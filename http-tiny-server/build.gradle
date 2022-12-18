@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+    id "application"
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+
+compileJava {
+    options.compilerArgs << '-g' // Debug? Comment if needed.
+}
+
+dependencies {
+    // TODO Jackson might be needed
+    implementation project(':common-utils')
+    testImplementation "junit:junit:$junit_version"
+}
+
+mainClassName = "http.HTTPServer"
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+}

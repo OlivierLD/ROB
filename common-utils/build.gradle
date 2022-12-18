@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+    id "application"
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://oss.sonatype.org/content/groups/public" }
+    maven { url "https://mvnrepository.com/artifact" }
+}
+
+// sourceCompatibility = 1.8
+
+dependencies {
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    testImplementation "junit:junit:$junit_version"
+}
+
+mainClassName = "utils.SystemUtils"
+
+shadowJar {
+    zip64 true
+    // to create an executable jar-file. Requires mainClassName.
+    mergeServiceFiles()
+}
+
+build.doFirst {
+    println "+-------------------------------------------------------------"
+    println "| >>> Try 'gradlew run' in common-utils to see some system info."
+    println "+-------------------------------------------------------------"
+}
+
+task sysInfo(type: JavaExec, dependsOn: build, description: "Display System Info.") {
+    main = 'utils.SystemUtils'
+//  jvmArgs "-verbose"
+//  classpath project.configurations.default
+    classpath sourceSets.main.runtimeClasspath
+//  classpath sourceSets.main.output.classesDir
+    // Use like ../gradlew sysInfo -P--minimal
+    if (project.hasProperty("--minimal")) {
+        args += ["--minimal"]
+    }
+    if (project.hasProperty("--no-free-mem")) {
+        args += ["--no-free-mem"]
+    }
+}
+
+sysInfo.doFirst {
+    println "+-------------------------------------------------------------"
+    println " This task is deprecated. Use gradle run instead."
+    println "+-------------------------------------------------------------"
+}
+
+run {
+    // Use like ../gradlew sysInfo -P--minimal
+    if (project.hasProperty("--minimal")) {
+        args += ["--minimal"]
+    }
+    if (project.hasProperty("--no-free-mem")) {
+        args += ["--no-free-mem"]
+    }
+}

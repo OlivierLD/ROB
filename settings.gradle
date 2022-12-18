@@ -1,0 +1,15 @@
+rootProject.name = 'rob'
+//
+include 'SerialRxTx'
+include "common-utils"
+include "http-tiny-server"
+
+// Astro Computer
+include('astro-computer:AstroComputer')
+include('astro-computer:AstroUtilities')
+
+// Raspberry Sailor
+include('raspberry-sailor:NMEA-Parser')
+include('raspberry-sailor:TideEngine')
+
+

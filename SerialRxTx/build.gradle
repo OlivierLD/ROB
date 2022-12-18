@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    // maven { url "https://oss.sonatype.org/content/groups/public" }
+}
+
+dependencies {
+    implementation 'org.rxtx:rxtx:2.1.7'
+    implementation project(':common-utils')
+}
+
+shadowJar {
+    zip64 true
+}
+
+task runSample(type: JavaExec, dependsOn: classes, description: 'Runs the sample') {
+    main = 'sample.SerialEchoClient'
+//  jvmArgs '-Djava.library.path=/usr/lib/jni'
+//  jvmArgs '-Dserial.port=/dev/ttyACM0'
+//  jvmArgs '-Dbaud.rate=9600'
+    jvmArgs '-Djava.library.path=~/repos/oliv-soft-project-builder/olivsoft/release/all-3rd-party/rxtx.distrib/mac-10.5' // On a Mac
+    jvmArgs '-Dserial.port=/dev/tty.usbserial'
+    jvmArgs '-Dbaud.rate=115200'
+    classpath sourceSets.main.runtimeClasspath
+    // classpath configurations.runtime
+}
+
+runSample.doFirst {
+    println "--------------------------------------------------------------------------------------"
+    println ">>> Run like this: gradlew runSample --console plain --no-daemon"
+    println "--------------------------------------------------------------------------------------"
+}
