@@ -1,16 +1,17 @@
 package http;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import http.client.HTTPClient;
 import org.junit.Test;
 
-import java.net.ConnectException;
+//import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.SocketException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -354,7 +355,13 @@ public class HTTPServerTests {
 	private HTTPServer.Response getOperationList(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 
-		String content = new Gson().toJson(this.opList);
+		String content = ""; // new Gson().toJson(this.opList);
+		try {
+			content = new ObjectMapper().writeValueAsString(this.opList);
+		} catch (JsonProcessingException jpe) {
+			content = jpe.getMessage();
+			jpe.printStackTrace();
+		}
 		RESTProcessorUtil.generateResponseHeaders(response, content.length());
 		response.setPayload(content.getBytes());
 		return response;

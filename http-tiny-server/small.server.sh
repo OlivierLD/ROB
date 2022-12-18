@@ -10,7 +10,7 @@
 # - From the directory you did the "gradle test" from, do a "small.server.sh"
 # - From a browser, reach http://localhost:9876/build/reports/tests/test/index.html
 #
-SERVER_HOME_DIR=~/repos/raspberry-coffee/http-tiny-server/
+SERVER_HOME_DIR=~/repos/ROB/http-tiny-server/
 #
 CP=${SERVER_HOME_DIR}build/libs/http-tiny-server-1.0-all.jar
 JAVA_OPTIONS=

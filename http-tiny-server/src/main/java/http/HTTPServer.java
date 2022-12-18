@@ -1,6 +1,8 @@
 package http;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import http.client.HTTPClient;
 import utils.DumpUtil;
 import utils.StaticUtil;
@@ -82,6 +84,8 @@ public class HTTPServer {
 	private Function<HTTPServer.Request, HTTPServer.Response> proxyFunction = null;
 	private Consumer<Integer> portOpenCallback = null;
 	private Runnable shutdownCallback = null;
+
+	private static ObjectMapper mapper = new ObjectMapper();
 
 	/*
 	  For CORS, to be returned in the Response:
@@ -356,7 +360,13 @@ public class HTTPServer {
 
 	public static Response buildErrorResponse(Response response, int httpStatus, ErrorPayload payload) {
 		response.setStatus(httpStatus);
-		String content = new Gson().toJson(payload);
+		String content = ""; // new Gson().toJson(payload);
+		try {
+			mapper.writeValueAsString(payload);
+		} catch (JsonProcessingException jpe) {
+			content = jpe.getMessage(); // TODO Use dumpException ?
+			jpe.printStackTrace();
+		}
 		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.length());
 		response.setPayload(content.getBytes());
 		return response;
@@ -1327,7 +1337,13 @@ public class HTTPServer {
 					Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
 					List<Operation> opList = opList1; // Above
-					String content = new Gson().toJson(opList);
+					String content = ""; // new Gson().toJson(opList);
+					try {
+						content = mapper.writeValueAsString(opList);
+					} catch (JsonProcessingException jpe) {
+						content = jpe.getMessage();  // TODO Use dumpException ?
+						jpe.printStackTrace();
+					}
 					RESTProcessorUtil.generateResponseHeaders(response, content.length());
 					response.setPayload(content.getBytes());
 					return response;

@@ -1,6 +1,5 @@
 #!/bin/bash
 echo -e "Starting java server"
-# CP=$(find ~/repos/raspberry-coffee -name http-tiny-server-1.0-all.jar)
 JAR_FILE=../../http-tiny-server/build/libs/http-tiny-server-1.0-all.jar
 if [[ ! -f ${JAR_FILE} ]]; then
     echo -e "${JAR_FILE} not found where expected. Exiting"

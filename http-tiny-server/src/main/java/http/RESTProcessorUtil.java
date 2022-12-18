@@ -1,6 +1,7 @@
 package http;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -11,10 +12,11 @@ import java.util.stream.IntStream;
 
 public class RESTProcessorUtil {
 
+	private final static ObjectMapper mapper = new ObjectMapper();
 	/**
 	 * Make sure no operation is duplicated. Check on Verb and Path
 	 * Throws an Exception if a duplicate operation is found.
-	 * @param opList
+	 * @param opList Operation list
 	 */
 	public static void checkDuplicateOperations(List<HTTPServer.Operation> opList) {
 		IntStream.range(0, opList.size())
@@ -246,7 +248,13 @@ CancelPizzaTestSuite,I don't want my Pizza anymore,CancelPizza,true,en,en,,
 	}
 
 	public static void addErrorMessageToResponse(HTTPServer.Response response, String errMess) {
-		String content = new Gson().toJson(new ErrorMessage(errMess)).toString();
+		String content = ""; // new Gson().toJson(new ErrorMessage(errMess)).toString();
+		try {
+			content = mapper.writeValueAsString(new ErrorMessage(errMess));
+		} catch (JsonProcessingException jpe) {
+			content = jpe.getMessage();
+			jpe.printStackTrace();
+		}
 		RESTProcessorUtil.generateResponseHeaders(response, content.length());
 		response.setPayload(content.getBytes());
 	}

@@ -5,13 +5,13 @@
 ### Java
 _**To be published as its own artifact on Maven.**_
 > See in the `build.gradle` 
-> - `// maven { url "https://raw.githubusercontent.com/OlivierLD/raspberry-coffee/repository" }`
-> - `implementation 'oliv.raspi.coffee:TideEngine:1.0'`
+> - `// maven { url "https://raw.githubusercontent.com/OlivierLD/ROB/repository" }`
+> - `implementation 'raspberry.on.board:TideEngine:1.0'`
 -->
 
 #### Maven repo
 The artifacts are - at least for now - published in a github repo, accessed as a Maven repository.
-See [here](https://github.com/OlivierLD/raspberry-coffee/blob/repository/README.md).
+See [here](https://github.com/OlivierLD/ROB/blob/repository/README.md).
 
 
 > Several implementations of the data storage (coefficients, tide stations) are

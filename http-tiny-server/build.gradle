@@ -22,7 +22,7 @@ compileJava {
 }
 
 dependencies {
-    // TODO Jackson might be needed
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
     implementation project(':common-utils')
     testImplementation "junit:junit:$junit_version"
 }
