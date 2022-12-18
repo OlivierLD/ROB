@@ -85,7 +85,7 @@ public class HTTPServer {
 	private Consumer<Integer> portOpenCallback = null;
 	private Runnable shutdownCallback = null;
 
-	private static ObjectMapper mapper = new ObjectMapper();
+	private final static ObjectMapper mapper = new ObjectMapper();
 
 	/*
 	  For CORS, to be returned in the Response:
@@ -395,7 +395,7 @@ public class HTTPServer {
 		// Kill the httpListenerThread, waiting on the ServerSocket.accept().
 		if (this.httpListenerThread.isAlive()) {
 			// Bam!
-			System.out.println(String.format("Killing httpListenerThread (%s)", sendCleanStopSignal ? "true" : "false"));
+			System.out.printf("Killing httpListenerThread (%s)\n", sendCleanStopSignal ? "true" : "false");
 			this.sendCleanStopSignal = false; // The trick!
 			try {
 				// Release the ss.accept()
@@ -445,10 +445,8 @@ public class HTTPServer {
 				for (RESTRequestManager reqMgr : requestManagers) {
 					List<Operation> opList = reqMgr.getRESTOperationList();
 					List<Operation> dups = opList.stream()
-							.filter(op -> requestManager.getRESTOperationList().stream()
-									.filter(newOp -> (newOp.getVerb().equals(op.getVerb()) &&
-											RESTProcessorUtil.pathsAreIdentical(newOp.getPath(), op.getPath())))
-                                    .count() > 0)
+							.filter(op -> requestManager.getRESTOperationList().stream().anyMatch(newOp -> (newOp.getVerb().equals(op.getVerb()) &&
+									RESTProcessorUtil.pathsAreIdentical(newOp.getPath(), op.getPath()))))
 //									.collect(Collectors.counting()) > 0)
 							.collect(Collectors.toList());
 					if (dups.size() > 0) {
@@ -489,7 +487,7 @@ public class HTTPServer {
 	private void incPort() {
 		this.port += 1;
 		if (verbose) {
-			System.out.println(String.format("...Trying port %d", this.port));
+			System.out.printf("...Trying port %d\n", this.port);
 		}
 	}
 
@@ -631,7 +629,7 @@ public class HTTPServer {
 								payloadTypeHasBeenSet = true;
 							}
 							if ("true".equals(System.getProperty("http.super.verbose", "false"))) {
-								System.out.println(String.format("\tPayload data: 0x%02X", read));
+								System.out.printf("\tPayload data: 0x%02X\n", read);
 							}
 							if (payloadIsBinary) {
 								byteArrayOutputStream.write(read); // Binary content!!
@@ -692,7 +690,7 @@ public class HTTPServer {
 				String payload = null;
 				if (payloadIsBinary) {
 					byte[] binaryPayload = byteArrayOutputStream.toByteArray();
-					System.out.println(String.format(">> Payload is %d bytes big", binaryPayload.length));
+					System.out.printf(">> Payload is %d bytes big\n", binaryPayload.length);
 					request.setContent(binaryPayload);
 				} else {
 					payload = sb.toString();
@@ -706,7 +704,7 @@ public class HTTPServer {
 				if (request != null) {
                     // String protocol = request.getProtocol();
                     String path = request.getPath();
-					if (request.getQueryStringParameters() != null && request.getQueryStringParameters().keySet().contains("verbose")) {
+					if (request.getQueryStringParameters() != null && request.getQueryStringParameters().containsKey("verbose")) {
 						String verb = request.getQueryStringParameters().get("verbose");
 						verbose = (verb == null || verb.equalsIgnoreCase("YES") || verb.equalsIgnoreCase("TRUE") || verb.equalsIgnoreCase("ON"));
 					}
@@ -742,7 +740,7 @@ public class HTTPServer {
 
 							String webArchive = System.getProperty("web.archive", "web.zip"); // TODO Make sure it is a zip archive
 							if (verbose) {
-								System.out.println(String.format("%s => reading %s in %s", zipPath, fName, webArchive));
+								System.out.printf("%s => reading %s in %s\n", zipPath, fName, webArchive);
 							}
 
 							InputStream is = getZipInputStream(webArchive, fName);
@@ -833,7 +831,7 @@ public class HTTPServer {
 											sendResponse(response, out);
 										} catch (Exception err) {
 											System.err.println("+-----------------------------------------------");
-											System.err.println(String.format("| Caught error sending back response:\n| %s", String.valueOf(response)));
+											System.err.printf("| Caught error sending back response:\n| %s\n", String.valueOf(response));
 											System.err.println("+-----------------------------------------------");
 											err.printStackTrace();
 										}
@@ -886,7 +884,7 @@ public class HTTPServer {
 					}
 				} else { // Specific. Is that a GPSd request?
 					if (payload != null && payload.length() > 0 && payload.startsWith("?WATCH=")) { // GPSd ?  ?WATCH={...}; ?POLL; ?DEVICE;
-						System.out.println(String.format(">>>>>>>> GPSd: [%s]", payload)); // This is the first embryo of a GPSd implementation...
+						System.out.printf(">>>>>>>> GPSd: [%s]\n", payload); // This is the first embryo of a GPSd implementation...
 						String json = payload.substring("?WATCH=".length());
 						String responsePayload = "{\"class\":\"SKY\",\"device\":\"/dev/pts/1\",\"time\":\"2005-07-08T11:28:07.114Z\",\"xdop\":1.55,\"hdop\":1.24,\"pdop\":1.99,\"satellites\":[{\"PRN\":23,\"el\":6,\"az\":84,\"ss\":0,\"used\":false},{\"PRN\":28,\"el\":7,\"az\":160,\"ss\":0,\"used\":false},{\"PRN\":8,\"el\":66,\"az\":189,\"ss\":44,\"used\":true},{\"PRN\":29,\"el\":13,\"az\":273,\"ss\":0,\"used\":false},{\"PRN\":10,\"el\":51,\"az\":304,\"ss\":29,\"used\":true},{\"PRN\":4,\"el\":15,\"az\":199,\"ss\":36,\"used\":true},{\"PRN\":2,\"el\":34,\"az\":241,\"ss\":43,\"used\":true},{\"PRN\":27,\"el\":71,\"az\":76,\"ss\":43,\"used\":true}]}" + "\n";
 						out.write(responsePayload.getBytes());
@@ -926,7 +924,7 @@ public class HTTPServer {
 	 */
 	public HTTPServer(int port, RESTRequestManager requestManager, Properties properties, boolean startImmediately) throws Exception {
 
-		System.out.println(String.format("Starting new %s (verbose %s)", this.getClass().getName(), verbose));
+		System.out.printf("Starting new %s (verbose %s)\n", this.getClass().getName(), verbose);
 
 		this.port = port;
 //		String httpPort = System.getProperty("http.port", String.valueOf(port));
@@ -968,7 +966,7 @@ public class HTTPServer {
 					System.out.println("On exit -> " + returned);
 				} catch (ConnectException ce) {
 					// Absorb
-					System.err.println(String.format("Already down: %s", ce.toString()));
+					System.err.printf("Already down: %s\n", ce.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -991,13 +989,13 @@ public class HTTPServer {
 						try {
 							ss = new ServerSocket(httpServerInstance.getPort());
 							keepTrying = false;
-							System.out.println(String.format("%s - Port open: %d",
+							System.out.printf("%s - Port open: %d\n",
 									NumberFormat.getInstance().format(System.currentTimeMillis()),
-									httpServerInstance.getPort()));
+									httpServerInstance.getPort());
 							if (verbose) {
 								System.out.println("-- Dumping: --");
 								List<String> st = DumpUtil.whoCalledMe();
-								st.forEach(el -> System.out.println(String.format("\t%s", el)));
+								st.forEach(el -> System.out.printf("\t%s\n", el));
 								System.out.println("--------------");
 							}
 						} catch (BindException be) {
@@ -1005,11 +1003,11 @@ public class HTTPServer {
 								httpServerInstance.incPort();
 								HTTPContext.getInstance().getLogger().info(String.format("Port in use, trying %d", httpServerInstance.getPort()));
 							} else {
-								System.err.println(String.format("Address in use: %d", httpServerInstance.getPort()));
+								System.err.printf("Address in use: %d\n", httpServerInstance.getPort());
 //								keepTrying = false;
 								System.err.println("-- Dumping: --");
 								List<String> st = DumpUtil.whoCalledMe();
-								st.stream().forEach(el -> System.err.println(String.format("\t%s", el)));
+								st.stream().forEach(el -> System.err.printf("\t%s\n", el));
 								System.err.println("--------------");
 								throw be;
 							}
@@ -1023,7 +1021,7 @@ public class HTTPServer {
 						httpServerInstance.portOpenCallback.accept(httpServerInstance.getPort());
 					}
 
-					System.out.println(String.format("%s - %s now accepting requests", NumberFormat.getInstance().format(System.currentTimeMillis()), httpServerInstance.getClass().getName()));
+					System.out.printf("%s - %s now accepting requests\n", NumberFormat.getInstance().format(System.currentTimeMillis()), httpServerInstance.getClass().getName());
 					while (isRunning()) {
 						// Socket client = ss.accept(); // Blocking read
 						new RequestHandler(ss.accept()).start();
@@ -1182,11 +1180,11 @@ public class HTTPServer {
 		if (se.getMessage().contains("Broken pipe") || se.getMessage().contains("Protocol wrong type for socket")) {
 			if (verbose) {
 				System.err.println("+-------------------------");
-				System.err.println(String.format("| %s - Managed error, client hung up! Response was:\n%s", new Date().toString(), content));
+				System.err.printf("| %s - Managed error, client hung up! Response was:\n%s\n", new Date().toString(), content);
 				System.err.println("+-------------------------");
 			}
 		} else {
-			System.err.println(String.format(">> Cause: %s, Message: %s", se.getCause(), se.getMessage()));
+			System.err.printf(">> Cause: %s, Message: %s\n", se.getCause(), se.getMessage());
 			se.printStackTrace();
 		}
 	}
@@ -1252,7 +1250,7 @@ public class HTTPServer {
 					System.out.println();
 				}
 				if (verbose) {
-					respHeaders.keySet().forEach(k -> System.out.println(String.format("%s%s: %s", StringUtils.lpad("", PAD_LENGTH), k, respHeaders.get(k))));
+					respHeaders.keySet().forEach(k -> System.out.printf("%s%s: %s\n", StringUtils.lpad("", PAD_LENGTH), k, respHeaders.get(k)));
 				}
 			}
 			if (response.getPayload() != null) {
@@ -1263,14 +1261,14 @@ public class HTTPServer {
 						System.out.println();
 					}
 					if (verbose) {
-						System.out.println(String.format("%s%s", StringUtils.lpad("", PAD_LENGTH), responsePayload));
+						System.out.printf("%s%s\n", StringUtils.lpad("", PAD_LENGTH), responsePayload);
 					}
 				} else {
 					String mimeType = "-none-";
 					if (response.getHeaders() != null && response.getHeaders().get(HttpHeaders.CONTENT_TYPE) != null) {
 						mimeType = response.getHeaders().get(HttpHeaders.CONTENT_TYPE);
 					}
-					System.out.println(String.format("... No Content-Type, or not text? [%s]", mimeType));
+					System.out.printf("... No Content-Type, or not text? [%s]\n", mimeType);
 				}
 			}
 		}
@@ -1301,7 +1299,7 @@ public class HTTPServer {
 		} catch (NumberFormatException nfe) {
 			if (nfe.getMessage().equals("null")) {
 				// No system variable
-				System.out.println(String.format("Using port %d", port));
+				System.out.printf("Using port %d\n", port);
 			} else {
 				nfe.printStackTrace();
 			}
@@ -1359,12 +1357,12 @@ public class HTTPServer {
 		}
 
 		httpServer.startServer();
-		System.out.println(String.format("Started on port %d", httpServer.getPort()));
-		String staticDocs = httpServer.staticDocumentsLocation.stream().collect(Collectors.joining(", "));
-		String staticZipDocs = httpServer.staticZippedDocumentsLocation.stream().collect(Collectors.joining(", "));
-		System.out.println(String.format("Static pages (in a zip or not) at %s and %s%s",
+		System.out.printf("Started on port %d\n", httpServer.getPort());
+		String staticDocs = String.join(", ", httpServer.staticDocumentsLocation);
+		String staticZipDocs = String.join(", ", httpServer.staticZippedDocumentsLocation);
+		System.out.printf("Static pages (in a zip or not) at %s and %s%s\n",
 				staticDocs, staticZipDocs,
-				(withRest ? ", plus REST service GET /oplist are available" : "")));
+				(withRest ? ", plus REST service GET /oplist are available" : ""));
 
 		if (true) {
 			waiter = new Thread("HTTPWaiter") {

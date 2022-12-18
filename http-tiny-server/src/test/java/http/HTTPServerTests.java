@@ -3,6 +3,7 @@ package http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import http.client.HTTPClient;
+import org.junit.Assert;
 import org.junit.Test;
 
 //import java.net.ConnectException;
@@ -100,7 +101,7 @@ public class HTTPServerTests {
 			httpServer.addRequestManager(restServerImplTwo);
 			fail("We should not be there");
 		} catch (IllegalArgumentException ex) {
-			System.out.println(String.format("As expected [%s]", ex.toString()));
+			System.out.printf("As expected [%s]\n", ex.toString());
 		} finally {
 			System.out.println("Stopping HTTP Server...");
 			httpServer.stopRunning();
@@ -135,7 +136,7 @@ public class HTTPServerTests {
 			RESTProcessorUtil.checkDuplicateOperations(opList);
 			fail("Should have detected duplicate");
 		} catch (Exception ex) {
-			System.out.println(String.format("As expected: %s", ex.toString()));
+			System.out.printf("As expected: %s\n", ex.toString());
 		}
 	}
 
@@ -177,9 +178,7 @@ public class HTTPServerTests {
 		System.out.println("... HTTP Server started");
 
 		// Add a Shutdown Callback
-		Runnable shutdownCallback = () -> {
-			System.out.println("!! Server was shut down !!");
-		};
+		Runnable shutdownCallback = () -> System.out.println("!! Server was shut down !!");
 		httpServer.setShutdownCallback(shutdownCallback);
 
 		PORT_TO_USE += 1;
@@ -233,9 +232,7 @@ public class HTTPServerTests {
 		}
 		assertNotNull(httpServer);
 		System.out.println("... HTTP Server started.");
-		Runnable youTellMe = () -> {
-			System.out.println("---- Callback: Server shutting down...");
-		};
+		Runnable youTellMe = () -> System.out.println("---- Callback: Server shutting down...");
 		httpServer.setShutdownCallback(youTellMe);
 
 		Thread t1 = null, t2 = null, t3 = null;
@@ -245,7 +242,7 @@ public class HTTPServerTests {
 				try {
 					String response = HTTPClient.doGet(String.format("http://localhost:%d/oplist", PORT_TO_USE), null); // Response will be empty, but that 's OK.
 					System.out.printf("===> Got response at %s\n", NF.format(System.currentTimeMillis()));
-					assertTrue("Response is null", response != null);
+					Assert.assertNotNull("Response is null", response);
 				} catch (SocketException se) {
 					if (se.getMessage().contains("Unexpected end of file from server")) {
 						// Expected
@@ -332,7 +329,7 @@ public class HTTPServerTests {
 		System.out.println("...HTTP Server started.");
 		try {
 			String response = HTTPClient.doGet(String.format("gemini://localhost:%d/oplist", PORT_TO_USE), null); // Response will be empty, but that 's OK.
-			assertTrue("Response is null", response != null);
+			Assert.assertNotNull("Response is null", response);
 		} catch (MalformedURLException mue) {
 			assertTrue ("gemini protocol should have failed.", mue.getMessage().contains("unknown protocol: gemini"));
 		} catch (Exception ex) {
@@ -355,7 +352,7 @@ public class HTTPServerTests {
 	private HTTPServer.Response getOperationList(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 
-		String content = ""; // new Gson().toJson(this.opList);
+		String content; // new Gson().toJson(this.opList);
 		try {
 			content = new ObjectMapper().writeValueAsString(this.opList);
 		} catch (JsonProcessingException jpe) {
