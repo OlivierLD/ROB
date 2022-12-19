@@ -6,11 +6,15 @@ CP=./build/libs/Serial-IO-1.0-all.jar
 CP=${CP}:/usr/share/java/RXTXcomm.jar
 echo Make sure the GPS is connected through its USB socket.
 #
-# SERIAL_PORT=/dev/ttyUSB0 # RPi
-# SERIAL_PORT=/dev/ttyS80 # RPi
-# SERIAL_PORT=/dev/tty.Bluetooth-Incoming-Port # Mac
-SERIAL_PORT=/dev/tty.usbmodem14201
-# SERIAL_PORT=/dev/tty.usbserial # Mac
+if [[ "$1" != "" ]]; then
+  SERIAL_PORT=$1
+else
+  # SERIAL_PORT=/dev/ttyUSB0 # RPi
+  # SERIAL_PORT=/dev/ttyS80 # RPi
+  # SERIAL_PORT=/dev/tty.Bluetooth-Incoming-Port # Mac
+  SERIAL_PORT=/dev/tty.usbmodem14201
+  # SERIAL_PORT=/dev/tty.usbserial # Mac
+fi
 BAUD_RATE=4800
 #
 JAVA_OPTS="-Dserial.port=$SERIAL_PORT -Dbaud.rate=$BAUD_RATE"
