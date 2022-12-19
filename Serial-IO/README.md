@@ -4,7 +4,7 @@ To install this package (on Raspberry Pi, or more generally on Ubuntu), type
 ```
 $> sudo apt-get install librxtx-java
 ```
-This is an possible alternative to the `com.pi4j.io.serial` package (that comes with PI4J).
+This is a possible alternative to the `com.pi4j.io.serial` package (that comes with PI4J).
 Gives a bit more flexibility, specially on the callback side.
 
 It requires:
@@ -183,7 +183,7 @@ If you are running from a Raspberry Pi, you need sudo access. Run the script nam
 
 On the Raspberry Pi, the Serial port needs to be accessed as `root`. In case Gradle cannot do that, you can use the provided script named `runArduionoSample`.
 ```
-$ ./runArduinoSample
+$ ./runArduinoSample.sh
 ```
 The output is the same as above.
 
@@ -200,7 +200,7 @@ In the script `runGPSSample.sh`:
 #
 # Read a GPS
 #
-CP=./build/libs/Serial.IO-1.0.jar
+CP=./build/libs/Serial.IO-1.0-all.jar
 CP=$CP:/usr/share/java/RXTXcomm.jar
 #
 SERIAL_PORT=/dev/ttyS0 # RPi. This port may vary

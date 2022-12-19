@@ -1,9 +1,9 @@
-## Cross-Platform Serial communication with `raspi-serial-console`.
+## Cross-Platform Serial communication with `Serial-IO`.
 This is a Java implementation of a Serial client for the `Serial-IO` module, in this project.
 
 This involves the `RxTx` classes located in the package `gnu.io`.
 
-To install this package (on Raspberry Pi, or more generally on Ubuntu), type
+To install this package (on Raspberry Pi, or more generally on Ubuntu, Debian, & Co), type
 ```
 $> sudo apt-get install librxtx-java
 ```
@@ -19,7 +19,7 @@ The serial-console must have been enabled for this to work.
 ```bash
  $ sudo raspi-config
 ```
-Go to **“9 Advanced Function menu”**, then **“A8.Serial”** and select **“No”** to disable shell terminal on the serial port, **"Yes"** to enable it.
+<!-- Go to **“Advanced Function menu”**, then **“A8.Serial”** and select **“No”** to disable shell terminal on the serial port, **"Yes"** to enable it. -->
 
 See [this document](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/enabling-serial-console) for more details.
 
