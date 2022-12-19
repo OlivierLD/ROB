@@ -3,7 +3,6 @@ package tideengine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tideengine.contracts.BackendDataComputer;
 
-import javax.annotation.Nonnull;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
@@ -185,7 +184,7 @@ public class BackEndTideComputer {
 		return d;
 	}
 
-	public TideStation findTideStation(@Nonnull  String stationName, int year, @Nonnull Constituents constituents, @Nonnull Stations stations) throws Exception {
+	public TideStation findTideStation(String stationName, int year, Constituents constituents, Stations stations) throws Exception {
 		long before = System.currentTimeMillis();
 		TideStation station = stations.getStations().get(stationName);
 		if (station == null) { // Try match

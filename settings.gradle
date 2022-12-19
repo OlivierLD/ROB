@@ -12,5 +12,6 @@ include('astro-computer:AstroUtilities')
 // Raspberry Sailor
 include('raspberry-sailor:NMEA-Parser')
 include('raspberry-sailor:TideEngine')
+include('raspberry-sailor:NMEA-multiplexer')
 
 

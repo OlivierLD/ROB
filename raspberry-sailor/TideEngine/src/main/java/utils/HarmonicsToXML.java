@@ -4,7 +4,6 @@ import oracle.xml.parser.v2.XMLDocument;
 import oracle.xml.parser.v2.XMLElement;
 import org.w3c.dom.Text;
 
-import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -41,7 +40,7 @@ public class HarmonicsToXML {
 	 * @param harmonicName
 	 * @throws Exception
 	 */
-	public static void generateXML(@Nonnull String[] harmonicName) throws Exception {
+	public static void generateXML(String[] harmonicName) throws Exception {
 		final String LONGITUDE = "!longitude:";
 		final String LATITUDE = "!latitude:";
 

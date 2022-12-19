@@ -30,3 +30,6 @@ build/
 .idea
 **/node_modules
 **/.DS_Store
+
+# SQLite DBs
+*.db
