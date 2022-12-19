@@ -14,10 +14,10 @@ SERIAL_PORT=/dev/ttyACM0 # RPi
 # SERIAL_PORT=/dev/tty.usbserial # Mac
 #
 if [[ "${SERIAL_PORT}" == "/dev/ttyACM0" ]]; then
-  echo -s "Note: There is some bug in libRxTx-java regarding the access to /dev/ttyACM0"
-  echo -s "If this is your case, try creating a symbolic link on the port, and access it through its link:"
-  echo -s " $ sudo ln -s /dev/ttyACM0 /dev/ttyS80"
-  echo -s "Then try reading or writing on /dev/ttyS80"
+  echo -e "Note: There is some bug in libRxTx-java regarding the access to /dev/ttyACM0"
+  echo -e "If this is your case, try creating a symbolic link on the port, and access it through its link:"
+  echo -e " $ sudo ln -s /dev/ttyACM0 /dev/ttyS80"
+  echo -e "Then try reading or writing on /dev/ttyS80"
 fi
 #
 BAUD_RATE=4800
