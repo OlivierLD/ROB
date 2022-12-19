@@ -1,5 +1,5 @@
 ## Cross-Platform Serial communication with `raspi-serial-console`.
-This is a Java implementation of a Serial client for the `raspi-serial-console`.
+This is a Java implementation of a Serial client for the `Serial-IO` module, in this project.
 
 This involves the `RxTx` classes located in the package `gnu.io`.
 
@@ -27,9 +27,9 @@ See [this document](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-u
 On the machine you want to connect to the Raspberry Pi from, just run
 ```bash
  $ cd SerialRxTx
- $ ../gradlew clean build
+ $ ../gradlew clean shadowJar
 ```
- This will generate a jar file `build/libs/SerialRxTx-1.0.jar`, required by the scripts mentioned below.
+ This will generate a jar file `build/libs/SerialRxTx-1.0-all.jar`, required by the scripts mentioned below.
 
 ### Examples
 The most important is probably to set the `java.library.path` to its right value. `RXTXcomm.jar` uses Java Native Interface (`JNI`), to invoke
@@ -54,7 +54,7 @@ Script `run.mac` :
 #
 RXTX_HOME=./libs
 #
-CP=./build/libs/SerialRxTx-1.0.jar
+CP=./build/libs/SerialRxTx-1.0-all.jar
 CP=$CP:$RXTX_HOME/RXTXcomm.jar
 #
 JAVA_OPTS=
@@ -143,7 +143,7 @@ Script `run.bat`
 ::
 set RXTX_HOME=C:\OlivWork\git\oliv-soft-project-builder\olivsoft\release\all-3rd-party\rxtx.distrib
 ::
-set CP=.\build\libs\SerialRxTx-1.0.jar
+set CP=.\build\libs\SerialRxTx-1.0-all.jar
 set CP=%CP%;%RXTX_HOME%\RXTXcomm.jar
 ::
 java -Djava.library.path=%RXTX_HOME%/win64 -Dserial.port=COM17 -Dbaud.rate=115200 -cp %CP% console.SerialConsoleCLI
