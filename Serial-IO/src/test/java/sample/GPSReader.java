@@ -16,7 +16,7 @@ import java.util.Set;
  * Serial port (/dev/ttyUSB0 below) may vary.
  */
 public class GPSReader implements SerialIOCallbacks {
-	private boolean verbose = "true".equals(System.getProperty("verbose", "false"));
+	private final boolean verbose = "true".equals(System.getProperty("verbose", "false"));
 
 	private List<String> filters = null;
 	private void setSentenceFilter(List<String> filters) {
@@ -30,7 +30,7 @@ public class GPSReader implements SerialIOCallbacks {
 
 	private int lenToRead = 0;
 	private int bufferIdx = 0;
-	private byte[] serialBuffer = new byte[256];
+	private final byte[] serialBuffer = new byte[256];
 
 	@Override
 	public void onSerialData(byte b) {
@@ -55,7 +55,7 @@ public class GPSReader implements SerialIOCallbacks {
 
 	/**
 	 * Formatting the data read by {@link #onSerialData(byte)}
-	 * @param mess
+	 * @param mess message to format
 	 */
 	public void serialOutput(byte[] mess) {
 		if (verbose) { // verbose...
@@ -104,10 +104,10 @@ public class GPSReader implements SerialIOCallbacks {
 		// "/dev/ttyUSB0"
 		String serialPortName = System.getProperty("serial.port", defaultValue);
 		String baudRateStr = System.getProperty("baud.rate", "4800");
-		System.out.println(String.format("Opening port %s:%s", serialPortName, baudRateStr));
+		System.out.printf("Opening port %s:%s\n", serialPortName, baudRateStr);
 		CommPortIdentifier serialPort = pm.get(serialPortName);
 		if (serialPort == null) {
-			System.out.println(String.format("Port %s not found, aborting", serialPortName));
+			System.out.printf("Port %s not found, aborting\n", serialPortName);
 			System.exit(1);
 		}
 		final Thread thread = Thread.currentThread();

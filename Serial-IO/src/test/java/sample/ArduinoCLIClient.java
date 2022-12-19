@@ -33,7 +33,7 @@ public class ArduinoCLIClient implements SerialIOCallbacks {
 
 	private int lenToRead = 0;
 	private int bufferIdx = 0;
-	private byte[] serialBuffer = new byte[256];
+	private final byte[] serialBuffer = new byte[256];
 
 	@Override
 	public void onSerialData(byte b) {
@@ -91,11 +91,11 @@ public class ArduinoCLIClient implements SerialIOCallbacks {
 
 		String serialPortName = System.getProperty("serial.port", "/dev/ttyUSB0");
 		String baudRateStr = System.getProperty("baud.rate", "9600");
-		System.out.println(String.format("Opening port %s:%s", serialPortName, baudRateStr));
+		System.out.printf("Opening port %s:%s\n", serialPortName, baudRateStr);
 
 		CommPortIdentifier arduinoPort = pm.get(serialPortName);
 		if (arduinoPort == null) {
-			System.out.println(String.format("Port %s not found in the list", serialPortName));
+			System.out.printf("Port %s not found in the list\n", serialPortName);
 //		System.exit(1);
 		}
 

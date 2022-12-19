@@ -17,7 +17,7 @@ import java.util.TooManyListenersException;
 
 public class SerialCommunicator
 		implements SerialPortEventListener {
-	private SerialIOCallbacks parent;
+	private final SerialIOCallbacks parent;
 	private boolean verbose = false;
 
 	private boolean emulateCommunicator = false;
@@ -79,12 +79,12 @@ public class SerialCommunicator
 			// Serial ports only
 			if (curPort.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 				if (verbose) {
-					System.out.println(String.format("Adding %s to the Serial list", curPort.getName()));
+					System.out.printf("Adding %s to the Serial list\n", curPort.getName());
 				}
 				portMap.put(curPort.getName(), curPort);
 			} else {
 				if (verbose) {
-					System.out.println(String.format("Skipping %s, it is a %s port.", curPort.getName(), readablePortType(curPort.getPortType())));
+					System.out.printf("Skipping %s, it is a %s port.\n", curPort.getName(), readablePortType(curPort.getPortType()));
 				}
 			}
 		}
