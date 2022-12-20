@@ -9,7 +9,7 @@ context:
 channels:
   # AIS Data
   - type: file
-    filename: ./sample.data/logged.data.archive.zip
+    filename: ./sample-data/logged.data.archive.zip
     zip: true
     path.in.zip: ais.nmea
     verbose: false

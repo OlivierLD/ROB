@@ -729,7 +729,19 @@ public class MuxInitializer {
 //		System.out.printf("%s -> %s", k, yamlMap.get(k).getClass().getName()));
             switch (k) {
                 case "name":
-                    System.out.printf("Definition Name: %s\n", yamlMap.get(k));
+                    // System.out.printf("Definition Name: %s\n", yamlMap.get(k));
+                    properties.setProperty(k, (String)yamlMap.get(k));
+                    break;
+                case "description":
+                    // System.out.println("-- Description --");
+                    // ((List<String>)yamlMap.get(k)).forEach(System.out::println);
+                    AtomicInteger nbDesc = new AtomicInteger(0);
+                    ((List<String>)yamlMap.get(k)).forEach(line -> {
+                        int nb = nbDesc.incrementAndGet();
+                        String propName = String.format("description.%02d", nb);
+                        properties.setProperty(propName, line);
+                    });
+                    // System.out.println("-----------------");
                     break;
                 case "context":
                     Map<String, Object> context = (Map<String, Object>) yamlMap.get(k);

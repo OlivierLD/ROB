@@ -22,6 +22,8 @@ import java.util.logging.LogManager;
 
 /**
  * <b>NMEA Multiplexer.</b><br>
+ * The main. See main method javadoc for more.
+ * <br/>
  * Also contains the definition of the REST operations for admin purpose.<br>
  * See {@link RESTRequestManager} and {@link HTTPServer}.<br>
  * Also see below the definition of <code>List&lt;Operation&gt; operations</code>.
@@ -367,8 +369,14 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
 
     /**
      * Start the Multiplexer from here.
+     * Supported System variables (VM options):
+     * - process.on.start (default true)
+     * - mux.data.verbose (default false)
+     * - mux.infra.verbose (default false)
+     * - mux.properties (default 'nmea.mux.properties')
+     * - yaml.tx.verbose (default no)
      *
-     * @param args unused.
+     * @param args CLI prms. see "--interactive-config".
      */
     public static void main(String... args) {
         AtomicBoolean interactiveConfig = new AtomicBoolean(false);
@@ -379,6 +387,26 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         });
 
         Properties definitions = interactiveConfig.get() ? GenericNMEAMultiplexer.interactiveConfig() :  GenericNMEAMultiplexer.getDefinitions();
+
+        if (definitions.get("name") != null) {
+            System.out.printf("Definition Name: %s\n", definitions.get("name"));
+        }
+        int descIdx = 1;
+        while (true) {
+            String propName = String.format("description.%02d", descIdx);
+            if (definitions.get(propName) != null) {
+                if (descIdx == 1) {
+                    System.out.println("-- Description --");
+                }
+                System.out.println(definitions.get(propName));
+                descIdx++;
+            } else {
+                break;
+            }
+        }
+        if (descIdx > 1) {
+            System.out.println("-----------------");
+        }
 
         if (infraVerbose) {
             System.out.println("MUX Definitions:");

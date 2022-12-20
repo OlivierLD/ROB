@@ -38,7 +38,7 @@ forwarders:
     log.dir: "logged"
     split: "hour"
   - class: "nmea.forwarder.SSD1306Processor"
-    properties: "ssd1306.properties"
+    properties: "mux-configs/ssd1306.properties"
   - type: "tcp"
     port: 7001
 computers:

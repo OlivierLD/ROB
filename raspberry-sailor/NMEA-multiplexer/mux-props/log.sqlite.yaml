@@ -23,4 +23,4 @@ channels:
     verbose: false
 forwarders:
   - class: "nmea.forwarders.SQLitePublisher"
-    properties: mux.props/sqlite.fwd.properties
+    properties: mux-props/sqlite.fwd.properties

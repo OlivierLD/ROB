@@ -16,7 +16,7 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 #
-echo Using properties file ${MUX_PROP_FILE}
+echo -e "Using properties file ${MUX_PROP_FILE}"
 #
 JAVA_OPTIONS=
 if [[ "$OS" == "Darwin" ]]; then
@@ -75,13 +75,11 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dcalculate.solar.with.eot=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=37.8218 -Ddefault.mux.longitude=-122.3112"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dtry.to.speak=true"
 #
-# JAVA_OPTIONS="$JAVA_OPTONS -Dpi4j.debug -Dpi4j.linking=dynamic"
-#
 CP=./build/libs/NMEA-multiplexer-1.0-all.jar
 SUDO=
 if [[ "$OS" == "Darwin" ]]; then
   # CP=${CP}:./libs/RXTXcomm.jar          # for Mac
-  CP=${CP}:../Serial.IO/libs/RXTXcomm.jar # for Mac
+  CP=${CP}:../../Serial-IO/libs/RXTXcomm.jar # for Mac
 fi
 if [[ "$OS" == "Linux" ]]; then
   CP=${CP}:/usr/share/java/RXTXcomm.jar # For Raspberry Pi
