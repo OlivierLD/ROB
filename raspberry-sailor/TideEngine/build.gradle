@@ -20,10 +20,8 @@ repositories {
 
 dependencies {
   implementation 'oracle:xmlparser:2.0'
-//  implementation 'com.google.code.findbugs:jsr305:3.0.0' // TODO Get rid of that?
   implementation 'org.xerial:sqlite-jdbc:3.34.0'
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-//  implementation 'org.glassfish.jersey.core:jersey-client:2.25.1'
   implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1'
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':astro-computer:AstroComputer')
