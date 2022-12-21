@@ -59,6 +59,12 @@ $PYZDA,110135.00,20,12,2022,00,00*7C
 $PYZDA,110136.00,20,12,2022,00,00*7F
 . . .
 ```
+To see if the Python server is running:
+```
+$ ps -ef | grep TCP_ZDA_server | grep -v grep
+  501 29063  1322   0 11:58AM ttys011    0:00.07 /. . ./Python src/main/python/TCP_ZDA_server.py --port:7001 --verbose:true
+$
+```
 
 #### Server interaction
 You can interact with the server, using a TCP client.  
