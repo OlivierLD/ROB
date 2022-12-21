@@ -3,6 +3,7 @@ package tcp.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
@@ -10,6 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -42,8 +44,14 @@ public class SimpleTCPClient {
 	public String sendMessage(String msg) throws Exception {
 		System.out.printf("Client sending message: %s\n", msg);
 		out.println(msg);
-		/*String resp =*/ return in.readLine();
+		/*String resp =*/ return readMessage();
 		// return resp;
+	}
+
+	public String readMessage() throws Exception {
+		synchronized (in) {
+			return in.readLine();
+		}
 	}
 
 	public void stopConnection() throws Exception {
@@ -75,10 +83,47 @@ public class SimpleTCPClient {
 			}
 		});
 
+		AtomicBoolean keepDummyReading = new AtomicBoolean(true);
+
 		SimpleTCPClient client = new SimpleTCPClient();
 		try {
 			client.startConnection(host.get(), port.get());
 			System.out.printf("(%s) Enter '.' at the prompt to stop. Any non-empty string otherwise.\n", SimpleTCPClient.class.getName());
+
+			Thread mainThread = Thread.currentThread();
+
+			// Reader thread...
+			Thread dummyReader = new Thread(() -> {
+				while (true) {
+					if (keepDummyReading.get()) {
+						try {
+							String serverMessage = client.readMessage();
+							if (false) {
+								System.out.printf("\t\tFrom dummy thread: [%s]\n", serverMessage);
+							}
+						} catch (IOException ex) {
+							if (!ex.getMessage().startsWith("Stream closed")) {
+								ex.printStackTrace();
+							}
+							break;
+						} catch (Exception ex2) {
+							ex2.printStackTrace();
+							break;
+						}
+					} else {
+						try {
+							synchronized (mainThread) {
+								mainThread.notify();
+							}
+							Thread.sleep(500L); // This is gonfled.
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				System.out.println("Done with dummy reader");
+			}, "DummyReader");
+			dummyReader.start();
 
 			boolean keepWorking = true;
 			while (keepWorking) {
@@ -86,9 +131,20 @@ public class SimpleTCPClient {
 				if (request.trim().length() > 0) {
 					if (".".equals(request)) {
 						keepWorking = false;
+						dummyReader.interrupt();
 					} else {
-                        String response = client.sendMessage(request);
-                        System.out.printf("Server responded %s\n", response);
+						keepDummyReading.set(false);
+						try {
+							synchronized (mainThread) {
+								mainThread.wait();
+								System.out.println("\tMain was released !");
+							}
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						String response = client.sendMessage(request);
+						keepDummyReading.set(true);
+                        System.out.printf(">> Server responded %s\n", response);
 						// Parse as JSON ?
 						if (parseReturnedJSON) {
 							try {
@@ -99,6 +155,8 @@ public class SimpleTCPClient {
 								boom.printStackTrace();
 								System.out.println("------------------------------");
 							}
+						} else {
+							System.out.println("Leaving data as-is.");
 						}
 					}
 				} else {

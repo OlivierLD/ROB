@@ -15,6 +15,7 @@ import socket
 import threading
 import traceback
 import platform
+import json
 from datetime import datetime, timezone
 import logging
 from logging import info
@@ -70,7 +71,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         "system-utc-time": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     }
     try:
-        payload: str = str(message) + NMEA_EOS
+        payload: str = json.dumps(message) + NMEA_EOS  # str(message) + NMEA_EOS
         if verbose:
             print(f"Producing status: {payload}")
         producing_status = True
@@ -83,7 +84,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
 
 def client_listener(connection: socket.socket, address: tuple) -> None:
     """
-    Expects three possible inputs: "STATUS", "SLOWER", or "FASTER" (not case-sensitive).
+    Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
     """
     global nb_clients
     global between_loops
@@ -109,12 +110,16 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 print(f"Unknown or un-managed message [{client_mess}]")
             if len(client_mess) > 0:
                 print(f"Received {client_mess} request. Between Loop value: {between_loops} s.")
+        except ConnectionResetError as cre:
+            print("ClientListener disconnected")
+            # nb_clients -= 1
+            break
         except BrokenPipeError as bpe:
-            print("Client disconnected")
-            nb_clients -= 1
+            print("ClientListener disconnected")
+            # nb_clients -= 1
             break
         except Exception as ex:
-            print("Oops!...")
+            print("(ClientListener) Oops!...")
             traceback.print_exc(file=sys.stdout)
             break  # Client disconnected
     print("Exiting client listener thread")
@@ -137,11 +142,11 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
                 print("Waiting for the status to be completed.")
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
-            print("Client disconnected")
+            print("ZDA Client disconnected")
             nb_clients -= 1
             break
         except Exception as ex:
-            print("Oops!...")
+            print("(ZDA Producer) Oops!...")
             traceback.print_exc(file=sys.stdout)
             nb_clients -= 1
             break  # Client disconnected
@@ -185,20 +190,24 @@ def main(args: List[str]) -> None:
         except OSError:
             traceback.print_exc(file=sys.stdout)
             print("Exiting.")
+            sys.exit(1)
         s.listen()
         print("Server is listening. [Ctrl-C] will stop the process.")
-        while keep_listening:
+        while keep_listening:   # Listen for new connections
             conn, addr = s.accept()
             # print(f">> New accept: Conn is a {type(conn)}, addr is a {type(addr)}")
             nb_clients += 1
             print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
             # Generate ZDA sentences for this client in its own thread. Producer thread
-            client_thread = threading.Thread(target=produce_zda, args=(conn, addr,))  # Producer
+            client_thread: threading.Thread = \
+                threading.Thread(target=produce_zda, args=(conn, addr,))  # Producer
+            # print(f"Thread is a {type(client_thread)}")
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
             # Listener thread
-            client_listener_thread = threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
+            client_listener_thread: threading.Thread = \
+                threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
             client_listener_thread.daemon = True  # Dies on exit
             client_listener_thread.start()
 

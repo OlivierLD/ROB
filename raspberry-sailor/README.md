@@ -4,3 +4,4 @@
 
 - NMEA Parser and related utilities
 - Tide Engine
+- and much more, keep posted.
