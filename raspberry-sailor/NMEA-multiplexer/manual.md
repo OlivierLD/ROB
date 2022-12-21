@@ -71,6 +71,10 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
  # This is an example of the way a MUX could be defined with YAML.
  #
  name: "NMEA with GPS, BME280, LSM303"
+ description:
+   - "Part 1"
+   - "Part 2"
+   - "Etc..."
  context:
    with.http.server: true
    http.port: 5678
@@ -455,6 +459,9 @@ It's an example/WiP of the way to use AIS data to detect collision threats.
 #### Other properties
 
 ```properties
+name=Basic MUX configuration.
+description.01=Basic MUX Config 
+description.02=HTTP port is 9999
 with.http.server=yes
 http.port=9999
 #
@@ -475,7 +482,7 @@ damping=30
 `with.http.server` is set to `no` by default. `yes` means that you will have access to
 some `REST` services, for admin and other purposes.
 
-If `with.http.server` is set to `yes`, the default http port is `9999`. It can be overridden by `http.port` if needed.
+If `with.http.server` is set to `yes` (or `true`), the default http port is `9999`. It can be overridden by `http.port` if needed.
 
 > _Note_: with `with.http.server` set to `true` comes a REST channel: `POST /mux/nmea-sentence -d '$GPRMC,165007.445,A,3806.5201,N,12251.7777,W,001.7,192.6,200818,,,A*7B'`
 > 

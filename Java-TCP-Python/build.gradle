@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+    id "application"
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    // maven { url "https://oss.sonatype.org/content/groups/public" }
+}
+
+// sourceCompatibility = 1.8
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+
+    testImplementation "junit:junit:$junit_version"
+}
+
+mainClassName = "tcp.server.TCPMultiServer"
+
+shadowJar {
+    zip64 true
+    // to create an executable jar-file. Requires mainClassName.
+    mergeServiceFiles()
+}

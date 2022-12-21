@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-#
-# That one produces ZDA Strings for each connected client.
-# It also understands input from the client: "STATUS", "LOOPS:x.xx" (not case sensitive), see client_listener.
-# LOOPS:xxx will produce a between_loops = x.xx (in seconds), like LOOPS:1.0
-#
-# It starts TWO threads:
-# - One to produce the ZDA strings
-# - One to listen to possible client inputs.
-#
+"""
+That one produces ZDA Strings for each connected client.
+It also understands input from the client: "STATUS", "SLOWER" ar "FASTER" (not case sensitive), see client_listener.
+"""
 import sys
 import signal
 import time
@@ -25,14 +20,11 @@ keep_listening: bool = True
 
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
-verbose: bool = False
+verbose: bool = True
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
-
-CMD_STATUS: str = "STATUS"
-CMD_LOOP_PREFIX: str = "LOOPS:"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
@@ -47,7 +39,7 @@ def interrupt(sig: int, frame):
     keep_listening = False
     time.sleep(1.5)
     print("Server Exiting.")
-    info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
+    info(f'sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
     sys.exit()   # DTC
 
@@ -61,7 +53,6 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global between_loops
     global producing_status
-    global keep_listening
     message: Dict = {
         "source": __file__,
         "between-loops": between_loops,
@@ -88,23 +79,20 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global between_loops
     print("New client listener")
-    while keep_listening:
+    while True:
         try:
             data: bytes = connection.recv(1024)   # If receive from client is needed...
             if verbose:
                 print(f"Received from client: {data}")
-            client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
-            if  client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
-                try:
-                    between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
-                except ValueError as ex:
-                    print("Bad number, oops!...")
-                    traceback.print_exc(file=sys.stdout)
+            client_mess: str = f"{data.decode('utf-8')}".strip().upper()
+            if  client_mess == "FASTER":
+                between_loops /= 2.0
+            elif client_mess == "SLOWER":
+                between_loops *= 2.0
+            elif client_mess == "STATUS":
                 produce_status(connection, address)
-            elif client_mess == CMD_STATUS:
-                produce_status(connection, address)
-            # elif client_mess == "":
-            #     pass  # ignore
+            elif client_mess == "":
+                pass  # ignore
             else:
                 print(f"Unknown or un-managed message [{client_mess}]")
             if len(client_mess) > 0:
@@ -117,7 +105,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
             print("Oops!...")
             traceback.print_exc(file=sys.stdout)
             break  # Client disconnected
-    print("Exiting client listener thread")
+    print("Exiting client listener")
 
 
 def produce_zda(connection: socket.socket, address: tuple) -> None:
@@ -125,14 +113,14 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     print(f"Connected by client {connection}")
-    while keep_listening:
+    while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
         nmea_zda: str = NMEABuilder.build_ZDA() + NMEA_EOS
         try:
             if not producing_status:
                 if verbose:
                     print(f"Producing ZDA and sending: {nmea_zda}")
-                connection.sendall(nmea_zda.encode())  # Send to the client(s), broadcast.
+                connection.sendall(nmea_zda.encode())  # Send to the client
             else:
                 print("Waiting for the status to be completed.")
             time.sleep(between_loops)
@@ -145,8 +133,7 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
             traceback.print_exc(file=sys.stdout)
             nb_clients -= 1
             break  # Client disconnected
-    print(f"Exiting producer thread. Done with request(s) from {connection}.\nClosing.")
-    connection.close()
+    print(f"Done with request from {connection}")
     print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
 
 
@@ -180,11 +167,7 @@ def main(args: List[str]) -> None:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:
             print(f"Binding {HOST}:{PORT}...")
-        try:
-            s.bind((HOST, PORT))
-        except OSError:
-            traceback.print_exc(file=sys.stdout)
-            print("Exiting.")
+        s.bind((HOST, PORT))
         s.listen()
         print("Server is listening. [Ctrl-C] will stop the process.")
         while keep_listening:
@@ -192,12 +175,11 @@ def main(args: List[str]) -> None:
             # print(f">> New accept: Conn is a {type(conn)}, addr is a {type(addr)}")
             nb_clients += 1
             print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
-            # Generate ZDA sentences for this client in its own thread. Producer thread
+            # Generate ZDA sentences for this client in its own thread.
             client_thread = threading.Thread(target=produce_zda, args=(conn, addr,))  # Producer
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
-            # Listener thread
             client_listener_thread = threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
             client_listener_thread.daemon = True  # Dies on exit
             client_listener_thread.start()
