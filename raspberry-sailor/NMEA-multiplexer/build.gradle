@@ -30,7 +30,6 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
     implementation 'org.fusesource.jansi:jansi:1.11'
-    implementation 'oracle:xmlparser:2.0'
     implementation 'org.yaml:snakeyaml:1.21'
     implementation 'org.xerial:sqlite-jdbc:3.34.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
@@ -40,7 +39,9 @@ dependencies {
     implementation project(':common-utils')
     implementation project(':astro-computer:AstroUtilities')
     implementation project(':astro-computer:AstroComputer')
+
     testImplementation "junit:junit:$junit_version"
+    testImplementation 'oracle:xmlparser:2.0'
 }
 
 shadowJar {
