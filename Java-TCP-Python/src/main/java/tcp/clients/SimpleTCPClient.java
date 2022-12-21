@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SimpleTCPClient {
 
 	private final static boolean parseReturnedJSON = "true".equals(System.getProperty("parse.json.response"));
+	private final static boolean spitOutDummyReader = "true".equals(System.getProperty("display.server.feed"));
 
 	private final static ObjectMapper mapper = new ObjectMapper(); // Jackson
 
@@ -84,6 +85,7 @@ public class SimpleTCPClient {
 		});
 
 		AtomicBoolean keepDummyReading = new AtomicBoolean(true);
+		AtomicBoolean keepDummyAlive = new AtomicBoolean(true);
 
 		SimpleTCPClient client = new SimpleTCPClient();
 		try {
@@ -94,11 +96,11 @@ public class SimpleTCPClient {
 
 			// Reader thread...
 			Thread dummyReader = new Thread(() -> {
-				while (true) {
+				while (keepDummyAlive.get()) {
 					if (keepDummyReading.get()) {
 						try {
 							String serverMessage = client.readMessage();
-							if (false) {
+							if (spitOutDummyReader) {
 								System.out.printf("\t\tFrom dummy thread: [%s]\n", serverMessage);
 							}
 						} catch (IOException ex) {
@@ -131,6 +133,7 @@ public class SimpleTCPClient {
 				if (request.trim().length() > 0) {
 					if (".".equals(request)) {
 						keepWorking = false;
+						keepDummyAlive.set(false);
 						dummyReader.interrupt();
 					} else {
 						keepDummyReading.set(false);

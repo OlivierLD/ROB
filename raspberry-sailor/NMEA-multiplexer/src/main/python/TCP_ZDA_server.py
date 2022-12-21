@@ -92,24 +92,25 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     while keep_listening:
         try:
             data: bytes = connection.recv(1024)   # If receive from client is needed...
-            if verbose:
-                print(f"Received from client: {data}")
-            client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
-            if  client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
-                try:
-                    between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
-                except ValueError as ex:
-                    print("Bad number, oops!...")
-                    traceback.print_exc(file=sys.stdout)
-                produce_status(connection, address)
-            elif client_mess == CMD_STATUS:
-                produce_status(connection, address)
-            # elif client_mess == "":
-            #     pass  # ignore
-            else:
-                print(f"Unknown or un-managed message [{client_mess}]")
-            if len(client_mess) > 0:
-                print(f"Received {client_mess} request. Between Loop value: {between_loops} s.")
+            if len(data) > 0:
+                if verbose:
+                    print(f"Received from client: {data}")
+                client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
+                if  client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
+                    try:
+                        between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
+                    except ValueError as ex:
+                        print("Bad number, oops!...")
+                        traceback.print_exc(file=sys.stdout)
+                    produce_status(connection, address)
+                elif client_mess == CMD_STATUS:
+                    produce_status(connection, address)
+                # elif client_mess == "":
+                #     pass  # ignore
+                else:
+                    print(f"Unknown or un-managed message [{client_mess}]")
+                if len(client_mess) > 0:
+                    print(f"Received {client_mess} request. Between Loop value: {between_loops} s.")
         except ConnectionResetError as cre:
             print("ClientListener disconnected")
             # nb_clients -= 1
@@ -136,7 +137,7 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
         try:
             if not producing_status:
                 if verbose:
-                    print(f"Producing ZDA and sending: {nmea_zda}")
+                    print(f"Producing ZDA and sending: {nmea_zda.strip()}")
                 connection.sendall(nmea_zda.encode())  # Send to the client(s), broadcast.
             else:
                 print("Waiting for the status to be completed.")
