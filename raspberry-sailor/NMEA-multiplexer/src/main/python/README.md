@@ -5,10 +5,14 @@ The code Python in this folder is usually a wrapper around the Python modules wr
 The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
 
 The Python code reads the sensor's data, and builds appropriate NMEA sentences to carry them.
+The code acts as a TCP server, so any TCP client can receive the produced NMEA sentences.  
+> _**Note**_: This is what the NMEA-multiplexer expects, but any TCP/NMEA savvy client can use it.
+> Like [OpenCPN](https://www.opencpn.org/), [SeaWi](http://www.seawimarine.net/), etc.
 
+_**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
-  - that one does not need a sensor.
-- `XDR`: Transducer Measurement. Can hold (among many others) Temperature, Pressure, Humidity
+  - that one does not need a sensor. It has a Java equivalent.
+- `XDR`: Transducer Measurement. Can convey (among many others) Temperature, Pressure, Humidity
   - Produced by BMP180, BME280,
 - `MTA`: Air Temperature, Celsius
   - Produced by BMP180, BME280
@@ -114,6 +118,6 @@ $
 ---
 ## Misc links
 - <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
-- 
+
 
 ---
