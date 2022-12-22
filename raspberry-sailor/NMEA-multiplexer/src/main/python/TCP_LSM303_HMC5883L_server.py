@@ -143,7 +143,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
     print(f"Connected by client {connection}")
     while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        data_str: str = produce_LSM303_MAG_Data(sensor)
+        data_str: str = produce_MAG_Data(sensor)
         #
         # TODO Introduce calibration parameters. Calculate data.
         hdg: float = 0.0   # Degrees
@@ -194,6 +194,7 @@ def main(args: List[str]) -> None:
     global PORT
     global verbose
     global nb_clients
+    global sensor
     print("Usage is:")
     print(
         f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")
@@ -215,6 +216,8 @@ def main(args: List[str]) -> None:
         print("-------------------------------------")
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
+    i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
+    sensor = adafruit_lsm303dlh_mag.LSM303DLH_Mag(i2c)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:
@@ -234,14 +237,14 @@ def main(args: List[str]) -> None:
             print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
             # Generate ZDA sentences for this client in its own thread. Producer thread
             client_thread: threading.Thread = \
-                threading.Thread(target=produce_nmea, args=(conn, addr,))  # Producer
+                threading.Thread(target=produce_nmea, args=(conn, addr, True, True, True,))  # Producer
             # print(f"Thread is a {type(client_thread)}")
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
             # Listener thread
             client_listener_thread: threading.Thread = \
-                threading.Thread(target=client_listener, args=(conn, addr, True, True, True))  # Listener
+                threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
             client_listener_thread.daemon = True  # Dies on exit
             client_listener_thread.start()
 
