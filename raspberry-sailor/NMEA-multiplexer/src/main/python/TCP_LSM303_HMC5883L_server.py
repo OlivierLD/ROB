@@ -18,6 +18,9 @@ import time
 import socket
 import threading
 import traceback
+import json
+import platform
+import board
 from datetime import datetime, timezone
 import NMEABuilder   # local script
 from typing import List
