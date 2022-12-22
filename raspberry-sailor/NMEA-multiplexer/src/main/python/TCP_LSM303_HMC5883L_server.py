@@ -28,13 +28,14 @@ import NMEABuilder   # local script
 from typing import List
 import busio
 import adafruit_lsm303dlh_mag
+import math
 
 keep_listening: bool = True
 sensor: adafruit_lsm303dlh_mag.LSM303DLH_Mag
 
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
-verbose: bool = True
+verbose: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
@@ -61,15 +62,15 @@ between_loops: float = 1.0  # in seconds
 producing_status: bool = False
 
 
-def produce_MAG_Data(sensor: adafruit_lsm303dlh_mag.LSM303DLH_Mag) -> str:
+def produce_MAG_Data(sensor: adafruit_lsm303dlh_mag.LSM303DLH_Mag) -> dict:
     mag_x, mag_y, mag_z = sensor.magnetic
     data: dict = {
         "mag_x": mag_x,
         "mag_y": mag_y,
         "mag_z": mag_z
     }
-    data_str: str = json.dumps(data) + DATA_EOS  # DATA_EOS is important, the client does a readLine !
-    return data_str
+    # data_str: str = json.dumps(data) + DATA_EOS  # DATA_EOS is important, the client does a readLine !
+    return data
 
 
 def produce_status(connection: socket.socket, address: tuple) -> None:
@@ -149,18 +150,27 @@ def produce_nmea(connection: socket.socket, address: tuple,
     print(f"Connected by client {connection}")
     while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        data_str: str = produce_MAG_Data(sensor)
-        #
-        # TODO Introduce calibration parameters. Calculate data.
-        hdg: float = 0.0   # Degrees
-        ptch: float = 0.0  # Degrees
-        roll: float = 0.0  # Degrees
+        data: dict = produce_MAG_Data(sensor)
+        mag_x: float = data["mag_x"]
+        mag_y: float = data["mag_y"]
+        mag_z: float = data["mag_z"]
+
+        # TODO Introduce calibration parameters.
+
+        # Calculate data.
+        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
+        # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
+        hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
+        while heading < 0:
+            heading += 360
+        ptch: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
+        roll: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
 
         nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
         nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
         # like "$IIXDR,A,180,D,PTCH,A,-154,D,ROLL*78"
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT" },
-                                              { "value": roll, "type": "ANGULAR_DISPLACEMENT" }) + NMEA_EOS
+        nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT", "extra": "PTCH" },
+                                              { "value": roll, "type": "ANGULAR_DISPLACEMENT", "extra": "ROLL" }) + NMEA_EOS
 
         if verbose:
             # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior

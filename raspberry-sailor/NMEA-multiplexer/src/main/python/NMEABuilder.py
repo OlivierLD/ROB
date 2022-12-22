@@ -137,7 +137,10 @@ def build_XDR(*args) -> str:
         # print(f"{i}: arg:{args[i]}")
         xdr_type: dict = XDR_Types[args[i]["type"]]
         # print(f"xdr_type: ${type(xdr_type)}")
-        sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{i}"
+        if "extra" in xdr_type:
+            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{xdr_type['extra']}"
+        else:
+            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{i}"
 
     cs: int = checksum.calculate_check_sum(sentence)
     str_cs: str = f"{cs:02X}"  # Should be 2 character long, in upper case.
@@ -195,6 +198,9 @@ if __name__ == '__main__':
                              { "value": 12.34, "type": "TEMPERATURE" },
                              { "value": 101_325, "type": "PRESSURE_P" },
                              { "value": 1.01325, "type": "PRESSURE_B" })
+    print(f"Generated XDR: {xdr_sentence}")
+    xdr_sentence = build_XDR({ "value": 56.78, "type": "ANGULAR_DISPLACEMENT", "extra": "PTCH" },
+                             { "value": 12.34, "type": "ANGULAR_DISPLACEMENT", "extra": "ROLL" })
     print(f"Generated XDR: {xdr_sentence}")
 
     print(f"Generated HDM: {build_HDM(195.4)}")
