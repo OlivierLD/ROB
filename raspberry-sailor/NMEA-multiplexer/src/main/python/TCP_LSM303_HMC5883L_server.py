@@ -22,6 +22,8 @@ import json
 import platform
 import board
 from datetime import datetime, timezone
+import logging
+from logging import info
 import NMEABuilder   # local script
 from typing import List
 import busio
