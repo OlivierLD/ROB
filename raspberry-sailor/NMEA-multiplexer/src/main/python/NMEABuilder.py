@@ -107,12 +107,13 @@ def xdr_default_fmt(value: float) -> str:
 
 
 # Not sure it's 100% standard... OpenCPN recognizes those, though.
+# like "$IIXDR,A,180,D,PTCH,A,-154,D,ROLL*78"
 XDR_PTCH: str = "PTCH"  # No, it's not a typo, there is no 'I' in 'PTCH'.
 XDR_ROLL: str = "ROLL"
 
 XDR_Types: Dict[str, Dict] = {
     "TEMPERATURE": { "type": "C", "unit": "C", "to_string": xdr_value_to_str_1_dec },           # in Celsius
-    "ANGULAR_DISPLACEMENT": { "type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec }, # In degrees. TODO Extra args, PTCH, ROLL.
+    "ANGULAR_DISPLACEMENT": { "type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec }, # In degrees. Possible Extra args, PTCH, ROLL.
     "LINEAR_DISPLACEMENT": { "type": "D", "unit": "M", "to_string": xdr_default_fmt },          # In meters
     "FREQUENCY": { "type": "F", "unit": "H", "to_string": xdr_default_fmt },                    # In Hertz
     "FORCE": { "type": "N", "unit": "N", "to_string": xdr_default_fmt },                        # In Newtons

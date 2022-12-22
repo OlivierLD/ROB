@@ -155,7 +155,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
         mag_y: float = data["mag_y"]
         mag_z: float = data["mag_z"]
 
-        # TODO Introduce calibration parameters.
+        # TODO: Introduce calibration parameters.
 
         # Calculate data.
         norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
@@ -169,8 +169,8 @@ def produce_nmea(connection: socket.socket, address: tuple,
         nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
         nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
         # like "$IIXDR,A,180,D,PTCH,A,-154,D,ROLL*78"
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT", "extra": "PTCH" },
-                                              { "value": roll, "type": "ANGULAR_DISPLACEMENT", "extra": "ROLL" }) + NMEA_EOS
+        nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_PTCH },
+                                              { "value": roll, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_ROLL }) + NMEA_EOS
 
         if verbose:
             # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
