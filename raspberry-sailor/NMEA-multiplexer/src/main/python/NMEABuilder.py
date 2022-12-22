@@ -9,6 +9,7 @@ from typing import Dict  # , List, Set, Tuple, Optional
 DEBUG: bool = False
 
 
+# UTC Time
 def build_ZDA(utc_ms: int = None) -> str:
     """
     Builds the ZDA sentence for given timestamp.
@@ -50,6 +51,7 @@ def build_ZDA(utc_ms: int = None) -> str:
     return "$" + sentence
 
 
+# Air Temperature
 def build_MTA(temperature: float) -> str:
     """
     Build the MTA String, for the given temperature.
@@ -65,6 +67,7 @@ def build_MTA(temperature: float) -> str:
     return "$" + sentence
 
 
+# Atm Pressure
 def build_MMB(mb_pressure: float) -> str:
     """
     Build MMB sentence. 
@@ -103,9 +106,13 @@ def xdr_default_fmt(value: float) -> str:
     return f"{value}"
 
 
+# Not sure it's 100% standard... OpenCPN recognizes those, though.
+XDR_PTCH: str = "PTCH"  # No, it's not a typo, there is no 'I' in 'PTCH'.
+XDR_ROLL: str = "ROLL"
+
 XDR_Types: Dict[str, Dict] = {
     "TEMPERATURE": { "type": "C", "unit": "C", "to_string": xdr_value_to_str_1_dec },           # in Celsius
-    "ANGULAR_DISPLACEMENT": { "type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec }, # In degrees
+    "ANGULAR_DISPLACEMENT": { "type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec }, # In degrees. TODO Extra args, PTCH, ROLL.
     "LINEAR_DISPLACEMENT": { "type": "D", "unit": "M", "to_string": xdr_default_fmt },          # In meters
     "FREQUENCY": { "type": "F", "unit": "H", "to_string": xdr_default_fmt },                    # In Hertz
     "FORCE": { "type": "N", "unit": "N", "to_string": xdr_default_fmt },                        # In Newtons
@@ -123,6 +130,7 @@ XDR_Types: Dict[str, Dict] = {
 }
 
 
+# Transducer Measurement
 def build_XDR(*args) -> str:
     sentence: str = f"{prefixes.DEVICE_PREFIX}XDR"
     for i in range(len(args)):
@@ -140,6 +148,7 @@ def build_XDR(*args) -> str:
     return "$" + sentence
 
 
+# Heading
 def build_HDM(hdm: float) -> str:
     sentence: str = f"{prefixes.DEVICE_PREFIX}HDM,"
 
@@ -154,6 +163,7 @@ def build_HDM(hdm: float) -> str:
     return "$" + sentence
 
 
+# Heading
 def build_HDG(hdm: float) -> str:
     sentence: str = f"{prefixes.DEVICE_PREFIX}HDG,"
 
