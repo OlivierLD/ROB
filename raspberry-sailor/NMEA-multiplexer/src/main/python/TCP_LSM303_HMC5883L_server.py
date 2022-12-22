@@ -39,6 +39,7 @@ PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
+DATA_EOS: str = "\r\n"  # aka CR-LF
 
 
 def interrupt(sig: int, frame):
