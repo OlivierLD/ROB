@@ -1,9 +1,23 @@
 # Python NMEA Servers...
 This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
-that could be used to feed the NMEA-multiplexer.
+that could be used to feed the NMEA-multiplexer.  
+The code Python in this folder is usually a wrapper around the Python modules written by the sensor provider.
+The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
+
+The Python code reads the sensor's data, and builds appropriate NMEA sentences to carry them.
+
+- `ZDA`: Time & Date - UTC, day, month, year and local time zone 
+  - that one does not need a sensor.
+- `XDR`: Transducer Measurement. Can hold (among many others) Temperature, Pressure, Humidity
+  - Produced by BMP180, BME280,
+- `MTA`: Air Temperature, Celsius
+  - Produced by BMP180, BME280
+- `MMB`: Atm Pressure
+    - Produced by BMP180, BME280
+- `HDM`, `HDG`: Heading
+  - Produced by LSM303, HCM5883L, LIS3DML
 
 ## Example 1, produce and consume ZDA Sentences
-
 To start the Python ZDA server
 ```
 $ pwd
@@ -96,5 +110,10 @@ User Request > .
 (tcp.clients.SimpleTCPClient) Client exiting
 $
 ```
+
+---
+## Misc links
+- <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
+- 
 
 ---

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 #
 # That one produces ZDA Strings for each connected client.
+# This server does not need to read a sensor, it takes the time from the system.
+# 
 # It also understands input from the client: "STATUS", "LOOPS:x.xx" (not case sensitive), see client_listener.
 # LOOPS:xxx will produce a between_loops = x.xx (in seconds), like LOOPS:1.0
 #
@@ -21,6 +23,9 @@ import logging
 from logging import info
 import NMEABuilder   # local script
 from typing import List, Dict
+
+__version__ = "0.0.1"
+__repo__ = "https://github.com/OlivierLD/ROB"
 
 keep_listening: bool = True
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public class TextToSpeech {
 	private final static Map<String, String> speechTools = new HashMap<>();
 	// See this: https://howtoraspberrypi.com/make-talk-raspberry-pi-espeak/
-	static{
+	static {
 		speechTools.put("Mac OS X", "say \"%s\"");
 		speechTools.put("Linux", "espeak -a 200 \"%s\" --stdout | aplay");
 	}
