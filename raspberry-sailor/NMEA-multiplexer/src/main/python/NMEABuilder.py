@@ -137,8 +137,8 @@ def build_XDR(*args) -> str:
         # print(f"{i}: arg:{args[i]}")
         xdr_type: dict = XDR_Types[args[i]["type"]]
         # print(f"xdr_type: ${type(xdr_type)}")
-        if "extra" in xdr_type:
-            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{xdr_type['extra']}"
+        if "extra" in args[i]:
+            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{args[i]['extra']}"
         else:
             sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{i}"
 
