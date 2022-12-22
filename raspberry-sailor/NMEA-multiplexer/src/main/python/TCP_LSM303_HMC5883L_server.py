@@ -161,8 +161,8 @@ def produce_nmea(connection: socket.socket, address: tuple,
         norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
         # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
         hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
-        while heading < 0:
-            heading += 360
+        while hdg < 0:
+            hdg += 360
         ptch: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
         roll: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
 
