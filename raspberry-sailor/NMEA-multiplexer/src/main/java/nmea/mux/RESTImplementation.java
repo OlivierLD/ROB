@@ -2673,8 +2673,10 @@ public class RESTImplementation {
 			specialContentType = HttpHeaders.TEXT_PLAIN_UTF8;
 			try {
 				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
+//				content = content.replace('\272', ' '); // That one ?
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
+					System.out.printf("\tlength: %d\n", content.length());
 				}
 			} catch (JsonProcessingException jpe) {
 				content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
