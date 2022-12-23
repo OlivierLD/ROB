@@ -195,8 +195,8 @@ def produce_nmea(connection: socket.socket, address: tuple,
         while roll < -180:
             roll += 360
         roll *= -1
-        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose UP, negative: nose down
-        ptch -= ptch
+        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose down, negative: nose up
+        ptch -= 180
         while ptch < -180:
             ptch += 360
 
