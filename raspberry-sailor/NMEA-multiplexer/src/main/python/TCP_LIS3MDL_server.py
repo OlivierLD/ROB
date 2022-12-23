@@ -71,6 +71,7 @@ CALIBRATION_MAP: dict = {
     MAG_Z_OFFSET: 0.0
 }
 
+
 def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
@@ -88,7 +89,7 @@ between_loops: float = 1.0  # in seconds
 producing_status: bool = False
 
 
-def produce_MAG_Data(sensor: adafruit_lsm303dlh_mag.LSM303DLH_Mag) -> dict:
+def produce_MAG_Data(sensor: adafruit_lis3mdl.LIS3MDL) -> dict:
     mag_x, mag_y, mag_z = sensor.magnetic
     data: dict = {
         "mag_x": mag_x,
@@ -137,7 +138,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 if verbose:
                     print(f"Received from client: {data}")
                 client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
-                if  client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
+                if client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
                     try:
                         between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
                     except ValueError as ex:

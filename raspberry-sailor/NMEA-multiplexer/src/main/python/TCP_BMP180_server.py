@@ -46,7 +46,7 @@ CMD_LOOP_PREFIX: str = "LOOPS:"
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
 
-def interrupt(signal, frame):
+def interrupt(sig, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
     print("\nCtrl+C intercepted!")
@@ -101,7 +101,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 if verbose:
                     print(f"Received from client: {data}")
                 client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
-                if  client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
+                if client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
                     try:
                         between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
                     except ValueError as ex:

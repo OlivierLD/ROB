@@ -84,6 +84,10 @@ $ ps -ef | grep TCP_ZDA_server | grep -v grep
 $
 ```
 
+## Example 2, produce and consume Mag Data
+
+## Example 3, produce and consume Atmospheric Data
+
 #### Server interaction
 You can interact with the server, using a TCP client.  
 Look into the `Java-TCP-Python` module (in this project).  
