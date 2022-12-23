@@ -11,7 +11,8 @@ https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm30
 Produces HDG (or HDM) Strings, from the data read from a LSM303 or a HMC5883L (sme I2C address),
 on a regular basis, see the between_loops variable.
 
-With Calibration. Requires a pip3 install pyyaml
+With Calibration.
+Requires a pip3 install pyyaml
 """
 
 import sys
@@ -184,13 +185,20 @@ def produce_nmea(connection: socket.socket, address: tuple,
         mag_y = CALIBRATION_MAP[MAG_Y_COEFF] * (CALIBRATION_MAP[MAG_Y_OFFSET] + mag_y)
         mag_z = CALIBRATION_MAP[MAG_Z_COEFF] * (CALIBRATION_MAP[MAG_Z_OFFSET] + mag_z)
         # Calculated data.
-        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
+        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)  # In microTesla
         # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
         hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
         while hdg < 0:
             hdg += 360
-        roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
-        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
+        roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z. Positive: heeling Stbd, negative, heeling Port
+        roll -= 180
+        while roll < -180:
+            roll += 360
+        roll *= -1
+        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose UP, negative: nose down
+        ptch -= ptch
+        while ptch < -180:
+            ptch += 360
 
         nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
         nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
