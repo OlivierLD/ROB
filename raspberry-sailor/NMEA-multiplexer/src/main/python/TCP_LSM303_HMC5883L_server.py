@@ -254,7 +254,8 @@ def main(args: List[str]) -> None:
             if arg[:len(CAL_PROPS_PREFIX)] == CAL_PROPS_PREFIX:
                 cal_props: str = arg[len(CAL_PROPS_PREFIX):]
                 try:
-                    CALIBRATION_MAP = yaml.safe_load(cal_props)
+                    with open(cal_props, "r") as props:
+                        CALIBRATION_MAP = yaml.safe_load(props)
                 except yaml.YAMLError as exc:
                     print(exc)
 
