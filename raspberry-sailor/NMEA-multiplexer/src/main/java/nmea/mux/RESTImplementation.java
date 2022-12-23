@@ -2672,14 +2672,19 @@ public class RESTImplementation {
 		} else {
 			specialContentType = HttpHeaders.TEXT_PLAIN_ISO_8859;
 			try {
-				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
-				content = content.replace('°', ' '); // That one ? TODO There must be a better way...
+				final byte[] ba = mapper.writeValueAsBytes(cache);
+				content = new String(ba, "UTF-8");
+				// content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
+				// content = content.replace('°', '*'); // ' '); TODO There must be a better way...
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
 					System.out.printf("\tlength: %d\n", content.length());
 				}
 			} catch (JsonProcessingException jpe) {
 				content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
+			} catch (UnsupportedEncodingException uee) {
+				content = uee.getMessage();
+				content = uee.getMessage();
 			}
 		}
 		RESTProcessorUtil.generateResponseHeaders(response, specialContentType, content.length());
