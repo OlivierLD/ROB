@@ -123,6 +123,9 @@ $
 ## Misc links and stuff
 - <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
 - <https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor/python-circuitpython>
+- <https://github.com/adafruit/Adafruit_CircuitPython_HTU21D>
+- <https://pypi.org/project/adafruit-circuitpython-HTU21D/>
+- <https://docs.circuitpython.org/projects/htu21d/en/latest/>
 - <https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library>
 - <https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/python-circuitpython-test>
 - <https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer/python-circuitpython>
