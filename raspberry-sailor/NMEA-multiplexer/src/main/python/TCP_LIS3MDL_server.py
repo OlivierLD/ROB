@@ -11,7 +11,8 @@ sudo pip3 install adafruit-circuitpython-lis3mdl
 Produces HDM, HDG and XDR Strings, from the data read from a LIS3MDL (triple axis magnetometer),
 on a regular basis, see the between_loops variable.
 
-
+With Calibration.
+Requires a pip3 install pyyaml
 """
 
 import sys
@@ -30,6 +31,7 @@ import NMEABuilder   # local script
 from typing import List
 import busio
 import math
+import yaml
 import adafruit_lis3mdl
 
 __version__ = "0.0.1"
@@ -42,6 +44,7 @@ HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set 
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
 verbose: bool = False
 
+CAL_PROPS_PREFIX: str = "--cal-props:"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
@@ -52,6 +55,21 @@ CMD_LOOP_PREFIX: str = "LOOPS:"
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 DATA_EOS: str = "\r\n"  # aka CR-LF
 
+MAG_X_COEFF: str = "MAG_X_COEFF"
+MAG_Y_COEFF: str = "MAG_Y_COEFF"
+MAG_Z_COEFF: str = "MAG_Z_COEFF"
+MAG_X_OFFSET: str = "MAG_X_OFFSET"
+MAG_Y_OFFSET: str = "MAG_Y_OFFSET"
+MAG_Z_OFFSET: str = "MAG_Z_OFFSET"
+
+CALIBRATION_MAP: dict = {
+    MAG_X_COEFF: 1.0,
+    MAG_Y_COEFF: 1.0,
+    MAG_Z_COEFF: 1.0,
+    MAG_X_OFFSET: 0.0,
+    MAG_Y_OFFSET: 0.0,
+    MAG_Z_OFFSET: 0.0
+}
 
 def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
@@ -162,17 +180,25 @@ def produce_nmea(connection: socket.socket, address: tuple,
         mag_x: float = data["mag_x"]
         mag_y: float = data["mag_y"]
         mag_z: float = data["mag_z"]
-
-        # TODO: Introduce calibration parameters.
-
-        # Calculate data.
-        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
+        # Calibrated data
+        mag_x = CALIBRATION_MAP[MAG_X_COEFF] * (CALIBRATION_MAP[MAG_X_OFFSET] + mag_x)
+        mag_y = CALIBRATION_MAP[MAG_Y_COEFF] * (CALIBRATION_MAP[MAG_Y_OFFSET] + mag_y)
+        mag_z = CALIBRATION_MAP[MAG_Z_COEFF] * (CALIBRATION_MAP[MAG_Z_OFFSET] + mag_z)
+        # Calculated data.
+        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)  # In microTesla
         # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
         hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
         while hdg < 0:
             hdg += 360
-        ptch: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
-        roll: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
+        roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z. Positive: heeling Stbd, negative, heeling Port
+        roll -= 180
+        while roll < -180:
+            roll += 360
+        roll *= -1
+        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose down, negative: nose up
+        ptch -= 180
+        while ptch < -180:
+            ptch += 360
 
         nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
         nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
@@ -219,9 +245,10 @@ def main(args: List[str]) -> None:
     global verbose
     global nb_clients
     global sensor
+    global CALIBRATION_MAP
     print("Usage is:")
     print(
-        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")
+        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false] [{CAL_PROPS_PREFIX}cal_props.yaml")
     print(f"\twhere {MACHINE_NAME_PRM_PREFIX} and {PORT_PRM_PREFIX} must match the context's settings.\n")
 
     if len(args) > 0:  # Script name + X args. > 1 should do the job.
@@ -232,6 +259,13 @@ def main(args: List[str]) -> None:
                 PORT = int(arg[len(PORT_PRM_PREFIX):])
             if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
                 verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+            if arg[:len(CAL_PROPS_PREFIX)] == CAL_PROPS_PREFIX:
+                cal_props: str = arg[len(CAL_PROPS_PREFIX):]
+                try:
+                    with open(cal_props, "r") as props:
+                        CALIBRATION_MAP = yaml.safe_load(props)
+                except yaml.YAMLError as exc:
+                    print(exc)
 
     if verbose:
         print("-- Received from the command line: --")

@@ -267,8 +267,6 @@ def main(args: List[str]) -> None:
                 except yaml.YAMLError as exc:
                     print(exc)
 
-
-
     if verbose:
         print("-- Received from the command line: --")
         for arg in sys.argv:
