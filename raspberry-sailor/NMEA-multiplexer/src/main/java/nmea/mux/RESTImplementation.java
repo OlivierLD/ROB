@@ -2670,21 +2670,20 @@ public class RESTImplementation {
 					"BSP=%.2f\nLAT=%f\nLNG=%f\nSOG=%.2f\nCOG=%d\nDATE=%s\nYEAR=%d\nMONTH=%d\nDAY=%d\nHOUR=%d\nMIN=%d\nSEC=%d\nS_HOUR=%d\nS_MIN=%d\nS_SEC=%d\nRMC_OK=%s\nBARO=%.2f\nTEMP=%.2f\nHUM=%.2f",
 					bsp, latitude, longitude, sog, cog, date, year, month, day, hours, mins, secs, solHours, solMins, solSecs, (rmcStatus ? "OK" : "KO"), press, airTemp, hum);
 		} else {
-			specialContentType = HttpHeaders.TEXT_PLAIN_ISO_8859;
+			// specialContentType = HttpHeaders.TEXT_PLAIN_ISO_8859;
 			try {
-				final byte[] ba = mapper.writeValueAsBytes(cache);
-				content = new String(ba, "UTF-8");
-				// content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
-				// content = content.replace('°', '*'); // ' '); TODO There must be a better way...
+//				final byte[] ba = mapper.writeValueAsBytes(cache);
+//				content = new String(ba, "UTF-8");
+				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
+				content = content.replace('°', '*'); // ' '); TODO There must be a better way...
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
 					System.out.printf("\tlength: %d\n", content.length());
 				}
 			} catch (JsonProcessingException jpe) {
 				content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
-			} catch (UnsupportedEncodingException uee) {
-				content = uee.getMessage();
-				content = uee.getMessage();
+//			} catch (UnsupportedEncodingException uee) {
+//				content = uee.getMessage();
 			}
 		}
 		RESTProcessorUtil.generateResponseHeaders(response, specialContentType, content.length());
