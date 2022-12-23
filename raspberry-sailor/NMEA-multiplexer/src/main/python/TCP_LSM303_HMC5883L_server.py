@@ -8,8 +8,10 @@ https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout/python-ci
 
 https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html
 
-Produces HDG (or HDM) Strings, from the data read from a LSM303 or a HMC5883L,
+Produces HDG (or HDM) Strings, from the data read from a LSM303 or a HMC5883L (sme I2C address),
 on a regular basis, see the between_loops variable.
+
+With Calibration. Requires a pip3 install pyyaml
 """
 
 import sys
@@ -27,8 +29,12 @@ from logging import info
 import NMEABuilder   # local script
 from typing import List
 import busio
-import adafruit_lsm303dlh_mag
 import math
+import yaml
+import adafruit_lsm303dlh_mag
+
+__version__ = "0.0.1"
+__repo__ = "https://github.com/OlivierLD/ROB"
 
 keep_listening: bool = True
 sensor: adafruit_lsm303dlh_mag.LSM303DLH_Mag
@@ -37,13 +43,32 @@ HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set 
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
 verbose: bool = False
 
+CAL_PROPS_PREFIX: str = "--cal-props:"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 
+CMD_STATUS: str = "STATUS"
+CMD_LOOP_PREFIX: str = "LOOPS:"
+
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 DATA_EOS: str = "\r\n"  # aka CR-LF
 
+MAG_X_COEFF: str = "MAG_X_COEFF"
+MAG_Y_COEFF: str = "MAG_Y_COEFF"
+MAG_Z_COEFF: str = "MAG_Z_COEFF"
+MAG_X_OFFSET: str = "MAG_X_OFFSET"
+MAG_Y_OFFSET: str = "MAG_Y_OFFSET"
+MAG_Z_OFFSET: str = "MAG_Z_OFFSET"
+
+CALIBRATION_MAP: dict = {
+    MAG_X_COEFF: 1.0,
+    MAG_Y_COEFF: 1.0,
+    MAG_Z_COEFF: 1.0,
+    MAG_X_OFFSET: 0.0,
+    MAG_Y_OFFSET: 0.0,
+    MAG_Z_OFFSET: 0.0
+}
 
 def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
@@ -78,7 +103,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     global keep_listening
-    message: Dict = {
+    message: dict = {
         "source": __file__,
         "between-loops": between_loops,
         "connected-clients": nb_clients,
@@ -154,17 +179,18 @@ def produce_nmea(connection: socket.socket, address: tuple,
         mag_x: float = data["mag_x"]
         mag_y: float = data["mag_y"]
         mag_z: float = data["mag_z"]
-
-        # TODO: Introduce calibration parameters.
-
-        # Calculate data.
+        # Calibrated data
+        mag_x = CALIBRATION_MAP[MAG_X_COEFF] * (CALIBRATION_MAP[MAG_X_OFFSET] + mag_x)
+        mag_y = CALIBRATION_MAP[MAG_Y_COEFF] * (CALIBRATION_MAP[MAG_Y_OFFSET] + mag_y)
+        mag_z = CALIBRATION_MAP[MAG_Z_COEFF] * (CALIBRATION_MAP[MAG_Z_OFFSET] + mag_z)
+        # Calculated data.
         norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)
         # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
         hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
         while hdg < 0:
             hdg += 360
-        ptch: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
-        roll: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
+        roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z TODO 180 +- ?
+        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z TODO 180 +- ?
 
         nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
         nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
@@ -184,7 +210,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
             print("---------------------------")
 
         try:
-            # Send to the client
+            # Send to the client(s)
             if hdg_sentences:
                 connection.sendall(nmea_hdg.encode())
             if hdm_sentences:
@@ -211,9 +237,10 @@ def main(args: List[str]) -> None:
     global verbose
     global nb_clients
     global sensor
+    global CALIBRATION_MAP
     print("Usage is:")
     print(
-        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")
+        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false] [{CAL_PROPS_PREFIX}cal_props.yaml")
     print(f"\twhere {MACHINE_NAME_PRM_PREFIX} and {PORT_PRM_PREFIX} must match the context's settings.\n")
 
     if len(args) > 0:  # Script name + X args. > 1 should do the job.
@@ -224,6 +251,14 @@ def main(args: List[str]) -> None:
                 PORT = int(arg[len(PORT_PRM_PREFIX):])
             if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
                 verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+            if arg[:len(CAL_PROPS_PREFIX)] == CAL_PROPS_PREFIX:
+                cal_props: str = arg[len(CAL_PROPS_PREFIX):]
+                try:
+                    CALIBRATION_MAP = yaml.safe_load(cal_props)
+                except yaml.YAMLError as exc:
+                    print(exc)
+
+
 
     if verbose:
         print("-- Received from the command line: --")

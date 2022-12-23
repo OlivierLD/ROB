@@ -1,10 +1,10 @@
 # Python NMEA Servers...
 This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
 that could be used to feed the NMEA-multiplexer.  
-The code Python in this folder is usually a wrapper around the Python modules written by the sensor provider.
+The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors provider.
 The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
 
-The Python code reads the sensor's data, and builds appropriate NMEA sentences to carry them.
+The Python code reads the sensor's data, and builds appropriate NMEA sentences to carry them around.
 The code acts as a TCP server, so any TCP client can receive the produced NMEA sentences.  
 > _**Note**_: This is what the NMEA-multiplexer expects, but any TCP/NMEA savvy client can use it.
 > Like [OpenCPN](https://www.opencpn.org/), [SeaWi](http://www.seawimarine.net/), etc.
@@ -12,8 +12,8 @@ The code acts as a TCP server, so any TCP client can receive the produced NMEA s
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
   - that one does not need a sensor. It has a Java equivalent.
-- `XDR`: Transducer Measurement. Can convey (among many others) Temperature, Pressure, Humidity
-  - Produced by BMP180, BME280,
+- `XDR`: Transducer Measurement. Can convey (among many others) Temperature, Pressure, Humidity, Angular Displacement (like pitch and roll)
+  - Produced by BMP180, BME280, Magnetometers
 - `MTA`: Air Temperature, Celsius
   - Produced by BMP180, BME280
 - `MMB`: Atm Pressure
@@ -118,6 +118,19 @@ $
 ---
 ## Misc links
 - <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
+- A shield for atmospheric sensors: <https://www.thingiverse.com/thing:1067700>
+- [Magnetometer Calibration](https://github.com/OlivierLD/raspberry-coffee/blob/master/raspberry-io-pi4j/I2C-SPI/lsm303.calibration/README.md)
 
-
+```properties
+#
+# Offsets in microTesla
+#
+MagXOffset=12
+MagYOffset=-15.0
+MagZOffset=-5
+#
+MagXCoeff=1
+MagYCoeff=1.05
+MagZCoeff=1
+```
 ---

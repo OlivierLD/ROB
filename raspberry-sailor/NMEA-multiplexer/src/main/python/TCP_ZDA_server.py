@@ -22,7 +22,7 @@ from datetime import datetime, timezone
 import logging
 from logging import info
 import NMEABuilder   # local script
-from typing import List, Dict
+from typing import List
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -68,7 +68,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     global keep_listening
-    message: Dict = {
+    message: dict = {
         "source": __file__,
         "between-loops": between_loops,
         "connected-clients": nb_clients,

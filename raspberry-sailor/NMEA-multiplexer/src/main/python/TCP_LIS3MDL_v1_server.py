@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
 """
-A TCP server.
+A TCP Server
 
 To install the required packages:
-https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library
+https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer/python-circuitpython
 
-Produces XDR, MTA and MMB Strings, from the data read from a BMP180 (or BMP085),
-on a regular basis, see the between_loops variable.
+sudo pip3 install adafruit-circuitpython-lis3mdl
+
+Produces HDM and HDG Strings, from the data read from a LIS3MDL (triple axis magnetometer),
+every second.
+
+TODO Merge with TCP_LSM303_HMC5883L_server.py ?
+
 """
 
 import sys
@@ -16,18 +21,19 @@ import time
 import socket
 import threading
 import traceback
-from datetime import datetime, timezone
+import math
 import NMEABuilder   # local script
 from typing import List
-import Adafruit_BMP.BMP085 as BMP085
+import board
+import adafruit_lis3mdl
 
 
 keep_listening: bool = True
-sensor: BMP085.BMP085
+sensor: adafruit_lis3mdl.LIS3MDL
 
-HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
+HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
-verbose: bool = False
+verbose: bool = True
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
@@ -46,51 +52,27 @@ def interrupt(signal, frame):
 
 
 nb_clients: int = 0
-between_loops: float = 1.0  # in seconds
 
 
-def produce_nmea(connection: socket.socket, address: tuple,
-                 mta_sentences: bool = True,
-                 mmb_sentences: bool = True,
-                 xdr_sentences: bool = True) -> None:
+def produce_nmea(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global sensor
     print(f"Connected by client {connection}")
     while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        temperature: float = sensor.read_temperature()  # Celsius
-        pressure: float = sensor.read_pressure()        # Pa
-        altitude: float = sensor.read_altitude()        # meters
-        sea_level_pressure: float = sensor.read_sealevel_pressure()
+        mag_x, mag_y, mag_z = sensor.magnetic
+        heading: float = math.degrees(math.atan2(mag_y, mag_x))
+        # TODO Pitch & Roll
+        while heading < 0:
+            heading += 360
 
-        # OpenCPN expects the pressure in BARS from XDR, and air temperature from MTA !
-        # XDR Temperature is not necessarily Air Temperature...
-        nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
-        nmea_mmb: str = NMEABuilder.build_MMB(pressure / 100) + NMEA_EOS
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": temperature, "type": "TEMPERATURE" },
-                                              { "value": pressure, "type": "PRESSURE_P" },
-                                              { "value": pressure / 100_000, "type": "PRESSURE_B" }) + NMEA_EOS
-
-        if verbose:
-            # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
-            print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
-            if mta_sentences:
-                print(f"Sending {nmea_mta.strip()}")
-            if mmb_sentences:
-                print(f"Sending {nmea_mmb.strip()}")
-            if xdr_sentences:
-                print(f"Sending {nmea_xdr.strip()}")
-            print("---------------------------")
-
+        nmea_hdm: str = NMEABuilder.build_HDM(heading) + NMEA_EOS
+        nmea_hdg: str = NMEABuilder.build_HDG(heading) + NMEA_EOS
         try:
             # Send to the client
-            if mta_sentences:
-                connection.sendall(nmea_mta.encode())
-            if mmb_sentences:
-                connection.sendall(nmea_mmb.encode())
-            if xdr_sentences:
-                connection.sendall(nmea_xdr.encode())
-            time.sleep(between_loops)
+            connection.sendall(nmea_hdm.encode())
+            connection.sendall(nmea_hdg.encode())
+            time.sleep(1.0)  # 1 sec.
         except BrokenPipeError as bpe:
             print("Client disconnected")
             nb_clients -= 1
@@ -132,7 +114,8 @@ def main(args: List[str]) -> None:
         print("-------------------------------------")
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
-    sensor = BMP085.BMP085(busnum=1)
+    i2c = board.I2C()  # uses board.SCL and board.SDA
+    sensor = adafruit_lis3mdl.LIS3MDL(i2c)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:
@@ -145,8 +128,8 @@ def main(args: List[str]) -> None:
             print(f">> New accept: Conn is a {type(conn)}, addr is a {type(addr)}")
             nb_clients += 1
             print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
-            # Generate NMEA sentences for this client in its own thread.
-            client_thread = threading.Thread(target=produce_nmea, args=(conn, addr, True, False, True,))
+            # Generate ZDA sentences for this client in its own thread.
+            client_thread = threading.Thread(target=produce_nmea, args=(conn, addr,))
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
