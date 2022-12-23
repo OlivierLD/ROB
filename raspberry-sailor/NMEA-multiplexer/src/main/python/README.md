@@ -116,7 +116,7 @@ $
 ```
 
 ---
-## Misc links
+## Misc links and stuff
 - <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
 - A shield for atmospheric sensors: <https://www.thingiverse.com/thing:1067700>
 - [Magnetometer Calibration](https://github.com/OlivierLD/raspberry-coffee/blob/master/raspberry-io-pi4j/I2C-SPI/lsm303.calibration/README.md)

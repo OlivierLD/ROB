@@ -1,5 +1,6 @@
 #
-# This is an example
+# This is an example.
+# Magnetometer calibration data.
 #
 MAG_X_COEFF: 1.0
 MAG_Y_COEFF: 1.05
