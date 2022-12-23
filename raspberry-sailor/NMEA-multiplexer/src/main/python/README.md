@@ -121,16 +121,24 @@ $
 - A shield for atmospheric sensors: <https://www.thingiverse.com/thing:1067700>
 - [Magnetometer Calibration](https://github.com/OlivierLD/raspberry-coffee/blob/master/raspberry-io-pi4j/I2C-SPI/lsm303.calibration/README.md)
 
-```properties
+Put the calibration parameters in a `yaml` file:
+```yaml
+#
+MAG_X_COEFF: 1.0
+MAG_Y_COEFF: 1.05
+MAG_Z_COEFF: 1.0
 #
 # Offsets in microTesla
 #
-MagXOffset=12
-MagYOffset=-15.0
-MagZOffset=-5
-#
-MagXCoeff=1
-MagYCoeff=1.05
-MagZCoeff=1
+MAG_X_OFFSET: 12
+MAG_Y_OFFSET: -15
+MAG_Z_OFFSET: -5
 ```
+and use it like in
+```
+$ python3 src/main/python/TCP_LSM303_HMC8553L_server.py \
+          --port:7001 \
+          --cal-props:src/main/python/cal.sample.yaml
+```
+
 ---
