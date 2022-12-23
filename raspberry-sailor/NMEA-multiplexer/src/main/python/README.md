@@ -122,8 +122,12 @@ $
 ---
 ## Misc links and stuff
 - <https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html>
+- <https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor/python-circuitpython>
+- <https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library>
+- <https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/python-circuitpython-test>
+- <https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer/python-circuitpython>
 - A shield for atmospheric sensors: <https://www.thingiverse.com/thing:1067700>
-- [Magnetometer Calibration](https://github.com/OlivierLD/raspberry-coffee/blob/master/raspberry-io-pi4j/I2C-SPI/lsm303.calibration/README.md)
+- [Magnetometer (and accelerometer) Calibration](https://github.com/OlivierLD/raspberry-coffee/blob/master/raspberry-io-pi4j/I2C-SPI/lsm303.calibration/README.md)
 
 Put the calibration parameters in a `yaml` file:
 ```yaml
