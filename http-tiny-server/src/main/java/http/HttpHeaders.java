@@ -10,6 +10,7 @@ public class HttpHeaders {
     // Content-Type Values
     public final static String TEXT_PLAIN = "text/plain";
     public final static String TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8";
+    public final static String TEXT_PLAIN_ISO_8859 = "text/plain; charset=ISO-8859-1";
     public final static String TEXT_HTML = "text/html";
     public final static String TEXT_XML = "text/xml";
     public final static String APPLICATION_JSON = "application/json";
