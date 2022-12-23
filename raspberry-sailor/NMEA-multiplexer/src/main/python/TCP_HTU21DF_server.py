@@ -26,6 +26,7 @@ import logging
 from logging import info
 import NMEABuilder   # local script
 from typing import List
+import busio
 # import math, yaml ?
 from adafruit_htu21d import HTU21D
 

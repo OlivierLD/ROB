@@ -2611,7 +2611,7 @@ public class RESTImplementation {
 			String date = "";
 			int year = 0, month = 0, day = 0, hours = 0, mins = 0, secs = 0;
 			try {
-				// TODO Use Calendar
+				// TODO Use Calendar...
 				date = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).toString();
 				year = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getYear();
 				month = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getMonth();
@@ -2672,8 +2672,11 @@ public class RESTImplementation {
 		} else {
 			try {
 				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
+				if (restVerbose()) {
+					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
+				}
 			} catch (JsonProcessingException jpe) {
-				content = jpe.getMessage(); // TODO A more structured error message...
+				content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
 			}
 		}
 		RESTProcessorUtil.generateResponseHeaders(response, specialContentType, content.length());

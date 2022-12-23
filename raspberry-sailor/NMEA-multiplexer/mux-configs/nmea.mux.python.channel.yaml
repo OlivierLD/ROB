@@ -13,13 +13,17 @@ context:
 channels:
   # ZDA Data, as per the above.
   - type: tcp
-    server: localhost
+    server: 192.168.1.105
     port: 7001
     verbose: false
-  - type: serial
-    port: "/dev/ttyS80"  # GPS
-    baudrate: 4800
+  - type: tcp
+    server: 192.168.1.105
+    port: 7002
     verbose: false
+#  - type: serial
+#    port: "/dev/ttyS80"  # GPS
+#    baudrate: 4800
+#    verbose: false
 forwarders:
   - type: console
 

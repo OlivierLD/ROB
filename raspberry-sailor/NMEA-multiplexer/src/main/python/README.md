@@ -21,6 +21,16 @@ _**NMEA Sentences examples:**_
 - `HDM`, `HDG`: Heading
   - Produced by LSM303, HCM5883L, LIS3DML
 
+> _**Note**_: the Python code may require some modules to be installed. This must be done
+> _with an Internet connection_.  
+> Like 
+> ````
+> pip3 install pyyaml
+> pip3 install adafruit-circuitpython-htu21d
+> ````
+> After that, you may hop off the Internet.
+
+
 ## Example 1, produce and consume ZDA Sentences
 To start the Python ZDA server
 ```
@@ -84,14 +94,65 @@ $ ps -ef | grep TCP_ZDA_server | grep -v grep
 $
 ```
 
-## Example 2, produce and consume Mag Data
+## Example 2, produce Mag Data
+```
+$ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
+```
 
-## Example 3, produce and consume Atmospheric Data
+## Example 3, produce Atmospheric Data
+```
+$ python3 src/main/python/TCP_BMP180_server.py --port:7001
+```
 
-#### Server interaction
-You can interact with the server, using a TCP client.  
+## Example 4, produce all kinds of data, and consume them in one place
+Start all the required Python TCP servers
+```
+$ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
+```
+```
+$ python3 src/main/python/TCP_BMP180_server.py --port:7002
+```
+Consume them from an NMEA-multiplexer, with a config file like
+```yaml
+#
+# MUX definition.
+# With Python TCP Server input, on port 7001
+#
+name: "With TCP server, in Python"
+description:
+  - Requires the Python servers to be running, ports 7001 and 7002
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+channels:
+  # Mag Data
+  - type: tcp
+    server: localhost
+    port: 7001
+    verbose: false
+  # Atm Data
+  - type: tcp
+    server: localhost
+    port: 7002
+    verbose: false
+forwarders:
+  - type: console
+```
+Then you can get to the data.  
+Do a
+```
+$ curl -X GET http://localhost:9999/mux/oplist
+```
+and then a 
+```
+$ curl -X GET http://localhost:9999/mux/cache
+```
+
+## Server interaction
+The TCP code presented here allows you to interact with the server, using a TCP client.  
 Look into the `Java-TCP-Python` module (in this project).  
-You can change the ZDA sentence production frequency, and get the status of the server.
+You can change the NMEA sentences production frequency, and get the status of the server.
 
 ```
 $ ./start.tcp.client.sh --port:7001
