@@ -6,6 +6,8 @@ A TCP server.
 To install the required packages:
 https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor/python-circuitpython
 
+Use a sudo pip3 install adafruit-circuitpython-htu21d
+
 Produces XDR, MTA, from the data read from a HTU21DF,
 on a regular basis, see the between_loops variable.
 """
@@ -18,6 +20,7 @@ import threading
 import traceback
 import json
 import platform
+import board
 from datetime import datetime, timezone
 import logging
 from logging import info
@@ -30,7 +33,7 @@ __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 keep_listening: bool = True
-sensor: adafruit_htu21d.HTU21D
+sensor: HTU21D
 
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
