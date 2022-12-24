@@ -102,7 +102,7 @@ let handler = (req, res) => {
                 if (resource.endsWith(".jpg") ||
                     resource.endsWith(".gif") ||
                     resource.endsWith(".ico") ||
-                    resource.endsWith(".png")) {  // TODO More types here if needed
+                    resource.endsWith(".png")) {  // TODO More types here if needed, svg and others
                     //  res.writeHead(200, {'Content-Type': 'image/gif' });
                     res.end(data, 'binary');
                 } else {

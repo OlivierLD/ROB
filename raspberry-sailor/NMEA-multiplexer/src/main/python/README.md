@@ -1,8 +1,24 @@
 # Python NMEA Servers...
+As said before, this folder is here to try _not_ to have to re-write existing drivers.  
+We will use the code provided by the sensor providers, as it is, which usually means in Python.
+The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
+framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations.  
+> In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi, and whatever you can plug on it.
+> Vast topic indeed.
+
+For now, this is more to be seen as a Proof Of Concept (POC) than anything else. 
+
+The tricky point was to find a suitable way to establish a communication between Java and Python, and this without having to depend on external code.  
+So we are going to use TCP (Transfer Control Protocol), language agnostic protocol supported by many languages - including Java and Python, and the data going back and forth
+will be encapsulated by JSON (JavaScript Object Notation), also natively supported by the languages we target.
+
 This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
 reading sensor data, that could be used to feed the NMEA-multiplexer.  
-The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors provider.
+The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors' provider.
 The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
+
+> _**Note**_: the sensors we talk about here are atmospheric and magnetic sensors, using I2C (or maybe SPI some day) protocol.
+> We will _not_ use GPS here. GPS' are read using Serial communication. Look into the Java code for that.
 
 The Python code reads the sensor's data, and builds appropriate NMEA sentence(s) to carry them around.
 The code acts as a TCP server, so any TCP client can receive the produced NMEA sentences.  
@@ -18,7 +34,7 @@ We provide here TCP server reading the following sensors:
 
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
-  - that one does _**not**_ need a sensor. It has a Java equivalent.
+  - that one does _**not**_ need a sensor (it's based on the system's time). It has a Java equivalent.
 - `XDR`: Transducer Measurement. Can convey (among many others) Temperature, Pressure, Humidity, Angular Displacement (like pitch and roll)
   - Produced by BMP180, BME280, Magnetometers
 - `MTA`: Air Temperature, Celsius
@@ -28,8 +44,8 @@ _**NMEA Sentences examples:**_
 - `HDM`, `HDG`: Heading
   - Produced by LSM303, HCM5883L, LIS3DML
 
-> _**Note**_: the Python code may require some modules to be installed. This must be done
-> _with an Internet connection_.  
+> _**Important Note**_: the Python code may require some modules to be installed. This must be done
+> _with an <u>Internet connection</u>_.  
 > Like 
 > ````
 > pip3 install pyyaml
@@ -223,5 +239,9 @@ $ python3 src/main/python/TCP_LSM303_HMC8553L_server.py \
           --port:7001 \
           --cal-props:src/main/python/cal.sample.yaml
 ```
+
+# To Try next
+
+- Docker image?
 
 ---
