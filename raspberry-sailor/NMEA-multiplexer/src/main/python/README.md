@@ -1,17 +1,24 @@
 # Python NMEA Servers...
 This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
-that could be used to feed the NMEA-multiplexer.  
+reading sensor data, that could be used to feed the NMEA-multiplexer.  
 The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors provider.
 The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
 
-The Python code reads the sensor's data, and builds appropriate NMEA sentences to carry them around.
+The Python code reads the sensor's data, and builds appropriate NMEA sentence(s) to carry them around.
 The code acts as a TCP server, so any TCP client can receive the produced NMEA sentences.  
-> _**Note**_: This is what the NMEA-multiplexer expects, but any TCP/NMEA savvy client can use it.
+> _**Note**_: TCP is one of the inputs the NMEA-multiplexer expects, but any TCP/NMEA savvy client can use it.
 > Like [OpenCPN](https://www.opencpn.org/), [SeaWi](http://www.seawimarine.net/), etc.
+
+We provide here TCP server reading the following sensors:
+- [BMP180](https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library). Temperature, Pressure.
+- [BME280](https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout). Temperature, Pressure, Relative Humidity.
+- [HTUDF21D](https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor).  Temperature, Relative Humidity.
+- [LSM303](https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout). 3-axis Magnetometer, Accelerometer.
+- [LIS3MDL](https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer). 3-axis Magnetometer.
 
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
-  - that one does not need a sensor. It has a Java equivalent.
+  - that one does _**not**_ need a sensor. It has a Java equivalent.
 - `XDR`: Transducer Measurement. Can convey (among many others) Temperature, Pressure, Humidity, Angular Displacement (like pitch and roll)
   - Produced by BMP180, BME280, Magnetometers
 - `MTA`: Air Temperature, Celsius
@@ -103,6 +110,9 @@ $ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:
 ```
 $ python3 src/main/python/TCP_BMP180_server.py --port:7001
 ```
+```
+$ python3 src/main/python/TCP_BME280_server.py --port:7001
+```
 
 ## Example 4, produce all kinds of data, and consume them in one place
 Start all the required Python TCP servers
@@ -148,6 +158,7 @@ and then a
 ```
 $ curl -X GET http://localhost:9999/mux/cache
 ```
+> Notice the way the different TCP ports are mentioned in the yaml. 
 
 ## Server interaction
 The TCP code presented here allows you to interact with the server, using a TCP client.  
