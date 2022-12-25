@@ -1,0 +1,5 @@
+Projects in this folder intend to show how to implement - and deliver - NMEA-multiplexer instances, with different features, like
+- minimal logger
+- full server, with REST Implementation, almanac publication
+- etc
+

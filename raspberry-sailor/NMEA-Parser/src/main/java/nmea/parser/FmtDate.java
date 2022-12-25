@@ -19,6 +19,38 @@ public class FmtDate {
 	int sec;
 	String tz;
 
+	public long getEpoch() {
+		return epoch;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public int getHour() {
+		return hour;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public int getSec() {
+		return sec;
+	}
+
+	public String getTz() {
+		return tz;
+	}
+
 	public FmtDate epoch(long epoch) {
 		this.epoch = epoch;
 		return this;

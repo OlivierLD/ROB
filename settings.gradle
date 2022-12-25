@@ -15,4 +15,5 @@ include('raspberry-sailor:NMEA-Parser')
 include('raspberry-sailor:TideEngine')
 include('raspberry-sailor:NMEA-multiplexer')
 
+include('raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic')
 

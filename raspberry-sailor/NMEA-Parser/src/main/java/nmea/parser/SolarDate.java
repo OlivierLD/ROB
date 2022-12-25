@@ -14,6 +14,14 @@ public class SolarDate implements Serializable {
 	private Date date = null;
 	private FmtDate fmtDate = null;
 
+	public Date getDate() {
+		return date;
+	}
+
+	public FmtDate getFmtDate() {
+		return fmtDate;
+	}
+
 	public final static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss");
 
 	static {

@@ -12,6 +12,18 @@ public class UTCDate implements Serializable {
 	private long epoch = 0L;
 	private FmtDate fmtDate = null;
 
+	public Date getDate() {
+		return date;
+	}
+
+	public long getEpoch() {
+		return epoch;
+	}
+
+	public FmtDate getFmtDate() {
+		return fmtDate;
+	}
+
 	private static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
 	static {
 		FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));

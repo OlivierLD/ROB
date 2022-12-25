@@ -1,5 +1,5 @@
 # Python NMEA Servers...
-As said before, this folder is here to try _not_ to have to re-write existing drivers.  
+As said before, the code in this folder is here to try _not_ to have to re-write existing drivers.  
 We will use the code provided by the sensor providers, as it is, which usually means in Python.
 The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
 framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations.  

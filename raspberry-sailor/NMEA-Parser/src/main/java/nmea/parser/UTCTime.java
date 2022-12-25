@@ -12,6 +12,14 @@ public class UTCTime implements Serializable {
 	private Date date = null;
 	private FmtDate fmtDate = null;
 
+	public Date getDate() {
+		return date;
+	}
+
+	public FmtDate getFmtDate() {
+		return fmtDate;
+	}
+
 	private static SimpleDateFormat FMT = new SimpleDateFormat("HH:mm:ss 'UTC'");
 
 	static {

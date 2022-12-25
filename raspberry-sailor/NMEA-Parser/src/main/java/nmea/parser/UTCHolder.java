@@ -8,6 +8,15 @@ import java.util.TimeZone;
 public class UTCHolder
         implements Serializable {
     private UTCDate utcDate = null;
+
+    public UTCDate getUtcDate() {
+        return utcDate;
+    }
+
+    public UTCTime getUtcTime() {
+        return utcTime;
+    }
+
     private UTCTime utcTime = null;
     private static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
     static {

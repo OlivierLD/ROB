@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class SVData implements Serializable {
 	int svID = 0,
-					elevation = 0,
-					azimuth = 0,
-					snr = 0;
+		elevation = 0,
+		azimuth = 0,
+		snr = 0;
 
 	public SVData(int id, int elev, int z, int snr) {
 		this.svID = id;
