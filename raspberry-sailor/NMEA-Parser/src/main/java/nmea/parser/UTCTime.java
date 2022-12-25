@@ -20,8 +20,7 @@ public class UTCTime implements Serializable {
 		return fmtDate;
 	}
 
-	private static SimpleDateFormat FMT = new SimpleDateFormat("HH:mm:ss 'UTC'");
-
+	private final static SimpleDateFormat FMT = new SimpleDateFormat("HH:mm:ss 'UTC'");
 	static {
 		FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
 	}

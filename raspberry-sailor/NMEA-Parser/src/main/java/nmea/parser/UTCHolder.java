@@ -18,7 +18,7 @@ public class UTCHolder
     }
 
     private UTCTime utcTime = null;
-    private static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
+    private final static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
     static {
         FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
@@ -35,10 +35,11 @@ public class UTCHolder
 
     public Date getValue() {
         Date d = null;
-        if (this.utcDate != null)
+        if (this.utcDate != null) {
             d = this.utcDate.getValue();
-        else
+        } else {
             d = this.utcTime.getValue();
+        }
         return d;
     }
 

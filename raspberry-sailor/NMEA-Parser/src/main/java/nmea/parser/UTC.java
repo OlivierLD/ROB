@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class UTC implements Serializable {
-	private int h, m;
-	private float s;
+	private final int h, m;
+	private final float s;
 
 	public UTC(int h, int m, float s) {
 		this.h = h;
@@ -38,10 +38,10 @@ public class UTC implements Serializable {
 		return cal.getTime();
 	}
 
-	private DecimalFormat df2 = new DecimalFormat("00");
-	private DecimalFormat df23 = new DecimalFormat("00.000");
+	private final static DecimalFormat DF2 = new DecimalFormat("00");
+	private final static DecimalFormat DF23 = new DecimalFormat("00.000");
 
 	public String toString() {
-		return df2.format(h) + ":" + df2.format(m) + ":" + df23.format(s);
+		return DF2.format(h) + ":" + DF2.format(m) + ":" + DF23.format(s);
 	}
 }

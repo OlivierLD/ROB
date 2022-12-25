@@ -24,7 +24,7 @@ public class UTCDate implements Serializable {
 		return fmtDate;
 	}
 
-	private static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
+	private final static SimpleDateFormat FMT = new SimpleDateFormat("EEE, yyyy MMM dd HH:mm:ss 'UTC'");
 	static {
 		FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
 	}
