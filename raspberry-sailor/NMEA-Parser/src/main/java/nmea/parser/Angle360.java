@@ -17,6 +17,10 @@ public class Angle360 extends Angle // implements NMEADoubleValueHolder, Seriali
 		this.angle = angle;
 	}
 
+	public double getAngle() {
+		return angle;
+	}
+
 	public double getValue() {
 		return this.angle;
 	}

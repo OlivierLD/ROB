@@ -155,7 +155,7 @@ function onMessage(json) {
 		}
 		try {
 			let twd = json.TWD.angle;
-			events.publish(ENEVT_TWD, twd);
+			events.publish(EVENT_TWD, twd);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWD");
 		}

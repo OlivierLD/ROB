@@ -9,6 +9,10 @@ public class Distance implements NMEADoubleValueHolder, Serializable {
 	private static final String UNIT = "nm"; // TODO Localize
 	private static final DecimalFormat FMT = new DecimalFormat("00.00");
 
+	public double getDistance() {
+		return distance;
+	}
+
 	public Distance() {
 	}
 

@@ -91,7 +91,7 @@ public class ExtraDataComputer extends Computer {
 				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 				switch (sentenceID) {
 					case "RMC": // Recommended Minimum, version C
-						RMC rmc = StringParsers.parseRMC(sentence);
+						RMC rmc = StringParsers.parseRMC(sentence, false);
 						if (rmc != null && rmc.isValid()) {
 							Map<String, Object> rmcMap = new HashMap<>(5);
 							rmcMap.put(NMEADataCache.SOG, rmc.getSog() == -1 ? null : new Speed(rmc.getSog()));

@@ -8,6 +8,11 @@ public class Depth implements NMEADoubleValueHolder, Serializable {
 	private double depthInMeters = 0d;
 	private static final String METERS = " m";
 	private static final String FEET = "'";
+
+	public double getDepthInMeters() {
+		return depthInMeters;
+	}
+
 	private static final String FATHOMS = " f";
 
 	private static final DecimalFormat FMT = new DecimalFormat("##0.0");

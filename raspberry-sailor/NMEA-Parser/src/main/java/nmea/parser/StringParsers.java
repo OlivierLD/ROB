@@ -453,6 +453,9 @@ public class StringParsers {
 
 	// GGA Global Positioning System Fix Data. Time, Position and fix related data for a GPS receiver
 	public static List<Object> parseGGA(String data) {
+		return parseGGA(data, true);
+	}
+	public static List<Object> parseGGA(String data, boolean useSymbol) {
 		final int KEY_POS = 0;
 		final int UTC_POS = 1;
 		final int LAT_POS = 2;
@@ -552,7 +555,7 @@ public class StringParsers {
 
 		al = new ArrayList<Object>(4);
 		al.add(new UTC(h, m, sec));
-		al.add(new GeoPos(lat, lng));
+		al.add(new GeoPos(lat, lng, useSymbol));
 		al.add(nbsat);
 		al.add(alt);
 
@@ -998,6 +1001,9 @@ public class StringParsers {
 
 	// GLL Geographical Latitude & Longitude
 	public static GLL parseGLL(String data) {
+		return parseGLL(data, true);
+	}
+	public static GLL parseGLL(String data, boolean useSymbol) {
 		String s = data.trim();
 		if (s.length() < 6) {
 			return null;
@@ -1047,7 +1053,7 @@ public class StringParsers {
 					if (lngSgn.equals("W")) {
 						g *= -1.0;
 					}
-					ll = new GeoPos(l, g);
+					ll = new GeoPos(l, g, useSymbol);
 					k = s.indexOf(",", k + 2);
 					String dateStr = s.substring(k + 1);
 					if (dateStr.indexOf(",") > 0) {
@@ -1222,6 +1228,9 @@ public class StringParsers {
 
 	// RMB Recommended Minimum Navigation Information
 	public static RMB parseRMB(String str) {
+		return parseRMB(str, true);
+	}
+	public static RMB parseRMB(String str, boolean useSymbol) {
 		final int RMB_STATUS = 1;
 		final int RMB_XTE = 2;
 		final int RMB_STEER = 3;
@@ -1302,7 +1311,7 @@ public class StringParsers {
 				if ("W".equals(data[RMB_DEST_WP_LNG_SIGN])) {
 					lng = -lng;
 				}
-				rmb.setDest(new GeoPos(lat, lng));
+				rmb.setDest(new GeoPos(lat, lng, useSymbol));
 				double rtd = 0d;
 				try {
 					rtd = parseNMEADouble(data[RMB_RANGE_TO_DEST]);
@@ -1340,6 +1349,9 @@ public class StringParsers {
 
 	// RMC Recommended minimum specific GPS/Transit data
 	public static RMC parseRMC(String str) {
+		return parseRMC(str, true);
+	}
+	public static RMC parseRMC(String str, boolean useSymbol) {
 		final int RMC_UTC = 1;
 		final int RMC_ACTIVE_VOID = 2;
 		final int RMC_LATITUDE_VALUE = 3;
@@ -1478,7 +1490,7 @@ public class StringParsers {
 					if ("W".equals(data[RMC_LONGITUDE_SIGN])) {
 						g = -g;
 					}
-					rmc = rmc.setGp(new GeoPos(l, g));
+					rmc = rmc.setGp(new GeoPos(l, g, useSymbol));
 				}
 				if (data[RMC_SOG].length() > 0) {
 					double speed = 0;

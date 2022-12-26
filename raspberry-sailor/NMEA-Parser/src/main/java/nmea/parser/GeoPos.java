@@ -16,11 +16,20 @@ public class GeoPos implements Serializable {
 
 	public final static String DEGREE_SYMBOL = "\u00b0";
 
+	private boolean useDegreeSymbol = true;
+
 	public GeoPos(double l,
-	              double g) {
+				  double g) {
+		this(l, g, true);
+	}
+
+	public GeoPos(double l,
+	              double g,
+				  boolean useSymbol) {
 		this.lat = l;
 		this.lng = g;
 		this.gridSquare = this.gridSquare();
+		this.useDegreeSymbol = useSymbol;
 	}
 
 	public boolean equals(GeoPos compareTo) {
@@ -40,7 +49,7 @@ public class GeoPos implements Serializable {
 		String sgn = (degree >= 0) ? "N" : "S";
 		double minutes = Math.abs(lat - degree);
 		double hexMin = 100.0 * minutes * (6.0 / 10.0);
-		return sgn + "  " + DF_2.format((long) Math.abs(degree)) + DEGREE_SYMBOL + DF_22.format(hexMin) + "'";
+		return sgn + "  " + DF_2.format((long) Math.abs(degree)) + (this.useDegreeSymbol ? DEGREE_SYMBOL : "*") + DF_22.format(hexMin) + "'";
 	}
 
 	public String getLngInDegMinDec() {
@@ -48,7 +57,7 @@ public class GeoPos implements Serializable {
 		String sgn = (degree >= 0) ? "E" : "W";
 		double minutes = Math.abs(lng - degree);
 		double hexMin = 100.0 * minutes * (6.0 / 10.0);
-		return sgn + " " + DF_3.format((long) Math.abs(degree)) + DEGREE_SYMBOL + DF_22.format(hexMin) + "'";
+		return sgn + " " + DF_3.format((long) Math.abs(degree)) + (this.useDegreeSymbol ? DEGREE_SYMBOL : "*") + DF_22.format(hexMin) + "'";
 	}
 
 	public static double sexToDec(String degrees, String minutes)

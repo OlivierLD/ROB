@@ -6,8 +6,16 @@ public class Current extends NMEAComposite implements Serializable {
 	public double speed = 0.0;
 	public int angle = 0;
 
+	public double getSpeed() {
+		return speed;
+	}
+
+	public int getAngle() {
+		return angle;
+	}
+
 	public Current(int a,
-	               double s) {
+				   double s) {
 		this.speed = s;
 		this.angle = a;
 	}

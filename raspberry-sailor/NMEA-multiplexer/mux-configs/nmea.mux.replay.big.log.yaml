@@ -15,4 +15,8 @@ channels:
     verbose: false
 forwarders:
   - type: console
+computers:
+  - type: "tw-current"
+    prefix: "CC"
+    time.buffer.length: 30, 60, 600
 

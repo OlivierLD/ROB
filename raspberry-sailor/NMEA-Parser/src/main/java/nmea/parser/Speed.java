@@ -31,4 +31,8 @@ public class Speed implements NMEADoubleValueHolder, Serializable {
 	public double getDoubleValue() {
 		return this.speed;
 	}
+
+	public double getSpeed() {
+		return speed;
+	}
 }

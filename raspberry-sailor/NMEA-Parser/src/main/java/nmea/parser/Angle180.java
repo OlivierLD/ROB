@@ -13,6 +13,10 @@ public class Angle180 extends Angle // implements NMEADoubleValueHolder, Seriali
 	public Angle180() {
 	}
 
+	public double getAngle() {
+		return angle;
+	}
+
 	public Angle180(double angle) {
 		this.angle = angle;
 		if (Math.abs(angle) > 180)

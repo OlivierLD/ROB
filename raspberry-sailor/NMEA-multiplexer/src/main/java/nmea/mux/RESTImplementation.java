@@ -2702,7 +2702,9 @@ public class RESTImplementation {
 //				final byte[] ba = mapper.writeValueAsBytes(cache);
 //				content = new String(ba, "UTF-8");
 				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
-				content = content.replace('°', '*'); // ' '); TODO There must be a better way...
+				if (false && content.contains("°")) {
+					content = content.replace('°', '*'); // ' '); TODO There must be a better way...
+				}
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
 					System.out.printf("\tlength: %d\n", content.length());
@@ -2825,6 +2827,9 @@ public class RESTImplementation {
 //		}
 		try {
 			String content = map.size() > 0 ? mapper.writeValueAsString(map) : "";
+			if (false && content.contains("°")) {
+				content = content.replace('°', '*'); // ' '); TODO There must be a better way...
+			}
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
