@@ -85,6 +85,14 @@ public class WebSocketWriter implements Forwarder {
 			wsUri = instance.wsUri;
 		}
 
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
 		public String getWsUri() {
 			return wsUri;
 		}

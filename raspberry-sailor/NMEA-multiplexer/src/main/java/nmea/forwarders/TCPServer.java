@@ -127,13 +127,25 @@ public class TCPServer implements Forwarder {
 	}
 
 	public static class TCPBean {
-		private String cls;
-		private int port;
-		private String type = "tcp";
+		private final String cls;
+		private final int port;
+		private final String type = "tcp";
 		private int nbClients = 0;
 
 		public int getPort() {
 			return port;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public int getNbClients() {
+			return nbClients;
 		}
 
 		public TCPBean(TCPServer instance) {

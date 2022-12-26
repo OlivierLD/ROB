@@ -191,13 +191,25 @@ public class GPSdServer implements Forwarder {
 	}
 
 	public static class GPSdBean {
-		private String cls;
-		private int port;
-		private String type = "gpsd";
+		private final String cls;
+		private final int port;
+		private final String type = "gpsd";
 		private int nbClients = 0;
 
 		public int getPort() {
 			return port;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public int getNbClients() {
+			return nbClients;
 		}
 
 		public GPSdBean(GPSdServer instance) {

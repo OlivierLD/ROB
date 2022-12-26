@@ -63,9 +63,21 @@ public class ComputerSkeleton extends Computer {
 	}
 
 	public static class ComputerSkeletonBean { // TODO: implement a trait
-		private String cls;
-		private String type = "skeleton";
-		private boolean verbose;
+		private final String cls;
+		private final String type = "skeleton";
+		private final boolean verbose;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public boolean isVerbose() {
+			return verbose;
+		}
 
 		public ComputerSkeletonBean(ComputerSkeleton instance) {
 			this.cls = instance.getClass().getName();

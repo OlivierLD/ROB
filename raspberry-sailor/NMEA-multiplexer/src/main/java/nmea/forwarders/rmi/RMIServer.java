@@ -131,11 +131,23 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface, F
 	}
 
 	public static class RMIBean {
-		private String cls;
-		private int port;
-		private String type = "rmi";
-		private String bindingName;
-		private String serverAddress;
+		private final String cls;
+		private final int port;
+		private final String type = "rmi";
+		private final String bindingName;
+		private final String serverAddress;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public String getServerAddress() {
+			return serverAddress;
+		}
 
 		public int getPort() {
 			return this.port;

@@ -104,15 +104,27 @@ public class SerialWriter implements Forwarder {
 	}
 
 	public static class SerialBean {
-		private String cls;
-		private String port;
-		private int br;
+		private final String cls;
+		private final String port;
+		private final int br;
 		private String type = "serial";
 
 		public SerialBean(SerialWriter instance) {
 			cls = instance.getClass().getName();
 			port = instance.comPort;
 			br = instance.br;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public int getBr() {
+			return br;
+		}
+
+		public String getType() {
+			return type;
 		}
 
 		public String getPort() {

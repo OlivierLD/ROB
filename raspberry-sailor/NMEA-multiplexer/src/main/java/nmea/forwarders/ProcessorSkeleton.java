@@ -60,8 +60,16 @@ public class ProcessorSkeleton implements Forwarder {
 	}
 
 	public static class SkeletonBean {
-		private String cls;
-		private String type = "skeleton";
+		private final String cls;
+		private final String type = "skeleton";
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
 
 		public SkeletonBean(ProcessorSkeleton instance) {
 			cls = instance.getClass().getName();

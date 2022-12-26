@@ -125,6 +125,14 @@ public class SQLitePublisher implements Forwarder {
 			dbURL = instance.dbURL;
 		}
 
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
 		public String getDbURL() {
 			return dbURL;
 		}

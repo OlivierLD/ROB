@@ -315,13 +315,21 @@ public class WebSocketProcessor implements Forwarder {
 	}
 
 	public static class WSBean {
-		private String cls;
-		private String wsUri;
-		private String type = "wsp";
+		private final String cls;
+		private final String wsUri;
+		private final String type = "wsp";
 
 		public WSBean(WebSocketProcessor instance) {
 			cls = instance.getClass().getName();
 			wsUri = instance.wsUri;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
 		}
 
 		public String getWsUri() {

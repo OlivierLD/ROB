@@ -196,15 +196,27 @@ public class DataFileWriter implements Forwarder {
 	}
 
 	public static class DataFileBean {
-		private String cls;
-		private String log;
-		private boolean append;
-		private String type = "file";
+		private final String cls;
+		private final String log;
+		private final boolean append;
+		private final String type = "file";
 
 		public DataFileBean(DataFileWriter instance) {
 			cls = instance.getClass().getName();
 			log = instance.log;
 			append = instance.append;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public boolean isAppend() {
+			return append;
+		}
+
+		public String getType() {
+			return type;
 		}
 
 		public String getLog() {

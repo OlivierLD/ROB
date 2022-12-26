@@ -14,7 +14,7 @@ Build, run, watch:
 - `../../../gradlew shadowJar`
 - `./mux.sh nmea.mux.replay.big.log.yaml`
 - then reach <http://localhost:8080/web/basic.html> in your browser.
-- and also <http://localhost:8080/web/basic.html>, and <http://localhost:8080/web/admin.html>.
+- and also <http://localhost:8080/web/index.html>, and <http://localhost:8080/web/admin.html>.
 
 > Notice the config file `nmea.mux.replay.big.log.yaml`, look into it.
 

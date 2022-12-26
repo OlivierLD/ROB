@@ -60,9 +60,9 @@ public class UDPServer implements Forwarder {
 	}
 
 	public static class UDPBean {
-		private String cls;
-		private int port;
-		private String type = "udp";
+		private final String cls;
+		private final int port;
+		private final String type = "udp";
 
 		public UDPBean(UDPServer instance) {
 			cls = instance.getClass().getName();
@@ -71,6 +71,14 @@ public class UDPServer implements Forwarder {
 
 		public int getPort() {
 			return port;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
 		}
 	}
 

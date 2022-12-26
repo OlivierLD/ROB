@@ -343,7 +343,7 @@ function serialPortList() {
 }
 
 function buildList(arr) {
-	let str = (arr !== undefined) ? arr.toString() : "";
+	let str = (arr) ? arr.toString() : "";
 	return str;
 }
 

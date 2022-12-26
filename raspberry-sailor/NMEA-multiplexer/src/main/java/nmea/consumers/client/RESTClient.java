@@ -39,18 +39,46 @@ public class RESTClient extends NMEAClient {
 	private static RESTClient nmeaClient = null;
 
 	public static class RESTBean implements ClientBean {
-		private String cls;
-		private String type = "rest";  // TODO Other parameters !!
+		private final String cls;
+		private final String type = "rest";  // TODO Other parameters !!
 		private String protocol = "http";
-		private String hostname;
-		private int port;
+		private final String hostname;
+		private final int port;
 		private String queryPath = "/";
 		private String queryString = "";
 		private String jsonQueryString;
 		private String verb = "GET"; // TODO See if more verbs are needed.
-		private String[] deviceFilters;
-		private String[] sentenceFilters;
-		private boolean verbose;
+		private final String[] deviceFilters;
+		private final String[] sentenceFilters;
+		private final boolean verbose;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getProtocol() {
+			return protocol;
+		}
+
+		public String getQueryPath() {
+			return queryPath;
+		}
+
+		public String getQueryString() {
+			return queryString;
+		}
+
+		public String getJsonQueryString() {
+			return jsonQueryString;
+		}
+
+		public String getVerb() {
+			return verb;
+		}
+
+		public boolean isVerbose() {
+			return verbose;
+		}
 
 		public RESTBean(RESTClient instance) {
 			cls = instance.getClass().getName();

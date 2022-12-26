@@ -338,7 +338,7 @@ public class ExtraDataComputer extends Computer {
 		private final String type = "tw-current";
 		private String timeBufferLength = "600000"; // Default is 10 minutes.
 		private int cacheSize = 0;
-		private String tbSize = "";
+		private String tbSize = "";  // Time Buffer
 		private boolean verbose = false;
 		private String prefix = "OS";
 
@@ -356,6 +356,18 @@ public class ExtraDataComputer extends Computer {
 
 		public boolean isVerbose() {
 			return verbose;
+		}
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public String getTbSize() {
+			return tbSize;
 		}
 
 		public ComputerBean(ExtraDataComputer instance) {

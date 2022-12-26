@@ -57,12 +57,20 @@ public class ZDAClient extends NMEAClient {
 	private static ZDAClient nmeaClient = null;
 
 	public static class ZDABean implements ClientBean {
-		private String cls;
-		private String type = "zda";
-		private String[] deviceFilters;
-		private String[] sentenceFilters;
-		private String devicePrefix;
-		private boolean verbose;
+		private final String cls;
+		private final String type = "zda";
+		private final String[] deviceFilters;
+		private final String[] sentenceFilters;
+		private final String devicePrefix;
+		private final boolean verbose;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public boolean isVerbose() {
+			return verbose;
+		}
 
 		public ZDABean(ZDAClient instance) {
 			cls = instance.getClass().getName();

@@ -138,6 +138,12 @@ public class RESTPublisher implements Forwarder {
 		public String getResource() {
 			return resource;
 		}
+		public String getCls() {
+			return cls;
+		}
+		public String getType() {
+			return type;
+		}
 
 		public RESTBean(RESTPublisher instance) {
 			cls = instance.getClass().getName();

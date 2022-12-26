@@ -39,12 +39,20 @@ public class WebSocketClient extends NMEAClient {
 	private static WebSocketClient nmeaClient = null;
 
 	public static class WSBean implements ClientBean {
-		private String cls;
-		private String type = "ws";
-		private String wsUri;
-		private String[] deviceFilters;
-		private String[] sentenceFilters;
-		private boolean verbose;
+		private final String cls;
+		private final String type = "ws";
+		private final String wsUri;
+		private final String[] deviceFilters;
+		private final String[] sentenceFilters;
+		private final boolean verbose;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public boolean isVerbose() {
+			return verbose;
+		}
 
 		public WSBean(WebSocketClient instance) {
 			cls = instance.getClass().getName();

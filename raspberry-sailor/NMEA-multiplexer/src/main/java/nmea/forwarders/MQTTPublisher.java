@@ -139,9 +139,17 @@ public class MQTTPublisher implements Forwarder {
 	}
 
 	public static class MQTTBean {
-		private String cls;
-		private String brokerURL;
-		private String type = "mqtt";
+		private final String cls;
+		private final String brokerURL;
+		private final String type = "mqtt";
+
+		public String getCls() {
+			return cls;
+		}
+
+		public String getType() {
+			return type;
+		}
 
 		public MQTTBean(MQTTPublisher instance) {
 			cls = instance.getClass().getName();

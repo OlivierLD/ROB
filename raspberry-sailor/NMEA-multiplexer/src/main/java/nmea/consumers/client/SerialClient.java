@@ -49,13 +49,21 @@ public class SerialClient extends NMEAClient {
 	private static SerialClient nmeaClient = null;
 
 	public static class SerialBean implements ClientBean {
-		private String cls;
-		private String type = "serial";
-		private String port;
-		private int br;
-		private String[] deviceFilters;
-		private String[] sentenceFilters;
-		private boolean verbose;
+		private final String cls;
+		private final String type = "serial";
+		private final String port;
+		private final int br;
+		private final String[] deviceFilters;
+		private final String[] sentenceFilters;
+		private final boolean verbose;
+
+		public String getCls() {
+			return cls;
+		}
+
+		public boolean isVerbose() {
+			return verbose;
+		}
 
 		public SerialBean(SerialClient instance) {
 			cls = instance.getClass().getName();

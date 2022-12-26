@@ -1,11 +1,16 @@
 # ROB (Raspberry-Pi On Board)
 
-Java and Python
+Java and Python.
+
+| _**100% West Made. Fait 100% à l'ouest.**_ |
+|:------------------------------------------:|
+| ![A l'ouest](./a.l.ouest.jpeg) |
+
 
 This project came to light after [Raspberry Coffee](https://github.com/OlivierLD/raspberry-coffee).  
 `Raspberry Coffee` is mainly written in Java (and other JVM languages), and can communicate with sensors and actuators using [PI4J](https://pi4j.com/), itself relying on [WiringPi](http://wiringpi.com/).    
 
-Many drivers for those boards (sensors and actuators) have been written in Java to enable communication with the code.  
+Many drivers for those boards (sensors and actuators) have been written in Java to enable native communication with the code.  
 
 And then, Wiring Pi became deprecated, and subsequently, PI4J V1 as well. Too bad.  
 
@@ -23,6 +28,9 @@ _**We will give TCP a try**_, for this kind of Python-to-Java communication.
 This will also minimize the amount of dependencies to deal with (and eventually, the size of the archives).  
 In short, we would wrap the Python code into some sort of TCP server, which itself can be accessed from Java, natively.
 TCP is cool enough to be language agnostic.
+
+And on top of that, several parts of the code deserved some cleanup, and this is also an opportunity to minimize
+the number of dependencies to external libraries.
 
 ---
 More to come...
