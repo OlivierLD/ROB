@@ -220,7 +220,6 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CDR");
 		}
-
 		try {
 			let cog = json.COG.angle;
 			events.publish(EVENT_COG, cog);
@@ -247,7 +246,7 @@ function onMessage(json) {
 		}
 		try {
 			let sog = json.SOG.speed;
-			events.publish(EVGENT_SOG, sog);
+			events.publish(EVENT_SOG, sog);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
 		}

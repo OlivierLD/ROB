@@ -13,6 +13,10 @@ public class Temperature implements Serializable {
 	public Temperature() {
 	}
 
+	public double getTemperature() {
+		return temperature;
+	}
+
 	public Temperature(double temp) {
 		this.temperature = temp;
 	}

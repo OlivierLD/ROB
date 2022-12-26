@@ -6,7 +6,7 @@
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                       N M E A   M U L T I P L E X E R   D I S T R I B U T I O N                    |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
-echo -e "| This is an example showing how to generate a 'production' version, without the full github repo,   |"
+echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without the full github repo,   |"
 echo -e "| just what is needed to run the NMEA Multiplexer - in several configurations - and its web clients. |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| Now starting a fresh build...                                                                      |"
