@@ -44,6 +44,12 @@ body {
     margin-left: 50px;
 }
 
+.description {
+    color: white;
+    text-align: right;
+    padding-right: 10px;
+}
+
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
@@ -63,11 +69,16 @@ body {
 		<a href="gps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (analog)</a>
 		<a href="gps.digital.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (digital)</a>
 		<a href="leaflet.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/Leaflet Demo</a>
+        <div class="description">Requires Internet Connection</div>
 		<a href="googlemaps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Demo</a>
+        <div class="description">Requires Internet Connection</div>
 		<a href="googlemaps.driving.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Driving Demo</a>
+        <div class="description">Requires Internet Connection</div>
 		<a href="googlemaps.driving.html?type=walk" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Walking Demo</a>
+        <div class="description">Requires Internet Connection</div>
 		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Instruments Console</a>
 		<a href="wsconsole.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">WS Console</a>
+        <div class="description">Requires a WebSocket server to be up and running.</div>
 		<a href="weather.station.console.html" target="iframe_a" title="NMEA Weather Station Data (basic UI). Requires proper MUX settings">Weather Station Data</a>
 		<a href="weather.station.html" target="iframe_a" title="NMEA Weather Station Data (WebComponents UI). Requires proper MUX settings">Weather Station Data (WebComponents)</a>
 	</div>

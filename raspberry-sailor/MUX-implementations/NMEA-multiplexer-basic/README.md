@@ -282,6 +282,15 @@ $ curl -X GET http://192.168.1.102:8080/mux/oplist
 See how to add `http.RESTRequestManager`(s) to an `http.HTTPServer`, with the `addRequestManager` method.
 
 # Other samples
-Many other examples are available. Just look.
+Many other Web UI examples are available. Just look.
+
+
+# To production
+See the script `to.prod.sh`. It will generate an archive that can be deployed on
+a target machine, un-archived, and run.  
+To run it:
+```
+$ ./to.prod.sh
+```
 
 ---
