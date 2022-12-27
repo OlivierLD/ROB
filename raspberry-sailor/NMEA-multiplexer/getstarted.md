@@ -17,13 +17,13 @@ Then we will get some NMEA Data - from a USB GPS for example. If we can read tha
 We will clone the git repository. From a place of your choice (like your home directory), 
 in a terminal, do a 
 ```
-$ git clone https://github.com/OlivierLD/raspberry-coffee.git
+$ git clone https://github.com/OlivierLD/ROB.git
 ```
 This can take several minutes...  
 Now, we compile the NMEA Multiplexer. In a terminal, do this:
 ```
-$ cd raspberry-coffee/NMEA-multiplexer
-$ ../gradlew clean shadowJar --parallel
+$ cd ROB/raspberry-sailor/NMEA-multiplexer
+$ ../../gradlew clean shadowJar
 ```
 If `gradle` has not yet been used on your system, this last command will download it first.  
 If the previous command goes well, we are ready for the first tests. 

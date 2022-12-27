@@ -1,5 +1,8 @@
 # Java to Python, Python to Java, using TCP
-## A playground
+## A playground. Tests, Drafts, Tentatives, Tries ...
+
+> This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
+> the `src/main/python` directory.
 
 For a Java-to-Python communication, _**TCP**_ could be an option, it is socket-based, and natively supports read and write.
 

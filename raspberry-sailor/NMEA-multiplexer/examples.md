@@ -2,6 +2,8 @@
 
 [<< Back](./README.md)
 
+> _**Warning**_: this page needs updates, regarding the drivers of the breakout boards.
+
 ----
 
 - [Small external OLED display](#small-external-display)

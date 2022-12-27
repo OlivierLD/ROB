@@ -70,7 +70,7 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
  #
  # This is an example of the way a MUX could be defined with YAML.
  #
- name: "NMEA with GPS, BME280, LSM303"
+ name: "NMEA with GPS, BME280, LSM303 through TCP"
  description:
    - "Part 1"
    - "Part 2"
@@ -93,28 +93,22 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
      port: /dev/ttyS80
      baudrate: 4800
      verbose: false
-   - type: bme280
-     prefix: BM
+   - type: tcp
+     port: 7001
      verbose: false
-   - type: lsm303
-     prefix: LS
-     feature: BOTH
+   - type: tcp
+     port: 7002
      verbose: false
      sentence.filters: HDM,XDR
      heading.offset: 0
-     read.frequency: 1000
-     damping.size: 5  
-     lsm303.cal.prop.file: lsm303.cal.properties
  forwarders:
    - type: file
      timebase.filename: true
      filename.suffix: _LOG
      log.dir: logged
      split: hour
-   - class: nmea.forwarder.SSD1306Processor
-     properties: ssd1306.properties
    - type: tcp
-     port: 7001
+     port: 8001
  computers:
    - type: tw-current
      prefix: CC
@@ -123,26 +117,16 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
 
 Channel `properties` like: 
 ```properties                                       
-mux.01.type=lsm303           
-mux.01.device.prefix=II
+mux.01.type=tcp           
 mux.01.verbose=false
 mux.01.sentence.filters=HDM,XDR
-mux.01.heading.offset=0
-mux.01.feature=BOTH
-mux.01.damping.size=5
-mux.01.read.frequency=1000
 ```
 are equivalent to `yaml` like
 ```yaml
 channels:
- - type: lsm303           
-   device.prefix: II
+ - type: tcp           
    verbose: false
    sentence.filters: HDM,XDR
-   heading.offset: 0
-   feature: BOTH
-   damping.size: 5
-   read.frequency: 1000
 ```  
 > Notice that the yaml does not require `mux.01.xxx` and `mux.02.xxx` as the `properties` do. That 
 > makes it a bit more convenient and flexible to use.
@@ -192,13 +176,6 @@ channels:
     ```
     > See the examples of WebSocket servers suitable for this channel (like `wsnmea.js`, running on NodeJS).  
       The server is designed to push to every connected client the NMEA data pushed to it (see the `ws` forwarder about that).
-- `htu21df`
-    - Temperature, humidity
-    ```properties
-    mux.02.type=htu21df
-    mux.02.device.prefix=01
-    mux.02.verbose=false
-    ```
 - `rnd`
     - Random data generator (for debug)
     ```properties
@@ -208,45 +185,6 @@ channels:
     - ZDA Sentence generator (UTC day, month, and year, and local time zone offset)
     ```properties
     mux.01.type=zda
-    ```
-- `lsm303`
-    - Triple axis accelerometer and magnetometer
-    ```properties
-    mux.01.type=lsm303
-    mux.01.device.prefix=II
-    mux.01.verbose=false
-    mux.01.sentence.filters=HDM,XDR
-    mux.01.heading.offset=0
-    mux.01.feature=BOTH
-    mux.01.damping.size=5
-    mux.01.read.frequency=1000
-    mux.01.lsm303.cal.prop.file=lsm303.cal.properties
-    ```
-- `hmc5883l`
-    - Triple axis magnetometer
-    ```properties
-    mux.01.type=hmc5883l
-    mux.01.device.prefix=II
-    mux.01.verbose=false
-    mux.01.sentence.filters=HDM,XDR
-    mux.01.heading.offset=0
-    mux.01.damping.size=5
-    mux.01.read.frequency=1000
-    mux.01.hmc5883l.cal.prop.file=hmc5883l.cal.properties
-    ```
-- `bme280`
-    - Humidity, pressure, temperature
-    ```properties
-    mux.01.type=bme280
-    mux.01.device.prefix=02
-    mux.01.verbose=false
-    ```
-- `bmp180`
-    - Temperature, pressure
-    ```properties
-    mux.01.type=bmp180
-    mux.01.device.prefix=01
-    mux.01.verbose=false
     ```
 - `rest`
   - For `GET` queries only (...for now)  
