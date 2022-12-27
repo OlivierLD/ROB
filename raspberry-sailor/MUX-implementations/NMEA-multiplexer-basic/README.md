@@ -3,6 +3,10 @@ This module is one illustration of what can be done from  Web client, on top of 
 This includes the way to start the Multiplexer (through its configuration file), and the way to reach the data to 
 display on a web page.
 
+The NMEA-multiplexer runs on its machine, and managed data can be access through several Web Interfaces, reachable from any device
+with a browser, connected on the same network. This network does not need to have Internet access,
+it can be emitted by a Raspberry Pi (like the one the NMEA-multiplexer runs on).
+
 ## Basics
 It obviously requires the NMEA-multiplexer to be running.  
 Data are fetched from the `NMEA Data Cache` using REST Requests.
