@@ -8,6 +8,9 @@ https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout/python-ci
 
 https://docs.circuitpython.org/projects/lsm303/en/latest/_modules/adafruit_lsm303.html
 
+sudo pip3 install adafruit-circuitpython-lsm303-accel   # <- Optional
+sudo pip3 install adafruit-circuitpython-lsm303dlh-mag
+
 Produces HDG (or HDM) Strings, from the data read from a LSM303 or a HMC5883L (sme I2C address),
 on a regular basis, see the between_loops variable.
 
