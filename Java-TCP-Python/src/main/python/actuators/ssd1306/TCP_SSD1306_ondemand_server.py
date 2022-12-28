@@ -143,7 +143,7 @@ def produce_result(connection: socket.socket, address: tuple) -> None:
         if client_mess[:len(DISPLAY_REQUEST_PREFIX)].upper() == DISPLAY_REQUEST_PREFIX:
             display_data = client_mess[len(DISPLAY_REQUEST_PREFIX):]
             json_str: dict = json.loads(display_data)
-            data_str = display_SSD1306_Data(oled_screen, json_str['str'])
+            data_str = display_SSD1306_Data(oled_screen, json_str['str'])  # Write on screen
         elif client_mess.upper() == "CLS":
             data_str = cls_SSD1306(oled_screen)
         elif client_mess.upper() == "LISTOP":

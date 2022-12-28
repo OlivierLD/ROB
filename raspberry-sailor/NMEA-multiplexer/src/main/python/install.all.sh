@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Required dependencies for the TCP servers
+# Needs Internet access.
 #
 echo -e "For the BMP180, look into https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library"
 #

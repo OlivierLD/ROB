@@ -49,7 +49,7 @@ For example:
 > Here we chose _not_ to convert anything. NMEA remains NMEA, which everyone understands. And everyone's happy.
 > 
 > NMEA Parsers are available in OpenSource, in several languages. In this project, you'll find
-> at least one in Java, and for ES6. Plus one in Python (WiP), in the `Python.101` folder, called `NMEASerialTest.py`.
+> at least one in Java, and for ES6. Plus one in Python (WiP), in the `Java-TCP-Python` module, called `NMEASerialTest.py`.
 > 
 > > This being said... You will see in this project that there is a data-cache that can be used,
 > > at least, in the case of the REST Server (also part of this project, and heavily used in the `RESTNavServer`).
@@ -142,6 +142,7 @@ Forwarders:
 - **TCP** writes NMEA data to a TCP port
 - **WebSocket** writes NMEA data to a WebSocket server (this is _also_ a WebSocket client)
 - **File** write NMEA data to a log file
+- **Small Screens**, oled, eInk, etc (WiP)
 - etc
 
 Sensors:
@@ -152,6 +153,13 @@ Sensors:
 - **HMC5883L** reads raw data from a HMC5883L sensor (3D magnetometer), and produces `XDR` NMEA Sentences for pitch and roll, `HDM` for heading.
 - ... and the list is not closed.
 ![I2C Wiring](./docimages/i2c.png "Sample I2C Wiring for BME280 & L3GD20H")
+> _**Note about Sensors**_: As opposed to what it used to be until recently, we kept the 
+> code that reads the sensors' data in Python. The values will be reached through the `TCP` channel.
+> This was done to avoid dependencies on Java frameworks like `PI4J` or `diozero`. We've experienced
+> some frustration recently, when PI4J-v1 was deprecated (after WiringPi's deprecation). Its V2 - and `diozero` as well)
+> have restriction on the Java SDK. It requires JDK 11, that cannot run on a Raspberry Pi Zero. This may be fixed later,
+> but leaving the sensor code in Python (usually written by the sensors' providers) cuts us some slack, as those already working drivers
+> do not need to be re-written in Java. This presented some redundant aspect...
 
 Computers:
 - **True Wind** computer (produces `MDA`, `MWD` data)
@@ -201,7 +209,7 @@ Those settings can be modified once the mux is started, through the REST API.
 
 To compile and build:
 ```
- $> ../gradlew shadowJar
+ $> ../../gradlew shadowJar
 ```
 To run it, modify `mux.sh` to fit your environment, and run
 ```
@@ -221,9 +229,9 @@ The **_build_** is done as said above, with a
 ```
 This produces a fat jar (in the `build/libs` folder), that can be used to run the Multiplexer.  
 
-You can also _**package**_ for production, using the script `to.prod.sh` from a terminal (you will be prompted for input).
+In the modules implementing the NMEA-multiplexer, you can also _**package**_ for production, using the script `to.prod.sh` from a terminal (you will be prompted for input).
 This will produce a `tar.gz` file, containing everything needed to run smoothly (jar-files, scripts, sample config files).
-This archive can be exported to wherever it is needed, and it will _not_ require any source file, or git repository.
+This archive can be exported to wherever it is needed, and it will _not_ require any source file, nor git repository.
 
 To _**start**_ the Multiplexer, you need to eventually run the script `mux.sh`. This script will
 refer to the right jar-file, and use the right java command to start the Multiplexer. It can also take the
@@ -232,7 +240,7 @@ care of some cleanup before running `mux.sh`. Those two scripts can be run in ba
 like with `nohup ./mux.sh &`. If you do so, then you will need to kill
 the Multiplexer process to stop it. This can be achieved by running `killmx.sh`.
 
-> _**Note**_: During the packaging tep above, the script is also archiving some web resources.
+> _**Note**_: During the packaging step above (`to.prod.sh`), the script is also archiving some web resources.
 > The Multiplexer this page is about can be exposed through a small REST/HTTP server.  
 > This way to expose the Multiplexer's features is indeed part of the Multiplexer, hence those Web examples.
 > But those pages do not mean to be seen _**as anything but examples**_ !!
@@ -407,7 +415,7 @@ http.port=9999
 > It is **_NOT_** an enterprise server, and it will **_NOT_** scale as one. Think of it as a **_Micro server_**.
 
 > Examples of Web implementations (HTML, REST, etc) are gathered in another module,
-> [NMEA-multiplexer-impl](../NMEA-multiplexer-impl).
+> [NMEA-multiplexer-basic](../MUX-implementations/NMEA-multiplexer-basic).
 
 ### Supported REST end-points
 
@@ -543,10 +551,10 @@ identical to the elements returned by `GET /mux/forwarders`.
  POST /mux/channels
 ```
 
-There is a Web UI using the REST resources above.
+There is a Web UI using the REST resources above, in `raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic`.
 
 > _Note_: This Web UI is to be considered  as an **example** of the way to access the resources. Nothing more. Best case scenario, a
-> UI Developer might find it cute...
+> Web-UI Developer might find it cute...
 
 On the HTTP Port, use a url like `http://machine-name:9999/web/admin.html`,
 where `machine-name` is the name of the machine where the multiplexer is running, and `9999` is the port defined in the properties.
