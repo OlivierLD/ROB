@@ -153,11 +153,11 @@ Sensors:
 - **HMC5883L** reads raw data from a HMC5883L sensor (3D magnetometer), and produces `XDR` NMEA Sentences for pitch and roll, `HDM` for heading.
 - ... and the list is not closed.
 ![I2C Wiring](./docimages/i2c.png "Sample I2C Wiring for BME280 & L3GD20H")
-> _**Note about Sensors**_: As opposed to what it used to be until recently, we kept the 
+> _**Note about Sensors**_: As opposed to what it used to be in the previous version, we kept the 
 > code that reads the sensors' data in Python. The values will be reached through the `TCP` channel.
 > This was done to avoid dependencies on Java frameworks like `PI4J` or `diozero`. We've experienced
 > some frustration recently, when PI4J-v1 was deprecated (after WiringPi's deprecation). Its V2 - and `diozero` as well)
-> have restriction on the Java SDK. It requires JDK 11, that cannot run on a Raspberry Pi Zero. This may be fixed later,
+> have restrictions on the Java SDK. It requires JDK 11, that cannot run on a Raspberry Pi Zero. This may be fixed later,
 > but leaving the sensor code in Python (usually written by the sensors' providers) cuts us some slack, as those already working drivers
 > do not need to be re-written in Java. This presented some redundant aspect...
 
