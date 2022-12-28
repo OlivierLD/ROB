@@ -7,6 +7,9 @@ To install the required packages:
 https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor/python-circuitpython
 
 Use a sudo pip3 install adafruit-circuitpython-htu21d
+To see if installed, in the Python REPL, type:
+>>> help('adafruit_htu21d')
+
 
 Produces XDR, MTA, from the data read from a HTU21DF,
 on a regular basis, see the between_loops variable.
