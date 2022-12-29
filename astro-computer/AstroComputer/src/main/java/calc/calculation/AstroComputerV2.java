@@ -34,6 +34,8 @@ public class AstroComputerV2 {
         double gha;
         BodyFromPos fromPos;
 
+        public GP() {}
+
         @Override
         public String toString() {
             return String.format("Name:%s, decl:%f, gha:%f, From:%s", name, decl, gha, (fromPos != null ? fromPos.toString() : "null"));
@@ -58,6 +60,22 @@ public class AstroComputerV2 {
             this.fromPos = fromPos;
             return this;
         }
+
+        public String getName() {
+            return name;
+        }
+
+        public double getDecl() {
+            return decl;
+        }
+
+        public double getGha() {
+            return gha;
+        }
+
+        public BodyFromPos getFromPos() {
+            return fromPos;
+        }
     }
 
     public static class OBS {
@@ -80,6 +98,14 @@ public class AstroComputerV2 {
         public OBS z(double z) {
             this.z = z;
             return this;
+        }
+
+        public double getAlt() {
+            return alt;
+        }
+
+        public double getZ() {
+            return z;
         }
     }
 
@@ -115,6 +141,8 @@ public class AstroComputerV2 {
         Pos observer;
         OBS observed;
 
+        public BodyFromPos() {}
+
         @Override
         public String toString() {
             return "BodyFromPos{" +
@@ -131,6 +159,14 @@ public class AstroComputerV2 {
         public BodyFromPos observed(OBS asSeen) {
             this.observed = asSeen;
             return this;
+        }
+
+        public Pos getObserver() {
+            return observer;
+        }
+
+        public OBS getObserved() {
+            return observed;
         }
     }
 

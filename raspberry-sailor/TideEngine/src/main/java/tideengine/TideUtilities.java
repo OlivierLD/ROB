@@ -696,6 +696,22 @@ public class TideUtilities {
 		public String getType() {
 			return type;
 		}
+
+		public Calendar getCal() {
+			return cal;
+		}
+
+		public long getEpoch() {
+			return epoch;
+		}
+
+		public String getUnit() {
+			return unit;
+		}
+
+		public String getFormattedDate() {
+			return formattedDate;
+		}
 	}
 
 	public static class SpecialPrm {

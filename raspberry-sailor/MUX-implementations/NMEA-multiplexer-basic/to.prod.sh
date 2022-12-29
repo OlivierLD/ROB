@@ -79,6 +79,10 @@ cp mux.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
 #
+# TODO The Python part...
+#
+echo -e "Python part, pending"
+#
 # 4 - Archiving
 #
 # zip -q -r ${distdir}.zip ${distdir}

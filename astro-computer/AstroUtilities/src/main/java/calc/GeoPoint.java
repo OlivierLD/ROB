@@ -7,9 +7,19 @@ public final class GeoPoint
 	double latitude;
 	double longitude;
 
+	public GeoPoint() {}
+
 	public GeoPoint(double l, double g) {
 		latitude = l;
 		longitude = g;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
 	}
 
 	public double getL() {

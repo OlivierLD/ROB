@@ -1,6 +1,7 @@
 rootProject.name = 'rob'
 //
 include "common-utils"
+include "common-image-utils"
 include 'Serial-IO'
 include 'SerialRxTx'
 include "http-tiny-server"
@@ -13,7 +14,13 @@ include('astro-computer:AstroUtilities')
 // Raspberry Sailor
 include('raspberry-sailor:NMEA-Parser')
 include('raspberry-sailor:TideEngine')
+include('raspberry-sailor:PolarSmoother')
 include('raspberry-sailor:NMEA-multiplexer')
+include('raspberry-sailor:RESTNauticalAlmanac')
+include('raspberry-sailor:RESTRouting')
+include('raspberry-sailor:RESTTideEngine')
+include('raspberry-sailor:RESTImageProcessor')
 
 include('raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic')
+include('raspberry-sailor:MUX-implementations:RESTNavServer')
 

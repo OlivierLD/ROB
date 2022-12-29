@@ -356,6 +356,18 @@ public class HTTPServer {
 			this.errorStack = errorStack;
 			return this;
 		}
+
+		public String getErrorCode() {
+			return errorCode;
+		}
+
+		public String getErrorMessage() {
+			return errorMessage;
+		}
+
+		public List<String> getErrorStack() {
+			return errorStack;
+		}
 	}
 
 	public static Response buildErrorResponse(Response response, int httpStatus, ErrorPayload payload) {

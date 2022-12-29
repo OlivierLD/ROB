@@ -107,6 +107,9 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 			saxParser.parse(is, sf);
 		} catch (DoneWithSiteException dwse) {
 			// System.err.println(dwse.getLocalizedMessage());
+			System.err.println("--- DoneWithSiteException ---");
+			dwse.printStackTrace();
+			System.err.println("-----------------------------");
 			throw new RuntimeException(dwse);
 		} catch (Exception ex) {
 			throw ex;
