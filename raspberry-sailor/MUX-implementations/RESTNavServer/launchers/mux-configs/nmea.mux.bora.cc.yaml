@@ -20,12 +20,12 @@ channels:
     verbose: false
 forwarders:
   - class: nmea.forwarders.CharacterConsoleWriter
-    properties: char.console.properties
+    properties: mux-configs/char.console.properties
   - type: "tcp"
     port: 7001
   - type: "gpsd"
     port: 2947
-    properties: gpsd.properties
+    properties: mux-configs/gpsd.properties
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m

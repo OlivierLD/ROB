@@ -15,5 +15,5 @@ channels:
     verbose: false
 forwarders:
   - class: nmea.forwarders.CharacterConsoleWriter
-    properties: char.console.2.properties
+    properties: mux-configs/char.console.2.properties
 

@@ -89,11 +89,31 @@ public class GRIBDump {
 					}
 
 					Map<GribType, Float[][]> subMap = gribDataMap.get(gDate);
+					// Ugly trick. With a GribDate extends Date, it works OK.
+					// But otherwise, the gribDataMap.get(gDate) does not return the expected map.
+					// The key and the gDate are NOT 'equals'
+					// TODO FIx that...
+					final Object[] keys = gribDataMap.keySet().toArray();
+					for (int k=0; k<keys.length; k++) {
+						GribDate keyDate = (GribDate)keys[k];
+						if (keyDate.getDate().equals(gDate.getDate())) {
+							subMap = gribDataMap.get(keyDate);
+							break;
+						}
+					}
+//					gribDataMap.keySet().forEach(keyDate -> {
+//						if (keyDate.getDate().equals(gDate.getDate())) {
+//							System.out.printf(">> Found existing map for %s\n", keyDate.getFormattedUTCDate());
+//						}
+//					});
 					if (subMap == null) {
 						subMap = new HashMap<>();
 					}
 					subMap.put(new GribType(type, description, unit, grbds.getMinValue(), grbds.getMaxValue()), data);
 					gribDataMap.put(gDate, subMap);
+					if (verbose) {
+						System.out.printf("Adding data for type %s to date %s\n", type, gDate);
+					}
 				} catch (NoValidGribException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -168,20 +188,31 @@ public class GRIBDump {
 		}
 	}
 
-	public List<DatedGRIB> getExpandedGBRIB(GribFile gf) {
+	public List<DatedGRIB> getExpandedGRIB(GribFile gf) {
 		return expandGrib(dump(gf));
 	}
 
 	// For standalone tests
 	public static void main(String... args) throws Exception {
+		final ObjectMapper mapper = new ObjectMapper();
 		GRIBDump gribDump = new GRIBDump();
 //	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
-//	String gribFileName = "GRIB_2009_02_25_Sample.grb";
-		String gribFileName = "grib.grb";
+		String gribFileName = "GRIB_2009_02_25_Sample.grb";
+//		String gribFileName = "grib.grb";
 		URL gribURL = new File(gribFileName).toURI().toURL();
 		GribFile gf = new GribFile(gribURL.openStream());
+		final List<DatedGRIB> expandedGRIB = gribDump.getExpandedGRIB(gf);
 
-		System.out.println(new ObjectMapper().writeValueAsString(gribDump.getExpandedGBRIB(gf)));
+		System.out.printf("expandedGRIB has %d entries\n", expandedGRIB.size());
+
+		if (expandedGRIB.size() > 0) {
+			final GribDate firstGribDate = expandedGRIB.get(0).getGribDate();
+			String firstJsonDate = mapper.writeValueAsString(firstGribDate);
+			System.out.println(firstJsonDate);
+		}
+
+		String dump = mapper.writeValueAsString(expandedGRIB);
+		System.out.println(dump);
 
 		if (verbose) {
 			System.out.println("Done:");

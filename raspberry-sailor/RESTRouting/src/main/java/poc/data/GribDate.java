@@ -1,9 +1,10 @@
 package poc.data;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class GribDate extends Date {
+public class GribDate implements Serializable, Cloneable, Comparable<GribDate> { // extends Date { // Removed extends Date for Jackson to be happy
 	private Date date;
 	private long epoch;
 	private String formattedUTCDate;
@@ -20,7 +21,7 @@ public class GribDate extends Date {
 
 	public GribDate(Date d, int h, int w, double x, double y, double t,
 	                double b, double l, double r) {
-		super(d.getTime());
+//		super(d.getTime());
 		this.date = d;
 		this.epoch = d.getTime();
 		this.formattedUTCDate = SDF_UTC.format(d);
@@ -105,4 +106,36 @@ public class GribDate extends Date {
 	public double getRight() {
 		return right;
 	}
+
+//	@Override
+	public Date getDate() {
+		return date;
+	}
+
+	public long getEpoch() {
+		return epoch;
+	}
+
+	public String getFormattedUTCDate() {
+		return formattedUTCDate;
+	}
+
+	@Override
+	public int compareTo(GribDate o) {
+		return this.getDate().compareTo(o.getDate());
+	}
+
+	@Override
+	public String toString() {
+		return this.getFormattedUTCDate();
+	}
+
+//	@Override
+//	public boolean equals(Object other) {
+//		if (other instanceof GribDate) {
+//			return this.getDate().equals(((GribDate)other).getDate()); // TODO More if it works
+//		} else {
+//			return false;
+//		}
+//	}
 }

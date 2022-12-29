@@ -27,6 +27,6 @@ forwarders:
     port: 7003
 computers:
   - class: nmea.computers.AISManager
-    properties: ais.mgr.properties
+    properties: mux-configs/ais.mgr.properties
   - class: nmea.computers.AISTargetLogger
-    properties: target.logger.properties
+    properties: mux-configs/target.logger.properties

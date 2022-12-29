@@ -24,7 +24,7 @@ forwarders:
     port: 7001
   - type: "gpsd"
     port: 2947
-    properties: gpsd.properties
+    properties: mux-configs/gpsd.properties
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m

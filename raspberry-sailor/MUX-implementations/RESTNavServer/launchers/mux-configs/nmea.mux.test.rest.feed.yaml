@@ -8,5 +8,5 @@ context:
   init.cache: true
 forwarders:
   - class: nmea.forwarders.CharacterConsoleWriter
-    properties: char.console.properties
+    properties: mux-configs/char.console.properties
 

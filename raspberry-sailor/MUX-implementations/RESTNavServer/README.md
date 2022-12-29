@@ -151,7 +151,7 @@ The module `NMEA-mux-WebUI` in this project is a playground for this kind of cus
 ## Try it
 Build it:
 ```bash
- $ ../gradlew [--no-daemon] shadowJar
+ $ ../../../gradlew [--no-daemon] shadowJar
 ```
 
 Then run the server

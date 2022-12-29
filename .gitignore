@@ -34,3 +34,4 @@ build/
 # SQLite DBs
 *.db
 **/bin
+**/nohup.out

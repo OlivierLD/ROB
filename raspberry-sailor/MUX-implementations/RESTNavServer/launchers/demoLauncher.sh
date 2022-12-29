@@ -173,79 +173,79 @@ while [[ "${GO}" == "true" ]]; do
 	    echo -e "Required help on option ${HELP_ON}"
 	    case "${HELP_ON}" in
 	      "1")
-	        PROP_FILE=nmea.mux.no.gps.yaml
+	        PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
 	        displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "1a")
-	        PROP_FILE=nmea.mux.tcp.zda.yaml
+	        PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	        displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "2")
-	        PROP_FILE=nmea.mux.interactive.time.properties
+	        PROP_FILE=mux-configs/nmea.mux.interactive.time.properties
 	        displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "3")
-	        PROP_FILE=nmea.mux.home.properties
+	        PROP_FILE=mux-configs/nmea.mux.home.properties
 	        displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "4")
-	        PROP_FILE=nmea.mux.gps.properties
+	        PROP_FILE=mux-configs/nmea.mux.gps.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "5")
-	        PROP_FILE=nmea.mux.no.gps.properties
+	        PROP_FILE=mux-configs/nmea.mux.no.gps.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "6")
-	        PROP_FILE=nmea.mux.kayak.log.properties
+	        PROP_FILE=mux-configs/nmea.mux.kayak.log.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "6b")
-	        PROP_FILE=nmea.mux.kayak.etel.yaml
+	        PROP_FILE=mux-configs/nmea.mux.kayak.etel.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "7")
-	        PROP_FILE=nmea.mux.driving.log.properties
+	        PROP_FILE=mux-configs/nmea.mux.driving.log.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "8")
-	        PROP_FILE=nmea.mux.kayak.cc.yaml
+	        PROP_FILE=mux-configs/nmea.mux.kayak.cc.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "9")
-	        PROP_FILE=nmea.mux.bora.cc.yaml
+	        PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "9b")
-	        PROP_FILE=nmea.mux.cc.op.yaml
+	        PROP_FILE=mux-configs/nmea.mux.cc.op.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "9c")
-	        PROP_FILE=nmea.mux.nh.r.yaml
+	        PROP_FILE=mux-configs/nmea.mux.nh.r.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "9d")
-	        PROP_FILE=nmea.mux.heading.yaml
+	        PROP_FILE=mux-configs/nmea.mux.heading.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "9e")
-	        PROP_FILE=nmea.mux.bora.fwd.yaml
+	        PROP_FILE=mux-configs/nmea.mux.bora.fwd.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "10")
-	        PROP_FILE=nmea.mux.properties
+	        PROP_FILE=mux-configs/nmea.mux.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "11")
-	        PROP_FILE=nmea.mux.properties
+	        PROP_FILE=mux-configs/nmea.mux.properties
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "12")
-	        PROP_FILE=nmea.mux.2.serial.yaml
+	        PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "13")
-	        PROP_FILE=nmea.mux.gps.ais.yaml
+	        PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE}
 	        ;;
 	      "20")
@@ -274,7 +274,7 @@ while [[ "${GO}" == "true" ]]; do
 	    read a
 	    ;;
 	  "1")
-  	  PROP_FILE=nmea.mux.no.gps.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
   	  NOHUP=""
   	  if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
   	    if [[ "${WITH_NOHUP}" == "Y" ]]; then
@@ -312,7 +312,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "1a")
-  	  PROP_FILE=nmea.mux.tcp.zda.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    # QUESTION: a 'screen' option ?
 	    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
@@ -333,7 +333,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "2")
-	    PROP_FILE=nmea.mux.interactive.time.properties
+	    PROP_FILE=mux-configs/nmea.mux.interactive.time.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -344,7 +344,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "3")
-	    PROP_FILE=nmea.mux.home.properties
+	    PROP_FILE=mux-configs/nmea.mux.home.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
 	#   sleep 5 # Wait for the server to be operational
@@ -352,7 +352,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "4")
-	    PROP_FILE=nmea.mux.gps.properties
+	    PROP_FILE=mux-configs/nmea.mux.gps.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -363,7 +363,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "5")
-	    PROP_FILE=nmea.mux.no.gps.properties
+	    PROP_FILE=mux-configs/nmea.mux.no.gps.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date --sun-flower ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -375,7 +375,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "6")
-	    PROP_FILE=nmea.mux.kayak.log.properties
+	    PROP_FILE=mux-configs/nmea.mux.kayak.log.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -386,7 +386,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "6b")
-	    PROP_FILE=nmea.mux.kayak.etel.yaml
+	    PROP_FILE=mux-configs/nmea.mux.kayak.etel.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -397,7 +397,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "7")
-	    PROP_FILE=nmea.mux.driving.log.properties
+	    PROP_FILE=mux-configs/nmea.mux.driving.log.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -409,7 +409,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "8")
-	    PROP_FILE=nmea.mux.kayak.cc.yaml
+	    PROP_FILE=mux-configs/nmea.mux.kayak.cc.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -422,7 +422,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9")
-	    PROP_FILE=nmea.mux.bora.cc.yaml
+	    PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -435,7 +435,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9b")
-	    PROP_FILE=nmea.mux.cc.op.yaml
+	    PROP_FILE=mux-configs/nmea.mux.cc.op.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -448,7 +448,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9c")
-	    PROP_FILE=nmea.mux.nh.r.yaml
+	    PROP_FILE=mux-configs/nmea.mux.nh.r.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -461,7 +461,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9d")
-	    PROP_FILE=nmea.mux.heading.yaml
+	    PROP_FILE=mux-configs/nmea.mux.heading.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -474,7 +474,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9e")
-	    PROP_FILE=nmea.mux.bora.fwd.yaml
+	    PROP_FILE=mux-configs/nmea.mux.bora.fwd.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -487,7 +487,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "10")
-	    PROP_FILE=nmea.mux.properties
+	    PROP_FILE=mux-configs/nmea.mux.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    # NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --delta-t:AUTO:2010-11"
 	    NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --delta-t:AUTO"
@@ -500,7 +500,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "11")
-	    PROP_FILE=nmea.mux.properties
+	    PROP_FILE=mux-configs/nmea.mux.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --proxy --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -511,7 +511,7 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "12")
-  	  PROP_FILE=nmea.mux.2.serial.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
@@ -522,9 +522,9 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "13")
-  	  # PROP_FILE=nmea.mux.ais.test.yaml
-  	  # PROP_FILE=nmea.mux.ais.test.2.yaml
-  	  PROP_FILE=nmea.mux.gps.ais.yaml
+  	  # PROP_FILE=mux-configs/nmea.mux.ais.test.yaml
+  	  # PROP_FILE=mux-configs/nmea.mux.ais.test.2.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then

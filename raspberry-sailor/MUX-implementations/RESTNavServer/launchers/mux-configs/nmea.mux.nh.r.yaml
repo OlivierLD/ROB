@@ -17,7 +17,7 @@ channels:
     verbose: false
 forwarders:
   - class: nmea.forwarders.CharacterConsoleWriter
-    properties: char.console.properties
+    properties: mux-configs/char.console.properties
 computers:
   - type: tw-current
     #                   30s 60s 10m

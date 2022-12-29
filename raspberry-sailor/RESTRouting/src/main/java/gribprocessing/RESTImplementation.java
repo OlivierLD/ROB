@@ -117,7 +117,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ROUTING-0001")
+							.errorCode("GRIB-0001")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -163,14 +163,14 @@ public class RESTImplementation {
 							File location = new File(dir);
 							if (!location.exists()) {
 								boolean ok = location.mkdirs();
-								System.out.println(String.format("Created directory(ies) %s: %s", dir, (ok ? "OK" : "failed")));
+								System.out.printf("Created directory(ies) %s: %s\n", dir, (ok ? "OK" : "failed"));
 							} else {
-								System.out.println(String.format("Directory(ies) %s already created.", dir));
+								System.out.printf("Directory(ies) %s already created.\n", dir);
 							}
 							String gribFileName = "grib.grb";
-							System.out.println(String.format(" >> Will pull new GRIB %s into %s", gribFileName, dir));
+							System.out.printf(" >> Will pull new GRIB %s into %s\n", gribFileName, dir);
 							String generatedGRIBRequest = GRIBUtils.generateGRIBRequest(gribRequest.request);
-							System.out.println(String.format("Generated GRIB Request: %s", generatedGRIBRequest));
+							System.out.printf("Generated GRIB Request: %s", generatedGRIBRequest);
 							GRIBUtils.getGRIB(generatedGRIBRequest, dir, gribFileName, verbose);
 							gribURL = new File(dir, gribFileName).toURI().toURL();
 						} catch (Exception ex) {
@@ -188,11 +188,17 @@ public class RESTImplementation {
 						System.out.println(String.format("GRIB Data %s, opening stream.", gribURL.toString()));
 					}
 					GribFile gf = new GribFile(gribURL.openStream());
-					List<GRIBDump.DatedGRIB> expandedGBRIB = dump.getExpandedGBRIB(gf);
+					List<GRIBDump.DatedGRIB> expandedGBRIB = dump.getExpandedGRIB(gf);
 					String content;
 					try {
 						content = mapper.writeValueAsString(expandedGBRIB);
+//						System.out.println("--- Expanded GRIB ---");
+//						System.out.println(content);
+//						System.out.println("---------------------");
 					} catch (JsonProcessingException jpe) {
+						System.err.println("--- requestGRIBData ---");
+						jpe.printStackTrace();
+						System.err.println("-----------------------");
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
