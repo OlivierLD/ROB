@@ -885,10 +885,12 @@ public class GribHelper {
 					for (int row = 0; row < tgd.height; row++) {
 						try {
 							val = gr.getValue(col, row);
-							if (val > 200000F)
+							if (val > 200_000F) {
 								val = 0.0F;
-							if (tgd.type.equals("htsgw"))
+							}
+							if (tgd.type.equals("htsgw")) {
 								val *= 100F;
+							}
 							if (tgd.type.equals("tmp")) {
 								if (grpds.getLevel().equals("2.0m")) {
 									if (airTmpData == null)
@@ -918,8 +920,9 @@ public class GribHelper {
 						if (nbTmpChecked == 1 && airTmpData != null) {
 							type = "airtmp";
 							tgd.data = airTmpData;
-							if (seaTmpData == null)
+							if (seaTmpData == null) {
 								typeLoop = false;
+							}
 						} else if (seaTmpData != null) {
 							type = "seatmp";
 							tgd.data = seaTmpData;

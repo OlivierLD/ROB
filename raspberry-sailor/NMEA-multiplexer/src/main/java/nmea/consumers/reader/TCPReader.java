@@ -60,7 +60,7 @@ public class TCPReader extends NMEAReader {
 			skt = new Socket(address, tcpPort);
 
 			InputStream theInput = skt.getInputStream();
-			byte buffer[] = new byte[4096];
+			byte buffer[] = new byte[4_096];
 			String s;
 			int nbReadTest = 0;
 			while (this.canRead()) {

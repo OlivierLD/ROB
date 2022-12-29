@@ -53,7 +53,7 @@ public class Basic01 {
 
     @Test
     public void dateTest() {
-        int year = 2022;
+        int year = 2_022;
 
         final String TIME_ZONE = "America/Los_Angeles";
         final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z z");

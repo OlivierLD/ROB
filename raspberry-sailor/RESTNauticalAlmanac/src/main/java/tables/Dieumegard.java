@@ -52,7 +52,6 @@ public class Dieumegard {
 		double d = 1 - Math.cos(Math.toRadians(ah));
 		double log = log10(d);
 		double colog = -log;
-
 		return colog;
 	}
 
@@ -74,7 +73,6 @@ public class Dieumegard {
 		double d = Math.cos(Math.toRadians(dec));
 		double log = log10(d);
 		double colog = -log;
-
 		return colog;
 	}
 
@@ -95,7 +93,6 @@ public class Dieumegard {
 	private static double calculateTable3(double d) {
 		double log = log10(d);
 		double colog = -log;
-
 		return colog;
 	}
 
@@ -115,7 +112,6 @@ public class Dieumegard {
 
 	private static double calculateTableA(double x) {
 		double d = 1.0 - Math.cos(Math.toRadians(x));
-
 		return d;
 	}
 

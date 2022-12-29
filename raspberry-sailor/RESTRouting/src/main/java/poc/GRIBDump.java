@@ -92,13 +92,15 @@ public class GRIBDump {
 					// Ugly trick. With a GribDate extends Date, it works OK.
 					// But otherwise, the gribDataMap.get(gDate) does not return the expected map.
 					// The key and the gDate are NOT 'equals'
-					// TODO FIx that...
-					final Object[] keys = gribDataMap.keySet().toArray();
-					for (int k=0; k<keys.length; k++) {
-						GribDate keyDate = (GribDate)keys[k];
-						if (keyDate.getDate().equals(gDate.getDate())) {
-							subMap = gribDataMap.get(keyDate);
-							break;
+					// >> Fixed by implementing a hashCode() and a equals() methods in GribDate...
+					if (false && subMap == null) {
+						final Object[] keys = gribDataMap.keySet().toArray();
+						for (Object key : keys) {
+							GribDate keyDate = (GribDate) key;
+							if (keyDate.getDate().equals(gDate.getDate())) {
+								subMap = gribDataMap.get(keyDate);
+								break;
+							}
 						}
 					}
 //					gribDataMap.keySet().forEach(keyDate -> {
@@ -216,8 +218,6 @@ public class GRIBDump {
 
 		if (verbose) {
 			System.out.println("Done:");
-		}
-		if (verbose) {
 			gribDump.dumpFeedback();
 		}
 	}

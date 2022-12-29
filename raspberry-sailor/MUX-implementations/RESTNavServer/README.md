@@ -1,12 +1,12 @@
 # Navigation Server
 #### Prolongation/Extension of the NMEA-multiplexer
 This is the one you want if the board (computer) you want to run it on is strong enough.  
-It might not be the case for small boards like Raspberry Pi Zero or A+... See [NMEA-mux-WebUI](../NMEA-mux-WebUI) for more details on alternate configurations. 
+It might be a bit slow on small boards like Raspberry Pi Zero or A+... 
 
 > This project was tested and used at sea, in the real world.
 
 An illustration of the way to gather or aggregate several REST Services all in one place.
-This project is an extension/prolongation of the [NMEA Multiplexer](https://github.com/OlivierLD/raspberry-coffee/blob/master/NMEA-multiplexer/README.md).
+This project is an extension/prolongation of the `NMEA Multiplexer`.
 
 ```
 It combines the features of the NMEA-multiplexer (and others, like tide-computer, astro-computer) as well as exposition of those features
@@ -18,18 +18,26 @@ can be consumed through a REST interface (that also means from a web page).
 ```
 Demos of what can be done are found in the launchers folder.  
 All the demos are launched from the script runNavServer.sh, that in turn launches the java class navrest.NavServer.  
-All you need to do to see all the available demos and use-cases is to start the scrip demoLauncher.sh from a console, in the launchers folder.
+All you need to do to see all the available demos and use-cases is to start the script demoLauncher.sh from a console, in the launchers folder.
 ```
 
 
 It uses:
-- [Tide](https://github.com/OlivierLD/raspberry-coffee/blob/master/RESTTideEngine/README.md) REST Service
-- [Astro](https://github.com/OlivierLD/raspberry-coffee/tree/master/RESTNauticalAlmanac) REST Service
-- [NMEA Multiplexer](https://github.com/OlivierLD/raspberry-coffee/blob/master/NMEA-multiplexer/README.md) REST Service
+- Tide REST Service
+- Astro REST Service
+- NMEA Multiplexer REST Service
+- GRIB (and routing) REST Service
 - ... and the list keeps growing (see in `navrest.NavServer.java` how to add a `RequestManager`).
 
 In addition, I'll be attempting to implement the features of the Weather Wizard (another project I own, in Java and Swing, that can superimpose different heterogeneous documents on the same chart, like Faxes, GRIBS, routing results, etc.). This part involves the
 `Img` REST Service, found in the [`RESTImageProcessor`](https://github.com/OlivierLD/raspberry-coffee/tree/master/RESTImageProcessor) project, and the routing features, found in the [`RESTRouting`](https://github.com/OlivierLD/raspberry-coffee/blob/master/RESTRouting/README.md) project.
+
+It delivers REST services, and Web pages as well.  
+Some would require an Internet access, but most of them can be displayed
+on any browser on a machine running on the same network as the server (laptops, tablets, cell-phones) 
+
+There will also be a script to produce a production archive, in order to deploy
+the product without having to start from the Git repo.
 
 ### Rationale
 
@@ -216,6 +224,7 @@ Details below...
 .artObjects[] | select(.principalOrFirstMaker | test("van")) | {id: .id, artist: .principalOrFirstMaker}
 ```
 
+Once a server is atrted, you can stop it by running the `./killns.sh` script.
 
 ## Use it
 
@@ -234,6 +243,7 @@ _Your browser needs to support `HTML5` and `CSS3`, but nowadays, less and less b
 Then you are able to:
 - See the Navigation Console
 - Publish Nautical Almanacs
+  - Compare with <https://www.thenauticalalmanac.com/> (good resource!)
 - Visualize Tide Curves
 - etc.
 

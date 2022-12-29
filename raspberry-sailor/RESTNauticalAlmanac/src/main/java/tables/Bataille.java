@@ -19,9 +19,9 @@ public class Bataille {
 		System.out.println("  <table id='1'>");
 		for (int lat = 0; lat <= 90; lat++) {
 			System.out.println("    <lat val='" + fmt2.format(lat) + "'>");
-			for (int i = 0; i < P.length; i++) {
-				double v = calculateTable1(P[i], (double) lat);
-				System.out.println("      <value p='" + fmt03.format(P[i]) + "' h='" + GeomUtil.formatDegInHM(P[i]) + "' h2='" + GeomUtil.formatDegInHM(180 - P[i]) + "'>" + fmt12.format(v) + "</value>");
+			for (double value : P) {
+				double v = calculateTable1(value, lat);
+				System.out.println("      <value p='" + fmt03.format(value) + "' h='" + GeomUtil.formatDegInHM(value) + "' h2='" + GeomUtil.formatDegInHM(180 - value) + "'>" + fmt12.format(v) + "</value>");
 			}
 			System.out.println("    </lat>");
 		}
@@ -29,8 +29,8 @@ public class Bataille {
 	}
 
 	public static double calculateTable1(double p, double l) {
-		double v = Math.cos(Math.toRadians(p)) * Math.sin(Math.toRadians(l));
-		return v;
+		return /*double v =*/ Math.cos(Math.toRadians(p)) * Math.sin(Math.toRadians(l));
+//		return v;
 	}
 
 	public static void table2() {
@@ -47,8 +47,8 @@ public class Bataille {
 	}
 
 	public static double calculateTable2(double p, double l) {
-		double v = Math.cos(Math.toRadians(l)) * Math.tan(Math.toRadians(p));
-		return v;
+		return /*double v =*/ Math.cos(Math.toRadians(l)) * Math.tan(Math.toRadians(p));
+//		return v;
 	}
 
 	public static void allTheTables() {

@@ -36,7 +36,7 @@ public class World {
 					double g;
 					for (g = Double.parseDouble(lngValue); g > 180D; g -= 180D) ;
 					for (; g < -180D; g += 360D) ;
-					polygon.addPoint((int) (g * 1000), (int) (l * 1000));
+					polygon.addPoint((int) (g * 1_000), (int) (l * 1_000));
 				}
 				listPolygon.add(polygon);
 			}
@@ -50,7 +50,7 @@ public class World {
 		if (lp == null)
 			lp = getChartPolygon();
 		boolean b = false;
-		Point p = new Point((int) (gp.getG() * 1000), (int) (gp.getL() * 1000));
+		Point p = new Point((int) (gp.getG() * 1_000), (int) (gp.getL() * 1_000));
 		for (Polygon poly : lp) {
 			if (poly.contains(p)) {
 				b = true;
@@ -89,8 +89,8 @@ public class World {
 			lp = getChartPolygon();
 		Polygon pg = null;
 
-		Point pFrom = new Point((int) (from.getG() * 1000), (int) (from.getL() * 1000));
-		Point pTo = new Point((int) (to.getG() * 1000), (int) (to.getL() * 1000));
+		Point pFrom = new Point((int) (from.getG() * 1_000), (int) (from.getL() * 1_000));
+		Point pTo = new Point((int) (to.getG() * 1_000), (int) (to.getL() * 1_000));
 		for (Polygon poly : lp) {
 			Polygon inter = lineIntersectsPolygon(pFrom, pTo, poly);
 			if (inter != null) {

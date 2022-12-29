@@ -127,7 +127,7 @@ public class SerialClient extends NMEAClient {
 			}
 		});
 		nmeaClient.initClient();
-		nmeaClient.setReader(new SerialReader("SerialReader", nmeaClient.getListeners(), commPort, 4800));
+		nmeaClient.setReader(new SerialReader("SerialReader", nmeaClient.getListeners(), commPort, 4_800));
 		nmeaClient.startWorking();
 	}
 }

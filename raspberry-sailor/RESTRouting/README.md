@@ -6,7 +6,7 @@ The rendering is (to be) done on the client (HTML5/CSS) over a map. See in `REST
 
 And later, add the faxes.
 
-Run `./runGRIBserver`:
+Run `./runGRIBserver.sh`:
 
 ![Test API](./screenshot.00.png)
 
@@ -14,4 +14,6 @@ Run `./runGRIBserver`:
 - GRIB Request generator ?
 - Routing
 - Remove JQuery dependencies, move to pure ES6
-- Other grib providers than `saildocs`. (See <https://opengribs.org/en/gribs>, <https://www.zygrib.org/>, ...)
+- Other grib providers than `saildocs`. 
+  - See <https://opengribs.org/en/gribs> 
+  - See <https://www.zygrib.org/>

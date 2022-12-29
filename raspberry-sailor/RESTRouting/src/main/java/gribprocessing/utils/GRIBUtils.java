@@ -81,7 +81,7 @@ public class GRIBUtils {
 				fName = outputdir + File.separator + "GRIB" + SDF.format(new Date()) + ".grb";
 			}
 			try {
-//      System.out.println(request);
+//      		System.out.println(request);
 				URL saildocs = new URL(urlString);
 				URLConnection connection = saildocs.openConnection();
 				connection.connect();
@@ -90,7 +90,7 @@ public class GRIBUtils {
 
 				long waiting = 0L;
 				while (dis.available() == 0 && waiting < 30L) { // 30s Timeout...
-					Thread.sleep(1000L);
+					Thread.sleep(1_000L);
 					waiting += 1L;
 				}
 

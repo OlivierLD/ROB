@@ -11,14 +11,17 @@ For the value of Delta T, see:
 
 ---
 
-Designed to be part of other projects, see `RESTNavServer`, `Project.Trunk:SunFlower`, `RESTTideEngine`, ...
+Designed to be part of other projects, see `RESTNavServer`, `RESTTideEngine`, ...
+
+It also provides a way to generate the French `Table 500` (Dieumegard & Bataille). Look into the `RESTNavServer` module,
+in the `launchers/pub` folder, there is a `publish.tables.sh` script.
 
 ---
 
 ## Build it
 To run it in standalone (which is by far not the only way), you need to build it first:
 ```
- $ ../gradlew clean shadowJar
+ $ ../../gradlew clean shadowJar
 ```
 Then, you can give it a try:
 ```

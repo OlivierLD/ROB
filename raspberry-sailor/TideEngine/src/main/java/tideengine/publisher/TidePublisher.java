@@ -257,7 +257,7 @@ public class TidePublisher {
 			String f = publish(
 					URLEncoder.encode("Ocean Beach, California", StandardCharsets.UTF_8.toString()).replace("+", "%20"),
 					Calendar.JANUARY,
-					2019,
+					2_019,
 					1,
 					Calendar.YEAR,
 					"publishagenda.sh");

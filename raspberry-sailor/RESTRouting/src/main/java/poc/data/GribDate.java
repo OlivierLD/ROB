@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class GribDate implements Serializable, Cloneable, Comparable<GribDate> { // extends Date { // Removed extends Date for Jackson to be happy
 	private Date date;
-	private long epoch;
-	private String formattedUTCDate;
+	private final long epoch;
+	private final String formattedUTCDate;
 	private int height;
 	private int width;
 	private double stepx;
@@ -130,12 +130,25 @@ public class GribDate implements Serializable, Cloneable, Comparable<GribDate> {
 		return this.getFormattedUTCDate();
 	}
 
-//	@Override
-//	public boolean equals(Object other) {
-//		if (other instanceof GribDate) {
-//			return this.getDate().equals(((GribDate)other).getDate()); // TODO More if it works
-//		} else {
-//			return false;
-//		}
-//	}
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		} else if (other == null) {
+			return false;
+		} else if (other instanceof GribDate) {
+			return this.getDate().equals(((GribDate)other).getDate()) &&
+					this.getTop() == ((GribDate)other).getTop() &&
+					this.getBottom() == ((GribDate)other).getBottom() &&
+					this.getLeft() == ((GribDate)other).getLeft() &&
+					this.getRight() == ((GribDate)other).getRight();  // TODO More ?
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return this.getDate().hashCode();
+	}
 }

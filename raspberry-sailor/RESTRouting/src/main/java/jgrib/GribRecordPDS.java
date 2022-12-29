@@ -654,8 +654,8 @@ public class GribRecordPDS
    {
       Calendar gmtTime = baseTime;
       // hopefully this DST offset adjusts to DST automatically
-      int dstOffset = gmtTime.get(Calendar.DST_OFFSET)/3600000;
-      int gmtOffset = gmtTime.get(Calendar.ZONE_OFFSET)/3600000;//ms to hours
+      int dstOffset = gmtTime.get(Calendar.DST_OFFSET) / 3_600_000;
+      int gmtOffset = gmtTime.get(Calendar.ZONE_OFFSET) / 3_600_000; //ms to hours
       // System.out.println("offset is " + gmtOffset);
       // System.out.println("dst offset is " + dstOffset);
       //put offset back
@@ -674,8 +674,8 @@ public class GribRecordPDS
       Calendar gmtTime = forecastTime;
       // System.out.println("forecast time = " + gmtTime.getTime());
       // hopefully this DST offset adjusts to DST automatically
-      int dstOffset = gmtTime.get(Calendar.DST_OFFSET)/3600000;
-      int gmtOffset = gmtTime.get(Calendar.ZONE_OFFSET)/3600000;//ms to hours
+      int dstOffset = gmtTime.get(Calendar.DST_OFFSET) / 3_600_000;
+      int gmtOffset = gmtTime.get(Calendar.ZONE_OFFSET) / 3_600_000; //ms to hours
       // System.out.println("offset is " + gmtOffset);
       // System.out.println("dst offset is " + dstOffset);
       gmtTime.set(Calendar.HOUR,gmtTime.get(Calendar.HOUR)-gmtOffset-dstOffset);//put offset back

@@ -206,7 +206,7 @@ public class GPSDClient {
 
 //		System.setProperty("verbose", "true");
 		String host = "sinagot.net"; // "localhost";
-		int port = 2947;
+		int port = 2_947;
 		try {
 			boolean keepTrying = true;
 			while (keepTrying) {

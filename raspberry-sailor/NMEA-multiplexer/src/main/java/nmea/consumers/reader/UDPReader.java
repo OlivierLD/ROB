@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UDPReader extends NMEAReader {
 	private final static String DEFAULT_HOST_NAME = "localhost";
-	private final static int DEFAULT_UDP_PORT = 8001;
+	private final static int DEFAULT_UDP_PORT = 8_001;
 	private String host = DEFAULT_HOST_NAME;
 	private int udpPort = DEFAULT_UDP_PORT;
 	private long timeout = 5_000L; // Default value
@@ -61,7 +61,7 @@ public class UDPReader extends NMEAReader {
 				dsocket = new DatagramSocket(udpPort, address);
 			}
 
-			byte buffer[] = new byte[4096];
+			byte buffer[] = new byte[4_096];
 			String s;
 			while (this.canRead()) {
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
