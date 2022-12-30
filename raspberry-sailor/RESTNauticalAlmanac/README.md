@@ -13,7 +13,7 @@ For the value of Delta T, see:
 
 Designed to be part of other projects, see `RESTNavServer`, `RESTTideEngine`, ...
 
-It also provides a way to generate the French `Table 500` (Dieumegard & Bataille). Look into the `RESTNavServer` module,
+It also provides a way to generate the French `Tables 900` (Dieumegard & Bataille, see [here](http://navastro.free.fr/dieumegard1.htm)). Look into the `RESTNavServer` module,
 in the `launchers/pub` folder, there is a `publish.tables.sh` script.
 
 ---

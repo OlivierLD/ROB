@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
  * Dynamically calculate the data for the 4 Dieumegard tables
  * Those data are published in XML format, so they can be transformed later on,
  * using fop, for example, by the appropriate stylesheet.
+ *
+ * Spits out the generated XML on System.out. To be re-directed into a file.
  */
 public class Dieumegard {
 	private final static DecimalFormat fmt4 = new DecimalFormat("0000");
@@ -33,7 +35,7 @@ public class Dieumegard {
 				if (!Double.isInfinite(value)) {
 					System.out.println("      <value deg='" + fmt3.format(d) + "' neg='" + neg + "'>");
 					System.out.println("        <int>" + ((int) value) + "</int>");//fmt14.format(value)
-					int mantisse = (int) Math.round((value - (int) value) * 10000.0);
+					int mantisse = (int) Math.round((value - (int) value) * 10_000.0);
 					System.out.println("        <mant>" + fmt4.format(mantisse) + "</mant>");
 					System.out.println("      </value>");
 				} else {
@@ -47,7 +49,9 @@ public class Dieumegard {
 		}
 		System.out.println("  </table>");
 	}
-
+	/*
+	 * Cologarithme de l'angle au pole.
+	 */
 	private static double calculateTable1(double ah) {
 		double d = 1 - Math.cos(Math.toRadians(ah));
 		double log = log10(d);
@@ -68,7 +72,9 @@ public class Dieumegard {
 		}
 		System.out.println("  </table>");
 	}
-
+	/*
+	 * Cologarithme d'un angle (applicable a L & D)
+	 */
 	private static double calculateTable2(double dec) {
 		double d = Math.cos(Math.toRadians(dec));
 		double log = log10(d);
@@ -81,7 +87,7 @@ public class Dieumegard {
 		for (int du = 0; du < 100; du++) {
 			System.out.println("    <du val='" + fmt2.format(du) + "'>");
 			for (int mc = 0; mc <= 90; mc++) {
-				double d = (double) (du + (mc * 100)) / 10000.0;
+				double d = (double) (du + (mc * 100)) / 10_000.0;
 				double x = calculateTable3(d);
 				System.out.println("      <value mc='" + fmt2.format(mc) + "'>" + fmt14.format(x) + "</value>");
 			}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Don Pedro d'Alfaroubeira</title>
+    <link rel="stylesheet" href="./print.css" type="text/css">
+  </head>
+  <body>
+    <h1>Fonctionnement des tables de Dieumegard &amp; Bataille</h1>
+	<p>
+	  Pour les tables de Dieumegard comme pour celles de Bataille, on doit avoir calcul&eacute; - &agrave; l'aide des &eacute;ph&eacute;m&eacute;rides et du livre de bord&nbsp;:
+	  <ul>
+	    <li type="disc">La latitude estim&eacute;e de l'observateur <b>L</b></li>
+	    <li type="disc">La d&eacute;clinaison de l'astre <b>D</b></li>
+	    <li type="disc">L'angle horaire de l'astre <b>AHL</b></li>
+	  </ul>
+	  <ul>
+	    <li type="disc">Les tables de Dieumegard servent &agrave; calculer la hauteur estim&eacute;e de l'astre</li>
+	    <li type="disc">Les tables de Bataille servent &agrave; calculer l'azimut de l'astre</li>
+	  </ul>
+	</p>
+    <p>
+	  <h2>Tables de Dieumegard</h2>
+	  La formule &agrave; r&eacute;soudre est la suivante
+	  <p align="center">
+	    <font face="courier new">sin He = sinL.sinD + cosL.cosD.cosAHL</font>
+	  </p>
+	  qui se lit aussi
+	  <p align="center">
+	    <font face="courier new">1 - cos(90-He) = (1 - cos(L&plusmn;D)) + cosL.cosD.(1 - cosAHL)</font>
+	  </p>
+	La grandeur (90-He) s'appelle aussi la <b>Distance Z&eacute;nithale</b>, parfois not&eacute;e &zeta; (dz&eacute;ta, d.z. comme <b>d</b>istance <b>z</b>&eacute;nithale).
+	  <br>
+	  La pr&eacute;cision requise (la minute d'arc) impose l'utilisation des logarithmes.
+	  <br>
+	  Dans les tables de Dieumegard&nbsp;:
+	  <ul>
+	    <li type="disc">La table 1 donne <font face="courier new">colog(1 - cosAHL)</font></li>
+	    <li type="disc">La table 2 donne <font face="courier new">colog(cos&nbsp;&alpha;)</font>, utilis&eacute;e pour L et D</li>
+	    <li type="disc">La table 3 donne <font face="courier new">colog(n)</font></li>
+	    <li type="disc">La table A donne <font face="courier new">1 - cos&nbsp;&alpha;</font></li>
+	  </ul>
+	</p>
+    <p>
+	  <h2>Tables de Bataille</h2>
+	  La formule &agrave; r&eacute;soudre est la suivante
+	  <p align="center">
+	    <table border="0">
+		  <tr>
+		    <td rowspan="3" valign="middle">
+	          <font face="courier new">tg Z = </font>
+			</td>
+		    <td align="center"><font face="courier new">sinAHL</font></td>
+		  </tr>
+		  <tr>
+		    <td align="center"><hr></td>
+		  </tr>
+		  <tr>
+		    <td align="center"><font face="courier new">(cosL.tgD) - (sinL.cosAHL)</font></td>
+		  </tr>
+		</table>
+	  </p>
+	  <p>
+	    P est l'angle au p&ocirc;le, donn&eacute;e analogue &agrave; AHL.
+		<br>
+	    Dans les tables de Bataille&nbsp;:
+	    <ul>
+	      <li type="disc">La table 1 donne <font face="courier new">cosP.sinL</font> (nombre m)</li>
+	      <li type="disc">La table 2 donne <font face="courier new">tgD.cosL</font> (nombre n)</li>
+	    </ul>
+		on entre ensuite Table 2 avec m+n &agrave; l'int&eacute;rieur, pour r&eacute;soudre la formule&nbsp;:
+		<ul>
+	      <li type="disc">
+	    <table border="0">
+		  <tr>
+		    <td rowspan="3" valign="middle">
+	          <font face="courier new">tg (90 - Z) = </font>
+			</td>
+		    <td align="center"><font face="courier new">m+n</font></td>
+		  </tr>
+		  <tr>
+		    <td align="center"><hr></td>
+		  </tr>
+		  <tr>
+		    <td align="center"><font face="courier new">cos(90-P)</font></td>
+		  </tr>
+		</table>
+		  </li>
+		</ul>  
+	  </p>
+	</p>
+    <p>
+      <h2>Resources</h2>
+      La <a href="dieumegard.bataille.usage.ods">feuille de calcul</a> effectue tous les calculs faits par les tables (en montrant toutes les &eacute;tapes), avec L, D &amp; AHL. Elle restitue <i>exactement</i> ce qu'on fait &agrave; la main &agrave; l'aide des tables.
+    </p>	
+    <hr>
+    &copy; 2011, Oliv Fecit.
+  </body>
+</html>

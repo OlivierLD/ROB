@@ -4,6 +4,13 @@ import calc.GeomUtil;
 
 import java.text.DecimalFormat;
 
+/**
+ * Dynamically calculate the data for the 2 Bataille tables
+ * Those data are published in XML format, so they can be transformed later on,
+ * using fop, for example, by the appropriate stylesheet.
+ *
+ * Spits out the generated XML on System.out. To be re-directed into a file.
+ */
 public class Bataille {
 	//private final static DecimalFormat fmt3  = new DecimalFormat("000");
 	private final static DecimalFormat fmt2 = new DecimalFormat("#0");
