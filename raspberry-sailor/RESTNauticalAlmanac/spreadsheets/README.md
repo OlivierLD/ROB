@@ -6,6 +6,6 @@ Les deux feuilles de calcul présentes dans ce répertoire (une pour LibreOffice
 les étapes des calculs requis par les tables de Dieumegard, et Bataille.  
 Ceci afin de se familiariser avec leur usage.
 
-Plus de details [ici](https://htmlpreview.github.io/)
+Plus de détails [ici](https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/RESTNauticalAlmanac/spreadsheets/DnB.html).
 
 ---
