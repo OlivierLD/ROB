@@ -58,7 +58,7 @@
 
         var blinkHeader = function(divName) {
             var elmt = document.getElementById(divName);
-            if (elmt !== undefined) {
+            if (elmt) {
                 var original = elmt.style.backgroundColor;
                 elmt.style.backgroundColor = 'lightgreen';
                 setTimeout(function() {
@@ -69,22 +69,22 @@
 
         var onMessage = function (json) {
 
-            if (json["x.inside.temp"] !== undefined) {
+            if (json["x.inside.temp"]) {
                 displayInsideTemp.setValue(json["x.inside.temp"]);
                 blinkHeader('in-tmp-head');
             }
-            if (json["x.outside.temp"] !== undefined) {
+            if (json["x.outside.temp"]) {
                 displayOutsideTemp.setValue(json["x.outside.temp"]);
                 blinkHeader('out-tmp-head');
             }
-            if (json["Barometric Pressure"] !== undefined) {
+            if (json["Barometric Pressure"]) {
                 displayPRMSL.setValue(json["Barometric Pressure"]["pressure"]);
             }
-            if (json["x.inside.hum"] !== undefined) {
+            if (json["x.inside.hum"]) {
                 displayInsideHum.setValue(json["x.inside.hum"]);
                 blinkHeader('in-hum-head');
             }
-            if (json["x.outside.hum"] !== undefined) {
+            if (json["x.outside.hum"]) {
                 displayOutsideHum.setValue(json["x.outside.hum"]);
                 blinkHeader('out-hum-head');
             }
@@ -116,7 +116,7 @@
             document.getElementById("console-type").innerHTML = 'The HTML5 ' + flavor + ' Console.';
             resizeComponents(window.innerWidth);
             var theme = getQSPrm('theme');
-            if (theme !== undefined) {
+            if (theme) {
                 changeTheme(theme);
                 var rb = document.getElementsByName('theme');
                 for (var i = 0; i < rb.length; i++) {
@@ -124,7 +124,7 @@
                 }
             }
             var border = getQSPrm('border');
-            if (border !== undefined) {
+            if (border) {
                 changeBorder(border === 'Y');
                 var cb = document.getElementById('with-border');
                 cb.checked = (border === 'Y');
@@ -132,7 +132,7 @@
         };
 
         var displayErr = function (err) {
-            if (err !== undefined)
+            if (err)
                 document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
         };
 

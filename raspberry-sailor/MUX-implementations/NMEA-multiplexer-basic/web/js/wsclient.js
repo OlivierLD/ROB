@@ -51,7 +51,7 @@ let connection;
 
 function displayMessage(mess) {
 	let messList = statusFld.innerHTML;
-	if (messList !== undefined) {
+	if (messList) {
 		let lines = messList.split('<br>');
 		while (lines.length > 10) { // Limit number of messages to 10.
 			lines.shift();
@@ -61,7 +61,7 @@ function displayMessage(mess) {
 			messList += (lines[i] + '<br>');
 		}
 	}
-	messList = (((messList !== undefined && messList.length) > 0 ? messList + (messList.endsWith('<br>') ? '' : '<br>') : '') + mess);
+	messList = (((messList && messList.length) > 0 ? messList + (messList.endsWith('<br>') ? '' : '<br>') : '') + mess);
 	statusFld.innerHTML = messList;
 	statusFld.scrollTop = statusFld.scrollHeight; // Scroll down
 }

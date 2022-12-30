@@ -7,7 +7,7 @@ function cacheClient(dataManager, bp) {
 
 	let onMessage = dataManager; // Client function
 	let betweenPing = 1000;
-	if (bp !== undefined) {
+	if (bp) {
 		betweenPing = bp;
 	}
 
@@ -24,14 +24,14 @@ function cacheClient(dataManager, bp) {
 			let xhr = new XMLHttpRequest();
 
 			let req = verb + " " + url;
-			if (data !== undefined && data !== null) {
+			if (data) {
 				req += ("\n" + JSON.stringify(data, null, 2));
 			}
 
 			xhr.open(verb, url, true);
 			xhr.setRequestHeader("Content-type", "application/json");
 			try {
-				if (data === undefined || data === null) {
+				if (data) {
 					xhr.send();
 				} else {
 					xhr.send(JSON.stringify(data));
@@ -74,17 +74,17 @@ function cacheClient(dataManager, bp) {
 			onMessage(json);
 		}, (error, errmess) => {
 			let message;
-			if (errmess !== undefined) {
+			if (errmess) {
 				try {
 					let mess = JSON.parse(errmess);
-					if (mess.message !== undefined) {
+					if (mess.message) {
 						message = mess.message;
 					}
 				} catch (err) {
 					//  console.log(errmess);
 				}
 			}
-			console.log("Failed to get nmea data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+			console.log("Failed to get nmea data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 		});
 	}
 };

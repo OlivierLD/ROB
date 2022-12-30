@@ -60,19 +60,19 @@ function onMessage(json) {
 	} catch (err) {
 		console.log("Err", err);
 	}
-	if (json["Satellites in view"] !== undefined) {
+	if (json["Satellites in view"]) {
 		generateSatelliteData(json["Satellites in view"]);
 		// Satellites on the chart
-		if (json.Position !== undefined) {
+		if (json.Position) {
 			plotSatellitesOnChart({lat: json.Position.lat, lng: json.Position.lng}, json["Satellites in view"]);
 		}
 	}
-	if (json.COG !== undefined) {
+	if (json.COG) {
 	    if (rose) {
 		    rose.setValue(Math.round(json.COG.angle));
 		}
 	}
-	if (json.SOG !== undefined) {
+	if (json.SOG) {
 	    if (displayBSP) {
 		    displayBSP.setValue(json.SOG.speed * (1.852 / 1.609)); // Apply coeff for speed. Knots to mph
 		}
@@ -210,14 +210,14 @@ function getAltitudeData() {
 		pushAltitudeData(alt);
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get the run data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get the run data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 		pushAltitudeData(0);
 	});
 }

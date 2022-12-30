@@ -103,25 +103,25 @@
 				}, (error, errmess) => {
 					document.body.style.cursor = 'default';
 					let message;
-					if (errmess !== undefined) {
-						if (errmess.message !== undefined) {
+					if (errmess) {
+						if (errmess.message) {
 							message = errmess.message;
 						} else {
 							message = errmess;
 						}
 					}
-					console.log("Failed to get the forwarders list..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+					console.log("Failed to get the forwarders list..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 				});
 			}, (error, errmess) => {
 				var message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the log files list..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to get the log files list..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -134,14 +134,14 @@
 				getLogFilesList();
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to delete the log file..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to delete the log file..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 

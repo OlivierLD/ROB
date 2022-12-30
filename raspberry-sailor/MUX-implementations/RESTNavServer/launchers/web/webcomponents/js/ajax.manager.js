@@ -156,7 +156,7 @@ function fetch() {
             console.log("Error:", err, ("\nfor value [" + value + "]"));
         }
     }, (error) => { // Reject
-        console.log("Failed to get NMEA data..." + (error !== undefined && error.code !== undefined ? error.code : ' - ') + ', ' + (error !== undefined && error.message !== undefined ? error.message : ' - '));
+        console.log("Failed to get NMEA data..." + (error && error.code ? error.code : ' - ') + ', ' + (error && error.message ? error.message : ' - '));
     });
 }
 
@@ -208,7 +208,7 @@ function loadSunData(pos) {
             console.log("Error:", err, ("\nfor value [" + value + "]"));
         }
     }, (error) => { // Reject
-        console.log("Failed to get Sun data..." + (error !== undefined && error.code !== undefined ? error.code : ' - ') + ', ' + (error !== undefined && error.message !== undefined ? error.message : ' - '));
+        console.log("Failed to get Sun data..." + (error && error.code ? error.code : ' - ') + ', ' + (error && error.message ? error.message : ' - '));
     });
 }
 

@@ -4,7 +4,7 @@ function SunFlowerClient(dataManager, bp){
 
     var onMessage = dataManager; // Client function
     var betweenPing = 1000;
-    if (bp !== undefined) {
+    if (bp) {
         betweenPing = bp;
     }
 
@@ -55,17 +55,17 @@ function SunFlowerClient(dataManager, bp){
         });
         getData.fail(function (error, errmess) {
             var message;
-            if (errmess !== undefined) {
+            if (errmess) {
                 try {
                     var mess = JSON.parse(errmess);
-                    if (mess.message !== undefined) {
+                    if (mess.message) {
                         message = mess.message;
                     }
                 } catch (err) {
                 //  console.log(errmess);
                 }
             }
-            console.log("Failed to get sunflower data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            console.log("Failed to get sunflower data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
         });
     };
 

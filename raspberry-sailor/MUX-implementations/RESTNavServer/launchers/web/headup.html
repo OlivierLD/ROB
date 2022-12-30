@@ -403,13 +403,13 @@
 			}
 		}, (error, errmess) => {
 			let message = "";
-			if (errmess !== undefined) {
+			if (errmess) {
 				let mess = JSON.parse(errmess);
-				if (mess.message !== undefined) {
+				if (mess.message) {
 					message += mess.message;
 				}
 			}
-			messManager("Failed to get nmea data..." + (error !== undefined ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			messManager("Failed to get nmea data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
 			events.publish('valid', null);
 		});
 	}

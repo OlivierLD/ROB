@@ -15,7 +15,7 @@ if (Math.toRadians === undefined) {
 function onMessage(json) {
 	document.getElementById("raw-json").innerText = JSON.stringify(json, null, 2);
 
-	if (json.Position !== undefined) {
+	if (json.Position) {
 		try {
 			clear("mapCanvas");
 			drawWorldMap("mapCanvas");
@@ -34,17 +34,17 @@ function onMessage(json) {
 	} catch (err) {
 		console.log("Err", err);
 	}
-	if (json["Satellites in view"] !== undefined) {
+	if (json["Satellites in view"]) {
 		generateSatelliteData(json["Satellites in view"]);
 		// Satellites on the chart
-		if (json.Position !== undefined) {
+		if (json.Position) {
 			plotSatellitesOnChart({lat: json.Position.lat, lng: json.Position.lng}, json["Satellites in view"]);
 		}
 	}
-	if (json.COG !== undefined) {
+	if (json.COG) {
 		rose.setValue(Math.round(json.COG.angle));
 	}
-	if (json.SOG !== undefined) {
+	if (json.SOG) {
 		displayBSP.setValue(json.SOG.speed);
 	}
 }
@@ -52,9 +52,9 @@ function onMessage(json) {
 function generateSatelliteData(sd) {
 	let html = "<table cellspacing='10'>";
 	html += "<tr><th>PRN</th><th>Alt.</th><th>Z</th><th>snr</th></tr>";
-	if (sd !== undefined) {
+	if (sd) {
 		// Send to plotter here.
-		if (satellitesPlotter !== undefined) {
+		if (satellitesPlotter) {
 			satellitesPlotter.setSatellites(sd);
 		}
 
@@ -85,7 +85,7 @@ function deadReckoning(from, dist, route) {
 }
 
 function plotSatellitesOnChart(pos, sd) {
-	if (sd !== undefined) {
+	if (sd) {
 		for (let sat in sd) {
 			let satellite = sd[sat];
 			let satellitePosition = deadReckoning(pos, (90 - satellite.elevation) * 60, satellite.azimuth);
@@ -97,7 +97,7 @@ function plotSatellitesOnChart(pos, sd) {
 
 function getSNRColor(snr) {
 	let c = 'lightGray';
-	if (snr !== undefined && snr !== null) {
+	if (snr) {
 		if (snr > 0) {
 			c = 'red';
 		}
@@ -136,7 +136,7 @@ function decToSex(val, ns_ew) {
 
 function displayMessage(mess) {
 	let messList = statusFld.innerHTML;
-	messList = (((messList !== undefined && messList.length) > 0 ? messList + '<br>' : '') + mess);
+	messList = (((messList && messList.length) > 0 ? messList + '<br>' : '') + mess);
 	statusFld.innerHTML = messList;
 	statusFld.scrollTop = statusFld.scrollHeight; // Scroll down
 };
@@ -147,7 +147,7 @@ function resetStatus() {
 
 function setConnectionStatus(ok) {
 	let title = document.getElementById("title");
-	if (title !== undefined) {
+	if (title) {
 		title.style.color = (ok === true ? 'green' : 'red');
 	}
 }

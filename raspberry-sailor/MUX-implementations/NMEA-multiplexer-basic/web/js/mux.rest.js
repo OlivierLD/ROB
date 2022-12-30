@@ -30,7 +30,7 @@ function getPromise(
 		let TIMEOUT = timeout;
 
 		let req = verb + " " + url;
-		if (data !== undefined && data !== null) {
+		if (data) {
 			req += ("\n" + JSON.stringify(data, null, 2));
 		}
 		if (DEBUG) {
@@ -195,7 +195,7 @@ function pushData(flow) {
 		flowData.push(new Tuple(flowData.length, flow));
 	}
 	document.getElementById("flow").innerText = (flow + " bytes/sec.");
-	if (GRAPH_MAX_LEN !== undefined && flowData.length > GRAPH_MAX_LEN) {
+	if (GRAPH_MAX_LEN && flowData.length > GRAPH_MAX_LEN) {
 		while (flowData.length > GRAPH_MAX_LEN) {
 			flowData.splice(0, 1);
 		}
@@ -208,14 +208,14 @@ function protocolTest() {
 		console.log(value);
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get protocol test status..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get protocol test status..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -228,14 +228,14 @@ function forwarderStatus() {
 		document.getElementById("forwarders-status").innerText = (status === true ? 'ON' : 'Paused');
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get the forwarders status..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get the forwarders status..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 		document.getElementById("forwarders-status").innerText = ('-');
 	});
 }
@@ -254,14 +254,14 @@ function dataVolume() {
 		document.getElementById('flow').style.cursor = 'auto';
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get the flow status..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get the flow status..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 		pushData(0);
 		document.getElementById('flow').style.cursor = 'auto';
 	});
@@ -284,7 +284,7 @@ function getLastNMEASentence() {
 	getData.then((value) => {
 		let json = JSON.parse(value); // Like { "nmea-bytes": 13469, "started": 1489004962194 }
 		let lastString = json["last-data"];
-		if (lastString !== null && lastString !== undefined) {
+		if (lastString) {
 			lastString = lastString.trim();
 		}
 		let timestamp = json["timestamp"];
@@ -295,14 +295,14 @@ function getLastNMEASentence() {
 		}
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get the last NMEA Data..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get the last NMEA Data..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -331,14 +331,14 @@ function serialPortList() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get serial ports list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get serial ports list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -367,7 +367,7 @@ function displayRawData(elapsed) {
 	storedHistory += ((storedHistory.length > 0 ? "\n" : "") + stringified);
 	let content = '<pre>' + storedHistory + '</pre>';
 	let elapsedContent = "\n";
-	if (elapsed !== undefined) {
+	if (elapsed) {
 		elapsedContent = ('in ' + elapsed + " ms.\n");
 	}
 	document.getElementById("raw-data").innerHTML = content;
@@ -379,9 +379,9 @@ function displayRawData(elapsed) {
 }
 
 function displayRawDataOut() {
-	if (document.getElementById("raw-data-out") !== undefined) {
+	if (document.getElementById("raw-data-out")) {
 		document.getElementById("raw-data-out").innerHTML = ('<pre>' + storedHistoryOut + '</pre>');
-		if (document.getElementById("raw-data-out") !== undefined) {
+		if (document.getElementById("raw-data-out")) {
 			document.getElementById("raw-data-out").scrollTop = document.getElementById("raw-data-out").scrollHeight;
 		}
 	}
@@ -431,29 +431,29 @@ function channelList() {
 					html += ("<tr><td><b>rnd</b></td><td></td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					break;
 				case 'bmp180':
-					html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					break;
 				case 'bme280':
-					html += ("<tr><td><b>bme280</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					html += ("<tr><td><b>bme280</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					break;
 				case 'lsm303':
-					html += ("<tr><td><b>lsm303</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
-					if (json[i].headingOffset !== undefined) {
+					html += ("<tr><td><b>lsm303</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+					if (json[i].headingOffset) {
 						html += ("<td>Heading Offset: " + json[i].headingOffset + "</td>");
 					}
-					if (json[i].readFrequency !== undefined) {
+					if (json[i].readFrequency) {
 						html += ("<td>Read Frequency: " + json[i].readFrequency + " ms</td>");
 					}
-					if (json[i].dampingSize !== undefined) {
+					if (json[i].dampingSize) {
 						html += ("<td>Damping Size: " + json[i].dampingSize + " elmts</td>");
 					}
 					html += "</tr>";
 					break;
 				case 'zda':
-					html += ("<tr><td><b>zda</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					html += ("<tr><td><b>zda</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					break;
 				case 'htu21df':
-					html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					break;
 				default:
 					html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -467,14 +467,14 @@ function channelList() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get channels list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get channels list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -539,14 +539,14 @@ function forwarderList() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get forwarders list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get forwarders list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -580,14 +580,14 @@ function computerList() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get nmea.computers list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get nmea.computers list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -659,34 +659,34 @@ function generateDiagram() {
 						"</td></tr>");
 					break;
 				case 'bmp180':
-					html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+					html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") +
 						"</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
 						"</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
 						"</td></tr>");
 					break;
 				case 'bme280':
-					html += ("<tr><td><b>bme280</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+					html += ("<tr><td><b>bme280</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") +
 						"</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
 						"</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
 						"</td></tr>");
 					break;
 				case 'lsm303':
-					html += ("<tr><td><b>lsm303</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+					html += ("<tr><td><b>lsm303</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") +
 						"</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
 						"</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
-						((json[i].headingOffset !== undefined && json[i].headingOffset !== 0) ? ("<td>Heading Offset: " + json[i].headingOffset + "</td>") : "") +
-						((json[i].readFrequency !== undefined && json[i].readFrequency !== 0) ? ("<td>Read Frequency: " + json[i].readFrequency + " ms</td>") : "") +
-						((json[i].dampingSize !== undefined && json[i].dampingSize !== 0) ? ("<td>Damping Size: " + json[i].dampingSize + " elmts</td>") : "") +
+						((json[i].headingOffset && json[i].headingOffset !== 0) ? ("<td>Heading Offset: " + json[i].headingOffset + "</td>") : "") +
+						((json[i].readFrequency && json[i].readFrequency !== 0) ? ("<td>Read Frequency: " + json[i].readFrequency + " ms</td>") : "") +
+						((json[i].dampingSize && json[i].dampingSize !== 0) ? ("<td>Damping Size: " + json[i].dampingSize + " elmts</td>") : "") +
 						"</td></tr>");
 					break;
 				case 'zda':
-					html += ("<tr><td><b>zda</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+					html += ("<tr><td><b>zda</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") +
 						"</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
 						"</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
 						"</td></tr>");
 					break;
 				case 'htu21df':
-					html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+					html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix ? json[i].devicePrefix : "") +
 						"</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
 						"</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
 						"</td></tr>");
@@ -710,8 +710,8 @@ function generateDiagram() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
@@ -726,7 +726,7 @@ function generateDiagram() {
 			document.getElementById("diagram").style.display = 'block';
 			document.getElementById("lists").style.display = 'none';
 		}
-		errManager.display("Failed to get channels list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get channels list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 
 	let getForwarderPromise = getForwarders();
@@ -790,8 +790,8 @@ function generateDiagram() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
@@ -806,7 +806,7 @@ function generateDiagram() {
 			document.getElementById("diagram").style.display = 'block';
 			document.getElementById("lists").style.display = 'none';
 		}
-		errManager.display("Failed to get forwarders list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get forwarders list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 
 	let getComputerPromise = getComputers();
@@ -839,8 +839,8 @@ function generateDiagram() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
@@ -853,7 +853,7 @@ function generateDiagram() {
 			document.getElementById("diagram").style.display = 'block';
 			document.getElementById("lists").style.display = 'none';
 		}
-		errManager.display("Failed to get nmea.computers list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to get nmea.computers list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -869,14 +869,14 @@ function createChannel(channel) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to create channel..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to create channel..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -892,14 +892,14 @@ function createForwarder(forwarder) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to create forwarder..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to create forwarder..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -915,14 +915,14 @@ function createComputer(computer) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to create computer..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to create computer..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -938,14 +938,14 @@ function removeChannel(channel) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to delete channel..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to delete channel..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -961,14 +961,14 @@ function removeForwarder(channel) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to delete forwarder..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to delete forwarder..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -984,14 +984,14 @@ function removeComputer(computer) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to delete computer..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to delete computer..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -1007,14 +1007,14 @@ function changeChannel(channel) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to update channel..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to update channel..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -1030,14 +1030,14 @@ function changeComputer(computer) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to update computer..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to update computer..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -1067,14 +1067,14 @@ function manageMuxVerbose(cb) {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to update multiplexer..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to update multiplexer..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -1090,14 +1090,14 @@ function resetCache() {
 	}, (error, errmess) => {
 		document.body.style.cursor = 'default';
 		let message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
+		if (errmess) {
+			if (errmess.message) {
 				message = errmess.message;
 			} else {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to reset data cache..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager.display("Failed to reset data cache..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 

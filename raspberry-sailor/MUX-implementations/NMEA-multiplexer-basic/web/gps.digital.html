@@ -109,19 +109,19 @@
     <script>
       let onMessage = (json) => {
     //    console.log(JSON.stringify(json, null, 2));
-          if (json["Altitude"] !== undefined) {
+          if (json["Altitude"]) {
               let altitude = json["Altitude"];
               document.getElementById('alt').innerText = altitude.toFixed(2);
           }
-          if (json["COG"] !== undefined) {
+          if (json["COG"]) {
               var cog = json["COG"].angle;
               document.getElementById('cog').innerText = cog.toFixed(0);
           }
-          if (json["SOG"] !== undefined) {
+          if (json["SOG"]) {
               let sog = json["SOG"].speed;
               document.getElementById('sog').innerText = sog.toFixed(2);
           }
-          if (json["Position"] !== undefined) {
+          if (json["Position"]) {
               let lat = json["Position"].lat;
               let lon = json["Position"].lng;
               document.getElementById('lat').innerText = decToSex(lat, 'NS');

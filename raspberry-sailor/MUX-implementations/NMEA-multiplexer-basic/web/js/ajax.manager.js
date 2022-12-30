@@ -27,14 +27,14 @@ function getNMEAData() {
 		let xhr = new XMLHttpRequest();
 
 		let req = verb + " " + url;
-		if (data !== undefined && data !== null) {
+		if (data) {
 			req += ("\n" + JSON.stringify(data, null, 2));
 		}
 
 		xhr.open(verb, url, true);
 		xhr.setRequestHeader("Content-type", "application/json");
 		try {
-			if (data === undefined || data === null) {
+			if (data) {
 				xhr.send();
 			} else {
 				xhr.send(JSON.stringify(data));
@@ -69,13 +69,13 @@ function fetch() {
 		onMessage(json);
 	}, (error, errmess) => {
 		let message;
-		if (errmess !== undefined) {
+		if (errmess) {
 			let mess = JSON.parse(errmess);
-			if (mess.message !== undefined) {
+			if (mess.message) {
 				message = mess.message;
 			}
 		}
-		console.debug("Failed to get nmea data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		console.debug("Failed to get nmea data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 
@@ -283,7 +283,7 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "dew");
 		}
 
-		if (errMess !== undefined && forwardAjaxErrors) {
+		if (errMess && forwardAjaxErrors) {
 			displayErr(errMess);
 		}
 	} catch (err) {
