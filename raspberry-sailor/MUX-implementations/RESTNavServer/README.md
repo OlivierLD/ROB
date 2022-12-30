@@ -383,7 +383,7 @@ Works for Sun, Moon, Venus, Mars, Jupiter, Saturn, and 58 stars.
 ![ANSO Console](./docimg/console.png)
 
 ## Server Remote access
-> See [this document](https://github.com/OlivierLD/raspberry-coffee/tree/master/NMEA-multiplexer#remote-access).
+> See [this document](../../NMEA-multiplexer/README.md#remote-access).
 
 ### More resources
 - [Happy Nav Server](https://github.com/OlivierLD/raspberry-coffee/blob/master/Papers/happy.navserver/HappyNavserver.md)
