@@ -286,7 +286,10 @@ $ curl -X GET http://192.168.1.102:8080/mux/oplist
 See how to add `http.RESTRequestManager`(s) to an `http.HTTPServer`, with the `addRequestManager` method.
 
 # Other samples
-Many other Web UI examples are available. Just look.
+Many other Web UI examples are available. Just look.  
+You will see that some examples need an Internet connection (for Google Maps and Leaflets), some others can run without Internet.  
+Some are using WebComponents, some vanilla JavaScript components (directly drawing on HTML5 canvases).  
+Your imagination is the limit.
 
 
 # To production
@@ -296,5 +299,11 @@ To run it:
 ```
 $ ./to.prod.sh
 ```
+
+Explanations on how to deploy the generated archive are given by the script.
+
+You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
+at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.
+
 
 ---
