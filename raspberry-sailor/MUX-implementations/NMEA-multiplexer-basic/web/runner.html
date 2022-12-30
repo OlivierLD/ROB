@@ -187,7 +187,7 @@
 		}
 
 		function speedUnit(su) {
-			if (su.value !== undefined && su.value.trim().length > 0) {
+			if (su.value && su.value.trim().length > 0) {
 				setSpeedUnit(su.value);
 			}
 		}
@@ -200,14 +200,14 @@
 				document.getElementById("flip-1").checked = status; // a boolean
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the forwarders status..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to get the forwarders status..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -239,26 +239,26 @@
 					default:
 						break;
 				}
-				document.getElementById("sog").innerText = ((json.sog.sog !== undefined ? (json.sog.sog * speedFactor).toFixed(2) : "-") + " " + unitStr);
-				document.getElementById("cog").innerText = ((json.cog.cog !== undefined ? json.cog.cog.toFixed(0) : "-") + "\272");
-				if (json.pos !== undefined) {
-					if (json.pos.lat !== undefined) {
+				document.getElementById("sog").innerText = ((json.sog.sog ? (json.sog.sog * speedFactor).toFixed(2) : "-") + " " + unitStr);
+				document.getElementById("cog").innerText = ((json.cog.cog ? json.cog.cog.toFixed(0) : "-") + "\272");
+				if (json.pos) {
+					if (json.pos.lat) {
 						document.getElementById("lat").innerText = decToSex(json.pos.lat, "NS", true);
 					}
-					if (json.pos.lng !== undefined) {
+					if (json.pos.lng) {
 						document.getElementById("lng").innerText = decToSex(json.pos.lng, "EW", true);
 					}
 				}
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Speed and Course..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to get the Speed and Course..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -290,17 +290,17 @@
 					default:
 						break;
 				}
-				document.getElementById("dist-val").innerText = ((json["distance"] !== undefined ? (json["distance"] * distFactor).toFixed(2) : "-") + " " + unitStr);
+				document.getElementById("dist-val").innerText = ((json["distance"] ? (json["distance"] * distFactor).toFixed(2) : "-") + " " + unitStr);
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Distance traveled..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to get the Distance traveled..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -308,7 +308,7 @@
 			let getData = getDeltaAlt(); // A promise
 			getData.then((value) => {
 				let json = JSON.parse(value);
-				if (json !== undefined) {
+				if (json) {
 					let unit = document.getElementById("speed-unit").value; // Altitude comes in meters
 					let unitFactor = 1;
 					let unitStr = "m";
@@ -333,18 +333,18 @@
 						default:
 							break;
 					}
-					document.getElementById("delta-alt-val").innerText = ((json["delta-altitude"] !== undefined ?(json["delta-altitude"] * unitFactor).toFixed(2) : "-") + " " + unitStr);
+					document.getElementById("delta-alt-val").innerText = ((json["delta-altitude"] ?(json["delta-altitude"] * unitFactor).toFixed(2) : "-") + " " + unitStr);
 				}
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Delta Altitude..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				console.log("Failed to get the Delta Altitude..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 

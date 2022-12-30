@@ -6,9 +6,9 @@ description:
   - Reads the GPS
   - Forward on TCP:7002
 context:
-  with.http.server: false
+  with.http.server: true
   http.port: 8888
-  init.cache: false
+  init.cache: true
 channels:
   - type: serial
     port: /dev/ttyS80
