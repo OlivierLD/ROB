@@ -59,6 +59,12 @@ It provides REST access to the data it deals with, so all its features can be ac
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
 
 
+## Misc notes
+When building on small board, do not hesitate to exclude some demanding tasks, like
+```
+$ .../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
+```
+
 ---
 More to come...
 
