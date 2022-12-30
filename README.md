@@ -40,19 +40,21 @@ and consolidate the number of dependencies to external libraries. For example, f
 ## How the repo is organized
 At the root, we have some generic building blocks, like
 - `http-tiny-server`
-- `common -utils`
+- `common-utils`
 - `Serial-IO` and `SerialRxTx`
 
-The `Java-TCP-Python` module gathers the different experiment done to establish
+The `Java-TCP-Python` module gathers the different experiments done to establish
 a bridge between Java and Python.
 
 In the `astro-computer` directory, there are two modules for celestial calculations (in several
 languages: Java, Scala, Python, C, go, ES6, and some Jupyter Notebooks).
 
 All those things will come together in the directory `raspberry-sailor`.  
-It contains REST wrapper (usable from the `http-tiny-server`) around the features we will need, like NMEA Parser,
+It contains REST wrappers (usable from the `http-tiny-server`) around the features we will need, like NMEA Parser,
 Tide calculations, Routing (GRIB management), etc.  
 The main building block in the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
+> Note: The `NMEA-multiplexer` contains Python TCP servers for sensor data access.
+
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
 
