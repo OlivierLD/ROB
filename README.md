@@ -53,7 +53,7 @@ All those things will come together in the directory `raspberry-sailor`.
 It contains REST wrappers (usable from the `http-tiny-server`) around the features we will need, like NMEA Parser,
 Tide calculations, Routing (GRIB management), etc.  
 The main building block in the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
-> Note: The `NMEA-multiplexer` contains Python TCP servers for sensor data access.
+> _**Note**_: The `NMEA-multiplexer` contains "some" Python TCP servers for sensor data access.
 
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
