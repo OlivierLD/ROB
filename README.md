@@ -12,7 +12,7 @@ This project came to light after [Raspberry Coffee](https://github.com/OlivierLD
 `Raspberry Coffee` is mainly written in Java (and other JVM languages), and can communicate with sensors and actuators using [PI4J](https://pi4j.com/), itself relying on [WiringPi](http://wiringpi.com/).
 
 > In a navigation environment, NMEA data usually come through a Serial Port, which does not require much in term of additional software (we use here `librxtx-java`, easy to install and to use, and it seems not to present restrictions regarding the JDK version).
-> Sensors can be welcome though, to add atmospheric data to the existing NMEA flow, like Pressure, Air Temperature, Humidity, etc.
+> Sensors can be welcome on board though, to add atmospheric data to the existing NMEA flow, like Pressure, Air Temperature, Humidity, etc.
 > This is where extra Java frameworks could be needed, to deal with the Raspberry Pi's GPIO header the sensors are connected on.  
 
 I have written many drivers for those boards (sensors and actuators), in Java, to enable native communication with the code.  
@@ -35,7 +35,7 @@ In short, we would wrap the Python code into some sort of TCP server, which itse
 TCP is cool enough to be language agnostic.
 
 And on top of that, several parts of the code deserved some cleanup, and this is also an opportunity to minimize
-the number of dependencies to external libraries.
+and consolidate the number of dependencies to external libraries. For example, for the Java-to-JSON part, only Jackson is now used.
 
 ## How the repo is organized
 At the root, we have some generic building blocks, like
