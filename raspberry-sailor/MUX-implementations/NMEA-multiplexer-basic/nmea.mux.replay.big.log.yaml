@@ -4,7 +4,7 @@
 name: "Replay big log file."
 description:
   - Replay a big log file in the sample-data folder.
-  - The file must obvious ly be here for the replay to work.
+  - The file must obviously be here for the replay to work.
 context:
   with.http.server: true
   http.port: 8080

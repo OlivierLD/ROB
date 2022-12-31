@@ -7,14 +7,14 @@
  */
 "use strict";
 
-var worldMap;
-var currentDate;
+let worldMap;
+let currentDate;
 
-var errManager = function(mess) {
+let errManager = function(mess) {
 	console.log(mess);
 };
 
-var init = function () {
+let init = function () {
 	worldMap = new WorldMap('mapCanvas', 'GLOBE');
 
 	// For Mercator
@@ -23,100 +23,104 @@ var init = function () {
 	// worldMap.setWest(127.5);
 };
 
-var DEFAULT_TIMEOUT = 60000;
+const DEFAULT_TIMEOUT = 60000;
 
-var getDeferred = function(
-		url,                          // full api path
-		timeout,                      // After that, fail.
-		verb,                         // GET, PUT, DELETE, POST, etc
-		happyCode,                    // if met, resolve, otherwise fail.
-		data,                         // payload, when needed (PUT, POST...)
-		show) {                       // Show the traffic [true]|false
+function getPromise(url,                          // full api path
+					timeout,                      // After that, fail.
+					verb,                         // GET, PUT, DELETE, POST, etc
+					happyCode,                    // if met, resolve, otherwise fail.
+					data,                         // payload, when needed (PUT, POST...)
+					show) {                       // Show the traffic [true]|false
+
 	if (show === undefined) {
 		show = true;
 	}
 	if (show === true) {
 		document.body.style.cursor = 'wait';
 	}
-	var deferred = $.Deferred(),  // a jQuery deferred
-			url = url,
-			xhr = new XMLHttpRequest(),
-			TIMEOUT = timeout;
+	let xhr = new XMLHttpRequest();
 
-	var req = verb + " " + url;
-	if (data !== undefined && data !== null) {
-		req += ("\n" + JSON.stringify(data, null, 2));
-	}
+	return new Promise(function (resolve, reject) {
+		let xhr = new XMLHttpRequest();
 
-	xhr.open(verb, url, true);
-	xhr.setRequestHeader("Content-type", "application/json");
-	if (data === undefined) {
-		xhr.send();
-	} else {
-		xhr.send(JSON.stringify(data));
-	}
-
-	var requestTimer = setTimeout(function() {
-		xhr.abort();
-		var mess = { message: 'Timeout' };
-		deferred.reject(408, mess);
-	}, TIMEOUT);
-
-	xhr.onload = function() {
-		clearTimeout(requestTimer);
-		if (xhr.status === happyCode) {
-			deferred.resolve(xhr.response);
-		} else {
-			deferred.reject(xhr.status, xhr.response);
+		let req = verb + " " + url;
+		if (data !== undefined && data !== null) {
+			req += ("\n" + JSON.stringify(data, null, 2));
 		}
-	};
-	return deferred.promise();
-};
 
-var getSkyGP = function(when) {
-	var url = "/astro/positions-in-the-sky";
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			if (data === undefined || data === null) {
+				xhr.send();
+			} else {
+				xhr.send(JSON.stringify(data));
+			}
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(function () {
+			xhr.abort();
+			let mess = {code: 408, message: 'Timeout'};
+			reject(mess);
+		}, timeout);
+
+		xhr.onload = function () {
+			clearTimeout(requestTimer);
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+}
+
+let getSkyGP = function(when) {
+	let url = "/astro/positions-in-the-sky";
 	// Add date
 	url += ("?at=" + when);
 	url += ("&fromL=" + position.lat);
 	url += ("&fromG=" + position.lng);
 	// Wandering bodies
-	if ($("#WWB")[0].checked) { // to minimize the size of the payload
+	if (document.getElementById("WWB").checked) { // to minimize the size of the payload
 		url += ("&wandering=true");
 	}
 	// Stars
-	if ($("#WS")[0].checked) { // to minimize the size of the payload
+	if (document.getElementById("WS").checked) { // to minimize the size of the payload
 		url += ("&stars=true");
 	}
-	return getDeferred(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
-var getAstroData = function(when, callback) {
-	var getData = getSkyGP(when);
-	getData.done(function(value) {
-		var json = JSON.parse(value);
+let getAstroData = function(when, callback) {
+	let getData = getSkyGP(when);
+	getData.then((value) => {
+		// console.log("Done:", value);
+		let json = JSON.parse(value);
 		if (callback !== undefined) {
 			callback(json);
 		} else {
 			console.log(JSON.stringify(json, null, 2));
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed to get the Astro Data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager("Failed to get Astro Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 	});
+
 };
 
-var getQueryParameterByName = function(name, url) {
+let getQueryParameterByName = function(name, url) {
 	if (!url) url = window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 			results = regex.exec(url);
 	if (!results) return null;
 	if (!results[2]) return '';
@@ -127,40 +131,40 @@ var getQueryParameterByName = function(name, url) {
  *  Demo features
  */
 
-var position = {
+let position = {
 	lat: 37.7489,
 	lng: -122.5070
 };
 
 const MINUTE = 60000; // in ms.
 
-var getCurrentUTCDate = function() {
-	var date = new Date();
-	var offset = date.getTimezoneOffset() * MINUTE; // in millisecs
+let getCurrentUTCDate = function() {
+	let date = new Date();
+	let offset = date.getTimezoneOffset() * MINUTE; // in millisecs
 
 	return new Date().getTime() + offset; // - (6 * 3600 * 1000);
 };
 
-var initAjax = function () {
+let initAjax = function () {
 
 	currentDate = getCurrentUTCDate();
 	console.log("Starting (now) at " + new Date(currentDate).format("Y-M-d H:i:s UTC"));
 
-	var interval = setInterval(function () {
+	let interval = setInterval(function () {
 		tickClock();
 	}, 100);
 
-	var intervalGPS = setInterval(function () {
+	let intervalGPS = setInterval(function () {
 		tickGPS();
 	}, 1000) // 1 sec;
 
 };
 
-var tickClock = function () {
+let tickClock = function () {
 
-	var moveFast = true, erratic = false;
+	let moveFast = true, erratic = false;
 
-	var mf = getQueryParameterByName("move-fast");
+	let mf = getQueryParameterByName("move-fast");
 	moveFast = (mf === "true");
 
 	if (moveFast) {
@@ -170,13 +174,13 @@ var tickClock = function () {
 		if (position.lng > 180) position.lng -= 360;
 
 		if (erratic) {
-			var plus = (Math.random() > 0.5);
+			let plus = (Math.random() > 0.5);
 			position.lat += (Math.random() * (plus ? 1 : -1));
 			if (position.lat > 90) position.lat = 180 - position.lat;
 			if (position.lat < -90) position.lat = -180 + position.lat;
 		}
 	}
-	var json = {
+	let json = {
 		Position: {
 			lat: position.lat,
 			lng: position.lng
@@ -185,13 +189,13 @@ var tickClock = function () {
 	onMessage(json); // Position
 };
 
-var tickGPS = function () {
+let tickGPS = function () {
 
-	var moveFast = true;
-	var mf = getQueryParameterByName("move-fast");
+	let moveFast = true;
+	let mf = getQueryParameterByName("move-fast");
 	moveFast = (mf === "true");
 
-	var json = {
+	let json = {
 		GPS: new Date(currentDate)
 	};
 	onMessage(json); // Date
@@ -202,8 +206,8 @@ var tickGPS = function () {
 		currentDate = getCurrentUTCDate();
 	}
 
-	var mess = "Time is now " + new Date(currentDate).format("Y-M-d H:i:s UTC");
-	var dateField = document.getElementById("current-date");
+	let mess = "Time is now " + new Date(currentDate).format("Y-M-d H:i:s UTC");
+	let dateField = document.getElementById("current-date");
 	if (dateField !== undefined) {
 		dateField.innerText = mess;
 	} else {
@@ -211,15 +215,15 @@ var tickGPS = function () {
 	}
 };
 
-var onMessage = function (json) {
+let onMessage = function (json) {
 	try {
-		var errMess = "";
+		let errMess = "";
 
 		try {
 			if (json.Position !== undefined) {
-				var latitude = json.Position.lat;
+				let latitude = json.Position.lat;
 	//    console.log("latitude:" + latitude)
-				var longitude = json.Position.lng;
+				let longitude = json.Position.lng;
 	//    console.log("Pt:" + latitude + ", " + longitude);
 				events.publish('pos', {
 					'lat': latitude,
@@ -231,7 +235,7 @@ var onMessage = function (json) {
 		}
 		try {
 		  if (json.GPS !== undefined) {
-				var gpsDate = json.GPS;
+				let gpsDate = json.GPS;
 				events.publish('gps-time', gpsDate);
 			}
 		} catch (err) {

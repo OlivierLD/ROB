@@ -1,3 +1,8 @@
+if (Math.toDegrees === undefined) {
+	Math.toDegrees = (rad) => {
+		return rad * (180 / Math.PI);
+	}
+}
 
 const TABS = ['one', 'two', 'three', 'four', 'five', 'six'];
 
@@ -110,8 +115,10 @@ function collapseExpandHeadsup() {
  */
 function setData(id, value) {
 	let elem = document.getElementById(id);
-	elem.value = value;                            // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
-	elem.repaint();
+	if (elem) {
+		elem.value = value;  // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
+		elem.repaint();
+	}
 }
 
 let deviationCurve = null;
@@ -465,7 +472,7 @@ function callAfter(id) {
 					plotSatellite(context, worldMap, userPos, satColor, gs.name, {lat: 0, lng: gs.lng});
 				});
 			}
-			if (document.getElementById('iss-01').checked) {
+			if (document.getElementById('iss-01') && document.getElementById('iss-01').checked) {
 				// Display ISS pos?
 				// console.log("Will display ISS position");
 				if (issData !== null) {
@@ -495,7 +502,7 @@ function callAfter(id) {
 				}
 			}
 			// Moon to Sun route
-			if (document.getElementById('moon-sun-path-01').checked) {
+			if (document.getElementById('moon-sun-path-01') && document.getElementById('moon-sun-path-01').checked) {
 				if (moonSunData !== undefined && moonSunData.length > 0) {
 					// console.log("Plotting moon to sun route", moonSunData);
 					plotSunMoonRoute(context, worldMap, moonSunData);
@@ -669,28 +676,30 @@ function astroCallback(data) {
 	if (data.moonPhase !== undefined) { // Update MoonPhase WebComp
 		// console.log("Moon Phase:", data.moonPhase);
 		let moonPhase = document.getElementById('moon-phase-01');
-		moonPhase.phase = data.moonPhase;
-		if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
-			// Tilt calculation, TODO use data.moonTilt
-			moonPhase.phase = ((data.from.latitude < data.moon.decl) ? -1 : 1) * data.moonPhase;
-			let alpha = data.moonTilt; // 0;
-//			moonSunData = data.moonToSunSkyRoute;
-//			if (moonSunData !== undefined) {
-//				try {
-//					alpha = calculateMoonTilt(moonSunData);
-//				} catch(error) {
-//					console.debug(error);
-//				}
-//			}
-			let moonTilt = /*90 +*/ alpha; // 0: vertical. +: clockwise, -: counter-clockwise
-			moonPhase.tilt = moonTilt;                                 // Update tilt on graphic
-			moonPhase.title = `Tilt:${alpha.toFixed(1)}°`; // Update tooltip
-			// Update small label
-			moonPhase.smallLabel = `Tilt:${alpha.toFixed(1)}°`;
-		} else {
+		if (moonPhase) {
 			moonPhase.phase = data.moonPhase;
-		}
-		//moonPhase.repaint();
+			if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
+				// Tilt calculation, TODO use data.moonTilt
+				moonPhase.phase = ((data.from.latitude < data.moon.decl) ? -1 : 1) * data.moonPhase;
+				let alpha = data.moonTilt; // 0;
+	//			moonSunData = data.moonToSunSkyRoute;
+	//			if (moonSunData !== undefined) {
+	//				try {
+	//					alpha = calculateMoonTilt(moonSunData);
+	//				} catch(error) {
+	//					console.debug(error);
+	//				}
+	//			}
+				let moonTilt = /*90 +*/ alpha; // 0: vertical. +: clockwise, -: counter-clockwise
+				moonPhase.tilt = moonTilt;                                 // Update tilt on graphic
+				moonPhase.title = `Tilt:${alpha.toFixed(1)}°`; // Update tooltip
+				// Update small label
+				moonPhase.smallLabel = `Tilt:${alpha.toFixed(1)}°`;
+			} else {
+				moonPhase.phase = data.moonPhase;
+			}
+			//moonPhase.repaint();
+	}
 	}
 
 	sunAltitude = data.sunObs.alt; // For the doBefore method
@@ -837,7 +846,9 @@ function astroCallback(data) {
 
 	// Extra data Raw Tab
 	if (data.moonPhase !== undefined) {
-		document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
+		if (document.getElementById("moon-phase-rd")) {
+			document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
+		}
 		if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
 			let alpha = data.moonTilt; // 0;
 //			let alpha = 0; // Tilt from horizontal
@@ -849,12 +860,14 @@ function astroCallback(data) {
 //				}
 //			}
 			let moonTilt = alpha;
-			//document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
-			document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
+			if (document.getElementById("moon-tilt-rd")) {
+				//document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
+				document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
+			}
 		}
 	}
 	// ISS?
-	if (document.getElementById('iss-01') !== undefined) {
+	if (document.getElementById('iss-01')) {
 		if (document.getElementById('iss-01').checked) {
 			// Display ISS pos?
 			// console.log("Will display ISS position");
@@ -878,51 +891,55 @@ function astroCallback(data) {
 	// tPass has only hh:mi:ss
 	let tPass = new Date();
 	tPass.setUTCHours(data.tPass.hour, data.tPass.min, data.tPass.sec);
-	document.getElementById('sun-path-01').sunTransit = { time: tPass.getTime() };
-	// console.log("Transit:", tPass);
-	let now = new Date();
-	document.getElementById('sun-path-01').now = { time: now.getTime() };
-	if (moonPos !== {}) {
-		document.getElementById('sun-path-01').moonPos = moonPos;
+	if (document.getElementById('sun-path-01')) {
+		document.getElementById('sun-path-01').sunTransit = { time: tPass.getTime() };
+		// console.log("Transit:", tPass);
+		let now = new Date();
+		document.getElementById('sun-path-01').now = { time: now.getTime() };
+		if (moonPos !== {}) {
+			document.getElementById('sun-path-01').moonPos = moonPos;
+		}
 	}
 	let planetDataAvailable = venusPos.he !== undefined && marsPos.he !== undefined && jupiterPos.he !== undefined && saturnPos.he !== undefined;
-	document.getElementById('with-wb').disabled = !planetDataAvailable;
-	let withWanderingBodies = planetDataAvailable && document.getElementById('with-wb').checked;
-	document.getElementById('ecliptic').disabled = !withWanderingBodies;
-	let withEcliptic = withWanderingBodies && document.getElementById('ecliptic').checked;
-	let withMoonToSunRoute = document.getElementById('moon-sun-route').checked;
-	if (!withEcliptic) {
-		document.getElementById('sun-path-01').ariesGHA = undefined;
-		document.getElementById('sun-path-01').eclipticObliquity = undefined;
-	}
-	if (withEcliptic && data.ghaAries !== undefined) {
-		document.getElementById('sun-path-01').ariesGHA = data.ghaAries;
-	}
-	if (withEcliptic && data.eclipticObliquity !== undefined) {
-		document.getElementById('sun-path-01').eclipticObliquity = data.eclipticObliquity;
-	}
+	if (document.getElementById('with-wb')) {
+		document.getElementById('with-wb').disabled = !planetDataAvailable;
+		let withWanderingBodies = planetDataAvailable && document.getElementById('with-wb').checked;
+		document.getElementById('ecliptic').disabled = !withWanderingBodies;
+		let withEcliptic = withWanderingBodies && document.getElementById('ecliptic').checked;
+		let withMoonToSunRoute = document.getElementById('moon-sun-route').checked;
+		if (!withEcliptic) {
+			document.getElementById('sun-path-01').ariesGHA = undefined;
+			document.getElementById('sun-path-01').eclipticObliquity = undefined;
+		}
+		if (withEcliptic && data.ghaAries !== undefined) {
+			document.getElementById('sun-path-01').ariesGHA = data.ghaAries;
+		}
+		if (withEcliptic && data.eclipticObliquity !== undefined) {
+			document.getElementById('sun-path-01').eclipticObliquity = data.eclipticObliquity;
+		}
 
-	document.getElementById('sun-path-01').moonToSunSkyRoute = withMoonToSunRoute ? data.moonToSunSkyRoute : undefined;
+		document.getElementById('sun-path-01').moonToSunSkyRoute = withMoonToSunRoute ? data.moonToSunSkyRoute : undefined;
 
-	if (venusPos !== {} && withWanderingBodies) {
-		document.getElementById('sun-path-01').venusPos = venusPos;
-	} else {
-		document.getElementById('sun-path-01').venusPos = undefined;
-	}
-	if (marsPos !== {} && withWanderingBodies) {
-		document.getElementById('sun-path-01').marsPos = marsPos;
-	} else {
-		document.getElementById('sun-path-01').marsPos = undefined;
-	}
-	if (jupiterPos !== {} && withWanderingBodies) {
-		document.getElementById('sun-path-01').jupiterPos = jupiterPos;
-	} else {
-		document.getElementById('sun-path-01').jupiterPos = undefined;
-	}
-	if (saturnPos !== {} && withWanderingBodies) {
-		document.getElementById('sun-path-01').saturnPos = saturnPos;
-	} else {
-		document.getElementById('sun-path-01').saturnPos = undefined;
+		if (venusPos !== {} && withWanderingBodies) {
+			document.getElementById('sun-path-01').venusPos = venusPos;
+		} else {
+			document.getElementById('sun-path-01').venusPos = undefined;
+		}
+		if (marsPos !== {} && withWanderingBodies) {
+			document.getElementById('sun-path-01').marsPos = marsPos;
+		} else {
+			document.getElementById('sun-path-01').marsPos = undefined;
+		}
+		if (jupiterPos !== {} && withWanderingBodies) {
+			document.getElementById('sun-path-01').jupiterPos = jupiterPos;
+		} else {
+			document.getElementById('sun-path-01').jupiterPos = undefined;
+		}
+		if (saturnPos !== {} && withWanderingBodies) {
+			document.getElementById('sun-path-01').saturnPos = saturnPos;
+		} else {
+			document.getElementById('sun-path-01').saturnPos = undefined;
+		}
 	}
 	worldMap.setAstronomicalData(data);
 	worldMap.repaint();

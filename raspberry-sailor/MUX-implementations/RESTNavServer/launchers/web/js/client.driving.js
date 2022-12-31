@@ -20,7 +20,7 @@ function lpad(str, len, pad) {
 	return padded;
 }
 
-if (decToSex === undefined) {
+// if (!decToSex) {
     let decToSex = (val, ns_ew) => {
         let absVal = Math.abs(val);
         let intValue = Math.floor(absVal);
@@ -37,7 +37,7 @@ if (decToSex === undefined) {
     //  s = intValue + String.fromCharCode(176) + dec.toFixed(2) + "'";
         return s;
     }
-}
+// }
 
 function onMessage(json) {
 	document.getElementById("raw-json").innerText = JSON.stringify(json, null, 2);

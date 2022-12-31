@@ -1535,9 +1535,11 @@ class WorldMap extends HTMLElement {
 
 				if (this.astronomicalData.stars !== undefined && this.withStars) {
 					let instance = this;
-					this.astronomicalData.stars.forEach((star, idx) => {
-						instance.positionBody(context, userPos, instance.worldmapColorConfig.starsColor, star.name, star.decl, star.gha, false, true);
-					});
+					if (this.astronomicalData.stars) {
+						this.astronomicalData.stars.forEach((star, idx) => {
+							instance.positionBody(context, userPos, instance.worldmapColorConfig.starsColor, star.name, star.decl, star.gha, false, true);
+						});
+				}
 				}
 			}
 		}

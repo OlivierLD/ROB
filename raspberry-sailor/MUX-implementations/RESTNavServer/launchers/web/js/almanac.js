@@ -1,195 +1,187 @@
 "use strict";
-// TODO Move to ES6
 
-var DEFAULT_TIMEOUT = 60000;
+const DEFAULT_TIMEOUT = 60000;
 
-// var errManager = console.log;
-var errManager = function(mess) {
-	var content = $("#error").html();
-	$("#error").html((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
+// let errManager = console.log;
+let errManager = function(mess) {
+	let content = document.getElementById("error").innerHTML;
+	document.getElementById("error").innerHTML = ((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
 	try {
 		flipTab('error-tab');
 	} catch (err) {
 		console.log(err);
 	}
-	var div = document.getElementById("error");
+	let div = document.getElementById("error");
 	div.scrollTop = div.scrollHeight;
 };
 
-// var messManager = console.log;
-var messManager = function(mess) {
-	var content = $("#messages").html();
-	$("#messages").html((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
+// let messManager = console.log;
+let messManager = function(mess) {
+	let content = document.getElementById("messages").innerHTML;
+	document.getElementById("messages").innerHTML = ((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
 	try {
 		flipTab('message-tab');
 	} catch (err) {
 		console.log(err);
 	}
-	var div = document.getElementById("messages");
+	let div = document.getElementById("messages");
 	div.scrollTop = div.scrollHeight;
 };
 
-var getQueryParameterByName = function(name, url) {
+let getQueryParameterByName = function(name, url) {
 	if (!url) url = window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 			results = regex.exec(url);
 	if (!results) return null;
 	if (!results[2]) return '';
 	return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-var getDeferred = function(
-		url,                          // full api path
-		timeout,                      // After that, fail.
-		verb,                         // GET, PUT, DELETE, POST, etc
-		happyCode,                    // if met, resolve, otherwise fail.
-		data,                         // payload, when needed (PUT, POST...)
-		show) {                       // Show the traffic [true]|false
+function getPromise(url,                          // full api path
+					timeout,                      // After that, fail.
+					verb,                         // GET, PUT, DELETE, POST, etc
+					happyCode,                    // if met, resolve, otherwise fail.
+					data,                         // payload, when needed (PUT, POST...)
+					show) {                       // Show the traffic [true]|false
+
 	if (show === undefined) {
 		show = true;
 	}
 	if (show === true) {
 		document.body.style.cursor = 'wait';
 	}
-	var deferred = $.Deferred(),  // a jQuery deferred
-			url = url,
-			xhr = new XMLHttpRequest(),
-			TIMEOUT = timeout;
+	let xhr = new XMLHttpRequest();
 
-	var req = verb + " " + url;
-	if (data !== undefined && data !== null) {
-		req += ("\n" + JSON.stringify(data, null, 2));
-	}
+	return new Promise(function (resolve, reject) {
+		let xhr = new XMLHttpRequest();
 
-	xhr.open(verb, url, true);
-	xhr.setRequestHeader("Content-type", "application/json");
-	if (data === undefined) {
-		xhr.send();
-	} else {
-		xhr.send(JSON.stringify(data));
-	}
+		let req = verb + " " + url;
+		if (data !== undefined && data !== null) {
+			req += ("\n" + JSON.stringify(data, null, 2));
+		}
 
-	if (TIMEOUT > 0) {
-		// requestTimer will be used to clear the timeout in case the request comes back in time.
-		var requestTimer = setTimeout(function () {
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			if (data === undefined || data === null) {
+				xhr.send();
+			} else {
+				xhr.send(JSON.stringify(data));
+			}
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(function () {
 			xhr.abort();
-			var mess = {message: 'Timeout'};
-			deferred.reject(408, mess);
-		}, TIMEOUT);
-	}
+			let mess = {code: 408, message: 'Timeout'};
+			reject(mess);
+		}, timeout);
 
-	xhr.onload = function() {
-		if (requestTimer !== undefined) {
+		xhr.onload = function () {
 			clearTimeout(requestTimer);
-		}
-		if (xhr.status === happyCode) {
-			deferred.resolve(xhr.response);
-		} else {
-			deferred.reject(xhr.status, xhr.response);
-		}
-	};
-	return deferred.promise();
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+}
+
+const DURATION_FMT = "Y-m-dTH:i:s";
+
+let getPerpetualDoc = function(options) {
+	let url = "/astro/publish/perpetual";
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
 };
 
-var DURATION_FMT = "Y-m-dTH:i:s";
-
-var getPerpetualDoc = function(options) {
-	var url = "/astro/publish/perpetual";
-	return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
+let getAlmanac = function(options) {
+	let url = "/astro/publish/almanac";
+	return getPromise(url, 1000 * DEFAULT_TIMEOUT, 'POST', 200, options, false);
 };
 
-var getAlmanac = function(options) {
-	var url = "/astro/publish/almanac";
-//return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
-	return getDeferred(url, -1, 'POST', 200, options, false);
+let getLunar = function(options) {
+	let url = "/astro/publish/lunar";
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
 };
 
-var getLunar = function(options) {
-	var url = "/astro/publish/lunar";
-	return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
-};
-
-var publishPerpetual = function(options, callback) {
-	var getData = getPerpetualDoc(options);
-	getData.done(function(value) {
+let publishPerpetual = function(options, callback) {
+	let getData = getPerpetualDoc(options);
+	getData.then((value) => {
+		// console.log("Done:", value);
 		if (callback === undefined) {
 			try {
 				// Do something smart
-				$("#result").html("<pre>" + value + "</pre>");
+				document.getElementById("result").innerHTML = ("<pre>" + value + "</pre>");
 			} catch (err) {
 				errManager(err + '\nFor\n' + value);
 			}
 		} else {
 			callback(value);
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed publish perpetual almanac data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined
-		? message : ' - '));
+		errManager("Failed to get Astro Data..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
 
-var publishAlmanac = function(options, callback) {
-	var getData = getAlmanac(options);
-	getData.done(function(value) {
+let publishAlmanac = function(options, callback) {
+	let getData = getAlmanac(options);
+	getData.then((value) => {
+		// console.log("Done:", value);
 		if (callback === undefined) {
 			try {
 				// Do something smart
-				$("#result").html("<pre>" + value + "</pre>");
+				document.getElementById("result").innerHTML = ("<pre>" + value + "</pre>");
 			} catch (err) {
 				errManager(err + '\nFor\n' + value);
 			}
 		} else {
 			callback(value);
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed publishing Almanac..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined
-				? message : ' - '));
+		errManager("Failed publishing Almanac..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
+
 };
 
-var publishLunar= function(options, callback) {
-	var getData = getLunar(options);
-	getData.done(function(value) {
+let publishLunar= function(options, callback) {
+	let getData = getLunar(options);
+	getData.then((value) => {
+		// console.log("Done:", value);
 		if (callback === undefined) {
 			try {
 				// Do something smart
-				$("#result").html("<pre>" + value + "</pre>");
+				document.getElementById("result").innerHTML = ("<pre>" + value + "</pre>");
 			} catch (err) {
 				errManager(err + '\nFor\n' + value);
 			}
 		} else {
 			callback(value);
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed publishing Lunar..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined
-				? message : ' - '));
+		errManager("Failed publishing Lunar..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };

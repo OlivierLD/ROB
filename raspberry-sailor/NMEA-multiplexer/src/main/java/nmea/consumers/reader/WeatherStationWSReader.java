@@ -86,6 +86,7 @@ public class WeatherStationWSReader extends NMEAReader {
 				}
 
 				try {
+					@SuppressWarnings("unchecked")
 					Map<String, Object> map = mapper.readValue(mess, Map.class);
 
 					double hum = (double)map.get("hum");

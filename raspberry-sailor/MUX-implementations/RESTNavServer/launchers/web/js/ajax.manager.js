@@ -61,7 +61,7 @@ function getNMEAData() {
 function fetch() {
 	let getData = getNMEAData();
 	getData.then((value) => {
-		console.log("Done:", value);
+		// console.log("Done:", value);
 		let json = JSON.parse(value);
 		onMessage(json);
 	}, (error, errmess) => {

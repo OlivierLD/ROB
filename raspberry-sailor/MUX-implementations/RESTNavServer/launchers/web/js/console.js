@@ -19,11 +19,11 @@ let displayBSP, displayLog, displayTWD, displayTWS, thermometer, athermometer, d
 		currentDirEvolution1m, currentSpeedEvolution1m,
 		currentDirEvolution10m, currentSpeedEvolution10m;
 
-var jumboList = [];
+let jumboList = [];
 
-var editing = false;
+let editing = false;
 
-var init = function () {
+let init = function () {
 //displayBSP = new AnalogDisplay('bspCanvas', 100, 15, 5, 1);
 	displayBSP = new AnalogDisplay('bspCanvas', 100, 15, 5, 1, true, 40);
 	displayBSP.setDigits(5);
@@ -102,8 +102,8 @@ var init = function () {
  *
  * @param len can be undefined
  */
-var updateTWBufferLength = function(txt) {
-	var len;
+let updateTWBufferLength = function(txt) {
+	let len;
 	if (txt.value.length === 0) {
 		len = undefined;
 	}
@@ -121,8 +121,8 @@ var updateTWBufferLength = function(txt) {
  *
  * @param len can be undefined
  */
-var updateCurrentBufferLength = function(txt) {
-	var len;
+let updateCurrentBufferLength = function(txt) {
+	let len;
 	if (txt.value.length === 0) {
 		len = undefined;
 	}
@@ -142,7 +142,7 @@ var updateCurrentBufferLength = function(txt) {
 	currentSpeedEvolution10m.setMaxBuffLength(len);
 };
 
-var changeBorder = function (b) {
+let changeBorder = function (b) {
 	displayBSP.setBorder(b);
 	displayHDG.setBorder(b);
 	displayTWD.setBorder(b);
@@ -156,15 +156,15 @@ var changeBorder = function (b) {
 	displayCurrent2.setBorder(b);
 };
 
-var cssSelectManager = function() {
-	var x = document.getElementById("css-select").value;
-	var cssName = x;
+let cssSelectManager = function() {
+	let x = document.getElementById("css-select").value;
+	let cssName = x;
 	changeTheme(cssName);
 };
 
-var TOTAL_WIDTH = 1200;
+const TOTAL_WIDTH = 1200;
 
-var resizeDisplays = function (width) {
+let resizeDisplays = function (width) {
 	if (displayBSP !== undefined && displayTWS !== undefined) { // TODO Other displays
 		displayBSP.setDisplaySize(100 * (Math.min(width, TOTAL_WIDTH) / TOTAL_WIDTH));
 		displayTWS.setDisplaySize(100 * (Math.min(width, TOTAL_WIDTH) / TOTAL_WIDTH));
@@ -187,72 +187,76 @@ var resizeDisplays = function (width) {
 		currentDirEvolution10m.drawGraph();
 		currentSpeedEvolution10m.drawGraph();
 
-		var jumboFactor = width / TOTAL_WIDTH;
-		for (var i = 0; i < jumboList.length; i++) {
+		let jumboFactor = width / TOTAL_WIDTH;
+		for (let i = 0; i < jumboList.length; i++) {
 			if (jumboList[i] !== undefined)
 				jumboList[i].setDisplaySize(120 * jumboFactor, 60 * jumboFactor);
 		}
 	}
 };
 
-var lpad = function (str, pad, len) {
+let lpad = function (str, pad, len) {
 	while (str.length < len)
 		str = pad + str;
 	return str;
 };
 
-var DEFAULT_TIMEOUT = 60000;
+const DEFAULT_TIMEOUT = 60000;
 
-var getDeferred = function(
-		url,                          // full api path
-		timeout,                      // After that, fail.
-		verb,                         // GET, PUT, DELETE, POST, etc
-		happyCode,                    // if met, resolve, otherwise fail.
-		data,                         // payload, when needed (PUT, POST...)
-		show) {                       // Show the traffic [true]|false
+function getPromise(url,                          // full api path
+					timeout,                      // After that, fail.
+					verb,                         // GET, PUT, DELETE, POST, etc
+					happyCode,                    // if met, resolve, otherwise fail.
+					data,                         // payload, when needed (PUT, POST...)
+					show) {                       // Show the traffic [true]|false
+
 	if (show === undefined) {
 		show = true;
 	}
 	if (show === true) {
 		document.body.style.cursor = 'wait';
 	}
-	var deferred = $.Deferred(),  // a jQuery deferred
-			url = url,
-			xhr = new XMLHttpRequest(),
-			TIMEOUT = timeout;
+	let xhr = new XMLHttpRequest();
 
-	var req = verb + " " + url;
-	if (data !== undefined && data !== null) {
-		req += ("\n" + JSON.stringify(data, null, 2));
-	}
+	return new Promise(function (resolve, reject) {
+		let xhr = new XMLHttpRequest();
 
-	xhr.open(verb, url, true);
-	xhr.setRequestHeader("Content-type", "application/json");
-	if (data === undefined) {
-		xhr.send();
-	} else {
-		xhr.send(JSON.stringify(data));
-	}
-
-	var requestTimer = setTimeout(function() {
-		xhr.abort();
-		var mess = { message: 'Timeout' };
-		deferred.reject(408, mess);
-	}, TIMEOUT);
-
-	xhr.onload = function() {
-		clearTimeout(requestTimer);
-		if (xhr.status === happyCode) {
-			deferred.resolve(xhr.response);
-		} else {
-			deferred.reject(xhr.status, xhr.response);
+		let req = verb + " " + url;
+		if (data !== undefined && data !== null) {
+			req += ("\n" + JSON.stringify(data, null, 2));
 		}
-	};
-	return deferred.promise();
-};
 
-var getSunMoonGP = function(from, when) {
-	var url = "/astro/positions-in-the-sky";
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			if (data === undefined || data === null) {
+				xhr.send();
+			} else {
+				xhr.send(JSON.stringify(data));
+			}
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(function () {
+			xhr.abort();
+			let mess = {code: 408, message: 'Timeout'};
+			reject(mess);
+		}, timeout);
+
+		xhr.onload = function () {
+			clearTimeout(requestTimer);
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+}
+
+let getSunMoonGP = function(from, when) {
+	let url = "/astro/positions-in-the-sky";
 	// Add date
 	url += ("?at=" + when);
 	if (from !== undefined) {
@@ -261,28 +265,28 @@ var getSunMoonGP = function(from, when) {
 	}
 	// Wandering bodies
 	url += ("&wandering=true");
-	return getDeferred(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+	// return getDeferred(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
-var getAstroData = function(from, when, callback) {
-	var getData = getSunMoonGP(from, when);
-	getData.done(function(value) {
-		var json = JSON.parse(value);
+let getAstroData = function(from, when, callback) {
+	let getData = getSunMoonGP(from, when);
+	getData.then((value) => {
+		// console.log("Done:", value);
+		let json = JSON.parse(value);
 		if (callback !== undefined) {
 			callback(json);
 		} else {
 			console.log(JSON.stringify(json, null, 2));
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		displayErr("Failed to get Astro Data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		displayErr("Failed to get Astro Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };

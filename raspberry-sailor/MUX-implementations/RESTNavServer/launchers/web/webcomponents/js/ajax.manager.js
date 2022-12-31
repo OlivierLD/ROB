@@ -56,9 +56,9 @@ function getPromise(
     timeout,                      // After that, fail.
     verb,                         // GET, PUT, DELETE, POST, etc
     happyCode,                    // if met, resolve, otherwise fail.
-    data = null,             // payload, when needed (PUT, POST...)
-    show = true,          // Show the traffic [true]|false
-    headers = null) {        // Array of { name: '', value: '' }
+    data = null,                  // payload, when needed (PUT, POST...)
+    show = true,                  // Show the traffic [true]|false
+    headers = null) {             // Array of { name: '', value: '' }
 
     if (show === true) {
         document.body.style.cursor = 'wait';
@@ -84,7 +84,7 @@ function getPromise(
             headers.forEach(header => xhr.setRequestHeader(header.name, header.value));
         }
         try {
-            if (data === undefined || data === null) {
+            if (!data) {
                 xhr.send();
             } else {
                 xhr.send(JSON.stringify(data));
@@ -231,7 +231,7 @@ function getSkyGP(when, position, wandering, stars) {
         url += ("&wandering=true");
     }
     // Stars
-    if (stars !== undefined && stars === true) { // to minimize the size of the payload
+    if (stars && stars === true) { // to minimize the size of the payload
         url += ("&stars=true");
     }
     return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);

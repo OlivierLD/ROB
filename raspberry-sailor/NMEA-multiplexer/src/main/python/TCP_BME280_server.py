@@ -8,7 +8,7 @@ https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperat
 
 Use a sudo pip3 install adafruit-circuitpython-bme280
 
-Produces XDR, MTA, MMB, from the data read from a BME280,
+Produces XDR, MTA, MMB, from the data read from a BME280, (TODO: MBA ?)
 on a regular basis, see the between_loops variable.
 """
 

@@ -14,6 +14,7 @@ import utils.DumpUtil;
 import utils.StaticUtil;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -155,7 +156,19 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             synchronized (adminServer) {
                 // System.out.println("Mux Stopping Admin server");
                 this.getLogger().log(Level.INFO, "Mux Stopping Admin server");
-                adminServer.stopRunning();
+                try {
+                    adminServer.stopRunning();
+                } catch (Exception ex) {
+                    if (ex instanceof RuntimeException) {
+                        if (ex.getCause() instanceof ConnectException) {
+                            System.err.println(">> ConnectException when shutting down the adminServer. Not un-expected, already dead.");
+                        } else {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        ex.printStackTrace();
+                    }
+                }
             }
         }
     }
