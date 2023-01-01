@@ -37,6 +37,9 @@ TCP is cool enough to be language agnostic.
 And on top of that, several parts of the code deserved some cleanup, and this is also an opportunity to minimize
 and consolidate the number of dependencies to external libraries. For example, for the Java-to-JSON part, only Jackson is now used.
 
+The web pages and scripts _**do not rely on any framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
+It's using ES6 features, like Promises.
+
 ## How the repo is organized
 At the root, we have some generic building blocks, like
 - `http-tiny-server`
