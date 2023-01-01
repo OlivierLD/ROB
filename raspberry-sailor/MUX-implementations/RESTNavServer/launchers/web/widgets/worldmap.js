@@ -14,6 +14,24 @@ if (typeof(getDir) !== 'function') {
     };
 }
 
+if (typeof(decToSex) !== 'function') {
+	let decToSex = (val, ns_ew) => {
+		let absVal = Math.abs(val);
+		let intValue = Math.floor(absVal);
+		let dec = absVal - intValue;
+		let i = intValue;
+		dec *= 60;
+		let s = i + "&deg;" + dec.toFixed(2) + "'";
+
+		if (val < 0) {
+			s += (ns_ew === 'NS' ? 'S' : 'W');
+		} else {
+			s += (ns_ew === 'NS' ? 'N' : 'E');
+		}
+		return s;
+	};
+}
+
 const projections = {
 	anaximandre: {
 		type: "ANAXIMANDRE"
