@@ -65,7 +65,7 @@ Illustrations of the ways to put it to work are available under `MUX-implementat
 ## Misc notes
 When building on small board, do not hesitate to exclude some demanding tasks, like
 ```
-$ .../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
+$ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
 
 ---
