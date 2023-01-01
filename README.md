@@ -1,12 +1,33 @@
 # ROB (Raspberry-Pi On Board)
-### Using the Raspberry Pi at sea.
-
-Java and Python(3).
-
+### Using the Raspberry Pi <u>at sea</u>.
 | _**100% West Made. Fait 100% à l'ouest.**_ |
 |:------------------------------------------:|
 | ![A l'ouest, Britanny, California](./a.l.ouest.jpeg) |
 
+Java and Python(3).
+
+## Preamble
+One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access.
+Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum.
+Routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
+
+
+## What this is
+We intend here to deal with the data provided by an NMEA Station (Boat Speed, Wind data, ...), a GPS, and maybe additional boards (like Atmospheric sensors like BME280, very cheap).  
+We want to be able to:
+- Forward the read and calculated data to other softwares (like OpenCPN, SeaWi, ...)
+- Calculate True Wind (Speed and Direction)
+- Calculate current, in real time
+- Calculate tides - and publish tide almanacs
+- Calculate celestial data - and publish celestial almanacs
+- Calculate routing - based on GRIB files (receivable at sea, yes. I did it)
+- Provide all kinds of user interfaces, accessible from laptops, tablets, cell-phones...
+- Provide the way to come up with your own extensions and custom User Interfaces.
+- ...and all this kind of things.
+
+All this, running on a Raspberry Pi.
+
+---
 
 This project came to light after [Raspberry Coffee](https://github.com/OlivierLD/raspberry-coffee).  
 `Raspberry Coffee` is mainly written in Java (and other JVM languages), and can communicate with sensors and actuators using [PI4J](https://pi4j.com/), itself relying on [WiringPi](http://wiringpi.com/).
@@ -38,7 +59,7 @@ And on top of that, several parts of the code deserved some cleanup, and this is
 and consolidate the number of dependencies to external libraries. For example, for the Java-to-JSON part, only Jackson is now used.
 
 The web pages and scripts _**do not rely on any framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
-It's using ES6 features, like Promises.
+It's using vanilla ES6 features, like Promises.
 
 ## How the repo is organized
 At the root, we have some generic building blocks, like
