@@ -8,7 +8,7 @@ Java and Python(3).
 
 ## Preamble
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access.
-Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum.
+Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can be done offline.  
 Routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
 
 
