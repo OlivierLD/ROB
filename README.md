@@ -5,7 +5,7 @@ Java and Python(3).
 
 | _**100% West Made. Fait 100% à l'ouest.**_ |
 |:------------------------------------------:|
-| ![A l'ouest](./a.l.ouest.jpeg) |
+| ![A l'ouest, Britanny, California](./a.l.ouest.jpeg) |
 
 
 This project came to light after [Raspberry Coffee](https://github.com/OlivierLD/raspberry-coffee).  
@@ -67,6 +67,14 @@ When building on small board, do not hesitate to exclude some demanding tasks, l
 ```
 $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
+
+## Misc links to look at...
+- <https://saillogger.com/>
+- <https://github.com/itemir/rpi_boat_utils>
+- <https://gpsd.gitlab.io/gpsd/>
+- <https://celnav.de/> (my favorite)
+- <http://www.tecepe.com.br/nav/>
+- <http://navastro.free.fr/> (in French)
 
 ---
 More to come...
