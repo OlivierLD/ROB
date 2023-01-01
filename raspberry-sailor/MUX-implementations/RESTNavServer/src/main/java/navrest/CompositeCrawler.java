@@ -56,6 +56,7 @@ public class CompositeCrawler {
 
 		System.setProperty(NASHORN_ARGS, ES_6);
 
+		// TODO Replace the catalog with a JSON Object, and Nashorn with Jackson.
 		ScriptEngineManager factory = new ScriptEngineManager();
 		ScriptEngine engine = factory.getEngineByName("nashorn");
 		engine.eval(new FileReader(catalog));

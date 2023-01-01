@@ -462,7 +462,7 @@ public class RESTImplementation {
 	 * @return
 	 */
 	private Response requestRouting(Request request) {
-		if (true || verbose) {
+		if (verbose) {
 			System.out.println("Starting routing computation.");
 		}
 
@@ -477,7 +477,8 @@ public class RESTImplementation {
 				StringReader stringReader = new StringReader(payload);
 				try {
 					RoutingRequest routingRequest = mapper.readValue(stringReader, RoutingRequest.class);
-					RoutingUtil.RoutingResult routing = new BlindRouting().calculate(routingRequest.fromL,
+					RoutingUtil.RoutingResult routing = new BlindRouting().calculate(
+							routingRequest.fromL,
 							routingRequest.fromG,
 							routingRequest.toL,
 							routingRequest.toG,
@@ -495,11 +496,36 @@ public class RESTImplementation {
 							routingRequest.avoidLand,
 							routingRequest.verbose
 					);
-					if (true) {
-						String theFullStuff = mapper.writeValueAsString(routing);
-						BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
-						br.write(theFullStuff);
-						br.close();
+					if (verbose) {
+						System.out.println("--- BlindRouting().calculate completed. ---");
+					}
+					if (false) {  // TODO An option in the request ?
+						System.out.println("--- Spitting out fullrouting.json ---");
+						// Warning: this is a BIIIIIIG file... More than 100Gb for Atlantic crossing
+						if (false) {
+							String theFullStuff = mapper.writeValueAsString(routing); // That part seems to be quite memory demanding...
+							BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
+							br.write(theFullStuff);
+							br.close();
+						}
+						if (true) {
+							Thread spitter = new Thread(() -> {
+								System.out.println("Thread spitter started");
+								try {
+									BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
+									mapper.writeValue(br, routing);
+									br.close();
+								} catch (Throwable t) {
+									t.printStackTrace();
+								}
+								System.out.println("Thread spitter completed.");
+							}, "spitter");
+							spitter.start();
+						}
+						System.out.println("--- Done spitting out fullrouting.json ---");
+					}
+					if (verbose) {
+						System.out.println("--- Preparing response. ---");
 					}
 					String content = routing.bestRoute(); //  new Gson().toJson(routing); - The full object is way too big !!
 					String contentType = HttpHeaders.APPLICATION_JSON;
@@ -520,7 +546,7 @@ public class RESTImplementation {
 						default:
 							break;
 					}
-					if (true || verbose) {
+					if (verbose) {
 						System.out.println("Routing completed.");
 					}
 //					System.out.println(String.format("Content-type: %s", contentType));
@@ -544,6 +570,10 @@ public class RESTImplementation {
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
 									.errorCode("GRIB-0103")
+									.errorStack(Arrays.asList(ex1.getStackTrace())
+											.stream()
+											.map(StackTraceElement::toString)
+											.collect(Collectors.toList()))
 									.errorMessage(errMess));
 					return response;
 				}
