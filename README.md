@@ -21,6 +21,7 @@ We want to be able to:
 - Calculate tides - and publish tide almanacs
 - Calculate celestial data - and publish celestial almanacs
 - Calculate routing - based on GRIB files (receivable at sea, yes. I did it)
+- Log everything for future replay
 - Provide all kinds of user interfaces, accessible from laptops, tablets, cell-phones...
 - Provide the way to come up with your own extensions and custom User Interfaces.
 - ...and all this kind of things.
