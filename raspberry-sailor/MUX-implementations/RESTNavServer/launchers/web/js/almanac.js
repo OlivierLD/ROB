@@ -1,6 +1,6 @@
 "use strict";
 
-const DEFAULT_TIMEOUT = 60000;
+var DEFAULT_TIMEOUT = 60000;
 
 // let errManager = console.log;
 let errManager = function(mess) {

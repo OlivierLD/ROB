@@ -201,7 +201,7 @@ let lpad = function (str, pad, len) {
 	return str;
 };
 
-const DEFAULT_TIMEOUT = 60000;
+var DEFAULT_TIMEOUT = 60000;
 
 function getPromise(url,                          // full api path
 					timeout,                      // After that, fail.

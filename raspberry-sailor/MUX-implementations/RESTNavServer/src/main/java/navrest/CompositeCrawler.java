@@ -1,5 +1,6 @@
 package navrest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import http.HTTPServer;
 
 import javax.script.ScriptEngine;
@@ -214,11 +215,19 @@ public class CompositeCrawler {
 			this.compositeElements = compositeElements;
 			return this;
 		}
+
+		public String getName() {
+			return name;
+		}
+
+		public List<CompositeElement> getCompositeElements() {
+			return compositeElements;
+		}
 	}
 
 	enum ElementType {
 		FAX, GRIB
-	};
+	}
 
 	public static class CompositeElement {
 		ElementType type;
@@ -237,12 +246,27 @@ public class CompositeCrawler {
 			this.resource = resource;
 			return this;
 		}
+
+		public ElementType getType() {
+			return type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getResource() {
+			return resource;
+		}
 	}
 
 	/* For tests */
 	public static void main(String... args) throws Exception {
 		CompositeCrawler crawler = new CompositeCrawler();
 		Map<String, Object> composites = crawler.getCompositeHierarchy("PAC-0001");
+
+		String json = new ObjectMapper().writeValueAsString(composites);
+		System.out.println(json);
 
 		String[] blah = new String[] { "Ah!" };
 		try {

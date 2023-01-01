@@ -23,7 +23,7 @@ let init = function () {
 	// worldMap.setWest(127.5);
 };
 
-const DEFAULT_TIMEOUT = 60000;
+var DEFAULT_TIMEOUT = 60000;
 
 function getPromise(url,                          // full api path
 					timeout,                      // After that, fail.
@@ -114,7 +114,6 @@ let getAstroData = function(when, callback) {
 		}
 		errManager("Failed to get Astro Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 	});
-
 };
 
 let getQueryParameterByName = function(name, url) {

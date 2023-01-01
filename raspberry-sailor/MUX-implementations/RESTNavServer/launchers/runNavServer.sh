@@ -174,8 +174,8 @@ if [[ "${GPS_OFFSET}" == "true" ]]; then
 fi
 # JAVA_OPTS="${JAVA_OPTS} -Drmc.date.offset.verbose=true"
 #
-echo -e ">>> Warning: Bumping Max Memory to 1Gb"
-JAVA_OPTS="${JAVA_OPTS} -Xms64M -Xmx1G"
+echo -e ">>> Warning: Bumping Max Memory to 2Gb"   # Routing can be demanding...
+JAVA_OPTS="${JAVA_OPTS} -Xms64M -Xmx2G"
 #
 # For remote debugging:
 # JAVA_OPTS="${JAVA_OPTS} -client -agentlib:jdwp=transport=dt_socket,server=y,address=4000"

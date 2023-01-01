@@ -368,13 +368,14 @@ public class HTTPServer {
 		public List<String> getErrorStack() {
 			return errorStack;
 		}
+
 	}
 
 	public static Response buildErrorResponse(Response response, int httpStatus, ErrorPayload payload) {
 		response.setStatus(httpStatus);
 		String content = ""; // new Gson().toJson(payload);
 		try {
-			mapper.writeValueAsString(payload);
+			content = mapper.writeValueAsString(payload);
 		} catch (JsonProcessingException jpe) {
 			content = jpe.getMessage(); // TODO Use dumpException ?
 			jpe.printStackTrace();

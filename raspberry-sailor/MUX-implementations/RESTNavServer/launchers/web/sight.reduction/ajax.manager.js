@@ -6,7 +6,7 @@
 
 const DEBUG = false;
 
-const DEFAULT_TIMEOUT = 60000; // 1 minute
+var DEFAULT_TIMEOUT = 60000; // 1 minute
 /* global events */
 
 /* Uses ES6 Promises */

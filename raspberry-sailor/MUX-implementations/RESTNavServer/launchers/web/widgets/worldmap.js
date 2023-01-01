@@ -3,14 +3,16 @@
  * @author Olivier Le Diouris
  */
 
-let getDir = (x, y) => {
-	let direction = 180 + Math.toDegrees(Math.atan2(x, y));
-	while (direction < 0) {
-		direction += 360;
-	}
-	direction %= 360;
-	return direction;
-};
+if (typeof(getDir) !== 'function') {
+    let getDir = (x, y) => {
+        let direction = 180 + Math.toDegrees(Math.atan2(x, y));
+        while (direction < 0) {
+            direction += 360;
+        }
+        direction %= 360;
+        return direction;
+    };
+}
 
 const projections = {
 	anaximandre: {

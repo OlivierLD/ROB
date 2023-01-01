@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <!--
  | Weather Wizard main features.
- | JQuery is used to interact with the DOM tree, and JQuery Deffered (for Promises management).
- | It could be now using ES6's Promises.
  +-->
 <html>
 <head>
@@ -19,7 +17,51 @@
     <link rel="stylesheet" href="../css/worldmap.02.css" type="text/css"/>
     <link rel="stylesheet" href="../css/composites.css" type="text/css"/>
 
-    <!--script type="text/javascript" src="../js/jquery-2.1.3.js"></script-->
+    <style>
+        .map-style {
+            display: block;
+            height: 400px; /* Overridden onload */
+            width: 850px;
+            resize: both; /* Resize! */
+            overflow-x: auto;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .control-style {
+            width: 350px; 
+            height: 600px; 
+            resize: both; 
+            overflow-x: scroll; 
+            overflow-y: scroll;
+        }
+
+        .table-style {
+            padding: 5px;
+            background: #fff;
+            border-radius: 5px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid #CCC;
+            margin-top: 10px;
+        }
+
+        .complist-style {
+            padding: 5px;
+            background: #fff;
+            border-radius: 5px;
+            height: 100px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid #CCC;
+            margin-top: 10px;
+        }
+
+        button {
+            border-radius: 5px;
+        }
+    </style>
+
     <script type="text/javascript" src="../widgets/WorldMapData.js"></script>
     <script type="text/javascript" src="../js/mercator.utils.js"></script>
     <script type="text/javascript" src="../widgets/worldmap.js"></script>
@@ -44,14 +86,14 @@
 
     <script type="text/javascript">
 
-        var flavor = 'Ajax'; // Default, WebSocket not implemented here (we run on a small http server).
-
-        var currentFax = 1;
-        var canvas, context;
-
-        var thisZoomFactor = 1;
-
-        function messageManager(mess) {
+        let flavor = 'Ajax'; // Default, WebSocket not implemented here (we run on a small http server).
+    
+        let currentFax = 1;
+        let canvas, context;
+    
+        let thisZoomFactor = 1;
+    
+        let messageManager = (mess) => {
             let messZone = document.getElementById("message-zone");
             if (messZone !== undefined && messZone !== null) {
                 let existingContent = messZone.innerHTML;
@@ -66,45 +108,13 @@
                 console.log(mess);
             }
         }
-
-        function clearMessZone() {
+    
+        let clearMessZone = () => {
             let messZone = document.getElementById("message-zone");
             messZone.innerText = '';
         }
-
-        window.onload = function () {
-            init(); // init UI
-
-            canvas = document.getElementById('mapCanvas');
-            context = canvas.getContext('2d');
-
-            worldMap.clear();
-            worldMap.setMouseMoveCallback(mouseMoveCallback);
-            worldMap.setMouseClickCallback(mouseClickCallback);
-            worldMap.setPositionLabel("Pos");
-            setTimeout(function () {
-                worldMap.drawWorldMap();
-            }, 1);
-
-            document.getElementById("console-type").innerHTML = 'The HTML5 ' + flavor + ' Console.';
-
-            $("#map-container").height(window.innerHeight * 0.80);
-
-            // Populate composites list
-            for (var i = 0; i < compositeCatalog.length; i++) {
-                var opt = document.createElement('option');
-                opt.setAttribute('value', compositeCatalog[i].key);
-                opt.appendChild(document.createTextNode(compositeCatalog[i].name));
-                document.getElementById('composites').appendChild(opt);
-                if (i === 0) {
-                    if (compositeCatalog[i].gribRequest !== undefined) {
-                        $("#grib-request").val(compositeCatalog[i].gribRequest);
-                    }
-                }
-            }
-        };
-
-        var mouseClickCallback = function (obj) {
+    
+        let mouseClickCallback = (obj) => {
             messageManager("Mouse clicked on the Map.");
             // console.log("Mouse clicked on the map", obj);
             let lat = obj.lat;
@@ -116,7 +126,7 @@
                 lng = Math.abs(lng);
                 document.getElementById('routing-pos-lat-deg-01').value = Math.floor(lat).toFixed(0);
                 document.getElementById('routing-pos-lng-deg-01').value = Math.floor(lng).toFixed(0);
-
+    
                 document.getElementById('routing-pos-lat-min-01').value = ((lat - Math.floor(lat)) * 60).toFixed(2);
                 document.getElementById('routing-pos-lng-min-01').value = ((lng - Math.floor(lng)) * 60).toFixed(2);
             } else {
@@ -126,19 +136,19 @@
                 redraw();
             }
         };
-
-        var mouseMoveCallback = function (obj) {
+    
+        let mouseMoveCallback = (obj) => {
             //  Display position, GRIB Data, etc...
-            var mouseDataElmt = $("#mouse-data");
-            var str = "Mouse X: " + obj.x + ", Y:" + obj.y;
+            let mouseDataElmt = document.getElementById("mouse-data");
+            let str = "Mouse X: " + obj.x + ", Y:" + obj.y;
             str += ("\nL: " + decToSex(obj.lat, "NS"));
             str += ("\nG: " + decToSex(obj.lng, "EW"));
-
+    
             if (gribData !== undefined) {
-                var date = $("#grib-dates").val();
-                var oneDateGRIB = gribData[0]; // Default
+                let date = document.getElementById("grib-dates").value;
+                let oneDateGRIB = gribData[0]; // Default
                 // Look for the right date
-                for (var i = 0; i < gribData.length; i++) {
+                for (let i = 0; i < gribData.length; i++) {
                     if (gribData[i].gribDate.formattedUTCDate === date) {
                         oneDateGRIB = gribData[i];
                         break;
@@ -146,21 +156,21 @@
                 }
                 // The current frame is oneDateGRIB
                 // Find the GRIB Cell
-                var xCell = oneDateGRIB.gribDate.width - 1,
+                let xCell = oneDateGRIB.gribDate.width - 1,
                     yCell = oneDateGRIB.gribDate.height - 1;
-
+    
                 // console.log("  > xCell %d", xCell);
-
-                for (var hGRIB = 0; hGRIB < oneDateGRIB.gribDate.height; hGRIB++) {
-                    var lat = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB));
+    
+                for (let hGRIB = 0; hGRIB < oneDateGRIB.gribDate.height; hGRIB++) {
+                    let lat = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB));
                     if (lat > obj.lat) {
                         yCell = (hGRIB - 1);
                         break;
                     }
                 }
-
-                for (var wGRIB = 0; wGRIB < oneDateGRIB.gribDate.width; wGRIB++) {
-                    var lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB));
+    
+                for (let wGRIB = 0; wGRIB < oneDateGRIB.gribDate.width; wGRIB++) {
+                    let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB));
                     if (lng > 0 && obj.lng > 0 && lng > obj.lng) {
                         xCell = wGRIB - 1;
                         break;
@@ -176,23 +186,23 @@
                 // 		xCell,
                 // 		oneDateGRIB.gribDate.height,
                 // 		oneDateGRIB.gribDate.width);
-
+    
                 str += ("\nGRIB cell row <b>" + yCell + "</b>, col <b>" + xCell + "</b>");
-                var foundWind = false;
-                for (var idx = 0; idx < oneDateGRIB.typedData.length; idx++) {
-                    var skip = false;
+                let foundWind = false;
+                for (let idx = 0; idx < oneDateGRIB.typedData.length; idx++) {
+                    let skip = false;
                     if (oneDateGRIB.typedData[idx].data[yCell] === undefined) {
                         console.debug(">>>> oneDateGRIB.typedData[idx].data, yCell:%d, undefined.", yCell);
                         break;
                     }
-                    var value = oneDateGRIB.typedData[idx].data[yCell][xCell]; // TODO xCell === -1
-                    var unit = oneDateGRIB.typedData[idx].gribType.unit;
-                    var type = oneDateGRIB.typedData[idx].gribType.type;
-
+                    let value = oneDateGRIB.typedData[idx].data[yCell][xCell]; // TODO xCell === -1
+                    let unit = oneDateGRIB.typedData[idx].gribType.unit;
+                    let type = oneDateGRIB.typedData[idx].gribType.type;
+    
                     // console.log("  >>> Type: %s, xCell: %d", type, xCell);
-
+    
+                    let displayValue = '-', displayUnit = '-', displayType = '-';
                     if (value !== undefined) {  // xCell === -1 ?
-                        var displayValue, displayUnit, displayType;
                         switch (type) {
                             case 'prmsl':
                                 displayType = 'PRMSL';
@@ -206,8 +216,8 @@
                                 break;
                             case 'ugrd':
                                 if (!foundWind) {
-                                    var vgrd;
-                                    for (var i = 0; i < oneDateGRIB.typedData.length; i++) {
+                                    let vgrd;
+                                    for (let i = 0; i < oneDateGRIB.typedData.length; i++) {
                                         if (oneDateGRIB.typedData[i].gribType.type === 'vgrd') {
                                             vgrd = oneDateGRIB.typedData[i].data;
                                             break;
@@ -216,10 +226,10 @@
                                     if (vgrd !== undefined) {
                                         displayUnit = '';
                                         displayType = "WIND";
-                                        var u = value;
-                                        var v = vgrd[yCell][xCell];
-                                        var tws = getSpeed(u, v);
-                                        var dir = getDir(u, v);
+                                        let u = value;
+                                        let v = vgrd[yCell][xCell];
+                                        let tws = getSpeed(u, v);
+                                        let dir = getDir(u, v);
                                         displayValue = tws.toFixed(1) + " kts, " + dir.toFixed(0) + "&deg; (u:" + u.toFixed(1) + ", v:" + v.toFixed(1) + "), Cell <b>" + yCell + "</b>, <b>" + xCell + "</b>.";
                                         // console.log('w:%d, h:%d', yCell, xCell);
                                         foundWind = true;
@@ -276,88 +286,88 @@
                     }
                 }
             }
-            mouseDataElmt.html("<pre>" + str + "</pre>");
+            mouseDataElmt.innerHTML = ("<pre>" + str + "</pre>");
         };
-
-        var displayErr = function (err) {
+    
+        let displayErr = (err) => {
             if (err !== undefined) {
                 document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
             }
         };
-
-        var withChart = true;
-
-        var changeChart = function (cb) {
+    
+        let withChart = true;
+    
+        let changeChart = (cb) => {
             withChart = cb.checked;
             redraw();
         };
-
-        var changeGrid = function (cb) {
+    
+        let changeGrid = (cb) => {
             worldMap.setWithGrid(cb.checked);
             redraw();
         };
-
-        var changeTropics = function (cb) {
+    
+        let changeTropics = (cb) => {
             worldMap.setWithTropics(cb.checked);
             redraw();
         };
-
-        var changeGRIB = function (cb) {
+    
+        let changeGRIB = (cb) => {
             worldMap.setAfterDrawing(cb.checked ? renderGRIBData : undefined);
             redraw();
         };
-
+    
         // changeFAXES
-        var changeFAXES = function (cb) {
+        let changeFAXES = (cb) => {
             // worldMap.setAfterDrawing(cb.checked ? renderGRIBData : undefined);
             for (let sh = 0; sh < show.length; sh++) {
                 if (cb.checked === false) {
-                  show[sh] = false;
+                    show[sh] = false;
                 } else { // See the status of the corresponding Fax CB
-                  show[sh] = cb.checked;
-                  // Check all the checkboxes in table with id 'fax-table'
-                  var faxTable = document.getElementById('fax-table');
-                  let cbs = faxTable.querySelectorAll('input[type=checkbox]');
-                  if (cbs !== undefined && cbs !== null) {
-                     show[sh] = cbs[sh].checked;
-                  }
+                    show[sh] = cb.checked;
+                    // Check all the checkboxes in table with id 'fax-table'
+                    let faxTable = document.getElementById('fax-table');
+                    let cbs = faxTable.querySelectorAll('input[type=checkbox]');
+                    if (cbs !== undefined && cbs !== null) {
+                        show[sh] = cbs[sh].checked;
+                    }
                 }
             }
             redraw();
         };
-
-        var show = []; // [true, true, true];
-        var faxName = [];
+    
+        let show = []; // [true, true, true];
+        let faxName = [];
         // For 3 faxes Sfc, 500mb, StreamLines
-        var zoom = []; // [0.3418498710866215, 0.5209310701416114, 1.0040821009550305];
-        var topLeft = [];
+        let zoom = []; // [0.3418498710866215, 0.5209310701416114, 1.0040821009550305];
+        let topLeft = [];
         //  [
         //	  [10, 10],
         //	  [15, 30],
         //	  [-41, 460]
         //  ];
-        var faxObj = [];
-
-        var faxRequestCallback = function (val, originalRequest) {
-            var returned = JSON.parse(val);
-
+        let faxObj = [];
+    
+        let faxRequestCallback = (val, originalRequest) => {
+            let returned = (typeof(val) === 'string') ? JSON.parse(val) : val;
+    
             // get data from originalRequest
             show = [];
             zoom = [];
             topLeft = [];
             faxObj = [];
             faxName = [];
-            for (var idx = 0; idx < originalRequest.faxData.length; idx++) {
+            for (let idx = 0; idx < originalRequest.faxData.length; idx++) {
                 show.push(true);
-
-                var fax = new Image();
-                var x = originalRequest.faxData[idx].location.x;
-                var y = originalRequest.faxData[idx].location.y;
-                var faxZoom = originalRequest.faxData[idx].zoom;
+    
+                let fax = new Image();
+                let x = originalRequest.faxData[idx].location.x;
+                let y = originalRequest.faxData[idx].location.y;
+                let faxZoom = originalRequest.faxData[idx].zoom;
                 zoom.push(faxZoom);
                 topLeft.push([x, y]);
                 faxName.push(originalRequest.faxData[idx].name);
-                fax.onload = function () {
+                fax.onload = () => {
                     context.drawImage(fax, x, y, (parseInt(fax.width) * faxZoom), (parseInt(fax.height) * faxZoom));
                     redraw();
                 };
@@ -365,7 +375,7 @@
                 if (returned[idx].returned !== undefined) {
                     if (returned[idx].returned.startsWith("file:")) { // && returned[idx].returned.indexOf("/web/") > -1) {
                         // TODO Something better, relative to /web
-                        var loc = returned[idx].returned.substring(returned[idx].returned.indexOf("/web/") + 1);
+                        let loc = returned[idx].returned.substring(returned[idx].returned.indexOf("/web/") + 1);
                         fax.src = '../../' + loc;
                     } else {
                         fax.src = '../../' + returned[idx].returned;
@@ -377,10 +387,10 @@
                 faxObj.push(fax);
             }
         };
-
-        var findCompositeByKey = function (key) {
-            var comp = {};
-            for (var i = 0; i < compositeCatalog.length; i++) {
+    
+        let findCompositeByKey = (key) => {
+            let comp = {};
+            for (let i = 0; i < compositeCatalog.length; i++) {
                 if (key === compositeCatalog[i].key) {
                     comp = compositeCatalog[i];
                     break;
@@ -388,21 +398,22 @@
             }
             return comp;
         };
-
-        var monthNames = [
-            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
         ];
-
+    
         /*
-         * Reload an existing composite.
-         */
-        var reload = function (key, compositeData) {
+            * Reload an existing composite.
+            */
+        let reload = (key, compositeData) => {
             console.log("Reloading", key, compositeData);
-            var composite = findCompositeByKey(key);
+            let composite = findCompositeByKey(key);
             // Fill out with actual file locations
             if (composite.faxData !== undefined) {
-                for (var i = 0; i < composite.faxData.length; i++) {
-                    for (var f = 0; f < compositeData.length; f++) {
+                for (let i = 0; i < composite.faxData.length; i++) {
+                    for (let f = 0; f < compositeData.length; f++) {
                         if (compositeData[f].type === 'FAX' &&
                             compositeData[f].name === '_' + key + '_' + i + '.png') {
                             composite.faxData[i].faxUrl = compositeData[f].resource;
@@ -412,7 +423,7 @@
                 }
                 // GRIB
                 if (composite.gribRequest !== undefined) {
-                    for (var f = 0; f < compositeData.length; f++) {
+                    for (let f = 0; f < compositeData.length; f++) {
                         if (compositeData[f].type === 'GRIB') { // name='grib.grb'
                             composite.gribRequest = compositeData[f].resource;
                             break;
@@ -422,124 +433,124 @@
             }
             loadComposite(composite);
         };
-
-        var getKeyFromName = function (name) {
-            var key = name.substring(0, name.indexOf('_'));
+    
+        let getKeyFromName = (name) => {
+            let key = name.substring(0, name.indexOf('_'));
             return key;
         };
-
-        var readableName = function (name) {
-            var key = getKeyFromName(name);
-            var time = name.substring(name.indexOf('_') + 1);
-            var hours = time.substring(0, 2);
-            var min = time.substring(2, 4);
-            var sec = time.substring(4);
-
-            var comp = findCompositeByKey(key);
-            var desc = comp.name;
-
+    
+        let readableName = (name) => {
+            let key = getKeyFromName(name);
+            let time = name.substring(name.indexOf('_') + 1);
+            let hours = time.substring(0, 2);
+            let min = time.substring(2, 4);
+            let sec = time.substring(4);
+    
+            let comp = findCompositeByKey(key);
+            let desc = comp.name;
+    
             return (key + " @ " + hours + ":" + min + ":" + sec + (desc !== undefined ? "<br><small>" + desc + "</small>" : ""));
         };
-
-        var expandCollapse = function (id) {
-// 	console.log('>> Exp/Coll ' + id);
-            var elmt = document.getElementById(id);
+    
+        let expandCollapse = (id) => {
+            // 	console.log('>> Exp/Coll ' + id);
+            let elmt = document.getElementById(id);
             if (elmt.style.display === "none") {
                 elmt.style.display = "block";
             } else {
                 elmt.style.display = "none";
             }
         };
-
+    
         /*
-          Sample data:
-
-          {
-          "2017": {
-              "12": {
-                  "10": [
-                      {
-                          "name": "ATL-0001_184206",
-                          "compositeElements": [
-                              {
-                                  "type": "FAX",
-                                  "name": "_ATL-0001_0.png",
-                                  "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/_ATL-0001_0.png"
-                              },
-                              {
-                                  "type": "FAX",
-                                  "name": "_ATL-0001_1.png",
-                                  "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/_ATL-0001_1.png"
-                              },
-                              {
-                                  "type": "GRIB",
-                                  "name": "grib.grb",
-                                  "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/grib.grb"
-                              }
-                          ]
-                      },
-                      {
-                          "name": "PAC-0001_073637",
-                          "compositeElements": [
-                              {
-                      ...
-
-           */
-
-        var sortObject = function (o) { // Sort by property of level 1
-            var sorted = {},
+            Sample data:
+    
+            {
+            "2017": {
+                "12": {
+                    "10": [
+                        {
+                            "name": "ATL-0001_184206",
+                            "compositeElements": [
+                                {
+                                    "type": "FAX",
+                                    "name": "_ATL-0001_0.png",
+                                    "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/_ATL-0001_0.png"
+                                },
+                                {
+                                    "type": "FAX",
+                                    "name": "_ATL-0001_1.png",
+                                    "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/_ATL-0001_1.png"
+                                },
+                                {
+                                    "type": "GRIB",
+                                    "name": "grib.grb",
+                                    "resource": "file:/Users/olediour/repos/raspberry-coffee/RESTNavServer/web/2017/12/10/ATL-0001_184206/grib.grb"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "PAC-0001_073637",
+                            "compositeElements": [
+                                {
+                        ...
+    
+            */
+    
+        let sortObject = (o) => { // Sort by property of level 1
+            let sorted = {},
                 key, a = [];
-
+    
             for (key in o) {
                 if (o.hasOwnProperty(key)) {
                     a.push(key);
                 }
             }
-
+    
             a.sort();
-
+    
             for (key = 0; key < a.length; key++) {
                 sorted[a[key]] = o[a[key]];
             }
             return sorted;
         };
-
-        var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-        var makeCompositeTree = function (tree) {
-            var htmlCode = "<b>Existing Composites:</b><ul style='margin-left: -20px;'>";
-            for (var year in tree) {
+    
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    
+        let makeCompositeTree = (tree) => {
+            let htmlCode = "<b>Existing Composites:</b><ul style='margin-left: -20px;'>";
+            for (let year in tree) {
                 htmlCode += "<li type='disc'>";
                 htmlCode += ("<span class='compositeNode' onclick='expandCollapse(\"" + year + "\");' style='cursor: pointer;'>");
-                var months = tree[year];
-                var nbMonths = Object.keys(months).length;
+                let months = tree[year];
+                let nbMonths = Object.keys(months).length;
                 htmlCode += (year + " (" + nbMonths + " month" + (nbMonths > 1 ? "s" : "") + ") :");
                 htmlCode += ("</span>");
                 htmlCode += ("<ul id='" + year + "' style='display: none; padding-left: 10px;'>");
-                for (var month in months) {
+                for (let month in months) {
                     htmlCode += "<li type='disc'>";
                     htmlCode += ("<span class='compositeNode' onclick='expandCollapse(\"" + year + "-" + month + "\");' style='cursor: pointer;'>");
-                    var days = sortObject(months[month]);
-                    var nbDays = Object.keys(days).length;
+                    let days = sortObject(months[month]);
+                    let nbDays = Object.keys(days).length;
                     htmlCode += (monthNames[parseInt(month) - 1] + " (" + nbDays + " day" + (nbDays > 1 ? "s" : "") + ") :");
                     htmlCode += ("</span>");
                     htmlCode += ("<ul id='" + year + "-" + month + "' style='display: none; padding-left: 10px;'>");
-
-                    var sortedDays = Object.keys(days);
+    
+                    let sortedDays = Object.keys(days);
                     sortedDays.sort();
-                    for (var x = 0; x < sortedDays.length; x++) {
-                        var day = sortedDays[x]; // day number as a String
+                    for (let x = 0; x < sortedDays.length; x++) {
+                        let day = sortedDays[x]; // day number as a String
                         // Find week day
-                        var date = new Date(year, month - 1, day);
-                        var weekDay = date.getDay();
+                        let date = new Date(year, month - 1, day);
+                        let weekDay = date.getDay();
                         htmlCode += "<li type='disc'>";
                         htmlCode += ("<span class='compositeNode' onclick='expandCollapse(\"" + year + "-" + month + "-" + day + "\");' style='cursor: pointer;'>");
-                        var compositeList = days[day]; // Array
+                        let compositeList = days[day]; // Array
                         htmlCode += (day + ", " + dayNames[weekDay] + " (" + compositeList.length + " composite" + (compositeList.length > 1 ? "s" : "") + ") :");
                         htmlCode += ("</span>");
                         htmlCode += ("<ul id='" + year + "-" + month + "-" + day + "' style='display: none; padding-left: 10px;'>");
-                        for (var i = 0; i < compositeList.length; i++) {
-                            var comp = compositeList[i];
+                        for (let i = 0; i < compositeList.length; i++) {
+                            let comp = compositeList[i];
                             htmlCode += ("<li type='disc'><a class='compositeNode' onclick='reload(\"" + getKeyFromName(comp.name) + "\", " + JSON.stringify(comp.compositeElements) + ");'>" + readableName(comp.name) + "</a></li>"); // The leaf!
                         }
                         htmlCode += "</ul>";
@@ -554,43 +565,43 @@
             htmlCode += "</ul>";
             return htmlCode;
         };
-
-        var getCompositeList = function () {
-            var filter = document.getElementById("comp-name-filter").value;
-//  console.log("Filtering: " + filter);
-            var cb = function (value) {
-//		console.log(value);
-                var data = JSON.parse(value);
-                $("#composite-list").html(makeCompositeTree(data)); // "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+    
+        let getCompositeList = () => {
+            let filter = document.getElementById("comp-name-filter").value;
+    //  console.log("Filtering: " + filter);
+            let cb = (value) => {
+    //		console.log(value);
+                let data = (typeof(value) === 'string') ? JSON.parse(value) : value;
+                document.getElementById("composite-list").innerHTML = (makeCompositeTree(data)); // "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
             };
             getExistingComposites(cb, filter);
         };
-
-        var displaySummary = function (bestRoute) {
+    
+        let displaySummary = (bestRoute) => {
             bestRoute.waypoints.forEach(wp => {
                 console.log("At", wp.datetime, "Position", wp.position.latitude, wp.position.longitude);
                 console.log("  TWS", wp.tws, "TWD", wp.twd, "BSP", wp.bsp, "HDG", wp.hdg);
             });
         };
-
-        var DURATION_FMT = "Y-m-dTH:i:s";
-        var ROUTING_VERBOSE = true;
-
-        var testRouting = function () {
-
+    
+        const DURATION_FMT = "Y-m-dTH:i:s";
+        const ROUTING_VERBOSE = true;
+    
+        let testRouting = () => {
+    
             console.log('GRIB Data:', gribFileLocation); // Use this one?
-
+    
             if (gribFileLocation === undefined) {
                 alert("No GRIB File location, aborting");
                 return;
             }
-            var toL = (document.getElementById('routing-pos-lat-sign-01').value === 'S' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lat-deg-01').value) +
+            let toL = (document.getElementById('routing-pos-lat-sign-01').value === 'S' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lat-deg-01').value) +
                 (parseFloat(parseInt(document.getElementById('routing-pos-lat-min-01').value) / 60)));
-            var toG = (document.getElementById('routing-pos-lng-sign-01').value === 'W' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lng-deg-01').value) +
+            let toG = (document.getElementById('routing-pos-lng-sign-01').value === 'W' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lng-deg-01').value) +
                 (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
-            var now = new Date();
-            var utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
-            var sampleRequest = {
+            let now = new Date();
+            let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
+            let sampleRequest = {
                 "fromL": position.lat,
                 "fromG": position.lng,
                 "toL": toL,
@@ -609,12 +620,13 @@
                 "avoidLand": false,
                 "verbose": false
             };
-            var callback = function (bestRoute) {
+            let callback = (bestRoute) => {
+                // bestRouteToPlot is declared in gbrib.routing.js
+                bestRouteToPlot = (typeof(bestRoute) === 'string') ? JSON.parse(bestRoute) : bestRoute; // in grib.routing.js, global.
                 if (ROUTING_VERBOSE) {
-                    console.log(`Routing has ${ JSON.parse(bestRoute).waypoints.length } point(s)`);
+                    console.log(`Routing has ${ bestRouteToPlot.waypoints.length } point(s)`);
                     console.log(bestRoute);
                 }
-                bestRouteToPlot = JSON.parse(bestRoute); // in grib.routing.js, global.
                 if (ROUTING_VERBOSE) {
                     displaySummary(bestRouteToPlot);
                 }
@@ -622,66 +634,66 @@
             };
             getBestRoute(sampleRequest, callback);
         };
-
-        var compositeInterval;
-        var timerInterval;
-        var timeToNextLoad = 0;
-
-        var intervalInSeconds = 3600 * 6;
-
-        var secToHMS = function (nbSec) {
-            var h = Math.floor(nbSec / 3600);
-            var m = Math.floor((nbSec - (h * 3600)) / 60);
-            var s = nbSec % 60;
-
-            var strH = h.toFixed(0);
+    
+        let compositeInterval;
+        let timerInterval;
+        let timeToNextLoad = 0;
+    
+        let intervalInSeconds = 3600 * 6;
+    
+        let secToHMS = (nbSec) => {
+            let h = Math.floor(nbSec / 3600);
+            let m = Math.floor((nbSec - (h * 3600)) / 60);
+            let s = nbSec % 60;
+    
+            let strH = h.toFixed(0);
             while (strH.length < 2) {
                 strH = '0' + strH;
             }
-            var strM = m.toFixed(0);
+            let strM = m.toFixed(0);
             while (strM.length < 2) {
                 strM = '0' + strM;
             }
-            var strS = s.toFixed(0);
+            let strS = s.toFixed(0);
             while (strS.length < 2) {
                 strS = '0' + strS;
             }
             return strH + ":" + strM + ":" + strS;
         };
-
-        var continuousLoad = function (cb) {
+    
+        let continuousLoad = (cb) => {
             if (cb.checked === true) { // Start
                 timeToNextLoad = intervalInSeconds; // In seconds
-                $("#load-composites").prop("disabled", true);
-                compositeInterval = setInterval(function () {
+                document.getElementById("load-composites").disabled = true;
+                compositeInterval = setInterval(() => {
                     loadComposite();
                     timeToNextLoad = intervalInSeconds; // In seconds
                 }, 1000 * intervalInSeconds); // Every 6 hours
-                timerInterval = setInterval(function () {
+                timerInterval = setInterval(() => {
                         timeToNextLoad -= 1; // Decrease
-                        var strTime = secToHMS(timeToNextLoad);
-                        $("#time-to-next").text(" (in " + strTime + ")");
+                        let strTime = secToHMS(timeToNextLoad);
+                        document.getElementById("time-to-next").innerText = (" (in " + strTime + ")");
                     },
                     1000); // Every second
             } else { // Stop
-                $("#load-composites").prop("disabled", false);
+                document.getElementById("load-composites").disabled = false;
                 clearInterval(compositeInterval);
                 clearInterval(timerInterval);
-                $("#time-to-next").text("");
+                document.getElementById("time-to-next").innerText = ("");
             }
         };
-
+    
         /**
          * If existing data is provided, it comes from the file system
          */
-        var loadComposite = function (existingData) {
-            var key = document.getElementById('composites').value;
-
-            var compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
-
+        let loadComposite = (existingData) => {
+            let key = document.getElementById('composites').value;
+    
+            let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
+    
             // Clear previous one if any
             gribData = undefined;
-
+    
             gribFileLocation = undefined;
             if (existingData !== undefined && existingData.gribRequest !== undefined) {
                 gribFileLocation = existingData.gribRequest;
@@ -693,12 +705,12 @@
                 }
                 document.getElementById('current-grib-location').innerText = ('GRIB in ' + gribFileLocation);
             }
-
+    
             errManager = (mess) => { // Override the one in ww.js. Console, and TextArea
-              console.log(mess);
-              messageManager(mess);
+                console.log(mess);
+                messageManager(mess);
             };
-
+    
             // console.log("Loading", (typeof(compositeData) === 'object' ? JSON.stringify(compositeData, null, 2) : compositeData));
             messageManager("Loading:");
             messageManager(compositeData);
@@ -709,20 +721,20 @@
             worldMap.setWest(compositeData.map.west);
             worldMap.setEast(compositeData.map.east); // Recalculated, anyway.
             worldMap.setProjection(compositeData.map.projection);
-
+    
             worldMap.drawWorldMap();
-            $("#grib-checkbox").prop("disabled", true);
-            $("#grib-checkbox").prop("checked", false);
-
+            document.getElementById("grib-checkbox").disabled = true;
+            document.getElementById("grib-checkbox").checked = false;
+    
             // $("#fax-checkbox").prop("disabled", true);
             // $("#fax-checkbox").prop("checked", false);
-
+    
             // Clean up dynamic data
             // 1 - Fax Table rows
-            var idx = 1;
-            var go = true;
+            let idx = 1;
+            let go = true;
             while (go) {
-                var row = document.getElementById('row-' + idx);
+                let row = document.getElementById('row-' + idx);
                 if (row !== null) {
                     row.parentNode.removeChild(row);
                     idx += 1;
@@ -734,7 +746,7 @@
             idx = 1;
             go = true;
             while (go) {
-                var radio = document.getElementById('zoomfor-' + idx);
+                let radio = document.getElementById('zoomfor-' + idx);
                 if (radio !== null) {
                     radio.parentNode.removeChild(radio);
                     idx += 1;
@@ -742,19 +754,19 @@
                     go = false;
                 }
             }
-
-            var year, month, day, time;
-            var now = new Date();
+    
+            let year, month, day, time;
+            let now = new Date();
             year = now.format('Y');
             month = now.format('m');
             day = now.format('d');
             time = compositeData.key + '_' + now.format('His');
-
-            var requestData = [];
+    
+            let requestData = [];
             if (compositeData.faxData !== undefined) {
-
-                compositeData.faxData.forEach(function (fax, idx) {
-                    var oneFax = {
+    
+                compositeData.faxData.forEach((fax, idx) => {
+                    let oneFax = {
                         url: fax.faxUrl,
                         name: fax.name,
                         storage: 'web/' + year + '/' + month + '/' + day + '/' + time + '/' + compositeData.key + '_' + idx + '.png', // Original. With the date
@@ -771,143 +783,143 @@
                         oneFax.rotation = fax.rotation;
                     }
                     requestData.push(oneFax);
-
+    
                     /*
-                      Adding rows like
+                        Adding rows like
                     <tr>
-                      <td>[checkbox]</td>
+                        <td>[checkbox]</td>
                                 <td>1</td>
                                 <td><div id="name-1"></div></td>
-                      <td><div id="x-1" style="text-align: right;"></div></td>
+                        <td><div id="x-1" style="text-align: right;"></div></td>
                                 <td><div id="y-1" style="text-align: right;"></div></td>
                                 <td><div id="zoom-1" style="text-align: right;"></div></td>
                             </tr>
                     */
-                    var faxTable = document.getElementById('fax-table');
-                    var row = document.createElement('tr');
+                    let faxTable = document.getElementById('fax-table');
+                    let row = document.createElement('tr');
                     row.id = 'row-' + (idx + 1);
-
+    
                     // Adding a checkbox <input type="checkbox" onchange="showHide(1, this);" checked>Show fax #1 <br/>
-                    var div = document.createElement('div');
+                    let div = document.createElement('div');
                     div.id = 'cb-' + (idx + 1);
-
-                    var cb = document.createElement('input');
+    
+                    let cb = document.createElement('input');
                     cb.type = 'checkbox';
                     cb.id = 'cb-' + (idx + 1);
                     cb.setAttribute('onchange', 'showHide(' + (idx + 1) + ', this);');
                     cb.checked = true;
                     div.appendChild(cb);
-                    var col0 = document.createElement('td');
+                    let col0 = document.createElement('td');
                     col0.setAttribute('style', 'text-align: center;');
                     row.appendChild(col0);
                     col0.appendChild(cb);
-
-                    var col1 = document.createElement('td');
+    
+                    let col1 = document.createElement('td');
                     row.appendChild(col1);
                     col1.appendChild(document.createTextNode((idx + 1)));
-
-                    var col2 = document.createElement('td');
+    
+                    let col2 = document.createElement('td');
                     row.appendChild(col2);
-                    var div2 = document.createElement('div');
+                    let div2 = document.createElement('div');
                     div2.id = 'name-' + (idx + 1);
                     div2.style.whiteSpace = "nowrap";
                     div2.appendChild(document.createTextNode(fax.name));
                     col2.appendChild(div2);
-
-                    var col3 = document.createElement('td');
+    
+                    let col3 = document.createElement('td');
                     row.appendChild(col3);
-                    var div3 = document.createElement('div');
+                    let div3 = document.createElement('div');
                     div3.id = 'x-' + (idx + 1);
                     div3.setAttribute('style', 'text-align: right;');
                     div3.appendChild(document.createTextNode(fax.location.x));
                     col3.appendChild(div3);
-
-                    var col4 = document.createElement('td');
+    
+                    let col4 = document.createElement('td');
                     row.appendChild(col4);
-                    var div4 = document.createElement('div');
+                    let div4 = document.createElement('div');
                     div4.id = 'y-' + (idx + 1);
                     div4.setAttribute('style', 'text-align: right;');
                     div4.appendChild(document.createTextNode(fax.location.y));
                     col4.appendChild(div4);
-
-                    var col5 = document.createElement('td');
+    
+                    let col5 = document.createElement('td');
                     row.appendChild(col5);
-                    var div5 = document.createElement('div');
+                    let div5 = document.createElement('div');
                     div5.id = 'zoom-' + (idx + 1);
                     div5.setAttribute('style', 'text-align: left;');
                     div5.appendChild(document.createTextNode(fax.zoom));
                     col5.appendChild(div5);
-
+    
                     faxTable.appendChild(row);
-
+    
                 }); // end forEach
-
+    
                 // Request ready
                 // console.log(requestData);
                 messageManager(requestData);
                 getCompositeFaxes(requestData, compositeData, faxRequestCallback);
             }
-
+    
             if (compositeData.gribRequest !== undefined) {
                 makeGRIBRequest(compositeData.gribRequest, existingData === undefined ? 'web/' + year + '/' + month + '/' + day + '/' + time : undefined); // grib file Location
             }
         };
-
-        var speakUp = function (num) {
+    
+        let speakUp = (num) => {
             document.getElementById("name-" + num).innerText = faxName[num - 1];
             document.getElementById("x-" + num).innerText = (topLeft[num - 1][0] * thisZoomFactor).toFixed(0);
             document.getElementById("y-" + num).innerText = (topLeft[num - 1][1] * thisZoomFactor).toFixed(0);
             document.getElementById("zoom-" + num).innerText = (zoom[num - 1] * thisZoomFactor);
         };
-
-        var zoomFax = function (num, factor) {
+    
+        let zoomFax = (num, factor) => {
             zoom[num - 1] *= factor;
             speakUp(num);
             redraw();
         };
-
-        var zoomIn = function () {
-            var factor = parseFloat(document.getElementById("zoom-factor").value);
+    
+        let zoomIn = () => {
+            let factor = parseFloat(document.getElementById("zoom-factor").value);
             zoomFax(currentFax, factor);
         };
-
-        var zoomOut = function () {
-            var factor = parseFloat(document.getElementById("zoom-factor").value);
+    
+        let zoomOut = () => {
+            let factor = parseFloat(document.getElementById("zoom-factor").value);
             zoomFax(currentFax, 1 / factor);
         };
-
-        var up = function () {
+    
+        let up = () => {
             topLeft[currentFax - 1][1] -= 1;
             speakUp(currentFax);
             redraw();
         };
-
-        var down = function () {
+    
+        let down = () => {
             topLeft[currentFax - 1][1] += 1;
             speakUp(currentFax);
             redraw();
         };
-
-        var left = function () {
+    
+        let left = () => {
             topLeft[currentFax - 1][0] -= 1;
             speakUp(currentFax);
             redraw();
         };
-
-        var right = function () {
+    
+        let right = () => {
             topLeft[currentFax - 1][0] += 1;
             speakUp(currentFax);
             redraw();
         };
-
-        var showHide = function (num, cb) {
+    
+        let showHide = (num, cb) => {
             show[num - 1] = cb.checked;
             redraw();
         };
-
+    
         let scrollGribInterval = -1;
-
-        function scrollGribs(cb) {
+    
+        let scrollGribs = (cb) => {
             // console.log("Yes! %s", cb.checked);
             let gribDatesList = document.getElementById("grib-dates");
             if (cb.checked) {
@@ -926,15 +938,15 @@
                 window.clearInterval(scrollGribInterval);
             }
         }
-
-        var redraw = function () {
+    
+        let redraw = () => {
             worldMap.clear();
-//  worldMap.setPositionLabel("");
-
+    //  worldMap.setPositionLabel("");
+    
             if (withChart) { // Chart (and GRIBs) *under* the faxes
                 worldMap.drawWorldMap(false);
             }
-
+    
             for (let sh = 0; sh < show.length; sh++) {
                 if (show[sh] === true && faxObj[sh] !== undefined) {
                     context.drawImage(
@@ -946,18 +958,18 @@
                     );
                 }
             }
-//		if (withChart) { // GRIB over the faxes
-//			worldMap.drawWorldMap(false);
-//		}
+    //		if (withChart) { // GRIB over the faxes
+    //			worldMap.drawWorldMap(false);
+    //		}
         };
-
-        var changeFax = function (val) {
+    
+        let changeFax = (val) => {
             currentFax = val;
         };
-
+    
         const GRIB_DEBUG = false;
-
-        var plotGrib = function (jsonGrib) {
+    
+        let plotGrib = (jsonGrib) => {
             if (GRIB_DEBUG) { // DEBUG
                 // console.log("Received GRIB");
                 messageManager("Received GRIB");
@@ -966,7 +978,7 @@
                     // console.log('GRIB Date:', grib.gribDate.formattedUTCDate);
                     messageManager('GRIB Date:' + grib.gribDate.formattedUTCDate);
                 });
-
+    
                 jsonGrib[0].typedData.forEach((type, idx) => {
                     // console.log('Type:', type.gribType.desc);
                     messageManager('Type:' + type.gribType.desc);
@@ -974,50 +986,49 @@
             }
             // Create the UI widgets to deal with the GRIB
             // 1. Dates
-            var gribDates = $("#grib-dates");
-            gribDates
-                .find('option')
-                .remove();
-
+            let gribDates = document.getElementById("grib-dates");
+            while (gribDates.options.length > 0) {
+                gribDates.remove(0);
+            }
+    
             jsonGrib.forEach((grib, idx) => {
-                gribDates.append($('<option>', {
-                    value: grib.gribDate.formattedUTCDate,
-                    text: grib.gribDate.formattedUTCDate
-                }));
+                let option = document.createElement("option");
+                option.text = grib.gribDate.formattedUTCDate;
+                option.value = grib.gribDate.formattedUTCDate;
+                gribDates.add(option);
             });
             // 2. Types
-            var gribTypes = $("#grib-types");
-            gribTypes
-                .find('option')
-                .remove();
-
-            var foundWind = false;
+            let gribTypes = document.getElementById("grib-types");
+            while (gribTypes.options.length > 0) {
+                gribTypes.remove(0);
+            }
+    
+            let foundWind = false;
             jsonGrib[0].typedData.forEach((type, idx) => {
+                let option = document.createElement("option");
                 if (type.gribType.type === 'vgrd' || type.gribType.type === 'ugrd') {
                     if (!foundWind) {
-                        gribTypes.append($('<option>', {
-                            value: 'wind',
-                            text: 'Surface Wind',
-                            selected: 'selected'
-                        }));
+                        option.text = 'Surface Wind';
+                        option.value = 'wind';
+                        option.selected = 'selected';
+                        gribTypes.add(option);
                     }
                     foundWind = true;
                 } else {
-                    gribTypes.append($('<option>', {
-                        value: type.gribType.type,
-                        text: type.gribType.desc
-                    }));
+                    option.text = type.gribType.desc;
+                    option.value = type.gribType.type;
+                    gribTypes.add(option);
                 }
             });
-
+    
             gribData = jsonGrib; // gribData is a function prm
             // Min and max for each grib data
             findMinMax(gribData, 0);
-
+    
             redraw();
         };
-
-        function findMinMax(gribData, idx) { // TODO Call this when GRIB date changes
+    
+        let findMinMax = (gribData, idx) => { // TODO Call this when GRIB date changes
             // console.log("Display min and max for index", idx);
             messageManager("Display min and max for index:" + idx);
             let gribObj = gribData[idx];
@@ -1051,8 +1062,8 @@
                 }
             }
         }
-
-        let displayCompositeInfo = function () {
+    
+        let displayCompositeInfo = () => {
             console.log('Displaying');
             let infoDiv = document.getElementById('composite-info');
             let compositeId = document.getElementById('composites').value;
@@ -1073,23 +1084,23 @@
                     break;
                 }
             }
-
+    
             infoDiv.innerHTML = content;
         };
-
-        let hideCompositeInfo = function () {
+    
+        let hideCompositeInfo = () => {
             console.log('Hiding');
             let infoDiv = document.getElementById('composite-info');
             infoDiv.innerHTML = "";
         };
-
-        var makeGRIBRequest = function (gribRequest, where) {
-            var rawRequest = gribRequest;
-            if (rawRequest === undefined) {
-                rawRequest = $("#grib-request").val();
+    
+        let makeGRIBRequest = (gribRequest, where) => {
+            let rawRequest = gribRequest;
+            if (rawRequest === undefined && document.getElementById("grib-request")) {
+                rawRequest = document.getElementById("grib-request").value;
             }
             console.log(rawRequest);
-            var jsonRequest = {request: rawRequest};
+            let jsonRequest = {request: rawRequest};
             if (where !== undefined) {
                 console.log('... into', where);
                 jsonRequest.directory = where;
@@ -1097,96 +1108,55 @@
                 document.getElementById('current-grib-location').innerText = ('GRIB in ' + gribFileLocation);
             }
             worldMap.setAfterDrawing(renderGRIBData); // That is the callback
-
+    
             requestGRIB(jsonRequest, plotGrib);
         };
-
-        var renderGRIB = function () {
-            var rawGrib = JSON.parse($("#json-grib").val());
+    
+        let renderGRIB = () => {
+            let rawGrib = JSON.parse(document.getElementById("json-grib").value);
             worldMap.setAfterDrawing(renderGRIBData);
             plotGrib(rawGrib);
         };
-
-        var flipGRIB = function (radio) {
+    
+        let flipGRIB = (radio) => {
             if (radio.value === 'web') {
-                $("#grib-web").css('display', 'block');
-                $("#grib-json").css('display', 'none');
+                document.getElementById("grib-web").style.display = 'block';
+                document.getElementById("grib-json").style.display = 'none';
             } else if (radio.value === 'json') {
-                $("#grib-web").css('display', 'none');
-                $("#grib-json").css('display', 'block');
+                document.getElementById("grib-web").style.display = 'none';
+                document.getElementById("grib-json").style.display = 'block';
             }
         };
-
-        var updateGRIBRequest = function (option) {
-            var key = option.value;
-            for (var i = 0; i < compositeCatalog.length; i++) {
+    
+        let updateGRIBRequest = (option) => {
+            let key = option.value;
+            for (let i = 0; i < compositeCatalog.length; i++) {
                 if (key === compositeCatalog[i].key) {
-                    if (compositeCatalog[i].gribRequest !== undefined) {
-                        $("#grib-request").val(compositeCatalog[i].gribRequest);
-                    } else {
-                        $("#grib-request").val('');
+                    if (document.getElementById("grib-request")) {
+                        if (compositeCatalog[i].gribRequest !== undefined) {
+                            document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+                        } else {
+                            document.getElementById("grib-request").value = ('');
+                        }
                     }
                     break;
                 }
             }
         };
-
-        var changeCanvasSize = function (factor) {
+    
+        let changeCanvasSize = (factor) => {
             thisZoomFactor *= factor;
             worldMap.setCanvasHeight(worldMap.getCanvasHeight() * factor);
             worldMap.setCanvasWidth(worldMap.getCanvasWidth() * factor);
             // Faxes offset and zoom
-            for (var sh = 0; sh < show.length; sh++) {
+            for (let sh = 0; sh < show.length; sh++) {
                 speakUp(sh + 1);
             }
             redraw();
         };
-
+    
     </script>
-    <style>
-        .map-style {
-            display: block;
-            height: 400px; /* Overridden onload */
-            width: 850px;
-            resize: both; /* Resize! */
-            overflow-x: auto;
-            overflow-y: auto;
-            text-align: center;
-        }
-
-        .control-style {
-            width: 350px; 
-            height: 600px; 
-            resize: both; 
-            overflow-x: scroll; 
-            overflow-y: scroll;
-        }
-
-        .table-style {
-            padding: 5px;
-            background: #fff;
-            border-radius: 5px;
-            overflow-y: auto;
-            overflow-x: auto;
-            border: 1px solid #CCC;
-            margin-top: 10px;
-        }
-
-        .complist-style {
-            padding: 5px;
-            background: #fff;
-            border-radius: 5px;
-            height: 100px;
-            overflow-y: auto;
-            overflow-x: auto;
-            border: 1px solid #CCC;
-            margin-top: 10px;
-        }
-
-        button {
-            border-radius: 5px;
-        }
-    </style>
+        
 </head>
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;">
 <h2>Weather Wizard in HTML5/ES6 - Operations (WiP)<span id="time-to-next"></span></h2>
@@ -1357,4 +1327,41 @@ Going to: Latitude:
     </tr>
 </table>
 </body>
+
+<script type="text/javascript">
+
+    window.onload = () => {
+        init(); // init UI
+
+        canvas = document.getElementById('mapCanvas');
+        context = canvas.getContext('2d');
+
+        worldMap.clear();
+        worldMap.setMouseMoveCallback(mouseMoveCallback);
+        worldMap.setMouseClickCallback(mouseClickCallback);
+        worldMap.setPositionLabel("Pos");
+        setTimeout(() => {
+            worldMap.drawWorldMap();
+        }, 1);
+
+        document.getElementById("console-type").innerHTML = 'The HTML5 ' + flavor + ' Console.';
+
+        document.getElementById("map-container").height = (window.innerHeight * 0.80);
+
+        // Populate composites list
+        for (let i = 0; i < compositeCatalog.length; i++) {
+            let opt = document.createElement('option');
+            opt.setAttribute('value', compositeCatalog[i].key);
+            opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+            document.getElementById('composites').appendChild(opt);
+            if (i === 0) {
+                if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
+                    document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+                }
+            }
+        }
+    };
+
+</script>
+
 </html>

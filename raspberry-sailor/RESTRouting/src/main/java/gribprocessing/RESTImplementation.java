@@ -527,12 +527,14 @@ public class RESTImplementation {
 //					System.out.println(String.format("Content:\n%s", content));
 					RESTProcessorUtil.generateResponseHeaders(response, contentType, content.length());
 					response.setPayload(content.getBytes());
-				} catch (Exception ex1) {
-					if (verbose) {
+				} catch (Throwable ex1) {  // To include the OutOfMemoryError
+					if (true || verbose) {
+						System.err.println("--- Exception in Routing Service ---");
 						ex1.printStackTrace();
+						System.err.println("------------------------------------");
 					}
 					String errMess = ex1.toString();
-					if (ex1 instanceof RuntimeException) {
+					if (true || ex1 instanceof RuntimeException) {
 						errMess = Arrays.stream(ex1.getStackTrace())
 								.filter(el -> !el.equals(ex1.getStackTrace()[0])) // Except first one
 								.map(StackTraceElement::toString)

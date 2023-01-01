@@ -4,17 +4,24 @@
  * Shows how to use the WorldMap object
  * and the REST APIs of the img service.
  * Displays faxes.
- *
- * TODO Move to ES6 Promise and Co, instead of JQuery Deferred.
  */
 "use strict";
 
-var worldMap;
-var currentDate;
+let worldMap;
+let currentDate;
 
-var errManager = function(mess) {
-	console.log(mess);
-};
+if (typeof(errManager) !== 'function') {
+	let errManager = function(mess) {
+		let content = document.getElementById("error").innerHTML;
+		if (content !== undefined) {
+			document.getElementById("error").innerHTML = ((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
+			let div = document.getElementById("error");
+			div.scrollTop = div.scrollHeight;
+		} else {
+			console.log(mess);
+		}
+	};
+}
 
 var DEFAULT_TIMEOUT = 120000;
 
@@ -23,29 +30,29 @@ var DEFAULT_TIMEOUT = 120000;
  * TODO Get it from another channel, like a GPS...
  */
 
-//var position = { // SF
+//let position = { // SF
 //	lat:   37.7489,
 //	lng: -122.5070
 //};
-//var position = { // Vannes
+//let position = { // Vannes
 //	lat: 47.661667,
 //	lng: -2.758167
 //};
-var position = { // Belz
+let position = { // Belz
 	lat: 47.661667,
 	lng: -3.135667
 };
 
 const MINUTE = 60000; // in ms.
 
-var getCurrentUTCDate = function() {
-	var date = new Date();
-	var offset = date.getTimezoneOffset() * MINUTE; // in millisecs
+let getCurrentUTCDate = function() {
+	let date = new Date();
+	let offset = date.getTimezoneOffset() * MINUTE; // in millisecs
 
 	return new Date().getTime() + offset; // - (6 * 3600 * 1000);
 };
 
-var init = function () {
+let init = function () {
 	worldMap = new WorldMap('mapCanvas', 'MERCATOR');
 
 	worldMap.setNorth(75);
@@ -57,173 +64,167 @@ var init = function () {
 
 };
 
-// var DEFAULT_TIMEOUT = 60000;
+// let DEFAULT_TIMEOUT = 60000;
 
-var getDeferred = function(
-		url,                          // full api path
-		timeout,                      // After that, fail.
-		verb,                         // GET, PUT, DELETE, POST, etc
-		happyCode,                    // if met, resolve, otherwise fail.
-		data,                         // payload, when needed (PUT, POST...)
-		show) {                       // Show the traffic [true]|false
+function getPromise(url,                          // full api path
+					timeout,                      // After that, fail.
+					verb,                         // GET, PUT, DELETE, POST, etc
+					happyCode,                    // if met, resolve, otherwise fail.
+					data,                         // payload, when needed (PUT, POST...)
+					show) {                       // Show the traffic [true]|false
+
 	if (show === undefined) {
 		show = true;
 	}
 	if (show === true) {
 		document.body.style.cursor = 'wait';
 	}
-	var deferred = $.Deferred(),  // a jQuery deferred
-			url = url,
-			xhr = new XMLHttpRequest(),
-			TIMEOUT = timeout;
+	let xhr = new XMLHttpRequest();
 
-	var req = verb + " " + url;
-	if (data !== undefined && data !== null) {
-		req += ("\n" + JSON.stringify(data, null, 2));
-	}
+	return new Promise(function (resolve, reject) {
+		let xhr = new XMLHttpRequest();
 
-	xhr.open(verb, url, true);
-	xhr.setRequestHeader("Content-type", "application/json");
-	if (data === undefined) {
-		xhr.send();
-	} else {
-		xhr.send(JSON.stringify(data));
-	}
-
-	var requestTimer = setTimeout(function() {
-		xhr.abort();
-		var mess = { message: 'Timeout' };
-		deferred.reject(408, mess);
-	}, TIMEOUT);
-
-	xhr.onload = function() {
-		clearTimeout(requestTimer);
-		if (xhr.status === happyCode) {
-			deferred.resolve(xhr.response);
-		} else {
-			deferred.reject(xhr.status, xhr.response);
+		let req = verb + " " + url;
+		if (data !== undefined && data !== null) {
+			req += ("\n" + JSON.stringify(data, null, 2));
 		}
-	};
-	return deferred.promise();
-};
 
-var requestCompositeFaxes = function(requestPayload) {
-	var url = "/img/download-and-transform";
-	return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, requestPayload, false);
-};
-
-var getCompositeFaxes = function(options, compositeData, callback) {
-	var getData = requestCompositeFaxes(options);
-	getData.done(function(value) {
-		if (callback === undefined) {
-			try {
-				// Do something smart
-				console.log(value);
-			} catch (err) {
-				errManager(err + '\nFor\n' + value);
-			}
-		} else {
-			callback(value, compositeData);
-		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			if (data === undefined || data === null) {
+				xhr.send();
 			} else {
-				message = errmess;
+				xhr.send(JSON.stringify(data));
+			}
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(function () {
+			xhr.abort();
+			let mess = {code: 408, message: 'Timeout'};
+			reject(mess);
+		}, timeout);
+
+		xhr.onload = function () {
+			clearTimeout(requestTimer);
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+}
+
+let requestCompositeFaxes = function(requestPayload) {
+	let url = "/img/download-and-transform";
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, requestPayload, false);
+};
+
+let getCompositeFaxes = function(options, compositeData, callback) {
+	let getData = requestCompositeFaxes(options);
+	getData.then((value) => {
+		// console.log("Done:", value);
+		let json = JSON.parse(value);
+		if (callback !== undefined) {
+			callback(json, compositeData);
+		} else {
+			console.log(JSON.stringify(json, null, 2));
+			console.log(JSON.stringify(compositeData, null, 2));
+		}
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed to get composite data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager("Failed to get Composite Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
 
-var crawlComposites = function(filter) {
-	var url = "/ww/composite-hierarchy";
+let crawlComposites = function(filter) {
+	let url = "/ww/composite-hierarchy";
 	if (filter !== undefined && filter.length > 0) {
 		url += ("?filter=" + filter);
 	}
-	return getDeferred(url, DEFAULT_TIMEOUT, 'GET', 200, undefined, false);
+	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, undefined, false);
 };
 
-var getExistingComposites = function(callback, filter) {
-	var getData = crawlComposites(filter);
-	getData.done(function(value) {
-		if (callback === undefined) {
-			try {
-				// Do something smart
-				console.log(value);
-			} catch (err) {
-				errManager(err + '\nFor\n' + value);
-			}
+let getExistingComposites = function(callback, filter) {
+	let getData = crawlComposites(filter);
+	getData.then((value) => {
+		// console.log("Done:", value);
+		let json = JSON.parse(value);
+		if (callback !== undefined) {
+			callback(json);
 		} else {
-			callback(value);
+			console.log(JSON.stringify(json, null, 2));
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed to get composite data data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager("Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
+
 };
 
-var gribData;
-var gribFileLocation;
+let gribData;
+let gribFileLocation;
 
 // Callback for GRIBs
-var renderGRIBData = function(canvas, context) {
-	$("#grib-checkbox").prop("disabled", false);
-	$("#grib-checkbox").prop("checked", true);
+let renderGRIBData = function(canvas, context) {
+	if (document.getElementById("grib-checkbox")) {
+		document.getElementById("grib-checkbox").disabled = false;
+		document.getElementById("grib-checkbox").checked = true;
+	}
 
 //console.log("Now drawing GRIB");
 	if (gribData !== undefined) {
-		var date = $("#grib-dates").val(), type = $("#grib-types").val();
+		let date = document.getElementById("grib-dates").value;
+		let type = document.getElementById("grib-types").value;
 		drawGrib(canvas, context, gribData, date, type);
 	}
 };
 
 // Routing features
 
-var routingPromise = function(payload) {
-	var url = "/grib/routing";
-	return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, payload, false);
+let routingPromise = function(payload) {
+	let url = "/grib/routing";
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, payload, false);
 };
 
-var getBestRoute = function(payload, callback) {
+let getBestRoute = function(payload, callback) {
 
 	console.log("From", payload.fromL, payload.fromG, "To", payload.toL, payload.toG,
 			"Starting", payload.startTime, "GRIB", payload.gribName,
 			"Polars", payload.polarFile);
 
-	var getData = routingPromise(payload);
-	getData.done(function(value) {
-		if (callback === undefined) {
-			try {
-				// Do something smart
-				console.log(value);
-			} catch (err) {
-				errManager(err + '\nFor\n' + value);
-			}
+	let getData = routingPromise(payload);
+	getData.then((value) => {
+		// console.log("Done:", value);
+		let json = JSON.parse(value);
+		if (callback !== undefined) {
+			callback(json);
 		} else {
-			callback(value);
+			console.log(JSON.stringify(json, null, 2));
 		}
-	});
-	getData.fail(function(error, errmess) {
-		var message;
-		if (errmess !== undefined) {
-			if (errmess.message !== undefined) {
-				message = errmess.message;
-			} else {
-				message = errmess;
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = typeof(errmess) === 'string' ? JSON.parse(errmess) : errmess;
+			if (mess.message) {
+				message = mess.message;
 			}
 		}
-		errManager("Failed to get best route..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager("Failed to get best route..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };

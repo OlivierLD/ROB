@@ -10,7 +10,7 @@ let SunFlowerClient = function (dataManager, bp) {
 		betweenPing = bp;
 	}
 
-	const DEFAULT_TIMEOUT = 10000;
+	var DEFAULT_TIMEOUT = 10000;
 
 	let getDeferred = (
 			url,                          // full api path
