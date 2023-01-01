@@ -207,7 +207,7 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the forwarders status..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to get the forwarders status..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -258,7 +258,7 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Speed and Course..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to get the Speed and Course..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -300,7 +300,7 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Distance traveled..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to get the Distance traveled..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 
@@ -344,7 +344,7 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the Delta Altitude..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to get the Delta Altitude..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 			});
 		}
 

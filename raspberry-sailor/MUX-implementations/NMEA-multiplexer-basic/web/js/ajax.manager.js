@@ -75,7 +75,7 @@ function fetch() {
 				message = mess.message;
 			}
 		}
-		console.debug("Failed to get nmea data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 }
 

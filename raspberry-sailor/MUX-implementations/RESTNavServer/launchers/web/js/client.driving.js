@@ -217,7 +217,7 @@ function getAltitudeData() {
 				message = errmess;
 			}
 		}
-		errManager.display("Failed to get the run data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		errManager.display("Failed to get the run data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 		pushAltitudeData(0);
 	});
 }

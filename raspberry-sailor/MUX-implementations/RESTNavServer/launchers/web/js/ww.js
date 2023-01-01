@@ -142,7 +142,7 @@ let getCompositeFaxes = function(options, compositeData, callback) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get Composite Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
 

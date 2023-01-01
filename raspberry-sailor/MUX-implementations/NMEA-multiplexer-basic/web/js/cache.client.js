@@ -84,7 +84,7 @@ function cacheClient(dataManager, bp) {
 					//  console.log(errmess);
 				}
 			}
-			console.log("Failed to get nmea data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+			console.log("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 		});
 	}
 };

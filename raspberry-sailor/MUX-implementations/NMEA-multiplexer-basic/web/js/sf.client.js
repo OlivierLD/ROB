@@ -65,7 +65,7 @@ function SunFlowerClient(dataManager, bp){
                 //  console.log(errmess);
                 }
             }
-            console.log("Failed to get sunflower data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+            console.log("Failed to get sunflower data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
         });
     };
 

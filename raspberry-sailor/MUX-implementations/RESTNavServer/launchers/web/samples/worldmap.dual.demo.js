@@ -112,7 +112,7 @@ let getAstroData = function(when, callback) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get Astro Data..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("Failed to get Astro Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
 
