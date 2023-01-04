@@ -102,6 +102,7 @@ function displayHelp() {
 GO=true
 #
 # Banner done with https://manytools.org/hacker-tools/ascii-banner/, 'Slant Relief'
+# Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
 #
 cat banner.txt
 sleep 1
