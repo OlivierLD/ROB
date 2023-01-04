@@ -6,6 +6,8 @@
 # 
 # For parameters --no-rmc-time --no-date : see in runNavServer.sh
 #
+# Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
+#
 RED='\033[0;31m'
 NC='\033[0m'
 #
@@ -102,7 +104,6 @@ function displayHelp() {
 GO=true
 #
 # Banner done with https://manytools.org/hacker-tools/ascii-banner/, 'Slant Relief'
-# Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
 #
 cat banner.txt
 sleep 1
