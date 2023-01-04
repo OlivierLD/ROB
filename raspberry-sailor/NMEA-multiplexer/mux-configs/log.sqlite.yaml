@@ -17,7 +17,7 @@ context:
   damping: 30
 channels:
   - type: file
-    filename: ./sample-data/2010-11-08.Nuku-Hiva-Tuamotu.nmea.zip
+    filename: ./sample-data/logged.data.zip
     # mux.01.filename=./sample-data/2010-11-08.Nuku-Hiva-Tuamotu.nmea
     # mux.01.device.filters=
     # mux.01.sentence.filters=~RMC, ~GLL

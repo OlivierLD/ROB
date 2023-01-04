@@ -14,7 +14,8 @@ public class TrueWind
 	@Override
 	public String getCsvData(String separator) {
 		return String.format("%d%s%f",
-				this.getAngle(), separator,
+				this.getAngle(),
+				separator,
 				this.getSpeed());
 	}
 }

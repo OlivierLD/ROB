@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Wind extends NMEAComposite implements Serializable {
 	private double speed = 0.0;
-	private int angle = 0;
+	private int angle = 0;  // Relative to the boat.
 
 	public Wind(int a,
 	            double s) {

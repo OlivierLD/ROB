@@ -1,6 +1,7 @@
-### Elaborating your own polars
+### Elaborating your own polars (WiP)
+### ![Polar](./polar.jpg)
 
-![Polar](./polar.jpg)
+> Look at `util.LogToPolarPoints`, in `NMEA-multiplexer`
 
 Polars are those curves predicting the speed of the boat (Boat SPeed **BSP** or Speed Through Water **STW**) for given true wind speed (TWS) and true wind angle (TWA). Without the polars of your boat, there is no way to compute any routing, it is as simple as that.
 
@@ -87,7 +88,7 @@ as illustrated by the 3D view in the tool.
 
 ![3D View](./docimg/screenshot.04.png)
 
-👉 This tool also understands the format used by MaxSea, the files with a `.pol` extension. The can be read (`File > Import from MaxSea...`), or produced (`File > Export to MaxSea...`).
+👉 This tool also understands the format used by MaxSea, the files with a `.pol` extension. They can be read (`File > Import from MaxSea...`), or produced (`File > Export to MaxSea...`).
 
 Those files are text files, looking like this:
 

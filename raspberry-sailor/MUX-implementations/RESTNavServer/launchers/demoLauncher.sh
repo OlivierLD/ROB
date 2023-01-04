@@ -6,6 +6,9 @@
 # 
 # For parameters --no-rmc-time --no-date : see in runNavServer.sh
 #
+RED='\033[0;31m'
+NC='\033[0m'
+#
 HTTP_PORT=9999
 #
 LAUNCH_BROWSER=N
@@ -15,6 +18,20 @@ WITH_NOHUP=
 export CMD_VERBOSE=N
 # Program parameters
 NAV_SERVER_EXTRA_OPTIONS=
+#
+function displayUsage() {
+  echo -e "-- Several CLI Parameters --"
+  echo -e " ${RED}--help, -h, help, ?${NC}: produces this message."
+  echo -e " ${RED}--http-port:XXXX${NC}, default ${HTTP_PORT}, where XXXX overrides the default port, ${HTTP_PORT}, hard-coded in ${0}."
+  echo -e " ${RED}--option:XX${NC}, automatically launches option XX, without prompting the user"
+  echo -e " ${RED}--browser:Y|N${NC}, default N, will open a browser (URL depends on the option)"
+  echo -e " ${RED}--nohup:Y|N${NC}, no default, will use nohup or not (when/if option uses it)"
+  echo -e " ${RED}--proxy:Y|N${NC}, default N, will use a proxy or not (proxy is defined in runNavServer.sh)"
+  echo -e " ${RED}--cmd-verbose:Y|N${NC}, default N, will display the command sent to runNavServer.sh"
+  echo -e "----------------------------"
+  echo -e "Also check the '${RED}H:XX${NC}' options in the menu, giving details on the config."
+  echo -e "----------------------------"
+}
 #
 if [[ $# -gt 0 ]]; then
 	for prm in $*; do
@@ -32,6 +49,10 @@ if [[ $# -gt 0 ]]; then
 	    if [[ "${WITH_PROXY}" == "Y" ]] || [[ "${WITH_PROXY}" == "y" ]]; then
 	      NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --proxy"
 	    fi
+	  elif [[ ${prm} == "--help" ]] || [[ ${prm} == "-h" ]] || [[ ${prm} == "help" ]] || [[ ${prm} == "?" ]]; then
+	    displayUsage
+	    echo -e "Hit [return] to move on"
+	    read dummy
 	  elif [[ ${prm} == "--option:"* ]]; then
 	    USER_OPTION=${prm#*:}
 	  else
@@ -39,6 +60,25 @@ if [[ $# -gt 0 ]]; then
 	  fi
 	done
 fi
+#
+URL_OPTION_1="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+URL_OPTION_1a="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+URL_OPTION_2="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+URL_OPTION_4="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y"
+URL_OPTION_5="http://localhost:${HTTP_PORT}/web/sunflower/sun.data.html"
+URL_OPTION_6="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_6b="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_7="http://localhost:${HTTP_PORT}/web/leaflet.driving.html"
+URL_OPTION_8="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_9="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_9b="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_9c="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_9d="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_9e="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_10="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_11="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_12="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+URL_OPTION_13="http://localhost:${HTTP_PORT}/web/nmea/admin.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -53,6 +93,10 @@ function displayHelp() {
   echo -e "Option $1, property file is $2"
   cat $2
   echo -e "--------------------------------"
+  if [[ "$3" != "" ]]; then
+    echo -e "Would open a browser with URL ${3}"
+    echo -e "--------------------------------"
+  fi
 }
 #
 GO=true
@@ -67,63 +111,51 @@ NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 while [[ "${GO}" == "true" ]]; do
 	clear
 	echo -e ">> Note ⚠️ : Optional Script Parameters : "
-	echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y"
+	echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y --help -h help ?"
 	echo -e "    --option:X will not prompt the user for his choice, it will go directly for it."
 	echo -e "    --nohup:Y will launch some commands with nohup (see the script for details)"
-	echo -e "+-----------------------------------------------------------------------------------------+"
-	echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                   |"
-	echo -e "+-----------------------------------------------------------------------------------------+"
-	echo -e "|  P. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |"
-	echo -e "| PG. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "|  J. JConsole (JVM Monitoring) 📡   |  JV. JVisualVM 📡                                  |"
-	echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |"
-	echo -e "|                                    |         running on the remote machine.             |"
-	echo -e "|                                    |     Enter 'JVH' for some help.                     |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                             |"
-	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                       |"
-	echo -e "+-----------------------------------------------------------------------------------------+"
-	echo -e "|  1. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |"
-	echo -e "|  1a. Time from a TCP ZDA generator (port 7002); HTTP Server, rich Web UI.               |"
-	echo -e "|      Does not require a GPS                                                             |"
-	echo -e "|  2. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |"
-	echo -e "|  3. Home Weather Station data                                                           |"
-	echo -e "|  4. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |"
-	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |"
-	echo -e "|  5. Like option '1', but with 'Sun Flower' option                                       |"
-	echo -e "|  6. Replay logged kayak data (Drakes Estero)                                            |"
-	echo -e "|  6b. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
-	echo -e "|  7. Replay logged driving data (with a Maps)                                            |"
-	echo -e "|  8. Replay logged kayak data, ANSI console display                                      |"
-	echo -e "|  9. Replay logged sailing data (Bora-Bora - Tongareva), ANSI console display            |"
-	echo -e "|  9b. Replay logged sailing data (China Camp - Oyster Point), ANSI console display       |"
-	echo -e "|            (there is some current in that one, it's in the SF Bay)                      |"
-	echo -e "|  9c. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display            |"
-	echo -e "|            (Big file)                                                                   |"
-	echo -e "|  9d. Replay logged sailing data (Oyster Point), heading back in.                        |"
-	echo -e "|  9e. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |"
-	echo -e "|            (requires a NodeJS WebSocket server to be running)                           |"
-	echo -e "| 10. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. |"
-	echo -e "|     - See or modify nmea.mux.properties for details.                                    |"
-	echo -e "| 11. Same as 10, with proxy.                                                             |"
-	echo -e "|     - See or modify nmea.mux.properties for details.                                    |"
-	echo -e "| 12. With 2 input serial ports.                                                          |"
-	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              |"
-	echo -e "| 13. AIS Tests.                                                                          |"
-	echo -e "+-----------------------------------------------------------------------------------------+"
-	echo -e "| 20.  Get Data Cache (curl)                                                              |"
-	echo -e "| 20b. Get REST operations list (curl)                                                    |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "| 21. Sample Python TCP Client                                                            |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "|  S. Show NavServer process(es) ⚙️   | SP. Show proxy process(es) ⚙️                       |"
-	echo -e "|  K. Kill all running Multiplexers  |                                                    |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "|  >> To get help on option X, type H:X (like H:11, H:20b, etc)                           |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
-	echo -e "|  Q. Quit ❎                        |                                                    |"
-	echo -e "+------------------------------------+----------------------------------------------------+"
+	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+	echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                                                                                                             |"
+	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}P${NC}. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |                                                                                         |"
+	echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |                                                                                         |"
+	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}J${NC}. JConsole (JVM Monitoring) 📡   |  ${RED}JV${NC}. JVisualVM 📡                                  |                                                                                         |"
+	echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |"
+	echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
+	echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
+	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002); HTTP Server, rich Web UI.               |"
+	echo -e "|      Does not require a GPS                                                             |                                                                                         |"
+	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
+	echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
+	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
+	echo -e "|  ${RED}6${NC}. Replay logged kayak data (Drakes Estero)                                            |  ${RED}6b${NC}. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
+	echo -e "|  ${RED}7${NC}. Replay logged driving data (with a Maps)                                            |  ${RED}8${NC}. Replay logged kayak data, ANSI console display                                      |"
+	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), ANSI console display            |  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point), ANSI console display       |"
+	echo -e "|            (Big file)                                                                   |             (there is some current in that one, it's in the SF Bay)                     |"
+	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display            |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
+	echo -e "|            (Big file)                                                                   |             (requires a NodeJS WebSocket server to be running)                          |"
+	echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |                                                                                         |"
+	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
+	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
+	echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests.                                                                          |"
+	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              |                                                                                         |"
+	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
+	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
+	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                        | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                            |"
+	echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
+	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
+	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
+	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+	echo -e "|  >> To get help on option X, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
+	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
+	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	if [[ "${USER_OPTION}" != "" ]]; then
 	  echo -e "------------------------------"
 	  echo -e ">> Using option ${USER_OPTION}"
@@ -174,79 +206,79 @@ while [[ "${GO}" == "true" ]]; do
 	    case "${HELP_ON}" in
 	      "1")
 	        PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
-	        displayHelp ${HELP_ON} ${PROP_FILE}
+	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1}
 	        ;;
 	      "1a")
 	        PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
-	        displayHelp ${HELP_ON} ${PROP_FILE}
+	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1a}
 	        ;;
 	      "2")
 	        PROP_FILE=mux-configs/nmea.mux.interactive.time.properties
-	        displayHelp ${HELP_ON} ${PROP_FILE}
+	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_2}
 	        ;;
 	      "3")
 	        PROP_FILE=mux-configs/nmea.mux.home.properties
-	        displayHelp ${HELP_ON} ${PROP_FILE}
+	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_3}
 	        ;;
 	      "4")
 	        PROP_FILE=mux-configs/nmea.mux.gps.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_4}
 	        ;;
 	      "5")
 	        PROP_FILE=mux-configs/nmea.mux.no.gps.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_5}
 	        ;;
 	      "6")
 	        PROP_FILE=mux-configs/nmea.mux.kayak.log.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_6}
 	        ;;
 	      "6b")
 	        PROP_FILE=mux-configs/nmea.mux.kayak.etel.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_6b}
 	        ;;
 	      "7")
 	        PROP_FILE=mux-configs/nmea.mux.driving.log.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_7}
 	        ;;
 	      "8")
 	        PROP_FILE=mux-configs/nmea.mux.kayak.cc.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_8}
 	        ;;
 	      "9")
 	        PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9}
 	        ;;
 	      "9b")
 	        PROP_FILE=mux-configs/nmea.mux.cc.op.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9b}
 	        ;;
 	      "9c")
 	        PROP_FILE=mux-configs/nmea.mux.nh.r.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9c}
 	        ;;
 	      "9d")
 	        PROP_FILE=mux-configs/nmea.mux.heading.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9d}
 	        ;;
 	      "9e")
 	        PROP_FILE=mux-configs/nmea.mux.bora.fwd.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9e}
 	        ;;
 	      "10")
 	        PROP_FILE=mux-configs/nmea.mux.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_10}
 	        ;;
 	      "11")
 	        PROP_FILE=mux-configs/nmea.mux.properties
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_11}
 	        ;;
 	      "12")
 	        PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_12}
 	        ;;
 	      "13")
 	        PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
-	      	displayHelp ${HELP_ON} ${PROP_FILE}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13}
 	        ;;
 	      "20")
 	      	echo -e "Uses a 'curl' to display the current data cache, using REST"
@@ -306,7 +338,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+		    openBrowser ${URL_OPTION_1}
 	    fi
 	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
 	    GO=false
@@ -327,7 +359,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+		    openBrowser ${URL_OPTION_1a}
 	    fi
 	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
 	    GO=false
@@ -339,7 +371,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+		    openBrowser ${URL_OPTION_2}
 	    fi
 	    GO=false
 	    ;;
@@ -358,7 +390,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5   # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y"
+		    openBrowser ${URL_OPTION_4}
 	    fi
 	    GO=false
 	    ;;
@@ -370,7 +402,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
-		    openBrowser "http://localhost:${HTTP_PORT}/web/sunflower/sun.data.html"
+		    openBrowser ${URL_OPTION_5}
 	    fi
 	    GO=false
 	    ;;
@@ -381,7 +413,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_6}
 	    fi
 	    GO=false
 	    ;;
@@ -392,7 +424,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_6b}
 	    fi
 	    GO=false
 	    ;;
@@ -404,7 +436,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/googlemaps.driving.html"
-		    openBrowser "http://localhost:${HTTP_PORT}/web/leaflet.driving.html"
+		    openBrowser ${URL_OPTION_7}
 	    fi
 	    GO=false
 	    ;;
@@ -417,7 +449,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_8}
 	    fi
 	    GO=false
 	    ;;
@@ -430,7 +462,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_9}
 	    fi
 	    GO=false
 	    ;;
@@ -443,7 +475,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_9b}
 	    fi
 	    GO=false
 	    ;;
@@ -456,7 +488,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_9c}
 	    fi
 	    GO=false
 	    ;;
@@ -469,7 +501,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_9d}
 	    fi
 	    GO=false
 	    ;;
@@ -482,7 +514,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_9e}
 	    fi
 	    GO=false
 	    ;;
@@ -495,7 +527,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_10}
 	    fi
 	    GO=false
 	    ;;
@@ -506,7 +538,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/index.html"
+		    openBrowser ${URL_OPTION_11}
 	    fi
 	    GO=false
 	    ;;
@@ -517,7 +549,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+		    openBrowser ${URL_OPTION_12}
 	    fi
 	    GO=false
 	    ;;
@@ -530,7 +562,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser "http://localhost:${HTTP_PORT}/web/nmea/admin.html"
+		    openBrowser ${URL_OPTION_13}
 	    fi
 	    GO=false
 	    ;;

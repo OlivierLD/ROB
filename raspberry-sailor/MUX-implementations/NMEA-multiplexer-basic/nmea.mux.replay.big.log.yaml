@@ -12,7 +12,7 @@ context:
   default.declination: 0
 channels:
   - type: file
-    filename: ../../NMEA-multiplexer/sample-data/2010-11-08.Nuku-Hiva-Tuamotu.nmea.zip
+    filename: ../../NMEA-multiplexer/sample-data/logged.data.zip
     zip: true
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     verbose: false

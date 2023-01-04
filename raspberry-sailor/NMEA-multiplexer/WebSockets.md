@@ -83,7 +83,7 @@ _**From three different terminals (or in batch mode):**_
      with.http.server: false
    channels:
      - type: file
-       filename: ./sample.data/2010-11-08.Nuku-Hiva-Tuamotu.nmea.zip
+       filename: ./sample-data/logged.data.zip
        zip: true
        path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
        verbose: false
