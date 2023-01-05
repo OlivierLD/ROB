@@ -508,6 +508,86 @@ const compositeCatalog = [
 	},
 	{
 		key: "ATL-0002-FINE",
+		name: "North Atlantic, current analysis (fine, 2-day GRIB)",
+		map: {
+			projection: mapProjections.mercator,
+			north: 65.5,
+			south: 10,
+			east: 28.2,
+			west: -101.8
+		},
+		canvas: {
+			w: 900,
+			h: 600
+		},
+		faxData: [
+			{
+				faxUrl: "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+				name: "North-West Atl surface analysis",
+				transp: faxColors.white,
+				rotation: 90,
+				tx: {
+					from: faxColors.black,
+					to: faxColors.red
+				},
+				effect: faxEffects.blur,
+				zoom: 0.32291855775920775,
+				location: {
+					x: 13,
+					y: 8
+				}
+			},
+			{
+				faxUrl: "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+				name: "North-East Atl surface analysis",
+				transp: faxColors.white,
+				rotation: 90,
+				tx: {
+					from: faxColors.black,
+					to: faxColors.red
+				},
+				effect: faxEffects.blur,
+				zoom: 0.32291855775920775,
+				location: {
+					x: 401,
+					y: 8
+				}
+			},
+			{
+				faxUrl: "https://tgftp.nws.noaa.gov/fax/PPAA10.gif",
+				name: "North Atl 500mb analysis",
+				transp: faxColors.white,
+				tx: {
+					from: faxColors.black,
+					to: faxColors.blue
+				},
+				effect: faxEffects.blur,
+				zoom: 0.49330500605497085,
+				location: {
+					x: 26,
+					y: 27
+				}
+			},
+			{
+				faxUrl: "https://tgftp.nws.noaa.gov/fax/PJAA99.gif",
+				name: "North Atl Sea state",
+				transp: faxColors.white,
+				tx: {
+					from: faxColors.black,
+					to: faxColors.darkgreen
+				},
+				effect: faxEffects.blur,
+				zoom: 0.4928121938611098,
+				location: {
+					x: 26,
+					y: 27
+				}
+			}
+		],
+		gribRequest: 'GFS:65N,10N,100W,10E|1,1|0,3..48|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN'
+	},
+	{
+		key: "ATL-0003-FINE",
 		name: "North Atlantic, current analysis (fine, 5-day GRIB)",
 		map: {
 			projection: mapProjections.mercator,

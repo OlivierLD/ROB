@@ -29,8 +29,8 @@
         }
 
         .control-style {
-            width: 350px; 
-            height: 600px; 
+            min-width: 350px; 
+            min-height: 400px; 
             resize: both; 
             overflow-x: scroll; 
             overflow-y: scroll;
@@ -1103,7 +1103,6 @@
                     break;
                 }
             }
-    
             infoDiv.innerHTML = content;
         };
     
@@ -1177,8 +1176,8 @@
     </script>
         
 </head>
-<body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;">
-<h2>Weather Wizard in HTML5/ES6 - Operations (WiP)<span id="time-to-next"></span></h2>
+<body style="background-color: rgba(47, 55, 61, 0.95); background-image: none;">
+<h2>Weather Wizard. Pure HTML5/ES6. Operations (WiP)<span id="time-to-next"></span></h2>
 <div>
     <table style="border: 0;">
         <tr>
@@ -1199,6 +1198,7 @@
                     <hr/>
                     <select id="composites" onchange="updateGRIBRequest(this);" onmouseover="displayCompositeInfo();"
                             onmouseleave="hideCompositeInfo();"></select> <!-- TODO Composite Info on mouse over -->
+                    <br/>                            
                     <button id="load-composites" onclick="loadComposite();">Load documents</button>
 
                     <input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours
@@ -1242,7 +1242,7 @@
                     </div>
                     <div id="dyn-faxes" class="table-style">
                         <!--span>Show faxes checkbox (TODO)</span-->
-                        <table id="fax-table">
+                        <table id="fax-table" style="border: 1px solid silver;" border="1">
                             <tr>
                                 <th>Show</th>
                                 <th>#</th>
@@ -1331,17 +1331,18 @@ Going to: Latitude:
 </div>
 <!-- End of Test -->
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0"> <!--  style="position: fixed; bottom: 0;" -->
-    <tr>
-        <td align="left" valign="top" height="40">
-            <address><span id="console-type"></span></address>
-        </td>
-    </tr>
+<table width="100%" cellpadding="0" cellspacing="0"> <!--  style="position: fixed; bottom: 0;" -->
     <tr>
         <td>
             <!-- Messages -->
-            <div id="message-zone" style="color: black; font-family: 'Courier New', 'Source Code Pro', Helvetica, Geneva; padding: 1px; border-radius: 5px; border: 1px solid #CCC; min-height: 50px; max-height: 200px; overflow-y: scroll;"></div>
-            <button onclick="clearMessZone();">Clear</button>
+            <div id="message-zone" style="background-color: white; color: black; font-family: 'Courier New', 'Source Code Pro', Helvetica, Geneva; padding: 1px; border-radius: 5px; border: 1px solid #CCC; height: 100px; overflow-y: scroll;"></div>
+            <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <hr/>
+            <address><span id="console-type"></span></address>
         </td>
     </tr>
 </table>
