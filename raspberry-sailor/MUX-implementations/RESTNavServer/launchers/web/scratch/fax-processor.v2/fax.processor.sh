@@ -46,7 +46,7 @@ for ARG in "$@"; do
     HTTP_PORT=${ARG#*:}
   elif [[ ${ARG} == "--kill-server:"* ]]; then
     KILL_SERVER=${ARG#*:}
-  elif [[ "$ARG" == "-h" ]] || [[ "$ARG" == "--help" ]]; then
+  elif [[ "$ARG" == "-h" ]] || [[ "$ARG" == "--help" ]] || [[ "$ARG" == "help" ]] || [[ "$ARG" == "?" ]]; then
     echo -e "Usage is:"
     echo -e " ${0} [--flavor:none|python|node|java] [--port:8080] [--kill-server:true] [--verbose] [--browser:true] [--help] [--spot:atl|pac]"
     echo -e "    --flavor:none|python|node|java - The flavor of the HTTP server to start. Default python. 'none' does not start a server. It may reuse an already started one."
@@ -55,7 +55,7 @@ for ARG in "$@"; do
     echo -e "    --browser:true|false - Default true."
     echo -e "    --spot:atl|pac - Default atl."
     echo -e "    --verbose, or -v - Default 'no verbose'."
-    echo -e "    --help, or -h - Guess what! Exit after displaying help."
+    echo -e "    --help, -h, help, or ? - Guess what! Exit after displaying help."
     echo -e "Bye now."
     exit 0
   elif [[ "$ARG" == "-v" ]] || [[ "$ARG" == "--verbose" ]]; then
@@ -157,8 +157,8 @@ if [[ "${SERVER_FLAVOR}" != "none" ]]; then
     echo -e "To kill the server, use PID ${SERVER_PROCESS_ID}, like in \"kill -9 ${SERVER_PROCESS_ID}\""
   elif [[ "${SERVER_FLAVOR}" == "java" ]]; then
     echo -e "Starting java server"
-    # CP=$(find ~/repos/raspberry-coffee -name http-tiny-server-1.0-all.jar)
-    JAR_FILE=../../../../../http-tiny-server/build/libs/http-tiny-server-1.0-all.jar
+    # CP=$(find ~/repos/rob -name http-tiny-server-1.0-all.jar)
+    JAR_FILE=../../../../../../../http-tiny-server/build/libs/http-tiny-server-1.0-all.jar
     if [[ ! -f ${JAR_FILE} ]]; then
       echo -e "${JAR_FILE} not found where expected. Exiting"
       exit 1

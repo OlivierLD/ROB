@@ -62,13 +62,21 @@
         --font: Arial;
       }
 
+      .copy-paste {
+      	width: 25px;
+      	height: auto;
+      }
+      .copy-paste:hover {
+      	cursor: pointer;
+      }
+
     </style>
     <script type="text/javascript" src="js/matrix.js"></script>
     <script type="text/javascript">
 
-        var dataGraph; // The graph itself.
-        var graphData = [];
-//      var GRAPH_MAX_LEN = 300; // 60 = 1 minute
+        let dataGraph; // The graph itself.
+        let graphData = [];
+//      let GRAPH_MAX_LEN = 300; // 60 = 1 minute
 
         window.onload = function() {
           dataGraph = new Graph("dataCanvas", graphData, null, null);
@@ -77,17 +85,18 @@
           dataGraph.drawPoints("dataCanvas", graphData);
         };
 
-        var onDataChange = function () {
-	        var text = document.getElementById("json-dev").value;
+        let onDataChange = () => {
+	        let text = document.getElementById("json-dev").value;
 
 	        if (text.length > 0) {
 		        try {
-			        var devArray = JSON.parse(text);
-			        var filter = 20;
+			        let devArray = JSON.parse(text);
+			        let filter = 20;
 			        try {
 				        filter = parseInt(document.getElementById('dev-filter').value);
 			        }
-			        catch (err) { // Absorb
+			        catch (err) { // Absorb?
+						console.log(JSON.stringify(err));
 			        }
 			        devArray.forEach(tuple => {
 				        if (Math.abs(tuple.dev) < filter) {
@@ -102,11 +111,11 @@
 	        }
         };
 
-        var generateCSV = function(coeff) {
-        	var content = "";
-        	for (var i=0; i<=360; i+=5) {
-        		var d = coeff[0] +
-								(coeff[1] * Math.sin(Math.toRadians(i))) +
+        let generateCSV = (coeff) => {
+        	let content = "";
+        	for (let i=0; i<=360; i+=5) {
+        		let d = coeff[0] +
+						(coeff[1] * Math.sin(Math.toRadians(i))) +
 				        (coeff[2] * Math.cos(Math.toRadians(i))) +
 				        (coeff[3] * Math.sin(2 * Math.toRadians(i))) +
 				        (coeff[4] * Math.cos(2 * Math.toRadians(i)));
@@ -115,10 +124,10 @@
 					return content;
 				};
 
-        var generateCSV2 = function(coeff) {
-	        var content = "";
-	        for (var i=0; i<=360; i+=5) {
-		        var d = coeff[0] +
+        let generateCSV2 = (coeff) => {
+	        let content = "";
+	        for (let i=0; i<=360; i+=5) {
+		        let d = coeff[0] +
 				        (coeff[1] * Math.sin(Math.toRadians(i))) +
 				        (coeff[2] * Math.cos(Math.toRadians(i))) +
 				        (coeff[3] * Math.sin(2 * Math.toRadians(i))) +
@@ -128,12 +137,12 @@
 	        return content;
         };
 
-        var goDrawing = function () {
+        let goDrawing = () => {
 	        try {
-		        var graphData = dataGraph.getData();
-		        var coeffData = smoothDevCurve(graphData);
-		        var result = document.getElementById('coeff-list');
-		        var content = 'a = ' + coeffData[0] + '<br/>' +
+		        let graphData = dataGraph.getData();
+		        let coeffData = smoothDevCurve(graphData);
+		        let result = document.getElementById('coeff-list');
+		        let content = 'a = ' + coeffData[0] + '<br/>' +
 				        'b = ' + coeffData[1] + '<br/>' +
 				        'c = ' + coeffData[2] + '<br/>' +
 				        'd = ' + coeffData[3] + '<br/>' +
@@ -141,27 +150,40 @@
 		        result.innerHTML = content;
 
 		        // dev on CompassHeadings
-		        var csv = document.getElementById('csv');
+		        let csv = document.getElementById('csv');
 		        csv.innerText = generateCSV(coeffData);
 
 		        // dev on MagneticHeadings
-		        var csv2 = document.getElementById('csv2');
+		        let csv2 = document.getElementById('csv2');
 		        csv2.innerText = generateCSV2(coeffData);
 
-		        var decompose = document.getElementById('decompose-cb').checked === true;
+		        let decompose = document.getElementById('decompose-cb').checked === true;
 		        dataGraph.drawPoints("dataCanvas", graphData, coeffData, decompose);
 	        } catch (err) {
 		        alert(err);
 	        }
         };
 
-        var setSpray = function(cb) {
+        let setSpray = (cb) => {
             dataGraph.setSprayPoints(cb.checked);
         };
 
-        var setTooltip = function(cb) {
+        let setTooltip = (cb) => {
             dataGraph.setTooltip(cb.checked);
         };
+
+        let copyToClipboard = (fieldId) => {
+			let value = document.getElementById(fieldId).innerHTML;
+			let codeContent = value.replaceAll("<br>", "\n");
+			// console.log(codeContent);
+			let codeHolder = document.createElement("textarea"); // To keep the format, 'input' would not.
+			codeHolder.value = codeContent;
+			document.body.appendChild(codeHolder);
+			codeHolder.select();
+			document.execCommand("copy");
+			document.body.removeChild(codeHolder);
+			alert(`Value copied to clipboard`);
+		};
 
     </script>
   </head>
@@ -169,58 +191,61 @@
     <table width="100%" border="0">
       <tr>
         <td colspan="1" with="33%" valign="top">
-          <h2>Deviation Curve Smoothing</h2>
-					<small>
-						Standalone. Does not require a server to be running.
-						<br/>
-						Can be used as a static page.
-					</small>
-					<br/>
-					Equation's shape is <b>a + b sin(Z) + c cos(Z) + d sin(2.Z) + e cos(2.Z)</b>
+        	<h2>Deviation Curve Smoothing</h2>
+			<small>
+				Standalone. Does not require a server to be running.
+				<br/>
+				Can be used as a static page.
+			</small>
+			<br/>
+			Equation's shape is <b>a + b sin(Z) + c cos(Z) + d sin(2.Z) + e cos(2.Z)</b>
         </td>
         <td rowspan="2" width="34%" valign="top">
           <textarea id="json-dev" spellcheck="false" style="color: darkgrey; border: none; margin: 2px; width: 98%; height: 190px;" onchange="javascript:onDataChange();" placeholder="Paste JSON data here"></textarea>
 					<!--br/>
 					<small>Paste your JSON data &#8679; in the box above ...</small-->
         </td>
-				<td rowspan="2" width="33%" valign="top"> <!-- Result will go here -->
-					<table width="100%">
-						<tr>
-							<td width="50%" height="100%" valign="top">
-								<div id="coeff-list" style="height: 120px;"><span style="color: silver; font-style: italic;" title="Curve coefficients">Coefficient will show up here</span></div>
-							</td>
-							<td width="50%" height="100%">
-								<span style="font-style: italic; color: silver;">dev on Compass Headings</span>
-								<div id="csv" style="height: 80px; overflow-x: auto; overflow-y: auto; border: 1px solid silver;"><span style="color: silver; font-style: italic;" title="Your CSV deviation file (1).">CSV data will show up here</span></div>
-								<span style="font-style: italic; color: silver;">dev on Magnetic Headings</span>
-								<div id="csv2" style="height: 80px; overflow-x: auto; overflow-y: auto; border: 1px solid silver;"><span style="color: silver; font-style: italic;" title="Your CSV deviation file (2).">CSV data will show up here</span></div>
-							</td>
-						</tr>
-					</table>
-				</td>
-      </tr>
-      <tr>
-				<td>
+			<td rowspan="2" width="33%" valign="top"> <!-- Result will go here -->
 				<table width="100%">
 					<tr>
-						<td valign="top" align="left" width="50%">
-							<input type="checkbox" id="with-spray" onchange="setSpray(this);" title="Add to the logging...">Spray points
-							<br>
-							<input type="checkbox" id="with-tooltip" onchange="setTooltip(this);">With tooltip
+						<td width="50%" height="100%" valign="top">
+							<div id="coeff-list" style="height: 120px;"><span style="color: silver; font-style: italic;" title="Curve coefficients">Coefficient will show up here</span></div>
 						</td>
-						<td valign="top" align="left" >
-							Do not use data points where dev is greater than:
-							<input type="number" value="20" id="dev-filter" style="width: 40px;"> &deg;
+						<td width="50%" height="100%">
+							<span style="font-style: italic; color: silver;">
+								dev on Compass Headings
+								<button onclick="copyToClipboard('csv')"><img src="icons8-copy-to-clipboard-50.png" class="copy-paste" title="Copy to Clipboard"></button>
+							</span>
+							<div id="csv" style="height: 80px; overflow-x: auto; overflow-y: auto; border: 1px solid silver;"><span style="color: silver; font-style: italic;" title="Your CSV deviation file (1).">CSV data will show up here</span></div>
+							<span style="font-style: italic; color: silver;">dev on Magnetic Headings</span>
+							<div id="csv2" style="height: 80px; overflow-x: auto; overflow-y: auto; border: 1px solid silver;"><span style="color: silver; font-style: italic;" title="Your CSV deviation file (2).">CSV data will show up here</span></div>
 						</td>
 					</tr>
 				</table>
-				</td>
+			</td>
+      </tr>
+      <tr>
+			<td>
+			<table width="100%">
+				<tr>
+					<td valign="top" align="left" width="50%">
+						<input type="checkbox" id="with-spray" onchange="setSpray(this);" title="Add to the logging...">Spray points
+						<br>
+						<input type="checkbox" id="with-tooltip" onchange="setTooltip(this);">With tooltip
+					</td>
+					<td valign="top" align="left">
+						Do not use data points where dev is greater than:
+						<input type="number" value="20" id="dev-filter" style="width: 40px;"> &deg;
+					</td>
+				</tr>
+			</table>
+			</td>
       </tr>
       <tr>
         <td colspan="3">
-          <small>If needed, spray points on the canvas below (click and drag the mouse), and click </small><button onclick="goDrawing();" style="border-radius: 3px; box-shadow: 2px 2px 18px #888888;">Compute &amp; Display</button>
-					&nbsp;
-					<input type="checkbox" id="decompose-cb" onchange="goDrawing();"> Decompose.
+        	<small>If needed, spray points on the canvas below (click and drag the mouse), and click </small><button onclick="goDrawing();" style="border-radius: 3px; box-shadow: 2px 2px 18px #888888;">Compute &amp; Display</button>
+			&nbsp;
+			<input type="checkbox" id="decompose-cb" onchange="goDrawing();"> Decompose.
         </td>
       </tr>
       <tr>
