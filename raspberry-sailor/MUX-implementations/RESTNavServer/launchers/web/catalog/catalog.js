@@ -32,7 +32,7 @@ const mapProjections = {
 	// TODO LAMBERT and others
 };
 
-const compositeCatalog = [
+const compositeCatalog = [ // Obsolete. Use compositeCatalog.json
 	{
 		key: "PAC-0001-NORTH-FINE",
 		name: "North Pacific, current analysis (fine)",
