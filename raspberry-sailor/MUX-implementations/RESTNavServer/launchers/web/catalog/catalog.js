@@ -3,6 +3,8 @@
 // https://www.weather.gov/source/marine/mobile/hfmarsh_mobile.html
 // Pacific: https://www.nws.noaa.gov/om/marine/hfhi_mobile.htm
 // Atlantic: https://www.nws.noaa.gov/om/marine/hfmarsh_mobile.htm
+
+// To be replaced by compositeCatalog.js, not to have to use Nashorn.
 const faxColors = { // Must match ImageColor, in PullTxManager
 	black: "BLACK",
 	white: "WHITE",

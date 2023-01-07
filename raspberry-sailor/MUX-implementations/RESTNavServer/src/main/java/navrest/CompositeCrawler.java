@@ -3,19 +3,10 @@ package navrest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import http.HTTPServer;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -24,10 +15,8 @@ import java.util.regex.Pattern;
  */
 public class CompositeCrawler {
 
-	private final static String COMPOSITE_CATALOG = "web" + File.separator + "catalog" + File.separator + "catalog.js";
-
-	private final static String NASHORN_ARGS = "nashorn.args";
-	private final static String ES_6 = "--language=es6";
+	private final static ObjectMapper mapper = new ObjectMapper();
+	private final static String JSON_COMPOSITE_CATALOG = "web" + File.separator + "catalog" + File.separator + "compositeCatalog.json";
 
 	private final Pattern YEAR_PATTERN  = Pattern.compile("^\\d{4}$");
 	private final Pattern MONTH_PATTERN = Pattern.compile("^\\d{2}$");
@@ -49,19 +38,24 @@ public class CompositeCrawler {
 
 	@SuppressWarnings("unchecked")
 	private Map<String, Object> getCompositeCatalog() throws Exception {
-		File catalog = new File(COMPOSITE_CATALOG);
-		if (!catalog.exists()) {
-			throw new RuntimeException(catalog.getAbsolutePath() + " Not found");
+		File jsonCatalog = new File(JSON_COMPOSITE_CATALOG);
+		if (!jsonCatalog.exists()) {
+			throw new RuntimeException(jsonCatalog.getAbsolutePath() + " Not found");
 		}
-
-		System.setProperty(NASHORN_ARGS, ES_6);
-
-		// TODO Replace the catalog with a JSON Object, and Nashorn with Jackson.
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("nashorn");
-		engine.eval(new FileReader(catalog));
-		Object catalogObject = engine.eval("compositeCatalog"); // as named in the script.
-
+		Object catalogObject = null;
+		try {
+			Object compositeArray = mapper.readValue(new FileReader(jsonCatalog), Object.class);
+//			System.out.println("Mapped.");
+			if (compositeArray instanceof List) {
+				catalogObject = new HashMap<String, Object>();
+				for (int i=0; i<((List<Object>)compositeArray).size(); i++) {
+					((Map<String, Object>) catalogObject).put(String.valueOf(i), ((List<Object>)compositeArray).get(i));
+				}
+//				System.out.println("Done.");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return (Map<String, Object>)catalogObject;
 	}
 
@@ -77,8 +71,6 @@ public class CompositeCrawler {
 		});
 		return patternList;
 	}
-
-
 
 	private Map<String, Object> crawl(File from, int level, List<Pattern> pList, Map<String, Object> compositeTree, String filter) {
 
@@ -266,8 +258,8 @@ public class CompositeCrawler {
 		CompositeCrawler crawler = new CompositeCrawler();
 		Map<String, Object> composites = crawler.getCompositeHierarchy("PAC-0001");
 
-		String json = new ObjectMapper().writeValueAsString(composites);
-		System.out.println(json);
+		String json = mapper.writeValueAsString(composites);
+		System.out.println("Composites:" + json);
 
 		String[] blah = new String[] { "Ah!" };
 		try {
