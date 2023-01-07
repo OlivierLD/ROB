@@ -36,9 +36,6 @@ It delivers REST services, and Web pages as well.
 Some would require an Internet access, but most of them can be displayed
 on any browser on a machine running on the same network as the server (laptops, tablets, cell-phones) 
 
-There will also be a script to produce a production archive, in order to deploy
-the product without having to start from the Git repo.
-
 ### Rationale
 
 Even small boards like the Raspberry Pi can swallow heavy data computing.
@@ -91,8 +88,9 @@ This allows pretty much _any_ network-aware device to connect to the Local Area 
 created by the Raspberry Pi (or any machine the server runs on) to connect to it and consume the data it produces.
 
 The way to go for the front end (view) is - at least for now - quite obvious, it is the combination of HTML5, CSS3, and JavaScript.
-Consuming REST services can be done from many frameworks, here we'll use `jQuery`, for its `Promise` (aka `Deferred`) features.
-> _Summer 2018_: I'll be moving away from `JQuery Deferred`, `EcmaScript6` comes with `Promises` that work fine. `JQuery` is a great tool, but not required here any more.
+Consuming REST services can be done from many frameworks<s>, here we'll use `jQuery`, for its `Promise` (aka `Deferred`) features</s>.
+> _Summer 2018_: We'll be moving away from `JQuery Deferred`, `EcmaScript6` comes with `Promises` that work fine. `JQuery` is a great tool, but not required here anymore.  
+> _January 2023_: Done.
 
 For the back end (model and controller), my current choice would be to go for a Java Virtual Machine (JVM) supported language, like Java (this is by far not the only JVM-supported language, see Scala, Groovy, Clojure...), mostly for portability,
 re-usability and extensibility reasons. I have several other projects (not necessarily dedicated to the Raspberry Pi) writen in Java; a `jar` (**J**ava **AR**chive) generated from those projects can be part of **any**

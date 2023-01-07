@@ -135,7 +135,7 @@ In the above, `W` is called the Compass Variation
 
 > The RMC and HDM strings may return a field named Variation, that in many cases contains only the Mag. Decl.
 
-#### Step by step
+#### Step by step, from log-file to dev-curve.
 - After  running a build (`../../gradlew clean shadowJar`), transform the NMEA data file into a json document:
   - run `./process.log.sh 2010-11-03.Taiohae.nmea`, this generates a `data.json` (default name).
 - Open `deviation.tool.html` in a browser (it does not need a server to run).
