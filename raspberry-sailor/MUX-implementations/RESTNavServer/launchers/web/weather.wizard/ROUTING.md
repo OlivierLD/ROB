@@ -8,7 +8,9 @@ Routing calculation is based on two main things:
 > This is used a lot when racing, to find the route to get from point A to point B as fast as possible.  
 > But this 'as fast as possible' requirement is not the only possible one. When cruising, you may very well want
 > to get from point A to point B, without having wind above 35 knots, and with a wind angle between 90&deg; and 180&deg;.  
-> A routing program can very well take this kind of requirements in account. 
+> A routing program can very well take this kind of requirements in account. That makes it very interesting, even if not racing.  
+> My friend Craig told me: "The different between racing and cruising is that, when cruising, you have to keep the crew happy".  
+> To keep in mind 😏 
 
 ##### Polar file
 - Passed as System variable when starting the server, like in `-Dpolar.file.location=./sample.data/polars/CheoyLee42.polar-coeff`.
