@@ -9,7 +9,7 @@ Routing calculation is based on two main things:
 > But this 'as fast as possible' requirement is not the only possible one. When cruising, you may very well want
 > to get from point A to point B, without having wind above 35 knots, and with a wind angle between 90&deg; and 180&deg;.  
 > A routing program can very well take this kind of requirements in account. That makes it very interesting, even if not racing.  
-> My friend Craig told me: "The different between racing and cruising is that, when cruising, you have to keep the crew happy".  
+> My friend Craig told me: "The difference between racing and cruising is that, when cruising, you have to keep the crew happy".  
 > To keep in mind 😏 
 
 ##### Polar file
