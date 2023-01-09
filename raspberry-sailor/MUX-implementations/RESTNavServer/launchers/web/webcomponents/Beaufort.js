@@ -284,12 +284,12 @@ class Beaufort extends HTMLElement {
 				break;
 			}
 		}
-		let labelFontSize = 20; // Math.round(Math.min(oneELementHeight, oneELementWidth)) / 2;
+		let labelFontSize = 20; // Math.round(Math.min(oneElementHeight, oneElementWidth)) / 2;
 		// 14: 13 Beaufort degrees + room for the label.
-		let oneELementWidth = (this._orientation == "VERTICAL") ? this._width : this._width / 13; 
-		let oneELementHeight = (this._orientation == "VERTICAL") ? this._height / 14  : this._height - labelFontSize; // 20: label font size, hard-coded...
+		let oneElementWidth = (this._orientation == "VERTICAL") ? this._width : this._width / 13;
+		let oneElementHeight = (this._orientation == "VERTICAL") ? this._height / 14  : this._height - labelFontSize; // 20: label font size, hard-coded...
 
-		// let labelFontSize = Math.round(Math.min(oneELementHeight, oneELementWidth)) / 2;
+		// let labelFontSize = Math.round(Math.min(oneElementHeight, oneElementWidth)) / 2;
 
 		// Set the canvas size from its container.
 		this.canvas.width = this.width;
@@ -317,9 +317,9 @@ class Beaufort extends HTMLElement {
 		if (this._orientation == "VERTICAL") {
 			for (let i = 0; i < BEAUFORT_SCALE.length; i++) {
 				let topLeftX = padding;
-				let topLeftY = this._height - ((i + 1) * oneELementHeight) + padding;
+				let topLeftY = this._height - ((i + 1) * oneElementHeight) + padding;
 				let rectWidth = this._width - (2 * padding);
-				let rectHeight = oneELementHeight - (2 * padding);
+				let rectHeight = oneElementHeight - (2 * padding);
 				context.beginPath();
 				context.strokeStyle = this.beaufortColorConfig.outlineColor;
 				context.roundRect(topLeftX, topLeftY, rectWidth, rectHeight, 5);
@@ -328,7 +328,7 @@ class Beaufort extends HTMLElement {
 					context.fill();
 					// Force value
 					let beaufort = i.toFixed(0);
-					let fontSize = Math.round(oneELementHeight);
+					let fontSize = Math.round(oneElementHeight);
 					context.font = `bold ${fontSize}px ${this.beaufortColorConfig.font}`;
 					let metrics = context.measureText(beaufort);
 					let len = metrics.width;
@@ -346,10 +346,10 @@ class Beaufort extends HTMLElement {
 			}
 		} else { // HORIZONTAL
 			for (let i = 0; i < BEAUFORT_SCALE.length; i++) {
-				let topLeftX = (i * oneELementWidth) + padding;
+				let topLeftX = (i * oneElementWidth) + padding;
 				let topLeftY = (2 * padding) + labelFontSize;
-				let rectWidth = oneELementWidth - (2 * padding);
-				let rectHeight = oneELementHeight - (2 * padding);
+				let rectWidth = oneElementWidth - (2 * padding);
+				let rectHeight = oneElementHeight - (2 * padding);
 				context.beginPath();
 				context.strokeStyle = this.beaufortColorConfig.outlineColor;
 				context.roundRect(topLeftX, topLeftY, rectWidth, rectHeight, 5);
