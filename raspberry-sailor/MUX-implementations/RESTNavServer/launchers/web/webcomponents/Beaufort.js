@@ -296,9 +296,17 @@ class Beaufort extends HTMLElement {
 		this.canvas.height = this.height;
 
 		// Cleanup
-		//context.fillStyle = "#ffffff";
-		context.fillStyle = this.beaufortColorConfig.bgColor;
-		//context.fillStyle = "transparent";
+		if (this.beaufortColorConfig.withGradient) { 
+			let grd = context.createLinearGradient(0, 5, 0, this.height);
+			grd.addColorStop(0, this.beaufortColorConfig.displayBackgroundGradient.from);// 0  Beginning
+			grd.addColorStop(1, this.beaufortColorConfig.displayBackgroundGradient.to);  // 1  End
+			context.fillStyle = grd;
+
+		} else {
+			//context.fillStyle = "#ffffff";
+			context.fillStyle = this.beaufortColorConfig.bgColor;
+			//context.fillStyle = "transparent";
+		}
 		context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		//context.fillStyle = 'rgba(255, 255, 255, 0.0)';
 		//context.fillRect(0, 0, canvas.width, canvas.height);
