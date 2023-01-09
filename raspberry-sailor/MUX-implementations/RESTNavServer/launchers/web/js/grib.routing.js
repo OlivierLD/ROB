@@ -8,6 +8,37 @@ const DEBUG = false;
 const VERBOSE = false;
 var DEFAULT_TIMEOUT = 60000;
 
+const BEAUFORT_SCALE = [
+	0, 1, 4, 7, 11, 16, 22, 28, 34, 41, 48, 56, 64
+//  |  |  |  |   |   |   |   |   |   |   |   |   |
+//	|  |  |  |   |   |   |   |   |   |   |   |   12
+//	|  |  |  |   |   |   |   |   |   |   |   11
+//	|  |  |  |   |   |   |   |   |   |   10
+//	|  |  |  |   |   |   |   |   |   9
+//	|  |  |  |   |   |   |   |   8
+//	|  |  |  |   |   |   |   7
+//	|  |  |  |   |   |   6
+//	|  |  |  |   |   5
+//	|  |  |  |   4
+//	|  |  |  3
+//	|  |  2
+//	|  1
+//  0
+];
+
+let getBeaufortScale = function(tws) {
+	let currentForce = 12;
+	for (let i=0; i<BEAUFORT_SCALE.length;i++) {
+		if (BEAUFORT_SCALE[i] > tws) {
+			currentForce = i - 1;
+			// console.log(`TWS ${this._value} => Force ${currentForce}`);
+			break;
+		}
+	}
+	return currentForce;
+}
+
+
 // let errManager = console.log;
 let errManager = function(mess) {
 	if (document.getElementById("error")) {
@@ -428,7 +459,7 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 	}
 	console.log("Max TWS: %d kn", maxTWS);
 	try {
-		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn`;
+		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) })`;
 	} catch (err) {}
 	// Is there a route to draw here?
 	if (bestRouteToPlot !== undefined) {
