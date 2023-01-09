@@ -28,6 +28,10 @@
             text-align: center;
         }
 
+        canvas#mapCanvas {
+            cursor: crosshair;
+        }
+
         .control-style {
             min-width: 350px; 
             min-height: 400px; 
@@ -239,10 +243,11 @@
         }
     
         let mouseClickCallback = (obj) => {
-            messageManager("Mouse clicked on the Map.");
-            // console.log("Mouse clicked on the map", obj);
             let lat = obj.lat;
             let lng = obj.lng;
+            messageManager(`Mouse clicked on the Map ${lat} / ${lng}.`);
+            // console.log("Mouse clicked on the map", obj);
+
             if (document.getElementById('rb-going-to').checked) {
                 document.getElementById('routing-pos-lat-sign-01').value = (lat < 0 ? "S" : "N");
                 document.getElementById('routing-pos-lng-sign-01').value = (lng < 0 ? "W" : "E");
@@ -821,6 +826,7 @@
          * If existing data is provided, it comes from the file system
          */
         let loadComposite = (existingData) => {
+            document.getElementById("grib-widgets").style.display = 'none';
             let key = document.getElementById('composites').value;
     
             let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
@@ -859,6 +865,8 @@
             worldMap.drawWorldMap();
             document.getElementById("grib-checkbox").disabled = true;
             document.getElementById("grib-checkbox").checked = false;
+
+            document.getElementById("grib-widgets").style.display = 'block';
     
             // $("#fax-checkbox").prop("disabled", true);
             // $("#fax-checkbox").prop("checked", false);
@@ -1309,6 +1317,7 @@
                     <input type="checkbox" onchange="changeTropics(this);"/> With Tropics
                     <br/>
                     <input id="grib-checkbox" type="checkbox" onchange="changeGRIB(this);" disabled/> With GRIB Data
+                    <br/>
                     <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
                     <hr/>
                     <select id="composites" onchange="updateGRIBRequest(this);" onmouseover="displayCompositeInfo();"
@@ -1320,7 +1329,7 @@
                     <hr/>
                     <input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
                     <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage
-                    <hr/>
+                    <!-- hr/ -->
                     <div id="grib-web">
                     </div>
                     <div id="grib-json" style="display: none;">
@@ -1334,7 +1343,7 @@
                     <button onclick="changeCanvasSize(0.9);">-</button>
                     <button onclick="changeCanvasSize(1.1);">+</button>
                     <hr/>
-                    <div class="table-style">
+                    <div id="grib-widgets" class="table-style" style="display: none; background: lime;">
                         <table>
                             <tr>
                                 <th>Date</th>
@@ -1388,82 +1397,93 @@
         <tr>
             <!-- Web Components for the GRIB Here -->
             <td title="GRIB Data at the mouse" style="border: 1px solid orange; border-radius: 5px;">
-                <!-- True Wind Speed in knots<br/ -->
-                <analog-display class="analogdisplay-monochrome-orange"
-                                title="True Wind Speed in knots"
-                                id="tws-01"
-                                min-value="0"
-                                max-value="60"
-                                value="0"
-                                major-ticks="10"
-                                minor-ticks="1"
-                                with-border="true"
-                                overlap="40"
-                                label="TWS"
-                                width="200"
-                                height="200"></analog-display>
+                <div style="display: grid;
+                            grid-template-columns: auto auto auto auto aujto;
+                            grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
+                    <span style="grid-area: top;">GRIB Data, at the mouse, on the chart</span>                            
+                    <!-- True Wind Speed in knots<br/ -->
+                    <analog-display class="analogdisplay-monochrome-orange"
+                                    style="grid-area: middle-01;"
+                                    title="True Wind Speed in knots"
+                                    id="tws-01"
+                                    min-value="0"
+                                    max-value="60"
+                                    value="0"
+                                    major-ticks="10"
+                                    minor-ticks="1"
+                                    with-border="true"
+                                    overlap="40"
+                                    label="TWS"
+                                    width="200"
+                                    height="200"></analog-display>
 
-                <!-- Wind Direction in &deg;<br/ -->
-                <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
-                                   title="TWD"
-                                   id="twd-01"
-                                   value="0"
-                                   major-ticks="45"
-                                   minor-ticks="5"
-                                   with-rose="true"
-                                   with-border="true"
-                                   label="TWD"
-                                   width="200"
-                                   height="200"></direction-display>
+                    <!-- Wind Direction in &deg;<br/ -->
+                    <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
+                                       style="grid-area: middle-02;"
+                                       title="TWD"
+                                       id="twd-01"
+                                       value="0"
+                                       major-ticks="45"
+                                       minor-ticks="5"
+                                       with-rose="true"
+                                       with-border="true"
+                                       label="TWD"
+                                       width="200"
+                                       height="200"></direction-display>
 
-                <!-- Air Temperature in &deg;C<br/ -->
-                <thermo-meter id="thermometer-01"
-                              class="thermometer-orange"
-                              title="Air, Celsius"
-                              min-value="-20"
-                              max-value="50"
-                              major-ticks="10"
-                              minor-ticks="1"
-                              value="0"
-                              unit="C"
-                              width="100"
-                              height="220"></thermo-meter>
+                    <!-- Air Temperature in &deg;C<br/ -->
+                    <thermo-meter id="thermometer-01"
+                                  class="thermometer-orange"
+                                  style="grid-area: middle-03;"
+                                  title="Air, Celsius"
+                                  min-value="-20"
+                                  max-value="50"
+                                  major-ticks="10"
+                                  minor-ticks="1"
+                                  value="0"
+                                  unit="C"
+                                  width="100"
+                                  height="220"></thermo-meter>
 
-                <!-- Atm Pressure in hPa<br/ -->
-                <analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
-                                title="Pressure in hPa"
-                                id="prmsl-01"
-                                min-value="983"
-                                max-value="1043"
-                                value="1013.6"
-                                major-ticks="10"
-                                minor-ticks="1"
-                                with-border="true"
-                                overlap="40"
-                                label="PRMSL"
-                                width="200"
-                                height="200"></analog-display>
+                    <!-- Atm Pressure in hPa<br/ -->
+                    <analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
+                                    style="grid-area: middle-04;"
+                                    title="Pressure in hPa"
+                                    id="prmsl-01"
+                                    min-value="983"
+                                    max-value="1043"
+                                    value="1013.6"
+                                    major-ticks="10"
+                                    minor-ticks="1"
+                                    with-border="true"
+                                    overlap="40"
+                                    label="PRMSL"
+                                    width="200"
+                                    height="200"></analog-display>
 
-                <!-- Precipitation Rate in mm/h<br/ -->
-                <pluvio-meter id="rain-01"
-                            class="pluviometer-orange"
-                            title="m/m per hour"
-                            min-value="0"
-                            max-value="10"
-                            major-ticks="1"
-                            minor-ticks="0.10"
-                            value="0"
-                            width="80"
-                            height="220"></pluvio-meter>
+                    <!-- Precipitation Rate in mm/h<br/ -->
+                    <pluvio-meter id="rain-01"
+                                  class="pluviometer-orange"
+                                  style="grid-area: middle-05;"
+                                  title="m/m per hour"
+                                  min-value="0"
+                                  max-value="30"
+                                  major-ticks="5"
+                                  minor-ticks="0.50"
+                                  value="0"
+                                  width="80"
+                                  height="220"></pluvio-meter>
 
-                <beaufort-scale id="beaufort-01"
-                                class="beaufort-01"
-                                title="Beaufort Scale"
-                                value="0.0"
-                                orientation="HORIZONTAL"
-                                width="200"
-                                height="60"></beaufort-scale>
-        </td>
+                    <beaufort-scale id="beaufort-01"
+                                    class="beaufort-01"
+                                    style="grid-area: bottom;"
+                                    title="Beaufort Scale"
+                                    value="0.0"
+                                    orientation="HORIZONTAL"
+                                    width="200"
+                                    height="60"></beaufort-scale>
+                </div>                            
+            </td>
         </tr>
         <tr>
             <td valign="top">

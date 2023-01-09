@@ -358,7 +358,7 @@ class Beaufort extends HTMLElement {
 					context.fill();
 					// Force value
 					let beaufort = i.toFixed(0);
-					let fontSize = Math.round(oneELementWidth);
+					let fontSize = Math.round(oneElementWidth);
 					context.font = `bold ${fontSize}px ${this.beaufortColorConfig.font}`;
 					let metrics = context.measureText(beaufort);
 					let len = metrics.width;
