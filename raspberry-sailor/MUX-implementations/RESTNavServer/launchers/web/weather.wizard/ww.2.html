@@ -1391,18 +1391,20 @@ Going to: Latitude:
         document.getElementById("map-container").height = (window.innerHeight * 0.80);
 
         // Populate composites list
-        setTimeout(() => { // compositeCatalog populated by a Promise in catalog.js... Not elegant, fix that.
-        for (let i = 0; i < compositeCatalog.length; i++) {
-            let opt = document.createElement('option');
-            opt.setAttribute('value', compositeCatalog[i].key);
-            opt.appendChild(document.createTextNode(compositeCatalog[i].name));
-            document.getElementById('composites').appendChild(opt);
-            if (i === 0) {
-                if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
-                    document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+        if (false) { // Old method. To be removed.
+            setTimeout(() => { // compositeCatalog populated by a Promise in catalog.js... Not elegant, fix that.
+            for (let i = 0; i < compositeCatalog.length; i++) {
+                let opt = document.createElement('option');
+                opt.setAttribute('value', compositeCatalog[i].key);
+                opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+                document.getElementById('composites').appendChild(opt);
+                if (i === 0) {
+                    if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
+                        document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+                    }
                 }
-            }
-        } }, 2000);
+            } }, 2000);
+        }
 
         const URL = '../catalog/compositeCatalog.json';	
 
