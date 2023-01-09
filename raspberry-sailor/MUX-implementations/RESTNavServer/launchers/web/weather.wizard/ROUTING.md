@@ -1,5 +1,14 @@
-### Data for Routing (&#10140; WIP)
-This will be integrated in teh Weather Wizard GUI.
+### Data for Routing (&#10140; WiP)
+This will be integrated in the Weather Wizard GUI.
+
+Routing calculation is based on two main things:
+- GRIB files, giving weather data (including wind speed and direction), on cells, across time.
+- Boat polars. Curves giving the theoretical Boat Speed for a given Wind Speed and Direction.
+
+> This is used a lot when racing, to find the route to get from point A to point B as fast as possible.  
+> But this 'as fast as possible' requirement is not the only possible one. When cruising, you may very well want
+> to get from point A to point B, without having wind above 35 knots, and with a wind angle between 90&deg; and 180&deg;.  
+> A routing program can very well take this kind of requirements in account. 
 
 ##### Polar file
 - Passed as System variable when starting the server, like in `-Dpolar.file.location=./sample.data/polars/CheoyLee42.polar-coeff`.

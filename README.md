@@ -83,6 +83,12 @@ The main building block in the `NMEA-multiplexer`. This one can run as it is, bu
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
 
+## Back end, front end
+Many languages can take care of back-end computing...  
+Front-end UI is more tricky. Swing is a Java option, Python has other possibilities, same for C..., but they're all different.  
+_**So**_, to make everyone happy, we will here do all the back-end computing in whatever language you want, and make it REST-accessible, with - when required - a JSON payload.  
+A web-enabled REST client (HTML5, ES6, CSS3) will be able to take care of displaying those data; all you need is a (recent) browser.
+No need to deal with Android, iOS, Windows..., the goal here being to simplify the maintenance and portability.
 
 ## Misc notes
 When building on small board, do not hesitate to exclude some demanding tasks, like
