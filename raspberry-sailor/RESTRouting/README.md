@@ -1,5 +1,5 @@
 ## GRIB Reader
-And routing.
+_And_ routing.
 
 The server generates a json document, as in `GRIBBulk`.
 The rendering is (to be) done on the client (HTML5/CSS) over a map. See in `RESTNavServer/web`.

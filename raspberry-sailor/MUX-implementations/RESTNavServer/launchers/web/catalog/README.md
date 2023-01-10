@@ -10,3 +10,8 @@ One drawback is the consistency check. Colors, Effects, and Projections were ref
 The `catalog.js` is here just for illustration and reference, it is not used in the code anymore.
 
 ---
+
+`compositeCatalog.json` is now the point of truth.  
+It's the user's responsibility to keep it in good shape.
+
+--- 
