@@ -876,9 +876,8 @@
             document.getElementById("grib-checkbox").disabled = true;
             document.getElementById("grib-checkbox").checked = false;
 
-            document.getElementById("grib-widgets").style.display = 'block';
-            document.getElementById("grib-web-comps").style.display = 'block';
-
+            // document.getElementById("grib-widgets").style.display = 'block';
+            // document.getElementById("grib-web-comps").style.display = 'block';
     
             // $("#fax-checkbox").prop("disabled", true);
             // $("#fax-checkbox").prop("checked", false);
@@ -1138,6 +1137,10 @@
                     messageManager('Type:' + type.gribType.desc);
                 });
             }
+            // Enable GRIB widgets
+            document.getElementById("grib-widgets").style.display = 'block';
+            document.getElementById("grib-web-comps").style.display = 'block';
+
             // Create the UI widgets to deal with the GRIB
             // 1. Dates
             let gribDates = document.getElementById("grib-dates");
@@ -1264,7 +1267,7 @@
             }
             worldMap.setAfterDrawing(renderGRIBData); // That is the callback
     
-            requestGRIB(jsonRequest, plotGrib);
+            requestGRIB(jsonRequest, plotGrib);  // TODO Enable GRIB widgets if successful
         };
     
         let renderGRIB = () => {
@@ -1281,7 +1284,7 @@
             } else if (radio.value === 'json') {
                 document.getElementById("grib-web").style.display = 'none';
                 document.getElementById("grib-json").style.display = 'block';
-                document.getElementById("load-composites").disabled = true; // Disable Load Composite button
+                document.getElementById("load-composites").disabled = true;  // Disable Load Composite button
             }
         };
     
@@ -1417,7 +1420,7 @@
                     <div style="display: grid;
                                 grid-template-columns: auto auto auto auto aujto;
                                 grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
-                        <span style="grid-area: top;">GRIB Data, at the mouse, on the chart</span>                            
+                        <span style="grid-area: top; padding-left: 5px;">GRIB Data, at the mouse, on the chart</span>                            
                         <!-- True Wind Speed in knots<br/ -->
                         <analog-display class="analogdisplay-monochrome-orange"
                                         style="grid-area: middle-01;"
@@ -1607,7 +1610,7 @@ Going to: Latitude:
         document.getElementById("map-container").height = (window.innerHeight * 0.80);
 
         // Populate composites list
-        if (false) { // Old method. To be removed.
+        if (false) { // Old method. TO BE REMOVED.
             setTimeout(() => { // compositeCatalog populated by a Promise in catalog.js... Not elegant, fix that.
             for (let i = 0; i < compositeCatalog.length; i++) {
                 let opt = document.createElement('option');
