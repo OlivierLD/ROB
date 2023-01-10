@@ -18,20 +18,28 @@
     }
     </style>
     <script type="text/javascript">
+        
         showSurface = (cb) => {
-          let left = document.getElementById("left");
-          let right = document.getElementById("right");
-          right.style.display = cb.checked ? 'inline' : 'none';
-          left.style.display = cb.checked ? 'inline' : 'none';
+          rightFax.style.display = cb.checked ? 'inline' : 'none';
+          leftFax.style.display = cb.checked ? 'inline' : 'none';
+          if (leftFax.style.display === 'none' && rightFax.style.display === 'none') {
+              fax500mb.style.marginTop = '-30px';
+            } else {
+              fax500mb.style.marginTop = '-575px';
+            }
         };
         show500mb = (cb) => {
-          let fax500mb = document.getElementById("500mb");
           fax500mb.style.display = cb.checked ? 'inline' : 'none';
+          if (leftFax.style.display === 'none' && rightFax.style.display === 'none') {
+            fax500mb.style.marginTop = '-30px';
+          } else {
+            fax500mb.style.marginTop = '-575px';
+          }
         };
     </script>
 </head>
 <body>
-  <h2>Faxes from the Internet</h2>
+  <h2>Faxes from the Internet, surface and 500mb, now</h2>
 
 <!-- North-West Atlantic: https://tgftp.nws.noaa.gov/fax/PYAA12.gif -->
 <!-- North-East Atlantic: https://tgftp.nws.noaa.gov/fax/PYAA11.gif -->
@@ -39,7 +47,12 @@
 
   <!-- TODO Values for the faxes position (CSS width, margins, etc) -->
 
-  <div id="placeholder" class="fax-container" style="min-height: 600px; min-width: 1024px; padding-top: 40px;">
+  <div id="fax-checkboxes">
+    <input type="checkbox" onchange="showSurface(this);" checked>Surface Faxes
+    <input type="checkbox" onchange="show500mb(this);" checked>500mb
+  </div>
+
+  <div id="placeholder" class="fax-container" style="min-height: 600px; min-width: 1024px; padding-top: 80px;">
       <img id="left" src="https://tgftp.nws.noaa.gov/fax/PYAA12.gif"></img>
       <img id="right" src="https://tgftp.nws.noaa.gov/fax/PYAA11.gif"></img>
       <img id="500mb" src="https://tgftp.nws.noaa.gov/fax/PPAA10.gif"></img>
@@ -53,14 +66,19 @@
   </div>
 </body>
 <script type="text/javascript">
+
+    let leftFax;
+    let rightFax;
+    let fax500mb;
+
     window.onload = () => {
-      const leftFax = document.getElementById('left');
+      leftFax = document.getElementById('left');
       leftFax.style.width = '600px';
       leftFax.style.height = 'auto';
       leftFax.style.transform = 'rotate(90deg)';
       leftFax.style.filter = 'opacity(1.0)';
 
-      const rightFax = document.getElementById('right');
+      rightFax = document.getElementById('right');
       rightFax.style.width = '600px';
       rightFax.style.height = 'auto';
       rightFax.style.transform = 'rotate(90deg)';
@@ -68,7 +86,7 @@
       rightFax.style.marginLeft = '-33px';
       rightFax.style.zIndex = '-1';
 
-      const fax500mb = document.getElementById('500mb');
+      fax500mb = document.getElementById('500mb');
       fax500mb.style.width = '919px';
       fax500mb.style.height = 'auto';
       // fax500mb.style.transform = 'rotate(0deg)';
