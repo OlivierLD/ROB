@@ -30,7 +30,7 @@
 
         canvas#mapCanvas {
             /* cursor: crosshair; */
-            cursor: url('../images/crosshair.png') 20 20, auto;
+            cursor: url('../images/crosshair.png') 19 20, auto;
         }
 
         .control-style {
@@ -224,7 +224,7 @@
     
         let messageManager = (mess) => {
             let messZone = document.getElementById("message-zone");
-            if (messZone !== undefined && messZone !== null) {
+            if (messZone) {
                 let existingContent = messZone.innerHTML;
                 if (existingContent.trim().length > 0) {
                     existingContent += "\n";
@@ -233,6 +233,8 @@
                 existingContent = existingContent.replace("</pre>", "");
                 existingContent += (typeof(mess) === 'object' ? JSON.stringify(mess, null, 2) : mess);
                 messZone.innerHTML = "<pre>" + existingContent + "</pre>";
+                // Scroll at the bottom
+                messZone.scrollTop = messZone.scrollHeight;
             } else {
                 console.log(mess);
             }
@@ -828,6 +830,7 @@
          */
         let loadComposite = (existingData) => {
             document.getElementById("grib-widgets").style.display = 'none';
+            document.getElementById("grib-web-comps").style.display = 'none';
             let key = document.getElementById('composites').value;
     
             let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
@@ -868,6 +871,8 @@
             document.getElementById("grib-checkbox").checked = false;
 
             document.getElementById("grib-widgets").style.display = 'block';
+            document.getElementById("grib-web-comps").style.display = 'block';
+
     
             // $("#fax-checkbox").prop("disabled", true);
             // $("#fax-checkbox").prop("checked", false);
@@ -1172,8 +1177,10 @@
         };
     
         let findMinMax = (gribData, idx) => { // TODO Call this when GRIB date changes
+            let mess = gribData ? `${gribData.length} date(s), from ${gribData[0].gribDate.formattedUTCDate} to ${gribData[gribData.length - 1].gribDate.formattedUTCDate}` : "missing data";
+            messageManager(`GRIB data received on client (${mess}), finding min and max for index ${idx}`);
             // console.log("Display min and max for index", idx);
-            messageManager("Display min and max for index:" + idx);
+            // messageManager("Finding min and max for index:" + idx);
             let gribObj = gribData[idx];
             console.log(gribObj.gribDate.formattedUTCDate);
             for (let i = 0; i < gribObj.typedData.length; i++) {
@@ -1264,9 +1271,11 @@
             if (radio.value === 'web') {
                 document.getElementById("grib-web").style.display = 'block';
                 document.getElementById("grib-json").style.display = 'none';
+                document.getElementById("load-composites").disabled = false; // Enable Load Composite button
             } else if (radio.value === 'json') {
                 document.getElementById("grib-web").style.display = 'none';
                 document.getElementById("grib-json").style.display = 'block';
+                document.getElementById("load-composites").disabled = true; // Disable Load Composite button
             }
         };
     
@@ -1398,92 +1407,94 @@
         <tr>
             <!-- Web Components for the GRIB Here -->
             <td title="GRIB Data at the mouse" style="border: 1px solid orange; border-radius: 5px;">
-                <div style="display: grid;
-                            grid-template-columns: auto auto auto auto aujto;
-                            grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
-                    <span style="grid-area: top;">GRIB Data, at the mouse, on the chart</span>                            
-                    <!-- True Wind Speed in knots<br/ -->
-                    <analog-display class="analogdisplay-monochrome-orange"
-                                    style="grid-area: middle-01;"
-                                    title="True Wind Speed in knots"
-                                    id="tws-01"
-                                    min-value="0"
-                                    max-value="60"
+                <div id="grib-web-comps" style="display: none;">
+                    <div style="display: grid;
+                                grid-template-columns: auto auto auto auto aujto;
+                                grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
+                        <span style="grid-area: top;">GRIB Data, at the mouse, on the chart</span>                            
+                        <!-- True Wind Speed in knots<br/ -->
+                        <analog-display class="analogdisplay-monochrome-orange"
+                                        style="grid-area: middle-01;"
+                                        title="True Wind Speed in knots"
+                                        id="tws-01"
+                                        min-value="0"
+                                        max-value="60"
+                                        value="0"
+                                        major-ticks="10"
+                                        minor-ticks="1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="TWS"
+                                        width="200"
+                                        height="200"></analog-display>
+
+                        <!-- Wind Direction in &deg;<br/ -->
+                        <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
+                                        style="grid-area: middle-02;"
+                                        title="TWD"
+                                        id="twd-01"
+                                        value="0"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="TWD"
+                                        width="200"
+                                        height="200"></direction-display>
+
+                        <!-- Air Temperature in &deg;C<br/ -->
+                        <thermo-meter id="thermometer-01"
+                                    class="thermometer-orange"
+                                    style="grid-area: middle-03;"
+                                    title="Air, Celsius"
+                                    min-value="-20"
+                                    max-value="50"
+                                    major-ticks="10"
+                                    minor-ticks="1"
                                     value="0"
-                                    major-ticks="10"
-                                    minor-ticks="1"
-                                    with-border="true"
-                                    overlap="40"
-                                    label="TWS"
-                                    width="200"
-                                    height="200"></analog-display>
+                                    unit="C"
+                                    width="100"
+                                    height="220"></thermo-meter>
 
-                    <!-- Wind Direction in &deg;<br/ -->
-                    <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
-                                       style="grid-area: middle-02;"
-                                       title="TWD"
-                                       id="twd-01"
-                                       value="0"
-                                       major-ticks="45"
-                                       minor-ticks="5"
-                                       with-rose="true"
-                                       with-border="true"
-                                       label="TWD"
-                                       width="200"
-                                       height="200"></direction-display>
+                        <!-- Atm Pressure in hPa<br/ -->
+                        <analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
+                                        style="grid-area: middle-04;"
+                                        title="Pressure in hPa"
+                                        id="prmsl-01"
+                                        min-value="983"
+                                        max-value="1043"
+                                        value="1013.6"
+                                        major-ticks="10"
+                                        minor-ticks="1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="PRMSL"
+                                        width="200"
+                                        height="200"></analog-display>
 
-                    <!-- Air Temperature in &deg;C<br/ -->
-                    <thermo-meter id="thermometer-01"
-                                  class="thermometer-orange"
-                                  style="grid-area: middle-03;"
-                                  title="Air, Celsius"
-                                  min-value="-20"
-                                  max-value="50"
-                                  major-ticks="10"
-                                  minor-ticks="1"
-                                  value="0"
-                                  unit="C"
-                                  width="100"
-                                  height="220"></thermo-meter>
+                        <!-- Precipitation Rate in mm/h<br/ -->
+                        <pluvio-meter id="rain-01"
+                                    class="pluviometer-orange"
+                                    style="grid-area: middle-05;"
+                                    title="m/m per hour"
+                                    min-value="0"
+                                    max-value="30"
+                                    major-ticks="5"
+                                    minor-ticks="0.50"
+                                    value="0"
+                                    width="80"
+                                    height="220"></pluvio-meter>
 
-                    <!-- Atm Pressure in hPa<br/ -->
-                    <analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
-                                    style="grid-area: middle-04;"
-                                    title="Pressure in hPa"
-                                    id="prmsl-01"
-                                    min-value="983"
-                                    max-value="1043"
-                                    value="1013.6"
-                                    major-ticks="10"
-                                    minor-ticks="1"
-                                    with-border="true"
-                                    overlap="40"
-                                    label="PRMSL"
-                                    width="200"
-                                    height="200"></analog-display>
-
-                    <!-- Precipitation Rate in mm/h<br/ -->
-                    <pluvio-meter id="rain-01"
-                                  class="pluviometer-orange"
-                                  style="grid-area: middle-05;"
-                                  title="m/m per hour"
-                                  min-value="0"
-                                  max-value="30"
-                                  major-ticks="5"
-                                  minor-ticks="0.50"
-                                  value="0"
-                                  width="80"
-                                  height="220"></pluvio-meter>
-
-                    <beaufort-scale id="beaufort-01"
-                                    class="beaufort-01"
-                                    style="grid-area: bottom;"
-                                    title="Beaufort Scale"
-                                    value="0.0"
-                                    orientation="HORIZONTAL"
-                                    width="200"
-                                    height="60"></beaufort-scale>
-                </div>                            
+                        <beaufort-scale id="beaufort-01"
+                                        class="beaufort-01"
+                                        style="grid-area: bottom;"
+                                        title="Beaufort Scale"
+                                        value="0.0"
+                                        orientation="HORIZONTAL"
+                                        width="200"
+                                        height="60"></beaufort-scale>
+                    </div>                            
+                </div>
             </td>
         </tr>
         <tr>
