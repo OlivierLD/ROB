@@ -12,14 +12,7 @@ import polarmaker.polars.util.sort.ObjectToSort;
 import polarmaker.polars.util.sort.QSortAlgorithm;
 import polarmaker.smooth.PolarsResourceBundle;
 
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -130,7 +123,8 @@ public class TreePanel
 			dataTree.addTreeSelectionListener(treeMonitor);
 			dataTree.addMouseListener(new MouseListener() {
 				public void mouseClicked(MouseEvent e) {
-					boolean right = ((e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == InputEvent.BUTTON3_DOWN_MASK);
+					// boolean right = ((e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == InputEvent.BUTTON3_DOWN_MASK);
+					boolean right = SwingUtilities.isRightMouseButton(e);
 					if (dataTree.getPathForLocation(e.getX(), e.getY()) != null) {
 						// fireDefaultAction(e);
 						PolarTreeNode ptn = (PolarTreeNode) dataTree.getLastSelectedPathComponent();
@@ -354,7 +348,7 @@ public class TreePanel
 
 	/**
 	 * This is the popup menu for the JTree
-	 * Is is contextual.
+	 * It is contextual.
 	 */
 	class TreePopup extends JPopupMenu
 			implements ActionListener,
