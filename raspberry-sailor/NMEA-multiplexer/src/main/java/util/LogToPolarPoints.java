@@ -26,6 +26,8 @@ public class LogToPolarPoints {
     private final static String PATH_IN_ZIP_PREFIX = "--path-in-zip:";
     private final static String TO_PREFIX = "--to:";
 
+    private final static boolean NO_ZERO_BSP = "true".equals(System.getProperty("skip.bsp.00", "true"));
+
     private static InputStream getZipInputStream(String zipName, String entryName)
             throws Exception {
         ZipInputStream zip = new ZipInputStream(new FileInputStream(zipName));
@@ -138,9 +140,11 @@ public class LogToPolarPoints {
                                     minTWA = Math.min(minTWA, twa);
                                     maxTWA = Math.max(maxTWA, twa);
 
-                                    String outputData = String.format("{ \"twa\": %d, \"tws\": %f, \"bsp\": %f },\n", twa, tws, bsp);
-                                    outputRecords += 1;
-                                    bw.write(outputData);
+                                    if (bsp > 0 || !NO_ZERO_BSP) {
+                                        String outputData = String.format("{ \"twa\": %d, \"tws\": %f, \"bsp\": %f },\n", twa, tws, bsp);
+                                        outputRecords += 1;
+                                        bw.write(outputData);
+                                    }
                                 }
                                 if (refBSP != null && refTW != null) {
                                     refBSP = null;

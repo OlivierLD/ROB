@@ -8,6 +8,9 @@ echo -e " or"
 echo -e "${0} --from-zip:archive.zip --path-in-zip:path/to/data.nmea --to:output.json"
 echo -e "-------------------"
 #
+# To list a zip content:
+# $ unzip -vl file.zip
+#
 # in sample-data/logged.data.zip:
 # - 2010-07-10.tacking.back.in.nmea
 # - 2010-11-08.Nuku-Hiva-Tuamotu.nmea
@@ -23,5 +26,9 @@ echo -e "-------------------"
 # - 2017.06.17.nmea
 # and more...
 #
+# By default, no 0-BSP data is recorded.
+SKIP_NO_BSP=
+# SKIP_NO_BSP="-Dskip.bsp.00=false"  # Keep record with BSP = 0
+#
 CP=./build/libs/NMEA-multiplexer-1.0-all.jar
-java -cp ${CP} util.LogToPolarPoints $*
+java -cp ${CP} ${SKIP_NO_BSP} util.LogToPolarPoints $*

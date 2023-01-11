@@ -29,10 +29,10 @@ import java.util.Vector;
  * Adapted from ThreeD.java, delivered with the jdk 1.2.2
  */
 public class ThreeDPanel
-		extends JPanel
-		implements Runnable,
-		MouseListener,
-		MouseMotionListener {
+	   extends JPanel
+	   implements Runnable,
+				  MouseListener,
+				  MouseMotionListener {
 	private Color bgColor = Color.black;
 	private Color lineColor = Color.green;
 	private Color textColor = Color.red;
@@ -120,8 +120,8 @@ public class ThreeDPanel
 		mdname = model;
 		scalefudge = scale;
 
-//    amat.yrot(20);
-//    amat.xrot(20);
+//      amat.yrot(20);
+//      amat.xrot(20);
 		amat.yrot(10);
 		amat.xrot(10);
 		if (mdname == null) {

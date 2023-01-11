@@ -81,7 +81,7 @@ public class GUIFrame
 	private JMenuBar menuBar = new JMenuBar();
 	private JPanel panelCenter = new JPanel();
 	private BorderLayout layoutMain = new BorderLayout();
-	private MainPanel mainPanel1 = new MainPanel();
+	private MainPanel mainPanel = new MainPanel();
 	private BorderLayout borderLayout1 = new BorderLayout();
 
 	private boolean ok2exit = true;
@@ -219,11 +219,7 @@ public class GUIFrame
 		statusBar.setText(PolarsResourceBundle.getPolarsResourceBundle().getString("no-file-open"));
 		buttonOpen.setToolTipText(PolarsResourceBundle.getPolarsResourceBundle().getString("open-file"));
 		buttonOpen.setIcon(imageOpen);
-		buttonOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonOpen_actionPerformed(e);
-			}
-		});
+		buttonOpen.addActionListener(e -> buttonOpen_actionPerformed(e));
 		buttonClose.setToolTipText(PolarsResourceBundle.getPolarsResourceBundle().getString("save-modif"));
 		buttonClose.setIcon(imageClose);
 		buttonClose.addActionListener(new ActionListener() {
@@ -266,7 +262,7 @@ public class GUIFrame
 		toolBar.add(buttonClose);
 		toolBar.add(buttonHelp);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
-		panelCenter.add(mainPanel1, BorderLayout.CENTER);
+		panelCenter.add(mainPanel, BorderLayout.CENTER);
 		this.getContentPane().add(panelCenter, BorderLayout.CENTER);
 	}
 
@@ -325,8 +321,8 @@ public class GUIFrame
 					fw.flush();
 					fw.close();
 					fName = newFName;
-					if (mainPanel1 != null) {
-						mainPanel1.setDataFile(fName);
+					if (mainPanel != null) {
+						mainPanel.setDataFile(fName);
 					}
 					statusBar.setText(fName);
 				}
@@ -342,8 +338,8 @@ public class GUIFrame
 
 	public void reOpen(String fName) {
 		if (fName != null && !fName.trim().isEmpty()) {
-			if (mainPanel1 != null) {
-				mainPanel1.setDataFile(fName);
+			if (mainPanel != null) {
+				mainPanel.setDataFile(fName);
 			}
 			statusBar.setText(fName);
 			enableMenus(true);
@@ -392,7 +388,7 @@ public class GUIFrame
 		int resp = JOptionPane.showConfirmDialog(this, ep, "Extrapolation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if (resp == JOptionPane.OK_OPTION) {
 			double factor = ep.getFactor();
-			mainPanel1.extrapolateSpeed(factor);
+			mainPanel.extrapolateSpeed(factor);
 		}
 	}
 
@@ -407,7 +403,7 @@ public class GUIFrame
 	private void save(String fn) {
 		System.out.println("Saving XML Data");
 		fn = PolarUtilities.makeSureExtensionIsOK(fn, ".polar-data");
-		Object o = mainPanel1.getTreeRoot();
+		Object o = mainPanel.getTreeRoot();
 		if (o == null) {
 			JOptionPane.showMessageDialog(this, PolarsResourceBundle.getPolarsResourceBundle().getString("no-data-loaded"), PolarsResourceBundle.getPolarsResourceBundle().getString("saving-data"),
 					JOptionPane.WARNING_MESSAGE);
@@ -503,12 +499,12 @@ public class GUIFrame
 
 	private void genCoeff() {
 		System.out.println("Generate coefficients");
-		if (mainPanel1.getTreeRoot() != null) {
+		if (mainPanel.getTreeRoot() != null) {
 			String fName = PolarUtilities.chooseFile(JFileChooser.FILES_ONLY, "polar-coeff", "Coefficients", "Save Coefficient File", "Save As");
 			if (!fName.trim().isEmpty()) {
 				fName = PolarUtilities.makeSureExtensionIsOK(fName, ".polar-coeff");
 				// Loop on the different sections. Assume we have a tree of sections, with all the degrees.
-				PolarTreeNode treeRoot = (PolarTreeNode) mainPanel1.getTreeRoot();
+				PolarTreeNode treeRoot = (PolarTreeNode) mainPanel.getTreeRoot();
 				int nbSections = treeRoot.getChildCount();
 				System.out.println("We have [" + nbSections + "] section(s).");
 				assert (treeRoot.getType() == PolarTreeNode.ROOT_TYPE);
@@ -561,7 +557,7 @@ public class GUIFrame
 	}
 
 	void smoothPrm_ActionPerformed(ActionEvent e) {
-		PolarTreeNode[] sn = mainPanel1.getSelectedNode();
+		PolarTreeNode[] sn = mainPanel.getSelectedNode();
 		if (sn == null || (sn != null && sn.length != 1)) {
 			JOptionPane.showMessageDialog(this, "<html>Select <b>one</b> Section Node</html>", "Smoothing", JOptionPane.WARNING_MESSAGE);
 			return;
@@ -601,8 +597,8 @@ public class GUIFrame
 	}
 
 	void plotBulk_ActionPerformed(ActionEvent e) {
-		mainPanel1.setPlotBulkOnSmoothPanel(plotBulkOnSmooth.isSelected());
-		mainPanel1.repaint();
+		mainPanel.setPlotBulkOnSmoothPanel(plotBulkOnSmooth.isSelected());
+		mainPanel.repaint();
 	}
 
 	void helpAbout_ActionPerformed(ActionEvent e) {
@@ -699,8 +695,8 @@ public class GUIFrame
 			br.close();
 			bw.flush();
 			bw.close();
-			if (mainPanel1 != null) {
-				mainPanel1.setDataFile(f);
+			if (mainPanel != null) {
+				mainPanel.setDataFile(f);
 			}
 			statusBar.setText(f);
 			enableMenus(true);
@@ -714,9 +710,9 @@ public class GUIFrame
 		// degrees are in Constants.POLAR_DEGREE and Constants.COEFF_DEGREE
 		Constants.setLastOpenFile(fName);
 		Constants.storeConstants();
-		if (mainPanel1.getTreeRoot() != null) {
+		if (mainPanel.getTreeRoot() != null) {
 			// 1 - Re-generating all coeffs
-			Enumeration sections = ((PolarTreeNode) mainPanel1.getTreeRoot()).children();
+			Enumeration sections = ((PolarTreeNode) mainPanel.getTreeRoot()).children();
 			List<CoeffForPolars> coefflist = new ArrayList<CoeffForPolars>();
 			while (sections.hasMoreElements()) {
 				PolarTreeNode section = (PolarTreeNode) sections.nextElement();

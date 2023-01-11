@@ -160,7 +160,7 @@ public class MainPanel
 		smoothPanel.resetCoeffDeg();
 		if (selectedNode != null) {
 			coeffMap = null;
-//    System.out.println("Smoothing Data");
+	//      System.out.println("Smoothing Data");
 			double[][] coeffArray = new double[selectedNode.length][];
 			for (int i = 0; i < selectedNode.length; i++) {
 				if (selectedNode[i].getType() == PolarTreeNode.ROOT_TYPE) {
@@ -179,7 +179,7 @@ public class MainPanel
 									coeffMap);
 							// Transform
 							ObjMaker.generate("polars.xml");
-							// Replace the panel
+							// Replace the panel.
 							threeDPanel = new ThreeDPanel("polars.obj", Color.black, Color.green, null, null);
 							tabbedPane.setComponentAt(2, threeDPanel);
 							threeDPanel.setPanelLabel("");
@@ -220,8 +220,8 @@ public class MainPanel
 							threeDPanel.setPanelLabel("Polar Deg. " + theSection.getPolarDegree() +
 									", Coeff Deg. " + theSection.getCoeffDegree());
 							//          Vector data = buildSpeedDataVector((PolarTreeNode)getTreeRoot());
-							Vector data = buildSpeedDataVector(theSection);
-							threeDPanel.setSpeedPts(data);
+							Vector<ThreeDPoint> data = buildSpeedDataVector(theSection);
+							threeDPanel.setSpeedPts(data); // TODO with real boat data ?
 							threeDPanel.setDrawingOption(ThreeDPanel.CIRC_OPT);
 						}
 					} catch (Exception e) {
@@ -242,9 +242,9 @@ public class MainPanel
 		smoothPanel.repaint();
 	}
 
-	// builds a Vector of ThreeDPoint
-	private Vector buildSpeedDataVector(PolarTreeNode section) {
-		Vector<ThreeDPoint> v = new Vector<ThreeDPoint>();
+	// builds a Vector of ThreeDPoint from the tree.
+	private Vector<ThreeDPoint> buildSpeedDataVector(PolarTreeNode section) {
+		Vector<ThreeDPoint> v = new Vector<>();
 		Enumeration enumeration = section.children();
 
 		while (enumeration.hasMoreElements()) {
@@ -268,6 +268,14 @@ public class MainPanel
 				System.out.println("Invalid children under Section (in MainPanel.buildSpeedDataVector)");
 			}
 		}
+		return v;
+	}
+
+	// Same as above, but from logged points (processed by util.LogToPolarPoints)
+	private Vector<ThreeDPoint> buildSpeedPointsVector(String fileName) {
+		Vector<ThreeDPoint> v = new Vector<>();
+		// TODO Implement
+
 		return v;
 	}
 

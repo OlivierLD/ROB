@@ -22,7 +22,7 @@ like `(Z, diff)`, representing a cloud of points.
 
 We will use the [Least Square method](https://en.wikipedia.org/wiki/Least_squares) to come up with the expected coefficients.
 
-> For details on the Least Square method, for this specific case, see [this document](https://htmlpreview.github.io/?https://github.com/OlivierLD/raspberry-coffee/blob/master/Project.Trunk/Deviation.Tool/README.html).
+> For details on the Least Square method, for this specific case, see [this document](https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Deviation-Tool/README.html).
 
 For each point, for each `HDM`, we want the calculated deviation to be as close as possible to the measured deviation.
 

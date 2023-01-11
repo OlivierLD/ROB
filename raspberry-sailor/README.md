@@ -7,6 +7,7 @@
 - NMEA Multiplexer
 - Deviation Tool (build your own deviation curve)
 - Polar Smoother (elaborate your own polars)
+- Sample implementations
 - and much more, keep posted.
 
 ### Misc links
