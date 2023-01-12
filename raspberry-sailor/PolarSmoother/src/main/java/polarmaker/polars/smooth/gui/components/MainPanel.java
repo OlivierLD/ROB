@@ -1,5 +1,6 @@
 package polarmaker.polars.smooth.gui.components;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import polarmaker.Constants;
 import polarmaker.polars.PolarPoint;
 import polarmaker.polars.main.PolarSmoother;
@@ -20,11 +21,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.io.IOException;
+import java.util.*;
 
 public class MainPanel
 		extends JPanel
@@ -32,6 +32,8 @@ public class MainPanel
 	private JSplitPane jSplitPane1 = new JSplitPane();
 	private TreePanel treePanel = new TreePanel(this);
 	private BorderLayout borderLayout1 = new BorderLayout();
+
+	private String logFileName = null;
 
 	private PolarTreeNode[] selectedNode = null;
 
@@ -78,6 +80,10 @@ public class MainPanel
 		treePanel.repaint();
 		bulkPanel.repaint();
 		smoothPanel.repaint();
+	}
+
+	public void setLogFileName(String logFileName) {
+		this.logFileName = logFileName;
 	}
 
 	public void extrapolateSpeed(double factor) {
@@ -221,8 +227,12 @@ public class MainPanel
 									", Coeff Deg. " + theSection.getCoeffDegree());
 							//          Vector data = buildSpeedDataVector((PolarTreeNode)getTreeRoot());
 							Vector<ThreeDPoint> data = buildSpeedDataVector(theSection);
-							threeDPanel.setSpeedPts(data); // TODO with real boat data ?
+							threeDPanel.setSpeedPts(data);
 							threeDPanel.setDrawingOption(ThreeDPanel.CIRC_OPT);
+
+							// Logged Data
+							Vector<ThreeDPoint> loggedData = buildLoggedPointsVector();
+							threeDPanel.setLoggedPoints(loggedData);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -242,6 +252,12 @@ public class MainPanel
 		smoothPanel.repaint();
 	}
 
+	private static ThreeDPoint threeDFromBoatData(double bsp, double tws, int twa) {
+		float x = (float) tws;
+		float y = (float) (bsp * Math.sin(Math.toRadians(twa)));
+		float z = (float) (bsp * Math.cos(Math.toRadians(twa)));
+		return new ThreeDPoint(x, y, z);
+	}
 	// builds a Vector of ThreeDPoint from the tree.
 	private Vector<ThreeDPoint> buildSpeedDataVector(PolarTreeNode section) {
 		Vector<ThreeDPoint> v = new Vector<>();
@@ -256,12 +272,15 @@ public class MainPanel
 					PolarTreeNode twaNode = (PolarTreeNode) bspEnumeration.nextElement();
 					double bsp = twaNode.getBsp();
 					int twa = twaNode.getTwa();
-					float x = (float) tws;
-					float y = (float) (bsp * Math.sin(Math.toRadians((double) twa)));
-					float z = (float) (bsp * Math.cos(Math.toRadians((double) twa)));
-					ThreeDPoint tdp = new ThreeDPoint(x, y, z);
+					if (false) {
+						float x = (float) tws;
+						float y = (float) (bsp * Math.sin(Math.toRadians(twa)));
+						float z = (float) (bsp * Math.cos(Math.toRadians(twa)));
+						ThreeDPoint tdp = new ThreeDPoint(x, y, z);
+					}
+					ThreeDPoint tdp = threeDFromBoatData(bsp, tws, twa);
 					v.add(tdp);
-					tdp = new ThreeDPoint(x, -y, z);
+					tdp = new ThreeDPoint(tdp.getX(), -tdp.getY(), tdp.getZ());
 					v.add(tdp);
 				}
 			} else {
@@ -271,11 +290,49 @@ public class MainPanel
 		return v;
 	}
 
-	// Same as above, but from logged points (processed by util.LogToPolarPoints)
-	private Vector<ThreeDPoint> buildSpeedPointsVector(String fileName) {
-		Vector<ThreeDPoint> v = new Vector<>();
-		// TODO Implement data points (from log) in the 3D pane
+	/**
+	 * Same as above, but from logged points (processed by util.LogToPolarPoints)
+	 * @return
+	 */
+	private Vector<ThreeDPoint> buildLoggedPointsVector() {
+		final Vector<ThreeDPoint> v = new Vector<>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String dataFileName = this.logFileName; // "$HOME/repos/ROB/raspberry-sailor/NMEA-multiplexer/output.json";
+			if (dataFileName != null) {
+				Object dataArray = mapper.readValue(new FileReader(dataFileName), Object.class);
+				if (dataArray instanceof List) {
+					List<Map<String, Object>> triplets = (List<Map<String, Object>>) dataArray;
+					triplets.forEach(tpl -> {
+						double bsp = (Double) tpl.get("bsp");
+						double tws = (Double) tpl.get("tws");
+						int twa = (Integer) tpl.get("twa");
 
+						// TODO Something generic : logged triplet (tws, twa, bsp) -> 3D point.
+						if (false) {
+							float x = (float) tws;
+							float y = (float) (bsp * Math.sin(Math.toRadians(twa)));
+							float z = (float) (bsp * Math.cos(Math.toRadians(twa)));
+							ThreeDPoint tdp = new ThreeDPoint(x, y, z);
+							v.add(tdp);
+							tdp = new ThreeDPoint(x, -y, z);
+							v.add(tdp);
+						}
+						ThreeDPoint tdp = threeDFromBoatData(bsp, tws, twa);
+						v.add(tdp);
+						tdp = new ThreeDPoint(tdp.getX(), -tdp.getY(), tdp.getZ());
+						v.add(tdp);
+					});
+				} else {
+					System.out.println("Weird...");
+				}
+			} else {
+				// Leave Vector Empty
+				return null;
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 		return v;
 	}
 

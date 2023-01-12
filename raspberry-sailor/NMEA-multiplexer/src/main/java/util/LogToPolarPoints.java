@@ -225,7 +225,7 @@ public class LogToPolarPoints {
                                         outputRecords += 1;
 
                                         if (extensionToUse == SupportedExtension.JSON) {
-                                            String outputData = String.format("{ \"twa\": %d, \"tws\": %f, \"bsp\": %f },\n", twa, tws, bsp);
+                                            String outputData = String.format("%s{ \"twa\": %d, \"tws\": %f, \"bsp\": %f }\n", (outputRecords > 1 ? "," : ""), twa, tws, bsp);
                                             bw.write(outputData);
                                         } else if (extensionToUse == SupportedExtension.XML) {
                                             String outputData = String.format("  <twa>%d</twa> <tws>%f</tws> <bsp>%f</bsp>\n", twa, tws, bsp);

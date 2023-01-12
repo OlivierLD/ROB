@@ -61,6 +61,11 @@ public class GUIFrame
 	private JMenu menuHelp = new JMenu();
 	private JMenuItem menuFileNew = new JMenuItem();
 	private JMenuItem menuFileOpen = new JMenuItem();
+
+	private JMenuItem menuFileOpenLogged = new JMenuItem();
+	private JMenuItem menuFileRemoveLogged = new JMenuItem();
+
+
 	private JMenuItem menuFileImportMaxSea = new JMenuItem();
 
 	private JMenu menuFileReopen = new JMenu();
@@ -125,6 +130,15 @@ public class GUIFrame
 				fileOpen_ActionPerformed(ae);
 			}
 		});
+
+		menuFileOpenLogged.setText(PolarsResourceBundle.getPolarsResourceBundle().getString("open-logged"));
+		menuFileOpenLogged.addActionListener(ae -> fileOpenLogged_ActionPerformed(ae));
+		menuFileOpenLogged.setToolTipText("Open a json file generated from logging!!"); // TODO: resource bundle !!
+
+		menuFileRemoveLogged.setText(PolarsResourceBundle.getPolarsResourceBundle().getString("remove-logged"));
+		menuFileRemoveLogged.addActionListener(ae -> fileRemoveLogged_ActionPerformed(ae));
+		menuFileRemoveLogged.setToolTipText("Remove any loaded logged data"); // TODO: resource bundle !!
+
 		menuFileReopen.setText(PolarsResourceBundle.getPolarsResourceBundle().getString("re-open"));
 		if (Constants.getLastOpenFile().length() > 0) {
 			lastFile = Constants.getLastOpenFile().substring(Constants.getLastOpenFile().lastIndexOf(File.separator) + 1);
@@ -238,6 +252,12 @@ public class GUIFrame
 		menuFile.add(menuFileNew);
 		menuFile.add(menuFileOpen);
 		menuFile.add(menuFileReopen);
+
+		menuFile.add(new JSeparator());
+		menuFile.add(menuFileOpenLogged);
+		menuFile.add(menuFileRemoveLogged);
+		menuFile.add(new JSeparator());
+
 		menuFile.add(menuFileImportMaxSea);
 		menuFile.add(menuFileSave);
 		menuFile.add(menuFileSaveAs);
@@ -334,6 +354,14 @@ public class GUIFrame
 
 	private void fileOpen_ActionPerformed(ActionEvent e) {
 		setDataFile();
+	}
+
+	private void fileOpenLogged_ActionPerformed(ActionEvent e) {
+		setLogFile();
+	}
+
+	private void fileRemoveLogged_ActionPerformed(ActionEvent e) {
+		removeLogFile();
 	}
 
 	public void reOpen(String fName) {
@@ -614,6 +642,21 @@ public class GUIFrame
 	private void setDataFile() {
 		fName = PolarUtilities.chooseFile(JFileChooser.FILES_AND_DIRECTORIES, "polar-data", "Polar Data", "Polar Data", "Open");
 		reOpen(fName);
+	}
+
+	private void setLogFile() {
+		String logFileName = PolarUtilities.chooseFile(JFileChooser.FILES_AND_DIRECTORIES, "json", "Log files", "Polar Log Files", "Open");
+//		System.out.println("Propagate " + logFileName);
+		if (mainPanel != null) {
+			mainPanel.setLogFileName(logFileName);
+		}
+	}
+
+	private void removeLogFile() {
+//		System.out.println("Remove log file!!");
+		if (mainPanel != null) {
+			mainPanel.setLogFileName(null);
+		}
 	}
 
 	private void importFromMaxSeaFile() {

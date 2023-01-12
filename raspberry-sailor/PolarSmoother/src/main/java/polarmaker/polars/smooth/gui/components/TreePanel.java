@@ -28,7 +28,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Enumeration;
@@ -83,11 +82,11 @@ public class TreePanel
 	public void extrapolate(double d) {
 		if (root != null) {
 			PolarTreeNode ptn = (PolarTreeNode) root;
-			loopAndExtraolate(ptn, d);
+			loopAndExtrapolate(ptn, d);
 		}
 	}
 
-	private void loopAndExtraolate(PolarTreeNode node, double d) {
+	private void loopAndExtrapolate(PolarTreeNode node, double d) {
 		int c = node.getChildCount();
 		if (c == 0) { // Leaf
 			node.setBsp(d * node.getBsp());
@@ -99,7 +98,7 @@ public class TreePanel
 				node.setUpwindVmg(node.getUpwindVmg() * d);
 			}
 			for (int i = 0; i < c; i++) {
-				loopAndExtraolate((PolarTreeNode) node.getChildAt(i), d);
+				loopAndExtrapolate((PolarTreeNode) node.getChildAt(i), d);
 			}
 		}
 	}
