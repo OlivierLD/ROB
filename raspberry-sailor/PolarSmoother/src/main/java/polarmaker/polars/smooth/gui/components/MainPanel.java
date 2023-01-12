@@ -274,7 +274,7 @@ public class MainPanel
 	// Same as above, but from logged points (processed by util.LogToPolarPoints)
 	private Vector<ThreeDPoint> buildSpeedPointsVector(String fileName) {
 		Vector<ThreeDPoint> v = new Vector<>();
-		// TODO Implement
+		// TODO Implement data points (from log) in the 3D pane
 
 		return v;
 	}

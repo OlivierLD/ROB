@@ -7,15 +7,21 @@ package util;
 import nmea.parser.StringParsers;
 import nmea.parser.TrueWind;
 import nmea.parser.VHW;
+import util.swing.SwingFrame;
 
+import java.awt.*;
 import java.io.*;
 import java.text.NumberFormat;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
  * Scan a log file (in NMEA), and
  * extract the BSP for TWA/TWS
+ *
+ * Can produce json, xml, csv, txt outputs (based on the extension of the output file name)
  */
 public class LogToPolarPoints {
 
@@ -50,19 +56,76 @@ public class LogToPolarPoints {
         return is;
     }
 
-    public static void processFiles(String in, String out) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(in));
-        try (br) {
-            processFiles(br, out);
+    public final static class PolarTriplet {
+        double bsp;
+        double twa;
+        double tws;
+
+        public PolarTriplet() {
+        }
+
+        public PolarTriplet(double bsp, double twa, double tws) {
+            this.bsp = bsp;
+            this.twa = twa;
+            this.tws = tws;
+        }
+
+        public PolarTriplet bsp(double bsp) {
+            this.bsp = bsp;
+            return this;
+        }
+        public PolarTriplet twa(double twa) {
+            this.twa = twa;
+            return this;
+        }
+        public PolarTriplet tws(double tws) {
+            this.tws = tws;
+            return this;
+        }
+
+        public double getBsp() {
+            return bsp;
+        }
+
+        public void setBsp(double bsp) {
+            this.bsp = bsp;
+        }
+
+        public double getTwa() {
+            return twa;
+        }
+
+        public void setTwa(double twa) {
+            this.twa = twa;
+        }
+
+        public double getTws() {
+            return tws;
+        }
+
+        public void setTws(double tws) {
+            this.tws = tws;
         }
     }
 
-    public static void processFiles(String in, String path, String out) throws Exception {
+    enum SupportedExtension {
+        JSON, CSV, XML, TXT
+    }
+    private static SupportedExtension extensionToUse = SupportedExtension.JSON;
+
+    public static List<PolarTriplet> processFiles(String in, String out) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(in));
+        try (br) {
+            return processFiles(br, out);
+        }
+    }
+
+    public static List<PolarTriplet> processFiles(String in, String path, String out) throws Exception {
 
         final InputStream zipInputStream = getZipInputStream(in, path);
         BufferedReader br = new BufferedReader(new InputStreamReader(zipInputStream));
         try (br) {
-            processFiles(br, out);
+            return processFiles(br, out);
         }
     }
     /**
@@ -72,8 +135,19 @@ public class LogToPolarPoints {
      * @param out name of the file to produce
      * @throws Exception when error.
      */
-    public static void processFiles(BufferedReader br, String out) throws Exception {
+    public static List<PolarTriplet> processFiles(BufferedReader br, String out) throws Exception {
 
+        if (out.endsWith(".json")) {
+            extensionToUse = SupportedExtension.JSON;
+        } else if (out.endsWith(".xml")) {
+            extensionToUse = SupportedExtension.XML;
+        } else if (out.endsWith(".csv")) {
+            extensionToUse = SupportedExtension.CSV;
+        } else {
+            extensionToUse = SupportedExtension.TXT;
+        }
+
+        List<PolarTriplet> plList = new ArrayList<>();
         BufferedWriter bw = new BufferedWriter(new FileWriter(out));
 
         String line;
@@ -93,7 +167,13 @@ public class LogToPolarPoints {
         TrueWind refTW = null;
         VHW refBSP = null;
 
-        bw.write("[\n");
+        if (extensionToUse == SupportedExtension.JSON) {
+            bw.write("[\n");
+        } else if (extensionToUse == SupportedExtension.XML) {
+            bw.write("<polar-points>\n");
+        } else if (extensionToUse == SupportedExtension.CSV) {
+            bw.write("twa;tws;bsp\n");
+        }
 
         boolean keepReading = true;
         while (keepReading) {
@@ -141,9 +221,22 @@ public class LogToPolarPoints {
                                     maxTWA = Math.max(maxTWA, twa);
 
                                     if (bsp > 0 || !NO_ZERO_BSP) {
-                                        String outputData = String.format("{ \"twa\": %d, \"tws\": %f, \"bsp\": %f },\n", twa, tws, bsp);
+                                        plList.add(new PolarTriplet(bsp, twa, tws));
                                         outputRecords += 1;
-                                        bw.write(outputData);
+
+                                        if (extensionToUse == SupportedExtension.JSON) {
+                                            String outputData = String.format("{ \"twa\": %d, \"tws\": %f, \"bsp\": %f },\n", twa, tws, bsp);
+                                            bw.write(outputData);
+                                        } else if (extensionToUse == SupportedExtension.XML) {
+                                            String outputData = String.format("  <twa>%d</twa> <tws>%f</tws> <bsp>%f</bsp>\n", twa, tws, bsp);
+                                            bw.write(outputData);
+                                        } else if (extensionToUse == SupportedExtension.CSV) {
+                                            String outputData = String.format("%d; %f; %f\n", twa, tws, bsp);
+                                            bw.write(outputData);
+                                        } else {
+                                            String outputData = String.format("twa: %d, tws: %f, bsp: %f\n", twa, tws, bsp);
+                                            bw.write(outputData);
+                                        }
                                     }
                                 }
                                 if (refBSP != null && refTW != null) {
@@ -170,7 +263,15 @@ public class LogToPolarPoints {
                 }
             }
         }
-        bw.write("]\n");
+        if (extensionToUse == SupportedExtension.JSON) {
+            bw.write("]\n");
+        } else if (extensionToUse == SupportedExtension.XML) {
+            bw.write("</polar-points>\n");
+//        } else if (extensionToUse == SupportedExtension.CSV) {
+//            bw.write("bsp;twa;tws\n");
+        }
+
+
         bw.close();
 
         System.out.println("--- Summary ---");
@@ -184,6 +285,8 @@ public class LogToPolarPoints {
         System.out.printf("TWS in [%f, %f]\n", minTWS, maxTWS);
         System.out.printf("TWA in [%d, %d]\n", minTWA, maxTWA);
         System.out.println("---------------");
+
+        return plList;
     }
 
     public static void main(String... args) {
@@ -224,11 +327,21 @@ public class LogToPolarPoints {
         System.out.printf("- Will produce [%s]\n", outputFileName);
         // Now let's go.
         try {
+            List<PolarTriplet> plList = null;
             if (inputFileName != null) {
-                processFiles(inputFileName, outputFileName);
+                plList = processFiles(inputFileName, outputFileName);
             } else {
-                processFiles(inputZipFileName, pathInZip, outputFileName);
+                plList = processFiles(inputZipFileName, pathInZip, outputFileName);
             }
+            // Display result, graphically
+            try {
+                SwingFrame frame = new SwingFrame(plList, SwingFrame.DataOption.POLARS);
+                frame.setVisible(true);
+                frame.plot();
+            } catch (HeadlessException he) {
+                System.out.println("Headless Exception. Try in a graphical desktop environment to visualize the data.");
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

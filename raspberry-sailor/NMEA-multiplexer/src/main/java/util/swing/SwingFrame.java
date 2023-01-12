@@ -1,6 +1,7 @@
 package util.swing;
 
 import util.LogAnalyzer;
+import util.LogToPolarPoints;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,6 +33,12 @@ public class SwingFrame extends JFrame {
 	private SwingPanel swingPanel;
 
 	private List<LogAnalyzer.DatedPosition> positions = null;
+	private List<LogToPolarPoints.PolarTriplet> plList = null;
+
+	public enum DataOption {
+		POSITIONS,
+		POLARS
+	}
 
 	private JSlider fromSlider = null;
 	private JSlider toSlider = null;
@@ -39,12 +46,25 @@ public class SwingFrame extends JFrame {
 	private JCheckBox allAtOnce = null;
 	private JButton plotButton = null;
 
-	public SwingFrame(List<LogAnalyzer.DatedPosition> positions) {
-		this.positions = positions;
+	public SwingFrame(List<?> providedList) {
+		this(providedList, DataOption.POSITIONS);
+	}
+
+	public SwingFrame(List<?> dataList, DataOption dataOption) {
+		if (dataOption == DataOption.POSITIONS) {
+			this.positions = (List<LogAnalyzer.DatedPosition>)dataList;
+		}
+		if (dataOption == DataOption.POLARS) {
+			this.plList = (List<LogToPolarPoints.PolarTriplet>)dataList;
+		}
 		initComponents();
 		this.setSize(new Dimension(400, 500));
 		this.setPreferredSize(new Dimension(400, 500));
-		this.setTitle("Positions");
+		if (dataOption == DataOption.POSITIONS) {
+			this.setTitle("Positions");
+		} else {
+			this.setTitle("Polar Points");
+		}
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = this.getSize();
@@ -232,12 +252,17 @@ public class SwingFrame extends JFrame {
 	};
 
 	public void plot() {
-		plot(this.positions);
+		if (this.positions != null) {
+			plot(this.positions);
+		}
+		if (this.plList != null) {
+			plot(this.plList);
+		}
 	}
-	public void plot(List<LogAnalyzer.DatedPosition> pos) {
-		plot(pos, !allAtOnce.isSelected());
+	public void plot(List<?> ptl) {
+		plot(ptl, !allAtOnce.isSelected());
 	}
-	public void plot(List<LogAnalyzer.DatedPosition> pos, boolean progressing) {
+	public void plot(List<?> pos, boolean progressing) {
 		Consumer<Object> callback = null;
 		if (progressing) {
 			callback = plotCallback;

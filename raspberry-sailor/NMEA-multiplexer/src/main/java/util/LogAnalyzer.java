@@ -28,6 +28,10 @@ import static nmea.parser.StringParsers.GGA_ALT_IDX;
  * We look for RMC and GGA strings.
  *
  * Result displayed in a Swing JFrame.
+ * Expect 1 or 2 CLI parameters :
+ * - fileName.nmea
+ * or
+ * - fileName.zip pathInArchive.nmea
  */
 public class LogAnalyzer {
 
