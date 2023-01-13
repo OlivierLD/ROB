@@ -9,7 +9,7 @@ context:
   default.declination: 0
 channels:
   - type: file
-    filename: ./sample-data/2010-11-08.Nuku-Hiva-Tuamotu.nmea.zip
+    filename: ./sample-data/logged.data.zip
     zip: true
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     verbose: false
