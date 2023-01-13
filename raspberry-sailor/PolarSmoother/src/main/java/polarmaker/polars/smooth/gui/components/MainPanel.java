@@ -194,6 +194,9 @@ public class MainPanel
 							ex.printStackTrace();
 						}
 					}
+					// Logged Data
+					Vector<ThreeDPoint> loggedData = buildLoggedPointsVector();
+					threeDPanel.setLoggedPoints(loggedData);
 				} else if (selectedNode[i].getType() == PolarTreeNode.SECTION_TYPE) {
 					final PolarTreeNode theSection = selectedNode[i];
 					double[][] coeffDeg = null;
@@ -252,7 +255,7 @@ public class MainPanel
 		smoothPanel.repaint();
 	}
 
-	private static ThreeDPoint threeDFromBoatData(double bsp, double tws, int twa) {
+	private static ThreeDPoint threeDFromBoatData(double bsp, double tws, double twa) {
 		float x = (float) tws;
 		float y = (float) (bsp * Math.sin(Math.toRadians(twa)));
 		float z = (float) (bsp * Math.cos(Math.toRadians(twa)));
@@ -306,7 +309,9 @@ public class MainPanel
 					triplets.forEach(tpl -> {
 						double bsp = (Double) tpl.get("bsp");
 						double tws = (Double) tpl.get("tws");
-						int twa = (Integer) tpl.get("twa");
+						double twa = (Double) tpl.get("twa");
+
+						// TODO An option to put twa on 180 degrees ?
 
 						// TODO Something generic : logged triplet (tws, twa, bsp) -> 3D point.
 						if (false) {
@@ -320,8 +325,8 @@ public class MainPanel
 						}
 						ThreeDPoint tdp = threeDFromBoatData(bsp, tws, twa);
 						v.add(tdp);
-						tdp = new ThreeDPoint(tdp.getX(), -tdp.getY(), tdp.getZ());
-						v.add(tdp);
+//						tdp = new ThreeDPoint(tdp.getX(), -tdp.getY(), tdp.getZ());
+//						v.add(tdp);
 					});
 				} else {
 					System.out.println("Weird...");

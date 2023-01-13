@@ -46,6 +46,8 @@ public class SwingFrame extends JFrame {
 	private JCheckBox allAtOnce = null;
 	private JButton plotButton = null;
 
+	private boolean displayControls = true;
+
 	public SwingFrame(List<?> providedList) {
 		this(providedList, DataOption.POSITIONS);
 	}
@@ -53,9 +55,11 @@ public class SwingFrame extends JFrame {
 	public SwingFrame(List<?> dataList, DataOption dataOption) {
 		if (dataOption == DataOption.POSITIONS) {
 			this.positions = (List<LogAnalyzer.DatedPosition>)dataList;
+			displayControls = true;
 		}
 		if (dataOption == DataOption.POLARS) {
 			this.plList = (List<LogToPolarPoints.PolarTriplet>)dataList;
+			displayControls = false;
 		}
 		initComponents();
 		this.setSize(new Dimension(400, 500));
@@ -94,115 +98,118 @@ public class SwingFrame extends JFrame {
 			}
 		});
 		this.add(swingPanel, BorderLayout.CENTER);
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridBagLayout());
-//		bottomPanel.setBorder(new LineBorder(Color.RED, 1));
-		bottomPanel.setBorder(BorderFactory.createTitledBorder("Track Parameters"));
 
-		// Populate bottom panel, plotButton (zoom in and out, execute), sliders (from, to), etc
-		JLabel fromLabel = new JLabel("From");
-		fromSlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER, 0);
-		fromSlider.setEnabled(true);
-		fromSlider.addChangeListener(changeEvent -> {
+		if (displayControls) {
+			JPanel bottomPanel = new JPanel();
+			bottomPanel.setLayout(new GridBagLayout());
+//		bottomPanel.setBorder(new LineBorder(Color.RED, 1));
+			bottomPanel.setBorder(BorderFactory.createTitledBorder("Track Parameters"));
+
+			// Populate bottom panel, plotButton (zoom in and out, execute), sliders (from, to), etc
+			JLabel fromLabel = new JLabel("From");
+			fromSlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER, 0);
+			fromSlider.setEnabled(true);
+			fromSlider.addChangeListener(changeEvent -> {
 //			System.out.println("From listener" + changeEvent);
 //			fromSlider.setToolTipText(String.format("%d", fromSlider.getValue()));
+				setTooltipText(fromSlider);
+				manageSliders(FROM);
+			});
 			setTooltipText(fromSlider);
-			manageSliders(FROM);
-		});
-		setTooltipText(fromSlider);
 
-		JLabel toLabel = new JLabel("To");
-		toSlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER, MAX_SLIDER);
-		toSlider.setEnabled(true);
+			JLabel toLabel = new JLabel("To");
+			toSlider = new JSlider(JSlider.HORIZONTAL, 0, MAX_SLIDER, MAX_SLIDER);
+			toSlider.setEnabled(true);
 //		toSlider.setValue(1_000);
-		toSlider.addChangeListener(changeEvent -> {
+			toSlider.addChangeListener(changeEvent -> {
 //			System.out.println("To listener" + changeEvent);
 //			toSlider.setToolTipText(String.format("%d", toSlider.getValue()));
+				setTooltipText(toSlider);
+				manageSliders(TO);
+			});
 			setTooltipText(toSlider);
-			manageSliders(TO);
-		});
-		setTooltipText(toSlider);
 
-		bottomPanel.add(fromLabel, new GridBagConstraints(0,
-				0,
-				1,
-				1,
-				0.1,
-				0.0,
-				GridBagConstraints.EAST,
-				GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
-		bottomPanel.add(fromSlider, new GridBagConstraints(1,
-				0,
-				1,
-				1,
-				1.0,
-				0.0,
-				GridBagConstraints.EAST,
-				GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 0), 0, 0));
+			bottomPanel.add(fromLabel, new GridBagConstraints(0,
+					0,
+					1,
+					1,
+					0.1,
+					0.0,
+					GridBagConstraints.EAST,
+					GridBagConstraints.NONE,
+					new Insets(0, 0, 0, 0), 0, 0));
+			bottomPanel.add(fromSlider, new GridBagConstraints(1,
+					0,
+					1,
+					1,
+					1.0,
+					0.0,
+					GridBagConstraints.EAST,
+					GridBagConstraints.HORIZONTAL,
+					new Insets(0, 0, 0, 0), 0, 0));
 
-		bottomPanel.add(toLabel, new GridBagConstraints(0,
-				1,
-				1,
-				1,
-				0.1,
-				0.0,
-				GridBagConstraints.EAST,
-				GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
-		bottomPanel.add(toSlider, new GridBagConstraints(1,
-				1,
-				1,
-				1,
-				1.0,
-				0.0,
-				GridBagConstraints.EAST,
-				GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 0), 0, 0));
+			bottomPanel.add(toLabel, new GridBagConstraints(0,
+					1,
+					1,
+					1,
+					0.1,
+					0.0,
+					GridBagConstraints.EAST,
+					GridBagConstraints.NONE,
+					new Insets(0, 0, 0, 0), 0, 0));
+			bottomPanel.add(toSlider, new GridBagConstraints(1,
+					1,
+					1,
+					1,
+					1.0,
+					0.0,
+					GridBagConstraints.EAST,
+					GridBagConstraints.HORIZONTAL,
+					new Insets(0, 0, 0, 0), 0, 0));
 
-		allAtOnce = new JCheckBox("All at once");
-		allAtOnce.setSelected(true);
-		bottomPanel.add(allAtOnce, new GridBagConstraints(0,
-				2,
-				2,
-				1,
-				0.0,
-				0.0,
-				GridBagConstraints.EAST,
-				GridBagConstraints.HORIZONTAL,
-				new Insets(0, 0, 0, 0), 0, 0));
+			allAtOnce = new JCheckBox("All at once");
+			allAtOnce.setSelected(true);
+			bottomPanel.add(allAtOnce, new GridBagConstraints(0,
+					2,
+					2,
+					1,
+					0.0,
+					0.0,
+					GridBagConstraints.EAST,
+					GridBagConstraints.HORIZONTAL,
+					new Insets(0, 0, 0, 0), 0, 0));
 
 
-		plotButton = new JButton("Plot");
-		plotButton.addActionListener((actionEvent) -> {
+			plotButton = new JButton("Plot");
+			plotButton.addActionListener((actionEvent) -> {
 //			System.out.println("Click event:" + actionEvent);
-			List<LogAnalyzer.DatedPosition> toPlot = null;
-			if (positions != null) {
-				int indexFrom = (int)Math.floor((double)positions.size() * ((double)fromSlider.getValue() / (double)MAX_SLIDER));
-				indexFrom = (indexFrom >= positions.size()) ? indexFrom - 1 : indexFrom;
-				int indexTo = (int)Math.floor((double)positions.size() * ((double)toSlider.getValue() / (double)MAX_SLIDER));
-				indexTo = (indexTo >= positions.size()) ? indexTo - 1 : indexTo;
-				final int _from = indexFrom, _to = indexTo;
-				toPlot = IntStream.range(0, positions.size())
-						.filter(i -> (i >= _from && i <= _to))
-						.mapToObj(i -> positions.get(i))
-						.collect(Collectors.toList());
-				this.plot(toPlot, !allAtOnce.isSelected());
-			}
-		});
+				List<LogAnalyzer.DatedPosition> toPlot = null;
+				if (positions != null) {
+					int indexFrom = (int) Math.floor((double) positions.size() * ((double) fromSlider.getValue() / (double) MAX_SLIDER));
+					indexFrom = (indexFrom >= positions.size()) ? indexFrom - 1 : indexFrom;
+					int indexTo = (int) Math.floor((double) positions.size() * ((double) toSlider.getValue() / (double) MAX_SLIDER));
+					indexTo = (indexTo >= positions.size()) ? indexTo - 1 : indexTo;
+					final int _from = indexFrom, _to = indexTo;
+					toPlot = IntStream.range(0, positions.size())
+							.filter(i -> (i >= _from && i <= _to))
+							.mapToObj(i -> positions.get(i))
+							.collect(Collectors.toList());
+					this.plot(toPlot, !allAtOnce.isSelected());
+				}
+			});
 
-		bottomPanel.add(plotButton, new GridBagConstraints(0,
-				3,
-				2,
-				1,
-				0.0,
-				0.0,
-				GridBagConstraints.CENTER,
-				GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
+			bottomPanel.add(plotButton, new GridBagConstraints(0,
+					3,
+					2,
+					1,
+					0.0,
+					0.0,
+					GridBagConstraints.CENTER,
+					GridBagConstraints.NONE,
+					new Insets(0, 0, 0, 0), 0, 0));
 
-		this.add(bottomPanel, BorderLayout.SOUTH);
+			this.add(bottomPanel, BorderLayout.SOUTH);
+		}
 
 		this.pack();
 	}
@@ -260,7 +267,7 @@ public class SwingFrame extends JFrame {
 		}
 	}
 	public void plot(List<?> ptl) {
-		plot(ptl, !allAtOnce.isSelected());
+		plot(ptl, (allAtOnce != null && !allAtOnce.isSelected()));
 	}
 	public void plot(List<?> pos, boolean progressing) {
 		Consumer<Object> callback = null;

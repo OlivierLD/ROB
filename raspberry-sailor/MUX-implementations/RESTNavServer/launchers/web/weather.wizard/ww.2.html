@@ -547,10 +547,11 @@
         ];
     
         /*
-            * Reload an existing composite.
-            */
+         * Reload an existing composite.
+         */
         let reload = (key, compositeData) => {
             console.log("Reloading", key, compositeData);
+            composeCompositeInfo(key);
             let originalComposite = findCompositeByKey(key);
 
             let composite = JSON.parse(JSON.stringify(originalComposite));  // This is a deep copy, not to modify the catalog
@@ -1221,11 +1222,16 @@
                 }
             }
         }
-    
+
         let displayCompositeInfo = () => {
             // console.log('Displaying');
-            let infoDiv = document.getElementById('composite-info');
             let compositeId = document.getElementById('composites').value;
+            composeCompositeInfo(compositeId);
+        }
+
+        let composeCompositeInfo = (compositeId) => {
+            // console.log('Displaying');
+            let infoDiv = document.getElementById('composite-info');
             let content = "<h1>Not found</h1>";
             for (let i = 0; i < compositeCatalog.length; i++) {
                 if (compositeCatalog[i].key === compositeId) {
@@ -1319,7 +1325,7 @@
         
 </head>
 <body style="background-color: rgba(47, 55, 61, 0.95); background-image: none;">
-<h2>Weather Wizard. Pure HTML5/ES6. Operations (WiP)<span id="time-to-next"></span></h2>
+<h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP)<span id="time-to-next"></span></h2>
 <div>
     <table width="100%">
         <tr>
@@ -1339,12 +1345,17 @@
                     <br/>
                     <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
                     <hr/>
-                    <select id="composites" onchange="updateGRIBRequest(this);" onmouseover="displayCompositeInfo();"
-                            onmouseleave="hideCompositeInfo();"></select> <!-- TODO Composite Info on mouse over -->
+                    <select id="composites" 
+                            onchange="updateGRIBRequest(this); displayCompositeInfo();" 
+                            onmouseover="displayCompositeInfo();"></select> 
+                      <!--  onmouseleave="hideCompositeInfo();"></select --> 
                     <br/>                            
                     <button id="load-composites" onclick="loadComposite();">Load documents</button>
 
                     <input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours
+
+                    <div id="composite-info"></div>
+
                     <hr/>
                     <input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
                     <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage
@@ -1362,11 +1373,11 @@
                     <button onclick="changeCanvasSize(0.9);">-</button>
                     <button onclick="changeCanvasSize(1.1);">+</button>
                     <hr/>
-                    <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.5);">
+                    <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
                         <table>
                             <tr>
-                                <th>Date</th>
-                                <th>Type</th>
+                                <th>GRIB Date</th>
+                                <th>Data Type</th>
                             </tr>
                             <tr>
                                 <td>
@@ -1383,7 +1394,7 @@
                             </tr>
                         </table>
                     </div>
-                    <div id="dyn-faxes" class="table-style">
+                    <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
                         <!--span>Show faxes checkbox (TODO)</span-->
                         <table id="fax-table" class="bordered">
                             <tr>
@@ -1402,9 +1413,7 @@
                         <div id="max-waves"></div>
                         <div id="max-prate"></div>
                     </div>
-                    <!-- TODO Analog displays for the values -->
                     <div id="mouse-data" class="table-style" style="color: black;"></div>
-                    <div id="composite-info"></div>
                 </div>
             </td>
         </tr>

@@ -159,8 +159,8 @@ public class LogToPolarPoints {
 
         double minBSP = Double.MAX_VALUE;
         double maxBSP = 0;
-        int minTWA = 180;
-        int maxTWA = 0;
+        double minTWA = 180;
+        double maxTWA = 0;
         double minTWS = Double.MAX_VALUE;
         double maxTWS = 0;
 
@@ -207,8 +207,8 @@ public class LogToPolarPoints {
                                 if (refBSP != null && refTW != null) {
                                     // Write here
                                     // System.out.printf("TW: %s, BSP: %f\n", refTW, refBSP.getBsp());
-                                    int twa = refTW.getAngle();
-                                    if (twa > 180) {
+                                    double twa = refTW.getAngle();
+                                    if (false && twa > 180) {  // Leave it on 360
                                         twa = 360 - twa;
                                     }
                                     final double tws = refTW.getSpeed();
@@ -225,16 +225,16 @@ public class LogToPolarPoints {
                                         outputRecords += 1;
 
                                         if (extensionToUse == SupportedExtension.JSON) {
-                                            String outputData = String.format("%s{ \"twa\": %d, \"tws\": %f, \"bsp\": %f }\n", (outputRecords > 1 ? "," : ""), twa, tws, bsp);
+                                            String outputData = String.format("%s{ \"twa\": %f, \"tws\": %f, \"bsp\": %f }\n", (outputRecords > 1 ? "," : ""), twa, tws, bsp);
                                             bw.write(outputData);
                                         } else if (extensionToUse == SupportedExtension.XML) {
-                                            String outputData = String.format("  <twa>%d</twa> <tws>%f</tws> <bsp>%f</bsp>\n", twa, tws, bsp);
+                                            String outputData = String.format("  <twa>%f</twa> <tws>%f</tws> <bsp>%f</bsp>\n", twa, tws, bsp);
                                             bw.write(outputData);
                                         } else if (extensionToUse == SupportedExtension.CSV) {
-                                            String outputData = String.format("%d; %f; %f\n", twa, tws, bsp);
+                                            String outputData = String.format("%f; %f; %f\n", twa, tws, bsp);
                                             bw.write(outputData);
                                         } else {
-                                            String outputData = String.format("twa: %d, tws: %f, bsp: %f\n", twa, tws, bsp);
+                                            String outputData = String.format("twa: %f, tws: %f, bsp: %f\n", twa, tws, bsp);
                                             bw.write(outputData);
                                         }
                                     }
@@ -283,7 +283,7 @@ public class LogToPolarPoints {
                 NumberFormat.getInstance().format(outputRecords));
         System.out.printf("BSP in [%f, %f]\n", minBSP, maxBSP);
         System.out.printf("TWS in [%f, %f]\n", minTWS, maxTWS);
-        System.out.printf("TWA in [%d, %d]\n", minTWA, maxTWA);
+        System.out.printf("TWA in [%f, %f]\n", minTWA, maxTWA);
         System.out.println("---------------");
 
         return plList;

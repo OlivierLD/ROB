@@ -5,6 +5,7 @@ import util.LogAnalyzer;
 import util.LogToPolarPoints;
 
 import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +19,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+// https://mathbits.com/MathBits/Java/Graphics/GraphingMethods.htm
+
 public class SwingPanel
-		extends javax.swing.JPanel {
+		extends JPanel {
 	private Color pointColor = Color.red;
 	private List<LogAnalyzer.DatedPosition> positions = null;
 	private List<LogToPolarPoints.PolarTriplet> ptList = null;
@@ -153,16 +156,16 @@ public class SwingPanel
 			gr.setColor(pointColor);
 
 			final double minTWA = 0;
-			final double maxTWA = 180;
+			final double maxTWA = 360;
 			final double minBSP = 0;
 			final double maxBSP = ptList.stream().mapToDouble(data -> data.getBsp()).max().orElseThrow(NoSuchElementException::new);
 
-			double widthRatio = (double) this.getWidth() / ((maxBSP) * 1.1);
+			double widthRatio = (double) this.getWidth() / ((2 * maxBSP) * 1.1);
 			double heightRatio = (double) this.getHeight() / ((2 * maxBSP) * 1.1);
 			final double ratio = Math.min(widthRatio, heightRatio);
 
 			Function<Double, Integer> xToCanvas = x -> {
-				int stepOne = /* (this.getWidth() / 2) + */ (int) Math.round((x - minBSP) * (ratio * 1.1));
+				int stepOne = (this.getWidth() / 2) + (int) Math.round((x - minBSP) * (ratio * 1.1));
 				int stepTwo = stepOne; //  - (this.getWidth() / 2);
 				return stepTwo;
 			};
@@ -183,8 +186,9 @@ public class SwingPanel
 			for (int i=1; i<maxBSP; i++) {
 				int radius = (int)Math.round(i * (ratio * 1.1));
 				// https://mathbits.com/MathBits/Java/Graphics/GraphingMethods.htm
-				gr.drawArc(centerX - radius, centerY - radius, 2 * radius, 2 * radius, -90, 180);
+				gr.drawArc(centerX - radius, centerY - radius, 2 * radius, 2 * radius, -90, 360);
 			}
+			gr.drawLine(centerX, centerY, centerX, 0); // Axis
 
 			// Plot Points
 			gr.setColor(pointColor);
