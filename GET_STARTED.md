@@ -1,6 +1,9 @@
 # Off we go!
 ### Aka "Get Started" for dummies
 
+This document should help anyone who's not familiar with programming, build, and such technologies.
+If that is not the case, please do let me know, log a bug or a request.
+
 # Install required software, clone the repo, build and run a first module.
 
 ## You will need

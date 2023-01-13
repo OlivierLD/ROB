@@ -103,6 +103,7 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 - <https://celnav.de/> (my favorite)
 - <http://www.tecepe.com.br/nav/>
 - <http://navastro.free.fr/> (in French)
+- Get Started: [For dummies](./GET_STARTED.md)
 
 ---
 More to come...
