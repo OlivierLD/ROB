@@ -190,9 +190,10 @@ public class GRIBBulk {
 	// For standalone tests
 	public static void main(String... args) throws Exception {
 		GRIBBulk gb = new GRIBBulk();
-//	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
-//	String gribFileName = "GRIB_2009_02_25_Sample.grb";
-		String gribFileName = "GRIB_2017_10_16_07_31_47_PDT.grb";
+	//	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
+	//	String gribFileName = "GRIB_2009_02_25_Sample.grb";
+	//  String gribFileName = "GRIB_2017_10_16_07_31_47_PDT.grb";
+		String gribFileName =  "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/samples/_cache_weather-cache_EastAtlantic.wind.7days.grb";
 		if (args.length > 0) {
 			gribFileName = args[0];
 		}

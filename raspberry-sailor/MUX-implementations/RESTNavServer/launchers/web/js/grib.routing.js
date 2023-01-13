@@ -129,7 +129,7 @@ let requestGRIB = function(gribRequest, cb) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get the GBRIB..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("Failed to get the GRIB..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 
 };
