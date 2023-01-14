@@ -103,6 +103,17 @@ When building on small board, do not hesitate to exclude some demanding tasks, l
 $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
 
+## Highlights
+- [Read NMEA data, log, forward, process](./raspberry-sailor/NMEA-multiplexer/README.md)
+- [Build your own deviation curve](./raspberry-sailor/Deviation-Tool/README.md)
+- [Build your own polars](./raspberry-sailor/PolarSmoother/README.md) (in progress)
+- [Read and render GRIB files](./raspberry-sailor/RESTRouting/README.md) (in progress)
+- Celestial Almanacs publication
+- Tide Tables publication
+- Implementation and customization examples:
+  - [Basic](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/README.md)
+  - [RESTNavServer](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), with many examples
+
 ## Misc links to look at...
 - <https://saillogger.com/>
 - <https://github.com/itemir/rpi_boat_utils>
@@ -113,5 +124,7 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 - Get Started: [For dummies](./GET_STARTED.md)
 
 ---
-More to come...
+And more to come...
+
+---
 
