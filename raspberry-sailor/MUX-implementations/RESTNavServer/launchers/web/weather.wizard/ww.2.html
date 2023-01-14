@@ -275,6 +275,8 @@
             let str = "Mouse X: " + obj.x + ", Y:" + obj.y;
             str += ("\nL: " + decToSex(obj.lat, "NS"));
             str += ("\nG: " + decToSex(obj.lng, "EW"));
+
+            document.getElementById('mouse-pos').innerText = `${decToSex(obj.lat, "NS")} / ${decToSex(obj.lng, "EW")}`;
     
             if (gribData !== undefined) {
                 let date = document.getElementById("grib-dates").value;
@@ -1140,7 +1142,7 @@
             }
             // Enable GRIB widgets
             document.getElementById("grib-widgets").style.display = 'block';
-            document.getElementById("grib-web-comps").style.display = 'block';
+            document.getElementById("grib-web-comps").style.display = 'inline-block';
 
             // Create the UI widgets to deal with the GRIB
             // 1. Dates
@@ -1424,12 +1426,12 @@
         </tr>
         <tr>
             <!-- Web Components for the GRIB Here -->
-            <td title="GRIB Data at the mouse" style="border: 1px solid orange; border-radius: 5px;">
+            <td title="GRIB Data at the mouse" style="height: 0; border: 1px solid orange; border-radius: 5px;">
                 <div id="grib-web-comps" style="display: none;">
                     <div style="display: grid;
-                                grid-template-columns: auto auto auto auto aujto;
+                                grid-template-columns: auto auto auto auto auto;
                                 grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
-                        <span style="grid-area: top; padding-left: 5px;">GRIB Data, at the mouse, on the chart</span>                            
+                        <span style="grid-area: top; padding-left: 5px;">GRIB Data, at the mouse, on the chart <span id="mouse-pos"></span></span>                            
                         <!-- True Wind Speed in knots<br/ -->
                         <analog-display class="analogdisplay-monochrome-orange"
                                         style="grid-area: middle-01;"
