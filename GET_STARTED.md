@@ -9,6 +9,8 @@ From this page, you will learn how to install the required software to build and
 There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
 at runtime.
 
+> _**Note**_: This is written for RaspiOS, Debian, Ubuntu, and such clones.
+
 # Install required software, clone the repo, build and run a first module.
 
 ## You will need
