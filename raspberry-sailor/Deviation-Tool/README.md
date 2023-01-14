@@ -110,6 +110,8 @@ Those data are raw NMEA Data, that can be logged using the `NMEA-multiplexer`.
 This sample data file is not ideal, the boat's path should be as round as possible, to have data on 360&deg;.
 The circle (the path) should be as big as possible, to allow the COG to be in sync with the HDG.
 
+> _**Caution**_: On some boats, running the engine can impact the compass' deviation...
+
 But again, this is just an example, showing how to use the tool this document is about.
 
 #### This gives the Compass' Deviation for any <u>Compass Heading</u>.
