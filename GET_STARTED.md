@@ -4,6 +4,11 @@
 This document should help anyone who's not familiar with programming, build, and such technologies.
 If that is not the case, please do let me know, log a bug or a request.
 
+From this page, you will learn how to install the required software to build and run the whole stuff, from the git repo. 
+
+There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
+at runtime.
+
 # Install required software, clone the repo, build and run a first module.
 
 ## You will need
@@ -104,9 +109,89 @@ Stop it with a `[Ctrl C]`.
 
 If you reached this step without error messages, you are in good shape!
 
+You will notice a bunch of other scripts (`log.analyzer.sh`, `log.merge.sh`, `log.shrinker.sh`, `log.to.csv.sh`, 
+`log.to.gpx.sh`, `log.to.json.sh`, `log.to.kml.sh`, `log.to.polars.sh`, `mk.link.sh`, ...). We'll come back to them later.
+
 # Other modules
 ## `RESTNavServer`
+This `RESTNavServer` module gather a bunch of examples of what can be done from the NMEA-multiplexer and related 
+modules, from the smallest implementation showing how to log data when hiking or kayaking (but with a Web UI!), to a bigger
+one, with admin features, celestial almanacs and tide tables publication, GRIB and faxes management, etc.
+
+### Build it
+From the repo's root:
+```
+$ cd ~/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer
+```
+do a 
+```
+$ ../../../gradlew shadowJar
+
+> Configure project :
+>> From task compileJava (in rob), using java version 11 
+>> From task compileTestJava (in rob), using java version 11 
+
+> Configure project :astro-computer:AstroComputer
+>> From task compileJava (in AstroComputer), using java version 11 
+>> From task compileTestJava (in AstroComputer), using java version 11 
+
+> Configure project :astro-computer:AstroUtilities
+>> From task compileJava (in AstroUtilities), using java version 11 
+>> From task compileTestJava (in AstroUtilities), using java version 11 
+
 . . .
+
+BUILD SUCCESSFUL in 8s
+33 actionable tasks: 1 executed, 32 up-to-date
+```
+If no error message show up, you can proceed to the next step.
+
+### Run it
+There are a lot of examples in this module. To facilitate the access to those example, there is a demo script, `demoLauncher.sh`,
+to be - like many others - started from a terminal. This script offers the possibility to start a browser
+when appropriate. To use this feature, you obviously need to be in a Graphical Desktop Environment; you will then start
+a the `demoLauncher.sh` from a terminal open in the desktop.
+
+#### Get to it, fast
+After doing the build as explained above, do a
+```
+$ cd launchers
+```
+and then, start the server (with a specific config), and open a browser:
+```
+$ ./demoLauncher.sh --option:1 --nohup:N --browser:Y
+```
+This will open the browser with a URL like <http://localhost:9999/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n>, with arbitrary position, 
+but using the system current time.  
+
+![Console](./images/01.console.png)
+
+Now, try going to <http://localhost:9999/web/index.html>. You would see a page with a hamburger (&#9776;) at the top left, from which you can access to a menu.
+
+| Menu collapsed | Menu opened |
+|:----------------------------------:|:-----------------------------:|
+| ![Hamburger](./images/01.menu.png) | ![Menu](./images/02.menu.png) |
+
+To try:
+- In the Weather Wizard section, try "2 - Operations" (this requires an Internet connection, for now)
+![Weather Wizard](./images/01.ww.png)
+  - As per the request definition (the drop-down list at the top left part, saying "North Atlantic, current analysis (fine, 2-day GRIB)),
+    this shows a GRIB and 4 faxes on the North Atlantic.
+  - The orange display show the GRIB data at the position of the mouse on the chart,
+    True Wind Speed and Direction, Air Temperature, Atmospheric Pressure, Precipitation Rate.
+  - GRIB and faxes can be shown or hidden at will, by using checkboxes on the right pane.
+- Various NMEA Consoles
+  - This is a bunch of console examples, that can be displayed on several kinds of devices (laptop, tablets, cell-phone, smartwatches) 
+- Tides / Select Tide Station
+  ![Tides Port-Tudy](./images/01.tides.png)
+- Tides / Publish tide almanacs
+
+#### Explore the menu
+Just type 
+```
+$ ./demoLauncher.sh
+```
+... and see for yourself !
 
 # Customize
 . . .

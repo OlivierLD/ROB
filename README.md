@@ -8,7 +8,7 @@ Java and Python(3).
 
 ## Preamble
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access.
-Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can be done offline.  
+Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
 Routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
 
 
@@ -59,8 +59,10 @@ TCP is cool enough to be language agnostic.
 And on top of that, several parts of the code deserved some cleanup, and this is also an opportunity to minimize
 and consolidate the number of dependencies to external libraries. For example, for the Java-to-JSON part, only Jackson is now used.
 
-The web pages and scripts _**do not rely on any framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
-It's using vanilla ES6 features, like Promises.
+The web pages and scripts _**do not rely on any external framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
+It's using vanilla ES6 features, like Promises. <!-- https://kinsta.com/blog/javascript-libraries/ -->
+> Note: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) are great tools. The goal here is to minimize the dependencies,
+> as well as the final volume of the code.
 
 ## How the repo is organized
 At the root, we have some generic building blocks, like
@@ -88,7 +90,7 @@ Many languages can take care of back-end computing...
 Front-end UI is more tricky. Swing is a Java option, Python has other possibilities, same for C..., but they're all different.  
 _**So**_, to make everyone happy, we will here do all the back-end computing in whatever language you want, and make it REST-accessible, with - when required - a JSON payload.  
 A web-enabled REST client (HTML5, ES6, CSS3) will be able to take care of displaying those data; all you need is a (recent) browser.
-No need to deal with Android, iOS, Windows..., the goal here being to simplify the maintenance and portability.
+No need to deal with Android, iOS, Windows..., **_the goal here being to simplify the data access, maintenance and portability_**.
 
 ## Misc notes
 When building on small board, do not hesitate to exclude some demanding tasks, like
