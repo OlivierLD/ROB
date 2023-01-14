@@ -92,6 +92,11 @@ _**So**_, to make everyone happy, we will here do all the back-end computing in 
 A web-enabled REST client (HTML5, ES6, CSS3) will be able to take care of displaying those data; all you need is a (recent) browser.
 No need to deal with Android, iOS, Windows..., **_the goal here being to simplify the data access, maintenance and portability_**.
 
+## Build Techniques
+Languages used here are Java, and in some cases Python. The Web UI is done in pure HTML5/ES6/CSS3.
+The build is done using [`gradle`](https://gradle.org/).  
+If you're not familiar with those tools and techniques, check out the [GET_STARTED](./GET_STARTED.md) page.
+
 ## Misc notes
 When building on small board, do not hesitate to exclude some demanding tasks, like
 ```

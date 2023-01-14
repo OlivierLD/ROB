@@ -56,7 +56,7 @@ $ sudo apt-get install librxtx-java
 > _**Note**_: To install the software above, you will need an Internet connection.
 
 ## Clone the git repo
-From a directory of your choice, like a directory created for your git repositories, named below `repos`, created under youyr home directory by the following command:
+From a directory of your choice, like a directory created for your git repositories, named below `repos`, created under your home directory by the following command:
 ```
 $ cd
 $ mkdir repos
@@ -66,7 +66,7 @@ then
 $ cd ~/repos
 $ git clone https://github.com/OlivierLD/ROB.git
 ```
-This will clone the repo (branch `master`) in to a directory named `ROB`.
+This will clone the repo (branch `master`) into a directory named `ROB`.
 
 > _**Note**_: Now your repository is cloned, at any time, to refresh it with its last modifications,
 > from any folder under the root (`ROB` in this case), just do a
@@ -79,7 +79,7 @@ This will clone the repo (branch `master`) in to a directory named `ROB`.
 
 ## Build the `NMEA-multiplexer` module
 This step will validate all the required nuts and bolts.  
-It requires an Internet connection, as it will need to pull some dependencies fromn somne `maven` repos.
+It requires an Internet connection, as it will need to pull some dependencies from some `maven` repos.
 
 If `gradle` is not on your machine yet, it will be downloaded (from the Internet) and installed (this happens only once).  
 From your home directory, do a 
@@ -147,7 +147,7 @@ BUILD SUCCESSFUL in 8s
 If no error message show up, you can proceed to the next step.
 
 ### Run it
-There are a lot of examples in this module. To facilitate the access to those example, there is a demo script, `demoLauncher.sh`,
+There are a lot of examples in this module. To facilitate the access to those examples, there is a demo script, `demoLauncher.sh`,
 to be - like many others - started from a terminal. This script offers the possibility to start a browser
 when appropriate. To use this feature, you obviously need to be in a Graphical Desktop Environment; you will then start
 a the `demoLauncher.sh` from a terminal open in the desktop.
@@ -157,7 +157,7 @@ After doing the build as explained above, do a
 ```
 $ cd launchers
 ```
-and then, start the server (with a specific config), and open a browser:
+and then, try the following command, to start the server (with a specific config), and open a browser:
 ```
 $ ./demoLauncher.sh --option:1 --nohup:N --browser:Y
 ```
