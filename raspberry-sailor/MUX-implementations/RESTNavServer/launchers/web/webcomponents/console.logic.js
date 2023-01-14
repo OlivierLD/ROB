@@ -233,7 +233,9 @@ function setRawNMEA(sentence) {
 		}
 		let content = '<pre>';
 		storedHistory.forEach(str => {
-			content += (str.trim() + '\n');
+			if (str) {
+				content += (str.trim() + '\n');
+			}
 		});
 		content += '</pre>';
 
@@ -453,9 +455,91 @@ function setISSData(data) {
 	issData = data;
 }
 
+let extraDrawingWorldMap = (wm, context, hdg) => {
+
+	// https://www.w3schools.com/tags/canvas_arc.asp
+
+	let width = wm.width;
+	let height = wm.height;
+	let radius = (height / 2) * 0.9;
+
+	context.beginPath();
+
+	// External Compass Circle
+	context.arc(width / 2, height / 2, radius, 0, 2 * Math.PI, false);
+	context.lineWidth = 3;
+
+	context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Circle
+	context.stroke();
+	context.closePath();
+
+	let numberTicks = 30;
+	let majorTicks  = 10;
+	let minorTicks  =  1;
+
+	context.beginPath();
+	for (let i = 0; i < 360; i += majorTicks) {
+		let heading = i - hdg;
+		let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
+		let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
+		let xTo = (width / 2) - ((radius * 0.85) * Math.cos(2 * Math.PI * (heading / 360)));
+		let yTo = (height / 2) - ((radius * 0.85) * Math.sin(2 * Math.PI * (heading / 360)));
+		context.moveTo(xFrom, yFrom);
+		context.lineTo(xTo, yTo);
+	}
+	context.lineWidth = 3;
+	context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Major ticks
+	context.stroke();
+	context.closePath();
+
+	// Minor Ticks
+	if (minorTicks > 0) {
+		context.beginPath();
+		for (let i = 0; i <= 360; i += minorTicks) {
+			let heading = i - hdg;
+			let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
+			let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
+			let xTo = (width / 2) - ((radius * 0.90) * Math.cos(2 * Math.PI * (heading / 360)));
+			let yTo = (height / 2) - ((radius * 0.90) * Math.sin(2 * Math.PI * (heading / 360)));
+			context.moveTo(xFrom, yFrom);
+			context.lineTo(xTo, yTo);
+		}
+		context.lineWidth = 1;
+		context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Minor ticks
+		context.stroke();
+		context.closePath();
+	}
+	// Numbers
+	let digitColor = 'rgba(0, 255, 255, 0.5)'; // Numbers
+	context.beginPath();
+	let scale = 1;
+	for (let i = 0; i < 360; i += numberTicks) {
+		let heading = i - hdg;
+		context.save();
+		context.translate(width / 2, (height / 2));
+		context.rotate((2 * Math.PI * (heading / 360)));
+		context.font = "bold " + Math.round(scale * 15) + "px Arial"; // Like "bold 15px Arial"
+		context.fillStyle = (i === 0) ? 'cyan' : digitColor;
+		let str = i.toString();
+		let len = context.measureText(str).width;
+		context.fillText(str, -len / 2, (-(radius * .8) + 10));
+		context.lineWidth = 1;
+		context.strokeStyle = 'rgba(0, 255, 255, 0.5)';           // Numbers
+		context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+		context.restore();
+	}
+	context.closePath();
+};
+
 // AFTER callback on WorldMap (in Globe mode)
 function callAfter(id) {
 	document.getElementById(id).setDoAfter((worldMap, context) => {
+
+		// Add the Heading circle around the globe
+		if (typeof(global_COG) !== 'undefined') { // It is defined. Draw the compass circle.
+			extraDrawingWorldMap(worldMap, context, global_COG);
+		}
+
 		if (Object.keys(worldMap.userPosition).length > 0) {
 			let userPos = worldMap.getPanelPoint(worldMap.userPosition.latitude, worldMap.userPosition.longitude);
 			/*

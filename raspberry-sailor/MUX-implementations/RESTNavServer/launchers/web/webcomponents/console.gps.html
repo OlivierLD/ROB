@@ -55,6 +55,8 @@
 
         console.log('Start!');
 
+        let global_COG = 0;  // For the drawAfter on the globe.
+
         // For this Console.
         function lpad(str, len, pad) {
             let s = str;
@@ -323,6 +325,8 @@
         });
         events.subscribe(events.topicNames.COG, (val) => {
             cog = val;
+            global_COG = val;
+            
             setData('compass-rose-01', val);
             setData('compass-01', val);
             // setData('compass-display-01', val);
@@ -1288,7 +1292,7 @@
          }
     </style>
 
-    <!-- All logic in the script below -->
+    <!-- !! All logic in the script below !!, including the window.onload -->
     <script type="text/javascript" src="./console.logic.js"></script>
 </head>
 <body>

@@ -168,6 +168,8 @@ but using the system current time.
 
 ![Console](./images/01.console.png)
 
+> _**Note**_: to kill the server, use the script `./killns.sh`
+
 Now, try going to <http://localhost:9999/web/index.html>. You would see a page with a hamburger (&#9776;) at the top left, from which you can access to a menu.
 
 | Menu collapsed | Menu opened |
@@ -194,6 +196,10 @@ Just type
 $ ./demoLauncher.sh
 ```
 ... and see for yourself !
+
+> _**Note**_: to kill the server, use the script `./killns.sh`, or
+> use the `K` option in the `demoLauncher.sh`.
+
 
 # Customize
 . . .

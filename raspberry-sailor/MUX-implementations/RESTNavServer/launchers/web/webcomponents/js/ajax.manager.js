@@ -9,7 +9,9 @@ function initAjax() {
     let interval = setInterval(() => {
         fetch();
         // console.log(`LoadSunData, gpstime: ${gpsTime}, pos: ${lastKnownPos}`);
-        loadSunData({ position: lastKnownPos, utcdate: gpsTime});
+        if (lastKnownPos && gpsTime) {
+            loadSunData({ position: lastKnownPos, utcdate: gpsTime});
+        }
     }, 1000);
 
     // Example:
