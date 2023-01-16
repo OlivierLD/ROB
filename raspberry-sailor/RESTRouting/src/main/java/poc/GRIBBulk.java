@@ -18,7 +18,9 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -111,6 +113,7 @@ public class GRIBBulk {
 					if (subMap == null) {
 						subMap = new HashMap<>();
 					}
+					// TODO Get the coordinates for min and max values.
 					subMap.put(new GribType(type, description, unit, grbds.getMinValue(), grbds.getMaxValue()), data);
 					gribDataMap.put(gDate, subMap);
 				} catch (NoValidGribException e) {
@@ -197,8 +200,13 @@ public class GRIBBulk {
 		if (args.length > 0) {
 			gribFileName = args[0];
 		}
+		// Option 1
 		URL gribURL = new File(gribFileName).toURI().toURL();
 		GribFile gf = new GribFile(gribURL.openStream());
+		// Option 2 - Works the same.
+//		FileInputStream fis = new FileInputStream(gribFileName);
+//		GribFile gf = new GribFile(fis);
+
 		gb.showBulk(Thread.currentThread(), gf);
 		Thread me = Thread.currentThread();
 		synchronized (me) {

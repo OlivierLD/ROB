@@ -182,6 +182,16 @@ def build_HDG(hdm: float) -> str:
     return "$" + sentence
 
 
+def build_MSG(mess: str) -> str:
+    sentence: str = f"{prefixes.DEVICE_PREFIX}TXT,{mess}"
+    cs: int = checksum.calculate_check_sum(sentence)
+    str_cs: str = f"{cs:02X}"  # Should be 2 character long, in upper case.
+    while len(str_cs) < 2:
+        str_cs = '0' + str_cs
+    sentence += ("*" + str_cs.upper())
+    return "$" + sentence
+
+
 # This is for tests
 if __name__ == '__main__':
     print(f"Generated ZDA: {build_ZDA()}")

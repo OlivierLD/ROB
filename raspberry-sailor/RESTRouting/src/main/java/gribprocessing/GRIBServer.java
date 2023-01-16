@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * A standalone main GRIBServer, with ONLY the ones implemented in RESTImplementation
+ * Start this server, and do a 'curl -X GET http://localhost:9999/grib/oplist
  */
 public class GRIBServer {
 

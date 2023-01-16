@@ -699,6 +699,7 @@
                         htmlCode += ("<ul id='" + year + "-" + month + "-" + day + "' style='display: none; padding-left: 10px;'>");
                         for (let i = 0; i < compositeList.length; i++) {
                             let comp = compositeList[i];
+                            // onclick='reload(...)'
                             htmlCode += ("<li type='disc'><a class='compositeNode' onclick='reload(\"" + getKeyFromName(comp.name) + "\", " + JSON.stringify(comp.compositeElements) + ");'>" + readableName(comp.name) + "</a></li>"); // The leaf!
                         }
                         htmlCode += "</ul>";
@@ -1188,7 +1189,7 @@
             redraw();
         };
     
-        let findMinMax = (gribData, idx) => { // TODO Call this when GRIB date changes
+        let findMinMax = (gribData, idx) => { // Also call this when GRIB date changes
             let mess = gribData ? `${gribData.length} date(s), from ${gribData[0].gribDate.formattedUTCDate} to ${gribData[gribData.length - 1].gribDate.formattedUTCDate}` : "missing data";
             messageManager(`GRIB data received on client (${mess}), finding min and max for index ${idx}`);
             // console.log("Display min and max for index", idx);
@@ -1223,13 +1224,13 @@
                     }
                 }
             }
-        }
+        };
 
         let displayCompositeInfo = () => {
             // console.log('Displaying');
             let compositeId = document.getElementById('composites').value;
             composeCompositeInfo(compositeId);
-        }
+        };
 
         let composeCompositeInfo = (compositeId) => {
             // console.log('Displaying');
@@ -1275,7 +1276,7 @@
             }
             worldMap.setAfterDrawing(renderGRIBData); // That is the callback
     
-            requestGRIB(jsonRequest, plotGrib);  // TODO Enable GRIB widgets if successful
+            requestGRIB(jsonRequest, plotGrib);  // Enable GRIB widgets if successful
         };
     
         let renderGRIB = () => {

@@ -24,7 +24,7 @@ import board
 from datetime import datetime, timezone
 import logging
 from logging import info
-import NMEABuilder   # local script
+import NMEABuilder  # local script
 from typing import List
 import busio
 # import math, yaml ?
@@ -37,7 +37,7 @@ keep_listening: bool = True
 sensor: adafruit_bme280.Adafruit_BME280_I2C
 
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
-PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
+PORT: int = 7001  # Port to listen on (non-privileged ports are > 1023)
 verbose: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
@@ -59,7 +59,7 @@ def interrupt(sig, frame):
     print("Server Exiting.")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
-    sys.exit()   # DTC
+    sys.exit()  # DTC
 
 
 nb_clients: int = 0
@@ -100,7 +100,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     print("New client listener")
     while keep_listening:
         try:
-            data: bytes = connection.recv(1024)   # If receive from client is needed...
+            data: bytes = connection.recv(1024)  # If receive from client is needed...
             if len(data) > 0:
                 if verbose:
                     print(f"Received from client: {data}")
@@ -144,36 +144,43 @@ def produce_nmea(connection: socket.socket, address: tuple,
     print(f"Connected by client {connection}")
     while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        temperature: float = sensor.temperature     # Celsius
-        humidity: float = sensor.relative_humidity  # %
-        pressure: float = sensor.pressure           # hPa
+        if sensor is not None:
+            temperature: float = sensor.temperature  # Celsius
+            humidity: float = sensor.relative_humidity  # %
+            pressure: float = sensor.pressure  # hPa
 
-        nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
-        nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEA_EOS
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": humidity, "type": "HUMIDITY" },
-                                              {"value": temperature, "type": "TEMPERATURE"},
-                                              {"value": pressure * 100, "type": "PRESSURE_P"},
-                                              {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEA_EOS
+            nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
+            nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEA_EOS
+            nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
+                                                  {"value": temperature, "type": "TEMPERATURE"},
+                                                  {"value": pressure * 100, "type": "PRESSURE_P"},
+                                                  {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEA_EOS
 
-        if verbose:
-            # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
-            print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
-            if mta_sentences:
-                print(f"Sending {nmea_mta.strip()}")
-            if mmb_sentences:
-                print(f"Sending {nmea_mmb.strip()}")
-            if xdr_sentences:
-                print(f"Sending {nmea_xdr.strip()}")
-            print("---------------------------")
+            if verbose:
+                # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
+                print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S')} --")
+                if mta_sentences:
+                    print(f"Sending {nmea_mta.strip()}")
+                if mmb_sentences:
+                    print(f"Sending {nmea_mmb.strip()}")
+                if xdr_sentences:
+                    print(f"Sending {nmea_xdr.strip()}")
+                print("---------------------------")
+        else:
+            dummy_str: str = NMEABuilder.build_MSG("No BME280 was found");
 
         try:
             # Send to the client
-            if mta_sentences:
-                connection.sendall(nmea_mta.encode())
-            if mmb_sentences:
-                connection.sendall(nmea_mmb.encode())
-            if xdr_sentences:
-                connection.sendall(nmea_xdr.encode())
+            if sensor is not None:
+                if mta_sentences:
+                    connection.sendall(nmea_mta.encode())
+                if mmb_sentences:
+                    connection.sendall(nmea_mmb.encode())
+                if xdr_sentences:
+                    connection.sendall(nmea_xdr.encode())
+            else:
+                print(f"No Sensor: {dummy_str}")
+                connection.sendall(dummy_str.encode)
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("Client disconnected")
@@ -217,8 +224,12 @@ def main(args: List[str]) -> None:
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
     i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
-    sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-    sensor.sea_level_pressure = 1013.25  # Depends on your location
+    try:
+        sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+        sensor.sea_level_pressure = 1013.25  # Depends on your location
+    except:
+        print("No BME280 was found...")
+        sensor = None
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:

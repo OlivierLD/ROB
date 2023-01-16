@@ -111,8 +111,9 @@ public class DumpUtil {
 
 	public static String dumpHexMess(byte[] mess) {
 		String line = "";
-		for (int i = 0; i < mess.length; i++)
+		for (int i = 0; i < mess.length; i++) {
 			line += (StringUtils.lpad(Integer.toHexString(mess[i] & 0xFF).toUpperCase(), 2, "0") + " ");
+		}
 		return line.trim();
 	}
 

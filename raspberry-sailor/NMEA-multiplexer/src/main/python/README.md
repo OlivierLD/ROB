@@ -49,6 +49,8 @@ _**NMEA Sentences examples:**_
 > Like 
 > ````
 > pip3 install pyyaml
+> pip3 install board
+> . . .
 > pip3 install adafruit-circuitpython-htu21d
 > ````
 > After that, you may hop off the Internet.

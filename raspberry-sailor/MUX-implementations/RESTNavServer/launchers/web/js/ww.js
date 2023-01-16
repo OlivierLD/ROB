@@ -3,6 +3,7 @@
  *
  * Shows how to use the WorldMap object
  * and the REST APIs of the img service.
+ * 
  * Displays faxes.
  */
 "use strict";

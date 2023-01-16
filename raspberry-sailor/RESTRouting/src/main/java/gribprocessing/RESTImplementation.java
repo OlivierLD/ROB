@@ -13,15 +13,16 @@ import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
 import jgrib.GribFile;
 import poc.GRIBDump;
+import utils.DumpUtil;
+import utils.StringUtils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,11 @@ public class RESTImplementation {
 					GRIB_PREFIX + "/get-data",
 					this::requestGRIBData,
 					"Request a GRIB download from the web, and return its json representation."),
+			new Operation(
+					"POST",
+					GRIB_PREFIX + "/process-grib-file",
+					this::requestGRIBUpload,
+					"GRIB file-input from HTML form, and return its json representation."),
 			new Operation(
 					"GET",
 					GRIB_PREFIX + "/routing-request",
@@ -234,7 +240,158 @@ public class RESTImplementation {
 							.errorMessage("Request payload not found"));
 			return response;
 		}
+		return response;
+	}
 
+	private final String HEADER_SEPARATOR = "\r\n";
+	private final String END_OF_HEADERS = HEADER_SEPARATOR + HEADER_SEPARATOR;
+
+	/**
+	 * WiP...
+	 * @param request
+	 * @return
+	 */
+	private Response requestGRIBUpload(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		final Map<String, String> headers = request.getHeaders();
+		headers.keySet().forEach(k -> System.out.printf("%s: %s\n", k, headers.get(k)));
+
+		String contentType = headers
+				.keySet()
+				.stream()
+				.filter(k -> k.toUpperCase().equalsIgnoreCase("CONTENT-TYPE"))
+				.map(k -> headers.get(k).trim())
+				.findFirst().orElse(null);
+
+		System.out.printf("Content-Type: [%s]\n", contentType);
+		String boundary = "";
+		if (contentType.toUpperCase().startsWith("MULTIPART/FORM-DATA")) {
+			if (contentType.toUpperCase().contains("BOUNDARY=")) {
+				boundary = contentType.substring(contentType.toUpperCase().indexOf("BOUNDARY=") + "BOUNDARY=".length());
+			}
+		}
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			final byte[] requestContent = request.getContent();
+			System.out.printf("Original Request Content length: %d\n", requestContent.length);
+			byte[] gribContent = null;
+			String payload = new String(requestContent, StandardCharsets.UTF_8); // , StandardCharsets.UTF_16);
+            /*
+             * Payload is like :
+             *
+------WebKitFormBoundaryvJgOKXKBW43PaOKs
+Content-Disposition: form-data; name="file"; filename="_cache_weather-cache_EastAtlantic.wind.7days.grb"
+Content-Type: application/octet-stream
+
+GRIB �  `��!i 
+
+. . .
+� 7777
+------WebKitFormBoundaryvJgOKXKBW43PaOKs--
+             */
+			System.out.printf("Request Content: %s\n", payload);
+
+			String key = boundary;
+			if (key.trim().length() == 0) {
+				key = payload.substring(0, payload.indexOf(HEADER_SEPARATOR));
+			}
+			System.out.println("Key: " + key);
+			// TODO Find the offset in the byte array ?
+			int headersEnd = payload.indexOf(END_OF_HEADERS) + END_OF_HEADERS.length();
+			int contentEnd = payload.lastIndexOf(key + "--");
+
+//			gribContent = payload.substring(headersEnd, contentEnd).getBytes(); // StandardCharsets.UTF_16);
+			int baLength = (contentEnd - headersEnd);
+			gribContent = new byte[baLength];
+//			ByteBuffer bb = ByteBuffer.wrap(requestContent); // , headersEnd, (contentEnd - headersEnd));
+//			bb.get(gribContent, headersEnd, baLength);
+
+			for (int i=0; i<baLength; i++) {
+				// gribContent[i] = requestContent[i + headersEnd];
+				byte b = (byte)payload.charAt(i + headersEnd); // -17 returns 0xFD, 0b1111 1101, should be 0b1000 0010
+//				gribContent[i] = b;
+
+//				byte b = (byte) (0xFF & requestContent[i + headersEnd]);
+				if (true && (b > 0x80 || b < 0x00)) {
+//					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
+					b &= 0x7F;
+					// (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
+//					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
+					b = (byte) (~b);  // 2's complement
+//					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
+					b = (byte) (b | 0x80); // Might be useless
+//					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
+//					System.out.println("-");
+				}
+				if (i < 10) {
+					System.out.printf("b: 0x%s\n", StringUtils.lpad(Integer.toHexString(b & 0xFF).toUpperCase(), 2, "0"));
+				}
+				gribContent[i] = b; // (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
+			}
+			System.out.printf("Offset diff %d - %d = %d, content length: %d\n", contentEnd, headersEnd, (contentEnd - headersEnd), gribContent.length);
+
+			if (true ) { // some tests...
+				// The head
+				byte[] head = new byte[64];
+				System.arraycopy(gribContent, 0, head, 0, 64);
+				String[] dd = DumpUtil.dualDump(head);
+				System.out.println("Head");
+				for (String l : dd) {
+					System.out.println(l);
+				}
+				// The tail
+				byte[] tail = new byte[64];
+				System.arraycopy(gribContent, gribContent.length - 64, tail, 0, 64);
+				dd = DumpUtil.dualDump(tail);
+				System.out.println("Tail");
+				for (String l : dd) {
+					System.out.println(l);
+				}
+			}
+
+			try {
+				GribFile gf = new GribFile(new ByteArrayInputStream(gribContent)); // <- Read the byte stream !
+				// new BufferedReader(new InputStreamReader(new ByteArrayInputStream(gribContent)));
+				GRIBDump dump = new GRIBDump();
+				List<GRIBDump.DatedGRIB> expandedGBRIB = dump.getExpandedGRIB(gf);
+				String content;
+				try {
+					content = mapper.writeValueAsString(expandedGBRIB);
+					System.out.println("--- Expanded GRIB ---");
+					System.out.println(content);
+					System.out.println("---------------------");
+				} catch (JsonProcessingException jpe) {
+					System.err.println("--- requestGRIBData ---");
+					jpe.printStackTrace();
+					System.err.println("-----------------------");
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("GRIB-0100")
+									.errorMessage(jpe.toString())
+									.errorStack(HTTPServer.dumpException(jpe)));
+					return response;
+				}
+				RESTProcessorUtil.generateResponseHeaders(response, content.length());
+				response.setPayload(content.getBytes());
+			} catch (Exception ex) {
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("GRIB-0102")
+								.errorMessage(ex.toString())
+								.errorStack(HTTPServer.dumpException(ex)));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("GRIB-0101")
+							.errorMessage("Request payload not found"));
+			return response;
+		}
 		return response;
 	}
 

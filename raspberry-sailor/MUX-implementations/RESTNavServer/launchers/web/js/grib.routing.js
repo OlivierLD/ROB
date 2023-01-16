@@ -142,7 +142,9 @@ let getSpeed = function(x, y) {
 };
 
 /**
- * Get wind direction from ugrd, vgrd
+ * Get wind direction from ugrd, vgrd.
+ * TODO: use Math.atan2
+ * 
  * @param x ugrd
  * @param y vgrd
  * @returns {number} Direction in degrees [0..360]
