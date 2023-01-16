@@ -476,6 +476,47 @@
 		"gribRequest": "GFS:65N,10N,100W,10E|1,1|0,3..120|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 	},
 	{
+		"key": "ATL-0001-48H",
+		"name": "North Atlantic, 48h Prediction",
+		"map": {
+			"projection": "MERCATOR",
+			"north": 65.5,
+			"south": 10,
+			"east": 28.2,
+			"west": -101.8
+		},
+		"canvas": {
+			"w": 900,
+			"h": 600
+		},
+		"faxData": [
+			{
+				"faxUrl": "https://ocean.weather.gov/shtml/qdtm85.gif",
+				"name": "North Atl surface 48H, surface",
+				"transp": "WHITE",
+				"rotation": 0,
+				"effect": "BLUR",
+				"zoom": 0.7084151674187669,
+				"location": {
+					"x": 27,
+					"y": 27
+				}
+			},
+			{
+				"faxUrl": "https://ocean.weather.gov/shtml/ppai50.gif",
+				"name": "North Atl 500mb, 48H",
+				"transp": "WHITE",
+				"effect": "BLUR",
+				"zoom": 0.7151625060283835,
+				"location": {
+					"x": 23,
+					"y": 25
+				}
+			}
+		],
+		"gribRequest": "GFS:65N,10N,100W,10E|1,1|0,6..96|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
+	},
+	{
 		"key": "MED-0001",
 		"name": "Mediterranean GRIBs",
 		"map": {

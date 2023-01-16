@@ -23,7 +23,7 @@
 	<script type="text/javascript" src="../js/date.proto.js"></script>
     <script type="text/javascript" src="../js/routes.utils.js"></script>
 	<script type="text/javascript" src="../js/grib.routing.js"></script>
-	<script type="text/javascript" src="../catalog/catalog.js"></script>
+	<!--script type="text/javascript" src="../catalog/catalog.js"></script-->
 	<script type="text/javascript" src="../js/ww.js"></script>
 
     <script type="text/javascript">
@@ -637,6 +637,42 @@
 	  document.getElementById("canvas-size").innerText = "Canvas Size: (WxH):" + worldMap.getCanvasWidth() + "x" + worldMap.getCanvasHeight();
 		redraw();
   };
+
+  const URL = '../catalog/compositeCatalog.json';	
+
+	fetch(URL)
+		.then(
+			response => {
+				console.log(`Response: ${response.ok}`);
+				compositeCatalog = response.json().then(doc => {
+					compositeCatalog = doc;
+					console.log(`Composites Catalog loaded, ${doc.length} elements`); 
+
+					// Now populate the drop-down list.
+					for (let i = 0; i < compositeCatalog.length; i++) {
+						let opt = document.createElement('option');
+						opt.setAttribute('value', compositeCatalog[i].key);
+						opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+						document.getElementById('composites').appendChild(opt);
+						if (i === 0) {
+							if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
+								document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+							}
+						}
+					}
+				});
+			}, 
+			(error, errmess) => {
+				console.log("Ooch");
+				let message;
+				if (errmess) {
+					let mess = JSON.parse(errmess);
+					if (mess.message) {
+						message = mess.message;
+					}
+				}
+				console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+			});
 
 		</script>
   </head>
