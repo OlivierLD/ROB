@@ -180,7 +180,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
                     connection.sendall(nmea_xdr.encode())
             else:
                 print(f"No Sensor: {dummy_str}")
-                connection.sendall(dummy_str.encode)
+                connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("Client disconnected")

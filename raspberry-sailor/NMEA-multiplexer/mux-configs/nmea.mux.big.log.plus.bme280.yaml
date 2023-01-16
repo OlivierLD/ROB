@@ -14,7 +14,7 @@ channels:
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     verbose: false
   - type: tcp
-    server: 192.168.1.105
+    server: localhost
     port: 9876
     verbose: false
 forwarders:
