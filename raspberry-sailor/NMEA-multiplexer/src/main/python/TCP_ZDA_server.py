@@ -11,6 +11,7 @@
 # - One to listen to possible client inputs.
 #
 import sys
+import os
 import signal
 import time
 import socket
@@ -57,6 +58,7 @@ def interrupt(sig: int, frame):
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
     sys.exit()   # DTC
+    os._exit(1)  # Re-DTC
 
 
 nb_clients: int = 0
