@@ -39,6 +39,7 @@ VERBOSE_PREFIX: str = "--verbose:"
 
 CMD_STATUS: str = "STATUS"
 CMD_LOOP_PREFIX: str = "LOOPS:"
+CMD_EXIT: str = "EXIT"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
@@ -110,6 +111,8 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                     produce_status(connection, address)
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
+                elif client_mess == CMD_EXIT:
+                    interrupt(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:
