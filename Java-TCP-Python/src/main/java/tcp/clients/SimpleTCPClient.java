@@ -107,9 +107,11 @@ public class SimpleTCPClient {
 							if (!ex.getMessage().startsWith("Stream closed")) {
 								ex.printStackTrace();
 							}
+							keepDummyAlive.set(false);
 							break;
 						} catch (Exception ex2) {
 							ex2.printStackTrace();
+							keepDummyAlive.set(false);
 							break;
 						}
 					} else {

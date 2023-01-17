@@ -57,7 +57,7 @@ def interrupt(sig: int, frame):
     print("Server Exiting.")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
-    sys.exit()   # DTC
+    # sys.exit()   # DTC
     os._exit(1)  # Re-DTC
 
 
