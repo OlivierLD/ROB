@@ -31,7 +31,7 @@ __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 keep_listening: bool = True
-sensor: BMP085.BMP085
+sensor: BMP085.BMP085 = None
 
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
 PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
@@ -71,6 +71,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     global keep_listening
+    global verbose
     message: dict = {
         "source": __file__,
         "between-loops": between_loops,
@@ -97,6 +98,8 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global between_loops
     global keep_listening
+    global verbose
+
     print("New client listener")
     while keep_listening:
         try:
@@ -141,9 +144,12 @@ def produce_nmea(connection: socket.socket, address: tuple,
                  mta_sentences: bool = True,
                  mmb_sentences: bool = True,
                  xdr_sentences: bool = True) -> None:
+    global verbose
     global nb_clients
-    global sensor
+    global between_loops
+    global producing_status
     global keep_listening
+    global sensor
     print(f"Connected by client {connection}")
     while keep_listening:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
@@ -173,7 +179,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
                     print(f"Sending {nmea_xdr.strip()}")
                 print("---------------------------")
         else:
-            dummy_str: str = NMEABuilder.build_MSG("No BMP180 was found");
+            dummy_str: str = NMEABuilder.build_MSG("No BMP180 was found") + NMEA_EOS   # Do not forget the NMEA_EOS !
 
         try:
             # Send to the client
@@ -185,7 +191,8 @@ def produce_nmea(connection: socket.socket, address: tuple,
                 if xdr_sentences:
                     connection.sendall(nmea_xdr.encode())
             else:
-                print(f"No Sensor: {dummy_str}")
+                if verbose:
+                    print(f"No Sensor: {dummy_str.strip()}")
                 connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
@@ -254,7 +261,7 @@ def main(args: List[str]) -> None:
             print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
             # Generate NMEA sentences for this client in its own thread. Producer thread
             client_thread: threading.Thread = \
-                threading.Thread(target=produce_nmea, args=(conn, addr, True, False, True,))  # Producer
+                threading.Thread(target=produce_nmea, args=(conn, addr, True, True, True,))  # Producer
             # print(f"Thread is a {type(client_thread)}")
             client_thread.daemon = True  # Dies on exit
             client_thread.start()

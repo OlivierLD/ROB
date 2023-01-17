@@ -3,7 +3,7 @@
 # That one produces ZDA Strings for each connected client.
 # This server does not need to read a sensor, it takes the time from the system.
 # 
-# It also understands input from the client: "STATUS", "LOOPS:x.xx" (not case sensitive), see client_listener.
+# It also understands input from the client: "STATUS", "LOOPS:x.xx", "EXIT" (not case sensitive), see client_listener.
 # LOOPS:xxx will produce a between_loops = x.xx (in seconds), like LOOPS:1.0
 #
 # It starts TWO threads:
@@ -174,6 +174,7 @@ def main(args: List[str]) -> None:
     global verbose
     global nb_clients
     global keep_listening
+
     print("Usage is:")
     print(
         f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")

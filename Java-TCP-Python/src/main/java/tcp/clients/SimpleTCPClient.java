@@ -103,6 +103,9 @@ public class SimpleTCPClient {
 							if (spitOutDummyReader) {
 								System.out.printf("\t\tFrom dummy thread: [%s]\n", serverMessage);
 							}
+							if (serverMessage == null) { // Assume server is dead. Does IOException happen?
+								keepDummyAlive.set(false);
+							}
 						} catch (IOException ex) {
 							if (!ex.getMessage().startsWith("Stream closed")) {
 								ex.printStackTrace();
@@ -125,7 +128,7 @@ public class SimpleTCPClient {
 						}
 					}
 				}
-				System.out.println("Done with dummy reader");
+				System.out.println("Done with dummy reader thread.");
 			}, "DummyReader");
 			dummyReader.start();
 
