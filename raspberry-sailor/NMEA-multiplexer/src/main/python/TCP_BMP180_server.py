@@ -58,7 +58,7 @@ def interrupt(sig, frame):
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
     # sys.exit()   # DTC
-    os_exit(1)
+    os._exit(1)
 
 
 nb_clients: int = 0
