@@ -114,7 +114,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
-                    interrup(None, None)
+                    interrupt(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:
