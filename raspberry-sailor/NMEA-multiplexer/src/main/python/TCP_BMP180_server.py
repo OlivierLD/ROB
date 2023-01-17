@@ -11,6 +11,7 @@ on a regular basis, see the between_loops variable.
 """
 
 import sys
+import os
 import signal
 import time
 import socket
@@ -56,7 +57,8 @@ def interrupt(sig, frame):
     print("Server Exiting.")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
-    sys.exit()   # DTC
+    # sys.exit()   # DTC
+    os_exit(1)
 
 
 nb_clients: int = 0
