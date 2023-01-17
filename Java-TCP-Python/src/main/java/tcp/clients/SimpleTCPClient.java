@@ -20,11 +20,13 @@ import java.util.concurrent.atomic.AtomicReference;
  * Assumes that the server is sending lines (ending with a LF)
  *
  * CLI args: --host:<IP or name> --port:5555
+ *
+ * See the "flip" user input...
  */
 public class SimpleTCPClient {
 
 	private final static boolean parseReturnedJSON = "true".equals(System.getProperty("parse.json.response"));
-	private final static boolean spitOutDummyReader = "true".equals(System.getProperty("display.server.feed"));
+	private static boolean spitOutDummyReader = "true".equals(System.getProperty("display.server.feed"));
 
 	private final static ObjectMapper mapper = new ObjectMapper(); // Jackson
 
@@ -140,6 +142,8 @@ public class SimpleTCPClient {
 						keepWorking = false;
 						keepDummyAlive.set(false);
 						dummyReader.interrupt();
+					} else if ("flip".equals(request)) {
+						spitOutDummyReader = !spitOutDummyReader;
 					} else {
 						keepDummyReading.set(false);
 						try {
