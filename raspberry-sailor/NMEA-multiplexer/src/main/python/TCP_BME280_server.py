@@ -97,6 +97,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     """
     global nb_clients
     global between_loops
+    global keep_listening
     print("New client listener")
     while keep_listening:
         try:
@@ -141,8 +142,9 @@ def produce_nmea(connection: socket.socket, address: tuple,
                  xdr_sentences: bool = True) -> None:
     global nb_clients
     global sensor
+    global keep_listening
     print(f"Connected by client {connection}")
-    while True:
+    while keep_listening:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
         if sensor is not None:
             temperature: float = sensor.temperature  # Celsius
@@ -201,6 +203,7 @@ def main(args: List[str]) -> None:
     global verbose
     global nb_clients
     global sensor
+    global keep_listening
 
     print("Usage is:")
     print(

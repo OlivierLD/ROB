@@ -96,6 +96,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     """
     global nb_clients
     global between_loops
+    global keep_listening
     print("New client listener")
     while keep_listening:
         try:
@@ -140,6 +141,7 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global between_loops
     global producing_status
+    global keep_listening
     print(f"Connected by client {connection}")
     while keep_listening:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
@@ -171,6 +173,7 @@ def main(args: List[str]) -> None:
     global PORT
     global verbose
     global nb_clients
+    global keep_listening
     print("Usage is:")
     print(
         f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")
