@@ -202,11 +202,9 @@ User Request > loops:0.5
 - Key: connected-clients, Value (java.lang.Integer): 1
 - Key: python-version, Value (java.lang.String): 3.10.8
 - Key: system-utc-time, Value (java.lang.String): 2022-12-21T12:30:30.000Z
-User Request > .
-(tcp.clients.SimpleTCPClient) Client exiting
-Done with dummy reader
 User Request > /exit
 (tcp.clients.SimpleTCPClient) Client exiting
+Done with dummy reader
 $
 ```
 
