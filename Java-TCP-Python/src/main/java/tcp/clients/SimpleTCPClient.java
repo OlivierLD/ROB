@@ -138,12 +138,13 @@ public class SimpleTCPClient {
 			while (keepWorking) {
 				String request = System.console().readLine("User Request > ");
 				if (request.trim().length() > 0) {
-					if (".".equals(request)) {
+					if (".".equals(request.trim())) {
 						keepWorking = false;
 						keepDummyAlive.set(false);
 						dummyReader.interrupt();
-					} else if ("flip".equals(request)) {
+					} else if ("flip".equals(request.trim())) {
 						spitOutDummyReader = !spitOutDummyReader;
+						System.out.printf("Setting server output to %b\n", spitOutDummyReader);
 					} else {
 						keepDummyReading.set(false);
 						try {
