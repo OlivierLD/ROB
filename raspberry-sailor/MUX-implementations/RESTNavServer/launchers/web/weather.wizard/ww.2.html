@@ -478,6 +478,12 @@
                     }
                 }
             }
+            // Disable/Enable fax's CheckBoxes
+            let faxTable = document.getElementById('fax-table');
+            let cbs = faxTable.querySelectorAll('input[type=checkbox]');
+            cbs.forEach((fcb, i) => fcb.disabled = !cb.checked );
+            // Also works: for (let fcb of cbs) { . . . }
+
             redraw();
         };
     
