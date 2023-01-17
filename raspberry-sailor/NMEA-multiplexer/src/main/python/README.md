@@ -123,6 +123,7 @@ $
 ```
 $ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
 ```
+> Notice the calibration properties yaml file
 
 ## Example 3, produce Atmospheric Data
 ```
@@ -188,15 +189,15 @@ $ ./start.tcp.client.sh --port:7001
 (tcp.clients.SimpleTCPClient) Port now set to 7001
 (tcp.clients.SimpleTCPClient) Enter '.' at the prompt to stop. Any non-empty string otherwise.
 User Request > status
->> Server responded {"source": "/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 10.0, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:10.000Z"}
-- Key: source, Value (java.lang.String): /Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
+>> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 10.0, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:10.000Z"}
+- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
 - Key: between-loops, Value (java.lang.Double): 10.0
 - Key: connected-clients, Value (java.lang.Integer): 1
 - Key: python-version, Value (java.lang.String): 3.10.8
 - Key: system-utc-time, Value (java.lang.String): 2022-12-21T12:30:10.000Z
 User Request > loops:0.5
->> Server responded {"source": "/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 0.5, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:30.000Z"}
-- Key: source, Value (java.lang.String): /Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
+>> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 0.5, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:30.000Z"}
+- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
 - Key: between-loops, Value (java.lang.Double): 0.5
 - Key: connected-clients, Value (java.lang.Integer): 1
 - Key: python-version, Value (java.lang.String): 3.10.8

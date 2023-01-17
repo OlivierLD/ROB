@@ -42,6 +42,7 @@ VERBOSE_PREFIX: str = "--verbose:"
 
 CMD_STATUS: str = "STATUS"
 CMD_LOOP_PREFIX: str = "LOOPS:"
+CMD_EXIT: str = "EXIT"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
@@ -89,7 +90,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
 
 def client_listener(connection: socket.socket, address: tuple) -> None:
     """
-    Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
+    Expects several possible inputs: "STATUS", "LOOPS:x.xx", "EXIT" (not case-sensitive).
     """
     global nb_clients
     global between_loops
@@ -110,6 +111,8 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                     produce_status(connection, address)
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
+                elif client_mess == CMD_EXIT:
+                    interrup(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:
@@ -140,39 +143,46 @@ def produce_nmea(connection: socket.socket, address: tuple,
     print(f"Connected by client {connection}")
     while True:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        temperature: float = sensor.read_temperature()  # Celsius
-        pressure: float = sensor.read_pressure()        # Pa
-        # altitude and sea level pressure depend on setStandardSeaLevelPressure
-        altitude: float = sensor.read_altitude()        # meters
-        sea_level_pressure: float = sensor.read_sealevel_pressure()
+        if sensor is not None:
+            temperature: float = sensor.read_temperature()  # Celsius
+            pressure: float = sensor.read_pressure()        # Pa
+            # altitude and sea level pressure depend on setStandardSeaLevelPressure
+            altitude: float = sensor.read_altitude()        # meters
+            sea_level_pressure: float = sensor.read_sealevel_pressure()
 
-        # OpenCPN expects the pressure in BARS from XDR, and air temperature from MTA !
-        # XDR Temperature is not necessarily Air Temperature...
-        nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
-        nmea_mmb: str = NMEABuilder.build_MMB(pressure / 100) + NMEA_EOS
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": temperature, "type": "TEMPERATURE" },
-                                              { "value": pressure, "type": "PRESSURE_P" },
-                                              { "value": pressure / 100_000, "type": "PRESSURE_B" }) + NMEA_EOS
+            # OpenCPN expects the pressure in BARS from XDR, and air temperature from MTA !
+            # XDR Temperature is not necessarily Air Temperature...
+            nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
+            nmea_mmb: str = NMEABuilder.build_MMB(pressure / 100) + NMEA_EOS
+            nmea_xdr: str = NMEABuilder.build_XDR({ "value": temperature, "type": "TEMPERATURE" },
+                                                  { "value": pressure, "type": "PRESSURE_P" },
+                                                  { "value": pressure / 100_000, "type": "PRESSURE_B" }) + NMEA_EOS
 
-        if verbose:
-            # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
-            print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
-            if mta_sentences:
-                print(f"Sending {nmea_mta.strip()}")
-            if mmb_sentences:
-                print(f"Sending {nmea_mmb.strip()}")
-            if xdr_sentences:
-                print(f"Sending {nmea_xdr.strip()}")
-            print("---------------------------")
+            if verbose:
+                # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
+                print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
+                if mta_sentences:
+                    print(f"Sending {nmea_mta.strip()}")
+                if mmb_sentences:
+                    print(f"Sending {nmea_mmb.strip()}")
+                if xdr_sentences:
+                    print(f"Sending {nmea_xdr.strip()}")
+                print("---------------------------")
+        else:
+            dummy_str: str = NMEABuilder.build_MSG("No BMP180 was found");
 
         try:
             # Send to the client
-            if mta_sentences:
-                connection.sendall(nmea_mta.encode())
-            if mmb_sentences:
-                connection.sendall(nmea_mmb.encode())
-            if xdr_sentences:
-                connection.sendall(nmea_xdr.encode())
+            if sensor is not None:
+                if mta_sentences:
+                    connection.sendall(nmea_mta.encode())
+                if mmb_sentences:
+                    connection.sendall(nmea_mmb.encode())
+                if xdr_sentences:
+                    connection.sendall(nmea_xdr.encode())
+            else:
+                print(f"No Sensor: {dummy_str}")
+                connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("Client disconnected")
@@ -215,7 +225,11 @@ def main(args: List[str]) -> None:
         print("-------------------------------------")
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
-    sensor = BMP085.BMP085(busnum=1)
+    try:
+        sensor = BMP085.BMP085(busnum=1)
+    except:
+        print("No BMP180 was found...")
+        sensor = None
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:
