@@ -19,6 +19,7 @@ Requires a pip3 install pyyaml
 """
 
 import sys
+import os
 import signal
 import time
 import socket
@@ -54,6 +55,7 @@ VERBOSE_PREFIX: str = "--verbose:"
 
 CMD_STATUS: str = "STATUS"
 CMD_LOOP_PREFIX: str = "LOOPS:"
+CMD_EXIT: str = "EXIT"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 DATA_EOS: str = "\r\n"  # aka CR-LF
@@ -74,6 +76,7 @@ CALIBRATION_MAP: dict = {
     MAG_Z_OFFSET: 0.0
 }
 
+
 def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
@@ -83,7 +86,8 @@ def interrupt(sig: int, frame):
     print("Server Exiting.")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
-    sys.exit()   # DTC
+    # sys.exit()  # DTC
+    os._exit(1)
 
 
 nb_clients: int = 0
@@ -107,6 +111,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     global keep_listening
+    global verbose
     message: dict = {
         "source": __file__,
         "between-loops": between_loops,
@@ -132,6 +137,9 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     """
     global nb_clients
     global between_loops
+    global keep_listening
+    global verbose
+
     print("New client listener")
     while keep_listening:
         try:
@@ -149,6 +157,8 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                     produce_status(connection, address)
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
+                elif client_mess == CMD_EXIT:
+                    interrupt(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:
@@ -174,60 +184,71 @@ def produce_nmea(connection: socket.socket, address: tuple,
                  hdg_sentences: bool = True,
                  hdm_sentences: bool = True,
                  xdr_sentences: bool = True) -> None:
+    global verbose
     global nb_clients
+    global between_loops
+    global producing_status
+    global keep_listening
     global sensor
     print(f"Connected by client {connection}")
-    while True:
+    while keep_listening:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
-        data: dict = produce_MAG_Data(sensor)
-        mag_x: float = data["mag_x"]
-        mag_y: float = data["mag_y"]
-        mag_z: float = data["mag_z"]
-        # Calibrated data
-        mag_x = CALIBRATION_MAP[MAG_X_COEFF] * (CALIBRATION_MAP[MAG_X_OFFSET] + mag_x)
-        mag_y = CALIBRATION_MAP[MAG_Y_COEFF] * (CALIBRATION_MAP[MAG_Y_OFFSET] + mag_y)
-        mag_z = CALIBRATION_MAP[MAG_Z_COEFF] * (CALIBRATION_MAP[MAG_Z_OFFSET] + mag_z)
-        # Calculated data.
-        norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)  # In microTesla
-        # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
-        hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
-        while hdg < 0:
-            hdg += 360
-        roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z. Positive: heeling Stbd, negative, heeling Port
-        roll -= 180
-        while roll < -180:
-            roll += 360
-        roll *= -1
-        ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose down, negative: nose up
-        ptch -= 180
-        while ptch < -180:
-            ptch += 360
+        if sensor is not None:
+            data: dict = produce_MAG_Data(sensor)
+            mag_x: float = data["mag_x"]
+            mag_y: float = data["mag_y"]
+            mag_z: float = data["mag_z"]
+            # Calibrated data
+            mag_x = CALIBRATION_MAP[MAG_X_COEFF] * (CALIBRATION_MAP[MAG_X_OFFSET] + mag_x)
+            mag_y = CALIBRATION_MAP[MAG_Y_COEFF] * (CALIBRATION_MAP[MAG_Y_OFFSET] + mag_y)
+            mag_z = CALIBRATION_MAP[MAG_Z_COEFF] * (CALIBRATION_MAP[MAG_Z_OFFSET] + mag_z)
+            # Calculated data.
+            norm: float = math.sqrt(mag_x ** 2 + mag_y ** 2 + mag_z ** 2)  # In microTesla
+            # print(f"mag_x:{type(mag_x)}, mag_y:{type(mag_y)}, mag_z:{type(mag_z)}")
+            hdg: float = math.degrees(math.atan2(mag_y, mag_x))  # Orientation in plan x,y
+            while hdg < 0:
+                hdg += 360
+            roll: float = math.degrees(math.atan2(mag_y, mag_z))  # Orientation in plan y,z. Positive: heeling Stbd, negative, heeling Port
+            roll -= 180
+            while roll < -180:
+                roll += 360
+            roll *= -1
+            ptch: float = math.degrees(math.atan2(mag_x, mag_z))  # Orientation in plan x,z. Positive: nose down, negative: nose up
+            ptch -= 180
+            while ptch < -180:
+                ptch += 360
 
-        nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
-        nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
-        # like "$IIXDR,A,180,D,PTCH,A,-154,D,ROLL*78"
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_PTCH },
-                                              { "value": roll, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_ROLL }) + NMEA_EOS
+            nmea_hdg: str = NMEABuilder.build_HDG(hdg) + NMEA_EOS
+            nmea_hdm: str = NMEABuilder.build_HDM(hdg) + NMEA_EOS
+            # like "$IIXDR,A,180,D,PTCH,A,-154,D,ROLL*78"
+            nmea_xdr: str = NMEABuilder.build_XDR({ "value": ptch, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_PTCH },
+                                                  { "value": roll, "type": "ANGULAR_DISPLACEMENT", "extra": NMEABuilder.XDR_ROLL }) + NMEA_EOS
 
-        if verbose:
-            # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
-            print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
-            if hdg_sentences:
-                print(f"Sending {nmea_hdg.strip()}")
-            if hdm_sentences:
-                print(f"Sending {nmea_hdm.strip()}")
-            if xdr_sentences:
-                print(f"Sending {nmea_xdr.strip()}")
-            print("---------------------------")
+            if verbose:
+                # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
+                print(f"-- At {datetime.now(timezone.utc).strftime('%d-%b-%Y %H:%M:%S') } --")
+                if hdg_sentences:
+                    print(f"Sending {nmea_hdg.strip()}")
+                if hdm_sentences:
+                    print(f"Sending {nmea_hdm.strip()}")
+                if xdr_sentences:
+                    print(f"Sending {nmea_xdr.strip()}")
+                print("---------------------------")
+        else:
+            dummy_str: str = NMEABuilder.build_MSG("No LSM303 or HMC5883L was found") + NMEA_EOS
 
         try:
             # Send to the client(s)
-            if hdg_sentences:
-                connection.sendall(nmea_hdg.encode())
-            if hdm_sentences:
-                connection.sendall(nmea_hdm.encode())
-            if xdr_sentences:
-                connection.sendall(nmea_xdr.encode())
+            if sensor is not None:
+                if hdg_sentences:
+                    connection.sendall(nmea_hdg.encode())
+                if hdm_sentences:
+                    connection.sendall(nmea_hdm.encode())
+                if xdr_sentences:
+                    connection.sendall(nmea_xdr.encode())
+            else:
+                print(f"No Sensor: {dummy_str.strip()}")
+                connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("Client disconnected")
@@ -248,6 +269,7 @@ def main(args: List[str]) -> None:
     global verbose
     global nb_clients
     global sensor
+    global keep_listening
     global CALIBRATION_MAP
     print("Usage is:")
     print(
@@ -278,7 +300,11 @@ def main(args: List[str]) -> None:
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
     i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
-    sensor = adafruit_lsm303dlh_mag.LSM303DLH_Mag(i2c)
+    try:
+        sensor = adafruit_lsm303dlh_mag.LSM303DLH_Mag(i2c)
+    except:
+        print("No LSM303DLH_Mag was found...")
+        sensor = None
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         if verbose:

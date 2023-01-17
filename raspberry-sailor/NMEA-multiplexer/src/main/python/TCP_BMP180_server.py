@@ -48,7 +48,7 @@ CMD_EXIT: str = "EXIT"
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
 
-def interrupt(sig, frame):
+def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
     print("\nCtrl+C intercepted!")

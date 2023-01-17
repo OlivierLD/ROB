@@ -13,6 +13,7 @@ on a regular basis, see the between_loops variable.
 """
 
 import sys
+import os
 import signal
 import time
 import socket
@@ -46,11 +47,12 @@ VERBOSE_PREFIX: str = "--verbose:"
 
 CMD_STATUS: str = "STATUS"
 CMD_LOOP_PREFIX: str = "LOOPS:"
+CMD_EXIT: str = "EXIT"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
 
-def interrupt(sig, frame):
+def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
     print("\nCtrl+C intercepted!")
@@ -59,7 +61,8 @@ def interrupt(sig, frame):
     print("Server Exiting.")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
-    sys.exit()  # DTC
+    # sys.exit()  # DTC
+    os._exit(1)
 
 
 nb_clients: int = 0
@@ -72,6 +75,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global between_loops
     global producing_status
     global keep_listening
+    global verbose
     message: dict = {
         "source": __file__,
         "between-loops": between_loops,
@@ -93,11 +97,13 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
 
 def client_listener(connection: socket.socket, address: tuple) -> None:
     """
-    Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
+    Expects several possible inputs: "STATUS", "LOOPS:x.xx", "EXIT" (not case-sensitive).
     """
     global nb_clients
     global between_loops
     global keep_listening
+    global verbose
+
     print("New client listener")
     while keep_listening:
         try:
@@ -115,6 +121,8 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                     produce_status(connection, address)
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
+                elif client_mess == CMD_EXIT:
+                    interrupt(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:
@@ -140,9 +148,12 @@ def produce_nmea(connection: socket.socket, address: tuple,
                  mta_sentences: bool = True,
                  mmb_sentences: bool = True,
                  xdr_sentences: bool = True) -> None:
+    global verbose
     global nb_clients
-    global sensor
+    global between_loops
+    global producing_status
     global keep_listening
+    global sensor
     print(f"Connected by client {connection}")
     while keep_listening:
         # data: bytes = conn.recv(1024)   # If receive from client is needed...
@@ -169,7 +180,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
                     print(f"Sending {nmea_xdr.strip()}")
                 print("---------------------------")
         else:
-            dummy_str: str = NMEABuilder.build_MSG("No BME280 was found");
+            dummy_str: str = NMEABuilder.build_MSG("No BME280 was found") + NMEA_EOS
 
         try:
             # Send to the client
@@ -181,7 +192,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
                 if xdr_sentences:
                     connection.sendall(nmea_xdr.encode())
             else:
-                print(f"No Sensor: {dummy_str}")
+                print(f"No Sensor: {dummy_str.strip()}")
                 connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
