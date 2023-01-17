@@ -181,13 +181,13 @@ $ curl -X GET http://localhost:9999/mux/cache
 
 ## Server interaction
 The TCP code presented here allows you to interact with the server, using a TCP client.  
-Look into the `Java-TCP-Python` module (in this project).  
+Look into the `Java-TCP-Python` module (in this project, make sure you've built it).  
 You can change the NMEA sentences production frequency, and get the status of the server.
 
 ```
 $ ./start.tcp.client.sh --port:7001
 (tcp.clients.SimpleTCPClient) Port now set to 7001
-(tcp.clients.SimpleTCPClient) Enter '.' at the prompt to stop. Any non-empty string otherwise.
+(tcp.clients.SimpleTCPClient) Enter '/exit' at the prompt to stop. Any non-empty string otherwise.
 User Request > status
 >> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 10.0, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:10.000Z"}
 - Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
@@ -205,7 +205,7 @@ User Request > loops:0.5
 User Request > .
 (tcp.clients.SimpleTCPClient) Client exiting
 Done with dummy reader
-User Request > .
+User Request > /exit
 (tcp.clients.SimpleTCPClient) Client exiting
 $
 ```

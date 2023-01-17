@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * CLI args: --host:<IP or name> --port:5555
  *
- * See the "flip" user input...
+ * See the "/flip", "/exit" user input...
  */
 public class SimpleTCPClient {
 
@@ -66,6 +66,14 @@ public class SimpleTCPClient {
 	private final static String PORT_PREFIX = "--port:";
 	private final static String HOST_PREFIX = "--host:";
 
+	private static void displayHelp() {
+		System.out.println("Commands entered at the prompt:");
+		System.out.println("\t/help : You just did it.");
+		System.out.println("\t/exit or /quit to stop the client");
+		System.out.println("\t/flip to see/hide the server's output (related to the -Ddisplay.server.feed)");
+		System.out.println("\t... Any other non-empty command will be sent to the server.");
+	}
+
 	public static void main(String... args) {
 
 		final AtomicInteger port = new AtomicInteger(5_555);
@@ -92,7 +100,7 @@ public class SimpleTCPClient {
 		SimpleTCPClient client = new SimpleTCPClient();
 		try {
 			client.startConnection(host.get(), port.get());
-			System.out.printf("(%s) Enter '.' at the prompt to stop. Any non-empty string otherwise.\n", SimpleTCPClient.class.getName());
+			System.out.printf("(%s) At the prompt, enter '/help' for help,\n'/exit' to stop,\n'/flip' to see/hide server's output.\nAny non-empty string (sent to server) otherwise.\n", SimpleTCPClient.class.getName());
 
 			Thread mainThread = Thread.currentThread();
 
@@ -138,11 +146,13 @@ public class SimpleTCPClient {
 			while (keepWorking) {
 				String request = System.console().readLine("User Request > ");
 				if (request.trim().length() > 0) {
-					if (".".equals(request.trim())) {
+					if ("/exit".equals(request.trim()) || "/quit".equals(request.trim())) {
 						keepWorking = false;
 						keepDummyAlive.set(false);
 						dummyReader.interrupt();
-					} else if ("flip".equals(request.trim())) {
+					} else if ("/help".equals(request.trim())) {
+						displayHelp();
+					} else if ("/flip".equals(request.trim())) {
 						spitOutDummyReader = !spitOutDummyReader;
 						System.out.printf("Setting server output to %b\n", spitOutDummyReader);
 					} else {

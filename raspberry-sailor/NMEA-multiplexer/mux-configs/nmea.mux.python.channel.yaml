@@ -26,4 +26,3 @@ channels:
 #    verbose: false
 forwarders:
   - type: console
-
