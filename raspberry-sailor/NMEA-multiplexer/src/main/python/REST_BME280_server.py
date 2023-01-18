@@ -152,7 +152,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 bme280_data: dict = read_bme280()
                 # Transform sensor data to NMEA Strings
                 nmea_data: dict
-                if not bme280_data['status'].startswith('OK'):
+                if not bme280_data['status'].startswith('OK'):  # "OK", or "OK, simulated"
                     mess: str = NMEABuilder.build_MSG(bme280_data['status']) + NMEABuilder.NMEA_EOS
                     nmea_data = { "message": mess }
                 else:
