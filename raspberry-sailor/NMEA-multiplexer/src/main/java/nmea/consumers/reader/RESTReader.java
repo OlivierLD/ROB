@@ -63,6 +63,9 @@ public class RESTReader extends NMEAReader {
 	}
 	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs) {
 		super(threadName != null ? threadName : "rest-thread", al);
+		if (verbose) {
+			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
+		}
 		this.protocol = protocol;
 		this.hostName = host;
 		this.httpPort = http;
@@ -95,9 +98,15 @@ public class RESTReader extends NMEAReader {
 	/**
 	 * Processes the REST response. Designed in case it needs to be overridden.
 	 * Used as responseProcessor (see above)
-	 * (TODO Illustrate)
+	 * Does a super.fireDataRead(new NMEAEvent(this, nmeaContent));
+	 * (TODO Illustrate extension)
 	 *
-	 * @param response The response tpo process
+	 * IMPORTANT: It's the server's responsibility to provide well formed NMEA Sentences.
+	 * If the payload is a JSON Map, every member of the map will be considered as 'sendable'.
+	 * Otherwise, the full payload will be sent.
+	 * This means that each member VALUE needs to be a valid NMEA string. See detectSentence, in NMEAParser.
+	 *
+	 * @param response The response to process
 	 * @throws Exception Oops.
 	 */
 	@SuppressWarnings("unchecked")
@@ -141,7 +150,7 @@ public class RESTReader extends NMEAReader {
 			try {
 				Object finalObject = mapper.readValue(payload, Object.class);
 				if (finalObject instanceof Map) {
-					((Map<String, String>) finalObject).forEach((k, v) -> dataToFire.add(v));
+					((Map<String, String>) finalObject).forEach((k, v) -> dataToFire.add(v)); // Prepare all the elements of the map
 				} else {
 					dataToFire.add(payload);
 				}
@@ -152,10 +161,13 @@ public class RESTReader extends NMEAReader {
 
 			// Loop on all data to fire.
 			dataToFire.forEach(data -> {
-				if (!data.endsWith(NMEAParser.NMEA_SENTENCE_SEPARATOR)) {
+				if (data != null && !data.endsWith(NMEAParser.NMEA_SENTENCE_SEPARATOR)) {
 					data += NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				}
 				NMEAEvent n = new NMEAEvent(this, data);
+				if (verbose) {
+					System.out.printf("\tRESTReader firing super.fireDataRead with %s\n", data);
+				}
 				super.fireDataRead(n);
 			});
 		} catch (Exception ex) {
@@ -216,7 +228,7 @@ public class RESTReader extends NMEAReader {
 					ex.printStackTrace();
 				}
 				// Wait like 1 sec.
-				TimeUtil.delay(1_000L);
+				TimeUtil.delay(1_000L); // TODO Make this a parameter
 			}
 			System.out.println("Stop Reading REST server.");
 		} catch (Exception e) {

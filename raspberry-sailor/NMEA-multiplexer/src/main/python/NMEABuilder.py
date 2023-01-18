@@ -5,8 +5,8 @@ import prefixes  # local script
 from datetime import datetime, timezone
 from typing import Dict  # , List, Set, Tuple, Optional
 
-
 DEBUG: bool = False
+NMEA_EOS: str = "\r\n"  # aka CR-LF
 
 
 # UTC Time
@@ -70,12 +70,12 @@ def build_MTA(temperature: float) -> str:
 # Atm Pressure
 def build_MMB(mb_pressure: float) -> str:
     """
-    Build MMB sentence. 
+    Build MMB sentence.
     mbPressure: pressure, in mb
     """
     sentence: str = f"{prefixes.DEVICE_PREFIX}MMB,"
-    sentence += f"{mb_pressure / 33.8600:0.4f},I,"   # Inches of Hg
-    sentence += f"{mb_pressure / 1_000:0.4f},B"      # Bars. 1 mb = 1 hPa
+    sentence += f"{mb_pressure / 33.8600:0.4f},I,"  # Inches of Hg
+    sentence += f"{mb_pressure / 1_000:0.4f},B"  # Bars. 1 mb = 1 hPa
 
     cs: int = checksum.calculate_check_sum(sentence)
     str_cs: str = f"{cs:02X}"  # Should be 2 character long, in upper case.
@@ -112,22 +112,23 @@ XDR_PTCH: str = "PTCH"  # No, it's not a typo, there is no 'I' in 'PTCH'.
 XDR_ROLL: str = "ROLL"
 
 XDR_Types: Dict[str, Dict] = {
-    "TEMPERATURE": { "type": "C", "unit": "C", "to_string": xdr_value_to_str_1_dec },           # in Celsius
-    "ANGULAR_DISPLACEMENT": { "type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec }, # In degrees. Possible Extra args, PTCH, ROLL.
-    "LINEAR_DISPLACEMENT": { "type": "D", "unit": "M", "to_string": xdr_default_fmt },          # In meters
-    "FREQUENCY": { "type": "F", "unit": "H", "to_string": xdr_default_fmt },                    # In Hertz
-    "FORCE": { "type": "N", "unit": "N", "to_string": xdr_default_fmt },                        # In Newtons
-    "PRESSURE_B": { "type": "P", "unit": "B", "to_string": xdr_value_to_str_4_dec },            # In Bars
-    "PRESSURE_P": { "type": "P", "unit": "P", "to_string": xdr_value_to_str_no_dec },           # In Pascals
-    "FLOW_RATE": { "type": "R", "unit": "l", "to_string": xdr_default_fmt },                    # In liters
-    "TACHOMETER": { "type": "T", "unit": "R", "to_string": xdr_default_fmt },                   # In RPM
-    "HUMIDITY": { "type": "H", "unit": "P", "to_string": xdr_value_to_str_1_dec },              # In %
-    "VOLUME": { "type": "V", "unit": "M", "to_string": xdr_default_fmt },                       # In Cubic meters
-    "GENERIC": { "type": "G", "unit": "", "to_string": xdr_value_to_str_5_dec },                # No unit
-    "CURRENT": { "type": "I", "unit": "A", "to_string": xdr_default_fmt },                      # Electric current, in Amperes
-    "VOLTAGE": { "type": "U", "unit": "V", "to_string": xdr_default_fmt },                      # In Volts
-    "SWITCH_OR_VALVE": { "type": "S", "unit": "", "to_string": xdr_default_fmt },               # No Unit
-    "SALINITY": { "type": "L", "unit": "S", "to_string": xdr_default_fmt }                      # In Parts per Thousand
+    "TEMPERATURE": {"type": "C", "unit": "C", "to_string": xdr_value_to_str_1_dec},  # in Celsius
+    "ANGULAR_DISPLACEMENT": {"type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec},
+    # In degrees. Possible Extra args, PTCH, ROLL.
+    "LINEAR_DISPLACEMENT": {"type": "D", "unit": "M", "to_string": xdr_default_fmt},  # In meters
+    "FREQUENCY": {"type": "F", "unit": "H", "to_string": xdr_default_fmt},  # In Hertz
+    "FORCE": {"type": "N", "unit": "N", "to_string": xdr_default_fmt},  # In Newtons
+    "PRESSURE_B": {"type": "P", "unit": "B", "to_string": xdr_value_to_str_4_dec},  # In Bars
+    "PRESSURE_P": {"type": "P", "unit": "P", "to_string": xdr_value_to_str_no_dec},  # In Pascals
+    "FLOW_RATE": {"type": "R", "unit": "l", "to_string": xdr_default_fmt},  # In liters
+    "TACHOMETER": {"type": "T", "unit": "R", "to_string": xdr_default_fmt},  # In RPM
+    "HUMIDITY": {"type": "H", "unit": "P", "to_string": xdr_value_to_str_1_dec},  # In %
+    "VOLUME": {"type": "V", "unit": "M", "to_string": xdr_default_fmt},  # In Cubic meters
+    "GENERIC": {"type": "G", "unit": "", "to_string": xdr_value_to_str_5_dec},  # No unit
+    "CURRENT": {"type": "I", "unit": "A", "to_string": xdr_default_fmt},  # Electric current, in Amperes
+    "VOLTAGE": {"type": "U", "unit": "V", "to_string": xdr_default_fmt},  # In Volts
+    "SWITCH_OR_VALVE": {"type": "S", "unit": "", "to_string": xdr_default_fmt},  # No Unit
+    "SALINITY": {"type": "L", "unit": "S", "to_string": xdr_default_fmt}  # In Parts per Thousand
 }
 
 
@@ -139,9 +140,9 @@ def build_XDR(*args) -> str:
         xdr_type: dict = XDR_Types[args[i]["type"]]
         # print(f"xdr_type: ${type(xdr_type)}")
         if "extra" in args[i]:
-            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{args[i]['extra']}"
+            sentence += f",{xdr_type['type']},{xdr_type['to_string'](args[i]['value'])},{xdr_type['unit']},{args[i]['extra']}"
         else:
-            sentence += f",{xdr_type['type']},{ xdr_type['to_string'](args[i]['value']) },{xdr_type['unit']},{i}"
+            sentence += f",{xdr_type['type']},{xdr_type['to_string'](args[i]['value'])},{xdr_type['unit']},{i}"
 
     cs: int = checksum.calculate_check_sum(sentence)
     str_cs: str = f"{cs:02X}"  # Should be 2 character long, in upper case.
@@ -195,23 +196,23 @@ def build_MSG(mess: str) -> str:
 # This is for tests
 if __name__ == '__main__':
     print(f"Generated ZDA: {build_ZDA()}")
-    
+
     print(f"Generated MTA: {build_MTA(12.34)}")
     print(f"Generated MTA: {build_MTA(.34)}")
     print(f"Generated MTA: {build_MTA(12.34567)}")
 
     print(f"Generated MMB: {build_MMB(1013.25)}")
 
-    xdr_sentence: str = build_XDR({ "value": 123, "type": "TEMPERATURE" },
-                                  { "value": 1.01325, "type": "PRESSURE_B" })
+    xdr_sentence: str = build_XDR({"value": 123, "type": "TEMPERATURE"},
+                                  {"value": 1.01325, "type": "PRESSURE_B"})
     print(f"Generated XDR: {xdr_sentence}")
-    xdr_sentence = build_XDR({ "value": 56.78, "type": "HUMIDITY" },
-                             { "value": 12.34, "type": "TEMPERATURE" },
-                             { "value": 101_325, "type": "PRESSURE_P" },
-                             { "value": 1.01325, "type": "PRESSURE_B" })
+    xdr_sentence = build_XDR({"value": 56.78, "type": "HUMIDITY"},
+                             {"value": 12.34, "type": "TEMPERATURE"},
+                             {"value": 101_325, "type": "PRESSURE_P"},
+                             {"value": 1.01325, "type": "PRESSURE_B"})
     print(f"Generated XDR: {xdr_sentence}")
-    xdr_sentence = build_XDR({ "value": 56.78, "type": "ANGULAR_DISPLACEMENT", "extra": "PTCH" },
-                             { "value": 12.34, "type": "ANGULAR_DISPLACEMENT", "extra": "ROLL" })
+    xdr_sentence = build_XDR({"value": 56.78, "type": "ANGULAR_DISPLACEMENT", "extra": "PTCH"},
+                             {"value": 12.34, "type": "ANGULAR_DISPLACEMENT", "extra": "ROLL"})
     print(f"Generated XDR: {xdr_sentence}")
 
     print(f"Generated HDM: {build_HDM(195.4)}")

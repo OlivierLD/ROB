@@ -32,7 +32,14 @@ public class RESTClient extends NMEAClient {
 			System.out.println("Received from REST :" + e.getContent());
 		}
 		if (multiplexer != null) {
+			if (verbose) {
+				System.out.println("From REST, mux.onData :" + e.getContent());
+			}
 			multiplexer.onData(e.getContent());
+		} else {
+			if (verbose) {
+				System.out.println("From REST, NO mux");
+			}
 		}
 	}
 
@@ -40,7 +47,7 @@ public class RESTClient extends NMEAClient {
 
 	public static class RESTBean implements ClientBean {
 		private final String cls;
-		private final String type = "rest";  // TODO Other parameters !!
+		private final String type = "rest";  // TODO Other parameters !!, like frequency
 		private String protocol = "http";
 		private final String hostname;
 		private final int port;
@@ -132,7 +139,7 @@ public class RESTClient extends NMEAClient {
 		for (String s : args) {
 			System.out.println("CustomRESTClient prm:" + s);
 		}
-		String serverNameOrIP = "192.168.1.102";
+		String serverNameOrIP = "192.168.1.105";
 
 		nmeaClient = new RESTClient();
 
@@ -147,9 +154,10 @@ public class RESTClient extends NMEAClient {
 				"http",
 				serverNameOrIP,
 				8_080,
-				"/oplist/",
+				"/bme280/oplist", // /bme280/data, /bme280/nmea-data
 				"",
 				null));
+		nmeaClient.setVerbose(true);
 		nmeaClient.startWorking();
 	}
 }

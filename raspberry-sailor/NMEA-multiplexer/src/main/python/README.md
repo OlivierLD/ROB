@@ -8,10 +8,34 @@ framework deprecation, restrictions based on the JDK version... Here is a try to
 
 For now, this is more to be seen as a Proof Of Concept (POC) than anything else. 
 
-The tricky point was to find a suitable way to establish a communication between Java and Python, and this without having to depend on external code.  
-So we are going to use TCP (Transfer Control Protocol), language agnostic protocol supported by many languages - including Java and Python, and the data going back and forth
+The tricky point was to find a suitable way to establish a communication between Java and Python, and this without having to depend on external code. And ideally, a language agnostic method.  
+
+After several trials, two main communication methods emerged:
+- Transfer Control Protocol (TCP)
+- Representational State Transfer (REST)
+  - relies on HTTP, itself relying on TCP
+
+### TCP and REST, in short
+TCP implementations exist in the NMEA world (OpenCPN, SeaWi, ...). When a client connects to a TCP server, then the TCP server starts feeding the client with 
+NMEA sentences, as long as the client remains connected to the server. This is indeed very convenient for data like Heading, Wind Speed, etc.  
+TCP is a _connected_ protocol. The client remains connected to the server as long s he does not explicitly disconnect (or on error).
+
+REST, as it is relying on HTTP, is not a connected protocol. A REST request goes like this:
+- Client connects to the server
+- Client sends a request
+- Server produces a response, sent back to the client
+- Connection is _closed_ (and cannot be reused)
+
+In this context, this is convenient if you do not need to receive as many data as possible, but more like on
+an on-demand basis. Like for Air Temperature, Atmospheric Pressure, etc. Those data do not vary
+as fast as boat or wind speed.
+
+So we are going to use TCP and REST, language agnostic protocol supported by many languages - including Java and Python, and the data going back and forth
 will be encapsulated by JSON (JavaScript Object Notation), also natively supported by the languages we target.
 
+_**A last detail**_: The servers (TCP and/or REST) do not need to run on the same machine as the NMEA-multiplexer. All they need is to see each other on the network.
+
+## Implementations
 This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
 reading sensor data, that could be used to feed the NMEA-multiplexer.  
 The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors' provider.
@@ -20,12 +44,13 @@ The code provided in this folder requires those modules to be installed first (w
 > _**Note**_: the sensors we talk about here are atmospheric and magnetic sensors, using I2C (or maybe SPI some day) protocol.
 > We will _not_ use GPS here. GPS' are read using Serial communication. Look into the Java code for that.
 
+### TCP
 The Python code reads the sensor's data, and builds appropriate NMEA sentence(s) to carry them around.
 The code acts as a TCP server, so any TCP client can receive the produced NMEA sentences.  
 > _**Note**_: TCP is one of the inputs the NMEA-multiplexer expects, but any TCP/NMEA savvy client can use it.
 > Like [OpenCPN](https://www.opencpn.org/), [SeaWi](http://www.seawimarine.net/), etc.
 
-We provide here TCP server reading the following sensors:
+We provide here TCP servers reading the following sensors:
 - [BMP180](https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library). Temperature, Pressure.
 - [BME280](https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout). Temperature, Pressure, Relative Humidity.
 - [HTUDF21D](https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor).  Temperature, Relative Humidity.
@@ -207,6 +232,20 @@ User Request > /exit
 Done with dummy reader
 $
 ```
+
+### REST
+There is a REST channel that comes with the NMEA-multiplexer. Let's use it.
+
+_Server Example_: `REST_BME280_server.py`  
+Start it like in
+```
+$ python3 src/main/python/REST_BME280_server.py --machine-name:192.168.1.105 --simulate-when-missing:true
+```
+
+> _**Important**_: As it is now, it's the server responsibility to respond with _valid_ NMEA strings. 
+> See the NMEA-multiplexer Consumer's doc for details.
+
+. . .
 
 ---
 ## Misc links and stuff

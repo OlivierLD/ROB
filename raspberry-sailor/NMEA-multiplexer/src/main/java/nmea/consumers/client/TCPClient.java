@@ -114,7 +114,7 @@ public class TCPClient extends NMEAClient {
 			}
 		});
 		nmeaClient.initClient();
-		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, 7001));
+		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, 7_001));
 		nmeaClient.startWorking();
 	}
 }

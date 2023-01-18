@@ -148,7 +148,7 @@ public final class NMEAParser extends Thread {
 		String ret = null;
 		try {
 			if (interesting()) {
-				// DEBUG
+				// DEBUG. TODO some system var to see what's going on?
 //			System.out.println("=== NMEAParser ===");
 //			DumpUtil.displayDualDump(nmeaStream);
 				int start = getSentenceStartIndex(nmeaStream);
