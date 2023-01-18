@@ -214,7 +214,8 @@ channels:
       between-loops: 2000  # in ms
       verbose: false
     ```
-    This one is more designed to be extended. More samples to come.  
+    <!-- This one is more designed to be extended. -->  
+    More samples to come.    
     The tricky point is that this has to generate a _valid_ NMEA String, and that requires
     a knowledge of the structure of the payload returned by the service, if not some post-processing.
   
