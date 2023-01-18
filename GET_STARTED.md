@@ -13,15 +13,23 @@ at runtime.
 
 # Install required software, clone the repo, build and run a first module.
 
-## You will need
+## You will need:
 - git
 - Java (JDK 11)
 - To access a GPS (and/or NMEA data) through a Serial Port, `librxtx-java`
 - Python 3 (in some cases)
 
-The modules of the project are built using `gradle`. It will be downloaded and installed automatically if not there yet.
+> _**Note**_: The modules of the project are built using `gradle`. It will be downloaded and installed automatically if not there yet.  
+> So, you do _NOT_ need to worry about it.
 
 All the commands described below are to be run from a terminal (unless mentioned otherwise).
+
+> _**Note**_: in the following instructions, make sure you respect the provided syntax.  
+> When you see something like 
+> ```
+> ../../../gradlew shadowJar
+> ```
+> do use the leading `../../..` ! (Thanks to Captain K)
 
 ## Install required software
 - To know if `git` is available on your system:

@@ -39,6 +39,7 @@ public class RESTReader extends NMEAReader {
 	private final static String DEFAULT_PROTOCOL = "http";
 	private final static String DEFAULT_QUERY_PATH = "/";
 	private final static String DEFAULT_QUERY_STRING = "";
+	private final static long DEFAULT_BETWEEN_LOOPS = 1_000L;
 
 	private int httpPort = DEFAULT_HTTP_PORT;
 	private String hostName = DEFAULT_HOST_NAME;
@@ -46,22 +47,23 @@ public class RESTReader extends NMEAReader {
 	private String queryPath = DEFAULT_QUERY_PATH;
 	private String queryString = DEFAULT_QUERY_STRING;
 	private String jqsString = null; // jq syntax doc: https://lzone.de/cheat-sheet/jq, jackson-jq repo: https://github.com/eiiches/jackson-jq
+	private long betweenLoops = DEFAULT_BETWEEN_LOOPS;
 
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final Scope ROOT_SCOPE = Scope.newEmptyScope(); // jq scope
 
 	public RESTReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null);
+		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
 	}
 
 	public RESTReader(List<NMEAListener> al, int http) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null);
+		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
 	}
 
 	public RESTReader(List<NMEAListener> al, String host, int http) {
-		this(null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null);
+		this(null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
 	}
-	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs) {
+	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs, Long betweenLoops) {
 		super(threadName != null ? threadName : "rest-thread", al);
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
@@ -72,6 +74,7 @@ public class RESTReader extends NMEAReader {
 		this.queryPath = path;
 		this.queryString = qs;
 		this.jqsString = jqs;
+		this.betweenLoops = betweenLoops;
 	}
 
 	public String getProtocol() {
@@ -92,6 +95,7 @@ public class RESTReader extends NMEAReader {
 	public String getJQString() {
 		return this.jqsString;
 	}
+	public long getBetweenLoops() { return this.betweenLoops; }
 
 	public Consumer<HTTPServer.Response> responseProcessor = this::manageRESTResponse;
 
@@ -228,7 +232,7 @@ public class RESTReader extends NMEAReader {
 					ex.printStackTrace();
 				}
 				// Wait like 1 sec.
-				TimeUtil.delay(1_000L); // TODO Make this a parameter
+				TimeUtil.delay(this.betweenLoops);
 			}
 			System.out.println("Stop Reading REST server.");
 		} catch (Exception e) {

@@ -17,8 +17,9 @@ channels:
     machine-name: 192.168.1.105
     http-port: 8080
     query-path: /bme280/nmea-data
-    # query-string:     # Would include the ?, and subsequent &...
-    # jqs:              # JQ String, to apply on the response
+    # query-string:      # Would include the ?, and subsequent &...
+    # jqs:               # JQ String, to apply on the response
+    between-loops: 2000  # in ms
     verbose: false
 forwarders:
   - type: console

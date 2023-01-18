@@ -30,6 +30,7 @@ public class RESTReaderTest {
                 8_080,
                 "/eink2_13/oplist",
                 "",
+                null,
                 null));
         nmeaClient.startWorking();
 

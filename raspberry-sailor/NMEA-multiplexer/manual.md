@@ -187,6 +187,7 @@ channels:
     mux.01.type=zda
     ```
 - `rest`
+  - Work in Progress
   - For `GET` queries only (...for now)  
     ```properties
     mux.01.type=rest
@@ -196,13 +197,38 @@ channels:
     mux.01.query-path=/mux/cache
     mux.01.query-string=?query=string  # Would include the ?, and subsequent &...
     mux.01.jqs=".NMEA_AS_IS | { RMC, GLL }"  # jq-like expression
+    mux.01.between-loops=1000   # Default is 1000ms
     mux.01.verbose=false
+    ```
+    or in `yaml`:
+    ```yaml
+    channels:
+    . . .
+    - type: rest
+      protocol: http
+      machine-name: 192.168.1.105
+      http-port: 8080
+      query-path: /bme280/nmea-data
+      query-string: ?query=string
+      jqs: ".NMEA_AS_IS | { RMC, GLL }"
+      between-loops: 2000  # in ms
+      verbose: false
     ```
     This one is more designed to be extended. More samples to come.  
     The tricky point is that this has to generate a _valid_ NMEA String, and that requires
     a knowledge of the structure of the payload returned by the service, if not some post-processing.
   
-- _Note_: there is an "Implicit" REST input (to feed the cache)
+    As it is now, we can deal with REST services returning in the response's payload:
+    - A JSON Map
+    - A plain object (as a String in `plain/text`)
+    
+    If it is a map like `{ "one": "$IDAAA,aaaaa*FF", "two": "$IDBBB,bbbbb*FF" }`, the Consumer will
+    assume that the values `"$IDAAA,aaaaa*FF"` and `"$IDBBB,bbbbb*FF"` are NMEA 
+    valid strings, and will be managed as such. If invalid, they'd be lost (See in `nmea.api.NMEAParser`, method `interesting()`).  
+    If it is a plain object, it will be managed as usual, if NMEA-valid.
+---
+
+- _**Note**_: there is an "Implicit" REST input (to feed the cache)
     - Like a `rest` input channel (consumer)
     - If the `with.http.server` is running, then there is REST resource
     ```

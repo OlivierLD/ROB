@@ -175,6 +175,15 @@ public class MuxInitializer {
                                 String queryPath = muxProps.getProperty(String.format("mux.%s.query-path", MUX_IDX_FMT.format(muxIdx)));
                                 String queryString = muxProps.getProperty(String.format("mux.%s.query-string", MUX_IDX_FMT.format(muxIdx)));
                                 String jqString = muxProps.getProperty(String.format("mux.%s.jqs", MUX_IDX_FMT.format(muxIdx)));
+                                Long betweenLoops = null;
+                                String strBetweenLoops = muxProps.getProperty(String.format("mux.%s.between-loops", MUX_IDX_FMT.format(muxIdx)));
+                                if (strBetweenLoops != null) {
+                                    try {
+                                        betweenLoops = Long.parseLong(strBetweenLoops);
+                                    } catch (NumberFormatException nfe) {
+                                        nfe.printStackTrace();
+                                    }
+                                }
                                 deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 RESTClient restClient = new RESTClient(
@@ -182,7 +191,7 @@ public class MuxInitializer {
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
                                 restClient.initClient();
-                                restClient.setReader(new RESTReader("MUX-RESTReader", restClient.getListeners(), protocol, machineName, Integer.parseInt(httPort), queryPath, queryString, jqString));
+                                restClient.setReader(new RESTReader("MUX-RESTReader", restClient.getListeners(), protocol, machineName, Integer.parseInt(httPort), queryPath, queryString, jqString, betweenLoops));
                                 restClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(restClient);
                             } catch (Exception e) {

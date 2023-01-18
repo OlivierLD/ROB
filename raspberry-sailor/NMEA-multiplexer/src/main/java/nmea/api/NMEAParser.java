@@ -30,7 +30,7 @@ import java.util.List;
  * @see nmea.api.NMEAException
  */
 public final class NMEAParser extends Thread {
-	protected String[] nmeaPrefix = null;
+	private String[] nmeaPrefix = null;
 	private String[] nmeaSentence = null;
 
 	private StringBuffer nmeaStream = new StringBuffer();
@@ -100,7 +100,7 @@ public final class NMEAParser extends Thread {
 								instance.fireDataDetected(new NMEAEvent(this, s));
 							} else {
 								if ("true".equals(System.getProperty("nmea.parser.verbose","false"))) {
-									System.out.println(String.format("  >>> Rejecting [%s] <<< ", s.trim()));
+									System.out.printf("  >>> Rejecting [%s] <<< \n", s.trim());
 								}
 							}
 						}
@@ -188,8 +188,8 @@ public final class NMEAParser extends Thread {
 	}
 	/**
 	 * Detects a potentially valid NMEA Sentence
-	 * @return true if a potential sentence is detected.
-	 * @throws NMEAException
+	 * @return true if a potential sentence is detected. false if not.
+	 * @throws NMEAException Oops
 	 */
 	private boolean interesting()
 					throws NMEAException {

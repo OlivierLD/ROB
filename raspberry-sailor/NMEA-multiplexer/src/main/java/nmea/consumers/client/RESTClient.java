@@ -156,6 +156,7 @@ public class RESTClient extends NMEAClient {
 				8_080,
 				"/bme280/oplist", // /bme280/data, /bme280/nmea-data
 				"",
+				null,
 				null));
 		nmeaClient.setVerbose(true);
 		nmeaClient.startWorking();
