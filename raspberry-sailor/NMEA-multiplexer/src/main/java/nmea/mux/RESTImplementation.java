@@ -39,7 +39,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class defines the REST operations supported by the HTTP Server.
+ * This class defines the REST operations supported by the HTTP Server, including Admin operations
  * <p>
  * This list is defined in the <code>List&lt;Operation&gt;</code> named <code>operations</code>.
  * <br>
