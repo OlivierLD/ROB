@@ -39,11 +39,21 @@ public class RandomClient extends NMEAClient {
 	private static RandomClient nmeaClient = null;
 
 	public static class RandomBean implements ClientBean {
-		private final String cls;
+		private String cls;
 		private final String type = "rnd";
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose = false;
+
+		public RandomBean() { // for Jackson
+		}
+
+		public RandomBean(RandomClient instance) {
+			cls = instance.getClass().getName();
+			verbose = instance.isVerbose();
+			deviceFilters = instance.getDevicePrefix();
+			sentenceFilters = instance.getSentenceArray();
+		}
 
 		public String getCls() {
 			return cls;
@@ -53,12 +63,6 @@ public class RandomClient extends NMEAClient {
 			return verbose;
 		}
 
-		public RandomBean(RandomClient instance) {
-			cls = instance.getClass().getName();
-			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
-		}
 
 		@Override
 		public String getType() {

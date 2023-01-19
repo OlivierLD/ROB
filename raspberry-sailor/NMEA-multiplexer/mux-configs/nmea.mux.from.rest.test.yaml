@@ -12,6 +12,7 @@ context:
   default.declination: 0
 channels:
 #  - type: rnd
+#  - type: zda
   - type: rest           # A test of the rest consumer.
     protocol: http
     machine-name: 192.168.1.105

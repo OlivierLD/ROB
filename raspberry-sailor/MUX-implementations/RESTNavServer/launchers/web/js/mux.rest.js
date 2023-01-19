@@ -143,15 +143,15 @@ let getComputers = () => {
 };
 
 let addForwarder = (forwarder) => {
-    return getPromise('/mux/forwarders', DEFAULT_TIMEOUT, 'POST', 200, forwarder);
+    return getPromise('/mux/forwarders', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 200 || ret === 201); }, forwarder);
 };
 
 let addChannel = (channel) => {
-    return getPromise('/mux/channels', DEFAULT_TIMEOUT, 'POST', 200, channel);
+    return getPromise('/mux/channels', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 200 || ret === 201); }, channel);
 };
 
 let addComputer = (computer) => {
-    return getPromise('/mux/computers', DEFAULT_TIMEOUT, 'POST', 200, computer);
+    return getPromise('/mux/computers', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 200 || ret === 201); }, computer);
 };
 
 let updateChannel = (channel) => {
@@ -346,7 +346,7 @@ let serialPortList = () => {
 };
 
 let buildList = (arr) => {
-    let str = (arr !== undefined) ? arr.toString() : "";
+    let str = (arr) ? arr.toString() : "";
     return str;
 };
 

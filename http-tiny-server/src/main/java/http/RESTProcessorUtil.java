@@ -274,5 +274,9 @@ CancelPizzaTestSuite,I don't want my Pizza anymore,CancelPizza,true,en,en,,
 			this.message = message;
 			return this;
 		}
+
+		public String getMessage() { // For Jackson...
+			return message;
+		}
 	}
 }

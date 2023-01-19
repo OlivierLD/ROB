@@ -40,13 +40,13 @@ public class UDPClient extends NMEAClient {
 	private static UDPClient nmeaClient = null;
 
 	public static class UDPBean implements ClientBean {
-		private final String cls;
+		private String cls;
 		private final String type = "udp";
-		private final int port;
-		private final String hostname;
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private int port;
+		private String hostname;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
 
 		public String getCls() {
 			return cls;
@@ -56,6 +56,7 @@ public class UDPClient extends NMEAClient {
 			return verbose;
 		}
 
+		public UDPBean() {}
 		public UDPBean(UDPClient instance) {
 			cls = instance.getClass().getName();
 			port = ((UDPReader) instance.getReader()).getPort();

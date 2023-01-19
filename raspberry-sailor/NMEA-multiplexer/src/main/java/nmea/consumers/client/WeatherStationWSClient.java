@@ -46,12 +46,12 @@ public class WeatherStationWSClient extends NMEAClient {
 	private static WeatherStationWSClient nmeaClient = null;
 
 	public static class WeatherStationBean implements ClientBean {
-		private final String cls;
+		private String cls;
 		private final String type = "weather.station";
-		private final String wsUri;
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private String wsUri;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
 
 		public String getCls() {
 			return cls;
@@ -61,6 +61,7 @@ public class WeatherStationWSClient extends NMEAClient {
 			return verbose;
 		}
 
+		public WeatherStationBean() {}
 		public WeatherStationBean(WeatherStationWSClient instance) {
 			cls = instance.getClass().getName();
 			wsUri = ((WeatherStationWSReader) instance.getReader()).getWsUri();

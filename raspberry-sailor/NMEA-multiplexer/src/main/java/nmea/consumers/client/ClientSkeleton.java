@@ -39,11 +39,13 @@ public class ClientSkeleton extends NMEAClient {
 	private static ClientSkeleton nmeaClient = null;
 
 	public static class SkeletonBean implements ClientBean {
-		private final String cls;
+		private String cls;
 		private final String type = "skeleton";
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
+
+		public SkeletonBean() {}
 
 		public SkeletonBean(ClientSkeleton instance) {
 			cls = instance.getClass().getName();

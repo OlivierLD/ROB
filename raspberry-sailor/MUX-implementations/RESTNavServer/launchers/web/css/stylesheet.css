@@ -9,8 +9,8 @@ body {
     font-family: "Lato", Verdana, Helvetica, Geneva, sans-serif;
     background-position: top left;
     background-repeat: repeat;
-    background-image: url("../images/backgrounds/bground.jpg");
-    /*background-image: linear-gradient(white, lightgray);*/
+    /* background-image: url("../images/backgrounds/bground.jpg"); */
+    background-image: linear-gradient(white, lightgray);
 }
 
 h1 {

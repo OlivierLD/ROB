@@ -903,9 +903,9 @@ public class RESTImplementation {
 								.errorCode("ASTRO-0401")
 								.errorMessage(ex.toString())
 								.errorStack(Arrays.asList(ex.getStackTrace())
-																		.stream()
-																		.map(te -> te.toString())
-																		.collect(Collectors.toList())));
+														.stream()
+														.map(te -> te.toString())
+														.collect(Collectors.toList())));
 				// More details
 //				String stackTrace = new Gson().toJson(ex.getStackTrace());
 //				RESTProcessorUtil.generateResponseHeaders(response, stackTrace.length());

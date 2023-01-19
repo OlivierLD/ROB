@@ -16,18 +16,8 @@ import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
 import nmea.computers.Computer;
 import nmea.computers.ExtraDataComputer;
-import nmea.consumers.client.DataFileClient;
-import nmea.consumers.client.RandomClient;
-import nmea.consumers.client.SerialClient;
-import nmea.consumers.client.TCPClient;
-import nmea.consumers.client.WebSocketClient;
-import nmea.consumers.client.ZDAClient;
-import nmea.consumers.reader.DataFileReader;
-import nmea.consumers.reader.RandomReader;
-import nmea.consumers.reader.SerialReader;
-import nmea.consumers.reader.TCPReader;
-import nmea.consumers.reader.WebSocketReader;
-import nmea.consumers.reader.ZDAReader;
+import nmea.consumers.client.*;
+import nmea.consumers.reader.*;
 import nmea.forwarders.*;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
@@ -1228,7 +1218,7 @@ public class RESTImplementation {
 				try {
 					TCPClient.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPClient.TCPBean.class); // new Gson().fromJson(new String(request.getContent()), TCPClient.TCPBean.class);
 					opClient = nmeaDataClients.stream()
-							.filter(channel -> channel instanceof SerialClient &&
+							.filter(channel -> channel instanceof TCPClient &&
 									((TCPClient.TCPBean) channel.getBean()).getPort() == tcpJson.getPort() &&
 									((TCPClient.TCPBean) channel.getBean()).getHostname().equals(tcpJson.getHostname()))
 							.findFirst();
@@ -1250,7 +1240,7 @@ public class RESTImplementation {
 					} else {
 						// Already there
 						response.setStatus(HTTPServer.Response.BAD_REQUEST);
-						RESTProcessorUtil.addErrorMessageToResponse(response, "ths 'tcp' already exists");
+						RESTProcessorUtil.addErrorMessageToResponse(response, "this 'tcp' already exists");
 					}
 				} catch (Exception ex) {
 					response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1586,6 +1576,50 @@ public class RESTImplementation {
 				} catch (Exception ex) {
 					response.setStatus(HTTPServer.Response.BAD_REQUEST);
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+					ex.printStackTrace();
+				}
+				break;
+			case "rest":
+				try {
+					RESTClient.RESTBean restJson = mapper.readValue(new String(request.getContent()), RESTClient.RESTBean.class); // new Gson().fromJson(new String(request.getContent()), RandomClient.RandomBean.class);
+					opClient = nmeaDataClients.stream()
+							.filter(channel -> channel instanceof RESTClient &&
+									((RESTClient.RESTBean) channel.getBean()).getHostname().equals(restJson.getHostname())  &&
+									((RESTClient.RESTBean) channel.getBean()).getPort() == restJson.getPort()  &&
+									((RESTClient.RESTBean) channel.getBean()).getQueryPath().equals(restJson.getQueryPath()) /* && TODO other conditions ? */)
+							.findFirst();
+					if (!opClient.isPresent()) {
+						try {
+							NMEAClient restClient = new RESTClient(restJson.getDeviceFilters(), restJson.getSentenceFilters(), this.mux);
+							restClient.initClient();
+							restClient.setReader(new RESTReader("MUX-RESTReader",
+									restClient.getListeners(),
+									restJson.getProtocol(),
+									restJson.getHostname(),
+									restJson.getPort(),
+									restJson.getQueryPath(),
+									restJson.getQueryString(),
+									restJson.getJsonQueryString(),
+									restJson.getFrequency()));
+							nmeaDataClients.add(restClient);
+							restClient.startWorking();
+							String content = mapper.writeValueAsString(restClient.getBean()); // new Gson().toJson(rndClient.getBean());
+							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							response.setPayload(content.getBytes());
+						} catch (Exception ex) {
+							response.setStatus(HTTPServer.Response.BAD_REQUEST);
+							RESTProcessorUtil.addErrorMessageToResponse(response, ex.toString());
+							ex.printStackTrace();
+						}
+					} else {
+						// Already there
+						response.setStatus(HTTPServer.Response.BAD_REQUEST);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "this 'REST' already exists");
+					}
+				} catch (Exception ex) {
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+					ex.printStackTrace();
 				}
 				break;
 			case "custom":

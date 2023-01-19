@@ -62,16 +62,18 @@ public class DataFileClient extends NMEAClient {
 	private static DataFileClient nmeaClient = null;
 
 	public static class DataFileBean implements ClientBean {
-		private final String cls;
-		private final String file;
-		private final long pause;
+		private String cls;
+		private String file;
+		private long pause;
 		private final String type = "file";
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
-		private final boolean loop;
-		private final boolean zip;
-		private final String pathInArchive;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
+		private boolean loop;
+		private boolean zip;
+		private String pathInArchive;
+
+		public DataFileBean() {}
 
 		public DataFileBean(DataFileClient instance) {
 			cls = instance.getClass().getName();

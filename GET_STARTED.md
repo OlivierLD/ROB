@@ -205,6 +205,13 @@ $ ./demoLauncher.sh
 ```
 ... and see for yourself !
 
+The same Web pages can be accessed from other devices on the same network (other laptops, tablets, cell-phones).
+To facilitate the URL entry, go to "Nav Menu" (from `http://<your-ip>:9999/web/index.html`), and choose the `QR Codes` entry.  
+Make sure you use the server's IP address or name (not "localhost"), and then you can flash
+the generated QR Code from any other device.
+
+![QR Code](./images/QRCodes.png)
+
 > _**Note**_: to kill the server, use the script `./killns.sh`, or
 > use the `K` option in the `demoLauncher.sh`.
 

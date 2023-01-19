@@ -46,18 +46,19 @@ public class RESTClient extends NMEAClient {
 	private static RESTClient nmeaClient = null;
 
 	public static class RESTBean implements ClientBean {
-		private final String cls;
-		private final String type = "rest";  // TODO Other parameters !!, like frequency
+		private String cls;
+		private final String type = "rest";
 		private String protocol = "http";
-		private final String hostname;
-		private final int port;
+		private String hostname;
+		private int port;
 		private String queryPath = "/";
 		private String queryString = "";
 		private String jsonQueryString;
-		private String verb = "GET"; // TODO See if more verbs are needed.
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private long frequency = 1_000L;
+		private String verb = "GET";        // TODO See if more verbs are needed.
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
 
 		public String getCls() {
 			return cls;
@@ -83,9 +84,13 @@ public class RESTClient extends NMEAClient {
 			return verb;
 		}
 
+		public long getFrequency() { return frequency; }
+
 		public boolean isVerbose() {
 			return verbose;
 		}
+
+		public RESTBean() {}
 
 		public RESTBean(RESTClient instance) {
 			cls = instance.getClass().getName();
@@ -98,6 +103,7 @@ public class RESTClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			frequency = ((RESTReader) instance.getReader()).getBetweenLoops();
 		}
 
 		@Override

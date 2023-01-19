@@ -39,13 +39,13 @@ public class TCPClient extends NMEAClient {
 	private static TCPClient nmeaClient = null;
 
 	public static class TCPBean implements ClientBean {
-		private final String cls;
+		private String cls;
 		private final String type = "tcp";
-		private final int port;
-		private final String hostname;
-		private final String[] deviceFilters;
-		private final String[] sentenceFilters;
-		private final boolean verbose;
+		private int port;
+		private String hostname;
+		private String[] deviceFilters;
+		private String[] sentenceFilters;
+		private boolean verbose;
 
 		public String getCls() {
 			return cls;
@@ -55,6 +55,7 @@ public class TCPClient extends NMEAClient {
 			return verbose;
 		}
 
+		public TCPBean() {}
 		public TCPBean(TCPClient instance) {
 			cls = instance.getClass().getName();
 			port = ((TCPReader) instance.getReader()).getPort();
