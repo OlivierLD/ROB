@@ -429,16 +429,16 @@ let channelList = () => {
                     "</td><td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td valign='top'><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'serial':
-                    html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr><td><b>tcp</b></td><td>" + json[i].hostname + ":" + json[i].port + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>tcp</b></td><td>" + json[i].hostname + ":" + json[i].port + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'ws':
-                    html += ("<tr><td><b>ws</b></td><td> " + json[i].wsUri + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>ws</b></td><td> " + json[i].wsUri + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'rnd':
-                    html += ("<tr><td><b>rnd</b></td><td></td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>rnd</b></td><td></td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'bmp180':  // Obsolete
                     html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -460,19 +460,19 @@ let channelList = () => {
                     html += "</tr>";
                     break;
                 case 'zda':
-                    html += ("<tr><td><b>zda</b></td><td> Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>zda</b></td><td> Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'htu21df':  // Obsolete
                     html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
                              "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                              "Frequency: " + json[i].frequency + "ms <br/>" +
                              (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 default:
-                    html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
             }
         }
@@ -509,13 +509,13 @@ let forwarderList = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'serial':
-                    html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr><td><b>tcp</b></td><td>Port " + json[i].port + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
+                    html += ("<tr><td valign='top'><b>tcp</b></td><td>Port " + json[i].port + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
                     break;
                 case 'rest':
                     /*
@@ -524,13 +524,13 @@ let forwarderList = () => {
                      "verb": "POST",
                      "resource": "/whatever",
                      */
-                    html += ("<tr><td><b>rest</b></td><td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
                     break;
                 case 'gpsd':
-                    html += ("<tr><td><b>gpsd</b></td><td>Port " + json[i].port + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
+                    html += ("<tr><td valign='top'><b>gpsd</b></td><td>Port " + json[i].port + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
                     break;
                 case 'ws':
-                    html += ("<tr><td><b>ws</b></td><td>" + json[i].wsUri + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>ws</b></td><td>" + json[i].wsUri + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'rmi':
                     html += ("<tr><td valign='top'><b>rmi</b></td><td valign='top'>" +
@@ -540,7 +540,7 @@ let forwarderList = () => {
                         "</td><td valign='top'><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'console':
-                    html += ("<tr><td><b>console</b></td><td></td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>console</b></td><td></td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 default:
                     html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -643,7 +643,7 @@ let generateDiagram = () => {
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
-                case 'file': // TODO Add missing options
+                case 'file':
                     html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file + 
                         "<br>Archive ?: " + json[i].zip  + 
                         "<br>Path in archive: " + json[i].pathInArchive  + 
@@ -654,38 +654,38 @@ let generateDiagram = () => {
                         "</td></tr>");
                     break;
                 case 'serial':
-                    html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br +
+                    html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr><td><b>tcp</b></td><td>" + json[i].hostname + ":" + json[i].port +
+                    html += ("<tr><td valign='top'><b>tcp</b></td><td>" + json[i].hostname + ":" + json[i].port +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'ws':
-                    html += ("<tr><td><b>ws</b></td><td> " + json[i].wsUri +
+                    html += ("<tr><td valign='top'><b>ws</b></td><td> " + json[i].wsUri +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'rnd':
-                    html += ("<tr><td><b>rnd</b></td><td></td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                    html += ("<tr><td valign='top'><b>rnd</b></td><td></td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'bmp180': // Obsolete
                     html += ("<tr><td><b>bmp180</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'bme280': // Obsolete
                     html += ("<tr><td><b>bme280</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'lsm303': // Obsolete
@@ -698,27 +698,29 @@ let generateDiagram = () => {
                         "</td></tr>");
                     break;
                 case 'zda':
-                    html += ("<tr><td><b>zda</b></td><td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+                    html += ("<tr><td valign='top'><b>zda</b></td><td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'htu21df': // Obsolete
                     html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
                             "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                             "Frequency: " + json[i].frequency + "ms <br/>" +
-                            (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                            (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + 
+                            "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') + 
+                            "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') + "</td></tr>");
                     break;
                 default:
-                    html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls +
+                    html += ("<tr><td valign='top'><b><i>" + type + "</i></b></td><td>" + json[i].cls +
                         "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
-                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Device Filter') +
+                        "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
                     break;
             }
@@ -1153,7 +1155,9 @@ let showAddComputer = () => {
 let showDiv = (divId) => {
     let elmt = document.getElementById(divId);
 
-    elmt.classList.toggle('visible-div');
+    if (!('visible-div' in elmt.classList)) {
+        elmt.classList.add('visible-div');
+    }
 
     let newH = '100%';
     let newV = 'visible';
@@ -1167,7 +1171,9 @@ let showDiv = (divId) => {
 let hideDiv = (divId) => {
     let elmt = document.getElementById(divId);
 
-    elmt.classList.toggle('visible-div');
+    if (('visible-div' in elmt.classList)) {
+        elmt.classList.remove('visible-div');
+    }
 
     let newH = '0';
     let newV = 'hidden';
@@ -1178,24 +1184,30 @@ let hideDiv = (divId) => {
 };
 
 let showDivs = (channels, forwarders, computers) => {
-//  console.log("Displaying divs: channels " + (channels === true ? 'X' : 'O') + " forwarders " + (forwarders === true ? 'X' : 'O') + " computers " + (computers === true ? 'X' : 'O'));
+    // console.log("Displaying divs: channels " + (channels === true ? 'X' : 'O') + " forwarders " + (forwarders === true ? 'X' : 'O') + " computers " + (computers === true ? 'X' : 'O'));
 //   document.getElementById("add-channel").style.display = ((channels === true ? 'inline' : 'none'));
     if (channels === true) {
         showDiv("add-channel");
+        document.getElementById("add-channel-icon").src = 'pandown.gif';
     } else {
         hideDiv("add-channel");
+        document.getElementById("add-channel-icon").src = 'panright.gif';
     }
 //  document.getElementById("add-forwarder").style.display = ((forwarders === true ? 'inline' : 'none'));
     if (forwarders === true) {
         showDiv("add-forwarder");
+        document.getElementById("add-fwrd-icon").src = 'pandown.gif';
     } else {
         hideDiv("add-forwarder");
+        document.getElementById("add-fwrd-icon").src = 'panright.gif';
     }
 //  document.getElementById("add-computer").style.display = ((computers === true ? 'inline' : 'none'));
     if (computers === true) {
         showDiv("add-computer");
+        document.getElementById("add-comp-icon").src = 'pandown.gif';
     } else {
         hideDiv("add-computer");
+        document.getElementById("add-comp-icon").src = 'panright.gif';
     }
 };
 

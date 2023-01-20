@@ -4,13 +4,14 @@ html {
 
 body {
     color: blue;
+    background-color: rgba(192, 192, 192, 0.25);
     font-weight: normal;
     font-size: 10pt;
     font-family: "Lato", Verdana, Helvetica, Geneva, sans-serif;
-    background-position: top left;
-    background-repeat: repeat;
+    /* background-position: top left; */
+    /* background-repeat: repeat; */
     /* background-image: url("../images/backgrounds/bground.jpg"); */
-    background-image: linear-gradient(white, lightgray);
+    /* background-image: linear-gradient(white, lightgray); */
 }
 
 h1 {

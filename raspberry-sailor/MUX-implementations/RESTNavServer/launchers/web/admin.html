@@ -21,6 +21,12 @@
     <script type="text/javascript" src="./widgets/Graph.js"></script>
     <link id="page-ux" rel="stylesheet" href="./css/stylesheet.css" type="text/css"/>
     <style>
+
+      button {
+        border-radius: 5px;
+        background-color: rgba(255, 165, 0, 0.5);
+      }
+
       .selectedButton {
         padding:5px;
         border-top-right-radius: 10px;
@@ -973,9 +979,9 @@
     </div>
     </p>
     <p>
-      <button onclick="showAddChannel();">Add a Channel</button>&nbsp;
-      <button onclick="showAddForwarder();">Add a Forwarder</button>&nbsp;
-      <button onclick="showAddComputer();">Add a Computer</button>
+      <button onclick="showAddChannel();"><img id="add-channel-icon" src='panright.gif'>Add a Channel</button>&nbsp;
+      <button onclick="showAddForwarder();"><img id="add-fwrd-icon" src='panright.gif'>Add a Forwarder</button>&nbsp;
+      <button onclick="showAddComputer();"><img id="add-comp-icon" src='panright.gif'>Add a Computer</button>
       <div id="add-channel" class="smooth">
         <hr/>
         <h4>Add an input Channel</h4>
