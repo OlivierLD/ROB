@@ -9,15 +9,15 @@ From this page, you will learn how to install the required software to build and
 There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
 at runtime.
 
-> _**Note**_: This is written for RaspiOS, Debian, Ubuntu, and such clones.
+> _**Note**_: This document is written for RaspiOS, Debian, Ubuntu, and such clones.
 
 # Install required software, clone the repo, build and run a first module.
 
 ## You will need:
-- git
-- Java (JDK 11)
+- `git`
+- `Java` (JDK 11)
 - To access a GPS (and/or NMEA data) through a Serial Port, `librxtx-java`
-- Python 3 (in some cases)
+- `Python 3` (in some cases)
 
 > _**Note**_: The modules of the project are built using `gradle`. It will be downloaded and installed automatically if not there yet.  
 > So, you do _NOT_ need to worry about it.
@@ -29,7 +29,13 @@ All the commands described below are to be run from a terminal (unless mentioned
 > ```
 > ../../../gradlew shadowJar
 > ```
-> do use the leading `../../..` ! (Thanks to Captain K)
+> _**do enter**_ the command's leading `../../../` ! (Thanks to Captain K)  
+> 
+> Also, when you see a leading `$` in the commands below, this is the console's prompt. Do _**not**_ type it.  
+> When it says `$ which git`, what you actually need to type is just `which git`.  
+> Depending on your config (in `~/.bashrc`, `~/.bash-profile`, or so), this prompt may vary. It can also give you your current directory
+> or other environment data.  
+> Cheers!
 
 ## Install required software
 - To know if `git` is available on your system:

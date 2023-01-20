@@ -40,8 +40,9 @@ import java.util.stream.Collectors;
 
 /**
  * This class defines the REST operations supported by the HTTP Server, including Admin operations
+ * like Consumers, Forwarders, and Computers creation, deletion, etc.
  * <p>
- * This list is defined in the <code>List&lt;Operation&gt;</code> named <code>operations</code>.
+ * This list of operations is defined in the <code>List&lt;Operation&gt;</code> named <code>operations</code>.
  * <br>
  * The Multiplexer will use the {@link #processRequest(Request)} method of this class to
  * have the required requests processed.
@@ -144,7 +145,7 @@ public class RESTImplementation {
 					"POST",
 					REST_PREFIX + "/channels",
 					this::postChannel,
-					"Creates an input channel"),
+					"Creates an input channel (aka consumer)"),
 			new Operation(
 					"POST",
 					REST_PREFIX + "/computers",

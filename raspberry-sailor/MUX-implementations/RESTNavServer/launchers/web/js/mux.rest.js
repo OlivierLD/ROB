@@ -418,8 +418,15 @@ let channelList = () => {
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
-                case 'file':  // TODO Add missing options
-                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>Name: " + json[i].file + "<br>Between reads: " + json[i].pause + " ms" + "<br>Loop: " + json[i].loop + "</td><td valign='top'>" + buildList(json[i].deviceFilters) + "</td><td valign='top'>" + buildList(json[i].sentenceFilters) + "</td><td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td valign='top'><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                case 'file':
+                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>Name: " + json[i].file + 
+                    "<br>Archive ?: " + json[i].zip  + 
+                    "<br>Path in archive: " + json[i].pathInArchive  + 
+                    "<br>Between reads: " + json[i].pause + " ms" + 
+                    "<br>Loop: " + json[i].loop + 
+                    "</td><td valign='top'>" + buildList(json[i].deviceFilters) + 
+                    "</td><td valign='top'>" + buildList(json[i].sentenceFilters) +
+                    "</td><td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td valign='top'><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'serial':
                     html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -637,7 +644,11 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file': // TODO Add missing options
-                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file + "<br>Between reads: " + json[i].pause + " ms" + "<br>Loop: " + json[i].loop +
+                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file + 
+                        "<br>Archive ?: " + json[i].zip  + 
+                        "<br>Path in archive: " + json[i].pathInArchive  + 
+                        "<br>Between reads: " + json[i].pause + " ms" + 
+                        "<br>Loop: " + json[i].loop + 
                         "</td><td valign='top'>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td><td valign='top'>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
