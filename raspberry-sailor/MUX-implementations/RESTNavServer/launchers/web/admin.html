@@ -890,7 +890,7 @@
             terminate();
             document.body.innerHTML = '<h1>Bye-bye...</h1>' +
             '<h2>Server is going down upon your request.</h2>' +
-            '<p>Restart the server from a console to continue...</p>';
+            '<p>Restart the server from a console to resume...</p>';
           } else {
             console.log('Canceled');
           }
@@ -929,7 +929,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownMux();">Terminate</button></td>
+        <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownMux();">Terminate <img src="images/bomb.png" width="30"></button></td>
         <td colspan="3" align="right"><input type="checkbox" id="show-inbound-data" onchange="showInboundData(this);">Show Inbound Data</td>
       </tr>
       <tr>

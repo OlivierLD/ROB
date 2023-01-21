@@ -78,14 +78,22 @@
 		<a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a>
 		<a href="qr.code.html" target="iframe_a" title="QR Codes">QR Codes</a>
 
-		<hr style="width: 90%;"/>
+		<!--hr style="width: 90%;"/>
 		<a href="index.html" title="Back">Back to main index</a>
+		<hr style="width: 90%;"/-->
+
+		<hr style="width: 90%;"/>
+
+		<a href="javascript:void(0)" title="Designed for big screens.&#13;Would not fit on cell-phones." style="font-style: italic;">Admin</a>
+
+		<a href="admin.html" target="new" title="Admin Console" class="submenu">Runtime Config Manager</a>
+		<div class="submenu link-description">Manage the full runtime context. Channels, Forwarders, Computers.</div>
+		<a href="muxbuilder/text/mux-builder.html" target="iframe_a" title="MUX-builder, text version" class="submenu">MUX Builder, text version</a>
+		<a href="muxbuilder/dragndrop/mux-builder.html" target="iframe_a" title="MUX-builder, graphical version" class="submenu">MUX Builder, graphical version</a>
+
 		<hr style="width: 90%;"/>
 
 		<a href="javascript:void(0)" title="Designed for big screens.&#13;Would not fit on cell-phones." style="font-style: italic;">Laptops, tablets</a>
-
-		<a href="admin.html" target="new" title="Admin Console" class="submenu">Admin</a>
-		<div class="submenu link-description">Manage the full context. Channels, in, out.</div>
 
 		<a href="console.html" target="iframe_a" title="Data Console" class="submenu">Console with Current (Obsolete)</a>
 		<div class="submenu link-description">Canvases, Boat Data (no WebComponents)</div>
@@ -128,7 +136,7 @@
 	</div>
 
 	<div style="width: 100%;">
-	  <span style="font-size:20px; cursor:pointer;" title="Click for menu" onclick="openNav()">&#9776; NMEA Consoles</span> <!-- the hamburger -->
+	  <span style="font-size:20px; cursor:pointer;" title="Click for menu" onclick="openNav()">&#9776; NMEA and Admin Consoles</span> <!-- the hamburger -->
 	</div>
 
 	<p style="text-align: center;">
