@@ -64,6 +64,14 @@
 			.sidenav a {font-size: 18px;}
 		}
 
+		.link-description {
+			margin-left: 30px;
+			font-size: 12px;
+			color: orange;
+			font-style: italic;
+			text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan;
+		}
+
 		#wrap { position:fixed; left:0; width:100%; top:40px; height:100%; }
 
 	</style>
@@ -73,6 +81,15 @@
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a>
 		<a href="qr.code.html" target="iframe_a" title="QR Codes">QR Codes</a>
+
+		<hr style="width: 90%;"/>
+
+		<a href="javascript:void(0)" title="Designed for big screens.&#13;Would not fit on cell-phones." style="font-style: italic;">Admin</a>
+
+		<a href="admin.html" target="new" title="Admin Console" class="submenu">Runtime Config Manager</a>
+		<div class="submenu link-description">Manage the full runtime context. Channels, Forwarders, Computers.</div>
+		<a href="muxbuilder/text/mux-builder.html" target="iframe_a" title="MUX-builder, text version" class="submenu">MUX Builder, text version</a>
+		<a href="muxbuilder/dragndrop/mux-builder.html" target="iframe_a" title="MUX-builder, graphical version" class="submenu">MUX Builder, graphical version</a>
 
 		<hr style="width: 90%;"/>
 
@@ -87,7 +104,7 @@
 
 		<hr style="width: 90%;"/>
 
-		<a href="index.consoles.html" target="new_window" title="NMEA Consoles">Various Admin &amp; NMEA Consoles</a>
+		<a href="index.consoles.html" target="new_window" title="NMEA Consoles&#13;Examples">Various NMEA Consoles</a>
 
 		<hr style="width: 90%;"/>
 
