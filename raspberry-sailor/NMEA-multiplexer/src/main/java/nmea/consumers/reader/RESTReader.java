@@ -123,7 +123,7 @@ public class RESTReader extends NMEAReader {
 				AtomicReference<String> objPayload = new AtomicReference<>(payload);
 				if ("application/json".equals(contentType)) {
 					String jqString = getJQString();
-					if (jqString != null) {
+					if (jqString != null && jqString.trim().length() > 0) {  // Compatible Java 8
 						try {
 							JsonQuery jq = JsonQuery.compile(jqString /*".NMEA_AS_IS.RMC" */, Versions.JQ_1_6);
 							JsonNode jsonNode = mapper.readTree(new StringReader(payload));
