@@ -1680,6 +1680,11 @@ Going to: Latitude:
                     console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
 
+        // Get position from cache every second
+        let posInterval = window.setInterval(() => {
+            getGPSPosition();
+        }, 1000);
+
     };
 
 </script>

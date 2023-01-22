@@ -55,6 +55,9 @@
 			text-align: right;
 			margin-right: 25px;
 		}
+		.menu-title {
+			font-style: italic;
+		}
 
 		@media screen and (max-height: 450px) {
 			.sidenav {padding-top: 15px;}
@@ -70,15 +73,25 @@
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a>
 		<a href="qr.code.html" target="iframe_a" title="QR Codes">QR Codes</a>
-		<a href="tide/index.html" target="iframe_a" title="Tides">Tides</a>
+
+		<hr style="width: 90%;"/>
+
+		<a href="tide/index.html" target="iframe_a" title="Tides" class="menu-title">Tides</a>
 		<a href="tide/select.station.html" target="iframe_a" title="Tides" class="submenu">Select Tide Station</a>
 		<a href="tide/pub.101.html" target="iframe_a" title="Tides" class="submenu">Publish tide almanacs</a>
+
+		<hr style="width: 90%;"/>
+
 		<a href="tide/moon.calendar.html" target="iframe_a" title="Tides" class="submenu">Publish Moon Calendar</a>
 		<a href="almanac/almanac.html" target="iframe_a" title="Astronomical Almanacs">Nautical Almanacs</a>
 
-		<a href="index.consoles.html" target="new_window" title="NMEA Consoles">Various NMEA Consoles</a>
+		<hr style="width: 90%;"/>
 
-		<a href="javascript:void(0)" title="Weather Wizard &amp; Routing">Weather Wizard</a>
+		<a href="index.consoles.html" target="new_window" title="NMEA Consoles">Various Admin &amp; NMEA Consoles</a>
+
+		<hr style="width: 90%;"/>
+
+		<a href="javascript:void(0)" title="Weather Wizard &amp; Routing" class="menu-title">Weather Wizard</a>
 
 		<a href="weather.wizard/ww.html" target="iframe_a" title="Weather Wizard" class="submenu">1 - Basics, workbench</a>
 		<a href="weather.wizard/ww.2.html" target="new_window" title="Weather Wizard" class="submenu">2 - Operations</a>
@@ -87,7 +100,12 @@
 		<!--a href="javascript:void(0)" title="Demos and Co">Demos, Work in Progress</a>
 		<a href="samples/now.from.SF.html" target="iframe_a" title="World Chart demo, from SF" class="submenu">World Chart, from San Francisco</a>
 		<a href="samples/worldmap.dual.demo.html?move-fast=true" target="iframe_a" title="World Chart demo" class="submenu">World Chart demo</a-->
+		
+		<hr style="width: 90%;"/>
+
 		<a href="sight.reduction/sr.01.html" target="iframe_a" title="Sight Reduction">Sight Reduction</a>
+		
+		<hr style="width: 90%;"/>
 	</div>
 
 	<div style="width: 100%;">

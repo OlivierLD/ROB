@@ -39,7 +39,7 @@ var DEFAULT_TIMEOUT = 120000;
 //	lat: 47.661667,
 //	lng: -2.758167
 //};
-let position = { // Belz
+let position = { // Belz, default
 	lat: 47.661667,
 	lng: -3.135667
 };
@@ -176,6 +176,34 @@ let getExistingComposites = function(callback, filter) {
 		errManager("Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 
+};
+
+// Get position from cache ?
+let getPositionFromNMEACache = function() {
+	let url = "/mux/cache";
+	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
+let getGPSPosition = function() {
+	let posPromise = getPositionFromNMEACache();
+	posPromise.then(cache => {
+		let cacheValues = JSON.parse(cache);
+		// console.log(`Pos from Cache ${JSON.stringify(cacheValues)}`);
+		if (cacheValues.Position) {
+			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });
+			redraw();
+			// console.log(`Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
+		}
+	}, (error, errmess) => {
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
+			}
+		}
+		errManager("Failed to get Data Cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+	});
 };
 
 let gribData;
