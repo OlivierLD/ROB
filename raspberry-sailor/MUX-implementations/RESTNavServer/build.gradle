@@ -24,13 +24,10 @@ dependencies {
   implementation project (':astro-computer:AstroUtilities')
   implementation project (':astro-computer:AstroComputer')
   implementation project (':raspberry-sailor:RESTNauticalAlmanac')
-//  implementation project (':raspberry-sailor:TideEngine')  // Should not be necessary...
   implementation project (':raspberry-sailor:RESTTideEngine')
   implementation project (':raspberry-sailor:RESTImageProcessor')
   implementation project (':raspberry-sailor:RESTRouting')
   implementation project (':raspberry-sailor:NMEA-multiplexer')
-//  implementation project (':NMEA-mux-extensions')
-//  implementation project (':Project-Trunk:SunFlower')
 
   testImplementation "junit:junit:$junit_version"
 }

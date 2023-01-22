@@ -11,17 +11,15 @@ version = '1.0'
 repositories {
   mavenCentral()
   mavenLocal()
-  maven { url "https://www.datanucleus.org/downloads/maven2" }
+  // maven { url "https://www.datanucleus.org/downloads/maven2" }
 }
 
 dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-//  implementation "com.google.code.gson:gson:$google_gson_gson"
   implementation 'oracle:xmlparser:2.0'
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':common-utils')
   implementation project(':http-tiny-server')
-//  implementation project(':NMEA-multiplexer')
   implementation project(':raspberry-sailor:NMEA-Parser')
   implementation project(':raspberry-sailor:PolarSmoother')
 }

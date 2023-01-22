@@ -22,5 +22,4 @@ repositories {
 
 dependencies {
   implementation project(':raspberry-sailor:NMEA-Parser')
-//  implementation project(':NMEA-multiplexer')
 }

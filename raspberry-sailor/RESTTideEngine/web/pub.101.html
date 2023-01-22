@@ -11,19 +11,19 @@
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<style>
 		.selectedButton {
-			padding:5px;
+			padding: 5px;
 			border-top-right-radius: 10px;
-			border:1px solid #CCC;
-			margin-top:10px;
+			border: 1px solid #CCC;
+			margin-top: 10px;
 			border-bottom: none;
 			font-size: 12px;
 			font-weight: bold;
 		}
 		.unselectedButton {
-			padding:5px;
+			padding: 5px;
 			border-top-right-radius: 10px;
-			border:1px solid #CCC;
-			margin-top:10px;
+			border: 1px solid #CCC;
+			margin-top: 10px;
 			border-bottom: none;
 			font-size: 12px;
 			font-weight: normal;
@@ -79,32 +79,32 @@
 	</script>
 </head>
 <body>
-  <h2>Publishing Tide Table</h2>
+	<h2>Publishing Tide Table</h2>
 	<hr/>
-  Tide Table. Choose your station (filter first), and hit [Publish] (or [Agenda]).
+  	Tide Table. Choose your station (filter first), and hit [Publish] (or [Agenda]).
 	<hr/>
 	<input type="search" size="30" placeholder="Filter" id="filter">&nbsp;<button onclick="tideStations(0, 500, $('#filter').val(), populateList);">Search</button>
 	<select id="station-list" style="width: 300px;"></select>, Starting
-  <select id="month">
-	  <option value="0">Jan</option>
-	  <option value="1">Feb</option>
-	  <option value="2">Mar</option>
-	  <option value="3">Apr</option>
-	  <option value="4">May</option>
-	  <option value="5">Jun</option>
-	  <option value="6">Jul</option>
-	  <option value="7">Aug</option>
-	  <option value="8">Sep</option>
-	  <option value="9">Oct</option>
-	  <option value="10">Nov</option>
-	  <option value="11">Dec</option>
-  </select>
+	<select id="month">
+		  <option value="0">Jan</option>
+		  <option value="1">Feb</option>
+		  <option value="2">Mar</option>
+		  <option value="3">Apr</option>
+		  <option value="4">May</option>
+		  <option value="5">Jun</option>
+		  <option value="6">Jul</option>
+		  <option value="7">Aug</option>
+		  <option value="8">Sep</option>
+		  <option value="9">Oct</option>
+		  <option value="10">Nov</option>
+		  <option value="11">Dec</option>
+	  </select>
 	<input type="text" size="4" placeholder="Year" id="year"/>, for
-  <input type="text" size="2" placeholder="" style="text-align: right;" id="nb" value="1"/>
-  <select id="quantity">
-	  <option value="MONTH">month(s)</option>
-	  <option value="YEAR">year(s)</option>
-  </select>.
+	<input type="text" size="2" placeholder="" style="text-align: right;" id="nb" value="1"/>
+	<select id="quantity">
+		<option value="MONTH">month(s)</option>
+		<option value="YEAR">year(s)</option>
+	</select>.
 
 	<hr/>
 
@@ -112,7 +112,7 @@
 	        onclick="getStarted(); publishTable($('#station-list').val(), { startYear: parseInt($('#year').val()), startMonth: parseInt($('#month').val()), nb: parseInt($('#nb').val()), quantity: $('#quantity').val() }, dataManager);">Publish</button>
 	<hr/>
     Your document is <span id="doc-url">...</span>
-  <hr/>
+  	<hr/>
 	<!-- Tabs -->
 	<div style="margin-bottom: 5px;">
 		<span id="message-tab" onclick="manageClick(this);" class="selectedButton" style="margin-left: 5px; cursor: pointer;">Messages</span>
