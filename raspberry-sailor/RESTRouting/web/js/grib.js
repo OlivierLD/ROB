@@ -1,95 +1,117 @@
 "use strict";
 
-// TODO Move to ES6
-
-var DEFAULT_TIMEOUT = 60000;
+const DEBUG = false;
+const DEFAULT_TIMEOUT = 60000; // 1 minute
 
 // var errManager = console.log;
-var errManager = function(mess) {
-	var content = $("#error").html();
-	if (content !== undefined) {
-		$("#error").html((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
-		var div = document.getElementById("error");
-		div.scrollTop = div.scrollHeight;
-	} else {
-		console.log(mess);
-	}
+let errManager = (mess) => {
+    let errorElement = document.getElementById("error");
+    if (errorElement) {
+        let content = errorElement.innerHTML;
+        if (content !== undefined) {
+            errorElement.innerHTML = ((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
+            errorElement.scrollTop = errorElement.scrollHeight; // Scroll down
+        } else {
+            console.log(JSON.stringify(mess, null, 2));
+        }
+    } else {
+        alert("Where do you call me from ??! (Check the console)");
+        console.log(JSON.stringify(mess, null, 2));
+    }
 };
 
-var getQueryParameterByName = function(name, url) {
-	if (!url) url = window.location.href;
+let getQueryParameterByName = (name, url) => {
+	if (!url) {
+	    url = window.location.href;
+	}
 	name = name.replace(/[\[\]]/g, "\\$&");
-	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 			results = regex.exec(url);
-	if (!results) return null;
-	if (!results[2]) return '';
+	if (!results) {
+	    return null;
+	}
+	if (!results[2]) {
+	    return '';
+	}
 	return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-var getDeferred = function(
-		url,                          // full api path
-		timeout,                      // After that, fail.
-		verb,                         // GET, PUT, DELETE, POST, etc
-		happyCode,                    // if met, resolve, otherwise fail.
-		data,                         // payload, when needed (PUT, POST...)
-		show) {                       // Show the traffic [true]|false
-	if (show === undefined) {
-		show = true;
-	}
-	if (show === true) {
-		document.body.style.cursor = 'wait';
-	}
-	var deferred = $.Deferred(),  // a jQuery deferred
-			url = url,
-			xhr = new XMLHttpRequest(),
-			TIMEOUT = timeout;
+/* Uses ES6 Promises */
+let getPromise = (
+    url,                          // full resource path
+    timeout,                      // After that, fail.
+    verb,                         // GET, PUT, DELETE, POST, etc
+    happyCode,                    // if met, resolve, otherwise fail.
+    data = null,                  // payload, when needed (PUT, POST...)
+    show = true,                  // Show the traffic [true]|false
+    headers = null) => {          // Array of { name: 'Header-Name', value: 'Header-Value' }
 
-	var req = verb + " " + url;
-	if (data !== undefined && data !== null) {
-		req += ("\n" + JSON.stringify(data, null, 2));
-	}
+    if (show === true) {
+        document.body.style.cursor = 'wait';
+    }
 
-	xhr.open(verb, url, true);
-	xhr.setRequestHeader("Content-type", "application/json"); // I know, hard-coded.
-	if (data === undefined) {
-		xhr.send();
-	} else {
-		xhr.send(JSON.stringify(data));
-	}
+    if (DEBUG) {
+        console.log(">>> Promise", verb, url);
+    }
 
-	var requestTimer = setTimeout(function() {
-		xhr.abort();
-		var mess = { message: 'Timeout' };
-		deferred.reject(408, mess);
-	}, TIMEOUT);
+    let promise = new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        let TIMEOUT = timeout;
 
-	xhr.onload = function() {
-		clearTimeout(requestTimer);
-		if (xhr.status === happyCode) {
-			deferred.resolve(xhr.response);
-		} else {
-			deferred.reject(xhr.status, xhr.response);
-		}
-	};
-	return deferred.promise();
+        let req = verb + " " + url;
+        if (data !== undefined && data !== null) {
+            req += ("\n" + JSON.stringify(data, null, 2));
+        }
+
+        xhr.open(verb, url, true);
+        if (headers === null) {
+            xhr.setRequestHeader("Content-type", "application/json");
+        } else {
+            headers.forEach(header => xhr.setRequestHeader(header.name, header.value));
+        }
+        try {
+            if (data === undefined || data === null) {
+                xhr.send();
+            } else {
+                xhr.send(JSON.stringify(data));
+            }
+        } catch (err) {
+            console.log("Send Error ", err);
+        }
+
+        let requestTimer = setTimeout(() => {
+            xhr.abort();
+            let mess = { code: 408, message: `Timeout for ${verb} ${url}` };
+            reject(mess);
+        }, TIMEOUT);
+
+        xhr.onload = () => {
+            clearTimeout(requestTimer);
+            if (xhr.status === happyCode) {
+                resolve(xhr.response);
+            } else {
+                reject({code: xhr.status, message: xhr.response});
+            }
+        };
+    });
+    return promise;
 };
 
-var getGRIB = function(request) {
+let getGRIB = (request) => {
 	var url = "/grib/get-data";
-	return getDeferred(url, DEFAULT_TIMEOUT, 'POST', 200, request, false);
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, request, false);
 };
 
-var requestGRIB = function(gribRequest) {
-	var getData = getGRIB(gribRequest);
-	getData.done(function(value) {
-		var json = JSON.parse(value);
+let requestGRIB = (gribRequest) => {
+	let getData = getGRIB(gribRequest);
+	getData.then(value => {
+		let json = JSON.parse(value);
 		// Do something smart here.
 		console.log("GRIB Data:", json);
-		$("#result").html("<pre>" +
+		document.getElementById("result").innerHTML = "<pre>" +
 				JSON.stringify(json, null, 2) +
-				"</pre>");
-	});
-	getData.fail(function(error, errmess) {
+				"</pre>";
+	}, (error, errmess) => {
 		var message;
 		if (errmess !== undefined) {
 			if (errmess.message !== undefined) {
@@ -98,6 +120,6 @@ var requestGRIB = function(gribRequest) {
 				message = errmess;
 			}
 		}
-		errManager("Failed to get the GRIB..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		errManager("Failed to get the GRIB..." + (error !== undefined ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
 	});
 };

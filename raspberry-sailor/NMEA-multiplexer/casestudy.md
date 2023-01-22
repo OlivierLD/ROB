@@ -286,7 +286,7 @@ Note that even if it is happy with `json`, Node-RED has no problem dealing with 
 Another cool thing is that the Java NMEA Multiplexer and Node-RED can seamlessly co-exist.
 
 ## AIS
-See [this document](https://github.com/OlivierLD/raspberry-coffee/tree/master/Project-Trunk/dAISy).
+See [this document](../dAISy/README.md).
 
 It is also easy to setup the `dAISy HAT` on a Raspberry Pi. I've used a Raspberry Pi A+, it has the same size as the HAT.
 I run an `NMEA-Multiplexer` with a configuration file like this:

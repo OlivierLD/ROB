@@ -30,7 +30,7 @@ It uses:
 - ... and the list keeps growing (see in `navrest.NavServer.java` how to add a `RequestManager`).
 
 In addition, I'll be attempting to implement the features of the Weather Wizard (another project I own, in Java and Swing, that can superimpose different heterogeneous documents on the same chart, like Faxes, GRIBS, routing results, etc.). This part involves the
-`Img` REST Service, found in the [`RESTImageProcessor`](https://github.com/OlivierLD/raspberry-coffee/tree/master/RESTImageProcessor) project, and the routing features, found in the [`RESTRouting`](https://github.com/OlivierLD/raspberry-coffee/blob/master/RESTRouting/README.md) project.
+`Img` REST Service, found in the [`RESTImageProcessor`](../../RESTImageProcessor/README.md) module, and the routing features, found in the [`RESTRouting`](../../RESTRouting/README.md) module.
 
 It delivers REST services, and Web pages as well.  
 Some would require an Internet access, but most of them can be displayed
@@ -416,7 +416,7 @@ heading.fork.width=10
 
 
 #### AIS plotter
-- See [here](../Project-Trunk/dAISy/README.md) and [here](../NMEA-multiplexer/casestudy.md#ais)
+- See [here](../../dAISy/README.md) and [here](../../NMEA-multiplexer/casestudy.md#ais)
 - Requires an Internet connection (for LeafLet)
 - Start your `RESTNavServer`, reading an AIS HAT (like `dAISy`)
 - Reach <http://your-server-address:9999/web/ais/ais.102.html>

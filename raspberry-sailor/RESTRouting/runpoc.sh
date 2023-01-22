@@ -8,7 +8,7 @@ CP=./build/libs/RESTRouting-1.0-all.jar
 #
 JAVA_OPT=
 JAVA_OPT="$JAVA_OPT -Dgrib.verbose=false"
-JAVA_OPT="$JAVA_OPT -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80"
+# JAVA_OPT="$JAVA_OPT -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80"
 # Pull GRIB file and dump:
 java -cp ${CP} ${JAVA_OPT} samples.Sample03 > grib.json
 #

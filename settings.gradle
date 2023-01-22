@@ -21,7 +21,9 @@ include('raspberry-sailor:RESTNauticalAlmanac')
 include('raspberry-sailor:RESTRouting')
 include('raspberry-sailor:RESTTideEngine')
 include('raspberry-sailor:RESTImageProcessor')
+include('raspberry-sailor:dAISy')
 
 include('raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic')
+include('raspberry-sailor:MUX-implementations:NMEA-mux-extensions')
 include('raspberry-sailor:MUX-implementations:RESTNavServer')
 
