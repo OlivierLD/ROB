@@ -5,7 +5,6 @@
 	<link rel="icon" type="image/jpg" href="icons/palm.04.jpg">
 	<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /-->
 	<link id="page-ux" rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
-	<script type="text/javascript" src="js/jquery-2.1.3.js"></script> <!-- TODO Remove this, in tides.js too -->
 	<script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/tide.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
@@ -58,30 +57,36 @@
 			tideGraph = new TideGraph("tideCanvas", tideData, graphCallback, "feet");
 			// Load the date dropdown lists
 			let year = new Date().getFullYear();
-			$("#year").empty();
+			document.getElementById("year").value = "";
 			for (let i=0; i<20; i++) {
-				let option = "<option value='" + (year - 10 + i) + "'>" + (year - 10 + i) + "</option>";
-				$('#year').append(option);
+				let option = document.createElement("option");
+				option.text = decodeURIComponent((year - 10 + i));
+				option.value = decodeURIComponent((year - 10 + i));
+				document.getElementById('year').add(option);
+
 			}
-			$('#year').val(year);
+			document.getElementById('year').value = (year);
 			let month = new Date().getMonth();
 			let mNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-			$("#month").empty();
+			document.getElementById("month").value = "";
 			for (let i=0; i<mNames.length; i++) {
-				let option = "<option value='" + (i + 1) + "'>" + mNames[i] + "</option>";
-				$('#month').append(option);
+				let option = document.createElement("option");
+				option.text = decodeURIComponent(mNames[i]);
+				option.value = decodeURIComponent(i + 1);
+				document.getElementById('month').add(option);
+
 			}
-			$('#month').val(month + 1);
+			document.getElementById('month').value = (month + 1);
 			let day = new Date().getDate();
 			populateDays();
-			$('#day').val(day);
+			document.getElementById('day').value = (day);
 
 			// Query parameters?
 			let station = getQueryParameterByName("station");
 			if (station !== undefined && station !== null) {
 				// alert("Station " + station);
 				// Do it, for now, 1 day
-				$('#with-table').prop('checked', true);
+				document.getElementById('with-table').checked = true;
 				tideTable(station,
 					{ year: year, month: month + 1, day: day }, '', '', '', false, 1, dataManager);
 
@@ -95,22 +100,26 @@
 		};
 
 		let populateDays = () => {
-			let nbDays = getNbDayInMonth(parseInt($('#year').val()), parseInt($('#month').val()));
-			$("#day").empty();
+			let nbDays = getNbDayInMonth(parseInt(document.getElementById('year').value), parseInt(document.getElementById('month').value));
+			document.getElementById("day").value = "";
 			for (let i=0; i<nbDays; i++) {
-				let option = "<option value='" + (i + 1) + "'>" + (i + 1) + "</option>";
-				$('#day').append(option);
+				let option = document.createElement("option");
+				option.text = decodeURIComponent(i + 1);
+				option.value = decodeURIComponent(i + 1);
+				document.getElementById('day').add(option);
 			}
 		};
 
 		let populateList = (stationList) => {
-			$("#station-list").empty();
-			$("#draw-curve").prop('disabled', true);
+			document.getElementById("station-list").value = "";
+			document.getElementById("draw-curve").disabled = true;
 			stationList.forEach((station, idx) => {
-				let option = "<option value='" + decodeURIComponent(station) + "'>" + decodeURIComponent(station) + "</option>";
-				$('#station-list').append(option);
+				let option = document.createElement("option");
+				option.text = decodeURIComponent(station);
+				option.value = decodeURIComponent(station);
+				document.getElementById('station-list').add(option);
 			});
-			$("#draw-curve").prop('disabled', stationList.length === 0);
+			document.getElementById("draw-curve").disabled = stationList.length === 0;
 		};
 
 		let daylightReceiver = (value) => {
@@ -195,7 +204,7 @@
 					tideData.harmonics = harmonics;
 				}
 				let idx2plot = new Date().getTime(); // Current date/time
-				tideGraph.drawGraph("tideCanvas", tideData, idx2plot, $('#with-table').prop('checked') === true ? json.table : undefined);
+				tideGraph.drawGraph("tideCanvas", tideData, idx2plot, document.getElementById('with-table').checked === true ? json.table : undefined);
 			} catch (err) {
 				console.log(err);
 			}
@@ -209,12 +218,12 @@
 			// Show the right div
 			switch (div.id) {
 				case 'error-tab':
-					$("#error-div").css('display', 'block');
-					$("#message-div").css('display', 'none');
+					document.getElementById("error-div").style.display = 'block';
+					document.getElementById("message-div").style.display = 'none';
 					break;
 				case 'message-tab':
-					$("#error-div").css('display', 'none');
-					$("#message-div").css('display', 'block');
+					document.getElementById("error-div").style.display = 'none';
+					document.getElementById("message-div").style.display = 'block';
 					break;
 				default:
 					break;
@@ -228,7 +237,7 @@
 	<hr/>
   Tide curve. Choose your station (filter first), and hit [Draw Curve].
 	<hr/>
-	<input type="search" size="30" placeholder="Filter" id="filter">&nbsp;<button onclick="tideStations(0, 500, $('#filter').val(), populateList);">Search</button>
+	<input type="search" size="30" placeholder="Filter" id="filter">&nbsp;<button onclick="tideStations(0, 500, document.getElementById('filter').value, populateList);">Search</button>
 	<select id="station-list" style="width: 300px;"></select>, <select id="nb-days"><option value="1">1 Day</option><option value="7">1 Week</option><option value="14">2 Weeks</option><option value="31">1 Month</option></select>
 	<div style="width: 100%;">
 		<!-- Graph here -->
@@ -270,7 +279,7 @@
 	</div>
 	<hr/>
 	Starting <select id="year" onchange="populateDays();"></select> <select id="month" onchange="populateDays();"></select> <select id="day"></select>
-	<button id="draw-curve" disabled onclick="tideTable($('#station-list').val(), { year: parseInt($('#year').val()), month: parseInt($('#month').val()), day: parseInt($('#day').val()) }, '', '', '', $('#with-details').prop('checked'), $('#nb-days').val(), dataManager);">Draw Curve</button>
+	<button id="draw-curve" disabled onclick="tideTable(document.getElementById('station-list').value, { year: parseInt(document.getElementById('year').value), month: parseInt(document.getElementById('month').value), day: parseInt(document.getElementById('day').value) }, '', '', '', document.getElementById('with-details').checked, document.getElementById('nb-days').value, dataManager);">Draw Curve</button>
 	&nbsp;<input type="checkbox" id="with-details" title="Include Harmonics"> With harmonic details,
 	&nbsp;<input type="checkbox" id="with-table" title="Include Time Table"> With time table.
 	<hr/>
@@ -281,11 +290,11 @@
 	</div>
 	<div id="message-div" style="display: block;">
 		<div id="messages" style="font-family: 'Source Code Pro', 'Courier New', Helvetica, Geneva; display: block; padding: 1px; border-radius: 5px; border: 1px solid #CCC; min-height: 75px; max-height: 75px; overflow-y: scroll;"></div>
-		<button onclick="$('#messages').html('');">Clear log</button>
+		<button onclick="document.getElementById('messages').innerHTML = ('');">Clear log</button>
 	</div>
 	<div id="error-div" style="display: none;">
 		<div id="error" style="font-family: 'Source Code Pro', 'Courier New', Helvetica, Geneva; color: red; display: block; padding: 1px; border-radius: 5px; border: 1px solid #CCC; min-height: 75px; max-height: 75px; overflow-y: scroll;"></div>
-		<button onclick="$('#error').html('');">Clear log</button>
+		<button onclick="document.getElementById('error').innerHTML = ('');">Clear log</button>
 	</div>
 </body>
 </html>

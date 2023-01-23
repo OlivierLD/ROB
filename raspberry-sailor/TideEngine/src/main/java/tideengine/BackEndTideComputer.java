@@ -252,7 +252,7 @@ public class BackEndTideComputer {
 		Set<String> keys = stations.getStations().keySet();
 		for (String k : keys) {
 			try {
-				stationData.add(stations.getStations().get(k));
+				stationData.add(stations.getStations().get(k)); // TODO Encoding ?
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
