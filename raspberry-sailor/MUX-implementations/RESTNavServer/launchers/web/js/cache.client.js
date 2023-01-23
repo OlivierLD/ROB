@@ -13,10 +13,10 @@ function cacheClient(dataManager, bp) {
 	function getNMEAData() {
 
 		let url = '/mux/cache',
-				verb = 'GET',
-				TIMEOUT = 10000,
-        happyCode = 200,
-        data = null;
+			verb = 'GET',
+			TIMEOUT = 10000,
+			happyCode = 200,
+			data = null;
 
 		return new Promise(function (resolve, reject) {
 			let xhr = new XMLHttpRequest();
@@ -40,7 +40,7 @@ function cacheClient(dataManager, bp) {
 
 			let requestTimer = setTimeout(() => {
 				xhr.abort();
-				let mess = {code: 408, message: 'Timeout'};
+				let mess = {code: 408, message: `Timeout (${TIMEOUT}ms) for ${verb} ${url}`};
 				reject(mess);
 			}, TIMEOUT);
 

@@ -15,11 +15,11 @@ function initAjax(forwardErrors) {
 function getNMEAData() {
 
 	let url = '/mux/cache',
-			xhr = new XMLHttpRequest(),
-			verb = 'GET',
-			data = null,
-			happyCode = 200,
-			TIMEOUT = 10000;
+		xhr = new XMLHttpRequest(),
+		verb = 'GET',
+		data = null,
+		happyCode = 200,
+		TIMEOUT = 10000;
 
 	let promise = new Promise((resolve, reject) => {
 		let xhr = new XMLHttpRequest();
@@ -43,7 +43,7 @@ function getNMEAData() {
 
 		let requestTimer = setTimeout(() => {
 			xhr.abort();
-			let mess = {code: 408, message: 'Timeout'};
+			let mess = {code: 408, message: `Timeout (${TIMEOUT}ms) for ${verb} ${url}`};
 			reject(mess);
 		}, TIMEOUT);
 

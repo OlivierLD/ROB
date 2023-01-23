@@ -240,7 +240,7 @@ function getPromise(url,                          // full api path
 
 		let requestTimer = setTimeout(function () {
 			xhr.abort();
-			let mess = {code: 408, message: 'Timeout'};
+			let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
 			reject(mess);
 		}, timeout);
 

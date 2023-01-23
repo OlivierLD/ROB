@@ -54,7 +54,7 @@ function getPromise(
 
         let requestTimer = setTimeout(() => {
             xhr.abort();
-            let mess = {code: 408, message: 'Timeout'};
+            let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
             reject(mess);
         }, TIMEOUT);
 
