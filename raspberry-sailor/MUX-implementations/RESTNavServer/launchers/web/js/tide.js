@@ -194,9 +194,14 @@ let getPublishedMoonCal = (station, options) => {
 
 let getSunData = (lat, lng) => {
     let url = "/astro/sun-now";
-    let data = {}; // Payload
-    data.latitude = lat;
-    data.longitude = lng;
+    let data = {
+        position: {
+            latitude: lat,
+            longitude: lng
+        }
+    }; // Payload.
+//    data.latitude = lat;
+//    data.longitude = lng;
     return getPromise(url, DEFAULT_TIMEOUT, 'POST', [200, 201], data);
 };
 
