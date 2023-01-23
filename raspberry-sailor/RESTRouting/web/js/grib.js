@@ -108,9 +108,7 @@ let requestGRIB = (gribRequest) => {
 		let json = JSON.parse(value);
 		// Do something smart here.
 		console.log("GRIB Data:", json);
-		document.getElementById("result").innerHTML = "<pre>" +
-				JSON.stringify(json, null, 2) +
-				"</pre>";
+		document.getElementById("result").innerHTML = "<pre>" + JSON.stringify(json, null, 2) + "</pre>";
 	}, (error, errmess) => {
 		var message;
 		if (errmess !== undefined) {
