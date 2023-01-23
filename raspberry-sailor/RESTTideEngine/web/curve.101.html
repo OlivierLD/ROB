@@ -57,24 +57,28 @@
 			tideGraph = new TideGraph("tideCanvas", tideData, graphCallback, "feet");
 			// Load the date dropdown lists
 			let year = new Date().getFullYear();
-			document.getElementById("year").value = "";
+			let list = document.getElementById("year");
+			while (list.options.length > 0) {
+				list.remove(0);
+			}
 			for (let i=0; i<20; i++) {
 				let option = document.createElement("option");
 				option.text = decodeURIComponent((year - 10 + i));
 				option.value = decodeURIComponent((year - 10 + i));
-				document.getElementById('year').add(option);
-
+				list.add(option);
 			}
 			document.getElementById('year').value = (year);
 			let month = new Date().getMonth();
 			let mNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-			document.getElementById("month").value = "";
+			list = document.getElementById("month");
+			while (list.options.length > 0) {
+				list.remove(0);
+			}
 			for (let i=0; i<mNames.length; i++) {
 				let option = document.createElement("option");
 				option.text = decodeURIComponent(mNames[i]);
 				option.value = decodeURIComponent(i + 1);
-				document.getElementById('month').add(option);
-
+				list.add(option);
 			}
 			document.getElementById('month').value = (month + 1);
 			let day = new Date().getDate();
@@ -101,24 +105,30 @@
 
 		let populateDays = () => {
 			let nbDays = getNbDayInMonth(parseInt(document.getElementById('year').value), parseInt(document.getElementById('month').value));
-			document.getElementById("day").value = "";
+			let list = document.getElementById("day");
+			while (list.options.length > 0) {
+				list.remove(0);
+			}
 			for (let i=0; i<nbDays; i++) {
 				let option = document.createElement("option");
 				option.text = decodeURIComponent(i + 1);
 				option.value = decodeURIComponent(i + 1);
-				document.getElementById('day').add(option);
+				list.add(option);
 			}
 		};
 
 		let populateList = (stationList) => {
-			document.getElementById("station-list").value = "";
-			document.getElementById("draw-curve").disabled = true;
+			let list = document.getElementById("station-list");
+			while (list.options.length > 0) {
+				list.remove(0);
+			}
 			stationList.forEach((station, idx) => {
 				let option = document.createElement("option");
 				option.text = decodeURIComponent(station);
 				option.value = decodeURIComponent(station);
-				document.getElementById('station-list').add(option);
+				list.add(option);
 			});
+			document.getElementById("draw-curve").disabled = true;
 			document.getElementById("draw-curve").disabled = stationList.length === 0;
 		};
 

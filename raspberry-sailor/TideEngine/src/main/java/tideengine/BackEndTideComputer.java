@@ -23,7 +23,7 @@ public class BackEndTideComputer {
 		JSON
 	}
 
-	private static Option flavor = Option.XML; // Default
+	private static Option flavor = Option.JSON; // Default
 	static {
 		String strFlavor = System.getProperty("tide.flavor");
 		if (strFlavor != null) {
@@ -45,6 +45,9 @@ public class BackEndTideComputer {
 	private final static boolean dataVerbose = "true".equals(System.getProperty("data.verbose", "false"));
 
 	public BackEndTideComputer() {
+		if (dataVerbose) {
+			System.out.printf("For TideEngine, using flavor %s\n", flavor);
+		}
 		if (flavor == Option.XML) {
 			this.dataComputer = new BackEndXMLTideComputer();
 		} else if (flavor == Option.SQLITE) {

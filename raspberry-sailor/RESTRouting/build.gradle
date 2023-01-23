@@ -11,7 +11,7 @@ version = '1.0'
 repositories {
   mavenCentral()
   mavenLocal()
-  // maven { url "https://www.datanucleus.org/downloads/maven2" }
+  maven { url "https://www.datanucleus.org/downloads/maven2" }
 }
 
 dependencies {

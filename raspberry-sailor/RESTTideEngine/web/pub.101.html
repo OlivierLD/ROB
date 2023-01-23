@@ -38,13 +38,16 @@
 		};
 
 		let populateList = (stationList) => {
-			document.getElementById("station-list").value = '';
+			let list = document.getElementById("station-list");
+			while (list.options.length > 0) {
+				list.remove(0);
+			}
 			// document.getElementById("draw-curve").disabled = true;
 			stationList.forEach((station, idx) => {
 				let option = document.createElement("option");
 				option.text = decodeURIComponent(station);
 				option.value = decodeURIComponent(station);
-				document.getElementById('station-list').add(option);
+				list.add(option);
 
 			});
 			document.getElementById("publish").disabled = stationList.length === 0;
