@@ -143,7 +143,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
 	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
 	echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests.                                                                          |"
-	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              | ${RED}13b${NC}. GPS, + AIS data from sinagot.net.                                                  |"
+	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              | ${RED}13b${NC}. GPS, + AIS data from sinagot.net (demanding...).                                   |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"

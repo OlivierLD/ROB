@@ -1737,7 +1737,7 @@ public class AISParser {
 
 		public int getOffset3() {
 			try {
-				return (int)recordContent.get(OFFSET_3);
+				return (int)recordContent.get(OFFSET_3); // See null case, like for OFFSET_2
 			} catch (Exception ex) {
 				return 0;
 			}
@@ -1773,7 +1773,7 @@ public class AISParser {
 
 		public int getOffset4() {
 			try {
-				return (int)recordContent.get(OFFSET_4);
+				return (int)recordContent.get(OFFSET_4); // See null case, like for OFFSET_2
 			} catch (Exception ex) {
 				return 0;
 			}
