@@ -55,7 +55,8 @@ runs on your laptop, tablet or smartphone (`Windows`, `MacOS`, `iOS`, `Linux`, `
 a browser available, supporting `HTML5` (if it does not, you should really upgrade it).
 
 `HTML5` and `JavaScript` have been gaining a lot of momentum in the recent years, new frameworks like
-`jQuery`, `ionic`, `ReactJS`, `Angular`, `Underscore`,...) appear every day, and provide really rich and nice UI.
+`jQuery`, `ionic`, `ReactJS`, `Angular`, `Underscore`,...) appear every day, and provide really rich and nice UI,
+even if they're not mandatory.
 
 My feeling would be to go down this route whenever possible, that would save a lot of efforts, and provide a pretty cool
 Graphical User Interface (GUI). I have written a lot of GUI in Swing.  
@@ -221,7 +222,6 @@ The expected file is on your machine, named `tide.pdf`.
 
 
 ### TODO
-- Move web pages and scripts to ES6 (remove JQuery) 
 - Swing Implementation
     - See project `olivsoft-swing`
 - Android Implementation, etc.

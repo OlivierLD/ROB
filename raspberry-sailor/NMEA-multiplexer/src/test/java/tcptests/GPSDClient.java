@@ -77,7 +77,7 @@ public class GPSDClient {
 			int nbReadTest = 0;
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			while (canRead()) {
-				int bytesRead = theInput.read(buffer);
+				int bytesRead = theInput.read(buffer); // Read the source here.
 				if (bytesRead == -1) {
 					System.out.println("Nothing to read...");
 					if (nbReadTest++ > 10) {
@@ -105,11 +105,14 @@ public class GPSDClient {
 									if (mess.startsWith("!")) {
 										try {
 											AISParser.AISRecord aisRecord = aisParser.parseAIS(mess);
-											System.out.println(String.format("Parsed: %s", aisRecord.toString()));
+											if (aisRecord != null) {
+												System.out.printf("Parsed: %s\n", aisRecord);
+											}
 										} catch (AISParser.AISException aisEx) {
 											System.err.println(aisEx.toString());
 										} catch (Exception ex) {
-											System.err.println(" Oops >> " + ex.toString());
+											System.err.printf(" Oops >> [%s], -> %s\n", mess, ex.toString());
+//											ex.printStackTrace();
 										}
 									} else if (mess.startsWith("$")) {
 										System.out.println(">> NMEA Stuff ? >> " + mess);

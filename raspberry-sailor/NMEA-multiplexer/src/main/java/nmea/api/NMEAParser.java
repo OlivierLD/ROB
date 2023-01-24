@@ -2,6 +2,7 @@ package nmea.api;
 
 import nmea.ais.AISParser;
 import nmea.parser.StringParsers;
+import utils.DumpUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,9 @@ import java.util.List;
  * @see nmea.api.NMEAException
  */
 public final class NMEAParser extends Thread {
+
+	private final static boolean VERBOSE = System.getProperty("nmea.parser.verbose", "false").equals("true");
+
 	private String[] nmeaPrefix = null;
 	private String[] nmeaSentence = null;
 
@@ -48,8 +52,8 @@ public final class NMEAParser extends Thread {
 	 */
 
 	public NMEAParser(List<NMEAListener> al) {
-		if (System.getProperty("nmea.parser.verbose", "false").equals("true")) {
-			System.out.println(this.getClass().getName() + ":Creating parser");
+		if (VERBOSE) {
+			System.out.println(this.getClass().getName() + ":Creating NMEAParser");
 		}
 		instance = this;
 		NMEAListeners = al;
@@ -99,7 +103,7 @@ public final class NMEAParser extends Thread {
 							if (broadcast) {
 								instance.fireDataDetected(new NMEAEvent(this, s));
 							} else {
-								if ("true".equals(System.getProperty("nmea.parser.verbose","false"))) {
+								if (VERBOSE) {
 									System.out.printf("  >>> Rejecting [%s] <<< \n", s.trim());
 								}
 							}
@@ -148,15 +152,19 @@ public final class NMEAParser extends Thread {
 		String ret = null;
 		try {
 			if (interesting()) {
-				// DEBUG. TODO some system var to see what's going on?
-//			System.out.println("=== NMEAParser ===");
-//			DumpUtil.displayDualDump(nmeaStream);
+				if (VERBOSE) {
+					System.out.println("=== NMEAParser ===");
+					DumpUtil.displayDualDump(nmeaStream.toString());
+				}
 				int start = getSentenceStartIndex(nmeaStream);
 				int end = nmeaStream.indexOf(NMEA_SENTENCE_SEPARATOR, start);
 				ret = nmeaStream.substring(start, end);
 //			nmeaStream = nmeaStream.substring(end + NMEA_SENTENCE_SEPARATOR.length());
 				nmeaStream.delete(0, end + NMEA_SENTENCE_SEPARATOR.length());
 			} else {
+				if (VERBOSE) {
+					System.out.printf("Rejecting [%s]\n", nmeaStream.toString().trim());
+				}
 				if (nmeaStream.length() > MAX_STREAM_SIZE) {
 					nmeaStream = new StringBuffer(); // Reset to avoid OutOfMemoryException
 				}

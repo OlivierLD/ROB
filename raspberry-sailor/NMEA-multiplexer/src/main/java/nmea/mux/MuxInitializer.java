@@ -204,12 +204,18 @@ public class MuxInitializer {
                                 String tcpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
                                 deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                                String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
+                                boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
                                 TCPClient tcpClient = new TCPClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
                                 tcpClient.initClient();
-                                tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort)));
+                                if (initialRequest.trim().isEmpty()) {
+                                    tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), keepTrying));
+                                } else {
+                                    tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), initialRequest, keepTrying));
+                                }
                                 tcpClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(tcpClient);
                             } catch (Exception e) {

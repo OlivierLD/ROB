@@ -33,8 +33,6 @@ public class TCPReaderTest {
                 System.getProperty("tcp.host", "ais.exploratorium.edu");
         int port = Integer.parseInt(System.getProperty("tcp.port", "80")); // 7001; // 2947
 
-        // TODO Also try sinagot.net:2947, as GPSd
-
         System.out.println(String.format("TCP Client for %s:%d", host, port));
 
         try {

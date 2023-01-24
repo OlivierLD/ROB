@@ -43,6 +43,7 @@ public class TCPClient extends NMEAClient {
 		private final String type = "tcp";
 		private int port;
 		private String hostname;
+		// TODO Add initial.request and keep.trying ?
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
@@ -104,7 +105,10 @@ public class TCPClient extends NMEAClient {
 		for (String s : args) {
 			System.out.println("CustomTCPClient prm:" + s);
 		}
-		String serverName = "192.168.42.2";
+		String serverName = "sinagot.net"; // ""192.168.42.2";
+		int serverPort = 2_947; // 7_001;
+
+		System.setProperty("nmea.parser.verbose", "true");
 
 		nmeaClient = new TCPClient();
 
@@ -115,7 +119,7 @@ public class TCPClient extends NMEAClient {
 			}
 		});
 		nmeaClient.initClient();
-		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, 7_001));
+		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, serverPort));
 		nmeaClient.startWorking();
 	}
 }

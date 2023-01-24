@@ -67,7 +67,7 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -DdeltaT=AUTO" # 01-Jan-2019
 #
 # JAVA_OPTIONS="$JAVA_OPTONS -Dpi4j.debug -Dpi4j.linking=dynamic"
 #
-CP=./build/libs/NMEA.mux.extensions-1.0-all.jar
+CP=./build/libs/NMEA-mux-extensions-1.0-all.jar
 if [[ "$OS" == "Darwin" ]]; then
   CP=${CP}:./libs/RXTXcomm.jar          # for Mac
 fi

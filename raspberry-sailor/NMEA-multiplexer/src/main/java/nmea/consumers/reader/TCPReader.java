@@ -6,13 +6,13 @@ import nmea.api.NMEAParser;
 import nmea.api.NMEAReader;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,22 +23,35 @@ public class TCPReader extends NMEAReader {
 	private final static int DEFAULT_TCP_PORT = 80;
 	private int tcpPort = DEFAULT_TCP_PORT;
 	private String hostName = DEFAULT_HOST_NAME;
+	private String initialRequest = null;  // Like for GPSd...
+	private boolean keepTrying = false;
 
 	public TCPReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_HOST_NAME, DEFAULT_TCP_PORT);
+		this(null, al, DEFAULT_HOST_NAME, DEFAULT_TCP_PORT, false);
 	}
 
 	public TCPReader(List<NMEAListener> al, int tcp) {
-		this(null, al, DEFAULT_HOST_NAME, tcp);
+		this(null, al, DEFAULT_HOST_NAME, tcp, false);
 	}
 
 	public TCPReader(List<NMEAListener> al, String host, int tcp) {
-		this(null, al, host, tcp);
+		this(null, al, host, tcp, false);
 	}
+
 	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp) {
+		this(threadName, al, host, tcp, null, false);
+	}
+
+	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp, boolean keepTrying) {
+		this(threadName, al, host, tcp, null, keepTrying);
+	}
+
+	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp, String initialRequest, boolean keepTrying) {
 		super(threadName != null ? threadName : "tcp-thread", al);
-		hostName = host;
-		tcpPort = tcp;
+		this.hostName = host;
+		this.tcpPort = tcp;
+		this.initialRequest = initialRequest;
+		this.keepTrying = keepTrying;
 	}
 
 	private Socket skt = null;
@@ -59,26 +72,35 @@ public class TCPReader extends NMEAReader {
 //    System.out.println("INFO:" + hostName + " (" + address.toString() + ")" + " is" + (address.isMulticastAddress() ? "" : " NOT") + " a multicast address");
 			skt = new Socket(address, tcpPort);
 
+			if (this.initialRequest != null) {
+				// Like "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
+				OutputStream os = skt.getOutputStream();
+				PrintWriter out = new PrintWriter(os, true);
+				out.println(this.initialRequest);
+			}
+
 			InputStream theInput = skt.getInputStream();
-			byte buffer[] = new byte[4_096];
+			byte[] buffer = new byte[4_096];
 			String s;
 			int nbReadTest = 0;
 			while (this.canRead()) {
 				int bytesRead = theInput.read(buffer);
 				if (bytesRead == -1) {
 					System.out.println("Nothing to read...");
-					if (nbReadTest++ > 10)
+					if (nbReadTest++ > 10) {
 						break;
+					}
 				} else {
 					int nn = bytesRead;
 					for (int i = 0; i < Math.min(buffer.length, bytesRead); i++) {
-						if (buffer[i] != 0)
+						if (buffer[i] != 0) {
 							continue;
+						}
 						nn = i;
 						break;
 					}
 
-					byte toPrint[] = new byte[nn];
+					byte[] toPrint = new byte[nn];
 					for (int i = 0; i < nn; i++) {
 						toPrint[i] = buffer[i];
 					}
@@ -129,6 +151,14 @@ public class TCPReader extends NMEAReader {
 		} catch (Exception e) {
 //    e.printStackTrace();
 			manageError(e);
+		}
+		if (this.keepTrying && this.goRead) { // Reconnect
+			System.out.println("--------------------------------");
+			System.out.println("-- Re-connecting the TCP feed --");
+			System.out.println("--------------------------------");
+			startReader();
+		} else {
+			System.out.println("-- End of TCP reader.");
 		}
 	}
 

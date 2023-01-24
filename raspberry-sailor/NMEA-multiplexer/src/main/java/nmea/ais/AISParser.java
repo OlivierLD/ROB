@@ -27,6 +27,7 @@ public class AISParser {
 	/*
    * !AIVDM,1,1,,A,15NB>cP03jG?l`<EaV0`MFO000S>,0*39
    * ^      ^ ^  ^ ^                            ^ ^
+   * |      | |  | |                            | |
    * |      | |  | |                            | NMEA Checksum
    * |      | |  | |                            End of message. Number of fill bits for padding.
    * |      | |  | Encoded AIS Data

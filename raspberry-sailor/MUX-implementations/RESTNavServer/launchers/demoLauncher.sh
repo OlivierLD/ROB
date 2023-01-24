@@ -81,6 +81,7 @@ URL_OPTION_10="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_11="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_12="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 URL_OPTION_13="http://localhost:${HTTP_PORT}/web/nmea/admin.html"
+URL_OPTION_13b="http://localhost:${HTTP_PORT}/web/nmea/admin.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -142,7 +143,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
 	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
 	echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests.                                                                          |"
-	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              |                                                                                         |"
+	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              | ${RED}13b${NC}. GPS, + AIS data from sinagot.net.                                                  |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -281,6 +282,10 @@ while [[ "${GO}" == "true" ]]; do
 	      "13")
 	        PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13}
+	        ;;
+	      "13b")
+	        PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13b}
 	        ;;
 	      "20")
 	      	echo -e "Uses a 'curl' to display the current data cache, using REST"
@@ -565,6 +570,17 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_13}
+	    fi
+	    GO=false
+	    ;;
+	  "13b")
+  	  PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_13b}
 	    fi
 	    GO=false
 	    ;;
