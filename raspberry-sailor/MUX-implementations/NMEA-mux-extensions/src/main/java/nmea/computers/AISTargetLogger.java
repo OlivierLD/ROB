@@ -151,6 +151,7 @@ public class AISTargetLogger extends Computer {
 					}
 				} catch (AISParser.AISException aisException) { // un-managed AIS type
 					// Absorb
+					// aisException.printStackTrace();
 				}
 			}
 		}

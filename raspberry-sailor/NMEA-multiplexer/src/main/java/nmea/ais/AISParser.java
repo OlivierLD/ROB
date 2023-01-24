@@ -533,7 +533,7 @@ public class AISParser {
 		}
 	}
 
-	public final static String AIS_PREFIX = "!AIVDM"; // TODO Other Talker IDs, AIVDM, AIVDO
+	public final static String AIS_PREFIX = "!AIVDM"; // TODO Other Talker IDs, AIVDM, AIVDO, etc.
 
 	private final static int PREFIX_POS = 0;
 	private final static int NB_SENTENCES_POS = 1;
@@ -1009,6 +1009,7 @@ public class AISParser {
 			ar.setDraught(value);
 		}
 	}
+
 	private static void setAISData(AISDataType5 a, AISRecord ar, String value) {
 		if (a.equals(AISDataType5.CALL_SIGN)) {
 			ar.setCallSign(value);
@@ -1032,6 +1033,7 @@ public class AISParser {
 			ar.setFuncId(value);
 		}
 	}
+
 	private static void setAISData(AISDataType8 a, AISRecord ar, String value) {
 		if (a.equals(AISDataType8.DATA)) {
 			ar.setBinData(value);
@@ -1147,6 +1149,7 @@ public class AISParser {
 			ar.setUtc(value);
 		}
 	}
+
 	private static void setAISData(AISDataType21 a, AISRecord ar, String value) {
 		if (a.equals(AISDataType21.NAME)) {
 			ar.setName(value);
@@ -1166,6 +1169,7 @@ public class AISParser {
 			ar.setPartNo(value);
 		}
 	}
+
 	private static void setAISData(AISDataType24A a, AISRecord ar, String value) {
 		if (a.equals(AISDataType24A.VESSEL_NAME)) {
 			ar.setVesselName(value);
@@ -1198,6 +1202,7 @@ public class AISParser {
 		} else if (a.equals(AISDataType24B.MOTHER_MMSI)) {
 			ar.setMotherMMSI(value);		}
 	}
+
 	private static void setAISData(AISDataType24B a, AISRecord ar, String value) {
 		if (a.equals(AISDataType24B.CALL_SIGN)) {
 			ar.setCallSign(value);
@@ -1259,12 +1264,12 @@ public class AISParser {
 		private int repeatIndicator;  // Mandatory
 		private int MMSI;             // Mandatory
 		private long recordTimeStamp; // Mandatory
-		private String messageDescription;
-		private String navStatusDesc;
-		private String aidTypeDesc;
-		private String vesselNameStr;
-		private String nameStr;
-		private String shipTypeStr;
+		private String messageDescription = "";
+		private String navStatusDesc = "";
+		private String aidTypeDesc = "";
+		private String vesselNameStr = "";
+		private String nameStr = "";
+		private String shipTypeStr = "";
 
 		Map<String, Object> recordContent = new HashMap<>();
 
@@ -1694,7 +1699,12 @@ public class AISParser {
 		}
 
 		public int getOffset2() {
-			return (int)recordContent.get(OFFSET_2);
+			int offset = -1;
+			if (recordContent.get(OFFSET_2) != null) { // This is for Jackson.
+				return (int) recordContent.get(OFFSET_2);
+			} else {
+				return offset;
+			}
 		}
 
 		public void setOffset2(int offset2) {
@@ -2614,6 +2624,31 @@ public class AISParser {
 
 		public long getRecordTimeStamp() {
 			return recordTimeStamp;
+		}
+
+		// For Jackson...
+		public String getNavStatusDesc() {
+			return navStatusDesc;
+		}
+
+		public String getAidTypeDesc() {
+			return aidTypeDesc;
+		}
+
+		public String getVesselNameStr() {
+			return vesselNameStr;
+		}
+
+		public String getNameStr() {
+			return nameStr;
+		}
+
+		public String getShipTypeStr() {
+			return shipTypeStr;
+		}
+
+		public Map<String, Object> getRecordContent() {
+			return recordContent;
 		}
 	}
 }

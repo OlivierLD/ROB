@@ -128,9 +128,16 @@ public abstract class NMEAReader extends Thread {
 			System.out.println(String.format(">> %s: Reader Running", this.getClass().getName()));
 		}
 		try {
-			startReader();
+			synchronized (this) {
+				startReader();
+			}
 		} catch (Exception ex) {
-			this.NMEAListeners.stream().forEach(listener -> listener.fireError(ex));
+			if (false) {
+				System.err.println(("--- NMEAReader ---"));
+				ex.printStackTrace();
+				System.err.println(("------------------"));
+				this.NMEAListeners.stream().forEach(listener -> listener.fireError(ex));
+			}
 			throw new RuntimeException(ex);
 		} finally {
 			if (verbose) {

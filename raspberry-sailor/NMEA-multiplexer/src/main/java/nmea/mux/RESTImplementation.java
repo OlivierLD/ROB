@@ -2745,7 +2745,13 @@ public class RESTImplementation {
 					System.out.printf("\tlength: %d\n", content.length());
 				}
 			} catch (JsonProcessingException jpe) {
-				content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
+				try {
+					// content = jpe.getMessage(); // TODO A more structured error message?... Error, text, return.
+					content = mapper.writeValueAsString(jpe);
+				} catch (JsonProcessingException jpe2) {
+					content = jpe.getMessage();
+					jpe2.printStackTrace();
+				}
 //			} catch (UnsupportedEncodingException uee) {
 //				content = uee.getMessage();
 			}

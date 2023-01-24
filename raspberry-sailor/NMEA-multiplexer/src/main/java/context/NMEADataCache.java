@@ -3,6 +3,8 @@ package context;
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
 import calc.calculation.SightReductionUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nmea.ais.AISParser;
 import nmea.mux.context.Context;
 import nmea.parser.Angle;
@@ -53,10 +55,15 @@ import java.util.logging.Level;
 
 /**
  * For AIS, see system property "put.ais.in.cache"
+ * For verbose, see property "nmea.cache.verbose"
  */
 public class NMEADataCache
 		extends ConcurrentHashMap<String, Object>
 		implements Serializable {
+
+	private final static boolean VERBOSE = System.getProperty("nmea.cache.verbose", "false").equals("true");
+
+	private final static ObjectMapper mapper = new ObjectMapper();
 
 	// Keys. TODO, make this an enum?
 	public static final String NB_MESS_PROCESSED = "NbMess"; // Retrieved when pulling the whole cache.
@@ -175,7 +182,7 @@ public class NMEADataCache
 	public NMEADataCache() {
 		super();
 		started = System.currentTimeMillis();
-		if (System.getProperty("nmea.cache.verbose", "false").equals("true")) {
+		if (VERBOSE) {
 			System.out.println("+=================================+");
 			System.out.println("| Instantiating an NMEADataCache. |");
 			System.out.println("+=================================+");
@@ -291,19 +298,31 @@ public class NMEADataCache
 	}
 
 	@Override
-	public /*synchronized*/ Object put(String key, Object value) {
-		// Qucik debug tgrick
+	public synchronized Object put(String key, Object value) {
+		// Quick debug trick
 //		if (key.equals(GPS_DATE_TIME) && true) {
 //			System.out.println("PUTTING GPS Date Time in the cache:" + value);
 //		}
 
+		if (VERBOSE) { //  || key.equals(AIS)) {
+			try {
+				String aisStr = mapper.writeValueAsString(value);
+				System.out.printf("Put in CACHE, key [%s], [%s]\n", key, value == null ? "null" : aisStr);
+			} catch (JsonProcessingException jpe) {
+				System.out.printf("Put in CACHE (2), key [%s], [%s]\n", key, value == null ? "null" : value);
+				jpe.printStackTrace();
+			}
+		}
+
 		Object o = null;
 		synchronized (this) {
-			try {
-				o = super.put(key, value);
-			} catch (Exception ex) {
-				System.err.printf("Caught Exception for key [%s], value [%s]:", key, value);
-				ex.printStackTrace();
+			if (value != null) {
+				try {
+					o = super.put(key, value);
+				} catch (Exception ex) {
+					System.err.printf("Caught Exception for key [%s], value [%s]:", key, value);
+					ex.printStackTrace();
+				}
 			}
 		}
 		if (dampingSize > 1 && dampingMap.containsKey(key)) {
@@ -311,6 +330,15 @@ public class NMEADataCache
 			ald.add(value);
 			while (ald.size() > dampingSize) {
 				ald.remove(0);
+			}
+		}
+
+		if (VERBOSE) {
+			try {
+				String cacheContent = mapper.writeValueAsString(this);
+				System.out.println(cacheContent);
+			} catch (JsonProcessingException jpe) {
+				jpe.printStackTrace();
 			}
 		}
 		return o;

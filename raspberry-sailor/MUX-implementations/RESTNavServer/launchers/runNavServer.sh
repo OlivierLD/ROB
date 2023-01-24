@@ -54,6 +54,7 @@ IMAGE_VERBOSE=false
 GRIB_VERBOSE=false
 AIS_VERBOSE=false
 REST_VERBOSE=false
+NMEA_CACHE_VERBOSE=false
 #
 # CP=../build/libs/RESTNavServer-1.0-all.jar
 CP=$(find .. -name '*-all.jar')
@@ -135,7 +136,7 @@ if [[ "${WEATHER_STATION}" == "false" ]] && [[ "${SUN_FLOWER}" == "true" ]]; the
 fi
 #
 # Specific/Temporary
-# JAVA_OPTS="${JAVA_OPTS} -Dnmea.cache.verbose=true"
+JAVA_OPTS="${JAVA_OPTS} -Dnmea.cache.verbose=${NMEA_CACHE_VERBOSE}"
 if [[ "${NO_DATE}" == "true" ]]; then
   # To use when re-playing GPS data. Those dates will not go in the cache.
   # Uses only date from RMC sentences
