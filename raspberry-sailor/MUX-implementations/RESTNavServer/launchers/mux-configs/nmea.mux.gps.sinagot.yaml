@@ -13,7 +13,7 @@ channels:
     port: /dev/ttyS80
     baudrate: 4800
     verbose: true
-  # AIS Data, from a GPSd server
+  # AIS Data, from a GPSd server (a lot of data, careful)
   - type: tcp
     server: sinagot.net
     port: 2947

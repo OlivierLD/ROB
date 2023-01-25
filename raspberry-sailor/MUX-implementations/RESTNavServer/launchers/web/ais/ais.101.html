@@ -21,7 +21,7 @@ body {
     Use query parameter <code>test=true</code> for hard-coded NMEA cache value.
 </div>
 <hr/>
-<small>See console for results</small>
+<h2>See console for results (right-click, Inspect)</h2>
 <hr/>
 </body>
 <script type="text/javascript">
@@ -101,7 +101,7 @@ body {
 
             let requestTimer = setTimeout(() => {
                 xhr.abort();
-                let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
+                let mess = {code: 408, message: `Timeout (${TIMEOUT}ms) for ${verb} ${url}`};
                 reject(mess);
             }, TIMEOUT);
 

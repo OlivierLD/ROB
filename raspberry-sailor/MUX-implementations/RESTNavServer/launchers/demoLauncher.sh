@@ -80,8 +80,8 @@ URL_OPTION_9e="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_10="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_11="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_12="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
-URL_OPTION_13="http://localhost:${HTTP_PORT}/web/nmea/admin.html"
-URL_OPTION_13b="http://localhost:${HTTP_PORT}/web/nmea/admin.html"
+URL_OPTION_13="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
+URL_OPTION_13b="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
