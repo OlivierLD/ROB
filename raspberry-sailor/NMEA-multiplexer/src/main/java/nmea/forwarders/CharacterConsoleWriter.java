@@ -60,7 +60,7 @@ public class CharacterConsoleWriter implements Forwarder {
 	}
 
 	private static class ConsoleBean {
-		private final String cls;
+		private String cls;
 		private final String type = "char-console";
 
 		public String getCls() {
@@ -71,6 +71,8 @@ public class CharacterConsoleWriter implements Forwarder {
 			return type;
 		}
 
+		public ConsoleBean() {
+		}
 		public ConsoleBean(CharacterConsoleWriter instance) {
 			cls = instance.getClass().getName();
 		}

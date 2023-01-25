@@ -599,6 +599,7 @@
                     });
                     break;
                 case 'rest':
+                    protocol = document.getElementById("rest-protocol").value;
                     port = document.getElementById("rest-port").value;
                     server = document.getElementById("rest-server").value;
                     path = document.getElementById("rest-path").value;
@@ -613,6 +614,7 @@
                     sFilters = document.getElementById("rest-sentence-filters").value.split(",");
                     createChannel({
                         type: 'rest',
+                        protocol: protocol,
                         hostname: server,
                         port: port,
                         queryPath: path,
@@ -673,6 +675,7 @@
               });
               break;
             case 'rest':
+              let protocol = document.getElementById("fwd-rest-protocol").value;
               let verb = document.getElementById("fwd-rest-verb").value;
               let server = document.getElementById("fwd-rest-server").value;
               if (server.trim().length === 0) {
@@ -685,6 +688,7 @@
               let resource = document.getElementById("fwd-rest-resource").value;
               createForwarder({
                 type: 'rest',
+                protocol: protocol,
                 verb: verb,
                 serverName: server,
                 port: port,
@@ -1230,6 +1234,15 @@
               <div id="channel-rest" style="display: none;">
                 <table>
                   <tr>
+                    <td>Protocol</td>
+                    <td>
+                        <select id="rest-protocol">
+                            <option value="http">http</option>
+                            <option value="https">https</option>
+                        </select>
+                    </td>
+                  </tr>
+                  <tr>
                     <td>Server</td>
                     <td><input id="rest-server" type="text" placeholder="Server Name" size="20"></td>
                   </tr>
@@ -1251,7 +1264,7 @@
                   </tr>
                   <tr>
                     <td>frequency</td>
-                    <td><input id="rest-freq" type="number" placeholder="Frequency" size="10"></td>
+                    <td><input id="rest-freq" type="number" placeholder="Frequency" size="10" value="1000"></td>
                   </tr>
                   <tr>
                     <td>Device filter(s)</td>
@@ -1346,16 +1359,25 @@
               <div id="forward-rest" style="display: none;">
                 <table>
                   <tr>
+                    <td>Protocol</td>
+                    <td>
+                        <select id="fwd-rest-protocol">
+                            <option value="http">http</option>
+                            <option value="https">https</option>
+                        </select>
+                    </td>
+                  </tr>
+                  <tr>
                     <td>Verb</td>
                     <td><input id="fwd-rest-verb" type="text" placeholder="POST" size="10"></td>
                   </tr>
                   <tr>
                     <td>Server Name or IP</td>
-                    <td><input id="fwd-rest-server" type="text" placeholder="Server Name" size="10"></td>
+                    <td><input id="fwd-rest-server" type="text" placeholder="Server Name" size="30"></td>
                   </tr>
                   <tr>
                     <td>Port</td>
-                    <td><input id="fwd-rest-port" type="text" placeholder="Port" size="10"></td>
+                    <td><input id="fwd-rest-port" type="number" placeholder="Port" size="10"></td>
                   </tr>
                   <tr>
                     <td>Resource</td>
@@ -1367,7 +1389,7 @@
                 <table>
                   <tr>
                     <td>Port</td>
-                    <td><input id="fwd-gpsd-port" type="text" placeholder="Port, like 2947" size="10"></td>
+                    <td><input id="fwd-gpsd-port" type="number" placeholder="Port, like 2947" size="10"></td>
                   </tr>
                 </table>
               </div>
@@ -1375,7 +1397,7 @@
                 <table>
                   <tr>
                     <td>Port</td>
-                    <td><input id="fwd-rmi-port" type="text" placeholder="Port" size="10"></td>
+                    <td><input id="fwd-rmi-port" type="number" placeholder="Port" size="10"></td>
                   </tr>
                   <tr>
                     <td>Binding Name</td>

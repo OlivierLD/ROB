@@ -22,9 +22,10 @@ public class ConsoleWriter implements Forwarder {
 	}
 
 	private static class ConsoleBean {
-		private final String cls;
+		private String cls;
 		private final String type = "console";
 
+		public ConsoleBean() {}
 		public ConsoleBean(ConsoleWriter instance) {
 			cls = instance.getClass().getName();
 		}

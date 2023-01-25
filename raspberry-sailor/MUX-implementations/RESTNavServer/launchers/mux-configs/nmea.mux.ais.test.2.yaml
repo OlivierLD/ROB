@@ -22,4 +22,8 @@ forwarders:
     subclass: nmea.forwarders.AISTCPServer
     port: 7003
     verbose: true
+computers:
+  - class: nmea.computers.AISManager
+    verbose: false
+    properties: mux-configs/ais.mgr.properties
 

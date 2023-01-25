@@ -115,12 +115,12 @@ public class RESTPublisher implements Forwarder {
 	}
 
 	public static class RESTBean {
-		private final String cls;
-		private final String protocol;
-		private final int port;
-		private final String serverName;
-		private final String verb;
-		private final String resource;
+		private String cls;
+		private String protocol;
+		private int port;
+		private String serverName;
+		private String verb;
+		private String resource;
 		private final String type = "rest";
 
 		public String getProtocol() {
@@ -143,6 +143,9 @@ public class RESTPublisher implements Forwarder {
 		}
 		public String getType() {
 			return type;
+		}
+
+		public RESTBean() {
 		}
 
 		public RESTBean(RESTPublisher instance) {

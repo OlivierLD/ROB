@@ -697,12 +697,12 @@ public class CharacterModeConsole {
 	}
 
 	private static class ConsoleData {
-		private final String key;
-		private final int x;
-		private final int y;
-		private final String fgData;
-		private final String bgData;
-		private final String fgTitle;
+		private String key;
+		private int x;
+		private int y;
+		private String fgData;
+		private String bgData;
+		private String fgTitle;
 
 		public String getKey() {
 			return key;
@@ -732,7 +732,9 @@ public class CharacterModeConsole {
 			return bgTitle;
 		}
 
-		private final String bgTitle;
+		private String bgTitle;
+
+		public ConsoleData() {}
 
 		public ConsoleData(String key, int x, int y, String fgData, String bgData, String fgTitle, String bgTitle) {
 			this.key = key;

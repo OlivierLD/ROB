@@ -28,5 +28,6 @@ forwarders:
 computers:
   - class: nmea.computers.AISManager
     properties: mux-configs/ais.mgr.properties
+    verbose: false
   - class: nmea.computers.AISTargetLogger
     properties: mux-configs/target.logger.properties

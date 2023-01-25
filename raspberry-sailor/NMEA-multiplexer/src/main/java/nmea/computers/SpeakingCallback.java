@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  *
  * This one is talking the message.
  *
- * The same Consumer could be used to turn on a light or a buzzer, even if the accept String parameter is not used.
+ * The same Consumer could be used to turn on a light or a buzzer, even if the "accept" String parameter is not used.
  */
 public class SpeakingCallback implements Consumer<String> {
 

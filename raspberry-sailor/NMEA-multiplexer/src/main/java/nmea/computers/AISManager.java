@@ -96,7 +96,7 @@ public class AISManager extends Computer {
 									}
 								} else {
 									if (this.verbose) {
-										System.out.println(String.format("For %s (%s): Comparing %s with %s / %s (%.04f / %.04f)\n\tdistance %.02f nm (min is %.02f)\n\tBearing from target to current pos. %.02f\272\n\tCOG Target: %.02f\n\t-> No threat found",
+										System.out.printf("For %s (%s): Comparing %s with %s / %s (%.04f / %.04f)\n\tdistance %.02f nm (min is %.02f)\n\tBearing from target to current pos. %.02f\272\n\tCOG Target: %.02f\n\t-> No threat found\n",
 												aisRecord.getMMSI(),
 												aisRecord.getVesselName(),
 												position.toString(),
@@ -107,7 +107,7 @@ public class AISManager extends Computer {
 												distToTarget,
 												this.minimumDistance,
 												bearingFromTarget,
-												aisRecord.getCog()));
+												aisRecord.getCog());
 									}
 								}
 							}
