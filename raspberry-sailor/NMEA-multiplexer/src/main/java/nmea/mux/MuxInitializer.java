@@ -166,7 +166,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "rest":  // TODO WiP. Document
+                        case "rest":
                             try {
 //                                System.out.printf("REST Consumer required here (#%d), come back soon! (See above)\n", muxIdx);
                                 String machineName = muxProps.getProperty(String.format("mux.%s.machine-name", MUX_IDX_FMT.format(muxIdx)));
@@ -191,7 +191,15 @@ public class MuxInitializer {
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
                                 restClient.initClient();
-                                restClient.setReader(new RESTReader("MUX-RESTReader", restClient.getListeners(), protocol, machineName, Integer.parseInt(httPort), queryPath, queryString, jqString, betweenLoops));
+                                restClient.setReader(new RESTReader("MUX-RESTReader",
+                                                        restClient.getListeners(),
+                                                        protocol,
+                                                        machineName,
+                                                        Integer.parseInt(httPort),
+                                                        queryPath,
+                                                        queryString,
+                                                        jqString,
+                                                        betweenLoops));
                                 restClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(restClient);
                             } catch (Exception e) {

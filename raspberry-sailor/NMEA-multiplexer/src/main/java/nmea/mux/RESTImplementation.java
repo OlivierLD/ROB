@@ -1227,7 +1227,12 @@ public class RESTImplementation {
 						try {
 							NMEAClient tcpClient = new TCPClient(tcpJson.getDeviceFilters(), tcpJson.getSentenceFilters(), this.mux);
 							tcpClient.initClient();
-							tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpJson.getHostname(), tcpJson.getPort()));
+							tcpClient.setReader(new TCPReader("MUX-TCPReader",
+													tcpClient.getListeners(),
+													tcpJson.getHostname(),
+													tcpJson.getPort(),
+													tcpJson.getInitialRequest().trim().length() > 0 ? tcpJson.getInitialRequest() : null,
+													tcpJson.isKeepTrying()));
 							nmeaDataClients.add(tcpClient);
 							tcpClient.startWorking();
 							String content = mapper.writeValueAsString(tcpClient.getBean()); //  new Gson().toJson(tcpClient.getBean());

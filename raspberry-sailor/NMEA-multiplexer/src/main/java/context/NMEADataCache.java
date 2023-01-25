@@ -320,7 +320,7 @@ public class NMEADataCache
 				try {
 					o = super.put(key, value);
 				} catch (Exception ex) {
-					System.err.printf("Caught Exception for key [%s], value [%s]:", key, value);
+					System.err.printf("Caught Exception for key [%s], value [%s]:\n", key, value);
 					ex.printStackTrace();
 				}
 			}

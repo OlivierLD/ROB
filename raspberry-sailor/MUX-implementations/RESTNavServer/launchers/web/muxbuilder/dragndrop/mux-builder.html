@@ -265,6 +265,14 @@ let fileFwdOption = (sel) => {
                           <td><input type="number" class="port-num" placeholder="TCP Port"></td>
                       </tr>
                       <tr>
+                        <td>Initial Request</td>
+                        <td><input type="text" class="initial-request" size="30" placeholder="Initial Request"></td>
+                      </tr>
+                      <tr>
+                        <td>Keep Trying</td>
+                        <td><input type="checkbox" class="keep-trying"></td>
+                      </tr>
+                      <tr>
                           <td>Device Filters</td>
                           <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
                       </tr>
@@ -281,7 +289,79 @@ let fileFwdOption = (sel) => {
                 </dialog>
             </div>
           </div>
-          <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
+          <div id="consumer-12" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
+            <div>
+              <span class="close-icon" onclick="remove(this);">&times;</span>
+              <span class="channel-description">REST input</span>
+            </div>
+            <div class="draggable-content">
+              <span>REST </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+              <dialog class="editable-prm" style="min-height: 200px;">
+                <div class="dialog-header">
+                  <div style="padding: 10px;">
+                    <span style="margin-left: 20px;">Edit REST Channel Parameters</span>
+                    <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                  </div>
+                </div>
+                <div class="editable-zone rest-channel">
+                  <table>
+                    <tr>
+                      <td>Protocol</td>
+                      <td>
+                          <select class="rest-protocol">
+                              <option value="http">http</option>
+                              <option value="https">https</option>
+                          </select>
+                      </td>
+
+
+                    </tr>
+                    <tr>
+                        <td>Server name or IP</td>
+                        <td><input type="text" class="server-name" size="30" placeholder="Server Name"></td>
+                    </tr>
+                    <tr>
+                        <td>Port</td>
+                        <td><input type="number" class="port-num" placeholder="REST Port"></td>
+                    </tr>
+                    <!--tr>
+                      <td>Verb</td>
+                      <td><input type="text" class="rest-verb" size="10" placeholder="Verb" value="GET"></td>
+                    </tr-->
+                    <tr>
+                      <td>Path</td>
+                      <td><input type="text" class="rest-path" size="30" placeholder="REST Query Path"></td>
+                    </tr>
+                    <tr>
+                      <td>Query String</td>
+                      <td><input type="text" class="rest-qs" size="30" placeholder="Query String"></td>
+                    </tr>
+                    <tr>
+                      <td>JQ Syntax</td>
+                      <td><input type="text" class="rest-jq" size="30" placeholder="JQ Syntax"></td>
+                    </tr>
+                    <tr>
+                      <td>Frequency (ms)</td>
+                      <td><input type="number" class="rest-frequency" size="10" placeholder="Frequency" value="1000"></td>
+                    </tr>
+                    <tr>
+                        <td>Device Filters</td>
+                        <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
+                    </tr>
+                    <tr>
+                        <td>Sentence Filters</td>
+                        <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
+                    </tr>
+                    <tr>
+                        <td>Verbose</td>
+                        <td><input type="checkbox" class="verbose"></td>
+                    </tr>
+                  </table>
+                </div>
+              </dialog>
+          </div>
+        </div>
+        <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
               <span class="channel-description">Log file replay</span>
@@ -377,7 +457,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature & Humidity Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span>HTU21DF (Obsolete, use TCP)</span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">HTU21DF</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -406,7 +486,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature, Humidity, Pressure Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span>BME280 (Obsolete, use TCP)</span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">BME280</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -435,7 +515,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature, Humidity, Pressure Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span>BMP180 (Obsolete, use TCP)</span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">BMP180</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -464,7 +544,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Magnetometer Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span>HCM5883L (Obsolete, use TCP)</span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">HCM5883L</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -513,7 +593,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Magnetometer Accelerometer Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span>LSM303 (Obsolete, use TCP)</span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">LSM303</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">

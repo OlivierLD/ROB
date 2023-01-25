@@ -474,17 +474,21 @@
                         alert('Both port and server name are required');
                         return;
                     }
+                    initialRequest = document.getElementById("tcp-initial-request").value;
+                    keepTrying = document.getElementById("tcp-keep-trying").checked;
                     dFilters = document.getElementById("tcp-dev-filters").value.split(",");
                     sFilters = document.getElementById("tcp-sentence-filters").value.split(",");
                     createChannel({
                         type: 'tcp',
                         port: port,
                         hostname: server,
+                        initialRequest: initialRequest,
+                        keepTrying: keepTrying,
                         deviceFilters: dFilters,
                         sentenceFilters: sFilters
                     });
                     break;
-                case 'file':
+                case 'file':  //TODO Zip prms
                     let logfile = document.getElementById("data-file").value;
                     if (logfile.trim().length === 0) {
                         alert('Log file name required');
@@ -994,10 +998,10 @@
                 <option value="file">Data File</option>
                 <option value="ws">Web Socket</option>
                 <option value="rnd">Random</option>
-                <option value="bmp180">BMP180</option>
+                <!--option value="bmp180">BMP180</option>
                 <option value="bme280">BME280</option>
                 <option value="lsm303">LSM303</option>
-                <option value="htu21df">HTU21DF</option>
+                <option value="htu21df">HTU21DF</option-->
                 <option value="zda">ZDA</option>
                 <option value="rest">REST</option>
                 <option value="custom">Custom</option>
@@ -1043,6 +1047,14 @@
                   <tr>
                     <td>Port</td>
                     <td><input id="tcp-port" type="text" placeholder="Port" size="10"></td>
+                  </tr>
+                  <tr>
+                    <td>Initial Request</td>
+                    <td><input id="tcp-initial-request" type="text" placeholder="Initial Request ?" size="30"></td>
+                  </tr>
+                  <tr>
+                    <td>Keep Trying</td>
+                    <td><input id="tcp-keep-trying" type="checkbox"></td>
                   </tr>
                   <tr>
                     <td>Device filter(s)</td>

@@ -43,7 +43,8 @@ public class TCPClient extends NMEAClient {
 		private final String type = "tcp";
 		private int port;
 		private String hostname;
-		// TODO Add initial.request and keep.trying ?
+		private String initialRequest;
+		private boolean keepTrying;
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
@@ -61,6 +62,8 @@ public class TCPClient extends NMEAClient {
 			cls = instance.getClass().getName();
 			port = ((TCPReader) instance.getReader()).getPort();
 			hostname = ((TCPReader) instance.getReader()).getHostname();
+			initialRequest = ((TCPReader) instance.getReader()).getInitialRequest();
+			keepTrying = ((TCPReader) instance.getReader()).isKeepTrying();
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
@@ -77,6 +80,15 @@ public class TCPClient extends NMEAClient {
 
 		public String getHostname() {
 			return this.hostname;
+		}
+
+
+		public String getInitialRequest() {
+			return initialRequest;
+		}
+
+		public boolean isKeepTrying() {
+			return keepTrying;
 		}
 
 		@Override

@@ -64,6 +64,14 @@ public class TCPReader extends NMEAReader {
 		return this.hostName;
 	}
 
+	public String getInitialRequest() {
+		return initialRequest;
+	}
+
+	public boolean isKeepTrying() {
+		return keepTrying;
+	}
+
 	@Override
 	public void startReader() {
 		super.enableReading();

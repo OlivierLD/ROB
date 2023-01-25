@@ -22,7 +22,7 @@ import static utils.StaticUtil.userInput;
  * ... and access /dev/ttyS80 instead of /dev/ttyACM0
  */
 public class SerialConsoleCLI implements SerialIOCallbacks {
-	private static boolean verbose = "true".equals(System.getProperty("verbose", "false"));
+	private final static boolean VERBOSE = "true".equals(System.getProperty("verbose", "false"));
 
 	@Override
 	public void connected(boolean b) {
@@ -31,7 +31,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 
 	private int bufferIdx = 0;
 	private final static int BUFFER_SIZE = 4_096;
-	private byte[] serialBuffer = new byte[BUFFER_SIZE];
+	private final byte[] serialBuffer = new byte[BUFFER_SIZE];
 
 	private void resetSerialBuffer() {
 		for (int i = 0; i < serialBuffer.length; i++) {
@@ -55,10 +55,10 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 
 	@Override
 	public void onSerialData(byte[] ba, int len) {
-		if (this.verbose) {
+		if (VERBOSE) {
 			System.out.println("== onSerialData ==========================");
-			System.out.println(String.format("%d: %s", len, DumpUtil.dumpHexMess(new String(ba, 0, len).getBytes())));
-			System.out.println(String.format("Also [%s]", new String(ba, 0, len)));
+			System.out.printf("%d: %s\n", len, DumpUtil.dumpHexMess(new String(ba, 0, len).getBytes()));
+			System.out.printf("Also [%s]\n", new String(ba, 0, len));
 		}
 		System.arraycopy(ba, 0, serialBuffer, bufferIdx, len);
 		bufferIdx += len;
@@ -66,22 +66,22 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 		if (bufferIdx > 0) {
 			String newMess = new String(serialBuffer, 0, bufferIdx);
 			String[] messages = newMess.split("\n"); // Full lines end with \r\n
-			if (this.verbose) {
-				System.out.println(String.format("== onSerialData, just received %d bytes (now %d bytes), %d message(s):", len, newMess.length(), messages.length));
+			if (VERBOSE) {
+				System.out.printf("== onSerialData, just received %d bytes (now %d bytes), %d message(s):\n", len, newMess.length(), messages.length);
 				System.out.println(DumpUtil.dumpHexMess(newMess.getBytes()));
 				System.out.println("====================================");
 			}
 			Arrays.stream(messages)
 					.filter(str -> str.length() > 0 && str.charAt(0) != 0xD)
 					.forEach(mess -> {
-						if (this.verbose) {
+						if (VERBOSE) {
 							System.out.println("\tMess len:" + mess.length());
 							DumpUtil.displayDualDump(mess);
 						}
 						serialOutput(mess);
 					});
 		}
-		if (this.verbose) {
+		if (VERBOSE) {
 			System.out.println("...Reseting.");
 		}
 		bufferIdx = 0;
@@ -93,7 +93,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 	}
 
 	public void serialOutput(byte[] mess) {
-		if (verbose) {
+		if (VERBOSE) {
 			DumpUtil.displayDualDump(mess);
 		}
 
@@ -120,7 +120,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 
 	private static void transfer(String pattern, SerialCommunicator sc, String prefix) throws IOException {
 		String fileName = (prefix != null ? prefix + File.separator : "") + pattern;
-		System.out.println(String.format("Processing %s", fileName));
+		System.out.printf("Processing %s\n", fileName);
 
 		File f = new File(fileName);
 		if (f.isFile() && f.exists()) {
@@ -154,7 +154,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 				}
 			});
 		} else { // Pattern?
-			System.out.println(String.format("Regex %s", pattern));
+			System.out.printf("Regex %s\n", pattern);
 			// TODO Implement
 		}
 	}
@@ -172,7 +172,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 	public static void main(String... args) {
 		final SerialConsoleCLI mwc = new SerialConsoleCLI();
 		final SerialCommunicator sc = new SerialCommunicator(mwc);
-		sc.setVerbose(verbose);
+		sc.setVerbose(VERBOSE);
 
 		Map<String, CommPortIdentifier> pm = sc.getPortList();
 		Set<String> ports = pm.keySet();
@@ -189,10 +189,10 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 
 		String serialPortName = System.getProperty("serial.port", "/dev/ttyUSB0");
 		String baudRateStr = System.getProperty("baud.rate", "9600");
-		System.out.println(String.format("Opening port %s:%s ...", serialPortName, baudRateStr));
+		System.out.printf("Opening port %s:%s ...\n", serialPortName, baudRateStr);
 		CommPortIdentifier serialPort = pm.get(serialPortName);
 		if (serialPort == null) {
-			System.out.println(String.format("Port %s not found, aborting", serialPortName));
+			System.out.printf("Port %s not found, aborting\n", serialPortName);
 			System.exit(1);
 		}
 		try {
@@ -200,7 +200,7 @@ public class SerialConsoleCLI implements SerialIOCallbacks {
 			sc.connect(serialPort, "SerialRxTx", Integer.parseInt(baudRateStr));
 			boolean b = sc.initIOStream();
 			System.out.println("IO Streams " + (b ? "" : "NOT ") + "initialized");
-			if (verbose) {
+			if (VERBOSE) {
 				System.out.println("Verbose: ON");
 			}
 			sc.initListener();

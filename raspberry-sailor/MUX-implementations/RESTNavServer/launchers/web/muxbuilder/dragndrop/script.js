@@ -182,8 +182,46 @@ function generateTCPConsumerCode(node) {
   let code = "";
   let serverName = node.querySelector('.server-name').value;
   code += `    server: ${serverName}\n`;
-  let baudRate = node.querySelector('.port-num').value;
-  code += `    port: ${baudRate}\n`;
+  let portNum = node.querySelector('.port-num').value;
+  code += `    port: ${portNum}\n`;
+  let initialRequest = node.querySelector('.initial-request').value;
+  code += `    initial.request: ${initialRequest}\n`;
+  let keepTrying = node.querySelector('.keep-trying').checked;
+  code += `    keep.trying: ${keepTrying}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  // filters
+  let deviceFilters = node.querySelector('.device-filter').value;
+  if (deviceFilters.trim().length > 0) {
+      code += `    device.filters: ${deviceFilters}\n`;
+  }
+  let sentenceFilters = node.querySelector('.sentence-filter').value;
+  if (sentenceFilters.trim().length > 0) {
+      code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  return code;
+}
+
+function generateRESTConsumerCode(node) {
+  let code = "";
+
+  let protocol = node.querySelector('.rest-protocol').value;
+  code += `    protocol: ${protocol}\n`;
+  let serverName = node.querySelector('.server-name').value;
+  code += `    machine-name: ${serverName}\n`;
+  let portNum = node.querySelector('.port-num').value;
+  code += `    http-port: ${portNum}\n`;
+  // let verb = node.querySelector('.rest-verb').value;
+  // code += `    verb: ${verb}\n`;
+  let restPath = node.querySelector('.rest-path').value;
+  code += `    query-path: ${restPath}\n`;
+  let qs = node.querySelector('.rest-qs').value;
+  code += `    query-string: ${qs}\n`;
+  let jq = node.querySelector('.rest-jq').value;
+  code += `    jqs: ${jq}\n`;
+  let freq = node.querySelector('.rest-frequency').value;
+  code += `    between-loops: ${freq}\n`;
+
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
   // filters
@@ -450,6 +488,9 @@ function dumpIt(withDialog) { // YAML Generation
     } else if (prms.classList.contains("tcp-channel")) { 
       code += "  - type: tcp\n";
       code += generateTCPConsumerCode(prms);
+    } else if (prms.classList.contains("rest-channel")) { 
+      code += "  - type: rest\n";
+      code += generateRESTConsumerCode(prms);
     } else if (prms.classList.contains("file-channel")) { 
       code += "  - type: file\n";
       code += generateFileConsumerCode(prms);
