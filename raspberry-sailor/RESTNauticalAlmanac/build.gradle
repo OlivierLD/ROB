@@ -40,7 +40,7 @@ task runSample(type: JavaExec, dependsOn: build, description: "Sample calculatio
 //classpath project.configurations.default
 //classpath sourceSets.main.output.classesDir
   classpath sourceSets.main.runtimeClasspath
-  main = 'nauticalalmanac.sample.Main4Tests'
+  mainClass = 'nauticalalmanac.sample.Main4Tests'
   workingDir "."
 }
 

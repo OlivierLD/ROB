@@ -38,7 +38,7 @@ build.doFirst {
 }
 
 task sysInfo(type: JavaExec, dependsOn: build, description: "Display System Info.") {
-    main = 'utils.SystemUtils'
+    mainClass = 'utils.SystemUtils'
 //  jvmArgs "-verbose"
 //  classpath project.configurations.default
     classpath sourceSets.main.runtimeClasspath

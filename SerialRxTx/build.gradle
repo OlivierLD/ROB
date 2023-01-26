@@ -25,7 +25,7 @@ shadowJar {
 }
 
 task runSample(type: JavaExec, dependsOn: classes, description: 'Runs the sample') {
-    main = 'sample.SerialEchoClient'
+    mainClass = 'sample.SerialEchoClient'
 //  jvmArgs '-Djava.library.path=/usr/lib/jni'
 //  jvmArgs '-Dserial.port=/dev/ttyACM0'
 //  jvmArgs '-Dbaud.rate=9600'

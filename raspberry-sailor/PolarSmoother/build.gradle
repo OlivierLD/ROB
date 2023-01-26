@@ -30,7 +30,7 @@ compileJava {
 }
 
 task runSmoother(type: JavaExec, dependsOn: classes, description: 'Runs the Polar Smoother GUI') {
-  main = 'polarmaker.polars.main.PolarSmoother'
+  mainClass = 'polarmaker.polars.main.PolarSmoother'
   classpath sourceSets.main.runtimeClasspath
 //  classpath configurations.runtime
 }

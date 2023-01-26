@@ -37,7 +37,7 @@ task harmonicsXML(type: JavaExec, dependsOn: build, description: "Generate the X
 //classpath project.configurations.default
 //classpath sourceSets.main.output.classesDir
   classpath sourceSets.main.runtimeClasspath
-  main = 'utils.HarmonicsToXML'
+  mainClass = 'utils.HarmonicsToXML'
   jvmArgs "-Xms512m"
   jvmArgs "-Xmx1024m"
 //args "none", "nothing", "needed"

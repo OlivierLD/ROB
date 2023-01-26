@@ -50,7 +50,7 @@ shadowJar {
 
 task runLogAnalyzer(type: JavaExec) {
     description 'Analyze a log file. Use gradlew runLogAnalyzer -Pdatafile=[datafile.nmea]'
-    main = 'util.LogAnalyzer'
+    mainClass = 'util.LogAnalyzer'
     classpath = sourceSets.main.runtimeClasspath
     // Another syntax to try:
     //     args project.findProperty('datafile') ?: './default-data-file.nmea'
