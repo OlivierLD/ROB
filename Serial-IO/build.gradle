@@ -43,7 +43,7 @@ runArduinoSample.doFirst {
 }
 
 task runGPSSample(type: JavaExec, dependsOn: classes, description: 'Runs the GPS Serial.IO sample') {
-    mainClass = sample.GPSReader
+    mainClass = 'sample.GPSReader'
     jvmArgs '-Djava.library.path=/usr/lib/jni'
     jvmArgs '-Dserial.port=/dev/ttyUSB0'
     jvmArgs '-Dbaud.rate=4800'

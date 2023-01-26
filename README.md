@@ -123,6 +123,13 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 - <http://navastro.free.fr/> (in French)
 - Get Started: [For dummies](./GET_STARTED.md)
 
+## Customize, Build, and Deploy
+- WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now.
+
+
+## TODO next
+- Wow! Vast topic!
+
 ---
 And more to come...
 
