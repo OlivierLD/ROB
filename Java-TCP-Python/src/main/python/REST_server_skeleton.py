@@ -3,42 +3,25 @@
 # Requires:
 # ---------
 # pip3 install http (already in python3.7, no need to install it)
-# [sudo] pip3 install adafruit-circuitpython-bme280
-#
-# Provides REST access to the cache, try GET http://localhost:8080/bme280/data
-#
-# For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /bme280/nmea-data
+# Provides REST access to the cache, try GET http://localhost:8080/skeleton/oplist
 #
 import json
 import sys
 import random
-# import traceback
-# import time
-# import math
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
-import board
-import busio
-import NMEABuilder   # local script
-
-
-from adafruit_bme280 import basic as adafruit_bme280
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX = "/bme280"
+PATH_PREFIX = "/skeleton"
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
-simulate_when_missing: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
-SIMULATE_WHEN_MISSING_PREFIX: str = "--simulate-when-missing:"
-
-sensor: adafruit_bme280.Adafruit_BME280_I2C
 
 sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
     "1": "First",
@@ -46,46 +29,6 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
     "3": "Third",
     "4": "Fourth"
 }
-
-
-i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
-try:
-    sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-    sensor.sea_level_pressure = 1013.25  # Depends on your location
-except:
-    print("No BME280 was found...")
-    sensor = None
-
-
-def read_bme280() -> dict:
-    """
-    Reads the sensor, returns a JSON structure.
-    """
-    global sensor
-    temperature: float = None  # Celsius
-    humidity: float = None     # %
-    pressure: float = None     # hPa
-    status: str = None
-
-    if sensor is not None:
-        temperature = sensor.temperature     # Celsius
-        humidity = sensor.relative_humidity  # %
-        pressure = sensor.pressure           # hPa
-        status = "OK"
-    else:
-        if simulate_when_missing:
-            temperature = random.randrange(-100, 400) / 10
-            humidity = random.randrange(0, 1000) / 10
-            pressure = random.randrange(9500, 10400) / 10
-            status = "OK - Simulated"
-        else:
-            status = "No BME280 was found"
-    return {
-        "temperature": temperature,
-        "humidity": humidity,
-        "pressure": pressure,
-        "status": status
-    }
 
 
 # Defining an HTTP request Handler class
@@ -135,42 +78,12 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 else:
                     print("oops, no equal sign in {}".format(qs_prm))
 
-        if path == PATH_PREFIX + "/data":
+        if path == PATH_PREFIX + "/example":
             if verbose:
-                print("BME280 Value request")
+                print("Example request")
             try:
-                bme280_data: dict = read_bme280()
-                self.wfile.write(json.dumps(bme280_data).encode())
-            except Exception as exception:
-                error = {"message": "{}".format(exception)}
-                self.wfile.write(json.dumps(error).encode())
-                self.send_response(500)
-        elif path == PATH_PREFIX + "/nmea-data":
-            if verbose:
-                print("BME280 NMEA-Value request")
-            try:
-                bme280_data: dict = read_bme280()
-                # Transform sensor data to NMEA Strings
-                nmea_data: dict
-                if not bme280_data['status'].startswith('OK'):  # "OK", or "OK, simulated"
-                    mess: str = NMEABuilder.build_MSG(bme280_data['status']) + NMEABuilder.NMEA_EOS
-                    nmea_data = { "message": mess }
-                else:
-                    temperature: float = bme280_data['temperature']
-                    pressure: float = bme280_data['pressure']
-                    humidity: float = bme280_data['humidity']
-                    nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEABuilder.NMEA_EOS
-                    nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS
-                    nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
-                                                          {"value": temperature, "type": "TEMPERATURE"},
-                                                          {"value": pressure * 100, "type": "PRESSURE_P"},
-                                                          {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
-                    nmea_data = {
-                        "01": nmea_mta,
-                        "02": nmea_mmb,
-                        "03": nmea_xdr
-                    }
-                self.wfile.write(json.dumps(nmea_data).encode())
+                sample_data: dict = { "dummy": "stuff" }
+                self.wfile.write(json.dumps(sample_data).encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
@@ -182,13 +95,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "verb": "GET",
                         "description": "Get the available operation list."
                     }, {
-                        "path": PATH_PREFIX + "/data",
+                        "path": PATH_PREFIX + "/example",
                         "verb": "GET",
-                        "description": "Get the BME280 data, in json format."
-                    }, {
-                        "path": PATH_PREFIX + "/nmea-data",
-                        "verb": "GET",
-                        "description": "Get the BME280 data, NMEA format."
+                        "description": "Get sample data, in json format."
                     }]
             }
             response_content = json.dumps(response).encode()
@@ -294,8 +203,6 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
-        if arg[:len(SIMULATE_WHEN_MISSING_PREFIX)] == SIMULATE_WHEN_MISSING_PREFIX:
-            simulate_when_missing = (arg[len(SIMULATE_WHEN_MISSING_PREFIX):].lower() == "true")
 
 # Server Initialization
 port_number: int = server_port
@@ -310,4 +217,4 @@ try:
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
 
-print("Done with REST BME280 server.")
+print("Done with REST Skeleton server.")

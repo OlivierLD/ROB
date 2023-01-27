@@ -3,42 +3,44 @@
 # Requires:
 # ---------
 # pip3 install http (already in python3.7, no need to install it)
-# [sudo] pip3 install adafruit-circuitpython-bme280
 #
-# Provides REST access to the cache, try GET http://localhost:8080/bme280/data
-#
-# For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /bme280/nmea-data
 #
 import json
 import sys
-import random
-# import traceback
-# import time
-# import math
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 import board
-import busio
-import NMEABuilder   # local script
-
-
-from adafruit_bme280 import basic as adafruit_bme280
+import digitalio
+import PIL
+from PIL import Image, ImageDraw, ImageFont
+import adafruit_ssd1306
+import time
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX = "/bme280"
+PATH_PREFIX = "/ssd1306"
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
-simulate_when_missing: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
-SIMULATE_WHEN_MISSING_PREFIX: str = "--simulate-when-missing:"
 
-sensor: adafruit_bme280.Adafruit_BME280_I2C
+oled: adafruit_ssd1306.SSD1306_I2C
+
+# Define the Reset Pin
+oled_reset = digitalio.DigitalInOut(board.D4)
+
+# Change these
+# to the right size for your display!
+WIDTH: int = 128
+HEIGHT: int = 32  # Change to 64 if needed
+BORDER: int = 5
+
+WHITE: int = 255
+BLACK: int = 0
 
 sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
     "1": "First",
@@ -48,44 +50,92 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
 }
 
 
-i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
+# Use for I2C.
+i2c = board.I2C()  # uses board.SCL and board.SDA
+# i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 try:
-    sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-    sensor.sea_level_pressure = 1013.25  # Depends on your location
+    oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
 except:
-    print("No BME280 was found...")
-    sensor = None
+    print("No SSD1306 was found...")
+    oled = None
+
+# Clear display.
+oled.fill(BLACK)
+oled.show()
+
+# Create blank image for drawing.
+# Make sure to create image with mode '1' for 1-bit color.
+image: PIL.Image.Image = Image.new("1", (oled.width, oled.height))
+# print(f"Image is a {type(image)}")
+
+# Get drawing object to draw on image.
+draw: PIL.ImageDraw.ImageDraw = ImageDraw.Draw(image)
+# print(f"Draw is a {type(draw)}")
+
+# Draw a white background
+draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
+
+# Draw a smaller inner rectangle, in black
+draw.rectangle(
+    (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+    outline=BLACK,
+    fill=BLACK,
+)
+
+# Load default font.
+font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+# print(f"Font is a {type(font)}")
+
+# Draw Some Text
+text: str = "Init SSD1306"
+(font_width, font_height) = font.getsize(text)
+draw.text(
+    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+    text,
+    font=font,
+    fill=WHITE,
+)
+
+# Display image
+oled.image(image)
+oled.show()
+
+# First define some constants to allow easy resizing of shapes.
+padding: int = -2
+top: int = padding
+bottom: int = oled.height - padding
+# Move left to right keeping track of the current x position for drawing shapes.
+x: int = 0
 
 
-def read_bme280() -> dict:
-    """
-    Reads the sensor, returns a JSON structure.
-    """
-    global sensor
-    temperature: float = None  # Celsius
-    humidity: float = None     # %
-    pressure: float = None     # hPa
-    status: str = None
+def display(display_data: dict) -> None:
+    global oled
+    try:
+        # Draw a black filled box to clear the image.
+        draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
 
-    if sensor is not None:
-        temperature = sensor.temperature     # Celsius
-        humidity = sensor.relative_humidity  # %
-        pressure = sensor.pressure           # hPa
-        status = "OK"
-    else:
-        if simulate_when_missing:
-            temperature = random.randrange(-100, 400) / 10
-            humidity = random.randrange(0, 1000) / 10
-            pressure = random.randrange(9500, 10400) / 10
-            status = "OK - Simulated"
-        else:
-            status = "No BME280 was found"
-    return {
-        "temperature": temperature,
-        "humidity": humidity,
-        "pressure": pressure,
-        "status": status
-    }
+        draw.text((x, top), "Dummy data", font=font, fill=WHITE)
+        # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
+        # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
+        # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
+
+        # Display image.
+        oled.image(image)
+        oled.show()
+    except Exception as error:
+        print(f"Error: {repr(error)}")
+
+
+def clear() -> None:
+    global oled
+    try:
+        # Draw a black filled box to clear the image.
+        draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
+        # Display image.
+        oled.image(image)
+        oled.show()
+    except Exception as error:
+        print(f"Error: {repr(error)}")
 
 
 # Defining an HTTP request Handler class
@@ -135,42 +185,12 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 else:
                     print("oops, no equal sign in {}".format(qs_prm))
 
-        if path == PATH_PREFIX + "/data":
+        if path == PATH_PREFIX + "/duh":
             if verbose:
-                print("BME280 Value request")
+                print("SSD1306 Value request")
             try:
-                bme280_data: dict = read_bme280()
-                self.wfile.write(json.dumps(bme280_data).encode())
-            except Exception as exception:
-                error = {"message": "{}".format(exception)}
-                self.wfile.write(json.dumps(error).encode())
-                self.send_response(500)
-        elif path == PATH_PREFIX + "/nmea-data":
-            if verbose:
-                print("BME280 NMEA-Value request")
-            try:
-                bme280_data: dict = read_bme280()
-                # Transform sensor data to NMEA Strings
-                nmea_data: dict
-                if not bme280_data['status'].startswith('OK'):  # "OK", or "OK, simulated"
-                    mess: str = NMEABuilder.build_MSG(bme280_data['status']) + NMEABuilder.NMEA_EOS
-                    nmea_data = { "message": mess }
-                else:
-                    temperature: float = bme280_data['temperature']
-                    pressure: float = bme280_data['pressure']
-                    humidity: float = bme280_data['humidity']
-                    nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEABuilder.NMEA_EOS
-                    nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS
-                    nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
-                                                          {"value": temperature, "type": "TEMPERATURE"},
-                                                          {"value": pressure * 100, "type": "PRESSURE_P"},
-                                                          {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
-                    nmea_data = {
-                        "01": nmea_mta,
-                        "02": nmea_mmb,
-                        "03": nmea_xdr
-                    }
-                self.wfile.write(json.dumps(nmea_data).encode())
+                dummy_data: dict = { "dummy": "empty" }
+                self.wfile.write(json.dumps(dummy_data).encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
@@ -182,13 +202,17 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "verb": "GET",
                         "description": "Get the available operation list."
                     }, {
-                        "path": PATH_PREFIX + "/data",
+                        "path": PATH_PREFIX + "/duh",
                         "verb": "GET",
-                        "description": "Get the BME280 data, in json format."
+                        "description": "Placeholder, in json format."
                     }, {
                         "path": PATH_PREFIX + "/nmea-data",
-                        "verb": "GET",
-                        "description": "Get the BME280 data, NMEA format."
+                        "verb": "PUT",
+                        "description": "Write on the screen."
+                    }, {
+                        "path": PATH_PREFIX + "/whatever",
+                        "verb": "POST",
+                        "description": "Placeholder."
                     }]
             }
             response_content = json.dumps(response).encode()
@@ -234,7 +258,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if verbose:
             print("POST request, {}".format(self.path))
         if self.path.startswith("/whatever/"):  # Dummy POST
-            content_len = int(self.headers.get('Content-Length'))
+            content_len: int = int(self.headers.get('Content-Length'))
             post_body = self.rfile.read(content_len).decode('utf-8')
             print("Content: {}".format(post_body))
 
@@ -258,10 +282,45 @@ class ServiceHandler(BaseHTTPRequestHandler):
     def do_PUT(self):
         if verbose:
             print("PUT request, {}".format(self.path))
-        if self.path.startswith("/whatever/"):
-            self.send_response(201)
-            response = {"status": "OK"}
-            self.wfile.write(json.dumps(response).encode())
+        if self.path == PATH_PREFIX + "/nmea-data":
+            content_len: int = int(self.headers.get('Content-Length'))
+            post_body = self.rfile.read(content_len).decode('utf-8')
+            print("Content: {}".format(post_body))
+            try:
+                print("Will do the job here.")
+                # TODO Display post_body on screen
+                display({})
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+            except Exception as error:
+                error: str = f"Exception {repr(error)}\n"
+                self.send_response(404)
+                self.send_header('Content-Type', 'plain/text')
+                content_len = len(error)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(bytes(error, 'utf-8'))
+        elif self.path == PATH_PREFIX + "/clear-screen":
+            try:
+                print("Will do the job here.")
+                # Clear screen
+                clear()
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+            except Exception as error:
+                error: str = f"Exception {repr(error)}\n"
+                self.send_response(404)
+                self.send_header('Content-Type', 'plain/text')
+                content_len = len(error)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(bytes(error, 'utf-8'))
         else:
             if verbose:
                 print("PUT on {} not managed".format(self.path))
@@ -310,4 +369,4 @@ try:
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
 
-print("Done with REST BME280 server.")
+print("Done with REST SSD1306 server.")

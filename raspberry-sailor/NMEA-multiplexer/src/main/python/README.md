@@ -234,7 +234,8 @@ $
 ```
 
 ### REST
-There is a REST channel that comes with the NMEA-multiplexer. Let's use it.
+There is a REST channel that comes with the NMEA-multiplexer. Let's use it.  
+This consumer issues GET requests on a regular basis.
 
 _Server Example_: `REST_BME280_server.py`  
 Start it like in
@@ -245,7 +246,17 @@ $ python3 src/main/python/REST_BME280_server.py --machine-name:192.168.1.105 --s
 > _**Important**_: As it is now, it's the server responsibility to respond with _valid_ NMEA strings. 
 > See the NMEA-multiplexer Consumer's doc for details.
 
-. . .
+
+### Actuators
+Just like sensors provide data to be read, actuators are to be written to.  
+A camera would be a _sensor_, a screen would be an _actuator_.
+
+Even if TCP can do the job, a good way to interact with an actuator would be a REST PUT or POST request.  
+As an illustration, there is a REST server that deals with an SSD1306 oled screen.     
+- Wirings: <https://learn.adafruit.com/monochrome-oled-breakouts/python-wiring>
+- CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux>
+  - Setup: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi>
+
 
 ---
 ## Misc links and stuff
