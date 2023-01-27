@@ -63,7 +63,7 @@ mkdir ${distdir}
 mkdir ${distdir}/build
 mkdir ${distdir}/build/libs
 #
-# 3 - Copying needed resources
+# 3 - Copying required resources
 #
 echo -e "Copying resources"
 cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs

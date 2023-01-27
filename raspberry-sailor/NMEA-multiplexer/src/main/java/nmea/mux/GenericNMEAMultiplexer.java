@@ -30,7 +30,7 @@ import java.util.logging.LogManager;
  * Also see below the definition of <code>List&lt;Operation&gt; operations</code>.
  */
 public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
-    private HTTPServer adminServer = null;
+    private HTTPServer adminServer; // = null;
     protected Properties muxProperties;
 
     private final List<NMEAClient> nmeaDataClients = new ArrayList<>(); // Consumers, aka Channels
@@ -279,6 +279,12 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
      */
     private static Properties interactiveConfig() {
         Properties props;
+
+        System.out.println("--- W A R N I N G ---");
+        System.out.println(" This is a development feature... \nIt might not be (actually it is NOT) 100% in sync with the real soft.");
+        System.out.println(" Look into the code to finish the job!");
+        System.out.println(" You are going to be prompted to enter whatever would be read from the config files (yaml or properties).");
+        System.out.println(" This being said, let's proceed. (Ctrl-C will get you off the hook)\n");
         System.out.println("-- Enter Mux config interactively --");
         Yaml yaml = new Yaml();
         Map<String, Object> topMap = new HashMap<>();
@@ -305,13 +311,19 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         // Channels (List)
         List<Map<String, Object>> channels = new ArrayList<>();
 
-        input = StaticUtil.userInput("Replay log file y|n ? > ");
+        input = StaticUtil.userInput("Replay (hard-coded) log file y|n ? > ");
         if ("Y".equalsIgnoreCase(input)) {
+
+            final String zipFile = "./sample-data/logged.data.zip";
+            final String pathInZip = "2010-11-08.Nuku-Hiva-Tuamotu.nmea";
+
+            System.out.printf("\tWill (try to) replay the data logged in %s, %s\n", zipFile, pathInZip);
+
             Map<String, Object> oneChannel = new HashMap<>();
 
             oneChannel.put("type", "file");
-            oneChannel.put("filename", "./sample.data/logged.data.archive.zip");
-            oneChannel.put("path.in.zip", "2010-11-08.Nuku-Hiva-Tuamotu.nmea");
+            oneChannel.put("filename", zipFile);
+            oneChannel.put("path.in.zip", pathInZip);
             oneChannel.put("zip", true);
             oneChannel.put("verbose", false);
 
@@ -319,11 +331,17 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         }
         input = StaticUtil.userInput("Read Serial port y|n ? > ");
         if ("Y".equalsIgnoreCase(input)) {
+
+            final String serialPort = "/dev/ttyS80";
+            final int baudRate = 4_800;
+
+            System.out.printf("\tWill read serial port %s:%d\n", serialPort, baudRate);
+
             Map<String, Object> oneChannel = new HashMap<>();
 
             oneChannel.put("type", "serial");
-            oneChannel.put("port", "/dev/ttyS80");
-            oneChannel.put("baudrate", 4800);
+            oneChannel.put("port", serialPort);
+            oneChannel.put("baudrate", baudRate);
             oneChannel.put("verbose", false);
 
             channels.add(oneChannel);
@@ -334,6 +352,14 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         // Forwarder (List)
         List<Map<String, Object>> forwarders = new ArrayList<>();
         Map<String, Object> oneForwarder;
+
+        input = StaticUtil.userInput("Forwarder. Console y|n ? > ");
+        if ("Y".equalsIgnoreCase(input)) {
+            oneForwarder = new HashMap<>();
+            oneForwarder.put("type", "console");
+            oneForwarder.put("verbose", false);
+            forwarders.add(oneForwarder);
+        }
 
         input = StaticUtil.userInput("Forwarder. REST y|n ? > ");
         if ("Y".equalsIgnoreCase(input)) {
@@ -373,8 +399,12 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
 
         // Others (dev curve, and so)
 
-        String output = yaml.dump(topMap);
+        String output = yaml.dumpAsMap(topMap);
+        // FYI...
+        System.out.println("-- Running with config ---");
         System.out.println(output);
+        System.out.println("--------------------------");
+        /* String dummy = */ StaticUtil.userInput("Enter [Return] to move on > ");
 
         props = MuxInitializer.yamlToProperties(topMap);
         return props;
