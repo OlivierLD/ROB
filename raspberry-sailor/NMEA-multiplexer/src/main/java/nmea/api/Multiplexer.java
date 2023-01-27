@@ -1,6 +1,6 @@
 package nmea.api;
 
-import java.util.Properties;
+// import java.util.Properties;
 
 public interface Multiplexer {
 	public void onData(String mess);

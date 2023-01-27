@@ -38,11 +38,13 @@ For example:
 
 ### NMEA
 
-[NMEA](http://nmea.org) (National Marine Electronics Association) is one of the oldest IT standards, defining how sensor data should be conveyed.
+- [NMEA](http://nmea.org) (National Marine Electronics Association) is one of the oldest IT standards, defining how sensor data should be conveyed.
+- Another [Good Resource](https://gpsd.gitlab.io/gpsd/NMEA.html), by the author of GPSd.
+
 
 > _Note_: here is an _<u>opened</u>_ question:
 >
-> Some softwares are using more "modern" technologies to shape the data (like `GPSd`, `SignalK`, ..., they use JSON over REST/HTTP), but what is the point?
+> Some software products are using more "modern" technologies to shape the data (like `GPSd`, `SignalK`, ..., they use JSON over REST/HTTP), but what is the point?
 > `text/plain` has always been a supported mime-type, suitable for NMEA Sentences... 
 > 
 > The conveyed data _are_ NMEA data, and to be able to communicate with other softs, their (proprietary?) format will eventually have to be converted back to NMEA...
@@ -59,6 +61,10 @@ For example:
 > > **The remaining point would be to agree on the JSON Schema to use, and there no standard about that yet.**
 
 --------
+This NMEAMultiplexer will deal with NMEA Data, in input, as well as for output, in order to preserve - as much as possible -
+compatibility with other programs. Everyone understands NMEA.  
+The "only" exception to this rule will be the structure of the data cache, which brings us back to the note above...
+
 This NMEAMultiplexer can use any input (File, Serial, TCP, UDP, WebSocket, Sensors, Computations, ...), produce any output (File, Serial, TCP, UDP, WebSockets...), and use a REST API on top of that.
 
 At the heart of this lies a small http server ([part of this project](../http-tiny-server/README.md)), designed to run on _very small_ boards, like a Raspberry Pi Zero, and with possibly _no_ Internet access.
@@ -82,8 +88,10 @@ For the impatient: go [here](#to-see-it-at-work-aka-get-started) to get started 
 - NMEA Strings generator
 - Serial port Reader / Writer
 - TCP Reader / Writer
+- REST Reader / Writer
 - UDP Reader / Writer
 - WebSocket client (read/write)
+- ... and more.
 
 #### Also includes
 - A tiny (but amazing) HTTP REST server, for admin and external access (through REST services) purpose.

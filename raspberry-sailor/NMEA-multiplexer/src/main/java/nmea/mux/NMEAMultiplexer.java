@@ -10,7 +10,7 @@ import nmea.consumers.reader.SerialReader;
 import nmea.consumers.reader.TCPReader;
 
 /**
- * Note: Just a SAMPLE, for validation of the concept.
+ * <b><i>Note</i></b>: Just an EXAMPLE, for validation of the concept.
  *
  * @deprecated Use {@link GenericNMEAMultiplexer} instead (for production or real implementation).
  */
@@ -36,7 +36,7 @@ public class NMEAMultiplexer implements Multiplexer {
 
 	private final static String tcpServerName = "192.168.1.1";
 	private final static int tcpPort = 7001;
-	private final static String dataFile = "./sample.data/2010-11-08.Nuku-Hiva-Tuamotu.nmea";
+	private final static String dataFile = "./sample-data/2010-11-08.Nuku-Hiva-Tuamotu.nmea";
 	// like "/dev/tty.usbserial"on Mac, "COMx" on Windows, "/dev/ttyUSB0" on Linux, including Raspberry Pi.
 	private final static String serialPort = "/dev/tty.usbserial";
 	private final static int serialBaudRate = 4_800;

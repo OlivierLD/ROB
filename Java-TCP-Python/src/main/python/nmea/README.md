@@ -30,7 +30,7 @@ received from this port can be directly used by the NMEA-multiplexer.
 > We could very well use other formats, like JSON. It's all about agreeing on the content type 
 > between the client and the server.
 
-### A first example: ZDA
+### A first example: [ZDA](https://gpsd.gitlab.io/gpsd/NMEA.html#_zda_time_date_utc_day_month_year_and_local_time_zone)
 We start with a TCP Server producing a ZDA Sentence, because this is simple.  
 This sentence represents the current UTC Time and Date, it does not require any sensor, the current date is read from the
 Operating System, a ZDA string is generated, and pushed to the connected client(s).
