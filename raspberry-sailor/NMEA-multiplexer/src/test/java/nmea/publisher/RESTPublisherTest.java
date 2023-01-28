@@ -19,6 +19,10 @@ public class RESTPublisherTest {
             "Ping", "Pong", "Paf",
             "Bing", "Boom", "Bang"
     );
+    private final static List<String> DATA_TO_SEND_TO_SSD = List.of(
+            "Ping|Pong|Paf",
+            "Bing|Boom|Bang"
+    );
 
     @Test
     public void testRESTEInk() {
@@ -55,4 +59,40 @@ public class RESTPublisherTest {
         }
         assertTrue("Argh!", true);
     }
+
+    @Test
+    public void testREST_SSD1306() {
+        try {
+            RESTPublisher restPublisher = new RESTPublisher();
+
+            Properties props = new Properties();
+            props.put("server.name", "192.168.1.101"); // That one must be up and running for this main to work.
+            props.put("server.port", "8080");
+            props.put("rest.protocol", "http");
+            props.put("rest.resource", "/ssd1306/nmea-data");
+            props.put("rest.verb", "PUT");
+            props.put("http.headers", "Content-Type:plain/text");
+            restPublisher.setProperties(props);
+
+            for (int i = 0; i < 10; i++) {
+                System.out.println(DATA_TO_SEND_TO_SSD.get(i % DATA_TO_SEND_TO_SSD.size()));
+                try {
+                    String wpl = DATA_TO_SEND_TO_SSD.get(i % DATA_TO_SEND_TO_SSD.size());
+                    restPublisher.write(wpl.getBytes());
+                } catch (Exception ex) {
+                    System.err.println(ex.getLocalizedMessage());
+                }
+                try {
+                    Thread.sleep(1_000L);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Oops");
+        }
+        assertTrue("Argh!", true);
+    }
+
 }

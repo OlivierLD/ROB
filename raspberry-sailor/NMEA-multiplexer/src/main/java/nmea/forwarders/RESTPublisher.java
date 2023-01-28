@@ -96,7 +96,23 @@ public class RESTPublisher implements Forwarder {
 					}
 					// TODO return the response message/status ?
 					break;
-				case "PUT": // TODO See if that's needed...
+				case "PUT":
+					String putRequest = String.format("%s://%s:%d%s", protocol, serverName, httpPort, restResource);
+					String putStrContent = new String(message).trim();
+//					System.out.println("Verbose: [" + this.props.getProperty("verbose") + "]");
+					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+						System.out.printf("%s\n%s\n", putRequest, putStrContent);
+					}
+					HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
+					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+						System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
+								putRequest,
+								putStrContent,
+								putResponse.getCode(),
+								putResponse.getPayload());
+					}
+					// TODO return the response message/status ?
+					break;
 				default:
 					break;
 			}

@@ -9,7 +9,7 @@ context:
   init.cache: true
 channels:
   - type: file
-    filename: ./sample.data/logged.data.zip
+    filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
     zip: true
     path.in.zip: 2018-11-24.Drakes.Estero.nmea
     verbose: false

@@ -9,6 +9,7 @@ import json
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
+from typing import List
 import board
 import digitalio
 import PIL
@@ -27,6 +28,7 @@ machine_name: str = "127.0.0.1"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
+HEIGHT_PREFIX: str = "--height:"
 
 oled: adafruit_ssd1306.SSD1306_I2C
 
@@ -36,7 +38,7 @@ oled_reset = digitalio.DigitalInOut(board.D4)
 # Change these
 # to the right size for your display!
 WIDTH: int = 128
-HEIGHT: int = 32  # Change to 64 if needed
+HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm.
 BORDER: int = 5
 
 WHITE: int = 255
@@ -49,6 +51,23 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
     "4": "Fourth"
 }
 
+if len(sys.argv) > 0:  # Script name + X args
+    for arg in sys.argv:
+        if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
+            machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
+        if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
+            server_port = int(arg[len(PORT_PRM_PREFIX):])
+        if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
+            verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+        if arg[:len(HEIGHT_PREFIX)] == HEIGHT_PREFIX:
+            try:
+                user_height = int(arg[len(HEIGHT_PREFIX):])
+                if user_height == 32 or user_height == 64:
+                    HEIGHT = user_height
+                else:
+                    print(f"Height must be 32 or 64, not {user_height}")
+            except Exception as error:
+                print(f"Height error: {repr(error)}")
 
 # Use for I2C.
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -60,8 +79,9 @@ except:
     oled = None
 
 # Clear display.
-oled.fill(BLACK)
-oled.show()
+if oled is not None:
+    oled.fill(BLACK)
+    oled.show()
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
@@ -108,13 +128,22 @@ bottom: int = oled.height - padding
 x: int = 0
 
 
-def display(display_data: dict) -> None:
+def display(display_data: List[str]) -> None:
     global oled
+    global font
+    global image
+    global draw
+    global x
     try:
         # Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
 
-        draw.text((x, top), "Dummy data", font=font, fill=WHITE)
+        y: int = top
+        for line in display_data:
+            draw.text((x, y), line, font=font, fill=WHITE)
+            y = y + 8
+
+        # draw.text((x, top), display_data, font=font, fill=WHITE)
         # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
         # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
         # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
@@ -128,6 +157,7 @@ def display(display_data: dict) -> None:
 
 def clear() -> None:
     global oled
+    global draw
     try:
         # Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
@@ -189,7 +219,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             if verbose:
                 print("SSD1306 Value request")
             try:
-                dummy_data: dict = { "dummy": "empty" }
+                dummy_data: dict = {"dummy": "empty"}
                 self.wfile.write(json.dumps(dummy_data).encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
@@ -198,22 +228,26 @@ class ServiceHandler(BaseHTTPRequestHandler):
         elif path == PATH_PREFIX + "/oplist":
             response = {
                 "oplist": [{
-                        "path": PATH_PREFIX + "/oplist",
-                        "verb": "GET",
-                        "description": "Get the available operation list."
-                    }, {
-                        "path": PATH_PREFIX + "/duh",
-                        "verb": "GET",
-                        "description": "Placeholder, in json format."
-                    }, {
-                        "path": PATH_PREFIX + "/nmea-data",
-                        "verb": "PUT",
-                        "description": "Write on the screen."
-                    }, {
-                        "path": PATH_PREFIX + "/whatever",
-                        "verb": "POST",
-                        "description": "Placeholder."
-                    }]
+                    "path": PATH_PREFIX + "/oplist",
+                    "verb": "GET",
+                    "description": "Get the available operation list."
+                }, {
+                    "path": PATH_PREFIX + "/duh",
+                    "verb": "GET",
+                    "description": "Placeholder, in json format."
+                }, {
+                    "path": PATH_PREFIX + "/nmea-data",
+                    "verb": "PUT",
+                    "description": "Write on the screen."
+                }, {
+                    "path": PATH_PREFIX + "/clear-screen",
+                    "verb": "PUT",
+                    "description": "Clean the screen."
+                }, {
+                    "path": PATH_PREFIX + "/whatever",
+                    "verb": "POST",
+                    "description": "Placeholder."
+                }]
             }
             response_content = json.dumps(response).encode()
             self.send_response(200)
@@ -260,8 +294,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if self.path.startswith("/whatever/"):  # Dummy POST
             content_len: int = int(self.headers.get('Content-Length'))
             post_body = self.rfile.read(content_len).decode('utf-8')
-            print("Content: {}".format(post_body))
-
+            if verbose:
+                print("Content: {}".format(post_body))
             self.send_response(201)
             response = {"status": "OK"}
             self.wfile.write(json.dumps(response).encode())
@@ -284,12 +318,15 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("PUT request, {}".format(self.path))
         if self.path == PATH_PREFIX + "/nmea-data":
             content_len: int = int(self.headers.get('Content-Length'))
-            post_body = self.rfile.read(content_len).decode('utf-8')
-            print("Content: {}".format(post_body))
+            body: str = self.rfile.read(content_len).decode('utf-8')
+            if verbose:
+                print("Content: {}".format(body))
             try:
-                print("Will do the job here.")
-                # TODO Display post_body on screen
-                display({})
+                if verbose:
+                    print(f"Displaying {body}")
+                # Display body lines on screen
+                line_list: List[str] = body.split('|')
+                display(line_list)
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -305,7 +342,6 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path == PATH_PREFIX + "/clear-screen":
             try:
-                print("Will do the job here.")
                 # Clear screen
                 clear()
                 self.send_response(201)
@@ -345,28 +381,20 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
-if len(sys.argv) > 0:  # Script name + X args
-    for arg in sys.argv:
-        if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
-            machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
-        if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
-            server_port = int(arg[len(PORT_PRM_PREFIX):])
-        if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
-            verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
-        if arg[:len(SIMULATE_WHEN_MISSING_PREFIX)] == SIMULATE_WHEN_MISSING_PREFIX:
-            simulate_when_missing = (arg[len(SIMULATE_WHEN_MISSING_PREFIX):].lower() == "true")
-
 # Server Initialization
 port_number: int = server_port
-print("Starting server on port {}".format(port_number))
+print("Starting SSD1306 server on port {}".format(port_number))
 server = HTTPServer((machine_name, port_number), ServiceHandler)
 #
 print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
-print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number, PATH_PREFIX))
+print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number,
+                                                                                    PATH_PREFIX))
 #
 try:
     server.serve_forever()
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
 
+if oled is not None:
+    clear()
 print("Done with REST SSD1306 server.")

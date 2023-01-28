@@ -11,7 +11,7 @@ context:
   damping: 30
 channels:
   - type: file
-    filename: ./sample.data/logged.data.zip
+    filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
     zip: true
     path.in.zip: 2010-07-10.tacking.back.in.nmea
     verbose: false

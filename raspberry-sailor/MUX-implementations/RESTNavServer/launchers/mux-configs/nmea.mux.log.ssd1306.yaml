@@ -13,18 +13,21 @@ channels:
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
     zip: true
-    path.in.zip: 2011-01-29.strait.to.tongareva.for.DR.txt.nmea
+    path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     between-records: 1000
     loop: true
     verbose: false
 forwarders:
-  - type: ws
-    wsuri: ws://localhost:9876/
+  - type: rest
+    rest.protocol: http
+    server.name: 192.168.1.101
+    server.port: 8080
+    rest.resource: /ssd1306/nmea-data
+    rest.verb: PUT
+    http.headers: Content-Type:plain/text
+    verbose: true
   - type: "tcp"
     port: 7001
-  - type: "gpsd"
-    port: 2947
-    properties: mux-configs/gpsd.properties
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
