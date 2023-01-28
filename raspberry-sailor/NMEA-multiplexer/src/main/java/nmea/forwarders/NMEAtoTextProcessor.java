@@ -4,15 +4,34 @@ import calc.GeomUtil;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.forwarders.delegate.DelegateConsumer;
-import nmea.mux.context.Context;
-import nmea.parser.*;
+import nmea.parser.Angle180;
+import nmea.parser.Angle180EW;
+import nmea.parser.Angle180LR;
+import nmea.parser.Angle360;
+import nmea.parser.Current;
+import nmea.parser.Depth;
+import nmea.parser.Distance;
+import nmea.parser.GeoPos;
+import nmea.parser.Pressure;
+import nmea.parser.SolarDate;
+import nmea.parser.Speed;
+import nmea.parser.Temperature;
+import nmea.parser.UTCDate;
+import nmea.parser.UTCTime;
 
 import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.TimeZone;
 import java.util.function.Consumer;
 
 /**
@@ -20,9 +39,8 @@ import java.util.function.Consumer;
  * <br>
  * To be used with other apps.
  * <p>
- * It auto-scrolls across available values, if display.time (-Ddisplay.time) is greater than 0
+ * It auto-scrolls across available values, if display.time (see properties) is greater than 0
  * <p>
- * TODO A Consumer<String> to forward the formatted data
  */
 public class NMEAtoTextProcessor implements Forwarder {
     private boolean keepWorking = true;
@@ -91,56 +109,47 @@ public class NMEAtoTextProcessor implements Forwarder {
     }
 
     private static NMEAtoTextProcessor instance = null;
-    protected boolean externallyOwned = false;
 
     protected boolean verbose = false;
 
     // Matching with the following values done in #setProperties below.
-    private final static int TWD_OPTION = 0; // True Wind Direction
-    private final static int BSP_OPTION = 1; // Boat Speed
-    private final static int TWS_OPTION = 2; // True Wind Speed
-    private final static int TWA_OPTION = 3; // True Wind Angle
-    private final static int AWA_OPTION = 4; // Apparent Wind Angle
-    private final static int AWS_OPTION = 5; // Apparent Wind Speed
-    private final static int ATP_OPTION = 6; // Air Temperature
-    private final static int WTP_OPTION = 7; // Water Temperature
-    private final static int COG_OPTION = 8; // Course Over Ground
-    private final static int SOG_OPTION = 9; // Speed Over Ground
-    private final static int HDG_OPTION = 10; // Heading
-    private final static int POS_OPTION = 11; // Position
-    private final static int DBT_OPTION = 12; // Depth Below Transducer
-    private final static int HUM_OPTION = 13; // Relative Humidity
-    private final static int CUR_OPTION = 14; // Current. Speed and Direction
-    private final static int PRS_OPTION = 15; // Atmospheric Pressure (PRMSL).
-    private final static int GPS_OPTION = 16; // GPS Date & Time
-    private final static int SOL_OPTION = 17; // SOLAR Date & Time
-    // etc...
-    private final static int SYS_OPTION = 18;
+    enum DisplayOptions {
+        TWD,     // True Wind Direction
+        BSP,     // Boat Speed in knots
+        BSP_KMH, // Boat Speed in Km per Hour
+        BSP_MPH, // Boat Speed in Miles per Hour
+        BSP_MS,  // Boat Speed in meters per second
+        TWS,     // True Wind Speed in knots
+        TWS_KMH, // True Wind Speed in Km per Hour
+        TWS_MPH, // True Wind Speed in Miles per Hour
+        TWS_MS,  // True Wind Speed in meters per second
+        TWA,     // True Wind Angle
+        AWA,     // Apparent Wind Angle
+        AWS,     // Apparent Wind Speed in knots
+        AWS_KMH, // Apparent Wind Speed in Km per Hour
+        AWS_MPH, // Apparent Wind Speed in Miles per Hour
+        AWS_MS,  // Apparent Wind Speed in meters per second
+        ATP,     // Air Temperature
+        WTP,     // Water Temperature
+        COG,     // Course Over Ground
+        SOG,     // Speed Over Ground in knots
+        SOG_KMH, // Speed Over Ground in Km per Hour
+        SOG_MPH, // Speed Over Ground in Miles per Hour
+        SOG_MS,  // Speed Over Ground in meters per second
+        HDG,     // Heading
+        POS,     // GPS Position
+        DBT,     // Depth Below Transducer
+        HUM,     // Relative Humidity
+        CUR,     // Current. Speed (in knots) and Direction
+        PRS,     // Atmospheric Pressure (PRMSL).
+        GPS,     // GPS Date & Time
+        SOL,     // SOLAR Date & Time
+        // etc...
+        SYS      // System Time
+    }
 
-    private static final List<Integer> optionList = new ArrayList<>();
-//	{
-//					TWD_OPTION, // True Wind Direction
-//					BSP_OPTION, // Boat Speed
-//					TWS_OPTION, // True Wind Speed
-//					TWA_OPTION, // True Wind Angle
-//					AWA_OPTION, // Apparent Wind Angle
-//					AWS_OPTION, // Apparent Wind Speed
-//					ATP_OPTION, // Air Temperature
-//					WTP_OPTION, // Water Temperature
-//					COG_OPTION, // Course Over Ground
-//					SOG_OPTION, // Speed Over Ground
-//					HDG_OPTION, // Heading
-//					POS_OPTION, // Position
-//					DBT_OPTION, // Depth Below Transducer
-//					HUM_OPTION, // Relative Humidity
-//					CUR_OPTION, // Current. Speed and Direction
-//					PRS_OPTION, // Atmospheric Pressure (PRMSL).
-//          		GPS_OPTION  // GPS Date & Time
-//          		SOL_OPTION  // SOLAR Date & Time
-//          . . .
-//	};
-
-    private int currentOption = TWD_OPTION; // 0;
+    private static final List<DisplayOptions> optionList = new ArrayList<>();
+    private int currentOption = 0; // An index, in the user's list
 
     private long scrollWait = 5_000L;
 
@@ -148,15 +157,13 @@ public class NMEAtoTextProcessor implements Forwarder {
         KNOTS, KMH, MPH, MS
     }
 
-    SpeedUnit speedUnit = SpeedUnit.KNOTS;
-
-
+    // Default Consumer.
     private final Consumer<List<String>> DEFAULT_DISPLAY_CONSUMER = (dataList) -> {
         dataList.forEach(line -> System.out.println(line));
         System.out.println("---------------");
     };
 
-	private Consumer<List<String>> displayConsumer = DEFAULT_DISPLAY_CONSUMER; // TODO Setter
+	private Consumer<List<String>> displayConsumer = DEFAULT_DISPLAY_CONSUMER;
 
 	public void setDisplayConsumer(Consumer<List<String>> displayConsumer) {
 		this.displayConsumer = displayConsumer;
@@ -164,10 +171,6 @@ public class NMEAtoTextProcessor implements Forwarder {
 
 	public static NMEAtoTextProcessor getInstance() {
         return instance;
-    }
-
-    public void setExternallyOwned(boolean b) { // TODO Do it for other screen forwarders
-        externallyOwned = b;
     }
 
     public NMEAtoTextProcessor() throws Exception {
@@ -192,60 +195,11 @@ public class NMEAtoTextProcessor implements Forwarder {
                 ok = true;
             }
         }
-
-        final String REST_CLIENT_EVENT_NAME = "change-speed-unit";
-        final String SPEED_UNIT = "speed-unit";
-
-        Context.getInstance().addTopicListener(new Context.TopicListener(REST_CLIENT_EVENT_NAME) {
-            /**
-             * Speed Unit can be changed (from a client, on the server) with a REST call:
-             * POST /mux/events/change-speed-unit with a payload like
-             * { "speed-unit": "kmh" }
-             *
-             * @param topic   <code>change-speed-unit</code> for this to work, or a regex matching it.
-             * @param payload one of { "speed-unit": "kmh" }, { "speed-unit": "mph" }, { "speed-unit": "ms" }, or { "speed-unit": "kts" }
-             */
-            @Override
-            @SuppressWarnings("unchecked")
-            public void topicBroadcast(String topic, Object payload) {
-//			System.out.println("Topic:" + topic + ", payload:" + payload);
-                if (payload instanceof Map) {
-                    Map<String, Object> map = (Map) payload;
-                    Object unit = map.get(SPEED_UNIT);
-                    if (unit != null) {
-                        if (verbose) {
-                            System.out.println("Changing Speed Unit to " + unit.toString());
-                        }
-                        switch (unit.toString()) {
-                            case "kmh":
-                                speedUnit = SpeedUnit.KMH;
-                                break;
-                            case "ms":
-                                speedUnit = SpeedUnit.MS;
-                                break;
-                            case "mph":
-                                speedUnit = SpeedUnit.MPH;
-                                break;
-                            case "kts":
-                                speedUnit = SpeedUnit.KNOTS;
-                                break;
-                            default:
-                                System.err.printf("Un-managed speed unit [%s]\n", unit.toString());
-                                break;
-                        }
-                    } else {
-                        System.err.println("Expected member [speed-unit] not found in the payload.");
-                    }
-                } else {
-                    System.err.printf("Un-expected payload type [%s]\n", payload.getClass().getName());
-                }
-            }
-        });
     }
 
     protected void initPartOne() {
         try {
-            // NOOP
+            // NOOP. Should be safe.
         } catch (Throwable error) {
             System.err.println("--- Instantiating Processor ---");
             error.printStackTrace(); // See the actual problem..., you never know.
@@ -254,9 +208,9 @@ public class NMEAtoTextProcessor implements Forwarder {
     }
 
     protected void initPartTwo() {
-        Thread scrollThread = new Thread("ScrollThread") { // if scrollWait > 0
+        Thread scrollThread = new Thread("ScrollThread") {
             public void run() {
-                while (keepWorking && scrollWait > 0) {
+                while (keepWorking && scrollWait > 0) { // if scrollWait > 0
                     try {
                         Thread.sleep(scrollWait);
                     } catch (Exception ignore) {
@@ -439,72 +393,120 @@ public class NMEAtoTextProcessor implements Forwarder {
                     }
                     // Transformer's specific job.
                     // Do see how optionList is populated from the properties.
-                    if (!optionList.isEmpty() && !externallyOwned) {
-                        int toDisplay = optionList.get(currentOption);
-                        switch (toDisplay) {
-                            case TWD_OPTION:
+                    if (!optionList.isEmpty()) {
+                        DisplayOptions toDisplay = optionList.get(currentOption);
+                        switch (toDisplay.toString()) {
+                            case "TWD":
                                 displayAngleAndValue("TWD ", bean.twd);
                                 break;
-                            case BSP_OPTION:
-                                displaySpeed("BSP ", bean.bsp);
+                            case "BSP":
+                                displaySpeed("BSP ", bean.bsp, SpeedUnit.KNOTS);
                                 break;
-                            case TWS_OPTION:
-                                displaySpeed("TWS ", bean.tws);
+                            case "BSP_KMH":
+                                displaySpeed("BSP ", bean.bsp, SpeedUnit.KMH);
                                 break;
-                            case TWA_OPTION:
+                            case "BSP_MPH":
+                                displaySpeed("BSP ", bean.bsp, SpeedUnit.MPH);
+                                break;
+                            case "BSP_MS":
+                                displaySpeed("BSP ", bean.bsp, SpeedUnit.MS);
+                                break;
+                            case "TWS":
+                                displaySpeed("TWS ", bean.tws, SpeedUnit.KNOTS);
+                                break;
+                            case "TWS_KMH":
+                                displaySpeed("TWS ", bean.tws, SpeedUnit.KMH);
+                                break;
+                            case "TWS_MPH":
+                                displaySpeed("TWS ", bean.tws, SpeedUnit.MPH);
+                                break;
+                            case "TWS_MS":
+                                displaySpeed("TWS ", bean.tws, SpeedUnit.MS);
+                                break;
+                            case "TWA":
                                 displayAngleAndValue("TWA ", bean.twa);
                                 break;
-                            case AWA_OPTION:
+                            case "AWA":
                                 displayAngleAndValue("AWA ", bean.awa);
                                 break;
-                            case AWS_OPTION:
-                                displaySpeed("AWS ", bean.aws);
+                            case "AWS":
+                                displaySpeed("AWS ", bean.aws, SpeedUnit.KNOTS);
                                 break;
-                            case ATP_OPTION:
+                            case "AWS_KMH":
+                                displaySpeed("AWS ", bean.aws, SpeedUnit.KMH);
+                                break;
+                            case "AWS_MPH":
+                                displaySpeed("AWS ", bean.aws, SpeedUnit.MPH);
+                                break;
+                            case "AWS_MS":
+                                displaySpeed("AWS ", bean.aws, SpeedUnit.MS);
+                                break;
+                            case "ATP":
                                 displayTemp("AIR ", bean.atemp);
                                 break;
-                            case WTP_OPTION:
+                            case "WTP":
                                 displayTemp("WATER ", bean.wtemp);
                                 break;
-                            case COG_OPTION:
+                            case "COG":
                                 if (bean.cog != -1) {
                                     displayAngleAndValue("COG ", bean.cog);
                                 } else {
                                     displayDummyValue("COG");
                                 }
                                 break;
-                            case SOG_OPTION:
+                            case "SOG":
                                 if (bean.sog != -1) {
-                                    displaySpeed("SOG ", bean.sog);
+                                    displaySpeed("SOG ", bean.sog, SpeedUnit.KNOTS);
                                 } else {
                                     displayDummyValue("SOG");
                                 }
                                 break;
-                            case HDG_OPTION:
+                            case "SOG_KMH":
+                                if (bean.sog != -1) {
+                                    displaySpeed("SOG ", bean.sog, SpeedUnit.KMH);
+                                } else {
+                                    displayDummyValue("SOG");
+                                }
+                                break;
+                            case "SOG_MPH":
+                                if (bean.sog != -1) {
+                                    displaySpeed("SOG ", bean.sog, SpeedUnit.MPH);
+                                } else {
+                                    displayDummyValue("SOG");
+                                }
+                                break;
+                            case "SOG_MS":
+                                if (bean.sog != -1) {
+                                    displaySpeed("SOG ", bean.sog, SpeedUnit.MS);
+                                } else {
+                                    displayDummyValue("SOG");
+                                }
+                                break;
+                            case "HDG":
                                 displayAngleAndValue("HDG ", bean.hdg);
                                 break;
-                            case DBT_OPTION:
+                            case "DBT":
                                 displayValue("DBT ", " m", bean.dbt);
                                 break;
-                            case HUM_OPTION:
+                            case "HUM":
                                 displayValue("HUM ", " %", bean.hum);
                                 break;
-                            case CUR_OPTION:
+                            case "CUR":
                                 displayCurrent(bean.cdr, bean.csp);
                                 break;
-                            case POS_OPTION:
+                            case "POS":
                                 displayPos(bean.lat, bean.lng, bean.rmcOk);
                                 break;
-                            case GPS_OPTION:
+                            case "GPS":
                                 displayDateTime(bean.gpsDateTime);
                                 break;
-                            case SOL_OPTION:
+                            case "SOL":
                                 displaySolarDateTime(bean.gpsSolarDate);
                                 break;
-                            case PRS_OPTION:
+                            case "PRS":
                                 displayPRMSL(bean.prmsl);
                                 break;
-							case SYS_OPTION:
+							case "SYS":
 								displaySystemDateTime(System.currentTimeMillis()); // Not from the cache, obviously.
 								break;
                             default:
@@ -561,7 +563,7 @@ public class NMEAtoTextProcessor implements Forwarder {
         }
     }
 
-    private void displaySpeed(String label, double value) {
+    private void displaySpeed(String label, double value, SpeedUnit speedUnit) {
         String unit = " kts";
         double speedFactor = 1D;
         switch (speedUnit) {
@@ -775,10 +777,8 @@ public class NMEAtoTextProcessor implements Forwarder {
 				} else {
                     System.err.println("Wrong DelegateConsumer class [%s], expected [DelegateConsumer]");
                 }
-			} catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException nsme) {
-				nsme.printStackTrace();
-			} catch (ClassNotFoundException cnfe) {
-				cnfe.printStackTrace();
+			} catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException bam) {
+				bam.printStackTrace();
 			}
 		}
 
@@ -790,90 +790,21 @@ public class NMEAtoTextProcessor implements Forwarder {
         }
         verbose = "true".equals(props.getProperty("screen.verbose", "false"));
 
-        // Data to display on the small screen
+        // Data to display on the chosen output.
         String csv = props.getProperty("to.display", "");
 		if (verbose) {
 			System.out.printf("To Display: %s\n", csv);
 		}
         if (!csv.trim().isEmpty()) {
             Arrays.stream(csv.trim().split(",")).forEach(id -> {
-                switch (id) {
-                    case "POS": // Position
-                        optionList.add(POS_OPTION);
-                        break;
-                    case "GPS": // GPS Date & Time
-                        optionList.add(GPS_OPTION);
-                        break;
-                    case "SOL": // Solar Date & Time
-                        optionList.add(SOL_OPTION);
-                        break;
-                    case "SYS": // System Date & Time
-                        optionList.add(SYS_OPTION);
-                        break;
-                    case "BSP":
-                        optionList.add(BSP_OPTION);
-                        speedUnit = SpeedUnit.KNOTS;
-                        break;
-                    case "SOG": // KMH, MPH Speed in knots, km/h or mph
-                        optionList.add(SOG_OPTION);
-                        speedUnit = SpeedUnit.KNOTS;
-                        break;
-                    case "KMH": // KMH, MPH Speed in knots, km/h or mph
-                        optionList.add(SOG_OPTION);
-                        speedUnit = SpeedUnit.KMH;
-                        break;
-                    case "MPH": // KMH, MPH Speed in knots, km/h or mph
-                        optionList.add(SOG_OPTION);
-                        speedUnit = SpeedUnit.MPH;
-                        break;
-                    case "MS": // SOG, in KMH, MPH Speed in knots, km/h or mph
-                        optionList.add(SOG_OPTION);
-                        speedUnit = SpeedUnit.MS;
-                        break;
-                    case "COG": // Course Over Ground
-                        optionList.add(COG_OPTION);
-                        break;
-                    case "HDG": // Heading
-                        optionList.add(HDG_OPTION);
-                        break;
-                    case "TWD": // True Wind Direction
-                        optionList.add(TWD_OPTION);
-                        break;
-                    case "TWS": // - True Wind Speed
-                        optionList.add(TWS_OPTION);
-                        break;
-                    case "TWA": // - True Wind Angle
-                        optionList.add(TWA_OPTION);
-                        break;
-                    case "AWS": // - Apparent Wind Speed
-                        optionList.add(AWS_OPTION);
-                        break;
-                    case "AWA": // - Apparent Wind Angle
-                        optionList.add(AWA_OPTION);
-                        break;
-                    case "WTP": // - Water Temperature
-                        optionList.add(WTP_OPTION);
-                        break;
-                    case "ATP": // - Air Temperature
-                        optionList.add(ATP_OPTION);
-                        break;
-                    case "PML": // - Pressure at Mean Sea Level
-                        optionList.add(PRS_OPTION);
-                        break;
-                    case "HUM": // - Humidity
-                        optionList.add(HUM_OPTION);
-                        break;
-                    case "DBT": // - Depth
-                        optionList.add(DBT_OPTION);
-                        break;
-                    case "CUR": // - Current. Speed and Direction
-                        optionList.add(CUR_OPTION);
-                        break;
-                    case "PCH": // Pitch
-                    case "ROL": // Roll
-                    default:
-                        System.out.printf("[%s] not implemented yet.\n", id);
-                        break;
+
+                Optional<DisplayOptions> foundDisplay = Arrays.stream(DisplayOptions.values())
+                                                              .filter(value -> id.equals(value.name()))
+                                                              .findFirst();
+                if (foundDisplay.isPresent()) {
+                    optionList.add(foundDisplay.get());
+                } else {
+                    System.out.printf("ID '%s' is not known.\n", id);
                 }
             });
         }

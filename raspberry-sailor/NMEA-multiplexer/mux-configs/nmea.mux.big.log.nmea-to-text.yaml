@@ -18,7 +18,7 @@ channels:
     verbose: false
 forwarders:
   # - type: console
-  - class: nmea.forwarders.NMEAtoTextProcessor
+  - class: nmea.forwarders.NMEAtoTextProcessor   # An interesting use-case.
     properties: mux-configs/nmea-to-text.properties
 computers:
   - type: "tw-current"

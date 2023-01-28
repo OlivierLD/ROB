@@ -8,6 +8,9 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * To be invoked from {@link nmea.forwarders.NMEAtoTextProcessor}
+ */
 public class SSD1306RESTConsumer implements DelegateConsumer {
 
     private String protocol;   // http or https
@@ -43,6 +46,17 @@ public class SSD1306RESTConsumer implements DelegateConsumer {
         }
     };
 
+    /**
+     * Managed properties are:
+     * - ssd1306.dg.protocol
+     * - ssd1306.dg.server-name
+     * - ssd1306.dg.port
+     * - ssd1306.dg.verb
+     * - ssd1306.dg.resource
+     * - ssd1306.dg.verbose
+     *
+     * @param props Properties, as read from the file.
+     */
     @Override
     public void setProperties(Properties props) {
         this.protocol = props.getProperty("ssd1306.dg.protocol", "http");

@@ -389,6 +389,102 @@ You can also implement your own forwarder (implementing the `Forwarder` interfac
 
 Look for `forward.02.class=nmea.forwarders.RESTIoTPublisher`
 
+##### An interesting forwarder use-case
+There is in the code a `nmea.forwarders.NMEAtoTextProcessor`, that is not to be mentioned by its type, but as a custom Forwarder, like in
+```yaml
+forwarders:
+  - class: nmea.forwarders.NMEAtoTextProcessor   # An interesting use-case.
+    properties: mux-configs/nmea-to-text.properties
+```
+As you would see in the code, this forwarder translates the NMEA content stored in the cache in to
+human-readable strings, to be displayed "somewhere".  
+The strings to display are defined in the properties file attached to the forwarder,
+`mux-configs/nmea-to-text.properties` in the above:
+```properties
+#
+# display.time is the amount of seconds a given value remains displayed before switching to the next one.
+#
+display.time=10
+screen.verbose=false
+#
+# The DelegateConsumer
+data.consumer=nmea.forwarders.delegate.SSD1306RESTConsumer
+consumer.properties=mux-configs/REST.ssd1306.dg.properties
+#
+# Available data:  See in NMEAtoTextProcessor, DisplayOptions.
+#
+to.display=POS,AWS,TWS,BSP,BSP_KMH,SOG,HDG,COG,GPS
+```
+This tells the forwarder to display strings named  as in the property `to.display`.  
+The default behavior for `nmea.forwarders.NMEAtoTextProcessor` is to display the required text in the console:
+```
+Definition Name: Replay big log file.
+-- Description --
+Forward data to "NMEA to Text"
+Work in Progress
+-----------------
+Log available in global, level INFO
+Log file pattern mux.log
+nmea.computers.current.LongTimeCurrentCalculator is starting...
+nmea.computers.current.LongTimeCurrentCalculator is starting...
+nmea.computers.current.LongTimeCurrentCalculator is starting...
+Starting new http.HTTPServer (verbose false)
+POSITION:
+RMC not ready yet!
+---------------
+1,674,916,654,786 - Port open: 8080
+1,674,916,654,786 - http.HTTPServer now accepting requests
+POSITION
+9°06.46'S
+140°12.52'W
+---------------
+POSITION
+9°06.46'S
+140°12.52'W
+---------------
+POSITION
+9°06.46'S
+140°12.53'W
+---------------
+POSITION
+9°06.47'S
+140°12.54'W
+---------------
+. . .
+```
+The displayed data changes every 10 seconds, as defined in the property `display.time`.  
+This default behavior is coded in a `Consumer<List<Stgring>>`, defaulted in the code to
+```java
+    // Default Consumer.
+    private final Consumer<List<String>> DEFAULT_DISPLAY_CONSUMER = (dataList) -> {
+        dataList.forEach(line -> System.out.println(line));
+        System.out.println("---------------");
+    };
+
+	private Consumer<List<String>> displayConsumer = DEFAULT_DISPLAY_CONSUMER;
+```
+This behavior can be overridden, by supplying the name of a `DelegateConsumer` in the properties file, as done above in
+the properties `data.consumer`, optionally `consumer.properties`.  
+The `data.consumer` mentions `nmea.forwarders.delegate.SSD1306RESTConsumer`, available in this repository.  
+Look into it for details.  
+This class is using properties described in `consumer.properties`, `mux-configs/REST.ssd1306.dg.properties`:
+```properties
+ssd1306.dg.protocol=http
+ssd1306.dg.server-name=192.168.1.101
+ssd1306.dg.port=8080
+ssd1306.dg.verb=PUT
+ssd1306.dg.resource=/ssd1306/nmea-data
+ssd1306.dg.verbose=false
+```
+This `DelegateConsumer` is doing a REST PUT request to some REST server, connected to an oled screen SSD1306, that will
+display the required data. This REST server is in this case written in Python,
+the code is in `REST_SSD1306_server.py`, in this repository.
+
+| POS | AWS | BSP |
+|:---:|:---:|:---:|
+| ![POS](./docimages/SSD1306_POS.jpg) | ![AWS](./docimages/SSD1306_AWS.jpg) | ![BSP](./docimages/SSD1306_BSP.jpg) | 
+
+
 #### Pre-defined computer type(s)
 
 - `tw-current`
