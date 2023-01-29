@@ -51,10 +51,10 @@ If a framework becomes obsolete, or if it needs upgrades, then so does the Java 
 We want here to find a way to get rid of this kind of nasty occurrences.  
 So, an idea would be to keep this code as it is - it's working in Python, and the board provider will take care of updates, if needed - and find a way to establish a communication between this Python code and Java...
 
-_**We will give TCP a try**_, for this kind of Python-to-Java communication.  
+_**We will give TCP and REST a try**_, for this kind of Python-to-Java communication.  
 This will also minimize the amount of dependencies to deal with (and eventually, the size of the archives).  
-In short, we would wrap the Python code into some sort of TCP server, which itself can be accessed from Java, natively.
-TCP is cool enough to be language agnostic.
+In short, we would wrap the Python code into some sort of TCP or REST server, which itself can be accessed from Java, natively.
+TCP and REST are cool enough to be language agnostic.
 
 And on top of that, several parts of the code deserved some cleanup, and this is also an opportunity to minimize
 and consolidate the number of dependencies to external libraries. For example, for the Java-to-JSON part, only Jackson is now used.
@@ -63,6 +63,8 @@ The web pages and scripts _**do not rely on any external framework**_ (_no_ JQue
 It's using vanilla ES6 features, like Promises. <!-- https://kinsta.com/blog/javascript-libraries/ -->
 > Note: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) are great tools. The goal here is to minimize the dependencies,
 > as well as the final volume of the code.
+
+And we will try to implement Consumers, Forwarders and Computers as pluggable components, to facilitate the required customizations.
 
 ## How the repo is organized
 At the root, we have some generic building blocks, like
@@ -80,7 +82,7 @@ All those things will come together in the directory `raspberry-sailor`.
 It contains REST wrappers (usable from the `http-tiny-server`) around the features we will need, like NMEA Parser,
 Tide calculations, Routing (GRIB management), etc.  
 The main building block in the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
-> _**Note**_: The `NMEA-multiplexer` contains "some" Python TCP servers for sensor data access.
+> _**Note**_: The `NMEA-multiplexer` contains "some" Python TCP and REST servers for sensor and actuator data access.
 
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
@@ -138,7 +140,8 @@ Wow! Vast topic...
   - [Almond, for Scala](https://almond.sh/)
   - [IJavaScript](https://github.com/n-riesco/ijavascript)
   - . . .
-
+  
+  Some notebooks are available in eth `NMEA-Parser` project. More to come.
 
 ---
 And more to come...
