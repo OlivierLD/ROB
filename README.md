@@ -130,7 +130,7 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ## TODO next
 Wow! Vast topic...
 
-- Docker Images ?
+- Docker Images ? For now, see [here](https://github.com/OlivierLD/raspberry-coffee/tree/master/docker).
   - Docker can run on a Raspberry Pi, this would simplify deployment and installation steps.
 - Jupyter Notebooks to see how components work.  
   _Jupyter Notebooks_ were originally developed for Python, but they're now also available for pretty much any language that comes with a REPL (Read Execute Print Loop), like Java (9+), Scala, NodeJS, ...

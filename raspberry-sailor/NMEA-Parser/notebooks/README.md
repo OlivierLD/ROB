@@ -1,5 +1,6 @@
-# Jupyter Notebooks
+# [Jupyter Notebooks](https://jupyter.org/)
 
+To install Jupyter Notebook on your machine, see [here](https://jupyter.org/install).  
 We will be using here some Jupyter Notebooks for Java.  
 See [Spencer Park / IJava](https://github.com/SpencerPark/IJava) to learn how to install and run it.
 
