@@ -75,6 +75,10 @@ Empty message. Doing nothing.
 closing socket
 $
 ```
+
+> _**Note**_: the `--machine-name` can be replaced with a `--machine-name:$(hostname -I)`.  
+> This will automatically refer to the machine's IP address.
+
 The client above displays the `ZDA` sentences produced by the server.
 
 It works from the NMEA-multiplexer, with a `yaml` file like that one (see the `channels` section):
