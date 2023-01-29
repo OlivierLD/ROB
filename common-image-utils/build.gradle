@@ -7,8 +7,8 @@ group = 'raspberry.on.board'
 version = '1.0'
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {

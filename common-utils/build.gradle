@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+    id 'com.github.johnrengelman.shadow'
     id "application"
 }
 
@@ -10,10 +10,9 @@ group = 'raspberry.on.board'
 version = '1.0'
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/public" }
-    maven { url "https://mvnrepository.com/artifact" }
 }
 
 // sourceCompatibility = 1.8

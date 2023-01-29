@@ -1,8 +1,8 @@
 plugins {
   id 'java'
   id 'idea'
-  id 'maven-publish' // Includes 'gradle install'. 'maven-publish' would say 'gradle publish'
-  id 'com.github.johnrengelman.shadow' // version '4.0.2'
+  id 'maven-publish'
+  id 'com.github.johnrengelman.shadow'
 }
 
 group = 'raspberry.on.board'
@@ -13,8 +13,8 @@ compileJava {
 }
 
 repositories {
-  mavenCentral()
   mavenLocal()
+  mavenCentral()
   maven { url "https://www.datanucleus.org/downloads/maven2" }
 }
 

@@ -4,15 +4,14 @@ plugins {
 //id 'idea'
   id 'maven-publish'
   id 'com.github.johnrengelman.shadow' // version '4.0.2'
-//id 'findbugs'
 }
 
 group = 'raspberry.on.board'
 version = '1.0'
 
 repositories {
-  mavenCentral()
   mavenLocal()
+  mavenCentral()
   maven { url "https://www.datanucleus.org/downloads/maven2" }
 }
 

@@ -3,16 +3,15 @@ plugins {
 //    id 'scala'
     id 'idea'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' // version '4.0.2'
+    id 'com.github.johnrengelman.shadow'
 }
 
 group = 'raspberry.on.board'
 version = '1.0'
 
 repositories {
-    mavenCentral()
     mavenLocal()
-    // maven { url "https://www.datanucleus.org/downloads/maven2" }
+    mavenCentral()
 }
 
 compileJava.options.compilerArgs += ["-Xlint:none"]

@@ -3,7 +3,7 @@ plugins {
 //id 'scala'
   id 'idea'
   id 'maven-publish'
-  id 'com.github.johnrengelman.shadow' // version '4.0.2'
+  id 'com.github.johnrengelman.shadow'
 }
 compileJava {
   options.encoding = 'UTF-8'
@@ -14,8 +14,8 @@ group = 'raspberry.on.board'
 version = '1.0'
 
 repositories {
-  mavenCentral()
   mavenLocal()
+  mavenCentral()
   maven { url "https://www.datanucleus.org/downloads/maven2" }
 }
 
