@@ -115,7 +115,7 @@ public class RESTReader extends NMEAReader {
 	 * This means that each member VALUE needs to be a valid NMEA string. See detectSentence, in NMEAParser.
 	 *
 	 * @param response The response to process
-	 * @throws Exception Oops.
+	 * @throws RuntimeException Oops.
 	 */
 	@SuppressWarnings("unchecked")
 	private void manageRESTResponse(HTTPServer.Response response) {

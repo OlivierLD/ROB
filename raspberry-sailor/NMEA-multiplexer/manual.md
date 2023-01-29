@@ -188,6 +188,9 @@ channels:
     ```
 - `rest`
   - Work in Progress
+  - The `jqs` parameter below intends to work like the `jq` utility, on a returned JSON payload 
+    - See the [JQ](https://stedolan.github.io/jq/) repo 
+    - For JQ (**J**SON **Q**uery) Syntax, see <https://lzone.de/cheat-sheet/jq>, and <https://github.com/eiiches/jackson-jq>
   - For `GET` queries only (...for now)  
     ```properties
     mux.01.type=rest
@@ -195,7 +198,7 @@ channels:
     mux.01.machine-name=192.168.1.102
     mux.01.http-port=8080
     mux.01.query-path=/mux/cache
-    mux.01.query-string=?query=string  # Would include the ?, and subsequent &...
+    mux.01.query-string=?query=string  # Must include the leading ?, and subsequent &...
     mux.01.jqs=".NMEA_AS_IS | { RMC, GLL }"  # jq-like expression
     mux.01.between-loops=1000   # Default is 1000ms
     mux.01.verbose=false
@@ -208,14 +211,14 @@ channels:
       protocol: http
       machine-name: 192.168.1.105
       http-port: 8080
-      query-path: /bme280/nmea-data
-      query-string: ?query=string
-      jqs: ".NMEA_AS_IS | { RMC, GLL }"
+      query-path: /mux/cache    # /bme280/nmea-data
+      query-string: ?query=string  # Must include the leading ?, and subsequent &...
+      jqs: ".NMEA_AS_IS | { RMC, GLL }"  # null
       between-loops: 2000  # in ms (default 1000)
       verbose: false
     ```
     <!-- This one is more designed to be extended. -->  
-    More samples to come.    
+    Look into the repo for more examples.    
     The tricky point is that this has to generate a _valid_ NMEA String, and that requires
     a knowledge of the structure of the payload returned by the service, if not some post-processing.
   
@@ -521,7 +524,7 @@ It's an example/WiP of the way to use AIS data to detect collision threats.
 
 ```properties
 name=Basic MUX configuration.
-description.01=Basic MUX Config 
+description.01=Basic MUX Config
 description.02=HTTP port is 9999
 with.http.server=yes
 http.port=9999
