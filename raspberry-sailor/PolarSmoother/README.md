@@ -17,6 +17,8 @@ or after a `$ ../../gradlew shadowJar`, run the script named `smoother.sh`
 ```
 You can create new files or use already existing ones, change smoothing parameters, drag points directly on the graph (right pane), etc.
 
+> _**Note**_: many polars can be found on the web, like [here](http://download.meltemus.com/polars/).
+
 Menu bar will give you access to the various feature, as well as contextual popup menus in the left pane.
 
 The files the tool rely on (`*.polar-data` and `*.polar-coeff`) are XML files, they can be edited as any text document. But the graphical interface
