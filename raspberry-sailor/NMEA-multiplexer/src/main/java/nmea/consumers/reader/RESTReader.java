@@ -30,6 +30,8 @@ import java.util.function.Consumer;
 /**
  * Assumes JSON Output from the REST service invoked with GET
  *
+ * For JQ prm: jq syntax doc: https://lzone.de/cheat-sheet/jq, jackson-jq repo: https://github.com/eiiches/jackson-jq
+ *
  * REST reader. WiP
  * - verbs ?
  */
