@@ -461,7 +461,7 @@ This default behavior is coded in a `Consumer<List<Stgring>>`, defaulted in the 
         System.out.println("---------------");
     };
 
-	private Consumer<List<String>> displayConsumer = DEFAULT_DISPLAY_CONSUMER;
+    private Consumer<List<String>> displayConsumer = DEFAULT_DISPLAY_CONSUMER;
 ```
 This behavior can be overridden, by supplying the name of a `DelegateConsumer` in the properties file, as done above in
 the properties `data.consumer`, optionally `consumer.properties`.  
