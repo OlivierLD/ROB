@@ -9,7 +9,9 @@ From this page, you will learn how to install the required software to build and
 There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
 at runtime.
 
-> _**Note**_: This document is written for RaspiOS, Debian, Ubuntu, and such clones.
+> _**Note**_:   
+> - This document is written for RaspiOS, Debian, Ubuntu, and such clones.  
+> - The scripts in this repo are written for Bash Shell (`bash`).
 
 # Install required software, clone the repo, build and run a first module.
 
@@ -218,7 +220,7 @@ the generated QR Code from any other device.
 
 ![QR Code](./images/QRCodes.png)
 
-> _**Note**_: to kill the server, use the script `./killns.sh`, or
+> _**Note**_: to kill the server, run the script `./killns.sh`, or
 > use the `K` option in the `demoLauncher.sh`.
 
 
