@@ -141,11 +141,13 @@ public class RESTClient extends NMEAClient {
 	 * @param args Unused
 	 */
 	public static void main(String... args) {
+
 		System.out.println("CustomRESTClient invoked with " + args.length + " Parameter(s).");
 		for (String s : args) {
 			System.out.println("CustomRESTClient prm:" + s);
 		}
-		String serverNameOrIP = "192.168.1.105";
+//		String serverNameOrIP = "192.168.1.105";
+		String serverNameOrIP = "192.168.1.101";
 
 		nmeaClient = new RESTClient();
 
@@ -159,10 +161,10 @@ public class RESTClient extends NMEAClient {
 		nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
 				"http",
 				serverNameOrIP,
-				8_080,
-				"/bme280/oplist", // /bme280/data, /bme280/nmea-data
+				9_999, // 8_080,
+				"/mux/cache", // ""/bme280/oplist", // /bme280/data, /bme280/nmea-data
 				"",
-				null,
+				".NMEA_AS_IS | { RMC, GLL }", // ".NMEA_AS_IS .RMC", // ".NMEA",  // null,
 				null));
 		nmeaClient.setVerbose(true);
 		nmeaClient.startWorking();

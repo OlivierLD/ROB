@@ -211,7 +211,7 @@ channels:
       query-path: /bme280/nmea-data
       query-string: ?query=string
       jqs: ".NMEA_AS_IS | { RMC, GLL }"
-      between-loops: 2000  # in ms
+      between-loops: 2000  # in ms (default 1000)
       verbose: false
     ```
     <!-- This one is more designed to be extended. -->  

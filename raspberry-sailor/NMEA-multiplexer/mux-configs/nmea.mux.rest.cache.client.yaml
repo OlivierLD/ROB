@@ -10,8 +10,8 @@ context:
 channels:
   - type: rest  # Just for tests of the rest consumer
     protocol: http
-    machine-name: 192.168.1.102
-    http-port: 8080
+    machine-name: 192.168.1.101
+    http-port: 9999
     query-path: /mux/cache
 #    query-path: /eink2_13/oplist
     # query-string:     # Would include the ?, and subsequent &...

@@ -74,7 +74,9 @@ public class RESTReader extends NMEAReader {
 		this.queryPath = path;
 		this.queryString = qs;
 		this.jqsString = jqs;
-		this.betweenLoops = betweenLoops;
+		if (betweenLoops != null) {
+			this.betweenLoops = betweenLoops;
+		}
 	}
 
 	public String getProtocol() {
@@ -154,7 +156,7 @@ public class RESTReader extends NMEAReader {
 			try {
 				Object finalObject = mapper.readValue(payload, Object.class);
 				if (finalObject instanceof Map) {
-					((Map<String, String>) finalObject).forEach((k, v) -> dataToFire.add(v)); // Prepare all the elements of the map
+					((Map<String, Object>) finalObject).forEach((k, v) -> dataToFire.add(v.toString())); // Prepare all the elements of the map
 				} else {
 					dataToFire.add(payload);
 				}
