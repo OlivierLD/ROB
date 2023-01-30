@@ -220,7 +220,7 @@ let renderGRIBData = function(canvas, context) {
 	if (gribData !== undefined) {
 		let date = document.getElementById("grib-dates").value;
 		let type = document.getElementById("grib-types").value;
-		drawGrib(canvas, context, gribData, date, type);
+		drawGrib(canvas, context, gribData, date, type); // Defined in grib.routing.js
 	}
 };
 

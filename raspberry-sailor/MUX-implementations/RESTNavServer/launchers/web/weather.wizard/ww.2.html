@@ -1280,14 +1280,16 @@
                 gribFileLocation = where; // Used for routing. Directory of grib.grb
                 document.getElementById('current-grib-location').innerText = ('GRIB in ' + gribFileLocation);
             }
-            worldMap.setAfterDrawing(renderGRIBData); // That is the callback
+            worldMap.setAfterDrawing(renderGRIBData); // That is the callback. GRIB on top of the chart.
+            // worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
     
             requestGRIB(jsonRequest, plotGrib);  // Enable GRIB widgets if successful
         };
     
         let renderGRIB = () => {
             let rawGrib = JSON.parse(document.getElementById("json-grib").value);
-            worldMap.setAfterDrawing(renderGRIBData);
+            worldMap.setAfterDrawing(renderGRIBData); // GRIB on top
+            // worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
             plotGrib(rawGrib);
         };
     

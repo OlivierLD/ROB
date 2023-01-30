@@ -274,11 +274,43 @@ let drawWindArrow = function(context, at, twd, tws) {
 	}
 };
 
+const BLUE_BASED = 1;
+const BEAUFORT_BASED = 2; // Based on the colors used for the Beaufort WebComponent.
+const WIND_BG_COLOR_OPTION = BEAUFORT_BASED;
+
+// Duplicated from Beaufort.js. TODO: SOmething nicer
+// See https://htmlcolorcodes.com/
+const SCALE_COLORS = [
+	{ force:  0, color: 'rgb(232, 246, 243)' },
+	{ force:  1, color: 'rgb(212, 230, 241)' },
+	{ force:  2, color: 'rgb(133, 193, 233)' },
+	{ force:  3, color: 'rgb( 93, 173, 226)' },
+	{ force:  4, color: 'rgb( 26, 188, 156)' },
+	{ force:  5, color: 'rgb( 29, 131,  72)' },
+	{ force:  6, color: 'rgb(241, 196,  15)' },
+	{ force:  7, color: 'rgb(231,  76,  69)' },
+	{ force:  8, color: 'rgb(192,  57,  43)' },
+	{ force:  9, color: 'rgb(123,  36,  28)' },
+	{ force: 10, color: 'rgb(118,  68, 138)' },
+	{ force: 11, color: 'rgb( 91,  44, 111)' },
+	{ force: 12, color: 'rgb( 33,  47,  61)' }
+];
+
 let getBGColor = function(value, type) {
 	let color = 'white';
 	switch (type) {
 		case 'wind': // blue, [0..80]
-			color = 'rgba(0, 0, 255, ' + Math.min((value / 80), 1) + ')';
+			if (WIND_BG_COLOR_OPTION === BLUE_BASED) {
+				color = 'rgba(0, 0, 255, ' + Math.min((value / 80), 1) + ')';
+			} else { // BEAUFORT
+				let force = getBeaufortScale(value);
+				let beaufortColor = SCALE_COLORS[force].color; //'rgba(1,2,3, 0.5)';
+				let transp = 0.75;
+				let transpColor = beaufortColor.replace(/rgb/i, "rgba");
+				transpColor = transpColor.replace(/\)/i,`, ${transp})`);
+				color = transpColor;
+				// console.log(`Force ${force}, color is ${color}`);	
+			}
 			break;
 		case 'prmsl': // red, 101300, [95000..104000], inverted
 			color = 'rgba(255, 0, 0,' + (1 - Math.min((value - 95000) / (104000 - 95000), 1)) + ')';

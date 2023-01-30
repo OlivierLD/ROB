@@ -243,6 +243,8 @@ Start it like in
 $ python3 src/main/python/REST_BME280_server.py --machine-name:192.168.1.105 --simulate-when-missing:true
 ```
 
+> _**Note**_: the `--machine-name:192.168.1.105` can be replaced with a `--machine-name:$(hostname -I)`, much nicer.
+
 > _**Important**_: As it is now, it's the server responsibility to respond with _valid_ NMEA strings. 
 > See the NMEA-multiplexer Consumer's doc for details.
 
