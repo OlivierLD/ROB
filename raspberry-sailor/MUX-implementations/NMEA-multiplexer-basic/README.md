@@ -289,8 +289,8 @@ See how to add `http.RESTRequestManager`(s) to an `http.HTTPServer`, with the `a
 Many other Web UI examples are available. Just look.  
 You will see that some examples need an Internet connection (for Google Maps and Leaflets), some others can run without Internet.  
 Some are using WebComponents, some vanilla JavaScript components (directly drawing on HTML5 canvases).  
-Your imagination is the limit.
-
+Your imagination is the limit.  
+There is also a [USE_CASES](./USE_CASES.md) document.
 
 # To production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on

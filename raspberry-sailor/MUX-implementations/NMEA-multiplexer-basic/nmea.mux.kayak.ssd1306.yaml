@@ -11,8 +11,6 @@ context:
   with.http.server: true
   http.port: 9999
   init.cache: true
-  deviation.file.name: "dp_2011_04_15.csv"
-  max.leeway: 10.0
   damping: 30
 channels:
   - type: serial   # GPS
@@ -33,7 +31,7 @@ forwarders:
 #    http.headers: Content-Type:plain/text
 #    verbose: false
   - class: nmea.forwarders.NMEAtoTextProcessor   # An interesting use-case. Formatted data on an SSD1306.
-    properties: mux-configs/nmea-to-text.properties
+    properties: ./nmea-to-text.properties
   - type: file
     filename: ./data.nmea
     flush: true
