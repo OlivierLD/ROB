@@ -43,3 +43,5 @@ echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
 echo -e "Use ./scripts/kill.python.rest.sh to stop the server."
+echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/ssd1306/nmea-data -d 'This is|a test.'"
+echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
