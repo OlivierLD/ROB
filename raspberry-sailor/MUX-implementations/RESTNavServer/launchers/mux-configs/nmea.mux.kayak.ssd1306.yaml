@@ -1,0 +1,33 @@
+#
+# MUX definition.
+#
+name: "Logging Data from the Kayak"
+description:
+  - A GPS on /dev/ttyS80
+  - A BME280 read fromnm a TCP Server in Python, on port 8001
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  deviation.file.name: "dp_2011_04_15.csv"
+  max.leeway: 10.0
+  damping: 30
+channels:
+  - type: serial   # GPS
+    port: /dev/ttyS80
+    baudrate: 4800
+    verbose: true
+  - type: tcp
+    server: 192.168.1.101
+    port: 8001
+    verbose: true
+forwarders:
+  - type: rest   # For an SSD1306. Raw NMEA sentences.
+    rest.protocol: http
+    server.name: 192.168.1.103
+    server.port: 8080
+    rest.resource: /ssd1306/nmea-data
+    rest.verb: PUT
+    http.headers: Content-Type:plain/text
+    verbose: true
+

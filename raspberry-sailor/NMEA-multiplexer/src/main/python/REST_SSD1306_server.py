@@ -102,7 +102,7 @@ else:
 
     try:
         oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
-        print(f"SSD1306 is a {type(oled)}")
+        # print(f"SSD1306 is a {type(oled)}")
     except:
         print("No SPI SSD1306 was found...")
         oled = None

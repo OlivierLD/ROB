@@ -10,7 +10,7 @@ else
     MACHINE_NAME=$(hostname)
     echo -e "Plan B: ${MACHINE_NAME}"
 fi
-MACHINE_NAME=$(echo -e "${MACHINE_NAME}" | sed -e 's/^[[:space:]]*//')  # This is a trim.
+MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
 SCREEN_HEIGHT=32
