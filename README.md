@@ -124,6 +124,7 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 - <http://www.tecepe.com.br/nav/>
 - <http://navastro.free.fr/> (in French)
 - Get Started: [For dummies](./GET_STARTED.md)
+- Hints and Tips [here](./HintsAndTips.md)
 
 ## Customize, Build, and Deploy
 - WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now.
@@ -141,7 +142,7 @@ Wow! Vast topic...
   - [IJavaScript](https://github.com/n-riesco/ijavascript)
   - . . .
   
-  Some notebooks are available in eth `NMEA-Parser` project. More to come.
+  Some notebooks are available in the `NMEA-Parser` project. More to come.
 
 ---
 And more to come...

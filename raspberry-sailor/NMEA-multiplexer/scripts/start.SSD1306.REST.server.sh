@@ -37,7 +37,7 @@ read USER_INPUT
 if [[ "${USER_INPUT}" != "" ]]; then
     SCREEN_HEIGHT=${USER_INPUT}
 fi
-# echo "Will use verbose ${SIMULATE_IF_MISSING}"
+# echo "Will use screen height ${SCREEN_HEIGHT}"
 COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &

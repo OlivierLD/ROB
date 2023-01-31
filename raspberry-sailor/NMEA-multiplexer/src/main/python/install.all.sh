@@ -10,3 +10,5 @@ sudo pip3 install adafruit-circuitpython-bme280
 sudo pip3 install adafruit-circuitpython-lis3mdl
 sudo pip3 install pyyaml
 sudo pip3 install adafruit-circuitpython-lsm303dlh-mag
+#
+sudo pip3 install adafruit-circuitpython-ssd1306
