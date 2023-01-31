@@ -13,6 +13,7 @@ fi
 PORT=9999
 VERBOSE=false
 SCREEN_HEIGHT=32
+WIRING="I2C"
 #
 echo -en "Enter Machine Name - Default [${MACHINE_NAME}] > "
 read USER_INPUT
@@ -38,7 +39,13 @@ if [[ "${USER_INPUT}" != "" ]]; then
     SCREEN_HEIGHT=${USER_INPUT}
 fi
 # echo "Will use screen height ${SCREEN_HEIGHT}"
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT}"
+echo -en "Wiring Option (I2C or SPI) ? - Default [${WIRING}] > "
+read USER_INPUT
+if [[ "${USER_INPUT}" != "" ]]; then
+    WIRING=${USER_INPUT}
+fi
+# echo "Will use screen wiring option ${WIRING}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring-option:${WIRING}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

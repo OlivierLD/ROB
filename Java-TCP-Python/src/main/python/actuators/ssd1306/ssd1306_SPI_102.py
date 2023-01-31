@@ -11,6 +11,7 @@ not support PIL/pillow (python imaging library)!
 """
 
 # https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306
+# https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all
 
 import board
 import digitalio
@@ -26,7 +27,7 @@ oled_reset = digitalio.DigitalInOut(board.D24)  # GPIO 24, Pin #18
 # Change these
 # to the right size for your display!
 WIDTH: int = 128
-HEIGHT: int = 64 # 32  # Change to 64 if needed
+HEIGHT: int = 64 # 32  # Change to 64/32 if needed
 BORDER: int = 5
 
 WHITE: int = 255

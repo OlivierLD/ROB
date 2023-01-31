@@ -25,6 +25,9 @@ server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
 
+oled_wiring_option: str = "I2C"
+
+WIRING_PREFIX: str = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
@@ -59,6 +62,12 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+        if arg[:len(WIRING_PREFIX)] == WIRING_PREFIX:
+            wiring_option = arg[len(WIRING_PREFIX):]
+            if wiring_option != "SPI" and wiring_option != "I2C":
+                print(f"Wiring Option must be SPI or I2C, not {wiring_option}. Keeping {oled_wiring_option}.")
+            else:
+                oled_wiring_option = wiring_option
         if arg[:len(HEIGHT_PREFIX)] == HEIGHT_PREFIX:
             try:
                 user_height = int(arg[len(HEIGHT_PREFIX):])
@@ -69,14 +78,34 @@ if len(sys.argv) > 0:  # Script name + X args
             except Exception as error:
                 print(f"Height error: {repr(error)}")
 
-# Use for I2C.
-i2c = board.I2C()  # uses board.SCL and board.SDA
-# i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-try:
-    oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
-except:
-    print("No SSD1306 was found...")
-    oled = None
+if oled_wiring_option == "I2C":
+    # Use for I2C.
+    i2c = board.I2C()  # uses board.SCL and board.SDA
+    # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+    print(f"Using RESET {oled_reset}")
+    try:
+        oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
+    except:
+        print("No I2C SSD1306 was found...")
+        oled = None
+else:
+    # Use for SPI
+    spi = board.SPI()
+    oled_reset = digitalio.DigitalInOut(board.D24)  # GPIO 24, Pin #18
+    # oled_cs = digitalio.DigitalInOut(board.D5)
+    oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
+    # oled_dc = digitalio.DigitalInOut(board.D6)
+    oled_dc = digitalio.DigitalInOut(board.D23)  # Pin #16
+    print(f"Using RESET {oled_reset}")
+    print(f"Using CS {oled_cs}")
+    print(f"Using DC {oled_dc}")
+
+    try:
+        oled = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+    except:
+        print("No SPI SSD1306 was found...")
+        oled = None
+
 
 # Clear display.
 if oled is not None:

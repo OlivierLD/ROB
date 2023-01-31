@@ -6,6 +6,11 @@ framework deprecation, restrictions based on the JDK version... Here is a try to
 > In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi, and whatever you can plug on it.
 > Vast topic indeed.
 
+## Python interaction with Sensors and Actuators
+- <https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306>
+- <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
+
+
 For now, this is more to be seen as a Proof Of Concept (POC) than anything else. 
 
 The tricky point was to find a suitable way to establish a communication between Java and Python, and this without having to depend on external code. And ideally, a language agnostic method.  
@@ -56,6 +61,9 @@ We provide here TCP servers reading the following sensors:
 - [HTUDF21D](https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor).  Temperature, Relative Humidity.
 - [LSM303](https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout). 3-axis Magnetometer, Accelerometer.
 - [LIS3MDL](https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer). 3-axis Magnetometer.
+
+And actuators:
+- [SSD1306 oled screen](https://learn.adafruit.com/monochrome-oled-breakouts) (SPI and I2C)
 
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
