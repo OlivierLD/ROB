@@ -10,6 +10,8 @@ Adafruit Blinka to support CircuitPython libraries. CircuitPython does
 not support PIL/pillow (python imaging library)!
 """
 
+# https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306
+
 import board
 import digitalio
 import PIL
@@ -18,7 +20,8 @@ import adafruit_ssd1306
 import time
 
 # Define the Reset Pin
-oled_reset = digitalio.DigitalInOut(board.D4)
+# oled_reset = digitalio.DigitalInOut(board.D4)  # GPIO 4, Pin #7
+oled_reset = digitalio.DigitalInOut(board.D24)  # GPIO 24, Pin #18
 
 # Change these
 # to the right size for your display!
@@ -40,8 +43,10 @@ if False:
 # Use for SPI
 if True:
     spi = board.SPI()
-    oled_cs = digitalio.DigitalInOut(board.D5)
-    oled_dc = digitalio.DigitalInOut(board.D6)
+    # oled_cs = digitalio.DigitalInOut(board.D5)
+    oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
+    # oled_dc = digitalio.DigitalInOut(board.D6)
+    oled_dc = digitalio.DigitalInOut(board.D23)  # Pin #16
     oled = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
 
 # Clear display.
