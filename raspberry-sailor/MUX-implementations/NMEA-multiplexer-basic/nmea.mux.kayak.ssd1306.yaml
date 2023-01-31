@@ -4,7 +4,9 @@
 name: "Logging Data from the Kayak"
 description:
   - A GPS on /dev/ttyS80
-  - A BME280 read fromnm a TCP Server in Python, on port 8001
+  - A BME280 read from a TCP Server in Python, on port 8001
+  - Display on an SSD1306 128x64
+  - Log data in a file
 context:
   with.http.server: true
   http.port: 9999
@@ -30,6 +32,16 @@ forwarders:
 #    rest.verb: PUT
 #    http.headers: Content-Type:plain/text
 #    verbose: false
-  - class: nmea.forwarders.NMEAtoTextProcessor   # An interesting use-case.
+  - class: nmea.forwarders.NMEAtoTextProcessor   # An interesting use-case. Formatted data on an SSD1306.
     properties: mux-configs/nmea-to-text.properties
+  - type: file
+    filename: ./data.nmea
+    flush: true
+    verbose: false
+#  - type: file
+#    timebase.filename: true
+#    filename.suffix: "_LOG"
+#    log.dir: "logged"
+#    split: "hour"
+#    verbose: false
 
