@@ -82,7 +82,7 @@ if oled_wiring_option == "I2C":
     # Use for I2C.
     i2c = board.I2C()  # uses board.SCL and board.SDA
     # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-    print(f"Using RESET {oled_reset}")
+    print(f"Using RESET {'D4'}")
     try:
         oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
     except:
@@ -96,9 +96,9 @@ else:
     oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
     # oled_dc = digitalio.DigitalInOut(board.D6)
     oled_dc = digitalio.DigitalInOut(board.D23)  # Pin #16
-    print(f"Using RESET {oled_reset}")
-    print(f"Using CS {oled_cs}")
-    print(f"Using DC {oled_dc}")
+    print(f"Using RESET {'D24'}")
+    print(f"Using CS {'D8'}")
+    print(f"Using DC {'D23'}")
 
     try:
         oled = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
