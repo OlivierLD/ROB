@@ -2,6 +2,10 @@
 #
 # To be run from the module's root (NMEA-multiplexer), like ./scripts/start.BME280.REST.server.sh
 #
+# Move 1 level above the 'script' directory
+pushd $(dirname $0)/..
+echo -e "Working from $PWD"
+
 PYTHON_SCRIPT_NAME=src/main/python/TCP_BME280_server.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
@@ -10,6 +14,7 @@ else
     MACHINE_NAME=$(hostname)
     echo -e "Plan B: ${MACHINE_NAME}"
 fi
+MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
 #
@@ -36,3 +41,5 @@ echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
 echo -e "Use ./scripts/kill.python.tcp.sh to stop the server."
+
+popd

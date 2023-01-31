@@ -2,6 +2,10 @@
 #
 # To be run from the module's root (NMEA-multiplexer), like ./scripts/start.SSD1306.REST.server.sh
 #
+# Move 1 level above the 'script' directory
+pushd $(dirname $0)/..
+echo -e "Working from $PWD"
+
 PYTHON_SCRIPT_NAME=src/main/python/REST_SSD1306_server.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
@@ -53,3 +57,5 @@ echo -e "Done"
 echo -e "Use ./scripts/kill.python.rest.sh to stop the server."
 echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/ssd1306/nmea-data -d 'This is|a test.'"
 echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
+
+popd
