@@ -9,6 +9,9 @@
 #
 # For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /bme280/nmea-data
 #
+# Start it with 
+# $ python3 <...>/REST_BME280_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false --simulate-when-missing:false
+#
 import json
 import sys
 import random
