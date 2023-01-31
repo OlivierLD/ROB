@@ -33,7 +33,7 @@ PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
 
-oled: adafruit_ssd1306.SSD1306_I2C
+oled = None
 
 # Define the Reset Pin
 oled_reset = digitalio.DigitalInOut(board.D4)
@@ -101,11 +101,11 @@ else:
     print(f"Using DC {'D23'}")
 
     try:
-        oled = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+        oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+        print(f"SSD1306 is a {type(oled)}")
     except:
         print("No SPI SSD1306 was found...")
         oled = None
-
 
 # Clear display.
 if oled is not None:

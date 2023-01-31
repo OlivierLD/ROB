@@ -10,6 +10,7 @@ else
     MACHINE_NAME=$(hostname)
     echo -e "Plan B: ${MACHINE_NAME}"
 fi
+MACHINE_NAME=$(echo -e "${MACHINE_NAME}" | sed -e 's/^[[:space:]]*//')  # This is a trim.
 PORT=9999
 VERBOSE=false
 SCREEN_HEIGHT=32
@@ -45,7 +46,7 @@ if [[ "${USER_INPUT}" != "" ]]; then
     WIRING=${USER_INPUT}
 fi
 # echo "Will use screen wiring option ${WIRING}"
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring-option:${WIRING}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
