@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# To be run from the module's root (NMEA-multiplexer), like ./scripts/start.BME280.REST.server.sh
+# To be run from the module's root (NMEA-multiplexer), like ./scripts/start.SSD1306.REST.server.sh
 #
-PYTHON_SCRIPT_NAME=src/main/python/REST_BME280_server.py
+PYTHON_SCRIPT_NAME=src/main/python/REST_SSD1306_server.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
     echo -e "It worked: ${MACHINE_NAME}"
@@ -12,7 +12,7 @@ else
 fi
 PORT=9999
 VERBOSE=false
-SIMULATE_IF_MISSING=false
+SCREEN_HEIGHT=32
 #
 echo -en "Enter Machine Name - Default [${MACHINE_NAME}] > "
 read USER_INPUT
@@ -32,13 +32,13 @@ if [[ "${USER_INPUT}" != "" ]]; then
     VERBOSE=${USER_INPUT}
 fi
 # echo "Will use verbose ${VERBOSE}"
-echo -en "Simulate if missing (true or false) ? - Default [${SIMULATE_IF_MISSING}] > "
+echo -en "Screen Height (32 or 64) ? - Default [${SCREEN_HEIGHT}] > "
 read USER_INPUT
 if [[ "${USER_INPUT}" != "" ]]; then
-    SIMULATE_IF_MISSING=${USER_INPUT}
+    SCREEN_HEIGHT=${USER_INPUT}
 fi
 # echo "Will use verbose ${SIMULATE_IF_MISSING}"
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --simulate-when-missing:${SIMULATE_IF_MISSING}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
