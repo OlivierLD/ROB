@@ -5,6 +5,8 @@
 > This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
 > the `src/main/python` directory.
 
+> Raspberry Pi GPIO Headers [here](https://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/#:~:text=The%20Raspberry%20header%20is%20the,3.3V%20(on%202%20pins)).
+
 For a Java-to-Python communication, _**TCP**_ could be an option, it is socket-based, and natively supports read and write.
 
 We would have the Java code acting as a TCP server, and we would wrap the Python code into

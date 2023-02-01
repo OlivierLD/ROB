@@ -6,7 +6,7 @@ $ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
 
 ## Use-case 1 
-### With a GPS, a BME280, and a 128x64 SSD1306 (using SPI)
+### A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI)
 > Suitable for hiking, kayaking, this kind of things.  
 > Position is read from a Serial GPS, Atmospheric data from a [BME280](https://www.adafruit.com/product/2652).  
 > Data are displayed on a [small OLED screen](https://www.adafruit.com/product/326), and logged into a file, to be replayed later. 
@@ -124,21 +124,23 @@ And you can see what's going on from a browser:
 - <http://192.168.1.103:9999/web/index.html>
 
 The Web UI available above is designed for all kinds of configurations. For example, 
-in this case (As you have a GPS and a BME280 to feed the data), you might not be able to see the True Wind Speed 🤔...  
-Again, the Web Pages presented here are to be seen as examples oif the way to consume the data.
+in this case (as you have a GPS and a BME280 to feed the data), you might not be able to see the True Wind Speed 🤔...  
+Again, the Web Pages presented here are to be seen as examples of the way to consume the data available from the cache of the Multiplexer, through REST services..
 
 #### Details
-Wiring, Schemas, Components, 3D printed enclosures... More soon.
+Wiring, Schemas, Components, 3D printed enclosures...
 
-On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: Hardware Attached on Top):
+On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: **H**ardware **A**ttached on **T**op):
 
 | Components moved down to show the wiring |
 |:-----------------------------------------:|
 | ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) |
-| Actual Position |
+| Actual Components Position |
 | ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) |
 
-3D Printed enclosure, available [here](https://github.com/OlivierLD/3DPrinting/tree/master/OpenSCAD/RPiA%2BLogger).
+3D Printed enclosure, available 
+- [here](https://github.com/OlivierLD/3DPrinting/tree/master/OpenSCAD/RPiA%2BLogger).
+- [STL, animated](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiA%2BLogger/rpi.aplus.enclosure.full.stl).
 
 | On the go |
 |:---------:|
