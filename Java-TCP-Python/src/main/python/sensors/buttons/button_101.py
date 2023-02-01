@@ -4,6 +4,7 @@ import board
 from digitalio import DigitalInOut, Direction, Pull
 
 # D20 is pin #38
+# Other pin on the GROUND.
 btn: DigitalInOut = DigitalInOut(board.D20)  # DigitalInOut(board.SWITCH)
 # print(f"Button is a {type(btn)}")
 btn.direction = Direction.INPUT
