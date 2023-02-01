@@ -51,6 +51,18 @@ If a framework becomes obsolete, or if it needs upgrades, then so does the Java 
 We want here to find a way to get rid of this kind of nasty occurrences.  
 So, an idea would be to keep this code as it is - it's working in Python, and the board provider will take care of updates, if needed - and find a way to establish a communication between this Python code and Java...
 
+> The reason why I originally went for Java is because Java is a programming language, as opposed to Python, which sounds more - to me - like a scripting language.  
+> I suspect that this last sentence may cause some eyebrows to raise, but I still believe it.  
+> Java is designed to scale, it has amazing debug capabilities (including remote debugging), it scales, it can be 
+> distributed, it is **_natively_** object-oriented, it's recursive (Java knows about Java), it's compiled - and not interpreted, etc.  
+> Python is great, and keeps getting more and more popular, for good reasons. One of them being that is may look simpler than Java,
+> and closer to the mindset of a scientist (like a mathematician).  
+> If you look at those charts ranking the different languages popularity, you would see Python's popularity keeping rising, and - for example - C's popularity stagnating at 
+> bottom of the scale... But still, at least 90% of the Operating Systems are written in C. There must be a reason.  
+> Popularity and efficiency might not be always in sync...   
+> There is obviously a lot to say about that, but I'll stop here; this could turn into an endless conversation.  
+> But now, I want to bridge a gap between Java and Python. Let's be positive.
+
 _**We will give TCP and REST a try**_, for this kind of Python-to-Java communication.  
 This will also minimize the amount of dependencies to deal with (and eventually, the size of the archives).  
 In short, we would wrap the Python code into some sort of TCP or REST server, which itself can be accessed from Java, natively.
@@ -61,8 +73,8 @@ and consolidate the number of dependencies to external libraries. For example, f
 
 The web pages and scripts _**do not rely on any external framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
 It's using vanilla ES6 features, like Promises. <!-- https://kinsta.com/blog/javascript-libraries/ -->
-> Note: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) are great tools. The goal here is to minimize the dependencies,
-> as well as the final volume of the code.
+> Note: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) **are** great tools. The goal here is to minimize the dependencies,
+> as well as the final volume of the code and archives.
 
 And we will try to implement Consumers, Forwarders and Computers as pluggable components, to facilitate the required customizations.
 
