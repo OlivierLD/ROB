@@ -109,6 +109,12 @@ and then:
 ```
 $ ../../gradlew shadowJar
 ```
+> _**Note**_: When building on small board, do not hesitate to exclude some demanding tasks, like
+> ```
+> $ ../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
+> ```
+
+
 This will compile all the required dependencies, and generate a jar (java-archive) named `./build/libs/NMEA-multiplexer-1.0-all.jar`.
 It should finish with a 
 ```

@@ -228,7 +228,7 @@ function onMessage(json) {
 		// Battery_Voltage, Relative_Humidity, Barometric_Pressure
 		if (json["Barometric Pressure"]) {
 			try {
-				let baro = json["Barometric Pressure"].pressure;
+				let baro = json["Barometric Pressure"].value;
 				if (baro != 0) {
 					events.publish(EVENT_PRMSL, baro);
 				}

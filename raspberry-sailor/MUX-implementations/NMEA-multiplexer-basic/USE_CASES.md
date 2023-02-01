@@ -117,7 +117,7 @@ Reading serial port...
 . . .
 ```
 > _**Note**_: if the Serial port of the GPS is giving you trouble, run the script
-> `../RESTNavServer/mk.link.sh`
+> `../RESTNavServer/mk.link.sh` ...
 
 Data are read, displayed and logged.  
 And you can see what's going on from a browser:
