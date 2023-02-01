@@ -33,13 +33,14 @@ BORDER: int = 5
 WHITE: int = 255
 BLACK: int = 0
 
+oled: None
+
 # Use for I2C.
 if False:
     i2c = board.I2C()  # uses board.SCL and board.SDA
     # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
     oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
     # print(f"Oled is a {type(oled)}")
-
 
 # Use for SPI
 if True:
@@ -48,7 +49,7 @@ if True:
     oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
     # oled_dc = digitalio.DigitalInOut(board.D6)
     oled_dc = digitalio.DigitalInOut(board.D23)  # Pin #16
-    oled = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+    oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
 
 # Clear display.
 oled.fill(BLACK)

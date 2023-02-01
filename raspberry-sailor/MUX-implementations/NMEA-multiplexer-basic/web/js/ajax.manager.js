@@ -115,172 +115,268 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "full data");
 		}
 
-		try {
-			let latitude = json.Position.lat;
-//          console.log("latitude:" + latitude)
-			let longitude = json.Position.lng;
-//          console.log("Pt:" + latitude + ", " + longitude);
-			events.publish(EVENT_POS, {
-				'lat': latitude,
-				'lng': longitude
-			});
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "position");
-		}
 		// Publishes
-		try {
-			let bsp = json.BSP.speed;
-			events.publish(EVENT_BSP, bsp);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "boat speed");
+		if (json.Position) {
+			try {
+				let latitude = json.Position.lat;
+	//          console.log("latitude:" + latitude)
+				let longitude = json.Position.lng;
+	//          console.log("Pt:" + latitude + ", " + longitude);
+				events.publish(EVENT_POS, {
+					'lat': latitude,
+					'lng': longitude
+				});
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "position");
+			}
+		} else {
+			console.log("No Position");
 		}
-		try {
-			let log = json.Log.distance;
-			events.publish(EVENT_LOG, log);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "log (" + err + ")");
+		if (json.BSP) {
+			try {
+				let bsp = json.BSP.speed;
+				events.publish(EVENT_BSP, bsp);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "boat speed");
+			}
+		} else {
+			console.log("No BSP");
 		}
-		try {
-			let gpsDate = json["GPS Date & Time"].date;
-			events.publish(EVENT_GPS_TIME, gpsDate);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
+		if (json.Log) {
+			try {
+				let log = json.Log.distance;
+				events.publish(EVENT_LOG, log);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "log (" + err + ")");
+			}
+		} else {
+			console.log("No LOG");
 		}
-
-		try {
-			let hdg = json["HDG true"].angle;
-			events.publish(EVENT_HDG, hdg);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "heading");
-		}
-		try {
-			let twd = json.TWD.angle;
-			events.publish(EVENT_TWD, twd);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWD");
-		}
-		try {
-			let twa = json.TWA.angle;
-			events.publish(EVENT_TWA, twa);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWA");
-		}
-		try {
-			let tws = json.TWS.speed;
-			events.publish(EVENT_TWS, tws);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWS");
-		}
-
-		try {
-			let waterTemp = json["Water Temperature"].temperature;
-			events.publish(EVENT_WT, waterTemp);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "water temperature");
+		if (json["GPS Date & Time"]) {
+			try {
+				let gpsDate = json["GPS Date & Time"].date;
+				events.publish(EVENT_GPS_TIME, gpsDate);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
+			}
+		} else {
+			console.log("No GPS Data");
 		}
 
-		try {
-			let airTemp = json["Air Temperature"].temperature;
-			events.publish(EVENT_AT, airTemp);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "air temperature");
+		if (json["HDG true"]) {
+			try {
+				let hdg = json["HDG true"].angle;
+				events.publish(EVENT_HDG, hdg);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "heading");
+			}
+		} else {
+			console.log("No HDG");
+		}
+		if (json.TWD) {
+			try {
+				let twd = json.TWD.angle;
+				events.publish(EVENT_TWD, twd);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWD");
+			}
+		} else {
+			console.log("No TWD");
+		}
+		if (json.TWA) {
+			try {
+				let twa = json.TWA.angle;
+				events.publish(EVENT_TWA, twa);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWA");
+			}
+		} else {
+			console.log("No TWA");
+		}
+		if (json.TWS) {
+			try {
+				let tws = json.TWS.speed;
+				events.publish(EVENT_TWS, tws);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWS");
+			}
+		} else {
+			console.log("No TWS");
+		}
+
+		if (json["Water Temperature"]) {
+			try {
+				let waterTemp = json["Water Temperature"].temperature;
+				events.publish(EVENT_WT, waterTemp);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "water temperature");
+			}
+		} else {
+			console.log("No Water Temp.");
+		}
+
+		if (json["Air Temperature"]) {
+			try {
+				let airTemp = json["Air Temperature"].temperature;
+				events.publish(EVENT_AT, airTemp);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "air temperature");
+			}
+		} else {
+			console.log("No Air Temp.");
 		}
 		// Battery_Voltage, Relative_Humidity, Barometric_Pressure
-		try {
-			let baro = json["Barometric Pressure"].pressure;
-			if (baro != 0) {
-				events.publish(EVENT_PRMSL, baro);
+		if (json["Barometric Pressure"]) {
+			try {
+				let baro = json["Barometric Pressure"].pressure;
+				if (baro != 0) {
+					events.publish(EVENT_PRMSL, baro);
+				}
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "PRMSL");
 			}
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "PRMSL");
+		} else {
+			console.log("No Baro.");
 		}
-		try {
-			let hum = json["Relative Humidity"];
-			if (hum > 0) {
-				events.publish(EVENT_HUM, hum);
+		if (json["Relative Humidity"]) {
+			try {
+				let hum = json["Relative Humidity"];
+				if (hum > 0) {
+					events.publish(EVENT_HUM, hum);
+				}
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Relative_Humidity");
 			}
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Relative_Humidity");
+		} else {
+			console.log("No HUM");
 		}
-		try {
-			let aws = json.AWS.speed;
-			events.publish(EVENT_AWS, aws);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWS");
+		if (json.AWS) {
+			try {
+				let aws = json.AWS.speed;
+				events.publish(EVENT_AWS, aws);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWS");
+			}
+		} else {
+			console.log("No AWS");
 		}
-		try {
-			let awa = json.AWA.angle;
-			events.publish(EVENT_AWA, awa);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWA");
+		if (json.AWA) {
+			try {
+				let awa = json.AWA.angle;
+				events.publish(EVENT_AWA, awa);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWA");
+			}
+		} else {
+			console.log("No AWA");
 		}
-		try {
-			let cdr = json.CDR.angle;
-			events.publish(EVENT_CDR, cdr);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CDR");
+		if (json.CDR) {
+			try {
+				let cdr = json.CDR.angle;
+				events.publish(EVENT_CDR, cdr);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CDR");
+			}
+		} else {
+			console.log("No CDR");
 		}
-		try {
-			let cog = json.COG.angle;
-			events.publish(EVENT_COG, cog);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "COG");
+		if (json.COG) {
+			try {
+				let cog = json.COG.angle;
+				events.publish(EVENT_COG, cog);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "COG");
+			}
+		} else {
+			console.log("No COG");
 		}
-		try {
-			let cmg = json.CMG.angle;
-			events.publish(EVENT_CMG, cmg);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CMG");
+		if (json.CMG) {
+			try {
+				let cmg = json.CMG.angle;
+				events.publish(EVENT_CMG, cmg);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CMG");
+			}
+		} else {
+			console.log("No CMG");
 		}
-		try {
-			let leeway = json.Leeway.angle;
-			events.publish(EVENT_LEEWAY, leeway);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Leeway");
+		if (json.Leeway) {
+			try {
+				let leeway = json.Leeway.angle;
+				events.publish(EVENT_LEEWAY, leeway);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Leeway");
+			}
+		} else {
+			console.log("No leeway");
 		}
-		try {
-			let csp = json.CSP.speed;
-			events.publish(EVENT_CSP, csp);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CSP");
+		if (json.CSP) {
+			try {
+				let csp = json.CSP.speed;
+				events.publish(EVENT_CSP, csp);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CSP");
+			}
+		} else {
+			console.log("No CSP");
 		}
-		try {
-			let sog = json.SOG.speed;
-			events.publish(EVENT_SOG, sog);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
+		if (json.SOG) {
+			try {
+				let sog = json.SOG.speed;
+				events.publish(EVENT_SOG, sog);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
+			}
+		} else {
+			console.log("No SOG");
 		}
 		// to-wp, vmg-wind, vmg-wp, b2wp
-		try {
-			let to_wp = json["To Waypoint"];
-			let b2wp = json["Bearing to WP"].angle;
-			events.publish(EVENT_WP, {
-				'to_wp': to_wp,
-				'b2wp': b2wp
-			});
-		} catch (err) {
+		if (json["To Waypoint"] && json["Bearing to WP"]) {
+			try {
+				let to_wp = json["To Waypoint"];
+				let b2wp = json["Bearing to WP"].angle;
+				events.publish(EVENT_WP, {
+					'to_wp': to_wp,
+					'b2wp': b2wp
+				});
+			} catch (err) {
+			}
+		} else {
+			console.log("No WP info");
 		}
 
-		try {
-			events.publish(EVENT_VMG, {
-				'onwind': json["VMG on Wind"],
-				'onwp': json["VMG to Waypoint"]
-			});
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "VMG");
+		if (json["VMG on Wind"] && json["VMG to Waypoint"]) {
+			try {
+				events.publish(EVENT_VMG, {
+					'onwind': json["VMG on Wind"],
+					'onwp': json["VMG to Waypoint"]
+				});
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "VMG");
+			}
+		} else {
+			console.log("Not enough VMG info");
 		}
 
-		try {
-			let prate = json.prate;
-			events.publish(EVENT_PRATE, prate);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "prate");
+		if (json.prate) {
+			try {
+				let prate = json.prate;
+				events.publish(EVENT_PRATE, prate);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "prate");
+			}
+		} else {
+			console.log("No PRATE");
 		}
-		try {
-			let dew = json.dewpoint;
-			events.publish(EVENT_DEW, dew);
-		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "dew");
+		if (json.dewpoint) {
+			try {
+				let dew = json.dewpoint;
+				events.publish(EVENT_DEW, dew);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "dew");
+			}
+		} else {
+			console.log("No dewpoint");
 		}
 
 		if (errMess && forwardAjaxErrors) {

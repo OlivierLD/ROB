@@ -1,5 +1,6 @@
 # Java to Python, Python to Java, using TCP
-## A playground. Tests, Drafts, Tentatives, Tries ...
+## A playground. 
+### Tests, Drafts, Tentatives, Tries, Errors, Mistakes ...
 
 > This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
 > the `src/main/python` directory.

@@ -25,7 +25,7 @@ import busio
 import NMEABuilder   # local script
 
 
-from adafruit_bme280 import basic as adafruit_bme280
+from adafruit_bme280 import basic as adafruit_bme280  # pip3 install adafruit-circuitpython-bme280
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"

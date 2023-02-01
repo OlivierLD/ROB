@@ -37,7 +37,7 @@ Server is listening. [Ctrl-C] will stop the process.
 The port above (`8001`) is the one defined in `nmea.mux.kayak.ssd1306.yaml`:
 ```yaml
 channels:
-  . . .
+  - . . .
   - type: tcp
     server: 192.168.1.103
     port: 8001
@@ -120,10 +120,12 @@ Reading serial port...
 > `../RESTNavServer/mk.link.sh`
 
 Data are read, displayed and logged.  
-And you can see what's going on from a brower:
+And you can see what's going on from a browser:
 - <http://192.168.1.103:9999/web/index.html>
 
 #### Details
+
+<!-- TODO Add wiring: /Users/olivierlediouris/repos/raspberry-coffee/NMEA-mux-WebUI/perma-proto-pi-hat_bb_01.png --> 
 . . .
 
 ---

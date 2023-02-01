@@ -14,7 +14,7 @@ import board
 import digitalio
 import PIL
 from PIL import Image, ImageDraw, ImageFont
-import adafruit_ssd1306
+import adafruit_ssd1306   # pip3 install adafruit-circuitpython-ssd1306
 import time
 
 __version__ = "0.0.1"
