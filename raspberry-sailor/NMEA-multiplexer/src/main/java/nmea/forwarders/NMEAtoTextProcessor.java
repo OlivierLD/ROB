@@ -744,6 +744,14 @@ public class NMEAtoTextProcessor implements Forwarder {
         public NMEAtoTextBean(NMEAtoTextProcessor instance) {
             cls = instance.getClass().getName();
         }
+
+        public String getCls() {
+            return cls;
+        }
+
+        public String getType() {
+            return type;
+        }
     }
 
     @Override
