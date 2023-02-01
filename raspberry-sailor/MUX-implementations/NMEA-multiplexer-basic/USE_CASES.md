@@ -8,8 +8,8 @@ $ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ## Use-case 1 
 ### With a GPS, a BME280, and a 128x64 SSD1306 (using SPI)
 > Suitable for hiking, kayaking, this kind of things.  
-> Position is read from a Serial GPS, Atmospheric data from a BME280.  
-> Data are displayed on a small OLED screen, and logged into a file, to be replayed later. 
+> Position is read from a Serial GPS, Atmospheric data from a [BME280](https://www.adafruit.com/product/2652).  
+> Data are displayed on a [small OLED screen](https://www.adafruit.com/product/326), and logged into a file, to be replayed later. 
 
 **We assume below that the address of the board you're running on is `192.168.1.103`.**
 
@@ -123,9 +123,26 @@ Data are read, displayed and logged.
 And you can see what's going on from a browser:
 - <http://192.168.1.103:9999/web/index.html>
 
-#### Details
+The Web UI available above is designed for all kinds of configurations. For example, 
+in this case (As you have a GPS and a BME280 to feed the data), you might not be able to see the True Wind Speed 🤔...  
+Again, the Web Pages presented here are to be seen as examples oif the way to consume the data.
 
-<!-- TODO Add wiring: /Users/olivierlediouris/repos/raspberry-coffee/NMEA-mux-WebUI/perma-proto-pi-hat_bb_01.png --> 
-. . .
+#### Details
+Wiring, Schemas, Components, 3D printed enclosures... More soon.
+
+On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: Hardware Attached on Top):
+
+| Components moved down to show the wiring |
+|:-----------------------------------------:|
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) |
+| Actual Position |
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) |
+
+3D Printed enclosure, available [here](https://github.com/OlivierLD/3DPrinting/tree/master/OpenSCAD/RPiA%2BLogger).
+
+| On the go |
+|:---------:|
+| ![Full Setting](./doc_resources/01.full.setting.jpg) |
+| ![At work](./doc_resources/kayak.setting.jpg) |
 
 ---
