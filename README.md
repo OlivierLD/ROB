@@ -141,6 +141,9 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ## Customize, Build, and Deploy
 - WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now.
 
+Also, by using TCP and REST, all sensors and actuators using those protocols can be _distributed_, they do not have to be located on the same board.
+You can very well have the GPS and NMEA data read from one Raspberry Pi somewhere, the Magnetometer (like an LSM303) somewhere else, and all those guys
+feeding the NMEA-multiplexer, located on another board.
 
 ## TODO next
 Wow! Vast topic...

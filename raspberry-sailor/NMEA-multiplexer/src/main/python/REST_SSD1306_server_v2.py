@@ -4,6 +4,11 @@
 # ---------
 # pip3 install http (already in python3.7, no need to install it)
 #
+# Different from the REST_SSD1306_server.py.
+# That one receives full the cache (as JSON) and manages the display of the data by itself.
+# It can also deal with push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
+#
+# Work In Progress !
 #
 import json
 import sys
@@ -12,6 +17,7 @@ from typing import Dict
 from typing import List
 import board
 import digitalio
+from digitalio import DigitalInOut, Direction, Pull
 import PIL
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306   # pip3 install adafruit-circuitpython-ssd1306
@@ -33,11 +39,61 @@ PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
 
+DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
+
 oled = None
 
 # Define the Reset Pin
 reset_pin = board.D4  # Pin #7
 oled_reset = digitalio.DigitalInOut(reset_pin)
+
+current_value: int = 0
+
+pin_button_01 = board.D20  # pin #38
+pin_button_02 = board.D21  # pin #40
+
+
+def button_listener(pin, state) -> None:
+    global current_value
+    global pin_button_01
+    global pin_button_02
+    if VERBOSE:
+        print(f"Yo! {pin}, state {state}")
+    if pin == pin_button_01 and state == True:
+        current_value += 1
+    if pin == pin_button_02 and state == True:
+        current_value -= 1
+    if state:
+        print(f"Current Value is now {current_value}")
+
+
+def button_manager(pin, callback) -> None:
+    global keep_looping
+    btn: DigitalInOut = DigitalInOut(pin)
+    # print(f"Button is a {type(btn)}")
+    btn.direction = Direction.OUTPUT
+    # btn.pull = Pull.UP
+
+    prev_state: bool = btn.value
+    # print(f"Button State is a {type(prev_state)}")
+    while keep_looping:
+        try:
+            cur_state: bool = btn.value
+            if cur_state != prev_state:
+                if not cur_state:
+                    if VERBOSE:
+                        print("BTN is UP")
+                    callback(pin, False)  # Broadcast wherever needed
+                else:
+                    if VERBOSE:
+                        print("BTN is DOWN")
+                    callback(pin, True)   # Broadcast wherever needed
+            prev_state = cur_state
+            time.sleep(0.1) # sleep for debounce
+        except Exception as oops:
+            print(f"Error: {repr(oops)}")
+    print(f"Done with button listener on pin {pin}")
+
 
 # Change these
 # to the right size for your display!
@@ -111,6 +167,21 @@ else:
         print("No SPI SSD1306 was found...")
         oled = None
 
+# Now, let's go
+# Initialize buttons
+print("Press button connected on GPIO-20 to scroll up")
+button_thread_01: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_01, button_listener))
+# print(f"Thead is a {type(button_thread_01)}")
+button_thread_01.daemon = True  # Dies on exit
+button_thread_01.start()
+
+print("Press button connected on GPIO-21 to scroll down")
+button_thread_02: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_02, button_listener))
+button_thread_02.daemon = True  # Dies on exit
+button_thread_02.start()
+
+
+# Initialize OLED screen.
 # Clear display.
 if oled is not None:
     oled.fill(BLACK)
@@ -139,7 +210,7 @@ draw.rectangle(
 font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 # print(f"Font is a {type(font)}")
 
-# Draw Some Text
+# Draw Some Text, at startup.
 text: str = "Init SSD1306"
 (font_width, font_height) = font.getsize(text)
 draw.text(
@@ -201,7 +272,7 @@ def clear() -> None:
         print(f"Error: {repr(error)}")
 
 
-# Defining an HTTP request Handler class
+# Defining an HTTP request Handler class, for REST requests
 class ServiceHandler(BaseHTTPRequestHandler):
     # sets basic headers for the server
     def _set_headers(self):
@@ -271,7 +342,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 }, {
                     "path": PATH_PREFIX + "/nmea-data",
                     "verb": "PUT",
-                    "description": "Write on the screen."
+                    "description": "Receive the cache, in JSON format."
                 }, {
                     "path": PATH_PREFIX + "/clear-screen",
                     "verb": "PUT",
@@ -349,17 +420,16 @@ class ServiceHandler(BaseHTTPRequestHandler):
     def do_PUT(self):
         if verbose:
             print("PUT request, {}".format(self.path))
-        if self.path == PATH_PREFIX + "/nmea-data":
+        if self.path == PATH_PREFIX + "/nmea-data":  # Receive the full NMEA Cache, as a JSON Object
             content_len: int = int(self.headers.get('Content-Length'))
             body: str = self.rfile.read(content_len).decode('utf-8')
             if verbose:
                 print("Content: {}".format(body))
             try:
                 if verbose:
-                    print(f"Displaying {body}")
+                    print(f"Received {body}")
                 # Display body lines on screen
-                line_list: List[str] = body.split('|')
-                display(line_list)
+                display("Cache was received")  # Temp
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -414,6 +484,22 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
+def display_manager() -> None:
+    global current_value
+    while keep_looping:
+        if current_value % 2 == 0:
+            display(["Bim !"])
+        else:
+            display(["Bam !"])
+        time.sleep(1.0)
+
+
+# Initialize the display thread
+display_thread: threading.Thread = threading.Thread(target=display_manager, args=())
+display_thread.daemon = True  # Dies on exit
+display_thread.start()
+
+
 # Server Initialization
 port_number: int = server_port
 print("Starting SSD1306 server on port {}".format(port_number))
@@ -427,7 +513,12 @@ try:
     server.serve_forever()
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
+    button_thread_01.join()
+    button_thread_02.join()
+    display_thread.join()
 
+
+# After all
 if oled is not None:
     clear()
 print("Done with REST SSD1306 server.")
