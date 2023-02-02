@@ -8,11 +8,11 @@
 ![Wiring](../../../../../resources/PushButtons_bb.png)
 To use with the code in `button_101.py` and `button_listener.py`.
 
-## Unusual wiring
+## Unusual wiring...
 I've also - probably by mistake - tested another button wiring, that seems to work too.
 ![Wiring](../../../../../resources/PushButtons_inv_bb.png)
 The red wires are connected on the `3V3`.  
-The code to use is `button_101_inv.py` in this case.
+The code to use is `button_101_inv.py` and `button_listener_inv.py` in this case.
 
 ## Docs to look at
 - <https://realpython.com/intro-to-python-threading/>
