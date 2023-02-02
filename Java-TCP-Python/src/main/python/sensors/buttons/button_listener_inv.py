@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#
 # Warning!
 # The button PINs are in this case connected on the 3.3V !! And not on the ground.
 # That seems to work, states are inverted, but they react as anticipated.
