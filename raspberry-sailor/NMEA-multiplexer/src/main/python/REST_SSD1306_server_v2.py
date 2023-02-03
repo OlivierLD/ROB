@@ -558,13 +558,23 @@ def format_data(id: str) -> List[str]:
                 f"COG: {cog}°",
                 f"SOG: {sog} kts"]
         elif id == "ATP":
-            pass
+            atp: float = nmea_cache["Air Temperature"]["value"]
+            formatted = [ "AIR", f"{atp}°C" ]
         elif id == "PRM":
-            pass
+            prmsl: float = nmea_cache["Barometric Pressure"]["value"]
+            formatted = [ "PRMSL", f"{prmsl} hPa" ]
         elif id == "HUM":
-            pass
+            hum: float = nmea_cache["Relative Humidity"]
+            formatted = [ id, f"{hum}%" ]
         elif id == "ATM":  # ATP, PRS, HUM
-            pass
+            atp: float = nmea_cache["Air Temperature"]["value"]
+            prmsl: float = nmea_cache["Barometric Pressure"]["value"]
+            hum: float = nmea_cache["Relative Humidity"]
+            formatted = [
+                f"PRMSL: {prmsl} hPa",
+                f"AIR  : {atp}°C",
+                f"HUM  : {hum} %"
+            ]
         else:
             formatted = [id, "Not implemented"]
     except TypeError as te:
