@@ -650,6 +650,47 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
+                        case "nmea-cache-publisher":
+                            String cacheSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            Integer restPort = null;
+                            Long betweenLoops = null;
+                            String strPort = muxProps.getProperty(String.format("forward.%s.rest.port", MUX_IDX_FMT.format(fwdIdx)));
+                            String strBetweenLoops = muxProps.getProperty(String.format("forward.%s.between-loops", MUX_IDX_FMT.format(fwdIdx)));
+                            String protocol = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(fwdIdx)));
+                            String machine = muxProps.getProperty(String.format("forward.%s.rest.machine-name", MUX_IDX_FMT.format(fwdIdx)));
+                            String resource = muxProps.getProperty(String.format("forward.%s.rest.resource", MUX_IDX_FMT.format(fwdIdx)));
+                            String verb = muxProps.getProperty(String.format("forward.%s.rest.verb", MUX_IDX_FMT.format(fwdIdx)));
+                            String qs = muxProps.getProperty(String.format("forward.%s.rest.query.string", MUX_IDX_FMT.format(fwdIdx)));
+                            try {
+                                if (strPort != null) {
+                                    restPort = Integer.parseInt(strPort);
+                                }
+                                if (strBetweenLoops != null) {
+                                    betweenLoops = Long.parseLong(strBetweenLoops);
+                                }
+                                // Validate values (protocol, verb, ...)
+                                if (protocol != null && !protocol.equals("http") && !protocol.equals("https")) {
+                                    protocol = null;
+                                    System.err.printf("Protocol [%s] not supported. Only http and https can be used. Keeping default.\n", protocol);
+                                }
+                                if (verb != null && !verb.equals("PUT") && !verb.equals("POST")) {
+                                    verb = null;
+                                    System.err.printf("Verb [%s] not supported. Only PUT and POST can be used. Keeping default.\n", verb);
+                                }
+                                Forwarder cachePublisher = null;
+                                if (cacheSubClass == null) {
+                                    cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs);
+                                } else {
+                                    // TODO Manage this subclass case
+                                    System.err.println("Subclass case not managed yet...");
+                                }
+
+                                cachePublisher.init();
+                                nmeaDataForwarders.add(cachePublisher);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
                         default:
                             throw new RuntimeException(String.format("forward type [%s] not supported yet.", type));
                     }

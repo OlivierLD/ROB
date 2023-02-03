@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import math
+
 
 def sex_to_dec(degrees: str, minutes: str) -> float:
     """
@@ -17,6 +19,29 @@ def sex_to_dec(degrees: str, minutes: str) -> float:
         raise Exception(f"Cannot convert {degrees} {minutes}, {repr(error)}")
 
 
+#
+# sign_type is "NS" or "EW". Default is NS
+#
+def dec_to_sex(value: float, sign_type: str) -> str:
+    abs_val = abs(value)
+    int_value: float = math.floor(abs_val)
+    dec: float = abs_val - int_value
+    i: int = int(int_value)
+    dec *= 60
+    converted: str = f"{i}°{dec:02.2f}'"
+    if value < 0:
+        if sign_type is None or sign_type == "NS":
+            converted = "S " + converted
+        elif sign_type == "EW":
+            converted = "W " + converted
+    else:
+        if sign_type is None or sign_type == "NS":
+            converted = "N " + converted
+        elif sign_type == "EW":
+            converted = "E " + converted
+    return converted
+
+
 # This is for tests
 if __name__ == '__main__':
     deg: str = "37"
@@ -29,3 +54,9 @@ if __name__ == '__main__':
         print(f"{deg} {min} => {sex_to_dec(deg, min)}")
     except Exception as error:
         print(f"{repr(error)}")
+
+    try:
+        dec: float = 37.20566666
+        print(f"{dec} => {dec_to_sex(dec, 'NS')}")
+    except Exception as oops:
+        print(f"{repr(oops)}")

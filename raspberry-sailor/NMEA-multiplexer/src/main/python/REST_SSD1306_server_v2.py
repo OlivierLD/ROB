@@ -15,13 +15,15 @@ import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from typing import List
+import threading
 import board
 import digitalio
 from digitalio import DigitalInOut, Direction, Pull
 import PIL
 from PIL import Image, ImageDraw, ImageFont
-import adafruit_ssd1306   # pip3 install adafruit-circuitpython-ssd1306
+import adafruit_ssd1306  # pip3 install adafruit-circuitpython-ssd1306
 import time
+import utils  # local script
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -41,6 +43,10 @@ HEIGHT_PREFIX: str = "--height:"
 
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
+# Supported data (see format_data method):
+# BSP, POS, SOG, COG, NAV
+# TODO: More data
+
 oled = None
 
 # Define the Reset Pin
@@ -48,6 +54,16 @@ reset_pin = board.D4  # Pin #7
 oled_reset = digitalio.DigitalInOut(reset_pin)
 
 current_value: int = 0
+keep_looping: bool = True
+nmea_cache: Dict[str, object] = None
+
+# Default list
+nmea_data: List[str] = [
+    "BSP",  # Boat Speed
+    "SOG",  # Speed Over Ground
+    "COG",  # Course Over Ground
+    "POS"  # Position
+]
 
 pin_button_01 = board.D20  # pin #38
 pin_button_02 = board.D21  # pin #40
@@ -55,22 +71,30 @@ pin_button_02 = board.D21  # pin #40
 
 def button_listener(pin, state) -> None:
     global current_value
+    global nmea_data
     global pin_button_01
     global pin_button_02
-    if VERBOSE:
+    if verbose:
         print(f"Yo! {pin}, state {state}")
     if pin == pin_button_01 and state == True:
         current_value += 1
     if pin == pin_button_02 and state == True:
         current_value -= 1
-    if state:
-        print(f"Current Value is now {current_value}")
+    if current_value < 0:
+        current_value = len(nmea_data) - 1
+    if current_value >= len(nmea_data):
+        current_value = 0
+    if state and verbose:
+        print(f"Current index in list is now {current_value}")
 
 
 def button_manager(pin, callback) -> None:
     global keep_looping
     btn: DigitalInOut = DigitalInOut(pin)
     # print(f"Button is a {type(btn)}")
+    #
+    # Warning: Button wired on the 3V3, and not on GND !!!
+    #
     btn.direction = Direction.OUTPUT
     # btn.pull = Pull.UP
 
@@ -81,15 +105,15 @@ def button_manager(pin, callback) -> None:
             cur_state: bool = btn.value
             if cur_state != prev_state:
                 if not cur_state:
-                    if VERBOSE:
+                    if verbose:
                         print("BTN is UP")
                     callback(pin, False)  # Broadcast wherever needed
                 else:
-                    if VERBOSE:
+                    if verbose:
                         print("BTN is DOWN")
-                    callback(pin, True)   # Broadcast wherever needed
+                    callback(pin, True)  # Broadcast wherever needed
             prev_state = cur_state
-            time.sleep(0.1) # sleep for debounce
+            time.sleep(0.1)  # sleep for debounce
         except Exception as oops:
             print(f"Error: {repr(oops)}")
     print(f"Done with button listener on pin {pin}")
@@ -134,6 +158,14 @@ if len(sys.argv) > 0:  # Script name + X args
                     print(f"Height must be 32 or 64, not {user_height}")
             except Exception as error:
                 print(f"Height error: {repr(error)}")
+        if arg[:len(DATA_PREFIX)] == DATA_PREFIX:
+            user_list = arg[len(DATA_PREFIX):].split(',')
+            nmea_data = []  # reset
+            for id in user_list:
+                nmea_data.append(id.strip())
+            if verbose:
+                print("Data list:")
+                print(nmea_data)
 
 if oled_wiring_option == "I2C":
     # Use for I2C.
@@ -141,7 +173,8 @@ if oled_wiring_option == "I2C":
     # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
     print(f"Using RESET {reset_pin}")
     try:
-        oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
+        oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C,
+                                                                          reset=oled_reset)
     except:
         print("No I2C SSD1306 was found...")
         oled = None
@@ -161,7 +194,8 @@ else:
     print(f"Using DC {dc_pin}")
 
     try:
-        oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+        oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset,
+                                                                          oled_cs)
         # print(f"SSD1306 is a {type(oled)}")
     except:
         print("No SPI SSD1306 was found...")
@@ -179,7 +213,6 @@ print("Press button connected on GPIO-21 to scroll down")
 button_thread_02: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_02, button_listener))
 button_thread_02.daemon = True  # Dies on exit
 button_thread_02.start()
-
 
 # Initialize OLED screen.
 # Clear display.
@@ -418,6 +451,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # PUT method Definition
     def do_PUT(self):
+        global nmea_cache
         if verbose:
             print("PUT request, {}".format(self.path))
         if self.path == PATH_PREFIX + "/nmea-data":  # Receive the full NMEA Cache, as a JSON Object
@@ -426,10 +460,14 @@ class ServiceHandler(BaseHTTPRequestHandler):
             if verbose:
                 print("Content: {}".format(body))
             try:
-                if verbose:
-                    print(f"Received {body}")
-                # Display body lines on screen
-                display("Cache was received")  # Temp
+                # Parse it
+                try:
+                    nmea_cache = json.loads(body)
+                    if verbose:
+                        print(">>> Cache parsed OK")
+                except Exception as whatzat:
+                    print(f">>> Parsing cache -> Oops: {repr(whatzat)}")
+                # display("Cache was received")  # Temp
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -484,14 +522,60 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
+def format_data(id: str) -> List[str]:
+    global nmea_cache
+
+    formatted: List[str] = None  # Init
+
+    try:
+        if id == "BSP":
+            bsp = nmea_cache[id]["speed"]
+            formatted = ["BSP", f"{bsp} kts"]
+        elif id == "SOG":
+            sog = nmea_cache[id]["speed"]
+            formatted = ["SOG", f"{sog} kts"]
+        elif id == "COG":
+            cog = nmea_cache[id]["angle"]
+            formatted = ["COG", f"{cog}°"]
+        elif id == "POS":
+            position: Dict = nmea_cache["Position"]
+            latitude: float = position["lat"]
+            longitude: float = position["lng"]
+            grid: str = position["gridSquare"]
+            formatted = [id, utils.dec_to_sex(latitude, "NS"), utils.dec_to_sex(longitude, "EW"), grid]
+        elif id == "NAV":
+            # Warning: 5 lines, too many lines for a 128x32
+            position: Dict = nmea_cache["Position"]
+            latitude: float = position["lat"]
+            longitude: float = position["lng"]
+            grid: str = position["gridSquare"]
+            sog = nmea_cache["SOG"]["speed"]
+            cog = nmea_cache["COG"]["angle"]
+            formatted = [
+                f"POS: {utils.dec_to_sex(latitude, 'NS')}",
+                f"     {utils.dec_to_sex(longitude, 'EW')}",
+                f"     {grid}",
+                f"COG: {cog}°",
+                f"SOG: {sog} kts"]
+        else:
+            formatted = [id, "Not implemented"]
+    except TypeError as te:
+        formatted = [id, "Not in Cache (yet)"]
+    except Exception as oops:
+        print(f"{id}:{repr(oops)}")
+        formatted = [f"{id}:{repr(oops)}"]
+    return formatted
+
+
 def display_manager() -> None:
     global current_value
+    global keep_looping
     while keep_looping:
-        if current_value % 2 == 0:
-            display(["Bim !"])
-        else:
-            display(["Bam !"])
+        to_display: List[str] = format_data(nmea_data[current_value])
+        display(to_display)
+        # display([f"{current_value} -> {nmea_data[current_value]}"])
         time.sleep(1.0)
+    print("Done with display thread")
 
 
 # Initialize the display thread
@@ -499,12 +583,15 @@ display_thread: threading.Thread = threading.Thread(target=display_manager, args
 display_thread.daemon = True  # Dies on exit
 display_thread.start()
 
-
 # Server Initialization
 port_number: int = server_port
 print("Starting SSD1306 server on port {}".format(port_number))
 server = HTTPServer((machine_name, port_number), ServiceHandler)
 #
+# For dev. Requires import sample_cache
+# nmea_cache = json.loads(sample_cache.sample_json)
+
+print("Server ready for duty.")
 print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
 print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number,
                                                                                     PATH_PREFIX))
@@ -513,10 +600,10 @@ try:
     server.serve_forever()
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
+    keep_looping = False
     button_thread_01.join()
     button_thread_02.join()
     display_thread.join()
-
 
 # After all
 if oled is not None:
