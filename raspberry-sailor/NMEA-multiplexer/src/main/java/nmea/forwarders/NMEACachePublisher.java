@@ -237,6 +237,34 @@ public class NMEACachePublisher implements Forwarder {
         public String getType() {
             return type;
         }
+
+        public long getBetweenLoops() {
+            return betweenLoops;
+        }
+
+        public String getProtocol() {
+            return protocol;
+        }
+
+        public String getVerb() {
+            return verb;
+        }
+
+        public String getMachineName() {
+            return machineName;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public String getResource() {
+            return resource;
+        }
+
+        public String getQueryString() {
+            return queryString;
+        }
     }
 
     @Override
