@@ -44,7 +44,7 @@ HEIGHT_PREFIX: str = "--height:"
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV
+# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM
 # TODO: More data
 
 oled = None
@@ -557,6 +557,14 @@ def format_data(id: str) -> List[str]:
                 f"     {grid}",
                 f"COG: {cog}°",
                 f"SOG: {sog} kts"]
+        elif id == "ATP":
+            pass
+        elif id == "PRM":
+            pass
+        elif id == "HUM":
+            pass
+        elif id == "ATM":  # ATP, PRS, HUM
+            pass
         else:
             formatted = [id, "Not implemented"]
     except TypeError as te:
