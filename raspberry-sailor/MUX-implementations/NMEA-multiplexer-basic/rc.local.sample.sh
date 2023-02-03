@@ -6,6 +6,8 @@
 # Link the Serial Port
 # sudo ln -s /dev/ttyACM0 /dev/ttyS80
 #
+# If started from rc.local, make sure the python modules are installed with sudo.
+#
 # Start the REST Server for BME280
 ~pi/repos/ROB/raspberry-sailor/NMEA-multiplexer/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:$(hostname -I) --port:9876 --verbose:false > bme280.python.log 2>&1
 sleep 10

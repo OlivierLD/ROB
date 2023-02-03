@@ -142,6 +142,11 @@ let getComputers = () => {
     return getPromise('/mux/computers', DEFAULT_TIMEOUT, 'GET', 200);
 };
 
+let getCache = () => {
+    return getPromise('/mux/cache', DEFAULT_TIMEOUT, 'GET', 200);
+};
+
+
 let addForwarder = (forwarder) => {
     return getPromise('/mux/forwarders', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 200 || ret === 201); }, forwarder);
 };
@@ -880,6 +885,40 @@ let generateDiagram = () => {
             document.getElementById("lists").style.display = 'none';
         }
         errManager.display("Failed to get nmea.computers list..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+    });
+};
+
+let generateCache = () => {
+    let before = new Date().getTime();
+    let getData = getCache();
+    getData.then((value) => {
+        let after = new Date().getTime();
+        document.body.style.cursor = 'default';
+        console.log("Done in " + (after - before) + " ms :", value);
+        let json = JSON.parse(value);
+        setRESTPayload(json, (after - before));
+        let html = "<h5>NMEA Cache</h5>";
+        if (json) {
+            html += "<div style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
+            html += "<pre>" + JSON.stringify(json, null, 2) + "</pre>";
+            html += "</div>";
+        } else {
+            html += "<i>No Cache available</i>";
+        }
+        document.getElementById("lists").innerHTML = html;
+        document.getElementById("diagram").style.display = 'none';
+        document.getElementById("lists").style.display = 'block';
+    }, (error, errMess) => {
+        document.body.style.cursor = 'default';
+        let message;
+        if (errMess !== undefined) {
+            if (errMess.message !== undefined) {
+                message = errMess.message;
+            } else {
+                message = errMess;
+            }
+        }
+        errManager.display("Failed to get the cachet..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
     });
 };
 
