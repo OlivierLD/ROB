@@ -1,7 +1,13 @@
 #!/bin/bash
 #
-# To be run from the module's root (NMEA-multiplexer), like ./scripts/start.SSD1306.REST.server.sh
+# See CLI prm --interactive
 #
+INTERACTIVE=true
+if [[ $# -gt 0 ]]; then
+  if [[ "$1" == "--interactive:false" ]]; then
+    INTERACTIVE=false
+  fi
+fi
 # Move 1 level above the 'script' directory
 pushd $(dirname $0)/..
 echo -e "Working from $PWD"
@@ -20,36 +26,58 @@ VERBOSE=false
 SCREEN_HEIGHT=32
 WIRING="I2C"
 #
-echo -en "Enter Machine Name - Default [${MACHINE_NAME}] > "
-read USER_INPUT
-if [[ "${USER_INPUT}" != "" ]]; then
-    MACHINE_NAME=${USER_INPUT}
+# Prompted, or get prms from CLI
+#
+if [[ "${INTERACTIVE}" == "true" ]]; then
+  echo -en "Enter Machine Name - Default [${MACHINE_NAME}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      MACHINE_NAME=${USER_INPUT}
+  fi
+  # echo -e "Will use ${MACHINE_NAME}"
+  echo -en "Enter HTTP Port - Default [${PORT}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      PORT=${USER_INPUT}
+  fi
+  # echo "Will use port ${PORT}"
+  echo -en "Verbose (true or false) ? - Default [${VERBOSE}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      VERBOSE=${USER_INPUT}
+  fi
+  # echo "Will use verbose ${VERBOSE}"
+  echo -en "Screen Height (32 or 64) ? - Default [${SCREEN_HEIGHT}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      SCREEN_HEIGHT=${USER_INPUT}
+  fi
+  # echo "Will use screen height ${SCREEN_HEIGHT}"
+  echo -en "Wiring Option (I2C or SPI) ? - Default [${WIRING}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      WIRING=${USER_INPUT}
+  fi
+  # echo "Will use screen wiring option ${WIRING}"
+else
+  echo -e "Getting prms from CLI"
+  if [[ $# -gt 0 ]]; then
+  	for prm in $*; do
+  	  echo "Processing ${prm} ..."
+  	  if [[ ${prm} == "--machine-name:"* ]]; then
+  	    MACHINE_NAME=${prm#*:}
+  	  elif [[ ${prm} == "--port:"* ]]; then
+  	    PORT=${prm#*:}
+  	  elif [[ ${prm} == "--verbose:"* ]]; then
+  	    VERBOSE=${prm#*:}
+  	  elif [[ ${prm} == "--height:"* ]]; then
+  	    SCREEN_HEIGHT=${prm#*:}
+  	  elif [[ ${prm} == "--wiring:"* ]]; then
+  	    WIRING=${prm#*:}
+  	  fi
+  	done
+  fi
 fi
-# echo -e "Will use ${MACHINE_NAME}"
-echo -en "Enter HTTP Port - Default [${PORT}] > "
-read USER_INPUT
-if [[ "${USER_INPUT}" != "" ]]; then
-    PORT=${USER_INPUT}
-fi
-# echo "Will use port ${PORT}"
-echo -en "Verbose (true or false) ? - Default [${VERBOSE}] > "
-read USER_INPUT
-if [[ "${USER_INPUT}" != "" ]]; then
-    VERBOSE=${USER_INPUT}
-fi
-# echo "Will use verbose ${VERBOSE}"
-echo -en "Screen Height (32 or 64) ? - Default [${SCREEN_HEIGHT}] > "
-read USER_INPUT
-if [[ "${USER_INPUT}" != "" ]]; then
-    SCREEN_HEIGHT=${USER_INPUT}
-fi
-# echo "Will use screen height ${SCREEN_HEIGHT}"
-echo -en "Wiring Option (I2C or SPI) ? - Default [${WIRING}] > "
-read USER_INPUT
-if [[ "${USER_INPUT}" != "" ]]; then
-    WIRING=${USER_INPUT}
-fi
-# echo "Will use screen wiring option ${WIRING}"
 COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &

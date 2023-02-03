@@ -23,12 +23,33 @@ The `main` method is in `nmea.mux.GenericNMEAMultiplexer`.
 
 > For the impatient: [Get started, fast](./getstarted.md). 
 
+---
+
+- At the center of the picture, we have the NMEA-Multiplexer
+  - This is also hosting an optional HTTP server, implementing REST and Web interfaces to the data.
+- Then you have Consumers (aka channels), bringing in NMEA Data
+  - File channel (to replay logged data)
+  - Serial channel, to read a Serial port
+  - TCP, REST, MQTT, WebSockets, etc..., whatever can provide NMEA sentences
+  - etc...
+- Then you possibly have Computers, calculating extra data, re-injected into the  NMEA-multiplexer
+  - Current and True Wind calculated with GPS data (SOG, COG)
+  - Custom ones
+  - etc...
+- Then you have Forwarders, spitting out NMEA data (and others, sometimes)
+  - File Forwarder, to log data
+  - Character-mode console
+  - REST Forwarder, to feed other servers
+  - TCP and others to feed other soft programs (like OpenCPN, SeaWi, etc)
+  - etc...
+
+---
 NMEA channels management, in and out.
 
 This is - obviously - a _software_ multiplexer (**no** hardware required), that can read data from
 multiple sources, compute extra data (like current) if needed, and broadcast them onto (possibly) several output destinations.
 
-For example:
+_For example_:
 - Read one or more serial ports (GPS, boat data), write them into a log file
 - Read a serial port, read a `BME280` sensor (air temperature, atmospheric pressure, relative humidity), and broadcast everything on a TCP port, for `OpenCPN`.
 - Read a file of logged data, and send them over `TCP` to `OpenCPN`, for replay.
@@ -68,7 +89,7 @@ The "only" exception to this rule will be the structure of the data cache, which
 This NMEAMultiplexer can use any input (File, Serial, TCP, UDP, WebSocket, Sensors, Computations, ...), produce any output (File, Serial, TCP, UDP, WebSockets...), and use a REST API on top of that.
 
 At the heart of this lies a small http server ([part of this project](../http-tiny-server/README.md)), designed to run on _very small_ boards, like a Raspberry Pi Zero, and with possibly _no_ Internet access.
-> _Warning ⚠️_: It is not designed to scale as an enterprise server!
+> _Warning_ ⚠️: It is not designed to scale as an enterprise server!
 
 The operations on the Serial port(s) require `libRxTx`. This is included in the gradle dependencies.
 To be able to use it outside gradle, run (on Linux/Debian/Raspberry Pi):

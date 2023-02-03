@@ -12,7 +12,7 @@ fi
 pushd $(dirname $0)/..
 echo -e "Working from $PWD"
 
-PYTHON_SCRIPT_NAME=src/main/python/TCP_BME280_server.py
+PYTHON_SCRIPT_NAME=src/main/python/REST_SSD1306_server_v2.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
     echo -e "It worked: ${MACHINE_NAME}"
@@ -23,7 +23,9 @@ fi
 MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
-#
+SCREEN_HEIGHT=32
+WIRING="I2C"
+DATA="BSP,SOG,COG,POS"
 #
 # Prompted, or get prms from CLI
 #
@@ -46,6 +48,24 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
       VERBOSE=${USER_INPUT}
   fi
   # echo "Will use verbose ${VERBOSE}"
+  echo -en "Screen Height (32 or 64) ? - Default [${SCREEN_HEIGHT}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      SCREEN_HEIGHT=${USER_INPUT}
+  fi
+  # echo "Will use screen height ${SCREEN_HEIGHT}"
+  echo -en "Wiring Option (I2C or SPI) ? - Default [${WIRING}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      WIRING=${USER_INPUT}
+  fi
+  # echo "Will use screen wiring option ${WIRING}"
+  echo -en "Data to display (CSV list) ? - Default [${DATA}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      DATA=${USER_INPUT}
+  fi
+  # echo "Will use data option ${DATA}"
 else
   echo -e "Getting prms from CLI"
   if [[ $# -gt 0 ]]; then
@@ -57,14 +77,21 @@ else
   	    PORT=${prm#*:}
   	  elif [[ ${prm} == "--verbose:"* ]]; then
   	    VERBOSE=${prm#*:}
+  	  elif [[ ${prm} == "--height:"* ]]; then
+  	    SCREEN_HEIGHT=${prm#*:}
+  	  elif [[ ${prm} == "--wiring:"* ]]; then
+  	    WIRING=${prm#*:}
+  	  elif [[ ${prm} == "--data:"* ]]; then
+  	    DATA=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
-echo -e "Use ./scripts/kill.python.tcp.sh to stop the server."
+echo -e "Use ./scripts/kill.python.rest.sh to stop the server."
+echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
 
 popd
