@@ -1,17 +1,14 @@
-<table width=""100%">
+<table width="100%">
   <tr>
 <td valign="top">
-# ROB (Raspberry-Pi On Board)
-### Using the Raspberry Pi <u>at sea</u>.
+<h1>ROB (Raspberry-Pi On Board)</h1>
+<h3>Using the Raspberry Pi <u>at sea</u>.</h3>
 </td>
 <td valign="top">
-| _**100% West Made. Fait 100% à l'ouest.**_ |
-|:------------------------------------------:|
-| ![A l'ouest, Britanny, California](./a.l.ouest.jpeg) |
+<img src="./a.l.ouest.jpeg" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
 </td>
   </tr>
 </table>
-
 Java and Python(3).
 
 ## Preamble
