@@ -1,15 +1,23 @@
+<table width=""100%">
+  <tr>
+<td valign="top">
 # ROB (Raspberry-Pi On Board)
 ### Using the Raspberry Pi <u>at sea</u>.
+</td>
+<td valign="top">
 | _**100% West Made. Fait 100% à l'ouest.**_ |
 |:------------------------------------------:|
 | ![A l'ouest, Britanny, California](./a.l.ouest.jpeg) |
+</td>
+  </tr>
+</table>
 
 Java and Python(3).
 
 ## Preamble
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access.
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
-Routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
+NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
 
 
 ## What this is

@@ -3,12 +3,13 @@ As said before, the code in this folder is here to try _not_ to have to re-write
 We will use the code provided by the sensor providers, as it is, which usually means in Python.
 The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
 framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations. We'll se how it goes.  
-> In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi, and whatever you can plug on it, and protocols like UART, SPI, I2C.  
+> In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi, and whatever you can plug on it. And protocols like UART, SPI, I2C.  
 > Vast topic indeed.
 
 ## Python interaction with Sensors and Actuators
+- Python, in general, a great resource: <https://realpython.com/>
 - MicroPython: <https://docs.micropython.org/en/latest/library/index.html>
-  - <https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306>
+  - For example: <https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306>
 - CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
 
 
