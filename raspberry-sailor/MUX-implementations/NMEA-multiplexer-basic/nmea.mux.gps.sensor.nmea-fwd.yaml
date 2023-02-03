@@ -4,7 +4,7 @@
 name: "Replay big log file."
 description:
   - Reads GPS
-  - Reads BME280 (port 9876)
+  - Reads BME280 (REST, port 9876)
   - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
   - Log data in a file (data.nmea)
 context:
@@ -18,10 +18,19 @@ channels:
     baudrate: 4800
 #    sentence.filters: RMC,GLL
 #    verbose: true
-  - type: tcp
-    server: 192.168.1.103
-    port: 9876
+  - type: rest           # Pings the Python REST Server for the BME280
+    protocol: http
+    machine-name: 192.168.1.103
+    http-port: 9876
+    query-path: /bme280/nmea-data
+    # query-string:      # Would include the ?, and subsequent &...
+    # jqs:               # JQ String, to apply on the response
+    between-loops: 2000  # in ms
     verbose: false
+#  - type: tcp
+#    server: 192.168.1.103
+#    port: 9876
+#    verbose: false
 forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds
