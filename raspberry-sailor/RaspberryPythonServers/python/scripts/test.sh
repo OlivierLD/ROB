@@ -1,5 +1,20 @@
 #!/bin/bash
+#
+# A playground
+#
 echo -e "Script is in $(dirname $0)"
+
+# Stolen from gradlew
+die ( ) {
+    echo
+    echo "$*"
+    echo
+    exit 1
+}
+
+FIND_THIS=java
+# FIND_THIS=tagada
+which ${FIND_THIS} || die "Ah ben merdalor! No ${FIND_THIS}!"
 
 MACHINE_NAME=
 if MACHINE_NAME=$(hostname -I); then

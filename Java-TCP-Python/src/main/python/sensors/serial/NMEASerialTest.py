@@ -150,7 +150,7 @@ def parse_nmea_sentence(sentence: str) -> Dict:
 # On mac, USB GPS on port /dev/tty.usbmodem14101,
 # Raspberry Pi, use /dev/ttyUSB0 or so.
 port_name: str = "/dev/tty.usbmodem141101"
-baud_rate: int = 4800
+baud_rate: int = 4_800
 # port_name = "/dev/ttyACM0"
 # baud_rate = 115200
 port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)

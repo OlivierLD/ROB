@@ -8,7 +8,9 @@
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
 # It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
-# -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that.
+# -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that (in
+#      ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/doc_resources/ and in
+#      ROB/Java-TCP-Python/resources)
 #
 # Work In Progress !
 #
@@ -118,6 +120,8 @@ def button_manager(pin, callback) -> None:
             time.sleep(0.1)  # sleep for debounce
         except Exception as oops:
             print(f"Error: {repr(oops)}")
+        finally:
+            print("button_manager, finally.")
     print(f"Done with button listener on pin {pin}")
 
 
@@ -169,6 +173,7 @@ if len(sys.argv) > 0:  # Script name + X args
                 print("Data list:")
                 print(nmea_data)
 
+# initialize the oled screen
 if oled_wiring_option == "I2C":
     # Use for I2C.
     i2c = board.I2C()  # uses board.SCL and board.SDA
