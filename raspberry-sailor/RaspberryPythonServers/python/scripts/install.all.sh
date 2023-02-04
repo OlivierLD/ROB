@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# Required dependencies for the TCP servers
+# Required dependencies for the TCP and REST servers
 # Needs Internet access.
+# Run with sudo, so scripts can be run as root.
 #
 echo -e "For the BMP180, look into https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library"
 #

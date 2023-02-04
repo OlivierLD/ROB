@@ -6,7 +6,9 @@
 #
 # Different from the REST_SSD1306_server.py.
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
-# It can also deal with push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
+# It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
+#
+# -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that.
 #
 # Work In Progress !
 #
@@ -62,7 +64,7 @@ nmea_data: List[str] = [
     "BSP",  # Boat Speed
     "SOG",  # Speed Over Ground
     "COG",  # Course Over Ground
-    "POS"  # Position
+    "POS"   # Position
 ]
 
 pin_button_01 = board.D20  # pin #38

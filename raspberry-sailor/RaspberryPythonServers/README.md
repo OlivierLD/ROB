@@ -90,6 +90,7 @@ _**NMEA Sentences examples:**_
 > ````
 > After that, you may hop off the Internet.
 
+**Do look at the script named `install.all.sh`.**
 
 ## Example 1, produce and consume ZDA Sentences
 To start the Python ZDA server
@@ -98,7 +99,7 @@ $ pwd
 .../ROB/raspberry-sailor/NMEA-multiplexer
 $ python3 src/main/python/TCP_ZDA_server.py --port:7001
 ```
-Then, start the NMEA-multiplexer with the following config file:
+Then, start the NMEA-multiplexer (from its directory) with the following config file:
 ```yaml
 #
 # MUX definition.
@@ -107,7 +108,7 @@ Then, start the NMEA-multiplexer with the following config file:
 name: "With TCP server, in Python"
 description:
   - Requires the Python server to be running
-  - python3 src/main/python/TCP_ZDA_server.py --port:7001
+  - python3 ./python/TCP_ZDA_server.py --port:7001
 context:
   with.http.server: true
   http.port: 9999
@@ -123,7 +124,8 @@ forwarders:
 ```
 as in
 ```
-./mux.sh mux-configs/nmea.mux.python.channel.yaml 
+$ cd <. . .>/NMEA-multiplexer
+$ ./mux.sh mux-configs/nmea.mux.python.channel.yaml 
 ```
 and you should get the following output, in the console, as expected:
 ```
@@ -132,7 +134,7 @@ Running java  -Djava.library.path=/Library/Java/Extensions -Dscreen.verbose=true
 Definition Name: With TCP server, in Python
 -- Description --
 Requires the Python server to be running
-python3 src/main/python/TCP_ZDA_server.py --port:7001
+python3 ./python/TCP_ZDA_server.py --port:7001
 -----------------
 Log available in global, level INFO
 Log file pattern mux.log
@@ -156,25 +158,25 @@ $
 
 ## Example 2, produce Mag Data
 ```
-$ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
+$ python3 ./python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
 ```
 > Notice the calibration properties yaml file
 
 ## Example 3, produce Atmospheric Data
 ```
-$ python3 src/main/python/TCP_BMP180_server.py --port:7001
+$ python3 ./python/TCP_BMP180_server.py --port:7001
 ```
 ```
-$ python3 src/main/python/TCP_BME280_server.py --port:7001
+$ python3 ./python/TCP_BME280_server.py --port:7001
 ```
 
 ## Example 4, produce all kinds of data, and consume them in one place
 Start all the required Python TCP servers
 ```
-$ python3 src/main/python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
+$ python3 ./python/TCP_LSM303_HCM5883L_server.py --port:7001 --cal-props:cal.sample.yaml
 ```
 ```
-$ python3 src/main/python/TCP_BMP180_server.py --port:7002
+$ python3 ./python/TCP_BMP180_server.py --port:7002
 ```
 Consume them from an NMEA-multiplexer, with a config file like
 ```yaml
@@ -224,15 +226,15 @@ $ ./start.tcp.client.sh --port:7001
 (tcp.clients.SimpleTCPClient) Port now set to 7001
 (tcp.clients.SimpleTCPClient) Enter '/exit' at the prompt to stop. Any non-empty string otherwise.
 User Request > status
->> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 10.0, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:10.000Z"}
-- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
+>> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/RaspberryPythonServers/python/TCP_ZDA_server.py", "between-loops": 10.0, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:10.000Z"}
+- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/RaspberryPythonServers/python/TCP_ZDA_server.py
 - Key: between-loops, Value (java.lang.Double): 10.0
 - Key: connected-clients, Value (java.lang.Integer): 1
 - Key: python-version, Value (java.lang.String): 3.10.8
 - Key: system-utc-time, Value (java.lang.String): 2022-12-21T12:30:10.000Z
 User Request > loops:0.5
->> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py", "between-loops": 0.5, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:30.000Z"}
-- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_ZDA_server.py
+>> Server responded {"source": "<. . .>/repos/ROB/raspberry-sailor/RaspberryPythonServers/python/TCP_ZDA_server.py", "between-loops": 0.5, "connected-clients": 1, "python-version": "3.10.8", "system-utc-time": "2022-12-21T12:30:30.000Z"}
+- Key: source, Value (java.lang.String): <. . .>/repos/ROB/raspberry-sailor/RaspberryPythonServers/python/TCP_ZDA_server.py
 - Key: between-loops, Value (java.lang.Double): 0.5
 - Key: connected-clients, Value (java.lang.Integer): 1
 - Key: python-version, Value (java.lang.String): 3.10.8
@@ -250,7 +252,7 @@ This consumer issues GET requests on a regular basis.
 _Server Example_: `REST_BME280_server.py`  
 Start it like in
 ```
-$ python3 src/main/python/REST_BME280_server.py --machine-name:192.168.1.105 --simulate-when-missing:true
+$ python3 ./python/REST_BME280_server.py --machine-name:192.168.1.105 --simulate-when-missing:true
 ```
 
 > _**Note**_: the `--machine-name:192.168.1.105` can be replaced with a `--machine-name:$(hostname -I)`, much nicer.
@@ -298,9 +300,9 @@ MAG_Z_OFFSET: -5
 ```
 and use it like in
 ```
-$ python3 src/main/python/TCP_LSM303_HMC8553L_server.py \
+$ python3 ./python/TCP_LSM303_HMC8553L_server.py \
           --port:7001 \
-          --cal-props:src/main/python/cal.sample.yaml
+          --cal-props:./python/cal.sample.yaml
 ```
 
 # To Try next

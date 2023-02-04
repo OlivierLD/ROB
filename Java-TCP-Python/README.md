@@ -143,8 +143,8 @@ For the option that considers
 - Writing the Java driver implies mimicking what Python is doing. Talking to Python is a way to avoid this kind of duplication.
 
 ### Cons
-- We need to agree of the payload (JSON is indeed an option)
-- Wrapping the Python code into a TCP server is not trivial, but the structure of such code can be done generically.
+- We need to agree (Client and Server) on the payload format (JSON is indeed an option)
+- Wrapping the Python code into a TCP server is not trivial, but the structure of such code can be generic.
 
 ### Conclusion ?
 Sounds like a good option.
