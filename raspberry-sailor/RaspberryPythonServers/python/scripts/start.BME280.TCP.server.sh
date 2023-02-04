@@ -12,7 +12,7 @@ fi
 pushd $(dirname $0)/..
 echo -e "Working from $PWD"
 
-PYTHON_SCRIPT_NAME=src/main/python/TCP_BME280_server.py
+PYTHON_SCRIPT_NAME=./python/TCP_BME280_server.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
     echo -e "It worked: ${MACHINE_NAME}"
