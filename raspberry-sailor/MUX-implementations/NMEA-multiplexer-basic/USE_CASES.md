@@ -16,19 +16,19 @@ $ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 First start the Python servers, for the BME280 and the SSD1306.  
 Make sure you use the right ports.
 ```
-$ ../../NMEA-multiplexer/scripts/start.BME280.TCP.server.sh
+$ ../../RaspberryPythonServers/python/scripts/start.BME280.TCP.server.sh
 ~/repos/ROB/raspberry-sailor/NMEA-multiplexer ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
-Working from /home/pi/repos/ROB/raspberry-sailor/NMEA-multiplexer
+Working from /home/pi/repos/ROB/raspberry-sailor/RaspberryPythonServers/python
 It worked: 192.168.1.103 
 Enter Machine Name - Default [192.168.1.103] > 
 Enter HTTP Port - Default [9999] > 8001
 Verbose (true or false) ? - Default [false] > 
-Running python3 src/main/python/TCP_BME280_server.py --machine-name:192.168.1.103 --port:8001 --verbose:false
+Running python3 ./TCP_BME280_server.py --machine-name:192.168.1.103 --port:8001 --verbose:false
 Done
 Use ./scripts/kill.python.tcp.sh to stop the server.
 
 Usage is:
-python3 /home/pi/repos/ROB/raspberry-sailor/NMEA-multiplexer/src/main/python/TCP_BME280_server.py [--machine-name:127.0.0.1] [--port:7001] [--verbose:true|false]
+python3 /home/pi/repos/ROB/raspberry-sailor/RaspberryPythonServers/python/scripts/TCP_BME280_server.py [--machine-name:127.0.0.1] [--port:7001] [--verbose:true|false]
 	where --machine-name: and --port: must match the context's settings.
 
 Server is listening. [Ctrl-C] will stop the process.
@@ -46,16 +46,16 @@ channels:
 ```
 
 ```
-$ ../../NMEA-multiplexer/scripts/start.SSD1306.REST.server.sh 
+$ ../../RaspberryPythonServers/python/scripts/start.SSD1306.REST.server.sh 
 ~/repos/ROB/raspberry-sailor/NMEA-multiplexer ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
-Working from /home/pi/repos/ROB/raspberry-sailor/NMEA-multiplexer
+Working from /home/pi/repos/ROB/raspberry-sailor/RaspberryPythonServers/python
 It worked: 192.168.1.103 
 Enter Machine Name - Default [192.168.1.103] > 
 Enter HTTP Port - Default [9999] > 8080
 Verbose (true or false) ? - Default [false] > 
 Screen Height (32 or 64) ? - Default [32] > 64
 Wiring Option (I2C or SPI) ? - Default [I2C] > SPI
-Running python3 src/main/python/REST_SSD1306_server.py --machine-name:192.168.1.103 --port:8080 --verbose:false --height:64 --wiring:SPI
+Running python3 s./REST_SSD1306_server.py --machine-name:192.168.1.103 --port:8080 --verbose:false --height:64 --wiring:SPI
 Done
 Use ./scripts/kill.python.rest.sh to stop the server.
 - Try curl -X PUT http://192.168.1.103:8080/ssd1306/nmea-data -d 'This is|a test.'

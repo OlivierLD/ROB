@@ -10,7 +10,7 @@ echo -e "| This is an EXAMPLE showing how to generate a 'production' version, wi
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
 echo -e "| possibly with several configurations - and its web clients.                                        |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
-echo -e "| Now starting a fresh build...                                                                      |"
+echo -e "| Now you mau start a fresh build...                                                                 |"
 echo -e "| Make sure the java version is compatible with your target. Current version:                        |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 java -version > jvers.txt 2>&1
@@ -19,7 +19,7 @@ while read line; do
 done < jvers.txt
 rm jvers.txt
 echo -e "+----------------------------------------------------------------------------------------------------+"
-echo -e "| Make sure the current Java version is compatible with the target one.                              |"
+echo -e "| Make sure the current Java version is compatible with the target one!!                             |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e ""
 #
@@ -45,8 +45,8 @@ if [[ -f ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ]]; then
 fi
 #
 if [[ "${REBUILD_REQUEST}" == "Y" ]]; then
-  echo -e "Rebuilding from source..."
-  ../../../gradlew clean shadowJar ${PROXY_SETTINGS}
+  echo -e "Rebuilding from source (No Scala)..."
+  ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
 fi
 #
 # 2 - Create new dir
@@ -55,7 +55,8 @@ echo -en "Which (non existent) folder should we create the distribution in ? > "
 # Directory name, that will become the archive name.
 read distdir
 if [[ -d "${distdir}" ]]; then
-	echo -e "Folder ${distdir} exists. Please drop it or choose another name"
+	echo -e "Folder ${distdir} exists. Please drop it or choose another name."
+	echo -e "Exiting."
 	exit 1
 fi
 echo -e "Creating folder ${distdir}"
@@ -79,14 +80,28 @@ cp mux.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
 #
-# TODO The Python part...
-#
-echo -e "Python part, pending"
+# The Python part...
+PACKAGE_PYTHON=Y
+echo -en "Do we package the Python part ? > "
+read REPLY
+if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+  echo -e "Ok, skipping python."
+  PACKAGE_PYTHON=N
+fi
+if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
+  # Packaging Python scripts
+  mkdir ${distdir}/python
+  echo -e "Copying Python stuff into ${distdir}/python"
+  cp -R ../../RaspberryPythonServers/python/ ${distdir}/python
+  rm -rf ${distdir}/python/__pycache__
+  echo -e "Done with Python"
+fi
 #
 # 4 - Archiving
 #
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
+# Drop directory
 rm -rf ${distdir}
 #
 # 5 - Ready!
@@ -98,9 +113,13 @@ echo -e "| Send it to another machine, and un-archive it.                       
 echo -e "| Use tar -xzvf ${distdir}.tar.gz' to un-archive.                                                   |"
 echo -e "| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |"
 echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |"
+if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
+  echo -e "| > For the python scripts, make sure you run (once) the script ./python/scripts/install.all.sh    |"
+  echo -e "| > after unzipping the archive on the target machine.                                             |"
+fi
 echo -e "| The script to launch will be 'mux.sh'                                                            |"
 echo -e "| It is your responsibility to use the right properties file, possibly modified to fit your needs. |"
 echo -e "| For the runner/logger, use nmea.mux.gps.tcp.properties                                           |"
-echo -e "| Use it for example like:                                                                         |"
+echo -e "| Use it - for example - like:                                                                     |"
 echo -e "| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |"
 echo -e "+--------------------------------------------------------------------------------------------------+"

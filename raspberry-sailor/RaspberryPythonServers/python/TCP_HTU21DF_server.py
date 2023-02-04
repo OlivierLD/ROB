@@ -110,7 +110,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     print("New client listener")
     while keep_listening:
         try:
-            data: bytes = connection.recv(1024)   # If receive from client is needed...
+            data: bytes = connection.recv(1_024)   # If receive from client is needed...
             if len(data) > 0:
                 if verbose:
                     print(f"Received from client: {data}")
@@ -158,7 +158,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
     global sensor
     print(f"Connected by client {connection}")
     while keep_listening:
-        # data: bytes = conn.recv(1024)   # If receive from client is needed...
+        # data: bytes = conn.recv(1_024)   # If receive from client is needed...
         if sensor is not None:
             temperature: float = sensor.temperature     # Celsius
             humidity: float = sensor.relative_humidity  # %

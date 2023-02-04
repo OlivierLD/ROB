@@ -78,8 +78,8 @@ def read_bme280() -> dict:
     else:
         if simulate_when_missing:
             temperature = random.randrange(-100, 400) / 10
-            humidity = random.randrange(0, 1000) / 10
-            pressure = random.randrange(9500, 10400) / 10
+            humidity = random.randrange(0, 1_000) / 10
+            pressure = random.randrange(9_500, 10_400) / 10
             status = "OK - Simulated"
         else:
             status = "No BME280 was found"
