@@ -25,8 +25,16 @@ public class SimpleTCPClient {
 	}
 
 	public String sendMessage(String msg) throws Exception {
+		return sendMessage(msg, 1);
+	}
+
+	public String sendMessage(String msg, int nbRead) throws Exception {
 		out.println(msg);
-		String resp = in.readLine();
+		String resp = "";
+		for (int i=0; i<nbRead; i++) {
+			String one = in.readLine();
+			resp += (one + "\n");
+		}
 		return resp;
 	}
 
@@ -67,10 +75,13 @@ public class SimpleTCPClient {
 			boolean keepWorking = true;
 			while (keepWorking) {
 				String request = StaticUtil.userInput("Request > ");
-				String response = client.sendMessage(request);
-				System.out.printf("Server responded %s\n", response);
 				if (".".equals(request)) {
 					keepWorking = false;
+				} else {
+					// Response works if server talks when told to.
+					// Continuous feed would not like this.
+					String response = client.sendMessage(request, 1);
+					System.out.printf("Server responded %s\n", response);
 				}
 			}
 			System.out.printf("(%s) Client exiting\n", SimpleTCPClient.class.getName());

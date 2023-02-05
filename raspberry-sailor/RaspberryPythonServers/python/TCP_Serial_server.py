@@ -152,7 +152,9 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         if verbose:
             print(f"Producing status: {payload}")
         producing_status = True
-        connection.sendall(payload.encode())  # This one does not go through...
+        # time.sleep(0.5)
+        connection.sendall(payload.encode())  # This one might not go through...
+        # time.sleep(0.5)
         producing_status = False
     except Exception:
         print("Oops!...")
@@ -215,7 +217,7 @@ def read_serial_port(connection: socket.socket, address: tuple, port: int) -> No
                 connection.sendall(serial_nmea.encode())  # Send to the client(s), broadcast.
             else:
                 print("Waiting for the status to be completed.")
-            time.sleep(0.25)   # between_loops)
+            time.sleep(0.25)   # De-bouncing
         except BrokenPipeError as bpe:
             print("Serial Client disconnected")
             nb_clients -= 1
