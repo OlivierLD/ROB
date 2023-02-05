@@ -63,6 +63,7 @@ We provide here TCP servers reading the following sensors:
 - [HTUDF21D](https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor).  Temperature, Relative Humidity.
 - [LSM303](https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout). 3-axis Magnetometer, Accelerometer.
 - [LIS3MDL](https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer). 3-axis Magnetometer.
+- and also one to read a Serial Port (spitting out NMEA data, like a GPS, or an NMEA station)
 
 And actuators:
 - [SSD1306 oled screen](https://learn.adafruit.com/monochrome-oled-breakouts) (SPI and I2C)
@@ -96,8 +97,8 @@ _**NMEA Sentences examples:**_
 To start the Python ZDA server
 ```
 $ pwd
-.../ROB/raspberry-sailor/NMEA-multiplexer
-$ python3 src/main/python/TCP_ZDA_server.py --port:7001
+.../ROB/raspberry-sailor/RaspberryPythonServers
+$ python3 ./python/TCP_ZDA_server.py --port:7001
 ```
 Then, start the NMEA-multiplexer (from its directory) with the following config file:
 ```yaml

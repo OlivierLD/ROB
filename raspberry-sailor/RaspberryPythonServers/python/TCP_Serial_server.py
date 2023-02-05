@@ -17,7 +17,7 @@
 # - https://pythonhosted.org/pyserial/pyserial.html
 # - https://pyserial.readthedocs.io/en/latest/pyserial.html
 #
-# Read Serial port, parse NMEA Data.
+# Read Serial port, get NMEA Data, broadcast on TCP.
 #
 import serial
 import sys
@@ -32,7 +32,6 @@ import json
 from datetime import datetime, timezone
 import logging
 from logging import info
-import NMEABuilder   # local script
 from typing import List
 
 __version__ = "0.0.1"
@@ -45,6 +44,7 @@ PORT: int = 7001         # Port to listen on (non-privileged ports are > 1023)
 SERIAL_PORT: str = "/dev/ttyACM0"
 BAUD_RATE: int = 4800
 verbose: bool = False
+DEBUG: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
@@ -80,10 +80,11 @@ def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
     :param serial_port: the port, as returned by serial.Serial
     :return: the full NMEA String, with its EOL '\r\n'
     """
+    global DEBUG
     rv = []
     while True:
         ch = serial_port.read()
-        if verbose:
+        if DEBUG:
             print("Read {} from Serial Port".format(ch))
         rv.append(ch)
         if ch == b'\n':
@@ -132,18 +133,15 @@ def valid_check_sum(sentence: str) -> bool:
 
 
 nb_clients: int = 0
-between_loops: float = 1.0  # For ALL the threads.
 producing_status: bool = False
 
 
 def produce_status(connection: socket.socket, address: tuple) -> None:
     global nb_clients
-    global between_loops
     global producing_status
     global keep_listening
     message: dict = {
         "source": __file__,
-        "between-loops": between_loops,
         "connected-clients": nb_clients,
         "python-version": platform.python_version(),
         "system-utc-time": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
@@ -165,7 +163,6 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
     Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
     """
     global nb_clients
-    global between_loops
     global keep_listening
     print("New client listener")
     while keep_listening:
@@ -175,14 +172,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 if verbose:
                     print(f"Received from client: {data}")
                 client_mess: str = f"{data.decode('utf-8')}".strip().upper()  # Warning: upper
-                if client_mess[:len(CMD_LOOP_PREFIX)] == CMD_LOOP_PREFIX:
-                    try:
-                        between_loops = float(client_mess[len(CMD_LOOP_PREFIX):])
-                    except ValueError as ex:
-                        print("Bad number, oops!...")
-                        traceback.print_exc(file=sys.stdout)
-                    produce_status(connection, address)
-                elif client_mess == CMD_STATUS:
+                if client_mess == CMD_STATUS:
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
                     interrupt(None, None)
@@ -191,7 +181,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 else:
                     print(f"Unknown or un-managed message [{client_mess}]")
                 if len(client_mess) > 0:
-                    print(f"Received {client_mess} request. Between Loop value: {between_loops} s.")
+                    print(f"Received {client_mess} request.")
         except ConnectionResetError as cre:
             print("ClientListener disconnected")
             # nb_clients -= 1
@@ -209,7 +199,6 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
 
 def read_serial_port(connection: socket.socket, address: tuple, port: int) -> None:
     global nb_clients
-    global between_loops
     global producing_status
     global keep_listening
     print(f"Connected by client {connection}")
@@ -219,12 +208,12 @@ def read_serial_port(connection: socket.socket, address: tuple, port: int) -> No
 
         try:
             if not producing_status:
-                if verbose:
-                    print(f"Read Serial Data and sending: {serial_nmea.strip()}")
+                # if verbose:
+                #    print(f"Read Serial Data and sending: {serial_nmea.strip()}")
                 connection.sendall(serial_nmea.encode())  # Send to the client(s), broadcast.
             else:
                 print("Waiting for the status to be completed.")
-            time.sleep(between_loops)
+            time.sleep(0.25)   # between_loops)
         except BrokenPipeError as bpe:
             print("Serial Client disconnected")
             nb_clients -= 1
@@ -242,6 +231,8 @@ def read_serial_port(connection: socket.socket, address: tuple, port: int) -> No
 def main(args: List[str]) -> None:
     global HOST
     global PORT
+    global BAUD_RATE
+    global SERIAL_PORT
     global verbose
     global nb_clients
     global keep_listening
@@ -274,8 +265,12 @@ def main(args: List[str]) -> None:
     # Raspberry Pi, use /dev/ttyUSB0 or so.
     # port_name: str = "/dev/tty.usbmodem141101"
     baud_rate: int = BAUD_RATE
-    port_name:str = SERIAL_PORT
-    port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)
+    port_name: str = SERIAL_PORT
+    try:
+        port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)
+    except Exception as oops:
+        print(f"Not such port {port_name}, exiting")
+        sys.exit(1)
 
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
 

@@ -12,7 +12,7 @@ fi
 pushd $(dirname $0)/..
 echo -e "Working from $PWD"
 
-PYTHON_SCRIPT_NAME=./TCP_BME280_server.py
+PYTHON_SCRIPT_NAME=./TCP_Serial_server.py
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I) ; then
     echo -e "It worked: ${MACHINE_NAME}"
@@ -23,6 +23,8 @@ fi
 MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
+SERIAL_PORT=/dev/ttyACM0
+BAUD_RATE=4800
 #
 #
 # Prompted, or get prms from CLI
@@ -40,6 +42,18 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
       PORT=${USER_INPUT}
   fi
   # echo "Will use port ${PORT}"
+  echo -en "Enter Serial Port Name - Default [${SERIAL_PORT}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      SERIAL_PORT=${USER_INPUT}
+  fi
+  # echo "Will use serial port ${SERIAL_PORT}"
+  echo -en "Enter Baud Rate - Default [${BAUD_RATE}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      BAUD_RATE=${USER_INPUT}
+  fi
+  # echo "Will use baud rate ${BAUD_RATE}"
   echo -en "Verbose (true or false) ? - Default [${VERBOSE}] > "
   read USER_INPUT
   if [[ "${USER_INPUT}" != "" ]]; then
@@ -55,13 +69,17 @@ else
   	    MACHINE_NAME=${prm#*:}
   	  elif [[ ${prm} == "--port:"* ]]; then
   	    PORT=${prm#*:}
+  	  elif [[ ${prm} == "--serial-port:"* ]]; then
+  	    SERIAL_PORT=${prm#*:}
+  	  elif [[ ${prm} == "--baud-rate:"* ]]; then
+  	    BAUD_RATE=${prm#*:}
   	  elif [[ ${prm} == "--verbose:"* ]]; then
   	    VERBOSE=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --serial-port:${SERIAL_PORT} --baud-rate:${BAUD_RATE} --verbose:${VERBOSE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
