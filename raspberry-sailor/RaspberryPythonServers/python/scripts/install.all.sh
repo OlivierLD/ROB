@@ -6,6 +6,7 @@
 #
 echo -e "For the BMP180, look into https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library"
 #
+sudo pip3 install serial
 sudo pip3 install adafruit-circuitpython-htu21d
 sudo pip3 install adafruit-circuitpython-bme280
 sudo pip3 install adafruit-circuitpython-lis3mdl
