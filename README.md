@@ -12,15 +12,32 @@
 Java and Python(3).
 
 ## Preamble
+The goal here is to be able to fulfil the computing needs of a navigator with a Raspberry Pi (we'll discuss the different models later).
+The Raspberry Pi (see <https://www.raspberrypi.org/> and <https://www.raspberrypi.com/>) is a small and _cheap_ single-board computer, running a clone of Linux, it's hard drive is an SD card, its power consumption is low, and
+it comes with a GPIO header that can be used to read sensors, or feed actuators.  
+The more I use it, the more I like it.
+
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access.
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
-NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.
+NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
+At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
 
+This project is opening several possibilities, from simple data logging to celestial almanac computation and publication. Depending on what you want or what you need,
+a Raspberry Pi Zero might be enough. I've tested it, the basic `NMEA-multiplexer` runs fine on it.  
+Now, if you want to fully featured navigation server (as in the module `RESTNavServer`), then you might want to beef-up your config, with a Raspberry Pi Model 4...
+
+When we will be using extra components (like Atmospheric data sensors, small screens), you will find links to some providers of such devices, this will
+give an idea of the budget you'll need (it's usually ridiculous).
+
+And another cool thing is that we will provide a Web interface for data rendering, as well as for the administration of the system.  
+Those will mostly rely on some REST services, illustrated by many examples.
+
+As it is now, you might need to like playing with bits and pieces of code to get to where you want to be... I'm working on it, I'm trying to bring it to a wider audience.
 
 ## What this is
 We intend here to deal with the data provided by an NMEA Station (Boat Speed, Wind data, ...), a GPS, and maybe additional boards (like Atmospheric sensors like BME280, very cheap).  
 We want to be able to:
-- Forward the read and calculated data to other softwares (like OpenCPN, SeaWi, ...)
+- Forward the read and calculated data to other software programs (like OpenCPN, SeaWi, ...)
 - Calculate True Wind (Speed and Direction)
 - Calculate current, in real time
 - Calculate tides - and publish tide almanacs
@@ -34,6 +51,8 @@ We want to be able to:
 All this, running on a Raspberry Pi.
 
 ---
+
+## Background
 
 This project came to light after [Raspberry Coffee](https://github.com/OlivierLD/raspberry-coffee).  
 `Raspberry Coffee` is mainly written in Java (and other JVM languages), and can communicate with sensors and actuators using [PI4J](https://pi4j.com/), itself relying on [WiringPi](http://wiringpi.com/).

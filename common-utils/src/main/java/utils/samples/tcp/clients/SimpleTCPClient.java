@@ -81,7 +81,7 @@ public class SimpleTCPClient {
 					// Response works if server talks when told to.
 					// Continuous feed would not like this.
 					String response = client.sendMessage(request, 1);
-					System.out.printf("Server responded %s\n", response);
+					System.out.printf("Server responded %s\n", response.trim());
 				}
 			}
 			System.out.printf("(%s) Client exiting\n", SimpleTCPClient.class.getName());
