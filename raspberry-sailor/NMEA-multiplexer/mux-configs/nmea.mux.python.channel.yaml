@@ -1,11 +1,12 @@
 #
 # MUX definition.
-# With Python TCP Server input, on port 7001
+# With Python TCP Server input, on port 9002
 #
 name: "Serial GPS, with TCP server, in Python"
 description:
-  - Requires the Python server to be running
-  - python3 src/main/python/TCP_ZDA_server.py --port:7001 --host:192.168.1.105
+  - Requires the Python TCP server to be running
+  - ./RaspberryPythonServers/python/scripts/start.BME280.TCP.server.sh
+  - The script above will prompt you for machine name, port, etc.
 context:
   with.http.server: true
   http.port: 9999
