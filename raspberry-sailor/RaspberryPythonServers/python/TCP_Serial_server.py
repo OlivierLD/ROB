@@ -140,6 +140,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     global nb_clients
     global producing_status
     global keep_listening
+    global verbose
     message: dict = {
         "source": __file__,
         "connected-clients": nb_clients,
@@ -160,10 +161,11 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
 
 def client_listener(connection: socket.socket, address: tuple) -> None:
     """
-    Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
+    Expects several possible inputs: "STATUS", "EXIT" (not case-sensitive).
     """
     global nb_clients
     global keep_listening
+    global verbose
     print("New client listener")
     while keep_listening:
         try:

@@ -49,10 +49,10 @@ public class SimpleTCPClient {
 			if (arg.startsWith(PORT_PREFIX)) {
 				try {
 					port.set(Integer.parseInt(arg.substring(PORT_PREFIX.length())));
-					System.out.printf("(%s) Port now set to %d\n", SimpleTCPClient.class.getName(), port);
+					System.out.printf("(%s) Port now set to %d\n", SimpleTCPClient.class.getName(), port.get());
 				} catch (NumberFormatException nfe) {
 					System.out.printf("Invalid port in [%s], keeping default %d\n", arg, port.get());
-					System.out.printf("(%s) Host is now %s\n", SimpleTCPClient.class.getName(), host);
+					System.out.printf("(%s) Host is now %s\n", SimpleTCPClient.class.getName(), host.get());
 				}
 			} else if (arg.startsWith(HOST_PREFIX)) {
 				host.set(arg.substring(HOST_PREFIX.length()));
@@ -77,6 +77,7 @@ public class SimpleTCPClient {
 			client.stopConnection();
 		} catch (Exception ex) {
 			// Ooch!
+			System.err.printf("On machine %s, port %d\n", host.get(), port.get());
 			ex.printStackTrace();
 		}
 	}
