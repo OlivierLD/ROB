@@ -109,7 +109,7 @@ Then, start the NMEA-multiplexer (from its directory) with the following config 
 name: "With TCP server, in Python"
 description:
   - Requires the Python server to be running
-  - python3 ./python/TCP_ZDA_server.py --port:7001
+  - like python3 ./python/TCP_ZDA_server.py --port:7001
 context:
   with.http.server: true
   http.port: 9999
