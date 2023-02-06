@@ -29,7 +29,7 @@
  | - RAW (event 'raw')
  |
  | Query parameters available:
- | DIGITAL, POS, GPS, SAT, COG, SOG, MAP, STW, AWS, AWA, TWS, TWD, TWA, HDG, PRMSL, WT, AT, HUM, RAW
+ | DIGITAL, POS, GPS, SAT, COG, SOG, MAP, STW, AWS, AWA, TWS, TWD, TWA, HDG, PRMSL, RAW  TODO Others !!
  | DIGITAL is 'false' by default, all others are 'true'
  | They all take 'true' or 'false' values, like in
  | http://server-ip:9999/web/small.screens/small.console.all.data.html?DIGITAL=false&COG=true&HDG=false&TWD=false&TWS=false&TWA=false&AWS=false&AWA=false&STW=false
@@ -40,7 +40,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>NMEA Multi-Screen</title>
+	<title>NMEA Multi-Screen, V2</title>
 	<link rel="stylesheet" href="../webcomponents/css/rocker.css">
     <link rel="icon" type="image/ico" href="../icons/hammerhead.02.ico">
 	<style>
@@ -71,7 +71,7 @@
 
 		.the-slides {
 			/*display: none;*/
-			height: 340px;  /*300px;*/
+			height: 300px;
 			grid-area: center;
 			margin: auto;
 			transition: max-height 1s ease-out, opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -368,161 +368,11 @@
 			--font: 'Arial'; /* 'Source Code Pro' */
 		}
 
-		.sidenav {
-			height: 100%;
-			width: 0;
-			position: fixed;
-			z-index: 1;
-			top: 0;
-			left: 0;
-			/*  background-color: rgba(0, 0, 0, 0.6); */
-			background-image: linear-gradient(rgba(0, 0, 255, 0.6), rgba(0, 0, 0, 0.6));
-			overflow-x: hidden;
-			transition: 1.0s;
-			padding-top: 60px;
-		}
-
-		.sidenav a {
-			padding: 8px 8px 8px 32px;
-			text-decoration: none;
-			font-size: 18px;
-			color: silver; /* #818181; */
-			display: block;
-			transition: 0.3s;
-		}
-
-		.sidenav a:hover, .offcanvas a:focus {
-			color: white; /* #f1f1f1; */
-			/*cursor: not-allowed;*/
-		}
-
-		#close-nav-button:hover {
-			color: cyan;
-			cursor: pointer;
-		}
-
-		#help-nav-button:hover {
-			color: cyan;
-			cursor: pointer;
-		}
-
 		a.active-link:hover {
 			color: cyan;
 			cursor: pointer;
 		}
 
-		.sidenav .helpbtn {
-			position: absolute;
-			top: 0;
-			left: 55px;
-			font-size: 24px;
-			padding: 8px;
-			/* margin-left: 20px; */
-			margin-bottom: 20px;
-		}
-
-		.sidenav .closebtn {
-			position: absolute;
-			top: 0;
-			right: 25px;
-			font-size: 24px;
-			margin-left: 50px;
-			margin-bottom: 20px;
-		}
-
-		/* For the switch (slider) */
-		.switch {
-			position: relative;
-			display: inline-block;
-			width: calc(var(--slider-scale) * 60px);
-			height: calc(var(--slider-scale) * 34px);
-		}
-
-		.switch input {
-			opacity: 0;
-			width: 0;
-			height: 0;
-		}
-
-		.slider {
-			position: absolute;
-			cursor: pointer;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: #ccc;
-			-webkit-transition: .4s;
-			transition: .4s;
-		}
-
-		.slider:before {
-			position: absolute;
-			content: "";
-			height: calc(var(--slider-scale) * 26px);
-			width: calc(var(--slider-scale) * 26px);
-			left: calc(var(--slider-scale) * 4px);
-			bottom: calc(var(--slider-scale) * 4px);
-			background-color: white;
-			-webkit-transition: .4s;
-			transition: .4s;
-		}
-
-		input:checked + .slider {
-			background-color: #2196f3;
-		}
-
-		input:focus + .slider {
-			box-shadow: 0 0 1px #2196f3;
-		}
-
-		input:checked + .slider:before {
-			-webkit-transform: translateX(calc(var(--slider-scale) * 26px));
-			-ms-transform: translateX(calc(var(--slider-scale) * 26px));
-			transform: translateX(calc(var(--slider-scale) * 26px));
-		}
-
-		/* Rounded sliders */
-		.slider.round {
-			border-radius: calc(var(--slider-scale) * 34px);
-		}
-
-		.slider.round:before {
-			border-radius: 50%;
-		}
-
-		/* Switch grid */
-		.switch-container {
-			display: grid;
-			grid-template-columns: calc(var(--slider-scale) * 80px) 200px;
-			width: 500px;
-		}
-		.switch-element {
-			place-self: flex-start;
-		}
-
-		dialog {
-			background: rgba(25, 25, 25, 0.75);
-			color: silver;
-			width: 300px;
-			top: 50px;
-			border: 2px solid orange;
-			border-radius: 10px;
-			margin: auto;
-		}
-
-		.dialog-header {
-			font-size: 24px;
-			font-weight: 700;
-		}
-
-		.dialog-header-close {
-			float: right;
-		}
-		.dialog-header-close:hover {
-			color: cyan;
-			cursor: pointer;
-		}
 		.raw-data {
 			font-size: 8px;
 			text-align: left;
@@ -530,6 +380,46 @@
 			overflow-x: auto;
 			overflow-y: auto;
 		}
+
+		.tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(241, 241, 241, 0.5);
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        .tab .mess {
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+            color: black;
+            text-align: right;
+        }
+
 
 	</style>
 
@@ -549,21 +439,62 @@
 </head>
 <body>
 
-<h1 title="Use the hamburger on the left to reach the menu."
-    style="text-align: left; width: 100%; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-	<span id="hamburger" style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span>
-</h1>
 
+<div style="text-align: center;" id="display-bar">
+<!-- Here we have the displays toolbar -->
+<!--
+	Categories & Displays
+	- GPS:
+		- 1 : POS
+		- 2 : Date & Time
+		- 3 : SAT
+		- 4 : COG
+		- 5 : SOG
+		- 6 : MAP
+	- BOAT
+		- 7 : BSP
+		- 8 : AWS
+		- 9 : AWA
+		- 10: TWS
+		- 11: TWD
+		- 12: TWA
+		- 13: HDG
+	- ATM:
+		- 14: PRMSL
+		- 15: WT
+		- 16: AT
+		- 17: HUM
+	- RAW:
+		- 18: RAW
+-->
+	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+	<!--div class="tab" style="display: block;"-->
+		<button class="tablinks active" onclick="showSlides(1);">Position</button>
+		<button class="tablinks" onclick="showSlides(2);">GPS Date & Time</button>
+		<button class="tablinks" onclick="showSlides(3);">GPS Satellites</button>
+		<button class="tablinks" onclick="showSlides(4);">COG</button>
+		<button class="tablinks" onclick="showSlides(5);">SOG</button>
+		<button class="tablinks" onclick="showSlides(6);">MAP</button>
+	</div>
+	<div class="tab" style="display: none; grid-template-columns: auto auto auto auto auto auto auto;">
+		<button class="tablinks active" onclick="showSlides(7);">BSP</button>
+		<button class="tablinks" onclick="showSlides(8);">AWS</button>
+		<button class="tablinks" onclick="showSlides(9);">AWA</button>
+		<button class="tablinks" onclick="showSlides(10);">TWS</button>
+		<button class="tablinks" onclick="showSlides(11);">TWD</button>
+		<button class="tablinks" onclick="showSlides(12);">TWA</button>
+		<button class="tablinks" onclick="showSlides(13);">HDG</button>
+	</div>
+	<div class="tab" style="display: none; grid-template-columns: auto auto auto auto;">
+		<button class="tablinks active" onclick="showSlides(14);">PRMSL</button>
+		<button class="tablinks" onclick="showSlides(15);">WT</button>
+		<button class="tablinks" onclick="showSlides(16);">AT</button>
+		<button class="tablinks" onclick="showSlides(17);">HUM</button>
+	</div>
+	<div class="tab" style="display: none; grid-template-columns: auto;">
+		<button class="tablinks active" onclick="showSlides(18);">RAW</button>
+	</div>
 
-<!--input type="checkbox" onchange="manageClick(this);" /> Auto-scroll -->
-<div style="margin: 2px;" title="Scroll every 5 seconds.">
-	<span style="font-weight: bold; font-style: italic;">Auto Scroll</span>
-	<!--br/-->
-	<label class="rocker" style="font-size: 0.50em; vertical-align: middle;">
-		<input type="checkbox" onchange="manageClick(this);" id="scroll-switch">
-		<span class="switch-left">On</span>
-		<span class="switch-right">Off</span>
-	</label>
 </div>
 
 <!-- Here are the slides (the screens) -->
@@ -666,7 +597,6 @@
 		</div>
 		<div class="text">MAP</div>
 	</div>
-
 
 	<div class="the-slides fade">
 		<div class="number-text">7 / 18</div>
@@ -920,361 +850,40 @@
 		</div>
 		<div class="text">RAW</div>
 	</div>
-
-	<div class="prev" onclick="plusSlides(-1);">&#10094;</div>
-	<div class="next" onclick="plusSlides(+1);">&#10095;</div>
-
-	<div class="dots">
-		<span class="dot" onclick="currentSlide(01);" title="POS"></span>
-		<span class="dot" onclick="currentSlide(02);" title="GPS"></span>
-		<span class="dot" onclick="currentSlide(03);" title="SAT"></span>
-		<span class="dot" onclick="currentSlide(04);" title="COG"></span>
-		<span class="dot" onclick="currentSlide(05);" title="SOG"></span>
-		<span class="dot" onclick="currentSlide(06);" title="MAP"></span>
-		<span class="dot" onclick="currentSlide(07);" title="STW"></span>
-		<span class="dot" onclick="currentSlide(08);" title="AWS"></span>
-		<span class="dot" onclick="currentSlide(09);" title="AWA"></span>
-		<span class="dot" onclick="currentSlide(10);" title="TWS"></span>
-		<span class="dot" onclick="currentSlide(11);" title="TWD"></span>
-		<span class="dot" onclick="currentSlide(12);" title="TWA"></span>
-		<span class="dot" onclick="currentSlide(13);" title="HDG"></span>
-		<span class="dot" onclick="currentSlide(14);" title="PRMSL"></span>
-		<span class="dot" onclick="currentSlide(15);" title="WT"></span>
-		<span class="dot" onclick="currentSlide(16);" title="AT"></span>
-		<span class="dot" onclick="currentSlide(17);" title="HUM"></span>
-		<span class="dot" onclick="currentSlide(18);" title="RAW"></span>
-	</div>
-	
 </div>
 
-<dialog id="help-dialog" style="width: 300px; z-index: 10;">
-    <div class="dialog-header">
-      <span>Help !...</span>
-      <span class="dialog-header-close" onclick="closeHelpDialog();">&times</span>
-    </div>
-    <div style="text-align: left; padding: 5px;">
-      <!-- Help content -->
-      <div style="margin-top: 15px;">
-        Use the sliders in the nav bar to show or hide the different screens.<br/>
-      </div>
-      <div style="margin-top: 15px;">
-        Query String parameters are also available to configure those screens at startup.<br/>Use the slider's names
-		as parameter names.
-      </div>
-      <div style="margin-top: 15px;">
-        <i>QS Example</i>: <code style="white-space: nowrap; /* nowrap: for the question mark */">?AWA=false&AWS=false&HDG=false</code>
-      </div>
-    </div>
-</dialog>
-
-<!-- Sliding Menu -->
-<div id="side-nav" class="sidenav" style="text-align: left;" onmouseleave="closeNav()">
-    <a href="javascript:void(0)" id="help-nav-button" class="helpbtn" onclick="displayHelp()" title="Help">?</a>
-    <a href="javascript:void(0)" id="close-nav-button" class="closebtn" onclick="closeNav()">&times;</a>
-
-	<div class="switch-container" style="margin-left: 30px;" title="Analog Displays, when possible">
-		<label class="switch switch-element">
-		  <input id="digit-analog-slider" type="checkbox" onchange="manageDigitalClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">Analog Displays</span>
+<div id="category-bar">
+	<!-- Here we have the categories toolbar -->
+	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto;">
+		<button class="tablinks active" onclick="showCategoryBar(1);">GPS Data</button>
+		<button class="tablinks" onclick="showCategoryBar(2);">BOAT Data</button>
+		<button class="tablinks" onclick="showCategoryBar(3);">Atmospheric Data</button>
+		<button class="tablinks" onclick="showCategoryBar(4);">RAW Data</button>
 	</div>
 
-	<div style="margin-left: 30px; padding-bottom: 20px; padding-top: 20px;">Manage Slides Visibility</div>
-
-	<div class="switch-container" style="margin-left: 30px;" title="Display GPS Position">
-		<label class="switch switch-element">
-		  <input id="pos-slider" type="checkbox" onchange="managePOSClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">POS</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display GPS Time">
-		<label class="switch switch-element">
-		  <input id="gps-slider" type="checkbox" onchange="manageGPSClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">GPS</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display GPS Satellites">
-		<label class="switch switch-element">
-		  <input id="sat-slider" type="checkbox" onchange="manageSATClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">SAT</span>
-	</div>
-
-	<div class="switch-container" style="margin-left: 30px;" title="Display Course Over Ground">
-		<label class="switch switch-element">
-		  <input id="cog-slider" type="checkbox" onchange="manageCOGClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">COG</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Speed Over Ground">
-		<label class="switch switch-element">
-		  <input id="sog-slider" type="checkbox" onchange="manageSOGClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">SOG</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Map (the track)">
-		<label class="switch switch-element">
-		  <input id="map-slider" type="checkbox" onchange="manageMAPClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">MAP</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Speed Through Water (aka BSP)">
-		<label class="switch switch-element">
-		  <input id="stw-slider" type="checkbox" onchange="manageSTWClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">STW</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Apparent Wind Speed">
-		<label class="switch switch-element">
-		  <input id="aws-slider" type="checkbox" onchange="manageAWSClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">AWS</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Apparent Wind Angle">
-		<label class="switch switch-element">
-		  <input id="awa-slider" type="checkbox" onchange="manageAWAClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">AWA</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display True Wind Speed">
-		<label class="switch switch-element">
-		  <input id="tws-slider" type="checkbox" onchange="manageTWSClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">TWS</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display True Wind Direction">
-		<label class="switch switch-element">
-		  <input id="twd-slider" type="checkbox" onchange="manageTWDClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">TWD</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display True Wind Angle">
-		<label class="switch switch-element">
-		  <input id="twa-slider" type="checkbox" onchange="manageTWAClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">TWA</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Heading (from Compass)">
-		<label class="switch switch-element">
-		  <input id="hdg-slider" type="checkbox" onchange="manageHDGClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">HDG</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Atm Pressure">
-		<label class="switch switch-element">
-		  <input id="prmsl-slider" type="checkbox" onchange="managePRMSLClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">PRMSL</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Water Temperature">
-		<label class="switch switch-element">
-		  <input id="wt-slider" type="checkbox" onchange="manageWTClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">WT</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Air Temperature">
-		<label class="switch switch-element">
-		  <input id="at-slider" type="checkbox" onchange="manageATClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">AT</span>
-	</div>
-	<div class="switch-container" style="margin-left: 30px;" title="Display Relative Humidity">
-		<label class="switch switch-element">
-		  <input id="hum-slider" type="checkbox" onchange="manageHUMClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">HUM</span>
-	</div>
-
-	<div class="switch-container" style="margin-left: 30px;" title="Display Raw Data">
-		<label class="switch switch-element">
-		  <input id="raw-slider" type="checkbox" onchange="manageRAWClick(this);" checked>
-		  <span class="slider round"></span>
-		</label>
-		<span class="switch-element">RAW</span>
-	</div>
-
-</div>	
+</div>
 
 <script type="text/javascript">
-	let auto = false;
 
 	const DIGITAL_DISPLAY = 1; // All digital displays (except GPS Satellites and Track)
 	const ANALOG_DISPLAY = 2;  // Some data displayed on an analog WebCOmponent
-	let digital_analog = ANALOG_DISPLAY;
+	let digital_analog = ANALOG_DISPLAY; // TODO Manage this one.
 
-	let displayPos = true;
-	let displayGps = true;
-	let displaySat = true;
-	let displayCog = true;
-	let displaySog = true;
-	let displayMap = true;
-	let displayStw = true;
-	let displayAws = true;
-	let displayAwa = true;
-	let displayTws = true;
-	let displayTwd = true;
-	let displayTwa = true;
-	let displayHdg = true;
-	let displayPrmsl = true;
-	let displayAt = true;
-	let displayWt = true;
-	let displayHum = true;
-	let displayRaw = true;
-
-	function manageDigitalClick(cb) {
-		digital_analog = cb.checked ? ANALOG_DISPLAY : DIGITAL_DISPLAY;
-		// Set concerned displays accordingly.
-		document.getElementById('cog-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('cog').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('sog-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('sog').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('awa-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('awa').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('twd-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('twd').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('twa-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('twa').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('prmsl-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('prmsl').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('wt-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('wt').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('at-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('at').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-
-		document.getElementById('hum-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
-		document.getElementById('hum').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
-	}
-
-	function managePOSClick(cb) {
-		displayPos = cb.checked;
-		// console.log(`Display position: ${displayPos}`);
-	}
-	function manageGPSClick(cb) {
-		displayGps = cb.checked;
-	}
-	function manageSATClick(cb) {
-		displaySat = cb.checked;
-	}
-	function manageSOGClick(cb) {
-		displaySog = cb.checked;
-	}
-	function manageCOGClick(cb) {
-		displayCog = cb.checked;
-	}
-	function manageMAPClick(cb) {
-		displayMap = cb.checked;
-	}
-	function manageSTWClick(cb) {
-		displayStw = cb.checked;
-	}
-	function manageAWSClick(cb) {
-		displayAws = cb.checked;
-	}
-	function manageAWAClick(cb) {
-		displayAwa = cb.checked;
-	}
-	function manageTWSClick(cb) {
-		displayTws = cb.checked;
-	}
-	function manageTWDClick(cb) {
-		displayTwd = cb.checked;
-	}
-	function manageTWAClick(cb) {
-		displayTwa = cb.checked;
-	}
-	function manageHDGClick(cb) {
-		displayHdg = cb.checked;
-	}
-	function manageRAWClick(cb) {
-		displayRaw = cb.checked;
-	}
-
-	function managePRMSLClick(cb) {
-		displayPrmsl = cb.checked;
-	}
-	function manageWTClick(cb) {
-		displayWt = cb.checked;
-	}
-	function manageATClick(cb) {
-		displayAt = cb.checked;
-	}
-	function manageHUMClick(cb) {
-		displayHum = cb.checked;
-	}
-
-	function manageClick(cb) {
-		auto = cb.checked;
-		if (auto) {
-			showSlides(slideIndex);
-		}
-	}
-
-	let slideIndex = 1;
-	showSlides(slideIndex);
-
-	function plusSlides(n) {
-
-		let dots = document.querySelector('.dots');
-		let dotArray = dots.querySelectorAll('.dot');
-
-		let slideDisplayArray = [
-			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
-			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
-		];
-		// showSlides(slideIndex += n);
-		slideIndex += n;
-
-		let found = false;
-		while (!found) {
-			if (slideIndex < 1) {
-				slideIndex = dotArray.length;
+	function showCategoryBar(barIndex) {
+		let displayBars = document.getElementById('display-bar').querySelectorAll(".tab");
+		displayBars.forEach((bar, idx) => {
+			bar.style.display = (idx == barIndex - 1) ? 'grid' : 'none';
+			if (idx == barIndex - 1) {
+				// Show first slide of this toolbar
+				let firstTabButton = bar.querySelector(".tablinks");
+				firstTabButton.click();
 			}
-			if (slideIndex > dotArray.length) {
-				slideIndex = 1;
-			}
-			if (!slideDisplayArray[slideIndex - 1]) {
-				slideIndex += n;
-			} else {
-				found = true;
-			}
-		}
-
-		showSlides(slideIndex);
-	}
-
-	function currentSlide(n) {
-		showSlides(slideIndex = n);
+		});
 	}
 
 	function showSlides(n) {
 		let slides = document.getElementsByClassName("the-slides");
-		let dots = document.getElementsByClassName("dot");
+		let slideIndex = n;
 		if (n > slides.length) {
 			slideIndex = 1;
 		}
@@ -1284,132 +893,8 @@
 		for (let i = 0; i < slides.length; i++) { // Hide them all
 		    //	slides[i].style.display = "none";
 			slides[i].classList.remove("visible-slide");
-		}
-
-		if (!auto) {
-			for (let i = 0; i < dots.length; i++) {
-				dots[i].className = dots[i].className.replace(" active", "");
-			}
-			slides[slideIndex - 1].classList.add("visible-slide"); // Show active one
-
-			dots[slideIndex - 1].className += " active";
-		} else { // Auto. 
-
-			let slideDisplayArray = [
-				displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
-				displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-				displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
-			];
-
-			slideIndex++; // Auto: always +1
-			let found = false;
-			while (!found) {
-				if (slideIndex > slides.length) {
-					slideIndex = 1;
-				}
-				if (!slideDisplayArray[slideIndex - 1]) {
-					slideIndex += 1;
-				} else {
-					found = true;
-				}
-			}
-
-			for (let i = 0; i < dots.length; i++) {
-				dots[i].className = dots[i].className.replace(" active", "");
-			}
-//		slides[slideIndex - 1].style.display = "block";
-			slides[slideIndex - 1].classList.add("visible-slide");
-
-			dots[slideIndex - 1].className += " active";
-			setTimeout(showSlides, 5000); // Change screen every 5 seconds
-		}
-	}
-
-	function openNav() {
-		// Set checkboxes values in the nav bar
-		document.getElementById("digit-analog-slider").checked = (digital_analog === ANALOG_DISPLAY);
-		document.getElementById("pos-slider").checked = displayPos;
-		document.getElementById("gps-slider").checked = displayGps;
-		document.getElementById("sat-slider").checked = displaySat;
-		document.getElementById("cog-slider").checked = displayCog;
-		document.getElementById("sog-slider").checked = displaySog;
-		document.getElementById("map-slider").checked = displayMap;
-
-		document.getElementById("awa-slider").checked = displayAwa;
-		document.getElementById("aws-slider").checked = displayAws;
-		document.getElementById("twa-slider").checked = displayTwa;
-		document.getElementById("tws-slider").checked = displayTws;
-		document.getElementById("twd-slider").checked = displayTwd;
-		document.getElementById("stw-slider").checked = displayStw;
-		document.getElementById("hdg-slider").checked = displayHdg;
-
-		document.getElementById("prmsl-slider").checked = displayPrmsl;
-		document.getElementById("at-slider").checked = displayAt;
-		document.getElementById("wt-slider").checked = displayWt;
-		document.getElementById("hum-slider").checked = displayHum;
-
-		document.getElementById("raw-slider").checked = displayRaw;
-		// Open side nav
-    	document.getElementById("side-nav").style.width =  getComputedStyle(document.documentElement).getPropertyValue('--expanded-nav-width'); // "450px";
-    }
-
-	function setSlideVisibility() {
-		let dots = document.querySelector('.dots');
-		let dotArray = dots.querySelectorAll('.dot');
-		let slideDisplayArray = [
-			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
-			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
-		];
-		// Display/Hide the dots
-		for (let i=0; i<dotArray.length; i++) {
-			dotArray[i].style.display = slideDisplayArray[i] ? '' : 'none';
-		}
-		// Find the first non-hidden slide
-		let found = false;
-		while (!found) {
-			if (slideIndex > dotArray.length) {
-				slideIndex = 1;
-			}
-			if (!slideDisplayArray[slideIndex - 1]) {
-				slideIndex += 1;
-			} else {
-				found = true;
-			}
-		}
-	}
-
-    function closeNav() {
-    	document.getElementById("side-nav").style.width = "0";
-
-		// Manage the slides visibility.
-		// console.log("Manage the slides visibility here.");
-		setSlideVisibility();
-
-		// console.log(`Manage the slides visibility here. SlideIndex: ${slideIndex}`);
-		showSlides(slideIndex);
-    }
-
-	const NO_DIALOG_MESSAGE = "Your browser seems not to support dialogs...\nMaybe Chrome or Chromium would?";
-
-	function closeHelpDialog() {
-		let aboutDialog = document.getElementById("help-dialog");
-		if (aboutDialog.close !== undefined) {
-			aboutDialog.close();
-		} else {
-		// alert(NO_DIALOG_MESSAGE);
-			aboutDialog.style.display = 'none';
-		}
-	}
-
-	function displayHelp() {
-		let aboutDialog = document.getElementById("help-dialog");
-		if (aboutDialog.show !== undefined) {
-			aboutDialog.show();
-		} else {
-			alert(NO_DIALOG_MESSAGE);
-			aboutDialog.style.display = 'inline';
-		}
+		}		
+		slides[slideIndex - 1].classList.add("visible-slide"); // Show active one
 	}
 
 	let trackMap; // The map. TrackMap (just the path, no chart).
@@ -1570,21 +1055,6 @@
 		return s;
 	};
 
-	// Swipe detection
-	let touchstartX = 0
-	let touchendX = 0
-
-	let handleGesture = () => {
-		if (touchendX < touchstartX) {
-			// alert('swiped left!');
-			plusSlides(+1);
-		}
-		if (touchendX > touchstartX) {
-			// alert('swiped right!');
-			plusSlides(-1);
-		}
-	};
-
 	let getQSPrm = (prm) => {
 		let loc = document.location.toString();
 		if (loc.indexOf("?") > -1) {
@@ -1609,66 +1079,13 @@
 		trackMap.repaint();
 
 		const slider = document.querySelector('.slideshow-container');
-		slider.addEventListener('touchstart', e => {
-			touchstartX = e.changedTouches[0].screenX;
-		});
-
-		slider.addEventListener('touchend', e => {
-			touchendX = e.changedTouches[0].screenX;
-			handleGesture();
-		});
-
-		// Measure slides length (WiP)
-		// let slides = document.querySelectorAll(".the-slides");
-		// console.log(`We have ${slides.length} slide(s).`);
-
 		// Query String parameters
 		// debugger;
 		let qs = getQSPrm('DIGITAL');
 		digital_analog = (qs !== null && qs === "true") ? DIGITAL_DISPLAY : ANALOG_DISPLAY;
-		qs = getQSPrm('POS');
-		displayPos = (qs === null || qs === "true");
-		qs = getQSPrm('GPS');
-		displayGps = (qs === null || qs === "true");
-		qs = getQSPrm('SAT');
-		displaySat = (qs === null || qs === "true");
-		qs = getQSPrm('COG');
-		displayCog = (qs === null || qs === "true");
-		qs = getQSPrm('SOG');
-		displaySog = (qs === null || qs === "true");
-		qs = getQSPrm('MAP');
-		displayMap = (qs === null || qs === "true");
-		qs = getQSPrm('STW');
-		displayStw = (qs === null || qs === "true");
-		qs = getQSPrm('AWS');
-		displayAws = (qs === null || qs === "true");
-		qs = getQSPrm('AWA');
-		displayAwa = (qs === null || qs === "true");
-		qs = getQSPrm('TWS');
-		displayTws = (qs === null || qs === "true");
-		qs = getQSPrm('TWD');
-		displayTwd = (qs === null || qs === "true");
-		qs = getQSPrm('TWA');
-		displayTwa = (qs === null || qs === "true");
-		qs = getQSPrm('HDG');
-		displayHdg = (qs === null || qs === "true");
-		qs = getQSPrm('PRMSL');
-		displayPrmsl = (qs === null || qs === "true");
-		qs = getQSPrm('WT');
-		displayWt = (qs === null || qs === "true");
-		qs = getQSPrm('AT');
-		displayAt = (qs === null || qs === "true");
-		qs = getQSPrm('HUM');
-		displayHum = (qs === null || qs === "true");
 
-		qs = getQSPrm('RAW');
-		displayRaw = (qs === null || qs === "true");
-
-		setSlideVisibility();
-
-		// console.log(`Manage the slides visibility here. SlideIndex: ${slideIndex}`);
-		showSlides(slideIndex);
-
+		// showSlides(1); // First slide, first toolbar
+		showCategoryBar(1);
 	}
 </script>
 

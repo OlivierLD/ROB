@@ -300,8 +300,8 @@ function onMessage(json) {
 		}
 		// Battery_Voltage, Relative_Humidity, Barometric_Pressure
 		try {
-			let baro = json["Barometric Pressure"].pressure;
-			if (baro != 0) {
+			let baro = json["Barometric Pressure"].value;
+			if (baro && baro != 0) {
 				events.publish('prmsl', baro);
 			}
 		} catch (err) {
