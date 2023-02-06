@@ -7,9 +7,11 @@
 # For parameters --no-rmc-time --no-date : see in runNavServer.sh
 #
 # Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
+#    or https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
 #
-RED='\033[0;31m'
-NC='\033[0m'
+RED='\033[0;31;1m'    # Red and Bold
+BOLD_BLACK_BLINK='\033[0;30;1;5m'  # Black, bold, blink.
+NC='\033[0m'          # Back to No Color
 #
 HTTP_PORT=9999
 #
@@ -128,7 +130,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
 	echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
 	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002); HTTP Server, rich Web UI.               |"
+	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
 	echo -e "|                                                                                         |             Does not require a GPS                                                      |"
 	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
 	echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
@@ -147,15 +149,15 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
-	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	# echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
+	# echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                        | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                            |"
 	echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
 	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|  >> To get help on option X, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
+	echo -e "|  >> ${BOLD_BLACK_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
@@ -313,25 +315,25 @@ while [[ "${GO}" == "true" ]]; do
 	    read a
 	    ;;
 	  "1")
-  	  PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
-  	  NOHUP=""
-  	  if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
-  	    if [[ "${WITH_NOHUP}" == "Y" ]]; then
-  	      NOHUP="nohup "
-  	      echo -e ">> Will use nohup"
-  	    else
-  	      NOHUP=""
-  	      echo -e ">> Will not use nohup"
-  	    fi
-  	  else
-  	    # Ask if nohup, just in this case
-  	    echo -en " ==> Use nohup (y|n) ? > "
-  	    read REPLY
-        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-          NOHUP="nohup "
-          echo -e ">> Will use nohup"
-        fi
-  	  fi
+		PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
+		NOHUP=""
+		if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
+			if [[ "${WITH_NOHUP}" == "Y" ]]; then
+				NOHUP="nohup "
+				echo -e ">> Will use nohup"
+			else
+				NOHUP=""
+				echo -e ">> Will not use nohup"
+			fi
+		else
+			# Ask if nohup, just in this case
+			echo -en " ==> Use nohup (y|n) ? > "
+			read REPLY
+			if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+				NOHUP="nohup "
+				echo -e ">> Will use nohup"
+			fi
+		fi
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    # QUESTION: a 'screen' option ?
 	    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
@@ -346,12 +348,14 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
 		    openBrowser ${URL_OPTION_1}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
 	    GO=false
 	    ;;
 	  "1a")
-  	  PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
+  	    PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    # QUESTION: a 'screen' option ?
 	    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
@@ -367,6 +371,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
 		    openBrowser ${URL_OPTION_1a}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
 	    GO=false
@@ -379,6 +385,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_2}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -388,6 +396,7 @@ while [[ "${GO}" == "true" ]]; do
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
 	#   sleep 5 # Wait for the server to be operational
 	#   openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+	    echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    GO=false
 	    ;;
 	  "4")
@@ -398,6 +407,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5   # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_4}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -410,6 +421,8 @@ while [[ "${GO}" == "true" ]]; do
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 		    openBrowser ${URL_OPTION_5}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -421,6 +434,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_6}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -432,6 +447,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_6b}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -444,6 +461,8 @@ while [[ "${GO}" == "true" ]]; do
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/googlemaps.driving.html"
 		    openBrowser ${URL_OPTION_7}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -457,6 +476,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_8}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -470,6 +491,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -483,6 +506,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9b}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -496,6 +521,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9c}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -509,6 +536,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9d}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -522,6 +551,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9e}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -535,6 +566,8 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_10}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -546,41 +579,49 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_11}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
 	  "12")
-  	  PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
+  	  	PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_12}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
 	  "13")
   	  # PROP_FILE=mux-configs/nmea.mux.ais.test.yaml
   	  # PROP_FILE=mux-configs/nmea.mux.ais.test.2.yaml
-  	  PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
+  	  	PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_13}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
 	  "13b")
-  	  PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
+  	  	PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_13b}
+		else 
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
@@ -591,8 +632,8 @@ while [[ "${GO}" == "true" ]]; do
 	    else
 	      ${COMMAND}
 	    fi
-      echo -e "\nHit [Return]"
-      read resp
+		echo -e "\nHit [Return]"
+		read resp
 	    ;;
 	  "20b")
 	    COMMAND="curl -X GET http://localhost:9999/oplist"
@@ -601,39 +642,39 @@ while [[ "${GO}" == "true" ]]; do
 	    else
 	      ${COMMAND}
 	    fi
-      echo -e "\nHit [Return]"
-      read resp
+		echo -e "\nHit [Return]"
+		read resp
 	    ;;
 	  "21")
 	    echo -e "This requires a Multiplexer to be running, and forwarding data on a TCP Port"
 	    echo -en " ==> Enter Multiplexer machine name or IP (default 'localhost'): "
-      read MACHINE_NAME
-      if [[ "${MACHINE_NAME}" == "" ]]; then
-        MACHINE_NAME=localhost
-        echo -e "Defaulting machine name to ${MACHINE_NAME}"
-      fi
-	    echo -en " ==> Enter Multiplexer TCP port (default 7001): "
-      read TCP_PORT
-      if [[ "${TCP_PORT}" == "" ]]; then
-        TCP_PORT=7001
-        echo -e "Defaulting TCP port to ${TCP_PORT}"
-      fi
-	    echo -en " ==> With verbose option (default false): "
-      read VERBOSE
-      if [[ "${VERBOSE}" == "" ]]; then
-        VERBOSE=false
-        echo -e "Defaulting verbose to ${VERBOSE}"
-      fi
-      if [[ ${VERBOSE} =~ ^(yes|y|Y)$ ]]; then
-        VERBOSE=true
-      fi
-      #
-      pushd other-clients/python
+		read MACHINE_NAME
+		if [[ "${MACHINE_NAME}" == "" ]]; then
+			MACHINE_NAME=localhost
+			echo -e "Defaulting machine name to ${MACHINE_NAME}"
+		fi
+		echo -en " ==> Enter Multiplexer TCP port (default 7001): "
+		read TCP_PORT
+		if [[ "${TCP_PORT}" == "" ]]; then
+			TCP_PORT=7001
+			echo -e "Defaulting TCP port to ${TCP_PORT}"
+		fi
+		echo -en " ==> With verbose option (default false): "
+		read VERBOSE
+		if [[ "${VERBOSE}" == "" ]]; then
+			VERBOSE=false
+			echo -e "Defaulting verbose to ${VERBOSE}"
+		fi
+		if [[ ${VERBOSE} =~ ^(yes|y|Y)$ ]]; then
+			VERBOSE=true
+		fi
+		#
+		pushd other-clients/python
 	    COMMAND="python3 tcp_mux_client.py --machine-name:${MACHINE_NAME} --port:${TCP_PORT} --verbose:${VERBOSE}"
 	    ${COMMAND}
 	    popd
-      echo -e "\nHit [Return]"
-      read resp
+		echo -e "\nHit [Return]"
+		read resp
 	    ;;
 	# Others...
 	    # ;;
@@ -641,22 +682,22 @@ while [[ "${GO}" == "true" ]]; do
 	    echo -e "Nav Server processes:"
 	    ps -ef | grep navrest.NavServer | grep -v grep
 	    ps -ef | grep navrest.NavServer | grep -v grep | grep -v killns | awk '{ print $2 }' > km
-			NB_L=$(cat km | wc -l)
-			if [[ ${NB_L} == 0 ]]; then
+		NB_L=$(cat km | wc -l)
+		if [[ ${NB_L} == 0 ]]; then
 			  echo -e "No NavServer process found."
 			else
 			  echo -e "----------- NavServer HTTP Ports ---------"
-        if [[ $(uname -a) == *Linux* ]]; then
-            # Could use sudo below
-            netstat -tunap | grep ${HTTP_PORT}
-				else
-          for pid in $(cat km); do
-            netstat -vanp tcp | grep ${pid} | grep LISTEN
-          done
-				fi
-			  echo -e "------------------------------------------"
-				rm km
-			fi
+        	if [[ $(uname -a) == *Linux* ]]; then
+              # Could use sudo below
+              netstat -tunap | grep ${HTTP_PORT}
+			else
+              for pid in $(cat km); do
+                netstat -vanp tcp | grep ${pid} | grep LISTEN
+              done
+		    fi
+			echo -e "------------------------------------------"
+			rm km
+		fi
 	    echo -en "Hit [return]"
 	    read ret
 	    ;;

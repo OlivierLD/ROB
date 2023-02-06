@@ -1004,9 +1004,73 @@ let fileFwdOption = (sel) => {
                         </div>
                     </dialog>
                 </div>
-            </div>
+          </div>
 
-            <!--div id="forwarder-X" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
+          <div id="forwarder-10" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
+            <div>
+              <span class="close-icon" onclick="remove(this);">&times;</span>
+              <span class="forwarder-description">NMEA Cache Publisher</span>
+            </div>
+            <div class="draggable-content">
+                <span>cache-publisher </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <dialog class="editable-prm" style="min-height: 200px;">
+                  <div class="dialog-header">
+                    <div style="padding: 10px;">
+                      <span style="margin-left: 20px;">Edit NMEA Cache Publisher Parameters</span>
+                      <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                    </div>
+                  </div>
+                  <div class="editable-zone nmea-cache-publisher">
+                    <table>
+                      <tr>
+                        <td>Between Loops</td>
+                        <td><input type="number" class="between-loops" size="5" placeholder="Between Loops" value="1"></td>
+                      </tr>
+                      <tr>
+                        <td>Verb</td>
+                        <td>
+                            <select class="rest-verb">
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                            </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Protocol</td>
+                        <td>
+                            <select class="rest-protocol">
+                                <option value="http">http</option>
+                                <option value="https">https</option>
+                            </select>
+                        </td>
+                      </tr>
+                      <tr>
+                          <td>Server</td>
+                          <td><input type="text" class="server-name" size="30" placeholder="Server Name or IP"></td>
+                      </tr>
+                      <tr>
+                          <td>Port</td>
+                          <td><input type="number" class="server-port" placeholder="Server Port" value="8080"></td>
+                      </tr>
+                      <tr>
+                          <td>Resource</td>
+                          <td><input type="text" class="server-resource" size="30" placeholder="/mux/nmea-data"></td>
+                      </tr>
+                      <tr>
+                        <td>Query String</td>
+                        <td><input type="text" class="server-qs" size="30" placeholder="?name=value"></td>
+                      </tr>
+                      <!--tr>
+                          <td>Header(s)</td>
+                          <td><input type="text" class="rest-headers" size="30" placeholder="REST Headers" value="Content-Type:plain/text"></td>
+                      </tr-->
+                    </table>
+                  </div>  
+                </dialog>    
+            </div>
+          </div>
+
+          <!--div id="forwarder-X" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
               <div>
                 <span class="close-icon" onclick="remove(this);">&times;</span>
                 <span class="forwarder-description">Sample output (for example)</span>
@@ -1025,7 +1089,7 @@ let fileFwdOption = (sel) => {
                     </div>
                   </dialog>
               </div>
-            </div-->
+          </div-->
 
           <!-- End of Forwarders List -->
         </div>  

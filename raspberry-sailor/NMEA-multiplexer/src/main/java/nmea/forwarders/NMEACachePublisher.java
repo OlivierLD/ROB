@@ -213,7 +213,7 @@ public class NMEACachePublisher implements Forwarder {
         protected String queryString;
 
         public NMEACacheBean(NMEACachePublisher instance,
-                             long betweenLoops,  // TODO Check factor 1000
+                             long betweenLoops,  // TODO Check factor 1000 ?
                              String protocol,
                              String verb,
                              String machineName,

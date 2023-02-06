@@ -9,6 +9,15 @@
 Run that script:
 [uart_control](https://github.com/itemir/rpi_boat_utils/blob/master/uart_control/uart_control)
 
+Or, as per the pdf above:
+```
+$ wget https://github.com/itemir/rpi_boat_utils/raw/master/uart_control/uart_control
+$ chmod +x ./uart_control
+$ sudo ./uart_control gpio
+$ sudo reboot now
+```
+
+
 ### Run
 ```
 $ ll /dev/ser*

@@ -411,6 +411,27 @@ function generateRESTFwdCode(node) {
   return code;
 }
 
+function generateNMEAPublisherCode(node) {
+  let code = "";
+  let betweenLoops = node.querySelector('.between-loops').value;
+  code += `    between-loops: ${betweenLoops}\n`;
+  let restVerb = node.querySelector('.rest-verb').value;
+  code += `    rest.verb: ${restVerb}\n`;
+  let restProtocol = node.querySelector('.rest-protocol').value;
+  code += `    rest.protocol: ${restProtocol}\n`;
+  let serverName = node.querySelector('.server-name').value;
+  code += `    rest.machine-name: ${serverName}\n`;
+  let serverPort = node.querySelector('.server-port').value;
+  code += `    rest.port: ${serverPort}\n`;
+  let restResource = node.querySelector('.server-resource').value;
+  code += `    rest.resource: ${restResource}\n`;
+  let qs = node.querySelector('.server-qs').value;
+  if (qs.trim().length > 0) {
+    code += `    rest.query.string: ${qs}\n`;
+  }
+  return code;
+}
+
 function generateWSFwdCode(node) {
   let code = "";
   let wsUri = node.querySelector('.ws-uri').value;
@@ -558,6 +579,9 @@ function dumpIt(withDialog) { // YAML Generation
     } else if (prms.classList.contains("rest-forwarder")) {
       code += "  - type: rest\n";
       code += generateRESTFwdCode(prms);
+    } else if (prms.classList.contains("nmea-cache-publisher")) {
+      code += "  - type: nmea-cache-publisher\n";
+      code += generateNMEAPublisherCode(prms);
     } else if (prms.classList.contains("dynamic-forwarder")) {
         code += generateDynamicFwdCode(prms); // Already contains the first dash.
     }

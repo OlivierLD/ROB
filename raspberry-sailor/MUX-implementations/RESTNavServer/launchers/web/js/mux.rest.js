@@ -897,7 +897,7 @@ let generateCache = () => {
         console.log("Done in " + (after - before) + " ms :", value);
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
-        let html = "<h5>NMEA Cache</h5>";
+        let html = `<h5>NMEA Cache at <i>${new Date()}</i></h5>`;
         if (json) {
             html += "<div style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
             html += "<pre>" + JSON.stringify(json, null, 2) + "</pre>";
@@ -918,7 +918,7 @@ let generateCache = () => {
                 message = errMess;
             }
         }
-        errManager.display("Failed to get the cachet..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+        errManager.display("Failed to get the cache..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
     });
 };
 
