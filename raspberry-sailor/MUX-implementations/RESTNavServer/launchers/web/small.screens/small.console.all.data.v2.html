@@ -41,7 +41,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>NMEA Multi-Screen, V2</title>
-	<link rel="stylesheet" href="../webcomponents/css/rocker.css">
+	<!--link rel="stylesheet" href="../webcomponents/css/rocker.css"-->
     <link rel="icon" type="image/ico" href="../icons/hammerhead.02.ico">
 	<style>
 
@@ -470,8 +470,8 @@
 	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
 	<!--div class="tab" style="display: block;"-->
 		<button class="tablinks active" onclick="showSlides(1);">Position</button>
-		<button class="tablinks" onclick="showSlides(2);">GPS Date & Time</button>
-		<button class="tablinks" onclick="showSlides(3);">GPS Satellites</button>
+		<button class="tablinks" onclick="showSlides(2);">Date & Time</button>
+		<button class="tablinks" onclick="showSlides(3);">SAT</button>
 		<button class="tablinks" onclick="showSlides(4);">COG</button>
 		<button class="tablinks" onclick="showSlides(5);">SOG</button>
 		<button class="tablinks" onclick="showSlides(6);">MAP</button>
@@ -543,9 +543,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">4 / 18</div>
 		<div class="display">
-			<div id="cog-div" class="display" style="display: none; border: none;">
+			<div id="cog-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">Course Over Ground</span>
+				<br/>
 				<span class="display-data" id="cog-dig">000</span>
+				<br/>
 				<span class="display-unit">degrees</span>
 			</div>
 			<compass-display id="cog"
@@ -565,9 +567,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">5 / 18</div>
 		<div class="display">
-			<div id="sog-div" class="display" style="display: none; border: none;">
+			<div id="sog-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">Speed Over Ground</span>
+				<br/>
 				<span class="display-data" id="sog-dig">00.00</span>
+				<br/>
 				<span class="display-unit">knots</span>
 			</div>
 			<analog-display class="analogdisplay-day-speed display-data"
@@ -600,9 +604,11 @@
 
 	<div class="the-slides fade">
 		<div class="number-text">7 / 18</div>
-		<div class="display">
+		<div class="display" style="padding-top: 66px;">
 			<span class="display-title">Boat Speed</span>
+			<br/>
 			<span class="display-data" id="bsp">00.00</span>
+			<br/>
 			<span class="display-unit">knots</span>
 		</div>
 		<div class="text">BSP</div>
@@ -610,9 +616,11 @@
 
 	<div class="the-slides fade">
 		<div class="number-text">8 / 18</div>
-		<div class="display">
+		<div class="display" style="padding-top: 66px;">
 			<span class="display-title">Apparent Wind Speed</span>
+			<br/>
 			<span class="display-data" id="aws">00.00</span>
+			<br/>
 			<span class="display-unit">knots</span>
 		</div>
 		<div class="text">AWS</div>
@@ -621,9 +629,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">9 / 18</div>
 		<div class="display">
-			<div id="awa-div" class="display" style="display: none; border: none;">
+			<div id="awa-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">Apparent Wind Angle</span>
+				<br/>
 				<span class="display-data" id="awa-dig">000</span>
+				<br/>
 				<span class="display-unit">degrees</span>
 			</div>
 			<wind-angle-display class="analogdisplay-day-dir display-data"
@@ -644,9 +654,11 @@
 
 	<div class="the-slides fade">
 		<div class="number-text">10 / 18</div>
-		<div class="display">
+		<div class="display" style="padding-top: 66px;">
 			<span class="display-title">True Wind Speed</span>
+			<br/>
 			<span class="display-data" id="tws">00.00</span>
+			<br/>
 			<span class="display-unit">knots</span>
 		</div>
 		<div class="text">TWS</div>
@@ -655,9 +667,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">11 / 18</div>
 		<div class="display">
-			<div id="twd-div" class="display" style="display: none; border: none;">
+			<div id="twd-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">True Wind Dir</span>
+				<br/>
 				<span class="display-data" id="twd-dig">000</span>
+				<br/>
 				<span class="display-unit">degrees</span>
 			</div>
 			<direction-display class="analogdisplay-day-dir display-data"
@@ -679,9 +693,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">12 / 18</div>
 		<div class="display">
-			<div id="twa-div" class="display" style="display: none; border: none;">
+			<div id="twa-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">True Wind Angle</span>
+				<br/>
 				<span class="display-data" id="twa-dig">000</span>
+				<br/>
 				<span class="display-unit">degrees</span>
 			</div>	
 			<wind-angle-display class="analogdisplay-day-dir display-data"
@@ -702,9 +718,11 @@
 
 	<div class="the-slides fade">
 		<div class="number-text">13 / 18</div>
-		<div class="display">
+		<div class="display" style="padding-top: 66px;">
 			<span class="display-title">True Heading</span>
+			<br/>
 			<span class="display-data" id="hdg">000</span>
+			<br/>
 			<span class="display-unit">degrees</span>
 		</div>
 		<div class="text">HDG</div>
@@ -713,7 +731,7 @@
 	<div class="the-slides fade">
 		<div class="number-text">14 / 18</div>
 		<div class="display">
-			<div id="prmsl-div" class="display" style="display: none; border: none;">
+			<div id="prmsl-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">PRMSL</span>
 				<span class="display-data" id="prmsl-dig">0000.0</span>
 				<span class="display-unit">hPa</span>
@@ -741,9 +759,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">15 / 18</div>
 		<div class="display">
-			<div id="wt-div" class="display" style="display: none; border: none;">
+			<div id="wt-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">WT</span>
+				<br/>
 				<span class="display-data" id="wt-dig">00.0</span>
+				<br/>
 				<span class="display-unit">&deg;C</span>
 			</div>
 			<!--analog-display class="analogdisplay-day-speed display-data"
@@ -779,9 +799,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">16 / 18</div>
 		<div class="display">
-			<div id="at-div" class="display" style="display: none; border: none;">
+			<div id="at-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">AT</span>
+				<br/>
 				<span class="display-data" id="at-dig">00.0</span>
+				<br/>
 				<span class="display-unit">&deg;C</span>
 			</div>
 			<!--analog-display class="analogdisplay-day-speed display-data"
@@ -817,9 +839,11 @@
 	<div class="the-slides fade">
 		<div class="number-text">17 / 18</div>
 		<div class="display">
-			<div id="hum-div" class="display" style="display: none; border: none;">
+			<div id="hum-div" class="display" style="padding-top: 88px; display: none; border: none;">
 				<span class="display-title">HUM</span>
+				<br/>
 				<span class="display-data" id="hum-dig">00.0</span>
+				<br/>
 				<span class="display-unit">%</span>
 			</div>
 			<analog-display class="analogdisplay-day-speed display-data"
@@ -1070,7 +1094,7 @@
 			}
 		}
 		return null;
-	}
+	};
 
 	window.onload = () => {
 		initAjax();
@@ -1083,6 +1107,35 @@
 		// debugger;
 		let qs = getQSPrm('DIGITAL');
 		digital_analog = (qs !== null && qs === "true") ? DIGITAL_DISPLAY : ANALOG_DISPLAY;
+		// Show-Hide
+		if (digital_analog === DIGITAL_DISPLAY) {
+			document.getElementById('sog-div').style.display = 'block';
+			document.getElementById('sog').style.display = 'none';
+
+			document.getElementById('cog-div').style.display = 'block';
+			document.getElementById('cog').style.display = 'none';
+
+			document.getElementById('awa-div').style.display = 'block';
+			document.getElementById('awa').style.display = 'none';
+
+			document.getElementById('twa-div').style.display = 'block';
+			document.getElementById('twa').style.display = 'none';
+
+			document.getElementById('twd-div').style.display = 'block';
+			document.getElementById('twd').style.display = 'none';
+
+			document.getElementById('prmsl-div').style.display = 'block';
+			document.getElementById('prmsl').style.display = 'none';
+
+			document.getElementById('wt-div').style.display = 'block';
+			document.getElementById('wt').style.display = 'none';
+
+			document.getElementById('at-div').style.display = 'block';
+			document.getElementById('at').style.display = 'none';
+
+			document.getElementById('hum-div').style.display = 'block';
+			document.getElementById('hum').style.display = 'none';
+		}
 
 		// showSlides(1); // First slide, first toolbar
 		showCategoryBar(1);
