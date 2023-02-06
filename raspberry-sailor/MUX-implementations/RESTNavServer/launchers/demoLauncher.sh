@@ -10,7 +10,7 @@
 #    or https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
 #
 RED='\033[0;31;1m'    # Red and Bold
-BOLD_BLACK_BLINK='\033[0;30;1;5m'  # Black, bold, blink.
+BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
 NC='\033[0m'          # Back to No Color
 #
 HTTP_PORT=9999
@@ -157,7 +157,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
 	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|  >> ${BOLD_BLACK_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
+	echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
