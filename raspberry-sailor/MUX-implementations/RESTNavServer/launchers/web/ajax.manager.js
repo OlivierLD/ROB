@@ -151,9 +151,9 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "air temperature");
 		}
-		// Battery_Voltage, Relative_Humidity, Barometric_Pressure
+		// Relative_Humidity, Barometric_Pressure
 		try {
-			let baro = json["Barometric Pressure"].pressure;
+			let baro = json["Barometric Pressure"].value;
 			if (baro != 0) {
 				events.publish('prmsl', baro);
 			}

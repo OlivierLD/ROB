@@ -29,6 +29,10 @@ public class Pressure implements Serializable {
 		return this.pressure;
 	}
 
+	public double getPressure() {
+		return pressure;
+	}
+
 	public String toString() {
 		double d = this.pressure;
 		return FMT.format(d) + H_PA + ", " +

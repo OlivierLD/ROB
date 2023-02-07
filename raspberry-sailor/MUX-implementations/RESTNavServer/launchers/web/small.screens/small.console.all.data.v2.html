@@ -29,11 +29,8 @@
  | - RAW (event 'raw')
  |
  | Query parameters available:
- | DIGITAL, POS, GPS, SAT, COG, SOG, MAP, STW, AWS, AWA, TWS, TWD, TWA, HDG, PRMSL, RAW  TODO Others !!
- | DIGITAL is 'false' by default, all others are 'true'
- | They all take 'true' or 'false' values, like in
- | http://server-ip:9999/web/small.screens/small.console.all.data.html?DIGITAL=false&COG=true&HDG=false&TWD=false&TWS=false&TWA=false&AWS=false&AWA=false&STW=false
- | This is where the QR Code generator can proof useful.
+ | DIGITAL, 'false' by default
+ | http://server-ip:9999/web/small.screens/small.console.all.data.html?DIGITAL=true
  |
  | To see event subscriptions, look for "EVENT SUBSCRIBERS HERE."
  +-->
@@ -352,6 +349,33 @@
 			--value-font-size-factor: 1
 		}
 
+		/* Day, flat gray */
+		.analogdisplay-flat-gray {
+			--bg-color: rgba(255, 255, 255, 0.0);
+			--digit-color: grey;
+			--with-gradient: true;
+			--display-background-gradient-from: LightGrey;
+			--display-background-gradient-to: white; /* used if --withGradient: false */
+			--display-line-color: rgba(0, 0, 0, 0.5);
+			--label-fill-color: rgba(255, 255, 255, 0.5);
+			--with-display-shadow: false;
+			--shadow-color: rgba(0, 0, 0, 0.75);
+			--outline-color: DarkGrey;
+			--major-tick-color: grey;
+			--minor-tick-color: grey;
+			--value-color: grey;
+			--value-outline-color: black;
+			--value-nb-decimal: 1;
+			--hand-color: red;
+			--hand-outline-color: grey;
+			--with-hand-shadow: true;
+			--knob-color: DarkGrey;
+			--knob-outline-color: black;
+			--font: Arial;
+			--value-font-size-factor: 1
+		}
+
+
 		.thermometer-day {
 			--bg-color: rgba(0, 0, 0, 0);
 			--digit-color: DarkGrey;
@@ -469,30 +493,30 @@
 -->
 	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
 	<!--div class="tab" style="display: block;"-->
-		<button class="tablinks active" onclick="showSlides(1);">Position</button>
-		<button class="tablinks" onclick="showSlides(2);">Date & Time</button>
-		<button class="tablinks" onclick="showSlides(3);">SAT</button>
-		<button class="tablinks" onclick="showSlides(4);">COG</button>
-		<button class="tablinks" onclick="showSlides(5);">SOG</button>
-		<button class="tablinks" onclick="showSlides(6);">MAP</button>
+		<button class="tablinks active" onclick="showSlides(1);" title="GPS Position">Position</button>
+		<button class="tablinks" onclick="showSlides(2);" title="UTC Date & Time&#13;from GPS">Date & Time</button>
+		<button class="tablinks" onclick="showSlides(3);" title="GPS Satellites in view">SAT</button>
+		<button class="tablinks" onclick="showSlides(4);" title="Course Over Ground">COG</button>
+		<button class="tablinks" onclick="showSlides(5);" title="Speed Over Ground">SOG</button>
+		<button class="tablinks" onclick="showSlides(6);" title="Recent track">MAP</button>
 	</div>
 	<div class="tab" style="display: none; grid-template-columns: auto auto auto auto auto auto auto;">
-		<button class="tablinks active" onclick="showSlides(7);">BSP</button>
-		<button class="tablinks" onclick="showSlides(8);">AWS</button>
-		<button class="tablinks" onclick="showSlides(9);">AWA</button>
-		<button class="tablinks" onclick="showSlides(10);">TWS</button>
-		<button class="tablinks" onclick="showSlides(11);">TWD</button>
-		<button class="tablinks" onclick="showSlides(12);">TWA</button>
-		<button class="tablinks" onclick="showSlides(13);">HDG</button>
+		<button class="tablinks active" onclick="showSlides(7);" title="Boat Speed">BSP</button>
+		<button class="tablinks" onclick="showSlides(8);" title="Apparent Wind Speed">AWS</button>
+		<button class="tablinks" onclick="showSlides(9);" title="Apparent Wind Angle">AWA</button>
+		<button class="tablinks" onclick="showSlides(10);" title="True Wind Speed">TWS</button>
+		<button class="tablinks" onclick="showSlides(11);" title="Truw Wind Direction">TWD</button>
+		<button class="tablinks" onclick="showSlides(12);" title="True Wind Angle">TWA</button>
+		<button class="tablinks" onclick="showSlides(13);" title="True Heading">HDG</button>
 	</div>
 	<div class="tab" style="display: none; grid-template-columns: auto auto auto auto;">
-		<button class="tablinks active" onclick="showSlides(14);">PRMSL</button>
-		<button class="tablinks" onclick="showSlides(15);">WT</button>
-		<button class="tablinks" onclick="showSlides(16);">AT</button>
-		<button class="tablinks" onclick="showSlides(17);">HUM</button>
+		<button class="tablinks active" onclick="showSlides(14);" title="Pressure at Mean Sea Level">PRMSL</button>
+		<button class="tablinks" onclick="showSlides(15);" title="Water Temperature">WT</button>
+		<button class="tablinks" onclick="showSlides(16);" title="Air Temperature">AT</button>
+		<button class="tablinks" onclick="showSlides(17);" title="Relative Humidity">HUM</button>
 	</div>
 	<div class="tab" style="display: none; grid-template-columns: auto;">
-		<button class="tablinks active" onclick="showSlides(18);">RAW</button>
+		<button class="tablinks active" onclick="showSlides(18);" title="RAW Data from the Cache">RAW</button>
 	</div>
 
 </div>
@@ -574,7 +598,7 @@
 				<br/>
 				<span class="display-unit">knots</span>
 			</div>
-			<analog-display class="analogdisplay-day-speed display-data"
+			<analog-display class="analogdisplay-flat-gray display-data"
 							title="Speed Over Ground&#13;in knots"
 							id="sog"
 							min-value="0"
@@ -736,7 +760,7 @@
 				<span class="display-data" id="prmsl-dig">0000.0</span>
 				<span class="display-unit">hPa</span>
 			</div>
-			<analog-display class="analogdisplay-day-speed display-data"
+			<analog-display class="analogdisplay-flat-gray display-data"
 							title="PRMSL&#13;in mb"
 							id="prmsl"
 							min-value="968"
@@ -846,7 +870,7 @@
 				<br/>
 				<span class="display-unit">%</span>
 			</div>
-			<analog-display class="analogdisplay-day-speed display-data"
+			<analog-display class="analogdisplay-flat-gray display-data"
 							title="HUM&#13;in %"
 							id="hum"
 							min-value="0"
@@ -879,10 +903,10 @@
 <div id="category-bar">
 	<!-- Here we have the categories toolbar -->
 	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto;">
-		<button class="tablinks active" onclick="showCategoryBar(1);">GPS Data</button>
-		<button class="tablinks" onclick="showCategoryBar(2);">BOAT Data</button>
-		<button class="tablinks" onclick="showCategoryBar(3);">Atmospheric Data</button>
-		<button class="tablinks" onclick="showCategoryBar(4);">RAW Data</button>
+		<button class="tablinks active" onclick="showCategoryBar(1);" title="GPS Data">GPS Data</button>
+		<button class="tablinks" onclick="showCategoryBar(2);" title="Boat and Wind Data">BOAT Data</button>
+		<button class="tablinks" onclick="showCategoryBar(3);" title="Atmospheric Data">Atmospheric Data</button>
+		<button class="tablinks" onclick="showCategoryBar(4);" title="RAW Data from the Cache">RAW Data</button>
 	</div>
 
 </div>
