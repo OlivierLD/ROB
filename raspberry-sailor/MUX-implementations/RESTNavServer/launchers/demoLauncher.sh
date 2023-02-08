@@ -334,20 +334,20 @@ while [[ "${GO}" == "true" ]]; do
 				echo -e ">> Will use nohup"
 			fi
 		fi
-	    echo -e "Launching Nav Server with ${PROP_FILE}"
-	    # QUESTION: a 'screen' option ?
-	    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
-	    # echo -e "A screen session 'navserver' was started"
-	    #
-	    # bash -c "exec -a ProcessName Command"
-	    if [[ "${CMD_VERBOSE}" == "Y" ]]; then
-	      echo -e "Running command: [${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
-	    fi
-	    ${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
-	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
-		    echo -e ">>> Waiting for the server to start..."
-		    sleep 5  # Wait (5s) for the server to be operational
-		    openBrowser ${URL_OPTION_1}
+    echo -e "Launching Nav Server with ${PROP_FILE}"
+    # QUESTION: a 'screen' option ?
+    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
+    # echo -e "A screen session 'navserver' was started"
+    #
+    # bash -c "exec -a ProcessName Command"
+    if [[ "${CMD_VERBOSE}" == "Y" ]]; then
+      echo -e "Running command: [${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
+    fi
+    ${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+      echo -e ">>> Waiting for the server to start..."
+      sleep 5  # Wait (5s) for the server to be operational
+      openBrowser ${URL_OPTION_1}
 		else 
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
