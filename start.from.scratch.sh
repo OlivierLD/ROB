@@ -46,6 +46,7 @@ fi
 #
 GIT_TO_BE_INSTALLED=true
 if [[ "$(which git)" != "" ]]; then
+  echo -e "Git was found. OK."
   GIT_TO_BE_INSTALLED=false
 else
   echo -e "No Git found."
