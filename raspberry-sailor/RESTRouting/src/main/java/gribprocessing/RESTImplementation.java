@@ -246,8 +246,26 @@ public class RESTImplementation {
 	private final String HEADER_SEPARATOR = "\r\n";
 	private final String END_OF_HEADERS = HEADER_SEPARATOR + HEADER_SEPARATOR;
 
+
+	private static int findByteArrayIndex(byte[] in, byte[] toFind) {
+		int idx = -1;
+		for (int i=0; i<in.length - toFind.length; i++) {
+			boolean match = true;
+			for (int j=0; j<toFind.length; j++) {
+				if (in[i + j] != toFind[j]) {
+					match = false;
+					break;
+				}
+			}
+			if (match) {
+				idx = i;
+				break;
+			}
+		}
+		return idx;
+	}
 	/**
-	 * WiP...
+	 * WiP... Still not good for binaries.
 	 * @param request
 	 * @return
 	 */
@@ -290,63 +308,118 @@ GRIB �  `��!i 
 � 7777
 ------WebKitFormBoundaryvJgOKXKBW43PaOKs--
              */
-			System.out.printf("Request Content: %s\n", payload);
+			System.out.printf("--- Request Content ---\n%s\n---------\n", payload);
+
+			if (false) {
+				// Dump the beginning of the requestContent
+				try {
+					byte[] head = new byte[1_024];
+					for (int i = 0; i < 1_024; i++) { // TODO use System.arraycopy
+						head[i] = requestContent[i];
+					}
+					String[] sa = DumpUtil.dualDump(head);
+					if (sa != null) {
+						System.out.println(">>> Request Head (1024):");
+						for (String s : sa) {
+							System.out.println("\t\t" + s);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 
 			String key = boundary;
 			if (key.trim().length() == 0) {
 				key = payload.substring(0, payload.indexOf(HEADER_SEPARATOR));
 			}
 			System.out.println("Key: " + key);
-			// TODO Find the offset in the byte array ?
+			// Find the offset in the byte array
 			int headersEnd = payload.indexOf(END_OF_HEADERS) + END_OF_HEADERS.length();
-			int contentEnd = payload.lastIndexOf(key + "--");
 
+			int contentEnd = payload.lastIndexOf(HEADER_SEPARATOR + "--" + key + "--");
+//			int contentEnd = findByteArrayIndex(requestContent, (HEADER_SEPARATOR + "--" + key + "--").getBytes());
+
+			System.out.printf("HeadersEnd:%d, ContentEnd:%d, length:%d\n", headersEnd, contentEnd, (contentEnd - headersEnd));
+
+			// Different versions, for tests
+			if (true) {
+				gribContent = payload.substring(headersEnd, contentEnd).getBytes(StandardCharsets.UTF_8);
+			}
+			if (false) {
 //			gribContent = payload.substring(headersEnd, contentEnd).getBytes(); // StandardCharsets.UTF_16);
-			int baLength = (contentEnd - headersEnd);
-			gribContent = new byte[baLength];
+				int baLength = (contentEnd - headersEnd);
+				gribContent = new byte[baLength];
 //			ByteBuffer bb = ByteBuffer.wrap(requestContent); // , headersEnd, (contentEnd - headersEnd));
 //			bb.get(gribContent, headersEnd, baLength);
 
-			for (int i=0; i<baLength; i++) {
-				// gribContent[i] = requestContent[i + headersEnd];
-				byte b = (byte)payload.charAt(i + headersEnd); // -17 returns 0xFD, 0b1111 1101, should be 0b1000 0010
+				for (int i = 0; i < baLength; i++) {
+					// gribContent[i] = requestContent[i + headersEnd];
+					byte from_requestContent = requestContent[headersEnd + i];
+					byte b_orig = (byte) payload.charAt(i + headersEnd); // -17 returns 0xFD, 0b1111 1101, should be 0b1000 0010
+					byte b = b_orig;
 //				gribContent[i] = b;
 
 //				byte b = (byte) (0xFF & requestContent[i + headersEnd]);
-				if (true && (b > 0x80 || b < 0x00)) {
+					if (true && (b > 0x80 || b < 0x00)) {
 //					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
-					b &= 0x7F;
-					// (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
+						b &= 0x7F;
+						// (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
 //					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
-					b = (byte) (~b);  // 2's complement
+						b = (byte) (~b);  // 2's complement
 //					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
-					b = (byte) (b | 0x80); // Might be useless
+						b = (byte) (b | 0x80); // Might be useless
 //					System.out.printf("b: %d 0b%s, 0x%s\n", b, StringUtils.lpad(Integer.toString((int) (b & 0xFF), 2), 8, "0"), StringUtils.lpad(Integer.toString((int) b & 0xFF, 16), 2, "0"));
 //					System.out.println("-");
+					}
+					if (i <= 0xF) {
+						System.out.printf("b: (0x%s) 0x%s -> 0x%s\n",
+								StringUtils.lpad(Integer.toHexString(from_requestContent & 0xFF).toUpperCase(), 2, "0"),
+								StringUtils.lpad(Integer.toHexString(b_orig & 0xFF).toUpperCase(), 2, "0"),
+								StringUtils.lpad(Integer.toHexString(b & 0xFF).toUpperCase(), 2, "0"));
+					}
+					gribContent[i] = b; // (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
 				}
-				if (i < 10) {
-					System.out.printf("b: 0x%s\n", StringUtils.lpad(Integer.toHexString(b & 0xFF).toUpperCase(), 2, "0"));
-				}
-				gribContent[i] = b; // (byte)((~(requestContent[i + headersEnd] & 0x7F)) | 0x80);
+				System.out.printf("Offset diff %d - %d = %d, content length: %d\n", contentEnd, headersEnd, (contentEnd - headersEnd), gribContent.length);
 			}
-			System.out.printf("Offset diff %d - %d = %d, content length: %d\n", contentEnd, headersEnd, (contentEnd - headersEnd), gribContent.length);
+			if (false) {
+				int baLength = (contentEnd - headersEnd);
+				gribContent = new byte[baLength];
+				System.arraycopy(requestContent, headersEnd, gribContent, 0, baLength);
+//				for (int i=0; i<baLength; i++) {
+//					gribContent[i] = requestContent[headersEnd + i];
+//				}
+			}
 
 			if (true ) { // some tests...
+				final int CHUNK_SIZE = 64;
 				// The head
-				byte[] head = new byte[64];
-				System.arraycopy(gribContent, 0, head, 0, 64);
+				byte[] head = new byte[CHUNK_SIZE];
+				System.arraycopy(gribContent, 0, head, 0, CHUNK_SIZE);
 				String[] dd = DumpUtil.dualDump(head);
 				System.out.println("Head");
 				for (String l : dd) {
 					System.out.println(l);
 				}
 				// The tail
-				byte[] tail = new byte[64];
-				System.arraycopy(gribContent, gribContent.length - 64, tail, 0, 64);
+				byte[] tail = new byte[CHUNK_SIZE];
+				System.arraycopy(gribContent, gribContent.length - CHUNK_SIZE, tail, 0, CHUNK_SIZE);
 				dd = DumpUtil.dualDump(tail);
 				System.out.println("Tail");
 				for (String l : dd) {
 					System.out.println(l);
+				}
+			}
+
+			// For tests
+			if (true) {
+				try {
+					File outputFile = new File("outputFile.bin");
+					try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+						outputStream.write(gribContent);
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
 			}
 

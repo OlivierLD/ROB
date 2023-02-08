@@ -36,10 +36,6 @@ public class GRIBServer {
 				.collect(Collectors.toList());
 	}
 
-	public static void main(String... args) {
-		new GRIBServer();
-	}
-
 	public HTTPServer startHttpServer(int port, GRIBRequestManager requestManager) {
 		HTTPServer newHttpServer = null;
 		try {
@@ -51,4 +47,9 @@ public class GRIBServer {
 		}
 		return newHttpServer;
 	}
+
+	public static void main(String... args) {
+		new GRIBServer();
+	}
+
 }

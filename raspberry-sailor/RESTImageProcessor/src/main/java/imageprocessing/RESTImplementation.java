@@ -119,7 +119,7 @@ public class RESTImplementation {
 		return response;
 	}
 
-	// Experimental
+	// Experimental. WiP.
 	private Response uploadImage(Request request) {
 		Response response = new Response(request.getProtocol(), Response.CREATED);
 		if (request.getContent() != null && request.getContent().length > 0) {
