@@ -350,7 +350,9 @@ forwarders:
     properties: test.01.properties
 # No Computer
 ```
-Good.  
+> Note: The `Character Console` is to be managed as a Custom Forwarder, hence the `type` and `properties` entries in its definition.
+
+
 Last step, we must generate the `properties` file named `test.01.properties`, to 
 drive the behavior of the `Character Console`. Using - again - your favorite text editor,
 next to the `text.01.yaml` generated above (in the same directory), insert a content like
