@@ -4,10 +4,17 @@
 # use it at your own risks !
 # Written for Raspberry Pi, Debian, Ubuntu.
 #
-# wget https://github.com/itemir/rpi_boat_utils/raw/master/uart_control/uart_control
-# chmod +x ./uart_control
-# sudo ./uart_control gpio
+# Can be used like:
+# wget https://github.com/OlivierLD/ROB/raw/master/start.from.scratch.sh
+# chmod +x ./start.from.scratch.sh
+# ./start.from.scratch.sh
 #
+die ( ) {
+    echo "--------------------"
+    echo "$*"
+    echo "--------------------"
+    exit 1
+}
 # 1. See if JDK is available
 JDK_TO_BE_INSTALLED=true
 JAVA_TO_FIND=javac
@@ -37,7 +44,22 @@ fi
 #
 # Git ?
 #
-
+GIT_TO_BE_INSTALLED=true
+if [[ "$(which git)" != "" ]]; then
+  GIT_TO_BE_INSTALLED=false
+else
+  echo -e "No Git found."
+fi
+if [[ "${GIT_TO_BE_INSTALLED}" == "true" ]]; then
+  # Install GIT
+  echo -e "GIT is required"
+  echo -en "Do we install it now? > "
+  read REPLY
+  if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+      echo -e "Ok, moving on."
+      sudo apt-get install git-all
+  fi
+fi
 #
 # librxtx-java
 #
@@ -52,7 +74,7 @@ git clone https://github.com/OlivierLD/ROB.git
 cd ROB
 # Build the module RESTNavServer
 cd raspberry-sailor/MUX-implementations/RESTNavServer
-../../../gradlew shadowJar
+../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala || die "The build went wrong, stopping there."
 # Start the demo menu
 cd launchers
 ./demoLauncher.sh

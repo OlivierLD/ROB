@@ -15,6 +15,16 @@ at runtime.
 
 # Install required software, clone the repo, build and run a first module.
 
+> _**Note**_: If you are in a real hurry, and want things done _**NOW**_, just run this from a terminal:
+> ```
+> wget https://github.com/OlivierLD/ROB/raw/master/start.from.scratch.sh
+> chmod +x ./start.from.scratch.sh
+> ./start.from.scratch.sh
+> ```
+> This will install the required soft if missing, and run a build.
+
+Otherwise...:
+
 ## You will need:
 - `git`
 - `Java` (JDK 11)
