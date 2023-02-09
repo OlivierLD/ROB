@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Properties;
 
 public class TCPServer implements Forwarder {
-	private TCPServer instance = this;
-	private List<Socket> clientSocketList = new ArrayList<>(1);
+	private final TCPServer instance = this;
+	private final List<Socket> clientSocketList = new ArrayList<>(1);
 	private Properties props = null;
 
 	private int tcpPort = 7001; // Default
@@ -120,15 +120,16 @@ public class TCPServer implements Forwarder {
 					parent.setSocket(clientSkt);
 				}
 			} catch (Exception ex) {
-				System.err.println(String.format("SocketThread port %d: %s",tcpPort , ex.getLocalizedMessage()));
+				System.err.printf("SocketThread port %d: %s\n",tcpPort , ex.getLocalizedMessage());
 			}
 			System.out.println("..... End of TCP SocketThread.");
 		}
 	}
 
 	public static class TCPBean {
-		private final String cls;
-		private final int port;
+
+		private String cls;
+		private int port;
 		private final String type = "tcp";
 		private int nbClients = 0;
 
@@ -147,6 +148,8 @@ public class TCPServer implements Forwarder {
 		public int getNbClients() {
 			return nbClients;
 		}
+
+		public TCPBean() {}
 
 		public TCPBean(TCPServer instance) {
 			cls = instance.getClass().getName();
