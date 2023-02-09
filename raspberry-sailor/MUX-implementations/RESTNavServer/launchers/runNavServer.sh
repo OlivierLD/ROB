@@ -208,7 +208,7 @@ fi
 # JAVA_OPTS="${JAVA_OPTS} -Ddata.verbose=true"
 #
 if [[ "${HTTP_PORT}" != "" ]]; then
-  JAVA_OPTS="${JAVA_OPTS} -Dhttp.port=${HTTP_PORT}"
+  JAVA_OPTS="${JAVA_OPTS} -Dhttp.port=${HTTP_PORT}"   # Use only if not in config file yet.
 fi
 #
 COMMAND="${SUDO}java -cp ${CP} ${JAVA_OPTS} navrest.NavServer"

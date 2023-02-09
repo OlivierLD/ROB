@@ -1,31 +1,34 @@
 # Off we go!
 ### Aka "Get Started" for dummies
 
-This document should help anyone who's not familiar with programming, build, and such technologies.
+The goal here is to see something interesting, as fast as possible.
+
+This document should help anyone who's not familiar with programming, build, and such technologies.  
 If that is not the case, please do let me know, log a bug or a request.
 
-From this page, you will learn how to install the required software to build and run the whole stuff, from the git repo. 
+From this page, you will learn how to install the required software to build and run the whole stuff, _from the git repo_.  
+In other documents, we will explain how to do a build, and run its result on another (production) machine, without having the production machine to deal with or care about the repo.
 
 There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
 at runtime.
 
-> _**Note**_:   
-> - This document is written for RaspiOS, Debian, Ubuntu, and such clones.  
+> _**<big>Note</big>**_:
+> - This document is written for RaspiOS, Debian, Ubuntu, and such Linux clones.  
 > - The scripts in this repo are written for Bash Shell (`bash`).
 
 # Install required software, clone the repo, build and run a first module.
 
-> _**Note**_: If you are in a real hurry, and want things done _**NOW**_, just run this from a terminal:
+> _**Note**_: If you are in a real hurry, and want things done like _**NOW**_, just run this from a terminal:
 > ```
 > wget https://github.com/OlivierLD/ROB/raw/master/start.from.scratch.sh
 > chmod +x ./start.from.scratch.sh
 > ./start.from.scratch.sh
 > ```
-> This will install the required soft if missing, and run a build, and display a demo menu.  
+> This will install the required missing soft, and run a build, and display a demo menu.  
+> All you need to know about is reading english.  
 > Start with Option `1` if you're new to this stuff.   
 > Enjoy!  
-> Also check out the [Things to try](#things-to-try) section.
-
+> Do also check out the "[Things to try](#things-to-try)" section.
 
 Otherwise...:
 
@@ -287,13 +290,14 @@ running in a terminal. In addition, you want to see the same data in a Web page.
     > 
     > _**Note**_: if this symbolic link is required everytime, you might want to put it in your `/etc/rc.local` file.
 
-Now, we will use the web `MUX-builder` to generate the `yaml` configuration file.
+- **Step 2**  
+  Now, we will use the web `MUX-builder` to generate the `yaml` configuration file.
 
-- MUX-builder
-  - GPS
-  - Character-mode Console
+  - MUX-builder
+    - GPS
+    - Character-mode Console
 
-If the multiplexer is started, from a browser reach out to <http://localhost:9999/web/muxbuilder/dragndrop/mux-builder.html>, or from the <http://localhost:9999/web/index.html>, `Nav menu`,
+If the multiplexer is started (check your `[port]`), from a browser reach out to <http://localhost:[port]/web/muxbuilder/dragndrop/mux-builder.html>, or from the <http://localhost:[port]/web/index.html>, `Nav menu`,
 `Mux builder, graphical version`.   
 You can also directly open `./raspberry-sailor/MUX-implementations/RESTNavServer/launchers/web/muxbuilder/dragndrop/mux-builder.html`, as it does not require a server to be running.
 
@@ -373,12 +377,13 @@ SOG=2,4,YELLOW,BLACK,RED,BLACK
 This will display `POS` (GPS Position), `GDT` (GPS Date & Time), `SLT` (Solar Time), `COG` (Course Over Ground), and `SOG` (Speed Over Ground).  
 For all available option, see the class `CharacterModeConsole.java`, or files like `char.console.2.properties`.
 
+- **Step 3**  
 Now, let's start all this!  
 From a terminal, in the `launchers` folder, enter
 ```
-$ ./runNavServer.sh --mux:test.01.yaml --http-port:8080
+$ ./runNavServer.sh --mux:test.01.yaml
 ```
-The MUX should start, and your terminal should display a screen like
+The MUX should start, and your terminal should display a screen (with colors) like
 ```
 - Console - Test 01 -
 POS   47°40.67'N   3°08.13'W              
@@ -388,12 +393,12 @@ COG     0 t  SOG  0.10 kt
 ```
 The screen is update every second.
 
-For the Web interface, go to <http://localhost:8080/web/index.html>, then
+For the Web interface, go to <http://localhost:8080/web/index.html>, then  
 **&#9776; Nav Menu** > **Various NMEA Consoles** > **GPS Console (Small Screens)** :
 ![GPS Satellites](./images/gps.screens.png)
 
-You can also take a look at the Admin page, **&#9776; Nav Menu** > **Runtime Config Manager**.
-
+You can also take a look at the _**Admin**_ page,  
+**&#9776; Nav Menu** > **Runtime Config Manager**.
 
 Finally, to stop the MUX, hit `[Ctrl-C]` in the console.
 
