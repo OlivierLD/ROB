@@ -31,19 +31,39 @@ public class NavServer {
 
 		boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose", "true"));
 
-		String port = System.getProperty("http.port");  // TODO Get it from the config file !!!
-		if (port != null) {
-			try {
-				httpPort = Integer.parseInt(port);
-				System.out.printf("(%s) Will use HTTP Port %d (from -Dhttp.port)\n", this.getClass().getName(), httpPort);
-			} catch (NumberFormatException nfe) {
-				System.err.println(nfe.toString());
-			}
-		} else {
-			System.out.printf("(%s) HTTP Port defaulted to %d\n", this.getClass().getName(), httpPort);
+		final Properties muxDefinitions = GenericNMEAMultiplexer.getDefinitions();
+
+		String withHttpServer = muxDefinitions.getProperty("with.http.server", "no");
+		if (withHttpServer.equals("no") || withHttpServer.equals("false")) {
+			System.out.printf("(%s) Warning: WILL instantiate an HTTP Server (enforced)\n", this.getClass().getName());
+			muxDefinitions.setProperty("with.http.server", "true");
 		}
+		String initCache = muxDefinitions.getProperty("init.cache", "no");
+		if (initCache.equals("no") || initCache.equals("false")) {
+			System.out.printf("(%s) Warning: WILL initialize the cache (enforced)\n", this.getClass().getName());
+			muxDefinitions.setProperty("init.cache", "true");
+		}
+
+		String port = muxDefinitions.getProperty("http.port");
+		if (port != null) {
+			httpPort = Integer.parseInt(port);
+		} else {
+			port = System.getProperty("http.port");
+			if (port != null) {
+				try {
+					httpPort = Integer.parseInt(port);
+					System.out.printf("(%s) Will use HTTP Port %d (from -Dhttp.port)\n", this.getClass().getName(), httpPort);
+				} catch (NumberFormatException nfe) {
+					System.err.println(nfe.toString());
+				}
+			} else {
+				System.out.printf("(%s) HTTP Port defaulted to %d\n", this.getClass().getName(), httpPort);
+			}
+		}
+
 		System.out.printf("(%s) running on port %d\n", this.getClass().getName(), httpPort);
 		this.httpServer = startHttpServer(httpPort, new NavRequestManager(this));
+
 		// Add astronomical features...
 		if (infraVerbose) {
 			System.out.printf("\t>> %s (%s) - adding AstroRequestManager\n",
@@ -59,7 +79,7 @@ public class NavServer {
 		}
 		this.httpServer.addRequestManager(new TideRequestManager());
 		// Add Nav features: Dead Reckoning, logging, re-broadcasting, from the NMEA Multiplexer
-		Properties definitions = GenericNMEAMultiplexer.getDefinitions();
+		Properties definitions = muxDefinitions; // GenericNMEAMultiplexer.getDefinitions();
 		multiplexer = new GenericNMEAMultiplexer(definitions);
 		if (infraVerbose) {
 			System.out.printf("\t>> %s (%s) - adding GenericNMEAMultiplexer\n",
@@ -99,10 +119,6 @@ public class NavServer {
 				.collect(Collectors.toList());
 	}
 
-	public static void main(String... args) {
-		new NavServer();
-	}
-
 	public HTTPServer startHttpServer(int port, NavRequestManager requestManager) {
 		HTTPServer newHttpServer = null;
 		try {
@@ -115,5 +131,9 @@ public class NavServer {
 			e.printStackTrace();
 		}
 		return newHttpServer;
+	}
+
+	public static void main(String... args) {
+		new NavServer();
 	}
 }

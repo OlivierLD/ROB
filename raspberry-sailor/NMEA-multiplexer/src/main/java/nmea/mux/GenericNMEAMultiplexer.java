@@ -423,27 +423,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         return props;
     }
 
-    /**
-     * Start the Multiplexer from here.
-     * Supported System variables (VM options):
-     * - process.on.start (default true)
-     * - mux.data.verbose (default false)
-     * - mux.infra.verbose (default false)
-     * - mux.properties (default 'nmea.mux.properties')
-     * - yaml.tx.verbose (default no)
-     *
-     * @param args CLI prms. see "--interactive-config".
-     */
-    public static void main(String... args) {
-        AtomicBoolean interactiveConfig = new AtomicBoolean(false);
-        Arrays.asList(args).forEach(prm -> {
-            if ("--interactive-config".equals(prm)) {
-                interactiveConfig.set(true);
-            }
-        });
-
-        Properties definitions = interactiveConfig.get() ? GenericNMEAMultiplexer.interactiveConfig() :  GenericNMEAMultiplexer.getDefinitions();
-
+    public static void initDefinitions(Properties definitions) {
         if (definitions.get("name") != null) {
             System.out.printf("Definition Name: %s\n", definitions.get("name"));
         }
@@ -492,5 +472,28 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
                         GenericNMEAMultiplexer.class.getName());
             }
         }
+    }
+
+    /**
+     * Start the Multiplexer from here.
+     * Supported System variables (VM options):
+     * - process.on.start (default true)
+     * - mux.data.verbose (default false)
+     * - mux.infra.verbose (default false)
+     * - mux.properties (default 'nmea.mux.properties')
+     * - yaml.tx.verbose (default no)
+     *
+     * @param args CLI prms. see "--interactive-config".
+     */
+    public static void main(String... args) {
+        AtomicBoolean interactiveConfig = new AtomicBoolean(false);
+        Arrays.asList(args).forEach(prm -> {
+            if ("--interactive-config".equals(prm)) {
+                interactiveConfig.set(true);
+            }
+        });
+
+        Properties definitions = interactiveConfig.get() ? GenericNMEAMultiplexer.interactiveConfig() :  GenericNMEAMultiplexer.getDefinitions();
+        initDefinitions(definitions);
     }
 }
