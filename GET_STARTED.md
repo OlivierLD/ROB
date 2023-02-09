@@ -395,7 +395,10 @@ The screen is updated every second.
 
 For the Web interface, open <http://localhost:8080/web/index.html> in a browser (use the IP address if the browser is not on localhost), then  
 **&#9776; Nav Menu** > **Various NMEA Consoles** > **GPS Console (Small Screens)** :
-![GPS Satellites](./images/gps.screens.png)
+
+| 1 | 2 | 3 | 4 | 5 | 6 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![GPS Satellites](./images/gps.screens.01.png) | ![GPS Satellites](./images/gps.screens.02.png) | ![GPS Satellites](./images/gps.screens.03.png) | ![GPS Satellites](./images/gps.screens.04.png) | ![GPS Satellites](./images/gps.screens.05.png) | ![GPS Satellites](./images/gps.screens.06.png) |
 
 You can also take a look at the graphical  _**Admin**_ page,  
 **&#9776; Nav Menu** > **Runtime Config Manager**.
