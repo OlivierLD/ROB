@@ -318,7 +318,7 @@ Next, select the `Forwarders` tab, and scroll down the left pane, to see the `Dy
 Drag it in the middle, and edit its properties:
 ![Mux Builder](./images/mux-builder.06.png)
 Enter `nmea.forwarders.CharacterConsoleWriter` in Class Name, and 
-`test.01.properties` in Properties File (We will generate this file later).  
+`test.01.properties` in Properties File (we will generate this file later).  
 You can already see your config file generated in the right pane.  
 To finish, click the `Generate YAML` button, at the bottom left.
 ![Mux Builder](./images/mux-builder.07.png)
@@ -375,7 +375,7 @@ COG=1,4,YELLOW,BLACK,GREEN,BLACK
 SOG=2,4,YELLOW,BLACK,RED,BLACK
 ```
 This will display `POS` (GPS Position), `GDT` (GPS Date & Time), `SLT` (Solar Time), `COG` (Course Over Ground), and `SOG` (Speed Over Ground).  
-For all available option, see the class `CharacterModeConsole.java`, or files like `char.console.2.properties`.
+For all available options, see the class `CharacterModeConsole.java`, or files like `char.console.2.properties`.
 
 - **Step 3**  
 Now, let's start all this!  
@@ -391,13 +391,13 @@ GDT 08 Feb 2023 11:48:06 UTC
 SLT 08 Feb 2023 12:32:00 Solar                    
 COG     0 t  SOG  0.10 kt           
 ```
-The screen is update every second.
+The screen is updated every second.
 
-For the Web interface, go to <http://localhost:8080/web/index.html>, then  
+For the Web interface, open <http://localhost:8080/web/index.html> in a browser (use the IP address if the browser is not on localhost), then  
 **&#9776; Nav Menu** > **Various NMEA Consoles** > **GPS Console (Small Screens)** :
 ![GPS Satellites](./images/gps.screens.png)
 
-You can also take a look at the _**Admin**_ page,  
+You can also take a look at the graphical  _**Admin**_ page,  
 **&#9776; Nav Menu** > **Runtime Config Manager**.
 
 Finally, to stop the MUX, hit `[Ctrl-C]` in the console.

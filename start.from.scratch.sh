@@ -33,7 +33,7 @@ fi
 if [[ "${JDK_TO_BE_INSTALLED}" == "true" ]]; then
   # Install JDK 11
   echo -e "JDK is required"
-  echo -en "Do we install it now? > "
+  echo -en "Install it now? > "
   read REPLY
   if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
       echo -e "Ok, moving on."
@@ -54,7 +54,7 @@ fi
 if [[ "${GIT_TO_BE_INSTALLED}" == "true" ]]; then
   # Install GIT
   echo -e "GIT is required"
-  echo -en "Do we install it now? > "
+  echo -en "Install it now? > "
   read REPLY
   if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
       echo -e "Ok, moving on."
