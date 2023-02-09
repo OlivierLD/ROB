@@ -284,6 +284,8 @@ running in a terminal. In addition, you want to see the same data in a Web page.
     > ```
     > sudo ln -s /dev/ttyACM0 /dev/ttyS80
     > ```
+    > 
+    > _**Note**_: if this symbolic link is required everytime, you might want to put it in your `/etc/rc.local` file.
 
 Now, we will use the web `MUX-builder` to generate the `yaml` configuration file.
 
@@ -374,7 +376,7 @@ For all available option, see the class `CharacterModeConsole.java`, or files li
 Now, let's start all this!  
 From a terminal, in the `launchers` folder, enter
 ```
-$ ./runNavServer.sh --mux:test.01.yaml
+$ ./runNavServer.sh --mux:test.01.yaml --http-port:8080
 ```
 The MUX should start, and your terminal should display a screen like
 ```
@@ -386,9 +388,12 @@ COG     0 t  SOG  0.10 kt
 ```
 The screen is update every second.
 
-For the Web interface, go to <http://localhost:9999/web/index.html>, then
+For the Web interface, go to <http://localhost:8080/web/index.html>, then
 **&#9776; Nav Menu** > **Various NMEA Consoles** > **GPS Console (Small Screens)** :
 ![GPS Satellites](./images/gps.screens.png)
+
+You can also take a look at the Admin page, **&#9776; Nav Menu** > **Runtime Config Manager**.
+
 
 Finally, to stop the MUX, hit `[Ctrl-C]` in the console.
 

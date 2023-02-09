@@ -131,7 +131,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
     }
 
     private static boolean verbose = "true".equals(System.getProperty("mux.data.verbose"));
-    private final static boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose"));
+    private final static boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose", "true")); // Defaulted to true (for now)
     private boolean process = true; // onData, forward to computers and forwarders
 
     private boolean softStop = false;

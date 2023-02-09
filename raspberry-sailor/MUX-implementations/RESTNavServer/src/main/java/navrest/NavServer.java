@@ -31,7 +31,7 @@ public class NavServer {
 
 		boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose", "true"));
 
-		String port = System.getProperty("http.port");
+		String port = System.getProperty("http.port");  // TODO Get it from the config file !!!
 		if (port != null) {
 			try {
 				httpPort = Integer.parseInt(port);

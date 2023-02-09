@@ -7,7 +7,7 @@ echo -e "     -p or --proxy means with a proxy (proxy definition in the script $
 echo -e "     -m or --mux points to the properties file to use for the Multiplexer, default is nmea.mux.properties"
 echo -e "     -sf or --sun-flower means with Sun Flower option (extra Request Manager)"
 echo -e "     --no-date does not put any GPS date or time (replayed or live) in the cache (allows you to use a ZDA generator)"
-echo -e "     --no-rmc-time will NOT set rmc time (only date & time). Usefull when replaying data"
+echo -e "     --no-rmc-time will NOT set rmc time (only date & time). Useful when replaying data"
 echo -e "----------------------------"
 #
 echo -e "⚓ Starting the Navigation Rest Server 🌴"
@@ -46,6 +46,7 @@ done
 #
 if [[ "${INFRA_VERBOSE}" == "" ]]; then
   INFRA_VERBOSE=true
+  echo -e "Setting INFRA_VERBOSE to ${INFRA_VERBOSE}"
 fi
 HTTP_VERBOSE=false
 TIDE_VERBOSE=false
