@@ -196,11 +196,12 @@ public class DataFileWriter implements Forwarder {
 	}
 
 	public static class DataFileBean {
-		private final String cls;
-		private final String log;
-		private final boolean append;
+		private String cls;
+		private String log;
+		private boolean append;
 		private final String type = "file";
 
+		public DataFileBean() {}   // This is for Jackson
 		public DataFileBean(DataFileWriter instance) {
 			cls = instance.getClass().getName();
 			log = instance.log;

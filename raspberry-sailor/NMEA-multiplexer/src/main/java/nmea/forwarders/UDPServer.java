@@ -60,10 +60,11 @@ public class UDPServer implements Forwarder {
 	}
 
 	public static class UDPBean {
-		private final String cls;
-		private final int port;
+		private String cls;
+		private int port;
 		private final String type = "udp";
 
+		public UDPBean() {}  // This is for Jackson
 		public UDPBean(UDPServer instance) {
 			cls = instance.getClass().getName();
 			port = instance.udpPort;

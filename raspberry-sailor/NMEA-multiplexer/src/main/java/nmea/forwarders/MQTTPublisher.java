@@ -139,9 +139,9 @@ public class MQTTPublisher implements Forwarder {
 	}
 
 	public static class MQTTBean {
-		private final String cls;
-		private final String brokerURL;
-		private final String type = "mqtt";
+		private String cls;
+		private String brokerURL;
+		private String type = "mqtt";
 
 		public String getCls() {
 			return cls;
@@ -151,6 +151,7 @@ public class MQTTPublisher implements Forwarder {
 			return type;
 		}
 
+		public MQTTBean() {}   // This is for Jackson
 		public MQTTBean(MQTTPublisher instance) {
 			cls = instance.getClass().getName();
 			brokerURL = instance.brokerURL;

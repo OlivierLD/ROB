@@ -76,10 +76,11 @@ public class WebSocketWriter implements Forwarder {
 	}
 
 	public static class WSBean {
-		private final String cls;
-		private final String wsUri;
+		private String cls;
+		private String wsUri;
 		private final String type = "ws";
 
+		public WSBean() {}  // This is for Jackson
 		public WSBean(WebSocketWriter instance) {
 			cls = instance.getClass().getName();
 			wsUri = instance.wsUri;

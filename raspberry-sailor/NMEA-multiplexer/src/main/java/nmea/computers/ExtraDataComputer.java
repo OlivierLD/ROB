@@ -334,7 +334,7 @@ public class ExtraDataComputer extends Computer {
 	}
 
 	public static class ComputerBean {
-		private final String cls;
+		private String cls;
 		private final String type = "tw-current";
 		private String timeBufferLength = "600000"; // Default is 10 minutes.
 		private int cacheSize = 0;
@@ -370,6 +370,7 @@ public class ExtraDataComputer extends Computer {
 			return tbSize;
 		}
 
+		public ComputerBean() {}  // This is for Jackson
 		public ComputerBean(ExtraDataComputer instance) {
 			this.cls = instance.getClass().getName();
 			this.cacheSize = ApplicationContext.getInstance().getDataCache().size();

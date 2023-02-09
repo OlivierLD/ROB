@@ -191,9 +191,9 @@ public class GPSdServer implements Forwarder {
 	}
 
 	public static class GPSdBean {
-		private final String cls;
-		private final int port;
-		private final String type = "gpsd";
+		private String cls;
+		private int port;
+		private String type = "gpsd";
 		private int nbClients = 0;
 
 		public int getPort() {
@@ -212,6 +212,7 @@ public class GPSdServer implements Forwarder {
 			return nbClients;
 		}
 
+		public GPSdBean() {}   // This is for Jackson
 		public GPSdBean(GPSdServer instance) {
 			cls = instance.getClass().getName();
 			port = instance.tcpPort;

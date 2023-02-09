@@ -116,10 +116,11 @@ public class SQLitePublisher implements Forwarder {
 	}
 
 	public static class SQLiteBean {
-		private final String cls;
-		private final String dbURL;
-		private final String type = "sqlite";
+		private String cls;
+		private String dbURL;
+		private String type = "sqlite";
 
+		public SQLiteBean() {}   // This is for Jackson
 		public SQLiteBean(SQLitePublisher instance) {
 			cls = instance.getClass().getName();
 			dbURL = instance.dbURL;

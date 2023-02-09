@@ -161,8 +161,7 @@ public class RESTPublisher implements Forwarder {
 			return type;
 		}
 
-		public RESTBean() {
-		}
+		public RESTBean() {}   // This is for Jackson
 
 		public RESTBean(RESTPublisher instance) {
 			cls = instance.getClass().getName();

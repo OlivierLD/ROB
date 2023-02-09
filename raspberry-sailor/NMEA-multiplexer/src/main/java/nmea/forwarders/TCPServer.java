@@ -149,7 +149,7 @@ public class TCPServer implements Forwarder {
 			return nbClients;
 		}
 
-		public TCPBean() {}
+		public TCPBean() {}  // This is for Jackson
 
 		public TCPBean(TCPServer instance) {
 			cls = instance.getClass().getName();

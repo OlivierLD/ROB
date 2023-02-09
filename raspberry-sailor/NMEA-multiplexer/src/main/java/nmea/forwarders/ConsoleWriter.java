@@ -25,7 +25,7 @@ public class ConsoleWriter implements Forwarder {
 		private String cls;
 		private final String type = "console";
 
-		public ConsoleBean() {}
+		public ConsoleBean() {}  // This is for Jackson
 		public ConsoleBean(ConsoleWriter instance) {
 			cls = instance.getClass().getName();
 		}

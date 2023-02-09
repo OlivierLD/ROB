@@ -202,8 +202,8 @@ public class NMEACachePublisher implements Forwarder {
     }
 
     public static class NMEACacheBean {
-        private final String cls; // Class
-        private final String type = "nmea-cache-publisher";
+        private String cls; // Class
+        private String type = "nmea-cache-publisher";
         protected long betweenLoops;
         protected String protocol;
         protected String verb;
@@ -212,6 +212,7 @@ public class NMEACachePublisher implements Forwarder {
         protected String resource;
         protected String queryString;
 
+        public NMEACacheBean() {}   // This is for Jackson
         public NMEACacheBean(NMEACachePublisher instance,
                              long betweenLoops,  // TODO Check factor 1000 ?
                              String protocol,
