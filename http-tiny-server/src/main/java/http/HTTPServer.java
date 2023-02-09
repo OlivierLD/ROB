@@ -1034,7 +1034,10 @@ public class HTTPServer {
 						httpServerInstance.portOpenCallback.accept(httpServerInstance.getPort());
 					}
 
-					System.out.printf("%s - %s now accepting requests\n", NumberFormat.getInstance().format(System.currentTimeMillis()), httpServerInstance.getClass().getName());
+					System.out.printf("%s - %s now accepting requests on port %d\n",
+							NumberFormat.getInstance().format(System.currentTimeMillis()),
+							httpServerInstance.getClass().getName(),
+							httpServerInstance.getPort());
 					while (isRunning()) {
 						// Socket client = ss.accept(); // Blocking read
 						new RequestHandler(ss.accept()).start();

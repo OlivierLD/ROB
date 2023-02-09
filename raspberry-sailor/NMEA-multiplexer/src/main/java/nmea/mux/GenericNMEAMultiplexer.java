@@ -192,7 +192,10 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         Context.getInstance().setStartTime(System.currentTimeMillis());
 
         if (infraVerbose) {
-            System.out.printf("\t>> %s - Constructor %s, Initializing RESTImplementation...\n", NumberFormat.getInstance().format(System.currentTimeMillis()), this.getClass().getName());
+            System.out.printf("\t>> %s (%s) - Constructor %s, Initializing RESTImplementation...\n",
+                    NumberFormat.getInstance().format(System.currentTimeMillis()),
+                    this.getClass().getName(),
+                    this.getClass().getName());
         }
         // Read initial config from the properties file. See the main method.
 //		verbose = "true".equals(System.getProperty("mux.data.verbose", "false")); // Initial verbose.
@@ -200,7 +203,9 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         MuxInitializer.setup(muxProps, nmeaDataClients, nmeaDataForwarders, nmeaDataComputers, this, verbose);
 
         if (infraVerbose) {
-            System.out.printf("\t>> %s - RESTImplementation initialized.\n", NumberFormat.getInstance().format(System.currentTimeMillis()));
+            System.out.printf("\t>> %s (%s) - RESTImplementation initialized.\n",
+                    NumberFormat.getInstance().format(System.currentTimeMillis()),
+                    this.getClass().getName());
         }
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (!softStop) {
@@ -210,7 +215,10 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
 
         nmeaDataClients.forEach(client -> {
             if (infraVerbose) {
-                System.out.printf("\t>> %s - NMEADataClient: Starting %s...\n", NumberFormat.getInstance().format(System.currentTimeMillis()), client.getClass().getName());
+                System.out.printf("\t>> %s (%s) - NMEADataClient: Starting %s...\n",
+                        NumberFormat.getInstance().format(System.currentTimeMillis()),
+                        client.getClass().getName(),
+                        client.getClass().getName());
             }
             try {
                 client.startWorking();
@@ -219,7 +227,9 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             }
         });
         if (infraVerbose) {
-            System.out.printf("\t>> %s - %s constructor completed.\n", NumberFormat.getInstance().format(System.currentTimeMillis()), this.getClass().getName());
+            System.out.printf("\t>> %s (%s) constructor completed.\n",
+                    NumberFormat.getInstance().format(System.currentTimeMillis()),
+                    this.getClass().getName());
         }
     }
 
@@ -233,7 +243,10 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             this.adminServer = new HTTPServer(port, this);
             this.adminServer.startServer();
             if (infraVerbose) {
-                System.out.printf("\t>> %s - Starting Admin server on port %d\n", NumberFormat.getInstance().format(System.currentTimeMillis()), port);
+                System.out.printf("\t>> %s (%s) - Starting Admin server on port %d\n",
+                        NumberFormat.getInstance().format(System.currentTimeMillis()),
+                        this.getClass().getName(),
+                        port);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -468,12 +481,15 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         if ("yes".equals(withHttpServer) || "true".equals(withHttpServer)) {
             int httpPort = Integer.parseInt(definitions.getProperty("http.port", "9999"));
             if (infraVerbose) {
-                System.out.printf("Starting Admin server on port %d\n", httpPort);
+                System.out.printf("(%s) Starting Admin server on port %d\n",
+                        GenericNMEAMultiplexer.class.getName(),
+                        httpPort);
             }
             mux.startAdminServer(httpPort);
         } else {
             if (infraVerbose) {
-                System.out.println("\t>> NO Admin server started");
+                System.out.printf("\t>> (%s) NO Admin server started\n",
+                        GenericNMEAMultiplexer.class.getName());
             }
         }
     }
