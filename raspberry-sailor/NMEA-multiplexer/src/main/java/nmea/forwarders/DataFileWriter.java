@@ -19,12 +19,12 @@ import java.util.TimeZone;
 public class DataFileWriter implements Forwarder {
 	private BufferedWriter dataFile;
 	private String log;
-	private boolean append;
-	private boolean timeBased;
-	private String radix;
+	private final boolean append;
+	private final boolean timeBased;
+	private final String radix;
 	private String dir;
 	private String split;
-	private boolean flush;
+	private final boolean flush;
 	private long timeSplitThreshold = 0L;
 
 	private final static long MIN_MS  = 60 * 1_000;
@@ -49,7 +49,7 @@ public class DataFileWriter implements Forwarder {
 	}
 
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
-		System.out.println(String.format("- Start writing to %s, %s ", this.getClass().getName(), fName));
+		System.out.printf("- Start writing to %s, %s \n", this.getClass().getName(), fName);
 
 		this.log = fName;
 		this.append = append;
@@ -78,7 +78,7 @@ public class DataFileWriter implements Forwarder {
 		try {
 			this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
 		} catch (Exception ex) {
-			System.err.println(String.format("When creating [%s]", this.log));
+			System.err.printf("When creating [%s]\n", this.log);
 			throw ex;
 		}
 	}
@@ -100,7 +100,7 @@ public class DataFileWriter implements Forwarder {
 						try {
 							this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
 						} catch (Exception ex) {
-							System.err.println(String.format("When creating [%s]", this.log));
+							System.err.printf("When creating [%s]\n", this.log);
 							throw ex;
 						}
 						this.timeSplitThreshold = nextSplit();
@@ -153,38 +153,34 @@ public class DataFileWriter implements Forwarder {
 		today00.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 		long timeSplitThreshold = today00.getTimeInMillis();
 		switch (this.split) {
-			case "min":
+			case "min" -> {
 				Calendar todayThisMinute = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
 				todayThisMinute.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayThisMinute.add(Calendar.MINUTE, 1);
 				timeSplitThreshold = todayThisMinute.getTimeInMillis();
-				break;
-			case "hour":
+			}
+			case "hour" -> {
 				Calendar todayThisHour = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), 0);
 				todayThisHour.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayThisHour.add(Calendar.HOUR, 1);
 				timeSplitThreshold = todayThisHour.getTimeInMillis();
-				break;
-			case "day":
-				timeSplitThreshold += DAY_MS;
-				break;
-			case "week":
-				timeSplitThreshold += WEEK_MS;
-				break;
-			case "month":
+			}
+			case "day" -> timeSplitThreshold += DAY_MS;
+			case "week" -> timeSplitThreshold += WEEK_MS;
+			case "month" -> {
 				Calendar today1st = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 1);
 				today1st.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				today1st.add(Calendar.MONTH, 1);
 				timeSplitThreshold = today1st.getTimeInMillis();
-				break;
-			case "year":
+			}
+			case "year" -> {
 				Calendar todayJan1st = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JANUARY, 1);
 				todayJan1st.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayJan1st.add(Calendar.YEAR, 1);
 				timeSplitThreshold = todayJan1st.getTimeInMillis();
-				break;
-			default:
-				break;
+			}
+			default -> {
+			}
 		}
 //		{
 //			Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("etc/UTC"));
