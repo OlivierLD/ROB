@@ -1036,13 +1036,25 @@ public class RESTImplementation {
 				try {
 					DataFileWriter.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileWriter.DataFileBean.class); //  new Gson().fromJson(new String(request.getContent()), DataFileWriter.DataFileBean.class);
 					// Check if not there yet.
-					opFwd = nmeaDataForwarders.stream()
+					opFwd = nmeaDataForwarders.stream()   // TODO Something more accurate...
 							.filter(fwd -> fwd instanceof DataFileWriter &&
 									((DataFileWriter) fwd).getLog().equals(fileJson.getLog()))
 							.findFirst();
 					if (!opFwd.isPresent()) {
 						try {
-							Forwarder fileForwarder = new DataFileWriter(fileJson.getLog(), fileJson.append());
+							Forwarder fileForwarder = null;
+							if (fileJson.isTimeBased()) {
+								fileForwarder = new DataFileWriter(
+										fileJson.getLog(),
+										fileJson.append(),
+										fileJson.isTimeBased(),
+										fileJson.getRadix(),
+										fileJson.getDir(),
+										fileJson.getSplit(),
+										fileJson.isFlush());
+							} else {
+								fileForwarder = new DataFileWriter(fileJson.getLog(), fileJson.append(), fileJson.isFlush());
+							}
 							nmeaDataForwarders.add(fileForwarder);
 							String content = mapper.writeValueAsString(fileForwarder.getBean()); // new Gson().toJson(fileForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -1054,7 +1066,7 @@ public class RESTImplementation {
 						}
 					} else {
 						response.setStatus(HTTPServer.Response.BAD_REQUEST);
-						RESTProcessorUtil.addErrorMessageToResponse(response, "this 'file' alreacy exists");
+						RESTProcessorUtil.addErrorMessageToResponse(response, "this 'file' already exists");
 					}
 				} catch (Exception ex) {
 					response.setStatus(HTTPServer.Response.BAD_REQUEST);

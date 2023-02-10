@@ -47,6 +47,9 @@ public class DataFileWriter implements Forwarder {
 	public DataFileWriter(String fName, boolean append) throws Exception {
 		this(fName, append, false, null, null, null, false);
 	}
+	public DataFileWriter(String fName, boolean append, boolean flush) throws Exception {
+		this(fName, append, false, null, null, null, flush);
+	}
 
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
 		System.out.printf("- Start writing to %s, %s \n", this.getClass().getName(), fName);

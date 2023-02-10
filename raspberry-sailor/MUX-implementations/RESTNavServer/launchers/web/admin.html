@@ -568,7 +568,7 @@
                 let suffix = document.getElementById('fwd-data-file-tb-suffix').value;
                 let logDir = document.getElementById('fwd-data-file-tb-log-dir').value;
                 let split = document.getElementById('fwd-data-file-tb-split').value;
-                let flush = document.getElementById("fwd-data-file-tb-flush").is(':checked');
+                let flush = document.getElementById("fwd-data-file-tb-flush").checked;
 
                 fwdPayload = {
                   type: 'file',
@@ -585,8 +585,8 @@
                   alert('Log file name is required');
                   return;
                 }
-                let append = document.getElementById("fwd-data-file-app").is(':checked');
-                let flush = document.getElementById("fwd-data-file-flush").is(':checked');
+                let append = document.getElementById("fwd-data-file-app").checked;
+                let flush = document.getElementById("fwd-data-file-flush").checked;
 
                 fwdPayload = {
                   type: 'file',
