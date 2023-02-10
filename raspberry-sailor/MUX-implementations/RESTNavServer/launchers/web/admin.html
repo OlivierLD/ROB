@@ -154,277 +154,111 @@
             document.getElementById("show-hide-raw-data").innerHTML = (showRESTData ? "<small>&nbsp;<img src='pandown.gif'> Hide REST Traffic</small>" : "<small>&nbsp;<img src='panright.gif'> Show REST Traffic</small>");
         }
 
+        const CHANNELS = [
+          "channel-serial",
+          "channel-tcp",
+          "channel-file",
+          "channel-ws",
+          "channel-rnd",
+          // "channel-bmp180",
+          // "channel-bme280",
+          // "channel-lsm303",
+          // "channel-htu21df",
+          "channel-zda",
+          "channel-rest",
+          "channel-custom"
+        ];
+        const FORWARDERS = [
+          "forward-serial",
+          "forward-tcp",
+          "forward-rest",
+          "forward-gpsd",
+          "forward-rmi",
+          "forward-file",
+          "forward-ws",
+          "forward-console",
+          "forward-custom"
+        ];
+        const COMPUTERS = [
+          "computer-twc",
+          "computer-custom"
+        ];
+
+        function onOrOff(idsArray, toTurnOn) {
+          idsArray.forEach(channel => document.getElementById(channel).style.display = (channel === toTurnOn ? 'inline' : 'none'));
+        }
+        
         function manageChannelSelection(selected) {
             switch (selected) {
                 case 'serial':
-                    document.getElementById("channel-serial").style.display = 'inline';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-serial");
+                  break;
                 case 'tcp':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'inline';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-tcp");
+                  break;
                 case 'file':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'inline';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-file");
+                  break;
                 case 'ws':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'inline';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-ws");
+                  break;
                 case 'rnd':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'inline';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-rnd");
+                  break;
                 // case 'bmp180':
-                //     document.getElementById("channel-serial").style.display = 'none';
-                //     document.getElementById("channel-tcp").style.display = 'none';
-                //     document.getElementById("channel-file").style.display = 'none';
-                //     document.getElementById("channel-ws").style.display = 'none';
-                //     document.getElementById("channel-rnd").style.display = 'none';
-                //     document.getElementById("channel-bmp180").style.display = 'inline';
-                //     document.getElementById("channel-bme280").style.display = 'none';
-                //     document.getElementById("channel-lsm303").style.display = 'none';
-                //     document.getElementById("channel-htu21df").style.display = 'none';
-                //     document.getElementById("channel-zda").style.display = 'none';
-                //     document.getElementById("channel-custom").style.display = 'none';
+                //     onOrOff(CHANNELS, "channel-bmp180");
                 //     break;
                 // case 'bme280':
-                //     document.getElementById("channel-serial").style.display = 'none';
-                //     document.getElementById("channel-tcp").style.display = 'none';
-                //     document.getElementById("channel-file").style.display = 'none';
-                //     document.getElementById("channel-ws").style.display = 'none';
-                //     document.getElementById("channel-rnd").style.display = 'none';
-                //     document.getElementById("channel-bmp180").style.display = 'none';
-                //     document.getElementById("channel-bme280").style.display = 'inline';
-                //     document.getElementById("channel-lsm303").style.display = 'none';
-                //     document.getElementById("channel-htu21df").style.display = 'none';
-                //     document.getElementById("channel-zda").style.display = 'none';
-                //     document.getElementById("channel-custom").style.display = 'none';
+                //     onOrOff(CHANNELS, "channel-bme280");
                 //     break;
                 // case 'lsm303':
-                //     document.getElementById("channel-serial").style.display = 'none';
-                //     document.getElementById("channel-tcp").style.display = 'none';
-                //     document.getElementById("channel-file").style.display = 'none';
-                //     document.getElementById("channel-ws").style.display = 'none';
-                //     document.getElementById("channel-rnd").style.display = 'none';
-                //     document.getElementById("channel-bmp180").style.display = 'none';
-                //     document.getElementById("channel-bme280").style.display = 'none';
-                //     document.getElementById("channel-lsm303").style.display = 'inline';
-                //     document.getElementById("channel-htu21df").style.display = 'none';
-                //     document.getElementById("channel-zda").style.display = 'none';
-                //     document.getElementById("channel-custom").style.display = 'none';
+                //     onOrOff(CHANNELS, "channel-lsm303");
                 //     break;
                 // case 'htu21df':
-                //     document.getElementById("channel-serial").style.display = 'none';
-                //     document.getElementById("channel-tcp").style.display = 'none';
-                //     document.getElementById("channel-file").style.display = 'none';
-                //     document.getElementById("channel-ws").style.display = 'none';
-                //     document.getElementById("channel-rnd").style.display = 'none';
-                //     document.getElementById("channel-bmp180").style.display = 'none';
-                //     document.getElementById("channel-bme280").style.display = 'none';
-                //     document.getElementById("channel-lsm303").style.display = 'none';
-                //     document.getElementById("channel-htu21df").style.display = 'inline';
-                //     document.getElementById("channel-zda").style.display = 'none';
-                //     document.getElementById("channel-custom").style.display = 'none';
+                //     onOrOff(CHANNELS, "channel-htu21df");
                 //     break;
                 case 'zda':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'inline';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-zda");
+                  break;
                 case 'rest':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'inline';
-                    document.getElementById("channel-custom").style.display = 'none';
-                    break;
+                  onOrOff(CHANNELS, "channel-rest");
+                  break;
                 case 'custom':
-                    document.getElementById("channel-serial").style.display = 'none';
-                    document.getElementById("channel-tcp").style.display = 'none';
-                    document.getElementById("channel-file").style.display = 'none';
-                    document.getElementById("channel-ws").style.display = 'none';
-                    document.getElementById("channel-rnd").style.display = 'none';
-                    // document.getElementById("channel-bmp180").style.display = 'none';
-                    // document.getElementById("channel-bme280").style.display = 'none';
-                    // document.getElementById("channel-lsm303").style.display = 'none';
-                    // document.getElementById("channel-htu21df").style.display = 'none';
-                    document.getElementById("channel-zda").style.display = 'none';
-                    document.getElementById("channel-rest").style.display = 'none';
-                    document.getElementById("channel-custom").style.display = 'inline';
-                    break;
+                  onOrOff(CHANNELS, "channel-custom");
+                  break;
                 default:
-                    break;
+                  break;
             }
         }
 
         function manageForwardSelection(selected) {
             switch (selected) {
               case 'serial':
-                document.getElementById("forward-serial").style.display = 'inline';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-serial");
                 break;
               case 'tcp':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'inline';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-tcp");
                 break;
               case 'rest':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'inline';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-rest");
                 break;
               case 'gpsd':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'inline';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-gpsd");
                 break;
               case 'rmi':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'inline';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-rmi");
                 break;
               case 'file':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'inline';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-file");
                 break;
               case 'ws':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'inline';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-ws");
                 break;
               case 'console':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'inline';
-                document.getElementById("forward-custom").style.display = 'none';
+                onOrOff(FORWARDERS, "forward-console");
                 break;
               case 'custom':
-                document.getElementById("forward-serial").style.display = 'none';
-                document.getElementById("forward-tcp").style.display = 'none';
-                document.getElementById("forward-rest").style.display = 'none';
-                document.getElementById("forward-gpsd").style.display = 'none';
-                document.getElementById("forward-rmi").style.display = 'none';
-                document.getElementById("forward-file").style.display = 'none';
-                document.getElementById("forward-ws").style.display = 'none';
-                document.getElementById("forward-console").style.display = 'none';
-                document.getElementById("forward-custom").style.display = 'inline';
+                onOrOff(FORWARDERS, "forward-custom");
                 break;
               default:
                 break;
@@ -434,15 +268,13 @@
         function manageComputerSelection(selected) {
             switch (selected) {
                 case 'tw-current':
-                    document.getElementById("computer-twc").style.display = 'inline';
-                    document.getElementById("computer-custom").style.display = 'none';
-                    break;
+                  onOrOff(COMPUTERS, "computer-twc");
+                  break;
                 case 'custom':
-                    document.getElementById("computer-twc").style.display = 'none';
-                    document.getElementById("computer-custom").style.display = 'inline';
-                    break;
+                  onOrOff(COMPUTERS, "computer-custom");
+                  break;
                 default:
-                    break;
+                  break;
             }
         }
 
@@ -1051,11 +883,11 @@
                 <table>
                   <tr>
                     <td>Server</td>
-                    <td><input id="tcp-server" type="text" placeholder="Server Name" size="20"></td>
+                    <td><input id="tcp-server" type="text" placeholder="Server Name or PI" size="20"></td>
                   </tr>
                   <tr>
                     <td>Port</td>
-                    <td><input id="tcp-port" type="text" placeholder="Port" size="10"></td>
+                    <td><input id="tcp-port" type="number" placeholder="Port" size="10"></td>
                   </tr>
                   <tr>
                     <td>Initial Request</td>
@@ -1357,7 +1189,7 @@
                 <table>
                   <tr>
                     <td>Port</td>
-                    <td><input id="fwd-tcp-port" type="text" placeholder="Port" size="10"></td>
+                    <td><input id="fwd-tcp-port" type="number" placeholder="Port" size="10"></td>
                   </tr>
                 </table>
               </div>
