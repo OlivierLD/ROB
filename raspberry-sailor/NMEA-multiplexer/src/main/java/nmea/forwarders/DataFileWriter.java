@@ -153,34 +153,38 @@ public class DataFileWriter implements Forwarder {
 		today00.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 		long timeSplitThreshold = today00.getTimeInMillis();
 		switch (this.split) {
-			case "min" -> {
+			case "min":
 				Calendar todayThisMinute = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
 				todayThisMinute.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayThisMinute.add(Calendar.MINUTE, 1);
 				timeSplitThreshold = todayThisMinute.getTimeInMillis();
-			}
-			case "hour" -> {
+				break;
+			case "hour":
 				Calendar todayThisHour = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), 0);
 				todayThisHour.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayThisHour.add(Calendar.HOUR, 1);
 				timeSplitThreshold = todayThisHour.getTimeInMillis();
-			}
-			case "day" -> timeSplitThreshold += DAY_MS;
-			case "week" -> timeSplitThreshold += WEEK_MS;
-			case "month" -> {
+				break;
+			case "day":
+				timeSplitThreshold += DAY_MS;
+				break;
+			case "week":
+				timeSplitThreshold += WEEK_MS;
+				break;
+			case "month":
 				Calendar today1st = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 1);
 				today1st.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				today1st.add(Calendar.MONTH, 1);
 				timeSplitThreshold = today1st.getTimeInMillis();
-			}
-			case "year" -> {
+				break;
+			case "year":
 				Calendar todayJan1st = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JANUARY, 1);
 				todayJan1st.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 				todayJan1st.add(Calendar.YEAR, 1);
 				timeSplitThreshold = todayJan1st.getTimeInMillis();
-			}
-			default -> {
-			}
+				break;
+			default:
+				break;
 		}
 //		{
 //			Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("etc/UTC"));
