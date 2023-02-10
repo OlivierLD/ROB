@@ -114,6 +114,8 @@
          * Displays the errors in a non-modal way.
          * @param mess the error message to display.
          */
+        let errMessages = [];
+        const MAX_NB_MESS = 10;
         function errorHandler(mess) {
           let messZone = document.getElementById("err-mess");
           if (false) { // Stby
@@ -122,9 +124,13 @@
                 messZone.innerText = "";
             }, 10000);
           } else {
-            let previous = messZone.innerText.trim();
-            let next = `${(previous.length > 0 ? previous + "\n" : "") }${new Date()} : ${mess}`;
-            messZone.innerText = next;
+            errMessages.push(mess);
+            while (errMessages.length > MAX_NB_MESS) {
+              errMessages.slice(0);
+            }
+            let newMessage = '';
+            errMessages.forEach(mess => newMessage += (mess + "\n"));
+            messZone.innerText = newMessage;
           }
         }
 
