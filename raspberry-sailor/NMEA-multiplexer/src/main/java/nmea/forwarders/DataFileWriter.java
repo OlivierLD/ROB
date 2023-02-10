@@ -199,6 +199,13 @@ public class DataFileWriter implements Forwarder {
 		private String cls;
 		private String log;
 		private boolean append;
+		private boolean timeBased;
+		private String radix;
+		private String dir;
+		private String split;
+		private boolean flush;
+
+
 		private final String type = "file";
 
 		public DataFileBean() {}   // This is for Jackson
@@ -206,6 +213,11 @@ public class DataFileWriter implements Forwarder {
 			cls = instance.getClass().getName();
 			log = instance.log;
 			append = instance.append;
+			timeBased = instance.timeBased;
+			radix = instance.radix;
+			dir = instance.dir;
+			split = instance.split;
+			flush = instance.flush;
 		}
 
 		public String getCls() {
@@ -223,7 +235,28 @@ public class DataFileWriter implements Forwarder {
 		public String getLog() {
 			return log;
 		}
-		public boolean append() { return append; }
+
+		public boolean append() { return append; } // Any useful ?
+
+		public boolean isTimeBased() {
+			return timeBased;
+		}
+
+		public String getRadix() {
+			return radix;
+		}
+
+		public String getDir() {
+			return dir;
+		}
+
+		public String getSplit() {
+			return split;
+		}
+
+		public boolean isFlush() {
+			return flush;
+		}
 	}
 
 	@Override

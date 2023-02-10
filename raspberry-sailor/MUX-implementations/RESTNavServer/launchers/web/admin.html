@@ -116,10 +116,16 @@
          */
         function errorHandler(mess) {
           let messZone = document.getElementById("err-mess");
-          messZone.innerText = mess;
-          setTimeout(function() {
-              messZone.innerText = "";
-          }, 10000);
+          if (false) { // Stby
+            messZone.innerText = mess;
+            setTimeout(function() {
+                messZone.innerText = "";
+            }, 10000);
+          } else {
+            let previous = messZone.innerText.trim();
+            let next = `${(previous.length > 0 ? previous + "\n" : "") }${new Date()} : ${mess}`;
+            messZone.innerText = next;
+          }
         }
 
         // Executed at startup
@@ -187,7 +193,7 @@
         function onOrOff(idsArray, toTurnOn) {
           idsArray.forEach(channel => document.getElementById(channel).style.display = (channel === toTurnOn ? 'inline' : 'none'));
         }
-        
+
         function manageChannelSelection(selected) {
             switch (selected) {
                 case 'serial':
@@ -556,17 +562,40 @@
               });
               break;
             case 'file':
-              let logfile = document.getElementById("fwd-data-file").value;
-              if (logfile.trim().length === 0) {
-                alert('Log file name is required');
-                return;
+              let fwdPayload = {};
+              if (document.getElementById('tbfn').checked) { // Time based name
+
+                let suffix = document.getElementById('fwd-data-file-tb-suffix').value;
+                let logDir = document.getElementById('fwd-data-file-tb-log-dir').value;
+                let split = document.getElementById('fwd-data-file-tb-split').value;
+                let flush = document.getElementById("fwd-data-file-tb-flush").is(':checked');
+
+                fwdPayload = {
+                  type: 'file',
+                  timeBased: true,
+                  radix: suffix,
+                  dir: logDir,
+                  split: split,
+                  flush: flush
+                };
+
+              } else { // NOT time based
+                let logfile = document.getElementById("fwd-data-file").value;
+                if (logfile.trim().length === 0) {
+                  alert('Log file name is required');
+                  return;
+                }
+                let append = document.getElementById("fwd-data-file-app").is(':checked');
+                let flush = document.getElementById("fwd-data-file-flush").is(':checked');
+
+                fwdPayload = {
+                  type: 'file',
+                  timeBased: false,
+                  log: logfile,
+                  append: append
+                };
               }
-              let append = document.getElementById("fwd-data-file-app").is(':checked');
-              createForwarder({
-                type: 'file',
-                log: logfile,
-                append: append
-              });
+              createForwarder(fwdPayload);
               break;
             case 'ws':
               let uri = document.getElementById("fwd-wsuri").value;
@@ -1244,10 +1273,70 @@
               </div>
               <div id="forward-file" style="display: none;">
                 <table>
-                  <tr>
+                  <!--tr>
                     <td>Data File</td>
-                    <td><input id="fwd-data-file" type="text" placeholder="Log File" size="30"></td>
-                    <td><input type='checkbox' id="fwd-data-file-app" title="Reset, or append."> Append</td>
+                  </tr-->
+                  <tr>
+                    <script type="text/javascript">
+                      // Manage checkbox below
+                      function flipFileOption(cb) {
+                        console.log(`Box is ${cb.checked ? '' : 'NOT '}checked`);
+                        if (cb.checked) {
+                          document.getElementById('not-time-based').style.display = 'none';
+                          document.getElementById('time-based').style.display = 'block';
+                        } else {
+                          document.getElementById('not-time-based').style.display = 'block';
+                          document.getElementById('time-based').style.display = 'none';
+                        }
+                      }
+                    </script>
+                    <td>Time-based file name <input type="checkbox" id="tbfn" onchange="flipFileOption(this);"></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div id="not-time-based" style="display: block;">
+                        <!-- NOT time-based file name Option, single file. -->
+                        <table>
+                          <tr>
+                            <td>File Name:</td><td><input id="fwd-data-file" type="text" placeholder="Log File" size="30"></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"><input type='checkbox' id="fwd-data-file-app" title="Reset, or append."> Append</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"><input type='checkbox' id="fwd-data-file-flush" title="Flush ?"> Flush</td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div id="time-based" style="display: none;">
+                        <!-- time-based file name Option -->
+                        <table>
+                          <tr>
+                            <td>File Suffix:</td><td><input id="fwd-data-file-tb-suffix" type="text" placeholder="Suffix" size="10" value="_LOG" placeholder="Suffix"></td>
+                          </tr>
+                          <tr>
+                            <td>Log directory:</td><td><input id="fwd-data-file-tb-log-dir" type="text" placeholder="Log Dir" size="30" value="logged" placeholder="Log Dir"></td>
+                          </tr>
+                          <tr>
+                            <td>Split:</td>
+                            <td>
+                              <select id="fwd-data-file-tb-split">
+                                <option value="minute">Minute</option>
+                                <option value="hour" selected>Hour</option>
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"><input type='checkbox' id="fwd-data-file-tb-flush" title="Flush ?"> Flush</td>
+                          </tr>
+                        </table>
+                        
+                      </div>
+                    </td>  
                   </tr>
                 </table>
               </div>
@@ -1320,7 +1409,7 @@
         </table>
         <button onclick="requestComputerCreation();">Add</button>
     </div>
-    <div id="err-mess" style="color: red;"></div>
+    <div id="err-mess" style="color: red; min-height: 0; max-height: 80px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
     <hr/>
     <!--button onclick="protocolTest();">Protocol test</button>
     <hr/-->
