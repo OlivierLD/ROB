@@ -70,8 +70,12 @@ echo -e "Copying resources"
 cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs
 # Log folder
 # mkdir ${distdir}/logged
-# Web resources
-cp -R web ${distdir}
+# Web resources, zipped. To see the content: unzip -vl web.zip
+# cp -R web ${distdir}
+cd web
+zip -r ../${distdir}/web.zip *
+cd ..
+#
 # Properties files
 cp *.properties ${distdir}
 cp *.yaml ${distdir}
@@ -121,5 +125,7 @@ echo -e "| The script to launch will be 'mux.sh'                                
 echo -e "| It is your responsibility to use the right properties file, possibly modified to fit your needs. |"
 echo -e "| For the runner/logger, use nmea.mux.gps.tcp.properties                                           |"
 echo -e "| Use it - for example - like:                                                                     |"
+echo -e "| $ cd ${distdir}                                                                                   "
 echo -e "| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |"
+echo -e "|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |"
 echo -e "+--------------------------------------------------------------------------------------------------+"

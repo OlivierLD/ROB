@@ -303,7 +303,8 @@ $ ./to.prod.sh
 Explanations on how to deploy the generated archive are given by the script.
 
 You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
-at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.
+at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.  
+In the production environment, what used to be reached from a URL like <http://localhost:8080/web/index.html> should now be <http://localhost:8080/zip/index.html>.
 
 > _**Note**_: This `to.prod.sh` script takes care of the deployment of the Java and Web parts (http server).  
 > If your config requires some sensor data to be reached, the corresponding Python

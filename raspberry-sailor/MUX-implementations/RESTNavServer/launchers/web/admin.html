@@ -124,13 +124,14 @@
                 messZone.innerText = "";
             }, 10000);
           } else {
-            errMessages.push(mess);
+            errMessages.push(`${new Date()}: ${mess}`);
             while (errMessages.length > MAX_NB_MESS) {
               errMessages.slice(0);
             }
             let newMessage = '';
             errMessages.forEach(mess => newMessage += (mess + "\n"));
             messZone.innerText = newMessage;
+            messZone.scrollTop = messZone.scrollHeight; // Scroll at the bottom
           }
         }
 

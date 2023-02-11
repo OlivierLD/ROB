@@ -25,5 +25,5 @@ channels:
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     verbose: false
 forwarders:
-  - class: "nmea.forwarders.SQLitePublisher"
-    properties: mux-configs/sqlite.fwd.properties
+  - class: nmea.forwarders.SQLitePublisher
+    properties: mux-configs/sqlite.properties

@@ -291,6 +291,11 @@ The lines above means that:
 > and _is_ manageable by the `admin` web page.
 
 > See `ExtendedDataFileWriter.java` for details.
+ 
+Several "dynamic" forwarders are provided, as examples. See - among others
+- `CharacterConsoleWrite.java`
+- `SQLitePublisher.java`
+- . . .
 
 #### Pre-defined forwarder types
 

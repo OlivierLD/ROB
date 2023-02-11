@@ -120,12 +120,15 @@ Reading serial port...
 > `../RESTNavServer/mk.link.sh` ...
 
 Data are read, displayed and logged.  
-And you can see what's going on from a browser:
+And you can see what's going on from a browser (machine name and port "may" change):
 - <http://192.168.1.103:9999/web/index.html>
 
 The Web UI available above is designed for all kinds of configurations. For example, 
 in this case (as you have a GPS and a BME280 to feed the data), you might not be able to see the True Wind Speed 🤔...  
-Again, the Web Pages presented here are to be seen as examples of the way to consume the data available from the cache of the Multiplexer, through REST services..
+Again, the Web Pages presented here are to be seen as examples of the way to consume the data available from the cache of the Multiplexer, through REST services.  
+> _**Note**_: The Raspberry Pi can very well emit its own network, onto which you can connect from other devices (laptops, tablets, cell-phones, smartwatches, ...). See
+> [here](../../../HintsAndTips.md#ad-hoc--hotspot-networking).  
+> Along the same lines, other devices can also `ssh` to the Raspberry Pi.
 
 #### Details
 Wiring, Schemas, Components, 3D printed enclosures...

@@ -7,17 +7,10 @@ context:
   http.port: 9999
   init.cache: true
 channels:
-  # GPS replay
+  # GPS and AIS replay
   - type: file
-    filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
-    path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
-    zip: true
-    verbose: false
-  # AIS Data
-  - type: file
-    filename: ./sample.data/logged.data.archive.zip
-    zip: true
-    path.in.zip: ais.nmea
+    filename: ../../../NMEA-multiplexer/sample-data/data.nmea
+    zip: false
     verbose: false
   - type: tcp
     server: ais.exploratorium.edu
@@ -25,14 +18,14 @@ channels:
     verbose: false
 
 forwarders:
-  - type: rest
-    server.name: 192.168.42.6
-    server.port: 9999
-    rest.resource: /mux/nmea-sentence
-    rest.verb: POST
-    http.headers: Content-Type:text/plain
-    verbose: true
-  # - type: console
+#  - type: rest
+#    server.name: 192.168.42.6
+#    server.port: 9999
+#    rest.resource: /mux/nmea-sentence
+#    rest.verb: POST
+#    http.headers: Content-Type:text/plain
+#    verbose: true
+#   - type: console
   - type: tcp
     port: 7002
     properties: no.ais.properties

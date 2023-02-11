@@ -23,7 +23,7 @@ import java.util.Properties;
  * );
  * </pre>
  * </li>
- * <li>See the script <code>nmea.sql</code></li>
+ * <li>See the script <code>sql/nmea.sql</code></li>
  * </ul>
  *
  * Requires the following dep in gradle:<br/>

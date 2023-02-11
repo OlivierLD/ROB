@@ -52,6 +52,8 @@ We want to be able to:
 
 All this, running on a Raspberry Pi.
 
+> _**Note**_: for now, we deal _only_ with `NMEA0183`, as - as far as I know - no GPS deals (yet) with `NMEA2000`.
+
 ---
 
 ## Background
@@ -79,14 +81,14 @@ So, an idea would be to keep this code as it is - it's working in Python, and th
 
 > The reason why I originally went for Java is because Java is a programming language, as opposed to Python, which sounds more - to me - like a scripting language.  
 > I suspect that this last sentence may cause some eyebrows to raise, but I still believe it.  
-> Java is designed to scale, it has amazing debug capabilities (including remote debugging), it scales, it can be 
-> distributed, it is **_natively_** object-oriented, it's recursive (Java knows about Java), it's compiled - and not interpreted, etc.  
+> Java is designed to scale, it has amazing debug capabilities (including _remote_ debugging), it scales, it can be 
+> distributed, it is **_natively_** object-oriented, it's recursive (Java knows about Java), it's compiled - and not interpreted, it can deal with concurrent accesses, etc.  
 > Python is great, and keeps getting more and more popular, for good reasons. One of them being that it may look simpler than Java,
 > and closer to the mindset of a scientist (like a mathematician).  
 > If you look at those charts ranking the different languages popularity, you would see Python's popularity keeping rising, and - for example - C's popularity stagnating at 
 > bottom of the scale... But still, at least 90% of the Operating Systems are written in C. There must be a reason.  
 > Popularity and efficiency might not be always in sync... Riding a cab and building a car are two different things.   
-> There is obviously a lot to say about that, but I'll stop here; this could turn into an endless conversation.  
+> There is obviously a lot to say about that, but I'll stop here; this could turn into an endless conversation (ping me if you want).  
 > But now, I want to bridge a gap between Java and Python. Let's be positive.
 
 _**We will give TCP and REST a try**_, for this kind of Python-to-Java communication.  
