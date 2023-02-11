@@ -433,7 +433,7 @@ From `Machine A`, send the archive to `Machine B`:
 ```
 $ scp nmea-dist.tar.gz pi@192.168.1.101:~
 pi@192.168.1.101's password: 
-nmea-dist.tar.gz                                                                                        100%   37MB 372.6KB/s   01:42    
+nmea-dist.tar.gz                                                                        100%   37MB 372.6KB/s   01:42    
 $
 ```
 We're done with `Machine A`.
@@ -537,13 +537,13 @@ To install `hostapd`, enter the command:
 ```
 sudo apt install hostapd
 ```
-enter Y when prompted.
+enter `Y` when prompted.
 
-To install dnsmasq enter the command:
+To install `dnsmasq` enter the command:
 ```
 sudo apt install dnsmasq
 ```
-enter Y when prompted
+enter `Y` when prompted
 
 The installers will have set up the program so they run when the pi is started and activated them. While we set the hotspot we should stop them running. This is done with the following commands:
 ```
@@ -551,12 +551,12 @@ sudo systemctl stop hostapd
 sudo systemctl stop dnsmasq
 ```
 
-Define the hotspot network name and passphrase in `/etc/hostapd/hostapd.conf` (see `ssid` and `wpa_passphrase`:
+Define the hotspot network name and passphrase in `/etc/hostapd/hostapd.conf` (see `ssid` and `wpa_passphrase` properties):
 ```
 # country_code=FR
 interface=wlan0
 driver=nl80211
-ssid=NMEANetwork   # This is the network name
+ssid=NMEANetwork   # <- This is the network name, choose your own.
 hw_mode=g
 channel=6
 wmm_enabled=0
@@ -600,11 +600,12 @@ sudo service hostapd status
 sudo service dnsmasq status
 ```
 
-Then you can stop the `Machine B`, plug in your GPS, and reboot it.
+Then you can stop the `Machine B`, plug in your GPS, and boot it.
 
 Once it is re-started, you should see - from `Machine A` for example - a network named, as above, `NMEANetwork`.
 Its password is `PassWord` (see above).
 
-Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new Network), try to reach <http://192.168.50.10:9999/zip/index.html>.
+Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
+`192.168.50.10` being the address of the machine the multiplexer runs on.
 
 ---

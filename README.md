@@ -193,7 +193,7 @@ Wow! Vast topic...
   - [IJavaScript](https://github.com/n-riesco/ijavascript)
   - . . .
   
-  Some notebooks are available in the `NMEA-Parser` project. More to come.
+Some notebooks are available in the `NMEA-Parser` project. More to come.
 
 ---
 And more to come...
