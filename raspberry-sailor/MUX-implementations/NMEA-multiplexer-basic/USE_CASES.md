@@ -605,7 +605,6 @@ Then you can stop the `Machine B`, plug in your GPS, and reboot it.
 Once it is re-started, you should see - from `Machine A` for example - a network named, as above, `NMEANetwork`.
 Its password is `PassWord` (see above).
 
-Once connected on this new network, from this "other" machine, try to reach <http://192.168.50.10:9999/zip/index.html>.
-
+Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new Network), try to reach <http://192.168.50.10:9999/zip/index.html>.
 
 ---

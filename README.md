@@ -167,7 +167,15 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 - Hints and Tips [here](./HintsAndTips.md)
 
 ## Customize, Build, and Deploy
-- WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now.
+This is a vast topic.  
+Again, we are targeting here all kinds of machines, from big ones, to the smallest Raspberry Pi Zero - which can indeed take care of the job.  
+The thing is that a Raspberry Pi Zero might not be abe to take care a routing, almanac publishing, and such demanding tasks.  
+This is why we do not provide here the biggest possible config with all possible options, as it might not be suitable for your targeted environment.
+Each case is a particular case, there is no "one-size-fits-all" config here...  
+We will see later if Docker could be a way to approach this problem, by preparing several Docker images, suitable for different hardware configurations. More to come. 
+
+- WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now,
+and the [USE_CASE](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/USE_CASES.md#use-case-2) page.
 
 Also, by using TCP and REST, all sensors and actuators using those protocols can be _distributed_, they do not have to be located on the same board.
 You can very well have the GPS and NMEA data read from one Raspberry Pi somewhere, the Magnetometer (like an LSM303) somewhere else, and all those guys
