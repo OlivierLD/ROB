@@ -106,7 +106,7 @@ public class WeatherStationWSReader extends NMEAReader {
 									String.valueOf(deviceIdx++)), // %, Humidity
 							new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
 									temp,
-									String.valueOf(deviceIdx++)), // Celcius, Temperature
+									String.valueOf(deviceIdx++)), // Celsius, Temperature
 							new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
 									temp,
 									String.valueOf(deviceIdx++)), // mm/h, Rain

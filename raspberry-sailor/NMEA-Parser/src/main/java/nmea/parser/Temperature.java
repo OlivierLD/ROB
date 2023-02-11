@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 
 public class Temperature implements Serializable {
 	private double temperature = 0d;
-	private static final String CELCIUS = "\272C";
+	private static final String CELSIUS = "\272C";
 	private static final String FARENHEIT = "\272F";
 	private static final DecimalFormat FMT = new DecimalFormat("##0.0");
 
@@ -27,6 +27,6 @@ public class Temperature implements Serializable {
 
 	public String toString() {
 		double d = this.temperature;
-		return FMT.format(d) + CELCIUS + ", " + FMT.format((5 * d / 9) + 32) + FARENHEIT;
+		return FMT.format(d) + CELSIUS + ", " + FMT.format((5 * d / 9) + 32) + FARENHEIT;
 	}
 }

@@ -328,7 +328,7 @@ let getBGColor = function(value, type) {
 			// }
 			color = `rgba(0, 0, ${blue}, ${transp.toFixed(2)})`; // max 30 mm/h
 			break;
-		case 'tmp': // blue, to red, [233..323] (Celcius [-40..50]). [-40..0] -> blue. [0..50] -> red
+		case 'tmp': // blue, to red, [233..323] (Celsius [-40..50]). [-40..0] -> blue. [0..50] -> red
 			if (value <= 273) { // lower than 0 C
 				color = 'rgba(0, 0, 255,' + (1 - Math.min((value - 233) / (273 - 233), 1)) + ')'; // Blue
 			} else {

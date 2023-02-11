@@ -158,8 +158,8 @@ public class StringParsers {
 		 *        |     |     |     |     |   |   11-Dew Point C
 		 *        |     |     |     |     |   10-Absolute hum %
 		 *        |     |     |     |     9-Relative hum %
-		 *        |     |     |     7-Water temp in Celcius
-		 *        |     |     5-Air Temp in Celcius  |
+		 *        |     |     |     7-Water temp in Celsius
+		 *        |     |     5-Air Temp in Celsius  |
 		 *        |     3-Pressure in Bars
 		 *        1-Pressure in inches
 		 *
@@ -249,17 +249,17 @@ public class StringParsers {
 
 	// MTA Air Temperature
 	public static double parseMTA(String data) {
-		final int TEMP_CELCIUS = 1;
+		final int TEMP_CELSIUS = 1;
 		/*
 		 * Structure is $IIMTA,020.5,C*30
 		 *                     |     |
-		 *                     |     Celcius
-		 *                     Temperature in Celcius
+		 *                     |     Celsius
+		 *                     Temperature in Celsius
 		 */
 		double d = 0d;
 		String[] sa = data.substring(0, data.indexOf("*")).split(",");
 		try {
-			d = Double.parseDouble(sa[TEMP_CELCIUS]);
+			d = Double.parseDouble(sa[TEMP_CELSIUS]);
 		} catch (NumberFormatException nfe) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 				nfe.printStackTrace();
@@ -711,7 +711,7 @@ public class StringParsers {
 
 	// MTW Water Temperature
 	public static double parseMTW(String data) {
-		final int TEMP_CELCIUS = 1;
+		final int TEMP_CELSIUS = 1;
 		/* Structure
 		 * $xxMTW,+18.0,C*hh
 		 *
@@ -724,7 +724,7 @@ public class StringParsers {
 		double temp = 0d;
 		try {
 			String[] nmeaElements = data.substring(0, data.indexOf("*")).split(",");
-			String _s = nmeaElements[TEMP_CELCIUS];
+			String _s = nmeaElements[TEMP_CELSIUS];
 			if (_s.startsWith("+")) {
 				_s = _s.substring(1);
 			}
@@ -2102,7 +2102,7 @@ public class StringParsers {
 		HDT("HDT", "Heading - True", StringParsers::parseHDT, Integer.class),
 		MDA("MDA", "Meteo Composite", StringParsers::parseMDA, MDA.class),
 		MMB("MMB", "Atm Pressure", StringParsers::parseMMB, Double.class),
-		MTA("MTA", "Air Temperature, Celcius", StringParsers::parseMTA, Double.class),
+		MTA("MTA", "Air Temperature, Celsius", StringParsers::parseMTA, Double.class),
 		MTW("MTW", "Mean Temperature of Water", StringParsers::parseMTW, Double.class),
 		MWD("MWD", "Wind Direction & Speed", StringParsers::parseMWD, TrueWind.class),
 		MWV("MWV", "Wind Speed and Angle", StringParsers::parseMWV, ApparentWind.class), // Careful, actually returns Wind.class

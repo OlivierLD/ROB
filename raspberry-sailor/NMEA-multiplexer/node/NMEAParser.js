@@ -400,8 +400,8 @@ var parseMDA = function (str) {
      *        |     |     |     |     |   |   Dew Point C
      *        |     |     |     |     |   Absolute hum %
      *        |     |     |     |     Relative hum %
-     *        |     |     |     Water temp in Celcius
-     *        |     |     Air Temp in Celcius  |
+     *        |     |     |     Water temp in Celsius
+     *        |     |     Air Temp in Celsius  |
      *        |     Pressure in Bars
      *        Pressure in inches
      *
@@ -462,7 +462,7 @@ var parseMTA = function (str) {
      *        1   2
      * $RPMTA,9.9,C*37
      *        |   |
-     *        |   Celcius
+     *        |   Celsius
      *        Value
      */
     var data = getChunks(str).data;
@@ -475,7 +475,7 @@ var parseMTW = function (str) {
      *         1    2
      * $IIMTW,+18.0,C*31
      *         |    |
-     *         |    Celcius
+     *         |    Celsius
      *         Value
      */
     var data = getChunks(str).data;

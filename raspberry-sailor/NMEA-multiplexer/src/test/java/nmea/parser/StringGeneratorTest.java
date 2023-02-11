@@ -52,7 +52,7 @@ public class StringGeneratorTest {
                 12,    // WATER TEMP
                 75,    // REL HUMIDITY
                 50,    // ABS HUMIDITY
-                9,    // DEW POINT (CELCIUS)
+                9,    // DEW POINT (CELSIUS)
                 270,    // TWD
                 255,    // WIND DIR (MAG)
                 12.0); // TWS
@@ -66,7 +66,7 @@ public class StringGeneratorTest {
                 12,    // WATER TEMP
                 75,    // REL HUMIDITY
                 50,    // ABS HUMIDITY
-                -Double.MAX_VALUE,    // DEW POINT (CELCIUS)
+                -Double.MAX_VALUE,    // DEW POINT (CELSIUS)
                 270,    // TWD
                 255,    // WIND DIR (MAG)
                 12.0); // TWS

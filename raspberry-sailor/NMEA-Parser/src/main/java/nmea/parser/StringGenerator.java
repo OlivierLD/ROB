@@ -250,7 +250,7 @@ public class StringGenerator {
 	                                 double waterTempInDegrees,
 	                                 double relHumidity,
 	                                 double absHumidity,
-	                                 double dewPointInCelcius,
+	                                 double dewPointInCelsius,
 	                                 double windDirTrue,
 	                                 double windDirMag,
 	                                 double windSpeedInKnots) {
@@ -281,8 +281,8 @@ public class StringGenerator {
 		} else {
 			mda += ",";
 		}
-		if (dewPointInCelcius != -Double.MAX_VALUE) {
-			mda += (TEMP_FMT.format(dewPointInCelcius) + ",C,");
+		if (dewPointInCelsius != -Double.MAX_VALUE) {
+			mda += (TEMP_FMT.format(dewPointInCelsius) + ",C,");
 		} else {
 			mda += ",,";
 		}

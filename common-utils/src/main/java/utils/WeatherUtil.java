@@ -6,8 +6,8 @@ public class WeatherUtil {
 	 * Compliant with http://www.dpcalc.org/
 	 *
 	 * @param hum in %
-	 * @param temp in Celcius
-	 * @return in Celcius
+	 * @param temp in Celsius
+	 * @return in Celsius
 	 */
 	public static double dewPointTemperature(double hum, double temp) {
 		double dewPointTemp = 0d;

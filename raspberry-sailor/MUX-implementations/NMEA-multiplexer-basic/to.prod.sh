@@ -10,7 +10,7 @@ echo -e "| This is an EXAMPLE showing how to generate a 'production' version, wi
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
 echo -e "| possibly with several configurations - and its web clients.                                        |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
-echo -e "| Now you mau start a fresh build...                                                                 |"
+echo -e "| Now you may start a fresh build...                                                                 |"
 echo -e "| Make sure the java version is compatible with your target. Current version:                        |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 java -version > jvers.txt 2>&1
@@ -114,7 +114,7 @@ echo -e "+----------------------------------------------------------------------
 echo -e " >> Archive $PWD/${distdir}.tar.gz ready for deployment."
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "| Send it to another machine, and un-archive it.                                                   |"
-echo -e "| Use tar -xzvf ${distdir}.tar.gz' to un-archive.                                                   |"
+echo -e "| Use 'tar -xzvf ${distdir}.tar.gz' to un-archive.                                                   |"
 echo -e "| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |"
 echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |"
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then

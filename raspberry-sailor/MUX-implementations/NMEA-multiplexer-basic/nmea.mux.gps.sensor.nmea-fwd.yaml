@@ -20,6 +20,7 @@ channels:
 #    verbose: true
   - type: rest           # Pings the Python REST Server for the BME280
     protocol: http
+    # machine-name: localhost
     machine-name: 192.168.1.103
     http-port: 9876
     query-path: /bme280/nmea-data
@@ -35,7 +36,8 @@ forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds
     rest.protocol: http
-    rest.machine-name: 192.168.1.103
+    rest.machine-name: localhost
+    # rest.machine-name: 192.168.1.103
     rest.port: 8080
     rest.resource: /ssd1306/nmea-data
     rest.verb: PUT

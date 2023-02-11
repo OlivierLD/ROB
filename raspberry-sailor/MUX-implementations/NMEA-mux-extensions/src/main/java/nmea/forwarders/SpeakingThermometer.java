@@ -38,7 +38,7 @@ public class SpeakingThermometer implements Forwarder {
 				double airTemp = StringParsers.parseMTA(str);
 				if (Math.abs(airTemp - previousTemp) >= 1.0) {
 					previousTemp = airTemp;
-					TextToSpeech.speak(String.format("Temperature is now %.1f degrees Celcius.", airTemp));
+					TextToSpeech.speak(String.format("Temperature is now %.1f degrees Celsius.", airTemp));
 				}
 			}
 		}

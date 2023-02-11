@@ -40,7 +40,7 @@ Then comment the lines at the bottom of `/etc/dhcpcd.conf`:  (do not forget the 
 # static routers=192.168.50.1
 ```
 To re-enable the HotSpot:
-Uncomment the lines at the bottom of `/etc/dhcpcd.conf` (see above):
+Uncomment the 4 lines at the bottom of `/etc/dhcpcd.conf` (see above):
 ```
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
