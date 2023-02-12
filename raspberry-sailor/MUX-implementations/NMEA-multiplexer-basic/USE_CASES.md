@@ -526,6 +526,22 @@ cd /home/pi/nmea-dist
 nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 #
 ```
+> Note: to _stop_ all the servers started above, run a script like:
+> ```
+> #!/bin/bash
+> ps -ef | grep -Eiw 'java |python3 ' | grep -v grep | awk '{ print $2 }' > km
+> NB_L=$(cat km | wc -l)
+> if [[ ${NB_L} == 0 ]]; then
+>   echo No process found.
+> fi
+> for pid in $(cat km); do
+>   echo -e "Killing process ${pid}"
+>   sudo kill -15 ${pid}
+> done
+> rm km
+
+> ```
+
 
 Finally, we set up the hotspot network.  
 Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>,
@@ -573,8 +589,9 @@ rsn_pairwise=CCMP
 Add the following lines at the bottom of `/etc/dnsmasq.conf`
 
 ```
-#RPiHotspot config - No Intenet
+# RPiHotspot config - No Intenet
 interface=wlan0
+# bind-dynamic     # Add this for Internet config 
 domain-needed
 bogus-priv
 dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
