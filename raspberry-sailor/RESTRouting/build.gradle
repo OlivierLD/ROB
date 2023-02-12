@@ -20,6 +20,7 @@ dependencies {
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':common-utils')
   implementation project(':http-tiny-server')
+  implementation project(':raspberry-sailor:JGRIB')
   implementation project(':raspberry-sailor:NMEA-Parser')
   implementation project(':raspberry-sailor:PolarSmoother')
 }

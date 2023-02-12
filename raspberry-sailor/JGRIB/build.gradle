@@ -1,0 +1,25 @@
+plugins {
+  id 'java'
+  id 'maven-publish'
+  id 'idea'
+  id 'com.github.johnrengelman.shadow'
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+}
+
+compileJava {
+    options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+}
+
+shadowJar {
+  zip64 true
+}
