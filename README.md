@@ -196,6 +196,12 @@ Wow! Vast topic...
 Some notebooks are available in the `NMEA-Parser` project. More to come.
 
 ---
+Check out the number of lines of code, per categories
+```
+$ ./line.counter.sh
+```
+
+---
 And more to come...
 
 ---
