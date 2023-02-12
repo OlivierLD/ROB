@@ -357,8 +357,10 @@ On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: **H**ardware **A**ttac
 
 | Wiring |
 |:-----------------------------------------:|
-| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) Components moved down to show the wiring|
-| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) Actual Components Position |
+| Components moved down to show the wiring |
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) |
+| Actual Components Position |
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) |
 
 3D Printed enclosure, available
 - [here](https://github.com/OlivierLD/3DPrinting/tree/master/OpenSCAD/RPiA%2BLogger).
