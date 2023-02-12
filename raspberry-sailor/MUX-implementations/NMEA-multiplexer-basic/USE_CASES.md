@@ -5,6 +5,11 @@ First, make sure you've built the soft:
 $ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
 
+# Content
+- [A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI)](#use-case-1)
+- Deploy for prod, [Raspberry Pi and GPS](#use-case-2)
+- Deploy for prod, [Raspberry Pi, GPS, BME280, SSD1306, push buttons](#use-case-3)
+
 ## Use-case 1 
 ### A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI)
 > Suitable for hiking, kayaking, this kind of things.  
@@ -150,8 +155,327 @@ On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: **H**ardware **A**ttac
 | ![Full Setting](./doc_resources/01.full.setting.jpg) |
 | ![At work](./doc_resources/kayak.setting.jpg) |
 
+---
 ## Use-case 2
-### Deploy the config above, on a new Raspberry Pi image
+### A Multiplexer (and its web interface) on a Raspberry Pi, with a GPS
+This is a simple configuration. We will build the project on a machine where the git repo has been cloned.
+This machine will be called `Machine A`. From `Machine A`, we will generate an archive that will be pushed on the Raspberry Pi (called `Machine B`).
+On the Raspberry Pi, we will expand the archive mentioned before, do a minimal setup, and we will bve ready for the real world.
+
+The Raspberry Pi will possibly emit its own HotSpot network.
+
+---
+**_To be as clear as possible_**:
+- We will build the required soft from a clone of the git repo, on `Machine A`.
+- We will deploy the required artifacts on `Machine B` (the Raspberry Pi A+, the one that will do the job).
+  - Configure whatever has to be configured on it
+  - Take it for a hike!
+---
+#### Machine A
+You need to have cloned the repo, and installed all the requirements for a build.
+> The script `start.from.scratch.sh` will help you if needed. Look into it for details.
+
+`Machine A` can be a laptop, running Windows, Mac, Linux..., as well as a Raspberry Pi, strong enough to run the build.  
+Assuming that you can run a terminal using `bash`, use `to.prod.sh` to generate the archive to deploy (from `ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic`):
+```
+$ ./to.prod.sh 
++----------------------------------------------------------------------------------------------------+
+|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |
++----------------------------------------------------------------------------------------------------+
+| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |
+| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |
+| possibly with several configurations - and its web clients.                                        |
++----------------------------------------------------------------------------------------------------+
+| Now you may start a fresh build...                                                                 |
+| Make sure the java version is compatible with your target. Current version:                        |
++----------------------------------------------------------------------------------------------------+
+| java version "11.0.8" 2020-07-14 LTS
+| Java(TM) SE Runtime Environment 18.9 (build 11.0.8+10-LTS)
+| Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.8+10-LTS, mixed mode)
++----------------------------------------------------------------------------------------------------+
+| Make sure the current Java version is compatible with the target one!!                             |
++----------------------------------------------------------------------------------------------------+
+
+There is an existing jar-file:
+147025906 78488 -rw-r--r--  1 olivierlediouris  staff    38M Feb 11 08:40 ./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+With the following MANIFEST:
+Found ./build/libs/NMEA-multiplexer-basic-1.0-all.jar. Moving on.
+~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/temp ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
+-------- MANIFEST.MF --------
+Manifest-Version: 1.0
+
+-----------------------------
+~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
+----------------------------
+Do we re-build the Java part ? > y
+Rebuilding from source (No Scala)...
+
+> Configure project :
+>> From task compileJava (in rob), using java version 11 
+>> From task compileTestJava (in rob), using java version 11 
+
+> Configure project :astro-computer:AstroComputer
+>> From task compileJava (in AstroComputer), using java version 11 
+>> From task compileTestJava (in AstroComputer), using java version 11 
+
+> Configure project :astro-computer:AstroUtilities
+>> From task compileJava (in AstroUtilities), using java version 11 
+>> From task compileTestJava (in AstroUtilities), using java version 11 
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.6/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 9s
+14 actionable tasks: 2 executed, 12 up-to-date
+Which (non existent) folder should we create the distribution in ? > nmea-dist
+Creating folder nmea-dist
+Copying resources
+  adding: admin.html (deflated 89%)
+  adding: basic.html (deflated 59%)
+  adding: console.html (deflated 79%)
+  adding: css/ (stored 0%)
+  adding: css/black.css (deflated 38%)
+  adding: css/night.stylesheet.css (deflated 80%)
+  adding: css/stylesheet.css (deflated 80%)
+  adding: css/bground.jpg (stored 0%)
+  adding: css/white.css (deflated 37%)
+  adding: css/web-components.css (deflated 86%)
+  adding: css/screen.css (deflated 46%)
+  adding: css/graph.ux.01.css (deflated 63%)
+  adding: css/graph.ux.02.css (deflated 64%)
+  adding: css/graph.ux.03.css (deflated 64%)
+  adding: examples/ (stored 0%)
+  adding: examples/in.out.html (deflated 73%)
+  adding: favicon.ico (deflated 46%)
+  adding: fonts/ (stored 0%)
+  adding: fonts/ds-digi.ttf (deflated 66%)
+  adding: fonts/ds-digib.ttf (deflated 65%)
+  adding: fonts/ds-digit.ttf (deflated 65%)
+  adding: fonts/ds-digii.ttf (deflated 65%)
+  adding: fonts/ledbdrev.ttf (deflated 92%)
+  adding: googlemaps.demo.html (deflated 65%)
+  adding: googlemaps.driving.html (deflated 66%)
+  adding: gps.demo.html (deflated 65%)
+  adding: gps.digital.html (deflated 70%)
+  adding: icons/ (stored 0%)
+  adding: icons/AJAX.jpeg (deflated 31%)
+  adding: icons/jellyfish.ico (deflated 80%)
+  adding: icons/ajax.png (stored 0%)
+  adding: icons/palm.02.jpg (deflated 5%)
+  adding: icons/hammerhead.ico (deflated 61%)
+  adding: icons/hamburgers.jpg (deflated 36%)
+  adding: icons/hammerhead.02.png (deflated 2%)
+  adding: icons/palm.04.jpg (deflated 5%)
+  adding: icons/palm.01.jpeg (deflated 4%)
+  adding: icons/REST.jpeg (deflated 22%)
+  adding: icons/ajax.ico (deflated 83%)
+  adding: icons/jellyfish.png (stored 0%)
+  adding: icons/delete.png (deflated 2%)
+  adding: icons/palm.01.ico (deflated 38%)
+  adding: icons/hammerhead.02.ico (deflated 66%)
+  adding: icons/hammerhead.png (stored 0%)
+  adding: icons/palm.03.gif (stored 0%)
+  adding: icons/palm.02.ico (deflated 48%)
+  adding: icons/palm.03.ico (deflated 60%)
+  adding: icons/palm.04.ico (deflated 42%)
+  adding: icons/HTML5.png (deflated 7%)
+  adding: icons/reload.png (stored 0%)
+  adding: images/ (stored 0%)
+  adding: images/antenna.png (deflated 16%)
+  adding: images/crosshair.png (stored 0%)
+  adding: index.html (deflated 67%)
+  adding: index.min.html (deflated 56%)
+  adding: js/ (stored 0%)
+  adding: js/pub.sub.js (deflated 56%)
+  adding: js/cache.client.js (deflated 55%)
+  adding: js/mux.rest.js (deflated 87%)
+  adding: js/console.js (deflated 75%)
+  adding: js/client.driving.js (deflated 62%)
+  adding: js/googlemaps.js (deflated 57%)
+  adding: js/date.proto.js (deflated 70%)
+  adding: js/client.gps.js (deflated 62%)
+  adding: js/NavigationHelper.js (deflated 66%)
+  adding: js/ws.manager.js (deflated 59%)
+  adding: js/ajax.manager.js (deflated 77%)
+  adding: js/wsclient.js (deflated 55%)
+  adding: leaflet.101.html (deflated 87%)
+  adding: leaflet.102.html (deflated 92%)
+  adding: leaflet.103.html (deflated 76%)
+  adding: leaflet.demo.html (deflated 64%)
+  adding: leaflet.svg.html (deflated 43%)
+  adding: logMgmt.html (deflated 66%)
+  adding: navHelperTest.html (deflated 71%)
+  adding: pandown.gif (deflated 65%)
+  adding: panright.gif (deflated 66%)
+  adding: refresh_icon.png (stored 0%)
+  adding: runner.html (deflated 72%)
+  adding: special.protocol.html (deflated 62%)
+  adding: weather.station.console.html (deflated 68%)
+  adding: weather.station.html (deflated 76%)
+  adding: webGL/ (stored 0%)
+  adding: webGL/wireframe.html (deflated 79%)
+  adding: webGL/boat.js (deflated 71%)
+  adding: webcomponents/ (stored 0%)
+  adding: webcomponents/Thermometer.js (deflated 74%)
+  adding: webcomponents/Pluviometer.js (deflated 74%)
+  adding: webcomponents/AnalogDisplay.js (deflated 77%)
+  adding: webcomponents/DirectionDisplay.js (deflated 78%)
+  adding: webcomponents/AnalogWatch.js (deflated 77%)
+  adding: widgets/ (stored 0%)
+  adding: widgets/NumericDisplay.js (deflated 70%)
+  adding: widgets/Graph.js (deflated 77%)
+  adding: widgets/Thermometer.js (deflated 76%)
+  adding: widgets/BoatOverview.js (deflated 81%)
+  adding: widgets/TWDEvolution.js (deflated 74%)
+  adding: widgets/CurrentDisplay.js (deflated 78%)
+  adding: widgets/worldmap.js (deflated 67%)
+  adding: widgets/AWDisplay.js (deflated 77%)
+  adding: widgets/SatellitesPlotter.js (deflated 71%)
+  adding: widgets/Direction.js (deflated 80%)
+  adding: widgets/README.md (deflated 9%)
+  adding: widgets/DateDisplay.js (deflated 69%)
+  adding: widgets/JumboDisplay.js (deflated 73%)
+  adding: widgets/CompassRose.js (deflated 70%)
+  adding: widgets/TimeDisplay.js (deflated 70%)
+  adding: widgets/AnalogDisplay.js (deflated 76%)
+  adding: widgets/TWSEvolution.js (deflated 73%)
+  adding: wsconsole.html (deflated 50%)
+Do we package the Python part ? > n
+a nmea-dist
+a nmea-dist/nmea.mux.gps.tcp.yaml
+a nmea-dist/nmea-to-text.properties
+a nmea-dist/nmea.mux.gps.sensor.nmea-fwd.yaml
+a nmea-dist/web.zip
+a nmea-dist/nmea.mux.kayak.ssd1306.yaml
+a nmea-dist/nmea.mux.replay.big.log.yaml
+a nmea-dist/REST.ssd1306.dg.properties
+a nmea-dist/nmea.mux.big.log.nmea-fwd.yaml
+a nmea-dist/mux.sh
+a nmea-dist/build
+a nmea-dist/build/libs
+a nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
++--------------------------------------------------------------------------------------------------+
+ >> Archive /Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
++--------------------------------------------------------------------------------------------------+
+| Send it to another machine, and un-archive it.                                                   |
+| Use 'tar -xzvf nmea-dist.tar.gz' to un-archive.                                                   |
+| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |
+| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |
+| The script to launch will be 'mux.sh'                                                            |
+| It is your responsibility to use the right properties file, possibly modified to fit your needs. |
+| For the runner/logger, use nmea.mux.gps.tcp.properties                                           |
+| Use it - for example - like:                                                                     |
+| $ cd nmea-dist                                                                                   
+| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |
+|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |
++--------------------------------------------------------------------------------------------------+
+$
+```
+The archive was generated.  
+Now we need to configure `Machine B`, and send the newly generated archive to it.
+
+#### Machine B
+Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
+Make sure you enable the `ssh` interface (use `raspi-config`).  
+This new image should contain a Java Development Kit (aka JDK), and Python 3. Make sure it's right:
+```
+$ java version
+```
+If java is not there (or not in the right version), install JDK 11:
+```
+$ sudo apt-get update
+$ sudo apt-get install openjdk-11-jdk
+```
+
+Find the IP address of `Machine B` (I use [`fing`](https://www.fing.com/products/development-toolkit). Make sure you use the [`Fing CLI`](https://www.fing.com/products/development-toolkit) for your system, `dpkg --print-architecture` will tell you what to choose, `lscpu` too.).   
+We assume it is `192.168.1.101`.  
+From `Machine A`, send the archive to `Machine B`:
+```
+$ scp nmea-dist.tar.gz pi@192.168.1.101:~
+pi@192.168.1.101's password: 
+nmea-dist.tar.gz                                                                        100%   37MB 372.6KB/s   01:42    
+$
+```
+We're done with `Machine A`.
+
+Connect on `Machine B` (with `ssh` from `Machine A`, if you want)
+```
+$ ssh pi@192.168.1.101
+```
+and unarchive what was received before:
+```
+$ tar -xzvf nmea-dist.tar.gz
+nmea-dist/
+nmea-dist/nmea.mux.gps.tcp.yaml
+nmea-dist/nmea-to-text.properties
+nmea-dist/nmea.mux.gps.sensor.nmea-fwd.yaml
+nmea-dist/web.zip
+nmea-dist/nmea.mux.kayak.ssd1306.yaml
+nmea-dist/nmea.mux.replay.big.log.yaml
+nmea-dist/REST.ssd1306.dg.properties
+nmea-dist/nmea.mux.big.log.nmea-fwd.yaml
+nmea-dist/mux.sh
+nmea-dist/build/
+nmea-dist/build/libs/
+nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
+$
+```
+Make sure `librxtx-java` is installed:
+```
+$ sudo apt-get install librxtx-java
+```
+
+Let's move to the newly created directory:
+```
+$ cd nmea-dist
+```
+Then, modify the file `/etc/rc.local` (make sure you're super-user), to start the required pieces at boot. Add the following lines, at the end
+of the file, _before_ the `exit` statement:
+```
+# Link the Serial Port
+sudo ln -s /dev/ttyACM0 /dev/ttyS80
+#
+# Start the MUX
+cd /home/pi/nmea-dist
+nohup ./mux.sh nmea.mux.gps.yaml &
+#
+```
+> Note: the mapping on `/dev/ttyS80` is used in `nmea.mux.gps.yaml`. Make sure it matches your config.
+
+> Note: to _stop_ all the servers started above, run a script like:
+> ```
+> #!/bin/bash
+> ps -ef | grep -Eiw 'java |python3 ' | grep -v grep | awk '{ print $2 }' > km
+> NB_L=$(cat km | wc -l)
+> if [[ ${NB_L} == 0 ]]; then
+>   echo No process found.
+> fi
+> for pid in $(cat km); do
+>   echo -e "Killing process ${pid}"
+>   sudo kill -15 ${pid}
+> done
+> rm km
+> ```
+
+Finally, we can set up the hotspot network on the Raspberry Pi.  
+Follow the instructions [here](./HOTSPOT.md).
+
+Then you can stop the `Machine B` (the Raspberry Pi), plug in your GPS, and boot it.
+
+Once it is re-started, you should see - from `Machine A` for example - a network named, as above, `NMEANetwork`.
+Its password is `PassWord` (see in the [instructions](./HOTSPOT.md)).
+
+Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
+`192.168.50.10` being the address of the machine the multiplexer runs on.
+
+
+
+---
+## Use-case 3
+### Deploy the config [above](#use-case-1), on a new Raspberry Pi image
 We want to deploy the configuration described [above](#use-case-1) on a newly flashed SD Card ([Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
 This config will include
 - A Raspberry Pi A+, to host the NMEA-multiplexer
@@ -526,6 +850,9 @@ cd /home/pi/nmea-dist
 nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 #
 ```
+> Note: the mapping on `/dev/ttyS80` is used in `nmea.mux.gps.sensor.nmea-fwd.yaml`. Make sure it matches your config.
+
+
 > Note: to _stop_ all the servers started above, run a script like:
 > ```
 > #!/bin/bash
@@ -539,88 +866,15 @@ nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 >   sudo kill -15 ${pid}
 > done
 > rm km
-
 > ```
 
+Finally, we can set up the hotspot network on the Raspberry Pi.  
+Follow the instructions [here](./HOTSPOT.md).
 
-Finally, we set up the hotspot network.  
-Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>,
-```
-sudo apt update
-sudo apt upgrade
-```
-To install `hostapd`, enter the command:
-```
-sudo apt install hostapd
-```
-enter `Y` when prompted.
-
-To install `dnsmasq` enter the command:
-```
-sudo apt install dnsmasq
-```
-enter `Y` when prompted
-
-The installers will have set up the program so they run when the pi is started and activated them. While we set the hotspot we should stop them running. This is done with the following commands:
-```
-sudo systemctl stop hostapd
-sudo systemctl stop dnsmasq
-```
-
-Define the hotspot network name and passphrase in `/etc/hostapd/hostapd.conf` (see `ssid` and `wpa_passphrase` properties):
-```
-# country_code=FR
-interface=wlan0
-driver=nl80211
-ssid=NMEANetwork   # <- This is the network name, choose your own.
-hw_mode=g
-channel=6
-wmm_enabled=0
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=PassWord
-wpa_key_mgmt=WPA-PSK
-# wpa_pairwise=TKIP
-rsn_pairwise=CCMP
-```
-
-Add the following lines at the bottom of `/etc/dnsmasq.conf`
-
-```
-# RPiHotspot config - No Intenet
-interface=wlan0
-# bind-dynamic     # Add this for Internet config 
-domain-needed
-bogus-priv
-dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
-```
-
-Add the following lines at the bottom of `/etc/dhcpcd.conf`:
-```
-#
-# Static HotSpot
-interface wlan0
-nohook wpa_supplicant
-static ip_address=192.168.50.10/24
-static routers=192.168.50.1
-```
-Enable the `hostapd` service:
-```
-sudo systemctl unmask hostapd
-sudo systemctl enable hostapd
-```
-See its status:
-```
-sudo service hostapd status
-sudo service dnsmasq status
-```
-
-Then you can stop the `Machine B`, plug in your GPS, and boot it.
+Then you can stop the `Machine B` (the Raspberry Pi), plug in your GPS, and boot it.
 
 Once it is re-started, you should see - from `Machine A` for example - a network named, as above, `NMEANetwork`.
-Its password is `PassWord` (see above).
+Its password is `PassWord` (see in the [instructions](./HOTSPOT.md)).
 
 Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
 `192.168.50.10` being the address of the machine the multiplexer runs on.

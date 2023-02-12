@@ -1,0 +1,28 @@
+#
+# MUX definition.
+#
+name: "Log GPS Data."
+description:
+  - Reads GPS
+  - Log data in a file (data.nmea)
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: 0
+channels:
+  - type: serial
+    port: /dev/ttyS80
+    baudrate: 4800
+#    sentence.filters: RMC,GLL
+#    verbose: true
+forwarders:
+  - type: file
+    filename: data.nmea
+    flush: true
+    # verbose: false
+    # timebase.filename=true
+    # filename.suffix=_LOG
+    # log.dir=logged
+    # split=hour
+
