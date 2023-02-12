@@ -493,32 +493,7 @@ a nmea-dist/build
 a nmea-dist/build/libs
 a nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
 a nmea-dist/python/checksum.py
-a nmea-dist/python/cal.sample.yaml
-a nmea-dist/python/TCP_BMP180_server.py
-a nmea-dist/python/REST_BME280_server.py
-a nmea-dist/python/sample_cache.py
-a nmea-dist/python/TCP_BME280_server.py
-a nmea-dist/python/cal.sample.2.yaml
-a nmea-dist/python/NMEABuilder.py
-a nmea-dist/python/TCP_ZDA_server.py
-a nmea-dist/python/TCP_LIS3MDL_server.py
-a nmea-dist/python/NMEAParser.py
-a nmea-dist/python/REST_SSD1306_server.py
-a nmea-dist/python/TCP_LSM303_HMC5883L_server.py
-a nmea-dist/python/prefixes.py
-a nmea-dist/python/utils.py
-a nmea-dist/python/REST_SSD1306_server_v2.py
-a nmea-dist/python/scripts
-a nmea-dist/python/TCP_HTU21DF_server.py
-a nmea-dist/python/TCP_Serial_server.py
-a nmea-dist/python/scripts/start.SSD1306.REST.server.sh
-a nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh
-a nmea-dist/python/scripts/start.BME280.TCP.server.sh
-a nmea-dist/python/scripts/install.all.sh
-a nmea-dist/python/scripts/README.md
-a nmea-dist/python/scripts/kill.python.tcp.sh
-a nmea-dist/python/scripts/kill.python.tcp.sh
-a nmea-dist/python/scripts/kill.python.rest.sh
+. . .
 a nmea-dist/python/scripts/start.Serial.TCP.server.sh
 a nmea-dist/python/scripts/test.sh
 a nmea-dist/python/scripts/start.BME280.REST.server.sh
@@ -591,32 +566,7 @@ nmea-dist/build/
 nmea-dist/build/libs/
 nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
 nmea-dist/python/checksum.py
-nmea-dist/python/cal.sample.yaml
-nmea-dist/python/TCP_BMP180_server.py
-nmea-dist/python/REST_BME280_server.py
-nmea-dist/python/sample_cache.py
-nmea-dist/python/TCP_BME280_server.py
-nmea-dist/python/cal.sample.2.yaml
-nmea-dist/python/NMEABuilder.py
-nmea-dist/python/TCP_ZDA_server.py
-nmea-dist/python/TCP_LIS3MDL_server.py
-nmea-dist/python/NMEAParser.py
-nmea-dist/python/REST_SSD1306_server.py
-nmea-dist/python/TCP_LSM303_HMC5883L_server.py
-nmea-dist/python/prefixes.py
-nmea-dist/python/utils.py
-nmea-dist/python/REST_SSD1306_server_v2.py
-nmea-dist/python/scripts/
-nmea-dist/python/TCP_HTU21DF_server.py
-nmea-dist/python/TCP_Serial_server.py
-nmea-dist/python/scripts/start.SSD1306.REST.server.sh
-nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh
-nmea-dist/python/scripts/start.BME280.TCP.server.sh
-nmea-dist/python/scripts/install.all.sh
-nmea-dist/python/scripts/README.md
-nmea-dist/python/scripts/kill.python.tcp.sh
-nmea-dist/python/scripts/kill.python.rest.sh
-nmea-dist/python/scripts/start.Serial.TCP.server.sh
+. . .
 nmea-dist/python/scripts/test.sh
 nmea-dist/python/scripts/start.BME280.REST.server.sh
 $
