@@ -355,11 +355,10 @@ Wiring, Schemas, Components, 3D printed enclosures...
 
 On a [PiHAT](https://www.adafruit.com/product/2310) (HAT: **H**ardware **A**ttached on **T**op):
 
-| Components moved down to show the wiring |
+| Wiring |
 |:-----------------------------------------:|
-| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) |
-| Actual Components Position |
-| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) |
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_01.png) Components moved down to show the wiring|
+| ![PiHAT](./doc_resources/perma-proto-pi-hat_bb_02.png) Actual Components Position |
 
 3D Printed enclosure, available
 - [here](https://github.com/OlivierLD/3DPrinting/tree/master/OpenSCAD/RPiA%2BLogger).
