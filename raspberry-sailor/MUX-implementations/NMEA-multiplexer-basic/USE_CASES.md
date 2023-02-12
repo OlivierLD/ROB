@@ -380,7 +380,7 @@ Now we need to configure `Machine B`, and send the newly generated archive to it
 #### Machine B
 Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
 Make sure you enable the `ssh` interface (use `raspi-config`).  
-This new image should contain a Java Development Kit (aka JDK), and Python 3. Make sure it's right:
+This new image should contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
 $ java version
 ```
@@ -469,7 +469,7 @@ Once it is re-started, you should see - from `Machine A` for example - a network
 Its password is `PassWord` (see in the [instructions](./HOTSPOT.md)).
 
 Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
-`192.168.50.10` being the address of the machine the multiplexer runs on.
+`192.168.50.10` being the address of the machine (Raspberry Pi) the multiplexer runs on.
 
 
 
@@ -877,6 +877,6 @@ Once it is re-started, you should see - from `Machine A` for example - a network
 Its password is `PassWord` (see in the [instructions](./HOTSPOT.md)).
 
 Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
-`192.168.50.10` being the address of the machine the multiplexer runs on.
+`192.168.50.10` being the address of the machine (Raspberry Pi) the multiplexer runs on.
 
 ---
