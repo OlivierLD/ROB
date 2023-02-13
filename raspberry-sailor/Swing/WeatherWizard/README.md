@@ -10,7 +10,7 @@ Latest version is currently 4.0.0.0.
 
 Written in Java. As such, runs everywhere Java runs (Windows, Linux, Mac OS, etc)
 
-It has been written because I was enable to find anything equivalent anywhere.
+It has been written because I was unable to find anything equivalent anywhere.
 Paperback User Manual available at [Lulu.com](http://www.lulu.com/shop/olivier-le-diouris/weather-wizard-user-manual/paperback/product-20064234.html).
 
 There is [here](http://donpedro.lediouris.net/weather/applet/chartapplet.html) a signed applet, demonstrating <i>some</i> of the features of the product.

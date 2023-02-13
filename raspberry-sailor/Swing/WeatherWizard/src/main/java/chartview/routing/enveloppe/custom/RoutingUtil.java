@@ -76,8 +76,6 @@ public class RoutingUtil {
         return brg;
     }
 
-    //
-
     public static List<List<RoutingPoint>> calculateIsochrons(RoutingClientInterface caller,
                                                               ChartPanel chartPanel,
                                                               RoutingPoint startFrom,
@@ -140,9 +138,9 @@ public class RoutingUtil {
         RoutingPoint center = startFrom;
 
         int nbIntermediateIndex = 0;
-        if (intermediateWP != null)
+        if (intermediateWP != null) {
             finalDestination = intermediateWP.get(nbIntermediateIndex++);
-
+        }
         double gcDistance = 0D;
         RoutingPoint aimFor = null;
         int bestRouteIndex = 0;
@@ -153,21 +151,21 @@ public class RoutingUtil {
 
 //  System.out.println("Starting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString());
 
-        // Calcutate bearing to detination (from start)
-        if (aimFor == null)
+        // Calculate bearing to destination (from start)
+        if (aimFor == null) {
             brg = getBearing(center);
-        else
+        } else {
             brg = getBearingTo(center, aimFor);
-
-        List<List<RoutingPoint>> allIsochrons = new ArrayList<List<RoutingPoint>>();
+        }
+        List<List<RoutingPoint>> allIsochrons = new ArrayList<>();
 
         // Initialization
         interruptRouting = false;
         timer = System.currentTimeMillis();
 
         smallestDist = Double.MAX_VALUE;
-        List<List<RoutingPoint>> data = new ArrayList<List<RoutingPoint>>(1);
-        ArrayList<RoutingPoint> one = new ArrayList<RoutingPoint>(1);
+        List<List<RoutingPoint>> data = new ArrayList<>(1);
+        ArrayList<RoutingPoint> one = new ArrayList<>(1);
         center.setDate(fromDate);
         GribHelper.GribCondition wind = GribHelper.gribLookup(center.getPosition(), wgd, fromDate);
         boolean keepLooping = true;
@@ -207,7 +205,7 @@ public class RoutingUtil {
                     while (!interruptRouting && keepLooping && dimTwo.hasNext()) {
 //          timer = logDiffTime(timer, "Milestone 3");
                         RoutingPoint newCurveCenter = dimTwo.next();
-                        List<RoutingPoint> oneCurve = new ArrayList<RoutingPoint>(10);
+                        List<RoutingPoint> oneCurve = new ArrayList<>(10);
 
                         wind = GribHelper.gribLookup(newCurveCenter.getPosition(), wgd, currentDate);
                         if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
@@ -222,11 +220,11 @@ public class RoutingUtil {
 //          timer = logDiffTime(timer, "Milestone 4");
 
 //          brg = getBearing(newCurveCenter); // 7-apr-2010.            
-                        if (aimFor == null)
+                        if (aimFor == null) {
                             brg = getBearing(newCurveCenter);
-                        else // Finer Routing
+                        } else { // Finer Routing
                             brg = getBearingTo(newCurveCenter, aimFor);
-
+                        }
 //          nbNonZeroSpeed = 0;
                         // Calculate isochron from center
                         for (int bearing = brg - routingForkWidth / 2;
@@ -234,9 +232,9 @@ public class RoutingUtil {
                              bearing += routingStep) {
 //            timer = logDiffTime(timer, "Milestone 5");
                             int windDir = 0;
-                            if (wind != null)
+                            if (wind != null) {
                                 windDir = wind.winddir;
-                            else {
+                            } else {
 //              Context.getInstance().fireLogging("Wind is null..., aborting (out of the GRIB)\n");
 //              System.out.println("Aborting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString()+ ", wind is null.");
                                 //      keepLooping = false;
@@ -245,8 +243,9 @@ public class RoutingUtil {
                             int twa;
                             for (twa = bearing - windDir; twa < 0; twa += 360) ;
                             double wSpeed = 0.0D;
-                            if (wind != null) // Should be granted already...
+                            if (wind != null) { // Should be granted already...
                                 wSpeed = wind.windspeed;
+                            }
                             // In case user said to avoid TWS > xxx
                             if (maxTWS > -1) {
                                 if (wSpeed > maxTWS) {
@@ -270,8 +269,9 @@ public class RoutingUtil {
                                 speed = PolarHelper.getSpeed(wSpeed, twa, speedCoeff);
                             }
 
-                            if (speed < 0.0D)
+                            if (speed < 0.0D) {
                                 speed = 0.0D;
+                            }
 
                             if (speed > 0D) {
                                 nbNonZeroSpeed++;
@@ -316,11 +316,11 @@ public class RoutingUtil {
                                 oneCurve.add(ip);
                             }
 //            timer = logDiffTime(timer, "Milestone 6");
-
                         }
 //          timer = logDiffTime(timer, "Milestone 7");
-                        if (!interruptRouting)
+                        if (!interruptRouting) {
                             temp.add(oneCurve);
+                        }
                     }
                 }
                 long after = System.currentTimeMillis();
@@ -335,7 +335,7 @@ public class RoutingUtil {
 //        WWContext.getInstance().fireLogging("Reducing...");
 //        System.out.print("Reducing...");
 //        before = System.currentTimeMillis();
-                    finalCurve = calculateEnveloppe(data, center);
+                    finalCurve = calculateEnvelope(data, center);
                     if (aimFor != null) {
                         if (isPointIn(aimFor, finalCurve, center)) {
                             try {
@@ -370,8 +370,9 @@ public class RoutingUtil {
                     gc.setStart(new GreatCirclePoint((forecast.getPosition().getL()), (forecast.getPosition().getG())));
                     if (aimFor == null) {
                       gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
-                    } else
+                    } else {
                         gc.setArrival(new GreatCirclePoint((aimFor.getPosition().getL()), (aimFor.getPosition().getG())));
+                    }
                     try {
                         gc.calculateGreatCircle(10);
                         gcDistance = Math.toDegrees(gc.getDistance() * 60D);
@@ -399,8 +400,9 @@ public class RoutingUtil {
                         synchronized (monitor) {
                             int total = monitor.getTotal();
                             int current = monitor.getCurrent();
-                            if (current != total)
+                            if (current != total) {
                                 monitor.setCurrent(null, total);
+                            }
                         }
                     }
                     JOptionPane.showMessageDialog(null, "(1) " + WWGnlUtilities.buildMessage("routing-aborted", new String[]{Integer.toString(allIsochrons.size())}), WWGnlUtilities.buildMessage("routing"), JOptionPane.WARNING_MESSAGE);
@@ -421,8 +423,9 @@ public class RoutingUtil {
                             if (smallestDist < proximity) {
                                 keepLooping = false;
                                 System.out.println("Close enough.");
-                            } else
+                            } else {
                                 smallestDist *= 1.5; // Boo... Should do some backtracking
+                            }
                         }
                         smallestDist = localSmallOne;
                     }
@@ -435,33 +438,36 @@ public class RoutingUtil {
                             center = closest;
                             center.setDate(currentDate);
 
-                            if (nbIntermediateIndex < intermediateWP.size())
+                            if (nbIntermediateIndex < intermediateWP.size()) {
                                 finalDestination = intermediateWP.get(nbIntermediateIndex++);
-                            else {
-                                if (!finalDestination.getPosition().equals(destination.getPosition()))
+                            } else {
+                                if (!finalDestination.getPosition().equals(destination.getPosition())) {
                                     finalDestination = destination;
-                                else {
+                                } else {
                                     keepLooping = false;
                                     System.out.println("Destination reached, aiming (inter-WP) [" + (aimFor != null ? aimFor.getPosition().toString() : "none") + "] finalDestination [" + finalDestination.getPosition().toString() + "]");
                                 }
                             }
                         }
-                        if (!keepLooping) // End of Routing
+                        if (!keepLooping) { // End of Routing
                             WWContext.getInstance().fireLogging("Finished (" + WWGnlUtilities.XXXX12.format(smallestDist) + " vs " + WWGnlUtilities.XXXX12.format(localSmallOne) + ").\n(Non Zero Speed:" + nbNonZeroSpeed + ")\n", LoggingPanel.YELLOW_STYLE);
+                        }
                         if (nbNonZeroSpeed == 0) {
                             ProgressMonitor monitor = WWContext.getInstance().getMonitor();
                             if (monitor != null) {
                                 synchronized (monitor) {
                                     int total = monitor.getTotal();
                                     int current = monitor.getCurrent();
-                                    if (current != total)
+                                    if (current != total) {
                                         monitor.setCurrent(null, total);
+                                    }
                                 }
                             }
-                            if (interruptedBecauseTooOld)
+                            if (interruptedBecauseTooOld) {
                                 JOptionPane.showMessageDialog(null, WWGnlUtilities.buildMessage("grib-exhausted", new String[]{Integer.toString(allIsochrons.size())}), WWGnlUtilities.buildMessage("routing"), JOptionPane.WARNING_MESSAGE);
-                            else
+                            } else {
                                 JOptionPane.showMessageDialog(null, "(2) " + WWGnlUtilities.buildMessage("routing-aborted", new String[]{Integer.toString(allIsochrons.size())}), WWGnlUtilities.buildMessage("routing"), JOptionPane.WARNING_MESSAGE);
+                            }
                         }
                     } else {
                         ProgressMonitor monitor = WWContext.getInstance().getMonitor();
@@ -469,14 +475,16 @@ public class RoutingUtil {
                             synchronized (monitor) {
                                 int total = monitor.getTotal();
                                 int current = monitor.getCurrent();
-                                if (current != total)
+                                if (current != total) {
                                     monitor.setCurrent(null, total);
+                                }
                             }
                         }
-                        if (interruptedBecauseTooOld)
+                        if (interruptedBecauseTooOld) {
                             JOptionPane.showMessageDialog(null, WWGnlUtilities.buildMessage("grib-exhausted", new String[]{Integer.toString(allIsochrons.size())}), WWGnlUtilities.buildMessage("routing"), JOptionPane.WARNING_MESSAGE);
-                        else
+                        } else {
                             JOptionPane.showMessageDialog(null, "(3) " + WWGnlUtilities.buildMessage("routing-aborted", new String[]{Integer.toString(allIsochrons.size())}), WWGnlUtilities.buildMessage("routing"), JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 }
                 allowOtherRoute = false;
@@ -491,8 +499,9 @@ public class RoutingUtil {
                 WWContext.getInstance().fireLogging("Isochrone # " + Integer.toString(allIsochrons.size()) + ", smallest distance to arrival:" + WWGnlUtilities.XXXX12.format(smallestDist) + " nm. Still processing:" + keepLooping + "\n");
                 WWContext.getInstance().fireProgressing("Isochrone # " + Integer.toString(allIsochrons.size()) + "...");
 
-                if (caller != null)
+                if (caller != null) {
                     caller.routingNotification(allIsochrons, finalClosest);
+                }
 //      timer = logDiffTime(timer, "Milestone 13");
             }
             if (interruptRouting) {
@@ -564,9 +573,9 @@ public class RoutingUtil {
         bestRoute.add(start);
         while (go) {
             RoutingPoint next = start.getAncestor();
-            if (next == null)
+            if (next == null) {
                 go = false;
-            else {
+            } else {
                 bestRoute.add(next);
                 start = next;
             }
@@ -601,7 +610,7 @@ public class RoutingUtil {
     }
 
     // Possible optimization ?
-    private static List<RoutingPoint> calculateEnveloppe(List<List<RoutingPoint>> bulkPoints, RoutingPoint center) {
+    private static List<RoutingPoint> calculateEnvelope(List<List<RoutingPoint>> bulkPoints, RoutingPoint center) {
         List<RoutingPoint> returnCurve = new ArrayList<RoutingPoint>();
         long before = System.currentTimeMillis();
         // Put ALL the points in the finalCurve
@@ -625,14 +634,15 @@ public class RoutingUtil {
             Iterator<RoutingPoint> dimTwo = curve.iterator();
             while (!interruptRouting && dimTwo.hasNext()) {
                 RoutingPoint newPoint = dimTwo.next();
-                currentPolygon.addPoint(newPoint.getPoint().x,
-                        newPoint.getPoint().y);
+                currentPolygon.addPoint(newPoint.getPoint().x, newPoint.getPoint().y);
             }
             currentPolygon.addPoint(center.getPoint().x, center.getPoint().y); // close
             Iterator<List<RoutingPoint>> dimOneBis = bulkPoints.iterator();
             while (!interruptRouting && dimOneBis.hasNext()) {
                 List<RoutingPoint> curveBis = dimOneBis.next();
-                if (curveBis.equals(curve)) continue;
+                if (curveBis.equals(curve)) {
+                    continue;
+                }
                 Iterator<RoutingPoint> dimTwoBis = curveBis.iterator();
                 while (!interruptRouting && dimTwoBis.hasNext()) {
                     RoutingPoint isop = dimTwoBis.next();
@@ -659,8 +669,9 @@ public class RoutingUtil {
     private static boolean isPointIn(RoutingPoint rp, List<RoutingPoint> lrp, RoutingPoint center) {
         Polygon currentPolygon = new Polygon();
         currentPolygon.addPoint(center.getPoint().x, center.getPoint().y); // center
-        for (RoutingPoint p : lrp)
+        for (RoutingPoint p : lrp) {
             currentPolygon.addPoint(p.getPoint().x, p.getPoint().y);
+        }
         currentPolygon.addPoint(center.getPoint().x, center.getPoint().y); // close
         return currentPolygon.contains(rp.getPoint());
     }
@@ -707,18 +718,21 @@ public class RoutingUtil {
                         if (grib != null) {
 //            System.out.println("  -> " + grib.getDate());
                             bigGribMap.put(grib.getDate(), grib);
-                        } else
+                        } else {
                             System.out.println("  -> NULL grib");
+                        }
                     }
-                } else
+                } else {
                     System.out.println("*** No GRIB data in " + f.getAbsolutePath());
+                }
             }
             System.out.println("The big GRIB map has " + bigGribMap.size() + " entry(ies).");
             GribHelper.GribConditionData[] bigData = new GribHelper.GribConditionData[bigGribMap.size()];
             Set<Date> keys = bigGribMap.keySet();
             int idx = 0;
-            for (Date d : keys)
+            for (Date d : keys) {
                 bigData[idx++] = bigGribMap.get(d);
+            }
             cp.setGribData(bigData, "OneBigGRIBArray");
             // TODO Hide progress bar
             // TODO ? Save the BIG Grib?
@@ -734,12 +748,12 @@ public class RoutingUtil {
     private static Matcher matcher = null;
 
     private static List<File> drillDownArchive(List<File> list, File dir, final String filter, final boolean regExp) {
-        if (!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             throw new RuntimeException("[" + dir.getAbsolutePath() + "] not found, or is not a directory (from " + System.getProperty("user.dir") + ")");
-        else {
-            if (regExp)
+        } else {
+            if (regExp) {
                 pattern = Pattern.compile(filter); // , Pattern.CASE_INSENSITIVE);
-
+            }
             File[] flist = dir.listFiles(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     boolean cond = false;
@@ -762,10 +776,11 @@ public class RoutingUtil {
             List<File> _list = Arrays.asList(flist);
             List<File> lf = new ArrayList<File>();
             for (File f : _list) {
-                if (f.isDirectory())
+                if (f.isDirectory()) {
                     lf = drillDownArchive(lf, f, filter, regExp);
-                else
+                } else {
                     lf.add(f);
+                }
             }
             list.addAll(lf);
             //  flist = (File[])list.toArray();
@@ -774,8 +789,9 @@ public class RoutingUtil {
     }
 
     public static List<RoutingPoint> whatIfRouting(CommandPanel cp, GeoPoint fromPt, GribHelper.GribConditionData[] gribData) {
-        if (wirp == null)
+        if (wirp == null) {
             wirp = new WhatIfRoutingPanel();
+        }
         wirp.setFromPos(fromPt);
 
         List<RoutingPoint> route = null;
@@ -803,8 +819,9 @@ public class RoutingUtil {
             }
             startNow = wirp.isNowSelected();
 
-            if (wirp.isDuringSelected())
+            if (wirp.isDuringSelected()) {
                 nbd = wirp.getNbDays();
+            }
 
             long timeStep = 24;
             try {
@@ -821,11 +838,13 @@ public class RoutingUtil {
 
             route = new ArrayList<RoutingPoint>(2);
             Date fromDate = gribData[0].getDate();
-            if (startNow)
+            if (startNow) {
                 fromDate = new Date();
+            }
             Date toDate = gribData[gribData.length - 1].getDate();
-            if (wirp.isDuringSelected())
-                toDate = new Date(fromDate.getTime() + (nbd * (24L * 3600L * 1000L)));
+            if (wirp.isDuringSelected()) {
+                toDate = new Date(fromDate.getTime() + (nbd * (24L * 3_600L * 1_000L)));
+            }
             System.out.println("Forecast ends at " + toDate.toString());
 
             Date currentDate = fromDate;
@@ -838,23 +857,30 @@ public class RoutingUtil {
                 rpt.setAncestor(ancestor);
                 GribHelper.GribCondition wind = GribHelper.gribLookup(currentPt, gribData, currentDate);
                 int windDir = 0;
-                if (wind != null)
+                if (wind != null) {
                     windDir = wind.winddir;
+                }
 
-                if (wirp.isHeadingSelected())
+                if (wirp.isHeadingSelected()) {
                     twa = windDir - hdg;
-                else
+                } else {
                     hdg = windDir - twa;
+                }
 
-                while (twa < 0) twa += 360;
-                while (hdg < 0) hdg += 360;
+                while (twa < 0) {
+                    twa += 360;
+                }
+                while (hdg < 0) {
+                    hdg += 360;
+                }
                 double wSpeed = 0.0D;
-                if (wind != null)
+                if (wind != null) {
                     wSpeed = wind.windspeed;
+                }
                 double speed = PolarHelper.getSpeed(wSpeed, twa, polarFactor);
-                if (speed < 0.0D)
+                if (speed < 0.0D) {
                     speed = 0.0D;
-
+                }
                 rpt.setTwa(-twa);
                 rpt.setTwd(windDir);
                 rpt.setTws(wSpeed);
@@ -932,9 +958,9 @@ public class RoutingUtil {
         boolean generateGPXRoute = true;
         String clipboardContent = "";
         // Opening tags
-        if (clipboardOption == ParamPanel.RoutingOutputList.CSV)
+        if (clipboardOption == ParamPanel.RoutingOutputList.CSV) {
             clipboardContent = "L;(dec L);G;(dec G);Date;UTC;TWS;TWD;BSP;HDG\n";
-        else if (clipboardOption == ParamPanel.RoutingOutputList.GPX) {
+        } else if (clipboardOption == ParamPanel.RoutingOutputList.GPX) {
             clipboardContent =
                     "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
                             "<gpx version=\"1.1\" \n" +
@@ -983,17 +1009,16 @@ public class RoutingUtil {
             RoutingPoint rp = null;
             RoutingPoint ic = null; // Isochron Center
 //    for (int r=0; r<routesize; r++) // 0 is the closest point, the last calculated
-            for (int r = routesize - 1; r >= 0; r--) // 0 is the closest point, the last calculated
-            {
+            for (int r = routesize - 1; r >= 0; r--) { // 0 is the closest point, the last calculated
                 rp = bestRoute.get(r);
-                if (r == 0) // Last one
+                if (r == 0) { // Last one
                     ic = rp;
-                else
+                } else {
                     ic = bestRoute.get(r - 1);
-
-                if (rp.getDate() == null)
+                }
+                if (rp.getDate() == null) {
                     date = time = "";
-                else {
+                } else {
                     cal.setTime(rp.getDate());
 
                     int year = cal.get(Calendar.YEAR);
@@ -1082,8 +1107,9 @@ public class RoutingUtil {
                     clipboardContent +=
                             (rp.getPosition().toString() + " : " + date + ", tws:" + tws + ", twd:" + twd + ", bsp:" + bsp + ", hdg:" + hdg + "\n");
                 } else if (clipboardOption == ParamPanel.RoutingOutputList.KML) {
-                    if (firstKMLHeading == -1)
+                    if (firstKMLHeading == -1) {
                         firstKMLHeading = ic.getHdg();
+                    }
                     kmlRoute += (rp.getPosition().getG() + "," + rp.getPosition().getL() + ",0\n");
                     String tws = WWGnlUtilities.XX22.format(ic.getTws());
                     String twd = Integer.toString(ic.getTwd());
@@ -1135,10 +1161,10 @@ public class RoutingUtil {
             }
             // Closing tags
             if (clipboardOption == ParamPanel.RoutingOutputList.GPX) {
-                if (generateGPXRoute)
+                if (generateGPXRoute) {
                     clipboardContent += "  </rte>\n";
-                clipboardContent +=
-                        ("</gpx>");
+                }
+                clipboardContent += ("</gpx>");
             } else if (clipboardOption == ParamPanel.RoutingOutputList.KML) {
                 clipboardContent +=
                         ("      <Folder>\n" +
@@ -1190,8 +1216,7 @@ public class RoutingUtil {
                     BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutput));
                     bw.write(clipboardContent + "\n");
                     bw.close();
-                    if (clipboardOption == ParamPanel.RoutingOutputList.JSON) // Suggest view in Google maps
-                    {
+                    if (clipboardOption == ParamPanel.RoutingOutputList.JSON) { // Suggest view in Google maps
                         int resp = JOptionPane.showConfirmDialog(instance, "See in Google maps?", "Routing", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                         if (resp == JOptionPane.YES_OPTION) {
                             File f = new File("routing/googlemaprouting.html");

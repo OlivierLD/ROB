@@ -5014,222 +5014,6 @@
       </module>
       <module name="66" symetric="no">
          <plot id="1">
-            <x>634</x>
-            <y>347</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>634</x>
-            <y>347</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="67" symetric="no">
-         <plot id="1">
-            <x>644</x>
-            <y>310</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>644</x>
-            <y>310</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="68" symetric="no">
-         <plot id="1">
-            <x>720</x>
-            <y>331</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>720</x>
-            <y>331</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="69" symetric="no">
-         <plot id="1">
-            <x>711</x>
-            <y>336</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>711</x>
-            <y>336</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="70" symetric="no">
-         <plot id="1">
-            <x>713</x>
-            <y>330</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>713</x>
-            <y>330</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="71" symetric="no">
-         <plot id="1">
-            <x>714</x>
-            <y>328</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>714</x>
-            <y>328</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="72" symetric="no">
-         <plot id="1">
-            <x>714</x>
-            <y>325</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>714</x>
-            <y>325</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="73" symetric="no">
-         <plot id="1">
-            <x>713</x>
-            <y>322</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>713</x>
-            <y>322</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="74" symetric="no">
-         <plot id="1">
-            <x>712</x>
-            <y>319</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>712</x>
-            <y>319</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="75" symetric="no">
-         <plot id="1">
-            <x>686</x>
-            <y>306</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>686</x>
-            <y>306</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="76" symetric="no">
-         <plot id="1">
-            <x>663</x>
-            <y>301</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>663</x>
-            <y>301</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="77" symetric="no">
-         <plot id="1">
-            <x>659</x>
-            <y>290</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>659</x>
-            <y>290</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="78" symetric="no">
-         <plot id="1">
-            <x>654</x>
-            <y>281</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>654</x>
-            <y>281</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="79" symetric="no">
-         <plot id="1">
-            <x>642</x>
-            <y>278</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>642</x>
-            <y>278</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="80" symetric="no">
-         <plot id="1">
-            <x>650</x>
-            <y>271</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>650</x>
-            <y>271</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="81" symetric="no">
-         <plot id="1">
-            <x>641</x>
-            <y>271</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>641</x>
-            <y>271</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="82" symetric="no">
-         <plot id="1">
-            <x>656</x>
-            <y>298</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>656</x>
-            <y>298</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="83" symetric="no">
-         <plot id="1">
-            <x>621</x>
-            <y>293</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>621</x>
-            <y>293</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="84" symetric="no">
-         <plot id="1">
             <x>469</x>
             <y>14</y>
             <z>0.0</z>
@@ -5375,7 +5159,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="85" symetric="no">
+      <module name="67" symetric="no">
          <plot id="1">
             <x>483</x>
             <y>45</y>
@@ -5527,7 +5311,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="86" symetric="no">
+      <module name="68" symetric="no">
          <plot id="1">
             <x>296</x>
             <y>291</y>
@@ -5549,7 +5333,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="87" symetric="no">
+      <module name="69" symetric="no">
          <plot id="1">
             <x>304</x>
             <y>294</y>
@@ -5576,7 +5360,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="88" symetric="no">
+      <module name="70" symetric="no">
          <plot id="1">
             <x>307</x>
             <y>295</y>
@@ -5603,7 +5387,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="89" symetric="no">
+      <module name="71" symetric="no">
          <plot id="1">
             <x>310</x>
             <y>298</y>
@@ -5630,7 +5414,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="90" symetric="no">
+      <module name="72" symetric="no">
          <plot id="1">
             <x>318</x>
             <y>304</y>
@@ -5667,7 +5451,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="91" symetric="no">
+      <module name="73" symetric="no">
          <plot id="1">
             <x>255</x>
             <y>42</y>
@@ -5714,7 +5498,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="92" symetric="no">
+      <module name="74" symetric="no">
          <plot id="1">
             <x>267</x>
             <y>69</y>
@@ -5746,7 +5530,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="93" symetric="no">
+      <module name="75" symetric="no">
          <plot id="1">
             <x>181</x>
             <y>125</y>
@@ -5778,7 +5562,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="94" symetric="no">
+      <module name="76" symetric="no">
          <plot id="1">
             <x>187</x>
             <y>127</y>
@@ -5800,7 +5584,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="95" symetric="no">
+      <module name="77" symetric="no">
          <plot id="1">
             <x>199</x>
             <y>130</y>
@@ -5822,7 +5606,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="96" symetric="no">
+      <module name="78" symetric="no">
          <plot id="1">
             <x>207</x>
             <y>134</y>
@@ -5844,7 +5628,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="97" symetric="no">
+      <module name="79" symetric="no">
          <plot id="1">
             <x>226</x>
             <y>131</y>
@@ -5866,7 +5650,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="98" symetric="no">
+      <module name="80" symetric="no">
          <plot id="1">
             <x>235</x>
             <y>129</y>
@@ -5898,7 +5682,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="99" symetric="no">
+      <module name="81" symetric="no">
          <plot id="1">
             <x>258</x>
             <y>123</y>
@@ -5935,7 +5719,7 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="100" symetric="no">
+      <module name="82" symetric="no">
          <plot id="1">
             <x>264</x>
             <y>119</y>
@@ -5967,82 +5751,10 @@
             <z>0.0</z>
          </plot>
       </module>
-      <module name="101" symetric="no">
+      <module name="83" symetric="no">
          <plot id="1">
-            <x>791</x>
-            <y>67</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>791</x>
-            <y>67</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="102" symetric="no">
-         <plot id="1">
-            <x>705</x>
-            <y>2</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>705</x>
-            <y>2</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="103" symetric="no">
-         <plot id="1">
-            <x>742</x>
-            <y>146</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>742</x>
-            <y>146</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="104" symetric="no">
-         <plot id="1">
-            <x>627</x>
-            <y>170</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>627</x>
-            <y>170</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="105" symetric="no">
-         <plot id="1">
-            <x>666</x>
-            <y>166</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>666</x>
-            <y>166</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="106" symetric="no">
-         <plot id="1">
-            <x>624</x>
-            <y>188</y>
-            <z>0.0</z>
-         </plot>
-         <plot id="2">
-            <x>624</x>
-            <y>188</y>
-            <z>0.0</z>
-         </plot>
-      </module>
-      <module name="107" symetric="no">
-         <plot id="1">
-            <x>634</x>
-            <y>347</y>
+            <x>515</x>
+            <y>3</y>
             <z>0.0</z>
          </plot>
          <plot id="2">

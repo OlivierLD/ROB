@@ -70,6 +70,7 @@ import oracle.xml.parser.v2.XMLElement;
 import oracle.xml.parser.v2.XMLParser;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @SuppressWarnings("serial")
@@ -351,10 +352,10 @@ public class DataFilePopup
               int x_offset = 0;
               int y_offset = 0;
 
-              try { scale = Double.parseDouble(faxrow.selectNodes("./faxScale").item(0).getTextContent()); } catch (Exception ignore) {}
-              try { rotation = Float.parseFloat(faxrow.selectNodes("./faxRotation").item(0).getTextContent()); } catch (Exception ignore) {}
-              try { x_offset = Integer.parseInt(faxrow.selectNodes("./faxXoffset").item(0).getTextContent()); } catch (Exception ignore) {}
-              try { y_offset = Integer.parseInt(faxrow.selectNodes("./faxYoffset").item(0).getTextContent()); } catch (Exception ignore) {}
+              try { scale = Double.parseDouble(faxrow.selectNodes("./faxScale").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+              try { rotation = Float.parseFloat(faxrow.selectNodes("./faxRotation").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+              try { x_offset = Integer.parseInt(faxrow.selectNodes("./faxXoffset").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+              try { y_offset = Integer.parseInt(faxrow.selectNodes("./faxYoffset").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
 
               faxData[i][FaxPatternEditTablePanel.SCALE_COL] = scale;     // Scale
               faxData[i][FaxPatternEditTablePanel.ROTATION_COL] = rotation; // Rotation
@@ -505,13 +506,13 @@ public class DataFilePopup
             int xOffset = 0;
             int yOffset = 0;
             boolean showChart = true;
-            try { northBoundary = Double.parseDouble(doc.selectNodes("/pattern/north").item(0).getTextContent()); } catch (Exception ignore) {}
-            try { southBoundary = Double.parseDouble(doc.selectNodes("/pattern/south").item(0).getTextContent()); } catch (Exception ignore) {}
-            try { eastBoundary = Double.parseDouble(doc.selectNodes("/pattern/east").item(0).getTextContent()); } catch (Exception ignore) {}
-            try { westBoundary = Double.parseDouble(doc.selectNodes("/pattern/west").item(0).getTextContent()); } catch (Exception ignore) {}
+            try { northBoundary = Double.parseDouble(doc.selectNodes("/pattern/north").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+            try { southBoundary = Double.parseDouble(doc.selectNodes("/pattern/south").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+            try { eastBoundary = Double.parseDouble(doc.selectNodes("/pattern/east").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+            try { westBoundary = Double.parseDouble(doc.selectNodes("/pattern/west").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
 
-            try { chartWidth = Integer.parseInt(doc.selectNodes("/pattern/chartwidth").item(0).getTextContent()); } catch (Exception ignore) {}
-            try { chartHeight = Integer.parseInt(doc.selectNodes("/pattern/chartheight").item(0).getTextContent()); } catch (Exception ignore) {}
+            try { chartWidth = Integer.parseInt(doc.selectNodes("/pattern/chartwidth").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
+            try { chartHeight = Integer.parseInt(doc.selectNodes("/pattern/chartheight").item(0).getFirstChild().getNodeValue()); } catch (Exception ignore) {}
 
 
             try { showChart = "yes".equals(((XMLElement)doc.selectNodes("/pattern/chart-opt").item(0)).getAttribute("show")); } catch (Exception ignore) {}

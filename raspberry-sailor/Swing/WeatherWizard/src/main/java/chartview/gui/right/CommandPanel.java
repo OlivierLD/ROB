@@ -1550,8 +1550,7 @@ public class CommandPanel
                 }
             }
 
-            public void store() // Save, and update
-            {
+            public void store() { // Save, and update
                 if (parent != null && parent.isVisible()) {
                     boolean ok2go = true;
                     int nbWaz = 0;
@@ -1594,9 +1593,9 @@ public class CommandPanel
                             boolean go = true;
                             while (go) {
                                 ZipEntry ze = in.getNextEntry();
-                                if (ze == null)
+                                if (ze == null) {
                                     go = false;
-                                else {
+                                } else {
                                     System.out.println("Duplicating " + ze.getName());
                                     WWGnlUtilities.writeToArchive(out, in, ze.getName());
                                 }
@@ -1765,8 +1764,7 @@ public class CommandPanel
                 }
             }
 
-            public void storeAs() // Save as...
-            {
+            public void storeAs() { // Save as...
                 String compositeName = WWContext.getInstance().getCurrentComposite();
                 final String newFileName = WWGnlUtilities.chooseFile(instance,
                         JFileChooser.FILES_ONLY,
