@@ -1,0 +1,69 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Chart Mercator Background" color="0;0;0" transparent="false" color-change="false">
+        <faxScale>1.8920142172896854</faxScale> 
+        <faxXoffset>-348</faxXoffset> 
+        <faxYoffset>-232</faxYoffset> 
+        <faxRotation>0.0</faxRotation> 
+        <dynamic-resource url="resource://GREENWICH_CENTERED_MERCATOR_BG" dir="" prefix="" pattern="" extension=""/>
+      </fax>
+      <fax hint="North Atlantic Surface" color="252;69;5" transparent="true" color-change="true">
+         <faxScale>0.35049389948139215</faxScale>
+         <faxXoffset>40</faxXoffset>
+         <faxYoffset>30</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif" dir="./WeatherFaxes/yyyy/MM/dd/Surface" prefix="NOAA_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Surface 48H" color="255;0;0" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrbw.gif" dir="./WeatherFaxes/yyyy/MM/dd/Surface" prefix="NOAA_48H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Surface 96H" color="166;18;18" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hrbw.gif" dir="./WeatherFaxes/yyyy/MM/dd/Surface" prefix="NOAA_96H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Waves 48H" color="27;129;142" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrwind_wave.gif" dir="./WeatherFaxes/yyyy/MM/dd/Waves" prefix="NOAA_48H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Waves 96H" color="17;76;142" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hrwind_wave.gif" dir="./WeatherFaxes/yyyy/MM/dd/Waves" prefix="NOAA_96H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Waves 48H Color" color="252;69;5" transparent="true" color-change="false">
+         <faxScale>0.5250000000000000</faxScale>
+         <faxXoffset>70</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrwper_color.gif" dir="./WeatherFaxes/yyyy/MM/dd/Waves_Color" prefix="NOAA_48H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic Waves 96H Color" color="252;69;5" transparent="true" color-change="false">
+         <faxScale>0.5250000000000000</faxScale>
+         <faxXoffset>70</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hrwper_color.gif" dir="./WeatherFaxes/yyyy/MM/dd/Waves_Color" prefix="NOAA_96H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic 500mb 6H" color="0;0;255" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_06hr500bw.gif" dir="./WeatherFaxes/yyyy/MM/dd/500mb" prefix="NOAA_06H_" pattern="dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic 500mb 48H" color="0;0;255" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hr500bw.gif" dir="./WeatherFaxes/yyyy/MM/dd/500mb" prefix="NOAA_48H_" pattern="dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic 500mb 96H" color="0;0;255" transparent="true" color-change="true">
+         <faxScale>0.5300000000000000</faxScale>
+         <faxXoffset>60</faxXoffset>
+         <faxYoffset>60</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hr500bw.gif" dir="./WeatherFaxes/yyyy/MM/dd/500mb" prefix="NOAA_96H" pattern="dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false"><dynamic-grib hint="North Atlantic GRIB 14 Days" request="GFS:65N,1N,100W,10E|2,2|0,3..336|PRMSL,WIND,HGT500,AIRTMP,WAVES" dir="./GRIBFiles/yyyy/MM/dd" prefix="NOAA_14d_" pattern="HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>65.5</north>
+   <south>-9.5</south>
+   <east>28.2</east>
+   <west>-101.8</west>
+   <chartwidth>1091</chartwidth>
+   <chartheight>815</chartheight>
+</pattern>

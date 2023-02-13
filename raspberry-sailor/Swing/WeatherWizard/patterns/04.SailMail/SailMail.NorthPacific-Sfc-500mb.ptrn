@@ -1,0 +1,24 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NE Pacific Surface" color="255;0;0" transparent="true">
+         <faxScale>0.6343933037813565</faxScale>
+         <faxXoffset>631</faxXoffset>
+         <faxYoffset>0</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="North Pacific 500mb" color="0;0;0" transparent="true">
+         <faxScale>0.9818305040674532</faxScale>
+         <faxXoffset>7</faxXoffset>
+         <faxYoffset>23</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib wind-only="false" with-contour="true"></grib>
+   <projection type="MERCATOR"/>
+   <north>65.49999999999997</north>
+   <south>-9.500000000000002</south>
+   <east>-38.30000000000003</east>
+   <west>131.70000000000007</west>
+   <chartwidth>1431</chartwidth>
+   <chartheight>731</chartheight>
+</pattern>

@@ -1,0 +1,19 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Pacific Color (UA)" color="0;0;0" transparent="false" color-change="false">
+         <faxScale>1.0561698984743062</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>0</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/UA/OPC_PAC.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_uasfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib/>
+   <projection type="ANAXIMANDRE"/>
+   <north>89.0</north>
+   <south>5.1</south>
+   <east>-115.1</east>
+   <west>129.9</west>
+   <chartwidth>1898</chartwidth>
+   <chartheight>1385</chartheight>
+</pattern>

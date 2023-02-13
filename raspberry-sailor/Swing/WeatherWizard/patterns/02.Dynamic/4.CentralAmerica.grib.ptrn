@@ -1,0 +1,19 @@
+<pattern>
+   <fax-collection>
+      <fax hint="24Hr Surface Forecast, central america" color="204;0;0" transparent="true" color-change="true">
+         <faxScale>0.5873792960629333</faxScale>
+         <faxXoffset>-52</faxXoffset>
+         <faxYoffset>73</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://weather.noaa.gov/pub/fax/PYFE80.gif" dir="./WeatherFaxes/yyyy/MM" prefix="Central_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+	  </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">Central America<dynamic-grib hint="Central America" request="GFS:35N,29S,150W,058W|2,2|0,6..168|PRMSL,WIND,HGT500,WAVES" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>35.0</north>
+   <south>-25.0</south>
+   <east>-65.0</east>
+   <west>-150.0</west>
+   <chartwidth>987</chartwidth>
+   <chartheight>735</chartheight>
+</pattern>

@@ -1,0 +1,40 @@
+<pattern>
+<author name="Titus - 2014.08.06"/>
+   <fax-collection>
+      <!--fax hint="North Atlantic Background" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>1.3007522717478845</faxScale>
+         <faxXoffset>-89</faxXoffset>
+         <faxYoffset>-151</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="ext-resource://./resources/North_Atlantic.jpg" dir="." prefix="" pattern="" extension=""/></fax-->
+      <fax hint="Sfc Analysis" color="204;0;0" transparent="true" color-change="true">
+         <faxScale>0.540298684997168</faxScale>
+         <faxXoffset>-120</faxXoffset>
+         <faxYoffset>-259</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.jpg" dir="./WeatherFaxes" prefix="Sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Sfc Forecast 48H" color="0;0;153" transparent="true" color-change="true">
+         <faxScale>0.8245190675402602</faxScale>
+         <faxXoffset>-54</faxXoffset>
+         <faxYoffset>-133</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrbw.gif" dir="./WeatherFaxes" prefix="48_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Sfc Forecast 96H" color="153;0;153" transparent="true" color-change="true">
+         <faxScale>0.8245190675402602</faxScale>
+         <faxXoffset>-54</faxXoffset>
+         <faxYoffset>-133</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hrbw.gif" dir="./WeatherFaxes" prefix="96_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax> 
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="1" time-smooth="6"><dynamic-grib hint="North Atlantic - 5 Days 2.5x2.5, current situation" request="search:chartview.util.SearchUtil.findMostRecentFile(&quot;.*\.grb$&quot;, &quot;${grib.path}&quot;)" dir="" pattern="" extension="" prefix=""/></grib>
+   <projection type="MERCATOR"/>
+   <north>60.0</north>
+   <south>10.0</south>
+   <east>20.0</east>
+   <west>-95.0</west>
+   <chartwidth>1491</chartwidth>
+   <chartheight>848</chartheight>
+   <scroll x="0" y="0"/>
+   <chart-opt show="no"/>
+   <fax-option value="RADIOBUTTON"/> 
+</pattern>

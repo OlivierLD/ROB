@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public final class GreatCirclePoint
         implements Serializable {
-    double latitude;
-    double longitude;
+    double latitude;   // In degrees
+    double longitude;  // In degrees
 
     public GreatCirclePoint(double l, double g) {
         latitude = l;

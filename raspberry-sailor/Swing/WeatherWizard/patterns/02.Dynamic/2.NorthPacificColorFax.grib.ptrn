@@ -1,0 +1,18 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Colored Surface Fax" color="0;0;0" transparent="true" color-change="false">
+         <faxScale>0.631953211936557</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>-12</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/UA/OPC_PAC.gif" dir="./WeatherFaxes/yyyy/MM" prefix="NOAA_color" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false"><dynamic-grib hint="North Pacific GRIB" request="GFS:85N,5N,130E,120W|2,2|0|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="ANAXIMANDRE"/>
+   <north>88.0</north>
+   <south>10.0</south>
+   <east>-118.0</east>
+   <west>130.0</west>
+   <chartwidth>1108</chartwidth>
+   <chartheight>772</chartheight>
+</pattern>

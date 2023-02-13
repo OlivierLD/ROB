@@ -1,0 +1,11 @@
+<pattern>
+   <fax-collection/>
+   <grib display-TWS-Data="true" display-PRMSL-Data="false" display-500HGT-Data="false" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" smooth="4" time-smooth="3">California West Coast<dynamic-grib hint="West Coast" request="GFS:52N,25N,160W,104W|1,1|0,3..168|PRMSL,WIND,HGT500,AIRTMP,WAVES,RAIN"  dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>52.0</north>
+   <south>25.0</south>
+   <east>-104.0</east>
+   <west>-160.0</west>
+   <chartwidth>1028</chartwidth>
+   <chartheight>646</chartheight>
+<author name=""/><scroll x="0" y="0"/><chart-opt show="yes"/><fax-option value="CHECKBOX"/></pattern>

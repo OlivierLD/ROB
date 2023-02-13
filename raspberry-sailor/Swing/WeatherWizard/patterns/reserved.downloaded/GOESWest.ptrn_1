@@ -1,0 +1,17 @@
+<pattern>
+   <fax-collection>
+      <fax hint="GOES West image" color="0;0;0" wh-ratio="0.9375">
+         <faxScale>1.1</faxScale>
+         <faxXoffset>28</faxXoffset>
+         <faxYoffset>-16</faxYoffset>
+      </fax>
+   </fax-collection>
+   <grib></grib>
+   <projection type="SATELLITE" nadir-latitude="0.0" nadir-longitude="-135.0" altitude="40000.0" opaque="true"/>
+   <north>90.0</north>
+   <south>-90.0</south>
+   <east>180.0</east>
+   <west>-180.0</west>
+   <chartwidth>556</chartwidth>
+   <chartheight>493</chartheight>
+</pattern>

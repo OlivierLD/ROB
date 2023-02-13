@@ -461,7 +461,10 @@ public final class GreatCircle {
 	/*
 	 * Points coordinates in Radians
 	 */
-	public static double calculateRhumLineDistance(GreatCirclePoint f, GreatCirclePoint t) {
+	public double calculateRhumbLineDistance() {
+		return calculateRhumbLineDistance(this.start, this.arrival);
+	}
+	public static double calculateRhumbLineDistance(GreatCirclePoint f, GreatCirclePoint t) {
 		int _nsDir = 0;
 		if (t.getL() > f.getL()) {
 			_nsDir = TO_NORTH;
@@ -530,6 +533,9 @@ public final class GreatCircle {
 		return _dLoxo;
 	}
 
+	public double calculateRhumbLineRoute() {
+		return calculateRhumbLineRoute(this.start, this.arrival);
+	}
 	/**
 	 * Rhumbline aka loxodrome
 	 * Points coordinates in Radians

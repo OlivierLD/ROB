@@ -1,0 +1,27 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Pacific Surface" color="255;0;0">
+         <faxScale>0.3504938994813921</faxScale>
+         <faxXoffset>155</faxXoffset>
+         <faxYoffset>128</faxYoffset>
+      </fax>
+      <fax hint="North Pacific 500mb" color="0;0;255">
+         <faxScale>0.5435337909065088</faxScale>
+         <faxXoffset>96</faxXoffset>
+         <faxYoffset>119</faxYoffset>
+      </fax>
+      <fax hint="North Pacific Sea State" color="0;204;0">
+         <faxScale>1.1174146992035976</faxScale>
+         <faxXoffset>58</faxXoffset>
+         <faxYoffset>58</faxYoffset>
+      </fax>
+   </fax-collection>
+   <grib wind-only="false"></grib>
+   <projection type="MERCATOR"/>
+   <north>67.1</north>
+   <south>-7.9</south>
+   <east>-41.7</east>
+   <west>128.3</west>
+   <chartwidth>1595</chartwidth>
+   <chartheight>835</chartheight>
+</pattern>

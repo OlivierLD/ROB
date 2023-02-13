@@ -1,0 +1,18 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Fiji Sat Picture" color="0;0;0" transparent="false">
+         <faxScale>0.6830134553650705</faxScale>
+         <faxXoffset>18</faxXoffset>
+         <faxYoffset>8</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.met.gov.fj/aifs_prods/06gms_ir.jpg" dir="./WeatherFaxes/SatImages/yyyy/MM/fiji" prefix="Fiji_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="jpg"/></fax>
+   </fax-collection>
+   <grib wind-only="false" with-contour="false">GFS:0S,40S,140E,160W|2,2|0,12..168|PRMSL,WIND,HGT500,TEMP,WAVES<dynamic-grib hint="Fiji Centered" request="GFS:0S,40S,140E,160W|2,2|0,12..168|PRMSL,WIND,HGT500,TEMP,WAVES" dir="./GRIBFiles/yyyy/MM/polynesia" prefix="Fiji_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>0.5</north>
+   <south>-41.5</south>
+   <east>-158.9</east>
+   <west>139.1</west>
+   <chartwidth>939</chartwidth>
+   <chartheight>700</chartheight>
+</pattern>

@@ -1,0 +1,17 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Central Pacific Streamline (Honolulu)" color="204;0;51">
+         <faxScale>0.49374936086165816</faxScale>
+         <faxXoffset>20</faxXoffset>
+         <faxYoffset>-200</faxYoffset>
+      </fax>
+   </fax-collection>
+   <grib wind-only="false"></grib>
+   <projection type="MERCATOR"/>
+   <north>32.10000000000006</north>
+   <south>-37.89999999999994</south>
+   <east>-101.29999999999998</east>
+   <west>128.70000000000002</west>
+   <chartwidth>1164</chartwidth>
+   <chartheight>671</chartheight>
+</pattern>

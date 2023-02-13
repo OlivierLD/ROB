@@ -1,0 +1,22 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Tropical West Atlantic 48h waves" color="201;102;0" transparent="true" change-color="true">
+         <faxScale>0.5919287333386348</faxScale>
+         <faxXoffset>162</faxXoffset>
+         <faxYoffset>-61</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.nhc.noaa.gov/tafb_latest/atl48_latestBW.gif" dir="./WeatherFaxes/yyyy/MM/waves" prefix="NOAA_waves_48_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="false" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">
+     <dynamic-grib hint="Zone covered by the faxes above (Tropical West Atlantic)" request="GFS:28N,17N,89W,76W|1,1|0,12..72|PRMSL,WIND" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="MERCATOR"/>
+   <north>35.0</north>
+   <south>-5.0</south>
+   <east>-25.0</east>
+   <west>-110.0</west>
+   <chartwidth>1202</chartwidth>
+   <chartheight>600</chartheight>
+   <scroll x="0" y="0" /> 
+</pattern>

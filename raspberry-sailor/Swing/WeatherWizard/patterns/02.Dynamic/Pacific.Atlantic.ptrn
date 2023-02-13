@@ -1,0 +1,42 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Atlantic Surface" color="255;0;0" transparent="true">
+         <faxScale>0.22987406095457374</faxScale>
+         <faxXoffset>4097</faxXoffset>
+         <faxYoffset>9</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif" dir="./WeatherFaxes/2008-gif/world" prefix="NAtl_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Atlantic 500mb" color="0;0;204" transparent="true">
+         <faxScale>0.35808961778086157</faxScale>
+         <faxXoffset>2633</faxXoffset>
+         <faxYoffset>40</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_06hr500bw.gif" dir="./WeatherFaxes/2008-gif/world" prefix="NAtl_500_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North PAcific Surface" color="204;51;0" transparent="true">
+         <faxScale>0.23210424611034045</faxScale>
+         <faxXoffset>1060</faxXoffset>
+         <faxYoffset>0</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/P_sfc_full_ocean.gif" dir="./WeatherFaxes/2008-gif/world" prefix="NPac_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="North Pacific 500mb" color="0;102;102" transparent="true">
+         <faxScale>0.35566378206145405</faxScale>
+         <faxXoffset>700</faxXoffset>
+         <faxYoffset>40</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif" dir="./WeatherFaxes/2008-gif/world" prefix="NPac_500_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Central Pacific Streamlines" color="153;0;153" transparent="true">
+         <faxScale>0.2876949615287466</faxScale>
+         <faxXoffset>1060</faxXoffset>
+         <faxYoffset>560</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PWFA11.gif" dir="./WeatherFaxes/2008-gif/world" prefix="Pac_stream_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib wind-only="true" with-contour="false"/>
+   <projection type="MERCATOR"/>
+   <north>65.0</north>
+   <south>-50.0</south>
+   <east>20.0</east>
+   <west>90.0</west>
+   <chartwidth>1604</chartwidth>
+   <chartheight>798</chartheight>
+</pattern>

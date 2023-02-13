@@ -1,0 +1,22 @@
+<pattern>
+<author name="Titus - 2013.01.23. With search:"/>
+   <fax-collection>
+      <fax hint="Caribbean" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>1.0338686862088182</faxScale>
+         <faxXoffset>-53</faxXoffset>
+         <faxYoffset>-2</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="ext-resource://./resources/Caribbean.png" dir="." prefix="" pattern="" extension=""/>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="true" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="3" time-smooth="1"><dynamic-grib hint="Caribbean - 7 Days 1x1, current situation" request="search:chartview.util.SearchUtil.findMostRecentFile(&quot;.*Caribbean_.*\.grb&quot;, &quot;${grib.path}&quot;)" dir="" pattern="" extension="" prefix=""/></grib>
+   <projection type="MERCATOR"/>
+   <north>23.48</north>
+   <south>7.48</south>
+   <east>-60.56</east>
+   <west>-88.38</west>
+   <chartwidth>1575</chartwidth>
+   <chartheight>941</chartheight>
+   <scroll x="0" y="0"/>
+   <chart-opt show="no"/>
+<fax-option value="RADIOBUTTON"/></pattern>

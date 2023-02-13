@@ -1,0 +1,36 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NMC NW Surface Pacific" color="255;0;0" transparent="true">
+         <faxScale>0.6830134553650705</faxScale>
+         <faxXoffset>14</faxXoffset>
+         <faxYoffset>73</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+      <fax hint="NMC NE Surface Pacific" color="204;0;51" transparent="true">
+         <faxScale>0.6830134553650705</faxScale>
+         <faxXoffset>610</faxXoffset>
+         <faxYoffset>80</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+      <fax hint="NMC N 500mb Pacific " color="0;0;204" transparent="true">
+         <faxScale>1.04060401</faxScale>
+         <faxXoffset>61</faxXoffset>
+         <faxYoffset>12</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="KMW Central Pacific Streamlines" color="102;0;102" transparent="true">
+         <faxScale>0.9090909090909091</faxScale>
+         <faxXoffset>130</faxXoffset>
+         <faxYoffset>250</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib wind-only="true" with-contour="false"/>
+   <projection type="MERCATOR"/>
+   <north>65.10000000000001</north>
+   <south>-49.9</south>
+   <east>-105.30000000000004</east>
+   <west>125.79999999999995</west>
+   <chartwidth>1045</chartwidth>
+   <chartheight>1170</chartheight>
+</pattern>

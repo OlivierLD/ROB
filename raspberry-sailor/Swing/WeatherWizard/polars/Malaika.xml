@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<polar-coeff-function xmlns="http://www.logisail.com/polars"
+                      polar-degree="5"
+                      polar-coeff-degree="3">
+  <polar-coeff degree="5">
+    <coeff degree="3">-1.0733200295407871E-13</coeff>
+    <coeff degree="2">8.883956948444678E-12</coeff>
+    <coeff degree="1">-2.46630722960835E-10</coeff>
+    <coeff degree="0">-1.1476246324459685E-10</coeff>
+  </polar-coeff>
+  <polar-coeff degree="4">
+    <coeff degree="3">5.776625927570906E-11</coeff>
+    <coeff degree="2">-4.677589987934445E-9</coeff>
+    <coeff degree="1">1.2699204722644713E-7</coeff>
+    <coeff degree="0">5.394868612944212E-8</coeff>
+  </polar-coeff>
+  <polar-coeff degree="3">
+    <coeff degree="3">-1.1406327733273204E-8</coeff>
+    <coeff degree="2">8.990575200427325E-7</coeff>
+    <coeff degree="1">-2.380683318496592E-5</coeff>
+    <coeff degree="0">-9.050536175804957E-6</coeff>
+  </polar-coeff>
+  <polar-coeff degree="2">
+    <coeff degree="3">9.170808415732053E-7</coeff>
+    <coeff degree="2">-7.038294594967039E-5</coeff>
+    <coeff degree="1">0.0018226564532608687</coeff>
+    <coeff degree="0">5.891408943360099E-4</coeff>
+  </polar-coeff>
+  <polar-coeff degree="1">
+    <coeff degree="3">-1.8197110898037378E-5</coeff>
+    <coeff degree="2">0.0013680381318041755</coeff>
+    <coeff degree="1">-0.03420012964815561</coeff>
+    <coeff degree="0">-0.008300830074129184</coeff>
+  </polar-coeff>
+  <polar-coeff degree="0">
+    <coeff degree="3">3.7873301551035344E-5</coeff>
+    <coeff degree="2">-0.002753692478995335</coeff>
+    <coeff degree="1">0.06320875062280729</coeff>
+    <coeff degree="0">0.0037086253434615024</coeff>
+  </polar-coeff>
+</polar-coeff-function>

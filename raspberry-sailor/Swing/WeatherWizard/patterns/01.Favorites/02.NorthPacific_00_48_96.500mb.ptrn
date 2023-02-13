@@ -1,0 +1,35 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Pacific 500mb" color="0;0;255" transparent="true">
+         <faxScale>0.5329151632117903</faxScale> 
+         <faxXoffset>115</faxXoffset> 
+         <faxYoffset>124</faxYoffset> 
+         <faxRotation>0.0</faxRotation> 
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif" dir="./WeatherFaxes/yyyy/MM/500mb" prefix="NOAA_500mb_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="NPac 500mb Chart 48h" color="0;0;255" transparent="true">
+         <faxScale>0.5327976514970197</faxScale> 
+         <faxXoffset>115</faxXoffset> 
+         <faxYoffset>123</faxYoffset> 
+         <faxRotation>0.0</faxRotation> 
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_48hr500bw.gif" dir="./WeatherFaxes/2008-gif/500mb" prefix="NOAA_500mb_48_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="NPac 500mb Chart 96h" color="0;0;255" transparent="true">
+         <faxScale>0.5354616397545048</faxScale> 
+         <faxXoffset>111</faxXoffset> 
+         <faxYoffset>119</faxYoffset> 
+         <faxRotation>0.0</faxRotation> 
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_96hr500bw.gif" dir="./WeatherFaxes/2008-gif/500mb" prefix="NOAA_500mb_96_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib></grib>
+   <projection type="MERCATOR"/>
+   <north>67.1</north>
+   <south>-7.9</south>
+   <east>-41.7</east>
+   <west>128.3</west>
+   <chartwidth>1595</chartwidth>
+   <chartheight>835</chartheight>
+   <scroll x="0" y="0" /> 
+   <fax-option value="RADIOBUTTON" /> 
+</pattern>

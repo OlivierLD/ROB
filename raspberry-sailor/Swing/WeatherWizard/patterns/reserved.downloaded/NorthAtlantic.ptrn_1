@@ -1,0 +1,22 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NorthAtlantic Surface" color="255;0;0" transparent="true">
+         <faxScale>0.35049389948139215</faxScale>
+         <faxXoffset>40</faxXoffset>
+         <faxYoffset>30</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif" dir="./WeatherFaxes/2007-gif/sfc" prefix="NOAA_Atlantic_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="NorthAtlantic 500mb" color="0;0;255" transparent="true">
+         <faxScale>0.5441834994469384</faxScale>
+         <faxXoffset>35</faxXoffset>
+         <faxYoffset>58</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_06hr500bw.gif" dir="./WeatherFaxes/2007-gif/500mb" prefix="NOAA_Atlantic_500_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib/>
+   <projection type="MERCATOR"/>
+   <north>65.5</north>
+   <south>-9.5</south>
+   <east>28.2</east>
+   <west>-101.8</west>
+   <chartwidth>1091</chartwidth>
+   <chartheight>815</chartheight>
+</pattern>

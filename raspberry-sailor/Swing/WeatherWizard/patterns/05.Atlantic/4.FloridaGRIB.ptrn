@@ -1,0 +1,11 @@
+<pattern>
+   <fax-collection/>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">GRIB File for Florida<dynamic-grib hint="Florida GRIB Data" request="GFS:35N,10N,097W,060W|2,2|0,12..168|PRMSL,WIND,HGT500,TEMP,WAVES" dir="./GRIBFiles/yyyy/MM" prefix="Florida_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>35.0</north>
+   <south>10.0</south>
+   <east>-60.0</east>
+   <west>-97.0</west>
+   <chartwidth>838</chartwidth>
+   <chartheight>600</chartheight>
+<scroll x="0" y="0"/></pattern>

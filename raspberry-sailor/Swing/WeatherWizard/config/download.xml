@@ -1,0 +1,37 @@
+<fax-collection>
+  <!--fax name="" url=""/-->
+  <fax name="North Pacific 500mb Chart" url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif"/>
+  <fax name="North Pacific 500mb Chart - 24h" url="http://www.opc.ncep.noaa.gov/shtml/P_24hr500bw.gif"/>
+  <fax name="North Pacific 500mb Chart - 48h" url="http://www.opc.ncep.noaa.gov/shtml/P_48hr500bw.gif"/>
+  <fax name="North Pacific 500mb Chart - 96h" url="http://www.opc.ncep.noaa.gov/shtml/P_96hr500bw.gif"/>
+  <fax name="North Pacific Surface Chart" url="http://www.opc.ncep.noaa.gov/P_sfc_full_ocean.gif"/>
+  <fax name="North Pacific Surface Chart - 24h" url="http://www.opc.ncep.noaa.gov/shtml/P_24hrbw.gif"/>
+  <fax name="North Pacific Surface Chart - 48h" url="http://www.opc.ncep.noaa.gov/shtml/P_48hrbw.gif"/>
+  <fax name="North Pacific Surface Chart - 96h" url="http://www.opc.ncep.noaa.gov/shtml/P_96hrbw.gif"/>
+  <fax name="North Pacific Sea State" url="http://www.opc.ncep.noaa.gov/shtml/P_seastatebw.gif"/>
+  <fax name="North Pacific Sea State - 24h" url="http://www.opc.ncep.noaa.gov/shtml/P_24hrwind_wave.gif"/>
+  <fax name="North Pacific Sea State - 48h" url="http://www.opc.ncep.noaa.gov/shtml/P_48hrwind_wave.gif"/>
+  <fax name="North Pacific Sea State - 96h" url="http://www.opc.ncep.noaa.gov/shtml/A_96hr500bw.gif"/>
+  <fax name="North Atlantic 500mb Chart" url="http://www.opc.ncep.noaa.gov/shtml/A_06hr500bw.gif"/>
+  <fax name="North Atlantic 500mb Chart - 24h" url="http://www.opc.ncep.noaa.gov/shtml/A_24hr500bw.gif"/>
+  <fax name="North Atlantic 500mb Chart - 48h" url="http://www.opc.ncep.noaa.gov/shtml/A_48hr500bw.gif"/>
+  <fax name="North Atlantic 500mb Chart - 96h" url="http://www.opc.ncep.noaa.gov/shtml/A_96hr500bw.gif"/>
+  <fax name="North Atlantic Surface Chart" url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif"/>
+  <fax name="North Atlantic Surface Chart - 24h" url="http://www.opc.ncep.noaa.gov/shtml/A_24hrbw.gif"/>
+  <fax name="North Atlantic Surface Chart - 48h" url="http://www.opc.ncep.noaa.gov/shtml/A_48hrbw.gif"/>
+  <fax name="North Atlantic Surface Chart - 96h" url="http://www.opc.ncep.noaa.gov/shtml/A_96hrbw.gif"/>
+  <fax name="North Atlantic Sea State" url="http://www.opc.ncep.noaa.gov/shtml/A_seastatebw.gif"/>
+  <fax name="North Atlantic Sea State - 24h" url="http://www.opc.ncep.noaa.gov/shtml/A_24hrwind_wave.gif"/>
+  <fax name="North Atlantic Sea State - 48h" url="http://www.opc.ncep.noaa.gov/shtml/A_48hrwind_wave.gif"/>
+  <fax name="North Atlantic Sea State - 96h" url="http://www.opc.ncep.noaa.gov/shtml/A_96hrwind_wave.gif"/>
+  <fax name="Australian BOM, Surface Chart" url="http://www.bom.gov.au/difacs/IDX0078.gif"/>
+  <fax name="Australian BOM, 500mb Chart" url="http://www.bom.gov.au/difacs/IDX0099.gif"/>
+  <fax name="Central Pacific Surface Chart" url="http://weather.noaa.gov/pub/fax/PJFB10.gif"/>
+  <fax name="Central Pacific Streamline (Honolulu)" url="http://weather.noaa.gov/pub/fax/PWFA11.gif"/>
+  <fax name="Central Pacific GOES IR" url="http://weather.noaa.gov/pub/fax/evpz11.jpg"/>
+  <fax name="Central Pacific GOES IR - Polynesia and Vincinity" url="http://weather.noaa.gov/pub/fax/evps11.jpg"/>
+  <fax name="24h tropical forecast (East Pac)" url="http://weather.noaa.gov/pub/fax/PYFE80.gif"/>
+  <fax name="Australia to Samoa" url="http://www.met.gov.fj/aifs_prods/06gms_ir.jpg"/>
+  <fax name="NZ to Polynesia" url="http://www.meteo.pf/bulletins/satellites/psir.jpg"/>  
+  <fax name="NZ and W Polynesia" url="http://weather.noaa.gov/pub/fax/evps11.jpg"/> 
+</fax-collection>

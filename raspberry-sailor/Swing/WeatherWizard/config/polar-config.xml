@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns="urn:oliv-nmea" last-open-file="D:\OlivSoft\all-scripts\polars\coreutilities.sample-files\Malaika-1_C40.polar-data">
+  <smoothing-config>
+    <max-boat-speed-for-polars>17</max-boat-speed-for-polars>
+    <min-wind-speed>5</min-wind-speed>
+    <max-wind-speed>50</max-wind-speed>
+  </smoothing-config>
+</config>

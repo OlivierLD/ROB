@@ -1,0 +1,18 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Central Pacific Streamlines (Honolulu)" color="204;0;204" transparent="true">
+         <faxScale>0.441758999992167</faxScale>
+         <faxXoffset>225</faxXoffset>
+         <faxYoffset>-464</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PWFA11.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_stream_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib wind-only="true" with-contour="false">Same as above<dynamic-grib hint="Central Pacific" request="GFS:30N,40S,130E,110W|2,2|0|PRMSL,WIND,HGT500,TEMP,WAVES" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>30.0</north>
+   <south>-40.0</south>
+   <east>-110.0</east>
+   <west>130.0</west>
+   <chartwidth>962</chartwidth>
+   <chartheight>603</chartheight>
+</pattern>

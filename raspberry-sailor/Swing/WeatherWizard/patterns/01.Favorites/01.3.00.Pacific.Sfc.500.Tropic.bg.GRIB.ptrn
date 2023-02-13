@@ -1,0 +1,42 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Chart Mercator Background" color="0;0;0" transparent="false" color-change="false">
+        <faxScale>1.8292883447458812</faxScale>
+        <faxXoffset>-637</faxXoffset>
+        <faxYoffset>-223</faxYoffset>
+        <faxRotation>0.0</faxRotation>
+        <dynamic-resource url="resource://180_CENTERED_MERCATOR_BG" dir="" prefix="" pattern="" extension=""/>
+      </fax>
+      <fax hint="North Pacific Surface" color="255;0;51" transparent="true" color-change="true">
+         <faxScale>0.33790467906521593</faxScale>
+         <faxXoffset>183</faxXoffset>
+         <faxYoffset>94</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/P_sfc_full_ocean.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="North Pacific 500mb" color="0;153;255" transparent="true" color-change="true">
+         <faxScale>0.5146306466877547</faxScale>
+         <faxXoffset>133</faxXoffset>
+         <faxYoffset>98</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif" dir="./WeatherFaxes/yyyy/MM/500mb" prefix="NOAA_500mb_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="Central Pacific Streamline" color="204;0;204" transparent="true" color-change="true">
+         <faxScale>0.44724917076280424</faxScale>
+         <faxXoffset>271</faxXoffset>
+         <faxYoffset>597</faxYoffset>
+         <faxRotation>90.0</faxRotation>         
+         <dynamic-resource url="http://weather.noaa.gov/pub/fax/PWFA11.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_stream_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">
+     <dynamic-grib hint="Zone covered by the faxes above (All Pacific) , current situation" request="GFS:65N,45S,130E,110W|2,2|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="MERCATOR"/>
+   <north>66.5</north>
+   <south>-48.5</south>
+   <east>-102.0</east>
+   <west>127.5</west>
+   <chartwidth>1061</chartwidth>
+   <chartheight>1184</chartheight>
+</pattern>

@@ -1,0 +1,22 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NorthPac Surface" color="255;0;0">
+         <faxScale>0.24911232653566937</faxScale>
+         <faxXoffset>161</faxXoffset>
+         <faxYoffset>116</faxYoffset>
+      </fax>
+      <fax hint="NorthPac 500mb" color="0;0;255">
+         <faxScale>0.3863147615516799</faxScale>
+         <faxXoffset>102</faxXoffset>
+         <faxYoffset>107</faxYoffset>
+      </fax>
+   </fax-collection>
+   <grib></grib>
+   <projection type="MERCATOR"/>
+   <north>67.1</north>
+   <south>-7.9</south>
+   <east>-41.69999999999991</east>
+   <west>128.29999999999964</west>
+   <chartwidth>1141</chartwidth>
+   <chartheight>595</chartheight>
+</pattern>

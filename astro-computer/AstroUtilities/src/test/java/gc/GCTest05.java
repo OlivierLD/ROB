@@ -14,7 +14,7 @@ public class GCTest05 {
 		double dist = from.gcDistanceBetween(to);
 		double heading = GreatCircle.calculateRhumbLineRoute(from.degreesToRadians(),
 				to.degreesToRadians());
-		double dist2 = GreatCircle.calculateRhumLineDistance(from.degreesToRadians(),
+		double dist2 = GreatCircle.calculateRhumbLineDistance(from.degreesToRadians(),
 				to.degreesToRadians());
 		System.out.println("GC Dist:" + dist + ", Loxo Dist:" + dist2 + " nm, " + (dist2 * 1852) + " m, heading " + Math.toDegrees(heading));
 

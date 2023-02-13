@@ -1,0 +1,66 @@
+<grib-collection>
+  <grib-set id="Misc Pacific">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <grib name="North Pacific, 7 days, every 6 hours, 2x2" request="GFS:60N,0N,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500"/><grib name="North Pacific, 1 days, 2x2" request="GFS:60N,0N,120E,070W|2,2|0|PRMSL,WIND,HGT500"/><grib name="All Pacific, 7 days, every 6 hours, 2x2" request="GFS:60N,60S,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500"/><grib name="North Pacific with temp &amp; waves, 7 days, every 6 hours, 2x2" request="GFS:60N,0N,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500,SEATMP,WAVES"/><grib name="SF Vincinity, 7 days" request="GFS:43N,25N,150W,114W|1,1|0,12..168|PRMSL,WIND,HGT500"/><grib name="Vancouver-Panama, 7 days" request="GFS:50N,0N,140W,60W|2,2|0,12..168|PRMSL,WIND,HGT500,TEMP,WAVES"/><grib name="SF-Hawaii, 7 days, every 6 hours, 2x2" request="GFS:43N,17N,164W,114W|2,2|0,6..168|PRMSL,WIND,HGT500"/><grib name="SF-Hawaii, 7 days, every 6 hours, 1x1" request="GFS:43N,17N,164W,114W|1,1|0,6..168|PRMSL,WIND,HGT500"/><grib name="SF-Hawaii, 10 days, every 24 hours, 2x2" request="GFS:43N,17N,164W,114W|2,2|0,24..240|PRMSL,WIND,HGT500"/><grib name="SF-Marquesas, 10 days, every 24 hours, 2x2" request="GFS:43N,20S,150W,114W|2,2|0,24..240|PRMSL,WIND,HGT500"/><grib name="All Pacific, 7 days, every 6 hours, 1x1" request="GFS:60N,60S,120E,070W|1,1|0,6..168|PRMSL,WIND,HGT500"/><grib name="Hawaii-Vancouver, 7 days, every 6 hours, 2x2" request="GFS:50N,20N,170W,120W|2,2|0,6..168|PRMSL,WIND,HGT500"/><grib name="Mid &amp; North Pacific, 10 days, every 12 hours, 2x2" request="GFS:60N,30S,120E,070W|2,2|0,12..240|PRMSL,WIND,HGT500"/><grib name="SW Pacific, 10 days, every 12 hours, 2x2" request="GFS:10N,50S,130E,150W|2,2|0,12..240|PRMSL,WIND,HGT500"/><grib name="Polynesia, 10 days, every 12 hours, 2x2" request="GFS:5N,30S,180W,120W|2,2|0,12..240|PRMSL,WIND,HGT500"/><grib name="East (French) Polynesia, 10 days, wind, pr, 500, temp, waves" request="GFS:5N,30S,160W,120W|2,2|0,12..240|PRMSL,WIND,HGT500,TEMP,WAVES"/><grib name="SF-Marquesas, big, 10 days" request="GFS:43N,20S,170W,80W|2,2|0,24..240|PRMSL,WIND,HGT500"/></grib-set>
+  <grib-set id="All Pacific">
+    <!-- All Pacific -->
+    <grib name="All Pacific, 1 day, 2x2, Sfc, 500" request="GFS:60N,60S,120E,070W|2,2|12|WIND,PRMSL,HGT"/>
+    <grib name="All Pacific, 7 days, Sfc, 500" request="GFS:60N,60S,120E,070W|2,2|0,6..168|WIND,PRMSL,HGT"/>
+    <grib name="All Pacific, 2 days, Sfc, 500" request="GFS:60N,60S,120E,070W|2,2|12,24,36,48|WIND,PRMSL,HGT"/>
+    <grib name="All Pacific, 1 day, Sfc, 500, Temp, Waves" request="GFS:60N,60S,120E,070W|2,2|12|WIND,PRMSL,HGT,TMP,WAVES"/>
+  </grib-set>
+  <grib-set id="North Pacific">
+    <grib name="North Pacific, 1 day, Sfc, 500" request="GFS:65N,10N,135E,115W|2,2|0|PRMSL,WIND,HGT500"/>
+    <grib name="North Pacific, 1 day, Sfc, 500, Temp, Waves" request="GFS:65N,10N,135E,115W|2,2|0|WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="North Pacific, 7 days, Just Wind" request="GFS:65N,20S,120E,090W|2,2|12,24,36,48,60,72,96,120,144,168|WIND"/>
+    <grib name="North Pacific, 7 days, Sfc, 500" request="GFS:65N,20S,120E,090W|2,2|12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT"/>
+    <grib name="North Pacific, 7 days, Sfc, 500, Temp" request="GFS:65N,20S,120E,090W|2,2|12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP"/>
+    <grib name="North Pacific, 7 days, Sfc, 500, Temp, Waves" request="GFS:65N,20S,120E,090W|2,2|12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  </grib-set>
+  <grib-set id="South Pacific">
+    <grib name="South Pacific, 1 day, Sfc, 500" request="GFS:10S,50S,120E,090W|2,2|12|WIND,PRMSL,HGT"/>
+  <grib name="East Polynesia, 1 week" request="GFS:5S,30S,150W,120W|2,2|0,6..168|PRMSL,WIND,HGT500"/></grib-set>
+  <grib-set id="NE Pacific">
+    <grib name="NE Pacific, 1 day, Sfc, 500, Temp, Waves" request="GFS:65N,14.25N,175W,115W|1,1||WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="NE Pacific, 7 days, Sfc, 500, Temp, Waves" request="GFS:65N,14.25N,175W,115W|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  </grib-set>
+  <grib-set id="NW Pacific">
+    <grib name="NW Pacific, 1 day, Sfc, 500, Temp, Waves" request="GFS:65N,14N,136.50E,115W|1,1|WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="NW Pacific, 7 days, Sfc, 500, Temp, Waves" request="GFS:65N,14N,136.50E,115W|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  </grib-set>
+  <grib-set id="North Atlantic">
+    <grib name="N Atlantic, 1 day, Sfc, 500, Temp, Waves" request="GFS:65N,14N,100W,10E|1,1||WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="N Atlantic, 7 days, Sfc, 500, Temp, Waves" request="GFS:65N,14N,100W,10E|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  <grib name="Florida" request="GFS:33N,12N,097W,065W|2,2|0,12..168|PRMSL,WIND,HGT500,TEMP,WAVES"/><grib name="NorthEast Atlantic" request="GFS:85N,20N,100W,40E|1,1|0,6..72|PRMSL,WIND,HGT500"/><grib name="Biscay" request="GFS:55N,25N,45W,24E|1,1|0,6..168|PRMSL,WIND,HGT500,AIRTMP,WAVES,RAIN"/></grib-set>
+  <grib-set id="All Atlantic">
+    <grib name="All Atlantic, 1 day, Sfc, 500, Temp, Waves" request="GFS:65N,65S,100W,25E|1,1||WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="All Atlantic, 7 days, Sfc, 500, Temp, Waves, Rain" request="GFS:65N,65S,100W,25E|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES,PRATE"/>
+  </grib-set>
+  <grib-set id="Australia New Zealand">
+    <grib name="Australia, 1 day, Sfc, 500, Temp, Waves" request="GFS:10S,50S,110E,180E|1,1||WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="Australia, 7 days, Sfc, 500, Temp, Waves" request="GFS:10S,50S,110E,180E|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  </grib-set>
+  <grib-set id="Mediterranean Sea">
+    <grib name="Mediterranean Sea, 1 day, Sfc, 500, Temp, Waves" request="GFS:44N,33N,8W,20E|1,1||WIND,PRMSL,HGT,TMP,WAVES"/>
+    <grib name="Mediterranean Sea, 7 days, Sfc, 500, Temp, Waves" request="GFS:44N,33N,8W,20E|1,1|00,12,24,36,48,60,72,96,120,144,168|WIND,PRMSL,HGT,TMP,WAVES"/>
+  <grib name="Greece, 7 days" request="GFS:44N,30N,10E,35E|1,1|0,6..168|PRMSL,WIND,HGT500"/></grib-set>
+  <grib-set id="South Indian">
+    <grib name="South Indian, 1 day, Sfc, 500" request="GFS:10S,60S,0E,160E|2,2|12|WIND,PRMSL,HGT"/>
+  </grib-set>
+  <grib-set id="Big South">
+    <grib name="Big South, 1 day, Sfc, 500" request="GFS:00S,70S,10E,60W|2,2|12|WIND,PRMSL,HGT"/>
+  </grib-set>
+<grib-set id="RTOFS"><grib name="Atlantic Current, Salinity, etc" request="RTOFS:20S,70N,83W,2W|0.25,0.25|0,12,24,36..120|CUR,WTMP,DSL_M,SALTY"/><grib name="North Atlantic for current tests" request="RTOFS:20S,70N,83W,2W|0.25,0.25|0,12,24,36..72|CUR"/></grib-set></grib-collection>

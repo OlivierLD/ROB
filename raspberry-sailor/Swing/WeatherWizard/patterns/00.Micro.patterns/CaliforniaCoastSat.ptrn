@@ -1,0 +1,20 @@
+<pattern>
+   <fax-collection>
+      <fax hint="California Coast" color="0;0;0" transparent="false" color-change="false">
+         <faxScale>1.0335289789367599</faxScale>
+         <faxXoffset>6</faxXoffset>
+         <faxYoffset>3</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="resource://CALIFORNIA_COAST_SAT" dir="." prefix="" pattern="" extension=""/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">California Coast<dynamic-grib hint="California Coast" request="GFS:42N,32N,128W,116W|1,1|0,3..168|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>41.95</north>
+   <south>32.45</south>
+   <east>-115.85</east>
+   <west>-127.85</west>
+   <chartwidth>1136</chartwidth>
+   <chartheight>1132</chartheight>
+  <author name="Olivier"/>
+  <scroll x="0" y="0"/>
+</pattern>

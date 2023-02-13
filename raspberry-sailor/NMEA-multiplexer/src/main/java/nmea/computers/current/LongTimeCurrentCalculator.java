@@ -225,7 +225,7 @@ public class LongTimeCurrentCalculator /* extends Computer */ {
 												Math.toRadians(groundData[groundData.length - 1].getG()));
 
 										// Between the 2 above: the current
-										double dist = GreatCircle.calculateRhumLineDistance(geoFrom, geoTo); // Dist between DR & GPS
+										double dist = GreatCircle.calculateRhumbLineDistance(geoFrom, geoTo); // Dist between DR & GPS
 										double currentDir = Math.toDegrees(GreatCircle.calculateRhumbLineRoute(geoFrom, geoTo));
 										double hourRatio = (double) (timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() - timeBuffer.get(0).getValue().getTime()) / (double) ONE_HOUR_MS;
 										double currentSpeed = dist / hourRatio;

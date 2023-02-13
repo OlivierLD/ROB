@@ -1,0 +1,13 @@
+<pattern>
+   <fax-collection/>
+   <grib display-TWS-Data="true" display-PRMSL-Data="false" display-500HGT-Data="false" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false">
+     <dynamic-grib hint="North Pacific GRIB Data" request="GFS:60N,20S,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="MERCATOR"/>
+   <north>66.5</north>
+   <south>-48.5</south>
+   <east>-102.0</east>
+   <west>127.5</west>
+   <chartwidth>1061</chartwidth>
+   <chartheight>1184</chartheight>
+</pattern>

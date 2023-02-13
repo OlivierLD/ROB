@@ -14,6 +14,7 @@ SH_LINES=$((find . -name '*.sh' -print0 | xargs -0 cat) |  wc -l)
 JSON_LINES=$((find . -name '*.json' -print0 | xargs -0 cat) |  wc -l)
 IPYNB_LINES=$((find . -name '*.ipynb' -print0 | xargs -0 cat) |  wc -l)
 SQL_LINES=$((find . -name '*.sql' -print0 | xargs -0 cat) |  wc -l)
+XML_LINES=$((find . -name '*.xml' -print0 | xargs -0 cat) |  wc -l)
 
 echo -e "${JAVA_LINES} lines of Java code"
 echo -e "${SCALA_LINES} lines of Scala code"
@@ -26,9 +27,12 @@ echo -e "${MD_LINES} lines of MD doc"
 echo -e "${SH_LINES} lines of script"
 echo -e "${IPYNB_LINES} lines of notebooks"
 echo -e "${SQL_LINES} lines of SQL code"
+echo -e "${XML_LINES} lines of XML"
 echo -e " "
 echo -e "...and counting!"
 echo -e "------------------------"
-echo -e "This is a total of $(expr ${JAVA_LINES} + ${SCALA_LINES} + ${PYTHON_LINES} + ${ES6_LINES} + ${JSON_LINES} + ${HTML_LINES} + ${CSS_LINES} + ${MD_LINES} + ${IPYNB_LINES} + ${SH_LINES} + ${SQL_LINES}) lines..."
+TOTAL=$(expr ${JAVA_LINES} + ${SCALA_LINES} + ${PYTHON_LINES} + ${ES6_LINES} + ${JSON_LINES} + ${HTML_LINES} + ${CSS_LINES} + ${MD_LINES} + ${IPYNB_LINES} + ${SH_LINES} + ${SQL_LINES} + ${XML_LINES})
+# printf "%'.3f\n" ${TOTAL}
+echo -e "This is a total of $(printf "%'.0f" ${TOTAL}) lines..."
 echo -e "------------------------"
 

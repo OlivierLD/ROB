@@ -1,0 +1,36 @@
+<pattern>
+   <fax-collection>
+      <fax hint="500mb current state" color="0;0;204" transparent="true">
+         <faxScale>0.6209213230591549</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>20</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif" dir="./WeatherFaxes/batch/500mb" prefix="500mb_current_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="500mb 24h prediction" color="153;0;0" transparent="true">
+         <faxScale>0.6209213230591549</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>20</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_24hr500bw.gif" dir="./WeatherFaxes/batch/500mb" prefix="500mb_24h_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="500mb 48h prediction" color="0;102;0" transparent="true">
+         <faxScale>0.6209213230591549</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>20</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_48hr500bw.gif" dir="./WeatherFaxes/batch/500mb" prefix="500mb_48h_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="500mb 96h prediction" color="51;51;51" transparent="true">
+         <faxScale>0.6209213230591549</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>20</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/P_96hr500bw.gif" dir="./WeatherFaxes/batch/500mb" prefix="500mb_96h_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib wind-only="true" with-contour="false"/>
+   <projection type="MERCATOR"/>
+   <north>64.49999999999997</north>
+   <south>-10.500000000000002</south>
+   <east>-35.49999999999999</east>
+   <west>134.49999999999997</west>
+   <chartwidth>1822</chartwidth>
+   <chartheight>918</chartheight>
+</pattern>

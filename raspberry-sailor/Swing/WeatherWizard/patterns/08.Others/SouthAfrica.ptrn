@@ -1,0 +1,18 @@
+<pattern>
+   <fax-collection>
+      <fax hint="South African Weather Service" color="255;0;0" transparent="true" color-change="true">
+         <faxScale>0.44828047706103996</faxScale>
+         <faxXoffset>25</faxXoffset>
+         <faxYoffset>609</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://metzone.weathersa.co.za/images/articles/ma_sy.gif" dir="." prefix="SA_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" smooth="1" time-smooth="1">Atl - Good Hope - Indian<dynamic-grib hint="South" request="GFS:00S,60S,55W,100E|2,2|0,6..72|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="LAMBERT" contact-parallel="-26.0"/>
+   <north>-0.0</north>
+   <south>-65.0</south>
+   <east>103.0</east>
+   <west>-57.0</west>
+   <chartwidth>1343</chartwidth>
+   <chartheight>1343</chartheight>
+<author name="Olivier"/><scroll x="0" y="244"/></pattern>

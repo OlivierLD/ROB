@@ -1,0 +1,24 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Xavier's fax" color="0;0;0" transparent="false" color-change="false">
+         <faxScale>0.5900980650802995</faxScale>
+         <faxXoffset>759</faxXoffset>
+         <faxYoffset>44</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="Sailmail fax" color="0;0;153" transparent="true" color-change="true">
+         <faxScale>0.914339824239913</faxScale>
+         <faxXoffset>186</faxXoffset>
+         <faxYoffset>-175</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="false" display-500HGT-Data="false" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false"></grib>
+   <projection type="MERCATOR"/>
+   <north>35.0</north>
+   <south>-45.0</south>
+   <east>-100.0</east>
+   <west>120.0</west>
+   <chartwidth>1156</chartwidth>
+   <chartheight>726</chartheight>
+</pattern>

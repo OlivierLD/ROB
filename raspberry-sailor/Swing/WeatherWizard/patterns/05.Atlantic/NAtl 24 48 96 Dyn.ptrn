@@ -1,0 +1,46 @@
+<pattern>
+   <fax-collection>
+
+<fax hint="NorthAtlantic Surface, T0" color="0;0;0" transparent="true" color-change="true">
+         <faxScale>0.34828468599470275</faxScale>
+         <faxXoffset>50</faxXoffset>
+         <faxYoffset>30</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_Atl_sfc_T0_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+
+
+<fax hint="NorthAtlantic Surface, 24h" color="0;0;0" transparent="true" color-change="true">
+         <faxScale>0.3046121015098264</faxScale>
+         <faxXoffset>51</faxXoffset>
+         <faxYoffset>771</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_24hrbw.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_Atl_sfc_24_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+
+
+      <fax hint="NorthAtlantic Surface, 48h" color="0;0;0" transparent="true">
+         <faxScale>0.5360401295445413</faxScale>
+         <faxXoffset>50</faxXoffset>
+         <faxYoffset>54</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrbw.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_Atl_sfc_48_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+      
+
+      <fax hint="NorthAtlantic Surface, 96h" color="0;0;0" transparent="true">
+         <faxScale>0.5360401295445413</faxScale>
+         <faxXoffset>50</faxXoffset>
+         <faxYoffset>54</faxYoffset>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_96hrbw.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="NOAA_Atl_sfc_96_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+
+
+
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">
+     <dynamic-grib hint="North Atlantic GRIB" request="GFS:65N,14N,100W,10E|2,2|0,3..168|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="NorthAtlantic_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="MERCATOR"/>
+   <north>65.5</north>
+   <south>-9.5</south>
+   <east>28.2</east>
+   <west>-101.8</west>
+   <chartwidth>1091</chartwidth>
+   <chartheight>815</chartheight>
+   
+   <fax-option value="RADIOBUTTON"/>
+</pattern>

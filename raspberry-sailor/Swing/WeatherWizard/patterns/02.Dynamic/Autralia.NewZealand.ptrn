@@ -1,0 +1,26 @@
+<pattern>
+   <fax-collection>
+      <fax hint="BOM Surface" color="255;0;0" transparent="true">
+         <faxScale>1.2221000000000002</faxScale>
+         <faxXoffset>170</faxXoffset>
+         <faxYoffset>155</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.bom.gov.au/difacs/IDX0078.gif" dir="./WeatherFaxes/2007-gif/sfc" prefix="BOM_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="BOM 500mb" color="0;0;255" transparent="true">
+         <faxScale>1.2100000000000002</faxScale>
+         <faxXoffset>176</faxXoffset>
+         <faxYoffset>158</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://www.bom.gov.au/difacs/IDX0099.gif" dir="./WeatherFaxes/2007-gif/500mb" prefix="BOM_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib wind-only="false" with-contour="true"></grib>
+   <projection type="LAMBERT" contact-parallel="-25.0"/>
+   <north>-0.0</north>
+   <south>-60.0</south>
+   <east>180.0</east>
+   <west>80.0</west>
+   <chartwidth>1137</chartwidth>
+   <chartheight>857</chartheight>
+</pattern>

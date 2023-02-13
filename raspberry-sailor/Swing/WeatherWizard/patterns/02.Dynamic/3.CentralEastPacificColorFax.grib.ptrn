@@ -1,0 +1,18 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Tropical Zone" color="0;0;0" transparent="true" color-change="false">
+         <faxScale>0.7382317589921633</faxScale>
+         <faxXoffset>35</faxXoffset>
+         <faxYoffset>23</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/UA/Mexico.gif" dir="./WeatherFaxes/yyyy/MM" prefix="NOAA_centralColor" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">North Tropical Zone<dynamic-grib hint="" request="GFS:35N,5S,1150W,060W|2,2|0,12..168|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>35.5</north>
+   <south>-5.6</south>
+   <east>-57.5</east>
+   <west>-117.5</west>
+   <chartwidth>1442</chartwidth>
+   <chartheight>1049</chartheight>
+</pattern>

@@ -1,0 +1,22 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NorthAlaskaGulfBG" color="0;0;0" transparent="false" color-change="false">
+         <faxScale>1.2150843379523228</faxScale>
+         <faxXoffset>-126</faxXoffset>
+         <faxYoffset>122</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="ext-resource://./resources/NorthAlaskaGulf.png" dir="." prefix="" pattern="" extension=""/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" smooth="6" time-smooth="3">StLawrence<dynamic-grib hint="North of Gulf of Alaska" request="GFS:63N,56N,160W,137W|1,1|0,3..168|PRMSL,WIND,HGT500,AIRTMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>63.0</north>
+   <south>56.0</south>
+   <east>-137.0</east>
+   <west>-160.0</west>
+   <author name="Olivier"/>
+   <fax-option value="CHECKBOX"/>
+   <chartwidth>1272</chartwidth>
+   <chartheight>766</chartheight>
+   <chart-opt show="no"/>
+   <scroll x="272" y="120"/>
+</pattern>

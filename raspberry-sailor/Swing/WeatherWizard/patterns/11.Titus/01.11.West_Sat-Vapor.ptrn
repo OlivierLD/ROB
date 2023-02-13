@@ -1,0 +1,22 @@
+<pattern>
+<author name="Titus"/>
+<fax-collection>
+<fax hint="Satellite Atlantic West - Vapor" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>1.235</faxScale>
+         <faxXoffset>-25</faxXoffset>
+         <faxYoffset>-14</faxYoffset>
+      <dynamic-resource url="http://www.ssd.noaa.gov/goes/east/eaus/wv-l.jpg" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Satellite_Vapor" prefix="NOAA_Atl_West_" pattern="HH_mm_ss_z" extension="png"/></fax>
+<fax hint="Satellite Atlantic Carribean - Vapor" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>0.99</faxScale>
+         <faxXoffset>108</faxXoffset>
+         <faxYoffset>331</faxYoffset>
+      <dynamic-resource url="http://www.ssd.noaa.gov/goes/east/tatl/wv-l.jpg" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Satellite_Vapor" prefix="NOAA_Atl_Wide_" pattern="HH_mm_ss_z" extension="png"/></fax>
+</fax-collection>
+   <projection type="MERCATOR"/>
+   <north>65</north>
+   <south>-5</south>
+   <east>-20</east>
+   <west>-110</west>
+   <chartwidth>1239</chartwidth>
+   <chartheight>913</chartheight>
+</pattern>

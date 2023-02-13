@@ -1,0 +1,46 @@
+<pattern>
+<author name="Titus - 2013-01"/>
+   <fax-collection>
+      <fax hint="North Atlantic Background" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>1.027</faxScale>
+         <faxXoffset>-38</faxXoffset>
+         <faxYoffset>-18</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="ext-resource://./resources/North_Atlantic.png" dir="." prefix="" pattern="" extension=""/></fax>
+      <fax hint="Surface Analysis" color="196;12;12" transparent="true" color-change="true">
+         <faxScale>0.4275</faxScale>
+         <faxXoffset>0</faxXoffset>
+         <faxYoffset>61</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/A_sfc_full_ocean.gif" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="NOAA_Analysis_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Surface 48H" color="196;12;12" transparent="true" color-change="true">
+         <faxScale>0.6525</faxScale>
+         <faxXoffset>23</faxXoffset>
+         <faxYoffset>75</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hrbw.gif" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="NOAA_48H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="500mb 6H" color="0;51;204" transparent="true" color-change="true">
+         <faxScale>0.6525</faxScale>
+         <faxXoffset>23</faxXoffset>
+         <faxYoffset>75</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_06hr500bw.gif" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/500mb" prefix="NOAA_06H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="500mb 48H" color="0;51;204" transparent="true" color-change="true">
+         <faxScale>0.6525</faxScale>
+         <faxXoffset>23</faxXoffset>
+         <faxYoffset>75</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="http://www.opc.ncep.noaa.gov/shtml/A_48hr500bw.gif" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/500mb" prefix="NOAA_48H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="1" time-smooth="1"><dynamic-grib hint="North Atlantic GRIB 7 Days" request="GFS:68N,2N,98W,18E|1,1|0,3..48|PRMSL,WIND,HGT500,WAVES" dir="./GRIBFiles/Atlantic/yyyy/MM/dd" prefix="2Days_" pattern="dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>66.0</north>
+   <south>6.0</south>
+   <east>20.0</east>
+   <west>-100.0</west>
+   <chartwidth>1230</chartwidth>
+   <chartheight>848</chartheight>
+   <scroll x="0" y="0"/>
+   <chart-opt show="no"/>
+   <fax-option value="RADIOBUTTON"/> 
+</pattern>

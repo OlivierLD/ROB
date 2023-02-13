@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow'
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    // maven { url "https://oss.sonatype.org/content/groups/public" }
+}
+
+// sourceCompatibility = 1.8
+
+dependencies {
+    // implementation 'com.sun.mail:javax.mail:1.6.2'
+    testImplementation "junit:junit:$junit_version"
+}
+
+shadowJar {
+    zip64 true
+    // to create an executable jar-file. Requires mainClassName.
+    mergeServiceFiles()
+}

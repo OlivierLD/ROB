@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<polar-coeff-function xmlns="http://www.logisail.com/polars"
+                      polar-degree="5"
+                      polar-coeff-degree="4">
+  <polar-coeff degree="5">
+    <coeff degree="4">1.1508047559377202E-15</coeff>
+    <coeff degree="3">-1.8524615176358344E-13</coeff>
+    <coeff degree="2">1.0166394838462944E-11</coeff>
+    <coeff degree="1">-2.2124559097424737E-10</coeff>
+    <coeff degree="0">1.2034369294732852E-9</coeff>
+  </polar-coeff>
+  <polar-coeff degree="4">
+    <coeff degree="4">-4.899355795668824E-13</coeff>
+    <coeff degree="3">7.862834185251008E-11</coeff>
+    <coeff degree="2">-4.296864473099134E-9</coeff>
+    <coeff degree="1">9.28622925563702E-8</coeff>
+    <coeff degree="0">-4.851835203235339E-7</coeff>
+  </polar-coeff>
+  <polar-coeff degree="3">
+    <coeff degree="4">7.019269033928336E-11</coeff>
+    <coeff degree="3">-1.1229096378953466E-8</coeff>
+    <coeff degree="2">6.11196874915284E-7</coeff>
+    <coeff degree="1">-1.3126744644497454E-5</coeff>
+    <coeff degree="0">6.675097952163153E-5</coeff>
+  </polar-coeff>
+  <polar-coeff degree="2">
+    <coeff degree="4">-3.6403022640560976E-9</coeff>
+    <coeff degree="3">5.810300160172605E-7</coeff>
+    <coeff degree="2">-3.159858011939564E-5</coeff>
+    <coeff degree="1">6.78618330462637E-4</coeff>
+    <coeff degree="0">-0.0041207373495401045</coeff>
+  </polar-coeff>
+  <polar-coeff degree="1">
+    <coeff degree="4">1.2344609217788483E-8</coeff>
+    <coeff degree="3">-1.7488259901037723E-6</coeff>
+    <coeff degree="2">8.128714139188364E-5</coeff>
+    <coeff degree="1">-0.0012797270199587096</coeff>
+    <coeff degree="0">0.13875233792745867</coeff>
+  </polar-coeff>
+  <polar-coeff degree="0">
+    <coeff degree="4">1.5403436800745884E-7</coeff>
+    <coeff degree="3">-2.5286826089452935E-5</coeff>
+    <coeff degree="2">0.0014156849852549197</coeff>
+    <coeff degree="1">-0.03153738220238678</coeff>
+    <coeff degree="0">0.13203970095537887</coeff>
+  </polar-coeff>
+</polar-coeff-function>

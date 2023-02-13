@@ -1,0 +1,22 @@
+<pattern>
+   <fax-collection>
+      <fax hint="North Pacific Satellite Picture" color="0;0;0" transparent="false" color-change="false">
+         <faxScale>0.5615136532181088</faxScale>
+         <faxXoffset>665</faxXoffset>
+         <faxYoffset>537</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="http://weather.noaa.gov/pub/fax/evpn99.jpg" dir="./WeatherFaxes/yyyy/MM/satpic" prefix="NOAA_SP_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-Data="true" smooth="1" time-smooth="1">
+     <dynamic-grib hint="North Pacific" request="GFS:60N,0N,120E,070W|2,2|0,12..72|PRMSL,WIND,HGT500,WAVES,TEMP,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="POLAR_STEREO"/>
+   <north>65.0</north>
+   <south>-0.0</south>
+   <east>175.0</east>
+   <west>265.0</west>
+   <chartwidth>1686</chartwidth>
+   <chartheight>1686</chartheight>
+   <scroll x="443" y="322"/> 
+<author name=""/><chart-opt show="yes"/><fax-option value="CHECKBOX"/></pattern>

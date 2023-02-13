@@ -1,0 +1,13 @@
+<fax-collection>
+   <fax name="North Pacific 500mb Chart" url="http://www.opc.ncep.noaa.gov/shtml/P_06hr500bw.gif" dir="./WeatherFaxes/yyyy/500mb" prefix="NOAA_500mb_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="North Pacific Surface" url="http://www.opc.ncep.noaa.gov/P_sfc_full_ocean.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="NOAA_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="Central Pacific Streamline" url="http://weather.noaa.gov/pub/fax/PWFA11.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="NOAA_stream_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc Chart (MET)" url="http://www2.wetter3.de/Fax/00_UKMet_Boden+00.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="UKMET_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc+24 Chart (MET)" url="http://www2.wetter3.de/Fax/00_UKMet_Boden+24.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="UKMET_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc+48 Chart (MET)" url="http://www2.wetter3.de/Fax/00_UKMet_Boden+48.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="UKMET_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc+72 Chart (MET)" url="http://www2.wetter3.de/Fax/00_UKMet_Boden+72.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="UKMET_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc Chart+84 (MET)" url="http://www2.wetter3.de/Fax/00_UKMet_Boden+84.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="UKMET_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <fax name="NE Atlantic sfc Chart (DWD)" url="http://www2.wetter3.de/Fax/00_DWD_Boden+36-7145.gif" dir="./WeatherFaxes/yyyy/sfc" prefix="DWD_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+   <grib name="North Pacific, 7 days, every 6 hours, 2x2" request="GFS:60N,30S,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy" prefix="GRIB_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   <grib name="Caribbean, 7 days, every 1 hours, 1x1" request="GFS:32N,4N,99W,55W|1,1|0,3..164|PRMSL,WIND,HGT500,AIRTMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MMMM/EEE-dd" prefix="Caribbean_7Days at " pattern="HH:mm:ss-z" extension="grb"/>
+</fax-collection>

@@ -1,0 +1,36 @@
+<pattern>
+   <fax-collection>
+      <fax hint="GOES West Full Pacific Mercator" color="0;0;0" transparent="false">
+         <faxScale>0.8264462809917354</faxScale>
+         <faxXoffset>130</faxXoffset>
+         <faxYoffset>20</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="North Pacific Surface" color="255;0;51" transparent="true">
+         <faxScale>0.30925993249580114</faxScale>
+         <faxXoffset>-130</faxXoffset>
+         <faxYoffset>-370</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="North Pacific 500mb" color="0;153;255" transparent="true">
+         <faxScale>0.48125322418744526</faxScale>
+         <faxXoffset>-91</faxXoffset>
+         <faxYoffset>-205</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="Central Pacific Streamlines" color="204;0;204" transparent="true">
+         <faxScale>0.4075494753979321</faxScale>
+         <faxXoffset>40</faxXoffset>
+         <faxYoffset>249</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib wind-only="false" with-contour="true"></grib>
+   <projection type="MERCATOR"/>
+   <north>57.5</north>
+   <south>-72.5</south>
+   <east>-9.5</east>
+   <west>140.5</west>
+   <chartwidth>1560</chartwidth>
+   <chartheight>1322</chartheight>
+</pattern>

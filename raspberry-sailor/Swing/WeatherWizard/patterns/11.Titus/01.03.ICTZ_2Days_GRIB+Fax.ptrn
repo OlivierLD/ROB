@@ -1,0 +1,46 @@
+<pattern>
+<author name="Titus - 2013-01"/>
+   <fax-collection>
+      <fax hint="Center Atlantic Background" color="0;0;0" transparent="false" color-change="true">
+         <faxScale>1.181</faxScale>
+         <faxXoffset>-78</faxXoffset>
+         <faxYoffset>8</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      <dynamic-resource url="ext-resource://./resources/Equator.png" dir="." prefix="" pattern="" extension=""/></fax>
+<fax hint="Sfc Analysis Today 3H00Z" color="0;51;204" transparent="true" color-change="true">
+         <faxScale>0.875</faxScale>
+         <faxXoffset>30</faxXoffset>
+         <faxYoffset>-497</faxYoffset>
+         <faxRotation>-90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PYEA86.TIF" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="ZCIT_03H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Sfc Analysis Today 11H00Z" color="204;0;51" transparent="true" color-change="true">
+         <faxScale>0.875</faxScale>
+         <faxXoffset>30</faxXoffset>
+         <faxYoffset>-497</faxYoffset>
+         <faxRotation>-90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PYEA87.TIF" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="ZCIT_11H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+      <fax hint="Sfc Analysis Today 16H00Z" color="0;51;51" transparent="true" color-change="true">
+         <faxScale>0.875</faxScale>
+         <faxXoffset>30</faxXoffset>
+         <faxYoffset>-497</faxYoffset>
+         <faxRotation>-90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PYEA85.TIF" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="ZCIT_16H_" pattern="HH_mm_ss_z" extension="png"/></fax>
+     <fax hint="Sfc Analysis Today 22H00Z" color="255;255;0" transparent="true" color-change="true">
+         <faxScale>0.875</faxScale>
+         <faxXoffset>30</faxXoffset>
+         <faxYoffset>-497</faxYoffset>
+         <faxRotation>-90.0</faxRotation>
+      <dynamic-resource url="http://weather.noaa.gov/pub/fax/PYEA88.TIF" dir="./WeatherFaxes/Atlantic_N/yyyy/MM/dd/Surface" prefix="ZCIT_22H_" pattern="HH_mm_ss_z" extension="png"/></fax>      
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="2" time-smooth="3"><dynamic-grib hint="ICTZ GRIB 1 Day" request="GFS:28N,18S,80W,31E|1,1|0,3..24|PRMSL,WIND,HGT500" dir="./GRIBFiles/Atlantic/yyyy/MM/dd" prefix="1Day_" pattern="dd_HH_mm_ss_z" extension="grb"/></grib>
+   <projection type="MERCATOR"/>
+   <north>29.0</north>
+   <south>-14.0</south>
+   <east>-10.0</east>
+   <west>-80.0</west>
+   <chartwidth>1231</chartwidth>
+   <chartheight>780</chartheight>
+   <scroll x="0" y="0"/>
+   <chart-opt show="no"/>
+   <fax-option value="RADIOBUTTON"/> 
+</pattern>

@@ -1,0 +1,30 @@
+<pattern>
+   <fax-collection>
+      <fax hint="Akeu" color="255;0;51" transparent="true" color-change="true">
+         <faxScale>0.33790467906521593</faxScale>
+         <faxXoffset>183</faxXoffset>
+         <faxYoffset>94</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="Coucou" color="0;153;255" transparent="true" color-change="true">
+         <faxScale>0.5146306466877547</faxScale>
+         <faxXoffset>133</faxXoffset>
+         <faxYoffset>98</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="Larigou" color="204;0;204" transparent="true" color-change="true">
+         <faxScale>0.44724917076280424</faxScale>
+         <faxXoffset>271</faxXoffset>
+         <faxYoffset>597</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">That one</grib>
+   <projection type="MERCATOR"/>
+   <north>66.5</north>
+   <south>-48.5</south>
+   <east>-102.0</east>
+   <west>127.5</west>
+   <chartwidth>1061</chartwidth>
+   <chartheight>1184</chartheight>
+</pattern>
