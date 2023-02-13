@@ -549,10 +549,11 @@ public class WWGnlUtilities {
             }
         }
         if (withPreviewer) {
-            if (option == IMAGE_PREVIEWER_OPTION)
+            if (option == IMAGE_PREVIEWER_OPTION) {
                 previewer = new FilePreviewer(chooser);
-            else if (option == SOUND_PREVIEWER_OPTION)
+            } else if (option == SOUND_PREVIEWER_OPTION) {
                 previewer = new SoundPreviewer(chooser);
+            }
             chooser.setAccessory(previewer);
         }
         // QUESTION Sort the file by date, most recent on top. If possible... :(
@@ -561,10 +562,12 @@ public class WWGnlUtilities {
         chooser.setFileFilter(filter);
         chooser.setFileSelectionMode(mode);
 
-        if (buttonLabel != null)
+        if (buttonLabel != null) {
             chooser.setApproveButtonText(buttonLabel);
-        if (dialogLabel != null)
+        }
+        if (dialogLabel != null) {
             chooser.setDialogTitle(dialogLabel);
+        }
 
         try {
             //  SwingUtilities.invokeAndWait(new Runnable() { // Cannot be invoked on the dispatcher thread.
