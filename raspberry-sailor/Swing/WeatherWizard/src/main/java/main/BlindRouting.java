@@ -40,7 +40,7 @@ import java.util.TimeZone;
 
 import jgrib.GribFile;
 
-import ocss.nmea.parser.StringParsers;
+import nmea.parser.StringParsers;
 
 import calc.GeomUtil;
 

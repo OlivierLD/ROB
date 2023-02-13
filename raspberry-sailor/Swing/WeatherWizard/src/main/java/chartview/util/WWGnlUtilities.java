@@ -10,9 +10,7 @@ import chartview.ctx.WWContext;
 import chartview.gui.AdjustFrame;
 import chartview.gui.left.FileTypeHolder;
 import chartview.gui.right.CommandPanel;
-import chartview.gui.right.CompositeTabComponent;
 import chartview.gui.util.dialog.ExitPanel;
-import chartview.gui.util.dialog.FaxType;
 import chartview.gui.util.dialog.OneColumnTablePanel;
 import chartview.gui.util.dialog.OneFilePanel;
 import chartview.gui.util.dialog.PositionInputPanel;
@@ -25,18 +23,12 @@ import chartview.gui.util.param.ParamPanel;
 
 import chartview.gui.util.param.widget.FieldPlusFinder;
 
-import chartview.util.grib.GribHelper;
 import chartview.util.http.HTTPClient;
 import chartview.util.local.WeatherAssistantResourceBundle;
 
-import chartview.util.nmeaclient.BoatPositionGPSdClient;
 import chartview.util.progress.ProgressUtil;
 
-import chartview.util.nmeaclient.BoatPositionSerialClient;
-
-import chartview.util.nmeaclient.BoatPositionTCPClient;
-
-import chartview.util.nmeaclient.BoatPositionUDPClient;
+import chartview.util.nmeaclient.BoatPositionMUXClient;
 
 import coreutilities.Utilities;
 
@@ -68,8 +60,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.beans.XMLDecoder;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -90,11 +80,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.RuntimeMXBean;
-
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -114,7 +99,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -124,12 +108,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -138,8 +116,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import javax.swing.*;
-
-import jgrib.GribFile;
 
 import oracle.xml.parser.v2.DOMParser;
 import oracle.xml.parser.v2.NSResolver;
@@ -3593,12 +3569,13 @@ public class WWGnlUtilities {
         // TODO Implement...
     }
 
-    public static BoatPosition getSerialBoatPosition() throws Exception {
-        BoatPositionSerialClient bpsc = new BoatPositionSerialClient();
+    // TODO Other protocols to get the position (TCP, etc)
+    public static BoatPosition getBoatPosition() throws Exception {
+        BoatPositionMUXClient bpsc = new BoatPositionMUXClient();
         int nbTry = 0;
         while (bpsc.getBoatPosition() == null && bpsc.allIsOk() && nbTry++ < 5) {
             try {
-                Thread.sleep(1000L);
+                Thread.sleep(1_000L);
             } catch (Exception ex) {
             }
         }
@@ -3609,58 +3586,6 @@ public class WWGnlUtilities {
                 throw new RuntimeException("No position found from the serial port");
         } else
             throw new RuntimeException(bpsc.getProblemCause());
-    }
-
-    public static BoatPosition getTCPBoatPosition() throws Exception {
-        BoatPositionTCPClient bptc = new BoatPositionTCPClient(false);
-//    int nbTry = 0;
-//    while (bptc.getBoatPosition() == null && bptc.allIsOk() && nbTry++ < 5)
-//    {
-//      try { Thread.sleep(1000L); } catch (Exception ex) {}
-//    }
-        if (bptc.allIsOk()) {
-            if (bptc.getBoatPosition() != null)
-                return bptc.getBoatPosition();
-            else
-                throw new RuntimeException("No position found from the TCP port");
-        } else
-            throw new RuntimeException(bptc.getProblemCause());
-    }
-
-    public static BoatPosition getUDPBoatPosition() throws Exception {
-        BoatPositionUDPClient bpuc = new BoatPositionUDPClient();
-        int nbTry = 0;
-        while (bpuc.getBoatPosition() == null && bpuc.allIsOk() && nbTry++ < 5) {
-            try {
-                Thread.sleep(1000L);
-            } catch (Exception ex) {
-            }
-        }
-        if (bpuc.allIsOk()) {
-            if (bpuc.getBoatPosition() != null)
-                return bpuc.getBoatPosition();
-            else
-                throw new RuntimeException("No position found from the UDP port");
-        } else
-            throw new RuntimeException(bpuc.getProblemCause());
-    }
-
-    public static BoatPosition getGPSdBoatPosition() throws Exception {
-        BoatPositionGPSdClient bpgc = new BoatPositionGPSdClient();
-        int nbTry = 0;
-        while (bpgc.getBoatPosition() == null && bpgc.allIsOk() && nbTry++ < 5) {
-            try {
-                Thread.sleep(1000L);
-            } catch (Exception ex) {
-            }
-        }
-        if (bpgc.allIsOk()) {
-            if (bpgc.getBoatPosition() != null)
-                return bpgc.getBoatPosition();
-            else
-                throw new RuntimeException("No position found from the GPSd port");
-        } else
-            throw new RuntimeException(bpgc.getProblemCause());
     }
 
     public static BoatPosition getHTTPBoatPosition() throws Exception {

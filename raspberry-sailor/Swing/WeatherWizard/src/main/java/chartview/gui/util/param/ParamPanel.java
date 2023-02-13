@@ -1125,7 +1125,7 @@ public final class ParamPanel
         GrayPanelOptionListComboBox gpOptionCombo = new GrayPanelOptionListComboBox();
         TemperatureUnitListComboBox tempUnitCombo = new TemperatureUnitListComboBox();
         AnemometerHandOptionListComboBox anemoCombo = new AnemometerHandOptionListComboBox();
-        JComboBox serialPortList = new JComboBox(SerialPortList.listSerialPorts());
+        JComboBox serialPortList = new JComboBox(new String[] { "Empty Serial Port list"}); // TODO Remove this  SerialPortList.listSerialPorts());
         JComboBox timeZonesList = new JComboBox(TimeZone.getAvailableIDs());
         RoutingOptionComboBox roCombo = new RoutingOptionComboBox();
 

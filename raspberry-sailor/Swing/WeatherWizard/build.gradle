@@ -35,6 +35,7 @@ dependencies {
   implementation project(':raspberry-sailor:JGRIB')
   implementation project(':raspberry-sailor:NMEA-Parser')
   implementation project(':raspberry-sailor:TideEngine')
+  implementation project(':raspberry-sailor:PolarSmoother')
 
   implementation project(':raspberry-sailor:Swing:ChartComponents')
 //  implementation project(':fullnmeaconsole')

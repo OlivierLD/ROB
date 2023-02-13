@@ -2637,37 +2637,7 @@ public class CommandPanel
                                             } catch (HTTPClient.NMEAServerException nse) {
                                                 System.err.println("NMEA HTTP Server must be down. Trying Serial port");
                                                 WWContext.getInstance().fireLogging(". NMEA HTTP Server must be down. Trying Serial port\n");
-                                                try {
-                                                    bp = WWGnlUtilities.getSerialBoatPosition(); // Try Serial port
-                                                    WWContext.getInstance().fireSetStatus("Got Position from Serial Port:" + bp.getPos().toString());
-                                                } catch (Exception serialEx) {
-                                                    System.err.println("Cannot read Serial port either.\nStopping Serial Port reading, trying TCP");
-                                                    WWContext.getInstance().fireLogging(". Cannot read Serial port either.\nStopping Serial Port reading, trying TCP\n");
-                                                    try {
-                                                        bp = WWGnlUtilities.getTCPBoatPosition(); // Try TCP
-                                                        WWContext.getInstance().fireSetStatus("Got Position from TCP:" + bp.getPos().toString());
-                                                    } catch (Exception tcpEx) {
-                                                        System.err.println("Cannot read TCP port either.\nStopping TCP Port reading, trying UDP");
-                                                        WWContext.getInstance().fireLogging(". Cannot read TCP port either.\nStopping TCP Port reading, trying UDP\n");
-                                                        try {
-                                                            bp = WWGnlUtilities.getUDPBoatPosition(); // Try UDP
-                                                            WWContext.getInstance().fireSetStatus("Got Position from UDP:" + bp.getPos().toString());
-                                                        } catch (Exception udpEx) {
-                                                            System.err.println("Cannot read UDP port either.\nStopping UDP Port reading, trying GPSd");
-                                                            WWContext.getInstance().fireLogging(". Cannot read UDP port either.\ntopping UDP Port reading, trying GPSd");
-                                                            try {
-                                                                bp = WWGnlUtilities.getGPSdBoatPosition(); // Try GPSd
-                                                                WWContext.getInstance().fireSetStatus("Got Position from GPSd:" + bp.getPos().toString());
-                                                            } catch (Exception gpsdEx) {
-                                                                String mess = "Cannot read GPSd port either.\nStopping GPSd Port reading, switch to manual entry";
-                                                                System.err.println(mess);
-                                                                WWContext.getInstance().fireLogging(mess + "\n");
-                                                                WWGnlUtilities.getManualBoatPosition();
-                                                                goNmea = false;
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                                // TODO Other ways ?
                                             } catch (Exception ex) {
                                                 WWContext.getInstance().fireExceptionLogging(ex);
                                                 ex.printStackTrace();

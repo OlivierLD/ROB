@@ -756,7 +756,9 @@ public class AdjustFrame extends JFrame {
         menuToolsRetryNetwork.setSelected(false);
         menuToolsRetryNetwork.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                ChartAdjust.checkForUpdate();
+//                ChartAdjust.checkForUpdate();
+                // TODO Remove this
+                System.out.println("This was removed...");
             }
         });
 
@@ -991,7 +993,9 @@ public class AdjustFrame extends JFrame {
         menuCheckForUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if (WWContext.getInstance().isOnLine()) {
-                    ChartAdjust.checkForUpdate();
+                    // TODO Remove this
+                    // ChartAdjust.checkForUpdate();
+                    System.out.println("This was removed.");
                 } else {
                     String mess = "You're not on line,\nor your Internet connection is not accessible.\nThere is currently not way to send a message...";
                     if ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")))
