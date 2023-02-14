@@ -454,10 +454,10 @@ public class CommandPanel
         checkBoxCompositePanel = new JPanel();
         checkBoxPanelHolder = new JPanel();
         checkBoxPanelHolder.setLayout(new BorderLayout());
-        cbPanelScrollUpButton = new JButton("");
-        cbPanelScrollUpButton.setToolTipText("Scroll Up");
-        cbPanelScrollDownButton = new JButton("");
-        cbPanelScrollDownButton.setToolTipText("Scroll Down");
+        cbPanelScrollUpButton = new JButton("\u25b2");
+        cbPanelScrollUpButton.setToolTipText("Scroll Up");     // TODO LOCALIZE ?
+        cbPanelScrollDownButton = new JButton("\u25bc");
+        cbPanelScrollDownButton.setToolTipText("Scroll Down"); // TODO LOCALIZE ?
         checkBoxPanelScrollPane = new JScrollPane();
 
         checkBoxPanelScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -473,7 +473,9 @@ public class CommandPanel
             int y = checkBoxPanelScrollPane.getViewport().getViewPosition().y;
             //        System.out.println("Y:"+ y);
             int newy = y - 10;
-            if (newy < 0) newy = 0;
+            if (newy < 0) {
+                newy = 0;
+            }
             checkBoxPanelScrollPane.getViewport().setViewPosition(new Point(0, newy));
         });
 
@@ -482,9 +484,9 @@ public class CommandPanel
             //        System.out.println("Y:"+ y);
             int newy = y + 10;
             if (newy + checkBoxPanelScrollPane.getViewport().getHeight() > checkBoxCompositePanel.getHeight()) {
-                //          System.out.println("Rheu!");
-                //          System.out.println("Panel H:" + panelThatScroll.getHeight());
-                //          System.out.println("View H :" + jScrollPane1.getViewport().getHeight());
+                // System.out.println("Rheu!");
+                // System.out.println("Panel H:" + panelThatScroll.getHeight());
+                // System.out.println("View H :" + jScrollPane1.getViewport().getHeight());
                 newy = checkBoxCompositePanel.getHeight() - checkBoxPanelScrollPane.getViewport().getHeight() + 1;
             }
             checkBoxPanelScrollPane.getViewport().setViewPosition(new Point(0, newy));
@@ -497,8 +499,7 @@ public class CommandPanel
             public void mouseClicked(MouseEvent me) {
                 //        super.mouseClicked(me);
                 int mask = me.getModifiers();
-                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) // Right click
-                {
+                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) { // Right click
                     {
                         cbpPopup = new CheckBoxPanelPopup(instance, me.getX(), me.getY());
                     }
@@ -516,8 +517,8 @@ public class CommandPanel
 
         rightVerticalPanel.add(sliderHolder, BorderLayout.NORTH);
         rightBottomPanel.setLayout(new BorderLayout());
-        //  rightBottomPanel.add(checkBoxCompositePanel, BorderLayout.NORTH);
-        //  rightVerticalPanel.add(rightBottomPanel, BorderLayout.CENTER);
+        // rightBottomPanel.add(checkBoxCompositePanel, BorderLayout.NORTH);
+        // rightVerticalPanel.add(rightBottomPanel, BorderLayout.CENTER);
         rightVerticalPanel.add(checkBoxPanelHolder, BorderLayout.CENTER);
         rightVerticalPanel.add(blurSharpPanel, BorderLayout.SOUTH);
 

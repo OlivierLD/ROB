@@ -27,7 +27,6 @@ import java.awt.datatransfer.StringSelection;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.*;
@@ -149,7 +148,7 @@ public class RoutingUtil {
             System.out.println("Aiming for [" + aimFor.getPosition() + "]");
         }
 
-//  System.out.println("Starting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString());
+        // System.out.println("Starting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString());
 
         // Calculate bearing to destination (from start)
         if (aimFor == null) {
@@ -184,7 +183,7 @@ public class RoutingUtil {
 
         Date currentDate = fromDate; // new Date(fromDate.getTime() + (long)(timeStep * 3_600D * 1_000D));
         Date arrivalDate = null;
-//  synchronized (allIsochrons)
+        // synchronized (allIsochrons)
         {
             // Start from "center"
             while (keepLooping && !interruptRouting) {
@@ -210,7 +209,7 @@ public class RoutingUtil {
                         wind = GribHelper.gribLookup(newCurveCenter.getPosition(), wgd, currentDate);
                         if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
                             center.setGribTooOld(true);
-//            System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
+                            // System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
                             if (stopIfGRIB2old) {
                                 keepLooping = false;
                                 interruptedBecauseTooOld = true;
@@ -219,13 +218,13 @@ public class RoutingUtil {
                         }
                         timer = logDiffTime(timer, "Milestone 4");
 
-//          brg = getBearing(newCurveCenter); // 7-apr-2010.            
+                        // brg = getBearing(newCurveCenter); // 7-apr-2010.
                         if (aimFor == null) {
                             brg = getBearing(newCurveCenter);
                         } else { // Finer Routing
                             brg = getBearingTo(newCurveCenter, aimFor);
                         }
-//          nbNonZeroSpeed = 0;
+                        // nbNonZeroSpeed = 0;
                         // Calculate isochron from center
                         for (int bearing = brg - routingForkWidth / 2;
                             keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
@@ -235,9 +234,9 @@ public class RoutingUtil {
                             if (wind != null) {
                                 windDir = wind.winddir;
                             } else {
-//              Context.getInstance().fireLogging("Wind is null..., aborting (out of the GRIB)\n");
-//              System.out.println("Aborting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString()+ ", wind is null.");
-                                //      keepLooping = false;
+                                // Context.getInstance().fireLogging("Wind is null..., aborting (out of the GRIB)\n");
+                                // System.out.println("Aborting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString()+ ", wind is null.");
+                                // keepLooping = false;
                                 continue;
                             }
                             int twa;
@@ -249,8 +248,8 @@ public class RoutingUtil {
                             // In case user said to avoid TWS > xxx
                             if (maxTWS > -1) {
                                 if (wSpeed > maxTWS) {
-//                Context.getInstance().fireLogging("Avoiding too much wind (" + GnlUtilities.XXXX12.format(wSpeed) + " over " + Integer.toString(maxTWS) + ")\n");
-//                WWContext.getInstance().fireLogging(".", LoggingPanel.RED_STYLE); // Takes a long time!
+                                    // Context.getInstance().fireLogging("Avoiding too much wind (" + GnlUtilities.XXXX12.format(wSpeed) + " over " + Integer.toString(maxTWS) + ")\n");
+                                    // WWContext.getInstance().fireLogging(".", LoggingPanel.RED_STYLE); // Takes a long time!
                                     wSpeed = 0;
                                     allowOtherRoute = true;
                                     continue;
@@ -258,14 +257,14 @@ public class RoutingUtil {
                             }
                             double speed = 0D;
                             if (minTWA > -1 && twa < minTWA || twa > (360 - minTWA)) {
-//              Context.getInstance().fireLogging("Avoiding too close wind (" + Integer.toString(twa) + " below " + Integer.toString(minTWA) + ")\n");
-//              WWContext.getInstance().fireLogging(".", LoggingPanel.RED_STYLE); // Takes a long time!
+                                // Context.getInstance().fireLogging("Avoiding too close wind (" + Integer.toString(twa) + " below " + Integer.toString(minTWA) + ")\n");
+                                // WWContext.getInstance().fireLogging(".", LoggingPanel.RED_STYLE); // Takes a long time!
                                 speed = 0D;
                                 allowOtherRoute = true;
                                 continue; // Added 22-Jun-2009
                             } else {
-//              if (minTWA > -1)
-//                WWContext.getInstance().fireLogging(".", LoggingPanel.GREEN_STYLE); // Takes a long time!
+                                // if (minTWA > -1)
+                                //   WWContext.getInstance().fireLogging(".", LoggingPanel.GREEN_STYLE); // Takes a long time!
                                 speed = PolarHelper.getSpeed(wSpeed, twa, speedCoeff);
                             }
 
@@ -283,11 +282,11 @@ public class RoutingUtil {
                                         dist,
                                         bearing);
                                 GeoPoint forecast = new GeoPoint(dr.getL(), dr.getG());
-//              System.out.println("Routing point [" + forecast.toString() + "] in " + (World.isInLand(forecast)?"land <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<":"the water"));                  
+                                // System.out.println("Routing point [" + forecast.toString() + "] in " + (World.isInLand(forecast)?"land <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<":"the water"));
                                 // Avoid the land
                                 // if (avoidLand && (World.isInLand(forecast) || World.isRouteCrossingLand(newCurveCenter.getPosition(), forecast) != null))
                                 if (avoidLand && World.isInLand(forecast)) {
-//                System.out.println("..........................Avoiding land...");
+                                    // System.out.println("..........................Avoiding land...");
                                     metLand = true;
                                     speed = 0D;
                                     allowOtherRoute = true;
@@ -336,9 +335,9 @@ public class RoutingUtil {
                 List<RoutingPoint> finalCurve = null;
                 if (!interruptRouting) {
                     timer = logDiffTime(timer, "Milestone 8-bis (proceeding to envelope)");
-//        WWContext.getInstance().fireLogging("Reducing...");
-//        System.out.print("Reducing...");
-//        before = System.currentTimeMillis();
+                    // WWContext.getInstance().fireLogging("Reducing...");
+                    // System.out.print("Reducing...");
+                    // before = System.currentTimeMillis();
                     finalCurve = calculateEnvelope(data, center);
                     if (aimFor != null) {
                         if (isPointIn(aimFor, finalCurve, center)) {
@@ -352,8 +351,8 @@ public class RoutingUtil {
                             smallestDist = Double.MAX_VALUE; // Reset, for the next leg
                         }
                     }
-//        WWContext.getInstance().fireLogging("Reducing completed in " + Long.toString(System.currentTimeMillis() - before) + " ms\n");
-//        System.out.println(" completed in " + Long.toString(System.currentTimeMillis() - before) + " ms\n");
+                    // WWContext.getInstance().fireLogging("Reducing completed in " + Long.toString(System.currentTimeMillis() - before) + " ms\n");
+                    // System.out.println(" completed in " + Long.toString(System.currentTimeMillis() - before) + " ms\n");
                 }
                 // Calculate distance to destination, from the final curve
                 Iterator<RoutingPoint> finalIterator = null;
@@ -367,13 +366,13 @@ public class RoutingUtil {
                         }
                     }
                 }
-//      System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
+                // System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
                 while (!interruptRouting && finalIterator != null && finalIterator.hasNext()) {
                     timer = logDiffTime(timer, "Milestone 10");
                     RoutingPoint forecast = finalIterator.next();
                     gc.setStart(new GreatCirclePoint((forecast.getPosition().getL()), (forecast.getPosition().getG())));
                     if (aimFor == null) {
-                      gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
+                        gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
                     } else {
                         gc.setArrival(new GreatCirclePoint((aimFor.getPosition().getL()), (aimFor.getPosition().getG())));
                     }
@@ -389,11 +388,11 @@ public class RoutingUtil {
                     }
                 }
                 timer = logDiffTime(timer, "Milestone 11");
-//      System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
+                // System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
                 if (localSmallOne < smallestDist) {
                     smallestDist = localSmallOne;
                     finalClosest = closest;
-//        WWContext.getInstance().fireLogging("Still progressing...\n");                  
+                    // WWContext.getInstance().fireLogging("Still progressing...\n");
                 } else if (localSmallOne == smallestDist) {
                     // Not progressing
                     keepLooping = false;
@@ -420,10 +419,10 @@ public class RoutingUtil {
                     System.out.println("SmallestDistance:" + smallestDist);
                     if ((allowOtherRoute && nbNonZeroSpeed == 0) || metLand) {
                         keepLooping = true; // Try again, even if the distance was not shrinking
-//          smallestDist = localSmallOne;
+                        // smallestDist = localSmallOne;
                         if (metLand) {
                             System.out.println("--------------- Try again, maybe met land. (smallest:" + smallestDist + ", local:" + localSmallOne + ", prox:" + proximity + ") --------------");
-//            JOptionPane.showMessageDialog(null, "Met Land?", "Bing", JOptionPane.PLAIN_MESSAGE);
+                            // JOptionPane.showMessageDialog(null, "Met Land?", "Bing", JOptionPane.PLAIN_MESSAGE);
                             if (smallestDist < proximity) {
                                 keepLooping = false;
                                 System.out.println("Close enough.");
@@ -510,7 +509,7 @@ public class RoutingUtil {
             }
             if (interruptRouting) {
                 logDiffTime(timer, "Routing interrupted.");
-//      System.out.println("Routing interrupted.");
+                // System.out.println("Routing interrupted.");
                 WWContext.getInstance().fireLogging("Routing aborted on user's request.\n", LoggingPanel.YELLOW_STYLE);
             }
         }
@@ -539,8 +538,8 @@ public class RoutingUtil {
         // The route goes from destination to origin. Revert it.
         bestRoute = revertList(bestRoute);
 
-//    for (RoutingPoint rp : bestRoute)
-//      System.out.println("Best : " + rp.getPosition().toString());
+        // for (RoutingPoint rp : bestRoute)
+        //   System.out.println("Best : " + rp.getPosition().toString());
 
         return calculateIsochrons(caller,
                 chartPanel,
@@ -592,7 +591,7 @@ public class RoutingUtil {
                                                       GeoPoint mousePosition) {
         RoutingPoint rp = null;
         List<RoutingPoint> isochron = isochrons.get(isochrons.size() - draggedIsochronIdx - 1);
-//  System.out.println("Dragged isochron has " + isochron.size() + " point(s)");
+        // System.out.println("Dragged isochron has " + isochron.size() + " point(s)");
         double minDist = Double.MAX_VALUE;
         for (RoutingPoint lrp : isochron) {
             double dist = GreatCircle.getDistanceInNM(new GreatCirclePoint(lrp.getPosition()), new GreatCirclePoint(mousePosition));
@@ -601,7 +600,7 @@ public class RoutingUtil {
                 rp = lrp;
             }
         }
-//  System.out.println("Smallest distance is " + minDist);
+        // System.out.println("Smallest distance is " + minDist);
         return rp;
     }
 
@@ -617,7 +616,7 @@ public class RoutingUtil {
 
     // Possible optimization ?
     private static List<RoutingPoint> calculateEnvelope(List<List<RoutingPoint>> bulkPoints, RoutingPoint center) {
-        List<RoutingPoint> returnCurve = new ArrayList<RoutingPoint>();
+        List<RoutingPoint> returnCurve = new ArrayList<>();
         long before = System.currentTimeMillis();
         // Put ALL the points in the finalCurve
         Iterator<List<RoutingPoint>> dimOne = bulkPoints.iterator();
@@ -656,10 +655,10 @@ public class RoutingUtil {
                     RoutingPoint isop = dimTwoBis.next();
                     if (currentPolygon.contains(isop.getPoint())) {
                         // Remove from the final Curve if it's inside (and not removed already)
-//          if (returnCurve.contains(isop.getPoint())) // Demanding...
+                        // if (returnCurve.contains(isop.getPoint())) // Demanding...
                         {
                             returnCurve.remove(isop.getPoint());
-                            //          System.out.println("Removing point, len now " + returnCurve.size());
+                            // System.out.println("Removing point, len now " + returnCurve.size());
                         }
                     }
                 }
@@ -724,10 +723,10 @@ public class RoutingUtil {
             for (File f : list) {
                 GribHelper.GribConditionData[] gribData = CommandPanelUtils.getGribFromComposite(f.getAbsolutePath());
                 if (gribData != null) {
-//        System.out.println(f.getAbsolutePath() + " contains data for:");
+                    // System.out.println(f.getAbsolutePath() + " contains data for:");
                     for (GribHelper.GribConditionData grib : gribData) {
                         if (grib != null) {
-//            System.out.println("  -> " + grib.getDate());
+                            // System.out.println("  -> " + grib.getDate());
                             bigGribMap.put(grib.getDate(), grib);
                         } else {
                             System.out.println("  -> NULL grib");
@@ -765,24 +764,22 @@ public class RoutingUtil {
             if (regExp) {
                 pattern = Pattern.compile(filter); // , Pattern.CASE_INSENSITIVE);
             }
-            File[] flist = dir.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    boolean cond = false;
-                    cond = new File(dir, name).isDirectory() || name.endsWith(WWContext.WAZ_EXTENSION);
-                    if (cond && filter != null && filter.trim().length() > 0) {
-                        if (!new File(dir, name).isDirectory()) {
-                            if (!regExp) {
-                                cond = cond && (name.indexOf(filter) > -1);
-                            } else {
-                                matcher = pattern.matcher(name);
-                                cond = cond && matcher.find();
-                            }
+            File[] flist = dir.listFiles((dir1, name) -> {
+                boolean cond = false;
+                cond = new File(dir1, name).isDirectory() || name.endsWith(WWContext.WAZ_EXTENSION);
+                if (cond && filter != null && filter.trim().length() > 0) {
+                    if (!new File(dir1, name).isDirectory()) {
+                        if (!regExp) {
+                            cond = cond && (name.indexOf(filter) > -1);
+                        } else {
+                            matcher = pattern.matcher(name);
+                            cond = cond && matcher.find();
                         }
                     }
-//            if (cond)
-//              System.out.println("Accepted " + name + " in " + dir);
-                    return cond;
                 }
+                // if (cond)
+                //   System.out.println("Accepted " + name + " in " + dir);
+                return cond;
             });
             List<File> _list = Arrays.asList(flist);
             List<File> lf = new ArrayList<File>();
@@ -794,7 +791,7 @@ public class RoutingUtil {
                 }
             }
             list.addAll(lf);
-            //  flist = (File[])list.toArray();
+            // flist = (File[])list.toArray();
             return list;
         }
     }
@@ -847,7 +844,7 @@ public class RoutingUtil {
                 JOptionPane.showMessageDialog(cp, ex.toString(), "Polar Factor", JOptionPane.ERROR_MESSAGE);
             }
 
-            route = new ArrayList<RoutingPoint>(2);
+            route = new ArrayList<>(2);
             Date fromDate = gribData[0].getDate();
             if (startNow) {
                 fromDate = new Date();
@@ -871,7 +868,6 @@ public class RoutingUtil {
                 if (wind != null) {
                     windDir = wind.winddir;
                 }
-
                 if (wirp.isHeadingSelected()) {
                     twa = windDir - hdg;
                 } else {
@@ -903,30 +899,30 @@ public class RoutingUtil {
 
                 double dist = timeStep * speed;
                 currentDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
-                GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint((currentPt.getL()), (currentPt.getG())),
-                        dist,
-                        hdg);
+                GreatCirclePoint dr = GreatCircle.dr_degrees(new GreatCirclePoint((currentPt.getL()), (currentPt.getG())),
+                                                     dist,
+                                                     hdg);
                 currentPt = new GeoPoint(dr.getL(), dr.getG());
                 ancestor = rpt;
 
-                //    System.out.println("Reaching " + currentDate.toString() + ", " +
-                //                        currentPt.toString() + " TWA:" + twa +
-                //                       " TWD:" + windDir +
-                //                       " TWS:" + wSpeed +
-                //                       " BSP:" + speed +
-                //                       " HDG:" + hdg);
+                // System.out.println("Reaching " + currentDate.toString() + ", " +
+                //                     currentPt.toString() + " TWA:" + twa +
+                //                    " TWD:" + windDir +
+                //                    " TWS:" + wSpeed +
+                //                    " BSP:" + speed +
+                //                    " HDG:" + hdg);
             }
             long after = System.currentTimeMillis();
             System.out.println("Created " + route.size() + " Routing Points between " + fromDate.toString() + " and " + toDate.toString() + " in " + Long.toString(after - before) + " ms.");
             // Turn the route upside down, to do like the routing backtracking
-            List<RoutingPoint> route2 = new ArrayList<RoutingPoint>(route.size());
+            List<RoutingPoint> route2 = new ArrayList<>(route.size());
             for (int i = 0; i < route.size(); i++) {
                 RoutingPoint rp = route.get(route.size() - (i + 1));
                 route2.add(rp);
             }
             // TODO Fix that mess...
-//    route2.add(route.get(0)); // Trick. For the route to look like the routing one (backtracking).
-//    int size = route2.size();
+            // route2.add(route.get(0)); // Trick. For the route to look like the routing one (backtracking).
+            // int size = route2.size();
             for (int i = 0; false && i < route2.size(); i++) {
                 RoutingPoint rp = route2.get(i);
                 RoutingPoint prev = null;
@@ -935,8 +931,9 @@ public class RoutingUtil {
                 } catch (IndexOutOfBoundsException ioobe) {
                 }
                 rp.setAncestor(prev);
-                if (prev != null)
+                if (prev != null) {
                     rp.setPosition(prev.getPosition());
+                }
             }
             route = route2;
         }
@@ -1019,7 +1016,7 @@ public class RoutingUtil {
             String date = "", time = "";
             RoutingPoint rp = null;
             RoutingPoint ic = null; // Isochron Center
-//    for (int r=0; r<routesize; r++) // 0 is the closest point, the last calculated
+            // for (int r=0; r<routesize; r++) // 0 is the closest point, the last calculated
             for (int r = routesize - 1; r >= 0; r--) { // 0 is the closest point, the last calculated
                 rp = bestRoute.get(r);
                 if (r == 0) { // Last one
@@ -1236,7 +1233,7 @@ public class RoutingUtil {
                                 bwjs.write("var routing = " + clipboardContent + "\n");
                                 bwjs.close();
 
-//              String whatToOpen = f.toURI().toURL().toString() + "?data=" + new File(fileOutput).toURI().toURL().toString();
+                                // String whatToOpen = f.toURI().toURL().toString() + "?data=" + new File(fileOutput).toURI().toURL().toString();
                                 String whatToOpen = f.toURI().toURL().toString();
                                 System.out.println("Opening:" + whatToOpen);
                                 try {
@@ -1249,8 +1246,9 @@ public class RoutingUtil {
                                     String message = "Running in " + System.getProperty("user.dir") + "\n" + ex.getLocalizedMessage();
                                     JOptionPane.showMessageDialog(instance, message, "Routing in GoogleMaps", JOptionPane.ERROR_MESSAGE);
                                 }
-                            } else
+                            } else {
                                 JOptionPane.showMessageDialog(instance, "File routing/googlemaprouting.html not found on your system...", "Google Routing", JOptionPane.WARNING_MESSAGE);
+                            }
                         }
                     }
                 } catch (Exception ex) {

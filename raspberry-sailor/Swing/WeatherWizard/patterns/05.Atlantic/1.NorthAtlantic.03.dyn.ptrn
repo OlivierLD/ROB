@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<pattern>
+   <fax-collection>
+      <fax hint="NorthAtlantic Surface - West" color="255;0;0" transparent="true">
+         <faxScale>0.32291855775920775</faxScale>
+         <faxXoffset>-107</faxXoffset>
+         <faxYoffset>168</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+         <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PYAA12.gif" dir="./WeatherFaxes/noaa/sfc" prefix="NOAA_Atl_NW_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="NorthAtlantic Surface - East" color="255;0;0" transparent="true">
+         <faxScale>0.3238738139421861</faxScale>
+         <faxXoffset>1091</faxXoffset>
+         <faxYoffset>168</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+         <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PYAA11.gif" dir="./WeatherFaxes/noaa/sfc" prefix="NOAA_Atl_NE_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="NorthAtlantic 500mb" color="0;0;255" transparent="true">
+         <faxScale>0.4937762523597154</faxScale>
+         <faxXoffset>49</faxXoffset>
+         <faxYoffset>54</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PPAA10.gif" dir="./WeatherFaxes/noaa/500mb" prefix="NOAA_Atl_500_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+      <fax hint="NorthAtlantic Sea State" color="0;100;0" transparent="true">
+         <faxScale>0.49431419111852265</faxScale>
+         <faxXoffset>49</faxXoffset>
+         <faxYoffset>55</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+         <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PJAA99.gif" dir="./WeatherFaxes/noaa/SeaState" prefix="NOAA_Atl_waves_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+      </fax>
+   </fax-collection>
+   <grib>
+      <dynamic-grib hint="North Atlantic GRIB" request="GFS:65N,14N,100W,10E|1,1|0,6..168|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="NorthAtlantic_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   </grib>
+   <projection type="MERCATOR"/>
+   <north>65.5</north>
+   <south>10.0</south>
+   <east>28.2</east>
+   <west>-101.8</west>
+   <chartwidth>900</chartwidth>
+   <chartheight>600</chartheight>
+</pattern>
