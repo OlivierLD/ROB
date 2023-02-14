@@ -147,7 +147,7 @@ $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 
 ## Highlights
 - [Read NMEA data, log, forward, process](./raspberry-sailor/NMEA-multiplexer/README.md)
-- [Build your own deviation curve](./raspberry-sailor/Deviation-Tool/README.md)
+- [Build your own deviation curve](./raspberry-sailor/Swing/Deviation-Tool/README.md)
 - [Build your own polars](./raspberry-sailor/PolarSmoother/README.md) (in progress)
 - [Read and render GRIB files](./raspberry-sailor/RESTRouting/README.md) (in progress)
 - Celestial Almanacs publication

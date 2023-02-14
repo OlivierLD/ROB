@@ -1,4 +1,7 @@
 ### Elaborating your own polars (WiP)
+
+Requires Java-Swing (to be run from a graphical desktop).
+
 ### ![Polar](./polar.jpg)
 
 > Look at `util.LogToPolarPoints`, in `NMEA-multiplexer`

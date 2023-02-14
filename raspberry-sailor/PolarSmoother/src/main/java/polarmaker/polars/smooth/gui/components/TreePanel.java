@@ -37,20 +37,20 @@ import java.util.Vector;
 
 public class TreePanel
 		extends JPanel {
-	private BorderLayout borderLayout1 = new BorderLayout();
+	private final BorderLayout borderLayout1 = new BorderLayout();
 	private JScrollPane scrollPane = null;
 	private final transient TreeSelectionListener treeMonitor = new TreeMonitor();
-//private final TreeModel emptyTreeModel = new DefaultTreeModel(new PolarTreeNode("Polars"));
+	// private final TreeModel emptyTreeModel = new DefaultTreeModel(new PolarTreeNode("Polars"));
 
 	private transient Object root = null;
 
 	private PolarTreeNode[] currentlySelectedNode = null;
-	private JTree dataTree = new JTree();
+	private final JTree dataTree = new JTree();
 
 	private String dataFile = null;
 	private transient MainPanelInterface caller = null;
 
-	private TreePopup treePopup = new TreePopup(this);
+	private final TreePopup treePopup = new TreePopup(this);
 
 	public TreePanel(MainPanelInterface mpi) {
 		caller = mpi;
@@ -141,15 +141,16 @@ public class TreePanel
 							}
 						} else if (ptn != null && ptn.getType() == PolarTreeNode.SECTION_TYPE) {
 							if (right) {
-//                System.out.println("Right");
+                                // System.out.println("Right");
 								treePopup.show(dataTree, e.getX(), e.getY(), ptn);
 							}
-//              else
-//                System.out.println("Left");
+						// else
+						//   System.out.println("Left");
 						}
 					} else {
-						if ("true".equals(System.getProperty("verbose", "false")))
+						if ("true".equals(System.getProperty("verbose", "false"))) {
 							System.out.println("MouseClicked");
+						}
 					}
 				}
 
@@ -161,7 +162,7 @@ public class TreePanel
 					if (e.getClickCount() == 2) {
 						dblClicked(e);
 					} else {
-//            System.out.println("Mouse Released");
+						// System.out.println("Mouse Released");
 						tryPopup(e);
 					}
 				}
@@ -337,8 +338,8 @@ public class TreePanel
 					PolarsResourceBundle.getPolarsResourceBundle().getString("sort"),
 					JOptionPane.ERROR_MESSAGE);
 		}
-		for (int i = 0; i < nodeArray.length; i++) {
-			PolarTreeNode sorted = (PolarTreeNode) nodeArray[i].getSortedObject();
+		for (NodeObject nodeObject : nodeArray) {
+			PolarTreeNode sorted = (PolarTreeNode) nodeObject.getSortedObject();
 			ptn.add(sorted);
 		}
 		// refresh the tree
@@ -479,9 +480,10 @@ public class TreePanel
 									twavmgd,
 									vmgd);
 							Object[][] tableData = etp.getTwaData();
-							for (int i = 0; i < tableData.length; i++)
+							for (int i = 0; i < tableData.length; i++) {
 								newNode.add(new PolarTreeNode(((Integer) tableData[i][0]).intValue(),
 										((Double) tableData[i][1]).doubleValue()));
+							}
 							// ptn = newNode;
 							parentNode.remove(ptn);
 							parentNode.add(newNode);
@@ -532,7 +534,6 @@ public class TreePanel
 				int existing = ((PolarTreeNode) ptn.getParent()).getChildCount();
 				PolarTreeNode newNode = new PolarTreeNode(Integer.toString(existing + 1) + " - Duplicated", ptn.getPolarDegree(), ptn.getCoeffDegree(), ptn.getFromTwa(), ptn.getToTwa());
 				newNode = duplicate(ptn, newNode);
-
 				((PolarTreeNode) ptn.getParent()).add(newNode);
 				sortTree((PolarTreeNode) ptn.getParent());
 				((DefaultTreeModel) parent.dataTree.getModel()).reload(ptn.getParent());
@@ -565,7 +566,6 @@ public class TreePanel
 					JOptionPane.PLAIN_MESSAGE);
 			if (resp == JOptionPane.OK_OPTION) {
 				try {
-
 					newNode = new PolarTreeNode(esp.getName(),
 							esp.getPolarDegree(),
 							esp.getCoeffDegree(),
@@ -628,9 +628,10 @@ public class TreePanel
 							twavmgd,
 							vmgd);
 					Object[][] tableData = etp.getTwaData();
-					for (int i = 0; i < tableData.length; i++)
-						newNode.add(new PolarTreeNode(((Integer) tableData[i][0]).intValue(),
-								((Double) tableData[i][1]).doubleValue()));
+					for (Object[] tableDatum : tableData) {
+						newNode.add(new PolarTreeNode(((Integer) tableDatum[0]).intValue(),
+								((Double) tableDatum[1]).doubleValue()));
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -691,13 +692,14 @@ public class TreePanel
 		}
 	}
 
-	class NodeObject extends ObjectToSort {
+	static class NodeObject extends ObjectToSort {
 		PolarTreeNode body;
 
 		public NodeObject(Object o) {
 			super(o);
-			if (o instanceof PolarTreeNode)
+			if (o instanceof PolarTreeNode) {
 				body = (PolarTreeNode) o;
+			}
 		}
 
 		public double getValue() {
