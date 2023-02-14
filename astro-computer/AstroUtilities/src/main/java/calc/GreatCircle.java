@@ -2,6 +2,8 @@ package calc;
 
 import java.util.Vector;
 
+// TODO Cleanup in the radians / degrees ...
+
 public final class GreatCircle {
 	public static final int TO_NORTH = 0;
 	public static final int TO_SOUTH = 1;
@@ -10,8 +12,8 @@ public final class GreatCircle {
 	
 	private int ewDir;
 	private int nsDir;
-	private GreatCirclePoint start;   // Angles in radians
-	private GreatCirclePoint arrival; // Angles in radians
+	private GreatCirclePoint start;   // Angles in radians or degrees !!
+	private GreatCirclePoint arrival; // Angles in radians or degrees !!
 	private Vector<GreatCircleWayPoint> route;
 
 	private static final double TOLERANCE = 1D;
@@ -300,6 +302,93 @@ public final class GreatCircle {
 		}
 	}
 
+	public void calculateGreatCircle_degrees(int nbPoints) {
+		GreatCirclePoint arrival = new GreatCirclePoint(Math.toRadians(this.arrival.getL()), Math.toRadians(this.arrival.getG()));
+		GreatCirclePoint start = new GreatCirclePoint(Math.toRadians(this.start.getL()), Math.toRadians(this.start.getG()));
+
+		if (arrival.getL() > start.getL()) {
+			nsDir = TO_NORTH;
+		} else {
+			nsDir = TO_SOUTH;
+		}
+		if (arrival.getG() > start.getG()) {
+			ewDir = TO_EAST;
+		} else {
+			ewDir = TO_WEST;
+		}
+		if (Math.abs(arrival.getG() - start.getG()) > Math.PI) {
+			if (ewDir == TO_EAST) {
+				ewDir = TO_WEST;
+				arrival.setG(arrival.getG() - (2 * Math.PI));
+			} else {
+				ewDir = TO_EAST;
+				arrival.setG((2 * Math.PI) + arrival.getG());
+			}
+		}
+		double deltaG = arrival.getG() - start.getG();
+		route = new Vector<>(nbPoints);
+		double interval = deltaG / (double) nbPoints;
+		GreatCirclePoint smallStart = start;
+		boolean go = true;
+		for (double g = start.getG(); route.size() <= nbPoints; g += interval) {
+			double deltag = arrival.getG() - g;
+			double tanStartAngle = Math.sin(deltag) / (Math.cos(smallStart.getL()) * Math.tan(arrival.getL()) - Math.sin(smallStart.getL()) * Math.cos(deltag));
+			double smallL = Math.atan(Math.tan(smallStart.getL()) * Math.cos(interval) + Math.sin(interval) / (tanStartAngle * Math.cos(smallStart.getL())));
+			double rpG = g + interval;
+			if (rpG > Math.PI) {
+				rpG -= (2 * Math.PI);
+			}
+			if (rpG < -Math.PI) {
+				rpG = (2 * Math.PI) + rpG;
+			}
+			GreatCirclePoint routePoint = new GreatCirclePoint(smallL, rpG);
+			double ari = Math.toDegrees(Math.atan(tanStartAngle));
+			if (ari < 0.0D) {
+				ari = Math.abs(ari);
+			}
+
+			int _nsDir;
+			if (routePoint.getL() > smallStart.getL()) {
+				_nsDir = TO_NORTH;
+			} else {
+				_nsDir = TO_SOUTH;
+			}
+			double arrG = routePoint.getG();
+			double staG = smallStart.getG();
+			if (sign(arrG) != sign(staG)) {
+				if (sign(arrG) > 0) {
+					arrG -= (2 * Math.PI);
+				} else {
+					arrG = Math.PI - arrG;
+				}
+			}
+			int _ewDir;
+			if (arrG > staG) {
+				_ewDir = TO_EAST;
+			} else {
+				_ewDir = TO_WEST;
+			}
+			double _start = 0.0D;
+			if (_nsDir == TO_SOUTH) {
+				_start = 180D;
+				if (_ewDir == TO_EAST) {
+					ari = _start - ari;
+				} else {
+					ari = _start + ari;
+				}
+			} else if (_ewDir == TO_EAST) {
+				ari = _start + ari;
+			} else {
+				ari = _start - ari;
+			}
+			while (ari < 0.0D) {
+				ari += 360;
+			}
+			route.addElement(new GreatCircleWayPoint(smallStart, arrival.equals(smallStart) ? null : (Double.isNaN(ari) ? null : ari)));
+			smallStart = routePoint;
+		}
+	}
+
 	/**
 	 * GC Distance
 	 * @return in radians
@@ -310,7 +399,11 @@ public final class GreatCircle {
 //		return Math.acos(cos);
 		return GreatCircle.getDistance(this.start, this.arrival);
 	}
-	
+
+	public double getDistance_degrees() {
+		return GreatCircle.getDistance(this.start.degreesToRadians(), this.arrival.degreesToRadians());
+	}
+
 	public static double getDistance(GreatCirclePoint from, GreatCirclePoint to) {
 		double cos = Math.sin(from.getL()) * Math.sin(to.getL()) + Math.cos(from.getL()) * 
 				Math.cos(to.getL()) * Math.cos(to.getG() - from.getG());
@@ -536,6 +629,10 @@ public final class GreatCircle {
 	public double calculateRhumbLineRoute() {
 		return calculateRhumbLineRoute(this.start, this.arrival);
 	}
+
+	public double calculateRhumbLineRoute_degrees() {
+		return calculateRhumbLineRoute_degrees(this.start, this.arrival);
+	}
 	/**
 	 * Rhumbline aka loxodrome
 	 * Points coordinates in Radians
@@ -605,6 +702,10 @@ public final class GreatCircle {
 		return _rv;
 	}
 
+	public static double calculateRhumbLineRoute_degrees(GreatCirclePoint f, GreatCirclePoint t) {
+		return calculateRhumbLineRoute(f.degreesToRadians(), t.degreesToRadians());
+	}
+
 	private static int sign(double d) {
 		if (d == 0.0D) {
 			return 0;
@@ -650,5 +751,21 @@ public final class GreatCircle {
 		double deltaG = Math.toRadians(dist / (60D * Math.cos((from.getL() + l2) / 2D))) * Math.sin(Math.toRadians(route)); // 2009-mar-10
 		double g2 = from.getG() + deltaG;
 		return new GreatCirclePoint(l2, g2);
+	}
+
+	/**
+	 * Dead Reckoning
+	 *
+	 * @param from  GeoPoint, L &amp; G in Degrees
+	 * @param dist  distance in nm
+	 * @param route route in degrees
+	 * @return DR Position, L &amp; G in Degrees
+	 */
+	public static GreatCirclePoint dr_degrees(GreatCirclePoint from, double dist, double route) {
+		double deltaL = Math.toRadians(dist / 60D) * Math.cos(Math.toRadians(route));
+		double l2 = Math.toRadians(from.getL()) + deltaL;
+		double deltaG = Math.toRadians(dist / (60D * Math.cos((Math.toRadians(from.getL()) + l2) / 2D))) * Math.sin(Math.toRadians(route)); // 2009-mar-10
+		double g2 = Math.toRadians(from.getG()) + deltaG;
+		return new GreatCirclePoint(Math.toDegrees(l2), Math.toDegrees(g2));
 	}
 }

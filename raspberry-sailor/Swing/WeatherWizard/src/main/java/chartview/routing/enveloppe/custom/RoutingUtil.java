@@ -56,10 +56,10 @@ public class RoutingUtil {
         int brg = 0;
         gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
         gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
-//  gc.calculateGreatCircle(10);
-//  double gcDistance = Math.toDegrees(gc.getDistance() * 60D);
+        //  gc.calculateGreatCircle_degrees(10);
+        //  double gcDistance = Math.toDegrees(gc.getDistance_degrees() * 60D);
         // GreatCircle.calculateRhumbLine();
-        double rlZ = gc.calculateRhumbLineRoute();
+        double rlZ = gc.calculateRhumbLineRoute_degrees();
         brg = (int) Math.round(Math.toDegrees(rlZ));
         return brg;
     }
@@ -68,10 +68,10 @@ public class RoutingUtil {
         int brg = 0;
         gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
         gc.setArrival(new GreatCirclePoint((dest.getPosition().getL()), (dest.getPosition().getG())));
-        //  gc.calculateGreatCircle(10);
-        //  double gcDistance = Math.toDegrees(gc.getDistance() * 60D);
+        //  gc.calculateGreatCircle_degrees(10);
+        //  double gcDistance = Math.toDegrees(gc.getDistance_degrees() * 60D);
         // GreatCircle.calculateRhumbLine();
-        double rlZ = gc.calculateRhumbLineRoute();
+        double rlZ = gc.calculateRhumbLineRoute_degrees();
         brg = (int) Math.round(Math.toDegrees(rlZ));
         return brg;
     }
@@ -172,7 +172,7 @@ public class RoutingUtil {
         boolean interruptedBecauseTooOld = false;
         if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
             center.setGribTooOld(true);
-//    System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
+            // System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
             if (stopIfGRIB2old) {
                 keepLooping = false;
                 interruptedBecauseTooOld = true;
@@ -182,13 +182,13 @@ public class RoutingUtil {
         one.add(center); // Initialize data with the center. One point only.
         data.add(one);
 
-        Date currentDate = fromDate; // new Date(fromDate.getTime() + (long)(timeStep * 3600D * 1000D));
+        Date currentDate = fromDate; // new Date(fromDate.getTime() + (long)(timeStep * 3_600D * 1_000D));
         Date arrivalDate = null;
 //  synchronized (allIsochrons)
         {
             // Start from "center"
             while (keepLooping && !interruptRouting) {
-//      timer = logDiffTime(timer, "Milestone 1");
+                timer = logDiffTime(timer, "Milestone 1");
                 double localSmallOne = Double.MAX_VALUE;
                 List<List<RoutingPoint>> temp = new ArrayList<List<RoutingPoint>>();
                 Iterator<List<RoutingPoint>> dimOne = data.iterator();
@@ -197,13 +197,13 @@ public class RoutingUtil {
                 boolean allowOtherRoute = false;
                 long before = System.currentTimeMillis();
                 while (!interruptRouting && dimOne.hasNext() && keepLooping) {
-//        timer = logDiffTime(timer, "Milestone 2");
+                    timer = logDiffTime(timer, "Milestone 2");
                     List<RoutingPoint> curve = dimOne.next();
                     Iterator<RoutingPoint> dimTwo = curve.iterator();
                     nbNonZeroSpeed = 0;
                     metLand = false;
                     while (!interruptRouting && keepLooping && dimTwo.hasNext()) {
-//          timer = logDiffTime(timer, "Milestone 3");
+                        timer = logDiffTime(timer, "Milestone 3");
                         RoutingPoint newCurveCenter = dimTwo.next();
                         List<RoutingPoint> oneCurve = new ArrayList<>(10);
 
@@ -217,7 +217,7 @@ public class RoutingUtil {
                                 WWContext.getInstance().fireLogging("Routing aborted. GRIB exhausted (preference).\n", LoggingPanel.YELLOW_STYLE);
                             }
                         }
-//          timer = logDiffTime(timer, "Milestone 4");
+                        timer = logDiffTime(timer, "Milestone 4");
 
 //          brg = getBearing(newCurveCenter); // 7-apr-2010.            
                         if (aimFor == null) {
@@ -228,9 +228,9 @@ public class RoutingUtil {
 //          nbNonZeroSpeed = 0;
                         // Calculate isochron from center
                         for (int bearing = brg - routingForkWidth / 2;
-                             keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
-                             bearing += routingStep) {
-//            timer = logDiffTime(timer, "Milestone 5");
+                            keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
+                            bearing += routingStep) {
+                            timer = logDiffTime(timer, "Milestone 5");
                             int windDir = 0;
                             if (wind != null) {
                                 windDir = wind.winddir;
@@ -276,11 +276,13 @@ public class RoutingUtil {
                             if (speed > 0D) {
                                 nbNonZeroSpeed++;
                                 double dist = timeInterval * speed;
-                                arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3600D * 1000D));
-                              GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint((newCurveCenter.getPosition().getL()), (newCurveCenter.getPosition().getG())),
+                                arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
+                                GreatCirclePoint dr = GreatCircle.dr_degrees(
+                                        new GreatCirclePoint(newCurveCenter.getPosition().getL(),
+                                                             newCurveCenter.getPosition().getG()),
                                         dist,
                                         bearing);
-                                GeoPoint forecast = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG())); // TODO Check that !
+                                GeoPoint forecast = new GeoPoint(dr.getL(), dr.getG());
 //              System.out.println("Routing point [" + forecast.toString() + "] in " + (World.isInLand(forecast)?"land <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<":"the water"));                  
                                 // Avoid the land
                                 // if (avoidLand && (World.isInLand(forecast) || World.isRouteCrossingLand(newCurveCenter.getPosition(), forecast) != null))
@@ -295,9 +297,9 @@ public class RoutingUtil {
 
                                 Point forecastPoint = null;
                                 if (chartPanel != null) {
-                                  forecastPoint = chartPanel.getPanelPoint(forecast);
+                                    forecastPoint = chartPanel.getPanelPoint(forecast);
                                 } else {
-                                  forecastPoint = new Point((int) Math.round(forecast.getG() * 1000), (int) Math.round(forecast.getL() * 1000));
+                                    forecastPoint = new Point((int) Math.round(forecast.getG() * 1_000), (int) Math.round(forecast.getL() * 1_000));
                                 }
                                 RoutingPoint ip = new RoutingPoint(forecastPoint);
 
@@ -311,27 +313,29 @@ public class RoutingUtil {
                                 ip.setTwd(windDir);      // twd from center
                                 ip.setDate(arrivalDate); // arrival date at this point
                                 if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
-                                  ip.setGribTooOld(true);
+                                    ip.setGribTooOld(true);
                                 }
                                 oneCurve.add(ip);
                             }
-//            timer = logDiffTime(timer, "Milestone 6");
+                            timer = logDiffTime(timer, "Milestone 6");
                         }
-//          timer = logDiffTime(timer, "Milestone 7");
+                        timer = logDiffTime(timer, "Milestone 7");
                         if (!interruptRouting) {
                             temp.add(oneCurve);
                         }
                     }
                 }
                 long after = System.currentTimeMillis();
-//      System.out.println("Isochron calculated in " + Long.toString(after - before) + " ms.");
-                // Start from the finalCurve, the previous enveloppe, for the next calculation
+                if (true) {
+                    System.out.println("Isochron calculated in " + NumberFormat.getInstance().format(after - before) + " ms.");
+                }
+                // Start from the finalCurve, the previous envelope, for the next calculation
                 // Flip data
-//      timer = logDiffTime(timer, "Milestone 8");
+                timer = logDiffTime(timer, "Milestone 8");
                 data = temp;
                 List<RoutingPoint> finalCurve = null;
                 if (!interruptRouting) {
-//        timer = logDiffTime(timer, "Milestone 8-bis");
+                    timer = logDiffTime(timer, "Milestone 8-bis (proceeding to envelope)");
 //        WWContext.getInstance().fireLogging("Reducing...");
 //        System.out.print("Reducing...");
 //        before = System.currentTimeMillis();
@@ -353,7 +357,7 @@ public class RoutingUtil {
                 }
                 // Calculate distance to destination, from the final curve
                 Iterator<RoutingPoint> finalIterator = null;
-//      timer = logDiffTime(timer, "Milestone 9");
+                timer = logDiffTime(timer, "Milestone 9");
                 if (finalCurve != null) {
                     try {
                         finalIterator = finalCurve.iterator();
@@ -365,7 +369,7 @@ public class RoutingUtil {
                 }
 //      System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
                 while (!interruptRouting && finalIterator != null && finalIterator.hasNext()) {
-//        timer = logDiffTime(timer, "Milestone 10");
+                    timer = logDiffTime(timer, "Milestone 10");
                     RoutingPoint forecast = finalIterator.next();
                     gc.setStart(new GreatCirclePoint((forecast.getPosition().getL()), (forecast.getPosition().getG())));
                     if (aimFor == null) {
@@ -374,8 +378,8 @@ public class RoutingUtil {
                         gc.setArrival(new GreatCirclePoint((aimFor.getPosition().getL()), (aimFor.getPosition().getG())));
                     }
                     try {
-                        gc.calculateGreatCircle(10);
-                        gcDistance = Math.toDegrees(gc.getDistance() * 60D);
+                        // gc.calculateGreatCircle_degrees(10);
+                        gcDistance = Math.toDegrees(gc.getDistance_degrees() * 60D);
                         if (gcDistance < localSmallOne) {
                             localSmallOne = gcDistance;
                             closest = forecast;
@@ -384,7 +388,7 @@ public class RoutingUtil {
                         ex.printStackTrace();
                     }
                 }
-//      timer = logDiffTime(timer, "Milestone 11");
+                timer = logDiffTime(timer, "Milestone 11");
 //      System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
                 if (localSmallOne < smallestDist) {
                     smallestDist = localSmallOne;
@@ -489,7 +493,7 @@ public class RoutingUtil {
                 }
                 allowOtherRoute = false;
 
-//      timer = logDiffTime(timer, "Milestone 12");
+                timer = logDiffTime(timer, "Milestone 12");
                 if (keepLooping) {
                     allIsochrons.add(finalCurve);
                     data = new ArrayList<List<RoutingPoint>>();
@@ -502,7 +506,7 @@ public class RoutingUtil {
                 if (caller != null) {
                     caller.routingNotification(allIsochrons, finalClosest);
                 }
-//      timer = logDiffTime(timer, "Milestone 13");
+                timer = logDiffTime(timer, "Milestone 13");
             }
             if (interruptRouting) {
                 logDiffTime(timer, "Routing interrupted.");
@@ -510,7 +514,7 @@ public class RoutingUtil {
                 WWContext.getInstance().fireLogging("Routing aborted on user's request.\n", LoggingPanel.YELLOW_STYLE);
             }
         }
-//  timer = logDiffTime(timer, "Milestone 14");
+        timer = logDiffTime(timer, "Milestone 14");
         return allIsochrons;
     }
 
@@ -605,7 +609,9 @@ public class RoutingUtil {
 
     private static long logDiffTime(long before, String mess) {
         long after = System.currentTimeMillis();
-        System.out.println(mess + " (" + Long.toString(after - before) + " ms)");
+        if (false) { // TODO A System variable
+            System.out.println(mess + " (" + Long.toString(after - before) + " ms)");
+        }
         return after;
     }
 
@@ -623,7 +629,9 @@ public class RoutingUtil {
                 returnCurve.add(newPoint);
             }
         }
-        String mess = "Reducing from " + returnCurve.size() + " ";
+        String mess = String.format("From %s, reducing from %s ",
+                center.getPosition().toString(),
+                NumberFormat.getNumberInstance().format(returnCurve.size()));
         int origNum = returnCurve.size();
         // Calculate final curve - Here is the skill
         dimOne = bulkPoints.iterator();
@@ -660,8 +668,11 @@ public class RoutingUtil {
         long after = System.currentTimeMillis();
         int finalNum = returnCurve.size();
         float ratio = 100f * (float) (origNum - finalNum) / (float) origNum;
-        WWContext.getInstance().fireLogging(mess + "to " + returnCurve.size() + " point(s) (gained " + WWContext.DF_2.format(ratio) + "%), curve reduction calculated in " + Long.toString(after - before) + " ms");
-        System.out.println(mess + "to " + returnCurve.size() + " point(s) (gained " + WWContext.DF_2.format(ratio) + "%), curve reduction calculated in " + Long.toString(after - before) + " ms");
+
+        mess += String.format("to %s point(s) (gained %s%%), curve reduction calculated in %s ms.",
+                NumberFormat.getNumberInstance().format(returnCurve.size()), WWContext.DF_2.format(ratio), NumberFormat.getNumberInstance().format(after - before));
+        WWContext.getInstance().fireLogging(mess);
+        System.out.println(mess);
 
         return returnCurve;
     }
@@ -891,11 +902,11 @@ public class RoutingUtil {
                 route.add(rpt);
 
                 double dist = timeStep * speed;
-                currentDate = new Date(currentDate.getTime() + (long) (timeStep * 3600D * 1000D));
+                currentDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
                 GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint((currentPt.getL()), (currentPt.getG())),
                         dist,
                         hdg);
-                currentPt = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG()));
+                currentPt = new GeoPoint(dr.getL(), dr.getG());
                 ancestor = rpt;
 
                 //    System.out.println("Reaching " + currentDate.toString() + ", " +

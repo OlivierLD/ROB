@@ -340,8 +340,9 @@ public class ChartPanel extends JPanel
         h /= zoom;
         setPreferredSize(new Dimension(w, h));
         setSize(new Dimension(w, h));
-        if (gp != null)
+        if (gp != null) {
             positionTo(gp);
+        }
         repaint();
     }
 
@@ -2109,12 +2110,15 @@ public class ChartPanel extends JPanel
             for (gAmpl = _east - _west; gAmpl < 0D; gAmpl += 360D) ;
             double graph2chartRatio = (double) w / gAmpl;
             double _lng = lng;
-            if (Math.abs(_west) > 180D && sign(_lng) != sign(_west) && sign(_lng) > 0)
+            if (Math.abs(_west) > 180D && sign(_lng) != sign(_west) && sign(_lng) > 0) {
                 _lng -= 360D;
-            if (gAmpl > 180D && _lng < 0D && _west > 0D)
+            }
+            if (gAmpl > 180D && _lng < 0D && _west > 0D) {
                 _lng += 360D;
-            if (gAmpl > 180D && _lng >= 0D && _west > 0D && _lng < _east)
+            }
+            if (gAmpl > 180D && _lng >= 0D && _west > 0D && _lng < _east) {
                 _lng += (_west + (gAmpl - _east));
+            }
             int x = 0;
             double[] xy = null;
             switch (projection) {
@@ -2150,8 +2154,9 @@ public class ChartPanel extends JPanel
                     xy = calculatePolarStereoGraphicXYCoordinates(lat, lng);
                     x = (int) Math.round(stereoView_ratio * xy[0]);
                     x += stereoViewOffset_X;
-                    if (south < 0) // Southern hemisphere
+                    if (south < 0) { // Southern hemisphere
                         x = w - x;
+                    }
                     break;
             }
             double incSouth = 0.0D;
@@ -2219,14 +2224,16 @@ public class ChartPanel extends JPanel
                 case ChartPanelInterface.POLAR_STEREOGRAPHIC:
                     incLat = lat;
                     y = (int) (stereoViewOffset_Y - (int) incSouth);
-                    if (south < 0) // Southern hemisphere
+                    if (south < 0) { // Southern hemisphere
                         y = h + y;
+                    }
                     break;
             }
             pt = new Point(x, y);
             if (projection != ChartPanelInterface.GLOBE_VIEW &&
-                    projection != ChartPanelInterface.SATELLITE_VIEW)
+                    projection != ChartPanelInterface.SATELLITE_VIEW) {
                 pt = rotate(pt);
+            }
         }
         return pt;
     }
@@ -2260,18 +2267,22 @@ public class ChartPanel extends JPanel
                     double _x = (x - stereoViewOffset_X) / stereoView_ratio;
                     double _y = (y - stereoViewOffset_Y) / stereoView_ratio;
                     g = lambdaZero + Math.toDegrees(Math.atan(_x / (_y)));
-                    if (g < -180D)
+                    if (g < -180D) {
                         g += 360D;
-                    if (g > 180D)
+                    }
+                    if (g > 180D) {
                         g -= 360;
+                    }
                     break;
                 case ChartPanelInterface.ANAXIMANDRE:
                 case ChartPanelInterface.MERCATOR:
                     g = (double) x / graph2chartRatio + _west;
-                    if (g < -180D)
+                    if (g < -180D) {
                         g += 360D;
-                    if (g > 180D)
+                    }
+                    if (g > 180D) {
                         g -= 360;
+                    }
                     break;
                 case ChartPanelInterface.LAMBERT:
                     // TODO Fix it (G)
@@ -2281,17 +2292,23 @@ public class ChartPanel extends JPanel
                     int deltaY = rotated.y - conicOffset_Y;
                     double angleWithCenter = Math.toDegrees(Math.atan((double) deltaX / (double) deltaY));
                     if (deltaY < 0) {
-                        if (deltaX > 0)
+                        if (deltaX > 0) {
                             angleWithCenter += 180D;
-                        else
+                        } else {
                             angleWithCenter -= 180D;
+                        }
                     }
-                    if (contactParallel < 0.0D)
+                    if (contactParallel < 0.0D) {
                         angleWithCenter += 180D;
+                    }
 //        System.out.println("Angle With Center:" + angleWithCenter + " [deltaX:" + deltaX + ", deltaY:" + deltaY + "]");
                     g = angleWithCenter / Math.sin(Math.toRadians(contactParallel));
-                    while (g > 180D) g -= 360D;
-                    while (g < -180D) g += 360D;
+                    while (g > 180D) {
+                        g -= 360D;
+                    }
+                    while (g < -180D) {
+                        g += 360D;
+                    }
                     break;
             }
             double incSouth = 0.0D;
@@ -2322,8 +2339,9 @@ public class ChartPanel extends JPanel
                     int deltaY = rotated.y - conicOffset_Y;
                     double dist2center = Math.sqrt(Math.pow(deltaX, 2D) + Math.pow(deltaY, 2D));
                     double qte = (1.0D - Math.cos(Math.toRadians(Math.abs(contactParallel))) * (dist2center / conic_ratio) * Math.sin(Math.toRadians(Math.abs(contactParallel)))) / ((dist2center / conic_ratio) * Math.pow(Math.sin(Math.toRadians(Math.abs(contactParallel))), 2D));
-                    if (contactParallel < 0D)
+                    if (contactParallel < 0D) {
                         qte *= -1D;
+                    }
                     l = Math.toDegrees(Math.atan(qte));
                     break;
                 case ChartPanelInterface.POLAR_STEREOGRAPHIC: // TODO See http://kartoweb.itc.nl/geometrics/Map%20projections/body.htm
@@ -2341,19 +2359,23 @@ public class ChartPanel extends JPanel
         boolean ret = false;
         if (gp.getL() > south && gp.getL() < north) {
             if (west < east) {
-                if (gp.getG() < east && gp.getG() > west)
+                if (gp.getG() < east && gp.getG() > west) {
                     ret = true;
+                }
 //        else
 //          System.out.println(gp.getG() + " not between " + west + " and " + east);
             } else if (east < 0.0D) {
                 double _east_ = 360D + east;
                 double _lng_ = gp.getG();
-                if (_lng_ < 0.0D)
+                if (_lng_ < 0.0D) {
                     _lng_ += 360D;
-                if (_lng_ < _east_ && _lng_ > west)
+                }
+                if (_lng_ < _east_ && _lng_ > west) {
                     ret = true;
-            } else if (gp.getG() > east || gp.getG() < west) // Not sure...
+                }
+            } else if (gp.getG() > east || gp.getG() < west) { // Not sure...
                 ret = true;
+            }
         }
         return ret;
     }
@@ -2374,20 +2396,22 @@ public class ChartPanel extends JPanel
         Font f = g.getFont();
         int nbCr = 0;
         int crOffset;
-        for (crOffset = 0; (crOffset = s.indexOf("\n", crOffset) + 1) > 0; )
+        for (crOffset = 0; (crOffset = s.indexOf("\n", crOffset) + 1) > 0; ) {
             nbCr++;
+        }
 
         String txt[] = new String[nbCr + 1];
         int i = 0;
         crOffset = 0;
-        for (i = 0; i < nbCr; i++)
+        for (i = 0; i < nbCr; i++) {
             txt[i] = s.substring(crOffset, (crOffset = s.indexOf("\n", crOffset) + 1) - 1);
-
+        }
         txt[i] = s.substring(crOffset);
         int strWidth = 0;
         for (i = 0; i < nbCr + 1; i++) {
-            if (g.getFontMetrics(f).stringWidth(txt[i]) > strWidth)
+            if (g.getFontMetrics(f).stringWidth(txt[i]) > strWidth) {
                 strWidth = g.getFontMetrics(f).stringWidth(txt[i]);
+            }
         }
         Color c = g.getColor(); // postitTextColor
         g.setColor(bgcolor);
@@ -2420,14 +2444,14 @@ public class ChartPanel extends JPanel
             float alpha = 1.0f;
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         }
-        if (fgcolor != null)
+        if (fgcolor != null) {
             g.setColor(fgcolor);
-        else
+        } else {
             g.setColor(c);
-
-        for (i = 0; i < nbCr + 1; i++)
+        }
+        for (i = 0; i < nbCr + 1; i++) {
             g.drawString(txt[i], startX + bevel + postitOffset, startY + (i * f.getSize()));
-
+        }
         g.setColor(origin);
     }
 
@@ -2446,20 +2470,21 @@ public class ChartPanel extends JPanel
         Font f = g.getFont();
         int nbCr = 0;
         int crOffset;
-        for (crOffset = 0; (crOffset = s.indexOf("\n", crOffset) + 1) > 0; )
+        for (crOffset = 0; (crOffset = s.indexOf("\n", crOffset) + 1) > 0; ) {
             nbCr++;
-
+        }
         String txt[] = new String[nbCr + 1];
         int i = 0;
         crOffset = 0;
-        for (i = 0; i < nbCr; i++)
+        for (i = 0; i < nbCr; i++) {
             txt[i] = s.substring(crOffset, (crOffset = s.indexOf("\n", crOffset) + 1) - 1);
-
+        }
         txt[i] = s.substring(crOffset);
         int strWidth = 0;
         for (i = 0; i < nbCr + 1; i++) {
-            if (g.getFontMetrics(f).stringWidth(txt[i]) > strWidth)
+            if (g.getFontMetrics(f).stringWidth(txt[i]) > strWidth) {
                 strWidth = g.getFontMetrics(f).stringWidth(txt[i]);
+            }
         }
         Color c = g.getColor(); // postitTextColor
         g.setColor(bgcolor);
@@ -2508,14 +2533,14 @@ public class ChartPanel extends JPanel
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         }
 
-        if (fgcolor != null)
+        if (fgcolor != null) {
             g.setColor(fgcolor);
-        else
+        } else {
             g.setColor(c);
-
-        for (i = 0; i < nbCr + 1; i++)
+        }
+        for (i = 0; i < nbCr + 1; i++) {
             g.drawString(txt[i], startX + bevel + postitOffset, startY + (i * f.getSize()));
-
+        }
         g.setColor(origin);
     }
 
@@ -2545,10 +2570,12 @@ public class ChartPanel extends JPanel
         int y = this.getVisibleRect().y;
         int increment = 1;
         if ((e.getModifiers() & MouseEvent.BUTTON2_MASK) != 0 ||
-                (e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+                (e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
             increment = 10;
-        if ((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0)
+        }
+        if ((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0) {
             increment *= 2;
+        }
 
         if (mouseEdgeProximity == MOUSE_CLOSE_TO_TOP) {
 //    System.out.println("Scrolling Up...");
