@@ -8,26 +8,25 @@ import chartview.gui.util.param.ParamPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PatternEditorPanel
         extends JPanel {
-    private FaxPatternEditTablePanel faxPatternEditTablePanel = new FaxPatternEditTablePanel();
-    private GRIBPatternEditorPanel gribPatternEditorPanel = new GRIBPatternEditorPanel();
-    private ChartDimensionInputPanel chartDimensionEditorPanel = new ChartDimensionInputPanel();
+    private final FaxPatternEditTablePanel faxPatternEditTablePanel = new FaxPatternEditTablePanel();
+    private final GRIBPatternEditorPanel gribPatternEditorPanel = new GRIBPatternEditorPanel();
+    private final ChartDimensionInputPanel chartDimensionEditorPanel = new ChartDimensionInputPanel();
 
-    private transient Object[][] faxData = null;
-    private transient Object[][] gribData = null;
+    private transient Object[][] faxData;
+    private transient Object[][] gribData;
     private boolean grib = false;
-    private JCheckBox fitColumnsCheckBox = new JCheckBox();
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JLabel authorLabel = new JLabel();
-    private JTextField authorTextField = new JTextField();
-    private JPanel jPanel1 = new JPanel(new GridBagLayout());
-    private JLabel faxDisplayLabel = new JLabel();
-    private JRadioButton checkBoxOptionRadioButton = new JRadioButton();
-    private JRadioButton radioButtonOptionRadioButton = new JRadioButton();
-    private ButtonGroup bg = new ButtonGroup();
+    private final JCheckBox fitColumnsCheckBox = new JCheckBox();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JLabel authorLabel = new JLabel();
+    private final JTextField authorTextField = new JTextField();
+    private final JPanel jPanel1 = new JPanel(new GridBagLayout());
+    private final JLabel faxDisplayLabel = new JLabel();
+    private final JRadioButton checkBoxOptionRadioButton = new JRadioButton();
+    private final JRadioButton radioButtonOptionRadioButton = new JRadioButton();
+    private final ButtonGroup bg = new ButtonGroup();
 
     public PatternEditorPanel(String author,
                               int projection,
@@ -92,17 +91,12 @@ public class PatternEditorPanel
         }
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         this.setLayout(gridBagLayout1);
         this.setSize(new Dimension(619, 687));
         this.setPreferredSize(new Dimension(619, 687));
         fitColumnsCheckBox.setText("Auto-resize Columns"); // LOCALIZE
-        fitColumnsCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                fitColumnsCheckBox_actionPerformed(e);
-            }
-        });
+        fitColumnsCheckBox.addActionListener(e -> fitColumnsCheckBox_actionPerformed(e));
         this.add(chartDimensionEditorPanel, new GridBagConstraints(0, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         this.add(faxPatternEditTablePanel, new GridBagConstraints(0, 2, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -131,7 +125,7 @@ public class PatternEditorPanel
                 new Insets(0, 0, 0, 0), 0, 0));
         fitColumnsCheckBox.setSelected(faxPatternEditTablePanel.getTableResize() == TableResizeValue.ON);
         authorLabel.setText("Author");  // LOCALIZE
-        authorLabel.setFont(new Font("Tahoma", 2, 11));
+        authorLabel.setFont(new Font("Tahoma", Font.ITALIC, 11));
         faxDisplayLabel.setText("Fax Display Option");
         checkBoxOptionRadioButton.setText("Check Box");
         checkBoxOptionRadioButton.setSelected(true);

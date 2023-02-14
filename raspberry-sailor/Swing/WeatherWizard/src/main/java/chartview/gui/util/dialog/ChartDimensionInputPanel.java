@@ -1,6 +1,5 @@
 package chartview.gui.util.dialog;
 
-
 import chart.components.ui.ChartPanelInterface;
 import chartview.ctx.WWContext;
 import chartview.util.WWGnlUtilities;
@@ -9,39 +8,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 
-
 public class ChartDimensionInputPanel
         extends JPanel {
-    private JTextField topLatTextField = new JTextField();
-    private JLabel nLabel = new JLabel();
-    private JComboBox<String> topLatComboBox = new JComboBox<>();
-    private JLabel sLabel = new JLabel();
-    private JTextField bottomLatTextField = new JTextField();
-    private JComboBox<String> bottomLatComboBox = new JComboBox<>();
-    private JLabel wLabel = new JLabel();
-    private JLabel eLabel = new JLabel();
-    private JComboBox<String> leftLongComboBox = new JComboBox<>();
-    private JComboBox<String> rightLongComboBox = new JComboBox<>();
-    private JTextField leftLongTextField = new JTextField();
-    private JTextField rightLongTextField = new JTextField();
-    private JLabel chartItalicLabel = new JLabel();
+    private final JTextField topLatTextField = new JTextField();
+    private final JLabel nLabel = new JLabel();
+    private final JComboBox<String> topLatComboBox = new JComboBox<>();
+    private final JLabel sLabel = new JLabel();
+    private final JTextField bottomLatTextField = new JTextField();
+    private final JComboBox<String> bottomLatComboBox = new JComboBox<>();
+    private final JLabel wLabel = new JLabel();
+    private final JLabel eLabel = new JLabel();
+    private final JComboBox<String> leftLongComboBox = new JComboBox<>();
+    private final JComboBox<String> rightLongComboBox = new JComboBox<>();
+    private final JTextField leftLongTextField = new JTextField();
+    private final JTextField rightLongTextField = new JTextField();
+    private final JLabel chartItalicLabel = new JLabel();
 
-    private JSeparator jSeparator1 = new JSeparator();
-    private JLabel dimensionLabel = new JLabel();
-    private JLabel widthLabel = new JLabel();
-    private JLabel heightLabel = new JLabel();
-    private JFormattedTextField widthFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
-    private JFormattedTextField heightFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
-    private JSeparator jSeparator2 = new JSeparator();
-    private JLabel offsetLabel = new JLabel();
-    private JLabel xOffsetLabel = new JLabel();
-    private JLabel yOffsetLabel = new JLabel();
-    private JFormattedTextField xOffsetFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
-    private JFormattedTextField yOffsetFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
-    private JLabel projectionLabel = new JLabel();
-    private JComboBox<String> projectionComboBox = new JComboBox<>();
-    private JSeparator jSeparator3 = new JSeparator();
-    private JCheckBox showChartCheckBox = new JCheckBox();
+    private final JSeparator jSeparator1 = new JSeparator();
+    private final JLabel dimensionLabel = new JLabel();
+    private final JLabel widthLabel = new JLabel();
+    private final JLabel heightLabel = new JLabel();
+    private final JFormattedTextField widthFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
+    private final JFormattedTextField heightFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
+    private final JSeparator jSeparator2 = new JSeparator();
+    private final JLabel offsetLabel = new JLabel();
+    private final JLabel xOffsetLabel = new JLabel();
+    private final JLabel yOffsetLabel = new JLabel();
+    private final JFormattedTextField xOffsetFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
+    private final JFormattedTextField yOffsetFormattedTextField = new JFormattedTextField(new DecimalFormat("####0"));
+    private final JLabel projectionLabel = new JLabel();
+    private final JComboBox<String> projectionComboBox = new JComboBox<>();
+    private final JSeparator jSeparator3 = new JSeparator();
+    private final JCheckBox showChartCheckBox = new JCheckBox();
 
     public ChartDimensionInputPanel() {
         try {
@@ -52,8 +50,7 @@ public class ChartDimensionInputPanel
         }
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         this.setLayout(new GridBagLayout());
         this.setSize(new Dimension(532, 371));
 
@@ -82,7 +79,7 @@ public class ChartDimensionInputPanel
         rightLongTextField.setPreferredSize(new Dimension(120, 20));
         rightLongTextField.setHorizontalAlignment(JTextField.RIGHT);
         chartItalicLabel.setText(WWGnlUtilities.buildMessage("chart"));
-        chartItalicLabel.setFont(new Font("Tahoma", 3, 11));
+        chartItalicLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 
         projectionComboBox.removeAllItems();
         for (ChartPanelInterface.Projection prj : ChartPanelInterface.Projection.values())

@@ -35,8 +35,6 @@ import oracle.xml.parser.v2.XMLElement;
 import org.w3c.dom.Text;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;

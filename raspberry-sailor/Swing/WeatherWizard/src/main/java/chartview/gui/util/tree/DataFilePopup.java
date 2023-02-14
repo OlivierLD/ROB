@@ -40,31 +40,31 @@ public class DataFilePopup
         extends JPopupMenu
         implements ActionListener,
                    PopupMenuListener {
-    private JMenuItem show;
-    private JMenuItem showNewTab;
-    private JMenuItem refresh;
-    private JMenuItem filter;
-    private JMenuItem gribDetails;
-    private JMenuItem edit;
-    private JMenuItem rename;
-    private JMenuItem copyFavorite;
-    private JMenuItem copyLocally;
-    private JMenuItem fileSystem;
-    private JMenu sortByName;
+    private final JMenuItem show;
+    private final JMenuItem showNewTab;
+    private final JMenuItem refresh;
+    private final JMenuItem filter;
+    private final JMenuItem gribDetails;
+    private final JMenuItem edit;
+    private final JMenuItem rename;
+    private final JMenuItem copyFavorite;
+    private final JMenuItem copyLocally;
+    private final JMenuItem fileSystem;
+    private final JMenu sortByName;
 
-    private JMenuItem sortByNameAsc;
-    private JMenuItem sortByNameDesc;
+    private final JMenuItem sortByNameAsc;
+    private final JMenuItem sortByNameDesc;
 
-    private JMenu sortByDate;
+    private final JMenu sortByDate;
 
-    private JMenuItem sortByDateAsc;
-    private JMenuItem sortByDateDesc;
+    private final JMenuItem sortByDateAsc;
+    private final JMenuItem sortByDateDesc;
 
-    private JMenuItem archiveComposite;
-    private JMenuItem unarchiveComposite;
-    private JMenuItem archiveCompositeDir;
+    private final JMenuItem archiveComposite;
+    private final JMenuItem unarchiveComposite;
+    private final JMenuItem archiveCompositeDir;
 
-    private JTreeFilePanel parent = null;
+    private final JTreeFilePanel parent;
 
     private final static String SHOW = WWGnlUtilities.buildMessage("show");
     private final static String SHOW_NEW_TAB = WWGnlUtilities.buildMessage("show-in-new-tab");
@@ -493,22 +493,31 @@ public class DataFilePopup
 
                         try {
                             String prjStr = ((XMLElement) (doc.selectNodes("/pattern/projection").item(0))).getAttribute("type");
-                            if (prjStr.equals(CommandPanel.MERCATOR)) {
-                              projection = ChartPanelInterface.MERCATOR;
-                            } else if (prjStr.equals(CommandPanel.ANAXIMANDRE)) {
-                              projection = ChartPanelInterface.ANAXIMANDRE;
-                            } else if (prjStr.equals(CommandPanel.LAMBERT)) {
-                              projection = ChartPanelInterface.LAMBERT;
-                            } else if (prjStr.equals(CommandPanel.GLOBE)) {
-                              projection = ChartPanelInterface.GLOBE_VIEW;
-                            } else if (prjStr.equals(CommandPanel.SATELLITE)) {
-                              projection = ChartPanelInterface.SATELLITE_VIEW;
-                            } else if (prjStr.equals(CommandPanel.CONIC_EQU)) {
-                              projection = ChartPanelInterface.CONIC_EQUIDISTANT;
-                            } else if (prjStr.equals(CommandPanel.STEREO)) {
-                              projection = ChartPanelInterface.STEREOGRAPHIC;
-                            } else if (prjStr.equals(CommandPanel.POLAR_STEREO)) {
-                              projection = ChartPanelInterface.POLAR_STEREOGRAPHIC;
+                            switch (prjStr) {
+                                case CommandPanel.MERCATOR:
+                                    projection = ChartPanelInterface.MERCATOR;
+                                    break;
+                                case CommandPanel.ANAXIMANDRE:
+                                    projection = ChartPanelInterface.ANAXIMANDRE;
+                                    break;
+                                case CommandPanel.LAMBERT:
+                                    projection = ChartPanelInterface.LAMBERT;
+                                    break;
+                                case CommandPanel.GLOBE:
+                                    projection = ChartPanelInterface.GLOBE_VIEW;
+                                    break;
+                                case CommandPanel.SATELLITE:
+                                    projection = ChartPanelInterface.SATELLITE_VIEW;
+                                    break;
+                                case CommandPanel.CONIC_EQU:
+                                    projection = ChartPanelInterface.CONIC_EQUIDISTANT;
+                                    break;
+                                case CommandPanel.STEREO:
+                                    projection = ChartPanelInterface.STEREOGRAPHIC;
+                                    break;
+                                case CommandPanel.POLAR_STEREO:
+                                    projection = ChartPanelInterface.POLAR_STEREOGRAPHIC;
+                                    break;
                             }
                         } catch (Exception ignore) {
                         }
@@ -676,7 +685,7 @@ public class DataFilePopup
                                 gribNode.setAttribute("smooth", Integer.toString(pep.get2DSmooth()));
                                 gribNode.setAttribute("time-smooth", Integer.toString(pep.getTimeSmooth()));
 
-                                XMLElement grib = null;
+                                XMLElement grib;
                                 if (gribNode.selectNodes("dynamic-grib").getLength() > 0) {
                                     grib = (XMLElement) gribNode.selectNodes("dynamic-grib").item(0);
                                     grib.setAttribute("hint", (String) newGribData[0][0]);
@@ -855,13 +864,13 @@ public class DataFilePopup
                         JOptionPane.QUESTION_MESSAGE);
                 final Boolean deleteWhenDone = Boolean.valueOf(resp == JOptionPane.YES_OPTION);
                 if (resp != JOptionPane.CANCEL_OPTION) {
-                    List<String> fileList = new ArrayList<String>();
-                    for (int i = 0; i < dtnArray.length; i++) {
-                        if (dtnArray[i] instanceof JTreeFilePanel.CompositeFileTreeNode) {
-                            JTreeFilePanel.CompositeFileTreeNode dftn = (JTreeFilePanel.CompositeFileTreeNode) dtnArray[i];
+                    List<String> fileList = new ArrayList<>();
+                    for (DefaultMutableTreeNode defaultMutableTreeNode : dtnArray) {
+                        if (defaultMutableTreeNode instanceof JTreeFilePanel.CompositeFileTreeNode) {
+                            JTreeFilePanel.CompositeFileTreeNode dftn = (JTreeFilePanel.CompositeFileTreeNode) defaultMutableTreeNode;
                             fileList.add(dftn.dir + File.separator + dftn.name);
                         } else {
-                          System.out.println("One node ignored...");
+                            System.out.println("One node ignored...");
                         }
                     }
                     // Sort
@@ -949,11 +958,7 @@ public class DataFilePopup
             edit.setEnabled(true);
             rename.setEnabled(true);
 //    System.out.println("Parent:" + dtn.getParent().toString());
-            if (!dtn.getParent().toString().equals(FAVORITE_DIRECTORY_NAME) && !((JTreeFilePanel.PatternFileTreeNode) dtn).dir.startsWith("http://")) {
-              copyFavorite.setEnabled(true);
-            } else {
-              copyFavorite.setEnabled(false);
-            }
+            copyFavorite.setEnabled(!dtn.getParent().toString().equals(FAVORITE_DIRECTORY_NAME) && !((JTreeFilePanel.PatternFileTreeNode) dtn).dir.startsWith("http://"));
             fileSystem.setEnabled(!((JTreeFilePanel.PatternFileTreeNode) dtn).dir.startsWith("http://"));
             gribDetails.setEnabled(false);
             archiveComposite.setEnabled(false);
@@ -972,9 +977,9 @@ public class DataFilePopup
             boolean enableCompositeArchive = false;
 
             if (dtnArray != null) {
-                for (int i = 0; i < dtnArray.length; i++) {
-                    if (dtnArray[i] != null && dtnArray[i] instanceof JTreeFilePanel.CompositeFileTreeNode) {
-                        JTreeFilePanel.CompositeFileTreeNode cftn = (JTreeFilePanel.CompositeFileTreeNode) dtnArray[i];
+                for (DefaultMutableTreeNode defaultMutableTreeNode : dtnArray) {
+                    if (defaultMutableTreeNode != null && defaultMutableTreeNode instanceof JTreeFilePanel.CompositeFileTreeNode) {
+                        JTreeFilePanel.CompositeFileTreeNode cftn = (JTreeFilePanel.CompositeFileTreeNode) defaultMutableTreeNode;
                         if (cftn.name.endsWith(".xml")) { // And nor .waz
                             enableCompositeArchive = true;
                             break;
