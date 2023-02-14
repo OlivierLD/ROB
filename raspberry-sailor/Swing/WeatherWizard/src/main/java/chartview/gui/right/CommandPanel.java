@@ -1925,17 +1925,17 @@ public class CommandPanel
                     westText.setNodeValue(Double.toString(wLong));
                     west.appendChild(westText);
 
-                    XMLElement chartwidth = (XMLElement) pattern.createElement("chartwidth");
-                    root.appendChild(chartwidth);
-                    Text chartwidthText = pattern.createTextNode("#text");
-                    chartwidthText.setNodeValue(Integer.toString(chartPanel.getWidth()));
-                    chartwidth.appendChild(chartwidthText);
+                    XMLElement chartWidth = (XMLElement) pattern.createElement("chartwidth");
+                    root.appendChild(chartWidth);
+                    Text chartWidthText = pattern.createTextNode("#text");
+                    chartWidthText.setNodeValue(Integer.toString(chartPanel.getWidth()));
+                    chartWidth.appendChild(chartWidthText);
 
-                    XMLElement chartheight = (XMLElement) pattern.createElement("chartheight");
-                    root.appendChild(chartheight);
-                    Text chartheightText = pattern.createTextNode("#text");
-                    chartheightText.setNodeValue(Integer.toString(chartPanel.getHeight()));
-                    chartheight.appendChild(chartheightText);
+                    XMLElement chartHeight = (XMLElement) pattern.createElement("chartheight");
+                    root.appendChild(chartHeight);
+                    Text chartHeightText = pattern.createTextNode("#text");
+                    chartHeightText.setNodeValue(Integer.toString(chartPanel.getHeight()));
+                    chartHeight.appendChild(chartHeightText);
 
                     String fileName = WWGnlUtilities.chooseFile(instance,
                             JFileChooser.FILES_ONLY,

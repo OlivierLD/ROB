@@ -51,7 +51,7 @@
    <param id="49">0;153;153</param>
    <param id="50">false</param>
    <param id="51">true</param>
-   <param id="52">COM10</param>
+   <param id="52">Empty Serial Port list</param>
    <param id="53">3</param>
    <param id="54">7001</param>
    <param id="55">8001</param>
@@ -83,4 +83,9 @@
    <param id="81">1.0</param>
    <param id="82">Arial, 12, , </param>
    <param id="83">false</param>
+   <param id="84">38 0 N/122 0 W</param>
+   <param id="85">Ocean Beach</param>
+   <param id="86">olivier@lediouris.net</param>
+   <param id="87">America/Los_Angeles</param>
+   <param id="88"></param>
 </app-parameters>

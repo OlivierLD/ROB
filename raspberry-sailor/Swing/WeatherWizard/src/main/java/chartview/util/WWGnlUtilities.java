@@ -617,13 +617,13 @@ public class WWGnlUtilities {
             e.printStackTrace();
         }
 
-        int retval = chooser.showOpenDialog(parent);
+//        int retval = chooser.showOpenDialog(parent);
+        int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
         switch (retval) {
             case JFileChooser.APPROVE_OPTION:
                 fileName = chooser.getSelectedFile().toString();
                 break;
             case JFileChooser.CANCEL_OPTION:
-                break;
             case JFileChooser.ERROR_OPTION:
                 break;
         }
