@@ -1053,8 +1053,9 @@ public class AdjustFrame extends JFrame {
         jSplitPane.setOneTouchExpandable(true);
 //  jSplitPane.setOneTouchExpandable(false);
 //  jSplitPane.setDividerSize(8);
-        jSplitPane.setDividerLocation(175);
-//  jSplitPane.setDividerLocation(.20D);
+
+//        jSplitPane.setDividerLocation(175);
+        jSplitPane.setDividerLocation(.20D);
 
         this.getContentPane().add(jSplitPane, BorderLayout.CENTER);
 

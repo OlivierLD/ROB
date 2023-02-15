@@ -31,6 +31,7 @@ include('raspberry-sailor:Swing:ww-user-exits:WW-UserExits')
 include('raspberry-sailor:Swing:ww-user-exits:WW-UserExits_II')
 include('raspberry-sailor:Swing:ww-user-exits:WW-UserExit_Dustlets')
 include('raspberry-sailor:Swing:ww-user-exits:WW-UserExit_CurrentDustlet')
+include('raspberry-sailor:Swing:ww-user-exits:WW-UserExits_Processing')
 
 include('raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic')
 include('raspberry-sailor:MUX-implementations:NMEA-mux-extensions')

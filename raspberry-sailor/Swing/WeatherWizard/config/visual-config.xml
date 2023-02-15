@@ -2,6 +2,6 @@
    <tree-pane id="0" expanded="true"/>
    <tree-pane id="1" expanded="true"/>
    <tree-pane id="2" expanded="true"/>
-   <tree-pane id="3" expanded="true"/>
-   <tree-pane id="4" expanded="true"/>
+   <tree-pane id="3" expanded="false"/>
+   <tree-pane id="4" expanded="false"/>
 </visual-config>

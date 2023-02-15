@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-@SuppressWarnings("serial")
 public class RoutingPanel extends JPanel {
     private int current_routing_mode = -1;
 
@@ -42,58 +41,58 @@ public class RoutingPanel extends JPanel {
 
     private List<RoutingPoint> bestRoute = null;
 
-    private GridBagLayout gridBagLayoutOne = new GridBagLayout();
-    private GridBagLayout gridBagLayoutTwo = new GridBagLayout();
+    private final GridBagLayout gridBagLayoutOne = new GridBagLayout();
+    private final GridBagLayout gridBagLayoutTwo = new GridBagLayout();
 
-    private JRadioButton trueWindRadioButton = new JRadioButton(WWGnlUtilities.buildMessage("true-wind"));
-    private JRadioButton appWindRadioButton = new JRadioButton(WWGnlUtilities.buildMessage("app-wind"));
-    private JPanel trueAppPanel = new JPanel();
-    private ButtonGroup group = new ButtonGroup();
+    private final JRadioButton trueWindRadioButton = new JRadioButton(WWGnlUtilities.buildMessage("true-wind"));
+    private final JRadioButton appWindRadioButton = new JRadioButton(WWGnlUtilities.buildMessage("app-wind"));
+    private final JPanel trueAppPanel = new JPanel();
+    private final ButtonGroup group = new ButtonGroup();
 
-    private WindVanePanel windVanePanel = new WindVanePanel();
-    private WindGaugePanel windGaugePanel = new WindGaugePanel();
-    private StationDataPanel stationDataPanel = new StationDataPanel();
-    private BSPDisplay bspDisplay = new BSPDisplay();
-    private HeadingPanel headingPanel = new HeadingPanel(true); // with glossy effect
+    private final WindVanePanel windVanePanel = new WindVanePanel();
+    private final WindGaugePanel windGaugePanel = new WindGaugePanel();
+    private final StationDataPanel stationDataPanel = new StationDataPanel();
+    private final BSPDisplay bspDisplay = new BSPDisplay();
+    private final HeadingPanel headingPanel = new HeadingPanel(true); // with glossy effect
 
-    private JTabbedPane tabbedPane = new JTabbedPane();
-    private JPanel stepPanel = new JPanel();
-    private JPanel summaryPanelHolder = new JPanel();
-    private JPanel summaryPanel = new JPanel();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
+    private final JPanel stepPanel = new JPanel();
+    private final JPanel summaryPanelHolder = new JPanel();
+    private final JPanel summaryPanel = new JPanel();
 
-    private JLabel dateLabel = new JLabel();
-    private JSlider routeSlider = new JSlider();
-    private JLabel positionLabel = new JLabel();
+    private final JLabel dateLabel = new JLabel();
+    private final JSlider routeSlider = new JSlider();
+    private final JLabel positionLabel = new JLabel();
 
-    private JLabel fromPositionLabel = new JLabel(WWGnlUtilities.buildMessage("from"));
-    private JLabel toPositionLabel = new JLabel(WWGnlUtilities.buildMessage("to"));
-    private JLabel fromDateLabel = new JLabel(WWGnlUtilities.buildMessage("from"));
-    private JLabel toDateLabel = new JLabel(WWGnlUtilities.buildMessage("to"));
-    private JLabel duration = new JLabel(WWGnlUtilities.buildMessage("duration"));
-    private JLabel bspRangeLabel = new JLabel(WWGnlUtilities.buildMessage("bsp-range"));
-    private JLabel twsRangeLabel = new JLabel(WWGnlUtilities.buildMessage("tws-range"));
-    private JLabel twaRangeLabel = new JLabel(WWGnlUtilities.buildMessage("twa-range"));
+    private final JLabel fromPositionLabel = new JLabel(WWGnlUtilities.buildMessage("from"));
+    private final JLabel toPositionLabel = new JLabel(WWGnlUtilities.buildMessage("to"));
+    private final JLabel fromDateLabel = new JLabel(WWGnlUtilities.buildMessage("from"));
+    private final JLabel toDateLabel = new JLabel(WWGnlUtilities.buildMessage("to"));
+    private final JLabel duration = new JLabel(WWGnlUtilities.buildMessage("duration"));
+    private final JLabel bspRangeLabel = new JLabel(WWGnlUtilities.buildMessage("bsp-range"));
+    private final JLabel twsRangeLabel = new JLabel(WWGnlUtilities.buildMessage("tws-range"));
+    private final JLabel twaRangeLabel = new JLabel(WWGnlUtilities.buildMessage("twa-range"));
 
     int routeSliderValue = 1;
-    private JLabel gcLabel = new JLabel();
-    private JLabel actualDistLabel = new JLabel();
-    private JButton prevButton = new JButton();
-    private JButton nextButton = new JButton();
-    private JButton syncGribButton = new JButton();
-    private JCheckBox autoSyncCheckBox = new JCheckBox();
-    private JPanel bottomPanel = new JPanel();
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JSeparator jSeparator1 = new JSeparator();
-    private JSeparator jSeparator2 = new JSeparator();
-    private JSeparator jSeparator3 = new JSeparator();
-    private JLabel elapsedLabel = new JLabel();
-    private JSeparator jSeparator4 = new JSeparator();
+    private final JLabel gcLabel = new JLabel();
+    private final JLabel actualDistLabel = new JLabel();
+    private final JButton prevButton = new JButton();
+    private final JButton nextButton = new JButton();
+    private final JButton syncGribButton = new JButton();
+    private final JCheckBox autoSyncCheckBox = new JCheckBox();
+    private final JPanel bottomPanel = new JPanel();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JSeparator jSeparator1 = new JSeparator();
+    private final JSeparator jSeparator2 = new JSeparator();
+    private final JSeparator jSeparator3 = new JSeparator();
+    private final JLabel elapsedLabel = new JLabel();
+    private final JSeparator jSeparator4 = new JSeparator();
 
-    private JCheckBox showIsochrons = new JCheckBox(WWGnlUtilities.buildMessage("show-isochrones"));
-    private JCheckBox showRoute = new JCheckBox(WWGnlUtilities.buildMessage("show-best-route"));
-    private JCheckBox showLabels = new JCheckBox(WWGnlUtilities.buildMessage("routing-labels"));
+    private final JCheckBox showIsochrons = new JCheckBox(WWGnlUtilities.buildMessage("show-isochrones"));
+    private final JCheckBox showRoute = new JCheckBox(WWGnlUtilities.buildMessage("show-best-route"));
+    private final JCheckBox showLabels = new JCheckBox(WWGnlUtilities.buildMessage("routing-labels"));
 
-    private JButton saveButton = new JButton("Save routing as...");
+    private final JButton saveButton = new JButton("Save routing as...");
 
     public RoutingPanel() {
         try {
@@ -122,17 +121,9 @@ public class RoutingPanel extends JPanel {
         group.add(trueWindRadioButton);
         group.add(appWindRadioButton);
         trueWindRadioButton.setSelected(true);
-        trueWindRadioButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                trueWindRadioButton_actionPerformed(e);
-            }
-        });
+        trueWindRadioButton.addActionListener(e -> trueWindRadioButton_actionPerformed(e));
         appWindRadioButton.setSelected(false);
-        appWindRadioButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                appWindRadioButton_actionPerformed(e);
-            }
-        });
+        appWindRadioButton.addActionListener(e -> appWindRadioButton_actionPerformed(e));
         trueAppPanel.add(trueWindRadioButton);
         trueAppPanel.add(appWindRadioButton);
 
@@ -151,17 +142,15 @@ public class RoutingPanel extends JPanel {
         routeSlider.setSnapToTicks(true);
         routeSlider.setPaintTicks(true);
         routeSlider.setMajorTickSpacing(1);
-        routeSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                JSlider slider = (JSlider) evt.getSource();
+        routeSlider.addChangeListener(evt -> {
+            JSlider slider = (JSlider) evt.getSource();
 
-                if (!slider.getValueIsAdjusting()) {
-                    int sv = slider.getValue();
-                    if (sv != routeSliderValue) {
-                        routeSliderValue = sv;
-                        //            System.out.println("Slider Value:" + routeSliderValue);
-                        updateData();
-                    }
+            if (!slider.getValueIsAdjusting()) {
+                int sv = slider.getValue();
+                if (sv != routeSliderValue) {
+                    routeSliderValue = sv;
+                    //            System.out.println("Slider Value:" + routeSliderValue);
+                    updateData();
                 }
             }
         });
@@ -171,40 +160,24 @@ public class RoutingPanel extends JPanel {
 //  prevButton.setText("<");
         prevButton.setIcon(new ImageIcon(this.getClass().getResource("img/previous.png")));
         prevButton.setToolTipText(WWGnlUtilities.buildMessage("previous-step"));
-        prevButton.setFont(new Font("Courier New", 0, 10));
+        prevButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         prevButton.setPreferredSize(new Dimension(22, 18));
-        prevButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                prevButton_actionPerformed(e);
-            }
-        });
+        prevButton.addActionListener(e -> prevButton_actionPerformed(e));
 //  nextButton.setText(">");
         nextButton.setIcon(new ImageIcon(this.getClass().getResource("img/next.png")));
-        nextButton.setFont(new Font("Courier New", 0, 10));
+        nextButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         nextButton.setPreferredSize(new Dimension(22, 18));
         nextButton.setToolTipText(WWGnlUtilities.buildMessage("next-step"));
-        nextButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                nextButton_actionPerformed(e);
-            }
-        });
+        nextButton.addActionListener(e -> nextButton_actionPerformed(e));
 //  syncGribButton.setText("S");
         syncGribButton.setIcon(new ImageIcon(this.getClass().getResource("img/action.png")));
-        syncGribButton.setFont(new Font("Courier New", 0, 10));
+        syncGribButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         syncGribButton.setPreferredSize(new Dimension(22, 18));
         syncGribButton.setToolTipText(WWGnlUtilities.buildMessage("synchronize-with-grib"));
-        syncGribButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                syncGribButton_actionPerformed(e);
-            }
-        });
+        syncGribButton.addActionListener(e -> syncGribButton_actionPerformed(e));
         autoSyncCheckBox.setText("AutoSync");
         autoSyncCheckBox.setActionCommand("autoSyncCheckBox");
-        autoSyncCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                autoSyncCheckBox_actionPerformed(e);
-            }
-        });
+        autoSyncCheckBox.addActionListener(e -> autoSyncCheckBox_actionPerformed(e));
         bottomPanel.setLayout(gridBagLayout1);
         elapsedLabel.setText("ELapsed: 0");
         stepPanel.add(windVanePanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH, GridBagConstraints.NONE,
@@ -320,35 +293,26 @@ public class RoutingPanel extends JPanel {
                 new GridBagConstraints(0, 17, 3, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                         new Insets(0, 0, 0, 0), 0, 0));
 
-        showIsochrons.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
-                cp.setDrawIsochrons(showIsochrons.isSelected());
-                cp.getChartPanel().repaint();
-            }
+        showIsochrons.addActionListener(e -> {
+            CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
+            cp.setDrawIsochrons(showIsochrons.isSelected());
+            cp.getChartPanel().repaint();
         });
-        showRoute.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
-                cp.setDrawBestRoute(showRoute.isSelected());
-                showLabels.setEnabled(showRoute.isSelected());
-                cp.getChartPanel().repaint();
-            }
+        showRoute.addActionListener(e -> {
+            CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
+            cp.setDrawBestRoute(showRoute.isSelected());
+            showLabels.setEnabled(showRoute.isSelected());
+            cp.getChartPanel().repaint();
         });
-        showLabels.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
-                cp.setPostitOnRoute(showLabels.isSelected());
-                cp.getChartPanel().repaint();
-            }
+        showLabels.addActionListener(e -> {
+            CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
+            cp.setPostitOnRoute(showLabels.isSelected());
+            cp.getChartPanel().repaint();
         });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                // Re-suggest to save the routing
-                CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
-                RoutingUtil.outputRouting(cp, cp.getFrom(), cp.getTo(), cp.getClosestPoint(), cp.getAllCalculatedIsochrons(), true);
-            }
+        saveButton.addActionListener(actionEvent -> {
+            // Re-suggest to save the routing
+            CommandPanel cp = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel();
+            RoutingUtil.outputRouting(cp, cp.getFrom(), cp.getTo(), cp.getClosestPoint(), cp.getAllCalculatedIsochrons(), true);
         });
         this.validate();
 
@@ -378,49 +342,46 @@ public class RoutingPanel extends JPanel {
     }
 
     private void updateData() {
-        if (routeSliderValue == 1)
-            prevButton.setEnabled(false);
-        else
-            prevButton.setEnabled(true);
-
-        if (routeSliderValue == routeSlider.getMaximum())
-            nextButton.setEnabled(false);
-        else
-            nextButton.setEnabled(true);
-
+        prevButton.setEnabled(routeSliderValue != 1);
+        nextButton.setEnabled(routeSliderValue != routeSlider.getMaximum());
         RoutingPoint rp = null;
         RoutingPoint ic = null; // Isochron Center
         try {
             int r = bestRoute.size() - routeSliderValue;
             rp = bestRoute.get(r);
-            if (r == 0) // Last one
+            if (r == 0) { // Last one
                 ic = rp;
-            else
+            } else {
                 ic = bestRoute.get(r - 1);
+            }
             setRouteData(rp, ic, current_routing_mode);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (autoSyncCheckBox.isSelected())
+        if (autoSyncCheckBox.isSelected()) {
             syncGribButton_actionPerformed(null);
+        }
     }
 
     public void setAwa(int awa) {
-        if (appWindRadioButton.isSelected())
+        if (appWindRadioButton.isSelected()) {
             windVanePanel.setWindDir(awa);
+        }
         stationDataPanel.setAWA(awa);
     }
 
     public void setAws(float aws) {
-        if (appWindRadioButton.isSelected())
+        if (appWindRadioButton.isSelected()) {
             windGaugePanel.setTws(aws);
+        }
         stationDataPanel.setAWS(aws);
     }
 
     public void setTwa(int twa) {
         this.twa = twa;
-        if (trueWindRadioButton.isSelected())
+        if (trueWindRadioButton.isSelected()) {
             windVanePanel.setWindDir(twa);
+        }
         stationDataPanel.setTWA(twa);
     }
 
@@ -439,8 +400,9 @@ public class RoutingPanel extends JPanel {
 
     public void setTws(float tws) {
         this.tws = tws;
-        if (trueWindRadioButton.isSelected())
+        if (trueWindRadioButton.isSelected()) {
             windGaugePanel.setTws(tws);
+        }
         stationDataPanel.setTWS(tws);
     }
 
@@ -468,11 +430,12 @@ public class RoutingPanel extends JPanel {
             dateLabel.setText(WWGnlUtilities.SDF_UT_bis.format(date));
             int[] elapsed = evaluateDaysHours(fromDate, date);
             String mess = "";
-            if (elapsed[1] > 0)
+            if (elapsed[1] > 0) {
                 mess = WWGnlUtilities.buildMessage("duration", new String[]{Integer.toString(elapsed[0]),
                         Integer.toString(elapsed[1])});
-            else
+            } else {
                 mess = WWGnlUtilities.buildMessage("small.duration", new String[]{Integer.toString(elapsed[0])});
+            }
             elapsedLabel.setText(mess);
         } else
             dateLabel.setText("");
@@ -530,22 +493,35 @@ public class RoutingPanel extends JPanel {
             Iterator<RoutingPoint> iterator = bestRoute.iterator();
             while (iterator.hasNext()) {
                 rp = iterator.next();
-                if (rp.getAncestor() != null) // Not for the first one
-                {
+                if (rp.getAncestor() != null) { // Not for the first one
                     double bsp = rp.getBsp();
                     double tws = rp.getTws();
                     int twa = Math.abs(rp.getTwa());
-                    if (twa > 180) twa = 360 - twa;
+                    if (twa > 180) {
+                        twa = 360 - twa;
+                    }
 
-                    if (bsp < minBSP) minBSP = bsp;
-                    if (bsp > maxBSP) maxBSP = bsp;
-                    if (tws < minTWS) minTWS = tws;
-                    if (tws > maxTWS) maxTWS = tws;
-                    if (twa > maxTWA) maxTWA = twa;
-                    if (twa < minTWA) minTWA = twa;
+                    if (bsp < minBSP) {
+                        minBSP = bsp;
+                    }
+                    if (bsp > maxBSP) {
+                        maxBSP = bsp;
+                    }
+                    if (tws < minTWS) {
+                        minTWS = tws;
+                    }
+                    if (tws > maxTWS) {
+                        maxTWS = tws;
+                    }
+                    if (twa > maxTWA) {
+                        maxTWA = twa;
+                    }
+                    if (twa < minTWA) {
+                        minTWA = twa;
+                    }
                 }
                 if (prevPos != null) {
-                  actualDistance += GreatCircle.getDistanceInNM(new GreatCirclePoint(prevPos), new GreatCirclePoint(rp.getPosition()));
+                  actualDistance += GreatCircle.getDistanceInNM(new GreatCirclePoint(prevPos).degreesToRadians(), new GreatCirclePoint(rp.getPosition()).degreesToRadians());
                 }
                 prevPos = rp.getPosition();
             }
@@ -568,17 +544,19 @@ public class RoutingPanel extends JPanel {
             twaRangeLabel.setText(WWGnlUtilities.buildMessage("twa-range", new String[]{Integer.toString(minTWA), Integer.toString(maxTWA)}));
 
             // from-to
-            double gcDist = GreatCircle.getDistanceInNM(new GreatCirclePoint(fromPos), new GreatCirclePoint(toPos));
+            double gcDist = GreatCircle.getDistanceInNM(new GreatCirclePoint(fromPos).degreesToRadians(),
+                                                        new GreatCirclePoint(toPos).degreesToRadians());
             gcLabel.setText(WWGnlUtilities.buildMessage("gc", new String[]{WWGnlUtilities.XXX12.format(gcDist)}));
             actualDistLabel.setText(WWGnlUtilities.buildMessage("actual", new String[]{WWGnlUtilities.XXX12.format(actualDistance)}));
 
             try {
                 int r = bestRoute.size() - 1;
                 rp = bestRoute.get(r); // The first one
-                if (r == 0) // Last one
+                if (r == 0) { // Last one
                     ic = rp;
-                else
+                } else {
                     ic = bestRoute.get(r - 1);
+                }
                 setRouteData(rp, ic, routingType);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -612,10 +590,12 @@ public class RoutingPanel extends JPanel {
             double hauteur = tws * Math.sin(Math.toRadians(twa));
             aws = Math.sqrt((base * base) + (hauteur * hauteur));
             int _twa = twa;
-            if (_twa < -180)
+            if (_twa < -180) {
                 _twa += 360;
-            if (_twa > 180)
+            }
+            if (_twa > 180) {
                 _twa -= 360;
+            }
 
             setAws((float) aws);
             if (base != 0) {
@@ -626,13 +606,16 @@ public class RoutingPanel extends JPanel {
                 }
             } else {
                 awa = 90;
-                if (Math.sin(Math.toRadians(twa)) < 0)
+                if (Math.sin(Math.toRadians(twa)) < 0) {
                     awa = -90;
+                }
             }
-            if (awa > 180)
+            if (awa > 180) {
                 awa = awa - 360;
-            if (Utilities.sign(_twa) != Utilities.sign(awa))
+            }
+            if (Utilities.sign(_twa) != Utilities.sign(awa)) {
                 awa = -awa;
+            }
             setAwa(awa);
 
 //    System.out.println("TWA:" + twa + ", TWS:" + tws + " (_twa:" + _twa + ")");
@@ -663,16 +646,18 @@ public class RoutingPanel extends JPanel {
         routeSliderValue -= 1;
         routeSlider.setValue(routeSliderValue);
         updateData();
-        if (autoSyncCheckBox.isSelected())
+        if (autoSyncCheckBox.isSelected()) {
             syncGribButton_actionPerformed(e);
+        }
     }
 
     private void nextButton_actionPerformed(ActionEvent e) {
         routeSliderValue += 1;
         routeSlider.setValue(routeSliderValue);
         updateData();
-        if (autoSyncCheckBox.isSelected())
+        if (autoSyncCheckBox.isSelected()) {
             syncGribButton_actionPerformed(e);
+        }
     }
 
     private void syncGribButton_actionPerformed(ActionEvent e) {

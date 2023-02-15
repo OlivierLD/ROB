@@ -1,54 +1,40 @@
-apply plugin: 'java'
-compileJava.options.encoding = 'ISO-8859-1'
-apply plugin: 'maven'
-
-// def userprofile = System.getenv()['USERPROFILE'] // On Windows...
-
-group = 'oliv.cool.stuff'
-version = '4.0.0.0'
-
-sourceSets {
-  main {
-    java {
-      srcDir 'src'
-    }
-  }
-  test {
-    java {
-      srcDir 'tests'
-    }
-  }
+plugins {
+  id 'java'
+  id 'idea'
+  id 'maven-publish'
+  id 'com.github.johnrengelman.shadow'
 }
 
+group = 'raspberry.on.board'
+version = '1.0'
+
 repositories {
-  mavenCentral()
-  maven { url "http://lediouris.net/maven2" }
   mavenLocal()
+  mavenCentral()
 }
 
 dependencies {
-  compile 'org.processing:core:2.2.1'
-  runtime 'org.jogamp.jogl:jogl-all:2.0-rc11'
-  runtime 'org.jogamp.gluegen:gluegen-rt-main:2.0-rc11'
-  compile project(':weatherwizard')
+  implementation 'oracle:xmlparser:2.0'
+  implementation 'org.processing:core:2.2.1'
+  implementation 'org.jogamp.jogl:jogl-all:2.0-rc11'
+  implementation 'org.jogamp.gluegen:gluegen-rt-main:2.0-rc11'
+
+  implementation project(':common-swing-utils')
+  implementation project(':raspberry-sailor:JGRIB')
+//  implementation project(':astro-computer:AstroUtilities')
+  implementation project(':raspberry-sailor:Swing:WeatherWizard')
+  implementation project(':raspberry-sailor:Swing:ChartComponents')
+
+  testImplementation "junit:junit:$junit_version"
 }
 
-task copyResources(type: Copy) {
-  description = 'Copies non-java resources in the output directory before the jar task (png, xml, xsd, ttf, properties, etc)'
-  from 'src'
-  into 'build/classes/main'
-  include '**/*.xml', '**/*.xsd', '**/*.png', '**/*.gif', '**/*.jpg', '**/*.properties', '**/*.ttf', '**/*.TTF', '**/*.html'
+shadowJar {
+  zip64 true
 }
-
-jar.dependsOn(copyResources)
-
-//task tellMeProxy (description: "Spits out the proxy settings.") << {
-//  try {
-//    println "Accessing resources with proxy $proxyHost:$proxyPort"
-//    println "UserProfile: " + System.getenv()['USERPROFILE']
-//  } catch (Exception e) {
-//    println "No proxy"
-//  }
+///
+//dependencies {
+//  compile 'org.processing:core:2.2.1'
+//  runtime 'org.jogamp.jogl:jogl-all:2.0-rc11'
+//  runtime 'org.jogamp.gluegen:gluegen-rt-main:2.0-rc11'
+//  compile project(':weatherwizard')
 //}
-//
-//compileJava.dependsOn(tellMeProxy)

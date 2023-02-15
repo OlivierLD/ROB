@@ -11,32 +11,38 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-@SuppressWarnings("serial")
 public class FileTypeHolder
         extends JPanel {
-    private JTreeFilePanel faxTree = new JTreeFilePanel(ParamPanel.data[ParamData.FAX_FILES_LOC][ParamData.VALUE_INDEX].toString(),
+    private final JTreeFilePanel faxTree = new JTreeFilePanel(
+            ParamPanel.data[ParamData.FAX_FILES_LOC][ParamData.VALUE_INDEX].toString(),
             JTreeFilePanel.FAX_TYPE,
             this);
-    private JTreeFilePanel gribTree = new JTreeFilePanel(ParamPanel.data[ParamData.GRIB_FILES_LOC][ParamData.VALUE_INDEX].toString(),
+    private final JTreeFilePanel gribTree = new JTreeFilePanel(
+            ParamPanel.data[ParamData.GRIB_FILES_LOC][ParamData.VALUE_INDEX].toString(),
             JTreeFilePanel.GRIB_TYPE,
             this);
-    private JTreeFilePanel compositeTree = new JTreeFilePanel(ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX].toString(),
+    private final JTreeFilePanel compositeTree = new JTreeFilePanel(
+            ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX].toString(),
             JTreeFilePanel.COMPOSITE_TYPE,
             this);
-    private JTreeFilePanel patternTree = new JTreeFilePanel(ParamPanel.data[ParamData.PATTERN_DIR][ParamData.VALUE_INDEX].toString(),
+    private final JTreeFilePanel patternTree = new JTreeFilePanel(
+            ParamPanel.data[ParamData.PATTERN_DIR][ParamData.VALUE_INDEX].toString(),
             JTreeFilePanel.PATTERN_TYPE,
             this);
-    private JTreeFilePanel preDefFaxTree = new JTreeFilePanel(null,
+    private final JTreeFilePanel preDefFaxTree = new JTreeFilePanel(
+            null,
             JTreeFilePanel.PRE_DEF_FAX_TYPE,
             this);
 
-    private JPanel filler = new JPanel();
+    private final JPanel filler = new JPanel();
 
-    private JTreeFilePanel[] pa = {faxTree,
+    private final JTreeFilePanel[] pa = {
+            faxTree,
             gribTree,
             compositeTree,
             patternTree,
-            preDefFaxTree};
+            preDefFaxTree
+    };
 
     public final static int FAX_TREE = 0;
     public final static int GRIB_TREE = 1;
@@ -44,7 +50,7 @@ public class FileTypeHolder
     public final static int PATTERN_TREE = 3;
     public final static int PREDEF_FAX_TREE = 4;
 
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
 
     public FileTypeHolder() {
         try {
@@ -55,12 +61,11 @@ public class FileTypeHolder
         }
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         this.setLayout(gridBagLayout1);
         this.setPreferredSize(new Dimension(200, 600));
 
-        this.setSize(new Dimension(200, 300));
+        this.setSize(new Dimension(200, 600));
         this.add(faxTree,
                 new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
                         new Insets(5, 5, 0, 5), 0, 0));
@@ -124,10 +129,10 @@ public class FileTypeHolder
     }
 
     public void notifyComponentSizeChange() {
-//  System.out.println("Size has changed.");
+        // System.out.println("Size has changed.");
         int nbExpanded = 0;
-        for (int i = 0; i < pa.length; i++) {
-            if (pa[i].isExpanded()) nbExpanded += 1;
+        for (JTreeFilePanel jTreeFilePanel : pa) {
+            if (jTreeFilePanel.isExpanded()) nbExpanded += 1;
         }
 
         int nbCollapsed = pa.length - nbExpanded;
@@ -137,27 +142,27 @@ public class FileTypeHolder
         // TODO reference to the getMinHeight
         int heightToShare = totalHeight - (nbCollapsed * faxTree.getMinHeight());
         int heightForExpanded = 0;
-//    if (nbExpanded == 0) // Enforce first one opened.
-//    {
-//      pa[0].setExpanded(true);
-//      nbExpanded = 1;
-//    }  
-        if (nbExpanded != 0)
+        // if (nbExpanded == 0) { // Enforce first one opened.
+        //   pa[0].setExpanded(true);
+        //   nbExpanded = 1;
+        // }
+        if (nbExpanded != 0) {
             heightForExpanded = heightToShare / nbExpanded;
+        }
 
         Dimension expandedDim = new Dimension(currentWidth, heightForExpanded);
         Dimension collapsedDim = new Dimension(currentWidth, faxTree.getMinHeight());
-        for (int i = 0; i < pa.length; i++) {
-            if (pa[i].isExpanded()) {
-                pa[i].setSize(expandedDim);
-                pa[i].setPreferredSize(expandedDim);
-                pa[i].setMinimumSize(expandedDim);
+        for (JTreeFilePanel jTreeFilePanel : pa) {
+            if (jTreeFilePanel.isExpanded()) {
+                jTreeFilePanel.setSize(expandedDim);
+                jTreeFilePanel.setPreferredSize(expandedDim);
+                jTreeFilePanel.setMinimumSize(expandedDim);
             } else {
-                pa[i].setSize(collapsedDim);
-                pa[i].setPreferredSize(collapsedDim);
-                pa[i].setMinimumSize(collapsedDim);
+                jTreeFilePanel.setSize(collapsedDim);
+                jTreeFilePanel.setPreferredSize(collapsedDim);
+                jTreeFilePanel.setMinimumSize(collapsedDim);
             }
-//    pa[i].repaint();
+            // pa[i].repaint();
         }
         if (nbExpanded == 0) { // All collapsed
             Dimension d = new Dimension(currentWidth, heightToShare);
@@ -170,9 +175,8 @@ public class FileTypeHolder
             filler.setPreferredSize(d);
             filler.setMinimumSize(d);
         }
-
         this.validate();
-//  this.validateTree();
+        //  this.validateTree();
     }
 
     public void refreshFaxTree() {
