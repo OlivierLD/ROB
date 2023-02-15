@@ -3,11 +3,9 @@ package currentdustlet;
 import weatherwizard.currentuserexits.GRIBCurrentDustlet;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 
 public class DustletPanel
@@ -28,11 +26,11 @@ public class DustletPanel
     private JButton backward = new JButton();
     private JButton animate = new JButton();
     private JLabel motesLabel = new JLabel("Motes");
-    private JTextField motesTextField = new JTextField();
+    private JTextField motesTextField = new JFormattedTextField(NumberFormat.getInstance());
     private JLabel spinLabel = new JLabel("Current Factor");
     private JSpinner currentSizeSpinner = null;
     private int currentFactorForDustlet = 50;
-    private JLabel speedLabel = new JLabel("Animation Rate (s)");
+    private JLabel speedLabel = new JLabel("Animation Rate (in s)");
     private JSpinner dustletSpeedSpinner = null;
     private int speedForDustlet = 2;
 
@@ -102,8 +100,8 @@ public class DustletPanel
         animate.setMargin(new Insets(1, 1, 1, 1));
         animate.addActionListener(e -> animateButton_actionPerformed());
 
-        motesTextField.setPreferredSize(new Dimension(40, 20));
-        motesTextField.setMinimumSize(new Dimension(40, 20));
+        motesTextField.setPreferredSize(new Dimension(80, 20));
+        motesTextField.setMinimumSize(new Dimension(60, 20));
         motesTextField.setToolTipText("Motes");
         motesTextField.setHorizontalAlignment(JTextField.RIGHT);
         motesTextField.setText(Integer.toString(motes));
@@ -118,9 +116,9 @@ public class DustletPanel
 
         SpinnerModel model = new SpinnerNumberModel(50, 1, 100, 1);
         currentSizeSpinner = new JSpinner(model);
-        currentSizeSpinner.setMinimumSize(new Dimension(40, 20));
-        currentSizeSpinner.setMaximumSize(new Dimension(40, 20));
-        currentSizeSpinner.setPreferredSize(new Dimension(40, 20));
+        currentSizeSpinner.setMinimumSize(new Dimension(60, 20));
+        currentSizeSpinner.setMaximumSize(new Dimension(80, 20));
+        currentSizeSpinner.setPreferredSize(new Dimension(60, 20));
         currentSizeSpinner.setToolTipText("Current Factor");
         currentSizeSpinner.setValue(new Integer(currentFactorForDustlet));
         currentSizeSpinner.addChangeListener(evt -> {
@@ -137,10 +135,10 @@ public class DustletPanel
         });
         SpinnerModel speedModel = new SpinnerNumberModel(2, 1, 30, 1);
         dustletSpeedSpinner = new JSpinner(speedModel);
-        dustletSpeedSpinner.setMinimumSize(new Dimension(40, 20));
-        dustletSpeedSpinner.setMaximumSize(new Dimension(40, 20));
-        dustletSpeedSpinner.setPreferredSize(new Dimension(40, 20));
-        dustletSpeedSpinner.setToolTipText("Animation Rate (s)");
+        dustletSpeedSpinner.setMinimumSize(new Dimension(60, 20));
+        dustletSpeedSpinner.setMaximumSize(new Dimension(60, 20));
+        dustletSpeedSpinner.setPreferredSize(new Dimension(60, 20));
+        dustletSpeedSpinner.setToolTipText("Animation Rate (in s)");
         dustletSpeedSpinner.setValue(new Integer(speedForDustlet));
         dustletSpeedSpinner.setFocusable(false);
         dustletSpeedSpinner.addChangeListener(evt -> {

@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,6 @@ public class GRIBCurrentDustlet
 
     private int displayOption = FULL_CHART_DISPLAY;
     private final static NumberFormat NF = NumberFormat.getInstance(Locale.ENGLISH); // Enforce English for Dustlets
-
 
     private List<String> feedback = null;
     private GribHelper.GribConditionData[] wgd = null;
@@ -89,15 +89,20 @@ public class GRIBCurrentDustlet
                         (int) topLeftY + visibleRect.height);
                 // System.out.println("BottomRight is at " + bottomRight.toString());
             } else {
-                motes = (chartPanel.getWidth() * chartPanel.getHeight()) / 25; // TODO chartPanbel == null ?
+                if (chartPanel != null) {
+                    motes = (chartPanel.getWidth() * chartPanel.getHeight()) / 25;
+                }
             }
             int[] dim = generateCurrentDustletFile(wsFactor);
-            int[] imgdim = generateDustletBackground(); // temp / grib.png
-//    System.out.println("Creating DustletPanel...");
+            int[] imgDim = generateDustletBackground(); // temp / grib.png
+            if (imgDim == null) {
+                imgDim = new int[]{800, 600};
+            }
+            // System.out.println("Creating DustletPanel...");
             dustletPanel = new DustletPanel(this,
                     dustletBGImage,
-                    imgdim[0],
-                    imgdim[1],
+                    imgDim[0],
+                    imgDim[1],
                     dim[0],
                     dim[1],
                     motes,
@@ -108,8 +113,8 @@ public class GRIBCurrentDustlet
 //    System.out.println("...Done");
             JFrame frame = new JFrame("GRIB Current Dustlet");
             frame.getContentPane().add(dustletPanel);
-            frame.setSize(new Dimension(imgdim[0] + 50,
-                    imgdim[1] + 50));
+            frame.setSize(new Dimension(imgDim[0] + 50,
+                    imgDim[1] + 50));
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Dimension frameSize = frame.getSize();
             if (frameSize.height > screenSize.height) frameSize.height = screenSize.height;
@@ -118,10 +123,12 @@ public class GRIBCurrentDustlet
             frame.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     e.getComponent().setVisible(false);
-                    if (dustletPanel != null)
+                    if (dustletPanel != null) {
                         dustletPanel.stop();
-                    if (dustletThread != null)
+                    }
+                    if (dustletThread != null) {
                         dustletThread.stopLooping();
+                    }
 //          System.out.println("Notifying...");
                     feedback.add("Success!");
                     synchronized (parent) {
@@ -145,11 +152,11 @@ public class GRIBCurrentDustlet
             try {
                 Utilities.makeSureTempExists();
                 if (chartPanel != null) {
-//        System.out.println("Before - Size:" + chartPanel.getSize().getWidth() + "x" + chartPanel.getSize().getHeight());
+                    // System.out.println("Before - Size:" + chartPanel.getSize().getWidth() + "x" + chartPanel.getSize().getHeight());
                     int nbZoomOut = 0;
                     // Original config, to restore it after
                     int origProj = chartPanel.getProjection();
-//        chartPanel.setProjection(ChartPanelInterface.MERCATOR);
+                    // chartPanel.setProjection(ChartPanelInterface.MERCATOR);
                     chartPanel.setProjection(ChartPanelInterface.ANAXIMANDRE);
                     chartPanel.repaint();
 
@@ -159,7 +166,7 @@ public class GRIBCurrentDustlet
                         Rectangle r = chartPanel.getVisibleRect();
                         origDimension = new Dimension(r.width, r.height);
                     }
-//        System.out.println("After (ANAXIMANDRE)- Size:" + origDimension.getWidth() + "x" + origDimension.getHeight());
+                    // System.out.println("After (ANAXIMANDRE)- Size:" + origDimension.getWidth() + "x" + origDimension.getHeight());
                     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                     if ((origDimension.getWidth() + FRAME_BEVEL) > screenSize.getWidth() ||
                             (origDimension.getHeight() + FRAME_BEVEL) > screenSize.getHeight()) {
@@ -171,11 +178,12 @@ public class GRIBCurrentDustlet
                             nbZoomOut++;
                             origDimension = chartPanel.getSize();
                             if ((origDimension.getWidth() + FRAME_BEVEL) <= screenSize.getWidth() &&
-                                    (origDimension.getHeight() + FRAME_BEVEL) <= screenSize.getHeight())
+                                    (origDimension.getHeight() + FRAME_BEVEL) <= screenSize.getHeight()) {
                                 tooBig = false;
+                            }
                         }
                     }
-//        System.out.println("After (resize)- Size:" + origDimension.getWidth() + "x" + origDimension.getHeight());
+                    // System.out.println("After (resize)- Size:" + origDimension.getWidth() + "x" + origDimension.getHeight());
                     boolean chart = cp.isDrawChart();
                     boolean grid = chartPanel.isWithGrid();
                     Color bg = chartPanel.getChartBackGround();
@@ -197,7 +205,7 @@ public class GRIBCurrentDustlet
                         newS = bottomRight.getL();
                         newW = topLeft.getG();
                         newE = bottomRight.getG();
-//          System.out.println("Chart boundaries:" + newN + ", " + newS + " and " + newW + ", " + newE);
+                        // System.out.println("Chart boundaries:" + newN + ", " + newS + " and " + newW + ", " + newE);
                     }
 
                     boolean displayGrib = cp.isDrawGRIB();
@@ -210,11 +218,11 @@ public class GRIBCurrentDustlet
                     if (displayOption == VISIBLE_PART_ONLY_DISPLAY) {
                         chartPanel.setW(origDimension.width);
                         chartPanel.setH(origDimension.height);
-                    } else
+                    } else {
                         chartPanel.setWidthFromChart(newN, newS, newW, newE);
-
-//        Dimension newDimension = chartPanel.getSize();
-//        System.out.println("After (new width)- Size:" + newDimension.getWidth() + "x" + newDimension.getHeight());
+                    }
+                    // Dimension newDimension = chartPanel.getSize();
+                    // System.out.println("After (new width)- Size:" + newDimension.getWidth() + "x" + newDimension.getHeight());
 
                     chartPanel.setChartBackGround(Color.black); // (Color)ParamPanel.data[ParamData.DUSTLET_CHART_BG][1]);
                     chartPanel.setChartColor(Color.white);      // (Color)ParamPanel.data[ParamData.DUSTLET_CHART_LINES][1]);
@@ -232,9 +240,9 @@ public class GRIBCurrentDustlet
                     // Chart, and Grid
                     cp.setDrawChart(true);
                     chartPanel.setWithGrid(true);
-                    if (displayOption == VISIBLE_PART_ONLY_DISPLAY)
+                    if (displayOption == VISIBLE_PART_ONLY_DISPLAY) {
                         chartPanel.repaint();
-
+                    }
                     File tempFile = File.createTempFile("grib", ".png", new File("temp"));
                     dustletBGImage = tempFile.toString();
                     if (displayOption == FULL_CHART_DISPLAY)
@@ -505,12 +513,11 @@ public class GRIBCurrentDustlet
     }
 
     // For standalone tests
-//  public static void main(String... args) throws Exception
-//  {
-//    GRIBDustlet gb = new GRIBDustlet();
-//    String gribFileName = "GRIB_2009_02_25_Sample.grb";
-//    URL gribURL = GRIBDustlet.class.getResource(gribFileName);
-//    System.out.println("GRIB:" + gribURL.getFile());
-//    gb.showDustlet(Thread.currentThread(), gribURL.getFile());
-//  }  
+    public static void main(String... args) throws Exception {
+        GRIBCurrentDustlet gb = new GRIBCurrentDustlet();
+        String gribFileName = "GulfStream_2023_02_15_15_38_50_CET.grb";
+        URL gribURL = GRIBCurrentDustlet.class.getResource(gribFileName);
+        System.out.println("GRIB:" + gribURL.getFile());
+        gb.showDustlet(Thread.currentThread(), gribURL.getFile());
+    }
 }

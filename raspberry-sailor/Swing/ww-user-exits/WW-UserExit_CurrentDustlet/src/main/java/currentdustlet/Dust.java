@@ -222,13 +222,15 @@ public class Dust {
         for (i = 0; i < nmotes; i++) {
             double x = xmotes[i];
             double y = ymotes[i];
-            double vx = world_to_view[0] * x + world_to_view[2] * y + world_to_view[4];
-            double vy = world_to_view[1] * x + world_to_view[3] * y + world_to_view[5];
-            // XXX try an image here?  or a line showing velocity?
-            double[] uv = new double[2];
-            lookup_uv(x, y, uv);
-            g.drawLine((int) vx, (int) vy, (int) (vx + uv[0]), (int) (vy + uv[1]));
-            //	    System.err.println("mote at "+x+","+y+"  --> "+vx+","+vy);
+            if (world_to_view != null) {
+                double vx = world_to_view[0] * x + world_to_view[2] * y + world_to_view[4];
+                double vy = world_to_view[1] * x + world_to_view[3] * y + world_to_view[5];
+                // XXX try an image here?  or a line showing velocity?
+                double[] uv = new double[2];
+                lookup_uv(x, y, uv);
+                g.drawLine((int) vx, (int) vy, (int) (vx + uv[0]), (int) (vy + uv[1]));
+                // System.err.println("mote at "+x+","+y+"  --> "+vx+","+vy);
+            }
         }
     }
 
