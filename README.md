@@ -109,7 +109,7 @@ And we will try to implement Consumers, Forwarders and Computers as pluggable co
 ## How the repo is organized
 At the root, we have some generic building blocks, like
 - `http-tiny-server`
-- `common-utils`
+- `common-utils` and other similar modules
 - `Serial-IO` and `SerialRxTx`
 
 The `Java-TCP-Python` module gathers the different experiments done to establish
@@ -119,9 +119,9 @@ In the `astro-computer` directory, there are two modules for celestial calculati
 languages: Java, Scala, Python, C, go, ES6, and some Jupyter Notebooks).
 
 All those things will come together in the directory `raspberry-sailor`.  
-It contains REST wrappers (usable from the `http-tiny-server`) around the features we will need, like NMEA Parser,
-Tide calculations, Routing (GRIB management), etc.  
-The main building block in the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
+It contains REST wrappers (usable from and by the `http-tiny-server`) around the features we will need, like NMEA Parser,
+Tide calculations, Routing (and GRIB management), etc.  
+The main building block is the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
 > _**Note**_: The `NMEA-multiplexer` contains "some" Python TCP and REST servers for sensor and actuator data access.
 
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
@@ -132,7 +132,8 @@ Many languages can take care of back-end computing...
 Front-end UI is more tricky. Swing is a Java option, Python has other possibilities, same for C..., but they're all different.  
 _**So**_, to make everyone happy, we will here do all the back-end computing in whatever language you want, and make it REST-accessible, with - when required - a JSON payload.  
 A web-enabled REST client (HTML5, ES6, CSS3) will be able to take care of displaying those data; all you need is a (recent) browser.
-No need to deal with Android, iOS, Windows..., **_the goal here being to simplify the data access, maintenance and portability_**.
+No need to deal with Android, iOS, Windows..., **_the goal here being to simplify the data access, maintenance and portability_**.  
+> _**Note**_: We will see later what can be done with Docker.  
 
 ## Build Techniques
 Languages used here are Java, and in some cases Python. The Web UI is done in pure HTML5/ES6/CSS3.
@@ -140,7 +141,7 @@ The build is done using [`gradle`](https://gradle.org/).
 If you're not familiar with those tools and techniques, check out the [GET_STARTED](./GET_STARTED.md) page.
 
 ## Misc notes
-When building on small board, do not hesitate to exclude some demanding tasks, like
+When building on small boards, do not hesitate to exclude some demanding tasks, like
 ```
 $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```

@@ -1,0 +1,25 @@
+plugins {
+  id 'java'
+  id 'idea'
+  id 'maven-publish'
+  id 'com.github.johnrengelman.shadow'
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  implementation project(':raspberry-sailor:Swing:WeatherWizard')
+  implementation project(':raspberry-sailor:Swing:ChartComponents')
+
+  testImplementation "junit:junit:$junit_version"
+}
+
+shadowJar {
+  zip64 true
+}

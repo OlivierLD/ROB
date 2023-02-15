@@ -12,22 +12,15 @@ repositories {
   mavenLocal()
   mavenCentral()
 //  maven { url "http://www.datanucleus.org/downloads/maven2" }
-//  maven { url "https://raw.githubusercontent.com/OlivierLD/raspberry-coffee/repository" }
-//  maven { url "http://maven.icm.edu.pl/artifactory/repo/" }
-//  maven { url "https://oss.sonatype.org/content/groups/public" }
-//  maven { url "http://lediouris.net/maven2" }
 }
 
 dependencies {
   implementation 'oracle:xmlparser:2.0'
+  implementation 'com.sun.mail:javax.mail:1.6.2'
 
   implementation fileTree(dir: '../../../common-image-utils/libs', include: ['*.jar'])
 //  implementation 'javax:jai_codec:1.1.3'
 //  implementation 'javax:jai_core:1.1.3'
-//  implementation group: 'javax.mail', name: 'mail', version: '1.4.1'
-  implementation 'com.sun.mail:javax.mail:1.6.2'
-
-//  implementation project(':coreutilities')
 
   implementation project(':common-swing-utils')
   implementation project(':astro-computer:AstroUtilities')
@@ -38,37 +31,13 @@ dependencies {
   implementation project(':raspberry-sailor:PolarSmoother')
 
   implementation project(':raspberry-sailor:Swing:ChartComponents')
-//  implementation project(':fullnmeaconsole')
-//  implementation project(':polar-smoother')
-//  implementation project(':java-tide-engine')
-//  implementation project(':javanauticalalmanac')
+
+//  implementation project(':raspberry-sailor:Swing:ww-user-exits:WW-UserExits')
+//  implementation project(':raspberry-sailor:Swing:ww-user-exits:WW-UserExits_II')
 
   testImplementation "junit:junit:$junit_version"
 }
 
-//task copyResources(type: Copy) {
-//  description = 'Copies non-java resources in the output directory before the jar task (png, xml, xsd, ttf, properties, etc)'
-//  from 'src'
-//  into 'build/classes/main'
-//  include '**/*.xml', '**/*.xsd', '**/*.png', '**/*.gif', '**/*.jpg', '**/*.properties', '**/*.ttf', '**/*.html', '**/background/*.*'
-//}
-//
-//jar.dependsOn(copyResources)
-
-//task tellMeProxy (description: "Spits out the proxy settings.") << {
-//  try {
-//    println "Accessing resources with proxy $proxyHost:$proxyPort"
-//    println "UserProfile: " + System.getenv()['USERPROFILE']
-//  } catch (Exception e) {
-//    println "No proxy"
-//  }
-//}
-//
-//compileJava.dependsOn(tellMeProxy)
-
-//task run(type: JavaExec, dependsOn: build, description: "Test run.") {
-//  main = 'main.splash.Splasher'
-////jvmArgs "-verbose"
-//  classpath project.configurations.default
-//  classpath sourceSets.main.output.classesDir
-//}
+shadowJar {
+  zip64 true
+}

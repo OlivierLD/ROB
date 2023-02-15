@@ -1,5 +1,7 @@
 # Weather Wizard
 
+## WiP. Being ported.
+
 This project depends on several other projects. 
 
 You can whether:
@@ -20,7 +22,7 @@ Please report unwanted behaviors, or address enhancement requests, to [me](mailt
 ## What it does, what it does not
 This is *not* a GRIB viewer, *nor* a fax viewer. Such utilities already exist elsewhere.
 
-The idea at the the origin of this project is that one:
+The idea at the origin of this project is that one:
 
 On a chart, with a given projection (*Mercator, Lambert, globe, satellite views, square, polar stereographic, and more*) you can *_superimpose_* several weather faxes (like surface analysis, 500mb analysis, wave height, sat pictures, etc) and GRIB Data (wind speed & direction, 500mb, PRMSL, etc).
 The tool allows you to do this, store, and restore.
