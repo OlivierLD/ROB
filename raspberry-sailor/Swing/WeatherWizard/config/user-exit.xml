@@ -49,4 +49,13 @@ Same as above, but <big>Asynchronous</big>.</html>]]>
          </comment>
       </user-exit>
    </sub-menu>
+   <!--sub-menu label="Processing">
+      <user-exit sync="false" ack="false" id="7">
+         <label>GRIB Processing</label>
+         <action>weatherwizard.userexits.GRIBProcessing</action>
+         <comment>
+            <![CDATA[<html>Renders the GRIB in Processing.</html>]]>
+         </comment>
+      </user-exit>
+   </sub-menu-->
 </ww-user-exit>
