@@ -43,3 +43,6 @@ build/
 **/ww*.properties
 *.grb
 *.grib
+
+*.obj
+**/*.bin
