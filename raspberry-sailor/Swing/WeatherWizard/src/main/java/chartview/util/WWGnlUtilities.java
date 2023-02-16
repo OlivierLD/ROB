@@ -625,9 +625,25 @@ public class WWGnlUtilities {
 
 
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    // int retval = chooser.showOpenDialog(parent);
+            SwingUtilities.invokeAndWait(() -> {
+                // int retval = chooser.showOpenDialog(parent);
+                int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
+                switch (retval) {
+                    case JFileChooser.APPROVE_OPTION:
+                        atomicFileName.set(chooser.getSelectedFile().toString());
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+                    case JFileChooser.ERROR_OPTION:
+                        break;
+                }
+            });
+        } catch (InvocationTargetException ite) {
+            ite.printStackTrace();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        } catch (Throwable ex) {
+            if (ex.getMessage().startsWith("Cannot call invokeAndWait")) {
+                try { // Try out of the thread...
                     int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
                     switch (retval) {
                         case JFileChooser.APPROVE_OPTION:
@@ -637,12 +653,12 @@ public class WWGnlUtilities {
                         case JFileChooser.ERROR_OPTION:
                             break;
                     }
+                } catch (Exception exLevel2) {
+                    exLevel2.printStackTrace();
                 }
-            });
-        } catch (InvocationTargetException ite) {
-            ite.printStackTrace();
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            } else {
+                ex.printStackTrace();
+            }
         }
         return atomicFileName.get();
     }

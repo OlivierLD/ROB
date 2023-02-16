@@ -743,10 +743,14 @@ public class AdjustFrame extends JFrame {
         menuAdmin.add(menuManageUE);
         menuManageUE.setText(WWGnlUtilities.buildMessage("manage-ue"));
         menuManageUE.setIcon(new ImageIcon(this.getClass().getResource("img/help.png")));
-        menuManageUE.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+        menuManageUE.addActionListener(ae -> {
+            try {
+//                SwingUtilities.invokeAndWait(() -> WWGnlUtilities.manageUE(instance));
                 WWGnlUtilities.manageUE(instance);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+            // WWGnlUtilities.manageUE(instance)
         });
 
         menuTools.add(new JSeparator());

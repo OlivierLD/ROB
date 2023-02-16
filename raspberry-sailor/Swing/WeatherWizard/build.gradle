@@ -11,7 +11,7 @@ version = '1.0'
 repositories {
   mavenLocal()
   mavenCentral()
-//  maven { url "http://www.datanucleus.org/downloads/maven2" }
+  maven { url "https://www.datanucleus.org/downloads/maven2" }  // For XML Parser
 }
 
 dependencies {
