@@ -493,6 +493,9 @@ public class WWGnlUtilities {
         return request;
     }
 
+    public enum SaveOrOpen {
+        SAVE, OPEN
+    }
     public static String chooseFile(int mode, String flt, String desc) {
         return WWGnlUtilities.chooseFile(mode, new String[]{flt}, desc);
     }
@@ -532,7 +535,19 @@ public class WWGnlUtilities {
                                     String buttonLabel,
                                     String dialogLabel,
                                     boolean withPreviewer) {
-        return chooseFile(parent, mode, flt, desc, where, buttonLabel, dialogLabel, withPreviewer, IMAGE_PREVIEWER_OPTION);
+        return chooseFile(parent, mode, flt, desc, where, SaveOrOpen.SAVE, buttonLabel, dialogLabel, withPreviewer, IMAGE_PREVIEWER_OPTION);
+    }
+
+    public static String chooseFile(Component parent,
+                                    int mode,
+                                    String[] flt,
+                                    String desc,
+                                    String where,
+                                    SaveOrOpen saveOrOpen,
+                                    String buttonLabel,
+                                    String dialogLabel,
+                                    boolean withPreviewer) {
+        return chooseFile(parent, mode, flt, desc, where, saveOrOpen, buttonLabel, dialogLabel, withPreviewer, IMAGE_PREVIEWER_OPTION);
     }
 
     public static String chooseFile(Component parent,
@@ -540,6 +555,7 @@ public class WWGnlUtilities {
                                     String[] flt,
                                     String desc,
                                     final String where,
+                                    SaveOrOpen saveOrOpen,
                                     String buttonLabel,
                                     String dialogLabel,
                                     boolean withPreviewer,
@@ -626,9 +642,13 @@ public class WWGnlUtilities {
 
         try {
             SwingUtilities.invokeAndWait(() -> {
-                // int retval = chooser.showOpenDialog(parent);
-                int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
-                switch (retval) {
+                int retVal = -1;
+                if (saveOrOpen.equals(SaveOrOpen.OPEN)) {
+                    retVal = chooser.showOpenDialog(parent);
+                } else if (saveOrOpen.equals(SaveOrOpen.SAVE)) {
+                    retVal = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
+                }
+                switch (retVal) {
                     case JFileChooser.APPROVE_OPTION:
                         atomicFileName.set(chooser.getSelectedFile().toString());
                         break;
@@ -644,8 +664,13 @@ public class WWGnlUtilities {
         } catch (Throwable ex) {
             if (ex.getMessage().startsWith("Cannot call invokeAndWait")) {
                 try { // Try out of the thread...
-                    int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
-                    switch (retval) {
+                    int retVal = -1;
+                    if (saveOrOpen.equals(SaveOrOpen.OPEN)) {
+                        retVal = chooser.showOpenDialog(parent);
+                    } else if (saveOrOpen.equals(SaveOrOpen.SAVE)) {
+                        retVal = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
+                    }
+                    switch (retVal) {
                         case JFileChooser.APPROVE_OPTION:
                             atomicFileName.set(chooser.getSelectedFile().toString());
                             break;
@@ -3506,15 +3531,18 @@ public class WWGnlUtilities {
 
         public void loadImage(File f) {
             if (f == null) {
-                thumbnail = null;
+                this.thumbnail = null;
             } else {
                 try {
-//        ImageIcon tmpIcon = new ImageIcon(f.getPath());
+                    // ImageIcon tmpIcon = new ImageIcon(f.getPath());
                     ImageIcon tmpIcon = new ImageIcon(ImageUtil.readImage(f.getPath()));
-                    if (tmpIcon.getIconWidth() > (DEFAULT_WIDTH * 2)) {
-                        thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance((DEFAULT_WIDTH * 2), -1, Image.SCALE_DEFAULT));
+                    System.out.printf(">> Icon %d x %d\n", tmpIcon.getIconWidth(), tmpIcon.getIconHeight());
+
+                    if (/*false && */ tmpIcon.getIconWidth() > (DEFAULT_WIDTH)) {
+                        this.thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance((DEFAULT_WIDTH), -1, Image.SCALE_DEFAULT));
+                        System.out.println("Image resized for preview.");
                     } else {
-                        thumbnail = tmpIcon;
+                        this.thumbnail = tmpIcon;
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -3525,9 +3553,23 @@ public class WWGnlUtilities {
         public void propertyChange(PropertyChangeEvent e) {
             String prop = e.getPropertyName();
             if (Objects.equals(prop, JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {
-                if (isShowing()) {
-                    loadImage((File) e.getNewValue());
-                    repaint();
+                if (this.isShowing()) {
+                    if (e.getNewValue() != null) {
+                        System.out.printf(">> File NewValue: %s\n", e.getNewValue());
+                        try {
+                            if (e.getNewValue() instanceof File) {
+                                File f = (File) e.getNewValue();
+                                if (f.exists() && !f.isDirectory()) {
+                                    this.loadImage((File) e.getNewValue());
+                                    this.repaint();
+                                } else {
+                                    System.out.printf("Nope...: %s\n", f.getAbsolutePath());
+                                }
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
                 }
             }
         }
@@ -3550,8 +3592,6 @@ public class WWGnlUtilities {
     public static class SoundPreviewer
             extends JPanel
             implements PropertyChangeListener {
-        @SuppressWarnings("compatibility:-4402332360298856105")
-        private final static long serialVersionUID = 1L;
 
         JButton playButton = new JButton("Play"); // LOCALIZE
         String soundFileName = null;

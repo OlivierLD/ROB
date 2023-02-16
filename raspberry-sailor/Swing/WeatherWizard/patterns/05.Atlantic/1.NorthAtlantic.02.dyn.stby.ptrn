@@ -1,0 +1,36 @@
+<pattern>
+   <fax-collection>
+      <fax hint="NW Atl" color="255;0;0" transparent="true" color-change="true">
+         <faxScale>0.32291855775920775</faxScale>
+         <faxXoffset>-107</faxXoffset>
+         <faxYoffset>168</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+      <fax hint="NE Atl" color="255;0;0" transparent="true" color-change="true">
+         <faxScale>0.3238738139421861</faxScale>
+         <faxXoffset>1091</faxXoffset>
+         <faxYoffset>168</faxYoffset>
+         <faxRotation>90.0</faxRotation>
+      </fax>
+      <fax hint="N Atl 500mb" color="0;0;255" transparent="true" color-change="true">
+         <faxScale>0.4937762523597154</faxScale>
+         <faxXoffset>49</faxXoffset>
+         <faxYoffset>54</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+      <fax hint="N Atl Sea State" color="0;100;0" transparent="true" color-change="true">
+         <faxScale>0.49431419111852265</faxScale>
+         <faxXoffset>49</faxXoffset>
+         <faxYoffset>55</faxYoffset>
+         <faxRotation>0.0</faxRotation>
+      </fax>
+   </fax-collection>
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false">All faxes above</grib>
+   <projection type="MERCATOR"/>
+   <north>65.5</north>
+   <south>10.0</south>
+   <east>28.2</east>
+   <west>-101.8</west>
+   <chartwidth>1007</chartwidth>
+   <chartheight>600</chartheight>
+</pattern>

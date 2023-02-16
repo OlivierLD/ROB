@@ -328,7 +328,8 @@ public class CommandPanelUtils {
                 JFileChooser.FILES_ONLY,
                 new String[]{"jpg", "jpeg", "png"},
                 WWGnlUtilities.buildMessage("image-files"),
-                ".", WWGnlUtilities.buildMessage("save"),
+                ".",
+                WWGnlUtilities.buildMessage("save"),
                 WWGnlUtilities.buildMessage("generate-image"));
         if (fName.trim().length() > 0) {
             String prefix = "";
@@ -683,7 +684,7 @@ public class CommandPanelUtils {
         String fileName = "";
         if (!update && compositeName == null) {
             fileName = WWGnlUtilities.chooseFile(cp,
-                    JFileChooser.FILES_ONLY, // TODO Localize
+                    JFileChooser.FILES_ONLY, // TODO Localize?
                     new String[]{"waz"}, // , "xml" },
                     "Composites",
                     ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX].toString(),
@@ -1064,10 +1065,12 @@ public class CommandPanelUtils {
                         } else { // Non dynamic, prompt the user.
                             // Prompt for the file
                             String firstDir = ((ParamPanel.DataPath) ParamPanel.data[ParamData.FAX_FILES_LOC][ParamData.VALUE_INDEX]).toString().split(File.pathSeparator)[0];
-                            faxName = WWGnlUtilities.chooseFile(cp, JFileChooser.FILES_ONLY,
+                            faxName = WWGnlUtilities.chooseFile(cp,
+                                    JFileChooser.FILES_ONLY,
                                     new String[]{"gif", "jpg", "jpeg", "tif", "tiff", "png"},
                                     hintName,
                                     firstDir,
+                                    WWGnlUtilities.SaveOrOpen.OPEN,
                                     WWGnlUtilities.buildMessage("open"),
                                     hintName,
                                     true);
@@ -1115,7 +1118,8 @@ public class CommandPanelUtils {
                             try {
                                 faxOrigin = ((XMLElement) fax.selectNodes("./dynamic-resource").item(0)).getAttribute("url");
                             } catch (Exception ignore) {
-                                ignore.printStackTrace();
+//                                ignore.printStackTrace();
+                                System.err.printf("No FaxOrigin, ignoring: %s\n", ignore.toString());
                             }
                             cp.getFaxImage()[i].faxOrigin = faxOrigin;
                             if (cp.getFaxImage()[i].comment.equals(faxName)) {
@@ -1226,10 +1230,15 @@ public class CommandPanelUtils {
                         String gribHint = gribNode.getFirstChild().getNodeValue();
                         if (gribHint.trim().length() > 0) {
                             String firstDir = ((ParamPanel.DataPath) ParamPanel.data[ParamData.GRIB_FILES_LOC][ParamData.VALUE_INDEX]).toString().split(File.pathSeparator)[0];
-                            String grib = WWGnlUtilities.chooseFile(cp, JFileChooser.FILES_ONLY,
-                                    new String[]{"grb", "grib"}, gribHint,
-                                    firstDir, WWGnlUtilities.buildMessage("open"),
-                                    gribHint);
+                            String grib = WWGnlUtilities.chooseFile(cp,
+                                    JFileChooser.FILES_ONLY,
+                                    new String[]{"grb", "grib"},
+                                    gribHint,
+                                    firstDir,
+                                    WWGnlUtilities.SaveOrOpen.OPEN,
+                                    WWGnlUtilities.buildMessage("open"),
+                                    gribHint,
+                                    false);
                             if (grib != null && grib.trim().length() > 0) {
                                 String gribFileName = grib;
                                 GribHelper.GribConditionData wgd[] = GribHelper.getGribData(gribFileName, true);
