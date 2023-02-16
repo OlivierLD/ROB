@@ -23,7 +23,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-@SuppressWarnings("serial")
+
 public class LoggingPanel
   extends JPanel
 {

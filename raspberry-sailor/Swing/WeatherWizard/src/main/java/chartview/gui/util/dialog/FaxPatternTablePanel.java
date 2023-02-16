@@ -22,7 +22,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public final class FaxPatternTablePanel
   extends JPanel
 {
@@ -163,7 +163,7 @@ public final class FaxPatternTablePanel
     ((AbstractTableModel) dataModel).fireTableDataChanged();
   }
 
-  @SuppressWarnings("serial")
+  
   public class CustomTableFaxCellRenderer
     extends JLabel
     implements TableCellRenderer

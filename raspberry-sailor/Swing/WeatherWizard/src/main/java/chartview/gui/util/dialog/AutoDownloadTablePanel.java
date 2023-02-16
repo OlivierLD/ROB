@@ -45,7 +45,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public final class AutoDownloadTablePanel
   extends JPanel
 {
@@ -268,7 +268,7 @@ public final class AutoDownloadTablePanel
     setTableResize(tableAutoResizeCheckBox.isSelected() ? TableResizeValue.ON : TableResizeValue.OFF);
   }
 
-  @SuppressWarnings("serial")
+  
   public class CustomTableCellRenderer
     extends JLabel
     implements TableCellRenderer
@@ -300,7 +300,7 @@ public final class AutoDownloadTablePanel
     }
   }
 
-  @SuppressWarnings("serial")
+  
   public class ParamEditor
     extends JComponent
     implements TableCellEditor

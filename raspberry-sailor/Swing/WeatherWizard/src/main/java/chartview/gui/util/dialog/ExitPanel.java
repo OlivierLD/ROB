@@ -11,7 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class ExitPanel
   extends JPanel
 {

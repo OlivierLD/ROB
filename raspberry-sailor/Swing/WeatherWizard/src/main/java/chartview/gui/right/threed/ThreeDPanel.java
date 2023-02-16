@@ -1011,7 +1011,7 @@ public class ThreeDPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     class FileFormatException
             extends Exception {
         public FileFormatException(String s) {

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.JColorChooser;
 
-@SuppressWarnings("serial")
+
 public class FieldPlusColorPicker
   extends FieldPlusFinder
 {

@@ -8,7 +8,7 @@ import java.awt.Color;
 
 import javax.swing.JOptionPane;
 
-@SuppressWarnings("serial")
+
 public class FieldPlusFileAndColorPicker
      extends FieldPlusFinder
 {

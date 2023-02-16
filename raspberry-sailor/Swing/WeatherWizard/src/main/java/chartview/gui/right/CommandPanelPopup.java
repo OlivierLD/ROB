@@ -26,7 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
+
 public class CommandPanelPopup
         extends JPopupMenu
         implements ActionListener, PopupMenuListener {

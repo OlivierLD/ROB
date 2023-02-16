@@ -19,7 +19,7 @@ import oracle.xml.parser.v2.XMLElement;
 
 import org.w3c.dom.NodeList;
 
-@SuppressWarnings("serial")
+
 public class CreateGRIBRequestPanel
   extends JPanel
 {

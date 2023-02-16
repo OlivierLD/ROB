@@ -91,16 +91,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -266,13 +258,15 @@ public class WWGnlUtilities {
 
     public static String truncateBigFileName(String orig) {
         String trunc = orig;
-        if (orig != null && orig.length() > 6)
+        if (orig != null && orig.length() > 6) {
             trunc = orig.substring(0, 6);
+        }
         trunc += "...";
-        if (orig.indexOf(File.separator) > -1)
+        if (orig.indexOf(File.separator) > -1) {
             trunc += (orig.substring(orig.lastIndexOf(File.separator)));
-        else
+        } else {
             trunc += (orig.substring(orig.lastIndexOf("/")));
+        }
         return trunc;
     }
 
@@ -347,29 +341,34 @@ public class WWGnlUtilities {
      */
     public static double getDir(float x, float y) {
         double dir = 0.0D;
-        if (y != 0)
+        if (y != 0) {
             dir = Math.toDegrees(Math.atan((double) x / (double) y));
+        }
         if (x <= 0 || y <= 0) {
-            if (x > 0 && y < 0)
+            if (x > 0 && y < 0) {
                 dir += 180D;
-            else if (x < 0 && y > 0)
+            } else if (x < 0 && y > 0) {
                 dir += 360D;
-            else if (x < 0 && y < 0)
+            } else if (x < 0 && y < 0) {
                 dir += 180D;
-            else if (x == 0) {
-                if (y > 0)
+            } else if (x == 0) {
+                if (y > 0) {
                     dir = 0.0D;
-                else
+                } else {
                     dir = 180D;
+                }
             } else if (y == 0) {
-                if (x > 0)
+                if (x > 0) {
                     dir = 90D;
-                else
+                } else {
                     dir = 270D;
+                }
             }
         }
         dir += 180D; // Because it is a GRIB
-        while (dir >= 360D) dir -= 360D;
+        while (dir >= 360D) {
+            dir -= 360D;
+        }
         return dir;
     }
 
@@ -383,8 +382,9 @@ public class WWGnlUtilities {
                         "\"\n\t\tin \"" + fontRes +
                         "\"\n\t\tfor \"" + parent.getClass().getName() +
                         "\"\n\t\ttry: " + parent.getClass().getResource(fontRes));
-            } else
+            } else {
                 return Font.createFont(Font.TRUETYPE_FONT, fontDef);
+            }
         } catch (FontFormatException e) {
             System.err.println("getting font " + fontName);
             e.printStackTrace();
@@ -450,7 +450,9 @@ public class WWGnlUtilities {
     /**
      * For SailMail requests
      *
-     * @param gribRequest
+     * TODO Other providers ?
+     *
+     * @param gribRequest SailMail's format.
      * @return
      */
     public static String generateGRIBRequest(String gribRequest) {
@@ -460,22 +462,23 @@ public class WWGnlUtilities {
 
             MessageDigest digest = MessageDigest.getInstance("MD5");
             byte[] buff = new byte[inputString.length()];
-            for (int i = 0; i < inputString.length(); i++)
+            for (int i = 0; i < inputString.length(); i++) {
                 buff[i] = (byte) inputString.charAt(i);
+            }
             digest.update(buff, 0, inputString.length());
 
             String s = "";
             byte[] md5encoded = digest.digest();
             //    System.out.println("Final len:" + md5encoded.length);
-            for (int i = 0; i < md5encoded.length; i++) {
-                char c = (char) md5encoded[i];
+            for (byte b : md5encoded) {
+                char c = (char) b;
                 String str = Integer.toString(c, 16);
-                if (str.length() == 4)
+                if (str.length() == 4) {
                     str = str.substring(2, 4);
-                else if (str.length() == 1)
+                } else if (str.length() == 1) {
                     str = "0" + str;
-                //      System.out.print(str + " ");
-
+                }
+                // System.out.print(str + " ");
                 s += str;
             }
             //    System.out.println();
@@ -769,7 +772,6 @@ public class WWGnlUtilities {
                 Properties props = new Properties();
                 props.setProperty(COMPOSITE_FILTER_FOR_ROUTING, regExp);
                 props.store(new FileWriter(REGEXPR_ROUTING_PROPERTIES_FILE), "Last Regular Expressions");
-
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -817,8 +819,9 @@ public class WWGnlUtilities {
         alpha = 1.0f;
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         // Line around the boat
-        for (int i = 0; i < x.length - 1; i++)
+        for (int i = 0; i < x.length - 1; i++) {
             g2.drawLine(xpoints[i], ypoints[i], xpoints[i + 1], ypoints[i + 1]);
+        }
         g2.drawLine(xpoints[x.length - 1], ypoints[x.length - 1], xpoints[0], ypoints[0]);
 
         // option ?
@@ -903,7 +906,6 @@ public class WWGnlUtilities {
         g2d.fillOval(center.x - (KNOB_DIAMETER / 2),
                 center.y - (KNOB_DIAMETER / 2),
                 KNOB_DIAMETER, KNOB_DIAMETER);
-
         g2d.setStroke(originalStroke);
     }
 
@@ -916,17 +918,21 @@ public class WWGnlUtilities {
 
     public static void drawAnemometerArrow(Graphics2D g, Point from, Point to, int headLength, int option, Color handColor, Color arrowColor) {
         Color orig = null;
-        if (g != null) orig = g.getColor();
-        if (handColor != null) g.setColor(handColor);
+        if (g != null) {
+            orig = g.getColor();
+        }
+        if (handColor != null) {
+            g.setColor(handColor);
+        }
 //  int headLength = 30; // 17; // (int)(Math.sqrt( Math.pow((from.x - to.x), 2) + Math.pow((from.y - to.y), 2)) / 3d);
         double headHalfAngle = 15D;
 
         Point middlePoint = null;
-        if (option == FORWARD)
+        if (option == FORWARD) {
             middlePoint = new Point(from.x - ((from.x - to.x) / 2), from.y - ((from.y - to.y) / 2));
-        else
+        } else {
             middlePoint = new Point(from.x + ((from.x - to.x) / 6), from.y + ((from.y - to.y) / 6));
-
+        }
         double dir = getDir((float) (from.x - to.x), (float) (to.y - from.y));
         //  System.out.println("Dir:" + dir);
         Point left = null, right = null;
@@ -943,11 +949,14 @@ public class WWGnlUtilities {
         }
         g.drawLine(from.x, from.y, to.x, to.y);
         Polygon head = new Polygon(new int[]{middlePoint.x, left.x, right.x}, new int[]{middlePoint.y, left.y, right.y}, 3);
-        if (arrowColor != null)
+        if (arrowColor != null) {
             g.setColor(arrowColor);
+        }
         g.fillPolygon(head);
 
-        if (g != null) g.setColor(orig);
+        if (g != null) {
+            g.setColor(orig);
+        }
     }
 
     public static void drawWind(Graphics gr,
@@ -1059,8 +1068,9 @@ public class WWGnlUtilities {
         boolean displayWindDirWithWindColorRange = ((Boolean) ParamPanel.data[ParamData.DISPLAY_WIND_WITH_COLOR_WIND_RANGE][ParamData.VALUE_INDEX]).booleanValue();
 
         int discSize = 4; // Smallest
-        if (drawHeavyDot)
+        if (drawHeavyDot) {
             discSize = (int) Math.round(speed / (double) 2);
+        }
         if (drawWindColorBackground) {
             gr.setColor(getWindColor(coloredWind, initialGribWindBaseColor, speed, true)); // Set transparency anyway
             int w = Math.abs(br.x - tl.x);
@@ -1072,8 +1082,9 @@ public class WWGnlUtilities {
                         new int[]{tl.y, bl.y, br.y, tr.y},
                         4);
                 gr.fillPolygon(plg);
-            } else
+            } else {
                 gr.fillRect(tl.x, tl.y, w, h);
+            }
 //    gr.setColor(Color.black);
 //    gr.drawRect(tl.x, tl.y, w, h);
         } else {
@@ -1097,14 +1108,14 @@ public class WWGnlUtilities {
         int arrowX = (int) ((double) arrowLength * Math.sin(dTWD));
         int arrowY = (int) ((double) arrowLength * Math.cos(dTWD));
 
-        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue())
+        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue()) {
             gr.setColor(getWindColor(coloredWind, initialGribWindBaseColor, speed, false)); // Sets transparency if required (coloredWind = true)
-        else if (displayWindDirWithWindColorRange)
+        } else if (displayWindDirWithWindColorRange) {
             gr.setColor(Color.black);
-
-        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue() || displayWindDirWithWindColorRange)
+        }
+        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue() || displayWindDirWithWindColorRange) {
             gr.drawLine(x, y, x + arrowX, y + arrowY);
-
+        }
         if (displayWindSpeed) {
             Font f = gr.getFont();
             gr.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -1274,8 +1285,9 @@ public class WWGnlUtilities {
         boolean displayWindDirWithWindColorRange = ((Boolean) ParamPanel.data[ParamData.DISPLAY_WIND_WITH_COLOR_WIND_RANGE][ParamData.VALUE_INDEX]).booleanValue();
 
         int discSize = 4; // Smallest
-        if (drawHeavyDot)
+        if (drawHeavyDot) {
             discSize = (int) Math.round(speed * 10 / (double) 2);
+        }
         if (drawCurrentColorBackground) {
             gr.setColor(getWindColor(coloredCurrent, initialGribCurrentBaseColor, speed * 10, true)); // Set transparency anyway
             int w = Math.abs(br.x - tl.x);
@@ -1287,10 +1299,11 @@ public class WWGnlUtilities {
                         new int[]{tl.y, bl.y, br.y, tr.y},
                         4);
                 gr.fillPolygon(plg);
-            } else
+            } else {
                 gr.fillRect(tl.x, tl.y, w, h);
-            //    gr.setColor(Color.black);
-            //    gr.drawRect(tl.x, tl.y, w, h);
+                //    gr.setColor(Color.black);
+                //    gr.drawRect(tl.x, tl.y, w, h);
+            }
         } else {
             gr.setColor(getWindColor(coloredCurrent, initialGribCurrentBaseColor, speed * 10, false));
             gr.fillOval(x - discSize / 2, y - discSize / 2, discSize, discSize);
@@ -1314,14 +1327,14 @@ public class WWGnlUtilities {
         int arrowX = (int) ((double) arrowLength * Math.sin(dCDR));
         int arrowY = (int) ((double) arrowLength * Math.cos(dCDR));
 
-        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue())
+        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue()) {
             gr.setColor(getWindColor(coloredCurrent, initialGribCurrentBaseColor, speed * 10, false)); // Sets transparency if required (coloredWind = true)
-        else if (displayWindDirWithWindColorRange)
+        } else if (displayWindDirWithWindColorRange) {
             gr.setColor(Color.black);
-
-        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue() || displayWindDirWithWindColorRange)
+        }
+        if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue() || displayWindDirWithWindColorRange) {
             gr.drawLine(x, y, x + arrowX, y + arrowY);
-
+        }
         if (displayCurrentSpeed) {
             Font f = gr.getFont();
             gr.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -1374,26 +1387,30 @@ public class WWGnlUtilities {
                                      Color initialGribWindBaseColor,
                                      double speed,
                                      boolean setAnyway) {
-        if (!coloredWind)
+        if (!coloredWind) {
             return Color.black;
-
+        }
         Color c = null;
 
         if (!WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue()) {
             float speedF = (float) speed;
-            if (speedF > 50F) speedF = 50F;
+            if (speedF > 50F) {
+                speedF = 50F;
+            }
             Color igwbc = initialGribWindBaseColor; // Base color
 
             if (setAnyway || WWContext.getInstance().getUseGRIBWindSpeedTransparency()) {
                 int alpha = (int) (255 * speedF / 50F);
                 c = new Color(igwbc.getRed(), igwbc.getGreen(), igwbc.getBlue(), alpha);
-            } else
+            } else {
                 c = igwbc;
+            }
         } else {
 //    c = WindGaugePanel.getWindColor((float)speed);
             int intWS = Math.round((float) speed);
-            if (intWS > WIND_COLOR_VALUES.length - 1)
+            if (intWS > WIND_COLOR_VALUES.length - 1) {
                 intWS = WIND_COLOR_VALUES.length - 1;
+            }
             c = new Color(WIND_COLOR_VALUES[intWS][0],
                     WIND_COLOR_VALUES[intWS][1],
                     WIND_COLOR_VALUES[intWS][2]);
@@ -1437,8 +1454,12 @@ public class WWGnlUtilities {
         double amplitude = top - bottom;
 
         double t = temperature;
-        if (t < bottom) t = bottom;
-        if (t > top) t = top;
+        if (t < bottom) {
+            t = bottom;
+        }
+        if (t > top) {
+            t = top;
+        }
 
         if (true) {
             Color c1 = new Color(14, 241, 236); // Color.blue; // From
@@ -1452,10 +1473,15 @@ public class WWGnlUtilities {
             int r = 0, g = 0, b = 0;
             r = (int) (255 * (t - bottom) / amplitude);
             b = 255 - (int) (255 * (t - bottom) / amplitude);
-            if (r < 0 || b < 0)
+            if (r < 0 || b < 0) {
                 System.out.print("[Temp color for " + temperature + ":" + r + "," + g + "," + b + "]");
-            if (r < 0) r = 0;
-            if (b < 0) b = 0;
+            }
+            if (r < 0) {
+                r = 0;
+            }
+            if (b < 0) {
+                b = 0;
+            }
             c = new Color(r, g, b);
         }
         return c;
@@ -1474,15 +1500,24 @@ public class WWGnlUtilities {
         double amplitude = top - bottom;
 
         double h = height;
-        if (h < bottom) h = bottom;
-        if (h > top) h = top;
+        if (h < bottom) {
+            h = bottom;
+        }
+        if (h > top) {
+            h = top;
+        }
 
         r = 255 - (int) (255 * (h - bottom) / amplitude);
         g = 255 - (int) (255 * (h - bottom) / amplitude);
-        if (r < 0 || g < 0)
+        if (r < 0 || g < 0) {
             System.out.print("[Waves color for " + height + ":" + r + "," + g + "," + b + "]");
-        if (r < 0) r = 0;
-        if (g < 0) g = 0;
+        }
+        if (r < 0) {
+            r = 0;
+        }
+        if (g < 0) {
+            g = 0;
+        }
         c = new Color(r, g, b);
         return c;
     }
@@ -1501,17 +1536,28 @@ public class WWGnlUtilities {
         double amplitude = top - bottom;
 
         double h = top - height;
-        if (h < bottom) h = bottom;
-        if (h > top) h = top;
+        if (h < bottom) {
+            h = bottom;
+        }
+        if (h > top) {
+            h = top;
+        }
 
         r = (int) (255 * (h - bottom) / amplitude);
         g = (int) (255 * (h - bottom) / amplitude);
         b = (int) (255 * (h - bottom) / amplitude);
-        if (r < 0 || g < 0 || b < 0)
+        if (r < 0 || g < 0 || b < 0) {
             System.out.print("[Rain color for " + height + ":" + r + "," + g + "," + b + "]");
-        if (r < 0) r = 0;
-        if (g < 0) g = 0;
-        if (b < 0) b = 0;
+        }
+        if (r < 0) {
+            r = 0;
+        }
+        if (g < 0) {
+            g = 0;
+        }
+        if (b < 0) {
+            b = 0;
+        }
         c = new Color(r, g, b);
         return c;
     }
@@ -1529,17 +1575,28 @@ public class WWGnlUtilities {
         double amplitude = top - bottom;
 
         double p = pressure;
-        if (p < bottom) p = bottom;
-        if (p > top) p = top;
+        if (p < bottom) {
+            p = bottom;
+        }
+        if (p > top) {
+            p = top;
+        }
 
         r = (int) (255 * (p - bottom) / amplitude);
         g = (int) (255 * (p - bottom) / amplitude);
         b = (int) (255 * (p - bottom) / amplitude);
-        if (r < 0 || g < 0 || b < 0)
+        if (r < 0 || g < 0 || b < 0) {
             System.out.print("[Pressure color for " + pressure + ":" + r + "," + g + "," + b + "]");
-        if (r < 0) r = 0;
-        if (g < 0) g = 0;
-        if (b < 0) b = 0;
+        }
+        if (r < 0) {
+            r = 0;
+        }
+        if (g < 0) {
+            g = 0;
+        }
+        if (b < 0) {
+            b = 0;
+        }
         c = new Color(r, g, b);
         return c;
     }
@@ -1557,17 +1614,28 @@ public class WWGnlUtilities {
         double amplitude = top - bottom;
 
         double p = alt;
-        if (p < bottom) p = bottom;
-        if (p > top) p = top;
+        if (p < bottom) {
+            p = bottom;
+        }
+        if (p > top) {
+            p = top;
+        }
 
         r = (int) (255 * (p - bottom) / amplitude);
         g = (int) (255 * (p - bottom) / amplitude);
         b = (int) (255 * (p - bottom) / amplitude);
-        if (r < 0 || g < 0 || b < 0)
+        if (r < 0 || g < 0 || b < 0) {
             System.out.print("[Pressure color for " + alt + ":" + r + "," + g + "," + b + "]");
-        if (r < 0) r = 0;
-        if (g < 0) g = 0;
-        if (b < 0) b = 0;
+        }
+        if (r < 0) {
+            r = 0;
+        }
+        if (g < 0) {
+            g = 0;
+        }
+        if (b < 0) {
+            b = 0;
+        }
         c = new Color(r, g, b);
         return c;
     }
@@ -1586,8 +1654,9 @@ public class WWGnlUtilities {
                     new int[]{tl.y, bl.y, br.y, tr.y},
                     4);
             gr.fillPolygon(plg);
-        } else
+        } else {
             gr.fillRect(tl.x, tl.y, w, h);
+        }
         alpha = 1.0f;
         ((Graphics2D) gr).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
@@ -1595,8 +1664,9 @@ public class WWGnlUtilities {
     public static Color buildColor(String str) {
         String[] st = str.split(";");
         int b = 0, g = 0, r = 0;
-        if (st.length != 3)
+        if (st.length != 3) {
             throw new RuntimeException("Bad color definition: [" + str + "]");
+        }
         r = Integer.parseInt(st[0]);
         g = Integer.parseInt(st[1]);
         b = Integer.parseInt(st[2]);
@@ -1665,10 +1735,11 @@ public class WWGnlUtilities {
                     "Exit",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if (resp == JOptionPane.NO_OPTION)
+            if (resp == JOptionPane.NO_OPTION) {
                 return;
-            else
+            } else {
                 confirm = false; // Don't ask twice
+            }
         }
 
         if (confirm) {
@@ -1684,9 +1755,9 @@ public class WWGnlUtilities {
                     ParamPanel.saveParameters();
                 }
             }
-        } else
+        } else {
             go = true;
-
+        }
         if (go) {
             try {
                 Properties props = new Properties();
@@ -1819,7 +1890,7 @@ public class WWGnlUtilities {
     /**
      * Old version, turns XML into WAZ
      *
-     * @Deprecated
+     * @deprecated
      */
     public static void archiveCompositeDirectory_(final String compositeDirectoryName) {
         // 1 - Ask: Copy or Move
@@ -1829,8 +1900,9 @@ public class WWGnlUtilities {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         final Boolean deleteWhenDone = Boolean.valueOf(resp == JOptionPane.YES_OPTION);
-        if (resp == JOptionPane.CANCEL_OPTION)
+        if (resp == JOptionPane.CANCEL_OPTION) {
             return;
+        }
         // Loop and archive
         Thread archiver = new Thread("archiver") {
             public void run() {
@@ -1858,11 +1930,7 @@ public class WWGnlUtilities {
                     archiveName += ".zip";
                     final String _archiveName = archiveName;
                     archiveName = compositeDirectoryName + File.separator + archiveName;
-                    FilenameFilter fnf = new FilenameFilter() {
-                        public boolean accept(File dir, String name) {
-                            return (!name.equals(_archiveName));
-                        }
-                    };
+                    FilenameFilter fnf = (dir, name) -> (!name.equals(_archiveName));
                     int[] counter = countFilesAndDir(root, fnf, 0, 0);
                     System.out.println("Generating " + archiveName);
 
@@ -1881,8 +1949,9 @@ public class WWGnlUtilities {
                         zos.close();
                         // Now delete
                         File[] dd = root.listFiles(fnf);
-                        for (File f : dd)
+                        for (File f : dd) {
                             recurseDelete(f, fnf);
+                        }
                         resp = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(),
                                 WWGnlUtilities.buildMessage("archiving-completed", new String[]{archiveName}),
                                 WWGnlUtilities.buildMessage("archive-composite"),
@@ -1916,8 +1985,9 @@ public class WWGnlUtilities {
     private static void recurseDelete(File f, FilenameFilter fnf) {
         if (f.isDirectory()) {
             File[] child = f.listFiles(fnf);
-            for (File c : child)
+            for (File c : child) {
                 recurseDelete(c, fnf);
+            }
         }
         boolean b = f.delete();
         if (!b) {
@@ -1940,9 +2010,9 @@ public class WWGnlUtilities {
 
 //  System.out.println("drillDownAndGenerateImage for " + dir.toString());
 
-        if (!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             throw new RuntimeException("[" + dir.getName() + "] not found, or is not a directory");
-        else {
+        } else {
             File[] flist = dir.listFiles(new FileFilter() {
                 public boolean accept(File pathname) {
                     boolean ok = pathname.isDirectory() || (!pathname.isDirectory() &&
@@ -1951,24 +2021,26 @@ public class WWGnlUtilities {
 //            System.out.println("Filtering: [" + pathname.toString() + "] :" + ok);
                     if (ok && !pathname.isDirectory() && pattern != null) {
                         Matcher m = pattern.matcher(pathname.toString());
-                        if ("true".equals(System.getProperty("verbose", "false")))
+                        if ("true".equals(System.getProperty("verbose", "false"))) {
                             System.out.println("Checking if [" + pathname.toString() + "] matches [" + pattern + "]");
-                        if (!m.matches())
+                        }
+                        if (!m.matches()) {
                             ok = false;
+                        }
                     }
                     return ok;
                 }
             });
 //    Arrays.sort(flist, Collections.reverseOrder());
-            for (int i = 0; i < flist.length && keepWorking.valueOf(); i++) {
-                if (flist[i].isDirectory())
+            for (int i = 0; i < flist.length && keepWorking.get(); i++) {
+                if (flist[i].isDirectory()) {
                     howMany += drillDownAndGenerateImage(flist[i], imgDir, cp, pattern, faxPattern, countOnly, displayOption, corellation, withBoatAndTrack, withCommentsOnly);
-                else {
+                } else {
                     String fName = flist[i].getAbsolutePath();
                     String comment = "";
-                    if (withCommentsOnly)
+                    if (withCommentsOnly) {
                         comment = WWGnlUtilities.getCompositeComment(flist[i].getAbsolutePath());
-
+                    }
                     if (withCommentsOnly && comment.trim().length() == 0) {
                         WWContext.getInstance().fireLogging("Comment required, skipping [" + fName + "]");
                         WWContext.getInstance().fireSetStatus("Comment required, skipping [" + fName + "]");
@@ -2019,23 +2091,21 @@ public class WWGnlUtilities {
 
     private static int drillDownAndArchive(File dir, Boolean b) {
         int howMany = 0;
-        if (!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             throw new RuntimeException("[" + dir.getName() + "] not found, or is not a directory");
-        else {
-            File[] flist = dir.listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    boolean ok = pathname.isDirectory() || (!pathname.isDirectory() && pathname.toString().endsWith(".xml"));
+        } else {
+            File[] flist = dir.listFiles(pathname -> {
+                boolean ok = pathname.isDirectory() || (!pathname.isDirectory() && pathname.toString().endsWith(".xml"));
 //            System.out.println("Filtering: [" + pathname.toString() + "] :" + ok);
-                    return ok;
-                }
+                return ok;
             });
             Arrays.sort(flist, Collections.reverseOrder());
-            for (int i = 0; i < flist.length; i++) {
-                if (flist[i].isDirectory())
-                    howMany += drillDownAndArchive(flist[i], b);
-                else {
+            for (File file : flist) {
+                if (file.isDirectory()) {
+                    howMany += drillDownAndArchive(file, b);
+                } else {
 //        System.out.println("Archiving " + flist[i].getAbsolutePath());
-                    archiveComposite(flist[i].getAbsolutePath(), b);
+                    archiveComposite(file.getAbsolutePath(), b);
                     howMany++;
                 }
             }
@@ -2052,9 +2122,9 @@ public class WWGnlUtilities {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         deleteWhenDone = Boolean.valueOf(resp == JOptionPane.YES_OPTION);
-        if (resp == JOptionPane.CANCEL_OPTION)
+        if (resp == JOptionPane.CANCEL_OPTION) {
             return "Cancelled";
-
+        }
         return archiveComposite(compositeName, deleteWhenDone);
     }
 
@@ -2065,7 +2135,7 @@ public class WWGnlUtilities {
     public static String archiveComposite(String compositeName, Boolean deleteOnceDone, boolean deleteGRIBfile) {
         List<String> filesToDelete = null;
         if (deleteOnceDone.booleanValue()) {
-            filesToDelete = new ArrayList<String>(1);
+            filesToDelete = new ArrayList<>(1);
             filesToDelete.add(compositeName); // Make sure... It will be deleted anyway.
         }
         String archiveName = "";
@@ -2079,8 +2149,9 @@ public class WWGnlUtilities {
             // Create temp dir
             String tempDir = "./temp/" + archiveName;
             File archiveDir = new File(tempDir);
-            if (archiveDir.exists())
+            if (archiveDir.exists()) {
                 archiveDir.delete();
+            }
             archiveDir.mkdirs();
 
             // 1 - Parse Composite XML doc
@@ -2100,61 +2171,66 @@ public class WWGnlUtilities {
                         //      System.out.println("FileName:" + faxName);
                         String faxDir = tempDir + "/faxes";
                         File faxDirectory = new File(faxDir);
-                        if (!faxDirectory.exists())
+                        if (!faxDirectory.exists()) {
                             faxDirectory.mkdirs();
+                        }
                         String newFax = "";
-                        if (faxName.indexOf("/") > -1)
+                        if (faxName.indexOf("/") > -1) {
                             newFax = Integer.toString(i + 1) + "_" + faxName.substring(faxName.lastIndexOf("/") + 1);
-                        else
+                        } else {
                             newFax = Integer.toString(i + 1) + "_" + faxName.substring(faxName.lastIndexOf(File.separator) + 1); // Legacy
+                        }
                         //      System.out.println("Copying " + faxName + " into " + newFax);
-                        FileInputStream fis = null;
-                        FileOutputStream fos = null;
-                        try {
-                            fis = new FileInputStream(faxName);
-                            fos = new FileOutputStream(new File(faxDir, newFax));
+                        try (FileInputStream fis = new FileInputStream(faxName);
+                             FileOutputStream fos = new FileOutputStream(new File(faxDir, newFax))) {
                             Utilities.copy(fis, fos);
-                            fis.close();
-                            fos.close();
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                        } finally {
-                            if (fis != null) fis.close();
-                            if (fos != null) fos.close();
                         }
+//                        FileInputStream fis = null;
+//                        FileOutputStream fos = null;
+//                        try {
+//                            fis = new FileInputStream(faxName);
+//                            fos = new FileOutputStream(new File(faxDir, newFax));
+//                            Utilities.copy(fis, fos);
+//                            fis.close();
+//                            fos.close();
+//                        } catch (Exception ex) {
+//                            ex.printStackTrace();
+//                        } finally {
+//                            if (fis != null) {
+//                                fis.close();
+//                            }
+//                            if (fos != null) {
+//                                fos.close();
+//                            }
+//                        }
                         // SailMail header file?
                         if (faxName.toUpperCase().endsWith(".TIF") || faxName.toUpperCase().endsWith(".TIFF")) {
                             String headerFileName = WWGnlUtilities.getHeaderFileName(faxName);
                             if (WWGnlUtilities.headerFileExists(headerFileName)) {
-                                try {
-                                    String newFaxHeader = "";
-                                    if (headerFileName.indexOf("/") > -1)
-                                        newFaxHeader = headerFileName.substring(headerFileName.lastIndexOf("/") + 1);
-                                    else
-                                        newFaxHeader = headerFileName.substring(headerFileName.lastIndexOf(File.separator) + 1);  // Legacy
-
-                                    System.out.println(" ---> " + headerFileName + " becomes " + newFaxHeader);
-
-                                    fis = new FileInputStream(headerFileName);
-                                    fos = new FileOutputStream(new File(faxDir, newFaxHeader));
+                                String newFaxHeader = "";
+                                if (headerFileName.indexOf("/") > -1) {
+                                    newFaxHeader = headerFileName.substring(headerFileName.lastIndexOf("/") + 1);
+                                } else {
+                                    newFaxHeader = headerFileName.substring(headerFileName.lastIndexOf(File.separator) + 1);  // Legacy
+                                }
+                                System.out.println(" ---> " + headerFileName + " becomes " + newFaxHeader);
+                                try (FileInputStream fis = new FileInputStream(headerFileName);
+                                     FileOutputStream fos = new FileOutputStream(new File(faxDir, newFaxHeader))) {
                                     Utilities.copy(fis, fos);
-                                    fis.close();
-                                    fos.close();
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                } finally {
-                                    if (fis != null)
-                                        fis.close();
-                                    if (fos != null)
-                                        fos.close();
                                 }
-                                if (deleteOnceDone.booleanValue())
+                                if (deleteOnceDone.booleanValue()) {
                                     filesToDelete.add(headerFileName);
+                                }
                             }
                         }
                         fax.setAttribute("file", WWContext.WAZ_PROTOCOL_PREFIX + "faxes/" + newFax);
-                        if (deleteOnceDone.booleanValue())
+                        if (deleteOnceDone.booleanValue()) {
                             filesToDelete.add(faxName);
+                        }
                     }
                     // b - grib
                     //    NodeList gribs = composite.selectNodes("/storage/grib[not (@in-line = 'true')]");
@@ -2168,39 +2244,26 @@ public class WWGnlUtilities {
                             //      System.out.println("FileName:" + faxName);
                             String gribDir = tempDir + "/grib";
                             File gribDirectory = new File(gribDir);
-                            if (!gribDirectory.exists())
+                            if (!gribDirectory.exists()) {
                                 gribDirectory.mkdirs();
+                            }
                             String newGrib = "";
-                            if (gribName.indexOf("/") > -1)
+                            if (gribName.indexOf("/") > -1) {
                                 newGrib = gribName.substring(gribName.lastIndexOf("/") + 1);
-                            else
+                            } else {
                                 newGrib = gribName.substring(gribName.lastIndexOf(File.separator) + 1); // Legacy
+                            }
                             //      System.out.println("Copying " + faxName + " into " + newFax);
-                            FileInputStream fis = null;
-                            FileOutputStream fos = null;
-                            try {
-                                fis = new FileInputStream(gribName);
-                                fos = new FileOutputStream(new File(gribDir, newGrib));
+                            try (FileInputStream fis = new FileInputStream(gribName);
+                                 FileOutputStream fos = new FileOutputStream(new File(gribDir, newGrib))) {
                                 Utilities.copy(fis, fos);
-                                fis.close();
-                                fos.close();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
-                            } finally {
-                                if (fis != null)
-                                    try {
-                                        fis.close();
-                                    } catch (Exception ignore) {
-                                    }
-                                if (fos != null)
-                                    try {
-                                        fos.close();
-                                    } catch (Exception ignore) {
-                                    }
                             }
                             gribNameNode.setNodeValue(WWContext.WAZ_PROTOCOL_PREFIX + "grib/" + newGrib);
-                            if (deleteOnceDone.booleanValue() && deleteGRIBfile)
+                            if (deleteOnceDone.booleanValue() && deleteGRIBfile) {
                                 filesToDelete.add(gribName);
+                            }
                         }
                     }
                     // c - GPX Data file
@@ -2217,17 +2280,20 @@ public class WWGnlUtilities {
                     // 5 - Delete temp dir
                     boolean success = deleteDir(archiveDir);
                     System.out.println("Deleting temp dir " + archiveDir.toString() + ":" + success);
-                    if (!success)
+                    if (!success) {
                         deleteLater(archiveDir.toString());
+                    }
                     // 6 - Delete originals if necessary
                     // Always delete the xml file when archive is requested
                     File xml = new File(compositeName);
-                    if (!xml.exists() || !xml.canWrite())
+                    if (!xml.exists() || !xml.canWrite()) {
                         System.out.print("...does not exist or is write protected");
+                    }
                     boolean b = xml.delete();
                     System.out.println(", done:" + b);
-                    if (!b) // Write in file to delete later
+                    if (!b) {  // Write in file to delete later
                         deleteLater(compositeName);
+                    }
                     // Now the other guys.
                     if (deleteOnceDone.booleanValue()) {
                         WWContext.getInstance().fireProgressing(WWGnlUtilities.buildMessage("deleting-from-filesystem"));
@@ -2236,12 +2302,14 @@ public class WWGnlUtilities {
                             String str = fd.next();
                             System.out.print("Deleting " + str);
                             File f = new File(str);
-                            if (!f.exists() || !f.canWrite())
+                            if (!f.exists() || !f.canWrite()) {
                                 System.out.print("...does not exist or is write protected");
+                            }
                             b = f.delete();
                             System.out.println(", done:" + b);
-                            if (!b) // Write in file to delete later
+                            if (!b) { // Write in file to delete later
                                 deleteLater(str);
+                            }
                         }
                     }
                 }
@@ -2312,8 +2380,9 @@ public class WWGnlUtilities {
         String generatedDirectory = null;
         generatedDirectory = archiveName.substring(0, archiveName.lastIndexOf(WWContext.WAZ_EXTENSION)) + "-" + "unarchived";
         File dir = new File(generatedDirectory);
-        if (!dir.exists())
+        if (!dir.exists()) {
             dir.mkdirs();
+        }
         try {
             ZipFile waz = new ZipFile(archiveName);
             ZipEntry composite = waz.getEntry("composite.xml");
@@ -2340,8 +2409,9 @@ public class WWGnlUtilities {
                         faxName = faxName.substring(WWContext.WAZ_PROTOCOL_PREFIX.length());
                         InputStream fis = waz.getInputStream(waz.getEntry(faxName));
                         File faxDir = new File(dir, "faxes");
-                        if (!faxDir.exists())
+                        if (!faxDir.exists()) {
                             faxDir.mkdirs();
+                        }
                         String newFaxName = faxName.substring(faxName.lastIndexOf("/") + 1);
                         File newFax = new File(faxDir, newFaxName);
                         FileOutputStream faxOut = new FileOutputStream(newFax);
@@ -2357,8 +2427,9 @@ public class WWGnlUtilities {
                         gribName = gribName.substring(WWContext.WAZ_PROTOCOL_PREFIX.length());
                         InputStream fis = waz.getInputStream(waz.getEntry(gribName));
                         File gribDir = new File(dir, "grib");
-                        if (!gribDir.exists())
+                        if (!gribDir.exists()) {
                             gribDir.mkdirs();
+                        }
                         String newGribName = gribName.substring(gribName.lastIndexOf("/") + 1);
                         File newGrib = new File(gribDir, newGribName);
                         FileOutputStream gribOut = new FileOutputStream(newGrib);
@@ -2371,8 +2442,9 @@ public class WWGnlUtilities {
                 FileOutputStream fComposite = new FileOutputStream(compositeFile);
                 doc.print(fComposite);
                 fComposite.close();
-            } else
+            } else {
                 System.out.println("Bizarre...");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2382,10 +2454,12 @@ public class WWGnlUtilities {
     private static List<String> recurseDirectory(File dir, List<String> list, FilenameFilter filter) {
         if (dir.isDirectory()) {
             File[] fa = dir.listFiles(filter);
-            for (int i = 0; i < fa.length; i++)
+            for (int i = 0; i < fa.length; i++) {
                 list = recurseDirectory(fa[i], list, filter);
-        } else
+            }
+        } else {
             list.add(dir.getAbsolutePath());
+        }
         return list;
     }
 
@@ -2406,7 +2480,6 @@ public class WWGnlUtilities {
 
         final JTabbedPane tabs = new JTabbedPane();
 
-        @SuppressWarnings("serial")
         OneColumnTablePanel gribPanel = new OneColumnTablePanel(WWGnlUtilities.buildMessage("splash-grib"), false, true) {
             public void refresh() {
                 System.out.println("Refreshing GRIBs after delete");
@@ -2420,7 +2493,6 @@ public class WWGnlUtilities {
         };
         gribPanel.setData(gribList);
 
-        @SuppressWarnings("serial")
         OneColumnTablePanel faxPanel = new OneColumnTablePanel(WWGnlUtilities.buildMessage("splash-faxes"), false, true) {
             public void refresh() {
                 System.out.println("Refreshing faxes after delete");
@@ -2475,8 +2547,9 @@ public class WWGnlUtilities {
                 File grib = new File(gfName);
                 if (gribList.contains(grib.getAbsolutePath())) {
                     gribList.remove(grib.getAbsolutePath());
-                } else
+                } else {
                     System.out.println("Composite [" + comp + "] grib [" + grib.getAbsolutePath() + "] not in list...");
+                }
             }
         }
     }
@@ -2506,18 +2579,16 @@ public class WWGnlUtilities {
     private static List<String> buildFaxList() {
         List<String> faxList = null;
         // Scan faxes, full path
-        FilenameFilter faxFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                File f = new File(dir, name);
-                return f.isDirectory() ||
-                        (!f.isDirectory() &&
-                                (name.toUpperCase().endsWith(".TIF") ||
-                                        name.toUpperCase().endsWith(".TIFF") ||
-                                        name.toUpperCase().endsWith(".PNG") ||
-                                        name.toUpperCase().endsWith(".JPG") ||
-                                        name.toUpperCase().endsWith(".JPEG") ||
-                                        name.toUpperCase().endsWith(".GIF")));
-            }
+        FilenameFilter faxFilter = (dir, name) -> {
+            File f = new File(dir, name);
+            return f.isDirectory() ||
+                    (!f.isDirectory() &&
+                            (name.toUpperCase().endsWith(".TIF") ||
+                                    name.toUpperCase().endsWith(".TIFF") ||
+                                    name.toUpperCase().endsWith(".PNG") ||
+                                    name.toUpperCase().endsWith(".JPG") ||
+                                    name.toUpperCase().endsWith(".JPEG") ||
+                                    name.toUpperCase().endsWith(".GIF")));
         };
         faxList = new ArrayList<String>();
         String faxPath = ((ParamPanel.DataPath) ParamPanel.data[ParamData.FAX_FILES_LOC][ParamData.VALUE_INDEX]).toString();
@@ -2533,14 +2604,12 @@ public class WWGnlUtilities {
         List<String> compositeList = null;
         // Scan Composites (xml, not waz)
         String compositeDir = ((ParamPanel.DataDirectory) ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX]).toString();
-        FilenameFilter compositeFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                File f = new File(dir, name);
-                return f.isDirectory() ||
-                        (!f.isDirectory() && name.toUpperCase().endsWith(".XML"));
-            }
+        FilenameFilter compositeFilter = (dir, name) -> {
+            File f = new File(dir, name);
+            return f.isDirectory() ||
+                    (!f.isDirectory() && name.toUpperCase().endsWith(".XML"));
         };
-        compositeList = new ArrayList<String>();
+        compositeList = new ArrayList<>();
         compositeList = recurseDirectory(new File(compositeDir), compositeList, compositeFilter);
         return compositeList;
     }
@@ -2571,30 +2640,29 @@ public class WWGnlUtilities {
                 uetp.saveData();
             }
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 
     public static void cleanupBackups() {
         String[] dir2scan = new String[]{"all-libs", "all-user-exits"};
-        List<String> toDelete = new ArrayList<String>();
+        List<String> toDelete = new ArrayList<>();
         String ptrn = "\\.jar_[0-9]+$";
         final Pattern pattern = Pattern.compile(ptrn);
-        FilenameFilter fnf = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                File f = new File(dir, name);
-                boolean accept = false;
-                if (f.isDirectory())
-                    accept = true;
-                else {
-                    Matcher m = pattern.matcher(name);
+        FilenameFilter fnf = (dir, name) -> {
+            File f = new File(dir, name);
+            boolean accept = false;
+            if (f.isDirectory()) {
+                accept = true;
+            } else {
+                Matcher m = pattern.matcher(name);
 //          System.out.println(" --> [" + name + "] ?");
-                    if (m.find())
-                        accept = true;
+                if (m.find()) {
+                    accept = true;
                 }
-                //    System.out.println("name [" + name + "] is " + (accept?"":"not ") + "matching");
-                return accept;
             }
+            //    System.out.println("name [" + name + "] is " + (accept?"":"not ") + "matching");
+            return accept;
         };
         for (String dir : dir2scan) {
             File from = new File(".." + File.separator + dir);
@@ -2603,8 +2671,9 @@ public class WWGnlUtilities {
         }
         if (toDelete.size() > 0) {
             String mess = WWGnlUtilities.buildMessage("will-delete") + "\n";
-            for (String s : toDelete)
+            for (String s : toDelete) {
                 mess += (s + "\n");
+            }
             mess += ("\n" + WWGnlUtilities.buildMessage("proceed"));
             int resp = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(),
                     mess, WWGnlUtilities.buildMessage("cleanup-backup"),
@@ -2616,11 +2685,12 @@ public class WWGnlUtilities {
                     f.delete();
                 }
             }
-        } else
+        } else {
             JOptionPane.showMessageDialog(WWContext.getInstance().getMasterTopFrame(),
                     WWGnlUtilities.buildMessage("nothing-to-delete"),
                     WWGnlUtilities.buildMessage("cleanup-backup"),
                     JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private static String findUnusedFileName(String radical, String extension) {
@@ -2654,8 +2724,9 @@ public class WWGnlUtilities {
                 while ((line = br.readLine()) != null) {
                     System.out.println("Deleting " + line);
                     boolean b = deleteDir(new File(line), false);
-                    if (!b)
+                    if (!b) {
                         System.out.println("No way to delete " + line + "...");
+                    }
                 }
                 br.close();
                 f.delete();
@@ -2681,15 +2752,16 @@ public class WWGnlUtilities {
             }
         }
         boolean b = false;
-        if (!dir.exists())
+        if (!dir.exists()) {
             System.out.println(dir.toString() + ": not found.");
-        else if (!dir.canWrite())
+        } else if (!dir.canWrite()) {
             System.out.println(dir.toString() + ": write protected.");
-        else {
+        } else {
             // The directory is now empty so delete it
             b = dir.delete();
-            if (!b && laterIfFailed)
+            if (!b && laterIfFailed) {
                 deleteLater(dir.toString());
+            }
         }
         return b;
     }
@@ -2706,10 +2778,12 @@ public class WWGnlUtilities {
         if (f.isDirectory()) {
             retVal[NBDIR_POS]++;
             File[] toCount = (fnf == null ? f.listFiles() : f.listFiles(fnf));
-            for (int i = 0; i < toCount.length; i++)
-                retVal = countFilesAndDir(toCount[i], fnf, retVal[NBFILE_POS], retVal[NBDIR_POS]);
-        } else
+            for (File file : toCount) {
+                retVal = countFilesAndDir(file, fnf, retVal[NBFILE_POS], retVal[NBDIR_POS]);
+            }
+        } else {
             retVal[NBFILE_POS]++;
+        }
         return retVal;
     }
 
@@ -2717,12 +2791,14 @@ public class WWGnlUtilities {
         if (f.isDirectory()) {
 //    System.out.println("Looking into:" + f.getAbsolutePath());
             File[] toArchive = (fnf == null ? f.listFiles() : f.listFiles(fnf));
-            for (int i = 0; i < toArchive.length; i++)
+            for (int i = 0; i < toArchive.length; i++) {
                 recurseFile(toArchive[i], zip, rootDir);
+            }
         } else {
             String fullFileName = f.getAbsolutePath();
-            if (fullFileName.startsWith(rootDir.getAbsolutePath()))
+            if (fullFileName.startsWith(rootDir.getAbsolutePath())) {
                 fullFileName = fullFileName.substring(rootDir.getAbsolutePath().length() + 1);
+            }
 //    System.out.println("  --  Archiving:" + f.getAbsolutePath() + " as " + fullFileName);
             writeToArchive(zip, f.getAbsolutePath(), Utilities.replaceString(fullFileName, File.separator, "/"));
         }
@@ -2758,12 +2834,14 @@ public class WWGnlUtilities {
                 pathElem[pe] = s;
             }
         }
-        for (int pe = 0; pe < pathElem.length; pe++)
-            translated += ((translated.length() == 0 ? "" : "/") + pathElem[pe]);
+        for (String s : pathElem) {
+            translated += ((translated.length() == 0 ? "" : "/") + s);
+        }
         return translated;
     }
 
-    private final static WWGnlUtilities.SpecialBool keepWorking = new WWGnlUtilities.SpecialBool(true);
+//    private final static WWGnlUtilities.SpecialBool keepWorking = new WWGnlUtilities.SpecialBool(true);
+    private final static AtomicBoolean keepWorking = new AtomicBoolean(true);
 
     public static void generateImagesFromComposites(String fromDir, final CommandPanel cp) {
         String[] fromTo = chooseTwoFiles(cp,
@@ -2826,21 +2904,22 @@ public class WWGnlUtilities {
                     }
                 }
             }
-            if (ok2go) // Means pattern validated
-            {
+            if (ok2go) { // Means pattern validated
                 // Store patterns
                 try {
                     Properties prevProps = new Properties();
                     prevProps.load(new FileInputStream(WWGnlUtilities.REGEXPR_PROPERTIES_FILE));
                     Properties props = new Properties();
-                    if (regExpPattern != null)
+                    if (regExpPattern != null) {
                         props.setProperty(COMPOSITE_FILTER, regExpPattern);
-                    else
+                    } else {
                         props.setProperty(COMPOSITE_FILTER, prevProps.getProperty(COMPOSITE_FILTER, ""));
-                    if (faxNameFilter != null)
+                    }
+                    if (faxNameFilter != null) {
                         props.setProperty(FAX_NAME_FILTER, faxNameFilter);
-                    else
+                    } else {
                         props.setProperty(FAX_NAME_FILTER, prevProps.getProperty(FAX_NAME_FILTER, ""));
+                    }
                     props.store(new FileWriter(REGEXPR_PROPERTIES_FILE), "Last Regular Expressions");
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -2853,25 +2932,24 @@ public class WWGnlUtilities {
                         // 1 - Count
                         final int howMany = drillDownAndGenerateImage(new File(startFrom), new File(generateIn), cp, _pattern, _faxNamePattern, true, displayOpt, null, withBoatAndTrack, withCommentOnly);
                         int resp = 0;
-                        if (howMany > 0)
+                        if (howMany > 0) {
                             resp = JOptionPane.showConfirmDialog(cp,
                                     WWGnlUtilities.buildMessage("image-gen-prompt",
                                             new String[]{Integer.toString(howMany)}),
                                     WWGnlUtilities.buildMessage("image-generation"),
                                     JOptionPane.OK_CANCEL_OPTION,
                                     JOptionPane.QUESTION_MESSAGE);
-                        else {
+                        } else {
                             JOptionPane.showMessageDialog(cp, "No file to generate.\nCheck your regular expression.", WWGnlUtilities.buildMessage("image-generation"), JOptionPane.WARNING_MESSAGE);
                             resp = JOptionPane.CANCEL_OPTION;
                         }
                         if (resp == JOptionPane.OK_OPTION) {
                             final Pattern ptrn = _pattern;
                             final Pattern faxPtrn = _faxNamePattern;
-                            Runnable heavyRunnable = new Runnable() // Show progress bar
-                            {
+                            Runnable heavyRunnable = new Runnable() { // Show progress bar
                                 //          ProgressMonitor monitor = null;
                                 public void run() {
-                                    keepWorking.setValue(true);
+                                    keepWorking.set(true);
                                     WWContext.getInstance().setMonitor(ProgressUtil.createModalProgressMonitor(WWContext.getInstance().getMasterTopFrame(), howMany, false));
                                     WWContext.getInstance().getMonitor().start(WWGnlUtilities.buildMessage("generating-image", new String[]{"1", Integer.toString(howMany)}));
 
@@ -2893,7 +2971,7 @@ public class WWGnlUtilities {
 
                                         public void interruptProgress() {
                                             System.out.println("Interrupting image processing.");
-                                            keepWorking.setValue(false);
+                                            keepWorking.set(false);
                                         }
                                     });
                                     WWContext.getInstance().addApplicationListener(WWContext.getInstance().getAel4monitor());
@@ -2958,8 +3036,9 @@ public class WWGnlUtilities {
                                         ioe.printStackTrace();
                                     } finally {
                                         // to ensure that progress dlg is closed in case of any exception
-                                        if (WWContext.getInstance().getMonitor().getCurrent() != WWContext.getInstance().getMonitor().getTotal())
+                                        if (WWContext.getInstance().getMonitor().getCurrent() != WWContext.getInstance().getMonitor().getTotal()) {
                                             WWContext.getInstance().getMonitor().setCurrent(null, WWContext.getInstance().getMonitor().getTotal());
+                                        }
                                         WWContext.getInstance().removeApplicationListener(WWContext.getInstance().getAel4monitor());
                                         WWContext.getInstance().setAel4monitor(null);
                                         WWContext.getInstance().setMonitor(null);
@@ -2977,26 +3056,25 @@ public class WWGnlUtilities {
     }
 
     public static void generatePDFDataFromImages(String imgLoc, String pdfTitle) throws Exception {
-        String[] month = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] month = new String[]{
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        };
 
         // PrintStream out = System.out;
         OutputStream os = new FileOutputStream("." + File.separator + "data4pdf.xml");
         PrintStream out = new PrintStream(os);
 
         File root = new File(imgLoc);
-        File[] files = root.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".waz.png");
-            }
-        });
+        File[] files = root.listFiles((dir, name) -> name.endsWith(".waz.png"));
 
         DOMParser parser = new DOMParser();
         XMLDocument doc = null;
         try {
             File f = new File("." + File.separator + "image-comments.xml");
-            if (!f.exists())
+            if (!f.exists()) {
                 System.out.println("Tiens?");
+            }
             URL url = f.toURI().toURL();
             System.out.println("Parsing " + url.toString());
             parser.parse(new FileInputStream(f));
@@ -3058,10 +3136,11 @@ public class WWGnlUtilities {
             XMLDocument doc = null;
             DOMParser parser = WWContext.getInstance().getParser();
             URL url = null;
-            if (fileName.startsWith("http://"))
+            if (fileName.startsWith("http://")) {
                 url = new URL(fileName);
-            else
+            } else {
                 url = new File(fileName).toURI().toURL();
+            }
             synchronized (parser) {
                 parser.setValidationMode(XMLParser.NONVALIDATING);
                 parser.parse(url);
@@ -3098,32 +3177,31 @@ public class WWGnlUtilities {
             g2d.setStroke(stroke);
         }
         int BEFORE_AFTER = 3; // TASK Externalize that one, width for smoothing. But 3 sounds good.
-        if (data == null)
+        if (data == null) {
             return;
-
+        }
         int i = 0;
         for (List<List<GeoPoint>> level : data) {
-            if (level == null)
+            if (level == null) {
                 continue;
+            }
 
-            if (isIn(i, doubleThick))
+            if (isIn(i, doubleThick)) {
                 g2d.setStroke(new BasicStroke(4,
                         BasicStroke.CAP_BUTT,
                         BasicStroke.JOIN_BEVEL));
-
+            }
 //    Iterator<ArrayList<GeoPoint>> islandIterator = level.iterator();
 //    Iterator<GeoPoint> it = null;
-            for (List<GeoPoint> curve : level)
+            for (List<GeoPoint> curve : level) {
 //    while (islandIterator.hasNext())
-            {
                 GeoPoint firstPt = null;
                 GeoPoint current = null;
                 Point previous = null;
                 Point firstPanelPoint = null;
 //      List<GeoPoint> ap = islandIterator.next();
 //      System.out.println("Curve Size:" + curve.size());
-                if (curve.size() > BEFORE_AFTER) // Arbitraire
-                {
+                if (curve.size() > BEFORE_AFTER) { // Arbitraire
                     GeoPoint _first = curve.get(0);
                     GeoPoint _last = curve.get(curve.size() - 1);
 //        double closeLoopDistance = _first.orthoDistanceBetween(_last);
@@ -3131,9 +3209,8 @@ public class WWGnlUtilities {
 
 //        it = ap.iterator();
                     int nb = 0;
-                    for (GeoPoint gp : curve)
+                    for (GeoPoint gp : curve) {
 //        while (it.hasNext())
-                    {
                         current = gp;
 
 //          Point plot = chartPanel.getPanelPoint(gp);
@@ -3146,16 +3223,18 @@ public class WWGnlUtilities {
                         for (int idx = bi; idx <= ai; idx++) {
                             int _idx = idx;
                             if (idx < 0) {
-                                if (closeLoopDistance > 300D)
+                                if (closeLoopDistance > 300D) {
                                     _idx = 0;
-                                else
+                                } else {
                                     _idx = curve.size() + idx;
+                                }
                             }
                             if (idx > curve.size() - 1) {
-                                if (closeLoopDistance > 300D)
+                                if (closeLoopDistance > 300D) {
                                     _idx = curve.size() - 1;
-                                else
+                                } else {
                                     _idx = idx - curve.size();
+                                }
                             }
                             Point _p = chartPanel.getPanelPoint(curve.get(_idx));
                             X += _p.x;
@@ -3164,8 +3243,9 @@ public class WWGnlUtilities {
                         int abs = (int) Math.round(X / (2 * BEFORE_AFTER + 1));
                         int ord = (int) Math.round(Y / (2 * BEFORE_AFTER + 1));
                         //        gr.fillOval(abs - 2, ord - 2, 4, 4); // Draw the point
-                        if (previous != null)
+                        if (previous != null) {
                             gr.drawLine(previous.x, previous.y, abs, ord); // draw the line
+                        }
                         previous = new Point(abs, ord);
                         if (firstPt == null) {
                             firstPt = current;
@@ -3174,10 +3254,10 @@ public class WWGnlUtilities {
                         nb++;
                     }
                     double dist = 0d;
-                    if (firstPt != null)
+                    if (firstPt != null) {
                         dist = firstPt.loxoDistanceBetween(current); // firstPt.orthoDistanceBetween(current)
-                    if (firstPt != null && dist < 300D) // Close the loop
-                    {
+                    }
+                    if (firstPt != null && dist < 300D) { // Close the loop
                         //      System.out.println("Distance between First & last:" + dist + "nm");
                         gr.drawLine(firstPanelPoint.x, firstPanelPoint.y, previous.x, previous.y);
                     } else if (firstPt != null) {
@@ -3187,15 +3267,16 @@ public class WWGnlUtilities {
                     }
                 }
             }
-            if (isIn(i, doubleThick))
+            if (isIn(i, doubleThick)) {
                 g2d.setStroke(new BasicStroke(2,
                         BasicStroke.CAP_BUTT,
                         BasicStroke.JOIN_BEVEL));
+            }
             i++;
         }
-        if (gr instanceof Graphics2D)
+        if (gr instanceof Graphics2D) {
             g2d.setStroke(originalStroke);
-
+        }
     }
 
     public static void drawBumps(Graphics gr, ChartPanel chartPanel, List<CurveUtil.GeoBump> bumps) {
@@ -3203,9 +3284,7 @@ public class WWGnlUtilities {
             Font f = gr.getFont();
             Font f2 = new Font(f.getName(), Font.BOLD, 20);
             gr.setFont(f2);
-            Iterator<CurveUtil.GeoBump> iterator = bumps.iterator();
-            while (iterator.hasNext()) {
-                CurveUtil.GeoBump gb = iterator.next();
+            for (CurveUtil.GeoBump gb : bumps) {
                 Point p = chartPanel.getPanelPoint(gb.getGeoPoint());
                 String symbol = (gb.getType() == CurveUtil.GeoBump.L ? WWGnlUtilities.buildMessage("low") : WWGnlUtilities.buildMessage("high"));
                 int l = gr.getFontMetrics(f2).stringWidth(symbol);
@@ -3217,8 +3296,8 @@ public class WWGnlUtilities {
 
     public static boolean isIn(int i, int[] ia) {
         boolean b = false;
-        for (int x = 0; x < ia.length; x++) {
-            if (i == ia[x]) {
+        for (int j : ia) {
+            if (i == j) {
                 b = true;
                 break;
             }
@@ -3251,12 +3330,14 @@ public class WWGnlUtilities {
                     WWGnlUtilities.buildMessage("reading-from-web"),
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if (resp == JOptionPane.OK_OPTION)
+            if (resp == JOptionPane.OK_OPTION) {
                 urlToFetch = wup.getURL().trim();
-            else
+            } else {
                 urlToFetch = null;
-        } else
+            }
+        } else {
             urlToFetch = url;
+        }
         final String urlStr = urlToFetch;
         if (urlStr != null && urlStr.length() > 0) {
             Runnable heavyRunnable = new Runnable() {
@@ -3291,8 +3372,9 @@ public class WWGnlUtilities {
                     } finally {
                         //    System.out.println("End of Progress Monitor");
                         // to ensure that progress dlg is closed in case of any exception
-                        if (WWContext.getInstance().getMonitor().getCurrent() != WWContext.getInstance().getMonitor().getTotal())
+                        if (WWContext.getInstance().getMonitor().getCurrent() != WWContext.getInstance().getMonitor().getTotal()) {
                             WWContext.getInstance().getMonitor().setCurrent(null, WWContext.getInstance().getMonitor().getTotal());
+                        }
 //          WWContext.getInstance().removeApplicationListener(WWContext.getInstance().getAel4monitor());
                         WWContext.getInstance().setAel4monitor(null);
                         WWContext.getInstance().setMonitor(null);
@@ -3346,9 +3428,10 @@ public class WWGnlUtilities {
     public static int nbOccurs(String in, char of) {
         int nb = 0;
         char[] ca = in.toCharArray();
-        for (int i = 0; i < ca.length; i++) {
-            if (ca[i] == of)
+        for (char c : ca) {
+            if (c == of) {
                 nb++;
+            }
         }
         return nb;
     }
@@ -3369,12 +3452,13 @@ public class WWGnlUtilities {
                     if (composite != null) {
                         InputStream is = waz.getInputStream(composite);
                         parser.parse(is);
-                    } else
+                    } else {
                         System.out.println("composite.xml not found :(");
+                    }
                 } else if (fileName.endsWith(".xml")) {
-                    if (!(new File(fileName).isDirectory()))
+                    if (!(new File(fileName).isDirectory())) {
                         parser.parse(new File(fileName).toURI().toURL());
-                    else {
+                    } else {
                         JOptionPane.showMessageDialog(null, fileName + " is a directory", "Restoring Composite", JOptionPane.ERROR_MESSAGE);
                         return "";
                     }
@@ -3391,7 +3475,6 @@ public class WWGnlUtilities {
         return comment;
     }
 
-    @SuppressWarnings("serial")
     public static class FilePreviewer
             extends JComponent
             implements PropertyChangeListener {
@@ -3425,7 +3508,7 @@ public class WWGnlUtilities {
 
         public void propertyChange(PropertyChangeEvent e) {
             String prop = e.getPropertyName();
-            if (prop == JFileChooser.SELECTED_FILE_CHANGED_PROPERTY) {
+            if (Objects.equals(prop, JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {
                 if (isShowing()) {
                     loadImage((File) e.getNewValue());
                     repaint();
@@ -3437,8 +3520,12 @@ public class WWGnlUtilities {
             if (thumbnail != null) {
                 int x = getWidth() / 2 - thumbnail.getIconWidth() / 2;
                 int y = getHeight() / 2 - thumbnail.getIconHeight() / 2;
-                if (y < 0) y = 0;
-                if (x < 5) x = 5;
+                if (y < 0) {
+                    y = 0;
+                }
+                if (x < 5) {
+                    x = 5;
+                }
                 thumbnail.paintIcon(this, g, x, y);
             }
         }
@@ -3485,7 +3572,7 @@ public class WWGnlUtilities {
             String prop = e.getPropertyName();
             soundFileName = "";
             playButton.setEnabled(false);
-            if (prop == JFileChooser.SELECTED_FILE_CHANGED_PROPERTY) {
+            if (Objects.equals(prop, JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {
                 if (isShowing()) {
                     try {
                         soundFileName = ((File) e.getNewValue()).getAbsolutePath();
@@ -3506,7 +3593,10 @@ public class WWGnlUtilities {
 //    }
     }
 
-    public static class SpecialBool {
+    /**
+     * @deprecated Use AtomicBoolean
+     */
+    public static class SpecialBool {  // TODO Replace with Atomic
         private boolean b = true;
 
         public SpecialBool(boolean b) {
@@ -3542,8 +3632,9 @@ public class WWGnlUtilities {
             try {
                 NodeList nl = doc.selectNodes("/storage/fax-collection/fax");
                 faxList = new ArrayList<String>(nl.getLength());
-                for (int i = 0; i < nl.getLength(); i++)
+                for (int i = 0; i < nl.getLength(); i++) {
                     faxList.add(((XMLElement) nl.item(i)).getAttribute("file"));
+                }
                 nl = doc.selectNodes("/storage/grib");
                 if (nl.getLength() > 0) {
                     XMLElement grib = (XMLElement) nl.item(0);
@@ -3597,12 +3688,14 @@ public class WWGnlUtilities {
             }
         }
         if (bpsc.allIsOk()) {
-            if (bpsc.getBoatPosition() != null)
+            if (bpsc.getBoatPosition() != null) {
                 return bpsc.getBoatPosition();
-            else
+            } else {
                 throw new RuntimeException("No position found from the serial port");
-        } else
+            }
+        } else {
             throw new RuntimeException(bpsc.getProblemCause());
+        }
     }
 
     public static BoatPosition getHTTPBoatPosition() throws Exception {
@@ -3696,7 +3789,7 @@ public class WWGnlUtilities {
         }
     }
 
-    // Beaufort Scale                                  0   1   2   3    4    5    6    7    8    9   10   11   12
+    // Beaufort Scale                                 0   1   2   3    4    5    6    7    8    9   10   11   12
     protected final static double[] BEAUFORT_SCALE = {0d, 1d, 4d, 7d, 11d, 16d, 22d, 28d, 34d, 41d, 48d, 56d, 64d};
 
     public static int getBeaufort(double d) {
@@ -3705,8 +3798,9 @@ public class WWGnlUtilities {
             if (d < BEAUFORT_SCALE[i]) {
                 b = i - 1;
                 break;
-            } else
+            } else {
                 b = i;
+            }
         }
         return b;
     }
@@ -3721,9 +3815,9 @@ public class WWGnlUtilities {
     public static double getAngle(double sin, double cos) {
         double angle = 0;
         angle = Math.asin(sin);
-        if (cos < 0)
+        if (cos < 0) {
             angle = Math.PI - angle;
-
+        }
         return angle;
     }
 
@@ -3758,12 +3852,15 @@ public class WWGnlUtilities {
         int nbDay = (int) (diff / NB_S_PER_DAY);
         int nbHour = (int) ((diff - (nbDay * NB_S_PER_DAY)) / NB_S_PER_HOUR);
         int nbMin = (int) ((diff - (nbDay * NB_S_PER_DAY) - (nbHour * NB_S_PER_HOUR)) / NB_S_PER_MIN);
-        if (nbDay > 0)
+        if (nbDay > 0) {
             ret += (Integer.toString(nbDay) + " " + (nbDay > 1 ? buildMessage("day_s") : buildMessage("day")) + " ");
-        if (nbHour > 0) // || nbDay > 0)
+        }
+        if (nbHour > 0) { // || nbDay > 0)
             ret += (Integer.toString(nbHour) + " " + (nbHour > 1 ? buildMessage("hour_s") : buildMessage("hour")) + " ");
-        if (nbMin > 0) // || nbHour > 0 || nbDay > 0)
+        }
+        if (nbMin > 0) { // || nbHour > 0 || nbDay > 0)
             ret += (Integer.toString(nbMin) + " " + (nbMin > 1 ? buildMessage("minute_s") : buildMessage("minute")));
+        }
         //  System.out.println("Diff:" + diff + ", :" + ret);
         return ret;
     }
@@ -3815,8 +3912,9 @@ public class WWGnlUtilities {
         long remainder = amount;
         for (int i = 0; i < units.length; i++) {
             long divider = 1;
-            for (int j = 0; j < (units.length - i - 1); j++)
-                divider *= 1024;
+            for (int j = 0; j < (units.length - i - 1); j++) {
+                divider *= 1_024;
+            }
             //    System.out.println("Divider for [" + units[i] + "]:" + divider);
             long temp = remainder / divider;
             if (temp != 0) {
@@ -3909,10 +4007,12 @@ public class WWGnlUtilities {
                 if (cl.isInstance(parent)) {
                     component = cl.cast(parent);
                     b = false;
-                } else
+                } else {
                     parent = parent.getParent();
-            } else
+                }
+            } else {
                 b = false;
+            }
         }
         return component;
     }
@@ -3922,7 +4022,8 @@ public class WWGnlUtilities {
                                               final int dialogType,
                                               int timeout) // In seconds!!!
     {
-        final WWGnlUtilities.SpecialBool imDone = new WWGnlUtilities.SpecialBool(false);
+//        final WWGnlUtilities.SpecialBool imDone = new WWGnlUtilities.SpecialBool(false);
+        final AtomicBoolean imDone = new AtomicBoolean(false);
 
         final Thread me = Thread.currentThread();
         Thread thread = new Thread("display-and-hide-dialog") {
@@ -3932,7 +4033,7 @@ public class WWGnlUtilities {
                             message,
                             title,
                             dialogType);
-                    imDone.setValue(true);
+                    imDone.set(true);
                     synchronized (me) {
                         me.notify();
                     }
@@ -3950,8 +4051,8 @@ public class WWGnlUtilities {
 
         synchronized (me) {
             try {
-                for (int i = 0; i < timeout && !imDone.valueOf(); i++) {
-                    me.wait(1000L);
+                for (int i = 0; i < timeout && !imDone.get(); i++) {
+                    me.wait(1_000L);
                 }
                 if (thread.isAlive()) {
                     thread.interrupt();
@@ -3998,7 +4099,6 @@ public class WWGnlUtilities {
         System.out.println("[" + after + "]");
 
         System.out.println("Archive test");
-        ;
         String ar = archiveComposite("C:\\_myWork\\_ForExport\\dev-corner\\olivsoft\\all-scripts\\composites\\2008\\01 - jan\\2008-01-17-AllPacific-GRIB.xml");
         System.out.println("Returned:" + ar);
     }

@@ -12,7 +12,7 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class StationDataPanel
   extends JPanel
 {

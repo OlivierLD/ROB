@@ -36,7 +36,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
 
 
-@SuppressWarnings("serial")
+
 public class ChartCommandPanelToolBar
   extends JToolBar
 {

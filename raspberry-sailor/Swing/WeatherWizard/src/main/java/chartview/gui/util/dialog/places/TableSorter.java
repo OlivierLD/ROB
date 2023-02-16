@@ -14,7 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
-@SuppressWarnings("serial")
+
 public class TableSorter 
      extends PlacesTableMap 
 {

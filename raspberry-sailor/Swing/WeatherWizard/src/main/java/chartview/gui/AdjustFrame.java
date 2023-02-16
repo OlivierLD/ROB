@@ -70,7 +70,7 @@ public class AdjustFrame extends JFrame {
 
     int grayPanelY = 0;
     int grayPanelSectorAngle = 0;
-    @SuppressWarnings("serial")
+    
     private JLayeredPane layers = new JLayeredPane() {
         @Override
         public void paint(Graphics g) {
@@ -87,7 +87,7 @@ public class AdjustFrame extends JFrame {
     private String message2Display = "";
 
     private float grayPanelTransparency = ((Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX]).floatValue();
-    @SuppressWarnings("serial")
+    
     private JPanel grayTransparentPanel = new JPanel() {
         @Override
         public void paintComponent(Graphics g) {
@@ -2393,7 +2393,7 @@ public class AdjustFrame extends JFrame {
     public JTabbedPane getMasterTabPane() {
         return masterTabPane;
     }
-//  @SuppressWarnings("serial")
+//  
 //  public class HelpOpenAction extends AbstractAction
 //  {
 //    public HelpOpenAction()
@@ -2408,7 +2408,7 @@ public class AdjustFrame extends JFrame {
 //    }
 //  }
 
-    @SuppressWarnings("serial")
+    
     public class ExitAction extends AbstractAction {
         public ExitAction() {
             super(WWGnlUtilities.buildMessage("exit-no-acc"), new ImageIcon(instance.getClass().getResource("img/dummy.png")));
@@ -2419,7 +2419,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class OpenAction extends AbstractAction {
         public OpenAction() {
             super(WWGnlUtilities.buildMessage("set-composite"),
@@ -2431,7 +2431,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class NewTabAction extends AbstractAction {
         private boolean withLoad = false;
 
@@ -2458,7 +2458,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class ReloadAction extends AbstractAction {
         public ReloadAction() {
             super(WWGnlUtilities.buildMessage("load-reload-defaut"),
@@ -2474,7 +2474,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class SaveCompositeAction extends AbstractAction {
         public SaveCompositeAction() {
             super(WWGnlUtilities.buildMessage("save-composite"), new ImageIcon(instance.getClass().getResource("img/save.png")));
@@ -2485,7 +2485,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class SaveCompositeAsAction extends AbstractAction {
         public SaveCompositeAsAction() {
             super(WWGnlUtilities.buildMessage("save-as-composite"), new ImageIcon(instance.getClass().getResource("img/save.png")));

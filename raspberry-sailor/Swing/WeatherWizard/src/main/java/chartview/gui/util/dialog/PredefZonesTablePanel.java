@@ -52,7 +52,7 @@ import oracle.xml.parser.v2.XMLElement;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-@SuppressWarnings("serial")
+
 public final class PredefZonesTablePanel
   extends JPanel
 {
@@ -323,7 +323,7 @@ public final class PredefZonesTablePanel
     return newDoc; 
   }
 
-  @SuppressWarnings("serial")
+  
   public class CustomTableCellRenderer
     extends JLabel
     implements TableCellRenderer
@@ -356,7 +356,7 @@ public final class PredefZonesTablePanel
     }
   }
 
-  @SuppressWarnings("serial")
+  
   public class ParamEditor
     extends JComponent
     implements TableCellEditor
@@ -537,7 +537,7 @@ public final class PredefZonesTablePanel
     ((AbstractTableModel) dataModel).fireTableDataChanged();
   }
 
-  @SuppressWarnings("serial")
+  
   class TablePopup extends JPopupMenu
                 implements ActionListener,
                            PopupMenuListener

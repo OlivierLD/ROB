@@ -47,7 +47,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-@SuppressWarnings("serial")
+
 public class CompositeDetailsInputPanel
      extends JPanel
 {

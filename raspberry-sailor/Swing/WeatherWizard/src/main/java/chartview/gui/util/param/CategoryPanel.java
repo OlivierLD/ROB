@@ -9,7 +9,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-@SuppressWarnings("serial")
+
 public class CategoryPanel
      extends JPanel
 {

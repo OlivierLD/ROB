@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
-@SuppressWarnings("serial")
+
 public final class GRIBPatternEditorPanel
   extends JPanel
 {

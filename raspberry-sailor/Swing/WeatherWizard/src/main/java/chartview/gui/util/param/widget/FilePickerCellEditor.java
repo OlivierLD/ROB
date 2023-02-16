@@ -15,7 +15,7 @@ import javax.swing.table.TableCellEditor;
 import java.util.Vector;
 import javax.swing.event.ChangeEvent;
 
-@SuppressWarnings("serial")
+
 public class FilePickerCellEditor 
      extends FieldPlusFilePicker 
   implements TableCellEditor 

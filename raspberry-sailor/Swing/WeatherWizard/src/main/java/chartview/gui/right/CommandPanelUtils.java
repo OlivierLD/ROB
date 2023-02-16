@@ -113,8 +113,9 @@ public class CommandPanelUtils {
         // Measure dimensions, based on the title and the data to display.
         if (winTitle != null) {
             int strWidth = graphics.getFontMetrics(titleFont).stringWidth(winTitle);
-            if ((strWidth + ALT_WINDOW_TITLE_OFFSET + ALT_WINDOW_3BUTTON_WIDTH) > altTooltipW)
+            if ((strWidth + ALT_WINDOW_TITLE_OFFSET + ALT_WINDOW_3BUTTON_WIDTH) > altTooltipW) {
                 altTooltipW = strWidth + ALT_WINDOW_TITLE_OFFSET + ALT_WINDOW_3BUTTON_WIDTH;
+            }
         }
 
         if (dataString != null) {

@@ -26,7 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-@SuppressWarnings("serial")
+
 public class ProjectionPanel
   extends JPanel
 {

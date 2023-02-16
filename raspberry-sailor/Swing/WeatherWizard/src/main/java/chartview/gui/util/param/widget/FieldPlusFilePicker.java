@@ -4,7 +4,7 @@ import chartview.util.WWGnlUtilities;
 
 import javax.swing.JFileChooser;
 
-@SuppressWarnings("serial")
+
 public class FieldPlusFilePicker extends FieldPlusFinder
 {
   String[] fileTypes = null;

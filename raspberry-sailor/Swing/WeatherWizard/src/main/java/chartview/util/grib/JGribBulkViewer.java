@@ -241,7 +241,7 @@ public class JGribBulkViewer
     }
   }
   
-  @SuppressWarnings("serial")
+  
   class GribDate extends Date
   {
     private Date date;

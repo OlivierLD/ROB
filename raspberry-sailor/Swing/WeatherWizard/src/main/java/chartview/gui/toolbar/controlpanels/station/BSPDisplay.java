@@ -21,7 +21,7 @@ import java.awt.RenderingHints;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class BSPDisplay
   extends JPanel
 {

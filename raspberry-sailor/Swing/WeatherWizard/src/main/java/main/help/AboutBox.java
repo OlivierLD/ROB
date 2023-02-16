@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.Properties;
 
-@SuppressWarnings("serial")
+
 public class AboutBox
         extends JPanel {
     private transient Border border = BorderFactory.createEtchedBorder();

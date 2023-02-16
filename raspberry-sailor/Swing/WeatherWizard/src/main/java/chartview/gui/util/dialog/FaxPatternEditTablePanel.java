@@ -46,7 +46,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public final class FaxPatternEditTablePanel
   extends JPanel
 {
@@ -411,7 +411,7 @@ public final class FaxPatternEditTablePanel
       return TableResizeValue.OFF;
   }
 
-  @SuppressWarnings("serial")
+  
   public class ParamEditor
     extends JComponent
     implements TableCellEditor
@@ -523,7 +523,7 @@ public final class FaxPatternEditTablePanel
     }
   }
 
-  @SuppressWarnings("serial")
+  
   public class CustomTableCellRenderer
     extends JLabel
     implements TableCellRenderer

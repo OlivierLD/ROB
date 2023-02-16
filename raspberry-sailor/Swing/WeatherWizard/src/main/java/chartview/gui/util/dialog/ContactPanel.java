@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-@SuppressWarnings("serial")
+
 public class ContactPanel
      extends JPanel
 {

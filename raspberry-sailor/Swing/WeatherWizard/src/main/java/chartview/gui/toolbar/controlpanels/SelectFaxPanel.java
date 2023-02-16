@@ -25,7 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-@SuppressWarnings("serial")
+
 public class SelectFaxPanel
   extends JPanel
 {

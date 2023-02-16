@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import javax.swing.JLayeredPane;
 import javax.swing.Scrollable;
 
-@SuppressWarnings("serial")
+
 public class ScrollableLayeredPane 
      extends JLayeredPane
   implements Scrollable

@@ -34,7 +34,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public final class ContourLineTablePanel
   extends JPanel
 {

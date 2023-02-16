@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-@SuppressWarnings("serial")
+
 public class FileAndColorPanel
   extends JPanel
 {

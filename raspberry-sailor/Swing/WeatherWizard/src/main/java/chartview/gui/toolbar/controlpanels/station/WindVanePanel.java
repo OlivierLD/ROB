@@ -24,7 +24,7 @@ import java.awt.geom.Arc2D;
 
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class WindVanePanel
   extends JPanel
 {

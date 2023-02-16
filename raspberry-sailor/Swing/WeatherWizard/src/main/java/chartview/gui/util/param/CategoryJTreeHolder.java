@@ -21,7 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 
-@SuppressWarnings("serial")
+
 public class CategoryJTreeHolder 
     extends JPanel
 {

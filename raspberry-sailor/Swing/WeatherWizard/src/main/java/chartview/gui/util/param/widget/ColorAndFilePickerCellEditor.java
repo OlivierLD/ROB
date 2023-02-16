@@ -14,7 +14,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
-@SuppressWarnings("serial")
+
 public class ColorAndFilePickerCellEditor
      extends FieldPlusFileAndColorPicker
   implements TableCellEditor

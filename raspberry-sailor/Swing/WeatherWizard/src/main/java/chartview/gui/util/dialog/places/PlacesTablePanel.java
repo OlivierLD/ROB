@@ -39,7 +39,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import oracle.xml.parser.v2.XMLElement;
 
-@SuppressWarnings("serial")
+
 public class PlacesTablePanel
      extends JPanel 
 {
@@ -205,7 +205,7 @@ public class PlacesTablePanel
     TableColumn checkColumn = table.getColumn(SHOW);
     checkColumn.setCellEditor(new DefaultCellEditor(checkBox));
     
-    @SuppressWarnings("serial")
+    
     DefaultTableCellRenderer stringRenderer = new DefaultTableCellRenderer()
     {
       public void setValue(Object value)

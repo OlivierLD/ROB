@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class ControlPane
   extends JPanel
 {
@@ -29,7 +29,7 @@ public class ControlPane
 
   private MainZoomPanel mainZoomPanel = new MainZoomPanel();
   private SelectFaxPanel selectFaxPanel = new SelectFaxPanel();
-  @SuppressWarnings("serial")
+  
   private ButtonCommandPanel imageCommandPanel = new ButtonCommandPanel()
     {
       public void fireUp()
@@ -63,7 +63,7 @@ public class ControlPane
       }
     };
     
-  @SuppressWarnings("serial")
+  
   private ButtonCommandPanel chartCommandPanel = new ButtonCommandPanel()
     {
       public void fireUp()

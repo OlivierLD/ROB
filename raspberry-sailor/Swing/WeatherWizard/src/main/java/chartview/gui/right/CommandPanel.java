@@ -371,12 +371,13 @@ public class CommandPanel
             blurRadioButton.setSelected(blurIndex == -1);
             noChangeRadioButton.setSelected(blurIndex == 0);
             sharpRadioButton.setSelected(blurIndex == 1);
-            if (blurIndex == -1)
+            if (blurIndex == -1) {
                 blurSharpOption = ImageUtil.BLUR;
-            else if (blurIndex == 0)
+            } else if (blurIndex == 0) {
                 blurSharpOption = ImageUtil.NO_CHANGE;
-            else if (blurIndex == 1)
+            } else if (blurIndex == 1) {
                 blurSharpOption = ImageUtil.SHARPEN;
+            }
             previousBlurSharpOption = blurSharpOption;
         }
         smoothColorCheckBox = new JCheckBox("");
@@ -414,18 +415,21 @@ public class CommandPanel
 
         blurRadioButton.addActionListener(e -> {
             blurSharpOption = ImageUtil.BLUR;
-            if (getFaxes() != null)
+            if (getFaxes() != null) {
                 adjustFuzziness();
+            }
         });
         noChangeRadioButton.addActionListener(e -> {
             blurSharpOption = ImageUtil.NO_CHANGE;
-            if (getFaxes() != null)
+            if (getFaxes() != null) {
                 adjustFuzziness();
+            }
         });
         sharpRadioButton.addActionListener(e -> {
             blurSharpOption = ImageUtil.SHARPEN;
-            if (getFaxes() != null)
+            if (getFaxes() != null) {
                 adjustFuzziness();
+            }
         });
         smoothColorCheckBox.addActionListener(e -> SwingUtilities.invokeLater(() -> repaint()));
         smoothColorCheckBox.addMouseListener(new MouseAdapter() {
@@ -433,8 +437,7 @@ public class CommandPanel
             public void mouseClicked(MouseEvent me) {
                 //          super.mouseClicked(e);
                 int mask = me.getModifiers();
-                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) // Right click
-                {
+                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) { // Right click
                     BlurMatrixDimPanel bmdp = new BlurMatrixDimPanel();
                     bmdp.setMatrixSize(blurMatrixDim);
                     int resp = JOptionPane.showConfirmDialog(smoothColorCheckBox, bmdp, "Blur Matrix Dimension", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -600,8 +603,9 @@ public class CommandPanel
     }
 
     public FaxType[] getFaxes() {
-        if (faxImage == null || faxImage.length == 0)
+        if (faxImage == null || faxImage.length == 0) {
             return null;
+        }
         FaxType[] ft = null;
         try {
             ft = new FaxType[faxImage.length];
@@ -699,17 +703,18 @@ public class CommandPanel
         faxOpacitySlider.setEnabled(false);
         gribOpacitySlider.setEnabled(false);
         if (checkBoxCompositePanel != null) {
-            if (compositeCheckBox != null) // Remove before adding new ones
-            {
+            if (compositeCheckBox != null) { // Remove before adding new ones
                 for (int i = 0; i < compositeCheckBox.length; i++) {
-                    if (compositeCheckBox[i] != null)
+                    if (compositeCheckBox[i] != null) {
                         checkBoxCompositePanel.remove(compositeCheckBox[i]);
+                    }
                 }
             }
             if (compositeRadioButton != null) {
                 for (int i = 0; i < compositeRadioButton.length; i++) {
-                    if (compositeRadioButton[i] != null)
+                    if (compositeRadioButton[i] != null) {
                         checkBoxCompositePanel.remove(compositeRadioButton[i]);
+                    }
                 }
             }
             checkBoxCompositePanel.repaint();
@@ -753,8 +758,9 @@ public class CommandPanel
 
             for (int i = 0; i < nbFaxes; i++) {
                 if (faxes[i].getOrigin().startsWith(WWContext.INTERNAL_RESOURCE_PREFIX) ||
-                        faxes[i].getOrigin().startsWith(WWContext.EXTERNAL_RESOURCE_PREFIX))
+                        faxes[i].getOrigin().startsWith(WWContext.EXTERNAL_RESOURCE_PREFIX)) {
                     ecb++;
+                }
             }
             compositeCheckBox = new JCheckBox[EXTRA_CHECK_BOXES + ecb + (wgd != null ? 1 : 0)];
 
@@ -782,12 +788,15 @@ public class CommandPanel
                     chartPanel.repaint();
                 });
                 String tooltip = faxes[i].getTitle();
-                if (tooltip == null || tooltip.trim().length() == 0)
+                if (tooltip == null || tooltip.trim().length() == 0) {
                     tooltip = faxes[i].getComment();
-                if (tooltip.trim().length() == 0)
+                }
+                if (tooltip.trim().length() == 0) {
                     tooltip = faxes[i].getValue();
-                if (tooltip.indexOf("/") > -1)
+                }
+                if (tooltip.indexOf("/") > -1) {
                     tooltip = tooltip.substring(tooltip.lastIndexOf("/") + 1);
+                }
                 compositeCheckBox[nbCB].setToolTipText(tooltip);
                 checkBoxCompositePanel.add(compositeCheckBox[nbCB],
                         new GridBagConstraints(0, i, 1, 1, 0.0, 0.0,
@@ -815,18 +824,22 @@ public class CommandPanel
                     //        faxImage[fIdx].show = compositeRadioButton[fIdx].isSelected();
 
                     for (int i1 = 0; i1 < compositeRadioButton.length; i1++) {
-                        if (compositeRadioButton[i1] != null)
+                        if (compositeRadioButton[i1] != null) {
                             faxImage[i1 + _ecb].show = compositeRadioButton[i1].isSelected();
+                        }
                     }
                     chartPanel.repaint();
                 });
                 String tooltip = faxes[i].getTitle();
-                if (tooltip == null || tooltip.trim().length() == 0)
+                if (tooltip == null || tooltip.trim().length() == 0) {
                     tooltip = faxes[i].getComment();
-                if (tooltip.trim().length() == 0)
+                }
+                if (tooltip.trim().length() == 0) {
                     tooltip = faxes[i].getValue();
-                if (tooltip.indexOf("/") > -1)
+                }
+                if (tooltip.indexOf("/") > -1) {
                     tooltip = tooltip.substring(tooltip.lastIndexOf("/") + 1);
+                }
                 compositeRadioButton[nbRB].setToolTipText(tooltip);
                 checkBoxCompositePanel.add(compositeRadioButton[nbRB],
                         new GridBagConstraints(0, i, 1, 1, 0.0, 0.0,
@@ -848,11 +861,11 @@ public class CommandPanel
         }
         int i = ecb + (faxes == null ? 0 : (checkBoxPanelOption == CHECKBOX_OPTION ? faxes.length : 0));
         int pos = (faxes == null ? 0 : faxes.length);
-        if (wgd != null) // One for the GRIBs
-        {
+        if (wgd != null) { // One for the GRIBs
             final int cbIdx = i;
-            if (compositeCheckBox == null)
+            if (compositeCheckBox == null) {
                 compositeCheckBox = new JCheckBox[ecb + EXTRA_CHECK_BOXES + 1]; // + 1 pour le GRIB
+            }
             compositeCheckBox[cbIdx] = new JCheckBox("");
             compositeCheckBox[cbIdx].setSelected(this.isDrawGRIB());
             compositeCheckBox[cbIdx].setBackground((Color) ParamPanel.data[ParamData.GRIB_WIND_COLOR][ParamData.VALUE_INDEX]);
@@ -868,8 +881,9 @@ public class CommandPanel
                             new Insets(5, 5, 5, 5), 0, 0));
         }
         // Add 6, for the chart, and for the grid, drawing, places, sailmail stations, weather stations
-        if (compositeCheckBox == null)
+        if (compositeCheckBox == null) {
             compositeCheckBox = new JCheckBox[ecb + EXTRA_CHECK_BOXES];
+        }
         i = ecb + (faxes == null ? 0 : (checkBoxPanelOption == CHECKBOX_OPTION ? faxes.length : 0)) + (wgd != null ? 1 : 0);
         { // Chart
             final int cbIdx = i;
@@ -973,18 +987,24 @@ public class CommandPanel
         int nbContour = 0;
         final List<Integer> contourList = new ArrayList<>();
 
-        if (gribData != null && isDisplayContourTWS()) contourList.add(new Integer(GRIBDataUtil.TYPE_TWS));
-        if (gribData != null && isTherePrmsl() && isDisplayContourPRMSL())
+        if (gribData != null && isDisplayContourTWS()) {
+            contourList.add(new Integer(GRIBDataUtil.TYPE_TWS));
+        }
+        if (gribData != null && isTherePrmsl() && isDisplayContourPRMSL()) {
             contourList.add(new Integer(GRIBDataUtil.TYPE_PRMSL));
-        if (gribData != null && isThere500mb() && isDisplayContour500mb())
+        }
+        if (gribData != null && isThere500mb() && isDisplayContour500mb()) {
             contourList.add(new Integer(GRIBDataUtil.TYPE_500MB));
-        if (gribData != null && isThereWaves() && isDisplayContourWaves())
+        }
+        if (gribData != null && isThereWaves() && isDisplayContourWaves()) {
             contourList.add(new Integer(GRIBDataUtil.TYPE_WAVE));
-        if (gribData != null && isThereTemperature() && isDisplayContourTemp())
+        }
+        if (gribData != null && isThereTemperature() && isDisplayContourTemp()) {
             contourList.add(new Integer(GRIBDataUtil.TYPE_TMP));
-        if (gribData != null && isThereRain() && isDisplayContourPrate())
+        }
+        if (gribData != null && isThereRain() && isDisplayContourPrate()) {
             contourList.add(new Integer(GRIBDataUtil.TYPE_RAIN));
-
+        }
         nbContour = contourList.size();
 
         displayGribPRMSLContour = true;
@@ -1082,34 +1102,36 @@ public class CommandPanel
             String fileName = faxes[i].getValue();
             Image faxImg = null;
             try {
-                if (fileName.startsWith(WWContext.WAZ_PROTOCOL_PREFIX)) // From archive. Used for example when color is to be changed by user.
-                {
+                if (fileName.startsWith(WWContext.WAZ_PROTOCOL_PREFIX)) { // From archive. Used for example when color is to be changed by user.
                     waz = new ZipFile(WWContext.getInstance().getCurrentComposite());
                     String fName = fileName.substring(WWContext.WAZ_PROTOCOL_PREFIX.length());
                     InputStream is = waz.getInputStream(waz.getEntry(fName));
                     boolean tif = fileName.toUpperCase().endsWith(".TIFF") || fileName.toUpperCase().endsWith(".TIF");
                     faxImg = ImageUtil.readImage(is, tif);
                     is.close();
-                } else
+                } else {
                     faxImg = ImageUtil.readImage(fileName);
+                }
                 if (faxImg != null) {
                     if (faxes[i].isTransparent()) {
                         if (faxes[i].isChangeColor() || previousBlurSharpOption != blurSharpOption) {
                             if (faxImage != null &&
                                     faxImage.length > i &&
                                     faxes[i].getColor().equals(faxImage[i].color) && // Same color
-                                    previousBlurSharpOption == blurSharpOption) // Same fuzziness
+                                    previousBlurSharpOption == blurSharpOption) { // Same fuzziness
                                 faxImg = faxImage[i].faxImage;
-                            else {
+                            } else {
                                 //  faxImg = ImageUtil.makeTransparentImage(this, faxImg, faxes[i].getColor());
-                                if (ImageUtil.countColors(faxImg) > 2)
+                                if (ImageUtil.countColors(faxImg) > 2) {
                                     faxImg = ImageUtil.switchAnyColorAndMakeColorTransparent(faxImg, faxes[i].getColor(), ImageUtil.mostUsedColor(faxImg), blurSharpOption);
-                                else
+                                } else {
                                     faxImg = ImageUtil.switchColorAndMakeColorTransparent(faxImg, Color.black, faxes[i].getColor(), Color.white, blurSharpOption);
+                                }
                             }
-                        } else
+                        } else {
                             // Leave colors as they are, make the white transparent
                             faxImg = ImageUtil.makeColorTransparent(faxImg, Color.white, blurSharpOption);
+                        }
                     }
                     newFaxImage[i] = new FaxImage();
                     newFaxImage[i].faxImage = faxImg;
@@ -1122,8 +1144,7 @@ public class CommandPanel
                     newFaxImage[i].faxTitle = faxes[i].getTitle();
                     newFaxImage[i].faxOrigin = faxes[i].getOrigin();
                     int idx = faxIndex(fileName); // Is FileName already displayed?
-                    if (idx > -1) // if yes, keep offsets, scale and rotation
-                    {
+                    if (idx > -1) { // if yes, keep offsets, scale and rotation
                         newFaxImage[i].imageHOffset = faxImage[idx].imageHOffset;
                         newFaxImage[i].imageVOffset = faxImage[idx].imageVOffset;
                         newFaxImage[i].imageScale = faxImage[idx].imageScale;
@@ -1315,18 +1336,21 @@ public class CommandPanel
             }
 
             public void ddZoomConfirmChanged(boolean b) {
-                if (parent != null && parent.isVisible())
+                if (parent != null && parent.isVisible()) {
                     chartPanel.setConfirmDDZoom(b);
+                }
             }
 
             public void rotate(double d) {
                 if (parent != null && parent.isVisible()) {
                     if (faxImage != null && faxImage.length > 0) {
                         if (currentFaxIndex == -1) {
-                            for (int i = 0; faxImage != null && i < faxImage.length; i++)
+                            for (int i = 0; faxImage != null && i < faxImage.length; i++) {
                                 faxImage[i].imageRotationAngle = d;
-                        } else
+                            }
+                        } else {
                             faxImage[currentFaxIndex].imageRotationAngle = d;
+                        }
                     }
                     repaint();
                 }
@@ -1354,8 +1378,9 @@ public class CommandPanel
                         e.printStackTrace();
                     }
                     if (chartPanel.getProjection() != ChartPanel.GLOBE_VIEW &&
-                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW)
+                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW) {
                         chartPanel.setWidthFromChart(nLat, sLat, wLong, eLong);
+                    }
                     //        eLong = chartPanel.calculateEastG(nLat, sLat, wLong);
                     chartPanel.setEastG(eLong);
                     chartPanel.setWestG(wLong);
@@ -1388,8 +1413,9 @@ public class CommandPanel
                         e.printStackTrace();
                     }
                     if (chartPanel.getProjection() != ChartPanel.GLOBE_VIEW &&
-                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW)
+                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW) {
                         chartPanel.setWidthFromChart(nLat, sLat, wLong, eLong);
+                    }
                     //        eLong = chartPanel.calculateEastG(nLat, sLat, wLong);
                     chartPanel.setEastG(eLong);
                     chartPanel.setWestG(wLong);
@@ -1422,8 +1448,9 @@ public class CommandPanel
                         e.printStackTrace();
                     }
                     if (chartPanel.getProjection() != ChartPanel.GLOBE_VIEW &&
-                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW)
+                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW) {
                         chartPanel.setWidthFromChart(nLat, sLat, wLong, eLong);
+                    }
                     //        eLong = chartPanel.calculateEastG(nLat, sLat, wLong);
                     chartPanel.setEastG(eLong);
                     chartPanel.setWestG(wLong);
@@ -1458,8 +1485,9 @@ public class CommandPanel
                     }
                     //        eLong = chartPanel.calculateEastG(nLat, sLat, wLong);
                     if (chartPanel.getProjection() != ChartPanel.GLOBE_VIEW &&
-                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW)
+                            chartPanel.getProjection() != ChartPanel.SATELLITE_VIEW) {
                         chartPanel.setWidthFromChart(nLat, sLat, wLong, eLong);
+                    }
                     chartPanel.setEastG(eLong);
                     chartPanel.setWestG(wLong);
                     chartPanel.setNorthL(nLat);
@@ -1522,8 +1550,9 @@ public class CommandPanel
                         if (nbWaz > 0 && nbWaz != faxImage.length) {
                             ok2go = false; // At least one fax does not come from the archive
                         }
-                        if (ok2go && nbWaz > 0)
+                        if (ok2go && nbWaz > 0) {
                             update = true;
+                        }
                     }
 
                     if (ok2go) {
@@ -1584,8 +1613,9 @@ public class CommandPanel
                             compositeName = newCompositeName;
                             WWContext.getInstance().setCurrentComposite(compositeName);
                         } catch (Exception ex) {
-                            if ("false".equals(System.getProperty("headless", "false")))
+                            if ("false".equals(System.getProperty("headless", "false"))) {
                                 JOptionPane.showMessageDialog(null, ex.toString(), "Updating archive", JOptionPane.ERROR_MESSAGE);
+                            }
                             ex.printStackTrace();
                             ok2go = false;
                         }
@@ -1633,11 +1663,11 @@ public class CommandPanel
                                 title,
                                 JOptionPane.YES_NO_CANCEL_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
-                        if (resp == JOptionPane.NO_OPTION)
+                        if (resp == JOptionPane.NO_OPTION) {
                             currentComment = "";
-                        else if (resp == JOptionPane.CANCEL_OPTION)
+                        } else if (resp == JOptionPane.CANCEL_OPTION) {
                             ok2go = false;
-
+                        }
                         if (dontAskCheckBox.isSelected()) {
                             ParamPanel.data[ParamData.CONFIRM_COMMENT][ParamData.VALUE_INDEX] = Boolean.valueOf(false);
                             ParamPanel.saveParameters();
@@ -1752,8 +1782,9 @@ public class CommandPanel
             }
 
             public void googleMapRequested() {
-                if (parent != null && parent.isVisible())
+                if (parent != null && parent.isVisible()) {
                     generateGoogleFiles(GoogleUtil.OPTION_MAP);
+                }
             }
 
             public void googleEarthRequested() {
@@ -1790,9 +1821,9 @@ public class CommandPanel
                     }
                     fptp.setData(data);
                     int resp = JOptionPane.showConfirmDialog(instance, fptp, WWGnlUtilities.buildMessage("pattern-generation"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (resp != JOptionPane.OK_OPTION)
+                    if (resp != JOptionPane.OK_OPTION) {
                         return;
-
+                    }
                     data = fptp.getData();
 
                     for (int i = 0; data != null && i < data.length - nbGrib; i++) {
@@ -2328,7 +2359,7 @@ public class CommandPanel
                                 (instance.isDisplay3D500mb() && instance.isThere500mb()) ||
                                 (instance.isDisplay3DTemperature() && instance.isThereTemperature()) ||
                                 (instance.isDisplay3DWaves() && instance.isThereWaves()) /* ||
-																							instance.displayContourLines */) {
+								 instance.displayContourLines */) {
                             int resp = JOptionPane.showConfirmDialog(instance, WWGnlUtilities.buildMessage("might-take-time"), WWGnlUtilities.buildMessage("animate"),
                                     JOptionPane.YES_NO_OPTION,
                                     JOptionPane.QUESTION_MESSAGE);
@@ -2480,8 +2511,9 @@ public class CommandPanel
                                     synchronized (monitor) {
                                         int total = monitor.getTotal();
                                         int current = monitor.getCurrent();
-                                        if (current != total)
+                                        if (current != total) {
                                             monitor.setCurrent(null, total);
+                                        }
                                     }
                                 }
                             }
@@ -2498,12 +2530,13 @@ public class CommandPanel
                             WWContext.getInstance().fireInterruptProgress();
                         } catch (RuntimeException rte) {
                             String mess = rte.getMessage();
-                            if (mess.startsWith("DataArray (width) size mismatch"))
+                            if (mess.startsWith("DataArray (width) size mismatch")) {
                                 if (WWContext.getDebugLevel() >= 1) {
                                     System.out.println(mess);
                                 } else {
                                     throw rte;
                                 }
+                            }
                         } finally {
                             //                ProgressMonitor pm = WWContext.getInstance().getMonitor();
                             synchronized (pm) {
@@ -2555,8 +2588,7 @@ public class CommandPanel
                         Image img = null;
                         if (pdf.getOrigin().toLowerCase().startsWith("http://")) {
                             img = HTTPClient.getChart(pdf.getOrigin(), dir, fileName, true);
-                        } else if (pdf.getOrigin().startsWith(SearchUtil.SEARCH_PROTOCOL)) // (local search, for SailMail)
-                        {
+                        } else if (pdf.getOrigin().startsWith(SearchUtil.SEARCH_PROTOCOL)) { // (local search, for SailMail)
                             // Parse Expression, like search:chartview.util.SearchUtil.findMostRecentFax(pattern, rootPath)
                             String faxName = SearchUtil.dynamicSearch(pdf.getOrigin());
                             //              System.out.println("For [" + pdf.getOrigin() + "], search: found [" + faxName + "]");
@@ -3268,8 +3300,7 @@ public class CommandPanel
             } else {
                 WWContext.getInstance().fireNoWaveObj();
             }
-            if (display3DRain) // TODO Make sure boundaries are OK...
-            {
+            if (display3DRain) { // TODO Make sure boundaries are OK...
                 if (smooth > 1 && !alreadyAskedAboutGRIB) {
                     warnFor3D();
                     alreadyAskedAboutGRIB = true;
@@ -4772,8 +4803,7 @@ public class CommandPanel
             }
             g2.setStroke(originalStroke);
         }
-        if (gribSliceInfo != -1D && fromGRIBSlice == null && toGRIBSlice == null) // Routing GRIB Slice
-        {
+        if (gribSliceInfo != -1D && fromGRIBSlice == null && toGRIBSlice == null) { // Routing GRIB Slice
             //    System.out.println("GribSliceInfo at Point D:" + gribSliceInfo);
             int[] xy = gsp.getPointFromD(gribSliceInfo);
             if (gribData != null) {

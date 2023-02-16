@@ -15,7 +15,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.text.JTextComponent;
 
-@SuppressWarnings("serial")
+
 public class LoggingPanelPopup
   extends JPopupMenu
   implements ActionListener, PopupMenuListener

@@ -40,7 +40,7 @@ import oracle.xml.parser.v2.XMLParser;
 
 import org.w3c.dom.NodeList;
 
-@SuppressWarnings("serial")
+
 public class InternetFax extends JPanel
 {
   private GridBagLayout gridBagLayout1 = new GridBagLayout();

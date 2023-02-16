@@ -6,7 +6,7 @@ import java.awt.Point;
 
 import java.util.Date;
 
-@SuppressWarnings("serial")
+
 public class RoutingPoint extends Point
 {
   private RoutingPoint parent = null;

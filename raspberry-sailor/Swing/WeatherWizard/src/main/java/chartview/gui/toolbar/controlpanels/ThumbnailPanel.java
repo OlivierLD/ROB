@@ -34,7 +34,7 @@ import java.awt.image.RenderedImage;
 import javax.swing.JPanel;
 
 
-@SuppressWarnings("serial")
+
 public class ThumbnailPanel
      extends JPanel
 implements MouseListener, 

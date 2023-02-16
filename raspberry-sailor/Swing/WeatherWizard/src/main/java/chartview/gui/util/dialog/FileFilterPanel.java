@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-@SuppressWarnings("serial")
+
 public class FileFilterPanel
   extends JPanel
 {

@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class SingleControlPane
   extends JPanel
 {

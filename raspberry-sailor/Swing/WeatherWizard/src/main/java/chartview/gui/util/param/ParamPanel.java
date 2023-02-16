@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.*;
 
-@SuppressWarnings("serial")
+
 public final class ParamPanel
         extends JPanel {
     private BorderLayout borderLayout1 = new BorderLayout();
@@ -1019,7 +1019,7 @@ public final class ParamPanel
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new JTableFocusChangeListener(table));
     }
 
-    @SuppressWarnings("serial")
+    
     public class CustomTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -1029,7 +1029,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     public class SpecialTableCellRenderer
             extends JLabel
             implements TableCellRenderer {
@@ -1112,7 +1112,7 @@ public final class ParamPanel
 
     protected static String[] lnfValues = null; // Populated in the constructor
 
-    @SuppressWarnings("serial")
+    
     public class ParamEditor
             extends JComponent
             implements TableCellEditor {
@@ -1901,7 +1901,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class TemperatureUnitListComboBox extends JComboBox {
         public TemperatureUnitListComboBox() {
             super();
@@ -1912,7 +1912,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class AnemometerHandOptionListComboBox extends JComboBox {
         public AnemometerHandOptionListComboBox() {
             super();
@@ -1923,7 +1923,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class GrayPanelOptionListComboBox extends JComboBox {
         public GrayPanelOptionListComboBox() {
             super();
@@ -1934,7 +1934,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class FaxBlurListComboBox extends JComboBox {
         public FaxBlurListComboBox() {
             super();
@@ -1945,7 +1945,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class WindOptionComboBox extends JComboBox {
         public WindOptionComboBox() {
             super();
@@ -1956,7 +1956,7 @@ public final class ParamPanel
         }
     }
 
-    @SuppressWarnings("serial")
+    
     private static class RoutingOptionComboBox extends JComboBox {
         public RoutingOptionComboBox() {
             super();

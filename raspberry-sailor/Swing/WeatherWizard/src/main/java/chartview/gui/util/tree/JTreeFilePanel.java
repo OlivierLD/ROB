@@ -56,7 +56,7 @@ import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipFile;
 
 
-@SuppressWarnings("serial")
+
 public class JTreeFilePanel
         extends JPanel {
     public final static String OLP_URL = "http://weather.lediouris.net/patterns/olp.xml";

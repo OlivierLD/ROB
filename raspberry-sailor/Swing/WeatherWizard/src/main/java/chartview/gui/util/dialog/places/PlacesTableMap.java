@@ -5,7 +5,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public class PlacesTableMap 
      extends AbstractTableModel 
   implements TableModelListener

@@ -14,7 +14,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 
-@SuppressWarnings("serial")
+
 public class ShiftTabPopup
   extends JPopupMenu
   implements ActionListener, PopupMenuListener

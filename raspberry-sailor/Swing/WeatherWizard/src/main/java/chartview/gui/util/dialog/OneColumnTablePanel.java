@@ -36,7 +36,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-@SuppressWarnings("serial")
+
 public class OneColumnTablePanel
   extends JPanel
 {
@@ -259,7 +259,7 @@ public class OneColumnTablePanel
     }
   }
 
-  @SuppressWarnings("serial")
+  
   class TablePopup extends JPopupMenu
                 implements ActionListener,
                            PopupMenuListener

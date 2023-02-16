@@ -31,7 +31,7 @@ import javax.swing.JWindow;
 
 import main.help.AboutBox;
 
-@SuppressWarnings("serial")
+
 public class SplashWindow extends JWindow
 {
   private static SplashWindow instance;

@@ -23,7 +23,7 @@ import javax.swing.text.NumberFormatter;
 import calc.GeomUtil;
 
 
-@SuppressWarnings("serial")
+
 public class PositionInputPanel extends JPanel 
 {
   private GridBagLayout gridBagLayout1 = new GridBagLayout();

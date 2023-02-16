@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-@SuppressWarnings("serial")
+
 public class BulkGribPanel
   extends JPanel
 {

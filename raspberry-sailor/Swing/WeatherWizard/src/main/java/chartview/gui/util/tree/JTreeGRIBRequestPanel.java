@@ -61,7 +61,7 @@ import oracle.xml.parser.v2.XMLParser;
 import org.w3c.dom.NodeList;
 
 
-@SuppressWarnings("serial")
+
 public class JTreeGRIBRequestPanel
      extends JPanel
 {
@@ -1128,7 +1128,7 @@ public class JTreeGRIBRequestPanel
 //  System.out.println("Caret Position Changed");
   }
 
-  @SuppressWarnings("serial")
+  
   public class GRIBRequestTreeNode extends DefaultMutableTreeNode
   {
     String name;
@@ -1190,7 +1190,7 @@ public class JTreeGRIBRequestPanel
     }
   }
 
-  @SuppressWarnings("serial")
+  
   class GribTreeCellRenderer
     extends DefaultTreeCellRenderer
   {

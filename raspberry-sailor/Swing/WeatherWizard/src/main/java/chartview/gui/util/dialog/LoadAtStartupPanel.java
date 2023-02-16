@@ -12,7 +12,7 @@ import java.io.File;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class LoadAtStartupPanel
   extends JPanel
 {
