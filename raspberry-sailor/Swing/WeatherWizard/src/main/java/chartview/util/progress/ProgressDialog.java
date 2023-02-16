@@ -114,7 +114,7 @@ public class ProgressDialog
             public void actionPerformed(ActionEvent e)
             {
     //        System.out.println("Canceling");
-              WWContext.getInstance().fireInterruptProcess();
+              WWContext.getInstance().fireInterruptProgress();
               removeMe();
               WWContext.getInstance().removeApplicationListener(WWContext.getInstance().getAel4monitor());
               dispose();

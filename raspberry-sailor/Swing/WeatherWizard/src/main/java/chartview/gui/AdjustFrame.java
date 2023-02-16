@@ -1119,7 +1119,7 @@ public class AdjustFrame extends JFrame {
                     grayPanelTransparency = ((Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX]).floatValue();
                     layers.add(grayTransparentPanel, grayLayerIndex); // Add gray layer
                 } else {
-//          WWContext.getInstance().fireInterruptProcess();
+//          WWContext.getInstance().fireInterruptProgress();
                     String _soundName = "";
                     try {
                         _soundName = ((ParamPanel.SoundFile) ParamPanel.data[ParamData.PLAY_SOUND_ON_JOB_COMPLETION][ParamData.VALUE_INDEX]).toString();

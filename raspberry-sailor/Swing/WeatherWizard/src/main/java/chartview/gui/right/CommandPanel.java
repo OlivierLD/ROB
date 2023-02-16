@@ -1668,14 +1668,15 @@ public class CommandPanel
                                         }
 
                                         public void interruptProgress() {
-                                            System.out.println("Interruption requested (1)...");
+                                            System.out.println("\"Progress\" Interruption requested (1)...");
                                             ProgressMonitor monitor = WWContext.getInstance().getMonitor();
                                             if (monitor != null) {
                                                 synchronized (monitor) {
                                                     int total = monitor.getTotal();
                                                     int current = monitor.getCurrent();
-                                                    if (current != total)
+                                                    if (current != total) {
                                                         monitor.setCurrent(null, total);
+                                                    }
                                                 }
                                             }
                                         }
@@ -1688,10 +1689,11 @@ public class CommandPanel
                                     }
                                 }
                                 try {
-                                    if (!updateComposite)
+                                    if (!updateComposite) {
                                         runStorageThread();
-                                    else
+                                    } else {
                                         runStorageThread(updateComposite, WWContext.getInstance().getCurrentComposite());
+                                    }
                                 } finally {
                                     //                  WWContext.getInstance().fireSetLoading(false, WWGnlUtilities.buildMessage("gathering-storing"));
                                     if (!updateComposite) {
@@ -1700,8 +1702,9 @@ public class CommandPanel
                                         if (monitor != null) {
                                             synchronized (monitor) {
                                                 try {
-                                                    if (monitor.getCurrent() != monitor.getTotal())
+                                                    if (monitor.getCurrent() != monitor.getTotal()) {
                                                         monitor.setCurrent(null, monitor.getTotal());
+                                                    }
                                                     WWContext.getInstance().removeApplicationListener(WWContext.getInstance().getAel4monitor());
                                                     WWContext.getInstance().setAel4monitor(null);
                                                     WWContext.getInstance().setMonitor(null);
@@ -2492,7 +2495,7 @@ public class CommandPanel
                             System.err.println("===================");
                             cme.printStackTrace();
                             System.err.println("===================");
-                            WWContext.getInstance().fireInterruptProcess();
+                            WWContext.getInstance().fireInterruptProgress();
                         } catch (RuntimeException rte) {
                             String mess = rte.getMessage();
                             if (mess.startsWith("DataArray (width) size mismatch"))

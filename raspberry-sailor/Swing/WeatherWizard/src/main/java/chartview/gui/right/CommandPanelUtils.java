@@ -677,7 +677,7 @@ public class CommandPanelUtils {
             }
         }
 
-        WWContext.getInstance().fireInterruptProcess();
+        WWContext.getInstance().fireInterruptProgress(); // Interrupt Progress
 
         String fileName = "";
         if (!update && compositeName == null) {
@@ -749,7 +749,7 @@ public class CommandPanelUtils {
             // Update the composite.xml in the waz file
             if (fileName.toUpperCase().endsWith(".WAZ")) // Archive required
             {
-                //      WWContext.getInstance().fireInterruptProcess();
+                //      WWContext.getInstance().fireInterruptProgress();
                 int resp = JOptionPane.showConfirmDialog(cp,
                         WWGnlUtilities.buildMessage("updating-composite", new String[]{fileName}),
                         WWGnlUtilities.buildMessage("store-composite"),
@@ -825,7 +825,7 @@ public class CommandPanelUtils {
                         System.out.println("File [" + fileName + "] does not exist...");
                     }
                     System.out.println("Cancelling...");
-                    WWContext.getInstance().fireInterruptProcess();
+                    WWContext.getInstance().fireInterruptProgress();
                     JOptionPane.showMessageDialog(cp, other.toString(), "Loading Pattern", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -989,9 +989,12 @@ public class CommandPanelUtils {
                                         System.out.println(String.format("    >>> Fax #%d not reachable...", i + 1));
                                         iioe.printStackTrace();
                                     } catch (Exception ex) {
+                                        System.err.println("------------");
+                                        ex.printStackTrace();
+                                        System.err.println("------------");
                                         System.out.println("!!!!!!! >>> Loading fax, Exception is a " + ex.getClass().getName());
-                                        //                System.out.println("HTTPClient.getChart interrupted..., returning.");
-                                        WWContext.getInstance().fireInterruptProcess();
+                                        // System.out.println("HTTPClient.getChart interrupted..., returning.");
+                                        WWContext.getInstance().fireInterruptProgress();
                                         return;
                                     }
                                 }
@@ -1007,12 +1010,12 @@ public class CommandPanelUtils {
                                     if (url.startsWith(WWContext.INTERNAL_RESOURCE_PREFIX)) {
                                         internStr = url.substring(WWContext.INTERNAL_RESOURCE_PREFIX.length());
 
-//                  if (internStr.equals(WWContext.BG_MERCATOR_GREENWICH_CENTERED_ALIAS))
-//                    internStr = WWContext.BG_MERCATOR_GREENWICH_CENTERED;
-//                  else if (internStr.equals(WWContext.BG_MERCATOR_ANTIMERIDIAN_CENTERED_ALIAS))
-//                    internStr = WWContext.BG_MERCATOR_ANTIMERIDIAN_CENTERED;
-//                  else if (internStr.equals(WWContext.BG_MERCATOR_NE_ATLANTIC_ALIAS))
-//                    internStr = WWContext.BG_MERCATOR_NE_ATLANTIC;
+                    //                  if (internStr.equals(WWContext.BG_MERCATOR_GREENWICH_CENTERED_ALIAS))
+                    //                    internStr = WWContext.BG_MERCATOR_GREENWICH_CENTERED;
+                    //                  else if (internStr.equals(WWContext.BG_MERCATOR_ANTIMERIDIAN_CENTERED_ALIAS))
+                    //                    internStr = WWContext.BG_MERCATOR_ANTIMERIDIAN_CENTERED;
+                    //                  else if (internStr.equals(WWContext.BG_MERCATOR_NE_ATLANTIC_ALIAS))
+                    //                    internStr = WWContext.BG_MERCATOR_NE_ATLANTIC;
 
                                         for (BackGround bg : BackGround.values()) {
                                             if (internStr.equals(bg.label())) {
@@ -1156,7 +1159,7 @@ public class CommandPanelUtils {
                                 }
                             } catch (Exception e) {
                                 WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("file-not-found", new String[]{faxName}) + "\n");
-                                //  WWContext.getInstance().fireInterruptProcess();
+                                //  WWContext.getInstance().fireInterruptProgress();
                                 //  return;
                             }
                             ft[i] = new FaxType(faxName, c, Boolean.valueOf(true), Boolean.valueOf(true), imageRotation, faxOrigin, faxName);
@@ -1280,7 +1283,7 @@ public class CommandPanelUtils {
                                 cwe.printStackTrace();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
-                                WWContext.getInstance().fireInterruptProcess();
+                                WWContext.getInstance().fireInterruptProgress();
                                 return;
                             }
                         }

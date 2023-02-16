@@ -3,27 +3,61 @@
       <fax hint="NorthAtlantic MET Surface 00" color="0;0;0" transparent="true" color-change="true">
          <faxScale>0.786335279013842</faxScale>
          <faxXoffset>1327</faxXoffset>
-         <faxYoffset>73</faxYoffset>
+         <faxYoffset>43</faxYoffset>
 		 <faxRotation>0.0</faxRotation>
-         <dynamic-resource url="http://www2.wetter3.de/Fax/00_UKMet_Boden+00.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="MET_Atl_sfc_00_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+         <dynamic-resource url="https://www2.wetter3.de/Fax/00_UKMet_Boden+00.gif"
+                           dir="./WeatherFaxes/yyyy/MM/sfc"
+                           prefix="MET_Atl_sfc_00_"
+                           pattern="yyyy_MM_dd_HH_mm_ss_z"
+                           extension="png"/>
 	  </fax>
       <fax hint="NorthAtlantic MET Surface 24" color="0;0;0" transparent="true" color-change="true">
          <faxScale>0.786335279013842</faxScale>
          <faxXoffset>1327</faxXoffset>
-         <faxYoffset>73</faxYoffset>
+         <faxYoffset>43</faxYoffset>
 		 <faxRotation>0.0</faxRotation>
-         <dynamic-resource url="http://www2.wetter3.de/Fax/00_UKMet_Boden+24.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="MET_Atl_sfc_24_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+         <dynamic-resource url="https://www2.wetter3.de/Fax/00_UKMet_Boden+24.gif"
+                           dir="./WeatherFaxes/yyyy/MM/sfc"
+                           prefix="MET_Atl_sfc_24_"
+                           pattern="yyyy_MM_dd_HH_mm_ss_z"
+                           extension="png"/>
 	  </fax>
       <fax hint="NorthAtlantic MET Surface 48" color="0;0;0" transparent="true" color-change="true">
          <faxScale>0.786335279013842</faxScale>
          <faxXoffset>1327</faxXoffset>
-         <faxYoffset>73</faxYoffset>
+         <faxYoffset>43</faxYoffset>
 		 <faxRotation>0.0</faxRotation>
-         <dynamic-resource url="http://www2.wetter3.de/Fax/00_UKMet_Boden+48.gif" dir="./WeatherFaxes/yyyy/MM/sfc" prefix="MET_Atl_sfc_48_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
+         <dynamic-resource url="https://www2.wetter3.de/Fax/00_UKMet_Boden+48.gif"
+                           dir="./WeatherFaxes/yyyy/MM/sfc"
+                           prefix="MET_Atl_sfc_48_"
+                           pattern="yyyy_MM_dd_HH_mm_ss_z"
+                           extension="png"/>
 	  </fax>
    </fax-collection>
-   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="false" display-TEMP-Data="false" display-PRATE-Data="false" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false">
-     <dynamic-grib hint="North Atlantic GRIB" request="GFS:85N,20N,100W,40E|1,1|0,12..72|PRMSL,WIND,HGT500" dir="./GRIBFiles/yyyy/MM" prefix="NorthAtlantic_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+   <grib display-TWS-Data="true"
+         display-PRMSL-Data="true"
+         display-500HGT-Data="true"
+         display-WAVES-Data="false"
+         display-TEMP-Data="false"
+         display-PRATE-Data="false"
+         display-TWS-3D="false"
+         display-PRMSL-3D="false"
+         display-500HGT-3D="false"
+         display-WAVES-3D="false"
+         display-TEMP-3D="false"
+         display-PRATE-3D="false"
+         display-TWS-contour="false"
+         display-PRMSL-contour="false"
+         display-500HGT-contour="false"
+         display-WAVES-contour="false"
+         display-TEMP-contour="false"
+         display-PRATE-contour="false">
+     <dynamic-grib hint="North Atlantic GRIB"
+                   request="GFS:85N,20N,100W,40E|1,1|0,12..72|PRMSL,WIND,HGT500"
+                   dir="./GRIBFiles/yyyy/MM"
+                   prefix="NorthAtlantic_"
+                   pattern="yyyy_MM_dd_HH_mm_ss_z"
+                   extension="grb"/>
    </grib>
    <projection type="POLAR_STEREO"/>
    <north>90.0</north>

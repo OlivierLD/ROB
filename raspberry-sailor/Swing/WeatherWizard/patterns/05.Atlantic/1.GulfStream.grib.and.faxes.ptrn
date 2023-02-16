@@ -41,7 +41,12 @@
          display-WAVES-contour="false"
          display-TEMP-contour="false"
          display-PRATE-contour="false">
-      <dynamic-grib hint="North Atlantic Gulf Stream GRIB" request="RTOFS:65N,9S,100W,10E|0.5,0.5|0,12..144|CUR" dir="./GRIBFiles/yyyy/MM" prefix="GulfStream_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
+      <dynamic-grib hint="North Atlantic Gulf Stream GRIB"
+                    request="RTOFS:65N,9S,100W,10E|0.5,0.5|0,12..144|CUR"
+                    dir="./GRIBFiles/yyyy/MM"
+                    prefix="GulfStream_"
+                    pattern="yyyy_MM_dd_HH_mm_ss_z"
+                    extension="grb"/>
    </grib>
    <projection type="MERCATOR"/>
    <north>65.5</north>

@@ -80,6 +80,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -100,6 +101,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -540,6 +542,7 @@ public class WWGnlUtilities {
                                     boolean withPreviewer,
                                     int option) {
         String fileName = "";
+        AtomicReference<String> atomicFileName = new AtomicReference<>(fileName);
         final JFileChooser chooser = new JFileChooser();
         if (parent instanceof FieldPlusFinder) {
 //    System.out.println("Parent:" + parent.getParent().getClass().getName()); // look for the "value"
@@ -617,17 +620,28 @@ public class WWGnlUtilities {
             e.printStackTrace();
         }
 
-//        int retval = chooser.showOpenDialog(parent);
-        int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
-        switch (retval) {
-            case JFileChooser.APPROVE_OPTION:
-                fileName = chooser.getSelectedFile().toString();
-                break;
-            case JFileChooser.CANCEL_OPTION:
-            case JFileChooser.ERROR_OPTION:
-                break;
+
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    // int retval = chooser.showOpenDialog(parent);
+                    int retval = chooser.showSaveDialog(parent);  // Shows the FileName field, even on Mac.
+                    switch (retval) {
+                        case JFileChooser.APPROVE_OPTION:
+                            atomicFileName.set(chooser.getSelectedFile().toString());
+                            break;
+                        case JFileChooser.CANCEL_OPTION:
+                        case JFileChooser.ERROR_OPTION:
+                            break;
+                    }
+                }
+            });
+        } catch (InvocationTargetException ite) {
+            ite.printStackTrace();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         }
-        return fileName;
+        return atomicFileName.get();
     }
 
     private static TwoFilePanel twoFilePanel = null;
