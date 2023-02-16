@@ -37,3 +37,9 @@ build/
 *.db
 **/bin
 **/nohup.out
+
+**/2022
+**/2023
+**/ww*.properties
+*.grb
+*.grib
