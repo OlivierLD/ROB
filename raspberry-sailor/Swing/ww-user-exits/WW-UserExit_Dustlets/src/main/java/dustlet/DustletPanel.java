@@ -8,6 +8,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.Date;
 
 public class DustletPanel
@@ -28,7 +29,7 @@ public class DustletPanel
     private JButton backward = new JButton();
     private JButton animate = new JButton();
     private JLabel motesLabel = new JLabel("Motes");
-    private JTextField motesTextField = new JTextField();
+    private JTextField motesTextField = new JFormattedTextField(NumberFormat.getInstance());
     private JLabel spinLabel = new JLabel("Wind Factor");
     private JSpinner windSizeSpinner = null;
     private int windFactorForDustlet = 5;
@@ -104,8 +105,8 @@ public class DustletPanel
         animate.setMargin(new Insets(1, 1, 1, 1));
         animate.addActionListener(e -> animateButton_actionPerformed());
 
-        motesTextField.setPreferredSize(new Dimension(40, 20));
-        motesTextField.setMinimumSize(new Dimension(40, 20));
+        motesTextField.setPreferredSize(new Dimension(60, 20));
+        motesTextField.setMinimumSize(new Dimension(60, 20));
         motesTextField.setToolTipText("Motes");
         motesTextField.setHorizontalAlignment(JTextField.RIGHT);
         motesTextField.setText(Integer.toString(motes));

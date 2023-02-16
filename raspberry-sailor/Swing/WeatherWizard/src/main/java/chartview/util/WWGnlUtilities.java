@@ -1890,7 +1890,7 @@ public class WWGnlUtilities {
     /**
      * Old version, turns XML into WAZ
      *
-     * @deprecated
+     * @Deprecated
      */
     public static void archiveCompositeDirectory_(final String compositeDirectoryName) {
         // 1 - Ask: Copy or Move
@@ -3594,7 +3594,7 @@ public class WWGnlUtilities {
     }
 
     /**
-     * @deprecated Use AtomicBoolean
+     * @Deprecated Use AtomicBoolean
      */
     public static class SpecialBool {  // TODO Replace with Atomic
         private boolean b = true;
