@@ -46,11 +46,12 @@ public class SimpleSample
             CommandPanel.FaxImage[] fi = cp.getFaxImage();
             System.out.println("Faxes:" + fi.length + " image(s)");
             for (int i = 0; i < fi.length; i++) {
-                System.out.println(" - " + fi[i].fileName);
+                String transformed = System.getProperty("user.home") + File.separator + "img" + i + ".png";
+                System.out.println(" - " + fi[i].fileName + ", to " + transformed);
                 // Saving the image
                 Image img = fi[i].faxImage;
                 try {
-                    ImageUtil.writeImageToFile(img, "png", System.getProperty("user.home") + File.separator + "img" + i + ".png");
+                    ImageUtil.writeImageToFile(img, "png", transformed);
                 } catch (Exception ex) {
                     System.err.println("Writing image file:");
                     ex.printStackTrace();

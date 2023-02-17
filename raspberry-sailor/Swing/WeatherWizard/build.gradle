@@ -42,8 +42,12 @@ jar {
   manifest {
     attributes(
             "Manifest-Version": "1.0",
-            "Compile-Date": new Date().toString(),
-            "Main-Class": "main.splash.Splasher"
+            "Compile-Date"    : new Date().toString(),
+            "Main-Class"      : "main.splash.Splasher",
+            'Built-By'        : System.properties['user.name'],
+            'Created-By'      : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'       : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'        : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
     )
   }
 }
