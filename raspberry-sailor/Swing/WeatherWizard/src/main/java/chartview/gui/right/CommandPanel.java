@@ -3179,8 +3179,8 @@ public class CommandPanel
                     String u = units[getDataIndexOf((String) displayComboBox.getSelectedItem())];
                     if ("AIRTMP".equals((String) displayComboBox.getSelectedItem())) {
                         boundariesLabel.setText(WWGnlUtilities.buildMessage("from-to", new String[]{
-                                WWGnlUtilities.XX22.format(WWGnlUtilities.convertTemperatureFromCelcius(bndr[0], temperatureUnit)) + u,
-                                WWGnlUtilities.XX22.format(WWGnlUtilities.convertTemperatureFromCelcius(bndr[1], temperatureUnit)) + u}));
+                                WWGnlUtilities.XX22.format(WWGnlUtilities.convertTemperatureFromCelsius(bndr[0], temperatureUnit)) + u,
+                                WWGnlUtilities.XX22.format(WWGnlUtilities.convertTemperatureFromCelsius(bndr[1], temperatureUnit)) + u}));
                     } else {
                         boundariesLabel.setText(WWGnlUtilities.buildMessage("from-to", new String[]{WWGnlUtilities.XX22.format(bndr[0]) + u, WWGnlUtilities.XX22.format(bndr[1]) + u}));
                     }

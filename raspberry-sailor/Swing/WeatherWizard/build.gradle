@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
   id 'java'
   id 'idea'
@@ -42,7 +44,7 @@ jar {
   manifest {
     attributes(
             "Manifest-Version": "1.0",
-            "Compile-Date"    : new Date().toString(),
+            "Compile-Date"    : new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss.SS z", Locale.ENGLISH).format(new Date()),
             "Main-Class"      : "main.splash.Splasher",
             'Built-By'        : System.properties['user.name'],
             'Created-By'      : "Gradle ${gradle.gradleVersion}",

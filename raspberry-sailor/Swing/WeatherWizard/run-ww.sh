@@ -12,4 +12,15 @@ CP=${CP}:../ww-user-exits/WW-UserExit_CurrentDustlet/build/libs/WW-UserExit_Curr
 #
 # CP=${CP}:/Applications/Processing.v4.app/Contents/Java/core/library/core.jar
 #
-java -cp ${CP} main.splash.Splasher
+# Default L&F is Metal (unless enforced below)
+#
+LNF=
+#
+# LNF="-Dkeep.system.lnf=true"  # Applied if -Dswing.defaultlaf is NOT here.
+#
+# LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+# LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
+# LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
+# LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"
+#
+java -cp ${CP} ${LNF} main.splash.Splasher

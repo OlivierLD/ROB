@@ -1,5 +1,7 @@
 # Weather Wizard
 
+Runs with the Metal Look and Feel.  
+To keep the system Look and Feel, use `-Dkeep.system.lnf=true` at runtime.
 ## WiP. Being ported.
 
 This project depends on several other projects. 

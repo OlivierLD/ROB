@@ -203,7 +203,7 @@ public class GRIBVisualPanel extends JPanel // TransparentPanel
           label = "TEMP";
           startColor = new Color(128, 255, 255, COLOR_OPACITY);
           endColor   = new Color(255,   0,   0, COLOR_OPACITY);
-          currValue = (float)WWGnlUtilities.convertTemperatureFromKelvin(tempValue, ParamPanel.TemperatureUnitList.CELCIUS); // tempUnit);
+          currValue = (float)WWGnlUtilities.convertTemperatureFromKelvin(tempValue, ParamPanel.TemperatureUnitList.CELSIUS); // tempUnit);
 //        System.out.println("TEMP:" + tempValue);
           displayValue = (int) ((currValue + 50f) * ((float)h / 100f)); // [-50, 50]
           break;
@@ -237,7 +237,7 @@ public class GRIBVisualPanel extends JPanel // TransparentPanel
       g.drawRect(xOffset + (i * (w / 6)), h - yOffset - displayValue, w / 6, displayValue);
       g.setColor(GRIB_DATA_TEXT_COLOR);
       if (i == TEMPERATURE)
-        displayString = FMTS[i].format(WWGnlUtilities.convertTemperatureFromCelcius(currValue, tempUnit));
+        displayString = FMTS[i].format(WWGnlUtilities.convertTemperatureFromCelsius(currValue, tempUnit));
       else
         displayString = FMTS[i].format(currValue);
       int l = g.getFontMetrics(smallFont).stringWidth(displayString);

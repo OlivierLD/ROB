@@ -32,14 +32,14 @@ import java.util.*;
 
 public final class ParamPanel
         extends JPanel {
-    private BorderLayout borderLayout1 = new BorderLayout();
-    private JPanel topPanel = new JPanel();
-    private JPanel bottomPanel = new JPanel();
-    private JPanel centerPane = new JPanel();
-    private JLabel fileNameLabel = new JLabel();
+    private final BorderLayout borderLayout1 = new BorderLayout();
+    private final JPanel topPanel = new JPanel();
+    private final JPanel bottomPanel = new JPanel();
+    private final JPanel centerPane = new JPanel();
+    private final JLabel fileNameLabel = new JLabel();
 
-    private JEditorPane helpTextArea = new JEditorPane();
-    private JScrollPane textAreaScrollPane = new JScrollPane(helpTextArea);
+    private final JEditorPane helpTextArea = new JEditorPane();
+    private final JScrollPane textAreaScrollPane = new JScrollPane(helpTextArea);
 
     private final static String KEY = WWGnlUtilities.buildMessage("name");
     private final static String VALUE = WWGnlUtilities.buildMessage("value");
@@ -53,8 +53,8 @@ public final class ParamPanel
 
     private JTable table;
     private JScrollPane scrollPane;
-    private BorderLayout borderLayout2 = new BorderLayout();
-    private JLabel titleLabel = new JLabel();
+    private final BorderLayout borderLayout2 = new BorderLayout();
+    private final JLabel titleLabel = new JLabel();
 
     public ParamPanel() {
         try {
@@ -91,16 +91,16 @@ public final class ParamPanel
                 it = "http://localhost:6666";
                 break;
             case ParamData.NMEA_POLLING_FREQ:
-                it = new Integer(60);
+                it = 60;
                 break;
             case ParamData.NMEA_FALLBACK_TIMEOUT:
-                it = new Integer(60);
+                it = 60;
                 break;
             case ParamData.POLAR_FILE_LOC:
                 it = new DataFile(new String[]{"xml", "polar-coeff"}, WWGnlUtilities.buildMessage("polars"), "." + File.separator + "polars" + File.separator + "polars.xml");
                 break;
             case ParamData.ROUTING_STEP:
-                it = new Integer(10);
+                it = 10;
                 break;
             case ParamData.DEFAULT_FONT:
                 it = new Font("Arial", Font.PLAIN, 12) {
@@ -111,13 +111,13 @@ public final class ParamPanel
                 };
                 break;
             case ParamData.ROUTING_FORK_WIDTH:
-                it = new Integer(50);
+                it = 50;
                 break;
             case ParamData.ROUTING_FROM_CURR_LOC:
                 it = Boolean.FALSE;
                 break;
             case ParamData.ROUTING_TIME_INTERVAL:
-                it = new Double(6.0);
+                it = 6.0;
                 break;
             case ParamData.GRIB_FILES_LOC:
 //      it = new DataDirectory(GnlUtilities.buildMessage("grib-files-button"), "." + File.separator + "gribDir");
@@ -131,10 +131,10 @@ public final class ParamPanel
                 it = new DataDirectory(WWGnlUtilities.buildMessage("composite-button"), "." + File.separator + "compositeDir");
                 break;
             case ParamData.CHART_LINE_THICK:
-                it = new Integer(3);
+                it = 3;
                 break;
             case ParamData.FAX_TRANSPARENCY:
-                it = new Float(0.5);
+                it = 0.5F;
                 break;
             case ParamData.CHART_BG_COLOR:
                 it = Color.white;
@@ -167,25 +167,25 @@ public final class ParamPanel
                 it = new ListOfLookAndFeel("Metal"); // Unused
                 break;
             case ParamData.AUTO_UPDATES:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.SHOW_NOTIFICATIONS:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.CONFIRM_DD_ZOOM:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.AVOID_TWS_GT:
-                it = new Integer(-1);
+                it = -1;
                 break;
             case ParamData.AVOID_TWA_LT:
-                it = new Integer(-1);
+                it = -1;
                 break;
             case ParamData.STOP_ROUTING_ON_EXHAUSTED_GRIB:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.INTERVAL_BETWEEN_ISOBARS:
-                it = new Integer(4);
+                it = 4;
                 break;
             case ParamData.ISO_TWS_LIST:
                 it = new ContourLinesList("10, 20, 30, 40, 60");
@@ -206,19 +206,19 @@ public final class ParamPanel
                 it = new ContourLinesList("0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25");
                 break;
             case ParamData.POLAR_SPEED_FACTOR:
-                it = new Double(1D);
+                it = 10.0;
                 break;
             case ParamData.CONFIRM_ON_EXIT:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.CONFIRM_COMMENT:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.USE_TRANSPARENT_GRIB_WIND:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.COLOR_RANGE:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.PREFERRED_WIND_DISPLAY:
                 it = new WindOptionList(0);
@@ -230,34 +230,34 @@ public final class ParamPanel
                 it = Color.cyan;
                 break;
             case ParamData.DEFAULT_ZOOM_VALUE:
-                it = new Double(1.1);
+                it = 1.1;
                 break;
             case ParamData.DEFAULT_CHART_INC_VALUE:
-                it = new Double(1.0);
+                it = 1.0;
                 break;
             case ParamData.DEFAULT_FAX_INC_VALUE:
-                it = new Integer(10);
+                it = 10;
                 break;
             case ParamData.DD_ZOOM_COLOR:
                 it = Color.green;
                 break;
             case ParamData.DISPLAY_WIND_WITH_COLOR_WIND_RANGE:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.DEFAULT_FAX_BLUR:
                 it = new FaxBlurList(0);
                 break;
             case ParamData.CLICK_SCROLL:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.OLD_ISOCHRONS_COLOR:
                 it = Color.lightGray;
                 break;
             case ParamData.SHOW_ROUTING_LABELS:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.SHOW_ISOCHRONS:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.SERIAL_PORT:
                 it = new ListOfSerialPorts("COM1");
@@ -308,19 +308,19 @@ public final class ParamPanel
                 it = "";
                 break;
             case ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL:
-                it = new Integer(0);
+                it = 0;
                 break;
             case ParamData.GRAY_PANEL_OPTION:
                 it = new GrayPanelOptionList(AdjustFrame.GRAY_PANEL_NO_FADE_OPTION);
                 break;
             case ParamData.GRAY_PANEL_OPACITY:
-                it = new Float(0.75);
+                it = 0.75F;
                 break;
             case ParamData.WAIT_ON_STARTUP:
-                it = new Integer(30);
+                it = 30;
                 break;
             case ParamData.EXPAND_CONTROLS_BY_DEFAULT:
-                it = Boolean.TRUE;
+                it = true;
                 break;
             case ParamData.TEMPERATURE_UNIT:
                 it = new TemperatureUnitList(0);
@@ -333,13 +333,13 @@ public final class ParamPanel
                 it = new SoundFile(new String[]{"wav", "ogg"}, WWGnlUtilities.buildMessage("sounds"), "");
                 break;
             case ParamData.TRY_TO_AVOID_LAND:
-                it = Boolean.FALSE;
+                it = false;
                 break;
             case ParamData.STOP_ROUTING_WHEN_CLOSER_TO:
-                it = new Double(25.0);
+                it = 25.0;
                 break;
             case ParamData.GRIB_TWS_COEFF:
-                it = new Double(1D);
+                it = 1D;
                 break;
             case ParamData.EPHEMERIS_POSITION:
                 try {
@@ -384,9 +384,9 @@ public final class ParamPanel
                         try {
                             data[i][ParamData.NAME_INDEX] = new ParamDisplayLabel(ParamData.getLabels()[i], ParamData.getHelptext()[i]);
                             String s = "";
-                            if (nl.item(0) != null && nl.item(0).getFirstChild() != null)
+                            if (nl.item(0) != null && nl.item(0).getFirstChild() != null) {
                                 s = nl.item(0).getFirstChild().getNodeValue();
-                            else {
+                            } else {
                                 onePreference(i);
                                 continue;
                             }
@@ -411,9 +411,9 @@ public final class ParamPanel
                                     i == ParamData.WAVES_COLOR_IN_ROUTING ||
                                     i == ParamData.AIRTMP_COLOR_IN_ROUTING ||
                                     i == ParamData.RAIN_COLOR_IN_ROUTING ||
-                                    i == ParamData.BSP_COLOR_IN_ROUTING)
+                                    i == ParamData.BSP_COLOR_IN_ROUTING) {
                                 data[i][ParamData.VALUE_INDEX] = WWGnlUtilities.buildColor(s);
-                            else if (i == ParamData.ROUTING_STEP ||              // Integers
+                            } else if (i == ParamData.ROUTING_STEP ||              // Integers
                                     i == ParamData.ROUTING_FORK_WIDTH ||
                                     i == ParamData.TCP_PORT ||
                                     i == ParamData.UDP_PORT ||
@@ -426,18 +426,18 @@ public final class ParamPanel
                                     i == ParamData.INTERVAL_BETWEEN_ISOBARS ||
                                     i == ParamData.DEFAULT_FAX_INC_VALUE ||
                                     i == ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL ||
-                                    i == ParamData.WAIT_ON_STARTUP)
-                                data[i][ParamData.VALUE_INDEX] = new Integer(s);
-                            else if (i == ParamData.DEFAULT_FONT)
+                                    i == ParamData.WAIT_ON_STARTUP) {
+                                data[i][ParamData.VALUE_INDEX] = Integer.valueOf(s);
+                            } else if (i == ParamData.DEFAULT_FONT) {
                                 data[i][ParamData.VALUE_INDEX] = FontPanel.stringToFont(s);
-                            else if (i == ParamData.ROUTING_TIME_INTERVAL ||     // Doubles
+                            } else if (i == ParamData.ROUTING_TIME_INTERVAL ||     // Doubles
                                     i == ParamData.POLAR_SPEED_FACTOR ||
                                     i == ParamData.DEFAULT_ZOOM_VALUE ||
                                     i == ParamData.DEFAULT_CHART_INC_VALUE ||
                                     i == ParamData.STOP_ROUTING_WHEN_CLOSER_TO ||
-                                    i == ParamData.GRIB_TWS_COEFF)
-                                data[i][ParamData.VALUE_INDEX] = new Double(s);
-                            else if (i == ParamData.ROUTING_FROM_CURR_LOC ||     // Booleans
+                                    i == ParamData.GRIB_TWS_COEFF) {
+                                data[i][ParamData.VALUE_INDEX] = Double.valueOf(s);
+                            } else if (i == ParamData.ROUTING_FROM_CURR_LOC ||     // Booleans
                                     i == ParamData.AUTO_UPDATES ||
                                     i == ParamData.SHOW_NOTIFICATIONS ||
                                     i == ParamData.CONFIRM_DD_ZOOM ||
@@ -451,56 +451,56 @@ public final class ParamPanel
                                     i == ParamData.SHOW_ROUTING_LABELS ||
                                     i == ParamData.SHOW_ISOCHRONS ||
                                     i == ParamData.EXPAND_CONTROLS_BY_DEFAULT ||
-                                    i == ParamData.TRY_TO_AVOID_LAND)
-                                data[i][ParamData.VALUE_INDEX] = new Boolean(s);
-                            else if (i == ParamData.POLAR_FILE_LOC)              // DataFiles, Polars
+                                    i == ParamData.TRY_TO_AVOID_LAND) {
+                                data[i][ParamData.VALUE_INDEX] = Boolean.valueOf(s);
+                            } else if (i == ParamData.POLAR_FILE_LOC) {             // DataFiles, Polars
                                 data[i][ParamData.VALUE_INDEX] = new DataFile(new String[]{"xml", "polar-coeff"}, "Polars", s);
-                            else if (i == ParamData.LOAD_COMPOSITE_STARTUP)      // DataFiles, Patterns
+                            } else if (i == ParamData.LOAD_COMPOSITE_STARTUP) {     // DataFiles, Patterns
                                 data[i][ParamData.VALUE_INDEX] = new DataFile(new String[]{"ptrn"}, "Patterns", s);
-                            else if (i == ParamData.COMPOSITE_ROOT_DIR)               // DataDirectories
+                            } else if (i == ParamData.COMPOSITE_ROOT_DIR) {              // DataDirectories
                                 data[i][ParamData.VALUE_INDEX] = new DataDirectory(WWGnlUtilities.buildMessage("composite-button"), s);
-                            else if (i == ParamData.FAX_FILES_LOC)
+                            } else if (i == ParamData.FAX_FILES_LOC) {
                                 data[i][ParamData.VALUE_INDEX] = new DataPath(s);
-                            else if (i == ParamData.GRIB_FILES_LOC)
+                            } else if (i == ParamData.GRIB_FILES_LOC) {
                                 data[i][ParamData.VALUE_INDEX] = new DataPath(s);
-                            else if (i == ParamData.PATTERN_DIR)
+                            } else if (i == ParamData.PATTERN_DIR) {
                                 data[i][ParamData.VALUE_INDEX] = new DataDirectory(WWGnlUtilities.buildMessage("pattern-button"), s);
-                            else if (i == ParamData.FAX_TRANSPARENCY ||
-                                    i == ParamData.GRAY_PANEL_OPACITY)          // Float
-                                data[i][ParamData.VALUE_INDEX] = new Float(s);
-                            else if (i == ParamData.LOOK_AND_FEEL)               // Look and Feel (list)
+                            } else if (i == ParamData.FAX_TRANSPARENCY ||
+                                    i == ParamData.GRAY_PANEL_OPACITY) {          // Float
+                                data[i][ParamData.VALUE_INDEX] = Float.valueOf(s);
+                            } else if (i == ParamData.LOOK_AND_FEEL) {              // Look and Feel (list)
                                 data[i][ParamData.VALUE_INDEX] = new ListOfLookAndFeel(s);
-                            else if (i == ParamData.PREFERRED_WIND_DISPLAY)      // Wind Display Options (list)
+                            } else if (i == ParamData.PREFERRED_WIND_DISPLAY) {     // Wind Display Options (list)
                                 data[i][ParamData.VALUE_INDEX] = new WindOptionList(Integer.parseInt(s));
-                            else if (i == ParamData.ISOBARS_LIST ||              // Contour Lines
+                            } else if (i == ParamData.ISOBARS_LIST ||              // Contour Lines
                                     i == ParamData.ISOHEIGHT500_LIST ||
                                     i == ParamData.ISOHEIGHTWAVES_LIST ||
                                     i == ParamData.ISOTEMP_LIST ||
                                     i == ParamData.ISO_TWS_LIST ||
-                                    i == ParamData.ISOPRATE_LIST)
+                                    i == ParamData.ISOPRATE_LIST) {
                                 data[i][ParamData.VALUE_INDEX] = new ContourLinesList(s);
-                            else if (i == ParamData.DEFAULT_FAX_BLUR)
+                            } else if (i == ParamData.DEFAULT_FAX_BLUR) {
                                 data[i][ParamData.VALUE_INDEX] = new FaxBlurList(Integer.parseInt(s));
-                            else if (i == ParamData.GRAY_PANEL_OPTION)
+                            } else if (i == ParamData.GRAY_PANEL_OPTION) {
                                 data[i][ParamData.VALUE_INDEX] = new GrayPanelOptionList(Integer.parseInt(s));
-                            else if (i == ParamData.SERIAL_PORT)
+                            } else if (i == ParamData.SERIAL_PORT) {
                                 data[i][ParamData.VALUE_INDEX] = new ListOfSerialPorts(s);
-                            else if (i == ParamData.ROUTING_OUTPUT_FLAVOR)
+                            } else if (i == ParamData.ROUTING_OUTPUT_FLAVOR) {
                                 data[i][ParamData.VALUE_INDEX] = new RoutingOutputList(Integer.parseInt(s));
-                            else if (i == ParamData.TEMPERATURE_UNIT)
+                            } else if (i == ParamData.TEMPERATURE_UNIT) {
                                 data[i][ParamData.VALUE_INDEX] = new TemperatureUnitList(Integer.parseInt(s));
-                            else if (i == ParamData.ANEMOMETER_HAND_OPTION)
+                            } else if (i == ParamData.ANEMOMETER_HAND_OPTION) {
                                 data[i][ParamData.VALUE_INDEX] = new AnemometerHandOptionList(Integer.parseInt(s));
-                            else if (i == ParamData.PLAY_SOUND_ON_JOB_COMPLETION)              // DataFiles, Sound
-                            {
+                            } else if (i == ParamData.PLAY_SOUND_ON_JOB_COMPLETION) {             // DataFiles, Sound
 //              if (s != null && s.trim().length() > 0)
                                 data[i][ParamData.VALUE_INDEX] = new SoundFile(new String[]{"wav", "ogg"}, "Sounds", s);
-                            } else if (i == ParamData.EPHEMERIS_POSITION)
+                            } else if (i == ParamData.EPHEMERIS_POSITION) {
                                 data[i][ParamData.VALUE_INDEX] = new Position(s);
-                            else if (i == ParamData.EPHEMERIS_EMAIL_TZ)
+                            } else if (i == ParamData.EPHEMERIS_EMAIL_TZ) {
                                 data[i][ParamData.VALUE_INDEX] = new ListOfTimeZones(s);
-                            else                                               // Strings
+                            } else {                                              // Strings
                                 data[i][ParamData.VALUE_INDEX] = s;
+                            }
                         } catch (Exception ex) {
                             data[i][ParamData.VALUE_INDEX] = oneFactorySetting(i);
                         }
@@ -525,7 +525,7 @@ public final class ParamPanel
 
     private int currentCategoryIndex = -1;
 
-    private static Object[] categoryIndexes = new Object[]
+    private final static Object[] categoryIndexes = new Object[]
             {new int[] // Colors
                     {ParamData.CHART_COLOR,
                             ParamData.GRID_COLOR,
@@ -630,42 +630,43 @@ public final class ParamPanel
             int index = ((int[]) categoryIndexes[idx])[i];
             try {
                 Object cloned = null;
-                if (data[index][ParamData.VALUE_INDEX] == null)
+                if (data[index][ParamData.VALUE_INDEX] == null) {
                     data[index][ParamData.VALUE_INDEX] = oneFactorySetting(index);
-                if (data[index][ParamData.VALUE_INDEX] instanceof Color)
+                }
+                if (data[index][ParamData.VALUE_INDEX] instanceof Color) {
                     cloned = new Color(((Color) data[index][ParamData.VALUE_INDEX]).getRed(),
                             ((Color) data[index][ParamData.VALUE_INDEX]).getGreen(),
                             ((Color) data[index][ParamData.VALUE_INDEX]).getBlue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof Integer)
-                    cloned = new Integer(((Integer) data[index][ParamData.VALUE_INDEX]).intValue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof Double)
-                    cloned = new Double(((Double) data[index][ParamData.VALUE_INDEX]).doubleValue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof Float)
-                    cloned = new Float(((Float) data[index][ParamData.VALUE_INDEX]).floatValue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof String)
-                    cloned = new String(data[index][ParamData.VALUE_INDEX].toString());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof Boolean)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof Integer) {
+                    cloned = ((Integer) data[index][ParamData.VALUE_INDEX]).intValue();
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof Double) {
+                    cloned = ((Double) data[index][ParamData.VALUE_INDEX]).doubleValue();
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof Float) {
+                    cloned = ((Float) data[index][ParamData.VALUE_INDEX]).floatValue();
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof String) {
+                    cloned = data[index][ParamData.VALUE_INDEX].toString();
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof Boolean) {
                     cloned = ((Boolean) data[index][ParamData.VALUE_INDEX]).booleanValue();
-                else if (data[index][ParamData.VALUE_INDEX] instanceof SoundFile)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof SoundFile) {
                     cloned = new SoundFile(((SoundFile) data[index][ParamData.VALUE_INDEX]).getFileExt(),
                             ((SoundFile) data[index][ParamData.VALUE_INDEX]).getDesc(),
                             ((SoundFile) data[index][ParamData.VALUE_INDEX]).getValue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof DataFile)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof DataFile) {
                     cloned = new DataFile(((DataFile) data[index][ParamData.VALUE_INDEX]).getFileExt(),
                             ((DataFile) data[index][ParamData.VALUE_INDEX]).getDesc(),
                             ((DataFile) data[index][ParamData.VALUE_INDEX]).getValue());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof DataDirectory)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof DataDirectory) {
                     cloned = new DataDirectory(((DataDirectory) data[index][ParamData.VALUE_INDEX]).desc,
                             ((DataDirectory) data[index][ParamData.VALUE_INDEX]).value);
-                else if (data[index][ParamData.VALUE_INDEX] instanceof ListOfLookAndFeel)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof ListOfLookAndFeel) {
                     cloned = new ListOfLookAndFeel(((ListOfLookAndFeel) data[index][ParamData.VALUE_INDEX]).currentValue);
-                else if (data[index][ParamData.VALUE_INDEX] instanceof AnemometerHandOptionList)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof AnemometerHandOptionList) {
                     cloned = new AnemometerHandOptionList(((AnemometerHandOptionList) data[index][ParamData.VALUE_INDEX]).getCurrentIndex());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof TemperatureUnitList)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof TemperatureUnitList) {
                     cloned = new TemperatureUnitList(((TemperatureUnitList) data[index][ParamData.VALUE_INDEX]).getCurrentIndex());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof ContourLinesList)
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof ContourLinesList) {
                     cloned = new ContourLinesList(((ContourLinesList) data[index][ParamData.VALUE_INDEX]).toString());
-                else if (data[index][ParamData.VALUE_INDEX] instanceof Font) {
+                } else if (data[index][ParamData.VALUE_INDEX] instanceof Font) {
                     Font f = (Font) data[index][ParamData.VALUE_INDEX];
                     cloned = new Font(f.getName(), f.getStyle(), f.getSize());
                 } else {
@@ -835,8 +836,8 @@ public final class ParamPanel
                             currentIndex == ParamData.CLICK_SCROLL ||
                             currentIndex == ParamData.EXPAND_CONTROLS_BY_DEFAULT ||
                             currentIndex == ParamData.TRY_TO_AVOID_LAND) {
-                        try { /* boolean b = */
-                            new Boolean(after);
+                        try {
+                            /*boolean b =*/ Boolean.valueOf(after); // Just to make sure there's not pb
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(this,
                                     e.getMessage(),
@@ -1038,7 +1039,7 @@ public final class ParamPanel
         private transient Object curValue = null;
         private transient Color bgColor = null;
 
-        private boolean bold = false;
+        private final boolean bold = false;
 
         public Component getTableCellRendererComponent(JTable table,
                                                        Object value,
@@ -1113,20 +1114,20 @@ public final class ParamPanel
     protected static String[] lnfValues = null; // Populated in the constructor
 
     
-    public class ParamEditor
+    public static class ParamEditor
             extends JComponent
             implements TableCellEditor {
         JComponent componentToApply;
         protected transient Vector<CellEditorListener> listeners;
         protected transient Object originalValue;
-        JComboBox lnfList = new JComboBox(lnfValues); // Should not be used
+        JComboBox<String> lnfList = new JComboBox<>(lnfValues); // Should not be used
         WindOptionComboBox wdoCombo = new WindOptionComboBox();
         FaxBlurListComboBox blurCombo = new FaxBlurListComboBox();
         GrayPanelOptionListComboBox gpOptionCombo = new GrayPanelOptionListComboBox();
         TemperatureUnitListComboBox tempUnitCombo = new TemperatureUnitListComboBox();
         AnemometerHandOptionListComboBox anemoCombo = new AnemometerHandOptionListComboBox();
-        JComboBox serialPortList = new JComboBox(new String[] { "Empty Serial Port list"}); // TODO Remove this  SerialPortList.listSerialPorts());
-        JComboBox timeZonesList = new JComboBox(TimeZone.getAvailableIDs());
+        JComboBox<String> serialPortList = new JComboBox<>(new String[] { "Empty Serial Port list"}); // TODO Remove this  SerialPortList.listSerialPorts());
+        JComboBox<String> timeZonesList = new JComboBox<>(TimeZone.getAvailableIDs());
         RoutingOptionComboBox roCombo = new RoutingOptionComboBox();
 
         public ParamEditor() {
@@ -1211,44 +1212,46 @@ public final class ParamPanel
         public Object getCellEditorValue() {
 //    System.out.println("getCellEditorValue invoked");
             if (componentToApply instanceof JTextField) {
-                if (originalValue instanceof String)
+                if (originalValue instanceof String) {
                     return ((JTextField) componentToApply).getText();
-                else if (originalValue instanceof Integer)
-                    return new Integer(((JTextField) componentToApply).getText());
-                else if (originalValue instanceof Double)
-                    return new Double(((JTextField) componentToApply).getText());
-                else if (originalValue instanceof Float)
-                    return new Float(((JTextField) componentToApply).getText());
-                else if (originalValue instanceof Position)
+                } else if (originalValue instanceof Integer) {
+                    return Integer.valueOf(((JTextField) componentToApply).getText());
+                } else if (originalValue instanceof Double) {
+                    return Double.valueOf(((JTextField) componentToApply).getText());
+                } else if (originalValue instanceof Float) {
+                    return Float.valueOf(((JTextField) componentToApply).getText());
+                } else if (originalValue instanceof Position) {
                     return new Position(((JTextField) componentToApply).getText());
-                else
+                } else {
                     return null;
+                }
             } else if (componentToApply instanceof ColorPickerCellEditor) {
                 Color c = (Color) ((ColorPickerCellEditor) componentToApply).getCellEditorValue();
-                if (c != null)
+                if (c != null) {
                     return c;
-                else {
+                } else {
 //        System.out.println("Original Value is a " + originalValue.getClass().getName());
                     return (Color) originalValue;
                 }
             } else if (componentToApply instanceof FieldPlusLOVPicker) {
                 ContourLinesList cll = (ContourLinesList) ((FieldPlusLOVPicker) componentToApply).getCellEditorValue();
-                if (cll != null)
+                if (cll != null) {
                     return cll;
-                else {
+                } else {
                     //  System.out.println("Original Value is a " + originalValue.getClass().getName());
                     return (ContourLinesList) originalValue;
                 }
             } else if (componentToApply instanceof FieldPlusFontPicker) {
                 Object obj = ((FieldPlusFontPicker) componentToApply).getCellEditorValue();
-                if (obj instanceof Font) // FIXME Fix that shit...
+                if (obj instanceof Font) { // FIXME Fix that shit...
                     return (Font) obj;
-                else if (obj instanceof String) {
+                } else if (obj instanceof String) {
                     String font = (String) ((FieldPlusFontPicker) componentToApply).getCellEditorValue();
-                    if (font != null)
+                    if (font != null) {
                         return FontPanel.stringToFont(font);
-                    else
+                    } else {
                         return null;
+                    }
                 } else {
                     //  System.out.println("Original Value is a " + originalValue.getClass().getName());
                     return (Font) originalValue;
@@ -1312,8 +1315,9 @@ public final class ParamPanel
                     }
                 }
                 // Legacy
-                if (idx == -1)
+                if (idx == -1) {
                     idx = 0;
+                }
                 return (new WindOptionList(idx));
             } else if (componentToApply instanceof RoutingOptionComboBox) {
                 String s = (String) ((RoutingOptionComboBox) componentToApply).getSelectedItem();
@@ -1325,17 +1329,17 @@ public final class ParamPanel
                     }
                 }
                 // Legacy
-                if (idx == -1)
+                if (idx == -1) {
                     idx = 0;
+                }
                 return (new RoutingOutputList(idx));
             } else if (componentToApply instanceof JComboBox) // Too vague...
             {
-                if (originalValue instanceof ListOfSerialPorts)
+                if (originalValue instanceof ListOfSerialPorts) {
                     return new ListOfSerialPorts((String) ((JComboBox) componentToApply).getSelectedItem());
-                else if (originalValue instanceof ListOfTimeZones)
+                } else if (originalValue instanceof ListOfTimeZones) {
                     return new ListOfTimeZones((String) ((JComboBox) componentToApply).getSelectedItem());
-                else // Assume Look and Feel... Not granted
-                {
+                } else { // Assume Look and Feel... Not granted
                     System.out.println("Warning!!! Unproperly managed ComboBox for :" + originalValue.getClass().getName());
                     return (new ListOfLookAndFeel((String) ((JComboBox) componentToApply).getSelectedItem()));
                 }
@@ -1373,14 +1377,16 @@ public final class ParamPanel
 
         protected void fireEditingCanceled() {
             ChangeEvent ce = new ChangeEvent(this);
-            for (int i = listeners.size(); i >= 0; i--)
+            for (int i = listeners.size(); i >= 0; i--) {
                 listeners.elementAt(i).editingCanceled(ce);
+            }
         }
 
         protected void fireEditingStopped() {
             ChangeEvent ce = new ChangeEvent(this);
-            for (int i = (listeners.size() - 1); i >= 0; i--)
+            for (int i = (listeners.size() - 1); i >= 0; i--) {
                 listeners.elementAt(i).editingStopped(ce);
+            }
         }
     }
 
@@ -1397,12 +1403,14 @@ public final class ParamPanel
                                       String v,
                                       Object[][] d) {
         int len = 0;
-        if (d != null)
+        if (d != null) {
             len = d.length;
+        }
         Object[][] newData = new Object[len + 1][names.length];
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < names.length; j++)
+            for (int j = 0; j < names.length; j++) {
                 newData[i][j] = d[i][j];
+            }
         }
         newData[len][ParamData.NAME_INDEX] = k;
         newData[len][ParamData.VALUE_INDEX] = v;
@@ -1450,8 +1458,9 @@ public final class ParamPanel
 //        System.out.println("Saving:" + valueObject.toString());
                 }
             } else {
-                if (i != ParamData.PLAY_SOUND_ON_JOB_COMPLETION)
+                if (i != ParamData.PLAY_SOUND_ON_JOB_COMPLETION) {
                     JOptionPane.showMessageDialog(WWContext.getInstance().getMasterTopFrame(), WWGnlUtilities.buildMessage("null-value", new String[]{ParamData.getLabels()[i] /* Integer.toString(i) */}));
+                }
                 val.setNodeValue("");
             }
             param.appendChild(val);
@@ -1550,8 +1559,9 @@ public final class ParamPanel
             String[] data = s.split(File.pathSeparator);
             if (data != null) {
                 path = new DataDirectory[data.length];
-                for (int i = 0; i < data.length; i++)
+                for (int i = 0; i < data.length; i++) {
                     path[i] = new DataDirectory("DataPath", data[i]);
+                }
             }
         }
 
@@ -1589,9 +1599,10 @@ public final class ParamPanel
             while (strtokContourLines.hasMoreTokens()) {
                 String tok = strtokContourLines.nextToken().trim();
                 boolean b = tok.startsWith("[") && tok.endsWith("]");
-                if (b)
+                if (b) {
                     tok = tok.substring(1, tok.length() - 1);
-                al.add(new Integer(tok));
+                }
+                al.add(Integer.valueOf(tok));
             }
             int[] ret = new int[al.size()];
             Iterator<Integer> iterator = al.iterator();
@@ -1610,8 +1621,9 @@ public final class ParamPanel
             while (strtokContourLines.hasMoreTokens()) {
                 String tok = strtokContourLines.nextToken().trim();
                 boolean b = tok.startsWith("[") && tok.endsWith("]");
-                if (b)
-                    al.add(new Integer(idx));
+                if (b) {
+                    al.add(Integer.valueOf(idx));
+                }
                 idx++;
             }
             int[] ret = new int[al.size()];
@@ -1621,7 +1633,6 @@ public final class ParamPanel
                 Integer integer = iterator.next();
                 ret[i++] = integer.intValue();
             }
-
             return ret;
         }
     }
@@ -1701,14 +1712,14 @@ public final class ParamPanel
     }
 
     public static class TemperatureUnitList extends ListOfValues {
-        public final static int CELCIUS = 0;
+        public final static int CELSIUS = 0;
         public final static int FAHRENHEIT = 1;
         public final static int KELVIN = 2;
 
         private static HashMap<Integer, String> map = new HashMap<Integer, String>(3);
 
         public TemperatureUnitList(int key) {
-            map.put(CELCIUS, "\272C");
+            map.put(CELSIUS, "\272C");
             map.put(FAHRENHEIT, "\272F");
             map.put(KELVIN, "\272K");
 
@@ -1743,7 +1754,7 @@ public final class ParamPanel
         }
 
         public static String getLabel(int idx) {
-            return map.get(new Integer(idx));
+            return map.get(Integer.valueOf(idx));
         }
     }
 
@@ -1790,7 +1801,7 @@ public final class ParamPanel
         }
 
         public static String getLabel(int idx) {
-            return map.get(new Integer(idx));
+            return map.get(Integer.valueOf(idx));
         }
     }
 

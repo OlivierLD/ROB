@@ -273,7 +273,7 @@ public class WWGnlUtilities {
     public static double convertTemperatureFromKelvin(double temperature, int toUnit) {
         double newTemp = temperature;
         switch (toUnit) {
-            case ParamPanel.TemperatureUnitList.CELCIUS:
+            case ParamPanel.TemperatureUnitList.CELSIUS:
                 newTemp -= 273.6;
                 break;
             case ParamPanel.TemperatureUnitList.FAHRENHEIT:
@@ -287,7 +287,7 @@ public class WWGnlUtilities {
         return newTemp;
     }
 
-    public static double convertTemperatureFromCelcius(double temperature, int toUnit) {
+    public static double convertTemperatureFromCelsius(double temperature, int toUnit) {
         double newTemp = temperature;
         switch (toUnit) {
             case ParamPanel.TemperatureUnitList.KELVIN:
@@ -3585,6 +3585,16 @@ public class WWGnlUtilities {
                     x = 5;
                 }
                 thumbnail.paintIcon(this, g, x, y);
+            } else {
+                final Dimension dimension = this.getSize();
+                String message2Display = "Fax will show up here";  // TODO Localize
+                g.setFont(g.getFont().deriveFont(Font.ITALIC | Font.BOLD, 20f));
+                String str = message2Display; // WWGnlUtilities.buildMessage("loading");
+                int strWidth = g.getFontMetrics(g.getFont()).stringWidth(str);
+                g.setColor(Color.GRAY);
+                g.drawString(str, (int)(dimension.getWidth() / 2) - (strWidth / 2) + 3, 20 + g.getFont().getSize() + 3); // Shadow
+                g.setColor(Color.RED);
+                g.drawString(str, (int)(dimension.getWidth() / 2) - (strWidth / 2), 20 + g.getFont().getSize());         // Text
             }
         }
     }
@@ -4123,11 +4133,11 @@ public class WWGnlUtilities {
 
     public static void main__(String[] args) {
         double kelvin = 273d;
-        System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.CELCIUS) + " C");
+        System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.CELSIUS) + " C");
         System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.FAHRENHEIT) + " F");
         System.out.println();
         kelvin = 293d;
-        System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.CELCIUS) + " C");
+        System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.CELSIUS) + " C");
         System.out.println(kelvin + " K = " + convertTemperatureFromKelvin(kelvin, ParamPanel.TemperatureUnitList.FAHRENHEIT) + " F");
     }
 

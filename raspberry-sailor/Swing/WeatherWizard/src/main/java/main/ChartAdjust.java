@@ -54,8 +54,9 @@ public class ChartAdjust {
         }
         //  System.out.println("Found " + nbdots + " dot(s)");
         String resource = "";
-        for (i = 0; i < nbdots; i++)
+        for (i = 0; i < nbdots; i++) {
             resource += (".." + "/");
+        }
         resource += ("meta-inf" + "/" + "Manifest.mf");
 
         String className = this.getClass().getName().substring(this.getClass().getName().lastIndexOf(".") + 1) + ".class";
@@ -67,7 +68,7 @@ public class ChartAdjust {
         if (strURL.indexOf(jarIdentifier) > -1) {
             try {
                 String jarFileURL = strURL.substring(0, strURL.indexOf(jarIdentifier) + jarIdentifier.length()); // Must end with ".jar!/"
-                //      System.out.println("Trying to reach [" + jarFileURL + "]");
+                // System.out.println("Trying to reach [" + jarFileURL + "]");
                 URL jarURL = new URL(jarFileURL);
                 JarFile myJar = ((JarURLConnection) jarURL.openConnection()).getJarFile();
                 Manifest manifest = myJar.getManifest();
@@ -80,7 +81,7 @@ public class ChartAdjust {
             }
         }
 
-        if (lastModified == null || lastModified.trim().length() == 0) {
+        if (lastModified == null || lastModified.trim().length() == 0) { // TODO isEmpty
             strURL = strURL.substring(0, strURL.lastIndexOf(className));
             strURL += resource;
             try {
@@ -142,11 +143,11 @@ public class ChartAdjust {
                         String s = args[a].substring("-composite:".length());
                         // An array?
                         String ca[] = s.split(",");
-                        if (ca.length > 1)
+                        if (ca.length > 1) {
                             ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX] = new ParamPanel.DataFile(new String[]{"ptrn"},
                                     "pattern",
                                     s);
-                        else {
+                        } else {
                             ParamPanel.DataFile[] ppdf = new ParamPanel.DataFile[ca.length];
                             for (int j = 0; j < ca.length; j++) {
                                 ppdf[i] = new ParamPanel.DataFile(new String[]{"ptrn"},
@@ -218,7 +219,7 @@ public class ChartAdjust {
                             GraphicsConfiguration[] gc = curGs.getConfigurations();
                             for (GraphicsConfiguration curGc : gc) {
                                 Rectangle bounds = curGc.getBounds();
-                                //          System.out.println(bounds.getX() + "," + bounds.getY() + " " + bounds.getWidth() + " x " + bounds.getHeight());
+                                // System.out.println(bounds.getX() + "," + bounds.getY() + " " + bounds.getWidth() + " x " + bounds.getHeight());
                                 if (x > bounds.getX() && x < (bounds.getX() + bounds.getWidth()) && y > bounds.getY() && y < (bounds.getY() + bounds.getHeight())) {
                                     foundMatch = true;
                                     break;
@@ -231,7 +232,7 @@ public class ChartAdjust {
                             positioned = false;
                         } else {
                             boolean smoothOpening = false;
-                            int NB_STEP = 50;
+                            final int NB_STEP = 50;
                             for (int p = 0; smoothOpening && p <= NB_STEP; p++) {
                                 final int _w = (int) (p * (w / (float) NB_STEP));
                                 final int _h = (int) (p * (h / (float) NB_STEP));
@@ -242,13 +243,13 @@ public class ChartAdjust {
 
                                 SwingUtilities.invokeAndWait(new Runnable() {
                                     public void run() {
-                                        //    System.out.println("First display " + _w + ", " + _h + ", " + _w + ", " + _h);
+                                        // System.out.println("First display " + _w + ", " + _h + ", " + _w + ", " + _h);
                                         Dimension dim = new Dimension(_w, _h);
                                         frame.setSize(dim);
                                         frame.setLocation(_x, _y);
-//                  frame.setDividerLocation(_dl);
+                                        // frame.setDividerLocation(_dl);
                                         frame.setVisible(true);
-                                        //   try { Thread.sleep(10L); } catch (InterruptedException ie) {}
+                                        // try { Thread.sleep(10L); } catch (InterruptedException ie) {}
                                     }
                                 });
                             }
@@ -257,18 +258,20 @@ public class ChartAdjust {
                             frame.setDividerLocation(dl);
                             positioned = true;
                         }
-                    } catch (Exception forgetit) {
-                        System.err.println(forgetit.toString());
+                    } catch (Exception forgetIt) {
+                        System.err.println(forgetIt.toString());
                     }
                 }
 
                 if (!positioned) {
                     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                     Dimension frameSize = frame.getSize();
-                    if (frameSize.height > screenSize.height)
+                    if (frameSize.height > screenSize.height) {
                         frameSize.height = screenSize.height;
-                    if (frameSize.width > screenSize.width)
+                    }
+                    if (frameSize.width > screenSize.width) {
                         frameSize.width = screenSize.width;
+                    }
                     frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
                 }
                 frame.addWindowListener(new WindowAdapter() {
@@ -286,19 +289,19 @@ public class ChartAdjust {
         // lastModified, like Thu 02/16/2012 18:11:14.08
         Date compiledDate = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss.SS", Locale.ENGLISH);
-            sdf.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+            SimpleDateFormat sdf = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss.SS Z", Locale.ENGLISH);
+            sdf.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
             compiledDate = sdf.parse(lastModified);
         } catch (ParseException pe) {
             // From the class ? like Sun, 19 Feb 2012 03:21:22 GMT
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-                sdf.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+                sdf.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
                 compiledDate = sdf.parse(lastModified);
             } catch (ParseException pe2) {
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("E MM/dd/yyyy HH:mm:ss", Locale.ENGLISH); // Compiled on Linux
-                    sdf.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
                     compiledDate = sdf.parse(lastModified);
                 } catch (ParseException pe3) {
                     // Give up...
@@ -392,27 +395,50 @@ public class ChartAdjust {
         // Start the UI
         String lnf = System.getProperty("swing.defaultlaf");
 //  System.out.println("LnF:" + lnf);
-        if (lnf == null) // Let the -Dswing.defaultlaf do the job.
-        {
-//    WWGnlUtilities.installLookAndFeel();
-            try {
-                if (System.getProperty("swing.defaultlaf") == null)
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                WWContext.getInstance().fireExceptionLogging(e);
-                e.printStackTrace();
+        if (lnf == null) { // Let the -Dswing.defaultlaf do the job.
+            // WWGnlUtilities.installLookAndFeel();
+//            try {
+//                if (System.getProperty("swing.defaultlaf") == null) {
+//                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//                }
+//            } catch (Exception e) {
+//                WWContext.getInstance().fireExceptionLogging(e);
+//                e.printStackTrace();
+//            }
+            if (!"true".equals(System.getProperty("keep.system.lnf"))) {
+                try {
+                    // Set cross-platform Java L&F (also called "Metal")
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (UnsupportedLookAndFeelException e) {
+                    // handle exception
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    // handle exception
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    // handle exception
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // handle exception
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Keeping System L&F.");
             }
+        } else {
+            System.out.printf("Applying LnF %s\n", lnf);
         }
         JFrame.setDefaultLookAndFeelDecorated(true);
         if (false) {
             UIManager.LookAndFeelInfo[] info = UIManager.getInstalledLookAndFeels();
-            for (int i = 0; i < info.length; i++)
+            for (int i = 0; i < info.length; i++) {
                 System.out.println(info[i].getName() + ":" + info[i].getClassName());
+            }
         }
         try {
             new ChartAdjust(args);
         } catch (Exception e) {
-            System.err.println("Cought from the main:");
+            System.err.println("Caught from the main:");
             System.err.println("---------------------");
             e.printStackTrace();
             System.err.println("---------------------");
