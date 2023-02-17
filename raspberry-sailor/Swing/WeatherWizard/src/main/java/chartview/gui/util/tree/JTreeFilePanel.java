@@ -59,7 +59,7 @@ import java.util.zip.ZipFile;
 
 public class JTreeFilePanel
         extends JPanel {
-    public final static String OLP_URL = "http://weather.lediouris.net/patterns/olp.xml";
+    public final static String OLP_URL = "http://www.lediouris.net/ww/patterns/olp.xml";
     public final static String PDF_URL = "dyn.fax.xml";
 
     private BorderLayout borderLayout1 = new BorderLayout();

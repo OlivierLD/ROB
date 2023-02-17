@@ -15,10 +15,33 @@ repositories {
 }
 
 dependencies {
+  implementation 'oracle:xmlparser:2.0'
   implementation project(':raspberry-sailor:Swing:WeatherWizard')
   implementation project(':raspberry-sailor:Swing:ChartComponents')
 
   testImplementation "junit:junit:$junit_version"
+}
+
+jar {
+  // User-exit specific. Challenge: Go find the f*king doc !!
+  manifest {
+    attributes (
+            "Manifest-Version": "1.0",
+            "Compile-Date"   : new Date().toString(),
+            'Built-By'       : System.properties['user.name'],
+            'Created-By'     : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+    )
+    attributes ([
+                  "WW-User-Exit-Action"  : "weatherwizard.userexits.SimpleSample",          // The UE class
+                  "WW-User-Exit-Comment" : "Writes faxes to the file system, as an image.", // Supports <html><b>HTML</b> syntax</html>
+                  "WW-User-Exit-Location": "Samples;For Tests",                             // Location in user-exit menu, ';' separated hierarchy.
+                  "WW-User-Exit-ack"     : "true",  // Acknowledge at the end ?
+                  "WW-User-Exit-sync"    : "true"   // Synchronous or Asynchronous
+                ], "User-Exit-1"
+    )
+  }
 }
 
 shadowJar {

@@ -551,13 +551,13 @@ public class DataFilePopup
                                 authorElem.setAttribute("name", pep.getAuthor());
                             }
                             // Get Chart Parameters
-                            doc.selectNodes("/pattern/north").item(0).setTextContent(Double.toString(pep.getTopLat()));
-                            doc.selectNodes("/pattern/south").item(0).setTextContent(Double.toString(pep.getBottomLat()));
-                            doc.selectNodes("/pattern/east").item(0).setTextContent(Double.toString(pep.getRightLong()));
-                            doc.selectNodes("/pattern/west").item(0).setTextContent(Double.toString(pep.getLeftLong()));
+                            doc.selectNodes("/pattern/north").item(0).getFirstChild().setNodeValue(Double.toString(pep.getTopLat()));
+                            doc.selectNodes("/pattern/south").item(0).getFirstChild().setNodeValue(Double.toString(pep.getBottomLat()));
+                            doc.selectNodes("/pattern/east").item(0).getFirstChild().setNodeValue(Double.toString(pep.getRightLong()));
+                            doc.selectNodes("/pattern/west").item(0).getFirstChild().setNodeValue(Double.toString(pep.getLeftLong()));
 
-                            doc.selectNodes("/pattern/chartwidth").item(0).setTextContent(Integer.toString(pep.getChartWidth()));
-                            doc.selectNodes("/pattern/chartheight").item(0).setTextContent(Integer.toString(pep.getChartHeight()));
+                            doc.selectNodes("/pattern/chartwidth").item(0).getFirstChild().setNodeValue(Integer.toString(pep.getChartWidth()));
+                            doc.selectNodes("/pattern/chartheight").item(0).getFirstChild().setNodeValue(Integer.toString(pep.getChartHeight()));
 
                             NodeList nl = doc.selectNodes("/pattern/scroll");
                             if (nl.getLength() == 0) {
@@ -631,19 +631,19 @@ public class DataFilePopup
                                 }
                                 // TODO Scale, Rotation, X&Y Offsets
                                 try {
-                                    faxrow.selectNodes("./faxScale").item(0).setTextContent(Double.toString((Double) faxData[i][FaxPatternEditTablePanel.SCALE_COL]));
+                                    faxrow.selectNodes("./faxScale").item(0).getFirstChild().setNodeValue(Double.toString((Double) faxData[i][FaxPatternEditTablePanel.SCALE_COL]));
                                 } catch (Exception ignore) {
                                 }
                                 try {
-                                    faxrow.selectNodes("./faxRotation").item(0).setTextContent(Float.toString((Float) faxData[i][FaxPatternEditTablePanel.ROTATION_COL]));
+                                    faxrow.selectNodes("./faxRotation").item(0).getFirstChild().setNodeValue(Float.toString((Float) faxData[i][FaxPatternEditTablePanel.ROTATION_COL]));
                                 } catch (Exception ignore) {
                                 }
                                 try {
-                                    faxrow.selectNodes("./faxXoffset").item(0).setTextContent(Integer.toString((Integer) faxData[i][FaxPatternEditTablePanel.X_OFFSET_COL]));
+                                    faxrow.selectNodes("./faxXoffset").item(0).getFirstChild().setNodeValue(Integer.toString((Integer) faxData[i][FaxPatternEditTablePanel.X_OFFSET_COL]));
                                 } catch (Exception ignore) {
                                 }
                                 try {
-                                    faxrow.selectNodes("./faxYoffset").item(0).setTextContent(Integer.toString((Integer) faxData[i][FaxPatternEditTablePanel.Y_OFFSET_COL]));
+                                    faxrow.selectNodes("./faxYoffset").item(0).getFirstChild().setNodeValue(Integer.toString((Integer) faxData[i][FaxPatternEditTablePanel.Y_OFFSET_COL]));
                                 } catch (Exception ignore) {
                                 }
                                 if (((Boolean) faxData[i][2]).booleanValue()) {

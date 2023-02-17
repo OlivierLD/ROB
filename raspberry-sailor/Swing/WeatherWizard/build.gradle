@@ -38,6 +38,16 @@ dependencies {
   testImplementation "junit:junit:$junit_version"
 }
 
+jar {
+  manifest {
+    attributes(
+            "Manifest-Version": "1.0",
+            "Compile-Date": new Date().toString(),
+            "Main-Class": "main.splash.Splasher"
+    )
+  }
+}
+
 shadowJar {
   zip64 true
 }

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.*;
 
 public class GRIBSlug
-        extends JApplet
+//        extends JApplet
         implements UserExitInterface {
     public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_S_z");
     private HashMap<GribDate, HashMap<GribType, Float[][]>> gribDataMap = null;
@@ -30,6 +30,7 @@ public class GRIBSlug
         super();
     }
 
+    @Override
     public boolean isAvailable(CommandPanel commandPanel, WWContext ctx) {
         boolean available = true;
         if (ctx.getGribFile() == null) {
@@ -38,6 +39,7 @@ public class GRIBSlug
         return available;
     }
 
+    @Override
     public boolean userExitTask(CommandPanel cp, final WWContext ctx)
             throws UserExitException {
         boolean ok = true;
@@ -60,20 +62,20 @@ public class GRIBSlug
         return ok;
     }
 
-    private final void showSlug(final Thread parent, WWContext ctx) {
+    private void showSlug(final Thread parent, WWContext ctx) {
         GribFile gribFile = ctx.getGribFile();
         showSlug(parent, gribFile);
     }
 
-    private final void showSlug(final Thread parent, GribFile gribFile) {
-        feedback = new ArrayList<String>(1);
+    private void showSlug(final Thread parent, GribFile gribFile) {
+        feedback = new ArrayList<>(1);
         try {
             // GribPDSParamTable.turnOffJGRIBLogging();
             TimeZone tz = TimeZone.getTimeZone("127"); // "GMT + 0"
             //  TimeZone.setDefault(tz);
             SDF.setTimeZone(tz);
 
-            gribDataMap = new HashMap<GribDate, HashMap<GribType, Float[][]>>();
+            gribDataMap = new HashMap<>();
 
             int lrLength = gribFile.getLightRecords().length;
             for (int i = 0; i < lrLength; i++) {
@@ -167,10 +169,12 @@ public class GRIBSlug
         }
     }
 
+    @Override
     public List<String> getFeedback() {
         return feedback;
     }
 
+    // TODO Remove ?
     public void init() {
         try {
             standalone = true;

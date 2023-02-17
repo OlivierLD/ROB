@@ -277,17 +277,19 @@ public class UserExitTablePanel
         String ueArchive = WWGnlUtilities.chooseFile(this,
                 JFileChooser.FILES_ONLY,
                 new String[]{"jar"},
-                "UserExit Archive",
+                "UserExit Archives",
                 ".",
+                WWGnlUtilities.SaveOrOpen.OPEN,
                 WWGnlUtilities.buildMessage("select"),
-                WWGnlUtilities.buildMessage("user-exit"));
+                WWGnlUtilities.buildMessage("user-exit"),
+                false);
         if (ueArchive != null && ueArchive.trim().length() > 0) {
             try {
                 int ueNum = data.length;
                 // Open
                 JarFile jarFile = new JarFile(ueArchive);
                 // Get Manifest and Validate
-                List<UserExitAction> ueal = new ArrayList<>();
+                List<UserExitAction> ueal = new ArrayList<>(); // Init
                 Manifest manifest = jarFile.getManifest();
                 Map<String, Attributes> entries = manifest.getEntries();
                 for (String key : entries.keySet()) {
@@ -345,7 +347,7 @@ public class UserExitTablePanel
                         txt.setNodeValue(ueAction);
                         CDATASection cds = originalData.createCDATASection("#cdata");
                         comment.appendChild(cds);
-                        cds.setTextContent(ueComment);
+                        cds.setNodeValue(ueComment);
 
                         addLineInTable(uea, ueAction, ueComment.trim());
                         ueal.add(uea);

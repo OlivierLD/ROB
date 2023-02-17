@@ -8,6 +8,7 @@ import chartview.util.UserExitInterface;
 import chartview.util.grib.GribHelper;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class SimpleSample
         super();
     }
 
+    @Override
     public boolean isAvailable(CommandPanel commandPanel, WWContext ctx) {
         boolean available = true;
         if (commandPanel.getFaxImage() == null) {
@@ -32,6 +34,7 @@ public class SimpleSample
         return available;
     }
 
+    @Override
     public boolean userExitTask(CommandPanel cp, WWContext ctx)
             throws UserExitException {
         boolean ok = true;
@@ -47,7 +50,7 @@ public class SimpleSample
                 // Saving the image
                 Image img = fi[i].faxImage;
                 try {
-                    ImageUtil.writeImageToFile(img, "png", "C:\\Documents and Settings\\olediour\\Desktop\\" + "img" + i + ".png");
+                    ImageUtil.writeImageToFile(img, "png", System.getProperty("user.home") + File.separator + "img" + i + ".png");
                 } catch (Exception ex) {
                     System.err.println("Writing image file:");
                     ex.printStackTrace();
@@ -66,6 +69,7 @@ public class SimpleSample
         return ok;
     }
 
+    @Override
     public List<String> getFeedback() {
         return feedback;
     }
