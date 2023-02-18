@@ -1,0 +1,82 @@
+<places>
+   <place name="Palo Alto - WRD719" show="true">
+      <latitude deg="37" min="24.0" sign="N"/>
+      <longitude deg="122" min="03.0" sign="W"/>
+   </place>
+   <place name="San Luis Obispo - WHV861" show="true">
+      <latitude deg="35" min="14.0" sign="N"/>
+      <longitude deg="121" min="38.0" sign="W"/>
+   </place>
+   <place name="San Diego - WQAB964" show="true">
+      <latitude deg="32" min="44.0" sign="N"/>
+      <longitude deg="117" min="13.0" sign="W"/>
+   </place>
+   <place name="Friday Harbor - WHV382" show="true">
+      <latitude deg="48" min="31.00" sign="N"/>
+      <longitude deg="123" min="03.00" sign="W"/>
+   </place>
+   <place name="Corpus Christi - WPTG385" show="true">
+      <latitude deg="27" min="41.0" sign="N"/>
+      <longitude deg="97" min="18.0" sign="W"/>
+   </place>
+   <place name="Rock Hill - KZN508" show="true">
+      <latitude deg="34" min="59.0" sign="N"/>
+      <longitude deg="081" min="03.0" sign="W"/>
+   </place>
+   <place name="Honolulu - KUZ533" show="true">
+      <latitude deg="21" min="19.0" sign="N"/>
+      <longitude deg="157" min="53.0" sign="W"/>
+   </place>
+   <place name="Daytona - WPUC469" show="true">
+      <latitude deg="29" min="11.0" sign="N"/>
+      <longitude deg="80" min="58.0" sign="W"/>
+   </place>
+   <place name="Lunenburg - XJN714" show="true">
+      <latitude deg="44" min="24.0" sign="N"/>
+      <longitude deg="64" min="18.0" sign="W"/>
+   </place>
+   <place name="Panama - HPPM2" show="true">
+      <latitude deg="8" min="46.0" sign="N"/>
+      <longitude deg="82" min="28.0" sign="W"/>
+   </place>
+   <place name="Panama - HPPM1" show="true">
+      <latitude deg="8" min="26.0" sign="N"/>
+      <longitude deg="82" min="33.0" sign="W"/>
+   </place>
+   <place name="Trinidad - 9Z4DH" show="true">
+      <latitude deg="10" min="36.0" sign="N"/>
+      <longitude deg="61" min="38.0" sign="W"/>
+   </place>
+   <place name="Brugge - OSY" show="true">
+      <latitude deg="51" min="16.0" sign="N"/>
+      <longitude deg="3" min="18.0" sign="E"/>
+   </place>
+   <place name="Los Lagos - Chile - CEV773" show="true">
+      <latitude deg="39" min="46.0" sign="S"/>
+      <longitude deg="72" min="43.0" sign="W"/>
+   </place>
+   <place name="Mahini - FOHXM" show="true">
+      <latitude deg="14" min="24.0" sign="S"/>
+      <longitude deg="146" min="0.0" sign="W"/>
+   </place>
+   <place name="Firefly - VZX" show="true">
+      <latitude deg="32" min="04.0" sign="S"/>
+      <longitude deg="152" min="13.0" sign="E"/>
+   </place>
+   <place name="Abu Tig Marin - Egypt - SSM678" show="true">
+      <latitude deg="27" min="26.0" sign="N"/>
+      <longitude deg="33" min="43.0" sign="E"/>
+   </place>
+   <place name="Brunei - V8V2222" show="true">
+      <latitude deg="4" min="46.0" sign="N"/>
+      <longitude deg="114" min="28.0" sign="E"/>
+   </place>
+   <place name="Maputo, Mozambique - RC01" show="true">
+      <latitude deg="27" min="26.0" sign="S"/>
+      <longitude deg="27" min="23.0" sign="E"/>
+   </place>
+   <place name="Niue - ZKN2SM" show="true">
+      <latitude deg="19" min="3.3" sign="S"/>
+      <longitude deg="169" min="55.7" sign="W"/>
+   </place>
+</places>

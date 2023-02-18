@@ -1,0 +1,26 @@
+<places>
+   <place name="Point Reyes (NMC)" show="true">
+      <latitude deg="38" min="0.0" sign="N"/>
+      <longitude deg="123" min="0.0" sign="W"/>
+   </place>
+   <place name="Honolulu (KVM70)" show="true">
+      <latitude deg="21" min="19.0" sign="N"/>
+      <longitude deg="157" min="53.0" sign="W"/>
+   </place>
+   <place name="Kodiak (NOJ)" show="true">
+      <latitude deg="57" min="45.0" sign="N"/>
+      <longitude deg="152" min="30.0" sign="W"/>
+   </place>
+   <place name="Wellington (ZKLF)" show="true">
+      <latitude deg="41" min="20.0" sign="S"/>
+      <longitude deg="174" min="45.0" sign="E"/>
+   </place>
+   <place name="Charleville (VMC)" show="true">
+      <latitude deg="26" min="25.0" sign="S"/>
+      <longitude deg="146" min="15.0" sign="E"/>
+   </place>
+   <place name="Wiluna (VMW)" show="true">
+      <latitude deg="26" min="36.0" sign="S"/>
+      <longitude deg="120" min="15.0" sign="E"/>
+   </place>
+</places>

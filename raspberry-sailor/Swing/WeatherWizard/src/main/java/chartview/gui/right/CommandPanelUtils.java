@@ -1405,9 +1405,9 @@ public class CommandPanelUtils {
                 doc = parser.getDocument();
             }
             NodeList place = doc.selectNodes("//place");
-            List<GeoPoint> alPos = new ArrayList<GeoPoint>(place.getLength());
-            List<String> alName = new ArrayList<String>(place.getLength());
-            List<Boolean> alShow = new ArrayList<Boolean>(place.getLength());
+            List<GeoPoint> alPos = new ArrayList<>(place.getLength());
+            List<String> alName = new ArrayList<>(place.getLength());
+            List<Boolean> alShow = new ArrayList<>(place.getLength());
             for (int i = 0; i < place.getLength(); i++) {
                 GeoPoint gp = null;
                 XMLElement xe = (XMLElement) place.item(i);
@@ -1436,6 +1436,7 @@ public class CommandPanelUtils {
             cp.setShowPlacesArray(alShow.toArray(new Boolean[alShow.size()]));
         } catch (FileNotFoundException fne) {
             WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("places-not-found") + "\n");
+            System.out.println(WWGnlUtilities.buildMessage("places-not-found"));
         } catch (Exception ex) {
             WWContext.getInstance().fireExceptionLogging(ex);
             ex.printStackTrace();
@@ -1484,7 +1485,8 @@ public class CommandPanelUtils {
                 cp.getSma().add(sms);
             }
         } catch (FileNotFoundException fne) {
-            WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("places-not-found") + "\n");
+            WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("file-not-found", new String[]{placesFileName}) + "\n");
+            System.out.println(WWGnlUtilities.buildMessage("file-not-found", new String[]{placesFileName}));
         } catch (Exception ex) {
             WWContext.getInstance().fireExceptionLogging(ex);
             ex.printStackTrace();
@@ -1533,7 +1535,8 @@ public class CommandPanelUtils {
                 cp.getWsta().add(ws);
             }
         } catch (FileNotFoundException fne) {
-            WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("places-not-found") + "\n");
+            WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("file-not-found", new String[]{placesFileName}) + "\n");
+            System.out.println(WWGnlUtilities.buildMessage("file-not-found", new String[]{placesFileName}));
         } catch (Exception ex) {
             WWContext.getInstance().fireExceptionLogging(ex);
             ex.printStackTrace();

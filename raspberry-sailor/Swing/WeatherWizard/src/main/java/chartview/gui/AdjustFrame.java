@@ -36,7 +36,9 @@ import utils.TimeUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,9 +58,9 @@ public class AdjustFrame extends JFrame {
     private static final NumberFormat NF_PHASE = new DecimalFormat("00");
     private static final NumberFormat Z_FORMAT = new DecimalFormat("##0");
 
-    private BorderLayout borderLayout;
+    private final BorderLayout borderLayout;
 
-    private FileTypeHolder allJTrees = new FileTypeHolder();
+    private final FileTypeHolder allJTrees = new FileTypeHolder();
 
     public final static int GRAY_PANEL_NOPANEL_OPTION = -1;
     public final static int GRAY_PANEL_NO_FADE_OPTION = 0;
@@ -71,24 +73,25 @@ public class AdjustFrame extends JFrame {
     int grayPanelY = 0;
     int grayPanelSectorAngle = 0;
     
-    private JLayeredPane layers = new JLayeredPane() {
+    private final JLayeredPane layers = new JLayeredPane() {
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-            if (grayPanelY == 0)
+            if (grayPanelY == 0) {
                 masterTabPane.setBounds(0, 0, this.getWidth(), this.getHeight());
+            }
             grayTransparentPanel.setBounds(0, grayPanelY, this.getWidth(), this.getHeight());
         }
     };
 
     private transient Thread fader = null;
 
-    private JTabbedPane masterTabPane = new JTabbedPane();
+    private final JTabbedPane masterTabPane = new JTabbedPane();
     private String message2Display = "";
 
-    private float grayPanelTransparency = ((Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX]).floatValue();
+    private float grayPanelTransparency = (Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX];
     
-    private JPanel grayTransparentPanel = new JPanel() {
+    private final JPanel grayTransparentPanel = new JPanel() {
         @Override
         public void paintComponent(Graphics g) {
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -114,11 +117,12 @@ public class AdjustFrame extends JFrame {
 
             if (grayPanelOption == GRAY_PANEL_NO_FADE_OPTION ||
                     grayPanelOption == GRAY_PANEL_SHIFT_DOWN_OPTION ||
-                    grayPanelOption == GRAY_PANEL_FADE_OPTION)
+                    grayPanelOption == GRAY_PANEL_FADE_OPTION) {
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
-            if (grayPanelOption == GRAY_PANEL_SECTOR_OPTION)
+            }
+            if (grayPanelOption == GRAY_PANEL_SECTOR_OPTION) {
                 g.fillArc(-this.getWidth() / 2, -this.getHeight() / 2, 2 * this.getWidth(), 2 * this.getHeight(), 90, 360 - grayPanelSectorAngle);
-
+            }
             if (message2Display != null && message2Display.trim().length() > 0) {
                 //      g.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 50));
                 g.setFont(g.getFont().deriveFont(Font.ITALIC | Font.BOLD, 50f));
@@ -138,67 +142,67 @@ public class AdjustFrame extends JFrame {
         }
     };
 
-    private JPanel statusPanel = new JPanel();
-    private JProgressBar progressBar = new JProgressBar(0, 100);
-    private JLabel statusLabel = new JLabel("...");
+    private final JPanel statusPanel = new JPanel();
+    private final JProgressBar progressBar = new JProgressBar(0, 100);
+    private final JLabel statusLabel = new JLabel("...");
 
-    private JMenu menuFile = new JMenu();
+    private final JMenu menuFile = new JMenu();
     //private JMenuItem menuFileOpen = new JMenuItem();
-    private JMenu menuDownload = new JMenu();
-    private JMenuItem menuDownloadFaxFromNet = new JMenuItem();
-    private JMenuItem menuDownloadGRIBFromNet = new JMenuItem();
-    private JMenuItem menuSetupAutoDownload = new JMenuItem();
-    private JMenuItem menuStartAutoDownload = new JMenuItem();
+    private final JMenu menuDownload = new JMenu();
+    private final JMenuItem menuDownloadFaxFromNet = new JMenuItem();
+    private final JMenuItem menuDownloadGRIBFromNet = new JMenuItem();
+    private final JMenuItem menuSetupAutoDownload = new JMenuItem();
+    private final JMenuItem menuStartAutoDownload = new JMenuItem();
 
-    private JMenuItem menuFilePrint = new JMenuItem();
-    private JMenuItem menuGenImage = new JMenuItem();
+    private final JMenuItem menuFilePrint = new JMenuItem();
+    private final JMenuItem menuGenImage = new JMenuItem();
 
-    private JMenuItem menuGoogle = new JMenu();
-    private JMenuItem menuGoogleMap = new JMenuItem();
-    private JMenuItem menuGoogleEarth = new JMenuItem();
+    private final JMenuItem menuGoogle = new JMenu();
+    private final JMenuItem menuGoogleMap = new JMenuItem();
+    private final JMenuItem menuGoogleEarth = new JMenuItem();
 
     //private JMenuItem menuFileExit = new JMenuItem();
 //private JMenuItem menuFileStore = new JMenuItem();
     private SaveCompositeAsAction scaa = null;
-    private JMenuItem menuFileRestore = new JMenuItem();
-    private JMenuItem menuFileRestoreFromURL = new JMenuItem();
+    private final JMenuItem menuFileRestore = new JMenuItem();
+    private final JMenuItem menuFileRestoreFromURL = new JMenuItem();
 
-    private JMenuItem menuFileCreatePattern = new JMenuItem();
-    private JMenuItem menuFileLoadFromPattern = new JMenuItem();
+    private final JMenuItem menuFileCreatePattern = new JMenuItem();
+    private final JMenuItem menuFileLoadFromPattern = new JMenuItem();
 
-    private JMenu menuTools = new JMenu();
-    private JMenu menuCharts = new JMenu();
-    private JMenuItem managePredefinedZones = new JMenuItem();
+    private final JMenu menuTools = new JMenu();
+    private final JMenu menuCharts = new JMenu();
+    private final JMenuItem managePredefinedZones = new JMenuItem();
 
-    private JMenu menuRouting = new JMenu();
-    private JMenuItem menuToolsRouting = new JMenuItem();
-    private JMenuItem whatIfMenuItem = new JMenuItem();
+    private final JMenu menuRouting = new JMenu();
+    private final JMenuItem menuToolsRouting = new JMenuItem();
+    private final JMenuItem whatIfMenuItem = new JMenuItem();
 
-    private JMenuItem gribPilotChartRoutingMenuItem = new JMenuItem();
+    private final JMenuItem gribPilotChartRoutingMenuItem = new JMenuItem();
 
-    private JMenuItem menuToolsGeostrophicWind = new JMenuItem();
-    private JMenuItem menuToolsRetryNetwork = new JMenuItem();
-    private JMenuItem menuToolsPlaces = new JMenuItem();
-    private JMenuItem menuToolsPreferences = new JMenuItem();
+    private final JMenuItem menuToolsGeostrophicWind = new JMenuItem();
+    // private JMenuItem menuToolsRetryNetwork = new JMenuItem();
+    private final JMenuItem menuToolsPlaces = new JMenuItem();
+    private final JMenuItem menuToolsPreferences = new JMenuItem();
 
-    private JMenu menuAdmin = new JMenu();
-    private JMenuItem menuAdminGenImages = new JMenuItem();
-    private JMenuItem menuDetectUnusedFiles = new JMenuItem();
-    private JMenuItem menuCleanOldBackups = new JMenuItem();
-    private JMenuItem menuManageUE = new JMenuItem();
+    private final JMenu menuAdmin = new JMenu();
+    private final JMenuItem menuAdminGenImages = new JMenuItem();
+    private final JMenuItem menuDetectUnusedFiles = new JMenuItem();
+    private final JMenuItem menuCleanOldBackups = new JMenuItem();
+    private final JMenuItem menuManageUE = new JMenuItem();
 
-    private JMenu nmeaMenu = new JMenu();
-    //private JCheckBoxMenuItem menuStartNMEA = new JCheckBoxMenuItem();
-    private JMenuItem menuStartNMEA = new JMenuItem();
-    private JMenuItem manualNMEA = new JMenuItem();
+    private final JMenu nmeaMenu = new JMenu();
+    // private JCheckBoxMenuItem menuStartNMEA = new JCheckBoxMenuItem();
+    private final JMenuItem menuStartNMEA = new JMenuItem();
+    private final JMenuItem manualNMEA = new JMenuItem();
 
-    private JMenu menuHelp = new JMenu();
-    private JMenuItem menuHelpAbout = new JMenuItem();
-    private JMenuItem menuHelpManual = new JMenuItem();
-    private JMenuItem menuHelpOrderManual = new JMenuItem();
-    private JMenuItem menuHelpContact = new JMenuItem();
-    private JMenuItem menuCheckForUpdate = new JMenuItem();
-    private JMenuBar menuBar = new JMenuBar();
+    private final JMenu menuHelp = new JMenu();
+    private final JMenuItem menuHelpAbout = new JMenuItem();
+    private final JMenuItem menuHelpManual = new JMenuItem();      // TODO Update link
+    private final JMenuItem menuHelpOrderManual = new JMenuItem(); // TODO Update manual
+    private final JMenuItem menuHelpContact = new JMenuItem();
+//    private JMenuItem menuCheckForUpdate = new JMenuItem();
+    private final JMenuBar menuBar = new JMenuBar();
 
     private JSplitPane jSplitPane = null;
 
@@ -225,13 +229,13 @@ public class AdjustFrame extends JFrame {
             final String compositeName = ((ParamPanel.DataFile) ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX]).toString();
             if (compositeName.trim().length() > 0) {
                 boolean headlessMode = ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")));
-                if (!headlessMode)
-                    askAndWaitForLoadAtStartup(compositeName, ((Integer) ParamPanel.data[ParamData.WAIT_ON_STARTUP][ParamData.VALUE_INDEX]).intValue());
-                else {
-                    int interval = ((Integer) ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX]).intValue();
-                    if (interval > 0)
+                if (!headlessMode) {
+                    askAndWaitForLoadAtStartup(compositeName, (Integer) ParamPanel.data[ParamData.WAIT_ON_STARTUP][ParamData.VALUE_INDEX]);
+                } else {
+                    int interval = (Integer) ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX];
+                    if (interval > 0) {
                         enterReloadLoop(compositeName, interval);
-                    else {
+                    } else {
                         // This should NEVER happen here
                         WWContext.getInstance().fireLoadDynamicComposite(compositeName);
                     }
@@ -319,16 +323,16 @@ public class AdjustFrame extends JFrame {
         int nbT = masterTabPane.getTabCount() - 2;
         WWContext.getInstance().fireSetOpenTabNum(nbT);
         if (masterTabPane.getTabCount() > 2) {
-            for (int i = tabIdx; i > 0; i--)
+            for (int i = tabIdx; i > 0; i--) {
                 shiftTabLeft(i);
-
-            for (int i = masterTabPane.getTabCount() - 2; i > 0; i--) // -2, the last one is available (+ sign).
-            {
+            }
+            for (int i = masterTabPane.getTabCount() - 2; i > 0; i--) { // -2, the last one is available (+ sign).
                 Object o = masterTabPane.getComponentAt(i);
-                if (o instanceof CompositeTabbedPane)
+                if (o instanceof CompositeTabbedPane) {
                     ((CompositeTabbedPane) o).removeListener();
-                else
+                } else {
                     System.out.println("Component at tab " + i + " is a " + o.getClass().getName());
+                }
                 masterTabPane.setComponentAt(i, null);
                 masterTabPane.remove(i);
             }
@@ -353,11 +357,12 @@ public class AdjustFrame extends JFrame {
                         me.notify();
                     }
                     if (resp == JOptionPane.YES_OPTION) {
-                        int interval = ((Integer) ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX]).intValue();
-                        if (interval > 0)
+                        int interval = (Integer) ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX];
+                        if (interval > 0) {
                             enterReloadLoop(compositeName, interval);
-                        else
+                        } else {
                             WWContext.getInstance().fireLoadDynamicComposite(compositeName);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -366,7 +371,7 @@ public class AdjustFrame extends JFrame {
 
             public void interrupt() {
                 super.interrupt();
-//        System.out.println("Wait is canceled.");
+                // System.out.println("Wait is canceled.");
             }
         };
         thread.start();
@@ -388,16 +393,20 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    private void setLoadingProgresssBar(boolean b) {
-        setLoadingProgresssBar(b, WWGnlUtilities.buildMessage("loading"));
+    private void setLoadingProgressBar(boolean b) {
+        setLoadingProgressBar(b, WWGnlUtilities.buildMessage("loading"));
     }
 
     private int nbLoad = 0;
     private transient OscillateThread oscillate = null;
 
-    private void setLoadingProgresssBar(boolean b, final String s) {
-        if (b) nbLoad += 1;
-        if (!b) nbLoad -= 1;
+    private void setLoadingProgressBar(boolean b, final String s) {
+        if (b) {
+            nbLoad += 1;
+        }
+        if (!b) {
+            nbLoad -= 1;
+        }
 
         final boolean x = (nbLoad > 0);
 
@@ -406,11 +415,12 @@ public class AdjustFrame extends JFrame {
     }
 
     public void stopAnyOscillatingThread() {
-        if (oscillate != null)
+        if (oscillate != null) {
             oscillate.abort();
+        }
     }
 
-    private transient Object grayLayerIndex = new Integer(2);
+    private final transient Object grayLayerIndex = 2;
 
     private void jbInit() throws Exception {
         WWContext.getInstance().setMasterTopFrame(this);
@@ -459,35 +469,36 @@ public class AdjustFrame extends JFrame {
                 if (mouseEvent.getClickCount() == 2) {
                     System.out.println("Exploding!");
                 }
-                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) // Right click
-                {
-//         System.out.println("Right-Click on Tab #" + ((JTabbedPane)mouseEvent.getSource()).getSelectedIndex());
+                if ((mask & MouseEvent.BUTTON2_MASK) != 0 || (mask & MouseEvent.BUTTON3_MASK) != 0) { // Right click
+                    // System.out.println("Right-Click on Tab #" + ((JTabbedPane)mouseEvent.getSource()).getSelectedIndex());
                     mouseEvent.consume(); // Trap
                     // Show menu to shift the tab right or left when appropriate
                     int selectedIndex = ((JTabbedPane) mouseEvent.getSource()).getSelectedIndex();
 
                     if (((JTabbedPane) mouseEvent.getSource()).getTabCount() > 2 &&
-                            selectedIndex < ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 1) // More than one tab, clicked
-                    {
-//             JTabbedPane tp = (JTabbedPane)mouseEvent.getSource();             
+                            selectedIndex < ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 1) { // More than one tab, clicked
+                        // JTabbedPane tp = (JTabbedPane)mouseEvent.getSource();
                         ShiftTabPopup stp = new ShiftTabPopup(instance, selectedIndex);
                         stp.enableCloseOthers(true);
-                        if (selectedIndex == 0)
+                        if (selectedIndex == 0) {
                             stp.enableShiftLeft(false);
-                        if (selectedIndex == ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 2)
+                        }
+                        if (selectedIndex == ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 2) {
                             stp.enableShiftRight(false);
-                        if (selectedIndex > 0)
+                        }
+                        if (selectedIndex > 0) {
                             stp.enableShiftLeft(true);
-                        if (selectedIndex < ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 2)
+                        }
+                        if (selectedIndex < ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 2) {
                             stp.enableShiftRight(true);
+                        }
                         stp.show(masterTabPane, mouseEvent.getX(), mouseEvent.getY());
-                    } else
+                    } else {
                         ((JTabbedPane) mouseEvent.getSource()).setSelectedIndex(0);
-                } else // Usual left-click
-                {
+                    }
+                } else { // Usual left-click
                     //     System.out.println("Click on Tab " + ((JTabbedPane)mouseEvent.getSource()).getSelectedIndex());
-                    if (((JTabbedPane) mouseEvent.getSource()).getSelectedIndex() == ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 1) // Last tab clicked
-                    {
+                    if (((JTabbedPane) mouseEvent.getSource()).getSelectedIndex() == ((JTabbedPane) mouseEvent.getSource()).getTabCount() - 1) { // Last tab clicked
                         addCompositeTab();
                     }
                 }
@@ -553,51 +564,27 @@ public class AdjustFrame extends JFrame {
         menuDownloadFaxFromNet.setText(WWGnlUtilities.buildMessage("download-fax-from-internet"));
         menuDownloadFaxFromNet.setToolTipText(WWGnlUtilities.buildMessage("from-predefined"));
         menuDownloadFaxFromNet.setIcon(new ImageIcon(this.getClass().getResource("img/script.png")));
-        menuDownloadFaxFromNet.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                downloadFaxFromInternet();
-            }
-        });
+        menuDownloadFaxFromNet.addActionListener(ae -> downloadFaxFromInternet());
         menuDownloadGRIBFromNet.setText(WWGnlUtilities.buildMessage("download-grib-from-net"));
         menuDownloadGRIBFromNet.setToolTipText(WWGnlUtilities.buildMessage("from-predefined"));
         menuDownloadGRIBFromNet.setIcon(new ImageIcon(this.getClass().getResource("img/grib.png")));
-        menuDownloadGRIBFromNet.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                downloadGRIBFromInternet();
-            }
-        });
+        menuDownloadGRIBFromNet.addActionListener(ae -> downloadGRIBFromInternet());
 
         menuSetupAutoDownload.setText(WWGnlUtilities.buildMessage("setup-auto-download"));
         menuSetupAutoDownload.setIcon(new ImageIcon(this.getClass().getResource("img/filter.png")));
-        menuSetupAutoDownload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                setupDownload();
-            }
-        });
+        menuSetupAutoDownload.addActionListener(ae -> setupDownload());
         menuStartAutoDownload.setText(WWGnlUtilities.buildMessage("start-auto-download"));
         menuStartAutoDownload.setIcon(new ImageIcon(this.getClass().getResource("img/controller.png")));
-        menuStartAutoDownload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                startAutoDownload();
-            }
-        });
+        menuStartAutoDownload.addActionListener(ae -> startAutoDownload());
 //  menuSetupAutoDownload.setEnabled(false);
 //  menuStartAutoDownload.setEnabled(false);
 
         menuFilePrint.setText(WWGnlUtilities.buildMessage("print"));
         menuFilePrint.setIcon(new ImageIcon(this.getClass().getResource("img/print.png")));
-        menuFilePrint.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                filePrint_ActionPerformed(ae);
-            }
-        });
+        menuFilePrint.addActionListener(ae -> filePrint_ActionPerformed(ae));
         menuGenImage.setText(WWGnlUtilities.buildMessage("generate-image"));
         menuGenImage.setIcon(new ImageIcon(this.getClass().getResource("img/snapshot.png")));
-        menuGenImage.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                genImage_actionPerformed(ae);
-            }
-        });
+        menuGenImage.addActionListener(ae -> genImage_actionPerformed(ae));
 //  menuFileStore.setText(GnlUtilities.buildMessage("save-composite"));
 //  menuFileStore.setIcon(new ImageIcon(this.getClass().getResource("img/save.png")));
 //  menuFileStore.addActionListener(new ActionListener()
@@ -613,50 +600,26 @@ public class AdjustFrame extends JFrame {
 
         menuGoogleMap.setText(WWGnlUtilities.buildMessage("view-google-map"));
         menuGoogleMap.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
-        menuGoogleMap.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                gMap();
-            }
-        });
+        menuGoogleMap.addActionListener(ae -> gMap());
 //  menuGoogleMap.setEnabled(false);
         menuGoogleEarth.setText(WWGnlUtilities.buildMessage("view-google-earth"));
         menuGoogleEarth.setIcon(new ImageIcon(this.getClass().getResource("img/ge.png")));
-        menuGoogleEarth.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                gEarth();
-            }
-        });
+        menuGoogleEarth.addActionListener(ae -> gEarth());
 //  menuGoogleEarth.setEnabled(false);
 
         menuFileRestore.setText(WWGnlUtilities.buildMessage("load-composite"));
         menuFileRestore.setIcon(new ImageIcon(this.getClass().getResource("img/open.png")));
-        menuFileRestore.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                restore();
-            }
-        });
+        menuFileRestore.addActionListener(ae -> restore());
         menuFileRestoreFromURL.setText(WWGnlUtilities.buildMessage("load-composite-from-url"));
         menuFileRestoreFromURL.setIcon(new ImageIcon(this.getClass().getResource("img/open.png")));
-        menuFileRestoreFromURL.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                downloadFromTheWebAndDisplayComposite(null);
-            }
-        });
+        menuFileRestoreFromURL.addActionListener(ae -> downloadFromTheWebAndDisplayComposite(null));
 
         menuFileCreatePattern.setText(WWGnlUtilities.buildMessage("create-pattern"));
         menuFileCreatePattern.setIcon(new ImageIcon(this.getClass().getResource("img/pattern.png")));
-        menuFileCreatePattern.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                generatePattern();
-            }
-        });
+        menuFileCreatePattern.addActionListener(ae -> generatePattern());
         menuFileLoadFromPattern.setText(WWGnlUtilities.buildMessage("load-with-pattern"));
         menuFileLoadFromPattern.setIcon(new ImageIcon(this.getClass().getResource("img/pattern.png")));
-        menuFileLoadFromPattern.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                loadWithPattern();
-            }
-        });
+        menuFileLoadFromPattern.addActionListener(ae -> loadWithPattern());
 //    menuFileExit.setText("Exit");
 //    menuFileExit.setToolTipText("Quit");
 //    menuFileExit.addActionListener(new ActionListener()
@@ -689,63 +652,49 @@ public class AdjustFrame extends JFrame {
         menuAdmin.add(menuAdminGenImages);
         menuAdminGenImages.setText(WWGnlUtilities.buildMessage("admin-images"));
         menuAdminGenImages.setIcon(new ImageIcon(this.getClass().getResource("img/snapshot.png")));
-        menuAdminGenImages.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                final String compositeDir = ((ParamPanel.DataDirectory) ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX]).toString();
-                boolean ok = true;
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isDisplayAltTooltip()) {
-                    // LOCALIZE
-                    int resp = JOptionPane.showConfirmDialog(instance, "Tooltip window is on,\ndo we still proceed?", "Image generation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (resp == JOptionPane.YES_OPTION)
-                        ok = true;
-                    else
-                        ok = false;
-                }
-                if (ok)
-                    WWGnlUtilities.generateImagesFromComposites(compositeDir, ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel());
+        menuAdminGenImages.addActionListener(ae -> {
+            final String compositeDir = ((ParamPanel.DataDirectory) ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX]).toString();
+            boolean ok = true;
+            if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isDisplayAltTooltip()) {
+                // LOCALIZE
+                int resp = JOptionPane.showConfirmDialog(instance, "Tooltip window is on,\ndo we still proceed?", "Image generation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                ok = (resp == JOptionPane.YES_OPTION);
+            }
+            if (ok) {
+                WWGnlUtilities.generateImagesFromComposites(compositeDir, ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel());
             }
         });
         menuAdmin.add(menuDetectUnusedFiles);
         menuDetectUnusedFiles.setText(WWGnlUtilities.buildMessage("detect-unused"));
         menuDetectUnusedFiles.setIcon(new ImageIcon(this.getClass().getResource("img/findfiles.png")));
-        menuDetectUnusedFiles.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                Thread t = new Thread("unused-document-detector") {
-                    public void run() {
-                        WWGnlUtilities.detectUnusedDocuments();
-                        WWContext.getInstance().fireSetLoading(false, "Detecting..."); // LOCALIZE
-                    }
-                };
-                WWContext.getInstance().fireSetLoading(true, "Detecting..."); // LOCALIZE
-                t.start();
-            }
+        menuDetectUnusedFiles.addActionListener(ae -> {
+            Thread t = new Thread("unused-document-detector") {
+                public void run() {
+                    WWGnlUtilities.detectUnusedDocuments();
+                    WWContext.getInstance().fireSetLoading(false, "Detecting..."); // LOCALIZE
+                }
+            };
+            WWContext.getInstance().fireSetLoading(true, "Detecting..."); // LOCALIZE
+            t.start();
         });
         menuAdmin.add(menuCleanOldBackups);
         menuCleanOldBackups.setText(WWGnlUtilities.buildMessage("cleanup-backup"));
         menuCleanOldBackups.setToolTipText(WWGnlUtilities.buildMessage("cleanup-backup-tt"));
         menuCleanOldBackups.setIcon(new ImageIcon(this.getClass().getResource("img/smrtdata.png")));
-        menuCleanOldBackups.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                WWGnlUtilities.cleanupBackups();
-            }
-        });
+        menuCleanOldBackups.addActionListener(ae -> WWGnlUtilities.cleanupBackups());
 
         menuAdmin.add(menuToolsPlaces);
         menuToolsPlaces.setText(WWGnlUtilities.buildMessage("places-mgmt"));
         menuToolsPlaces.setIcon(new ImageIcon(instance.getClass().getResource("img/places.png")));
         menuToolsPlaces.setSelected(true);
-        menuToolsPlaces.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                WWGnlUtilities.placesMgmt(instance);
-            }
-        });
+        menuToolsPlaces.addActionListener(ae -> WWGnlUtilities.placesMgmt(instance));
 
         menuAdmin.add(menuManageUE);
         menuManageUE.setText(WWGnlUtilities.buildMessage("manage-ue"));
         menuManageUE.setIcon(new ImageIcon(this.getClass().getResource("img/help.png")));
         menuManageUE.addActionListener(ae -> {
             try {
-//                SwingUtilities.invokeAndWait(() -> WWGnlUtilities.manageUE(instance));
+                // SwingUtilities.invokeAndWait(() -> WWGnlUtilities.manageUE(instance));
                 WWGnlUtilities.manageUE(instance);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -753,18 +702,16 @@ public class AdjustFrame extends JFrame {
             // WWGnlUtilities.manageUE(instance)
         });
 
-        menuTools.add(new JSeparator());
-        menuToolsRetryNetwork.setText(WWGnlUtilities.buildMessage("retry-network"));
-        menuToolsRetryNetwork.setIcon(new ImageIcon(this.getClass().getResource("img/network.png")));
-        menuTools.add(menuToolsRetryNetwork);
-        menuToolsRetryNetwork.setSelected(false);
-        menuToolsRetryNetwork.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-//                ChartAdjust.checkForUpdate();
-                // TODO Remove this
-                System.out.println("This was removed...");
-            }
-        });
+        // menuTools.add(new JSeparator());
+        // menuToolsRetryNetwork.setText(WWGnlUtilities.buildMessage("retry-network"));
+        // menuToolsRetryNetwork.setIcon(new ImageIcon(this.getClass().getResource("img/network.png")));
+        // menuTools.add(menuToolsRetryNetwork);
+        // menuToolsRetryNetwork.setSelected(false);
+        // menuToolsRetryNetwork.addActionListener(ae -> {
+        //     // ChartAdjust.checkForUpdate();
+        //     // TODO Remove this
+        //     System.out.println("This was removed...");
+        // });
 
         menuTools.add(new JSeparator());
         menuTools.add(menuToolsPreferences);
@@ -775,122 +722,105 @@ public class AdjustFrame extends JFrame {
 
         menuToolsPreferences.setText(WWGnlUtilities.buildMessage("preferences"));
         menuToolsPreferences.setIcon(new ImageIcon(instance.getClass().getResource("img/tools.png")));
-        menuToolsPreferences.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                CategoryPanel cp = new CategoryPanel();
-                int opt =
-                        JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(),
-                                cp,
-                                "Application Parameters",
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.DEFAULT_OPTION);
-                if (opt == JOptionPane.OK_OPTION)
-                    cp.finalPrmUpdate();
+        menuToolsPreferences.addActionListener(ae -> {
+            CategoryPanel cp = new CategoryPanel();
+            int opt =
+                    JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(),
+                            cp,
+                            "Application Parameters",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.DEFAULT_OPTION);
+            if (opt == JOptionPane.OK_OPTION) {
+                cp.finalPrmUpdate();
             }
         });
         menuRouting.setText(WWGnlUtilities.buildMessage("routing"));
         menuRouting.setIcon(new ImageIcon(instance.getClass().getResource("img/navigation.png")));
         menuToolsRouting.setText(WWGnlUtilities.buildMessage("routing-dot"));
         menuToolsRouting.setIcon(new ImageIcon(instance.getClass().getResource("img/navigation.png")));
-        menuToolsRouting.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null &&
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null) {
-                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().calculateRouting();
-                } else {
-                    JOptionPane.showMessageDialog(instance,
-                            WWGnlUtilities.buildMessage("orig-dest-routing"),
-                            WWGnlUtilities.buildMessage("routing"),
-                            JOptionPane.WARNING_MESSAGE);
-                }
+        menuToolsRouting.addActionListener(ae -> {
+            if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null &&
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null) {
+                ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().calculateRouting();
+            } else {
+                JOptionPane.showMessageDialog(instance,
+                        WWGnlUtilities.buildMessage("orig-dest-routing"),
+                        WWGnlUtilities.buildMessage("routing"),
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
         whatIfMenuItem.setText(WWGnlUtilities.buildMessage("what-if")); // Reverse Routing.
         whatIfMenuItem.setIcon(new ImageIcon(instance.getClass().getResource("img/navigation.png")));
-        whatIfMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
-//              ((CompositeTabbedPane)masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null && 
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null) {
-                    //          int resp = JOptionPane.showConfirmDialog(null, "Start routing computation?", "Routing", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    //          if (resp == JOptionPane.OK_OPTION)
-                    {
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().whatIfRouting();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(instance,
-                            WWGnlUtilities.buildMessage("orig-dest-routing"), // TODO One point required only
-                            WWGnlUtilities.buildMessage("routing"),
-                            JOptionPane.WARNING_MESSAGE);
-                }
+        whatIfMenuItem.addActionListener(ae -> {
+            if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
+                    // ((CompositeTabbedPane)masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null &&
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null) {
+                ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().whatIfRouting();
+            } else {
+                JOptionPane.showMessageDialog(instance,
+                        WWGnlUtilities.buildMessage("orig-dest-routing"), // TODO One point required only
+                        WWGnlUtilities.buildMessage("routing"),
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
 
         gribPilotChartRoutingMenuItem.setText(WWGnlUtilities.buildMessage("grib-as-pilot-chart")); // Based on archived GRIBs.
         gribPilotChartRoutingMenuItem.setIcon(new ImageIcon(instance.getClass().getResource("img/navigation.png")));
         gribPilotChartRoutingMenuItem.setToolTipText(WWGnlUtilities.buildMessage("grib-as-pilot-chart-hint"));
-        gribPilotChartRoutingMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null) {
-                    // Ask what directory to look into for the GRIBs, pattern, etc.
-                    String[] respStr = WWGnlUtilities.chooseCompositeDirAndPattern(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel(),
-                            JFileChooser.DIRECTORIES_ONLY,
-                            new String[]{""},
-                            WWGnlUtilities.buildMessage("composite-directories"),
-                            ".",
-                            WWGnlUtilities.buildMessage("composite-directories"));
-                    if (respStr != null) {
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().routingWithArchivedGRIBs(respStr[0], respStr[1]);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(instance,
-                            WWGnlUtilities.buildMessage("orig-dest-routing"),
-                            WWGnlUtilities.buildMessage("routing"),
-                            JOptionPane.WARNING_MESSAGE);
+        gribPilotChartRoutingMenuItem.addActionListener(ae -> {
+            if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null) {
+                // Ask what directory to look into for the GRIBs, pattern, etc.
+                String[] respStr = WWGnlUtilities.chooseCompositeDirAndPattern(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel(),
+                        JFileChooser.DIRECTORIES_ONLY,
+                        new String[]{""},
+                        WWGnlUtilities.buildMessage("composite-directories"),
+                        ".",
+                        WWGnlUtilities.buildMessage("composite-directories"));
+                if (respStr != null) {
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().routingWithArchivedGRIBs(respStr[0], respStr[1]);
                 }
+            } else {
+                JOptionPane.showMessageDialog(instance,
+                        WWGnlUtilities.buildMessage("orig-dest-routing"),
+                        WWGnlUtilities.buildMessage("routing"),
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
 
         menuToolsGeostrophicWind.setText(WWGnlUtilities.buildMessage("geostrophic-wind"));
 //  menuToolsGeostrophicWind.setIcon(new ImageIcon(this.getClass().getResource("img/greenflag.png")));
         menuToolsGeostrophicWind.setIcon(new ImageIcon(this.getClass().getResource("img/pushpin_16x16.png")));
-        menuToolsGeostrophicWind.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
-                        ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null) {
-                    if (Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()) < 30D ||
-                            Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) < 30D) {
-                        Thread displayThread = new Thread() {
-                            public void run() {
-                                JOptionPane.showMessageDialog(instance,
-                                        WWGnlUtilities.buildMessage("under-30"),
-                                        WWGnlUtilities.buildMessage("geostrophic-wind"),
-                                        JOptionPane.ERROR_MESSAGE);
-                            }
-                        };
-                        displayThread.start();
-                    } else {
-                        // Get the distance
-                        WWContext.getInstance().getGreatCircle().setStart(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getG())));
-                        WWContext.getInstance().getGreatCircle().setArrival(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getG())));
-                        double gcDist = Math.toDegrees(WWContext.getInstance().getGreatCircle().getDistance()) * 60.0;
-
-                        int interval = ((Integer) ParamPanel.data[ParamData.INTERVAL_BETWEEN_ISOBARS][ParamData.VALUE_INDEX]).intValue();
-                        double gws = WWGnlUtilities.getGeostrophicWindSpeed(gcDist, Math.abs((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL() + ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) / 2D), interval);
-                        // Display result
-                        String result = WWGnlUtilities.buildMessage("geostrophic-wind-speed") + WWGnlUtilities.DF2.format(gws) + " kts.\n" +
-                                WWGnlUtilities.buildMessage("with-friction") + WWGnlUtilities.DF2.format(gws * 0.7) + " kts.";
-
-                        JOptionPane.showMessageDialog(instance,
-                                result, WWGnlUtilities.buildMessage("geostrophic-wind"),
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
+        menuToolsGeostrophicWind.addActionListener(ae -> {
+            if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
+                    ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null) {
+                if (Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()) < 30D ||
+                        Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) < 30D) {
+                    Thread displayThread = new Thread(() -> JOptionPane.showMessageDialog(instance,
+                            WWGnlUtilities.buildMessage("under-30"),
+                            WWGnlUtilities.buildMessage("geostrophic-wind"),
+                            JOptionPane.ERROR_MESSAGE));
+                    displayThread.start();
                 } else {
-                    JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("need-2-points"), WWGnlUtilities.buildMessage("geostrophic-wind"),
-                            JOptionPane.WARNING_MESSAGE);
+                    // Get the distance
+                    WWContext.getInstance().getGreatCircle().setStart(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getG())));
+                    WWContext.getInstance().getGreatCircle().setArrival(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getG())));
+                    double gcDist = Math.toDegrees(WWContext.getInstance().getGreatCircle().getDistance()) * 60.0;
+
+                    int interval = ((Integer) ParamPanel.data[ParamData.INTERVAL_BETWEEN_ISOBARS][ParamData.VALUE_INDEX]).intValue();
+                    double gws = WWGnlUtilities.getGeostrophicWindSpeed(gcDist, Math.abs((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL() + ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) / 2D), interval);
+                    // Display result
+                    String result = WWGnlUtilities.buildMessage("geostrophic-wind-speed") + WWGnlUtilities.DF2.format(gws) + " kts.\n" +
+                            WWGnlUtilities.buildMessage("with-friction") + WWGnlUtilities.DF2.format(gws * 0.7) + " kts.";
+
+                    JOptionPane.showMessageDialog(instance,
+                            result, WWGnlUtilities.buildMessage("geostrophic-wind"),
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("need-2-points"), WWGnlUtilities.buildMessage("geostrophic-wind"),
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -898,19 +828,13 @@ public class AdjustFrame extends JFrame {
         nmeaMenu.setIcon(new ImageIcon(instance.getClass().getResource("img/greydot.png")));
         menuStartNMEA.setText(WWGnlUtilities.buildMessage("from-gps"));
         menuStartNMEA.setIcon(new ImageIcon(instance.getClass().getResource("img/gps.png")));
-        menuStartNMEA.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+        menuStartNMEA.addActionListener(ae -> {
 //          WWContext.getInstance().fireNMEAAcquisition(menuStartNMEA.isSelected());
-                WWContext.getInstance().fireNMEAAcquisition(true);
-            }
+            WWContext.getInstance().fireNMEAAcquisition(true);
         });
         manualNMEA.setText(WWGnlUtilities.buildMessage("manual"));
         manualNMEA.setIcon(new ImageIcon(this.getClass().getResource("img/grab.png")));
-        manualNMEA.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                WWGnlUtilities.getManualBoatPosition();
-            }
-        });
+        manualNMEA.addActionListener(ae -> WWGnlUtilities.getManualBoatPosition());
 
         menuBar.add(menuHelp);
 //  menuHelp.setText(WWGnlUtilities.buildMessage("help"));
@@ -919,98 +843,88 @@ public class AdjustFrame extends JFrame {
 //  menuHelpAbout.setText(WWGnlUtilities.buildMessage("about"));
         WWGnlUtilities.setLabelAndMnemonic("about", menuHelpAbout);
         menuHelpAbout.setIcon(new ImageIcon(this.getClass().getResource("img/help.png")));
-        menuHelpAbout.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+        menuHelpAbout.addActionListener(ae -> {
 
-                final JDialog dialog = new JDialog(instance, "GRIB, Weather Faxes, Charts", true);
-                dialog.setContentPane(new AboutBox());
-                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.pack();
-                dialog.setLocationRelativeTo(instance);
-                dialog.setVisible(true);
+            final JDialog dialog = new JDialog(instance, "GRIB, Weather Faxes, Charts", true);
+            dialog.setContentPane(new AboutBox());
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.pack();
+            dialog.setLocationRelativeTo(instance);
+            dialog.setVisible(true);
 
-//            JOptionPane.showMessageDialog(instance, new AboutBox(), 
-//                                          "GRIB, Weather Faxes, Charts", 
+//            JOptionPane.showMessageDialog(instance, new AboutBox(),
+//                                          "GRIB, Weather Faxes, Charts",
 //                                          JOptionPane.PLAIN_MESSAGE);
-            }
         });
         menuHelp.add(menuHelpManual);
         menuHelpManual.setText(WWGnlUtilities.buildMessage("download-manual"));
         menuHelpManual.setIcon(new ImageIcon(this.getClass().getResource("img/book.gif")));
-        menuHelpManual.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                dowloadPDFManual();
-            }
-        });
+        menuHelpManual.addActionListener(ae -> downloadPDFManual());
         menuHelp.add(menuHelpOrderManual);
         menuHelpOrderManual.setText(WWGnlUtilities.buildMessage("order-manual"));
         menuHelpOrderManual.setIcon(new ImageIcon(this.getClass().getResource("img/book.gif")));
-        menuHelpOrderManual.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                orderManual();
-            }
-        });
+        menuHelpOrderManual.addActionListener(ae -> orderManual());
 
         menuHelpContact.setText(WWGnlUtilities.buildMessage("contact-dev-team-dot"));
         menuHelpContact.setIcon(new ImageIcon(this.getClass().getResource("img/onecamel.png")));
-        menuHelpContact.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (WWContext.getInstance().isOnLine()) {
-                    final ContactPanel cp = new ContactPanel();
-                    boolean fineByMe = false;
-                    while (!fineByMe) {
-                        int resp = JOptionPane.showConfirmDialog(null, cp, WWGnlUtilities.buildMessage("contact-dev-team"),
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE);
-                        if (resp == JOptionPane.OK_OPTION) {
-                            String name = cp.getName();
-                            String email = cp.getEmail();
-                            String message = cp.getMessage();
+        menuHelpContact.addActionListener(ae -> {
+            if (WWContext.getInstance().isOnLine()) {
+                final ContactPanel cp = new ContactPanel();
+                boolean fineByMe = false;
+                while (!fineByMe) {
+                    int resp = JOptionPane.showConfirmDialog(null, cp, WWGnlUtilities.buildMessage("contact-dev-team"),
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE);
+                    if (resp == JOptionPane.OK_OPTION) {
+                        String name = cp.getName();
+                        String email = cp.getEmail();
+                        String message = cp.getMessage();
 
-                            if (name.trim().length() == 0 || email.trim().length() == 0 || message.trim().length() == 0) {
-                                // This should not happen
-                                System.out.println("A problem...");
-                                JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("please-all-fields"), WWGnlUtilities.buildMessage("contact-dev-team"), JOptionPane.ERROR_MESSAGE);
-                            } else {
-                                fineByMe = true;
-                                String userMessage = "From:" + name + "\n" +
-                                        "email:" + email + "\n" +
-                                        message + "\n\n";
-                                ChartAdjust.sendPing(userMessage);
-                            }
-                        } else
+                        if (name.trim().length() == 0 || email.trim().length() == 0 || message.trim().length() == 0) {
+                            // This should not happen
+                            System.out.println("A problem...");
+                            JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("please-all-fields"), WWGnlUtilities.buildMessage("contact-dev-team"), JOptionPane.ERROR_MESSAGE);
+                        } else {
                             fineByMe = true;
-                    }
+                            String userMessage = "From:" + name + "\n" +
+                                    "email:" + email + "\n" +
+                                    message + "\n\n";
+                            ChartAdjust.sendPing(userMessage);
+                        }
+                    } else
+                        fineByMe = true;
+                }
+            } else {
+                String mess = "You're not on line,\nor your Internet connection is not accessible.\nThere is currently not way to send a message...";
+                if ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false"))) {
+                    System.out.println("-> " + mess);
                 } else {
-                    String mess = "You're not on line,\nor your Internet connection is not accessible.\nThere is currently not way to send a message...";
-                    if ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")))
-                        System.out.println("-> " + mess);
-                    else
-                        JOptionPane.showMessageDialog(instance, mess, "Contact", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(instance, mess, "Contact", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
         menuHelp.add(menuHelpContact);
 
-        menuCheckForUpdate.setText(WWGnlUtilities.buildMessage("check-for-update-menu"));
-        menuCheckForUpdate.setIcon(new ImageIcon(this.getClass().getResource("img/download.png")));
-        menuCheckForUpdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (WWContext.getInstance().isOnLine()) {
-                    // TODO Remove this
-                    // ChartAdjust.checkForUpdate();
-                    System.out.println("This was removed.");
-                } else {
-                    String mess = "You're not on line,\nor your Internet connection is not accessible.\nThere is currently not way to send a message...";
-                    if ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")))
-                        System.out.println("-> " + mess);
-                    else
-                        JOptionPane.showMessageDialog(instance, mess, "Contact", JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
-        menuHelp.add(new JSeparator());
-        menuHelp.add(menuCheckForUpdate);
+//        menuCheckForUpdate.setText(WWGnlUtilities.buildMessage("check-for-update-menu"));
+//        menuCheckForUpdate.setIcon(new ImageIcon(this.getClass().getResource("img/download.png")));
+//        menuCheckForUpdate.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent ae) {
+//                if (WWContext.getInstance().isOnLine()) {
+//                    // TODO Remove this
+//                    // ChartAdjust.checkForUpdate();
+//                    System.out.println("This was removed.");
+//                } else {
+//                    String mess = "You're not on line,\nor your Internet connection is not accessible.\nThere is currently not way to send a message...";
+//                    if ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false"))) {
+//                        System.out.println("-> " + mess);
+//                    } else {
+//                        JOptionPane.showMessageDialog(instance, mess, "Contact", JOptionPane.WARNING_MESSAGE);
+//                    }
+//                }
+//            }
+//        });
+//        menuHelp.add(new JSeparator());
+//        menuHelp.add(menuCheckForUpdate);
 
         getContentPane().setLayout(borderLayout);
         setSize(new Dimension(1000, 700));
@@ -1069,30 +983,30 @@ public class AdjustFrame extends JFrame {
             }
 
             @Override
-            public void compositeFileOpen(final String fileName) // fileName : full path to the file
-            {
+            public void compositeFileOpen(final String fileName) { // fileName : full path to the file
                 String justFileName = fileName;
-                if (fileName.lastIndexOf(File.separatorChar) > 0)
+                if (fileName.lastIndexOf(File.separatorChar) > 0) {
                     justFileName = justFileName.substring(fileName.lastIndexOf(File.separatorChar) + 1);
-//        System.out.println("JustFileName:" + justFileName + " (idx:" + fileName.lastIndexOf(File.separatorChar) + ")");
+                }
+                // System.out.println("JustFileName:" + justFileName + " (idx:" + fileName.lastIndexOf(File.separatorChar) + ")");
                 masterTabPane.setTitleAt(masterTabPane.getSelectedIndex(), justFileName);
                 ((CompositeTabComponent) masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setTabTitle(justFileName);
-//        ((CompositeTabComponent)masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setToolTipText(JTreeFilePanel.getCompositeBubble(justFileName, fileName));
+                // ((CompositeTabComponent)masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setToolTipText(JTreeFilePanel.getCompositeBubble(justFileName, fileName));
                 masterTabPane.setToolTipTextAt(masterTabPane.getSelectedIndex(), JTreeFilePanel.getCompositeBubble(justFileName, fileName));
                 // Activate save as menu item
                 scaa.setEnabled(true);
             }
 
             @Override
-            public void setCompositeFileName(final String fileName) // fileName : full path to the file
-            {
+            public void setCompositeFileName(final String fileName) { // fileName : full path to the file
                 String justFileName = fileName;
-                if (fileName.lastIndexOf(File.separatorChar) > 0)
+                if (fileName.lastIndexOf(File.separatorChar) > 0) {
                     justFileName = justFileName.substring(fileName.lastIndexOf(File.separatorChar) + 1);
-                //        System.out.println("JustFileName:" + justFileName + " (idx:" + fileName.lastIndexOf(File.separatorChar) + ")");
+                }
+                // System.out.println("JustFileName:" + justFileName + " (idx:" + fileName.lastIndexOf(File.separatorChar) + ")");
                 masterTabPane.setTitleAt(masterTabPane.getSelectedIndex(), justFileName);
                 ((CompositeTabComponent) masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setTabTitle(justFileName);
-                //        ((CompositeTabComponent)masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setToolTipText(JTreeFilePanel.getCompositeBubble(justFileName, fileName));
+                // ((CompositeTabComponent)masterTabPane.getTabComponentAt(masterTabPane.getSelectedIndex())).setToolTipText(JTreeFilePanel.getCompositeBubble(justFileName, fileName));
                 masterTabPane.setToolTipTextAt(masterTabPane.getSelectedIndex(), JTreeFilePanel.getCompositeBubble(justFileName, fileName));
                 // Activate save as menu item
                 scaa.setEnabled(true);
@@ -1116,7 +1030,7 @@ public class AdjustFrame extends JFrame {
             @Override
             public void setLoading(boolean b, String mess) {
                 message2Display = mess;
-                setLoadingProgresssBar(b, mess);
+                setLoadingProgressBar(b, mess);
                 grayPanelOption = Integer.parseInt(((ParamPanel.GrayPanelOptionList) (ParamPanel.data[ParamData.GRAY_PANEL_OPTION][ParamData.VALUE_INDEX])).getStringIndex());
                 if (b) {
                     grayPanelY = 0;
@@ -1130,8 +1044,7 @@ public class AdjustFrame extends JFrame {
                     } catch (NullPointerException npe) {
                     }
                     final String soundName = _soundName;
-                    if (soundName.trim().length() > 0) // Play Sound on Completion
-                    {
+                    if (soundName.trim().length() > 0) { // Play Sound on Completion
                         Thread playThread = new Thread() {
                             public void run() {
                                 try {
@@ -1166,8 +1079,7 @@ public class AdjustFrame extends JFrame {
                                         step = 15;
                                     }
 
-                                    for (int i = 0; i < maxI; i += step) // Shifts/Scrolls down, or circular whipe out.
-                                    {
+                                    for (int i = 0; i < maxI; i += step) { // Shifts/Scrolls down, or circular whipe out.
                                         synchronized (this) {
                                             final int y = i;
                                             final float gpt = (origTransparency * (1f - ((float) i / (float) layers.getSize().getHeight())));
@@ -1176,12 +1088,13 @@ public class AdjustFrame extends JFrame {
 //                          {
 //                             public void run()
 //                             {
-                                                if (grayPanelOption == GRAY_PANEL_SHIFT_DOWN_OPTION)
+                                                if (grayPanelOption == GRAY_PANEL_SHIFT_DOWN_OPTION) {
                                                     grayPanelY = y;
-                                                else if (grayPanelOption == GRAY_PANEL_FADE_OPTION)
+                                                } else if (grayPanelOption == GRAY_PANEL_FADE_OPTION) {
                                                     grayPanelTransparency = gpt;
-                                                else if (grayPanelOption == GRAY_PANEL_SECTOR_OPTION)
+                                                } else if (grayPanelOption == GRAY_PANEL_SECTOR_OPTION) {
                                                     grayPanelSectorAngle = y;
+                                                }
                                                 //                             System.out.println("-> " + grayPanelY);
                                                 //                             System.out.println("-> " + grayPanelTransparency);
                                                 //                             System.out.println("-> angle:" + grayPanelSectorAngle);
@@ -1214,8 +1127,7 @@ public class AdjustFrame extends JFrame {
 
                             message2Display = "";
                             if (false) {
-                                for (int i = 0; i < layers.getSize().getHeight(); i++) // Shifts/Scrolls down
-                                {
+                                for (int i = 0; i < layers.getSize().getHeight(); i++) { // Shifts/Scrolls down
                                     try {
                                         Thread.sleep(50L);
                                     } catch (InterruptedException ex) {
@@ -1253,15 +1165,15 @@ public class AdjustFrame extends JFrame {
             public void progressing(String mess) {
 //        System.out.println("... Progressing : " + mess + ", grayTransparentPanel is " + (grayTransparentPanel.isVisible()?"":"not ") + "visible");
                 message2Display = mess;
-                if (!grayTransparentPanel.isVisible())
+                if (!grayTransparentPanel.isVisible()) {
                     layers.add(grayTransparentPanel, grayLayerIndex); // Add gray layer
+                }
                 layers.repaint();
             }
 
             @Override
             public void scrollThroughTabs() {
-                if (!goAnimate) // That is a start
-                {
+                if (!goAnimate) { // That is a start
 //          System.out.println("Starting Tab Animation");
                     goAnimate = true;
                     Thread tabThread = new Thread("tab-animator") {
@@ -1270,8 +1182,9 @@ public class AdjustFrame extends JFrame {
                                 int nbTab = masterTabPane.getTabCount() - 1;
                                 int selectedTab = masterTabPane.getSelectedIndex();
                                 selectedTab += 1;
-                                if (selectedTab > (nbTab - 1))
+                                if (selectedTab > (nbTab - 1)) {
                                     selectedTab = 0;
+                                }
                                 masterTabPane.setSelectedIndex(selectedTab);
                                 try {
                                     Thread.sleep(2000L);
@@ -1302,8 +1215,9 @@ public class AdjustFrame extends JFrame {
     public void addCompositeTab(String tabName) {
         final CompositeTabbedPane nctp = new CompositeTabbedPane();
         String _tabName = tabName;
-        if (_tabName == null)
+        if (_tabName == null) {
             _tabName = "Composite (" + masterTabPane.getTabCount() + ")";
+        }
         masterTabPane.add(nctp, _tabName, masterTabPane.getTabCount() - 1);
 //  masterTabPane.setTabComponentAt(masterTabPane.getTabCount() - 2, new CompositeTabComponent("Composite (" + Integer.toString(masterTabPane.getTabCount() - 1) + ")", "right/remove_composite.png")
         masterTabPane.setTabComponentAt(masterTabPane.getTabCount() - 2, new CompositeTabComponent(_tabName, "right/remove_composite.png") {
@@ -1348,37 +1262,32 @@ public class AdjustFrame extends JFrame {
                     menuCharts.add(new JSeparator());
                 } else {
                     JMenuItem mni = new JMenuItem(pz.name);
-                    mni.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent ae) {
-                            ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().applyBoundariesChanges(pz.top, pz.bottom, pz.left, pz.right);
-                        }
-                    });
+                    mni.addActionListener(ae -> ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().applyBoundariesChanges(pz.top, pz.bottom, pz.left, pz.right));
                     menuCharts.add(mni);
                 }
             }
             menuCharts.add(new JSeparator());
             managePredefinedZones.setText(WWGnlUtilities.buildMessage("manage-predefined-zones"));
             menuCharts.add(managePredefinedZones);
-            managePredefinedZones.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    PredefZonesTablePanel pdztp = new PredefZonesTablePanel();
-                    DOMParser parser = WWContext.getInstance().getParser();
-                    try {
-                        synchronized (parser) {
-                            parser.parse(new File("config" + File.separator + "predefined-zones.xml").toURI().toURL());
-                            pdztp.setData(parser.getDocument());
-                        }
-                        int resp = JOptionPane.showConfirmDialog(instance, pdztp, WWGnlUtilities.buildMessage("predefined-zones"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if (resp == JOptionPane.OK_OPTION) {
-                            XMLDocument predefDoc = pdztp.getData();
-                            predefDoc.print(new FileOutputStream(new File("config" + File.separator + "predefined-zones.xml")));
-                            buildChartMenu();
-                        }
-                    } catch (Exception ex) {
-                        if ("false".equals(System.getProperty("headless", "false")))
-                            JOptionPane.showMessageDialog(instance, ex.toString(), ":)", JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace();
+            managePredefinedZones.addActionListener(e -> {
+                PredefZonesTablePanel pdztp = new PredefZonesTablePanel();
+                DOMParser parser = WWContext.getInstance().getParser();
+                try {
+                    synchronized (parser) {
+                        parser.parse(new File("config" + File.separator + "predefined-zones.xml").toURI().toURL());
+                        pdztp.setData(parser.getDocument());
                     }
+                    int resp = JOptionPane.showConfirmDialog(instance, pdztp, WWGnlUtilities.buildMessage("predefined-zones"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    if (resp == JOptionPane.OK_OPTION) {
+                        XMLDocument predefDoc = pdztp.getData();
+                        predefDoc.print(new FileOutputStream(new File("config" + File.separator + "predefined-zones.xml")));
+                        buildChartMenu();
+                    }
+                } catch (Exception ex) {
+                    if ("false".equals(System.getProperty("headless", "false"))) {
+                        JOptionPane.showMessageDialog(instance, ex.toString(), ":)", JOptionPane.ERROR_MESSAGE);
+                    }
+                    ex.printStackTrace();
                 }
             });
         } catch (Exception ex) {
@@ -1434,25 +1343,26 @@ public class AdjustFrame extends JFrame {
 
     // TODO Merge that one with the same method in CompositeTabbedPane
     private void setupComposite(String faxFile, String gribFile) {
-        if (inputPanel == null)
+        if (inputPanel == null) {
             inputPanel = new CompositeDetailsInputPanel();
-
+        }
         FaxType[] faxarray = ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFaxes();
-//  if (faxarray != null)
+        //  if (faxarray != null)
         inputPanel.setFaxes(faxarray);
 
-        if (faxFile != null)
+        if (faxFile != null) {
             inputPanel.addNewFaxFileInTable(faxFile);
-
-        if (faxFile == null && faxarray == null) // then it might be a GRIB
+        }
+        if (faxFile == null && faxarray == null) { // then it might be a GRIB
             inputPanel.setSizeFromGRIB(true);
-
+        }
         if (gribFile != null && gribFile.trim().length() > 0) {
             inputPanel.setGribFileName(gribFile);
             File gf = new File(gribFile);
             inputPanel.setGRIBRequestSelected(!gf.exists()); // If file not found, assume GRIB Request
-        } else
+        } else {
             inputPanel.setGribFileName("");
+        }
         inputPanel.setPRMSL(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isDisplayPrmsl() && ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isTherePrmsl());
         inputPanel.set500mb(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isDisplay500mb() && ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isThere500mb());
         inputPanel.setWaves(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isDisplayWaves() && ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().isThereWaves());
@@ -1501,8 +1411,7 @@ public class AdjustFrame extends JFrame {
                     gribOptions[CompositeDetailsInputPanel.PRATE_CONTOUR];
             if (((faxFile != null && faxFile.trim().length() > 0) || (faxarray != null && faxarray.length > 0)) &&
                     /* inputPanel.getGribFileName().trim().length() > 0 && */
-                    atLeastOneContour) // Confirm Faxes + GRIB contour lines
-            {
+                    atLeastOneContour) { // Confirm Faxes + GRIB contour lines
                 int response = JOptionPane.showConfirmDialog(this,
                         WWGnlUtilities.buildMessage("confirm-fax-plus-cl"),
                         WWGnlUtilities.buildMessage("weather-data"),
@@ -1535,11 +1444,13 @@ public class AdjustFrame extends JFrame {
             ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setDisplay3DRain(gribOptions[CompositeDetailsInputPanel.PRATE_3D]);
             if (atLeastOne3D) {
                 ((JTabbedPane) masterTabPane.getSelectedComponent()).setEnabledAt(1, true);
-                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null)
+                if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData() != null) {
                     ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getThreeDGRIBPanel().getThreeDPanel().setPanelLabel(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribData()[((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getGribIndex()].getDate().toString());
+                }
             } else {
-                if (((JTabbedPane) masterTabPane.getSelectedComponent()).getSelectedIndex() == 1)
+                if (((JTabbedPane) masterTabPane.getSelectedComponent()).getSelectedIndex() == 1) {
                     ((JTabbedPane) masterTabPane.getSelectedComponent()).setSelectedIndex(0);
+                }
                 ((JTabbedPane) masterTabPane.getSelectedComponent()).setEnabledAt(1, false);
             }
             ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setDisplayContourTWS(gribOptions[CompositeDetailsInputPanel.TWS_CONTOUR]);
@@ -1555,22 +1466,24 @@ public class AdjustFrame extends JFrame {
                     String gpxDataFileName = inputPanel.getGPXFileName();
                     long to = -1L;
                     Date date = inputPanel.getUpToDate();
-                    if (date != null)
+                    if (date != null) {
                         to = date.getTime();
+                    }
                     List<GeoPoint> algp = GPXUtil.parseGPXData(new File(gpxDataFileName).toURI().toURL(), -1L, to);
                     ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setGPXData(algp);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            } else
+            } else {
                 ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setGPXData(null);
-//    System.out.println("InputPanel OK");
+            }
+            // System.out.println("InputPanel OK");
             WWContext.getInstance().fireSetLoading(true);
             Thread loader = new Thread("composite-loader") {
                 public void run() {
-//          System.out.println("Top of loader thread");
+                    // System.out.println("Top of loader thread");
                     String grib = inputPanel.getGribFileName();
-//          if (!(grib.trim().length() > 0 && inputPanel.isSizeFromGRIB()))
+                    // if (!(grib.trim().length() > 0 && inputPanel.isSizeFromGRIB()))
                     {
                         ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setNLat(inputPanel.getTopLat());
                         ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setSLat(inputPanel.getBottomLat());
@@ -1608,8 +1521,7 @@ public class AdjustFrame extends JFrame {
                             }
                         }
                         if (keepGoing) {
-                            if (inputPanel.isGRIBRequestSelected()) // Then we assume it is to be reached through http
-                            {
+                            if (inputPanel.isGRIBRequestSelected()) { // Then we assume it is to be reached through http
                                 ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setGribRequest(grib);
                                 String gribRequest = WWGnlUtilities.generateGRIBRequest(grib);
                                 try {
@@ -1656,10 +1568,11 @@ public class AdjustFrame extends JFrame {
                                 } catch (RuntimeException rte) {
                                     String mess = rte.getMessage();
 //                  System.out.println("RuntimeException getMessage(): [" + mess + "]");
-                                    if (mess.startsWith("DataArray (width) size mismatch"))
+                                    if (mess.startsWith("DataArray (width) size mismatch")) {
                                         System.out.println(mess);
-                                    else
+                                    } else {
                                         throw rte;
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -1682,8 +1595,9 @@ public class AdjustFrame extends JFrame {
 //              System.out.println("Rank: " + (i+1) + ", " + faxes[i].getValue() + ", " + faxes[i].getColor() );
                             String comment = WWGnlUtilities.getHeader(faxes[i].getValue());
 //              System.out.println("Current comment " + faxes[i].getComment());
-                            if (faxes[i].getComment() == null || faxes[i].getComment().trim().length() == 0)
+                            if (faxes[i].getComment() == null || faxes[i].getComment().trim().length() == 0) {
                                 faxes[i].setComment(comment);
+                            }
                             appendFrameTitle(faxes[i].getComment());
                         }
                         ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().setFaxes(faxes);
@@ -1740,8 +1654,9 @@ public class AdjustFrame extends JFrame {
             boolean go = true;
             if (f.exists()) {
                 int r = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(), WWGnlUtilities.buildMessage("already-exists-override", new String[]{inf.getFaxLocalFile()}), WWGnlUtilities.buildMessage("download"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (r != JOptionPane.YES_OPTION)
+                if (r != JOptionPane.YES_OPTION) {
                     go = false;
+                }
             }
             if (go) {
                 Thread downLoadThread = new Thread("downloader") {
@@ -1752,8 +1667,9 @@ public class AdjustFrame extends JFrame {
                             HTTPClient.getChart(inf.getFaxStrURL(), ".", saveAs, true);
                             JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("is-ready", new String[]{saveAs}), WWGnlUtilities.buildMessage("fax-download"), JOptionPane.INFORMATION_MESSAGE);
                             //          allJTrees.refreshFaxTree();
-                            if ("false".equals(System.getProperty("headless", "false")))
+                            if ("false".equals(System.getProperty("headless", "false"))) {
                                 WWContext.getInstance().fireReloadFaxTree();
+                            }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -1778,8 +1694,9 @@ public class AdjustFrame extends JFrame {
                         new String[]{ing.getGRIBLocalFile()}), WWGnlUtilities.buildMessage("download"),
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
-                if (r != JOptionPane.YES_OPTION)
+                if (r != JOptionPane.YES_OPTION) {
                     go = false;
+                }
             }
             if (go) {
                 Thread downLoadThread = new Thread("grib-getter") {
@@ -1799,8 +1716,9 @@ public class AdjustFrame extends JFrame {
                         }
                         JOptionPane.showMessageDialog(instance, WWGnlUtilities.buildMessage("is-ready", new String[]{saveAs}), WWGnlUtilities.buildMessage("grib-download"), JOptionPane.INFORMATION_MESSAGE);
 //          allJTrees.refreshGribTree();
-                        if ("false".equals(System.getProperty("headless", "false")))
+                        if ("false".equals(System.getProperty("headless", "false"))) {
                             WWContext.getInstance().fireReloadGRIBTree();
+                        }
                     }
                 };
                 downLoadThread.start();
@@ -1864,8 +1782,9 @@ public class AdjustFrame extends JFrame {
             WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("does-not-exist",
                     new String[]{autoDownloadConfigFile.getAbsolutePath()}) + "\n");
         // Display JTable
-        if (data != null)
+        if (data != null) {
             WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("found-faxes", new String[]{Integer.toString(data.length)}) + "\n");
+        }
         AutoDownloadTablePanel autoTablePanel = new AutoDownloadTablePanel();
         autoTablePanel.setData(data);
         int resp = JOptionPane.showConfirmDialog(this,
@@ -1950,8 +1869,9 @@ public class AdjustFrame extends JFrame {
 
                                 WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("loading2", new String[]{faxUrl}) + "\n", LoggingPanel.WHITE_STYLE);
                                 File fDir = new File(faxDir);
-                                if (!fDir.exists())
+                                if (!fDir.exists()) {
                                     fDir.mkdirs();
+                                }
                                 try {
                                     System.out.println(">>> Downloading FAX " + faxUrl);
                                     HTTPClient.getChart(faxUrl, faxDir, fileName, true);
@@ -1960,10 +1880,11 @@ public class AdjustFrame extends JFrame {
                                 {
                                     String message = fnfe.getMessage();
                                     message += ("\nUser [" + System.getProperty("user.name") + "] seems not to have write access to " + faxDir);
-                                    if ("false".equals(System.getProperty("headless", "false")))
+                                    if ("false".equals(System.getProperty("headless", "false"))) {
                                         JOptionPane.showMessageDialog(instance, message, "Download", JOptionPane.WARNING_MESSAGE);
-                                    else
+                                    } else {
                                         System.out.println(message);
+                                    }
                                     fnfe.printStackTrace();
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
@@ -1979,8 +1900,9 @@ public class AdjustFrame extends JFrame {
                                 Date now = new Date();
                                 gribDir = WWGnlUtilities.translatePath(gribDir, now);
                                 File gDir = new File(gribDir);
-                                if (!gDir.exists())
+                                if (!gDir.exists()) {
                                     gDir.mkdirs();
+                                }
                                 String fileName = gribDir + File.separator + girbPrefix + sdf.format(new Date()) + "." + gribExt;
                                 System.out.println(">>> Downloading GRIB " + request);
                                 WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("loading2", new String[]{request}) + "\n", LoggingPanel.WHITE_STYLE);
@@ -2001,14 +1923,16 @@ public class AdjustFrame extends JFrame {
                         finalMess += WWGnlUtilities.buildMessage("are-ready");
                         JOptionPane.showMessageDialog(instance, finalMess, WWGnlUtilities.buildMessage("automatic-download"), JOptionPane.INFORMATION_MESSAGE);
                         if (fax > 0) {
-//            allJTrees.refreshFaxTree();
-                            if ("false".equals(System.getProperty("headless", "false")))
+                            // allJTrees.refreshFaxTree();
+                            if ("false".equals(System.getProperty("headless", "false"))) {
                                 WWContext.getInstance().fireReloadFaxTree();
+                            }
                         }
                         if (grib > 0) {
-//            allJTrees.refreshGribTree();
-                            if ("false".equals(System.getProperty("headless", "false")))
+                            // allJTrees.refreshGribTree();
+                            if ("false".equals(System.getProperty("headless", "false"))) {
                                 WWContext.getInstance().fireReloadGRIBTree();
+                            }
                         }
                     }
                 };
@@ -2029,16 +1953,14 @@ public class AdjustFrame extends JFrame {
     }
 
     private void store() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size();
-             i++) {
+        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
             ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
             l.store();
         }
     }
 
     private void storeAs() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size();
-             i++) {
+        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
             ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
             l.storeAs();
         }
@@ -2065,12 +1987,13 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    private void dowloadPDFManual() {
+    private void downloadPDFManual() {
         try {
             // String lang = Locale.getDefault().getLanguage();
             // System.out.println("I speak " + lang);
             // String docFileName = System.getProperty("user.dir") + File.separator + "doc" + File.separator + "weather" + File.separator + "index.html";
-            String docFileName = "http://donpedro.lediouris.net/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf";
+            // TODO Update the document, the link.
+            String docFileName = "http://www.lediouris.net/donpedro/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf";
             Utilities.openInBrowser(docFileName);
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
@@ -2089,7 +2012,7 @@ public class AdjustFrame extends JFrame {
     }
 
     private List<PredefZone> getPredefZones() throws Exception {
-        List<PredefZone> pdfz = new ArrayList<PredefZone>(5);
+        List<PredefZone> pdfz = new ArrayList<>(5);
         DOMParser parser = WWContext.getInstance().getParser();
         XMLDocument doc = null;
         synchronized (parser) {
@@ -2140,7 +2063,7 @@ public class AdjustFrame extends JFrame {
                         start.set(Calendar.SECOND, 0);
                         start.set(Calendar.MILLISECOND, 0);
                         long startMS = start.getTimeInMillis();
-//            System.out.println("-> Will Start at " + new Date(startMS).toString());
+                        // System.out.println("-> Will Start at " + new Date(startMS).toString());
                         while (startMS < now) {
                             start.add(Calendar.HOUR, 24);
                             startMS = start.getTimeInMillis();
@@ -2173,8 +2096,9 @@ public class AdjustFrame extends JFrame {
                         WWContext.getInstance().fireSetStatus(mess);
                         long now = System.currentTimeMillis();
                         long amount2Sleep = (1000L * 60L * interval) - (now - startedAt);
-                        if (amount2Sleep > 0)
+                        if (amount2Sleep > 0) {
                             Thread.sleep(amount2Sleep);
+                        }
                         System.out.println("-- Thread " + this.getName() + " waking up.");
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -2367,8 +2291,9 @@ public class AdjustFrame extends JFrame {
                         WWContext.getInstance().fireSetStatus(mess);
                         long now = System.currentTimeMillis();
                         long amount2Sleep = (1000L * 60L * interval) - (now - startedAt);
-                        if (amount2Sleep > 0)
+                        if (amount2Sleep > 0) {
                             Thread.sleep(amount2Sleep);
+                        }
                         System.out.println("-- Thread " + this.getName() + " waking up.");
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -2454,10 +2379,11 @@ public class AdjustFrame extends JFrame {
             addCompositeTab();
             if (this.withLoad) {
                 String compositeName = ((ParamPanel.DataFile) ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX]).toString();
-                if (compositeName != null && compositeName.trim().length() != 0)
+                if (compositeName != null && compositeName.trim().length() != 0) {
                     WWContext.getInstance().fireLoadDynamicComposite(compositeName);
-                else
+                } else {
                     JOptionPane.showMessageDialog(instance, "No default composite to reload.\nSet it up in the preferences.", "Reload Default Composite", JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }
@@ -2471,10 +2397,11 @@ public class AdjustFrame extends JFrame {
 
         public void actionPerformed(ActionEvent ae) {
             String compositeName = ((ParamPanel.DataFile) ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX]).toString();
-            if (compositeName != null && compositeName.trim().length() != 0)
+            if (compositeName != null && compositeName.trim().length() != 0) {
                 WWContext.getInstance().fireLoadDynamicComposite(compositeName);
-            else
+            } else {
                 JOptionPane.showMessageDialog(instance, "No default composite to reload.\nSet it up in the preferences.", "Reload Default Composite", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
