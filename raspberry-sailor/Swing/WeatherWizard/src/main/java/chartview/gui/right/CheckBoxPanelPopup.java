@@ -14,10 +14,10 @@ import java.awt.event.ActionListener;
 public class CheckBoxPanelPopup
         extends JPopupMenu
         implements ActionListener, PopupMenuListener {
-    private CommandPanel parent;
+    private final CommandPanel parent;
 
-    private JMenuItem checkBoxOption;
-    private JMenuItem radioButtonOption;
+    private final JMenuItem checkBoxOption;
+    private final JMenuItem radioButtonOption;
 
     private final String CHECKBOX_OPTION = WWGnlUtilities.buildMessage("checkbox-panel-option");
     private final String RADIOBUTTON_OPTION = WWGnlUtilities.buildMessage("radiobutton-panel-option");
@@ -32,13 +32,13 @@ public class CheckBoxPanelPopup
         this.setBackground(Color.white);
 
         checkBoxOption = new JMenuItem(CHECKBOX_OPTION);
-//  checkBoxOption.setIcon(new ImageIcon(this.getClass().getResource("remove_composite.png")));
+        //  checkBoxOption.setIcon(new ImageIcon(this.getClass().getResource("remove_composite.png")));
         this.add(checkBoxOption);
         checkBoxOption.addActionListener(this);
         checkBoxOption.setBackground(Color.white);
 
         radioButtonOption = new JMenuItem(RADIOBUTTON_OPTION);
-//  radioButtonOption.setIcon(new ImageIcon(this.getClass().getResource("composite.png")));
+        //  radioButtonOption.setIcon(new ImageIcon(this.getClass().getResource("composite.png")));
         this.add(radioButtonOption);
         radioButtonOption.addActionListener(this);
         radioButtonOption.setBackground(Color.white);

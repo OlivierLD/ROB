@@ -67,9 +67,9 @@ public class CommandPanelUtils {
     private static int altTooltipW = ALT_WINDOW_MIN_WIDTH;
     private static int altTooltipH = ALT_WINDOW_MIN_HEIGHT;
 
-    private static ImageIcon closeImage = new ImageIcon(CommandPanelUtils.class.getResource("close.gif"));
-    private static ImageIcon zoomInImage = new ImageIcon(CommandPanelUtils.class.getResource("zoomexpand.gif"));
-    private static ImageIcon zoomOutImage = new ImageIcon(CommandPanelUtils.class.getResource("zoomshrink.gif"));
+    private final static ImageIcon closeImage = new ImageIcon(CommandPanelUtils.class.getResource("close.gif"));
+    private final static ImageIcon zoomInImage = new ImageIcon(CommandPanelUtils.class.getResource("zoomexpand.gif"));
+    private final static ImageIcon zoomOutImage = new ImageIcon(CommandPanelUtils.class.getResource("zoomshrink.gif"));
     private final static int buttonWidth = 15;
 
     public final static int CLOSE_IMAGE = 1;
@@ -225,21 +225,17 @@ public class CommandPanelUtils {
         int x = me.getX() - (int) chartPanel.getVisibleRect().getX(),
                 y = me.getY() - (int) chartPanel.getVisibleRect().getY();
         //  System.out.println("X:" + x + ", Y:" + y + " (winY:" + altTooltipY + ", winX:" + altTooltipX + ", winW:" + altTooltipW);
-        if (y > altTooltipY + 7 &&
-                y < altTooltipY + 21) {
-            if (x < (altTooltipX + altTooltipW - 3) &&
-                    x > (altTooltipX + altTooltipW - (3 + buttonWidth))) {
-                //    System.out.println("Close");
-                button = CLOSE_IMAGE;
-            } else if (x < (altTooltipX + altTooltipW - 30) &&
-                    x > (altTooltipX + altTooltipW - (30 + buttonWidth))) {
-                //    System.out.println("Expand");
-                button = ZOOMEXPAND_IMAGE;
-            } else if (x < (altTooltipX + altTooltipW - 50) &&
-                    x > (altTooltipX + altTooltipW - (50 + buttonWidth))) {
-                //    System.out.println("Shrink");
-                button = ZOOMSHRINK_IMAGE;
-            }
+        if (y > altTooltipY + 7 && y < altTooltipY + 21) {
+        }
+        if (x < (altTooltipX + altTooltipW - 3) && x > (altTooltipX + altTooltipW - (3 + buttonWidth))) {
+            //    System.out.println("Close");
+            button = CLOSE_IMAGE;
+        } else if (x < (altTooltipX + altTooltipW - 30) && x > (altTooltipX + altTooltipW - (30 + buttonWidth))) {
+            //    System.out.println("Expand");
+            button = ZOOMEXPAND_IMAGE;
+        } else if (x < (altTooltipX + altTooltipW - 50) && x > (altTooltipX + altTooltipW - (50 + buttonWidth))) {
+            //    System.out.println("Shrink");
+            button = ZOOMSHRINK_IMAGE;
         }
         return button;
     }
@@ -749,8 +745,7 @@ public class CommandPanelUtils {
             }
         } else if (update && fileName != null && fileName.trim().length() > 0) {
             // Update the composite.xml in the waz file
-            if (fileName.toUpperCase().endsWith(".WAZ")) // Archive required
-            {
+            if (fileName.toUpperCase().endsWith(".WAZ")) { // Archive required
                 //      WWContext.getInstance().fireInterruptProgress();
                 int resp = JOptionPane.showConfirmDialog(cp,
                         WWGnlUtilities.buildMessage("updating-composite", new String[]{fileName}),
@@ -1253,8 +1248,7 @@ public class CommandPanelUtils {
                         XMLElement saildocs = (XMLElement) gribNode.selectNodes("dynamic-grib").item(0);
                         String request = saildocs.getAttribute("request");
                         gribRequest = request;
-                        if (gribRequest.startsWith(SearchUtil.SEARCH_PROTOCOL)) // From the disc
-                        {
+                        if (gribRequest.startsWith(SearchUtil.SEARCH_PROTOCOL)) { // From the disc
                             // Parse Expression, like search:chartview.util.SearchUtil.findMostRecentFax(pattern, rootPath)
                             String gribFileName = SearchUtil.dynamicSearch(gribRequest);
                             // System.out.println("For " + hintName + ", search: found [" + gribFileName + "]");
@@ -1423,13 +1417,17 @@ public class CommandPanelUtils {
                 String minG = ((XMLElement) xe.getElementsByTagName("longitude").item(0)).getAttribute("min");
                 String sgnG = ((XMLElement) xe.getElementsByTagName("longitude").item(0)).getAttribute("sign");
                 double l = GeomUtil.sexToDec(degL, minL);
-                if (sgnL.equals("S")) l = -l;
+                if (sgnL.equals("S")) {
+                    l = -l;
+                }
                 double g = GeomUtil.sexToDec(degG, minG);
-                if (sgnG.equals("W")) g = -g;
+                if (sgnG.equals("W")) {
+                    g = -g;
+                }
                 gp = new GeoPoint(l, g);
                 alPos.add(gp);
                 alName.add(placeName);
-                alShow.add(new Boolean(show));
+                alShow.add(Boolean.valueOf(show));
             }
             cp.setGpa(/*(GeoPoint[])*/alPos.toArray(new GeoPoint[alPos.size()]));
             cp.setPtLabels(/*(String[])*/alName.toArray(new String[alName.size()]));
@@ -1663,8 +1661,9 @@ public class CommandPanelUtils {
                 boolean showChart = true;
                 try {
                     XMLElement chartOpt = (XMLElement) (doc.selectNodes("//chart-opt").item(0));
-                    if (chartOpt != null)
+                    if (chartOpt != null) {
                         showChart = "yes".equals(chartOpt.getAttribute("show"));
+                    }
                 } catch (Exception ignore) {
                 }
                 cp.setDrawChart(showChart);
@@ -1895,12 +1894,13 @@ public class CommandPanelUtils {
                             cp.setDisplay3DRain("true".equals(gribNode.getAttribute("display-PRATE-3D")));
                         }
                         String wo = gribNode.getAttribute("wind-only"); // deprecated
-                        if (wo.trim().length() > 0)
+                        if (wo.trim().length() > 0) {
                             cp.setWindOnly(Boolean.valueOf(wo));
+                        }
                         String wc = gribNode.getAttribute("with-contour"); // deprecated
-                        if (wc.trim().length() > 0)
+                        if (wc.trim().length() > 0) {
                             cp.setDisplayContourLines(Boolean.valueOf(wc));
-
+                        }
                         String inLine = gribNode.getAttribute("in-line");
                         if (inLine != null && inLine.trim().equals("true")) {
                             // Deserialize

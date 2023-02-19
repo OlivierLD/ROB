@@ -126,7 +126,7 @@ public class ChartAdjust {
 
         ParamPanel.setUserValues();
         // Might also try this:
-        // java -Dswing.aatext=true -Dswing.plaf.metal.controlFont=Tahoma -Dswing.plaf.metal.userFont=Tahoma �
+        // java -Dswing.aatext=true -Dswing.plaf.metal.controlFont=Tahoma -Dswing.plaf.metal.userFont=Tahoma
         Font defaultFont = null;
         try {
             defaultFont = ((Font) ParamPanel.data[ParamData.DEFAULT_FONT][ParamData.VALUE_INDEX]);

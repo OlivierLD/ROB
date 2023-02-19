@@ -23,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,76 +31,74 @@ import java.util.List;
 public class CommandPanelPopup
         extends JPopupMenu
         implements ActionListener, PopupMenuListener {
-    @SuppressWarnings("compatibility:-8486677894088376025")
-    private final static long serialVersionUID = 1L;
-    private CommandPanel parent;
+    private final CommandPanel parent;
 
     private transient List<UserExitAction> userExitList = null;
 
-    private JCheckBoxMenuItem showPrintablePageSize;
+    private final JCheckBoxMenuItem showPrintablePageSize;
 
-    private JMenu compositeMenu;
-    private JMenuItem removeComposite;
-    private JMenuItem setupComposite;
+    private final JMenu compositeMenu;
+    private final JMenuItem removeComposite;
+    private final JMenuItem setupComposite;
 
-    private JMenuItem removeFax;
-    private JMenuItem setFaxWHRatio;
-    private JMenuItem removeGRIB;
+    private final JMenuItem removeFax;
+    private final JMenuItem setFaxWHRatio;
+    private final JMenuItem removeGRIB;
 
-    private JMenu menuGoogle;
-    private JMenuItem menuGoogleMap;
-    private JMenuItem menuGoogleEarth;
+//    private final JMenu menuGoogle;
+//    private final JMenuItem menuGoogleMap;
+//    private final JMenuItem menuGoogleEarth;
 
-    private JCheckBoxMenuItem plotNadir;
+    private final JCheckBoxMenuItem plotNadir;
 
-    private JMenu GRIBnWindDisplayMenu;
+    private final JMenu GRIBnWindDisplayMenu;
 
-    private JMenuItem gribDetails;
+    private final JMenuItem gribDetails;
     //  private JMenuItem spotHere;
-    private JRadioButtonMenuItem smallDot;
-    private JRadioButtonMenuItem heavyDot;
-    private JRadioButtonMenuItem background;
-    private JCheckBoxMenuItem displayWindSpeedValueMenuItem;
-    private JCheckBoxMenuItem useThickWindMenuItem;
+    private final JRadioButtonMenuItem smallDot;
+    private final JRadioButtonMenuItem heavyDot;
+    private final JRadioButtonMenuItem background;
+    private final JCheckBoxMenuItem displayWindSpeedValueMenuItem;
+    private final JCheckBoxMenuItem useThickWindMenuItem;
 
-    private JMenuItem windBaseColor;
-    private JCheckBoxMenuItem gribTransparency;
-    private JCheckBoxMenuItem colorRangeForWindSpeed;
-    private JCheckBoxMenuItem gribSlicing;
+    private final JMenuItem windBaseColor;
+    private final JCheckBoxMenuItem gribTransparency;
+    private final JCheckBoxMenuItem colorRangeForWindSpeed;
+    private final JCheckBoxMenuItem gribSlicing;
 
-    private JMenu chartMenu;
-    private JRadioButtonMenuItem tooltip;
-    private JRadioButtonMenuItem notooltip;
-    private JRadioButtonMenuItem tooltipwin;
-    private JMenuItem chartColor;
-    private JMenuItem gridColor;
-    private JMenuItem chartBgColor;
-    private JMenuItem removeLastDrawing;
-    private JMenuItem chooseDrawingColor;
+    private final JMenu chartMenu;
+    private final JRadioButtonMenuItem tooltip;
+    private final JRadioButtonMenuItem notooltip;
+    private final JRadioButtonMenuItem tooltipwin;
+    private final JMenuItem chartColor;
+    private final JMenuItem gridColor;
+    private final JMenuItem chartBgColor;
+    private final JMenuItem removeLastDrawing;
+    private final JMenuItem chooseDrawingColor;
 
-    private JCheckBoxMenuItem showChart;
-    private JCheckBoxMenuItem showPlaces;
-    private JCheckBoxMenuItem showSailMail;
-    private JCheckBoxMenuItem showGrid;
-    private JCheckBoxMenuItem clickScroll;
+    private final JCheckBoxMenuItem showChart;
+    private final JCheckBoxMenuItem showPlaces;
+    private final JCheckBoxMenuItem showSailMail;
+    private final JCheckBoxMenuItem showGrid;
+    private final JCheckBoxMenuItem clickScroll;
 
-    private JMenu routingMenu;
-    private JCheckBoxMenuItem showIsochrons;
-    private JCheckBoxMenuItem showBestRoute;
-    private JCheckBoxMenuItem showRoutingLabels;
-    private JMenuItem interruptRouting;
-    private JMenuItem eraseRoutingBoat;
-    private JMenuItem erasePositionBoat;
-    private JMenuItem removeRouting;
+    private final JMenu routingMenu;
+    private final JCheckBoxMenuItem showIsochrons;
+    private final JCheckBoxMenuItem showBestRoute;
+    private final JCheckBoxMenuItem showRoutingLabels;
+    private final JMenuItem interruptRouting;
+    private final JMenuItem eraseRoutingBoat;
+    private final JMenuItem erasePositionBoat;
+    private final JMenuItem removeRouting;
 
-    private JMenuItem eraseFlags;
-    private JCheckBoxMenuItem insertRoutingWayPointsMenuItem;
-    private JMenuItem editRoutingWayPoints;
+    private final JMenuItem eraseFlags;
+    private final JCheckBoxMenuItem insertRoutingWayPointsMenuItem;
+    private final JMenuItem editRoutingWayPoints;
 
-    private JMenu userExitMenu;
+    private final JMenu userExitMenu;
 
-    private ButtonGroup group = new ButtonGroup();
-    private ButtonGroup group2 = new ButtonGroup();
+    private final ButtonGroup group = new ButtonGroup();
+    private final ButtonGroup group2 = new ButtonGroup();
 
     private final String SHOW_PRINTABLE_PAGE_SIZE = WWGnlUtilities.buildMessage("show-printable-page-size");
 
@@ -111,9 +110,9 @@ public class CommandPanelPopup
     private final String FAX_WH_RATIO = WWGnlUtilities.buildMessage("set-fax-ratio");
     private final String REMOVE_GRIB = WWGnlUtilities.buildMessage("remove-grib");
 
-    private final String VIEW_GOOGLE = WWGnlUtilities.buildMessage("view-google");
-    private final String GOOGLE_MAP = WWGnlUtilities.buildMessage("view-google-map");
-    private final String GOOGLE_EARTH = WWGnlUtilities.buildMessage("view-google-earth");
+//    private final String VIEW_GOOGLE = WWGnlUtilities.buildMessage("view-google");
+//    private final String GOOGLE_MAP = WWGnlUtilities.buildMessage("view-google-map");
+//    private final String GOOGLE_EARTH = WWGnlUtilities.buildMessage("view-google-earth");
 
     private final String PLOT_NADIR = WWGnlUtilities.buildMessage("plot-nadir");
 
@@ -192,22 +191,22 @@ public class CommandPanelPopup
         setupComposite.addActionListener(this);
         setupComposite.setBackground(Color.white);
 
-        menuGoogle = new JMenu(VIEW_GOOGLE);
-        compositeMenu.add(menuGoogle);
-        menuGoogle.setBackground(Color.white);
-        menuGoogle.setIcon(new ImageIcon(this.getClass().getResource("google.png")));
+//        menuGoogle = new JMenu(VIEW_GOOGLE);
+//        compositeMenu.add(menuGoogle);
+//        menuGoogle.setBackground(Color.white);
+//        menuGoogle.setIcon(new ImageIcon(this.getClass().getResource("google.png")));
 
-        menuGoogleMap = new JMenuItem(GOOGLE_MAP);
-        menuGoogle.add(menuGoogleMap);
-        menuGoogleMap.addActionListener(this);
-        menuGoogleMap.setBackground(Color.white);
-        menuGoogleMap.setIcon(new ImageIcon(this.getClass().getResource("google.png")));
+//        menuGoogleMap = new JMenuItem(GOOGLE_MAP);
+//        menuGoogle.add(menuGoogleMap);
+//        menuGoogleMap.addActionListener(this);
+//        menuGoogleMap.setBackground(Color.white);
+//        menuGoogleMap.setIcon(new ImageIcon(this.getClass().getResource("google.png")));
 
-        menuGoogleEarth = new JMenuItem(GOOGLE_EARTH);
-        menuGoogle.add(menuGoogleEarth);
-        menuGoogleEarth.addActionListener(this);
-        menuGoogleEarth.setBackground(Color.white);
-        menuGoogleEarth.setIcon(new ImageIcon(this.getClass().getResource("ge.png")));
+//        menuGoogleEarth = new JMenuItem(GOOGLE_EARTH);
+//        menuGoogle.add(menuGoogleEarth);
+//        menuGoogleEarth.addActionListener(this);
+//        menuGoogleEarth.setBackground(Color.white);
+//        menuGoogleEarth.setIcon(new ImageIcon(this.getClass().getResource("ge.png")));
 
         removeFax = new JMenuItem(REMOVE_FAX);
         removeFax.setIcon(new ImageIcon(this.getClass().getResource("remove_fax.png")));
@@ -270,13 +269,13 @@ public class CommandPanelPopup
         gribTransparency = new JCheckBoxMenuItem(TRANSPARENT_GRIB);
         GRIBnWindDisplayMenu.add(gribTransparency);
         gribTransparency.addActionListener(this);
-        gribTransparency.setSelected(WWContext.getInstance().getUseGRIBWindSpeedTransparency().booleanValue());
+        gribTransparency.setSelected(WWContext.getInstance().getUseGRIBWindSpeedTransparency());
         gribTransparency.setBackground(Color.white);
 
         colorRangeForWindSpeed = new JCheckBoxMenuItem(COLOR_RANGE);
         GRIBnWindDisplayMenu.add(colorRangeForWindSpeed);
         colorRangeForWindSpeed.addActionListener(this);
-        colorRangeForWindSpeed.setSelected(WWContext.getInstance().getUseColorRangeForWindSpeed().booleanValue());
+        colorRangeForWindSpeed.setSelected(WWContext.getInstance().getUseColorRangeForWindSpeed());
         colorRangeForWindSpeed.setBackground(Color.white);
 
         displayWindSpeedValueMenuItem = new JCheckBoxMenuItem(DISPLAYWINDSPEED);
@@ -308,8 +307,9 @@ public class CommandPanelPopup
         chooseDrawingColor.setBackground(Color.white);
 
         removeLastDrawing = new JMenuItem(REMOVE_LAST_DRAWING);
-        if (ccp.getChartPanel().getHandDrawing() != null && ccp.getChartPanel().getHandDrawing().size() > 0)
+        if (ccp.getChartPanel().getHandDrawing() != null && ccp.getChartPanel().getHandDrawing().size() > 0) {
             chartMenu.add(removeLastDrawing);
+        }
         removeLastDrawing.addActionListener(this);
         removeLastDrawing.setBackground(Color.white);
 
@@ -334,10 +334,7 @@ public class CommandPanelPopup
         heavyDot.setSelected(parent.drawHeavyDot);
         background.setSelected(parent.drawWindColorBackground);
 
-        if (parent.thereIsFax2Display())
-            removeFax.setEnabled(true);
-        else
-            removeFax.setEnabled(false);
+        removeFax.setEnabled(parent.thereIsFax2Display());
 
         if (parent.thereIsGRIB2Display()) {
             removeGRIB.setEnabled(true);
@@ -517,8 +514,9 @@ public class CommandPanelPopup
         if (userExit != null) {
             try {
                 NodeList nl = userExit.selectNodes("/ww-user-exit/*");
-                if (nl != null && nl.getLength() > 0)
-                    userExitList = new ArrayList<UserExitAction>(1);
+                if (nl != null && nl.getLength() > 0) {
+                    userExitList = new ArrayList<>(1);
+                }
                 buildUserExitMenus(nl, userExitMenu);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Creating UserExits menu:" + ex.toString(), "UserExit Menu", JOptionPane.ERROR_MESSAGE);
@@ -560,11 +558,12 @@ public class CommandPanelPopup
             int nbf = (parent.getFaxes() != null ? parent.getFaxes().length : 0);
             if (nbf > 0) {
                 String mess = WWGnlUtilities.buildMessage("really-remove") + " ";
-                if (nbf == 1)
+                if (nbf == 1) {
                     mess += WWGnlUtilities.buildMessage("this-fax");
-                else
+                } else {
                     mess += WWGnlUtilities.buildMessage("those-faxes", new String[]
                             {Integer.toString(nbf)});
+                }
                 int resp =
                         JOptionPane.showConfirmDialog(parent, mess, WWGnlUtilities.buildMessage("remove-faxes"), JOptionPane.OK_CANCEL_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
@@ -574,12 +573,12 @@ public class CommandPanelPopup
                 }
             }
         }
-        if (event.getActionCommand().equals(GOOGLE_MAP)) {
-            WWContext.getInstance().fireGoogleMapRequested();
-        }
-        if (event.getActionCommand().equals(GOOGLE_EARTH)) {
-            WWContext.getInstance().fireGoogleEarthRequested();
-        }
+//        if (event.getActionCommand().equals(GOOGLE_MAP)) {
+//            WWContext.getInstance().fireGoogleMapRequested();
+//        }
+//        if (event.getActionCommand().equals(GOOGLE_EARTH)) {
+//            WWContext.getInstance().fireGoogleEarthRequested();
+//        }
         if (event.getActionCommand().equals(FAX_WH_RATIO)) {
             WHRatioPanel whrp = new WHRatioPanel();
             whrp.setRatio(parent.whRatio);
@@ -602,10 +601,11 @@ public class CommandPanelPopup
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(GRIB_DETAILS)) {
             String mess = "Contains " + parent.getGribData().length + " frame(s)";
-            if (WWContext.getInstance().getGribFile() != null)
+            if (WWContext.getInstance().getGribFile() != null) {
                 GribHelper.displayGRIBDetails(WWContext.getInstance().getGribFile(), mess);
-            else
+            } else {
                 System.out.println("No GribFile...");
+            }
         } else if (event.getActionCommand().equals(SMALL_DOT)) {
             parent.drawHeavyDot = false;
             parent.drawWindColorBackground = false;
@@ -623,7 +623,7 @@ public class CommandPanelPopup
             Color newColor = JColorChooser.showDialog(this, WWGnlUtilities.buildMessage("change-wind-base"), orig);
             if (newColor != null) {
                 CommandPanel.initialGribWindBaseColor = newColor;
-//      parent.chartPanel.repaint();
+                // parent.chartPanel.repaint();
             }
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(DISPLAYWINDSPEED)) {
@@ -636,27 +636,30 @@ public class CommandPanelPopup
             parent.setEnableGRIBSlice(!parent.isEnableGRIBSlice());
         } else if (event.getActionCommand().equals(TRANSPARENT_GRIB)) {
             Boolean bool = WWContext.getInstance().getUseGRIBWindSpeedTransparency();
-            WWContext.getInstance().setUseGRIBWindSpeedTransparency(Boolean.valueOf(!bool.booleanValue()));
+            WWContext.getInstance().setUseGRIBWindSpeedTransparency(!bool);
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(COLOR_RANGE)) {
             Boolean bool = WWContext.getInstance().getUseColorRangeForWindSpeed();
-            WWContext.getInstance().setUseColorRangeForWindSpeed(Boolean.valueOf(!bool.booleanValue()));
+            WWContext.getInstance().setUseColorRangeForWindSpeed(!bool);
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(TOOLTIP)) {
             parent.chartPanel.setPositionToolTipEnabled(!notooltip.isSelected());
             parent.setDisplayAltTooltip(tooltipwin.isSelected());
-            if (tooltip.isSelected())
+            if (tooltip.isSelected()) {
                 System.setProperty("tooltip.option", "on-chart");
+            }
         } else if (event.getActionCommand().equals(NO_TOOLTIP)) {
             parent.chartPanel.setPositionToolTipEnabled(!notooltip.isSelected());
             parent.setDisplayAltTooltip(!notooltip.isSelected());
-            if (notooltip.isSelected())
+            if (notooltip.isSelected()) {
                 System.setProperty("tooltip.option", "none");
+            }
         } else if (event.getActionCommand().equals(TOOLTIP_WINDOW)) {
             parent.chartPanel.setPositionToolTipEnabled(!notooltip.isSelected());
             parent.setDisplayAltTooltip(tooltipwin.isSelected());
-            if (tooltipwin.isSelected())
+            if (tooltipwin.isSelected()) {
                 System.setProperty("tooltip.option", "tt-window");
+            }
         } else if (event.getActionCommand().equals(CHART_COLOR)) {
             Color orig = parent.chartPanel.getChartColor();
             Color newColor = JColorChooser.showDialog(this, WWGnlUtilities.buildMessage("set-chart-color"), orig);
@@ -689,8 +692,9 @@ public class CommandPanelPopup
             }
         } else if (event.getActionCommand().equals(SHOW_CHART)) {
             parent.setDrawChart(showChart.isSelected());
-            if (parent.compositeCheckBox != null && parent.compositeCheckBox.length >= 2)
+            if (parent.compositeCheckBox != null && parent.compositeCheckBox.length >= 2) {
                 parent.compositeCheckBox[parent.compositeCheckBox.length - 2].setSelected(showChart.isSelected());
+            }
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(SHOW_PLACES)) {
             parent.setShowPlaces(showPlaces.isSelected());
@@ -700,8 +704,9 @@ public class CommandPanelPopup
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(SHOW_GRID)) {
             parent.chartPanel.setWithGrid(showGrid.isSelected());
-            if (parent.compositeCheckBox != null && parent.compositeCheckBox.length >= 2)
+            if (parent.compositeCheckBox != null && parent.compositeCheckBox.length >= 2) {
                 parent.compositeCheckBox[parent.compositeCheckBox.length - 1].setSelected(showGrid.isSelected());
+            }
             parent.chartPanel.repaint();
         } else if (event.getActionCommand().equals(CLICK_SCROLL)) {
             parent.chartPanel.setMouseEdgeProximityDetectionEnabled(clickScroll.isSelected());
@@ -750,9 +755,8 @@ public class CommandPanelPopup
             parent.insertRoutingWP = insertRoutingWayPointsMenuItem.isSelected();
         } else if (event.getActionCommand().equals(EDIT_ROUTING_WP)) {
             // Reorder, delete
-            List<GeoPoint> aliwp = new ArrayList<GeoPoint>(parent.intermediateRoutingWP.size() + 1);
-            for (GeoPoint gp : parent.intermediateRoutingWP)
-                aliwp.add(gp);
+            List<GeoPoint> aliwp = new ArrayList<>(parent.intermediateRoutingWP.size() + 1);
+            aliwp.addAll(parent.intermediateRoutingWP);
             aliwp.add(parent.to);
             WayPointTablePanel wptp = new WayPointTablePanel(aliwp);
             wptp.setTopLabel(WWGnlUtilities.buildMessage("from-2", new String[]{parent.from.toString()}));
@@ -760,13 +764,15 @@ public class CommandPanelPopup
             if (resp == JOptionPane.OK_OPTION) {
                 aliwp = wptp.getData();
                 parent.to = aliwp.get(aliwp.size() - 1); // Destination
-                parent.intermediateRoutingWP = new ArrayList<GeoPoint>(aliwp.size() - 1);
-                for (int i = 0; i < aliwp.size() - 1; i++)
+                parent.intermediateRoutingWP = new ArrayList<>(aliwp.size() - 1);
+                for (int i = 0; i < aliwp.size() - 1; i++) {
                     parent.intermediateRoutingWP.add(aliwp.get(i));
+                }
                 WWContext.getInstance().fireHighlightWayPoint(null); // Will do the repaint
 //      parent.chartPanel.repaint();
-            } else
+            } else {
                 WWContext.getInstance().fireHighlightWayPoint(null);
+            }
         } else if (isUserExitAction(event.getActionCommand())) {
             /* boolean ok = */
             manageUserExitAction(event.getActionCommand());
@@ -787,43 +793,40 @@ public class CommandPanelPopup
         _x = x;
         _y = y;
 
-        if (parent.getProjection() == ChartPanelInterface.GLOBE_VIEW ||
-                parent.getProjection() == ChartPanelInterface.SATELLITE_VIEW)
-            plotNadir.setEnabled(true);
-        else
-            plotNadir.setEnabled(false);
+        plotNadir.setEnabled(parent.getProjection() == ChartPanelInterface.GLOBE_VIEW ||
+                parent.getProjection() == ChartPanelInterface.SATELLITE_VIEW);
 
         if (parent.thereIsFax2Display() || parent.thereIsGRIB2Display()) {
             removeComposite.setEnabled(true);
-            menuGoogle.setEnabled(true);
-//    setupComposite.setEnabled(true);
+//            menuGoogle.setEnabled(true);
+            // setupComposite.setEnabled(true);
         } else {
             removeComposite.setEnabled(false);
-            menuGoogle.setEnabled(false);
-//    setupComposite.setEnabled(false);
+//            menuGoogle.setEnabled(false);
+            // setupComposite.setEnabled(false);
         }
 
         if (parent.thereIsFax2Display()) {
             removeFax.setEnabled(true);
-//    setupComposite.setEnabled(true);
+            // setupComposite.setEnabled(true);
             setFaxWHRatio.setEnabled(true);
         } else {
             removeFax.setEnabled(false);
-//    setupComposite.setEnabled(false);
+            // setupComposite.setEnabled(false);
             setFaxWHRatio.setEnabled(false);
         }
 
         if (parent.thereIsGRIB2Display()) {
             removeGRIB.setEnabled(true);
             gribDetails.setEnabled(true);
-//      spotHere.setEnabled(true);
+            // spotHere.setEnabled(true);
             smallDot.setEnabled(true);
             heavyDot.setEnabled(true);
             background.setEnabled(true);
         } else {
             removeGRIB.setEnabled(false);
             gribDetails.setEnabled(false);
-//      spotHere.setEnabled(false);
+            // spotHere.setEnabled(false);
             smallDot.setEnabled(false);
             heavyDot.setEnabled(false);
             background.setEnabled(false);
@@ -895,7 +898,7 @@ public class CommandPanelPopup
         boolean b = false;
         try {
             Class taskClass = Class.forName(uea.getAction());
-            Object taskObject = taskClass.newInstance();
+            Object taskObject = taskClass.getDeclaredConstructor().newInstance();
             if (taskObject instanceof UserExitInterface) {
                 try {
                     UserExitInterface uei = (UserExitInterface) taskObject;
@@ -907,6 +910,8 @@ public class CommandPanelPopup
                 // Message
                 JOptionPane.showMessageDialog(parent, uea.getAction() + " must implement UserExitInterface.", "User Exit", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (NoSuchMethodException | InvocationTargetException ex) {
+            JOptionPane.showMessageDialog(parent, ex.toString(), "User Exit Action", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(parent, ex.toString(), "User Exit Action", JOptionPane.ERROR_MESSAGE);
         } catch (InstantiationException ie) {
@@ -914,7 +919,6 @@ public class CommandPanelPopup
         } catch (IllegalAccessException iae) {
             JOptionPane.showMessageDialog(parent, iae.toString(), "User Exit Action", JOptionPane.ERROR_MESSAGE);
         }
-
         return b;
     }
 
@@ -932,12 +936,11 @@ public class CommandPanelPopup
         } else {
             try {
                 Class taskClass = Class.forName(task.getAction());
-                final Object taskObject = taskClass.newInstance();
+                final Object taskObject = taskClass.getDeclaredConstructor().newInstance();
                 if (taskObject instanceof UserExitInterface) {
                     if (task.isSync()) {
                         executeUserExit((UserExitInterface) taskObject, task.isAck());
-                    } else // Thread
-                    {
+                    } else { // Thread
                         final UserExitAction t = task;
                         Thread ueThread = new Thread("user-exit-thread") {
                             public void run() {
@@ -950,6 +953,8 @@ public class CommandPanelPopup
                     // Message
                     JOptionPane.showMessageDialog(parent, task.getAction() + " must implement UserExitInterface.", "User Exit", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (NoSuchMethodException | InvocationTargetException ex) {
+                JOptionPane.showMessageDialog(parent, ex.toString(), "User Exit Action", JOptionPane.ERROR_MESSAGE);
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(parent, ex.toString(), "User Exit Action", JOptionPane.ERROR_MESSAGE);
             } catch (InstantiationException ie) {
@@ -968,8 +973,9 @@ public class CommandPanelPopup
                 List<String> feedback = uei.getFeedback();
                 String message = "";
                 if (feedback != null) {
-                    for (String s : feedback)
+                    for (String s : feedback) {
                         message += ((message.length() == 0 ? "" : "\n") + s);
+                    }
                 }
                 if (execOk) {
                     message = "User Exit Execution OK:\n" + message;

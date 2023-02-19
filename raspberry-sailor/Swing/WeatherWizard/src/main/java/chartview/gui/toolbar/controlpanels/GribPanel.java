@@ -8,54 +8,51 @@ import chartview.gui.util.param.ParamPanel;
 import chartview.util.WWGnlUtilities;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.TimeZone;
 
 
 public class GribPanel
         extends JPanel {
-    private GribPanel instance = this;
+    private final GribPanel instance = this;
 
-    private JButton forwardButton = new JButton();
-    private JButton backwardButton = new JButton();
-    private JButton animateButton = new JButton();
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JLabel gribInfoLineTwo = new JLabel();
-    private JLabel gribInfoLineThree = new JLabel();
-    private JLabel gribInfoLineFour = new JLabel();
-    private JPanel topPanel = new JPanel();
+    private final JButton forwardButton = new JButton();
+    private final JButton backwardButton = new JButton();
+    private final JButton animateButton = new JButton();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JLabel gribInfoLineTwo = new JLabel();
+    private final JLabel gribInfoLineThree = new JLabel();
+    private final JLabel gribInfoLineFour = new JLabel();
+    private final JPanel topPanel = new JPanel();
 
-    private JPanel gribSmoothingPanel = new JPanel();
-    private JTextField smoothValue = new JTextField("1");
-    private JButton smoothButton = new JButton();
-    private JLabel smoothLabel = new JLabel(WWGnlUtilities.buildMessage("grib-smooth"));
-    private JPanel dataOptionsPanel = new JPanel();
+    private final JPanel gribSmoothingPanel = new JPanel();
+    private final JTextField smoothValue = new JTextField("1");
+    private final JButton smoothButton = new JButton();
+    private final JLabel smoothLabel = new JLabel(WWGnlUtilities.buildMessage("grib-smooth"));
+    private final JPanel dataOptionsPanel = new JPanel();
 
-    private JLabel windLabel = new JLabel("WIND");
-    private JLabel prmslLabel = new JLabel("PRMSL");
-    private JLabel hgtLabel = new JLabel("HGT");
-    private JLabel tmpLabel = new JLabel("AIRTMP");
-    private JLabel waveLabel = new JLabel("WAVES");
-    private JLabel rainLabel = new JLabel("RAIN");
-    private JButton googleButton = new JButton();
-    private JSlider gribSlider = new JSlider();
+    private final JLabel windLabel = new JLabel("WIND");
+    private final JLabel prmslLabel = new JLabel("PRMSL");
+    private final JLabel hgtLabel = new JLabel("HGT");
+    private final JLabel tmpLabel = new JLabel("AIRTMP");
+    private final JLabel waveLabel = new JLabel("WAVES");
+    private final JLabel rainLabel = new JLabel("RAIN");
+    private final JButton googleButton = new JButton();
+    private final JSlider gribSlider = new JSlider();
 
     private int sliderValue = 1;
-    private JLabel googleLabel = new JLabel();
-    private GridBagLayout gridBagLayout2 = new GridBagLayout();
-    private JLabel smoothTimeLabel = new JLabel(WWGnlUtilities.buildMessage("grib-time-smooth"));
-    private JTextField smoothTimeValue = new JTextField();
-    private JButton smoothTimeButton = new JButton();
+    private final JLabel googleLabel = new JLabel();
+    private final GridBagLayout gridBagLayout2 = new GridBagLayout();
+    private final JLabel smoothTimeLabel = new JLabel(WWGnlUtilities.buildMessage("grib-time-smooth"));
+    private final JTextField smoothTimeValue = new JTextField();
+    private final JButton smoothTimeButton = new JButton();
 
-    private JCheckBox withLabelOnGribCheckBox = new JCheckBox(WWContext.getInstance().getOriginalDefaultTimeZone().getID());
-    private GridBagLayout gridBagLayout3 = new GridBagLayout();
-    private JSlider replaySpeedSlider = new JSlider();
-    private JLabel gribCoeffLabel = new JLabel(); // "Etc/UTC"
-//private JLabel timeZoneLabel = new JLabel("Etc/UTC");
+    private final JCheckBox withLabelOnGribCheckBox = new JCheckBox(WWContext.getInstance().getOriginalDefaultTimeZone().getID());
+    private final GridBagLayout gridBagLayout3 = new GridBagLayout();
+    private final JSlider replaySpeedSlider = new JSlider();
+    private final JLabel gribCoeffLabel = new JLabel(); // "Etc/UTC"
+    // private JLabel timeZoneLabel = new JLabel("Etc/UTC");
 
     public GribPanel() {
         try {
@@ -66,8 +63,7 @@ public class GribPanel
         }
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         WWContext.getInstance().addApplicationListener(new ApplicationEventListener() {
             public String toString() {
                 return "from GribPanel.";
@@ -119,20 +115,20 @@ public class GribPanel
 
             public void updateGribSmoothingValue(int i) {
                 CompositeTabbedPane ctp = WWGnlUtilities.findFirstParentOfType(instance, CompositeTabbedPane.class);
-//        if (ctp != null && ctp.getSelectedIndex() == ((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedIndex())
-//        if (ctp != null && ctp.equals(((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedComponent()))
+                // if (ctp != null && ctp.getSelectedIndex() == ((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedIndex())
+                // if (ctp != null && ctp.equals(((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedComponent()))
                 if (ctp != null && ctp.isVisible()) {
-//          System.out.println("Setting smooth value from " + smoothValue.getText() + " to " + i);
+                    // System.out.println("Setting smooth value from " + smoothValue.getText() + " to " + i);
                     smoothValue.setText(Integer.toString(i));
                 }
             }
 
             public void updateGribTimeSmoothingValue(int i) {
                 CompositeTabbedPane ctp = WWGnlUtilities.findFirstParentOfType(instance, CompositeTabbedPane.class); // TODO Apply this to othe methods of the listener
-//        if (ctp != null && ctp.getSelectedIndex() == ((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedIndex())
-//        if (ctp != null && ctp.equals(((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedComponent()))
+                // if (ctp != null && ctp.getSelectedIndex() == ((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedIndex())
+                // if (ctp != null && ctp.equals(((AdjustFrame)WWContext.getInstance().getMasterTopFrame()).getMasterTabPane().getSelectedComponent()))
                 if (ctp != null && ctp.isVisible()) {
-//          System.out.println("Setting time smooth value from " + smoothTimeValue.getText() + " to " + i);
+                    // System.out.println("Setting time smooth value from " + smoothTimeValue.getText() + " to " + i);
                     smoothTimeValue.setText(Integer.toString(i));
                 }
             }
@@ -192,22 +188,14 @@ public class GribPanel
         forwardButton.setMaximumSize(new Dimension(24, 24));
         forwardButton.setMinimumSize(new Dimension(24, 24));
         forwardButton.setMargin(new Insets(1, 1, 1, 1));
-        forwardButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                forwardButton_actionPerformed(e);
-            }
-        });
+        forwardButton.addActionListener(this::forwardButton_actionPerformed);
         backwardButton.setIcon(new ImageIcon(this.getClass().getResource("img/panleft.gif")));
         backwardButton.setPreferredSize(new Dimension(24, 24));
         backwardButton.setBorderPainted(false);
         backwardButton.setMaximumSize(new Dimension(24, 24));
         backwardButton.setMinimumSize(new Dimension(24, 24));
         backwardButton.setMargin(new Insets(1, 1, 1, 1));
-        backwardButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                backwardButton_actionPerformed(e);
-            }
-        });
+        backwardButton.addActionListener(this::backwardButton_actionPerformed);
         animateButton.setIcon(new ImageIcon(this.getClass().getResource("img/refresh.png")));
         animateButton.setPreferredSize(new Dimension(24, 24));
         animateButton.setBorderPainted(false);
@@ -215,11 +203,7 @@ public class GribPanel
         animateButton.setMaximumSize(new Dimension(24, 24));
         animateButton.setMinimumSize(new Dimension(24, 24));
         animateButton.setMargin(new Insets(1, 1, 1, 1));
-        animateButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                animateButton_actionPerformed(e);
-            }
-        });
+        animateButton.addActionListener(this::animateButton_actionPerformed);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backwardButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(5, 0, 5, 0), 0, 0));
@@ -233,35 +217,30 @@ public class GribPanel
         buttonPanel.add(withLabelOnGribCheckBox, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(5, 0, 5, 0), 0, 0));
         withLabelOnGribCheckBox.setEnabled(false);
-        withLabelOnGribCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        withLabelOnGribCheckBox.addActionListener(e -> {
 //        timeZoneLabel.setEnabled(withLabelOnGribCheckBox.isSelected());
-                WWContext.getInstance().fireDisplayGRIBDateLabel(withLabelOnGribCheckBox.isSelected());
-                if (withLabelOnGribCheckBox.isSelected()) {
-                    TimeZoneTable tzt = new TimeZoneTable(TimeZone.getAvailableIDs());
-                    int resp = JOptionPane.showConfirmDialog(instance, tzt, "Time Zones", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                    if (resp == JOptionPane.OK_OPTION) {
-                        String s = tzt.getSelectedTimeZoneData();
-//            System.out.println("Was [" + withLabelOnGribCheckBox.getText() + "], now [" + s +"]");
-                        if (s != null)
-                            withLabelOnGribCheckBox.setText(s);
+            WWContext.getInstance().fireDisplayGRIBDateLabel(withLabelOnGribCheckBox.isSelected());
+            if (withLabelOnGribCheckBox.isSelected()) {
+                TimeZoneTable tzt = new TimeZoneTable(TimeZone.getAvailableIDs());
+                int resp = JOptionPane.showConfirmDialog(instance, tzt, "Time Zones", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (resp == JOptionPane.OK_OPTION) {
+                    String s = tzt.getSelectedTimeZoneData();
+                    // System.out.println("Was [" + withLabelOnGribCheckBox.getText() + "], now [" + s +"]");
+                    if (s != null) {
+                        withLabelOnGribCheckBox.setText(s);
                     }
-                    WWContext.getInstance().fireTimeZoneForLabel(withLabelOnGribCheckBox.getText());
                 }
+                WWContext.getInstance().fireTimeZoneForLabel(withLabelOnGribCheckBox.getText());
             }
         });
-//    timeZoneLabel.addMouseListener(new MouseAdapter()
-//       {
+//    timeZoneLabel.addMouseListener(new MouseAdapter() {
 //        @Override
-//        public void mouseClicked(MouseEvent e)
-//        {
+//        public void mouseClicked(MouseEvent e) {
 //          super.mouseClicked(e);
-//          if (timeZoneLabel.isEnabled())
-//          {
+//          if (timeZoneLabel.isEnabled()) {
 //            TimeZoneTable tzt = new TimeZoneTable(TimeZone.getAvailableIDs());
 //            int resp = JOptionPane.showConfirmDialog(instance, tzt, "Time Zones", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-//            if (resp == JOptionPane.OK_OPTION)
-//            {
+//            if (resp == JOptionPane.OK_OPTION) {
 //              String s = tzt.getSelectedTimeZoneData();
 //              System.out.println("Was [" + timeZoneLabel.getText() + "], now [" + s +"]");
 //              timeZoneLabel.setText(s);
@@ -275,27 +254,26 @@ public class GribPanel
 //    buttonPanel.add(timeZoneLabel, null);
 
         replaySpeedSlider.setToolTipText("Animation replay speed");
-        replaySpeedSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                JSlider slider = (JSlider) evt.getSource();
+        replaySpeedSlider.addChangeListener(evt -> {
+            JSlider slider = (JSlider) evt.getSource();
 
-                if (!slider.getValueIsAdjusting()) {
-                    int sv = slider.getValue();
-                    String tootltipMess = "Normal Speed";
-                    if (sv < 10)
-                        tootltipMess = "Veeeeeery slow";
-                    else if (sv < 40)
-                        tootltipMess = "Slow";
-                    else if (sv < 60)
-                        tootltipMess = "Normal Speed";
-                    else if (sv < 80)
-                        tootltipMess = "Fast";
-                    else
-                        tootltipMess = "As fast as possible";
-                    slider.setToolTipText(tootltipMess);
-                    // Broadcast replay delay (not speed).
-                    WWContext.getInstance().fireSetReplayDelay(100 - sv);
+            if (!slider.getValueIsAdjusting()) {
+                int sv = slider.getValue();
+                String tootltipMess = "Normal Speed";
+                if (sv < 10) {
+                    tootltipMess = "Veeeeeery slow";
+                } else if (sv < 40) {
+                    tootltipMess = "Slow";
+                } else if (sv < 60) {
+                    tootltipMess = "Normal Speed";
+                } else if (sv < 80) {
+                    tootltipMess = "Fast";
+                } else {
+                    tootltipMess = "As fast as possible";
                 }
+                slider.setToolTipText(tootltipMess);
+                // Broadcast replay delay (not speed).
+                WWContext.getInstance().fireSetReplayDelay(100 - sv);
             }
         });
 
@@ -325,19 +303,17 @@ public class GribPanel
                 new Insets(0, 0, 0, 0), 0, 0));
         this.add(gribCoeffLabel, new GridBagConstraints(0, 9, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 0), 0, 0));
-        gribSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                JSlider slider = (JSlider) evt.getSource();
+        gribSlider.addChangeListener(evt -> {
+            JSlider slider = (JSlider) evt.getSource();
 
-                if (!slider.getValueIsAdjusting()) {
-                    int sv = slider.getValue();
-                    if (sv != sliderValue) {
-                        sliderValue = sv;
+            if (!slider.getValueIsAdjusting()) {
+                int sv = slider.getValue();
+                if (sv != sliderValue) {
+                    sliderValue = sv;
 //            System.out.println("Slider Value:" + sliderValue);
-                        updateSliderData();
-                    }
-                    slider.setToolTipText("Frame #" + Integer.toString(sv));
+                    updateSliderData();
                 }
+                slider.setToolTipText("Frame #" + Integer.toString(sv));
             }
         });
 
@@ -359,11 +335,7 @@ public class GribPanel
         googleButton.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
         googleButton.setActionCommand("googleMap");
         googleButton.setToolTipText(WWGnlUtilities.buildMessage("show-wind-in-google-map"));
-        googleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                googleButton_actionPerformed(e);
-            }
-        });
+        googleButton.addActionListener(this::googleButton_actionPerformed);
         googleButton.setEnabled(false);
         googleButton.setMaximumSize(new Dimension(24, 24));
         googleButton.setMinimumSize(new Dimension(24, 24));
@@ -389,11 +361,7 @@ public class GribPanel
         smoothTimeButton.setToolTipText(WWGnlUtilities.buildMessage("apply-time-smooth"));
         smoothTimeButton.setPreferredSize(new Dimension(30, 20));
         smoothTimeButton.setEnabled(false);
-        smoothTimeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                smoothTimeButton_actionPerformed(e);
-            }
-        });
+        smoothTimeButton.addActionListener(this::smoothTimeButton_actionPerformed);
         gribSmoothingPanel.setLayout(gridBagLayout2);
         gribSmoothingPanel.add(smoothLabel,
                 new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -413,11 +381,7 @@ public class GribPanel
         smoothButton.setText("...");
         smoothButton.setToolTipText(WWGnlUtilities.buildMessage("apply-smooth"));
         smoothButton.setPreferredSize(new Dimension(30, 20));
-        smoothButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                smoothButton_actionPerformed(e);
-            }
-        });
+        smoothButton.addActionListener(this::smoothButton_actionPerformed);
         gribSmoothingPanel.add(smoothButton,
                 new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                         GridBagConstraints.CENTER,
@@ -453,22 +417,22 @@ public class GribPanel
         animateButton.setEnabled(false);
         gribInfoLineTwo.setEnabled(false);
         gribInfoLineTwo.setPreferredSize(new Dimension(170, 14));
-        gribInfoLineTwo.setFont(new Font("Tahoma", 1, 9));
+        gribInfoLineTwo.setFont(new Font("Tahoma", Font.BOLD, 9));
         gribInfoLineTwo.setForeground(Color.blue);
         gribInfoLineThree.setEnabled(false);
         gribInfoLineThree.setPreferredSize(new Dimension(170, 14));
-        gribInfoLineThree.setFont(new Font("Tahoma", 0, 9));
+        gribInfoLineThree.setFont(new Font("Tahoma", Font.PLAIN, 9));
         gribInfoLineFour.setText("GRIB Info - 4");
         gribInfoLineFour.setEnabled(false);
         gribInfoLineFour.setPreferredSize(new Dimension(170, 14));
-        gribInfoLineFour.setFont(new Font("Tahoma", 0, 9));
+        gribInfoLineFour.setFont(new Font("Tahoma", Font.PLAIN, 9));
 
         topPanel.add(googleLabel, null);
         topPanel.add(googleButton, null);
     }
 
     public void setGRIBTWSCoeff(double d) {
-        gribCoeffLabel.setText("GRIB TWS Coeff:" + Double.toString(d));
+        gribCoeffLabel.setText("GRIB TWS Coeff:" + d);
     }
 
     private void updateSliderData() {
@@ -538,9 +502,10 @@ public class GribPanel
         setWaves(b5);
         setRain(b6);
 
-        double d = ((Double) ParamPanel.data[ParamData.GRIB_TWS_COEFF][ParamData.VALUE_INDEX]).doubleValue();
-        if (d != 1.0)
+        double d = (Double) ParamPanel.data[ParamData.GRIB_TWS_COEFF][ParamData.VALUE_INDEX];
+        if (d != 1.0) {
             setGRIBTWSCoeff(d);
+        }
     }
 
     private void smoothButton_actionPerformed(ActionEvent e) {

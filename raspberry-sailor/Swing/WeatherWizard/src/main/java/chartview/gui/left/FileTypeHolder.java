@@ -44,11 +44,11 @@ public class FileTypeHolder
             preDefFaxTree
     };
 
-    public final static int FAX_TREE = 0;
-    public final static int GRIB_TREE = 1;
-    public final static int COMPOSITE_TREE = 2;
-    public final static int PATTERN_TREE = 3;
-    public final static int PREDEF_FAX_TREE = 4;
+//    public final static int FAX_TREE = 0;
+//    public final static int GRIB_TREE = 1;
+//    public final static int COMPOSITE_TREE = 2;
+//    public final static int PATTERN_TREE = 3;
+//    public final static int PREDEF_FAX_TREE = 4;
 
     private final GridBagLayout gridBagLayout1 = new GridBagLayout();
 

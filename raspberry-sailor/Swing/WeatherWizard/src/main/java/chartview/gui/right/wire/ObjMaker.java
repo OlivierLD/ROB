@@ -44,10 +44,9 @@ public class ObjMaker {
         Hashtable<String, String> nsHash;
 
         OCSSSResolver() {
-            nsHash = new Hashtable<String, String>();
+            nsHash = new Hashtable<>();
         }
     }
-
 
     public ObjMaker() {
     }
@@ -64,7 +63,7 @@ public class ObjMaker {
     public static int generate(String fName, FileWriter destFile,
                                double addX, double addY, double addZ,
                                double affX, double affY, double affZ,
-                               int startOffset, boolean symetric) {
+                               int startOffset, boolean symmetric) {
         File sourceDir = null;
         File source = null;
         startFrom = startOffset;
@@ -136,8 +135,9 @@ public class ObjMaker {
                         if (childs != null) {
                             for (int j = 0; j < childs.getLength(); j++) {
                                 Node kid = childs.item(j);
-                                if (kid.getNodeType() == 1)
+                                if (kid.getNodeType() == 1) {
                                     z = Double.parseDouble(kid.getFirstChild().getNodeValue());
+                                }
                             }
 
                         }
@@ -146,11 +146,12 @@ public class ObjMaker {
                         nbElements++;
                     }
 
-                    for (int i = 0; i < nbElements - 1; i++)
+                    for (int i = 0; i < nbElements - 1; i++) {
                         fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                    if (nbElements > 0)
+                    }
+                    if (nbElements > 0) {
                         startFrom++;
+                    }
                 }
                 fw.write("# Deck\n");
                 nl = doc.selectNodes("/wf:data/wf:deck/wf:part", resolver);
@@ -160,8 +161,9 @@ public class ObjMaker {
                         NodeList pl =
                                 ((Element) nl.item(i)).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                         "plot");
-                        if (pl == null)
+                        if (pl == null) {
                             continue;
+                        }
                         for (int j = 0; j < pl.getLength(); j++) {
                             Node node = pl.item(j);
                             double x =
@@ -172,22 +174,21 @@ public class ObjMaker {
                                 for (int k = 0; k < childs.getLength(); k++) {
                                     Node kid = childs.item(k);
                                     if (kid.getNodeType() == 1) {
-                                        z =
-                                                Double.parseDouble(kid.getFirstChild().getNodeValue());
+                                        z = Double.parseDouble(kid.getFirstChild().getNodeValue());
                                         nbElements++;
                                     }
                                 }
 
                             }
-                            fw.write("v " + (x * affX + addX) + " " + addY + " " +
-                                    (z * affZ + addZ) + "\n");
+                            fw.write("v " + (x * affX + addX) + " " + addY + " " + (z * affZ + addZ) + "\n");
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                     }
 
                 }
@@ -212,23 +213,21 @@ public class ObjMaker {
                         }
                     }
 
-                    for (int i = 0; i < nbElements - 1; i++)
+                    for (int i = 0; i < nbElements - 1; i++) {
                         fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                    if (nbElements > 0)
+                    }
+                    if (nbElements > 0) {
                         startFrom++;
+                    }
                     fw.write("# Sheer Two\n");
                     nbElements = 0;
-                    for (int i = 0; i < nl.getLength() && symetric; i++) {
+                    for (int i = 0; i < nl.getLength() && symmetric; i++) {
                         Node node = nl.item(i);
                         if (node.getNodeType() == 1 && node.getNodeName() == "plot") {
-                            double x =
-                                    Double.parseDouble(((Element) node).getAttribute("x"));
-                            double y =
-                                    Double.parseDouble(((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double x = Double.parseDouble(((Element) node).getAttribute("x"));
+                            double y = Double.parseDouble(((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "y").item(0).getFirstChild().getNodeValue());
-                            double z =
-                                    Double.parseDouble(((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double z = Double.parseDouble(((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "z").item(0).getFirstChild().getNodeValue());
                             fw.write("v " + (x * affX + addX) + " " + (addY - y * affY) +
                                     " " + (z * affZ + addZ) + "\n");
@@ -236,11 +235,12 @@ public class ObjMaker {
                         }
                     }
 
-                    for (int i = 0; i < nbElements - 1; i++)
+                    for (int i = 0; i < nbElements - 1; i++) {
                         fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                    if (nbElements > 0)
+                    }
+                    if (nbElements > 0) {
                         startFrom++;
+                    }
                 }
                 nl = doc.selectNodes("/wf:data/wf:forms/wf:form", resolver);
                 nbElements = 0;
@@ -252,35 +252,40 @@ public class ObjMaker {
                         NodeList plots = node.getChildNodes();
                         nbElements = 0;
                         for (int j = 0; j < plots.getLength(); j++) {
-                            if (plots.item(j).getNodeType() != 1)
+                            if (plots.item(j).getNodeType() != 1) {
                                 continue;
+                            }
                             NodeList yz = plots.item(j).getChildNodes();
                             double y = Double.MIN_VALUE;
                             double z = Double.MIN_VALUE;
                             label0:
                             for (int k = 0; k < yz.getLength(); k++) {
-                                if (yz.item(k).getNodeType() != 1)
+                                if (yz.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList yzKids;
                                 if (yz.item(k).getNodeName().equals("y")) {
                                     yzKids = yz.item(k).getChildNodes();
                                     int l = 0;
                                     do {
-                                        if (l >= yzKids.getLength())
+                                        if (l >= yzKids.getLength()) {
                                             continue label0;
-                                        if (yzKids.item(l).getNodeType() == 3)
+                                        }
+                                        if (yzKids.item(l).getNodeType() == 3) {
                                             y = Double.parseDouble(yzKids.item(l).getNodeValue());
+                                        }
                                         l++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
-                                if (!yz.item(k).getNodeName().equals("z"))
+                                if (!yz.item(k).getNodeName().equals("z")) {
                                     continue;
+                                }
                                 yzKids = yz.item(k).getChildNodes();
-                                for (int l = 0; l < yzKids.getLength(); l++)
-                                    if (yzKids.item(l).getNodeType() == 3)
+                                for (int l = 0; l < yzKids.getLength(); l++) {
+                                    if (yzKids.item(l).getNodeType() == 3) {
                                         z = Double.parseDouble(yzKids.item(l).getNodeValue());
-
+                                    }
+                                }
                             }
 
                             if (y != Double.MIN_VALUE && z != Double.MIN_VALUE) {
@@ -290,40 +295,45 @@ public class ObjMaker {
                             }
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                         nbElements = 0;
-                        for (int j = 0; j < plots.getLength() && symetric; j++) {
+                        for (int j = 0; j < plots.getLength() && symmetric; j++) {
                             NodeList yz = plots.item(j).getChildNodes();
                             double y = Double.MIN_VALUE;
                             double z = Double.MIN_VALUE;
                             label1:
                             for (int k = 0; k < yz.getLength(); k++) {
-                                if (yz.item(k).getNodeType() != 1)
+                                if (yz.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList yzKids;
                                 if (yz.item(k).getNodeName().equals("y")) {
                                     yzKids = yz.item(k).getChildNodes();
                                     int l = 0;
                                     do {
-                                        if (l >= yzKids.getLength())
+                                        if (l >= yzKids.getLength()) {
                                             continue label1;
-                                        if (yzKids.item(l).getNodeType() == 3)
+                                        }
+                                        if (yzKids.item(l).getNodeType() == 3) {
                                             y = Double.parseDouble(yzKids.item(l).getNodeValue());
+                                        }
                                         l++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
-                                if (!yz.item(k).getNodeName().equals("z"))
+                                if (!yz.item(k).getNodeName().equals("z")) {
                                     continue;
+                                }
                                 yzKids = yz.item(k).getChildNodes();
-                                for (int l = 0; l < yzKids.getLength(); l++)
-                                    if (yzKids.item(l).getNodeType() == 3)
+                                for (int l = 0; l < yzKids.getLength(); l++) {
+                                    if (yzKids.item(l).getNodeType() == 3) {
                                         z = Double.parseDouble(yzKids.item(l).getNodeValue());
-
+                                    }
+                                }
                             }
 
                             if (y != Double.MIN_VALUE && z != Double.MIN_VALUE) {
@@ -333,11 +343,12 @@ public class ObjMaker {
                             }
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                     }
 
                 }
@@ -346,10 +357,10 @@ public class ObjMaker {
                 if (nl != null) {
                     for (int i = 0; i < nl.getLength(); i++) {
                         Node node = nl.item(i);
-                        if (node.getNodeType() != 1 || !node.getNodeName().equals("wl"))
+                        if (node.getNodeType() != 1 || !node.getNodeName().equals("wl")) {
                             continue;
-                        double z =
-                                Double.parseDouble(((Element) node).getAttribute("z"));
+                        }
+                        double z = Double.parseDouble(((Element) node).getAttribute("z"));
                         fw.write("# WaterLine " + (addZ + z) + "\n");
                         NodeList plots = node.getChildNodes();
                         nbElements = 0;
@@ -359,28 +370,32 @@ public class ObjMaker {
                             double y = Double.MIN_VALUE;
                             label2:
                             for (int k = 0; k < xy.getLength(); k++) {
-                                if (xy.item(k).getNodeType() != 1)
+                                if (xy.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList xyKids;
                                 if (xy.item(k).getNodeName().equals("x")) {
                                     xyKids = xy.item(k).getChildNodes();
                                     int l = 0;
                                     do {
-                                        if (l >= xyKids.getLength())
+                                        if (l >= xyKids.getLength()) {
                                             continue label2;
-                                        if (xyKids.item(l).getNodeType() == 3)
+                                        }
+                                        if (xyKids.item(l).getNodeType() == 3) {
                                             x = Double.parseDouble(xyKids.item(l).getNodeValue());
+                                        }
                                         l++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
-                                if (!xy.item(k).getNodeName().equals("y"))
+                                if (!xy.item(k).getNodeName().equals("y")) {
                                     continue;
+                                }
                                 xyKids = xy.item(k).getChildNodes();
-                                for (int l = 0; l < xyKids.getLength(); l++)
-                                    if (xyKids.item(l).getNodeType() == 3)
+                                for (int l = 0; l < xyKids.getLength(); l++) {
+                                    if (xyKids.item(l).getNodeType() == 3) {
                                         y = Double.parseDouble(xyKids.item(l).getNodeValue());
-
+                                    }
+                                }
                             }
 
                             if (x != Double.MIN_VALUE && y != Double.MIN_VALUE) {
@@ -390,40 +405,45 @@ public class ObjMaker {
                             }
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                         nbElements = 0;
-                        for (int j = 0; j < plots.getLength() && symetric; j++) {
+                        for (int j = 0; j < plots.getLength() && symmetric; j++) {
                             NodeList xy = plots.item(j).getChildNodes();
                             double x = Double.MIN_VALUE;
                             double y = Double.MIN_VALUE;
                             label3:
                             for (int k = 0; k < xy.getLength(); k++) {
-                                if (xy.item(k).getNodeType() != 1)
+                                if (xy.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList xyKids;
                                 if (xy.item(k).getNodeName().equals("x")) {
                                     xyKids = xy.item(k).getChildNodes();
                                     int l = 0;
                                     do {
-                                        if (l >= xyKids.getLength())
+                                        if (l >= xyKids.getLength()) {
                                             continue label3;
-                                        if (xyKids.item(l).getNodeType() == 3)
+                                        }
+                                        if (xyKids.item(l).getNodeType() == 3) {
                                             x = Double.parseDouble(xyKids.item(l).getNodeValue());
+                                        }
                                         l++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
-                                if (!xy.item(k).getNodeName().equals("y"))
+                                if (!xy.item(k).getNodeName().equals("y")) {
                                     continue;
+                                }
                                 xyKids = xy.item(k).getChildNodes();
-                                for (int l = 0; l < xyKids.getLength(); l++)
-                                    if (xyKids.item(l).getNodeType() == 3)
+                                for (int l = 0; l < xyKids.getLength(); l++) {
+                                    if (xyKids.item(l).getNodeType() == 3) {
                                         y = Double.parseDouble(xyKids.item(l).getNodeValue());
-
+                                    }
+                                }
                             }
 
                             if (x != Double.MIN_VALUE && y != Double.MIN_VALUE) {
@@ -433,11 +453,12 @@ public class ObjMaker {
                             }
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                     }
 
                 }
@@ -451,51 +472,54 @@ public class ObjMaker {
                         fw.write("# Buttock " + (addY + y) + "\n");
                         NodeList parts = node.getChildNodes();
                         for (int j = 0; j < parts.getLength(); j++) {
-                            if (parts.item(j).getNodeType() != 1)
+                            if (parts.item(j).getNodeType() != 1) {
                                 continue;
+                            }
                             nbElements = 0;
                             NodeList plots = parts.item(j).getChildNodes();
                             for (int k = 0; k < plots.getLength(); k++) {
-                                if (plots.item(k).getNodeType() != 1)
+                                if (plots.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList xz = plots.item(k).getChildNodes();
                                 double x = 0.0D;
                                 double z = 0.0D;
                                 label4:
                                 for (int l = 0; l < xz.getLength(); l++) {
-                                    if (xz.item(l).getNodeType() != 1)
+                                    if (xz.item(l).getNodeType() != 1) {
                                         continue;
+                                    }
                                     NodeList lastOne;
                                     int m;
                                     if (xz.item(l).getNodeName().equals("x")) {
                                         lastOne = xz.item(l).getChildNodes();
                                         m = 0;
                                         do {
-                                            if (m >= lastOne.getLength())
+                                            if (m >= lastOne.getLength()) {
                                                 continue label4;
+                                            }
                                             if (lastOne.item(m).getNodeType() == 3) {
-                                                x =
-                                                        Double.parseDouble(lastOne.item(m).getNodeValue());
+                                                x = Double.parseDouble(lastOne.item(m).getNodeValue());
                                                 continue label4;
                                             }
                                             m++;
-                                        }
-                                        while (true);
+                                        } while (true);
                                     }
-                                    if (!xz.item(l).getNodeName().equals("z"))
+                                    if (!xz.item(l).getNodeName().equals("z")) {
                                         continue;
+                                    }
                                     lastOne = xz.item(l).getChildNodes();
                                     m = 0;
                                     do {
-                                        if (m >= lastOne.getLength())
+                                        if (m >= lastOne.getLength()) {
                                             continue label4;
+                                        }
                                         if (lastOne.item(m).getNodeType() == 3) {
                                             z = Double.parseDouble(lastOne.item(m).getNodeValue());
                                             continue label4;
                                         }
                                         m++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
 
                                 fw.write("v " + (addX + x * affX) + " " + (addY + y * affY) +
@@ -503,60 +527,64 @@ public class ObjMaker {
                                 nbElements++;
                             }
 
-                            for (int k = 0; k < nbElements - 1; k++)
+                            for (int k = 0; k < nbElements - 1; k++) {
                                 fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                            if (nbElements > 0)
+                            }
+                            if (nbElements > 0) {
                                 startFrom++;
+                            }
                         }
 
                         nbElements = 0;
                         for (int j = 0; j < parts.getLength(); j++) {
-                            if (parts.item(j).getNodeType() != 1)
+                            if (parts.item(j).getNodeType() != 1) {
                                 continue;
+                            }
                             nbElements = 0;
                             NodeList plots = parts.item(j).getChildNodes();
-                            for (int k = 0; k < plots.getLength() && symetric; k++) {
-                                if (plots.item(k).getNodeType() != 1)
+                            for (int k = 0; k < plots.getLength() && symmetric; k++) {
+                                if (plots.item(k).getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList xz = plots.item(k).getChildNodes();
                                 double x = 0.0D;
                                 double z = 0.0D;
                                 label5:
                                 for (int l = 0; l < xz.getLength(); l++) {
-                                    if (xz.item(l).getNodeType() != 1)
+                                    if (xz.item(l).getNodeType() != 1) {
                                         continue;
+                                    }
                                     NodeList lastOne;
                                     int m;
                                     if (xz.item(l).getNodeName().equals("x")) {
                                         lastOne = xz.item(l).getChildNodes();
                                         m = 0;
                                         do {
-                                            if (m >= lastOne.getLength())
+                                            if (m >= lastOne.getLength()) {
                                                 continue label5;
+                                            }
                                             if (lastOne.item(m).getNodeType() == 3) {
-                                                x =
-                                                        Double.parseDouble(lastOne.item(m).getNodeValue());
+                                                x = Double.parseDouble(lastOne.item(m).getNodeValue());
                                                 continue label5;
                                             }
                                             m++;
-                                        }
-                                        while (true);
+                                        } while (true);
                                     }
-                                    if (!xz.item(l).getNodeName().equals("z"))
+                                    if (!xz.item(l).getNodeName().equals("z")) {
                                         continue;
+                                    }
                                     lastOne = xz.item(l).getChildNodes();
                                     m = 0;
                                     do {
-                                        if (m >= lastOne.getLength())
+                                        if (m >= lastOne.getLength()) {
                                             continue label5;
+                                        }
                                         if (lastOne.item(m).getNodeType() == 3) {
                                             z = Double.parseDouble(lastOne.item(m).getNodeValue());
                                             continue label5;
                                         }
                                         m++;
-                                    }
-                                    while (true);
+                                    } while (true);
                                 }
 
                                 fw.write("v " + (addX + x * affX) + " " + (addY - y * affY) +
@@ -564,15 +592,14 @@ public class ObjMaker {
                                 nbElements++;
                             }
 
-                            for (int k = 0; k < nbElements - 1; k++)
+                            for (int k = 0; k < nbElements - 1; k++) {
                                 fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                            if (nbElements > 0)
+                            }
+                            if (nbElements > 0) {
                                 startFrom++;
+                            }
                         }
-
                     }
-
                 }
                 nl = doc.selectNodes("/wf:data/wf:modules/wf:module", resolver);
                 if (nl != null) {
@@ -580,59 +607,56 @@ public class ObjMaker {
                         nbElements = 0;
                         Node node = nl.item(i);
                         String name = ((Element) node).getAttribute("name");
-                        boolean sym =
-                                ((Element) node).getAttribute("symetric").equals("yes");
+                        boolean sym = ((Element) node).getAttribute("symetric").equals("yes");
                         fw.write("# Module " + name + "\n");
                         NodeList plots =
                                 ((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                         "plot");
-                        if (plots == null)
+                        if (plots == null) {
                             continue;
+                        }
                         for (int j = 0; j < plots.getLength(); j++) {
                             Element plot = (Element) plots.item(j);
-                            double x =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double x = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "x").item(0).getFirstChild().getNodeValue());
-                            double y =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double y = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "y").item(0).getFirstChild().getNodeValue());
-                            double z =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double z = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "z").item(0).getFirstChild().getNodeValue());
                             fw.write("v " + (addX + x * affX) + " " + (addY + y * affY) +
                                     " " + (addZ + z * affZ) + "\n");
                             nbElements++;
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                         nbElements = 0;
-                        if (!sym)
+                        if (!sym) {
                             continue;
+                        }
                         for (int j = 0; j < plots.getLength(); j++) {
                             Element plot = (Element) plots.item(j);
-                            double x =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double x = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "x").item(0).getFirstChild().getNodeValue());
-                            double y =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double y = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "y").item(0).getFirstChild().getNodeValue());
-                            double z =
-                                    Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
+                            double z = Double.parseDouble(plot.getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
                                             "z").item(0).getFirstChild().getNodeValue());
                             fw.write("v " + (addX + x * affX) + " " + (addY - y * affY) +
                                     " " + (addZ + z * affZ) + "\n");
                             nbElements++;
                         }
 
-                        for (int j = 0; j < nbElements - 1; j++)
+                        for (int j = 0; j < nbElements - 1; j++) {
                             fw.write("f " + ++startFrom + " " + (startFrom + 1) + "\n");
-
-                        if (nbElements > 0)
+                        }
+                        if (nbElements > 0) {
                             startFrom++;
+                        }
                     }
 
                 }
@@ -641,8 +665,7 @@ public class ObjMaker {
                     for (int i = 0; i < nl.getLength(); i++) {
                         nbElements = 0;
                         Node node = nl.item(i);
-                        String name =
-                                sourceDir.toString() + File.separator + ((XMLElement) node).getAttribute("source");
+                        String name = sourceDir.toString() + File.separator + ((XMLElement) node).getAttribute("source");
                         fw.write("# Imported " + name + "\n");
                         NodeList origin =
                                 ((Element) node).getElementsByTagNameNS("http://donpedro.lediouris.net/wireframe",
@@ -656,56 +679,56 @@ public class ObjMaker {
                         if (affineTramsform != null) {
                             for (int j = 0; j < affineTramsform.getLength(); j++) {
                                 Node affineNode = affineTramsform.item(j);
-                                if (affineNode.getNodeType() != 1)
+                                if (affineNode.getNodeType() != 1) {
                                     continue;
+                                }
                                 NodeList coords = affineNode.getChildNodes();
                                 for (int k = 0; k < coords.getLength(); k++) {
                                     Node n = coords.item(k);
-                                    if (n.getNodeType() == 1 && n.getNodeName().equals("x"))
-                                        affineX =
-                                                Double.parseDouble(n.getFirstChild().getNodeValue());
-                                    if (n.getNodeType() == 1 && n.getNodeName().equals("y"))
-                                        affineY =
-                                                Double.parseDouble(n.getFirstChild().getNodeValue());
-                                    if (n.getNodeType() == 1 && n.getNodeName().equals("z"))
-                                        affineZ =
-                                                Double.parseDouble(n.getFirstChild().getNodeValue());
+                                    if (n.getNodeType() == 1 && n.getNodeName().equals("x")) {
+                                        affineX = Double.parseDouble(n.getFirstChild().getNodeValue());
+                                    }
+                                    if (n.getNodeType() == 1 && n.getNodeName().equals("y")) {
+                                        affineY = Double.parseDouble(n.getFirstChild().getNodeValue());
+                                    }
+                                    if (n.getNodeType() == 1 && n.getNodeName().equals("z")) {
+                                        affineZ = Double.parseDouble(n.getFirstChild().getNodeValue());
+                                    }
                                 }
 
                             }
 
                         }
-                        if (origin == null)
+                        if (origin == null) {
                             continue;
+                        }
                         for (int j = 0; j < origin.getLength(); j++) {
                             Node originNode = origin.item(j);
-                            if (originNode.getNodeType() != 1)
+                            if (originNode.getNodeType() != 1) {
                                 continue;
+                            }
                             double x = Double.MIN_VALUE;
                             double y = Double.MIN_VALUE;
                             double z = Double.MIN_VALUE;
                             NodeList coords = originNode.getChildNodes();
                             for (int k = 0; k < coords.getLength(); k++) {
                                 Node n = coords.item(k);
-                                if (n.getNodeType() == 1 && n.getNodeName().equals("x"))
-                                    x =
-                                            affineX * Double.parseDouble(n.getFirstChild().getNodeValue());
-                                if (n.getNodeType() == 1 && n.getNodeName().equals("y"))
-                                    y =
-                                            affineY * Double.parseDouble(n.getFirstChild().getNodeValue());
-                                if (n.getNodeType() == 1 && n.getNodeName().equals("z"))
-                                    z =
-                                            affineZ * Double.parseDouble(n.getFirstChild().getNodeValue());
+                                if (n.getNodeType() == 1 && n.getNodeName().equals("x")) {
+                                    x = affineX * Double.parseDouble(n.getFirstChild().getNodeValue());
+                                }
+                                if (n.getNodeType() == 1 && n.getNodeName().equals("y")) {
+                                    y = affineY * Double.parseDouble(n.getFirstChild().getNodeValue());
+                                }
+                                if (n.getNodeType() == 1 && n.getNodeName().equals("z")) {
+                                    z = affineZ * Double.parseDouble(n.getFirstChild().getNodeValue());
+                                }
                             }
 
-                            int managed =
-                                    generate(name, fw, x, y, z, affineX, affineY, affineZ,
-                                            startFrom, symetric);
+                            int managed = generate(name, fw, x, y, z, affineX, affineY, affineZ,
+                                            startFrom, symmetric);
                             startFrom = managed;
                         }
-
                     }
-
                 }
                 fw.flush();
             } catch (Exception e) {

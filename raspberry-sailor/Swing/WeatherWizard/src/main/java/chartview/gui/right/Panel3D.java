@@ -10,27 +10,26 @@ import chartview.gui.util.param.ParamPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class Panel3D
         extends JPanel {
-    private BorderLayout borderLayout1 = new BorderLayout();
-    private ThreeDPanel threeDPanel = new ThreeDPanel(null,
+    private final BorderLayout borderLayout1 = new BorderLayout();
+    private final ThreeDPanel threeDPanel = new ThreeDPanel(null,
             1.0f,
             new Color(240, 240, 245),
             (Color) ParamPanel.data[ParamData.CHART_COLOR][ParamData.VALUE_INDEX],
             Color.blue, // Text (N, S, E, W)
             Color.red); // Other points (not used for now)
-    private ZoomPanel zoompanel = new ZoomPanel();
-    private JCheckBox twsCheckBox = new JCheckBox();
-    private JCheckBox prmslCheckBox = new JCheckBox();
-    private JCheckBox hgt500CheckBox = new JCheckBox();
-    private JCheckBox wavesCheckBox = new JCheckBox();
-    private JCheckBox temperatureCheckBox = new JCheckBox();
-    private JCheckBox rainCheckBox = new JCheckBox();
+    private final ZoomPanel zoompanel = new ZoomPanel();
+    private final JCheckBox twsCheckBox = new JCheckBox();
+    private final JCheckBox prmslCheckBox = new JCheckBox();
+    private final JCheckBox hgt500CheckBox = new JCheckBox();
+    private final JCheckBox wavesCheckBox = new JCheckBox();
+    private final JCheckBox temperatureCheckBox = new JCheckBox();
+    private final JCheckBox rainCheckBox = new JCheckBox();
 
-    private transient ApplicationEventListener ael = new ApplicationEventListener() {
+    private final transient ApplicationEventListener ael = new ApplicationEventListener() {
         public String toString() {
             return "from Panel3D.";
         }
@@ -105,52 +104,27 @@ public class Panel3D
         WWContext.getInstance().removeApplicationListener(ael);
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         this.setLayout(borderLayout1);
         this.setSize(new Dimension(620, 361));
         twsCheckBox.setText("tws");
         twsCheckBox.setEnabled(false);
-        twsCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                twsCheckBox_actionPerformed(e);
-            }
-        });
+        twsCheckBox.addActionListener(this::twsCheckBox_actionPerformed);
         prmslCheckBox.setText("prmsl");
         prmslCheckBox.setEnabled(false);
-        prmslCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                prmslCheckBox_actionPerformed(e);
-            }
-        });
+        prmslCheckBox.addActionListener(this::prmslCheckBox_actionPerformed);
         hgt500CheckBox.setText("500mb");
         hgt500CheckBox.setEnabled(false);
-        hgt500CheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                hgt500CheckBox_actionPerformed(e);
-            }
-        });
+        hgt500CheckBox.addActionListener(this::hgt500CheckBox_actionPerformed);
         wavesCheckBox.setText("waves");
         wavesCheckBox.setEnabled(false);
-        wavesCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                wavesCheckBox_actionPerformed(e);
-            }
-        });
+        wavesCheckBox.addActionListener(this::wavesCheckBox_actionPerformed);
         temperatureCheckBox.setText("temperature");
         temperatureCheckBox.setEnabled(false);
-        temperatureCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                temperatureCheckBox_actionPerformed(e);
-            }
-        });
+        temperatureCheckBox.addActionListener(this::temperatureCheckBox_actionPerformed);
         rainCheckBox.setText("precipitation");
         rainCheckBox.setEnabled(false);
-        rainCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                rainCheckBox_actionPerformed(e);
-            }
-        });
+        rainCheckBox.addActionListener(this::rainCheckBox_actionPerformed);
         this.add(threeDPanel, BorderLayout.CENTER);
         zoompanel.add(twsCheckBox, null);
         zoompanel.add(prmslCheckBox, null);

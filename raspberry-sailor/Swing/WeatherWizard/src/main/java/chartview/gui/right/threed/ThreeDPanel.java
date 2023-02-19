@@ -82,18 +82,21 @@ public class ThreeDPanel
                        Color line,
                        Color text,
                        Color pts) {
-        if (bg != null)
+        if (bg != null) {
             bgColor = bg;
-        if (line != null)
+        }
+        if (line != null) {
             lineColor = line;
-        if (text != null)
+        }
+        if (text != null) {
             textColor = text;
-        if (pts != null)
+        }
+        if (pts != null) {
             pointColor = pts;
-
-        if (model != null && model.trim().length() > 0)
+        }
+        if (model != null && model.trim().length() > 0) {
             init(model, scale);
-
+        }
         WWContext.getInstance().addApplicationListener(new ApplicationEventListener() {
             public String toString() {
                 return "from ThreeDPanel.";
@@ -103,7 +106,7 @@ public class ThreeDPanel
                 if (md == null) {
                     setScale(1.0f);
                     setModel("temp" + File.separator + "chart.obj", true);
-                    Vector<ThreeDPoint> labelVector = new Vector<ThreeDPoint>();
+                    Vector<ThreeDPoint> labelVector = new Vector<>();
                     for (Point p : al) {
                         labelVector.add(new ThreeDPoint((float) p.x, (float) p.y, 0.0f));
                     }
@@ -289,8 +292,9 @@ public class ThreeDPanel
 
     public void setModel(String m, boolean enforce) {
         if (m != null && (!m.equals(mdname) || enforce)) {
-            if (enforce)
+            if (enforce) {
                 WWContext.getInstance().fireLogging("Enforcing refresh, scale " + scalefudge + "\n");
+            }
             this.mdname = m;
             init(mdname, scalefudge);
         }
@@ -308,8 +312,9 @@ public class ThreeDPanel
                     m3d.compress();
 
                     Module3D module = new Module3D(m3d, c, name);
-                    if (modules == null)
-                        modules = new HashMap<String, Module3D>(1);
+                    if (modules == null) {
+                        modules = new HashMap<>(1);
+                    }
                     modules.put(name, module);
                 }
             } catch (Exception ex) {
@@ -347,9 +352,9 @@ public class ThreeDPanel
         amat.yrot(25f);
         amat.zrot(40f);
 
-        if (mdname == null)
+        if (mdname == null) {
             mdname = "paperboat.obj";
-
+        }
         addMouseListener(this);
         addMouseMotionListener(this);
 
@@ -388,10 +393,12 @@ public class ThreeDPanel
             float xw = m.xmax - m.xmin;
             float yw = m.ymax - m.ymin;
             float zw = m.zmax - m.zmin;
-            if (yw > xw)
+            if (yw > xw) {
                 xw = yw;
-            if (zw > xw)
+            }
+            if (zw > xw) {
                 xw = zw;
+            }
             float f1 = getSize().width / xw;
             float f2 = getSize().height / xw;
             xfac = 0.7f * (f1 < f2 ? f1 : f2) * scalefudge;
@@ -419,8 +426,9 @@ public class ThreeDPanel
             e.printStackTrace();
         }
         try {
-            if (is != null)
+            if (is != null) {
                 is.close();
+            }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
             e.printStackTrace();
@@ -493,8 +501,9 @@ public class ThreeDPanel
         g.fillRect(0, 0, r.width, r.height);
 
         g.setColor(textColor);
-        if (panelLabel.trim().length() > 0)
+        if (panelLabel.trim().length() > 0) {
             g.drawString(panelLabel, 3, 12);
+        }
         g.setColor(bgColor);
         // Axis
     /*
@@ -509,31 +518,54 @@ public class ThreeDPanel
                 zmin = Float.MAX_VALUE, zmax = -Float.MAX_VALUE;
 
         if (md != null) {
-            if (md.xmin < xmin) xmin = md.xmin;
-            if (md.ymin < ymin) ymin = md.ymin;
-            if (md.zmin < zmin) zmin = md.zmin;
-
-            if (md.xmax > xmax) xmax = md.xmax;
-            if (md.ymax > ymax) ymax = md.ymax;
-            if (md.zmax > zmax) zmax = md.zmax;
+            if (md.xmin < xmin) {
+                xmin = md.xmin;
+            }
+            if (md.ymin < ymin) {
+                ymin = md.ymin;
+            }
+            if (md.zmin < zmin) {
+                zmin = md.zmin;
+            }
+            if (md.xmax > xmax) {
+                xmax = md.xmax;
+            }
+            if (md.ymax > ymax) {
+                ymax = md.ymax;
+            }
+            if (md.zmax > zmax) {
+                zmax = md.zmax;
+            }
         }
         if (modules != null) {
             Set<String> keys = modules.keySet();
             for (String k : keys) {
                 Module3D module = modules.get(k);
                 Model3D m3d = module.getModel3D();
-                if (m3d.xmin < xmin) xmin = m3d.xmin;
-                if (m3d.ymin < ymin) ymin = m3d.ymin;
-                if (m3d.zmin < zmin) zmin = m3d.zmin;
-
-                if (m3d.xmax > xmax) xmax = m3d.xmax;
-                if (m3d.ymax > ymax) ymax = m3d.ymax;
-                if (m3d.zmax > zmax) zmax = m3d.zmax;
+                if (m3d.xmin < xmin) {
+                    xmin = m3d.xmin;
+                }
+                if (m3d.ymin < ymin) {
+                    ymin = m3d.ymin;
+                }
+                if (m3d.zmin < zmin) {
+                    zmin = m3d.zmin;
+                }
+                if (m3d.xmax > xmax) {
+                    xmax = m3d.xmax;
+                }
+                if (m3d.ymax > ymax) {
+                    ymax = m3d.ymax;
+                }
+                if (m3d.zmax > zmax) {
+                    zmax = m3d.zmax;
+                }
             }
         }
 
-        if (md == null && mdname != null)
+        if (md == null && mdname != null) {
             run(); // Always reset
+        }
         if (md != null) {
             md.mat.unit();
             md.mat.translate(-(xmin + xmax) / 2, -(ymin + ymax) / 2, -(zmin + zmax) / 2);
@@ -653,8 +685,9 @@ public class ThreeDPanel
                                 x = st.nval;
                                 if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
                                     y = st.nval;
-                                    if (st.nextToken() == StreamTokenizer.TT_NUMBER)
+                                    if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
                                         z = st.nval;
+                                    }
                                 }
                             }
                             addVert((float) x, (float) y, (float) z);
@@ -669,29 +702,34 @@ public class ThreeDPanel
                             while (true)
                                 if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
                                     n = (int) st.nval;
-                                    if (prev >= 0)
+                                    if (prev >= 0) {
                                         add(prev - 1, n - 1);
-                                    if (start < 0)
+                                    }
+                                    if (start < 0) {
                                         start = n;
+                                    }
                                     prev = n;
-                                } else if (st.ttype == '/')
+                                } else if (st.ttype == '/') {
                                     st.nextToken();
-                                else
+                                } else {
                                     break;
-                            if (start >= 0)
+                                }
+                            if (start >= 0) {
                                 add(start - 1, prev - 1);
-                            if (st.ttype != StreamTokenizer.TT_EOL)
+                            }
+                            if (st.ttype != StreamTokenizer.TT_EOL) {
                                 break scan;
+                            }
                         } else {
                             while (st.nextToken() != StreamTokenizer.TT_EOL &&
-                                    st.ttype != StreamTokenizer.TT_EOF)
-                                ;
+                                    st.ttype != StreamTokenizer.TT_EOF) ;
                         }
                 }
             }
             is.close();
-            if (st.ttype != StreamTokenizer.TT_EOF)
+            if (st.ttype != StreamTokenizer.TT_EOF) {
                 throw new FileFormatException(st.toString());
+            }
         }
 
         Model3D(Vector v) throws Exception {
@@ -705,8 +743,9 @@ public class ThreeDPanel
                     nb++;
                     ThreeDPoint pt3d = (ThreeDPoint) pt;
                     addVert(pt3d.getX(), pt3d.getY(), pt3d.getZ());
-                } else
+                } else {
                     throw new Exception("Invalid object in vector");
+                }
             }
             // f
             for (int i = 0; i < nb; i++) {
@@ -742,8 +781,9 @@ public class ThreeDPanel
          */
         void add(int p1, int p2) {
             int i = ncon;
-            if (p1 >= nvert || p2 >= nvert)
+            if (p1 >= nvert || p2 >= nvert) {
                 return;
+            }
             if (i >= maxcon) {
                 if (con == null) {
                     maxcon = 100;
@@ -768,41 +808,43 @@ public class ThreeDPanel
          * Transform all the points in this model
          */
         void transform() {
-            if (transformed || nvert <= 0)
+            if (transformed || nvert <= 0) {
                 return;
-            if (tvert == null || tvert.length < nvert * 3)
+            }
+            if (tvert == null || tvert.length < nvert * 3) {
                 tvert = new int[nvert * 3];
+            }
             mat.transform(vert, tvert, nvert);
             transformed = true;
         }
 
-        /* Quick Sort implementation
+        /*
+         * Quick Sort implementation
          */
-
         private void quickSort(int[] a, int left, int right) {
             int leftIndex = left;
             int rightIndex = right;
-            int partionElement;
+            int partitionElement;
             if (right > left) {
                 /* Arbitrarily establishing partition element as the midpoint of
                  * the array.
                  */
-                partionElement = a[(left + right) / 2];
+                partitionElement = a[(left + right) / 2];
 
                 // loop through the array until indices cross
                 while (leftIndex <= rightIndex) {
                     /* find the first element that is greater than or equal to
                      * the partionElement starting from the leftIndex.
                      */
-                    while ((leftIndex < right) && (a[leftIndex] < partionElement))
+                    while ((leftIndex < right) && (a[leftIndex] < partitionElement)) {
                         ++leftIndex;
-
+                    }
                     /* find an element that is smaller than or equal to
                      * the partionElement starting from the rightIndex.
                      */
-                    while ((rightIndex > left) && (a[rightIndex] > partionElement))
+                    while ((rightIndex > left) && (a[rightIndex] > partitionElement)) {
                         --rightIndex;
-
+                    }
                     // if the indexes have not crossed, swap
                     if (leftIndex <= rightIndex) {
                         swap(a, leftIndex, rightIndex);
@@ -811,17 +853,21 @@ public class ThreeDPanel
                     }
                 }
 
-                /* If the right index has not reached the left side of array
+                /*
+                 * If the right index has not reached the left side of array
                  * must now sort the left partition.
                  */
-                if (left < rightIndex)
+                if (left < rightIndex) {
                     quickSort(a, left, rightIndex);
+                }
 
-                /* If the left index has not reached the right side of array
+                /*
+                 * If the left index has not reached the right side of array
                  * must now sort the right partition.
                  */
-                if (leftIndex < right)
+                if (leftIndex < right) {
                     quickSort(a, leftIndex, right);
+                }
             }
         }
 
@@ -893,8 +939,9 @@ public class ThreeDPanel
             int lim = ncon;
             int c[] = con;
             int v[] = tvert;
-            if (lim <= 0 || nvert <= 0)
+            if (lim <= 0 || nvert <= 0) {
                 return;
+            }
             int p1 = 0, p2 = 0;
             if (stbd_port) {
                 int T = c[lim / 2];
@@ -902,7 +949,9 @@ public class ThreeDPanel
                 p2 = (T & 0xFFFF) * 3;
 
                 Color cc = g.getColor();
-                if (setColor) g.setColor(textColor);
+                if (setColor) {
+                    g.setColor(textColor);
+                }
                 Font f = g.getFont();
                 Font f2 = new Font(f.getName(), Font.BOLD, f.getSize());
                 g.setFont(f2);
@@ -910,44 +959,56 @@ public class ThreeDPanel
                 int l = g.getFontMetrics(f2).stringWidth(str);
                 g.drawString(str, v[p1] - (l / 2), v[p1 + 1]);
                 g.setFont(f);
-                if (setColor) g.setColor(cc);
+                if (setColor) {
+                    g.setColor(cc);
+                }
             }
             for (int i = 0; i < lim; i++) {
                 int T = c[i];
                 p1 = ((T >> 16) & 0xFFFF) * 3;
                 p2 = (T & 0xFFFF) * 3;
                 int grey = v[p1 + 2] + v[p2 + 2];
-                if (grey < 0)
+                if (grey < 0) {
                     grey = 0;
-                if (grey > 15)
+                }
+                if (grey > 15) {
                     grey = 15;
+                }
                 if (grey != lg) {
                     lg = grey;
-                    if (setColor) g.setColor(opt == DRAW ? gr[grey] : pointColor);
+                    if (setColor) {
+                        g.setColor(opt == DRAW ? gr[grey] : pointColor);
+                    }
                 }
 
                 if (opt == DRAW) {
-                    if (i == 0) // Axes
-                    {
-//          g.setColor(Color.black);
-                        if (setColor) g.setColor(lineColor);
+                    if (i == 0) { // Axes
+                    // g.setColor(Color.black);
+                        if (setColor) {
+                            g.setColor(lineColor);
+                        }
                     }
-                } else if (setColor) g.setColor(pointColor);
+                } else if (setColor) {
+                    g.setColor(pointColor);
+                }
 
                 if (opt == DRAW) {
                     // Draw
                     g.drawLine(v[p1], v[p1 + 1], v[p2], v[p2 + 1]);
                 } else if (opt == PLOT) {
                     // Plot
-                    if (drawingOption == CIRC_OPT)
+                    if (drawingOption == CIRC_OPT) {
                         g.drawOval(v[p1] - 2, v[p1 + 1] - 2, 4, 4);
-                    else if (drawingOption == DOT_OPT)
+                    } else if (drawingOption == DOT_OPT) {
                         g.drawLine(v[p1], v[p1 + 1], v[p1], v[p1 + 1]);
-                    else if (drawingOption == DRAW_OPT)
+                    } else if (drawingOption == DRAW_OPT) {
                         g.drawLine(v[p1], v[p1 + 1], v[p2], v[p2 + 1]);
+                    }
                 } else if (opt == WRITE) {
                     Color cc = g.getColor();
-                    if (setColor) g.setColor(textColor);
+                    if (setColor) {
+                        g.setColor(textColor);
+                    }
                     Font f = g.getFont();
                     Font f2 = new Font(f.getName(), Font.BOLD, f.getSize());
                     g.setFont(f2);
@@ -955,15 +1016,19 @@ public class ThreeDPanel
                     int l = g.getFontMetrics(f2).stringWidth(str);
                     g.drawString(str, v[p1] - (l / 2), v[p1 + 1]);
                     g.setFont(f);
-                    if (setColor) g.setColor(cc);
+                    if (setColor) {
+                        g.setColor(cc);
+                    }
                 }
             }
-            if (opt == PLOT && drawingOption != DRAW_OPT) // Last point
+            if (opt == PLOT && drawingOption != DRAW_OPT) { // Last point
                 g.drawLine(v[p2], v[p2 + 1], v[p2], v[p2 + 1]);
-            if (opt == WRITE) // Last point
-            {
+            }
+            if (opt == WRITE) { // Last point
                 Color cc = g.getColor();
-                if (setColor) g.setColor(textColor);
+                if (setColor) {
+                    g.setColor(textColor);
+                }
                 Font f = g.getFont();
                 Font f2 = new Font(f.getName(), Font.BOLD, f.getSize());
                 g.setFont(f2);
@@ -971,7 +1036,9 @@ public class ThreeDPanel
                 int l = g.getFontMetrics(f2).stringWidth(str);
                 g.drawString(str, v[p2] - (l / 2), v[p2 + 1]);
                 g.setFont(f);
-                if (setColor) g.setColor(cc);
+                if (setColor) {
+                    g.setColor(cc);
+                }
             }
         }
 
@@ -979,28 +1046,35 @@ public class ThreeDPanel
          * Find the bounding box of this model
          */
         void findBB() {
-            if (nvert <= 0)
+            if (nvert <= 0) {
                 return;
+            }
             float v[] = vert;
             float xmin = v[0], xmax = xmin;
             float ymin = v[1], ymax = ymin;
             float zmin = v[2], zmax = zmin;
             for (int i = nvert * 3; (i -= 3) > 0; ) {
                 float x = v[i];
-                if (x < xmin)
+                if (x < xmin) {
                     xmin = x;
-                if (x > xmax)
+                }
+                if (x > xmax) {
                     xmax = x;
+                }
                 float y = v[i + 1];
-                if (y < ymin)
+                if (y < ymin) {
                     ymin = y;
-                if (y > ymax)
+                }
+                if (y > ymax) {
                     ymax = y;
+                }
                 float z = v[i + 2];
-                if (z < zmin)
+                if (z < zmin) {
                     zmin = z;
-                if (z > zmax)
+                }
+                if (z > zmax) {
                     zmax = z;
+                }
             }
             this.xmax = xmax;
             this.xmin = xmin;

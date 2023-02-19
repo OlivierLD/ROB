@@ -147,7 +147,7 @@ public class CommandPanel
     private final static int temperatureUnit = Integer.parseInt(((ParamPanel.TemperatureUnitList) (ParamPanel.data[ParamData.TEMPERATURE_UNIT][ParamData.VALUE_INDEX])).getStringIndex());
     private final static String[] dataLabels = {"WIND", "PRMSL", "500HGT", "AIRTMP", "WAVES", "RAIN", "CURRENT"};
     private final static String[] units = {" kts", " mb", " m",
-            ParamPanel.TemperatureUnitList.getLabel(temperatureUnit), // was "�C"
+            ParamPanel.TemperatureUnitList.getLabel(temperatureUnit), // was "xC"
             " m", " mm/h", " kts"};
     private final double[][] boundaries = new double[dataLabels.length][2];
 

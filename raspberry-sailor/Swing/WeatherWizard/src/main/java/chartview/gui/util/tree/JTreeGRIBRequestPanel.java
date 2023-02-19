@@ -289,7 +289,7 @@ public class JTreeGRIBRequestPanel
             twentyfourRadioButton_actionPerformed(e);
           }
         });
-    oneRadioButton.setText("1� x 1�");
+    oneRadioButton.setText("1\272 x 1\272");
     oneRadioButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -297,7 +297,7 @@ public class JTreeGRIBRequestPanel
             oneRadioButton_actionPerformed(e);
           }
         });
-    twoRadioButton.setText("2� x 2�");
+    twoRadioButton.setText("2\272 x 2\272");
     twoRadioButton.setSelected(true);
     twoRadioButton.addActionListener(new ActionListener()
         {
@@ -306,7 +306,7 @@ public class JTreeGRIBRequestPanel
             twoRadioButton_actionPerformed(e);
           }
         });
-    fourRadioButton.setText("4� x 4�");
+    fourRadioButton.setText("4\272 x 4\272");
 
     fourRadioButton.addActionListener(new ActionListener()
         {

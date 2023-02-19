@@ -157,9 +157,9 @@ public class AdjustFrame extends JFrame {
     private final JMenuItem menuFilePrint = new JMenuItem();
     private final JMenuItem menuGenImage = new JMenuItem();
 
-    private final JMenuItem menuGoogle = new JMenu();
-    private final JMenuItem menuGoogleMap = new JMenuItem();
-    private final JMenuItem menuGoogleEarth = new JMenuItem();
+//    private final JMenuItem menuGoogle = new JMenu();
+//    private final JMenuItem menuGoogleMap = new JMenuItem();
+//    private final JMenuItem menuGoogleEarth = new JMenuItem();
 
     //private JMenuItem menuFileExit = new JMenuItem();
 //private JMenuItem menuFileStore = new JMenuItem();
@@ -426,16 +426,16 @@ public class AdjustFrame extends JFrame {
         WWContext.getInstance().setMasterTopFrame(this);
 
         masterTabPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        layers.add(masterTabPane, new Integer(1));
-//  layers.add(grayTransparentPanel, grayLayerIndex);
+        layers.add(masterTabPane, 1);
+        // layers.add(grayTransparentPanel, grayLayerIndex);
 
-//  this.setIconImage(new ImageIcon(this.getClass().getResource("img/paperboat.png")).getImage());
+        // this.setIconImage(new ImageIcon(this.getClass().getResource("img/paperboat.png")).getImage());
         this.setIconImage(new ImageIcon(this.getClass().getResource("img/wizardicone.png")).getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         final CompositeTabbedPane firstTab = new CompositeTabbedPane();
         masterTabPane.add("Composite", firstTab);  // The first tab
-//  masterTabPane.setToolTipTextAt(0, "Right-click to close");
+        // masterTabPane.setToolTipTextAt(0, "Right-click to close");
         masterTabPane.setTabComponentAt(0, new CompositeTabComponent("Composite", "right/remove_composite.png") {
             public void onClose() {
                 int nbT = masterTabPane.getTabCount() - 2;
@@ -445,7 +445,9 @@ public class AdjustFrame extends JFrame {
                     masterTabPane.remove(0);
                     firstTab.removeListener();
                     int newIndex = 0 - 1;
-                    while (newIndex < 0) newIndex++;
+                    while (newIndex < 0) {
+                        newIndex++;
+                    }
                     masterTabPane.setSelectedIndex(newIndex);
                 }
             }
@@ -523,10 +525,10 @@ public class AdjustFrame extends JFrame {
         menuFile.add(menuFilePrint);
         menuFile.add(menuGenImage);
         menuFile.add(new JSeparator());
-        menuFile.add(menuGoogle);
-        menuGoogle.add(menuGoogleMap);
-        menuGoogle.add(menuGoogleEarth);
-        menuFile.add(new JSeparator());
+//        menuFile.add(menuGoogle);
+//        menuGoogle.add(menuGoogleMap);
+//        menuGoogle.add(menuGoogleEarth);
+//        menuFile.add(new JSeparator());
 //  menuFile.add(menuFileStore);
         menuFile.add(new SaveCompositeAction()).setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
         scaa = new SaveCompositeAsAction();
@@ -581,31 +583,31 @@ public class AdjustFrame extends JFrame {
 
         menuFilePrint.setText(WWGnlUtilities.buildMessage("print"));
         menuFilePrint.setIcon(new ImageIcon(this.getClass().getResource("img/print.png")));
-        menuFilePrint.addActionListener(ae -> filePrint_ActionPerformed(ae));
+        menuFilePrint.addActionListener(this::filePrint_ActionPerformed);
         menuGenImage.setText(WWGnlUtilities.buildMessage("generate-image"));
         menuGenImage.setIcon(new ImageIcon(this.getClass().getResource("img/snapshot.png")));
-        menuGenImage.addActionListener(ae -> genImage_actionPerformed(ae));
-//  menuFileStore.setText(GnlUtilities.buildMessage("save-composite"));
-//  menuFileStore.setIcon(new ImageIcon(this.getClass().getResource("img/save.png")));
-//  menuFileStore.addActionListener(new ActionListener()
-//      {
-//        public void actionPerformed(ActionEvent ae)
-//        {
-//          store();
-//        }
-//      });
+        menuGenImage.addActionListener(this::genImage_actionPerformed);
+        //  menuFileStore.setText(GnlUtilities.buildMessage("save-composite"));
+        //  menuFileStore.setIcon(new ImageIcon(this.getClass().getResource("img/save.png")));
+        //  menuFileStore.addActionListener(new ActionListener()
+        //      {
+        //        public void actionPerformed(ActionEvent ae)
+        //        {
+        //          store();
+        //        }
+        //      });
 
-        menuGoogle.setText(WWGnlUtilities.buildMessage("view-google"));
-        menuGoogle.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
+//        menuGoogle.setText(WWGnlUtilities.buildMessage("view-google"));
+//        menuGoogle.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
 
-        menuGoogleMap.setText(WWGnlUtilities.buildMessage("view-google-map"));
-        menuGoogleMap.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
-        menuGoogleMap.addActionListener(ae -> gMap());
-//  menuGoogleMap.setEnabled(false);
-        menuGoogleEarth.setText(WWGnlUtilities.buildMessage("view-google-earth"));
-        menuGoogleEarth.setIcon(new ImageIcon(this.getClass().getResource("img/ge.png")));
-        menuGoogleEarth.addActionListener(ae -> gEarth());
-//  menuGoogleEarth.setEnabled(false);
+//        menuGoogleMap.setText(WWGnlUtilities.buildMessage("view-google-map"));
+//        menuGoogleMap.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
+//        menuGoogleMap.addActionListener(ae -> gMap());
+        //  menuGoogleMap.setEnabled(false);
+//        menuGoogleEarth.setText(WWGnlUtilities.buildMessage("view-google-earth"));
+//        menuGoogleEarth.setIcon(new ImageIcon(this.getClass().getResource("img/ge.png")));
+//        menuGoogleEarth.addActionListener(ae -> gEarth());
+        //  menuGoogleEarth.setEnabled(false);
 
         menuFileRestore.setText(WWGnlUtilities.buildMessage("load-composite"));
         menuFileRestore.setIcon(new ImageIcon(this.getClass().getResource("img/open.png")));
@@ -729,7 +731,7 @@ public class AdjustFrame extends JFrame {
                             cp,
                             "Application Parameters",
                             JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.DEFAULT_OPTION);
+                            JOptionPane.PLAIN_MESSAGE);
             if (opt == JOptionPane.OK_OPTION) {
                 cp.finalPrmUpdate();
             }
@@ -927,7 +929,7 @@ public class AdjustFrame extends JFrame {
 //        menuHelp.add(menuCheckForUpdate);
 
         getContentPane().setLayout(borderLayout);
-        setSize(new Dimension(1000, 700));
+        setSize(new Dimension(1_000, 700));
 
         Thread pendule = new Thread("clock") {
             public void run() {
@@ -936,10 +938,10 @@ public class AdjustFrame extends JFrame {
                     Date ut = TimeUtil.getGMT();
                     WWContext.getInstance().setCurrentUTC(ut);
                     String title = FRAME_BASE_TITLE + " - UTC: " + SDF_FOR_TITLE.format(ut);
-//        System.out.println("Setting time to " + title);
+                    // System.out.println("Setting time to " + title);
                     setTitle(title);
                     try {
-                        Thread.sleep(1000L);
+                        Thread.sleep(1_000L);
                     } catch (Exception ignore) {
                     }
                 }
@@ -1020,11 +1022,7 @@ public class AdjustFrame extends JFrame {
 
             @Override
             public void setStatus(final String str) {
-                new Thread() {
-                    public void run() {
-                        setStatusLabel(str);
-                    }
-                }.start();
+                new Thread(() -> setStatusLabel(str)).start();
             }
 
             @Override
@@ -1034,7 +1032,7 @@ public class AdjustFrame extends JFrame {
                 grayPanelOption = Integer.parseInt(((ParamPanel.GrayPanelOptionList) (ParamPanel.data[ParamData.GRAY_PANEL_OPTION][ParamData.VALUE_INDEX])).getStringIndex());
                 if (b) {
                     grayPanelY = 0;
-                    grayPanelTransparency = ((Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX]).floatValue();
+                    grayPanelTransparency = (Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX];
                     layers.add(grayTransparentPanel, grayLayerIndex); // Add gray layer
                 } else {
 //          WWContext.getInstance().fireInterruptProgress();
@@ -1045,20 +1043,18 @@ public class AdjustFrame extends JFrame {
                     }
                     final String soundName = _soundName;
                     if (soundName.trim().length() > 0) { // Play Sound on Completion
-                        Thread playThread = new Thread() {
-                            public void run() {
-                                try {
-                                    WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
-                                } catch (MalformedURLException murle) {
-                                    // TODO: Add catch code
-                                    murle.printStackTrace();
-                                } catch (Exception e) {
-                                    System.err.println("Playing [" + soundName + "]");
-                                    // TODO: Add catch code
-                                    e.printStackTrace();
-                                }
+                        Thread playThread = new Thread(() -> {
+                            try {
+                                WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
+                            } catch (MalformedURLException murle) {
+                                // TODO: Add catch code
+                                murle.printStackTrace();
+                            } catch (Exception e) {
+                                System.err.println("Playing [" + soundName + "]");
+                                // TODO: Add catch code
+                                e.printStackTrace();
                             }
-                        };
+                        });
                         System.out.println("Pouet-pouet");
                         playThread.start();
                     }
@@ -1731,7 +1727,7 @@ public class AdjustFrame extends JFrame {
     private void setupDownload() {
         // Build the object
         // fax - url - dir - pattern
-        Object data[][] = null;
+        Object[][] data = null;
         File autoDownloadConfigFile = new File(AUTO_DOWNLOAD_CONFIG_FILE_NAME);
         if (autoDownloadConfigFile.exists()) {
             DOMParser parser = WWContext.getInstance().getParser();
@@ -2091,7 +2087,7 @@ public class AdjustFrame extends JFrame {
                     long startedAt = System.currentTimeMillis();
                     WWContext.getInstance().fireLoadDynamicComposite(compositeName); // Asynchronous!
                     try {
-                        System.out.println("-- Taking a nap (" + Utilities.readableTime(interval * 1000 * 60).trim() + ")");
+                        System.out.println("-- Taking a nap (" + Utilities.readableTime(interval * 1_000 * 60).trim() + ")");
                         String mess = WWGnlUtilities.buildMessage("next-download") + " " + WWGnlUtilities.formatTimeDiff(interval * 60); //"Next automatic download in " + Integer.toString(interval) + " minute(s)";
                         WWContext.getInstance().fireSetStatus(mess);
                         long now = System.currentTimeMillis();
@@ -2257,13 +2253,12 @@ public class AdjustFrame extends JFrame {
 //                content += "<hr>";
 //                content += "<small>Calculated with &Delta;T=" + deltaT + "</small><br>";
 //                if (started.get(Calendar.DAY_OF_WEEK) == weekly && // On Mondays, print almanac for one week
-//                    TimeUnit.DAYS.convert((reference.getTimeInMillis() - started.getTimeInMillis()), TimeUnit.MILLISECONDS) < 7)
-//                {
+//                    TimeUnit.DAYS.convert((reference.getTimeInMillis() - started.getTimeInMillis()), TimeUnit.MILLISECONDS) < 7) {
 //                  reference.add(Calendar.HOUR_OF_DAY, 24);
 //                  date = reference.getTime();
-//                }
-//                else
+//                } else {
 //                  keepLooping = false;
+//                }
 //              }
 //              content += "</body></html>";
 
@@ -2427,7 +2422,7 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    class PredefZone {
+    static class PredefZone {
         protected String name = "";
         protected double top = 0D;
         protected double bottom = 0D;

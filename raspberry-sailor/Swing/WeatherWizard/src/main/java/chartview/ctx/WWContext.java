@@ -103,8 +103,9 @@ public class WWContext {
     }
 
     public static synchronized WWContext getInstance() {
-        if (context == null)
+        if (context == null) {
             context = new WWContext();
+        }
         return context;
     }
 
@@ -893,38 +894,45 @@ public class WWContext {
     }
 
     public void fireSetDisplayBestRoute(boolean b) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setDisplayBestRoute(b);
+        }
     }
 
     public void fireSetDisplayRoutingLabels(boolean b) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setDisplayRoutingLabels(b);
+        }
     }
 
     public void fireSetDisplayIsochrons(boolean b) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setDisplayIsochrons(b);
+        }
     }
 
     public void fireDisplayGRIBDateLabel(boolean b) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.displayGRIBDateLabel(b);
+        }
     }
 
     public void fireTimeZoneForLabel(String tz) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setTimeZoneForLabel(tz);
+        }
     }
 
     public void fireSetReplayDelay(int i) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setReplayDelay(i);
+        }
     }
 
     public void fireSetWithCompositeDocumentDate(boolean b) {
-        for (ApplicationEventListener l : WWContext.getInstance().getListeners())
+        for (ApplicationEventListener l : WWContext.getInstance().getListeners()) {
             l.setWithCompositeDocumentDate(b);
+        }
     }
 
     public void fireClickOnChart() {
@@ -939,8 +947,9 @@ public class WWContext {
     }
 
     public Boolean getUseGRIBWindSpeedTransparency() {
-        if (useGRIBWindSpeedTransparency == null)
+        if (useGRIBWindSpeedTransparency == null) {
             useGRIBWindSpeedTransparency = ((Boolean) ParamPanel.data[ParamData.USE_TRANSPARENT_GRIB_WIND][ParamData.VALUE_INDEX]);
+        }
         return useGRIBWindSpeedTransparency;
     }
 
@@ -957,8 +966,9 @@ public class WWContext {
     }
 
     public Boolean getUseColorRangeForWindSpeed() {
-        if (useColorRangeForWindSpeed == null)
+        if (useColorRangeForWindSpeed == null) {
             useColorRangeForWindSpeed = ((Boolean) ParamPanel.data[ParamData.COLOR_RANGE][ParamData.VALUE_INDEX]);
+        }
         return useColorRangeForWindSpeed;
     }
 
@@ -1080,13 +1090,16 @@ public class WWContext {
 
         public boolean accept(File f) {
             if (f != null) {
-                if (f.isDirectory())
+                if (f.isDirectory()) {
                     return true;
+                }
                 String extension = getExtension(f);
-                if (filters == null)
+                if (filters == null) {
                     return true;
-                if (extension != null && filters.get(getExtension(f)) != null)
+                }
+                if (extension != null && filters.get(getExtension(f)) != null) {
                     return true;
+                }
             }
             return false;
         }
@@ -1095,15 +1108,17 @@ public class WWContext {
             if (f != null) {
                 String filename = f.getName();
                 int i = filename.lastIndexOf('.');
-                if (i > 0 && i < filename.length() - 1)
+                if (i > 0 && i < filename.length() - 1) {
                     return filename.substring(i + 1).toLowerCase();
+                }
             }
             return null;
         }
 
         public void addExtension(String extension) {
-            if (filters == null)
-                filters = new Hashtable<String, Object>(5);
+            if (filters == null) {
+                filters = new Hashtable<>(5);
+            }
             filters.put(extension.toLowerCase(), this);
             fullDescription = null;
         }
@@ -1111,17 +1126,19 @@ public class WWContext {
         public String getDescription() {
             if (fullDescription == null) {
                 if (description == null || isExtensionListInDescription()) {
-                    if (description != null)
+                    if (description != null) {
                         fullDescription = description;
+                    }
                     if (filters != null) {
                         fullDescription += " (";
                         Enumeration extensions = filters.keys();
-                        if (extensions != null)
-                            for (fullDescription += "." + (String) extensions.nextElement(); extensions.hasMoreElements(); fullDescription += ", " + (String) extensions.nextElement())
-                                ;
+                        if (extensions != null) {
+                            for (fullDescription += "." + (String) extensions.nextElement(); extensions.hasMoreElements(); fullDescription += ", " + (String) extensions.nextElement());
+                        }
                         fullDescription += ")";
-                    } else
+                    } else {
                         fullDescription = "";
+                    }
                 } else {
                     fullDescription = description;
                 }
@@ -1174,9 +1191,10 @@ public class WWContext {
             fullDescription = null;
             useExtensionsInDescription = true;
             if (filter != null) {
-                this.filters = new Hashtable<String, Object>(filter.length);
-                for (int i = 0; i < filter.length; i++)
+                this.filters = new Hashtable<>(filter.length);
+                for (int i = 0; i < filter.length; i++) {
                     addExtension(filter[i]);
+                }
             }
             setDescription(description);
         }

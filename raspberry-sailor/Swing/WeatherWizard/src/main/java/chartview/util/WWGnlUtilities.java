@@ -3844,7 +3844,11 @@ public class WWGnlUtilities {
                 ex.printStackTrace();
             }
         }
-        int resp = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(), pip, WWGnlUtilities.buildMessage("position-manual-entry"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int resp = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(),
+                pip,
+                WWGnlUtilities.buildMessage("position-manual-entry"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         if (resp == JOptionPane.OK_OPTION) {
             double l = pip.getL();
             double g = pip.getG();
