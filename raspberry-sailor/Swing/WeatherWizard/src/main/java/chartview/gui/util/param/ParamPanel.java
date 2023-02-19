@@ -638,15 +638,15 @@ public final class ParamPanel
                             ((Color) data[index][ParamData.VALUE_INDEX]).getGreen(),
                             ((Color) data[index][ParamData.VALUE_INDEX]).getBlue());
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof Integer) {
-                    cloned = ((Integer) data[index][ParamData.VALUE_INDEX]).intValue();
+                    cloned = (Integer) data[index][ParamData.VALUE_INDEX];
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof Double) {
-                    cloned = ((Double) data[index][ParamData.VALUE_INDEX]).doubleValue();
+                    cloned = (Double) data[index][ParamData.VALUE_INDEX];
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof Float) {
-                    cloned = ((Float) data[index][ParamData.VALUE_INDEX]).floatValue();
+                    cloned = (Float) data[index][ParamData.VALUE_INDEX];
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof String) {
                     cloned = data[index][ParamData.VALUE_INDEX].toString();
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof Boolean) {
-                    cloned = ((Boolean) data[index][ParamData.VALUE_INDEX]).booleanValue();
+                    cloned = (Boolean) data[index][ParamData.VALUE_INDEX];
                 } else if (data[index][ParamData.VALUE_INDEX] instanceof SoundFile) {
                     cloned = new SoundFile(((SoundFile) data[index][ParamData.VALUE_INDEX]).getFileExt(),
                             ((SoundFile) data[index][ParamData.VALUE_INDEX]).getDesc(),
@@ -837,7 +837,8 @@ public final class ParamPanel
                             currentIndex == ParamData.EXPAND_CONTROLS_BY_DEFAULT ||
                             currentIndex == ParamData.TRY_TO_AVOID_LAND) {
                         try {
-                            /*boolean b =*/ Boolean.valueOf(after); // Just to make sure there's not pb
+                            /*boolean b =*/
+                            Boolean.valueOf(after); // Just to make sure there's not pb
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(this,
                                     e.getMessage(),
@@ -867,7 +868,7 @@ public final class ParamPanel
                         if (currentIndex == ParamData.DD_ZOOM_COLOR)
                             WWContext.getInstance().fireDDZColorChanged((Color) ParamPanel.data[ParamData.DD_ZOOM_COLOR][ParamData.VALUE_INDEX]);
                         if (currentIndex == ParamData.CHART_LINE_THICK)
-                            WWContext.getInstance().fireChartLineThicknessChanged(((Integer) ParamPanel.data[ParamData.CHART_LINE_THICK][ParamData.VALUE_INDEX]).intValue());
+                            WWContext.getInstance().fireChartLineThicknessChanged((Integer) ParamPanel.data[ParamData.CHART_LINE_THICK][ParamData.VALUE_INDEX]);
                         if (currentIndex == ParamData.FAX_TRANSPARENCY ||
                                 currentIndex == ParamData.GRIB_WIND_COLOR ||
                                 currentIndex == ParamData.GRIB_CURRENT_COLOR ||
@@ -887,7 +888,7 @@ public final class ParamPanel
                         if (currentIndex == ParamData.LOOK_AND_FEEL) // TASK Remove, unused
                             WWContext.getInstance().fireLookAndFeelChanged(((ListOfLookAndFeel) ParamPanel.data[ParamData.LOOK_AND_FEEL][ParamData.VALUE_INDEX]).currentValue);
                         if (currentIndex == ParamData.CONFIRM_DD_ZOOM)
-                            WWContext.getInstance().fireDDZoomConfirmChanged(((Boolean) ParamPanel.data[ParamData.CONFIRM_DD_ZOOM][ParamData.VALUE_INDEX]).booleanValue());
+                            WWContext.getInstance().fireDDZoomConfirmChanged((Boolean) ParamPanel.data[ParamData.CONFIRM_DD_ZOOM][ParamData.VALUE_INDEX]);
                     }
                 }
             }
@@ -902,7 +903,7 @@ public final class ParamPanel
         table.repaint();
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         this.setLayout(borderLayout1);
         this.setSize(new Dimension(181, 300));
 //  parent.setSize(new Dimension(400, 378));
@@ -1020,8 +1021,8 @@ public final class ParamPanel
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(new JTableFocusChangeListener(table));
     }
 
-    
-    public class CustomTableCellRenderer extends DefaultTableCellRenderer {
+
+    static public class CustomTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -1030,8 +1031,8 @@ public final class ParamPanel
         }
     }
 
-    
-    public class SpecialTableCellRenderer
+
+    public static class SpecialTableCellRenderer
             extends JLabel
             implements TableCellRenderer {
         private final transient List<Color> rowColors = Arrays.asList(Color.WHITE, Color.LIGHT_GRAY);
@@ -1111,9 +1112,8 @@ public final class ParamPanel
         }
     }
 
-    protected static String[] lnfValues = null; // Populated in the constructor
+    private static String[] lnfValues = null; // Populated in the constructor
 
-    
     public static class ParamEditor
             extends JComponent
             implements TableCellEditor {
@@ -1126,7 +1126,7 @@ public final class ParamPanel
         GrayPanelOptionListComboBox gpOptionCombo = new GrayPanelOptionListComboBox();
         TemperatureUnitListComboBox tempUnitCombo = new TemperatureUnitListComboBox();
         AnemometerHandOptionListComboBox anemoCombo = new AnemometerHandOptionListComboBox();
-        JComboBox<String> serialPortList = new JComboBox<>(new String[] { "Empty Serial Port list"}); // TODO Remove this  SerialPortList.listSerialPorts());
+        JComboBox<String> serialPortList = new JComboBox<>(new String[]{"Empty Serial Port list"}); // TODO Remove this  SerialPortList.listSerialPorts());
         JComboBox<String> timeZonesList = new JComboBox<>(TimeZone.getAvailableIDs());
         RoutingOptionComboBox roCombo = new RoutingOptionComboBox();
 
@@ -1274,7 +1274,7 @@ public final class ParamPanel
                         break;
                     }
                 }
-                return (new TemperatureUnitList(i.intValue()));
+                return (new TemperatureUnitList(i));
             } else if (componentToApply instanceof AnemometerHandOptionListComboBox) {
                 String s = (String) ((AnemometerHandOptionListComboBox) componentToApply).getSelectedItem();
                 Integer i = null;
@@ -1284,7 +1284,7 @@ public final class ParamPanel
                         break;
                     }
                 }
-                return (new AnemometerHandOptionList(i.intValue()));
+                return (new AnemometerHandOptionList(i));
             } else if (componentToApply instanceof FaxBlurListComboBox) {
                 String s = (String) ((FaxBlurListComboBox) componentToApply).getSelectedItem();
                 Integer i = null;
@@ -1294,7 +1294,7 @@ public final class ParamPanel
                         break;
                     }
                 }
-                return (new FaxBlurList(i.intValue()));
+                return (new FaxBlurList(i));
             } else if (componentToApply instanceof GrayPanelOptionListComboBox) {
                 String s = (String) ((GrayPanelOptionListComboBox) componentToApply).getSelectedItem();
                 Integer i = null;
@@ -1304,7 +1304,7 @@ public final class ParamPanel
                         break;
                     }
                 }
-                return (new GrayPanelOptionList(i.intValue()));
+                return (new GrayPanelOptionList(i));
             } else if (componentToApply instanceof WindOptionComboBox) {
                 String s = (String) ((WindOptionComboBox) componentToApply).getSelectedItem();
                 int idx = -1;
@@ -1336,12 +1336,12 @@ public final class ParamPanel
             } else if (componentToApply instanceof JComboBox) // Too vague...
             {
                 if (originalValue instanceof ListOfSerialPorts) {
-                    return new ListOfSerialPorts((String) ((JComboBox) componentToApply).getSelectedItem());
+                    return new ListOfSerialPorts((String) ((JComboBox<String>) componentToApply).getSelectedItem());
                 } else if (originalValue instanceof ListOfTimeZones) {
-                    return new ListOfTimeZones((String) ((JComboBox) componentToApply).getSelectedItem());
+                    return new ListOfTimeZones((String) ((JComboBox<String>) componentToApply).getSelectedItem());
                 } else { // Assume Look and Feel... Not granted
                     System.out.println("Warning!!! Unproperly managed ComboBox for :" + originalValue.getClass().getName());
-                    return (new ListOfLookAndFeel((String) ((JComboBox) componentToApply).getSelectedItem()));
+                    return (new ListOfLookAndFeel((String) ((JComboBox<String>) componentToApply).getSelectedItem()));
                 }
             } else {
                 WWContext.getInstance().fireLogging("ParamPanel.getCellEditorValue : Null!! [" + (componentToApply != null ? componentToApply.getClass().getName() : " null") + "]");
@@ -1408,9 +1408,7 @@ public final class ParamPanel
         }
         Object[][] newData = new Object[len + 1][names.length];
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < names.length; j++) {
-                newData[i][j] = d[i][j];
-            }
+            System.arraycopy(d[i], 0, newData[i], 0, names.length);
         }
         newData[len][ParamData.NAME_INDEX] = k;
         newData[len][ParamData.VALUE_INDEX] = v;
@@ -1480,8 +1478,8 @@ public final class ParamPanel
     }
 
     public static class DataFile {
-        private String[] fileExt;
-        private String desc;
+        private final String[] fileExt;
+        private final String desc;
         private String value;
 
         public DataFile(String[] sa, String s, String str) {
@@ -1518,7 +1516,7 @@ public final class ParamPanel
     }
 
     public static class DataDirectory {
-        private String desc;
+        private final String desc;
         private String value;
 
         public DataDirectory(String description, String dirValue) {
@@ -1594,7 +1592,7 @@ public final class ParamPanel
         }
 
         public int[] getIntValues() {
-            List<Integer> al = new ArrayList<Integer>();
+            List<Integer> al = new ArrayList<>();
             StringTokenizer strtokContourLines = new StringTokenizer(value, ",");
             while (strtokContourLines.hasMoreTokens()) {
                 String tok = strtokContourLines.nextToken().trim();
@@ -1609,20 +1607,20 @@ public final class ParamPanel
             int i = 0;
             while (iterator.hasNext()) {
                 Integer integer = iterator.next();
-                ret[i++] = integer.intValue();
+                ret[i++] = integer;
             }
             return ret;
         }
 
         public int[] getBoldIndexes() {
-            List<Integer> al = new ArrayList<Integer>();
+            List<Integer> al = new ArrayList<>();
             StringTokenizer strtokContourLines = new StringTokenizer(value, ",");
             int idx = 0;
             while (strtokContourLines.hasMoreTokens()) {
                 String tok = strtokContourLines.nextToken().trim();
                 boolean b = tok.startsWith("[") && tok.endsWith("]");
                 if (b) {
-                    al.add(Integer.valueOf(idx));
+                    al.add(idx);
                 }
                 idx++;
             }
@@ -1631,7 +1629,7 @@ public final class ParamPanel
             int i = 0;
             while (iterator.hasNext()) {
                 Integer integer = iterator.next();
-                ret[i++] = integer.intValue();
+                ret[i++] = integer;
             }
             return ret;
         }
@@ -1644,7 +1642,7 @@ public final class ParamPanel
     }
 
     public static class WindOptionList extends ListOfValues {
-        private static String[] map = {WWGnlUtilities.buildMessage("small-dot"),
+        private final static String[] map = {WWGnlUtilities.buildMessage("small-dot"),
                 WWGnlUtilities.buildMessage("heavy-dot"),
                 WWGnlUtilities.buildMessage("background")};
 
@@ -1674,7 +1672,7 @@ public final class ParamPanel
     }
 
     public static class RoutingOutputList extends ListOfValues {
-        private static String[] map = {"CSV",
+        private final static String[] map = {"CSV",
                 "GPX",
                 "Text",
                 WWGnlUtilities.buildMessage("ask-user-every-time"),
@@ -1716,7 +1714,7 @@ public final class ParamPanel
         public final static int FAHRENHEIT = 1;
         public final static int KELVIN = 2;
 
-        private static HashMap<Integer, String> map = new HashMap<Integer, String>(3);
+        private final static HashMap<Integer, String> map = new HashMap<>(3);
 
         public TemperatureUnitList(int key) {
             map.put(CELSIUS, "\272C");
@@ -1730,7 +1728,7 @@ public final class ParamPanel
             int idx = -1;
             for (Integer k : map.keySet()) {
                 if (map.get(k).equals(getCurrentValue())) {
-                    idx = k.intValue();
+                    idx = k;
                     break;
                 }
             }
@@ -1754,7 +1752,7 @@ public final class ParamPanel
         }
 
         public static String getLabel(int idx) {
-            return map.get(Integer.valueOf(idx));
+            return map.get(idx);
         }
     }
 
@@ -1763,7 +1761,7 @@ public final class ParamPanel
         public final static int ARROW_HAND_OPTION = 2;
         public final static int BIG_HAND_OPTION = 3;
 
-        private static HashMap<Integer, String> map = new HashMap<Integer, String>(3);
+        private final static HashMap<Integer, String> map = new HashMap<>(3);
 
         public AnemometerHandOptionList(int key) {
             map.put(SIMPLE_HAND_OPTION, WWGnlUtilities.buildMessage("simple-hand"));
@@ -1777,7 +1775,7 @@ public final class ParamPanel
             int idx = -1;
             for (Integer k : map.keySet()) {
                 if (map.get(k).equals(getCurrentValue())) {
-                    idx = k.intValue();
+                    idx = k;
                     break;
                 }
             }
@@ -1801,12 +1799,12 @@ public final class ParamPanel
         }
 
         public static String getLabel(int idx) {
-            return map.get(Integer.valueOf(idx));
+            return map.get(idx);
         }
     }
 
     public static class FaxBlurList extends ListOfValues {
-        private static HashMap<Integer, String> map = new HashMap<Integer, String>(3);
+        private final static HashMap<Integer, String> map = new HashMap<>(3);
 
         public FaxBlurList(int key) {
             map.put(-1, WWGnlUtilities.buildMessage("blur"));
@@ -1834,7 +1832,7 @@ public final class ParamPanel
     }
 
     public static class GrayPanelOptionList extends ListOfValues {
-        private static Map<Integer, String> map = new LinkedHashMap<Integer, String>(3);
+        private final static Map<Integer, String> map = new LinkedHashMap<>(3);
 
         public GrayPanelOptionList(int key) {
             map.put(AdjustFrame.GRAY_PANEL_NOPANEL_OPTION, WWGnlUtilities.buildMessage("no-gray-panel"));
@@ -1912,7 +1910,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class TemperatureUnitListComboBox extends JComboBox {
         public TemperatureUnitListComboBox() {
             super();
@@ -1923,7 +1921,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class AnemometerHandOptionListComboBox extends JComboBox {
         public AnemometerHandOptionListComboBox() {
             super();
@@ -1934,7 +1932,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class GrayPanelOptionListComboBox extends JComboBox {
         public GrayPanelOptionListComboBox() {
             super();
@@ -1945,7 +1943,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class FaxBlurListComboBox extends JComboBox {
         public FaxBlurListComboBox() {
             super();
@@ -1956,7 +1954,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class WindOptionComboBox extends JComboBox {
         public WindOptionComboBox() {
             super();
@@ -1967,7 +1965,7 @@ public final class ParamPanel
         }
     }
 
-    
+
     private static class RoutingOptionComboBox extends JComboBox {
         public RoutingOptionComboBox() {
             super();

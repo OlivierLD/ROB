@@ -1,35 +1,29 @@
 package chartview.gui.util.param;
 
-public class ListOfValues
-{
-  String currentValue = "";
+public class ListOfValues {
+    String currentValue = "";
 
-  public ListOfValues()
-  {}
-  
-  public ListOfValues(String str)
-  {
-    currentValue = str;
-  }
+    public ListOfValues() {
+    }
 
-  public void setCurrentValue(String str)
-  {
-    currentValue = str;
-  }
+    public ListOfValues(String str) {
+        currentValue = str;
+    }
 
-  public String getCurrentValue()
-  {
-    return currentValue;
-  }
+    public void setCurrentValue(String str) {
+        currentValue = str;
+    }
 
-  public boolean equals(ListOfValues lov)
-  {
-    return this.toString().equals(lov.toString());
-  }
+    public String getCurrentValue() {
+        return currentValue;
+    }
 
-  public String toString()
-  {
-    return currentValue;
-  }
+    public boolean equals(ListOfValues lov) {
+        return this.toString().equals(lov.toString());
+    }
+
+    public String toString() {
+        return currentValue;
+    }
 }
 

@@ -1,6 +1,7 @@
 package chartview.gui.util.tree;
 
 
+import calc.GeomUtil;
 import chartview.ctx.ApplicationEventListener;
 import chartview.ctx.WWContext;
 import chartview.gui.AdjustFrame;
@@ -14,27 +15,14 @@ import oracle.xml.parser.v2.XMLDocument;
 import oracle.xml.parser.v2.XMLElement;
 import oracle.xml.parser.v2.XMLParser;
 import org.w3c.dom.NodeList;
-import calc.GeomUtil;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-import java.awt.BorderLayout;
-import java.awt.Component;
+import javax.swing.tree.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,17 +32,12 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipFile;
-
 
 
 public class JTreeFilePanel
@@ -62,9 +45,9 @@ public class JTreeFilePanel
     public final static String OLP_URL = "http://www.lediouris.net/ww/patterns/olp.xml";
     public final static String PDF_URL = "dyn.fax.xml";
 
-    private BorderLayout borderLayout1 = new BorderLayout();
-    private JScrollPane jScrollPane1 = new JScrollPane();
-    private JTree jTree = new JTree();
+    private final BorderLayout borderLayout1 = new BorderLayout();
+    private final JScrollPane jScrollPane1 = new JScrollPane();
+    private final JTree jTree = new JTree();
     //private JButton showHideButton = new JButton();
     private CustomPanelButton showHideButton = null;
     private final transient TreeSelectionListener treeMonitor = new TreeMonitor(this);
@@ -72,10 +55,10 @@ public class JTreeFilePanel
     private DefaultMutableTreeNode currentlySelectedNode = null;
 
     private boolean expanded = true;
-    private String path = null;
+    private final String path;
 
-    private DefaultMutableTreeNode root = null;
-    private DataFilePopup rootPopup = new DataFilePopup(this);
+    private final DefaultMutableTreeNode root;
+    private final DataFilePopup rootPopup = new DataFilePopup(this);
 
     public final static int GRIB_TYPE = 0;
     public final static int FAX_TYPE = 1;
@@ -124,14 +107,15 @@ public class JTreeFilePanel
             case COMPOSITE_TYPE:
 //    case COMPOSITE_ARCHIVE_TYPE:
                 String sortType = System.getProperty("composite.sort", "date.desc");
-                if ("date.desc".equals(sortType))
+                if ("date.desc".equals(sortType)) {
                     this.sort = SORT_BY_DATE_DESC;
-                else if ("date.asc".equals(sortType))
+                } else if ("date.asc".equals(sortType)) {
                     this.sort = SORT_BY_DATE_ASC;
-                else if ("name.asc".equals(sortType))
+                } else if ("name.asc".equals(sortType)) {
                     this.sort = SORT_BY_NAME_ASC;
-                else if ("name.desc".equals(sortType))
+                } else if ("name.desc".equals(sortType)) {
                     this.sort = SORT_BY_NAME_DESC;
+                }
                 break;
             case PATTERN_TYPE:
             case PRE_DEF_FAX_TYPE:
@@ -161,7 +145,7 @@ public class JTreeFilePanel
         }
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         this.setLayout(borderLayout1);
         jScrollPane1.getViewport().add(jTree, null);
         jTree.addTreeSelectionListener(treeMonitor);
@@ -280,8 +264,8 @@ public class JTreeFilePanel
                     TreePath[] paths = jTree.getSelectionPaths();
                     boolean isSelected = false;
                     if (paths != null) {
-                        for (int i = 0; i < paths.length; i++) {
-                            if (paths[i] == current) {
+                        for (TreePath treePath : paths) {
+                            if (treePath == current) {
                                 isSelected = true;
                                 break;
                             }
@@ -294,8 +278,9 @@ public class JTreeFilePanel
                     if (nbSelected > 1) {
                         TreePath[] treePath = jTree.getSelectionPaths();
                         DefaultMutableTreeNode[] dmtnArray = new DefaultMutableTreeNode[treePath.length];
-                        for (int i = 0; i < treePath.length; i++)
+                        for (int i = 0; i < treePath.length; i++) {
                             dmtnArray[i] = (DefaultMutableTreeNode) treePath[i].getLastPathComponent();
+                        }
                         rootPopup.setTreeNode(dmtnArray);
                     } else {
                         DefaultMutableTreeNode dtn = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
@@ -364,61 +349,56 @@ public class JTreeFilePanel
         WWContext.getInstance().fireLogging(WWGnlUtilities.buildMessage("loading2", new String[]{names[type]}));
 
         DefaultMutableTreeNode localPatterns = null;
-//  DefaultMutableTreeNode preDefFaxes    = null;
-        if (getType() == PATTERN_TYPE) // Add a node for the on-line patterns
-        {
+        //  DefaultMutableTreeNode preDefFaxes    = null;
+        if (getType() == PATTERN_TYPE) { // Add a node for the on-line patterns
             final DefaultMutableTreeNode onLinePatterns = new DefaultMutableTreeNode(WWGnlUtilities.buildMessage("on-line-patterns"));
             localPatterns = new DefaultMutableTreeNode(WWGnlUtilities.buildMessage("local-patterns"));
             root.add(localPatterns);
-//    jTree.setRootVisible(false);
+            // jTree.setRootVisible(false);
 
-            Thread olpThread = new Thread() {
-                public void run() {
-                    try {
-                        URL url = new URL(OLP_URL);
-                        // We create a new parser, for other thread not to wait for it to be released
-                        DOMParser parser = new DOMParser(); // (DOMParser)WWContext.getInstance().getParser();
-                        synchronized (parser) {
-                            parser.setValidationMode(XMLParser.NONVALIDATING);
-                            parser.parse(url);
-                            XMLDocument olpDoc = parser.getDocument();
-                            drillDownWebPatterns((XMLElement) olpDoc.getDocumentElement(), onLinePatterns);
-                            // onLinePatterns.add(new PatternFileTreeNode("http://", "weather.lediouris.net/patterns/01.Favorites/06.01.bis.AllPac.Faxes.Satellite.ptrn", "Web Pattern"));
-                            root.add(onLinePatterns);
-                            ((DefaultTreeModel) jTree.getModel()).reload(root);
-                        }
-                    } catch (Throwable ex) {
-                        System.err.println("No connection for OnLine patterns:" + ex.getLocalizedMessage());
-//            ex.printStackTrace();
+            Thread olpThread = new Thread(() -> {
+                try {
+                    URL url = new URL(OLP_URL);
+                    // We create a new parser, for other thread not to wait for it to be released
+                    DOMParser parser = new DOMParser(); // (DOMParser)WWContext.getInstance().getParser();
+                    synchronized (parser) {
+                        parser.setValidationMode(XMLParser.NONVALIDATING);
+                        parser.parse(url);
+                        XMLDocument olpDoc = parser.getDocument();
+                        drillDownWebPatterns((XMLElement) olpDoc.getDocumentElement(), onLinePatterns);
+                        // onLinePatterns.add(new PatternFileTreeNode("http://", "weather.lediouris.net/patterns/01.Favorites/06.01.bis.AllPac.Faxes.Satellite.ptrn", "Web Pattern"));
+                        root.add(onLinePatterns);
+                        ((DefaultTreeModel) jTree.getModel()).reload(root);
                     }
-                    System.out.println("Online Pattern Thread completed.");
+                } catch (Throwable ex) {
+                    System.err.println("No connection for OnLine patterns:" + ex.getLocalizedMessage());
+                    // ex.printStackTrace();
                 }
-            };
+                System.out.println("Online Pattern Thread completed.");
+            });
             olpThread.start();
         } else if (getType() == PRE_DEF_FAX_TYPE) {
-//    preDefFaxes = new DefaultMutableTreeNode(WWGnlUtilities.buildMessage("pre-def-faxes"));
-//    root.add(preDefFaxes);
+            // preDefFaxes = new DefaultMutableTreeNode(WWGnlUtilities.buildMessage("pre-def-faxes"));
+            // root.add(preDefFaxes);
             jTree.setRootVisible(true);
-            Thread predefLoader = new Thread() {
-                public void run() {
-                    try {
-                        URL url = new File(PDF_URL).toURI().toURL();
-                        DOMParser parser = WWContext.getInstance().getParser();
-                        synchronized (parser) {
-                            parser.setValidationMode(XMLParser.NONVALIDATING);
-                            parser.parse(url);
-                            XMLDocument pdfDoc = parser.getDocument();
-                            //        drillDownPreDefFaxes((XMLElement)pdfDoc.getDocumentElement(), preDefFaxes);
-                            drillDownPreDefFaxes((XMLElement) pdfDoc.getDocumentElement(), root);
-                            System.out.println("Pre-defined faxes thread completed.");
-                        }
-                    } catch (Exception ex) {
-                        root.add(new DefaultMutableTreeNode("No pre-defined fax definition found.")); // LOCALIZE
-                        System.out.println("No PreDefined faxes...:" + ex.getLocalizedMessage());
-                        ex.printStackTrace();
+            Thread predefLoader = new Thread(() -> {
+                try {
+                    URL url = new File(PDF_URL).toURI().toURL();
+                    DOMParser parser = WWContext.getInstance().getParser();
+                    synchronized (parser) {
+                        parser.setValidationMode(XMLParser.NONVALIDATING);
+                        parser.parse(url);
+                        XMLDocument pdfDoc = parser.getDocument();
+                        //        drillDownPreDefFaxes((XMLElement)pdfDoc.getDocumentElement(), preDefFaxes);
+                        drillDownPreDefFaxes((XMLElement) pdfDoc.getDocumentElement(), root);
+                        System.out.println("Pre-defined faxes thread completed.");
                     }
+                } catch (Exception ex) {
+                    root.add(new DefaultMutableTreeNode("No pre-defined fax definition found.")); // LOCALIZE
+                    System.out.println("No PreDefined faxes...:" + ex.getLocalizedMessage());
+                    ex.printStackTrace();
                 }
-            };
+            });
             predefLoader.start();
         }
 
@@ -433,10 +413,11 @@ public class JTreeFilePanel
                 for (int i = 0; i < pathElem.length; i++) {
                     String name = pathElem[i].substring(pathElem[i].lastIndexOf("/") + 1);
                     insertedNodes[i] = new DirectoryTreeNode(pathElem[i], name, name);
-                    if (localPatterns != null)
+                    if (localPatterns != null) {
                         localPatterns.add(insertedNodes[i]);
-                    else
+                    } else {
                         root.add(insertedNodes[i]);
+                    }
                 }
             }
             for (int i = 0; i < pathElem.length; i++) {
@@ -471,16 +452,18 @@ public class JTreeFilePanel
 
     private void removeEmptyBranches(DefaultMutableTreeNode fromRoot) {
         Enumeration children = fromRoot.children();
-        List<DirectoryTreeNode> toRemove = new ArrayList<DirectoryTreeNode>();
+        List<DirectoryTreeNode> toRemove = new ArrayList<>();
         while (children.hasMoreElements()) {
             TreeNode dtn = (TreeNode) children.nextElement();
             if (dtn instanceof DirectoryTreeNode) {
                 DirectoryTreeNode dirNode = (DirectoryTreeNode) dtn;
 
-                if (dirNode.getChildCount() > 0)
+                if (dirNode.getChildCount() > 0) {
                     removeEmptyBranches(dirNode);
-                if (dirNode.getChildCount() == 0)
+                }
+                if (dirNode.getChildCount() == 0) {
                     toRemove.add(dirNode);
+                }
             }
         }
         // Remove here!
@@ -549,9 +532,9 @@ public class JTreeFilePanel
                            final String commentFilter,
                            final boolean commentRegExp) {
 
-        if (!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             throw new RuntimeException("[" + dir.getAbsolutePath() + "] not found, or is not a directory (from " + System.getProperty("user.dir") + ")");
-        else {
+        } else {
             File[] flist = dir.listFiles(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
                     boolean cond = false;
@@ -562,9 +545,9 @@ public class JTreeFilePanel
                                     name.endsWith(".grib");
                             if (cond && filter != null && filter.trim().length() > 0) {
                                 if (!new File(dir, name).isDirectory()) {
-                                    if (!regExp)
+                                    if (!regExp) {
                                         cond = cond && (name.indexOf(filter) > -1);
-                                    else {
+                                    } else {
                                         matcher = pattern.matcher(name);
                                         cond = cond && matcher.find();
                                     }
@@ -581,9 +564,9 @@ public class JTreeFilePanel
                                     name.endsWith(".png");
                             if (cond && filter != null && filter.trim().length() > 0) {
                                 if (!new File(dir, name).isDirectory()) {
-                                    if (!regExp)
+                                    if (!regExp) {
                                         cond = cond && (name.indexOf(filter) > -1);
-                                    else {
+                                    } else {
                                         matcher = pattern.matcher(name);
                                         cond = cond && matcher.find();
                                     }
@@ -597,9 +580,9 @@ public class JTreeFilePanel
                                 File f = new File(dir, name);
                                 if (!f.isDirectory()) {
                                     if (filter != null && filter.trim().length() > 0) {
-                                        if (!regExp)
+                                        if (!regExp) {
                                             cond = cond && (name.indexOf(filter) > -1);
-                                        else {
+                                        } else {
                                             matcher = pattern.matcher(name);
                                             cond = cond && matcher.find();
                                         }
@@ -608,9 +591,9 @@ public class JTreeFilePanel
                                         // Get the comment
                                         String compositeComment = WWGnlUtilities.getCompositeComment(f.getAbsolutePath());
 //                      System.out.println("Matching [" + compositeComment + "] against ["+ commentFilter + "]");
-                                        if (!commentRegExp)
+                                        if (!commentRegExp) {
                                             cond = cond && (compositeComment.indexOf(commentFilter) > -1);
-                                        else {
+                                        } else {
                                             commentMatcher = commentPattern.matcher(compositeComment);
                                             cond = cond && commentMatcher.find();
                                         }
@@ -625,9 +608,9 @@ public class JTreeFilePanel
                             cond = new File(dir, name).isDirectory() || name.endsWith(".ptrn");
                             if (cond && filter != null && filter.trim().length() > 0) {
                                 if (!new File(dir, name).isDirectory()) {
-                                    if (!regExp)
+                                    if (!regExp) {
                                         cond = cond && (name.indexOf(filter) > -1);
-                                    else {
+                                    } else {
                                         matcher = pattern.matcher(name);
                                         cond = cond && matcher.find();
                                     }
@@ -646,7 +629,7 @@ public class JTreeFilePanel
             });
             List<File> list = Arrays.asList(flist);
             // Sort the Files, most recent on top, for all others than pattern
-//    if (type != JTreeFilePanel.PATTERN_TYPE)
+        //  if (type != JTreeFilePanel.PATTERN_TYPE)
             Collections.<File>sort(list, new FileSorter(type));
 
             try {
@@ -657,19 +640,18 @@ public class JTreeFilePanel
                 cce.printStackTrace();
             }
 
-            for (int i = 0; i < flist.length; i++) {
-                File f = flist[i];
+            for (File f : flist) {
                 if (f.isDirectory()) {
 //        DefaultMutableTreeNode dtn = new DefaultMutableTreeNode(flist[i].getName());
-                    DirectoryTreeNode dtn = new DirectoryTreeNode(flist[i].getAbsolutePath(), flist[i].getName(), flist[i].getName());
+                    DirectoryTreeNode dtn = new DirectoryTreeNode(f.getAbsolutePath(), f.getName(), f.getName());
                     parent.add(dtn);
-                    drillDown(flist[i], dtn, filter, regExp, commentFilter, commentRegExp);
+                    drillDown(f, dtn, filter, regExp, commentFilter, commentRegExp);
                 } else {
                     nbFile++;
                     System.out.print(".");
 //        System.out.print(Integer.toString(nbFile) + "-");
                     DefaultMutableTreeNode dtn = null;
-                    String localFileName = flist[i].getName(); //flist[i].getAbsolutePath().substring(flist[i].getAbsolutePath().lastIndexOf(File.separator) + 1);
+                    String localFileName = f.getName(); //flist[i].getAbsolutePath().substring(flist[i].getAbsolutePath().lastIndexOf(File.separator) + 1);
                     try {
                         switch (type) {
                             case JTreeFilePanel.FAX_TYPE:
@@ -687,7 +669,7 @@ public class JTreeFilePanel
                                     WWContext.getInstance().fireReadGRIB();
                                 } catch (Exception npe) // inline-requests...
                                 {
-                                    System.out.println("Problem -> " + flist[i].getAbsolutePath());
+                                    System.out.println("Problem -> " + f.getAbsolutePath());
                                 }
                                 break;
                             case JTreeFilePanel.COMPOSITE_TYPE:
@@ -783,18 +765,21 @@ public class JTreeFilePanel
                 return (f2.getName().compareTo(f1.getName()));
             } else if (sort == SORT_BY_DATE_DESC) {
                 // Most recent on top
-                if (f1.lastModified() > f2.lastModified())
+                if (f1.lastModified() > f2.lastModified()) {
                     return -1;
-                else
+                } else {
                     return 1;
+                }
             } else if (sort == SORT_BY_DATE_ASC) {
                 // Most recent on top
-                if (f2.lastModified() > f1.lastModified())
+                if (f2.lastModified() > f1.lastModified()) {
                     return -1;
-                else
+                } else {
                     return 1;
-            } else
+                }
+            } else {
                 return 0; // Should never occur
+            }
         }
     }
 
@@ -825,7 +810,7 @@ public class JTreeFilePanel
                     }
                 } else // .waz
                 {
-//        System.out.println("Looking for archive [" + fPath + "] name [" + fName + "]");
+                    // System.out.println("Looking for archive [" + fPath + "] name [" + fName + "]");
                     ZipFile waz = new ZipFile(fPath);
                     InputStream is = waz.getInputStream(waz.getEntry("composite.xml"));
                     parser.parse(is);
@@ -836,8 +821,9 @@ public class JTreeFilePanel
                     NodeList comment = doc.selectNodes("//composite-comment");
                     if (comment.getLength() > 0) {
                         String commentStr = Utilities.superTrim(comment.item(0).getFirstChild().getNodeValue());
-                        if (commentStr.trim().length() > 200)
+                        if (commentStr.trim().length() > 200) {
                             commentStr = commentStr.trim().substring(0, 200) + " ...";
+                        }
                         str += commentStr.replaceAll("\n", "<br>");
                         str += "<br>";
                     }
@@ -852,8 +838,9 @@ public class JTreeFilePanel
                                 faxTtl = (XMLElement) fax.selectNodes("./faxTitle").item(0);
                             } catch (Exception ignore) {
                             }
-                            if (faxTtl != null)
+                            if (faxTtl != null) {
                                 str += (faxTtl.getNodeValue() /*.getTextContent()*/ + " - ");
+                            }
                             str += (WWGnlUtilities.truncateBigFileName(faxName) + "<br>");
                         }
                     }
@@ -864,9 +851,9 @@ public class JTreeFilePanel
                             XMLElement grb = (XMLElement) grib.item(i);
                             String gribName = "";
                             String ilr = grb.getAttribute("in-line-request");
-                            if (ilr != null && ilr.trim().length() > 0)
+                            if (ilr != null && ilr.trim().length() > 0) {
                                 str += (ilr + "<br>");
-                            else {
+                            } else {
                                 try {
                                     gribName = grb.getFirstChild().getNodeValue();
                                     str += (WWGnlUtilities.truncateBigFileName(gribName) + "<br>");
@@ -899,8 +886,9 @@ public class JTreeFilePanel
                 XMLDocument doc = parser.getDocument();
                 try {
                     String author = ((XMLElement) doc.selectNodes("//author").item(0)).getAttribute("name");
-                    if (author != null && author.trim().length() > 0)
+                    if (author != null && author.trim().length() > 0) {
                         str += (WWGnlUtilities.buildMessage("author") + " " + author + "<br>");
+                    }
                 } catch (Exception ex) {
                     // System.out.println("No Author.");
                 }
@@ -908,16 +896,17 @@ public class JTreeFilePanel
                 for (int i = 0; i < fax.getLength(); i++) {
                     XMLElement f = (XMLElement) fax.item(i);
                     str += (f.getAttribute("hint") + " ");
-                    if (f.getChildrenByTagName("dynamic-resource").getLength() > 0)
+                    if (f.getChildrenByTagName("dynamic-resource").getLength() > 0) {
                         str += "<font color='red'>dynamic</font><br>";
-                    else
+                    } else {
                         str += "<font color='blue'>non-dynamic</font><br>";
+                    }
                 }
 
                 NodeList grib = doc.selectNodes("//grib[string-length(text()) > 0 or ./dynamic-grib]");
-                if (grib.getLength() > 0)
+                if (grib.getLength() > 0) {
                     str += ("1 GRIB file<br>");
-
+                }
                 String projection = ((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("type");
                 str += ("Projection " + projection);
                 // Done
@@ -933,8 +922,9 @@ public class JTreeFilePanel
 
     protected void fireFileOpen(String fName) {
         if (type == JTreeFilePanel.COMPOSITE_TYPE) {
-            if (((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel().isBusy())
+            if (((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel().isBusy()) {
                 ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).addCompositeTab();
+            }
         }
 
         for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
@@ -961,8 +951,8 @@ public class JTreeFilePanel
             } else if (type == JTreeFilePanel.PRE_DEF_FAX_TYPE) {
                 l.predfinedFaxOpen(fName);
             }
-//      else // DEBUG
-//        System.out.println("Not doing anything for [" + fName + "]");
+    //      else // DEBUG
+    //        System.out.println("Not doing anything for [" + fName + "]");
         }
     }
 
@@ -987,14 +977,13 @@ public class JTreeFilePanel
             }
             DefaultMutableTreeNode dtn = (DefaultMutableTreeNode) tp.getLastPathComponent();
             currentlySelectedNode = dtn;
-            if (dtn instanceof DataFileTreeNode && parent.type == JTreeFilePanel.FAX_TYPE) // Fax Preview
-            {
+            if (dtn instanceof DataFileTreeNode && parent.type == JTreeFilePanel.FAX_TYPE) { // Fax Preview
                 WWContext.getInstance().fireFaxSelectedForPreview(((DataFileTreeNode) dtn).getFullFileName());
             }
         }
     }
 
-    public class DataFileTreeNode extends DefaultMutableTreeNode {
+    public static class DataFileTreeNode extends DefaultMutableTreeNode {
         String dir;
         String name;
         String bubble;
@@ -1007,8 +996,9 @@ public class JTreeFilePanel
 
         public String toString() {
             String s = name;
-            if (dir.startsWith("http://"))
+            if (dir.startsWith("http://")) {
                 s = name.substring(name.lastIndexOf("/") + 1);
+            }
             return s;
         }
 
@@ -1022,49 +1012,50 @@ public class JTreeFilePanel
 
         public String getFullFileName() {
             String s = dir + File.separator + name;
-            if (dir.equals("http://"))
+            if (dir.equals("http://")) {
                 s = dir + name;
+            }
             return s;
         }
     }
 
-    public class PatternFileTreeNode extends DataFileTreeNode {
+    public static class PatternFileTreeNode extends DataFileTreeNode {
         public PatternFileTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    public class PredefinedFaxTreeNode extends DataFileTreeNode {
+    public static class PredefinedFaxTreeNode extends DataFileTreeNode {
         public PredefinedFaxTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    public class FaxFileTreeNode extends DataFileTreeNode {
+    public static class FaxFileTreeNode extends DataFileTreeNode {
         public FaxFileTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    public class GribFileTreeNode extends DataFileTreeNode {
+    public static class GribFileTreeNode extends DataFileTreeNode {
         public GribFileTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    public class CompositeFileTreeNode extends DataFileTreeNode {
+    public static class CompositeFileTreeNode extends DataFileTreeNode {
         public CompositeFileTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    public class DirectoryTreeNode extends DataFileTreeNode {
+    public static class DirectoryTreeNode extends DataFileTreeNode {
         public DirectoryTreeNode(String dir, String name, String bubble) {
             super(dir, name, bubble);
         }
     }
 
-    class GribTreeCellRenderer extends DefaultTreeCellRenderer {
+    static class GribTreeCellRenderer extends DefaultTreeCellRenderer {
         public GribTreeCellRenderer() {
             super();
         }
@@ -1084,24 +1075,25 @@ public class JTreeFilePanel
                     row,
                     hasFocus);
             if (value instanceof DataFileTreeNode && !(value instanceof DirectoryTreeNode)) {
-                if (value instanceof FaxFileTreeNode || value instanceof PredefinedFaxTreeNode)
+                if (value instanceof FaxFileTreeNode || value instanceof PredefinedFaxTreeNode) {
                     setIcon(new ImageIcon(this.getClass().getResource("script.png")));
-                else if (value instanceof CompositeFileTreeNode) {
-                    if (((CompositeFileTreeNode) value).name.endsWith(WWContext.WAZ_EXTENSION))
+                } else if (value instanceof CompositeFileTreeNode) {
+                    if (((CompositeFileTreeNode) value).name.endsWith(WWContext.WAZ_EXTENSION)) {
                         setIcon(new ImageIcon(this.getClass().getResource("mapZ.png")));
-                    else
+                    } else {
                         setIcon(new ImageIcon(this.getClass().getResource("map.png")));
-                } else if (value instanceof PatternFileTreeNode)
+                    }
+                } else if (value instanceof PatternFileTreeNode) {
                     setIcon(new ImageIcon(this.getClass().getResource("layout.png")));
-                else if (value instanceof GribFileTreeNode)
+                } else if (value instanceof GribFileTreeNode) {
                     setIcon(new ImageIcon(this.getClass().getResource("page.png")));
-                else
+                } else {
                     setIcon(new ImageIcon(this.getClass().getResource("note.png")));
-
+                }
                 setToolTipText(((DataFileTreeNode) value).getBubble());
-            } else if (value instanceof DirectoryTreeNode)
+            } else if (value instanceof DirectoryTreeNode) {
                 setToolTipText(((DirectoryTreeNode) value).getBubble());
-
+            }
             return this;
         }
     }

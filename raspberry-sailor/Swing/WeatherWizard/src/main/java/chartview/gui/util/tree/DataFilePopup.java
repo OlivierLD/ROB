@@ -140,10 +140,11 @@ public class DataFilePopup
         Thread refreshThread = new Thread("tree-refresher") {
             public void run() {
                 WWContext.getInstance().fireSetLoading(true, WWGnlUtilities.buildMessage("refreshing"));
-                if (withCommentFilter)
+                if (withCommentFilter) {
                     parent.reloadTree(fileFilter, regExp, commentFilter, commentRegExp);
-                else
+                } else {
                     parent.reloadTree(fileFilter, regExp);
+                }
 //      ((DefaultTreeModel)parent.getJTree().getModel()).reload(parent.getRoot());
                 WWContext.getInstance().fireSetLoading(false, WWGnlUtilities.buildMessage("refreshing"));
             }
@@ -245,8 +246,8 @@ public class DataFilePopup
                                 XMLElement dyn = (XMLElement) dynamics.item(0);
                                 faxOrigin = dyn.getAttribute("url");
                             }
-                            Boolean transparent = Boolean.valueOf(faxrow.getAttribute("transparent"));
-                            Boolean colorChange = Boolean.valueOf(faxrow.getAttribute("color-change"));
+                            boolean transparent = Boolean.parseBoolean(faxrow.getAttribute("transparent"));
+                            boolean colorChange = Boolean.parseBoolean(faxrow.getAttribute("color-change"));
                             String faxName = faxrow.getAttribute("hint");
                             faxData[i][FaxPatternEditTablePanel.HINT_COL] = new FaxType(faxName,
                                     WWGnlUtilities.buildColor(faxrow.getAttribute("color")),
@@ -358,23 +359,23 @@ public class DataFilePopup
                             boolean newVersion = false;
                             try {
                                 // TASK display-TWS-Data ?
-                                gribData[0][6] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-Data").equals("true"));
-                                gribData[0][7] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-Data").equals("true"));
-                                gribData[0][8] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-Data").equals("true"));
-                                gribData[0][9] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-Data").equals("true"));
-                                gribData[0][10] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-Data").equals("true"));
-                                gribData[0][11] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TWS-3D").equals("true"));
-                                gribData[0][12] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-3D").equals("true"));
-                                gribData[0][13] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-3D").equals("true"));
-                                gribData[0][14] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-3D").equals("true"));
-                                gribData[0][15] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-3D").equals("true"));
-                                gribData[0][16] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-3D").equals("true"));
-                                gribData[0][17] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TWS-contour").equals("true"));
-                                gribData[0][18] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-contour").equals("true"));
-                                gribData[0][19] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-contour").equals("true"));
-                                gribData[0][20] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-contour").equals("true"));
-                                gribData[0][21] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-contour").equals("true"));
-                                gribData[0][22] = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-contour").equals("true"));
+                                gribData[0][6] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-Data").equals("true");
+                                gribData[0][7] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-Data").equals("true");
+                                gribData[0][8] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-Data").equals("true");
+                                gribData[0][9] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-Data").equals("true");
+                                gribData[0][10] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-Data").equals("true");
+                                gribData[0][11] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TWS-3D").equals("true");
+                                gribData[0][12] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-3D").equals("true");
+                                gribData[0][13] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-3D").equals("true");
+                                gribData[0][14] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-3D").equals("true");
+                                gribData[0][15] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-3D").equals("true");
+                                gribData[0][16] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-3D").equals("true");
+                                gribData[0][17] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TWS-contour").equals("true");
+                                gribData[0][18] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRMSL-contour").equals("true");
+                                gribData[0][19] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-500HGT-contour").equals("true");
+                                gribData[0][20] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-WAVES-contour").equals("true");
+                                gribData[0][21] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-TEMP-contour").equals("true");
+                                gribData[0][22] = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("display-PRATE-contour").equals("true");
                                 newVersion = true;
                             } catch (Exception ex) {
                                 gribData[0][6] = Boolean.FALSE;
@@ -397,7 +398,7 @@ public class DataFilePopup
                             }
                             if (!newVersion) {
                                 try {
-                                    boolean wo = Boolean.valueOf(((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("wind-only").equals("true"));
+                                    boolean wo = ((XMLElement) doc.selectNodes("//grib").item(0)).getAttribute("wind-only").equals("true");
                                     if (!wo) {
                                         gribData[0][6] = Boolean.TRUE; // PRMSL
                                         gribData[0][7] = Boolean.TRUE; // 500
@@ -619,12 +620,12 @@ public class DataFilePopup
                                 XMLElement dyn = null;
                                 if (faxrow.selectNodes("./dynamic-resource").getLength() != 0) {
                                     dyn = (XMLElement) faxrow.selectNodes("./dynamic-resource").item(0);
-                                    if (!((Boolean) faxData[i][FaxPatternEditTablePanel.DYNAMIC_COL]).booleanValue()) { // remove dyn
+                                    if (!(Boolean) faxData[i][FaxPatternEditTablePanel.DYNAMIC_COL]) { // remove dyn
                                         faxrow.removeChild(dyn);
                                         dyn = null;
                                     }
                                 } else {
-                                    if (((Boolean) faxData[i][FaxPatternEditTablePanel.DYNAMIC_COL]).booleanValue()) { // create
+                                    if ((Boolean) faxData[i][FaxPatternEditTablePanel.DYNAMIC_COL]) { // create
                                         dyn = (XMLElement) doc.createElement("dynamic-resource");
                                         faxrow.appendChild(dyn);
                                     }
@@ -646,7 +647,7 @@ public class DataFilePopup
                                     faxrow.selectNodes("./faxYoffset").item(0).getFirstChild().setNodeValue(Integer.toString((Integer) faxData[i][FaxPatternEditTablePanel.Y_OFFSET_COL]));
                                 } catch (Exception ignore) {
                                 }
-                                if (((Boolean) faxData[i][2]).booleanValue()) {
+                                if ((Boolean) faxData[i][2]) {
                                     // assume dyn is not null
                                     dyn.setAttribute("url", (String) faxData[i][FaxPatternEditTablePanel.FAX_URL_COL]);
                                     dyn.setAttribute("dir", ((ParamPanel.DataDirectory) faxData[i][FaxPatternEditTablePanel.FAX_DIR_COL]).toString());
@@ -862,7 +863,7 @@ public class DataFilePopup
                 int resp = JOptionPane.showConfirmDialog(WWContext.getInstance().getMasterTopFrame(), WWGnlUtilities.buildMessage("do-you-wish-to-delete"), WWGnlUtilities.buildMessage("archive-composite"),
                         JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
-                final Boolean deleteWhenDone = Boolean.valueOf(resp == JOptionPane.YES_OPTION);
+                final boolean deleteWhenDone = resp == JOptionPane.YES_OPTION;
                 if (resp != JOptionPane.CANCEL_OPTION) {
                     List<String> fileList = new ArrayList<>();
                     for (DefaultMutableTreeNode defaultMutableTreeNode : dtnArray) {
@@ -879,7 +880,7 @@ public class DataFilePopup
                     for (String compositeName : fileList) {
                       WWGnlUtilities.archiveComposite(compositeName, deleteWhenDone);
                     }
-//        refreshTree();
+                    // refreshTree();
                     WWContext.getInstance().fireReloadCompositeTree();
                     WWContext.getInstance().fireReloadFaxTree();
                     WWContext.getInstance().fireReloadGRIBTree();
@@ -887,13 +888,13 @@ public class DataFilePopup
             } else if (dtn instanceof JTreeFilePanel.CompositeFileTreeNode) {
                 JTreeFilePanel.CompositeFileTreeNode dftn = (JTreeFilePanel.CompositeFileTreeNode) dtn;
                 WWGnlUtilities.archiveComposite(dftn.dir + File.separator + dftn.name);
-//      refreshTree();
+                // refreshTree();
                 WWContext.getInstance().fireReloadCompositeTree();
                 WWContext.getInstance().fireReloadFaxTree();
                 WWContext.getInstance().fireReloadGRIBTree();
             }
         } else if (event.getActionCommand().equals(UNARCHIVE_COMPOSITE)) {
-//    String compositeLocation = ParamPanel.data[ParamData.CTX_FILES_LOC][ParamData.VALUE_INDEX].toString();
+            // String compositeLocation = ParamPanel.data[ParamData.CTX_FILES_LOC][ParamData.VALUE_INDEX].toString();
             JTreeFilePanel.CompositeFileTreeNode dftn = (JTreeFilePanel.CompositeFileTreeNode) dtn;
             String where = WWGnlUtilities.unarchiveComposite(dftn.dir + File.separator + dftn.name);
             WWContext.getInstance().fireReloadCompositeTree();
@@ -911,7 +912,7 @@ public class DataFilePopup
                 });
                 try {
                     t.start();
-//        t.join();
+                    // t.join();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
