@@ -200,7 +200,7 @@ public class GRIBDataUtil
       {
         if (gribData.getGribPointData()[h][w] != null)
         {
-          double val = gribData.getGribPointData()[h][w].getRain() * 3600D;
+          double val = gribData.getGribPointData()[h][w].getRain() * 3_600D;
   
           if (val < minValue) minValue = val;
           if (val > maxValue) maxValue = val;
@@ -609,12 +609,12 @@ public class GRIBDataUtil
           else if (option == TYPE_WAVE)
           {
             double wh = gribData.getGribPointData()[h][w].getWHgt();
-            if (wh > 3000 || wh < 0)
+            if (wh > 3_000 || wh < 0)
               wh = 0.01;
             value = wh / 10D;
           }
           else if (option == TYPE_RAIN)
-            value = gribData.getGribPointData()[h][w].getRain() * 3600D; 
+            value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
           else if (option == TYPE_TWS)
             value = getGRIBWindSpeed(gribData.getGribPointData()[h][w].getU(),
                                      gribData.getGribPointData()[h][w].getV());
@@ -691,11 +691,11 @@ public class GRIBDataUtil
             else if (option == TYPE_TMP)
               value = gribData.getGribPointData()[h][w].getAirtmp();
             else if (option == TYPE_RAIN)
-              value = gribData.getGribPointData()[h][w].getRain() * 3600D; 
+              value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
             else if (option == TYPE_WAVE)
             {
               double wh = gribData.getGribPointData()[h][w].getWHgt();
-              if (wh > 3000 || wh < 0)
+              if (wh > 3_000 || wh < 0)
                 wh = 0.01;
               value = wh / 10D;
             }
@@ -778,11 +778,11 @@ public class GRIBDataUtil
             else if (option == TYPE_TMP)
               value = gribData.getGribPointData()[h][w].getAirtmp();
             else if (option == TYPE_RAIN)
-              value = gribData.getGribPointData()[h][w].getRain() * 3600D; 
+              value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
             else if (option == TYPE_WAVE)
             {
               double wh = gribData.getGribPointData()[h][w].getWHgt();
-              if (wh > 3000 || wh < 0)
+              if (wh > 3_000 || wh < 0)
                 wh = 0.01;
               value = wh / 10D;
             }

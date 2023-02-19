@@ -188,10 +188,10 @@ public class BlindRouting implements RoutingClientInterface
     if (verbose) 
       System.out.println("Routing from " + isoFrom.toString() + "\nto " + isoTo.toString());
     int i = 0;
-    Point point = new Point((int)Math.round(isoFrom.getG() * 1000), (int)Math.round(isoFrom.getL() * 1000)); //chartPanel.getPanelPoint(isoFrom);
+    Point point = new Point((int)Math.round(isoFrom.getG() * 1_000), (int)Math.round(isoFrom.getL() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
     RoutingPoint center = new RoutingPoint(point);
     center.setPosition(from);
-    point = new Point((int)Math.round(to.getG() * 1000), (int)Math.round(to.getL() * 1000)); // chartPanel.getPanelPoint(to);
+    point = new Point((int)Math.round(to.getG() * 1_000), (int)Math.round(to.getL() * 1_000)); // chartPanel.getPanelPoint(to);
     RoutingPoint destination = new RoutingPoint(point);
     destination.setPosition(to);
 

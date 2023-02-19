@@ -1,150 +1,126 @@
 package chartview.gui.util.dialog;
 
-import java.awt.Color;
+import java.awt.*;
 
-public class FaxType implements Comparable<FaxType>
-{
-  String value;
-  Color color = Color.black;
-  boolean show = true;
-  boolean transparent = true;
-  boolean changeColor = true; // Change black to this.color
-  int rank;
-  double rotation = 0D;
-  String comment = "";
-  String origin = "";
-  String title = "";
+public class FaxType implements Comparable<FaxType> {
+    String value;
+    Color color = Color.black;
+    boolean show = true;
+    boolean transparent = true;
+    boolean changeColor = true; // Change black to this.color
+    int rank;
+    double rotation = 0D;
+    String comment = "";
+    String origin = "";
+    String title = "";
 
-  public FaxType(String v, Color c, boolean b, boolean tr, double d, String orig, String t, boolean cc)
-  {
-    value = v;
-    color = c;
-    show = b;
-    transparent = tr;
-    rotation = d;
-    origin = orig;
-    title = t;
-    changeColor = cc;
-  }
-  public FaxType(String v, Color c, boolean b, boolean tr, double d, String orig, String t)
-  {
-    value = v;
-    color = c;
-    show = b;
-    transparent = tr;
-    rotation = d;
-    origin = orig;
-    title = t;
-    changeColor = (color != null);
-  }
-  
-  public void setChangeColor(boolean b)
-  {
-    this.changeColor = b;
-  }
-  
-  public boolean isChangeColor()
-  {
-    return changeColor;
-  }
+    public FaxType(String v, Color c, boolean b, boolean tr, double d, String orig, String t, boolean cc) {
+        value = v;
+        color = c;
+        show = b;
+        transparent = tr;
+        rotation = d;
+        origin = orig;
+        title = t;
+        changeColor = cc;
+    }
 
-  public String toString()
-  {
-    return (comment.length()>0?comment:value);
-  }
+    public FaxType(String v, Color c, boolean b, boolean tr, double d, String orig, String t) {
+        value = v;
+        color = c;
+        show = b;
+        transparent = tr;
+        rotation = d;
+        origin = orig;
+        title = t;
+        changeColor = (color != null);
+    }
 
-  public String getValue()
-  {
-    return value;
-  }
+    public void setChangeColor(boolean b) {
+        this.changeColor = b;
+    }
 
-  public Color getColor()
-  {
-    return color;
-  }
+    public boolean isChangeColor() {
+        return changeColor;
+    }
 
-  public void setValue(String s)
-  {
-    value = s;
-  }
+    public String toString() {
+        return (comment.length() > 0 ? comment : value);
+    }
 
-  public void setColor(Color c)
-  {
-    color = c;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public int compareTo(FaxType ft)
-  {
-    return (this.rank - ft.getRank());
-  }
+    public Color getColor() {
+        return color;
+    }
 
-  public void setRank(int rank)
-  {
-    this.rank = rank;
-  }
+    public void setValue(String s) {
+        value = s;
+    }
 
-  public int getRank()
-  {
-    return rank;
-  }
+    public void setColor(Color c) {
+        color = c;
+    }
 
-  public void setComment(String comment)
-  {
-    this.comment = comment;
-  }
+    public int compareTo(FaxType ft) {
+        return (this.rank - ft.getRank());
+    }
 
-  public String getComment()
-  {
-    return comment;
-  }
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
-  public void setShow(boolean show)
-  {
-    this.show = show;
-  }
+    public int getRank() {
+        return rank;
+    }
 
-  public boolean isShow()
-  {
-    return show;
-  }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-  public void setTransparent(boolean transparent)
-  {
-    this.transparent = transparent;
-  }
+    public String getComment() {
+        return comment;
+    }
 
-  public boolean isTransparent()
-  {
-    return transparent;
-  }
+    public void setShow(boolean show) {
+        this.show = show;
+    }
 
-  public void setRotation(double rotation)
-  {
-    this.rotation = rotation;
-  }
+    public boolean isShow() {
+        return show;
+    }
 
-  public double getRotation()
-  {
-    return rotation;
-  }
+    public void setTransparent(boolean transparent) {
+        this.transparent = transparent;
+    }
 
-  public void setOrigin(String origin)
-  {
-    this.origin = origin;
-  }
+    public boolean isTransparent() {
+        return transparent;
+    }
 
-  public String getOrigin()
-  {
-    return origin;
-  }
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
 
-  public void setTitle(String title)
-  {
-    this.title = title;
-  }
+    public double getRotation() {
+        return rotation;
+    }
 
-  public String getTitle()
-  {
-    return title;
-  }
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }

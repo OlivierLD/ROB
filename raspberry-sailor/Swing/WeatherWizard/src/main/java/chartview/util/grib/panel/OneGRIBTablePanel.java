@@ -118,7 +118,7 @@ public class OneGRIBTablePanel
             return names[column];
           }
 
-          public Class getColumnClass(int c)
+          public Class<?> getColumnClass(int c)
           {
             //            System.out.println("Class requested column " + c + ", type:" + getValueAt(0, c).getClass());
             return getValueAt(0, c).getClass();

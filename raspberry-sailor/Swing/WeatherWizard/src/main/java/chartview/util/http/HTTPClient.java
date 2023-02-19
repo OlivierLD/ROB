@@ -52,7 +52,7 @@ public class HTTPClient {
             int nbLoop = 1;
             while ((nBytes = is.read(aByte, 0, 1)) != -1) {
                 content = Utilities.appendByte(content, aByte[0]);
-                if (content.length > (nbLoop * 1000)) {
+                if (content.length > (nbLoop * 1_000)) {
                     long now = System.currentTimeMillis();
                     long delta = now - started;
                     double rate = (double) content.length / ((double) delta / 1_000D);
@@ -242,7 +242,7 @@ public class HTTPClient {
                     waiting += 1L;
                 }
 
-                final int BUFFER_SIZE = 65536;
+                final int BUFFER_SIZE = 65_536;
                 byte aByte[] = new byte[BUFFER_SIZE];
                 int nBytes;
                 while ((nBytes = dis.read(aByte, 0, BUFFER_SIZE)) != -1) {

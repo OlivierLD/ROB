@@ -82,8 +82,9 @@ public class ChartDimensionInputPanel
         chartItalicLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 
         projectionComboBox.removeAllItems();
-        for (ChartPanelInterface.Projection prj : ChartPanelInterface.Projection.values())
+        for (ChartPanelInterface.Projection prj : ChartPanelInterface.Projection.values()) {
             projectionComboBox.addItem(prj.label());
+        }
 
         dimensionLabel.setText("Dimension");
         dimensionLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
@@ -163,36 +164,36 @@ public class ChartDimensionInputPanel
     public void setTopLat(double d) {
         this.topLatTextField.setText(WWGnlUtilities.XX14.format(Math.abs(d)));
         if (d > 0) {
-          this.topLatComboBox.setSelectedItem("N");
+            this.topLatComboBox.setSelectedItem("N");
         } else {
-          this.topLatComboBox.setSelectedItem("S");
+            this.topLatComboBox.setSelectedItem("S");
         }
     }
 
     public void setBottomLat(double d) {
         this.bottomLatTextField.setText(WWGnlUtilities.XX14.format(Math.abs(d)));
         if (d > 0) {
-          this.bottomLatComboBox.setSelectedItem("N");
+            this.bottomLatComboBox.setSelectedItem("N");
         } else {
-          this.bottomLatComboBox.setSelectedItem("S");
+            this.bottomLatComboBox.setSelectedItem("S");
         }
     }
 
     public void setLeftLong(double d) {
         this.leftLongTextField.setText(WWGnlUtilities.XX14.format(Math.abs(d)));
         if (d > 0) {
-          this.leftLongComboBox.setSelectedItem("E");
+            this.leftLongComboBox.setSelectedItem("E");
         } else {
-          this.leftLongComboBox.setSelectedItem("W");
+            this.leftLongComboBox.setSelectedItem("W");
         }
     }
 
     public void setRightLong(double d) {
         this.rightLongTextField.setText(WWGnlUtilities.XX14.format(Math.abs(d)));
         if (d > 0) {
-          this.rightLongComboBox.setSelectedItem("E");
+            this.rightLongComboBox.setSelectedItem("E");
         } else {
-          this.rightLongComboBox.setSelectedItem("W");
+            this.rightLongComboBox.setSelectedItem("W");
         }
     }
 
@@ -202,7 +203,7 @@ public class ChartDimensionInputPanel
 //    d = Double.parseDouble(topLatTextField.getText());
             d = WWContext.NF.parse(topLatTextField.getText()).doubleValue();
             if (topLatComboBox.getSelectedItem().equals("S")) {
-              d = -d;
+                d = -d;
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
@@ -216,7 +217,7 @@ public class ChartDimensionInputPanel
         try {
             d = WWContext.NF.parse(bottomLatTextField.getText()).doubleValue();
             if (bottomLatComboBox.getSelectedItem().equals("S")) {
-              d = -d;
+                d = -d;
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
@@ -230,7 +231,7 @@ public class ChartDimensionInputPanel
         try {
             d = WWContext.NF.parse(leftLongTextField.getText()).doubleValue();
             if (leftLongComboBox.getSelectedItem().equals("W")) {
-              d = -d;
+                d = -d;
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
@@ -244,7 +245,7 @@ public class ChartDimensionInputPanel
         try {
             d = WWContext.NF.parse(rightLongTextField.getText()).doubleValue();
             if (rightLongComboBox.getSelectedItem().equals("W")) {
-              d = -d;
+                d = -d;
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);

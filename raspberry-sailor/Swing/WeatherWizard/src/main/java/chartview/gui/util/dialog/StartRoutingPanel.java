@@ -6,7 +6,6 @@ import chartview.util.WWGnlUtilities;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,20 +13,20 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class StartRoutingPanel
-       extends JPanel {
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JLabel jLabel1 = new JLabel();
-    private JLabel message = new JLabel();
-    private JTextField yearTextField = new JTextField();
-    private JComboBox monthComboBox = new JComboBox();
-    private JTextField dayTextField = new JTextField();
-    private JTextField hourTextField = new JTextField();
-    private JTextField minTextField = new JTextField();
-    private JTextField secTextField = new JTextField();
-    private JLabel gmtLabel = new JLabel();
-    private JLabel sepLabel1 = new JLabel();
-    private JLabel sepLabel2 = new JLabel();
-    private JLabel startDateLabel = new JLabel();
+        extends JPanel {
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JLabel jLabel1 = new JLabel();
+    private final JLabel message = new JLabel();
+    private final JTextField yearTextField = new JTextField();
+    private final JComboBox<String> monthComboBox = new JComboBox<>();
+    private final JTextField dayTextField = new JTextField();
+    private final JTextField hourTextField = new JTextField();
+    private final JTextField minTextField = new JTextField();
+    private final JTextField secTextField = new JTextField();
+    private final JLabel gmtLabel = new JLabel();
+    private final JLabel sepLabel1 = new JLabel();
+    private final JLabel sepLabel2 = new JLabel();
+    private final JLabel startDateLabel = new JLabel();
 
     private int timeInterval = 0;
     private int angularStep = 0;
@@ -37,34 +36,34 @@ public class StartRoutingPanel
     private boolean stopRoutingOnExhaustedGRIB = false;
     private Date gribFrom = null;
 
-    private JLabel atLabel = new JLabel();
-    private JLabel distanceLabel = new JLabel();
-    private JLabel jLabel7 = new JLabel();
-    private JLabel jLabel8 = new JLabel();
-    private JLabel jLabel9 = new JLabel();
-    private JCheckBox avoidTWSCheckBox = new JCheckBox();
-    private JTextField timeIntervalTextField = new JTextField();
-    private JTextField angularStepTextField = new JTextField();
-    private JTextField forkWidthTextField = new JTextField();
-    private JTextField maxTWSTextField = new JTextField();
-    private JLabel jLabel11 = new JLabel();
-    private JLabel jLabel12 = new JLabel();
-    private JLabel jLabel13 = new JLabel();
-    private JLabel knotsLabel = new JLabel();
-    private JCheckBox avoidTWACheckBox = new JCheckBox();
-    private JTextField minTWATextField = new JTextField();
-    private JLabel angleLabel = new JLabel();
-    private JCheckBox gribExhaustedCheckBox = new JCheckBox();
-    private JCheckBox withTheGribCheckBox = new JCheckBox();
-    private JLabel jLabel2 = new JLabel();
-    private DecimalFormat df = new DecimalFormat("#0.00");
-    private JFormattedTextField polarFactorTextField = new JFormattedTextField(df);
-    private JCheckBox avoidLandCheckBox = new JCheckBox();
-    private JLabel proximityLabel = new JLabel();
+    private final JLabel atLabel = new JLabel();
+    private final JLabel distanceLabel = new JLabel();
+    private final JLabel jLabel7 = new JLabel();
+    private final JLabel jLabel8 = new JLabel();
+    private final JLabel jLabel9 = new JLabel();
+    private final JCheckBox avoidTWSCheckBox = new JCheckBox();
+    private final JTextField timeIntervalTextField = new JTextField();
+    private final JTextField angularStepTextField = new JTextField();
+    private final JTextField forkWidthTextField = new JTextField();
+    private final JTextField maxTWSTextField = new JTextField();
+    private final JLabel jLabel11 = new JLabel();
+    private final JLabel jLabel12 = new JLabel();
+    private final JLabel jLabel13 = new JLabel();
+    private final JLabel knotsLabel = new JLabel();
+    private final JCheckBox avoidTWACheckBox = new JCheckBox();
+    private final JTextField minTWATextField = new JTextField();
+    private final JLabel angleLabel = new JLabel();
+    private final JCheckBox gribExhaustedCheckBox = new JCheckBox();
+    private final JCheckBox withTheGribCheckBox = new JCheckBox();
+    private final JLabel jLabel2 = new JLabel();
+    private final DecimalFormat df = new DecimalFormat("#0.00");
+    private final JFormattedTextField polarFactorTextField = new JFormattedTextField(df);
+    private final JCheckBox avoidLandCheckBox = new JCheckBox();
+    private final JLabel proximityLabel = new JLabel();
 
     private final static DecimalFormat MASK = new DecimalFormat("##0.00");
-    private JFormattedTextField proximityFormattedTextField = new JFormattedTextField(MASK);
-    private JLabel jLabel3 = new JLabel();
+    private final JFormattedTextField proximityFormattedTextField = new JFormattedTextField(MASK);
+    private final JLabel jLabel3 = new JLabel();
 
     public StartRoutingPanel() {
         try {
@@ -114,12 +113,11 @@ public class StartRoutingPanel
         message.setText(str);
     }
 
-    private void jbInit()
-            throws Exception {
+    private void jbInit() {
         this.setLayout(gridBagLayout1);
         this.setSize(new Dimension(400, 348));
         jLabel1.setText(WWGnlUtilities.buildMessage("routing-start-date"));
-        jLabel1.setFont(new Font("Tahoma", 1, 12));
+        jLabel1.setFont(new Font("Tahoma", Font.BOLD, 12));
         message.setText("Message goes here");
         yearTextField.setPreferredSize(new Dimension(40, 20));
         yearTextField.setHorizontalAlignment(JTextField.CENTER);
@@ -146,11 +144,7 @@ public class StartRoutingPanel
         avoidTWSCheckBox.setSelected(false);
         maxTWSTextField.setEnabled(false);
         knotsLabel.setEnabled(false);
-        avoidTWSCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                avoidTWSCheckBox_actionPerformed(e);
-            }
-        });
+        avoidTWSCheckBox.addActionListener(this::avoidTWSCheckBox_actionPerformed);
         timeIntervalTextField.setHorizontalAlignment(JTextField.CENTER);
         angularStepTextField.setHorizontalAlignment(JTextField.CENTER);
         forkWidthTextField.setHorizontalAlignment(JTextField.CENTER);
@@ -162,38 +156,26 @@ public class StartRoutingPanel
         avoidTWACheckBox.setText(WWGnlUtilities.buildMessage("avoid-twa"));
         minTWATextField.setEnabled(false);
         angleLabel.setEnabled(false);
-        avoidTWACheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                avoidTWACheckBox_actionPerformed(e);
-            }
-        });
+        avoidTWACheckBox.addActionListener(this::avoidTWACheckBox_actionPerformed);
         minTWATextField.setHorizontalAlignment(JTextField.CENTER);
         angleLabel.setText(WWGnlUtilities.buildMessage("degrees"));
         gribExhaustedCheckBox.setText(WWGnlUtilities.buildMessage("stop-routing"));
         gribExhaustedCheckBox.setActionCommand("gribExhaustedCheckBox");
         gribExhaustedCheckBox.setToolTipText(WWGnlUtilities.buildMessage("exhausted-tooltip"));
         withTheGribCheckBox.setText(WWGnlUtilities.buildMessage("start-with-grib"));
-        withTheGribCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                withTheGribCheckBox_actionPerformed(e);
-            }
-        });
+        withTheGribCheckBox.addActionListener(this::withTheGribCheckBox_actionPerformed);
         jLabel2.setText(WWGnlUtilities.buildMessage("polar-speed-factor"));
         polarFactorTextField.setHorizontalAlignment(JTextField.RIGHT);
         polarFactorTextField.setText("1.0");
         polarFactorTextField.setToolTipText(WWGnlUtilities.buildMessage("polar-speed-hint"));
         avoidLandCheckBox.setText(WWGnlUtilities.buildMessage("avoid-land"));
-        avoidLandCheckBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                avoidLandCheckBox_actionPerformed(e);
-            }
-        });
+        avoidLandCheckBox.addActionListener(this::avoidLandCheckBox_actionPerformed);
         proximityLabel.setText(WWGnlUtilities.buildMessage("routing-completed-below"));
         proximityFormattedTextField.setHorizontalAlignment(JTextField.RIGHT);
         proximityFormattedTextField.setText("0.00");
         jLabel3.setText("nm");
         for (int i = 0; i < WWGnlUtilities.MONTH.length; i++) {
-          monthComboBox.addItem(WWGnlUtilities.MONTH[i]);
+            monthComboBox.addItem(WWGnlUtilities.MONTH[i]);
         }
 
         this.add(jLabel1,
@@ -402,9 +384,9 @@ public class StartRoutingPanel
     private void withTheGribCheckBox_actionPerformed(ActionEvent e) {
         boolean b = withTheGribCheckBox.isSelected();
         if (b) {
-          setDate(gribFrom);
+            setDate(gribFrom);
         } else {
-          setDate(new Date());
+            setDate(new Date());
         }
         yearTextField.setEnabled(!b);
         monthComboBox.setEnabled(!b);
@@ -452,7 +434,7 @@ public class StartRoutingPanel
         maxTWSTextField.setEnabled(avoidTWSCheckBox.isSelected());
         knotsLabel.setEnabled(avoidTWSCheckBox.isSelected());
         if (!avoidTWSCheckBox.isSelected()) {
-          maxTWSTextField.setText("-1");
+            maxTWSTextField.setText("-1");
         }
     }
 
@@ -460,7 +442,7 @@ public class StartRoutingPanel
         minTWATextField.setEnabled(avoidTWACheckBox.isSelected());
         angleLabel.setEnabled(avoidTWACheckBox.isSelected());
         if (!avoidTWACheckBox.isSelected()) {
-          minTWATextField.setText("-1");
+            minTWATextField.setText("-1");
         }
     }
 

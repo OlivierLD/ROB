@@ -138,7 +138,7 @@ public class TimeZoneTable
                 return names[column];
             }
 
-            public Class getColumnClass(int c) {
+            public Class<?> getColumnClass(int c) {
                 return getValueAt(0, c).getClass();
             }
 

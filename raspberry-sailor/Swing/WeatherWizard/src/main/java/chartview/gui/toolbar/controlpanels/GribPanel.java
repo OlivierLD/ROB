@@ -179,7 +179,7 @@ public class GribPanel
         this.setSize(new Dimension(ControlPane.WIDTH, 270));
         this.setPreferredSize(new Dimension(ControlPane.WIDTH, 270));
         this.setMinimumSize(new Dimension(ControlPane.WIDTH, 270));
-        this.setMaximumSize(new Dimension(1000, 1000));
+        this.setMaximumSize(new Dimension(1_000, 1_000));
         this.setLayout(gridBagLayout1);
         this.setEnabled(false);
         forwardButton.setIcon(new ImageIcon(this.getClass().getResource("img/panright.gif")));

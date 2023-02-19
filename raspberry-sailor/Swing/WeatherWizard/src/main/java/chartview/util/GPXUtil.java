@@ -66,7 +66,7 @@ public class GPXUtil {
                     try {
                         time = StringParsers.durationToDate(xe.selectNodes("./gpx:time", nsr).item(0).getTextContent());
                         int tuOffset = TimeUtil.getGMTOffset();
-                        time += (tuOffset * (3600L * 1000L));
+                        time += (tuOffset * (3_600L * 1_000L));
                     } catch (Exception ex) {
                         System.out.println("Finding time:" + ex.toString());
                     }
@@ -137,7 +137,7 @@ public class GPXUtil {
                 strDate = ((XMLElement) nl.item(0)).getNodeValue(); // .getTextContent();
                 long time = StringParsers.durationToDate(strDate);
                 int tuOffset = TimeUtil.getGMTOffset();
-                time += (tuOffset * (3600L * 1000L));
+                time += (tuOffset * (3_600L * 1_000L));
                 if (true) {
                     TimeZone tz = TimeZone.getDefault();
                     TimeZone.setDefault(TimeZone.getTimeZone("127"));

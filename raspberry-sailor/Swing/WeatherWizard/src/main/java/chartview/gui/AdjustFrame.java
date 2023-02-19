@@ -380,7 +380,7 @@ public class AdjustFrame extends JFrame {
             try {
                 for (int i = 0; i < timeout && !imDone.valueOf(); i++) {
                     specialPanel.setLineFiveMessage(WWGnlUtilities.buildMessage("you-said-5", new String[]{Integer.toString(timeout - i)}));
-                    me.wait(1000L);
+                    me.wait(1_000L);
                 }
                 if (thread.isAlive()) {
                     thread.interrupt();

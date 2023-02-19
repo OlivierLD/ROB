@@ -43,7 +43,7 @@ public class PlacesTableMap
         return dataModel.getColumnName(column);
     }
 
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return dataModel.getColumnClass(c);
     }
 

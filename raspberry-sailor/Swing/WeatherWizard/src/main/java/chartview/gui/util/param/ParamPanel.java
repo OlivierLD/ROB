@@ -961,7 +961,7 @@ public final class ParamPanel
             }
 
             @Override
-            public Class getColumnClass(int c) {
+            public Class<?> getColumnClass(int c) {
                 if (c == 1) {
                     System.out.println("Class requested column " + c + ", type:" + getValueAt(0, c).getClass());
                     System.out.println("  Value is [" + getValueAt(0, c).toString() + "]");

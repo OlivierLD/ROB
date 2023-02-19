@@ -6,7 +6,6 @@ import chartview.util.WWGnlUtilities;
 import coreutilities.Utilities;
 import main.help.AboutBox;
 
-import javax.swing.*;
 import java.lang.reflect.Method;
 import java.util.Date;
 
@@ -37,12 +36,10 @@ public class Splasher {
                 params[0] = args;
                 mainMethod.invoke(null, params);
 
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    public void run() {
-                        Date now = new Date();
-                        System.out.println("** Shutting down (headless) at " + now.toString() + " (was running for " + Utilities.readableTime(now.getTime() - started.getTime()) + ")");
-                    }
-                });
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    Date now = new Date();
+                    System.out.println("** Shutting down (headless) at " + now.toString() + " (was running for " + Utilities.readableTime(now.getTime() - started.getTime()) + ")");
+                }, "Shutdown-Hook"));
 
             } catch (Exception ex) {
                 ex.printStackTrace();

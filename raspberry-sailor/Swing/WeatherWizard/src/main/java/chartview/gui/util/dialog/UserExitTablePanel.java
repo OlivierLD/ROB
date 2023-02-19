@@ -23,8 +23,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,7 +56,7 @@ public class UserExitTablePanel
     BorderLayout borderLayout2 = new BorderLayout();
     JScrollPane centerScrollPane = null; // new JScrollPane();
     JPanel topPanel = new JPanel();
-    JLabel jLabel1 = new JLabel();
+
     JButton testButton = new JButton();
     JButton removeButton = new JButton();
     JButton addButton = new JButton();
@@ -102,7 +100,7 @@ public class UserExitTablePanel
         }
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         this.setLayout(borderLayout1);
         this.setSize(new Dimension(580, 170));
         this.setPreferredSize(new Dimension(580, 170));
@@ -111,36 +109,24 @@ public class UserExitTablePanel
         testButton.setPreferredSize(new Dimension(73, 20));
         testButton.setMinimumSize(new Dimension(73, 20));
         testButton.setMaximumSize(new Dimension(73, 20));
-        testButton.setFont(new Font("Dialog", 0, 10));
-        testButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                testButton_actionPerformed();
-            }
-        });
+        testButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+        testButton.addActionListener(e -> testButton_actionPerformed());
         testButton.setEnabled(false);
 
         removeButton.setText(WWGnlUtilities.buildMessage("remove-mark"));
         removeButton.setPreferredSize(new Dimension(73, 20));
         removeButton.setMinimumSize(new Dimension(73, 20));
         removeButton.setMaximumSize(new Dimension(73, 20));
-        removeButton.setFont(new Font("Dialog", 0, 10));
-        removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                removeButton_actionPerformed();
-            }
-        });
+        removeButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+        removeButton.addActionListener(e -> removeButton_actionPerformed());
         removeButton.setEnabled(false);
 
         addButton.setText(WWGnlUtilities.buildMessage("add-mark"));
         addButton.setPreferredSize(new Dimension(73, 20));
         addButton.setMinimumSize(new Dimension(73, 20));
         addButton.setMaximumSize(new Dimension(73, 20));
-        addButton.setFont(new Font("Dialog", 0, 10));
-        addButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                loadUserExit();
-            }
-        });
+        addButton.setFont(new Font("Dialog", Font.PLAIN, 10));
+        addButton.addActionListener(e -> loadUserExit());
 
         this.add(centerPanel, BorderLayout.CENTER);
         bottomPanel.add(testButton, null);
@@ -177,7 +163,7 @@ public class UserExitTablePanel
                 return names[column];
             }
 
-            public Class getColumnClass(int c) {
+            public Class<?> getColumnClass(int c) {
                 return getValueAt(0, c).getClass();
             }
 
@@ -204,8 +190,7 @@ public class UserExitTablePanel
         int len = data.length;
         Object[][] newData = new Object[len + 1][names.length];
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < names.length; j++)
-                newData[i][j] = data[i][j];
+            System.arraycopy(data[i], 0, newData[i], 0, names.length);
         }
         newData[len][0] = uea;
         newData[len][1] = action;
@@ -218,26 +203,25 @@ public class UserExitTablePanel
     private void removeCurrentLine() {
         int selectedRow = table.getSelectedRow();
 //  System.out.println("Row " + selectedRow + " is selected");
-        if (selectedRow < 0) // This should not happen
+        if (selectedRow < 0) { // This should not happen
             JOptionPane.showMessageDialog(WWContext.getInstance().getMasterTopFrame(),
                     "Please choose a row to remove",
                     "Removing an entry",
                     JOptionPane.WARNING_MESSAGE);
-        else {
+        } else {
             int l = data.length;
             Object[][] newData = new Object[l - 1][names.length];
             int oldInd, newInd;
             newInd = 0;
             for (oldInd = 0; oldInd < l; oldInd++) {
                 if (oldInd != selectedRow) {
-                    for (int j = 0; j < names.length; j++)
-                        newData[newInd][j] = data[oldInd][j];
+                    System.arraycopy(data[oldInd], 0, newData[newInd], 0, names.length);
                     newInd++;
                 }
             }
             data = newData;
-//    sorter.tableChanged(new TableModelEvent(dataModel));
-//    sorter.checkModel();
+            //    sorter.tableChanged(new TableModelEvent(dataModel));
+            //    sorter.checkModel();
             ((AbstractTableModel) dataModel).fireTableDataChanged();
             table.repaint();
         }
@@ -249,18 +233,19 @@ public class UserExitTablePanel
             int selectedRow = table.getSelectedRow();
             classToTest = (String) data[selectedRow][1];
 
-            Class c = Class.forName(classToTest);
-            Object o = c.newInstance();
-            if (o instanceof UserExitInterface)
+            Class<?> c = Class.forName(classToTest);
+            Object o = c.getDeclaredConstructor().newInstance();
+            if (o instanceof UserExitInterface) {
                 JOptionPane.showMessageDialog(this,
                         WWGnlUtilities.buildMessage("testing-ok", new String[]{classToTest}),
                         WWGnlUtilities.buildMessage("testing"),
                         JOptionPane.INFORMATION_MESSAGE);
-            else
+            } else {
                 JOptionPane.showMessageDialog(this,
                         WWGnlUtilities.buildMessage("testing-bad-interface", new String[]{classToTest, c.getName()}),
                         WWGnlUtilities.buildMessage("testing"),
                         JOptionPane.WARNING_MESSAGE);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     ex.toString(),
@@ -316,11 +301,11 @@ public class UserExitTablePanel
                         XMLElement menuItem = (XMLElement) originalData.getDocumentElement();
                         String[] menuHierarchy = ueLocation.split(";");
                         // Find or Create the menu hierarchy
-                        for (int i = 0; i < menuHierarchy.length; i++) {
-                            NodeList nl = menuItem.selectNodes("./sub-menu[./@label = '" + menuHierarchy[i] + "']");
+                        for (String s : menuHierarchy) {
+                            NodeList nl = menuItem.selectNodes("./sub-menu[./@label = '" + s + "']");
                             if (nl.getLength() == 0) {
                                 XMLElement newNode = (XMLElement) originalData.createElement("sub-menu");
-                                newNode.setAttribute("label", menuHierarchy[i]);
+                                newNode.setAttribute("label", s);
                                 menuItem.appendChild(newNode);
                                 menuItem = newNode;
                             } else {
@@ -385,8 +370,8 @@ public class UserExitTablePanel
                         for (UserExitAction u : ueal) {
                             String actionClass = u.getAction();
                             try {
-                                Class c = Class.forName(actionClass);
-                                Object o = c.newInstance();
+                                Class<?> c = Class.forName(actionClass);
+                                Object o = c.getDeclaredConstructor().newInstance();
                                 if (!(o instanceof UserExitInterface)) {
                                     JOptionPane.showMessageDialog(this,
                                             WWGnlUtilities.buildMessage("does-not-implement-interface", new String[]{actionClass}),
@@ -422,12 +407,12 @@ public class UserExitTablePanel
 
     public void saveData() {
         // 1 - Updates
-        for (int i = 0; i < data.length; i++) {
-            UserExitAction uea = (UserExitAction) data[i][0];
+        for (Object[] datum : data) {
+            UserExitAction uea = (UserExitAction) datum[0];
             // Removed or modified only. Create is another task.
             int id = uea.getRnk();
-            String action = (String) data[i][1];
-            String comment = (String) data[i][2];
+            String action = (String) datum[1];
+            String comment = (String) datum[2];
             try {
                 XMLElement thisOne = (XMLElement) originalData.selectNodes("//user-exit[./@id = '" + Integer.toString(id) + "']").item(0);
 //      thisOne.getChildrenByTagName("label").item(0).getFirstChild().setNodeValue(label);
@@ -453,8 +438,9 @@ public class UserExitTablePanel
                 boolean found = false;
                 for (int j = 0; !found && j < data.length; j++) {
                     UserExitAction uea = (UserExitAction) data[j][0];
-                    if (rnk == uea.getRnk())
+                    if (rnk == uea.getRnk()) {
                         found = true;
+                    }
                 }
                 if (!found) {
                     XMLElement parent = (XMLElement) ue.getParentNode();
@@ -514,7 +500,7 @@ public class UserExitTablePanel
         }
     }
 
-    public class TextFieldEditor
+    static public class TextFieldEditor
             extends JComponent
             implements TableCellEditor {
         JComponent componentToApply;
@@ -523,7 +509,7 @@ public class UserExitTablePanel
 
         public TextFieldEditor() {
             super();
-            listeners = new Vector<CellEditorListener>();
+            listeners = new Vector<>();
         }
 
         public Component getTableCellEditorComponent(JTable table,
@@ -552,11 +538,11 @@ public class UserExitTablePanel
                 if (originalValue instanceof String) {
                     return ((JTextField) componentToApply).getText();
                 } else if (originalValue instanceof Integer) {
-                    return new Integer(((JTextField) componentToApply).getText());
+                    return Integer.valueOf(((JTextField) componentToApply).getText());
                 } else if (originalValue instanceof Double) {
-                    return new Double(((JTextField) componentToApply).getText());
+                    return Double.valueOf(((JTextField) componentToApply).getText());
                 } else if (originalValue instanceof Float) {
-                    return new Float(((JTextField) componentToApply).getText());
+                    return Float.valueOf(((JTextField) componentToApply).getText());
                 } else {
                     return null;
                 }

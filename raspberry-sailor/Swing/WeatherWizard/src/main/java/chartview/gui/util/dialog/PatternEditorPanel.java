@@ -96,7 +96,7 @@ public class PatternEditorPanel
         this.setSize(new Dimension(619, 687));
         this.setPreferredSize(new Dimension(619, 687));
         fitColumnsCheckBox.setText("Auto-resize Columns"); // LOCALIZE
-        fitColumnsCheckBox.addActionListener(e -> fitColumnsCheckBox_actionPerformed(e));
+        fitColumnsCheckBox.addActionListener(this::fitColumnsCheckBox_actionPerformed);
         this.add(chartDimensionEditorPanel, new GridBagConstraints(0, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         this.add(faxPatternEditTablePanel, new GridBagConstraints(0, 2, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -270,9 +270,10 @@ public class PatternEditorPanel
     }
 
     public int getFaxOption() {
-        if (radioButtonOptionRadioButton.isSelected())
+        if (radioButtonOptionRadioButton.isSelected()) {
             return CommandPanel.RADIOBUTTON_OPTION;
-        else
+        } else {
             return CommandPanel.CHECKBOX_OPTION;
+        }
     }
 }
