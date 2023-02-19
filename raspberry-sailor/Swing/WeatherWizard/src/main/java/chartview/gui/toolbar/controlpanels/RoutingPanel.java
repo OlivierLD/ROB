@@ -18,11 +18,8 @@ import coreutilities.Utilities;
 import coreutilities.gui.HeadingPanel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -102,7 +99,7 @@ public class RoutingPanel extends JPanel {
         }
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         this.setLayout(new BorderLayout());
         this.setSize(new Dimension(400, 340));
         this.setPreferredSize(new Dimension(ControlPane.WIDTH, 340));
@@ -121,9 +118,9 @@ public class RoutingPanel extends JPanel {
         group.add(trueWindRadioButton);
         group.add(appWindRadioButton);
         trueWindRadioButton.setSelected(true);
-        trueWindRadioButton.addActionListener(e -> trueWindRadioButton_actionPerformed(e));
+        trueWindRadioButton.addActionListener(this::trueWindRadioButton_actionPerformed);
         appWindRadioButton.setSelected(false);
-        appWindRadioButton.addActionListener(e -> appWindRadioButton_actionPerformed(e));
+        appWindRadioButton.addActionListener(this::appWindRadioButton_actionPerformed);
         trueAppPanel.add(trueWindRadioButton);
         trueAppPanel.add(appWindRadioButton);
 
@@ -157,27 +154,24 @@ public class RoutingPanel extends JPanel {
         positionLabel.setText(WWGnlUtilities.buildMessage("position"));
         gcLabel.setText(WWGnlUtilities.buildMessage("gc"));
         actualDistLabel.setText(WWGnlUtilities.buildMessage("actual"));
-//  prevButton.setText("<");
         prevButton.setIcon(new ImageIcon(this.getClass().getResource("img/previous.png")));
         prevButton.setToolTipText(WWGnlUtilities.buildMessage("previous-step"));
         prevButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         prevButton.setPreferredSize(new Dimension(22, 18));
-        prevButton.addActionListener(e -> prevButton_actionPerformed(e));
-//  nextButton.setText(">");
+        prevButton.addActionListener(this::prevButton_actionPerformed);
         nextButton.setIcon(new ImageIcon(this.getClass().getResource("img/next.png")));
         nextButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         nextButton.setPreferredSize(new Dimension(22, 18));
         nextButton.setToolTipText(WWGnlUtilities.buildMessage("next-step"));
-        nextButton.addActionListener(e -> nextButton_actionPerformed(e));
-//  syncGribButton.setText("S");
+        nextButton.addActionListener(this::nextButton_actionPerformed);
         syncGribButton.setIcon(new ImageIcon(this.getClass().getResource("img/action.png")));
         syncGribButton.setFont(new Font("Courier New", Font.PLAIN, 10));
         syncGribButton.setPreferredSize(new Dimension(22, 18));
         syncGribButton.setToolTipText(WWGnlUtilities.buildMessage("synchronize-with-grib"));
-        syncGribButton.addActionListener(e -> syncGribButton_actionPerformed(e));
+        syncGribButton.addActionListener(this::syncGribButton_actionPerformed);
         autoSyncCheckBox.setText("AutoSync");
         autoSyncCheckBox.setActionCommand("autoSyncCheckBox");
-        autoSyncCheckBox.addActionListener(e -> autoSyncCheckBox_actionPerformed(e));
+        autoSyncCheckBox.addActionListener(this::autoSyncCheckBox_actionPerformed);
         bottomPanel.setLayout(gridBagLayout1);
         elapsedLabel.setText("ELapsed: 0");
         stepPanel.add(windVanePanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH, GridBagConstraints.NONE,
@@ -521,7 +515,7 @@ public class RoutingPanel extends JPanel {
                     }
                 }
                 if (prevPos != null) {
-                  actualDistance += GreatCircle.getDistanceInNM(new GreatCirclePoint(prevPos).degreesToRadians(), new GreatCirclePoint(rp.getPosition()).degreesToRadians());
+                    actualDistance += GreatCircle.getDistanceInNM(new GreatCirclePoint(prevPos).degreesToRadians(), new GreatCirclePoint(rp.getPosition()).degreesToRadians());
                 }
                 prevPos = rp.getPosition();
             }
@@ -545,7 +539,7 @@ public class RoutingPanel extends JPanel {
 
             // from-to
             double gcDist = GreatCircle.getDistanceInNM(new GreatCirclePoint(fromPos).degreesToRadians(),
-                                                        new GreatCirclePoint(toPos).degreesToRadians());
+                    new GreatCirclePoint(toPos).degreesToRadians());
             gcLabel.setText(WWGnlUtilities.buildMessage("gc", new String[]{WWGnlUtilities.XXX12.format(gcDist)}));
             actualDistLabel.setText(WWGnlUtilities.buildMessage("actual", new String[]{WWGnlUtilities.XXX12.format(actualDistance)}));
 
@@ -661,7 +655,7 @@ public class RoutingPanel extends JPanel {
     }
 
     private void syncGribButton_actionPerformed(ActionEvent e) {
-//  System.out.println("Synchronizing with GRIB for " + this.date.toString());
+        //  System.out.println("Synchronizing with GRIB for " + this.date.toString());
         WWContext.getInstance().fireSyncGribWithDate(date);
     }
 

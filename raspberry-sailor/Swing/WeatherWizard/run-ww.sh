@@ -24,6 +24,6 @@ LNF=
 # LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"
 #
 LANG=
-LANG="-Duser.country=FR -Duser.language=fr"
+# LANG="-Duser.country=FR -Duser.language=fr"
 #
 java -cp ${CP} ${LNF} ${LANG} main.splash.Splasher
