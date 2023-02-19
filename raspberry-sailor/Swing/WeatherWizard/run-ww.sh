@@ -23,4 +23,7 @@ LNF=
 # LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
 # LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"
 #
-java -cp ${CP} ${LNF} main.splash.Splasher
+LANG=
+LANG="-Duser.country=FR -Duser.language=fr"
+#
+java -cp ${CP} ${LNF} ${LANG} main.splash.Splasher
