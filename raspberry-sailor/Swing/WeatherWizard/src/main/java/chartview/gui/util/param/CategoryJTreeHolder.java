@@ -112,11 +112,11 @@ public class CategoryJTreeHolder
         public void valueChanged(TreeSelectionEvent tse) {
             TreePath tp = tse.getNewLeadSelectionPath();
             if (tp == null) {
-              return;
+                return;
             }
             DefaultMutableTreeNode dtn = (DefaultMutableTreeNode) tp.getLastPathComponent();
             currentlySelectedNode = dtn;
-//    System.out.println("Selected " + dtn.getUserObject().toString());
+            // System.out.println("Selected " + dtn.getUserObject().toString());
             parent.getEventFormTree(dtn.getUserObject().toString());
         }
     }

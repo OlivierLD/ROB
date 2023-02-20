@@ -95,14 +95,14 @@ public class ParamData {
     public final static int GRIB_TWS_COEFF = 81;
     public final static int DEFAULT_FONT = 82;
     public final static int CONFIRM_COMMENT = 83;
-    // Headless
+    // Headless, TODO to remove
     public final static int EPHEMERIS_POSITION = 84;
     public final static int TIDE_STATION_NAME = 85;
     public final static int EPHEMERIS_EMAIL_LIST = 86;
     public final static int EPHEMERIS_EMAIL_TZ = 87;
     public final static int EPHEMERIS_EMAIL_PROVIDER = 88;
 
-    public final static int NB_PRFERENCES = 89;
+    public final static int NB_PREFERENCES = 89;
 
     private final static String[] labels =
             {

@@ -34,14 +34,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RoutingUtil {
-    public static final int REAL_ROUTING = 0;
+    public static final int REAL_ROUTING = 0;   // TODO Replace with enum
     public static final int WHAT_IF_ROUTING = 1;
 
     private static RoutingPoint finalDestination = null;
     private static GribHelper.GribConditionData[] wgd = null;
     private static double timeStep = 0D;
 
-    private static GreatCircle gc = new GreatCircle();
+    private final static GreatCircle gc = new GreatCircle();
     private static RoutingPoint closest = null;
     private static RoutingPoint finalClosest = null;
 
@@ -189,7 +189,7 @@ public class RoutingUtil {
             while (keepLooping && !interruptRouting) {
                 timer = logDiffTime(timer, "Milestone 1");
                 double localSmallOne = Double.MAX_VALUE;
-                List<List<RoutingPoint>> temp = new ArrayList<List<RoutingPoint>>();
+                List<List<RoutingPoint>> temp = new ArrayList<>();
                 Iterator<List<RoutingPoint>> dimOne = data.iterator();
                 int nbNonZeroSpeed = 0;
                 boolean metLand = false;
@@ -227,8 +227,8 @@ public class RoutingUtil {
                         // nbNonZeroSpeed = 0;
                         // Calculate isochron from center
                         for (int bearing = brg - routingForkWidth / 2;
-                            keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
-                            bearing += routingStep) {
+                             keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
+                             bearing += routingStep) {
                             timer = logDiffTime(timer, "Milestone 5");
                             int windDir = 0;
                             if (wind != null) {
@@ -278,7 +278,7 @@ public class RoutingUtil {
                                 arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
                                 GreatCirclePoint dr = GreatCircle.dr_degrees(
                                         new GreatCirclePoint(newCurveCenter.getPosition().getL(),
-                                                             newCurveCenter.getPosition().getG()),
+                                                newCurveCenter.getPosition().getG()),
                                         dist,
                                         bearing);
                                 GeoPoint forecast = new GeoPoint(dr.getL(), dr.getG());
@@ -900,8 +900,8 @@ public class RoutingUtil {
                 double dist = timeStep * speed;
                 currentDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
                 GreatCirclePoint dr = GreatCircle.dr_degrees(new GreatCirclePoint((currentPt.getL()), (currentPt.getG())),
-                                                     dist,
-                                                     hdg);
+                        dist,
+                        hdg);
                 currentPt = new GeoPoint(dr.getL(), dr.getG());
                 ancestor = rpt;
 

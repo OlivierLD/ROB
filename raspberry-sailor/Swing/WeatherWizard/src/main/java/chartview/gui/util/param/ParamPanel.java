@@ -69,8 +69,9 @@ public final class ParamPanel
      * Factory settings
      */
     private static void initTableValues() {
-        for (int i = 0; i < ParamData.NB_PRFERENCES; i++)
+        for (int i = 0; i < ParamData.NB_PREFERENCES; i++) {
             onePreference(i);
+        }
     }
 
     private static void onePreference(int prefId) {

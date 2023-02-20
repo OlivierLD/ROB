@@ -138,7 +138,7 @@ public class ChartAdjust {
         }
         if (headlessMode) {
             if (args != null && args.length > 0) {
-                for (int a = 0; a < args.length; a++) {
+                for (int a = 0; a < args.length; a++) { // TODO Isolate the CLI prms.
                     if (args[a].startsWith("-composite:")) {
                         String s = args[a].substring("-composite:".length());
                         // An array?

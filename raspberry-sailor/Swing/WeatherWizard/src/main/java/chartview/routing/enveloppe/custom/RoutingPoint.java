@@ -2,133 +2,110 @@ package chartview.routing.enveloppe.custom;
 
 import calc.GeoPoint;
 
-import java.awt.Point;
-
+import java.awt.*;
 import java.util.Date;
 
 
-public class RoutingPoint extends Point
-{
-  private RoutingPoint parent = null;
+public class RoutingPoint extends Point {
+    private RoutingPoint parent = null;
 
-  int xOffset = 0;
-  int yOffset = 0;
+    int xOffset = 0;
+    int yOffset = 0;
 
-  double xFactor = 1D;
-  double yFactor = 1D;
+    double xFactor = 1D;
+    double yFactor = 1D;
 
-  private GeoPoint position = null;
-  private Date     date = null;
-  private double   bsp = 0;
-  private int      hdg = 0;
-  private double   tws = 0;
-  private int      twd = 0;
-  private int      twa = 0;
-  
-  private boolean gribTooOld = false;
+    private GeoPoint position = null;
+    private Date date = null;
+    private double bsp = 0;
+    private int hdg = 0;
+    private double tws = 0;
+    private int twd = 0;
+    private int twa = 0;
 
-  public RoutingPoint(int x, int y)
-  {
-    super(x, y);
-  }
+    private boolean gribTooOld = false;
 
-  public RoutingPoint(Point p)
-  {
-    super(p);
-  }
+    public RoutingPoint(int x, int y) {
+        super(x, y);
+    }
 
-  public Point getPoint()
-  {
-    return new Point((int) ((x - xOffset) * xFactor), (int) ((y - yOffset) * yFactor));
-  }
+    public RoutingPoint(Point p) {
+        super(p);
+    }
 
-  public RoutingPoint getAncestor()
-  {
-    return parent;
-  }
+    public Point getPoint() {
+        return new Point((int) ((x - xOffset) * xFactor), (int) ((y - yOffset) * yFactor));
+    }
 
-  public void setAncestor(RoutingPoint ip)
-  {
-    parent = ip;
-  }
+    public RoutingPoint getAncestor() {
+        return parent;
+    }
 
-  public void setPosition(GeoPoint position)
-  {
-    this.position = position;
-  }
+    public void setAncestor(RoutingPoint ip) {
+        parent = ip;
+    }
 
-  public GeoPoint getPosition()
-  {
-    return position;
-  }
+    public void setPosition(GeoPoint position) {
+        this.position = position;
+    }
 
-  public void setDate(Date date)
-  {
-    this.date = date;
-  }
+    public GeoPoint getPosition() {
+        return position;
+    }
 
-  public Date getDate()
-  {
-    return date;
-  }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-  public void setBsp(double bsp)
-  {
-    this.bsp = bsp;
-  }
+    public Date getDate() {
+        return date;
+    }
 
-  public double getBsp()
-  {
-    return bsp;
-  }
+    public void setBsp(double bsp) {
+        this.bsp = bsp;
+    }
 
-  public void setHdg(int hdg)
-  {
-    this.hdg = hdg;
-  }
+    public double getBsp() {
+        return bsp;
+    }
 
-  public int getHdg()
-  {
-    return hdg;
-  }
+    public void setHdg(int hdg) {
+        this.hdg = hdg;
+    }
 
-  public void setTws(double tws)
-  {
-    this.tws = tws;
-  }
+    public int getHdg() {
+        return hdg;
+    }
 
-  public double getTws()
-  {
-    return tws;
-  }
+    public void setTws(double tws) {
+        this.tws = tws;
+    }
 
-  public void setTwd(int twd)
-  {
-    this.twd = twd;
-  }
+    public double getTws() {
+        return tws;
+    }
 
-  public int getTwd()
-  {
-    return twd;
-  }
+    public void setTwd(int twd) {
+        this.twd = twd;
+    }
 
-  public void setTwa(int twa)
-  {
-    this.twa = twa;
-  }
+    public int getTwd() {
+        return twd;
+    }
 
-  public int getTwa()
-  {
-    return twa;
-  }
+    public void setTwa(int twa) {
+        this.twa = twa;
+    }
 
-  public void setGribTooOld(boolean gribTooOld)
-  {
-    this.gribTooOld = gribTooOld;
-  }
+    public int getTwa() {
+        return twa;
+    }
 
-  public boolean isGribTooOld()
-  {
-    return gribTooOld;
-  }
+    public void setGribTooOld(boolean gribTooOld) {
+        this.gribTooOld = gribTooOld;
+    }
+
+    public boolean isGribTooOld() {
+        return gribTooOld;
+    }
 }

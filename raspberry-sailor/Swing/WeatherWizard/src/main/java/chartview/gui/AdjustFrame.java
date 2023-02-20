@@ -10,17 +10,13 @@ import chartview.gui.right.CommandPanel;
 import chartview.gui.right.CompositeTabComponent;
 import chartview.gui.right.CompositeTabbedPane;
 import chartview.gui.toolbar.controlpanels.LoggingPanel;
-import chartview.gui.util.EmailContentGenerator;
 import chartview.gui.util.dialog.*;
-import chartview.gui.util.dialog.places.Position;
 import chartview.gui.util.param.CategoryPanel;
-import chartview.gui.util.param.ListOfTimeZones;
 import chartview.gui.util.param.ParamData;
 import chartview.gui.util.param.ParamPanel;
 import chartview.gui.util.tree.JTreeFilePanel;
 import chartview.util.GPXUtil;
 import chartview.util.WWGnlUtilities;
-import chartview.util.email.EmailSender;
 import chartview.util.grib.GribHelper;
 import chartview.util.http.HTTPClient;
 import coreutilities.Utilities;
@@ -238,18 +234,6 @@ public class AdjustFrame extends JFrame {
                     } else {
                         // This should NEVER happen here
                         WWContext.getInstance().fireLoadDynamicComposite(compositeName);
-                    }
-                    // In headless mode, ephemeris loops?
-                    if ("true".equals(System.getProperty("ephemeris.email", "false"))) {
-                        System.out.println("Will send ephemeris email every day at [" + System.getProperty("start.ephemeris.loop.at", "XX:XX") + "].");
-                        // Need:
-                        // Time (to send the email),
-                        // Position,
-                        // Tide station,
-                        // email list (receiver),
-                        // sender name/pswd,
-                        // email server.
-                        enterEphemerisLoop();
                     }
                 }
             }
@@ -1872,8 +1856,7 @@ public class AdjustFrame extends JFrame {
                                     System.out.println(">>> Downloading FAX " + faxUrl);
                                     HTTPClient.getChart(faxUrl, faxDir, fileName, true);
                                     finalMess += ("- " + fileName + "\n");
-                                } catch (FileNotFoundException fnfe) // Case of a permission
-                                {
+                                } catch (FileNotFoundException fnfe) { // Case of a permission
                                     String message = fnfe.getMessage();
                                     message += ("\nUser [" + System.getProperty("user.name") + "] seems not to have write access to " + faxDir);
                                     if ("false".equals(System.getProperty("headless", "false"))) {
@@ -2103,200 +2086,6 @@ public class AdjustFrame extends JFrame {
             }
         };
         System.out.println("\n-- Starting reload thread...");
-        t.start();
-    }
-
-    public static void enterEphemerisLoop() {
-        final int interval = 24 * 60; // in minutes
-
-        String threadName = Long.toString(new Date().getTime());
-        Thread t = new Thread("Ephemeris-" + threadName) {
-            public void run() {
-                String startAt = System.getProperty("start.ephemeris.loop.at", "");
-                if (startAt.trim().length() > 0) {
-                    // Pattern is "HH:MM"
-                    String[] hhmm = startAt.split(":");
-                    try {
-                        int hh = Integer.parseInt(hhmm[0]);
-                        int mm = Integer.parseInt(hhmm[1]);
-                        long now = System.currentTimeMillis();
-                        Calendar start = GregorianCalendar.getInstance();
-                        start.set(Calendar.HOUR_OF_DAY, hh);
-                        start.set(Calendar.MINUTE, mm);
-                        start.set(Calendar.SECOND, 0);
-                        start.set(Calendar.MILLISECOND, 0);
-                        long startMS = start.getTimeInMillis();
-                        //        System.out.println("-> Will Start at " + new Date(startMS).toString());
-                        while (startMS < now) {
-                            start.add(Calendar.HOUR, 24);
-                            startMS = start.getTimeInMillis();
-                            System.out.println("-> Will Start Ephemeris at " + new Date(startMS).toString());
-                        }
-                        long timeToWait = startMS - now;
-                        try {
-                            System.out.println("-> Will Start Ephemeris email at " + new Date(startMS).toString());
-                            System.out.println("Waiting for " + timeToWait + " ms before looping.");
-                            Thread.sleep(timeToWait);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    } catch (Exception ex) {
-                        System.err.println("Problem with -Dstart.ephemeris.loop=" + startAt);
-                        ex.printStackTrace();
-                    }
-                }
-
-                while (true) {
-                    Date date = new Date();
-                    System.out.println("------------------------------------------------------------------------------");
-                    System.out.println("-- Ephemeris starting at " + date.toString());
-                    System.out.println("-- Ephemeris loop, thread " + this.getName());
-                    System.out.println("------------------------------------------------------------------------------");
-                    long startedAt = System.currentTimeMillis();
-                    // Generate ephemeris email here
-                    String provider = (String) ParamPanel.data[ParamData.EPHEMERIS_EMAIL_PROVIDER][ParamData.VALUE_INDEX];
-                    EmailSender emailSender = new EmailSender(provider); //
-                    try {
-                        String tideStation = ((String) ParamPanel.data[ParamData.TIDE_STATION_NAME][ParamData.VALUE_INDEX]).toString();
-                        int weekly = Calendar.MONDAY;
-                        Position position = ((Position) ParamPanel.data[ParamData.EPHEMERIS_POSITION][ParamData.VALUE_INDEX]);
-
-                        String content = EmailContentGenerator.generateEmailContent(
-                                tideStation,
-                                position,
-                                ((ListOfTimeZones) ParamPanel.data[ParamData.EPHEMERIS_EMAIL_TZ][ParamData.VALUE_INDEX]).toString(),
-                                weekly);
-                        Calendar started = GregorianCalendar.getInstance();
-                        Date firstDay = GregorianCalendar.getInstance().getTime();
-//
-//              date = reference.getTime();
-
-//              Calendar reference = GregorianCalendar.getInstance(); // new GregorianCalendar();
-//
-//              date = reference.getTime();
-//           // reference.setTimeInMillis(date.getTime());
-//              Calendar started = GregorianCalendar.getInstance();
-//              boolean keepLooping = true;
-//              String content = "<html><body>";
-//              Date firstDay = null;
-//              while (keepLooping)
-//              {
-//                GeoPos pos = new GeoPos(position.getLat().getValue(),
-//                                        position.getLong().getValue());
-//                AstroComputer.setDateTime(reference.get(Calendar.YEAR),
-//                                          reference.get(Calendar.MONTH) + 1,
-//                                          reference.get(Calendar.DAY_OF_MONTH),
-//                                          reference.get(Calendar.HOUR_OF_DAY), // 12 - (int)Math.round(AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(ts.getTimeZone()))),
-//                                          reference.get(Calendar.MINUTE),
-//                                          reference.get(Calendar.SECOND));
-//                AstroComputer.calculate();
-//                String tz = ((ListOfTimeZones)ParamPanel.data[ParamData.EPHEMERIS_EMAIL_TZ][ParamData.VALUE_INDEX]).toString();
-//                Object[] sunRiseSet = AstroUtil.calculateRiseSet(pos, tz, reference);
-//                Object[] moonRiseSet = AstroUtil.calculateMoonRiseSet(pos, tz, reference);
-//
-//                Calendar sunTransit = new GregorianCalendar();
-//                sunTransit.setTimeZone(TimeZone.getTimeZone(tz));
-//                sunTransit.set(Calendar.YEAR, reference.get(Calendar.YEAR));
-//                sunTransit.set(Calendar.MONTH, reference.get(Calendar.MONTH));
-//                sunTransit.set(Calendar.DAY_OF_MONTH, reference.get(Calendar.DAY_OF_MONTH));
-//                sunTransit.set(Calendar.SECOND, 0);
-//
-//                if (pos != null)
-//                {
-//                  double tPass = AstroComputer.getSunMeridianPassageTime(position.getLat().getValue(), position.getLong().getValue());
-//                  double r = tPass + AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(tz), sunTransit.getTime());
-//                  int min = (int)((r - ((int)r)) * 60);
-//                  sunTransit.set(Calendar.MINUTE, min);
-//                  sunTransit.set(Calendar.HOUR_OF_DAY, (int)r);
-//                }
-//                double moonPhase = AstroComputer.getMoonPhase(reference.get(Calendar.YEAR),
-//                                                              reference.get(Calendar.MONTH) + 1,
-//                                                              reference.get(Calendar.DAY_OF_MONTH),
-//                                                              reference.get(Calendar.HOUR_OF_DAY), // 12 - (int)Math.round(AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(ts.getTimeZone()))),
-//                                                              reference.get(Calendar.MINUTE),
-//                                                              reference.get(Calendar.SECOND));
-//                int phaseInDay = (int)Math.round(moonPhase / (360d / 28d)) + 1;
-//                if (phaseInDay > 28) phaseInDay = 28;
-//                if (phaseInDay < 1) phaseInDay = 1;
-//
-//                SDF_FOR_SUN_MOON_EPHEMERIS.setTimeZone(TimeZone.getTimeZone(tz));
-//                System.out.println("Sun Rise:" + new Date(((Calendar)sunRiseSet[0]).getTimeInMillis()));
-//                System.out.println("Sun Set :" + new Date(((Calendar)sunRiseSet[1]).getTimeInMillis()));
-//                System.out.println("Moon Phase: " + phaseInDay + " day(s).");
-//                double sunD  = AstroComputer.getSunDecl();
-//                double moonD = AstroComputer.getMoonDecl();
-//                double deltaT = AstroComputer.getDeltaT();
-//                if (firstDay == null)
-//                  firstDay = date;
-//                content += "<h2>" + "Almanac for " + SDF_FOR_EPHEMERIS.format(date) + "</h2>" +
-//                                 "<table width='98%'><tr><td valign='top'>" +
-//                                 "<pre>At " + pos.toString().replaceAll("\272", "&deg;") + "\n";
-//                content += ("Sun Rise:" + SDF_FOR_SUN_MOON_EPHEMERIS.format(new Date(((Calendar)sunRiseSet[0]).getTimeInMillis())) + " (Z=" + lpad(Z_FORMAT.format((Double)sunRiseSet[2]), " ", 3) + "&deg;)\n");
-//                content += ("Sun Set :" + SDF_FOR_SUN_MOON_EPHEMERIS.format(new Date(((Calendar)sunRiseSet[1]).getTimeInMillis())) + " (Z=" + lpad(Z_FORMAT.format((Double)sunRiseSet[3]), " ", 3) + "&deg;)\n");
-//                content += ("Sun transit :" + SDF_FOR_SUN_MOON_EPHEMERIS.format(new Date(sunTransit.getTimeInMillis())) + "\n");
-//
-//                content += ("Moon Rise:" + SDF_FOR_SUN_MOON_EPHEMERIS.format(new Date(((Calendar)moonRiseSet[0]).getTimeInMillis())) + " (Z=" + lpad(Z_FORMAT.format((Double)moonRiseSet[2]), " ", 3) + "&deg;)\n");
-//                content += ("Moon Set :" + SDF_FOR_SUN_MOON_EPHEMERIS.format(new Date(((Calendar)moonRiseSet[1]).getTimeInMillis())) + " (Z=" + lpad(Z_FORMAT.format((Double)moonRiseSet[3]), " ", 3) + "&deg;)\n");
-//
-//                content += ("Moon Phase: " + phaseInDay + " day(s).");
-//                content += "</pre></td><td valign='top' align='right'>";
-//                content += ("<img src='http://www.lediouris.net/moon/phase" + NF_PHASE.format(phaseInDay) + ".gif'>"); // TODO Southern hemisphere
-//                content += "</td></tr></table>";
-//                content += "<hr><pre>";
-//                content += ("At " + SDF_FOR_SUN_MOON_EPHEMERIS.format(date) + ":\n");
-//                content += ("Sun D : " + lpad(GeomUtil.decToSex(sunD), " ", 15) + "\n");
-//                content += ("Moon D: " + lpad(GeomUtil.decToSex(moonD), " ", 15) + "\n");
-//                content += "<hr>";
-//                content += ("Tide at " + tideStation + ":\n");
-//                content += TideComputer.calculateTideAt(tideStation, reference);
-//                content += "</pre>";
-//                content += "<hr>";
-//                content += "<small>Calculated with &Delta;T=" + deltaT + "</small><br>";
-//                if (started.get(Calendar.DAY_OF_WEEK) == weekly && // On Mondays, print almanac for one week
-//                    TimeUnit.DAYS.convert((reference.getTimeInMillis() - started.getTimeInMillis()), TimeUnit.MILLISECONDS) < 7) {
-//                  reference.add(Calendar.HOUR_OF_DAY, 24);
-//                  date = reference.getTime();
-//                } else {
-//                  keepLooping = false;
-//                }
-//              }
-//              content += "</body></html>";
-
-                        //    String moonFile = "." + File.separator + "pub" + File.separator + "phase" + NF_PHASE.format(phaseInDay) + ".gif";
-                        String to = ((String) ParamPanel.data[ParamData.EPHEMERIS_EMAIL_LIST][ParamData.VALUE_INDEX]);
-                        String[] dest = to.split(";");
-                        System.out.println("+===================================+");
-                        System.out.println("|   Sending Ephemeris Email         |");
-                        System.out.println("| to " + to.replace(";", " "));
-                        emailSender.send(dest,
-                                "Almanac for " + (started.get(Calendar.DAY_OF_WEEK) == weekly ? "the week of " : "") + SDF_FOR_EPHEMERIS.format(firstDay),
-                                content,
-                                "text/html;charset=utf-8" /* ,
-                               moonFile */);
-                        System.out.println("|   Ephemeris Email Sent            |");
-                        //   System.out.println("| Attached " + moonFile);
-                        System.out.println("| Content:\n" + content);
-                        System.out.println("+===================================+");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    try {
-                        System.out.println("-- Taking a nap (" + Utilities.readableTime(interval * 1000 * 60).trim() + ")");
-                        String mess = WWGnlUtilities.buildMessage("next-download") + " " + WWGnlUtilities.formatTimeDiff(interval * 60); //"Next automatic download in " + Integer.toString(interval) + " minute(s)";
-                        WWContext.getInstance().fireSetStatus(mess);
-                        long now = System.currentTimeMillis();
-                        long amount2Sleep = (1000L * 60L * interval) - (now - startedAt);
-                        if (amount2Sleep > 0) {
-                            Thread.sleep(amount2Sleep);
-                        }
-                        System.out.println("-- Thread " + this.getName() + " waking up.");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        };
-        System.out.println("\n-- Starting ephemeris email thread...");
         t.start();
     }
 

@@ -191,7 +191,7 @@ public class BackEndTideComputer {
 		long before = System.currentTimeMillis();
 		TideStation station = stations.getStations().get(stationName);
 		if (station == null) { // Try match
-			System.out.println(String.format("%s not found, trying partial match.", stationName));
+			System.out.println(String.format("%s not found, trying partial match...", stationName));
 			Set<String> keys = stations.getStations().keySet();
 			for (String s : keys) {
 				if (s.toLowerCase(Locale.ROOT).contains(stationName.toLowerCase(Locale.ROOT))) {

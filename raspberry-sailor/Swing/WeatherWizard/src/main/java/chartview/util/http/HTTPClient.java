@@ -14,7 +14,10 @@ import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.*;
-import java.net.*;
+import java.net.SocketException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +31,7 @@ public class HTTPClient {
             throws Exception {
         String ret = null;
         try {
-            byte content[] = readURL(new URL(url));
+            byte[] content = readURL(new URL(url));
             if (content == null) {
                 throw new NMEAServerException("NMEA HTTP Server not found.");
             }
@@ -40,13 +43,13 @@ public class HTTPClient {
     }
 
     public static byte[] readURL(URL url) throws Exception {
-        byte content[] = null;
+        byte[] content = null;
         try {
             URLConnection newURLConn = url.openConnection();
             InputStream is = newURLConn.getInputStream();
             boolean finished = false;
             int available = 0;
-            byte aByte[] = new byte[2];
+            byte[] aByte = new byte[2];
             int nBytes;
             long started = System.currentTimeMillis();
             int nbLoop = 1;
@@ -83,7 +86,7 @@ public class HTTPClient {
         return image;
     }
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_z");
+    private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_z");
 
     public static Image getChart(String urlString, String dir, boolean verbose) throws Exception {
         return getChart(urlString, dir, null, verbose);
@@ -95,7 +98,7 @@ public class HTTPClient {
         if (true || verbose) {
             System.out.printf("Downloading %s into %s, as %s\n", urlString, dir, fileName);
         }
-        /**
+        /*
          * If there is a ';' in the url, url is before,
          * after, this is the output directory.
          */
@@ -110,11 +113,11 @@ public class HTTPClient {
         try {
             long before = System.currentTimeMillis();
             if (verbose) {
-              System.out.println("...reading (1) " + urlStr);
+                System.out.println("...reading (1) " + urlStr);
             }
             String fName = fileName;
             if (fName == null) {
-              fName = outputdir + File.separator + "Weather_" + sdf.format(new Date()) + ".jpg";
+                fName = outputdir + File.separator + "Weather_" + sdf.format(new Date()) + ".jpg";
             }
             try {
                 URL chartUrl = new URL(urlStr);
@@ -139,46 +142,46 @@ public class HTTPClient {
                 WWContext.getInstance().fireInterruptProgress();
                 if (fileName != null) { // assume interactive
                     if (!("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")))) {
-                       // Non-blocking download process.
-                       Thread dialogThread = new Thread(() -> {
-                          JLabel label = new JLabel();
-                          Font font = label.getFont();
-                          // create some css from the label's font
-                          StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-                          style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
-                          style.append("font-size:" + font.getSize() + "pt;");
+                        // Non-blocking download process.
+                        Thread dialogThread = new Thread(() -> {
+                            JLabel label = new JLabel();
+                            Font font = label.getFont();
+                            // create some css from the label's font
+                            StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
+                            style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
+                            style.append("font-size:" + font.getSize() + "pt;");
 
-                          // html content
-                          JEditorPane ep = new JEditorPane("text/html", "<html><body style='" + style + "'>"
-                                  + "For fax <a href='" + urlString + "'>" + urlString + "</a><br> "
-                                  + e.toString()
-                                  + "</body></html>");
+                            // html content
+                            JEditorPane ep = new JEditorPane("text/html", "<html><body style='" + style + "'>"
+                                    + "For fax <a href='" + urlString + "'>" + urlString + "</a><br> "
+                                    + e.toString()
+                                    + "</body></html>");
 
-                          // handle link events
-                          ep.addHyperlinkListener(e1 -> {
-                              if (e1.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                                  if (Desktop.isDesktopSupported()) {
-                                      try {
-                                          Desktop.getDesktop().browse(e1.getURL().toURI());
-                                      } catch (URISyntaxException usi) {
-                                          usi.printStackTrace();
-                                      } catch (IOException ioe) {
-                                          ioe.printStackTrace();
-                                      }
-                                  }
-                              }
-                          });
-                          ep.setEditable(false);
-                          ep.setBackground(label.getBackground());
+                            // handle link events
+                            ep.addHyperlinkListener(e1 -> {
+                                if (e1.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                                    if (Desktop.isDesktopSupported()) {
+                                        try {
+                                            Desktop.getDesktop().browse(e1.getURL().toURI());
+                                        } catch (URISyntaxException usi) {
+                                            usi.printStackTrace();
+                                        } catch (IOException ioe) {
+                                            ioe.printStackTrace();
+                                        }
+                                    }
+                                }
+                            });
+                            ep.setEditable(false);
+                            ep.setBackground(label.getBackground());
 
-                          // Display the message, and close the dialog after 5 sec.
-                          WWGnlUtilities.displayMessageAndClose(
-                                  ep,
-                                  WWGnlUtilities.buildMessage("downloading-fax"),
-                                  JOptionPane.ERROR_MESSAGE,
-                                  5);
-                       });
-                       dialogThread.start();
+                            // Display the message, and close the dialog after 5 sec.
+                            WWGnlUtilities.displayMessageAndClose(
+                                    ep,
+                                    WWGnlUtilities.buildMessage("downloading-fax"),
+                                    JOptionPane.ERROR_MESSAGE,
+                                    5);
+                        });
+                        dialogThread.start();
                     }
                     System.out.println("Found error, moving on");
                     // e.printStackTrace();
@@ -189,21 +192,21 @@ public class HTTPClient {
             File f = new File(fName);
             if (new File(outputdir).canWrite()) {
                 if (fName.endsWith(".jpg")) {
-                  ImageIO.write((RenderedImage) image, "jpg", f);
+                    ImageIO.write((RenderedImage) image, "jpg", f);
                 } else if (fName.endsWith(".gif")) {
-                  gifImage.write(new GIFOutputStream(new FileOutputStream(f)));
+                    gifImage.write(new GIFOutputStream(new FileOutputStream(f)));
                 } else if (fName.endsWith(".png")) {
-                  ImageIO.write((RenderedImage) image, "png", f);
+                    ImageIO.write((RenderedImage) image, "png", f);
                 } else {
-                  System.out.println("Extension not supported (" + fName + ")");
+                    System.out.println("Extension not supported (" + fName + ")");
                 }
                 long diff = System.currentTimeMillis() - before;
                 retFile = f.getAbsolutePath();
                 if (verbose) {
-                  System.out.println("New Fax available " + retFile + " [" + Long.toString(diff) + " ms]");
+                    System.out.println("New Fax available " + retFile + " [" + Long.toString(diff) + " ms]");
                 }
             } else {
-              throw new CannotWriteException("Cannot write in " + outputdir);
+                throw new CannotWriteException("Cannot write in " + outputdir);
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);
@@ -223,10 +226,12 @@ public class HTTPClient {
         }
         try {
             long before = System.currentTimeMillis();
-            if (verbose) System.out.println("...reading (2) " + urlStr);
+            if (verbose) {
+                System.out.println("...reading (2) " + urlStr);
+            }
             String fName = fileName;
             if (fName == null) {
-              fName = outputdir + File.separator + "GRIB" + sdf.format(new Date()) + ".grb";
+                fName = outputdir + File.separator + "GRIB" + sdf.format(new Date()) + ".grb";
             }
             try {
 //      System.out.println(request);
@@ -243,7 +248,7 @@ public class HTTPClient {
                 }
 
                 final int BUFFER_SIZE = 65_536;
-                byte aByte[] = new byte[BUFFER_SIZE];
+                byte[] aByte = new byte[BUFFER_SIZE];
                 int nBytes;
                 while ((nBytes = dis.read(aByte, 0, BUFFER_SIZE)) != -1) {
                     // System.out.println("Read " + nBytes + " more bytes.");
@@ -256,7 +261,7 @@ public class HTTPClient {
                 dis = bais; // switch
             } catch (Exception e) {
                 if (fileName != null && "false".equals(System.getProperty("headless", "false"))) { // assume interactive
-                  JOptionPane.showMessageDialog(WWContext.getInstance().getMasterTopFrame(), e.toString(), "Downloading GRIB", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(WWContext.getInstance().getMasterTopFrame(), e.toString(), "Downloading GRIB", JOptionPane.ERROR_MESSAGE);
                 }
                 WWContext.getInstance().fireStopAnyLoading();
                 WWContext.getInstance().fireExceptionLogging(e);
@@ -270,10 +275,10 @@ public class HTTPClient {
                 long diff = System.currentTimeMillis() - before;
                 retFile = f.getAbsolutePath();
                 if (verbose) {
-                  System.out.println("New GRIB available " + retFile + " [" + Long.toString(diff) + " ms]");
+                    System.out.println("New GRIB available " + retFile + " [" + Long.toString(diff) + " ms]");
                 }
             } else {
-              throw new CannotWriteException("Cannot write in " + outputdir);
+                throw new CannotWriteException("Cannot write in " + outputdir);
             }
         } catch (Exception e) {
             WWContext.getInstance().fireExceptionLogging(e);

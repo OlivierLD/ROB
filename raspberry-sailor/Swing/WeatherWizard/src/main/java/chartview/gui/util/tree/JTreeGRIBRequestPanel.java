@@ -645,7 +645,6 @@ public class JTreeGRIBRequestPanel
 
     public void parseGRIBRequest(String gr) {
         // Sample: GFS:60N,0N,120E,070W|2,2|0,6..168|PRMSL,WIND,HGT500,SEATMP,WAVES
-
         int columnIndex = gr.indexOf(":");
         if (columnIndex == -1) {
             throw new RuntimeException("Unparsable GRIB Request - Missing column ':'");
@@ -659,13 +658,13 @@ public class JTreeGRIBRequestPanel
         int tokenIndex = 0;
         while (strtokGRIB.hasMoreTokens()) {
             String tok = strtokGRIB.nextToken();
-//    System.out.println("Token:" + tok);
+            // System.out.println("Token:" + tok);
             switch (tokenIndex) {
                 case 0: // Geo Positions
-                    StringTokenizer strtokGeo = new StringTokenizer(tok, ",");
+                    StringTokenizer strTokGeo = new StringTokenizer(tok, ",");
                     int index = 0;
-                    while (strtokGeo.hasMoreTokens()) {
-                        String s = strtokGeo.nextToken();
+                    while (strTokGeo.hasMoreTokens()) {
+                        String s = strTokGeo.nextToken();
                         switch (index) {
                             case 0: // Top
                                 topTextField.setText(s);

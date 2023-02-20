@@ -12,6 +12,11 @@ CP=${CP}:../ww-user-exits/WW-UserExit_CurrentDustlet/build/libs/WW-UserExit_Curr
 #
 # CP=${CP}:/Applications/Processing.v4.app/Contents/Java/core/library/core.jar
 #
+# Options:
+# headless
+# start.loop.at <- For default composite
+# display.composite, default true
+#
 # Default L&F is Metal (unless enforced below)
 #
 LNF=
@@ -26,4 +31,4 @@ LNF=
 LANG=
 # LANG="-Duser.country=FR -Duser.language=fr"
 #
-java -cp ${CP} ${LNF} ${LANG} main.splash.Splasher
+java -cp ${CP} ${LNF} ${LANG} ${TIDE_EMAILS} main.splash.Splasher

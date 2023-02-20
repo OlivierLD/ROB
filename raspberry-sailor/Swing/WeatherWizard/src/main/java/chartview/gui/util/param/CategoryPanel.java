@@ -36,15 +36,15 @@ public class CategoryPanel
 
     public void getEventFormTree(String str) {
         if (CategoryJTreeHolder.COLORS.equals(str)) {
-          table.setDisplayColorPrm();
+            table.setDisplayColorPrm();
         } else if (CategoryJTreeHolder.OTHERS.equals(str)) {
-          table.setDisplayOtherPrm();
+            table.setDisplayOtherPrm();
         } else if (CategoryJTreeHolder.POLARS.equals(str)) {
-          table.setRoutingPrm();
+            table.setRoutingPrm();
         } else if (CategoryJTreeHolder.MISC.equals(str)) {
-          table.setMiscPrm();
+            table.setMiscPrm();
         } else if (CategoryJTreeHolder.HEADLESS.equals(str)) {
-          table.setHeadlessPrm();
+            table.setHeadlessPrm();
         }
 //  else
 //    System.out.println("Un-managed event:" + str);

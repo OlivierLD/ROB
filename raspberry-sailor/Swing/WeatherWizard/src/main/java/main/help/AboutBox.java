@@ -18,16 +18,16 @@ import java.util.Properties;
 
 public class AboutBox
         extends JPanel {
-    private transient Border border = BorderFactory.createEtchedBorder();
-    private GridBagLayout layoutMain = new GridBagLayout();
-    private JLabel labelCompany = new JLabel();
-    private JLabel labelCopyright = new JLabel();
-    private JLabel labelAuthor = new JLabel();
-    private JLabel labelTitle = new JLabel();
-    private JLabel jLabel1 = new JLabel();
-    private JLabel contactLabel = new JLabel();
+    private final transient Border border = BorderFactory.createEtchedBorder();
+    private final GridBagLayout layoutMain = new GridBagLayout();
+    private final JLabel labelCompany = new JLabel();
+    private final JLabel labelCopyright = new JLabel();
+    private final JLabel labelAuthor = new JLabel();
+    private final JLabel labelTitle = new JLabel();
+    private final JLabel jLabel1 = new JLabel();
+    private final JLabel contactLabel = new JLabel();
 
-    private JTabbedPane tabbedPane = new JTabbedPane();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
 
     private final static String KEY = "Name";
     private final static String VALUE = "Value";
@@ -41,13 +41,12 @@ public class AboutBox
 
     JTable table;
     JScrollPane scrollPane;
-    BorderLayout borderLayout = new BorderLayout();
     JPanel panelOne = new JPanel();
     JPanel panelTwo = new JPanel();
     JPanel panelThree = new JPanel();
-    private JLabel compiledLabel = new JLabel();
-    private JLabel proxyLabel = new JLabel();
-    private JLabel jLabel2 = new JLabel();
+    private final JLabel compiledLabel = new JLabel();
+    private final JLabel proxyLabel = new JLabel();
+    private final JLabel jLabel2 = new JLabel();
 
     public AboutBox() {
         try {
@@ -162,12 +161,12 @@ public class AboutBox
 
     private Object[][] addLineInTable(String k, String v, Object[][] d) {
         int len = 0;
-        if (d != null)
+        if (d != null) {
             len = d.length;
+        }
         Object[][] newData = new Object[len + 1][names.length];
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < names.length; j++)
-                newData[i][j] = d[i][j];
+            System.arraycopy(d[i], 0, newData[i], 0, names.length);
         }
         newData[len][0] = k;
         newData[len][1] = v;

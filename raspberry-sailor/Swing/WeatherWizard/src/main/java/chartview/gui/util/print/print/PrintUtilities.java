@@ -43,9 +43,9 @@ public class PrintUtilities
         PrinterJob printJob = PrinterJob.getPrinterJob();
         PageFormat pf = printJob.defaultPage();
         if (this.componentToBePrinted.getSize().getWidth() > this.componentToBePrinted.getSize().getHeight()) {
-          pf.setOrientation(PageFormat.LANDSCAPE);
+            pf.setOrientation(PageFormat.LANDSCAPE);
         } else {
-          pf.setOrientation(PageFormat.PORTRAIT);
+            pf.setOrientation(PageFormat.PORTRAIT);
         }
         printJob.setPrintable(this, pf);
         if (printJob.printDialog()) {

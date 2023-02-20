@@ -2,37 +2,28 @@ package chartview.util;
 
 
 import calc.GeoPoint;
-
 import chartview.ctx.WWContext;
-
-import java.io.File;
-
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.Date;
-
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.swing.JOptionPane;
-
 import nmea.parser.StringParsers;
-
 import oracle.xml.parser.v2.DOMParser;
 import oracle.xml.parser.v2.NSResolver;
 import oracle.xml.parser.v2.XMLDocument;
 import oracle.xml.parser.v2.XMLElement;
-
 import org.w3c.dom.NodeList;
-
 import utils.TimeUtil;
+
+import javax.swing.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 public class GPXUtil {
     private final static String GPX_NS = "http://www.topografix.com/GPX/1/1";
 
     public static List<GeoPoint> parseGPXData(URL url, long from, long to) {
-        List<GeoPoint> ret = new ArrayList<GeoPoint>();
+        List<GeoPoint> ret = new ArrayList<>();
         DOMParser parser = WWContext.getInstance().getParser();
         XMLDocument gpx = null;
 
@@ -53,8 +44,7 @@ public class GPXUtil {
                 };
                 boolean track = true;
                 NodeList nl = gpx.selectNodes("//gpx:trkpt[./gpx:type = 'WPT']", nsr);
-                if (nl.getLength() == 0) // Then try a route (was a track)
-                {
+                if (nl.getLength() == 0) { // Then try a route (was a track)
                     nl = gpx.selectNodes("//gpx:rtept[./gpx:type = 'WPT']", nsr);
                     track = false;
                 }
@@ -73,20 +63,18 @@ public class GPXUtil {
                     if (track) {
                         TimeZone tz = TimeZone.getDefault();
                         TimeZone.setDefault(TimeZone.getTimeZone("127"));
-//          System.out.println("Date:" + new Date(time).toString());
+                        // System.out.println("Date:" + new Date(time).toString());
                         TimeZone.setDefault(tz); // Reset
                     }
-                    boolean add = true;
-                    if (track && from > -1L && time < from)
+                    boolean add = !track || from <= -1L || time >= from;
+                    if (track && add && to > -1L && time > to) {
                         add = false;
-                    if (track && add && to > -1L && time > to)
-                        add = false;
+                    }
                     if (add) {
                         GeoPoint gp = new GeoPoint(lat, lon);
                         ret.add(gp);
                     }
                 }
-
                 JOptionPane.showMessageDialog(null, "Added " + ret.size() + " points", "GPX Parsing", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.toString(), "GPX Parsing", JOptionPane.ERROR_MESSAGE);
@@ -129,9 +117,9 @@ public class GPXUtil {
                     }
                 };
                 String xpath = "//gpx:trkseg[position() = last()]//gpx:trkpt[position() = last()]/gpx:time";
-                if (opt == FIRST)
+                if (opt == FIRST) {
                     xpath = "//gpx:trkseg[position() = 1]//gpx:trkpt[position() = 1]/gpx:time";
-
+                }
                 NodeList nl = gpx.selectNodes(xpath, nsr);
                 String strDate = "";
                 strDate = ((XMLElement) nl.item(0)).getNodeValue(); // .getTextContent();
@@ -141,7 +129,7 @@ public class GPXUtil {
                 if (true) {
                     TimeZone tz = TimeZone.getDefault();
                     TimeZone.setDefault(TimeZone.getTimeZone("127"));
-//        System.out.println("Date:" + new Date(time).toString());
+                    // System.out.println("Date:" + new Date(time).toString());
                     TimeZone.setDefault(tz); // Reset
                 }
                 date = new Date(time);
@@ -154,8 +142,7 @@ public class GPXUtil {
 
     public static void main(String... args) {
         try {
-            String testData = // "C:\\_stage\\2010-11-13.gpx";
-                    "C:\\OlivWork\\olivsoft\\ChartAdjustment\\leg.02.gpx";
+            String testData = "leg.02.gpx";
             URL gpxURL = new File(testData).toURI().toURL();
             List<GeoPoint> algp = GPXUtil.parseGPXData(gpxURL, -1L, -1L);
             System.out.println("Returned " + algp.size() + " points.");

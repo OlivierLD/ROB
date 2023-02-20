@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
   implementation 'oracle:xmlparser:2.0'
-  implementation 'com.sun.mail:javax.mail:1.6.2'
 
   implementation fileTree(dir: '../../../common-image-utils/libs', include: ['*.jar'])
 //  implementation 'javax:jai_codec:1.1.3'
@@ -29,13 +28,9 @@ dependencies {
   implementation project(':astro-computer:AstroComputer')
   implementation project(':raspberry-sailor:JGRIB')
   implementation project(':raspberry-sailor:NMEA-Parser')
-  implementation project(':raspberry-sailor:TideEngine')
   implementation project(':raspberry-sailor:PolarSmoother')
 
   implementation project(':raspberry-sailor:Swing:ChartComponents')
-
-//  implementation project(':raspberry-sailor:Swing:ww-user-exits:WW-UserExits')
-//  implementation project(':raspberry-sailor:Swing:ww-user-exits:WW-UserExits_II')
 
   testImplementation "junit:junit:$junit_version"
 }

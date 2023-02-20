@@ -1,7 +1,5 @@
 package chartview.util.nmeaclient;
 
-import chartview.gui.util.param.ParamData;
-import chartview.gui.util.param.ParamPanel;
 import chartview.util.WWGnlUtilities;
 
 public class BoatPositionMUXClient implements BoatPositionClient {
