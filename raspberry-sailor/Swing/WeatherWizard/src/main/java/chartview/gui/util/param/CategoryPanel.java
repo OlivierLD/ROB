@@ -43,8 +43,8 @@ public class CategoryPanel
             table.setRoutingPrm();
         } else if (CategoryJTreeHolder.MISC.equals(str)) {
             table.setMiscPrm();
-        } else if (CategoryJTreeHolder.HEADLESS.equals(str)) {
-            table.setHeadlessPrm();
+//        } else if (CategoryJTreeHolder.HEADLESS.equals(str)) {
+//            table.setHeadlessPrm();
         }
 //  else
 //    System.out.println("Un-managed event:" + str);

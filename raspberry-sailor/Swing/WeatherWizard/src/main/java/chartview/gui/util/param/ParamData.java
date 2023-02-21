@@ -95,14 +95,15 @@ public class ParamData {
     public final static int GRIB_TWS_COEFF = 81;
     public final static int DEFAULT_FONT = 82;
     public final static int CONFIRM_COMMENT = 83;
+    public final static int PLAY_SOUND_WHEN_LEAVING = 84;
     // Headless, TODO to remove
-    public final static int EPHEMERIS_POSITION = 84;
-    public final static int TIDE_STATION_NAME = 85;
-    public final static int EPHEMERIS_EMAIL_LIST = 86;
-    public final static int EPHEMERIS_EMAIL_TZ = 87;
-    public final static int EPHEMERIS_EMAIL_PROVIDER = 88;
+//    public final static int EPHEMERIS_POSITION = 84;
+//    public final static int TIDE_STATION_NAME = 85;
+//    public final static int EPHEMERIS_EMAIL_LIST = 86;
+//    public final static int EPHEMERIS_EMAIL_TZ = 87;
+//    public final static int EPHEMERIS_EMAIL_PROVIDER = 88;
 
-    public final static int NB_PREFERENCES = 89;
+    public final static int NB_PREFERENCES = 85; // 89;
 
     private final static String[] labels =
             {
@@ -190,11 +191,12 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("grib-tws-coeff"),
                     WWGnlUtilities.buildMessage("default-font-size"),
                     WWGnlUtilities.buildMessage("ask-confirm-comment"),
+                    WWGnlUtilities.buildMessage("play-sound-when-leaving") /*,
                     WWGnlUtilities.buildMessage("ephemeris-position"),
                     WWGnlUtilities.buildMessage("ephemeris-tide-station"),
                     WWGnlUtilities.buildMessage("ephemeris-email-list"),
                     WWGnlUtilities.buildMessage("ephemeris-email-tz"),
-                    WWGnlUtilities.buildMessage("ephemeris-email-provider")
+                    WWGnlUtilities.buildMessage("ephemeris-email-provider") */
             };
 
     private final static String[] helptext =
@@ -283,11 +285,12 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("help-grib-tws-coeff"),
                     WWGnlUtilities.buildMessage("help-default-font-size"),
                     WWGnlUtilities.buildMessage("help-ask-confirm-comment"),
+                    WWGnlUtilities.buildMessage("help-play-sound-when-leaving") /*,
                     WWGnlUtilities.buildMessage("help-ephemeris-position"),
                     WWGnlUtilities.buildMessage("help-ephemeris-tide-station"),
                     WWGnlUtilities.buildMessage("help-ephemeris-email-list"),
                     WWGnlUtilities.buildMessage("help-ephemeris-email-tz"),
-                    WWGnlUtilities.buildMessage("help-ephemeris-email-provider")
+                    WWGnlUtilities.buildMessage("help-ephemeris-email-provider") */
             };
 
     public static String[] getLabels() {

@@ -342,25 +342,28 @@ public final class ParamPanel
             case ParamData.GRIB_TWS_COEFF:
                 it = 1D;
                 break;
-            case ParamData.EPHEMERIS_POSITION:
-                try {
-                    it = new Position(new Latitude("38 00.00 N"), new Longitude("122 00.00 W"));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            case ParamData.PLAY_SOUND_WHEN_LEAVING:
+                it = new SoundFile(new String[]{"wav", "ogg"}, WWGnlUtilities.buildMessage("sounds"), "");
                 break;
-            case ParamData.TIDE_STATION_NAME:
-                it = "Ocean Beach";
-                break;
-            case ParamData.EPHEMERIS_EMAIL_LIST:
-                it = "olivier@lediouris.net";
-                break;
-            case ParamData.EPHEMERIS_EMAIL_TZ:
-                it = new ListOfTimeZones("America/Los_Angeles");
-                break;
-            case ParamData.EPHEMERIS_EMAIL_PROVIDER:
-                it = "";
-                break;
+//            case ParamData.EPHEMERIS_POSITION:
+//                try {
+//                    it = new Position(new Latitude("38 00.00 N"), new Longitude("122 00.00 W"));
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//                break;
+//            case ParamData.TIDE_STATION_NAME:
+//                it = "Ocean Beach";
+//                break;
+//            case ParamData.EPHEMERIS_EMAIL_LIST:
+//                it = "olivier@lediouris.net";
+//                break;
+//            case ParamData.EPHEMERIS_EMAIL_TZ:
+//                it = new ListOfTimeZones("America/Los_Angeles");
+//                break;
+//            case ParamData.EPHEMERIS_EMAIL_PROVIDER:
+//                it = "";
+//                break;
             default:
                 break;
         }
@@ -493,12 +496,13 @@ public final class ParamPanel
                             } else if (i == ParamData.ANEMOMETER_HAND_OPTION) {
                                 data[i][ParamData.VALUE_INDEX] = new AnemometerHandOptionList(Integer.parseInt(s));
                             } else if (i == ParamData.PLAY_SOUND_ON_JOB_COMPLETION) {             // DataFiles, Sound
-//              if (s != null && s.trim().length() > 0)
                                 data[i][ParamData.VALUE_INDEX] = new SoundFile(new String[]{"wav", "ogg"}, "Sounds", s);
-                            } else if (i == ParamData.EPHEMERIS_POSITION) {
-                                data[i][ParamData.VALUE_INDEX] = new Position(s);
-                            } else if (i == ParamData.EPHEMERIS_EMAIL_TZ) {
-                                data[i][ParamData.VALUE_INDEX] = new ListOfTimeZones(s);
+                            } else if (i == ParamData.PLAY_SOUND_WHEN_LEAVING) {             // DataFiles, Sound
+                                data[i][ParamData.VALUE_INDEX] = new SoundFile(new String[]{"wav", "ogg"}, "Sounds", s);
+//                            } else if (i == ParamData.EPHEMERIS_POSITION) {
+//                                data[i][ParamData.VALUE_INDEX] = new Position(s);
+//                            } else if (i == ParamData.EPHEMERIS_EMAIL_TZ) {
+//                                data[i][ParamData.VALUE_INDEX] = new ListOfTimeZones(s);
                             } else {                                              // Strings
                                 data[i][ParamData.VALUE_INDEX] = s;
                             }
@@ -517,7 +521,7 @@ public final class ParamPanel
         }
     }
 
-    // By Category
+    // By Category, see indexes below
     private final static int DISPLAY_COLOR_PRM = 0;
     private final static int DISPLAY_OTHER_PRM = 1;
     private final static int ROUTING_PRM = 2;
@@ -613,7 +617,8 @@ public final class ParamPanel
                                     ParamData.GRAY_PANEL_OPTION,
                                     ParamData.GRAY_PANEL_OPACITY,
                                     ParamData.PLAY_SOUND_ON_JOB_COMPLETION,
-                                    ParamData.CONFIRM_COMMENT},
+                                    ParamData.CONFIRM_COMMENT,
+                                    ParamData.PLAY_SOUND_WHEN_LEAVING} /* ,
                     new int[]
                             { // Headless
                                     ParamData.EPHEMERIS_POSITION,
@@ -621,7 +626,7 @@ public final class ParamPanel
                                     ParamData.EPHEMERIS_EMAIL_LIST,
                                     ParamData.EPHEMERIS_EMAIL_TZ,
                                     ParamData.EPHEMERIS_EMAIL_PROVIDER
-                            }
+                            } */
             };
 
     private Object[][] mkDataArray(int idx) {
@@ -704,10 +709,10 @@ public final class ParamPanel
         currentCategoryIndex = MISC_PRM;
     }
 
-    public void setHeadlessPrm() {
-        setObject(mkDataArray(HEADLESS_PRM));
-        currentCategoryIndex = HEADLESS_PRM;
-    }
+//    public void setHeadlessPrm() {
+//        setObject(mkDataArray(HEADLESS_PRM));
+//        currentCategoryIndex = HEADLESS_PRM;
+//    }
 
     public void updateData() {
         // Update data
@@ -745,18 +750,17 @@ public final class ParamPanel
                             ok2go = false;
                         }
                     }
-                    if (currentIndex == ParamData.EPHEMERIS_POSITION) // Position
-                    {
-                        try {
-                            Position p = new Position(after);
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this,
-                                    ex.getMessage(),
-                                    WWGnlUtilities.buildMessage("modifying-parameters"),
-                                    JOptionPane.ERROR_MESSAGE);
-                            ok2go = false;
-                        }
-                    }
+//                    if (currentIndex == ParamData.EPHEMERIS_POSITION) { // Position
+//                        try {
+//                            Position p = new Position(after);
+//                        } catch (Exception ex) {
+//                            JOptionPane.showMessageDialog(this,
+//                                    ex.getMessage(),
+//                                    WWGnlUtilities.buildMessage("modifying-parameters"),
+//                                    JOptionPane.ERROR_MESSAGE);
+//                            ok2go = false;
+//                        }
+//                    }
                     if (currentIndex == ParamData.ROUTING_TIME_INTERVAL || // The double values
                             currentIndex == ParamData.POLAR_SPEED_FACTOR ||
                             currentIndex == ParamData.DEFAULT_ZOOM_VALUE ||

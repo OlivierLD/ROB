@@ -34,7 +34,7 @@ public class ChartAdjust {
     private static boolean headlessMode = false;
 
     public ChartAdjust(String[] args) {
-//  System.out.println("ClassLoader:" + this.getClass().getClassLoader().getClass().getName());
+        // System.out.println("ClassLoader:" + this.getClass().getClassLoader().getClass().getName());
         // Cleanup from previous session if necessary
         WWGnlUtilities.deleteNow();
         // Find the compilation date...

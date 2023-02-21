@@ -20,7 +20,7 @@ public class CategoryJTreeHolder
     public final static String POLARS = WWGnlUtilities.buildMessage("polars-nmea");
     public final static String MISC = WWGnlUtilities.buildMessage("misc");
 
-    public final static String HEADLESS = WWGnlUtilities.buildMessage("headless");
+//    public final static String HEADLESS = WWGnlUtilities.buildMessage("headless");
 
     private final BorderLayout borderLayout1 = new BorderLayout();
     private final JScrollPane jScrollPane = new JScrollPane();
@@ -68,7 +68,7 @@ public class CategoryJTreeHolder
         root.add(display);
         root.add(new DefaultMutableTreeNode(POLARS, true));
         root.add(new DefaultMutableTreeNode(MISC, true));
-        root.add(new DefaultMutableTreeNode(HEADLESS, true));
+//        root.add(new DefaultMutableTreeNode(HEADLESS, true));
 
         ((DefaultTreeModel) dataTree.getModel()).reload(root);
         expandAll(dataTree, true);

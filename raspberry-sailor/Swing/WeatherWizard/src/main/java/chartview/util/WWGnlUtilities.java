@@ -81,6 +81,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -1818,6 +1819,7 @@ public class WWGnlUtilities {
                 forgetit.printStackTrace();
             }
 
+            // TODO Remove ?
             File updateFile = new File("update" + File.separator + "update.xml");
             if (updateFile.exists()) {
                 try {
@@ -1879,10 +1881,46 @@ public class WWGnlUtilities {
                     e.printStackTrace();
                 }
             }
-
+            // Bonus
+            String exitName = "";
+            try {
+                exitName = ((ParamPanel.SoundFile) ParamPanel.data[ParamData.PLAY_SOUND_WHEN_LEAVING][ParamData.VALUE_INDEX]).toString();
+            } catch (NullPointerException npe) {
+            }
+            final String soundName = exitName;
+            if (soundName.trim().length() > 0) { // Play Sound on Exit
+                final Thread me = Thread.currentThread();
+                Thread playThread = new Thread(() -> {
+                    try {
+                        synchronized(me) {
+                            WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
+                            me.notify();
+                        }
+                    } catch (MalformedURLException murle) {
+                        // TODO: Add catch code
+                        murle.printStackTrace();
+                    } catch (Exception e) {
+                        System.err.println("Playing [" + soundName + "]");
+                        // TODO: Add catch code
+                        e.printStackTrace();
+                    }
+                });
+                System.out.println("Bip-bip!");
+                playThread.start();
+                synchronized(me) {
+                    try {
+                        me.wait();
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                    System.out.println("And bye!");
+                }
+            }
+            // Bye now.
             System.exit(0);
-        } else
+        } else {
             System.out.println("Not exiting...");
+        }
     }
 
     public static void setTreeConfig(FileTypeHolder fth) {
@@ -4022,17 +4060,17 @@ public class WWGnlUtilities {
                 (int) (2 * radius * 0.95));
     }
 
-    private static final int EXTERNAL_BUFFER_SIZE = 128000;
+    private static final int EXTERNAL_BUFFER_SIZE = 128_000;
 
     public static void playSound(URL sound) throws Exception {
         AudioInputStream audioInputStream = null;
         try {
             audioInputStream = AudioSystem.getAudioInputStream(sound);
         } catch (Exception e) {
-//    System.err.println(e.getLocalizedMessage());
+            // System.err.println(e.getLocalizedMessage());
             throw e;
-//      e.printStackTrace();
-//      System.exit(1);
+            // e.printStackTrace();
+            // System.exit(1);
         }
 
         AudioFormat audioFormat = audioInputStream.getFormat();

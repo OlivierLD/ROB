@@ -1,91 +1,87 @@
 <app-parameters>
-   <param id="0" hint="Chart Color">102;0;0</param>
-   <param id="1" hint="Chart Grid Color">204;204;204</param>
-   <param id="2" hint="NMEA Server URL">http://localhost:6666</param>
-   <param id="3" hint="NMEA Polling frequency (s)">60</param>
-   <param id="4" hint="Polar file location">./polars/CheoyLee42.polar-coeff</param>
-   <param id="5" hint="Routing Step">10</param>
-   <param id="6" hint="Routing fork width">140</param>
-   <param id="7" hint="Routing time interval">24.0</param>
-   <param id="8" hint="Routing from current location">true</param>
-   <param id="9" hint="Grib files root folder">./GRIBFiles</param>
-   <param id="10" hint="Fax root folder">./WeatherFaxes</param>
-   <param id="11" hint="Composites root folder">./composites</param>
-   <param id="12" hint="Chart line thickness">1</param>
-   <param id="13" hint="Fax transparency (alpha)">0.75</param>
-   <param id="14" hint="Chart BG color">254;254;233</param>
-   <param id="15" hint="GRIB Wind color">0;0;204</param>
-   <param id="16" hint="Patterns root folder">./patterns</param>
-   <param id="17" hint="PRMSL Contour color">204;0;51</param>
-   <param id="18" hint="500mb Contour color">0;102;204</param>
-   <param id="19" hint="Waves Contour color">0;0;0</param>
-   <param id="20" hint="Temp contour color">131;105;7</param>
-   <param id="21" hint="Look and Feel">Windows</param>
-   <param id="22" hint="Auto Update">true</param>
-   <param id="23" hint="Confirm DnD zoom">true</param>
-   <param id="24" hint="Routing: Avoid TWS over...">-1</param>
-   <param id="25" hint="Routing: Avoid TWA below...">60</param>
-   <param id="26" hint="Routing: Stop when GRIN exhausted">false</param>
-   <param id="27" hint="Interval between isobars">4</param>
-   <param id="28" hint="Isobars list">984, 988, 992, 996, 1000, 1004, 1008, [1012], 1016, 1020, 1024, 1028, 1032, 1036, 1040, 1044</param>
-   <param id="29" hint="Iso-500mb list">4980, 5040, 5100, 5160, 5220, 5280, 5340, 5400, 5460, 5520, 5580, [5640], 5700, 5760, 5820, 5880, 5940, 6000, 6060</param>
-   <param id="30" hint="Iso-waves list">1, 2, 3, 4, 5, 6, 7, 8, 9, 10</param>
-   <param id="31" hint="Iso-temp list">0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, -5, -10, -15, -20, -30, -40, 35, 40</param>
-   <param id="32" hint="Polars speed factor">0.75</param>
-   <param id="33" hint="Confirm Exit">true</param>
-   <param id="34" hint="Use transparent GRIB wind">true</param>
-   <param id="35" hint="Color range">false</param>
-   <param id="36" hint="Preferred Wind Display">2</param>
-   <param id="37" hint="Composite to load at startup">./patterns/05.Atlantic/1.NorthAtlantic.02.dyn.ptrn</param>
-   <param id="38" hint="GPS Boat color">0;0;0</param>
-   <param id="39" hint="Iso-TWS list">10, 20, 30, 40, 60, 15, 25, 35, 5</param>
-   <param id="40" hint="Default zoom value">1.01</param>
-   <param id="41" hint="Default chart inc value">1.0</param>
-   <param id="42" hint="Default fax inc value">10</param>
-   <param id="43" hint="DnD zoom color">0;255;0</param>
-   <param id="44" hint="Default wind with color wind range">false</param>
-   <param id="45" hint="Default fax blur">-1</param>
-   <param id="46" hint="Iso-prate list">1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25</param>
-   <param id="47" hint="PRate contour color">192;192;192</param>
-   <param id="48" hint="Click scroll">true</param>
-   <param id="49" hint="Old isochrons color">0;153;153</param>
-   <param id="50" hint="Show routing labels">false</param>
-   <param id="51" hint="Show isochrons">true</param>
-   <param id="52" hint="Serial port list">Empty Serial Port list</param>
-   <param id="53" hint="Routing output flavor">3</param>
-   <param id="54" hint="TCP port">7001</param>
-   <param id="55" hint="UDP port">8001</param>
-   <param id="56" hint="Route color">0;0;255</param>
-   <param id="57" hint="Routing boat color">255;0;0</param>
-   <param id="58" hint="TWS color in routing">0;0;255</param>
-   <param id="59" hint="Routing PRMSL color">255;0;0</param>
-   <param id="60" hint="Routing 500mb color">0;255;255</param>
-   <param id="61" hint="Routing waves color">0;255;0</param>
-   <param id="62" hint="Routing Air Temp color">0;0;0</param>
-   <param id="63" hint="Routing rain color">102;102;102</param>
-   <param id="64" hint="Routing BSP color">255;153;0</param>
-   <param id="65" hint="Auto save default composite">true</param>
-   <param id="66" hint="GRIB current color">0;102;0</param>
-   <param id="67" hint="Auto save default composite pattern">/yyyy/MM-MMM | Auto_ | yyyy_MM_dd_HH_mm_ss_z | waz</param>
-   <param id="68" hint="Reload default composite interval (minutes)">360</param>
-   <param id="69" hint="Gray pannel option">1</param>
-   <param id="70" hint="Gray panel opacity">0.5</param>
-   <param id="71" hint="Wait in startup">15</param>
-   <param id="72" hint="Expand controls by default">false</param>
-   <param id="73" hint="Temperature Unit">0</param>
-   <param id="74" hint="NMEA host">192.168.1.1</param>
-   <param id="75" hint="GPSd port">2947</param>
-   <param id="76" hint="Anemometer hand option">2</param>
-   <param id="77" hint="Play sound on completion"></param>
-   <param id="78" hint="Try to avoid land (routing)">false</param>
-   <param id="79" hint="Routing: Stop routing when closer to">75.0</param>
-   <param id="80" hint="NMEA Fallback timeout">60</param>
-   <param id="81" hint="GRIB TWS Coeff">1.0</param>
-   <param id="82" hint="Default font">Arial, 12, , </param>
-   <param id="83" hint="Confirm comment">false</param>
-   <!--param id="84">38 0 N/122 0 W</param>
-   <param id="85">Ocean Beach</param>
-   <param id="86">olivier@lediouris.net</param>
-   <param id="87">America/Los_Angeles</param>
-   <param id="88">google</param-->
+   <param id="0">102;0;0</param>
+   <param id="1">204;204;204</param>
+   <param id="2">http://localhost:6666</param>
+   <param id="3">60</param>
+   <param id="4">./polars/CheoyLee42.polar-coeff</param>
+   <param id="5">10</param>
+   <param id="6">140</param>
+   <param id="7">24.0</param>
+   <param id="8">true</param>
+   <param id="9">./GRIBFiles</param>
+   <param id="10">./WeatherFaxes</param>
+   <param id="11">./composites</param>
+   <param id="12">1</param>
+   <param id="13">0.75</param>
+   <param id="14">254;254;233</param>
+   <param id="15">0;0;204</param>
+   <param id="16">./patterns</param>
+   <param id="17">204;0;51</param>
+   <param id="18">0;102;204</param>
+   <param id="19">0;0;0</param>
+   <param id="20">131;105;7</param>
+   <param id="21">Windows</param>
+   <param id="22">true</param>
+   <param id="23">true</param>
+   <param id="24">-1</param>
+   <param id="25">60</param>
+   <param id="26">false</param>
+   <param id="27">4</param>
+   <param id="28">984, 988, 992, 996, 1000, 1004, 1008, [1012], 1016, 1020, 1024, 1028, 1032, 1036, 1040, 1044</param>
+   <param id="29">4980, 5040, 5100, 5160, 5220, 5280, 5340, 5400, 5460, 5520, 5580, [5640], 5700, 5760, 5820, 5880, 5940, 6000, 6060</param>
+   <param id="30">1, 2, 3, 4, 5, 6, 7, 8, 9, 10</param>
+   <param id="31">0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, -5, -10, -15, -20, -30, -40, 35, 40</param>
+   <param id="32">0.75</param>
+   <param id="33">true</param>
+   <param id="34">true</param>
+   <param id="35">false</param>
+   <param id="36">2</param>
+   <param id="37">./patterns/05.Atlantic/1.NorthAtlantic.02.dyn.ptrn</param>
+   <param id="38">0;0;0</param>
+   <param id="39">10, 20, 30, 40, 60, 15, 25, 35, 5</param>
+   <param id="40">1.01</param>
+   <param id="41">1.0</param>
+   <param id="42">10</param>
+   <param id="43">0;255;0</param>
+   <param id="44">false</param>
+   <param id="45">-1</param>
+   <param id="46">1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25</param>
+   <param id="47">192;192;192</param>
+   <param id="48">true</param>
+   <param id="49">0;153;153</param>
+   <param id="50">false</param>
+   <param id="51">true</param>
+   <param id="52">Empty Serial Port list</param>
+   <param id="53">3</param>
+   <param id="54">7001</param>
+   <param id="55">8001</param>
+   <param id="56">0;0;255</param>
+   <param id="57">255;0;0</param>
+   <param id="58">0;0;255</param>
+   <param id="59">255;0;0</param>
+   <param id="60">0;255;255</param>
+   <param id="61">0;255;0</param>
+   <param id="62">0;0;0</param>
+   <param id="63">102;102;102</param>
+   <param id="64">255;153;0</param>
+   <param id="65">true</param>
+   <param id="66">0;102;0</param>
+   <param id="67">/yyyy/MM-MMM | Auto_ | yyyy_MM_dd_HH_mm_ss_z | waz</param>
+   <param id="68">360</param>
+   <param id="69">1</param>
+   <param id="70">0.5</param>
+   <param id="71">15</param>
+   <param id="72">false</param>
+   <param id="73">0</param>
+   <param id="74">192.168.1.1</param>
+   <param id="75">2947</param>
+   <param id="76">2</param>
+   <param id="77">./sounds/R2D2.wav</param>
+   <param id="78">false</param>
+   <param id="79">75.0</param>
+   <param id="80">60</param>
+   <param id="81">1.0</param>
+   <param id="82">Arial, 12, , </param>
+   <param id="83">false</param>
+   <param id="84">./sounds/vista.wav</param>
 </app-parameters>
