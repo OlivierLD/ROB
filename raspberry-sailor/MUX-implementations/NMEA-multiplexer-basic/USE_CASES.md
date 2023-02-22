@@ -24,8 +24,12 @@ The Raspberry Pi will possibly emit its own HotSpot network.
 - We will deploy the required artifacts on `Machine B` (the Raspberry Pi A+, the one that will do the job).
   - Configure whatever has to be configured on it
   - Take it for a hike!
+
+In the commands below, we will prefix the prompts with the machine name (or so).  
+A prompt like `machine-a $` means that the command is to be issued from `Machine A`, the laptop.  
+A prompt like `pi $` mans that the command is to be issued omn the `Machine B`, the Raspberry Pi. 
 ---
-#### Machine A
+#### On Machine A
 You need to have cloned the repo, and installed all the requirements for a build.
 > The script `start.from.scratch.sh` will help you if needed. Look into it for details.
 
@@ -34,7 +38,7 @@ Assuming that you can run a terminal using `bash`, use `to.prod.sh` to generate 
 Say `n` when it says `Do we package the Python part ? >`.
 
 ```
-$ ./to.prod.sh 
+machine-a $ ./to.prod.sh 
 +----------------------------------------------------------------------------------------------------+
 |                          P A C K A G E   f o r   D I S T R I B U T I O N                           |
 +----------------------------------------------------------------------------------------------------+
@@ -125,7 +129,7 @@ a nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
 | $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |
 |  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |
 +--------------------------------------------------------------------------------------------------+
-$
+machine-a $
 ```
 The archive was generated.  
 Now we need to configure `Machine B`, and send the newly generated archive to it.
@@ -135,32 +139,46 @@ Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/comput
 Make sure you enable the `ssh` interface (use `raspi-config`).  
 This new image should contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
-$ java version
+pi $ java version
 ```
 If java is not there (or not in the right version), install JDK 11:
 ```
-$ sudo apt-get update
-$ sudo apt-get install openjdk-11-jdk
+pi $ sudo apt-get update
+pi $ sudo apt-get install openjdk-11-jdk
 ```
 
 Find the IP address of `Machine B` (I use [`fing`](https://www.fing.com/products/development-toolkit). Make sure you use the [`Fing CLI`](https://www.fing.com/products/development-toolkit) for your system, `dpkg --print-architecture` will tell you what to choose, `lscpu` too.).   
 We assume it is `192.168.1.101`.  
-From `Machine A`, send the archive to `Machine B`:
+
+Make sur you know the username used on the Raspberry Pi, use `whoami`:
 ```
-$ scp nmea-dist.tar.gz pi@192.168.1.101:~
+pi $ whoami
+pi
+```
+In this case, the username is `pi`, as seen on the second line above.
+
+#### On Machine A
+
+Back on `Machine A`, send the archive to `Machine B`:
+```
+machine-a $ scp nmea-dist.tar.gz pi@192.168.1.101:~
 pi@192.168.1.101's password: 
 nmea-dist.tar.gz                                                                        100%   37MB 372.6KB/s   01:42    
-$
+machine-a $
 ```
+> _**Note**_: in the `scp` command above, in `pi@192.168.1.101`, `pi` is the username found above. Make sure it matches your context.
+
 We're done with `Machine A`.
 
-Connect on `Machine B` (with `ssh` from `Machine A`, if you want)
+#### On Machine B
+
+Connect on `Machine B` (with `ssh` from `Machine A`, if you want, or directly on `Machine B`, if you have a screen and a keyboard connected to it)
 ```
-$ ssh pi@192.168.1.101
+machine-a $ ssh pi@192.168.1.101
 ```
 and unarchive what was received before:
 ```
-$ tar -xzvf nmea-dist.tar.gz
+pi $ tar -xzvf nmea-dist.tar.gz
 nmea-dist/
 nmea-dist/nmea.mux.gps.tcp.yaml
 nmea-dist/nmea-to-text.properties
@@ -174,16 +192,16 @@ nmea-dist/mux.sh
 nmea-dist/build/
 nmea-dist/build/libs/
 nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
-$
+pi $
 ```
 Make sure `librxtx-java` is installed:
 ```
-$ sudo apt-get install librxtx-java
+pi $ sudo apt-get install librxtx-java
 ```
 
 Let's move to the newly created directory:
 ```
-$ cd nmea-dist
+pi $ cd nmea-dist
 ```
 Then, modify the file `/etc/rc.local` (make sure you're super-user), to start the required pieces at boot. Add the following lines, at the end
 of the file, _before_ the `exit` statement:

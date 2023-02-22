@@ -17,9 +17,9 @@ public class SampleFrame extends JFrame {
 		}
 	}
 
-	private void jbInit() throws Exception {
+	private void jbInit() {
 		getContentPane().setLayout(borderLayout);
-		setSize(new Dimension(600, 600));
+		setSize(new Dimension(1_024, 600));
 		setTitle("Plotting Sheet");
 		getContentPane().add(psi, BorderLayout.CENTER);
 	}

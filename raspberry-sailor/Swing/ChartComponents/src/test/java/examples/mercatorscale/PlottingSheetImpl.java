@@ -18,24 +18,26 @@ public class PlottingSheetImpl
     private static final int CANVAS_WIDTH = 600;
     private static final int CANVAS_HEIGHT = (int) (CANVAS_WIDTH / 1.0);
 
-    private BorderLayout borderLayout1;
-    private JScrollPane jScrollPane1;
-    private PlottingSheet plottingSheet;
-    private JPanel bottomPanel;
-    private JButton zoomInButton;
-    private JButton zoomOutButton;
+    private final BorderLayout borderLayout1;
+    private final JScrollPane jScrollPane1;
+    private final PlottingSheet plottingSheet;
+    private final JPanel bottomPanel;
+    private final JButton zoomInButton;
+    private final JButton zoomOutButton;
 
-    private JButton setWidthButton;
-    private JSlider zoomSlider;
-    private JTextField zoomValueFld;
+    private final JButton setWidthButton;
+    private final JSlider zoomSlider;
+    private final JTextField zoomValueFld;
     private final static DecimalFormat DF22 = new DecimalFormat("#0.00");
-    private JLabel label = new JLabel("Center Lat:");
-    private JTextField centerLatValueFld;
-    private JTextField widthFld;
+    private final JLabel label = new JLabel("Center Lat:");
+    private final JTextField centerLatValueFld;
+    private final JTextField widthFld;
 
-    private JButton updateButton;
+    private final JButton updateButton;
 
-    private double centerLat = 37d;
+    private double centerLat =   37d;
+    private double centerLng = -122d;
+
     private double sLat = centerLat - (CHART_LATITUDE_SPAN / 2);
     private double nLat = sLat + CHART_LATITUDE_SPAN;
 
@@ -46,7 +48,13 @@ public class PlottingSheetImpl
 
         borderLayout1 = new BorderLayout();
         jScrollPane1 = new JScrollPane();
-        plottingSheet = new PlottingSheet(this, CANVAS_WIDTH, CANVAS_HEIGHT, 37d, -122d, 1d);
+        // Default values
+        plottingSheet = new PlottingSheet(this,
+                CANVAS_WIDTH,
+                CANVAS_HEIGHT,
+                this.centerLat,
+                this.centerLng,
+                1d); // Lat span. from top (very top) to bottom (very bottom) of the canvas
         plottingSheet.setWithDistanceScale(true);
         bottomPanel = new JPanel();
         zoomInButton = new JButton();
@@ -68,7 +76,7 @@ public class PlottingSheetImpl
         }
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         setLayout(borderLayout1);
         parent.setTitle(plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
 
@@ -84,12 +92,12 @@ public class PlottingSheetImpl
         });
 
         setWidthButton.setText("Set Width");
-        setWidthButton.addActionListener(e -> setWidth_actionPerformed(e));
+        setWidthButton.addActionListener(this::setWidth_actionPerformed);
 
         updateButton.setText("Update Chart");
-        updateButton.addActionListener(e -> update_actionPerformed(e));
+        updateButton.addActionListener(this::update_actionPerformed);
 
-        centerLatValueFld.setText(Double.toString(sLat + (CHART_LATITUDE_SPAN / 2D)));
+        centerLatValueFld.setText(Double.toString(this.sLat + (CHART_LATITUDE_SPAN / 2D)));
         centerLatValueFld.setPreferredSize(new Dimension(40, 20));
         centerLatValueFld.setHorizontalAlignment(4);
 
@@ -103,7 +111,7 @@ public class PlottingSheetImpl
         zoomValueFld.setText("1");
         zoomValueFld.setPreferredSize(new Dimension(40, 20));
         zoomValueFld.setHorizontalAlignment(4);
-        zoomValueFld.addActionListener(e -> zoomValueFld_actionPerformed(e));
+        zoomValueFld.addActionListener(this::zoomValueFld_actionPerformed);
         jScrollPane1.getViewport().add(plottingSheet, null);
         add(jScrollPane1, BorderLayout.CENTER);
         bottomPanel.add(zoomInButton, null);
@@ -135,11 +143,17 @@ public class PlottingSheetImpl
 
     private void update() {
         try {
-            centerLat = Double.parseDouble(centerLatValueFld.getText());
-            sLat = centerLat - (CHART_LATITUDE_SPAN / 2d);
-            nLat = sLat + CHART_LATITUDE_SPAN;
-//    chartPanel.zoomIn();
-            jbInit();
+            this.centerLat = Double.parseDouble(centerLatValueFld.getText());
+            System.out.printf("CenterLat is now %s\n", this.centerLat);
+            this.sLat = this.centerLat - (CHART_LATITUDE_SPAN / 2d);
+            this.nLat = this.sLat + CHART_LATITUDE_SPAN;
+            // chartPanel.zoomIn();
+
+            // Update plottingSheet
+            this.plottingSheet.setCenterLat(this.centerLat);
+            this.plottingSheet.setCenterLong(this.centerLng); // Useless for now, it's not a user-modifiable field
+
+            // jbInit();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -165,7 +179,7 @@ public class PlottingSheetImpl
     }
 
     public void chartPanelPaintComponent(Graphics gr) {
-//  plottingSheet.chartPanelPaintComponent(gr);
+        // plottingSheet.chartPanelPaintComponent(gr);
         plottingSheet.repaint();
 
         // Specific goes here
@@ -190,18 +204,18 @@ public class PlottingSheetImpl
             Point pt = plottingSheet.getPanelPoint(groundDatum);
             if (ppt != null) {
                 gr.drawLine(ppt.x, ppt.y, pt.x, pt.y);
-                ppt = pt;
+                // ppt = pt;
             }
             ppt = pt;
         }
-        // Thru water
+        // Through water
         gr.setColor(Color.red);
         ppt = null;
         for (GeoPoint drDatum : drData) {
             Point pt = plottingSheet.getPanelPoint(drDatum);
             if (ppt != null) {
                 gr.drawLine(ppt.x, ppt.y, pt.x, pt.y);
-                ppt = pt;
+                // ppt = pt;
             }
             ppt = pt;
         }
@@ -218,7 +232,8 @@ public class PlottingSheetImpl
             int x = me.getX();
             int y = me.getY();
             GeoPoint gp = plottingSheet.getGeoPos(x, y);
-            // TODO Something with the point...
+            // TODO Do something with the point...
+            System.out.printf("onEvent: %s\n", gp);
         }
         return true;
     }

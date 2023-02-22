@@ -7,6 +7,9 @@ import calc.GreatCirclePoint;
 import java.awt.*;
 import java.text.DecimalFormat;
 
+/*
+ * TODO Plot-grid Lat step, Lng Step
+ */
 public class PlottingSheet extends ChartPanel {
     private double chartLatitudeSpan = 1d;
 
