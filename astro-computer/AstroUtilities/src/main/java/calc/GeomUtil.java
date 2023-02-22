@@ -217,6 +217,7 @@ public final class GeomUtil {
 		return decToSex(v, output, displayType, signPosition, false);
 	}
 
+	// TODO Fix the 36*60.00 instead of 37*00.00 <- !
 	public static String decToSex(double v, int output, int displayType, int signPosition, boolean truncMinute) {
 		String s = "";
 		double absVal = Math.abs(v);

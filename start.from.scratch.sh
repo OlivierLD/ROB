@@ -62,7 +62,7 @@ if [[ "${GIT_TO_BE_INSTALLED}" == "true" ]]; then
   fi
 fi
 #
-# librxtx-java
+# librxtx-java, on Linux.
 #
 sudo apt-get install librxtx-java
 #

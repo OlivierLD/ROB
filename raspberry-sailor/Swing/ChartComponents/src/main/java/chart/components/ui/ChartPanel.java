@@ -490,10 +490,11 @@ public class ChartPanel extends JPanel
     }
 
     public boolean isPositionToolTipEnabled() {
-        if ((getProjection() == GLOBE_VIEW || getProjection() == SATELLITE_VIEW) && !enforceTooltip)
+        if ((getProjection() == GLOBE_VIEW || getProjection() == SATELLITE_VIEW) && !enforceTooltip) {
             return false;
-        else
+        } else {
             return enablePositionTooltip;
+        }
     }
 
     public void setProjection(int i) {
@@ -553,31 +554,29 @@ public class ChartPanel extends JPanel
         playVideo = true;
         pauseVideo = false;
         array = al;
-        Thread videoThread = new Thread() {
-            public void run() {
-                // System.out.println("Starting video for " + al.size() + " points, at " + videoStart);
-                for (int i = videoStart; i >= 0 && i < al.size() && playVideo; i += videoIncrement) {
-                    if (!pauseVideo) {
-                        currentVideoIndex = i;
-                        repaint();
-                        try {
-                            Thread.sleep(videoSleep);
-                        } catch (InterruptedException ignore) {
-                        }
-                    } else {
-                        //     System.out.println("Pausing video at " + i);
-                        videoStart = i;
-                        break;
-                    }
-                }
+        Thread videoThread = new Thread(() -> {
+            // System.out.println("Starting video for " + al.size() + " points, at " + videoStart);
+            for (int i = videoStart; i >= 0 && i < al.size() && playVideo; i += videoIncrement) {
                 if (!pauseVideo) {
-                    parent.videoCompleted();
-                    videoStart = 0;
-                    playVideo = false; // If it finishes by itself
+                    currentVideoIndex = i;
+                    repaint();
+                    try {
+                        Thread.sleep(videoSleep);
+                    } catch (InterruptedException ignore) {
+                    }
+                } else {
+                    //     System.out.println("Pausing video at " + i);
+                    videoStart = i;
+                    break;
                 }
-//        System.out.println("Video " + (pauseVideo?"paused":"completed"));
             }
-        };
+            if (!pauseVideo) {
+                parent.videoCompleted();
+                videoStart = 0;
+                playVideo = false; // If it finishes by itself
+            }
+//        System.out.println("Video " + (pauseVideo?"paused":"completed"));
+        });
         synchronized (videoThread) {
             videoThread.start();
         }

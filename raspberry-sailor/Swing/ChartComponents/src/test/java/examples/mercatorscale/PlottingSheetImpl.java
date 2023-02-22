@@ -54,7 +54,7 @@ public class PlottingSheetImpl
                 CANVAS_HEIGHT,
                 this.centerLat,
                 this.centerLng,
-                1d); // Lat span. from top (very top) to bottom (very bottom) of the canvas
+                2d); // Lat span. from top (very top) to bottom (very bottom) of the canvas
         plottingSheet.setWithDistanceScale(true);
         bottomPanel = new JPanel();
         zoomInButton = new JButton();
@@ -172,7 +172,7 @@ public class PlottingSheetImpl
             plottingSheet.setZoomFactor(z);
             plottingSheet.zoomIn();
             plottingSheet.setZoomFactor(saveZoom);
-            parent.setTitle(plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
+            // parent.setTitle(plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -220,7 +220,7 @@ public class PlottingSheetImpl
             ppt = pt;
         }
         // Current
-        gr.setColor(Color.green);
+        gr.setColor(Color.gray);
         Point p1 = plottingSheet.getPanelPoint(groundData[groundData.length - 1]);
         Point p2 = plottingSheet.getPanelPoint(drData[drData.length - 1]);
         gr.drawLine(p1.x, p1.y, p2.x, p2.y);

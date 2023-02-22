@@ -19,6 +19,8 @@ public class PlottingSheet extends ChartPanel {
     private double centerLong = -122D;
 
     private boolean withDistanceScale = true;
+    private boolean withMoreGrid = true; // Add vertical and horizontal grids
+    private double gridStep = 0.5; // for latitude and longitude
 
     private final static DecimalFormat DF15 = new DecimalFormat("##0.00000");
     private final static DecimalFormat DF41 = new DecimalFormat("###0.0");
@@ -43,9 +45,9 @@ public class PlottingSheet extends ChartPanel {
         setPreferredSize(new Dimension(this.getW(), this.getH()));
 //  setSize(new Dimension(this.getW(), this.getH()));
 
-        double eLong = this.calculateEastG(nLat, sLat, centerLong);
-        double lngWidth = Math.abs(eLong - centerLong);
-        double wLong = centerLong - (lngWidth / 2d);
+        double eLong = this.calculateEastG(this.nLat, this.sLat, this.centerLong);
+        double lngWidth = Math.abs(eLong - this.centerLong);
+        double wLong = this.centerLong - (lngWidth / 2d);
         eLong = wLong + lngWidth;
 
         this.setEastG(eLong);
@@ -103,9 +105,102 @@ public class PlottingSheet extends ChartPanel {
         }
         // Vertical axis
         gr.drawLine(center.x, 0, center.x, rect.height);
-        // TODO Vertical graduation
+
+        // Vertical graduation
+        // wLong, eLong
+        double eLong = this.calculateEastG(this.nLat, this.sLat, this.centerLong);
+        double lngWidth = Math.abs(eLong - this.centerLong);
+        double wLong = this.centerLong - (lngWidth / 2d);
+        eLong = wLong + lngWidth;
+
+        // System.out.printf("W lng: %f, E lng: %f\n", wLong, eLong);
+        if (withMoreGrid) {
+            double gStep = gridStep;
+            // Now, left
+            boolean keepGoingLeft = true;
+            double currentG = this.centerLong - gStep;
+            if (currentG < -180) {
+                currentG += 360;
+            }
+            while (keepGoingLeft) { // To west
+                Point left = this.getPanelPoint(centerLat, currentG);
+                // System.out.printf("PointLeft: x %d, y %d\n", left.x, left.y);
+                if (left.x < 0) {
+                    keepGoingLeft = false;
+                } else {
+                    gr.drawLine(left.x, 0, left.x, rect.height);
+                    currentG -= gStep;
+                    if (currentG < -180) {
+                        currentG += 360;
+                    }
+                }
+            }
+            // Now, right
+            boolean keepGoingRight = true;
+            currentG = this.centerLong + gStep;
+            if (currentG > 180) {
+                currentG -= 360;
+            }
+            while (keepGoingRight) { // To east
+                Point right = this.getPanelPoint(centerLat, currentG);
+                // System.out.printf("PointRight: x %d, y %d\n", right.x, right.y);
+                if (right.x > rect.width) {
+                    keepGoingRight = false;
+                } else {
+                    gr.drawLine(right.x, 0, right.x, rect.height);
+                    currentG += gStep;
+                    if (currentG > 180) {
+                        currentG -= 360;
+                    }
+                }
+            }
+        }
+
         // Horizontal axis
         gr.drawLine(0, center.y, rect.width, center.y);
+
+        // Horizontal graduation
+        if (withMoreGrid) {
+            double lStep = gridStep;
+            // Now, up
+            boolean keepGoingUp = true;
+            double currentL = this.centerLat + lStep;
+            if (currentL > 90) {
+                keepGoingUp = false;
+            }
+            while (keepGoingUp) { // To north
+                Point up = this.getPanelPoint(currentL, this.centerLong);
+                // System.out.printf("PointUp: x %d, y %d\n", up.x, up.y);
+                if (up.y < 0) {
+                    keepGoingUp = false;
+                } else {
+                    gr.drawLine(0, up.y, rect.width, up.y);
+                    currentL += lStep;
+                    if (currentL > 90) {
+                        keepGoingUp = false;
+                    }
+                }
+            }
+            // Now, down
+            boolean keepGoingDown = true;
+            currentL = this.centerLat - lStep;
+            if (currentL < -90) {
+                keepGoingDown = false;
+            }
+            while (keepGoingDown) { // To south
+                Point down = this.getPanelPoint(currentL, this.centerLong);
+                // System.out.printf("PointDown: x %d, y %d\n", down.x, down.y);
+                if (down.y > rect.height) {
+                    keepGoingDown = false;
+                } else {
+                    gr.drawLine(0, down.y, rect.width, down.y);
+                    currentL -= lStep;
+                    if (currentL < -90) {
+                        keepGoingDown = false;
+                    }
+                }
+            }
+        }
 
         // Scale ?
         if (withDistanceScale) {
@@ -144,6 +239,14 @@ public class PlottingSheet extends ChartPanel {
 
     public void setWithDistanceScale(boolean withScale) {
         this.withDistanceScale = withScale;
+    }
+
+    public void setWithMoreGrid(boolean withMoreGrid) {
+        this.withMoreGrid = withMoreGrid;
+    }
+
+    public void setGridStep(double gridStep) {
+        this.gridStep = gridStep;
     }
 
     public double getChartLatitudeSpan() {
