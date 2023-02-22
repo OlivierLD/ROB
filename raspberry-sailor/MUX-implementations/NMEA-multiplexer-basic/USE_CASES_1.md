@@ -232,7 +232,7 @@ In this case, the username is `pi`, as seen on the second line above.
 
 #### On Machine A
 
-Back on `Machine A`, send the archive to `Machine B`:
+Back on `Machine A`, send the archive to `Machine B`, using its IP address:
 ```
 machine-a $ scp nmea-dist.tar.gz pi@192.168.1.101:~
 pi@192.168.1.101's password: 
