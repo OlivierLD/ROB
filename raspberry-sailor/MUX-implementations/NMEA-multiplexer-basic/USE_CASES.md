@@ -1,10 +1,12 @@
 # Some use-cases
 
-First, make sure you've built the soft:
-```
-$ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
-```
+> _**Note**_: If you're not familiar enough with the required commands, do take a look at
+> the script named `start.from.scratch.sh`, located at the [root of the repo](../../../start.from.scratch.sh).
 
+First, make sure the soft can be built smoothly, from the machine where the git repo was cloned:
+```
+machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
+```
 # Content
 - Deploy for prod, [Raspberry Pi and GPS](#use-case-1)
 - [A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI)](#use-case-2)
@@ -141,8 +143,9 @@ Now we need to configure `Machine B`, and send the newly generated archive to it
 #### Machine B
 Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
 Make sure you enable the `ssh` interface (from the command line, use `raspi-config`,
-from the Graphical Desktop, use `Menu` > `Preferences` > `Raspberry Pi Configuration`, and then `Interfaces`).  
-This new image should contain a Java Development Kit (aka JDK). Make sure it's right:
+from the Graphical Desktop, use `Menu` > `Preferences` > `Raspberry Pi Configuration`, and then `Interfaces`).    
+This interface enablement can also be done through the settings (geared wheel) of the Raspberry Pi Imager.    
+This new image may contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
 pi $ java -version
 ```
@@ -548,35 +551,36 @@ Now we need to configure `Machine B`, and send the newly generated archive to it
 #### Machine B
 Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
 Make sure you enable the `ssh`, `spi`, `i2c` interfaces (use `raspi-config`).  
-This new image should contain a Java Development Kit (aka JDK), and Python 3. Make sure it's right:
+This interface enablement can also be done through the settings (geared wheel) of the Raspberry Pi Imager.  
+This new image may contain a Java Development Kit (aka JDK), and Python 3. Make sure it's right:
 ```
-$ java version
-$ python3 -V
+pi $ java -version
+pi $ python3 -V
 ```
 If java is not there (or not in the right version), install JDK 11:
 ```
-$ sudo apt-get update
-$ sudo apt-get install openjdk-11-jdk
+pi $ sudo apt-get update
+pi $ sudo apt-get install openjdk-11-jdk
 ```
 
 Find the IP address of `Machine B` (I use [`fing`](https://www.fing.com/products/development-toolkit). Make sure you use the [`Fing CLI`](https://www.fing.com/products/development-toolkit) for your system, `dpkg --print-architecture` will tell you what to choose, `lscpu` too.).   
 We assume it is `192.168.1.101`.  
 From `Machine A`, send the archive to `Machine B`:
 ```
-$ scp nmea-dist.tar.gz pi@192.168.1.101:~
+machine-a $ scp nmea-dist.tar.gz pi@192.168.1.101:~
 pi@192.168.1.101's password: 
 nmea-dist.tar.gz                                                                        100%   37MB 372.6KB/s   01:42    
-$
+machine-a $
 ```
 We're done with `Machine A`.
 
 Connect on `Machine B` (with `ssh` if you want):
 ```
-$ ssh pi@192.168.1.101
+machine-a $ ssh pi@192.168.1.101
 ```
 and unarchive what was received before:
 ```
-$ tar -xzvf nmea-dist.tar.gz
+pi $ tar -xzvf nmea-dist.tar.gz
 nmea-dist/
 nmea-dist/nmea.mux.gps.tcp.yaml
 nmea-dist/nmea-to-text.properties
@@ -595,22 +599,22 @@ nmea-dist/python/checksum.py
 . . .
 nmea-dist/python/scripts/test.sh
 nmea-dist/python/scripts/start.BME280.REST.server.sh
-$
+pi $
 ```
 Make sure `librxtx-java` is installed:
 ```
-$ sudo apt-get install librxtx-java
+pi $ sudo apt-get install librxtx-java
 ```
 
 Let's move to the newly created directory:
 ```
-$ cd nmea-dist
+pi $ cd nmea-dist
 ```
 We now install the required Python modules:
 ```
-$ ./python/scripts/install.all.sh
+pi $ ./python/scripts/install.all.sh
 . . .
-$
+pi $
 ```
 Then, modify the file `/etc/rc.local` (make sure you're super-user), to start the required pieces at boot. Add the following lines, at the end
 of the file, _before_ the `exit` statement:
