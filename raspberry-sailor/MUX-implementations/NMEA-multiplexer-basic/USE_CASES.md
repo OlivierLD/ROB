@@ -143,7 +143,7 @@ Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/comput
 Make sure you enable the `ssh` interface (use `raspi-config`).  
 This new image should contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
-pi $ java version
+pi $ java -version
 ```
 If java is not there (or not in the right version), install JDK 11:
 ```
