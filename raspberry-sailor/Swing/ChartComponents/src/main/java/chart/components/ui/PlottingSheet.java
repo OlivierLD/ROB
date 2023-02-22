@@ -7,9 +7,6 @@ import calc.GreatCirclePoint;
 import java.awt.*;
 import java.text.DecimalFormat;
 
-/*
- * TODO Plot-grid Lat step, Lng Step
- */
 public class PlottingSheet extends ChartPanel {
     private double chartLatitudeSpan = 1d;
 
@@ -20,7 +17,7 @@ public class PlottingSheet extends ChartPanel {
 
     private boolean withDistanceScale = true;
     private boolean withMoreGrid = true; // Add vertical and horizontal grids
-    private double gridStep = 0.5; // for latitude and longitude
+    private double gridStep = 0.5; // default for latitude and longitude steps
 
     private final static DecimalFormat DF15 = new DecimalFormat("##0.00000");
     private final static DecimalFormat DF41 = new DecimalFormat("###0.0");

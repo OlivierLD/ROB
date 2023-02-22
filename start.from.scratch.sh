@@ -35,10 +35,12 @@ if [[ "${JDK_TO_BE_INSTALLED}" == "true" ]]; then
   echo -e "JDK is required"
   echo -en "Install it now? > "
   read REPLY
-  if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-      echo -e "Ok, moving on."
+  if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+      echo -e "Ok, installing JDK."
       sudo apt-get update
       sudo apt-get install openjdk-11-jdk
+  else
+      echo -e "Skipping JDK installatio."
   fi
 fi
 #
@@ -56,9 +58,11 @@ if [[ "${GIT_TO_BE_INSTALLED}" == "true" ]]; then
   echo -e "GIT is required"
   echo -en "Install it now? > "
   read REPLY
-  if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-      echo -e "Ok, moving on."
+  if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+      echo -e "Ok, installing Git."
       sudo apt-get install git-all
+  else
+      echo -e "Skipping git installation."
   fi
 fi
 #
@@ -70,6 +74,16 @@ sudo apt-get install librxtx-java
 #
 mkdir repos
 pushd repos
+
+# echo warning about the size !
+echo -e "The GIT repo is about to be cloned in ${PWD}."
+echo -en "This will be roughly 1.4 Gb (Feb-2023), do we proceed ? > "
+read REPLY
+if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+    echo -e "Ok, stopping here."
+    exit 0
+fi
+#
 git clone https://github.com/OlivierLD/ROB.git
 #
 cd ROB

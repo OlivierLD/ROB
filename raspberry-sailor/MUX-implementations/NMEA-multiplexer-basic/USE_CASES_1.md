@@ -47,7 +47,7 @@ The script clones the repo in a `repos/ROB` folder, builds the `RESTNavServer`, 
 
 If this goes well, then you can move to the folder `repos/ROB/MUX-implementations/NMEA-multiplexer-basic`, and follow the rest of the instructions below.
 ```
-machine-a $ cd ~/repos/ROB/MUX-implementations/NMEA-multiplexer-basic
+machine-a $ cd ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
 machine-a $
 ```
 
