@@ -119,7 +119,7 @@ a nmea-dist/build
 a nmea-dist/build/libs
 a nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
 +--------------------------------------------------------------------------------------------------+
- >> Archive /Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
+ >> Archive /. . ./ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
 +--------------------------------------------------------------------------------------------------+
 | Send it to another machine, and un-archive it.                                                   |
 | Use 'tar -xzvf nmea-dist.tar.gz' to un-archive.                                                   |
@@ -524,7 +524,7 @@ a nmea-dist/python/scripts/start.Serial.TCP.server.sh
 a nmea-dist/python/scripts/test.sh
 a nmea-dist/python/scripts/start.BME280.REST.server.sh
 +--------------------------------------------------------------------------------------------------+
- >> Archive /Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
+ >> Archive /. . ./ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
 +--------------------------------------------------------------------------------------------------+
 | Send it to another machine, and un-archive it.                                                   |
 | Use 'tar -xzvf nmea-dist.tar.gz' to un-archive.                                                   |
