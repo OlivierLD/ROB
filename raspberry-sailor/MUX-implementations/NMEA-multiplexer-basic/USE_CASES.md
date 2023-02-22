@@ -21,13 +21,17 @@ The Raspberry Pi will possibly emit its own HotSpot network.
 ---
 **_To be as clear as possible_**:
 - We will build the required soft from a clone of the git repo, on `Machine A`.
-- We will deploy the required artifacts on `Machine B` (the Raspberry Pi A+, the one that will do the job).
+  - Technically: we are going to generate a `gz` archive containing Java ARchives (aka JARs), web pages, scripts, configuration files, everything you'll need at runtime.
+- We will deploy the required artifacts (the `gz` archive generated previously) on `Machine B` (the Raspberry Pi, the one that will do the job).
+  - Expand the `gz` archive
   - Configure whatever has to be configured on it
-  - Take it for a hike!
+  - And go! Take it for a hike!
 
-In the commands below, we will prefix the prompts with the machine name (or so).  
+---
+In the commands below, we will prefix the terminal prompts with the machine name (or so).  
 A prompt like `machine-a $` means that the command is to be issued from `Machine A`, the laptop.  
-A prompt like `pi $` mans that the command is to be issued omn the `Machine B`, the Raspberry Pi. 
+A prompt like `pi $` means that the command is to be issued omn the `Machine B`, the Raspberry Pi.
+
 ---
 #### On Machine A
 You need to have cloned the repo, and installed all the requirements for a build.
