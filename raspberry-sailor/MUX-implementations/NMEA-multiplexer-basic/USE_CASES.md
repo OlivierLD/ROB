@@ -140,7 +140,8 @@ Now we need to configure `Machine B`, and send the newly generated archive to it
 
 #### Machine B
 Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
-Make sure you enable the `ssh` interface (use `raspi-config`).  
+Make sure you enable the `ssh` interface (from the command line, use `raspi-config`,
+from the Graphical Desktop, use `Menu` > `Preferences` > `Raspberry Pi Configuration`, and then `Interfaces`).  
 This new image should contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
 pi $ java -version
@@ -151,10 +152,12 @@ pi $ sudo apt-get update
 pi $ sudo apt-get install openjdk-11-jdk
 ```
 
-Find the IP address of `Machine B` (I use [`fing`](https://www.fing.com/products/development-toolkit). Make sure you use the [`Fing CLI`](https://www.fing.com/products/development-toolkit) for your system, `dpkg --print-architecture` will tell you what to choose, `lscpu` too.).   
+Find the IP address of `Machine B` (I use `fing`, available [here](https://www.fing.com/products/development-toolkit). 
+The archive you'll download contains several installers, you will need to run the right one, based on your architecture;
+make sure you use the [`Fing CLI`](https://www.fing.com/products/development-toolkit) for your system, `dpkg --print-architecture` will tell you what to choose, `lscpu` too).   
 We assume it is `192.168.1.101`.  
 
-Make sur you know the username used on the Raspberry Pi, use `whoami`:
+Make sure you know the username used on the Raspberry Pi, use `whoami`:
 ```
 pi $ whoami
 pi
