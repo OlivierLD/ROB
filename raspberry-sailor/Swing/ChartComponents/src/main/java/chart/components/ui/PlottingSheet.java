@@ -199,6 +199,24 @@ public class PlottingSheet extends ChartPanel {
             }
         }
 
+        // Vertical minutes scale
+        if (withMoreGrid) {
+            // center: canvas point of the center
+            final double oneMinuteInDecimalDegrees = 1d / 60d;
+            double scaleLat = this.centerLat - 1.0d; // One degree below of Center
+            int y = 0;
+            while (scaleLat < this.centerLat + 1.0) {
+                Point p = this.getPanelPoint(scaleLat, this.centerLong);
+                gr.drawLine(center.x, p.y, center.x + (y % 10 == 0 ? 15 : (y % 5 == 0 ? 10 : 5)), p.y);
+                if (y == 30 || y == 90) {
+                    String thirty = "30'";
+                    gr.drawString(thirty, center.x + 20, p.y + ((gr.getFont().getSize() - 1) / 2));
+                }
+                y += 1;
+                scaleLat += oneMinuteInDecimalDegrees;
+            }
+        }
+
         // Scale ?
         if (withDistanceScale) {
             Point p1 = new Point(10, rect.height - 10);

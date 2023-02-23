@@ -11,6 +11,11 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 import java.util.EventObject;
 
+/**
+ * Mercator Plotting Sheet,
+ * with field and widgets to interact with it.
+ * Just an example. Not for prod.
+ */
 public class PlottingSheetImpl
         extends JPanel
         implements ChartPanelParentInterface {
@@ -27,7 +32,7 @@ public class PlottingSheetImpl
 
     private final JButton setWidthButton;
     private final JSlider zoomSlider;
-    private final JTextField zoomValueFld;
+    private final JLabel zoomValueFld;
     private final static DecimalFormat DF22 = new DecimalFormat("#0.00");
     private final JLabel label = new JLabel("Center Lat:");
     private final JTextField centerLatValueFld;
@@ -54,7 +59,7 @@ public class PlottingSheetImpl
                 CANVAS_HEIGHT,
                 this.centerLat,
                 this.centerLng,
-                2d); // Lat span. from top (very top) to bottom (very bottom) of the canvas
+                3.0d); // Lat span. from top (very top) to bottom (very bottom) of the canvas
         plottingSheet.setWithDistanceScale(true);
         bottomPanel = new JPanel();
         zoomInButton = new JButton();
@@ -64,10 +69,13 @@ public class PlottingSheetImpl
         updateButton = new JButton();
         centerLatValueFld = new JTextField();
         widthFld = new JTextField();
+        widthFld.setPreferredSize(new Dimension(50, 20));
+        widthFld.setHorizontalAlignment(JLabel.RIGHT);
+        widthFld.setToolTipText("Sheet's width");
         widthFld.setText(Integer.toString(CANVAS_WIDTH));
 
         zoomSlider = new JSlider();
-        zoomValueFld = new JTextField();
+        zoomValueFld = new JLabel("1.0");
 
         try {
             jbInit();
@@ -78,17 +86,17 @@ public class PlottingSheetImpl
 
     private void jbInit() {
         setLayout(borderLayout1);
-        parent.setTitle(plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
+        parent.setTitle("Plotting Sheet " + plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
 
         zoomInButton.setText("Zoom In");
         zoomInButton.addActionListener(e -> {
             jButton1_actionPerformed(e);
-            parent.setTitle(plottingSheet.getW() + " x " + plottingSheet.getH());
+            parent.setTitle("Plotting Sheet " + plottingSheet.getW() + " x " + plottingSheet.getH());
         });
         zoomOutButton.setText("Zoom Out");
         zoomOutButton.addActionListener(e -> {
             jButton2_actionPerformed(e);
-            parent.setTitle(plottingSheet.getW() + " x " + plottingSheet.getH());
+            parent.setTitle("Plotting Sheet " + plottingSheet.getW() + " x " + plottingSheet.getH());
         });
 
         setWidthButton.setText("Set Width");
@@ -98,20 +106,26 @@ public class PlottingSheetImpl
         updateButton.addActionListener(this::update_actionPerformed);
 
         centerLatValueFld.setText(Double.toString(this.sLat + (CHART_LATITUDE_SPAN / 2D)));
-        centerLatValueFld.setPreferredSize(new Dimension(40, 20));
-        centerLatValueFld.setHorizontalAlignment(4);
+        centerLatValueFld.setPreferredSize(new Dimension(50, 20));
+        centerLatValueFld.setHorizontalAlignment(JLabel.RIGHT);
 
         zoomSlider.setPaintTicks(true);
+        zoomSlider.setToolTipText(String.format("Scale %2.2f", 1d));
         zoomSlider.addChangeListener(evt -> {
             int slider = ((JSlider) evt.getSource()).getValue();
             double zoom = 50D / (double) slider;
+            if (Double.isInfinite(zoom)) {
+                zoom = 100d;
+            }
             zoomValueFld.setText(DF22.format(zoom));
             plottingSheet.applyZoom(zoom);
+            zoomSlider.setToolTipText(String.format("Scale %2.2f", zoom));
         });
-        zoomValueFld.setText("1");
+        zoomValueFld.setText("1.0");
+        zoomValueFld.setToolTipText("Scale value");
         zoomValueFld.setPreferredSize(new Dimension(40, 20));
-        zoomValueFld.setHorizontalAlignment(4);
-        zoomValueFld.addActionListener(this::zoomValueFld_actionPerformed);
+        zoomValueFld.setHorizontalAlignment(JLabel.RIGHT);
+        // zoomValueFld.addActionListener(this::zoomValueFld_actionPerformed);
         jScrollPane1.getViewport().add(plottingSheet, null);
         add(jScrollPane1, BorderLayout.CENTER);
         bottomPanel.add(zoomInButton, null);
@@ -172,7 +186,7 @@ public class PlottingSheetImpl
             plottingSheet.setZoomFactor(z);
             plottingSheet.zoomIn();
             plottingSheet.setZoomFactor(saveZoom);
-            // parent.setTitle(plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
+            parent.setTitle("Plotting Sheet " + plottingSheet.getWidth() + " x " + plottingSheet.getHeight());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -238,9 +252,9 @@ public class PlottingSheetImpl
         return true;
     }
 
-    private void zoomValueFld_actionPerformed(ActionEvent e) {
-        System.out.println("Action performed on the field");
-    }
+//    private void zoomValueFld_actionPerformed(ActionEvent e) {
+//        System.out.println("Action performed on the field");
+//    }
 
     public String getMessForTooltip() {
         return null;

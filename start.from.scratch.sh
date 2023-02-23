@@ -15,6 +15,14 @@ die ( ) {
     echo "--------------------"
     exit 1
 }
+UNAME=$(uname)
+#
+if [[ "${UNAME}" != "Linux" ]]; then
+  echo -e "Warning! If some soft is to be installed, this will work for Linux,"
+  echo -e "and you're running on ${UNAME}."
+  echo -en "Hit [return] to move on, or [Ctrl + C] to cancel."
+  read REPLY
+fi
 # 1. See if JDK is available
 JDK_TO_BE_INSTALLED=true
 JAVA_TO_FIND=javac
@@ -40,7 +48,7 @@ if [[ "${JDK_TO_BE_INSTALLED}" == "true" ]]; then
       sudo apt-get update
       sudo apt-get install openjdk-11-jdk
   else
-      echo -e "Skipping JDK installatio."
+      echo -e "Skipping JDK installation."
   fi
 fi
 #
