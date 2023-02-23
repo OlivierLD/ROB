@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import http.client.HTTPClient;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -95,7 +97,12 @@ public class NMEACachePublisher implements Forwarder {
                     try {
                         final String jsonCache = mapper.writeValueAsString(cache);
                         try {
-                            Map<String, String> headers = Map.of("Content-Type", "application/json");
+                            // Java 11
+//                            Map<String, String> headers = Map.of("Content-Type", "application/json");
+                            // Java 8
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("Content-Type", "application/json");
+
                             switch (instance.verb) {
                                 case "POST":
                                     String postRequest = String.format("%s://%s:%d%s%s",

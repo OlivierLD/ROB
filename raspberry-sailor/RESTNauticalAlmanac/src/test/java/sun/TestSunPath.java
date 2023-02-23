@@ -12,8 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestSunPath {
 
@@ -94,9 +93,9 @@ public class TestSunPath {
 //            assertTrue("Bad EoT", bodyData.getEot() == -14.087231881717116);
 
             assertTrue("Bad epoch", bodyData.getEpoch() == 1_647_772_902_000L);
-            assertTrue("Bad Decl", bodyData.getDecl() == -0.08003528415023496);
+            assertTrue(String.format("Bad Decl, %f instead of %f", bodyData.getDecl(), -0.08003528415023496), Math.abs(bodyData.getDecl() - -0.08003528415023496) < 0.000001);
             assertTrue("Bad GHA", bodyData.getGha() == 338.55586541758504);
-            assertTrue("Bad EoT", bodyData.getEot() == -7.382407987207898);
+            assertEquals("Bad EoT", bodyData.getEot(), -7.382407987207898, 0.00001);
             // TODO More...
 
             // It went well

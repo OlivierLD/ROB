@@ -2,6 +2,7 @@ package nmea.utils;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -11,8 +12,12 @@ public class TestDir {
 
     @Test
     public void testDir() {
-        List<Float> deltaX = List.of( 20f, 30f, -30f, -20f, 0.001f );
-        List<Float> deltaY = List.of( -30f, 100f, 200f, -200f, 0f );
+        // Java 11
+//        List<Float> deltaX = List.of( 20f, 30f, -30f, -20f, 0.001f );
+//        List<Float> deltaY = List.of( -30f, 100f, 200f, -200f, 0f );
+        // Java 8
+        List<Float> deltaX = Arrays.asList( 20f, 30f, -30f, -20f, 0.001f );
+        List<Float> deltaY = Arrays.asList( -30f, 100f, 200f, -200f, 0f );
 
         deltaX.forEach(x -> {
             deltaY.forEach(y -> {

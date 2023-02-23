@@ -33,7 +33,11 @@ public class Basic01 {
             List<TideStation> stationData = BackEndTideComputer.getStationData();
             System.out.printf("Got %d station data.\n", stationData.size());
             stationData.forEach(sd -> {
-                System.out.println(URLDecoder.decode(sd.getFullName(), StandardCharsets.UTF_8));
+                try {
+                    System.out.println(URLDecoder.decode(sd.getFullName(), StandardCharsets.UTF_8.toString())); // toString -> Java 8
+                } catch (UnsupportedEncodingException uee) {
+                    uee.printStackTrace();
+                }
             });
 
             backEndTideComputer.disconnect();

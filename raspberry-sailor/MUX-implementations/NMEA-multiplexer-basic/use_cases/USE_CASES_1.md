@@ -170,6 +170,29 @@ If java is not there (or not in the right version), install JDK 11:
 pi $ sudo apt-get update
 pi $ sudo apt-get install openjdk-11-jdk
 ```
+> _**Warning**_: depending on the architecture of your Raspberry Pi, you might want to use JDK 8.
+> JDK 11 seems not to be supported on old versions of the Raspberry Pi.  
+> Check out your architecture by typing (on the Raspberry Pi):
+> ```
+> pi $ lscpu
+> Architecture:          armv6l
+> Byte Order:            Little Endian
+> CPU(s):                1
+> On-line CPU(s) list:   0
+> Thread(s) per core:    1
+> Core(s) per socket:    1
+> Socket(s):             1
+> ```
+> Here, as it is `armv6l`, you will have to use a JDK 8, JDK 11 would not work.  
+> This would be a
+> ```
+> pi $ sudo apt-get update
+> pi $ sudo apt-get install openjdk-8-jdk
+> ```
+> And you would need to make sure that the same version is used
+> on `Machine A` to produce the runnable archives.  
+> To flip between versions, remember to use `sudo update-alternatives --config java[c]`. 
+
 
 Find the IP address of `Machine B`.
 

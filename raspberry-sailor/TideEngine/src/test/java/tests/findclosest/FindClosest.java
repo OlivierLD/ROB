@@ -67,7 +67,16 @@ public class FindClosest {
         long after = System.currentTimeMillis();
         System.out.printf("Closest station found in %d ms.\n", (after - before));
 
-        TideStation ts = closest.orElseThrow();
+        // Java 11
+//        TideStation ts = closest.orElseThrow();
+
+        // Java 8
+        TideStation ts;
+        if (closest.isPresent()) {
+            ts = closest.get();
+        } else {
+            throw new RuntimeException("Station not found");
+        }
 
         if (ts != null) {
             String location = URLDecoder.decode(ts.getFullName(), StandardCharsets.UTF_8.toString());

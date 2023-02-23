@@ -526,7 +526,7 @@ public class RESTImplementation {
 									try {
 										this.tideRequestManager.getLogger().log(Level.INFO,
 												String.format("Calculating tide in %s, from %s (%s) to %s (%s)",
-												URLDecoder.decode(ts.getFullName(), StandardCharsets.UTF_8),
+												URLDecoder.decode(ts.getFullName(), StandardCharsets.UTF_8.toString()),
 												sdf.format(now.getTime()),
 												NumberFormat.getInstance().format(now.getTimeInMillis()),
 												sdf.format(upTo.getTime()),

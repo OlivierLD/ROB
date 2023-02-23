@@ -135,7 +135,7 @@ public class Ephemeris {
 		String astroResourcePath = "astro/sun-between-dates";
 		String from = DURATION_FMT.format(now.getTime());      // "2017-09-01T00:00:00";
 		String to   = DURATION_FMT.format(tomorrow.getTime()); // "2017-09-02T00:00:01";
-		String tz = URLEncoder.encode("America/Los_Angeles", StandardCharsets.UTF_8);
+		String tz = URLEncoder.encode("America/Los_Angeles", StandardCharsets.UTF_8.toString());
 		String latitude = String.valueOf(lat);
 		String longitude = String.valueOf(lng);
 
@@ -182,7 +182,7 @@ public class Ephemeris {
 		// POST http://localhost:9999/tide/tide-stations/Ocean%20Beach%2C%20California/wh?from=2018-01-03T00:00:00&to=2018-01-04T00:00:01
 		String tideResourcePath2 = String.format(
 				"tide/tide-stations/%s/wh?from=%s&to=%s",
-				URLEncoder.encode(stationName, StandardCharsets.UTF_8).replace("+", "%20"),
+				URLEncoder.encode(stationName, StandardCharsets.UTF_8.toString()).replace("+", "%20"),
 				from,
 				to);
 		url = String.format("http://%s:%s/%s", serverName, serverPort, tideResourcePath2);

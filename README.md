@@ -12,7 +12,7 @@
 Java and Python(3).
 
 #### Warning
-The scripts presented in this repo are written fpr `bash` shell.  
+The scripts presented in this repo are written for `bash` shell.  
 As such, they run on Linux, Mac OS, and Windows 10+.
 
 ---
@@ -155,6 +155,11 @@ If you're not familiar with those tools and techniques, check out the [GET_START
 When building on small boards, do not hesitate to exclude some demanding tasks, like
 ```
 $ [...]/gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
+```
+
+You might also want to exclude some tests (look into their code for details)
+```
+$ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 ```
 
 ## Highlights

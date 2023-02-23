@@ -294,7 +294,12 @@ public class RESTImplementation {
 			final byte[] requestContent = request.getContent();
 			System.out.printf("Original Request Content length: %d\n", requestContent.length);
 			byte[] gribContent = null;
-			String payload = new String(requestContent, StandardCharsets.UTF_8); // , StandardCharsets.UTF_16);
+			String payload = "";
+			try {
+				payload = new String(requestContent, StandardCharsets.UTF_8.toString()); // , StandardCharsets.UTF_16);
+			} catch (UnsupportedEncodingException uee) {
+				throw new RuntimeException(uee);
+			}
             /*
              * Payload is like :
              *
@@ -344,7 +349,11 @@ GRIB �  `��!i 
 
 			// Different versions, for tests
 			if (true) {
-				gribContent = payload.substring(headersEnd, contentEnd).getBytes(StandardCharsets.UTF_8);
+				try {
+					gribContent = payload.substring(headersEnd, contentEnd).getBytes(StandardCharsets.UTF_8.toString());
+				} catch (UnsupportedEncodingException uee) {
+					throw new RuntimeException(uee);
+				}
 			}
 			if (false) {
 //			gribContent = payload.substring(headersEnd, contentEnd).getBytes(); // StandardCharsets.UTF_16);

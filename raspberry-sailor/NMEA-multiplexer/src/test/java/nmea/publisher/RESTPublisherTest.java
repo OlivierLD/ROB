@@ -3,6 +3,8 @@ package nmea.publisher;
 import nmea.forwarders.RESTPublisher;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -14,15 +16,26 @@ import static org.junit.Assert.fail;
  * ../gradlew test --tests "nmea.publisher.RESTPublisherTest.testRESTEInk"
  */
 public class RESTPublisherTest {
-
-    private final static List<String> DATA_TO_SEND = List.of(
-            "Ping", "Pong", "Paf",
-            "Bing", "Boom", "Bang"
-    );
-    private final static List<String> DATA_TO_SEND_TO_SSD = List.of(
-            "Ping|Pong|Paf",
-            "Bing|Boom|Bang"
-    );
+    // Java 11
+//    private final static List<String> DATA_TO_SEND = List.of(
+//            "Ping", "Pong", "Paf",
+//            "Bing", "Boom", "Bang"
+//    );
+    // Java 11
+//    private final static List<String> DATA_TO_SEND_TO_SSD = List.of(
+//            "Ping|Pong|Paf",
+//            "Bing|Boom|Bang"
+//    );
+    // Java 8
+    private final static List<String> DATA_TO_SEND ;
+    static {
+        DATA_TO_SEND = Arrays.asList("Ping", "Pong", "Paf","Bing", "Boom", "Bang");
+    }
+    // Java 8
+    private final static List<String> DATA_TO_SEND_TO_SSD;
+    static {
+        DATA_TO_SEND_TO_SSD = Arrays.asList("Ping|Pong|Paf", "Bing|Boom|Bang");
+    }
 
     @Test
     public void testRESTEInk() {
@@ -46,6 +59,8 @@ public class RESTPublisherTest {
                     restPublisher.write(wpl.getBytes());
                 } catch (Exception ex) {
                     System.err.println(ex.getLocalizedMessage());
+                    fail(ex.toString());
+                    break;
                 }
                 try {
                     Thread.sleep(1_000L);
@@ -81,6 +96,8 @@ public class RESTPublisherTest {
                     restPublisher.write(wpl.getBytes());
                 } catch (Exception ex) {
                     System.err.println(ex.getLocalizedMessage());
+                    fail(ex.toString());
+                    break;
                 }
                 try {
                     Thread.sleep(1_000L);
@@ -94,5 +111,4 @@ public class RESTPublisherTest {
         }
         assertTrue("Argh!", true);
     }
-
 }

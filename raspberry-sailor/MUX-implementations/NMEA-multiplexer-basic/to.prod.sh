@@ -51,6 +51,8 @@ fi
 #
 # 2 - Create new dir
 #
+echo -e "You will need to provide a name for your archive, that will also be the name of the folder where the runtime components will live."
+echo -e "A name like 'nmea-dist' would do the job..."
 echo -en "Which (non existent) folder should we create the distribution in ? > "
 # Directory name, that will become the archive name.
 read distdir

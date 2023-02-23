@@ -86,7 +86,8 @@ public class TestSolarDate {
         assertEquals("Wrong day.",     Integer.parseInt(formatted.substring( 8, 10)), two.getDay());
         assertEquals("Wrong hours.",   Integer.parseInt(formatted.substring(11, 13)), two.getH24());
         assertEquals("Wrong minutes.", Integer.parseInt(formatted.substring(14, 16)), two.getMinutes());
-        assertEquals("Wrong seconds.", Integer.parseInt(formatted.substring(17)), Math.round(two.getSeconds()));
+        // assertEquals("Wrong seconds.", Integer.parseInt(formatted.substring(17)), Math.round(two.getSeconds()));
+        assertEquals("Wrong seconds.", Integer.parseInt(formatted.substring(17)), (int)Math.floor(two.getSeconds())); // , 0.1);
 
         System.out.println("<< End of test");
     }

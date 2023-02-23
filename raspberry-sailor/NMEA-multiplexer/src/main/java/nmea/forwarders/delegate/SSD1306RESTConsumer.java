@@ -2,6 +2,7 @@ package nmea.forwarders.delegate;
 
 import http.client.HTTPClient;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -20,7 +21,10 @@ public class SSD1306RESTConsumer implements DelegateConsumer {
     private String resource;   // Path and Query String (if needed)
     private boolean verbose = false;
 
-    private Map<String, String> headers = Map.of("Content-Type", "text/plain");  // TODO Get from props ?
+    // Java 11
+//    private Map<String, String> headers = Map.of("Content-Type", "text/plain");
+    // Java 8
+    private Map<String, String> headers = new HashMap<>();
 
     private final Consumer<List<String>> consumer = (dataList) -> {
         // Default...
@@ -33,6 +37,7 @@ public class SSD1306RESTConsumer implements DelegateConsumer {
             System.out.printf("%s\n%s\n", putRequest, putStrContent);
         }
         try {
+            headers.put("Content-Type", "text/plain"); // For Java 8
             HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
             if (this.verbose) {
                 System.out.printf("PUT %s with %s: Response code %d, message: %s\n",

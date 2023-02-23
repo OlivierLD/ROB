@@ -114,19 +114,45 @@ public class LogToPolarPoints {
     private static SupportedExtension extensionToUse = SupportedExtension.JSON;
 
     public static List<PolarTriplet> processFiles(String in, String out) throws Exception {
+        // Java 11
+//        BufferedReader br = new BufferedReader(new FileReader(in));
+//        try (br) {
+//            return processFiles(br, out);
+//        }
+
+        // Java 8
+        List<PolarTriplet> lpr = null;
         BufferedReader br = new BufferedReader(new FileReader(in));
-        try (br) {
-            return processFiles(br, out);
+        try {
+            lpr = processFiles(br, out);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            br.close();
         }
+        return lpr;
     }
 
     public static List<PolarTriplet> processFiles(String in, String path, String out) throws Exception {
 
         final InputStream zipInputStream = getZipInputStream(in, path);
+        // Java 11
+//        BufferedReader br = new BufferedReader(new InputStreamReader(zipInputStream));
+//        try (br) {
+//            return processFiles(br, out);
+//        }
+
+        // Java 8
+        List<PolarTriplet> lpr = null;
         BufferedReader br = new BufferedReader(new InputStreamReader(zipInputStream));
-        try (br) {
-            return processFiles(br, out);
+        try {
+            lpr = processFiles(br, out);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            br.close();
         }
+        return lpr;
     }
     /**
      * Looks for TW & BSP, reset on RMC
