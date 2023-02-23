@@ -11,6 +11,17 @@
 </table>
 Java and Python(3).
 
+#### Warning
+The scripts presented in this repo are written fpr `bash` shell.  
+As such, they run on Linux, Mac OS, and Windows 10+.
+
+---
+#### Some links
+- [Get Started](./GET_STARTED.md), fast
+- Package for Prod [example](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/USE_CASES.md)
+- [Sample implementation and demos](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), REST services, Web Interfaces, and more.
+---
+
 ## Preamble
 The goal here is to be able to fulfil the computing needs of a navigator with a Raspberry Pi (we'll discuss the different models later).
 The Raspberry Pi (see <https://www.raspberrypi.org/> and <https://www.raspberrypi.com/>) is a small and _cheap_ single-board computer, running a clone of Linux, it's hard drive is an SD card, its power consumption is low, and
