@@ -1,5 +1,7 @@
 # Use-case 1
 
+> _**Note**_: this page is very detailed. If you are already familiar with git, gradle, java, etc, you might find it a bit redundant sometimes 😜. 
+
 ### A Multiplexer (and its web interface) on a Raspberry Pi, with a GPS
 This is a simple configuration. We will build the project on a machine where the git repo has been cloned.
 This machine will be called `Machine A`. From `Machine A`, we will generate an archive that will be pushed on the Raspberry Pi (called `Machine B`).
