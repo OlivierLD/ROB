@@ -10,7 +10,7 @@ file_exists() {
   fi
 }
 #
-oops ( ) {
+oops() {
     echo
     echo "$*"
     echo

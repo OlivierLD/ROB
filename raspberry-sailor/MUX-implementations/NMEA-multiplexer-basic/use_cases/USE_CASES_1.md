@@ -44,6 +44,8 @@ Finally, run the script:
 machine-a $ ./start.from.scratch.sh
 ```
 The script clones the repo in a `repos/ROB` folder, builds the `RESTNavServer`, and runs a demo script.
+> _**Note**_: The script will clone thre repo, this means that it will copy it onto `Machine A`. This is quite a volume of code and resources, you will be prompted berfore doing so.  
+> Once the process (clone, build, generation of the production archive) is done, you can drop the cloned repo if you want. But you can also keep it, for further builds, when modifications have happened in the repo...
 
 If this goes well, then you can move to the folder `repos/ROB/MUX-implementations/NMEA-multiplexer-basic`, and follow the rest of the instructions below.
 ```
