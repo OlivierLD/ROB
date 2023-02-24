@@ -373,6 +373,6 @@ Once connected on this new network, from this "other" machine (a cell-phone woul
 `192.168.50.10` being the address of the machine (Raspberry Pi) the multiplexer runs on.
 
 ### Summary
-Graphical summary [here](https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/NMEA-multiplexer-basic/use_cases/summary.html).
+Graphical summary [here](https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/use_cases/summary.html).
 
 ---
