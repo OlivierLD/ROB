@@ -191,8 +191,9 @@ pi $ sudo apt-get install openjdk-11-jdk
 > pi $ sudo apt-get update
 > pi $ sudo apt-get install openjdk-8-jdk
 > ```
-> And you would need to make sure that the same version is used
-> on `Machine A` to produce the runnable archives.  
+> **_And you would need to make sure that the same version is used_**
+> _**on `Machine A` to produce the runnable archives.**_  
+> If the Raspberry Pi (`Machine B`) runs a JDK 8, then the build on `Machine A` _**MUST**_ be done with JDK 8.   
 > To flip between versions, remember to use `sudo update-alternatives --config java[c]`. 
 
 
@@ -274,7 +275,7 @@ Connect on `Machine B` (with `ssh` from `Machine A`, if you want, or directly on
 ```
 machine-a $ ssh pi@192.168.1.101
 ```
-and unarchive what was received before:
+and unarchive - using `tar` (Tape ARchiver) - what was received before (named `nmea-dist.tar.gz` in our case):
 ```
 pi $ tar -xzvf nmea-dist.tar.gz
 nmea-dist/
@@ -292,16 +293,30 @@ nmea-dist/build/libs/
 nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
 pi $
 ```
-Make sure `librxtx-java` is installed:
+Make sure `librxtx-java` is installed on the Raspberry Pi:
 ```
 pi $ sudo apt-get install librxtx-java
 ```
 
-Let's move to the newly created directory:
+Let's move to the newly created directory (_**you**_ gave that name when executing the `to.prod.sh` script:
 ```
 pi $ cd nmea-dist
 ```
-Then, modify the file `/etc/rc.local` (make sure you're super-user), to start the required pieces at boot. Add the following lines, at the end
+
+> _**Note**_: Due to a bug (or so) in `librxtx-java`, the Serial port the GPS is plugged in is
+> named `/de/ttyAMC0`, but it needs to be linked to `/dev/ttyS80`, which is the port that will be used, 
+> see in the config file named `nmea.mux.gps.yaml`:
+> ```yaml
+> channels:
+> - type: serial
+>   port: /dev/ttyS80
+>   baudrate: 4800
+> ```
+> To link this port, use the command `sudo ln -s /dev/ttyACM0 /dev/ttyS80` before trying to read the port.
+> This is to be done again every time the Raspberry pi starts. It can also be done automatically, as explained below.
+
+
+Then, if you want the multiplexer to start when the Raspberry Pi boots, you can modify the file `/etc/rc.local` (make sure you're super-user), to start the required pieces at boot. Add the following lines, at the end
 of the file, _before_ the `exit` statement:
 ```
 # Link the Serial Port
@@ -329,7 +344,23 @@ nohup ./mux.sh nmea.mux.gps.yaml &
 > rm km
 > ```
 
+##### Ready !
+The multiplexer is now ready for duty. You can start it, and access the data it produces, from any other device connected on the same network 
+(including the Raspberry Pi itself, of course).  
+To start the Multiplexer, from the `nmea-dist` directory, in a terminal:
+```
+pi $ ./mux.sh nmea.mux.gps.yaml
+```
+If it starts as expected (you would see what goes on in the Console), then try to reach
+`http://192.168.1.101:9999/zip/index.html`, from a browser on any device on the same network.  
+A `[Ctrl + C]` in the console will stop the program.
+
+#### Finally
 Finally, we can set up the hotspot network on the Raspberry Pi.  
+
+If you are at sea, you might not have an Internet connection. But the Raspberry Pi can emit its own network,
+so other devices can connect to it, just like you would connect to your home network...
+
 Follow the instructions [here](../HOTSPOT.md).
 
 Then you can stop the `Machine B` (the Raspberry Pi), plug in your GPS, and boot it.
@@ -337,8 +368,11 @@ Then you can stop the `Machine B` (the Raspberry Pi), plug in your GPS, and boot
 Once it is re-started, you should see - from `Machine A` for example - a network named, as above, `NMEANetwork`.
 Its password is `PassWord` (see in the [instructions](../HOTSPOT.md)).
 
+
 Once connected on this new network, from this "other" machine (a cell-phone would work too, just connect from it to the new `NMEANetwork` network), try to reach <http://192.168.50.10:9999/zip/index.html>,
 `192.168.50.10` being the address of the machine (Raspberry Pi) the multiplexer runs on.
 
+### Summary
+Graphical summary [here](https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/NMEA-multiplexer-basic/use_cases/summary.html).
 
 ---
