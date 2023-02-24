@@ -11,9 +11,14 @@
 </table>
 Java and Python(3).
 
-#### Warning
+#### Warning 1
 The scripts presented in this repo are written for `bash` shell.  
-As such, they run on Linux, Mac OS, and Windows 10+.
+As such, they run on Linux, Mac OS, and Windows 10+ (I was told so).
+
+#### Warning 2
+To keep this project compatible with as many Raspberry Pi models as possible, we kept the Java code compatible with
+Java 8. Some syntax improvements would be possible, if Java 11 was the only one in the picture, but they're - for now - commented.  
+This is done intentionally.
 
 ---
 #### Some links
