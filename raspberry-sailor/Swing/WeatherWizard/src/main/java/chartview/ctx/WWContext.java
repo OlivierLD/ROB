@@ -711,12 +711,12 @@ public class WWContext {
         }
     }
 
-    public void fireWindInGoogle() {
-        for (int i = 0; i < this.getListeners().size(); i++) {
-            ApplicationEventListener l = this.getListeners().get(i);
-            l.showWindInGoogle();
-        }
-    }
+//    public void fireWindInGoogle() {
+//        for (int i = 0; i < this.getListeners().size(); i++) {
+//            ApplicationEventListener l = this.getListeners().get(i);
+//            l.showWindInGoogle();
+//        }
+//    }
 
     public void fireRoutingAvailable(boolean b, List<RoutingPoint> bestRoute) {
         for (int i = 0; i < this.getListeners().size(); i++) {
@@ -858,19 +858,19 @@ public class WWContext {
         }
     }
 
-    public void fireGoogleMapRequested() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
-            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
-            l.googleMapRequested();
-        }
-    }
+//    public void fireGoogleMapRequested() {
+//        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
+//            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
+//            l.googleMapRequested();
+//        }
+//    }
 
-    public void fireGoogleEarthRequested() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
-            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
-            l.googleEarthRequested();
-        }
-    }
+//    public void fireGoogleEarthRequested() {
+//        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
+//            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
+//            l.googleEarthRequested();
+//        }
+//    }
 
     public void fireSetOpenTabNum(int n) {
         for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {

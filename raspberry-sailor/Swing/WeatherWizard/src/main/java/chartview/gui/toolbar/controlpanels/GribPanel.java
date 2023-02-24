@@ -38,11 +38,11 @@ public class GribPanel
     private final JLabel tmpLabel = new JLabel("AIRTMP");
     private final JLabel waveLabel = new JLabel("WAVES");
     private final JLabel rainLabel = new JLabel("RAIN");
-    private final JButton googleButton = new JButton();
+//    private final JButton googleButton = new JButton();
     private final JSlider gribSlider = new JSlider();
 
     private int sliderValue = 1;
-    private final JLabel googleLabel = new JLabel();
+//    private final JLabel googleLabel = new JLabel();
     private final GridBagLayout gridBagLayout2 = new GridBagLayout();
     private final JLabel smoothTimeLabel = new JLabel(WWGnlUtilities.buildMessage("grib-time-smooth"));
     private final JTextField smoothTimeValue = new JTextField();
@@ -70,7 +70,7 @@ public class GribPanel
             }
 
             public void gribLoaded() {
-                googleButton.setEnabled(true);
+//                googleButton.setEnabled(true);
                 backwardButton.setEnabled(true);
 //        animateButton.setEnabled(true); 
 //        dustletLoopButton.setEnabled(true);
@@ -85,14 +85,14 @@ public class GribPanel
                 smoothTimeValue.setEnabled(true);
                 smoothTimeButton.setEnabled(true);
                 gribSlider.setEnabled(true);
-                googleLabel.setEnabled(true);
+//                googleLabel.setEnabled(true);
 
                 withLabelOnGribCheckBox.setEnabled(true);
 //        timeZoneLabel.setEnabled(withLabelOnGribCheckBox.isSelected());
             }
 
             public void gribUnloaded() {
-                googleButton.setEnabled(false);
+//                googleButton.setEnabled(false);
                 backwardButton.setEnabled(false);
                 animateButton.setEnabled(false);
 //        dustletLoopButton.setEnabled(false);
@@ -107,7 +107,7 @@ public class GribPanel
                 smoothTimeValue.setEnabled(false);
                 smoothTimeButton.setEnabled(false);
                 gribSlider.setEnabled(false);
-                googleLabel.setEnabled(false);
+//                googleLabel.setEnabled(false);
                 withLabelOnGribCheckBox.setEnabled(false);
 //        timeZoneLabel.setEnabled(false);
                 WWContext.getInstance().setGribFile(null);
@@ -332,15 +332,15 @@ public class GribPanel
         rainLabel.setEnabled(false);
 
         //  googleButton.setText("Google");
-        googleButton.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
-        googleButton.setActionCommand("googleMap");
-        googleButton.setToolTipText(WWGnlUtilities.buildMessage("show-wind-in-google-map"));
-        googleButton.addActionListener(this::googleButton_actionPerformed);
-        googleButton.setEnabled(false);
-        googleButton.setMaximumSize(new Dimension(24, 24));
-        googleButton.setMinimumSize(new Dimension(24, 24));
-        googleButton.setPreferredSize(new Dimension(24, 24));
-        googleButton.setMargin(new Insets(1, 1, 1, 1));
+//        googleButton.setIcon(new ImageIcon(this.getClass().getResource("img/google.png")));
+//        googleButton.setActionCommand("googleMap");
+//        googleButton.setToolTipText(WWGnlUtilities.buildMessage("show-wind-in-google-map"));
+//        googleButton.addActionListener(this::googleButton_actionPerformed);
+//        googleButton.setEnabled(false);
+//        googleButton.setMaximumSize(new Dimension(24, 24));
+//        googleButton.setMinimumSize(new Dimension(24, 24));
+//        googleButton.setPreferredSize(new Dimension(24, 24));
+//        googleButton.setMargin(new Insets(1, 1, 1, 1));
 
         gribSlider.setPaintTicks(true);
         gribSlider.setValue(1); // Was 0
@@ -349,8 +349,8 @@ public class GribPanel
         gribSlider.setEnabled(false);
         gribSlider.setMinimum(1); // Was 0
         gribSlider.setSnapToTicks(true);
-        googleLabel.setText(WWGnlUtilities.buildMessage("wind-in-google-map"));
-        googleLabel.setEnabled(false);
+//        googleLabel.setText(WWGnlUtilities.buildMessage("wind-in-google-map"));
+//        googleLabel.setEnabled(false);
         smoothTimeLabel.setEnabled(false);
         smoothTimeValue.setPreferredSize(new Dimension(30, 20));
         smoothTimeValue.setText("1");
@@ -427,8 +427,8 @@ public class GribPanel
         gribInfoLineFour.setPreferredSize(new Dimension(170, 14));
         gribInfoLineFour.setFont(new Font("Tahoma", Font.PLAIN, 9));
 
-        topPanel.add(googleLabel, null);
-        topPanel.add(googleButton, null);
+//        topPanel.add(googleLabel, null);
+//        topPanel.add(googleButton, null);
     }
 
     public void setGRIBTWSCoeff(double d) {
@@ -517,9 +517,9 @@ public class GribPanel
         WWContext.getInstance().fireGribSmoothing(smooth);
     }
 
-    private void googleButton_actionPerformed(ActionEvent e) {
-        WWContext.getInstance().fireWindInGoogle();
-    }
+//    private void googleButton_actionPerformed(ActionEvent e) {
+//        WWContext.getInstance().fireWindInGoogle();
+//    }
 
     private void smoothTimeButton_actionPerformed(ActionEvent e) {
         int smooth = 1;

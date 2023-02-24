@@ -1952,19 +1952,19 @@ public class AdjustFrame extends JFrame {
         }
     }
 
-    private void gMap() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
-            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
-            l.googleMapRequested();
-        }
-    }
+//    private void gMap() {
+//        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
+//            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
+//            l.googleMapRequested();
+//        }
+//    }
 
-    private void gEarth() {
-        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
-            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
-            l.googleEarthRequested();
-        }
-    }
+//    private void gEarth() {
+//        for (int i = 0; i < WWContext.getInstance().getListeners().size(); i++) {
+//            ApplicationEventListener l = WWContext.getInstance().getListeners().get(i);
+//            l.googleEarthRequested();
+//        }
+//    }
 
     private void downloadPDFManual() {
         try {

@@ -2,7 +2,7 @@
   <tr>
 <td valign="top">
 <h1>ROB (Raspberry-Pi On Board)</h1>
-<h3>Using the Raspberry Pi <u>at sea</u>.</h3>
+<h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
 </td>
 <td valign="top">
 <img src="./a.l.ouest.jpeg" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
@@ -147,7 +147,7 @@ No need to deal with Android, iOS, Windows..., **_the goal here being to simplif
 > _**Note**_: We will see later what can be done with Docker.  
 
 ## Build Techniques
-Languages used here are Java, and in some cases Python. The Web UI is done in pure HTML5/ES6/CSS3.
+Programming languages used here are Java, and in some cases Python. The Web UI is done in pure HTML5/ES6/CSS3, without any external framework.  
 The build is done using [`gradle`](https://gradle.org/).  
 If you're not familiar with those tools and techniques, check out the [GET_STARTED](./GET_STARTED.md) page.
 

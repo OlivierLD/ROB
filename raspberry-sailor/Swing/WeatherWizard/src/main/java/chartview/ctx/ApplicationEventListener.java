@@ -173,10 +173,10 @@ public abstract class ApplicationEventListener
   public void setRAINDisplayed(boolean b) {}
 
   public void setZoom3D(double d) {}
-  public void showWindInGoogle() {}
+//  public void showWindInGoogle() {}
 
-  public void googleMapRequested() {}
-  public void googleEarthRequested() {}
+//  public void googleMapRequested() {}
+//  public void googleEarthRequested() {}
 
   public void readFax() {}
   public void readGRIB() {}
