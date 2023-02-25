@@ -1898,15 +1898,20 @@ public class WWGnlUtilities {
                     try {
                         synchronized(me) {
                             WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
-                            me.notify();
+//                            me.notify();
                         }
                     } catch (MalformedURLException murle) {
-                        // TODO: Add catch code
+                        System.err.println("Error playing [" + soundName + "]");
+                        // TODO: Add catch code...
                         murle.printStackTrace();
                     } catch (Exception e) {
-                        System.err.println("Playing [" + soundName + "]");
-                        // TODO: Add catch code
+                        System.err.println("Error playing [" + soundName + "]");
+                        // TODO: Add catch code...
                         e.printStackTrace();
+                    } finally {
+                        synchronized(me) {
+                            me.notify();
+                        }
                     }
                 });
                 System.out.println("Bip-bip!");
