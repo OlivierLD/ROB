@@ -8,10 +8,10 @@ echo -e "+----------------------------------------------------------------------
 #
 echo -e "Open http://localhost:8080/index.html in a browser..."
 DARWIN=$(uname -a | grep Darwin)
-if [[ "$DARWIN" != "" ]]; then
-	echo Running on Mac
+if [[ "${DARWIN}" != "" ]]; then
+	echo -e "Running on Mac"
   open http://localhost:8080/index.html
 else
-  echo Assuming Linux/Raspberry Pi
+  echo -e "Assuming Linux/Raspberry Pi ($(uname))"
   chromium-browser http://localhost:8080/index.html
 fi

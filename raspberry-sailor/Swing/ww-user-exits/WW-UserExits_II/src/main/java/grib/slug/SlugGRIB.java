@@ -82,8 +82,13 @@ public class SlugGRIB extends JFrame {
                             for (int w = 0; w < width; w++) {
                                 float value = data2display[h][w].floatValue();
                                 if (previousData2Display != null && smoothingStep > -1) {
-                                    float prevValue = previousData2Display[h][w].floatValue();
-                                    value = prevValue + (smoothingStep * (value - prevValue) / smoothingSteps);
+                                    try {
+                                        float prevValue = previousData2Display[h][w].floatValue();
+                                        value = prevValue + (smoothingStep * (value - prevValue) / smoothingSteps);
+                                    } catch (ArrayIndexOutOfBoundsException aobe) {
+                                        System.err.println("--- Oops ---");
+                                        aobe.printStackTrace();
+                                    }
                                 }
                                 // else {
                                 //   if (verbose) System.out.println("*** No previousData2Display");
@@ -103,8 +108,13 @@ public class SlugGRIB extends JFrame {
                             for (int h = 0; h < height; h++) {
                                 float value = data2display[h][w].floatValue();
                                 if (previousData2Display != null && smoothingStep > -1) {
-                                    float prevValue = previousData2Display[h][w].floatValue();
-                                    value = prevValue + (smoothingStep * (value - prevValue) / smoothingSteps);
+                                    try {
+                                        float prevValue = previousData2Display[h][w].floatValue();
+                                        value = prevValue + (smoothingStep * (value - prevValue) / smoothingSteps);
+                                    } catch (ArrayIndexOutOfBoundsException aobe) {
+                                        System.err.println("--- Oops ---");
+                                        aobe.printStackTrace();
+                                    }
                                 }
                                 // Point pt = new Point(w*10, (int)(value / 20f));
                                 Point pt = spaceToPanel(w, h, value);

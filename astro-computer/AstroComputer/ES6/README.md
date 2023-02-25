@@ -20,10 +20,10 @@ Wed Feb 12 2020 09:32:54 GMT-0800 (PST): Server is listening on port 8080
 ```
 Then from a browser, load `http://localhost:8080/index.html` and follow the instructions on the page.
 
-> Or Mac or Linux, just run the script `./start.sh`, in the `ES6` folder. It will start the server, and open the right page in your default browser.  
+> Or Mac or Linux, just run the script `./start.sh` (or just type `npm start`), in the `src/main/ES6` folder. It will start the server, and open the right page in your default browser.  
 > Use `./stop.sh` to kill the server.
 
-> > To come: A WebComponent version?
+> > [ES6 example](https://olivierld.github.io/web.stuff/astro/index_02.html), with WebComponents
 
 You should get a `JSON` object like this:
 ```json

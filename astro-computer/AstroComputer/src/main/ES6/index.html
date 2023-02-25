@@ -55,6 +55,13 @@ body {
 </head>
 <body>
 <h1>This is an ES6 Celestial Computer test</h1>
+<h2>
+    Observer's position on Earth is hard-coded to San Francisco, CA.
+    <br/>
+    N 37&deg;30' / W 122&deg;18'
+</h2>
+<small>Look into the page's code for details</small>
+<hr/>
 <table>
     <tr>
         <td style="vertical-align: top;">
@@ -85,9 +92,9 @@ body {
                 <input type="checkbox" id="no-planet"><small>Skip planets calculations</small>
                 <input type="checkbox" id="verbose" onchange="verbose(this);"><small>Console Verbose</small>
             </div>
-            <button id="now" onclick="updateUTCDate();">Now</button>&nbsp;
+            <button id="now" onclick="updateUTCDate();" title="Update time to current time">Now</button>&nbsp;
             <button id="compute" onclick="compute();">Compute</button>&nbsp;
-            <input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);"><small>Auto Refresh</small>
+            <input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);" title="Every second"><small>Auto Refresh</small>
         </td>
         <td>
             <div id="moon-phase-div"></div>
@@ -174,8 +181,10 @@ body {
             console.log(oops);
         }
 
+        // San Francisco, CA.
         const LAT_SF = 37.5;
         const LONG_SF = -122.3;
+
         // Sun Z and Elev from SF
         let ghaSun = testResult.sun.GHA.raw;
         let decSun = testResult.sun.DEC.raw;
