@@ -89,7 +89,7 @@ public final class ParamPanel
                 it = Color.blue;
                 break;
             case ParamData.NMEA_SERVER_URL:
-                it = "http://localhost:6666";
+                it = "http://localhost:9999/mux/sog-cog";
                 break;
             case ParamData.NMEA_POLLING_FREQ:
                 it = 60;
@@ -261,7 +261,7 @@ public final class ParamPanel
                 it = true;
                 break;
             case ParamData.SERIAL_PORT:
-                it = new ListOfSerialPorts("COM1");
+                it = new ListOfSerialPorts("to-remove");
                 break;
             case ParamData.TCP_PORT:
                 it = "7001";
@@ -273,7 +273,7 @@ public final class ParamPanel
                 it = "2947";
                 break;
             case ParamData.NMEA_HOST:
-                it = "localhost";
+                it = "- obsolete -";
                 break;
             case ParamData.ROUTING_OUTPUT_FLAVOR:
                 it = new RoutingOutputList(0);
@@ -569,11 +569,11 @@ public final class ParamPanel
                                     ParamData.TEMPERATURE_UNIT},
                     new int[] // Routing, NMEA
                             {ParamData.NMEA_SERVER_URL,
-                                    ParamData.SERIAL_PORT,
-                                    ParamData.TCP_PORT,
-                                    ParamData.UDP_PORT,
-                                    ParamData.GPSD_PORT,
-                                    ParamData.NMEA_HOST,
+                                    ParamData.SERIAL_PORT,  // TODO Remove
+                                    ParamData.TCP_PORT,     // TODO Remove
+                                    ParamData.UDP_PORT,     // TODO Remove
+                                    ParamData.GPSD_PORT,    // TODO Remove
+                                    ParamData.NMEA_HOST,    // TODO Remove
                                     ParamData.NMEA_POLLING_FREQ,
                                     ParamData.NMEA_FALLBACK_TIMEOUT,
                                     ParamData.POLAR_FILE_LOC,

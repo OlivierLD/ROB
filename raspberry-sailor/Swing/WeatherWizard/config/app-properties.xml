@@ -1,7 +1,7 @@
 <app-parameters>
    <param id="0">102;0;0</param>
    <param id="1">204;204;204</param>
-   <param id="2">http://localhost:6666</param>
+   <param id="2">http://192.168.1.101:9999/mux/sog-cog</param>
    <param id="3">60</param>
    <param id="4">./polars/CheoyLee42.polar-coeff</param>
    <param id="5">10</param>
@@ -73,7 +73,7 @@
    <param id="71">15</param>
    <param id="72">false</param>
    <param id="73">0</param>
-   <param id="74">192.168.1.1</param>
+   <param id="74">192.168.1.101</param>
    <param id="75">2947</param>
    <param id="76">2</param>
    <param id="77">./sounds/R2D2.wav</param>

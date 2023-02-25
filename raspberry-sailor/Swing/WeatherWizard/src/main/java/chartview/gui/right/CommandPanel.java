@@ -2640,9 +2640,8 @@ public class CommandPanel
                                                 bp = WWGnlUtilities.getHTTPBoatPosition(); // Try HTTP port
                                                 WWContext.getInstance().fireSetStatus("Got Position from HTTP:" + bp.getPos().toString());
                                             } catch (HTTPClient.NMEAServerException nse) {
-                                                System.err.println("NMEA HTTP Server must be down. Trying Serial port");
-                                                WWContext.getInstance().fireLogging(". NMEA HTTP Server must be down. Trying Serial port\n");
-                                                // TODO Other ways ?
+                                                System.err.println("NMEA HTTP Server must be down. No response.");
+                                                WWContext.getInstance().fireLogging(". NMEA HTTP Server must be down. No response.\n");
                                             } catch (Exception ex) {
                                                 WWContext.getInstance().fireExceptionLogging(ex);
                                                 ex.printStackTrace();

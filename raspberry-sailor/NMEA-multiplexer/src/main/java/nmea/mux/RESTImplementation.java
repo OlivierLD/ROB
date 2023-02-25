@@ -225,7 +225,7 @@ public class RESTImplementation {
 					"GET",
 					REST_PREFIX + "/sog-cog",
 					this::getSCOG,
-					"Get Speed and Course Over Ground"),
+					"Get Position, Speed and Course Over Ground (from GPS)"),
 			new Operation(
 					"POST",
 					REST_PREFIX + "/sog-cog",

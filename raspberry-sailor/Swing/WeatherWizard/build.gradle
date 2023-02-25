@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
   implementation 'oracle:xmlparser:2.0'
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 
   implementation fileTree(dir: '../../../common-image-utils/libs', include: ['*.jar'])
 //  implementation 'javax:jai_codec:1.1.3'

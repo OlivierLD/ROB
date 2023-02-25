@@ -30,6 +30,7 @@ import chartview.util.progress.ProgressUtil;
 
 import chartview.util.nmeaclient.BoatPositionMUXClient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import coreutilities.Utilities;
 
 import java.awt.AlphaComposite;
@@ -127,6 +128,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 public class WWGnlUtilities {
+
+    private static ObjectMapper mapper = new ObjectMapper();
+
     public final static String REGEXPR_PROPERTIES_FILE = "regexpr.properties";
     public final static String COMPOSITE_FILTER = "composite.filter";
     public final static String REGEXPR_ROUTING_PROPERTIES_FILE = "regexpr.routing.properties";
@@ -3806,29 +3810,37 @@ public class WWGnlUtilities {
         BoatPosition bp = null;
         try {
             String nmeaPayload = HTTPClient.getContent((String) ParamPanel.data[ParamData.NMEA_SERVER_URL][ParamData.VALUE_INDEX]);
-            StringReader sr = new StringReader(nmeaPayload);
-            DOMParser parser = WWContext.getInstance().getParser();
-            XMLDocument doc = null;
-            synchronized (parser) {
-                parser.setValidationMode(DOMParser.NONVALIDATING);
-                parser.parse(sr);
-                doc = parser.getDocument();
-            }
+            /*
+             * Returned payload like
+             * {
+             *   "pos": {
+             *        "lat":47.677667,
+             *        "lng":-3.135667,
+             *        "gridSquare":"IN87kq",
+             *        "latInDegMinDec":"N  47*40.66'",
+             *        "lngInDegMinDec":"W 003*08.14'"
+             *      },
+             *   "sog":{"sog":null,"unit":"kt"},
+             *   "cog":{"cog":null,"unit":"deg"}
+             * }
+             */
+            final Map<String, Object> gpsData = mapper.readValue(nmeaPayload, Map.class);
+
             try {
                 double lat = 0d;
                 try {
-                    lat = Double.parseDouble(doc.selectNodes("/data/lat[1]").item(0).getFirstChild().getNodeValue());
+                    lat = (double)((Map<String, Object>)gpsData.get("pos")).get("lat");
                 } catch (Exception ignore) {
                 }
                 double lng = 0d;
                 try {
-                    lng = Double.parseDouble(doc.selectNodes("/data/lng[1]").item(0).getFirstChild().getNodeValue());
+                    lng = (double)((Map<String, Object>)gpsData.get("pos")).get("lng");
                 } catch (Exception ignore) {
                 }
                 GeoPoint gp = new GeoPoint(lat, lng);
                 int hdg = 0;
                 try {
-                    hdg = (int) Math.round(Double.parseDouble(doc.selectNodes("/data/cog").item(0).getFirstChild().getNodeValue()));
+                    hdg = (int)((Map<String, Object>)gpsData.get("cog")).get("cog");
                 } catch (Exception ignore) {
                 }
                 bp = new BoatPosition(gp, hdg);

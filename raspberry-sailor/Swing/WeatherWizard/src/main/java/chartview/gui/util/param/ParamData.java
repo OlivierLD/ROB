@@ -13,7 +13,7 @@ public class ParamData {
     // TODO Replace with an Enumeration?
     public final static int CHART_COLOR = 0;
     public final static int GRID_COLOR = 1;
-    public final static int NMEA_SERVER_URL = 2;
+    public final static int NMEA_SERVER_URL = 2;     // For REST request /mux/sog-cog
     public final static int NMEA_POLLING_FREQ = 3;
     public final static int POLAR_FILE_LOC = 4;
     public final static int ROUTING_STEP = 5;
@@ -161,8 +161,8 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("show-isochrons-by-default"),
                     WWGnlUtilities.buildMessage("nmea-serial-port"),
                     WWGnlUtilities.buildMessage("routing-output"),
-                    WWGnlUtilities.buildMessage("nmea-tcp-port"),
-                    WWGnlUtilities.buildMessage("nmea-udp-port"),
+                    WWGnlUtilities.buildMessage("nmea-tcp-port"),  // TODO Remove
+                    WWGnlUtilities.buildMessage("nmea-udp-port"),  // TODO Remove
                     WWGnlUtilities.buildMessage("route-color"),
                     WWGnlUtilities.buildMessage("routing-boat-color"),
                     WWGnlUtilities.buildMessage("tws-color-in-routing"),
@@ -181,13 +181,13 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("startup-wait"),
                     WWGnlUtilities.buildMessage("expand-control-by-default"),
                     WWGnlUtilities.buildMessage("temperature-unit"),
-                    WWGnlUtilities.buildMessage("nmea-hostname"),
-                    WWGnlUtilities.buildMessage("gpsd-port"),
+                    WWGnlUtilities.buildMessage("nmea-hostname"),            // TODO Remove
+                    WWGnlUtilities.buildMessage("gpsd-port"),                // TODO Remove
                     WWGnlUtilities.buildMessage("anemometer-hand-option"),
                     WWGnlUtilities.buildMessage("play-sound-on-job-completion"),
                     WWGnlUtilities.buildMessage("avoid-land"),
                     WWGnlUtilities.buildMessage("routing-completed-below"),
-                    WWGnlUtilities.buildMessage("nmea-fallback-timeout"),
+                    WWGnlUtilities.buildMessage("nmea-fallback-timeout"),   // TODO Remove
                     WWGnlUtilities.buildMessage("grib-tws-coeff"),
                     WWGnlUtilities.buildMessage("default-font-size"),
                     WWGnlUtilities.buildMessage("ask-confirm-comment"),
@@ -253,10 +253,10 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("help-old-isochrons-color"),
                     WWGnlUtilities.buildMessage("help-show-routing-labels-by-default"),
                     WWGnlUtilities.buildMessage("help-show-isochrons-by-default"),
-                    WWGnlUtilities.buildMessage("help-nmea-serial-port"),
+                    WWGnlUtilities.buildMessage("help-nmea-serial-port"),             // TODO Remove
                     WWGnlUtilities.buildMessage("help-routing-output"),
-                    WWGnlUtilities.buildMessage("help-nmea-tcp-port"),
-                    WWGnlUtilities.buildMessage("help-nmea-udp-port"),
+                    WWGnlUtilities.buildMessage("help-nmea-tcp-port"),                // TODO Remove
+                    WWGnlUtilities.buildMessage("help-nmea-udp-port"),                // TODO Remove
                     WWGnlUtilities.buildMessage("help-route-color"),
                     WWGnlUtilities.buildMessage("help-routing-boat-color"),
                     WWGnlUtilities.buildMessage("help-tws-color-in-routing"),
@@ -275,13 +275,13 @@ public class ParamData {
                     WWGnlUtilities.buildMessage("help-startup-wait"),
                     WWGnlUtilities.buildMessage("help-expand-control-by-default"),
                     WWGnlUtilities.buildMessage("temperature-unit-help"),
-                    WWGnlUtilities.buildMessage("help-nmea-hostname"),
-                    WWGnlUtilities.buildMessage("help-gpsd-port"),
+                    WWGnlUtilities.buildMessage("help-nmea-hostname"),                 // TODO Remove
+                    WWGnlUtilities.buildMessage("help-gpsd-port"),                     // TODO Remove
                     WWGnlUtilities.buildMessage("help-anemometer-hand-option"),
                     WWGnlUtilities.buildMessage("help-play-sound-on-job-completion"),
                     WWGnlUtilities.buildMessage("help-avoid-land"),
                     WWGnlUtilities.buildMessage("help-routing-completed-below"),
-                    WWGnlUtilities.buildMessage("help-nmea-fallback-timeout"),
+                    WWGnlUtilities.buildMessage("help-nmea-fallback-timeout"),         // TODO Remove
                     WWGnlUtilities.buildMessage("help-grib-tws-coeff"),
                     WWGnlUtilities.buildMessage("help-default-font-size"),
                     WWGnlUtilities.buildMessage("help-ask-confirm-comment"),
