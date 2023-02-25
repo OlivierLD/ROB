@@ -35,7 +35,7 @@ import java.util.jar.Manifest;
 
 public class UserExitTablePanel
         extends JPanel {
-    XMLDocument originalData = null;
+    XMLDocument originalData;
     // Table Columns
     final static String LABEL = WWGnlUtilities.buildMessage("label");
     final static String ACTION = WWGnlUtilities.buildMessage("action");
@@ -228,7 +228,7 @@ public class UserExitTablePanel
     }
 
     private void testButton_actionPerformed() {
-        String classToTest = "";
+        String classToTest = "- No class -";
         try {
             int selectedRow = table.getSelectedRow();
             classToTest = (String) data[selectedRow][1];
@@ -246,6 +246,17 @@ public class UserExitTablePanel
                         WWGnlUtilities.buildMessage("testing"),
                         JOptionPane.WARNING_MESSAGE);
             }
+        } catch (ClassNotFoundException cnfe) {
+
+            String message = System.getProperty("java.class.path");
+            if (message != null) {
+                message = message.replace(File.pathSeparator, "\n");
+            }
+
+            JOptionPane.showMessageDialog(this,
+                    String.format("Class [%s] not found in  classpath [%s]", classToTest, message),
+                    WWGnlUtilities.buildMessage("testing"),
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     ex.toString(),
