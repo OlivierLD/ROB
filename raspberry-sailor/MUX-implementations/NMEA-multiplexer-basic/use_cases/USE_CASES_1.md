@@ -18,6 +18,11 @@ The Raspberry Pi will possibly emit its own HotSpot network.
   - Configure whatever has to be configured on it
   - And go! Take it for a hike!
 
+> _**Important Note !!**_: We are going to build the Java part on `Machine A`, and send it to `Machine B`.   
+> It is essential to make sure that the build on `Machine A` happens with the same JDK version as the one used on `Machine B` at runtime.  
+> The choice will be between JDK 11 and JDK 8.  
+> See below the section where `lscpu` is used, [here](#java-version).
+
 ---
 In the commands below, we will prefix the terminal prompts with the machine name (or so).  
 A prompt like `machine-a $` means that the command is to be issued from `Machine A`, the laptop.  
@@ -164,7 +169,9 @@ Now we need to configure `Machine B`, and send the newly generated archive to it
 Flash a new SD card (see [here](https://www.raspberrypi.com/documentation/computers/getting-started.html), [Raspberry Pi Imager](https://www.raspberrypi.com/software/) does the job).  
 Make sure you enable the `ssh` interface (from the command line, use `raspi-config`,
 from the Graphical Desktop, use `Menu` > `Preferences` > `Raspberry Pi Configuration`, and then `Interfaces`).    
-This interface enablement can also be done through the settings (geared wheel) of the Raspberry Pi Imager.    
+This interface enablement can also be done through the settings (geared wheel) of the Raspberry Pi Imager.
+
+##### Java version
 This new image may contain a Java Development Kit (aka JDK). Make sure it's right:
 ```
 pi $ java -version
