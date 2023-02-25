@@ -1031,10 +1031,11 @@ public class AdjustFrame extends JFrame {
                             try {
                                 WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
                             } catch (MalformedURLException murle) {
+                                System.err.println("Error playing [" + soundName + "]");
                                 // TODO: Add catch code
                                 murle.printStackTrace();
                             } catch (Exception e) {
-                                System.err.println("Playing [" + soundName + "]");
+                                System.err.println("Error playing [" + soundName + "]");
                                 // TODO: Add catch code
                                 e.printStackTrace();
                             }

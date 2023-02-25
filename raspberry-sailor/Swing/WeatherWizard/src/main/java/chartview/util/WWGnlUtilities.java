@@ -4092,11 +4092,13 @@ public class WWGnlUtilities {
             line = (SourceDataLine) AudioSystem.getLine(info);
             line.open(audioFormat);
         } catch (LineUnavailableException e) {
-            e.printStackTrace();
-            System.exit(1);
+//            e.printStackTrace();
+//            System.exit(1);
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+//            e.printStackTrace();
+//            System.exit(1);
+            throw e;
         }
 
         line.start();
