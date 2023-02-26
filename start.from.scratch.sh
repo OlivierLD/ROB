@@ -2,7 +2,7 @@
 #
 # This is an example, a work in progress,
 # use it at your own risks !
-# Written for Raspberry Pi, Debian, Ubuntu.
+# Written for bash, on Raspberry Pi, Debian, Ubuntu.
 #
 # Can be used like:
 # wget https://github.com/OlivierLD/ROB/raw/master/start.from.scratch.sh
@@ -31,26 +31,65 @@ if [[ "$(which ${JAVA_TO_FIND})" != "" ]]; then
   # JAVA_VERSION=$(javac -version 2>&1 | awk -F '"' '/version/ {print $2}')
   JAVA_VERSION=$(${JAVA_TO_FIND} -version | awk '{ print $2 }')
   MAJOR_VERSION=$(echo ${JAVA_VERSION} | awk -F'.' '{print $1}')
-  if [[ ${MAJOR_VERSION} -ge 11 ]]; then
+  if [[ ${MAJOR_VERSION} -ge 8 ]]; then
     echo -e "Major JDK version is ${MAJOR_VERSION}, good."
-    JDK_TO_BE_INSTALLED=false
+    echo -en "Does it match the JDK installed on your target machine (like a Raspberry Pi) ? > "
+    read REPLY
+    if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+      JDK_TO_BE_INSTALLED=false
+    else
+      JDK_TO_BE_INSTALLED=true
+    fi
   fi
 else
   echo -e "No JDK found."
 fi
 if [[ "${JDK_TO_BE_INSTALLED}" == "true" ]]; then
-  # Install JDK 11
+  # Install JDK 11 or 8
   echo -e "JDK is required"
   echo -en "Install it now? > "
   read REPLY
   if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-      echo -e "Ok, installing JDK."
+      echo -e "Ok, we need to install a JDK."
+      echo -e "What JDK do we install here ? Version 8 or 11 ?"
+      KEEP_ASKING=true
+      JDK_VERSION=
+      while [[ "${KEEP_ASKING}" == "true" ]]; do
+        echo -en "Say 8, 11, or 'Q' to quit > "
+        read REPLY
+        echo -e "... You said ${REPLY}."
+        case "${REPLY}" in
+          "8")
+            JDK_VERSION=8
+            KEEP_ASKING=false
+            ;;
+          "11")
+            JDK_VERSION=11
+            KEEP_ASKING=false
+            ;;
+          "q" | "Q")
+            echo -e "Stopping here."
+            exit 0
+            ;;
+          *)
+            echo -e "Unsupported user input. Read again."
+            ;;
+        esac
+      done
       sudo apt-get update
-      sudo apt-get install openjdk-11-jdk
+      if [[ "${JDK_VERSION}" == "11" ]]; then
+        sudo apt-get install openjdk-11-jdk
+      fi
+      if [[ "${JDK_VERSION}" == "8" ]]; then
+        sudo apt-get install openjdk-8-jdk
+      fi
   else
       echo -e "Skipping JDK installation."
   fi
 fi
+#
+echo -en "Ready to move on ? > "
+read REPLY
 #
 # Git ?
 #
