@@ -51,4 +51,16 @@ sudo service hostapd status
 sudo service dnsmasq status
 ```
 
+## Backup / Restore SD card
+See [here](https://pimylifeup.com/backup-raspberry-pi/).
+
+On Mac OS:
+```
+$ diskutil list
+```
+
+```
+$ sudo dd if=/dev/disk1 of=~/PiSDBackup.dmg
+```
+
 ---
