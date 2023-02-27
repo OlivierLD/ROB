@@ -171,7 +171,6 @@ public class WWGnlUtilities {
     public final static Color PURPLE = new Color(165, 0, 165);
 
     public final static String USEREXITS_FILE_NAME = "." + File.separator + "config" + File.separator + "user-exit.xml";
-    public final static String STRUCTURE_FILE_NAME = "." + File.separator + "config" + File.separator + "structure.xml";
     public final static String VISUAL_CONFIG_FILE_NAME = "." + File.separator + "config" + File.separator + "visual-config.xml";
 
     public final static String[] MONTH =

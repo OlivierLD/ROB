@@ -978,7 +978,7 @@ public class GRIBSlicePanel
                     float prmsl = gribPoint.prmsl / 100f; // hPa
                     float hgt500 = gribPoint.hgt500;     // m
                     float waves = gribPoint.waves / 100F; // m
-                    float temp = gribPoint.temp - 273; // Celcius
+                    float temp = gribPoint.temp - 273; // Celsius
                     float rain = gribPoint.rain * 3600f; // kg/m^2/h => mm/h
                     int x, y;
                     x = (int) ((float) gribIdx * (float) this.getWidth() / (float) gribSize);
