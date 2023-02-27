@@ -742,6 +742,24 @@ class SunPath extends HTMLElement {
 				context.fillText(strLng, this._width - 10 - len, 40);
 			}
 			context.fillStyle = this.sunPathColorConfig.cardPointColor;
+
+			if (this._zOffset !== undefined) {
+				let z = 180 - this._zOffset;
+				if (this.invertX == -1) { // Pointing north
+					z = - this._zOffset;
+				}
+				while (z < 0) {
+					z += 360;
+				}
+				// console.log(`Z Offset: ${this._zOffset}`);
+				let displayData = `${z}°`;
+				let metrics = context.measureText(displayData);
+				context.fillText(displayData, (this._width / 2) - (metrics.width / 2), /*(this._height / 2) + 60*/ 18);
+				displayData = `\u21e7`;  // Vertical arrow
+				metrics = context.measureText(displayData);
+				context.fillText(displayData, (this._width / 2) - (metrics.width / 2), 36);
+			}
+
 			if (this._sunRise !== undefined) {
 				let strRiseTime = new Date(this._sunRise.time).format('H:i:s Z');
 				let strRiseZ = Utilities.decToSex(this._sunRise.z);

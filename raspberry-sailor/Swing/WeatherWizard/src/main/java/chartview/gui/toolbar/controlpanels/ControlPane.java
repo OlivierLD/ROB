@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ControlPane
         extends JPanel {
-    public final static int WIDTH = 220;
+    public final static int WIDTH = 280; // 220; // TODO Get the max of the inner panels.
 
     JPanel componentHolder = new JPanel(new GridBagLayout());
 
