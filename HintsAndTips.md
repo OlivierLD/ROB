@@ -3,6 +3,7 @@ A batch of useful and other things...
 
 ## Useful soft
 - Fing CLI: <https://www.fing.com/products/development-toolkit>
+  - Doc at <https://get.fing.com/fing-business/devrecog/documentation/Fing_CLI.pdf>
 
 
 ## Find the Serial port of your GPS (or whatever)

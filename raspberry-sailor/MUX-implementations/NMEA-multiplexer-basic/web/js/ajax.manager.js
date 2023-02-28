@@ -154,8 +154,14 @@ function onMessage(json) {
 		}
 		if (json["GPS Date & Time"]) {
 			try {
-				let gpsDate = json["GPS Date & Time"].date;
-				events.publish(EVENT_GPS_TIME, gpsDate);
+				// let gpsDate = json["GPS Date & Time"].date; // TODO Time Zone issue. Use fmtDate
+				let gpsDate = new Date(json["GPS Date & Time"].fmtDate.year, 
+				                       json["GPS Date & Time"].fmtDate.month, 
+									   json["GPS Date & Time"].fmtDate.day, 
+									   json["GPS Date & Time"].fmtDate.hour, 
+									   json["GPS Date & Time"].fmtDate.min, 
+									   json["GPS Date & Time"].fmtDate.sec).getTime();
+				events.publish(EVENT_GPS_TIME, gpsDate);  
 			} catch (err) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
 			}
