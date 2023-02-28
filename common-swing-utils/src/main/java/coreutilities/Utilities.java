@@ -167,55 +167,57 @@ public class Utilities {
     public static void showFileSystem(String where) throws Exception {
         String os = System.getProperty("os.name");
         System.out.printf("Opening file explorer on %s, at %s\n", os, where);
-        if (os.indexOf("Windows") > -1) {
-            String cmd = "cmd /k start /D\"" + where + "\" .";
-            //    System.out.println("Executing [" + cmd + "]");
-            Runtime.getRuntime().exec(cmd); // Can contain blanks, need quotes around it...
-        } else if (os.indexOf("Linux") > -1) {
-            String fileExplorer = "nautilus";
-            Process process = Runtime.getRuntime().exec(String.format("which %s", fileExplorer));
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
-            } else {
-                fileExplorer = "pcmanfm";
-                Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
-            }
-        } else if (os.indexOf("Mac") > -1) {
-            if (false) {
-                String[] applScriptCmd = {
-                        "osascript",
-                        "-e", "tell application \"Finder\"",
-                        "-e", "activate",
-                        "-e", "<open cmd>", // open cmd: index 6
-                        "-e", "end tell"
-                };
-                String pattern = File.separator;
-                if (pattern.equals("\\")) {
-                    pattern = "\\\\";
-                }
-                String[] pathElem = where.split(pattern);
-                String cmd = "open ";
-                for (int i = pathElem.length - 1; i > 0; i--) {
-                    cmd += ("folder \"" + pathElem[i] + "\" of ");
-                }
-                cmd += "startup disk";
-                applScriptCmd[6] = cmd;
-                Runtime.getRuntime().exec(applScriptCmd);
-            } else {
-//                try {
-//                    String command = String.format("open \"%s\"", where);
-//                    Runtime.getRuntime().exec(command);
-//                } catch (Exception ex) {
-//                    System.err.println("-- Opening File Explorer --");
-//                    ex.printStackTrace();
-//                }
-                if (Desktop.isDesktopSupported()) {
-                    Desktop.getDesktop().open(new File(where));
-                }
-            }
+
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(new File(where));
         } else {
-            throw new RuntimeException("showFileSystem method on OS [" + os + "] not implemented yet.\nFor now, you should open [" + where + "] by yourself.");
+            if (os.indexOf("Windows") > -1) {
+                String cmd = "cmd /k start /D\"" + where + "\" .";
+                //    System.out.println("Executing [" + cmd + "]");
+                Runtime.getRuntime().exec(cmd); // Can contain blanks, need quotes around it...
+            } else if (os.indexOf("Linux") > -1) {
+                String fileExplorer = "nautilus";
+                Process process = Runtime.getRuntime().exec(String.format("which %s", fileExplorer));
+                int exitCode = process.waitFor();
+                if (exitCode == 0) {
+                    Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
+                } else {
+                    fileExplorer = "pcmanfm";
+                    Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
+                }
+            } else if (os.indexOf("Mac") > -1) {
+                if (false) {
+                    String[] applScriptCmd = {
+                            "osascript",
+                            "-e", "tell application \"Finder\"",
+                            "-e", "activate",
+                            "-e", "<open cmd>", // open cmd: index 6
+                            "-e", "end tell"
+                    };
+                    String pattern = File.separator;
+                    if (pattern.equals("\\")) {
+                        pattern = "\\\\";
+                    }
+                    String[] pathElem = where.split(pattern);
+                    String cmd = "open ";
+                    for (int i = pathElem.length - 1; i > 0; i--) {
+                        cmd += ("folder \"" + pathElem[i] + "\" of ");
+                    }
+                    cmd += "startup disk";
+                    applScriptCmd[6] = cmd;
+                    Runtime.getRuntime().exec(applScriptCmd);
+                } else {
+                    try {
+                        String command = String.format("open \"%s\"", where);
+                        Runtime.getRuntime().exec(command);
+                    } catch (Exception ex) {
+                        System.err.println("-- Opening File Explorer --");
+                        ex.printStackTrace();
+                    }
+                }
+            } else {
+                throw new RuntimeException("showFileSystem method on OS [" + os + "] not implemented yet.\nFor now, you should open [" + where + "] by yourself.");
+            }
         }
     }
 
