@@ -1,25 +1,11 @@
 package coreutilities;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
@@ -180,6 +166,7 @@ public class Utilities {
 
     public static void showFileSystem(String where) throws Exception {
         String os = System.getProperty("os.name");
+        System.out.printf("Opening file explorer on %s, at %s\n", os, where);
         if (os.indexOf("Windows") > -1) {
             String cmd = "cmd /k start /D\"" + where + "\" .";
             //    System.out.println("Executing [" + cmd + "]");
@@ -195,32 +182,45 @@ public class Utilities {
                 Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
             }
         } else if (os.indexOf("Mac") > -1) {
-            String[] applScriptCmd = {
-                    "osascript",
-                    "-e", "tell application \"Finder\"",
-                    "-e", "activate",
-                    "-e", "<open cmd>", // open cmd: index 6
-                    "-e", "end tell"
-            };
-            String pattern = File.separator;
-            if (pattern.equals("\\")) {
-                pattern = "\\\\";
+            if (false) {
+                String[] applScriptCmd = {
+                        "osascript",
+                        "-e", "tell application \"Finder\"",
+                        "-e", "activate",
+                        "-e", "<open cmd>", // open cmd: index 6
+                        "-e", "end tell"
+                };
+                String pattern = File.separator;
+                if (pattern.equals("\\")) {
+                    pattern = "\\\\";
+                }
+                String[] pathElem = where.split(pattern);
+                String cmd = "open ";
+                for (int i = pathElem.length - 1; i > 0; i--) {
+                    cmd += ("folder \"" + pathElem[i] + "\" of ");
+                }
+                cmd += "startup disk";
+                applScriptCmd[6] = cmd;
+                Runtime.getRuntime().exec(applScriptCmd);
+            } else {
+//                try {
+//                    String command = String.format("open \"%s\"", where);
+//                    Runtime.getRuntime().exec(command);
+//                } catch (Exception ex) {
+//                    System.err.println("-- Opening File Explorer --");
+//                    ex.printStackTrace();
+//                }
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(new File(where));
+                }
             }
-            String[] pathElem = where.split(pattern);
-            String cmd = "open ";
-            for (int i = pathElem.length - 1; i > 0; i--) {
-                cmd += ("folder \"" + pathElem[i] + "\" of ");
-            }
-            cmd += "startup disk";
-            applScriptCmd[6] = cmd;
-            Runtime.getRuntime().exec(applScriptCmd);
         } else {
             throw new RuntimeException("showFileSystem method on OS [" + os + "] not implemented yet.\nFor now, you should open [" + where + "] by yourself.");
         }
     }
 
     public static void main(String... args) throws Exception {
-        System.setProperty("os.name", "Mac OS X");
+//        System.setProperty("os.name", "Mac OS X");
         String where = System.getProperty("user.dir");
         System.out.printf("Showing file system at %s\n", where);
         showFileSystem(where);
