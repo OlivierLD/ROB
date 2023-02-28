@@ -36,7 +36,7 @@
    <param id="34">true</param>
    <param id="35">false</param>
    <param id="36">2</param>
-   <param id="37">./patterns/01.Atlantic/02.NorthAtlantic.dyn.fax.grib.ptrn</param>
+   <param id="37">./patterns/01.Atlantic/07.NorthAtlantic.dyn.color.fax.grib.ptrn</param>
    <param id="38">0;0;0</param>
    <param id="39">10, 20, 30, 40, 60, 15, 25, 35, 5</param>
    <param id="40">1.01</param>

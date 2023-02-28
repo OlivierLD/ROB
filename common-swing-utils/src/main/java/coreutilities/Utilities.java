@@ -185,7 +185,15 @@ public class Utilities {
             //    System.out.println("Executing [" + cmd + "]");
             Runtime.getRuntime().exec(cmd); // Can contain blanks, need quotes around it...
         } else if (os.indexOf("Linux") > -1) {
-            Runtime.getRuntime().exec("nautilus " + where);
+            String fileExplorer = "nautilus";
+            Process process = Runtime.getRuntime().exec(String.format("which %s", fileExplorer));
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
+            } else {
+                fileExplorer = "pcmanfm";
+                Runtime.getRuntime().exec(String.format("%s %s", fileExplorer, where));
+            }
         } else if (os.indexOf("Mac") > -1) {
             String[] applScriptCmd = {
                     "osascript",
@@ -212,10 +220,13 @@ public class Utilities {
     }
 
     public static void main(String... args) throws Exception {
-//  System.setProperty("os.name", "Mac OS X");
-//  showFileSystem(System.getProperty("user.dir"));
-        long elapsed = 123456L; // 231234567890L;
-        System.out.println("Readable time (" + elapsed + ") : " + readableTime(elapsed));
+        System.setProperty("os.name", "Mac OS X");
+        String where = System.getProperty("user.dir");
+        System.out.printf("Showing file system at %s\n", where);
+        showFileSystem(where);
+        // long elapsed = 123456L; // 231234567890L;
+        // System.out.println("Readable time (" + elapsed + ") : " + readableTime(elapsed));
+        System.out.println("Hop!");
     }
 
     public static int sign(double d) {
