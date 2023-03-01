@@ -34,7 +34,7 @@ Otherwise...:
 
 ## You will need:
 - `git`
-- `Java` (JDK 11)
+- `Java` (JDK 11 or 8)
 - To access a GPS (and/or NMEA data) through a Serial Port, `librxtx-java`
 - `Python 3` (in some cases)
 
@@ -83,6 +83,12 @@ $ java -version
 $ sudo apt-get update 
 $ sudo apt-get install openjdk-11-jdk
 ```
+or, if the Raspberry Pi you target does not support JDK 11, install JDK 8
+```
+$ sudo apt-get update 
+$ sudo apt-get install openjdk-8-jdk
+```
+
 To install `librxtx-java`:
 ```
 $ sudo apt-get install librxtx-java
