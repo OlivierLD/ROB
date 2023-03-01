@@ -972,9 +972,10 @@
 	events.subscribe('gps-time', val => {
 		// val.format("Y-M-d H:i:s")
 		// let date = gpsTime.format("d-m-Y-l");
+		let date = new Date(val);
 		// console.log(`GPS-TIME: ${val.format("Y-M-d H:i:s")}`);
-		document.getElementById('gps-date').innerText = val.format("Y-M-d");
-		document.getElementById('gps-time').innerText = val.format("H:i:s");
+		document.getElementById('gps-date').innerText = date.format("Y-M-d");
+		document.getElementById('gps-time').innerText = date.format("H:i:s");
 	});
 	events.subscribe('gps-sat', val => {
 		// document.getElementById('bsp').innerText = val.toFixed(2);
