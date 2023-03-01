@@ -6,10 +6,13 @@ The goal here is to see something interesting, as fast as possible.
 This document should help anyone who's not familiar with programming, build, and such technologies.  
 If that is not the case, please do let me know, log a bug or a request.
 
-From this page, you will learn how to install the required software to build and run the whole stuff, _from the git repo_.  
+From this page, you will learn:
+- how to install the required software
+- how to build and run the whole stuff, _from the git repo_.  
+
 In other documents, we will explain how to do a build, and run its result on another (production) machine, without having the production machine to deal with or care about the repo.
 
-There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, without having to deal with the repository, which is obviously not required
+There will be a dedicated section, describing the way to _build and deploy_ the result to another machine, _**without**_ having to deal with the repository, which is obviously not required
 at runtime.
 
 > _**<big>Note</big>**_:
@@ -35,11 +38,10 @@ Otherwise...:
 ## You will need:
 - `git`
 - `Java` (JDK 11 or 8)
+  - The Java code is JDK 8 compatible. 
+  - `gradle` will also be needed for the build. It will be automatically installed if needed, you do _NOT_ need to worry about it.
 - To access a GPS (and/or NMEA data) through a Serial Port, `librxtx-java`
-- `Python 3` (in some cases)
-
-> _**Note**_: The modules of the project are built using `gradle`. It will be downloaded and installed automatically if not there yet.  
-> So, you do _NOT_ need to worry about it.
+- `Python 3` (in some cases, to access external devices, like sensors, oled screens, etc )
 
 All the commands described below are to be run from a terminal (unless mentioned otherwise).
 
@@ -110,12 +112,12 @@ $ git clone https://github.com/OlivierLD/ROB.git
 This will clone the repo (branch `master`) into a directory named `ROB`.
 
 > _**Note**_: Now your repository is cloned, at any time, to refresh it with its last modifications,
-> from any folder under the root (`ROB` in this case), just do a
+> from _any_ folder under the root (`ROB` in this case), just do a
 > ```
 > $ git pull
 > ```
 
-> _**Note**_: To clone the repo, you need an Internet connection.
+> _**Note**_: To clone the repo, or do a pull, you need an Internet connection.
  
 
 ## Build the `NMEA-multiplexer` module
@@ -193,7 +195,7 @@ $ ../../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 BUILD SUCCESSFUL in 8s
 33 actionable tasks: 1 executed, 32 up-to-date
 ```
-If no error message show up, you can proceed to the next step.
+If no error message shows up, you can proceed to the next step.
 
 ### Run it
 There are a lot of examples in this module. To facilitate the access to those examples, there is a demo script, `demoLauncher.sh`,
@@ -252,7 +254,7 @@ the generated QR Code from any other device.
 ![QR Code](./images/QRCodes.png)
 
 > _**Note**_: to kill the server, run the script `./killns.sh`, or
-> use the `K` option in the `demoLauncher.sh`.
+> use the `K` option in the `demoLauncher.sh`'s menu.
 
 ## Things to try
 
@@ -277,7 +279,7 @@ running in a terminal. In addition, you want to see the same data in a Web page.
      < /dev/ttyACM0
      Done!
     ```
-    => Your port name is `/dev/ttyACM0`  
+    &#8680; Your port name is `/dev/ttyACM0` <!-- 8680 (decimal) is 0x21e8 -->  
     > Note: `librxtx` "might" have some issue with this port name...  
     > You may run `mk.link.sh` to map it to `/dev/ttyS80`:   
     > ```
@@ -302,6 +304,8 @@ running in a terminal. In addition, you want to see the same data in a Web page.
   - MUX-builder
     - GPS
     - Character-mode Console
+
+> _**Note**_: `yaml` stands for **Y**et **A**nother **M**arkup **L**anguage. Now widely adopted.
 
 If the multiplexer is started (check your `[port]`), from a browser reach out to <http://localhost:[port]/web/muxbuilder/dragndrop/mux-builder.html>, or from the <http://localhost:[port]/web/index.html>, `Nav menu`,
 `Mux builder, graphical version`.   
