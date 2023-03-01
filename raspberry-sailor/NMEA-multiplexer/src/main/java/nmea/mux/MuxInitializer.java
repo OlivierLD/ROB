@@ -661,6 +661,8 @@ public class MuxInitializer {
                             String resource = muxProps.getProperty(String.format("forward.%s.rest.resource", MUX_IDX_FMT.format(fwdIdx)));
                             String verb = muxProps.getProperty(String.format("forward.%s.rest.verb", MUX_IDX_FMT.format(fwdIdx)));
                             String qs = muxProps.getProperty(String.format("forward.%s.rest.query.string", MUX_IDX_FMT.format(fwdIdx)));
+                            String closeResource = muxProps.getProperty(String.format("forward.%s.rest.onclose.resource", MUX_IDX_FMT.format(fwdIdx)));
+                            String closeVerb = muxProps.getProperty(String.format("forward.%s.rest.onclose.verb", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 if (strPort != null) {
                                     restPort = Integer.parseInt(strPort);
@@ -679,7 +681,11 @@ public class MuxInitializer {
                                 }
                                 Forwarder cachePublisher = null;
                                 if (cacheSubClass == null) {
-                                    cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs);
+                                    if (closeResource != null) {
+                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, closeResource, closeVerb);
+                                    } else {
+                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs);
+                                    }
                                 } else {
                                     // TODO Manage this subclass case
                                     System.err.println("Subclass case not managed yet...");

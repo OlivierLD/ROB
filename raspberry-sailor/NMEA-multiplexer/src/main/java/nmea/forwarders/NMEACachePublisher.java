@@ -32,6 +32,9 @@ public class NMEACachePublisher implements Forwarder {
     protected String resource = "/";
     protected String queryString = null;
 
+    protected String onCloseResource = null;
+    protected String onCloseVerb = null;
+
     public static NMEACachePublisher getInstance() {
         return instance;
     }
@@ -43,6 +46,18 @@ public class NMEACachePublisher implements Forwarder {
                               Integer port,
                               String resource,
                               String qs) throws Exception {
+        this(betweenPublish, verb, protocol, machineName, port, resource, qs, null, null);
+    }
+
+    public NMEACachePublisher(Long betweenPublish,
+                              String verb,
+                              String protocol,
+                              String machineName,
+                              Integer port,
+                              String resource,
+                              String qs,
+                              String doOnClose,
+                              String onCloseVerb) throws Exception {
 
         instance = this;
 
@@ -66,6 +81,12 @@ public class NMEACachePublisher implements Forwarder {
         }
         if (qs != null) {
             this.queryString = qs;
+        }
+        if (doOnClose != null) {
+            this.onCloseResource = doOnClose;
+        }
+        if (onCloseVerb != null) {
+            this.onCloseVerb = onCloseVerb;
         }
 
         int nbTry = 0;
@@ -196,6 +217,80 @@ public class NMEACachePublisher implements Forwarder {
     @Override
     public void close() {
         System.out.println("- Stop writing to " + this.getClass().getName());
+
+        // Add an 'onclose' action...., like to reset an oled screen?
+        if (this.onCloseResource != null && this.onCloseVerb != null) {
+            try {
+                // Java 11
+                // Map<String, String> headers = Map.of("Content-Type", "application/json");
+                // Java 8
+                Map<String, String> headers = new HashMap<>();
+                // headers.put("Content-Type", "application/json");
+
+                switch (this.onCloseVerb) {
+                    case "POST":
+                        String postRequest = String.format("%s://%s:%d%s",
+                                this.protocol,
+                                this.machineName,
+                                this.port,
+                                this.onCloseResource);
+                        if (this.verbose) {
+                            System.out.printf("%s\n", postRequest);
+                        }
+                        try {
+                            HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, null);
+                            if (this.verbose) {
+                                System.out.printf("POST %s with %s: Response code %d, message: %s\n",
+                                        postRequest,
+                                        null,
+                                        httpResponse.getCode(),
+                                        httpResponse.getPayload());
+                            }
+                        } catch (Throwable restFailure) {
+                            System.err.printf(">> POST Error in NMEACachePublisher: %s\n", restFailure.getMessage());
+                            if (instance.verbose) {
+                                restFailure.printStackTrace();
+                            }
+                        }
+                        break;
+                    case "PUT":
+                        String putRequest = String.format("%s://%s:%d%s",
+                                this.protocol,
+                                this.machineName,
+                                this.port,
+                                this.onCloseResource);
+                        if (instance.verbose) {
+                            System.out.printf("%s\n", putRequest);
+                        }
+                        try {
+                            HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, null);
+                            if (this.verbose) {
+                                System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
+                                        putRequest,
+                                        null,
+                                        putResponse.getCode(),
+                                        putResponse.getPayload());
+                            }
+                        } catch (Throwable restFailure) {
+                            System.err.printf(">> PUT Error in NMEACachePublisher: %s\n", restFailure.getMessage());
+                            if (instance.verbose) {
+                                restFailure.printStackTrace();
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } catch (Exception ex) {
+                if (instance.verbose) {
+                    System.err.println(">> Error!");
+                    ex.printStackTrace();
+                }
+                throw new RuntimeException(ex);
+            }
+
+        }
+
         try {
             // Stop Cache thread
             keepWorking = false;
