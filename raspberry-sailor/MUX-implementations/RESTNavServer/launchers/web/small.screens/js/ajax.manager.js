@@ -241,11 +241,12 @@ function onMessage(json) {
 		}
 		try {
 			let gdt = json["GPS Date & Time"];
-			// let date = new Date(Date.UTC(gdt.fmtDate.year, gdt.fmtDate.month - 1, gdt.fmtDate.day, gdt.fmtDate.hour, gdt.fmtDate.min, gdt.fmtDate.sec, 0));
-			// let date = new Date(gdt.epoch); 
-            // let gpsDate = new Date(gdt.epoch); // new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            // let gpsDate =  new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
-			let gpsDate = new Date(gdt.fmtDate.year, gdt.fmtDate.month - 1, gdt.fmtDate.day, gdt.fmtDate.hour, gdt.fmtDate.min, gdt.fmtDate.sec);
+			let gpsDate = new Date(gdt.fmtDate.year,
+			                       gdt.fmtDate.month - 1,
+			                       gdt.fmtDate.day,
+			                       gdt.fmtDate.hour,
+			                       gdt.fmtDate.min,
+			                       gdt.fmtDate.sec).getTime();
 			// UTC dates
 			events.publish('gps-time', gpsDate);
 		} catch (err) {

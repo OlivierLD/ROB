@@ -93,7 +93,7 @@
 			let getData = getLogFiles(); // A promise
 			getData.then((value) => {
 				let logFiles = JSON.parse(value);
-//      console.log("Log files", json);
+		        // console.log("Log files", json);
 				// get active file forwarder lo file name
 				let getForwarders = self.getForwarders(); // Another promise
 				getForwarders.then((value) => {
@@ -110,7 +110,7 @@
 							message = errmess;
 						}
 					}
-					console.log("Failed to get the forwarders list..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+					console.log("Failed to get the forwarder list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 				});
 			}, (error, errmess) => {
 				var message;
@@ -121,14 +121,14 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the log files list..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to get the log files list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 			});
 		}
 
 		function deleteLog(fName) {
 			let deleteData = deleteLogFile(fName); // A promise
 			deleteData.then((value) => {
-//		var json = JSON.parse(value);
+                // var json = JSON.parse(value);
 				console.log("Delete log file OK");
 				// Rebuild the list
 				getLogFilesList();
@@ -141,7 +141,7 @@
 						message = errmess;
 					}
 				}
-				console.log("Failed to delete the log file..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+				console.log("Failed to delete the log file..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 			});
 		}
 

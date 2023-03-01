@@ -107,7 +107,14 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "log (" + err + ")");
 		}
 		try {
-			let gpsDate = json["GPS Date & Time"].date;
+			// let gpsDate = json["GPS Date & Time"].date;
+			let gdt = json["GPS Date & Time"];
+			let gpsDate = new Date(gdt.fmtDate.year,
+			                       gdt.fmtDate.month - 1,
+			                       gdt.fmtDate.day,
+			                       gdt.fmtDate.hour,
+			                       gdt.fmtDate.min,
+			                       gdt.fmtDate.sec).getTime();
 			events.publish('gps-time', gpsDate);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
