@@ -154,9 +154,9 @@ function onMessage(json) {
 		}
 		if (json["GPS Date & Time"]) {
 			try {
-				// let gpsDate = json["GPS Date & Time"].date; // TODO Time Zone issue. Use fmtDate
-				let gpsDate = new Date(json["GPS Date & Time"].fmtDate.year, 
-				                       json["GPS Date & Time"].fmtDate.month, 
+				// let gpsDate = json["GPS Date & Time"].date; // Time Zone issue. Use fmtDate
+				let gpsDate = new Date(json["GPS Date & Time"].fmtDate.year,
+				                       json["GPS Date & Time"].fmtDate.month - 1, // Jan: 0 ... Dec: 11
 									   json["GPS Date & Time"].fmtDate.day, 
 									   json["GPS Date & Time"].fmtDate.hour, 
 									   json["GPS Date & Time"].fmtDate.min, 
