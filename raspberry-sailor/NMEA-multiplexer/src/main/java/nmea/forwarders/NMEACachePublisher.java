@@ -45,8 +45,9 @@ public class NMEACachePublisher implements Forwarder {
                               String machineName,
                               Integer port,
                               String resource,
-                              String qs) throws Exception {
-        this(betweenPublish, verb, protocol, machineName, port, resource, qs, null, null);
+                              String qs,
+                              boolean verbose) throws Exception {
+        this(betweenPublish, verb, protocol, machineName, port, resource, qs, verbose, null, null);
     }
 
     public NMEACachePublisher(Long betweenPublish,
@@ -56,10 +57,13 @@ public class NMEACachePublisher implements Forwarder {
                               Integer port,
                               String resource,
                               String qs,
+                              boolean verbose,
                               String doOnClose,
                               String onCloseVerb) throws Exception {
 
         instance = this;
+
+        this.verbose = verbose;
 
         if (betweenPublish != null) {
             this.betweenPublish = betweenPublish * 1_000L;
@@ -218,6 +222,9 @@ public class NMEACachePublisher implements Forwarder {
     public void close() {
         System.out.println("- Stop writing to " + this.getClass().getName());
 
+        if (this.verbose) {
+            System.out.printf("On close, resource: %s, verb: %s\n", this.onCloseResource, this.onCloseVerb);
+        }
         // Add an 'onclose' action...., like to reset an oled screen?
         if (this.onCloseResource != null && this.onCloseVerb != null) {
             try {
@@ -235,7 +242,7 @@ public class NMEACachePublisher implements Forwarder {
                                 this.port,
                                 this.onCloseResource);
                         if (this.verbose) {
-                            System.out.printf("%s\n", postRequest);
+                            System.out.printf("onClose doing a POST %s\n", postRequest);
                         }
                         try {
                             HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, null);
@@ -260,7 +267,7 @@ public class NMEACachePublisher implements Forwarder {
                                 this.port,
                                 this.onCloseResource);
                         if (instance.verbose) {
-                            System.out.printf("%s\n", putRequest);
+                            System.out.printf("onClose doing a PUT %s\n", putRequest);
                         }
                         try {
                             HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, null);
@@ -313,6 +320,8 @@ public class NMEACachePublisher implements Forwarder {
         protected int port;
         protected String resource;
         protected String queryString;
+        protected String doOnClose;
+        protected String onCloseVerb;
 
         public NMEACacheBean() {}   // This is for Jackson
         public NMEACacheBean(NMEACachePublisher instance,
@@ -322,7 +331,9 @@ public class NMEACachePublisher implements Forwarder {
                              String machineName,
                              int port,
                              String resource,
-                             String qs) {
+                             String qs,
+                             String doOnClose,
+                             String onCloseVerb) {
             this.cls = instance.getClass().getName();
             this.betweenLoops = betweenLoops;
             this.protocol = protocol;
@@ -331,6 +342,8 @@ public class NMEACachePublisher implements Forwarder {
             this.port = port;
             this.resource = resource;
             this.queryString = qs;
+            this.doOnClose = doOnClose;
+            this.onCloseVerb = onCloseVerb;
         }
 
         public String getCls() {
@@ -368,11 +381,19 @@ public class NMEACachePublisher implements Forwarder {
         public String getQueryString() {
             return queryString;
         }
+
+        public String getDoOnClose() {
+            return doOnClose;
+        }
+
+        public String getOnCloseVerb() {
+            return onCloseVerb;
+        }
     }
 
     @Override
     public Object getBean() {
-        return new NMEACacheBean(this, this.betweenPublish, this.protocol, this.verb, this.machineName, this.port, this.resource, this.queryString);
+        return new NMEACacheBean(this, this.betweenPublish, this.protocol, this.verb, this.machineName, this.port, this.resource, this.queryString, this.onCloseResource, this.onCloseVerb);
     }
 
     @Override
@@ -380,16 +401,19 @@ public class NMEACachePublisher implements Forwarder {
 		
 		String betweenLoops = props.getProperty("between.loops", "1");
         try {
-            betweenPublish = Long.parseLong(betweenLoops) * 1_000L;
+            this.betweenPublish = Long.parseLong(betweenLoops) * 1_000L;
         } catch (NumberFormatException nfe) {
             System.err.println("Using default value for between.loops time");
         }
-        verbose = "true".equals(props.getProperty("verbose", "false"));
-        protocol = props.getProperty("rest.protocol", "http");  // Make sure it is http or https
-        verb = props.getProperty("rest.verb", "PUT");
-        machineName = props.getProperty("rest.machine-name", "http");
-        port = Integer.parseInt(props.getProperty("rest.port", "8080")); // TODO trap exception
-        resource = props.getProperty("rest.resource", "/");
-        queryString = props.getProperty("rest.query.string");
+        this.verbose = "true".equals(props.getProperty("verbose", "false"));
+        this.protocol = props.getProperty("rest.protocol", "http");  // Make sure it is http or https
+        this.verb = props.getProperty("rest.verb", "PUT");
+        this.machineName = props.getProperty("rest.machine-name", "http");
+        this.port = Integer.parseInt(props.getProperty("rest.port", "8080")); // TODO trap exception
+        this.resource = props.getProperty("rest.resource", "/");
+        this.queryString = props.getProperty("rest.query.string");
+
+        this.onCloseResource = props.getProperty("rest.onclose.resource");;
+        this.onCloseVerb = props.getProperty("rest.onclose.verb");;
     }
 }

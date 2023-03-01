@@ -654,6 +654,7 @@ public class MuxInitializer {
                             String cacheSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             Integer restPort = null;
                             Long betweenLoops = null;
+                            boolean fwdVerbose = "true".equals(muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)), "false"));
                             String strPort = muxProps.getProperty(String.format("forward.%s.rest.port", MUX_IDX_FMT.format(fwdIdx)));
                             String strBetweenLoops = muxProps.getProperty(String.format("forward.%s.between-loops", MUX_IDX_FMT.format(fwdIdx)));
                             String protocol = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(fwdIdx)));
@@ -682,9 +683,9 @@ public class MuxInitializer {
                                 Forwarder cachePublisher = null;
                                 if (cacheSubClass == null) {
                                     if (closeResource != null) {
-                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, closeResource, closeVerb);
+                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, closeResource, closeVerb);
                                     } else {
-                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs);
+                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose);
                                     }
                                 } else {
                                     // TODO Manage this subclass case
