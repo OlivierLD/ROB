@@ -44,7 +44,7 @@ forwarders:
 #    rest.query.string: ""
     rest.onclose.resource: /ssd1306/clear-screen
     rest.onclose.verb: PUT
-    verbose: true
+    verbose: false
   - type: file
     # filename: data.nmea
     # flush: true
