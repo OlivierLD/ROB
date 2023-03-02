@@ -151,7 +151,7 @@ $
 ```
 If this is the case, try a
 ```
-$ ./mux.sh  mux-configs/nmea.mux.replay.big.log.yaml 
+$ ./mux.sh mux-configs/nmea.mux.replay.big.log.yaml 
 ```
 This would replay an archived log file, and spit out its content on the terminal.  
 Stop it with a `[Ctrl C]`.
