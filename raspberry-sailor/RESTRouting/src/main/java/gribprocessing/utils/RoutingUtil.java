@@ -169,9 +169,9 @@ public class RoutingUtil {
 		RoutingPoint center = startFrom;
 
 		int nbIntermediateIndex = 0;
-		if (intermediateWP != null)
+		if (intermediateWP != null) {
 			finalDestination = intermediateWP.get(nbIntermediateIndex++);
-
+		}
 		double gcDistance = 0D;
 		RoutingPoint aimFor = null;
 		int bestRouteIndex = 0;
@@ -183,11 +183,11 @@ public class RoutingUtil {
 //  System.out.println("Starting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString());
 
 		// Calculate bearing to destination (from start)
-		if (aimFor == null)
+		if (aimFor == null) {
 			brg = getBearing(center);
-		else
+		} else {
 			brg = getBearingTo(center, aimFor);
-
+		}
 		List<List<RoutingPoint>> allIsochrons = new ArrayList<>();
 
 		// Initialization
@@ -221,7 +221,7 @@ public class RoutingUtil {
 			while (keepLooping && !interruptRouting) {
 //      timer = logDiffTime(timer, "Milestone 1");
 				double localSmallOne = Double.MAX_VALUE;
-				List<List<RoutingPoint>> temp = new ArrayList<List<RoutingPoint>>();
+				List<List<RoutingPoint>> temp = new ArrayList<>();
 				Iterator<List<RoutingPoint>> dimOne = data.iterator();
 				int nbNonZeroSpeed = 0;
 				boolean metLand = false;
@@ -236,7 +236,7 @@ public class RoutingUtil {
 					while (!interruptRouting && keepLooping && dimTwo.hasNext()) {
 //          timer = logDiffTime(timer, "Milestone 3");
 						RoutingPoint newCurveCenter = dimTwo.next();
-						List<RoutingPoint> oneCurve = new ArrayList<RoutingPoint>(10);
+						List<RoutingPoint> oneCurve = new ArrayList<>(10);
 
 						wind = GribHelper.gribLookup(newCurveCenter.getPosition(), wgd, currentDate);
 						if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
@@ -251,11 +251,11 @@ public class RoutingUtil {
 //          timer = logDiffTime(timer, "Milestone 4");
 
 //          brg = getBearing(newCurveCenter); // 7-apr-2010.
-						if (aimFor == null)
+						if (aimFor == null) {
 							brg = getBearing(newCurveCenter);
-						else // Finer Routing
+						} else { // Finer Routing
 							brg = getBearingTo(newCurveCenter, aimFor);
-
+						}
 //          nbNonZeroSpeed = 0;
 						// Calculate isochron from center
 						for (int bearing = brg - routingForkWidth / 2;
@@ -263,9 +263,9 @@ public class RoutingUtil {
 						     bearing += routingStep) {
 //            timer = logDiffTime(timer, "Milestone 5");
 							int windDir = 0;
-							if (wind != null)
+							if (wind != null) {
 								windDir = wind.winddir;
-							else {
+							} else {
 //              Context.getInstance().fireLogging("Wind is null..., aborting (out of the GRIB)\n");
 //              System.out.println("Aborting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString()+ ", wind is null.");
 								//      keepLooping = false;
@@ -274,8 +274,9 @@ public class RoutingUtil {
 							int twa;
 							for (twa = bearing - windDir; twa < 0; twa += 360) ;
 							double wSpeed = 0.0D;
-							if (wind != null) // Should be granted already...
+							if (wind != null) { // Should be granted already...
 								wSpeed = wind.windspeed;
+							}
 							// In case user said to avoid TWS > xxx
 							if (maxTWS > -1) {
 								if (wSpeed > maxTWS) {
@@ -345,8 +346,9 @@ public class RoutingUtil {
 
 						}
 //          timer = logDiffTime(timer, "Milestone 7");
-						if (!interruptRouting)
+						if (!interruptRouting) {
 							temp.add(oneCurve);
+						}
 					}
 				}
 				long after = System.currentTimeMillis();
@@ -361,7 +363,7 @@ public class RoutingUtil {
 //        System.out.println("Reducing...");
 //        System.out.print("Reducing...");
 //        before = System.currentTimeMillis();
-					finalCurve = calculateEnveloppe(data, center, verbose);
+					finalCurve = calculateEnvelope(data, center, verbose);
 					if (aimFor != null) {
 						if (isPointIn(aimFor, finalCurve, center)) {
 							try {
@@ -453,17 +455,17 @@ public class RoutingUtil {
 						if (intermediateWP != null) {
 							smallestDist = Double.MAX_VALUE; // Reset, for the next leg
 							keepLooping = true;
-							finalCurve = new ArrayList<RoutingPoint>();
+							finalCurve = new ArrayList<>();
 							finalCurve.add(closest);
 							center = closest;
 							center.setDate(currentDate);
 
-							if (nbIntermediateIndex < intermediateWP.size())
+							if (nbIntermediateIndex < intermediateWP.size()) {
 								finalDestination = intermediateWP.get(nbIntermediateIndex++);
-							else {
-								if (!finalDestination.getPosition().equals(destination.getPosition()))
+							} else {
+								if (!finalDestination.getPosition().equals(destination.getPosition())) {
 									finalDestination = destination;
-								else {
+								} else {
 									keepLooping = false;
 									if (verbose) {
 										System.out.println("Destination reached, aiming (inter-WP) [" + (aimFor != null ? aimFor.getPosition().toString() : "none") + "] finalDestination [" + finalDestination.getPosition().toString() + "]");
@@ -476,16 +478,16 @@ public class RoutingUtil {
 						}
 						if (nbNonZeroSpeed == 0) {
 							if (interruptedBecauseTooOld) {
-								System.out.println(String.format("GRIB exhausted, %d isochrons", allIsochrons.size()));
+								System.out.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
 							} else {
-								System.out.println(String.format("Routing aborted after %d isochrons", allIsochrons.size()));
+								System.out.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
 							}
 						}
 					} else {
 						if (interruptedBecauseTooOld) {
-							System.out.println(String.format("GRIB exhausted, %d isochrons", allIsochrons.size()));
+							System.out.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
 						} else {
-							System.out.println(String.format("Routing aborted after %d isochrons", allIsochrons.size()));
+							System.out.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
 						}
 					}
 				}
@@ -494,7 +496,7 @@ public class RoutingUtil {
 //      timer = logDiffTime(timer, "Milestone 12");
 				if (keepLooping) {
 					allIsochrons.add(finalCurve);
-					data = new ArrayList<List<RoutingPoint>>();
+					data = new ArrayList<>();
 					data.add(finalCurve);
 					currentDate = arrivalDate;
 				}
@@ -560,7 +562,7 @@ public class RoutingUtil {
 	}
 
 	public static <T> List<T> revertList(List<T> list) {
-		List<T> inverted = new ArrayList<T>(list.size());
+		List<T> inverted = new ArrayList<>(list.size());
 		int listSize = list.size();
 		for (int i = listSize - 1; i >= 0; i--) {
 			inverted.add(list.get(i));
@@ -569,15 +571,15 @@ public class RoutingUtil {
 	}
 
 	public static List<RoutingPoint> getBestRoute(RoutingPoint closestPoint, List<List<RoutingPoint>> allIsochrons) {
-		List<RoutingPoint> bestRoute = new ArrayList<RoutingPoint>(allIsochrons.size());
+		List<RoutingPoint> bestRoute = new ArrayList<>(allIsochrons.size());
 		boolean go = true;
 		RoutingPoint start = closestPoint;
 		bestRoute.add(start);
 		while (go) {
 			RoutingPoint next = start.getAncestor();
-			if (next == null)
+			if (next == null) {
 				go = false;
-			else {
+			} else {
 				bestRoute.add(next);
 				start = next;
 			}
@@ -612,8 +614,8 @@ public class RoutingUtil {
 	}
 
 	// Possible optimization ?
-	private static List<RoutingPoint> calculateEnveloppe(List<List<RoutingPoint>> bulkPoints, RoutingPoint center, boolean verbose) {
-		List<RoutingPoint> returnCurve = new ArrayList<RoutingPoint>();
+	private static List<RoutingPoint> calculateEnvelope(List<List<RoutingPoint>> bulkPoints, RoutingPoint center, boolean verbose) {
+		List<RoutingPoint> returnCurve = new ArrayList<>();
 		long before = System.currentTimeMillis();
 		// Put ALL the points in the finalCurve
 		Iterator<List<RoutingPoint>> dimOne = bulkPoints.iterator();
@@ -643,7 +645,9 @@ public class RoutingUtil {
 			Iterator<List<RoutingPoint>> dimOneBis = bulkPoints.iterator();
 			while (!interruptRouting && dimOneBis.hasNext()) {
 				List<RoutingPoint> curveBis = dimOneBis.next();
-				if (curveBis.equals(curve)) continue;
+				if (curveBis.equals(curve)) {
+					continue;
+				}
 				Iterator<RoutingPoint> dimTwoBis = curveBis.iterator();
 				while (!interruptRouting && dimTwoBis.hasNext()) {
 					RoutingPoint isop = dimTwoBis.next();
@@ -683,8 +687,8 @@ public class RoutingUtil {
 		interruptRouting = true;
 	}
 
-	private static Pattern pattern = null;
-	private static Matcher matcher = null;
+//	private static Pattern pattern = null;
+//	private static Matcher matcher = null;
 
 	// TODO What-If routing
 
@@ -858,8 +862,9 @@ public class RoutingUtil {
 					String hdg = Integer.toString(ic.getHdg());
 					output.append(rp.getPosition().toString() + " : " + date + ", tws:" + tws + ", twd:" + twd + ", bsp:" + bsp + ", hdg:" + hdg + "\n");
 				} else if (outputOption == OutputOption.KML) {
-					if (firstKMLHeading == -1)
+					if (firstKMLHeading == -1) {
 						firstKMLHeading = ic.getHdg();
+					}
 					kmlRoute += (rp.getPosition().getG() + "," + rp.getPosition().getL() + ",0\n");
 					String tws = XX22.format(ic.getTws());
 					String twd = Integer.toString(ic.getTwd());

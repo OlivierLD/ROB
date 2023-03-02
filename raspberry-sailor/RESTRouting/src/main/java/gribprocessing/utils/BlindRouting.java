@@ -268,7 +268,7 @@ public class BlindRouting {
 			System.out.println("Using polar file " + fName);
 			System.out.println("Starting " + startDate.toString());
 		}
-		RoutingUtil.RoutingResult routingResult = RoutingUtil.calculateIsochrons(
+		RoutingUtil.RoutingResult routingResult = RoutingUtil.calculateIsochrons(  // TODO Look into it, takes tooooooo long.
 				fName,
 				center,
 				destination,

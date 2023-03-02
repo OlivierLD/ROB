@@ -716,6 +716,7 @@ GRIB �  `��!i 
 				StringReader stringReader = new StringReader(payload);
 				try {
 					RoutingRequest routingRequest = mapper.readValue(stringReader, RoutingRequest.class);
+					long before = System.currentTimeMillis();
 					RoutingUtil.RoutingResult routing = new BlindRouting().calculate(
 							routingRequest.fromL,
 							routingRequest.fromG,
@@ -735,8 +736,9 @@ GRIB �  `��!i 
 							routingRequest.avoidLand,
 							routingRequest.verbose
 					);
+					long after = System.currentTimeMillis();
 					if (verbose) {
-						System.out.println("--- BlindRouting().calculate completed. ---");
+						System.out.printf("--- BlindRouting().calculate completed in %d ms ---\n", (after - before));
 					}
 					if (false) {  // TODO An option in the request ?
 						System.out.println("--- Spitting out fullrouting.json ---");
