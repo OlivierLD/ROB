@@ -4,7 +4,6 @@
  | Should be suitable for a small screen device (tablet, smart-phone, smart-watch...)
  | Warning: this is not a responsive UI.
  | Can use swipe gestures on cell-phones and tablets.
- | Shows how to display - or not - the screens (aka slides) for various data.
  |
  | Available data:
  | - GPS Position (event 'pos')
@@ -13,6 +12,7 @@
  | - COG (event 'cog')
  | - SOG (event 'sog')
  | - MAP (events 'pos', 'cog', 'sog')
+ |
  | - PRMSL (event 'prmsl')
  | - AT (event 'at')
  | - HUM (event 'hum')
@@ -452,7 +452,7 @@
 
 
 <div style="text-align: center;" id="display-bar">
-<!-- Here we have the displays toolbar -->
+<!-- Here, on top, we have the displays toolbar -->
 <!--
 	Categories & Displays
 	- GPS:
@@ -470,7 +470,6 @@
 		- 10: RAW
 -->
 	<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
-	<!--div class="tab" style="display: block;"-->
 		<button class="tablinks active" onclick="showSlides(1);" title="GPS Position">Position</button>
 		<button class="tablinks" onclick="showSlides(2);" title="UTC Date & Time&#13;from GPS">Date & Time</button>
 		<button class="tablinks" onclick="showSlides(3);" title="GPS Satellites in view">SAT</button>
@@ -489,7 +488,7 @@
 
 </div>
 
-<!-- Here are the slides (the screens) -->
+<!-- Here, in the middle, are the slides (the screens) -->
 <div class="slideshow-container">
 
 	<div class="the-slides fade">
@@ -703,7 +702,7 @@
 </div>
 
 <div id="category-bar">
-	<!-- Here we have the categories toolbar -->
+	<!-- Here, at the bottom, we have the categories toolbar -->
 	<div class="tab" style="display: grid; grid-template-columns: auto auto auto;">
 		<button class="tablinks active" onclick="showCategoryBar(1);" title="GPS Data">GPS Data</button>
 		<button class="tablinks" onclick="showCategoryBar(2);" title="Atmospheric Data">Atmospheric Data</button>

@@ -163,6 +163,20 @@
             --font: Arial;
         }
 
+        .colored-01 {
+            --bg-color: transparent;
+            --with-gradient: false;
+            --display-background-gradient-from: black;
+            --display-background-gradient-to: LightGrey;
+            --with-display-shadow: true;
+            --shadow-color: rgba(0, 0, 0, 0.75);
+            --outline-color: white;
+            --value-color: orange;
+            --value-outline-color: lime;
+            --value-nb-decimal: 1;
+            --font: Arial;
+        }
+
 
     </style>
 
@@ -181,6 +195,7 @@
     <script type="module" src="../webcomponents/Thermometer.js"></script>
     <script type="module" src="../webcomponents/DirectionDisplay.js"></script>
     <script type="module" src="../webcomponents/AnalogDisplay.js"></script>
+    <script type="module" src="../webcomponents/ColoredScale.js"></script>
     <script type="module" src="../webcomponents/Beaufort.js"></script>
 
 
@@ -412,12 +427,15 @@
                                 try {
                                     displayValue = value.toFixed(2);
                                     displayUnit = unit;
+                                    // Web Component
+                                    document.getElementById('waves-01').value = displayValue;
                                 } catch (err) {
                                     displayValue = "xx";
                                     displayUnit = "-";
                                     // console.log(err);
                                     messageManager(err);
                                 }
+
                                 break;
                             default:
                                 break;
@@ -1438,8 +1456,8 @@
             <td title="GRIB Data at the mouse" style="height: 0; border: 1px solid orange; border-radius: 5px;">
                 <div id="grib-web-comps" style="display: none;">
                     <div style="display: grid;
-                                grid-template-columns: auto auto auto auto auto;
-                                grid-template-areas: 'top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05' 'bottom bottom bottom bottom bottom';">
+                                grid-template-columns: auto auto auto auto auto auto;
+                                grid-template-areas: 'top top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05 middle-06' 'bottom bottom bottom bottom bottom bottom';">
                         <span style="grid-area: top; padding-left: 5px;">GRIB Data, at the mouse, on the chart <span id="mouse-pos" style="font-family:'Courier New', Courier, monospace; font-weight: bold;"></span></span>                            
                         <!-- True Wind Speed in knots<br/ -->
                         <analog-display class="analogdisplay-monochrome-orange"
@@ -1503,16 +1521,27 @@
 
                         <!-- Precipitation Rate in mm/h<br/ -->
                         <pluvio-meter id="rain-01"
-                                    class="pluviometer-orange"
-                                    style="grid-area: middle-05;"
-                                    title="m/m per hour"
-                                    min-value="0"
-                                    max-value="30"
-                                    major-ticks="5"
-                                    minor-ticks="0.50"
-                                    value="0"
-                                    width="80"
-                                    height="220"></pluvio-meter>
+                                      class="pluviometer-orange"
+                                      style="grid-area: middle-05;"
+                                      title="m/m per hour"
+                                      min-value="0"
+                                      max-value="30"
+                                      major-ticks="5"
+                                      minor-ticks="0.50"
+                                      value="0"
+                                      width="80"
+                                      height="220"></pluvio-meter>
+
+                        <colored-scale id="waves-01"
+                                       title="Wave height in meters"
+                                       class="colored-01"
+                                       style="grid-area: middle-06;"
+                                       value="0.0"
+                                       orientation="VERTICAL"
+                                       unit="m"
+                                       scale="1"
+                                       width="60"
+                                       height="210"></colored-scale>
 
                         <beaufort-scale id="beaufort-01"
                                         class="beaufort-01"
