@@ -108,23 +108,23 @@ public class RoutingPoint extends Point {
 		return gribTooOld;
 	}
 
-	public RoutingPoint getParent() {
-		return parent;
-	}
+//	public RoutingPoint getParent() {
+//		return parent;
+//	}
 
-	public int getxOffset() {
-		return xOffset;
-	}
+//	public int getxOffset() {
+//		return xOffset;
+//	}
 
-	public int getyOffset() {
-		return yOffset;
-	}
+//	public int getyOffset() {
+//		return yOffset;
+//	}
 
-	public double getxFactor() {
-		return xFactor;
-	}
+//	public double getxFactor() {
+//		return xFactor;
+//	}
 
-	public double getyFactor() {
-		return yFactor;
-	}
+//	public double getyFactor() {
+//		return yFactor;
+//	}
 }

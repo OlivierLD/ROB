@@ -347,7 +347,12 @@ let getBGColor = function(value, type) {
 let bestRouteToPlot = undefined;
 let plotBestRoute = function(canvas, context) {
 //console.log("Plotting the best computed route: ", bestRouteToPlot);
-	let waypoints = bestRouteToPlot.waypoints;
+	let waypoints;
+	if (bestRouteToPlot.waypoints) { // This is for dev...
+	  	waypoints = bestRouteToPlot.waypoints;
+	} else {
+		waypoints = JSON.parse(bestRouteToPlot.bestRoute).waypoints;
+	}
 	context.save();
 	context.strokeStyle = 'orange';
 	context.lineWidth = 3;

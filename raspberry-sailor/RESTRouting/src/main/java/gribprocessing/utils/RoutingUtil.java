@@ -85,12 +85,12 @@ public class RoutingUtil {
 			this.bestRoute = bestRoute;
 			return this;
 		}
-		public List<List<RoutingPoint>> isochronals() {
-			return this.isochronals;
-		}
-		public String bestRoute() {
-			return this.bestRoute;
-		}
+//		public List<List<RoutingPoint>> isochronals() {
+//			return this.isochronals;
+//		}
+//		public String bestRoute() {
+//			return this.bestRoute;
+//		}
 
 		public RoutingPoint getClosest() {
 			return closest;
@@ -177,7 +177,7 @@ public class RoutingUtil {
 		int bestRouteIndex = 0;
 		if (bestRoute != null && bestRoute.size() > 0) {
 			aimFor = bestRoute.get(++bestRouteIndex);
-			System.out.println("Aiming for [" + aimFor.getPosition() + "]");
+			System.out.println("Aiming for [" + aimFor.getPosition() + "], " + (new Date()).toString());
 		}
 
 //  System.out.println("Starting routing from " + center.getPosition().toString() + " to " + destination.getPosition().toString());
@@ -219,7 +219,7 @@ public class RoutingUtil {
 		{
 			// Start from "center"
 			while (keepLooping && !interruptRouting) {
-//      timer = logDiffTime(timer, "Milestone 1");
+		        // timer = logDiffTime(timer, "Milestone 1");
 				double localSmallOne = Double.MAX_VALUE;
 				List<List<RoutingPoint>> temp = new ArrayList<>();
 				Iterator<List<RoutingPoint>> dimOne = data.iterator();
@@ -228,27 +228,27 @@ public class RoutingUtil {
 				boolean allowOtherRoute = false;
 				long before = System.currentTimeMillis();
 				while (!interruptRouting && dimOne.hasNext() && keepLooping) {
-//        timer = logDiffTime(timer, "Milestone 2");
+			        // timer = logDiffTime(timer, "Milestone 2");
 					List<RoutingPoint> curve = dimOne.next();
 					Iterator<RoutingPoint> dimTwo = curve.iterator();
 					nbNonZeroSpeed = 0;
 					metLand = false;
 					while (!interruptRouting && keepLooping && dimTwo.hasNext()) {
-//          timer = logDiffTime(timer, "Milestone 3");
+			            // timer = logDiffTime(timer, "Milestone 3");
 						RoutingPoint newCurveCenter = dimTwo.next();
 						List<RoutingPoint> oneCurve = new ArrayList<>(10);
 
 						wind = GribHelper.gribLookup(newCurveCenter.getPosition(), wgd, currentDate);
 						if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
 							center.setGribTooOld(true);
-//            System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
+							// System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
 							if (stopIfGRIB2old) {
 								keepLooping = false;
 								interruptedBecauseTooOld = true;
 								System.out.println("Routing aborted. GRIB exhausted (preference).");
 							}
 						}
-//          timer = logDiffTime(timer, "Milestone 4");
+				        // timer = logDiffTime(timer, "Milestone 4");
 
 //          brg = getBearing(newCurveCenter); // 7-apr-2010.
 						if (aimFor == null) {
@@ -261,7 +261,7 @@ public class RoutingUtil {
 						for (int bearing = brg - routingForkWidth / 2;
 						     keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
 						     bearing += routingStep) {
-//            timer = logDiffTime(timer, "Milestone 5");
+			                // timer = logDiffTime(timer, "Milestone 5");
 							int windDir = 0;
 							if (wind != null) {
 								windDir = wind.winddir;
@@ -342,28 +342,27 @@ public class RoutingUtil {
 								}
 								oneCurve.add(ip);
 							}
-//            timer = logDiffTime(timer, "Milestone 6");
-
+				            // timer = logDiffTime(timer, "Milestone 6");
 						}
-//          timer = logDiffTime(timer, "Milestone 7");
+				        // timer = logDiffTime(timer, "Milestone 7");
 						if (!interruptRouting) {
 							temp.add(oneCurve);
 						}
 					}
 				}
-				long after = System.currentTimeMillis();
-//      System.out.println("Isochron calculated in " + Long.toString(after - before) + " ms.");
+				// long after = System.currentTimeMillis();
+				// System.out.println("Isochron calculated in " + Long.toString(after - before) + " ms.");
 				// Start from the finalCurve, the previous envelope, for the next calculation
 				// Flip data
-//      timer = logDiffTime(timer, "Milestone 8");
+			    // timer = logDiffTime(timer, "Milestone 8");
 				data = temp;
 				List<RoutingPoint> finalCurve = null;
 				if (!interruptRouting) {
-//        timer = logDiffTime(timer, "Milestone 8-bis");
+			        // timer = logDiffTime(timer, "Milestone 8-bis");
 //        System.out.println("Reducing...");
-//        System.out.print("Reducing...");
 //        before = System.currentTimeMillis();
 					finalCurve = calculateEnvelope(data, center, verbose);
+					System.out.printf(">> Envolope: %d points.\n", finalCurve.size());
 					if (aimFor != null) {
 						if (isPointIn(aimFor, finalCurve, center)) {
 							try {
@@ -372,7 +371,7 @@ public class RoutingUtil {
 								aimFor = finalDestination;
 							}
 							System.out.println("Aiming for [" + aimFor.getPosition() + "]");
-							//localSmallOne = Double.MAX_VALUE;
+							// localSmallOne = Double.MAX_VALUE;
 							smallestDist = Double.MAX_VALUE; // Reset, for the next leg
 						}
 					}
@@ -381,7 +380,7 @@ public class RoutingUtil {
 				}
 				// Calculate distance to destination, from the final curve
 				Iterator<RoutingPoint> finalIterator = null;
-//      timer = logDiffTime(timer, "Milestone 9");
+      			// timer = logDiffTime(timer, "Milestone 9");
 				if (finalCurve != null) {
 					try {
 						finalIterator = finalCurve.iterator();
@@ -393,7 +392,7 @@ public class RoutingUtil {
 				}
 //      System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
 				while (!interruptRouting && finalIterator != null && finalIterator.hasNext()) {
-//        timer = logDiffTime(timer, "Milestone 10");
+					// timer = logDiffTime(timer, "Milestone 10");
 					RoutingPoint forecast = finalIterator.next();
 					gc.setStart(new GreatCirclePoint(Math.toRadians(forecast.getPosition().getL()),
 							Math.toRadians(forecast.getPosition().getG())));
@@ -415,7 +414,7 @@ public class RoutingUtil {
 						ex.printStackTrace();
 					}
 				}
-//      timer = logDiffTime(timer, "Milestone 11");
+				// timer = logDiffTime(timer, "Milestone 11");
 //      System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
 				if (localSmallOne < smallestDist) {
 					smallestDist = localSmallOne;
@@ -493,7 +492,7 @@ public class RoutingUtil {
 				}
 				allowOtherRoute = false;
 
-//      timer = logDiffTime(timer, "Milestone 12");
+				// timer = logDiffTime(timer, "Milestone 12");
 				if (keepLooping) {
 					allIsochrons.add(finalCurve);
 					data = new ArrayList<>();
@@ -503,8 +502,7 @@ public class RoutingUtil {
 				if (verbose) {
 					System.out.println("Isochrone # " + Integer.toString(allIsochrons.size()) + ", smallest distance to arrival:" + smallestDist + " nm. Still processing:" + keepLooping);
 				}
-
-//      timer = logDiffTime(timer, "Milestone 13");
+				// timer = logDiffTime(timer, "Milestone 13");
 			}
 			if (interruptRouting) {
 				logDiffTime(timer, "Routing interrupted.");
@@ -512,8 +510,10 @@ public class RoutingUtil {
 				System.out.println("Routing aborted on user's request.");
 			}
 		}
-//  timer = logDiffTime(timer, "Milestone 14");
-		return new RoutingResult().isochronals(allIsochrons).closest(finalClosest);
+		// timer = logDiffTime(timer, "Milestone 14");
+		RoutingResult result = new RoutingResult().isochronals(allIsochrons).closest(finalClosest);
+		// timer = logDiffTime(timer, "Milestone 15");
+		return result;
 	}
 
 	// TODO See when this is used

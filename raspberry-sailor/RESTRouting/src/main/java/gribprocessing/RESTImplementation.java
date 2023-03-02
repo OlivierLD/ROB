@@ -20,6 +20,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -740,16 +741,28 @@ GRIB �  `��!i 
 					if (verbose) {
 						System.out.printf("--- BlindRouting().calculate completed in %d ms ---\n", (after - before));
 					}
-					if (false) {  // TODO An option in the request ?
+					if (false) {  // Dev Test. TODO An option in the request ?
 						System.out.println("--- Spitting out fullrouting.json ---");
 						// Warning: this is a BIIIIIIG file... More than 100Gb for Atlantic crossing
-						if (false) {
-							String theFullStuff = mapper.writeValueAsString(routing); // That part seems to be quite memory demanding...
-							BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
-							br.write(theFullStuff);
-							br.close();
-						}
 						if (true) {
+							routing.getIsochronals().forEach(iso -> {
+								try {
+									String oneIsochronal = mapper.writeValueAsString(iso);
+									System.out.printf("One Isochronal (%d points): %s bytes.\n",
+											iso.size(),
+											NumberFormat.getNumberInstance().format(oneIsochronal.length()));
+								} catch (JsonProcessingException jpe) {
+									jpe.printStackTrace();
+								}
+							});
+
+							String theFullStuff = mapper.writeValueAsString(routing); // That part seems to be quite memory demanding... TODO Tweak the RoutingPoint object.
+							System.out.printf("Full routing is %d bytes big.\n", theFullStuff.length());
+							//BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
+							//br.write(theFullStuff);
+							//br.close();
+						}
+						if (false) {
 							Thread spitter = new Thread(() -> {
 								System.out.println("Thread spitter started");
 								try {
@@ -768,7 +781,8 @@ GRIB �  `��!i 
 					if (verbose) {
 						System.out.println("--- Preparing response. ---");
 					}
-					String content = routing.bestRoute(); //  new Gson().toJson(routing); - The full object is way too big !!
+					// String content = routing.getBestRoute(); //  new Gson().toJson(routing); - The full object may be too big !!
+					String content = mapper.writeValueAsString(routing);
 					String contentType = HttpHeaders.APPLICATION_JSON;
 					switch (routingRequest.outputType) {
 						case "TXT":
