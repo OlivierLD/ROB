@@ -181,7 +181,7 @@ JAVA_OPTS="${JAVA_OPTS} -Xms64M -Xmx1G"
 #
 # For remote debugging:
 ## JAVA_OPTS="${JAVA_OPTS} -client -agentlib:jdwp=transport=dt_socket,server=y,address=4000"
-# JAVA_OPTS="${JAVA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"  # new
+JAVA_OPTS="${JAVA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"  # new
 # For remote JVM Monitoring
 # JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=$(hostname)"
 #

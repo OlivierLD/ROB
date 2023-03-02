@@ -753,8 +753,8 @@ public class RoutingUtil {
 							"   <Document>\n" +
 							"      <name>Weather Wizard route (" + SDF_DMY.format(d) + ")</name>\n"); // TASK Add from/to
 		} else if (outputOption == OutputOption.JSON) {
-			output.append("{\n" +
-							      "  \"waypoints\": [\n");
+			// output.append("{\n" + "  \"waypoints\": [\n");
+			output.append("{\"waypoints\": [");
 		}
 
 		if (closestPoint != null && allCalculatedIsochrons != null) {
@@ -900,7 +900,7 @@ public class RoutingUtil {
 					String twd = Integer.toString(ic.getTwd());
 					String bsp = XXX12.format(ic.getBsp());
 					String hdg = Integer.toString(ic.getHdg());
-					output.append(
+					/* output.append(
 							 "    {\n" +
 									"      \"datetime\":\"" + date + "\",\n" +
 									"      \"position\": {\n" +
@@ -911,7 +911,18 @@ public class RoutingUtil {
 									"      \"twd\":" + twd + ",\n" +
 									"      \"bsp\":" + bsp + ",\n" +
 									"      \"hdg\":" + hdg + "\n" +
-									"    }" + (r == 0 ? "" : ",") + "\n");
+									"    }" + (r == 0 ? "" : ",") + "\n"); */
+					output.append(
+							"{  \"datetime\":\"" + date + "\"," +
+									" \"position\": {" +
+									" \"latitude\":\"" + rp.getPosition().getL() + "\"," +
+									" \"longitude\":\"" + rp.getPosition().getG() + "\"" +
+									" }," +
+									" \"tws\":" + tws + "," +
+									" \"twd\":" + twd + "," +
+									" \"bsp\":" + bsp + "," +
+									" \"hdg\":" + hdg + "" +
+									" }" + (r == 0 ? "" : ",") );
 				}
 			}
 			// Closing tags
@@ -961,8 +972,8 @@ public class RoutingUtil {
 								"   </Document>\n" +
 								"</kml>");
 			} else if (outputOption == OutputOption.JSON) {
-				output.append("  ]\n" +
-											"}\n");
+				// output.append("  ]\n" + "}\n");
+				output.append("  ]" + "}");
 			}
 		}
 		return output;

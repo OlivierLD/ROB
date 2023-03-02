@@ -781,7 +781,7 @@ GRIB �  `��!i 
 					if (verbose) {
 						System.out.println("--- Preparing response. ---");
 					}
-					// String content = routing.getBestRoute(); //  new Gson().toJson(routing); - The full object may be too big !!
+					// String content = routing.getBestRoute(); // The full object may be too big !!
 					String content = mapper.writeValueAsString(routing);
 					String contentType = HttpHeaders.APPLICATION_JSON;
 					switch (routingRequest.outputType) {
