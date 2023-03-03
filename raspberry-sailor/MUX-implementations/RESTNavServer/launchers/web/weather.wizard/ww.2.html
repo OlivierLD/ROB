@@ -782,7 +782,7 @@
                 (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
             let now = new Date();
             let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
-            let sampleRequest = {
+            let sampleRequest = {  // TODO Get more parameters from the user
                 "fromL": position.lat,
                 "fromG": position.lng,
                 "toL": toL,

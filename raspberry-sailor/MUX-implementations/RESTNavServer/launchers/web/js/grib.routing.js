@@ -346,23 +346,54 @@ let getBGColor = function(value, type) {
 
 let bestRouteToPlot = undefined;
 let plotBestRoute = function(canvas, context) {
-//console.log("Plotting the best computed route: ", bestRouteToPlot);
-	let waypoints;
+	// console.log("Plotting the best computed route: ", bestRouteToPlot);
+	let waypoints, isochrons;
 	if (bestRouteToPlot.waypoints) { // This is for dev...
 	  	waypoints = bestRouteToPlot.waypoints;
 	} else {
 		waypoints = JSON.parse(bestRouteToPlot.bestRoute).waypoints;
+		// Isochrons are in bestRouteToPlot.isochronals
+		isochrons = bestRouteToPlot.isochronals;
 	}
 	context.save();
+
+	// On option: draw isochrones here
+	if (isochrons) {
+		context.strokeStyle = 'blue';
+		context.lineWidth = 0.5;
+		isochrons.forEach(isochron => {  // For each isochron
+
+			context.beginPath();
+			isochron.forEach((point, idx) => { // For each point in one isochron
+				let canvasPt = worldMap.getCanvasLocation(canvas, point.position.latitude, point.position.longitude);
+				if (idx === 0) {
+					context.moveTo(canvasPt.x, canvasPt.y);
+				} else {
+					context.lineTo(canvasPt.x, canvasPt.y);
+				}
+				// Ancestor ?
+				if (point.ancestor) {
+					let ancestorPt = worldMap.getCanvasLocation(canvas, point.ancestor.position.latitude, point.ancestor.position.longitude);
+					context.moveTo(ancestorPt.x, ancestorPt.y);
+					context.lineTo(canvasPt.x, canvasPt.y);
+				}
+			});
+			context.stroke();
+			context.closePath();
+		});
+	}
+	context.restore();
+	context.save();
+
 	context.strokeStyle = 'orange';
 	context.lineWidth = 3;
 	context.beginPath();
 	for (let i=0; i<waypoints.length; i++) {
 //	console.log("Plot", waypoints[i].position.latitude + " / " + waypoints[i].position.longitude);
 		let canvasPt = worldMap.getCanvasLocation(canvas, waypoints[i].position.latitude, waypoints[i].position.longitude);
-		console.log();
+		// console.log();
 		if (i === 0) {
-			context.lineTo(canvasPt.x, canvasPt.y);
+			context.moveTo(canvasPt.x, canvasPt.y); 
 		} else {
 			context.lineTo(canvasPt.x, canvasPt.y);
 		}

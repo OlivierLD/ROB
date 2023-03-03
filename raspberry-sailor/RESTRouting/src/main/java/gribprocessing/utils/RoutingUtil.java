@@ -362,7 +362,7 @@ public class RoutingUtil {
 //        System.out.println("Reducing...");
 //        before = System.currentTimeMillis();
 					finalCurve = calculateEnvelope(data, center, verbose);
-					System.out.printf(">> Envolope: %d points.\n", finalCurve.size());
+					// System.out.printf(">> Envelope: %d points.\n", finalCurve.size());
 					if (aimFor != null) {
 						if (isPointIn(aimFor, finalCurve, center)) {
 							try {
