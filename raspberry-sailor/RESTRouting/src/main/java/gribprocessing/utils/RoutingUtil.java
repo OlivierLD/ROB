@@ -390,7 +390,7 @@ public class RoutingUtil {
 						}
 					}
 				}
-//      System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
+				// System.out.println("finalIterator.hasNext() : [" + finalIterator.hasNext() + "]");
 				while (!interruptRouting && finalIterator != null && finalIterator.hasNext()) {
 					// timer = logDiffTime(timer, "Milestone 10");
 					RoutingPoint forecast = finalIterator.next();

@@ -753,14 +753,14 @@
             getExistingComposites(cb, filter);
         };
     
-        let displaySummary = (bestRoute) => {
+        let displaySummary = (routingOutput) => {
 
             let waypoints;
-            if (bestRoute.waypoints) {
-                waypoints = bestRoute.waypoints;
-            } else {
-                waypoints = JSON.parse(bestRoute.bestRoute).waypoints;
-            }
+            //if (routingOutput.waypoints) {
+            //    waypoints = routingOutput.waypoints;
+            //} else {
+                waypoints = JSON.parse(routingOutput.bestRoute).waypoints;
+            //}
 
             waypoints.forEach(wp => {
                 console.log("At", wp.datetime, "Position", wp.position.latitude, wp.position.longitude);
@@ -785,7 +785,7 @@
                 (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
             let now = new Date();
             let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
-            let sampleRequest = {  // TODO Get more parameters from the user
+            let routingRequest = {  // TODO Get more parameters from the user
                 "fromL": position.lat,
                 "fromG": position.lng,
                 "toL": toL,
@@ -804,25 +804,28 @@
                 "avoidLand": false,
                 "verbose": false
             };
-            let callback = (bestRoute) => {
-                // bestRouteToPlot is declared in gbrib.routing.js
-                bestRouteToPlot = (typeof(bestRoute) === 'string') ? JSON.parse(bestRoute) : bestRoute; // in grib.routing.js, global.
+            let callback = (routing) => {
+                // routingResult is declared in grib.routing.js
+                routingResult = (typeof(routing) === 'string') ? JSON.parse(routing) : routing; // in grib.routing.js, global.
                 if (ROUTING_VERBOSE) {
+
+                    console.log(`For routing request: ${JSON.stringify(routingRequest, null, 2)}:`);
+
                     var len = 0;
-                    if (bestRouteToPlot.waypoints) { // This is for dev... Temp.
-                        len = bestRouteToPlot.waypoints.length;
-                    } else {
-                        len = JSON.parse(bestRouteToPlot.bestRoute).waypoints.length;
-                    }
+                    //if (routingResult.waypoints) { // This is for dev... Temp.
+                    //    len = routingResult.waypoints.length;
+                    //} else {
+                        len = JSON.parse(routingResult.bestRoute).waypoints.length;
+                    //}
                     console.log(`Routing has ${ len } point(s)`);
-                    console.log(bestRoute);
+                    console.log(routing);
                 }
                 if (ROUTING_VERBOSE) {
-                    displaySummary(bestRouteToPlot);
+                    displaySummary(routingResult);  // TODO Put it in the clipboard, along with the other flavors (GPX, KLM, etc)
                 }
                 plotBestRoute(canvas, context);
             };
-            getBestRoute(sampleRequest, callback);
+            getBestRoute(routingRequest, callback);
         };
     
         let compositeInterval;

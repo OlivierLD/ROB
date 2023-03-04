@@ -344,16 +344,16 @@ let getBGColor = function(value, type) {
 	return color;
 };
 
-let bestRouteToPlot = undefined;
+let routingResult = undefined;
 let plotBestRoute = function(canvas, context) {
-	// console.log("Plotting the best computed route: ", bestRouteToPlot);
+	// console.log("Plotting the best computed route: ", routingResult);
 	let waypoints, isochrons;
-	if (bestRouteToPlot.waypoints) { // This is for dev...
-	  	waypoints = bestRouteToPlot.waypoints;
+	if (routingResult.waypoints) { // This is for dev...
+	  	waypoints = routingResult.waypoints;
 	} else {
-		waypoints = JSON.parse(bestRouteToPlot.bestRoute).waypoints;
-		// Isochrons are in bestRouteToPlot.isochronals
-		isochrons = bestRouteToPlot.isochronals;
+		waypoints = JSON.parse(routingResult.bestRoute).waypoints;
+		// Isochrons are in routingResult.isochronals
+		isochrons = routingResult.isochronals;
 	}
 	context.save();
 
@@ -532,8 +532,8 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) })`;
 	} catch (err) {}
 	// Is there a route to draw here?
-	if (bestRouteToPlot !== undefined) {
-		plotBestRoute(canvas, context);
+	if (routingResult !== undefined) {
+		plotBestRoute(canvas, context); // TODO Option/checkbox to show/hide routing, isochrons
 	}
 };
 
