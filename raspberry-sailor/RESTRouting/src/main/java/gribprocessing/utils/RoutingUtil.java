@@ -71,7 +71,7 @@ public class RoutingUtil {
 	public static class RoutingResult {
 		RoutingPoint closest;
 		List<List<RoutingPoint>> isochronals;
-		String bestRoute; // Depends on the required output type (TXT, CSV, KML, GPX, JSON).
+		String bestRoute; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
 
 		public RoutingResult closest(RoutingPoint closest) {
 			this.closest = closest;
@@ -85,12 +85,6 @@ public class RoutingUtil {
 			this.bestRoute = bestRoute;
 			return this;
 		}
-//		public List<List<RoutingPoint>> isochronals() {
-//			return this.isochronals;
-//		}
-//		public String bestRoute() {
-//			return this.bestRoute;
-//		}
 
 		public RoutingPoint getClosest() {
 			return closest;
@@ -103,6 +97,58 @@ public class RoutingUtil {
 		public String getBestRoute() {
 			return bestRoute;
 		}
+	}
+
+	public static class RoutingResult4JSON {
+		List<List<RoutingIsochronPoint>> isochronals;
+		String bestRoute; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
+
+		public RoutingResult4JSON isochronals(List<List<RoutingIsochronPoint>> isochronals) {
+			this.isochronals = isochronals;
+			return this;
+		}
+		public RoutingResult4JSON bestRoute(String bestRoute) {
+			this.bestRoute = bestRoute;
+			return this;
+		}
+
+//		public RoutingPoint getClosest() {
+//			return this.closest;
+//		}
+
+		public List<List<RoutingIsochronPoint>> getIsochronals() {
+			return this.isochronals;
+		}
+
+		public String getBestRoute() {
+			return this.bestRoute;
+		}
+	}
+
+	/**
+	 * This is a trick.
+	 * @param originalRoutingResult the original routing
+	 * @return the shrinked routing
+	 */
+	public static RoutingResult4JSON transformForJson(RoutingResult originalRoutingResult) {
+		RoutingResult4JSON output = new RoutingResult4JSON();
+		// Best Route
+		output.bestRoute(originalRoutingResult.getBestRoute());
+		// Isochrons
+		List<List<RoutingIsochronPoint>> isochrons = new ArrayList<>();
+		originalRoutingResult.getIsochronals().forEach(isochron -> {
+			List<RoutingIsochronPoint> newIsochron = new ArrayList<>();
+			isochron.forEach(rp -> {
+				RoutingIsochronPoint newRP = new RoutingIsochronPoint(rp.getPosition());
+				if (rp.getAncestor() != null) {
+					newRP.setAncestor(rp.getAncestor().getPosition());
+				}
+				newIsochron.add(newRP);
+			});
+			isochrons.add(newIsochron);
+		});
+		output.isochronals(isochrons);
+		return output;
 	}
 
 	public static RoutingResult calculateIsochrons(String polarFileName,
@@ -592,7 +638,7 @@ public class RoutingUtil {
 	                                                  GeoPoint mousePosition) {
 		RoutingPoint rp = null;
 		List<RoutingPoint> isochron = isochrons.get(isochrons.size() - draggedIsochronIdx - 1);
-//  System.out.println("Dragged isochron has " + isochron.size() + " point(s)");
+		// System.out.println("Dragged isochron has " + isochron.size() + " point(s)");
 		double minDist = Double.MAX_VALUE;
 		for (RoutingPoint lrp : isochron) {
 			double dist = GreatCircle.getDistanceInNM(new GreatCirclePoint(lrp.getPosition()), new GreatCirclePoint(mousePosition));

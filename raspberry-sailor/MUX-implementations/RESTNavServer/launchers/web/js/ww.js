@@ -111,6 +111,8 @@ function getPromise(url,                          // full api path
 		xhr.onload = function () {
 			clearTimeout(requestTimer);
 			if (xhr.status === happyCode) {
+				let len = xhr.getResponseHeader("Content-Length");
+				console.log(`Content Length: ${ Intl.NumberFormat().format(len) }`);
 				resolve(xhr.response);
 			} else {
 				reject({code: xhr.status, message: xhr.response});

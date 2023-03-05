@@ -5,7 +5,11 @@ import calc.GeoPoint;
 import java.awt.Point;
 import java.util.Date;
 
-public class RoutingPoint extends Point {
+public class RoutingPoint extends Point { // TODO Do we need the extends Point in this context ?
+
+	/* Warning: For JSON/Jackson, use RoutingIsochronPoint */
+
+	// Used to find the best route, backwards.
 	private RoutingPoint parent = null;
 
 	int xOffset = 0;

@@ -348,13 +348,13 @@ let routingResult = undefined;
 let plotBestRoute = function(canvas, context) {
 	// console.log("Plotting the best computed route: ", routingResult);
 	let waypoints, isochrons;
-	if (routingResult.waypoints) { // This is for dev...
-	  	waypoints = routingResult.waypoints;
-	} else {
+	//if (routingResult.waypoints) { // This is for dev...
+	//  	waypoints = routingResult.waypoints;
+	//} else {
 		waypoints = JSON.parse(routingResult.bestRoute).waypoints;
 		// Isochrons are in routingResult.isochronals
 		isochrons = routingResult.isochronals;
-	}
+	//}
 	context.save();
 
 	// On option: draw isochrones here
@@ -373,7 +373,8 @@ let plotBestRoute = function(canvas, context) {
 				}
 				// Ancestor ?
 				if (point.ancestor) {
-					let ancestorPt = worldMap.getCanvasLocation(canvas, point.ancestor.position.latitude, point.ancestor.position.longitude);
+					// let ancestorPt = worldMap.getCanvasLocation(canvas, point.ancestor.position.latitude, point.ancestor.position.longitude);
+					let ancestorPt = worldMap.getCanvasLocation(canvas, point.ancestor.latitude, point.ancestor.longitude);
 					context.moveTo(ancestorPt.x, ancestorPt.y);
 					context.lineTo(canvasPt.x, canvasPt.y);
 				}

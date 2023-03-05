@@ -741,11 +741,14 @@ GRIB �  `��!i 
 					if (verbose) {
 						System.out.printf("--- BlindRouting().calculate completed in %d ms ---\n", (after - before));
 					}
+					// Replace isochons' RoutingPoints with RoutingIsochronPoints
+					RoutingUtil.RoutingResult4JSON routing4Json = RoutingUtil.transformForJson(routing);
+
 					if (false) {  // Dev Test. TODO An option in the request ?
 						System.out.println("--- Spitting out fullrouting.json ---");
 						// Warning: this is a BIIIIIIG file... More than 100Gb for Atlantic crossing
 						if (true) {
-							routing.getIsochronals().forEach(iso -> {
+							routing4Json.getIsochronals().forEach(iso -> {
 								try {
 									String oneIsochronal = mapper.writeValueAsString(iso);
 									System.out.printf("One Isochronal (%d points): %s bytes.\n",
@@ -756,7 +759,7 @@ GRIB �  `��!i 
 								}
 							});
 
-							String theFullStuff = mapper.writeValueAsString(routing); // That part seems to be quite memory demanding... TODO Tweak the RoutingPoint object.
+							String theFullStuff = mapper.writeValueAsString(routing4Json); // That part seems to be quite memory demanding... TODO Tweak the RoutingPoint object.
 							System.out.printf("Full routing is %d bytes big.\n", theFullStuff.length());
 							//BufferedWriter br = new BufferedWriter(new FileWriter("fullrouting.json"));
 							//br.write(theFullStuff);
@@ -781,8 +784,8 @@ GRIB �  `��!i 
 					if (verbose) {
 						System.out.println("--- Preparing response. ---");
 					}
-					// String content = routing.getBestRoute(); // The full object may be too big !!
-					String content = mapper.writeValueAsString(routing);
+					// String content = routing.getBestRoute(); // The full routing object may be too big !!
+					String content = mapper.writeValueAsString(routing4Json);
 					String contentType = HttpHeaders.APPLICATION_JSON;
 					switch (routingRequest.outputType) {
 						case "TXT":
