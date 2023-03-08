@@ -35,12 +35,12 @@ at runtime.
 
 Otherwise...:
 
-## You will need:
+## As software, you will need:
 - `git`
 - `Java` (JDK 11 or 8)
-  - The Java code is JDK 8 compatible. 
+  - The Java code is JDK 8 compatible, to fit early Raspberry Pis. 
   - `gradle` will also be needed for the build. It will be automatically installed if needed, you do _NOT_ need to worry about it.
-- To access a GPS (and/or NMEA data) through a Serial Port, `librxtx-java`
+- To access Serial Ports (GPS and/or NMEA data), `librxtx-java`
 - `Python 3` (in some cases, to access external devices, like sensors, oled screens, etc )
 
 All the commands described below are to be run from a terminal (unless mentioned otherwise).

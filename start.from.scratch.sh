@@ -140,6 +140,7 @@ cd raspberry-sailor/MUX-implementations/RESTNavServer
 # Start the demo menu
 cd launchers
 ./demoLauncher.sh
+
 popd
 #
 # Done with this script

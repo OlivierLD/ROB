@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BlindRouting {
-	private static boolean verbose = "true".equals(System.getProperty("rouring.verbose", "false"));
+	private static boolean verbose = "true".equals(System.getProperty("routing.verbose", "false"));
 
 	/*
 	 * Mandatory prms:
@@ -33,7 +33,7 @@ public class BlindRouting {
 	 * --routing-angle-step default 10 (in degrees)
 	 * --limit-tws          default -1 (in knots. -1 means no limit)
 	 * --limit-twa          default -1 (in degrees. -1 means no limit)
-	 * --speedC-Coeff       default 1.0 used to multiply the speed computed with the polars.
+	 * --speed-coeff       default 1.0 used to multiply the speed computed with the polars.
 	 * --avoid-land         default false (set to true, y, or yes)
 	 */
 
@@ -114,30 +114,30 @@ public class BlindRouting {
 				limitTWA = Integer.parseInt(args[i + 1]);
 			}
 			if (VERBOSE.equals(args[i])) {
-				verb = (args[i + 1].trim().toUpperCase().equals("Y") ||
-						args[i + 1].trim().toUpperCase().equals("TRUE") ||
-						args[i + 1].trim().toUpperCase().equals("YES"));
+				verb = (args[i + 1].trim().equalsIgnoreCase("Y") ||
+						args[i + 1].trim().equalsIgnoreCase("TRUE") ||
+						args[i + 1].trim().equalsIgnoreCase("YES"));
 			}
 			if (AVOID_LAND.equals(args[i])) {
-				avoidLand = (args[i + 1].trim().toUpperCase().equals("Y") ||
-						args[i + 1].trim().toUpperCase().equals("TRUE") ||
-						args[i + 1].trim().toUpperCase().equals("YES"));
+				avoidLand = (args[i + 1].trim().equalsIgnoreCase("Y") ||
+						args[i + 1].trim().equalsIgnoreCase("TRUE") ||
+						args[i + 1].trim().equalsIgnoreCase("YES"));
 			}
 			if (HELP.equals(args[i])) {
 				BlindRouting br = new BlindRouting();
 				System.out.println("Usage:");
 				System.out.println("java " + br.getClass().getName() + " --option value --option value ...");
 				System.out.println("Mandatory options:");
-				System.out.println(String.format("%s %s %s %s %s %s %s %s", FROM_L, FROM_G, TO_L, TO_G, START_TIME, GRIB_FILE, POLAR_FILE, OUTPUT_TYPE));
+				System.out.printf("%s %s %s %s %s %s %s %s\n", FROM_L, FROM_G, TO_L, TO_G, START_TIME, GRIB_FILE, POLAR_FILE, OUTPUT_TYPE);
 				System.out.println("Optional:");
-				System.out.println(String.format("%s default false", VERBOSE));
-				System.out.println(String.format("%s default 24", TIME_INTERVAL));
-				System.out.println(String.format("%s default 140", FORK_WIDTH));
-				System.out.println(String.format("%s default 10", ROUTING_STEP));
-				System.out.println(String.format("%s default -1", LIMIT_TWS));
-				System.out.println(String.format("%s default -1", LIMIT_TWA));
-				System.out.println(String.format("%s default 1.0", SPEED_COEFF));
-				System.out.println(String.format("%s default false", AVOID_LAND));
+				System.out.printf("%s default false\n", VERBOSE);
+				System.out.printf("%s default 24\n", TIME_INTERVAL);
+				System.out.printf("%s default 140\n", FORK_WIDTH);
+				System.out.printf("%s default 10\n", ROUTING_STEP);
+				System.out.printf("%s default -1\n", LIMIT_TWS);
+				System.out.printf("%s default -1\n", LIMIT_TWA);
+				System.out.printf("%s default 1.0\n", SPEED_COEFF);
+				System.out.printf("%s default false\n", AVOID_LAND);
 				System.out.println("-----------------------");
 				System.out.println("Example: java " + br.getClass().getName() +
 						FROM_L + " 37.122 " + FROM_G + " -122.5 " + TO_L + " -9.75 " + TO_G + " -139.10 " + START_TIME + " \"2012-03-10T12:00:00\" " + GRIB_FILE + " \"." +
@@ -165,10 +165,10 @@ public class BlindRouting {
 				limitTWS,
 				limitTWA,
 				speedCoeff,
-				25.0,
+				25.0,  // TODO a parameter for proximity
 				avoidLand,
 				verb);
-		System.out.println(content.bestRoutes);
+		System.out.println(content.bestRoutes.get(content.bestRoutes.keySet().toArray()[0]));
 		System.out.println("Done!");
 	}
 
@@ -240,12 +240,12 @@ public class BlindRouting {
 	                                           boolean avoidLand,
 	                                           boolean verbose) throws Exception {
 
-		this.verbose = verbose;
+		BlindRouting.verbose = verbose;
 		GeoPoint from = new GeoPoint(fromL, fromG);
 		GeoPoint to = new GeoPoint(toL, toG);
 		List<GeoPoint> intermediateRoutingWP = null;
 
-		GribFile gf = null;
+		GribFile gf;
 		try {
 			File f = new File(gribName);
 			if (!f.exists()) {
@@ -259,8 +259,8 @@ public class BlindRouting {
 
 		if (verbose) {
 			System.out.println("-- Starting Routing computation --");
-			System.out.println(String.format("From %f/%f to %f/%f, at %s, grib %s, with polars %s, output %s\n" +
-							"every %f hours, width %d, limitTWS %s, limitTWA %s, speedCoeff %f, prox: %f, avoid land: %s",
+			System.out.printf("From %f/%f to %f/%f, at %s, grib %s, with polars %s, output %s\n" +
+							"every %f hours, width %d, limitTWS %s, limitTWA %s, speedCoeff %f, prox: %f, avoid land: %s\n",
 					fromL, fromG,
 					toL, toG,
 					startTime,
@@ -273,8 +273,7 @@ public class BlindRouting {
 					(limitTWA == -1 ? "none" : String.valueOf(limitTWA)),
 					speedCoeff,
 					proximity,
-					avoidLand ? "yes" : "no"
-			));
+					avoidLand ? "yes" : "no");
 		}
 		List<GribHelper.GribConditionData> agcd = GribHelper.dumper(gf, "");
 		GribHelper.GribConditionData gribData[] = agcd.toArray(new GribHelper.GribConditionData[agcd.size()]);
@@ -291,7 +290,6 @@ public class BlindRouting {
 		if (verbose) {
 			System.out.println("Routing from " + isoFrom.toString() + "\nto " + isoTo.toString());
 		}
-		int i = 0;
 		Point point = new Point((int) Math.round(isoFrom.getG() * 1_000), (int) Math.round(isoFrom.getL() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
 		RoutingPoint center = new RoutingPoint(point);
 		center.setPosition(from);
@@ -314,23 +312,22 @@ public class BlindRouting {
 			System.out.println("Using polar file " + fName);
 			System.out.println("Starting " + startDate.toString());
 		}
-		RoutingUtil.RoutingResult routingResult = RoutingUtil.calculateIsochrons(
-				fName,
-				center,
-				destination,
-				interWP,
-				startDate,
-				gribData,
-				timeInterval,
-				routingForkWidth,
-				routingStep,
-				limitTWS,
-				limitTWA,
-				stopIfTooOld, // hard-coded to false
-				speedCoeff,
-				avoidLand,
-				proximity,
-				verbose);
+		RoutingUtil.RoutingResult routingResult = RoutingUtil.calculateIsochrons(fName,
+																				 center,
+																				 destination,
+																				 interWP,
+																				 startDate,
+																				 gribData,
+																				 timeInterval,
+																				 routingForkWidth,
+																				 routingStep,
+																				 limitTWS,
+																				 limitTWA,
+																				 stopIfTooOld, // hard-coded to false
+																				 speedCoeff,
+																				 avoidLand,
+																				 proximity,
+																				 verbose);
 
 		Map<RoutingUtil.OutputOption, StringBuffer> bestRoutes = RoutingUtil.outputRouting(center.getPosition(),
 																						   destination.getPosition(),
