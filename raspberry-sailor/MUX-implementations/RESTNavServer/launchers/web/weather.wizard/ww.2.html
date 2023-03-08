@@ -74,6 +74,49 @@
             border-radius: 3px;
         }
 
+        dialog {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .dialog-header {
+            /* width: 110%; */
+            height: 40px;
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            background-color: silver;
+            /* margin-left: -18px;
+            margin-top: -17px; */
+            vertical-align: middle;
+        }
+
+        .dialog-header-close {
+            margin-left: 10px;
+            margin-right: 15px;
+            float: right;
+        }
+        .dialog-header-close:hover {
+            color: cyan;
+            text-shadow: 6px 6px 8px black, 0 0 25px white, 0 0 10px orange;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            /*position: absolute;*/
+            text-align: right;
+            right: 0;
+            top: 0;
+            margin-top: 2px;
+            margin-right: 7px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .close-icon:hover {
+            color: cyan;
+            text-shadow: 2px 2px 4px black, 0 0 25px rgb(124, 26, 26), 0 0 10px navy;
+        }
+
         .mess-zone {
             background-color: white; 
             color: black; 
@@ -87,6 +130,49 @@
             overflow-y: scroll;
             overflow-x: scroll;
         }
+
+		.tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(241, 241, 241, 0.5);
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        .tab .mess {
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+            color: black;
+            text-align: right;
+        }
+
+        .active {
+			background-color: cyan; /*#717171;*/
+		}
 
         .analogdisplay-monochrome-orange {
             --bg-color: rgba(0, 0, 0, 0);
@@ -759,7 +845,7 @@
             //if (routingOutput.waypoints) {
             //    waypoints = routingOutput.waypoints;
             //} else {
-                waypoints = JSON.parse(routingOutput.bestRoute).waypoints;
+                waypoints = JSON.parse(routingOutput.bestRoutes.JSON).waypoints;
             //}
 
             waypoints.forEach(wp => {
@@ -768,9 +854,33 @@
             });
         };
     
+        const OUTPUT_ZONES = [
+                    "routing-output-1",  // JSON
+                    "routing-output-2",  // TXT
+                    "routing-output-3",  // GPX
+                    "routing-output-4",  // KML
+                    "routing-output-5"   // CSV
+                ];
+
+        function showContent(barIndex) {
+            let displayBarButtons = document.getElementById('display-bar').querySelectorAll(".tab")[0].querySelectorAll('button');
+            displayBarButtons.forEach((button, idx) => {
+                document.getElementById(OUTPUT_ZONES[idx]).style.display = (idx == barIndex - 1) ? 'block' : 'none';
+                if ((idx == barIndex - 1)) {
+                    button.classList.add('active'); // Enable tab
+                } else {
+                    button.classList.remove('active'); // Disable tab
+                }
+            });
+        }
+
         const DURATION_FMT = "Y-m-dTH:i:s";
         const ROUTING_VERBOSE = true;
     
+        function htmlEntities(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
         let testRouting = () => {
     
             console.log('GRIB Data:', gribFileLocation); // Use this one?
@@ -785,7 +895,78 @@
                 (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
             let now = new Date();
             let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
-            let routingRequest = {  // TODO Get more parameters from the user
+
+            let outputType = "JSON";  // GPX, KML, etc
+            let timeInterval = 24;
+            let routingForkWidth = 140;
+            let routingStep = 10;
+            let limitTWS = -1;
+            let limitTWA = -1;
+            let speedCoeff = 0.75;
+            let proximity = 25;
+            let avoidLand = false;
+            let verbose = false;
+
+            try {
+                if (document.getElementById("txt-flavor").checked) {
+                    outputType += ",TXT";
+                }
+                if (document.getElementById("gpx-flavor").checked) {
+                    outputType += ",GPX";
+                }
+                if (document.getElementById("kml-flavor").checked) {
+                    outputType += ",KML";
+                }
+                if (document.getElementById("csv-flavor").checked) {
+                    outputType += ",CSV";
+                }
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+
+            try {
+                timeInterval = parseInt(document.getElementById('routing-interval').value);
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                routingForkWidth = parseInt(document.getElementById('fork-width').value);
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                routingStep = parseInt(document.getElementById('routing-step').value);
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                if (document.getElementById('avoid-tws-cb').checked) {
+                    limitTWS = parseInt(document.getElementById('avoid-tws').value);
+                }
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                if (document.getElementById('avoid-twa-cb').checked) {
+                    limitTWA = parseInt(document.getElementById('avoid-twa').value);
+                }
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                speedCoeff = parseFloat(document.getElementById('speed-coeff').value);
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            try {
+                proximity = parseInt(document.getElementById('proximity').value);
+            } catch (err) {
+                console.log(`oops ${err}`);
+            }
+            avoidLand = document.getElementById('avoid-land').checked;
+            verbose = document.getElementById('routing-verbose').checked;
+
+            let routingRequest = {
                 "fromL": position.lat,
                 "fromG": position.lng,
                 "toL": toL,
@@ -793,37 +974,70 @@
                 "startTime": utc,
                 "gribName": gribFileLocation + "/grib.grb",
                 "polarFile": "./sample.data/polars/CheoyLee42.polar-coeff",
-                "outputType": "JSON",
-                "timeInterval": 24,    // Watch the OutOfMemoryError...
-                "routingForkWidth": 140,
-                "routingStep": 10,
-                "limitTWS": -1,
-                "limitTWA": -1,
-                "speedCoeff": 0.75,
-                "proximity": 25,
-                "avoidLand": false,
-                "verbose": false
+                "outputType": outputType,
+                "timeInterval": timeInterval,    // Watch the OutOfMemoryError...
+                "routingForkWidth": routingForkWidth,
+                "routingStep": routingStep,
+                "limitTWS": limitTWS,
+                "limitTWA": limitTWA,
+                "speedCoeff": speedCoeff,
+                "proximity": proximity,
+                "avoidLand": avoidLand,
+                "verbose": verbose
             };
             let callback = (routing) => {
                 // routingResult is declared in grib.routing.js
                 routingResult = (typeof(routing) === 'string') ? JSON.parse(routing) : routing; // in grib.routing.js, global.
                 if (ROUTING_VERBOSE) {
-
                     console.log(`For routing request: ${JSON.stringify(routingRequest, null, 2)}:`);
-
                     var len = 0;
-                    //if (routingResult.waypoints) { // This is for dev... Temp.
-                    //    len = routingResult.waypoints.length;
-                    //} else {
-                        len = JSON.parse(routingResult.bestRoute).waypoints.length;
-                    //}
+                    if (routingResult.waypoints) { // This is for dev... Temp.
+                        len = routingResult.waypoints.length;
+                        alert('You might want to upgrade the soft (Backend and frontend), really...');
+                    } else {
+                        len = JSON.parse(routingResult.bestRoutes.JSON).waypoints.length;
+                    }
                     console.log(`Routing has ${ len } point(s)`);
                     console.log(routing);
                 }
                 if (ROUTING_VERBOSE) {
-                    displaySummary(routingResult);  // TODO Put it in the clipboard, along with the other flavors (GPX, KLM, etc)
+                    displaySummary(routingResult);
                 }
                 plotBestRoute(canvas, context);
+                // Dialog with returned output flavors
+                // routingResult.bestRoutes.JSON, etc
+                if (ROUTING_VERBOSE) {
+                    console.log("-- Routing output flavor(s): --")
+                    Object.keys(routingResult.bestRoutes).forEach(k => console.log(`Output flavor ${k}`));
+                }
+                // TODO Put it in the clipboard, along with the other flavors (GPX, KLM, etc)
+
+                let displayBars = document.getElementById('display-bar').querySelectorAll(".tab");
+                let displayBarButtons = displayBars[0].querySelectorAll('button');
+
+                displayBarButtons[0].style.display = 'grid';
+                for (let i=1; i<displayBarButtons.length; i++) {
+                    displayBarButtons[i].style.display = 'none'; // Hide button
+                }
+                let outputFlavors = Object.keys(routingResult.bestRoutes);
+                for (let i=0; i<outputFlavors.length; i++) {
+                    displayBarButtons[i].style.display = 'grid'; // Show button
+                    displayBarButtons[i].innerText = outputFlavors[i];
+                    // document.getElementById(OUTPUT_ZONES[i]).style.display = 'block';
+                    if (outputFlavors[i] === 'JSON') {
+                        let json = JSON.parse(routingResult.bestRoutes[outputFlavors[i]]);
+                        document.getElementById(OUTPUT_ZONES[i]).innerHTML = `<pre>${JSON.stringify(json, null, 2)}</pre>`;
+                    } else {
+                        if (outputFlavors[i] === 'GPX' || outputFlavors[i] === 'KML') {
+                            document.getElementById(OUTPUT_ZONES[i]).innerHTML = `<pre>${htmlEntities(routingResult.bestRoutes[outputFlavors[i]])}</pre>`;
+                        } else {
+                            document.getElementById(OUTPUT_ZONES[i]).innerHTML = `<pre>${routingResult.bestRoutes[outputFlavors[i]]}</pre>`;
+                        }
+                    }
+                }
+                // Show result
+                let outputDialog = document.getElementById("routing-output-dialog");
+                outputDialog.show();
             };
             getBestRoute(routingRequest, callback);
         };
@@ -1369,11 +1583,189 @@
             }
             redraw();
         };
+
+
+        let showRoutingDialog = () => {
+            let routingDialog = document.getElementById("routing-prms-dialog");
+
+            // Fill out parameters
+            if (position) {
+                document.getElementById('position-from').innerText = 
+                    `${ decToSex(position.lat, 'NS') } / ${ decToSex(position.lng, 'EW') }`;
+            }
+            let toL = (document.getElementById('routing-pos-lat-sign-01').value === 'S' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lat-deg-01').value) +
+                (parseFloat(parseInt(document.getElementById('routing-pos-lat-min-01').value) / 60)));
+            let toG = (document.getElementById('routing-pos-lng-sign-01').value === 'W' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lng-deg-01').value) +
+                (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
+            document.getElementById('position-to').innerText = 
+                `${ decToSex(toL, 'NS') } / ${ decToSex(toG, 'EW') }`;
+            /*
+            let now = new Date();
+            let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
+            */
+
+            routingDialog.show(); 
+        };
+
+        let closeRoutingDialog = () => {
+            let codeDialog = document.getElementById("routing-prms-dialog");
+            codeDialog.close();
+        };
+
+        let activateField = (cb, fieldId) => {
+            document.getElementById(fieldId).disabled = !cb.checked;
+        };
     
+        let closeRoutingOutputDialog = () => {
+            let codeDialog = document.getElementById("routing-output-dialog");
+            codeDialog.close();
+        };
+
+        let ctrlC = button => {
+            let containers = button.parentElement.parentElement.querySelectorAll("div");
+            containers.forEach(container => {
+                if (container.id.startsWith("routing-output")) {
+                    if (container.style.display !== 'none') {
+                        // console.log('Found this:');
+                        let content = container.querySelector('pre').innerText;
+                        copyToClipboard(content);
+                        alert("Content copied to clipboard.");
+                    }                    
+                }
+            });
+        };
+
+        let copyToClipboard = content => {
+            let codeHolder = document.createElement("textarea"); // To keep the format, 'input' would not.
+            codeHolder.value = content;
+            document.body.appendChild(codeHolder);
+            codeHolder.select();
+            document.execCommand("copy");
+            document.body.removeChild(codeHolder);
+        };
     </script>
         
 </head>
 <body style="background-color: rgba(47, 55, 61, 0.95); background-image: none;">
+
+<dialog id="routing-prms-dialog" style="min-height: 300px; min-width: 400px; z-index: 50; border-radius: 10px; background-color: rgba(255, 255, 255, 0.85); overflow: hidden;">
+    <div class="dialog-header">
+        <div style="padding: 10px;">
+        <span style="margin-left: 20px;">Routing parameters</span>
+        <span class="dialog-header-close" onclick="closeRoutingDialog();">&times</span>
+        </div>
+    </div>
+    <div style="text-align: left; overflow-y: scroll;">
+        <div>
+            From <span id="position-from"></span>
+            <br/>
+            To <span id="position-to"></span>
+            <hr/>
+            <table>
+                <tr>
+                    <td>Output</td>
+                    <td>
+                        JSON, 
+                        <input type="checkbox" id="txt-flavor"> TXT,
+                        <input type="checkbox" id="gpx-flavor"> GPX,
+                        <input type="checkbox" id="kml-flavor"> KML,
+                        <input type="checkbox" id="csv-flavor"> CSV
+                    </td>
+                </tr>
+                <tr>
+                    <td>Interval between isochrons</td>
+                    <td><input type="number" id="routing-interval" value="24" min="0" step="1" style="width: 50px; text-align: right;"/></td>
+                </tr>
+                <tr>
+                    <td>Fork width</td>
+                    <td><input type="number" id="fork-width" value="140" min="0" step="1" style="width: 50px; text-align: right;"/></td>
+                </tr>
+                <tr>
+                    <td>Routing Step</td>
+                    <td><input type="number" id="routing-step" value="10" min="0" step="1" style="width: 50px; text-align: right;"/></td>
+                </tr>
+                <tr>
+                    <td>Avoid TWS above</td>
+                    <td>
+                        <input type="checkbox" id="avoid-tws-cb" onchange="activateField(this, 'avoid-tws');"/>
+                        <input type="number" id="avoid-tws" value="40" min="0" step="1" style="width: 50px; text-align: right;" disabled/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Avoid TWA below</td>
+                    <td>
+                        <input type="checkbox" id="avoid-twa-cb" onchange="activateField(this, 'avoid-twa');"/>
+                        <input type="number" id="avoid-twa" value="60" min="0" step="1" style="width: 50px; text-align: right;" disabled/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Speed Coeff</td>
+                    <td><input type="number" id="speed-coeff" value="0.75" min="0" step="0.05" style="width: 50px; text-align: right;"/></td>
+                </tr>
+                <tr>
+                    <td>Proximity</td>
+                    <td><input type="number" id="proximity" value="25" min="0" step="1" style="width: 50px; text-align: right;"/></td>
+                </tr>
+                <tr>
+                    <td>Try to avoid land</td>
+                    <td><input type="checkbox" id="avoid-land"/></td>
+                </tr>
+                <tr>
+                    <td>Verbose</td>
+                    <td><input type="checkbox" id="routing-verbose"/></td>
+                </tr>
+
+
+            </table>
+            <!--
+                "outputType": "JSON",
+                "timeInterval": 24,    // Watch the OutOfMemoryError...
+                "routingForkWidth": 140,
+                "routingStep": 10,
+                "limitTWS": -1,
+                "limitTWA": -1,
+                "speedCoeff": 0.75,
+                "proximity": 25,
+                "avoidLand": false,
+                "verbose": false
+            -->
+        </div>
+        <button onclick="closeRoutingDialog();">Cancel</button>
+        <button onclick="closeRoutingDialog(); testRouting();">Compute Routing</button>
+    </div>
+</dialog>    
+    
+<dialog id="routing-output-dialog" style="min-height: 300px; min-width: 400px; z-index: 50; border-radius: 10px; background-color: rgba(255, 255, 255, 0.85); overflow: hidden;">
+    <div class="dialog-header">
+        <div style="padding: 10px;">
+        <span style="margin-left: 20px;">Routing output</span>
+        <span class="dialog-header-close" onclick="closeRoutingOutputDialog();">&times</span>
+        </div>
+    </div>
+
+    <div style="text-align: center;" id="display-bar">
+        <div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto;">
+            <button class="tablinks active" onclick="showContent(1);">Type 1</button>
+            <button class="tablinks" onclick="showContent(2);">Type 2</button>
+            <button class="tablinks" onclick="showContent(3);">Type 3</button>
+            <button class="tablinks" onclick="showContent(4);">Type 4</button>
+            <button class="tablinks" onclick="showContent(5);">Type 5</button>
+        </div>
+    </div>
+
+    <div>
+        <div style="max-height: 600px; text-align: left; overflow-y: scroll; display: block;" id="routing-output-1"></div>
+        <div style="max-height: 600px; text-align: left; overflow-y: scroll; display: none;" id="routing-output-2"></div>
+        <div style="max-height: 600px; text-align: left; overflow-y: scroll; display: none;" id="routing-output-3"></div>
+        <div style="max-height: 600px; text-align: left; overflow-y: scroll; display: none;" id="routing-output-4"></div>
+        <div style="max-height: 600px; text-align: left; overflow-y: scroll; display: none;" id="routing-output-5"></div>
+        <div>
+            <button onclick="ctrlC(this);" title="Copy to clipboard."><span style="margin: 20px;"><img src="../images/icons8-copy-to-clipboard-50.png"/></span></button>
+        </div>
+    </div>
+</dialog>
+    
+
 <h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP)<span id="time-to-next"></span></h2>
 <div>
     <table width="100%" style="border: 2px solid transparent;">
@@ -1638,7 +2030,7 @@ Going to: Latitude:
        max="59.99"
        step="0.01"
        value="00.00"/>
-<button onclick="testRouting();" title="Early test, no UI. Work in Progress." style="color: red;">Routing <b><i>Test</i></b></button>
+<button onclick="showRoutingDialog();" title="Early test, no UI. Work in Progress." style="color: red;">Routing <b><i>Test</i></b></button>
 <hr/>
 <div style="min-height: 16px;">
     <span id="current-grib-location"></span>

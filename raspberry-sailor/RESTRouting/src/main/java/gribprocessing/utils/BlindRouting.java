@@ -7,12 +7,8 @@ import nmea.parser.StringParsers;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BlindRouting {
 	private static boolean verbose = "true".equals(System.getProperty("rouring.verbose", "false"));
@@ -172,10 +168,60 @@ public class BlindRouting {
 				25.0,
 				avoidLand,
 				verb);
-		System.out.println(content.bestRoute);
+		System.out.println(content.bestRoutes);
 		System.out.println("Done!");
 	}
 
+	public RoutingUtil.RoutingResult calculate(double fromL,
+											   double fromG,
+											   double toL,
+											   double toG,
+											   String startTime,
+											   String gribName,
+											   String polarFile,
+											   String outputType,
+											   double timeInterval,
+											   int routingForkWidth,
+											   int routingStep,
+											   int limitTWS,
+											   int limitTWA,
+											   double speedCoeff,
+											   double proximity,
+											   boolean avoidLand,
+											   boolean verbose) throws Exception {
+		// RoutingUtil.OutputOption outputOption = RoutingUtil.OutputOption.JSON; // Default
+
+		String[] outTypes = outputType.split(",");
+		List<RoutingUtil.OutputOption> types = new ArrayList<>();
+
+		for (String oneType : outTypes) {
+			for (RoutingUtil.OutputOption opt : RoutingUtil.OutputOption.values()) {
+				if (oneType.equals(opt.toString())) {
+					// outputOption = opt;
+					types.add(opt);
+					break;
+				}
+			}
+		}
+		return calculate(
+				fromL,
+				fromG,
+				toL,
+				toG,
+				startTime,
+				gribName,
+				polarFile,
+				types, // List.of(outputOption),
+				timeInterval,
+				routingForkWidth,
+				routingStep,
+				limitTWS,
+				limitTWA,
+				speedCoeff,
+				proximity,
+				avoidLand,
+				verbose);
+	}
 	public RoutingUtil.RoutingResult calculate(double fromL,
 	                                           double fromG,
 	                                           double toL,
@@ -183,7 +229,7 @@ public class BlindRouting {
 	                                           String startTime,
 	                                           String gribName,
 	                                           String polarFile,
-	                                           String outputType,
+											   List<RoutingUtil.OutputOption> outputFmt,
 	                                           double timeInterval,
 	                                           int routingForkWidth,
 	                                           int routingStep,
@@ -220,7 +266,7 @@ public class BlindRouting {
 					startTime,
 					gribName,
 					polarFile,
-					outputType,
+					outputFmt.stream().map(opt -> opt.toString()).collect(Collectors.joining(",")),
 					timeInterval,
 					routingForkWidth,
 					(limitTWS == -1 ? "none" : String.valueOf(limitTWS)),
@@ -286,16 +332,12 @@ public class BlindRouting {
 				proximity,
 				verbose);
 
-		RoutingUtil.OutputOption outputFmt = RoutingUtil.OutputOption.JSON;
-		for (RoutingUtil.OutputOption fmt : RoutingUtil.OutputOption.values()) {
-			if (fmt.name().equals(outputType)) {
-				outputFmt = fmt;
-				break;
-			}
-		}
-
-		StringBuffer bestRoute = RoutingUtil.outputRouting(center.getPosition(), destination.getPosition(), routingResult.closest, routingResult.isochronals, outputFmt);
-		routingResult.bestRoute(bestRoute.toString());
+		Map<RoutingUtil.OutputOption, StringBuffer> bestRoutes = RoutingUtil.outputRouting(center.getPosition(),
+																						   destination.getPosition(),
+																						   routingResult.closest,
+																						   routingResult.isochronals,
+																						   outputFmt);
+		routingResult.bestRoutes(bestRoutes);
 		return routingResult;
 	}
 }

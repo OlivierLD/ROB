@@ -351,7 +351,7 @@ let plotBestRoute = function(canvas, context) {
 	//if (routingResult.waypoints) { // This is for dev...
 	//  	waypoints = routingResult.waypoints;
 	//} else {
-		waypoints = JSON.parse(routingResult.bestRoute).waypoints;
+		waypoints = JSON.parse(routingResult.bestRoutes.JSON).waypoints;
 		// Isochrons are in routingResult.isochronals
 		isochrons = routingResult.isochronals;
 	//}

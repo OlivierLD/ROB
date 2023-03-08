@@ -688,7 +688,7 @@ GRIB �  `��!i 
 	 *     "startTime": "2017-10-16T07:00:00",
 	 *     "gribName": "./GRIB_2017_10_16_07_31_47_PDT.grb",
 	 *     "polarFile": "./samples/CheoyLee42.polar-coeff",
-	 *     "outputType": "JSON",
+	 *     "outputType": "JSON,GPX",
 	 *     "timeInterval": 24,
 	 *     "routingForkWidth": 140,
 	 *     "routingStep": 10,
@@ -726,7 +726,7 @@ GRIB �  `��!i 
 							routingRequest.startTime,
 							routingRequest.gribName,
 							routingRequest.polarFile,
-							routingRequest.outputType, // "JSON",
+							routingRequest.outputType, // csv like "JSON,GPX,TXT",...
 							routingRequest.timeInterval,
 							routingRequest.routingForkWidth,
 							routingRequest.routingStep,
@@ -786,30 +786,40 @@ GRIB �  `��!i 
 					}
 					// String content = routing.getBestRoute(); // The full routing object may be too big !!
 					String content = mapper.writeValueAsString(routing4Json);
-					String contentType = HttpHeaders.APPLICATION_JSON;
-					switch (routingRequest.outputType) {
-						case "TXT":
-							contentType = HttpHeaders.TEXT_PLAIN;
-							break;
-						case "CSV":
-							contentType = "text/csv";
-							break;
-						case "KML":
-							contentType = "application/vnd.google-earth.kml+xml";
-							break;
-						case "GPX":
-							contentType = "application/gpx+xml";
-							break;
-						case "JSON":
-						default:
-							break;
+
+					if (verbose) {
+						System.out.println("--------------");
+						System.out.printf("Content-length: %d\n", content.length());
+						System.out.println("--------------");
+						System.out.println(content);
+						System.out.println("--------------");
 					}
+
+					String contentType = HttpHeaders.APPLICATION_JSON;
+//					switch (routingRequest.outputType) { // All the types are in routes. Type is JSON.
+//						case "TXT":
+//							contentType = HttpHeaders.TEXT_PLAIN;
+//							break;
+//						case "CSV":
+//							contentType = "text/csv";
+//							break;
+//						case "KML":
+//							contentType = "application/vnd.google-earth.kml+xml";
+//							break;
+//						case "GPX":
+//							contentType = "application/gpx+xml";
+//							break;
+//						case "JSON":
+//						default:
+//							break;
+//					}
 					if (verbose) {
 						System.out.println("Routing completed.");
 					}
 //					System.out.println(String.format("Content-type: %s", contentType));
 //					System.out.println(String.format("Content:\n%s", content));
-					RESTProcessorUtil.generateResponseHeaders(response, contentType, content.length());
+
+					RESTProcessorUtil.generateResponseHeaders(response, contentType, content.getBytes().length); // content.length());
 					response.setPayload(content.getBytes());
 				} catch (Throwable ex1) {  // To include the OutOfMemoryError
 					if (true || verbose) {

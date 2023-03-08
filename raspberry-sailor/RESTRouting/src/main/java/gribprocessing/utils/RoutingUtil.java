@@ -10,17 +10,9 @@ import java.awt.Polygon;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
 
 public class RoutingUtil {
 	public static final int REAL_ROUTING = 0;
@@ -71,7 +63,7 @@ public class RoutingUtil {
 	public static class RoutingResult {
 		RoutingPoint closest;
 		List<List<RoutingPoint>> isochronals;
-		String bestRoute; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
+		Map<OutputOption, StringBuffer> bestRoutes; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
 
 		public RoutingResult closest(RoutingPoint closest) {
 			this.closest = closest;
@@ -81,8 +73,8 @@ public class RoutingUtil {
 			this.isochronals = isochronals;
 			return this;
 		}
-		public RoutingResult bestRoute(String bestRoute) {
-			this.bestRoute = bestRoute;
+		public RoutingResult bestRoutes(Map<OutputOption, StringBuffer> bestRoutes) {
+			this.bestRoutes = bestRoutes;
 			return this;
 		}
 
@@ -94,21 +86,21 @@ public class RoutingUtil {
 			return isochronals;
 		}
 
-		public String getBestRoute() {
-			return bestRoute;
+		public Map<OutputOption, StringBuffer> getBestRoutes() {
+			return bestRoutes;
 		}
 	}
 
 	public static class RoutingResult4JSON {
 		List<List<RoutingIsochronPoint>> isochronals;
-		String bestRoute; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
+		Map<OutputOption, StringBuffer> bestRoutes; // Content depends on the required output type (TXT, CSV, KML, GPX, JSON).
 
 		public RoutingResult4JSON isochronals(List<List<RoutingIsochronPoint>> isochronals) {
 			this.isochronals = isochronals;
 			return this;
 		}
-		public RoutingResult4JSON bestRoute(String bestRoute) {
-			this.bestRoute = bestRoute;
+		public RoutingResult4JSON bestRoutes(Map<OutputOption, StringBuffer> bestRoutes) {
+			this.bestRoutes = bestRoutes;
 			return this;
 		}
 
@@ -120,8 +112,8 @@ public class RoutingUtil {
 			return this.isochronals;
 		}
 
-		public String getBestRoute() {
-			return this.bestRoute;
+		public Map<OutputOption, StringBuffer> getBestRoutes() {
+			return this.bestRoutes;
 		}
 	}
 
@@ -133,7 +125,7 @@ public class RoutingUtil {
 	public static RoutingResult4JSON transformForJson(RoutingResult originalRoutingResult) {
 		RoutingResult4JSON output = new RoutingResult4JSON();
 		// Best Route
-		output.bestRoute(originalRoutingResult.getBestRoute());
+		output.bestRoutes(originalRoutingResult.getBestRoutes());
 		// Isochrons
 		List<List<RoutingIsochronPoint>> isochrons = new ArrayList<>();
 		originalRoutingResult.getIsochronals().forEach(isochron -> {
@@ -751,7 +743,25 @@ public class RoutingUtil {
 		SDF_DMY.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 	}
 
-	public static StringBuffer outputRouting(GeoPoint from, GeoPoint to, RoutingPoint closestPoint, List<List<RoutingPoint>> allCalculatedIsochrons, OutputOption outputOption) {
+	public static StringBuffer outputRouting(GeoPoint from,
+											 GeoPoint to,
+											 RoutingPoint closestPoint,
+											 List<List<RoutingPoint>> allCalculatedIsochrons,
+											 OutputOption outputOption) {
+		return outputRouting(from, to, closestPoint, allCalculatedIsochrons, Arrays.asList(new OutputOption[] {outputOption})).get(outputOption);
+	}
+
+	public static Map<OutputOption, StringBuffer> outputRouting(GeoPoint from,
+															    GeoPoint to,
+															    RoutingPoint closestPoint,
+															    List<List<RoutingPoint>> allCalculatedIsochrons,
+															    List<OutputOption> outputOptions) {
+
+		Map<OutputOption, StringBuffer> allOutputs = new HashMap<>();
+		outputOptions.forEach(opt -> {
+			allOutputs.put(opt, new StringBuffer());
+		});
+
 
 		String kmlPlaces = "";
 		String kmlRoute = "";
@@ -759,12 +769,13 @@ public class RoutingUtil {
 
 		// Reverse, for the clipboard
 		boolean generateGPXRoute = true;
-		StringBuffer output = new StringBuffer();
+		// StringBuffer output = new StringBuffer();
 		// Opening tags
-		if (outputOption == OutputOption.CSV) {
-			output.append("L;(dec L);G;(dec G);Date(MDY);UTC;TWS;TWD;BSP;HDG\n");
-		} else if (outputOption == OutputOption.GPX) {
-			output.append(
+		if (outputOptions.contains(OutputOption.CSV)) {
+			allOutputs.get(OutputOption.CSV).append("L;(dec L);G;(dec G);Date(MDY);UTC;TWS;TWD;BSP;HDG\n");
+		}
+		if (outputOptions.contains(OutputOption.GPX)) {
+			allOutputs.get(OutputOption.GPX).append(
 					"<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" +
 							"<gpx version=\"1.1\" \n" +
 							"     creator=\"OpenCPN\" \n" +
@@ -774,7 +785,7 @@ public class RoutingUtil {
 							"  xmlns:opencpn=\"http://www.opencpn.org\">\n");
 			if (generateGPXRoute) {
 				Date d = new Date();
-				output.append("  <rte>\n" +
+				allOutputs.get(OutputOption.GPX).append("  <rte>\n" +
 						"    <name>Weather Wizard route (" + SDF_DMY.format(d) + ")</name>\n" +
 						"    <extensions>\n" +
 						"      <opencpn:start>" + from.toString() + "</opencpn:start>\n" +
@@ -786,31 +797,34 @@ public class RoutingUtil {
 						"    <desc>Routing from Weather Wizard (generated " + d.toString() + ")</desc>\n" +
 						"    <number>" + (d.getTime()) + "</number>\n");
 			}
-		} else if (outputOption == OutputOption.TXT) {
+		}
+		if (outputOptions.contains(OutputOption.TXT)) {
 			Date d = new Date();
-			output.append("Weather Wizard route (" + SDF_DMY.format(d) + ") generated " + d.toString() + ")\n");
-		} else if (outputOption == OutputOption.KML) {
+			allOutputs.get(OutputOption.TXT).append("Weather Wizard route (" + SDF_DMY.format(d) + ") generated " + d.toString() + ")\n");
+		}
+		if (outputOptions.contains(OutputOption.KML)) {
 			Date d = new Date();
-			output.append(
+			allOutputs.get(OutputOption.KML).append(
 					"<?xml version = '1.0' encoding = 'UTF-8'?>\n" +
 							"<kml xmlns=\"http://earth.google.com/kml/2.0\" \n" +
 							"     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
 							"     xsi:schemaLocation=\"http://earth.google.com/kml/2.0 ../xsd/kml21.xsd\">\n" +
 							"   <Document>\n" +
 							"      <name>Weather Wizard route (" + SDF_DMY.format(d) + ")</name>\n"); // TASK Add from/to
-		} else if (outputOption == OutputOption.JSON) {
+		}
+		if (outputOptions.contains(OutputOption.JSON)) {
 			// output.append("{\n" + "  \"waypoints\": [\n");
-			output.append("{\"waypoints\": [");
+			allOutputs.get(OutputOption.JSON).append("{\"waypoints\": [");
 		}
 
 		if (closestPoint != null && allCalculatedIsochrons != null) {
 			Calendar cal = new GregorianCalendar();
 			List<RoutingPoint> bestRoute = RoutingUtil.getBestRoute(closestPoint, allCalculatedIsochrons);
 			int routeSize = bestRoute.size();
-			String date = "", time = "";
+			String dateCSV = "", timeCSV = "", dateGPX = "", dateTXT_KML = "", dateJSON = "";
 			RoutingPoint rp = null;
 			RoutingPoint ic = null; // Isochron Center
-//    for (int r=0; r<routeSize; r++) // 0 is the closest point, the last calculated
+			// for (int r=0; r<routeSize; r++) // 0 is the closest point, the last calculated
 			for (int r = routeSize - 1; r >= 0; r--) { // 0 is the closest point, the last calculated
 				rp = bestRoute.get(r);
 				if (r == 0) { // Last one
@@ -819,7 +833,7 @@ public class RoutingUtil {
 					ic = bestRoute.get(r - 1);
 				}
 				if (rp.getDate() == null) {
-					date = time = "";
+					dateCSV = timeCSV = dateGPX = dateTXT_KML = dateJSON = "";
 				} else {
 					cal.setTime(rp.getDate());
 
@@ -829,20 +843,23 @@ public class RoutingUtil {
 					int hours = cal.get(Calendar.HOUR_OF_DAY);
 					int minutes = cal.get(Calendar.MINUTE);
 					int seconds = cal.get(Calendar.SECOND);
-					if (outputOption == OutputOption.CSV) {
-						date = DF2.format(month + 1) + "/" + DF2.format(day) + "/" + Integer.toString(year);
-						time = DF2.format(hours) + ":" + DF2.format(minutes);
-					} else if (outputOption == OutputOption.GPX) {
-						date = Integer.toString(year) + "-" +
+					if (outputOptions.contains(OutputOption.CSV)) {
+						dateCSV = DF2.format(month + 1) + "/" + DF2.format(day) + "/" + Integer.toString(year);
+						timeCSV = DF2.format(hours) + ":" + DF2.format(minutes);
+					}
+					if (outputOptions.contains(OutputOption.GPX)) {
+						dateGPX = Integer.toString(year) + "-" +
 								DF2.format(month + 1) + "-" +
 								DF2.format(day) + "T" +
 								DF2.format(hours) + ":" +
 								DF2.format(minutes) + ":" +
 								DF2.format(seconds) + "Z";
-					} else if (outputOption == OutputOption.TXT || outputOption == OutputOption.KML) {
-						date = rp.getDate().toString();
-					} else if (outputOption == OutputOption.JSON) {
-						date = Integer.toString(year) + "-" +
+					}
+					if (outputOptions.contains(OutputOption.TXT) || outputOptions.contains(OutputOption.KML)) {
+						dateTXT_KML = rp.getDate().toString();
+					}
+					if (outputOptions.contains(OutputOption.JSON)) {
+						dateJSON = Integer.toString(year) + "-" +
 								DF2.format(month + 1) + "-" +
 								DF2.format(day) + "T" +
 								DF2.format(hours) + ":" +
@@ -851,7 +868,7 @@ public class RoutingUtil {
 					}
 				}
 				// Route points
-				if (outputOption == OutputOption.CSV) {
+				if (outputOptions.contains(OutputOption.CSV)) {
 					String lat = GeomUtil.decToSex(rp.getPosition().getL(), GeomUtil.SWING, GeomUtil.NS);
 					String lng = GeomUtil.decToSex(rp.getPosition().getG(), GeomUtil.SWING, GeomUtil.EW);
 					String tws = XX22.format(ic.getTws());
@@ -859,21 +876,22 @@ public class RoutingUtil {
 					String bsp = XX22.format(ic.getBsp());
 					String hdg = Integer.toString(ic.getHdg());
 
-					output.append(lat + ";" +
+					allOutputs.get(OutputOption.CSV).append(lat + ";" +
 							Double.toString(rp.getPosition().getL()) + ";" +
 							lng + ";" +
 							Double.toString(rp.getPosition().getG()) + ";" +
-							date + ";" +
-							time + ";" +
+							dateCSV + ";" +
+							timeCSV + ";" +
 							tws + ";" +
 							twd + ";" +
 							bsp + ";" +
 							hdg + "\n");
-				} else if (outputOption == OutputOption.GPX) {
+				}
+				if (outputOptions.contains(OutputOption.GPX)) {
 					if (generateGPXRoute) {
 						NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
 						nf.setMaximumFractionDigits(2);
-						output.append(
+						allOutputs.get(OutputOption.GPX).append(
 								 "       <rtept lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
 										"            <name>" + DF3.format(routeSize - r) + "_WW</name>\n" +
 										"            <desc>Waypoint " + Integer.toString(routeSize - r) + ";VMG=" + nf.format(ic.getBsp()) + ";</desc>\n" +
@@ -887,9 +905,9 @@ public class RoutingUtil {
 										"            </extensions>\n" +
 										"        </rtept>\n");
 					} else {
-						output.append(
+						allOutputs.get(OutputOption.GPX).append(
 								 "  <wpt lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
-										"    <time>" + date + "</time>\n" +
+										"    <time>" + dateGPX + "</time>\n" +
 										"    <name>" + DF3.format(r) + "_WW</name>\n" +
 										"    <sym>triangle</sym>\n" +
 										"    <type>WPT</type>\n" +
@@ -901,13 +919,15 @@ public class RoutingUtil {
 										"    </extensions>\n" +
 										"  </wpt>\n");
 					}
-				} else if (outputOption == OutputOption.TXT) {
+				}
+				if (outputOptions.contains(OutputOption.TXT)) {
 					String tws = XX22.format(ic.getTws());
 					String twd = Integer.toString(ic.getTwd());
 					String bsp = XX22.format(ic.getBsp());
 					String hdg = Integer.toString(ic.getHdg());
-					output.append(rp.getPosition().toString() + " : " + date + ", tws:" + tws + ", twd:" + twd + ", bsp:" + bsp + ", hdg:" + hdg + "\n");
-				} else if (outputOption == OutputOption.KML) {
+					allOutputs.get(OutputOption.TXT).append(rp.getPosition().toString() + " : " + dateTXT_KML + ", tws:" + tws + ", twd:" + twd + ", bsp:" + bsp + ", hdg:" + hdg + "\n");
+				}
+				if (outputOptions.contains(OutputOption.KML)) {
 					if (firstKMLHeading == -1) {
 						firstKMLHeading = ic.getHdg();
 					}
@@ -921,7 +941,7 @@ public class RoutingUtil {
 									"           <name>WayPoint " + Integer.toString(routeSize - r) + "</name>\n" +
 									"           <description>\n" +
 									"            <![CDATA[\n" +
-									"              <b>" + date + "</b>\n" +
+									"              <b>" + dateTXT_KML + "</b>\n" +
 									"              <table>\n" +
 									"                <tr><td>TWS</td><td>" + tws + " knots</td></tr>\n" +
 									"                <tr><td>TWD</td><td>" + twd + "&deg;</td></tr>\n" +
@@ -941,7 +961,8 @@ public class RoutingUtil {
 									"             <coordinates>" + rp.getPosition().getG() + "," + rp.getPosition().getL() + ",0 </coordinates>\n" +
 									"           </Point>\n" +
 									"         </Placemark>\n");
-				} else if (outputOption == OutputOption.JSON) {
+				}
+				if (outputOptions.contains(OutputOption.JSON)) {
 					String tws = XXX12.format(ic.getTws());
 					String twd = Integer.toString(ic.getTwd());
 					String bsp = XXX12.format(ic.getBsp());
@@ -958,8 +979,8 @@ public class RoutingUtil {
 									"      \"bsp\":" + bsp + ",\n" +
 									"      \"hdg\":" + hdg + "\n" +
 									"    }" + (r == 0 ? "" : ",") + "\n"); */
-					output.append(
-							"{  \"datetime\":\"" + date + "\"," +
+					allOutputs.get(OutputOption.JSON).append(
+							"{  \"datetime\":\"" + dateJSON + "\"," +
 									" \"position\": {" +
 									" \"latitude\":\"" + rp.getPosition().getL() + "\"," +
 									" \"longitude\":\"" + rp.getPosition().getG() + "\"" +
@@ -972,18 +993,19 @@ public class RoutingUtil {
 				}
 			}
 			// Closing tags
-			if (outputOption == OutputOption.GPX) {
+			if (outputOptions.contains(OutputOption.GPX)) {
 				if (generateGPXRoute) {
-					output.append("  </rte>\n");
+					allOutputs.get(OutputOption.GPX).append("  </rte>\n");
 				}
-				output.append("</gpx>");
-			} else if (outputOption == OutputOption.KML) {
-				output.append(
+				allOutputs.get(OutputOption.GPX).append("</gpx>");
+			}
+			if (outputOptions.contains(OutputOption.KML)) {
+				allOutputs.get(OutputOption.KML).append(
 						 "      <Folder>\n" +
 								"         <name>Waypoints</name>\n" +
 								kmlPlaces +
 								"      </Folder>\n");
-				output.append(
+				allOutputs.get(OutputOption.KML).append(
 						 "      <Placemark>\n" +
 								"          <name>Suggested route</name>\n" +
 								"          <LookAt>\n" +
@@ -1013,15 +1035,16 @@ public class RoutingUtil {
 								"             </coordinates>\n" +
 								"          </LineString>\n" +
 								"       </Placemark>\n");
-				output.append(
+				allOutputs.get(OutputOption.KML).append(
 						 "       <Snippet><![CDATA[created by <a href=\"http://code.google.com/p/weatherwizard/\">The Weather Wizard</a>]]></Snippet>\n" +
 								"   </Document>\n" +
 								"</kml>");
-			} else if (outputOption == OutputOption.JSON) {
+			}
+			if (outputOptions.contains(OutputOption.JSON)) {
 				// output.append("  ]\n" + "}\n");
-				output.append("  ]" + "}");
+				allOutputs.get(OutputOption.JSON).append("  ]" + "}");
 			}
 		}
-		return output;
+		return allOutputs;
 	}
 }

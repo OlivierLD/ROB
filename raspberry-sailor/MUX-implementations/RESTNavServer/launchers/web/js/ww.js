@@ -241,7 +241,9 @@ let getBestRoute = function(payload, callback) {
 
 	let getData = routingPromise(payload);
 	getData.then((value) => {
-		// console.log("Done:", value);
+		// console.log("----");
+		// console.log("Routing done:", value);
+		// console.log("----");
 		let json = JSON.parse(value);
 		if (callback !== undefined) {
 			callback(json);
