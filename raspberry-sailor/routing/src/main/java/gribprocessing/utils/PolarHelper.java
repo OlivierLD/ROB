@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.List;
 
 public class PolarHelper {
-	private double coeff[][] = null;
+	private double[][] coeff = null;
 	private List<CoeffForPolars> coeffList = null;
 
 	private static int polarVersion = 0;
@@ -19,8 +19,8 @@ public class PolarHelper {
 	public final static int POLAR_V1 = 1;
 	public final static int POLAR_V2 = 2;
 
-	private static DOMParser parser = new DOMParser(); // TODO In a static context?
-	private String polarFileName;
+	private final static DOMParser parser = new DOMParser(); // TODO In a static context?
+	private final String polarFileName;
 
 	public PolarHelper(String polarCoeffFileName) {
 		this.polarFileName = polarCoeffFileName;
@@ -41,11 +41,7 @@ public class PolarHelper {
 				XMLDocument doc = parser.getDocument();
 
 				if (polarVersion == POLAR_V1) {
-					NSResolver nsr = new NSResolver() {
-						public String resolveNamespacePrefix(String string) {
-							return "http://www.logisail.com/polars";
-						}
-					};
+					NSResolver nsr = string -> "http://www.logisail.com/polars";
 
 					int w = Integer.parseInt(doc.selectNodes("/pol:polar-coeff-function/@polar-degree", nsr).item(0).getNodeValue()) + 1;
 					int h = Integer.parseInt(doc.selectNodes("/pol:polar-coeff-function/@polar-coeff-degree", nsr).item(0).getNodeValue()) + 1;

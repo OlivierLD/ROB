@@ -52,7 +52,7 @@ public class RoutingUtil {
     private static boolean interruptRouting = false;
 
     private static int getBearing(RoutingPoint center) {
-        int brg = 0;
+        int brg;
         gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
         gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
         //  gc.calculateGreatCircle_degrees(10);
@@ -64,7 +64,7 @@ public class RoutingUtil {
     }
 
     private static int getBearingTo(RoutingPoint center, RoutingPoint dest) {
-        int brg = 0;
+        int brg;
         gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
         gc.setArrival(new GreatCirclePoint((dest.getPosition().getL()), (dest.getPosition().getG())));
         //  gc.calculateGreatCircle_degrees(10);

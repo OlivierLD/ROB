@@ -171,7 +171,7 @@ public class BlindRouting {
 				avoidLand,
 				verb);
 		System.out.println(content.bestRoutes.get(content.bestRoutes.keySet().toArray()[0]));
-		System.out.println("Done!");
+		System.err.println("Done!");
 	}
 
 	public RoutingUtil.RoutingResult calculate(double fromL,
@@ -268,7 +268,7 @@ public class BlindRouting {
 					startTime,
 					gribName,
 					polarFile,
-					outputFmt.stream().map(opt -> opt.toString()).collect(Collectors.joining(",")),
+					outputFmt.stream().map(Enum::toString).collect(Collectors.joining(",")),
 					timeInterval,
 					routingForkWidth,
 					(limitTWS == -1 ? "none" : String.valueOf(limitTWS)),
@@ -278,7 +278,7 @@ public class BlindRouting {
 					avoidLand ? "yes" : "no");
 		}
 		List<GribHelper.GribConditionData> agcd = GribHelper.dumper(gf, "");
-		GribHelper.GribConditionData gribData[] = agcd.toArray(new GribHelper.GribConditionData[agcd.size()]);
+		GribHelper.GribConditionData[] gribData = agcd.toArray(new GribHelper.GribConditionData[agcd.size()]);
 
 		long _time = StringParsers.durationToDate(startTime, "Etc/UTC");
 		Calendar startCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));

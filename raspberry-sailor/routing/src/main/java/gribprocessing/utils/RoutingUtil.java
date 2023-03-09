@@ -22,7 +22,7 @@ public class RoutingUtil {
 	private static GribHelper.GribConditionData[] wgd = null;
 	private static double timeStep = 0D;
 
-	private static GreatCircle gc = new GreatCircle();
+	private final static GreatCircle gc = new GreatCircle();
 	private static RoutingPoint closest = null;
 	private static RoutingPoint finalClosest = null;
 
@@ -245,7 +245,7 @@ public class RoutingUtil {
 			if (stopIfGRIB2old) {
 				keepLooping = false;
 				interruptedBecauseTooOld = true;
-				System.out.println("Routing aborted. GRIB exhausted (preference)."); // TODO Better logging
+				System.err.println("Routing aborted. GRIB exhausted (preference)."); // TODO Better logging
 			}
 		}
 		one.add(center); // Initialize data with the center. One point only.
@@ -283,7 +283,7 @@ public class RoutingUtil {
 							if (stopIfGRIB2old) {
 								keepLooping = false;
 								interruptedBecauseTooOld = true;
-								System.out.println("Routing aborted. GRIB exhausted (preference).");
+								System.err.println("Routing aborted. GRIB exhausted (preference).");
 							}
 						}
 				        // timer = logDiffTime(timer, "Milestone 4");
@@ -310,7 +310,10 @@ public class RoutingUtil {
 								continue;
 							}
 							int twa;
-							for (twa = bearing - windDir; twa < 0; twa += 360) ;
+							twa = bearing - windDir;
+							while (twa < 0) {
+								twa += 360;
+							}
 							double wSpeed = 0.0D;
 							if (wind != null) { // Should be granted already...
 								wSpeed = wind.windspeed;
@@ -515,16 +518,16 @@ public class RoutingUtil {
 						}
 						if (nbNonZeroSpeed == 0) {
 							if (interruptedBecauseTooOld) {
-								System.out.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
+								System.err.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
 							} else {
-								System.out.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
+								System.err.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
 							}
 						}
 					} else {
 						if (interruptedBecauseTooOld) {
-							System.out.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
+							System.err.printf("GRIB exhausted, %d isochrons\n", allIsochrons.size());
 						} else {
-							System.out.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
+							System.err.printf("Routing aborted after %d isochrons\n", allIsochrons.size());
 						}
 					}
 				}
@@ -545,7 +548,7 @@ public class RoutingUtil {
 			if (interruptRouting) {
 				logDiffTime(timer, "Routing interrupted.");
 //      System.out.println("Routing interrupted.");
-				System.out.println("Routing aborted on user's request.");
+				System.err.println("Routing aborted on user's request.");
 			}
 		}
 		// timer = logDiffTime(timer, "Milestone 14");

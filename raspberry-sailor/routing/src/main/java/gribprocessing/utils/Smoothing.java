@@ -47,40 +47,40 @@ public class Smoothing {
 
 		boolean stuck = false;
 
-		for (int i = 0; i < dp.length; i++) {
-			double dist = Smoothing.distance(dp[i].x, dp[i].y, x, y);
+		for (DataPoint dataPoint : dp) {
+			double dist = Smoothing.distance(dataPoint.x, dataPoint.y, x, y);
 			if (dist == 0D) {
-				finalTWD = dp[i].d;
-				finalTWS = dp[i].s;
-				finalprmsl = dp[i].prmsl;
-				final500htg = dp[i].hgt500;
-				finaltemp = dp[i].temp;
-				finalwheight = dp[i].whgt;
-				finalrain = dp[i].rain;
-				finalu = dp[i].u;
-				finalv = dp[i].v;
-				finaluC = dp[i].uC;
-				finalvC = dp[i].vC;
-				finalCDR = dp[i].dC;
-				finalCSP = dp[i].sC;
+				finalTWD = dataPoint.d;
+				finalTWS = dataPoint.s;
+				finalprmsl = dataPoint.prmsl;
+				final500htg = dataPoint.hgt500;
+				finaltemp = dataPoint.temp;
+				finalwheight = dataPoint.whgt;
+				finalrain = dataPoint.rain;
+				finalu = dataPoint.u;
+				finalv = dataPoint.v;
+				finaluC = dataPoint.uC;
+				finalvC = dataPoint.vC;
+				finalCDR = dataPoint.dC;
+				finalCSP = dataPoint.sC;
 				stuck = true;
 				break;
 			} else {
 				double coeff = 1.0 / (dist * dist);
 				totalcoeff += coeff;
-				totalTWD += (coeff * dp[i].d);
-				totalTWS += (coeff * dp[i].s);
-				totalprmsl += (coeff * dp[i].prmsl);
-				total500htg += (coeff * dp[i].hgt500);
-				totaltemp += (coeff * dp[i].temp);
-				totalwheight += (coeff * dp[i].whgt);
-				totalrain += (coeff * dp[i].rain);
-				totalu += (coeff * dp[i].u);
-				totalv += (coeff * dp[i].v);
-				totaluC += (coeff * dp[i].uC);
-				totalvC += (coeff * dp[i].vC);
-				totalCDR += (coeff * dp[i].dC);
-				totalCSP += (coeff * dp[i].sC);
+				totalTWD += (coeff * dataPoint.d);
+				totalTWS += (coeff * dataPoint.s);
+				totalprmsl += (coeff * dataPoint.prmsl);
+				total500htg += (coeff * dataPoint.hgt500);
+				totaltemp += (coeff * dataPoint.temp);
+				totalwheight += (coeff * dataPoint.whgt);
+				totalrain += (coeff * dataPoint.rain);
+				totalu += (coeff * dataPoint.u);
+				totalv += (coeff * dataPoint.v);
+				totaluC += (coeff * dataPoint.uC);
+				totalvC += (coeff * dataPoint.vC);
+				totalCDR += (coeff * dataPoint.dC);
+				totalCSP += (coeff * dataPoint.sC);
 			}
 		}
 		if (!stuck) {

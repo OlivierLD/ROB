@@ -21,7 +21,7 @@ public class GRIBUtils {
 	 * For SailMail requests
 	 *
 	 * @param gribRequest, like "GFS:65N,45S,130E,110W|2,2|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
-	 * @return
+	 * @return The full request, ready to use.
 	 */
 	public static String generateGRIBRequest(String gribRequest) {
 		String request = "";
@@ -38,8 +38,8 @@ public class GRIBUtils {
 			String s = "";
 			byte[] md5encoded = digest.digest();
 			//    System.out.println("Final len:" + md5encoded.length);
-			for (int i = 0; i < md5encoded.length; i++) {
-				char c = (char) md5encoded[i];
+			for (byte b : md5encoded) {
+				char c = (char) b;
 				String str = Integer.toString(c, 16);
 				if (str.length() == 4) {
 					str = str.substring(2, 4);
@@ -95,13 +95,13 @@ public class GRIBUtils {
 				}
 
 				final int BUFFER_SIZE = 65_536;
-				byte aByte[] = new byte[BUFFER_SIZE];
+				byte[] aByte = new byte[BUFFER_SIZE];
 				int nBytes;
 				while ((nBytes = dis.read(aByte, 0, BUFFER_SIZE)) != -1) {
-//        System.out.println("Read " + nBytes + " more bytes.");
+					// System.out.println("Read " + nBytes + " more bytes.");
 					content = StaticUtil.appendByteArrays(content, aByte, nBytes);
 				}
-//			System.out.println("Read " + content.length + " bytes.");
+				// System.out.println("Read " + content.length + " bytes.");
 				if (verbose) {
 					System.out.println("Read " + NumberFormat.getInstance().format(content.length) + " bytes of GRIB data.");
 				}
