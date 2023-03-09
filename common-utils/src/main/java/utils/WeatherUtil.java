@@ -5,9 +5,11 @@ public class WeatherUtil {
 	/**
 	 * Compliant with http://www.dpcalc.org/
 	 *
+	 * TODO Use it for xxMDA NMEA Sentences
+	 *
 	 * @param hum in %
 	 * @param temp in Celsius
-	 * @return in Celsius
+	 * @return dew point temperature in Celsius
 	 */
 	public static double dewPointTemperature(double hum, double temp) {
 		double dewPointTemp = 0d;
@@ -22,5 +24,4 @@ public class WeatherUtil {
 
 		return dewPointTemp;
 	}
-
 }

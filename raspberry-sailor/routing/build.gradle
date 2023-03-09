@@ -18,6 +18,7 @@ dependencies {
   implementation 'oracle:xmlparser:2.0'
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':common-utils')
+  implementation project(':raspberry-sailor:NMEA-Parser')
   implementation project(':raspberry-sailor:JGRIB')
   implementation project(':raspberry-sailor:PolarSmoother')
 }

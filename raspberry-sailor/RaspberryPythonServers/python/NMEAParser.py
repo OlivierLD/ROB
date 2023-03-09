@@ -8,6 +8,7 @@ from typing import Dict  # , List, Set, Tuple, Optional
 NMEA_EOS: str = '\r\n'
 DEBUG: bool = False
 
+# TODO XDR, MDA, ...
 
 def rmc_parser(sentence: str) -> Dict[str, Dict]:
     """

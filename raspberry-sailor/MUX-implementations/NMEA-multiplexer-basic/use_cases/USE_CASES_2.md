@@ -73,7 +73,8 @@ ssd1306.dg.resource=/ssd1306/nmea-data
 ssd1306.dg.verbose=false
 ```
 
-Now, sensors and actuator are in place, start the multiplexer:
+Now, sensors and actuator are in place, start the multiplexer with `nmea.mux.kayak.ssd1306.yaml`:
+
 ```
 $ ./mux.sh nmea.mux.kayak.ssd1306.yaml
 Using properties file nmea.mux.kayak.ssd1306.yaml

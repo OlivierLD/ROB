@@ -1,5 +1,7 @@
 package nmea.parser;
 
+import utils.WeatherUtil;
+
 import java.util.Date;
 
 public class StringGeneratorTest {
@@ -7,27 +9,27 @@ public class StringGeneratorTest {
         String rmc = StringGenerator.generateRMC("II", new Date(), 38.2500, -122.5, 6.7, 210, 3d);
         System.out.println("Generated RMC:" + rmc);
 
-        if (StringParsers.validCheckSum(rmc))
+        if (StringParsers.validCheckSum(rmc)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
-
+        }
         String mwv = StringGenerator.generateMWV("II", 23.45, 110);
         System.out.println("Generated MWV:" + mwv);
 
-        if (StringParsers.validCheckSum(mwv))
+        if (StringParsers.validCheckSum(mwv)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
-
+        }
         String vhw = StringGenerator.generateVHW("II", 8.5, 110);
         System.out.println("Generated VHW:" + vhw);
 
-        if (StringParsers.validCheckSum(vhw))
+        if (StringParsers.validCheckSum(vhw)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
-
+        }
         String mmb = StringGenerator.generateMMB("II", 1013.6);
         System.out.println("Generated MMB:" + mmb);
 
@@ -56,42 +58,45 @@ public class StringGeneratorTest {
                 270,    // TWD
                 255,    // WIND DIR (MAG)
                 12.0); // TWS
-        if (StringParsers.validCheckSum(mda))
+        if (StringParsers.validCheckSum(mda)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
+        }
         System.out.println("Generated MDA:" + mda);
         mda = StringGenerator.generateMDA("II", 1013.25, // PRMSL
                 25,    // AIR TEMP
                 12,    // WATER TEMP
                 75,    // REL HUMIDITY
                 50,    // ABS HUMIDITY
-                -Double.MAX_VALUE,    // DEW POINT (CELSIUS)
+                WeatherUtil.dewPointTemperature(75, 25), //  -Double.MAX_VALUE,    // DEW POINT (CELSIUS)
                 270,    // TWD
                 255,    // WIND DIR (MAG)
                 12.0); // TWS
-        if (StringParsers.validCheckSum(mda))
+        if (StringParsers.validCheckSum(mda)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
+        }
         System.out.println("Generated MDA:" + mda);
 
         double noValue = -Double.MAX_VALUE;
         mda = StringGenerator.generateMDA("WI", 1009, 31.7, noValue, noValue, noValue, noValue, 82.3, 72.3, 7.4);
-        if (StringParsers.validCheckSum(mda))
+        if (StringParsers.validCheckSum(mda)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
+        }
         System.out.println("Generated MDA:" + mda);
 
         System.out.println("Another one...");
         mda = "$WIMDA,29.796,I,1.009,B,31.7,C,,,,,,,82.3,T,72.3,M,7.4,N,3.8,M*23";
         System.out.println("Copied MDA   :" + mda);
-        if (StringParsers.validCheckSum(mda))
+        if (StringParsers.validCheckSum(mda)) {
             System.out.println("Valid!");
-        else
+        } else {
             System.out.println("Invalid...");
-
+        }
         String vwt = StringGenerator.generateVWT("II", 16, 96);
         System.out.println(vwt);
 
@@ -107,6 +112,6 @@ public class StringGeneratorTest {
         System.out.println(gll);
         GLL parsedGLL = StringParsers.parseGLL(gll);
         GeoPos ll = parsedGLL.getGllPos();
-        System.out.println(String.format(">> Pos %s", ll.toString()));
+        System.out.printf(">> Pos %s\n", ll.toString());
     }
 }

@@ -11,6 +11,7 @@ import nmea.parser.StringGenerator;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ServerHandshake;
+import utils.WeatherUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -127,7 +128,7 @@ public class WeatherStationWSReader extends NMEAReader {
 							-Double.MAX_VALUE,  // Water Temp
 							hum,
 							-Double.MAX_VALUE,  // Abs hum
-							-Double.MAX_VALUE,  // dew point
+							WeatherUtil.dewPointTemperature(hum, temp), // -Double.MAX_VALUE,  // dew point
 							avgdir,  // TWD
 							-Double.MAX_VALUE,  // TWD (mag)
 							speed); // TWS

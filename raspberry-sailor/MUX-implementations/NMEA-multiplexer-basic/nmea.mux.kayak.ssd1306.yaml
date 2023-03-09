@@ -3,8 +3,8 @@
 #
 name: "Logging Data from the Kayak"
 description:
-  - A GPS on /dev/ttyS80
-  - A BME280 read from a TCP Server in Python, on port 8001
+  - Read a GPS on /dev/ttyS80
+  - Read a BME280 from a TCP Server in Python, on port 8001
   - Display on an SSD1306 128x64
   - Log data in a file
 context:
