@@ -106,7 +106,8 @@ public class PolarHelper {
 		return y;
 	}
 
-	public static void main(String args[]) throws Exception {
+	// For tests
+	public static void main(String... args) throws Exception {
 		String fName = "/Users/olediour/repos/raspberry-coffee/Project.Trunk/PolarSmoother/sample-files/CheoyLee42.polar-coeff"; // ((ParamPanel.DataFile) ParamPanel.data[ParamData.POLAR_FILE_LOC][ParamData.VALUE_INDEX]).toString();
 
 		PolarHelper ph = new PolarHelper(fName);

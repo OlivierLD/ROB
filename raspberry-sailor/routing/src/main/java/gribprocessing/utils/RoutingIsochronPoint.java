@@ -2,9 +2,6 @@ package gribprocessing.utils;
 
 import calc.GeoPoint;
 
-import java.awt.*;
-import java.util.Date;
-
 /**
  * Designed to minimize the size of the chain of ancestors
  * TODO See how/if the bsp, date, hdg, tws, twd, twa are used to the isochrons.

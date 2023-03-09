@@ -41,7 +41,7 @@ Otherwise...:
   - The Java code is JDK 8 compatible, to fit early Raspberry Pis. 
   - `gradle` will also be needed for the build. It will be automatically installed if needed, you do _NOT_ need to worry about it.
 - To access Serial Ports (GPS and/or NMEA data), `librxtx-java`
-- `Python 3` (in some cases, to access external devices, like sensors, oled screens, etc )
+- `Python 3` (in some cases, to access external devices, like sensors, oled screens, etc.)
 
 All the commands described below are to be run from a terminal (unless mentioned otherwise).
 
@@ -228,7 +228,7 @@ Now, try going to <http://localhost:9999/web/index.html>. You would see a page w
 To try:
 - In the Weather Wizard section, try "2 - Operations" (this requires an Internet connection, for now)
 ![Weather Wizard](./images/01.ww.png)
-  - As per the request definition (the drop-down list at the top left part, saying "North Atlantic, current analysis (fine, 2-day GRIB)),
+  - As per the request definition (the drop-down list at the top left part, saying "North Atlantic, current analysis (fine, 2-day GRIB)"),
     this shows a GRIB and 4 faxes on the North Atlantic.
   - The orange display show the GRIB data at the position of the mouse on the chart,
     True Wind Speed and Direction, Air Temperature, Atmospheric Pressure, Precipitation Rate.

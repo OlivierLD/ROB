@@ -436,7 +436,7 @@ public class RoutingUtil {
                         if (intermediateWP != null) {
                             smallestDist = Double.MAX_VALUE; // Reset, for the next leg
                             keepLooping = true;
-                            finalCurve = new ArrayList<RoutingPoint>();
+                            finalCurve = new ArrayList<>();
                             finalCurve.add(closest);
                             center = closest;
                             center.setDate(currentDate);
@@ -561,7 +561,7 @@ public class RoutingUtil {
     }
 
     public static <T> List<T> revertList(List<T> list) {
-        List<T> inverted = new ArrayList<T>(list.size());
+        List<T> inverted = new ArrayList<>(list.size());
         int listSize = list.size();
         for (int i = listSize - 1; i >= 0; i--) {
             inverted.add(list.get(i));
@@ -570,7 +570,7 @@ public class RoutingUtil {
     }
 
     public static List<RoutingPoint> getBestRoute(RoutingPoint closestPoint, List<List<RoutingPoint>> allIsochrons) {
-        List<RoutingPoint> bestRoute = new ArrayList<RoutingPoint>(allIsochrons.size());
+        List<RoutingPoint> bestRoute = new ArrayList<>(allIsochrons.size());
         boolean go = true;
         RoutingPoint start = closestPoint;
         bestRoute.add(start);

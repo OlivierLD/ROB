@@ -13,6 +13,7 @@ include('astro-computer:AstroComputer')
 include('astro-computer:AstroUtilities')
 
 // Raspberry Sailor
+include('raspberry-sailor:routing')
 include('raspberry-sailor:NMEA-Parser')
 include('raspberry-sailor:TideEngine')
 include('raspberry-sailor:PolarSmoother')

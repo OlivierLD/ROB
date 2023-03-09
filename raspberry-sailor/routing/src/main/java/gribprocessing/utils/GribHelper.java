@@ -1,32 +1,13 @@
 package gribprocessing.utils;
 
 import calc.GeoPoint;
-import jgrib.GribFile;
-import jgrib.GribRecord;
-import jgrib.GribRecordBDS;
-import jgrib.GribRecordGDS;
-import jgrib.GribRecordPDS;
-import jgrib.NoValidGribException;
-import jgrib.NotSupportedException;
+import jgrib.*;
 import nmea.utils.NMEAUtils;
 import utils.StaticUtil;
 
-import javax.swing.JOptionPane;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.TreeMap;
+import javax.swing.*;
+import java.io.*;
+import java.util.*;
 
 public class GribHelper {
 	private final static boolean verbose = "true".equals(System.getProperty("grib.verbose", "false"));
@@ -365,7 +346,7 @@ public class GribHelper {
 
 	public static void displayGRIBDetails(String gribName) throws Exception {
 		try {
-			GribHelper.GribConditionData[] thisGRIB = GribHelper.getGribData(gribName, false);
+			GribConditionData[] thisGRIB = GribHelper.getGribData(gribName, false);
 			GribFile gf = new GribFile(gribName);
 			String mess = "Contains " + thisGRIB.length + " frame(s).";
 			displayGRIBDetails(gf, mess);

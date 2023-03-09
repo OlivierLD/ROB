@@ -422,6 +422,7 @@ public class BlindRouting implements RoutingClientInterface {
         }
     }
 
+    @Override
     public void routingNotification(List<List<RoutingPoint>> all, RoutingPoint closest) {
         closestPoint = closest;
     }

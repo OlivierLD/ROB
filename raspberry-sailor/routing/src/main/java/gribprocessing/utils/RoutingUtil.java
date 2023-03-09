@@ -5,11 +5,11 @@ import calc.GeomUtil;
 import calc.GreatCircle;
 import calc.GreatCirclePoint;
 
-import java.awt.Point;
-import java.awt.Polygon;
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.*;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
@@ -732,7 +732,8 @@ public class RoutingUtil {
 
 	public enum OutputOption {
 		CSV, GPX, TXT, KML, JSON
-	};
+	}
+
 	public final static SimpleDateFormat SDF_DMY  = new SimpleDateFormat("d MMM yyyy");
 	public final static DecimalFormat DF2    = new DecimalFormat("00");
 	public final static DecimalFormat DF3    = new DecimalFormat("000");

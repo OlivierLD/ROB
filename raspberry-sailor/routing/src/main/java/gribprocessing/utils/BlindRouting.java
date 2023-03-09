@@ -4,9 +4,10 @@ import calc.GeoPoint;
 import jgrib.GribFile;
 import nmea.parser.StringParsers;
 
-import java.awt.Point;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ public class BlindRouting {
 	private static boolean verbose = "true".equals(System.getProperty("routing.verbose", "false"));
 
 	/*
+	 * For the main:
 	 * Mandatory prms:
 	 * ---------------
 	 * --from-lat      Start latitude, decimal format

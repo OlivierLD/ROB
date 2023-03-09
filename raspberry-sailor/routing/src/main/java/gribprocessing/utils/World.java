@@ -6,8 +6,7 @@ import oracle.xml.parser.v2.XMLDocument;
 import oracle.xml.parser.v2.XMLElement;
 import org.w3c.dom.NodeList;
 
-import java.awt.Point;
-import java.awt.Polygon;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +15,12 @@ public class World {
 	private static List<Polygon> lp = null;
 
 	private static List<Polygon> getChartPolygon() {
-		List<Polygon> listPolygon = new ArrayList<Polygon>();
+		List<Polygon> listPolygon = new ArrayList<>();
 		try {
 			java.net.URL data = World.class.getResource("data.xml");
-			if (parser == null)
+			if (parser == null) {
 				parser = new DOMParser();
+			}
 			parser.parse(data);
 			XMLDocument doc = parser.getDocument();
 			NodeList nl = doc.selectNodes("//section");
@@ -34,8 +34,13 @@ public class World {
 					String lngValue = pt.getElementsByTagName("Lng").item(0).getFirstChild().getNodeValue();
 					double l = Double.parseDouble(latValue);
 					double g;
-					for (g = Double.parseDouble(lngValue); g > 180D; g -= 180D) ;
-					for (; g < -180D; g += 360D) ;
+					g = Double.parseDouble(lngValue);
+					while (g > 180D) {
+						g -= 180D;
+					}
+					while (g < -180D) {
+						g += 360D;
+					}
 					polygon.addPoint((int) (g * 1_000), (int) (l * 1_000));
 				}
 				listPolygon.add(polygon);
