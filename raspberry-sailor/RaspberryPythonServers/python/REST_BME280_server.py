@@ -23,6 +23,7 @@ from typing import Dict
 import board
 import busio
 import NMEABuilder   # local script
+import utils         # local script
 
 
 from adafruit_bme280 import basic as adafruit_bme280  # pip3 install adafruit-circuitpython-bme280
@@ -162,10 +163,13 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     temperature: float = bme280_data['temperature']
                     pressure: float = bme280_data['pressure']
                     humidity: float = bme280_data['humidity']
+                    dpt: float = utils.dew_point_temperature(humidity, temperature)
+
                     nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEABuilder.NMEA_EOS
                     nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS
                     nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
                                                           {"value": temperature, "type": "TEMPERATURE"},
+                                                          {"value": dpt, "type": "TEMPERATURE", "extra": "DEWP"},
                                                           {"value": pressure * 100, "type": "PRESSURE_P"},
                                                           {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
                     nmea_data = {
