@@ -512,7 +512,9 @@ the code is in `REST_SSD1306_server.py`, in this repository.
 #### Pre-defined computer type(s)
 
 - `tw-current`
-    - One computer, to calculate both True Wind and Current (GPS Based, with possibly several time buffers).
+  - One computer, to calculate both True Wind and Current (GPS Based, with possibly several time buffers).
+- `dew-point-computer`
+  - Calculate the dew point temperature if relative humidity and air temperature are available. 
 
 > _Important_: Computers may need data coming from the various channels. Those data will
 be stored in a cache _if the property `init.cache` is set to `true`_. See below.

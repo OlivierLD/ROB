@@ -163,7 +163,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     temperature: float = bme280_data['temperature']
                     pressure: float = bme280_data['pressure']
                     humidity: float = bme280_data['humidity']
-                    dpt: float = utils.dew_point_temperature(humidity, temperature)
+                    dpt: float = utils.dew_point_temperature(humidity, temperature)   # This way, no Computer required on the mux
 
                     nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEABuilder.NMEA_EOS
                     nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS

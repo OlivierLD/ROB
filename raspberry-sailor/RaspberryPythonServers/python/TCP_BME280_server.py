@@ -164,7 +164,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
             temperature: float = sensor.temperature  # Celsius
             humidity: float = sensor.relative_humidity  # %
             pressure: float = sensor.pressure  # hPa
-            dpt: float = utils.dew_point_temperature(humidity, temperature)
+            dpt: float = utils.dew_point_temperature(humidity, temperature)   # This way, no Computer required on the mux
 
             nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
             nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEA_EOS
