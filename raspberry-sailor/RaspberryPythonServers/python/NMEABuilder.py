@@ -2,13 +2,15 @@
 
 import checksum  # local script
 import prefixes  # local script
+import utils     # local sc ript
 from datetime import datetime, timezone
 from typing import Dict  # , List, Set, Tuple, Optional
 
 DEBUG: bool = False
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
-# TODO MDA
+# TODO MDA generator
+
 
 # UTC Time
 def build_ZDA(utc_ms: int = None) -> str:
@@ -112,6 +114,8 @@ def xdr_default_fmt(value: float) -> str:
 XDR_PTCH: str = "PTCH"  # No, it's not a typo, there is no 'I' in 'PTCH'.
 XDR_ROLL: str = "ROLL"
 
+XDR_DEWP: str = "DEWP"  " Dew Point"
+
 XDR_Types: Dict[str, Dict] = {
     "TEMPERATURE": {"type": "C", "unit": "C", "to_string": xdr_value_to_str_1_dec},  # in Celsius
     "ANGULAR_DISPLACEMENT": {"type": "A", "unit": "D", "to_string": xdr_value_to_str_no_dec},
@@ -209,6 +213,7 @@ if __name__ == '__main__':
     print(f"Generated XDR: {xdr_sentence}")
     xdr_sentence = build_XDR({"value": 56.78, "type": "HUMIDITY"},
                              {"value": 12.34, "type": "TEMPERATURE"},
+                             {"value": utils.dew_point_temperature(56.78, 12.34), "type": "TEMPERATURE", "extra": "DEWP"},
                              {"value": 101_325, "type": "PRESSURE_P"},
                              {"value": 1.01325, "type": "PRESSURE_B"})
     print(f"Generated XDR: {xdr_sentence}")

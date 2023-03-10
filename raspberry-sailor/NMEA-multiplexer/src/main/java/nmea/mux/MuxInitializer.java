@@ -5,6 +5,7 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
 import nmea.computers.Computer;
+import nmea.computers.DewPointTemperatureComputer;
 import nmea.computers.ExtraDataComputer;
 import nmea.consumers.client.*;
 import nmea.consumers.reader.*;
@@ -706,7 +707,7 @@ public class MuxInitializer {
             fwdIdx++;
         }
         if (verbose) {
-            System.out.printf("\t>> %s - Don with forwarders\n", NumberFormat.getInstance().format(System.currentTimeMillis()));
+            System.out.printf("\t>> %s - Done with forwarders\n", NumberFormat.getInstance().format(System.currentTimeMillis()));
         }
         // Init cache (for Computers).
         if ("true".equals(muxProps.getProperty("init.cache", "false"))) {
@@ -771,6 +772,16 @@ public class MuxInitializer {
                                         Computer twCurrentComputer = new ExtraDataComputer(mux, prefix, timeBufferLengths.toArray(new Long[timeBufferLengths.size()]));
                                         twCurrentComputer.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
                                         nmeaDataComputers.add(twCurrentComputer);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    break;
+                                case "dew-point-computer":
+                                    String dpPrefix = muxProps.getProperty(String.format("computer.%s.prefix", MUX_IDX_FMT.format(cptrIdx)), "OS");
+                                    try {
+                                        Computer dewPointComputer = new DewPointTemperatureComputer(mux, dpPrefix);
+                                        dewPointComputer.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
+                                        nmeaDataComputers.add(dewPointComputer);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }

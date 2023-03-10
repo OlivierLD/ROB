@@ -28,6 +28,7 @@ from datetime import datetime, timezone
 import logging
 from logging import info
 import NMEABuilder  # local script
+import utils        # local script
 from typing import List
 import busio
 # import math, yaml ?
@@ -163,11 +164,13 @@ def produce_nmea(connection: socket.socket, address: tuple,
             temperature: float = sensor.temperature  # Celsius
             humidity: float = sensor.relative_humidity  # %
             pressure: float = sensor.pressure  # hPa
+            dpt: float = utils.dew_point_temperature(humidity, temperature)
 
             nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
             nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEA_EOS
             nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
                                                   {"value": temperature, "type": "TEMPERATURE"},
+                                                  {"value": dpt, "type": "TEMPERATURE", "extra": "DEWP"},
                                                   {"value": pressure * 100, "type": "PRESSURE_P"},
                                                   {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEA_EOS
 

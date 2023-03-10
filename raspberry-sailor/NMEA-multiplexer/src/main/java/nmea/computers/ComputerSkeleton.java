@@ -59,7 +59,7 @@ public class ComputerSkeleton extends Computer {
 
 	@Override
 	public void close() {
-		System.out.println("- Stop Computing True Wind, " + this.getClass().getName());
+		System.out.println("- Stop Computing New Data, " + this.getClass().getName());
 	}
 
 	public static class ComputerSkeletonBean { // TODO: implement a trait

@@ -329,6 +329,17 @@ public class StringParsersTest {
             }
         }
 
+        str = "$PYXDR,H,56.8,P,0,C,12.3,C,1,C,4.0,C,DEWP,P,101325,P,3,P,1.0132,B,4*77"; // StringGenerator.XDR_DEW_POINT
+        System.out.println("[" + str + "] is " + (StringParsers.validCheckSum(str) ? "" : "not ") + "valid.");
+        xdr = StringParsers.parseXDR(str);
+        for (StringGenerator.XDRElement x : xdr) {
+            System.out.println(" => " + x.toString());
+            if (x.getTypeNunit().equals(StringGenerator.XDRTypes.TEMPERATURE) &&
+                    x.getTransducerName().equals(StringGenerator.XDR_DEW_POINT)) {
+                System.out.println("Dew Point Temp:" + x.getValue() + "\272C");
+            }
+        }
+
         str = "$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A";
         rmc = StringParsers.parseRMC(str);
         try {

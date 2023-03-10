@@ -577,10 +577,12 @@ def format_data(id: str) -> List[str]:
             atp: float = nmea_cache["Air Temperature"]["value"]
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
             hum: float = nmea_cache["Relative Humidity"]
+            dew: float = nmea_cache["dewpoint"]
             formatted = [
                 f"PRMSL: {prmsl} hPa",
                 f"AIR  : {atp}°C",
-                f"HUM  : {hum} %"
+                f"HUM  : {hum} %",
+                f"DEW  : {dew}°C"
             ]
         else:
             formatted = [id, "Not implemented"]

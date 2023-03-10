@@ -1,0 +1,21 @@
+#
+# MUX definition.
+#
+name: "Replay static log file."
+description:
+  - Computes Dew Point Temperature
+context:
+  with.http.server: true
+  http.port: 8080
+  init.cache: true
+  default.declination: 0
+channels:
+  - type: file
+    filename: ./sample-data/2023-03-10_08-00-00_UTC_LOG.nmea
+    verbose: false
+forwarders:
+  - type: console
+computers:
+  - type: "dew-point-computer"
+    prefix: "DP"
+    verbose: true

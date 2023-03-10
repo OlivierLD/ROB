@@ -757,7 +757,7 @@ public class NMEADataCache
 						if (mda.dewC != null) {
 							this.put(NMEADataCache.DEW_POINT_TEMP, mda.dewC);
 						}
-						// TODO: More MDA data...
+						// TODO: More MDA data... (Warning: MDA is obsolete)
 						break;
 					case "XTE": // Cross Track Error
 						// TODO: Implement
@@ -774,7 +774,7 @@ public class NMEADataCache
 									this.put(BARO_PRESS, new Pressure(val * 1_000));
 								} else if (type.equals(StringGenerator.XDRTypes.VOLTAGE)) {
 									this.put(BATTERY, (float)(val));
-								} else if (type.equals(StringGenerator.XDRTypes.GENERIC)) { // Consider it as prate.
+								} else if (type.equals(StringGenerator.XDRTypes.GENERIC)) { // Warning !! Assumption: Consider it as prate.
 									this.put(PRATE, (float)(val));
 								} else if (type.equals(StringGenerator.XDRTypes.ANGULAR_DISPLACEMENT) &&
 										xe.getTransducerName().equals(StringGenerator.XDR_PTCH)) {
@@ -782,6 +782,9 @@ public class NMEADataCache
 								} else if (type.equals(StringGenerator.XDRTypes.ANGULAR_DISPLACEMENT) &&
 										xe.getTransducerName().equals(StringGenerator.XDR_ROLL)) {
 									this.put(ROLL, val);
+								} else if (type.equals(StringGenerator.XDRTypes.TEMPERATURE) &&
+										xe.getTransducerName().equals(StringGenerator.XDR_DEW_POINT)) { // Warning !! No standard for XDR_DEW_POINT.
+									this.put(NMEADataCache.DEW_POINT_TEMP, val);
 								} else {
 									if ("true".equals(System.getProperty("verbose", "false"))) {
 										System.out.println("Un-managed XDR Type:" + type.toString());

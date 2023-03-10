@@ -2,6 +2,19 @@
 import math
 
 
+def dew_point_temperature(hum: float, temp: float) -> float:
+    c1: float = 6.10780
+    c2: float = 17.08085 if (temp > 0) else 17.84362
+    c3: float = 234.175 if (temp > 0) else 245.425
+
+    pz: float = c1 * math.exp((c2 * temp) / (c3 + temp))
+    pd: float = pz * (hum / 100)
+
+    dew_point_temp: float = (- math.log(pd / c1) * c3) / (math.log(pd / c1) - c2)
+
+    return dew_point_temp
+
+
 def sex_to_dec(degrees: str, minutes: str) -> float:
     """
     Convert a sexagesimal number (degrees, decimal minutes) into a decimal number
@@ -60,3 +73,14 @@ if __name__ == '__main__':
         print(f"{dec} => {dec_to_sex(dec, 'NS')}")
     except Exception as oops:
         print(f"{repr(oops)}")
+
+    air_temp: float = 20.0
+    rel_hum: float = 65.0
+
+    dpt = dew_point_temperature(rel_hum, air_temp)
+    print(f"Dew Point temp for Air {air_temp}\272C, Hum {rel_hum}% => {dpt}\272C")
+
+    air_temp = 12.34
+    rel_hum = 56.78
+    dpt = dew_point_temperature(rel_hum, air_temp)
+    print(f"Dew Point temp for Air {air_temp}\272C, Hum {rel_hum}% => {dpt}\272C")

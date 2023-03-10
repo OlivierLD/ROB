@@ -59,7 +59,7 @@ public class StringGenerator {
              | |   | |    |        ||     |
              | |   | |    |        |+-----+-- Transducer 'n'
              | |   | |    +--------+- Data for variable # of transducers
-             | |   | +- Transducer #1 ID
+             | |   | +- Transducer #1 ID (like 0..n, or PTCH, ROLL, ...)
              | |   +- Units of measure, Transducer #1
              | +- Measurement data, Transducer #1
              +- Transducer type, Transducer #1
@@ -85,6 +85,9 @@ public class StringGenerator {
       voltage                U           V = Volts
       switch or valve        S           none (null)            1 = ON/ CLOSED, 0 = OFF/ OPEN
       salinity               L           S = ppt                ppt = parts per thousand
+
+      Non-numeric transducer IDs seem to be used as needed, like PTCH, PITCH, ROLL, MAGX, MAGY, MAGZ, AIRT, ENGT, ...
+      I found no list of "official" transducer IDs.
    */
 
 	public enum XDRTypes { // See above for more details
@@ -153,6 +156,8 @@ public class StringGenerator {
 	// Not sure it's 100% standard... OpenCPN recognizes those, though.
 	public final static String XDR_PTCH = "PTCH"; // No, it's not a typo, there is no 'I' in 'PTCH'.
 	public final static String XDR_ROLL = "ROLL";
+
+	public final static String XDR_DEW_POINT = "DEWP";
 
 	public static String generateXDR(String devicePrefix, XDRElement first, XDRElement... next) {
 		int nbDevice = 0;
@@ -229,6 +234,7 @@ public class StringGenerator {
 	}
 
 	/*
+	 * Meteorological Composite.
 	 * -Double.MAX_VALUE means NO VALUE
 	 *
 	$--MDA,x.x,I,x.x,B,x.x,C,x.x,C,x.x,x.x,x.x,C,x.x,T,x.x,M,x.x,N,x.x,M*hh<CR><LF>
@@ -245,7 +251,8 @@ public class StringGenerator {
 				 |   | +---+- Barometric pressure, bars
 				 +---+- Barometric pressure, inches of mercury
 	*/
-	public static String generateMDA(String devicePrefix, double pressureInhPa, // ~ mb
+	public static String generateMDA(String devicePrefix,
+									 double pressureInhPa, // ~ mb
 	                                 double airTempInDegrees,
 	                                 double waterTempInDegrees,
 	                                 double relHumidity,
