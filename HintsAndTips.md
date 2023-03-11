@@ -11,8 +11,10 @@ A batch of useful and other things...
 
 
 ## ad-hoc / hotspot networking:
+### Option 1
 See <https://pyshine.com/How-to-configure-Raspberry-Pi-in-Ad-hoc-wifi-mode/>
 
+### Option 2
 That one sort of works (from <https://forums.raspberrypi.com/viewtopic.php?t=24615>):
 ```
 wpa_cli terminate
@@ -24,6 +26,8 @@ sudo iwconfig wlan0 essid my-adhoc-name
 sudo iwconfig wlan0 channel 1
 sudo ifconfig wlan0 up
 ```
+
+### Option 3
 Or better: <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>
 
 To disable the HotSpot:
@@ -52,6 +56,9 @@ sudo service hostapd status
 sudo service dnsmasq status
 ```
 
+### Option 4
+See this script: <https://gist.github.com/atlury/fe0ea8b91a981c103df7>
+
 ## Backup / Restore SD card
 See [here](https://pimylifeup.com/backup-raspberry-pi/).
 
@@ -63,5 +70,9 @@ $ diskutil list
 ```
 $ sudo dd if=/dev/disk1 of=~/PiSDBackup.dmg
 ```
+
+## Similar and interesting soft
+- <https://kingtidesailing.blogspot.com/2016/04/make-wireless-nmea-0183-multiplexer.html>
+- <https://opensource.com/article/23/3/build-raspberry-pi-dashboard-appsmith>
 
 ---

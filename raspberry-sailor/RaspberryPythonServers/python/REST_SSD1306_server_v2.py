@@ -566,13 +566,13 @@ def format_data(id: str) -> List[str]:
                 f"SOG: {sog} kts"]
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
-            formatted = [ "AIR", f"{atp}°C" ]
+            formatted = [ "AIR", f"{atp:.01f}°C" ]
         elif id == "PRM":
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
-            formatted = [ "PRMSL", f"{prmsl} hPa" ]
+            formatted = [ "PRMSL", f"{prmsl:.01f} hPa" ]
         elif id == "HUM":
             hum: float = nmea_cache["Relative Humidity"]
-            formatted = [ id, f"{hum}%" ]
+            formatted = [ id, f"{hum:.01f}%" ]
         elif id == "ATM":  # ATP, PRS, HUM
             atp: float = nmea_cache["Air Temperature"]["value"]
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
@@ -583,10 +583,10 @@ def format_data(id: str) -> List[str]:
             except Exception as oops:
                 pass
             formatted = [
-                f"PRMSL: {prmsl} hPa",
-                f"AIR  : {atp}°C",
-                f"HUM  : {hum} %",
-                f"DEW  : {dew}°C"
+                f"PRMSL: {prmsl:.01f} hPa",
+                f"AIR  : {atp:.01f}°C",
+                f"HUM  : {hum:.01f} %",
+                f"DEW  : {dew:.01f}°C"
             ]
         else:
             formatted = [id, "Not implemented"]
