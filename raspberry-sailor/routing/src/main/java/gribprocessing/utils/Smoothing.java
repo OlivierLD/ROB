@@ -98,8 +98,12 @@ public class Smoothing {
 			finalCDR = totalCDR / totalcoeff;
 			finalCSP = totalCSP / totalcoeff;
 		}
-		while (finalTWD > 360) finalTWD -= 360;
-		while (finalCDR > 360) finalCDR -= 360;
+		while (finalTWD > 360) {
+			finalTWD -= 360;
+		}
+		while (finalCDR > 360) {
+			finalCDR -= 360;
+		}
 
 		data = new ArrayList<>(2);
 		data.add(finalTWD);

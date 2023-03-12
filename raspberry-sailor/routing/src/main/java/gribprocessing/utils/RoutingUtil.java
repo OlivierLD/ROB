@@ -243,7 +243,7 @@ public class RoutingUtil {
 		boolean interruptedBecauseTooOld = false;
 		if (wind != null && wind.comment != null && wind.comment.equals("TOO_OLD")) {
 			center.setGribTooOld(true);
-//    System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
+			// System.out.println("Stop if GRIB too old:" + stopIfGRIB2old);
 			if (stopIfGRIB2old) {
 				keepLooping = false;
 				interruptedBecauseTooOld = true;
@@ -255,7 +255,7 @@ public class RoutingUtil {
 
 		Date currentDate = fromDate; // new Date(fromDate.getTime() + (long)(timeStep * 3600D * 1000D));
 		Date arrivalDate = null;
-//  synchronized (allIsochrons)
+		// synchronized (allIsochrons)
 		{
 			// Start from "center"
 			while (keepLooping && !interruptRouting) {
@@ -290,13 +290,13 @@ public class RoutingUtil {
 						}
 				        // timer = logDiffTime(timer, "Milestone 4");
 
-//          brg = getBearing(newCurveCenter); // 7-apr-2010.
+						// brg = getBearing(newCurveCenter); // 7-apr-2010.
 						if (aimFor == null) {
 							brg = getBearing(newCurveCenter);
 						} else { // Finer Routing
 							brg = getBearingTo(newCurveCenter, aimFor);
 						}
-//          nbNonZeroSpeed = 0;
+						// nbNonZeroSpeed = 0;
 						// Calculate isochron from center
 						for (int bearing = brg - routingForkWidth / 2;
 						     keepLooping && !interruptRouting && bearing <= brg + routingForkWidth / 2;
@@ -350,17 +350,17 @@ public class RoutingUtil {
 							if (speed > 0D) {
 								nbNonZeroSpeed++;
 								double dist = timeInterval * speed;
-								arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3600D * 1000D));
+								arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
 								GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint(Math.toRadians(newCurveCenter.getPosition().getL()),
 												Math.toRadians(newCurveCenter.getPosition().getG())),
 										dist,
 										bearing);
 								GeoPoint forecast = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG()));
-//              System.out.println("Routing point [" + forecast.toString() + "] in " + (World.isInLand(forecast)?"land <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<":"the water"));
+								// System.out.println("Routing point [" + forecast.toString() + "] in " + (World.isInLand(forecast)?"land <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<":"the water"));
 								// Avoid the land
 								// if (avoidLand && (World.isInLand(forecast) || World.isRouteCrossingLand(newCurveCenter.getPosition(), forecast) != null))
 								if (avoidLand && World.isInLand(forecast)) {
-//                System.out.println("..........................Avoiding land...");
+									// System.out.println("..........................Avoiding land...");
 									metLand = true;
 									speed = 0D;
 									allowOtherRoute = true;
@@ -368,7 +368,7 @@ public class RoutingUtil {
 									continue;
 								}
 
-								Point forecastPoint = new Point((int) Math.round(forecast.getG() * 1000), (int) Math.round(forecast.getL() * 1000));
+								Point forecastPoint = new Point((int) Math.round(forecast.getG() * 1_000), (int) Math.round(forecast.getL() * 1_000));
 								RoutingPoint ip = new RoutingPoint(forecastPoint);
 
 								// Add to Data

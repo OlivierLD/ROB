@@ -5,7 +5,7 @@ import calc.GeoPoint;
 import java.awt.*;
 import java.util.Date;
 
-public class RoutingPoint extends Point { // TODO Do we need the extends Point in this (non-Swing) context ?
+public class RoutingPoint extends Point { // The Point is virtual. Used for its int coordinates (L & G, multiplied by 1000)
 
 	/* Warning: For JSON/Jackson, use RoutingIsochronPoint */
 

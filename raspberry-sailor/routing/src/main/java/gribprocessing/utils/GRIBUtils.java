@@ -46,14 +46,12 @@ public class GRIBUtils {
 				} else if (str.length() == 1) {
 					str = "0" + str;
 				}
-				//      System.out.print(str + " ");
-
+				// System.out.print(str + " ");
 				s += str;
 			}
 			//    System.out.println();
 			//    System.out.println("Java MD5 [" + s + "]");
 			//    System.out.println("10 first chars [" + s.substring(0, 10) + "]");
-
 			//    System.out.println("Final Request: [http://saildocs.com/fetch?" + gribRequest + "&3=" + s.substring(0, 10) + "&u]" );
 			request = "http://saildocs.com/fetch?" + gribRequest + "&3=" + s.substring(0, 10) + "&u";
 		} catch (Exception ex) {
@@ -81,17 +79,17 @@ public class GRIBUtils {
 				fName = outputdir + File.separator + "GRIB" + SDF.format(new Date()) + ".grb";
 			}
 			try {
-//      		System.out.println(request);
+				// System.out.println(request);
 				URL saildocs = new URL(urlString);
 				URLConnection connection = saildocs.openConnection();
 				connection.connect();
-				//    DataInputStream dis = new DataInputStream(connection.getInputStream());
+				// DataInputStream dis = new DataInputStream(connection.getInputStream());
 				InputStream dis = connection.getInputStream();
 
-				long waiting = 0L;
-				while (dis.available() == 0 && waiting < 30L) { // 30s Timeout...
+				int waiting = 0;
+				while (dis.available() == 0 && waiting < 30) { // 30s Timeout...
 					Thread.sleep(1_000L);
-					waiting += 1L;
+					waiting += 1;
 				}
 
 				final int BUFFER_SIZE = 65_536;

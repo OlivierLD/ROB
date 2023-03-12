@@ -7,16 +7,18 @@ import nmea.parser.StringParsers;
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BlindRouting {
+
 	private static boolean verbose = "true".equals(System.getProperty("routing.verbose", "false"));
 
 	/*
 	 * For the main:
-	 * Mandatory prms:
+	 * Mandatory CLI parameters:
 	 * ---------------
 	 * --from-lat      Start latitude, decimal format
 	 * --from-lng      Start longitude, decimal format
@@ -27,7 +29,7 @@ public class BlindRouting {
 	 * --polar-file    [polarFileName]
 	 * --output-type   [typeName]. JSON, CSV, KML, GPX, TXT
 	 *
-	 * Optional prms:
+	 * Optional CLI parameters:
 	 * --------------
 	 * --verbose            default false (set to true, y, or yes)
 	 * --time-interval      default 24 (in hours)
@@ -42,7 +44,7 @@ public class BlindRouting {
 	private static final String FROM_L = "--from-lat";
 	private static final String FROM_G = "--from-lng";
 	private static final String TO_L = "--to-lat";
-	private static final String TO_G = "--to-lat";
+	private static final String TO_G = "--to-lng";
 	private static final String START_TIME = "--start-time";
 	private static final String POLAR_FILE = "--polar-file";
 	private static final String GRIB_FILE = "--grib-file";
@@ -151,6 +153,8 @@ public class BlindRouting {
 			}
 		}
 
+		long before = System.currentTimeMillis();
+
 		BlindRouting br = new BlindRouting();
 		RoutingUtil.RoutingResult content = br.calculate(
 				fromL,
@@ -171,7 +175,10 @@ public class BlindRouting {
 				avoidLand,
 				verb);
 		System.out.println(content.bestRoutes.get(content.bestRoutes.keySet().toArray()[0]));
-		System.err.println("Done!");
+
+		long after = System.currentTimeMillis();
+
+		System.err.printf("Routing computed in %s ms\n", NumberFormat.getInstance().format(after - before));
 	}
 
 	public RoutingUtil.RoutingResult calculate(double fromL,

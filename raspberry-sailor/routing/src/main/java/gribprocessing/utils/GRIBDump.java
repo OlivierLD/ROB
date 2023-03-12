@@ -133,12 +133,12 @@ public class GRIBDump {
 
 	public void dumpFeedback() {
 		if (feedback != null) {
-			feedback.stream().forEach(System.out::println);
+			feedback.forEach(System.out::println);
 		}
 	}
 
 	/**
-	 * For Gson to work properly...
+	 * For Gson to work properly... TODO Check if needed with Jackson
 	 *
 	 * @param data a Map
 	 * @return a list

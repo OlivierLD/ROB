@@ -4,7 +4,7 @@ import calc.GeoPoint;
 
 /**
  * Designed to minimize the size of the chain of ancestors
- * TODO See how/if the bsp, date, hdg, tws, twd, twa are used to the isochrons.
+ * TODO See how/if the bsp, date, hdg, tws, twd, twa are used or required in an isochron.
  */
 public class RoutingIsochronPoint {
 

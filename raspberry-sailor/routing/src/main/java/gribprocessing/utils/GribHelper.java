@@ -26,7 +26,7 @@ public class GribHelper {
 	 * @return Smoothed data
 	 */
 	public static GribConditionData smoothGribData(GribConditionData gribData, int smooth) {
-//  System.out.println("Smoothing..., factor " + smooth);
+		// System.out.println("Smoothing..., factor " + smooth);
 		GribConditionData newGribData;
 
 		double _w = gribData.getWLng();
@@ -47,7 +47,7 @@ public class GribHelper {
 		newGribData.setStepY(stepY);
 
 		int newH = gribData.getGribPointData().length * smooth,
-				newW = gribData.getGribPointData()[0].length * smooth;
+			newW = gribData.getGribPointData()[0].length * smooth;
 
 		GribPointData[][] newGribPointData = new GribPointData[newH][newW];
 
@@ -280,7 +280,7 @@ public class GribHelper {
 							gpd.setCsp(_Cspeed);
 
 							newGribPointData[h][w] = gpd;
-//            System.out.println("New GribPointData set at [" + h + ", " + w + "]");
+							// System.out.println("New GribPointData set at [" + h + ", " + w + "]");
 						} // _ar != null
 					} catch (ArrayIndexOutOfBoundsException aioobe) {
 						System.out.println(aioobe.toString());
@@ -303,14 +303,14 @@ public class GribHelper {
 		for (int i = 0; i < original.length - 1; i++) {
 			for (int j = 0; j < nbsteps; j++) {
 				int idx = (i * nbsteps) + j;
-//      System.out.println("i=" + i + ", j=" + j + ", idx=" + idx);
+				// System.out.println("i=" + i + ", j=" + j + ", idx=" + idx);
 				// Smoothing here
 				if (j == 0) {
 					newData[idx] = original[i];
 				} else {
 					newData[idx] = new GribConditionData();
 					Date newDate = new Date((long) getIntermediateValue(original[i].getDate().getTime(), original[i + 1].getDate().getTime(), nbsteps, j));
-//        System.out.println("New Date for " + idx + ":" + newDate.toString());
+					// System.out.println("New Date for " + idx + ":" + newDate.toString());
 					newData[idx].setDate(newDate);
 					newData[idx].setELng(original[i].getELng());
 					newData[idx].setWLng(original[i].getWLng());
@@ -331,7 +331,7 @@ public class GribHelper {
 					for (int h = 0; h < gpd.length; h++) {
 						for (int w = 0; w < gpd[h].length; w++) {
 							try {
-//              System.out.println("h=" + h + ", w=" + w + ", gpd[h].length=" + gpd[h].length);
+								// System.out.println("h=" + h + ", w=" + w + ", gpd[h].length=" + gpd[h].length);
 								gpd[h][w] = new GribPointData();
 								gpd[h][w].setLat(gpd1[h][w].getLat());
 								gpd[h][w].setLng(gpd1[h][w].getLng());

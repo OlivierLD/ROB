@@ -7,6 +7,7 @@ import oracle.xml.parser.v2.XMLElement;
 import org.w3c.dom.NodeList;
 
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +53,9 @@ public class World {
 	}
 
 	public static boolean isInLand(GeoPoint gp) {
-		if (lp == null)
+		if (lp == null) {
 			lp = getChartPolygon();
+		}
 		boolean b = false;
 		Point p = new Point((int) (gp.getG() * 1_000), (int) (gp.getL() * 1_000));
 		for (Polygon poly : lp) {
@@ -90,8 +92,9 @@ public class World {
 	}
 
 	public static Polygon isRouteCrossingLand(GeoPoint from, GeoPoint to) {
-		if (lp == null)
+		if (lp == null) {
 			lp = getChartPolygon();
+		}
 		Polygon pg = null;
 
 		Point pFrom = new Point((int) (from.getG() * 1_000), (int) (from.getL() * 1_000));
@@ -115,8 +118,8 @@ public class World {
 		long before = System.currentTimeMillis();
 		Polygon pg = lineIntersectsPolygon(from, to, poly);
 		long after = System.currentTimeMillis();
-		System.out.println("Intersection:" + Boolean.toString(pg != null));
-		System.out.println("(" + Long.toString(after - before) + " ms)");
+		System.out.println("Intersection: " + Boolean.toString(pg != null));
+		System.out.println("(" + NumberFormat.getInstance().format(after - before) + " ms)");
 
 		from = new Point(-20, -20);
 		to = new Point(-20, 20);
@@ -124,7 +127,7 @@ public class World {
 		before = System.currentTimeMillis();
 		pg = lineIntersectsPolygon(from, to, poly);
 		after = System.currentTimeMillis();
-		System.out.println("Intersection:" + Boolean.toString(pg != null));
-		System.out.println("(" + Long.toString(after - before) + " ms)");
+		System.out.println("Intersection: " + Boolean.toString(pg != null));
+		System.out.println("(" + NumberFormat.getInstance().format(after - before) + " ms)");
 	}
 }
