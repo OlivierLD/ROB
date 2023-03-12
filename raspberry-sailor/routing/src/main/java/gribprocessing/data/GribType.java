@@ -1,4 +1,4 @@
-package poc.data;
+package gribprocessing.data;
 
 public class GribType
 		implements Comparable {

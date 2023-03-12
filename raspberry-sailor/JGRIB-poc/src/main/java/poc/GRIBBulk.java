@@ -10,17 +10,15 @@ import jgrib.NotSupportedException;
 import poc.bulkpanel.BulkGribPanel;
 import poc.bulkpanel.GribDatePanel;
 import poc.bulkpanel.OneGRIBTablePanel;
-import poc.data.GribDate;
-import poc.data.GribType;
+import gribprocessing.data.GribDate;
+import gribprocessing.data.GribType;
 
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -47,7 +45,7 @@ public class GRIBBulk {
 		super();
 	}
 
-	private final void showBulk(final Thread parent, GribFile gribFile) {
+	private void showBulk(final Thread parent, GribFile gribFile) {
 		feedback = new ArrayList<>(1);
 		try {
 //    GribPDSParamTable.turnOffJGRIBLogging();
@@ -195,8 +193,8 @@ public class GRIBBulk {
 		GRIBBulk gb = new GRIBBulk();
 	//	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
 	//	String gribFileName = "GRIB_2009_02_25_Sample.grb";
-	//  String gribFileName = "GRIB_2017_10_16_07_31_47_PDT.grb";
-		String gribFileName =  "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/samples/_cache_weather-cache_EastAtlantic.wind.7days.grb";
+	    String gribFileName = "samples/GRIB_2017_10_16_07_31_47_PDT.grb";
+		// String gribFileName =  "$HOME/repos/ROB/raspberry-sailor/RESTRouting/samples/_cache_weather-cache_EastAtlantic.wind.7days.grb";
 		if (args.length > 0) {
 			gribFileName = args[0];
 		}

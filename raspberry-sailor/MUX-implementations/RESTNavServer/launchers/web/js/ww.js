@@ -210,6 +210,7 @@ let getGPSPosition = function() {
 
 let gribData;
 let gribFileLocation;
+let polarFile = "./sample.data/polars/CheoyLee42.polar-coeff";
 
 // Callback for GRIBs
 let renderGRIBData = function(canvas, context) {
@@ -230,7 +231,7 @@ let renderGRIBData = function(canvas, context) {
 
 let routingPromise = function(payload) {
 	let url = "/grib/routing";
-	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, payload, false);
+	return getPromise(url, DEFAULT_TIMEOUT * 100, 'POST', 200, payload, false);
 };
 
 let getBestRoute = function(payload, callback) {

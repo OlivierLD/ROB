@@ -3,9 +3,9 @@ package samples;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gribprocessing.utils.GRIBUtils;
 import jgrib.GribFile;
-import poc.GRIBDump;
-import poc.data.GribDate;
-import poc.data.GribType;
+import gribprocessing.utils.GRIBDump;
+import gribprocessing.data.GribDate;
+import gribprocessing.data.GribType;
 
 import java.io.File;
 import java.net.URL;

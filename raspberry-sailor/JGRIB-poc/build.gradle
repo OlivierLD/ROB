@@ -16,15 +16,16 @@ repositories {
 
 dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-  implementation 'oracle:xmlparser:2.0'
+  //implementation 'oracle:xmlparser:2.0'
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':common-utils')
-  implementation project(':raspberry-sailor:NMEA-Parser')
+  //implementation project(':http-tiny-server')
   implementation project(':raspberry-sailor:JGRIB')
-  implementation project(':raspberry-sailor:PolarSmoother')
+  implementation project(':raspberry-sailor:routing')
+  //implementation project(':raspberry-sailor:NMEA-Parser')
+  //implementation project(':raspberry-sailor:PolarSmoother')
 }
 
-//compileJava.options.encoding = 'ISO-8859-1'
 compileJava {
     options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
 }

@@ -294,7 +294,7 @@ public class MainPanel
 	}
 
 	/**
-	 * Same as above, but from logged points (processed by util.LogToPolarPoints)
+	 * Same as above, but from logged points
 	 * @return
 	 */
 	private Vector<ThreeDPoint> buildLoggedPointsVector() {

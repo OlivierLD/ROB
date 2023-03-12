@@ -18,6 +18,8 @@ public class RoutingUtil {
 	public static final int REAL_ROUTING = 0;
 	public static final int WHAT_IF_ROUTING = 1;
 
+	private final static NumberFormat DF_2 = new DecimalFormat("##0.00");
+
 	private static RoutingPoint finalDestination = null;
 	private static GribHelper.GribConditionData[] wgd = null;
 	private static double timeStep = 0D;
@@ -456,38 +458,39 @@ public class RoutingUtil {
 					}
 				}
 				// timer = logDiffTime(timer, "Milestone 11");
-//      System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
+				// System.out.println("Local:" + localSmallOne + ", Smallest:" + smallestDist);
 				if (localSmallOne < smallestDist) {
 					smallestDist = localSmallOne;
 					finalClosest = closest;
-//        System.out.println("Still progressing...\n");
+					// System.out.println("Still progressing...\n");
 				} else if (localSmallOne == smallestDist) {
 					// Not progressing
 					keepLooping = false;
-					System.out.println("Not progressing (stuck at " + smallestDist + " nm), aborting.");
+					System.out.println("Not progressing (stuck at " + DF_2.format(smallestDist) + " nm), aborting.");
 				} else if (Math.abs(localSmallOne - smallestDist) < (smallestDist * 0.9)) {
 					// When tacking for example... TODO Explore that one.
 					if (verbose) {
-						System.out.println("Corner case... localSmallOne:" + localSmallOne + ", smallesrDist:" + smallestDist);
+						System.out.println("Corner case... localSmallOne:" + DF_2.format(localSmallOne) + ", smallesrDist:" + DF_2.format(smallestDist));
 					}
 				} else {
 					keepLooping = false;
 					if (verbose) {
 						System.out.println("Destination reached? aiming WP [" + (aimFor != null ? aimFor.getPosition().toString() : "none") + "] finalDestination [" + finalDestination.getPosition().toString() + "]");
-						System.out.println("LocalSmallOne:" + localSmallOne);
-						System.out.println("SmallestDistance:" + smallestDist);
+						System.out.println("LocalSmallOne:" + DF_2.format(localSmallOne));
+						System.out.println("SmallestDistance:" + DF_2.format(smallestDist));
 					}
 					if ((allowOtherRoute && nbNonZeroSpeed == 0) || metLand) {
 						keepLooping = true; // Try again, even if the distance was not shrinking
-//          smallestDist = localSmallOne;
+						// smallestDist = localSmallOne;
 						if (metLand) {
-							System.out.println("--------------- Try again, maybe met land. (smallest:" + smallestDist + ", local:" + localSmallOne + ", prox:" + proximity + ") --------------");
-//            JOptionPane.showMessageDialog(null, "Met Land?", "Bing", JOptionPane.PLAIN_MESSAGE);
+							System.out.println("--------------- Try again, maybe met land. (smallest:" + DF_2.format(smallestDist) + ", local:" + DF_2.format(localSmallOne) + ", prox:" + proximity + ") --------------");
+							// JOptionPane.showMessageDialog(null, "Met Land?", "Bing", JOptionPane.PLAIN_MESSAGE);
 							if (smallestDist < proximity) {
 								keepLooping = false;
-								System.out.println("Close enough.");
-							} else
+								System.out.println("Close enough. Done.");
+							} else {
 								smallestDist *= 1.5; // Boo... Should do some backtracking
+							}
 						}
 						smallestDist = localSmallOne;
 					}
@@ -513,8 +516,9 @@ public class RoutingUtil {
 								}
 							}
 						}
-						if (!keepLooping && verbose) {// End of Routing
-							System.out.println("Finished (" + smallestDist + " vs " + localSmallOne + ").\n(Nb Non Zero Speed points:" + nbNonZeroSpeed + ")");
+						if (!keepLooping && verbose) { // End of Routing
+							System.out.println("Finished (" + DF_2.format(smallestDist) + " vs " + DF_2.format(localSmallOne) +
+									").\n(Nb Non Zero Speed points:" + NumberFormat.getInstance().format(nbNonZeroSpeed) + ")");
 						}
 						if (nbNonZeroSpeed == 0) {
 							if (interruptedBecauseTooOld) {
@@ -541,13 +545,14 @@ public class RoutingUtil {
 					currentDate = arrivalDate;
 				}
 				if (verbose) {
-					System.out.println("Isochrone # " + Integer.toString(allIsochrons.size()) + ", smallest distance to arrival:" + smallestDist + " nm. Still processing:" + keepLooping);
+					System.out.println("Isochrone # " + Integer.toString(allIsochrons.size()) + ", smallest distance to arrival:" +
+							DF_2.format(smallestDist) + " nm. " + (keepLooping ? "Still processing." : "Done processing."));
 				}
 				// timer = logDiffTime(timer, "Milestone 13");
 			}
 			if (interruptRouting) {
 				logDiffTime(timer, "Routing interrupted.");
-//      System.out.println("Routing interrupted.");
+				// System.out.println("Routing interrupted.");
 				System.err.println("Routing aborted on user's request.");
 			}
 		}
@@ -668,7 +673,7 @@ public class RoutingUtil {
 				returnCurve.add(newPoint);
 			}
 		}
-		String mess = "Reducing from " + returnCurve.size() + " ";
+		String mess = "Reducing from " + NumberFormat.getInstance().format(returnCurve.size()) + " ";
 		int origNum = returnCurve.size();
 		// Calculate final curve - Here is the skill
 		dimOne = bulkPoints.iterator();
@@ -694,10 +699,10 @@ public class RoutingUtil {
 					RoutingPoint isop = dimTwoBis.next();
 					if (currentPolygon.contains(isop.getPoint())) {
 						// Remove from the final Curve if it's inside (and not removed already)
-//          if (returnCurve.contains(isop.getPoint())) // Demanding...
+						// if (returnCurve.contains(isop.getPoint())) // Demanding...
 						{
 							returnCurve.remove(isop.getPoint());
-							//          System.out.println("Removing point, len now " + returnCurve.size());
+							// System.out.println("Removing point, len now " + returnCurve.size());
 						}
 					}
 				}
@@ -707,7 +712,7 @@ public class RoutingUtil {
 		int finalNum = returnCurve.size();
 		float ratio = 100f * (float) (origNum - finalNum) / (float) origNum;
 		if (verbose) {
-			System.out.println(mess + "to " + returnCurve.size() + " point(s) (gained " + ratio + "%), curve reduction calculated in " + Long.toString(after - before) + " ms");
+			System.out.println(mess + "to " + NumberFormat.getInstance().format(returnCurve.size()) + " point(s) (gained " + ratio + "%), curve reduction calculated in " + NumberFormat.getInstance().format(after - before) + " ms");
 		}
 
 		return returnCurve;

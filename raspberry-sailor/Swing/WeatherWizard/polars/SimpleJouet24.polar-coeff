@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<all-section-root xmlns="http://www.olivsoft.com/polars">
+  <polar-coeff-function from-twa="10"
+                        to-twa="180"
+                        polar-degree="3"
+                        polar-coeff-degree="3">
+    <polar-coeff degree="3">
+      <coeff degree="3">2.4025824573212546E-10</coeff>
+      <coeff degree="2">-1.4802310726081019E-8</coeff>
+      <coeff degree="1">2.0592830397320335E-7</coeff>
+      <coeff degree="0">-7.958522592381281E-8</coeff>
+    </polar-coeff>
+    <polar-coeff degree="2">
+      <coeff degree="3">-1.505296216597374E-7</coeff>
+      <coeff degree="2">9.757137207791388E-6</coeff>
+      <coeff degree="1">-1.6368601729765475E-4</coeff>
+      <coeff degree="0">1.051789743764485E-6</coeff>
+    </polar-coeff>
+    <polar-coeff degree="1">
+      <coeff degree="3">1.9273186110029125E-5</coeff>
+      <coeff degree="2">-0.0013091651760012285</coeff>
+      <coeff degree="1">0.024824830397901204</coeff>
+      <coeff degree="0">0.0021682619761258515</coeff>
+    </polar-coeff>
+    <polar-coeff degree="0">
+      <coeff degree="3">2.6175199421990558E-6</coeff>
+      <coeff degree="2">-2.341784738326821E-4</coeff>
+      <coeff degree="1">0.0065959542728544485</coeff>
+      <coeff degree="0">-0.0031491791468352126</coeff>
+    </polar-coeff>
+  </polar-coeff-function>
+</all-section-root>

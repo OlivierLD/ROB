@@ -320,7 +320,7 @@ public class CartesianPanel
 			else
 				this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
-		this.setToolTipText((int) Math.round(pp.getTwa()) + "�, " + Double.toString(pp.getBsp()) + " knts");
+		this.setToolTipText((int) Math.round(pp.getTwa()) + "\272, " + Double.toString(pp.getBsp()) + " knts");
 	}
 
 	public void mouseClicked(MouseEvent e) {

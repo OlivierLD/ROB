@@ -302,7 +302,8 @@ public class GUIFrame
 		String newFName = PolarUtilities.chooseFile(JFileChooser.FILES_AND_DIRECTORIES, "polar-data",
 				"Polar Data",
 				"Polar Data",
-				"Create");
+				"Create",
+				PolarUtilities.SAVE);
 		if (newFName != null && !newFName.trim().isEmpty()) {
 			try {
 				File f = new File(newFName);
@@ -388,7 +389,8 @@ public class GUIFrame
 				"polar-data",
 				"Polar Data",
 				"Polar Data",
-				"Save As");
+				"Save As",
+				PolarUtilities.SAVE);
 		if (newFName != null && !newFName.trim().isEmpty()) {
 			save(newFName);
 		}
@@ -528,7 +530,12 @@ public class GUIFrame
 	private void genCoeff() {
 		System.out.println("Generate coefficients");
 		if (mainPanel.getTreeRoot() != null) {
-			String fName = PolarUtilities.chooseFile(JFileChooser.FILES_ONLY, "polar-coeff", "Coefficients", "Save Coefficient File", "Save As");
+			String fName = PolarUtilities.chooseFile(JFileChooser.FILES_ONLY,
+					"polar-coeff",
+					"Coefficients",
+					"Save Coefficient File",
+					"Save As",
+					PolarUtilities.SAVE);
 			if (!fName.trim().isEmpty()) {
 				fName = PolarUtilities.makeSureExtensionIsOK(fName, ".polar-coeff");
 				// Loop on the different sections. Assume we have a tree of sections, with all the degrees.
@@ -676,18 +683,19 @@ public class GUIFrame
 			BufferedReader br = new BufferedReader(new FileReader(fName));
 			String line = "";
 			int ln = 0;
-			Vector<Vector<Object>> matrix = new Vector<Vector<Object>>();
+			Vector<Vector<Object>> matrix = new Vector<>();
 			while ((line = br.readLine()) != null) {
 				ln++;
-				Vector<Object> thisLine = new Vector<Object>();
-				StringTokenizer parser = new StringTokenizer(line);
+				Vector<Object> thisLine = new Vector<>();
+				StringTokenizer parser = new StringTokenizer(line, " \t\n\r\f;"); // Adding the ';'
 				while (parser.hasMoreTokens()) {
 					String data = parser.nextToken();
 					//          System.out.println("Read:" + data);
 					if (ln == 1) { // TWS array
-						if (data.equals("TWA"))
+						// if (data.equals("TWA"))
+						if (data.startsWith("TWA") || data.startsWith("twa")) {
 							thisLine.add("NoData");
-						else {
+						} else {
 							Integer ws = Integer.parseInt(data);
 							thisLine.add(ws);
 						}
@@ -764,7 +772,12 @@ public class GUIFrame
 			}
 			try {
 				// Choose a file name
-				String fName = PolarUtilities.chooseFile(JFileChooser.FILES_AND_DIRECTORIES, "pol", "MaxSea Polar Data", "MaxSea", "Save As");
+				String fName = PolarUtilities.chooseFile(JFileChooser.FILES_AND_DIRECTORIES,
+						"pol",
+						"MaxSea Polar Data",
+						"MaxSea",
+						"Save As",
+						PolarUtilities.SAVE);
 				fName = PolarUtilities.makeSureExtensionIsOK(fName, ".pol");
 
 				if (fName != null && !fName.trim().isEmpty()) {

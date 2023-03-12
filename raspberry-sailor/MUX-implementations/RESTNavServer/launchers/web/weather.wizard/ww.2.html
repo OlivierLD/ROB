@@ -887,7 +887,8 @@
 
         let testRouting = () => {
     
-            console.log('GRIB Data:', gribFileLocation); // Use this one?
+            console.log('GRIB Data in:', gribFileLocation); // Use this one?
+            console.log('With polars at ' + polarFile); // polarFile in ww.js
     
             if (gribFileLocation === undefined) {
                 alert("No GRIB File location, aborting");
@@ -910,6 +911,9 @@
             let proximity = 25;
             let avoidLand = false;
             let verbose = false;
+            // polarFile in ww.js
+
+            polarFile = document.getElementById('polar-location').value;
 
             try {
                 if (document.getElementById("txt-flavor").checked) {
@@ -977,7 +981,7 @@
                 "toG": toG,
                 "startTime": utc,
                 "gribName": gribFileLocation + "/grib.grb",
-                "polarFile": "./sample.data/polars/CheoyLee42.polar-coeff",
+                "polarFile": polarFile,                     // "./sample.data/polars/CheoyLee42.polar-coeff",
                 "outputType": outputType,
                 "timeInterval": timeInterval,    // Watch the OutOfMemoryError...
                 "routingForkWidth": routingForkWidth,
@@ -1608,6 +1612,8 @@
             let utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000)).format(DURATION_FMT);
             */
 
+            document.getElementById('polar-location').value = polarFile;
+
             routingDialog.show(); 
         };
 
@@ -1679,6 +1685,10 @@
             To <span id="position-to"></span>
             <hr/>
             <table>
+                <tr>
+                    <td>Polars File</td>
+                    <td><input type="text" id="polar-location" style="width: 300px; text-align: left;" placeholder="On the server..."></td>
+                </tr>
                 <tr>
                     <td>Output</td>
                     <td>

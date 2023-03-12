@@ -14,7 +14,7 @@ public class Sample02 {
     private final static ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String... args) {
-        String fName = "GRIB_2017_10_16_07_31_47_PDT.grb";
+        String fName = "samples/GRIB_2017_10_16_07_31_47_PDT.grb";
         try {
             GribFile gribFile = new GribFile(fName);
 
@@ -56,8 +56,9 @@ public class Sample02 {
                         }
                     }
                     HashMap<Type, Float[][]> subMap = bigmap.get(gDate);
-                    if (subMap == null)
-                        subMap = new HashMap<Type, Float[][]>();
+                    if (subMap == null) {
+                        subMap = new HashMap<>();
+                    }
                     subMap.put(new Type(type, description, unit, grbds.getMinValue(), grbds.getMaxValue()), data);
                     bigmap.put(gDate, subMap);
                 } catch (NoValidGribException e) {
@@ -84,7 +85,7 @@ public class Sample02 {
         }
     }
 
-    static class Type implements Comparable {
+    public static class Type implements Comparable {
         private String type;
         private String desc;
         private String unit;

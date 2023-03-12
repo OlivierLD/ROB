@@ -92,10 +92,21 @@ public class PolarUtilities {
 	}
 
 	public static String chooseFile(int mode,
+									String flt,
+									String desc,
+									String title,
+									String buttonLabel) {
+		return chooseFile(mode, flt, desc, title, buttonLabel, OPEN);
+	}
+
+	public final static int SAVE = 0;
+	public final static int OPEN = 1;
+	public static String chooseFile(int mode,
 	                                String flt,
 	                                String desc,
 	                                String title,
-	                                String buttonLabel) {
+	                                String buttonLabel,
+									int option) {
 		String fileName = "";
 		JFileChooser chooser = new JFileChooser();
 		if (title != null) {
@@ -115,13 +126,17 @@ public class PolarUtilities {
 		f = new File(currPath.substring(0, currPath.lastIndexOf(File.separator)));
 		chooser.setCurrentDirectory(f);
 
-		int retval = chooser.showOpenDialog(null);
-		switch (retval) {
+		int retVal;
+		if (option == OPEN) {
+			retVal = chooser.showOpenDialog(null);
+		} else { // Assume SAVE
+			retVal = chooser.showSaveDialog(null);
+		}
+		switch (retVal) {
 			case JFileChooser.APPROVE_OPTION:
 				fileName = chooser.getSelectedFile().toString();
 				break;
 			case JFileChooser.CANCEL_OPTION:
-				break;
 			case JFileChooser.ERROR_OPTION:
 				break;
 		}
@@ -160,7 +175,7 @@ public class PolarUtilities {
 		XMLDocument doc = parser.getDocument();
 		List<CoeffForPolars> list = buildCoeffList(doc);
 		// Test:
-		double bsp = getBSP(list, 20d, 87d);
+		double bsp = PolarUtilities.getBSP(list, 20d, 87d);
 		System.out.println("TWA 87, TWS 20, STW=" + bsp);
 	}
 }

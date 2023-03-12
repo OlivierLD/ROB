@@ -1,4 +1,4 @@
-package poc;
+package gribprocessing.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jgrib.GribFile;
@@ -8,8 +8,8 @@ import jgrib.GribRecordGDS;
 import jgrib.GribRecordPDS;
 import jgrib.NoValidGribException;
 import jgrib.NotSupportedException;
-import poc.data.GribDate;
-import poc.data.GribType;
+import gribprocessing.data.GribDate;
+import gribprocessing.data.GribType;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,7 +157,7 @@ public class GRIBDump {
 				GRIBTypedData typedData = new GRIBTypedData();
 				typedData.gribType = type;
 				typedData.data = typeMaps.get(type);
-				datedGRIB.typedData.add(typedData);
+				datedGRIB.getTypedData().add(typedData);
 			}
 			grib.add(datedGRIB);
 		}

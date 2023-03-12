@@ -12,7 +12,7 @@ import http.HTTPServer.Request;
 import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
 import jgrib.GribFile;
-import poc.GRIBDump;
+import gribprocessing.utils.GRIBDump;
 import utils.DumpUtil;
 import utils.StringUtils;
 

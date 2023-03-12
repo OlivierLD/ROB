@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<config xmlns="urn:oliv-nmea" last-open-file="/Users/olivierlediouris/repos/ROB/raspberry-sailor/PolarSmoother/sample-files/CheoyLee42.v2.new.polar-data">
+<config xmlns="urn:oliv-nmea" last-open-file="/var/folders/77/mg866rp100n0hxvw6tncs7p80000gn/T/FromMaxSea5825242880360336244.polar-data">
   <smoothing-config>
-    <max-boat-speed-for-polars>15</max-boat-speed-for-polars>
+    <max-boat-speed-for-polars>10</max-boat-speed-for-polars>
     <min-wind-speed>2</min-wind-speed>
     <max-wind-speed>40</max-wind-speed>
   </smoothing-config>
