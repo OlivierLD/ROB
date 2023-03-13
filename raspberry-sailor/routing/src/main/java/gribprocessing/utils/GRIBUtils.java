@@ -49,10 +49,12 @@ public class GRIBUtils {
 				// System.out.print(str + " ");
 				s += str;
 			}
-			//    System.out.println();
-			//    System.out.println("Java MD5 [" + s + "]");
-			//    System.out.println("10 first chars [" + s.substring(0, 10) + "]");
-			//    System.out.println("Final Request: [http://saildocs.com/fetch?" + gribRequest + "&3=" + s.substring(0, 10) + "&u]" );
+			if (false) {
+				System.out.println();
+				System.out.println("Java MD5 [" + s + "]");
+				System.out.println("10 first chars [" + s.substring(0, 10) + "]");
+				System.out.println("Final Request: [http://saildocs.com/fetch?" + gribRequest + "&3=" + s.substring(0, 10) + "&u]");
+			}
 			request = "http://saildocs.com/fetch?" + gribRequest + "&3=" + s.substring(0, 10) + "&u";
 		} catch (Exception ex) {
 			ex.printStackTrace();

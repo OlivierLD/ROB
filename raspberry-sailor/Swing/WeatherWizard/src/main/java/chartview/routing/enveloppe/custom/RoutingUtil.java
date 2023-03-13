@@ -943,8 +943,10 @@ public class RoutingUtil {
     public static void outputRouting(CommandPanel instance, GeoPoint from, GeoPoint to, RoutingPoint closestPoint, List<List<RoutingPoint>> allCalculatedIsochrons) {
         outputRouting(instance, from, to, closestPoint, allCalculatedIsochrons, false);
     }
-
     public static void outputRouting(CommandPanel instance, GeoPoint from, GeoPoint to, RoutingPoint closestPoint, List<List<RoutingPoint>> allCalculatedIsochrons, boolean doAsk) {
+        outputRouting(instance, from, to, closestPoint, allCalculatedIsochrons, false, null);
+    }
+    public static void outputRouting(CommandPanel instance, GeoPoint from, GeoPoint to, RoutingPoint closestPoint, List<List<RoutingPoint>> allCalculatedIsochrons, boolean doAsk, Long elapsed) {
         int clipboardOption = Integer.parseInt(((ParamPanel.RoutingOutputList) (ParamPanel.data[ParamData.ROUTING_OUTPUT_FLAVOR][ParamData.VALUE_INDEX])).getStringIndex());
         String fileOutput = null;
         if (doAsk || clipboardOption == ParamPanel.RoutingOutputList.ASK) {
@@ -953,7 +955,8 @@ public class RoutingUtil {
             } catch (InterruptedException ie) {
             } // Pas joli...
             RoutingOutputFlavorPanel rofp = new RoutingOutputFlavorPanel();
-            JOptionPane.showMessageDialog(instance, rofp, "Routing output", JOptionPane.QUESTION_MESSAGE);
+            String title = elapsed == null ? "Routing output" : String.format("Routing output (took %s ms)", NumberFormat.getInstance().format(elapsed));
+            JOptionPane.showMessageDialog(instance, rofp, title, JOptionPane.QUESTION_MESSAGE);
             clipboardOption = rofp.getSelectedOption();
             fileOutput = rofp.getFileOutput();
         }

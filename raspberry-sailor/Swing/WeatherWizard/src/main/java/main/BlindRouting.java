@@ -57,7 +57,7 @@ public class BlindRouting implements RoutingClientInterface {
         br.calculate(args);
     }
 
-    private void calculate(String[] args) throws Exception {
+    private void calculate(String... args) throws Exception {
         double fromL = 0, fromG = 0, toL = 0, toG = 0;
         String startTime = "";
         String gribName = "";

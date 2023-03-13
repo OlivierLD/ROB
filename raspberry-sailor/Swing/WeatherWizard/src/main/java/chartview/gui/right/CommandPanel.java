@@ -5067,10 +5067,10 @@ public class CommandPanel
             if (startRoutingPanel.avoidLand() && (World.isInLand(from) || World.isInLand(to))) {
                 String message = "";
                 if (World.isInLand(from)) {
-                    message += "You starting point " + from.toString() + " is in land.\n";
+                    message += "Your starting point " + from.toString() + " is in land.\n";
                 }
                 if (World.isInLand(to)) {
-                    message += "You destination point " + to.toString() + " is in land.\n";
+                    message += "Your destination point " + to.toString() + " is in land.\n";
                 }
                 message += "Is that OK to continue?";
 
@@ -5146,7 +5146,7 @@ public class CommandPanel
 
                     List<RoutingPoint> interWP = null;
                     if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
-                        interWP = new ArrayList<RoutingPoint>(intermediateRoutingWP.size());
+                        interWP = new ArrayList<>(intermediateRoutingWP.size());
                         for (GeoPoint gp : intermediateRoutingWP) {
                             RoutingPoint rp = new RoutingPoint(chartPanel.getPanelPoint(gp));
                             rp.setPosition(gp);
@@ -5221,7 +5221,7 @@ public class CommandPanel
                         }
                     }
                     // Routing output
-                    RoutingUtil.outputRouting(instance, from, to, closestPoint, allCalculatedIsochrons);
+                    RoutingUtil.outputRouting(instance, from, to, closestPoint, allCalculatedIsochrons, false, after - before);
                     if (closestPoint != null && allCalculatedIsochrons != null) {
                         displayGRIBSlice(bestRoute);
                     }
@@ -5230,7 +5230,7 @@ public class CommandPanel
             };
             isochronThread.setPriority(1);
             isochronThread.start();
-            //    JOptionPane.showMessageDialog(this, "Isochrons calculation is on its way...", "Routing", 1);
+            // JOptionPane.showMessageDialog(this, "Isochrons calculation is on its way...", "Routing", 1);
         }
     }
 
