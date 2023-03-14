@@ -39,10 +39,10 @@ public final class GeoPoint
 	}
 
 	public boolean equals(GeoPoint p) {
-		String g = GeomUtil.decToSex(longitude, 1, 2);
-		String gp = GeomUtil.decToSex(p.getG(), 1, 2);
-		String l = GeomUtil.decToSex(latitude, 1, 1);
-		String lp = GeomUtil.decToSex(p.getL(), 1, 1);
+		String g = GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW);
+		String gp = GeomUtil.decToSex(p.getG(), GeomUtil.SHELL, GeomUtil.EW);
+		String l = GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS);
+		String lp = GeomUtil.decToSex(p.getL(), GeomUtil.SHELL, GeomUtil.NS);
 		return g.equals(gp) && l.equals(lp);
 	}
 
@@ -87,10 +87,19 @@ public final class GeoPoint
 		return rlData.getdLoxo();
 	}
 
+	@Override
 	public String toString() {
+		// System.out.printf("GraphicsEnvironment.isHeadless(): %s\n", GraphicsEnvironment.isHeadless());
+		// GraphicsEnvironment.isHeadless() is not enough to know what degree symbol to display... Swing Component, or console ?
+		int degreeDisplayOption = // GraphicsEnvironment.isHeadless() ? GeomUtil.SHELL : GeomUtil.SWING;
+								  GeomUtil.SHELL;
+		return this.toString(degreeDisplayOption);
+	}
+
+	public String toString(int degreeDisplayOption) {
 		return String.format("%s / %s",
-				GeomUtil.decToSex(this.latitude, GeomUtil.SWING, GeomUtil.NS),
-				GeomUtil.decToSex(this.longitude, GeomUtil.SWING, GeomUtil.EW));
+				GeomUtil.decToSex(this.latitude, degreeDisplayOption, GeomUtil.NS),
+				GeomUtil.decToSex(this.longitude, degreeDisplayOption, GeomUtil.EW));
 	}
 
 	public GeoPoint degreesToRadians() {

@@ -1,5 +1,7 @@
 package main.splash;
 
+import calc.GeoPoint;
+import calc.GeomUtil;
 import chartview.ctx.ApplicationEventListener;
 import chartview.ctx.WWContext;
 import chartview.util.WWGnlUtilities;
@@ -19,6 +21,9 @@ public class Splasher {
     }
 
     public static void main(String... args) {
+
+//        GeoPoint here = new GeoPoint(47.677667, -3.135667);
+//        System.out.printf("Developed here: %s\n", here.toString(GeomUtil.DEFAULT_DEG));
 
         boolean headlessMode = ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")));
         if (!headlessMode) {

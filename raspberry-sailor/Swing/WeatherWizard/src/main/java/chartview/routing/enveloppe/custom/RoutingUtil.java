@@ -414,7 +414,7 @@ public class RoutingUtil {
                     System.out.println("Corner case... localSmallOne:" + localSmallOne + ", smallesrDist:" + smallestDist);
                 } else {
                     keepLooping = false;
-                    System.out.println("Destination reached? aiming WP [" + (aimFor != null ? aimFor.getPosition().toString() : "none") + "] finalDestination [" + finalDestination.getPosition().toString() + "]");
+                    System.out.println("Destination reached? aiming WP [" + (aimFor != null ? aimFor.getPosition().toString(GeomUtil.SHELL) : "none") + "] finalDestination [" + finalDestination.getPosition().toString(GeomUtil.SHELL) + "]");
                     System.out.println("LocalSmallOne:" + localSmallOne);
                     System.out.println("SmallestDistance:" + smallestDist);
                     if ((allowOtherRoute && nbNonZeroSpeed == 0) || metLand) {
@@ -628,8 +628,8 @@ public class RoutingUtil {
                 returnCurve.add(newPoint);
             }
         }
-        String mess = String.format("From %s, reducing from %s ",
-                center.getPosition().toString(),
+        String mess = String.format("From pos %s, reducing from %s ",
+                center.getPosition().toString(GeomUtil.SHELL),
                 NumberFormat.getNumberInstance().format(returnCurve.size()));
         int origNum = returnCurve.size();
         // Calculate final curve - Here is the skill
