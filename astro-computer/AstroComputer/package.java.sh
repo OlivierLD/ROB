@@ -12,7 +12,7 @@ find src/main/java -name '*.java' > sources.txt
 # For windows:
 # dir /s /B *.java > sources.txt
 # cat sources.txt
-javac -Xlint:deprecation -d classes -s src/main/java @sources.txt
+javac -Xlint:deprecation -d classes --source-path src/main/java:../AstroUtilities/src/main/java @sources.txt
 mkdir dist
 # Manifest
 echo "Main-Class: celestial.almanac.JavaSample" > manifest.txt
