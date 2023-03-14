@@ -3,12 +3,19 @@ buildscript {
 }
 
 plugins {
-  id 'java'
-  id 'scala'
-  id 'idea'
-  id 'maven-publish'
-  id 'com.github.johnrengelman.shadow' // version '6.0.0' // Remove version if used in a gradle submodule.
-  id "application"
+    id 'java'
+    id 'scala'
+    // id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' // version '6.0.0' // Remove version if used in a gradle submodule.
+    id "application"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+//    maven { url "https://www.datanucleus.org/downloads/maven2" }
+//    maven { url "https://oss.sonatype.org/content/groups/public" }
 }
 
 //compileJava.options.encoding = 'ISO-8859-1'
@@ -17,8 +24,8 @@ compileJava.options.compilerArgs += ["-Xlint:unchecked"]
 group = 'astro.computer'
 version = '1.0'
 
-//sourceCompatibility = 1.8
-//targetCompatibility = 1.8
+// sourceCompatibility = 1.8
+// targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
   if (JavaVersion.current() != project.targetCompatibility) {
@@ -41,11 +48,16 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url "https://www.datanucleus.org/downloads/maven2" }
-    maven { url "https://oss.sonatype.org/content/groups/public" }
+publishing {
+    publications {
+        maven(MavenPublication) {  // Required by publishToMavenLocal
+            groupId = 'astro.computer'
+            artifactId = 'AstroComputer'
+            version = '1.0'
+
+            from components.java
+        }
+    }
 }
 
 // Try using ../gradlew run --args="--now"
