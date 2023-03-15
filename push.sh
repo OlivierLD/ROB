@@ -100,9 +100,12 @@ if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
 else
   ${COMMAND}
   echo -e "Done"
+  git status
   echo -e "+---------------------------------------------------------------+"
   echo -e "| Do not forget to commit and push the changes in this branch!! |"
+  echo -e "| Do a 'git commit -am \"...\"',                                |"
+  echo -e "| and a 'git push origin repository'                            |"
   echo -e "+---------------------------------------------------------------+"
-  git status
+  # git status
 fi
 #
