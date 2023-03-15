@@ -73,16 +73,16 @@ $ mvn install:install-file \
       -DlocalRepositoryPath=. \
       -DcreateChecksum=true
 ```
-**_Shortcut_**: The script `push.sh` will help you with the steps above, prompting you for the required data.
+**_Shortcut available!_**: The script `push.sh` will help you with the steps above, prompting you for the required data.
 
 _Then_, `git add <whatever-you-added>`, `git commit`, and `git push` on the `repository` branch.
-> Note: Do make sure you've committed the jar files!! Use `git add -f` if needed.
+> _Note_: _**Do make sure**_ you've added and committed the jar files!! Use `git add -f` if needed.
 
 Repo URL: <https://raw.githubusercontent.com/OlivierLD/ROB/repository>
 
 Example: <https://raw.githubusercontent.com/OlivierLD/ROB/repository/raspberry/on/board/common-utils/1.0/common-utils-1.0.pom>
 
-> Note: When adding the files (`git add`), you might want to use the `-f` flag to force the jars in.
+> _Note_: When adding the files (`git add`), you might want to use the `-f` flag to force the jars in.
 
 ### Examples
 - From Maven
@@ -97,18 +97,25 @@ Example: <https://raw.githubusercontent.com/OlivierLD/ROB/repository/raspberry/o
 
 - From Gradle
 ```groovygit
+repositories {
+    mavenLocal()
+    mavenCentral()
+    . . .
+    maven { url "https://raw.githubusercontent.com/OlivierLD/ROB/repository" }   // Maven on GIT
+}
+
 dependencies {
     . . .
     implementation 'raspberry.on.board:common-utils:1.0'
     . . .
 }    
 ```
-In both cases (Maven, or Gradle), you need to add the Maven repository URL:
+In both cases (Maven, or Gradle), you need to add the Maven repository URL (you'll figure out how to do it, you can do it):
 ```
-url "https://raw.githubusercontent.com/OlivierLD/ROB/repository"
+"https://raw.githubusercontent.com/OlivierLD/ROB/repository"
 ```
 
-> **Note, for Java**
-> - Make sure the artifacts are compiled with the right Java version before committing and pushing them, some Raspberry Pi Zero might not like Java above version 8...
+> **Note, for <span style="color: red;">Java</span>**
+> - Make sure the artifacts are compiled with the right Java version before committing and pushing them, some Raspberry Pi Zero (and early Raspberry Pis, in general) might not like Java above version 8...
 
 ---

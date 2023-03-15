@@ -27,6 +27,9 @@ This is done intentionally.
 - [Sample implementation and demos](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), REST services, Web Interfaces, and more.
 ---
 
+## Preliminary note
+There is in this repo a `repository` branch, that can be used as a Maven repo. See [here](./MAVEN-REPO.md) for details.
+
 ## Preamble
 The goal here is to be able to fulfil the computing needs of a navigator with a Raspberry Pi (we'll discuss the different models later).
 The Raspberry Pi (see <https://www.raspberrypi.org/> and <https://www.raspberrypi.com/>) is a small and _cheap_ single-board computer, running a clone of Linux, it's hard drive is an SD card, its power consumption is low, and
