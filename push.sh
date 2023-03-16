@@ -73,7 +73,7 @@ fi
 JAR_FILE_NAME=${REPO_ROOT}/${ARTIFACT}/${VERSION}/${ARTIFACT}-${VERSION}.jar
 DATE_MODIFIED=$(ls -lisah ${JAR_FILE_NAME} | awk '{ print $8 " " $9 " " $10 }')
 echo -e "${ARTIFACT} version ${VERSION}, was modified ${DATE_MODIFIED}"
-echo -en "Do we proceed ? > "
+echo -en "Do we proceed? > "
 read REPLY
 if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
   echo "Canceled."
@@ -92,7 +92,7 @@ COMMAND="mvn install:install-file \
 #
 echo -e "Command is:"
 echo -e "${COMMAND}"
-echo -en "Do we proceed ? > "
+echo -en "Still OK? Do we proceed? > "
 read REPLY
 if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
   echo "Canceled."
