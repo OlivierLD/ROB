@@ -7,10 +7,10 @@ See good article at <https://gist.github.com/fernandezpablo85/03cf8b0cd2e7d85270
 > Another possibility: <https://repsy.io/>
 
 ### Sample command:
-
-From `ROB/common-utils` (`master` branch, or whatever branch you work on), install (generating the jar is good enough, actually):
+Let's say we want to publish the module `common-utils`.  
+From `ROB/common-utils` (`master` branch, or whatever branch you work on), install on your local maven repo (generating the jar is good enough, actually):
 ```
-$ ../gradlew publishToMavenLocal
+$ ../gradlew clean build publishToMavenLocal
 ```
 > _**Important note**_:  
 > In Gradle 7+, you need to have a `publish` section in `build.gradle`, like
@@ -46,7 +46,7 @@ Then, from this local repository, you can get the required generated artifacts, 
 > $
 > ```
 
-From the root of the `repository` branch:
+Now, from the root of the `repository` branch (and _**not**_ the one you were in above):
 ```
 $ mvn install:install-file \
       -DgroupId=raspberry.on.board \
@@ -76,13 +76,10 @@ $ mvn install:install-file \
 **_Shortcut available!_**: The script `push.sh` will help you with the steps above, prompting you for the required data.
 
 _Then_, `git add <whatever-you-added>`, `git commit`, and `git push` on the `repository` branch.
-> _Note_: _**Do make sure**_ you've added and committed the jar files!! Use `git add -f` if needed.
+> _Note_: _**Do make sure**_ you've added and committed the jar files!! Use `git add -f` if needed.  
+> When adding the files (`git add`), you might want to use the `-f` flag to force the jars in.
 
-Repo URL: <https://raw.githubusercontent.com/OlivierLD/ROB/repository>
-
-Example: <https://raw.githubusercontent.com/OlivierLD/ROB/repository/raspberry/on/board/common-utils/1.0/common-utils-1.0.pom>
-
-> _Note_: When adding the files (`git add`), you might want to use the `-f` flag to force the jars in.
+The repo URL will be: <https://raw.githubusercontent.com/OlivierLD/ROB/repository>   
 
 ### Examples
 - From Maven
@@ -114,8 +111,10 @@ In both cases (Maven, or Gradle), you need to add the Maven repository URL (you'
 ```
 "https://raw.githubusercontent.com/OlivierLD/ROB/repository"
 ```
+The artifacts above will be refered to by a URL like <https://raw.githubusercontent.com/OlivierLD/ROB/repository/raspberry/on/board/common-utils/1.0/common-utils-1.0.pom>
 
-> **Note, for <span style="color: red;">Java</span>**
+
+> **_Note_, for <span style="color: red;">Java</span>**
 > - Make sure the artifacts are compiled with the right Java version before committing and pushing them, some Raspberry Pi Zero (and early Raspberry Pis, in general) might not like Java above version 8...
 
 ---
