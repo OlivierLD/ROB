@@ -1,5 +1,5 @@
 # NMEA Parser, in Java
-Includes Parsers and Builders.  
+Includes String Parsers and String Builders.  
 Also started on AIS sentences (Work in Progress).
 
 Used by other modules of this project, can be used separately.

@@ -30,7 +30,7 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
               |      Active or Void
               UTC
     
-    :param sentence: Original sentence, souyrce
+    :param sentence: Original sentence, source
     :return: A Dict containing parsed elements
     """
     RMC_UTC: int = 1
