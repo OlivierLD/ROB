@@ -137,7 +137,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
 	echo -e "|  ${RED}6${NC}. Replay logged kayak data (Drakes Estero)                                            |  ${RED}6b${NC}. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
 	echo -e "|  ${RED}7${NC}. Replay logged driving data (with a Maps)                                            |  ${RED}8${NC}.  Replay logged kayak data, ANSI console display                                     |"
-	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), ANSI console display            |  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point), ANSI console display       |"
+	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), ANSI console display            |  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point),                            |"
 	echo -e "|            (Big file)                                                                   |             (there is some current in that one, it's in the SF Bay)                     |"
 	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display            |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
 	echo -e "|            (Big file)                                                                   |             (requires a NodeJS WebSocket server to be running)                          |"

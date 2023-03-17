@@ -20,7 +20,7 @@
  | - TWS (event 'tws')
  | - TWD (event 'twd')
  | - TWA (event 'twa')
- | - HDG (event 'hdg')
+ | - HDG (event 'hdg') (2 options)
  | - PRMSL (event 'prmsl')
  | - WT (event 'wt')
  | - AT (event 'at')
@@ -29,7 +29,7 @@
  | - RAW (event 'raw')
  |
  | Query parameters available:
- | DIGITAL, POS, GPS, SAT, COG, SOG, MAP, STW, AWS, AWA, TWS, TWD, TWA, HDG, PRMSL, WT, AT, HUM, RAW
+ | DIGITAL, POS, GPS, SAT, COG, SOG, MAP, STW, AWS, AWA, TWS, TWD, TWA, HDG, HDG-2, PRMSL, WT, AT, HUM, RAW
  | DIGITAL is 'false' by default, all others are 'true'
  | They all take 'true' or 'false' values, and can be preset from the query-string, like in
  | http://server-ip:9999/web/small.screens/small.console.all.data.html?DIGITAL=false&COG=true&HDG=false&TWD=false&TWS=false&TWA=false&AWS=false&AWA=false&STW=false
@@ -367,6 +367,22 @@
 			--font: 'Arial'; /* 'Source Code Pro' */
 		}
 
+		.globe-compass-01 {
+			--bg-color: transparent;
+			--display-background-gradient-from: transparent;
+			--display-background-gradient-to: transparent;
+			--display-globe-gradient-from: black;
+			--display-globe-gradient-to: rgb(47, 79, 79);
+			--display-cylinder-gradient-from: black;
+			--display-cylinder-gradient-to: darkgray;
+			--index-color: red;
+			--display-color: rgb(220, 220, 220);
+			--value-nb-decimal: 0;
+			--label-font: 'Courier New';
+			--value-font: Verdana;
+			--value-color: cyan;
+		}
+
 		.sidenav {
 			height: 100%;
 			width: 0;
@@ -536,6 +552,7 @@
 	<script type="module" src="../webcomponents/SatellitePlotter.js"></script>
 	<script type="module" src="../webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="../webcomponents/CompassDisplay.js"></script>
+	<script type="module" src="../webcomponents/CompassGlobe.js"></script>
 	<script type="module" src="../webcomponents/WindAngleDisplay.js"></script>
 	<script type="module" src="../webcomponents/DirectionDisplay.js"></script>
 	<script type="module" src="../webcomponents/Thermometer.js"></script>
@@ -569,7 +586,7 @@
 <div class="slideshow-container">
 
 	<div class="the-slides fade">
-		<div class="number-text">1 / 18</div>
+		<div class="number-text">1 / 19</div>
 		<div class="display-2">
 			<span class="display-title">Position</span>
 			<span class="display-small-data-1" id="lat">00 00.00</span>
@@ -580,7 +597,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">2 / 18</div>
+		<div class="number-text">2 / 19</div>
 		<div class="display-2">
 			<span class="display-title">GPS Time</span>
 			<span class="display-small-data-1" id="gps-date">DD-MMM-YYYY</span>
@@ -591,7 +608,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">3 / 18</div>
+		<div class="number-text">3 / 19</div>
 		<div class="display">
 			<!--span class="display-title">GPS Sats</span>
 			<span class="display-data" id="sat">000</span>
@@ -609,7 +626,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">4 / 18</div>
+		<div class="number-text">4 / 19</div>
 		<div class="display">
 			<div id="cog-div" class="display" style="display: none; border: none;">
 				<span class="display-title">Course Over Ground</span>
@@ -631,7 +648,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">5 / 18</div>
+		<div class="number-text">5 / 19</div>
 		<div class="display">
 			<div id="sog-div" class="display" style="display: none; border: none;">
 				<span class="display-title">Speed Over Ground</span>
@@ -659,7 +676,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">6 / 18</div>
+		<div class="number-text">6 / 19</div>
 		<div class="display">
 			<canvas id="mapCanvas" class="displayContent" width="200" height="250" title="Track Map"></canvas>
 		</div>
@@ -668,7 +685,7 @@
 
 
 	<div class="the-slides fade">
-		<div class="number-text">7 / 18</div>
+		<div class="number-text">7 / 19</div>
 		<div class="display">
 			<span class="display-title">Boat Speed</span>
 			<span class="display-data" id="bsp">00.00</span>
@@ -678,7 +695,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">8 / 18</div>
+		<div class="number-text">8 / 19</div>
 		<div class="display">
 			<span class="display-title">Apparent Wind Speed</span>
 			<span class="display-data" id="aws">00.00</span>
@@ -688,7 +705,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">9 / 18</div>
+		<div class="number-text">9 / 19</div>
 		<div class="display">
 			<div id="awa-div" class="display" style="display: none; border: none;">
 				<span class="display-title">Apparent Wind Angle</span>
@@ -712,7 +729,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">10 / 18</div>
+		<div class="number-text">10 / 19</div>
 		<div class="display">
 			<span class="display-title">True Wind Speed</span>
 			<span class="display-data" id="tws">00.00</span>
@@ -722,7 +739,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">11 / 18</div>
+		<div class="number-text">11 / 19</div>
 		<div class="display">
 			<div id="twd-div" class="display" style="display: none; border: none;">
 				<span class="display-title">True Wind Dir</span>
@@ -746,7 +763,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">12 / 18</div>
+		<div class="number-text">12 / 19</div>
 		<div class="display">
 			<div id="twa-div" class="display" style="display: none; border: none;">
 				<span class="display-title">True Wind Angle</span>
@@ -770,7 +787,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">13 / 18</div>
+		<div class="number-text">13 / 19</div>
 		<div class="display">
 			<span class="display-title">True Heading</span>
 			<span class="display-data" id="hdg">000</span>
@@ -780,7 +797,27 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">14 / 18</div>
+		<div class="number-text">14 / 19</div>
+		<div class="display">
+			<div id="hdg-2-div" class="display" style="display: none; border: none;">
+				<span class="display-title">HDG</span>
+				<span class="display-data" id="hdg-globe">000</span>
+				<span class="display-unit">&deg;</span>
+			</div>
+			<compass-globe id="compass-globe"
+						   class="globe-compass-01 display-data"
+						   width="200"
+						   height="200"
+						   value="000"
+						   label=""
+						   title="Compass"/>
+		</div>
+
+		<div class="text">HDG</div>
+	</div>
+
+	<div class="the-slides fade">
+		<div class="number-text">15 / 19</div>
 		<div class="display">
 			<div id="prmsl-div" class="display" style="display: none; border: none;">
 				<span class="display-title">PRMSL</span>
@@ -808,7 +845,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">15 / 18</div>
+		<div class="number-text">16 / 19</div>
 		<div class="display">
 			<div id="wt-div" class="display" style="display: none; border: none;">
 				<span class="display-title">WT</span>
@@ -846,7 +883,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">16 / 18</div>
+		<div class="number-text">17 / 19</div>
 		<div class="display">
 			<div id="at-div" class="display" style="display: none; border: none;">
 				<span class="display-title">AT</span>
@@ -884,7 +921,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">17 / 18</div>
+		<div class="number-text">18 / 19</div>
 		<div class="display">
 			<div id="hum-div" class="display" style="display: none; border: none;">
 				<span class="display-title">HUM</span>
@@ -912,7 +949,7 @@
 	</div>
 
 	<div class="the-slides fade">
-		<div class="number-text">18 / 18</div>
+		<div class="number-text">19 / 19</div>
 		<div class="display">
 			<span class="display-title">Raw Data</span>
 			<div id="raw-data" class="raw-data"></div>
@@ -937,11 +974,12 @@
 		<span class="dot" onclick="currentSlide(11);" title="TWD"></span>
 		<span class="dot" onclick="currentSlide(12);" title="TWA"></span>
 		<span class="dot" onclick="currentSlide(13);" title="HDG"></span>
-		<span class="dot" onclick="currentSlide(14);" title="PRMSL"></span>
-		<span class="dot" onclick="currentSlide(15);" title="WT"></span>
-		<span class="dot" onclick="currentSlide(16);" title="AT"></span>
-		<span class="dot" onclick="currentSlide(17);" title="HUM"></span>
-		<span class="dot" onclick="currentSlide(18);" title="RAW"></span>
+		<span class="dot" onclick="currentSlide(14);" title="HDG-2"></span>
+		<span class="dot" onclick="currentSlide(15);" title="PRMSL"></span>
+		<span class="dot" onclick="currentSlide(16);" title="WT"></span>
+		<span class="dot" onclick="currentSlide(17);" title="AT"></span>
+		<span class="dot" onclick="currentSlide(18);" title="HUM"></span>
+		<span class="dot" onclick="currentSlide(19);" title="RAW"></span>
 	</div>
 	
 </div>
@@ -1073,6 +1111,13 @@
 		</label>
 		<span class="switch-element">HDG</span>
 	</div>
+	<div class="switch-container" style="margin-left: 30px;" title="Display Compass Globe">
+		<label class="switch switch-element">
+		  <input id="hdg-2-slider" type="checkbox" onchange="manageHDG2Click(this);" checked>
+		  <span class="slider round"></span>
+		</label>
+		<span class="switch-element">HDG (globe)</span>
+	</div>
 	<div class="switch-container" style="margin-left: 30px;" title="Display Atm Pressure">
 		<label class="switch switch-element">
 		  <input id="prmsl-slider" type="checkbox" onchange="managePRMSLClick(this);" checked>
@@ -1132,6 +1177,7 @@
 	let displayTwd = true;
 	let displayTwa = true;
 	let displayHdg = true;
+	let displayHdg2 = true;
 	let displayPrmsl = true;
 	let displayAt = true;
 	let displayWt = true;
@@ -1155,6 +1201,9 @@
 
 		document.getElementById('twa-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
 		document.getElementById('twa').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
+
+		document.getElementById('hdg-2-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
+		document.getElementById('compass-globe').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
 
 		document.getElementById('prmsl-div').style.display = digital_analog === ANALOG_DISPLAY ? 'none' : 'inline-grid';
 		document.getElementById('prmsl').style.display = digital_analog === ANALOG_DISPLAY ? 'block' : 'none';
@@ -1209,6 +1258,9 @@
 	function manageHDGClick(cb) {
 		displayHdg = cb.checked;
 	}
+	function manageHDG2Click(cb) {
+		displayHdg2 = cb.checked;
+	}
 	function manageRAWClick(cb) {
 		displayRaw = cb.checked;
 	}
@@ -1244,7 +1296,8 @@
 		let slideDisplayArray = [
 			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
 			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
+			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+			displayRaw
 		];
 		// showSlides(slideIndex += n);
 		slideIndex += n;
@@ -1297,7 +1350,8 @@
 			let slideDisplayArray = [
 				displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
 				displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-				displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
+				displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+				displayRaw
 			];
 
 			slideIndex++; // Auto: always +1
@@ -1341,6 +1395,7 @@
 		document.getElementById("twd-slider").checked = displayTwd;
 		document.getElementById("stw-slider").checked = displayStw;
 		document.getElementById("hdg-slider").checked = displayHdg;
+		document.getElementById("hdg-2-slider").checked = displayHdg2;
 
 		document.getElementById("prmsl-slider").checked = displayPrmsl;
 		document.getElementById("at-slider").checked = displayAt;
@@ -1358,7 +1413,8 @@
 		let slideDisplayArray = [
 			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
 			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayPrmsl, displayWt, displayAt, displayHum, displayRaw
+			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+			displayRaw
 		];
 		// Display/Hide the dots
 		for (let i=0; i<dotArray.length; i++) {
@@ -1503,7 +1559,15 @@
 		}
 	});
 	events.subscribe('hdg', val => {
+		// 2 widgets here
+		// Widget 1
 		document.getElementById('hdg').innerText = val.toFixed(0);
+		// Widget 2
+		if (digital_analog === DIGITAL_DISPLAY) {
+			document.getElementById('hdg-globe').innerText = val.toFixed(0);
+		} else {
+			document.getElementById('compass-globe').value = val.toFixed(0);
+		}
 	});
 
 	// More events ? at, wt, prmsl, hum
@@ -1652,6 +1716,8 @@
 		displayTwa = (qs === null || qs === "true");
 		qs = getQSPrm('HDG');
 		displayHdg = (qs === null || qs === "true");
+		qs = getQSPrm('HDG-2');
+		displayHdg2 = (qs === null || qs === "true");
 		qs = getQSPrm('PRMSL');
 		displayPrmsl = (qs === null || qs === "true");
 		qs = getQSPrm('WT');
