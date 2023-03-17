@@ -25,6 +25,19 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
 }
 
+// See https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+    publications {
+        maven(MavenPublication) {  // Required by publishToMavenLocal
+            groupId = 'raspberry.on.board'
+            artifactId = 'NMEA-Parser'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+}
+
 shadowJar {
     zip64 true
 }
