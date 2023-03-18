@@ -52,7 +52,7 @@ public class SSD1306RESTConsumer implements DelegateConsumer {
     };
 
     /**
-     * Managed properties are:
+     * Managed properties are: (.dg. stands for DeleGate)
      * - ssd1306.dg.protocol
      * - ssd1306.dg.server-name
      * - ssd1306.dg.port

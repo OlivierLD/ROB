@@ -92,6 +92,10 @@ public class MuxInitializer {
                                     mux);
                     if (dynamic instanceof NMEAClient) {
                         NMEAClient nmeaClient = (NMEAClient) dynamic;
+
+                        String verboseProp = String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx));
+                        nmeaClient.setVerbose("true".equals(muxProps.getProperty(verboseProp)));
+
                         String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                         String propFileName = muxProps.getProperty(propProp);
                         Properties readerProperties = null;
@@ -109,11 +113,16 @@ public class MuxInitializer {
                         try {
                             String readerProp = String.format("mux.%s.reader", MUX_IDX_FMT.format(muxIdx));
                             String readerClass = muxProps.getProperty(readerProp);
-                            // Cannot invoke declared constructor with a generic type... :(
-                            if (readerProperties == null) {
-                                reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class).newInstance(readerProp, nmeaClient.getListeners());
+                            if (readerClass != null) {
+                                // Cannot invoke declared constructor with a generic type... :(
+                                if (readerProperties == null) {
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class).newInstance(readerProp, nmeaClient.getListeners());
+                                } else {
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class, Properties.class).newInstance(readerProp, nmeaClient.getListeners(), readerProperties);
+                                }
                             } else {
-                                reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class, Properties.class).newInstance(readerProp, nmeaClient.getListeners(), readerProperties);
+                                // A dynamic Consumer may require a Reader.
+                                System.out.println("No reader in the properties.");
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();

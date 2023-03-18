@@ -241,8 +241,10 @@ channels:
     - This can be used to feed the cache "by hand".
     - Use system variable `-Drest.feeder.verbose=true` to see the output.
 
-You can also define your own channels (extending `NMEAClient` and with a `reader` attribute).  
-Look for `mux.01.class=nmea.consumers.client.WeatherStationWSClient`.
+You can also define your own channels (extending `NMEAClient` and with a `reader` attribute in the properties, like `mux.02.reader=nmea.consumers.reader.ReaderSkeleton`).  
+Look for `mux.01.class=nmea.consumers.client.WeatherStationWSClient`.  
+Do also take a look at the class `nmea.consumers.dynamic.TXTExample`, it shows how to implement your own custom Consumer, along
+wit a `yaml` using it, `nmea.mux.dyn.consumer.yaml`.
 
 Channels can use those three attributes: `properties`, `device.filters`, `sentence.filters`:
 ```properties

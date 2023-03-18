@@ -1,0 +1,13 @@
+name: "Dynamic Consumer"
+context:
+  with.http.server: false
+  init.cache: false
+channels:
+  - class: nmea.consumers.dynamic.TXTExample
+    # reader: nmea.consumers.dynamic.TXTExample.TXTReader
+    # properties: blah.properties
+    verbose: false
+    # device.filters: . . .
+    # sentence.filters: . . .
+forwarders:
+  - type: console
