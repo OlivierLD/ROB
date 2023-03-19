@@ -17,7 +17,7 @@ import java.util.TimeZone;
  * . . .
  * channels:
  *   - class: nmea.consumers.dynamic.TXTExample
- *     reader: nmea.consumers.dynamic.TXTExample.TXTReader
+ *     # reader: nmea.consumers.dynamic.TXTExample.TXTReader
  *     properties: blah.properties
  *     verbose: false
  *     device.filters: . . .
@@ -27,7 +27,7 @@ import java.util.TimeZone;
  */
 public class TXTExample extends NMEAClient {
 
-    private static final SimpleDateFormat SDF_DATETIME = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS");
+    private static final SimpleDateFormat SDF_DATETIME = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss.SSS 'UTC'");
     static {
         SDF_DATETIME.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
     }
@@ -48,10 +48,33 @@ public class TXTExample extends NMEAClient {
 
     public TXTExample(String[] s, String[] sa, Multiplexer mux) {
         super(s, sa, mux);
-        // this.verbose = "true".equals(System.getProperty("txt.data.verbose", "false"));
         this.nmeaClient = this;
         // Here is a way to set the reader without the 'reader' property.
         this.setReader(new TXTExample.TXTReader("TXTProducer", this.getListeners()));
+    }
+
+    // Default values. Can be overridden by properties.
+    private String talkerId = "XX";
+    private String txtPrompt = "Hi there - time is";
+    private long betweenLoops = 1_000L;
+
+    @Override
+    public void initClient() {
+        super.initClient();
+
+        if (this.props != null) {
+            System.out.println("Found user-provided properties.");
+            this.talkerId = this.props.getProperty("text-talker-id", this.talkerId);
+            this.txtPrompt = this.props.getProperty("text-prefix", this.txtPrompt);
+            ((TXTReader)this.getReader()).setDevicePrefix(this.talkerId);
+            final String blProp = this.props.getProperty("between-loops", String.valueOf(this.betweenLoops));
+            try {
+                betweenLoops = Long.parseLong(blProp);
+            } catch (NumberFormatException nfe) {
+                System.err.printf("Unparsable %d\n", blProp);
+                nfe.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -69,11 +92,18 @@ public class TXTExample extends NMEAClient {
         return null;
     }
 
+    /**
+     * All the skill of the Client is in this method.
+     *
+     * @param prefix Talker ID. Sentence ID is hard-coded 'TXT'
+     * @param epoch Current time.
+     * @return A valid NMEA Sentence
+     */
     String produceTextSentence(String prefix, long epoch) {
         String txt = prefix + "TXT,";
         Date utc = new Date(epoch);
         String strUTC = SDF_DATETIME.format(utc);
-        txt += String.format("Hi there - time is %s", strUTC);
+        txt += String.format("%s %s", this.txtPrompt, strUTC);
         // Checksum
         int cs = StringParsers.calculateCheckSum(txt);
         txt += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
@@ -121,7 +151,7 @@ public class TXTExample extends NMEAClient {
                     e.printStackTrace();
                 }
                 try {
-                    Thread.sleep(1_000L); // Arbitrary
+                    Thread.sleep(nmeaClient.betweenLoops);
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }

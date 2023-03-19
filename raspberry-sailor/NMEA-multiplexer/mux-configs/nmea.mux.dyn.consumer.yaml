@@ -5,7 +5,7 @@ context:
 channels:
   - class: nmea.consumers.dynamic.TXTExample
     # reader: nmea.consumers.dynamic.TXTExample.TXTReader
-    # properties: blah.properties
+    properties: mux-configs/txt.properties
     verbose: false
     # device.filters: . . .
     # sentence.filters: . . .

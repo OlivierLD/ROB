@@ -122,7 +122,7 @@ public class MuxInitializer {
                                 }
                             } else {
                                 // A dynamic Consumer may require a Reader.
-                                System.out.println("No reader in the properties.");
+                                System.out.println("No 'reader' in the properties.");
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
