@@ -20,6 +20,19 @@ dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 }
 
+// See https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+  publications {
+    maven(MavenPublication) {  // Required by publishToMavenLocal
+      groupId = 'raspberry.on.board'
+      artifactId = 'PolarSmoother'
+      version = '1.0'
+
+      from components.java
+    }
+  }
+}
+
 shadowJar {
   zip64 true
 }

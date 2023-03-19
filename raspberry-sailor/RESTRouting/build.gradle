@@ -26,6 +26,19 @@ dependencies {
   implementation project(':raspberry-sailor:PolarSmoother')
 }
 
+// See https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+  publications {
+    maven(MavenPublication) {  // Required by publishToMavenLocal
+      groupId = 'raspberry.on.board'
+      artifactId = 'RESTRouting'
+      version = '1.0'
+
+      from components.java
+    }
+  }
+}
+
 //compileJava.options.encoding = 'ISO-8859-1'
 compileJava {
     options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"

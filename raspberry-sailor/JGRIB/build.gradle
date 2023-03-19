@@ -16,6 +16,19 @@ repositories {
 dependencies {
 }
 
+// See https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+  publications {
+    maven(MavenPublication) {  // Required by publishToMavenLocal
+      groupId = 'raspberry.on.board'
+      artifactId = 'JGRIB'
+      version = '1.0'
+
+      from components.java
+    }
+  }
+}
+
 compileJava {
     options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
 }

@@ -71,7 +71,7 @@ public class TXTExample extends NMEAClient {
             try {
                 betweenLoops = Long.parseLong(blProp);
             } catch (NumberFormatException nfe) {
-                System.err.printf("Unparsable %d\n", blProp);
+                System.err.printf("Unparsable long %s\n", blProp);
                 nfe.printStackTrace();
             }
         }
