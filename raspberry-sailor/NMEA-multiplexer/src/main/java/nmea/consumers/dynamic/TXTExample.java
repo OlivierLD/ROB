@@ -1,6 +1,11 @@
 package nmea.consumers.dynamic;
 
-import nmea.api.*;
+import nmea.api.Multiplexer;
+import nmea.api.NMEAClient;
+import nmea.api.NMEAEvent;
+import nmea.api.NMEAListener;
+import nmea.api.NMEAParser;
+import nmea.api.NMEAReader;
 import nmea.parser.StringParsers;
 import utils.StringUtils;
 
@@ -100,14 +105,15 @@ public class TXTExample extends NMEAClient {
      * @return A valid NMEA Sentence
      */
     String produceTextSentence(String prefix, long epoch) {
-        String txt = prefix + "TXT,";
+        StringBuffer sb = new StringBuffer();
+        sb.append(prefix + "TXT,");
         Date utc = new Date(epoch);
         String strUTC = SDF_DATETIME.format(utc);
-        txt += String.format("%s %s", this.txtPrompt, strUTC);
+        sb.append(String.format("%s %s", this.txtPrompt, strUTC));
         // Checksum
-        int cs = StringParsers.calculateCheckSum(txt);
-        txt += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
-        return "$" + txt;
+        int cs = StringParsers.calculateCheckSum(sb.toString());
+        sb.append("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0")); // Hexa
+        return sb.insert(0, "$").toString();
     }
 
     public static class TXTReader extends NMEAReader {
@@ -141,7 +147,7 @@ public class TXTExample extends NMEAClient {
                         String txtString = nmeaClient.produceTextSentence(this.devicePrefix, System.currentTimeMillis());
                         txtString += NMEAParser.NMEA_SENTENCE_SEPARATOR;
                         fireDataRead(new NMEAEvent(this, txtString));
-                        if (false) {
+                        if ("true".equals(System.getProperty("standalone"))) { // Invoked from the main
                             System.out.printf("Produced [%s]\n", txtString.trim());
                         }
                     } else {
@@ -172,6 +178,7 @@ public class TXTExample extends NMEAClient {
         for (String s : args) {
             System.out.println("TXTClient prm:" + s);
         }
+        System.setProperty("standalone", "true");
         nmeaClient = new TXTExample();
 
         Runtime.getRuntime().addShutdownHook(new Thread("TXTClient shutdown hook") {
