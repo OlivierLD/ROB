@@ -53,7 +53,7 @@ public class TXTExample extends NMEAClient {
 
     public TXTExample(String[] s, String[] sa, Multiplexer mux) {
         super(s, sa, mux);
-        this.nmeaClient = this;
+        nmeaClient = this;
         // Here is a way to set the reader without the 'reader' property.
         this.setReader(new TXTExample.TXTReader("TXTProducer", this.getListeners()));
     }
@@ -105,14 +105,15 @@ public class TXTExample extends NMEAClient {
      * @return A valid NMEA Sentence
      */
     String produceTextSentence(String prefix, long epoch) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(prefix + "TXT,");
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix); sb.append("TXT,");
         Date utc = new Date(epoch);
         String strUTC = SDF_DATETIME.format(utc);
         sb.append(String.format("%s %s", this.txtPrompt, strUTC));
         // Checksum
         int cs = StringParsers.calculateCheckSum(sb.toString());
-        sb.append("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0")); // Hexa
+        sb.append("*");
+        sb.append(StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0")); // Hexa
         return sb.insert(0, "$").toString();
     }
 

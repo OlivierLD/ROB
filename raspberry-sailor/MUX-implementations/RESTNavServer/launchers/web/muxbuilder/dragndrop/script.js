@@ -17,6 +17,7 @@ function drop(ev) {
       // Prevent a given Element...
       console.log(`Preventing drop from no-drag-1 to ${ev.target.id}`);
   } else {
+      console.log(`Dropping ${data}`);
       let newNode = document.getElementById(data).cloneNode(true); // Copy
       // show edit-icon and close-icon when dropped
       newNode.querySelector(".edit-icon").style.display = 'inline-block';
@@ -188,6 +189,32 @@ function generateTCPConsumerCode(node) {
   code += `    initial.request: ${initialRequest}\n`;
   let keepTrying = node.querySelector('.keep-trying').checked;
   code += `    keep.trying: ${keepTrying}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  // filters
+  let deviceFilters = node.querySelector('.device-filter').value;
+  if (deviceFilters.trim().length > 0) {
+      code += `    device.filters: ${deviceFilters}\n`;
+  }
+  let sentenceFilters = node.querySelector('.sentence-filter').value;
+  if (sentenceFilters.trim().length > 0) {
+      code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  return code;
+}
+
+function generateDynamicConsumerCode(node) {
+  let code = "";
+  let clientClassName = node.querySelector('.dyn-class-name').value;
+  code += `  - class: ${clientClassName}\n`;
+  let readerClassName = node.querySelector('.dyn-reader-class-name').value;
+  if (readerClassName.trim().length > 0) {
+    code += `    reader: ${readerClassName}\n`;
+  }
+  let dynPropName = node.querySelector('.dyn-props-name').value;
+  if (dynPropName.trim().length > 0) {
+    code += `    properties: ${dynPropName}\n`;
+  }
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
   // filters
@@ -512,6 +539,9 @@ function dumpIt(withDialog) { // YAML Generation
     } else if (prms.classList.contains("rest-channel")) { 
       code += "  - type: rest\n";
       code += generateRESTConsumerCode(prms);
+    } else if (prms.classList.contains("dynamic-consumer")) {
+      // code += "  - class: . . .\n";
+      code += generateDynamicConsumerCode(prms);
     } else if (prms.classList.contains("file-channel")) { 
       code += "  - type: file\n";
       code += generateFileConsumerCode(prms);

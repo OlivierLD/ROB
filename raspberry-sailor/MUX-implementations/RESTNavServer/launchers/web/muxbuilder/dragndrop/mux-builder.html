@@ -190,7 +190,7 @@ let fileFwdOption = (sel) => {
         <div class="message smaller">Drop Consumers below</div>
 
         <div class="vertical-scrollable-zone side-div">
-          <!-- TODO Add the REST Consumer, when ready -->
+          <!-- Warning! Consumers order is scrambled !! -->
           <div id="consumer-1" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
               <div>
                 <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -358,59 +358,104 @@ let fileFwdOption = (sel) => {
                 </div>
               </dialog>
           </div>
-        </div>
-        <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
+          </div>
+          <div id="consumer-13" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
-              <span class="close-icon" onclick="remove(this);">&times;</span>
-              <span class="channel-description">Log file replay</span>
+                <span class="close-icon" onclick="remove(this);">&times;</span>
+                <span class="forwarder-description">Dynamically Loaded Consumer</span>
             </div>
             <div class="draggable-content">
-              <span>File </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
-              <dialog class="editable-prm" style="min-height: 200px;">
-                <div class="dialog-header">
-                  <div style="padding: 10px;">
-                    <span style="margin-left: 20px;">Edit File Channel Parameters</span>
-                    <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
-                  </div>
-                </div>
-                <div class="editable-zone file-channel">
-                  <table>
-                    <tr>
-                        <td>File Name</td>
-                        <td><input type="text" class="file-name" size="30" placeholder="Log File Name"></td>
-                    </tr>
-                    <tr>
-                        <td>Zip</td>
-                        <td><input type="checkbox" class="zip-option"></td>
-                    </tr>
-                    <tr>
-                        <td>Path in Zip</td>
-                        <td><input type="text" class="zip-path" size="30" placeholder="Path in Zip"></td>
-                    </tr>
-                    <tr>
-                        <td>Device Filters</td>
-                        <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
-                    </tr>
-                    <tr>
-                        <td>Sentence Filters</td>
-                        <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
-                    </tr>
-                    <tr>
-                        <td>Verbose</td>
-                        <td><input type="checkbox" class="verbose"></td>
-                    </tr>
-                    <tr>
-                        <td>Between records</td>
-                        <td><input type="number" class="between-records" placeholder="1000"></td>
-                    </tr>
-                    <tr>
-                        <td>Loop</td>
-                        <td><input type="checkbox" class="loop"></td>
-                    </tr>
-                  </table>
-                </div>  
-              </dialog>            
+                <span>Dynamic </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <dialog class="editable-prm" style="min-height: 200px;">
+                    <div class="dialog-header">
+                        <div style="padding: 10px;">
+                            <span style="margin-left: 20px;">Edit Dynamic Consumer Parameters</span>
+                            <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                        </div>
+                    </div>
+                    <div class="editable-zone dynamic-consumer">
+                        <table>
+                          <tr>
+                              <td>Client Class Name</td>
+                              <td><input type="text" class="dyn-class-name" size="30" placeholder="nmea.client.ClassName"></td>
+                          </tr>
+                          <tr>
+                              <td>Reader Class Name</td>
+                              <td><input type="text" class="dyn-reader-class-name" size="30" placeholder="nmea.reader.ClassName"></td>
+                          </tr>
+                          <tr>
+                              <td>Properties file</td>
+                              <td><input type="text" class="dyn-props-name" size="30" placeholder="props.properties"></td>
+                          </tr>
+                          <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                          </tr>
+                          <tr>
+                            <td>Device Filters</td>
+                            <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
+                          </tr>
+                          <tr>
+                            <td>Sentence Filters</td>
+                            <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
+                          </tr>
+                        </table>
+                    </div>
+                </dialog>
             </div>
+          </div>
+          <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
+                  <div>
+                    <span class="close-icon" onclick="remove(this);">&times;</span>
+                    <span class="channel-description">Log file replay</span>
+                  </div>
+                  <div class="draggable-content">
+                    <span>File </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                    <dialog class="editable-prm" style="min-height: 200px;">
+                      <div class="dialog-header">
+                        <div style="padding: 10px;">
+                          <span style="margin-left: 20px;">Edit File Channel Parameters</span>
+                          <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                        </div>
+                      </div>
+                      <div class="editable-zone file-channel">
+                        <table>
+                          <tr>
+                              <td>File Name</td>
+                              <td><input type="text" class="file-name" size="30" placeholder="Log File Name"></td>
+                          </tr>
+                          <tr>
+                              <td>Zip</td>
+                              <td><input type="checkbox" class="zip-option"></td>
+                          </tr>
+                          <tr>
+                              <td>Path in Zip</td>
+                              <td><input type="text" class="zip-path" size="30" placeholder="Path in Zip"></td>
+                          </tr>
+                          <tr>
+                              <td>Device Filters</td>
+                              <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
+                          </tr>
+                          <tr>
+                              <td>Sentence Filters</td>
+                              <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
+                          </tr>
+                          <tr>
+                              <td>Verbose</td>
+                              <td><input type="checkbox" class="verbose"></td>
+                          </tr>
+                          <tr>
+                              <td>Between records</td>
+                              <td><input type="number" class="between-records" placeholder="1000"></td>
+                          </tr>
+                          <tr>
+                              <td>Loop</td>
+                              <td><input type="checkbox" class="loop"></td>
+                          </tr>
+                        </table>
+                      </div>  
+                    </dialog>            
+                  </div>
           </div>
           <div id="consumer-4" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
@@ -1168,7 +1213,7 @@ let fileFwdOption = (sel) => {
   </div>
 </div>
 
-<button onclick="dumpIt(true);" title="Will put it in the clipboard too."><span style="margin: 20px;">Generate YAML <img src="../../images/icons8-copy-to-clipboard-50.png"/></span></button>
+<button onclick="dumpIt(true);" title="Will put it in the clipboard too."><span style="margin: 20px;">Generate YAML <img src="./icons8-copy-to-clipboard-50.png"/></span></button>
 
 </body>
 </html>
