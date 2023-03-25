@@ -21,6 +21,7 @@ dependencies {
   implementation project(':common-utils')
   //implementation project(':http-tiny-server')
   implementation project(':raspberry-sailor:JGRIB')
+  // implementation 'publishing:JGribX:1.0'  // Published locally
   implementation project(':raspberry-sailor:routing')
   //implementation project(':raspberry-sailor:NMEA-Parser')
   //implementation project(':raspberry-sailor:PolarSmoother')

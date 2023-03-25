@@ -194,7 +194,7 @@ while [[ "${GO}" == "true" ]]; do
 	    read a
 	    ;;
 	  "J" | "j")
-	    jconsole &
+	    sudo jconsole &
 	    ;;
 	  "JV" | "jv")
 	    jvisualvm &

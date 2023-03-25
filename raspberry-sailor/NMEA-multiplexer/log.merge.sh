@@ -14,7 +14,7 @@ MERGED_FILE_NAME=$2
 #
 for log in `ls ${LOG_PATH}/*.nmea`; do
   echo -e "Adding ${log}"
-  cat ${log} >> $MERGED_FILE_NAME
+  cat ${log} >> ${MERGED_FILE_NAME}
 done
 echo -e "Done"
 echo -e "Now you might want to run a ./log.shrinker.sh ${MERGED_FILE_NAME}"

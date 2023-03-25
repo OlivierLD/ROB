@@ -149,7 +149,7 @@ public class MuxInitializer {
                     String deviceFilters = "";
                     String sentenceFilters = "";
                     switch (type) {
-                        case "serial":
+                        case "serial": // Consumer
                             try {
                                 String serialPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String br = muxProps.getProperty(String.format("mux.%s.baudrate", MUX_IDX_FMT.format(muxIdx)));
@@ -176,7 +176,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "rest":
+                        case "rest": // Consumer
                             try {
 //                                System.out.printf("REST Consumer required here (#%d), come back soon! (See above)\n", muxIdx);
                                 String machineName = muxProps.getProperty(String.format("mux.%s.machine-name", MUX_IDX_FMT.format(muxIdx)));
@@ -216,7 +216,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "tcp":
+                        case "tcp": // Consumer
                             try {
                                 String tcpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String tcpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
@@ -240,7 +240,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "file":
+                        case "file": // Consumer
 //                            System.out.println("MUX Props:\n" + muxProps);
                             try {
                                 String filename = muxProps.getProperty(String.format("mux.%s.filename", MUX_IDX_FMT.format(muxIdx)));
@@ -284,7 +284,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "ws":
+                        case "ws": // Consumer
                             try {
                                 String wsUri = muxProps.getProperty(String.format("mux.%s.wsuri", MUX_IDX_FMT.format(muxIdx)));
                                 deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
@@ -301,7 +301,7 @@ public class MuxInitializer {
                                 e.printStackTrace();
                             }
                             break;
-                        case "rnd": // Random generator, for debugging
+                        case "rnd":  // Consumer. Random generator, for debugging
                             try {
                                 deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
@@ -319,7 +319,7 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
-                        case "zda": // ZDA generator
+                        case "zda": // Consumer. ZDA generator
                             try {
                                 deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
@@ -337,7 +337,7 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
-                        case "batt":   // Battery Voltage, use XDR
+                        case "batt":   // Consumer. Battery Voltage, use XDR
                         default:
                             throw new RuntimeException(String.format("mux type [%s] not supported yet.", type));
                     }
@@ -420,7 +420,7 @@ public class MuxInitializer {
                         System.out.printf("\t>> %s - Loading for output channel %s (%s)\n", NumberFormat.getInstance().format(System.currentTimeMillis()), typeProp, type);
                     }
                     switch (type) {
-                        case "serial":
+                        case "serial": // Forwarder
                             String serialPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             int baudrate = Integer.parseInt(muxProps.getProperty(String.format("forward.%s.baudrate", MUX_IDX_FMT.format(fwdIdx))));
                             String propFileSerial = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
@@ -443,7 +443,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "tcp":
+                        case "tcp": // Forwarder
                             String tcpPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -465,7 +465,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "rest":
+                        case "rest": // Forwarder
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             String verboseStr = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
@@ -514,7 +514,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "gpsd":
+                        case "gpsd": // Forwarder
                             String gpsdPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             String gpsdPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String gpsdSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -536,7 +536,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "file":
+                        case "file": // Forwarder
                             String fName = muxProps.getProperty(String.format("forward.%s.filename", MUX_IDX_FMT.format(fwdIdx)), "data.nmea");
                             boolean append = "true".equals(muxProps.getProperty(String.format("forward.%s.append", MUX_IDX_FMT.format(fwdIdx)), "false"));
                             boolean timeBased = "true".equals(muxProps.getProperty(String.format("forward.%s.timebase.filename", MUX_IDX_FMT.format(fwdIdx)), "false"));
@@ -572,7 +572,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "ws":
+                        case "ws": // Forwarder
                             String wsUri = muxProps.getProperty(String.format("forward.%s.wsuri", MUX_IDX_FMT.format(fwdIdx)));
                             String wsPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String wsSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -594,7 +594,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "wsp":
+                        case "wsp": // Forwarder
                             String wspUri = muxProps.getProperty(String.format("forward.%s.wsuri", MUX_IDX_FMT.format(fwdIdx)));
                             String wspPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String wspSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -616,7 +616,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "console":
+                        case "console": // Forwarder
                             try {
                                 String consolePropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                                 String consoleSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -637,7 +637,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "rmi":
+                        case "rmi": // Forwarder
                             String rmiPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             String rmiName = muxProps.getProperty(String.format("forward.%s.name", MUX_IDX_FMT.format(fwdIdx)));
                             String rmiPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
@@ -660,7 +660,7 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-                        case "nmea-cache-publisher":
+                        case "nmea-cache-publisher": // Forwarder
                             String cacheSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             Integer restPort = null;
                             Long betweenLoops = null;
@@ -785,7 +785,7 @@ public class MuxInitializer {
                                         ex.printStackTrace();
                                     }
                                     break;
-                                case "dew-point-computer":
+                                case "dew-point-computer": // Computer
                                     String dpPrefix = muxProps.getProperty(String.format("computer.%s.prefix", MUX_IDX_FMT.format(cptrIdx)), "OS");
                                     try {
                                         Computer dewPointComputer = new DewPointTemperatureComputer(mux, dpPrefix);

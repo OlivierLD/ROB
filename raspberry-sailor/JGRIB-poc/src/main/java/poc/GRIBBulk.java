@@ -190,10 +190,12 @@ public class GRIBBulk {
 	}
 	// For standalone tests
 	public static void main(String... args) throws Exception {
+		String homeFolder = System.getProperty("user.home");
 		GRIBBulk gb = new GRIBBulk();
 	//	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
 	//	String gribFileName = "GRIB_2009_02_25_Sample.grb";
-	    String gribFileName = "samples/GRIB_2017_10_16_07_31_47_PDT.grb";
+	    String gribFileName = // "samples/GRIB_2017_10_16_07_31_47_PDT.grb";
+		                      String.format("%s/.xygrib/grib/20230324_073412_GFS_1P0_WW3_P50_.grb2", homeFolder);
 		// String gribFileName =  "$HOME/repos/ROB/raspberry-sailor/RESTRouting/samples/_cache_weather-cache_EastAtlantic.wind.7days.grb";
 		if (args.length > 0) {
 			gribFileName = args[0];
