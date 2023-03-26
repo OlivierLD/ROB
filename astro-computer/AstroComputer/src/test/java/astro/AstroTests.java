@@ -260,8 +260,8 @@ public class AstroTests {
 	public void testSRSun() {
 		String utcDate = "2022-09-11T07:08:08";
 		String bodyName = "Sun";
-		double userLatitude = 47.677667;
-		double userLongitude = -3.135667;
+		double userLatitude = 47.677667;   // Belz
+		double userLongitude = -3.135667;  // Belz
 		boolean reverse = false;
 		double instrumentalAltitude = 13.34188333;
 		int limb = SightReductionUtil.LOWER_LIMB;

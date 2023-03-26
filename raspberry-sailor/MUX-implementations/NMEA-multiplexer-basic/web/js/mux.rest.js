@@ -192,7 +192,7 @@ let deleteChannel = (channel) => {
 };
 
 let setSpeedUnit = (speedUnit) => {
-    return getPromise('/mux/events/change-speed-unit', DEFAULT_TIMEOUT, 'POST', 200, {"speed-unit": speedUnit}, false);
+    return getPromise('/mux/events/change-speed-unit', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret >= 200 || ret < 300); }, {"speed-unit": speedUnit}, false);
 };
 
 let pushData = (flow) => {

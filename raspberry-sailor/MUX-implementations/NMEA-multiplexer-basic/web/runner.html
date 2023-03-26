@@ -174,181 +174,6 @@
 		}
 
 	</style>
-	<script type="text/javascript">
-
-		function logEnabled(cb) {
-			if (cb.checked) {
-				console.log('On');
-				enableLogging(true);
-			} else {
-				console.log('Off');
-				enableLogging(false);
-			}
-		}
-
-		function speedUnit(su) {
-			if (su.value && su.value.trim().length > 0) {
-				setSpeedUnit(su.value);
-			}
-		}
-
-		function forwarderStatus() {
-			let getData = getForwarderStatus(); // A promise
-			getData.then((value) => {
-				let json = JSON.parse(value); // Like {"processing":false,"started":1501082121336}
-				let status = json.processing;
-				document.getElementById("flip-1").checked = status; // a boolean
-			}, (error, errmess) => {
-				let message;
-				if (errmess) {
-					if (errmess.message) {
-						message = errmess.message;
-					} else {
-						message = errmess;
-					}
-				}
-				console.log("Failed to get the forwarders status..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
-			});
-		}
-
-		function speedAndCourse() {
-			let getData = getSOGCOG(); // A promise
-			getData.then((value) => {
-				let json = JSON.parse(value);
-				let speedFactor = 1;
-				let unitStr = "kts";
-				let unit = document.getElementById("speed-unit").value;
-				switch (unit) {
-					case "":
-					case "ms":
-						speedFactor = 1.852 * (1000 / 3600);
-						unitStr = "m/s";
-						break;
-					case "kmh":
-						speedFactor = 1.852;
-						unitStr = "km/h";
-						break;
-					case "mph":
-						speedFactor = 1.15078; // 1.852 / 1.609;
-						unitStr = "mph";
-						break;
-					case "knots":
-						speedFactor = 1;
-						unitStr = "kts";
-						break;
-					default:
-						break;
-				}
-				document.getElementById("sog").innerText = ((json.sog.sog ? (json.sog.sog * speedFactor).toFixed(2) : "-") + " " + unitStr);
-				document.getElementById("cog").innerText = ((json.cog.cog ? json.cog.cog.toFixed(0) : "-") + "\272");
-				if (json.pos) {
-					if (json.pos.lat) {
-						document.getElementById("lat").innerText = decToSex(json.pos.lat, "NS", true);
-					}
-					if (json.pos.lng) {
-						document.getElementById("lng").innerText = decToSex(json.pos.lng, "EW", true);
-					}
-				}
-			}, (error, errmess) => {
-				let message;
-				if (errmess) {
-					if (errmess.message) {
-						message = errmess.message;
-					} else {
-						message = errmess;
-					}
-				}
-				console.log("Failed to get the Speed and Course..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
-			});
-		}
-
-		function getDistanceTraveled() {
-			let getData = getDistance(); // A promise
-			getData.then((value) => {
-				let json = JSON.parse(value); // Speed comes in knots
-				let unit = document.getElementById("speed-unit").value;
-				let distFactor = 1;
-				let unitStr = "nm";
-				switch (unit) {
-					case "":
-					case "ms":
-						distFactor = 1852; // 1.852 * (1000 / 3600);
-						unitStr = "m";
-						break;
-					case "kmh":
-						distFactor = 1.852;
-						unitStr = "km";
-						break;
-					case "mph":
-						distFactor = 1.15078; // 1.852 / 1.609;
-						unitStr = "miles";
-						break;
-					case "knots":
-						distFactor = 1;
-						unitStr = "nm";
-						break;
-					default:
-						break;
-				}
-				document.getElementById("dist-val").innerText = ((json["distance"] ? (json["distance"] * distFactor).toFixed(2) : "-") + " " + unitStr);
-			}, (error, errmess) => {
-				let message;
-				if (errmess) {
-					if (errmess.message) {
-						message = errmess.message;
-					} else {
-						message = errmess;
-					}
-				}
-				console.log("Failed to get the Distance traveled..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
-			});
-		}
-
-		function getDeltaAltitude() {
-			let getData = getDeltaAlt(); // A promise
-			getData.then((value) => {
-				let json = JSON.parse(value);
-				if (json) {
-					let unit = document.getElementById("speed-unit").value; // Altitude comes in meters
-					let unitFactor = 1;
-					let unitStr = "m";
-					switch (unit) {
-						case "":
-						case "ms":
-							unitFactor = 1;
-							unitStr = "m";
-							break;
-						case "kmh":
-							unitFactor = 1;
-							unitStr = "m";
-							break;
-						case "mph":
-							unitFactor = 3.28084;
-							unitStr = "feet";
-							break;
-						case "knots":
-							unitFactor = 1;
-							unitStr = "m";
-							break;
-						default:
-							break;
-					}
-					document.getElementById("delta-alt-val").innerText = ((json["delta-altitude"] ?(json["delta-altitude"] * unitFactor).toFixed(2) : "-") + " " + unitStr);
-				}
-			}, (error, errmess) => {
-				let message;
-				if (errmess) {
-					if (errmess.message) {
-						message = errmess.message;
-					} else {
-						message = errmess;
-					}
-				}
-				console.log("Failed to get the Delta Altitude..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
-			});
-		}
-
-	</script>
 </head>
 <body>
 <h1>Run &amp; Log</h1>
@@ -426,7 +251,179 @@
 </div>
 
 </div>
-<script>
+<script type="text/javascript">
+
+	function logEnabled(cb) {
+		if (cb.checked) {
+			console.log('On');
+			enableLogging(true);
+		} else {
+			console.log('Off');
+			enableLogging(false);
+		}
+	}
+
+	function speedUnit(su) {
+		if (su.value && su.value.trim().length > 0) {
+			setSpeedUnit(su.value);
+		}
+	}
+
+	function localForwarderStatus() {
+		let getData = getForwarderStatus(); // A promise
+		getData.then((value) => {
+			let json = JSON.parse(value); // Like {"processing":false,"started":1501082121336}
+			let status = json.processing;
+			document.getElementById("flip-1").checked = status; // a boolean
+		}, (error, errmess) => {
+			let message;
+			if (errmess) {
+				if (errmess.message) {
+					message = errmess.message;
+				} else {
+					message = errmess;
+				}
+			}
+			console.log("Failed to get the forwarders status..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	}
+
+	function speedAndCourse() {
+		let getData = getSOGCOG(); // A promise
+		getData.then((value) => {
+			let json = JSON.parse(value);
+			let speedFactor = 1;
+			let unitStr = "kts";
+			let unit = document.getElementById("speed-unit").value;
+			switch (unit) {
+				case "":
+				case "ms":
+					speedFactor = 1.852 * (1000 / 3600);
+					unitStr = "m/s";
+					break;
+				case "kmh":
+					speedFactor = 1.852;
+					unitStr = "km/h";
+					break;
+				case "mph":
+					speedFactor = 1.15078; // 1.852 / 1.609;
+					unitStr = "mph";
+					break;
+				case "knots":
+					speedFactor = 1;
+					unitStr = "kts";
+					break;
+				default:
+					break;
+			}
+			document.getElementById("sog").innerText = ((json.sog.sog ? (json.sog.sog * speedFactor).toFixed(2) : "-") + " " + unitStr);
+			document.getElementById("cog").innerText = ((json.cog.cog ? json.cog.cog.toFixed(0) : "-") + "\272");
+			if (json.pos) {
+				if (json.pos.lat) {
+					document.getElementById("lat").innerText = decToSex(json.pos.lat, "NS", true);
+				}
+				if (json.pos.lng) {
+					document.getElementById("lng").innerText = decToSex(json.pos.lng, "EW", true);
+				}
+			}
+		}, (error, errmess) => {
+			let message;
+			if (errmess) {
+				if (errmess.message) {
+					message = errmess.message;
+				} else {
+					message = errmess;
+				}
+			}
+			console.log("Failed to get the Speed and Course..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	}
+
+	function getDistanceTraveled() {
+		let getData = getDistance(); // A promise
+		getData.then((value) => {
+			let json = JSON.parse(value); // Speed comes in knots
+			let unit = document.getElementById("speed-unit").value;
+			let distFactor = 1;
+			let unitStr = "nm";
+			switch (unit) {
+				case "":
+				case "ms":
+					distFactor = 1852; // 1.852 * (1000 / 3600);
+					unitStr = "m";
+					break;
+				case "kmh":
+					distFactor = 1.852;
+					unitStr = "km";
+					break;
+				case "mph":
+					distFactor = 1.15078; // 1.852 / 1.609;
+					unitStr = "miles";
+					break;
+				case "knots":
+					distFactor = 1;
+					unitStr = "nm";
+					break;
+				default:
+					break;
+			}
+			document.getElementById("dist-val").innerText = ((json["distance"] ? (json["distance"] * distFactor).toFixed(2) : "-") + " " + unitStr);
+		}, (error, errmess) => {
+			let message;
+			if (errmess) {
+				if (errmess.message) {
+					message = errmess.message;
+				} else {
+					message = errmess;
+				}
+			}
+			console.log("Failed to get the Distance traveled..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	}
+
+	function getDeltaAltitude() {
+		let getData = getDeltaAlt(); // A promise
+		getData.then((value) => {
+			let json = JSON.parse(value);
+			if (json) {
+				let unit = document.getElementById("speed-unit").value; // Altitude comes in meters
+				let unitFactor = 1;
+				let unitStr = "m";
+				switch (unit) {
+					case "":
+					case "ms":
+						unitFactor = 1;
+						unitStr = "m";
+						break;
+					case "kmh":
+						unitFactor = 1;
+						unitStr = "m";
+						break;
+					case "mph":
+						unitFactor = 3.28084;
+						unitStr = "feet";
+						break;
+					case "knots":
+						unitFactor = 1;
+						unitStr = "m";
+						break;
+					default:
+						break;
+				}
+				document.getElementById("delta-alt-val").innerText = ((json["delta-altitude"] ?(json["delta-altitude"] * unitFactor).toFixed(2) : "-") + " " + unitStr);
+			}
+		}, (error, errmess) => {
+			let message;
+			if (errmess) {
+				if (errmess.message) {
+					message = errmess.message;
+				} else {
+					message = errmess;
+				}
+			}
+			console.log("Failed to get the Delta Altitude..." + (error ? error : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	}
 
 	function getTravelData() {
 		getDistanceTraveled();
@@ -491,7 +488,7 @@
 
 	(() => {
 
-		forwarderStatus();
+		localForwarderStatus();
 
 		setInterval(getTravelData, 1000); // Distance and delta-alt
 	})();

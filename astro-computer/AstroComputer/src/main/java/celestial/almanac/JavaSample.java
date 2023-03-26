@@ -2,6 +2,7 @@ package celestial.almanac;
 
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
+import calc.calculation.SightReductionUtil;
 import utils.TimeUtil;
 
 import java.text.SimpleDateFormat;
@@ -154,6 +155,23 @@ public class JavaSample {
 		System.out.println(String.format("Equation of time: %s", renderEoT(acv2.getEoT())));
 		System.out.println(String.format("Lunar Distance: %s", lpad(GeomUtil.decToSex(acv2.getLDist(), GeomUtil.SWING, GeomUtil.NONE), 10, " ")));
 		System.out.println(String.format("Day of Week: %s", acv2.getWeekDay()));
+
+		SightReductionUtil sru = new SightReductionUtil();
+
+		double userLatitude = 47.677667;   // Belz
+		double userLongitude = -3.135667;  // Belz
+
+		sru.calculate(userLatitude, userLongitude, acv2.getSunGHA(), acv2.getSunDecl());
+
+		double estimatedAltitude = sru.getHe();
+		double z = sru.getZ();
+		System.out.printf("Sun, from %s / %s : Alt: (%f) %s, Z: %f\n",
+				GeomUtil.decToSex(userLatitude, GeomUtil.SWING, GeomUtil.NS),
+				GeomUtil.decToSex(userLongitude, GeomUtil.SWING, GeomUtil.EW),
+				estimatedAltitude,
+				GeomUtil.decToSex(estimatedAltitude, GeomUtil.SWING, GeomUtil.NONE),
+				z);
+
 
 		System.out.println("Done with Java test run!");
 	}
