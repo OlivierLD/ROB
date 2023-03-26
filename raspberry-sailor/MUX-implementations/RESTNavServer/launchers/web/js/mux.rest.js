@@ -95,7 +95,7 @@ let getLogFile = (fileName) => {
 };
 
 let deleteLogFile = (logFile) => {
-    return getPromise('/mux/log-files/' + logFile, DEFAULT_TIMEOUT, 'DELETE', 200, null, false);
+    return getPromise('/mux/log-files/' + logFile, DEFAULT_TIMEOUT, 'DELETE', (ret) => { return (ret >= 200 || ret < 300); }, null, false);
 };
 
 let getSystemTime = () => {
