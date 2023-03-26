@@ -172,6 +172,7 @@ $ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 
 ## Highlights
 - [Read NMEA data, log, forward, process](./raspberry-sailor/NMEA-multiplexer/README.md)
+- Notebooks, [how NMEA Parsers work](./raspberry-sailor/NMEA-Parser/notebooks/HowItWorks.ipynb)
 - [Build your own deviation curve](./raspberry-sailor/Swing/Deviation-Tool/README.md)
 - [Build your own polars](./raspberry-sailor/PolarSmoother/README.md) (in progress)
 - [Read and render GRIB files](./raspberry-sailor/RESTRouting/README.md) (in progress)

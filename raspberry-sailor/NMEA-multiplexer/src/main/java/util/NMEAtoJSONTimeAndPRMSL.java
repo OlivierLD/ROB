@@ -15,8 +15,7 @@ import java.util.*;
 
 /**
  * An example of a custom log-file analyzer.
- *
- * Spits out RMC Time and PRMSL in a json format
+ * Spits out RMC Time and PRMSL (from XDR) in an array of json objects
  */
 public class NMEAtoJSONTimeAndPRMSL {
 	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -35,7 +34,6 @@ public class NMEAtoJSONTimeAndPRMSL {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutName));
 
 		String line = "";
-
 		double prmsl = 0d;
 
 		while (line != null) {
@@ -88,7 +86,7 @@ public class NMEAtoJSONTimeAndPRMSL {
 
 	public static void main(String... args) {
 		if (args.length != 1) {
-			throw new IllegalArgumentException("Please provide the name of the file to analyze as first parameter");
+			throw new IllegalArgumentException("Please provide the name of the file to analyze as first and only parameter");
 		}
 
 		try {

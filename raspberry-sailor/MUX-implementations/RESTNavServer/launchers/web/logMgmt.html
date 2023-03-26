@@ -68,12 +68,25 @@
 	</style>
 	<script type="text/javascript">
 
+		function messageManager(mess) {
+			// mess-zone
+			let messZone = document.getElementById('mess-zone');
+			if (messZone) {
+				messZone.style.display = 'block';
+				messZone.innerText = mess;
+			} else {
+				console.log(mess);
+			}
+		}
+
 		function getSystemDate(cb) {
 			let getTime = getSystemTime(); // A promise
 			getTime.then((value) => {
 				console.log("System date:", value);
 				if (cb !== undefined) {
 					cb(value);
+				} else {
+					console.log(value);
 				}
 			}, (error, errmess) => {
 				let message;
@@ -84,64 +97,67 @@
 						message = errmess;
 					}
 				}
-				console.log("GetSystemTime failed..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				messageManager("GetSystemTime failed..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
 			});
 		}
 
 		function getLogFilesList() {
-			let self = this;
 			let getData = getLogFiles(); // A promise
 			getData.then((value) => {
 				let logFiles = JSON.parse(value);
-//      console.log("Log files", json);
-				// get active file forwarder lo file name
-				let getForwarders = self.getForwarders(); // Another promise
-				getForwarders.then((value) => {
-					document.body.style.cursor = 'default';
-					let fwdrs = JSON.parse(value);
-					buildFileList(logFiles, fwdrs);
-				}, (error, errmess) => {
-					document.body.style.cursor = 'default';
-					let message;
-					if (errmess !== undefined) {
-						if (errmess.message !== undefined) {
-							message = errmess.message;
-						} else {
-							message = errmess;
+		        // console.log("Log files", logFiles);
+				// get active file forwarder log file name
+				try {
+					let getFwdrs= getForwarders(); // Another promise
+					getFwdrs.then((value) => {
+						document.body.style.cursor = 'default';
+						let fwdrs = JSON.parse(value);
+						buildFileList(logFiles, fwdrs);
+					}, (error, errmess) => {
+						document.body.style.cursor = 'default';
+						let message;
+						if (errmess) {
+							if (errmess.message) {
+								message = errmess.message;
+							} else {
+								message = errmess;
+							}
 						}
-					}
-					console.log("Failed to get the forwarders list..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
-				});
+						messageManager("Failed to get the forwarders list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+					});
+				} catch (err) {
+					messageManager("getForwarders Failed..." + (err ? err.toString() + ", " + JSON.stringify(err) : ' - '));
+				}
 			}, (error, errmess) => {
 				var message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to get the log files list..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				messageManager("Failed to get the log files list..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 			});
 		}
 
 		function deleteLog(fName) {
 			let deleteData = deleteLogFile(fName); // A promise
 			deleteData.then((value) => {
-//		var json = JSON.parse(value);
+                // var json = JSON.parse(value);
 				console.log("Delete log file OK");
 				// Rebuild the list
 				getLogFilesList();
 			}, (error, errmess) => {
 				let message;
-				if (errmess !== undefined) {
-					if (errmess.message !== undefined) {
+				if (errmess) {
+					if (errmess.message) {
 						message = errmess.message;
 					} else {
 						message = errmess;
 					}
 				}
-				console.log("Failed to delete the log file..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+				messageManager("Failed to delete the log file..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 			});
 		}
 
@@ -188,7 +204,11 @@
 		}
 
 		window.onload = () => {
-			getLogFilesList();
+			try {
+				getLogFilesList();
+			} catch (err) {
+				messageManager("getLogFilesList Failed..." + (err ? JSON.stringify(err) : ' - '));
+			}
 			getSystemDate(function(date) {
 				document.getElementById("syst-date").innerHTML = '<b>System Date: ' + date + '</b>';
 			});
@@ -202,6 +222,7 @@
 		<span>TODO: Terminal help, how to get to the log files from a CLI.</span>
 	</div>
 	<div id="syst-date" style="margin: 10px;"></div>
+	<div id="mess-zone" style="display: none; margin: 5px; border: 2px solid red; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<div id="file-table">
 		<div id="count" style="margin-left: 10px;"></div>
 		<table id="log-files-table" class="data-table">

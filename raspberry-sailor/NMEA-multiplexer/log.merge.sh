@@ -12,7 +12,8 @@ fi
 LOG_PATH=$1
 MERGED_FILE_NAME=$2
 #
-for log in `ls ${LOG_PATH}/*.nmea`; do
+# for log in `ls ${LOG_PATH}/*.nmea`; do
+for log in ${LOG_PATH}/*.nmea; do
   echo -e "Adding ${log}"
   cat ${log} >> ${MERGED_FILE_NAME}
 done
