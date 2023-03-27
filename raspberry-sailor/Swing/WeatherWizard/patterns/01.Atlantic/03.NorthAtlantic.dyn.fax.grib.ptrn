@@ -40,4 +40,8 @@
    <west>-101.8</west>
    <chartwidth>900</chartwidth>
    <chartheight>600</chartheight>
-<author name="Oliv"/><scroll x="0" y="0"/><chart-opt show="yes"/><fax-option value="CHECKBOX"/></pattern>
+   <author name="Oliv"/>
+   <scroll x="0" y="0"/>
+   <chart-opt show="yes"/>
+   <fax-option value="CHECKBOX"/>
+</pattern>

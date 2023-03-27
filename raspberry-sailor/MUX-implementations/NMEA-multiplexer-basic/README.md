@@ -26,7 +26,7 @@ Also try (this is for lazy-dummies)
 ```
 $ ./mux.sh --interactive-config
 ```
-This previous one was developed for tests, it requires some polishing, several values are hard-coded..., 
+This previous one was developed for tests, it is a work in progress, it requires some polishing, several values are hard-coded..., 
 as you would see in the code (`GenericNMEAMultiplexer.interactiveConfig()`). 
 
 ## How it works (in short)
@@ -290,7 +290,9 @@ Many other Web UI examples are available. Just look.
 You will see that some examples need an Internet connection (for Google Maps and Leaflets), some others can run without Internet.  
 Some are using WebComponents, some vanilla JavaScript components (directly drawing on HTML5 canvases).  
 Your imagination is the limit.  
-There is also a [USE_CASES](./USE_CASES.md) document.
+There is also a [USE_CASES](./USE_CASES.md) document.  
+> The WebComponents presented here live in their own repo, at <https://github.com/OlivierLD/WebComponents>. 
+> They can be seen live at <https://olivierld.github.io/webcomponents/gallery.html> (it's a biiiiig file).
 
 # To production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on
