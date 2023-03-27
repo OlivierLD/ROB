@@ -27,9 +27,9 @@ dependencies {
 publishing {
     publications {
         maven(MavenPublication) {  // Required by publishToMavenLocal
-            groupId = 'raspberry.on.board'
-            artifactId = 'common-utils'
-            version = '1.0'
+            groupId = 'raspberry.on.board' // use $project.group
+            artifactId = 'common-utils'    // use $project.name
+            version = '1.0'                // use $project.version
 
             from components.java
         }
@@ -46,7 +46,7 @@ shadowJar {
 
 build.doFirst {
     println "+-------------------------------------------------------------"
-    println "| >>> Try 'gradlew run' in common-utils to see some system info."
+    println "| >>> Try 'gradlew run' in common-utils (project.name: $project.name) to see some system info."
     println "+-------------------------------------------------------------"
 }
 
