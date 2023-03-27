@@ -83,13 +83,13 @@ public class JavaSample {
 		System.out.println(String.format("Calculations for %s (%s)", SDF_UTC.format(date.getTime()), now ? "now" : "not now"));
 
 		AstroComputerV2 acv2 = new AstroComputerV2();
-//		double defaultDeltaT = AstroComputer.getDeltaT();
-//		System.out.printf("Using deltaT: %f\n", defaultDeltaT);
+  		double defaultDeltaT = acv2.getDeltaT();
+  		System.out.printf("Using deltaT: %f\n", defaultDeltaT);
 		for (int i=0; i<10; i++) { // Any variation across the time?
 			long before = System.currentTimeMillis();
 			// Recalculate DeltaT
 			double deltaT = TimeUtil.getDeltaT(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1);
-//		System.out.printf(">> deltaT: %f s\n", deltaT);
+			System.out.printf(">> deltaT: %f s\n", deltaT);
 			acv2.setDeltaT(deltaT);
 
 			// All calculations here
@@ -156,6 +156,7 @@ public class JavaSample {
 		System.out.println(String.format("Lunar Distance: %s", lpad(GeomUtil.decToSex(acv2.getLDist(), GeomUtil.SWING, GeomUtil.NONE), 10, " ")));
 		System.out.println(String.format("Day of Week: %s", acv2.getWeekDay()));
 
+		// Extra: calculate Sun's apparent position from a given position
 		SightReductionUtil sru = new SightReductionUtil();
 
 		double userLatitude = 47.677667;   // Belz

@@ -7,7 +7,7 @@ plugins {
     id 'scala'
     // id 'idea'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' // version '6.0.0' // Remove version if used in a gradle submodule.
+    id 'com.github.johnrengelman.shadow' version '6.0.0' // Remove version if used in a gradle submodule.
     id "application"
 }
 
@@ -24,8 +24,8 @@ compileJava.options.compilerArgs += ["-Xlint:unchecked"]
 group = 'astro.computer'
 version = '1.0'
 
-// sourceCompatibility = 1.8
-// targetCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
   if (JavaVersion.current() != project.targetCompatibility) {
@@ -42,6 +42,7 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     implementation project(':astro-computer:AstroUtilities')
+    // implementation project(':AstroUtilities')
 
     implementation "org.scala-lang:scala-library:$scala_version"   // 2.12.5"
     implementation "org.scala-lang:scala-compiler:$scala_version"  // 2.12.5"

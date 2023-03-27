@@ -139,7 +139,7 @@ Calculation took 64 ms.
 #### From Python
 ```
 $ cd src/main/python
-$ ./calculation_sample.py 
+$ ./python_sample.py 
 ----------------------------------------------
 Calculations done for 2020-Mar-28 16:50:20 UTC
 In 142 ms
@@ -347,7 +347,7 @@ real	0m0.375s
 user	0m0.368s
 sys	0m0.060s
 
-$ time src/main/python/calculation_sample.py 
+$ time src/main/python/python_sample.py 
 ----------------------------------------------
 Calculations done for 2020-Mar-28 16:50:20 UTC
 ----------------------------------------------

@@ -319,14 +319,14 @@ class LongTermAlmanac:
         GMSTm = math.floor(GMSTmdecimal)
         GMSTsdecimal = 60 * (GMSTmdecimal - GMSTm)
         GMSTs = round(1000 * GMSTsdecimal) / 1000
-        if GMSTs - math.floor(GMSTs) == 0:
-            GMSTs += ".000"
-        elif 10 * GMSTs - math.floor(10 * GMSTs) == 0:
-            GMSTs += "00"
-        elif 100 * GMSTs - math.floor(100 * GMSTs) == 0:
-            GMSTs += "0"
+        # if GMSTs - math.floor(GMSTs) == 0:
+        #     GMSTs += ".000"
+        # elif 10 * GMSTs - math.floor(10 * GMSTs) == 0:
+        #     GMSTs += "00"
+        # elif 100 * GMSTs - math.floor(100 * GMSTs) == 0:
+        #     GMSTs += "0"
 
-        return "{}h {}m {}s".format(GMSTh, GMSTm, GMSTs)
+        return "{}h {}m {:.3f}s".format(GMSTh, GMSTm, GMSTs)
 
     # Output Declination
     @staticmethod

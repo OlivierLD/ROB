@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import os, sys, time
+from datetime import datetime, timezone
+
 current_path = os.path.dirname(os.path.abspath(__file__))
 print(f"Absolute current path ${current_path}")
 sys.path.append(current_path)
@@ -11,17 +13,44 @@ deltaT: float = DELTA_T
 
 # print("Default deltaT would be {} s.".format(deltaT))
 
+# UTC, to be used for calculation
+year: int = 2020
+month: int = 3
+day: int = 28
+hours: int = 16
+minutes: int = 50
+seconds: int = 20
+
+now: bool = False
+
+print(f"Running with {len(sys.argv)} argument(s)")
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--now":
+        now = True
+
+if now:
+    print("Calculating current UTC")
+    currentUTC: datetime = datetime.now(timezone.utc)
+    # print(f" Date Type: {type(currentUTC)}")
+    print(f"Current UTC: {currentUTC.strftime('%Y-%m-%dT%H:%M:%S.000Z')} ")
+    year = int(currentUTC.strftime("%Y"))
+    month = int(currentUTC.strftime("%m"))
+    day = int(currentUTC.strftime("%d"))
+    hours = int(currentUTC.strftime("%H"))
+    minutes = int(currentUTC.strftime("%M"))
+    seconds = int(currentUTC.strftime("%S"))
+
 before: int = int(round(time.time() * 1000))
 # Recalculate DeltaT 
-deltaT = lta.calculateDeltaT(2020, 3)
-# print("Recalculated for [{} / {}], DeltaT is {} s".format(2020, 3, deltaT))
+deltaT = lta.calculateDeltaT(year, month)
+print(f"Recalculated for [{year} / {month}], DeltaT is {deltaT} s")
 
-# 2020-MAR-28 16:50:20 UTC
-lta.calculate(2020, 3, 28, 16, 50, 20, deltaT)
+# default 2020-MAR-28 16:50:20 UTC
+lta.calculate(year, month, day, hours, minutes, seconds, deltaT)
 after: int = int(round(time.time() * 1000))
 # Display results
 print("----------------------------------------------")
-print("Calculations done for 2020-Mar-28 16:50:20 UTC")
+print(f"Calculations done for {year}-{month:02d}-{day} {hours}:{minutes}:{seconds} UTC")
 print("In {} ms".format(after - before))
 print("----------------------------------------------")
 

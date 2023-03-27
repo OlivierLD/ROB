@@ -56,9 +56,9 @@ body {
 <body>
 <h1>This is an ES6 Celestial Computer test</h1>
 <h2>
-    Observer's position on Earth is hard-coded to San Francisco, CA.
+    Observer's position on Earth is hard-coded in the page.
     <br/>
-    N 37&deg;30' / W 122&deg;18'
+    N 47&deg;40.66' / W 3&deg;08.14' <!-- N 37&deg;30' / W 122&deg;18' -->
 </h2>
 <small>Look into the page's code for details</small>
 <hr/>
@@ -104,14 +104,14 @@ body {
 
 <div class="grid-container">
     <div id="result" class="result"></div>
-    <div style="text-align: left; margin: 10px 20px 20px;" id="sun-azimuth" title="Sun Azimuth, from SF">
+    <div style="text-align: left; margin: 10px 20px 20px;" id="sun-azimuth" title="Sun Azimuth, from user's position">
         <div style="width: 160px; height: 160px; border: 1px solid blue; border-radius: 5px;">
             Sun Azimuth (SVG)...
         </div>
     </div>
 
     <div id="details" class="result"></div>
-    <div style="text-align: left; margin: 10px 20px 20px;" id="sun-elevation" title="Sun Elevation, from SF">
+    <div style="text-align: left; margin: 10px 20px 20px;" id="sun-elevation" title="Sun Elevation, from user's position">
         <div style="width: 160px; height: 160px; border: 1px solid blue; border-radius: 5px;">
             Sun Elevation (SVG)...
         </div>
@@ -120,6 +120,7 @@ body {
 </div>
 
 </body>
+</html>
 <script type="text/javascript">
 
     const DELTA_T = 69.2201; // Will be re-calculated
@@ -182,13 +183,17 @@ body {
         }
 
         // San Francisco, CA.
-        const LAT_SF = 37.5;
-        const LONG_SF = -122.3;
+        // const USER_LAT = 37.5;
+        // const USER_LONG = -122.3;
+        // Belz, Morbihan
+        const USER_LAT = 47.677667;
+		const USER_LONG = -3.135667;
 
-        // Sun Z and Elev from SF
+
+        // Sun Z and Elev from User pos
         let ghaSun = testResult.sun.GHA.raw;
         let decSun = testResult.sun.DEC.raw;
-        let sru = sightReduction(LAT_SF, LONG_SF, ghaSun, decSun);
+        let sru = sightReduction(USER_LAT, USER_LONG, ghaSun, decSun);
         if (consoleVerbose) {
             console.log("SRU Result:" + JSON.stringify(sru));
         }
@@ -197,7 +202,7 @@ body {
         drawElevation('sun-elevation', sru.alt);
 
         // Moon-tilt
-        let moonTilt = getMoonTilt({lat: 37.7489, lng: -122.507}, 
+        let moonTilt = getMoonTilt({lat: USER_LAT, lng: USER_LONG},
 							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw}, 
 							{gha: testResult.moon.GHA.raw, dec: testResult.moon.DEC.raw});
         console.log(`Moon Tilt: ${moonTilt}`);
@@ -467,4 +472,3 @@ body {
 
     };
 </script>
-</html>

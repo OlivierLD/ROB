@@ -1,14 +1,14 @@
 # Celestial Computer in Python.
 
-See sample usage in `calculation_sample.py`.
+See sample usage in `python_sample.py`.
 
 Use
 ```
-$ python3 calculation_sample.py 
+$ python3 python_sample.py 
 ```
 or just
 ```
-$ ./calculation_sample.py 
+$ ./python_sample.py [--now] 
 ```
 Output:
 ```
