@@ -10,6 +10,7 @@ DEBUG: bool = False
 
 # TODO XDR, MDA, ...
 
+
 def rmc_parser(sentence: str) -> Dict[str, Dict]:
     """
     Recommended Minimum Navigation Information, C
