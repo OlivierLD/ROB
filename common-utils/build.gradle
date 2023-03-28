@@ -24,6 +24,7 @@ dependencies {
 }
 
 // See https://docs.gradle.org/current/userguide/publishing_maven.html
+//     https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
 publishing {
     publications {
         maven(MavenPublication) {  // Required by publishToMavenLocal
@@ -32,6 +33,24 @@ publishing {
             version = '1.0'                // use $project.version
 
             from components.java
+            pom {
+                name = "common-utils"
+                description = "Common utilities, reused all over the place"
+                url = "http://github.com/OlivierLD/ROB"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "OlivierLD"
+                        name = "Olivier Le Diouris"
+                        email = "olivier.lediouris@gmail.com"
+                    }
+                }
+            }
         }
     }
 }

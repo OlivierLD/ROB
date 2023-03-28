@@ -8,6 +8,8 @@ _Summary of the links used in this document:_
 - [Demos](./demos.md)
 - [Examples](./examples.md)
 - [Case Study](./casestudy.md). Comparison with Node-RED
+- Extract [custom data](./CUSTOM_DATA.md)
+
 
 _Scripts_:  
 The scripts you will need to run the Multiplexer are `tomux.sh`, and `mux.sh`. You might need to tweak them to fit your context.
@@ -925,9 +927,13 @@ All the user has to do it to un-archive it and run the `mux.sh` script.
 -------------------------------
 
 ### Misc and others
-Porting this on other systems...
 
-#### Windows 10
+#### Extract custom data
+See [here](./CUSTOM_DATA.md)
+
+#### Porting this on other systems...
+
+##### Windows 10
 To read a Serial Port on Windows 10, with PowerShell:
 ```
 Write-Host "Running PowerShell, reading Serial port"
