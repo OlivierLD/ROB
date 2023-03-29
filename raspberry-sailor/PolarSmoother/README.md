@@ -51,7 +51,7 @@ where f<small><sup>TWS</sup></small> is a polynomial function of degree `n`, lik
 also written
 
 ![f(TWA)](./docimg/ftwa.gif)  
-> _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws} = \sum_{i=0}^{n} coef_i* Twa^{i}`.
+> _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws}(Twa) = \sum_{i=0}^{n} coef_i* Twa^{i}`.
 
 
 <!--
