@@ -113,7 +113,6 @@ fetch(URL)
         }
         console.debug("Failed to get PRMSL data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
     });
-
 ```
 
 ---

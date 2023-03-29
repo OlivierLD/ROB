@@ -22,6 +22,10 @@ After several trials, two main communication methods emerged:
 - Representational State Transfer (REST)
   - relies on HTTP, itself relying on TCP
 
+### Python Point of Truth
+Please refer to the scripts in [NMEA-Parser/src/main/python](../NMEA-Parser/src/main/python).  
+The homonyms are to be take in the directory mentioned above.
+
 ### TCP and REST, in short
 TCP implementations exist in the NMEA world (OpenCPN, SeaWi, ...). When a client connects to a TCP server, then the TCP server starts feeding the client with 
 NMEA sentences, as long as the client remains connected to the server. This is indeed very convenient for data like Heading, Wind Speed, etc.  
