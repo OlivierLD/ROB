@@ -46,11 +46,10 @@ public class NMEAtoJSONTimeAndPRMSL {
 		String line = "";
 		double prmsl = 0d;
 
-		long recordNumber = 0L;
-		final long FIFTEEN_MINUTES = (15 * 60 * 1_000);
+		final long FIFTEEN_MINUTES = (15 * 60 * 1_000); // in ms
 		long previousDateTime = 0L;
-		List<Double> xList = null;
-		List<Double> yList = null;
+		List<String> xList = null; // Dates, Duration fmt.
+		List<Double> yList = null; // Pressure values. hPa.
 
 		if (graphType.equals(DataType.FOR_DISPLAY_GRAPH_WEB_COMPONENT)) {
 			xList = new ArrayList<>();
@@ -76,8 +75,10 @@ public class NMEAtoJSONTimeAndPRMSL {
 									mapToLog.put("prmsl", prmsl);
 									jsonArray.add(mapToLog);
 								} else if (graphType.equals(DataType.FOR_DISPLAY_GRAPH_WEB_COMPONENT)) {
+									// One log every 15 minutes
 									if (rmc.getRmcTime().getTime() - previousDateTime > FIFTEEN_MINUTES) {
-										xList.add((double) ++recordNumber);
+										// System.out.printf("Logging pressure at %s\n", DURATION_FMT.format(rmc.getRmcTime()));
+										xList.add(DURATION_FMT.format(rmc.getRmcTime()));
 										yList.add(prmsl / 100L);
 										previousDateTime = rmc.getRmcTime().getTime();
 									}
@@ -128,13 +129,13 @@ public class NMEAtoJSONTimeAndPRMSL {
 		if (graphType.equals(DataType.RAW_DATA)) {
 			System.out.printf("Written %s element(s).\n", NumberFormat.getInstance().format(jsonArray.size()));
 		} else {
-			System.out.printf("Written %s element(s).\n", NumberFormat.getInstance().format(/*recordNumber*/xList.size()));
+			System.out.printf("Written %s element(s).\n", NumberFormat.getInstance().format(xList.size()));
 		}
 	}
 
 	public static void main(String... args) {
 		if (args.length != 1) {
-			throw new IllegalArgumentException("Please provide the name of the file to analyze as first and only parameter");
+			throw new IllegalArgumentException("Please provide the name of the file to process as first and only parameter");
 		}
 
 		try {

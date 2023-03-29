@@ -51,15 +51,15 @@ end up with a JSON file, containing data like
 ```json
 {
   "x": [
-    1.0,
-    2.0,
-    3.0,
-    4.0,
-    5.0,
-    6.0,
-    7.0,
-    8.0,
-    9.0,
+    "2023-03-11T06:44:38",
+    "2023-03-11T06:59:39",
+    "2023-03-11T07:14:40",
+    "2023-03-11T07:29:41",
+    "2023-03-11T07:44:42",
+    "2023-03-11T07:59:43",
+    "2023-03-11T08:14:44",
+    "2023-03-11T08:29:45",
+    "2023-03-11T08:44:46",
     .
     .
     .
@@ -82,11 +82,41 @@ end up with a JSON file, containing data like
 }
 ```
 The data we are interested in to visualize them in a [graph WebComponent](https://github.com/OlivierLD/WebComponents/tree/master/oliv-components/widgets/graph) are in the `"y"` array.  
-They can be extracted from the above, and rendered as follow:
+They can be extracted from the above, and rendered as follows:
 
 ![PRMSL](./docimages/prmsl.data.png)
 
 ---
-> _**Note**_: many other web components are available in the repo mentioned above, they can be visualized at 
+> _**Note**_: to import a json file from a web page or from JavaScript (ES6), you can use the `fetch` function:
+```js
+const URL = './baroData.json';	
+var graphData;
+
+fetch(URL)
+    .then(response => {
+        console.log(`Response: ${response.status} - ${response.statusText}`);
+        response.json().then(doc => {
+            graphData = doc;
+            console.log(`PRMSL data loaded, ${doc.length} elements`); 
+            // Process it here if needed
+            // . . .
+        });
+    }, 
+    (error, errmess) => {
+        console.log("Ooch");
+        let message;
+        if (errmess) {
+            let mess = JSON.parse(errmess);
+            if (mess.message) {
+                message = mess.message;
+            }
+        }
+        console.debug("Failed to get PRMSL data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+    });
+
+```
+
+---
+> _**Note**_: many other web components are available in the repo mentioned above, they (including this one) can be visualized at 
 > <https://olivierld.github.io/webcomponents/gallery.html>.
 ---
