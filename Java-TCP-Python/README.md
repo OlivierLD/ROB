@@ -1,5 +1,5 @@
 # Java to Python, Python to Java, using TCP
-## A playground. 
+## A playground. 🥳
 ### Tests, Drafts, Tentatives, Tries, Errors, Mistakes ...
 
 > This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
@@ -36,7 +36,7 @@ A TCP client would connect to the server; once connected, it can make requests, 
 And this until the client explicitly disconnects.  
 See [here](https://realpython.com/python-sockets/#tcp-sockets), good Real-Python document.
 
-> Theorically, a TCP server should be able to manage several clients. This is probably a good thing, but it might not always be a requirement here. 
+> Theoretically, a TCP server should be able to manage several clients. This is probably a good thing, but it might not always be a requirement here. 
 > But we'll need to be careful.
 
 ### All Java (Java Server, Java Client(s))
