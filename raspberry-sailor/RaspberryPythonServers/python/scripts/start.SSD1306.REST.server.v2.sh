@@ -26,6 +26,7 @@ VERBOSE=false
 SCREEN_HEIGHT=32
 WIRING="I2C"
 DATA="BSP,SOG,COG,POS"
+SS_MODE="on"
 #
 # Prompted, or get prms from CLI
 #
@@ -66,6 +67,12 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
       DATA=${USER_INPUT}
   fi
   # echo "Will use data option ${DATA}"
+  echo -en "Screen Saver Mode ? - Default [${SS_MODE}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      SS_MODE=${USER_INPUT}
+  fi
+  # echo "Will use screen saver mode option ${SS_MODE}"
 else
   echo -e "Getting prms from CLI"
   if [[ $# -gt 0 ]]; then
@@ -83,11 +90,13 @@ else
   	    WIRING=${prm#*:}
   	  elif [[ ${prm} == "--data:"* ]]; then
   	    DATA=${prm#*:}
+  	  elif [[ ${prm} == "--screen-saver:"* ]]; then
+  	    SS_MODE=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

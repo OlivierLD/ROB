@@ -12,8 +12,9 @@
 #      ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/doc_resources/ and in
 #      ROB/Java-TCP-Python/resources)
 #
+# Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
+#
 # Work In Progress !
-# - Started on ScreenSaving mode.
 #
 import json
 import sys
@@ -45,6 +46,7 @@ MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
+SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
 
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
@@ -65,6 +67,7 @@ nmea_cache: Dict[str, object] = None
 ENABLE_SCREEN_SAVER_AFTER: int = 30  # in second
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
+enable_screen_saver: bool = True
 
 # Default list
 nmea_data: List[str] = [
@@ -162,7 +165,7 @@ def screen_saver_manager() -> None:
 # Change these to the right size for your display!
 #
 WIDTH: int = 128
-HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm.
+HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PREFIX)
 BORDER: int = 5
 
 WHITE: int = 255
@@ -198,6 +201,14 @@ if len(sys.argv) > 0:  # Script name + X args
                     print(f"Height must be 32 or 64, not {user_height}")
             except Exception as error:
                 print(f"Height error: {repr(error)}")
+        if arg[:len(SCREEN_SAVER_MODE_PREFIX)] == SCREEN_SAVER_MODE_PREFIX:
+            try:
+                ss_mode_prm: str = arg[len(SCREEN_SAVER_MODE_PREFIX):]
+                if ss_mode_prm == 'off':
+                    enable_screen_saver = False
+            except Exception as error:
+                print(f"Screen Saver Mode error: {repr(error)}")
+
         if arg[:len(DATA_PREFIX)] == DATA_PREFIX:
             user_list = arg[len(DATA_PREFIX):].split(',')
             nmea_data = []  # reset
@@ -246,7 +257,7 @@ else:
 # Initialize buttons
 print("Press button connected on GPIO-20 to scroll up")
 button_thread_01: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_01, button_listener))
-# print(f"Thead is a {type(button_thread_01)}")
+# print(f"Thread is a {type(button_thread_01)}")
 button_thread_01.daemon = True  # Dies on exit
 button_thread_01.start()
 
@@ -255,10 +266,11 @@ button_thread_02: threading.Thread = threading.Thread(target=button_manager, arg
 button_thread_02.daemon = True  # Dies on exit
 button_thread_02.start()
 
-print("Starting screen saver thread")
-screen_saver_thread: threading.Thread = threading.Thread(target=screen_saver_manager)  # No args
-screen_saver_thread.daemon = True  # Dies on exit
-screen_saver_thread.start()
+if enable_screen_saver:
+    print("Starting screen saver thread")
+    screen_saver_thread: threading.Thread = threading.Thread(target=screen_saver_manager)  # No args
+    screen_saver_thread.daemon = True  # Dies on exit
+    screen_saver_thread.start()
 
 # Initialize OLED screen.
 # Clear display.
@@ -650,6 +662,7 @@ def format_data(id: str) -> List[str]:
     return formatted
 
 
+# Manage what goes on, on the display
 def display_manager() -> None:
     global current_value
     global keep_looping
@@ -680,7 +693,7 @@ print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".for
                                                                                     PATH_PREFIX))
 #
 # Main part.
-# Start the server, until Ctrl-C is hit.
+# Run the server, until Ctrl-C is hit.
 #
 try:
     server.serve_forever()
@@ -689,8 +702,9 @@ except KeyboardInterrupt:
     keep_looping = False
     button_thread_01.join()
     button_thread_02.join()
-    screen_saver_thread.join()
     display_thread.join()
+    if enable_screen_saver:
+        screen_saver_thread.join()
 
 # After all
 if oled is not None:
