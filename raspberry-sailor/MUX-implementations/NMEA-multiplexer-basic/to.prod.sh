@@ -97,9 +97,10 @@ if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
 fi
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   # Packaging Python scripts
+  PYTHON_SRC_DIR=RaspberryPythonServers
   mkdir ${distdir}/python
-  echo -e "Copying Python stuff into ${distdir}/python"
-  cp -R ../../RaspberryPythonServers/python/ ${distdir}/python
+  echo -e "Copying Python stuff from ${PYTHON_SRC_DIR}/python into ${distdir}/python"
+  cp -R ../../${PYTHON_SRC_DIR}/python/ ${distdir}/python
   rm -rf ${distdir}/python/__pycache__
   echo -e "Done with Python"
 fi

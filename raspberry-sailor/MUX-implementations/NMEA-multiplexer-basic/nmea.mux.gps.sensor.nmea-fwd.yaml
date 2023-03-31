@@ -1,5 +1,6 @@
 #
 # MUX definition.
+# The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py
 #
 name: "Replay big log file."
 description:

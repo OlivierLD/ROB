@@ -13,6 +13,7 @@
 #      ROB/Java-TCP-Python/resources)
 #
 # Work In Progress !
+# - Started on ScreenSaving mode.
 #
 import json
 import sys
@@ -61,6 +62,10 @@ current_value: int = 0
 keep_looping: bool = True
 nmea_cache: Dict[str, object] = None
 
+ENABLE_SCREEN_SAVER_AFTER: int = 30  # in second
+screen_saver_timer: int = 0
+screen_saver_on: bool = False
+
 # Default list
 nmea_data: List[str] = [
     "BSP",  # Boat Speed
@@ -72,6 +77,15 @@ nmea_data: List[str] = [
 pin_button_01 = board.D20  # pin #38
 pin_button_02 = board.D21  # pin #40
 
+
+def reset_screen_saver() -> None:
+    global screen_saver_on
+    global screen_saver_timer
+    if verbose:
+        print("Reseting screen saver")
+    screen_saver_on = False
+    screen_saver_timer = 0
+    
 
 def button_listener(pin, state) -> None:
     global current_value
@@ -94,6 +108,7 @@ def button_listener(pin, state) -> None:
 
 def button_manager(pin, callback) -> None:
     global keep_looping
+    global screen_saver_on
     btn: DigitalInOut = DigitalInOut(pin)
     # print(f"Button is a {type(btn)}")
     #
@@ -107,15 +122,18 @@ def button_manager(pin, callback) -> None:
     while keep_looping:
         try:
             cur_state: bool = btn.value
-            if cur_state != prev_state:
-                if not cur_state:
-                    if verbose:
-                        print("BTN is UP")
-                    callback(pin, False)  # Broadcast wherever needed
+            if cur_state != prev_state:  # Button status has changed
+                if screen_saver_on and cur_state:  # Screen Saver on, and Button DOWN
+                    reset_screen_saver()
                 else:
-                    if verbose:
-                        print("BTN is DOWN")
-                    callback(pin, True)  # Broadcast wherever needed
+                    if not cur_state:
+                        if verbose:
+                            print("BTN is UP")
+                        callback(pin, False)  # Broadcast wherever needed
+                    else:
+                        if verbose:
+                            print("BTN is DOWN")
+                        callback(pin, True)  # Broadcast wherever needed
             prev_state = cur_state
             time.sleep(0.1)  # sleep for debounce
         except Exception as oops:
@@ -125,8 +143,22 @@ def button_manager(pin, callback) -> None:
     print(f"Done with button listener on pin {pin}")
 
 
-# Change these
-# to the right size for your display!
+def screen_saver_manager() -> None:
+    global keep_looping
+    global screen_saver_timer
+    global screen_saver_on
+    while keep_looping:
+        screen_saver_timer += 1
+        if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER:
+            if verbose:
+                print("Turning screen saver ON")
+            screen_saver_on = True
+        time.sleep(1.0)
+
+
+#
+# Change these to the right size for your display!
+#
 WIDTH: int = 128
 HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm.
 BORDER: int = 5
@@ -221,6 +253,11 @@ button_thread_02: threading.Thread = threading.Thread(target=button_manager, arg
 button_thread_02.daemon = True  # Dies on exit
 button_thread_02.start()
 
+print("Starting screen saver thread")
+screen_saver_thread: threading.Thread = threading.Thread(target=screen_saver_manager)  # No args
+screen_saver_thread.daemon = True  # Dies on exit
+screen_saver_thread.start()
+
 # Initialize OLED screen.
 # Clear display.
 if oled is not None:
@@ -278,19 +315,22 @@ def display(display_data: List[str]) -> None:
     global image
     global draw
     global x
+    global screen_saver_on
     try:
         # Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
 
-        y: int = top
-        for line in display_data:
-            draw.text((x, y), line, font=font, fill=WHITE)
-            y = y + 8
+        if not screen_saver_on:
+            y: int = top
+            # Now draw the required text
+            for line in display_data:
+                draw.text((x, y), line, font=font, fill=WHITE)
+                y = y + 8
 
-        # draw.text((x, top), display_data, font=font, fill=WHITE)
-        # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
-        # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
-        # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
+            # draw.text((x, top), display_data, font=font, fill=WHITE)
+            # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
+            # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
+            # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
 
         # Display image.
         oled.image(image)
@@ -602,7 +642,7 @@ def display_manager() -> None:
     global current_value
     global keep_looping
     while keep_looping:
-        to_display: List[str] = format_data(nmea_data[current_value])
+        to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
         display(to_display)
         # display([f"{current_value} -> {nmea_data[current_value]}"])
         time.sleep(1.0)
@@ -627,6 +667,9 @@ print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, 
 print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number,
                                                                                     PATH_PREFIX))
 #
+# Main part.
+# Start the server, until Ctrl-C is hit.
+#
 try:
     server.serve_forever()
 except KeyboardInterrupt:
@@ -634,6 +677,7 @@ except KeyboardInterrupt:
     keep_looping = False
     button_thread_01.join()
     button_thread_02.join()
+    screen_saver_thread.join()
     display_thread.join()
 
 # After all
