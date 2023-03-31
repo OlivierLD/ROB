@@ -342,8 +342,8 @@ def display(display_data: List[str]) -> None:
             if screen_saver_timer % 2 == 0:
                 if verbose:
                     print("pixel ON")
-                # Draw 'x' on top left
-                draw.text((x, top), "x", font=font, fill=WHITE)
+                # Draw '.' on top left
+                draw.text((x, top), ".", font=font, fill=WHITE)
         # Display image.
         oled.image(image)
         oled.show()
