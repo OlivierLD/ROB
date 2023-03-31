@@ -123,7 +123,7 @@ def button_manager(pin, callback) -> None:
         try:
             cur_state: bool = btn.value
             if cur_state != prev_state:  # Button status has changed
-                if screen_saver_on and cur_state:  # Screen Saver on, and Button DOWN
+                if screen_saver_on and cur_state:  # Screen Saver on, and Button DOWN. Wake up !
                     reset_screen_saver()
                 else:
                     if not cur_state:
@@ -134,12 +134,14 @@ def button_manager(pin, callback) -> None:
                         if verbose:
                             print("BTN is DOWN")
                         callback(pin, True)  # Broadcast wherever needed
+                reset_screen_saver()  # Reset when button was clicked.
             prev_state = cur_state
             time.sleep(0.1)  # sleep for debounce
         except Exception as oops:
             print(f"Error: {repr(oops)}")
         finally:
-            print("button_manager, finally.")
+            if verbose and False:
+                print("button_manager, finally.")
     print(f"Done with button listener on pin {pin}")
 
 
@@ -149,7 +151,7 @@ def screen_saver_manager() -> None:
     global screen_saver_on
     while keep_looping:
         screen_saver_timer += 1
-        if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER:
+        if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER and not screen_saver_on:
             if verbose:
                 print("Turning screen saver ON")
             screen_saver_on = True
@@ -300,6 +302,8 @@ draw.text(
 # Display image
 oled.image(image)
 oled.show()
+# Wait a bit to show the init screen
+time.sleep(1)  # Optional
 
 # First define some constants to allow easy resizing of shapes.
 padding: int = -2
@@ -317,7 +321,7 @@ def display(display_data: List[str]) -> None:
     global x
     global screen_saver_on
     try:
-        # Draw a black filled box to clear the image.
+        # Clear Screen. Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
 
         if not screen_saver_on:
@@ -331,7 +335,15 @@ def display(display_data: List[str]) -> None:
             # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
-
+        else:
+            # Blink a dot
+            if verbose:
+                print(f"screen_saver_timer  {screen_saver_timer}")
+            if screen_saver_timer % 2 == 0:
+                if verbose:
+                    print("pixel ON")
+                # Draw 'x' on top left
+                draw.text((x, top), "x", font=font, fill=WHITE)
         # Display image.
         oled.image(image)
         oled.show()
