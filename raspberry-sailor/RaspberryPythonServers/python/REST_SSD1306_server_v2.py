@@ -348,14 +348,24 @@ def display(display_data: List[str]) -> None:
             # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
         else:
-            # Blink a dot
+            # Blink dots...
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")
-            if screen_saver_timer % 2 == 0:
+            if screen_saver_timer % 4 == 1:
                 if verbose:
-                    print("pixel ON")
+                    print("pixel ON .")
                 # Draw '.' on top left
                 draw.text((x, top), ".", font=font, fill=WHITE)
+            elif screen_saver_timer % 4 == 2:
+                if verbose:
+                    print("pixel ON ..")
+                # Draw '..' on top left
+                draw.text((x, top), "..", font=font, fill=WHITE)
+            elif screen_saver_timer % 4 == 3:
+                if verbose:
+                    print("pixel ON ...")
+                # Draw '...' on top left
+                draw.text((x, top), "...", font=font, fill=WHITE)
         # Display image.
         oled.image(image)
         oled.show()

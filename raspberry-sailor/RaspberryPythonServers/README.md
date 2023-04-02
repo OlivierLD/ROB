@@ -8,6 +8,8 @@ framework deprecation, restrictions based on the JDK version... Here is a try to
 
 ## Python interaction with Sensors and Actuators
 - Python, in general, a great resource: <https://realpython.com/>
+- Another great one for sensors and actuators: <https://github.com/pascalmartin/Adafruit-Raspberry-Pi-Python-Code>
+  - As seen in <https://www.raspberrypi-spy.co.uk/2012/05/install-rpi-gpio-python-library/>, requires a `sudo apt-get install rpi.gpio`
 - MicroPython: <https://docs.micropython.org/en/latest/library/index.html>
   - For example: <https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306>
 - CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
@@ -24,7 +26,7 @@ After several trials, two main communication methods emerged:
 
 ### Python Point of Truth
 Please refer to the scripts in [NMEA-Parser/src/main/python](../NMEA-Parser/src/main/python).  
-The homonyms are to be take in the directory mentioned above.
+The homonyms are to be taken from the directory mentioned above.
 
 ### TCP and REST, in short
 TCP implementations exist in the NMEA world (OpenCPN, SeaWi, ...). When a client connects to a TCP server, then the TCP server starts feeding the client with 
