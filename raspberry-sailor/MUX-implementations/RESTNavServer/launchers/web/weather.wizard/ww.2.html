@@ -305,6 +305,8 @@
 
     <script type="text/javascript">
 
+        const CHART_ON_TOP_OF_GRIB = true;
+
         if (typeof(decToSex) !== 'function') {
             let decToSex = (val, ns_ew) => {
                 let absVal = Math.abs(val);
@@ -568,7 +570,11 @@
         };
     
         let changeGRIB = (cb) => {
-            worldMap.setAfterDrawing(cb.checked ? renderGRIBData : undefined);
+            if (CHART_ON_TOP_OF_GRIB) {
+                worldMap.setBeforeDrawing(cb.checked ? renderGRIBData : undefined); // That is the callback. GRIB under the chart.
+            } else {
+                worldMap.setAfterDrawing(cb.checked ? renderGRIBData : undefined);  // That is the callback. GRIB on top of the chart.
+            }
             redraw();
         };
     
@@ -1465,6 +1471,7 @@
             for (let i = 0; i < gribObj.typedData.length; i++) {
                 let gribTypeData = gribObj.typedData[i];
                 if (gribTypeData.gribType.type !== 'vgrd' && gribTypeData.gribType.type !== 'ugrd') {
+                    // TODO Find min and max position.
                     console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
                     switch (gribTypeData.gribType.type) {
                         case 'tmp':
@@ -1540,16 +1547,21 @@
                 gribFileLocation = where; // Used for routing. Directory of grib.grb
                 document.getElementById('current-grib-location').innerText = ('GRIB in ' + gribFileLocation);
             }
-            worldMap.setAfterDrawing(renderGRIBData); // That is the callback. GRIB on top of the chart.
-            // worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
-    
+            if (CHART_ON_TOP_OF_GRIB) {
+                worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
+            } else {
+                worldMap.setAfterDrawing(renderGRIBData);  // That is the callback. GRIB on top of the chart.
+            }
             requestGRIB(jsonRequest, plotGrib);  // Enable GRIB widgets if successful
         };
     
         let renderGRIB = () => {
             let rawGrib = JSON.parse(document.getElementById("json-grib").value);
-            worldMap.setAfterDrawing(renderGRIBData); // GRIB on top
-            // worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
+            if (CHART_ON_TOP_OF_GRIB) {
+                worldMap.setBeforeDrawing(renderGRIBData); // That is the callback. GRIB under the chart.
+            } else {
+                worldMap.setAfterDrawing(renderGRIBData);  // That is the callback. GRIB on top of the chart.
+            }
             plotGrib(rawGrib);
         };
     

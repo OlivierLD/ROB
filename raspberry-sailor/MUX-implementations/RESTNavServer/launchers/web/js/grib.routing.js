@@ -305,7 +305,7 @@ let getBGColor = function(value, type) {
 			} else { // BEAUFORT
 				let force = getBeaufortScale(value);
 				let beaufortColor = SCALE_COLORS[force].color; //'rgba(1,2,3, 0.5)';
-				let transp = 0.75;
+				let transp = 0.6; // 0.75; // TODO Tweak this ?
 				let transpColor = beaufortColor.replace(/rgb/i, "rgba");
 				transpColor = transpColor.replace(/\)/i,`, ${transp})`);
 				color = transpColor;
@@ -451,6 +451,8 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 	}
 
 	let maxTWS = 0;
+	let maxTWSlat = null;
+	let maxTWSlng = null;
 
 	for (let hGRIB=0; hGRIB<oneDateGRIB.gribDate.height; hGRIB++) {
 		// Actual width... Waves Height has a different lng step.
@@ -515,7 +517,10 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 
 				let canvasPt = worldMap.getCanvasLocation(canvas, lat, lng);
 				drawWindArrow(context, canvasPt, dir, speed);
-
+				if (speed > maxTWS) { // Locate it
+					maxTWSlat = lat;
+					maxTWSlng = lng;
+				}
 				maxTWS = Math.max(maxTWS, speed);
 			}
 
@@ -532,7 +537,7 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 	}
 	// console.log("Max TWS: %d kn", maxTWS);
 	try {
-		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) })`;
+		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) }) at ${ decToSex(maxTWSlat, "NS") } / ${ decToSex(maxTWSlng, "EW") }`;
 	} catch (err) {}
 	// Is there a route to draw here?
 	if (routingResult !== undefined) {
