@@ -318,15 +318,17 @@ let getBGColor = function(value, type) {
 		case 'hgt': // blue, 5640, [4700..6000], inverted
 			color = 'rgba(0, 0, 255, ' + (1 - Math.min((value - 4700) / (6000 - 4700), 1)) + ')';
 			break;
-		case 'prate': // black, [0..30]. Unit is Kg x m-2 x s-1, which is 1mm.s-1. Turned into mm/h
+		case 'prate': // WAS black, [0..30]. Unit is Kg x m-2 x s-1, which is 1mm.s-1. Turned into mm/h
 			let max = 30;
 			let mm_per_hour = value * 3600;
-			let transp = 	Math.min(((mm_per_hour) / max), 1);
-			let blue = Math.max(255 - (mm_per_hour * (255 / max)), 0).toFixed(0);
+			const MULT_FACTOR = 10; // 00; // TODO Tweak that one ?
+			let transp = 	Math.min(((mm_per_hour * MULT_FACTOR) / max), 1);
+			let blue = 255; // Math.max(255 - (mm_per_hour * MULT_FACTOR * (255 / max)), 0).toFixed(0);
 			// if (mm_per_hour > 20) {
 			// 	console.log(`>> Value: ${mm_per_hour} => Blue: ${blue}`);
 			// }
-			color = `rgba(0, 0, ${blue}, ${transp.toFixed(2)})`; // max 30 mm/h
+			// console.log(`PRATE RGBA: rgba(0, 0, ${blue}, ${transp.toFixed(2)})`);
+			color = `rgba(0, 0, ${blue}, ${transp.toFixed(2)})`; // max 30 mm/h.
 			break;
 		case 'tmp': // blue, to red, [233..323] (Celsius [-40..50]). [-40..0] -> blue. [0..50] -> red
 			if (value <= 273) { // lower than 0 C
