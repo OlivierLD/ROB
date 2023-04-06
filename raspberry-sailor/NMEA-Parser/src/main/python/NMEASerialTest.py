@@ -81,7 +81,7 @@ def parse_nmea_sentence(sentence: str) -> Dict:
                 if not valid:
                     raise Exception('Invalid checksum')
                 else:
-                    sentence_id = sentence_prefix[3:]
+                    sentence_id: str = sentence_prefix[3:]
                     parser = None
                     for key in NMEA_PARSER_DICT:
                         if key == sentence_id:
@@ -144,14 +144,15 @@ def main(args: List[str]) -> None:
                 print("\tReceived raw:" + repr(rcv))  # repr: displays also non-printable characters between quotes.
             if proceed_parser:
                 try:
-                    nmea_obj = parse_nmea_sentence(rcv)
+                    nmea_obj: dict = parse_nmea_sentence(rcv)
+                    sentence_id: str = rcv[3:6]
                     # print(f"Raw: {repr(rcv)}\n\tParsed: {nmea_obj}")
-                    if rcv[3:6] == 'GLL':
+                    if sentence_id == 'GLL':
                         # {'gll': {'source': '$GNGLL,4740.66861,N,00308.13866,W,141439.00,A,A*66', 'utc': {'hour': 14, 'minute': 14, 'second': 39.0}, 'pos': {'latitude': 47.67781016666667, 'longitude': -3.1356443333333335}}}
                         print("-- GLL --")
                         print(f"Position: {utils.dec_to_sex(nmea_obj['gll']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['gll']['pos']['longitude'], 'EW')}")
                         print(f"UTC Time: {nmea_obj['gll']['utc']['hour']}:{nmea_obj['gll']['utc']['minute']}:{nmea_obj['gll']['utc']['second']}")
-                    elif rcv[3:6] == 'RMC':
+                    elif sentence_id == 'RMC':
                         # {'rmc': {'source': '$GNRMC,141440.00,A,4740.66813,N,00308.13792,W,0.211,,280323,,,A*7A', 'utc': {'year': 2023, 'month': 3, 'day': 28, 'hour': 14, 'minute': 14, 'second': 40.0}, 'pos': {'latitude': 47.677802166666666, 'longitude': -3.135632}, 'sog': 0.211}}
                         print("-- RMC --")
                         print(f"Position: {utils.dec_to_sex(nmea_obj['rmc']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['rmc']['pos']['longitude'], 'EW')}")
