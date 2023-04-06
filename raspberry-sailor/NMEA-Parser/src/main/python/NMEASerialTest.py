@@ -27,7 +27,7 @@ import utils
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-DEBUG: bool = True
+DEBUG: bool = False
 DEEP_DEBUG: bool = False
 DISPLAY_ALL: bool = False
 
