@@ -46,6 +46,7 @@ baud_rate: int = 4800
 
 proceed_parser: bool = True
 
+
 def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
     """
     Reads the serial port until a '\n' is met.
