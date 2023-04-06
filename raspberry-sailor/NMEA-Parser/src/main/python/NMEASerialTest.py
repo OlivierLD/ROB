@@ -26,7 +26,7 @@ import utils
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-DEBUG: bool = False
+DEBUG: bool = True
 DISPLAY_ALL: bool = False
 
 #
@@ -34,6 +34,13 @@ DISPLAY_ALL: bool = False
 #
 NMEA_PARSER_DICT: Dict = NMEAParser.NMEA_PARSER_DICT
 
+
+# On mac, USB GPS on port /dev/tty.usbmodem14101 (or something close).
+# Raspberry Pi, use /dev/ttyUSB0 or so.
+port_name: str = "/dev/tty.usbmodem1414101"   # "/dev/tty.usbmodem141101"
+baud_rate: int = 4800
+# port_name = "/dev/ttyACM0"
+# baud_rate = 115200
 
 def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
     """
@@ -93,12 +100,7 @@ def parse_nmea_sentence(sentence: str) -> Dict:
 
 
 def main(args: List[str]) -> None:
-    # On mac, USB GPS on port /dev/tty.usbmodem14101 (or something close).
-    # Raspberry Pi, use /dev/ttyUSB0 or so.
-    port_name: str = "/dev/tty.usbmodem1424101"   # "/dev/tty.usbmodem141101"
-    baud_rate: int = 4800
-    # port_name = "/dev/ttyACM0"
-    # baud_rate = 115200
+
     port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)
     print("Let's go. Hit Ctrl+C to stop")
     keep_looping: bool = True
