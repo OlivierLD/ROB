@@ -13,6 +13,7 @@
 # - https://pyserial.readthedocs.io/en/latest/pyserial.html
 #
 # Read Serial port, parse NMEA Data.
+# Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y
 #
 import serial
 import sys
@@ -42,6 +43,8 @@ port_name: str = "/dev/tty.usbmodem1414101"   # "/dev/tty.usbmodem141101"
 baud_rate: int = 4800
 # port_name = "/dev/ttyACM0"
 # baud_rate = 115200
+
+proceed_parser: bool = True
 
 def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
     """
@@ -100,37 +103,72 @@ def parse_nmea_sentence(sentence: str) -> Dict:
     return nmea_dict
 
 
-def main(args: List[str]) -> None:
+PORT_NAME_PREFIX: str = "--port-name:"
+BAUD_RATE_PREFIX: str = "--baud-rate:"
+PROCEED_WITH_PARSER: str = "--proceed-with-parser:"
 
-    port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)
+
+def main(args: List[str]) -> None:
+    global port_name
+    global baud_rate
+    global proceed_parser
+
+    if len(args) > 0:  # Script name + X args
+        for arg in args:
+            if arg[:len(PORT_NAME_PREFIX)] == PORT_NAME_PREFIX:
+                port_name = arg[len(PORT_NAME_PREFIX):]
+            if arg[:len(BAUD_RATE_PREFIX)] == BAUD_RATE_PREFIX:
+                baud_rate = int(arg[len(BAUD_RATE_PREFIX):])
+            if arg[:len(PROCEED_WITH_PARSER)] == PROCEED_WITH_PARSER:
+                proceed_flag = arg[len(PROCEED_WITH_PARSER):]
+                if proceed_flag.upper() == 'N' or proceed_flag.upper() == 'NO' or proceed_flag.upper() == 'FALSE':
+                    proceed_parser = False
+
+    print(f"Will read {port_name}:{baud_rate}...")
+    try:
+        port: int = serial.Serial(port_name, baudrate=baud_rate, timeout=3.0)
+    except FileNotFoundError as fnfe:
+        print(f">> No such port {port_name}. Exiting.")
+        sys.exit(1)
+    except serial.serialutil.SerialException as se:
+        print(f">> No such port {port_name}. Exiting.")
+        sys.exit(1)
+
     print("Let's go. Hit Ctrl+C to stop")
     keep_looping: bool = True
     while keep_looping:
-        rcv: str = read_nmea_sentence(port)
-        if DEBUG:
-            print("\tReceived raw:" + repr(rcv))  # repr: displays also non-printable characters between quotes.
         try:
-            nmea_obj = parse_nmea_sentence(rcv)
-            # print(f"Raw: {repr(rcv)}\n\tParsed: {nmea_obj}")
-            if rcv[3:6] == 'GLL':
-                # {'gll': {'source': '$GNGLL,4740.66861,N,00308.13866,W,141439.00,A,A*66', 'utc': {'hour': 14, 'minute': 14, 'second': 39.0}, 'pos': {'latitude': 47.67781016666667, 'longitude': -3.1356443333333335}}}
-                print("-- GLL --")
-                print(f"Position: {utils.dec_to_sex(nmea_obj['gll']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['gll']['pos']['longitude'], 'EW')}")
-                print(f"UTC Time: {nmea_obj['gll']['utc']['hour']}:{nmea_obj['gll']['utc']['minute']}:{nmea_obj['gll']['utc']['second']}")
-            elif rcv[3:6] == 'RMC':
-                # {'rmc': {'source': '$GNRMC,141440.00,A,4740.66813,N,00308.13792,W,0.211,,280323,,,A*7A', 'utc': {'year': 2023, 'month': 3, 'day': 28, 'hour': 14, 'minute': 14, 'second': 40.0}, 'pos': {'latitude': 47.677802166666666, 'longitude': -3.135632}, 'sog': 0.211}}
-                print("-- RMC --")
-                print(f"Position: {utils.dec_to_sex(nmea_obj['rmc']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['rmc']['pos']['longitude'], 'EW')}")
-                print(f"UTC DateTime: {nmea_obj['rmc']['utc']['year']}-{nmea_obj['rmc']['utc']['month']:02d}-{nmea_obj['rmc']['utc']['day']:02d} {nmea_obj['rmc']['utc']['hour']:02d}:{nmea_obj['rmc']['utc']['minute']:02d}:{nmea_obj['rmc']['utc']['second']}")
-                print(f"Speed & Course: SOG: {nmea_obj['rmc']['sog']}\272 - COG {nmea_obj['rmc']['cog'] if 'cog' in nmea_obj['rmc'].keys() else '-'} kt")
-            elif DISPLAY_ALL:
-                print("---------")
-                print(f"Raw: {repr(rcv)}\n\tParsed: {nmea_obj}")
+            rcv: str = read_nmea_sentence(port)
+            if DEBUG or not proceed_parser:
+                print("\tReceived raw:" + repr(rcv))  # repr: displays also non-printable characters between quotes.
+            if proceed_parser:
+                try:
+                    nmea_obj = parse_nmea_sentence(rcv)
+                    # print(f"Raw: {repr(rcv)}\n\tParsed: {nmea_obj}")
+                    if rcv[3:6] == 'GLL':
+                        # {'gll': {'source': '$GNGLL,4740.66861,N,00308.13866,W,141439.00,A,A*66', 'utc': {'hour': 14, 'minute': 14, 'second': 39.0}, 'pos': {'latitude': 47.67781016666667, 'longitude': -3.1356443333333335}}}
+                        print("-- GLL --")
+                        print(f"Position: {utils.dec_to_sex(nmea_obj['gll']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['gll']['pos']['longitude'], 'EW')}")
+                        print(f"UTC Time: {nmea_obj['gll']['utc']['hour']}:{nmea_obj['gll']['utc']['minute']}:{nmea_obj['gll']['utc']['second']}")
+                    elif rcv[3:6] == 'RMC':
+                        # {'rmc': {'source': '$GNRMC,141440.00,A,4740.66813,N,00308.13792,W,0.211,,280323,,,A*7A', 'utc': {'year': 2023, 'month': 3, 'day': 28, 'hour': 14, 'minute': 14, 'second': 40.0}, 'pos': {'latitude': 47.677802166666666, 'longitude': -3.135632}, 'sog': 0.211}}
+                        print("-- RMC --")
+                        print(f"Position: {utils.dec_to_sex(nmea_obj['rmc']['pos']['latitude'], 'NS')} / {utils.dec_to_sex(nmea_obj['rmc']['pos']['longitude'], 'EW')}")
+                        print(f"UTC DateTime: {nmea_obj['rmc']['utc']['year']}-{nmea_obj['rmc']['utc']['month']:02d}-{nmea_obj['rmc']['utc']['day']:02d} {nmea_obj['rmc']['utc']['hour']:02d}:{nmea_obj['rmc']['utc']['minute']:02d}:{nmea_obj['rmc']['utc']['second']}")
+                        print(f"Speed & Course: SOG: {nmea_obj['rmc']['sog']}\272 - COG {nmea_obj['rmc']['cog'] if 'cog' in nmea_obj['rmc'].keys() else '-'} kt")
+                    elif DISPLAY_ALL:
+                        print("---------")
+                        print(f"Raw: {repr(rcv)}\n\tParsed: {nmea_obj}")
+                except KeyboardInterrupt:  # Ctrl-C
+                    keep_looping = False
+                    print("\nExiting at user's request")
+                    pass
+                except Exception as ex:
+                    print("Oops! {}".format(ex))
         except KeyboardInterrupt:  # Ctrl-C
             keep_looping = False
-            print("Exiting at user's request")
-        except Exception as ex:
-            print("Oops! {}".format(ex))
+            print("\nExiting at user's request")
+            pass
 
     print("\nBye!")
 
