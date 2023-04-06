@@ -27,6 +27,7 @@ __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 DEBUG: bool = True
+DEEP_DEBUG: bool = False
 DISPLAY_ALL: bool = False
 
 #
@@ -51,13 +52,13 @@ def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
     rv = []
     while True:
         ch = serial_port.read()
-        if DEBUG:
+        if DEEP_DEBUG:
             print("Read {} from Serial Port".format(ch))
         rv.append(ch)
         if ch == b'\n':
             # string = [x.decode('utf-8') for x in rv]
             string = "".join(map(bytes.decode, rv))
-            if DEBUG:
+            if DEEP_DEBUG:
                 print("Returning {}".format(string))
             return string
 
