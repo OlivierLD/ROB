@@ -305,7 +305,7 @@ let getBGColor = function(value, type) {
 			} else { // BEAUFORT
 				let force = getBeaufortScale(value);
 				let beaufortColor = SCALE_COLORS[force].color; //'rgba(1,2,3, 0.5)';
-				let transp = 0.6; // 0.75; // TODO Tweak this ?
+				let transp = 0.75; // TODO Tweak this number ?
 				let transpColor = beaufortColor.replace(/rgb/i, "rgba");
 				transpColor = transpColor.replace(/\)/i,`, ${transp})`);
 				color = transpColor;

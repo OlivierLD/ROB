@@ -1457,7 +1457,6 @@
             gribData = jsonGrib; // gribData is a function prm
             // Min and max for each grib data
             findMinMax(gribData, 0);
-    
             redraw();
         };
     
@@ -1476,7 +1475,10 @@
                     switch (gribTypeData.gribType.type) {
                         case 'tmp':
                             try {
-                                document.getElementById('min-max-atemp').innerText = `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C`;
+                                document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
+                                                                                     `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, \n` +
+                                                                                     `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C` +
+                                                                                     "</pre>";
                             } catch (err) {
                             }
                             break;
