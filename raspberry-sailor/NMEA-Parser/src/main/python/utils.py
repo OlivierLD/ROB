@@ -36,6 +36,12 @@ def sex_to_dec(degrees: str, minutes: str) -> float:
 # sign_type is "NS" or "EW". Default is NS
 #
 def dec_to_sex(value: float, sign_type: str) -> str:
+    """
+    Convert decimal value like 12.34 into sexagesimal format like N 12°20.40'
+    :param value: decimal value to convert, like 12.34
+    :param sign_type: the type, "NS" (for latitudes) or "EW" (for longitudes)
+    :return the sexagesimal string
+    """
     abs_val = abs(value)
     int_value: float = math.floor(abs_val)
     dec: float = abs_val - int_value
