@@ -57,7 +57,9 @@ also written
 > _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws}(Twa) = \sum_{i=0}^{n} coef_i* Twa^{i}`.
 
 
-> Here, some LaTeX tests...
+#### Here below, some LaTeX tests (WiP)...
+
+---
 
 <!-- 
  | LaTeX test
@@ -88,8 +90,9 @@ $$
     \end{vmatrix}
 $$
 
-Or also $ equation $.
+Or also $$ equation $$.
 
+---
 
 <!--
 |  |    |  |
