@@ -56,6 +56,9 @@ also written
 ![f(TWA)](./docimg/ftwa.gif)  
 > _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws}(Twa) = \sum_{i=0}^{n} coef_i* Twa^{i}`.
 
+$$
+    f^{tws}(TWA)  \sum_{i=0}^{n} coef_i \times Twa^{i}
+$$
 
 #### Here below, some LaTeX tests (WiP)...
 
