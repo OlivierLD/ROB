@@ -57,33 +57,35 @@ also written
 > _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws}(Twa) = \sum_{i=0}^{n} coef_i* Twa^{i}`.
 
 
+> Here, some LaTeX tests...
+
 <!-- 
  | LaTeX test
  | See doc at https://ashki23.github.io/markdown-latex.html
  +-->
 
 $$ 
-equation 
+    equation 
 $$
 
 $$
-\begin{vmatrix}
-a & b & c & d
-\end{vmatrix}
-=
-\begin{vmatrix}
-\sum x^6 & \sum x^5 & \sum x^4 & \sum x^3\\
-\sum x^5 & \sum x^4 & \sum x^3 & \sum x^2\\
-\sum x^4 & \sum x^3 & \sum x^2 & \sum x^1\\
-\sum x^3 & \sum x^2 & \sum x^1 & \sum x^0
-\end{vmatrix}^{-1}
-\times
-\begin{vmatrix}
-\sum y \sum x^3\\
-\sum y \sum x^2\\
-\sum y \sum x^1\\
-\sum y \sum x^0
-\end{vmatrix}
+    \begin{vmatrix}
+    a & b & c & d
+    \end{vmatrix}
+    =
+    \begin{vmatrix}
+    \sum x^6 & \sum x^5 & \sum x^4 & \sum x^3\\
+    \sum x^5 & \sum x^4 & \sum x^3 & \sum x^2\\
+    \sum x^4 & \sum x^3 & \sum x^2 & \sum x^1\\
+    \sum x^3 & \sum x^2 & \sum x^1 & \sum x^0
+    \end{vmatrix}^{-1}
+    \times
+    \begin{vmatrix}
+    \sum y \sum x^3\\
+    \sum y \sum x^2\\
+    \sum y \sum x^1\\
+    \sum y \sum x^0
+    \end{vmatrix}
 $$
 
 Or also $ equation $.
