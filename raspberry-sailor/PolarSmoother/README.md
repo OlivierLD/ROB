@@ -10,6 +10,9 @@ Polars are those curves predicting the speed of the boat (Boat SPeed **BSP** or 
 
 The tool presented here can help you elaborate your own polars. It's written in Java, using Swing. It needs to run in a graphical environment.
 
+> _**Note**_: To elaborate polars based on logged data, we use the Least Square method.
+> Details about this method can be found on the web, and also [here](https://olivierld.github.io/web.stuff/boat.stuff/polarsCO2/index.html), in French (for now).
+
 You can run it from `gradle`:
 ```
  $ ../../gradlew runSmoother
