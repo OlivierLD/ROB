@@ -57,6 +57,13 @@ also written
 > _**Note**_: Above generated from this online [Latex Editor](https://latex.codecogs.com/eqneditor/editor.php) with `f^{tws}(Twa) = \sum_{i=0}^{n} coef_i* Twa^{i}`.
 
 
+<!-- LaTeX test -->
+
+$$ equation $$
+
+Or also $ equation $.
+
+
 <!--
 |  |    |  |
 |--:|:--:|:--|
