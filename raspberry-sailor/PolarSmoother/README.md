@@ -90,7 +90,9 @@ $$
     \end{vmatrix}
 $$
 
-Or also $$ equation $$.
+Or also inline $$ equation, really ? $$.
+
+Or also inline $$ \sum x^2 $$.
 
 ---
 
