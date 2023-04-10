@@ -60,14 +60,14 @@ $$
     f^{tws}(TWA)  \sum_{i=0}^{n} coef_i \times Twa^{i}
 $$
 
+<!-- 
+ | LaTeX test
+ | See doc at https://ashki23.github.io/markdown-latex.html
+ ...
 #### Here below, some LaTeX tests (WiP)...
 
 ---
 
-<!-- 
- | LaTeX test
- | See doc at https://ashki23.github.io/markdown-latex.html
- +-->
 
 $$ 
     equation 
@@ -96,6 +96,8 @@ $$
 Or also inline $$ equation, really ? $$.
 
 Or also inline $$ \sum x^2 $$.
+
++-->
 
 ---
 
