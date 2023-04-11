@@ -1,6 +1,5 @@
 package util;
 
-import nmea.parser.RMC;
 import nmea.parser.StringParsers;
 
 import java.io.*;
