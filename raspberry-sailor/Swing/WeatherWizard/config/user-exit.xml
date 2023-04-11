@@ -4,49 +4,37 @@
       <user-exit id="1" sync="true" ack="true">
          <label>Real Test</label>
          <action>weatherwizard.userexits.SimpleSample</action>
-         <comment>
-            <![CDATA[<html>This is an example, spitting out the <b><u>reworked</u></b> faxes (shape, size, orientation, color, transparency).</html>]]>
-         </comment>
+         <comment><![CDATA[<html>This is an example, spitting out the <b><u>reworked</u></b> faxes (shape, size, orientation, color, transparency).</html>]]></comment>
       </user-exit>
       <user-exit id="2" sync="false" ack="true">
          <label>Real Test - Async</label>
          <action>weatherwizard.userexits.SimpleSample</action>
-         <comment>
-            <![CDATA[<html>This is an example, spitting out the <b>reworked</b> faxes.<br>
-Same as above, but <big>Asynchronous</big>.</html>]]>
-         </comment>
+         <comment><![CDATA[<html>This is an example, spitting out the <b>reworked</b> faxes.<br>
+Same as above, but <big>Asynchronous</big>.</html>]]></comment>
       </user-exit>
    </sub-menu>
    <sub-menu label="GRIB Rendering">
       <user-exit sync="false" ack="true" id="3">
          <label>GRIB Slug</label>
          <action>weatherwizard.userexits.GRIBSlug</action>
-         <comment>
-            <![CDATA[<html>GRIB Slug.<br>Smooth animation of the different data<br><small>&copy; 2009, Oliv Soft.</small></html>]]>
-         </comment>
+         <comment><![CDATA[<html>GRIB Slug.<br>Smooth animation of the different data<br><small>&copy; 2009, Oliv Soft.</small></html>]]></comment>
       </user-exit>
       <user-exit sync="false" ack="false" id="4">
          <label>GRIB Bulk Data</label>
          <action>weatherwizard.userexits.GRIBBulk</action>
-         <comment>
-            <![CDATA[<html>GRIB Bulk Data Display,<br>in a Swing JTable<br><small>&copy; 2009, Oliv Soft.</small</html>]]>
-         </comment>
+         <comment><![CDATA[<html>GRIB Bulk Data Display,<br>in a Swing JTable<br><small>&copy; 2009, Oliv Soft.</small</html>]]></comment>
       </user-exit>
    </sub-menu>
    <sub-menu label="Dustlets">
       <user-exit sync="false" ack="false" id="5">
          <label>GRIB Dustlets</label>
          <action>weatherwizard.userexits.GRIBDustlet</action>
-         <comment>
-            <![CDATA[<html>Renders the GRIB as Dustlet (Nick Thompson).</html>]]>
-         </comment>
+         <comment><![CDATA[<html>Renders the GRIB as Dustlet (Nick Thompson).</html>]]></comment>
       </user-exit>
       <user-exit sync="false" ack="false" id="6">
          <label>GRIB Current Dustlets</label>
          <action>weatherwizard.currentuserexits.GRIBCurrentDustlet</action>
-         <comment>
-            <![CDATA[<html>Renders the current (Gulf Stream) as Dustlet (kudos to Nick Thompson).</html>]]>
-         </comment>
+         <comment><![CDATA[<html>Renders the current (Gulf Stream) as Dustlet (kudos to Nick Thompson).</html>]]></comment>
       </user-exit>
    </sub-menu>
    <!--sub-menu label="Processing">

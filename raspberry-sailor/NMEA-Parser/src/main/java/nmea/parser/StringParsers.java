@@ -66,6 +66,8 @@ import java.util.regex.Pattern;
  */
 public class StringParsers {
 
+  public final static String NMEA_EOS = "\r\n";	
+
   public final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss z");
   static {
   	SDF_UTC.setTimeZone(TimeZone.getTimeZone("etc/UTC"));

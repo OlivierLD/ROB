@@ -1,9 +1,10 @@
 package util;
 
-import nmea.parser.RMC;
+// import nmea.parser.RMC;
 import nmea.parser.StringParsers;
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +68,7 @@ public class LogFilter {
 		}
 
 		if (inputFileName == null || outputFileName == null) {
-			System.out.printf("Please provide input ND out file names as CLI parameters (%s, %s)\n", INPUT_LOG_FILE_PREFIX, OUTPUT_LOG_FILE_PREFIX);
+			System.out.printf("Please provide input AND out file names as CLI parameters (%s, %s)\n", INPUT_LOG_FILE_PREFIX, OUTPUT_LOG_FILE_PREFIX);
 			System.exit(1);
 		}
 		if (includeTalkers.size() > 0 && excludeTalkers.size() > 0) {
@@ -111,7 +112,7 @@ public class LogFilter {
 								writeOK = false;
 							}
 							if (writeOK) {
-								bufferedWriter.write(line + "\r\n");
+								bufferedWriter.write(line + StringParsers.NMEA_EOS);
 								writtenLineNum += 1;
 							}
 						}
@@ -123,7 +124,9 @@ public class LogFilter {
 			}
 			bufferedReader.close();
 			bufferedWriter.close();
-			System.out.printf("Read %d lines, written %d lines.\n", lineNum, writtenLineNum);
+			System.out.printf("Read %s lines, written %s lines.\n", 
+								NumberFormat.getInstance().format(lineNum), 
+								NumberFormat.getInstance().format(writtenLineNum));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
