@@ -1936,7 +1936,14 @@ public class StringParsers {
 	}
 
 	/**
-	 * @param sentence a VALID NMEA Semtence
+	 * @param sentence a VALID NMEA Sentence
+	 * @return the device (aka talker) ID
+	 */
+	public static String getTalkerID(String sentence) {
+		return getDeviceID(sentence);
+	}
+	/**
+	 * @param sentence a VALID NMEA Sentence
 	 * @return the sentence ID
 	 */
 	public static String getSentenceID(String sentence) {
