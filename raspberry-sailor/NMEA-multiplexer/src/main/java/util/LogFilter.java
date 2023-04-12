@@ -31,7 +31,7 @@ public class LogFilter {
 				EXCLUDE_SENTENCE_PREFIX,
 				INCLUDE_SENTENCE_PREFIX,
 				EXCLUDE_SENTENCE_PREFIX);
-		System.out.println("CVS is a Comma Separated Value List, like 'II,GP', or 'RMC,GLL,GGA'.");
+		System.out.println("CVS is a Comma Separated Value List, like 'II,GP', or 'RMC,GLL,GGA,VTG'.");
 	}
 	public static void main(String... args) {
 		String inputFileName = null;

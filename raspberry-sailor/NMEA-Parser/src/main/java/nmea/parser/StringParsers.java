@@ -2047,7 +2047,7 @@ public class StringParsers {
 
 		String trailer = duration.substring(19);
 		if (trailer.contains("+") || trailer.contains("-")) {
-//    System.out.println(trailer);
+            // System.out.println(trailer);
 			if (trailer.contains("+")) {
 				trailer = trailer.substring(trailer.indexOf("+") + 1);
 			}
@@ -2062,7 +2062,7 @@ public class StringParsers {
 				utcOffset = Float.parseFloat(trailer);
 			}
 		}
-//  System.out.println("UTC Offset:" + utcOffset);
+        // System.out.println("UTC Offset:" + utcOffset);
 
 		Calendar calendar = Calendar.getInstance();
 		if (utcOffset == 0f && tz != null) {

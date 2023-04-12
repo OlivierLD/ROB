@@ -3,8 +3,10 @@
 # Filter the log, on talker or sentence IDs.
 #
 if [[ "$1" == "" ]]; then
-  echo -e "Here will be some help."
-  exit 1
+  echo -e "Usage is:"
+  echo -e "$0 --input-data-file:original.nmea --output-data-file:filtered.nmea --include-talkers:GP --exclude-sentences:TXT,VTG"
+  echo -e "$0 --help"
+  exit 0
 fi
 CP=./build/libs/NMEA-multiplexer-1.0-all.jar
 JAVA_OPTIONS=
