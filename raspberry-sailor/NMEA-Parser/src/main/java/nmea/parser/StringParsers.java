@@ -22,47 +22,63 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Generic form is
- * $<talker ID><sentence ID,>[parameter 1],[parameter 2],...[<*checksum>]<CR><LF> (\r\n)
- *
+ * Generic form is of a sentence is:
+ * <pre>$&lt;talker ID>&lt;sentence ID,>[parameter 1],[parameter 2],...[&lt;*checksum>]&lt;CR>&lt;LF> (\r\n)</pre>
+ * <br/>
  * Available parsers:
- * - BAT (battery status, NOT standard)
- * - DBT (Depth Below Transducer)
- * - DPT (Depth)
- * - GGA (GPS Data)
- * - GLL (Geographical Latitude Longitude)
- * - GSA (GPS Satellites Data)
- * - GSV (GPS Detailed satellites data)
- * - HDM (Heading, Magnetic)
- * - HDT (Heading, True)
- * - MDA (Meteorological Composite)
- * - MMB (Atmospheric Pressure)
- * - MTA (Air Temperature)
- * - MTW (Water Temperature)
- * - MWD ((True) Wind Direction and Speed)
- * - MWV (Wind Speed and Angle)
- * - RMB (Recommended Minimum, version B)
- * - RMC (Recommended Minimum, version C)
- * - STD (Not standard, STarteD)
- * - TXT (Text)
- * - VDR (Current Speed and Direction)
- * - VHW (Water, Heading and Speed)
- * - VLW (Distance Travelled through Water)
- * - VTG (Track Made Good and Ground Speed)
- * - VWR (Relative Wind Speed and Angle)
- * - VWT (True Wind Speed and Angle - obsolete)
- * - XDR (Transducers Measurement, Various Sensors)
- * - ZDA (UTC DCate and Time)
- *
+ * <ul>
+ *   <li>BAT (battery status, NOT standard)</li>
+ *   <li>DBT (Depth Below Transducer)</li>
+ *   <li>DPT (Depth)</li>
+ *   <li>GGA (GPS Data)</li>
+ *   <li>GLL (Geographical Latitude Longitude)</li>
+ *   <li>GSA (GPS Satellites Data)</li>
+ *   <li>GSV (GPS Detailed satellites data)</li>
+ *   <li>HDM (Heading, Magnetic)</li>
+ *   <li>HDT (Heading, True)</li>
+ *   <li>MDA (Meteorological Composite)</li>
+ *   <li>MMB (Atmospheric Pressure)</li>
+ *   <li>MTA (Air Temperature)</li>
+ *   <li>MTW (Water Temperature)</li>
+ *   <li>MWD ((True) Wind Direction and Speed)</li>
+ *   <li>MWV (Wind Speed and Angle)</li>
+ *   <li>RMB (Recommended Minimum, version B)</li>
+ *   <li>RMC (Recommended Minimum, version C)</li>
+ *   <li>STD (Not standard, STarteD)</li>
+ *   <li>TXT (Text)</li>
+ *   <li>VDR (Current Speed and Direction)</li>
+ *   <li>VHW (Water, Heading and Speed)</li>
+ *   <li>VLW (Distance Travelled through Water)</li>
+ *   <li>VTG (Track Made Good and Ground Speed)</li>
+ *   <li>VWR (Relative Wind Speed and Angle)</li>
+ *   <li>VWT (True Wind Speed and Angle - obsolete)</li>
+ *   <li>XDR (Transducers Measurement, Various Sensors)</li>
+ *   <li>ZDA (UTC DCate and Time)</li>
+ * </ul>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
- *
- * TASK Implement the following:
- *
- * MDW Surface Wind, direction and velocity
- * VPW Device measured velocity parallel true wind
- * ZLZ Time of Day
- *
- * Good source: http://www.catb.org/gpsd/NMEA.html
+ * <br/>
+ * TASK? Implement the following:
+ * <ul>
+ *   <li>MDW Surface Wind, direction and velocity</li>
+ *   <li>
+ *     VPW Device measured velocity parallel true wind
+ *     <pre>
+ * VPW - Speed - Measured Parallel to Wind
+       1   2 3   4 5
+       |   | |   | |
+$--VPW,x.x,N,x.x,M*hh<CR><LF>
+Field Number:
+ 1) Speed, "-" means downwind
+ 2) N = Knots
+ 3) Speed, "-" means downwind
+ 4) M = Meters per second
+ 5) Checksum
+-----------------
+ *     </pre>
+ *   </li>
+ *   <li>ZLZ Time of Day</li>
+ * </ul>
+ * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  */
 public class StringParsers {
 
