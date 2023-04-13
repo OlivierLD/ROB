@@ -205,7 +205,7 @@ public class LogAnalyzer {
 			long previousDate = -1L;
 			long statLineNo = 0;
 
-			bw.write("Idx;time (epoch);deltaT;deltaDist (km);deltaT(2);cog;sog (kn)\n");
+			bw.write("Idx;time (epoch);deltaT;deltaDist (km);deltaT(2);cog;sog (kn);fmt-time-date;lat;long;fmt-lat;fmt-long\n");
 			statLineNo += 1;
 
 			long minLatIdx = -1,
@@ -322,7 +322,7 @@ public class LogAnalyzer {
 //											if (verbose) {
 //												System.out.printf("Small step: %.03f km, distance now : %.03f km\n", distanceKm, distanceInKm);
 //											}
-											bw.write(String.format("%d;%d;%d;%f;=(B%d-B%d);%s;%s\n",
+											bw.write(String.format("%d;%d;%d;%f;=(B%d-B%d);%s;%s;%s;%s;%s;%s;%s\n",
 													(totalNbRec - 1),
 													rmcTime != null ? rmcTime.getTime() : 0,
 													rmcTime != null ? (rmcTime.getTime() - previousDate) : 0,
@@ -330,15 +330,25 @@ public class LogAnalyzer {
 													(statLineNo + 1),
 													statLineNo,
 													cog == -1 ? "": cog,
-													sog));
+													sog,
+													String.format("=(B%d/1000/(60*60*24) + 25569)", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													gp != null ? gp.lat : "",
+													gp != null ? gp.lng : "",
+													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+													String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
 											prevRMCTime = rmcTime;
 										} else {
-											bw.write(String.format("%d;%d;%s;;;%s;%s\n",
+											bw.write(String.format("%d;%d;%s;;;%s;%s;%s;%s;%s;%s;%s\n",
 													(totalNbRec - 1),
 													rmcTime.getTime(),
 													previousDate != -1 ? String.format("%d", (rmcTime.getTime() - previousDate)) : "",
 													cog == -1 ? "": cog,
-													sog));
+													sog,
+													String.format("=(B%d/1000/(60*60*24) + 25569)", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													gp != null ? gp.lat : "",
+													gp != null ? gp.lng : "",
+													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+													String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
 										}
 										statLineNo += 1;
 										previousPos = gp;
@@ -380,9 +390,11 @@ public class LogAnalyzer {
 			}
 			br.close();
 			bw.close();
-			System.out.println("+-------------------------------------+");
-			System.out.println("| Checkout the spreadsheet stat.csv.  |");
-			System.out.println("+-------------------------------------+");
+//			System.out.println("+-------------------------------------+");
+//			System.out.println("| Checkout the spreadsheet stat.csv.  |");
+//			System.out.println("| Use ONLY ';' as separator !!!       |");
+//			System.out.println("| Use Unicode-UTF-8 as character set. |");
+//			System.out.println("+-------------------------------------+");
 
 			// Display summary
 			assert (start != null && arrival != null);
@@ -448,6 +460,13 @@ public class LogAnalyzer {
 			} catch (HeadlessException he) {
 				System.out.println("Headless Exception. Try in a graphical environment to visualize the data.");
 			}
+
+			System.out.println("+---------------------------------------+");
+			System.out.println("| Checkout the spreadsheet stat.csv.    |");
+			System.out.println("| Use ONLY ';' as separator !!!         |");
+			System.out.println("| Use Unicode (UTF-8) as character set. |");
+			System.out.println("+---------------------------------------+");
+
 		} catch (IOException ioe) {
 			System.err.println("From " + System.getProperty("user.dir"));
 			ioe.printStackTrace();

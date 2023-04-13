@@ -4,7 +4,7 @@ Here is a graphical tool allowing you to elaborate your own deviation curve from
 ## How it works
 The generic format of a deviation curve is
 ```
-dev(Z) = a + (b . sin(Z)) + (c . cos(Z)) + (d . sin(2.Z)) + (e . cos(2.Z))
+dev(Z) = a + (b * sin(Z)) + (c * cos(Z)) + (d * sin(2.Z)) + (e * cos(2.Z))
 ```
 where `Z` is the Magnetic Heading (`HDM`).
 
