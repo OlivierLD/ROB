@@ -60,7 +60,11 @@ public class NMEAtoJSONPos {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
 		boolean minified = "true".equals(System.getProperty("minified", "true"));
-		bw.write(mapper.writeValueAsString(jsonArray)); // TODO minified or not ?
+		if (minified) {
+			bw.write(mapper.writeValueAsString(jsonArray));
+		} else {
+			bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonArray));
+		}
 		bw.close();
 	}
 
