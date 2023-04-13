@@ -130,7 +130,7 @@ public class LogAnalyzer {
 		map.put(id, nb + 1);
 	}
 
-	private final static double MAX_CALCULATED_SPEED = 20 * 1_852 / 3_600; // 10 knots in m/s
+	private final static double MAX_CALCULATED_SPEED = 20d * 1_852d / 3_600d; // 10 knots in m/s
 
 	public static void main(String... args) {
 
@@ -184,7 +184,7 @@ public class LogAnalyzer {
 				fis = new FileInputStream(dataFileName);
 			}
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8.toString()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
 			// TODO Option to check chronology and continuity
 			BufferedWriter bw = new BufferedWriter(new FileWriter("stat.csv"));
 
@@ -331,7 +331,7 @@ public class LogAnalyzer {
 													statLineNo,
 													cog == -1 ? "": cog,
 													sog,
-													String.format("=(B%d/1000/(60*60*24) + 25569)", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
 													gp != null ? gp.lat : "",
 													gp != null ? gp.lng : "",
 													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
@@ -344,7 +344,7 @@ public class LogAnalyzer {
 													previousDate != -1 ? String.format("%d", (rmcTime.getTime() - previousDate)) : "",
 													cog == -1 ? "": cog,
 													sog,
-													String.format("=(B%d/1000/(60*60*24) + 25569)", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
 													gp != null ? gp.lat : "",
 													gp != null ? gp.lng : "",
 													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
