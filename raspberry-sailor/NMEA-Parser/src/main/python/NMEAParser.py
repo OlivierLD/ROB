@@ -137,7 +137,7 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
 
     gll_dict: Dict = { "source": sentence }
     sentence = sentence.strip()  # drops the \r\n
-    members: list = sentence.split(',')
+    members: list = sentence[:sentence.index("*")].split(',')
 
     if len(members[GLL_ACTIVE_VOID]) > 0 and members[GLL_ACTIVE_VOID] == 'A':
         if len(members[GLL_UTC]) > 0:
@@ -164,6 +164,24 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
                 "latitude": lat,
                 "longitude": lng
             }
+        if len(members) > GLL_TYPE:
+            gll_type: str = members[GLL_TYPE]
+            type_val: str = ""
+            print(f"Type->{gll_type}")
+            if gll_type is not None:
+                if gll_type == 'A':
+                    type_val = "autonomous"
+                elif gll_type == 'D':
+                    type_val = "differential"
+                elif gll_type == 'E':
+                    type_val = "estimated"
+                elif gll_type == 'N':
+                    type_val = "not valid"
+                elif gll_type == 'S':
+                    type_val = "simulator"
+                else:
+                    type_val = "unknown"
+                gll_dict['type'] = type_val
     else:
         gll_dict["status"] = "void"
 
@@ -296,6 +314,13 @@ if __name__ == '__main__':
     print("---------------")
 
     nmea = "$IIGLL,3739.854,N,12222.812,W,014003,A,A*49"
+    parsed = parse_nmea_sentence(nmea + NMEA_EOS)
+    print(f"Parsed GLL: {parsed}")
+    print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
+
+    print("---------------")
+
+    nmea = "$IIGLL,3739.854,N,12222.812,W,014003,A*24"
     parsed = parse_nmea_sentence(nmea + NMEA_EOS)
     print(f"Parsed GLL: {parsed}")
     print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
