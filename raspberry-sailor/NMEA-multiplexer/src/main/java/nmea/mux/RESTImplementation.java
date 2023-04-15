@@ -321,7 +321,7 @@ public class RESTImplementation {
 			List<String> portList = getSerialPortList();
 			Object[] portArray = portList.toArray(new Object[0]);
 			try {
-				String content = mapper.writeValueAsString(portArray); // new Gson().toJson(portArray).toString();
+				String content = mapper.writeValueAsString(portArray);
 				RESTProcessorUtil.generateResponseHeaders(response, content.length());
 				response.setPayload(content.getBytes());
 			} catch (JsonProcessingException jpe) {
@@ -343,7 +343,7 @@ public class RESTImplementation {
 				.collect(Collectors.toList())
 				.toArray(new Object[channelList.size()]);
 		try {
-			String content = mapper.writeValueAsString(channelArray); // new Gson().toJson(channelArray);
+			String content = mapper.writeValueAsString(channelArray);
 			if (restVerbose()) {
 				System.out.printf("-- Channels --\n%s\n--------------------\n", content);
 				System.out.printf("\tlength: %d\n", content.length());
@@ -365,7 +365,7 @@ public class RESTImplementation {
 				.collect(Collectors.toList())
 				.toArray(new Object[forwarderList.size()]);
 
-		String content; // = new Gson().toJson(forwarderArray);
+		String content;
 		try {
 			content = mapper.writeValueAsString(forwarderArray);
 			if (restVerbose()) {
@@ -389,7 +389,6 @@ public class RESTImplementation {
 				.collect(Collectors.toList())
 				.toArray(new Object[computerList.size()]);
 
-//		String content = new Gson().toJson(computerArray);
 		String content;
 		try {
 			content = mapper.writeValueAsString(computerArray);
@@ -432,7 +431,6 @@ public class RESTImplementation {
 		map.put("forwarders", forwarderArray);
 		map.put("computers", computerArray);
 
-//		String content = new Gson().toJson(map);
 		String content;
 		try {
 			content = mapper.writeValueAsString(map);
@@ -624,7 +622,7 @@ public class RESTImplementation {
 						StringReader stringReader = new StringReader(new String(request.getContent()));
 						try {
 							@SuppressWarnings("unchecked")
-							Map<String, String> custom = (Map<String, String>) mapper.readValue(stringReader, Object.class); // new Gson().fromJson(stringReader, Object.class);
+							Map<String, String> custom = (Map<String, String>) mapper.readValue(stringReader, Object.class);
 							opFwd = nmeaDataForwarders.stream()
 									.filter(fwd -> fwd.getClass().getName().equals(custom.get("cls")))
 									.findFirst();
@@ -769,7 +767,7 @@ public class RESTImplementation {
 						StringReader stringReader = new StringReader(new String(request.getContent()));
 						try {
 							@SuppressWarnings("unchecked")
-							Map<String, String> custom = (Map<String, String>)mapper.readValue(stringReader, Object.class); // (Map<String, String>) new Gson().fromJson(stringReader, Object.class);
+							Map<String, String> custom = (Map<String, String>)mapper.readValue(stringReader, Object.class);
 							opClient = nmeaDataClients.stream()
 									.filter(channel -> channel.getClass().getName().equals(custom.get("cls")))
 									.findFirst();
@@ -813,7 +811,7 @@ public class RESTImplementation {
 						StringReader stringReader = new StringReader(new String(request.getContent()));
 						try {
 							@SuppressWarnings("unchecked")
-							Map<String, String> custom = (Map<String, String>)mapper.readValue(stringReader, Object.class); // (Map<String, String>) new Gson().fromJson(stringReader, Object.class);
+							Map<String, String> custom = (Map<String, String>)mapper.readValue(stringReader, Object.class);
 							opComputer = nmeaDataComputers.stream()
 									.filter(cptr -> cptr.getClass().getName().equals(custom.get("cls")))
 									.findFirst();
@@ -864,7 +862,7 @@ public class RESTImplementation {
 						Forwarder consoleForwarder = new ConsoleWriter();
 						nmeaDataForwarders.add(consoleForwarder);
 						response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
-						String content = mapper.writeValueAsString(consoleForwarder.getBean()); // new Gson().toJson(consoleForwarder.getBean());
+						String content = mapper.writeValueAsString(consoleForwarder.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					} catch (Exception ex) {
@@ -880,7 +878,7 @@ public class RESTImplementation {
 				break;
 			case "serial":
 				try {
-					SerialWriter.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialWriter.SerialBean.class); // new Gson().fromJson(new String(request.getContent()), SerialWriter.SerialBean.class);
+					SerialWriter.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialWriter.SerialBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof SerialWriter &&
@@ -890,7 +888,7 @@ public class RESTImplementation {
 						try {
 							Forwarder serialForwarder = new SerialWriter(serialJson.getPort(), serialJson.getBR());
 							nmeaDataForwarders.add(serialForwarder);
-							String content = mapper.writeValueAsString(serialForwarder.getBean()); // new Gson().toJson(serialForwarder.getBean());
+							String content = mapper.writeValueAsString(serialForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -910,7 +908,7 @@ public class RESTImplementation {
 				break;
 			case "tcp":
 				try {
-					TCPServer.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPServer.TCPBean.class); // new Gson().fromJson(new String(request.getContent()), TCPServer.TCPBean.class);
+					TCPServer.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPServer.TCPBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof TCPServer &&
@@ -920,7 +918,7 @@ public class RESTImplementation {
 						try {
 							Forwarder tcpForwarder = new TCPServer(tcpJson.getPort());
 							nmeaDataForwarders.add(tcpForwarder);
-							String content = mapper.writeValueAsString(tcpForwarder.getBean()); // new Gson().toJson(tcpForwarder.getBean());
+							String content = mapper.writeValueAsString(tcpForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -940,7 +938,7 @@ public class RESTImplementation {
 				break;
 			case "rest":
 				try {
-					RESTPublisher.RESTBean restJson = mapper.readValue(new String(request.getContent()), RESTPublisher.RESTBean.class); // new Gson().fromJson(new String(request.getContent()), RESTPublisher.RESTBean.class);
+					RESTPublisher.RESTBean restJson = mapper.readValue(new String(request.getContent()), RESTPublisher.RESTBean.class);
 					// Check if not there yet.
 					// Check if already exists.
 					opFwd = nmeaDataForwarders.stream()
@@ -954,7 +952,7 @@ public class RESTImplementation {
 						try {
 							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(), restJson.getServerName(), restJson.getPort(), restJson.getResource());
 							nmeaDataForwarders.add(restForwarder);
-							String content = mapper.writeValueAsString(restForwarder.getBean()); // new Gson().toJson(restForwarder.getBean());
+							String content = mapper.writeValueAsString(restForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -974,7 +972,7 @@ public class RESTImplementation {
 				break;
 			case "gpsd":
 				try {
-					GPSdServer.GPSdBean gpsdJson = mapper.readValue(new String(request.getContent()), GPSdServer.GPSdBean.class); // new Gson().fromJson(new String(request.getContent()), GPSdServer.GPSdBean.class);
+					GPSdServer.GPSdBean gpsdJson = mapper.readValue(new String(request.getContent()), GPSdServer.GPSdBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof GPSdServer &&
@@ -984,7 +982,7 @@ public class RESTImplementation {
 						try {
 							Forwarder gpsdForwarder = new GPSdServer(gpsdJson.getPort());
 							nmeaDataForwarders.add(gpsdForwarder);
-							String content = mapper.writeValueAsString(gpsdForwarder.getBean()); // new Gson().toJson(gpsdForwarder.getBean());
+							String content = mapper.writeValueAsString(gpsdForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1004,7 +1002,7 @@ public class RESTImplementation {
 				break;
 			case "rmi":
 				try {
-					RMIServer.RMIBean rmiJson = mapper.readValue(new String(request.getContent()), RMIServer.RMIBean.class); // new Gson().fromJson(new String(request.getContent()), RMIServer.RMIBean.class);
+					RMIServer.RMIBean rmiJson = mapper.readValue(new String(request.getContent()), RMIServer.RMIBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof RMIServer &&
@@ -1014,7 +1012,7 @@ public class RESTImplementation {
 						try {
 							Forwarder rmiForwarder = new RMIServer(rmiJson.getPort(), rmiJson.getBindingName());
 							nmeaDataForwarders.add(rmiForwarder);
-							String content = mapper.writeValueAsString(rmiForwarder.getBean()); // new Gson().toJson(rmiForwarder.getBean());
+							String content = mapper.writeValueAsString(rmiForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1034,7 +1032,7 @@ public class RESTImplementation {
 				break;
 			case "file":
 				try {
-					DataFileWriter.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileWriter.DataFileBean.class); //  new Gson().fromJson(new String(request.getContent()), DataFileWriter.DataFileBean.class);
+					DataFileWriter.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileWriter.DataFileBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()   // TODO Something more accurate...
 							.filter(fwd -> fwd instanceof DataFileWriter &&
@@ -1056,7 +1054,7 @@ public class RESTImplementation {
 								fileForwarder = new DataFileWriter(fileJson.getLog(), fileJson.append(), fileJson.isFlush());
 							}
 							nmeaDataForwarders.add(fileForwarder);
-							String content = mapper.writeValueAsString(fileForwarder.getBean()); // new Gson().toJson(fileForwarder.getBean());
+							String content = mapper.writeValueAsString(fileForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1075,7 +1073,7 @@ public class RESTImplementation {
 				break;
 			case "ws":
 				try {
-					WebSocketWriter.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketWriter.WSBean.class); // new Gson().fromJson(new String(request.getContent()), WebSocketWriter.WSBean.class);
+					WebSocketWriter.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketWriter.WSBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof WebSocketWriter &&
@@ -1085,7 +1083,7 @@ public class RESTImplementation {
 						try {
 							Forwarder wsForwarder = new WebSocketWriter(wsJson.getWsUri());
 							nmeaDataForwarders.add(wsForwarder);
-							String content = mapper.writeValueAsString(wsForwarder.getBean()); // new Gson().toJson(wsForwarder.getBean());
+							String content = mapper.writeValueAsString(wsForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1105,7 +1103,7 @@ public class RESTImplementation {
 				break;
 			case "wsp":
 				try {
-					WebSocketProcessor.WSBean wspJson = mapper.readValue(new String(request.getContent()), WebSocketProcessor.WSBean.class); // new Gson().fromJson(new String(request.getContent()), WebSocketProcessor.WSBean.class);
+					WebSocketProcessor.WSBean wspJson = mapper.readValue(new String(request.getContent()), WebSocketProcessor.WSBean.class);
 					// Check if not there yet.
 					opFwd = nmeaDataForwarders.stream()
 							.filter(fwd -> fwd instanceof WebSocketProcessor &&
@@ -1115,7 +1113,7 @@ public class RESTImplementation {
 						try {
 							Forwarder wspForwarder = new WebSocketProcessor(wspJson.getWsUri());
 							nmeaDataForwarders.add(wspForwarder);
-							String content = mapper.writeValueAsString(wspForwarder.getBean()); // new Gson().toJson(wspForwarder.getBean());
+							String content = mapper.writeValueAsString(wspForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1136,7 +1134,7 @@ public class RESTImplementation {
 			case "custom":
 				// String payload = new String(request.getContent());
 				try {
-					Object custom = mapper.readValue(new String(request.getContent()), Object.class); // new Gson().fromJson(payload, Object.class);
+					Object custom = mapper.readValue(new String(request.getContent()), Object.class);
 					if (custom instanceof Map) {
 						@SuppressWarnings("unchecked")
 						Map<String, String> map = (Map<String, String>) custom;
@@ -1172,7 +1170,7 @@ public class RESTImplementation {
 										}
 									}
 									nmeaDataForwarders.add(forwarder);
-									String content = mapper.writeValueAsString(forwarder.getBean()); // new Gson().toJson(forwarder.getBean());
+									String content = mapper.writeValueAsString(forwarder.getBean());
 									RESTProcessorUtil.generateResponseHeaders(response, content.length());
 									response.setPayload(content.getBytes());
 								} else {
@@ -1218,7 +1216,7 @@ public class RESTImplementation {
 			return response;
 		} else {
 			try {
-				Object bean = mapper.readValue(new String(request.getContent()), Object.class); // new GsonBuilder().create().fromJson(new String(request.getContent()), Object.class);
+				Object bean = mapper.readValue(new String(request.getContent()), Object.class);
 				if (bean instanceof Map) {
 					type = ((Map<String, String>) bean).get("type");
 				}
@@ -1229,7 +1227,7 @@ public class RESTImplementation {
 		switch (type) {
 			case "tcp":
 				try {
-					TCPClient.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPClient.TCPBean.class); // new Gson().fromJson(new String(request.getContent()), TCPClient.TCPBean.class);
+					TCPClient.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPClient.TCPBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof TCPClient &&
 									((TCPClient.TCPBean) channel.getBean()).getPort() == tcpJson.getPort() &&
@@ -1247,7 +1245,7 @@ public class RESTImplementation {
 													tcpJson.isKeepTrying()));
 							nmeaDataClients.add(tcpClient);
 							tcpClient.startWorking();
-							String content = mapper.writeValueAsString(tcpClient.getBean()); //  new Gson().toJson(tcpClient.getBean());
+							String content = mapper.writeValueAsString(tcpClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1267,7 +1265,7 @@ public class RESTImplementation {
 				break;
 			case "serial":
 				try {
-					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class); // new Gson().fromJson(new String(request.getContent()), SerialClient.SerialBean.class);
+					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof SerialClient &&
 									((SerialClient.SerialBean) channel.getBean()).getPort().equals(serialJson.getPort()))
@@ -1280,7 +1278,7 @@ public class RESTImplementation {
 							serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialJson.getPort(), serialJson.getBr()));
 							nmeaDataClients.add(serialClient);
 							serialClient.startWorking();
-							String content = mapper.writeValueAsString(serialClient.getBean()); //  new Gson().toJson(serialClient.getBean());
+							String content = mapper.writeValueAsString(serialClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1300,7 +1298,7 @@ public class RESTImplementation {
 				break;
 			case "ws":
 				try {
-					WebSocketClient.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketClient.WSBean.class); // new Gson().fromJson(new String(request.getContent()), WebSocketClient.WSBean.class);
+					WebSocketClient.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketClient.WSBean.class);
 					// Check if not there yet.
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof WebSocketClient &&
@@ -1313,7 +1311,7 @@ public class RESTImplementation {
 							wsClient.setReader(new WebSocketReader("MUX-WSReader", wsClient.getListeners(), wsJson.getWsUri()));
 							nmeaDataClients.add(wsClient);
 							wsClient.startWorking();
-							String content = mapper.writeValueAsString(wsClient.getBean()); // new Gson().toJson(wsClient.getBean());
+							String content = mapper.writeValueAsString(wsClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1333,7 +1331,7 @@ public class RESTImplementation {
 				break;
 			case "file":
 				try {
-					DataFileClient.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileClient.DataFileBean.class); // new Gson().fromJson(new String(request.getContent()), DataFileClient.DataFileBean.class);
+					DataFileClient.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileClient.DataFileBean.class);
 					// Check if not there yet.
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof DataFileClient &&
@@ -1346,7 +1344,7 @@ public class RESTImplementation {
 							fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), fileJson.getFile(), fileJson.getPause()));
 							nmeaDataClients.add(fileClient);
 							fileClient.startWorking();
-							String content = mapper.writeValueAsString(fileClient.getBean()); // new Gson().toJson(fileClient.getBean());
+							String content = mapper.writeValueAsString(fileClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1448,7 +1446,7 @@ public class RESTImplementation {
 //				break;
 			case "zda":
 				try {
-					ZDAClient.ZDABean zdaJson = mapper.readValue(new String(request.getContent()), ZDAClient.ZDABean.class); // new Gson().fromJson(new String(request.getContent()), ZDAClient.ZDABean.class);
+					ZDAClient.ZDABean zdaJson = mapper.readValue(new String(request.getContent()), ZDAClient.ZDABean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof ZDAClient)
 							.findFirst();
@@ -1467,7 +1465,7 @@ public class RESTImplementation {
 							}
 							nmeaDataClients.add(zdaClient);
 							zdaClient.startWorking();
-							String content = mapper.writeValueAsString(zdaClient.getBean()); //  new Gson().toJson(zdaClient.getBean());
+							String content = mapper.writeValueAsString(zdaClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1567,7 +1565,7 @@ public class RESTImplementation {
 //				break;
 			case "rnd":
 				try {
-					RandomClient.RandomBean rndJson = mapper.readValue(new String(request.getContent()), RandomClient.RandomBean.class); // new Gson().fromJson(new String(request.getContent()), RandomClient.RandomBean.class);
+					RandomClient.RandomBean rndJson = mapper.readValue(new String(request.getContent()), RandomClient.RandomBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof RandomClient)
 							.findFirst();
@@ -1578,7 +1576,7 @@ public class RESTImplementation {
 							rndClient.setReader(new RandomReader("MUX-RndReader", rndClient.getListeners()));
 							nmeaDataClients.add(rndClient);
 							rndClient.startWorking();
-							String content = mapper.writeValueAsString(rndClient.getBean()); // new Gson().toJson(rndClient.getBean());
+							String content = mapper.writeValueAsString(rndClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1599,7 +1597,7 @@ public class RESTImplementation {
 				break;
 			case "rest":
 				try {
-					RESTClient.RESTBean restJson = mapper.readValue(new String(request.getContent()), RESTClient.RESTBean.class); // new Gson().fromJson(new String(request.getContent()), RandomClient.RandomBean.class);
+					RESTClient.RESTBean restJson = mapper.readValue(new String(request.getContent()), RESTClient.RESTBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof RESTClient &&
 									((RESTClient.RESTBean) channel.getBean()).getHostname().equals(restJson.getHostname())  &&
@@ -1621,7 +1619,7 @@ public class RESTImplementation {
 									restJson.getFrequency()));
 							nmeaDataClients.add(restClient);
 							restClient.startWorking();
-							String content = mapper.writeValueAsString(restClient.getBean()); // new Gson().toJson(rndClient.getBean());
+							String content = mapper.writeValueAsString(restClient.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1643,7 +1641,7 @@ public class RESTImplementation {
 			case "custom":
 //				String payload = new String(request.getContent());
 				try {
-					Object custom = mapper.readValue(new String(request.getContent()), Object.class); // new Gson().fromJson(payload, Object.class);
+					Object custom = mapper.readValue(new String(request.getContent()), Object.class);
 					if (custom instanceof Map) {
 						@SuppressWarnings("unchecked")
 						Map<String, Object> map = (Map<String, Object>) custom;
@@ -1710,7 +1708,7 @@ public class RESTImplementation {
 									}
 									nmeaDataClients.add(nmeaClient);
 									nmeaClient.startWorking();
-									String content = mapper.writeValueAsString(nmeaClient.getBean()); // new Gson().toJson(nmeaClient.getBean());
+									String content = mapper.writeValueAsString(nmeaClient.getBean());
 									RESTProcessorUtil.generateResponseHeaders(response, content.length());
 									response.setPayload(content.getBytes());
 								} else {
@@ -1765,7 +1763,7 @@ public class RESTImplementation {
 		switch (type) {
 			case "tw-current":
 				try {
-					ExtraDataComputer.ComputerBean twJson = mapper.readValue(new String(request.getContent()), ExtraDataComputer.ComputerBean.class); // new Gson().fromJson(new String(request.getContent()), ExtraDataComputer.ComputerBean.class);
+					ExtraDataComputer.ComputerBean twJson = mapper.readValue(new String(request.getContent()), ExtraDataComputer.ComputerBean.class);
 					// Check if not there yet.
 					opComputer = nmeaDataComputers.stream()
 							.filter(channel -> channel instanceof ExtraDataComputer)
@@ -1784,7 +1782,7 @@ public class RESTImplementation {
 							}
 							Computer twCurrentComputer = new ExtraDataComputer(this.mux, twJson.getPrefix(), timeBufferLengths.toArray(new Long[timeBufferLengths.size()]));
 							nmeaDataComputers.add(twCurrentComputer);
-							String content = mapper.writeValueAsString(twCurrentComputer.getBean()); //  new Gson().toJson(twCurrentComputer.getBean());
+							String content = mapper.writeValueAsString(twCurrentComputer.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.length());
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
@@ -1805,7 +1803,7 @@ public class RESTImplementation {
 			case "custom":
 				// String payload = new String(request.getContent());
 				try {
-					Object custom = mapper.readValue(new String(request.getContent()), Object.class); // new Gson().fromJson(payload, Object.class);
+					Object custom = mapper.readValue(new String(request.getContent()), Object.class);
 					if (custom instanceof Map) {
 						@SuppressWarnings("unchecked")
 						Map<String, String> map = (Map<String, String>) custom;
@@ -1841,7 +1839,7 @@ public class RESTImplementation {
 										}
 									}
 									nmeaDataComputers.add(computer);
-									String content = mapper.writeValueAsString(computer.getBean()); //  new Gson().toJson(computer.getBean());
+									String content = mapper.writeValueAsString(computer.getBean());
 									RESTProcessorUtil.generateResponseHeaders(response, content.length());
 									response.setPayload(content.getBytes());
 								} else {
@@ -1909,7 +1907,7 @@ public class RESTImplementation {
 		switch (type) {
 			case "serial":
 				try {
-					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class); // new Gson().fromJson(new String(request.getContent()), SerialClient.SerialBean.class);
+					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof SerialClient &&
 									((SerialClient.SerialBean) channel.getBean()).getPort().equals(serialJson.getPort()))
@@ -1920,7 +1918,7 @@ public class RESTImplementation {
 					} else { // Then update
 						SerialClient serialClient = (SerialClient) opClient.get();
 						serialClient.setVerbose(serialJson.getVerbose());
-						String content = mapper.writeValueAsString(serialClient.getBean()); // new Gson().toJson(serialClient.getBean());
+						String content = mapper.writeValueAsString(serialClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -1931,7 +1929,7 @@ public class RESTImplementation {
 				break;
 			case "file":
 				try {
-					DataFileClient.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileClient.DataFileBean.class); // new Gson().fromJson(new String(request.getContent()), DataFileClient.DataFileBean.class);
+					DataFileClient.DataFileBean fileJson = mapper.readValue(new String(request.getContent()), DataFileClient.DataFileBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof DataFileClient &&
 									((DataFileClient.DataFileBean) channel.getBean()).getFile().equals(fileJson.getFile()))
@@ -1943,7 +1941,7 @@ public class RESTImplementation {
 						DataFileClient dataFileClient = (DataFileClient) opClient.get();
 						dataFileClient.setVerbose(fileJson.getVerbose());
 						dataFileClient.setLoop(fileJson.getLoop());
-						String content = mapper.writeValueAsString(dataFileClient.getBean()); // new Gson().toJson(dataFileClient.getBean());
+						String content = mapper.writeValueAsString(dataFileClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -1954,7 +1952,7 @@ public class RESTImplementation {
 				break;
 			case "tcp":
 				try {
-					TCPClient.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPClient.TCPBean.class); // new Gson().fromJson(new String(request.getContent()), TCPClient.TCPBean.class);
+					TCPClient.TCPBean tcpJson = mapper.readValue(new String(request.getContent()), TCPClient.TCPBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof TCPClient &&
 									((TCPClient.TCPBean) channel.getBean()).getHostname().equals(tcpJson.getHostname()) &&
@@ -1966,7 +1964,7 @@ public class RESTImplementation {
 					} else { // Then update
 						TCPClient tcpClient = (TCPClient) opClient.get();
 						tcpClient.setVerbose(tcpJson.getVerbose());
-						String content = mapper.writeValueAsString(tcpClient.getBean()); // new Gson().toJson(tcpClient.getBean());
+						String content = mapper.writeValueAsString(tcpClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -1977,7 +1975,7 @@ public class RESTImplementation {
 				break;
 			case "ws":
 				try {
-					WebSocketClient.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketClient.WSBean.class); // new Gson().fromJson(new String(request.getContent()), WebSocketClient.WSBean.class);
+					WebSocketClient.WSBean wsJson = mapper.readValue(new String(request.getContent()), WebSocketClient.WSBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof WebSocketClient &&
 									((WebSocketClient.WSBean) channel.getBean()).getWsUri().equals(wsJson.getWsUri()))
@@ -1988,7 +1986,7 @@ public class RESTImplementation {
 					} else { // Then update
 						WebSocketClient webSocketClient = (WebSocketClient) opClient.get();
 						webSocketClient.setVerbose(wsJson.getVerbose());
-						String content = mapper.writeValueAsString(webSocketClient.getBean()); // new Gson().toJson(webSocketClient.getBean());
+						String content = mapper.writeValueAsString(webSocketClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2047,7 +2045,7 @@ public class RESTImplementation {
 //				break;
 			case "zda":
 				try {
-					ZDAClient.ZDABean zdaJson = mapper.readValue(new String(request.getContent()), ZDAClient.ZDABean.class); // new Gson().fromJson(new String(request.getContent()), ZDAClient.ZDABean.class);
+					ZDAClient.ZDABean zdaJson = mapper.readValue(new String(request.getContent()), ZDAClient.ZDABean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof ZDAClient)
 							.findFirst();
@@ -2057,7 +2055,7 @@ public class RESTImplementation {
 					} else { // Then update
 						ZDAClient zdaClient = (ZDAClient) opClient.get();
 						zdaClient.setVerbose(zdaJson.getVerbose());
-						String content = mapper.writeValueAsString(zdaClient.getBean()); // new Gson().toJson(zdaClient.getBean());
+						String content = mapper.writeValueAsString(zdaClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2084,7 +2082,7 @@ public class RESTImplementation {
 //				break;
 			case "rnd":
 				try {
-					RandomClient.RandomBean rndJson = mapper.readValue(new String(request.getContent()), RandomClient.RandomBean.class); // new Gson().fromJson(new String(request.getContent()), RandomClient.RandomBean.class);
+					RandomClient.RandomBean rndJson = mapper.readValue(new String(request.getContent()), RandomClient.RandomBean.class);
 					opClient = nmeaDataClients.stream()
 							.filter(channel -> channel instanceof RandomClient)
 							.findFirst();
@@ -2094,7 +2092,7 @@ public class RESTImplementation {
 					} else { // Then update
 						RandomClient randomClient = (RandomClient) opClient.get();
 						randomClient.setVerbose(rndJson.getVerbose());
-						String content = mapper.writeValueAsString(randomClient.getBean()); // new Gson().toJson(randomClient.getBean());
+						String content = mapper.writeValueAsString(randomClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2106,7 +2104,7 @@ public class RESTImplementation {
 			default:
 				try {
 					@SuppressWarnings("unchecked")
-					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class); //  new Gson().fromJson(new String(request.getContent()), Object.class);
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
 					opClient = nmeaDataClients.stream()
 							.filter(cptr -> cptr.getClass().getName().equals(custom.get("cls")))
 							.findFirst();
@@ -2117,7 +2115,7 @@ public class RESTImplementation {
 						NMEAClient nmeaClient = opClient.get();
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						nmeaClient.setVerbose(verbose);
-						String content = mapper.writeValueAsString(nmeaClient.getBean()); // new Gson().toJson(nmeaClient.getBean());
+						String content = mapper.writeValueAsString(nmeaClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2206,7 +2204,7 @@ public class RESTImplementation {
 		switch (type) { // TODO More cases?, for TW only, etc...
 			case "tw-current":
 				try {
-					ExtraDataComputer.ComputerBean twJson = mapper.readValue(new String(request.getContent()), ExtraDataComputer.ComputerBean.class); // new Gson().fromJson(new String(request.getContent()), ExtraDataComputer.ComputerBean.class);
+					ExtraDataComputer.ComputerBean twJson = mapper.readValue(new String(request.getContent()), ExtraDataComputer.ComputerBean.class);
 					opComputer = nmeaDataComputers.stream()
 							.filter(cptr -> cptr instanceof ExtraDataComputer)
 							.findFirst();
@@ -2217,7 +2215,7 @@ public class RESTImplementation {
 						ExtraDataComputer computer = (ExtraDataComputer) opComputer.get();
 						computer.setVerbose(twJson.isVerbose());
 						computer.setPrefix(twJson.getPrefix());
-						String content = mapper.writeValueAsString(computer.getBean()); // new Gson().toJson(computer.getBean());
+						String content = mapper.writeValueAsString(computer.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2229,7 +2227,7 @@ public class RESTImplementation {
 			default:
 				try {
 					@SuppressWarnings("unchecked")
-					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class); //  new Gson().fromJson(new String(request.getContent()), Object.class);
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
 					opComputer = nmeaDataComputers.stream()
 							.filter(cptr -> cptr.getClass().getName().equals(custom.get("cls")))
 							.findFirst();
@@ -2240,7 +2238,7 @@ public class RESTImplementation {
 						Computer computer = opComputer.get();
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						computer.setVerbose(verbose);
-						String content = mapper.writeValueAsString(computer.getBean()); // new Gson().toJson(computer.getBean());
+						String content = mapper.writeValueAsString(computer.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.length());
 						response.setPayload(content.getBytes());
 					}
@@ -2265,8 +2263,7 @@ public class RESTImplementation {
 		boolean newValue = "on".equals(prmValues.get(0));
 		this.mux.setVerbose(newValue);
 		try {
-			// JsonElement jsonElement = new Gson().toJsonTree(newValue);
-			String content = mapper.writeValueAsString(newValue); // jsonElement.toString();
+			String content = mapper.writeValueAsString(newValue);
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
@@ -2287,8 +2284,7 @@ public class RESTImplementation {
 		boolean newValue = "on".equals(prmValues.get(0));
 		this.mux.setEnableProcess(newValue);
 		try {
-//			JsonElement jsonElement = new Gson().toJsonTree(newValue);
-			String content = mapper.writeValueAsString(newValue); // jsonElement.toString();
+			String content = mapper.writeValueAsString(newValue);
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
@@ -2317,7 +2313,7 @@ public class RESTImplementation {
 			stdout.close();
 			System.out.printf("Find script completed, status %d, found %d files\n", exitStatus, list.size());
 
-			String content = mapper.writeValueAsString(list); // new Gson().toJson(list);
+			String content = mapper.writeValueAsString(list);
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.length());
 			response.setPayload(content.getBytes());
 		} catch (IOException | InterruptedException ex) {
@@ -2481,7 +2477,7 @@ public class RESTImplementation {
 			uee.printStackTrace();
 		}
 		try {
-			String content = mapper.writeValueAsString(responsePayload); // new Gson().toJson(responsePayload);
+			String content = mapper.writeValueAsString(responsePayload);
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
@@ -2503,7 +2499,6 @@ public class RESTImplementation {
 		Thread stopThread = new Thread(mux::stopAll);
 		stopThread.start();
 		try {
-//			JsonElement jsonElement = new Gson().toJsonTree(ok);
 			String content = mapper.writeValueAsString(ok); // jsonElement.toString();
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
@@ -2521,13 +2516,6 @@ public class RESTImplementation {
 		map.put("started", ApplicationContext.getInstance().getDataCache().getStartTime());
 		map.put("processing", status);
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getNMEAVolumeStatus", ex);
-//		}
-//		String content = jsonElement != null ? jsonElement.toString() : "";
 		String content;
 		try {
 			content = mapper.writeValueAsString(map);
@@ -2539,8 +2527,9 @@ public class RESTImplementation {
 
 		return response;
 	}
-
-	private transient static final List<String> REMOVE_WHEN_TINY = Arrays.asList(new String[] {  // List.of not supported in Java8
+	// Also used by option=txt
+	private transient static final List<String>
+			REMOVE_WHEN_TINY = Arrays.asList(new String[] {  // List.of not supported in Java8
 			NMEADataCache.LAST_NMEA_SENTENCE,
 			NMEADataCache.GPS_TIME,
 //			NMEADataCache.GPS_SOLAR_TIME,
@@ -2613,7 +2602,7 @@ public class RESTImplementation {
 		boolean tiny = false;
 		boolean txt = false;
 		Map<String, String> qsPrms = request.getQueryStringParameters();
-		if (qsPrms != null && qsPrms.get("option") != null) { // default full JSON
+		if (qsPrms != null && qsPrms.get("option") != null) { // default full JSON. TODO: wind and boat option ?
 			tiny = qsPrms.get("option").equals("tiny");
 			txt = qsPrms.get("option").equals("txt");
 		}
@@ -2621,34 +2610,8 @@ public class RESTImplementation {
 		// For appropriate JSON(/Jackson) rendering, make sure every sub-component is a JavaBean (or at least has getters).
 		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 
-//		JsonElement jsonElement = null;
-//		try {
-//			// Calculate VMG(s)
-//			if (cache != null) {
-//				synchronized (cache) {
-//				// 	NMEAUtils.calculateVMGs(cache);
-//					// TODO See how to use Jackson here.
-//					Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create(); // To avoid NaN/Double issues
-//					final JsonElement _jsonElement = gson.toJsonTree(cache); // I know, ah shit!
-//					//	String str = new Gson().toJson(cache);
-//					((JsonObject) _jsonElement).remove(NMEADataCache.DEVIATION_DATA); // Usually useless for the client, drop it.
-//					if (tiny || txt) {
-//						REMOVE_WHEN_TINY.stream()
-//								.forEach(((JsonObject) _jsonElement)::remove);
-//					}
-//					jsonElement = _jsonElement; // Same as above
-//				}
-//			}
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, String.format("With cache: %s", (cache == null ? "null" : cache.toString())));
-//			// Also try Gson gson = new GsonBuilder().setPrettyPrinting().create();
-////			Context.getInstance().getLogger().log(Level.INFO, "With cache (JSON):", (cache == null ? "null" : new Gson().toJson(cache)));
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getCache", ex);
-//		}
-
 		if (cache != null && (tiny || txt)) {
-			REMOVE_WHEN_TINY.stream()
-					.forEach(cache::remove);
+			REMOVE_WHEN_TINY.stream().forEach(cache::remove);
 		}
 
 		String content = "";
@@ -2657,7 +2620,6 @@ public class RESTImplementation {
 			specialContentType = HttpHeaders.TEXT_PLAIN;
 			double bsp = 0;
 			try {
-//				bsp = ((JsonObject) jsonElement).getAsJsonObject(NMEADataCache.BSP).get("speed").getAsDouble();
 				bsp = ((Speed)cache.get(NMEADataCache.BSP)).getValue();
 			} catch (Exception absorb) {
 			}
@@ -2744,7 +2706,7 @@ public class RESTImplementation {
 				airTemp = (double)cache.get(NMEADataCache.AIR_TEMP);
 			} catch (Exception absorb) {
 			}
-
+			// TODO Wind and Boat Data option ?
 			content = String.format(
 					"BSP=%.2f\nLAT=%f\nLNG=%f\nSOG=%.2f\nCOG=%d\nDATE=%s\nYEAR=%d\nMONTH=%d\nDAY=%d\nHOUR=%d\nMIN=%d\nSEC=%d\nS_HOUR=%d\nS_MIN=%d\nS_SEC=%d\nRMC_OK=%s\nBARO=%.2f\nTEMP=%.2f\nHUM=%.2f",
 					bsp, latitude, longitude, sog, cog, date, year, month, day, hours, mins, secs, solHours, solMins, solSecs, (rmcStatus ? "OK" : "KO"), press, airTemp, hum);
@@ -2785,12 +2747,6 @@ public class RESTImplementation {
 		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 		List<double[]> deviationCurve = (List<double[]>)cache.get(NMEADataCache.DEVIATION_DATA);
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(deviationCurve);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> Get Dev Curve", ex);
-//		}
 		try {
 			String content = deviationCurve != null ? mapper.writeValueAsString(deviationCurve) : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -2806,13 +2762,6 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 
 		GeoPos position = ((GeoPos)ApplicationContext.getInstance().getDataCache().get(NMEADataCache.POSITION)).updateGridSquare();
-
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(position);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> Get Position", ex);
-//		}
 
 		try {
 			String content = position != null ? mapper.writeValueAsString(position) : "";
@@ -2877,12 +2826,6 @@ public class RESTImplementation {
 
 		map.put("pos", position);
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getSCOG", ex);
-//		}
 		try {
 			String content = map.size() > 0 ? mapper.writeValueAsString(map) : "";
 			if (false && content.contains("°")) {
@@ -2918,7 +2861,6 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
 		String payload = new String(request.getContent());
 		if (!"null".equals(payload)) {
-//			Gson gson = new GsonBuilder().create();
 			StringReader stringReader = new StringReader(payload);
 			try {
 				Map data = mapper.readValue(stringReader, Map.class); // gson.fromJson(stringReader, Map.class);
@@ -2984,12 +2926,6 @@ public class RESTImplementation {
 		map.put("dist", distMap);
 		map.put("alt", altMap);
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getRunData", ex);
-//		}
 		try {
 			String content = map.size() > 0 ? mapper.writeValueAsString(map) : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -3010,12 +2946,6 @@ public class RESTImplementation {
 		map.put("distance", dist);
 		map.put("unit", "nm");
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getDistance", ex);
-//		}
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -3036,12 +2966,6 @@ public class RESTImplementation {
 		map.put("delta-altitude", delta);
 		map.put("unit", "m");
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getDeltaAlt", ex);
-//		}
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -3074,12 +2998,6 @@ public class RESTImplementation {
 		map.put("started", ApplicationContext.getInstance().getDataCache().getStartTime());
 		map.put("nmea-bytes", Context.getInstance().getManagedBytes());
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getNMEAVolumeStatus", ex);
-//		}
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -3099,12 +3017,6 @@ public class RESTImplementation {
 		map.put("timestamp", lastData.getTimestamp());
 		map.put("last-data", lastData.getString());
 
-//		JsonElement jsonElement = null;
-//		try {
-//			jsonElement = new Gson().toJsonTree(map);
-//		} catch (Exception ex) {
-//			Context.getInstance().getLogger().log(Level.INFO, "Managed >>> getLastNMEASentence", ex);
-//		}
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
@@ -3243,7 +3155,7 @@ public class RESTImplementation {
 				.collect(Collectors.toList())
 				.toArray(new Operation[operations.size()]);
 		try {
-			String content = mapper.writeValueAsString(channelArray); // new Gson().toJson(channelArray);
+			String content = mapper.writeValueAsString(channelArray);
 			RESTProcessorUtil.generateResponseHeaders(response, content.length());
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
