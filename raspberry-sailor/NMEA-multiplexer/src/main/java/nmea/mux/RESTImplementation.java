@@ -185,7 +185,7 @@ public class RESTImplementation {
 					"GET",
 					REST_PREFIX + "/cache",
 					this::getCache,
-					"Get ALL the data in the cache. QS prm: option=tiny|txt"),
+					"Get ALL the data in the cache. QS prm: option=tiny|txt"), // no option: full JSON.
 			new Operation(
 					"DELETE",
 					REST_PREFIX + "/cache",
@@ -210,7 +210,7 @@ public class RESTImplementation {
 					"GET",
 					REST_PREFIX + "/distance",
 					this::getDistance,
-					"Get distance traveled since last reset"),
+					"Get distance traveled since last log reset"),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/delta-alt",
@@ -245,7 +245,7 @@ public class RESTImplementation {
 					"GET",
 					REST_PREFIX + "/system-time",
 					this::getSystemTime,
-					"Get the system time as a long. Optional QS prm 'fmt': date | duration"),
+					"Get the system time as a long. Optional QS prm 'fmt': date | duration. Default: epoch."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/log-files/{log-file}",
@@ -2540,7 +2540,7 @@ public class RESTImplementation {
 		return response;
 	}
 
-	private transient static final List<String> REMOVE_WHEN_TINY = Arrays.asList(new String[] {
+	private transient static final List<String> REMOVE_WHEN_TINY = Arrays.asList(new String[] {  // List.of not supported in Java8
 			NMEADataCache.LAST_NMEA_SENTENCE,
 			NMEADataCache.GPS_TIME,
 //			NMEADataCache.GPS_SOLAR_TIME,
@@ -2613,7 +2613,7 @@ public class RESTImplementation {
 		boolean tiny = false;
 		boolean txt = false;
 		Map<String, String> qsPrms = request.getQueryStringParameters();
-		if (qsPrms != null && qsPrms.get("option") != null) {
+		if (qsPrms != null && qsPrms.get("option") != null) { // default full JSON
 			tiny = qsPrms.get("option").equals("tiny");
 			txt = qsPrms.get("option").equals("txt");
 		}
