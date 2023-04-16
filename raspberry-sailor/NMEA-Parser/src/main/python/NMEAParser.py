@@ -98,6 +98,25 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
             if members[RMC_VARIATION_SIGN] == 'W':
                 variation = -variation
             rmc_dict["variation"] = variation
+        if len(members) > RMC_TYPE:
+            rmc_type: str = members[RMC_TYPE]
+            type_val: str = ""
+            # print(f"Type->{rmc_type}")
+            if rmc_type is not None:
+                if rmc_type == 'A':
+                    type_val = "autonomous"
+                elif rmc_type == 'D':
+                    rmc_type = "differential"
+                elif rmc_type == 'E':
+                    type_val = "estimated"
+                elif rmc_type == 'N':
+                    type_val = "not valid"
+                elif rmc_type == 'S':
+                    type_val = "simulator"
+                else:
+                    type_val = "unknown"
+                rmc_dict['type'] = type_val
+
     else:
         rmc_dict["status"] = "void"
         
@@ -167,7 +186,7 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
         if len(members) > GLL_TYPE:
             gll_type: str = members[GLL_TYPE]
             type_val: str = ""
-            print(f"Type->{gll_type}")
+            # print(f"Type->{gll_type}")
             if gll_type is not None:
                 if gll_type == 'A':
                     type_val = "autonomous"
@@ -275,7 +294,7 @@ def parse_nmea_sentence(sentence: str) -> Dict:
             sentence_prefix: str = members[0]  # $TTIII
             if len(sentence_prefix) == 6:
                 # print("Sentence ID: {}".format(sentence_prefix))
-                valid: bool = checksum.valid_check_sum(sentence)
+                valid: bool = checksum.valid_check_sum(sentence, True)
                 if not valid:
                     raise Exception('Invalid checksum')
                 else:
@@ -313,6 +332,14 @@ if __name__ == '__main__':
 
     print("---------------")
 
+    nmea: str = "$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W,S*15"
+    # nmea: str = "$GPRMC,170000.00,A,3744.79693,N,12223.30420,W,0.052,,200621,,,D*62"
+    parsed: Dict = parse_nmea_sentence(nmea + NMEA_EOS)
+    print(f"Parsed RMC (2): {parsed}")
+    print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
+
+    print("---------------")
+
     nmea = "$IIGLL,3739.854,N,12222.812,W,014003,A,A*49"
     parsed = parse_nmea_sentence(nmea + NMEA_EOS)
     print(f"Parsed GLL: {parsed}")
@@ -322,7 +349,7 @@ if __name__ == '__main__':
 
     nmea = "$IIGLL,3739.854,N,12222.812,W,014003,A*24"
     parsed = parse_nmea_sentence(nmea + NMEA_EOS)
-    print(f"Parsed GLL: {parsed}")
+    print(f"Parsed GLL (2): {parsed}")
     print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
 
     print("---------------")

@@ -19,20 +19,20 @@ def calculate_check_sum(sentence: str) -> int:
     return cs
 
 
-def valid_check_sum(sentence: str) -> bool:
+def valid_check_sum(sentence: str, verbose: bool = False) -> bool:
     star_index: int = -1
     try:
         star_index = sentence.index('*')
     except Exception:
-        if DEBUG:
+        if DEBUG or verbose:
             print("No star was found")
         return False
     cs_key: str = sentence[-2:]
-    if DEBUG:
+    if DEBUG or verbose:
         print("CS Key: {}, from {}".format(cs_key, sentence))
     try:
         csk: int = int(cs_key, 16)
-        if DEBUG:
+        if DEBUG or verbose:
             print("Calculated CheckSum {:02x}".format(csk))
     except Exception:
         print("Invalid Hex CS Key {}".format(cs_key))
@@ -42,10 +42,10 @@ def valid_check_sum(sentence: str) -> bool:
     # print("Key in HEX is {}, validating {}".format(csk, string_to_validate))
     calculated: int = calculate_check_sum(string_to_validate)
     if calculated != csk:
-        if DEBUG:
-            print("Invalid checksum. Expected {}, calculated {}".format(hex(csk).split('x')[-1], hex(calculated).split('x')[-1]))
+        if DEBUG or verbose:
+            print("Invalid checksum. Expected [{}], calculated [{}]".format(hex(csk).split('x')[-1].upper(), hex(calculated).split('x')[-1].upper()))
         return False
-    elif DEBUG:
+    elif DEBUG or verbose:
         print("Valid Checksum 0x{:02x}".format(calculated))
 
     return True
