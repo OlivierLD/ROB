@@ -1,14 +1,87 @@
 #!/usr/bin/env python3
 
 import checksum  # local script
-import utils     # local script
+import utils  # local script
 import json
 from typing import Dict  # , List, Set, Tuple, Optional
 
 NMEA_EOS: str = '\r\n'
 DEBUG: bool = False
 
-# TODO XDR, MDA, ...
+
+# TODO XDR, GSA, GGA, VTG, GSV ...
+
+
+def mda_parser(sentence: str) -> Dict[str, Dict]:
+    """
+    MDA Meteorological Composite
+    Structure is
+    $--MDA,x.x,I,x.x,B,x.x,C,x.x,C,x.x,x.x,x.x,C,x.x,T,x.x,M,x.x,N,x.x,M*hh<CR><LF>
+           |     |     |     |     |   |   |     |     |     |     |
+           |     |     |     |     |   |   |     |     |     |     19-Wind speed, m/s
+           |     |     |     |     |   |   |     |     |     17-Wind speed, knots
+           |     |     |     |     |   |   |     |     15-Wind dir Mag
+           |     |     |     |     |   |   |     13-Wind dir, True
+           |     |     |     |     |   |   11-Dew Point C
+           |     |     |     |     |   10-Absolute hum %
+           |     |     |     |     9-Relative hum %
+           |     |     |     7-Water temp in Celsius
+           |     |     5-Air Temp in Celsius  |
+           |     3-Pressure in Bars
+           1-Pressure in inches
+    Example: $WIMDA,29.4473,I,0.9972,B,17.2,C,,,,,,,,,,,,,,*3E
+    """
+    PRESS_INCH: int = 1
+    PRESS_BAR: int = 3
+    AIR_T: int = 5
+    WATER_T: int = 7
+    REL_HUM: int = 9
+    ABS_HUM: int = 10
+    DEW_P_C: int = 11
+    WD_T: int = 13
+    WD_M: int = 15
+    WS_KNOTS: int = 17
+    WS_MS: int = 19
+    mda_dict: Dict = {"source": sentence}
+    sentence = sentence.strip()  # drops the \r\n
+    members: list = sentence[:sentence.index("*")].split(',')
+
+    for idx in range(1, len(members)):
+        if len(members[idx].strip()) > 0:
+            if idx == PRESS_INCH:
+                val: float = float(members[idx].strip())
+                mda_dict["press-inch"] = val
+            elif idx == PRESS_BAR:
+                val: float = float(members[idx].strip())
+                mda_dict["press-bar"] = val
+            elif idx == AIR_T:
+                val: float = float(members[idx].strip())
+                mda_dict["air-temp"] = val
+            elif idx == WATER_T:
+                val: float = float(members[idx].strip())
+                mda_dict["water-temp"] = val
+            elif idx == REL_HUM:
+                val: float = float(members[idx].strip())
+                mda_dict["rel-hum"] = val
+            elif idx == ABS_HUM:
+                val: float = float(members[idx].strip())
+                mda_dict["abs-hum"] = val
+            elif idx == DEW_P_C:
+                val: float = float(members[idx].strip())
+                mda_dict["dew-point-c"] = val
+            elif idx == WD_T:
+                val: float = float(members[idx].strip())
+                mda_dict["wind-dir-true"] = val
+            elif idx == WD_M:
+                val: float = float(members[idx].strip())
+                mda_dict["wind-dir-mag"] = val
+            elif idx == WS_KNOTS:
+                val: float = float(members[idx].strip())
+                mda_dict["wind-speed-knots"] = val
+            elif idx == WS_MS:
+                val: float = float(members[idx].strip())
+                mda_dict["wind-speed-ms"] = val
+    return {"mda": mda_dict}
 
 
 def rmc_parser(sentence: str) -> Dict[str, Dict]:
@@ -48,7 +121,7 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
     RMC_VARIATION_SIGN: int = 11
     RMC_TYPE: int = 12
 
-    rmc_dict: Dict = { "source": sentence }
+    rmc_dict: Dict = {"source": sentence}
     sentence = sentence.strip()  # drops the \r\n
     members: list = sentence[:sentence.index("*")].split(',')
 
@@ -72,7 +145,8 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
                 "minute": minute,
                 "second": second
             }
-        if len(members[RMC_LATITUDE_VALUE]) > 0 and len(members[RMC_LATITUDE_SIGN]) > 0 and len(members[RMC_LONGITUDE_VALUE]) > 0 and len(members[RMC_LONGITUDE_SIGN]) > 0:
+        if len(members[RMC_LATITUDE_VALUE]) > 0 and len(members[RMC_LATITUDE_SIGN]) > 0 and len(
+                members[RMC_LONGITUDE_VALUE]) > 0 and len(members[RMC_LONGITUDE_SIGN]) > 0:
             deg: str = members[RMC_LATITUDE_VALUE][0:2]
             min: str = members[RMC_LATITUDE_VALUE][2:]
             lat: float = utils.sex_to_dec(deg, min)
@@ -119,7 +193,7 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
 
     else:
         rmc_dict["status"] = "void"
-        
+
     return {"rmc": rmc_dict}
 
 
@@ -154,7 +228,7 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
     GLL_ACTIVE_VOID: int = 6
     GLL_TYPE: int = 7
 
-    gll_dict: Dict = { "source": sentence }
+    gll_dict: Dict = {"source": sentence}
     sentence = sentence.strip()  # drops the \r\n
     members: list = sentence[:sentence.index("*")].split(',')
 
@@ -168,7 +242,8 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
                 "minute": minute,
                 "second": second
             }
-        if len(members[GLL_LATITUDE_VALUE]) > 0 and len(members[GLL_LATITUDE_SIGN]) > 0 and len(members[GLL_LONGITUDE_VALUE]) > 0 and len(members[GLL_LONGITUDE_SIGN]) > 0:
+        if len(members[GLL_LATITUDE_VALUE]) > 0 and len(members[GLL_LATITUDE_SIGN]) > 0 and len(
+                members[GLL_LONGITUDE_VALUE]) > 0 and len(members[GLL_LONGITUDE_SIGN]) > 0:
             deg: str = members[GLL_LATITUDE_VALUE][0:2]
             min: str = members[GLL_LATITUDE_VALUE][2:]
             lat: float = utils.sex_to_dec(deg, min)
@@ -245,7 +320,7 @@ def zda_parser(sentence: str) -> Dict[str, Dict]:
     ZDA_LOCAL_ZONE_HOURS: int = 5
     ZDA_LOCAL_ZONE_MINUTES: int = 6
 
-    zda_dict: Dict = { "source": sentence }
+    zda_dict: Dict = {"source": sentence}
     sentence = sentence.strip()  # drops the \r\n
     members: list = sentence.split(',')
 
@@ -278,7 +353,8 @@ NMEA_PARSER_DICT: Dict = {
     "GGA": gga_parser,
     "VTG": vtg_parser,
     "GSV": gsv_parser,
-    "ZDA": zda_parser
+    "ZDA": zda_parser,
+    "MDA": mda_parser
 }
 
 
@@ -287,7 +363,7 @@ def parse_nmea_sentence(sentence: str) -> Dict:
     if sentence.startswith('$'):
         if sentence.endswith(NMEA_EOS):
             sentence = sentence.strip()  # drops the \r\n
-            members: list  = sentence.split(',')
+            members: list = sentence.split(',')
             # print(f"members is a {type(members)}")
             if DEBUG:
                 print("Split: {}".format(members))
@@ -357,6 +433,13 @@ if __name__ == '__main__':
     nmea = "$GPZDA,201530.00,04,07,2002,00,00*60"
     parsed = parse_nmea_sentence(nmea + NMEA_EOS)
     print(f"Parsed ZDA: {parsed}")
+    print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
+
+    print("---------------")
+
+    nmea = "$WSMDA,30.029,I,1.017,B,16.6,C,,,66.0,,,,12,T,,,3.1,N,1.6,M*6B"
+    parsed = parse_nmea_sentence(nmea + NMEA_EOS)
+    print(f"Parsed MDA: {parsed}")
     print(f"Beautified:\n{json.dumps(parsed, sort_keys=False, indent=2)}")
 
     print("---------------")
