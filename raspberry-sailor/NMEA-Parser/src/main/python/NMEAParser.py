@@ -50,7 +50,7 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
 
     rmc_dict: Dict = { "source": sentence }
     sentence = sentence.strip()  # drops the \r\n
-    members: list = sentence.split(',')
+    members: list = sentence[:sentence.index("*")].split(',')
 
     if len(members[RMC_ACTIVE_VOID]) > 0 and members[RMC_ACTIVE_VOID] == 'A':
         if len(members[RMC_UTC]) > 0 and len(members[RMC_DDMMYY]) > 0:
@@ -114,7 +114,7 @@ def rmc_parser(sentence: str) -> Dict[str, Dict]:
                 elif rmc_type == 'S':
                     type_val = "simulator"
                 else:
-                    type_val = "unknown"
+                    type_val = f"unknown [{rmc_type}]"
                 rmc_dict['type'] = type_val
 
     else:
@@ -199,7 +199,7 @@ def gll_parser(sentence: str) -> Dict[str, Dict]:
                 elif gll_type == 'S':
                     type_val = "simulator"
                 else:
-                    type_val = "unknown"
+                    type_val = f"unknown [{gll_type}]"
                 gll_dict['type'] = type_val
     else:
         gll_dict["status"] = "void"
