@@ -3,6 +3,8 @@ This module is one illustration of what can be done from  Web client, on top of 
 This includes the way to start the Multiplexer (through its configuration file), and the way to reach the data to 
 display on a web page.
 
+This module does _**NOT**_ extend any Java class of the NMEA-multiplexer, there is just _**NO**_ extra Java code in this module.
+
 The NMEA-multiplexer runs on its machine, and managed data can be access through several Web Interfaces, reachable from any device
 with a browser, connected on the same network. This network does not need to have Internet access,
 it can be emitted by a Raspberry Pi (like the one the NMEA-multiplexer runs on).
@@ -34,10 +36,11 @@ As it depends on the `http-tiny-server` module, the `NMEA-multiplexer` can also 
 - static Web pages
     - See the system properties `static.docs` and `static.zip.docs`.
 - REST requests
-    - Look into the class `nmea.mux.RESTImplementation`
+    - Look into the class `nmea.mux.RESTImplementation`, in the `NMEA-multiplexer` module itself.
 
 > _**Note**_: _Any_ REST client can reach the features available in the `NMEA-multiplexer` (or the classes extending it).
-> Web pages can do it - obviously - but also utilities like `curl`, `wget`, and devices like Arduino, ESP32 & friends, M5 sticks, etc.
+> Web pages can do it - obviously - but also utilities like `curl`, `wget`, and devices like Arduino, ESP32 & friends, M5 sticks, etc.  
+> Examples will be linked from here (soon).
 
 ## About NMEA-multiplexer's REST operations
 As you would see in `nmea.mux.RESTImplementation` where all operations are defined, there is a `/mux/oplist` resource, that will list
@@ -293,6 +296,8 @@ Your imagination is the limit.
 There is also a [USE_CASES](./USE_CASES.md) document.  
 > The WebComponents presented here live in their own repo, at <https://github.com/OlivierLD/WebComponents>. 
 > They can be seen live at <https://olivierld.github.io/webcomponents/gallery.html> (it's a biiiiig file).
+
+Examples of Web Admin features will also be presented (in other modules, like [RESTNavServer](../RESTNavServer/README.md)).
 
 # To production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Use this script to push the generate artifacts to the local maven repo.
+# Use this script to push the generated artifacts to the local maven repo.
 # Run it from the "repository" branch of the repo.
 #
 CURRENT_BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/')

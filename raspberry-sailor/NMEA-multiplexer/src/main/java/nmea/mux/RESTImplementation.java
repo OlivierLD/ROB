@@ -185,6 +185,7 @@ public class RESTImplementation {
 					"GET",
 					REST_PREFIX + "/cache",
 					this::getCache,
+					// TODO option=full|tiny|txt|boat-txt|atm-txt
 					"Get ALL the data in the cache. QS prm: option=tiny|txt"), // no option: full JSON.
 			new Operation(
 					"DELETE",
