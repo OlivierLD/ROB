@@ -55,7 +55,6 @@ public class GPSdServer implements Forwarder {
 			clientSocketlist.stream().forEach(tcpClientSocket -> {
 				synchronized (tcpClientSocket) {
 					try {
-
 						DataOutputStream out = new DataOutputStream(tcpClientSocket.getOutputStream());
 						out.write(message);
 						out.flush();
@@ -82,8 +81,9 @@ public class GPSdServer implements Forwarder {
 
 	private String formatByteHexa(byte b) {
 		String s = Integer.toHexString(b).toUpperCase();
-		while (s.length() < 2)
+		while (s.length() < 2) {
 			s = "0" + s;
+		}
 		return s;
 	}
 
@@ -91,8 +91,9 @@ public class GPSdServer implements Forwarder {
 	public void close() {
 		System.out.println("- Stop writing to " + this.getClass().getName());
 		try {
-			for (Socket tcpSocket : clientSocketlist)
+			for (Socket tcpSocket : clientSocketlist) {
 				tcpSocket.close();
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

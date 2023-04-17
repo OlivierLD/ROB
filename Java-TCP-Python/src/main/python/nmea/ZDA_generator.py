@@ -5,7 +5,7 @@ every second
 """
 import signal
 import time
-import NMEABuilder  # local script
+import fromthesource.NMEABuilder as NMEABuilder  # local script
 
 # Now we're talking...
 keep_listening: bool = True

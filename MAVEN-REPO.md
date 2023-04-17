@@ -4,16 +4,16 @@ There is a `repository` branch on the [ROB](https://github.com/OlivierLD/ROB) pr
 
 See good article at <https://gist.github.com/fernandezpablo85/03cf8b0cd2e7d8527063>
 
-> Another possibility: <https://repsy.io/>
+> Another possibility/option: <https://repsy.io/>
 
 ### Sample command:
 Let's say we want to publish the module `common-utils`.  
-From `ROB/common-utils` (`master` branch, or whatever branch you work on), install on your local maven repo (generating the jar is good enough, actually):
+From `ROB/common-utils` (`master` branch, or whatever branch you're working on), install on your local maven repo (generating the jar is good enough, actually):
 ```
 $ ../gradlew clean build publishToMavenLocal
 ```
 > _**Important note**_:  
-> In Gradle 7+, you need to have a `publish` section in `build.gradle`, like
+> In Gradle 7+, you need to have a `publishing` section in `build.gradle`, like
 > ```
 > publishing {
 >   publications {
@@ -29,6 +29,8 @@ $ ../gradlew clean build publishToMavenLocal
 > ```
 > See <https://docs.gradle.org/current/userguide/publishing_maven.html> for details.
 >
+
+TODO: document the `pom` section in `publishing`.
 
 This command will push the generated jar-file in your _local_ maven repository, usually under `~/.m2/repository`.  
 Then, from this local repository, you can get the required generated artifacts, and copy them in _this_ `repository` branch, so it can be reached as any maven artifact. See in the [Examples](#examples) section how to refer to it.
@@ -73,6 +75,8 @@ $ mvn install:install-file \
       -DlocalRepositoryPath=. \
       -DcreateChecksum=true
 ```
+<!-- _**To try**_: publish the shadowJar-generated archive (the `common-utils-1.0-all.jar` above). -->
+
 **_Shortcut available!_**: The script `push.sh` will help you with the steps above, prompting you for the required data.
 
 _Then_, `git add <whatever-you-added>`, `git commit`, and `git push` on the `repository` branch.

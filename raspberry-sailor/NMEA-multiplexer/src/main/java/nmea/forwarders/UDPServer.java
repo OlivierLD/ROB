@@ -37,20 +37,23 @@ public class UDPServer implements Forwarder {
 			if (address.isMulticastAddress()) {
 				dsocket = new MulticastSocket(udpPort);
 				((MulticastSocket) dsocket).joinGroup(address);
-			} else
+			} else {
 				dsocket = new DatagramSocket(udpPort, address);
+			}
 
 			// Initialize a datagram
 			DatagramPacket packet = new DatagramPacket(message, message.length, address, udpPort);
 			dsocket.send(packet);
-			if (address.isMulticastAddress())
+			if (address.isMulticastAddress()) {
 				((MulticastSocket) dsocket).leaveGroup(address);
+			}
 			dsocket.close();
 		} catch (Exception ex) {
-			if ("No such device".equals(ex.getMessage()))
-				System.out.println("No such devide [" + address + "] (from " + this.getClass().getName() + ")");
-			else
+			if ("No such device".equals(ex.getMessage())) {
+				System.out.println("No such device [" + address + "] (from " + this.getClass().getName() + ")");
+			} else {
 				ex.printStackTrace();
+			}
 		}
 	}
 

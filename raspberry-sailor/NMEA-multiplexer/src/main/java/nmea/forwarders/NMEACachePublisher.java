@@ -13,7 +13,7 @@ import java.util.Properties;
 /**
  * Forward the full NMEA Cache to a REST resource, in JSON.
  * This requires a knowledge of its structure...
- * REST verb can be PUT or POST.
+ * REST verb can be PUT or POST. Other verbs would not really make sense here.
  */
 public class NMEACachePublisher implements Forwarder {
 
@@ -183,7 +183,7 @@ public class NMEACachePublisher implements Forwarder {
                                         }
                                     }
                                     break;
-                                default:
+                                default: // TODO Honk ?
                                     break;
                             }
                         } catch (Exception ex) {
@@ -310,6 +310,9 @@ public class NMEACachePublisher implements Forwarder {
         }
     }
 
+    /**
+     * Unused getters are for Jackson.
+     */
     public static class NMEACacheBean {
         private String cls; // Class
         private String type = "nmea-cache-publisher";

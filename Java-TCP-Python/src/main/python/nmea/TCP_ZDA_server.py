@@ -13,7 +13,7 @@ import platform
 from datetime import datetime, timezone
 import logging
 from logging import info
-import NMEABuilder   # local script
+import fromthesource.NMEABuilder as NMEABuilder   # local script
 from typing import List, Dict
 
 keep_listening: bool = True

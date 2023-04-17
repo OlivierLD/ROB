@@ -1,18 +1,9 @@
-# Java to Python, Python to Java, using TCP 
-### and beyond... Any language to any language
+# Java to Python, Python to Java, using TCP et al
+### and beyond... Any language to any language, and vice-versa
 ## A playground. 🥳
 ### Tests, Drafts, Tentatives, Tries, Errors, Mistakes, Lessons ...
 
 ---
-
-#### To try, pending questions...
-- 1:1 TCP Client:Server
-- Two-Way, async response-reply, etc
-  - Receive from sensors, send to actuators (asynchronously)
-- UDP
-  - 1:1 UDP
----
-
 > This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
 > the `src/main/python` directory.
 
@@ -35,7 +26,7 @@ Let's see if we can come up with some scaffolding for this structure.
 
 ## Examples
 As opposed to HTTP, TCP is a connected protocol.  
-A _single_ HTTP request works like this: 
+A _single_ <u>HTTP</u> request works like this: 
 - connect to the server
 - make a request
 - get the response
@@ -159,5 +150,25 @@ For the option that considers
 
 ### Conclusion ?
 Sounds like a good option.
+
+
+## TODO, TOTRY
+
+- 1:1 TCP Client:Server, Java:Python, Python:Java
+- Two-Way, async response-reply, etc
+  - Receive from sensors, send to actuators (asynchronously)
+- UDP
+  - 1:1 UDP ?
+
+- Java tells the server(s) to shut down (like the `LISTOP` command)...
+- AN NMEA200-like architecture with sensors and actuators
+  - sensors like the `TCP_BMP180_basic_server.py`
+  - actuators like `ssd1306*.py` (acts like an MFD)
+
+> _**Note**_: In the case of such an architecture, TCP might sound like over-killing, in the sense that
+> more than one (Java) client for sensors and actuators might sound like in-probable.
+> But that could be useful though, for "admin" purpose.  
+> For example, on (Python) thread would be constantly pushing the `BMP180` to its Java client, and another thread would be listening to admin commands, like `LISTOP`, or `SHUTDOWN`... 
+
 
 ---

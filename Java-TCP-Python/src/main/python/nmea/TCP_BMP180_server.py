@@ -14,7 +14,7 @@ import socket
 import threading
 import traceback
 from datetime import datetime, timezone
-import NMEABuilder   # local script
+import fromthesource.NMEABuilder as NMEABuilder  # local script
 from typing import List
 import Adafruit_BMP.BMP085 as BMP085
 

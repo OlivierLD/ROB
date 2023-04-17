@@ -82,8 +82,9 @@ public class TCPServer implements Forwarder {
 
 	private String formatByteHexa(byte b) {
 		String s = Integer.toHexString(b).toUpperCase();
-		while (s.length() < 2)
+		while (s.length() < 2) {
 			s = "0" + s;
+		}
 		return s;
 	}
 
@@ -91,8 +92,9 @@ public class TCPServer implements Forwarder {
 	public void close() {
 		System.out.println("- Stop writing to " + this.getClass().getName());
 		try {
-			for (Socket tcpSocket : clientSocketList)
+			for (Socket tcpSocket : clientSocketList) {
 				tcpSocket.close();
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

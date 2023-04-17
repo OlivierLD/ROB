@@ -72,6 +72,7 @@ We want to be able to:
 All this, running on a Raspberry Pi.
 
 > _**Note**_: for now, we deal _only_ with `NMEA0183`, as - as far as I know - no GPS deals (yet) with `NMEA2000`.
+> Working on it.
 
 ---
 
