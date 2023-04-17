@@ -1,6 +1,17 @@
-# Java to Python, Python to Java, using TCP
+# Java to Python, Python to Java, using TCP 
+### and beyond... Any language to any language
 ## A playground. 🥳
-### Tests, Drafts, Tentatives, Tries, Errors, Mistakes ...
+### Tests, Drafts, Tentatives, Tries, Errors, Mistakes, Lessons ...
+
+---
+
+#### To try, pending questions...
+- 1:1 TCP Client:Server
+- Two-Way, async response-reply, etc
+  - Receive from sensors, send to actuators (asynchronously)
+- UDP
+  - 1:1 UDP
+---
 
 > This module contains tests and drafts that will eventually show up in the NMEA-multiplexer, in
 > the `src/main/python` directory.
