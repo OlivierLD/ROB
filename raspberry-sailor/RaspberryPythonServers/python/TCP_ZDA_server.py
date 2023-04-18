@@ -92,12 +92,12 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
 
 def client_listener(connection: socket.socket, address: tuple) -> None:
     """
-    Expects several possible inputs: "STATUS", "LOOPS:x.xx" (not case-sensitive).
+    Expects several possible inputs: "STATUS", "LOOPS:x.xx", "EXIT" (not case-sensitive).
     """
     global nb_clients
     global between_loops
     global keep_listening
-    print("New client listener")
+    print("New TCP client listener")
     while keep_listening:
         try:
             data: bytes = connection.recv(1_024)   # If receive from client is needed...
@@ -115,6 +115,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
+                    print(">> TCP ZDA received an EXIT message.")
                     # interrupt(None, None)
                     # Send SIGINT Signal to main process
                     os.kill(os.getpid(), signal.SIGINT)
