@@ -735,5 +735,5 @@ except KeyboardInterrupt:
 
 # After all
 if oled is not None:
-    clear()
+    clear()   # TODO Say "Bye"
 print("Done with REST SSD1306 server.")
