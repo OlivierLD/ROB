@@ -3,11 +3,11 @@ As said before, the code in this folder is here to try _not_ to have to re-write
 We will use the code provided by the sensor providers, as it is, which usually means in Python.
 The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
 framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations. We'll se how it goes.  
-> In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi, and whatever you can plug on it. And protocols like UART, SPI, I2C.  
-> Vast topic indeed.
+> In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi's hardware, and whatever you can plug on it. And protocols like UART, SPI, I2C.  
+> Vast topic indeed...
 
 ## Python interaction with Sensors and Actuators
-- Python, in general, a great resource: <https://realpython.com/>
+- Python, in general, a _great_ resource: <https://realpython.com/>
 - Another great one for sensors and actuators: <https://github.com/pascalmartin/Adafruit-Raspberry-Pi-Python-Code>
   - As seen in <https://www.raspberrypi-spy.co.uk/2012/05/install-rpi-gpio-python-library/>, requires a `sudo apt-get install rpi.gpio`
 - MicroPython: <https://docs.micropython.org/en/latest/library/index.html>

@@ -2,7 +2,7 @@
 #
 # Requires:
 # ---------
-# pip3 install http (already in python3.7, no need to install it)
+# pip3 install http (already in python3.7+, no need to install it)
 #
 # Different from the REST_SSD1306_server.py.
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
@@ -15,9 +15,11 @@
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
 #
 # Work In Progress !
+# Do run a curl -X GET /ssd1306/oplist !
 #
 import json
 import sys
+import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from typing import List
@@ -55,6 +57,8 @@ DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 # TODO: More data
 
 oled = None
+server_pid: int = os.getpid()
+
 
 # Define the Reset Pin
 reset_pin = board.D4  # Pin #7
@@ -462,6 +466,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     "verb": "PUT",
                     "description": "Clean the screen."
                 }, {
+                    "path": PATH_PREFIX + "/exit",
+                    "verb": "POST",
+                    "description": "Careful: terminate the server process."
+                }, {
                     "path": PATH_PREFIX + "/whatever",
                     "verb": "POST",
                     "description": "Placeholder."
@@ -517,6 +525,15 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_response(201)
             response = {"status": "OK"}
             self.wfile.write(json.dumps(response).encode())
+        elif self.path.startswith("/exit"):
+                content_len: int = int(self.headers.get('Content-Length'))
+                post_body = self.rfile.read(content_len).decode('utf-8')
+                if verbose:
+                    print("Content: {}".format(post_body))
+                self.send_response(201)
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+                os.kill(server_pid, signal.SIGINT)
         else:
             if verbose:
                 print("POST on {} not managed".format(self.path))
