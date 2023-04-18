@@ -28,7 +28,7 @@ channels:
   - type: tcp
     server: localhost
     port: 7001
-    verbose: true
+    verbose: false
 forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds
