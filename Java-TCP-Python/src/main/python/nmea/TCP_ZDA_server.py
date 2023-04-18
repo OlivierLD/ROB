@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
 That one produces ZDA Strings for each connected client.
-It also understands input from the client: "STATUS", "SLOWER" ar "FASTER" (not case sensitive), see client_listener.
+It also understands input from the client: "STATUS", "SLOWER", "FASTER", or "TERMINATE" (not case sensitive), see client_listener.
+
+Start it with
+$ python src/main/python/nmea/TCP_ZDA_server.py --port:7002 --verbose:true
 """
 import sys
+import os
+import json
 import signal
 import time
 import socket
@@ -13,7 +18,7 @@ import platform
 from datetime import datetime, timezone
 import logging
 from logging import info
-import fromthesource.NMEABuilder as NMEABuilder   # local script
+import NMEABuilder as NMEABuilder   # local script
 from typing import List, Dict
 
 keep_listening: bool = True
@@ -25,6 +30,11 @@ verbose: bool = True
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
+
+CLIENT_CMD_FASTER: str = "FASTER"
+CLIENT_CMD_SLOWER: str = "SLOWER"
+CLIENT_CMD_STATUS: str = "STATUS"
+CLIENT_CMD_TERMINATE: str = "TERMINATE"
 
 NMEA_EOS: str = "\r\n"  # aka CR-LF
 
@@ -39,7 +49,8 @@ def interrupt(sig: int, frame):
     keep_listening = False
     time.sleep(1.5)
     print("Server Exiting.")
-    info(f'sigint_handler: Received signal {sig} on frame {frame}')
+    if sig is not None:
+        info(f'sigint_handler: Received signal {sig} on frame {frame}')
     # traceback.print_stack(frame)
     sys.exit()   # DTC
 
@@ -61,7 +72,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         "system-utc-time": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     }
     try:
-        payload: str = str(message) + NMEA_EOS
+        payload: str = str(json.dumps(message)) + NMEA_EOS
         if verbose:
             print(f"Producing status: {payload}")
         producing_status = True
@@ -85,12 +96,16 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
             if verbose:
                 print(f"Received from client: {data}")
             client_mess: str = f"{data.decode('utf-8')}".strip().upper()
-            if  client_mess == "FASTER":
+            if  client_mess == CLIENT_CMD_FASTER:
                 between_loops /= 2.0
-            elif client_mess == "SLOWER":
+            elif client_mess == CLIENT_CMD_SLOWER:
                 between_loops *= 2.0
-            elif client_mess == "STATUS":
+            elif client_mess == CLIENT_CMD_STATUS:
                 produce_status(connection, address)
+            elif client_mess == CLIENT_CMD_TERMINATE:
+                # Send SIGINT Signal to main process
+                os.kill(os.getpid(), signal.SIGINT)
+                break
             elif client_mess == "":
                 pass  # ignore
             else:

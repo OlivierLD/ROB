@@ -13,7 +13,7 @@ import socket
 import threading
 import traceback
 import math
-import fromthesource.NMEABuilder as NMEABuilder   # local script
+import NMEABuilder as NMEABuilder   # local script
 from typing import List
 import board
 import adafruit_lis3mdl

@@ -2,7 +2,7 @@
 
 import checksum  # local script
 import prefixes  # local script
-import utils     # local sc ript
+import utils     # local script
 from datetime import datetime, timezone
 from typing import Dict  # , List, Set, Tuple, Optional
 

@@ -115,7 +115,10 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
-                    interrupt(None, None)
+                    # interrupt(None, None)
+                    # Send SIGINT Signal to main process
+                    os.kill(os.getpid(), signal.SIGINT)
+                    # break
                 # elif client_mess == "":
                 #     pass  # ignore
                 else:

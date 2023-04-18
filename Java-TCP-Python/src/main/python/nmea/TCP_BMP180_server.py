@@ -14,7 +14,7 @@ import socket
 import threading
 import traceback
 from datetime import datetime, timezone
-import fromthesource.NMEABuilder as NMEABuilder  # local script
+import NMEABuilder as NMEABuilder  # local script
 from typing import List
 import Adafruit_BMP.BMP085 as BMP085
 
@@ -64,7 +64,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
         # XDR Temperature is not necessarily Air Temperature...
         nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
         nmea_mmb: str = NMEABuilder.build_MMB(pressure / 100) + NMEA_EOS
-        nmea_xdr: str = NMEABuilder.build_XDR({ "value": temperature, "type": "TEMPERATURE" },
+        nmea_xdr: str = NMEABuilder.build_XDR({"value": temperature, "type": "TEMPERATURE"},
                                               { "value": pressure, "type": "PRESSURE_P" },
                                               { "value": pressure / 100_000, "type": "PRESSURE_B" }) + NMEA_EOS
 
