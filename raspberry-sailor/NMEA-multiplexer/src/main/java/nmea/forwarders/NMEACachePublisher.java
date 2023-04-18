@@ -150,7 +150,9 @@ public class NMEACachePublisher implements Forwarder {
                                                     httpResponse.getPayload());
                                         }
                                     } catch (Throwable restFailure) {
-                                        System.err.printf(">> POST Error in NMEACachePublisher: %s\n", restFailure.getMessage());
+                                        System.err.printf(">> POST (%s) Error in NMEACachePublisher: %s\n",
+                                                postRequest,
+                                                restFailure.getMessage());
                                         if (instance.verbose) {
                                             restFailure.printStackTrace();
                                         }
@@ -177,7 +179,9 @@ public class NMEACachePublisher implements Forwarder {
                                                     putResponse.getPayload());
                                         }
                                     } catch (Throwable restFailure) {
-                                        System.err.printf(">> PUT Error in NMEACachePublisher: %s\n", restFailure.getMessage());
+                                        System.err.printf(">> PUT (%s) Error in NMEACachePublisher: %s\n",
+                                                putRequest,
+                                                restFailure.getMessage());
                                         if (instance.verbose) {
                                             restFailure.printStackTrace();
                                         }
@@ -223,7 +227,7 @@ public class NMEACachePublisher implements Forwarder {
         System.out.println("- Stop writing to " + this.getClass().getName());
 
         if (this.verbose) {
-            System.out.printf("On close, resource: %s, verb: %s\n", this.onCloseResource, this.onCloseVerb);
+            System.out.printf(">> On close, resource: %s, verb: %s\n", this.onCloseResource, this.onCloseVerb);
         }
         // Add an 'onclose' action...., like to reset an oled screen?
         if (this.onCloseResource != null && this.onCloseVerb != null) {
@@ -242,7 +246,9 @@ public class NMEACachePublisher implements Forwarder {
                                 this.port,
                                 this.onCloseResource);
                         if (this.verbose) {
-                            System.out.printf("onClose doing a POST %s\n", postRequest);
+                            System.out.println("+======================================");
+                            System.out.printf("| onClose doing a POST %s\n", postRequest);
+                            System.out.println("+======================================");
                         }
                         try {
                             HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, null);
