@@ -267,7 +267,6 @@ $ python3 ./python/REST_BME280_server.py --machine-name:192.168.1.105 --simulate
 > _**Important**_: As it is now, it's the server responsibility to respond with _valid_ NMEA strings. 
 > See the NMEA-multiplexer Consumer's doc for details.
 
-
 ### Actuators
 Just like sensors provide data to be read, actuators are to be written to.  
 A camera would be a _sensor_, a screen would be an _actuator_.
@@ -278,6 +277,12 @@ As an illustration, there is a REST server that deals with an SSD1306 oled scree
 - CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux>
   - Setup: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi>
 
+### Example 5, Python Sensor (ZDA), Python Actuator (CacheForwarder), NMEA-Multiplexer
+Inspired by the NMEA2000 network concept.  
+We read a Python TCP sensor (producing ZDA sentences here, for the example), and pushing them 
+using a CacheForwarder to a Python Actuator (spitting out the position and dat on the terminal) acting as an MFD.
+
+See the script `test.server.sh` in the `scripts` directory.
 
 ---
 ## Misc links and stuff
@@ -313,7 +318,10 @@ $ python3 ./python/TCP_LSM303_HMC8553L_server.py \
 ```
 
 # To Try next
-
 - Docker image?
+
+# TODO 
+- Other languages  (C, Go, etc)
+  - It's all about writing TCP and REST servers...
 
 ---
