@@ -31,7 +31,7 @@ machine_name: str = "127.0.0.1"  # aka localhost
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
-server_pid: int = os.getpid()
+server_pid: int = os.getpid()  # Used to kill the process
 
 current_value: int = 0
 keep_looping: bool = True
@@ -54,7 +54,6 @@ if len(sys.argv) > 0:  # Script name + X args
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
 
-# Now, let's go
 
 # Defining an HTTP request Handler class, for REST requests
 class ServiceHandler(BaseHTTPRequestHandler):
@@ -306,6 +305,8 @@ def display_manager() -> None:
         time.sleep(1.0)
     print("Done with display thread")
 
+
+# Now, let's go
 
 # Initialize the display thread
 display_thread: threading.Thread = threading.Thread(target=display_manager, args=())

@@ -278,9 +278,9 @@ As an illustration, there is a REST server that deals with an SSD1306 oled scree
   - Setup: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi>
 
 ### Example 5, Python Sensor (ZDA), Python Actuator (CacheForwarder), NMEA-Multiplexer
-Inspired by the NMEA2000 network concept.  
+Inspired by the NMEA2000 network concept. Plug in any sensor, plug in any actuator.   
 We read a Python TCP sensor (producing ZDA sentences here, for the example), and pushing them 
-using a CacheForwarder to a Python Actuator (spitting out the position and dat on the terminal) acting as an MFD.
+using a CacheForwarder to a Python Actuator (spitting out the position and date on the terminal) acting as an MFD.
 
 See the script `test.server.sh` in the `scripts` directory.
 
