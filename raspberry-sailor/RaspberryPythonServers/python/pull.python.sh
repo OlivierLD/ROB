@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-PYTHON_ROOT=../../NMEA-Parser/src/main/python
+PYTHON_ROOT=../../NMEA-Parser/src/main/python/NMEAParserROB
 #
 echo -e "Will pull resources from the following location:"
 ls -lisa ${PYTHON_ROOT}

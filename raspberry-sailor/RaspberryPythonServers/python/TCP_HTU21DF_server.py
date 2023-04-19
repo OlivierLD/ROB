@@ -164,7 +164,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
             humidity: float = sensor.relative_humidity  # %
 
             nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
-            nmea_xdr: str = NMEABuilder.build_XDR({ "value": humidity, "type": "HUMIDITY" }) + NMEA_EOS
+            nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"}) + NMEA_EOS
 
             if verbose:
                 # Date formatting: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior

@@ -1,6 +1,7 @@
 #
 # MUX definition.
 # The "NMEA Cache forwarder" is implemented by REST_BasicCacheForwarder_server.py
+# TCP Sensor, REST Actuator
 #
 name: "Sensor-Actuator config (v1)."
 description:
@@ -15,16 +16,6 @@ context:
   default.declination: 0
   # TODO an onclose for the tcp channel ?
 channels:
-#  - type: rest           # Pings the Python REST Server for the BME280
-#    protocol: http
-#    machine-name: localhost
-#    # machine-name: 192.168.50.10
-#    http-port: 9876
-#    query-path: /bme280/nmea-data
-#    # query-string:      # Would include the ?, and subsequent &...
-#    # jqs:               # JQ String, to apply on the response
-#    between-loops: 2000  # in ms
-#    verbose: false
   - type: tcp
     server: localhost
     port: 7001

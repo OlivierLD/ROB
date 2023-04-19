@@ -1,6 +1,7 @@
 #
 # MUX definition.
 # The "NMEA Cache forwarder" is implemented by REST_BasicCacheForwarder_server.py
+# REST Sensor, REST Actuator
 #
 name: "Sensor-Actuator config (v2)."
 description:
