@@ -164,7 +164,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dpolar.file.location=./sample.data/polars/CheoyLee42.po
 JAVA_OPTS="${JAVA_OPTS} -Dcalculate.solar.with.eot=true"
 # For debug
 JAVA_OPTS="${JAVA_OPTS} -Drmc.verbose=false"
-JAVA_OPTS="${JAVA_OPTS} -Dzda.verbose=false"
+JAVA_OPTS="${JAVA_OPTS} -Dzda.data.verbose=false"
 #
 # For the small USB GPS (bug!)
 GPS_OFFSET=false

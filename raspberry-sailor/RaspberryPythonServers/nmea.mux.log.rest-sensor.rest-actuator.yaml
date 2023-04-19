@@ -2,10 +2,10 @@
 # MUX definition.
 # The "NMEA Cache forwarder" is implemented by REST_BasicCacheForwarder_server.py
 #
-name: "Sensor-Actuator config."
+name: "Sensor-Actuator config (v2)."
 description:
   - A test for the sensor-actuator configuration
-  - Reads a ZDA Generator (through TCP, port 9876)
+  - Reads a ZDA Generator (through REST, port 9876)
   - Forward data to "NMEA Cache forwarder" (on /cache-fwd, port 8080)
   - Log data in a file (data.nmea)
 context:
@@ -13,21 +13,17 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: 0
-  # TODO an onclose for the tcp channel ?
+  # TODO an onclose for the rest channel ?
 channels:
-#  - type: rest           # Pings the Python REST Server for the BME280
-#    protocol: http
-#    machine-name: localhost
-#    # machine-name: 192.168.50.10
-#    http-port: 9876
-#    query-path: /bme280/nmea-data
-#    # query-string:      # Would include the ?, and subsequent &...
-#    # jqs:               # JQ String, to apply on the response
-#    between-loops: 2000  # in ms
-#    verbose: false
-  - type: tcp
-    server: localhost
-    port: 7001
+  - type: rest           # Pings the Python REST Server for the ZDA Data
+    protocol: http
+    machine-name: localhost
+    # machine-name: 192.168.50.10
+    http-port: 9876
+    query-path: /utc-date-time/nmea-data
+    # query-string:      # Would include the ?, and subsequent &...
+    # jqs:               # JQ String, to apply on the response
+    between-loops: 2000  # in ms
     verbose: false
 forwarders:
   - type: nmea-cache-publisher

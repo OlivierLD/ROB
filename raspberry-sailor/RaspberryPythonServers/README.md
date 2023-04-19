@@ -49,13 +49,14 @@ will be encapsulated by JSON (JavaScript Object Notation), also natively support
 _**A last detail**_: The servers (TCP and/or REST) do not need to run on the same machine as the NMEA-multiplexer. All they need is to see each other on the network.
 
 ## Implementations
-This directory contains _**EXAMPLES**_ of the way to have TCP servers written in Python,
+This directory contains _**EXAMPLES**_ of the way to have TCP and REST servers written in Python,
 reading sensor data, that could be used to feed the NMEA-multiplexer.  
-The Python (Python3) code in this folder is usually a wrapper around the Python modules written by the sensors' provider.
+The Python (Python3) code in this folder is usually just a _**wrapper**_ around the Python modules written by the sensors' provider.
 The code provided in this folder requires those modules to be installed first (with `pip3` or similar tools). This will be explained.
 
 > _**Note**_: the sensors we talk about here are atmospheric and magnetic sensors, using I2C (or maybe SPI some day) protocol.
-> We will _not_ use GPS here. GPS' are read using Serial communication. Look into the Java code for that.
+> We will _not_ use GPS here. GPS' are read using Serial communication. Look into the Java code for that.  
+> This can be done though. Reading a Serial port from Python is a no-brainer. Look for `NMEASerialTest.py`, in the `NMEA-Parser` module.
 
 ### TCP
 The Python code reads the sensor's data, and builds appropriate NMEA sentence(s) to carry them around.
@@ -279,10 +280,15 @@ As an illustration, there is a REST server that deals with an SSD1306 oled scree
 
 ### Example 5, Python Sensor (ZDA), Python Actuator (CacheForwarder), NMEA-Multiplexer
 Inspired by the NMEA2000 network concept. Plug in any sensor, plug in any actuator.   
-We read a Python TCP sensor (producing ZDA sentences here, for the example), and pushing them 
-using a CacheForwarder to a Python Actuator (spitting out the position and date on the terminal) acting as an MFD.
+We read a Python _**TCP**_ sensor (producing ZDA sentences here, for the example), and pushing them 
+using a CacheForwarder to a Python Actuator (spitting out the position and date on the terminal) acting as an MFD, using **_REST_**.
 
-See the script `test.server.sh` in the `scripts` directory.
+See the script `test.tcp.rest.server.sh` in the `scripts` directory.
+
+### Example 6, Python Sensor (ZDA), Python Actuator (CacheForwarder), NMEA-Multiplexer
+Same as above, but with a REST channel for ZDA.
+
+See the script `test.rest.rest.server.sh` in the `scripts` directory.
 
 ---
 ## Misc links and stuff

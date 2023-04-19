@@ -5,7 +5,7 @@
 # pip3 install http (already in python3.7, no need to install it)
 # [sudo] pip3 install adafruit-circuitpython-bme280
 #
-# Provides REST access to the cache, try GET http://localhost:8080/bme280/data
+# Provides REST access to the BME280 data, try GET http://localhost:8080/bme280/data
 #
 # For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /bme280/nmea-data
 #
@@ -144,6 +144,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("BME280 Value request")
             try:
                 bme280_data: dict = read_bme280()
+                # TODO Headers ?
                 self.wfile.write(json.dumps(bme280_data).encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}

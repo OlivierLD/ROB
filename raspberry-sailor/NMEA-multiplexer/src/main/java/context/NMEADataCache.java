@@ -389,6 +389,9 @@ public class NMEADataCache
 	 */
 	@SuppressWarnings("unchecked")
 	public void parseAndFeed(String nmeaSentence) {
+		if ("true".equals(System.getProperty("mux.data.verbose"))) {
+			System.out.printf(">> NMEADataCache managing sentence %s\n", nmeaSentence);
+		}
 		if (StringParsers.validCheckSum(nmeaSentence)) {
 			// Increment # of messages processed
 			Long nbMess = (Long)this.get(NB_MESS_PROCESSED);
@@ -461,6 +464,9 @@ public class NMEADataCache
 				}
 			} else { // NMEA
 				String id = StringParsers.getSentenceID(nmeaSentence);
+				if ("true".equals(System.getProperty("mux.data.verbose"))) {
+					System.out.printf(">> NMEADataCache managing sentence ID %s\n", id);
+				}
 				switch (id) {
 					case "GGA":
 						List<Object> gga = StringParsers.parseGGA(nmeaSentence, false);
@@ -571,7 +577,7 @@ public class NMEADataCache
 							UTCTime utcTime = new UTCTime(utc.getValue());
 							this.put(GPS_TIME, utcTime);
 
-							if ("true".equals(System.getProperty("zda.verbose"))) {
+							if ("true".equals(System.getProperty("zda.data.verbose"))) {
 								System.out.printf("ZDA: From [%s], GPS date: %s, GPS Time: %s\n", nmeaSentence, StringParsers.SDF_UTC.format(utc.getValue()), StringParsers.SDF_UTC.format(utcTime.getValue()));
 							}
 							GeoPos pos = (GeoPos) this.get(POSITION);
@@ -585,6 +591,8 @@ public class NMEADataCache
 									this.put(GPS_SOLAR_TIME, new SolarDate(solarDate));
 								}
 							}
+						} else if ("true".equals(System.getProperty("zda.data.verbose"))) {
+							System.out.printf(">> ZDA: null for %s\n", nmeaSentence);
 						}
 						break;
 					case "VHW": // Water Speed and Heading
@@ -830,6 +838,10 @@ public class NMEADataCache
 						}
 						break;
 				}
+			}
+		} else {
+			if ("true".equals(System.getProperty("mux.data.verbose"))) {
+				System.out.printf(">> NMEADataCache: Invalid checksum for [%s]\n", nmeaSentence);
 			}
 		}
 	}
