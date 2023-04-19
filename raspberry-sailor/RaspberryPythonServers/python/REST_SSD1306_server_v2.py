@@ -488,7 +488,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("GET on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(400)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -507,7 +507,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         else:
             error = "{} Not found in sample_data\n".format(temp)
             self.send_response(404)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -539,7 +539,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("POST on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -574,7 +574,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             except Exception as error:
                 error: str = f"Exception {repr(error)}\n"
                 self.send_response(404)
-                self.send_header('Content-Type', 'plain/text')
+                self.send_header('Content-Type', 'text/plain')
                 content_len = len(error)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -591,7 +591,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             except Exception as error:
                 error: str = f"Exception {repr(error)}\n"
                 self.send_response(404)
-                self.send_header('Content-Type', 'plain/text')
+                self.send_header('Content-Type', 'text/plain')
                 content_len = len(error)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -601,7 +601,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("PUT on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -613,7 +613,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("DELETE on {} not managed".format(self.path))
         error = "NOT FOUND!"
         self.send_response(400)
-        self.send_header('Content-Type', 'plain/text')
+        self.send_header('Content-Type', 'text/plain')
         content_len = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()

@@ -10,6 +10,7 @@ pushd $(dirname $0)/src/main/python
 echo -e "-- Upgrading build, and building module --"
 python3 -m pip install --upgrade build
 python3 -m build
+# No upload for now.
 # Local deployment:
 echo -e "-- Local deployment --"
 pip install -e ./   # Seems not to work outside venv...

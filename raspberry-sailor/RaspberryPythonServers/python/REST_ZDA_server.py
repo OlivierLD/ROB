@@ -13,14 +13,16 @@
 # $ python3 <...>/REST_ZDA_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false
 #
 import json
+import signal
 import sys
+import os
 # import traceback
-# import time
+import time
 # import math
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 import NMEABuilder   # local script
-import utils         # local script
+# import utils         # local script
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -33,6 +35,8 @@ machine_name: str = "127.0.0.1"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
+
+server_pid: int = os.getpid()  # Used to kill the process
 
 sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
     "1": "First",
@@ -92,7 +96,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 nmea_zda: str = NMEABuilder.build_ZDA()  # + NMEABuilder.NMEA_EOS
                 # defining all the headers
                 self.send_response(200)
-                self.send_header('Content-Type', 'plain/text')
+                self.send_header('Content-Type', 'text/plain')
                 self.end_headers()
                 self.wfile.write(nmea_zda.encode())
             except Exception as exception:
@@ -105,6 +109,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "path": PATH_PREFIX + "/oplist",
                         "verb": "GET",
                         "description": "Get the available operation list."
+                    }, {
+                        "path": PATH_PREFIX + "/exit",
+                        "verb": "POST",
+                        "description": "Careful: terminate the server process."
                     }, {
                         "path": PATH_PREFIX + "/nmea-data",
                         "verb": "GET",
@@ -124,7 +132,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("GET on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(400)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -143,7 +151,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         else:
             error = "{} Not found in sample_data\n".format(temp)
             self.send_response(404)
-            self.send_header('Content-Type', 'plain/text')
+            self.send_header('Content-Type', 'text/plain')
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -154,13 +162,31 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if verbose:
             print("POST request, {}".format(self.path))
             print("POST on {} not managed".format(self.path))
-        error = "NOT FOUND!"
-        self.send_response(404)
-        self.send_header('Content-Type', 'plain/text')
-        content_len = len(error)
-        self.send_header('Content-Length', str(content_len))
-        self.end_headers()
-        self.wfile.write(bytes(error, 'utf-8'))
+        if self.path.startswith(PATH_PREFIX + "/exit"):
+            print(">>>>> ZDA server received POST /exit")
+            # content_len: int = int(self.headers.get('Content-Length'))
+            # post_body = self.rfile.read(content_len).decode('utf-8')
+            # if verbose:
+            #    print("Content: {}".format(post_body))
+            response = {"status": "OK"}
+            response_content = json.dumps(response).encode()
+            self.send_response(201)
+            self.send_header('Content-Type', 'application/json')
+            content_len = len(response_content)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(response_content)
+            time.sleep(2)  # Wait for response to be received
+            print(f">>> Killing ZDA server process ({server_pid}).")
+            os.kill(server_pid, signal.SIGKILL)
+        else:
+            error = "NOT FOUND!"
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/plain')
+            content_len = len(error)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(bytes(error, 'utf-8'))
 
     # PUT method Definition
     def do_PUT(self):
@@ -169,7 +195,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("PUT on {} not managed".format(self.path))
         error = "NOT FOUND!"
         self.send_response(404)
-        self.send_header('Content-Type', 'plain/text')
+        self.send_header('Content-Type', 'text/plain')
         content_len = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()
@@ -181,7 +207,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("DELETE on {} not managed".format(self.path))
         error = "NOT FOUND!"
         self.send_response(400)
-        self.send_header('Content-Type', 'plain/text')
+        self.send_header('Content-Type', 'text/plain')
         content_len = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()
