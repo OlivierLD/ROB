@@ -19,7 +19,7 @@ channels:
     server: localhost
     port: 7001
     verbose: false
-    properties: ~/repos/ROB/raspberry-sailor/RaspberryPythonServers/python.tcp.server.properties  # OnClose trick of the channel
+    properties: <...>/repos/ROB/raspberry-sailor/RaspberryPythonServers/python.tcp.server.properties  # OnClose trick on the channel
 forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds

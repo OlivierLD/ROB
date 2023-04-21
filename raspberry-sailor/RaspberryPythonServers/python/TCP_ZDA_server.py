@@ -54,8 +54,11 @@ def interrupt(sig: int, frame):
     print("\nCtrl+C intercepted!")
     keep_listening = False
     time.sleep(1.5)
-    print(">>> Python TCP ZDA Server Exiting.")
+    print("+---------- From Python ---------+")
+    print("| Python TCP ZDA Server Exiting. |")
+    print("+---------- From Python ---------+")
     info(f'>> INFO: sigint_handler: Received signal {sig} on frame {frame}')
+    time.sleep(2)  # Give time to the client to recover...
     # traceback.print_stack(frame)
     # sys.exit()   # DTC
     os._exit(1)  # Re-DTC
