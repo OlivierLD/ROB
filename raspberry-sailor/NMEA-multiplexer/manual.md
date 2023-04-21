@@ -270,6 +270,34 @@ means "_only RMC, XDR or MDA_".
 > _Note_: a line like `~RMC, MDA` does not mean much, as it would mean [`no RMC` and `just MDA`]. 
 > A line like `MDA` would mean the same thing.
 
+##### A Convention
+If a channel definition has a `properties` member, and if there is a `janitor` member in those properties like this:
+```yaml
+channels:
+  - type: zda
+    properties: mux-configs/dummy.zda.properties
+. . .
+```
+and
+```properties
+janitor=default
+dummy=stuff
+whatever=itizz
+```
+then:  
+If `janitor` is set to `default`, then the default `nmea.consumers.client.Janitor.executeOnClose()` will be executed, with the properties as parameter of the method.  
+Otherwise, the `janitor` will be dynamically loaded, and its `executeOnClose(Properties prop)` method will be executed, with the properties as parameters.  
+All you need to do is to implement your own `Janitor`, and have it in the classpath. It could then
+be mentioned like this:
+```properties
+janitor=my.own.CustomJanitor
+dummy=stuff
+whatever=itizz
+```
+The property values required at runtime (on close) by the `Janitor` would here be the values of `dummy` and `whatever`.
+
+
+
 #### Forwarders
 
 _**ALL**_ forwarders can use 2 _optional_ attributes, `subclass` and `properties`:
@@ -277,7 +305,7 @@ _**ALL**_ forwarders can use 2 _optional_ attributes, `subclass` and `properties
 forward.XX.type=file
 forward.XX.subclass=nmea.forwarders.ExtendedDataFileWriter
 forward.XX.properties=validlogger.properties
-...
+. . .
 ```
 The lines above means that:
 - The `nmea.forwarders.ExtendedDataFileWriter` is a `file` Forwarder (it extends `DataFileWriter`)

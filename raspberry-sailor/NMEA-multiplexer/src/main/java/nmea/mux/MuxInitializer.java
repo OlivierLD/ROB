@@ -168,6 +168,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        serialClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 serialClient.initClient();
                                 serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialPort, Integer.parseInt(br), resetInterval));
                                 serialClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
@@ -200,6 +211,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        restClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 restClient.initClient();
                                 restClient.setReader(new RESTReader("MUX-RESTReader",
                                                         restClient.getListeners(),
@@ -228,6 +250,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        tcpClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 tcpClient.initClient();
                                 if (initialRequest.trim().isEmpty()) {
                                     tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), keepTrying));
@@ -272,6 +305,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        fileClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 fileClient.initClient();
 								fileClient.setLoop(loop);
                                 fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), filename, betweenRec, loop, zip, pathInArchive));
@@ -293,6 +337,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        wsClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 wsClient.initClient();
                                 wsClient.setReader(new WebSocketReader("MUX-WSReader", wsClient.getListeners(), wsUri));
                                 wsClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
@@ -309,6 +364,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        rndClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 rndClient.initClient();
                                 rndClient.setReader(new RandomReader("MUX-RndReader", rndClient.getListeners()));
                                 rndClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
@@ -327,6 +393,17 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        zdaClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
                                 zdaClient.initClient();
                                 zdaClient.setReader(new ZDAReader("MUX-ZDAReader", zdaClient.getListeners()));
                                 zdaClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));

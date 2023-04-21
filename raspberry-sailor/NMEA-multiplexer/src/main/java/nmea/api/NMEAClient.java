@@ -1,5 +1,7 @@
 package nmea.api;
 
+import nmea.consumers.client.Janitor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -159,7 +161,52 @@ public abstract class NMEAClient {
 		}
 	}
 
+	/**
+	 * Called when the MUX shuts down.
+	 */
 	public void stopDataRead() {
+
+		if (this.verbose) {
+			System.out.printf("stopDataRead invoked from %s\n", this.getClass().getName());
+			System.out.printf(">> Properties: %s\n", this.props);
+		}
+
+		if (this.props != null) {
+			/* Convention!! if there is a 'janitor' property, execute the class it mentions.
+			 * janitor=default
+			 * or
+			 * janitor=akeu.coucou.CleanUp
+			 */
+
+			this.props.forEach((name, value) -> {
+				if ("janitor".equals(name)) {
+					// There is something to do on close
+					if ("default".equals(value)) {
+						new Janitor().executeOnClose(this.props);
+					} else {
+						// Execute the class (must be a Janitor)
+						try {
+							final Class<?> janitorClass = Class.forName(value.toString());
+							Object janitorInstance = janitorClass.getDeclaredConstructor();
+							if (janitorInstance instanceof Janitor) {
+								try {
+									((Janitor) janitorInstance).executeOnClose(this.props);
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+							} else {
+								System.err.printf(">> Arf ! Janitor cannot be a %s !\n", janitorInstance.getClass().getName());
+							}
+						} catch (ClassNotFoundException cnfe) {
+							cnfe.printStackTrace();
+						} catch (NoSuchMethodException nsme) {
+							nsme.printStackTrace();
+						}
+					}
+				}
+			});
+		}
+
 		this.getListeners().forEach(listener -> listener.stopReading(new NMEAEvent(this)));
 		// Remove listeners
 		removeAllListeners();
