@@ -98,6 +98,7 @@ fi
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   # Packaging Python scripts
   PYTHON_SRC_DIR=RaspberryPythonServers
+  # TODO Make sure the Python resources were copied from NMEA-Parser
   mkdir ${distdir}/python
   echo -e "Copying Python stuff from ${PYTHON_SRC_DIR}/python into ${distdir}/python"
   cp -R ../../${PYTHON_SRC_DIR}/python/ ${distdir}/python

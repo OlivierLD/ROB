@@ -4,7 +4,7 @@
 name: "Replaying logged data, between Bora-Bora & Tongareva"
 context:
   with.http.server: true
-  http.port: 8080
+  http.port: 9999
   init.cache: true
   deviation.file.name: "dp_2011_04_15.csv"
   max.leeway: 10.0

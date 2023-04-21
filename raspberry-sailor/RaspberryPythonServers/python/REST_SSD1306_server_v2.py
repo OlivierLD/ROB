@@ -54,7 +54,7 @@ DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
 # BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM
-# TODO: More data
+# TODO: More data, and graphics
 
 oled = None
 server_pid: int = os.getpid()
@@ -68,7 +68,7 @@ current_value: int = 0
 keep_looping: bool = True
 nmea_cache: Dict[str, object] = None
 
-ENABLE_SCREEN_SAVER_AFTER: int = 30  # in second
+ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
 enable_screen_saver: bool = True
@@ -735,5 +735,18 @@ except KeyboardInterrupt:
 
 # After all
 if oled is not None:
-    clear()   # TODO Say "Bye"
+    clear()
+    text: str = "Bye-bye..."
+    (font_width, font_height) = font.getsize(text)
+    draw.text(
+        (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+        text,
+        font=font,
+        fill=WHITE,
+    )
+    # Display image
+    oled.image(image)
+    oled.show()
+    time.sleep(2)
+    clear()
 print("Done with REST SSD1306 server.")
