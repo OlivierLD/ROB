@@ -12,8 +12,8 @@ import java.util.Map;
  * !! Work in Progress, not all message types are implemented (yet).
  *
  * Good doc at https://gpsd.gitlab.io/gpsd/AIVDM.html
- * https://www.navcen.uscg.gov/?pageName=AISFAQ
- * https://www.navcen.uscg.gov/?pageName=AISmain
+ *             https://www.navcen.uscg.gov/?pageName=AISFAQ
+ *             https://www.navcen.uscg.gov/?pageName=AISmain
  *
  * On-line decoder at https://www.aggsoft.com/ais-decoder.htm
  *
@@ -563,7 +563,7 @@ public class AISParser {
 	public AISRecord parseAIS(String sentence) throws AISException { // Must be non-static..., for multi-messages types.
 
 		if (verbose) {
-			System.out.println(String.format(">> AIS Parsing [%s]", sentence));
+			System.out.printf(">> AIS Parsing [%s]\n", sentence);
 		}
 
 		boolean valid = StringParsers.validCheckSum(sentence);
@@ -644,14 +644,14 @@ public class AISParser {
 						}
 						setAISData(a, aisRecord, intValue);
 						if (decodeVerbose) {
-							System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+							System.out.printf("Data %s, %s, %d chars becomes %d\n",
 									a,
 									binStr,
 									binStr.length(),
-									intValue));
+									intValue);
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Types 1, 2, 3: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Types 1, 2, 3: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -671,14 +671,14 @@ public class AISParser {
 						}
 						setAISData(a, aisRecord, intValue);
 						if (decodeVerbose) {
-							System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+							System.out.printf("Data %s, %s, %d chars becomes %d\n",
 									a,
 									binStr,
 									binStr.length(),
-									intValue));
+									intValue);
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Type 4: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Type 4: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -698,7 +698,7 @@ public class AISParser {
 								setAISData(a, aisRecord, intValue);
 							}
 						} else if (verbose) {
-							System.out.println(String.format(">> Type 5: Out of binString [%s]", a.toString()));
+							System.out.printf(">> Type 5: Out of binString [%s]\n", a.toString());
 						}
 					}
 					// After processing, reset buffer
@@ -724,7 +724,7 @@ public class AISParser {
 								setAISData(a, aisRecord, binStr);
 							}
 						} else if (verbose) {
-							System.out.println(String.format(">> Type 8: Out of binString [%s]", a.toString()));
+							System.out.printf(">> Type 8: Out of binString [%s]\n", a.toString());
 						}
 					}
 					// After processing, reset buffer
@@ -740,14 +740,14 @@ public class AISParser {
 						int intValue = Integer.parseInt(binStr, 2);
 						setAISData(a, aisRecord, intValue);
 						if (decodeVerbose) {
-							System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+							System.out.printf("Data %s, %s, %d chars becomes %d\n",
 									a,
 									binStr,
 									binStr.length(),
-									intValue));
+									intValue);
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Type 15: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Type 15: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -767,14 +767,14 @@ public class AISParser {
 						}
 						setAISData(a, aisRecord, intValue);
 						if (decodeVerbose) {
-							System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+							System.out.printf("Data %s, %s, %d chars becomes %d\n",
 									a,
 									binStr,
 									binStr.length(),
-									intValue));
+									intValue);
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Type 18: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Type 18: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -785,14 +785,14 @@ public class AISParser {
 						int intValue = Integer.parseInt(binStr, 2);
 						setAISData(a, aisRecord, intValue);
 						if (decodeVerbose) {
-							System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+							System.out.printf("Data %s, %s, %d chars becomes %d\n",
 									a,
 									binStr,
 									binStr.length(),
-									intValue));
+									intValue);
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Type 20: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Type 20: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -801,7 +801,7 @@ public class AISParser {
 					if (a.to() < binString.length()) {
 						String binStr = binString.substring(a.from(), a.to());
 						if (a.equals(AISDataType21.NAME) || a.equals(AISDataType21.NAME_EXTENSION)) {
-
+							// Duh ?
 						} else {
 							int intValue = Integer.parseInt(binStr, 2);
 							if (a.equals(AISDataType21.LATITUDE) || a.equals(AISDataType21.LONGITUDE)) {
@@ -815,15 +815,15 @@ public class AISParser {
 							}
 							setAISData(a, aisRecord, intValue);
 							if (decodeVerbose) {
-								System.out.println(String.format("Data %s, %s, %d chars becomes %d",
+								System.out.printf("Data %s, %s, %d chars becomes %d\n",
 										a,
 										binStr,
 										binStr.length(),
-										intValue));
+										intValue);
 							}
 						}
 					} else if (verbose) {
-						System.out.println(String.format(">> Type 21: Out of binString [%s]", a.toString()));
+						System.out.printf(">> Type 21: Out of binString [%s]\n", a.toString());
 					}
 				}
 				break;
@@ -835,7 +835,7 @@ public class AISParser {
 				if ("A".equals(partNo)) {
 					for (AISDataType24A a : AISDataType24A.values()) {
 						if (verbose) {
-							System.out.println(String.format("Type 24: %s [%d, %d], len:%d :: %s, %s", a.toString(), a.from(), a.to(), binString.length(), aisData, binString));
+							System.out.printf("Type 24: %s [%d, %d], len:%d :: %s, %s\n", a.toString(), a.from(), a.to(), binString.length(), aisData, binString);
 						}
 						if (a.to() < binString.length()) {
 							String binStr = binString.substring(a.from(), a.to());
@@ -846,13 +846,13 @@ public class AISParser {
 								setAISData(a, aisRecord, intValue);
 							}
 						} else if (verbose) {
-							System.out.println(String.format(">> Type 24A, Out of binString [%s]", a.toString()));
+							System.out.printf(">> Type 24A, Out of binString [%s]\n", a.toString());
 						}
 					}
 				} else {  // Assume "B"
 					for (AISDataType24B a : AISDataType24B.values()) {
 						if (verbose) {
-							System.out.println(String.format("Type 24: %s [%d, %d], len:%d :: %s, %s", a.toString(), a.from(), a.to(), binString.length(), aisData, binString));
+							System.out.printf("Type 24: %s [%d, %d], len:%d :: %s, %s\n", a.toString(), a.from(), a.to(), binString.length(), aisData, binString);
 						}
 						if (a.to() < binString.length()) {
 							String binStr = binString.substring(a.from(), a.to());
@@ -863,7 +863,7 @@ public class AISParser {
 								setAISData(a, aisRecord, intValue);
 							}
 						} else if (verbose) {
-							System.out.println(String.format(">> Type 24B, Out of binString [%s]", a.toString()));
+							System.out.printf(">> Type 24B, Out of binString [%s]\n", a.toString());
 						}
 					}
 				}
@@ -1216,7 +1216,7 @@ public class AISParser {
 			String bin = StringUtils.lpad(Integer.toBinaryString(c), 6, "0");
 			sb.append(bin);
 			if (decodeVerbose) {
-				System.out.println(String.format("%c becomes %s (%d)", encoded.charAt(i), bin, c));
+				System.out.printf("%c becomes %s (%d)\n", encoded.charAt(i), bin, c);
 			}
 //    sb.append(" ");
 		}
@@ -1237,7 +1237,7 @@ public class AISParser {
 
 	private enum MonthSizeOption {
 		LONG, SHORT
-	};
+	}
 	private final static String[] SHORT_MONTHS = {
 			"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 			"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"

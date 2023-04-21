@@ -16,8 +16,29 @@ import java.util.function.Consumer;
 
 /**
  * AIS Manager. WIP.
- * Uses current position and AIS data to detect possible collision threats.
+ * Uses current position and AIS data to detect <u>possible collision threats</u>.
+ * <br/>
  * Does NOT put anything in the cache.
+ * <br/>
+ * To be used as a custom computer:
+ * <pre>
+ * computers:
+ *   - class: nmea.computers.AISManager
+ *     properties: mux-configs/ais.mgr.properties
+ * </pre>
+ * Properties file like:
+ * <pre>
+ * # Properties of the AISManager Computer
+ * minimum.distance=5
+ * heading.fork.width=10
+ *
+ * # For test (big distance, big fork)
+ * #minimum.distance=50
+ * #heading.fork.width=90
+ *
+ * # collision.threat.callback=nmea.computers.SpeakingCallback
+ * collision.threat.callback=default
+ * </pre>
  */
 public class AISManager extends Computer {
 
@@ -26,7 +47,7 @@ public class AISManager extends Computer {
 	private final static double DEFAULT_HEADING_FORK = 10;
 	private double headingFork = DEFAULT_HEADING_FORK;
 
-	private AISParser aisParser = new AISParser();
+	private final AISParser aisParser = new AISParser();
 
 	public AISManager(Multiplexer mux) {
 		super(mux);
@@ -48,7 +69,7 @@ public class AISManager extends Computer {
 	@Override
 	public void write(byte[] mess) {
 		String sentence = new String(mess);
-//	System.out.println(String.format("In AIS Computer, write method: %s", sentence));
+        // System.out.println(String.format("In AIS Computer, write method: %s", sentence));
 
 		if (StringParsers.validCheckSum(sentence)) {
 			if (sentence.startsWith(AISParser.AIS_PREFIX)) {
