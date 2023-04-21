@@ -2,6 +2,7 @@ package nmea.api;
 
 import nmea.consumers.client.Janitor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -187,7 +188,7 @@ public abstract class NMEAClient {
 						// Execute the class (must be a Janitor)
 						try {
 							final Class<?> janitorClass = Class.forName(value.toString());
-							Object janitorInstance = janitorClass.getDeclaredConstructor();
+							Object janitorInstance = janitorClass.getDeclaredConstructor().newInstance();
 							if (janitorInstance instanceof Janitor) {
 								try {
 									((Janitor) janitorInstance).executeOnClose(this.props);
@@ -195,12 +196,16 @@ public abstract class NMEAClient {
 									ex.printStackTrace();
 								}
 							} else {
-								System.err.printf(">> Arf ! Janitor cannot be a %s !\n", janitorInstance.getClass().getName());
+								System.err.printf(">> Arf ! Janitor %s cannot be a %s !\n",
+										value.toString(),
+										janitorInstance.getClass().getName());
 							}
 						} catch (ClassNotFoundException cnfe) {
 							cnfe.printStackTrace();
 						} catch (NoSuchMethodException nsme) {
 							nsme.printStackTrace();
+						} catch (InstantiationException | IllegalAccessException | InvocationTargetException oops) {
+							oops.printStackTrace();
 						}
 					}
 				}
