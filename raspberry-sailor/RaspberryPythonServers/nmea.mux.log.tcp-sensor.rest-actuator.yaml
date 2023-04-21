@@ -14,12 +14,12 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: 0
-  # TODO an onclose for the tcp channel ?
 channels:
   - type: tcp
     server: localhost
     port: 7001
     verbose: false
+    properties: ~/repos/ROB/raspberry-sailor/RaspberryPythonServers/python.tcp.server.properties  # OnClose trick of the channel
 forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds
