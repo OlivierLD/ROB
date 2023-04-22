@@ -110,8 +110,15 @@ fi
 #
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
-# Drop directory
-rm -rf ${distdir}
+# Drop directory ?
+echo -en "Can we drop the ${distdir} directory ? > "
+read REPLY
+if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+  echo -e "Ok, moving on."
+  rm -rf ${distdir}
+else
+  echo -e "OK. This will be your responsibility to clean it up."
+fi
 #
 # 5 - Ready!
 #

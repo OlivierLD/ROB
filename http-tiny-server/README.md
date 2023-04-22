@@ -40,8 +40,12 @@ If `autobind` exists and is set to `true`, no `BindException` will be raised eve
 It also comes with a Java client so you can make HTTP requests from your Java code, see [`http.client.HTTPClient.java`](src/main/java/http/client/HTTPClient.java).
 
 ##### Static pages
-Driven by the `static.docs` property, of the `Properties` object mentioned above. Defaulted to `/web/`.
-Whatever request points to this resource(s) will be treated as a static request.
+Driven by the `static.docs` property, of the `Properties` object mentioned above. **Defaulted to `/web/`**.
+Whatever request points to this resource(s) will be treated as a static request.  
+This `static.docs` can be a list of comma-separated values, like
+```
+-Dstatic.docs="/web/,/here/,/there/"
+```
 
 > Example: you started the `HTTPServer` with the default properties.
 > A request like `http://localhost:9999/web/index.html` will look for an `index.html` in a `web` directory
@@ -54,6 +58,41 @@ Whatever request points to this resource(s) will be treated as a static request.
 > Example: from a browser, reach `http://localhost:9999/test`, you should see a page saying "Test is OK".
 
 See the code (comments and javadoc) for more details.
+
+###### A Bonus!
+There is also a property named `static.zip.docs`, that tells the server to look into an archive to get to the static docs.  
+The default value of this property is `/zip/`. This means that if a resource begins with `/zip/`, it will look for the required
+docs (html, css, js, etc) into a zip file; the default name of this zip file is `web.zip`, and can be changed by setting the value of the `web.archive` property.  
+The `static.zip.docs` property can also be a comma-separated list of values.
+```
+-Dstatic.zip.docs="/zip/,/zap/,/zoop/" -Dweb.archive=supersite.zip
+```
+
+> Note:  
+> To see the content of a zip file, type
+> ```
+> $ unzip -l nmea-dist/supersite.zip
+> Archive:  nmea-dist/supersite.zip
+> Length      Date    Time    Name
+> ---------  ---------- -----   ----
+>     65299  03-26-2023 01:40   admin.html
+>      3605  12-30-2022 09:41   basic.html
+>     23892  02-11-2023 08:23   console.html
+>         0  12-24-2022 08:41   css/
+>       325  12-19-2021 10:23   css/black.css
+>      2411  12-19-2021 10:23   css/night.stylesheet.css
+>      2486  12-19-2021 10:23   css/stylesheet.css
+>      . . .
+>       788  12-19-2021 10:23   images/crosshair.png
+>      4016  12-27-2022 01:22   index.html
+>      2557  08-13-2022 08:21   index.min.html
+>         0  03-31-2023 05:35   js/
+>      . . .
+> ```
+With the properties set as above, if a request like `/zoop/index.html` comes in,
+the server will look into an archive named `supersite.zip` to get - at its root - the `index.html` resource.  
+This is not like uglyfying or minimizing the web resources (this can be done before archiving though), but that considerably reduces
+the volume required to store them.
 
 ##### REST server
 To serve REST requests, you need to implement a `RESTRequestManager` interface.

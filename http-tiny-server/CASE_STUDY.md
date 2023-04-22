@@ -1,5 +1,9 @@
 # Case Study (WiP)
-> I want to run a simple HTTP server on my own box,
+This document shows how web servers can be implemented, in several languages. They all give the same result (hopefully). This is just to give you an idea of the
+effort it takes, and that will also give you the possibility to measure (later on) the memory and CPU it takes in each case.
+
+> _**Here is the main requirement**_:  
+> I want to run a simple HTTP server on my own local box,
 > possibly managing REST requests.  
 > How can I do that?  
 > What language can I use?
@@ -10,13 +14,15 @@
 - From the directory you did the `gradle test` from, you want to see the test results, from a browser running on a laptop, which is not where the tests have been running.
 - If the IP address of the _server_ where the tests have been running is `192.168.1.18`, you'd like to reach a url like <http://192.168.1.18:9876/build/reports/tests/test/index.html> ...
 
-This requires some kind of small HTTP server, to serve this HTTP request.
+This requires some kind of small HTTP server, to serve this HTTP request.  
+The server will have - obviously - to be running on the box the `gradle test` has been performed on,
+the one with the IP address `192.168.1.18` here. 
 
-And several options are available.
+Several options are available.
 
 
 ## Python
-Port default value is 8000, if the variable (`HTTP_PORT` below) is not set.
+Port default value is 8000, if the variable `HTTP_PORT` (see below) is not set.
 ```text
 $ HTTP_PORT=8000
 $ python3 -m http.server ${HTTP_PORT}
@@ -24,7 +30,7 @@ $ python3 -m http.server ${HTTP_PORT}
 
 ## NodeJS
 Requires a little bit of code, like this [`server.js`](./server.js).  
-Then run `node server.js`. The port number is set in the code.
+Then run `node server.js`. The port number is set in the code, look inti it.
 
 ## php
 To know if a php server is installed, type
@@ -70,5 +76,9 @@ $ wget http://${HOST_NAME}:${HTTP_PORT}/web/index.html -o test.html
 Of course, modify the environment variables `HOST_NAME` and `HTTP_PORT`.  
 Depending on the various flavors, the ports are `8000`, `8080`, `3000`, `9876`. They all can be changed,
 but just make sure you are using in the request the port you've set for the server.
+
+And by the way, to get to the test results we started from, from a browser, you want
+to reach <http://192.168.1.18:9876/build/reports/tests/test/index.html>. Make sure the port matches your server's settings, and make sure you've started the server
+from the directory you ran the tests from.
 
 ---
