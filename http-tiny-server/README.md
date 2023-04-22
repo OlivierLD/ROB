@@ -349,9 +349,6 @@ With a Graphical UI, run the class `utils.proxyguisample.ProxyGUI`:
 ![Proxy GUI](./ProxyGUI.png)
 
 ## Bonus(es)
-- Not 100% related, but could be useful, there is the skeleton of a 
-Python HTTP/REST server, along with some use-cases and scenarios, [here](../http-client-paradigm/src/main/python-skeletons/README.md).
-
 - Also see the script `small.server.sh`, to have this tiny http server ready from anywhere.
 
 - [Case Study](./CASE_STUDY.md) (several possibilities)
