@@ -64,16 +64,16 @@ import java.util.regex.Pattern;
  *     VPW Device measured velocity parallel true wind
  *     <pre>
  * VPW - Speed - Measured Parallel to Wind
-       1   2 3   4 5
-       |   | |   | |
-$--VPW,x.x,N,x.x,M*hh<CR><LF>
-Field Number:
- 1) Speed, "-" means downwind
- 2) N = Knots
- 3) Speed, "-" means downwind
- 4) M = Meters per second
- 5) Checksum
------------------
+ *        1   2 3   4 5
+ *        |   | |   | |
+ * $--VPW,x.x,N,x.x,M*hh<CR><LF>
+ * Field Number:
+ *  1) Speed, "-" means downwind
+ *  2) N = Knots
+ *  3) Speed, "-" means downwind
+ *  4) M = Meters per second
+ *  5) Checksum
+ * -----------------
  *     </pre>
  *   </li>
  *   <li>ZLZ Time of Day</li>

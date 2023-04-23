@@ -10,6 +10,7 @@
 #
 # Also see:
 # - https://pythonhosted.org/pyserial/pyserial.html
+# - https://pyserial.readthedocs.io/en/latest/shortintro.html
 # - https://pyserial.readthedocs.io/en/latest/pyserial.html
 #
 # Read Serial port, parse NMEA Data.
