@@ -83,7 +83,7 @@ PROXY_CMD=
 # An example:
 # PROXY_CMD="-e use_proxy=yes -e http_proxy=http://www-proxy.us.oracle.com:80 -e https_proxy=http://www-proxy.us.oracle.com:80"
 #
-# Values below are the same as in faxes.js, in the json bject named faxTransformer
+# Values below are the same as in faxes.js, in the json object named faxTransformer
 if [[ "${SPOT_OPTION}" == "atl" ]]; then
   # North-West Atlantic Sat Pic: http://tropic.ssec.wisc.edu/real-time/atlantic/images/xxirg8bbm.jpg
   wget ${QUIET} ${PROXY_CMD} http://tropic.ssec.wisc.edu/real-time/atlantic/images/xxirg8bbm.jpg --output-document NW-Atl-SP.jpg

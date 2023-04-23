@@ -1,4 +1,5 @@
 /**
+ * Runs on nodeJS.
  * This is a small and tiny Web server. Mostly serves static pages and files.
  */
 "use strict";

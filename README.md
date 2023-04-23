@@ -121,7 +121,7 @@ and consolidate the number of dependencies to external libraries. For example, f
 
 The web pages and scripts _**do not rely on any external framework**_ (_no_ JQuery, Underscore, etc). It's 100% organic.
 It's using vanilla ES6 features, like Promises. <!-- https://kinsta.com/blog/javascript-libraries/ -->
-> Note: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) **are** great tools. The goal here is to minimize the dependencies,
+> _**Note**_: Those JavaScript frameworks (JQuery, Underscore, React.js, etc) **are** great tools. The goal here is to minimize the dependencies,
 > as well as the final volume of the code and archives.
 
 And we will try to implement Consumers, Forwarders and Computers as pluggable components, to facilitate the required customizations.
@@ -133,7 +133,7 @@ At the root, we have some generic building blocks, like
 - `Serial-IO` and `SerialRxTx`
 
 The `Java-TCP-Python` module gathers the different experiments done to establish
-a bridge between Java and Python.
+a bridge between Java and Python. It's more like a playground.
 
 In the `astro-computer` directory, there are two modules for celestial calculations (in several
 languages: Java, Scala, Python, C, go, ES6, and some Jupyter Notebooks).
@@ -142,7 +142,7 @@ All those things will come together in the directory `raspberry-sailor`.
 It contains REST wrappers (usable from and by the `http-tiny-server`) around the features we will need, like NMEA Parser,
 Tide calculations, Routing (and GRIB management), etc.  
 The main building block is the `NMEA-multiplexer`. This one can run as it is, but it can also be enriched end extended.
-> _**Note**_: The `NMEA-multiplexer` contains "some" Python TCP and REST servers for sensor and actuator data access.
+> _**Note**_: The `RaspberryPythonServer` contains "some" Python TCP and REST servers for sensors and actuators data access.
 
 It provides REST access to the data it deals with, so all its features can be accessed through HTTP (from Services, and/or Web pages).   
 Illustrations of the ways to put it to work are available under `MUX-implementations`.  
@@ -209,7 +209,7 @@ You can very well have the GPS and NMEA data read from one Raspberry Pi somewher
 feeding the NMEA-multiplexer, located on another board.
 
 ## TODO next
-Wow! Vast topic...
+Wow! Vast topic too...
 
 - Docker Images ? For now, see [here](https://github.com/OlivierLD/raspberry-coffee/tree/master/docker).
   - Docker can run on a Raspberry Pi, this would simplify deployment and installation steps.

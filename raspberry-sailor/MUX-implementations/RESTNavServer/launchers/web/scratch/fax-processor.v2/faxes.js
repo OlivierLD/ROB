@@ -3,15 +3,15 @@
  */
 
 const NO_COLOR_CHANGE = 0;
-const TO_RED = 1;
-const TO_BLUE = 2;
-const TO_GREEN = 3;
-const TO_PURPLE = 4;
+const TO_RED          = 1;
+const TO_BLUE         = 2;
+const TO_GREEN        = 3;
+const TO_PURPLE       = 4;
 
 /**
  * This procedure changes the color of a fax.
  * The black is changed to the given color.
- * TRh white is turned transparent.
+ * The white is turned transparent.
  * 
  * We assume that the original fax comes in black and white.
  * Only black and white.
@@ -19,7 +19,7 @@ const TO_PURPLE = 4;
 transformFax = (imgCanvasName, canvasName, changeBlackTo) => {
   const img = document.getElementById(imgCanvasName);
   const canvas = document.getElementById(canvasName);
-  let ctx = canvas.getContext("2d");
+  let ctx = canvas.getContext("2d", { willReadFrequently: true });
 
   if (img.width === 0 || img.height === 0) {
     // Something's not right...
@@ -103,7 +103,7 @@ const faxTransformer = {
   "atlantic-n-00" : [
     { 
       "name": "NW Atlantic SatPic",
-      "url": "http://tropic.ssec.wisc.edu/real-time/atlantic/images/xxirg8bbm.jpg",
+      "url": "http://tropic.ssec.wisc.edu/real-time/atlantic/images/xxirg8bbm.jpg", // Warning: Not a Mercator Projection
       "downloadTo": "NW-Atl-SP.jpg",
       "fromTo": {
         "from": "left-sp",
@@ -120,7 +120,7 @@ const faxTransformer = {
     },
     { 
       "name": "NE Atlantic SatPic",
-      "url": "http://tropic.ssec.wisc.edu/real-time/europe/images/xxirm7bbm.jpg",
+      "url": "http://tropic.ssec.wisc.edu/real-time/europe/images/xxirm7bbm.jpg", // Warning: Not a Mercator Projection
       "downloadTo": "NE-Atl-SP.jpg",
       "fromTo": {
         "from": "right-sp",
@@ -293,7 +293,7 @@ doOnLoad = (option) => {
   // res.header('Access-Control-Allow-Methods', '*');
   // res.header('Access-Control-Allow-Headers', '*');
   // res.header('Access-Control-Max-Age', '3600');
-  // leftFax.setAttribute('crossOrigin', '*'); // Need Access-Control-Allow-Origin
+  // leftFax.setAttribute('crossOrigin', '*'); // Need Access-Control-Allow-Origin, from the server... !
   // leftFax.src = "https://tgftp.nws.noaa.gov/fax/PYAA12.gif"
 
   const DEFAULT_SPOT = 'atlantic-n-00';

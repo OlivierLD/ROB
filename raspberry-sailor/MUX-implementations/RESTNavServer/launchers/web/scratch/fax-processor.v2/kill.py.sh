@@ -17,7 +17,7 @@ else
   fi
 fi
 #
-ps -ef | grep 'python.*http.server' | grep -v grep | awk '{ print $2 }' > km
+ps -ef | grep 'ython.*http.server' | grep -v grep | awk '{ print $2 }' > km
 NB_L=$(cat km | wc -l)
 if [[ ${NB_L} -eq 0 ]]; then
   echo -e "No Python fax server process found."
