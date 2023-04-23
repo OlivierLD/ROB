@@ -24,6 +24,7 @@ transformFax = (imgCanvasName, canvasName, changeBlackTo) => {
   if (img.width === 0 || img.height === 0) {
     // Something's not right...
     throw `image on ${canvasName} has some 0-dimension: w: ${img.width}, h: ${img.height}`;
+    // console.info(`image on ${canvasName} has some 0-dimension: w: ${img.width}, h: ${img.height}`);
   }
 
   canvas.width = img.width;
