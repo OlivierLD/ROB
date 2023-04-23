@@ -36,6 +36,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -2611,8 +2612,10 @@ public class RESTImplementation {
 		// For appropriate JSON(/Jackson) rendering, make sure every sub-component is a JavaBean (or at least has getters).
 		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 
-		if (cache != null && (tiny || txt)) {
-			REMOVE_WHEN_TINY.stream().forEach(cache::remove);
+		Map<String, Object> clonedCache = tiny ? new HashMap<>(cache) : cache; // Clone, not to affect the cache when tiny (some members are removed)
+
+		if (clonedCache != null && (tiny)) { //  || txt)) {
+			REMOVE_WHEN_TINY.stream().forEach(clonedCache::remove);
 		}
 
 		String content = "";
@@ -2640,22 +2643,31 @@ public class RESTImplementation {
 			String date = "";
 			int year = 0, month = 0, day = 0, hours = 0, mins = 0, secs = 0;
 			try {
-				// Use Calendar (JDK 11)...
-				Calendar cal = new GregorianCalendar();
-				cal.setTime(((UTCDate)cache.get(NMEADataCache.GPS_SOLAR_TIME)).getValue());
-				date = (cache.get(NMEADataCache.GPS_DATE_TIME)).toString();
+				if (false) { // Previous option...
+					// Use Calendar (JDK 11)...
+					Calendar cal = new GregorianCalendar();
+					cal.setTime(((UTCDate) cache.get(NMEADataCache.GPS_SOLAR_TIME)).getValue());
+					date = (cache.get(NMEADataCache.GPS_DATE_TIME)).toString();
 //				year = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getYear();
-				year = cal.get(Calendar.YEAR);
+					year = cal.get(Calendar.YEAR);
 //				month = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getMonth();
-				month = cal.get(Calendar.MONTH);
+					month = cal.get(Calendar.MONTH);
 //				day = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getDate(); // .getDay();
-				day = cal.get(Calendar.DAY_OF_MONTH);
+					day = cal.get(Calendar.DAY_OF_MONTH);
 //				hours = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getHours();
-				hours = cal.get(Calendar.HOUR_OF_DAY);
+					hours = cal.get(Calendar.HOUR_OF_DAY);
 //				mins = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getMinutes();
-				mins = cal.get(Calendar.MINUTE);
+					mins = cal.get(Calendar.MINUTE);
 //				secs = ((UTCDate)cache.get(NMEADataCache.GPS_DATE_TIME)).getValue().getSeconds();
-				secs = cal.get(Calendar.SECOND);
+					secs = cal.get(Calendar.SECOND);
+				} else {
+					year = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getYear();
+					month = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getMonth();
+					day = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getDay();
+					hours = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getHour();
+					mins = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getMin();
+					secs = ((UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME)).getFmtDate().getSec();
+				}
 			} catch (Exception absorb) {
 			}
 
@@ -2716,7 +2728,7 @@ public class RESTImplementation {
 			try {
 //				final byte[] ba = mapper.writeValueAsBytes(cache);
 //				content = new String(ba, "UTF-8");
-				content = mapper.writeValueAsString(cache); // jsonElement != null ? jsonElement.toString() : "";
+				content = mapper.writeValueAsString(clonedCache); // jsonElement != null ? jsonElement.toString() : "";
 				if (false && content.contains("°")) {
 					content = content.replace('°', '*'); // ' '); TODO There must be a better way...
 				}

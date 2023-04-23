@@ -137,10 +137,10 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
 	echo -e "|  ${RED}6${NC}. Replay logged kayak data (Drakes Estero)                                            |  ${RED}6b${NC}. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
 	echo -e "|  ${RED}7${NC}. Replay logged driving data (with a Maps)                                            |  ${RED}8${NC}.  Replay logged kayak data, ANSI console display                                     |"
-	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), ANSI console display            |  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point),                            |"
-	echo -e "|            (Big file)                                                                   |             (there is some current in that one, it's in the SF Bay)                     |"
-	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display            |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
-	echo -e "|            (Big file)                                                                   |             (requires a NodeJS WebSocket server to be running)                          |"
+	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), TCP & GPSd forwarders (Big file)|  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point),                            |"
+	echo -e "|                                                                                         |             (there is some current in that one, it's in the SF Bay)                     |"
+	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display (Big file) |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
+	echo -e "|                                                                                         |             (requires a NodeJS WebSocket server to be running)                          |"
 	echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |                                                                                         |"
 	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
 	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
@@ -250,7 +250,8 @@ while [[ "${GO}" == "true" ]]; do
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_8}
 	        ;;
 	      "9")
-	        PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
+	        # PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
+	        PROP_FILE=mux-configs/nmea.mux.bora.tgrva.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9}
 	        ;;
 	      "9b")
@@ -482,7 +483,8 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "9")
-	    PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
+	    # PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
+	    PROP_FILE=mux-configs/nmea.mux.bora.tgrva.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file

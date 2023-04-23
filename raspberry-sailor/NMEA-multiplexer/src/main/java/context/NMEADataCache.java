@@ -415,7 +415,7 @@ public class NMEADataCache
 					if (asIsMap != null) {
 						asIsMap.put(sentenceId, nmeaSentence);
 					} else {
-						System.out.println(">>> Oops! asIsMap is null!");
+						System.out.println(">>> Oops! as-is Map is null!");
 					}
 					break;
 			}
