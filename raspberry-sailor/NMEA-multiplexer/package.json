@@ -18,11 +18,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OlivierLD/raspberry-coffee"
+    "url": "git+https://github.com/OlivierLD/ROB"
   },
   "author": "Olivier LeDiouris <olivier.lediouris@gmail.com>",
   "bugs": {
-    "url": "https://github.com/OlivierLD/raspberry-coffee/issues"
+    "url": "https://github.com/OlivierLD/ROB/issues"
   },
-  "homepage": "https://github.com/OlivierLD/raspberry-coffee#readme"
+  "homepage": "https://github.com/OlivierLD/ROB#readme"
 }

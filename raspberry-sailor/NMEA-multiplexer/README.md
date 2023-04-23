@@ -4,7 +4,7 @@
 _Summary of the links used in this document:_
 - [Get started, fast](./getstarted.md)
 - [Manual](./manual.md)
-- [Note on WebSockets](./WebSockets.md)
+- [Note on WebSocket](./WebSockets.md)
 - [Demos](./demos.md)
 - [Examples](./examples.md)
 - [Case Study](./casestudy.md). Comparison with Node-RED
@@ -78,17 +78,20 @@ _For example_:
 > 
 > > This being said... You will see in this project that there is a data-cache that can be used,
 > > at least, in the case of the REST Server (also part of this project, and heavily used in the `RESTNavServer`).
-> > This cache can be pinged and used from REST requests; as such, it has a JSON format...,
+> > This cache can be pinged and used from REST requests; as such, it supports a JSON format...,
 > > the requirements sound a lot like the ones SignalK is addressing.
 > >
-> > **The remaining point would be to agree on the JSON Schema to use, and there no standard about that yet.**
+> > **The remaining point would be to agree on the JSON Schema to use, but there is no standard about that yet.**
 
 --------
 This NMEAMultiplexer will deal with NMEA Data, in input, as well as for output, in order to preserve - as much as possible -
 compatibility with other programs. Everyone understands NMEA.  
 The "only" exception to this rule will be the structure of the data cache, which brings us back to the note above...
 
-This NMEAMultiplexer can use any input (File, Serial, TCP, UDP, WebSocket, Sensors, Computations, ...), produce any output (File, Serial, TCP, UDP, WebSockets...), and use a REST API on top of that.
+This NMEAMultiplexer can 
+- use many input protocols (File, Serial, TCP, UDP, WebSockets, Sensors, Computations, ...) 
+- produce many outputs (File, Serial, TCP, UDP, WebSockets...) 
+- and use a REST API on top of that.
 
 At the heart of this lies a small http server ([part of this project](../http-tiny-server/README.md)), designed to run on _very small_ boards, like a Raspberry Pi Zero, and with possibly _no_ Internet access.
 > _Warning_ ⚠️: It is not designed to scale as an enterprise server!
@@ -113,7 +116,7 @@ For the impatient: go [here](#to-see-it-at-work-aka-get-started) to get started 
 - TCP Reader / Writer
 - REST Reader / Writer
 - UDP Reader / Writer
-- WebSocket client (read/write)
+- WebSockets client (read/write)
 - ... and more.
 
 #### Also includes
