@@ -29,11 +29,15 @@ import java.util.regex.Pattern;
  * <ul>
  *   <li>BAT (battery status, NOT standard)</li>
  *   <li>DBT (Depth Below Transducer)</li>
+ *   <li>DBS (Depth Below Surface)</li>
  *   <li>DPT (Depth)</li>
  *   <li>GGA (GPS Data)</li>
  *   <li>GLL (Geographical Latitude Longitude)</li>
  *   <li>GSA (GPS Satellites Data)</li>
  *   <li>GSV (GPS Detailed satellites data)</li>
+ *   <li>GBS (GPS Satellite Fault Detection)</li>
+ *   <li>SSD (Ship Static Data)</li>
+ *   <li>VSD (Voyage Static Data)</li>
  *   <li>HDM (Heading, Magnetic)</li>
  *   <li>HDT (Heading, True)</li>
  *   <li>MDA (Meteorological Composite)</li>
@@ -79,6 +83,7 @@ import java.util.regex.Pattern;
  *   <li>ZLZ Time of Day</li>
  * </ul>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
+ * Also see https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  */
 public class StringParsers {
 
@@ -578,6 +583,93 @@ public class StringParsers {
 		al.add(alt);
 
 		return al;
+	}
+
+	public static class GBS {
+		int hours = 0, mins = 0;
+		float secs = 0f;
+		double sigmaErrorLat =0d, sigmaErrorLong = 0d, sigmaErrorAlt = 0d;
+		int satId = 0; // TODO Double ?
+		double probMissedDetection = 0d, biasInMeters = 0d, stdDevOfBias = 0d;
+
+		@Override
+		public String toString() {
+			return String.format("HMS: %d:%d:%2.2f, SigErrLat:%f, SigErrLng:%f, SigErrAlt:%f, SatID: %d, PMD: %f, BIM: %f, SDB: %f",
+					hours, mins, secs, sigmaErrorLat, sigmaErrorLong, sigmaErrorAlt,
+					satId, probMissedDetection, biasInMeters, stdDevOfBias);
+		}
+	}
+	public static GBS parseGBS(String data) {
+		/*
+		GPS Satellite Fault Detection
+
+ $--GBS,hhmmss.ss,x.x,x.x,x.x,x.x,x.x,x.x,x.x*hh<CR><LF>
+        |         |   |   |   |   |   |   |   |
+        |         |   |   |   |   |   |   |   9 - Checksum
+        |         |   |   |   |   |   |   8 - Standard deviation of bias estimate
+        |         |   |   |   |   |   7 - Estimate of bias in meters on most likely failed satellite
+        |         |   |   |   |   6 - Probability of missed detection for most likely failed satellite
+        |         |   |   |   5 - ID of most likely failed satellite (1 to 138)
+        |         |   |   4 - Expected 1-sigma error in altitude (meters)
+        |         |   3 - Expected 1-sigma error in longitude (meters)
+        |         2 - Expected 1-sigma error in latitude (meters)
+        1 - UTC time of the GGA or GNS fix associated with this sentence. hh is hours, mm is minutes, ss.ss is seconds
+
+ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitlab.io/gpsd/NMEA.html#_gbs_gps_satellite_fault_detection)
+          $GPGBS,163317.00,7.3,5.2,11.7,,,,*74
+                 |         |   |   |
+                 |         |   |   4
+                 |         |   3
+                 |         2
+                 1
+		 */
+		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		int hours = 0, mins = 0;
+		float secs = 0f;
+		double sigmaErrorLat =0d, sigmaErrorLong = 0d, sigmaErrorAlt = 0d;
+		int satId = 0; // TODO Double ?
+		double probMissedDetection = 0d, biasInMeters = 0d, stdDevOfBias = 0d;
+
+		if (sa.length > 1 && sa[1].length() > 0) {
+			String utc = sa[1];
+			hours = Integer.parseInt(utc.substring(0, 2));
+			mins = Integer.parseInt(utc.substring(2, 4));
+			secs = Float.parseFloat(utc.substring(4));
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			sigmaErrorLat = Double.parseDouble(sa[2]);
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			sigmaErrorLong = Double.parseDouble(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			sigmaErrorAlt = Double.parseDouble(sa[4]);
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			satId = Integer.parseInt(sa[5]);
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			probMissedDetection = Double.parseDouble(sa[6]);
+		}
+		if (sa.length > 7 && sa[7].length() > 0) {
+			biasInMeters = Double.parseDouble(sa[7]);
+		}
+		if (sa.length > 8 && sa[8].length() > 0) {
+			stdDevOfBias = Double.parseDouble(sa[8]);
+		}
+		GBS gbs = new GBS();
+		gbs.hours = hours;
+		gbs.mins = mins;
+		gbs.secs = secs;
+		gbs.sigmaErrorLat = sigmaErrorLat;
+		gbs.sigmaErrorLong = sigmaErrorLong;
+		gbs.sigmaErrorAlt = sigmaErrorAlt;
+		gbs.satId = satId;
+		gbs.probMissedDetection = probMissedDetection;
+		gbs.biasInMeters = biasInMeters;
+		gbs.stdDevOfBias = stdDevOfBias;
+
+		return gbs;
 	}
 
 	// GSA GPS DOP and active satellites
@@ -1909,6 +2001,166 @@ public class StringParsers {
 		return elmts.length > 4 ? elmts[4] : null;
 	}
 
+	public final static class SSD {
+		String callSign = "", name = "", talker = "";
+		int fromBow = 0, fromStern = 0, fromPortBeam = 0, fromStarboardBeam = 0;
+		int DTEFlag = 0;
+
+		@Override
+		public String toString() {
+			return String.format("CallSign:%s, Name:%s, FromBow:%d, FromStern:%d, FromPort:%d, FromStarboard:%d, DTEFlag:%d, Talker:%s", callSign, name, fromBow, fromStern, fromPortBeam, fromStarboardBeam, DTEFlag, talker);
+		}
+	}
+	/**
+	 * Ship Static Data. Up to 8 fields.
+	 $--SSD,c--c,c--c,xxx,xxx,xx,xx,c,aa*hh<CR><LF>
+	        |    |    |   |   |  |  | |
+	        |    |    |   |   |  |  | Source Identifier 5
+	        |    |    |   |   |  |  DTE indicator flag 4
+	        |    |    |   |   |  Pos. ref. point distance, "D," from starboard beam 3, 0 to 63 Meters
+	        |    |    |   |   Pos. ref. point distance, "C," from port beam 3, 0 to 63 Meters
+	        |    |    |   Pos. ref. point distance, "B," from stern 3, 0 to 511 Meters
+	        |    |    Pos. ref. point distance, "A," from bow 3, 0 to 511 meters
+	        |    Ship's Name 2, 1 to 20 characters
+	        Ship's Call Sign 1, 1 to 7 characters
+
+	 Example: $AISSD,PD2366@,MERRIMAC@@@@@@@@@@@@,017,000,03,02,1,AI*29
+	 */
+	public static SSD parseSSD(String sentence) {
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		String callSign = "", name = "", talker = "";
+		int fromBow = 0, fromStern = 0, fromPortBeam = 0, fromStarboardBeam = 0;
+		int DTEFlag = 0;
+		if (sa.length > 1 && sa[1].length() > 0) {
+			callSign = sa[1];
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			name = sa[2];
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			fromBow = Integer.parseInt(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			fromStern = Integer.parseInt(sa[4]);
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			fromPortBeam = Integer.parseInt(sa[5]);
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			fromStarboardBeam = Integer.parseInt(sa[6]);
+		}
+		if (sa.length > 7 && sa[7].length() > 0) {
+			DTEFlag = Integer.parseInt(sa[7]);
+		}
+		if (sa.length > 8 && sa[8].length() > 0) {
+			talker = sa[8];
+		}
+		SSD ssd = new SSD();
+		ssd.callSign = callSign;
+		ssd.name = name;
+		ssd.fromBow = fromBow;
+		ssd.fromStern = fromStern;
+		ssd.fromPortBeam = fromPortBeam;
+		ssd.fromStarboardBeam = fromStarboardBeam;
+		ssd.DTEFlag = DTEFlag;
+		ssd.talker = talker;
+		return ssd;
+	}
+
+	public final static class VSD {
+		int category = 0;
+		double draft = 0d;
+		int personsOnBoard = 0;
+		String destination = "";
+		int utcArrivalHours = 0, utcArrivalMins = 0;
+		float utcArrivalSecs = 0f;
+		int estDayArrival = 0, estMonthArrival = 0;
+		int navStatus = 0;
+		int regAppFlag = 0;
+
+		@Override
+		public String toString() {
+			return String.format("Cat: %d, Draft: %f, Pass:%d, Going to: %s, UTC-Arr: %02d:%02d:%02.2f, Day:%d, Month:%d, Status:%d, Flag:%d",
+					category, draft, personsOnBoard, destination,
+					utcArrivalHours, utcArrivalMins, utcArrivalSecs,
+					estDayArrival, estMonthArrival,
+					navStatus, regAppFlag);
+		}
+	}
+	/**
+	 *
+	 * Voyage Static Data
+	 $--VSD,x.x,x.x,x.x,c--c,hhmmss.ss,xx,xx,x.x,x.x*hh<CR><LF>
+	        |   |   |   |    |         |  |  |   |
+	        |   |   |   |    |         |  |  |   Regional application flags 8, 0 to 15
+	        |   |   |   |    |         |  |  Navigational status 7, 0 to 15
+	        |   |   |   |    |         |  Estimated month of arrival at destination 6, 00 to 12 (UTC)
+	        |   |   |   |    |         Estimated day of arrival at destination 6, 00 to 31 (UTC)
+	        |   |   |   |    Estimated UTC of arrival at destination 5
+	        |   |   |   Destination 4, 1-20 characters
+	        |   |   Persons on-board 3, 0 to 8191
+	        |   Maximum present static draught 2, 0 to 25.5 Meters
+	        Type of ship and cargo category 1, 0 to 255
+
+	 Example: $AIVSD,036,00.0,0000,@@@@@@@@@@@@@@@@@@@@,000000,00,00,00,00*4E
+	 */
+	public static VSD parseVSD(String sentence) {
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		int category = 0;
+		double draft = 0d;
+		int personsOnBoard = 0;
+		String destination = "";
+		int utcArrivalHours = 0, utcArrivalMins = 0;
+		float utcArrivalSecs = 0f;
+		int estDayArrival = 0, estMonthArrival = 0;
+		int navStatus = 0;
+		int regAppFlag = 0;
+
+		if (sa.length > 1 && sa[1].length() > 0) {
+			category = Integer.parseInt(sa[1]);
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			draft = Double.parseDouble(sa[2]);
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			personsOnBoard = Integer.parseInt(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			destination = sa[4];
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			utcArrivalHours = Integer.parseInt(sa[5].substring(0, 2));
+			utcArrivalMins = Integer.parseInt(sa[5].substring(2, 4));
+			utcArrivalSecs = Float.parseFloat(sa[5].substring(4));
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			estDayArrival = Integer.parseInt(sa[6]);
+		}
+		if (sa.length > 7 && sa[7].length() > 0) {
+			estMonthArrival = Integer.parseInt(sa[7]);
+		}
+		if (sa.length > 8 && sa[8].length() > 0) {
+			navStatus = Integer.parseInt(sa[8]);
+		}
+		if (sa.length > 9 && sa[9].length() > 0) {
+			regAppFlag = Integer.parseInt(sa[9]);
+		}
+		VSD vsd = new VSD();
+		vsd.category = category;
+		vsd.draft = draft;
+		vsd.personsOnBoard = personsOnBoard;
+		vsd.destination = destination;
+		vsd.utcArrivalHours = utcArrivalHours;
+		vsd.utcArrivalMins = utcArrivalMins;
+		vsd.utcArrivalSecs = utcArrivalSecs;
+		vsd.estDayArrival = estDayArrival;
+		vsd.estMonthArrival = estMonthArrival;
+		vsd.navStatus = navStatus;
+		vsd.regAppFlag = regAppFlag;
+
+		return vsd;
+	}
+
 	public static boolean validCheckSum(String sentence) {
 		return validCheckSum(sentence, false);
 	}
@@ -2143,6 +2395,7 @@ public class StringParsers {
 		DPT("DPT", "Depth of Water", StringParsers::parseDPT, Object.class),
 		GGA("GGA", "Global Positioning System Fix Data", StringParsers::parseGGA, List.class),
 		GSA("GSA", "GPS DOP and active satellites", StringParsers::parseGSA, GSA.class),
+		GBS("GBS", "GPS Satellite Fault Detection", StringParsers::parseGBS, StringParsers.GBS.class),
 		GSV("GSV", "Satellites in view", StringParsers::parseGSV, Map.class),
 		HDG("HDG", "Heading - Deviation & Variation", StringParsers::parseHDG, HDG.class),
 		HDM("HDM", "Heading - Magnetic", StringParsers::parseHDM, Integer.class),
@@ -2155,6 +2408,8 @@ public class StringParsers {
 		MWV("MWV", "Wind Speed and Angle", StringParsers::parseMWV, ApparentWind.class), // Careful, actually returns Wind.class
 		RMB("RMB", "Recommended Minimum Navigation Information, B", StringParsers::parseRMB, RMB.class),
 		TXT("TXT", "Text Transmission", StringParsers::parseTXT, String.class),
+		SSD("SSD", "Ship Static Data", StringParsers::parseSSD, StringParsers.SSD.class),
+		VSD("VSD", "Voyage Static Data", StringParsers::parseVSD, StringParsers.VSD.class),
 		VDR("VDR", "Set and Drift", StringParsers::parseVDR, Current.class),
 		VHW("VHW", "Water speed and heading", StringParsers::parseVHW, VHW.class),
 		VLW("VLW", "Distance Traveled through Water", StringParsers::parseVLW, VLW.class),

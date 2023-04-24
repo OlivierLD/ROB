@@ -20,6 +20,8 @@ import java.util.Map;
  * Nice AIS git repo: https://github.com/tbsalling/aismessages
  *
  * The main method is here for tests, look at it.
+ *
+ * TODO Other Talker IDs, AIVDO
  */
 public class AISParser {
 	public final static boolean verbose = "true".equals(System.getProperty("ais.verbose"));
@@ -35,6 +37,10 @@ public class AISParser {
    * |      Number of sentences
    * NMEA Message type, for AIS
    */
+
+	public final static String[] SENTENCE_LIST = new String[] {
+			"VDM", "VDO"
+	};
 
 	public static Map<Integer, String> messageTypeDescription = new HashMap<>();
 	static {
@@ -532,7 +538,7 @@ public class AISParser {
 		}
 	}
 
-	public final static String AIS_PREFIX = "!AIVDM"; // TODO Other Talker IDs, AIVDM, AIVDO
+	public final static String AIS_PREFIX = "!AIVDM"; // TODO Other Talker IDs, AIVDO
 
 	private final static int PREFIX_POS = 0;
 	private final static int NB_SENTENCES_POS = 1;

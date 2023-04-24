@@ -5,6 +5,7 @@ import calc.GeoPoint;
 import calc.GeomUtil;
 import calc.GreatCircle;
 import calc.GreatCirclePoint;
+import nmea.ais.AISParser;
 import nmea.parser.GeoPos;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
@@ -35,6 +36,7 @@ import static nmea.parser.StringParsers.GGA_ALT_IDX;
  */
 public class LogAnalyzer {
 
+	private static AISParser aisParser = new AISParser();
 	private final static SimpleDateFormat SDF = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss z");
 	static {
 		SDF.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
@@ -228,6 +230,22 @@ public class LogAnalyzer {
 					originalFileRecNo++;
 					if (StringParsers.validCheckSum(line)) {
 						totalNbRec++;
+						// AIS ? (startsWith("!")
+						if (line.startsWith("!")) {
+							try {
+								AISParser.AISRecord aisRecord = aisParser.parseAIS(line);
+								if (aisRecord != null) {
+									System.out.println(String.format("Parsed: %s", aisRecord.toString()));
+								} else {
+									System.out.println("AIS: null record (WiP)");
+								}
+							} catch (AISParser.AISException aisEx) {
+								System.err.println(aisEx);
+							} catch (Exception ex) {
+								System.err.println(ex);
+						    }
+						}
+
 						String id = StringParsers.getSentenceID(line);
 					    appendToMap(validStrings, id);
 						String device = StringParsers.getDeviceID(line);
@@ -400,7 +418,18 @@ public class LogAnalyzer {
 			// Maps
 			if (summary) { // Summary
 				System.out.println("Valid Strings:");
-				validStrings.keySet().stream().forEach(key -> System.out.printf("%s : %s element(s) (%s)\n", key, NumberFormat.getInstance().format(validStrings.get(key)), StringParsers.getSentenceDescription(key)));
+
+				validStrings.keySet().stream().forEach(key -> {
+					String sentenceDescription = StringParsers.getSentenceDescription(key);
+					if (sentenceDescription == null) {
+						if (Arrays.asList(AISParser.SENTENCE_LIST).contains(key)) {
+							sentenceDescription = "AIS";
+						} else {
+							sentenceDescription = "un-managed";
+						}
+					}
+					System.out.printf("%s : %s element(s) (%s)\n", key, NumberFormat.getInstance().format(validStrings.get(key)), sentenceDescription);
+				});
 				if (verbose) {
 					System.out.println("Invalid Strings:");
 					invalidStrings.keySet().stream().forEach(key -> System.out.printf("%s : %d elements\n", key, invalidStrings.get(key)));
