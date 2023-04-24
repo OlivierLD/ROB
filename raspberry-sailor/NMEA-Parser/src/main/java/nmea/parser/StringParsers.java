@@ -27,17 +27,16 @@ import java.util.regex.Pattern;
  * <br/>
  * Available parsers:
  * <ul>
+ *   <li>AAM (Waypoint Arrival Alarm)</li>
  *   <li>BAT (battery status, NOT standard)</li>
  *   <li>DBT (Depth Below Transducer)</li>
  *   <li>DBS (Depth Below Surface)</li>
  *   <li>DPT (Depth)</li>
+ *   <li>GBS (GPS Satellite Fault Detection)</li>
  *   <li>GGA (GPS Data)</li>
  *   <li>GLL (Geographical Latitude Longitude)</li>
  *   <li>GSA (GPS Satellites Data)</li>
  *   <li>GSV (GPS Detailed satellites data)</li>
- *   <li>GBS (GPS Satellite Fault Detection)</li>
- *   <li>SSD (Ship Static Data)</li>
- *   <li>VSD (Voyage Static Data)</li>
  *   <li>HDM (Heading, Magnetic)</li>
  *   <li>HDT (Heading, True)</li>
  *   <li>MDA (Meteorological Composite)</li>
@@ -48,20 +47,23 @@ import java.util.regex.Pattern;
  *   <li>MWV (Wind Speed and Angle)</li>
  *   <li>RMB (Recommended Minimum, version B)</li>
  *   <li>RMC (Recommended Minimum, version C)</li>
+ *   <li>SSD (Ship Static Data)</li>
  *   <li>STD (Not standard, STarteD)</li>
  *   <li>TXT (Text)</li>
  *   <li>VDR (Current Speed and Direction)</li>
  *   <li>VHW (Water, Heading and Speed)</li>
  *   <li>VLW (Distance Travelled through Water)</li>
  *   <li>VTG (Track Made Good and Ground Speed)</li>
+ *   <li>VSD (Voyage Static Data)</li>
  *   <li>VWR (Relative Wind Speed and Angle)</li>
  *   <li>VWT (True Wind Speed and Angle - obsolete)</li>
  *   <li>XDR (Transducers Measurement, Various Sensors)</li>
+ *   <li>XTE (Cross Track Error)</li>
  *   <li>ZDA (UTC DCate and Time)</li>
  * </ul>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
  * <br/>
- * TASK? Implement the following:
+ * TODO - Implement the following:
  * <ul>
  *   <li>MDW Surface Wind, direction and velocity</li>
  *   <li>
@@ -81,6 +83,11 @@ import java.util.regex.Pattern;
  *     </pre>
  *   </li>
  *   <li>ZLZ Time of Day</li>
+ *   <li>WCV Waypoint Closure Velocity</li>
+ *   <li>BWC Bearing & Distance to Waypoint</li>
+ *   <li>BWR Bearing & Distance to Waypoint - Rhumb Line</li>
+ *   <li>APB Heading/Track Controller (Autopilot) Sentence "B"</li>
+ *   <li>BOD Bearing - Origin to Destination</li>
  * </ul>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  * Also see https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
@@ -95,6 +102,12 @@ public class StringParsers {
   }
 
 	private static Map<Integer, SVData> gsvMap = null;
+
+
+  	/*
+  	 * String Parsers
+  	 * Starting here
+  	 */
 
 	public static List<StringGenerator.XDRElement> parseXDR(String data) {
 		List<StringGenerator.XDRElement> lxdr = new ArrayList<>();
@@ -2032,10 +2045,10 @@ public class StringParsers {
 		int fromBow = 0, fromStern = 0, fromPortBeam = 0, fromStarboardBeam = 0;
 		int DTEFlag = 0;
 		if (sa.length > 1 && sa[1].length() > 0) {
-			callSign = sa[1];
+			callSign = sa[1].replaceAll("@", " ").trim();
 		}
 		if (sa.length > 2 && sa[2].length() > 0) {
-			name = sa[2];
+			name = sa[2].replaceAll("@", " ").trim();
 		}
 		if (sa.length > 3 && sa[3].length() > 0) {
 			fromBow = Integer.parseInt(sa[3]);
@@ -2126,7 +2139,7 @@ public class StringParsers {
 			personsOnBoard = Integer.parseInt(sa[3]);
 		}
 		if (sa.length > 4 && sa[4].length() > 0) {
-			destination = sa[4];
+			destination = sa[4].replaceAll("@", " ").trim();
 		}
 		if (sa.length > 5 && sa[5].length() > 0) {
 			utcArrivalHours = Integer.parseInt(sa[5].substring(0, 2));
@@ -2160,6 +2173,238 @@ public class StringParsers {
 
 		return vsd;
 	}
+
+	public final static class XTE {
+		String statusOne = "", statusTwo = "";
+		double xteMag = 0d;
+		String dirToSteer = "", unit = "", mode = "";
+
+		public String getStatusOne() {
+			return statusOne;
+		}
+
+		public String getStatusTwo() {
+			return statusTwo;
+		}
+
+		public double getXteMag() {
+			return xteMag;
+		}
+
+		public String getDirToSteer() {
+			return dirToSteer;
+		}
+
+		public String getUnit() {
+			return unit;
+		}
+
+		public String getMode() {
+			return mode;
+		}
+
+		private static String decodeStatusOne(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Data Valid";
+					break;
+				case "V":
+					meaning = "Loran-C Blink or SNR warning";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private static String decodeStatusTwo(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Data Valid";
+					break;
+				case "V":
+					meaning = "Loran-C Cycle Lock warning flag";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private static String decodeMode(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Autonomous mode";
+					break;
+				case "D":
+					meaning = "Differential mode";
+					break;
+				case "E":
+					meaning = "Estimated (dead reckoning) mode";
+					break;
+				case "M":
+					meaning = "Manual input mode";
+					break;
+				case "S":
+					meaning = "Simulator mode";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		@Override
+		public String toString() {
+			return String.format("Status-1: %s, Status-2:%s, XTE Mag: %.02f, Steer:%s, unit:%s, mode: %s",
+								 decodeStatusOne(statusOne), decodeStatusTwo(statusTwo),
+								 xteMag, dirToSteer, unit,
+								 decodeMode(mode));
+		}
+	}
+	public static XTE parseXTE(String sentence) {
+		/*
+		Cross Track Error
+
+		$--XTE,A,A,x.x,a,N,a*hh<CR><LF>
+               | | |   | | |
+               | | |   | | Mode Indicator
+               | | |   | | - A = Autonomous mode
+               | | |   | | - D = Differential mode
+               | | |   | | - E = Estimated (dead reckoning) mode
+               | | |   | | - M = Manual input mode
+               | | |   | | - S = Simulator mode
+               | | |   | Units, nautical miles
+               | | |   Direction to steer, L/R
+               | | Magnitude of Cross-Track-Error
+               | Status
+			   | - A = Data valid
+			   | - V = Loran-C Cycle Lock warning flag
+			   Status
+				 - A = Data valid
+				 - V = Loran-C Blink or SNR warning
+				 - V = general warning flag for other navigation systems when a reliable fix is not available
+
+ 			Example: $GPXTE,,,,,N,N*5E, $GPXTE,V,V,,,N,S*43
+		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		String statusOne = "", statusTwo = "";
+		double xteMag = 0d;
+		String dirToSteer = "", unit = "", mode = "";
+		if (sa.length > 1 && sa[1].length() > 0) {
+			statusOne = sa[1];
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			statusTwo = sa[2];
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			xteMag = Double.parseDouble(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			dirToSteer = sa[4];
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			unit = sa[5];
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			mode = sa[6];
+		}
+		XTE xte = new XTE();
+		xte.statusOne = statusOne;
+		xte.statusTwo = statusTwo;
+		xte.xteMag = xteMag;
+		xte.dirToSteer = dirToSteer;
+		xte.unit = unit;
+		xte.mode = mode;
+
+		return xte;
+	}
+
+	public static class AAM {
+		String statusOne = "", statusTwo = "";
+		double arrivalRadius = 0d;
+		String unit = "";
+		String waypointId = "";
+
+		private String decodeStatusOne(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "arrival circle entered";
+					break;
+				case "V":
+					meaning = "arrival circle not entered";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private String decodeStatusTwo(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "perpendicular passed at waypoint";
+					break;
+				case "V":
+					meaning = "perpendicular not passed";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		@Override
+		public String toString() {
+			return String.format("Status-1:%s, Status-2:%s, Radius:%.02f, Unit:%s, WP:%s",
+					decodeStatusOne(statusOne), decodeStatusTwo(statusTwo),
+					arrivalRadius, unit, waypointId);
+		}
+	}
+	public static AAM parseAAM(String sentence) {
+		/*
+		Waypoint Arrival Alarm
+		$--AAM,A,A,x.x,N,c--c*hh<CR><LF>
+               | | |   | |
+               | | |   | Waypoint ID
+               | | |   Units of radius, nautical miles
+               | | Arrival circle radius
+               | Status: A = perpendicular passed at waypoint
+               |         V = perpendicular not passed
+               Status: A = arrival circle entered
+                       V = arrival circle not entered
+
+ Example: $GPAAM,V,V,0.05,N,*23
+		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		AAM aam = new AAM();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			aam.statusOne = sa[1];
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			aam.statusTwo = sa[2];
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			aam.arrivalRadius = Double.parseDouble(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			aam.unit = sa[4];
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			aam.waypointId = sa[5];
+		}
+		return aam;
+	}
+
+	/*
+	 * End of String Parsers
+	 * Parsing and various Utilities start here
+	 */
 
 	public static boolean validCheckSum(String sentence) {
 		return validCheckSum(sentence, false);
@@ -2385,7 +2630,11 @@ public class StringParsers {
 		return result;
 	}
 
-	// Used by autoParse
+
+	/*
+	   Used by autoParse
+	   AutoParse Utilities and tools
+	 */
 	public enum Dispatcher {
 
 		RMC("RMC", "Recommended Minimum Navigation Information, C", StringParsers::parseRMC, RMC.class),
@@ -2410,6 +2659,7 @@ public class StringParsers {
 		TXT("TXT", "Text Transmission", StringParsers::parseTXT, String.class),
 		SSD("SSD", "Ship Static Data", StringParsers::parseSSD, StringParsers.SSD.class),
 		VSD("VSD", "Voyage Static Data", StringParsers::parseVSD, StringParsers.VSD.class),
+		AAM("AAM", "Waypoint Arrival Alarm", StringParsers::parseAAM, StringParsers.AAM.class),
 		VDR("VDR", "Set and Drift", StringParsers::parseVDR, Current.class),
 		VHW("VHW", "Water speed and heading", StringParsers::parseVHW, VHW.class),
 		VLW("VLW", "Distance Traveled through Water", StringParsers::parseVLW, VLW.class),
@@ -2417,6 +2667,7 @@ public class StringParsers {
 		VWR("VWR", "Relative Wind Speed and Angle", StringParsers::parseVWR, ApparentWind.class),
 		VWT("VWT", "Wind Data", StringParsers::parseVWT, TrueWind.class),                              // Obsolete
 		XDR("XDR", "Transducer Measurement", StringParsers::parseXDR, List.class),
+		XTE("XTE", "Cross Track Error", StringParsers::parseXTE, StringParsers.XTE.class),
 		ZDA("ZDA", "Time & Date - UTC, day, month, year and local time zone", StringParsers::parseZDA, UTCDate.class);
 
 		private final String key;

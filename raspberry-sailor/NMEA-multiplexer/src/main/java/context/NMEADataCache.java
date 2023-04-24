@@ -748,7 +748,7 @@ public class NMEADataCache
 							this.put(SAT_IN_VIEW, satmap);
 						}
 						break;
-					case "MDA": // Meteorological composite (Humidity, among others)
+					case "MDA": // Meteorological composite (Humidity, among others) // TODO: More MDA data... (Warning: MDA is obsolete)
 						StringParsers.MDA mda = StringParsers.parseMDA(nmeaSentence);
 						if (mda.airT != null) {
 							this.put(NMEADataCache.AIR_TEMP, new Temperature(mda.airT));
@@ -765,10 +765,13 @@ public class NMEADataCache
 						if (mda.dewC != null) {
 							this.put(NMEADataCache.DEW_POINT_TEMP, mda.dewC);
 						}
-						// TODO: More MDA data... (Warning: MDA is obsolete)
 						break;
 					case "XTE": // Cross Track Error
-						// TODO: Implement
+						StringParsers.XTE xte = StringParsers.parseXTE(nmeaSentence);
+						if (xte != null) { // TODO Check XTE statuses ?
+							this.put(XTE, new Distance(xte.getXteMag()));
+							this.put(S2STEER, xte.getDirToSteer());
+						}
 						break;
 					case "XDR": // Transducer measurement
 						List<StringGenerator.XDRElement> xdr = StringParsers.parseXDR(nmeaSentence);

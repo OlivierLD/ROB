@@ -10,6 +10,7 @@ import java.util.Map;
  * AIS: Automatic Identification System
  *
  * !! Work in Progress, not all message types are implemented (yet).
+ * Only VDM for now.
  *
  * Good doc at https://gpsd.gitlab.io/gpsd/AIVDM.html
  *             https://www.navcen.uscg.gov/?pageName=AISFAQ
@@ -19,9 +20,9 @@ import java.util.Map;
  *
  * Nice AIS git repo: https://github.com/tbsalling/aismessages
  *
- * The main method is here for tests, look at it.
+ * The main method is here for tests, look at it. <- TODO a main ?
  *
- * TODO Other Talker IDs, AIVDO
+ * TODO Other Talker IDs, AIVDO chain
  */
 public class AISParser {
 	public final static boolean verbose = "true".equals(System.getProperty("ais.verbose"));
