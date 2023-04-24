@@ -1786,18 +1786,13 @@ public class StringParsers {
 		}
 	}
 
-	// Depth Below Transducer
-	public static float parseDBT(String data) {
-		return parseDBT(data, DEPTH_IN_METERS);
-	}
-	// Depth Below Transducer
-	public static float parseDBT(String data, short unit) {
+	private static float parseDepth(String data, short unit, String sentenceID) {
 		String s = data.trim();
 		if (s.length() < 6) {
 			return -1F;
 		}
 		/* Structure is
-		 *  $aaDBT,011.0,f,03.3,M,01.8,F*18(CR)(LF)
+		 *  $aaDBx,011.0,f,03.3,M,01.8,F*18(CR)(LF)
 		 *         |     | |    | |    |
 		 *         |     | |    | |    F for fathoms
 		 *         |     | |    | Depth in fathoms
@@ -1812,7 +1807,7 @@ public class StringParsers {
 		String str = "";
 		String first = "", last = "";
 		try {
-			first = "DBT,";
+			first = String.format("%s,", sentenceID); // Can also be "DBT,", or "DBS,"
 			last = ",f,";
 			if (s.contains(first) && s.contains(last)) {
 				if (s.indexOf(first) < s.indexOf(last)) {
@@ -1837,8 +1832,8 @@ public class StringParsers {
 			}
 			fathoms = parseNMEAFloat(str);
 		} catch (Exception e) {
-			System.err.println("parseDBT For " + s + ", " + e.toString());
-//    e.printStackTrace();
+			System.err.println("parseDepth For " + s + ", " + e.toString());
+			// e.printStackTrace();
 		}
 
 		if (unit == DEPTH_IN_FEET) {
@@ -1851,7 +1846,33 @@ public class StringParsers {
 			return feet;
 		}
 	}
+	// Depth Below Transducer
+	public static float parseDBT(String data) {
+		return parseDBT(data, DEPTH_IN_METERS);
+	}
+	// Depth Below Transducer
+	public static float parseDBT(String data, short unit) {
+		return parseDepth(data, unit, "DBT");
+	}
 
+	/* Depth Below Surface (Obsolete)
+	 * Structure is
+	 *  $aaDBS,011.0,f,03.3,M,01.8,F*18(CR)(LF)
+	 *         |     | |    | |    |
+	 *         |     | |    | |    F for fathoms
+	 *         |     | |    | Depth in fathoms
+	 *         |     | |    M for meters
+	 *         |     | Depth in meters
+	 *         |     f for feet
+	 *         Depth in feet
+	 */
+	public static float parseDBS(String data) {
+		return parseDBS(data, DEPTH_IN_METERS);
+	}
+	// Depth Below Surface
+	public static float parseDBS(String data, short unit) {
+		return parseDepth(data, unit, "DBS");
+	}
 	public static String parseTXT(String sentence) {
 		/*
 		 * WIP
@@ -2118,6 +2139,7 @@ public class StringParsers {
 		RMC("RMC", "Recommended Minimum Navigation Information, C", StringParsers::parseRMC, RMC.class),
 		GLL("GLL", "Geographical Lat & Long", StringParsers::parseGLL, GLL.class),
 		DBT("DBT", "Depth Below Transducer", StringParsers::parseDBT, Float.class),
+		DBS("DBS", "Depth Below Surface", StringParsers::parseDBS, Float.class),
 		DPT("DPT", "Depth of Water", StringParsers::parseDPT, Object.class),
 		GGA("GGA", "Global Positioning System Fix Data", StringParsers::parseGGA, List.class),
 		GSA("GSA", "GPS DOP and active satellites", StringParsers::parseGSA, GSA.class),

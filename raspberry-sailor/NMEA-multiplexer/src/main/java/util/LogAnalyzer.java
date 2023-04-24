@@ -397,50 +397,6 @@ public class LogAnalyzer {
 //			System.out.println("+-------------------------------------+");
 
 			// Display summary
-			assert (start != null && arrival != null);
-			System.out.printf("Started %s\n", SDF.format(start));
-			System.out.printf("Arrived %s\n", SDF.format(arrival));
-			System.out.printf("Used %s record(s) out of %s. \nTotal distance: %.03f (%.03f) %s, in %s. Avg speed:%.03f %s\n",
-					NumberFormat.getInstance().format(nbRec), // nb recs
-					NumberFormat.getInstance().format(totalNbRec), // total recs
-					distanceInKm / (unitToUse.equals(SpeedUnit.KMH) ? 1 : 1.852), // dist
-					distanceInNm * (unitToUse.equals(SpeedUnit.KN) ? 1 : 1.852), // dist
-					unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm", // Unit
-					msToHMS(arrival.getTime() - start.getTime()), // time
-					(distanceInKm / ((arrival.getTime() - start.getTime()) / ((double) HOUR))) / (unitToUse.equals(SpeedUnit.KMH) ? 1 : 1.852), // AVG
-					unitToUse.label());
-			System.out.printf("Max Speed (SOG): %.03f %s\n", maxSpeed * unitToUse.convert(), unitToUse.label());
-			System.out.printf("Min Speed (SOG): %.03f %s\n", minSpeed * unitToUse.convert(), unitToUse.label());
-			double deltaAlt = (maxAlt - minAlt);
-			if (!Double.isInfinite(deltaAlt)) {
-				System.out.printf("Min alt: %.02f m, Max alt: %.02f m, delta %.02f m\n", minAlt, maxAlt, (maxAlt - minAlt));
-			}
-			System.out.printf("Top-Left    :%s (%f / %f)\n", new GeoPos(maxLat, minLng).toString(), maxLat, minLng);
-			System.out.printf("Bottom-Right:%s (%f / %f)\n", new GeoPos(minLat, maxLng).toString(), minLat, maxLng);
-			System.out.printf("Min Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLat, GeomUtil.SWING, GeomUtil.NS), args[0], minLatIdx, SDF.format(minLatDate));
-			System.out.printf("Max Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(maxLat, GeomUtil.SWING, GeomUtil.NS), args[0], maxLatIdx, SDF.format(maxLatDate));
-			System.out.printf("Min Lng (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLng, GeomUtil.SWING, GeomUtil.EW), args[0], minLngIdx, SDF.format(minLngDate));
-			System.out.printf("Max Lng (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(maxLng, GeomUtil.SWING, GeomUtil.EW), args[0], maxLngIdx, SDF.format(maxLngDate));
-			System.out.println();
-
-			System.out.printf("Max Calc Speed: %.03f ms\n", maxSpeedCalc);
-
-			// Width, height
-			GreatCircle gc = new GreatCircle(new GreatCirclePoint(new GeoPoint(Math.toRadians(minLat),
-					                                                           Math.toRadians(minLng))), // bottom left
-					                         new GreatCirclePoint(new GeoPoint(Math.toRadians(maxLat),
-													                           Math.toRadians(maxLng)))); // top right
-			double distBLTR = gc.getDistanceInNM();
-			gc = new GreatCircle(new GreatCirclePoint(new GeoPoint(Math.toRadians(maxLat),
-					                                               Math.toRadians(minLng))), // top left
-					             new GreatCirclePoint(new GeoPoint(Math.toRadians(minLat),
-										                           Math.toRadians(maxLng)))); // bottom right
-			double distTLBR = gc.getDistanceInNM();
-			distBLTR *= unitToUse.convert(); // (unitToUse.equals(SpeedUnit.KMH) ? 1.852 : 1);
-			distTLBR *= unitToUse.convert(); // (unitToUse.equals(SpeedUnit.KMH) ? 1.852 : 1);
-			System.out.printf("Bottom-Left to top-right: %.03f %s\n", distBLTR, (unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm"));
-			System.out.printf("Top-Left to bottom-right: %.03f %s\n", distTLBR, (unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm"));
-
 			// Maps
 			if (summary) { // Summary
 				System.out.println("Valid Strings:");
@@ -452,15 +408,60 @@ public class LogAnalyzer {
 				System.out.println("Valid Devices:");
 				validDevices.keySet().stream().forEach(key -> System.out.printf("%s : %s element(s)\n", key, NumberFormat.getInstance().format(validDevices.get(key))));
 			}
-			try {
-				// A Map on a canvas?
-				SwingFrame frame = new SwingFrame(positions);
-				frame.setVisible(true);
-				frame.plot();
-			} catch (HeadlessException he) {
-				System.out.println("Headless Exception. Try in a graphical environment to visualize the data.");
-			}
+			assert (start != null && arrival != null);
+			if (start != null && arrival != null) {
+				System.out.printf("Started %s\n", SDF.format(start));
+				System.out.printf("Arrived %s\n", SDF.format(arrival));
+				System.out.printf("Used %s record(s) out of %s. \nTotal distance: %.03f (%.03f) %s, in %s. Avg speed:%.03f %s\n",
+						NumberFormat.getInstance().format(nbRec), // nb recs
+						NumberFormat.getInstance().format(totalNbRec), // total recs
+						distanceInKm / (unitToUse.equals(SpeedUnit.KMH) ? 1 : 1.852), // dist
+						distanceInNm * (unitToUse.equals(SpeedUnit.KN) ? 1 : 1.852), // dist
+						unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm", // Unit
+						msToHMS(arrival.getTime() - start.getTime()), // time
+						(distanceInKm / ((arrival.getTime() - start.getTime()) / ((double) HOUR))) / (unitToUse.equals(SpeedUnit.KMH) ? 1 : 1.852), // AVG
+						unitToUse.label());
+				System.out.printf("Max Speed (SOG): %.03f %s\n", maxSpeed * unitToUse.convert(), unitToUse.label());
+				System.out.printf("Min Speed (SOG): %.03f %s\n", minSpeed * unitToUse.convert(), unitToUse.label());
+				double deltaAlt = (maxAlt - minAlt);
+				if (!Double.isInfinite(deltaAlt)) {
+					System.out.printf("Min alt: %.02f m, Max alt: %.02f m, delta %.02f m\n", minAlt, maxAlt, (maxAlt - minAlt));
+				}
+				System.out.printf("Top-Left    :%s (%f / %f)\n", new GeoPos(maxLat, minLng).toString(), maxLat, minLng);
+				System.out.printf("Bottom-Right:%s (%f / %f)\n", new GeoPos(minLat, maxLng).toString(), minLat, maxLng);
+				System.out.printf("Min Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLat, GeomUtil.SWING, GeomUtil.NS), args[0], minLatIdx, SDF.format(minLatDate));
+				System.out.printf("Max Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(maxLat, GeomUtil.SWING, GeomUtil.NS), args[0], maxLatIdx, SDF.format(maxLatDate));
+				System.out.printf("Min Lng (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLng, GeomUtil.SWING, GeomUtil.EW), args[0], minLngIdx, SDF.format(minLngDate));
+				System.out.printf("Max Lng (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(maxLng, GeomUtil.SWING, GeomUtil.EW), args[0], maxLngIdx, SDF.format(maxLngDate));
+				System.out.println();
 
+				System.out.printf("Max Calc Speed: %.03f ms\n", maxSpeedCalc);
+
+				// Width, height
+				GreatCircle gc = new GreatCircle(new GreatCirclePoint(new GeoPoint(Math.toRadians(minLat),
+						Math.toRadians(minLng))), // bottom left
+						new GreatCirclePoint(new GeoPoint(Math.toRadians(maxLat),
+								Math.toRadians(maxLng)))); // top right
+				double distBLTR = gc.getDistanceInNM();
+				gc = new GreatCircle(new GreatCirclePoint(new GeoPoint(Math.toRadians(maxLat),
+						Math.toRadians(minLng))), // top left
+						new GreatCirclePoint(new GeoPoint(Math.toRadians(minLat),
+								Math.toRadians(maxLng)))); // bottom right
+				double distTLBR = gc.getDistanceInNM();
+				distBLTR *= unitToUse.convert(); // (unitToUse.equals(SpeedUnit.KMH) ? 1.852 : 1);
+				distTLBR *= unitToUse.convert(); // (unitToUse.equals(SpeedUnit.KMH) ? 1.852 : 1);
+				System.out.printf("Bottom-Left to top-right: %.03f %s\n", distBLTR, (unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm"));
+				System.out.printf("Top-Left to bottom-right: %.03f %s\n", distTLBR, (unitToUse.equals(SpeedUnit.KMH) ? "km" : "nm"));
+
+				try {
+					// A Map on a canvas?
+					SwingFrame frame = new SwingFrame(positions);
+					frame.setVisible(true);
+					frame.plot();
+				} catch (HeadlessException he) {
+					System.out.println("Headless Exception. Try in a graphical environment to visualize the data.");
+				}
+			}
 			System.out.println("+---------------------------------------+");
 			System.out.println("| Checkout the spreadsheet stat.csv.    |");
 			System.out.println("| Use ONLY ';' as separator !!!         |");
