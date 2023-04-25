@@ -26,9 +26,13 @@ import java.util.regex.Pattern;
  * <pre>$&lt;talker ID>&lt;sentence ID,>[parameter 1],[parameter 2],...[&lt;*checksum>]&lt;CR>&lt;LF> (\r\n)</pre>
  * <br/>
  * Available parsers:
- * <ul>
+ * <ol>
  *   <li>AAM (Waypoint Arrival Alarm)</li>
+ *   <li>APB (Heading/Track Controller (Autopilot) Sentence "B")</li>
  *   <li>BAT (battery status, NOT standard)</li>
+ *   <li>BOD (Bearing - Origin to Destination)</li>
+ *   <li>BWC, through BWx (Bearing & Distance to Waypoint)</li>
+ *   <li>BWR, through BWx (Bearing & Distance to Waypoint - Rhumb Line)</li>
  *   <li>DBT (Depth Below Transducer)</li>
  *   <li>DBS (Depth Below Surface)</li>
  *   <li>DPT (Depth)</li>
@@ -60,7 +64,7 @@ import java.util.regex.Pattern;
  *   <li>XDR (Transducers Measurement, Various Sensors)</li>
  *   <li>XTE (Cross Track Error)</li>
  *   <li>ZDA (UTC DCate and Time)</li>
- * </ul>
+ * </ol>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
  * <br/>
  * TODO - Implement the following:
@@ -84,15 +88,15 @@ import java.util.regex.Pattern;
  *   </li>
  *   <li>ZLZ Time of Day</li>
  *   <li>WCV Waypoint Closure Velocity</li>
- *   <li>BWC Bearing & Distance to Waypoint</li>
- *   <li>BWR Bearing & Distance to Waypoint - Rhumb Line</li>
- *   <li>APB Heading/Track Controller (Autopilot) Sentence "B"</li>
- *   <li>BOD Bearing - Origin to Destination</li>
  * </ul>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  * Also see https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  */
 public class StringParsers {
+
+	/*
+	Code Units (Comments) : STRING-PARSERS, UTILITIES, AUTO-PARSE
+	 */
 
   public final static String NMEA_EOS = "\r\n";	
 
@@ -105,8 +109,8 @@ public class StringParsers {
 
 
   	/*
-  	 * String Parsers
-  	 * Starting here
+  	 * STRING-PARSERS
+  	 * StringParsers starting here
   	 */
 
 	public static List<StringGenerator.XDRElement> parseXDR(String data) {
@@ -2251,6 +2255,9 @@ public class StringParsers {
 				case "S":
 					meaning = "Simulator mode";
 					break;
+				case "N":
+					meaning = "Data not valid";
+					break;
 				default:
 					meaning = String.format("Unknown[%s]", value);
 					break;
@@ -2401,7 +2408,356 @@ public class StringParsers {
 		return aam;
 	}
 
+	public final static class BOD {
+		double trueBearing = 0d, magBearing = 0d;
+		String fromWP = "", toWP = "";
+
+		@Override
+		public String toString() {
+			return String.format("TrueBearing: %.02f, MagBearing: %.02f, From: %s, to: %s",
+					trueBearing, magBearing, fromWP, toWP);
+		}
+	}
+	public static BOD parseBOD(String sentence) {
+		/*
+		Bearing - Origin to Destination
+
+		$--BOD,x.x,T,x.x,M,c--c,c--c*hh<CR><LF>
+               |     |     |    |
+               |     |     |    Origin waypoint ID (6)
+               |     |     Destination waypoint ID (5)
+               |     Bearing, degrees Magnetic (3)
+               Bearing, degrees True (1)
+
+          Example: $GPBOD,213.9,T,213.2,M,,*4C
+		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		BOD bod = new BOD();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			bod.trueBearing = Double.parseDouble(sa[1]);
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			bod.magBearing = Double.parseDouble(sa[3]);
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			bod.toWP = sa[5];
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			bod.fromWP = sa[6];
+		}
+		return bod;
+	}
+
+	public static class BWx {
+		int obsUTCHours = 0, obsUTCMins = 0;
+		float obsUTCSecs = 0f;
+		double wpLat = 0d, wpLng = 0d;
+		double trueBearing = 0d, magBearing = 0d, distance = 0d;
+		String wpId = "", mode = "";
+
+		private static String decodeMode(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Autonomous mode";
+					break;
+				case "D":
+					meaning = "Differential mode";
+					break;
+				case "E":
+					meaning = "Estimated (dead reckoning) mode";
+					break;
+				case "M":
+					meaning = "Manual input mode";
+					break;
+				case "S":
+					meaning = "Simulator mode";
+					break;
+				case "N":
+					meaning = "Data not valid";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("UTC Obs:%02d:%02d:%02.2f, from Lat %f, Long %f, Bearing: True: %f, Mag: %f, Distance: %f, WP: %s, Mode: %s",
+					obsUTCHours, obsUTCMins, obsUTCSecs,
+					wpLat, wpLng,
+					trueBearing, magBearing, distance,
+					wpId, decodeMode(mode));
+		}
+	}
+	public static BWx parseBWx(String sentence) {
+		/*
+		BWC - Bearing & Distance to Waypoint
+		BWR - Bearing & Distance to Waypoint - Rhumb Line
+ $--BWC,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh<CR><LF>
+ $--BWR,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh<CR><LF>
+        |         |       | |        | |   | |   | |   | |    |
+        |         |       | |        | |   . |   . |   . |    Mode Indicator: (13)
+        |         |       | |        | |   . |   . |   . |    - A = Autonomous mode
+        |         |       | |        | |   . |   . |   . |    - D = Differential mode
+        |         |       | |        | |     |     |     |    - E = Estimated (dead reckoning) mode
+        |         |       | |        | |     |     |     |    - M = Manual input mode
+        |         |       | |        | |     |     |     |    - S = Simulator mode
+        |         |       | |        | |     |     |     |    - N = Data not valid
+        |         |       | |        | |     |     |     Waypoint ID (12)
+        |         |       | |        | |     |     Distance, nautical miles (10)
+        |         |       | |        | |     Bearing, degrees Magnetic (8)
+        |         |       | |        | Bearing, degrees True (6)
+        |         |       | |        E/W (5)
+        |         |       | Waypoint longitude (4)
+        |         |       N/S (3)
+        |         Waypoint latitude (2)
+        UTC of observation (1)
+
+        Examples: $GPBWC,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*53
+                  $GPBWR,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*42
+ 		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		BWx bwx = new BWx();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			bwx.obsUTCHours = Integer.parseInt(sa[1].substring(0, 2));
+			bwx.obsUTCMins = Integer.parseInt(sa[1].substring(2, 4));
+			bwx.obsUTCSecs = Float.parseFloat(sa[1].substring(4));
+		}
+		if (sa.length > 2 && sa[2].length() > 0 && sa.length > 3 && sa[3].length() > 0) {
+			double lat = Double.parseDouble(sa[2]);
+			if (sa[3].equals("S")) {
+				lat -= lat;
+			}
+			bwx.wpLat = lat;
+		}
+		if (sa.length > 4 && sa[4].length() > 0 && sa.length > 5 && sa[5].length() > 0) {
+			double lng = Double.parseDouble(sa[4]);
+			if (sa[5].equals("W")) {
+				lng -= lng;
+			}
+			bwx.wpLng = lng;
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			bwx.trueBearing = Double.parseDouble(sa[6]);
+		}
+		if (sa.length > 8 && sa[8].length() > 0) {
+			bwx.magBearing = Double.parseDouble(sa[8]);
+		}
+		if (sa.length > 10 && sa[10].length() > 0) {
+			bwx.distance = Double.parseDouble(sa[10]);
+		}
+		if (sa.length > 12 && sa[12].length() > 0) {
+			bwx.wpId = sa[12];
+		}
+		if (sa.length > 13 && sa[13].length() > 0) {
+			bwx.mode = sa[13];
+		}
+		return bwx;
+	}
+
+	public final static class APB {
+		String statusOne = "", statusTwo = "";
+		double xteMag = 0d;
+		String steer = "", xteUnit = "";
+		String arrivalStatus = "", startStatus = "";
+		double bearingOriginToDestination = 0d;
+		String bodTM = "";
+		double bearingPresentToDestination = 0d;
+		String bpdTM = "", destWP = "";
+		double hdgToSteerToDestination = 0d;
+		String htsTM = "";
+		String mode = "";
+
+		private static String decodeStatusOne(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Data valid";
+					break;
+				case "V":
+					meaning = "Loran-C Blink or SNR warning";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private static String decodeStatusTwo(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Data Valid or not used";
+					break;
+				case "V":
+					meaning = "Loran-C Cycle Lock warning flag";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private static String decodeMode(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Autonomous mode";
+					break;
+				case "D":
+					meaning = "Differential mode";
+					break;
+				case "E":
+					meaning = "Estimated (dead reckoning) mode";
+					break;
+				case "M":
+					meaning = "Manual input mode";
+					break;
+				case "S":
+					meaning = "Simulator mode";
+					break;
+				case "N":
+					meaning = "Data not valid";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private String decodeArrivalStatus(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "arrival circle entered";
+					break;
+				case "V":
+					meaning = "arrival circle not entered";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+		private String decodeStartStatus(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "perpendicular passed at waypoint";
+					break;
+				case "V":
+					meaning = "perpendicular not passed";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("Status-1:%s, Status-2:%s, XTE: %.02f %s, Steer:%s, WP: %s, Start Status: %s, Arrival Status: %s, Origin-to-Dest: %.01f %s, Present-to-Dest: %.01f %s, Steer-t-Dest: %.01f %s, mode: %s",
+					decodeStatusOne(statusOne), decodeStatusTwo(statusTwo),
+					xteMag, xteUnit, steer, destWP, decodeStartStatus(startStatus), decodeArrivalStatus(arrivalStatus),
+					bearingOriginToDestination, bodTM,
+					bearingPresentToDestination, bpdTM,
+					hdgToSteerToDestination, htsTM,
+					decodeMode(mode));
+		}
+	}
+	public final static APB parseAPB(String sentence) {
+		/*
+		Heading/Track Controller (Autopilot) Sentence "B"
+
+		 $--APB,A,A,x.x,a,N,A,A,x.x,a,c--c,x.x,a,x.x,a,a*hh<CR><LF>
+                | | |   | | | | |   | |    |   | |   | |
+                | | |   | | | | |   | |    |   | |   | Mode indicator (15)
+                | | |   | | | | |   | |    |   | |   |  - A = Autonomous mode
+                | | |   | | | | |   | |    |   | |   |  - D = Differential mode
+                | | |   | | | | |   | |    |   | |   |  - E = Estimated (dead reckoning) mode
+                | | |   | | | | |   | |    |   | |   |  - M = Manual input mode
+                | | |   | | | | |   | |    |   | |   |  - S = Simulator mode
+                | | |   | | | | |   | |    |   | |   |  - N = Data not valid
+                | | |   | | | | |   | |    |   | |   True or Mag (14
+                | | |   | | | | |   | |    |   | Heading-to-steer to destination waypoint (13)
+                | | |   | | | | |   | |    |   True or Mag (12)
+                | | |   | | | | |   | |    Bearing, Present position to destination (11)
+                | | |   | | | | |   | Destination waypoint ID (10)
+                | | |   | | | | |   True or Mag (9)
+                | | |   | | | | Bearing origin to destination (8)
+                | | |   | | | Status: A = perpendicular passed at waypoint (7)
+                | | |   | | Status: A = arrival circle entered (6)
+                | | |   | XTE units, nautical miles (5)
+                | | |   Direction to steer, L/R (4)
+                | | Magnitude of XTE (cross-track-error) (3)
+                | Status (2)
+				| - A = Data valid or not used,
+				| - V = Loran-C Cycle Lock warning flag
+                Status (1)
+                  - A = Data valid
+                  - V = Loran-C Blink or SNR warning
+                  - V = General warning flag for other navigation systems when a reliable fix is not available
+
+		Example: $GPAPB,A,A,0.001,L,N,V,V,213.9,T,,213.9,T,213.9,T,A*77
+		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+
+		APB apb = new APB();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			apb.statusOne = sa[1];
+		}
+		if (sa.length > 2 && sa[2].length() > 0) {
+			apb.statusTwo = sa[2];
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			apb.xteMag = Double.parseDouble(sa[3]);
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			apb.steer = sa[4];
+		}
+		if (sa.length > 5 && sa[5].length() > 0) {
+			apb.xteUnit = sa[5];
+		}
+		if (sa.length > 6 && sa[6].length() > 0) {
+			apb.arrivalStatus = sa[6];
+		}
+		if (sa.length > 7 && sa[7].length() > 0) {
+			apb.startStatus = sa[7];
+		}
+		if (sa.length > 8 && sa[8].length() > 0) {
+			apb.bearingOriginToDestination = Double.parseDouble(sa[8]);
+		}
+		if (sa.length > 9 && sa[9].length() > 0) {
+			apb.bodTM = sa[9];
+		}
+		if (sa.length > 10 && sa[10].length() > 0) {
+			apb.destWP = sa[10];
+		}
+		if (sa.length > 11 && sa[11].length() > 0) {
+			apb.bearingPresentToDestination = Double.parseDouble(sa[11]);
+		}
+		if (sa.length > 12 && sa[12].length() > 0) {
+			apb.bpdTM = sa[12];
+		}
+		if (sa.length > 13 && sa[13].length() > 0) {
+			apb.hdgToSteerToDestination = Double.parseDouble(sa[13]);
+		}
+		if (sa.length > 14 && sa[14].length() > 0) {
+			apb.htsTM = sa[14];
+		}
+		if (sa.length > 15 && sa[15].length() > 0) {
+			apb.mode = sa[15];
+		}
+		return apb;
+	}
+
 	/*
+	 * UTILITIES
 	 * End of String Parsers
 	 * Parsing and various Utilities start here
 	 */
@@ -2632,6 +2988,7 @@ public class StringParsers {
 
 
 	/*
+	   AUTO-PARSE
 	   Used by autoParse
 	   AutoParse Utilities and tools
 	 */
@@ -2660,6 +3017,10 @@ public class StringParsers {
 		SSD("SSD", "Ship Static Data", StringParsers::parseSSD, StringParsers.SSD.class),
 		VSD("VSD", "Voyage Static Data", StringParsers::parseVSD, StringParsers.VSD.class),
 		AAM("AAM", "Waypoint Arrival Alarm", StringParsers::parseAAM, StringParsers.AAM.class),
+		BOD("BOD", "Bearing - Origin to Destination", StringParsers::parseBOD, StringParsers.BOD.class),
+		BWC("BWC", "Bearing & Distance to Waypoint", StringParsers::parseBWx, StringParsers.BWx.class),
+		BWR("BWR", "Bearing & Distance to Waypoint - Rhumb Line", StringParsers::parseBWx, StringParsers.BWx.class),
+		APB("APB", "Heading/Track Controller (Autopilot) Sentence \"B\"", StringParsers::parseAPB, StringParsers.APB.class),
 		VDR("VDR", "Set and Drift", StringParsers::parseVDR, Current.class),
 		VHW("VHW", "Water speed and heading", StringParsers::parseVHW, VHW.class),
 		VLW("VLW", "Distance Traveled through Water", StringParsers::parseVLW, VLW.class),
