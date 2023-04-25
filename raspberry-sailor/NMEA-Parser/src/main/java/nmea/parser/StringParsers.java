@@ -57,37 +57,18 @@ import java.util.regex.Pattern;
  *   <li>VDR (Current Speed and Direction)</li>
  *   <li>VHW (Water, Heading and Speed)</li>
  *   <li>VLW (Distance Travelled through Water)</li>
+ *   <li>VPW (Speed - Measured Parallel to Wind, VMG)</li>
  *   <li>VTG (Track Made Good and Ground Speed)</li>
  *   <li>VSD (Voyage Static Data)</li>
  *   <li>VWR (Relative Wind Speed and Angle)</li>
  *   <li>VWT (True Wind Speed and Angle - obsolete)</li>
+ *   <li>WCV (Waypoint Closure Velocity)</li>
  *   <li>XDR (Transducers Measurement, Various Sensors)</li>
  *   <li>XTE (Cross Track Error)</li>
  *   <li>ZDA (UTC DCate and Time)</li>
  * </ol>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
  * <br/>
- * TODO - Implement the following:
- * <ul>
- *   <li>MDW Surface Wind, direction and velocity</li>
- *   <li>
- *     VPW Device measured velocity parallel true wind
- *     <pre>
- * VPW - Speed - Measured Parallel to Wind
- *        1   2 3   4 5
- *        |   | |   | |
- * $--VPW,x.x,N,x.x,M*hh<CR><LF>
- * Field Number:
- *  1) Speed, "-" means downwind
- *  2) N = Knots
- *  3) Speed, "-" means downwind
- *  4) M = Meters per second
- *  5) Checksum
- * -----------------
- *     </pre>
- *   </li>
- *   <li>WCV Waypoint Closure Velocity</li>
- * </ul>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  *    Also see: https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  *
@@ -102,7 +83,8 @@ public class StringParsers {
 	- AUTO-PARSE
 	 */
 
-  public final static String NMEA_EOS = "\r\n";	
+  public final static String NMEA_EOS = "\r\n";
+  public final static int MIN_NMEA_LENGTH = 6;
 
   public final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss z");
   static {
@@ -393,7 +375,7 @@ public class StringParsers {
 		final int MESS_NUM = 2;
 
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return gsvMap;
 		}
 //  	System.out.println("String [" + s + "]");
@@ -512,7 +494,7 @@ public class StringParsers {
 
 		ArrayList<Object> al = null;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return al;
 		}
 		/* Structure is
@@ -619,9 +601,10 @@ public class StringParsers {
 
 		@Override
 		public String toString() {
-			return String.format("HMS: %s, SigErrLat:%f, SigErrLng:%f, SigErrAlt:%f, SatID: %d, PMD: %f, BIM: %f, SDB: %f",
+			return String.format("HMS: %s, SigErrLat:%.02f, SigErrLng:%.02f, SigErrAlt:%.02f, SatID: %s, PMD: %.03f%%, BIM: %.02fm, SDB: %.03f",
 					utcDate.toString(sdf), sigmaErrorLat, sigmaErrorLong, sigmaErrorAlt,
-					satId, probMissedDetection, biasInMeters, stdDevOfBias);
+					(satId != 0 ? String.valueOf(satId) : "n/a"),
+					probMissedDetection, biasInMeters, stdDevOfBias);
 		}
 	}
 	public static GBS parseGBS(String data) {
@@ -752,7 +735,7 @@ public class StringParsers {
 		final int SPEED_IN_KN = 5;
 
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		/* Structure is
@@ -806,7 +789,7 @@ public class StringParsers {
 		final int SINCE_RESET = 3;
 
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return (VLW) null;
 		}
 
@@ -839,7 +822,7 @@ public class StringParsers {
 		 *
 		 */
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return 0d;
 		}
 
@@ -867,7 +850,7 @@ public class StringParsers {
 		int flavor = -1;
 
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		/* Structure is
@@ -976,7 +959,7 @@ public class StringParsers {
 	public static TrueWind parseVWT(String data) {
 		TrueWind wind = null;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		try {
@@ -993,7 +976,7 @@ public class StringParsers {
 	// Example: VWR,148.,L,02.4,N,01.2,M,04.4,K*XX
 	public static ApparentWind parseVWR(String data) {
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		/* Structure is
@@ -1060,7 +1043,7 @@ public class StringParsers {
 	public static OverGround parseVTG(String data) {
 		String s = data.trim();
 		OverGround og = null;
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		/* Structure is
@@ -1127,7 +1110,7 @@ public class StringParsers {
 	}
 	public static GLL parseGLL(String data, boolean useSymbol) {
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		if (!validCheckSum(s)) {
@@ -1218,7 +1201,7 @@ public class StringParsers {
 		final int HDG_POS = 1;
 		final int MT_POS = 2;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1;
 		}
     /* Structure is
@@ -1253,7 +1236,7 @@ public class StringParsers {
 		final int HDG_POS = 1;
 		final int MT_POS = 2;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1;
 		}
 		/* Structure is
@@ -1295,7 +1278,7 @@ public class StringParsers {
 	public static HDG parseHDG(String data) {
 		HDG ret = null;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return ret;
 		}
 		double hdg = 0d;
@@ -1386,7 +1369,7 @@ public class StringParsers {
 		 */
 		RMB rmb = null;
 		String s = str.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
 		try {
@@ -1698,7 +1681,7 @@ public class StringParsers {
 			RMC rmc = parseRMC(s);
 			result = Double.toString(rmc.getGp().lat);
 		} catch (Exception ex) {
-			result = "-";
+			result = "n/a";
 		}
 		return result;
 	}
@@ -1709,7 +1692,7 @@ public class StringParsers {
 			RMC rmc = parseRMC(s);
 			result = Double.toString(rmc.getGp().lng);
 		} catch (Exception ex) {
-			result = "-";
+			result = "n/a";
 		}
 		return result;
 	}
@@ -1720,7 +1703,7 @@ public class StringParsers {
 			RMC rmc = parseRMC(s);
 			result = Double.toString(rmc.getCog());
 		} catch (Exception ex) {
-			result = "-";
+			result = "n/a";
 		}
 		return result;
 	}
@@ -1731,7 +1714,7 @@ public class StringParsers {
 			RMC rmc = parseRMC(s);
 			result = Double.toString(rmc.getSog());
 		} catch (Exception ex) {
-			result = "-";
+			result = "n/a";
 		}
 		return result;
 	}
@@ -1832,7 +1815,7 @@ public class StringParsers {
 			float f = parseDBT(s, DEPTH_IN_METERS);
 			sr = Float.toString(f);
 		} catch (Exception ex) {
-			sr = "-";
+			sr = "n/a";
 		}
 		return sr;
 	}
@@ -1848,7 +1831,7 @@ public class StringParsers {
 		final int IN_METERS = 1;
 		final int OFFSET = 2;
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1F;
 		}
 		/* Structure is
@@ -1896,7 +1879,7 @@ public class StringParsers {
 
 	private static float parseDepth(String data, short unit, String sentenceID) {
 		String s = data.trim();
-		if (s.length() < 6) {
+		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1F;
 		}
 		/* Structure is
@@ -2099,10 +2082,10 @@ public class StringParsers {
 
 		@Override
 		public String toString() {
-			return String.format("Cat: %d, Draft: %f, Pass:%d, Going to: %s, est-UTC-Arr:%s, Status:%d, Flag:%d",
+			return String.format("Cat: %d, Draft: %.02fm, Pass:%d, Going to: %s, est-UTC-Arr:%s, Status:%d, Flag:%d",
 					category, draft, personsOnBoard,
-					(destination.isEmpty() ? "-" : destination),
-					(estUTCArrival != null ? estUTCArrival.toString(sdf) : "-"),
+					(destination.isEmpty() ? "n/a" : destination),
+					(estUTCArrival != null ? estUTCArrival.toString(sdf) : "n/a"),
 					navStatus, regAppFlag);
 		}
 	}
@@ -2395,7 +2378,7 @@ public class StringParsers {
 		public String toString() {
 			return String.format("Status-1:%s, Status-2:%s, Radius:%.02f, Unit:%s, WP:%s",
 					decodeStatusOne(statusOne), decodeStatusTwo(statusTwo),
-					arrivalRadius, unit, waypointId);
+					arrivalRadius, unit, (waypointId.trim().length() > 0 ? waypointId.trim() : "n/a"));
 		}
 	}
 	public static AAM parseAAM(String sentence) {
@@ -2526,7 +2509,7 @@ public class StringParsers {
 					utcDate.toString(sdf),
 					wpPosition != null ? wpPosition.toString() : " -'",
 					trueBearing, magBearing, distance,
-					(wpId.isEmpty() ? "-" : wpId), decodeMode(mode));
+					(wpId.isEmpty() ? "n/a" : wpId), decodeMode(mode));
 		}
 	}
 	public static BWx parseBWx(String sentence) {
@@ -2714,7 +2697,9 @@ public class StringParsers {
 		public String toString() {
 			return String.format("Status-1:%s, Status-2:%s, XTE: %.02f %s, Steer:%s, WP: %s, Start Status: %s, Arrival Status: %s, Origin-to-Dest: %.01f %s, Present-to-Dest: %.01f %s, Steer-t-Dest: %.01f %s, mode: %s",
 					decodeStatusOne(statusOne), decodeStatusTwo(statusTwo),
-					xteMag, xteUnit, steer, destWP, decodeStartStatus(startStatus), decodeArrivalStatus(arrivalStatus),
+					xteMag, xteUnit, steer,
+					(destWP.trim().length() > 0 ? destWP.trim() : "n/a"),
+					decodeStartStatus(startStatus), decodeArrivalStatus(arrivalStatus),
 					bearingOriginToDestination, bodTM,
 					bearingPresentToDestination, bpdTM,
 					hdgToSteerToDestination, htsTM,
@@ -2808,7 +2793,21 @@ public class StringParsers {
 	}
 
 
-	public static void parseVPW(String sentence) {
+	public static class VPW {
+		// A VMG
+		double speedInKnots = 0d;
+		double speedInMS = 0d;
+
+		@Override
+		public String toString() {
+			return String.format("VMG (VPW): %skt %s, %sm/s %s",
+					(speedInKnots != 0 ? String.format("%.02f", speedInKnots) : "n/a "),
+					(speedInKnots < 0 ? "downwind" : (speedInKnots != 0 ? "upwind" : "")),
+					(speedInMS != 0 ? String.format("%.02f", speedInMS) : "n/a "),
+					(speedInMS < 0 ? "downwind" : (speedInMS != 0 ? "upwind" : "")));
+		}
+	}
+	public static VPW parseVPW(String sentence) {
 		/*
 VPW - Speed - Measured Parallel to Wind
 The component of the vessel's velocity vector parallel to the direction of the true wind direction.
@@ -2820,9 +2819,61 @@ $--VPW,x.x,N,x.x,M*hh<CR><LF>
        |   Knots
        Speed, "-" = downwind
 		 */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+
+		VPW vpw = new VPW();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			vpw.speedInKnots = Double.parseDouble(sa[1]);
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			vpw.speedInMS = Double.parseDouble(sa[3]);
+		}
+		return vpw;
 	}
 
-	public static void parseWCV(String sentence) {
+	public static class WCV {
+		double velocity = 0;
+		String wayPointID = "";
+		String mode = "";
+
+		private static String decodeMode(String value) {
+			String meaning;
+			switch (value) {
+				case "A":
+					meaning = "Autonomous mode";
+					break;
+				case "D":
+					meaning = "Differential mode";
+					break;
+				case "E":
+					meaning = "Estimated (dead reckoning) mode";
+					break;
+				case "M":
+					meaning = "Manual input mode";
+					break;
+				case "S":
+					meaning = "Simulator mode";
+					break;
+				case "N":
+					meaning = "Data not valid";
+					break;
+				default:
+					meaning = String.format("Unknown[%s]", value);
+					break;
+			}
+			return meaning;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%.02f kn to %s. Mode: %s",
+					velocity,
+					(wayPointID.trim().length() > 0 ? wayPointID.trim() : "n/a"),
+					decodeMode(mode));
+		}
+
+	}
+	public static WCV parseWCV(String sentence) {
 /*
 WCV - Waypoint Closure Velocity
 The component of the velocity vector in the direction of the waypoint, from present position.
@@ -2844,6 +2895,20 @@ Mode Indicator:
 
 	The positioning system Mode Indicator field shall not be a null field.
  */
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+
+		WCV wcv = new WCV();
+		if (sa.length > 1 && sa[1].length() > 0) {
+			wcv.velocity = Double.parseDouble(sa[1]);
+		}
+		if (sa.length > 3 && sa[3].length() > 0) {
+			wcv.wayPointID = sa[3];
+		}
+		if (sa.length > 4 && sa[4].length() > 0) {
+			wcv.mode = sa[4];
+		}
+		return wcv;
+
 	}
 
 	/*
@@ -3111,6 +3176,8 @@ Mode Indicator:
 		BWC("BWC", "Bearing & Distance to Waypoint", StringParsers::parseBWx, StringParsers.BWx.class),
 		BWR("BWR", "Bearing & Distance to Waypoint - Rhumb Line", StringParsers::parseBWx, StringParsers.BWx.class),
 		APB("APB", "Heading/Track Controller (Autopilot) Sentence \"B\"", StringParsers::parseAPB, StringParsers.APB.class),
+		WCV("WCV", "Waypoint Closure Velocity", StringParsers::parseWCV, StringParsers.WCV.class),
+		VPW("VPW", "Speed - Measured Parallel to Wind, aka VMG", StringParsers::parseVPW, StringParsers.VPW.class),
 		VDR("VDR", "Set and Drift", StringParsers::parseVDR, Current.class),
 		VHW("VHW", "Water speed and heading", StringParsers::parseVHW, VHW.class),
 		VLW("VLW", "Distance Traveled through Water", StringParsers::parseVLW, VLW.class),

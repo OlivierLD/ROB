@@ -2478,7 +2478,7 @@ public class AISParser {
 							repeatIndicator,
 							MMSI,
 							decodeStatus(getNavStatus()),
-							getName(),
+							(getName() != null ? getName() : "n/a"),
 							getRot(),
 							getLatitude(),
 							getLongitude(),
@@ -2507,8 +2507,8 @@ public class AISParser {
 							messageType,
 							repeatIndicator,
 							MMSI,
-							getCallSign().trim(),
-							getVesselName().trim(),
+							(getCallSign().replace("@", " ").trim().length() > 0 ? getCallSign().replace("@", " ").trim() : "n/a"),
+							(getVesselName().replace("@", " ").trim().length() > 0 ? getVesselName().replace("@", " ").trim() : "n/a"),
 							decodeType(getShipType()),
 							getDimToBow() + getDimToStern(),
 							getDimToPort() + getDimToStbd(),
@@ -2517,7 +2517,7 @@ public class AISParser {
 							StringUtils.lpad(String.valueOf(getEtaDay()), 2, "0"),
 							StringUtils.lpad(String.valueOf(getEtaHour()), 2, "0"),
 							StringUtils.lpad(String.valueOf(getEtaMinute()), 2, "0"),
-							getDestination().trim());
+							(getDestination().replace("@", " ").trim().length() > 0 ? getDestination().replace("@", " ").trim() : "n/a"));
 					break;
 				case 8:
 					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Des.Area Code %d, FuncID %d, Data: %s",
