@@ -1409,31 +1409,35 @@ public class StringParsers {
 				rmb.setOwpid(data[RMB_ORIGIN_WP]);
 				rmb.setDwpid(data[RMB_DEST_WP]);
 
-				double _lat = 0d;
-				try {
-					_lat = parseNMEADouble(data[RMB_DEST_WP_LAT]);
-				} catch (Exception ex) {
-					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
-						ex.printStackTrace();
+				if (data[RMB_DEST_WP_LAT].length() > 0 && data[RMB_DEST_WP_LAT_SIGN].length() > 0 && data[RMB_DEST_WP_LNG].length() > 0 && data[RMB_DEST_WP_LNG_SIGN].length() > 0) {
+					double _lat = 0d;
+					try {
+						_lat = parseNMEADouble(data[RMB_DEST_WP_LAT]);
+					} catch (Exception ex) {
+						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+							ex.printStackTrace();
+						}
 					}
-				}
-				double lat = (int) (_lat / 100d) + ((_lat % 100d) / 60d);
-				if ("S".equals(data[RMB_DEST_WP_LAT_SIGN])) {
-					lat = -lat;
-				}
-				double _lng = 0d;
-				try {
-					_lng = parseNMEADouble(data[RMB_DEST_WP_LNG]);
-				} catch (Exception ex) {
-					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
-						ex.printStackTrace();
+					double lat = (int) (_lat / 100d) + ((_lat % 100d) / 60d);
+					if ("S".equals(data[RMB_DEST_WP_LAT_SIGN])) {
+						lat = -lat;
 					}
+					double _lng = 0d;
+					try {
+						_lng = parseNMEADouble(data[RMB_DEST_WP_LNG]);
+					} catch (Exception ex) {
+						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+							ex.printStackTrace();
+						}
+					}
+					double lng = (int) (_lng / 100d) + ((_lng % 100d) / 60d);
+					if ("W".equals(data[RMB_DEST_WP_LNG_SIGN])) {
+						lng = -lng;
+					}
+					rmb.setDest(new GeoPos(lat, lng, useSymbol));
+				} else {
+					rmb.setDest(null);
 				}
-				double lng = (int) (_lng / 100d) + ((_lng % 100d) / 60d);
-				if ("W".equals(data[RMB_DEST_WP_LNG_SIGN])) {
-					lng = -lng;
-				}
-				rmb.setDest(new GeoPos(lat, lng, useSymbol));
 				double rtd = 0d;
 				try {
 					rtd = parseNMEADouble(data[RMB_RANGE_TO_DEST]);
@@ -2717,7 +2721,7 @@ public class StringParsers {
 					decodeMode(mode));
 		}
 	}
-	public final static APB parseAPB(String sentence) {
+	public static APB parseAPB(String sentence) {
 		/*
 		Heading/Track Controller (Autopilot) Sentence "B"
 
@@ -2804,34 +2808,41 @@ public class StringParsers {
 	}
 
 
-	public final static void parseVPW(String sentence) {
+	public static void parseVPW(String sentence) {
 		/*
 VPW - Speed - Measured Parallel to Wind
 The component of the vessel's velocity vector parallel to the direction of the true wind direction.
 Sometimes called "speed made good to windward" or "velocity made good to windward".
 $--VPW,x.x,N,x.x,M*hh<CR><LF>
- Speed, meters/second, "-" = downwind
- Speed, knots, "-" = downwind
+       |   | |   |
+       |   | |   m/s
+       |   | Speed, "-" = downwind
+       |   Knots
+       Speed, "-" = downwind
 		 */
 	}
 
-	public final static void parseWCV(String sentence) {
+	public static void parseWCV(String sentence) {
 /*
 WCV - Waypoint Closure Velocity
-The component of the velocity vector in the direction of the waypoint, from present position. Sometimes
-called "speed made good" or "velocity made good".
+The component of the velocity vector in the direction of the waypoint, from present position.
+Sometimes called "speed made good" or "velocity made good".
 $--WCV,x.x,N,c--c,a*hh<CR><LF>
- Mode Indicator1
- Waypoint identifier
- Velocity component, knots
+       |   | |    |
+       |   | |    Mode Indicator
+       |   | Waypoint identifier
+       |   knots
+       Velocity component
 Notes:
-1) Positioning system Mode Indicator: A = Autonomous mode
-D = Differential mode
-E = Estimated (dead reckoning) mode
-M = Manual input mode
-S = Simulator mode
-N = Data not valid
-The positioning system Mode Indicator field shall not be a null field.
+Mode Indicator:
+	A = Autonomous mode
+	D = Differential mode
+	E = Estimated (dead reckoning) mode
+	M = Manual input mode
+	S = Simulator mode
+	N = Data not valid
+
+	The positioning system Mode Indicator field shall not be a null field.
  */
 	}
 

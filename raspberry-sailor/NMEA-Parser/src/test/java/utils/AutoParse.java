@@ -10,11 +10,12 @@ import static org.junit.Assert.fail;
 
 public class AutoParse {
 
-    // TODO More Strings... (RMB, ...)
+    // TODO More Strings...
     private final static String[] NMEA_DATA_SAMPLE = {
             "$GPRMC,170000.00,A,3744.79693,N,12223.30420,W,0.052,,200621,,,D*62",
             "$IIGLL,0906.455,S,14012.519,W,220714,A,A*5D",
             "$GPRMC,170001.00,A,3744.79690,N,12223.30424,W,0.183,,200621,,,D*69",
+            "$IIRMB,A,0.00,L,,HAKAAU  ,,,,,026.60,173,,V,A*67",
             "$IIGLL,0906.455,S,14012.519,W,220714,A,A*5D",
             "$GPRMC,170002.00,A,3744.79681,N,12223.30435,W,0.228,,200621,,,D*68",
             "$IIGLL,0906.458,S,14012.521,W,220716,A,A*59",

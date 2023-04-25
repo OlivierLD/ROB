@@ -93,6 +93,22 @@ public class RMB extends NMEAComposite implements Serializable {
 		return String.format("dest-lat%sdest-lng%sorig-wp%sdest-wp%sxte%sdts%srtd%sbtd%sdvc%sas", SEP, SEP, SEP, SEP, SEP, SEP, SEP, SEP, SEP).replace(SEP, separator);
 	}
 
+	private String decodeArrivalStatus(String value) {
+		String meaning;
+		switch (value) {
+			case "A":
+				meaning = "arrival circle entered";
+				break;
+			case "V":
+				meaning = "arrival circle not entered";
+				break;
+			default:
+				meaning = String.format("Unknown[%s]", value);
+				break;
+		}
+		return meaning;
+	}
+
 	@Override
 	public String getCsvData(String separator) {
 		return String.format("%s%s%s%s%s%s%s%s%f%s%s%s%f%s%f%s%f%s%s",
@@ -106,5 +122,14 @@ public class RMB extends NMEAComposite implements Serializable {
 				btd, separator,
 				dcv, separator,
 				as);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("From: %s, to: %s (%s), XTE: %.02f nm, dist: %.02f nm (steer %s), Bearing %.01f\272 T, at %.01f kn, Status: %s",
+				(owpid.isEmpty() ? "-" : owpid.trim()),
+				(dwpid.isEmpty() ? "-" : dwpid.trim()),
+				(dest != null ? dest.toString() : "no pos"),
+				xte, rtd, dts, btd, dcv, decodeArrivalStatus(as));
 	}
 }
