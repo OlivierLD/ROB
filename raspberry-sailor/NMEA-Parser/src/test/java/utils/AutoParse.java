@@ -6,9 +6,11 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class AutoParse {
 
+    // TODO More Strings... (RMB, ...)
     private final static String[] NMEA_DATA_SAMPLE = {
             "$GPRMC,170000.00,A,3744.79693,N,12223.30420,W,0.052,,200621,,,D*62",
             "$IIGLL,0906.455,S,14012.519,W,220714,A,A*5D",
@@ -22,6 +24,7 @@ public class AutoParse {
             "$GPGBS,163317.00,7.3,5.2,11.7,,,,*74",
             "$AISSD,PD2366@,MERRIMAC@@@@@@@@@@@@,017,000,03,02,1,AI*29",
             "$AIVSD,036,00.0,0000,@@@@@@@@@@@@@@@@@@@@,000000,00,00,00,00*4E",
+            "$AIVSD,036,00.0,0000,@@@@@@@@@@@@@@@@@@@@,123456,06,03,00,00*4C",
             "$GPXTE,,,,,N,N*5E",
             "$GPXTE,V,V,,,N,S*43",
             "$GPAAM,V,V,0.05,N,*23",
@@ -45,6 +48,7 @@ public class AutoParse {
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        fail(String.format("Exception for %s: %s", nmea, ex));
                     }
                 });
         assertTrue("Argh!", true); // Arf !

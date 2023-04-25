@@ -86,16 +86,20 @@ import java.util.regex.Pattern;
  * -----------------
  *     </pre>
  *   </li>
- *   <li>ZLZ Time of Day</li>
  *   <li>WCV Waypoint Closure Velocity</li>
  * </ul>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
- * Also see https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
+ *    Also see: https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
+ *
+ * TODO: getters for all public static classes..., externalize all public static classes ? Make sure CheckSUm is validated all the time.
  */
 public class StringParsers {
 
 	/*
-	Code Units (Comments) : STRING-PARSERS, UTILITIES, AUTO-PARSE
+	Code Units (Comments) below:
+	- STRING-PARSERS
+	- UTILITIES
+	- AUTO-PARSE
 	 */
 
   public final static String NMEA_EOS = "\r\n";	
@@ -603,16 +607,20 @@ public class StringParsers {
 	}
 
 	public static class GBS {
-		int hours = 0, mins = 0;
-		float secs = 0f;
+		UTCDate utcDate;
 		double sigmaErrorLat =0d, sigmaErrorLong = 0d, sigmaErrorAlt = 0d;
 		int satId = 0; // TODO Double ?
 		double probMissedDetection = 0d, biasInMeters = 0d, stdDevOfBias = 0d;
 
+		private final static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss 'UTC'");
+		static {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+		}
+
 		@Override
 		public String toString() {
-			return String.format("HMS: %d:%d:%2.2f, SigErrLat:%f, SigErrLng:%f, SigErrAlt:%f, SatID: %d, PMD: %f, BIM: %f, SDB: %f",
-					hours, mins, secs, sigmaErrorLat, sigmaErrorLong, sigmaErrorAlt,
+			return String.format("HMS: %s, SigErrLat:%f, SigErrLng:%f, SigErrAlt:%f, SatID: %d, PMD: %f, BIM: %f, SDB: %f",
+					utcDate.toString(sdf), sigmaErrorLat, sigmaErrorLong, sigmaErrorAlt,
 					satId, probMissedDetection, biasInMeters, stdDevOfBias);
 		}
 	}
@@ -641,51 +649,38 @@ public class StringParsers {
                  1
 		 */
 		String[] sa = data.substring(0, data.indexOf("*")).split(",");
-		int hours = 0, mins = 0;
-		float secs = 0f;
-		double sigmaErrorLat =0d, sigmaErrorLong = 0d, sigmaErrorAlt = 0d;
-		int satId = 0; // TODO Double ?
-		double probMissedDetection = 0d, biasInMeters = 0d, stdDevOfBias = 0d;
+
+		GBS gbs = new GBS();
 
 		if (sa.length > 1 && sa[1].length() > 0) {
 			String utc = sa[1];
-			hours = Integer.parseInt(utc.substring(0, 2));
-			mins = Integer.parseInt(utc.substring(2, 4));
-			secs = Float.parseFloat(utc.substring(4));
+			int hours = Integer.parseInt(utc.substring(0, 2));
+			int mins = Integer.parseInt(utc.substring(2, 4));
+			float secs = Float.parseFloat(utc.substring(4));
+			UTCDate utcDate = new UTCDate(null, null, null, hours, mins, (int)Math.round(secs), null);
+			gbs.utcDate = utcDate;
 		}
 		if (sa.length > 2 && sa[2].length() > 0) {
-			sigmaErrorLat = Double.parseDouble(sa[2]);
+			gbs.sigmaErrorLat = Double.parseDouble(sa[2]);
 		}
 		if (sa.length > 3 && sa[3].length() > 0) {
-			sigmaErrorLong = Double.parseDouble(sa[3]);
+			gbs.sigmaErrorLong = Double.parseDouble(sa[3]);
 		}
 		if (sa.length > 4 && sa[4].length() > 0) {
-			sigmaErrorAlt = Double.parseDouble(sa[4]);
+			gbs.sigmaErrorAlt = Double.parseDouble(sa[4]);
 		}
 		if (sa.length > 5 && sa[5].length() > 0) {
-			satId = Integer.parseInt(sa[5]);
+			gbs.satId = Integer.parseInt(sa[5]);
 		}
 		if (sa.length > 6 && sa[6].length() > 0) {
-			probMissedDetection = Double.parseDouble(sa[6]);
+			gbs.probMissedDetection = Double.parseDouble(sa[6]);
 		}
 		if (sa.length > 7 && sa[7].length() > 0) {
-			biasInMeters = Double.parseDouble(sa[7]);
+			gbs.biasInMeters = Double.parseDouble(sa[7]);
 		}
 		if (sa.length > 8 && sa[8].length() > 0) {
-			stdDevOfBias = Double.parseDouble(sa[8]);
+			gbs.stdDevOfBias = Double.parseDouble(sa[8]);
 		}
-		GBS gbs = new GBS();
-		gbs.hours = hours;
-		gbs.mins = mins;
-		gbs.secs = secs;
-		gbs.sigmaErrorLat = sigmaErrorLat;
-		gbs.sigmaErrorLong = sigmaErrorLong;
-		gbs.sigmaErrorAlt = sigmaErrorAlt;
-		gbs.satId = satId;
-		gbs.probMissedDetection = probMissedDetection;
-		gbs.biasInMeters = biasInMeters;
-		gbs.stdDevOfBias = stdDevOfBias;
-
 		return gbs;
 	}
 
@@ -2089,18 +2084,21 @@ public class StringParsers {
 		double draft = 0d;
 		int personsOnBoard = 0;
 		String destination = "";
-		int utcArrivalHours = 0, utcArrivalMins = 0;
-		float utcArrivalSecs = 0f;
-		int estDayArrival = 0, estMonthArrival = 0;
+		UTCDate estUTCArrival;
 		int navStatus = 0;
 		int regAppFlag = 0;
 
+		private final static SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm:ss 'UTC'");
+		static {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+		}
+
 		@Override
 		public String toString() {
-			return String.format("Cat: %d, Draft: %f, Pass:%d, Going to: %s, UTC-Arr: %02d:%02d:%02.2f, Day:%d, Month:%d, Status:%d, Flag:%d",
-					category, draft, personsOnBoard, destination,
-					utcArrivalHours, utcArrivalMins, utcArrivalSecs,
-					estDayArrival, estMonthArrival,
+			return String.format("Cat: %d, Draft: %f, Pass:%d, Going to: %s, est-UTC-Arr:%s, Status:%d, Flag:%d",
+					category, draft, personsOnBoard,
+					(destination.isEmpty() ? "-" : destination),
+					(estUTCArrival != null ? estUTCArrival.toString(sdf) : "-"),
 					navStatus, regAppFlag);
 		}
 	}
@@ -2122,60 +2120,83 @@ public class StringParsers {
 	 Example: $AIVSD,036,00.0,0000,@@@@@@@@@@@@@@@@@@@@,000000,00,00,00,00*4E
 	 */
 	public static VSD parseVSD(String sentence) {
-		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
-		int category = 0;
-		double draft = 0d;
-		int personsOnBoard = 0;
-		String destination = "";
-		int utcArrivalHours = 0, utcArrivalMins = 0;
-		float utcArrivalSecs = 0f;
-		int estDayArrival = 0, estMonthArrival = 0;
-		int navStatus = 0;
-		int regAppFlag = 0;
 
-		if (sa.length > 1 && sa[1].length() > 0) {
-			category = Integer.parseInt(sa[1]);
+		if (sentence.length() < 6 || !sentence.contains("*")) {
+			return null;
 		}
-		if (sa.length > 2 && sa[2].length() > 0) {
-			draft = Double.parseDouble(sa[2]);
+		if (!validCheckSum(sentence)) {
+			return null;
 		}
-		if (sa.length > 3 && sa[3].length() > 0) {
-			personsOnBoard = Integer.parseInt(sa[3]);
-		}
-		if (sa.length > 4 && sa[4].length() > 0) {
-			destination = sa[4].replaceAll("@", " ").trim();
-		}
-		if (sa.length > 5 && sa[5].length() > 0) {
-			utcArrivalHours = Integer.parseInt(sa[5].substring(0, 2));
-			utcArrivalMins = Integer.parseInt(sa[5].substring(2, 4));
-			utcArrivalSecs = Float.parseFloat(sa[5].substring(4));
-		}
-		if (sa.length > 6 && sa[6].length() > 0) {
-			estDayArrival = Integer.parseInt(sa[6]);
-		}
-		if (sa.length > 7 && sa[7].length() > 0) {
-			estMonthArrival = Integer.parseInt(sa[7]);
-		}
-		if (sa.length > 8 && sa[8].length() > 0) {
-			navStatus = Integer.parseInt(sa[8]);
-		}
-		if (sa.length > 9 && sa[9].length() > 0) {
-			regAppFlag = Integer.parseInt(sa[9]);
-		}
-		VSD vsd = new VSD();
-		vsd.category = category;
-		vsd.draft = draft;
-		vsd.personsOnBoard = personsOnBoard;
-		vsd.destination = destination;
-		vsd.utcArrivalHours = utcArrivalHours;
-		vsd.utcArrivalMins = utcArrivalMins;
-		vsd.utcArrivalSecs = utcArrivalSecs;
-		vsd.estDayArrival = estDayArrival;
-		vsd.estMonthArrival = estMonthArrival;
-		vsd.navStatus = navStatus;
-		vsd.regAppFlag = regAppFlag;
 
-		return vsd;
+		if (sentence.contains("VSD,")) {
+
+			String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+			VSD vsd = new VSD();
+
+			if (sa.length > 1 && sa[1].length() > 0) {
+				vsd.category = Integer.parseInt(sa[1]);
+			}
+			if (sa.length > 2 && sa[2].length() > 0) {
+				vsd.draft = Double.parseDouble(sa[2]);
+			}
+			if (sa.length > 3 && sa[3].length() > 0) {
+				vsd.personsOnBoard = Integer.parseInt(sa[3]);
+			}
+			if (sa.length > 4 && sa[4].length() > 0) {
+				vsd.destination = sa[4].replaceAll("@", " ").trim();
+			}
+			// UTC Arrival
+			if (sa.length > 7 && sa[5].length() > 0 && sa[6].length() > 0 && sa[7].length() > 0) {
+				if (Integer.parseInt(sa[5]) == 0 && "00".equals(sa[6]) && "00".equals(sa[7])) {
+					vsd.estUTCArrival = null;
+				} else {
+					int utcArrivalHours = Integer.parseInt(sa[5].substring(0, 2));
+					int utcArrivalMins = Integer.parseInt(sa[5].substring(2, 4));
+					float utcArrivalSecs = Float.parseFloat(sa[5].substring(4));
+					int estDayArrival = Integer.parseInt(sa[6]);
+					int estMonthArrival = Integer.parseInt(sa[7]);
+					int d = 1;
+					try {
+						d = estDayArrival;
+					} catch (Exception ex) {
+						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+							ex.printStackTrace();
+						}
+					}
+					int mo = 1;
+					try {
+						mo = estMonthArrival - 1;
+					} catch (Exception ex) {
+						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+							ex.printStackTrace();
+						}
+					}
+					UTCDate estUTCDate = new UTCDate(null, mo, d, utcArrivalHours, utcArrivalMins, (int)Math.round(utcArrivalSecs), null);
+					vsd.estUTCArrival = estUTCDate;
+
+//					Calendar local = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // new GregorianCalendar();
+//					local.set(Calendar.HOUR_OF_DAY, utcArrivalHours);
+//					local.set(Calendar.MINUTE, utcArrivalMins);
+//					local.set(Calendar.SECOND, (int) Math.round(utcArrivalSecs));
+//					local.set(Calendar.MILLISECOND, 0); // TODO Something nicer?
+//					local.set(Calendar.DATE, d);
+//					local.set(Calendar.MONTH, mo);
+//
+//					Date utc = local.getTime();
+//					vsd.estUTCArrival = new UTCDate(utc);
+				}
+			}
+
+			if (sa.length > 8 && sa[8].length() > 0) {
+				vsd.navStatus = Integer.parseInt(sa[8]);
+			}
+			if (sa.length > 9 && sa[9].length() > 0) {
+				vsd.regAppFlag = Integer.parseInt(sa[9]);
+			}
+			return vsd;
+		} else {
+			return null;
+		}
 	}
 
 	public final static class XTE {
@@ -2449,11 +2470,18 @@ public class StringParsers {
 	}
 
 	public static class BWx {
-		int obsUTCHours = 0, obsUTCMins = 0;
-		float obsUTCSecs = 0f;
-		double wpLat = 0d, wpLng = 0d;
+		UTCDate utcDate;
+		GeoPos wpPosition;
 		double trueBearing = 0d, magBearing = 0d, distance = 0d;
 		String wpId = "", mode = "";
+
+		public GeoPos getWpPosition() {
+			return wpPosition;
+		}
+
+		public void setWpPosition(GeoPos wpPosition) {
+			this.wpPosition = wpPosition;
+		}
 
 		private static String decodeMode(String value) {
 			String meaning;
@@ -2483,13 +2511,18 @@ public class StringParsers {
 			return meaning;
 		}
 
+		private final static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss 'UTC'");
+		static {
+			sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+		}
+
 		@Override
 		public String toString() {
-			return String.format("UTC Obs:%02d:%02d:%02.2f, from Lat %f, Long %f, Bearing: True: %f, Mag: %f, Distance: %f, WP: %s, Mode: %s",
-					obsUTCHours, obsUTCMins, obsUTCSecs,
-					wpLat, wpLng,
+			return String.format("UTC Obs:%s, from WP:%s, Bearing: True: %.01f\272, Mag: %.01f\272, Distance: %.02f nm, WP: %s, Mode: %s",
+					utcDate.toString(sdf),
+					wpPosition != null ? wpPosition.toString() : " -'",
 					trueBearing, magBearing, distance,
-					wpId, decodeMode(mode));
+					(wpId.isEmpty() ? "-" : wpId), decodeMode(mode));
 		}
 	}
 	public static BWx parseBWx(String sentence) {
@@ -2519,43 +2552,57 @@ public class StringParsers {
         Examples: $GPBWC,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*53
                   $GPBWR,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*42
  		 */
-		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
-		BWx bwx = new BWx();
-		if (sa.length > 1 && sa[1].length() > 0) {
-			bwx.obsUTCHours = Integer.parseInt(sa[1].substring(0, 2));
-			bwx.obsUTCMins = Integer.parseInt(sa[1].substring(2, 4));
-			bwx.obsUTCSecs = Float.parseFloat(sa[1].substring(4));
+		if (sentence.length() < 6 || !sentence.contains("*")) {
+			return null;
 		}
-		if (sa.length > 2 && sa[2].length() > 0 && sa.length > 3 && sa[3].length() > 0) {
-			double lat = Double.parseDouble(sa[2]);
-			if (sa[3].equals("S")) {
-				lat -= lat;
+		if (!validCheckSum(sentence)) {
+			return null;
+		}
+
+		if (sentence.contains("BWC,") || sentence.contains("BWR,")) {
+			String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+			BWx bwx = new BWx();
+			if (sa.length > 1 && sa[1].length() > 0) {
+				int hours = Integer.parseInt(sa[1].substring(0, 2));
+				int minutes = Integer.parseInt(sa[1].substring(2, 4));
+				float seconds = Float.parseFloat(sa[1].substring(4));
+				bwx.utcDate = new UTCDate(null, null, null, hours, minutes, (int)Math.round(seconds), null);
 			}
-			bwx.wpLat = lat;
-		}
-		if (sa.length > 4 && sa[4].length() > 0 && sa.length > 5 && sa[5].length() > 0) {
-			double lng = Double.parseDouble(sa[4]);
-			if (sa[5].equals("W")) {
-				lng -= lng;
+			if (sa.length > 2 && sa[2].length() > 0 && sa.length > 3 && sa[3].length() > 0 &&
+					sa.length > 4 && sa[4].length() > 0 && sa.length > 5 && sa[5].length() > 0) {
+				String deg = sa[2].substring(0, 2);
+				String min = sa[2].substring(2);
+				double lat = GeomUtil.sexToDec(deg, min);
+				if ("S".equals(sa[3])) {
+					lat = -lat;
+				}
+				deg = sa[4].substring(0, 3);
+				min = sa[4].substring(3);
+				double lng = GeomUtil.sexToDec(deg, min);
+				if ("W".equals(sa[5])) {
+					lng = -lng;
+				}
+				bwx.setWpPosition(new GeoPos(lat, lng));
 			}
-			bwx.wpLng = lng;
+			if (sa.length > 6 && sa[6].length() > 0) {
+				bwx.trueBearing = Double.parseDouble(sa[6]);
+			}
+			if (sa.length > 8 && sa[8].length() > 0) {
+				bwx.magBearing = Double.parseDouble(sa[8]);
+			}
+			if (sa.length > 10 && sa[10].length() > 0) {
+				bwx.distance = Double.parseDouble(sa[10]);
+			}
+			if (sa.length > 12 && sa[12].length() > 0) {
+				bwx.wpId = sa[12];
+			}
+			if (sa.length > 13 && sa[13].length() > 0) {
+				bwx.mode = sa[13];
+			}
+			return bwx;
+		} else {
+			return null;
 		}
-		if (sa.length > 6 && sa[6].length() > 0) {
-			bwx.trueBearing = Double.parseDouble(sa[6]);
-		}
-		if (sa.length > 8 && sa[8].length() > 0) {
-			bwx.magBearing = Double.parseDouble(sa[8]);
-		}
-		if (sa.length > 10 && sa[10].length() > 0) {
-			bwx.distance = Double.parseDouble(sa[10]);
-		}
-		if (sa.length > 12 && sa[12].length() > 0) {
-			bwx.wpId = sa[12];
-		}
-		if (sa.length > 13 && sa[13].length() > 0) {
-			bwx.mode = sa[13];
-		}
-		return bwx;
 	}
 
 	public final static class APB {
@@ -2754,6 +2801,38 @@ public class StringParsers {
 			apb.mode = sa[15];
 		}
 		return apb;
+	}
+
+
+	public final static void parseVPW(String sentence) {
+		/*
+VPW - Speed - Measured Parallel to Wind
+The component of the vessel's velocity vector parallel to the direction of the true wind direction.
+Sometimes called "speed made good to windward" or "velocity made good to windward".
+$--VPW,x.x,N,x.x,M*hh<CR><LF>
+ Speed, meters/second, "-" = downwind
+ Speed, knots, "-" = downwind
+		 */
+	}
+
+	public final static void parseWCV(String sentence) {
+/*
+WCV - Waypoint Closure Velocity
+The component of the velocity vector in the direction of the waypoint, from present position. Sometimes
+called "speed made good" or "velocity made good".
+$--WCV,x.x,N,c--c,a*hh<CR><LF>
+ Mode Indicator1
+ Waypoint identifier
+ Velocity component, knots
+Notes:
+1) Positioning system Mode Indicator: A = Autonomous mode
+D = Differential mode
+E = Estimated (dead reckoning) mode
+M = Manual input mode
+S = Simulator mode
+N = Data not valid
+The positioning system Mode Indicator field shall not be a null field.
+ */
 	}
 
 	/*

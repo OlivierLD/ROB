@@ -21,5 +21,6 @@ dependencies {
   implementation 'org.rxtx:rxtx:2.1.7'
   implementation project(':common-utils')
   implementation project(":Serial-IO")   // Uses org.rxtx:rxtx:2.1.7
-  implementation project(':raspberry-sailor:NMEA-multiplexer')
+  implementation project(':raspberry-sailor:NMEA-Parser')
+  // implementation project(':raspberry-sailor:NMEA-multiplexer')
 }
