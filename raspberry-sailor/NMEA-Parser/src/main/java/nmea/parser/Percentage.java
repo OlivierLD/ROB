@@ -20,6 +20,7 @@ public abstract class Percentage implements Serializable {
 		return this.percentage;
 	}
 
+	@Override
 	public String toString() {
 		double d = this.percentage;
 		return FMT.format(d) + PERCENT;

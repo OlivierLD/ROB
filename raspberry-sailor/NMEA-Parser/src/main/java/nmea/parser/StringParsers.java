@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  *    Also see: https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  *
- * TODO: getters for all public static classes..., externalize all public static classes ? Make sure CheckSUm is validated all the time.
+ * TODO: getters for all public static classes ?...
  */
 public class StringParsers {
 
@@ -83,25 +83,28 @@ public class StringParsers {
 	- AUTO-PARSE
 	 */
 
-  public final static String NMEA_EOS = "\r\n";
-  public final static int MIN_NMEA_LENGTH = 6;
+	public final static String NMEA_EOS = "\r\n";
+	public final static int MIN_NMEA_LENGTH = 6;
 
-  public final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss z");
-  static {
-  	SDF_UTC.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
-  }
+	public final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss z");
+
+	static {
+		SDF_UTC.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
+	}
 
 	private static Map<Integer, SVData> gsvMap = null;
-
 
   	/*
   	 * STRING-PARSERS
   	 * StringParsers starting here
   	 */
 
-	public static List<StringGenerator.XDRElement> parseXDR(String data) {
+	public static List<StringGenerator.XDRElement> parseXDR(String sentence) {
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		List<StringGenerator.XDRElement> lxdr = new ArrayList<>();
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		if ((sa.length - 1) % 4 != 0) { // Mismatch
 			System.out.println("XDR String invalid (" + sa.length + " element(s) found, expected a multiple of 4)");
 			return lxdr;
@@ -134,11 +137,11 @@ public class StringParsers {
 				}
 			}
 			if (!foundType) {
-				System.out.println("Unknown XDR type [" + type + "], in [" + data + "]");
+				System.out.println("Unknown XDR type [" + type + "], in [" + sentence + "]");
 				return lxdr;
 			}
 			if (!foundUnit) {
-				System.out.println("Invalid XDR unit [" + unit + "] for type [" + type + "], in [" + data + "]");
+				System.out.println("Invalid XDR unit [" + unit + "] for type [" + type + "], in [" + sentence + "]");
 				return lxdr;
 			}
 		}
@@ -161,7 +164,7 @@ public class StringParsers {
 	}
 
 	// MDA Meteorological Composite
-	public static MDA parseMDA(String data) {
+	public static MDA parseMDA(String sentence) {
 		final int PRESS_INCH = 1;
 		final int PRESS_BAR = 3;
 		final int AIR_T = 5;
@@ -191,7 +194,11 @@ public class StringParsers {
 		 *
 		 * Example: $WIMDA,29.4473,I,0.9972,B,17.2,C,,,,,,,,,,,,,,*3E
 		 */
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
+
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		MDA mda = new MDA();
 		for (int i = 0; i < sa.length; i++) {
 			//  System.out.println(sa[i]);
@@ -246,10 +253,10 @@ public class StringParsers {
 
 	/**
 	 * MMB Atmospheric pressure
-	 * @param data the one to parse
+	 * @param sentence the one to parse
 	 * @return Pressure in Mb / hPa
 	 */
-	public static double parseMMB(String data) {
+	public static double parseMMB(String sentence) {
 		final int PR_IN_HG = 1;
 		final int PR_BARS = 3;
 		/*
@@ -260,8 +267,11 @@ public class StringParsers {
 		 *                     |       Inches of Hg
 		 *                     Pressure in inches of Hg
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		double d = 0d;
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			d = Double.parseDouble(sa[PR_BARS]);
 			d *= 1_000d;
@@ -274,7 +284,7 @@ public class StringParsers {
 	}
 
 	// MTA Air Temperature
-	public static double parseMTA(String data) {
+	public static double parseMTA(String sentence) {
 		final int TEMP_CELSIUS = 1;
 		/*
 		 * Structure is $IIMTA,020.5,C*30
@@ -282,8 +292,11 @@ public class StringParsers {
 		 *                     |     Celsius
 		 *                     Temperature in Celsius
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		double d = 0d;
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			d = Double.parseDouble(sa[TEMP_CELSIUS]);
 		} catch (NumberFormatException nfe) {
@@ -295,7 +308,7 @@ public class StringParsers {
 	}
 
 	// VDR Current Speed and Direction
-	public static Current parseVDR(String data) {
+	public static Current parseVDR(String sentence) {
 		final int DIR = 1;
 		final int SPEED = 5;
 		/*
@@ -308,8 +321,11 @@ public class StringParsers {
 		 *                     |    True
 		 *                     True Dir
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		Current current = null;
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			double speed = Double.parseDouble(sa[SPEED]);
 			float dir = Float.parseFloat(sa[DIR]);
@@ -322,7 +338,7 @@ public class StringParsers {
 		return current;
 	}
 
-	public static float parseBAT(String data) {
+	public static float parseBAT(String sentence) {
 		final int VOLTAGE = 1;
 		/*
 		 * NOT STANDARD !!!
@@ -333,8 +349,11 @@ public class StringParsers {
 		 *                     |     Volts
 		 *                     Voltage
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		float v = -1f;
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			v = Float.parseFloat(sa[VOLTAGE]);
 		} catch (NumberFormatException nfe) {
@@ -345,7 +364,7 @@ public class StringParsers {
 		return v;
 	}
 
-	public static long parseSTD(String data) {
+	public static long parseSTD(String sentence) {
 		final int VALUE = 1;
 		/*
 		 * NOT STANDARD !!!
@@ -353,8 +372,11 @@ public class StringParsers {
 		 *                     |
 		 *                     Cache Age in ms
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		long age = 0L;
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			age = Long.parseLong(sa[VALUE]);
 		} catch (NumberFormatException nfe) {
@@ -370,13 +392,16 @@ public class StringParsers {
 		return gsvData;
 	}
 	// GSV Detailed Satellite data
-	public static Map<Integer, SVData> parseGSV(String data) {
+	public static Map<Integer, SVData> parseGSV(String sentence) {
 		final int NB_MESS = 1;
 		final int MESS_NUM = 2;
 
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return gsvMap;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 //  	System.out.println("String [" + s + "]");
 		/* Structure is $GPGSV,3,1,11,03,03,111,00,04,15,270,00,06,01,010,00,13,06,292,00*74
@@ -398,7 +423,7 @@ public class StringParsers {
 		int nbMess = -1;
 		int messNum = -1;
 
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			nbMess = Integer.parseInt(sa[NB_MESS]);
 			messNum = Integer.parseInt(sa[MESS_NUM]);
@@ -478,10 +503,10 @@ public class StringParsers {
 	public static final int GGA_ALT_IDX = 3;
 
 	// GGA Global Positioning System Fix Data. Time, Position and fix related data for a GPS receiver
-	public static List<Object> parseGGA(String data) {
-		return parseGGA(data, true);
+	public static List<Object> parseGGA(String sentence) {
+		return parseGGA(sentence, true);
 	}
-	public static List<Object> parseGGA(String data, boolean useSymbol) {
+	public static List<Object> parseGGA(String sentence, boolean useSymbol) {
 		final int KEY_POS = 0;
 		final int UTC_POS = 1;
 		final int LAT_POS = 2;
@@ -493,9 +518,12 @@ public class StringParsers {
 		final int ANTENNA_ALT = 9;
 
 		ArrayList<Object> al = null;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return al;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $GPGGA,014457,3739.853,N,12222.821,W,1,03,5.4,1.1,M,-28.2,M,,*7E
@@ -607,7 +635,7 @@ public class StringParsers {
 					probMissedDetection, biasInMeters, stdDevOfBias);
 		}
 	}
-	public static GBS parseGBS(String data) {
+	public static GBS parseGBS(String sentence) {
 		/*
 		GPS Satellite Fault Detection
 
@@ -631,7 +659,10 @@ public class StringParsers {
                  |         2
                  1
 		 */
-		String[] sa = data.substring(0, data.indexOf("*")).split(",");
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		GBS gbs = new GBS();
 
@@ -668,7 +699,7 @@ public class StringParsers {
 	}
 
 	// GSA GPS DOP and active satellites
-	public static GSA parseGSA(String data) {
+	public static GSA parseGSA(String sentence) {
 		final int MODE_1 = 1;
 		final int MODE_2 = 2;
 		final int PDOP = 15;
@@ -685,8 +716,11 @@ public class StringParsers {
 		 *        Mode: M=Manual, forced to operate in 2D or 3D
 		 *              A=Automatic, 3D/2D
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		GSA gsa = new GSA();
-		String[] elements = data.substring(0, data.indexOf("*")).split(",");
+		String[] elements = sentence.substring(0, sentence.indexOf("*")).split(",");
 		if (elements.length >= 2) {
 			if ("M".equals(elements[MODE_1])) {
 				gsa.setMode1(GSA.ModeOne.Manual);
@@ -725,18 +759,21 @@ public class StringParsers {
 	}
 
 	// VHW Water speed and heading
-	public static VHW parseVHW(String data) {
-		return parseVHW(data, 0d);
+	public static VHW parseVHW(String sentence) {
+		return parseVHW(sentence, 0d);
 	}
 
-	public static VHW parseVHW(String data, double defaultBSP) {
+	public static VHW parseVHW(String sentence, double defaultBSP) {
 		final int HDG_IN_DEG_TRUE = 1;
 		final int HDG_IN_DEG_MAG = 3;
 		final int SPEED_IN_KN = 5;
 
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *         1   2 3   4 5   6 7   8
@@ -753,7 +790,7 @@ public class StringParsers {
 		double hdg = -1d;
 
 		try {
-			String[] nmeaElements = data.substring(0, data.indexOf("*")).split(",");
+			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			try {
 				speed = parseNMEADouble(nmeaElements[SPEED_IN_KN]);
 			} catch (Exception ex) {
@@ -784,15 +821,17 @@ public class StringParsers {
 	}
 
 	// VLW Distance Traveled through Water
-	public static VLW parseVLW(String data) {
+	public static VLW parseVLW(String sentence) {
 		final int CUM_DIST = 1;
 		final int SINCE_RESET = 3;
 
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return (VLW) null;
 		}
-
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		double cumulative = 0d;
 		double sinceReset = 0d;
 		/* Structure is
@@ -804,7 +843,7 @@ public class StringParsers {
 		 *        Total cumulative distance
 		 */
 		try {
-			String[] nmeaElements = data.substring(0, data.indexOf("*")).split(",");
+			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			cumulative = parseNMEADouble(nmeaElements[CUM_DIST]);
 			sinceReset = parseNMEADouble(nmeaElements[SINCE_RESET]);
 		} catch (Exception ex) {
@@ -815,20 +854,23 @@ public class StringParsers {
 	}
 
 	// MTW Water Temperature
-	public static double parseMTW(String data) {
+	public static double parseMTW(String sentence) {
 		final int TEMP_CELSIUS = 1;
 		/* Structure
 		 * $xxMTW,+18.0,C*hh
 		 *
 		 */
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return 0d;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 
 		double temp = 0d;
 		try {
-			String[] nmeaElements = data.substring(0, data.indexOf("*")).split(",");
+			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			String _s = nmeaElements[TEMP_CELSIUS];
 			if (_s.startsWith("+")) {
 				_s = _s.substring(1);
@@ -846,12 +888,15 @@ public class StringParsers {
 
 	// MWV Wind Speed and Angle
 	// AWA, AWS (R), possibly TWA, TWS (T)
-	public static Wind parseMWV(String data) {
+	public static Wind parseMWV(String sentence) {
 		int flavor = -1;
 
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $aaMWV,x.x,a,x.x,a,A*hh
@@ -917,7 +962,7 @@ public class StringParsers {
 	}
 
 	// MWD Wind Direction & Speed
-	public static TrueWind parseMWD(String data) {
+	public static TrueWind parseMWD(String sentence) {
 			/* $WIMWD,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>*hh
 	     *
 	     * NMEA 0183 standard Wind Direction and Speed, with respect to north.
@@ -932,8 +977,8 @@ public class StringParsers {
 	     * <8> M = Meters/second
 	     */
 		TrueWind tw = null;
-		if (validCheckSum(data)) {
-			String[] part = data.split(",");
+		if (validCheckSum(sentence)) {
+			String[] part = sentence.split(",");
 			double dir = 0;
 			double speed = 0;
 			if ("T".equals(part[2])) {
@@ -943,6 +988,8 @@ public class StringParsers {
 				speed = Double.parseDouble(part[5]);
 			}
 			tw = new TrueWind((int)Math.round(dir), speed);
+		} else {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		return tw;
 	}
@@ -956,14 +1003,17 @@ public class StringParsers {
 	 *        |     Calculated wind Speed, knots
 	 *        Calculated wind angle relative to the vessel, 0 to 180, left/right L/R of vessel heading
 	 */
-	public static TrueWind parseVWT(String data) {
+	public static TrueWind parseVWT(String sentence) {
 		TrueWind wind = null;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		try {
-			// TODO Implement
+			// TODO Implement ?
 		} catch (Exception e) {
 			System.err.println("parseVWT for " + s + ", " + e.toString());
 //    e.printStackTrace();
@@ -974,10 +1024,13 @@ public class StringParsers {
 	// VWR Relative Wind Speed and Angle
 	// AWA, AWS
 	// Example: VWR,148.,L,02.4,N,01.2,M,04.4,K*XX
-	public static ApparentWind parseVWR(String data) {
-		String s = data.trim();
+	public static ApparentWind parseVWR(String sentence) {
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $aaVWR,x.x,a,x.x,N,x.x,M,x.x,K*hh
@@ -1040,11 +1093,14 @@ public class StringParsers {
 	}
 
 	// VTG Track made good and Ground speed
-	public static OverGround parseVTG(String data) {
-		String s = data.trim();
+	public static OverGround parseVTG(String sentence) {
+		String s = sentence.trim();
 		OverGround og = null;
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 * $IIVTG,x.x,T,x.x,M,x.x,N,x.x,K,A*hh
@@ -1105,16 +1161,16 @@ public class StringParsers {
 	}
 
 	// GLL Geographical Latitude & Longitude
-	public static GLL parseGLL(String data) {
-		return parseGLL(data, true);
+	public static GLL parseGLL(String senntence) {
+		return parseGLL(senntence, true);
 	}
-	public static GLL parseGLL(String data, boolean useSymbol) {
-		String s = data.trim();
+	public static GLL parseGLL(String sentence, boolean useSymbol) {
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
 		}
-		if (!validCheckSum(s)) {
-			return null;
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $aaGLL,llll.ll,a,gggg.gg,a,hhmmss.ss,A,D*hh
@@ -1196,13 +1252,16 @@ public class StringParsers {
 	}
 
 	// HDT Heading - True
-	public static int parseHDT(String data) {
+	public static int parseHDT(String sentence) {
 		final int KEY_POS = 0;
 		final int HDG_POS = 1;
 		final int MT_POS = 2;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
     /* Structure is
      *  $aaHDT,xxx,M*hh(CR)(LF)
@@ -1212,7 +1271,7 @@ public class StringParsers {
      */
 		int hdg = 0;
 
-		String[] elmts = data.substring(0, data.indexOf("*")).split(",");
+		String[] elmts = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			if (elmts[KEY_POS].contains("HDT")) {
 				if ("T".equals(elmts[MT_POS])) {
@@ -1221,7 +1280,7 @@ public class StringParsers {
 					throw new RuntimeException("Wrong type [" + elmts[HDG_POS] + "] in parseHDT.");
 				}
 			} else {
-				System.err.println("Wrong chain in parseHDT [" + data + "]");
+				System.err.println("Wrong chain in parseHDT [" + sentence + "]");
 			}
 		} catch (Exception e) {
 			System.err.println("parseHDT for " + s + ", " + e.toString());
@@ -1231,13 +1290,16 @@ public class StringParsers {
 	}
 
 	// HDM Heading (Mag.)
-	public static int parseHDM(String data) {
+	public static int parseHDM(String sentence) {
 		final int KEY_POS = 0;
 		final int HDG_POS = 1;
 		final int MT_POS = 2;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $aaHDM,xxx,M*hh(CR)(LF)
@@ -1247,7 +1309,7 @@ public class StringParsers {
 		 */
 		int hdg = 0;
 
-		String[] elmts = data.substring(0, data.indexOf("*")).split(",");
+		String[] elmts = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			if (elmts[KEY_POS].contains("HDM")) {
 				if ("M".equals(elmts[MT_POS])) {
@@ -1256,7 +1318,7 @@ public class StringParsers {
 					throw new RuntimeException("Wrong type [" + elmts[HDG_POS] + "] in parseHDM.");
 				}
 			} else {
-				System.err.println("Wrong chain in parseHDM [" + data + "]");
+				System.err.println("Wrong chain in parseHDM [" + sentence + "]");
 			}
 		} catch (Exception e) {
 			System.err.println("parseHDM for " + s + ", " + e.toString());
@@ -1275,11 +1337,14 @@ public class StringParsers {
 	}
 
 	// HDG - Magnetic heading, deviation, variation
-	public static HDG parseHDG(String data) {
+	public static HDG parseHDG(String sentence) {
 		HDG ret = null;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return ret;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		double hdg = 0d;
 		double dev = 0d; // -Double.MAX_VALUE;
@@ -1295,7 +1360,7 @@ public class StringParsers {
 		 *        Magnetic Sensor heading in degrees
 		 */
 		try {
-			String[] nmeaElements = data.substring(0, data.indexOf("*")).split(",");
+			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			try {
 				hdg = parseNMEADouble(nmeaElements[1]);
 			} catch (Exception ex) {
@@ -1332,10 +1397,10 @@ public class StringParsers {
 	}
 
 	// RMB Recommended Minimum Navigation Information
-	public static RMB parseRMB(String str) {
-		return parseRMB(str, true);
+	public static RMB parseRMB(String sentence) {
+		return parseRMB(sentence, true);
 	}
-	public static RMB parseRMB(String str, boolean useSymbol) {
+	public static RMB parseRMB(String sentence, boolean useSymbol) {
 		final int RMB_STATUS = 1;
 		final int RMB_XTE = 2;
 		final int RMB_STEER = 3;
@@ -1368,53 +1433,56 @@ public class StringParsers {
 		 *        Data Status (Active or Void)
 		 */
 		RMB rmb = null;
-		String s = str.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return null;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		try {
 			if (s.contains("RMB,")) {
 				rmb = new RMB();
-				String[] data = str.substring(0, str.indexOf("*")).split(",");
-				if (data[RMB_STATUS].equals("V")) { // Void
+				String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+				if (sa[RMB_STATUS].equals("V")) { // Void
 					return null;
 				}
 				double xte = 0d;
 				try {
-					xte = parseNMEADouble(data[RMB_XTE]);
+					xte = parseNMEADouble(sa[RMB_XTE]);
 				} catch (Exception ex) {
 					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 						ex.printStackTrace();
 					}
 				}
 				rmb.setXte(xte);
-				rmb.setDts(data[RMB_STEER]);
-				rmb.setOwpid(data[RMB_ORIGIN_WP]);
-				rmb.setDwpid(data[RMB_DEST_WP]);
+				rmb.setDts(sa[RMB_STEER]);
+				rmb.setOwpid(sa[RMB_ORIGIN_WP]);
+				rmb.setDwpid(sa[RMB_DEST_WP]);
 
-				if (data[RMB_DEST_WP_LAT].length() > 0 && data[RMB_DEST_WP_LAT_SIGN].length() > 0 && data[RMB_DEST_WP_LNG].length() > 0 && data[RMB_DEST_WP_LNG_SIGN].length() > 0) {
+				if (sa[RMB_DEST_WP_LAT].length() > 0 && sa[RMB_DEST_WP_LAT_SIGN].length() > 0 && sa[RMB_DEST_WP_LNG].length() > 0 && sa[RMB_DEST_WP_LNG_SIGN].length() > 0) {
 					double _lat = 0d;
 					try {
-						_lat = parseNMEADouble(data[RMB_DEST_WP_LAT]);
+						_lat = parseNMEADouble(sa[RMB_DEST_WP_LAT]);
 					} catch (Exception ex) {
 						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 							ex.printStackTrace();
 						}
 					}
 					double lat = (int) (_lat / 100d) + ((_lat % 100d) / 60d);
-					if ("S".equals(data[RMB_DEST_WP_LAT_SIGN])) {
+					if ("S".equals(sa[RMB_DEST_WP_LAT_SIGN])) {
 						lat = -lat;
 					}
 					double _lng = 0d;
 					try {
-						_lng = parseNMEADouble(data[RMB_DEST_WP_LNG]);
+						_lng = parseNMEADouble(sa[RMB_DEST_WP_LNG]);
 					} catch (Exception ex) {
 						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 							ex.printStackTrace();
 						}
 					}
 					double lng = (int) (_lng / 100d) + ((_lng % 100d) / 60d);
-					if ("W".equals(data[RMB_DEST_WP_LNG_SIGN])) {
+					if ("W".equals(sa[RMB_DEST_WP_LNG_SIGN])) {
 						lng = -lng;
 					}
 					rmb.setDest(new GeoPos(lat, lng, useSymbol));
@@ -1423,7 +1491,7 @@ public class StringParsers {
 				}
 				double rtd = 0d;
 				try {
-					rtd = parseNMEADouble(data[RMB_RANGE_TO_DEST]);
+					rtd = parseNMEADouble(sa[RMB_RANGE_TO_DEST]);
 				} catch (Exception ex) {
 					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 						ex.printStackTrace();
@@ -1432,7 +1500,7 @@ public class StringParsers {
 				rmb.setRtd(rtd);
 				double btd = 0d;
 				try {
-					btd = parseNMEADouble(data[RMB_BEARING_TO_DEST]);
+					btd = parseNMEADouble(sa[RMB_BEARING_TO_DEST]);
 				} catch (Exception ex) {
 					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 						ex.printStackTrace();
@@ -1441,14 +1509,14 @@ public class StringParsers {
 				rmb.setBtd(btd);
 				double dcv = 0d;
 				try {
-					dcv = parseNMEADouble(data[RMB_DEST_CLOSING]);
+					dcv = parseNMEADouble(sa[RMB_DEST_CLOSING]);
 				} catch (Exception ex) {
 					if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 						ex.printStackTrace();
 					}
 				}
 				rmb.setDcv(dcv);
-				rmb.setAs(data[RMB_INFO]);
+				rmb.setAs(sa[RMB_INFO]);
 			}
 		} catch (Exception e) {
 			System.err.println("parseRMB for " + s + ", " + e.toString());
@@ -1457,10 +1525,10 @@ public class StringParsers {
 	}
 
 	// RMC Recommended minimum specific GPS/Transit data
-	public static RMC parseRMC(String str) {
-		return parseRMC(str, true);
+	public static RMC parseRMC(String sentence) {
+		return parseRMC(sentence, true);
 	}
-	public static RMC parseRMC(String str, boolean useSymbol) {
+	public static RMC parseRMC(String sentence, boolean useSymbol) {
 		final int RMC_UTC = 1;
 		final int RMC_ACTIVE_VOID = 2;
 		final int RMC_LATITUDE_VALUE = 3;
@@ -1476,13 +1544,13 @@ public class StringParsers {
 
 		RMC rmc = null;
 //		String str = StringUtils.removeNullsFromString(strOne.trim()); // TODO Do it at the consumer level
-		if (str.length() < 6 || !str.contains("*")) {
+		if (sentence.length() < 6 || !sentence.contains("*")) {
 			return null;
 		}
-		if (!validCheckSum(str)) {
-			return null;
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		String s = str.substring(0, str.indexOf("*"));
+		String s = sentence.substring(0, sentence.indexOf("*"));
 		/* RMC Structure is
 		 *                                                                    12
 		 *         1      2 3        4 5         6 7     8     9      10    11
@@ -1505,12 +1573,12 @@ public class StringParsers {
 			if (s.contains("RMC,")) {
 				rmc = new RMC();
 
-				String[] data = s.split(",");
-				rmc = rmc.setValid(data[RMC_ACTIVE_VOID].equals("A")); // Active. Does not prevent the date and time from being available.
-				if (data[RMC_UTC].length() > 0) { // Time and Date
+				String[] sa = s.split(",");
+				rmc = rmc.setValid(sa[RMC_ACTIVE_VOID].equals("A")); // Active. Does not prevent the date and time from being available.
+				if (sa[RMC_UTC].length() > 0) { // Time and Date
 					double utc = 0D;
 					try {
-						utc = parseNMEADouble(data[RMC_UTC]);
+						utc = parseNMEADouble(sa[RMC_UTC]);
 					} catch (Exception ex) {
 						System.out.println("data[1] in StringParsers.parseRMC");
 					}
@@ -1526,10 +1594,10 @@ public class StringParsers {
 					local.set(Calendar.MINUTE, m);
 					local.set(Calendar.SECOND, (int) Math.round(sec));
 					local.set(Calendar.MILLISECOND, 0);
-					if (data[RMC_DDMMYY].length() > 0) {
+					if (sa[RMC_DDMMYY].length() > 0) {
 						int d = 1;
 						try {
-							d = Integer.parseInt(data[RMC_DDMMYY].substring(0, 2));
+							d = Integer.parseInt(sa[RMC_DDMMYY].substring(0, 2));
 						} catch (Exception ex) {
 							if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 								ex.printStackTrace();
@@ -1537,7 +1605,7 @@ public class StringParsers {
 						}
 						int mo = 0;
 						try {
-							mo = Integer.parseInt(data[RMC_DDMMYY].substring(2, 4)) - 1;
+							mo = Integer.parseInt(sa[RMC_DDMMYY].substring(2, 4)) - 1;
 						} catch (Exception ex) {
 							if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 								ex.printStackTrace();
@@ -1545,7 +1613,7 @@ public class StringParsers {
 						}
 						int y = 0;
 						try {
-							y = Integer.parseInt(data[RMC_DDMMYY].substring(4));
+							y = Integer.parseInt(sa[RMC_DDMMYY].substring(4));
 						} catch (Exception ex) {
 							if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 								ex.printStackTrace();
@@ -1583,28 +1651,28 @@ public class StringParsers {
 					Date rmcTime = local.getTime();
 					rmc = rmc.setRmcTime(rmcTime);
 					if ("true".equals(System.getProperty("RMC.verbose"))) {
-						System.out.printf("RMC: From [%s], GPS date: %s, GPS Time: %s\n", str, SDF_UTC.format(rmc.getRmcDate()), SDF_UTC.format(rmcTime));
+						System.out.printf("RMC: From [%s], GPS date: %s, GPS Time: %s\n", sentence, SDF_UTC.format(rmc.getRmcDate()), SDF_UTC.format(rmcTime));
 					}
 				}
-				if (data[RMC_LATITUDE_VALUE].length() > 0 && data[RMC_LONGITUDE_VALUE].length() > 0) {
-					String deg = data[RMC_LATITUDE_VALUE].substring(0, 2);
-					String min = data[RMC_LATITUDE_VALUE].substring(2);
+				if (sa[RMC_LATITUDE_VALUE].length() > 0 && sa[RMC_LONGITUDE_VALUE].length() > 0) {
+					String deg = sa[RMC_LATITUDE_VALUE].substring(0, 2);
+					String min = sa[RMC_LATITUDE_VALUE].substring(2);
 					double l = GeomUtil.sexToDec(deg, min);
-					if ("S".equals(data[RMC_LATITUDE_SIGN])) {
+					if ("S".equals(sa[RMC_LATITUDE_SIGN])) {
 						l = -l;
 					}
-					deg = data[RMC_LONGITUDE_VALUE].substring(0, 3);
-					min = data[RMC_LONGITUDE_VALUE].substring(3);
+					deg = sa[RMC_LONGITUDE_VALUE].substring(0, 3);
+					min = sa[RMC_LONGITUDE_VALUE].substring(3);
 					double g = GeomUtil.sexToDec(deg, min);
-					if ("W".equals(data[RMC_LONGITUDE_SIGN])) {
+					if ("W".equals(sa[RMC_LONGITUDE_SIGN])) {
 						g = -g;
 					}
 					rmc = rmc.setGp(new GeoPos(l, g, useSymbol));
 				}
-				if (data[RMC_SOG].length() > 0) {
+				if (sa[RMC_SOG].length() > 0) {
 					double speed = 0;
 					try {
-						speed = parseNMEADouble(data[RMC_SOG]);
+						speed = parseNMEADouble(sa[RMC_SOG]);
 					} catch (Exception ex) {
 						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 							ex.printStackTrace();
@@ -1612,10 +1680,10 @@ public class StringParsers {
 					}
 					rmc.setSog(speed);
 				}
-				if (data[RMC_COG].length() > 0) {
+				if (sa[RMC_COG].length() > 0) {
 					double cog = 0;
 					try {
-						cog = parseNMEADouble(data[RMC_COG]);
+						cog = parseNMEADouble(sa[RMC_COG]);
 					} catch (Exception ex) {
 						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 							ex.printStackTrace();
@@ -1623,21 +1691,21 @@ public class StringParsers {
 					}
 					rmc.setCog(cog);
 				}
-				if (data[RMC_VARIATION_VALUE].length() > 0 && data[RMC_VARIATION_SIGN].length() > 0) {
+				if (sa[RMC_VARIATION_VALUE].length() > 0 && sa[RMC_VARIATION_SIGN].length() > 0) {
 					double d = -Double.MAX_VALUE;
 					try {
-						d = parseNMEADouble(data[RMC_VARIATION_VALUE]);
+						d = parseNMEADouble(sa[RMC_VARIATION_VALUE]);
 					} catch (Exception ex) {
 						if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 							ex.printStackTrace();
 						}
 					}
-					if ("W".equals(data[RMC_VARIATION_SIGN]))
+					if ("W".equals(sa[RMC_VARIATION_SIGN]))
 						d = -d;
 					rmc = rmc.setDeclination(d);
 				}
-				if (data.length > 12) { // Can be missing
-					switch (data[RMC_TYPE]) {
+				if (sa.length > 12) { // Can be missing
+					switch (sa[RMC_TYPE]) {
 						case "A":
 							rmc = rmc.setRmcType(RMC.RMC_TYPE.AUTONOMOUS);
 							break;
@@ -1660,25 +1728,25 @@ public class StringParsers {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("In parseRMC for " + str.trim() + ", " + e.toString());
+			System.err.println("In parseRMC for " + sentence.trim() + ", " + e.toString());
 			e.printStackTrace();
 		}
 		return rmc;
 	}
 
-	public static String parseRMCtoString(String data) {
+	public static String parseRMCtoString(String sentence) {
 		String ret = "";
 		try {
-			ret = parseRMC(data).toString();
+			ret = parseRMC(sentence).toString();
 		} catch (Exception ignore) {
 		}
 		return ret;
 	}
 
-	public static String getLatFromRMC(String s) {
+	public static String getLatFromRMC(String sentence) {
 		String result = "";
 		try {
-			RMC rmc = parseRMC(s);
+			RMC rmc = parseRMC(sentence);
 			result = Double.toString(rmc.getGp().lat);
 		} catch (Exception ex) {
 			result = "n/a";
@@ -1686,10 +1754,10 @@ public class StringParsers {
 		return result;
 	}
 
-	public static String getLongFromRMC(String s) {
+	public static String getLongFromRMC(String sentence) {
 		String result = "";
 		try {
-			RMC rmc = parseRMC(s);
+			RMC rmc = parseRMC(sentence);
 			result = Double.toString(rmc.getGp().lng);
 		} catch (Exception ex) {
 			result = "n/a";
@@ -1697,10 +1765,10 @@ public class StringParsers {
 		return result;
 	}
 
-	public static String getCOGFromRMC(String s) {
+	public static String getCOGFromRMC(String sentence) {
 		String result = "";
 		try {
-			RMC rmc = parseRMC(s);
+			RMC rmc = parseRMC(sentence);
 			result = Double.toString(rmc.getCog());
 		} catch (Exception ex) {
 			result = "n/a";
@@ -1708,10 +1776,10 @@ public class StringParsers {
 		return result;
 	}
 
-	public static String getSOGFromRMC(String s) {
+	public static String getSOGFromRMC(String sentence) {
 		String result = "";
 		try {
-			RMC rmc = parseRMC(s);
+			RMC rmc = parseRMC(sentence);
 			result = Double.toString(rmc.getSog());
 		} catch (Exception ex) {
 			result = "n/a";
@@ -1744,7 +1812,7 @@ public class StringParsers {
 	}
 
 	// ZDA Time & Date - UTC, day, month, year and local time zone
-	public static UTCDate parseZDA(String str) {
+	public static UTCDate parseZDA(String sentence) {
 		final int ZDA_UTC = 1;
 		final int ZDA_DAY = 2;
 		final int ZDA_MONTH = 3;
@@ -1764,17 +1832,20 @@ public class StringParsers {
 		 *        |         day
 		 *        HrMinSec(UTC)
 		 */
-		String[] data = str.substring(0, str.indexOf("*")).split(",");
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		Calendar local = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // new GregorianCalendar();
 //		local.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-		local.set(Calendar.HOUR_OF_DAY, Integer.parseInt(data[ZDA_UTC].substring(0, 2)));
-		local.set(Calendar.MINUTE, Integer.parseInt(data[ZDA_UTC].substring(2, 4)));
-		local.set(Calendar.SECOND, (int) Math.round(Float.parseFloat(data[ZDA_UTC].substring(4))));
+		local.set(Calendar.HOUR_OF_DAY, Integer.parseInt(sa[ZDA_UTC].substring(0, 2)));
+		local.set(Calendar.MINUTE, Integer.parseInt(sa[ZDA_UTC].substring(2, 4)));
+		local.set(Calendar.SECOND, (int) Math.round(Float.parseFloat(sa[ZDA_UTC].substring(4))));
 		local.set(Calendar.MILLISECOND, 0); // TODO Something nicer
 		int d = 1;
 		try {
-			d = Integer.parseInt(data[ZDA_DAY]);
+			d = Integer.parseInt(sa[ZDA_DAY]);
 		} catch (Exception ex) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 				ex.printStackTrace();
@@ -1782,7 +1853,7 @@ public class StringParsers {
 		}
 		int mo = 0;
 		try {
-			mo = Integer.parseInt(data[ZDA_MONTH]) - 1;
+			mo = Integer.parseInt(sa[ZDA_MONTH]) - 1;
 		} catch (Exception ex) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 				ex.printStackTrace();
@@ -1790,7 +1861,7 @@ public class StringParsers {
 		}
 		int y = 0;
 		try {
-			y = Integer.parseInt(data[ZDA_YEAR]);
+			y = Integer.parseInt(sa[ZDA_YEAR]);
 		} catch (Exception ex) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 				ex.printStackTrace();
@@ -1808,8 +1879,8 @@ public class StringParsers {
 	public static final short DEPTH_IN_METERS = 1;
 	public static final short DEPTH_IN_FATHOMS = 2;
 
-	public static String parseDBTinMetersToString(String data) {
-		String s = data.trim();
+	public static String parseDBTinMetersToString(String sentence) {
+		String s = sentence.trim();
 		String sr = "";
 		try {
 			float f = parseDBT(s, DEPTH_IN_METERS);
@@ -1823,16 +1894,19 @@ public class StringParsers {
 	private final static double METERS_TO_FEET = 3.28083;
 
 	// DBT Depth of Water
-	public static float parseDPT(String data) {
-		return parseDPT(data, DEPTH_IN_METERS);
+	public static float parseDPT(String sentence) {
+		return parseDPT(sentence, DEPTH_IN_METERS);
 	}
 	// Depth
-	public static float parseDPT(String data, short unit) {
+	public static float parseDPT(String sentence, short unit) {
 		final int IN_METERS = 1;
 		final int OFFSET = 2;
-		String s = data.trim();
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1F;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $xxDPT,XX.XX,XX.XX,XX.XX*hh<0D><0A>
@@ -1844,7 +1918,7 @@ public class StringParsers {
 		float feet = 0.0F;
 		float meters = 0.0F;
 		float fathoms = 0.0F;
-		String[] array = data.substring(0, data.indexOf("*")).split(",");
+		String[] array = sentence.substring(0, sentence.indexOf("*")).split(",");
 		try {
 			meters = parseNMEAFloat(array[IN_METERS]);
 			try {
@@ -1877,10 +1951,13 @@ public class StringParsers {
 		}
 	}
 
-	private static float parseDepth(String data, short unit, String sentenceID) {
-		String s = data.trim();
+	private static float parseDepth(String sentence, short unit, String sentenceID) {
+		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return -1F;
+		}
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		/* Structure is
 		 *  $aaDBx,011.0,f,03.3,M,01.8,F*18(CR)(LF)
@@ -1938,12 +2015,12 @@ public class StringParsers {
 		}
 	}
 	// Depth Below Transducer
-	public static float parseDBT(String data) {
-		return parseDBT(data, DEPTH_IN_METERS);
+	public static float parseDBT(String sentence) {
+		return parseDBT(sentence, DEPTH_IN_METERS);
 	}
 	// Depth Below Transducer
-	public static float parseDBT(String data, short unit) {
-		return parseDepth(data, unit, "DBT");
+	public static float parseDBT(String sentence, short unit) {
+		return parseDepth(sentence, unit, "DBT");
 	}
 
 	/* Depth Below Surface (Obsolete)
@@ -1957,12 +2034,12 @@ public class StringParsers {
 	 *         |     f for feet
 	 *         Depth in feet
 	 */
-	public static float parseDBS(String data) {
-		return parseDBS(data, DEPTH_IN_METERS);
+	public static float parseDBS(String sentence) {
+		return parseDBS(sentence, DEPTH_IN_METERS);
 	}
 	// Depth Below Surface
-	public static float parseDBS(String data, short unit) {
-		return parseDepth(data, unit, "DBS");
+	public static float parseDBS(String sentence, short unit) {
+		return parseDepth(sentence, unit, "DBS");
 	}
 	public static String parseTXT(String sentence) {
 		/*
@@ -1988,6 +2065,9 @@ public class StringParsers {
 		 *
 		 * Pending questions: what are 01,01,02 ?
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String s = sentence.trim();
 		if (s.length() < 6 || !s.contains("*")) {
 			return null;
@@ -2026,6 +2106,9 @@ public class StringParsers {
 	 Example: $AISSD,PD2366@,MERRIMAC@@@@@@@@@@@@,017,000,03,02,1,AI*29
 	 */
 	public static SSD parseSSD(String sentence) {
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		String callSign = "", name = "", talker = "";
 		int fromBow = 0, fromStern = 0, fromPortBeam = 0, fromStarboardBeam = 0;
@@ -2108,11 +2191,11 @@ public class StringParsers {
 	 */
 	public static VSD parseVSD(String sentence) {
 
-		if (sentence.length() < 6 || !sentence.contains("*")) {
+		if (sentence.length() < MIN_NMEA_LENGTH || !sentence.contains("*")) {
 			return null;
 		}
 		if (!validCheckSum(sentence)) {
-			return null;
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 
 		if (sentence.contains("VSD,")) {
@@ -2305,6 +2388,9 @@ public class StringParsers {
 
  			Example: $GPXTE,,,,,N,N*5E, $GPXTE,V,V,,,N,S*43
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		String statusOne = "", statusTwo = "";
 		double xteMag = 0d;
@@ -2396,6 +2482,9 @@ public class StringParsers {
 
  Example: $GPAAM,V,V,0.05,N,*23
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		AAM aam = new AAM();
 		if (sa.length > 1 && sa[1].length() > 0) {
@@ -2439,6 +2528,9 @@ public class StringParsers {
 
           Example: $GPBOD,213.9,T,213.2,M,,*4C
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		BOD bod = new BOD();
 		if (sa.length > 1 && sa[1].length() > 0) {
@@ -2543,7 +2635,7 @@ public class StringParsers {
 			return null;
 		}
 		if (!validCheckSum(sentence)) {
-			return null;
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 
 		if (sentence.contains("BWC,") || sentence.contains("BWR,")) {
@@ -2741,6 +2833,9 @@ public class StringParsers {
 
 		Example: $GPAPB,A,A,0.001,L,N,V,V,213.9,T,,213.9,T,213.9,T,A*77
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		APB apb = new APB();
@@ -2792,7 +2887,6 @@ public class StringParsers {
 		return apb;
 	}
 
-
 	public static class VPW {
 		// A VMG
 		double speedInKnots = 0d;
@@ -2819,6 +2913,9 @@ $--VPW,x.x,N,x.x,M*hh<CR><LF>
        |   Knots
        Speed, "-" = downwind
 		 */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		VPW vpw = new VPW();
@@ -2895,6 +2992,9 @@ Mode Indicator:
 
 	The positioning system Mode Indicator field shall not be a null field.
  */
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+		}
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		WCV wcv = new WCV();
@@ -3273,16 +3373,16 @@ Mode Indicator:
 				.forEach(dispatcher -> out.printf("%s: %s\n", dispatcher.key(), dispatcher.description()));
 	}
 
-	public static ParsedData autoParse(String data) {
-		if (!validCheckSum(data)) {
-			throw new RuntimeException(String.format("Invalid NMEA Sentence CheckSum [%s]", data));
+	public static ParsedData autoParse(String sentence) {
+		if (!validCheckSum(sentence)) {
+			throw new RuntimeException(String.format("Invalid NMEA Sentence CheckSum [%s]", sentence));
 		}
-		ParsedData parsedData = new ParsedData().fullSentence(data);
-		String key = getSentenceID(data);
-		parsedData.sentenceId(key).deviceID(getDeviceID(data));
+		ParsedData parsedData = new ParsedData().fullSentence(sentence);
+		String key = getSentenceID(sentence);
+		parsedData.sentenceId(key).deviceID(getDeviceID(sentence));
 		for (Dispatcher dispatcher : Dispatcher.values()) {
 			if (key.equals(dispatcher.key)) {
-				Object parsed = dispatcher.parser().apply(data);
+				Object parsed = dispatcher.parser().apply(sentence);
 				parsedData.parsedData(parsed);
 				break;
 			}
