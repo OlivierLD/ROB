@@ -11,7 +11,7 @@
 </table>
 
 ## Java and Python(3).
-The Raspberry Pi is a small but fully featured Linux computer that consumes a ridiculous amount of energy. There is no need
+The [Raspberry Pi](https://www.raspberrypi.com/) is a small, cheap, but fully featured Linux computer that consumes a ridiculous amount of energy. There is no need
 to have a generator to fulfill its energy needs !  
 It can be installed on board, and run 24x7, reading and computing data (from your NMEA Station, GPS, external breakout boards, etc), and do whatever
 is needed with them (log them, forward them to other softwares or clients, etc).  
@@ -253,7 +253,7 @@ $ ./line.counter.sh
 ```
 
 ---
-And more to come...
+And more to come... See you again soon.
 
 ---
 
