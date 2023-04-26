@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
+// Duration To Date
 public class DTD {
 
     @Test

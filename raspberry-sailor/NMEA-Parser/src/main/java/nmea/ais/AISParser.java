@@ -39,6 +39,7 @@ public class AISParser {
    * NMEA Message type, for AIS
    */
 
+	// NOTE: VDO not supported yet...
 	public final static String[] SENTENCE_LIST = new String[] {
 			"VDM", "VDO"
 	};
@@ -574,18 +575,18 @@ public class AISParser {
 		}
 
 		boolean valid = StringParsers.validCheckSum(sentence);
-		if (!valid) {
+		if ( ! valid) {
 			throw new RuntimeException(String.format("Invalid AIS Data (Bad checksum) for [%s]", sentence));
 		}
 		String[] dataElement = sentence.split(",");
-		if (!dataElement[PREFIX_POS].equals(AIS_PREFIX)) {
+		if ( ! dataElement[PREFIX_POS].equals(AIS_PREFIX)) {
 			throw new RuntimeException(String.format("Unmanaged AIS Prefix [%s].", dataElement[PREFIX_POS]));
 		}
 		String currentChannel = dataElement[AIS_CHANNEL_POS];
 
 		boolean multipleMessage = false;
 		boolean multipleMessageReady = false;
-		if (!dataElement[NB_SENTENCES_POS].equals("1")) { // More than 1 message.
+		if ( ! dataElement[NB_SENTENCES_POS].equals("1")) { // More than 1 message.
 			multipleMessage = true;
 			if ("1".equals(dataElement[CURR_SENTENCE_IDX])) {
 				unfinishedSentence = new StringBuffer();
@@ -604,9 +605,14 @@ public class AISParser {
 
 		AISRecord aisRecord = new AISRecord(System.currentTimeMillis());
 		String aisData = dataElement[AIS_DATA_POS];
-//  System.out.println("[" + aisData + "]");
+		if (decodeVerbose) {
+			System.out.println("AIS Data - as is: [" + aisData + "]");
+		}
 		String binString = encodedAIStoBinaryString(aisData);
-//  System.out.println(binString);
+		if (decodeVerbose) {
+			System.out.println("AIS Data - bin: [" + binString + "]");
+			System.out.println("AIS Data - hex: [" + encodedAIStoHexaString(aisData).trim() + "]");
+		}
 		if (multipleMessage) {
 			unfinishedSentence.append(binString);
 		}
@@ -690,7 +696,7 @@ public class AISParser {
 				}
 				break;
 			case 5:
-				if (!multipleMessage) {
+				if ( ! multipleMessage) {
 					// Bizarre
 					throw new AISException("Type 5 and only 1 message?...");
 				}
@@ -1223,9 +1229,24 @@ public class AISParser {
 			String bin = StringUtils.lpad(Integer.toBinaryString(c), 6, "0");
 			sb.append(bin);
 			if (decodeVerbose) {
-				System.out.printf("%c becomes %s (%d)\n", encoded.charAt(i), bin, c);
+				System.out.printf("%c becomes %s (0x%02X) (%d)\n", encoded.charAt(i), bin, c, c);
 			}
 //    sb.append(" ");
+		}
+		return sb.toString();
+	}
+
+	// This is for tests
+	private static String encodedAIStoHexaString(String encoded) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < encoded.length(); i++) {
+			int c = encoded.charAt(i);
+			c -= 48;
+			if (c > 40) {
+				c -= 8;
+			}
+			String hex = String.format("%02X ", c);
+			sb.append(hex);
 		}
 		return sb.toString();
 	}
@@ -2468,13 +2489,18 @@ public class AISParser {
 
 		@Override
 		public String toString() {
+			return toString(false);
+		}
+
+		public String toString(boolean multiline) {
 			String str = "";
 			switch (messageType) {
 				case 1:
 				case 2:
 				case 3:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, status: %s, name: %s, rot:%d, Pos:%f/%f (Acc:%d), COG:%.02f, SOG:%.02f, HDG:%s, TimeStamp: %d (s).",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, status: %s, name: %s, rot:%d, Pos:%f/%f (Acc:%d), COG:%.02f, SOG:%.02f, HDG:%s, TimeStamp: %d (s).",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							decodeStatus(getNavStatus()),
@@ -2489,8 +2515,9 @@ public class AISParser {
 							getUtc());
 					break;
 				case 4:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Pos:%f/%f, UTC %s-%s-%s %s:%s:%s.",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Pos:%f/%f, UTC %s-%s-%s %s:%s:%s.",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							getLatitude(),
@@ -2503,8 +2530,9 @@ public class AISParser {
 							StringUtils.lpad(String.valueOf(getUtcSecond()), 2, "0"));
 					break;
 				case 5:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, CallSign: %s, Vessel Name: %s, type: %s, Length: %d m, Width: %d m, Draught: %.02f m, ETA: %s-%s @ %s:%s, Destination: %s.",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, CallSign: %s, Vessel Name: %s, type: %s, Length: %d m, Width: %d m, Draught: %.02f m, ETA: %s-%s @ %s:%s, Destination: %s.",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							(getCallSign().replace("@", " ").trim().length() > 0 ? getCallSign().replace("@", " ").trim() : "n/a"),
@@ -2520,8 +2548,9 @@ public class AISParser {
 							(getDestination().replace("@", " ").trim().length() > 0 ? getDestination().replace("@", " ").trim() : "n/a"));
 					break;
 				case 8:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Des.Area Code %d, FuncID %d, Data: %s",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Des.Area Code %d, FuncID %d, Data: %s",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							getDesignatedAreaCode(),
@@ -2529,8 +2558,9 @@ public class AISParser {
 							getBinData());
 					break;
 				case 15:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Int MMSI %d, 1st MessType %d, 1st SlotOffset %d, 2nd MessType %d, 2nd SlotOffset %d, Int MMSI(2) %d, 1st MessType(2) %d, 1st SlotOffset(2) %d.",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Int MMSI %d, 1st MessType %d, 1st SlotOffset %d, 2nd MessType %d, 2nd SlotOffset %d, Int MMSI(2) %d, 1st MessType(2) %d, 1st SlotOffset(2) %d.",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							getInterrogatedMMSI(),
@@ -2543,8 +2573,9 @@ public class AISParser {
 							getFirstSlotOffset2());
 					break;
 				case 18:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Pos:%f/%f (Acc:%d), COG:%.02f, SOG:%.02f, HDG:%s, TimeStamp: %d (s).",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Pos:%f/%f (Acc:%d), COG:%.02f, SOG:%.02f, HDG:%s, TimeStamp: %d (s).",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							getLatitude(),
@@ -2556,8 +2587,9 @@ public class AISParser {
 							getUtc());
 					break;
 				case 20:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, Offset1: %d, Timeout1: %d, Incr1: %d, Offset2: %d, Timeout2: %d, Incr2: %d, Offset3: %d, Timeout3: %d, Incr3: %d, Offset4: %d, Timeout4: %d, Incr4: %d.",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Offset1: %d, Timeout1: %d, Incr1: %d, Offset2: %d, Timeout2: %d, Incr2: %d, Offset3: %d, Timeout3: %d, Incr3: %d, Offset4: %d, Timeout4: %d, Incr4: %d.",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							getOffset1(),
@@ -2574,8 +2606,9 @@ public class AISParser {
 							getIncrement4());
 					break;
 				case 21:
-					str = String.format("Type:%d, Repeat:%d, MMSI:%d, AidType: %s, Name: %s, Length: %d, Width: %d, L: %f, G :%f, Name Ext.: %s.",
+					str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, AidType: %s, Name: %s, Length: %d, Width: %d, L: %f, G :%f, Name Ext.: %s.",
 							messageType,
+							messageTypeDescription.get(messageType),
 							repeatIndicator,
 							MMSI,
 							decodeNavAidType(getAidType()),
@@ -2588,16 +2621,18 @@ public class AISParser {
 					break;
 				case 24:
 					if (getPartNo() == 0) { // Part A
-						str = String.format("Type:%d, Repeat:%d, MMSI:%d, Part#:%s, Vessel Name: %s.",
+						str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Part#:%s, Vessel Name: %s.",
 								messageType,
+								messageTypeDescription.get(messageType),
 								repeatIndicator,
 								MMSI,
 								"A",
 								getVesselName().replace("@", " ").trim());
 
 					} else {
-						str = String.format("Type:%d, Repeat:%d, MMSI:%d, Part#:%s, ShipType: %s, VendorID: %s, Length: %d, Width: %d, Mothership MMSI: %d.",
+						str = String.format("Type:%d (%s), Repeat:%d, MMSI:%d, Part#:%s, ShipType: %s, VendorID: %s, Length: %d, Width: %d, Mothership MMSI: %d.",
 								messageType,
+								messageTypeDescription.get(messageType),
 								repeatIndicator,
 								MMSI,
 								"B",
@@ -2610,6 +2645,9 @@ public class AISParser {
 					break;
 				default:
 					break;
+			}
+			if (multiline) {
+				str = str.replaceAll(", ", "\n");
 			}
 			return str;
 		}
