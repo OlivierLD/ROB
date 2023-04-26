@@ -1,7 +1,9 @@
 <table width="100%">
   <tr>
 <td valign="top">
-<h1>ROB (Raspberry-Pi On Board)</h1>
+<h1>ROBERT</h1>
+<b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
+Aka <b>ROB</b>.
 <h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
 </td>
 <td valign="top" align="right">

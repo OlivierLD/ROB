@@ -19,6 +19,7 @@ import java.util.Map;
  * On-line decoder at https://www.aggsoft.com/ais-decoder.htm
  *
  * Nice AIS git repo: https://github.com/tbsalling/aismessages
+ * https://www.navcen.uscg.gov/sites/default/files/pdf/AIS/AISGuide.pdf
  *
  * The main method is here for tests, look at it. <- TODO a main ?
  *

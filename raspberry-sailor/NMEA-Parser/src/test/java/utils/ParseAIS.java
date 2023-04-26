@@ -4,8 +4,7 @@ import nmea.ais.AISParser;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class ParseAIS {
 
@@ -28,10 +27,10 @@ public class ParseAIS {
 
     @Test
     public void aisParserTestOne() {
-        String aisSentenceOne = AIS_SENTENCES[3];
+        String aisSentenceOne = AIS_SENTENCES[2];
         try {
             final AISParser.AISRecord aisRecord = aisParser.parseAIS(aisSentenceOne);
-            assertTrue("AISRecord is null", aisRecord != null);
+            assertNotNull("AISRecord is null", aisRecord);
             System.out.println("-- Decoded AIS Data: --\n" + aisRecord.toString(true));
             System.out.println("-----------------------");
         } catch (AISParser.AISException ae) {
