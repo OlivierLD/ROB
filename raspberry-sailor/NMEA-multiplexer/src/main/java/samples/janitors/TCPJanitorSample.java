@@ -6,6 +6,14 @@ import util.SimpleTCPClient;
 import java.net.SocketException;
 import java.util.Properties;
 
+/**
+ * This is a Janitor example.
+ * Look into manual.md to know more about this.
+ * There is in this repo a RaspberryPythonServers/python.tcp.server.properties mentioning it, itself mentioned in
+ * RaspberryPythonServers/nmea.mux.log.tcp-sensor.rest-actuator.yaml.
+ *
+ * The class below expects properties tcp.server, tcp.port, and tcp.command to be set.
+ */
 public class TCPJanitorSample extends Janitor {
 
     @Override

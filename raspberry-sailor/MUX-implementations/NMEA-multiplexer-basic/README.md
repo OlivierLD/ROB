@@ -1,5 +1,5 @@
 # NMEA-multiplexer's Web Implementation Basics (and beyond)
-This module is one illustration of what can be done from  Web client, on top of the `NMEA-multiplexer`.  
+This module is one illustration of what can be done from  Web and/or REST client, on top of the `NMEA-multiplexer`.  
 This includes the way to start the Multiplexer (through its configuration file), and the way to reach the data to 
 display on a web page.
 
@@ -12,8 +12,10 @@ it can be emitted by a Raspberry Pi (like the one the NMEA-multiplexer runs on).
 ## Basics
 It obviously requires the NMEA-multiplexer to be running.  
 Data are fetched from the `NMEA Data Cache` using REST Requests.
-> For the Data Cache to be available/reachable, you need to have the property `with.http.server` set to `true`,
-> and the property `init.cache` set to `true`
+> For an HTTP server to be instantiated when the Multiplexer starts, you 
+> have to set (in the mux's config file)  the property `with.http.server` to `true`.  
+> **In _addition_**, for the Data Cache to be available, populated, and reachable, 
+> you need to set the property `init.cache` to `true`.
 
 ### Get Started, now!
 Build, run, watch:
@@ -34,7 +36,7 @@ as you would see in the code (`GenericNMEAMultiplexer.interactiveConfig()`).
 ## How it works (in short)
 As it depends on the `http-tiny-server` module, the `NMEA-multiplexer` can also act as an HTTP Server (not only WebServer). When the configuration property `with.http.server` is set to `true`, the multiplexer can also serve:
 - static Web pages
-    - See the system properties `static.docs` and `static.zip.docs`.
+    - See the system properties `static.docs` and `static.zip.docs` (and its associated `web.archive`).
 - REST requests
     - Look into the class `nmea.mux.RESTImplementation`, in the `NMEA-multiplexer` module itself.
 

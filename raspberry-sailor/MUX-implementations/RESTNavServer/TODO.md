@@ -4,7 +4,7 @@
 - Extended to any celestial body, any hemisphere, tropical zone(s).
 
 ### Rhumblines and Great Circles on the WorldMap
-- Great Circle OK (with doAfter on the WorldMap WebComponent) &#9989;
+- Great Circle (with `doAfter` callback on the WorldMap WebComponent) &#9989;
 
 ### A logger like the runner - for Kayaking.
 - Transparent top
@@ -26,6 +26,7 @@
 
 ### Routing
 - In progress. Best route OK
+  - TODO: GRIB version 2.
 - Get all isochronals, TODO
 
 ### Document the way to use `screen`

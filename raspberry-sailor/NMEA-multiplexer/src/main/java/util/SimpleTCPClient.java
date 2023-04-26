@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Simple interactive TCP client.
+ * To be run from a character terminal.
  * Assumes that the server is sending lines (ending with a LF)
  *
  * CLI args: --host:<IP or name> --port:5555

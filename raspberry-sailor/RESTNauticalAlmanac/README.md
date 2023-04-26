@@ -1,5 +1,7 @@
 # Nautical Almanac primitives 
 ### also provides REST resources implementation
+Allows an HTTP Client to consume (some) features of the `AstroComputer` module.  
+See how it can be put to work in `RESTNavServer`.
 
 --- 
 

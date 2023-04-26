@@ -2,7 +2,9 @@
 
 > This project intends to be a Proof of Concept.  
 > It's also a working example of a REST implementation of a concrete - working - backend, the one contained in the `TideEngine` module,
-> sibling of this one, also found in this repo.
+> sibling of this one, also found in this repo.  
+> See how it can be put to work in `RESTNavServer`.
+
 
 This is a tentative Tide Application, based on Server-Side Java implementing REST APIs for a Tide Computer.
 The rendering will be done through HTML5 and JavaScript querying the REST APIs.

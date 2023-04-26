@@ -1,2 +1,3 @@
 # RESTImageProcessor
-Used by the WeatherWizard, from its Web UI.
+Image processing capabilities, exposed through REST.  
+Used by the WeatherWizard (in `RESTNavServer`), from its Web UI.

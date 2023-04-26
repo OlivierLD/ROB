@@ -65,7 +65,7 @@ import java.util.regex.Pattern;
  *   <li>WCV (Waypoint Closure Velocity)</li>
  *   <li>XDR (Transducers Measurement, Various Sensors)</li>
  *   <li>XTE (Cross Track Error)</li>
- *   <li>ZDA (UTC DCate and Time)</li>
+ *   <li>ZDA (UTC Date and Time)</li>
  * </ol>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
  * <br/>

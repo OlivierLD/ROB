@@ -4,21 +4,44 @@
 <h1>ROB (Raspberry-Pi On Board)</h1>
 <h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
 </td>
-<td valign="top">
-<img src="./a.l.ouest.jpeg" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
+<td valign="top" align="right">
+<img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
 </td>
   </tr>
 </table>
-Java and Python(3).
+
+## Java and Python(3).
+The Raspberry Pi is a small but fully featured Linux computer that consumes a ridiculous amount of energy. There is no need
+to have a generator to fulfill its energy needs !  
+It can be installed on board, and run 24x7, reading and computing data (from your NMEA Station, GPS, external breakout boards, etc), and do whatever
+is needed with them (log them, forward them to other softwares or clients, etc).  
+The code presented here is designed to run even of the smallest versions of the Raspberry Pi (Raspberry Pi Zero), that have 512Mb of RAM, and it works (it has been tested in the real world).
 
 #### Warning 1
 The scripts presented in this repo are written for `bash` shell.  
-As such, they run on Linux, Mac OS, and Windows 10+ (I was told so).
+As such, they run on Linux, Mac OS, and Windows 10+ (I was told so, did not test).  
+And by the way, features that are not Raspberry Pi specific (like GPIO header management and access) will run on
+any computer or OS that supports `bash`, `java`, and if needed, `python3`. Installation of
+external module and packages are done through `apt-get` or so. This utility has equivalents on other OS's than RaspiOS.
 
 #### Warning 2
 To keep this project compatible with as many Raspberry Pi models as possible, we kept the Java code compatible with
 Java 8. Some syntax improvements would be possible, if Java 11 was the only one in the picture, but they're - for now - commented.  
 This is done intentionally.
+
+#### Warning 3
+The code presented in this repo is designed to be as flexible and customizable as possible.  
+Th execution of _**your**_ final product(s) will depend on the you configure the builds and runtime configuration files.  
+Example will be provided, but again, _as examples_.  
+There is no one-click definitive install in this repo, the packaging of what _**you**_ will deploy and run depends on what _**you**_ want.  
+You might want:
+- A Multiplexer to read NMEA data from several sources (your NMEA station, several breakout boards), log them for replay or analysis, and forward a readable version of some of computed data to a small screen next to the chart table.
+- The features above, plus a web interface, reachable from other devices (laptops, tablets, cell-phones) connected on the network emitted by the Raspberry Pi where the multiplexer is running.
+- Have some astronomical, tide, routing, and fax processing features available from a web interface (Tide and astronomical almanac publication - in pdf, routing based on your polars, display GRIBs and weather faxes on the same canvas, etc).
+- ... etc. Your imagination is the limit.
+
+If anything is unclear about the way to customize your configuration, if more examples are needed, please use the [issue](https://github.com/OlivierLD/ROB/issues) page of this repo.  
+But please, keep in mind that this is OpenSource..., not free consulting.
 
 ---
 #### Some links
@@ -38,7 +61,7 @@ The more I use it, the more I like it.
 
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
-but definitely _**NO**_ Internet access. We could call this "flake" computing 😉.   
+but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉.   
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
 NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
 At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
@@ -72,7 +95,8 @@ We want to be able to:
 All this, running on a Raspberry Pi.
 
 > _**Note**_: for now, we deal _only_ with `NMEA0183`, as - as far as I know - no GPS deals (yet) with `NMEA2000`.
-> Working on it.
+> Working on it.  
+> AIS Data are emitted using `NMEA0183`. There is some support for AIS sentences (work in progress).
 
 ---
 
