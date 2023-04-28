@@ -23,16 +23,16 @@ import java.util.regex.Pattern;
 
 /**
  * Generic form is of a sentence is:
- * <pre>$&lt;talker ID>&lt;sentence ID,>[parameter 1],[parameter 2],...[&lt;*checksum>]&lt;CR>&lt;LF> (\r\n)</pre>
- * <br/>
+ * <pre>$&lt;talker ID&gt;&lt;sentence ID,&gt;[parameter 1],[parameter 2],...[&lt;*checksum&gt;]&lt;CR&gt;&lt;LF&gt; (\r\n)</pre>
+ * <br>
  * Available parsers:
  * <ol>
  *   <li>AAM (Waypoint Arrival Alarm)</li>
  *   <li>APB (Heading/Track Controller (Autopilot) Sentence "B")</li>
  *   <li>BAT (battery status, NOT standard)</li>
  *   <li>BOD (Bearing - Origin to Destination)</li>
- *   <li>BWC, through BWx (Bearing & Distance to Waypoint)</li>
- *   <li>BWR, through BWx (Bearing & Distance to Waypoint - Rhumb Line)</li>
+ *   <li>BWC, through BWx (Bearing &amp; Distance to Waypoint)</li>
+ *   <li>BWR, through BWx (Bearing &amp; Distance to Waypoint - Rhumb Line)</li>
  *   <li>DBT (Depth Below Transducer)</li>
  *   <li>DBS (Depth Below Surface)</li>
  *   <li>DPT (Depth)</li>
@@ -68,11 +68,13 @@ import java.util.regex.Pattern;
  *   <li>ZDA (UTC Date and Time)</li>
  * </ol>
  * See {@link StringParsers.Dispatcher}, {@link #listDispatchers(PrintStream)}
- * <br/>
+ * <br>
  * Good source: https://gpsd.gitlab.io/gpsd/NMEA.html
  *    Also see: https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  *
  * TODO: getters for all public static classes ?...
+ *
+ * More output with -Dnmea.parser.verbose=true
  */
 public class StringParsers {
 
@@ -145,7 +147,6 @@ public class StringParsers {
 				return lxdr;
 			}
 		}
-
 		return lxdr;
 	}
 
@@ -163,7 +164,28 @@ public class StringParsers {
 		public Double windSpeedMS = null;
 	}
 
-	// MDA Meteorological Composite
+	/**
+	 * MDA Meteorological Composite
+	 * <pre>
+	 * $--MDA,x.x,I,x.x,B,x.x,C,x.x,C,x.x,x.x,x.x,C,x.x,T,x.x,M,x.x,N,x.x,M*hh&lt;CR&gt;&lt;LF&gt;
+	 *        |     |     |     |     |   |   |     |     |     |     |
+	 *        |     |     |     |     |   |   |     |     |     |     19-Wind speed, m/s
+	 *        |     |     |     |     |   |   |     |     |     17-Wind speed, knots
+	 *        |     |     |     |     |   |   |     |     15-Wind dir Mag
+	 *        |     |     |     |     |   |   |     13-Wind dir, True
+	 *        |     |     |     |     |   |   11-Dew Point C
+	 *        |     |     |     |     |   10-Absolute hum %
+	 *        |     |     |     |     9-Relative hum %
+	 *        |     |     |     7-Water temp in Celsius
+	 *        |     |     5-Air Temp in Celsius  |
+	 *        |     3-Pressure in Bars
+	 *        1-Pressure in inches
+	 *
+	 * Example: $WIMDA,29.4473,I,0.9972,B,17.2,C,,,,,,,,,,,,,,*3E
+	 * </pre>
+	 * @param sentence The one to parse
+	 * @return The result
+	 */
 	public static MDA parseMDA(String sentence) {
 		final int PRESS_INCH = 1;
 		final int PRESS_BAR = 3;
@@ -177,23 +199,6 @@ public class StringParsers {
 		final int WS_KNOTS = 17;
 		final int WS_MS = 19;
 
-		/*
-		 * $--MDA,x.x,I,x.x,B,x.x,C,x.x,C,x.x,x.x,x.x,C,x.x,T,x.x,M,x.x,N,x.x,M*hh<CR><LF>
-		 *        |     |     |     |     |   |   |     |     |     |     |
-		 *        |     |     |     |     |   |   |     |     |     |     19-Wind speed, m/s
-		 *        |     |     |     |     |   |   |     |     |     17-Wind speed, knots
-		 *        |     |     |     |     |   |   |     |     15-Wind dir Mag
-		 *        |     |     |     |     |   |   |     13-Wind dir, True
-		 *        |     |     |     |     |   |   11-Dew Point C
-		 *        |     |     |     |     |   10-Absolute hum %
-		 *        |     |     |     |     9-Relative hum %
-		 *        |     |     |     7-Water temp in Celsius
-		 *        |     |     5-Air Temp in Celsius  |
-		 *        |     3-Pressure in Bars
-		 *        1-Pressure in inches
-		 *
-		 * Example: $WIMDA,29.4473,I,0.9972,B,17.2,C,,,,,,,,,,,,,,*3E
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -253,20 +258,20 @@ public class StringParsers {
 
 	/**
 	 * MMB Atmospheric pressure
+	 * <pre>
+	 * Structure is $IIMMB,29.9350,I,1.0136,B*7A
+	 *                     |       | |      |
+	 *                     |       | |      Bars
+	 *                     |       | Pressure in Bars
+	 *                     |       Inches of Hg
+	 *                     Pressure in inches of Hg
+	 * </pre>
 	 * @param sentence the one to parse
 	 * @return Pressure in Mb / hPa
 	 */
 	public static double parseMMB(String sentence) {
 		final int PR_IN_HG = 1;
 		final int PR_BARS = 3;
-		/*
-		 * Structure is $IIMMB,29.9350,I,1.0136,B*7A
-		 *                     |       | |      |
-		 *                     |       | |      Bars
-		 *                     |       | Pressure in Bars
-		 *                     |       Inches of Hg
-		 *                     Pressure in inches of Hg
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -283,15 +288,19 @@ public class StringParsers {
 		return d;
 	}
 
-	// MTA Air Temperature
+	/**
+	 * MTA Air Temperature
+	 * <pre>
+	 * Structure is $IIMTA,020.5,C*30
+	 *                     |     |
+	 *                     |     Celsius
+	 *                     Temperature in Celsius
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return Temperature in Celsius
+	 */
 	public static double parseMTA(String sentence) {
 		final int TEMP_CELSIUS = 1;
-		/*
-		 * Structure is $IIMTA,020.5,C*30
-		 *                     |     |
-		 *                     |     Celsius
-		 *                     Temperature in Celsius
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -307,20 +316,24 @@ public class StringParsers {
 		return d;
 	}
 
-	// VDR Current Speed and Direction
+	/**
+	 * VDR Current Speed and Direction
+	 * <pre>
+	 * Structure is $IIVDR,00.0,T,00.0,M,00.0,N*XX
+	 *                     |    | |    | |    |
+	 *                     |    | |    | |    Knots
+	 *                     |    | |    | Speed
+	 *                     |    | |    Mag.
+	 *                     |    | Magnetic Dir
+	 *                     |    True
+	 *                     True Dir
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The current from the string
+	 */
 	public static Current parseVDR(String sentence) {
 		final int DIR = 1;
 		final int SPEED = 5;
-		/*
-		 * Structure is $IIVDR,00.0,T,00.0,M,00.0,N*XX
-		 *                     |    | |    | |    |
-		 *                     |    | |    | |    Knots
-		 *                     |    | |    | Speed
-		 *                     |    | |    Mag.
-		 *                     |    | Magnetic Dir
-		 *                     |    True
-		 *                     True Dir
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -338,17 +351,22 @@ public class StringParsers {
 		return current;
 	}
 
+	/**
+	 * Battery voltage
+	 * NOT STANDARD !!!
+	 * <pre>
+	 * Structure is $XXBAT,14.82,V,1011,98*20
+	 *                     |     | |    |
+	 *                     |     | |    Volume [0..100]
+	 *                     |     | ADC [0..1023]
+	 *                     |     Volts
+	 *                     Voltage
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The tension in volts
+	 */
 	public static float parseBAT(String sentence) {
 		final int VOLTAGE = 1;
-		/*
-		 * NOT STANDARD !!!
-		 * Structure is $XXBAT,14.82,V,1011,98*20
-		 *                     |     | |    |
-		 *                     |     | |    Volume [0..100]
-		 *                     |     | ADC [0..1023]
-		 *                     |     Volts
-		 *                     Voltage
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -364,14 +382,19 @@ public class StringParsers {
 		return v;
 	}
 
+	/**
+	 * Cache age
+	 * NOT STANDARD !!!
+	 * <pre>
+	 * Structure is $XXSTD,77672*5C
+	 *                     |
+	 *                     Cache Age in ms
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The cache age, in milliseconds
+	 */
 	public static long parseSTD(String sentence) {
 		final int VALUE = 1;
-		/*
-		 * NOT STANDARD !!!
-		 * Structure is $XXSTD,77672*5C
-		 *                     |
-		 *                     Cache Age in ms
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -391,7 +414,25 @@ public class StringParsers {
 	public static List<String> getGSVList() {
 		return gsvData;
 	}
-	// GSV Detailed Satellite data
+	/**
+	 * GSV Detailed Satellite data
+	 * <pre>
+	 * Structure is $GPGSV,3,1,11,03,03,111,00,04,15,270,00,06,01,010,00,13,06,292,00*74
+	 *                     | | |  |  |  |   |  |            |            |
+	 *                     | | |  |  |  |   |  |            |            10 - Fourth SV...
+	 *                     | | |  |  |  |   |  |            9 - Third SV...
+	 *                     | | |  |  |  |   |  8 - Second SV...
+	 *                     | | |  |  |  |   7 - SNR (0-99 db)
+	 *                     | | |  |  |  6 - Azimuth in degrees (0-359)
+	 *                     | | |  |  5 - Elevation in degrees (0-90)
+	 *                     | | |  4 - First SV PRN Number
+	 *                     | | 3 - Total number of SVs in view, and other meanings.
+	 *                     | 2 - Message Number
+	 *                     1 - Number of messages in this cycle
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return SVData Map
+	 */
 	public static Map<Integer, SVData> parseGSV(String sentence) {
 		final int NB_MESS = 1;
 		final int MESS_NUM = 2;
@@ -403,20 +444,7 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-//  	System.out.println("String [" + s + "]");
-		/* Structure is $GPGSV,3,1,11,03,03,111,00,04,15,270,00,06,01,010,00,13,06,292,00*74
-		 *                     | | |  |  |  |   |  |            |            |
-		 *                     | | |  |  |  |   |  |            |            10 - Fourth SV...
-		 *                     | | |  |  |  |   |  |            9 - Third SV...
-		 *                     | | |  |  |  |   |  8 - Second SV...
-		 *                     | | |  |  |  |   7 - SNR (0-99 db)
-		 *                     | | |  |  |  6 - Azimuth in degrees (0-359)
-		 *                     | | |  |  5 - Elevation in degrees (0-90)
-		 *                     | | |  4 - First SV PRN Number
-		 *                     | | 3 - Total number of SVs in view, and other meanings.
-		 *                     | 2 - Message Number
-		 *                     1 - Number of messages in this cycle
-		 */
+		// System.out.println("String [" + s + "]");
 		final int DATA_OFFSET = 3; // num of mess, mess num, Total num of SVs.
 		final int NB_DATA = 4; // SV num, elev, Z, SNR
 
@@ -506,6 +534,30 @@ public class StringParsers {
 	public static List<Object> parseGGA(String sentence) {
 		return parseGGA(sentence, true);
 	}
+	/**
+	 * GGA Global Positioning System Fix Data. Time, Position and fix related data for a GPS receiver.<br>
+	 * Structure is:
+	 * <pre>
+	 *  $GPGGA,014457,3739.853,N,12222.821,W,1,03,5.4,1.1,M,-28.2,M,,*7E
+	 *  $aaGGA,hhmmss.ss,llll.ll,a,gggg.gg,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh(CR)(LF)
+	 *         |         |         |         | |  |   |   | |   | |   |
+	 *         |         |         |         | |  |   |   | |   | |   Differential reference station ID
+	 *         |         |         |         | |  |   |   | |   | Age of differential GPS data (seconds)
+	 *         |         |         |         | |  |   |   | |   Unit of geodial separation, meters
+	 *         |         |         |         | |  |   |   | Geodial separation
+	 *         |         |         |         | |  |   |   Unit of antenna altitude, meters
+	 *         |         |         |         | |  |   Antenna altitude above sea level
+	 *         |         |         |         | |  Horizontal dilution of precision
+	 *         |         |         |         | number of satellites in use 00-12 (in use, not in view!)
+	 *         |         |         |         GPS quality indicator (0:invalid, 1:GPS fix, 2:DGPS fix)
+	 *         |         |         Longitude
+	 *         |         Latitude
+	 *         UTC of position
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param useSymbol Use degree symbol for GeoPos.toString
+	 * @return List of Objects
+	 */
 	public static List<Object> parseGGA(String sentence, boolean useSymbol) {
 		final int KEY_POS = 0;
 		final int UTC_POS = 1;
@@ -525,23 +577,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $GPGGA,014457,3739.853,N,12222.821,W,1,03,5.4,1.1,M,-28.2,M,,*7E
-		 *  $aaGGA,hhmmss.ss,llll.ll,a,gggg.gg,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh(CR)(LF)
-		 *         |         |         |         | |  |   |   | |   | |   |
-		 *         |         |         |         | |  |   |   | |   | |   Differential reference station ID
-		 *         |         |         |         | |  |   |   | |   | Age of differential GPS data (seconds)
-		 *         |         |         |         | |  |   |   | |   Unit of geodial separation, meters
-		 *         |         |         |         | |  |   |   | Geodial separation
-		 *         |         |         |         | |  |   |   Unit of antenna altitude, meters
-		 *         |         |         |         | |  |   Antenna altitude above sea level
-		 *         |         |         |         | |  Horizontal dilution of precision
-		 *         |         |         |         | number of satellites in use 00-12 (in use, not in view!)
-		 *         |         |         |         GPS quality indicator (0:invalid, 1:GPS fix, 2:DGPS fix)
-		 *         |         |         Longitude
-		 *         |         Latitude
-		 *         UTC of position
-		 */
 		String[] sa = s.substring(0, s.indexOf("*")).split(",");
 		double utc = 0L, lat = 0L, lng = 0L;
 		int nbsat = 0;
@@ -635,30 +670,33 @@ public class StringParsers {
 					probMissedDetection, biasInMeters, stdDevOfBias);
 		}
 	}
+	/**
+    GPS Satellite Fault Detection
+<pre>
+$--GBS,hhmmss.ss,x.x,x.x,x.x,x.x,x.x,x.x,x.x*hh&lt;CR&gt;&lt;LF&gt;
+    |         |   |   |   |   |   |   |   |
+    |         |   |   |   |   |   |   |   9 - Checksum
+    |         |   |   |   |   |   |   8 - Standard deviation of bias estimate
+    |         |   |   |   |   |   7 - Estimate of bias in meters on most likely failed satellite
+    |         |   |   |   |   6 - Probability of missed detection for most likely failed satellite
+    |         |   |   |   5 - ID of most likely failed satellite (1 to 138)
+    |         |   |   4 - Expected 1-sigma error in altitude (meters)
+    |         |   3 - Expected 1-sigma error in longitude (meters)
+    |         2 - Expected 1-sigma error in latitude (meters)
+    1 - UTC time of the GGA or GNS fix associated with this sentence. hh is hours, mm is minutes, ss.ss is seconds
+
+Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitlab.io/gpsd/NMEA.html#_gbs_gps_satellite_fault_detection)
+      $GPGBS,163317.00,7.3,5.2,11.7,,,,*74
+             |         |   |   |
+             |         |   |   4
+             |         |   3
+             |         2
+             1
+</pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
 	public static GBS parseGBS(String sentence) {
-		/*
-		GPS Satellite Fault Detection
-
- $--GBS,hhmmss.ss,x.x,x.x,x.x,x.x,x.x,x.x,x.x*hh<CR><LF>
-        |         |   |   |   |   |   |   |   |
-        |         |   |   |   |   |   |   |   9 - Checksum
-        |         |   |   |   |   |   |   8 - Standard deviation of bias estimate
-        |         |   |   |   |   |   7 - Estimate of bias in meters on most likely failed satellite
-        |         |   |   |   |   6 - Probability of missed detection for most likely failed satellite
-        |         |   |   |   5 - ID of most likely failed satellite (1 to 138)
-        |         |   |   4 - Expected 1-sigma error in altitude (meters)
-        |         |   3 - Expected 1-sigma error in longitude (meters)
-        |         2 - Expected 1-sigma error in latitude (meters)
-        1 - UTC time of the GGA or GNS fix associated with this sentence. hh is hours, mm is minutes, ss.ss is seconds
-
- Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitlab.io/gpsd/NMEA.html#_gbs_gps_satellite_fault_detection)
-          $GPGBS,163317.00,7.3,5.2,11.7,,,,*74
-                 |         |   |   |
-                 |         |   |   4
-                 |         |   3
-                 |         2
-                 1
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -698,24 +736,28 @@ public class StringParsers {
 		return gbs;
 	}
 
-	// GSA GPS DOP and active satellites
+	/**
+	 * GSA GPS DOP and active satellites
+	 * <pre>
+	 * $GPGSA,A,3,19,28,14,18,27,22,31,39,,,,,1.7,1.0,1.3*35
+	 *        | | |                           |   |   |
+	 *        | | |                           |   |   VDOP
+	 *        | | |                           |   HDOP
+	 *        | | |                           PDOP (dilution of precision). No unit; the smaller the better.
+	 *        | | IDs of the SVs used in fix (up to 12)
+	 *        | Mode: 1=Fix not available, 2=2D, 3=3D
+	 *        Mode: M=Manual, forced to operate in 2D or 3D
+	 *              A=Automatic, 3D/2D
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static GSA parseGSA(String sentence) {
 		final int MODE_1 = 1;
 		final int MODE_2 = 2;
 		final int PDOP = 15;
 		final int HDOP = 16;
 		final int VDOP = 17;
-		/*
-		 * $GPGSA,A,3,19,28,14,18,27,22,31,39,,,,,1.7,1.0,1.3*35
-		 *        | | |                           |   |   |
-		 *        | | |                           |   |   VDOP
-		 *        | | |                           |   HDOP
-		 *        | | |                           PDOP (dilution of precision). No unit; the smaller the better.
-		 *        | | IDs of the SVs used in fix (up to 12)
-		 *        | Mode: 1=Fix not available, 2=2D, 3=3D
-		 *        Mode: M=Manual, forced to operate in 2D or 3D
-		 *              A=Automatic, 3D/2D
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -763,6 +805,22 @@ public class StringParsers {
 		return parseVHW(sentence, 0d);
 	}
 
+	/**
+	 * VHW Water speed and heading <br>
+	 * Structure is
+	 * <pre>
+	 *         1   2 3   4 5   6 7   8
+	 *  $aaVHW,x.x,T,x.x,M,x.x,N,x.x,K*hh(CR)(LF)
+	 *         |     |     |     |
+	 *         |     |     |     Speed in km/h
+	 *         |     |     Speed in knots
+	 *         |     Heading in degrees, Magnetic
+	 *         Heading in degrees, True
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param defaultBSP Used if missing
+	 * @return The result.
+	 */
 	public static VHW parseVHW(String sentence, double defaultBSP) {
 		final int HDG_IN_DEG_TRUE = 1;
 		final int HDG_IN_DEG_MAG = 3;
@@ -775,15 +833,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *         1   2 3   4 5   6 7   8
-		 *  $aaVHW,x.x,T,x.x,M,x.x,N,x.x,K*hh(CR)(LF)
-		 *         |     |     |     |
-		 *         |     |     |     Speed in km/h
-		 *         |     |     Speed in knots
-		 *         |     Heading in degrees, Magnetic
-		 *         Heading in degrees, True
-		 */
 		// We're interested only in Speed in knots.
 		double speed = defaultBSP;
 		double hdm = -1d; // set to -1.Means not found.
@@ -820,7 +869,20 @@ public class StringParsers {
 		return new VHW().bsp(speed).hdm(hdm).hdg(hdg);
 	}
 
-	// VLW Distance Traveled through Water
+	/**
+	 * VLW Distance Traveled through Water<br>
+	 * Structure is
+	 * <pre>
+	 * $aaVLW,x.x,N,x.x,N*hh&lt;CR&gt;&lt;LF&gt;
+	 *        |   | |   |
+	 *        |   | |   Nautical miles
+	 *        |   | Distance since reset
+	 *        |   Nautical miles
+	 *        Total cumulative distance
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static VLW parseVLW(String sentence) {
 		final int CUM_DIST = 1;
 		final int SINCE_RESET = 3;
@@ -834,14 +896,6 @@ public class StringParsers {
 		}
 		double cumulative = 0d;
 		double sinceReset = 0d;
-		/* Structure is
-		 * $aaVLW,x.x,N,x.x,N*hh<CR><LF>
-		 *        |   | |   |
-		 *        |   | |   Nautical miles
-		 *        |   | Distance since reset
-		 *        |   Nautical miles
-		 *        Total cumulative distance
-		 */
 		try {
 			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			cumulative = parseNMEADouble(nmeaElements[CUM_DIST]);
@@ -853,13 +907,20 @@ public class StringParsers {
 		return new VLW().log(cumulative).daily(sinceReset);
 	}
 
-	// MTW Water Temperature
+	/**
+	 * MTW Water Temperature<br>
+	 * Structure is
+	 * <pre>
+	 * $xxMTW,+18.0,C*hh
+	 *        |     |
+	 *        |     Celsius
+	 *        Temparature
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result, in Celsius, as a double
+	 */
 	public static double parseMTW(String sentence) {
 		final int TEMP_CELSIUS = 1;
-		/* Structure
-		 * $xxMTW,+18.0,C*hh
-		 *
-		 */
 		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return 0d;
@@ -886,8 +947,22 @@ public class StringParsers {
 	public static final int TRUE_WIND = 0;
 	public static final int APPARENT_WIND = 1;
 
-	// MWV Wind Speed and Angle
-	// AWA, AWS (R), possibly TWA, TWS (T)
+	/**
+	 * MWV Wind Speed and Angle<br>
+	 * AWA, AWS (R), possibly TWA, TWS (T)<br>
+	 * Structure is<br>
+	 * <pre>
+	 *  $aaMWV,x.x,a,x.x,a,A*hh
+	 *         |   | |   | |
+	 *         |   | |   | status : A=data valid
+	 *         |   | |   Wind Speed unit (K/M/N)
+	 *         |   | Wind Speed
+	 *         |   reference R=relative, T=true
+	 *         Wind angle 0 to 360 degrees
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static Wind parseMWV(String sentence) {
 		int flavor = -1;
 
@@ -898,15 +973,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $aaMWV,x.x,a,x.x,a,A*hh
-		 *         |   | |   | |
-		 *         |   | |   | status : A=data valid
-		 *         |   | |   Wind Speed unit (K/M/N)
-		 *         |   | Wind Speed
-		 *         |   reference R=relative, T=true
-		 *         Wind angle 0 to 360 degrees
-		 */
 		// We're interested only in Speed in knots.
 		Wind aw = null;
 		try {
@@ -961,21 +1027,26 @@ public class StringParsers {
 		return aw;
 	}
 
-	// MWD Wind Direction & Speed
+	/**
+	 * MWD Wind Direction &amp; Speed<br>
+	 * <pre>
+	 * $WIMWD,&lt;1&gt;,&lt;2&gt;,&lt;3&gt;,&lt;4&gt;,&lt;5&gt;,&lt;6&gt;,&lt;7&gt;,&lt;8&gt;*hh
+	 *
+	 * NMEA 0183 standard Wind Direction and Speed, with respect to north.
+	 *
+	 * &lt;1&gt; Wind direction, 0.0 to 359.9 degrees True, to the nearest 0.1 degree
+	 * &lt;2&gt; T = True
+	 * &lt;3&gt; Wind direction, 0.0 to 359.9 degrees Magnetic, to the nearest 0.1 degree
+	 * &lt;4&gt; M = Magnetic
+	 * &lt;5&gt; Wind speed, knots, to the nearest 0.1 knot.
+	 * &lt;6&gt; N = Knots
+	 * &lt;7&gt; Wind speed, meters/second, to the nearest 0.1 m/s.
+	 * &lt;8&gt; M = Meters/second
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static TrueWind parseMWD(String sentence) {
-			/* $WIMWD,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>*hh
-	     *
-	     * NMEA 0183 standard Wind Direction and Speed, with respect to north.
-	     *
-	     * <1> Wind direction, 0.0 to 359.9 degrees True, to the nearest 0.1 degree
-	     * <2> T = True
-	     * <3> Wind direction, 0.0 to 359.9 degrees Magnetic, to the nearest 0.1 degree
-	     * <4> M = Magnetic
-	     * <5> Wind speed, knots, to the nearest 0.1 knot.
-	     * <6> N = Knots
-	     * <7> Wind speed, meters/second, to the nearest 0.1 m/s.
-	     * <8> M = Meters/second
-	     */
 		TrueWind tw = null;
 		if (validCheckSum(sentence)) {
 			String[] part = sentence.split(",");
@@ -994,14 +1065,18 @@ public class StringParsers {
 		return tw;
 	}
 
-	/*
-	 * VWT True Windspeed and Angle (obsolete)
-	 * $--VWT,x.x,a,x.x,N,x.x,M,x.x,K*hh<CR><LF>
+	/**
+	 * VWT True WindSpeed and Angle (obsolete)
+	 * <pre>
+	 * $--VWT,x.x,a,x.x,N,x.x,M,x.x,K*hh&lt;CR&gt;&lt;LF&gt;
 	 *        |     |     |     |
 	 *        |     |     |     Wind speed, Km/Hr
 	 *        |     |     Wind speed, meters/second
 	 *        |     Calculated wind Speed, knots
 	 *        Calculated wind angle relative to the vessel, 0 to 180, left/right L/R of vessel heading
+     * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
 	 */
 	public static TrueWind parseVWT(String sentence) {
 		TrueWind wind = null;
@@ -1021,9 +1096,23 @@ public class StringParsers {
 		return wind;
 	}
 
-	// VWR Relative Wind Speed and Angle
-	// AWA, AWS
-	// Example: VWR,148.,L,02.4,N,01.2,M,04.4,K*XX
+	/**
+	 * VWR Relative Wind Speed and Angle (AWA, AWS)<br>
+	 * Structure is<br>
+	 * <pre>
+	 *  $aaVWR,x.x,a,x.x,N,x.x,M,x.x,K*hh
+	 *         |   | |     |     |
+	 *         |   | |     |     Wind Speed, in km/h
+	 *         |   | |     Wind Speed, in m/s
+	 *         |   | Wind Speed, in knots
+	 *         |   L=port, R=starboard
+	 *         Wind angle 0 to 180 degrees
+	 *
+	 * Example: VWR,148.,L,02.4,N,01.2,M,04.4,K*XX
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static ApparentWind parseVWR(String sentence) {
 		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
@@ -1032,15 +1121,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $aaVWR,x.x,a,x.x,N,x.x,M,x.x,K*hh
-		 *         |   | |     |     |
-		 *         |   | |     |     Wind Speed, in km/h
-		 *         |   | |     Wind Speed, in m/s
-		 *         |   | Wind Speed, in knots
-		 *         |   L=port, R=starboard
-		 *         Wind angle 0 to 180 degrees
-		 */
 		// We're interested only in Speed in knots.
 		ApparentWind aw = null;
 		try {
@@ -1092,7 +1172,31 @@ public class StringParsers {
 		return aw;
 	}
 
-	// VTG Track made good and Ground speed
+	/**
+	 * VTG Track made good and Ground speed<br>
+	 * Structure is<br>
+	 * <pre>
+	 * $IIVTG,x.x,T,x.x,M,x.x,N,x.x,K,A*hh
+	 *        |   | |  |  |   | |___|
+     *        |   | |  |  |   | SOG, km/h
+     *        |   | |  |  |___|
+     *        |   | |  |  SOG, knots
+     *        |   | |__|
+     *        |   | COG, mag
+     *        |___|
+     *        COG, true
+     *
+     * $IIVTG,17.,T,M,7.9,N,,*36 // B&amp;G does this...
+     * $IIVTG,,T,338.,M,N,,*28   // or this...
+     * $IIVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*XX
+     *        054.7,T      True track made good
+     *        034.4,M      Magnetic track made good
+     *        005.5,N      Ground speed, knots
+	 *        010.2,K      Ground speed, Kilometers per hour
+     * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static OverGround parseVTG(String sentence) {
 		String s = sentence.trim();
 		OverGround og = null;
@@ -1102,21 +1206,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 * $IIVTG,x.x,T,x.x,M,x.x,N,x.x,K,A*hh
-				  |   | |  |  |   | |___|SOG, km/h
-				  |   | |  |  |___|SOG, knots
-				  |   | |__|COG, mag
-				  |___|COG, true
-
-		   $IIVTG,17.,T,M,7.9,N,,*36 // B&G does this...
-		   $IIVTG,,T,338.,M,N,,*28   // or this...
-		   $IIVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*XX
-				  054.7,T      True track made good
-				  034.4,M      Magnetic track made good
-				  005.5,N      Ground speed, knots
-				  010.2,K      Ground speed, Kilometers per hour
-		 */
 		// We're interested only in Speed in knots.
 		try {
 			if (false && !s.contains("A*")) { // Data invalid, only for NMEA 2.3 and later
@@ -1164,6 +1253,24 @@ public class StringParsers {
 	public static GLL parseGLL(String senntence) {
 		return parseGLL(senntence, true);
 	}
+	/**
+	 * GLL Geographical Latitude &amp; Longitude<br>
+	 * Structure is
+	 * <pre>
+	 *  $aaGLL,llll.ll,a,gggg.gg,a,hhmmss.ss,A,D*hh
+	 *         |       | |       | |         | |
+	 *         |       | |       | |         | Type: A=autonomous, D=differential, E=Estimated, N=not valid, S=Simulator (not always there)
+	 *         |       | |       | |         A:data valid (Active), V: void
+	 *         |       | |       | UTC of position
+	 *         |       | |       Long sign :E/W
+	 *         |       | Longitude
+	 *         |       Lat sign :N/S
+	 *         Latitude
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param useSymbol Use degree symbol in GeoPos.toString()
+	 * @return The result.
+	 */
 	public static GLL parseGLL(String sentence, boolean useSymbol) {
 		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
@@ -1172,17 +1279,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $aaGLL,llll.ll,a,gggg.gg,a,hhmmss.ss,A,D*hh
-		 *         |       | |       | |         | |
-		 *         |       | |       | |         | Type: A=autonomous, D=differential, E=Estimated, N=not valid, S=Simulator (not always there)
-		 *         |       | |       | |         A:data valid (Active), V: void
-		 *         |       | |       | UTC of position
-		 *         |       | |       Long sign :E/W
-		 *         |       | Longitude
-		 *         |       Lat sign :N/S
-		 *         Latitude
-		 */
 		GeoPos ll = null;
 		Date date = null;
 		try {
@@ -1251,7 +1347,18 @@ public class StringParsers {
 		return new GLL().gllPos(ll).gllDate(date);
 	}
 
-	// HDT Heading - True
+	/**
+	 * HDT Heading - True or Mag<br>
+	 * Structure is
+	 * <pre>
+	 *  $aaHDT,xxx,M*hh(CR)(LF)
+	 *         |   |
+	 *         |   Magnetic, True
+	 *         Heading in degrees
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result, as an int.
+	 */
 	public static int parseHDT(String sentence) {
 		final int KEY_POS = 0;
 		final int HDG_POS = 1;
@@ -1263,12 +1370,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-    /* Structure is
-     *  $aaHDT,xxx,M*hh(CR)(LF)
-     *         |   |
-     *         |   Magnetic, True
-     *         Heading in degrees
-     */
 		int hdg = 0;
 
 		String[] elmts = sentence.substring(0, sentence.indexOf("*")).split(",");
@@ -1289,7 +1390,18 @@ public class StringParsers {
 		return hdg;
 	}
 
-	// HDM Heading (Mag.)
+	/**
+	 * HDM Heading (Mag., True)<br>
+	 * Structure is
+	 * <pre>
+	 *  $aaHDM,xxx,M*hh(CR)(LF)
+	 *         |   |
+	 *         |   Magnetic, True
+	 *         Heading in degrees
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result, as an int.
+	 */
 	public static int parseHDM(String sentence) {
 		final int KEY_POS = 0;
 		final int HDG_POS = 1;
@@ -1301,12 +1413,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $aaHDM,xxx,M*hh(CR)(LF)
-		 *         |   |
-		 *         |   Magnetic, True
-		 *         Heading in degrees
-		 */
 		int hdg = 0;
 
 		String[] elmts = sentence.substring(0, sentence.indexOf("*")).split(",");
@@ -1336,7 +1442,22 @@ public class StringParsers {
 		return ret;
 	}
 
-	// HDG - Magnetic heading, deviation, variation
+	/**
+	 * HDG - Magnetic heading, deviation, variation<br>
+	 * Structure is
+	 * <pre>
+	 * $xxHDG,x.x,x.x,a,x.x,a*hh&lt;CR&gt;&lt;LF&gt;
+	 *        |   |   | |   | |
+	 *        |   |   | |   | Checksum
+	 *        |   |   | |   Magnetic Variation direction, E = Easterly, W = Westerly
+	 *        |   |   | Magnetic Variation degrees
+	 *        |   |   Magnetic Deviation direction, E = Easterly, W = Westerly
+	 *        |   Magnetic Deviation, degrees
+	 *        Magnetic Sensor heading in degrees
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static HDG parseHDG(String sentence) {
 		HDG ret = null;
 		String s = sentence.trim();
@@ -1349,16 +1470,6 @@ public class StringParsers {
 		double hdg = 0d;
 		double dev = 0d; // -Double.MAX_VALUE;
 		double var = 0d; // -Double.MAX_VALUE;
-		/* Structure is
-		 * $xxHDG,x.x,x.x,a,x.x,a*hh<CR><LF>
-		 *        |   |   | |   | |
-		 *        |   |   | |   | Checksum
-		 *        |   |   | |   Magnetic Variation direction, E = Easterly, W = Westerly
-		 *        |   |   | Magnetic Variation degrees
-		 *        |   |   Magnetic Deviation direction, E = Easterly, W = Westerly
-		 *        |   Magnetic Deviation, degrees
-		 *        Magnetic Sensor heading in degrees
-		 */
 		try {
 			String[] nmeaElements = sentence.substring(0, sentence.indexOf("*")).split(",");
 			try {
@@ -1400,6 +1511,30 @@ public class StringParsers {
 	public static RMB parseRMB(String sentence) {
 		return parseRMB(sentence, true);
 	}
+	/**
+	 * RMB Recommended Minimum Navigation Information<br>
+	 * <pre>
+	 *        1 2   3 4    5    6       7 8        9 10  11  12  13
+	 * $GPRMB,A,x.x,a,c--c,d--d,llll.ll,e,yyyyy.yy,f,g.g,h.h,i.i,j*kk
+	 *        | |   | |    |    |       | |        | |   |   |   |
+	 *        | |   | |    |    |       | |        | |   |   |   A=Entered or perpendicular passed, V:not there yet
+	 *        | |   | |    |    |       | |        | |   |   Destination closing velocity in knots
+	 *        | |   | |    |    |       | |        | |   Bearing to destination, degrees, True
+	 *        | |   | |    |    |       | |        | Range to destination, nm
+	 *        | |   | |    |    |       | |        E or W
+	 *        | |   | |    |    |       | Destination Waypoint longitude
+	 *        | |   | |    |    |       N or S
+	 *        | |   | |    |    Destination Waypoint latitude
+	 *        | |   | |    Destination Waypoint ID
+	 *        | |   | Origin Waypoint ID
+	 *        | |   Direction to steer (L or R) to correct error
+	 *        | Crosstrack error in nm
+	 *        Data Status (Active or Void)
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param useSymbol Use degree symbol in GeoPos.toString()
+	 * @return The result.
+	 */
 	public static RMB parseRMB(String sentence, boolean useSymbol) {
 		final int RMB_STATUS = 1;
 		final int RMB_XTE = 2;
@@ -1415,23 +1550,6 @@ public class StringParsers {
 		final int RMB_DEST_CLOSING = 12;
 		final int RMB_INFO = 13;
 
-		/*        1 2   3 4    5    6       7 8        9 10  11  12  13
-		 * $GPRMB,A,x.x,a,c--c,d--d,llll.ll,e,yyyyy.yy,f,g.g,h.h,i.i,j*kk
-		 *        | |   | |    |    |       | |        | |   |   |   |
-		 *        | |   | |    |    |       | |        | |   |   |   A=Entered or perpendicular passed, V:not there yet
-		 *        | |   | |    |    |       | |        | |   |   Destination closing velocity in knots
-		 *        | |   | |    |    |       | |        | |   Bearing to destination, degrees, True
-		 *        | |   | |    |    |       | |        | Range to destination, nm
-		 *        | |   | |    |    |       | |        E or W
-		 *        | |   | |    |    |       | Destination Waypoint longitude
-		 *        | |   | |    |    |       N or S
-		 *        | |   | |    |    Destination Waypoint latitude
-		 *        | |   | |    Destination Waypoint ID
-		 *        | |   | Origin Waypoint ID
-		 *        | |   Direction to steer (L or R) to correct error
-		 *        | Crosstrack error in nm
-		 *        Data Status (Active or Void)
-		 */
 		RMB rmb = null;
 		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
@@ -1528,6 +1646,31 @@ public class StringParsers {
 	public static RMC parseRMC(String sentence) {
 		return parseRMC(sentence, true);
 	}
+	/**
+	 * RMC Recommended minimum specific GPS/Transit data<br>
+	 * RMC Structure is
+	 * <pre>
+	 *                                                                    12
+	 *         1      2 3        4 5         6 7     8     9      10    11
+	 *  $GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W,T*6A
+	 *         |      | |        | |         | |     |     |      |     | |
+	 *         |      | |        | |         | |     |     |      |     | Type: A=autonomous, D=differential, E=Estimated, N=not valid, S=Simulator
+	 *         |      | |        | |         | |     |     |      |     Variation sign
+	 *         |      | |        | |         | |     |     |      Variation value
+	 *         |      | |        | |         | |     |     Date DDMMYY (see rmc.date.offset property)
+	 *         |      | |        | |         | |     COG
+	 *         |      | |        | |         | SOG
+	 *         |      | |        | |         Longitude Sign
+	 *         |      | |        | Longitude Value
+	 *         |      | |        Latitude Sign
+	 *         |      | Latitude value
+	 *         |      Active or Void
+	 *         UTC
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param useSymbol Use degree symbol in GeoPos.toString()
+	 * @return The result.
+	 */
 	public static RMC parseRMC(String sentence, boolean useSymbol) {
 		final int RMC_UTC = 1;
 		final int RMC_ACTIVE_VOID = 2;
@@ -1551,24 +1694,6 @@ public class StringParsers {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
 		String s = sentence.substring(0, sentence.indexOf("*"));
-		/* RMC Structure is
-		 *                                                                    12
-		 *         1      2 3        4 5         6 7     8     9      10    11
-		 *  $GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W,T*6A
-		 *         |      | |        | |         | |     |     |      |     | |
-		 *         |      | |        | |         | |     |     |      |     | Type: A=autonomous, D=differential, E=Estimated, N=not valid, S=Simulator
-		 *         |      | |        | |         | |     |     |      |     Variation sign
-		 *         |      | |        | |         | |     |     |      Variation value
-		 *         |      | |        | |         | |     |     Date DDMMYY (see rmc.date.offset property)
-		 *         |      | |        | |         | |     COG
-		 *         |      | |        | |         | SOG
-		 *         |      | |        | |         Longitude Sign
-		 *         |      | |        | Longitude Value
-		 *         |      | |        Latitude Sign
-		 *         |      | Latitude value
-		 *         |      Active or Void
-		 *         UTC
-		 */
 		try {
 			if (s.contains("RMC,")) {
 				rmc = new RMC();
@@ -1811,7 +1936,24 @@ public class StringParsers {
 		return new int[]{mn, nbm};
 	}
 
-	// ZDA Time & Date - UTC, day, month, year and local time zone
+	/**
+	 * ZDA Time &amp; Date - UTC, day, month, year and local time zone<br>
+	 * Structure is
+	 * <pre>
+	 * $GPZDA,hhmmss.ss,dd,mm,yyyy,xx,yy*CC
+	 *        1         2  3  4    5  6
+	 * $GPZDA,201530.00,04,07,2002,00,00*60
+	 *        |         |  |  |    |  |
+	 *        |         |  |  |    |  local zone minutes 0..59
+	 *        |         |  |  |    local zone hours -13..13
+	 *        |         |  |  year
+	 *        |         |  month
+	 *        |         day
+	 *        HrMinSec(UTC)
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+	 */
 	public static UTCDate parseZDA(String sentence) {
 		final int ZDA_UTC = 1;
 		final int ZDA_DAY = 2;
@@ -1820,18 +1962,6 @@ public class StringParsers {
 		final int ZDA_LOCAL_ZONE_HOURS = 5;
 		final int ZDA_LOCAL_ZONE_MINUTES = 6;
 
-		/* Structure is
-		 * $GPZDA,hhmmss.ss,dd,mm,yyyy,xx,yy*CC
-		 *        1         2  3  4
-		 * $GPZDA,201530.00,04,07,2002,00,00*60
-		 *        |         |  |  |    |  |
-		 *        |         |  |  |    |  local zone minutes 0..59
-		 *        |         |  |  |    local zone hours -13..13
-		 *        |         |  |  year
-		 *        |         |  month
-		 *        |         day
-		 *        HrMinSec(UTC)
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -1897,7 +2027,20 @@ public class StringParsers {
 	public static float parseDPT(String sentence) {
 		return parseDPT(sentence, DEPTH_IN_METERS);
 	}
-	// Depth
+	/**
+	 * Water Depth<br>
+	 * Structure is
+	 * <pre>
+	 *  $xxDPT,XX.XX,XX.XX,XX.XX*hh&lt;0D&gt;&lt;OA&gt;
+	 *         |     |     |
+	 *         |     |     Max depth in meters
+	 *         |     offset
+	 *         Depth in meters
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @param unit DEPTH_IN_FEET, DEPTH_IN_METERS, DEPTH_IN_FATHOMS
+	 * @return The result, as a float.
+	 */
 	public static float parseDPT(String sentence, short unit) {
 		final int IN_METERS = 1;
 		final int OFFSET = 2;
@@ -1908,13 +2051,6 @@ public class StringParsers {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
-		/* Structure is
-		 *  $xxDPT,XX.XX,XX.XX,XX.XX*hh<0D><0A>
-		 *         |     |     |
-		 *         |     |     Max depth in meters
-		 *         |     offset
-		 *         Depth in meters
-		 */
 		float feet = 0.0F;
 		float meters = 0.0F;
 		float fathoms = 0.0F;
@@ -2023,8 +2159,10 @@ public class StringParsers {
 		return parseDepth(sentence, unit, "DBT");
 	}
 
-	/* Depth Below Surface (Obsolete)
+	/**
+	 * Depth Below Surface (Obsolete)<br>
 	 * Structure is
+	 * <pre>
 	 *  $aaDBS,011.0,f,03.3,M,01.8,F*18(CR)(LF)
 	 *         |     | |    | |    |
 	 *         |     | |    | |    F for fathoms
@@ -2033,6 +2171,9 @@ public class StringParsers {
 	 *         |     | Depth in meters
 	 *         |     f for feet
 	 *         Depth in feet
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result, as a float.
 	 */
 	public static float parseDBS(String sentence) {
 		return parseDBS(sentence, DEPTH_IN_METERS);
@@ -2041,30 +2182,35 @@ public class StringParsers {
 	public static float parseDBS(String sentence, short unit) {
 		return parseDepth(sentence, unit, "DBS");
 	}
+	/**
+	 * WiP<br>
+	 * Structure:
+	 * <pre>
+	 *
+	 *        1  2  3  4
+	 * $GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59
+	 *        |  |  |  |                                          |
+	 *        |  |  |  |                                          Checksum
+	 *        |  |  |  Content
+	 *        |  |  ?
+	 *        |  ?
+	 *        ?
+	 *
+	 * Examples:
+	 * $AITXT,01,01,91,FREQ,2087,2088*57
+	 * $GPTXT,01,01,02,u-blox ag - www.u-blox.com*50
+	 * $GPTXT,01,01,02,HW  UBX-G70xx   00070000 FF7FFFFFo*69
+	 * $GPTXT,01,01,02,PROTVER 14.00*1E
+	 * $GPTXT,01,01,02,ANTSUPERV=AC SD PDoS SR*20
+	 * $GPTXT,01,01,02,ANTSTATUS=OK*3B
+	 * $GPTXT,01,01,02,LLC FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFD*2C
+	 * </pre>
+	 * Pending questions: what are 01,01,02 ?
+	 *
+	 * @param sentence the one to parse
+	 * @return The result, as a String.
+	 */
 	public static String parseTXT(String sentence) {
-		/*
-		 * WIP
-		 * Structure:
-		 * $AITXT,01,01,91,FREQ,2087,2088*57
-		 * $GPTXT,01,01,02,u-blox ag - www.u-blox.com*50
-		 * $GPTXT,01,01,02,HW  UBX-G70xx   00070000 FF7FFFFFo*69
-		 *
-		 *        1  2  3  4
-		 * $GPTXT,01,01,02,ROM CORE 1.00 (59842) Jun 27 2012 17:43:52*59
-		 *        |  |  |  |                                          |
-		 *        |  |  |  |                                          Checksum
-		 *        |  |  |  Content
-		 *        |  |  ?
-		 *        |  ?
-		 *        ?
-		 *
-		 * $GPTXT,01,01,02,PROTVER 14.00*1E
-		 * $GPTXT,01,01,02,ANTSUPERV=AC SD PDoS SR*20
-		 * $GPTXT,01,01,02,ANTSTATUS=OK*3B
-		 * $GPTXT,01,01,02,LLC FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFD*2C
-		 *
-		 * Pending questions: what are 01,01,02 ?
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2092,7 +2238,8 @@ public class StringParsers {
 	}
 	/**
 	 * Ship Static Data. Up to 8 fields.
-	 $--SSD,c--c,c--c,xxx,xxx,xx,xx,c,aa*hh<CR><LF>
+	 * <pre>
+	 $--SSD,c--c,c--c,xxx,xxx,xx,xx,c,aa*hh&lt;CR&gt;&lt;LF&gt;
 	        |    |    |   |   |  |  | |
 	        |    |    |   |   |  |  | Source Identifier 5
 	        |    |    |   |   |  |  DTE indicator flag 4
@@ -2104,6 +2251,9 @@ public class StringParsers {
 	        Ship's Call Sign 1, 1 to 7 characters
 
 	 Example: $AISSD,PD2366@,MERRIMAC@@@@@@@@@@@@,017,000,03,02,1,AI*29
+	 </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
 	 */
 	public static SSD parseSSD(String sentence) {
 		if (!validCheckSum(sentence)) {
@@ -2174,8 +2324,9 @@ public class StringParsers {
 	}
 	/**
 	 *
-	 * Voyage Static Data
-	 $--VSD,x.x,x.x,x.x,c--c,hhmmss.ss,xx,xx,x.x,x.x*hh<CR><LF>
+	 * Voyage Static Data<br>
+	 * <pre>
+	 $--VSD,x.x,x.x,x.x,c--c,hhmmss.ss,xx,xx,x.x,x.x*hh&lt;CR&gt;&lt;LF&gt;
 	        |   |   |   |    |         |  |  |   |
 	        |   |   |   |    |         |  |  |   Regional application flags 8, 0 to 15
 	        |   |   |   |    |         |  |  Navigational status 7, 0 to 15
@@ -2188,6 +2339,9 @@ public class StringParsers {
 	        Type of ship and cargo category 1, 0 to 255
 
 	 Example: $AIVSD,036,00.0,0000,@@@@@@@@@@@@@@@@@@@@,000000,00,00,00,00*4E
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
 	 */
 	public static VSD parseVSD(String sentence) {
 
@@ -2363,31 +2517,34 @@ public class StringParsers {
 								 decodeMode(mode));
 		}
 	}
+	/**
+    Cross Track Error
+	<pre>
+    $--XTE,A,A,x.x,a,N,a*hh&lt;CR&gt;&lt;LF&gt;
+           | | |   | | |
+           | | |   | | Mode Indicator
+           | | |   | | - A = Autonomous mode
+           | | |   | | - D = Differential mode
+           | | |   | | - E = Estimated (dead reckoning) mode
+           | | |   | | - M = Manual input mode
+           | | |   | | - S = Simulator mode
+           | | |   | Units, nautical miles
+           | | |   Direction to steer, L/R
+           | | Magnitude of Cross-Track-Error
+           | Status
+           | - A = Data valid
+           | - V = Loran-C Cycle Lock warning flag
+           Status
+             - A = Data valid
+             - V = Loran-C Blink or SNR warning
+             - V = general warning flag for other navigation systems when a reliable fix is not available
+
+         Example: $GPXTE,,,,,N,N*5E, $GPXTE,V,V,,,N,S*43
+     </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
 	public static XTE parseXTE(String sentence) {
-		/*
-		Cross Track Error
-
-		$--XTE,A,A,x.x,a,N,a*hh<CR><LF>
-               | | |   | | |
-               | | |   | | Mode Indicator
-               | | |   | | - A = Autonomous mode
-               | | |   | | - D = Differential mode
-               | | |   | | - E = Estimated (dead reckoning) mode
-               | | |   | | - M = Manual input mode
-               | | |   | | - S = Simulator mode
-               | | |   | Units, nautical miles
-               | | |   Direction to steer, L/R
-               | | Magnitude of Cross-Track-Error
-               | Status
-			   | - A = Data valid
-			   | - V = Loran-C Cycle Lock warning flag
-			   Status
-				 - A = Data valid
-				 - V = Loran-C Blink or SNR warning
-				 - V = general warning flag for other navigation systems when a reliable fix is not available
-
- 			Example: $GPXTE,,,,,N,N*5E, $GPXTE,V,V,,,N,S*43
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2467,21 +2624,25 @@ public class StringParsers {
 					arrivalRadius, unit, (waypointId.trim().length() > 0 ? waypointId.trim() : "n/a"));
 		}
 	}
-	public static AAM parseAAM(String sentence) {
-		/*
-		Waypoint Arrival Alarm
-		$--AAM,A,A,x.x,N,c--c*hh<CR><LF>
-               | | |   | |
-               | | |   | Waypoint ID
-               | | |   Units of radius, nautical miles
-               | | Arrival circle radius
-               | Status: A = perpendicular passed at waypoint
-               |         V = perpendicular not passed
-               Status: A = arrival circle entered
-                       V = arrival circle not entered
+	/**
+     * Waypoint Arrival Alarm
+     * <pre>
+    $--AAM,A,A,x.x,N,c--c*hh&lt;CR&gt;&lt;LF&gt;
+           | | |   | |
+           | | |   | Waypoint ID
+           | | |   Units of radius, nautical miles
+           | | Arrival circle radius
+           | Status: A = perpendicular passed at waypoint
+           |         V = perpendicular not passed
+           Status: A = arrival circle entered
+                   V = arrival circle not entered
 
- Example: $GPAAM,V,V,0.05,N,*23
-		 */
+Example: $GPAAM,V,V,0.05,N,*23
+	 * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
+	public static AAM parseAAM(String sentence) {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2515,19 +2676,22 @@ public class StringParsers {
 					trueBearing, magBearing, fromWP, toWP);
 		}
 	}
+	/**
+    Bearing - Origin to Destination
+	<pre>
+    $--BOD,x.x,T,x.x,M,c--c,c--c*hh&lt;CR&gt;&lt;LF&gt;
+           |     |     |    |
+           |     |     |    Origin waypoint ID (6)
+           |     |     Destination waypoint ID (5)
+           |     Bearing, degrees Magnetic (3)
+           Bearing, degrees True (1)
+
+      Example: $GPBOD,213.9,T,213.2,M,,*4C
+     * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
 	public static BOD parseBOD(String sentence) {
-		/*
-		Bearing - Origin to Destination
-
-		$--BOD,x.x,T,x.x,M,c--c,c--c*hh<CR><LF>
-               |     |     |    |
-               |     |     |    Origin waypoint ID (6)
-               |     |     Destination waypoint ID (5)
-               |     Bearing, degrees Magnetic (3)
-               Bearing, degrees True (1)
-
-          Example: $GPBOD,213.9,T,213.2,M,,*4C
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2604,33 +2768,37 @@ public class StringParsers {
 					(wpId.isEmpty() ? "n/a" : wpId), decodeMode(mode));
 		}
 	}
-	public static BWx parseBWx(String sentence) {
-		/*
-		BWC - Bearing & Distance to Waypoint
-		BWR - Bearing & Distance to Waypoint - Rhumb Line
- $--BWC,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh<CR><LF>
- $--BWR,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh<CR><LF>
-        |         |       | |        | |   | |   | |   | |    |
-        |         |       | |        | |   . |   . |   . |    Mode Indicator: (13)
-        |         |       | |        | |   . |   . |   . |    - A = Autonomous mode
-        |         |       | |        | |   . |   . |   . |    - D = Differential mode
-        |         |       | |        | |     |     |     |    - E = Estimated (dead reckoning) mode
-        |         |       | |        | |     |     |     |    - M = Manual input mode
-        |         |       | |        | |     |     |     |    - S = Simulator mode
-        |         |       | |        | |     |     |     |    - N = Data not valid
-        |         |       | |        | |     |     |     Waypoint ID (12)
-        |         |       | |        | |     |     Distance, nautical miles (10)
-        |         |       | |        | |     Bearing, degrees Magnetic (8)
-        |         |       | |        | Bearing, degrees True (6)
-        |         |       | |        E/W (5)
-        |         |       | Waypoint longitude (4)
-        |         |       N/S (3)
-        |         Waypoint latitude (2)
-        UTC of observation (1)
+	/**
+    BWC - Bearing &amp; Distance to Waypoint<br>
+    BWR - Bearing &amp; Distance to Waypoint - Rhumb Line
+    <pre>
+$--BWC,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh&lt;CR&gt;&lt;LF&gt;
+$--BWR,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x.x,T,x.x,M,x.x,N,c--c,a*hh&lt;CR&gt;&lt;LF&gt;
+    |         |       | |        | |   | |   | |   | |    |
+    |         |       | |        | |   . |   . |   . |    Mode Indicator: (13)
+    |         |       | |        | |   . |   . |   . |    - A = Autonomous mode
+    |         |       | |        | |   . |   . |   . |    - D = Differential mode
+    |         |       | |        | |     |     |     |    - E = Estimated (dead reckoning) mode
+    |         |       | |        | |     |     |     |    - M = Manual input mode
+    |         |       | |        | |     |     |     |    - S = Simulator mode
+    |         |       | |        | |     |     |     |    - N = Data not valid
+    |         |       | |        | |     |     |     Waypoint ID (12)
+    |         |       | |        | |     |     Distance, nautical miles (10)
+    |         |       | |        | |     Bearing, degrees Magnetic (8)
+    |         |       | |        | Bearing, degrees True (6)
+    |         |       | |        E/W (5)
+    |         |       | Waypoint longitude (4)
+    |         |       N/S (3)
+    |         Waypoint latitude (2)
+    UTC of observation (1)
 
-        Examples: $GPBWC,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*53
-                  $GPBWR,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*42
- 		 */
+    Examples: $GPBWC,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*53
+              $GPBWR,195938,5307.2833,N,00521.7536,E,213.9,T,213.2,M,4.25,N,,A*42
+    </pre>
+	  * @param sentence the one to parse
+	  * @return The result.
+      */
+	public static BWx parseBWx(String sentence) {
 		if (sentence.length() < 6 || !sentence.contains("*")) {
 			return null;
 		}
@@ -2798,41 +2966,44 @@ public class StringParsers {
 					decodeMode(mode));
 		}
 	}
+	/**
+    Heading/Track Controller (Autopilot) Sentence "B"
+	<pre>
+     $--APB,A,A,x.x,a,N,A,A,x.x,a,c--c,x.x,a,x.x,a,a*hh&lt;CR&gt;&lt;LF&gt;
+            | | |   | | | | |   | |    |   | |   | |
+            | | |   | | | | |   | |    |   | |   | Mode indicator (15)
+            | | |   | | | | |   | |    |   | |   |  - A = Autonomous mode
+            | | |   | | | | |   | |    |   | |   |  - D = Differential mode
+            | | |   | | | | |   | |    |   | |   |  - E = Estimated (dead reckoning) mode
+            | | |   | | | | |   | |    |   | |   |  - M = Manual input mode
+            | | |   | | | | |   | |    |   | |   |  - S = Simulator mode
+            | | |   | | | | |   | |    |   | |   |  - N = Data not valid
+            | | |   | | | | |   | |    |   | |   True or Mag (14
+            | | |   | | | | |   | |    |   | Heading-to-steer to destination waypoint (13)
+            | | |   | | | | |   | |    |   True or Mag (12)
+            | | |   | | | | |   | |    Bearing, Present position to destination (11)
+            | | |   | | | | |   | Destination waypoint ID (10)
+            | | |   | | | | |   True or Mag (9)
+            | | |   | | | | Bearing origin to destination (8)
+            | | |   | | | Status: A = perpendicular passed at waypoint (7)
+            | | |   | | Status: A = arrival circle entered (6)
+            | | |   | XTE units, nautical miles (5)
+            | | |   Direction to steer, L/R (4)
+            | | Magnitude of XTE (cross-track-error) (3)
+            | Status (2)
+            | - A = Data valid or not used,
+            | - V = Loran-C Cycle Lock warning flag
+            Status (1)
+              - A = Data valid
+              - V = Loran-C Blink or SNR warning
+              - V = General warning flag for other navigation systems when a reliable fix is not available
+
+    Example: $GPAPB,A,A,0.001,L,N,V,V,213.9,T,,213.9,T,213.9,T,A*77
+     * </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
 	public static APB parseAPB(String sentence) {
-		/*
-		Heading/Track Controller (Autopilot) Sentence "B"
-
-		 $--APB,A,A,x.x,a,N,A,A,x.x,a,c--c,x.x,a,x.x,a,a*hh<CR><LF>
-                | | |   | | | | |   | |    |   | |   | |
-                | | |   | | | | |   | |    |   | |   | Mode indicator (15)
-                | | |   | | | | |   | |    |   | |   |  - A = Autonomous mode
-                | | |   | | | | |   | |    |   | |   |  - D = Differential mode
-                | | |   | | | | |   | |    |   | |   |  - E = Estimated (dead reckoning) mode
-                | | |   | | | | |   | |    |   | |   |  - M = Manual input mode
-                | | |   | | | | |   | |    |   | |   |  - S = Simulator mode
-                | | |   | | | | |   | |    |   | |   |  - N = Data not valid
-                | | |   | | | | |   | |    |   | |   True or Mag (14
-                | | |   | | | | |   | |    |   | Heading-to-steer to destination waypoint (13)
-                | | |   | | | | |   | |    |   True or Mag (12)
-                | | |   | | | | |   | |    Bearing, Present position to destination (11)
-                | | |   | | | | |   | Destination waypoint ID (10)
-                | | |   | | | | |   True or Mag (9)
-                | | |   | | | | Bearing origin to destination (8)
-                | | |   | | | Status: A = perpendicular passed at waypoint (7)
-                | | |   | | Status: A = arrival circle entered (6)
-                | | |   | XTE units, nautical miles (5)
-                | | |   Direction to steer, L/R (4)
-                | | Magnitude of XTE (cross-track-error) (3)
-                | Status (2)
-				| - A = Data valid or not used,
-				| - V = Loran-C Cycle Lock warning flag
-                Status (1)
-                  - A = Data valid
-                  - V = Loran-C Blink or SNR warning
-                  - V = General warning flag for other navigation systems when a reliable fix is not available
-
-		Example: $GPAPB,A,A,0.001,L,N,V,V,213.9,T,,213.9,T,213.9,T,A*77
-		 */
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2901,18 +3072,22 @@ public class StringParsers {
 					(speedInMS < 0 ? "downwind" : (speedInMS != 0 ? "upwind" : "")));
 		}
 	}
-	public static VPW parseVPW(String sentence) {
-		/*
-VPW - Speed - Measured Parallel to Wind
-The component of the vessel's velocity vector parallel to the direction of the true wind direction.
+	/**
+VPW - Speed - Measured Parallel to Wind<br>
+The component of the vessel's velocity vector parallel to the direction of the true wind direction.<br>
 Sometimes called "speed made good to windward" or "velocity made good to windward".
-$--VPW,x.x,N,x.x,M*hh<CR><LF>
-       |   | |   |
-       |   | |   m/s
-       |   | Speed, "-" = downwind
-       |   Knots
-       Speed, "-" = downwind
-		 */
+<pre>
+$--VPW,x.x,N,x.x,M*hh&lt;CR&gt;&lt;LF&gt;
+   |   | |   |
+   |   | |   m/s
+   |   | Speed, "-" = downwind
+   |   Knots
+   Speed, "-" = downwind
+</pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
+	public static VPW parseVPW(String sentence) {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -2970,28 +3145,32 @@ $--VPW,x.x,N,x.x,M*hh<CR><LF>
 		}
 
 	}
-	public static WCV parseWCV(String sentence) {
-/*
-WCV - Waypoint Closure Velocity
-The component of the velocity vector in the direction of the waypoint, from present position.
-Sometimes called "speed made good" or "velocity made good".
-$--WCV,x.x,N,c--c,a*hh<CR><LF>
-       |   | |    |
-       |   | |    Mode Indicator
-       |   | Waypoint identifier
-       |   knots
-       Velocity component
-Notes:
-Mode Indicator:
-	A = Autonomous mode
-	D = Differential mode
-	E = Estimated (dead reckoning) mode
-	M = Manual input mode
-	S = Simulator mode
-	N = Data not valid
+	/**
+    WCV - Waypoint Closure Velocity<br>
+    The component of the velocity vector in the direction of the waypoint, from present position.<br>
+    Sometimes called "speed made good" or "velocity made good".
+    <pre>
+    $--WCV,x.x,N,c--c,a*hh&lt;CR&gt;&lt;LF&gt;
+           |   | |    |
+           |   | |    Mode Indicator
+           |   | Waypoint identifier
+           |   knots
+           Velocity component
+    Notes:
+    Mode Indicator:
+        A = Autonomous mode
+        D = Differential mode
+        E = Estimated (dead reckoning) mode
+        M = Manual input mode
+        S = Simulator mode
+        N = Data not valid
 
-	The positioning system Mode Indicator field shall not be a null field.
- */
+        The positioning system Mode Indicator field shall not be a null field.
+     </pre>
+	 * @param sentence the one to parse
+	 * @return The result.
+     */
+	public static WCV parseWCV(String sentence) {
 		if (!validCheckSum(sentence)) {
 			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
 		}
@@ -3031,17 +3210,17 @@ Mode Indicator:
 			}
 			String csKey = sentence.substring(starIndex + 1);
 			int csk = Integer.parseInt(csKey, 16);
-//    System.out.println("Checksum  : 0x" + csKey + " (" + csk + ")");
+			// System.out.println("Checksum  : 0x" + csKey + " (" + csk + ")");
 			String str2validate = sentence.substring(1, sentence.indexOf("*"));
-//    System.out.println("To validate:[" + str2validate + "]");
-//    char[] ca = str2validate.toCharArray();
-//    int calcCheckSum = ca[0];
-//    for (int i=1; i<ca.length; i++)
-//      calcCheckSum = calcCheckSum ^ ca[i]; // XOR
+			// System.out.println("To validate:[" + str2validate + "]");
+			// char[] ca = str2validate.toCharArray();
+			// int calcCheckSum = ca[0];
+			// for (int i=1; i<ca.length; i++)
+			//   calcCheckSum = calcCheckSum ^ ca[i]; // XOR
 
 			int calcCheckSum = calculateCheckSum(str2validate);
 			b = (calcCheckSum == csk);
-//    System.out.println("Calculated: 0x" + lpad(Integer.toString(calcCheckSum, 16).toUpperCase(), 2, "0"));
+			// System.out.println("Calculated: 0x" + lpad(Integer.toString(calcCheckSum, 16).toUpperCase(), 2, "0"));
 		} catch (Exception ex) {
 			if (verb) {
 				System.err.println("Oops:" + ex.getMessage());
@@ -3050,6 +3229,13 @@ Mode Indicator:
 		return b;
 	}
 
+	/**
+	 * Calculate the checksum. An XOR of all the characters, between the '$' and the '*' (excluded).<br>
+	 * In <code>"$GPZDA,201530.00,04,07,2002,00,00*60"</code>, the checksum is calculated with <code>"GPZDA,201530.00,04,07,2002,00,00"</code>
+	 *
+	 * @param str The (full) NMEA string, from '$' to '*XX'
+	 * @return The checksum, as an int.
+	 */
 	public static int calculateCheckSum(String str) {
 		if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 			System.out.printf("Calculating checksum for %s\n", str);
@@ -3125,18 +3311,21 @@ Mode Indicator:
 		return f;
 	}
 
-	/*
+	/**
 	 * Parses strings like "2006-05-05T17:35:48.000" + "Z" or UTC Offset like "-10:00"
+	 * <pre>
 	 * 01234567890123456789012
 	 * 1         2         3
-	 * <p>
-	 * Return a UTC date
+	 * </pre>
+	 * @param duration Duration Stgring
+	 * @return a UTC date
 	 */
 	public static long durationToDate(String duration) {
 		return durationToDate(duration, null);
 	}
 
-	/*
+	/**
+	 * <pre>
 	 * Sample: "2006-05-05T17:35:48.000Z"
 	 *          |    |  |  |  |  |  |
 	 *          |    |  |  |  |  |  20
@@ -3146,6 +3335,11 @@ Mode Indicator:
 	 *          |    |  8
 	 *          |    5
 	 *          0
+	 * </pre>
+	 * @param duration Duration string
+	 * @param tz Time Zone
+	 * @return an epoch (in milliseconds)
+	 * @throws RuntimeException if something's invalid.
 	 */
 	public static long durationToDate(String duration, String tz)
 					throws RuntimeException {

@@ -185,6 +185,7 @@ public class NMEAUtils {
      * @param x deltaX
      * @param y deltaY
      * @return the dir, in degrees [0..360[
+     * @throws AmbiguousException when calculation cannot be performed
      */
     public static double getDir(double x, double y) throws AmbiguousException {
         if (x == 0d && y == 0d) {

@@ -16,7 +16,6 @@ public class StringGenerator {
 	}
 	private static final SimpleDateFormat SDF_TIME = new SimpleDateFormat("HHmmss");
 	private static final SimpleDateFormat SDF_DATE = new SimpleDateFormat("ddMMyy");
-
 	private final static NumberFormat LAT_DEG_FMT = new DecimalFormat("00");
 	private final static NumberFormat LONG_DEG_FMT = new DecimalFormat("000");
 	private final static NumberFormat MIN_FMT = new DecimalFormat("00.000");
@@ -31,11 +30,8 @@ public class StringGenerator {
 	private final static NumberFormat SPEED_FMT = new DecimalFormat("#0.0");
 	private final static NumberFormat SPEED_FMT_2 = new DecimalFormat("#0.00");
 	private final static NumberFormat ANGLE_FMT = new DecimalFormat("##0");
-
 	private final static NumberFormat PRMSL_FMT_MDA = new DecimalFormat("##0.000");
-
 	private final static NumberFormat GENERIC_1_FMT = new DecimalFormat("##0.00000");
-
 	private final static double KNOTS_TO_KMH = 1.852;
 	private final static double KNOTS_TO_MS  = 1.852 * 0.27777777;
 
@@ -156,7 +152,6 @@ public class StringGenerator {
 	// Not sure it's 100% standard... OpenCPN recognizes those, though.
 	public final static String XDR_PTCH = "PTCH"; // No, it's not a typo, there is no 'I' in 'PTCH'.
 	public final static String XDR_ROLL = "ROLL";
-
 	public final static String XDR_DEW_POINT = "DEWP";
 
 	public static String generateXDR(String devicePrefix, XDRElement first, XDRElement... next) {
@@ -183,7 +178,7 @@ public class StringGenerator {
 			nf = GENERIC_1_FMT;
 		}
 		// TODO More formats as needed...
-//  System.out.println("XDR Format for [" + first.getTypeNunit() + "] is " + (nf == null?"":"not ") + "null");
+		// System.out.println("XDR Format for [" + first.getTypeNunit() + "] is " + (nf == null?"":"not ") + "null");
 		if (nf != null) {
 			xdr += (nf.format(first.getValue()) + ",");
 		} else {
@@ -521,12 +516,12 @@ public class StringGenerator {
      * $GPZDA,hhmmss.ss,dd,mm,yyyy,xx,yy*CC
      * $GPZDA,201530.00,04,07,2002,00,00*60
      *        |         |  |  |    |  |
-     *        |         |  |  |    |  local zone minutes 0..59
-     *        |         |  |  |    local zone hours -13..13
-     *        |         |  |  year
-     *        |         |  month
-     *        |         day
-     *        HrMinSec(UTC)
+     *        |         |  |  |    |  local zone minutes 0..59 - 6
+     *        |         |  |  |    local zone hours -13..13 - 5
+     *        |         |  |  year - 4
+     *        |         |  month - 3
+     *        |         day - 2
+     *        HrMinSec(UTC) - 1
      */
 		String zda = devicePrefix + "ZDA,";
 		Date utc = new Date(epoch);

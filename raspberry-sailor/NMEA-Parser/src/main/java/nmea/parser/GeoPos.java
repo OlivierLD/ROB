@@ -107,6 +107,7 @@ public class GeoPos implements Serializable {
 	 * and also https://www.karhukoti.com/maidenhead-grid-square-locator/?grid=CM87
 	 *
 	 * Generate the grid square from the lat and lng.
+	 * @return the GRIB Square encoding.
 	 */
 	public String gridSquare() {
 		return GeomUtil.gridSquare(this.lat, this.lng);

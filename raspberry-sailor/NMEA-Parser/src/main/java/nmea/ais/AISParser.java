@@ -21,9 +21,9 @@ import java.util.Map;
  * Nice AIS git repo: https://github.com/tbsalling/aismessages
  * https://www.navcen.uscg.gov/sites/default/files/pdf/AIS/AISGuide.pdf
  *
- * The main method is here for tests, look at it. <- TODO a main ?
+ * The main method is here for tests, look at it. TODO a main ?
  *
- * TODO Other Talker IDs, AIVDO chain
+ * TODO Other Talker IDs, VDO chain
  */
 public class AISParser {
 	public final static boolean verbose = "true".equals(System.getProperty("ais.verbose"));
