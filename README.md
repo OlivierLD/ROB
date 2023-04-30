@@ -10,7 +10,6 @@ Aka <b>ROB</b>.
 </td>
 <td valign="top" align="right">
 <img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
-<br/>
 <img src="./paperboat.png" alt="PaperBoat">
 <img src="./wizard150.png" alt="Weather Wizard">
 </td>
