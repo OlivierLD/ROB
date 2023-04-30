@@ -5,12 +5,13 @@
 <span title="Raspberry Pi">R</span><span title="On">O</span><span title="Board">B</span><span title="Embarked">E</span><span title="Research">R</span><span title="Technology">T</span>
 </h1>
 <b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
-Aka <b>ROB</b>.
+Aka <b>ROB</b>.  
+<br/>
+<img src="./paperboat.png" alt="PaperBoat">
 <h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
 </td>
 <td valign="top" align="right">
 <img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
-<img src="./paperboat.png" alt="PaperBoat">
 <img src="./wizard150.png" alt="Weather Wizard">
 </td>
   </tr>
