@@ -21,7 +21,7 @@ Aka <b>ROB</b>.
 The [Raspberry Pi](https://www.raspberrypi.com/) is a small, cheap, but fully featured Linux computer that consumes a ridiculous amount of energy. There is no need
 to have a generator to fulfill its energy needs !  
 It can be installed on board, and run 24x7, reading and computing data (from your NMEA Station, GPS, external breakout boards, etc), and do whatever
-is needed with them (log them, forward them to other softwares or clients, etc).  
+is needed with them (log them, transform them, forward them to other softwares or clients, etc).  
 The code presented here is designed to run even of the smallest versions of the Raspberry Pi (Raspberry Pi Zero), that have 512Mb of RAM, and it works (it has been tested in the real world).
 
 #### Warning 1
