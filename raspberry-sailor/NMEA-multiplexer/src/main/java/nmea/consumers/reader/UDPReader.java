@@ -61,7 +61,7 @@ public class UDPReader extends NMEAReader {
 				dsocket = new DatagramSocket(udpPort, address);
 			}
 
-			byte buffer[] = new byte[4_096];
+			byte[] buffer = new byte[4_096];
 			String s;
 			while (this.canRead()) {
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -73,16 +73,18 @@ public class UDPReader extends NMEAReader {
 				synchronized (waiter) {
 					try {
 						long before = System.currentTimeMillis();
-						if (timeout > -1)
+						if (timeout > -1) {
 							waiter.wait(timeout);
-						else
+						} else {
 							waiter.wait();
+						}
 						long after = System.currentTimeMillis();
 						if (drt.isAlive()) {
 //            System.out.println("Interrupting the DatagramReceiveThread");
 							drt.interrupt();
-							if (timeout != -1 && (after - before) >= timeout)
+							if (timeout != -1 && (after - before) >= timeout) {
 								throw new RuntimeException("UDP took too long.");
+							}
 						}
 					} catch (InterruptedException ie) {
 						System.out.println("Waiter Interrupted! (before end of wait, good)");
@@ -127,10 +129,11 @@ public class UDPReader extends NMEAReader {
 			if (dsocket != null) {
 				this.goRead = false;
 				if (dsocket instanceof MulticastSocket) {
-					if (group != null)
+					if (group != null) {
 						((MulticastSocket) dsocket).leaveGroup(group);
-					else
+					} else {
 						System.out.println(">> Multicast Socket: Group is null.");
+					}
 				}
 				dsocket.close();
 				dsocket = null;
@@ -152,10 +155,10 @@ public class UDPReader extends NMEAReader {
 		return timeout;
 	}
 
-	private class DatagramReceiveThread extends Thread {
+	private static class DatagramReceiveThread extends Thread {
 		private DatagramSocket ds = null;
-		private Thread waiter;
-		private DatagramPacket packet;
+		private final Thread waiter;
+		private final DatagramPacket packet;
 
 		public DatagramReceiveThread(DatagramSocket ds, DatagramPacket packet, Thread from) {
 			super();
@@ -166,16 +169,17 @@ public class UDPReader extends NMEAReader {
 
 		public void run() {
 			try {
-//      dsocket.receive(packet);
+				// dsocket.receive(packet);
 				ds.receive(packet);
 				synchronized (waiter) {
-//        System.out.println("Notifying waiter (Done).");
+					// System.out.println("Notifying waiter (Done).");
 					waiter.notify();
 				}
 			} catch (SocketException se) {
 				// Socket closed?
-				if (!"Socket closed".equals(se.getMessage()))
+				if (!"Socket closed".equals(se.getMessage())) {
 					System.out.println(">>>>> " + this.getClass().getName() + ":" + se.getMessage());
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

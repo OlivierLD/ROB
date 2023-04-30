@@ -117,19 +117,17 @@ public class TCPClient extends NMEAClient {
 		for (String s : args) {
 			System.out.println("CustomTCPClient prm:" + s);
 		}
-		String serverName = "sinagot.net"; // ""192.168.42.2";
+		String serverName = "sinagot.net"; // "192.168.42.2";
 		int serverPort = 2_947; // 7_001;
 
 		System.setProperty("nmea.parser.verbose", "true");
 
 		nmeaClient = new TCPClient();
 
-		Runtime.getRuntime().addShutdownHook(new Thread("TCPClient shutdown hook") {
-			public void run() {
-				System.out.println("Shutting down nicely.");
-				nmeaClient.stopDataRead();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			System.out.println("Shutting down nicely.");
+			nmeaClient.stopDataRead();
+		}, "TCPClient shutdown hook"));
 		nmeaClient.initClient();
 		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, serverPort));
 		nmeaClient.startWorking();

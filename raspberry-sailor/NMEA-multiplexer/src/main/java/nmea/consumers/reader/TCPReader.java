@@ -107,12 +107,8 @@ public class TCPReader extends NMEAReader {
 						nn = i;
 						break;
 					}
-
 					byte[] toPrint = new byte[nn];
-					for (int i = 0; i < nn; i++) {
-						toPrint[i] = buffer[i];
-					}
-
+					System.arraycopy(buffer, 0, toPrint, 0, nn);
 					s = new String(toPrint) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 	//      System.out.println("TCP:" + s);
 					NMEAEvent n = new NMEAEvent(this, s);

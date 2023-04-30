@@ -3,7 +3,7 @@ package nmea.consumers.client;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
-import nmea.consumers.reader.TCPReader;
+// import nmea.consumers.reader.TCPReader;
 import nmea.consumers.reader.UDPReader;
 
 /**

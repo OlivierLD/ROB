@@ -8,7 +8,7 @@ import java.util.Properties;
 
 /**
  * This is a Janitor example.
- * Look into manual.md to know more about this.
+ * Look into manual.md to know more about Janitor.
  * There is in this repo a RaspberryPythonServers/python.tcp.server.properties mentioning it, itself mentioned in
  * RaspberryPythonServers/nmea.mux.log.tcp-sensor.rest-actuator.yaml.
  *

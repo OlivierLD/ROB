@@ -31,6 +31,7 @@ public class SerialClient extends NMEAClient {
 		super(s, sa, mux);
 		this.verbose = "true".equals(System.getProperty("serial.data.verbose", "false"));
 		this.clientName = String.valueOf(System.currentTimeMillis()) ; // ((SerialReader) this.getReader()).getPort();
+		// this.clientName = String.format("Serial-%d", System.currentTimeMillis()); // TODO Why not?
 	}
 
 	@Override
@@ -39,7 +40,11 @@ public class SerialClient extends NMEAClient {
 			if (this.getReader() != null) {
 				this.clientName = ((SerialReader) this.getReader()).getPort();
 			}
-			System.out.println(String.format("[%s] Received from Serial (%s:%d): %s", DURATION_FMT.format(new Date()), this.clientName, ((SerialReader) this.getReader()).getBr(), e.getContent()));
+			System.out.printf("[%s] Received from Serial (%s:%d): %s\n",
+					DURATION_FMT.format(new Date()),
+					this.clientName,
+					((SerialReader) this.getReader()).getBr(),
+					e.getContent());
 		}
 		if (multiplexer != null) {
 			multiplexer.onData(e.getContent());
