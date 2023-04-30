@@ -11,8 +11,8 @@ Aka <b>ROB</b>.
 <h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
 </td>
 <td valign="top" align="right">
-<img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
 <img src="./wizard150.png" alt="Weather Wizard">
+<img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
 </td>
   </tr>
 </table>
