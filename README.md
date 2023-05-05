@@ -38,8 +38,8 @@ This is done intentionally.
 
 #### Warning 3
 The code presented in this repo is designed to be as flexible and customizable as possible.  
-Th execution of _**your**_ final product(s) will depend on the way you configure the builds and runtime configuration files.  
-Example will be provided, but again, _as examples_.  
+The execution of _**your**_ final product(s) will depend on the way you configure the builds and runtime configuration files.  
+Examples will be provided, but again, _as examples_.  
 There is no one-click definitive install in this repo, the packaging of what _**you**_ will deploy and run depends on what _**you**_ want.  
 You might want:
 - A Multiplexer to read NMEA data from several sources (your NMEA station, several breakout boards), log them for replay or analysis, and forward a readable version of some of computed data to a small screen next to the chart table.
@@ -47,8 +47,8 @@ You might want:
 - Have some astronomical, tide, routing, and fax processing features available from a web interface (Tide and astronomical almanac publication - in pdf, routing based on your polars, display GRIBs and weather faxes on the same canvas, etc).
 - ... etc. Your imagination is the limit.
 
-If anything is unclear about the way to customize your configuration, if more examples are needed, please use the [issue](https://github.com/OlivierLD/ROB/issues) page of this repo.  
-But please, keep in mind that this is OpenSource..., not free consulting.
+If anything is unclear about the way to customize your configuration, if more examples are needed, please use the [issues](https://github.com/OlivierLD/ROB/issues) page of this repo.  
+But pllllease, keep in mind that this is OpenSource..., not free consulting.
 
 ---
 #### Some links
