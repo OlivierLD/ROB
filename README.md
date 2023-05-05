@@ -38,7 +38,7 @@ This is done intentionally.
 
 #### Warning 3
 The code presented in this repo is designed to be as flexible and customizable as possible.  
-Th execution of _**your**_ final product(s) will depend on the you configure the builds and runtime configuration files.  
+Th execution of _**your**_ final product(s) will depend on the way you configure the builds and runtime configuration files.  
 Example will be provided, but again, _as examples_.  
 There is no one-click definitive install in this repo, the packaging of what _**you**_ will deploy and run depends on what _**you**_ want.  
 You might want:
