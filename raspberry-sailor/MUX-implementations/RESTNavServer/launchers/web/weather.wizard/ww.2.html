@@ -655,6 +655,10 @@
             }
         };
     
+        let gribCallback = (mess) => {
+            console.log(`GRIB Callback: ${mess}`);
+        };
+
         let findCompositeByKey = (key) => {
             let comp = {};
             for (let i = 0; i < compositeCatalog.length; i++) {
@@ -1136,7 +1140,7 @@
             };
     
             // console.log("Loading", (typeof(compositeData) === 'object' ? JSON.stringify(compositeData, null, 2) : compositeData));
-            messageManager("--- Loading: ---");
+            messageManager(`--- Loading ${compositeData.key} ---`);
             messageManager(compositeData);
             messageManager("----------------");
 
@@ -1290,7 +1294,14 @@
             }
     
             if (compositeData.gribRequest !== undefined) {
-                makeGRIBRequest(compositeData.gribRequest, existingData === undefined ? 'web/' + year + '/' + month + '/' + day + '/' + time : undefined); // grib file Location
+                makeGRIBRequest(compositeData.gribRequest, 
+                                existingData === undefined ? 'web/' + year + '/' + month + '/' + day + '/' + time : undefined,
+                                gribCallback); // grib file Location
+            }
+
+            let feedbackField = document.getElementById('time-last-load');
+            if (feedbackField) {
+                feedbackField.innerText = `${compositeData.key} requested at ${new Date()}`;
             }
         };
     
@@ -1536,7 +1547,7 @@
             infoDiv.innerHTML = "";
         };
     
-        let makeGRIBRequest = (gribRequest, where) => {
+        let makeGRIBRequest = (gribRequest, where, cb) => {
             let rawRequest = gribRequest;
             if (rawRequest === undefined && document.getElementById("grib-request")) {
                 rawRequest = document.getElementById("grib-request").value;
@@ -1555,6 +1566,9 @@
                 worldMap.setAfterDrawing(renderGRIBData);  // That is the callback. GRIB on top of the chart.
             }
             requestGRIB(jsonRequest, plotGrib);  // Enable GRIB widgets if successful
+            if (cb) { // if Callback exists
+                cb("GRIB loaded");
+            }
         };
     
         let renderGRIB = () => {
@@ -1807,7 +1821,7 @@
 </dialog>
     
 
-<h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP)<span id="time-to-next"></span></h2>
+<h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP) <span id="time-last-load"></span> <span id="time-to-next"></span></h2>
 <div>
     <table width="100%" style="border: 2px solid transparent;">
         <tr>
