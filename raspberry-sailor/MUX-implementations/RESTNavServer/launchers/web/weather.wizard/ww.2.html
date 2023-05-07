@@ -1301,7 +1301,7 @@
 
             let feedbackField = document.getElementById('time-last-load');
             if (feedbackField) {
-                feedbackField.innerText = `${compositeData.key} requested at ${new Date()}`;
+                feedbackField.innerText = `${compositeData.key} requested at ${ new Date().format("Y-M-d H:i:s Z") }`;
             }
         };
     
