@@ -24,7 +24,7 @@ if (typeof(errManager) !== 'function') {
 	};
 }
 
-var DEFAULT_TIMEOUT = 120000;
+var DEFAULT_TIMEOUT = 300000; // 120000: 2 minutes, 300000: 5 minutes
 
 /*
  * Demo features
