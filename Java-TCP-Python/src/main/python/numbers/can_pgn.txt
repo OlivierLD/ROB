@@ -1,0 +1,44 @@
+From https://endige.com/2050/nmea-2000-pgns-deciphered/:
+
+PGN	    HEX	    SISÄLTÖ
+65311	0x0FF1F	Magnetic Variation (Raymarine Proprietary)
+126992	0x1F010	System Time
+127237	0x1F105	Heading/Track Control
+127245	0x1F10D	Rudder
+127250	0x1F112	Vessel Heading
+127251	0x1F113	Rate of Turn
+127258	0x1F11A	Magnetic Variation
+127488	0x1F200	Engine Parameters, Rapid Update
+128259	0x1F503	Speed, Water referenced
+128267	0x1F50B	Water Depth
+128275	0x1F513	Distance Log
+129025	0x1F801	Position, Rapid Update
+129026	0x1F802	COG & SOG, Rapid Update
+129029	0x1F805	GNSS Position Data
+129033	0x1F809	Local Time Offset
+129044	0x1F814	Datum
+129283	0x1F903	Cross Track Error
+129284	0x1F904	Navigation Data
+129285	0x1F905	Navigation — Route/WP information
+129291	0x1F90B	Set & Drift, Rapid Update
+129539	0x1FA03	GNSS DOPs
+129540	0x1FA04	GNSS Sats in View
+130066	0x1FC12	Route and WP Service — Route/WP— List Attributes
+130067	0x1FC13	Route and WP Service — Route — WP Name & Position
+130074	0x1FC1A	Route and WP Service — WP List — WP Name & Position
+130306	0x1FD02	Wind Data
+130310	0x1FD06	Environmental Parameters
+130311	0x1FD07	Environmental Parameters
+130312	0x1FD08	Temperature
+130313	0x1FD09	Humidity
+130314	0x1FD0A	Actual Pressure
+130316	0x1FD0C	Temperature, Extended Range
+129038	0x1F80E	AIS Class A Position Report
+129039	0x1F80F	AIS Class B Position Report
+129040	0x1F810	AIS Class B Extended Position Report
+129041	0x1F811	AIS Aids to Navigation (AtoN) Report
+129793	0x1FB01	AIS UTC and Date Report
+129794	0x1FB02	AIS Class A Static and Voyage Related Data
+129798	0x1FB06	AIS SAR Aircraft Position Report
+129809	0x1FB11	AIS Class B “CS” Static Data Report, Part A
+129810	0x1FB12	AIS Class B “CS” Static Data Report, Part B

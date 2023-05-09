@@ -1,5 +1,5 @@
 # Python TCP Server(s)
-> NMEA-related components (parsers, etc) are to be pulled from `NMEA-multiplexer` module.  
+> NMEA0183-related components (parsers, etc) are to be pulled from `NMEA-multiplexer` module.  
 
 _**TODO**_: Cleanup this folder
 
