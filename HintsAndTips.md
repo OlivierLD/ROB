@@ -28,9 +28,27 @@ sudo ifconfig wlan0 up
 ```
 
 ### Option 3
-Or better: <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>
+Or better: <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>, that one uses 
+`hostapd` and `dnsmasq`. Works fine.  
+May need: 
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get dist-upgrade
+```
+This way, it works even on a Raspberry Pi A+.  
+> Note: in `/etc/dnsmasq.conf`:
+> ```
+> # RPiHotspot config - No Internet
+> interface=wlan0
+> bind-dynamic
+> domain-needed
+> bogus-priv
+> dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
+> ```
 
-To disable the HotSpot:
+---
+To _disable_ the HotSpot (and get back to a regular Internet config):
 ```
 sudo systemctl disable dnsmasq
 sudo systemctl disable hostapd
@@ -44,11 +62,15 @@ Then comment the lines at the bottom of `/etc/dhcpcd.conf`:  (do not forget the 
 # static ip_address=192.168.50.10/24
 # static routers=192.168.50.1
 ```
-To re-enable the HotSpot:
+---
+To _re-enable_ the HotSpot:
 Uncomment the 4 lines at the bottom of `/etc/dhcpcd.conf` (see above):
 ```
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
+#
+sudo systemctl unmask dnsmasq
+sudo systemctl enable dnsmasq
 ```
 Status:
 ```
