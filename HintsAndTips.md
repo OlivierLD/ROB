@@ -27,10 +27,14 @@ sudo iwconfig wlan0 channel 1
 sudo ifconfig wlan0 up
 ```
 
-### Option 3
-Or better: <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>, that one uses 
+### Option 3 - My preferred one
+To know what release you're running on:
+```
+$ lsb_release -a
+```
+See <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>, that one uses 
 `hostapd` and `dnsmasq`. Works fine.  
-May need: 
+May need, to begin with: 
 ```
 $ sudo apt-get update
 $ sudo apt-get upgrade
