@@ -30,5 +30,5 @@ echo -e "-------------------"
 SKIP_NO_BSP=
 # SKIP_NO_BSP="-Dskip.bsp.00=false"  # Keep record with BSP = 0
 #
-CP=./build/libs/NMEA-multiplexer-1.0-all.jar
+CP=$(dirname $0)/build/libs/NMEA-multiplexer-1.0-all.jar
 java -cp ${CP} ${SKIP_NO_BSP} util.LogToPolarPoints $*

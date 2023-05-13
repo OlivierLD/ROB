@@ -8,7 +8,7 @@ if [[ $# != 1 ]]; then
   exit 1
 fi
 #
-CP=./build/libs/NMEA-multiplexer-1.0-all.jar
+CP=$(dirname $0)/build/libs/NMEA-multiplexer-1.0-all.jar
 JAVA_OPTIONS=
 #
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80"
