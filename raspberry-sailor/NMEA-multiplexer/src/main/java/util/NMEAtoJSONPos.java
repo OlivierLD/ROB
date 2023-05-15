@@ -1,6 +1,7 @@
 package util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nmea.parser.GeoPos;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
 
@@ -8,13 +9,12 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * JSON positions generator, from NMEA log.
+ * Optional SOG and COG
  * LeafLet support this format, like
  * let latlngs = [
  *         [45.51, -122.68],
@@ -23,8 +23,44 @@ import java.util.Map;
  *     ];
  */
 public class NMEAtoJSONPos {
-	private final static ObjectMapper mapper = new ObjectMapper();
 
+	private final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'");
+	static {
+		SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+	}
+	private static class ObjectToLog extends GeoPos {
+		private double sog;
+		private double cog;
+		private String rmcDate;
+
+		public ObjectToLog(double l, double g) {
+			super(l, g);
+		}
+		public double getSog() {
+			return sog;
+		}
+
+		public void setSog(double sog) {
+			this.sog = sog;
+		}
+
+		public double getCog() {
+			return cog;
+		}
+
+		public void setCog(double cog) {
+			this.cog = cog;
+		}
+
+		public String getRmcDate() {
+			return rmcDate;
+		}
+
+		public void setRmcDate(String rmcDate) {
+			this.rmcDate = rmcDate;
+		}
+	}
+	private final static ObjectMapper mapper = new ObjectMapper();
 	private final static Map<String, Integer> map = new HashMap<>();
 
 	private static void transform(String fileInName,
@@ -33,6 +69,8 @@ public class NMEAtoJSONPos {
 		List<Object> jsonArray = new ArrayList<>();
 		BufferedReader br = new BufferedReader(new FileReader(fileInName));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutName));
+
+		boolean withOG = "true".equals(System.getProperty("with.og", "false"));
 
 		String line = "";
 
@@ -48,7 +86,15 @@ public class NMEAtoJSONPos {
 						if (StringParsers.validCheckSum(line)) {
 							RMC rmc = StringParsers.parseRMC(line);
 							if (rmc != null && rmc.getRmcTime() != null && rmc.isValid()) {
-								jsonArray.add(rmc.getGp());
+								if (withOG) {
+									ObjectToLog otl = new ObjectToLog(rmc.getGp().lat, rmc.getGp().lng);
+									otl.setRmcDate(SDF_UTC.format(rmc.getRmcDate()));
+									otl.setCog(rmc.getCog());
+									otl.setSog(rmc.getSog());
+									jsonArray.add(otl);
+								} else {
+									jsonArray.add(rmc.getGp());
+								}
 							}
 						}
 					}
