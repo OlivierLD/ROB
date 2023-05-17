@@ -14,8 +14,8 @@ import java.util.*;
 
 /**
  * JSON positions generator, from NMEA log.
- * Optional SOG and COG
- * LeafLet support this format, like
+ * Optional SOG and COG (and others if needed...)
+ * LeafLet supports this format, like
  * let latlngs = [
  *         [45.51, -122.68],
  *         [37.77, -122.43],

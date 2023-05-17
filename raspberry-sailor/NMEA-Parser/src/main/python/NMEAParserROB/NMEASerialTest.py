@@ -14,7 +14,9 @@
 # - https://pyserial.readthedocs.io/en/latest/pyserial.html
 #
 # Read Serial port, parse NMEA Data.
-# Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y
+# Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y --debug --deep-debug --display-all
+#
+# Do look below at variables DEBUG, DEEP_DEBUG, DISPLAY_ALL
 #
 import serial
 import sys
@@ -70,7 +72,7 @@ def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
 
 def parse_nmea_sentence(sentence: str) -> Dict:
     nmea_dict: Dict = {}
-    if sentence.startswith('$'):
+    if sentence.startswith('$') or sentence.startswith('!AI'):
         if sentence.endswith(NMEAParser.NMEA_EOS):
             sentence = sentence.strip()  # drops the \r\n
             members = sentence.split(',')
@@ -82,26 +84,29 @@ def parse_nmea_sentence(sentence: str) -> Dict:
                 if not valid:
                     raise Exception('Invalid checksum')
                 else:
-                    sentence_id: str = sentence_prefix[3:]
-                    parser = None
-                    for key in NMEA_PARSER_DICT:
-                        if key == sentence_id:
-                            parser = NMEA_PARSER_DICT[key]
-                            break
-                    if parser is None:
-                        raise Exception("No parser exists for {}".format(sentence_id))
-                    else:
-                        if DEBUG:
-                            print("Proceeding... {}".format(sentence_id))
-                        nmea_dict = parser(sentence)
-                        if DEBUG:
-                            print("Parsed: {}".format(nmea_dict))
+                    if sentence.startswith('$'):  # NMEA-0183
+                        sentence_id: str = sentence_prefix[3:]
+                        parser = None
+                        for key in NMEA_PARSER_DICT:
+                            if key == sentence_id:
+                                parser = NMEA_PARSER_DICT[key]
+                                break
+                        if parser is None:
+                            raise Exception("No parser exists for {}".format(sentence_id))
+                        else:
+                            if DEBUG:
+                                print("Proceeding... {}".format(sentence_id))
+                            nmea_dict = parser(sentence)
+                            if DEBUG:
+                                print("Parsed: {}".format(nmea_dict))
+                    else:  # AIS.
+                        print(f"Received AIS message: [{sentence}]")
             else:
                 raise Exception('Incorrect sentence prefix "{}". Should be 6 character long.'.format(sentence_prefix))
         else:
             raise Exception('Sentence should end with \\r\\n')
     else:
-        raise Exception('Sentence should start with $')
+        raise Exception('Sentence should start with $ or !AI')
     return nmea_dict
 
 
@@ -109,11 +114,18 @@ PORT_NAME_PREFIX: str = "--port-name:"
 BAUD_RATE_PREFIX: str = "--baud-rate:"
 PROCEED_WITH_PARSER: str = "--proceed-with-parser:"
 
+DEBUG_PRM: str = "--debug"
+DEEP_DEBUG_PRM: str = "--deep-debug"
+DISPLAY_ALL_PRM: str = "--display-all"
+
 
 def main(args: List[str]) -> None:
     global port_name
     global baud_rate
     global proceed_parser
+    global DEBUG
+    global DEEP_DEBUG
+    global DISPLAY_ALL
 
     if len(args) > 0:  # Script name + X args
         for arg in args:
@@ -125,6 +137,12 @@ def main(args: List[str]) -> None:
                 proceed_flag = arg[len(PROCEED_WITH_PARSER):]
                 if proceed_flag.upper() == 'N' or proceed_flag.upper() == 'NO' or proceed_flag.upper() == 'FALSE':
                     proceed_parser = False
+            if arg == DEBUG_PRM:
+                DEBUG = True
+            if arg == DEEP_DEBUG_PRM:
+                DEEP_DEBUG = True
+            if arg == DISPLAY_ALL_PRM:
+                DISPLAY_ALL = True
 
     print(f"Will read {port_name}:{baud_rate}...")
     try:
