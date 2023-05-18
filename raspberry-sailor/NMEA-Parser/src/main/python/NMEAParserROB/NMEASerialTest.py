@@ -15,6 +15,7 @@
 #
 # Read Serial port, parse NMEA Data.
 # Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y --debug --deep-debug --display-all
+#                     --baud-rate:38400 --port-name:/dev/serial0 --display-all --proceed-with-parser:N
 #
 # Do look below at variables DEBUG, DEEP_DEBUG, DISPLAY_ALL
 #

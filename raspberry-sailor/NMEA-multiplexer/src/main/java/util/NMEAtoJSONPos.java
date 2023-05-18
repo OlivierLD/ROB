@@ -1,6 +1,8 @@
 package util;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import nmea.parser.GeoPos;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
@@ -106,10 +108,16 @@ public class NMEAtoJSONPos {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
 		boolean minified = "true".equals(System.getProperty("minified", "true"));
+		// Cleanup: Remove latInDegMinDec nd lngInDegMinDec, to make the json smaller.
+		final JsonNode jsonNode = mapper.valueToTree(jsonArray);
+		for (JsonNode node : jsonNode) {
+			((ObjectNode)node).remove("latInDegMinDec");
+			((ObjectNode)node).remove("lngInDegMinDec");
+		}
 		if (minified) {
-			bw.write(mapper.writeValueAsString(jsonArray));
+			bw.write(mapper.writeValueAsString(jsonNode));
 		} else {
-			bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonArray));
+			bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
 		}
 		bw.close();
 	}
