@@ -140,7 +140,7 @@ public class RESTImplementation {
 	 * { "request": "GFS:65N,45S,130E,110W|2,2|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" }
 	 *
 	 * @param request the request
-	 * @return
+	 * @return the Response, containing the JSON version of the GRIB
 	 */
 	private Response requestGRIBData(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
@@ -215,7 +215,7 @@ public class RESTImplementation {
 						return response;
 					}
 					RESTProcessorUtil.generateResponseHeaders(response, content.length());
-					response.setPayload(content.getBytes());
+					response.setPayload(content.getBytes());   // JSON Payload, all went well.
 				} catch (Exception ex1) {
 					ex1.printStackTrace();
 					response = HTTPServer.buildErrorResponse(response,

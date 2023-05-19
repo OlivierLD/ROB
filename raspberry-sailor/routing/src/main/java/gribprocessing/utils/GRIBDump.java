@@ -199,7 +199,8 @@ public class GRIBDump {
 		final ObjectMapper mapper = new ObjectMapper();
 		GRIBDump gribDump = new GRIBDump();
 //	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
-		String gribFileName = "GRIB_2009_02_25_Sample.grb";
+		String gribFileName = // "GRIB_2009_02_25_Sample.grb";
+		                      "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/GRIB_2009_02_25_Sample.grb";
 //		String gribFileName = "grib.grb";
 		URL gribURL = new File(gribFileName).toURI().toURL();
 		GribFile gf = new GribFile(gribURL.openStream());

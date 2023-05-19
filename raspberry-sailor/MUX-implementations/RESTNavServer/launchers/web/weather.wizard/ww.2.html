@@ -1301,7 +1301,7 @@
 
             let feedbackField = document.getElementById('time-last-load');
             if (feedbackField) {
-                feedbackField.innerText = `${compositeData.key} requested at ${ new Date().format("Y-M-d H:i:s Z") }`;
+                feedbackField.innerText = `${compositeData.key} requested on ${ new Date().format("Y-M-d H:i:s Z") }`;
             }
         };
     
@@ -1439,7 +1439,7 @@
                 let option = document.createElement("option");
                 option.text = grib.gribDate.formattedUTCDate;
                 option.value = grib.gribDate.formattedUTCDate;
-                gribDates.add(option);
+                gribDates.add(option)
             });
             // 2. Types
             let gribTypes = document.getElementById("grib-types");
@@ -1481,8 +1481,40 @@
             for (let i = 0; i < gribObj.typedData.length; i++) {
                 let gribTypeData = gribObj.typedData[i];
                 if (gribTypeData.gribType.type !== 'vgrd' && gribTypeData.gribType.type !== 'ugrd') {
-                    // TODO Find min and max position.
-                    console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
+                    // Find min and max position.
+                    // console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
+                    let minPos = null, maxPos = null;
+                    // Find min & max ?
+                    if (gribTypeData.gribType.type === 'tmp'  ||
+                        gribTypeData.gribType.type === 'htsgw' ||
+                        gribTypeData.gribType.type === 'prate') { // Switchable...
+                        for (let hGRIB=0; hGRIB<gribObj.gribDate.height; hGRIB++) {
+                            let stepX = gribObj.gribDate.stepx;
+                    		let width = gribObj.gribDate.width;
+                            for (let wGRIB=0; wGRIB<width; wGRIB++) {
+                                let gribValue = data.x[hGRIB][wGRIB];
+                                let lng = ajustedLongitude(gribObj.gribDate.left, (gribObj.gribDate.stepx * wGRIB) + (gribObj.gribDate.stepx / 2));
+                				let lat  = gribObj.gribDate.bottom + ((gribObj.gribDate.stepy * hGRIB) + (gribObj.gribDate.stepy / 2));
+                                if (gribVaue >= gribTypeData.gribType.max) { 
+                                    maxPos = { lat: lat, lng: lng };
+                                }
+                                if (gribVaue <= gribTypeData.gribType.min) { 
+                                    minPos = { lat: lat, lng: lng };
+                                }
+                            }
+                        }
+                        console.log("Type %s (%s), min=%f (%s / %s), max=%f (%s / %s)", 
+                                    gribTypeData.gribType.desc, 
+                                    gribTypeData.gribType.type, 
+                                    gribTypeData.gribType.min, 
+                                    decToSex(minPos.lat, "NS"),
+                                    decToSex(minPos.lng, "EW"),
+                                    gribTypeData.gribType.max, 
+                                    decToSex(maxPos.lat, "NS"),
+                                    decToSex(maxPos.lng, "EW"));
+                    } else {
+                        console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
+                    }
                     switch (gribTypeData.gribType.type) {
                         case 'tmp':
                             try {
