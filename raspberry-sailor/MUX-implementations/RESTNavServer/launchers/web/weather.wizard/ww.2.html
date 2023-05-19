@@ -1492,13 +1492,13 @@
                             let stepX = gribObj.gribDate.stepx;
                     		let width = gribObj.gribDate.width;
                             for (let wGRIB=0; wGRIB<width; wGRIB++) {
-                                let gribValue = data.x[hGRIB][wGRIB];
+                                let gribValue = gribTypeData.data[hGRIB][wGRIB];
                                 let lng = ajustedLongitude(gribObj.gribDate.left, (gribObj.gribDate.stepx * wGRIB) + (gribObj.gribDate.stepx / 2));
                 				let lat  = gribObj.gribDate.bottom + ((gribObj.gribDate.stepy * hGRIB) + (gribObj.gribDate.stepy / 2));
-                                if (gribVaue >= gribTypeData.gribType.max) { 
+                                if (gribValue >= gribTypeData.gribType.max) { 
                                     maxPos = { lat: lat, lng: lng };
                                 }
-                                if (gribVaue <= gribTypeData.gribType.min) { 
+                                if (gribValue <= gribTypeData.gribType.min) { 
                                     minPos = { lat: lat, lng: lng };
                                 }
                             }
@@ -1519,21 +1519,21 @@
                         case 'tmp':
                             try {
                                 document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
-                                                                                     `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, \n` +
-                                                                                     `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C` +
+                                                                                     `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
+                                                                                     `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
                                                                                      "</pre>";
                             } catch (err) {
                             }
                             break;
                         case 'htsgw':
                             try {
-                                document.getElementById('max-waves').innerText = `Waves: max ${(gribTypeData.gribType.max).toFixed(2)} m`;
+                                document.getElementById('max-waves').innerText = `Waves: max ${(gribTypeData.gribType.max).toFixed(2)} m, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
                             } catch (err) {
                             }
                             break;
                         case 'prate':
                             try {
-                                document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * gribTypeData.gribType.max).toFixed(2)} mm/h`;
+                                document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * gribTypeData.gribType.max).toFixed(2)} mm/h, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
                             } catch (err) {
                             }
                             break;
