@@ -363,7 +363,15 @@ Faxes and GRIB, together
 ![Still a WiP...](./docimg/ww.2.png)
 The UI keeps evolving...
 
+**Routing (WiP)**
+![Choose Option](./docimg/ww.routing.01.png)  
+Choose routing options...  
 
+![Completed](./docimg/ww.routing.02.png)
+Routing completed (several optional formats)
+
+![Display](./docimg/ww.routing.03.png)
+Display !
 
 > _**Note**_: There is a tentative feature, to download and rework faxes, without a server, all the job being done _on the client side_.  
 > It has some (CORS) limitations... See in [launchers/web/scratch/fax-processor](launchers/web/scratch/fax-processor) and

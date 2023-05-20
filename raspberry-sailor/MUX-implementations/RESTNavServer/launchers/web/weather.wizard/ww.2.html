@@ -1385,7 +1385,7 @@
     
         let redraw = (caller) => {
             worldMap.clear();
-    //  worldMap.setPositionLabel("");
+            // worldMap.setPositionLabel("");
 
             if (caller) {  // GRIB Date change?
                 lastGRIBidx = caller.selectedIndex;
@@ -1481,7 +1481,7 @@
     
             gribData = jsonGrib; // gribData is a function prm
             // Min and max for each grib data
-            findMinMax(gribData, 0);  // TODO Remove from here ? Let it in redraw() ?
+            findMinMax(gribData, 0);
             redraw();
         };
     
@@ -1892,6 +1892,7 @@
                     <input type="checkbox" onchange="changeTropics(this);"/> With Tropics
                     <br/>
                     <input id="grib-checkbox" type="checkbox" onchange="changeGRIB(this);" disabled/> With GRIB Data
+                    <input id="wind-color-checkbox" type="checkbox" checked/> Color Wind
                     <br/>
                     <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
                     <hr/>

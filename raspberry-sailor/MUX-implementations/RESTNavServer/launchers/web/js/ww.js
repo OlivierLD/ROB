@@ -223,7 +223,12 @@ let renderGRIBData = function(canvas, context) {
 	if (gribData !== undefined) {
 		let date = document.getElementById("grib-dates").value;
 		let type = document.getElementById("grib-types").value;
-		drawGrib(canvas, context, gribData, date, type); // Defined in grib.routing.js
+		let colorOption = document.getElementById("wind-color-checkbox");
+		let windColorOption = true;
+		if (colorOption) {
+			windColorOption = colorOption.checked;
+		}
+		drawGrib(canvas, context, gribData, date, type, windColorOption); // Defined in grib.routing.js
 	}
 };
 

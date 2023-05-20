@@ -276,7 +276,7 @@ let drawWindArrow = function(context, at, twd, tws) {
 
 const BLUE_BASED = 1;
 const BEAUFORT_BASED = 2; // Based on the colors used for the Beaufort WebComponent.
-const WIND_BG_COLOR_OPTION = BEAUFORT_BASED;
+let WIND_BG_COLOR_OPTION = BEAUFORT_BASED;
 
 // Duplicated from Beaufort.js. TODO: SOmething nicer
 // See https://htmlcolorcodes.com/
@@ -407,8 +407,11 @@ let plotBestRoute = function(canvas, context) {
 };
 
 // Invoked by the callback
-let drawGrib = function(canvas, context, gribData, date, type) {
-	let oneDateGRIB = gribData[0]; // Default
+let drawGrib = function(canvas, context, gribData, date, type, windColorOption) {
+	if (windColorOption !== undefined) {
+		WIND_BG_COLOR_OPTION = windColorOption ? BEAUFORT_BASED : BLUE_BASED;
+	}
+ 	let oneDateGRIB = gribData[0]; // Default
 
 	// Look for the right date
 	for (let i=0; i<gribData.length; i++) {
@@ -499,14 +502,13 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 					gribValue = data.x[hGRIB][wGRIB];
 				}
 			}
-
 			// BG Color
 			context.fillStyle = getBGColor(gribValue, type);
 			if (VERBOSE && type === 'htsgw' && gribValue > 4) {
 				console.log(">> Cell (X, Y) (%d, %d): %s => %f", wGRIB, hGRIB, type, gribValue);
 			}
 			context.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-//		context.stroke();
+			// context.stroke();
 
 			// Center of the cell
 			let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB) + (oneDateGRIB.gribDate.stepx / 2));
