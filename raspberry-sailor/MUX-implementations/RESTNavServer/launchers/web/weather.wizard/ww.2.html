@@ -1375,8 +1375,8 @@
                         selectedIndex = 0;
                     }
                     gribDatesList.options.selectedIndex = selectedIndex;
-                    // Redraw
-                    redraw();
+                    // Redraw, and find min/max
+                    redraw(gribDatesList);
                 }, 2000);
             } else {
                 window.clearInterval(scrollGribInterval);
@@ -1938,8 +1938,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">Scroll through
-                                    dates
+                                <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
+                                    Scroll through dates
                                 </td>
                             </tr>
                         </table>
