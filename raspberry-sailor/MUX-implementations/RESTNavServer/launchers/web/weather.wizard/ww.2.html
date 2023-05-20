@@ -1387,12 +1387,11 @@
             worldMap.clear();
     //  worldMap.setPositionLabel("");
 
-            if (caller) {  // Date change?
-                debugger;
-            }
-
-            if (lastGRIBData) {
-                findMinMax(lastGRIBData, lastGRIBidx === -1 ? 0 : lastGRIBidx);
+            if (caller) {  // GRIB Date change?
+                lastGRIBidx = caller.selectedIndex;
+                if (lastGRIBData) {
+                    findMinMax(lastGRIBData, lastGRIBidx === -1 ? 0 : lastGRIBidx);
+                }
             }
     
             if (withChart && FAXES_ON_TOP) { // Chart (and GRIBs) *under* the faxes
