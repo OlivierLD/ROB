@@ -358,9 +358,14 @@ Below, a replay of a kayak trip...
 > Again, all this runs _fine_ on a Raspberry Pi Zero.
 
 ![GRIB Rendering](./docimg/screenshot.09.png)
-Faxes and GRIB, together
+Faxes and GRIB, together  
 
-> _**Note**_: There is a tentative feature, to downoad and rework faxes, without a server, all the job being done _on the client side_.  
+![Still a WiP...](./docimg/ww.2.png)
+The UI keeps evolving...
+
+
+
+> _**Note**_: There is a tentative feature, to download and rework faxes, without a server, all the job being done _on the client side_.  
 > It has some (CORS) limitations... See in [launchers/web/scratch/fax-processor](launchers/web/scratch/fax-processor) and
 > [launchers/web/scratch/fax-processor.v2](launchers/web/scratch/fax-processor.v2).
 
