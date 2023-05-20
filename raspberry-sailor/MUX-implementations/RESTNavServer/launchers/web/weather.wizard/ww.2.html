@@ -1484,8 +1484,8 @@
                     // Find min and max position.
                     // console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
                     let minPos = null, maxPos = null;
-                    // Find min & max ?
-                    if (gribTypeData.gribType.type === 'tmp'  ||
+                    // Find min & max location ?
+                    if (false && gribTypeData.gribType.type === 'tmp'  ||
                         gribTypeData.gribType.type === 'htsgw' ||
                         gribTypeData.gribType.type === 'prate') { // Switchable...
                         for (let hGRIB=0; hGRIB<gribObj.gribDate.height; hGRIB++) {

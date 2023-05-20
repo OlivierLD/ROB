@@ -420,6 +420,7 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 
 	// Base this on the type.
 	let data = {}; // ugrd, vgrd
+	let min = null, max = null;
 	// Look for the right data
 	switch (type) {
 		case 'wind': // Hybrid type
@@ -438,7 +439,9 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 		case 'prate': // Precipitation rate, kg/m^2/s
 			for (let i = 0; i < oneDateGRIB.typedData.length; i++) {
 				if (oneDateGRIB.typedData[i].gribType.type === type) {
-					data.x = oneDateGRIB.typedData[i].data;
+					data.x = oneDateGRIB.typedData[i].data; // It's an array
+					min = oneDateGRIB.typedData[i].gribType.min;
+					max = oneDateGRIB.typedData[i].gribType.max;
 				}
 			}
 			break;
@@ -450,9 +453,8 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 		console.log("   Dim (W x H) : %d x %d", data.x[0].length, data.x.length);
 	}
 
-	let maxTWS = 0;
-	let maxTWSlat = null;
-	let maxTWSlng = null;
+	let maxTWS = 0, minTmp = 0, maxTmp = 0, maxWaves = 0, maxPrate = 0;
+	let maxTWSPos = null, maxTmpPos = null, minTmpPos = null, maxPratePos = null, maxWavesPos = null;
 
 	for (let hGRIB=0; hGRIB<oneDateGRIB.gribDate.height; hGRIB++) {
 		// Actual width... Waves Height has a different lng step.
@@ -506,10 +508,10 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 			context.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 //		context.stroke();
 
+			// Center of the cell
+			let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB) + (oneDateGRIB.gribDate.stepx / 2));
+			let lat  = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB) + (oneDateGRIB.gribDate.stepy / 2));
 			if (type === 'wind') {
-				// Center of the cell
-				let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB) + (oneDateGRIB.gribDate.stepx / 2));
-				let lat  = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB) + (oneDateGRIB.gribDate.stepy / 2));
 				// data
 				let dir = getDir(data.x[hGRIB][wGRIB], data.y[hGRIB][wGRIB]);
 				let speed = gribValue;
@@ -518,11 +520,32 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 				let canvasPt = worldMap.getCanvasLocation(canvas, lat, lng);
 				drawWindArrow(context, canvasPt, dir, speed);
 				if (speed > maxTWS) { // Locate it
-					maxTWSlat = lat;
-					maxTWSlng = lng;
+					maxTWSPos = { lat: lat, lng: lng };
+					// maxTWSlng = lng;
 				}
 				maxTWS = Math.max(maxTWS, speed);
+			} else if (type === 'htsgw') {
+				if (gribValue >= max) { 
+					maxWaves = gribValue;
+					maxWavesPos = { lat: lat, lng: lng };
+				}
+			} else if (type === 'tmp') {
+				if (gribValue >= max) { 
+					maxTmp = gribValue;
+					maxTmpPos = { lat: lat, lng: lng };
+				}
+				if (gribValue <= min) {
+					minTmp = gribValue; 
+					minTmpPos = { lat: lat, lng: lng };
+				}
+
+			} else if (type === 'prate') {
+				if (gribValue >= max) { 
+					maxPrate = gribValue;
+					maxPratePos = { lat: lat, lng: lng };
+				}
 			}
+			
 
 			// DEBUG, print cell coordinates IN the cell.
 			if (DEBUG) {
@@ -537,7 +560,36 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 	}
 	// console.log("Max TWS: %d kn", maxTWS);
 	try {
-		document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) }) at ${ decToSex(maxTWSlat, "NS") } / ${ decToSex(maxTWSlng, "EW") }`;
+		// document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) }) at ${ decToSex(maxTWSPos.lat, "NS") } / ${ decToSex(maxTWSPos.lng, "EW") }`;
+		switch (type) {
+			case 'wind':
+				document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) }) at ${ decToSex(maxTWSPos.lat, "NS") } / ${ decToSex(maxTWSPos.lng, "EW") }`;
+				break;
+			case 'tmp':
+				try {
+					document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
+																		 `Air Temp: min ${(minTmp - 273).toFixed(2)}\xB0C, at ${decToSex(minTmpPos.lat, "NS") + '/' + decToSex(minTmpPos.lng, "EW")}\n` +
+																		 `          max ${(maxTmp - 273).toFixed(2)}\xB0C, at ${decToSex(maxTmpPos.lat, "NS") + '/' + decToSex(maxTmpPos.lng, "EW")}` +
+																		 "</pre>";
+				} catch (err) {
+				}
+				break;
+			case 'htsgw':
+				try {
+					document.getElementById('max-waves').innerText = `Waves: max ${(maxWaves).toFixed(2)} m, at ${decToSex(maxWavesPos.lat, "NS") + '/' + decToSex(maxWavesPos.lng, "EW")}`;
+				} catch (err) {
+				}
+				break;
+			case 'prate':
+				try {
+					document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * maxPrate).toFixed(2)} mm/h, at ${decToSex(maxPratePos.lat, "NS") + '/' + decToSex(maxPratePos.lng, "EW")}`;
+				} catch (err) {
+				}
+				break;
+			default:
+				break;
+		}
+
 	} catch (err) {}
 	// Is there a route to draw here?
 	if (routingResult !== undefined) {
