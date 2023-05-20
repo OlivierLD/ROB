@@ -1471,6 +1471,8 @@
             redraw();
         };
     
+        const FIND_MIN_MAX_HERE = false;
+
         let findMinMax = (gribData, idx) => { // Also call this when GRIB date changes
             let mess = gribData ? `${gribData.length} date(s), from ${gribData[0].gribDate.formattedUTCDate} to ${gribData[gribData.length - 1].gribDate.formattedUTCDate}` : "missing data";
             messageManager(`GRIB data received on client (${mess}), finding min and max for index ${idx}`);
@@ -1485,60 +1487,62 @@
                     // console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
                     let minPos = null, maxPos = null;
                     // Find min & max location ?
-                    if (false && gribTypeData.gribType.type === 'tmp'  ||
-                        gribTypeData.gribType.type === 'htsgw' ||
-                        gribTypeData.gribType.type === 'prate') { // Switchable...
-                        for (let hGRIB=0; hGRIB<gribObj.gribDate.height; hGRIB++) {
-                            let stepX = gribObj.gribDate.stepx;
-                    		let width = gribObj.gribDate.width;
-                            for (let wGRIB=0; wGRIB<width; wGRIB++) {
-                                let gribValue = gribTypeData.data[hGRIB][wGRIB];
-                                let lng = ajustedLongitude(gribObj.gribDate.left, (gribObj.gribDate.stepx * wGRIB) + (gribObj.gribDate.stepx / 2));
-                				let lat  = gribObj.gribDate.bottom + ((gribObj.gribDate.stepy * hGRIB) + (gribObj.gribDate.stepy / 2));
-                                if (gribValue >= gribTypeData.gribType.max) { 
-                                    maxPos = { lat: lat, lng: lng };
-                                }
-                                if (gribValue <= gribTypeData.gribType.min) { 
-                                    minPos = { lat: lat, lng: lng };
+                    if (FIND_MIN_MAX_HERE) {
+                        if (gribTypeData.gribType.type === 'tmp'  ||
+                            gribTypeData.gribType.type === 'htsgw' ||
+                            gribTypeData.gribType.type === 'prate') { // Switchable...
+                            for (let hGRIB=0; hGRIB<gribObj.gribDate.height; hGRIB++) {
+                                let stepX = gribObj.gribDate.stepx;
+                                let width = gribObj.gribDate.width;
+                                for (let wGRIB=0; wGRIB<width; wGRIB++) {
+                                    let gribValue = gribTypeData.data[hGRIB][wGRIB];
+                                    let lng = ajustedLongitude(gribObj.gribDate.left, (gribObj.gribDate.stepx * wGRIB) + (gribObj.gribDate.stepx / 2));
+                                    let lat  = gribObj.gribDate.bottom + ((gribObj.gribDate.stepy * hGRIB) + (gribObj.gribDate.stepy / 2));
+                                    if (gribValue >= gribTypeData.gribType.max) { 
+                                        maxPos = { lat: lat, lng: lng };
+                                    }
+                                    if (gribValue <= gribTypeData.gribType.min) { 
+                                        minPos = { lat: lat, lng: lng };
+                                    }
                                 }
                             }
+                            console.log("Type %s (%s), min=%f (%s / %s), max=%f (%s / %s)", 
+                                        gribTypeData.gribType.desc, 
+                                        gribTypeData.gribType.type, 
+                                        gribTypeData.gribType.min, 
+                                        decToSex(minPos.lat, "NS"),
+                                        decToSex(minPos.lng, "EW"),
+                                        gribTypeData.gribType.max, 
+                                        decToSex(maxPos.lat, "NS"),
+                                        decToSex(maxPos.lng, "EW"));
+                        } else {
+                            console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
                         }
-                        console.log("Type %s (%s), min=%f (%s / %s), max=%f (%s / %s)", 
-                                    gribTypeData.gribType.desc, 
-                                    gribTypeData.gribType.type, 
-                                    gribTypeData.gribType.min, 
-                                    decToSex(minPos.lat, "NS"),
-                                    decToSex(minPos.lng, "EW"),
-                                    gribTypeData.gribType.max, 
-                                    decToSex(maxPos.lat, "NS"),
-                                    decToSex(maxPos.lng, "EW"));
-                    } else {
-                        console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
-                    }
-                    switch (gribTypeData.gribType.type) {
-                        case 'tmp':
-                            try {
-                                document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
-                                                                                     `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
-                                                                                     `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
-                                                                                     "</pre>";
-                            } catch (err) {
-                            }
-                            break;
-                        case 'htsgw':
-                            try {
-                                document.getElementById('max-waves').innerText = `Waves: max ${(gribTypeData.gribType.max).toFixed(2)} m, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
-                            } catch (err) {
-                            }
-                            break;
-                        case 'prate':
-                            try {
-                                document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * gribTypeData.gribType.max).toFixed(2)} mm/h, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
-                            } catch (err) {
-                            }
-                            break;
-                        default:
-                            break;
+                        switch (gribTypeData.gribType.type) {
+                            case 'tmp':
+                                try {
+                                    document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
+                                                                                        `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
+                                                                                        `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
+                                                                                        "</pre>";
+                                } catch (err) {
+                                }
+                                break;
+                            case 'htsgw':
+                                try {
+                                    document.getElementById('max-waves').innerText = `Waves: max ${(gribTypeData.gribType.max).toFixed(2)} m, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
+                                } catch (err) {
+                                }
+                                break;
+                            case 'prate':
+                                try {
+                                    document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * gribTypeData.gribType.max).toFixed(2)} mm/h, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}`;
+                                } catch (err) {
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

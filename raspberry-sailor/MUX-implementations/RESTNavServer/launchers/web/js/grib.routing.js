@@ -572,18 +572,21 @@ let drawGrib = function(canvas, context, gribData, date, type) {
 																		 `          max ${(maxTmp - 273).toFixed(2)}\xB0C, at ${decToSex(maxTmpPos.lat, "NS") + '/' + decToSex(maxTmpPos.lng, "EW")}` +
 																		 "</pre>";
 				} catch (err) {
+					console.debug(err);
 				}
 				break;
 			case 'htsgw':
 				try {
 					document.getElementById('max-waves').innerText = `Waves: max ${(maxWaves).toFixed(2)} m, at ${decToSex(maxWavesPos.lat, "NS") + '/' + decToSex(maxWavesPos.lng, "EW")}`;
 				} catch (err) {
+					console.debug(err);
 				}
 				break;
 			case 'prate':
 				try {
 					document.getElementById('max-prate').innerText = `P-Rate: max ${(3600 * maxPrate).toFixed(2)} mm/h, at ${decToSex(maxPratePos.lat, "NS") + '/' + decToSex(maxPratePos.lng, "EW")}`;
 				} catch (err) {
+					console.debug(err);
 				}
 				break;
 			default:
