@@ -306,6 +306,10 @@
     <script type="text/javascript">
 
         const CHART_ON_TOP_OF_GRIB = true;
+        const FAXES_ON_TOP = true;
+
+        let lastGRIBData = null;
+        let lastGRIBidx = -1;
 
         if (typeof(decToSex) !== 'function') {
             let decToSex = (val, ns_ew) => {
@@ -1379,11 +1383,19 @@
             }
         }
     
-        let redraw = () => {
+        let redraw = (caller) => {
             worldMap.clear();
     //  worldMap.setPositionLabel("");
+
+            if (caller) {  // Date change?
+                debugger;
+            }
+
+            if (lastGRIBData) {
+                findMinMax(lastGRIBData, lastGRIBidx === -1 ? 0 : lastGRIBidx);
+            }
     
-            if (withChart) { // Chart (and GRIBs) *under* the faxes
+            if (withChart && FAXES_ON_TOP) { // Chart (and GRIBs) *under* the faxes
                 worldMap.drawWorldMap(false);
             }
     
@@ -1398,9 +1410,9 @@
                     );
                 }
             }
-    //		if (withChart) { // GRIB over the faxes
-    //			worldMap.drawWorldMap(false);
-    //		}
+    		if (withChart && !FAXES_ON_TOP) { // GRIB *over* the faxes
+    			worldMap.drawWorldMap(false);
+    		}
         };
     
         let changeFax = (val) => {
@@ -1410,6 +1422,9 @@
         const GRIB_DEBUG = false;
     
         let plotGrib = (jsonGrib) => {
+
+            lastGRIBData = jsonGrib;
+
             if (GRIB_DEBUG) { // DEBUG
                 // console.log("Received GRIB");
                 messageManager("Received GRIB");
@@ -1467,11 +1482,11 @@
     
             gribData = jsonGrib; // gribData is a function prm
             // Min and max for each grib data
-            findMinMax(gribData, 0);
+            findMinMax(gribData, 0);  // TODO Remove from here ? Let it in redraw() ?
             redraw();
         };
     
-        const FIND_MIN_MAX_HERE = false;
+        const FIND_MIN_MAX_HERE = true;
 
         let findMinMax = (gribData, idx) => { // Also call this when GRIB date changes
             let mess = gribData ? `${gribData.length} date(s), from ${gribData[0].gribDate.formattedUTCDate} to ${gribData[gribData.length - 1].gribDate.formattedUTCDate}` : "missing data";
@@ -1584,6 +1599,10 @@
         };
     
         let makeGRIBRequest = (gribRequest, where, cb) => {
+
+            lastGRIBData = null; // Reset
+            lastGRIBidx = -1;
+
             let rawRequest = gribRequest;
             if (rawRequest === undefined && document.getElementById("grib-request")) {
                 rawRequest = document.getElementById("grib-request").value;
@@ -1913,7 +1932,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <select id="grib-dates" onchange="redraw()"></select>
+                                    <select id="grib-dates" onchange="redraw(this)"></select>
                                 </td>
                                 <td>
                                     <select id="grib-types" onchange="redraw()"></select>
