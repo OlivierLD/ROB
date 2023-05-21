@@ -1,4 +1,7 @@
 # Setup HotSpot on Raspberry Pi
+<!-- 
+  TODO: make sure it is not redundant with the `HintsAndTips.md at the root of this repo
+ -->
 
 Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>.
 
@@ -8,6 +11,11 @@ Connected on the Raspberry Pi (directly, or using `ssh`), do the following comma
 sudo apt update
 sudo apt upgrade
 ```
+If needed:
+```
+sudo apt-get dist-upgrade
+```
+
 To install `hostapd`, enter the command:
 ```
 sudo apt install hostapd
@@ -56,7 +64,7 @@ bogus-priv
 dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
 ```
 
-Add the following lines at the bottom of `/etc/dhcpcd.conf`:
+Add the following lines at the bottom of `/etc/dhcpcd.conf` (make sure you use the right file... `dhcpcd.conf`):
 ```
 #
 # Static HotSpot
@@ -65,12 +73,15 @@ nohook wpa_supplicant
 static ip_address=192.168.50.10/24
 static routers=192.168.50.1
 ```
-Enable the `hostapd` service:
+Enable the `hostapd` and `dnsmasq` services:
 ```
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
+
+sudo systemctl unmask dnsmasq
+sudo systemctl enable dnsmasq
 ```
-See its status:
+See their statuses:
 ```
 sudo service hostapd status
 sudo service dnsmasq status

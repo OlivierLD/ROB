@@ -9,6 +9,12 @@ The NMEA-multiplexer runs on its machine, and managed data can be access through
 with a browser, connected on the same network. This network does not need to have Internet access,
 it can be emitted by a Raspberry Pi (like the one the NMEA-multiplexer runs on).
 
+> _**Important Note**_: Some Python resources can be used.  
+> Do make sure they are copied from their point-of-truth folders.  
+> That is:
+> - For parser related features: `NMEA-Multiplexer` module.
+> - For sensors and actuators related features: `RaspberryPythonServers` module.
+
 ## Basics
 It obviously requires the NMEA-multiplexer to be running.  
 Data are fetched from the `NMEA Data Cache` using REST Requests.

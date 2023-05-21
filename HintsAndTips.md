@@ -94,7 +94,7 @@ $ diskutil list
 ```
 
 ```
-$ sudo dd if=/dev/disk1 of=~/PiSDBackup.dmg
+$ sudo dd if=/dev/disk3 of=~/PiSDBackup.dmg
 ```
 
 ## Similar and interesting soft
