@@ -34,7 +34,7 @@ public class LongTimeCurrentCalculator /* extends Computer */ {
 
 	private boolean verbose = false;
 	// buffer.length in milliseconds
-	public final static long DEFAULT_BUFFER_LENGTH = 600_000L; // Milli Seconds
+	public final static long DEFAULT_BUFFER_LENGTH = 600_000L; // Milli Seconds, 600_000ms is 10 minutes.
 	private long bufferLength; // Long.parseLong(System.getProperty("buffer.length", String.valueOf(DEFAULT_BUFFER_LENGTH))); // Default 10 minutes
 
 	private Thread watcher = null;

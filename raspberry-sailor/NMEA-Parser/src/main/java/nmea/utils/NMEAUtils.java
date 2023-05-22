@@ -51,6 +51,18 @@ public class NMEAUtils {
         return offset;
     }
 
+    /**
+     *
+     * @param aws Apparent Wind Speed in knots
+     * @param awsCoeff
+     * @param awa Apparent Wind Angle in degrees
+     * @param awaOffset
+     * @param hdg True Heading
+     * @param hdgOffset
+     * @param sog Speed Over Ground in knots
+     * @param cog Course over Ground in degrees
+     * @return triplet { twa, tws, twd }
+     */
     public static double[] calculateTWwithGPS(double aws, double awsCoeff,
                                               double awa, double awaOffset,
                                               double hdg, double hdgOffset,
@@ -63,9 +75,11 @@ public class NMEAUtils {
             double diffCogHdg = 0;
             if (sog > 0d) {
                 diffCogHdg = (cog - (hdg + hdgOffset));
-                while (diffCogHdg < 0) diffCogHdg += 360;
+                while (diffCogHdg < 0) {
+                    diffCogHdg += 360;
+                }
                 if (diffCogHdg > 180) {
-//        System.out.println("- diffCogHdg > 180:" + Double.toString(diffCogHdg));
+                    // System.out.println("- diffCogHdg > 180:" + Double.toString(diffCogHdg));
                     diffCogHdg -= 360;
                 }
             }
@@ -100,7 +114,7 @@ public class NMEAUtils {
         } catch (Exception oops) {
             oops.printStackTrace();
         }
-        return new double[]{twa, tws, twd};
+        return new double[]{ twa, tws, twd };
     }
 
     public static double[] calculateCurrent(double bsp, double bspCoeff,
