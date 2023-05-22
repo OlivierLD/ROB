@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ | WiP.
+ | Available from http://leafletjs.com/
+ | Tutorials and examples at https://leafletjs.com/examples.html
+ | Note: No native way to change orientation
+ +-->
+<head>
+
+  <title>Leaflet Analysis</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../small.boat.png">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <style type="text/css">
+    
+.list-link {
+  color: white;
+  font-size: 20px;
+  text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 10px orange;
+  text-decoration: none;
+}
+a.list-link:hover {
+  color: cyan;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px cyan;
+}
+
+dialog[open] {
+    -webkit-animation: myFadeIn 3.0s ease normal;
+}
+
+@-webkit-keyframes myFadeIn{
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+.help-dialog {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 2em;
+	color: silver;
+	border: 2px solid silver;
+	border-radius: 5px;
+	width: 800px;
+	margin-left: 200px; 
+	margin-top: 10px; 
+	z-index: 1000;
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.dialog-header {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.dialog-header-close {
+  float: right;
+}
+.dialog-header-close:hover {
+  color: cyan;
+  cursor: pointer;
+  text-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+}
+
+#whatzat {
+    width: 40px; 
+    border: 2px solid silver; 
+    border-radius: 50%;
+}
+
+#whatzat:hover {
+    box-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}
+
+body {
+    font-family: "Source Code Pro", "Courier New", Helvetica, Geneva; 
+    font-weight: bold;
+    background-color: rgba(192, 192, 192, 0.35);
+}
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background: #ffae00; /* fallback for browsers that don't support gradients */
+  background: -webkit-linear-gradient(top, #ffae00, #d67600);
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  background: linear-gradient(top, #ffae00, #d67600);
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+
+button:hover, button:focus {
+  border: 2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;  
+}
+
+compass-rose .day {
+  --bg-color: white;
+  --digit-color: #404040;
+  --with-gradient: true;
+  --display-background-gradient-from: gray;
+  --display-background-gradient-to: white;
+  --tick-color: darkGray;
+  --index-color: red;
+  --font: Arial;
+}
+
+.analogdisplay-day {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: black;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: black;
+	--minor-tick-color: black;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: black;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.directiondisplay-01 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(192, 192, 193, 0.25);
+    --hand-outline-color: lime;
+}
+
+.arrow {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;*/
+    margin-top: 25px;
+    transform: translate(-50%, -50%);
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.arrow span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    margin-left: 15px;
+    animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
+  </style>
+
+  <script type="module" src="../webcomponents/AnalogDisplay.js"></script>
+  <script type="module" src="../webcomponents/CompassRose.js"></script>
+  <script type="module" src="../webcomponents/DirectionDisplay.js"></script>
+  
+</head>
+<body>
+
+<dialog id="about-dialog" class="help-dialog" style="color: cyan;">
+    <div class="dialog-header">
+        <table width="100%">
+            <tr>
+              <td>Help !...</td>
+              <td style="padding-left: 20px;">
+                <span>
+                    <img src="../n.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                    <br/>
+                    <img src="../c.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                </span>
+              </td>
+              <td>
+                <span class="dialog-header-close" onclick="closeAboutDialog();">&times</span>
+              </td>
+            </tr>
+        </table>
+        
+    </div>
+    <hr/>
+    <div>
+        <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
+            <!-- About content -->
+            <div style="margin-top: 15px;">
+                A simple Leaflet interface to visualize and replay data logged when sailing.<br/><br/>
+                <i>Featuring</i>:
+                <ul>
+                    <li>LeafLet Map API</li>
+                    <li>WebComponents</li>
+                    <li>HTML5/CSS3/ES6</li>
+                    <li>...and so on!</li>
+                </ul>
+            </div>
+            <hr/>
+            <div style="margin-top: 15px;">
+                Map is draggable.
+                <br/>
+                Zoom in and out using the +/- on the chart (or double-click, and shift + double-click)
+                <br/>
+                Click on the markers on the chart to display pictures.
+                <br/>
+                Click on the pictures to enlarge them.
+                <br/>
+                Use the links on the right to move from place to place (experimental).
+                <br/>
+                Try the "REPLAY" button to replay what was logged (zoom when replaying..., it's worth it).
+            </div>
+        </div>
+        <hr style="margin-top: 15px; margin-bottom: 5px;"/>
+        <i>OlivSoft never stops</i>
+    </div>
+</dialog>
+    
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <h1>Replay Logged Data</h1>
+        </td>
+        <td style="text-align: right; padding-right: 20px;">
+            <img src="../drowning.gif"
+                 id="whatzat" 
+                 title="Heeeeeeelp !!" 
+                 onclick="showAboutDialog();"/>
+        </td>
+        <td>
+            <div class="arrow" title="Try this!">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<!--div id="mapid" style="width: 600px; height: 400px;"></div-->
+<div style="margin: 5px;">
+  <span id="curr-point" style="margin: 10px;"></span><span id="point-card" style="margin: 10px;"></span>
+  <button id="start-path" onclick="pathIdx = INIT_PATH_IDX; /* 0; */ drive();">Replay</button>
+  <button id="cancel-path" onclick="cancelDrive();" disabled>Cancel</button>
+  <button id="stop-path" onclick="stopDriving();" disabled>Pause</button>
+  <button id="resume-path" onclick="resumeDriving();" disabled>Resume</button>
+</div>
+
+<!-- Map, and controls -->
+<table width="100%">
+  <tr>
+    <td valign="top">
+      <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
+      <div id="mapid" style="width: 1024px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
+    </td>
+    <td valign="top">
+      <div style="border: 2px solid black; border-radius: 5px;">
+        <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
+        <div id="curr-pos" style="text-align: right; padding: 2px; margin-top: -10px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
+      </div>  
+      <div id="displays" style="text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="SOG and COG,&#13;available when REPLAYing">
+        <div style="padding-left: 10px; color: blue; text-align: left; font-style: italic;">Replay Status</div>
+        <div id="UTC-date" style="text-align: center;" title="UTC Date">&nbsp;</div>
+        <analog-display class="analogdisplay-day"
+                        title="Speed Over Ground&#13;in knots"
+                        id="sog-01"
+                        min-value="0"
+                        max-value="15"
+                        value="0.0"
+                        major-ticks="1"
+                        minor-ticks="0.1"
+                        with-border="true"
+                        overlap="40"
+                        label="SOG"
+                        width="200"
+                        height="200"></analog-display>
+
+        <direction-display class="directiondisplay-01"
+                           title="Course Over Ground"
+                           id="cog-02"
+                           value="000"
+                           major-ticks="45"
+                           minor-ticks="5"
+                           with-rose="true"
+                           with-border="true"
+                           label="COG"
+                           hand="boat"
+                           width="200"
+                           height="200"></direction-display>
+        <div>
+            <input type="radio" name="needle-shape" value="boat" onchange="setNeedleShape('cog-02', this);" checked>Mono
+            <input type="radio" name="needle-shape" value="cata" onchange="setNeedleShape('cog-02', this);">Cata
+            <input type="radio" name="needle-shape" value="tri" onchange="setNeedleShape('cog-02', this);">Tri
+            <input type="radio" name="needle-shape" value="plane" onchange="setNeedleShape('cog-02', this);">Plane
+        </div>
+        <compass-rose id="cog-01"
+                      class="day"
+                      title="Course Over Ground"
+                      value="000"
+                      width="250"
+                      height="50"></compass-rose>
+      </div>
+      <!--hr style="margin-top: 10px;"/-->
+      <div>
+        <span style="margin-left: 10px;">Fly to (for tests):</span>
+        <ul>
+            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Cale de mise &agrave; l'eau</a></li>
+            <li><a class="list-link" href="#" onclick="flyToZoom(1);">Pointe de Kerbihan</a></li>
+            <li><a class="list-link" href="#" onclick="flyToZoom(2);">&Eacute;cole de Voile Oc&eacute;ane</a></li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+</table>
+<hr/>
+<div style="color: silver;">
+  OpenSource JavaScript map API at <a href="https://leafletjs.com/" target="leaflet">leafletjs.com</a>. Zoom for details...<br/>
+  <i style="color: silver;">OlivSoft never stops</i>
+</div>
+
+<script type="text/javascript">
+
+    function setNeedleShape(id, radio) {
+        // debugger;
+        document.getElementById(id).hand = radio.value;
+    }
+
+    function decToSex(val, ns_ew) {
+        let absVal = Math.abs(val);
+        let intValue = Math.floor(absVal);
+        let dec = absVal - intValue;
+        let i = intValue;
+        dec *= 60;
+        let min = dec.toFixed(4);
+        while (min.length < 7) {
+            min = '0' + min;
+        }
+        let s = i + "°" + min + "'";
+
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        return s;
+    }
+
+    let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
+
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+    let latlngs; // To be populated from JSON.
+
+    const ZOOM_POSITIONS = [
+        new L.LatLng(47.578967, -3.012377),  // Cale de mise a l'eau
+        new L.LatLng(47.566867, -3.018310),  // Kerbihan
+        new L.LatLng(47.567470, -3.004113)   // Ecole de Voile Oceane
+    ];
+
+    function flyToZoom(idx) {
+        // map.panTo(ZOOM_POSITIONS[idx]);
+        // map.setView(ZOOM_POSITIONS[idx], 18);
+        map.flyTo(ZOOM_POSITIONS[idx]);
+    }
+
+    // Used as an example, See "// markers" below. Used to hold pictures.
+    const MARKERS = [{
+        "latitude": 47.574220,
+        "longitude": -3.012335,
+        "name": "Downwind",
+        "description": "Nice kite (click to enlarge)\n<br/>\n<a href=\"pictures/01.jpeg\" target=\"_blank\"><img src=\"pictures/01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }, {
+        "latitude": 47.556245,
+        "longitude": -3.009787,
+        "name": "Trying the kite",
+        "description": "First kite setting (click to enlarge)\n<br/>\n<a href=\"pictures/02.jpeg\" target=\"_blank\"><img src=\"pictures/02.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }, {
+        "latitude": 47.570372,
+        "longitude": -3.012200,
+        "name": "Upwind, side by side",
+        "description": "J24 &amp; Birvidic 700 (click to enlarge)\n<br/>\n<a href=\"pictures/03.jpeg\" target=\"_blank\"><img src=\"pictures/03.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }, {
+        "latitude": 47.563373,
+        "longitude": -3.011712,
+        "name": "Catch me if you can!",
+        "description": "Symetric &amp; asymetric kites (click to enlarge)\n<br/>\n<a href=\"pictures/04.jpeg\" target=\"_blank\"><img src=\"pictures/04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }];
+
+    let trackData = './2010-07-10.tacking.back.in.nmea.json';
+
+    let polyline = null;
+
+    let loadPathData = () => {
+        fetch(trackData)
+            .then(response => {
+                console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                response.json().then(doc => {
+                    latlngs = doc;
+                    console.log(`Path data loaded, ${doc.length} elements`);
+
+                    if (polyline !== null) { // Remove if there was one already
+                        map.removeLayer(polyline);
+                    }
+                    // Process it here if needed
+                    document.getElementById('point-card').innerText = `${latlngs.length} data points.`;
+                    polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+
+                    // zoom the map to the polyline
+                    map.fitBounds(polyline.getBounds());
+
+                    // let tooltip = L.tooltip()
+                    //                 .setLatLng(L.latLng([0.0, 0.0]))
+                    //                 .setContent('Hello world!<br />This is a nice tooltip.')
+                    //                 .addTo(map);
+                    // Tooltips
+                    if (false) {
+                        let nb = 0;
+                        // debugger;
+                        latlngs.forEach(elmt => {
+                            // let latlng = L.latLng([elmt.lat, elmt.lng]);
+                            console.log(`At ${elmt.latInDegMinDec} / ${elmt.lngInDegMinDec}`);
+                            nb++;
+                            // let tooltip = L.tooltip()
+                            //                .setLatLng(L.latLng([elmt.lat, elmt.lng]))
+                            //                .setContent(elmt.latInDegMinDec + "<br/>" + elmt.lngInDegMinDec)
+                            //                .addTo(map);
+                        });
+                        console.log(`${nb} elements`);
+                    }
+
+                    // markers on the chart
+                    if (true) {
+                        MARKERS.forEach(mark => {
+                            L.marker([(mark.latitude), (mark.longitude)], { title: mark.name })
+                                .addTo(map)
+                                .bindPopup('<b>' + mark.name + '</b><br/>' + mark.description); // .openPopup();
+                        });
+                    }
+                });
+            },
+            (error, errmess) => {
+                console.log("Ooch");
+                let message;
+                if (errmess) {
+                    let mess = JSON.parse(errmess);
+                    if (mess.message) {
+                        message = mess.message;
+                    }
+                }
+                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+            });
+    };
+
+    // To draw in pixels, see https://leafletjs.com/examples/extending/extending-2-layers.html
+    // Also https://codepen.io/adelaide01/pen/EXMwbY
+
+    const INIT_PATH_IDX = 0; // 950; // 0;
+
+    let pathIdx = INIT_PATH_IDX;
+    let keepDriving = true;
+    let cancelDriving = true;
+    let circle = null;
+    let marker = null;
+    let tooltip = null;
+
+    map.addEventListener('mousemove', (event) => {
+        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
+        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
+        let lat = event.latlng.lat;
+        let lng = event.latlng.lng;
+        while (lng > 180) {
+            lng -= 360;
+        }
+        while (lng < -180) {
+            lng += 360;
+        }
+        if (cancelDriving) {
+            document.getElementById('curr-pos').innerHTML = `${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`;
+        }
+        if (tooltip != null) {
+            map.removeLayer(tooltip);
+        }
+        tooltip = L.tooltip()
+                        .setLatLng(L.latLng([lat, lng]))
+                        .setContent(`${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`)
+                        .addTo(map);
+
+    });
+
+    function lpad(s, w, len) {
+        let str = s;
+        while (str.length < len) {
+            str = w + str;
+        }
+        return str;
+    }
+
+    // on "REPLAY" button click
+    function drive() {
+
+        cancelDriving = false;
+        keepDriving = true;
+
+        document.getElementById('start-path').disabled = true;
+        document.getElementById('cancel-path').disabled = false;
+        document.getElementById('stop-path').disabled = false;
+        document.getElementById('resume-path').disabled = true;
+        // Recurse in that one.
+        function moveTo(j) {
+            if (j < latlngs.length && !cancelDriving) {
+                let pos = latlngs[j];
+                if (keepDriving) {
+                    window.setTimeout(() => {
+                        // 1 - Data
+                        let displayPos = `${decToSex(pos.lat, "NS")}<br/>${decToSex(pos.lng, "EW")}`;
+                        if (pos.rmcDate) {
+                            displayDate = `${pos.rmcDate}`;
+                            document.getElementById('UTC-date').innerHTML = displayDate;
+                        }
+                        if (pos.cog && pos.cog != -1) {
+                            document.getElementById('sog-01').value = pos.sog;
+                            document.getElementById('cog-01').value = pos.cog;
+                            document.getElementById('cog-02').value = pos.cog;
+
+                            // displayOG += `<br/>COG: ${lpad(pos.cog.toFixed(0), '0', 3)}&deg;<br/>SOG: ${pos.sog.toFixed(2)} kn`;
+                        }
+                        document.getElementById('curr-pos').innerHTML = displayPos;
+                        document.getElementById('curr-point').innerText = `${j} /`;
+
+                        // 2 - Chart (centered on pos) and graphic
+                        // map.setZoom(20);
+                        map.panTo(new L.LatLng(pos.lat, pos.lng));
+
+                        if (circle !== null) {
+                            map.removeLayer(circle);
+                        }
+                        if (marker !== null) {
+                            map.removeLayer(marker);
+                        }
+                        circle = L.circle([pos.lat, pos.lng], 50, {
+                            color: 'green',
+                            fillColor: '#30f',
+                            fillOpacity: 0.25
+                        });
+                        marker = L.marker([pos.lat, pos.lng]);
+                        circle.addTo(map);
+                        marker.addTo(map)
+
+                        pathIdx += 1; // 5;
+                        moveTo(pathIdx);
+                    }, 50);
+                }
+            } else {
+                document.getElementById('start-path').disabled = false;
+                document.getElementById('cancel-path').disabled = true;
+                document.getElementById('stop-path').disabled = true;
+                document.getElementById('resume-path').disabled = true;
+                document.getElementById('curr-point').innerText = "";
+                document.getElementById('curr-pos').innerHTML = "&nbsp;<br/>&nbsp;";
+                cancelDriving = true;
+                if (circle !== null) {
+                    map.removeLayer(circle);
+                }
+                if (marker !== null) {
+                    map.removeLayer(marker);
+                }
+                pathIdx = INIT_PATH_IDX; // 0;
+            }
+        }
+        console.log(`Start replaying, at idx ${pathIdx}`);
+        moveTo(pathIdx);
+    }
+
+    function cancelDrive() {
+        cancelDriving = true;
+        pathIdx = INIT_PATH_IDX; // 0;
+        document.getElementById('curr-pos').innerHTML = "&nbsp;<br/>&nbsp;";
+        document.getElementById('start-path').disabled = false;
+        document.getElementById('cancel-path').disabled = true;
+        document.getElementById('stop-path').disabled = true;
+        document.getElementById('resume-path').disabled = true;
+        document.getElementById('curr-point').innerText = "";
+    }
+
+    function stopDriving() {         // Pause
+        keepDriving = false; // !keepDriving;
+        document.getElementById('stop-path').disabled = true;
+        document.getElementById('resume-path').disabled = false;
+    }
+
+    function resumeDriving() {
+        keepDriving = true; // !keepDriving;
+        drive();
+        document.getElementById('stop-path').disabled = false;
+        document.getElementById('resume-path').disabled = true;
+    }
+
+    let showAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.show !== undefined) {
+            aboutDialog.show();
+        } else {
+            alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'inline';
+        }
+    };
+
+    let closeAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.close !== undefined) {
+            aboutDialog.close();
+        } else {
+            // alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'none';
+        }
+    };
+
+    window.onload = () => {
+      console.log("Page Loaded!");
+      loadPathData();
+    };
+
+</script>
+
+</body>
+</html>

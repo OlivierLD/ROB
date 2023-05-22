@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -59,7 +60,7 @@ import java.util.zip.ZipFile;
  * --polar-file: Polar file
  * --current-buffer-length: Buffer Length (in ms) for current computation
  * Example:
- *   --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea
+ *   --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea, 2012-06-10.china.camp-oyster.point.nmea
  *   --archive-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip
  *   --dev-curve:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv
  *   --polar-file:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff
@@ -279,10 +280,9 @@ public class NMEAtoJSONPosPlus {
 		private final static long ONE_HOUR_MS = 3_600_000L;
 		// Time, Position, CMG, BSP.
 		private List<TimeCurrent> timeCurrent = new ArrayList<>();
-		private List<UTCHolder> timeBuffer = new ArrayList<>();
+		private List<Long> timeBuffer = new ArrayList<>();
 		private List<GeoPos> positionBuffer = new ArrayList<>();
 		private List<Double> cmgBuffer = new ArrayList<>();
-		// private List<Double> hdgBuffer = new ArrayList<>();
 		private List<Double> bspBuffer = new ArrayList<>();
 
 		private GreatCirclePoint[] groundData = null;
@@ -298,32 +298,26 @@ public class NMEAtoJSONPosPlus {
 			timeBuffer = new ArrayList<>();
 			positionBuffer = new ArrayList<>();
 			cmgBuffer = new ArrayList<>();
-			// hdgBuffer = new ArrayList<>();
 			bspBuffer = new ArrayList<>();
 			timeCurrent = new ArrayList<>();
 		}
 
-		protected TimeCurrent pushAndCompute(UTCHolder utcDate, GeoPos position, Double cmg, Double bsp /*, Double hdg*/) {
+		protected TimeCurrent pushAndCompute(Long utcDate, GeoPos position, Double cmg, Double bsp) {
 			TimeCurrent result = null;
-			if (timeBuffer != null &&
-					utcDate != null &&
-					!utcDate.isNull() &&
-					utcDate.getValue() != null &&
-					(timeBuffer.size() == 0 ||
-							(timeBuffer.size() > 0 &&
-									timeBuffer.get(timeBuffer.size() - 1).getValue() != null &&
-									(timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() < utcDate.getValue().getTime())))) {
-				if (utcDate != null && cmg != null && position != null && bsp != null /* && hdg != null */) {
+			if (timeBuffer != null && utcDate != null &&
+					(timeBuffer.size() == 0 || (timeBuffer.size() > 0 &&
+									            timeBuffer.get(timeBuffer.size() - 1) != null &&
+									            (timeBuffer.get(timeBuffer.size() - 1) < utcDate)))) {
+				if (utcDate != null && cmg != null && position != null && bsp != null) {
 					if (timeBuffer.size() > 0) {
-						UTCHolder oldest = timeBuffer.get(0);
+						long oldest = timeBuffer.get(0); // First record
 						boolean keepGoing = true; // To resize the buffers
 
-						while (keepGoing && oldest.getValue().getTime() < (utcDate.getValue().getTime() - bufferLength)) {
+						while (keepGoing && oldest < (utcDate - bufferLength)) {
 							timeBuffer.remove(0);
 							positionBuffer.remove(0);
 							cmgBuffer.remove(0);
 							bspBuffer.remove(0);
-							// hdgBuffer.remove(0);
 
 							if (timeBuffer.size() > 0) {
 								oldest = timeBuffer.get(0);
@@ -338,7 +332,6 @@ public class NMEAtoJSONPosPlus {
 					// System.out.println("Adding position:" + position.toString());
 					cmgBuffer.add(cmg);
 					bspBuffer.add(bsp);
-					// hdgBuffer.add(hdg);
 					groundData = new GreatCirclePoint[positionBuffer.size()];
 					int index = 0;
 					for (GeoPos gp : positionBuffer) {
@@ -353,7 +346,7 @@ public class NMEAtoJSONPosPlus {
 					// The difference is the vector of the current.
 					for (int i = 0; i < size; i++) {
 						if (i > 0) {
-							long timeInterval = timeBuffer.get(i).getValue().getTime() - timeBuffer.get(i - 1).getValue().getTime();
+							long timeInterval = timeBuffer.get(i) - timeBuffer.get(i - 1);
 							double bSpeed = bspBuffer.get(i);
 							// System.out.println("-- TimeInterval:" + timeInterval + ", bsp:" + bSpeed);
 							if (bSpeed > 0) { // Then calculate estimated pos, with DoW and CMG
@@ -381,10 +374,10 @@ public class NMEAtoJSONPosPlus {
 					// Between the 2 above: the current
 					double dist = GreatCircle.calculateRhumbLineDistance(geoFrom, geoTo); // Dist between DR & GPS
 					double currentDir = Math.toDegrees(GreatCircle.calculateRhumbLineRoute(geoFrom, geoTo));
-					double hourRatio = (double) (timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() - timeBuffer.get(0).getValue().getTime()) / (double) ONE_HOUR_MS;
+					double hourRatio = (double) (timeBuffer.get(timeBuffer.size() - 1) - timeBuffer.get(0)) / (double) ONE_HOUR_MS;
 					double currentSpeed = dist / hourRatio;
 					timeCurrent.add(new TimeCurrent(
-							timeBuffer.get(timeBuffer.size() - 1).getValue().getTime(),
+							timeBuffer.get(timeBuffer.size() - 1),
 							currentSpeed,
 							currentDir));
 					// Trim current buffer to the time-length.
@@ -402,13 +395,7 @@ public class NMEAtoJSONPosPlus {
 					if (verbose) {
 						System.out.println("Inserting Current: on:" + NumberFormat.getInstance().format(bufferLength) + " ms, " + currentSpeed + " kts, dir:" + currentDir);
 					}
-					long time;
-					final UTCTime utcTime = utcDate.getUtcTime();
-					if (utcTime != null) {
-						time = utcTime.getDate().getTime();
-					} else {
-						time = utcDate.getUtcDate().getEpoch();
-					}
+					long time = utcDate;
 					result = new TimeCurrent(time, currentSpeed, currentDir);
 					if (verbose) {
 						System.out.println("Calculated Current Map:" + map.size() + " entry(ies)");
@@ -416,13 +403,13 @@ public class NMEAtoJSONPosPlus {
 				}
 			} else if (verbose) {
 				//  if (!utcDate.isNull() && (timeBuffer.size() == 0 || (timeBuffer.size() > 0 && (timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() < utcDate.getValue().getTime()))))
-				System.out.println("utcDate is " + (utcDate == null || utcDate.isNull() ? "" : "not ") + "null");
+				System.out.println("utcDate is " + (utcDate == null ? "" : "not ") + "null");
 				System.out.println("timeBuffer.size() = " + timeBuffer.size());
-				System.out.println("utcDate        :" + (utcDate.isNull() ? "" : new Date(utcDate.getValue().getTime()).toString()));
-				System.out.println("last timeBuffer:" + (timeBuffer.size() > 0 ? new Date(timeBuffer.get(timeBuffer.size() - 1).getValue().getTime()).toString() : "none"));
+				System.out.println("utcDate        :" + (utcDate == null ? "" : new Date(utcDate).toString()));
+				System.out.println("last timeBuffer:" + (timeBuffer.size() > 0 ? new Date(timeBuffer.get(timeBuffer.size() - 1)).toString() : "none"));
 				try {
 					if (timeBuffer.size() > 0) {
-						System.out.println("-> " + ((timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() < utcDate.getValue().getTime()) ? "true" : "false"));
+						System.out.println("-> " + ((timeBuffer.get(timeBuffer.size() - 1) < utcDate) ? "true" : "false"));
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -564,13 +551,15 @@ public class NMEAtoJSONPosPlus {
 									if (bsp != null && polarHelper != null) {
 										double polarSpeed = polarHelper.getSpeed(tws, Math.abs(twa), 1.0);
 										double perf = bsp / polarSpeed;
-										otl.setPerf(perf);
+										if (Double.isFinite(perf)) {
+											otl.setPerf(perf);
+										}
 									}
 
 								}
 								// Compute Current
 								if (currentComputer != null) {
-									final TimeCurrent timeCurrent = currentComputer.pushAndCompute(new UTCHolder(new UTCDate(rmc.getRmcTime())), rmc.getGp(), otl.getCmg(), bsp); //, hdt);
+									final TimeCurrent timeCurrent = currentComputer.pushAndCompute(rmc.getRmcTime().getTime(), rmc.getGp(), otl.getCmg(), bsp);
 									if (timeCurrent != null && !Double.isNaN(timeCurrent.getDir()) && !Double.isNaN(timeCurrent.getSpeed())) {
 										otl.setCsp(timeCurrent.getSpeed());
 										otl.setCdr(timeCurrent.getDir());
@@ -610,7 +599,42 @@ public class NMEAtoJSONPosPlus {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
 		System.out.printf("Generated %s JSON elements\n", NumberFormat.getInstance().format(jsonArray.size()));
-		// TODO Analyze ?
+		// Analyze. Min and Max BSP, SOG, CSP, perf
+		AtomicReference<Double> minBsp = new AtomicReference<>(Double.MAX_VALUE);
+		AtomicReference<Double> maxBsp = new AtomicReference<>(-Double.MAX_VALUE);
+		AtomicReference<Double> minSog = new AtomicReference<>(Double.MAX_VALUE);
+		AtomicReference<Double> maxSog = new AtomicReference<>(-Double.MAX_VALUE);
+		AtomicReference<Double> minCsp = new AtomicReference<>(Double.MAX_VALUE);
+		AtomicReference<Double> maxCsp = new AtomicReference<>(-Double.MAX_VALUE);
+		AtomicReference<Double> minPerf = new AtomicReference<>(Double.MAX_VALUE);
+		AtomicReference<Double> maxPerf = new AtomicReference<>(-Double.MAX_VALUE);
+		jsonArray.stream().map(obj -> (ObjectToLog)obj).forEach(otl -> {
+			minBsp.set(Math.min(otl.getBsp(), minBsp.get()));
+			maxBsp.set(Math.max(otl.getBsp(), maxBsp.get()));
+
+			minSog.set(Math.min(otl.getSog(), minSog.get()));
+			maxSog.set(Math.max(otl.getSog(), maxSog.get()));
+
+			minCsp.set(Math.min(otl.getCsp(), minCsp.get()));
+			maxCsp.set(Math.max(otl.getCsp(), maxCsp.get()));
+
+			minPerf.set(Math.min(otl.getPerf(), minPerf.get()));
+			maxPerf.set(Math.max(otl.getPerf(), maxPerf.get()));
+		});
+		final double avgBsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		final double avgSog = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		final double avgCsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		final double avgPerf = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+
+		double stdDevBsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgBsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevSog = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgSog - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevCsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgCsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevPerf = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgPerf - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).count());
+
+		System.out.printf("BSP in [%f, %f], avg %f, std %f\n", minBsp.get(), maxBsp.get(), avgBsp, stdDevBsp);
+		System.out.printf("SOG in [%f, %f], avg %f, std %f\n", minSog.get(), maxSog.get(), avgSog, stdDevSog);
+		System.out.printf("CSP in [%f, %f], avg %f, std %f\n", minCsp.get(), maxCsp.get(), avgCsp ,stdDevCsp);
+		System.out.printf("Perf in [%f, %f], avg %f, std %f\n", minPerf.get(), maxPerf.get(), avgPerf, stdDevPerf);
 
 		boolean minified = "true".equals(System.getProperty("minified", "true"));
 		// Cleanup: Remove latInDegMinDec nd lngInDegMinDec, to make the json smaller.
