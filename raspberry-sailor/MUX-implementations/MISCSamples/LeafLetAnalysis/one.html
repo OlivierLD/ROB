@@ -528,9 +528,32 @@ compass-rose .day {
                                         width="150"
                                         height="150 "></direction-display>
                     </td>
+                    <td>
+                        <analog-display class="analogdisplay-day"
+                                        title="Performance&#13;in %"
+                                        id="perf-01"
+                                        min-value="0"
+                                        max-value="2.0"
+                                        value="1.0"
+                                        major-ticks="0.25"
+                                        minor-ticks="0.1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="Perf"
+                                        width="150"
+                                        height="150"></analog-display>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="3">
+                        <!-- 
+                            Removed:
+                                    lwy="0" 
+                                    decl="10" 
+                                    dev="-0.98" 
+                                    b2wp="230" 
+                                    vmg="-3.85"
+                        -->
                         <boat-overview id="boat-overview-01" 
                                     width="600" 
                                     height="600"
@@ -545,12 +568,7 @@ compass-rose .day {
                                     twd="91"
                                     cdr="49" 
                                     csp="0.32" 
-                                    lwy="0" 
                                     cmg="222"
-                                    decl="10" 
-                                    dev="-0.98" 
-                                    b2wp="230" 
-                                    vmg="-3.85"
                                     with-current="true" 
                                     with-vmg="false"/>                    
                     </td>
@@ -627,7 +645,9 @@ compass-rose .day {
     // Used as an example, See "// markers" below. Used to hold pictures.
     const MARKERS = [];
 
-    let trackData = './2010-07-10.tacking.back.in.nmea.json';
+    let trackData = // './2010-07-10.tacking.back.in.nmea.json';
+                    // './2012-06-10.china.camp-oyster.point.nmea.json';
+                    './2014-08-30.headless.labor.day.week.end.sail.only.nmea.json';
 
     let polyline = null;
 
@@ -769,17 +789,17 @@ compass-rose .day {
                             document.getElementById('boat-overview-01').cog = pos.cog;
                             // displayOG += `<br/>COG: ${lpad(pos.cog.toFixed(0), '0', 3)}&deg;<br/>SOG: ${pos.sog.toFixed(2)} kn`;
                         }
-                        if (pos.bsp && pos.hdt && pos.cmg) {
+                        if (/*pos.bsp &&*/ pos.hdt && pos.cmg) {
                             document.getElementById('bsp-01').value = pos.bsp;
                             document.getElementById('hdt-01').value = pos.hdt;
                             document.getElementById('cmg-01').value = pos.cmg;
 
                             document.getElementById('boat-overview-01').bsp = pos.bsp;
-                            document.getElementById('boat-overview-01').hdg = pos.hdt;
-                            document.getElementById('boat-overview-01').cmg = pos.cmg;
+                            document.getElementById('boat-overview-01').hdg = pos.hdt; // pos.hdc;  // Compass Heading
+                            // document.getElementById('boat-overview-01').decl = pos.decl;
+                            // document.getElementById('boat-overview-01').dev = pos.dev;
                             document.getElementById('boat-overview-01').lwy = pos.leeway;
-                            document.getElementById('boat-overview-01').decl = pos.decl;
-                            document.getElementById('boat-overview-01').dev = pos.dev;
+                            document.getElementById('boat-overview-01').cmg = pos.cmg;
                         }
                         if (pos.awa && pos.aws && pos.twa && pos.tws) {
                             document.getElementById('aw-01').value = `{ "wa": ${pos.awa}, "ws": ${pos.aws} }`;
@@ -801,6 +821,9 @@ compass-rose .day {
                         }
                         if (pos.mwt) {
                             document.getElementById('thermometer-01').value = pos.mwt;
+                        }
+                        if (pos.perf) {
+                            document.getElementById('perf-01').value = pos.perf;
                         }
 
                         document.getElementById('curr-pos').innerHTML = displayPos;

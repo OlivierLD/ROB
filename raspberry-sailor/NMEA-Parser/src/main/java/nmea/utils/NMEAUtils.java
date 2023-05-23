@@ -117,6 +117,14 @@ public class NMEAUtils {
         return new double[]{ twa, tws, twd };
     }
 
+    public static double[] calculateTWnoGPS(double aws, double awsCoeff,
+                                            double awa, double awaOffset,
+                                            double hdg, double hdgOffset,
+                                            double bsp,
+                                            double hdt) {
+        return calculateTWwithGPS(aws, awsCoeff, awa, awaOffset, hdg, hdgOffset, bsp, hdt);
+    }
+
     public static double[] calculateCurrent(double bsp, double bspCoeff,
                                             double hdg, double hdgOffset,
                                             double leeway,

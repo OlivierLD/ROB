@@ -526,15 +526,28 @@ public class NMEAtoJSONPosPlus {
 								// More Computations !
 								// Compute TRUE wind
 								if (aws != null) {
-									// System.out.println("Using the GOOD method");
-									double[] tw = NMEAUtils.calculateTWwithGPS(aws,
-																			   awsCoeff,
-																			   awa,
-																			   awaOffset,
-																			   heading,
-																			   hdgOffset,
-																			   rmc.getSog(),
-																			   rmc.getCog());
+									double[] tw;
+									if (true) {
+										// System.out.println("Using the GOOD method");
+										tw = NMEAUtils.calculateTWwithGPS(aws,
+												awsCoeff,
+												awa,
+												awaOffset,
+												hdt,
+												hdgOffset,
+												rmc.getSog(),
+												rmc.getCog());
+									} else {
+										// Used if no GPS is available...
+										tw = NMEAUtils.calculateTWnoGPS(aws,
+												awsCoeff,
+												awa,
+												awaOffset,
+												hdt,
+												hdgOffset,
+												bsp,
+												hdt);
+									}
 									double twa = tw[0];
 									double tws = tw[1];
 									double twd = tw[2];
