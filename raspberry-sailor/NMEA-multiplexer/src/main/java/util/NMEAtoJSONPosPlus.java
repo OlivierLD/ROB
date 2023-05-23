@@ -50,6 +50,7 @@ import java.util.zip.ZipFile;
  * See CLI prms:
  * --file-name: Mandatory. File name, on the file system, or in the archive
  * --archive-name: Optional. Archive file name
+ * --output-file-name: Optional. Will be generated from --file-name if missing
  * --default-decl: Optional, default 0. Used if decl is not in RMC
  * --awa-offset: Optional, default 0.
  * --hdg-offset: Optional, default 0.
@@ -62,6 +63,7 @@ import java.util.zip.ZipFile;
  * Example:
  *   --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea, 2012-06-10.china.camp-oyster.point.nmea
  *   --archive-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip
+ *   --output-file-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/MISCSamples/LeafLetAnalysis/2010-07-10.tacking.back.in.nmea.json
  *   --dev-curve:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv
  *   --polar-file:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff
  *   --current-buffer-length:600000
@@ -652,6 +654,7 @@ public class NMEAtoJSONPosPlus {
 	}
 
 	private final static String FILE_NAME_PREFIX = "--file-name:";
+	private final static String OUTPUT_FILE_NAME_PREFIX = "--output-file-name:";
 	private final static String ARCHIVE_NAME_PREFIX = "--archive-name:";
 	private final static String DEFAULT_DECLINATION_PREFIX = "--default-decl:";
 	private final static String AWA_OFFSET_PREFIX = "--awa-offset:";
@@ -666,6 +669,7 @@ public class NMEAtoJSONPosPlus {
 	public static void main(String... args) {
 
 		String fileName = null;
+		String outputName = null;
 		String archiveName = null;
 		double defaultDeclinationValue = 0d;
 		String deviationCurveFile = null;
@@ -676,6 +680,8 @@ public class NMEAtoJSONPosPlus {
 			for (String arg : args) {
 				if (arg.startsWith(FILE_NAME_PREFIX)) {
 					fileName = arg.substring(FILE_NAME_PREFIX.length());
+				} else if (arg.startsWith(OUTPUT_FILE_NAME_PREFIX)) {
+					outputName = arg.substring(OUTPUT_FILE_NAME_PREFIX.length());
 				} else if (arg.startsWith(ARCHIVE_NAME_PREFIX)) {
 					archiveName = arg.substring(ARCHIVE_NAME_PREFIX.length());
 				} else if (arg.startsWith(DEFAULT_DECLINATION_PREFIX)) {
@@ -709,7 +715,7 @@ public class NMEAtoJSONPosPlus {
 
 		try {
 			String inputFileName = fileName;
-			String outputFileName = inputFileName + ".json";
+			String outputFileName = outputName != null ? outputName : inputFileName + ".json";
 			NMEAtoJSONPosPlus.transform(inputFileName,
 										archiveName,
 										defaultDeclinationValue,

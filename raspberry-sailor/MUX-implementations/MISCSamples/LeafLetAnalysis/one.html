@@ -162,8 +162,13 @@ compass-rose .day {
 
 .directiondisplay-01 {
 	--value-nb-decimal: 0;
-	--hand-color: rgba(192, 192, 193, 0.25);
+	--hand-color: rgba(192, 192, 192, 0.25);
     --hand-outline-color: lime;
+}
+.directiondisplay-02 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(255, 0, 0, 0.5);
+    --hand-outline-color: red;
 }
 
 .arrow {
@@ -209,11 +214,35 @@ compass-rose .day {
         transform: rotate(45deg) translate(20px, 20px);
     }
 }
+
+.thermometer-day {
+  --bg-color: rgba(0, 0, 0, 0);
+  --digit-color: DarkGrey;
+  --with-gradient: true;
+  --display-background-gradient-from: black;
+  --display-background-gradient-to: LightGrey;
+  --with-display-shadow: true;
+  --shadow-color: rgba(0, 0, 0, 0.75);
+  --major-tick-color: DarkGrey;
+  --minor-tick-color: DarkGrey;
+  --value-color: LightRed;
+  --value-outline-color: black;
+  --value-nb-decimal: 2;
+  --font: 'Arial'; /* 'Source Code Pro' */
+}
+
+/*td {
+    border: 1px solid silver;
+    border-radius: 5px;
+}*/
   </style>
 
   <script type="module" src="../webcomponents/AnalogDisplay.js"></script>
   <script type="module" src="../webcomponents/CompassRose.js"></script>
   <script type="module" src="../webcomponents/DirectionDisplay.js"></script>
+  <script type="module" src="../webcomponents/WindAngleDisplay.js"></script>
+  <script type="module" src="../webcomponents/BoatOverview.js"></script>
+  <script type="module" src="../webcomponents/Thermometer.js"></script>
   
 </head>
 <body>
@@ -242,7 +271,7 @@ compass-rose .day {
         <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
             <!-- About content -->
             <div style="margin-top: 15px;">
-                A simple Leaflet interface to visualize and replay data logged when sailing.<br/><br/>
+                A simple Leaflet and WebComponents interface to visualize and replay data logged when sailing.<br/><br/>
                 <i>Featuring</i>:
                 <ul>
                     <li>LeafLet Map API</li>
@@ -274,7 +303,7 @@ compass-rose .day {
 <table style="width: 100%;">
     <tr>
         <td>
-            <h1>Replay Logged Data</h1>
+            <h1 style="padding-left: 10px;">Replay Logged Data</h1>
         </td>
         <td style="text-align: right; padding-right: 20px;">
             <img src="../drowning.gif"
@@ -302,69 +331,244 @@ compass-rose .day {
   <button id="resume-path" onclick="resumeDriving();" disabled>Resume</button>
 </div>
 
-<!-- Map, and controls -->
+<!-- Map, displays, and controls -->
 <table width="100%">
   <tr>
     <td valign="top">
-      <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
-      <div id="mapid" style="width: 1024px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
+      <!-- Column 1 -->
+      <div id="mapid" style="width: 800px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
     </td>
-    <td valign="top">
+    <td valign="top" rowspan="2">
+      <!-- Column 2 -->
       <div style="border: 2px solid black; border-radius: 5px;">
         <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
         <div id="curr-pos" style="text-align: right; padding: 2px; margin-top: -10px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
       </div>  
-      <div id="displays" style="text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="SOG and COG,&#13;available when REPLAYing">
-        <div style="padding-left: 10px; color: blue; text-align: left; font-style: italic;">Replay Status</div>
-        <div id="UTC-date" style="text-align: center;" title="UTC Date">&nbsp;</div>
-        <analog-display class="analogdisplay-day"
-                        title="Speed Over Ground&#13;in knots"
-                        id="sog-01"
-                        min-value="0"
-                        max-value="15"
-                        value="0.0"
-                        major-ticks="1"
-                        minor-ticks="0.1"
-                        with-border="true"
-                        overlap="40"
-                        label="SOG"
-                        width="200"
-                        height="200"></analog-display>
-
-        <direction-display class="directiondisplay-01"
-                           title="Course Over Ground"
-                           id="cog-02"
-                           value="000"
-                           major-ticks="45"
-                           minor-ticks="5"
-                           with-rose="true"
-                           with-border="true"
-                           label="COG"
-                           hand="boat"
-                           width="200"
-                           height="200"></direction-display>
+      <div id="displays" style="text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="All data below&#13;available when REPLAYing">
+          <div style="padding-left: 10px; color: blue; text-align: left; font-style: italic;">Replay Status</div>
+          <div id="UTC-date" style="text-align: center;" title="UTC Date">&nbsp;</div>
+          <div id="diaply-container" style="max-height: 600px; overflow-y: scroll;">
+            <!-- Displays -->
+            <table>
+                <tr>
+                    <td>
+                        <analog-display class="analogdisplay-day"
+                                        title="Speed Over Ground&#13;in knots"
+                                        id="sog-01"
+                                        min-value="0"
+                                        max-value="15"
+                                        value="0.0"
+                                        major-ticks="1"
+                                        minor-ticks="0.1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="SOG"
+                                        width="150"
+                                        height="150"></analog-display>
+                    </td>
+                    <td>
+                        <direction-display class="directiondisplay-01"
+                                            title="Course Over Ground"
+                                            id="cog-02"
+                                            value="000"
+                                            major-ticks="45"
+                                            minor-ticks="5"
+                                            with-rose="true"
+                                            with-border="true"
+                                            label="COG"
+                                            hand="arrow"
+                                            width="150"
+                                            height="150"></direction-display>
+                        <!--
+                        <div>
+                            <input type="radio" name="needle-shape" value="boat" onchange="setNeedleShape('cog-02', this);">Mono
+                            <input type="radio" name="needle-shape" value="cata" onchange="setNeedleShape('cog-02', this);">Cata
+                            <input type="radio" name="needle-shape" value="tri" onchange="setNeedleShape('cog-02', this);">Tri
+                            <input type="radio" name="needle-shape" value="plane" onchange="setNeedleShape('cog-02', this);">Plane
+                            <input type="radio" name="needle-shape" value="arrow" onchange="setNeedleShape('cog-02', this);" checked>Arrow
+                        </div>
+                        <compass-rose id="cog-01"
+                                        class="day"
+                                        title="Course Over Ground"
+                                        value="000"
+                                        width="250"
+                                        height="50"></compass-rose>
+                        -->
+                    </td>
+                    <td>
+                        <thermo-meter id="thermometer-01"
+                                      class="thermometer-day"
+                                      title="Water temp,&#13;in Celcius"
+                                      min-value="-10"
+                                      max-value="40"
+                                      major-ticks="10"
+                                      minor-ticks="1"
+                                      value="00.00"
+                                      unit="C"
+                                      width="100"
+                                      height="150"></thermo-meter>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <analog-display class="analogdisplay-day"
+                                        title="Boat Speed&#13;in knots"
+                                        id="bsp-01"
+                                        min-value="0"
+                                        max-value="15"
+                                        value="0.0"
+                                        major-ticks="1"
+                                        minor-ticks="0.1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="BSP"
+                                        width="150"
+                                        height="150"></analog-display>
+                    </td>
+                    <td>
+                        <direction-display class="directiondisplay-01"
+                                        title="True Heading"
+                                        id="hdt-01"
+                                        value="000"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="HDT"
+                                        hand="boat"
+                                        width="150"
+                                        height="150"></direction-display>
+                    </td>
+                    <td>
+                        <direction-display class="directiondisplay-01"
+                                        title="Course Made Good"
+                                        id="cmg-01"
+                                        value="000"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="CMG"
+                                        hand="boat"
+                                        width="150"
+                                        height="150"></direction-display>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <wind-angle-display class="analogdisplay-day"
+                                            title="Apparent Wind"
+                                            id="aw-01"
+                                            value="{ 'wa': 60, 'ws': 10.2 }"
+                                            major-ticks="45"
+                                            minor-ticks="5"
+                                            with-border="true"
+                                            with-digits="true"
+                                            label="Apparent"
+                                            hand="wind"
+                                            width="150"
+                                            height="150"></wind-angle-display>
+                    </td>
+                    <td>
+                        <wind-angle-display class="analogdisplay-day"
+                                            title="True Wind"
+                                            id="tw-01"
+                                            value="{ 'wa': 60, 'ws': 10.2 }"
+                                            major-ticks="45"
+                                            minor-ticks="5"
+                                            with-border="true"
+                                            with-digits="true"
+                                            label="True"
+                                            hand="wind"
+                                            width="150"
+                                            height="150"></wind-angle-display>
+                    </td>
+                    <td>
+                        <direction-display class="directiondisplay-02"
+                                        title="True Wind Direction"
+                                        id="twd-01"
+                                        value="000"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="TWD"
+                                        hand="wind"
+                                        width="150"
+                                        height="150"></direction-display>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <analog-display class="analogdisplay-day"
+                                        title="Current Speed&#13;in knots"
+                                        id="csp-01"
+                                        min-value="0"
+                                        max-value="5"
+                                        value="0.0"
+                                        major-ticks="1"
+                                        minor-ticks="0.1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="CSP"
+                                        width="150"
+                                        height="150"></analog-display>
+                    </td>
+                    <td>
+                        <direction-display class="directiondisplay-01"
+                                        title="Current Direction"
+                                        id="cdr-01"
+                                        value="000"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="CDR"
+                                        hand="arrow"
+                                        width="150"
+                                        height="150 "></direction-display>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <boat-overview id="boat-overview-01" 
+                                    width="600" 
+                                    height="600"
+                                    sog="6.9" 
+                                    cog="215" 
+                                    bsp="7.1" 
+                                    hdg="222" 
+                                    aws="15.8"
+                                    awa="-112" 
+                                    tws="20.5" 
+                                    twa="-130" 
+                                    twd="91"
+                                    cdr="49" 
+                                    csp="0.32" 
+                                    lwy="0" 
+                                    cmg="222"
+                                    decl="10" 
+                                    dev="-0.98" 
+                                    b2wp="230" 
+                                    vmg="-3.85"
+                                    with-current="true" 
+                                    with-vmg="false"/>                    
+                    </td>
+                </tr>
+            </table>
+          </div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <!-- Row 2, Col 1 -->
         <div>
-            <input type="radio" name="needle-shape" value="boat" onchange="setNeedleShape('cog-02', this);" checked>Mono
-            <input type="radio" name="needle-shape" value="cata" onchange="setNeedleShape('cog-02', this);">Cata
-            <input type="radio" name="needle-shape" value="tri" onchange="setNeedleShape('cog-02', this);">Tri
-            <input type="radio" name="needle-shape" value="plane" onchange="setNeedleShape('cog-02', this);">Plane
+          <span style="margin-left: 10px;">Fly to (for tests):</span>
+          <ul>
+            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Harbormaster</a></li>
+          </ul>
         </div>
-        <compass-rose id="cog-01"
-                      class="day"
-                      title="Course Over Ground"
-                      value="000"
-                      width="250"
-                      height="50"></compass-rose>
-      </div>
-      <!--hr style="margin-top: 10px;"/-->
-      <div>
-        <span style="margin-left: 10px;">Fly to (for tests):</span>
-        <ul>
-            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Cale de mise &agrave; l'eau</a></li>
-            <li><a class="list-link" href="#" onclick="flyToZoom(1);">Pointe de Kerbihan</a></li>
-            <li><a class="list-link" href="#" onclick="flyToZoom(2);">&Eacute;cole de Voile Oc&eacute;ane</a></li>
-        </ul>
-      </div>
     </td>
   </tr>
 </table>
@@ -411,9 +615,7 @@ compass-rose .day {
     let latlngs; // To be populated from JSON.
 
     const ZOOM_POSITIONS = [
-        new L.LatLng(47.578967, -3.012377),  // Cale de mise a l'eau
-        new L.LatLng(47.566867, -3.018310),  // Kerbihan
-        new L.LatLng(47.567470, -3.004113)   // Ecole de Voile Oceane
+        new L.LatLng(37.663680, -122.378633)   // Harbormaster 37 39.8208 N 122 22.7180 W
     ];
 
     function flyToZoom(idx) {
@@ -423,27 +625,7 @@ compass-rose .day {
     }
 
     // Used as an example, See "// markers" below. Used to hold pictures.
-    const MARKERS = [{
-        "latitude": 47.574220,
-        "longitude": -3.012335,
-        "name": "Downwind",
-        "description": "Nice kite (click to enlarge)\n<br/>\n<a href=\"pictures/01.jpeg\" target=\"_blank\"><img src=\"pictures/01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }, {
-        "latitude": 47.556245,
-        "longitude": -3.009787,
-        "name": "Trying the kite",
-        "description": "First kite setting (click to enlarge)\n<br/>\n<a href=\"pictures/02.jpeg\" target=\"_blank\"><img src=\"pictures/02.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }, {
-        "latitude": 47.570372,
-        "longitude": -3.012200,
-        "name": "Upwind, side by side",
-        "description": "J24 &amp; Birvidic 700 (click to enlarge)\n<br/>\n<a href=\"pictures/03.jpeg\" target=\"_blank\"><img src=\"pictures/03.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }, {
-        "latitude": 47.563373,
-        "longitude": -3.011712,
-        "name": "Catch me if you can!",
-        "description": "Symetric &amp; asymetric kites (click to enlarge)\n<br/>\n<a href=\"pictures/04.jpeg\" target=\"_blank\"><img src=\"pictures/04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }];
+    const MARKERS = [];
 
     let trackData = './2010-07-10.tacking.back.in.nmea.json';
 
@@ -570,6 +752,8 @@ compass-rose .day {
                 let pos = latlngs[j];
                 if (keepDriving) {
                     window.setTimeout(() => {
+                        // 0 - Dump all values
+                        console.log(`Read from data file: ${JSON.stringify(pos, null, 2)}`);
                         // 1 - Data
                         let displayPos = `${decToSex(pos.lat, "NS")}<br/>${decToSex(pos.lng, "EW")}`;
                         if (pos.rmcDate) {
@@ -578,11 +762,47 @@ compass-rose .day {
                         }
                         if (pos.cog && pos.cog != -1) {
                             document.getElementById('sog-01').value = pos.sog;
-                            document.getElementById('cog-01').value = pos.cog;
+                            // document.getElementById('cog-01').value = pos.cog;
                             document.getElementById('cog-02').value = pos.cog;
 
+                            document.getElementById('boat-overview-01').sog = pos.sog;
+                            document.getElementById('boat-overview-01').cog = pos.cog;
                             // displayOG += `<br/>COG: ${lpad(pos.cog.toFixed(0), '0', 3)}&deg;<br/>SOG: ${pos.sog.toFixed(2)} kn`;
                         }
+                        if (pos.bsp && pos.hdt && pos.cmg) {
+                            document.getElementById('bsp-01').value = pos.bsp;
+                            document.getElementById('hdt-01').value = pos.hdt;
+                            document.getElementById('cmg-01').value = pos.cmg;
+
+                            document.getElementById('boat-overview-01').bsp = pos.bsp;
+                            document.getElementById('boat-overview-01').hdg = pos.hdt;
+                            document.getElementById('boat-overview-01').cmg = pos.cmg;
+                            document.getElementById('boat-overview-01').lwy = pos.leeway;
+                            document.getElementById('boat-overview-01').decl = pos.decl;
+                            document.getElementById('boat-overview-01').dev = pos.dev;
+                        }
+                        if (pos.awa && pos.aws && pos.twa && pos.tws) {
+                            document.getElementById('aw-01').value = `{ "wa": ${pos.awa}, "ws": ${pos.aws} }`;
+                            document.getElementById('tw-01').value = `{ "wa": ${pos.twa}, "ws": ${pos.tws} }`;
+                            document.getElementById('twd-01').value = pos.twd;
+
+                            document.getElementById('boat-overview-01').awa = pos.awa;
+                            document.getElementById('boat-overview-01').aws = pos.aws;
+                            document.getElementById('boat-overview-01').twa = pos.twa;
+                            document.getElementById('boat-overview-01').tws = pos.tws;
+                            document.getElementById('boat-overview-01').twd = pos.twd;
+                        }
+                        if (pos.cdr && pos.csp) {
+                            document.getElementById('cdr-01').value = pos.cdr;
+                            document.getElementById('csp-01').value = pos.csp;
+
+                            document.getElementById('boat-overview-01').cdr = pos.cdr;
+                            document.getElementById('boat-overview-01').csp = pos.csp;
+                        }
+                        if (pos.mwt) {
+                            document.getElementById('thermometer-01').value = pos.mwt;
+                        }
+
                         document.getElementById('curr-pos').innerHTML = displayPos;
                         document.getElementById('curr-point').innerText = `${j} /`;
 

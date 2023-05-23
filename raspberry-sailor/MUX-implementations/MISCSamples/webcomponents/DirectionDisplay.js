@@ -776,6 +776,29 @@ class DirectionDisplay extends HTMLElement {
 				y = centerY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
 				context.lineTo(x, y);
 			});
+		} else if (this.hand === 'arrow') {
+			// console.log("Drawing arrow needle...")
+			const BOAT_FACT = 0.8;
+			let arrowPoints = [
+				{ x: 0, y: - radius * BOAT_FACT *  0.7 }, // Nose
+				// Starboard
+				{ x: radius * BOAT_FACT * 0.25, y: - radius * BOAT_FACT * 0.4 },
+				{ x: radius * BOAT_FACT * 0.1, y: - radius * BOAT_FACT * 0.4 },
+				{ x: radius * BOAT_FACT * 0.1, y:  radius * BOAT_FACT * 0.5 },
+				// Port
+				{ x: - radius * BOAT_FACT * 0.1, y: radius * BOAT_FACT * 0.5 },
+				{ x: - radius * BOAT_FACT * 0.1, y: - radius * BOAT_FACT * 0.4 },
+				{ x: - radius * BOAT_FACT * 0.25, y: - radius * BOAT_FACT * 0.4 },
+
+				{ x: 0, y: - radius * BOAT_FACT *  0.7 }
+			];			
+			let radAngle = Math.toRadians(dv); // + (Math.PI / 2);
+			// Apply rotation to the points of the needle
+			arrowPoints.forEach(pt => {
+				x = centerX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+				y = centerY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+				context.lineTo(x, y);
+			});
 		} 
 		// Right
 		if (this.hand === 'regular' || this.hand === 'wind') {
