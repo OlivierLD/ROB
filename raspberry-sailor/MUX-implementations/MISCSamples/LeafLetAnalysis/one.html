@@ -235,6 +235,10 @@ compass-rose .day {
     border: 1px solid silver;
     border-radius: 5px;
 }*/
+
+#top-div button {
+    margin-left: 10px;
+}
   </style>
 
   <script type="module" src="../webcomponents/AnalogDisplay.js"></script>
@@ -323,12 +327,21 @@ compass-rose .day {
 
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
-<div style="margin: 5px;">
-  <span id="curr-point" style="margin: 10px;"></span><span id="point-card" style="margin: 10px;"></span>
+<div id="top-div" style="margin: 5px; display: grid; grid-template-columns: auto 120px 120px 120px 120px;">
+  <div>
+    <span id="curr-point" style="margin: 10px;"></span> <span id="point-card" style="margin: 10px;"></span>
+    <br/>
+    <span id="point-origin" style="margin: 10px; font-size: 10px;"></span>    
+  </div> 
   <button id="start-path" onclick="pathIdx = INIT_PATH_IDX; /* 0; */ drive();">Replay</button>
   <button id="cancel-path" onclick="cancelDrive();" disabled>Cancel</button>
   <button id="stop-path" onclick="stopDriving();" disabled>Pause</button>
   <button id="resume-path" onclick="resumeDriving();" disabled>Resume</button>
+</div>
+<div id="div-slider">
+    <input type="range" id="data-slider" value="0" min="0" max="200" style="width: 90%;"
+           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
+    <output name="padding" id="sliderValue01" style="color: black;"></output>
 </div>
 
 <!-- Map, displays, and controls -->
@@ -647,7 +660,8 @@ compass-rose .day {
 
     let trackData = // './2010-07-10.tacking.back.in.nmea.json';
                     // './2012-06-10.china.camp-oyster.point.nmea.json';
-                    './2014-08-30.headless.labor.day.week.end.sail.only.nmea.json';
+                    // './2014-08-30.headless.labor.day.week.end.sail.only.nmea.json';
+                    './2012-08-12.OysterPoint.ChinaCamp.valid.nmea.json';
 
     let polyline = null;
 
@@ -664,6 +678,8 @@ compass-rose .day {
                     }
                     // Process it here if needed
                     document.getElementById('point-card').innerText = `${latlngs.length} data points.`;
+                    document.getElementById('data-slider').max = latlngs.length;
+                    document.getElementById('point-origin').innerText = `from ${trackData}.`;
                     polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
 
                     // zoom the map to the polyline
@@ -828,6 +844,8 @@ compass-rose .day {
 
                         document.getElementById('curr-pos').innerHTML = displayPos;
                         document.getElementById('curr-point').innerText = `${j} /`;
+                        document.getElementById('data-slider').value = j;
+                        document.getElementById('sliderValue01').value = j;
 
                         // 2 - Chart (centered on pos) and graphic
                         // map.setZoom(20);
@@ -895,6 +913,11 @@ compass-rose .day {
         drive();
         document.getElementById('stop-path').disabled = false;
         document.getElementById('resume-path').disabled = true;
+    }
+
+    function onSlider(event) {
+        // TODO Manage that one
+        console.log(`Slider: ${this.value}`);
     }
 
     let showAboutDialog = () => {
