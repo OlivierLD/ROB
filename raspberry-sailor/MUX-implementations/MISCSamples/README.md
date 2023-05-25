@@ -16,7 +16,7 @@ $ ./log.to.leaflet.sh --file-name:2010-07-10.tacking.back.in.nmea \
                       --max-leeway:12 \
                       --aws-coeff:1.0
 ```
-Explanation about the various parameters can be found in the code.
+Explanations about the various parameters can be found in the code.
 
 To define a track, LeafLet expects a JSON structure like
 ```javascript
@@ -37,7 +37,35 @@ let latlngs = [
 
 The cool thing is that you can add other members to the elements of those arrays.  
 And this is what `NMEAtoJSONPosPlus.java` is doing.  
-Look into `MISCSamples/LeafLetAnalysis/2010-07-10.tacking.back.in.nmea.json` for an example.
+Look into `MISCSamples/LeafLetAnalysis/2010-07-10.tacking.back.in.nmea.json` for an example, elements look like this:
+```json
+[
+  . . ., {
+    "lat": 37.49418333333333,
+    "lng": -122.48435,
+    "gridSquare": "CM87sl",
+    "sog": 2.9,
+    "cog": 315,
+    "rmcDate": "2014-08-30 22:12:40 UTC",
+    "hdt": 302.87324198654164,
+    "hdc": 297,
+    "cmg": 314.46435190201043,
+    "leeway": 11.59110991546882,
+    "decl": 15,
+    "dev": -9.126758013458364,
+    "bsp": 2.9,
+    "mwt": 16.5,
+    "awa": 345,
+    "aws": 10.4,
+    "twa": -24.598581351163375,
+    "tws": 7.930019063678373,
+    "twd": 278,
+    "csp": 0.4332719680859111,
+    "cdr": 346.02936851584127,
+    "perf": 0.9131067216014545
+  }, . . .
+]
+```
 
 To see the Web UI, start a NodeJS server, using `npm start` (from the `MISCSamples` directory),
 and reach <http://localhost:8080/LeafLetAnalysis/one.html> from a browser.
