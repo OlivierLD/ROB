@@ -48,4 +48,20 @@ The UI should be clear enough for you to deal with it!
 |:-----------------------------------|:-----------------------------------|
 | ![One](./docimages/leafLet.01.png) | ![Two](./docimages/leafLet.02.png) |
 
+Displays on the left screenshot are:
+- `SOG`
+- `COG`
+- Water Temperature
+- `BSP`
+- True Heading
+- `CMG`
+- Apparent Wind Speed and Angle
+- True Wind Speed and Angle
+- True Wind Direction
+- Current Speed
+- Current Direction
+- Performance
+
+The slider on top of the screen can be manually dragged.
+
 ---
