@@ -50,7 +50,7 @@ dialog[open] {
 	padding: 2em;
 	color: silver;
 	border: 2px solid silver;
-	border-radius: 5px;
+	border-radius: 10px;
 	width: 800px;
 	margin-left: 200px; 
 	margin-top: 10px; 
@@ -384,7 +384,7 @@ compass-rose .day {
     <br/>
     <span id="point-origin" style="margin: 10px; font-size: 10px;"></span>    
   </div> 
-  <button id="start-path" onclick="pathIdx = INIT_PATH_IDX; /* 0; */ drive();">Replay</button>
+  <button id="start-path" onclick="/*pathIdx = INIT_PATH_IDX;*/ /* 0; */ drive();">Replay</button>
   <button id="cancel-path" onclick="cancelDrive();" disabled>Cancel</button>
   <button id="stop-path" onclick="stopDriving();" disabled>Pause</button>
   <button id="resume-path" onclick="resumeDriving();" disabled>Resume</button>
@@ -678,6 +678,8 @@ compass-rose .day {
 
 <script type="text/javascript">
 
+    const VERBOSE = false;
+
     function setNeedleShape(id, radio) {
         // debugger;
         document.getElementById(id).hand = radio.value;
@@ -859,12 +861,14 @@ compass-rose .day {
 
     // Recurse in that one.
     function moveTo(j, justMove) {
-    if (j < latlngs.length && !cancelDriving) {
+    if (j < latlngs.length && (!cancelDriving || (justMove !== undefined && justMove === true) )) {
         let pos = latlngs[j];
         if (keepDriving || (justMove !== undefined && justMove === true)) {
             window.setTimeout(() => {
-                // 0 - Dump all values
-                console.log(`Read from data file: ${JSON.stringify(pos, null, 2)}`);
+                if (VERBOSE) {
+                    // 0 - Dump all values
+                    console.log(`Read from data file: ${JSON.stringify(pos, null, 2)}`);
+                }
                 // 1 - Data
                 let displayPos = `${decToSex(pos.lat, "NS")}<br/>${decToSex(pos.lng, "EW")}`;
                 if (pos.rmcDate) {
@@ -952,6 +956,9 @@ compass-rose .day {
         document.getElementById('cancel-path').disabled = true;
         document.getElementById('stop-path').disabled = true;
         document.getElementById('resume-path').disabled = true;
+
+        document.getElementById('data-slider').disabled = false;
+
         document.getElementById('curr-point').innerText = "";
         document.getElementById('curr-pos').innerHTML = "&nbsp;<br/>&nbsp;";
         cancelDriving = true;
@@ -975,8 +982,9 @@ compass-rose .day {
         document.getElementById('cancel-path').disabled = false;
         document.getElementById('stop-path').disabled = false;
         document.getElementById('resume-path').disabled = true;
-        // Recurse in that one.
-        
+
+        document.getElementById('data-slider').disabled = true;
+
         console.log(`Start replaying, at idx ${pathIdx}`);
         moveTo(pathIdx);
     }
@@ -990,12 +998,16 @@ compass-rose .day {
         document.getElementById('stop-path').disabled = true;
         document.getElementById('resume-path').disabled = true;
         document.getElementById('curr-point').innerText = "";
+
+        document.getElementById('data-slider').disabled = false;
     }
 
     function stopDriving() {         // Pause
         keepDriving = false; // !keepDriving;
         document.getElementById('stop-path').disabled = true;
         document.getElementById('resume-path').disabled = false;
+
+        document.getElementById('data-slider').disabled = false;
     }
 
     function resumeDriving() {
@@ -1003,11 +1015,13 @@ compass-rose .day {
         drive();
         document.getElementById('stop-path').disabled = false;
         document.getElementById('resume-path').disabled = true;
+
+        document.getElementById('data-slider').disabled = true;
     }
 
     function onSlider(event) {
-        // Manage that one
-        console.log(`Slider: ${this.value}`);
+        // Manage Slider change
+        // console.log(`Slider: ${this.value}`);
         pathIdx = parseInt(this.value);
         moveTo(pathIdx, true);
     }
