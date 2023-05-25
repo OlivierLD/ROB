@@ -277,6 +277,7 @@ class BoatOverview extends HTMLElement {
 			"with-w",       // Boolean. Draw D & d
 			"boat-shape",   // String. MONO, CATA, TRI, PLANE
 			"zoom-on-boat", // Float, enforce zoom in (>1) or out (<1). Default 1
+			"min-wind",     // Integer. Set to to avoid blinking when wind goes (for example) from 9.6 to 10.2 and back...
 			"wp-name"       // String. Next WayPoint name
 
 		];
@@ -316,6 +317,7 @@ class BoatOverview extends HTMLElement {
 		this._dev = 0;  // deviation
 
 		this._zoom = 1.0;
+		this._minWind = 0;
 
 		this._withCurrent = false;
 		this._withLabels = true;
@@ -421,6 +423,8 @@ class BoatOverview extends HTMLElement {
 			case "zoom-on-boat":
 				this._zoom = parseFloat(newVal);
 				break;
+			case "min-wind":
+				this._minWind = parseInt(newVal);
 
 			case "with-current":
 				this._withCurrent = (newVal === 'true');
@@ -673,6 +677,10 @@ class BoatOverview extends HTMLElement {
 
 	get zoomOnBoat() {
 		return this._zoom;
+	}
+
+	get minWind() {
+		return this._minWind;
 	}
 
 	get withGPS() {
@@ -1404,7 +1412,7 @@ class BoatOverview extends HTMLElement {
 		let currentStyle = this.className;
 		if (this._previousClassName !== currentStyle || true) {
 			// Reload
-			//	console.log("Reloading CSS");
+			// console.log("Reloading CSS");
 			try {
 				this.boatOverviewColorConfig = this.getColorConfig(currentStyle);
 			} catch (err) {
@@ -1442,6 +1450,8 @@ class BoatOverview extends HTMLElement {
 		if (this._withWind) {
 			maxSpeed = Math.max(maxSpeed, this._aws);
 		}
+		maxSpeed = Math.max(maxSpeed, this._minWind); // Last parameter
+
 		this.speedScale = 5 * (Math.ceil(maxSpeed / 5));
 
 		let cWidth  = this._width;
