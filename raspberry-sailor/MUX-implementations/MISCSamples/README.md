@@ -44,5 +44,8 @@ and reach <http://localhost:8080/LeafLetAnalysis/one.html> from a browser.
 
 The UI should be clear enough for you to deal with it!
 
----
+| Displays                           | Overview                           |
+|:-----------------------------------|:-----------------------------------|
+| ![One](./docimages/leafLet.01.png) | ![Two](./docimages/leafLet.02.png) |
 
+---
