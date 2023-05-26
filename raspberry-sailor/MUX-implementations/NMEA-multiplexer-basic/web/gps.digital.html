@@ -26,8 +26,16 @@
     statusFld.innerHTML = "";
   };
 
+  let manageMessage = (mess) => {
+      if (statusFld) {
+          statusFld.style.display = 'block';
+          statusFld.innerHTML = `<pre>${mess}</pre>`;
+      }
+  }
+
   window.onload = function() {
     statusFld  = document.getElementById('status');
+    manageMessage("Page Loaded");
   };
 
   var decToSex = function (val, ns_ew) {
@@ -109,6 +117,7 @@
     <script>
       let onMessage = (json) => {
     //    console.log(JSON.stringify(json, null, 2));
+          manageMessage(`Message received ${JSON.stringify(json, null, 2)}`);
           if (json["Altitude"]) {
               let altitude = json["Altitude"];
               document.getElementById('alt').innerText = altitude.toFixed(2);
