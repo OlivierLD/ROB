@@ -5,6 +5,7 @@ name: "Log GPS Data."
 description:
   - Reads GPS
   - Log data in a file (data.nmea)
+  - Forward on TCP:7001
 context:
   with.http.server: true
   http.port: 9999
@@ -25,4 +26,6 @@ forwarders:
     # filename.suffix=_LOG
     # log.dir=logged
     # split=hour
+  - type: tcp
+    port: 7001
 
