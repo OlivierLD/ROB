@@ -3,9 +3,10 @@
 /**
  * Uses ES6 Promises
  */
-function cacheClient(dataManager, bp) {
+function cacheClient(dataManager, bp, errorManager) {
 
 	let onMessage = dataManager; // Client function
+	let onError = errorManager;  // Client function
 	let betweenPing = 1000;
 	if (bp) {
 		betweenPing = bp;
@@ -79,9 +80,14 @@ function cacheClient(dataManager, bp) {
 					let mess = JSON.parse(errmess);
 					if (mess.message) {
 						message = mess.message;
+						if (onError) {
+						    onError(message);
+						} else {
+						    onError(mess);
+						}
 					}
 				} catch (err) {
-					//  console.log(errmess);
+					console.log(err);
 				}
 			}
 			console.log("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
