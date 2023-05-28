@@ -165,6 +165,7 @@ public class LogAnalyzer {
 			Map<String, Long> validDevices = new HashMap<>();
 
 			String dataFileName = args[0];
+			String csvName = "";;
 			if (dataFileName.endsWith(".zip")) {
 				if (args.length != 2) {
 					throw new IllegalArgumentException("Please provide the file path in archive as second parameter");
@@ -175,6 +176,7 @@ public class LogAnalyzer {
 				}
 				ZipFile zipFile = new ZipFile(dataFileName);
 				ZipEntry zipEntry = zipFile.getEntry(pathInArchive);
+				csvName = dataFileName + "_" + pathInArchive + ".csv";
 				if (zipEntry == null) { // Path not found in the zip, take first entry.
 					zipEntry = zipFile.entries().nextElement();
 				}
@@ -183,12 +185,13 @@ public class LogAnalyzer {
 				if (verbose) {
 					System.out.printf("Will analyze %s\n", dataFileName);
 				}
+				csvName = dataFileName + ".csv";
 				fis = new FileInputStream(dataFileName);
 			}
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
 			// TODO Option to check chronology and continuity
-			BufferedWriter bw = new BufferedWriter(new FileWriter("stat.csv"));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(csvName)); // "stat.csv"));
 
 			// Accumulators and others
 			GeoPos previousPos = null;
@@ -207,7 +210,7 @@ public class LogAnalyzer {
 			long previousDate = -1L;
 			long statLineNo = 0;
 
-			bw.write("Idx;time (epoch);deltaT;deltaDist (km);deltaT(2);cog;sog (kn);fmt-time-date;lat;long;fmt-lat;fmt-long\n");
+			bw.write("Idx;time (epoch);deltaT;deltaDist (km);deltaT(2);cog;sog (kn);fmt-utc-date-time;lat;long;fmt-lat;fmt-long\n");
 			statLineNo += 1;
 
 			long minLatIdx = -1,
@@ -492,7 +495,7 @@ public class LogAnalyzer {
 				}
 			}
 			System.out.println("+---------------------------------------+");
-			System.out.println("| Checkout the spreadsheet stat.csv.    |");
+			System.out.printf("| Checkout the spreadsheet %s.%s.\n", System.getProperty("user.dir"), csvName);
 			System.out.println("| Use ONLY ';' as separator !!!         |");
 			System.out.println("| Use Unicode (UTF-8) as character set. |");
 			System.out.println("+---------------------------------------+");

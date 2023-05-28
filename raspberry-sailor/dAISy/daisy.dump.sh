@@ -3,9 +3,11 @@
 # Read a dAISy HAT
 #
 CP=./build/libs/dAISy-1.0-all.jar
-CP=${CP}:/usr/share/java/RXTXcomm.jar
+# CP=${CP}:/usr/share/java/RXTXcomm.jar
+CP=${CP}:../../Serial-IO/libs/RXTXcomm.jar
 #
-SERIAL_PORT=/dev/ttyS0
+# SERIAL_PORT=/dev/ttyS0
+SERIAL_PORT=/dev/tty.usbserial-14210
 BAUD_RATE=38400
 VERBOSE=true  # Verbose => DualDump
 #

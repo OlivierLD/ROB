@@ -129,18 +129,22 @@ public class AISParserTest {
 //					"!AIVDM,2,2,6,B,p88888888888880,2*69"
 //			);
 
-            List<String> aisFromDaisy = Arrays.asList(
-                    "!AIVDM,1,1,,B,?03Ovk1GQ4ePD00,2*2B",
-                    "!AIVDM,1,1,,B,D03Ovk0s=N>4g<ffpfpNfp0,2*5D",
-                    "!AIVDM,1,1,,A,403Ovk1vBN>r`o>jO>EdjJ?028GR,0*7F",
-                    "!AIVDM,1,1,,B,403Ovk1vBN>r`o>jO>EdjJ?028GT,0*7A",
-                    "!AIVDM,1,1,,A,403Ovk1vBN>s0o>jO8EdjJ?025kd,0*3F",
-                    "!AIVDM,1,1,,B,403Ovk1vBN>s0o>jO8EdjJ?025kd,0*3C",
-                    "!AIVDM,1,1,,A,D03Ovk1T1N>5N8ffqMhNfp0,2*6A",
-                    "!AIVDM,1,1,,B,D03Ovk1b5N>5N4ffqMhNfp0,2*57",
-                    "!AIVDM,1,1,,A,403Ovk1vBN>sDo>jO0EdjJO025kd,0*33",
-                    "!AIVDM,1,1,,B,403Ovk1vBN?0Do>jNnEdjIg020S:,0*65"
-            );
+//            List<String> aisFromDaisy = Arrays.asList(
+//                    "!AIVDM,1,1,,B,?03Ovk1GQ4ePD00,2*2B",
+//                    "!AIVDM,1,1,,B,D03Ovk0s=N>4g<ffpfpNfp0,2*5D",
+//                    "!AIVDM,1,1,,A,403Ovk1vBN>r`o>jO>EdjJ?028GR,0*7F",
+//                    "!AIVDM,1,1,,B,403Ovk1vBN>r`o>jO>EdjJ?028GT,0*7A",
+//                    "!AIVDM,1,1,,A,403Ovk1vBN>s0o>jO8EdjJ?025kd,0*3F",
+//                    "!AIVDM,1,1,,B,403Ovk1vBN>s0o>jO8EdjJ?025kd,0*3C",
+//                    "!AIVDM,1,1,,A,D03Ovk1T1N>5N8ffqMhNfp0,2*6A",
+//                    "!AIVDM,1,1,,B,D03Ovk1b5N>5N4ffqMhNfp0,2*57",
+//                    "!AIVDM,1,1,,A,403Ovk1vBN>sDo>jO0EdjJO025kd,0*33",
+//                    "!AIVDM,1,1,,B,403Ovk1vBN?0Do>jNnEdjIg020S:,0*65"
+//            );
+
+            List<String> aisFromDaisy = Arrays.asList("!AIVDM,1,1,,A,B3ITigP00?wpsV73C@kQ3wlQnDur,0*60",
+                                                      "!AIVDM,1,1,,B,B3IHCdP00gwpnn73C44OWwf5oP06,0*00",
+                                                      "!AIVDM,1,1,,B,B3ITigP00?wpsU73C?oQ3wlQnDwb,0*09");
 
             aisFromDaisy.forEach(aisStr -> {
                 try {

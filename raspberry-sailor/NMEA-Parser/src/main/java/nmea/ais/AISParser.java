@@ -1722,7 +1722,11 @@ public class AISParser {
 		}
 
 		public int getOffset2() {
-			return (int)recordContent.get(OFFSET_2);
+			try {
+				return (int)recordContent.get(OFFSET_2);
+			} catch (Exception ex) {
+				return 0;
+			}
 		}
 
 		public void setOffset2(int offset2) {
@@ -2659,6 +2663,59 @@ public class AISParser {
 
 		public long getRecordTimeStamp() {
 			return recordTimeStamp;
+		}
+
+		public String getNavStatusDesc() {
+			return navStatusDesc;
+		}
+
+		public String getAidTypeDesc() {
+			return aidTypeDesc;
+		}
+
+		public String getVesselNameStr() {
+			return vesselNameStr;
+		}
+
+		public String getNameStr() {
+			return nameStr;
+		}
+
+		public String getShipTypeStr() {
+			return shipTypeStr;
+		}
+
+		public void setMessageDescription(String messageDescription) {
+			this.messageDescription = messageDescription;
+		}
+
+		public void setNavStatusDesc(String navStatusDesc) {
+			this.navStatusDesc = navStatusDesc;
+		}
+
+		public void setAidTypeDesc(String aidTypeDesc) {
+			this.aidTypeDesc = aidTypeDesc;
+		}
+
+		public void setVesselNameStr(String vesselNameStr) {
+			this.vesselNameStr = vesselNameStr;
+		}
+
+		public void setNameStr(String nameStr) {
+			this.nameStr = nameStr;
+		}
+
+		public void setShipTypeStr(String shipTypeStr) {
+			this.shipTypeStr = shipTypeStr;
+		}
+
+		// For Jackson
+		public Map<String, Object> getRecordContent() {
+			return recordContent;
+		}
+
+		public void setRecordContent(Map<String, Object> recordContent) {
+			this.recordContent = recordContent;
 		}
 	}
 }

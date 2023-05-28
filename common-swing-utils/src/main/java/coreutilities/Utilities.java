@@ -94,8 +94,9 @@ public class Utilities {
                 }
             }
             in.close();
-        } else
+        } else {
             macAddress = "Unknown";
+        }
         return macAddress;
     }
 

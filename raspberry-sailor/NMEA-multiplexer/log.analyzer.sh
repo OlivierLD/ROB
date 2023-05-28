@@ -2,7 +2,7 @@
 #
 # With a Swing UI for the positions.
 #
-CP=./build/libs/NMEA-multiplexer-1.0-all.jar
+CP=$(dirname $0)/build/libs/NMEA-multiplexer-1.0-all.jar
 JAVA_OPTIONS=
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dspeed.unit=KN"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=false"

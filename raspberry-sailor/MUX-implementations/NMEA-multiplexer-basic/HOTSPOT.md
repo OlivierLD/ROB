@@ -39,7 +39,7 @@ Define the hotspot network name and passphrase in `/etc/hostapd/hostapd.conf` (s
 # country_code=FR
 interface=wlan0
 driver=nl80211
-ssid=NMEANetwork   # <- This is the network name, choose your own.
+ssid=NMEANetwork   # <- This is the network name, choose your own. And remove this comment !!
 hw_mode=g
 channel=6
 wmm_enabled=0

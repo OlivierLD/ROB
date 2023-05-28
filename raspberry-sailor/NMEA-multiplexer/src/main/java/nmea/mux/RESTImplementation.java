@@ -37,6 +37,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -97,6 +99,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/terminate",
 					this::stopAll,
 					"Hard stop, shutdown. VERY unusual REST resource..."),
+			new Operation(
+					"POST",
+					REST_PREFIX + "/system-date",
+					this::setSystemDate,
+					"Set the System Date. VERY unusual REST resource..."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/serial-ports",
@@ -2301,7 +2308,7 @@ public class RESTImplementation {
 
 //	String findCommand = String.format("find %s -name '*.nmea'", System.getProperty("user.dir", "."));
 		// find . -name '*.nmea' -print0 | xargs -0 ls -lisah | awk '{ print $7, $8, $9, $10, $11 }'
-		String findCommand = "find . -name '*.nmea' | xargs wc -l";
+		String findCommand = "find . -name '*.nmea' | sort | xargs wc -l";  // Sorted !!
 		try {
 			Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", findCommand});
 			int exitStatus = process.waitFor();
@@ -2489,6 +2496,70 @@ public class RESTImplementation {
 		return response;
 	}
 
+	/*
+	 * On Linux/bash, no password for sudo.
+	 * curl -X POST http://192.168.50.10:9999/mux/system-date -d '28 MAY 2023 12:19:00'.
+	 */
+	private HTTPServer.Response setSystemDate(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+
+		String payload = new String(request.getContent());
+		if (!"null".equals(payload) && payload != null && payload.trim().length() != 0) {
+			try {
+				String newDate = payload; // Like "19 APR 2012 11:14:00"
+				String command = String.format("sudo date -s '%s'", newDate);
+				System.out.printf("Executing command [%s]\n", command);
+
+				Process process = Runtime.getRuntime().exec(command);
+				int exitCode = process.waitFor();
+				System.out.printf("Exit code: %d\n", exitCode);
+				String returned = "";
+				BufferedReader in = null;
+				if (exitCode == 0) {
+					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				} else {
+					in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				}
+				while (true) {
+					String line = in.readLine();
+					System.out.println(line);
+					if (line == null) {
+						break;
+					} else {
+						returned += (line + "\n");
+					}
+				}
+				in.close();
+				if (exitCode == 0) {
+					RESTProcessorUtil.generateResponseHeaders(response, returned.length());
+					response.setPayload(returned.getBytes());
+				} else {
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MUX-2003")
+									.errorMessage(returned));
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("MUX-2001")
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MUX-2002")
+							.errorMessage("Request payload not found. Need one like '19 APR 2012 11:14:00'."));
+			return response;
+		}
+
+		return response;
+	}
 	/**
 	 * This one is a very unusual REST resource; it kills its own server.
 	 * And it is a recursive one, it itself invokes another REST resource.

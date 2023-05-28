@@ -2,17 +2,19 @@
 #
 # Read a Serial device
 #
-# CP=./build/libs/Serial-IO-1.0-all.jar
+CP=./build/libs/Serial-IO-1.0-all.jar
+# CP=./build/libs/Serial-IO-1.0.jar
 # CP=${CP}:/usr/share/java/RXTXcomm.jar
+CP=${CP}:./libs/RXTXcomm.jar
 # Should work too:
-CP=$(find . -name '*-all.jar')
+# CP=$(find . -name '*-all.jar')
 echo -e "Make sure the device is connected (through UART or its USB socket)."
 #
 # SERIAL_PORT=/dev/ttyUSB0 # RPi
-SERIAL_PORT=/dev/ttyS80 # RPi
+# SERIAL_PORT=/dev/ttyS80 # RPi
 # SERIAL_PORT=/dev/tty.Bluetooth-Incoming-Port # Mac
 # SERIAL_PORT=/dev/tty.usbserial # Mac
-# SERIAL_PORT=/dev/tty.usbmodem14101
+SERIAL_PORT=/dev/tty.usbserial-14210
 # BAUD_RATE=4800
 BAUD_RATE=38400
 VERBOSE=true  # Verbose => DualDump
