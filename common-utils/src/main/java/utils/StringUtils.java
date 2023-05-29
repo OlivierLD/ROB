@@ -45,6 +45,7 @@ public class StringUtils {
 	/**
 	 * Workaround: in some cases (NMEA String from a zip?), some NULs sneak in the strings...
 	 * Streaming Bytes is not really done with Java8 Streams...
+	 * Could be improved with Java11
 	 */
 	public static String removeNullsFromString(String str) {
 		List<Byte> strBytes = new ArrayList<>();

@@ -12,15 +12,18 @@ channels:
   # 37.8218 / -122.3112 should trigger a collision warning
   #
   # AIS Data
+#  - type: file
+#    filename: ./sample-data/logged.data.archive.zip
+#    zip: true
+#    path.in.zip: ais.nmea
+#    verbose: false
   - type: file
-    filename: ./sample-data/logged.data.archive.zip
-    zip: true
-    path.in.zip: ais.nmea
+    filename: ./logged/dives_2023_05_28.nmea
     verbose: false
 forwarders:
-#  - type: file
-#    filename: sample-data/data.nmea
-#    flush: true
+  - type: file
+    filename: sample-data/clean.dives.nmea
+    flush: true
   - type: tcp
     port: 7002
     verbose: false

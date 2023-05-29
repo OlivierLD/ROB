@@ -6,9 +6,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class DumpUtilTest_02 {
+    /*
+     * Dump a GRIB file (binary)
+     */
     public static void main(String... args) {
 
-        String fileToDump = "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/samples/_cache_weather-cache_EastAtlantic.wind.7days.grb";
+
+        String fileToDump = String.format("%s/repos/ROB/raspberry-sailor/RESTRouting/GRIB_2009_02_25_Sample.grb",
+                System.getProperty("user.home"));
 
         try (FileInputStream fis = new FileInputStream(fileToDump)) {
             int chunkLen = 64;
@@ -18,7 +23,6 @@ public class DumpUtilTest_02 {
             while (keepReading) {
                 int read = fis.read(chunk);
                 if (read > 0) {
-
                     String[] dd = DumpUtil.dualDump(chunk);
                     System.out.printf("Offset: %d\n", offset);
                     for (String l : dd) {
@@ -27,7 +31,6 @@ public class DumpUtilTest_02 {
                     offset += chunkLen;
                     // reset chunk
                     Arrays.fill(chunk, (byte)0);
-
                 } else {
                     keepReading = false;
                 }

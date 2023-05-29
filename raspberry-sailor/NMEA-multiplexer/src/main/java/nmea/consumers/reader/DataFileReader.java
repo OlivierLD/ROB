@@ -16,6 +16,7 @@ import java.util.zip.ZipFile;
  * Taking its inputs from a file
  */
 public class DataFileReader extends NMEAReader {
+	private final boolean REMOVE_ALL_NULLS = "true".equals(System.getProperty("remove.all.nulls", "true")); // True by default.
 	private String dataFileName = null;
 	private InputStream fis;
 	private long betweenRecords = 500L; // in ms
@@ -98,8 +99,10 @@ public class DataFileReader extends NMEAReader {
 					int l = fis.read(ba);
 //      System.out.println("Read " + l);
 					if (l != -1 && dim > 0) { // dim should be always greater than 0
+
 						String nmeaContent = new String(ba);
-						if (this.getZip()) { // Workaround. From a zip, some NULs have been seen sneaking in the string...
+						// TODO See if that would fit the nulls sneaking in from the stty /dev/ttyUSB* 38400...
+						if (REMOVE_ALL_NULLS || this.getZip()) { // Workaround... From a zip, some NULs have been seen sneaking in the string...
 							nmeaContent = StringUtils.removeNullsFromString(nmeaContent);
 						}
 						if (verbose) {

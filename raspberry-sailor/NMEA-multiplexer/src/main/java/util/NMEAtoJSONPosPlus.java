@@ -62,10 +62,10 @@ import java.util.zip.ZipFile;
  * --current-buffer-length: Buffer Length (in ms) for current computation
  * Example:
  *   --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea, 2012-06-10.china.camp-oyster.point.nmea
- *   --archive-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip
- *   --output-file-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/MISCSamples/LeafLetAnalysis/2010-07-10.tacking.back.in.nmea.json
- *   --dev-curve:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv
- *   --polar-file:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff
+ *   --archive-name:~/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip
+ *   --output-file-name:~/repos/ROB/raspberry-sailor/MUX-implementations/MISCSamples/LeafLetAnalysis/2010-07-10.tacking.back.in.nmea.json
+ *   --dev-curve:~/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv
+ *   --polar-file:~/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff
  *   --current-buffer-length:600000
  */
 public class NMEAtoJSONPosPlus {

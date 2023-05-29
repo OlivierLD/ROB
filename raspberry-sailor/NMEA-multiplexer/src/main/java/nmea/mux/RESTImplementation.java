@@ -2510,10 +2510,10 @@ public class RESTImplementation {
 				String command = String.format("sudo date -s '%s'", newDate);
 				System.out.printf("Executing command [%s]\n", command);
 
-				Process process = Runtime.getRuntime().exec(command);
+				Process process = Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", command }); // Note the '/bin/bash -c' !!
 				int exitCode = process.waitFor();
 				System.out.printf("Exit code: %d\n", exitCode);
-				String returned = "";
+				List<String> returned = new ArrayList<>();
 				BufferedReader in = null;
 				if (exitCode == 0) {
 					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -2526,19 +2526,22 @@ public class RESTImplementation {
 					if (line == null) {
 						break;
 					} else {
-						returned += (line + "\n");
+						returned.add(line);
 					}
 				}
-				in.close();
+				if (in != null) {
+					in.close();
+				}
+				String responsePayload = returned.stream().collect(Collectors.joining("\n"));
 				if (exitCode == 0) {
-					RESTProcessorUtil.generateResponseHeaders(response, returned.length());
-					response.setPayload(returned.getBytes());
+					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
+					response.setPayload(responsePayload.getBytes());
 				} else {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
 									.errorCode("MUX-2003")
-									.errorMessage(returned));
+									.errorMessage(responsePayload));
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
