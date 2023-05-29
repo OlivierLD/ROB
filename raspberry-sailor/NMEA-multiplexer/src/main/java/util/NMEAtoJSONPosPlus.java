@@ -641,6 +641,7 @@ public class NMEAtoJSONPosPlus {
 		final double avgCsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
 		final double avgPerf = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
 
+		// StdDev = sqrt(variance). TODO Explain variance
 		double stdDevBsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgBsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevSog = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgSog - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevCsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgCsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
