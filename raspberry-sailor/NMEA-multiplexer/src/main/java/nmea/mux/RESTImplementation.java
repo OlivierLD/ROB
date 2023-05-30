@@ -23,6 +23,7 @@ import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
 import nmea.parser.*;
+import utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -2513,6 +2514,10 @@ public class RESTImplementation {
 		if (!"null".equals(payload) && payload != null && payload.trim().length() != 0) {
 			try {
 				String newDate = payload; // Like "19 APR 2012 11:14:00"
+				// Trim quotes
+				if (newDate.startsWith("\"") || newDate.endsWith("\"")) {
+					newDate = StringUtils.trimDoubleQuotes(newDate);
+				}
 				String command = String.format("sudo date -s '%s'", newDate);
 				System.out.printf("Executing command [%s]\n", command);
 

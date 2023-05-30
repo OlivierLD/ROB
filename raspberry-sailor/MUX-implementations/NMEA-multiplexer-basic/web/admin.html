@@ -808,6 +808,7 @@
             let mins = document.getElementById('system-mins').value;
             let secs = document.getElementById('system-secs').value;
             let newFmtDate = `${lpad(day, '0', 2)} ${month} ${lpad(year, '0', 4)} ${lpad(hours, '0', 2)}:${lpad(mins, '0', 2)}:${lpad(secs, '0', 2)}`;
+            console.log(`Setting new System Date [${newFmtDate}]`);
             let promise = updateSystemDate(newFmtDate);
             promise.then(retVal => {
                 console.log(`SystemDate - success ${retVal}`);

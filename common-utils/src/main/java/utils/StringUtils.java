@@ -75,4 +75,20 @@ public class StringUtils {
 		return cleanString;
 	}
 
+	private static String trimSpecific(String original, String toTrim) {
+		String trimmed = original.trim();
+		while (trimmed.startsWith(toTrim) && trimmed.length() > 0) {
+			trimmed = trimmed.substring(1);
+		}
+		while (trimmed.endsWith(toTrim) && trimmed.length() > 0) {
+			trimmed = trimmed.substring(0, trimmed.length() - 1);
+		}
+		return trimmed;
+	}
+	public static String trimDoubleQuotes(String original) {
+		return trimSpecific(original, "\"");
+	}
+	public static String trimSimpleQuotes(String original) {
+		return trimSpecific(original, "'");
+	}
 }
