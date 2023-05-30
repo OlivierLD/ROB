@@ -53,6 +53,32 @@ import java.util.stream.Collectors;
  */
 public class RESTImplementation {
 
+	enum MESSAGE_INDEXES {
+		MUX_0001("MUX-0001", "Serial Ports"),
+		MUX_0002("MUX-0002", "Channels"),
+		MUX_0003("MUX-0003", "Current Time"),
+		MUX_0004("MUX-0004", "Cache"),
+		MUX_0005("MUX-0005", "Log Files"),
+		MUX_0006("MUX-0006", "System Date"),
+		MUX_0007("MUX-0007", "Delete Log File"),
+		MUX_0008("MUX-0008", "Set System Date"),
+		MUX_0009("MUX-0009", "Get System Date"),
+		MUX_0010("MUX-0010", "Set Position"),
+		MUX_0011("MUX-0011", "Over Ground"),
+		MUX_0012("MUX-0012", "NMEA Sentence");
+
+		private final String label, description;
+		MESSAGE_INDEXES(String label, String description) {
+			this.label = label;
+			this.description = description;
+		}
+		public String label() {
+			return this.label;
+		}
+		public String description() {
+			return this.description;
+		}
+	}
 	private final static ObjectMapper mapper = new ObjectMapper();
 
 	private final List<NMEAClient> nmeaDataClients;
@@ -345,7 +371,7 @@ public class RESTImplementation {
 			}
 		} catch (Error error) {
 			response = HTTPServer.buildErrorResponse(response, Response.BAD_REQUEST, new HTTPServer.ErrorPayload()
-					.errorCode("MUX-0001")
+					.errorCode(MESSAGE_INDEXES.MUX_0001.label())
 					.errorMessage(error.toString()));
 		}
 		return response;
@@ -368,7 +394,7 @@ public class RESTImplementation {
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response = HTTPServer.buildErrorResponse(response, Response.BAD_REQUEST, new HTTPServer.ErrorPayload()
-					.errorCode("MUX-0001")
+					.errorCode(MESSAGE_INDEXES.MUX_0002.label())
 					.errorMessage(jpe.toString()));
 		}
 		return response;
@@ -2337,7 +2363,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-2003")
+							.errorCode(MESSAGE_INDEXES.MUX_0005.label())
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -2369,7 +2395,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-3003")
+							.errorCode(MESSAGE_INDEXES.MUX_0006.label())
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -2458,7 +2484,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MUX-2004")
+								.errorCode(MESSAGE_INDEXES.MUX_0007.label())
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -2551,7 +2577,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MUX-2003")
+									.errorCode(MESSAGE_INDEXES.MUX_0008.label())
 									.errorMessage(responsePayload));
 				}
 			} catch (Exception ex) {
@@ -2559,7 +2585,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MUX-2001")
+								.errorCode(MESSAGE_INDEXES.MUX_0008.label())
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -2567,7 +2593,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-2002")
+							.errorCode(MESSAGE_INDEXES.MUX_0008.label())
 							.errorMessage("Request payload not found. Need one like '19 APR 2012 11:14:00'."));
 			return response;
 		}
@@ -2609,7 +2635,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-5001")
+							.errorCode(MESSAGE_INDEXES.MUX_0009.label())
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -2927,7 +2953,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MUX-1003")
+								.errorCode(MESSAGE_INDEXES.MUX_0010.label())
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -2935,7 +2961,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-1002")
+							.errorCode(MESSAGE_INDEXES.MUX_0010.label())
 							.errorMessage("Request payload not found"));
 			return response;
 		}
@@ -3013,7 +3039,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MUX-1013")
+								.errorCode(MESSAGE_INDEXES.MUX_0011.label())
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -3021,7 +3047,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-1012")
+							.errorCode(MESSAGE_INDEXES.MUX_0011.label())
 							.errorMessage("Request payload not found"));
 			return response;
 		}
@@ -3191,7 +3217,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MUX-1005")
+										.errorCode(MESSAGE_INDEXES.MUX_0012.label())
 										.errorMessage(String.format("Unexpected Content-Type [%s]. Should be text/plain", contentType)));
 						return response;
 					}
@@ -3209,7 +3235,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MUX-0005")
+										.errorCode(MESSAGE_INDEXES.MUX_0012.label())
 										.errorMessage("Cache not initialized!"));
 					} else {
 						if (this.mux != null) {
@@ -3231,7 +3257,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MUX-1000")
+									.errorCode(MESSAGE_INDEXES.MUX_0012.label())
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -3239,7 +3265,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MUX-1001")
+								.errorCode(MESSAGE_INDEXES.MUX_0012.label())
 								.errorMessage("Required body payload not found."));
 			}
 		}
@@ -3260,7 +3286,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MUX-0004")
+									.errorCode(MESSAGE_INDEXES.MUX_0003.label())
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -3273,7 +3299,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MUX-0005")
+							.errorCode(MESSAGE_INDEXES.MUX_0004.label())
 							.errorMessage("Cache not initialized!"));
 		} else {
 //			System.out.printf("Setting GPS Time in setCurrentTime: %s%n", epoch.toString());
