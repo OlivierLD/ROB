@@ -8,6 +8,14 @@ let storedElapsed = "";
 
 const DEBUG = false;
 
+let lpad = (s, w, len) => {
+    let str = s;
+    while (str.length < len) {
+        str = w + str;
+    }
+    return str;
+};
+
 /* Uses ES6 Promises */
 let getPromise = (
     url,                          // full api path
@@ -66,7 +74,7 @@ let getPromise = (
     });
 };
 
-var DEFAULT_TIMEOUT = 10000;
+const DEFAULT_TIMEOUT = 10000;
 
 let protocolTestFunc = () => {
     let url = document.location.origin.replace('http', 'mux') + '/this-is-a-test';
@@ -75,6 +83,14 @@ let protocolTestFunc = () => {
 
 let terminate = () => {
     return getPromise('/mux/terminate', DEFAULT_TIMEOUT, 'POST', 200, null, false);
+};
+
+let systemDate = () => {
+    return getPromise('/mux/system-date', DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
+let updateSystemDate = (newFmtDate) => {
+    return getPromise('/mux/system-date', DEFAULT_TIMEOUT, 'POST', 201, newFmtDate, false);
 };
 
 let enableLogging = (b) => {
@@ -192,7 +208,7 @@ let deleteChannel = (channel) => {
 };
 
 let setSpeedUnit = (speedUnit) => {
-    return getPromise('/mux/events/change-speed-unit', DEFAULT_TIMEOUT, 'POST', 200, {"speed-unit": speedUnit}, false);
+    return getPromise('/mux/events/change-speed-unit', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret >= 200 || ret < 300); }, {"speed-unit": speedUnit}, false);
 };
 
 let pushData = (flow) => {
@@ -424,12 +440,12 @@ let channelList = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>Name: " + json[i].file + 
-                    "<br>Archive ?: " + json[i].zip  + 
-                    "<br>Path in archive: " + json[i].pathInArchive  + 
-                    "<br>Between reads: " + json[i].pause + " ms" + 
-                    "<br>Loop: " + json[i].loop + 
-                    "</td><td valign='top'>" + buildList(json[i].deviceFilters) + 
+                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>Name: " + json[i].file +
+                    "<br>Archive ?: " + json[i].zip  +
+                    "<br>Path in archive: " + json[i].pathInArchive  +
+                    "<br>Between reads: " + json[i].pause + " ms" +
+                    "<br>Loop: " + json[i].loop +
+                    "</td><td valign='top'>" + buildList(json[i].deviceFilters) +
                     "</td><td valign='top'>" + buildList(json[i].sentenceFilters) +
                     "</td><td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td valign='top'><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
@@ -471,7 +487,7 @@ let channelList = () => {
                     html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" +
                              "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                              "Frequency: " + json[i].frequency + "ms <br/>" +
                              (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -653,11 +669,11 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file + 
-                        "<br>Archive ?: " + json[i].zip  + 
-                        "<br>Path in archive: " + json[i].pathInArchive  + 
-                        "<br>Between reads: " + json[i].pause + " ms" + 
-                        "<br>Loop: " + json[i].loop + 
+                    html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file +
+                        "<br>Archive ?: " + json[i].zip  +
+                        "<br>Path in archive: " + json[i].pathInArchive  +
+                        "<br>Between reads: " + json[i].pause + " ms" +
+                        "<br>Loop: " + json[i].loop +
                         "</td><td valign='top'>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td><td valign='top'>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td></tr>");
@@ -719,11 +735,11 @@ let generateDiagram = () => {
                         "</td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" + 
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" +
                             "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                             "Frequency: " + json[i].frequency + "ms <br/>" +
-                            (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + 
-                            "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') + 
+                            (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+                            "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                             "</td><td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') + "</td></tr>");
                     break;
                 default:
