@@ -8,6 +8,14 @@ let storedElapsed = "";
 
 const DEBUG = false;
 
+let lpad = (s, w, len) => {
+    let str = s;
+    while (str.length < len) {
+        str = w + str;
+    }
+    return str;
+};
+
 /* Uses ES6 Promises */
 let getPromise = (
     url,                          // full api path
@@ -75,6 +83,14 @@ let protocolTestFunc = () => {
 
 let terminate = () => {
     return getPromise('/mux/terminate', DEFAULT_TIMEOUT, 'POST', 200, null, false);
+};
+
+let systemDate = () => {
+    return getPromise('/mux/system-date', DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
+let updateSystemDate = (newFmtDate) => {
+    return getPromise('/mux/system-date', DEFAULT_TIMEOUT, 'POST', 201, newFmtDate, false);
 };
 
 let enableLogging = (b) => {

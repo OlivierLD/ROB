@@ -61,6 +61,7 @@ public class RESTImplementation {
 
 	private final static String REST_PREFIX = "/mux";
 	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	private final static SimpleDateFormat SYSDATE_FMT = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
 	public RESTImplementation(List<NMEAClient> nmeaDataClients,
 	                          List<Forwarder> nmeaDataForwarders,
@@ -99,6 +100,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/terminate",
 					this::stopAll,
 					"Hard stop, shutdown. VERY unusual REST resource..."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/system-date",
+					this::getSystemDate,
+					"Get the System Date, in JSON format."),
 			new Operation(
 					"POST",
 					REST_PREFIX + "/system-date",
@@ -2561,6 +2567,47 @@ public class RESTImplementation {
 			return response;
 		}
 
+		return response;
+	}
+
+	/*
+	 * Almost like getSystemTime, but not quite.
+	 */
+	private HTTPServer.Response getSystemDate(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+
+		String content = "";
+		try {
+			String formattedSysDate = SYSDATE_FMT.format(new Date());
+			/*
+			 *      30 MAY 2023 07:56:31
+			 *      |  |   |    |  |  |
+			 *      |  |   |    |  |  18
+			 *      |  |   |    |  15
+			 *      |  |   |    12
+			 *      |  |   7
+			 *      |  3
+			 *      0
+			 */
+			Map<String, Object> dateHolder = new HashMap<>();
+			dateHolder.put("day", Integer.parseInt(formattedSysDate.substring(0, 2)));
+			dateHolder.put("month", formattedSysDate.substring(3, 6).toUpperCase());
+			dateHolder.put("year", Integer.parseInt(formattedSysDate.substring(7, 11)));
+			dateHolder.put("hours", Integer.parseInt(formattedSysDate.substring(12, 14)));
+			dateHolder.put("mins", Integer.parseInt(formattedSysDate.substring(15, 17)));
+			dateHolder.put("secs", Integer.parseInt(formattedSysDate.substring(18)));
+			content = mapper.writeValueAsString(dateHolder);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.length());
+			response.setPayload(content.getBytes());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MUX-5001")
+							.errorMessage(ex.toString()));
+			return response;
+		}
 		return response;
 	}
 	/**

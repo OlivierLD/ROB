@@ -775,7 +775,55 @@
             console.log('Canceled');
           }
         }
-    </script>
+
+        function getSystemDate() {
+            let promise = systemDate();
+            promise.then((value) => {
+                console.log(value);
+                let sysDate = JSON.parse(value)
+                document.getElementById('system-day').value = sysDate.day;
+                document.getElementById('system-month').value = sysDate.month;
+                document.getElementById('system-year').value = sysDate.year;
+                document.getElementById('system-hours').value = sysDate.hours;
+                document.getElementById('system-mins').value = sysDate.mins;
+                document.getElementById('system-secs').value = sysDate.secs;
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to get System Date..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function setSystemDate() {
+            let day = document.getElementById('system-day').value;
+            let month = document.getElementById('system-month').value;
+            let year = document.getElementById('system-year').value;
+            let hours = document.getElementById('system-hours').value;
+            let mins = document.getElementById('system-mins').value;
+            let secs = document.getElementById('system-secs').value;
+            let newFmtDate = `${lpad(day, '0', 2)} ${month} ${lpad(year, '0', 4)} ${lpad(hours, '0', 2)}:${lpad(mins, '0', 2)}:${lpad(secs, '0', 2)}`;
+            let promise = updateSystemDate(newFmtDate);
+            promise.then(retVal => {
+                console.log(`SystemDate - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to set System Date..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+</script>
 </head>
 <body>
 <table width="100%">
@@ -809,8 +857,34 @@
         </td>
     </tr>
     <tr>
+        <td colspan="1" align="left">
+            System Date:
+            <input type="number" id="system-day" min="1" max="31" step="1" placeholder="Day" value="1">
+            <select id="system-month">
+                <option value="JAN" selected>JAN</option>
+                <option value="FEB">FEB</option>
+                <option value="MAR">MAR</option>
+                <option value="APR">APR</option>
+                <option value="MAY">MAY</option>
+                <option value="JUN">JUN</option>
+                <option value="JUL">JUL</option>
+                <option value="AUG">AUG</option>
+                <option value="SEP">SEP</option>
+                <option value="OCT">OCT</option>
+                <option value="NOV">NOV</option>
+                <option value="DEC">DEC</option>
+            </select>
+            <input type="number" id="system-year" min="1970" max="3000" step="1" placeholder="Year" value="1970">
+            <input type="number" id="system-hours" min="0" max="59" step="1" placeholder="Hour" value="0">
+            <input type="number" id="system-mins" min="0" max="59" step="1" placeholder="Min" value="0">
+            <input type="number" id="system-secs" min="0" max="59" step="1" placeholder="Sec" value="0">
+            &nbsp;&nbsp;
+            <button onclick="getSystemDate();">Get</button>
+            &nbsp;
+            <button onclick="setSystemDate();" title="Carefull !!&#13;Requires sudo - and password.">Set</button>
+        </td>
         <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownMux();">Terminate <img src="images/bomb.png" width="30"></button></td>
-        <td colspan="3" align="right"><input type="checkbox" id="show-inbound-data" onchange="showInboundData(this);">Show Inbound Data</td>
+        <td colspan="2" align="right"><input type="checkbox" id="show-inbound-data" onchange="showInboundData(this);">Show Inbound Data</td>
     </tr>
     <tr>
         <td colspan="4" align="left">
