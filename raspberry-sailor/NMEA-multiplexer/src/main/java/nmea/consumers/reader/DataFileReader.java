@@ -97,9 +97,8 @@ public class DataFileReader extends NMEAReader {
 				byte[] ba = new byte[dim];
 				try {
 					int l = fis.read(ba);
-//      System.out.println("Read " + l);
+					// System.out.println("Read " + l);
 					if (l != -1 && dim > 0) { // dim should be always greater than 0
-
 						String nmeaContent = new String(ba);
 						// TODO See if that would fit the nulls sneaking in from the stty /dev/ttyUSB* 38400...
 						if (REMOVE_ALL_NULLS || this.getZip()) { // Workaround... From a zip, some NULs have been seen sneaking in the string...

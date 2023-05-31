@@ -2,6 +2,7 @@
 #
 # Read a Serial device
 #
+cd $(dirname $0)
 CP=./build/libs/Serial-IO-1.0-all.jar
 # CP=./build/libs/Serial-IO-1.0.jar
 # CP=${CP}:/usr/share/java/RXTXcomm.jar
