@@ -231,6 +231,7 @@ public class NMEADataCache
 		if ("true".equals(System.getProperty("put.ais.in.cache", "true"))) {
 			// Start AIS Cleaner thread
 			aisCleaner = new Thread(() -> {
+				System.out.println("Starting thread AIS Cleaner.");
 				while (true) {
 					// Cleanup?
 					try {
@@ -450,7 +451,7 @@ public class NMEADataCache
 						}
 						synchronized (this) {
 							synchronized (aisMap) {
-								this.put(AIS, aisMap);
+								this.put(NMEADataCache.AIS, aisMap);
 							}
 						}
 					} catch (AISParser.AISException aisExc) {

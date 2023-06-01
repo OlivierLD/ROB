@@ -292,6 +292,15 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "dew");
 		}
 
+		try {
+			let ais = json.ais;
+			if (ais) {
+				events.publish('ais', log);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
+		}
+
 		if (errMess !== undefined && forwardAjaxErrors) {
 			displayErr(errMess);
 		}

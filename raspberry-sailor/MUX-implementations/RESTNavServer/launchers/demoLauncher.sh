@@ -602,7 +602,8 @@ while [[ "${GO}" == "true" ]]; do
 	  "13")
   	  # PROP_FILE=mux-configs/nmea.mux.ais.test.yaml
   	  # PROP_FILE=mux-configs/nmea.mux.ais.test.2.yaml
-  	  	PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.ais.test.3.yaml
+  	  #	PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then

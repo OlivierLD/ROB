@@ -405,6 +405,15 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "VMG");
 		}
 
+		try {
+			let ais = json.ais;
+			if (ais) {
+				events.publish('ais', ais);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
+		}
+
 		if (errMess !== undefined) {
 			// console.log(errMess); // Absorb
 		}

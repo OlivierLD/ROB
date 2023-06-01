@@ -71,6 +71,8 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dprocess.on.start=${PROCESS_ON_START}"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dmux.properties=${MUX_PROP_FILE}"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dno.ais=false" # Accept AIS Strings
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dcalculate.solar.with.eot=true"
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dais.cache.verbose=true"
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dput.ais.in.cache=true"
 #
 # To test the AISManager
 JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=37.8218 -Ddefault.mux.longitude=-122.3112"

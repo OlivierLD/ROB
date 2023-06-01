@@ -29,5 +29,5 @@ forwarders:
     verbose: false
 computers:
   - class: nmea.computers.AISManager
-    verbose: false
+    verbose: true
     properties: mux-configs/ais.mgr.properties

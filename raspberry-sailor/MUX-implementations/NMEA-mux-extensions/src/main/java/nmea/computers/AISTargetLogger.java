@@ -211,7 +211,6 @@ public class AISTargetLogger extends Computer {
 		} catch (JsonProcessingException jpe) {
 			jpe.printStackTrace();
 		}
-
 		System.exit(0);
 	}
 }

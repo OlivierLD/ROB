@@ -11,11 +11,12 @@ import util.TextToSpeech;
 import utils.TimeUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
 
 /**
- * AIS Manager. WIP.
+ * AIS Manager. WiP.
  * Uses current position and AIS data to detect <u>possible collision threats</u>.
  * <br/>
  * Does NOT put anything in the cache.
@@ -39,6 +40,10 @@ import java.util.function.Consumer;
  * # collision.threat.callback=nmea.computers.SpeakingCallback
  * collision.threat.callback=default
  * </pre>
+ *
+ * To try:
+ * curl -X GET http://localhost:1234/mux/cache | jq '.ais'
+ * (Cheat Sheet at https://lzone.de/cheat-sheet/jq)
  */
 public class AISManager extends Computer {
 
@@ -85,7 +90,7 @@ public class AISManager extends Computer {
 								// TODO Use the two speeds and headings (here and target). First degree equation solving.
 								if (distToTarget <= this.minimumDistance) {
 									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
-									String inRangeMessage = String.format("(%s) AISManager >> In range (%.02f/%.02f nm), diff heading: %.02f", TimeUtil.getTimeStamp(), distToTarget, this.minimumDistance, diffHeading);
+									String inRangeMessage = String.format("(%s) AISManager >> In range (%.02f/%.02f nm), diff heading: %.02f/%.02f", TimeUtil.getTimeStamp(), distToTarget, this.minimumDistance, diffHeading, this.headingFork);
 									System.out.println(inRangeMessage);
 									if (false) {
 										// A test
@@ -93,9 +98,30 @@ public class AISManager extends Computer {
 										TextToSpeech.speak(messToSpeak);
 									}
 									if (diffHeading < this.headingFork) { // Possible collision route (if you don't move)
-										String warningText = String.format("!!! Possible collision threat with %s (%s), at %s / %s\n\tdistance %.02f nm (min is %.02f)\n\tBearing from target to current pos. %.02f\272\n\tCOG Target: %.02f",
+										// Collision threat in the cache
+										aisRecord.setCollisionThreat(new AISParser.CollisionThreat(distToTarget, bearingFromTarget, this.minimumDistance));
+										// Find vesselName if it exists
+										String vesselName = aisRecord.getVesselName();
+										if (vesselName == null) {
+											// Look for record type 24 (Static Data Report)
+											try {
+												final Map<Integer, Map<Integer, AISParser.AISRecord>> aisMap = (Map<Integer, Map<Integer, AISParser.AISRecord>>)cache.get(NMEADataCache.AIS);
+												Map<Integer, AISParser.AISRecord> mapOfTypes = aisMap.get(aisRecord.getMMSI());
+												AISParser.AISRecord aisRecord2 = mapOfTypes.get(24);
+												if (aisRecord2 != null) {
+													vesselName = aisRecord2.getVesselName();
+												}
+											} catch (Exception ex) {
+												System.err.println("Getting vessel name:");
+												ex.printStackTrace();
+											}
+										}
+										String warningText = String.format("!!! Possible collision threat with %s (%s), at %s / %s\n" +
+														"\tdistance %.02f nm (min is %.02f)\n" +
+														"\tBearing from target to current pos. %.02f\272\n" +
+														"\tCOG Target: %.02f",
 												aisRecord.getMMSI(),
-												aisRecord.getVesselName(),
+												vesselName.replace("@", " ").trim(),
 												GeomUtil.decToSex(aisRecord.getLatitude(), GeomUtil.SWING, GeomUtil.NS),
 												GeomUtil.decToSex(aisRecord.getLongitude(), GeomUtil.SWING, GeomUtil.EW),
 												distToTarget,
@@ -114,10 +140,24 @@ public class AISManager extends Computer {
 											collisionCallback.accept(messageToSpeak);
 //											TextToSpeech.speak(messageToSpeak);
 										}
+									} else {
+										aisRecord.setCollisionThreat(null);
 									}
+									// Push record back in the cache
+									if (this.verbose) {
+										System.out.printf("Pushing aisRecord in cache:\n%s\n", aisRecord.toString());
+									}
+									final Map<Integer, Map<Integer, AISParser.AISRecord>> aisMap = (Map<Integer, Map<Integer, AISParser.AISRecord>>)cache.get(NMEADataCache.AIS);
+									Map<Integer, AISParser.AISRecord> mapOfTypes = aisMap.get(aisRecord.getMMSI());
+									mapOfTypes.put(aisRecord.getMessageType(), aisRecord);
+									cache.put(NMEADataCache.AIS, aisMap); // Back in.
 								} else {
 									if (this.verbose) {
-										System.out.printf("For %s (%s): Comparing %s with %s / %s (%.04f / %.04f)\n\tdistance %.02f nm (min is %.02f)\n\tBearing from target to current pos. %.02f\272\n\tCOG Target: %.02f\n\t-> No threat found\n",
+										System.out.printf("For %s (%s): Comparing %s with %s / %s (%.04f / %.04f)\n" +
+														"\tdistance %.02f nm (min is %.02f)\n" +
+														"\tBearing from target to current pos. %.02f\272\n" +
+														"\tCOG Target: %.02f\n" +
+														"\t-> No threat found\n",
 												aisRecord.getMMSI(),
 												aisRecord.getVesselName(),
 												position.toString(),

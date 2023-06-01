@@ -1282,6 +1282,45 @@ public class AISParser {
 		return ((m>=1 && m<=12) ? (option.equals(MonthSizeOption.SHORT) ? SHORT_MONTHS[m - 1] : LONG_MONTHS[m - 1]) : "--");
 	}
 
+	public static class CollisionThreat {
+		private double distToTarget;
+		private double bearingFromTarget;
+		private double minimumDistance;
+
+		public CollisionThreat() {
+		}
+
+		public CollisionThreat(double distToTarget, double bearingFromTarget, double minimumDistance) {
+			this.distToTarget = distToTarget;
+			this.bearingFromTarget = bearingFromTarget;
+			this.minimumDistance = minimumDistance;
+		}
+
+		public double getDistToTarget() {
+			return distToTarget;
+		}
+
+		public void setDistToTarget(double distToTarget) {
+			this.distToTarget = distToTarget;
+		}
+
+		public double getBearingFromTarget() {
+			return bearingFromTarget;
+		}
+
+		public void setBearingFromTarget(double bearingFromTarget) {
+			this.bearingFromTarget = bearingFromTarget;
+		}
+
+		public double getMinimumDistance() {
+			return minimumDistance;
+		}
+
+		public void setMinimumDistance(double minimumDistance) {
+			this.minimumDistance = minimumDistance;
+		}
+	}
+
 	public static class AISRecord {
 		private int messageType;      // Mandatory
 		private int repeatIndicator;  // Mandatory
@@ -1295,6 +1334,8 @@ public class AISParser {
 		private String shipTypeStr;
 
 		Map<String, Object> recordContent = new HashMap<>();
+
+		private CollisionThreat collisionThreat = null;
 
 		// Below all the possible keys for the Map above.
 		private static final String NAV_STATUS = "NavStatus";
@@ -2716,6 +2757,14 @@ public class AISParser {
 
 		public void setRecordContent(Map<String, Object> recordContent) {
 			this.recordContent = recordContent;
+		}
+
+		public CollisionThreat getCollisionThreat() {
+			return collisionThreat;
+		}
+
+		public void setCollisionThreat(CollisionThreat collisionThreat) {
+			this.collisionThreat = collisionThreat;
 		}
 	}
 }
