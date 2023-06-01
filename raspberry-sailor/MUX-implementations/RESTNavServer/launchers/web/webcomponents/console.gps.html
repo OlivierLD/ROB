@@ -9,7 +9,7 @@
  !
  ! HTML graphical entities, good doc at https://www.toptal.com/designers/htmlarrows/symbols/
  !
- ! TODO Current Evolution Display, as in RESTNavServer/launchers/web/console.html, but with a GraphDisplay WebComponent
+ ! TODO? Current Evolution Display, as in RESTNavServer/launchers/web/console.html, but with a GraphDisplay WebComponent
  !
  +-->
 <head>
@@ -302,7 +302,7 @@
             // console.log(">> GPS-Time: ", val);
             // val.format("Y-M-d H:i:s")
             let dateFromCache = new Date(val);
-            gpsTime = new Date(dateFromCache.getTime() + dateFromCache.getTimezoneOffset() * 60000); // For display...
+            gpsTime = new Date(dateFromCache.getTime()); // Already UTC. // + dateFromCache.getTimezoneOffset() * 60000); // For display...
             // gpsTime = new Date(val);
             let time = gpsTime.format("H:i:s");
             setData('analog-watch-01', time);
