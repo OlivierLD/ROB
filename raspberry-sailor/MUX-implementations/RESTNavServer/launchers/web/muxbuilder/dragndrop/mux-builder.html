@@ -164,13 +164,17 @@ let fileFwdOption = (sel) => {
                   <td>Damping</td>
                   <td><input type="number" min="1" step="1" value="30" id="damping"></td>
               </tr>
-          </table>
+              <tr>
+                <td>Markers yaml</td>
+                <td><input type="text" placeholder="markers yaml file" id="markers"></td>
+            </tr>
+        </table>
       </div>
   </div>  
   </dialog>            
 </div>
 
-<div class="message">Drag from the left, drop on the right</div>
+<div class="message">Drag from the left, drop on the center pane</div>
 
 <div class="tab">
   <button class="tablinks active" onclick="switchTab(event, 0);">Consumers</button>
@@ -1187,6 +1191,36 @@ let fileFwdOption = (sel) => {
               </div>
           </div>
 
+          <div id="computer-2" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
+            <div>
+              <span class="close-icon" onclick="remove(this);">&times;</span>
+              <span class="computer-description">AIS Manager Computer</span>
+            </div>
+            <div class="draggable-content">
+                <span>AIS Manager  </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <dialog class="editable-prm" style="min-height: 200px;">
+                  <div class="dialog-header">
+                    <div style="padding: 10px;">
+                      <span style="margin-left: 20px;">Edit AIS Computer Parameters</span>
+                      <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                    </div>
+                  </div>
+                  <div class="editable-zone ais-computer">
+                    No parameters to edit here...
+                    <!--table>
+                      <tr>
+                          <td>Prefix</td>
+                          <td><input type="text" class="device-prefix" placeholder="Device Prefix" value="CC"></td>
+                      </tr>
+                      <tr>
+                          <td>Time Buffer Length</td>
+                          <td><input type="text" class="time-buffer-length" placeholder="Comma separated, in milliseconds" value="30, 60, 600"></td>
+                      </tr>
+                    </table-->
+                  </div>  
+                </dialog>            
+              </div>
+          </div>
           <!-- End of Computers -->
           
         </div>  

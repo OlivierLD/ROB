@@ -518,7 +518,10 @@ function dumpIt(withDialog) { // YAML Generation
   code += `  hdg.offset: ${ document.getElementById('hdg-offset').value }\n`;
   code += `  awa.offset: ${ document.getElementById('awa-offset').value }\n`;
   code += `  damping: ${ document.getElementById('damping').value }\n`;
-
+  let markersFileName = document.getElementById('markers').value;
+  if (markersFileName.trim().length > 0) {
+      code += `  markers: ${ document.getElementById('markers').value }\n`;
+  }
 
   // Consumers
   let dropId = "drop-div-consumers";
@@ -630,6 +633,10 @@ function dumpIt(withDialog) { // YAML Generation
      if (prms.classList.contains("tw-cc-computer")) {
        code += "  - type: tw-current\n";
        code += generateTWCurrentComputerCode(prms);
+     } else if (prms.classList.contains("ais-computer")) {
+      code += "  - class: nmea.computers.AISManager\n";
+      code += "    verbose: false\n";
+      code += "    # You might want to add properties here\n";
      } else {
        console.log('???');
      }
