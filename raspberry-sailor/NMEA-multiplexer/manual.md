@@ -655,6 +655,7 @@ Such a file can be rendered like this:
 
 <img src="./docimages/deviation.curve.png" title="deviation curve" width="318" height="440">
 
+##### markers
 `markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers. Those markers
 will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).  
 The structure of this file is the following one:
