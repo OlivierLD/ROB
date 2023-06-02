@@ -6,17 +6,20 @@ description:
   - "Replay Channel"
   - "No forwarders"
   - "AIS Manager Computer"
+  - "Markers"
   - "Just HTTP - static and REST"
 context:
   with.http.server: true
   http.port: 9999
   init.cache: true
+  markers: mux-configs/markers.yaml
 channels:
   # GPS and AIS replay
   - type: file
     # filename: ../../../NMEA-multiplexer/sample-data/data.nmea
-    filename: ../../../NMEA-multiplexer/logged/dives_2023_05_28.nmea
-    zip: false
+    filename: ../../../NMEA-multiplexer/logged/dives.zip
+    path.in.zip: dives_2023_05_28.nmea
+    zip: true
     verbose: false
 # forwarders:
   # - type: console

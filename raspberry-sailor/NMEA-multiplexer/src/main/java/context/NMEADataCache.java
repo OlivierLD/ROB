@@ -142,9 +142,11 @@ public class NMEADataCache
 
 	public static final String NMEA_AS_IS = "NMEA_AS_IS";
 
-	public static final String USER_DEFINED = "UserDefined"; // Free, whatever you like! At your own risk!
+	public static final String USER_DEFINED = "UserDefined"; // Free, whatever you like! At your own risk! TODO Document, examples.
 
 	public static final String AIS = "ais";
+	public static final String MARKERS_FILE = "markers-file-name";
+	public static final String MARKERS_DATA = "markers-data";
 
 	// End of keys
 

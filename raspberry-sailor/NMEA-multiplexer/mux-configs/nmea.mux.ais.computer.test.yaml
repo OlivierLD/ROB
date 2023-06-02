@@ -6,6 +6,7 @@ context:
   with.http.server: true
   http.port: 1234
   init.cache: true
+  markers: mux-configs/markers.yaml
 channels:
   # GPS + NMEA
   # No GPS, use -Ddefault.mux.latitude=37.8218 and -Ddefault.mux.longitude=-122.3112

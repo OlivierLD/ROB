@@ -440,7 +440,8 @@ public class MuxInitializer {
                 double hdgOffset = Double.parseDouble(muxProps.getProperty("hdg.offset", "0"));
                 double defaultDeclination = Double.parseDouble(muxProps.getProperty("default.declination", "0"));
                 int damping = Integer.parseInt(muxProps.getProperty("damping", "1"));
-                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping);
+                String markerFile = muxProps.getProperty("markers"); // default null
+                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerFile);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

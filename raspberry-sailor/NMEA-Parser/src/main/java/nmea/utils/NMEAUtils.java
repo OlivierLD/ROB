@@ -1,17 +1,10 @@
 package nmea.utils;
 
-import nmea.parser.Angle180EW;
-import nmea.parser.HDG;
-import nmea.parser.OverGround;
-import nmea.parser.RMC;
-import nmea.parser.StringParsers;
+import nmea.parser.*;
+import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -325,6 +318,28 @@ public class NMEAUtils {
             ex.printStackTrace();
         }
         return ret;
+    }
+
+    public static List<Marker> loadMarkers(String markerFileName) {
+        List<Marker> markerList;
+        Yaml yaml = new Yaml();
+        try {
+            InputStream inputStream = new FileInputStream(markerFileName);
+            Map<String, Object> map = yaml.load(inputStream);
+            List<Map<String, Object>> yamlMarkerList = (List<Map<String, Object>>)map.get("markers");
+            markerList = new ArrayList<>();
+            yamlMarkerList.forEach(yamlMarker -> {
+                markerList.add(new Marker(
+                        (Double)yamlMarker.get("latitude"),
+                        (Double)yamlMarker.get("longitude"),
+                        (String)yamlMarker.get("label")
+                ));
+            });
+            // System.out.println("Map loaded.");
+        } catch (IOException ioe) {
+            throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
+        }
+        return markerList;
     }
 
     public static List<double[]> loadDeviationCurve(String deviationFileName) {

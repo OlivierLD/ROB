@@ -35,15 +35,37 @@ public class ApplicationContext {
 	}
 
 	public void initCache(String deviationFileName, // Default "zero-deviation.csv"
+						  double maxLeeway,         // Default 0
+						  double bspFactor,         // Default 1
+						  double awsFactor,         // Default 1
+						  double awaOffset,         // Default 0
+						  double hdgOffset,         // Default 0
+						  double defaultDeclination,// Default 0
+						  int damping) {            // Default 1
+		initCache(deviationFileName, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, null);
+	}
+
+	public void initCache(String deviationFileName, // Default "zero-deviation.csv"
 	                      double maxLeeway,         // Default 0
 	                      double bspFactor,         // Default 1
 	                      double awsFactor,         // Default 1
 	                      double awaOffset,         // Default 0
 	                      double hdgOffset,         // Default 0
 	                      double defaultDeclination,// Default 0
-	                      int damping) {            // Default 1
+	                      int damping,              // Default 1
+						  String markers) {         // Default null
 
 		dataCache = new NMEADataCache();
+
+		if (markers != null) {
+			if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
+				System.err.printf("Markers file must be a yaml file, not %s\n", markers);
+				System.err.println("Moving on anyway, without markers.");
+			} else {
+				dataCache.put(NMEADataCache.MARKERS_FILE, markers);
+				dataCache.put(NMEADataCache.MARKERS_DATA, NMEAUtils.loadMarkers(markers));
+			}
+		}
 
 		try {
 			List<double[]> deviationCurve = NMEAUtils.loadDeviationCurve(deviationFileName);

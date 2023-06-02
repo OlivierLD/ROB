@@ -414,6 +414,17 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
 		}
 
+		// Markers
+		try {
+			let markers = json['markers-data'];
+			if (markers) {
+				events.publish('markers', markers);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
+		}
+
+
 		if (errMess !== undefined) {
 			// console.log(errMess); // Absorb
 		}

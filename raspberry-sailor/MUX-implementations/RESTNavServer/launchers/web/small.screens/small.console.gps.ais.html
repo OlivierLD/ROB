@@ -276,6 +276,11 @@
 			displayMap.addPoint(val);
 			aisMap.setCurrentPoint(val);
 		});
+		events.subscribe('markers', val => {
+			aisMap.resetMarkers();
+			aisMap.setMarkerList(val);
+			aisMap.repaint();
+		});
 		events.subscribe('ais', val => {
 			aisMap.resetAISTargets();
 			let keys = Object.keys(val);
