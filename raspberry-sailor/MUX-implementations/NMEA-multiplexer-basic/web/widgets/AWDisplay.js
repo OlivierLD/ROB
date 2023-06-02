@@ -1,8 +1,8 @@
 /*
  * @author Olivier Le Diouris
+ * This is NOT a WebComponent
  */
-var awDisplayColorConfigWhite =
-    {
+var awDisplayColorConfigWhite = {
         bgColor: 'white',
         digitColor: 'black',
         withGradient: true,

@@ -1,5 +1,6 @@
 /*
  * @author Olivier Le Diouris
+ * This is NOT a WebComponent
  */
  // TODO This config in CSS
  // We wait for the var- custom properties to be implemented in CSS...

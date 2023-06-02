@@ -1,5 +1,6 @@
 /*
  * @author Olivier Le Diouris
+ * This is NOT a WebComponent
  */
 var roseColorConfigWhite = {
   bgColor:           'white',

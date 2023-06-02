@@ -1,0 +1,29 @@
+#
+# MUX definition.
+#
+name: "With a GPS and AIS (replay), for tests"
+description:
+  - "Replay Channel"
+  - "No forwarders"
+  - "AIS Manager Computer"
+  - "Markers"
+  - "Just HTTP - static and REST"
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  markers: markers.yaml
+channels:
+  # GPS and AIS replay
+  - type: file
+    filename: ../../NMEA-multiplexer/logged/dives.zip
+    path.in.zip: dives_2023_05_28.nmea
+    zip: true
+    verbose: false
+# forwarders:
+  # - type: console
+computers:
+  - class: nmea.computers.AISManager
+    verbose: false
+    properties: mux-configs/ais.mgr.properties
+

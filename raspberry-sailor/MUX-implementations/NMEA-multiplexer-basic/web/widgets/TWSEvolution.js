@@ -1,5 +1,6 @@
 /*
  * @author Olivier Le Diouris
+ * This is NOT a WebComponent
  */
 function TWSEvolution(cName)  // Canvas name
 {

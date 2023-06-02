@@ -1,3 +1,6 @@
+/*
+ * This is NOT a WebComponent
+ */
 var clear = function(canvasName) {
   var canvas = document.getElementById(canvasName);
   if (canvas !== undefined) {

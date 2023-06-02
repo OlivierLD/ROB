@@ -104,6 +104,8 @@ const EVENT_WP       = 'wp';
 const EVENT_VMG      = 'vmg';
 const EVENT_PRATE    = 'prate';
 const EVENT_DEW      = 'dew';
+const EVENT_AIS      = 'ais';
+const EVENT_MARKERS  = 'markers';
 
 function onMessage(json) {
 	try {
@@ -384,6 +386,26 @@ function onMessage(json) {
 		} else {
 			console.log("No dewpoint");
 		}
+
+				try {
+        			let ais = json.ais;
+        			if (ais) {
+        				events.publish(EVENT_AIS, ais);
+        			}
+        		} catch (err) {
+        			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
+        		}
+
+        		// Markers
+        		try {
+        			let markers = json['markers-data'];
+        			if (markers) {
+        				events.publish(EVENT_MARKERS, markers);
+        			}
+        		} catch (err) {
+        			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "meArkers (" + err + ")");
+        		}
+
 
 		if (errMess && forwardAjaxErrors) {
 			displayErr(errMess);

@@ -421,7 +421,7 @@ function onMessage(json) {
 				events.publish('markers', markers);
 			}
 		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "merkers (" + err + ")");
 		}
 
 
