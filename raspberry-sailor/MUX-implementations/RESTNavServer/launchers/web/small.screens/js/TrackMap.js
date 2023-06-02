@@ -29,12 +29,24 @@ function TrackMap(cName, width, height, bgColor, fgColor, gridColor, textColor, 
 	this.bufferSize = (buffSize || 400);
 
 	this.posBuffer = [];
+	this.markers = [];
 	this.lastCog = 0;
 	this.lastSog = 0;
+
+	let markerRadius = 5;
 
 	let canvasName = cName;
 	let canvas = document.getElementById(canvasName);
 	let context = canvas.getContext('2d');
+
+	this.resetMarkers = function() {
+		this.markers = [];
+	};
+
+	this.setMarkerList = function(list) {
+		this.markers = list;
+		this.repaint();
+	};
 
 	/**
 	 * Add point to tail of the buffer, drop the head if needed.
@@ -200,5 +212,23 @@ function TrackMap(cName, width, height, bgColor, fgColor, gridColor, textColor, 
 			}
 
 		}
+
+		// Markers, if any !
+		this.markers.forEach(marker => {
+			context.beginPath();
+			context.lineWidth = 3;
+
+			canvasX = (this.w / 2) + (((marker.longitude - mapCenter.lng) * (this.w / delta)) * sizeFactor);
+			canvasY = (this.h / 2) - (((marker.latitude - mapCenter.lat) * (this.h / delta)) * sizeFactor);
+			// console.log(`Plotting marker ${marker.label} (${canvasX}, ${canvasY})`);
+			context.arc(canvasX, canvasY, markerRadius, 0, 2 * Math.PI);
+			context.font = "8px Courier";
+			context.fillText(marker.label, canvasX + markerRadius + 1, canvasY - markerRadius);
+			context.fillStyle = 'cyan';
+			context.strokeStyle = 'cyan'; // this.fg;
+			context.stroke();
+			context.closePath();
+		});
+		
 	};
 };

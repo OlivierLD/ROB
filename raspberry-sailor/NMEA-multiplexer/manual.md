@@ -88,6 +88,7 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
    awa.offset: 0
    hdg.offset: 0
    damping: 30
+   markers: markers.yaml
  channels:
    - type: serial
      port: /dev/ttyS80
@@ -594,6 +595,7 @@ hdg.offset=0
 #
 default.declination=14
 damping=30
+markers=markers.yaml
 ```
 
 `with.http.server` is set to `no` by default. `yes` means that you will have access to
@@ -652,6 +654,34 @@ Each line contains two fields, the first one is the **Compass** Heading, the sec
 Such a file can be rendered like this:
 
 <img src="./docimages/deviation.curve.png" title="deviation curve" width="318" height="440">
+
+`markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers. Those markers
+will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).  
+The structure of this file is the following one:
+```yaml
+markers:
+  - latitude: 47.705 
+    longitude: -3.105 
+    label: Locoal
+  - latitude: 47.661667 
+    longitude: -2.758167
+    label: Vannes
+  - latitude: 47.677667
+    longitude: -3.135667
+    label: Belz
+  - latitude: 49.293167 
+    longitude: -0.098833
+    label: Dives
+  - latitude: 37.7489 
+    longitude: -122.5070
+    label: SF
+  . . .
+```
+`markers` is an array of objects containing 3 members:
+- `latitude` as a number
+- `longitude` as a number
+- `label` as a string
+
 
 ### Example
 Here is an example of a simple properties file driving the Multiplexer:

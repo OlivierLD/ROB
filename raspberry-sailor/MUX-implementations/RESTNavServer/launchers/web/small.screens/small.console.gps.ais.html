@@ -277,9 +277,13 @@
 			aisMap.setCurrentPoint(val);
 		});
 		events.subscribe('markers', val => {
+			displayMap.resetMarkers();
+			displayMap.setMarkerList(val);
+			// displayMap.repaint();
+
 			aisMap.resetMarkers();
 			aisMap.setMarkerList(val);
-			aisMap.repaint();
+			// aisMap.repaint();
 		});
 		events.subscribe('ais', val => {
 			aisMap.resetAISTargets();
