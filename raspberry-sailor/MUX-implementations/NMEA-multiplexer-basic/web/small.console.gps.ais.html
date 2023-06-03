@@ -257,6 +257,19 @@
 		let displayMap; // The map. TrackMap (just the path, no chart).
 		let aisMap;     // AIS Maps
 
+		let zoomIn = () => {
+			newRadius = aisMap.getRadius() / 2;
+			aisMap.setRadius(newRadius);
+			// console.log(`Zooming In, radius now ${newRadius}`);
+			document.getElementById('map-radius').innerText = `${newRadius}`;
+		};
+		let zoomOut = () => {
+			newRadius = aisMap.getRadius() * 2;
+			aisMap.setRadius(newRadius);
+			// console.log(`Zooming Out, radius now ${newRadius}`);
+			document.getElementById('map-radius').innerText = `${newRadius}`;
+		};
+
 		let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
 			// TODO Manage a specific component here.
 			console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
@@ -490,8 +503,13 @@
 	<div class="the-slides fade">
 		<div class="number-text">6 / 6</div>
 		<div class="display">
-			
-			<canvas id="aisCanvas" class="displayContent" width="180" height="250" title="AIS Map"></canvas>
+			<div style="text-align: right; z-index: 10;">
+				<span style="font-size: 10px; margin-right: 5px;">Map Radius: <span id="map-radius">1</span> nm</span>
+			</div>
+			<canvas id="aisCanvas" class="displayContent" style="margin-top: -18px;" width="180" height="250" title="AIS Map"></canvas>
+			<div style="margin-bottom: 18px; z-index: 10;">
+				<button style="min-width: 20px; border-radius: 50%;" onclick="zoomIn();">+</button><button style="min-width: 20px; border-radius: 50%;" onclick="zoomOut();">-</button>
+			</div>
 
 		</div>
 		<div class="text">AIS</div>

@@ -121,9 +121,9 @@ function onMessage(json) {
 		if (json.Position) {
 			try {
 				let latitude = json.Position.lat;
-	//          console.log("latitude:" + latitude)
+	//          console.debug("latitude:" + latitude)
 				let longitude = json.Position.lng;
-	//          console.log("Pt:" + latitude + ", " + longitude);
+	//          console.debug("Pt:" + latitude + ", " + longitude);
 				events.publish(EVENT_POS, {
 					'lat': latitude,
 					'lng': longitude
@@ -132,7 +132,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "position");
 			}
 		} else {
-			console.log("No Position");
+			console.debug("No Position");
 		}
 		if (json.BSP) {
 			try {
@@ -142,7 +142,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "boat speed");
 			}
 		} else {
-			console.log("No BSP");
+			console.debug("No BSP");
 		}
 		if (json.Log) {
 			try {
@@ -152,7 +152,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "log (" + err + ")");
 			}
 		} else {
-			console.log("No LOG");
+			console.debug("No LOG");
 		}
 		if (json["GPS Date & Time"]) {
 			try {
@@ -168,7 +168,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
 			}
 		} else {
-			console.log("No GPS Data");
+			console.debug("No GPS Data");
 		}
 
 		if (json["HDG true"]) {
@@ -179,7 +179,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "heading");
 			}
 		} else {
-			console.log("No HDG");
+			console.debug("No HDG");
 		}
 		if (json.TWD) {
 			try {
@@ -189,7 +189,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWD");
 			}
 		} else {
-			console.log("No TWD");
+			console.debug("No TWD");
 		}
 		if (json.TWA) {
 			try {
@@ -199,7 +199,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWA");
 			}
 		} else {
-			console.log("No TWA");
+			console.debug("No TWA");
 		}
 		if (json.TWS) {
 			try {
@@ -209,7 +209,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "TWS");
 			}
 		} else {
-			console.log("No TWS");
+			console.debug("No TWS");
 		}
 
 		if (json["Water Temperature"]) {
@@ -220,7 +220,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "water temperature");
 			}
 		} else {
-			console.log("No Water Temp.");
+			console.debug("No Water Temp.");
 		}
 
 		if (json["Air Temperature"]) {
@@ -231,7 +231,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "air temperature");
 			}
 		} else {
-			console.log("No Air Temp.");
+			console.debug("No Air Temp.");
 		}
 		// Battery_Voltage, Relative_Humidity, Barometric_Pressure
 		if (json["Barometric Pressure"]) {
@@ -244,7 +244,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "PRMSL");
 			}
 		} else {
-			console.log("No Baro.");
+			console.debug("No Baro.");
 		}
 		if (json["Relative Humidity"]) {
 			try {
@@ -256,7 +256,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Relative_Humidity");
 			}
 		} else {
-			console.log("No HUM");
+			console.debug("No HUM");
 		}
 		if (json.AWS) {
 			try {
@@ -266,7 +266,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWS");
 			}
 		} else {
-			console.log("No AWS");
+			console.debug("No AWS");
 		}
 		if (json.AWA) {
 			try {
@@ -276,7 +276,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "AWA");
 			}
 		} else {
-			console.log("No AWA");
+			console.debug("No AWA");
 		}
 		if (json.CDR) {
 			try {
@@ -286,7 +286,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CDR");
 			}
 		} else {
-			console.log("No CDR");
+			console.debug("No CDR");
 		}
 		if (json.COG) {
 			try {
@@ -296,7 +296,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "COG");
 			}
 		} else {
-			console.log("No COG");
+			console.debug("No COG");
 		}
 		if (json.CMG) {
 			try {
@@ -306,7 +306,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CMG");
 			}
 		} else {
-			console.log("No CMG");
+			console.debug("No CMG");
 		}
 		if (json.Leeway) {
 			try {
@@ -316,7 +316,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Leeway");
 			}
 		} else {
-			console.log("No leeway");
+			console.debug("No leeway");
 		}
 		if (json.CSP) {
 			try {
@@ -326,7 +326,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CSP");
 			}
 		} else {
-			console.log("No CSP");
+			console.debug("No CSP");
 		}
 		if (json.SOG) {
 			try {
@@ -336,7 +336,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
 			}
 		} else {
-			console.log("No SOG");
+			console.debug("No SOG");
 		}
 		// to-wp, vmg-wind, vmg-wp, b2wp
 		if (json["To Waypoint"] && json["Bearing to WP"]) {
@@ -350,7 +350,7 @@ function onMessage(json) {
 			} catch (err) {
 			}
 		} else {
-			console.log("No WP info");
+			console.debug("No WP info");
 		}
 
 		if (json["VMG on Wind"] && json["VMG to Waypoint"]) {
@@ -363,7 +363,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "VMG");
 			}
 		} else {
-			console.log("Not enough VMG info");
+			console.debug("Not enough VMG info");
 		}
 
 		if (json.prate) {
@@ -374,7 +374,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "prate");
 			}
 		} else {
-			console.log("No PRATE");
+			console.debug("No PRATE");
 		}
 		if (json.dewpoint) {
 			try {
@@ -384,7 +384,7 @@ function onMessage(json) {
 				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "dew");
 			}
 		} else {
-			console.log("No dewpoint");
+			console.debug("No dewpoint");
 		}
 
 				try {

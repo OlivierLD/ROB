@@ -25,5 +25,5 @@ channels:
 computers:
   - class: nmea.computers.AISManager
     verbose: false
-    properties: mux-configs/ais.mgr.properties
+    properties: ais.mgr.properties
 

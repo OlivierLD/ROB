@@ -307,7 +307,7 @@ There is also a [USE_CASES](./USE_CASES.md) document.
 
 Examples of Web Admin features will also be presented (in other modules, like [RESTNavServer](../RESTNavServer/README.md)).
 
-# To production
+# Build for production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on
 a target machine, un-archived, and run.  
 To run it:

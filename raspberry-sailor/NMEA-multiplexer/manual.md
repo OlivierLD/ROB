@@ -144,10 +144,11 @@ channels:
     mux.01.verbose=false
     mux.01.reset.interval=60000
     ```
-    > The optional `reset.interval` is in milliseconds. It closes and re-opens the Serial port as mentioned.
-    > It happens to be useful on some devices...  
----
-> _**Note**_: Reading the serial ports relies on the `librxtx-java` library. I came across
+    > The optional `reset.interval` is in milliseconds. It closes and re-opens the Serial port as mentioned.  
+    It happens to be useful on some devices...  
+
+> _**Note**_: _Reading a Serial port through `stty`_.   
+> Reading the serial ports relies on the `librxtx-java` library. I came across
 > several wierd behaviors, like when reading `/dev/ttyUSB0` with a baud rate of `38400`... without being able to find the root cause of the problem,
 > or being able to reproduce it on another machine.  
 > A solution would be to map the port using a command like `stty -F /dev/ttyUSB0 raw 38400 cs8 clocal`,

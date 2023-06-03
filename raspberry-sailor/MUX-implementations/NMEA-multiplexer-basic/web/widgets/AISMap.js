@@ -38,7 +38,7 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 	this.w = (width || 400);
 	this.h = (height || 400);
 
-	this.radius = (radius || 5);
+	this.radius = (radius || 5); // "radius" of the map.
 
 	this.aisTargets = [];
 	this.markers = [];
@@ -112,6 +112,16 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 		this.lastCog = cog;
 	};
 
+    this.setRadius = function(newRadius) {
+        this.radius = newRadius;
+		// console.log(`AIS Map: radius now ${this.radius}`);
+        this.repaint();
+    }
+
+    this.getRadius = function() {
+        return this.radius;
+    }
+
 	this.setLastSog = function(sog) {
 		this.lastSog = sog;
 	};
@@ -174,13 +184,15 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 		// 1 - Find the min and max, for latitude and longitude
 		let mapCenter = this.currentPos;
 
-		let minLat = mapCenter.lat - (radius / 60.0), 
-			maxLat = mapCenter.lat + (radius / 60.0), 
-			minLng = mapCenter.lng - (radius / 60.0), 
-			maxLng = mapCenter.lng + (radius / 60.0);
+		let minLat = mapCenter.lat - (this.radius / 60.0), 
+			maxLat = mapCenter.lat + (this.radius / 60.0), 
+			minLng = mapCenter.lng - (this.radius / 60.0), 
+			maxLng = mapCenter.lng + (this.radius / 60.0);
 
 		let deltaLat = Math.abs(maxLat - minLat);
 		let deltaLng = Math.abs(maxLng - minLng);
+
+		// console.log(`With radius ${this.radius}, deltaLat=${deltaLat}, deltaLng=${deltaLng}`);
 
 		let delta = Math.max(deltaLat, deltaLng);
 		if (delta === 0) {
@@ -208,28 +220,32 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 		this.aisTargets.forEach((target, idx) => {
 		   /*
 			* aisTarget: {
-			* 	 mmsi: string, 
+			* 	mmsi: string, 
 			*   vesselName: string, 
 			*   lat: number, 
 			*   lng: number, 
 			*   cog: number, 
 			*   sog: number, 
-			*   radius: number,
+			*   radius: number, // From the AIS Manager
 			*   threat: boolean
 			* }
 			*/
 			let withinSight = true; // TODO Something real..., radius etc.
 			if (withinSight) {
-				// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} ${target.threat ? '- Honk!' : ''}`)
+				// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} ${target.threat ? '- Honk!' : ''}`);
 				context.beginPath();
 				context.lineWidth = 3;
 
 				let canvasX = (this.w / 2) + (((target.lng - mapCenter.lng) * (this.w / delta)) * sizeFactor);
 				let canvasY = (this.h / 2) - (((target.lat - mapCenter.lat) * (this.h / delta)) * sizeFactor);
 
-				context.arc(canvasX, canvasY, boatRadius, 0, 2 * Math.PI);
+				// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} at ${canvasX}/${canvasY}`);
 
+				context.font = "8px Courier";
+				context.fillStyle = 'lime';
 				context.strokeStyle = target.threat ? 'red' : 'green'; // this.fg;
+				context.arc(canvasX, canvasY, boatRadius, 0, 2 * Math.PI);
+				context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasX + boatRadius + 1, canvasY - boatRadius);
 				context.stroke();
 				context.closePath();
 				drawArrow(context, canvasX, canvasY, 5 * boatRadius, this.lastCog, context.strokeStyle);
@@ -244,11 +260,11 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 			let canvasX = (this.w / 2) + (((marker.longitude - mapCenter.lng) * (this.w / delta)) * sizeFactor);
 			let canvasY = (this.h / 2) - (((marker.latitude - mapCenter.lat) * (this.h / delta)) * sizeFactor);
 			// console.log(`Plotting marker ${marker.label}`);
-			context.arc(canvasX, canvasY, markerRadius, 0, 2 * Math.PI);
 			context.font = "8px Courier";
-			context.fillText(marker.label, canvasX + markerRadius + 1, canvasY - markerRadius);
 			context.fillStyle = 'cyan';
 			context.strokeStyle = 'cyan'; // this.fg;
+			context.arc(canvasX, canvasY, markerRadius, 0, 2 * Math.PI);
+			context.fillText(marker.label, canvasX + markerRadius + 1, canvasY - markerRadius);
 			context.stroke();
 			context.closePath();
 		});
