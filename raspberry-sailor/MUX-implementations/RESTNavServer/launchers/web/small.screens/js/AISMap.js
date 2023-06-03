@@ -248,7 +248,7 @@ function AISMap(cName, width, height, bgColor, fgColor, gridColor, textColor, ra
 				context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasX + boatRadius + 1, canvasY - boatRadius);
 				context.stroke();
 				context.closePath();
-				drawArrow(context, canvasX, canvasY, 5 * boatRadius, this.lastCog, context.strokeStyle);
+				drawArrow(context, canvasX, canvasY, 5 * boatRadius, target.cog, context.strokeStyle);
 			}
 		});
 
