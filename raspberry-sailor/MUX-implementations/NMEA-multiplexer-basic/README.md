@@ -327,7 +327,7 @@ In the production environment, what used to be reached from a URL like <http://l
 > See how to do this is [their folder's README.md](../../NMEA-multiplexer/src/main/python/README.md#TCP).
 
 Here is an example of the execution of th `to.prod.script`.  
-Notive below when the script prompts the user for his input:
+Notice below when the script prompts the user for his input:
 - to rebuild the jar file (based on the current sources)
 - for the name of the archive to generate (`nmea-dist` here)
 - to include Python scripts in the archive
@@ -505,7 +505,7 @@ Once the script is completed, transfer the archive on your target machine (using
 
 If an _update_ is necessary, it is even easier.  
 Jus run the script `to.prod.sh` again, and _**do not drop**_ the directory at the end.  
-The structure of the `nmea-dist` (or whatever _**you**_ named it) looks like this:
+The structure of the `nmea-dist` folder (or whatever _**you**_ named it) looks like this:
 ```
 $ tree nmea-dist
 nmea-dist
