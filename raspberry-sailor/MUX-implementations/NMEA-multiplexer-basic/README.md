@@ -3,7 +3,7 @@ This module is one illustration of what can be done from  Web and/or REST client
 This includes the way to start the Multiplexer (through its configuration file), and the way to reach the data to 
 display on a web page.
 
-This module does _**NOT**_ extend any Java class of the NMEA-multiplexer, there is just _**NO**_ extra Java code in this module.
+This module does _**NOT**_ extend any Java class of the NMEA-multiplexer, and as you can see, there is just _**NO**_ extra Java code in this module. There is not even a `src` directory in this module.
 
 The NMEA-multiplexer runs on its machine, and managed data can be access through several Web Interfaces, reachable from any device
 with a browser, connected on the same network. This network does not need to have Internet access,
@@ -315,7 +315,7 @@ To run it:
 $ ./to.prod.sh
 ```
 
-Explanations on how to deploy the generated archive are given by the script.
+Explanations on how to deploy the generated archive are given interactively by the script.
 
 You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
 at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.  
@@ -326,5 +326,213 @@ In the production environment, what used to be reached from a URL like <http://l
 > scripts should be available on your production machine too.  
 > See how to do this is [their folder's README.md](../../NMEA-multiplexer/src/main/python/README.md#TCP).
 
+Here is an example of the execution of th `to.prod.script`.  
+Notive below when the script prompts the user for his input:
+- to rebuild the jar file (based on the current sources)
+- for the name of the archive to generate (`nmea-dist` here)
+- to include Python scripts in the archive
+- to drop the directory the archive has been done from
+
+```
+ $ ./to.prod.sh 
++----------------------------------------------------------------------------------------------------+
+|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |
++----------------------------------------------------------------------------------------------------+
+| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |
+| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |
+| possibly with several configurations - and its web clients.                                        |
++----------------------------------------------------------------------------------------------------+
+| Now you may start a fresh build...                                                                 |
+| Make sure the java version is compatible with your target. Current version:                        |
++----------------------------------------------------------------------------------------------------+
+| openjdk version "11.0.16" 2022-07-19
+| OpenJDK Runtime Environment (build 11.0.16+8-post-Raspbian-1deb11u1)
+| OpenJDK Server VM (build 11.0.16+8-post-Raspbian-1deb11u1, mixed mode)
++----------------------------------------------------------------------------------------------------+
+| Make sure the current Java version is compatible with the target one!!                             |
++----------------------------------------------------------------------------------------------------+
+
+There is an existing jar-file:
+1421050 40M -rw-r--r-- 1 pi pi 40M May 30 09:43 ./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+With the following MANIFEST:
+Found ./build/libs/NMEA-multiplexer-basic-1.0-all.jar. Moving on.
+~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/temp ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
+-------- MANIFEST.MF --------
+Manifest-Version: 1.0
+
+-----------------------------
+~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
+----------------------------
+Do we re-build the Java part ? > y
+Rebuilding from source (No Scala)...
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Configure project :
+>> From task compileJava (in rob), using java version 11 
+>> From task compileTestJava (in rob), using java version 11 
+
+> Configure project :astro-computer:AstroComputer
++------ Warning: Java version (JAVA_HOME) possible mismatch -----
+| In task compileJava (AstroComputer), the java version used 11 is not the expected version 1.8.
++----------------------------------------------------------------
++------ Warning: Java version (JAVA_HOME) possible mismatch -----
+| In task compileTestJava (AstroComputer), the java version used 11 is not the expected version 1.8.
++----------------------------------------------------------------
+
+> Configure project :astro-computer:AstroUtilities
++------ Warning: Java version (JAVA_HOME) possible mismatch -----
+| In task compileJava (AstroUtilities), the java version used 11 is not the expected version 1.8.
++----------------------------------------------------------------
++------ Warning: Java version (JAVA_HOME) possible mismatch -----
+| In task compileTestJava (AstroUtilities), the java version used 11 is not the expected version 1.8.
++----------------------------------------------------------------
+
+> Task :raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic:clean
+> Task :common-utils:compileJava UP-TO-DATE
+> Task :common-utils:processResources NO-SOURCE
+> Task :common-utils:classes UP-TO-DATE
+> Task :common-utils:jar UP-TO-DATE
+> Task :http-tiny-server:compileJava UP-TO-DATE
+> Task :http-tiny-server:processResources NO-SOURCE
+> Task :http-tiny-server:classes UP-TO-DATE
+> Task :http-tiny-server:jar UP-TO-DATE
+> Task :astro-computer:AstroUtilities:compileJava UP-TO-DATE
+. . .
+> Task :raspberry-sailor:NMEA-multiplexer:jar
+> Task :raspberry-sailor:routing:jar UP-TO-DATE
+> Task :raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic:compileJava NO-SOURCE
+> Task :raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic:processResources NO-SOURCE
+> Task :raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic:classes UP-TO-DATE
+> Task :raspberry-sailor:MUX-implementations:NMEA-multiplexer-basic:shadowJar
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.6/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 3m 6s
+24 actionable tasks: 8 executed, 16 up-to-date
+You will need to provide a name for your archive, that will also be the name of the folder where the runtime components will live.
+A name like 'nmea-dist' would do the job...
+Which (non existent) folder should we create the distribution in ? > nmea-dist
+Creating folder nmea-dist
+Copying resources
+  adding: admin.html (deflated 86%)
+  adding: basic.html (deflated 59%)
+  adding: console.html (deflated 79%)
+  adding: css/ (stored 0%)
+  adding: css/night.stylesheet.css (deflated 80%)
+  adding: css/graph.ux.03.css (deflated 64%)
+  adding: css/screen.css (deflated 45%)
+  adding: css/graph.ux.01.css (deflated 63%)
+  adding: css/web-components.css (deflated 86%)
+  adding: css/rocker.css (deflated 66%)
+  adding: css/graph.ux.02.css (deflated 64%)
+  adding: css/bground.jpg (stored 0%)
+  adding: css/stylesheet.css (deflated 80%)
+  adding: css/white.css (deflated 37%)
+  adding: css/black.css (deflated 38%)
+  adding: examples/ (stored 0%)
+  . . .
+  adding: widgets/Thermometer.js (deflated 76%)
+  adding: widgets/Direction.js (deflated 80%)
+  adding: widgets/AnalogDisplay.js (deflated 76%)
+  adding: widgets/TrackMap.js (deflated 70%)
+  adding: widgets/TimeDisplay.js (deflated 70%)
+  adding: widgets/worldmap.js (deflated 67%)
+  adding: widgets/JumboDisplay.js (deflated 73%)
+  adding: widgets/TWSEvolution.js (deflated 72%)
+  adding: widgets/AISMap.js (deflated 72%)
+  adding: widgets/SatellitesPlotter.js (deflated 71%)
+  adding: widgets/README.md (deflated 9%)
+  adding: wsconsole.html (deflated 50%)
+Do we package the Python part ? > y
+Copying Python stuff from RaspberryPythonServers/python into nmea-dist/python
+Done with Python
+nmea-dist/
+nmea-dist/nmea.mux.ais.test.3.yaml
+nmea-dist/nmea.mux.gps.yaml
+nmea-dist/kill.all.sample.sh
+nmea-dist/mux.sh
+nmea-dist/REST.ssd1306.dg.properties
+nmea-dist/python/
+nmea-dist/python/python/
+nmea-dist/python/python/TCP_HTU21DF_server.py
+nmea-dist/python/python/pull.python.sh
+nmea-dist/python/python/utils.py
+nmea-dist/python/python/sample_cache.py
+nmea-dist/python/python/REST_BasicCacheForwarder_server.py
+nmea-dist/python/python/REST_SSD1306_server_v2.py
+nmea-dist/python/python/REST_ZDA_server.py
+. . .
+nmea-dist/web.zip
+nmea-dist/nmea.mux.replay.big.log.yaml
+nmea-dist/nmea.mux.gps.tcp.yaml
+nmea-dist/ais.mgr.properties
+nmea-dist/nmea.mux.zero.yaml
+nmea-dist/markers.yaml
+nmea-dist/nmea.mux.ais.test.1.yaml
+nmea-dist/nmea.mux.kayak.ssd1306.yaml
+nmea-dist/build/
+nmea-dist/build/libs/
+nmea-dist/build/libs/NMEA-multiplexer-basic-1.0-all.jar
+nmea-dist/nmea.mux.gps.sensor.nmea-fwd.yaml
+Can we drop the nmea-dist directory ? > y
+Ok, moving on.
++--------------------------------------------------------------------------------------------------+
+ >> Archive /home/pi/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist.tar.gz ready for deployment.
++--------------------------------------------------------------------------------------------------+
+| Send it to another machine, and un-archive it.                                                   |
+| Use 'tar -xzvf nmea-dist.tar.gz' to un-archive.                                                   |
+| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |
+| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |
+| > For the python scripts, make sure you run (once) the script ./python/scripts/install.all.sh    |
+| > after unzipping the archive on the target machine.                                             |
+| The script to launch will be 'mux.sh'                                                            |
+| It is your responsibility to use the right properties file, possibly modified to fit your needs. |
+| For the runner/logger, use nmea.mux.gps.tcp.properties                                           |
+| Use it - for example - like:                                                                     |
+| $ cd nmea-dist                                                                                   
+| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |
+|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |
++--------------------------------------------------------------------------------------------------+
+ $ 
+```
+
+The script above is generating an archive named `nmea-dist.tar.gz`, its name comes from user's input.  
+Once the script is completed, transfer the archive on your target machine (using `scp` for example), un-archive it (as shown above, with a `tar -xzvf`), and you are good to go.
+
+If an _update_ is necessary, it is even easier.  
+Jus run the script `to.prod.sh` again, and _**do not drop**_ the directory at the end.  
+The structure of the `nmea-dist` (or whatever _**you**_ named it) looks like this:
+```
+$ tree nmea-dist
+nmea-dist
+├── ais.mgr.properties
+├── build
+│   └── libs
+│       └── NMEA-multiplexer-basic-1.0-all.jar
+├── kill.all.sample.sh
+├── markers.yaml
+├── mux.sh
+├── nmea.mux.ais.test.1.yaml
+├── nmea.mux.ais.test.3.yaml
+├── nmea.mux.big.log.nmea-fwd.yaml
+├── nmea.mux.gps.sensor.nmea-fwd.yaml
+├── nmea.mux.gps.tcp.yaml
+├── nmea.mux.gps.yaml
+├── nmea.mux.kayak.ssd1306.yaml
+├── nmea.mux.replay.big.log.yaml
+├── nmea.mux.zero.yaml
+├── nmea-to-text.properties
+├── REST.ssd1306.dg.properties
+└── web.zip
+
+2 directories, 17 files
+```
+This is also the structure generated on the target machine, strictly identical.  
+All you need to do this  time is to transfer the jar `NMEA-multiplexer-basic-1.0-all.jar` where it already exists, and - if needed - 
+the `web.zip`.
 
 ---
