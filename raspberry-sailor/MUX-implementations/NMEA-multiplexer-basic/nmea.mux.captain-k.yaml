@@ -1,0 +1,38 @@
+#
+# MUX definition.
+#
+name: "Log GPS and AIS Data."
+description:
+  - Reads GPS and AIS from stty
+  - Log data in 'logged' folder
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+channels:
+  # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal"
+  - type: file
+    filename: /dev/ttyACM0
+    verbose: false
+  # Requires a "stty -F /dev/ttyUSB0 raw 38400 cs8 clocal"
+  - type: file
+    filename: /dev/ttyUSB0
+    verbose: false
+forwarders:
+  #- type: tcp
+  #  subclass: nmea.forwarders.AISTCPServer
+  #  port: 7003
+  - type: file
+    verbose: false
+    timebase.filename: true
+    filename.suffix: "_LOG"
+    log.dir: "logged"
+    split: "hour"
+    flush: true
+  - type: tcp
+    port: 7001
+computers:
+  - class: nmea.computers.AISManager
+    properties: ais.mgr.properties
+    verbose: true
