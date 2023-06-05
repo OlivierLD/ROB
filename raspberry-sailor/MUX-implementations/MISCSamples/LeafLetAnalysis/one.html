@@ -743,6 +743,12 @@ compass-rose .day {
                     latlngs = doc;
                     console.log(`Path data loaded, ${doc.length} elements`);
 
+                    if (false) { // Generate minimal track.
+                        let smallTrack = [];
+                        latlngs.forEach(el => smallTrack.push({ lat: el.lat, lng: el.lng }));
+                        console.log(JSON.stringify(smallTrack));
+                    }
+
                     if (polyline !== null) { // Remove if there was one already
                         map.removeLayer(polyline);
                     }
