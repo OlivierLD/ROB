@@ -5,13 +5,12 @@
  */
 let forwardAjaxErrors = true;
 
-function initAjax(forwardErrors) {
-	if (forwardErrors !== undefined) {
-		forwardAjaxErrors = forwardErrors;
-	}
+function initAjax(forwardErrors=false, ping=1000) {
+
+	forwardAjaxErrors = forwardErrors;
 	let interval = setInterval(function () {
 		fetch();
-	}, 1000);
+	}, ping);
 }
 
 function getNMEAData() {

@@ -1,0 +1,38 @@
+#
+# MUX definition.
+#
+name: "With a GPS and AIS (replay), for tests"
+description:
+  - "Replay Channel"
+  - "Require Internet connection for sinagot.net"
+  - "No forwarders"
+  - "AIS Manager Computer"
+  - "Markers"
+  - "Just HTTP - static and REST"
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  markers: markers.yaml
+channels:
+  # GPS and AIS replay
+  - type: file
+    filename: ../../NMEA-multiplexer/logged/dives.zip
+    path.in.zip: dives_2023_05_28.nmea
+    zip: true
+    verbose: false
+  # AIS Data, from a GPSd server (a lot of data, careful)
+  - type: tcp
+    server: sinagot.net
+    port: 2947
+    # initial.request: "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
+    initial.request: ?WATCH={"enable":true,"json":false,"nmea":true,"raw":0,"scaled":false,"timing":false,"split24":false,"pps":false}
+    keep.trying: true
+    verbose: false
+# forwarders:
+  # - type: console
+computers:
+  - class: nmea.computers.AISManager
+    verbose: false
+    properties: ais.mgr.properties
+

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<!--
+ | Chartless GPS, AIS, markers
+ +-->
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Chartless Map</title>
+    <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
+	<style type="text/css">
+html {
+	font-family: "Courier New"
+}
+
+.chartless-map-01 {
+	--bg-color: rgba(224, 215, 215, 0.5);
+	--grid-color: rgba(0, 0, 0, 0.7);
+	--fg-color: gray;
+	--value-font: 'Courier New';
+}
+	</style>
+
+	<script type="text/javascript" src="js/date.proto.js"></script>
+	<script type="text/javascript" src="js/pub.sub.js"></script>
+	<script type="text/javascript" src="js/ajax.manager.js"></script>
+
+	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
+
+	<script type="text/javascript">
+
+const VERBOSE = false;		
+
+let map; 
+
+function displayErr(err) {
+	if (err) {
+		// document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+		console.log(err);
+	}
+}
+
+let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
+	// TODO Manage a specific component here.
+	console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
+};
+
+function onSlider(event) {
+	if (VERBOSE) {
+		console.log(`Setting chart width to ${this.value}.`);
+	}
+	if (this.value > 0) {
+    	map.chartWidth = this.value;
+	} else {
+		console.log(`Chart width ${this.value} !!`);
+	}
+}
+
+const MAX_BUFFER_LENGTH = 1000; // Tweak at will
+
+let trackBuffer = [];
+let aisTargets = [];
+let markers = [];
+let cog = 0;
+let sog;
+let pos;
+let gpsDate;
+
+let centerOnBoat = true;
+let displayMarkers = true;
+let displayAISTargets = true;
+
+let boatRadius = 10;
+
+/**
+ *  SUBSCRIBERS HERE.
+ *
+ * See js/ajax.manager.js
+ * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
+ */
+events.subscribe('pos', val => {
+	let strLat = decToSex(val.lat, 'NS');
+	let strLng = decToSex(val.lng, 'EW');
+	if (VERBOSE) {
+		console.log(`Got position: ${strLat} / ${strLng}`);
+	}
+	document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
+	pos = val;
+	trackBuffer.push(val);
+	while (trackBuffer.length > MAX_BUFFER_LENGTH) {
+		// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
+		trackBuffer.splice(0, 1);
+		// console.log(`Buffer length now ${trackBuffer.length}...`);
+    }
+	// console.log(`Track: ${trackBuffer.length} element(s).`);
+	document.getElementById('track-length').innerHTML = trackBuffer.length;
+	if (centerOnBoat) {
+		map.centerLat = val.lat;
+		map.centerLng = val.lng;
+	}
+});
+events.subscribe('markers', val => {
+	markers = val;
+});
+events.subscribe('ais', val => {
+	aisTargets = [];
+	let keys = Object.keys(val);
+	// console.log(`Received AIS Data, ${keys.length} target(s).`);
+	for (let i=0; i<keys.length; i++) {
+		// console.log(`Key ${keys[i]}`);
+		let recSet = val[keys[i]];
+		let recordKeys = Object.keys(recSet);
+		// console.log(`${recordKeys.length} records`);
+		// Is there a "18" (Position report) ?
+		if (recordKeys.indexOf('18') !== -1) {
+			// console.log(`We have a 18`);
+			let rec18 = recSet['18'];
+			let vesselName = rec18['vesselName'];
+			let recContent = rec18['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (false) {
+				if (rec18.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec18.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec18.collisionThreat.minimumDistance);
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i], 
+				vesselName: vesselName, 
+				lat: recContent.latitude, 
+				lng: recContent.longitude, 
+				cog: recContent.cog, 
+				sog: recContent.sog, 
+				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
+				threat: rec18.collisionThreat !== null
+			});
+		}
+		document.getElementById('ais-targets').innerHTML = aisTargets.length;
+	}
+});
+events.subscribe('gps-time', val => {
+	let date = new Date(val);
+	// val.format("Y-M-d H:i:s")
+	// let date = gpsTime.format("d-m-Y-l");
+	// console.log(`GPS-TIME: ${val.format("Y-M-d H:i:s")}`);
+	document.getElementById('gps-date').innerHTML = `${date.format("Y-m-d") + ' UTC'}`;
+	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
+	gpsDate = date;
+});
+events.subscribe('sog', val => {
+	document.getElementById('gps-sog').innerHTML = `${val} kn`;
+	sog = val;
+});
+events.subscribe('cog', val => {
+	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
+	cog = val;
+});
+///// END OF SUBSCRIBERS ////
+
+function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
+	
+	// console.log(`Drawing arrow for heading ${heading}`);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	context.moveTo(canvasX +  ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+
+	context.lineTo(canvasX + ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading - 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading - 10))));
+	context.lineTo(canvasX - ((boatLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
+					canvasY + ((boatLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading + 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading + 10))));
+
+	context.closePath();
+	context.stroke();
+}
+
+let updateMap = (elmt, context) => {
+	
+	if (false) { // Plot Center 
+		let center = elmt.posToCanvas(elmt._centerLat, elmt._centerLng);
+
+		context.save();
+
+		context.beginPath();
+		context.strokeStyle = 'red';
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		context.moveTo(center.x, center.y - 20);
+		context.lineTo(center.x, center.y + 20);
+	
+		context.moveTo(center.x - 20, center.y);
+		context.lineTo(center.x + 20, center.y);
+		context.stroke();
+		context.closePath();
+	
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+	
+		context.restore();
+	}
+
+	// The boat position and heading
+	if (true && pos) {
+		let boatXY = elmt.posToCanvas(pos.lat, pos.lng);
+
+		context.save();
+
+		context.strokeStyle = 'orange';
+		drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+
+		context.beginPath();
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		context.moveTo(boatXY.x, boatXY.y - 20);
+		context.lineTo(boatXY.x, boatXY.y + 20);
+	
+		context.moveTo(boatXY.x - 20, boatXY.y);
+		context.lineTo(boatXY.x + 20, boatXY.y);
+		context.stroke();
+		context.closePath();
+	
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(boatXY.x, boatXY.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+	
+		context.restore();
+	}
+
+
+	// The points of the track
+	context.beginPath();
+	context.strokeStyle = 'blue';
+	context.lineWidth = 1;
+	for (let i=0; i<trackBuffer.length; i++) {
+		let pos = trackBuffer[i];
+		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
+		// console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`)
+		if (i === 0) {
+			context.moveTo(canvasCoord.x, canvasCoord.y);
+		} else {
+			context.lineTo(canvasCoord.x, canvasCoord.y);
+		}
+	}
+	context.stroke();
+	context.closePath();
+
+	// Markers
+	if (VERBOSE) {
+		console.log(`${markers.length} markers`);
+	}
+	if (displayMarkers) {
+		context.save();
+		markers.forEach(marker => {
+			let lat = marker.latitude;
+			let lng = marker.longitude;
+			let label = marker.label;
+			let canvasCoord = elmt.posToCanvas(lat, lng);
+			context.beginPath();
+			context.strokeStyle = 'blue';
+			context.lineWidth = 2;
+			context.arc(canvasCoord.x, canvasCoord.y, 10, 0, 2 * Math.PI, false);
+			context.stroke();
+
+			context.font = "bold 12px Arial";
+			context.fillStyle = 'blue';
+			context.fillText(label, canvasCoord.x + 12, canvasCoord.y);
+
+			context.closePath();
+		});
+		context.restore();
+	}
+
+	// AIS Targets
+	if (VERBOSE) {
+		console.log(`${aisTargets.length} AIS Target(s)`);
+	}
+	if (displayAISTargets) {
+		aisTargets.forEach((target, idx) => {
+			/*
+			* aisTarget: {
+			* 	mmsi: string, 
+			*   vesselName: string, 
+			*   lat: number, 
+			*   lng: number, 
+			*   cog: number, 
+			*   sog: number, 
+			*   radius: number, // From the AIS Manager
+			*   threat: boolean
+			* }
+			*/
+			// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} ${target.threat ? '- Honk!' : ''}`);
+			context.beginPath();
+			context.lineWidth = 3;
+
+			let canvasCoord = elmt.posToCanvas(target.lat, target.lng);
+
+			// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} at ${canvasX}/${canvasY}`);
+
+			context.font = "8px Courier";
+			context.fillStyle = target.threat ? 'red' : 'green';
+			context.strokeStyle = target.threat ? 'red' : 'green'; 
+			context.arc(canvasCoord.x, canvasCoord.y, boatRadius, 0, 2 * Math.PI);
+			context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasCoord.x + boatRadius + 1, canvasCoord.y - boatRadius);
+			context.stroke();
+			context.closePath();
+			drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+		});
+	}
+};
+
+let lpad = (str, len, pad) => {
+	let s = str;
+	while (s.length < len) {
+		s = (pad === undefined ? ' ' : pad) + s;
+	}
+	return s;
+};
+
+let decToSex = (val, ns_ew) => {
+	let absVal = Math.abs(val);
+	let intValue = Math.floor(absVal);
+	let dec = absVal - intValue;
+	let i = intValue;
+	dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+	let s = "";
+	if (ns_ew !== undefined) {
+		if (val < 0) {
+			s += (ns_ew === 'NS' ? 'S' : 'W');
+		} else {
+			s += (ns_ew === 'NS' ? 'N' : 'E');
+		}
+		s += " ";
+	} else {
+		if (val < 0) {
+			s += '-'
+		}
+	}
+	s += i + "&deg;" + lpad(dec.toFixed(2), 5, '0') + "'";
+
+	return s;
+};
+
+let centerChart = (cb) => {
+	centerOnBoat = cb.checked;
+};
+let plotMarkers = (cb) => {
+	displayMarkers = cb.checked;
+	map.repaint();
+};
+let plotAISTargets = (cb) => {
+	displayAISTargets = cb.checked;
+	map.repaint();
+};
+
+window.onload = () => {
+	initAjax(); // false, ping=250);
+
+	map = document.getElementById('chartless-map-01');
+	map.setDoAfter(updateMap);        
+}
+	</script>
+</head>
+<body>
+	<h1>GPS &amp; AIS</h1>
+    <table>
+        <tr>
+            <td valign="top">
+                <div style="border: 1px solid silver; border-radius: 5px;">
+                    <chartless-map id="chartless-map-01"
+                                   class="chartless-map-01"
+                                   center-lat="0.0"
+                                   center-lng="0.0"
+                                   chart-width="5.0"
+                                   width="800"
+                                   height="600"></chartless-map>
+                </div>
+            </td>
+			<td valign="top">
+				<table>
+					<tr>
+						<td>Position:</td>
+						<td><span id="gps-position"></span></td>
+					</tr>
+					<tr>
+						<td>Track length:</td>
+						<td><span id="track-length"></span></td>
+					</tr>
+					<tr>
+						<td>GPS Date:</td>
+						<td><span id="gps-date"></span></td>
+					</tr>
+					<tr>
+						<td>GPS Time:</td>
+						<td><span id="gps-time"></span></td>
+					</tr>
+					<tr>
+						<td>SOG:</td>
+						<td><span id="gps-sog"></span></td>
+					</tr>
+					<tr>
+						<td>COG:</td>
+						<td><span id="gps-cog"></span></td>
+					</tr>
+					<tr>
+						<td>AIS Targets:</td>
+						<td><span id="ais-targets">-</span></td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+        <tr>
+            <td>
+                <!-- A slider for the chart scale -->
+                <div id="div-slider">
+                    <input type="range" id="scale-slider" value="5.0" min="0.0625" max="10.0" step="0.1" style="width: 90%;" title="Chart's width in degrees"
+                           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
+                    <output name="padding" id="sliderValue01" style="color: cyan;"></output>
+                </div>
+            </td>
+        </tr>
+		<tr>
+			<td>
+				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+			</td>
+		</tr>
+    </table>
+
+</body>
+</html>

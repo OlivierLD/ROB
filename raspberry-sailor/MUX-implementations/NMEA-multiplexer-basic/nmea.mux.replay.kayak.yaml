@@ -10,17 +10,18 @@ context:
   http.port: 8080
   init.cache: true
   default.declination: 0
+  markers: markers.yaml
 channels:
   - type: file
-    filename: ../../NMEA-multiplexer/sample-data/logged.data.zip
-    zip: true
-    path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
+    filename: ../RESTNavServer/launchers/sample.data/Kayak.Patrick.nmea
+    zip: false
+    # path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     # between-records: 100
     verbose: false
-forwarders:
+# forwarders:
 #  - type: console
-  - type: tcp
-    port: 7002
+#  - type: tcp
+#    port: 7002
 computers:
   - type: "tw-current"
     prefix: "CC"

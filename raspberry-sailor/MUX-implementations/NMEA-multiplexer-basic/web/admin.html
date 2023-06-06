@@ -126,7 +126,7 @@
           } else {
             errMessages.push(`${new Date()}: ${mess}`);
             while (errMessages.length > MAX_NB_MESS) {
-              errMessages.slice(0);
+              errMessages.splice(0, 1);
             }
             let newMessage = '';
             errMessages.forEach(mess => newMessage += (mess + "\n"));

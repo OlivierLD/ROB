@@ -26,4 +26,21 @@ markers:
   - latitude: 39.167398801021655
     longitude: -107.24753700739706
     label: "Redstone, CO."
-    
+  - latitude: 47.643393
+    longitude: -3.212535
+    label: "La barre"
+  - latitude: 0.0
+    longitude: 0.0
+    label: "Dummy"
+  - latitude: 47.659823
+    longitude: -3.211443
+    label: "Magouer"
+  - latitude: 47.675858
+    longitude: -3.200143
+    label: "Pont Lorois"
+  - latitude: 47.687092
+    longitude: -3.184950
+    label: "St Cado"
+  - latitude: 47.683498
+    longitude: -3.171165
+    label: "Pte du Perche"

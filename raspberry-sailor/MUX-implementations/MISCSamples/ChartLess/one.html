@@ -2,9 +2,7 @@
 <html lang="en">
 <!--
  | WiP.
- | Available from http://leafletjs.com/
- | Tutorials and examples at https://leafletjs.com/examples.html
- | Note: No native way to change orientation
+ | Chartkess Map...
  +-->
 <head>
 
@@ -13,9 +11,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="../small.boat.png">
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
   <style type="text/css">
     
@@ -299,6 +294,8 @@ compass-rose .day {
   <script type="module" src="../webcomponents/BoatOverview.js"></script>
   <script type="module" src="../webcomponents/Thermometer.js"></script>
   
+  <script type="module" src="../webcomponents/ChartlessMap.js"></script>
+
 </head>
 <body>
 
@@ -326,10 +323,10 @@ compass-rose .day {
         <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
             <!-- About content -->
             <div style="margin-top: 15px;">
-                A simple Leaflet and WebComponents interface to visualize and replay data logged when sailing.<br/><br/>
+                A simple WebComponents interface to visualize and replay data logged when sailing.<br/><br/>
                 <i>Featuring</i>:
                 <ul>
-                    <li>LeafLet Map API</li>
+                    <li>A Chartless Map (WebComponent), no Internet connection required</li>
                     <li>WebComponents</li>
                     <li>HTML5/CSS3/ES6</li>
                     <li>...and so on!</li>
@@ -337,12 +334,6 @@ compass-rose .day {
             </div>
             <hr/>
             <div style="margin-top: 15px;">
-                Map is draggable.
-                <br/>
-                Zoom in and out using the +/- on the chart (or double-click, and shift + double-click)
-                <br/>
-                Use the link at the bottom to move to some place(s) (experimental).
-                <br/>
                 Try the "REPLAY" button to replay what was logged (zoom when replaying..., it's worth it).
             </div>
         </div>
@@ -354,7 +345,8 @@ compass-rose .day {
 <table style="width: 100%;">
     <tr>
         <td>
-            <h1 style="padding-left: 10px;">Replay Logged Data</h1>
+            <h1 style="padding-left: 10px;">Replay Logged Data, with a map, but no cartography (Chart)</h1>
+            <h3>Work in Progress - <i>NO</i> Internet connection required</h3>
         </td>
         <td style="text-align: right; padding-right: 20px;">
             <img src="../drowning.gif"
@@ -395,8 +387,17 @@ compass-rose .day {
 <table width="100%">
   <tr>
     <td valign="top">
-      <!-- Column 1 -->
-      <div id="mapid" style="width: 800px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
+      <!-- Column 1, the "map" -->
+      <div id="mapid" style="width: 800px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;">
+        <chartless-map id="chartless-map-01"
+                       class="chartless-map-01"
+                       center-lat="0.00"
+                       center-lng="0.00"
+                       chart-width="10.0"
+                       projection="MERCATOR"
+                       width="800"
+                       height="600"></chartless-map>
+      </div>
     </td>
     <td valign="top" rowspan="2">
       <!-- Column 2 -->
@@ -654,21 +655,9 @@ compass-rose .day {
       </div>
     </td>
   </tr>
-  <tr>
-    <td>
-        <!-- Row 2, Col 1 -->
-        <div>
-          <span style="margin-left: 10px;">Fly to (for tests):</span>
-          <ul>
-            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Harbormaster</a></li>
-          </ul>
-        </div>
-    </td>
-  </tr>
 </table>
 <hr/>
 <div style="color: silver;">
-  OpenSource JavaScript map API at <a href="https://leafletjs.com/" target="leaflet">leafletjs.com</a>. Zoom for details...<br/>
   <i style="color: silver;">OlivSoft never stops</i>
 </div>
 
@@ -701,35 +690,14 @@ compass-rose .day {
         return s;
     }
 
-    let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
-
-    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
-
     let latlngs; // To be populated from JSON.
-
-    const ZOOM_POSITIONS = [
-        new L.LatLng(37.663680, -122.378633)   // Harbormaster 37 39.8208 N 122 22.7180 W
-    ];
-
-    function flyToZoom(idx) {
-        // map.panTo(ZOOM_POSITIONS[idx]);
-        // map.setView(ZOOM_POSITIONS[idx], 18);
-        map.flyTo(ZOOM_POSITIONS[idx]);
-    }
-
-    // Used as an example, See "// markers" below. Used to hold pictures.
-    const MARKERS = [];
+    let chartlessMap;
 
     const trackData = '../data/2010-07-10.tacking.back.in.nmea.json';
                     // '../data/2012-06-10.china.camp-oyster.point.nmea.json';
                     // '../data/2014-08-30.headless.labor.day.week.end.sail.only.nmea.json';
                     // '../data/2012-08-12.OysterPoint.ChinaCamp.valid.nmea.json';
                     // '../data/dives_2023_05_28.nmea.json';
-
-    let polyline = null;
 
     let loadPathData = () => {
         fetch(trackData)
@@ -745,23 +713,68 @@ compass-rose .day {
                         console.log(JSON.stringify(smallTrack));
                     }
 
-                    if (polyline !== null) { // Remove if there was one already
-                        map.removeLayer(polyline);
-                    }
                     // Process it here if needed
                     document.getElementById('point-card').innerText = `${latlngs.length} data points.`;
                     document.getElementById('data-slider').max = latlngs.length;
                     document.getElementById('point-origin').innerText = `from ${trackData}.`;
-                    polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+                    
 
-                    // zoom the map to the polyline
-                    map.fitBounds(polyline.getBounds());
+                    chartlessMap.setDoAfter((elmt, context) => {
+                        // console.log(`Plotting track of ${idx + 1} points.`);
 
-                    // let tooltip = L.tooltip()
-                    //                 .setLatLng(L.latLng([0.0, 0.0]))
-                    //                 .setContent('Hello world!<br />This is a nice tooltip.')
-                    //                 .addTo(map);
-                    // Tooltips
+                        // Plot Center
+                        if (true) {
+                            let center = elmt.posToCanvas(elmt._centerLat, elmt._centerLng);
+
+                            context.save();
+                    
+                            context.beginPath();
+                            context.strokeStyle = 'red';
+                            context.lineWidth = 1;
+                            // console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+                            // A cross
+                            context.moveTo(center.x, center.y - 20);
+                            context.lineTo(center.x, center.y + 20);
+                        
+                            context.moveTo(center.x - 20, center.y);
+                            context.lineTo(center.x + 20, center.y);
+                            context.stroke();
+                            context.closePath();
+                        
+                            // A circle
+                            context.beginPath();
+                            context.lineWidth = 4;
+                            context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
+                            context.stroke();
+                            context.closePath();
+                        
+                            context.restore();
+                        }
+
+                        // The points of the track
+                        context.beginPath();
+                        context.strokeStyle = 'blue';
+                        context.lineWidth = 1;
+                        for (let i=0; i<latlngs.length; i++) {
+                            let pos = latlngs[i];
+                            let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
+                            // console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`)
+                            if (i === 0) {
+                                context.moveTo(canvasCoord.x, canvasCoord.y);
+                            } else {
+                                context.lineTo(canvasCoord.x, canvasCoord.y);
+                            }
+                        }
+                        context.stroke();
+                        context.closePath();
+
+                    });        
+
+                    // Setup map here
+                    chartlessMap.chartWidth = 0.125;
+                    chartlessMap.centerLat = latlngs[0].lat;
+                    chartlessMap.centerLng = latlngs[0].lng;
+
                     if (false) {
                         let nb = 0;
                         // debugger;
@@ -777,14 +790,6 @@ compass-rose .day {
                         console.log(`${nb} elements`);
                     }
 
-                    // markers on the chart
-                    if (true) {
-                        MARKERS.forEach(mark => {
-                            L.marker([(mark.latitude), (mark.longitude)], { title: mark.name })
-                                .addTo(map)
-                                .bindPopup('<b>' + mark.name + '</b><br/>' + mark.description); // .openPopup();
-                        });
-                    }
                 });
             },
             (error, errmess) => {
@@ -800,9 +805,6 @@ compass-rose .day {
             });
     };
 
-    // To draw in pixels, see https://leafletjs.com/examples/extending/extending-2-layers.html
-    // Also https://codepen.io/adelaide01/pen/EXMwbY
-
     const INIT_PATH_IDX = 0; // 950; // 0;
 
     let pathIdx = INIT_PATH_IDX;
@@ -811,30 +813,6 @@ compass-rose .day {
     let circle = null;
     let marker = null;
     let tooltip = null;
-
-    map.addEventListener('mousemove', (event) => {
-        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
-        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
-        let lat = event.latlng.lat;
-        let lng = event.latlng.lng;
-        while (lng > 180) {
-            lng -= 360;
-        }
-        while (lng < -180) {
-            lng += 360;
-        }
-        if (cancelDriving) {
-            document.getElementById('curr-pos').innerHTML = `${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`;
-        }
-        if (tooltip != null) {
-            map.removeLayer(tooltip);
-        }
-        tooltip = L.tooltip()
-                        .setLatLng(L.latLng([lat, lng]))
-                        .setContent(`${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`)
-                        .addTo(map);
-
-    });
 
     function lpad(s, w, len) {
         let str = s;
@@ -1051,6 +1029,7 @@ compass-rose .day {
 
     window.onload = () => {
       console.log("Page Loaded!");
+      chartlessMap = document.getElementById('chartless-map-01');
       loadPathData();
     };
 
