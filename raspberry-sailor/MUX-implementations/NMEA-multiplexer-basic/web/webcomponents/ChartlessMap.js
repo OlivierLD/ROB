@@ -27,7 +27,6 @@ class ChartlessMap extends HTMLElement {
 			"center-lng",      // Number. Longitude of the center of the chart
 			"chart-width",     // Number. Width of the chart in degrees
 			"projection"       // String. Default Mercator (TODO: Anaximandre, Lambert)
-			// TODO Tooltips (callback), CSS Stylesheets.
 		];
 	}
 

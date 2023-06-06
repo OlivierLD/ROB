@@ -94,8 +94,10 @@ events.subscribe('pos', val => {
 	// console.log(`Track: ${trackBuffer.length} element(s).`);
 	document.getElementById('track-length').innerHTML = trackBuffer.length;
 	if (centerOnBoat) {
-		map.centerLat = val.lat;
+		map.centerLat = val.lat; // This does the repaint...
 		map.centerLng = val.lng;
+	} else {
+		map.repaint();
 	}
 });
 events.subscribe('markers', val => {
@@ -222,6 +224,9 @@ let updateMap = (elmt, context) => {
 
 	// The boat position and heading
 	if (true && pos) {
+
+		// console.log(`Pos: ${JSON.stringify(pos)}, cog: ${cog}`);
+
 		let boatXY = elmt.posToCanvas(pos.lat, pos.lng);
 
 		context.save();
@@ -248,6 +253,8 @@ let updateMap = (elmt, context) => {
 		context.closePath();
 	
 		context.restore();
+	// } else {
+	// 	console.log("No pos available...");
 	}
 
 
