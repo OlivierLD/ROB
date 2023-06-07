@@ -10,6 +10,7 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: -1
+  markers: markers.yaml
 channels:
   # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal"
   - type: file
