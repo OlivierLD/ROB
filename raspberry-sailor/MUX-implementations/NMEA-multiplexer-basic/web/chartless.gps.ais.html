@@ -18,6 +18,18 @@ html {
 	--fg-color: gray;
 	--value-font: 'Courier New';
 }
+.chartless-map-02 {
+	--bg-color: rgba(0, 0, 0, 0.5);
+	--grid-color: lime;
+	--fg-color: lime;
+	--value-font: 'Courier New';
+}
+.chartless-map-03 {
+	--bg-color: rgba(0, 0, 0, 1.0);
+	--grid-color: cyan;
+	--fg-color: cyan;
+	--value-font: 'Courier New';
+}
 	</style>
 
 	<script type="text/javascript" src="js/date.proto.js"></script>
@@ -385,6 +397,10 @@ let plotAISTargets = (cb) => {
 	map.repaint();
 };
 
+let setStyle = (opt) => {
+	document.getElementById('chartless-map-01').className = opt.value;
+};
+
 window.onload = () => {
 	initAjax(); // false, ping=250);
 
@@ -410,6 +426,16 @@ window.onload = () => {
             </td>
 			<td valign="top">
 				<table>
+					<tr>
+						<td>Style:</td>
+						<td>
+							<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
+								<option value="chartless-map-01" selected>Light</option>
+								<option value="chartless-map-02">Dark</option>
+								<option value="chartless-map-03">Darker</option>
+							</select>
+						</td>
+					</tr>
 					<tr>
 						<td>Position:</td>
 						<td><span id="gps-position"></span></td>

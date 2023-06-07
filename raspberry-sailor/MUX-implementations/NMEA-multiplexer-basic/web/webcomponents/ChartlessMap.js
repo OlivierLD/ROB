@@ -358,18 +358,21 @@ class ChartlessMap extends HTMLElement {
 			let x = (g - lngLeft) * lngDegreesToPixels;
 			// console.log(` ${ChartlessMap.decToSex(g, "EW")} => x: ${x}`);
 
+			context.save();
 			context.beginPath();
 			context.moveTo(x, 0);
 			context.lineTo(x, this._height);
 
 			// Label
 			let label = `${ChartlessMap.decToSex(g, "EW")}`;
-			let metrics = context.measureText(label);
-			let len = metrics.width;
-			context.fillText(label, Math.round(x + 5), 12);
-
+			var len = context.measureText(label).width;
+			context.translate(Math.round(x + 5), 0); // len / 2);
+			context.rotate(Math.PI / 2);
+			context.fillText(label, 1, 1); //i * xScale, cHeight - (len));
+	  
 			context.stroke();
 			context.closePath();
+			context.restore();
 		}
 
 		let latDegreesToPixel = this._height / chartHeight;
