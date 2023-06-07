@@ -346,7 +346,7 @@ class ChartlessMap extends HTMLElement {
 		let chartHeight = incLatTop - incLatBottom; // In Increasing Latitude !!
 		// 0.5, 1, 5, 10. To be tuned...
 		// let gridStep = 0.5;
-		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 3) * 10) / 10);
+		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 4) * 10) / 10);
 		if (chartlessMapVerbose) {
 			console.log(`GridStep: ${gridStep}`);
 		}
@@ -375,7 +375,7 @@ class ChartlessMap extends HTMLElement {
 		let latDegreesToPixel = this._height / chartHeight;
 		let firstSouthParallel = parseFloat((latBottom - gridStep).toFixed(0));
 		// console.log(`Between ${ChartlessMap.decToSex(latBottom, "NS")} (${latBottom}) and ${ChartlessMap.decToSex(latTop, "NS")} (${latTop}), starting parallels at ${ChartlessMap.decToSex(firstSouthParallel, "NS")}`);
-		for (let l=firstSouthParallel; l<latTop; l+=gridStep) {
+		for (let l=firstSouthParallel; l<latTop && gridStep>0; l+=gridStep) {
 			// console.log(`Draw parallel at ${ChartlessMap.decToSex(l, "NS")}`);
 			let y = (ChartlessMap.getIncLat(l) - ChartlessMap.getIncLat(latBottom)) * latDegreesToPixel;
 			// console.log(` ${ChartlessMap.decToSex(l, "NS")} => y: ${y}`);

@@ -83,7 +83,11 @@ body {
 		<a href="weather.station.html" target="iframe_a" title="NMEA Weather Station Data (WebComponents UI). Requires proper MUX settings">Weather Station Data (WebComponents)</a>
 	</div>
 
-	<span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Resource Menu</span> <!-- the hamburger -->
+    <div>
+        <span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Resource Menu</span> <!-- the hamburger -->
+        <span style="font-size:20px; cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
+    </div>
+
 
 	<div id="wrap">
 		<iframe id="the-frame" frameborder="0" src="" name="iframe_a" style="width: 100%; height: 95%;"></iframe>

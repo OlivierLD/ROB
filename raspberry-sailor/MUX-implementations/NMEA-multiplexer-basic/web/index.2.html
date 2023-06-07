@@ -74,7 +74,10 @@ body {
 		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Instruments Console</a>
 	</div>
 
-	<span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Resource Menu</span> <!-- the hamburger -->
+    <div>
+        <span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Resource Menu</span> <!-- the hamburger -->
+        <span style="font-size:20px; cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
+    </div>
 
 	<div id="wrap">
 		<iframe id="the-frame" frameborder="0" src="" name="iframe_a" style="width: 100%; height: 95%;"></iframe>
