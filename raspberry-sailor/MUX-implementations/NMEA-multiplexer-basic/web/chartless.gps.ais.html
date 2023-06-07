@@ -205,6 +205,8 @@ function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
 	context.stroke();
 }
 
+let markerAndTrackColor = 'navy';
+
 let updateMap = (elmt, context) => {
 	
 	if (false) { // Plot Center 
@@ -272,7 +274,7 @@ let updateMap = (elmt, context) => {
 
 	// The points of the track
 	context.beginPath();
-	context.strokeStyle = 'blue';
+	context.strokeStyle = markerAndTrackColor;
 	context.lineWidth = 1;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
@@ -299,13 +301,13 @@ let updateMap = (elmt, context) => {
 			let label = marker.label;
 			let canvasCoord = elmt.posToCanvas(lat, lng);
 			context.beginPath();
-			context.strokeStyle = 'blue';
+			context.strokeStyle = markerAndTrackColor;
 			context.lineWidth = 2;
 			context.arc(canvasCoord.x, canvasCoord.y, 10, 0, 2 * Math.PI, false);
 			context.stroke();
 
 			context.font = "bold 12px Arial";
-			context.fillStyle = 'blue';
+			context.fillStyle = markerAndTrackColor;
 			context.fillText(label, canvasCoord.x + 12, canvasCoord.y);
 
 			context.closePath();
@@ -399,6 +401,19 @@ let plotAISTargets = (cb) => {
 
 let setStyle = (opt) => {
 	document.getElementById('chartless-map-01').className = opt.value;
+
+	switch (opt.value) {
+		case 'chartless-map-03':
+			markerAndTrackColor = 'cyan';
+			break;
+		case 'chartless-map-02':
+			markerAndTrackColor = 'blue';
+			break;
+		case 'chartless-map-01':
+		default:
+			markerAndTrackColor = 'navy';
+			break;
+	}
 };
 
 window.onload = () => {
@@ -410,7 +425,7 @@ window.onload = () => {
 	</script>
 </head>
 <body>
-	<h1>GPS &amp; AIS</h1>
+	<h1>GPS, AIS, displayMarkers</h1>
     <table>
         <tr>
             <td valign="top">
@@ -470,10 +485,11 @@ window.onload = () => {
         <tr>
             <td>
                 <!-- A slider for the chart scale -->
-                <div id="div-slider">
-                    <input type="range" id="scale-slider" value="5.0" min="0.0625" max="10.0" step="0.1" style="width: 90%;" title="Chart's width in degrees"
-                           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
-                    <output name="padding" id="sliderValue01" style="color: cyan;"></output>
+                <div id="div-slider" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+					Chart Width:
+                    <input type="range" id="scale-slider" value="5.0" min="0.05" max="10.0" step="0.05" style="width: 600px;" title="Chart's width in degrees"
+                           oninput="onSlider.call(this, event); sliderValue01.value = `${parseFloat(this.value).toFixed(2)}&deg;`;"/>
+                    <output name="padding" id="sliderValue01" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5.00&deg;</output>
                 </div>
             </td>
         </tr>
