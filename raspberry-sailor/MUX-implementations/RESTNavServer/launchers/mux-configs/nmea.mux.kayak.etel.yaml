@@ -15,4 +15,4 @@ channels:
 forwarders:
   - type: tcp
     port: 7005
-
+    verbose: true

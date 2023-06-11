@@ -332,7 +332,8 @@ public class NMEAUtils {
                 markerList.add(new Marker(
                         (Double)yamlMarker.get("latitude"),
                         (Double)yamlMarker.get("longitude"),
-                        (String)yamlMarker.get("label")
+                        (String)yamlMarker.get("label"),
+                        (String)yamlMarker.get("type")
                 ));
             });
             // System.out.println("Map loaded.");

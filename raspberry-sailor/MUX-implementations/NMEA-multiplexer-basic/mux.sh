@@ -34,16 +34,25 @@ fi
 #
 PROCESS_ON_START=true # Default is true for process.on.start
 #
+MACHINE_NAME=`uname -a | awk '{ print $2 }'`
+HTTP_PORT=`cat ${MUX_PROP_FILE} | grep -e 'http.port[:|=]'`
+HTTP_PORT=$(echo ${HTTP_PORT})   # Trim the blanks
+PORT=${HTTP_PORT#*http.port=}
+if [[ ${PORT} =~ http.port* ]]; then
+   PORT=${HTTP_PORT#*http.port:}
+fi
+PORT=$(echo ${PORT})   # Trim the blanks
 if [[ "$PROCESS_ON_START" == "false" ]]; then
-  MACHINE_NAME=`uname -a | awk '{ print $2 }'`
-  PORT=`cat ${MUX_PROP_FILE} | grep http.port=`
-  PORT=${PORT#*http.port=}
   echo -e "+-------- N O T E   o n   F O R W A R D E R S ------------------"
   echo -e "| You will need to start the forwarders yourself,"
   echo -e "| invoke PUT http://${MACHINE_NAME}:${PORT}/mux/mux-process/on to start"
   echo -e "| invoke PUT http://${MACHINE_NAME}:${PORT}/mux/mux-process/off to stop"
   echo -e "| Or use http://${MACHINE_NAME}:${PORT}/web/runner.html from a "
   echo -e "| browser (laptop, cell, tablet...)"
+  echo -e "+---------------------------------------------------------------"
+else
+  echo -e "+---------------------------------------------------------------"
+  echo -e "| From a browser, try http://${MACHINE_NAME}:${PORT}/web/index.html"
   echo -e "+---------------------------------------------------------------"
 fi
 #

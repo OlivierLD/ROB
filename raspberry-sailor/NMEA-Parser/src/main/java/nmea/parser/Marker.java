@@ -4,12 +4,14 @@ public class Marker {
     private double latitude;
     private double longitude;
     private String label;
+    private String type;
 
     public Marker() {}
-    public Marker(double latitude, double longitude, String label) {
+    public Marker(double latitude, double longitude, String label, String type) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.label = label;
+        this.type = type;
     }
     public Marker latitude(double latitude) {
         this.latitude = latitude;
@@ -21,6 +23,10 @@ public class Marker {
     }
     public Marker label(String label) {
         this.label = label;
+        return this;
+    }
+    public Marker type(String type) {
+        this.type = type;
         return this;
     }
 
@@ -46,5 +52,13 @@ public class Marker {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -1,5 +1,5 @@
 # Nautical Almanac primitives 
-### also provides REST resources implementation
+### Also provides REST resources implementation, T900 (Dieumegard & Bataille) publishing.
 Allows an HTTP Client to consume (some) features of the `AstroComputer` module.  
 See how it can be put to work in `RESTNavServer`.
 

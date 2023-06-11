@@ -4,12 +4,15 @@
 markers:
   - latitude: 47.705 
     longitude: -3.105 
+    type: green
     label: Locoal
   - latitude: 47.661667 
     longitude: -2.758167
     label: Vannes
+    type: red
   - latitude: 47.677667
     longitude: -3.135667
+    type: card-n
     label: Belz
   - latitude: 49.293167 
     longitude: -0.098833
@@ -31,15 +34,19 @@ markers:
     label: "La barre"
   - latitude: 0.0
     longitude: 0.0
+    type: dummy
     label: "Dummy"
   - latitude: 47.659823
     longitude: -3.211443
+    type: card-s
     label: "Magouer"
   - latitude: 47.675858
     longitude: -3.200143
+    type: card-e
     label: "Pont Lorois"
   - latitude: 47.687092
     longitude: -3.184950
+    type: card-w
     label: "St Cado"
   - latitude: 47.683498
     longitude: -3.171165
