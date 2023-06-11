@@ -2,6 +2,10 @@
 # Markers, for tests
 #
 markers:
+  - label: "Basse Mélite"
+    latitude: 47.647265
+    longitude: -3.425327
+    type: card-n
   - latitude: 47.705 
     longitude: -3.105 
     label: Locoal

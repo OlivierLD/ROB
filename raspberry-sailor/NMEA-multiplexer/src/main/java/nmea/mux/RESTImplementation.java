@@ -2878,9 +2878,17 @@ public class RESTImplementation {
 		} else {
 			// specialContentType = HttpHeaders.TEXT_PLAIN_ISO_8859;
 			try {
-//				final byte[] ba = mapper.writeValueAsBytes(cache);
-//				content = new String(ba, "UTF-8");
-				content = mapper.writeValueAsString(clonedCache); // jsonElement != null ? jsonElement.toString() : "";
+				if (false) {
+					final byte[] ba = mapper.writeValueAsBytes(clonedCache);
+					try {
+						content = new String(ba, "UTF-8");
+					} catch (UnsupportedEncodingException uee) {
+						uee.printStackTrace();
+					}
+					System.out.printf("Content str length: %d, byte length: %d (%d)\n", content.length(), ba.length, content.getBytes().length);
+				} else {
+					content = mapper.writeValueAsString(clonedCache); // jsonElement != null ? jsonElement.toString() : "";
+				}
 				if (false && content.contains("°")) {
 					content = content.replace('°', '*'); // ' '); TODO There must be a better way...
 				}
@@ -2900,7 +2908,8 @@ public class RESTImplementation {
 //				content = uee.getMessage();
 			}
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, specialContentType, content.length());
+		// content.getBytes().length is important, if there are special characters...
+		RESTProcessorUtil.generateResponseHeaders(response, specialContentType, content.getBytes().length); // content.length());
 		response.setPayload(content.getBytes());
 
 		return response;

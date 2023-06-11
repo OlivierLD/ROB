@@ -27,6 +27,7 @@ dependencies {
     implementation project(':common-utils')
     implementation project(':astro-computer:AstroUtilities')
     testImplementation "junit:junit:$junit_version"
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 }
 
 // See https://docs.gradle.org/current/userguide/publishing_maven.html
