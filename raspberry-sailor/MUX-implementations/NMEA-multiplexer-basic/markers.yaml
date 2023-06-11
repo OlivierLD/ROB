@@ -9,7 +9,6 @@ markers:
   - latitude: 47.661667 
     longitude: -2.758167
     label: Vannes
-    type: red
   - latitude: 47.677667
     longitude: -3.135667
     type: card-n
@@ -29,8 +28,9 @@ markers:
   - latitude: 39.167398801021655
     longitude: -107.24753700739706
     label: "Redstone, CO."
-  - latitude: 47.643393
-    longitude: -3.212535
+  - latitude: 47.643065
+    longitude: -3.214258
+    type: red
     label: "La barre"
   - latitude: 0.0
     longitude: 0.0
@@ -51,3 +51,7 @@ markers:
   - latitude: 47.683498
     longitude: -3.171165
     label: "Pte du Perche"
+  - latitude: 47.642375
+    longitude: -3.244957
+    label: "Roheu"
+    type: card-s

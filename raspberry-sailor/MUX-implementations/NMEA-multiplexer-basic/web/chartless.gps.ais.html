@@ -606,12 +606,10 @@ let updateMap = (elmt, context) => {
 					context.fill();
 					context.restore();
 					break;
-				case 'dummy':
-					context.strokeStyle = 'darkgray';
 				case 'default':
-					context.strokeStyle = markerAndTrackColor;
 				default:
 					context.save();
+					context.strokeStyle = markerAndTrackColor;
 					// Crosshair
 					context.lineWidth = 0.5;
 					context.beginPath();

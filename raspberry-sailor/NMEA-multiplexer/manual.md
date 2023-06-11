@@ -679,6 +679,7 @@ markers:
   - latitude: 47.705 
     longitude: -3.105 
     label: Locoal
+    type: red
   - latitude: 47.661667 
     longitude: -2.758167
     label: Vannes
@@ -697,7 +698,9 @@ markers:
 - `latitude` as a number
 - `longitude` as a number
 - `label` as a string
+- `type` as an optional string
 
+`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`.
 
 ### Example
 Here is an example of a simple properties file driving the Multiplexer:
