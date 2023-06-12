@@ -676,25 +676,34 @@ will be stored in the cache (like the deviation curve data for example), and can
 The structure of this file is the following one:
 ```yaml
 markers:
-  - latitude: 47.705 
-    longitude: -3.105 
-    label: Locoal
-    type: red
-  - latitude: 47.661667 
-    longitude: -2.758167
-    label: Vannes
-  - latitude: 47.677667
-    longitude: -3.135667
-    label: Belz
-  - latitude: 49.293167 
-    longitude: -0.098833
-    label: Dives
+  - latitude: 47.659823
+    longitude: -3.211443
+    type: default
+    label: "Magouer"
+  - latitude: 47.675858
+    longitude: -3.200143
+    label: "Pont Lorois"
+  - latitude: 47.687092
+    longitude: -3.184950
+    type: default
+    label: "St Cado"
+  - latitude: 47.683498
+    longitude: -3.171165
+    label: "Pte du Perche"
+  - label: "Roheu"
+    latitude: 47.642375
+    longitude: -3.244957
+    type: card-s
+  - label: "Basse Mélite"
+    latitude: 47.647265
+    longitude: -3.425327
+    type: card-n
   - latitude: 37.7489 
     longitude: -122.5070
     label: SF
   . . .
 ```
-`markers` is an array of objects containing 3 members:
+`markers` is an array of objects containing 3 (or more) members:
 - `latitude` as a number
 - `longitude` as a number
 - `label` as a string
