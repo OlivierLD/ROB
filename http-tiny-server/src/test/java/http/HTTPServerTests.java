@@ -359,7 +359,7 @@ public class HTTPServerTests {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}

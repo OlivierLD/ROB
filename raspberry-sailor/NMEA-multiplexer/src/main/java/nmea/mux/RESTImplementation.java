@@ -364,7 +364,7 @@ public class RESTImplementation {
 			Object[] portArray = portList.toArray(new Object[0]);
 			try {
 				String content = mapper.writeValueAsString(portArray);
-				RESTProcessorUtil.generateResponseHeaders(response, content.length());
+				RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 				response.setPayload(content.getBytes());
 			} catch (JsonProcessingException jpe) {
 				jpe.printStackTrace();
@@ -388,9 +388,9 @@ public class RESTImplementation {
 			String content = mapper.writeValueAsString(channelArray);
 			if (restVerbose()) {
 				System.out.printf("-- Channels --\n%s\n--------------------\n", content);
-				System.out.printf("\tlength: %d\n", content.length());
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response = HTTPServer.buildErrorResponse(response, Response.BAD_REQUEST, new HTTPServer.ErrorPayload()
@@ -412,9 +412,9 @@ public class RESTImplementation {
 			content = mapper.writeValueAsString(forwarderArray);
 			if (restVerbose()) {
 				System.out.printf("-- Forwarders --\n%s\n--------------------\n", content);
-				System.out.printf("\tlength: %d\n", content.length());
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		} catch (JsonProcessingException jpe) {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
@@ -436,14 +436,14 @@ public class RESTImplementation {
 			content = mapper.writeValueAsString(computerArray);
 			if (restVerbose()) {
 				System.out.printf("-- Computers --\n%s\n--------------------\n", content);
-				System.out.printf("\tlength: %d\n", content.length());
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		} catch (JsonProcessingException jpe) {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 
 		return response;
@@ -476,12 +476,12 @@ public class RESTImplementation {
 		String content;
 		try {
 			content = mapper.writeValueAsString(map);
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		} catch (JsonProcessingException jpe) {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 
 		return response;
@@ -905,7 +905,7 @@ public class RESTImplementation {
 						nmeaDataForwarders.add(consoleForwarder);
 						response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 						String content = mapper.writeValueAsString(consoleForwarder.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					} catch (Exception ex) {
 						response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -931,7 +931,7 @@ public class RESTImplementation {
 							Forwarder serialForwarder = new SerialWriter(serialJson.getPort(), serialJson.getBR());
 							nmeaDataForwarders.add(serialForwarder);
 							String content = mapper.writeValueAsString(serialForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -961,7 +961,7 @@ public class RESTImplementation {
 							Forwarder tcpForwarder = new TCPServer(tcpJson.getPort());
 							nmeaDataForwarders.add(tcpForwarder);
 							String content = mapper.writeValueAsString(tcpForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -995,7 +995,7 @@ public class RESTImplementation {
 							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(), restJson.getServerName(), restJson.getPort(), restJson.getResource());
 							nmeaDataForwarders.add(restForwarder);
 							String content = mapper.writeValueAsString(restForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1025,7 +1025,7 @@ public class RESTImplementation {
 							Forwarder gpsdForwarder = new GPSdServer(gpsdJson.getPort());
 							nmeaDataForwarders.add(gpsdForwarder);
 							String content = mapper.writeValueAsString(gpsdForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1055,7 +1055,7 @@ public class RESTImplementation {
 							Forwarder rmiForwarder = new RMIServer(rmiJson.getPort(), rmiJson.getBindingName());
 							nmeaDataForwarders.add(rmiForwarder);
 							String content = mapper.writeValueAsString(rmiForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1097,7 +1097,7 @@ public class RESTImplementation {
 							}
 							nmeaDataForwarders.add(fileForwarder);
 							String content = mapper.writeValueAsString(fileForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1126,7 +1126,7 @@ public class RESTImplementation {
 							Forwarder wsForwarder = new WebSocketWriter(wsJson.getWsUri());
 							nmeaDataForwarders.add(wsForwarder);
 							String content = mapper.writeValueAsString(wsForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1156,7 +1156,7 @@ public class RESTImplementation {
 							Forwarder wspForwarder = new WebSocketProcessor(wspJson.getWsUri());
 							nmeaDataForwarders.add(wspForwarder);
 							String content = mapper.writeValueAsString(wspForwarder.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1213,7 +1213,7 @@ public class RESTImplementation {
 									}
 									nmeaDataForwarders.add(forwarder);
 									String content = mapper.writeValueAsString(forwarder.getBean());
-									RESTProcessorUtil.generateResponseHeaders(response, content.length());
+									RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 									response.setPayload(content.getBytes());
 								} else {
 									// Wrong class
@@ -1288,7 +1288,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(tcpClient);
 							tcpClient.startWorking();
 							String content = mapper.writeValueAsString(tcpClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1321,7 +1321,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(serialClient);
 							serialClient.startWorking();
 							String content = mapper.writeValueAsString(serialClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1354,7 +1354,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(wsClient);
 							wsClient.startWorking();
 							String content = mapper.writeValueAsString(wsClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1387,7 +1387,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(fileClient);
 							fileClient.startWorking();
 							String content = mapper.writeValueAsString(fileClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1425,7 +1425,7 @@ public class RESTImplementation {
 //						nmeaDataClients.add(bmp180Client);
 //						bmp180Client.startWorking();
 //						String content = new Gson().toJson(bmp180Client.getBean());
-//						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //						response.setPayload(content.getBytes());
 //					} catch (Exception ex) {
 //						response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1469,7 +1469,7 @@ public class RESTImplementation {
 //						nmeaDataClients.add(lsm303Client);
 //						lsm303Client.startWorking();
 //						String content = new Gson().toJson(lsm303Client.getBean());
-//						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //						response.setPayload(content.getBytes());
 //					} catch (Exception ex) {
 //						response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1508,7 +1508,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(zdaClient);
 							zdaClient.startWorking();
 							String content = mapper.writeValueAsString(zdaClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1550,7 +1550,7 @@ public class RESTImplementation {
 //						nmeaDataClients.add(bme280Client);
 //						bme280Client.startWorking();
 //						String content = new Gson().toJson(bme280Client.getBean());
-//						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //						response.setPayload(content.getBytes());
 //					} catch (Exception ex) {
 //						response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1588,7 +1588,7 @@ public class RESTImplementation {
 //						nmeaDataClients.add(htu21dfClient);
 //						htu21dfClient.startWorking();
 //						String content = new Gson().toJson(htu21dfClient.getBean());
-//						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //						response.setPayload(content.getBytes());
 //					} catch (Exception ex) {
 //						response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1619,7 +1619,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(rndClient);
 							rndClient.startWorking();
 							String content = mapper.writeValueAsString(rndClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1662,7 +1662,7 @@ public class RESTImplementation {
 							nmeaDataClients.add(restClient);
 							restClient.startWorking();
 							String content = mapper.writeValueAsString(restClient.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1751,7 +1751,7 @@ public class RESTImplementation {
 									nmeaDataClients.add(nmeaClient);
 									nmeaClient.startWorking();
 									String content = mapper.writeValueAsString(nmeaClient.getBean());
-									RESTProcessorUtil.generateResponseHeaders(response, content.length());
+									RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 									response.setPayload(content.getBytes());
 								} else {
 									// Wrong class
@@ -1825,7 +1825,7 @@ public class RESTImplementation {
 							Computer twCurrentComputer = new ExtraDataComputer(this.mux, twJson.getPrefix(), timeBufferLengths.toArray(new Long[timeBufferLengths.size()]));
 							nmeaDataComputers.add(twCurrentComputer);
 							String content = mapper.writeValueAsString(twCurrentComputer.getBean());
-							RESTProcessorUtil.generateResponseHeaders(response, content.length());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 							response.setPayload(content.getBytes());
 						} catch (Exception ex) {
 							response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -1882,7 +1882,7 @@ public class RESTImplementation {
 									}
 									nmeaDataComputers.add(computer);
 									String content = mapper.writeValueAsString(computer.getBean());
-									RESTProcessorUtil.generateResponseHeaders(response, content.length());
+									RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 									response.setPayload(content.getBytes());
 								} else {
 									// Wrong class
@@ -1961,7 +1961,7 @@ public class RESTImplementation {
 						SerialClient serialClient = (SerialClient) opClient.get();
 						serialClient.setVerbose(serialJson.getVerbose());
 						String content = mapper.writeValueAsString(serialClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -1984,7 +1984,7 @@ public class RESTImplementation {
 						dataFileClient.setVerbose(fileJson.getVerbose());
 						dataFileClient.setLoop(fileJson.getLoop());
 						String content = mapper.writeValueAsString(dataFileClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2007,7 +2007,7 @@ public class RESTImplementation {
 						TCPClient tcpClient = (TCPClient) opClient.get();
 						tcpClient.setVerbose(tcpJson.getVerbose());
 						String content = mapper.writeValueAsString(tcpClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2029,7 +2029,7 @@ public class RESTImplementation {
 						WebSocketClient webSocketClient = (WebSocketClient) opClient.get();
 						webSocketClient.setVerbose(wsJson.getVerbose());
 						String content = mapper.writeValueAsString(webSocketClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2049,7 +2049,7 @@ public class RESTImplementation {
 //					BMP180Client bmp180Client = (BMP180Client) opClient.get();
 //					bmp180Client.setVerbose(bmp180Json.getVerbose());
 //					String content = new Gson().toJson(bmp180Client.getBean());
-//					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //					response.setPayload(content.getBytes());
 //				}
 //				break;
@@ -2065,7 +2065,7 @@ public class RESTImplementation {
 //					BME280Client bme280Client = (BME280Client) opClient.get();
 //					bme280Client.setVerbose(bme280Json.getVerbose());
 //					String content = new Gson().toJson(bme280Client.getBean());
-//					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //					response.setPayload(content.getBytes());
 //				}
 //				break;
@@ -2081,7 +2081,7 @@ public class RESTImplementation {
 //					LSM303Client lsm303Client = (LSM303Client) opClient.get();
 //					lsm303Client.setVerbose(lsm303Json.getVerbose());
 //					String content = new Gson().toJson(lsm303Client.getBean());
-//					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //					response.setPayload(content.getBytes());
 //				}
 //				break;
@@ -2098,7 +2098,7 @@ public class RESTImplementation {
 						ZDAClient zdaClient = (ZDAClient) opClient.get();
 						zdaClient.setVerbose(zdaJson.getVerbose());
 						String content = mapper.writeValueAsString(zdaClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2118,7 +2118,7 @@ public class RESTImplementation {
 //					HTU21DFClient htu21DFClient = (HTU21DFClient) opClient.get();
 //					htu21DFClient.setVerbose(htu21dfJson.getVerbose());
 //					String content = new Gson().toJson(htu21DFClient.getBean());
-//					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+//					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 //					response.setPayload(content.getBytes());
 //				}
 //				break;
@@ -2135,7 +2135,7 @@ public class RESTImplementation {
 						RandomClient randomClient = (RandomClient) opClient.get();
 						randomClient.setVerbose(rndJson.getVerbose());
 						String content = mapper.writeValueAsString(randomClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2158,7 +2158,7 @@ public class RESTImplementation {
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						nmeaClient.setVerbose(verbose);
 						String content = mapper.writeValueAsString(nmeaClient.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2258,7 +2258,7 @@ public class RESTImplementation {
 						computer.setVerbose(twJson.isVerbose());
 						computer.setPrefix(twJson.getPrefix());
 						String content = mapper.writeValueAsString(computer.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2281,7 +2281,7 @@ public class RESTImplementation {
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						computer.setVerbose(verbose);
 						String content = mapper.writeValueAsString(computer.getBean());
-						RESTProcessorUtil.generateResponseHeaders(response, content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
@@ -2306,7 +2306,7 @@ public class RESTImplementation {
 		this.mux.setVerbose(newValue);
 		try {
 			String content = mapper.writeValueAsString(newValue);
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -2327,7 +2327,7 @@ public class RESTImplementation {
 		this.mux.setEnableProcess(newValue);
 		try {
 			String content = mapper.writeValueAsString(newValue);
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -2356,7 +2356,7 @@ public class RESTImplementation {
 			System.out.printf("Find script completed, status %d, found %d files\n", exitStatus, list.size());
 
 			String content = mapper.writeValueAsString(list);
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (IOException | InterruptedException ex) {
 			ex.printStackTrace();
@@ -2388,7 +2388,7 @@ public class RESTImplementation {
 			} else if (fmt.equals("duration")) {
 				content = DURATION_FMT.format(new Date());
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -2447,7 +2447,7 @@ public class RESTImplementation {
 		}
 		String content = sb.toString();
 		// Force application/octet-stream to download file. text/plain from HTML page displays the content
-		RESTProcessorUtil.generateResponseHeaders(response, "application/octet-stream", content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, "application/octet-stream", content.getBytes().length);
 		response.setPayload(content.getBytes());
 
 		return response;
@@ -2520,7 +2520,7 @@ public class RESTImplementation {
 		}
 		try {
 			String content = mapper.writeValueAsString(responsePayload);
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -2628,7 +2628,7 @@ public class RESTImplementation {
 			dateHolder.put("mins", Integer.parseInt(formattedSysDate.substring(15, 17)));
 			dateHolder.put("secs", Integer.parseInt(formattedSysDate.substring(18)));
 			content = mapper.writeValueAsString(dateHolder);
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -2654,7 +2654,7 @@ public class RESTImplementation {
 		stopThread.start();
 		try {
 			String content = mapper.writeValueAsString(ok); // jsonElement.toString();
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -2676,7 +2676,7 @@ public class RESTImplementation {
 		} catch (JsonProcessingException jpe) {
 			content = jpe.getMessage();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 
 		return response;
@@ -2885,7 +2885,7 @@ public class RESTImplementation {
 					} catch (UnsupportedEncodingException uee) {
 						uee.printStackTrace();
 					}
-					System.out.printf("Content str length: %d, byte length: %d (%d)\n", content.length(), ba.length, content.getBytes().length);
+					System.out.printf("Content str length: %d, byte length: %d (%d)\n", content.getBytes().length, ba.length, content.getBytes().length);
 				} else {
 					content = mapper.writeValueAsString(clonedCache); // jsonElement != null ? jsonElement.toString() : "";
 				}
@@ -2894,7 +2894,7 @@ public class RESTImplementation {
 				}
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
-					System.out.printf("\tlength: %d\n", content.length());
+					System.out.printf("\tlength: %d\n", content.getBytes().length);
 				}
 			} catch (JsonProcessingException jpe) {
 				try {
@@ -2923,7 +2923,7 @@ public class RESTImplementation {
 
 		try {
 			String content = deviationCurve != null ? mapper.writeValueAsString(deviationCurve) : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -2939,7 +2939,7 @@ public class RESTImplementation {
 
 		try {
 			String content = position != null ? mapper.writeValueAsString(position) : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3005,7 +3005,7 @@ public class RESTImplementation {
 			if (false && content.contains("°")) {
 				content = content.replace('°', '*'); // ' '); TODO There must be a better way...
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3102,7 +3102,7 @@ public class RESTImplementation {
 
 		try {
 			String content = map.size() > 0 ? mapper.writeValueAsString(map) : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3122,7 +3122,7 @@ public class RESTImplementation {
 
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3142,7 +3142,7 @@ public class RESTImplementation {
 
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3174,7 +3174,7 @@ public class RESTImplementation {
 
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3193,7 +3193,7 @@ public class RESTImplementation {
 
 		try {
 			String content = mapper.writeValueAsString(map); // jsonElement != null ? jsonElement.toString() : "";
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -3330,7 +3330,7 @@ public class RESTImplementation {
 				.toArray(new Operation[operations.size()]);
 		try {
 			String content = mapper.writeValueAsString(channelArray);
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);

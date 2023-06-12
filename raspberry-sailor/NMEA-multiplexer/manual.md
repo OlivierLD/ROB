@@ -700,7 +700,7 @@ markers:
 - `label` as a string
 - `type` as an optional string
 
-`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`.
+`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp`, `is-dng`.
 
 ### Example
 Here is an example of a simple properties file driving the Multiplexer:

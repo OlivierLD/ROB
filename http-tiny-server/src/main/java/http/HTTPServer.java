@@ -380,7 +380,7 @@ public class HTTPServer {
 			content = jpe.getMessage(); // TODO Use dumpException ?
 			jpe.printStackTrace();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}
@@ -725,7 +725,7 @@ public class HTTPServer {
 						System.out.println("Received an exit signal (path)");
 						Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 						String content = "Exiting";
-						RESTProcessorUtil.generateResponseHeaders(response, "text/html", content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, "text/html", content.getBytes().length);
 						response.setPayload(content.getBytes());
 						sendResponse(response, out);
 						okToStop = true;
@@ -735,7 +735,7 @@ public class HTTPServer {
 						if (request.getContent() != null && request.getContent().length > 0) {
 							content += String.format("\nYour payload was [%s]", new String(request.getContent()));
 						}
-						RESTProcessorUtil.generateResponseHeaders(response, "text/html", content.length());
+						RESTProcessorUtil.generateResponseHeaders(response, "text/html", content.getBytes().length);
 						response.setPayload(content.getBytes());
 						sendResponse(response, out);
 					} else if (pathIsZipStatic(path)) { // Static content, in an archive. See "static.zip.docs" property. Defaulted to "/zip/"
@@ -1358,7 +1358,7 @@ public class HTTPServer {
 						content = jpe.getMessage();  // TODO Use dumpException ?
 						jpe.printStackTrace();
 					}
-					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 					response.setPayload(content.getBytes());
 					return response;
 				}

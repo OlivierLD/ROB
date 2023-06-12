@@ -542,7 +542,7 @@ class ChartlessMap extends HTMLElement {
 		return { x: Math.round(x), y: Math.round(canvasHeight - y) };
 	}
 
-	// Wowow !! THIS is smart !
+	// Wowow !! THIS is smart (static vs non-static) !
 	posToCanvas(lat, lng) {
 		return ChartlessMap.posToCanvas(lat, lng, 
 										this._projection, 
@@ -588,6 +588,444 @@ class ChartlessMap extends HTMLElement {
 										this._chartWidth,
 										this._width,
 										this._height);
+	}
+
+	// Markers (display)  displays
+	plotMark(context, marker, markerRadius, beaconHeight) {
+		let lat = marker.latitude;
+		let lng = marker.longitude;
+		let label = marker.label;
+		let markType = marker.type || 'default'; // Can be undefined or null
+		
+		let canvasCoord = this.posToCanvas(lat, lng);
+		switch (markType) {
+			case 'red':
+				context.save();
+				context.strokeStyle = 'red';
+				context.fillStyle = 'red';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (Beacon)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top cylinder
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'green':
+				context.save();
+				context.strokeStyle = 'green';
+				context.fillStyle = 'green';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (Beacon)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top cone
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom left
+				context.lineTo(canvasCoord.x, canvasCoord.y - beaconHeight - 10);					  // Top (center)
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'card-n':
+				context.save();
+				context.strokeStyle = 'black';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				// Beacon Bottom part
+				context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Top part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 1
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom left
+				context.lineTo(canvasCoord.x, canvasCoord.y - 20 - 10);						// Top (center)
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 2
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 12); // Bottom left
+				context.lineTo(canvasCoord.x, canvasCoord.y - 20 - 20);						// Top (center)
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 12); // Bottom right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'card-s':
+				context.save();
+				context.strokeStyle = 'black';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				// Beacon Bottom part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Top part
+				context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.5), canvasCoord.y - (beaconHeight / 2)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 1
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x, canvasCoord.y - beaconHeight - 3);						 // Bottom (center)
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top right
+				context.closePath();
+				context.fill();
+				// Top. Cone 2
+				context.beginPath();
+				context.moveTo(canvasCoord.x, canvasCoord.y - beaconHeight - 12);						// Bottom (center)
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 20); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 20); // Top right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'card-e':
+				context.save();
+				context.strokeStyle = 'black';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				// Beacon Bottom part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Middle part
+				context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Top part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 1 (bottom one)
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x, canvasCoord.y - beaconHeight - 3);						 // Bottom (center)
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 10); // Top right
+				context.closePath();
+				context.fill();
+				// Top. Cone 2 (top one)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 12); // Bottom left
+				context.lineTo(canvasCoord.x, canvasCoord.y - 20 - 20);						// Top (center)
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 12); // Bottom right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'card-w':
+				context.save();
+				context.strokeStyle = 'black';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				// Beacon Bottom part
+				context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Middle part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Beacon Top part
+				context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 1
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom left
+				context.lineTo(canvasCoord.x, canvasCoord.y - beaconHeight - 10);						// Top (center)
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 3); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. Cone 2
+				context.beginPath();
+				context.moveTo(canvasCoord.x, canvasCoord.y - beaconHeight - 12);						 // Bottom (center)
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight - 20); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight - 20); // Top right
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'sp':
+				context.save();
+				context.strokeStyle = 'black';
+				context.fillStyle = 'yellow';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				context.fill();
+				// Top. Diagonal Cross
+				context.lineWidth = 4;
+				context.strokeStyle = 'yellow';
+				// context.fillStyle = 'yellow';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y - beaconHeight - 2); // Bottom left
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y - beaconHeight - 2 - (markerRadius / 1));	// Top right
+				context.closePath();
+				context.stroke();
+
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y - beaconHeight - 2 - (markerRadius / 1)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y - beaconHeight - 2);	// Bottom right
+				context.closePath();
+				context.stroke();
+				context.restore();
+				break;
+			case 'is-dng':
+				context.save();
+				context.strokeStyle = 'black';
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Cone (the beacon body)
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.stroke();
+				// Bottom part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2), canvasCoord.y); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2), canvasCoord.y); // Bottom right
+				context.closePath();
+				context.fill();
+				// Middle part
+				context.fillStyle = 'red';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.33), canvasCoord.y - (beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top part
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.moveTo(canvasCoord.x - (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom left
+				context.lineTo(canvasCoord.x - (markerRadius / 3), canvasCoord.y - beaconHeight); // Top left
+				context.lineTo(canvasCoord.x + (markerRadius / 3), canvasCoord.y - beaconHeight); // Top right
+				context.lineTo(canvasCoord.x + (markerRadius / 2.66), canvasCoord.y - (2 * beaconHeight / 3)); // Bottom right
+				context.closePath();
+				context.fill();
+				// Top. sphere 1
+				context.fillStyle = 'black';
+				context.beginPath();
+				context.arc(canvasCoord.x, canvasCoord.y - beaconHeight - (1 * markerRadius / 3), markerRadius / 3, 0, 2 * Math.PI, false);
+				context.closePath();
+				context.fill();
+				// Top. sphere 2
+				context.beginPath();
+				context.arc(canvasCoord.x, canvasCoord.y - beaconHeight - (3 * (markerRadius / 3)), markerRadius / 3, 0, 2 * Math.PI, false);
+				context.closePath();
+				context.fill();
+				context.restore();
+				break;
+			case 'default':
+			default:
+				context.save();
+				context.strokeStyle = markerAndTrackColor;
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// Circle
+				context.beginPath();
+				context.strokeStyle = markerAndTrackColor;
+				context.lineWidth = 2;
+				context.arc(canvasCoord.x, canvasCoord.y, markerRadius, 0, 2 * Math.PI, false);
+				context.stroke();
+				context.restore();
+				break;
+		}
+		// Label
+		context.font = "bold 12px Arial";
+		context.fillStyle = markerAndTrackColor;
+		context.fillText(label, canvasCoord.x + markerRadius + 2, canvasCoord.y);
+
+		context.closePath();
+
 	}
 }
 

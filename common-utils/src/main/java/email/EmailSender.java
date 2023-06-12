@@ -210,7 +210,7 @@ public class EmailSender {
 		}
 		msg.saveChanges();
 		if (verbose) {
-			System.out.println("sending:[" + content + "], " + Integer.toString(content.length()) + " characters");
+			System.out.println("sending:[" + content + "], " + Integer.toString(content.getBytes().length) + " characters");
 		}
 		Transport.send(msg);
 	}

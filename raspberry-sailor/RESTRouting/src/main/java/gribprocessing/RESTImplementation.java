@@ -129,7 +129,7 @@ public class RESTImplementation {
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}
@@ -214,7 +214,7 @@ public class RESTImplementation {
 										.errorStack(HTTPServer.dumpException(jpe)));
 						return response;
 					}
-					RESTProcessorUtil.generateResponseHeaders(response, content.length());
+					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 					response.setPayload(content.getBytes());   // JSON Payload, all went well.
 				} catch (Exception ex1) {
 					ex1.printStackTrace();
@@ -456,7 +456,7 @@ GRIB �  `��!i 
 									.errorStack(HTTPServer.dumpException(jpe)));
 					return response;
 				}
-				RESTProcessorUtil.generateResponseHeaders(response, content.length());
+				RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 				response.setPayload(content.getBytes());
 			} catch (Exception ex) {
 				response = HTTPServer.buildErrorResponse(response,
@@ -672,7 +672,7 @@ GRIB �  `��!i 
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}
@@ -789,7 +789,7 @@ GRIB �  `��!i 
 
 					if (verbose) {
 						System.out.println("--------------");
-						System.out.printf("Content-length: %d\n", content.length());
+						System.out.printf("Content-length: %d\n", content.getBytes().length);
 						System.out.println("--------------");
 						System.out.println(content);
 						System.out.println("--------------");
@@ -819,7 +819,7 @@ GRIB �  `��!i 
 //					System.out.println(String.format("Content-type: %s", contentType));
 //					System.out.println(String.format("Content:\n%s", content));
 
-					RESTProcessorUtil.generateResponseHeaders(response, contentType, content.getBytes().length); // content.length());
+					RESTProcessorUtil.generateResponseHeaders(response, contentType, content.getBytes().length); // content.getBytes().length);
 					response.setPayload(content.getBytes());
 				} catch (Throwable ex1) {  // To include the OutOfMemoryError
 					if (true || verbose) {

@@ -61,7 +61,7 @@ markers:
     type: card-e    
   - label: "Pte des Chats"
     latitude: 47.617237
-    longitude: -47.617237
+    longitude: -3.418165
     type: card-w    
   - label: ""
     latitude: 47.621502
@@ -71,6 +71,18 @@ markers:
     latitude: 47.691990
     longitude: -3.419095
     type: card-s    
+  - label: ""
+    latitude: 47.697765
+    longitude: -3.397415
+    type: sp    
+  - label: ""
+    latitude: 47.574503
+    longitude: -3.202672
+    type: sp    
+  - label: ""
+    latitude: 47.592078
+    longitude: -3.221455
+    type: is-dng    
   - label: "Placeholder"
     latitude: 0.0
     longitude: 0.0

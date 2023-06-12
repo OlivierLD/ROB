@@ -255,7 +255,7 @@ CancelPizzaTestSuite,I don't want my Pizza anymore,CancelPizza,true,en,en,,
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 	}
 

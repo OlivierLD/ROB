@@ -216,7 +216,7 @@ public class NMEADataCache
 			try {
 				double lat = Double.parseDouble(strLat);
 				double lng = Double.parseDouble(strLong);
-				GeoPos defaultPos = new GeoPos(lat, lng, false);
+				GeoPos defaultPos = new GeoPos(lat, lng, true);
 				synchronized (this) {
 					this.put(POSITION, defaultPos);
 				}
@@ -472,7 +472,7 @@ public class NMEADataCache
 				}
 				switch (id) {
 					case "GGA":
-						List<Object> gga = StringParsers.parseGGA(nmeaSentence, false);
+						List<Object> gga = StringParsers.parseGGA(nmeaSentence, true);
 						GeoPos ggaPos = (GeoPos) gga.get(StringParsers.GGA_POS_IDX);
 						if (ggaPos != null) {
 							this.put(POSITION, ggaPos);
@@ -499,7 +499,7 @@ public class NMEADataCache
 					case "RMC":
 						RMC rmc = null;
 						try {
-							rmc = StringParsers.parseRMC(nmeaSentence, false);
+							rmc = StringParsers.parseRMC(nmeaSentence, true);
 						} catch (Exception ex) { // Some NULL happen to sneak in some strings... TBD.
 							System.err.println("Managed >>");
 							ex.printStackTrace();
@@ -662,7 +662,7 @@ public class NMEADataCache
 						}
 						break;
 					case "GLL": // Lat & Long, UTC (No date, just time)
-						GLL gll = StringParsers.parseGLL(nmeaSentence, false);
+						GLL gll = StringParsers.parseGLL(nmeaSentence, true);
 						if (gll != null) {
 							GeoPos pos = gll.getGllPos();
 							if (pos != null) {
@@ -725,7 +725,7 @@ public class NMEADataCache
 						}
 						break;
 					case "RMB":
-						RMB rmb = StringParsers.parseRMB(nmeaSentence, false);
+						RMB rmb = StringParsers.parseRMB(nmeaSentence, true);
 						if (rmb != null) {
 							this.put(XTE, new Distance(rmb.getXte()));
 							this.put(WP_POS, rmb.getDest());

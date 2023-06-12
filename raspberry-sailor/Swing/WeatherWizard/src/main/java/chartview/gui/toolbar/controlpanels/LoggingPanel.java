@@ -82,12 +82,12 @@ public class LoggingPanel
 
             public void log(String str) {
                 String content = loggingTextZone.getText();
-//        System.out.println("Content length is " + content.length());
+//        System.out.println("Content length is " + content.getBytes().length);
                 // Limit amount of text to 3000 characters
-                if (content.length() > 3000) {
-//          System.out.print("Cutting text zone from " + content.length() + "...");
-                    content = content.substring(content.length() - 3000);
-//          System.out.println("to " + content.length());
+                if (content.getBytes().length > 3000) {
+//          System.out.print("Cutting text zone from " + content.getBytes().length + "...");
+                    content = content.substring(content.getBytes().length - 3000);
+//          System.out.println("to " + content.getBytes().length);
                     loggingTextZone.setText(content);
                 }
 
@@ -105,12 +105,12 @@ public class LoggingPanel
 
             public void log(String str, int styleIndex) {
                 String content = loggingTextZone.getText();
-                // System.out.println("Content length is " + content.length());
+                // System.out.println("Content length is " + content.getBytes().length);
                 // Limit amount of text to 3000 characters
-                if (content != null && content.length() > 3000) {
-                    // System.out.print("Cutting text zone from " + content.length() + "...");
-                    content = content.substring(content.length() - 3000);
-                    // System.out.println("to " + content.length());
+                if (content != null && content.getBytes().length > 3000) {
+                    // System.out.print("Cutting text zone from " + content.getBytes().length + "...");
+                    content = content.substring(content.getBytes().length - 3000);
+                    // System.out.println("to " + content.getBytes().length);
                     try {
                         doc.insertString(0, content, doc.getStyle(STYLES[styleIndex]));
                     } catch (BadLocationException ble) {

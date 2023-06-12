@@ -162,7 +162,7 @@ public class RESTImplementation {
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
 		}
-		RESTProcessorUtil.generateResponseHeaders(response, content.length());
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}
@@ -188,7 +188,7 @@ public class RESTImplementation {
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 			return response;
 		} catch (Exception ex) {
@@ -234,7 +234,7 @@ public class RESTImplementation {
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 			return response;
 		} catch (Exception ex) {
@@ -298,7 +298,7 @@ public class RESTImplementation {
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 			return response;
 		} catch (Exception ex) {
@@ -620,7 +620,7 @@ public class RESTImplementation {
 													.errorStack(HTTPServer.dumpException(jpe)));
 									return response;
 								}
-								RESTProcessorUtil.generateResponseHeaders(response, content.length());
+								RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 								response.setPayload(content.getBytes());
 								return response;
 							}
@@ -672,7 +672,7 @@ public class RESTImplementation {
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.length());
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 			return response;
 		} catch (Exception ex) {
