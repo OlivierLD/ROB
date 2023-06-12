@@ -2889,9 +2889,6 @@ public class RESTImplementation {
 				} else {
 					content = mapper.writeValueAsString(clonedCache); // jsonElement != null ? jsonElement.toString() : "";
 				}
-				if (false && content.contains("°")) {
-					content = content.replace('°', '*'); // ' '); TODO There must be a better way...
-				}
 				if (restVerbose()) {
 					System.out.printf("-- Requested Cache --\n%s\n--------------------\n", content);
 					System.out.printf("\tlength: %d\n", content.getBytes().length);
@@ -3002,9 +2999,6 @@ public class RESTImplementation {
 
 		try {
 			String content = map.size() > 0 ? mapper.writeValueAsString(map) : "";
-			if (false && content.contains("°")) {
-				content = content.replace('°', '*'); // ' '); TODO There must be a better way...
-			}
 			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
