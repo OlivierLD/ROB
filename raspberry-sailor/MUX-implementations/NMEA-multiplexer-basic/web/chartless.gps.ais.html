@@ -35,6 +35,7 @@ html {
 	<script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<script type="text/javascript" src="js/ajax.manager.js"></script>
+	<script type="text/javascript" src="js/NavigationHelper.js"></script>
 
 	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
 
@@ -248,7 +249,22 @@ let updateMap = (elmt, context) => {
 		let markerRadius = 10;
 		let beaconHeight = 2 * markerRadius;
 		markers.forEach(marker => {
-			elmt.plotMark(context, marker, markerRadius, beaconHeight); // method defined in the ChartlessMap
+			let extraMess = [];
+			if (pos) {
+				// Calculate distance and bearing to mark
+				// 1 - Distance
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
+							                                  { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) });
+				let distMess = `Distance: ${dist.toFixed(2)} nm`;
+				extraMess.push(distMess);
+				// 2 - Bearing
+				let from = { lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) };
+				let to = { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) };
+				let bearing = NavigationHelper.getBearingInDegrees(from, to);
+				let bearingMess = `Bearing: ${bearing.toFixed(0)}\u00b0`;
+				extraMess.push(bearingMess);
+			}
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, extraMess); // method defined in the ChartlessMap
 		});
 		context.restore();
 	}

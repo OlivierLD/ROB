@@ -187,5 +187,50 @@ let NavigationHelper = {
 			console.log(error);
 		}
 		return { 'vmgWind': vmgWind, 'vmgWayPoint': vmgWayPoint };
+	},
+
+	getGCDistance: function(from, to) {  // lat & lng in radians, returned in radians
+		if (from === undefined || to === undefined) {
+			throw ({err: "From and To are required"});
+		}
+		let cos = Math.sin(from.lat) * Math.sin(to.lat) + Math.cos(from.lat) * Math.cos(to.lat) * Math.cos(to.lng - from.lng);
+		return Math.acos(cos);
+	},
+	
+	getGCDistanceInDegrees: function(from, to) {
+		return Math.toDegrees(this.getGCDistance(from, to));
+	},
+	
+	getGCDistanceInNM: function(from, to) {
+		return (this.getGCDistanceInDegrees(from, to) * 60);
+	},
+
+	// All in radians
+	getBearing: function(from, to) {
+		// Bearing β = atan2(X,Y)
+		// X = cos to.lat * sin ∆L
+		// Y = cos from.lng * sin to.lng – sin from.lng * cos to.lng * cos ∆L
+		let deltaG = to.lng - from.lng;
+		let X = Math.cos(to.lat) * Math.sin(deltaG);
+		let Y = (Math.cos(from.lat) * Math.sin(to.lat)) - (Math.sin(from.lat) * Math.cos(to.lat) * Math.cos(deltaG));
+		return Math.atan2(X, Y);
+	},
+
+	getBearingInDegrees(from, to) {
+		let inDegrees = Math.toDegrees(this.getBearing(from, to));
+		if (inDegrees < 0) {
+			inDegrees += 360;
+		}
+		return inDegrees;
 	}
 };
+
+// From https://www.igismap.com/formula-to-find-bearing-or-heading-angle-between-two-points-latitude-longitude/
+// Kansas City: 39.099912, -94.581213
+// St Louis: 38.627089, -90.200203
+/*
+let from = { lat: Math.toRadians(39.099912), lng: Math.toRadians(-94.581213) };
+let to = { lat: Math.toRadians(38.627089), lng: Math.toRadians(-90.200203) };
+let bearing = NavigationHelper.getBearingInDegrees(from, to);
+console.log(`Bearing: ${bearing}`); // expected β = 96.51°
+*/

@@ -591,7 +591,7 @@ class ChartlessMap extends HTMLElement {
 	}
 
 	// Markers (display)  displays
-	plotMark(context, marker, markerRadius, beaconHeight) {
+	plotMark(context, marker, markerRadius, beaconHeight, extraData) {
 		let lat = marker.latitude;
 		let lng = marker.longitude;
 		let label = marker.label;
@@ -1023,9 +1023,13 @@ class ChartlessMap extends HTMLElement {
 		context.font = "bold 12px Arial";
 		context.fillStyle = markerAndTrackColor;
 		context.fillText(label, canvasCoord.x + markerRadius + 2, canvasCoord.y);
-
+		if (extraData !== null) {
+			context.font = "12px Arial";
+			extraData.forEach((line, idx) => {
+				context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + 1)));
+			}); 
+		}
 		context.closePath();
-
 	}
 }
 

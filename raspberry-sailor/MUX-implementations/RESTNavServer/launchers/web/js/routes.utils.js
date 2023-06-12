@@ -236,14 +236,14 @@ let calculateRhumbLine = (from, to) => {
  * @return DR Position, L & G in Radians
  */
 if (deadReckoning === undefined) {
-let deadReckoning = (from, dist, route) => {
-	let radianDistance = toRadians(dist / 60);
-	let finalLat = (Math.asin((Math.sin(from.lat) * Math.cos(radianDistance)) +
-								            (Math.cos(from.lat) * Math.sin(radianDistance) * Math.cos(toRadians(route)))));
-	let finalLng = from.lng + Math.atan2(Math.sin(toRadians(route)) * Math.sin(radianDistance) * Math.cos(from.lat),
-																			 Math.cos(radianDistance) - Math.sin(from.lat) * Math.sin(finalLat));
-	return ({lat: finalLat, lng: finalLng});
-};
+    let deadReckoning = (from, dist, route) => {
+        let radianDistance = toRadians(dist / 60);
+        let finalLat = (Math.asin((Math.sin(from.lat) * Math.cos(radianDistance)) +
+                                                (Math.cos(from.lat) * Math.sin(radianDistance) * Math.cos(toRadians(route)))));
+        let finalLng = from.lng + Math.atan2(Math.sin(toRadians(route)) * Math.sin(radianDistance) * Math.cos(from.lat),
+                                                                                 Math.cos(radianDistance) - Math.sin(from.lat) * Math.sin(finalLat));
+        return ({lat: finalLat, lng: finalLng});
+    };
 }
 
 let toDegreePt = (pt) => {
@@ -315,7 +315,9 @@ if (typeof(decToSex) !== 'function') {
 				}
 			}
 		}
-		while (dir >= 360) dir -= 360;
+		while (dir >= 360) {
+		    dir -= 360;
+		}
 		return dir;
 	};
 }
