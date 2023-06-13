@@ -157,6 +157,8 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
 	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+	echo -e "|  >> ${RED}T900${NC}. Publishing Navigation tables (Dieumegard & Bataille)                                                                                                                    |"
+	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
@@ -717,6 +719,12 @@ while [[ "${GO}" == "true" ]]; do
 	    #
 	    sleep 5  # Wait for the kill to be completed.
 	    #
+	    echo -en "Hit [return]"
+	    read ret
+	    ;;
+	  "T900" | "t900")
+	    clear
+	    ./pub/publish.tables.sh
 	    echo -en "Hit [return]"
 	    read ret
 	    ;;
