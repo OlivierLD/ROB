@@ -1,5 +1,11 @@
 /**
  * This is the chartless-map Web Component.
+ * Can be used to plot a grid, markers, tracks... without having to have a cartography available. (or
+ * a device supporting it).
+ * 
+ * Supported projection(s):
+ * - Mercator
+ * 
  * With callbacks.
  */
 
@@ -591,7 +597,7 @@ class ChartlessMap extends HTMLElement {
 	}
 
 	// Markers (display)  displays
-	plotMark(context, marker, markerRadius, beaconHeight, extraData) {
+	plotMark(context, marker, markerRadius, beaconHeight, defaultColor, extraData) {
 		let lat = marker.latitude;
 		let lng = marker.longitude;
 		let label = marker.label;
@@ -1000,7 +1006,7 @@ class ChartlessMap extends HTMLElement {
 			case 'default':
 			default:
 				context.save();
-				context.strokeStyle = markerAndTrackColor;
+				context.strokeStyle = defaultColor;
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
@@ -1012,7 +1018,7 @@ class ChartlessMap extends HTMLElement {
 				context.closePath();
 				// Circle
 				context.beginPath();
-				context.strokeStyle = markerAndTrackColor;
+				context.strokeStyle = defaultColor;
 				context.lineWidth = 2;
 				context.arc(canvasCoord.x, canvasCoord.y, markerRadius, 0, 2 * Math.PI, false);
 				context.stroke();
@@ -1021,9 +1027,9 @@ class ChartlessMap extends HTMLElement {
 		}
 		// Label
 		context.font = "bold 12px Arial";
-		context.fillStyle = markerAndTrackColor;
+		context.fillStyle = defaultColor;
 		context.fillText(label, canvasCoord.x + markerRadius + 2, canvasCoord.y);
-		if (extraData !== null) {
+		if (extraData !== null) { // Optional extra lines, near the label
 			context.font = "12px Arial";
 			extraData.forEach((line, idx) => {
 				context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + 1)));

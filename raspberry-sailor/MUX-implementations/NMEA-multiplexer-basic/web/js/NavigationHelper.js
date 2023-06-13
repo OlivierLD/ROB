@@ -197,26 +197,26 @@ let NavigationHelper = {
 		return Math.acos(cos);
 	},
 	
-	getGCDistanceInDegrees: function(from, to) {
+	getGCDistanceInDegrees: function(from, to) {  // lat & lng in radians
 		return Math.toDegrees(this.getGCDistance(from, to));
 	},
 	
-	getGCDistanceInNM: function(from, to) {
+	getGCDistanceInNM: function(from, to) {   // lat & lng in radians
 		return (this.getGCDistanceInDegrees(from, to) * 60);
 	},
 
 	// All in radians
 	getBearing: function(from, to) {
 		// Bearing β = atan2(X,Y)
-		// X = cos to.lat * sin ∆L
-		// Y = cos from.lng * sin to.lng – sin from.lng * cos to.lng * cos ∆L
+		// X = cos to.lat * sin ∆G
+		// Y = cos from.lng * sin to.lng – sin from.lng * cos to.lng * cos ∆G
 		let deltaG = to.lng - from.lng;
 		let X = Math.cos(to.lat) * Math.sin(deltaG);
 		let Y = (Math.cos(from.lat) * Math.sin(to.lat)) - (Math.sin(from.lat) * Math.cos(to.lat) * Math.cos(deltaG));
 		return Math.atan2(X, Y);
 	},
 
-	getBearingInDegrees(from, to) {
+	getBearingInDegrees: function(from, to) {
 		let inDegrees = Math.toDegrees(this.getBearing(from, to));
 		if (inDegrees < 0) {
 			inDegrees += 360;

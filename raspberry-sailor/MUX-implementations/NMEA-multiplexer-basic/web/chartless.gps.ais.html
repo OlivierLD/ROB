@@ -265,7 +265,7 @@ let updateMap = (elmt, context) => {
 				let bearingMess = `Bearing: ${bearing.toFixed(0)}\u00b0`;
 				extraMess.push(bearingMess);
 			}
-			elmt.plotMark(context, marker, markerRadius, beaconHeight, extraMess); // method defined in the ChartlessMap
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess); // method defined in the ChartlessMap
 		});
 		context.restore();
 	}
