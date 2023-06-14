@@ -12,7 +12,7 @@
  +-->
 <head>
 
-    <title>Quick Start - Leaflet</title>
+    <title>Marker Maker - Leaflet</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +38,11 @@ input[type=text], input[type=number], select {
   font-size: 18px;
   font-weight: bold;
   font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 5px;
 }
 
 .main-container {
@@ -66,7 +71,11 @@ input[type=text], input[type=number], select {
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div style="margin: 5px;">
-Click on the map to define a marker.
+A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
+<small style="color: blue;">
+  Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
+  Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
+</small>
 </div>
 <div>
 Mouse Pos: <span id="mouse-pos"></span>.
@@ -155,7 +164,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // let popup = L.popup();
+    let popup = L.popup(); // Used below.
 
     if (false) {
         function onMapClick(e) {
@@ -163,7 +172,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
             popup
                 .setLatLng(e.latlng)
                 // .setContent("You clicked the map at " + e.latlng.toString())
-                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}`)
+                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}<br/>Finish the job on the right pane.`)
                 .openOn(map);
         }
 
@@ -179,7 +188,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
             popup
                 .setLatLng(e.latlng)
                 // .setContent("You clicked the map at " + e.latlng.toString())
-                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}`)
+                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}<br/>Finish the job on the right pane.`)
                 .openOn(map);
         });
     }
@@ -194,6 +203,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
 
     function removeFromList(idx) {
       markerList.splice(idx, 1);
+      // TODO Remove the associated LeafLet marker and popup
       generateYamlContent();
     }
 
