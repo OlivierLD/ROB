@@ -1,5 +1,6 @@
 #
 # MUX definition.
+# See .../ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/use_cases/USE_CASES_2.md
 #
 name: "Logging Data from the Kayak"
 description:

@@ -459,7 +459,7 @@ You can also implement your own forwarder (implementing the `Forwarder` interfac
 
 Look for `forward.02.class=nmea.forwarders.RESTIoTPublisher`
 
-##### An interesting forwarder use-case
+##### ⚠️ An interesting forwarder use-case ⚠️
 There is in the code a `nmea.forwarders.NMEAtoTextProcessor`, that is not to be mentioned by its type, but as a custom Forwarder, like in
 ```yaml
 forwarders:

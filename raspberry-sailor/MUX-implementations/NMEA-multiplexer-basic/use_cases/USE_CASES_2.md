@@ -6,8 +6,10 @@
 
 **We assume below that the address of the board you're running on is `192.168.1.103`.**
 
-First start the Python servers, for the BME280 and the SSD1306.  
-Make sure you use the right ports.
+_**First, start the Python servers**_, for the BME280 and the SSD1306.  
+Make sure you use the right ports.  
+
+#### Read the BME280 Data
 ```
 $ ../../RaspberryPythonServers/python/scripts/start.BME280.TCP.server.sh
 ~/repos/ROB/raspberry-sailor/NMEA-multiplexer ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
@@ -38,6 +40,7 @@ channels:
 
 ```
 
+#### Receive data, and display them on the SSD1306 oled screen
 ```
 $ ../../RaspberryPythonServers/python/scripts/start.SSD1306.REST.server.sh 
 ~/repos/ROB/raspberry-sailor/NMEA-multiplexer ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
@@ -63,7 +66,7 @@ or  curl -v -X VIEW http://192.168.1.103:8080/ssd1306 -H "Content-Length: 1" -d 
 . . .
 
 ```
-The port `8080` is the one defined in `REST.ssd1306.dg.properties`:
+The port `8080` is the one defined in `REST.ssd1306.dg.properties` (`.dg.` stands for **D**ele**G**ate):
 ```properties
 ssd1306.dg.protocol=http
 ssd1306.dg.server-name=192.168.1.103
@@ -107,7 +110,6 @@ Port Ownership of /dev/ttyS80 changed: type=1, Owned (Locked)
 This is a serial port
 Reading serial port...
 /dev/ttyS80:4800  > Port is open...
-
 . . .
 ```
 > _**Note**_: if the Serial port of the GPS is giving you trouble, run the script
