@@ -169,7 +169,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
     let popup = L.popup(); // Used below.
 
     map.on('click', e => {
-        console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
+        // console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
         document.getElementById('one-marker-label').value = "";
         document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
         document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
@@ -185,7 +185,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
         // let lat = Math.round(event.latlng.lat * 100000) / 100000;
         // let lng = Math.round(event.latlng.lng * 100000) / 100000;
         mess = `${decToSex(event.latlng.lat, "NS")}/${decToSex(event.latlng.lng, "EW")} (${event.latlng.lat}/${event.latlng.lng})`;
-        console.log(`Mouse Pos ${mess}`);
+        // console.log(`Mouse Pos ${mess}`);
         document.getElementById('mouse-pos').innerText = mess;
     });
 
@@ -194,6 +194,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
       // Remove the associated LeafLet marker and popup
       map.removeLayer(leafletMakerList[idx]);
       leafletMakerList.splice(idx, 1);
+      
       generateYamlContent();
     }
 
