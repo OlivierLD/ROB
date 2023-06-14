@@ -6,6 +6,7 @@
   <link rel="icon" type="image/jpg" href="icons/palm.04.jpg">
   <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
   <style>
+
 body {
     font-family: "Lato", sans-serif;
 }
@@ -51,11 +52,30 @@ body {
 }
 
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+  .sidenav { padding-top: 15px; }
+  .sidenav a { font-size: 18px; }
 }
 
-#wrap { position:fixed; left:0; width:100%; top:40px; height:100%; }
+h2 {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid blue; 
+   line-height: 0.1em;
+   margin: 10px 0 20px; 
+} 
+
+h2 span { 
+    background: transparent; 
+    padding: 0 10px; 
+}
+
+#wrap { 
+    position: fixed; 
+    left: 0; 
+    width: 100%; 
+    top: 40px; 
+    height: 100%; 
+}
 
   </style>
 </head>
@@ -63,19 +83,25 @@ body {
 	<div id="side-nav" class="sidenav" onmouseleave="closeNav()">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a>
-		<a href="admin.html" target="iframe_a" title="Admin screen">Admin</a>
+        <h2><span>Admin</span></h2>
+		<a href="./muxbuilder/mux-builder.html" target="iframe_a" title="YAML Builder">YAML Config Builder</a>
+		<a href="./marker.maker.leaflet.html" target="iframe_a" title="Marker yaml file builder">Marker Maker</a>
+        <div class="description">Requires Internet Connection</div>
+		<a href="admin.html" target="iframe_a" title="Admin screen">Runtime Admin</a>
 		<a href="logMgmt.html" target="iframe_a" title="Log files managements">Log Management</a>
+        <h2><span>Consoles</span></h2>
 		<a href="gps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (analog)</a>
 		<a href="gps.digital.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (digital)</a>
-		<a href="small.console.gps.ais.html" target="iframe_a" title="Small Console, GPS, AIS.">GPS & AIS Demo</a>
-		<a href="chartless.gps.ais.html" target="iframe_a" title="WebComponent Console, GPS, AIS.">GPS & AIS Demo, WebComponents</a>
+		<a href="small.console.gps.ais.html" target="iframe_a" title="Small Console, GPS, AIS.">GPS & AIS Demo (Small Screens)</a>
+        <div class="description">For small screens (tablets, cell-phones)</div>
+		<a href="chartless.gps.ais.html" target="iframe_a" title="WebComponent Console, GPS, AIS.">GPS & AIS Demo (WebComponents)</a>
         <div class="description">Featuring the Chartless Map</div>
 		<a href="runner.html" target="iframe_a" title="Mobile client">Small client</a>
-		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Instruments Console</a>
+		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Several instruments console</a>
 	</div>
 
     <div>
-        <span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Resource Menu</span> <!-- the hamburger -->
+        <span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
         <span style="font-size:20px; cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
     </div>
 
@@ -84,11 +110,12 @@ body {
 	</div>
 
 	<script type="text/javascript">
-var openNav = function() {
+        
+let openNav = function() {
     document.getElementById("side-nav").style.width = "350px";
 };
 
-var closeNav = function() {
+let closeNav = function() {
     document.getElementById("side-nav").style.width = "0";
 };
 	</script>

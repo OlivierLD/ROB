@@ -19,6 +19,7 @@ channels:
     # path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     # between-records: 100
     verbose: false
+    sentence.filters: ~GGA
 # forwarders:
 #  - type: console
 #  - type: tcp

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<!--
+ | Requires the leafletjs resources to be in a "leaflet" directory under "web".
+ | Available from http://leafletjs.com/
+ | Tutorials and examples at https://leafletjs.com/examples.html
+ |
+ | Clickable map
+ |
+ | TODO: "Drive" mode on a track.
+ | Note: No native way to change orientation
+ +-->
+<head>
+
+    <title>Quick Start - Leaflet</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /-->
+    <!-- link rel="icon" type="image/ico" href="icons/hammerhead.02.ico" -->
+    <link rel="icon" type="image/ico" href="icons/jellyfish.ico">
+
+    <!--
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <script src="leaflet/leaflet.js"></script>
+    -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+    <style type="text/css">
+body {
+  background-color: whitesmoke;
+}
+
+input[type=text], input[type=number], select {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.main-container {
+  display: grid;
+  grid-template-areas: 'left right';
+  padding: 10px;
+  margin: auto;
+}      
+
+#one-marker {
+  min-width: 200px;
+  min-height: 100px;
+  overflow: scroll;
+}
+#markers-code {
+  min-width: 200px;
+  min-height: 400px;
+  max-width: 400px;
+  max-height: 400px;
+  overflow: scroll;
+}
+    </style>
+
+</head>
+<body style='font-family: "Source Code Pro", "Courier New", Helvetica, Geneva; font-weight: bold;'>
+
+<!--div id="mapid" style="width: 600px; height: 400px;"></div-->
+<div style="margin: 5px;">
+Click on the map to define a marker.
+</div>
+<div>
+Mouse Pos: <span id="mouse-pos"></span>.
+</div>
+
+<div id="main-container" class="main-container">
+
+<!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
+<div id="mapid" style="width: 800px; height: 600px; grid-area: left"></div>
+
+<div id="markers">
+  <div id="one-marker" style="margin: 10px;">
+    <table>
+      <tr>
+        <th>Name</th><th>Value</th>
+      </tr>
+      <tr>
+        <td>label</td>
+        <td><input type="text" placeholder="Marker label" value="" width="100%" id="one-marker-label"></td>
+      </tr>
+      <tr>
+        <td>latitude</td>
+        <td><div id="one-marker-latitude"></div></td>
+      </tr>
+      <tr>
+        <td>longitude</td>
+        <td ><div id="one-marker-longitude"></div></td>
+      </tr>
+      <tr>
+        <td>type</td>
+        <td>
+          <select id="one-marker-type">
+            <option value="default" selected>-</option>
+            <option value="green">Green</option>
+            <option value="red">Red</option>
+            <option value="card-n">Cardinal North</option>
+            <option value="card-s">Cardinal South</option>
+            <option value="card-e">Cardinal East</option>
+            <option value="card-w">Cardinal West</option>
+            <option value="sp">Special Mark</option>
+            <option value="is-dng">Isolated Danger</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+    <button onclick="addMarker();">Add Marker</button>
+  </div>
+  <div id="markers-code" style="border: 1px solid silver; border-radius: 5px;">
+    <pre>markers:      
+    </pre>
+  </div>
+  <div>
+    <button onclick="copyToClipboard();">Copy to Clipboard</button>
+  </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+
+    let markerList = [];
+
+    function decToSex(val, ns_ew) {
+        let absVal = Math.abs(val);
+        let intValue = Math.floor(absVal);
+        let dec = absVal - intValue;
+        let i = intValue;
+        dec *= 60;
+        let s = i + "°" + dec.toFixed(2) + "'";
+
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        return s;
+    }
+
+    // Initial position
+    let currentLatitude = 0.0; // 37.7488500;
+    let currentLongitude = 0.0; // -122.50724263;
+
+    let map = L.map('mapid').setView([currentLatitude, currentLongitude], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // let popup = L.popup();
+
+    if (false) {
+        function onMapClick(e) {
+            console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
+            popup
+                .setLatLng(e.latlng)
+                // .setContent("You clicked the map at " + e.latlng.toString())
+                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}`)
+                .openOn(map);
+        }
+
+        map.on('click', onMapClick);
+    } else {
+        map.on('click', e => {
+            console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
+            document.getElementById('one-marker-label').value = "";
+            document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
+            document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
+            document.getElementById('one-marker-type').value = "default";
+
+            popup
+                .setLatLng(e.latlng)
+                // .setContent("You clicked the map at " + e.latlng.toString())
+                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}`)
+                .openOn(map);
+        });
+    }
+
+    map.addEventListener('mousemove', (event) => {
+        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
+        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
+        mess = `${decToSex(event.latlng.lat, "NS")}/${decToSex(event.latlng.lng, "EW")} (${event.latlng.lat}/${event.latlng.lng})`;
+        console.log(`Mouse Pos ${mess}`);
+        document.getElementById('mouse-pos').innerText = mess;
+    });
+
+    function removeFromList(idx) {
+      markerList.splice(idx, 1);
+      generateYamlContent();
+    }
+
+    function generatePopupContent(label, type, latitude, longitude, idx) {
+      let content = 
+        `<div>` + 
+          `<button onclick="removeFromList(${idx})">Remove</button><br/>` + 
+          `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` + 
+        `</div>`;
+      return content;
+    }
+
+    function generateYamlContent() {
+      let content = "#\n" +
+        `# Generated ${new Date()}\n` +
+        "#\n" +
+        'markers:\n';
+      markerList.forEach(mark => {
+        let oneElement = `  - label: "${mark.label}"\n` +
+                         `    latitude: ${mark.latitude}\n` +
+                         `    longitude: ${mark.longitude}\n` +
+                         `    type: ${mark.type}\n`;
+        content += oneElement;                 
+      });
+
+      document.getElementById('markers-code').innerHTML = `<pre>${content}</pre>`;
+    }
+
+    function addMarker() {
+      let latitude = document.getElementById('one-marker-latitude').innerText;
+      let longitude = document.getElementById('one-marker-longitude').innerText;
+      let label = document.getElementById('one-marker-label').value;
+      let type = document.getElementById('one-marker-type').value;
+
+      markerList.push({
+        label: label,
+        type: type,
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude)
+      });
+
+      generateYamlContent();
+
+      L.marker([parseFloat(latitude), parseFloat(longitude)]).addTo(map)
+        .bindPopup(generatePopupContent(label, type, latitude, longitude, markerList.length - 1)).openPopup();
+    }
+
+    function copyToClipboard() {
+      let codeContent = document.getElementById('markers-code').querySelector("pre").innerText;
+      let codeHolder = document.createElement("textarea"); // To keep the format, 'input' would not.
+      codeHolder.value = codeContent;
+      document.body.appendChild(codeHolder);
+      codeHolder.select();
+      document.execCommand("copy");
+      document.body.removeChild(codeHolder);
+      // Content in the clipboard
+      alert("Copied!");
+    }
+
+</script>
+
+</body>
+</html>
