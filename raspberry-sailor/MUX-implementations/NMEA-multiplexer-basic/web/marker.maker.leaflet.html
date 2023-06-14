@@ -136,7 +136,9 @@ Mouse Pos: <span id="mouse-pos"></span>.
 
 <script type="text/javascript">
 
+    // Two lists to maintain in sync...
     let markerList = [];
+    let leafletMakerList = [];
 
     function decToSex(val, ns_ew) {
         let absVal = Math.abs(val);
@@ -166,32 +168,18 @@ Mouse Pos: <span id="mouse-pos"></span>.
 
     let popup = L.popup(); // Used below.
 
-    if (false) {
-        function onMapClick(e) {
-            console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
-            popup
-                .setLatLng(e.latlng)
-                // .setContent("You clicked the map at " + e.latlng.toString())
-                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}<br/>Finish the job on the right pane.`)
-                .openOn(map);
-        }
+    map.on('click', e => {
+        console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
+        document.getElementById('one-marker-label').value = "";
+        document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
+        document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
+        document.getElementById('one-marker-type').value = "default";
 
-        map.on('click', onMapClick);
-    } else {
-        map.on('click', e => {
-            console.log(`Click at ${e.latlng.lat}/${e.latlng.lng}`);
-            document.getElementById('one-marker-label').value = "";
-            document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
-            document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
-            document.getElementById('one-marker-type').value = "default";
-
-            popup
-                .setLatLng(e.latlng)
-                // .setContent("You clicked the map at " + e.latlng.toString())
-                .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}<br/>Finish the job on the right pane.`)
-                .openOn(map);
-        });
-    }
+        popup
+            .setLatLng(e.latlng)
+            .setContent(`You clicked the map at <br/>${decToSex(e.latlng.lat, "NS")}<br/>${decToSex(e.latlng.lng, "EW")}<br/>Finish the job on the right pane.`)
+            .openOn(map);
+    });
 
     map.addEventListener('mousemove', (event) => {
         // let lat = Math.round(event.latlng.lat * 100000) / 100000;
@@ -201,16 +189,18 @@ Mouse Pos: <span id="mouse-pos"></span>.
         document.getElementById('mouse-pos').innerText = mess;
     });
 
-    function removeFromList(idx) {
+    function removeFromList(button, idx) {
       markerList.splice(idx, 1);
-      // TODO Remove the associated LeafLet marker and popup
+      // Remove the associated LeafLet marker and popup
+      map.removeLayer(leafletMakerList[idx]);
+      leafletMakerList.splice(idx, 1);
       generateYamlContent();
     }
 
     function generatePopupContent(label, type, latitude, longitude, idx) {
       let content = 
         `<div>` + 
-          `<button onclick="removeFromList(${idx})">Remove</button><br/>` + 
+          `<button onclick="removeFromList(this, ${idx})">Remove</button><br/>` + 
           `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` + 
         `</div>`;
       return content;
@@ -247,7 +237,10 @@ Mouse Pos: <span id="mouse-pos"></span>.
 
       generateYamlContent();
 
-      L.marker([parseFloat(latitude), parseFloat(longitude)]).addTo(map)
+      let leafletMarker =  L.marker([parseFloat(latitude), parseFloat(longitude)]);
+      leafletMakerList.push(leafletMarker);
+
+      leafletMarker.addTo(map)
         .bindPopup(generatePopupContent(label, type, latitude, longitude, markerList.length - 1)).openPopup();
     }
 
