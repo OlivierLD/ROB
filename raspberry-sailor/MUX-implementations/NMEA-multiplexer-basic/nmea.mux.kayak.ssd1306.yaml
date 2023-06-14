@@ -13,6 +13,7 @@ context:
   http.port: 9999
   init.cache: true
   damping: 30
+  markers: markers.yaml
 channels:
   - type: serial   # GPS
     port: /dev/ttyS80

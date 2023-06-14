@@ -14,6 +14,7 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: 0
+  markers: markers.yaml
 channels:
   - type: serial
     port: /dev/ttyS80

@@ -5,6 +5,7 @@
 #
 # Link the Serial Port
 # sudo ln -s /dev/ttyACM0 /dev/ttyS80
+# Look at mk.link.sh
 #
 # If started from rc.local, make sure the python modules are installed with sudo.
 #
@@ -18,4 +19,3 @@ sleep 10
 pushd ~pi/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
 ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 popd
-
