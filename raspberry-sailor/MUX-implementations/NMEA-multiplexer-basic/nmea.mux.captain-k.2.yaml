@@ -1,10 +1,9 @@
 #
 # MUX definition.
-# Reads serial ports as streams.
 #
 name: "Log GPS and AIS Data."
 description:
-  - Reads GPS and AIS from stty, as streams
+  - Reads GPS and AIS from serial ports
   - Log data in 'logged' folder
   - Collision detection
 context:
@@ -14,14 +13,18 @@ context:
   default.declination: -1
   markers: markers.yaml
 channels:
-  # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal"
-  - type: file
-    filename: /dev/ttyACM0
-    verbose: false
-  # Requires a "stty -F /dev/ttyUSB0 raw 38400 cs8 clocal"
-  - type: file
-    filename: /dev/ttyUSB0
-    verbose: false
+  # May require a "sudo ln -s /dev/ttyACM0 /dev/ttyS80"
+  - type: serial
+    port: /dev/ttyS80
+    baudrate: 4800
+  #    sentence.filters: RMC,GLL
+  #    verbose: true
+  # May require a "sudo ln -s /dev/ttyAMA0 /dev/ttyUSB0"
+  - type: serial
+    port: /dev/ttyUSB0
+    baudrate: 38400
+#    sentence.filters: RMC,GLL
+#    verbose: true
 forwarders:
   #- type: tcp
   #  subclass: nmea.forwarders.AISTCPServer

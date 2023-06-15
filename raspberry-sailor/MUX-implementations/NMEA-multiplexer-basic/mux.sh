@@ -53,6 +53,7 @@ if [[ "$PROCESS_ON_START" == "false" ]]; then
 else
   echo -e "+---------------------------------------------------------------"
   echo -e "| From a browser, try http://${MACHINE_NAME}:${PORT}/web/index.html"
+  echo -e "|                  or http://${MACHINE_NAME}:${PORT}/zip/index.html"
   echo -e "+---------------------------------------------------------------"
 fi
 #

@@ -83,6 +83,7 @@ cp *.properties ${distdir}
 cp *.yaml ${distdir}
 # If needed, more resources would go here (like dev curves, etc)
 cp mux.sh ${distdir}
+cp mk.link.sh ${distdir}
 cp kill.all.sample.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
