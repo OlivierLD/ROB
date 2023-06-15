@@ -316,6 +316,7 @@ $ ./to.prod.sh
 ```
 
 Explanations on how to deploy the generated archive are given interactively by the script.
+_**DO READ THEM !!!**_
 
 You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
 at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.  
@@ -326,7 +327,7 @@ In the production environment, what used to be reached from a URL like <http://l
 > scripts should be available on your production machine too.  
 > See how to do this is [their folder's README.md](../../NMEA-multiplexer/src/main/python/README.md#TCP).
 
-Here is an example of the execution of th `to.prod.script`.  
+Here is an example of the execution of the `to.prod.sh` script.  
 Notice below when the script prompts the user for his input:
 - to rebuild the jar file (based on the current sources)
 - for the name of the archive to generate (`nmea-dist` here)
@@ -516,6 +517,7 @@ nmea-dist
 ├── kill.all.sample.sh
 ├── markers.yaml
 ├── mux.sh
+. . .
 ├── nmea.mux.ais.test.1.yaml
 ├── nmea.mux.ais.test.3.yaml
 ├── nmea.mux.big.log.nmea-fwd.yaml
@@ -525,8 +527,10 @@ nmea-dist
 ├── nmea.mux.kayak.ssd1306.yaml
 ├── nmea.mux.replay.big.log.yaml
 ├── nmea.mux.zero.yaml
+. . .
 ├── nmea-to-text.properties
 ├── REST.ssd1306.dg.properties
+. . .
 └── web.zip
 
 2 directories, 17 files
