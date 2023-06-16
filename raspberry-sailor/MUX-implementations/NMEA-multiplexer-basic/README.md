@@ -316,7 +316,8 @@ $ ./to.prod.sh
 ```
 
 Explanations on how to deploy the generated archive are given interactively by the script.
-_**DO READ THEM !!!**_
+_**DO READ THEM !!!**_   
+And _do not hesitate_ to mess with the code !!
 
 You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
 at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.  
