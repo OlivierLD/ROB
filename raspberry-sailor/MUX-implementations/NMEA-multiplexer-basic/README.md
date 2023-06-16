@@ -326,7 +326,7 @@ In the production environment, what used to be reached from a URL like <http://l
 > _**Note**_: This `to.prod.sh` script takes care of the deployment of the Java and Web parts (http server).  
 > If your config requires some sensor data to be reached, the corresponding Python
 > scripts should be available on your production machine too.  
-> See how to do this is [their folder's README.md](../../NMEA-multiplexer/src/main/python/README.md#TCP).
+> See how to do this is [their folder's README.md](../../RaspberryPythonServers/README.md#tcp).
 
 Here is an example of the execution of the `to.prod.sh` script.  
 Notice below when the script prompts the user for his input:
