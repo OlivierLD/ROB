@@ -8,3 +8,7 @@ To look at, in this repo:
 - ROB/raspberry-sailor/RESTNauticalAlmanac/spreadsheets
 - ROB/raspberry-sailor/RESTNauticalAlmanac/spreadsheets/DnB.html
 
+- Plotting Sheet: <http://fer3.com/arc/imgx/f1-plottingSheet.pdf>
+
+- Also: <https://navlist.net/>
+
