@@ -10,6 +10,7 @@ To look at, in this repo:
 - ROB/raspberry-sailor/RESTNauticalAlmanac/spreadsheets/DnB.html
 
 - Plotting Sheet: <http://fer3.com/arc/imgx/f1-plottingSheet.pdf>
+- Another Plotting Sheet: <https://thenauticalalmanac.com/Universal%20Plotting%20Sheet.pdf>
 
 - Also: <https://navlist.net/>
 
