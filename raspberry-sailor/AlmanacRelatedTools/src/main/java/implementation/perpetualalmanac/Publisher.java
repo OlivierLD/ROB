@@ -73,6 +73,6 @@ public class Publisher {
 			throw new RuntimeException("Bad chronology");
 		}
 		generate(args[2], from, to);
-//  format("out.txt", "out.pdf");
+		// format("out.txt", "out.pdf");
 	}
 }

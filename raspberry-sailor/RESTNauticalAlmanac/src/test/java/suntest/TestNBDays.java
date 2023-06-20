@@ -1,4 +1,4 @@
-package sun;
+package suntest;
 
 import implementation.almanac.AlmanacComputer;
 import org.junit.Test;

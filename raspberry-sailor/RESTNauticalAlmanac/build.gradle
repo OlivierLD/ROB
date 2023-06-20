@@ -22,13 +22,17 @@ repositories {
 dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
   implementation 'oracle:xmlparser:2.0'
+
   implementation project(':http-tiny-server')
   implementation project(':raspberry-sailor:NMEA-multiplexer')
   implementation project(':raspberry-sailor:NMEA-Parser')
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':astro-computer:AstroComputer')
+  implementation project(':raspberry-sailor:AlmanacRelatedTools')
+
   testImplementation "junit:junit:$junit_version"
   testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+  testImplementation project(':raspberry-sailor:AlmanacRelatedTools')
 }
 
 // See https://docs.gradle.org/current/userguide/publishing_maven.html

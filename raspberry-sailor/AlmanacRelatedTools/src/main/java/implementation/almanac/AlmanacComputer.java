@@ -1,7 +1,6 @@
 package implementation.almanac;
 
 
-import astrorest.RESTImplementation;
 import calc.GeomUtil;
 import calc.calculation.nauticalalmanac.*;
 import utils.TimeUtil;
@@ -74,11 +73,11 @@ public class AlmanacComputer {
 
 	/**
 	 * An example of a main (Can be - and is - invoked programmatically)
-	 * See in {@link RESTImplementation}, method generateAstroData.
+	 * See in module RESTNauticalAlmanac, RESTImplementation}, method generateAstroData.
 	 * Generates the xml output for the requested period.
 	 *
 	 * Try "java [...] implementation.almanac.AlmanacComputer -help" for details
-	 * or "java [...] implementation.almanac.AlmanacComputer -type continuous -year 2009 -month 2 -day 20 -out " for an example
+	 *  or "java [...] implementation.almanac.AlmanacComputer -type continuous -year 2009 -month 2 -day 20 -out " for an example
 	 */
 	public static void main(String... args) {
 		boolean help = getPrm(args, "-help");
@@ -139,7 +138,7 @@ public class AlmanacComputer {
 		}
 
 
-//  out.println("DeltaT:" + deltaT);
+		// out.println("DeltaT:" + deltaT);
 		if (yearPrm == null && "continuous".equals(type)) {
 			displayHelp();
 			throw new RuntimeException("Must have a year...");

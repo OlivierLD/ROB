@@ -1,0 +1,24 @@
+plugins {
+  id 'java'
+  id 'idea'
+  id 'maven-publish'
+  id 'com.github.johnrengelman.shadow'
+}
+
+group = 'raspberry.on.board'
+version = '1.0'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url "https://www.datanucleus.org/downloads/maven2" }
+}
+
+dependencies {
+  implementation 'oracle:xmlparser:2.0'
+  implementation project(':astro-computer:AstroComputer')
+  implementation project(':astro-computer:AstroUtilities')
+  // implementation project(':raspberry-sailor:NMEA-Parser')
+  // implementation project(':raspberry-sailor:NMEA-multiplexer')
+  testImplementation "junit:junit:$junit_version"
+}

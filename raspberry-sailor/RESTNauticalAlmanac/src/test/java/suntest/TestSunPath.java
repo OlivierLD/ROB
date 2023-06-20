@@ -1,4 +1,4 @@
-package sun;
+package suntest;
 
 import astrorest.RESTImplementation;
 // import calc.calculation.AstroComputerV2;

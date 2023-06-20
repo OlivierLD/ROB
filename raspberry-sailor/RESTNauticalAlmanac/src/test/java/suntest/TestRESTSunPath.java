@@ -1,4 +1,4 @@
-package sun;
+package suntest;
 
 import astrorest.AstroServer;
 import http.HttpHeaders;
