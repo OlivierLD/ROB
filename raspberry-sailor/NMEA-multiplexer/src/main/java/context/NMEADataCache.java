@@ -485,7 +485,9 @@ public class NMEADataCache
 						if (!"true".equals(System.getProperty("do.not.use.GGA.date.time"))) { // Not good when replaying, contains only H:M:S, no Y:N:D
 							UTC ggaDate = (UTC) gga.get(StringParsers.GGA_UTC_IDX);
 							if (ggaDate != null) {
-								this.put(GPS_DATE_TIME, new UTCDate(ggaDate.getDate()));
+								Date date = ggaDate.getDate();
+								UTCDate utcDate =  new UTCDate(date.getYear(), date.getMonth(), date.getDay(), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
+								this.put(GPS_DATE_TIME, utcDate);
 							}
 						}
 						//	int ggaNbSat = (Integer)gga.get(StringParsers.GGA_NBSAT_IDX);

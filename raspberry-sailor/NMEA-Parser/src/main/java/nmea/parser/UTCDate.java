@@ -8,8 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class
-UTCDate implements Serializable {
+public class UTCDate implements Serializable {
 	private Date date = null;
 	private long epoch = 0L;
 	private FmtDate fmtDate = null;

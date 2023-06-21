@@ -642,7 +642,7 @@ public class StringParsers {
 			}
 		}
 
-		al = new ArrayList<Object>(4);
+		al = new ArrayList<>(4);
 		al.add(new UTC(h, m, sec));
 		al.add(new GeoPos(lat, lng, useSymbol));
 		al.add(nbsat);
