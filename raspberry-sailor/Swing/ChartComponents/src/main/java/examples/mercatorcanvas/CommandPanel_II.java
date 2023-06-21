@@ -1,4 +1,4 @@
-package examples.canvas;
+package examples.mercatorcanvas;
 
 import calc.GeoPoint;
 import calc.GreatCircle;
@@ -22,12 +22,13 @@ import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.Vector;
 
-public class CommandPanel
+public class CommandPanel_II
         extends JPanel
         implements ChartPanelParentInterface {
-    private final static double CHART_LATITUDE_SPAN = 4d;
-    private final static int CANVAS_WIDTH = 650; // Seems to match Letter format (8.5" x 11")
-    private final static int CANVAS_HEIGHT = 488;
+    private static final double CHART_LATITUDE_SPAN = 3d;
+    //private static final int CANVAS_WIDTH = 800;  // Seems to match Letter format (11" x 8.5"), for a png
+    private static final int CANVAS_WIDTH = 1600; // Seems to match Double Letter format (22" x 17"), for a png
+    private static final int CANVAS_HEIGHT = (int) (CANVAS_WIDTH / 1.3333);
 
     private BorderLayout borderLayout1;
     private JScrollPane jScrollPane1;
@@ -43,8 +44,8 @@ public class CommandPanel
     private JSlider zoomSlider;
     private JTextField zoomValueFld;
     private final static DecimalFormat DF22 = new DecimalFormat("#0.00");
-    private JLabel label = new JLabel("South Lat:");
-    private JTextField sLatValueFld;
+    private JLabel label = new JLabel("Center Lat:");
+    private JTextField centerLatValueFld;
     private JTextField widthFld;
 
     private JButton updateButton;
@@ -52,12 +53,13 @@ public class CommandPanel
     private GeoPoint from;
     private GeoPoint to;
 
-    private double sLat = -2D;
+    private double sLat = -1.5D;
     private double nLat = sLat + CHART_LATITUDE_SPAN;
+    private double centerLat = 0d;
 
     SampleFrame parent = null;
 
-    public CommandPanel(SampleFrame caller) {
+    public CommandPanel_II(SampleFrame caller) {
         parent = caller;
 
         borderLayout1 = new BorderLayout();
@@ -70,7 +72,7 @@ public class CommandPanel
 
         updateButton = new JButton();
         printButton = new JButton();
-        sLatValueFld = new JTextField();
+        centerLatValueFld = new JTextField();
         widthFld = new JTextField();
         widthFld.setText(Integer.toString(CANVAS_WIDTH));
 
@@ -79,7 +81,7 @@ public class CommandPanel
 
         automateButton = new JButton("Auto");
 
-//    spatial = null;
+        //    spatial = null;
         from = null;
         to = null;
         try {
@@ -129,9 +131,9 @@ public class CommandPanel
             }
         });
 
-        sLatValueFld.setText(Double.toString(sLat));
-        sLatValueFld.setPreferredSize(new Dimension(40, 20));
-        sLatValueFld.setHorizontalAlignment(4);
+        centerLatValueFld.setText(Double.toString(sLat - (CHART_LATITUDE_SPAN / 2D)));
+        centerLatValueFld.setPreferredSize(new Dimension(40, 20));
+        centerLatValueFld.setHorizontalAlignment(4);
 
         printButton.setText("Print");
         printButton.addActionListener(new ActionListener() {
@@ -168,7 +170,7 @@ public class CommandPanel
         bottomPanel.add(setWidthButton, null);
 
         bottomPanel.add(label, null);
-        bottomPanel.add(sLatValueFld, null);
+        bottomPanel.add(centerLatValueFld, null);
         bottomPanel.add(updateButton, null);
         bottomPanel.add(printButton, null);
         bottomPanel.add(zoomSlider, null);
@@ -194,24 +196,26 @@ public class CommandPanel
         chartPanel.setHorizontalGridInterval(0.5);
         chartPanel.setVerticalGridInterval(0.5);
         chartPanel.setWithScale(true);
+        chartPanel.setMajorLatitudeTick(1d / 6d);
+        chartPanel.setMinorLatitudeTick(1d / 60d);
         chartPanel.setPositionToolTipEnabled(false);
         chartPanel.setWithLngLabels(false); // Because this is a canvas
         chartPanel.setWithInvertedLabels(true);
 
-//  chartPanel.setZoomFactor(1.01);
+        //  chartPanel.setZoomFactor(1.01);
     }
 
     private void generateImages() {
         genimage = true;
         Thread generator = new Thread() {
             public void run() {
-                for (int i = -2; i <= 60; i += (CHART_LATITUDE_SPAN / 2)) {
-                    sLatValueFld.setText(Integer.toString(i));
+                for (int i = 0; i <= 60; i += (CHART_LATITUDE_SPAN / 2)) {
+                    centerLatValueFld.setText(Integer.toString(i));
                     update();
                     setWidth();
                     print();
                     try {
-                        Thread.sleep(1000L);
+                        Thread.sleep(1_000L);
                     } catch (Exception ignore) {
                     }
                 }
@@ -236,10 +240,11 @@ public class CommandPanel
 
     private void update() {
         try {
-            double _sLat = Double.parseDouble(sLatValueFld.getText());
+            centerLat = Double.parseDouble(centerLatValueFld.getText());
+            double _sLat = centerLat - (CHART_LATITUDE_SPAN / 2d);
             sLat = _sLat;
             nLat = sLat + CHART_LATITUDE_SPAN;
-//    chartPanel.zoomIn();
+            //    chartPanel.zoomIn();
             jbInit();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -281,15 +286,14 @@ public class CommandPanel
         } else {
             // Print
             chartPanel.setPrintResize(false);
-            chartPanel.printGraphics((double) chartPanel.getWidth(),
-                    (double) chartPanel.getHeight());
+            chartPanel.printGraphics((double) chartPanel.getWidth(), (double) chartPanel.getHeight());
         }
     }
 
     public void chartPanelPaintComponent(Graphics gr) {
-//    if(spatial == null)
-//      spatial = new Spatial();
-//    spatial.drawChart(chartPanel, gr);
+        //    if(spatial == null)
+        //      spatial = new Spatial();
+        //    spatial.drawChart(chartPanel, gr);
         if (from != null && to != null) {
             drawRhumbLine(gr, from.getL(), from.getG(), to.getL(), to.getG());
             plotGreatCircle(gr, from.getL(), from.getG(), to.getL(), to.getG());
@@ -298,12 +302,14 @@ public class CommandPanel
         if (title) {
             Font font = gr.getFont();
             gr.setFont(new Font(font.getName(), Font.BOLD, font.getSize() * 2));
-            String label = "Mercator Template - Latitude " + Integer.toString((int) sLat) + "\272 to " + Integer.toString((int) nLat) + "\272";
+//    String label = "Mercator Template - Latitude " + Integer.toString((int) sLat) + "\272 to " + Integer.toString((int) nLat) + "\272";
+            String label = "Mercator Template - Latitude " + Integer.toString((int) centerLat) + "\272 N";
             gr.drawString(label, 20, 30);
             Graphics2D g2 = (Graphics2D) gr;
             // Upside-down
             AffineTransform oldTx = g2.getTransform();
-            label = "Canevas Mercator - Latitude " + Integer.toString((int) sLat) + "\272 � " + Integer.toString((int) nLat) + "\272";
+//    label = "Canevas Mercator - Latitude " + Integer.toString((int) sLat) + "\272 � " + Integer.toString((int) nLat) + "\272";
+            label = "Canevas Mercator - Latitude " + Integer.toString((int) centerLat) + "\272 S";
             int strWidth = gr.getFontMetrics(gr.getFont()).stringWidth(label);
             int strHeight = gr.getFont().getSize();
 
@@ -311,11 +317,10 @@ public class CommandPanel
             g2.transform(ct);
 
             g2.transform(AffineTransform.getRotateInstance(Math.PI));
-            gr.drawString(label, strWidth + 20 - chartPanel.getW(),
-                    strHeight + 40 - chartPanel.getH());
+            gr.drawString(label, strWidth + 20 - chartPanel.getW(), strHeight + 40 - chartPanel.getH());
             g2.setTransform(oldTx);
 
-//    gr.drawString(label, 20, 30);
+            //    gr.drawString(label, 20, 30);
             // Reset
             gr.setFont(font);
         }
@@ -327,13 +332,13 @@ public class CommandPanel
             g2.transform(ct);
             int limit = 6;
             for (int i = 1; i <= limit; i++)
-//    for (int i=0; i<limit; i++)
+            //    for (int i=0; i<limit; i++)
             {
                 float ratio = (float) i / (float) limit;
                 g2.transform(AffineTransform.getRotateInstance(Math.PI * (ratio - 1.0f)));
-//      float alpha = ((i == limit)?1.0f:ratio/3);
-//      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-//      g2.drawString("Rotated", 150.0f, 50.0f);        
+                //      float alpha = ((i == limit)?1.0f:ratio/3);
+                //      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+                //      g2.drawString("Rotated", 150.0f, 50.0f);
                 g2.drawString("Rotated " + Double.toString(Math.toDegrees(Math.PI * (ratio - 1f))), 0, 0);
                 System.out.println("Rotated " + Double.toString(Math.toDegrees(Math.PI * (ratio - 1f))));
                 g2.setTransform(oldTx);
@@ -341,8 +346,7 @@ public class CommandPanel
         }
     }
 
-    private void drawRhumbLine(Graphics g, double ls, double gs, double lf,
-                               double gf) {
+    private void drawRhumbLine(Graphics g, double ls, double gs, double lf, double gf) {
         g.setColor(Color.red);
         Point start = chartPanel.getPanelPoint(ls, gs);
         Point finish = chartPanel.getPanelPoint(lf, gf);
@@ -350,11 +354,7 @@ public class CommandPanel
             g.drawLine(start.x, start.y, finish.x, finish.y);
     }
 
-    private void plotGreatCircle(Graphics g,
-                                 double ls,
-                                 double gs,
-                                 double lf,
-                                 double gf) {
+    private void plotGreatCircle(Graphics g, double ls, double gs, double lf, double gf) {
         g.setColor(Color.blue);
         GreatCircle gc = new GreatCircle();
         gc.setStart(new GreatCirclePoint(Math.toRadians(ls), Math.toRadians(gs)));
@@ -366,7 +366,7 @@ public class CommandPanel
         for (GreatCircleWayPoint previous = null; enumeration.hasMoreElements(); previous = gcwp) {
             gcwp = (GreatCircleWayPoint) enumeration.nextElement();
             Point b = chartPanel.getPanelPoint(Math.toDegrees(gcwp.getPoint().getL()), Math.toDegrees(gcwp.getPoint().getG()));
-//    g.drawOval(b.x - 2, b.y - 2, 4, 4);
+            //    g.drawOval(b.x - 2, b.y - 2, 4, 4);
             if (previous != null) {
                 Point a = chartPanel.getPanelPoint(Math.toDegrees(previous.getPoint().getL()), Math.toDegrees(previous.getPoint().getG()));
                 g.drawLine(a.x, a.y, b.x, b.y);
@@ -396,7 +396,9 @@ public class CommandPanel
                 double rlDist = gc.calculateRhumbLineDistance();
                 double rlZ = gc.calculateRhumbLineRoute();
                 DecimalFormat df = new DecimalFormat("##0.00");
-                String mess = "GC:" + df.format(Math.toDegrees(gcDist * 60D)) + "'\n" + "RL:" + df.format(rlDist) + "'\n" + " Z:" + df.format(Math.toDegrees(rlZ)) + " true";
+                String mess = "GC:" + df.format(Math.toDegrees(gcDist * 60D)) + "'\n" +
+                        "RL:" + df.format(rlDist) + "'\n" +
+                        " Z:" + df.format(Math.toDegrees(rlZ)) + " true";
                 JOptionPane.showMessageDialog(this, mess, "Route", 1);
             }
         }

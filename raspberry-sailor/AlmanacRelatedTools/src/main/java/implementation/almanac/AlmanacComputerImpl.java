@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
  * Generates the Almanac XML representation for a given period, for almanac publication, in 1 hour steps.
  * This XML can then be transformed using XSLT (Not in this module, see RESTNavServer for ideas)
  */
-public class AlmanacComputer {
+public class AlmanacComputerImpl {
 	private final static boolean verbose = true;
 
 	private final static NumberFormat DF_X_02 = new DecimalFormat("0.00");
@@ -47,11 +47,11 @@ public class AlmanacComputer {
 		System.out.println(" you must provide -year ");
 		System.out.println(" then you can provide -month ");
 		System.out.println(" then you can provide -day ");
-		System.out.println("Example: " + AlmanacComputer.class.getName() + " -type continuous -year 2009");
+		System.out.println("Example: " + AlmanacComputerImpl.class.getName() + " -type continuous -year 2009");
 		System.out.println("  would generate the almanac for the whole 2009 year");
-		System.out.println("Example: " + AlmanacComputer.class.getName() + " -type continuous -year 2009 -month 2");
+		System.out.println("Example: " + AlmanacComputerImpl.class.getName() + " -type continuous -year 2009 -month 2");
 		System.out.println("  would generate the almanac for the whole month of February 2009");
-		System.out.println("Example: " + AlmanacComputer.class.getName() + " -type continuous -year 2009 -month 2 -day 20");
+		System.out.println("Example: " + AlmanacComputerImpl.class.getName() + " -type continuous -year 2009 -month 2 -day 20");
 		System.out.println("  would generate the almanac for February the 20th, 2009");
 		System.out.println("----------------------------------------");
 		System.out.println("- if type is 'from-to' -----------------");
@@ -61,7 +61,7 @@ public class AlmanacComputer {
 		System.out.println(" you must provide -to-year ");
 		System.out.println(" you must provide -to-month ");
 		System.out.println(" you must provide -to-day ");
-		System.out.println("Example: " + AlmanacComputer.class.getName() + " -type from-to -from-year 2010 -from-month 6 -from-day 25 -to-year 2011 -to-month 5 -to-day 31 ");
+		System.out.println("Example: " + AlmanacComputerImpl.class.getName() + " -type from-to -from-year 2010 -from-month 6 -from-day 25 -to-year 2011 -to-month 5 -to-day 31 ");
 		System.out.println("  would generate the almanac between June the 25th, 2010 and May the 31st, 2011");
 		System.out.println("----------------------------------------");
 	}
@@ -227,8 +227,8 @@ public class AlmanacComputer {
 					out.println("<day value='" + day + "'>");
 					for (int h = 0; h <= 24; h++) {  // Hour by hour
 						hour = h;
-						AlmanacComputer.calculate();
-						AlmanacComputer.xmlOutput();
+						AlmanacComputerImpl.calculate();
+						AlmanacComputerImpl.xmlOutput();
 					}
 					out.println("</day>");
 					if ("from-to".equals(type)) {
@@ -271,7 +271,7 @@ public class AlmanacComputer {
 		hour = 24;
 		deltaT = 66.7708f;
 
-		AlmanacComputer.calculate();
+		AlmanacComputerImpl.calculate();
 
 		System.out.println("-- 2012-09-21 24:00:00 --");
 		System.out.println("GHA Sun: " + Context.GHAsun);
@@ -280,7 +280,7 @@ public class AlmanacComputer {
 		day = 22;
 		hour = 00;
 
-		AlmanacComputer.calculate();
+		AlmanacComputerImpl.calculate();
 
 		System.out.println("-- 2012-09-22 00:00:00 --");
 		System.out.println("GHA Sun: " + Context.GHAsun);
@@ -747,7 +747,7 @@ public class AlmanacComputer {
 		out.println("<rise-set>");
 //  for (double lat=-55; lat<75; lat+=5)
 		for (double lat = 75; lat >= -55; lat -= 5) {
-			double[] rs = AlmanacComputer.sunRiseAndSet(lat);
+			double[] rs = AlmanacComputerImpl.sunRiseAndSet(lat);
 			out.println("<latitude val='" + Integer.toString((int) lat) + "'>");
 			out.println("<sun>");
 			if (Double.compare(rs[0], Double.NaN) == 0 || Double.compare(rs[1], Double.NaN) == 0) {
@@ -757,7 +757,7 @@ public class AlmanacComputer {
 				out.println("  <rise z='" + Integer.toString((int) Math.round(rs[2])) + "'>" + GeomUtil.formatHM(rs[0]) + "</rise><set z='" + Integer.toString((int) Math.round(rs[3])) + "'>" + GeomUtil.formatHM(rs[1]) + "</set>");
 			}
 			out.println("</sun>");
-			rs = AlmanacComputer.moonRiseAndSet(lat);
+			rs = AlmanacComputerImpl.moonRiseAndSet(lat);
 			out.println("<moon>");
 			if (Double.compare(rs[0], Double.NaN) == 0 || Double.compare(rs[1], Double.NaN) == 0) {
 				out.println("  <none/>");

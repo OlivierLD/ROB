@@ -1,6 +1,6 @@
 package implementation.perpetualalmanac;
 
-import implementation.almanac.AlmanacComputer;
+import implementation.almanac.AlmanacComputerImpl;
 import oracle.xml.parser.v2.DOMParser;
 import oracle.xml.parser.v2.XMLDocument;
 import org.w3c.dom.NodeList;
@@ -21,7 +21,7 @@ public class Publisher {
 			out.println("  <year value='" + Integer.toString(y) + "'>");
 			for (int m = 1; m <= 12; m++) {
 				out.println("    <month value='" + Integer.toString(m) + "'>");
-				int nbd = AlmanacComputer.getNbDays(y, m);
+				int nbd = AlmanacComputerImpl.getNbDays(y, m);
 				for (int d = 1; d <= nbd; d++) {
 					out.println("      <day value='" + Integer.toString(d) + "'>");
 					for (int h = 0; h <= 24; h++) {

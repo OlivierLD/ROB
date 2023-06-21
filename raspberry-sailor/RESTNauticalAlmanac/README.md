@@ -28,11 +28,11 @@ To run it in standalone (which is by far not the only way), you need to build it
 ```
 Then, you can give it a try:
 ```
- $ java -cp ./build/libs/RESTNauticalAlmanac-1.0-all.jar implementation.almanac.AlmanacComputer -help
+ $ java -cp ./build/libs/RESTNauticalAlmanac-1.0-all.jar implementation.almanac.AlmanacComputerImpl -help
 ```
 or something like
 ```
- $ java -cp ./build/libs/RESTNauticalAlmanac-1.0-all.jar implementation.almanac.AlmanacComputer -type continuous -year 2019 -month 10 -day 28
+ $ java -cp ./build/libs/RESTNauticalAlmanac-1.0-all.jar implementation.almanac.AlmanacComputerImpl -type continuous -year 2019 -month 10 -day 28
 ```
 
 ---

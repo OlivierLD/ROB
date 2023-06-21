@@ -11,7 +11,7 @@ For the T900:
 ```
 $ ./pub/publish.tables.sh
 ```
-For the altitude correction table:
+For the altitude correction tables:
 ```
 $ ./pub/corrections.sh
 ```
@@ -23,6 +23,10 @@ For Nautical Amanac or Lunar Distances:
 ```
 $ ./pub/almanac.sh
 ```
+
+### Mercator Canvases, Plotting Sheets, etc.
+For now, look into the `ChartComponents` module (under `Swing`)
+
 ### Misc links and stuff...
 - <https://www.crawfordnautical.com/2018/09/16/chart-projections/>
 

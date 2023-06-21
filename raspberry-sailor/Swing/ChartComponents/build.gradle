@@ -19,6 +19,7 @@ dependencies {
   implementation 'oracle:xmlparser:2.0'
   implementation project(':astro-computer:AstroUtilities')
   implementation project(':astro-computer:AstroComputer')
+  implementation project(':raspberry-sailor:NMEA-Parser')
   testImplementation "junit:junit:$junit_version"
 }
 

@@ -13,7 +13,7 @@ import http.HTTPServer.Operation;
 import http.HTTPServer.Request;
 import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
-import implementation.almanac.AlmanacComputer;
+import implementation.almanac.AlmanacComputerImpl;
 import implementation.perpetualalmanac.Publisher;
 import utils.TimeUtil;
 import nmea.parser.StringParsers; // for durationToDate
@@ -1244,7 +1244,7 @@ public class RESTImplementation {
 				this.astroRequestManager.getLogger().log(Level.INFO, String.format("Invoking AlmanacComputer with %s", Arrays.asList(prms).stream()
 						.collect(Collectors.joining(" "))));
 			}
-			AlmanacComputer.main(prms);
+			AlmanacComputerImpl.main(prms);
 			return tempFileName;
 
 		} catch (Exception ex) {

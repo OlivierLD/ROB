@@ -61,7 +61,7 @@ else
   progOption="${progOption} -year ${year}"
   echo -en "Month [1-12] > "
   read month
-  progOption="${progOption} -month${month}"
+  progOption="${progOption} -month ${month}"
   echo -en "Day [1-31]   > "
   read day
   progOption="${progOption} -day ${day}"
@@ -77,7 +77,7 @@ if [[ "${proceed}" == "N" ]]; then
   exit 0
 fi
 echo Generating Data...
-java -classpath ${CP} -DdeltaT="${DeltaT}" implementation.almanac.AlmanacComputer ${progOption} -out ./data.xml
+java -classpath ${CP} -DdeltaT="${DeltaT}" implementation.almanac.AlmanacComputerImpl ${progOption} -out ./data.xml
 # processPDF
 #set publishData=
 #set /p publishData=Publish Data [y]^|n ?   ^>
