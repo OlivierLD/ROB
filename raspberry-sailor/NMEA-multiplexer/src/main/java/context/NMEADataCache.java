@@ -486,7 +486,8 @@ public class NMEADataCache
 							UTC ggaDate = (UTC) gga.get(StringParsers.GGA_UTC_IDX);
 							if (ggaDate != null) {
 								Date date = ggaDate.getDate();
-								UTCDate utcDate =  new UTCDate(date.getYear(), date.getMonth(), date.getDay(), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
+								// TODO Upgrade that part
+								UTCDate utcDate =  new UTCDate(date.getYear() + 1900, date.getMonth(), date.getDate(), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
 								this.put(GPS_DATE_TIME, utcDate);
 							}
 						}

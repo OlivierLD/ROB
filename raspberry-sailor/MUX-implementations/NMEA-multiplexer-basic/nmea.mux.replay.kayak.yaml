@@ -19,8 +19,15 @@ channels:
     # path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     # between-records: 100
     verbose: false
-    sentence.filters: ~GGA
-# forwarders:
+    # sentence.filters: ~GGA
+forwarders:
+  - type: file
+    verbose: false
+    timebase.filename: true
+    filename.suffix: "_LOG"
+    log.dir: "logged"
+    split: "hour"
+    flush: true
 #  - type: console
 #  - type: tcp
 #    port: 7002

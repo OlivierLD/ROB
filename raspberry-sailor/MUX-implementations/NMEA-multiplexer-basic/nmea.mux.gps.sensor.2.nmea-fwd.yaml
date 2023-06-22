@@ -1,0 +1,64 @@
+#
+# MUX definition.
+# The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py
+# Requires several Python servers to be running.
+#
+name: "Real world scenario."
+description:
+  - Reads GPS
+  - Reads BME280 (REST, port 9876)
+  - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
+  - Log data in a file (data.nmea)
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: 0
+  markers: markers.yaml
+channels:
+  # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal (in /etc/rc.local ?)"
+  - type: file
+    filename: /dev/ttyACM0
+    verbose: false
+#    sentence.filters: ~GLL
+#    sentence.filters: RMC,GLL
+  - type: rest           # Pings the Python REST Server for the BME280 data (GET)
+    protocol: http
+    machine-name: localhost
+    # machine-name: 192.168.50.10
+    http-port: 9876
+    query-path: /bme280/nmea-data
+    # query-string:      # Would include the ?, and subsequent &...
+    # jqs:               # JQ String, to apply on the response
+    between-loops: 2000  # in ms
+    verbose: false
+#  - type: tcp
+#    server: 192.168.1.103
+#    port: 9876
+#    verbose: false
+forwarders:
+  - type: nmea-cache-publisher
+    between-loops: 1  # in seconds
+    rest.protocol: http
+    rest.machine-name: localhost   # The machine to send the stop-signal to
+    # rest.machine-name: 192.168.1.103
+    rest.port: 8080
+    rest.resource: /ssd1306/nmea-data
+    rest.verb: PUT
+#    rest.query.string: ""
+    rest.onclose.resource: /ssd1306/clear-screen
+    rest.onclose.verb: PUT
+    verbose: false
+  - type: file
+    # filename: data.nmea
+    # flush: true
+    verbose: false
+    timebase.filename: true
+    filename.suffix: _LOG
+    log.dir: logged
+    split: hour
+computers:
+  - type: "tw-current"
+    prefix: "CC"
+    time.buffer.length: 30, 60, 600
+

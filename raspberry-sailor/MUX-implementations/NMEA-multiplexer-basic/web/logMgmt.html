@@ -21,7 +21,8 @@
 
 		.scrollable-file-name {
 			min-width: 300px;
-			width: auto;
+			/* width: auto; */
+			width: 90%;
 			border: 1px solid silver;
 			border-radius: 5px;
 			white-space: nowrap;
@@ -181,6 +182,8 @@
 			minimumFractionDigits: 0
 		});
 
+		const useList = true;
+
 		function buildFileList(fileArray, forwarders) {
 
 			let activeLogFile = [];
@@ -190,33 +193,163 @@
 				}
 			}
 
-			let tableHtml = '';
-			document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
-			fileArray.forEach(lf => {
+			let totalNbLines = 0;
+			// Build a tree
+			let logFileTree = {};
+			fileArray.forEach(logFile => {
 				let isActive = false;
 				let isTotal = false;
 				activeLogFile.forEach(fname => {
-					if (lf.split(' ')[1].indexOf(fname) > -1) {
+					if (logFile.split(' ')[1].indexOf(fname) > -1) {
 						isActive = true;
 					}
 				});
-				if (lf.split(' ')[1] === 'total') {
+				if (logFile.split(' ')[1] === 'total') {
 					isTotal = true;
+					totalNbLines = parseInt(logFile.split(' ')[0]);
+				} else {
+					let fullFileName = logFile.split(' ')[1];
+					let fileSize = parseInt(logFile.split(' ')[0]);
+					let fullPath = fullFileName.split('/');
+					// console.log(`Full path: ${fullPath}`);
+					let current = logFileTree;
+					fullPath.forEach((elem, idx) => {
+						if (idx > 0) {
+							if (!current[elem]) {
+								if (idx === fullPath.length - 1) { // } elem.endsWith('.nmea')) { // leaf
+									// console.log(`Leaf node ${elem}`);
+									current[elem] = {
+										type: 'leaf',
+										fullPath: fullFileName,
+										name: elem,
+										size: fileSize,
+										isActive: isActive
+									};
+								} else {
+									current[elem] = {
+										type: 'node'
+									};
+								}
+							}
+							current = current[elem]; // drill down
+						} else {
+							current = logFileTree; // top
+						}
+					});
 				}
-//			console.log("List", activeLogFile, "lf", lf);
-				tableHtml +=
-						'<tr>\n' +
-						(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td><div class="scrollable-file-name"><a href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
-						// Flex			(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td class="file-name-content"><div class="flex-parent"><a class="flex-child" href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
-						// Raw				(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td style="min-width: 5px;"><div><a href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
-						'  <td style="text-align: right; font-style: italic;">' + formatter.format(lf.split(' ')[0]) + '</td>\n' +
-						// 9989: check, 9995: open hand, 10006: Heavy cross. All dingbats at https://www.w3schools.com/charsets/ref_utf_dingbats.asp
-						(isActive ? '  <td class="active-file" title="File is active!">&#10006;</td>\n' : '  <td></td>\n' ) +
-						(isActive || isTotal ? '  <td></td>\n' : '  <td class="delete-file"><button onclick="deleteLog(\'' + encodeURIComponent(lf.split(' ')[1]) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button></td>\n' ) +
-						'</tr>\n';
 			});
 
-			document.getElementById("table-body").innerHTML = tableHtml;
+			// console.log(`Total nb lines: ${totalNbLines}`);
+
+			// Loop on keys
+			let keys = Object.keys(logFileTree);
+			let htmlList = document.createElement('ul');
+			let drillDown = function(nodeName, fileParent, listParent) {
+				// console.log(`In drillDown, at ${JSON.stringify(fileParent)}`);
+				if (fileParent.type) {
+					if (fileParent.type === 'node') {
+						let li = document.createElement('li');
+						li.innerText = nodeName; // TODO other members ?
+						listParent.appendChild(li);
+						let ul = document.createElement('ul');
+						li.appendChild(ul);
+						let subKeys = Object.keys(fileParent);
+						subKeys.forEach(k => {
+							drillDown(k, fileParent[k], ul);
+						});
+					} else { // It is a leaf
+						let li = document.createElement('li');
+						// li.innerText = fileParent.name; // TODO other members, links, garbage, nb lines, etc.
+						let div = document.createElement('div');
+						div.setAttribute('class', 'scrollable-file-name');
+						let anchor = document.createElement('a');
+						anchor.setAttribute('href', '/mux/log-files/' + encodeURIComponent(fileParent.fullPath));
+						div.appendChild(anchor);
+						anchor.innerText = fileParent.name;
+						// Nb lines, active, delete
+						// console.log(`${fileParent.name} => size:${fileParent.size}, active: ${fileParent.isActive}`);
+						let nbl = document.createElement('span');
+						nbl.innerHTML = `,&nbsp;${formatter.format(fileParent.size)} lines&nbsp;`;
+						div.appendChild(nbl);
+						if (fileParent.isActive) {
+							let active = document.createElement('span');
+							active.setAttribute('style', 'padding: 5px;');
+							active.innerHTML = "&#10006;";
+							active.setAttribute('title', 'File is active!');
+							div.appendChild(active);
+						} else {
+							// <td class="delete-file"><button onclick="deleteLog(\'' + encodeURIComponent(lf.split(' ')[1]) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button></td>
+							let del = document.createElement('span');
+							del.setAttribute('class', 'delete-file');
+							let button = document.createElement('button');
+							button.setAttribute('onclick', `deleteLog('${encodeURIComponent(fileParent.fullPath)}')`);
+							button.setAttribute('title', 'Delete log file');
+							button.setAttribute('style', 'width: 24px; height: 24px; border-radius: 12px; padding: 0;');
+							let img = document.createElement('img');
+							// src="icons/delete.png" width="16" height="16" style="vertical-align: middle;""
+							img.setAttribute('src', 'icons/delete.png');
+							img.setAttribute('width', '20px');
+							img.setAttribute('height', '20px');
+							img.setAttribute('style', 'vertical-align: middle;');
+
+							button.appendChild(img);
+							del.appendChild(button);
+							div.appendChild(del);
+						}
+
+						li.appendChild(div);
+						listParent.appendChild(li);
+					}
+				// } else {
+				// 	console.log(`No type in ${JSON.stringify(fileParent)}`);
+				}
+			}
+			keys.forEach(k => {
+				// console.log(`Top Drill Down ${k}`);
+				drillDown(k, logFileTree[k], htmlList);
+			});
+
+			if (!useList) {
+				let tableHtml = '';
+				document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
+				fileArray.forEach(lf => {
+					let isActive = false;
+					let isTotal = false;
+					activeLogFile.forEach(fname => {
+						if (lf.split(' ')[1].indexOf(fname) > -1) {
+							isActive = true;
+						}
+					});
+					if (lf.split(' ')[1] === 'total') {
+						isTotal = true;
+					}
+	//			console.log("List", activeLogFile, "lf", lf);
+					tableHtml +=
+							'<tr>\n' +
+							(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td><div class="scrollable-file-name"><a href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
+							// Flex			(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td class="file-name-content"><div class="flex-parent"><a class="flex-child" href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
+							// Raw				(isTotal ? '<td style="font-style: italic;">total</td>\n' : '  <td style="min-width: 5px;"><div><a href="/mux/log-files/' + encodeURIComponent(lf.split(' ')[1]) + '" target="ext" title="Click to download">' + lf.split(' ')[1] + '</a></div></td>\n') +
+							'  <td style="text-align: right; font-style: italic;">' + formatter.format(lf.split(' ')[0]) + '</td>\n' +
+							// 9989: check, 9995: open hand, 10006: Heavy cross. All dingbats at https://www.w3schools.com/charsets/ref_utf_dingbats.asp
+							(isActive ? '  <td class="active-file" title="File is active!">&#10006;</td>\n' : '  <td></td>\n' ) +
+							(isActive || isTotal ? '  <td></td>\n' : '  <td class="delete-file"><button onclick="deleteLog(\'' + encodeURIComponent(lf.split(' ')[1]) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button></td>\n' ) +
+							'</tr>\n';
+				});
+
+				document.getElementById("table-body").innerHTML = tableHtml;
+			} else {
+				let theDiv = document.getElementById("file-list");
+				// Remove, then add
+				while (theDiv.firstChild) {
+					theDiv.removeChild(theDiv.firstChild)
+				}
+				// Add
+				theDiv.appendChild(htmlList);
+				let nbl = document.createElement('span');
+				nbl.setAttribute('style', 'font-weight: bold; font-style: italic;');
+				nbl.innerText = `Total lines: ${totalNbLines}`;
+				theDiv.appendChild(nbl);
+			}
 		}
 
 		window.onload = () => {
@@ -235,13 +368,14 @@
 <div id="main">
 	<div>
 		<h1 style="margin-left: 10px;"><span onclick="window.history.back();" title="Go back">&#8678;&nbsp;</span> Log Manager <img src="icons/reload.png" title="reload page" width="36" height="36" style="vertical-align: middle; margin-left: 20px;" onclick="location.reload();"></h1>
-		<span>TODO: Terminal help, how to get to the log files from a CLI?</span>
+		<!-- span>TODO: Terminal help, how to get to the log files from a CLI?</span -->
 	</div>
 	<div id="syst-date" style="margin: 10px;"></div>
 	<div id="mess-zone" style="display: none; margin: 5px; border: 2px solid red; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<div id="file-table">
 		<div id="count" style="margin-left: 10px;"></div>
-		<table id="log-files-table" class="data-table">
+
+		<!--table id="log-files-table" class="data-table">
 			<thead>
 			<tr>
 				<th>File Name</th>
@@ -251,7 +385,9 @@
 			</tr>
 			</thead>
 			<tbody id="table-body"></tbody>
-		</table>
+		</table-->
+
+		<div id="file-list" style="font-family: 'Courier New', Courier, monospace;"></div>
 
 	</div>
 	<div style="display: none"> <!-- turn display to block or inline for debugging -->

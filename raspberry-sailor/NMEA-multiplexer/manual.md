@@ -147,7 +147,7 @@ channels:
     > The optional `reset.interval` is in milliseconds. It closes and re-opens the Serial port as mentioned.  
     It happens to be useful on some devices...  
 
-> _**Note**_: _Reading a Serial port through `stty`_.   
+> ### _**Note**_: _Reading a Serial port through `stty`_.   
 > Reading the serial ports relies on the `librxtx-java` library. I came across
 > several wierd behaviors, like when reading `/dev/ttyUSB0` with a baud rate of `38400`... without being able to find the root cause of the problem,
 > or being able to reproduce it on another machine.  
@@ -158,7 +158,8 @@ channels:
 >   filename: /dev/ttyUSB0
 >   verbose: false
 > ```
-> This turned out to fix the problem.
+> This turned out to fix the problem.  
+> And also, that sounds like a possible way not to depend on `librxtx-java`, which remains an external library.
 
 - `tcp`
     - TCP input
@@ -170,7 +171,7 @@ channels:
     ```
   
 - `file`
-    - Log file replay
+    - Log file replay (or stream reading)
     ```properties
     mux.01.type=file
     mux.01.filename=./sample.data/archived.logged.data.zip
