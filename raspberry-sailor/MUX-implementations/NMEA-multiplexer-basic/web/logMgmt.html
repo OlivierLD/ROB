@@ -347,7 +347,7 @@
 				theDiv.appendChild(htmlList);
 				let nbl = document.createElement('span');
 				nbl.setAttribute('style', 'font-weight: bold; font-style: italic;');
-				nbl.innerText = `Total lines: ${totalNbLines}`;
+				nbl.innerText = `Total lines: ${formatter.format(totalNbLines)}`;
 				theDiv.appendChild(nbl);
 			}
 		}
