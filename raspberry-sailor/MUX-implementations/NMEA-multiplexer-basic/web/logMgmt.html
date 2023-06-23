@@ -244,12 +244,12 @@
 			// Loop on keys
 			let keys = Object.keys(logFileTree);
 			let htmlList = document.createElement('ul');
-			let drillDown = function(nodeName, fileParent, listParent) {
+			let drillDown = function(nodeName, fileParent, listParent) { // recursive
 				// console.log(`In drillDown, at ${JSON.stringify(fileParent)}`);
 				if (fileParent.type) {
 					if (fileParent.type === 'node') {
 						let li = document.createElement('li');
-						li.innerText = nodeName; // TODO other members ?
+						li.innerText = nodeName; 
 						listParent.appendChild(li);
 						let ul = document.createElement('ul');
 						li.appendChild(ul);

@@ -83,6 +83,10 @@ markers:
     latitude: 47.592078
     longitude: -3.221455
     type: is-dng    
+  - label: "Les Grands Sables"
+    latitude: 47.63827049009266
+    longitude: -3.4202241897583012
+    type: default
   - label: "Placeholder"
     latitude: 0.0
     longitude: 0.0
