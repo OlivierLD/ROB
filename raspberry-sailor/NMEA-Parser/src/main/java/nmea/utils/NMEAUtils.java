@@ -336,7 +336,26 @@ public class NMEAUtils {
                         (String)yamlMarker.get("type")
                 ));
             });
-            // System.out.println("Map loaded.");
+            // System.out.println("Markers loaded.");
+            // WiP
+            List<Map<String, Object>> yamlBorderList = (List<Map<String, Object>>)map.get("borders");
+            if (yamlBorderList != null) {
+                yamlBorderList.forEach(border -> {
+                    // System.out.printf("border is a %s\n", border.getClass().getName());
+                    final String name = (String)border.get("border-name");
+                    System.out.printf("-- Border: %s ---\n", name);
+                    List<Map<String, Object>> elements = (List<Map<String, Object>>)border.get("border-elements");
+                    // System.out.printf("elements is a %s\n", elements.getClass().getName());
+                    elements.forEach(el -> {
+                        el.keySet().forEach(k -> {
+                            Object obj = el.get(k);
+                            System.out.printf("%s: %s\n", k, obj);
+                        });
+                        System.out.println("-------------");
+                    });
+                });
+            }
+            System.out.println("Borders loaded.");
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
         }

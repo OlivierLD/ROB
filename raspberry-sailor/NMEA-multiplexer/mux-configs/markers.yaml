@@ -26,4 +26,20 @@ markers:
   - latitude: 39.167398801021655
     longitude: -107.24753700739706
     label: "Redstone, CO."
-    
+# Work in Progress...
+borders:
+  - border-name: "Etel North-West"
+    border-elements:
+      - rank: 1
+        latitude: 47.6600691664467
+        longitude: -3.2113552093505864
+      - rank: 2
+        latitude: 47.65532858402682
+        longitude: -3.2104969024658208
+      - rank: 3
+        latitude: 47.6508766696586
+        longitude: -3.209638595581055
+      - rank: 4
+        latitude: 47.643851123756754
+        longitude: -3.213286399841309
+
