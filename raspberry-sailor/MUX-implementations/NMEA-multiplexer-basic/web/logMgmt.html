@@ -352,6 +352,20 @@
 			}
 		}
 
+		let helpVisible = false;
+		function showHideHelp() {
+			let helpDiv = document.getElementById('help-zone');
+			let helpSwitch = document.getElementById('the-switch');
+			helpVisible = !helpVisible;
+			if (helpVisible) {
+				helpDiv.style.display = 'block';
+				helpSwitch.innerText = '-';
+			} else {
+				helpDiv.style.display = 'none';
+				helpSwitch.innerText = '+';
+			}
+		}
+
 		window.onload = () => {
 			try {
 				getLogFilesList();
@@ -371,6 +385,20 @@
 		<!-- span>TODO: Terminal help, how to get to the log files from a CLI?</span -->
 	</div>
 	<div id="syst-date" style="margin: 10px;"></div>
+	<div id="help-switch"><span id="the-switch" style="padding: 5px; border: 1px solid blue; border-radius: 50%; cursor: pointer;" onclick="showHideHelp();">+</span> Help</div>
+	<div id="help-zone" style="margin: 10px; display: none;">
+		You can also get to those files with <code>ssh</code> or <code>scp</code><br/>
+		<code>mux-dir</code> is the name of the root of the multiplexer (where the file <code>mux.sh</code> is).<br/>
+		and <code>pi</code> is the username to use on the Raspberry Pi.<br/>
+		<code>192.168.50.10</code> is the address (or name) or the Raspberry Pi.<br/>
+		<code>logged</code> is in this example the name of the folder you want the files from.<br/>
+		With <code>scp</code>:
+		<pre style="color: yellow; background: black; padding: 5px;">$ scp -r pi@192.168.50.10:~/mux-dir/logged/* .</pre>
+		With <code>ssh</code>:
+		<pre style="color: yellow; background: black; padding: 5px;">$ ssh pi@192.168.50.10
+$ cd mux-dir
+$ tree .</pre>
+	</div>
 	<div id="mess-zone" style="display: none; margin: 5px; border: 2px solid red; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<div id="file-table">
 		<div id="count" style="margin-left: 10px;"></div>

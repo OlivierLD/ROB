@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ | WiP.
+ | Available from http://leafletjs.com/
+ | Tutorials and examples at https://leafletjs.com/examples.html
+ | Note: No native way to change orientation
+ +-->
+<head>
+
+  <title>Leaflet Analysis</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../small.boat.png">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <script type="module" src="../webcomponents/SlideShow.js"></script>
+
+  <style type="text/css">
+    
+.list-link {
+  color: white;
+  font-size: 20px;
+  text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 10px orange;
+  text-decoration: none;
+}
+a.list-link:hover {
+  color: cyan;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px cyan;
+}
+
+dialog[open] {
+    -webkit-animation: myFadeIn 3.0s ease normal;
+}
+
+@-webkit-keyframes myFadeIn{
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+.right {
+    float: right;
+}
+.left {
+    float: left;
+}
+
+.custom-select {
+    font-family:'Courier New', Courier, monospace;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.help-dialog {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 2em;
+	color: silver;
+	border: 2px solid silver;
+	border-radius: 10px;
+	width: 800px;
+	margin-left: 200px; 
+	margin-top: 10px; 
+	z-index: 1000;
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.dialog-header {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.dialog-header-close {
+  float: right;
+}
+.dialog-header-close:hover {
+  color: cyan;
+  cursor: pointer;
+  text-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+}
+
+#whatzat {
+    width: 40px; 
+    border: 2px solid silver; 
+    border-radius: 50%;
+}
+
+#whatzat:hover {
+    box-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}
+
+body {
+    font-family: "Source Code Pro", "Courier New", Helvetica, Geneva; 
+    font-weight: bold;
+    background-color: rgba(192, 192, 192, 0.35);
+}
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background: #ffae00; /* fallback for browsers that don't support gradients */
+  background: -webkit-linear-gradient(top, #ffae00, #d67600);
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  background: linear-gradient(top, #ffae00, #d67600);
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+
+button:hover, button:focus {
+  border: 2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;  
+}
+
+compass-rose .day {
+  --bg-color: white;
+  --digit-color: #404040;
+  --with-gradient: true;
+  --display-background-gradient-from: gray;
+  --display-background-gradient-to: white;
+  --tick-color: darkGray;
+  --index-color: red;
+  --font: Arial;
+}
+
+.analogdisplay-day {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: black;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: black;
+	--minor-tick-color: black;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: black;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.directiondisplay-01 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(192, 192, 192, 0.25);
+    --hand-outline-color: lime;
+}
+.directiondisplay-02 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(255, 0, 0, 0.5);
+    --hand-outline-color: red;
+}
+
+.arrow {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;*/
+    margin-top: 25px;
+    transform: translate(-50%, -50%);
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.arrow span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    margin-left: 15px;
+    animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
+
+.thermometer-day {
+  --bg-color: rgba(0, 0, 0, 0);
+  --digit-color: DarkGrey;
+  --with-gradient: true;
+  --display-background-gradient-from: black;
+  --display-background-gradient-to: LightGrey;
+  --with-display-shadow: true;
+  --shadow-color: rgba(0, 0, 0, 0.75);
+  --major-tick-color: DarkGrey;
+  --minor-tick-color: DarkGrey;
+  --value-color: LightRed;
+  --value-outline-color: black;
+  --value-nb-decimal: 2;
+  --font: 'Arial'; /* 'Source Code Pro' */
+}
+
+/*td {
+    border: 1px solid silver;
+    border-radius: 5px;
+}*/
+
+#top-div button {
+    margin-left: 10px;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(241, 241, 241, 0.5);
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background: silver; /*rgb(101, 99, 99);*/
+    color: rgb(63, 54, 54);
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background: #ddd;
+    color: black;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background: #ffae00; /* fallback for browsers that don't support gradients */
+    background: -webkit-linear-gradient(top, #ffae00, #d67600);
+    background: -moz-linear-gradient(top, #ffae00, #d67600);
+    background: -o-linear-gradient(top, #ffae00, #d67600);
+    background: linear-gradient(top, #ffae00, #d67600);
+}
+
+.tab .mess {
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+    color: black;
+    text-align: right;
+}
+
+.data-container {
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+  </style>
+
+  <script type="module" src="../webcomponents/AnalogDisplay.js"></script>
+  <script type="module" src="../webcomponents/CompassRose.js"></script>
+  <script type="module" src="../webcomponents/DirectionDisplay.js"></script>
+  
+</head>
+<body>
+
+<dialog id="about-dialog" class="help-dialog" style="color: cyan;">
+    <div class="dialog-header">
+        <table width="100%">
+            <tr>
+              <td>Help !...</td>
+              <td style="padding-left: 20px;">
+                <span>
+                    <img src="../n.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                    <br/>
+                    <img src="../c.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                </span>
+              </td>
+              <td>
+                <span class="dialog-header-close" onclick="closeAboutDialog();">&times</span>
+              </td>
+            </tr>
+        </table>
+        
+    </div>
+    <hr/>
+    <div>
+        <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
+            <!-- About content -->
+            <div style="margin-top: 15px;">
+                A simple Leaflet and WebComponents interface to visualize and replay data logged when sailing.<br/><br/>
+                <i>Featuring</i>:
+                <ul>
+                    <li>LeafLet Map API</li>
+                    <li>WebComponents</li>
+                    <li>HTML5/CSS3/ES6</li>
+                    <li>...and so on!</li>
+                </ul>
+            </div>
+            <hr/>
+            <div style="margin-top: 15px;">
+                Map is draggable.
+                <br/>
+                Zoom in and out using the +/- on the chart (or double-click, and shift + double-click)
+                <br/>
+                Click on the markers on the chart to display pictures.
+                <br/>
+                Click on the pictures to enlarge them.
+                <br/>
+                Use the links on the right to move from place to place (experimental).
+                <br/>
+                Try the "REPLAY" button to replay what was logged (zoom when replaying..., it's worth it).
+            </div>
+        </div>
+        <hr style="margin-top: 15px; margin-bottom: 5px;"/>
+        <i>OlivSoft never stops</i>
+    </div>
+</dialog>
+    
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <h1 style="padding-left: 10px;">Rubi's Cup 2023 - Replay Logged Data</h1>
+        </td>
+        <td style="text-align: right; padding-right: 20px;">
+            <img src="../drowning.gif"
+                 id="whatzat" 
+                 title="Heeeeeeelp !!" 
+                 onclick="showAboutDialog();"/>
+        </td>
+        <td>
+            <div class="arrow" title="Try this!">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!--div id="mapid" style="width: 600px; height: 400px;"></div-->
+<div id="top-div" style="margin: 5px; display: grid; grid-template-columns: auto 120px 120px 120px 120px;">
+  <div>
+    <select id="track-drop-down" class="custom-select" onchange="reloadTrack(this);">
+        <option value="0">23-Jun-2023 - From Etel to Groix</option>
+        <option value="1">24-Jun-2023 - Rubi's Cup</option>
+        <option value="2">25-Jun-2023 - From Groix to Etel</option>
+    </select>
+    <span id="curr-point" style="margin: 10px;"></span> 
+    <span id="point-card" style="margin: 10px;"></span>
+    <br/>
+    <span id="point-origin" style="margin: 10px; font-size: 10px;"></span>    
+  </div> 
+  <button id="start-path" onclick="/*pathIdx = INIT_PATH_IDX;*/ /* 0; */ drive();">Replay</button>
+  <button id="cancel-path" onclick="cancelDrive();" disabled>Cancel</button>
+  <button id="stop-path" onclick="stopDriving();" disabled>Pause</button>
+  <button id="resume-path" onclick="resumeDriving();" disabled>Resume</button>
+</div>
+<div id="div-slider">
+    <input type="range" id="data-slider" value="0" min="0" max="200" style="width: 90%;"
+           oninput="onSlider.call(this, event); sliderValue01.value = this.value;"/>
+    <output name="padding" id="sliderValue01" style="color: black;"></output>
+</div>
+
+<!-- Map, displays, and controls -->
+<table width="100%">
+  <tr>
+    <td valign="top">
+      <!-- Column 1 -->
+      <div id="mapid" style="width: 800px; height: 600px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
+    </td>
+    <td valign="top" rowspan="2">
+      <!-- Column 2 -->
+      <div style="border: 2px solid black; border-radius: 5px;">
+        <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
+        <div id="curr-pos" style="width: 98%; height: 40px; padding: 2px; margin-top: -0px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
+      </div>  
+      <div id="displays" style="text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="All data below&#13;available when REPLAYing">
+          <div style="padding-left: 10px; color: blue; text-align: left; font-style: italic;">Replay Status</div>
+          <div id="UTC-date" style="text-align: center;" title="UTC Date">&nbsp;</div>
+          <div id="display-container" style="min-width: 600px;">
+
+            <div id="one" class="data-container" style="display: block;">
+                <!-- Displays -->
+                <table width="100%">
+                    <tr>
+                        <td valign="top">
+                            <analog-display class="analogdisplay-day"
+                                            title="Speed Over Ground&#13;in knots"
+                                            id="sog-01"
+                                            min-value="0"
+                                            max-value="15"
+                                            value="0.0"
+                                            major-ticks="1"
+                                            minor-ticks="0.1"
+                                            with-border="true"
+                                            overlap="40"
+                                            label="SOG"
+                                            width="300"
+                                            height="300"></analog-display>
+                        </td>
+                        <td valign="top">
+                            <direction-display class="directiondisplay-01"
+                                                title="Course Over Ground"
+                                                id="cog-02"
+                                                value="000"
+                                                major-ticks="45"
+                                                minor-ticks="5"
+                                                with-rose="true"
+                                                with-border="true"
+                                                label="COG"
+                                                hand="arrow"
+                                                width="300"
+                                                height="300"></direction-display>
+                            <div>
+                                <input type="radio" name="needle-shape" value="boat" onchange="setNeedleShape('cog-02', this);">Mono
+                                <input type="radio" name="needle-shape" value="cata" onchange="setNeedleShape('cog-02', this);">Cata
+                                <input type="radio" name="needle-shape" value="tri" onchange="setNeedleShape('cog-02', this);">Tri
+                                <input type="radio" name="needle-shape" value="plane" onchange="setNeedleShape('cog-02', this);">Plane
+                                <input type="radio" name="needle-shape" value="arrow" onchange="setNeedleShape('cog-02', this);" checked>Arrow
+                            </div>
+                            <compass-rose id="cog-01"
+                                            class="day"
+                                            title="Course Over Ground"
+                                            value="000"
+                                            width="250"
+                                            height="50"></compass-rose>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+      </div>
+
+      <div>
+        <span style="margin-left: 10px;">Fly to:</span>
+        <ul>
+            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Etel</a></li>
+            <li><a class="list-link" href="#" onclick="flyToZoom(1);">Port-Tudy</a></li>
+            <li><a class="list-link" href="#" onclick="flyToZoom(2);">Les Grands Sables</a></li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+</table>
+<hr/>
+<span>Slide show</span>
+<div id="slide-show-container" 
+     style="background: silver;">
+    <slide-show id="slide-show-02"
+                width="800"
+                height="600"
+                slideclick="onSlideShowClick">
+        <slide-show-image src="../images/day-01.rubiscup.01.jpeg" title="Towards Groix"></slide-show-image>
+        <slide-show-image src="../images/day-01.rubiscup.02.jpeg" title="Happy crew"></slide-show-image>
+        <slide-show-image src="../images/day-01.rubiscup.03.jpeg" title="Sunset"></slide-show-image>
+        <slide-show-image src="../images/day-01.rubiscup.04.jpeg" title="Sunset again"></slide-show-image>
+        <slide-show-image src="../images/day-02.rubiscup.01.jpeg" title="Going ashore"></slide-show-image>
+        <slide-show-image src="../images/day-02.rubiscup.02.jpeg" title="Coming back"></slide-show-image>
+        <slide-show-image src="../images/day-02.rubiscup.03.jpeg" title="The neighbors"></slide-show-image>
+        <slide-show-image src="../images/day-02.rubiscup.04.jpeg" title="Trying to reach the Birvideaux"></slide-show-image>
+        <slide-show-image src="../images/day-03.rubiscup.01.jpeg" title="Beg en Havre"></slide-show-image>
+        <slide-show-image src="../images/day-03.rubiscup.02.jpeg" title="La barre"></slide-show-image>
+        <slide-show-image src="../images/day-03.rubiscup.05.jpeg" title="Almost in..."></slide-show-image>
+        <slide-show-image src="../images/day-03.rubiscup.04.jpeg" title="We're in!"></slide-show-image>
+        <slide-show-image src="../images/day-03.rubiscup.03.jpeg" title="Up to the Harbor"></slide-show-image>
+    </slide-show>
+</div>
+<hr/>
+<div style="color: silver;">
+  OpenSource JavaScript map API at <a href="https://leafletjs.com/" target="leaflet">leafletjs.com</a>. Zoom for details...<br/>
+  <i style="color: silver;">OlivSoft never stops</i>
+</div>
+
+<script type="text/javascript">
+
+    const VERBOSE = false;
+
+    function setNeedleShape(id, radio) {
+        // debugger;
+        document.getElementById(id).hand = radio.value;
+    }
+
+    function decToSex(val, ns_ew) {
+        let absVal = Math.abs(val);
+        let intValue = Math.floor(absVal);
+        let dec = absVal - intValue;
+        let i = intValue;
+        dec *= 60;
+        let min = dec.toFixed(4);
+        while (min.length < 7) {
+            min = '0' + min;
+        }
+        let s = i + "°" + min + "'";
+
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        return s;
+    }
+
+    let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
+
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+    let latlngs; // To be populated from JSON.
+
+    const ZOOM_POSITIONS = [  
+        new L.LatLng(47.6598, -3.2051), // Etel
+        new L.LatLng(47.6440, -3.4463), // Port-Tudy
+        new L.LatLng(47.6388, -3.4213)  // Grands Sables
+    ];
+
+    function flyToZoom(idx) {
+        // map.panTo(ZOOM_POSITIONS[idx]);
+        // map.setView(ZOOM_POSITIONS[idx], 18);
+        map.flyTo(ZOOM_POSITIONS[idx]);
+    }
+
+    // Slideshow for one marker...
+    const SLIDE_SHOW = 
+    `<div style="background: silver;"><slide-show id="slide-show-01"
+					width="300"
+					height="200"
+                    slideclick="onSlideShowClick">
+		<slide-show-image src="../images/day-02.rubiscup.01.jpeg" title="Going ashore"></slide-show-image>
+		<slide-show-image src="../images/day-02.rubiscup.02.jpeg" title="Coming back"></slide-show-image>
+		<slide-show-image src="../images/day-02.rubiscup.03.jpeg" title="The neighbors"></slide-show-image>
+	</slide-show></div>`;
+
+
+    // Used as an example, See "// markers" below. Used to hold pictures.
+    const ALL_MARKERS = [
+    [ {
+        "latitude": 47.6059,
+        "longitude": -3.2588,
+        "name": "Going to Groix",
+        "content": "Heading starboard tack (click to enlarge)\n<br/>\n<a href=\"../images/day-01.rubiscup.01.jpeg\" target=\"_blank\"><img src=\"../images/day-01.rubiscup.01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }, {
+        "latitude": 47.6425,
+        "longitude": -3.3934,
+        "name": "Sunset",
+        "content": "We'll be late... (click to enlarge)\n<br/>\n<a href=\"../images/day-01.rubiscup.03.jpeg\" target=\"_blank\"><img src=\"../images/day-01.rubiscup.03.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }],
+    [{
+        "latitude": 47.6385,
+        "longitude": -3.4214,
+        "name": "Starting line",
+        "content": "Les Grand Sables (click to enlarge)\n<br/>\n" + SLIDE_SHOW
+    },{
+        "latitude": 47.5968,
+        "longitude": -3.3996,
+        "name": "Going upwind",
+        "content": "Wind is dropping... (click to enlarge)\n<br/>\n<a href=\"../images/day-02.rubiscup.04.jpeg\" target=\"_blank\"><img src=\"../images/day-02.rubiscup.04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }],
+    [{
+        "latitude": 47.6428,
+        "longitude": -3.2132,
+        "name": "Beg en Havre",
+        "content": "Arriving home (click to enlarge)\n<br/>\n<a href=\"../images/day-03.rubiscup.01.jpeg\" target=\"_blank\"><img src=\"../images/day-03.rubiscup.01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    },
+    {
+        "latitude": 47.6435,
+        "longitude": -3.2123,
+        "name": "Beg en Havre",
+        "content": "We're in ! (click to enlarge)\n<br/>\n<a href=\"../images/day-03.rubiscup.04.jpeg\" target=\"_blank\"><img src=\"../images/day-03.rubiscup.04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
+    }]];
+
+
+    // TODO Choose the track
+    const TRACK_DATA = [ '../data/2023-06-23.going.to.groix.nmea.json',  // First leg
+                         '../data/2023-06-24.rubiscup.nmea.json',        // Second leg
+                         '../data/2023-06-25.back.to.etel.nmea.json' ];  // Third leg
+
+    let trackData = TRACK_DATA[0];
+    let markers = ALL_MARKERS[0];
+
+    let currentMarkers = [];
+
+    let polyline = null;
+
+    let loadPathData = () => {
+        fetch(trackData)
+            .then(response => {
+                console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                response.json().then(doc => {
+                    latlngs = doc;
+                    console.log(`Path data loaded, ${doc.length} elements`);
+
+                    if (polyline !== null) { // Remove if there was one already
+                        map.removeLayer(polyline);
+                    }
+                    // Process it here if needed
+                    document.getElementById('point-card').innerText = `${latlngs.length} data points.`;
+                    document.getElementById('data-slider').max = latlngs.length;
+                    document.getElementById('point-origin').innerText = `from ${trackData}.`;
+                    polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+
+                    // zoom the map to the polyline
+                    map.fitBounds(polyline.getBounds());
+
+                    // let tooltip = L.tooltip()
+                    //                 .setLatLng(L.latLng([0.0, 0.0]))
+                    //                 .setContent('Hello world!<br />This is a nice tooltip.')
+                    //                 .addTo(map);
+                    // Tooltips
+                    if (false) {
+                        let nb = 0;
+                        // debugger;
+                        latlngs.forEach(elmt => {
+                            // let latlng = L.latLng([elmt.lat, elmt.lng]);
+                            console.log(`At ${elmt.latInDegMinDec} / ${elmt.lngInDegMinDec}`);
+                            nb++;
+                            // let tooltip = L.tooltip()
+                            //                .setLatLng(L.latLng([elmt.lat, elmt.lng]))
+                            //                .setContent(elmt.latInDegMinDec + "<br/>" + elmt.lngInDegMinDec)
+                            //                .addTo(map);
+                        });
+                        console.log(`${nb} elements`);
+                    }
+
+                    // markers on the chart
+                    if (true) {
+                        markers.forEach(mark => {
+                            oneMark = L.marker([(mark.latitude), (mark.longitude)], { title: mark.name });
+                            currentMarkers.push(oneMark);
+                            oneMark.addTo(map)
+                                   .bindPopup('<b>' + mark.name + '</b><br/>' + mark.content); // .openPopup();
+                        });
+                        // try {
+                        //     document.getElementById("slide-show-01").slideclick = onSlideShowClick;
+                        // } catch (err) {
+                        //     console.log(`Oops: ${JSON.stringify(err)}`);
+                        // }
+                    }
+                });
+            },
+            (error, errmess) => {
+                console.log("Ooch");
+                let message;
+                if (errmess) {
+                    let mess = JSON.parse(errmess);
+                    if (mess.message) {
+                        message = mess.message;
+                    }
+                }
+                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+            });
+    };
+
+    let reloadTrack = (dd) => {
+        let idx = parseInt(dd.value);
+        console.log(`Now loading track ${TRACK_DATA[idx]}`);
+        trackData = TRACK_DATA[idx];
+        markers = ALL_MARKERS[idx];
+        // Remove existing markers
+        currentMarkers.forEach(mark => map.removeLayer(mark));
+        currentMarkers = []; // Reset
+        loadPathData();
+    };
+
+    // To draw in pixels, see https://leafletjs.com/examples/extending/extending-2-layers.html
+    // Also https://codepen.io/adelaide01/pen/EXMwbY
+
+    const INIT_PATH_IDX = 0; // 950; // 0;
+
+    let pathIdx = INIT_PATH_IDX;
+    let keepDriving = true;
+    let cancelDriving = true;
+    let circle = null;
+    let marker = null;
+    let tooltip = null;
+
+    map.addEventListener('mousemove', (event) => {
+        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
+        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
+        let lat = event.latlng.lat;
+        let lng = event.latlng.lng;
+        while (lng > 180) {
+            lng -= 360;
+        }
+        while (lng < -180) {
+            lng += 360;
+        }
+        if (cancelDriving) {
+            document.getElementById('curr-pos').innerHTML = `<span class="left">${decToSex(lat, "NS")}</span><span class="right">(${lat})</span><br/><span class="left">${decToSex(lng, "EW")}</span><span class="right">(${lng})</span>`;
+        }
+        if (tooltip != null) {
+            map.removeLayer(tooltip);
+        }
+        tooltip = L.tooltip()
+                        .setLatLng(L.latLng([lat, lng]))
+                        .setContent(`${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`)
+                        .addTo(map);
+
+    });
+
+    function lpad(s, w, len) {
+        let str = s;
+        while (str.length < len) {
+            str = w + str;
+        }
+        return str;
+    }
+
+    function setLabels(cb, id) {
+        let bo = document.getElementById(id);
+        bo.withLabels = cb.checked;
+    }
+
+    const TABS = ['one', 'two'];
+
+    function openTab(evt, tabNum) {
+        let tabLinks = document.getElementsByClassName("tablinks");
+        for (let i=0; i<tabLinks.length; i++) {
+            tabLinks[i].className = tabLinks[i].className.replace(" active", ""); // Reset
+        }
+        for (let i=0; i<TABS.length; i++) {
+            document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
+        }
+        evt.currentTarget.className += " active";
+    }
+
+    // Recurse in that one.
+    function moveTo(j, justMove) {
+    if (j < latlngs.length && (!cancelDriving || (justMove !== undefined && justMove === true) )) {
+        let pos = latlngs[j];
+        if (keepDriving || (justMove !== undefined && justMove === true)) {
+            window.setTimeout(() => {
+                if (VERBOSE) {
+                    // 0 - Dump all values
+                    console.log(`Read from data file: ${JSON.stringify(pos, null, 2)}`);
+                }
+                // 1 - Data
+                let displayPos = `${decToSex(pos.lat, "NS")}<br/>${decToSex(pos.lng, "EW")}`;
+                if (pos.rmcDate) {
+                    displayDate = `${pos.rmcDate}`;
+                    document.getElementById('UTC-date').innerHTML = displayDate;
+                }
+                if (pos.cog && pos.cog != -1) {
+                    document.getElementById('sog-01').value = pos.sog;
+                    document.getElementById('cog-01').value = pos.cog;
+                    document.getElementById('cog-02').value = pos.cog;
+                }
+
+                document.getElementById('curr-pos').innerHTML = displayPos;
+                document.getElementById('curr-point').innerText = `${j} /`;
+                document.getElementById('data-slider').value = j;
+                document.getElementById('sliderValue01').value = j;
+
+                // 2 - Chart (centered on pos) and graphic
+                // map.setZoom(20);
+                map.panTo(new L.LatLng(pos.lat, pos.lng));
+
+                if (circle !== null) {
+                    map.removeLayer(circle);
+                }
+                if (marker !== null) {
+                    map.removeLayer(marker);
+                }
+                circle = L.circle([pos.lat, pos.lng], 50, {
+                    color: 'green',
+                    fillColor: '#30f',
+                    fillOpacity: 0.25
+                });
+                marker = L.marker([pos.lat, pos.lng]);
+                circle.addTo(map);
+                marker.addTo(map)
+
+                if (justMove === undefined || justMove === false) {
+                    pathIdx += 1; // 5;
+                    moveTo(pathIdx);
+                }
+            }, 50);
+        }
+    } else {
+        document.getElementById('start-path').disabled = false;
+        document.getElementById('cancel-path').disabled = true;
+        document.getElementById('stop-path').disabled = true;
+        document.getElementById('resume-path').disabled = true;
+
+        document.getElementById('data-slider').disabled = false;
+
+        document.getElementById('curr-point').innerText = "";
+        document.getElementById('curr-pos').innerHTML = "&nbsp;<br/>&nbsp;";
+        cancelDriving = true;
+        if (circle !== null) {
+            map.removeLayer(circle);
+        }
+        if (marker !== null) {
+            map.removeLayer(marker);
+        }
+        pathIdx = INIT_PATH_IDX; // 0;
+    }
+}
+
+    // on "REPLAY" button click
+    function drive() {
+        console.log("Driving");
+
+        cancelDriving = false;
+        keepDriving = true;
+
+        document.getElementById('start-path').disabled = true;
+        document.getElementById('cancel-path').disabled = false;
+        document.getElementById('stop-path').disabled = false;
+        document.getElementById('resume-path').disabled = true;
+
+        document.getElementById('data-slider').disabled = true;
+
+        console.log(`Start replaying, at idx ${pathIdx}`);
+        moveTo(pathIdx);
+    }
+
+    function cancelDrive() {
+        console.log("Canceling");
+        cancelDriving = true;
+        pathIdx = INIT_PATH_IDX; // 0;
+        document.getElementById('curr-pos').innerHTML = "&nbsp;<br/>&nbsp;";
+        document.getElementById('start-path').disabled = false;
+        document.getElementById('cancel-path').disabled = true;
+        document.getElementById('stop-path').disabled = true;
+        document.getElementById('resume-path').disabled = true;
+        document.getElementById('curr-point').innerText = "";
+
+        document.getElementById('data-slider').disabled = false;
+    }
+
+    function stopDriving() {         // Pause
+        console.log("Stopping");
+        keepDriving = false; // !keepDriving;
+        document.getElementById('stop-path').disabled = true;
+        document.getElementById('resume-path').disabled = false;
+
+        document.getElementById('data-slider').disabled = false;
+    }
+
+    function resumeDriving() {
+        console.log("Resuming");
+        keepDriving = true; // !keepDriving;
+        drive();
+        document.getElementById('stop-path').disabled = false;
+        document.getElementById('resume-path').disabled = true;
+
+        document.getElementById('data-slider').disabled = true;
+    }
+
+    function onSlider(event) {
+        // Manage Slider change
+        // console.log(`Slider: ${this.value}`);
+        pathIdx = parseInt(this.value);
+        moveTo(pathIdx, true);
+    }
+
+    let showAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.show !== undefined) {
+            aboutDialog.show();
+        } else {
+            alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'inline';
+        }
+    };
+
+    let closeAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.close !== undefined) {
+            aboutDialog.close();
+        } else {
+            // alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'none';
+        }
+    };
+
+    function onSlideShowClick(src) {
+        console.log(">> Client side!! Slide " + src + " was clicked.");
+        window.open(src, '_blank'); // This is an example
+    }
+
+    window.onload = () => {
+      console.log("Page Loaded!");
+      loadPathData();
+    };
+
+</script>
+
+</body>
+</html>

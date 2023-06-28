@@ -3,14 +3,9 @@ package util;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * GPX generator, from NMEA log.
@@ -73,6 +68,64 @@ public class NMEAtoGPX {
 		bw.close();
 	}
 
+	private static void transformWithSort(String fileInName,
+										  String fileOutName) throws Exception {
+		BufferedReader br = new BufferedReader(new FileReader(fileInName));
+		String line = "";
+
+		// 1 - Build a list of RMC
+		List<RMC> rmcList = new ArrayList<>();
+		while (line != null) {
+			line = br.readLine();
+			if (line != null) {
+				if (line.startsWith("$") && line.length() > 6) {
+					String prefix = line.substring(3, 6);
+					Integer nb = map.get(prefix);
+					map.put(prefix, (nb == null) ? (1) : (nb + 1));
+					// Specific
+					if ("RMC".equals(prefix)) {
+						if (StringParsers.validCheckSum(line)) {
+							RMC rmc = StringParsers.parseRMC(line);
+							if (rmc != null && rmc.getRmcTime() != null && rmc.isValid()) {
+								rmcList.add(rmc);
+							}
+						}
+					}
+				}
+			}
+		}
+		br.close();
+		// 2 - sort by date
+		Collections.sort(rmcList, (rmc1, rmc2) -> (int)(rmc1.getRmcDate().getTime() - rmc2.getRmcDate().getTime()));
+		// 3 - GPX from sorted list
+		BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutName));
+		bw.write("<?xml version=\"1.0\"?>\n" +
+				"<gpx version=\"1.1\" creator=\"OpenCPN\" " +
+				"     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+				"     xmlns=\"http://www.topografix.com/GPX/1/1\" " +
+				"     xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" " +
+				"     xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" " +
+				"     xmlns:opencpn=\"http://www.opencpn.org\">\n" +
+				"  <trk>\n" +
+				"    <extensions>\n" +
+				"      <opencpn:guid>21180000-44ac-4218-a090-ed331f980000</opencpn:guid>\n" +
+				"      <opencpn:viz>1</opencpn:viz>\n" +
+				"    </extensions>\n" +
+				"    <trkseg>\n");
+		rmcList.forEach(rmc -> {
+			try {
+				bw.write("      <trkpt lat=\"" + rmc.getGp().lat + "\" lon=\"" + rmc.getGp().lng + "\">\n" +
+						"        <time>" + UTC_MASK.format(rmc.getRmcTime()) + "</time>\n" +
+						"      </trkpt>\n");
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		});
+		bw.write("    </trkseg>\n" +
+				"  </trk>\n" +
+				"</gpx>");
+		bw.close();
+	}
 	public static void main(String... args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Please provide the name of the file to analyze as first parameter");
@@ -81,7 +134,11 @@ public class NMEAtoGPX {
 		try {
 			String inputFileName = args[0];
 			String outputFileName = inputFileName + ".gpx";
-			NMEAtoGPX.transform(inputFileName, outputFileName);
+			if (true) { // TODO Merge those 2 options
+				NMEAtoGPX.transformWithSort(inputFileName, outputFileName);
+			} else {
+				NMEAtoGPX.transform(inputFileName, outputFileName);
+			}
 			System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
 		} catch (Exception ex) {
 			ex.printStackTrace();

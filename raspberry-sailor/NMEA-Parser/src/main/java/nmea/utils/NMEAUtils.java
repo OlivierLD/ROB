@@ -21,7 +21,7 @@ public class NMEAUtils {
     public final static double DEFAULT_DECLINATION = 0d;
 
     public static String translateEscape(String str, int option) {
-        String s = null;
+        // String s = null;
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
             if (option == CR_NL) {
@@ -320,6 +320,13 @@ public class NMEAUtils {
         return ret;
     }
 
+    /**
+     * Load markers, and others, like borders, etc.
+     * @param markerFileName yaml file name.
+     * @return markers list.
+     *
+     * TODO The borders...
+     */
     public static List<Marker> loadMarkers(String markerFileName) {
         List<Marker> markerList;
         Yaml yaml = new Yaml();
@@ -622,7 +629,7 @@ public class NMEAUtils {
         return "$" + std;
     }
 
-    // This is just a test
+    // This is just a stupid test
     public static void main(String... args) {
         String data = "Akeu CoucouA*FG\r\n";
         System.out.println(translateEscape(data, ALL_IN_HEXA));

@@ -7,10 +7,7 @@ import nmea.parser.GeoPos;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,6 +20,8 @@ import java.util.*;
  *         [37.77, -122.43],
  *         [34.04, -118.2]
  *     ];
+ *
+ *  Do see the System Variable "sorted.data" below
  */
 public class NMEAtoJSONPos {
 
@@ -74,8 +73,9 @@ public class NMEAtoJSONPos {
 
 		boolean withOG = "true".equals(System.getProperty("with.og", "false"));
 
+		// 1 - Build a list of RMC
+		List<RMC> rmcList = new ArrayList<>();
 		String line = "";
-
 		while (line != null) {
 			line = br.readLine();
 			if (line != null) {
@@ -83,20 +83,12 @@ public class NMEAtoJSONPos {
 					String prefix = line.substring(3, 6);
 					Integer nb = map.get(prefix);
 					map.put(prefix, (nb == null) ? (1) : (nb + 1));
-					// Specific - To be extended at will...
+					// Specific
 					if ("RMC".equals(prefix)) {
 						if (StringParsers.validCheckSum(line)) {
 							RMC rmc = StringParsers.parseRMC(line);
 							if (rmc != null && rmc.getRmcTime() != null && rmc.isValid()) {
-								if (withOG) {
-									ObjectToLog otl = new ObjectToLog(rmc.getGp().lat, rmc.getGp().lng);
-									otl.setRmcDate(SDF_UTC.format(rmc.getRmcDate()));
-									otl.setCog(rmc.getCog());
-									otl.setSog(rmc.getSog());
-									jsonArray.add(otl);
-								} else {
-									jsonArray.add(rmc.getGp());
-								}
+								rmcList.add(rmc);
 							}
 						}
 					}
@@ -104,6 +96,22 @@ public class NMEAtoJSONPos {
 			}
 		}
 		br.close();
+		// 2 - sort by date ?
+		if ("true".equals(System.getProperty("sorted.data", "true"))) {
+			Collections.sort(rmcList, (rmc1, rmc2) -> (int) (rmc1.getRmcDate().getTime() - rmc2.getRmcDate().getTime()));
+		}
+		// 3 - JSON from sorted list
+		rmcList.forEach(rmc -> {
+			if (withOG) {
+				ObjectToLog otl = new ObjectToLog(rmc.getGp().lat, rmc.getGp().lng);
+				otl.setRmcDate(SDF_UTC.format(rmc.getRmcDate()));
+				otl.setCog(rmc.getCog());
+				otl.setSog(rmc.getSog());
+				jsonArray.add(otl);
+			} else {
+				jsonArray.add(rmc.getGp());
+			}
+		});
 		if ("true".equals(System.getProperty("verbose"))) {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
