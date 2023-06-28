@@ -59,11 +59,12 @@ public class ApplicationContext {
 
 		if (markers != null) {
 			if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
-				System.err.printf("Markers file must be a yaml file, not %s\n", markers);
+				System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
 				System.err.println("Moving on anyway, without markers.");
 			} else {
 				dataCache.put(NMEADataCache.MARKERS_FILE, markers);
 				dataCache.put(NMEADataCache.MARKERS_DATA, NMEAUtils.loadMarkers(markers));
+				dataCache.put(NMEADataCache.BORDERS_DATA, NMEAUtils.loadBorders(markers));
 			}
 		}
 

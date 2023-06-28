@@ -73,6 +73,7 @@ const MAX_BUFFER_LENGTH = 1000; // Tweak at will
 let trackBuffer = [];
 let aisTargets = [];
 let markers = [];
+let borders = [];
 let cog = 0;
 let sog;
 let pos;
@@ -80,6 +81,7 @@ let gpsDate;
 
 let centerOnBoat = true;
 let displayMarkers = true;
+let displayBorders = true;
 let displayAISTargets = true;
 let withDistBearing = true;
 
@@ -116,6 +118,9 @@ events.subscribe('pos', val => {
 });
 events.subscribe('markers', val => {
 	markers = val;
+});
+events.subscribe('borders', val => {
+	borders = val;
 });
 events.subscribe('ais', val => {
 	aisTargets = [];
@@ -270,6 +275,46 @@ let updateMap = (elmt, context) => {
 		context.restore();
 	}
 
+	// Borders.
+	if (VERBOSE) {
+		console.log(`${borders.length} borders`);
+	}
+	if (displayBorders) {
+		context.save();
+		let markerRadius = 10;
+		let beaconHeight = 2 * markerRadius;
+		borders.forEach(border => {
+			let extraMess = [];
+			let borderName = border.borderName;
+			let markerList = border.markerList;
+			// console.log(`Border [${borderName}]`);
+
+			let plotBorder = [];
+			// Plot markers
+			markerList.forEach(marker => {
+				elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
+				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
+				plotBorder.push(plot);
+			});
+			// Draw border
+			context.save();
+			context.beginPath();
+			context.strokeStyle = 'red';
+			context.lineWidth = 2;
+
+			if (plotBorder.length > 0) {
+				context.moveTo(plotBorder[0].x, plotBorder[0].y);
+				for (let i=1; i<plotBorder.length; i++) {
+					context.lineTo(plotBorder[i].x, plotBorder[i].y);
+				}
+			}
+			context.stroke();
+			context.closePath();
+			context.restore();
+		});
+		context.restore();
+	}
+
 	// AIS Targets
 	if (VERBOSE) {
 		console.log(`${aisTargets.length} AIS Target(s)`);
@@ -401,6 +446,10 @@ let plotMarkers = (cb) => {
 	displayMarkers = cb.checked;
 	map.repaint();
 };
+let plotBorders = (cb) => {
+	displayBorders = cb.checked;
+	map.repaint();
+};
 let distBearing = (cb) => {
 	withDistBearing = cb.checked;
 	map.repaint();
@@ -507,6 +556,7 @@ window.onload = () => {
 		<tr>
 			<td>
 				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
 				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
 				<input type="checkbox" onchange="distBearing(this);" checked>Dist &amp; Bearings
 				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
