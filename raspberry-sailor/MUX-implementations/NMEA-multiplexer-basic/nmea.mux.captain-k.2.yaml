@@ -42,3 +42,6 @@ computers:
   - class: nmea.computers.AISManager
     properties: ais.mgr.properties
     verbose: true
+  - class: nmea.computers.BorderManager
+    properties: border.mgr.properties
+    verbose: true

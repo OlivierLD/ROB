@@ -91,7 +91,6 @@ markers:
     latitude: 0.0
     longitude: 0.0
     type: default    
-# Work in Progress...   
 borders:
   - border-name: "Etel North-West"
     border-elements:
@@ -107,4 +106,17 @@ borders:
     - rank: 4
       latitude: 47.643851123756754
       longitude: -3.213286399841309
-
+  - border-name: "Etel, East side"
+    border-elements:
+    - rank: 1
+      latitude: 47.65639814326938
+      longitude: -3.207557201385498
+    - rank: 2
+      latitude: 47.651628318194355
+      longitude: -3.2067632675170903
+    - rank: 3
+      latitude: 47.6471038087798
+      longitude: -3.2091021537780766
+    - rank: 4
+      latitude: 47.64318610543658
+      longitude: -3.21176290512085

@@ -35,3 +35,6 @@ computers:
   - type: "tw-current"
     prefix: "CC"
     time.buffer.length: 30, 60, 600
+  - class: nmea.computers.BorderManager
+    properties: border.mgr.properties
+    verbose: true
