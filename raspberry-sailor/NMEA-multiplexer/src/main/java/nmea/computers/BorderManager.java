@@ -177,13 +177,11 @@ public class BorderManager extends Computer {
 								// Boat between milestone's lats on lngs. TODO This may need improvements...
 								Marker markerOne = borders.get(border).getMarkerList().get(seg);
 								Marker markerTwo = borders.get(border).getMarkerList().get(seg + 1);
-								if ((position.lng < Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) &&
-									 position.lng > Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
-									(position.lat < Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) &&
-									 position.lat > Math.min(markerOne.getLatitude(), markerTwo.getLatitude()))) {
-									threatDetected = true;
-									threatMessages.add(String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist));
-									threats.add(new BorderThreat().borderName(name).date(utcDate.getDate()).segmentIdx(seg + 1).dist(segDist));
+								if ((position.lng < Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng > Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+									(position.lat < Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat > Math.min(markerOne.getLatitude(), markerTwo.getLatitude()))) {
+								  threatDetected = true;
+								  threatMessages.add(String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist));
+								  threats.add(new BorderThreat().borderName(name).date(utcDate.getDate()).segmentIdx(seg + 1).dist(segDist));
 								}
 							}
 						}
