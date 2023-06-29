@@ -149,6 +149,8 @@ public class NMEADataCache
 	public static final String MARKERS_DATA = "markers-data";
 	public static final String BORDERS_DATA = "borders-data";
 
+	public static final String BORDERS_THREATS = "borders-threats";
+	public static final String AIS_THREATS = "ais-threats";
 	// End of keys
 
 	private final Map<Integer, Map<Integer, AISParser.AISRecord>> aisMap = new ConcurrentHashMap<>();
@@ -486,7 +488,13 @@ public class NMEADataCache
 						if (!"true".equals(System.getProperty("do.not.use.GGA.date.time"))) { // Not good when replaying, contains only H:M:S, no Y:N:D
 							UTC ggaDate = (UTC) gga.get(StringParsers.GGA_UTC_IDX);
 							if (ggaDate != null) {
-								Date date = ggaDate.getDate();
+								Date date = null;
+								UTCDate gpsDateTime = (UTCDate) this.get(NMEADataCache.GPS_DATE_TIME);
+								if (gpsDateTime != null) {
+									date = gpsDateTime.getDate();
+								} else {
+									date = ggaDate.getDate(); // Plan B
+								}
 								// TODO Upgrade that part
 								UTCDate utcDate =  new UTCDate(date.getYear() + 1900, date.getMonth(), date.getDate(), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
 								this.put(GPS_DATE_TIME, utcDate);

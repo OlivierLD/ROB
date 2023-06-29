@@ -1,0 +1,35 @@
+#
+# MUX definition.
+#
+name: "Replay big log file."
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders tests
+context:
+  with.http.server: true
+  http.port: 8080
+  init.cache: true
+  default.declination: 0
+  markers: markers.yaml
+channels:
+  - type: file
+    filename: ./logged/rubis-cup/going.to.groix/2023-06-23_08-18-48_UTC_LOG.nmea
+    zip: false
+    verbose: false
+    # sentence.filters: ~GGA
+forwarders:
+  - type: file
+    verbose: false
+    timebase.filename: true
+    filename.suffix: "_LOG"
+    log.dir: "logged"
+    split: "hour"
+    flush: true
+#  - type: console
+#  - type: tcp
+#    port: 7002
+computers:
+  - class: nmea.computers.BorderManager
+    properties: border.mgr.properties
+    verbose: true

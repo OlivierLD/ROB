@@ -74,6 +74,7 @@ let trackBuffer = [];
 let aisTargets = [];
 let markers = [];
 let borders = [];
+let borderThreats = [];
 let cog = 0;
 let sog;
 let pos;
@@ -121,6 +122,9 @@ events.subscribe('markers', val => {
 });
 events.subscribe('borders', val => {
 	borders = val;
+});
+events.subscribe('borders-threats', val => {
+	borderThreats = val;
 });
 events.subscribe('ais', val => {
 	aisTargets = [];
@@ -314,6 +318,27 @@ let updateMap = (elmt, context) => {
 		});
 		context.restore();
 	}
+
+	// Border threats ?
+	let threatText = '';
+	if (borderThreats.length > 0) {
+		threatText = `<i>Border Threats:</i> <ol>`;
+
+		borderThreats.forEach(bt => {
+			let innerCode = `<ul>
+				  <li>Border [${bt.borderName}]</li>
+				  <li>Segment #${bt.segmentIdx}</li>
+				  <li>At ${new Date(bt.date)}</li>
+				  <li>dist: ${bt.dist.toFixed(2)} nm</li>
+				</ul>`;
+			threatText += `<li>${innerCode}</li>`;
+		});
+
+		threatText += `</ol>`;
+	} else {
+		// Cleanup
+	}
+	document.getElementById('border-threats').innerHTML = threatText;
 
 	// AIS Targets
 	if (VERBOSE) {
@@ -536,8 +561,12 @@ window.onload = () => {
 						<td><span id="gps-cog"></span></td>
 					</tr>
 					<tr>
-						<td>AIS Targets:</td>
+						<td valign="top">AIS Targets:</td>
 						<td><span id="ais-targets">-</span></td>
+					</tr>
+					<tr>
+						<!--td valign="top">Border Threats:</td-->
+						<td colspan="2"><span id="border-threats">-</span></td>
 					</tr>
 				</table>
 			</td>

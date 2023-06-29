@@ -106,6 +106,8 @@ const EVENT_DEW      = 'dew';
 const EVENT_AIS      = 'ais';
 const EVENT_MARKERS  = 'markers';
 const EVENT_BORDERS  = 'borders';
+const BORDERS_THREATS = "borders-threats";
+const AIS_THREATS    = "ais-threats";
 
 function onMessage(json) {
 	try {
@@ -411,6 +413,15 @@ function onMessage(json) {
 			let borders = json['borders-data'];
 			if (borders) {
 				events.publish(EVENT_BORDERS, borders);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders (" + err + ")");
+		}
+
+		try {
+			let borderThreats = json[BORDERS_THREATS];
+			if (borderThreats) {
+				events.publish(BORDERS_THREATS, borderThreats);
 			}
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders (" + err + ")");
