@@ -107,7 +107,6 @@ const EVENT_AIS      = 'ais';
 const EVENT_MARKERS  = 'markers';
 const EVENT_BORDERS  = 'borders';
 const BORDERS_THREATS = "borders-threats";
-const AIS_THREATS    = "ais-threats";
 
 function onMessage(json) {
 	try {
@@ -424,7 +423,7 @@ function onMessage(json) {
 				events.publish(BORDERS_THREATS, borderThreats);
 			}
 		} catch (err) {
-			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders (" + err + ")");
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders threats (" + err + ")");
 		}
 
 		if (errMess && forwardAjaxErrors) {

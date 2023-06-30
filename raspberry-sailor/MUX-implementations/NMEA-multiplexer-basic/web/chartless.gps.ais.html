@@ -55,6 +55,7 @@ function displayErr(err) {
 let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
 	// TODO Manage a specific component here.
 	console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
+	// let aisCollisionZone = document.getElementById('ais-threats');
 };
 
 function onSlider(event) {
@@ -75,6 +76,7 @@ let aisTargets = [];
 let markers = [];
 let borders = [];
 let borderThreats = [];
+let aisThreats = null;
 let cog = 0;
 let sog;
 let pos;
@@ -126,7 +128,7 @@ events.subscribe('borders', val => {
 events.subscribe('borders-threats', val => {
 	borderThreats = val;
 });
-events.subscribe('ais', val => {
+events.subscribe('ais', val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);
 	// console.log(`Received AIS Data, ${keys.length} target(s).`);
@@ -322,7 +324,7 @@ let updateMap = (elmt, context) => {
 	// Border threats ?
 	let threatText = '';
 	if (borderThreats.length > 0) {
-		threatText = `<i>Border Threats:</i> <ol>`;
+		threatText = `<i style="font-weight: bold;">Border Threats:</i> <ol>`;
 
 		borderThreats.forEach(bt => {
 			let innerCode = `<ul>
@@ -344,7 +346,11 @@ let updateMap = (elmt, context) => {
 	if (VERBOSE) {
 		console.log(`${aisTargets.length} AIS Target(s)`);
 	}
+
+	let aisThreatsCodeElmnts = [];
+	let aisThreatsCode = "No AIS Threat";
 	if (displayAISTargets) {
+
 		aisTargets.forEach((target, idx) => {
 			/*
 			* aisTarget: {
@@ -374,8 +380,31 @@ let updateMap = (elmt, context) => {
 			context.stroke();
 			context.closePath();
 			drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			// AIS threat ?
+			if (target.threat === true) {
+				// debugger;
+				let oneThreat = `<ul>
+					<li>With ${target.mmsi} - ${target.vesselName}</li>
+					<li>at ${decToSex(target.lat, "NS")} / ${decToSex(target.lng, "EW")}</li>
+					<li>COG: ${target.cog}&deg;</li>
+					<li>SOG: ${target.sog.toFixed(2)} kn</li> 
+					<li>Min Dist: ${target.radius} nm</li>
+					</ul>`;
+				aisThreatsCodeElmnts.push(oneThreat);
+			}
 		});
 	}
+	if (aisThreatsCodeElmnts.length > 0) {
+		aisThreatsCode = `<i style="font-weight: bold;">AIS Threats:</i>`;
+		aisThreatsCode += "<ol>";
+		aisThreatsCodeElmnts.forEach(el => {
+			aisThreatsCode += `<li>${el}</li>`;
+		});
+		aisThreatsCode += "</ol>";
+	}
+	// Populate AIS threats
+	document.getElementById('ais-threats').innerHTML = aisThreatsCode;
+
 
 	// The boat position and heading, last to stay on top
 	if (true && pos) {
@@ -567,6 +596,10 @@ window.onload = () => {
 					<tr>
 						<!--td valign="top">Border Threats:</td-->
 						<td colspan="2"><span id="border-threats">-</span></td>
+					</tr>
+					<tr>
+						<!--td valign="top">AIS Threats:</td-->
+						<td colspan="2"><div id="ais-threats">-</div></td>
 					</tr>
 				</table>
 			</td>

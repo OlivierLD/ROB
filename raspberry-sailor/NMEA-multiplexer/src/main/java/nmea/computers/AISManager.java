@@ -47,89 +47,6 @@ import java.util.function.Consumer;
  */
 public class AISManager extends Computer {
 
-	public static class AISCollisionThreat {
-		private int mmsi;
-		private String vesselName;
-		private GeoPos targetPos;
-		private double distToTarget;
-		private double bearingFromTarget;
-		private double targetCOG;
-
-		public AISCollisionThreat() {}
-
-		public AISCollisionThreat mmsi(int mmsi) {
-			this.mmsi = mmsi;
-			return this;
-		}
-		public AISCollisionThreat vesselName(String vesselName) {
-			this.vesselName = vesselName;
-			return this;
-		}
-		public AISCollisionThreat targetPos(GeoPos targetPos) {
-			this.targetPos = targetPos;
-			return this;
-		}
-		public AISCollisionThreat distToTarget(double distToTarget) {
-			this.distToTarget = distToTarget;
-			return this;
-		}
-		public AISCollisionThreat bearingFromTarget(double bearingFromTarget) {
-			this.bearingFromTarget = bearingFromTarget;
-			return this;
-		}
-		public AISCollisionThreat targetCOG(double targetCOG) {
-			this.targetCOG = targetCOG;
-			return this;
-		}
-		public int getMmsi() {
-			return mmsi;
-		}
-
-		public void setMmsi(int mmsi) {
-			this.mmsi = mmsi;
-		}
-
-		public String getVesselName() {
-			return vesselName;
-		}
-
-		public void setVesselName(String vesselName) {
-			this.vesselName = vesselName;
-		}
-
-		public GeoPos getTargetPos() {
-			return targetPos;
-		}
-
-		public void setTargetPos(GeoPos targetPos) {
-			this.targetPos = targetPos;
-		}
-
-		public double getDistToTarget() {
-			return distToTarget;
-		}
-
-		public void setDistToTarget(double distToTarget) {
-			this.distToTarget = distToTarget;
-		}
-
-		public double getBearingFromTarget() {
-			return bearingFromTarget;
-		}
-
-		public void setBearingFromTarget(double bearingFromTarget) {
-			this.bearingFromTarget = bearingFromTarget;
-		}
-
-		public double getTargetCOG() {
-			return targetCOG;
-		}
-
-		public void setTargetCOG(double targetCOG) {
-			this.targetCOG = targetCOG;
-		}
-	}
-
 	private final static double DEFAULT_MINIMUM_DISTANCE = 20D;
 	private double minimumDistance = DEFAULT_MINIMUM_DISTANCE;
 	private final static double DEFAULT_HEADING_FORK = 10;
@@ -212,16 +129,8 @@ public class AISManager extends Computer {
 												bearingFromTarget,
 												aisRecord.getCog());
 
-										AISCollisionThreat collisionThreat = new AISCollisionThreat()
-												.bearingFromTarget(bearingFromTarget)
-												.mmsi(aisRecord.getMMSI())
-												.vesselName(vesselName.replace("@", " ").trim())
-												.targetPos(new GeoPos(aisRecord.getLatitude(), aisRecord.getLongitude()))
-												.targetCOG(aisRecord.getCog());
-										// TODO Send this to cache
-
 										System.out.println(warningText);
-										// TODO Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
+										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
 										if (collisionCallback != null) {
 											// A test
 											int bearingToTarget = (int)(180 + Math.round(bearingFromTarget));
@@ -230,7 +139,7 @@ public class AISManager extends Computer {
 													distToTarget,
 													bearingToTarget);
 											collisionCallback.accept(messageToSpeak);
-//											TextToSpeech.speak(messageToSpeak);
+  											// TextToSpeech.speak(messageToSpeak);
 										}
 									} else {
 										aisRecord.setCollisionThreat(null);
