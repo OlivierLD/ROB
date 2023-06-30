@@ -671,9 +671,10 @@ Such a file can be rendered like this:
 
 <img src="./docimages/deviation.curve.png" title="deviation curve" width="318" height="440">
 
-##### markers
-`markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers. Those markers
-will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).  
+##### markers and borders
+`markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers, and possibly borders. Those markers
+will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).
+
 The structure of this file is the following one:
 ```yaml
 markers:
@@ -712,7 +713,55 @@ markers:
 
 `type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp`, `is-dng`.
 
-### Example
+###### borders
+
+```yaml
+markers:
+  . . .
+borders:
+  - border-name: "Etel, Right bank"
+    border-elements:
+      - rank: 1
+        latitude: 47.6600691664467
+        longitude: -3.2113552093505864
+      - rank: 2
+        latitude: 47.65532858402682
+        longitude: -3.2104969024658208
+      - rank: 3
+        latitude: 47.6508766696586
+        longitude: -3.209638595581055
+      - rank: 4
+        latitude: 47.643851123756754
+        longitude: -3.213286399841309
+  - border-name: "Etel, Left bank"
+    border-elements:
+      - rank: 1
+        latitude: 47.65639814326938
+        longitude: -3.207557201385498
+. . .
+```
+
+Border can be managed by a `Computer`, like `nmea.computers.BorderManager`. This computer may require a properties file (see the code for details)
+```yaml
+computers:
+  - class: nmea.computers.BorderManager
+    properties: border.mgr.properties
+    verbose: true
+```
+Web UI below is using the "Chartless Map"
+
+|                   AIS, Borders, Markers                    |
+|:----------------------------------------------------------:|
+|                    AIS Collision threat                    |
+|    ![AIS Threat display](./docimages/ais-threat.01.png)    |
+|                       Border threat                        |
+| ![Border Threat display](./docimages/border.threat.01.png) |
+|                      Markers display                       |
+| ![Border Threat display](./docimages/border.threat.02.png) |
+
+
+
+### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
 ```properties
 #

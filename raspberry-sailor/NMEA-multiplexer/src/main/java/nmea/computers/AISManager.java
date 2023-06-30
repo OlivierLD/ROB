@@ -133,9 +133,14 @@ public class AISManager extends Computer {
 										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
 										if (collisionCallback != null) {
 											// A test
+											String targetName = vesselName.replace("@", " ").trim();
+											if (targetName.length() == 0) {
+												targetName = String.valueOf(aisRecord.getMMSI());
+											}
 											int bearingToTarget = (int)(180 + Math.round(bearingFromTarget));
 											bearingToTarget %= 360;
-											String messageToSpeak = String.format("Possible collision threat, %.02f miles in the %d.",
+											String messageToSpeak = String.format("Possible collision threat with %s, %.02f miles in the %d.",
+													targetName,
 													distToTarget,
 													bearingToTarget);
 											collisionCallback.accept(messageToSpeak);

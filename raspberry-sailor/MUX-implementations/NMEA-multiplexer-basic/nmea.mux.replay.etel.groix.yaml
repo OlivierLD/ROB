@@ -32,4 +32,4 @@ forwarders:
 computers:
   - class: nmea.computers.BorderManager
     properties: border.mgr.properties
-    verbose: true
+    verbose: false

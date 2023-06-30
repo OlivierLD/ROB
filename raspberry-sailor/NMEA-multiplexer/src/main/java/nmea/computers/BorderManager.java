@@ -1,13 +1,9 @@
 package nmea.computers;
 
-import calc.GeomUtil;
 import context.ApplicationContext;
 import context.NMEADataCache;
-import nmea.ais.AISParser;
 import nmea.api.Multiplexer;
 import nmea.parser.*;
-import util.TextToSpeech;
-import utils.TimeUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -30,11 +26,9 @@ import java.util.stream.Collectors;
  * <pre>
  * # Properties of the BorderManager Computer
  * minimum.distance=1
- * heading.fork.width=10
  *
  * # For test (big distance, big fork)
  * #minimum.distance=50
- * #heading.fork.width=90
  *
  * # border.threat.callback=nmea.computers.SpeakingCallback
  * border.threat.callback=default

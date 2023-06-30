@@ -152,10 +152,11 @@ events.subscribe('ais', val => {  // Possibly contains threats
 			if (vesselName !== null) {
 				vesselName = vesselName.replace(/@/g, " ").trim();
 			}
-			if (false) {
+			if (true) {
 				if (rec18.collisionThreat !== null) {
 					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec18.collisionThreat.minimumDistance}) !!`);
 					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec18.collisionThreat.minimumDistance);
+					// debugger;
 				}
 			}
 			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
@@ -168,7 +169,9 @@ events.subscribe('ais', val => {  // Possibly contains threats
 				cog: recContent.cog, 
 				sog: recContent.sog, 
 				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
-				threat: rec18.collisionThreat !== null
+				threat: rec18.collisionThreat !== null,
+				bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null
 			});
 		}
 		document.getElementById('ais-targets').innerHTML = aisTargets.length;
@@ -386,6 +389,7 @@ let updateMap = (elmt, context) => {
 				let oneThreat = `<ul>
 					<li>With ${target.mmsi} - ${target.vesselName}</li>
 					<li>at ${decToSex(target.lat, "NS")} / ${decToSex(target.lng, "EW")}</li>
+					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)} </li>
 					<li>COG: ${target.cog}&deg;</li>
 					<li>SOG: ${target.sog.toFixed(2)} kn</li> 
 					<li>Min Dist: ${target.radius} nm</li>
