@@ -1,11 +1,11 @@
 #
 # MUX definition.
 #
-name: "Minimal Mux"
+name: "Mini-minimal Mux"
 description:
   - "No channels"
   - "No forwarders"
-  - "No Computers"
+  - "No computers"
   - "Just HTTP - static and REST"
 context:
   with.http.server: true
@@ -13,3 +13,4 @@ context:
   init.cache: true
 #channels:
 #forwarders:
+#computers

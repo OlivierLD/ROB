@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * AIS Manager. WiP.
  * Uses current position and AIS data to detect <u>possible collision threats</u>.
  * <br/>
- * Does NOT put anything in the cache.
+ * Threats will end up in the cache, along with AIS targets.
  * <br/>
  * To be used as a custom computer:
  * <pre>

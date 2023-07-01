@@ -21,7 +21,7 @@ channels:
     zip: true
     verbose: false
 # forwarders:
-  # - type: console
+#   - type: console
 computers:
   - class: nmea.computers.AISManager
     verbose: false

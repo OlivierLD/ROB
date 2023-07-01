@@ -300,14 +300,14 @@ See how to add `http.RESTRequestManager`(s) to an `http.HTTPServer`, with the `a
 Many other Web UI examples are available. Just look.  
 You will see that some examples need an Internet connection (for Google Maps and Leaflets), some others can run without Internet.  
 Some are using WebComponents, some vanilla JavaScript components (directly drawing on HTML5 canvases).  
-Your imagination is the limit.  
+Your imagination is the limit, use it!  
 There is also a [USE_CASES](./USE_CASES.md) document.  
 > The WebComponents presented here live in their own repo, at <https://github.com/OlivierLD/WebComponents>. 
 > They can be seen live at <https://olivierld.github.io/webcomponents/gallery.html> (it's a biiiiig file).
 
 Examples of Web Admin features will also be presented (in other modules, like [RESTNavServer](../RESTNavServer/README.md)).
 
-# Build for production
+# Build and package for production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on
 a target machine, un-archived, and run.  
 To run it:
@@ -315,13 +315,14 @@ To run it:
 $ ./to.prod.sh
 ```
 
-Explanations on how to deploy the generated archive are given interactively by the script.
-_**DO READ THEM !!!**_   
-And _do not hesitate_ to mess with the code !!
+Explanations on how to deploy the generated archive are given interactively by the script.  
+⚠️ _**DO READ THEM !!!**_ ⚠️   
+And _do not hesitate_ to mess with the code !! 🪠
 
 You will notice that this archive will zip all the HTML/CSS/JavaScript/etc resources into a zip file that will be used
 at runtime when a Web Interface is required. The `http-tiny-server` can get the resources it needs from a zip, to minimize its footprint.  
 In the production environment, what used to be reached from a URL like <http://localhost:8080/web/index.html> should now be <http://localhost:8080/zip/index.html>.
+The http port is assigned in the config yaml file used start the multiplexer.
 
 > _**Note**_: This `to.prod.sh` script takes care of the deployment of the Java and Web parts (http server).  
 > If your config requires some sensor data to be reached, the corresponding Python
@@ -335,6 +336,7 @@ Notice below when the script prompts the user for his input:
 - to include Python scripts in the archive
 - to drop the directory the archive has been done from
 
+_Example:_
 ```
  $ ./to.prod.sh 
 +----------------------------------------------------------------------------------------------------+

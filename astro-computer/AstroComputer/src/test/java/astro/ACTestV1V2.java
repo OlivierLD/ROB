@@ -10,6 +10,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * AC stands for Almanac Computer
+ */
 public class ACTestV1V2 {
 
     // This is for tests. Compare V1 & V2

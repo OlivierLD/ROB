@@ -10,7 +10,7 @@ context:
   with.http.server: true
   http.port: 8080
   init.cache: true
-  default.declination: 0
+  default.declination: -1
   markers: markers.yaml
 channels:
   - type: file

@@ -4,7 +4,7 @@
 name: "With a GPS and AIS (replay), for tests"
 description:
   - "Replay Channel"
-  - "Require Internet connection for sinagot.net"
+  - "Require Internet connection for sinagot.net (warning, it's a lot of data)"
   - "No forwarders"
   - "AIS Manager Computer"
   - "Markers"

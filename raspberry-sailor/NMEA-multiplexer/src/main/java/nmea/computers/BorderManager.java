@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Border Manager. WiP.
  * Uses current position and borders definition <u>possible collision threats</u>.
  * <br/>
- * Does NOT put anything in the cache.
+ * Threats will end up in the cache.
  * <br/>
  * To be used as a custom computer:
  * <pre>
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * Properties file like:
  * <pre>
  * # Properties of the BorderManager Computer
- * minimum.distance=1
+ * minimum.distance=0.5
  *
  * # For test (big distance, big fork)
  * #minimum.distance=50
@@ -218,6 +218,8 @@ public class BorderManager extends Computer {
 			if (callback.equals("default")) {
 				this.collisionCallback = defaultCallback;
 			} else {
+				// Like Speaking callback, honk callback, led (blinking light) callback, etc...
+				// The speaking callback might be a little too verbose...
 				try {
 					Class<?> aConsumer = Class.forName(callback);
 					this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();

@@ -16,11 +16,15 @@
     }
 </style>
 <body>
-<h1>Summary</h1>
+<h1>Summary of the build process</h1>
 <table>
     <tr>
         <th width="50%">Machine A</th>
         <th width="50%">Machine B</th>
+    </tr>
+    <tr>
+        <td width="50%">The git repo is or will be cloned on this machine, the build will happen on this one.</td>
+        <td width="50%">No git repo here, only parts required at runtime will be available here.</td>
     </tr>
     <tr>
         <td style="text-align: center"><img src="../doc_resources/laptop.jpeg"></td>
@@ -33,7 +37,7 @@
     <tr><td>Clone the repo</td><td></td></tr>
     <tr><td>Build the Project</td><td></td></tr>
     <tr><td>Package it for Production, create an archive <img src="../doc_resources/zip.archive.jpeg" height="60" style="vertical-align: middle;"></td><td></td></tr>
-    <tr><td colspan="2">Send the archive to the Raspberry Pi</td></tr>
+    <tr><td colspan="2">Send the archive to the Raspberry Pi (using <code>scp</code>)</td></tr>
     <tr>
         <td colspan="2" style="text-align: center;">
             <img src="../doc_resources/laptop.jpeg" style="vertical-align: middle;">
@@ -51,6 +55,6 @@
 </table>
 
 <hr>
-
+<i>OlivSoft never stops</i>
 </body>
 </html>
