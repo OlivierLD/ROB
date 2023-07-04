@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- ! Warning: the page format is Letter. Can be changed to A4 if needed... -->
 <!DOCTYPE xsl:stylesheet [
  <!ENTITY copy    "&#169;">
  <!ENTITY Delta   "&#916;">
