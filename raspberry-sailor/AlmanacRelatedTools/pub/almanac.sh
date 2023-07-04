@@ -1,6 +1,6 @@
 #!/bin/bash
 echo ----------------------------
-echo Nautical Almanac or Lunar Distnaces Calculation
+echo Nautical Almanac or Lunar Distances Calculation
 echo and pdf generation
 echo ----------------------------
 #
