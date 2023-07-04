@@ -5,7 +5,7 @@ name: "Replay big log file."
 description:
   - Replay a log file from the sample-data folder.
   - The file must obviously be here for the replay to work.
-  - Markers tests
+  - Markers and Borders tests
 context:
   with.http.server: true
   http.port: 8080
