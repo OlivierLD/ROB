@@ -39,7 +39,8 @@ fi
 XSL_STYLESHEET=./perpetual.xsl
 PRM_OPTION="-docconf ./scalable.cfg"
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ./data.xml -xsl ${XSL_STYLESHEET} -pdf perpetual.pdf
-echo Done calculating, see perpetual.pdf !
+echo -e "Done calculating and publishing, checkout perpetual.pdf, in $(pwd)."
+
 # open perpetual.pdf
 #
 popd

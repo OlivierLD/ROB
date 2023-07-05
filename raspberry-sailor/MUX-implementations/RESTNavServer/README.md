@@ -159,12 +159,17 @@ Build it:
 ```bash
  $ ../../../gradlew [--no-daemon] shadowJar
 ```
+Then you have a small menu to get started:
+```bash
+$ ./menu.sh
+```
 
-Then run the server
+Or just run the server
 ```bash
  $ cd launchers
- $ ./runNavServer.sh
+ $ ./runNavServer.sh 
 ```
+This `runNavServer.sh` can take the name of a config file (like a yaml one) as first parameter.
 
 Finally, use `Postman`, any `REST` client (like `curl`), or your browser, and reach
 ```

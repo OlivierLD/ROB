@@ -19,6 +19,6 @@ export CP=${CP}:${FOP_HOME}/libs/xdo-0301.jar
 #
 java -classpath ${CP} tables.CorrectionTables
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor -xml ./corrections.xml -xsl corr-to-fo.xsl -pdf corrections.pdf
-echo Done calculating, checkout corrections.pdf.
+echo -e "Done calculating and publishing, checkout corrections.pdf, in $(pwd)."
 # call corrections.pdf
 popd

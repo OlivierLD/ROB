@@ -56,7 +56,7 @@ while [ "$LOOP" == "true" ]; do
 			COMMAND="java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml dieumegard.xml -xsl ./dieumegard-fo.xsl -pdf dieumegard.pdf"
 			echo Running from $PWD: ${COMMAND}
 			${COMMAND}
-			echo Done transforming, document is ready.
+			echo -e "Done transforming, document is dieumegard.pdf ready (in $(pwd))."
 			echo "Hit Return"
 			read a
       ;;
@@ -68,7 +68,7 @@ while [ "$LOOP" == "true" ]; do
 			COMMAND="java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml bataille.xml -xsl ./bataille-fo.xsl -pdf bataille.pdf"
 			echo Running from $PWD: ${COMMAND}
 			${COMMAND}
-			echo Done transforming, document is ready.
+			echo -e "Done transforming, document bataille.pdf is ready (in $(pwd))."
 			echo "Hit Return"
 			read a
       ;;
@@ -80,7 +80,7 @@ while [ "$LOOP" == "true" ]; do
 			COMMAND="java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml dieumegard.xml -xsl ./dieumegard-fo.xsl -rtf dieumegard.rtf"
 			echo Running from $PWD: ${COMMAND}
 			${COMMAND}
-			echo Done transforming, document is ready.
+			echo -e "Done transforming, document dieumegard.rtf is ready (in $(pwd))."
 			echo "Hit Return"
 			read a
       ;;
@@ -92,7 +92,7 @@ while [ "$LOOP" == "true" ]; do
 			COMMAND="java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml bataille.xml -xsl ./bataille-fo.xsl -rtf bataille.rtf"
 			echo Running from $PWD: ${COMMAND}
 			${COMMAND}
-			echo Done transforming, document is ready.
+			echo -e "Done transforming, document bataille.rtf is ready (in $(pwd))."
 			echo "Hit Return"
 			read a
       ;;

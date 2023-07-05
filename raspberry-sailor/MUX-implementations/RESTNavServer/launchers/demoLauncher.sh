@@ -9,6 +9,11 @@
 # Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
 #    or https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
 #
+export SCRIPT_DIR=$(dirname ${0})
+echo -e "Moving to ${SCRIPT_DIR}"
+cd ${SCRIPT_DIR}
+echo -e "Working from $(pwd -P)"
+#
 RED='\033[0;31;1m'    # Red and Bold
 BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
 NC='\033[0m'          # Back to No Color
@@ -156,11 +161,6 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
 	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
-	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|  >> ${RED}T900${NC}. Publishing Navigation tables (Dieumegard & Bataille)                                                                                                                    |"
-	echo -e "|  >> ${RED}ALM${NC}. Publishing Celestial Almanacs                                                                                                                                            |"
-	echo -e "|  >> ${RED}LTERM${NC}. Publishing Long Term Almanacs                                                                                                                                          |"
-	echo -e "|  >> ${RED}CORR${NC}. Publishing Correction tables                                                                                                                                            |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
@@ -722,30 +722,6 @@ while [[ "${GO}" == "true" ]]; do
 	    #
 	    sleep 5  # Wait for the kill to be completed.
 	    #
-	    echo -en "Hit [return]"
-	    read ret
-	    ;;
-	  "T900" | "t900")
-	    clear
-	    ./pub/tables/publish.tables.sh
-	    echo -en "Hit [return]"
-	    read ret
-	    ;;
-	  "ALM" | "alm")
-	    clear
-	    ./pub/almanacs/almanac.sh
-	    echo -en "Hit [return]"
-	    read ret
-	    ;;
-	  "LTERM" | "lterm")
-	    clear
-	    ./pub/almanacs/perpetual.sh
-	    echo -en "Hit [return]"
-	    read ret
-	    ;;
-	  "CORR" | "corr")
-	    clear
-	    ./pub/almanacs/corrections.sh
 	    echo -en "Hit [return]"
 	    read ret
 	    ;;
