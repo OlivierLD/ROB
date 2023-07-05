@@ -158,6 +158,9 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  >> ${RED}T900${NC}. Publishing Navigation tables (Dieumegard & Bataille)                                                                                                                    |"
+	echo -e "|  >> ${RED}ALM${NC}. Publishing Celestial Almanacs                                                                                                                                            |"
+	echo -e "|  >> ${RED}LTERM${NC}. Publishing Long Term Almanacs                                                                                                                                          |"
+	echo -e "|  >> ${RED}CORR${NC}. Publishing Correction tables                                                                                                                                            |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
 	echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
 	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
@@ -724,7 +727,25 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "T900" | "t900")
 	    clear
-	    ./pub/publish.tables.sh
+	    ./pub/tables/publish.tables.sh
+	    echo -en "Hit [return]"
+	    read ret
+	    ;;
+	  "ALM" | "alm")
+	    clear
+	    ./pub/almanacs/almanac.sh
+	    echo -en "Hit [return]"
+	    read ret
+	    ;;
+	  "LTERM" | "lterm")
+	    clear
+	    ./pub/almanacs/perpetual.sh
+	    echo -en "Hit [return]"
+	    read ret
+	    ;;
+	  "CORR" | "corr")
+	    clear
+	    ./pub/almanacs/corrections.sh
 	    echo -en "Hit [return]"
 	    read ret
 	    ;;

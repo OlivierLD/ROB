@@ -23,6 +23,7 @@ dependencies {
   implementation project (':http-tiny-server')
   implementation project (':astro-computer:AstroUtilities')
   implementation project (':astro-computer:AstroComputer')
+  implementation project (':raspberry-sailor:AlmanacRelatedTools')
   implementation project (':raspberry-sailor:RESTNauticalAlmanac')
   implementation project (':raspberry-sailor:RESTTideEngine')
   implementation project (':raspberry-sailor:RESTImageProcessor')

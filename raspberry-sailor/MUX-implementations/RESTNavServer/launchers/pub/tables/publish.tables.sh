@@ -8,9 +8,9 @@ echo -e "Moving to ${SCRIPT_DIR}"
 cd ${SCRIPT_DIR}
 echo -e "Working from $(pwd -P)"
 #
-export HOME=..
+export HOME=../..
 #
-export CP=${CP}:../../build/libs/RESTNavServer-1.0-all.jar
+export CP=${CP}:../../../build/libs/RESTNavServer-1.0-all.jar
 export CP=${CP}:${HOME}/libs/orai18n-collation.jar
 export CP=${CP}:${HOME}/libs/orai18n-mapping.jar
 export CP=${CP}:${HOME}/libs/fnd2.zip
