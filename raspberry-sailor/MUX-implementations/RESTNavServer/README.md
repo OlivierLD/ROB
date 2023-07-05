@@ -166,7 +166,7 @@ Then run the server
  $ ./runNavServer.sh
 ```
 
-Finally, use `Postman`, any `REST` client, or your browser, and reach
+Finally, use `Postman`, any `REST` client (like `curl`), or your browser, and reach
 ```
  GET http://localhost:9999/oplist
 ```
@@ -215,7 +215,7 @@ This latter one will start the server and open the appropriate Web UI, from a co
     
 Details below...
 
-> About the proxies, see the note [here](../common-utils/README.md#http-server-wip).
+> About the proxies, see the note [here](../../../common-utils/README.md#http-server-wip).
 
 > Note: `jq` can be used to transform the data model - to some extend.
 ```
