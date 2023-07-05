@@ -7,7 +7,7 @@ The Java code can be (and is) reused from REST interfaces.
 Look into the `pub` folder, the scripts will prompt you if needed.  
 Try:
 
-For the T900:
+For the T900 (Dieumegard & Bataille):
 ```
 $ ./pub/publish.tables.sh
 ```
@@ -19,7 +19,7 @@ For a "perpetual" (aka long-term) almanac:
 ```
 $ ./pub/perpetual.sh
 ```
-For Nautical Amanac or Lunar Distances:
+For Nautical Almanacs or Lunar Distances:
 ```
 $ ./pub/almanac.sh
 ```

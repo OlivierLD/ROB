@@ -1,7 +1,7 @@
 #!/bin/bash
 echo ----------------------------
 echo Perpetual Nautical Almanac Calculation
-echo and pdf generation
+echo and pdf generation.
 echo ----------------------------
 #
 export SCRIPT_DIR=$(dirname ${0})
@@ -26,9 +26,20 @@ echo Generating Data...
 java -classpath ${CP} implementation.perpetualalmanac.Publisher ${from} ${to} ./data.xml
 # :processPDF
 echo Processing PDF file
+PRM_OPTION=
+echo -en "English [1], French [2] > "
+read LANG
+if [[ "${LANG}" == "2" ]]; then
+  echo -e "Will speak French"
+  cp literals_fr.xsl literals.xsl
+else
+  echo -e "Will speak English"
+  cp literals_en.xsl literals.xsl
+fi
 XSL_STYLESHEET=./perpetual.xsl
 PRM_OPTION="-docconf ./scalable.cfg"
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ./data.xml -xsl ${XSL_STYLESHEET} -pdf perpetual.pdf
 echo Done calculating, see perpetual.pdf !
 # open perpetual.pdf
 #
+popd
