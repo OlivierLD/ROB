@@ -110,9 +110,12 @@ fi
 #
 # 4 - Archiving
 #
+echo -e "Now archiving"
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
 # Drop directory ?
+echo -e "Archive ${distdir}.tar.gz was generated:"
+ls -lisah ${distdir}.tar.gz
 echo -en "Can we drop the ${distdir} directory ? > "
 read REPLY
 if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
@@ -127,7 +130,7 @@ fi
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e " >> Archive $PWD/${distdir}.tar.gz ready for deployment."
 echo -e "+--------------------------------------------------------------------------------------------------+"
-echo -e "| Send it to another machine, and un-archive it.                                                   |"
+echo -e "| Send it to another machine (with scp for example), and un-archive it.                            |"
 echo -e "| Use 'tar -xzvf ${distdir}.tar.gz' to un-archive.                                                   |"
 echo -e "| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |"
 echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |"
