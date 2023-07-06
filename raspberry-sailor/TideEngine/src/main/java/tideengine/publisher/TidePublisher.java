@@ -236,31 +236,48 @@ public class TidePublisher {
 		}
 	}
 
+	private static String STATION_PREFIX = "--station-name:";
+	private static String YEAR_PREFIX = "--tide-year:";
 	/**
 	 * For tests
 	 *
-	 * @param args unused.
+	 * @param args --station-name:XXXX --tide-year:2023.
 	 */
 	public static void main(String... args) {
 
 		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
 
+		String station = "Ocean Beach, California";
+		int year = 2023;
+
+		for (String arg : args) {
+			System.out.printf("Processing arg [%s]\n", arg);
+			if (arg.startsWith(STATION_PREFIX)) {
+				station = arg.substring(STATION_PREFIX.length());
+				if ((station.startsWith("'") && station.endsWith("'")) || station.startsWith("\"") && station.endsWith("\"")) { // Trim quotes
+					station = station.substring(1, station.length() - 1);
+				}
+				station = station.replace("+", " ");  // Ugly escape trick...
+			}
+			if (arg.startsWith(YEAR_PREFIX)) {
+				year = Integer.parseInt(arg.substring(YEAR_PREFIX.length()));
+			}
+		}
+
+		System.out.printf("Station [%s], for year %d\n", station, year);
+
 		try {
 			backEndTideComputer.connect();
 			backEndTideComputer.setVerbose("true".equals(System.getProperty("tide.verbose", "false")));
-//			String f = publish(
-//					URLEncoder.encode("Ocean Beach, California", StandardCharsets.UTF_8.toString()).replace("+", "%20"),
-//					Calendar.SEPTEMBER,
-//					2017,
-//					1,
-//					Calendar.MONTH);
+
 			String f = publish(
-					URLEncoder.encode("Ocean Beach, California", StandardCharsets.UTF_8.toString()).replace("+", "%20"),
+					URLEncoder.encode(station, StandardCharsets.UTF_8.toString()).replace("+", "%20"),
 					Calendar.JANUARY,
-					2_019,
+					year,
 					1,
 					Calendar.YEAR,
-					"publishagenda.sh");
+					TIDE_TABLE);  // Change at will AGENDA_TABLE, MOON_CALENDAR
+
 			System.out.printf("%s generated\n", f);
 			System.out.println("Done!");
 		} catch (Exception ex) {
