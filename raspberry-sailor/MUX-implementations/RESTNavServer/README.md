@@ -21,7 +21,6 @@ All the demos are launched from the script runNavServer.sh, that in turn launche
 All you need to do to see all the available demos and use-cases is to start the script demoLauncher.sh from a console, in the launchers folder.
 ```
 
-
 It uses:
 - Tide REST Service
 - Astro REST Service
@@ -159,7 +158,7 @@ Build it:
 ```bash
  $ ../../../gradlew [--no-daemon] shadowJar
 ```
-Then you have a small menu to get started:
+Then you have a small menu to get started (with some publication options):
 ```bash
 $ ./menu.sh
 ```

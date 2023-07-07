@@ -31,6 +31,10 @@ And by the way, features that are not Raspberry Pi specific (like GPIO header ma
 any computer or OS that supports `bash`, `java`, and if needed, `python3`. Installation of
 external module and packages are done through `apt-get` or so. This utility has equivalents on other OS's than RaspiOS.
 
+> **_In other words:_   
+> All the soft presented here will run on a Raspberry Pi, but also on other platforms, like Linux laptops, Mac, Windows, etc.**  
+> Read again the above 😊.
+
 #### Warning 2
 To keep this project compatible with as many Raspberry Pi models as possible, we kept the Java code compatible with
 Java 8. Some syntax improvements would be possible, if Java 11 was the only one in the picture, but they're - for now - commented.  
