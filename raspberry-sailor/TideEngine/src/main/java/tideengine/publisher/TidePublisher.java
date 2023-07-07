@@ -23,6 +23,9 @@ public class TidePublisher {
 	public final static String AGENDA_TABLE = System.getProperty("publishagenda.script", "publishagenda.sh");
 	public final static String TIDE_TABLE = System.getProperty("publishtide.script", "publishtide.sh");
 	public final static String MOON_CALENDAR = System.getProperty("publishlunarcalendar.script", "publishlunarcalendar.sh");
+	public final static String SCRIPT_PATH = System.getProperty("script.path", "./xsl");
+	public final static String PDF_PATH = System.getProperty("pdf.path", "./web");
+
 
 	/**
 	 * @param ts         TideStation
@@ -107,13 +110,16 @@ public class TidePublisher {
 		System.out.println("Generation completed.");
 		// Ready for transformation
 		try {
-			String cmd = "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
-			System.out.println("Command:" + cmd);
+			// This part customizable, see script.path VM variable nd Co
+			String cmd = // "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+			SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+			System.out.println("Executing System Command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			int exitStatus = p.waitFor();
 			System.out.println("Script completed, status " + exitStatus);
 			System.out.printf("See %s.pdf\n", radical);
-			cmd = String.format("mv %s.pdf web", radical);
+			System.out.printf("Now moving %s to %s\n", radical, PDF_PATH);
+			cmd = String.format("mv %s.pdf %s", radical, PDF_PATH);
 			p = Runtime.getRuntime().exec(cmd);
 			exitStatus = p.waitFor();
 			System.out.printf("Command [%s] completed, status %s\n", cmd, exitStatus);
@@ -219,13 +225,15 @@ public class TidePublisher {
 		System.out.println("Generation completed.");
 		// Ready for transformation
 		try {
-			String cmd = "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+			String cmd = // "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+					     SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
 			System.out.println("Command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			int exitStatus = p.waitFor();
 			System.out.println("Script completed, status " + exitStatus);
-			System.out.printf("See %s.pdf\n", radical);
-			cmd = String.format("mv %s.pdf web", radical);
+			System.out.printf("File %s.pdf generated\n", radical);
+			System.out.printf("Now moving %s to %s\n", radical, PDF_PATH);
+			cmd = String.format("mv %s.pdf %s", radical, PDF_PATH); // Tricky... Works only on some shells.
 			p = Runtime.getRuntime().exec(cmd);
 			exitStatus = p.waitFor();
 			System.out.printf("Command [%s] completed, status %s\n", cmd, exitStatus);
@@ -278,7 +286,7 @@ public class TidePublisher {
 					Calendar.YEAR,
 					TIDE_TABLE);  // Change at will AGENDA_TABLE, MOON_CALENDAR
 
-			System.out.printf("%s generated\n", f);
+			System.out.printf("%s generated, in %s\n", f, System.getProperty("user.dir"));
 			System.out.println("Done!");
 		} catch (Exception ex) {
 			ex.printStackTrace();
