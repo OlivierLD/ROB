@@ -85,6 +85,7 @@ cp *.yaml ${distdir}
 cp mux.sh ${distdir}
 cp mk.link.sh ${distdir}
 cp kill.all.sample.sh ${distdir}
+cp show.processes.sh ${distdir}
 cp log.*.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
@@ -145,4 +146,5 @@ echo -e "| Use it - for example - like:                                         
 echo -e "| $ cd ${distdir}                                                                                   "
 echo -e "| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |"
 echo -e "|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |"
+echo -e "| Examples of /etc/rc.local are provided. See rc.local*.sh.                                        |"
 echo -e "+--------------------------------------------------------------------------------------------------+"
