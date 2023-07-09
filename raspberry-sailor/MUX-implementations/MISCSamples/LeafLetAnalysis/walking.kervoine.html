@@ -5,10 +5,12 @@
  | Available from http://leafletjs.com/
  | Tutorials and examples at https://leafletjs.com/examples.html
  | Note: No native way to change orientation
+ |
+ | With average speed, max speed, total distance
  +-->
 <head>
 
-  <title>Leaflet Analysis</title>
+  <title>Kervoine Leaflet Analysis</title>
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,8 +18,6 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-  <script type="module" src="../webcomponents/SlideShow.js"></script>
 
   <style type="text/css">
     
@@ -45,19 +45,6 @@ dialog[open] {
     to {
       opacity: 1;
     }
-}
-
-.right {
-    float: right;
-}
-.left {
-    float: left;
-}
-
-.custom-select {
-    font-family:'Courier New', Courier, monospace;
-    font-size: 16px;
-    font-weight: bold;
 }
 
 .help-dialog {
@@ -338,7 +325,7 @@ compass-rose .day {
         <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
             <!-- About content -->
             <div style="margin-top: 15px;">
-                A simple Leaflet and WebComponents interface to visualize and replay data logged when sailing.<br/><br/>
+                A simple Leaflet and WebComponents interface to visualize and replay data logged when walking in Belz.<br/><br/>
                 <i>Featuring</i>:
                 <ul>
                     <li>LeafLet Map API</li>
@@ -353,12 +340,6 @@ compass-rose .day {
                 <br/>
                 Zoom in and out using the +/- on the chart (or double-click, and shift + double-click)
                 <br/>
-                Click on the markers on the chart to display pictures.
-                <br/>
-                Click on the pictures to enlarge them.
-                <br/>
-                Use the links on the right to move from place to place (experimental).
-                <br/>
                 Try the "REPLAY" button to replay what was logged (zoom when replaying..., it's worth it).
             </div>
         </div>
@@ -370,7 +351,7 @@ compass-rose .day {
 <table style="width: 100%;">
     <tr>
         <td>
-            <h1 style="padding-left: 10px;">Rubi's Cup 2023 - Replay Logged Data</h1>
+            <h1 style="padding-left: 10px;">Walking in Kervoine</h1>
         </td>
         <td style="text-align: right; padding-right: 20px;">
             <img src="../drowning.gif"
@@ -388,16 +369,11 @@ compass-rose .day {
     </tr>
 </table>
 
+
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div id="top-div" style="margin: 5px; display: grid; grid-template-columns: auto 120px 120px 120px 120px;">
   <div>
-    <select id="track-drop-down" class="custom-select" onchange="reloadTrack(this);">
-        <option value="0">23-Jun-2023 - From Etel to Groix</option>
-        <option value="1">24-Jun-2023 - Rubi's Cup</option>
-        <option value="2">25-Jun-2023 - From Groix to Etel</option>
-    </select>
-    <span id="curr-point" style="margin: 10px;"></span> 
-    <span id="point-card" style="margin: 10px;"></span>
+    <span id="curr-point" style="margin: 10px;"></span> <span id="point-card" style="margin: 10px;"></span>
     <br/>
     <span id="point-origin" style="margin: 10px; font-size: 10px;"></span>    
   </div> 
@@ -423,7 +399,7 @@ compass-rose .day {
       <!-- Column 2 -->
       <div style="border: 2px solid black; border-radius: 5px;">
         <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
-        <div id="curr-pos" style="width: 98%; height: 40px; padding: 2px; margin-top: -0px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
+        <div id="curr-pos" style="text-align: right; padding: 2px; margin-top: -10px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
       </div>  
       <div id="displays" style="text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="All data below&#13;available when REPLAYing">
           <div style="padding-left: 10px; color: blue; text-align: left; font-style: italic;">Replay Status</div>
@@ -481,41 +457,9 @@ compass-rose .day {
             </div>
           </div>
       </div>
-
-      <div>
-        <span style="margin-left: 10px;">Fly to:</span>
-        <ul>
-            <li><a class="list-link" href="#" onclick="flyToZoom(0);">Etel</a></li>
-            <li><a class="list-link" href="#" onclick="flyToZoom(1);">Port-Tudy</a></li>
-            <li><a class="list-link" href="#" onclick="flyToZoom(2);">Les Grands Sables</a></li>
-        </ul>
-      </div>
     </td>
   </tr>
 </table>
-<hr/>
-<span>Slide show</span>
-<div id="slide-show-container" 
-     style="background: silver;">
-    <slide-show id="slide-show-02"
-                width="800"
-                height="600"
-                slideclick="onSlideShowClick">
-        <slide-show-image src="../images/day-01.rubiscup.01.jpeg" title="Towards Groix"></slide-show-image>
-        <slide-show-image src="../images/day-01.rubiscup.02.jpeg" title="Happy crew"></slide-show-image>
-        <slide-show-image src="../images/day-01.rubiscup.03.jpeg" title="Sunset"></slide-show-image>
-        <slide-show-image src="../images/day-01.rubiscup.04.jpeg" title="Sunset again"></slide-show-image>
-        <slide-show-image src="../images/day-02.rubiscup.01.jpeg" title="Going ashore"></slide-show-image>
-        <slide-show-image src="../images/day-02.rubiscup.02.jpeg" title="Coming back"></slide-show-image>
-        <slide-show-image src="../images/day-02.rubiscup.03.jpeg" title="The neighbors"></slide-show-image>
-        <slide-show-image src="../images/day-02.rubiscup.04.jpeg" title="Trying to reach the Birvideaux"></slide-show-image>
-        <slide-show-image src="../images/day-03.rubiscup.01.jpeg" title="Beg en Havre"></slide-show-image>
-        <slide-show-image src="../images/day-03.rubiscup.02.jpeg" title="La barre"></slide-show-image>
-        <slide-show-image src="../images/day-03.rubiscup.05.jpeg" title="Almost in..."></slide-show-image>
-        <slide-show-image src="../images/day-03.rubiscup.04.jpeg" title="We're in!"></slide-show-image>
-        <slide-show-image src="../images/day-03.rubiscup.03.jpeg" title="Up to the Harbor"></slide-show-image>
-    </slide-show>
-</div>
 <hr/>
 <div style="color: silver;">
   OpenSource JavaScript map API at <a href="https://leafletjs.com/" target="leaflet">leafletjs.com</a>. Zoom for details...<br/>
@@ -525,6 +469,18 @@ compass-rose .day {
 <script type="text/javascript">
 
     const VERBOSE = false;
+
+    if (Math.toDegrees === undefined) {
+        Math.toDegrees = (rad) => {
+            return rad * (180 / Math.PI);
+        }
+    }
+
+    if (Math.toRadians === undefined) {
+        Math.toRadians = (deg) => {
+            return deg * (Math.PI / 180);
+        }
+    }
 
     function setNeedleShape(id, radio) {
         // debugger;
@@ -551,6 +507,22 @@ compass-rose .day {
         return s;
     }
 
+    let getGCDistance = (from, to) => {
+        if (from === undefined || to === undefined) {
+            throw ({err: "From and To are required"});
+        }
+        let cos = Math.sin(Math.toRadians(from.lat)) * Math.sin(Math.toRadians(to.lat)) + Math.cos(Math.toRadians(from.lat)) * Math.cos(Math.toRadians(to.lat)) * Math.cos(Math.toRadians(to.lng - from.lng));
+        return Math.acos(cos);
+    };
+
+    let getGCDistanceInDegrees = (from, to) => {
+        return Math.toDegrees(getGCDistance(from, to));
+    };
+
+    let getGCDistanceInNM = (from, to) => {
+        return (getGCDistanceInDegrees(from, to) * 60);
+    };
+
     let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
 
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -560,77 +532,10 @@ compass-rose .day {
 
     let latlngs; // To be populated from JSON.
 
-    const ZOOM_POSITIONS = [  
-        new L.LatLng(47.6598, -3.2051), // Etel
-        new L.LatLng(47.6440, -3.4463), // Port-Tudy
-        new L.LatLng(47.6388, -3.4213)  // Grands Sables
-    ];
-
-    function flyToZoom(idx) {
-        // map.panTo(ZOOM_POSITIONS[idx]);
-        // map.setView(ZOOM_POSITIONS[idx], 18);
-        map.flyTo(ZOOM_POSITIONS[idx]);
-    }
-
-    // Slideshow for one marker...
-    const SLIDE_SHOW = 
-    `<div style="background: silver;"><slide-show id="slide-show-01"
-					width="300"
-					height="200"
-                    slideclick="onSlideShowClick">
-		<slide-show-image src="../images/day-02.rubiscup.01.jpeg" title="Going ashore"></slide-show-image>
-		<slide-show-image src="../images/day-02.rubiscup.02.jpeg" title="Coming back"></slide-show-image>
-		<slide-show-image src="../images/day-02.rubiscup.03.jpeg" title="The neighbors"></slide-show-image>
-	</slide-show></div>`;
-
-
     // Used as an example, See "// markers" below. Used to hold pictures.
-    const ALL_MARKERS = [
-    [ {
-        "latitude": 47.6059,
-        "longitude": -3.2588,
-        "name": "Going to Groix",
-        "content": "Heading starboard tack (click to enlarge)\n<br/>\n<a href=\"../images/day-01.rubiscup.01.jpeg\" target=\"_blank\"><img src=\"../images/day-01.rubiscup.01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }, {
-        "latitude": 47.6425,
-        "longitude": -3.3934,
-        "name": "Sunset",
-        "content": "We'll be late... (click to enlarge)\n<br/>\n<a href=\"../images/day-01.rubiscup.03.jpeg\" target=\"_blank\"><img src=\"../images/day-01.rubiscup.03.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }],
-    [{
-        "latitude": 47.6385,
-        "longitude": -3.4214,
-        "name": "Starting line",
-        "content": "Les Grand Sables (click to enlarge)\n<br/>\n" + SLIDE_SHOW
-    },{
-        "latitude": 47.5968,
-        "longitude": -3.3996,
-        "name": "Going upwind",
-        "content": "Wind is dropping... (click to enlarge)\n<br/>\n<a href=\"../images/day-02.rubiscup.04.jpeg\" target=\"_blank\"><img src=\"../images/day-02.rubiscup.04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }],
-    [{
-        "latitude": 47.6428,
-        "longitude": -3.2132,
-        "name": "Beg en Havre",
-        "content": "Arriving home (click to enlarge)\n<br/>\n<a href=\"../images/day-03.rubiscup.01.jpeg\" target=\"_blank\"><img src=\"../images/day-03.rubiscup.01.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    },
-    {
-        "latitude": 47.6435,
-        "longitude": -3.2123,
-        "name": "Beg en Havre",
-        "content": "We're in ! (click to enlarge)\n<br/>\n<a href=\"../images/day-03.rubiscup.04.jpeg\" target=\"_blank\"><img src=\"../images/day-03.rubiscup.04.jpeg\" width=\"256\" height=\"auto\" alt=\"Click to enlarge\"/></a>"
-    }]];
+    const MARKERS = [];
 
-
-    // TODO Choose the track
-    const TRACK_DATA = [ '../data/2023-06-23.going.to.groix.nmea.json',  // First leg
-                         '../data/2023-06-24.rubiscup.nmea.json',        // Second leg
-                         '../data/2023-06-25.back.to.etel.nmea.json' ];  // Third leg
-
-    let trackData = TRACK_DATA[0];
-    let markers = ALL_MARKERS[0];
-
-    let currentMarkers = [];
+    const trackData = '../data/2023-07-09_WalkingKervoine.json';
 
     let polyline = null;
 
@@ -649,16 +554,27 @@ compass-rose .day {
                     let minSog = 1000.0;
                     let maxSog = 0.0;
                     let sum = 0.0;
+                    let fullDist = 0.0;
+                    let previousPos = null;
                     latlngs.forEach(el => {
                         minSog = Math.min(minSog, el.sog);
                         maxSog = Math.max(maxSog, el.sog);
                         sum += el.sog;
+                        let newPos = { lat: el.lat, lng: el.lng };
+                        if (previousPos !== null) {
+                            let delta = getGCDistanceInNM(previousPos, newPos);
+                            if (!isNaN(delta)) {
+                                fullDist += delta;
+                            }
+                            // console.log(`Dist: ${fullDist.toFixed(2)}, delta ${delta.toFixed(4)} nm`);
+                        }
+                        previousPos = newPos;
                     });
                     let avgSog = sum / latlngs.length;
 
                     // Process it here if needed
                     // document.getElementById('point-card').innerText = `${latlngs.length} data points. Min SOG ${minSog.toFixed(2)} kts, Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts`;
-                    document.getElementById('point-card').innerText = `${latlngs.length} data points. Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts`;
+                    document.getElementById('point-card').innerText = `${latlngs.length} data points. Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts, dist: ${fullDist.toFixed(2)} nm (${(fullDist * 1.852).toFixed(2)} km)`;
                     document.getElementById('data-slider').max = latlngs.length;
                     document.getElementById('point-origin').innerText = `from ${trackData}.`;
                     polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
@@ -688,17 +604,11 @@ compass-rose .day {
 
                     // markers on the chart
                     if (true) {
-                        markers.forEach(mark => {
-                            oneMark = L.marker([(mark.latitude), (mark.longitude)], { title: mark.name });
-                            currentMarkers.push(oneMark);
-                            oneMark.addTo(map)
-                                   .bindPopup('<b>' + mark.name + '</b><br/>' + mark.content); // .openPopup();
+                        MARKERS.forEach(mark => {
+                            L.marker([(mark.latitude), (mark.longitude)], { title: mark.name })
+                                .addTo(map)
+                                .bindPopup('<b>' + mark.name + '</b><br/>' + mark.description); // .openPopup();
                         });
-                        // try {
-                        //     document.getElementById("slide-show-01").slideclick = onSlideShowClick;
-                        // } catch (err) {
-                        //     console.log(`Oops: ${JSON.stringify(err)}`);
-                        // }
                     }
                 });
             },
@@ -713,17 +623,6 @@ compass-rose .day {
                 }
                 console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
             });
-    };
-
-    let reloadTrack = (dd) => {
-        let idx = parseInt(dd.value);
-        console.log(`Now loading track ${TRACK_DATA[idx]}`);
-        trackData = TRACK_DATA[idx];
-        markers = ALL_MARKERS[idx];
-        // Remove existing markers
-        currentMarkers.forEach(mark => map.removeLayer(mark));
-        currentMarkers = []; // Reset
-        loadPathData();
     };
 
     // To draw in pixels, see https://leafletjs.com/examples/extending/extending-2-layers.html
@@ -750,7 +649,7 @@ compass-rose .day {
             lng += 360;
         }
         if (cancelDriving) {
-            document.getElementById('curr-pos').innerHTML = `<span class="left">${decToSex(lat, "NS")}</span><span class="right">(${lat})</span><br/><span class="left">${decToSex(lng, "EW")}</span><span class="right">(${lng})</span>`;
+            document.getElementById('curr-pos').innerHTML = `${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`;
         }
         if (tooltip != null) {
             map.removeLayer(tooltip);
@@ -938,11 +837,6 @@ compass-rose .day {
             aboutDialog.style.display = 'none';
         }
     };
-
-    function onSlideShowClick(src) {
-        console.log(">> Client side!! Slide " + src + " was clicked.");
-        window.open(src, '_blank'); // This is an example
-    }
 
     window.onload = () => {
       console.log("Page Loaded!");
