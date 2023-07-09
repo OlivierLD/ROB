@@ -23,5 +23,6 @@ sleep 10
 sleep 10
 # Start the MUX
 cd /home/pi/nmea-dist
-nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
+# nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
+nohup ./mux.sh nmea.mux.gps.sensor.2.nmea-fwd.yaml &
 #

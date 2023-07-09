@@ -3,6 +3,8 @@
  *
  * @author Olivier Le Diouris
  * Warning: No arrow functions in the prototype!
+ *
+ * Designed for import...
  */
 
 // Provide month names
@@ -192,3 +194,9 @@ Date.prototype.format = function(dateFormat) {
     }
     return date_string;
 };
+
+// This 'export' may raise an error (if not in a "module"). Seems to be OK, though.
+export function formatDate(date, fmt) {
+    // console.log(`date is a ${typeof(date)}`);
+    return date.format(fmt);
+}
