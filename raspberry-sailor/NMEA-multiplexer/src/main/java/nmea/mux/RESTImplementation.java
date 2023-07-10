@@ -3457,5 +3457,13 @@ public class RESTImplementation {
 			this.epoch = epoch;
 			return this;
 		}
+		// Getters and Setters for Jackson
+		public long getEpoch() {
+			return epoch;
+		}
+
+		public void setEpoch(long epoch) {
+			this.epoch = epoch;
+		}
 	}
 }

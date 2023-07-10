@@ -57,6 +57,8 @@ forwarders:
     filename.suffix: _LOG
     log.dir: logged
     split: hour
+  - type: tcp
+    port: 7001
 computers:
   - type: "tw-current"
     prefix: "CC"

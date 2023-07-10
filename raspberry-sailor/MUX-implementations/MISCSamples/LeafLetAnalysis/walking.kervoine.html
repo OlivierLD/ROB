@@ -564,7 +564,7 @@ compass-rose .day {
                         if (previousPos !== null) {
                             let delta = getGCDistanceInNM(previousPos, newPos);
                             if (!isNaN(delta)) {
-                                fullDist += delta;
+                              fullDist += delta;
                             }
                             // console.log(`Dist: ${fullDist.toFixed(2)}, delta ${delta.toFixed(4)} nm`);
                         }
@@ -573,7 +573,7 @@ compass-rose .day {
                     let avgSog = sum / latlngs.length;
 
                     // Process it here if needed
-                    // document.getElementById('point-card').innerText = `${latlngs.length} data points. Min SOG ${minSog.toFixed(2)} kts, Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts`;
+                 // document.getElementById('point-card').innerText = `${latlngs.length} data points. Min SOG ${minSog.toFixed(2)} kts, Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts`;
                     document.getElementById('point-card').innerText = `${latlngs.length} data points. Max SOG ${maxSog.toFixed(2)} kts, Avg SOG ${avgSog.toFixed(2)} kts, dist: ${fullDist.toFixed(2)} nm (${(fullDist * 1.852).toFixed(2)} km)`;
                     document.getElementById('data-slider').max = latlngs.length;
                     document.getElementById('point-origin').innerText = `from ${trackData}.`;

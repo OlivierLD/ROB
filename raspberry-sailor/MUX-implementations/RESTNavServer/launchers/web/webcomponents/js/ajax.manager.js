@@ -264,7 +264,7 @@ function getAstroData(when, position, wandering, stars, callback) {
 function setUTC(epoch) {
     let url = "/mux/utc";
     let obj = {epoch: epoch};
-    return getPromise(url, DEFAULT_TIMEOUT, 'PUT', 200, obj, false);
+    return getPromise(url, DEFAULT_TIMEOUT, 'PUT', 201, obj, false);
 }
 
 function setPosition(lat, lng) {

@@ -20,7 +20,9 @@ NC='\033[0m'          # Back to No Color
 #
 HTTP_PORT=9999
 #
+INTERACTIVE=Y
 LAUNCH_BROWSER=N
+LNCH_BRWSR_PROVIDED=N
 WITH_PROXY=N
 USER_OPTION=
 WITH_NOHUP=
@@ -47,6 +49,7 @@ if [[ $# -gt 0 ]]; then
 	  echo "Processing ${prm} ..."
 	  if [[ ${prm} == "--browser:"* ]]; then
 	    LAUNCH_BROWSER=${prm#*:}
+	    LNCH_BRWSR_PROVIDED=Y
 	  elif [[ ${prm} == "--http-port:"* ]]; then
 	    HTTP_PORT=${prm#*:}
 	  elif [[ ${prm} == "--nohup:"* ]]; then
@@ -64,6 +67,7 @@ if [[ $# -gt 0 ]]; then
 	    read dummy
 	  elif [[ ${prm} == "--option:"* ]]; then
 	    USER_OPTION=${prm#*:}
+	    INTERACTIVE=N
 	  else
 	    echo "Unsupported parameter ${prm}"
 	  fi
@@ -321,48 +325,67 @@ while [[ "${GO}" == "true" ]]; do
 	    read a
 	    ;;
 	  "1")
-		PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
-		NOHUP=""
-		if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
-			if [[ "${WITH_NOHUP}" == "Y" ]]; then
-				NOHUP="nohup "
-				echo -e ">> Will use nohup"
-			else
-				NOHUP=""
-				echo -e ">> Will not use nohup"
-			fi
-		else
-			# Ask if nohup, just in this case
-			echo -en " ==> Use nohup (y|n) ? > "
-			read REPLY
-			if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-				NOHUP="nohup "
-				echo -e ">> Will use nohup"
-			fi
-		fi
-    echo -e "Launching Nav Server with ${PROP_FILE}"
-    # QUESTION: a 'screen' option ?
-    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
-    # echo -e "A screen session 'navserver' was started"
-    #
-    # bash -c "exec -a ProcessName Command"
-    if [[ "${CMD_VERBOSE}" == "Y" ]]; then
-      echo -e "Running command: [${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
-    fi
-    ${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
-    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
-      echo -e ">>> Waiting for the server to start..."
-      sleep 5  # Wait (5s) for the server to be operational
-      openBrowser ${URL_OPTION_1}
-		else 
-	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
-	    fi
-	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
-	    GO=false
-	    ;;
+      PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
+      #
+      NOHUP=""
+      if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
+        if [[ "${WITH_NOHUP}" == "Y" ]]; then
+          NOHUP="nohup "
+          echo -e ">> Will use nohup"
+        else
+          NOHUP=""
+          echo -e ">> Will not use nohup"
+        fi
+      else
+        # Ask if nohup, just in this case
+        echo -en " ==> Use nohup (y|n) ? > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          NOHUP="nohup "
+          echo -e ">> Will use nohup"
+        fi
+      fi
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
+      echo -e "Launching Nav Server with ${PROP_FILE}"
+      # QUESTION: a 'screen' option ?
+      # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
+      # echo -e "A screen session 'navserver' was started"
+      #
+      # bash -c "exec -a ProcessName Command"
+      if [[ "${CMD_VERBOSE}" == "Y" ]]; then
+        echo -e "Running command: [${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
+      fi
+      ${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+      if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+        echo -e ">>> Waiting for the server to start..."
+        sleep 5  # Wait (5s) for the server to be operational
+        openBrowser ${URL_OPTION_1}
+      else
+          echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+        fi
+        echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
+        GO=false
+        ;;
 	  "1a")
-  	    PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    # QUESTION: a 'screen' option ?
 	    # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
 	    # echo -e "A screen session 'navserver' was started"
@@ -377,7 +400,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
 		    openBrowser ${URL_OPTION_1a}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
@@ -386,12 +409,22 @@ while [[ "${GO}" == "true" ]]; do
 	  "2")
 	    PROP_FILE=mux-configs/nmea.mux.interactive.time.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+	    echo -e "Use the 'Set Time' button in the Web UI"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_2}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -408,12 +441,21 @@ while [[ "${GO}" == "true" ]]; do
 	  "4")
 	    PROP_FILE=mux-configs/nmea.mux.gps.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5   # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_4}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -421,13 +463,22 @@ while [[ "${GO}" == "true" ]]; do
 	  "5")
 	    PROP_FILE=mux-configs/nmea.mux.no.gps.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date --sun-flower ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 		    openBrowser ${URL_OPTION_5}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -435,12 +486,21 @@ while [[ "${GO}" == "true" ]]; do
 	  "6")
 	    PROP_FILE=mux-configs/nmea.mux.kayak.log.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_6}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -448,12 +508,21 @@ while [[ "${GO}" == "true" ]]; do
 	  "6b")
 	    PROP_FILE=mux-configs/nmea.mux.kayak.etel.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_6b}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -461,13 +530,22 @@ while [[ "${GO}" == "true" ]]; do
 	  "7")
 	    PROP_FILE=mux-configs/nmea.mux.driving.log.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    # openBrowser "http://localhost:${HTTP_PORT}/web/googlemaps.driving.html"
 		    openBrowser ${URL_OPTION_7}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -475,6 +553,15 @@ while [[ "${GO}" == "true" ]]; do
 	  "8")
 	    PROP_FILE=mux-configs/nmea.mux.kayak.cc.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -482,7 +569,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_8}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -491,6 +578,15 @@ while [[ "${GO}" == "true" ]]; do
 	    # PROP_FILE=mux-configs/nmea.mux.bora.cc.yaml
 	    PROP_FILE=mux-configs/nmea.mux.bora.tgrva.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -498,7 +594,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -506,6 +602,15 @@ while [[ "${GO}" == "true" ]]; do
 	  "9b")
 	    PROP_FILE=mux-configs/nmea.mux.cc.op.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -513,13 +618,22 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9b}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
 	  "9c")
 	    PROP_FILE=mux-configs/nmea.mux.nh.r.yaml
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
@@ -528,7 +642,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9c}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -536,6 +650,15 @@ while [[ "${GO}" == "true" ]]; do
 	  "9d")
 	    PROP_FILE=mux-configs/nmea.mux.heading.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -543,7 +666,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9d}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -551,6 +674,15 @@ while [[ "${GO}" == "true" ]]; do
 	  "9e")
 	    PROP_FILE=mux-configs/nmea.mux.bora.fwd.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    export INFRA_VERBOSE=false
 	    # Get date and time from the file
 	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -558,7 +690,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9e}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -566,6 +698,15 @@ while [[ "${GO}" == "true" ]]; do
 	  "10")
 	    PROP_FILE=mux-configs/nmea.mux.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    # NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --delta-t:AUTO:2010-11"
 	    NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --delta-t:AUTO"
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -573,7 +714,7 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_10}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -581,12 +722,21 @@ while [[ "${GO}" == "true" ]]; do
 	  "11")
 	    PROP_FILE=mux-configs/nmea.mux.properties
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --proxy --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_11}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -594,12 +744,21 @@ while [[ "${GO}" == "true" ]]; do
 	  "12")
   	  	PROP_FILE=mux-configs/nmea.mux.2.serial.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_12}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -610,25 +769,43 @@ while [[ "${GO}" == "true" ]]; do
   	  PROP_FILE=mux-configs/nmea.mux.ais.test.3.yaml
   	  #	PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_13}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
 	    ;;
 	  "13b")
-  	  	PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
+  	  PROP_FILE=mux-configs/nmea.mux.gps.sinagot.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_13b}
-		else 
+		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
@@ -656,33 +833,33 @@ while [[ "${GO}" == "true" ]]; do
 	  "21")
 	    echo -e "This requires a Multiplexer to be running, and forwarding data on a TCP Port"
 	    echo -en " ==> Enter Multiplexer machine name or IP (default 'localhost'): "
-		read MACHINE_NAME
-		if [[ "${MACHINE_NAME}" == "" ]]; then
-			MACHINE_NAME=localhost
-			echo -e "Defaulting machine name to ${MACHINE_NAME}"
-		fi
-		echo -en " ==> Enter Multiplexer TCP port (default 7001): "
-		read TCP_PORT
-		if [[ "${TCP_PORT}" == "" ]]; then
-			TCP_PORT=7001
-			echo -e "Defaulting TCP port to ${TCP_PORT}"
-		fi
-		echo -en " ==> With verbose option (default false): "
-		read VERBOSE
-		if [[ "${VERBOSE}" == "" ]]; then
-			VERBOSE=false
-			echo -e "Defaulting verbose to ${VERBOSE}"
-		fi
-		if [[ ${VERBOSE} =~ ^(yes|y|Y)$ ]]; then
-			VERBOSE=true
-		fi
-		#
-		pushd other-clients/python
+      read MACHINE_NAME
+      if [[ "${MACHINE_NAME}" == "" ]]; then
+        MACHINE_NAME=localhost
+        echo -e "Defaulting machine name to ${MACHINE_NAME}"
+      fi
+      echo -en " ==> Enter Multiplexer TCP port (default 7001): "
+      read TCP_PORT
+      if [[ "${TCP_PORT}" == "" ]]; then
+        TCP_PORT=7001
+        echo -e "Defaulting TCP port to ${TCP_PORT}"
+      fi
+      echo -en " ==> With verbose option (default false): "
+      read VERBOSE
+      if [[ "${VERBOSE}" == "" ]]; then
+        VERBOSE=false
+        echo -e "Defaulting verbose to ${VERBOSE}"
+      fi
+      if [[ ${VERBOSE} =~ ^(yes|y|Y)$ ]]; then
+        VERBOSE=true
+      fi
+      #
+      pushd other-clients/python
 	    COMMAND="python3 tcp_mux_client.py --machine-name:${MACHINE_NAME} --port:${TCP_PORT} --verbose:${VERBOSE}"
 	    ${COMMAND}
 	    popd
-		echo -e "\nHit [Return]"
-		read resp
+      echo -e "\nHit [Return]"
+      read resp
 	    ;;
 	# Others...
 	    # ;;
@@ -690,22 +867,22 @@ while [[ "${GO}" == "true" ]]; do
 	    echo -e "Nav Server processes:"
 	    ps -ef | grep navrest.NavServer | grep -v grep
 	    ps -ef | grep navrest.NavServer | grep -v grep | grep -v killns | awk '{ print $2 }' > km
-		NB_L=$(cat km | wc -l)
-		if [[ ${NB_L} == 0 ]]; then
-			  echo -e "No NavServer process found."
-			else
-			  echo -e "----------- NavServer HTTP Ports ---------"
-        	if [[ $(uname -a) == *Linux* ]]; then
-              # Could use sudo below
-              netstat -tunap | grep ${HTTP_PORT}
-			else
-              for pid in $(cat km); do
-                netstat -vanp tcp | grep ${pid} | grep LISTEN
-              done
-		    fi
-			echo -e "------------------------------------------"
-			rm km
-		fi
+      NB_L=$(cat km | wc -l)
+      if [[ ${NB_L} == 0 ]]; then
+        echo -e "No NavServer process found."
+      else
+        echo -e "----------- NavServer HTTP Ports ---------"
+        if [[ $(uname -a) == *Linux* ]]; then
+          # Could use sudo below
+          netstat -tunap | grep ${HTTP_PORT}
+        else
+          for pid in $(cat km); do
+            netstat -vanp tcp | grep ${pid} | grep LISTEN
+          done
+        fi
+        echo -e "------------------------------------------"
+        rm km
+      fi
 	    echo -en "Hit [return]"
 	    read ret
 	    ;;
@@ -735,7 +912,6 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	esac
 done
-#
-#
+#######
 echo -e "Bye now. See you ✋"
 #
