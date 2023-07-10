@@ -93,6 +93,7 @@ markers:
     type: default    
 borders:
   - border-name: "Etel, Right bank"
+    type: "open"
     border-elements:
     - rank: 1
       latitude: 47.6600691664467
@@ -107,6 +108,7 @@ borders:
       latitude: 47.643851123756754
       longitude: -3.213286399841309
   - border-name: "Etel, Left bank"
+    type: "open"
     border-elements:
     - rank: 1
       latitude: 47.65639814326938
@@ -120,3 +122,40 @@ borders:
     - rank: 4
       latitude: 47.64318610543658
       longitude: -3.21176290512085
+  - border-name: "Groix"
+    type: "closed"
+    border-elements:
+       - rank: 1
+         latitude: 47.64561482699582
+         longitude: -3.4445571899414067
+       - rank: 2
+         latitude: 47.643764382716846
+         longitude: -3.4296226501464844
+       - rank: 3
+         latitude: 47.6338171216314
+         longitude: -3.41451644897461
+       - rank: 4
+         latitude: 47.61935551640258
+         longitude: -3.420181274414063
+       - rank: 5
+         latitude: 47.619702641789864
+         longitude: -3.46395492553711
+       - rank: 6
+         latitude: 47.628727092912776
+         longitude: -3.4867858886718754
+       - rank: 7
+         latitude: 47.63867532295018
+         longitude: -3.505840301513672
+       - rank: 8
+         latitude: 47.64769649845601
+         longitude: -3.515796661376953
+       - rank: 9
+         latitude: 47.65278467943264
+         longitude: -3.5142517089843754
+       - rank: 10
+         latitude: 47.65440354214958
+         longitude: -3.4963989257812504
+       - rank: 11
+         latitude: 47.649662445325056
+         longitude: -3.464469909667969
+

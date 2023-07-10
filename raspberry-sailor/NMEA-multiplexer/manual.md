@@ -720,6 +720,7 @@ markers:
   . . .
 borders:
   - border-name: "Etel, Right bank"
+    type: "open"
     border-elements:
       - rank: 1
         latitude: 47.6600691664467
@@ -734,14 +735,24 @@ borders:
         latitude: 47.643851123756754
         longitude: -3.213286399841309
   - border-name: "Etel, Left bank"
+    type: "open"
     border-elements:
       - rank: 1
         latitude: 47.65639814326938
         longitude: -3.207557201385498
 . . .
-```
+  - border-name: "Groix"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.64561482699582
+        longitude: -3.4445571899414067
+    . . .
 
-Border can be managed by a `Computer`, like `nmea.computers.BorderManager`. This computer may require a properties file (see the code for details)
+```
+Notice the optional `type` element, its value can be `open` or `closed` (`open` by default). `closed` can be used to define the border of an island, for example.
+
+Borders can be managed by a `Computer`, like `nmea.computers.BorderManager`. This computer may require a properties file (see the code for details)
 ```yaml
 computers:
   - class: nmea.computers.BorderManager

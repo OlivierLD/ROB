@@ -363,6 +363,7 @@ public class NMEAUtils {
                 yamlBorderList.forEach(border -> {
                     // System.out.printf("border is a %s\n", border.getClass().getName());
                     final String name = (String)border.get("border-name");
+                    boolean closed = "closed".equals((String)border.get("type")); // open by default. Can be missing.
                     // System.out.printf("-- Border: %s ---\n", name);
                     Border oneBorder = new Border(name);
                     List<Map<String, Object>> elements = (List<Map<String, Object>>)border.get("border-elements");
@@ -374,6 +375,12 @@ public class NMEAUtils {
                         double lng = (Double)el.get("longitude");
                         markerList.add(new Marker(lat, lng, String.valueOf(rank), "default"));
                     });
+                    if (closed) { // Then close the loop !
+                        int rank = elements.size() + 1;
+                        double lat = (Double)elements.get(0).get("latitude");
+                        double lng = (Double)elements.get(0).get("longitude");
+                        markerList.add(new Marker(lat, lng, String.valueOf(rank), "default"));
+                    }
                     oneBorder.setMarkerList(markerList);
                     borderList.add(oneBorder);
                 });

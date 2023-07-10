@@ -1032,7 +1032,7 @@ class ChartlessMap extends HTMLElement {
 		if (extraData !== null) { // Optional extra lines, near the label
 			context.font = "12px Arial";
 			extraData.forEach((line, idx) => {
-				context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + 1)));
+				context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + (label.trim().length == 0 ? 0 : 1))));
 			}); 
 		}
 		context.closePath();
