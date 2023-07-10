@@ -162,7 +162,7 @@ public class NMEADataCache
 	// Damping ArrayList's
 	private transient int dampingSize = 1;
 
-	private final transient static List<String> NOT_TO_RESET = Arrays.asList(
+	private final static List<String> NOT_TO_RESET = Arrays.asList(
 					BSP_FACTOR,
 					AWS_FACTOR,
 					AWA_OFFSET,
@@ -495,8 +495,10 @@ public class NMEADataCache
 								} else {
 									date = ggaDate.getDate(); // Plan B
 								}
-								// TODO Upgrade that part
-								UTCDate utcDate =  new UTCDate(date.getYear() + 1900, date.getMonth(), date.getDate(), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
+								Calendar current = GregorianCalendar.getInstance();
+								current.setTime(date);
+
+								UTCDate utcDate =  new UTCDate(current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH), ggaDate.getH(), ggaDate.getM(), (int)ggaDate.getS(), (int)(1000 * (ggaDate.getS() - (int)ggaDate.getS())));
 								this.put(GPS_DATE_TIME, utcDate);
 							}
 						}

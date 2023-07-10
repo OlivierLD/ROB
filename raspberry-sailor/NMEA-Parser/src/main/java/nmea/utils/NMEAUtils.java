@@ -45,13 +45,14 @@ public class NMEAUtils {
     }
 
     /**
+     * Uses COG and SOG for the AW calculation.
      *
      * @param aws Apparent Wind Speed in knots
-     * @param awsCoeff
+     * @param awsCoeff Coefficient for Apparent Wind Speed
      * @param awa Apparent Wind Angle in degrees
-     * @param awaOffset
+     * @param awaOffset Offset of Apparent Wind Angle, in degrees
      * @param hdg True Heading
-     * @param hdgOffset
+     * @param hdgOffset Heading offset, in degrees
      * @param sog Speed Over Ground in knots
      * @param cog Course over Ground in degrees
      * @return triplet { twa, tws, twd }
@@ -327,6 +328,7 @@ public class NMEAUtils {
      *
      * TODO The borders...
      */
+    @SuppressWarnings("unchecked")
     public static List<Marker> loadMarkers(String markerFileName) {
         List<Marker> markerList;
         Yaml yaml = new Yaml();
@@ -350,6 +352,7 @@ public class NMEAUtils {
         return markerList;
     }
 
+    @SuppressWarnings("unchecked")
     public static List<Border> loadBorders(String borderFileName) {
         List<Border> borderList;
         Yaml yaml = new Yaml();

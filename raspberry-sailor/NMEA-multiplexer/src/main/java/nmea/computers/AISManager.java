@@ -72,6 +72,7 @@ public class AISManager extends Computer {
 	 * @param mess Received message
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
 		String sentence = new String(mess);
         // System.out.println(String.format("In AIS Computer, write method: %s", sentence));

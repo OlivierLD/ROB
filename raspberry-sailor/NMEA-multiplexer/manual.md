@@ -711,7 +711,7 @@ markers:
 - `label` as a string
 - `type` as an optional string
 
-`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp`, `is-dng`.
+`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp` (for special mark), `is-dng` (for isolated danger).
 
 ###### borders
 

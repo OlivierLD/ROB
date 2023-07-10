@@ -117,6 +117,7 @@ public class BorderManager extends Computer {
 	 * @param mess Received message
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
 		String sentence = new String(mess);
 
