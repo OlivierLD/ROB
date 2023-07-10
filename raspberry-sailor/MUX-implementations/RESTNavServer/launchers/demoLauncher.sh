@@ -139,6 +139,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
 	echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
 	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+	echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context (requires Internet Connection)                           |                                                                                         |"
 	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
 	echo -e "|                                                                                         |             Does not require a GPS                                                      |"
 	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
@@ -218,6 +219,9 @@ while [[ "${GO}" == "true" ]]; do
 	    HELP_ON=${option#*:}
 	    echo -e "Required help on option ${HELP_ON}"
 	    case "${HELP_ON}" in
+	      "0")
+	        echo -e "All on Internet, nothing local."
+	        ;;
 	      "1")
 	        PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
 	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1}
@@ -323,6 +327,9 @@ while [[ "${GO}" == "true" ]]; do
 	    esac
 	    echo -en "Hit [Return]"
 	    read a
+	    ;;
+	  "0")
+	    openBrowser "https://olivierld.github.io/web.stuff/astro/index_02.html"
 	    ;;
 	  "1")
       PROP_FILE=mux-configs/nmea.mux.no.gps.yaml

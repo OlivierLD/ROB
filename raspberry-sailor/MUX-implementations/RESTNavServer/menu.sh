@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 echo -e "+------------ T O P   L E V E L   M E N U -------------+"
-echo -e "| 1 - Multiplexer Demos                                |"
+echo -e "| 1 - Multiplexer Use-Cases and other demos            |"
 echo -e "+------------------------------------------------------+"
 echo -e "| 2 - T900 (Dieumegard & Bataille)                     |"
 echo -e "| 3 - Celestial Almanacs publishing                    |"
