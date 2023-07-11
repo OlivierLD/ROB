@@ -139,7 +139,8 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
 	echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
 	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context (requires Internet Connection)                           |                                                                                         |"
+	echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context. External (and demanding on the browser). Requires Internet Connection.                                                                            |"
+	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
 	echo -e "|                                                                                         |             Does not require a GPS                                                      |"
 	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
@@ -330,6 +331,7 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "0")
 	    openBrowser "https://olivierld.github.io/web.stuff/astro/index_02.html"
+	    # GO=false
 	    ;;
 	  "1")
       PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
@@ -376,11 +378,11 @@ while [[ "${GO}" == "true" ]]; do
         sleep 5  # Wait (5s) for the server to be operational
         openBrowser ${URL_OPTION_1}
       else
-          echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
-        fi
-        echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
-        GO=false
-        ;;
+        echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+      fi
+      echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
+      GO=false
+      ;;
 	  "1a")
   	  PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
