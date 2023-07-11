@@ -27,6 +27,7 @@ if (typeof(errManager) !== 'function') {
 }
 
 var DEFAULT_TIMEOUT = 300000; // 120000: 2 minutes, 300000: 5 minutes
+var VERBOSE = true;
 
 /*
  * Demo features
@@ -129,10 +130,14 @@ let requestCompositeFaxes = function(requestPayload) {
 };
 
 let getCompositeFaxes = function(options, compositeData, callback) {
-	console.log(`getCompositeFaxes, starting`);
+	if (VERBOSE) {
+		console.log(`getCompositeFaxes, starting`);
+	}
 	let getData = requestCompositeFaxes(options);
 	getData.then((value) => {
-		// console.log("Done:", value);
+		if (VERBOSE) {
+			console.log("getCompisiteFaxes Done:", JSON.stringify(value));
+		}
 		let json = JSON.parse(value);
 		if (callback !== undefined) {
 			callback(json, compositeData);
@@ -161,10 +166,14 @@ let crawlComposites = function(filter) {
 };
 
 let getExistingComposites = function(callback, filter) {
-	console.log(`getExistingComposites, starting`);
+	if (VERBOSE) {
+		console.log(`getExistingComposites, starting`);
+	}
 	let getData = crawlComposites(filter);
 	getData.then((value) => {
-		// console.log("Done:", value);
+		if (VERBOSE) {
+			console.log("getExistingComposites: Done:", JSON.stringify(value));
+		}
 		let json = JSON.parse(value);
 		if (callback !== undefined) {
 			callback(json);
@@ -191,11 +200,15 @@ let getPositionFromNMEACache = function() {
 };
 
 let getGPSPosition = function() {
-	console.log(`getGPSPosition, starting`);
+	if (VERBOSE) {
+		console.log(`getGPSPosition, starting`);
+	}
 	let posPromise = getPositionFromNMEACache();
 	posPromise.then(cache => {
 		let cacheValues = JSON.parse(cache);
-		// console.log(`Pos from Cache ${JSON.stringify(cacheValues)}`);
+		if (VERBOSE) {
+			console.log(`Pos from Cache ${JSON.stringify(cacheValues)}`);
+		}
 		if (cacheValues.Position) {
 			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });
 			redraw();
