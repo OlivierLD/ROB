@@ -10,3 +10,7 @@ Among them:
 
 This folder contains notebooks for Python, Java, ... more to come.
 
+There are some samples showing the way to use the AstroComputer code(s) fro several languages.  
+There is also a notebook (`ZandHeByHand.ipynb`) showing the steps to go through to use logarithms and trigonometry to calculate Estimated Altitude and Azimuth, to come up with a Line of Positions.
+
+---

@@ -508,7 +508,7 @@ The script above is generating an archive named `nmea-dist.tar.gz`, its name com
 Once the script is completed, transfer the archive on your target machine (using `scp` for example), un-archive it (as shown above, with a `tar -xzvf`), and you are good to go.
 
 If an _update_ is necessary, it is even easier.  
-Jus run the script `to.prod.sh` again, and _**do not drop**_ the directory at the end.  
+Just run the script `to.prod.sh` again, and _**do not drop**_ the directory at the end.  
 The structure of the `nmea-dist` folder (or whatever _**you**_ named it) looks like this:
 ```
 $ tree nmea-dist
