@@ -214,7 +214,7 @@ $ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 - [Build your own polars](./raspberry-sailor/PolarSmoother/README.md) (in progress)
 ### GRIB and Faxes
 - [Read and render GRIB files and faxes](./raspberry-sailor/RESTRouting/README.md) (in progress)
-- Routing (in orogress)
+- Routing (in progress)
 ### Publishing Almanacs and Tables
 - Celestial Almanacs publication
 - Tide Tables publication
