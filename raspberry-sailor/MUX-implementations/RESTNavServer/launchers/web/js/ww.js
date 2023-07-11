@@ -12,14 +12,16 @@ let worldMap;
 let currentDate;
 
 if (typeof(errManager) !== 'function') {
+	console.log(`ww.js: errManager was not defined.`);
 	let errManager = function(mess) {
 		let content = document.getElementById("error").innerHTML;
 		if (content !== undefined) {
+			console.log(`Displaying errors in their own div.`);
 			document.getElementById("error").innerHTML = ((content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess);
 			let div = document.getElementById("error");
 			div.scrollTop = div.scrollHeight;
 		} else {
-			console.log(mess);
+			console.log(`Logging error: ${mess}`);
 		}
 	};
 }
@@ -127,6 +129,7 @@ let requestCompositeFaxes = function(requestPayload) {
 };
 
 let getCompositeFaxes = function(options, compositeData, callback) {
+	console.log(`getCompositeFaxes, starting`);
 	let getData = requestCompositeFaxes(options);
 	getData.then((value) => {
 		// console.log("Done:", value);
@@ -145,7 +148,7 @@ let getCompositeFaxes = function(options, compositeData, callback) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("getCompositeFaxes: Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
 
@@ -158,6 +161,7 @@ let crawlComposites = function(filter) {
 };
 
 let getExistingComposites = function(callback, filter) {
+	console.log(`getExistingComposites, starting`);
 	let getData = crawlComposites(filter);
 	getData.then((value) => {
 		// console.log("Done:", value);
@@ -175,7 +179,7 @@ let getExistingComposites = function(callback, filter) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("getExistingComposites: Failed to get Composite Data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 
 };
@@ -187,6 +191,7 @@ let getPositionFromNMEACache = function() {
 };
 
 let getGPSPosition = function() {
+	console.log(`getGPSPosition, starting`);
 	let posPromise = getPositionFromNMEACache();
 	posPromise.then(cache => {
 		let cacheValues = JSON.parse(cache);
@@ -204,7 +209,10 @@ let getGPSPosition = function() {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get Data Cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("getGPSPosition: Failed to get Data Cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		debugger;
+		error.stack;
+
 	});
 };
 
@@ -264,6 +272,6 @@ let getBestRoute = function(payload, callback) {
 				message = mess.message;
 			}
 		}
-		errManager("Failed to get best route..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
+		errManager("getBestRoute: Failed to get best route..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? message : ' - '));
 	});
 };
