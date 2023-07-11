@@ -341,6 +341,7 @@ while [[ "${GO}" == "true" ]]; do
         if [[ "${WITH_NOHUP}" == "Y" ]]; then
           NOHUP="nohup "
           echo -e ">> Will use nohup"
+          rm nohup.out
         else
           NOHUP=""
           echo -e ">> Will not use nohup"
@@ -352,6 +353,7 @@ while [[ "${GO}" == "true" ]]; do
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
           NOHUP="nohup "
           echo -e ">> Will use nohup"
+          rm nohup.out
         fi
       fi
       # Ask to launch a browser in interactive mode (and not provided already)

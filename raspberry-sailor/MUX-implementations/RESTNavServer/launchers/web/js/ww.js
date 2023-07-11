@@ -27,7 +27,7 @@ if (typeof(errManager) !== 'function') {
 }
 
 var DEFAULT_TIMEOUT = 300000; // 120000: 2 minutes, 300000: 5 minutes
-var WW_VERBOSE = true;
+var WW_VERBOSE = false;
 
 /*
  * Demo features
@@ -223,8 +223,8 @@ let getGPSPosition = function() {
 			}
 		}
 		errManager("getGPSPosition: Failed to get Data Cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-		debugger;
-		error.stack;
+		// debugger;
+		// error.stack;
 
 	});
 };

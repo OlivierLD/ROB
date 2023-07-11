@@ -15,7 +15,9 @@ JSON_LINES=$((find . -name '*.json' -print0 | xargs -0 cat) |  wc -l)
 IPYNB_LINES=$((find . -name '*.ipynb' -print0 | xargs -0 cat) |  wc -l)
 SQL_LINES=$((find . -name '*.sql' -print0 | xargs -0 cat) |  wc -l)
 XML_LINES=$((find . -name '*.xml' -print0 | xargs -0 cat) |  wc -l)
-
+#
+# This formatting might not work on Mac...
+#
 echo -e "$(printf "%'.0f" ${JAVA_LINES}) lines of Java code"
 echo -e "$(printf "%'.0f" ${SCALA_LINES}) lines of Scala code"
 echo -e "$(printf "%'.0f" ${PYTHON_LINES}) lines of Python code"

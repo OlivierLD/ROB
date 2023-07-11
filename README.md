@@ -206,17 +206,23 @@ You might also want to exclude some tests (look into their code for details)
 $ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 ```
 
-## Highlights
+# Highlights
+### NMEA Data Management, real time and replay
 - [Read NMEA data, log, forward, process](./raspberry-sailor/NMEA-multiplexer/README.md)
 - Notebooks, [how NMEA Parsers work](./raspberry-sailor/NMEA-Parser/notebooks/HowItWorks.ipynb)
 - [Build your own deviation curve](./raspberry-sailor/Swing/Deviation-Tool/README.md)
 - [Build your own polars](./raspberry-sailor/PolarSmoother/README.md) (in progress)
-- [Read and render GRIB files](./raspberry-sailor/RESTRouting/README.md) (in progress)
+### GRIB and Faxes
+- [Read and render GRIB files and faxes](./raspberry-sailor/RESTRouting/README.md) (in progress)
+- Routing (in orogress)
+### Publishing Almanacs and Tables
 - Celestial Almanacs publication
 - Tide Tables publication
+- Navigation and Correction tables publication
+### Implementation examples
 - Implementation and customization examples:
   - [Basic](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/README.md)
-  - [RESTNavServer](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), with many examples
+  - [RESTNavServer](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), with _many_ examples
 
 ## Misc links to look at...
 - <https://saillogger.com/>
@@ -244,7 +250,7 @@ You can very well have the GPS and NMEA data read from one Raspberry Pi somewher
 feeding the NMEA-multiplexer, located on another board.
 
 ## TODO next
-Wow! Vast topic too...
+Wow! Vaaaast topic too...
 
 - Docker Images ? For now, see [here](https://github.com/OlivierLD/raspberry-coffee/tree/master/docker).
   - Docker can run on a Raspberry Pi, this would simplify deployment and installation steps.
