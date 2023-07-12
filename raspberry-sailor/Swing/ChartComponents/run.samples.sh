@@ -5,6 +5,8 @@ CP=./build/libs/ChartComponents-1.0-all.jar
 KEEP_LOOPING=true
 while [[ "${KEEP_LOOPING}" == "true" ]]; do
   clear
+  echo -e "+--------------------------------------------------------------------------------+"
+  echo -e "|                            S W I N G   S A M P L E S                           |"
   echo -e "+---------------------------+-------------------------+--------------------------+"
   echo -e "|  1 - Satellites           |  2 - Atlantic           |  3 - Big Width           |"
   echo -e "|  4 - Case Study           |  5 - Conic Equidistant  |  6 - Globe               |"
