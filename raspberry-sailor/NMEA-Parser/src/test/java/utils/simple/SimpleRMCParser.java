@@ -1,5 +1,7 @@
 package utils.simple;
 
+import nmea.parser.StringParsers;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -289,5 +291,11 @@ public class SimpleRMCParser {
         System.out.println("UTC Time:" + RMC.SDF.format(rmc.rmcTime));
 
         System.out.println("Declination:" + rmc.declination);
+
+        // Get description
+        System.out.println("----------------------------------------------------");
+        System.out.printf("GGA: %s\n", StringParsers.Dispatcher.GGA.description());
+        System.out.printf("GSA: %s\n", StringParsers.Dispatcher.GSA.description());
+        System.out.printf("GSV: %s\n", StringParsers.Dispatcher.GSV.description());
     }
 }

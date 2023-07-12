@@ -16,7 +16,14 @@ channels:
     zip: true
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     sentence.filters: MWV,VHW,VLW,VWR,DPT,HDG,MTW
-    verbose: true
+    verbose: false
 forwarders:
+  - type: file
+    timebase.filename: false
+    filename: data.4tests.nmea
+    verbose: true
+    flush: true
+    # sentence.filters: MWV, VHW, HDG
+    sentence.filters: ~DPT,~MTW
   - type: "tcp"
     port: 7001

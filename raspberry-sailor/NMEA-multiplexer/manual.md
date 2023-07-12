@@ -396,6 +396,9 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     #
     forward.XX.append=true
     forward.XX.flush=true
+    #
+    forward.XX.sentence.filters=~GSA,~GGA,~GSV
+
     ```
     > _Explanations_:
     > - `timebase.filename` default value is `false`
@@ -405,6 +408,9 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     >   - if `log.dir` exists (default is `.`) log files will be generated in this directory (located under the working directory).
     >   - if `split` exists (default is `null`) and one of `min`, `hour`, `day`, `week`, `month`, `year`, then a new log file will generated every `min`, `hour`, `day`, `week`, `month`, or `year`.
     > - `flush` will write to the disk every time a record is written. Default is `false`.
+    > - `sentence.filters`, default `null`. Allows to log _only_ some sentences, or exclude some sentences.
+    >   - A filter like `RMC,GLL` would log only the `RMC` and `GLL` sentences
+    >   - A filter like `~GSA,~GGA,~GSV` will exclude `GSA`, `GGA` and `GSV` from the log.
     
 - `ws`
     <!-- TODO: See https://www.baeldung.com/java-websockets -->

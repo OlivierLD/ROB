@@ -11,6 +11,7 @@ import nmea.consumers.client.*;
 import nmea.consumers.reader.*;
 import nmea.forwarders.*;
 import nmea.forwarders.rmi.RMIServer;
+import nmea.parser.StringParsers;
 
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -42,6 +43,30 @@ import java.util.stream.Collectors;
 public class MuxInitializer {
 
     private final static NumberFormat MUX_IDX_FMT = new DecimalFormat("00");
+
+    private static void spitOutSentenceFilters(String sentenceFilters) {
+        if (!sentenceFilters.trim().isEmpty()) {
+            Arrays.asList(sentenceFilters.trim().split(","))
+                    .stream()
+                    .map(String::trim)
+                    .forEach(filter -> {
+                        String key = filter;
+                        boolean exclude = filter.startsWith("~");
+                        if (exclude) {
+                            key = filter.substring(1);
+                        }
+                        final StringParsers.Dispatcher dispatcherByKey = StringParsers.findDispatcherByKey(key);
+                        String description = "";
+                        if (dispatcherByKey != null) {
+                            description = dispatcherByKey.description();
+                        }
+                        System.out.printf("%s sentence [%s]%s\n",
+                                exclude ? "Excluding" : "Including",
+                                key,
+                                description.trim().length() > 0 ? String.format(" (%s)", description) : "");
+                    });
+        }
+    }
 
     public static void setup(Properties muxProps,
                              List<NMEAClient> nmeaDataClients,
@@ -84,6 +109,9 @@ public class MuxInitializer {
                     String sentenceFilters = "";
                     deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                    if (verbose) {
+                        spitOutSentenceFilters(sentenceFilters);
+                    }
                     Object dynamic = Class.forName(clss)
                             .getDeclaredConstructor(String[].class, String[].class, Multiplexer.class)
                             .newInstance(
@@ -146,15 +174,23 @@ public class MuxInitializer {
                     if (verbose) {
                         System.out.printf("\t>> %s - Loading channel %s (%s)\n", NumberFormat.getInstance().format(System.currentTimeMillis()), typeProp, type);
                     }
-                    String deviceFilters = "";
-                    String sentenceFilters = "";
+                    // String deviceFilters = "";
+                    // String sentenceFilters = "";
+
+                    // Make this generic, not specific like below.
+                    String deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                    String sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                    if (verbose) {
+                        spitOutSentenceFilters(sentenceFilters);
+                    }
+
                     switch (type) {
                         case "serial": // Consumer
                             try {
                                 String serialPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String br = muxProps.getProperty(String.format("mux.%s.baudrate", MUX_IDX_FMT.format(muxIdx)));
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 String resetIntervalStr = muxProps.getProperty(String.format("mux.%s.reset.interval", MUX_IDX_FMT.format(muxIdx)));
                                 Long resetInterval = null;
                                 if (resetIntervalStr != null) {
@@ -205,8 +241,8 @@ public class MuxInitializer {
                                         nfe.printStackTrace();
                                     }
                                 }
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 RESTClient restClient = new RESTClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -242,8 +278,8 @@ public class MuxInitializer {
                             try {
                                 String tcpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String tcpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
                                 boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
                                 TCPClient tcpClient = new TCPClient(
@@ -295,8 +331,8 @@ public class MuxInitializer {
                                 } catch (NumberFormatException nfe) {
                                     pathInArchive = null; // Default value
                                 }
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
 //                                System.out.printf("From props: %s=%s%n",
 //                                        String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx)),
 //                                        muxProps.getProperty(String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx))));
@@ -331,8 +367,8 @@ public class MuxInitializer {
                         case "ws": // Consumer
                             try {
                                 String wsUri = muxProps.getProperty(String.format("mux.%s.wsuri", MUX_IDX_FMT.format(muxIdx)));
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 WebSocketClient wsClient = new WebSocketClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -358,8 +394,8 @@ public class MuxInitializer {
                             break;
                         case "rnd":  // Consumer. Random generator, for debugging
                             try {
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 RandomClient rndClient = new RandomClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -387,8 +423,8 @@ public class MuxInitializer {
                             break;
                         case "zda": // Consumer. ZDA generator
                             try {
-                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 ZDAClient zdaClient = new ZDAClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -624,15 +660,20 @@ public class MuxInitializer {
                             String logDir = muxProps.getProperty(String.format("forward.%s.log.dir", MUX_IDX_FMT.format(fwdIdx)));
                             String split = muxProps.getProperty(String.format("forward.%s.split", MUX_IDX_FMT.format(fwdIdx)));
                             String flush = muxProps.getProperty(String.format("forward.%s.flush", MUX_IDX_FMT.format(fwdIdx)));
+                            String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
+                            // TODO verbose on all forwarders ?
+                            if (verbose && sentenceFilters != null) {
+                                spitOutSentenceFilters(sentenceFilters);
+                            }
                             try {
                                 Forwarder fileForwarder;
                                 if (fSubClass == null) {
-                                    fileForwarder = new DataFileWriter(fName, append, timeBased, radix, logDir, split, "true".equals(flush));
+                                    fileForwarder = new DataFileWriter(fName, append, timeBased, radix, logDir, split, "true".equals(flush), sentenceFilters);
                                 } else {
                                     try {
                                         fileForwarder = (DataFileWriter) Class.forName(fSubClass.trim())
-                                                .getConstructor(String.class, Boolean.class, Boolean.class, String.class, String.class, String.class, Boolean.class)
-                                                .newInstance(fName, append, timeBased, radix, logDir, split, "true".equals(flush));
+                                                .getConstructor(String.class, Boolean.class, Boolean.class, String.class, String.class, String.class, Boolean.class, String.class)
+                                                .newInstance(fName, append, timeBased, radix, logDir, split, "true".equals(flush), sentenceFilters);
                                     } catch (NoSuchMethodException nsme) {
                                         fileForwarder = (DataFileWriter) Class.forName(fSubClass.trim()) // Fallback on previous constructor
                                                 .getConstructor(String.class, Boolean.class)

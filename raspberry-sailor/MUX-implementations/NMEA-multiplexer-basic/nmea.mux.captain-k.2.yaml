@@ -17,7 +17,7 @@ channels:
   - type: serial
     port: /dev/ttyS80
     baudrate: 4800
-  #    sentence.filters: RMC,GLL
+    sentence.filters: ~GGA,~GSV,~GSA
   #    verbose: true
   # May require a "sudo ln -s /dev/ttyAMA0 /dev/ttyUSB0"
   - type: serial

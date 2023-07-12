@@ -17,6 +17,7 @@ channels:
   # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal"
   - type: file
     filename: /dev/ttyACM0
+    sentence.filters: ~GGA,~GSV,~GSA
     verbose: false
   # Requires a "stty -F /dev/ttyUSB0 raw 38400 cs8 clocal"
   - type: file

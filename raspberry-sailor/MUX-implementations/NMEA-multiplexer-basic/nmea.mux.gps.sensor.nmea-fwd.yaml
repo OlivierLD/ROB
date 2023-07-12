@@ -57,6 +57,7 @@ forwarders:
     filename.suffix: _LOG
     log.dir: logged
     split: hour
+    sentence.filters: ~GGA,~GSA,~GSV
 computers:
   - type: "tw-current"
     prefix: "CC"

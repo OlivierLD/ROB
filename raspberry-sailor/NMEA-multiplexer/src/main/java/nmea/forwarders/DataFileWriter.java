@@ -1,17 +1,14 @@
 package nmea.forwarders;
 
+import nmea.parser.StringParsers;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * for forwarder.XX.type=file
@@ -41,19 +38,33 @@ public class DataFileWriter implements Forwarder {
 		min, hour, day, week, month, year
 	}
 
+	private List<String> filters = null;
+
 	public DataFileWriter(String fName) throws Exception {
 		this(fName, false);
 	}
 	public DataFileWriter(String fName, boolean append) throws Exception {
-		this(fName, append, false, null, null, null, false);
+		this(fName, append, false, null, null, null, false, null);
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush) throws Exception {
-		this(fName, append, false, null, null, null, flush);
+		this(fName, append, false, null, null, null, flush, null);
 	}
 
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
+		this(fName, append, timeBased, radix, dir, split, flush, null);
+	}
+	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush, String sentenceFilters) throws Exception {
 		System.out.printf("- Start writing to %s, %s \n", this.getClass().getName(), fName);
 
+		if (sentenceFilters != null) {
+			if (sentenceFilters.trim().length() > 0) {
+				filters = Arrays.asList(sentenceFilters.trim().split(","))
+						.stream()
+						.map(String::trim)
+						.collect(Collectors.toList());
+
+			}
+		}
 		this.log = fName;
 		this.append = append;
 		this.timeBased = timeBased;
@@ -86,11 +97,38 @@ public class DataFileWriter implements Forwarder {
 		}
 	}
 
+	boolean VERBOSE = false;
+
 	@Override
 	public void write(byte[] message) {
 		try {
 			String mess = new String(message).trim(); // trim removes \r\n
-			if (!mess.isEmpty()) {
+			boolean ok = true;
+			if (mess.startsWith("$") && mess.length() > 6 && filters != null) {
+				ok = false;
+				String key = mess.substring(3, 6);
+				for (String filter : filters) {
+					if (!filter.startsWith("~")) { // include
+						if (filter.equals(key)) {
+							ok = true;
+							if (VERBOSE) {
+								System.out.printf("DataFileWriter >> Including [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+							}
+						}
+					} else {  // exclude
+						if (filter.substring(1).equals(key)) { // Don't !
+							ok = false;
+							if (VERBOSE) {
+								System.out.printf("DataFileWriter >> Excluding [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+							}
+							break;
+						} else {
+							ok = true;
+						}
+					}
+				}
+			}
+			if (!mess.isEmpty() && ok) {
 				this.dataFile.write(mess + '\n');
 				if (this.flush) {
 					this.dataFile.flush();
@@ -207,6 +245,7 @@ public class DataFileWriter implements Forwarder {
 		private String dir;
 		private String split;
 		private boolean flush;
+		private List<String> filters;
 
 
 		private final String type = "file";
@@ -221,6 +260,7 @@ public class DataFileWriter implements Forwarder {
 			dir = instance.dir;
 			split = instance.split;
 			flush = instance.flush;
+			filters = instance.filters;
 		}
 
 		public String getCls() {
@@ -259,6 +299,10 @@ public class DataFileWriter implements Forwarder {
 
 		public boolean isFlush() {
 			return flush;
+		}
+
+		public List<String> getFilters() {
+			return filters;
 		}
 	}
 

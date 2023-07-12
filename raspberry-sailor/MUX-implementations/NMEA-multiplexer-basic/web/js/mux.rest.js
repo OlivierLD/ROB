@@ -535,6 +535,10 @@ let forwarderList = () => {
 					} else {
 						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					}
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
+					}
                     break;
                 case 'serial':
                     html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -796,6 +800,10 @@ let generateDiagram = () => {
 						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					} else {
 						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					}
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
 					}
                     break;
                 case 'serial':
