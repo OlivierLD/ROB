@@ -41,6 +41,8 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+
     implementation project(':astro-computer:AstroUtilities')
     // implementation project(':AstroUtilities')
 
