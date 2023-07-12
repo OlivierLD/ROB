@@ -20,7 +20,7 @@ channels:
   - type: file
     filename: /dev/ttyACM0
     verbose: false
-    sentence.filters: ~GGA,~GSV,~GSA
+#    sentence.filters: ~GGA,~GSV,~GSA
 #    sentence.filters: ~GLL
 #    sentence.filters: RMC,GLL
   - type: rest           # Pings the Python REST Server for the BME280 data (GET)
@@ -58,6 +58,7 @@ forwarders:
     filename.suffix: _LOG
     log.dir: logged
     split: hour
+    sentence.filters: ~GGA,~GSV,~GSA
   - type: tcp
     port: 7001
 computers:
