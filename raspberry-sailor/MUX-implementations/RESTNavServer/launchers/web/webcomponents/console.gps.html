@@ -313,7 +313,7 @@
                 // let gpsDate = new Date(val);
                 let gpsDate = gpsTime;
                 /* global getAstroData DURATION_FMT withWanderingBodies withStars astroCallback (declared in console.logic.js) */
-                getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, astroCallback);
+                getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, withConstellations, astroCallback);
             }
         });
         events.subscribe(events.topicNames.GPS_SAT, (val) => {
@@ -1663,6 +1663,15 @@
                         <span style="position: relative; margin-top: 0px;">
                             <label class="rocker rocker-tiny">
                                 <input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>
+                                <span class="switch-left">On</span>
+                                <span class="switch-right">Off</span>
+                            </label>
+                        </span>
+
+                        <span style="text-align: right; margin-top: 12px;">Constellations</span>
+                        <span style="position: relative; margin-top: 0px;">
+                            <label class="rocker rocker-tiny">
+                                <input type="checkbox" onchange="withConstellations = this.checked; setConstellations('world-map-01', this);"/>
                                 <span class="switch-left">On</span>
                                 <span class="switch-right">Off</span>
                             </label>

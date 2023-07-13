@@ -6,6 +6,7 @@ import calc.calculation.SightReductionUtil;
 import calc.calculation.nauticalalmanac.Context;
 import calc.calculation.nauticalalmanac.Core;
 import calc.calculation.nauticalalmanac.Star;
+import calc.calculation.nauticalalmanacV2.Constellations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import http.HTTPServer;
@@ -78,11 +79,11 @@ public class RESTImplementation {
 					ASTRO_PREFIX + "/oplist",
 					this::getOperationList,
 					"List of all available operations, on astro request manager."),
-			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00
+			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00 &fromL=...&fromG=... &wandering=true&stars=true&constellations=true
 					"GET",
 					ASTRO_PREFIX + "/positions-in-the-sky",
 					this::getPositionsInTheSky,
-					"Get the Sun's and Moon's position (D & GHA) for an UTC date passed as QS prm named 'at', in DURATION Format. Optional: 'fromL' and 'fromG', 'wandering' (true|[false])."),
+					"Get the Sun's and Moon's position (D & GHA) for an UTC date passed as QS prm named 'at', in DURATION Format. Optional: 'fromL' and 'fromG', 'wandering' (true|[false]), 'stars' (true|[false]), 'constellations' (true|[false])."),
 			new Operation( // Payload like { position: { latitude: 37.76661945, longitude: -122.5166988 }, utcdate: "DURATION" }
 					"POST",
 					ASTRO_PREFIX + "/sun-now",
@@ -619,14 +620,24 @@ public class RESTImplementation {
 	 * Also, optionally:
 	 * - wandering bodies
 	 * - stars
-	 * @param request require query string parameters at (duration fmt), fromL, fromG, optional wandering=true|false, stars=true|false
+	 * - constellations
+	 *
+	 * To test:
+	 * curl -X GET "http://localhost:9999/astro/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true"
+	 * @param request require query string parameters at (duration fmt), fromL, fromG, optional wandering=true|false, stars=true|false, constellations=true|false
 	 * @return
 	 */
 	private Response getPositionsInTheSky(Request request) {
+
+		if (false) {
+			System.out.printf("getPositionsInTheSky, %s\n", request.toClassicalString());
+		}
+
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		String atPrm = null;
 		boolean wandering = false;  // Wandering bodies (visible ones)
-		boolean stars = false;      // Selected stars (selected by me)
+		boolean stars = false;      // Selected stars (selected by me, see Star.getCatalog())
+		boolean constellations = false;
 		Map<String, String> prms = request.getQueryStringParameters();
 		if (prms == null || prms.get("at") == null) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -661,6 +672,9 @@ public class RESTImplementation {
 			}
 			if ("true".equals(prms.get("stars"))) {
 				stars = true;
+			}
+			if ("true".equals(prms.get("constellations"))) {
+				constellations = true;
 			}
 
 			DURATION_FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
@@ -873,6 +887,51 @@ public class RESTImplementation {
 							});
 					data = data.stars(starPositions);
 				}
+				// Constellations
+				if (constellations) {
+					final List<Constellations.Constellation> constellationList = Constellations.getInstance().getConstellations();
+					List<ConstellationInTheSky> constellationsInTheSky = new ArrayList<>();
+					// Constellations
+					constellationList.stream()
+							// .limit(1)
+							.forEach(constellation -> {
+						if (false) {
+							System.out.printf(">> Processing constellation %s\n", constellation.getName());
+						}
+						ConstellationInTheSky oneConstellation = new ConstellationInTheSky(constellation.getName());
+						List<Map<String, AstroComputerV2.GP>> linesInTheSky = new ArrayList<>();
+						constellation.getLines().forEach(line -> {
+							if (false) {
+								System.out.printf(">> Constellation %s, Line: from %s to %s\n", constellation.getName(), line.getFrom(), line.getTo());
+							}
+							final Constellations.Star fromStar = constellation.getStars().stream().filter(star -> line.getFrom().equals(star.getName())).findFirst().get();
+							final Constellations.Star toStar = constellation.getStars().stream().filter(star -> line.getTo().equals(star.getName())).findFirst().get();
+
+							Map<String, AstroComputerV2.GP> oneLine = new HashMap<>();
+							double fromStarGHA = (360d - (15d * fromStar.getRa()) + acv2.getAriesGHA()) % 360.0; // in [0, 360[
+							double toStarGHA = (360d - (15d * toStar.getRa()) + acv2.getAriesGHA()) % 360.0;     // in [0, 360[
+							oneLine.put("from", new AstroComputerV2.GP()
+									.name(fromStar.getName())
+									.gha(fromStarGHA)
+									.decl(fromStar.getD()));
+							oneLine.put("to", new AstroComputerV2.GP()
+									.name(toStar.getName())
+									.gha(toStarGHA)
+									.decl(toStar.getD()));
+							linesInTheSky.add(oneLine);
+						});
+						oneConstellation.setLines(linesInTheSky);
+						constellationsInTheSky.add(oneConstellation);
+					});
+					data = data.constellations(constellationsInTheSky);
+					if (false) {
+						System.out.printf(">> --- We have %d constellations --- \n", constellationsInTheSky.size());
+						System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(constellationsInTheSky));
+						System.out.printf("--- Full payload --- \n");
+						System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data));
+						System.out.printf("-------------------- \n");
+					}
+				}
 
 				String content;
 				try {
@@ -894,8 +953,9 @@ public class RESTImplementation {
 				response.setPayload(content.getBytes());
 
 			} catch (Exception ex) {
-
-				System.err.println("Error converting to Json:\n" + data.toString());
+				System.err.println("--- getPositionInTheSky ---");
+				ex.printStackTrace();
+				System.err.println("---------------------------");
 
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
@@ -2078,6 +2138,27 @@ public class RESTImplementation {
 		}
 	}
 
+	public static class ConstellationInTheSky {
+		String name;
+		List<Map<String, AstroComputerV2.GP>> lines;
+		public ConstellationInTheSky() {}
+		public ConstellationInTheSky(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public List<Map<String, AstroComputerV2.GP>> getLines() {
+			return lines;
+		}
+		public void setLines(List<Map<String, AstroComputerV2.GP>> lines) {
+			this.lines = lines;
+		}
+	}
+
 	public static class PositionsInTheSky {
 		long epoch;
 		double deltaT;
@@ -2089,6 +2170,7 @@ public class RESTImplementation {
 		double moonTilt;
 		List<AstroComputerV2.GP> wanderingBodies;
 		List<AstroComputerV2.GP> stars;
+		List<ConstellationInTheSky> constellations;
 		double eclipticObliquity; // Mean
 		AstroComputerV2.Pos from;
 		AstroComputerV2.OBS sunObs;
@@ -2099,10 +2181,10 @@ public class RESTImplementation {
 
 		@Override
 		public String toString() {
-			return String.format("Epoch: %d\nDeltaT: %f\nSun:%s\nMoon:%s\nMoonPhase:%f\nGHAAries:%f\nRoute to Sun:%s\nWand.Bodies:%s\nStars:%s\n" +
+			return String.format("Epoch: %d\nDeltaT: %f\nSun:%s\nMoon:%s\nMoonPhase:%f\nGHAAries:%f\nRoute to Sun:%s\nWand.Bodies:%s\nStars:%s\nConstellations:%s\n" +
 							"Ecl.Obl:%f\nFrom:%s\nSun Obs:%s\nMoon Obs:%s\nAries Obs:%s\nTPass:%s\nSolar Date:%s",
 					epoch, deltaT, sun, moon, moonPhase, ghaAries, moonToSunSkyRoute,
-					wanderingBodies, stars, eclipticObliquity, from, sunObs, moonObs, ariesObs, tPass, solarDate);
+					wanderingBodies, stars, constellations, eclipticObliquity, from, sunObs, moonObs, ariesObs, tPass, solarDate);
 		}
 
 		public PositionsInTheSky epoch(long epoch) {
@@ -2183,6 +2265,11 @@ public class RESTImplementation {
 			return this;
 		}
 
+		public PositionsInTheSky constellations(List<ConstellationInTheSky> constellations) {
+			this.constellations = constellations;
+			return this;
+		}
+
 		public long getEpoch() {
 			return epoch;
 		}
@@ -2221,6 +2308,10 @@ public class RESTImplementation {
 
 		public List<AstroComputerV2.GP> getStars() {
 			return stars;
+		}
+
+		public List<ConstellationInTheSky> getConstellations() {
+			return constellations;
 		}
 
 		public double getEclipticObliquity() {

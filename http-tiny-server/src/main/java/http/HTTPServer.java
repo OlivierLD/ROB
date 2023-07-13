@@ -206,7 +206,7 @@ public class HTTPServer {
 		@Override
 		public String toString() {
 			final StringBuffer string = new StringBuffer();
-			string.append(this.verb).append(" ").append(this.path).append(" ").append(this.protocol);
+			string.append(this.verb).append(" ").append(this.getPath(true)).append(" ").append(this.protocol);
 
 			if (this.headers != null) {
 				this.headers.keySet()
@@ -216,6 +216,12 @@ public class HTTPServer {
 				string.append("\n\n").append(new String(this.content));
 			}
 
+			return string.toString();
+		}
+
+		public String toClassicalString() {
+			final StringBuffer string = new StringBuffer();
+			string.append(this.verb).append(" ").append(this.getPath(true)).append(" ").append(this.protocol);
 			return string.toString();
 		}
 	}

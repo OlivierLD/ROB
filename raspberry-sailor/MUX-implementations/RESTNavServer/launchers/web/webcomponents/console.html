@@ -12,7 +12,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>WebComponents NMEA Console</title>
+	<title>WebComponenttStars NMEA Console</title>
 	<link rel="icon" type="image/png" href="./logo-192x192.png">
 
 	<link rel="stylesheet" href="css/stylesheet.css">
@@ -69,8 +69,8 @@
 			setData('calendar-01', date);
 			if (gpsPosition !== undefined) {
 				let gpsDate = new Date(val);
-				/* global getAstroData DURATION_FMT withWanderingBodies withStars astroCallback */
-				getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, astroCallback);
+				/* global getAstroData DURATION_FMT withWanderingBodies withStars withConstellations astroCallback */
+				getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, withConstellations, astroCallback);
 			}
 		});
 		events.subscribe('gps-sat', function(val) {
@@ -434,6 +434,7 @@
 						<input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight
 						<input type="checkbox" onchange="withWanderingBodies = this.checked; setWanderingBodies('world-map-01', this);"/>Wandering bodies
 						<input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>Stars
+						<!--input type="checkbox" onchange="withConstellations = this.checked; setConstellations('world-map-01', this);"/>Constellations -->
 						<input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics
 						<br/>
 						<input type="checkbox" id="geo-sat-01"/>GeoStationary Satellites

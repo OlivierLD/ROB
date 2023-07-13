@@ -509,6 +509,7 @@ compass-display .green {
 	--stars-color: white;
 	--night-color: rgba(192, 192, 192, 0.3);
 	--display-position-color: white;
+	--constellation-color: silver;
 }
 
 .worldmap-display-02 {
@@ -536,6 +537,7 @@ compass-display .green {
 	--stars-color: white;
 	--night-color: rgba(192, 192, 192, 0.3);
 	--display-position-color: white;
+	--constellation-color: rgba(255, 255, 255, 0.5);
 }
 
 .led-panel-01 {

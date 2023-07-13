@@ -220,9 +220,10 @@ function loadSunData(pos) {
  * @param position { lat: 37.7489, lng: -122.507 }
  * @param wandering true|false
  * @param stars true|false
+ * @param constellations true|false
  * @returns {Promise<any>}
  */
-function getSkyGP(when, position, wandering, stars) {
+function getSkyGP(when, position, wandering, stars, constellations) {
     let url = "/astro/positions-in-the-sky";
     // Add date
     url += ("?at=" + when);
@@ -236,6 +237,11 @@ function getSkyGP(when, position, wandering, stars) {
     if (stars && stars === true) { // to minimize the size of the payload
         url += ("&stars=true");
     }
+    // Constellations
+    if (constellations && constellations === true) {
+        url += ("&constellations=true");
+    }
+
     return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 }
 
@@ -247,8 +253,8 @@ function getSkyGP(when, position, wandering, stars) {
  * @param stars true|false
  * @returns {Promise<any>}
  */
-function getAstroData(when, position, wandering, stars, callback) {
-    let getData = getSkyGP(when, position, wandering, stars);
+function getAstroData(when, position, wandering, stars, constellations, callback) {
+    let getData = getSkyGP(when, position, wandering, stars, constellations);
     getData.then((value) => { // resolve
         let json = JSON.parse(value);
         if (callback !== undefined) {

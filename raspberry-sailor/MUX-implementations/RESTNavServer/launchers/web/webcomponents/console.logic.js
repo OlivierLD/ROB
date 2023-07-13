@@ -331,6 +331,11 @@ function setStars(wcId, cb) {
 	document.getElementById(wcId).repaint();
 }
 
+function setConstellations(wcId, cb) {
+	document.getElementById(wcId).withConstellations = (cb.checked ? 'true' : 'false');
+	document.getElementById(wcId).repaint();
+}
+
 function setTropics(wcId, cb) {
 	document.getElementById(wcId).withTropics = (cb.checked ? 'true' : 'false');
 	document.getElementById(wcId).repaint();
@@ -1161,6 +1166,7 @@ let gpsTime = undefined;
 let gpsPosition = undefined;
 let withStars = false;
 let withWanderingBodies = false;
+let withConstellations = false;
 
 let BSP_COEFF = 1.0;
 let AWS_COEFF = 1.0;
