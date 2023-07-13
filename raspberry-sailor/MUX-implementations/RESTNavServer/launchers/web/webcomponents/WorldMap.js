@@ -971,10 +971,9 @@ class WorldMap extends HTMLElement {
 			context.fillStyle = color;
 			let metrics = context.measureText(name);
 			let len = metrics.width;
-			context.fillText(name, Math.round(midX) - (len / 2), Math.round(midY));
+			context.fillText(name, Math.round(midX) - (len / 2), Math.round(midY)); // TODO Center on Y ?
 			context.restore();
 		}
-
 	}
 
 	static getColorConfig(cssClassNames) {

@@ -623,7 +623,10 @@ public class RESTImplementation {
 	 * - constellations
 	 *
 	 * To test:
-	 * curl -X GET "http://localhost:9999/astro/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true"
+	 * curl -X GET "http://localhost:XXXX/astro/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true"
+	 *
+	 * Compare with https://stellarium-web.org/
+	 *
 	 * @param request require query string parameters at (duration fmt), fromL, fromG, optional wandering=true|false, stars=true|false, constellations=true|false
 	 * @return
 	 */
