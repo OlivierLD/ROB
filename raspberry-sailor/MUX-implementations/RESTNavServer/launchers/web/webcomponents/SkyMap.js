@@ -60,6 +60,9 @@ const SKY_MAP_TAG_NAME = 'sky-map';
  * - Latitude (Observer)
  * - LHA Aries
  * - Displayable star names
+ * 
+ * Compare to https://www.stelvision.com/astro/carte-ciel/
+ *            https://astronomes.com/carte-du-ciel/
  */
 
 /* The map data */
@@ -126,6 +129,31 @@ const Month = {
 		name: 'December',
 		nbDays: 31
 	}
+};
+
+const skyMapDefaultColorConfig = {
+	bgColor: 'white',
+	ticksColor: 'gray',
+	tickLabelsColor: 'black',
+	skyMapMonths: 'red',
+	skyBGColor: 'lightGray',
+	visibleSkyColor: 'white',
+	skylineColor: 'blue',
+	hoursTicksColor: 'blue',
+	hoursLabelColor: 'blue',
+	skyGridColor: 'gray',
+	declinationCircleColor: 'black',
+	ariesLabelColor: 'silver',
+	cardPointLabelsColor: 'red',
+	nsewColor: 'blue',
+	equatorialGridColor: 'blue',
+	constellationLineColor: 'black',
+	constellationNameColor: 'black',
+	starColor: 'gold',
+	starCircleColor: 'black',
+	starNameColor: 'blue',
+	wanderingBodiesColor: 'cyan',
+	wanderingBodiesNameColor: 'red'
 };
 
 /* global HTMLElement */
@@ -195,6 +223,9 @@ class SkyMap extends HTMLElement {
 		this._withSkyGrid = true;
 		this._withWanderingBodies = false;
 		this._wanderingBodiesData = undefined;
+
+		this._previousClassName = "";
+		this.skyMapColorConfig = skyMapDefaultColorConfig;
 	}
 
 	// Called whenever the custom element is inserted into the DOM.
@@ -368,11 +399,128 @@ class SkyMap extends HTMLElement {
 	/*
 	 * Component methods
 	 */
+
+	static getColorConfig(cssClassNames) {
+		let colorConfig = skyMapDefaultColorConfig;
+		let classes = cssClassNames.split(" ");
+		for (let cls=0; cls<classes.length; cls++) {
+			let cssClassName = classes[cls];
+			for (let s=0; s<document.styleSheets.length; s++) {
+				// console.log("Walking though ", document.styleSheets[s]);
+				try {
+					for (let r=0; document.styleSheets[s].cssRules !== null && r<document.styleSheets[s].cssRules.length; r++) {
+						let selector = document.styleSheets[s].cssRules[r].selectorText;
+						//			console.log(">>> ", selector);
+						if (selector !== undefined && (selector === '.' + cssClassName || (selector.indexOf('.' + cssClassName) > -1 && selector.indexOf(WORLD_MAP_TAG_NAME) > -1))) { // Cases like "tag-name .className"
+							//				console.log("  >>> Found it! [%s]", selector);
+							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
+							let cssTextElems = cssText.split(";");
+							cssTextElems.forEach((elem) => {
+								if (elem.trim().length > 0) {
+									let keyValPair = elem.split(":");
+									let key = keyValPair[0].trim();
+									let value = keyValPair[1].trim();
+									switch (key) {
+										case '--background-color':
+											colorConfig.bgColor = value;
+											break;
+										case '--ticks-color':
+											colorConfig.ticksColor = value;
+											break;
+										case '--ticks-labels-color':
+											colorConfig.tickLabelsColor = value;
+											break;
+										case '--sky-map-month-color':
+											colorConfig.skyMapMonths = value;
+											break;
+										case '--sky-background':
+											colorConfig.skyBGColor = value;
+											break;
+										case '--visible-sky-color':
+											colorConfig.visibleSkyColor = value;
+											break;
+										case '--skyline-color':
+											colorConfig.skylineColor = value;
+											break;
+										case '--hour-ticks-color':
+											colorConfig.hoursTicksColor = value;
+											break;
+										case '--hour-tick-label-color':
+											colorConfig.hoursLabelColor = value;
+											break;
+										case '--sky-grid-color':
+											colorConfig.skyGridColor = value;
+											break;
+										case '--declination-color':
+											colorConfig.declinationCircleColor = value;
+											break;
+										case '--aries-label-color':
+											colorConfig.ariesLabelColor = value;
+											break;
+										case '--card-points-color':
+											colorConfig.cardPointLabelsColor = value;
+											break;
+										case '--nsew-color':
+											colorConfig.nsewColor = value;
+											break;
+										case '--equatorial-grid-color':
+											colorConfig.equatorialGridColor = value;
+											break;
+										case '--constellation-lines-color':
+											colorConfig.constellationLineColor = value;
+											break;
+										case '--constellation-names-color':
+											colorConfig.constellationNameColor = value;
+											break;
+										case '--star-color':
+											colorConfig.starColor = value;
+											break;
+										case '--star-names-color':
+											colorConfig.starNameColor = value;
+											break;
+										case '--star-circle-color':
+											colorConfig.starCircleColor = value;
+											break;
+										case '--wandering-bodies-color':
+											colorConfig.wanderingBodiesColor = value;
+											break;
+										case '--wandering-bodies-labels-color':
+											colorConfig.wanderingBodiesNameColor = value;
+											break;
+										default:
+											break;
+									}
+								}
+							});
+						}
+					}
+				} catch (err) {
+					// Absorb
+				}
+			}
+		}
+		return colorConfig;
+	}
+
 	repaint() {
 		this.drawSkyMap();
 	}
 
 	drawSkyMap() {
+
+		let currentStyle = this.className;
+		if (this._previousClassName !== currentStyle || true) {
+			// Reload
+			//	console.log("Reloading CSS");
+			try {
+				this.skyMapColorConfig = SkyMap.getColorConfig(currentStyle);
+			} catch (err) {
+				// Absorb?
+				console.log(err);
+			}
+			this._previousClassName = currentStyle;
+		}
+
 		let context = this.canvas.getContext('2d');
 		context.clearRect(0, 0, this.width, this.height);
 
@@ -384,14 +532,14 @@ class SkyMap extends HTMLElement {
 
 		context.beginPath();
 		// White BG
-		context.fillStyle = 'white';
+		context.fillStyle = this.skyMapColorConfig.bgColor;
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius, 0, 2 * Math.PI, false);
 		context.fill();
 		context.closePath();
 		// 2 circles for LHA/Dates
 		context.beginPath();
 		context.lineWidth = 1;
-		context.strokeStyle = 'gray';
+		context.strokeStyle = this.skyMapColorConfig.ticksColor;
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius * 0.98, 0, 2 * Math.PI, false);
 		context.stroke();
 		context.closePath();
@@ -417,7 +565,7 @@ class SkyMap extends HTMLElement {
 				}
 			}
 			context.lineWidth = 1;
-			context.strokeStyle = 'gray';
+			context.strokeStyle = this.skyMapColorConfig.ticksColor;
 			context.stroke();
 			context.closePath();
 
@@ -435,7 +583,7 @@ class SkyMap extends HTMLElement {
 					context.lineTo(xTo, yTo);
 				}
 				context.lineWidth = 1;
-				context.strokeStyle = 'gray';
+				context.strokeStyle = this.skyMapColorConfig.ticksColor;
 				context.stroke();
 				context.closePath();
 			}
@@ -449,7 +597,7 @@ class SkyMap extends HTMLElement {
 					let __currentAngle = - Utilities.toRadians(i - (this._hemisphere * this.LHAAries));
 					context.rotate(__currentAngle - Math.PI);
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-					context.fillStyle = 'black';
+					context.fillStyle = this.skyMapColorConfig.tickLabelsColor;
 					let lha = (this._hemisphere === Hemispheres.NORTHERN_HEMISPHERE || i === 0 ? i : (360 - i));
 					let str = lha.toString() + '°';
 					let len = context.measureText(str).width;
@@ -482,7 +630,7 @@ class SkyMap extends HTMLElement {
 					let __currentAngle = rad;
 					context.rotate(__currentAngle - Math.PI);
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-					context.fillStyle = 'black';
+					context.fillStyle = this.skyMapColorConfig.tickLabelsColor;
 					let str = now.dayOfMonth.toString();
 					let len = context.measureText(str).width;
 					context.fillText(str, -len / 2, (-(radius * 0.98) + 10));
@@ -494,7 +642,7 @@ class SkyMap extends HTMLElement {
 					let __currentAngle = rad;
 					context.rotate(__currentAngle - Math.PI);
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-					context.fillStyle = 'red';
+					context.fillStyle = this.skyMapColorConfig.skyMapMonths;
 					let str = now.month.name;
 					let len = context.measureText(str).width;
 					context.fillText(str, -len / 2, (-(radius * 1.01) + 10));
@@ -502,7 +650,7 @@ class SkyMap extends HTMLElement {
 				}
 			}
 			context.lineWidth = 1;
-			context.strokeStyle = 'gray';
+			context.strokeStyle = this.skyMapColorConfig.ticksColor;
 			context.stroke();
 			context.closePath();
 		}
@@ -510,7 +658,7 @@ class SkyMap extends HTMLElement {
 		// Full Sphere
 		// Gray BG
 		context.beginPath();
-		context.fillStyle = 'lightGray';
+		context.fillStyle = this.skyMapColorConfig.skyBGColor;
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius * 0.92, 0, 2 * Math.PI, false); // This one is the "horizon" (pole abaisse)
 		context.fill();
 		context.closePath();
@@ -527,7 +675,7 @@ class SkyMap extends HTMLElement {
 			context.lineTo(xTo, yTo);
 		}
 		context.lineWidth = 1;
-		context.strokeStyle = 'blue';
+		context.strokeStyle = this.skyMapColorConfig.hoursTicksColor;
 		context.stroke();
 		context.closePath();
 
@@ -543,7 +691,7 @@ class SkyMap extends HTMLElement {
 			context.lineTo(xTo, yTo);
 		}
 		context.lineWidth = 2;
-		context.strokeStyle = 'blue';
+		context.strokeStyle = this.skyMapColorConfig.hoursTicksColor;
 		context.stroke();
 		context.closePath();
 
@@ -555,7 +703,7 @@ class SkyMap extends HTMLElement {
 			let __currentAngle = - Utilities.toRadians(i * 15);
 			context.rotate(__currentAngle - Math.PI);
 			context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-			context.fillStyle = 'blue';
+			context.fillStyle = this.skyMapColorConfig.hoursLabelColor;
 			let hour = (this._hemisphere === Hemispheres.NORTHERN_HEMISPHERE  || i === 0 ? i : (24 - i));
 			let str = Utilities.lpad(hour.toString(), 2, '0');
 			let len = context.measureText(str).width;
@@ -575,7 +723,7 @@ class SkyMap extends HTMLElement {
 		// Full Sphere Celestial equator
 		context.beginPath();
 		context.lineWidth = 2;
-		context.strokeStyle = 'gray';
+		context.strokeStyle = this.skyMapColorConfig.skyGridColor;
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius * 0.92 / 2, 0, 2 * Math.PI, false);
 		context.stroke();
 		context.closePath();
@@ -585,7 +733,7 @@ class SkyMap extends HTMLElement {
 		context.beginPath();
 		context.setLineDash([5]);
 		context.lineWidth = 0.5;
-		context.strokeStyle = 'black';
+		context.strokeStyle = this.skyMapColorConfig.declinationCircleColor;
 		for (let i=-80; i<90; i+=10) {
 			if (i === 0) {
 				continue;
@@ -608,7 +756,7 @@ class SkyMap extends HTMLElement {
 
 		// Display LHA Aries as text
 		let strAries = Utilities.decToSex(this.LHAAries);
-		context.fillStyle = 'silver'; // this.worldmapColorConfig.displayPositionColor; TODO Get color from CSS
+		context.fillStyle = this.skyMapColorConfig.ariesLabelColor;
 		context.font = "bold 16px Arial"; // "bold 40px Arial"
 		context.fillText('LHA Aries: ' + strAries, 10, 18);
 	}
@@ -644,7 +792,7 @@ class SkyMap extends HTMLElement {
 	drawVisibleSky(context, radius) {
 		// White BG
 		context.beginPath();
-		context.fillStyle = 'white';
+		context.fillStyle = this.skyMapColorConfig.visibleSkyColor;
 		for (let z=0; z<=360; z+= 0.25) {
 			let deadReck = Utilities.deadReckoning({lat: this.observerLatitude, lng: 0}, 90 * 60, -z);
 			let point = this.plotCoordinates(deadReck.lat, deadReck.lng, radius);
@@ -660,7 +808,7 @@ class SkyMap extends HTMLElement {
 
 		// Skyline
 		context.beginPath();
-		context.strokeStyle = 'blue';
+		context.strokeStyle = this.skyMapColorConfig.skylineColor;
 		context.lineWidth = 2;
 		for (let z=0; z<=360; z+= 0.25) {
 			let deadReck = Utilities.deadReckoning({lat: this.observerLatitude, lng: 0}, 90 * 60, -z);
@@ -673,7 +821,7 @@ class SkyMap extends HTMLElement {
 			if (z % 90 === 0) { // Cardinal points
 				context.save();
 				context.font = "bold 12px Arial"; // Like "bold 15px Arial"
-				context.fillStyle = 'red';
+				context.fillStyle = this.skyMapColorConfig.cardPointLabelsColor;
 				let str = "";
 				let len = 0;
 				switch (z) {
@@ -713,7 +861,7 @@ class SkyMap extends HTMLElement {
 		if (this._type === MapType.SKYMAP_TYPE) {
 			zenith *= -1;
 		}
-		context.fillStyle = 'blue';
+		context.fillStyle = this.skyMapColorConfig.nsewColor;
 		const zenithRadius = 2;
 		context.arc((this.canvas.width / 2), (this.canvas.height / 2) + zenith, zenithRadius, 0, 2 * Math.PI, false);
 		context.fill();
@@ -721,7 +869,7 @@ class SkyMap extends HTMLElement {
 
 		if (this._withSkyGrid) {
 			// Altitudes
-			context.strokeStyle = 'blue';
+			context.strokeStyle = this.skyMapColorConfig.equatorialGridColor;
 			context.lineWidth = 0.5;
 			for (let dz = 10; dz <= 90; dz += 10) {
 				context.beginPath();
@@ -796,7 +944,7 @@ class SkyMap extends HTMLElement {
 							lng -= 360;
 						}
 						let p2 = this.plotCoordinates(dec, lng, radius);
-						context.strokeStyle = 'black';
+						context.strokeStyle = this.skyMapColorConfig.constellationLineColor;
 						context.lineWidth = 0.5;
 						// (this._type === MapType.STARFINDER_TYPE ? 1 : -1 )
 						context.moveTo((this.canvas.width / 2) - p1.x, (this.canvas.height / 2) + p1.y);
@@ -831,7 +979,7 @@ class SkyMap extends HTMLElement {
 					}
 					let p = this.plotCoordinates(centerDec, lng, radius);
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-					context.fillStyle = 'black';
+					context.fillStyle = this.skyMapColorConfig.constellationNameColor;
 					let str = constellations[i].name;
 					let len = context.measureText(str).width;
 					context.fillText(str, (this.canvas.width / 2) - p.x - (len / 2), (this.canvas.height / 2) + p.y - 2);
@@ -850,17 +998,17 @@ class SkyMap extends HTMLElement {
 					}
 					let p = this.plotCoordinates(dec, lng, radius);
 					context.beginPath();
-					context.fillStyle = 'gold';
+					context.fillStyle = this.skyMapColorConfig.starColor;
 					const starRadius = 2;
 					context.arc((this.canvas.width / 2) - p.x, (this.canvas.height / 2) + p.y, starRadius, 0, 2 * Math.PI, false);
 					context.fill();
-					context.strokeStyle = 'black';
+					context.strokeStyle = this.skyMapColorConfig.constellationLineColor;
 					context.lineWidth = 0.5;
 					context.stroke();
 
 					if (constellations[i].stars[s].name.charAt(0) === constellations[i].stars[s].name.charAt(0).toUpperCase() && this._starNames) { // Star name, starts with uppercase
 						context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
-						context.fillStyle = 'blue';
+						context.fillStyle = this.skyMapColorConfig.starNameColor;
 						let str = constellations[i].stars[s].name;
 						let len = context.measureText(str).width;
 						context.fillText(str, (this.canvas.width / 2) - p.x - (len / 2), (this.canvas.height / 2) + p.y - 2);
@@ -925,16 +1073,16 @@ class SkyMap extends HTMLElement {
 				}
 				let p = self.plotCoordinates(dec, lng, radius);
 				context.beginPath();
-				context.fillStyle = 'cyan';
+				context.fillStyle = this.skyMapColorConfig.wanderingBodiesColor;
 				const bodyRadius = 4;
 				context.arc((self.canvas.width / 2) - p.x, (self.canvas.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
 				context.fill();
-				context.strokeStyle = 'black';
+				context.strokeStyle = this.skyMapColorConfig.starCircleColor;
 				context.lineWidth = 0.5;
 				context.stroke();
 
 				context.font = "bold " + Math.round(24) + "px Arial"; // Like "bold 15px Arial"
-				context.fillStyle = 'red';
+				context.fillStyle = this.skyMapColorConfig.wanderingBodiesNameColor;
 				let str = SkyMap.findSymbol(body.name);
 				let len = context.measureText(str).width;
 				context.fillText(str, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y - 4);

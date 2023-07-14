@@ -540,6 +540,56 @@ compass-display .green {
 	--constellation-color: rgba(255, 255, 255, 0.5);
 }
 
+.skymap-display-01 {
+	--background-color: white;
+	--ticks-color: gray;
+	--ticks-labels-color: black;
+	--sky-map-month-color: red;
+	--sky-background: lightGray;
+	--visible-sky-color: white;
+	--skyline-color: blue;
+	--hour-ticks-color: blue;
+	--hour-tick-label-color: blue;
+	--sky-grid-color: gray;
+	--declination-color: black;
+	--aries-label-color: silver;
+	--card-points-color: red;
+	--nsew-color: blue;
+	--equatorial-grid-color: blue;
+	--constellation-lines-color: black;
+	--constellation-names-color: black;
+	--star-color: gold;
+	--star-names-color: blue;
+	--star-circle-color: black;
+	--wandering-bodies-color: cyan;
+	--wandering-bodies-labels-color: red;
+}
+
+.skymap-display-02 {
+	--background-color: white;
+	--ticks-color: gray;
+	--ticks-labels-color: black;
+	--sky-map-month-color: red;
+	--sky-background: rgba(79, 84, 128, 0.86);
+	--visible-sky-color: navy;
+	--skyline-color: blue;
+	--hour-ticks-color: blue;
+	--hour-tick-label-color: blue;
+	--sky-grid-color: gray;
+	--declination-color: black;
+	--aries-label-color: silver;
+	--card-points-color: red;
+	--nsew-color: blue;
+	--equatorial-grid-color: blue;
+	--constellation-lines-color: pink;
+	--constellation-names-color: white;
+	--star-color: gold;
+	--star-names-color: lime;
+	--star-circle-color: black;
+	--wandering-bodies-color: cyan;
+	--wandering-bodies-labels-color: red;
+}
+
 .led-panel-01 {
 	--bg-color-from: gray;
 	--bg-color-to: black;

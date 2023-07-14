@@ -638,7 +638,7 @@ public class RESTImplementation {
 
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		String atPrm = null;
-		boolean wandering = false;  // Wandering bodies (visible ones)
+		boolean wandering = false;  // Wandering bodies Planets Venus, Mars, Jupiter, Saturn)
 		boolean stars = false;      // Selected stars (selected by me, see Star.getCatalog())
 		boolean constellations = false;
 		Map<String, String> prms = request.getQueryStringParameters();

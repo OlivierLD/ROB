@@ -4,6 +4,8 @@ const WORLD_MAP_TAG_NAME = 'world-map';
 const DEBUG = false;
 
 /**
+ * Note: This is an extended version (constellations, etc)
+ * 
  * TODO:
  * - Rhumblines & Great Circles.
  * - document doAfter & doBefore
