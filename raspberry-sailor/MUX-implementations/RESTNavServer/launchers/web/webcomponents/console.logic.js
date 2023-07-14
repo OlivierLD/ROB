@@ -756,6 +756,10 @@ function astroCallback(data) {
 
 	let worldMap = document.getElementById('world-map-01');
 	let skyMap = document.getElementById('sky-map-01');
+	let sunPathElement = document.getElementById('sun-path-01');
+	if (sunPathElement) {
+		sunPathElement.constellationData = data.constellations; // No repaint yet.
+	}
 
 	let lhaAries = getLHA(data.ghaAries, data.from.longitude);
 

@@ -894,6 +894,8 @@ public class RESTImplementation {
 				if (constellations) {
 					final List<Constellations.Constellation> constellationList = Constellations.getInstance().getConstellations();
 					List<ConstellationInTheSky> constellationsInTheSky = new ArrayList<>();
+					final double _lat = lat, _lng = lng;
+					SightReductionUtil sru = new SightReductionUtil();
 					// Constellations
 					constellationList.stream()
 							// .limit(1)
@@ -902,7 +904,8 @@ public class RESTImplementation {
 							System.out.printf(">> Processing constellation %s\n", constellation.getName());
 						}
 						ConstellationInTheSky oneConstellation = new ConstellationInTheSky(constellation.getName());
-						List<Map<String, AstroComputerV2.GP>> linesInTheSky = new ArrayList<>();
+						List<Map<String, Object>> /*AstroComputerV2.GP>>*/ linesInTheSky = new ArrayList<>();
+
 						constellation.getLines().forEach(line -> {
 							if (false) {
 								System.out.printf(">> Constellation %s, Line: from %s to %s\n", constellation.getName(), line.getFrom(), line.getTo());
@@ -910,17 +913,28 @@ public class RESTImplementation {
 							final Constellations.Star fromStar = constellation.getStars().stream().filter(star -> line.getFrom().equals(star.getName())).findFirst().get();
 							final Constellations.Star toStar = constellation.getStars().stream().filter(star -> line.getTo().equals(star.getName())).findFirst().get();
 
-							Map<String, AstroComputerV2.GP> oneLine = new HashMap<>();
+							Map<String, Object> /*AstroComputerV2.GP>*/ oneLine = new HashMap<>();
 							double fromStarGHA = (360d - (15d * fromStar.getRa()) + acv2.getAriesGHA()) % 360.0; // in [0, 360[
 							double toStarGHA = (360d - (15d * toStar.getRa()) + acv2.getAriesGHA()) % 360.0;     // in [0, 360[
+
+							// Calculate observed prms
+							sru.calculate(_lat, _lng, fromStarGHA, fromStar.getD());
+							double heFrom = sru.getHe();
+							double zFrom = sru.getZ();
+							sru.calculate(_lat, _lng, toStarGHA, toStar.getD());
+							double heTo = sru.getHe();
+							double zTo = sru.getZ();
+
 							oneLine.put("from", new AstroComputerV2.GP()
 									.name(fromStar.getName())
 									.gha(fromStarGHA)
 									.decl(fromStar.getD()));
+							oneLine.put("from-obs", Map.of("he", heFrom, "z", zFrom));
 							oneLine.put("to", new AstroComputerV2.GP()
 									.name(toStar.getName())
 									.gha(toStarGHA)
 									.decl(toStar.getD()));
+							oneLine.put("to-obs", Map.of("he", heTo, "z", zTo));
 							linesInTheSky.add(oneLine);
 						});
 						oneConstellation.setLines(linesInTheSky);
@@ -2143,7 +2157,7 @@ public class RESTImplementation {
 
 	public static class ConstellationInTheSky {
 		String name;
-		List<Map<String, AstroComputerV2.GP>> lines;
+		List<Map<String, Object>> /*AstroComputerV2.GP>>*/ lines;
 		public ConstellationInTheSky() {}
 		public ConstellationInTheSky(String name) {
 			this.name = name;
@@ -2154,10 +2168,10 @@ public class RESTImplementation {
 		public void setName(String name) {
 			this.name = name;
 		}
-		public List<Map<String, AstroComputerV2.GP>> getLines() {
+		public List<Map<String, Object>> /*AstroComputerV2.GP>>*/ getLines() {
 			return lines;
 		}
-		public void setLines(List<Map<String, AstroComputerV2.GP>> lines) {
+		public void setLines(List<Map<String, Object>> /*AstroComputerV2.GP>>*/ lines) {
 			this.lines = lines;
 		}
 	}

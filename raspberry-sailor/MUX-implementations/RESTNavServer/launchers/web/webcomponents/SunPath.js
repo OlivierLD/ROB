@@ -65,6 +65,8 @@ class SunPath extends HTMLElement {
 		this._sunData = undefined;
 		this._sunPath = undefined;
 
+		this._constellationData = undefined;
+
 		this.sunHe = undefined;
 		this.sunZ = undefined;
 		this.moonHe = undefined;
@@ -193,6 +195,11 @@ class SunPath extends HTMLElement {
 				lastZ = json[idx].z;
 			}
 		}
+	}
+
+	set constellationData(json) {
+		// 'constellations' member of curl -X GET "http://localhost:9999/astro/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true" 
+		this._constellationData = json;
 	}
 
 	set sunData(json) {
@@ -540,6 +547,9 @@ class SunPath extends HTMLElement {
 		context.fillStyle = this.sunPathColorConfig.baseColor;
 		context.fill();
 
+		/*
+		 * Astronimical Data
+		 */
 		// Lines to the actual Z for rise and set, for the Sun
 		if (this._sunData !== undefined) {
 			context.save()
@@ -904,7 +914,55 @@ class SunPath extends HTMLElement {
 		if (this.saturnHe !== undefined && this.saturnZ !== undefined) {
 			this.plotPlanet(context, center, radius, 'lightyellow', 'lightyellow', this.saturnHe, this.saturnZ, "Saturn");
 		}
+		// Constellations !
+		if (this._constellationData) {
+			// console.log("SunPath: Displaying Constellations");
+			// console.log(`>> We have ${this._constellationData.length} ones.`);
+			context.save();
+			context.strokeStyle = 'silver';  // TODO A style...
+			this._constellationData.forEach(constellation => {
+				let name = constellation.name;
+				// For the name position
+				let minX = this.width;
+				let maxX = 0;
+				let minY = this.height;
+				let maxY = 0;
 
+				constellation.lines.forEach(line => {
+					let fromObs = line["from-obs"];
+					let toObs = line["to-obs"];
+					context.beginPath();
+					let fromPanelPoint = this.rotateBothWays(fromObs.he + this.rotation, fromObs.z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+					minX = Math.min(minX, center.x + (fromPanelPoint.x * radius * this.invertX));
+					maxX = Math.max(maxX, center.x + (fromPanelPoint.x * radius * this.invertX));
+					minY = Math.min(minY, center.y - (fromPanelPoint.y * radius));
+					maxY = Math.max(maxY, center.y - (fromPanelPoint.y * radius));
+					let toPanelPoint = this.rotateBothWays(toObs.he + this.rotation, toObs.z, this.side, this._tilt * this.invertX, (this.addToZ + this._zOffset));
+					minX = Math.min(minX, center.x + (toPanelPoint.x * radius * this.invertX));
+					maxX = Math.max(maxX, center.x + (toPanelPoint.x * radius * this.invertX));
+					minY = Math.min(minY, center.y - (toPanelPoint.y * radius));
+					maxY = Math.max(maxY, center.y - (toPanelPoint.y * radius));
+
+					context.moveTo(center.x + (fromPanelPoint.x * radius * this.invertX), center.y - (fromPanelPoint.y * radius));
+					context.lineTo(center.x + (toPanelPoint.x * radius * this.invertX), center.y - (toPanelPoint.y * radius));
+					context.stroke();
+					context.closePath();
+				});
+				// Constellation name
+				let midX = (minX + maxX) / 2;
+				let midY = (minY + maxY) / 2;
+				context.font = "10px Arial";
+				context.fillStyle = 'silver';
+				let metrics = context.measureText(name);
+				let len = metrics.width;
+				let x = midX - (len / 2);
+				let y = midY;  // TODO Center on Y ?
+				context.fillText(name, x, y);
+				// console.log(`Displaying [${name}] at ${x}/${y}`);
+			});
+			context.restore();
+
+		}
 	}
 
 	/**
