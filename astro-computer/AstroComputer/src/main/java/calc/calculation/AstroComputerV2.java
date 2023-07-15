@@ -1623,6 +1623,11 @@ public class AstroComputerV2 {
         return gha;
     }
 
+    public static synchronized double raToGHA(double ra, double ghaAries) {
+        double gha = (360d - (15d * ra) + ghaAries) % 360.0;
+        return gha;
+    }
+
     public synchronized Map<String, Object> getAllCalculatedData() {
         Map<String, Object> fullMap = new HashMap<>();
 

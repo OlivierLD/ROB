@@ -952,7 +952,7 @@ class SunPath extends HTMLElement {
 				let midX = (minX + maxX) / 2;
 				let midY = (minY + maxY) / 2;
 				context.font = "10px Arial";
-				context.fillStyle = 'silver';
+				context.fillStyle = 'silver'; // TODO A Style
 				let metrics = context.measureText(name);
 				let len = metrics.width;
 				let x = midX - (len / 2);
@@ -961,7 +961,6 @@ class SunPath extends HTMLElement {
 				// console.log(`Displaying [${name}] at ${x}/${y}`);
 			});
 			context.restore();
-
 		}
 	}
 
