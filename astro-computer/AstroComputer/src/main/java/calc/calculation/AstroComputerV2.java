@@ -1617,7 +1617,7 @@ public class AstroComputerV2 {
         if (longitude < 0) { // W
             gha = -longitude;
         }
-        if (longitude > 0) { // E
+        if (longitude >= 0) { // E
             gha = 360 - longitude;
         }
         return gha;

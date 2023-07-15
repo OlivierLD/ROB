@@ -24,7 +24,7 @@ It can be installed on board, and run 24x7, reading and computing data (from you
 is needed with them (log them, transform them, forward them to other softwares or clients, etc).  
 The code presented here is designed to run even of the smallest versions of the Raspberry Pi (Raspberry Pi Zero), that have 512Mb of RAM, and it works (it has been tested in the real world).
 
-#### Warning 1
+#### Warning #1
 The scripts presented in this repo are written for `bash` shell.  
 As such, they run on Linux, Mac OS, and Windows 10+ (I was told so, did not test).  
 And by the way, features that are not Raspberry Pi specific (like GPIO header management and access) will run on
@@ -35,12 +35,12 @@ external module and packages are done through `apt-get` or so. This utility has 
 > All the soft presented here will run on a Raspberry Pi, but also on other platforms, like Linux laptops, Mac, Windows, etc.**  
 > Read again the above 😊.
 
-#### Warning 2
+#### Warning #2
 To keep this project compatible with as many Raspberry Pi models as possible, we kept the Java code compatible with
 Java 8. Some syntax improvements would be possible, if Java 11 was the only one in the picture, but they're - for now - commented.  
 This is done intentionally.
 
-#### Warning 3
+#### Warning #3
 The code presented in this repo is designed to be as flexible and customizable as possible.  
 The execution of _**your**_ final product(s) will depend on the way you configure the builds and runtime configuration files.  
 Examples will be provided, but again, _as examples_.  
@@ -72,7 +72,7 @@ The more I use it, the more I like it.
 
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
-but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉.   
+but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉. (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. Veeeeery low ⬇️ - if not null - Carbon Footprint)   
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
 NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
 At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
