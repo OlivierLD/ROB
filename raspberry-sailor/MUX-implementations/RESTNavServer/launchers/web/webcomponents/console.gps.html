@@ -2414,14 +2414,14 @@
                                     let vmgs = NavigationHelper.vmgCalculator(sog, cog, tw.twd, tw.twa, bsp, hdg, b2wp);
 
                                     let resContent =
-                                        'LWY:' + lwy.toFixed(1) + '\272 \n' +
-                                        'True HDG:' + hdg.toFixed(1) + '\272 \n' +
+                                        'LWY:' + lwy.toFixed(1) + '\u00b0 \n' +
+                                        'True HDG:' + hdg.toFixed(1) + '\u00b0 \n' +
                                         'TWS:' + tw.tws.toFixed(2) + ' kts\n' +
-                                        'TWA:' + tw.twa.toFixed(1) + '\272 \n' +
-                                        'TWD:' + tw.twd.toFixed(1) + '\272 \n' +
-                                        'D:' + Decl.toFixed(1) + '\272 \n' +
-                                        'd:' + dev.toFixed(1) + '\272 \n' +
-                                        'Current Dir:' + current.cdr.toFixed(1) + '\272 \n' +
+                                        'TWA:' + tw.twa.toFixed(1) + '\u00b0 \n' +
+                                        'TWD:' + tw.twd.toFixed(1) + '\u00b0 \n' +
+                                        'D:' + Decl.toFixed(1) + '\u00b0 \n' +
+                                        'd:' + dev.toFixed(1) + '\u00b0 \n' +
+                                        'Current Dir:' + current.cdr.toFixed(1) + '\u00b0 \n' +
                                         'Current Speed:' + current.csp.toFixed(2) + ' kts';
 
                                     console.log(resContent);
