@@ -2,7 +2,7 @@
   <tr>
 <td valign="top">
 <h1>
-<span title="Raspberry Pi">R</span><span title="On">O</span><span title="Board">B</span><span title="Embarked">E</span><span title="Research">R</span><span title="Technology">T</span>
+<span title="Raspberry Pi">R</span>.<span title="On">O</span>.<span title="Board">B</span>.<span title="Embarked">E</span>.<span title="Research">R</span>.<span title="Technology">T</span>.
 </h1>
 <b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
 Aka <b>ROB</b>.  
@@ -12,7 +12,7 @@ Aka <b>ROB</b>.
 </td>
 <td valign="top" align="right">
 <img src="./wizard150.png" alt="Weather Wizard">
-<img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
+<!-- img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California" -->
 </td>
   </tr>
 </table>
@@ -72,7 +72,7 @@ The more I use it, the more I like it.
 
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
-but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉. (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. Veeeeery low ⬇️ - if not null - Carbon Footprint)   
+but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉. (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. _**Veeeeery low**_ ⬇️ - if not null - carbon footprint)   
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
 NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
 At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
