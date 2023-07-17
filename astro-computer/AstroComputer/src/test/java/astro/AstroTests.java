@@ -8,6 +8,8 @@ import calc.calculation.SightReductionUtil;
 import calc.calculation.nauticalalmanac.Context;
 import calc.calculation.nauticalalmanac.Core;
 import calc.calculation.nauticalalmanac.Star;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.text.DecimalFormat;
@@ -21,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 public class AstroTests {
 
+	ObjectMapper mapper = new ObjectMapper();
 	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	static {
@@ -249,10 +252,14 @@ public class AstroTests {
 				reduced.put("delta-t", acv2.getDeltaT()); // In seconds (of time)
 			}
 
-			// TODO Add ObjectMapper ?
-//			String content = new Gson().toJson(reduced);
+			String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(reduced);
+			System.out.println("-- Sight Reduction --");
+			System.out.println(content);
+			System.out.println("---------------------");
 		} catch (ParseException pe) {
 			fail(pe.getMessage());
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
