@@ -86,6 +86,7 @@ cp mux.sh ${distdir}
 cp mk.link.sh ${distdir}
 cp kill.all.sample.sh ${distdir}
 cp show.processes.sh ${distdir}
+cp start.all.sh ${distdir}
 cp log.*.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}

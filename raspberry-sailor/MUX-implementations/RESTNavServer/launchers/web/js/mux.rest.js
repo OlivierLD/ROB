@@ -487,7 +487,7 @@ let channelList = () => {
                     html += ("<tr><td><b>htu21df</b></td><td>" + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" +
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
                              "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                              "Frequency: " + json[i].frequency + "ms <br/>" +
                              (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td><td>" + buildList(json[i].deviceFilters) + "</td><td>" + buildList(json[i].sentenceFilters) + "</td><td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td><td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -534,6 +534,10 @@ let forwarderList = () => {
 						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					} else {
 						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					}
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
 					}
                     break;
                 case 'serial':
@@ -671,7 +675,7 @@ let generateDiagram = () => {
                 case 'file':
                     html += ("<tr><td valign='top'><b>file</b></td><td valign='top'>File: " + json[i].file +
                         "<br>Archive ?: " + json[i].zip  +
-                        "<br>Path in archive: " + json[i].pathInArchive  +
+                        "<br>Path in archive: " + (json[i].pathInArchive ? json[i].pathInArchive : "-")  +
                         "<br>Between reads: " + json[i].pause + " ms" +
                         "<br>Loop: " + json[i].loop +
                         "</td><td valign='top'>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
@@ -735,8 +739,8 @@ let generateDiagram = () => {
                         "</td></tr>");
                     break;
                 case 'rest':
-                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + json[i].queryString + "  <br/>" +
-                            "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
+                    html += ("<tr><td valign='top'><b>rest</b></td><td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
+                            "JQ syntax: " + (json[i].jsonQueryString ? json[i].jsonQueryString : "-") + "<br/>" +
                             "Frequency: " + json[i].frequency + "ms <br/>" +
                             (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                             "</td><td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
@@ -796,6 +800,10 @@ let generateDiagram = () => {
 						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					} else {
 						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					}
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
 					}
                     break;
                 case 'serial':
