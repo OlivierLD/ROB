@@ -6,6 +6,9 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Properties;
 
+/**
+ * WiP... Not implemented
+ */
 public class UDPServer implements Forwarder {
 	private int udpPort = 8001;
 	private InetAddress address = null;
@@ -33,6 +36,9 @@ public class UDPServer implements Forwarder {
 	public void write(byte[] message) {
 		try {
 			// Create datagram socket
+			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+				System.out.printf("Creating Datagram Socket (%s, %d)\n", address, udpPort);
+			}
 			DatagramSocket dsocket = null;
 			if (address.isMulticastAddress()) {
 				dsocket = new MulticastSocket(udpPort);
@@ -40,14 +46,23 @@ public class UDPServer implements Forwarder {
 			} else {
 				dsocket = new DatagramSocket(udpPort, address);
 			}
+			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+				System.out.println("DatagramSocket created");
+			}
 
 			// Initialize a datagram
 			DatagramPacket packet = new DatagramPacket(message, message.length, address, udpPort);
 			dsocket.send(packet);
+			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+				System.out.println("UDP Message sent");
+			}
 			if (address.isMulticastAddress()) {
 				((MulticastSocket) dsocket).leaveGroup(address);
 			}
 			dsocket.close();
+			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+				System.out.println("DatagramSocket Closed");
+			}
 		} catch (Exception ex) {
 			if ("No such device".equals(ex.getMessage())) {
 				System.out.println("No such device [" + address + "] (from " + this.getClass().getName() + ")");

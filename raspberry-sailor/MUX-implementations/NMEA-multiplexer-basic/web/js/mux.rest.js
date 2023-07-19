@@ -812,6 +812,9 @@ let generateDiagram = () => {
                 case 'tcp':
                     html += ("<tr><td><b>tcp</b></td><td>Port " + json[i].port + "</td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
                     break;
+                // case 'udp':
+                //     html += ("<tr><td><b>tcp</b></td><td>Port " + json[i].port + "</td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
+                //     break;
                 case 'rest':
                     /*
                      "port": 8080,

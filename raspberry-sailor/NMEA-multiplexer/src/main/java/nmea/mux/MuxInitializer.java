@@ -539,6 +539,7 @@ public class MuxInitializer {
                             int baudrate = Integer.parseInt(muxProps.getProperty(String.format("forward.%s.baudrate", MUX_IDX_FMT.format(fwdIdx))));
                             String propFileSerial = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String serialSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String serialVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder serialForwarder;
                                 if (serialSubClass == null) {
@@ -546,9 +547,14 @@ public class MuxInitializer {
                                 } else {
                                     serialForwarder = (SerialWriter) Class.forName(serialSubClass.trim()).getConstructor(String.class, Integer.class).newInstance(serialPort, baudrate);
                                 }
-                                if (propFileSerial != null) {
+                                if (propFileSerial != null || serialVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(propFileSerial));
+                                    if (propFileSerial != null) {
+                                        forwarderProps.load(new FileReader(propFileSerial));
+                                    }
+                                    if (serialVerbose != null) {
+                                        forwarderProps.setProperty("verbose", serialVerbose.trim());
+                                    }
                                     serialForwarder.setProperties(forwarderProps);
                                 }
                                 serialForwarder.init();
@@ -561,6 +567,7 @@ public class MuxInitializer {
                             String tcpPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String tcpVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder tcpForwarder;
                                 if (tcpSubClass == null) {
@@ -568,9 +575,14 @@ public class MuxInitializer {
                                 } else {
                                     tcpForwarder = (TCPServer) Class.forName(tcpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(tcpPort));
                                 }
-                                if (tcpPropFile != null) {
+                                if (tcpPropFile != null || tcpVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(tcpPropFile));
+                                    if (tcpPropFile != null) {
+                                        forwarderProps.load(new FileReader(tcpPropFile));
+                                    }
+                                    if (tcpVerbose != null) {
+                                        forwarderProps.setProperty("verbose", tcpVerbose.trim());
+                                    }
                                     tcpForwarder.setProperties(forwarderProps);
                                 }
                                 tcpForwarder.init();
@@ -579,6 +591,28 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
+//                        case "udp": // Forwarder
+//                            String udpPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
+//                            String udpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
+//                            String udpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+//                            try {
+//                                Forwarder udpForwarder;
+//                                if (udpSubClass == null) {
+//                                    udpForwarder = new UDPServer(Integer.parseInt(udpPort));
+//                                } else {
+//                                    udpForwarder = (UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
+//                                }
+//                                if (udpPropFile != null) {
+//                                    Properties forwarderProps = new Properties();
+//                                    forwarderProps.load(new FileReader(udpPropFile));
+//                                    udpForwarder.setProperties(forwarderProps);
+//                                }
+//                                udpForwarder.init();
+//                                nmeaDataForwarders.add(udpForwarder);
+//                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+//                            }
+//                            break;
                         case "rest": // Forwarder
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
@@ -610,7 +644,7 @@ public class MuxInitializer {
                                 if (restSubClass == null) {
                                     restForwarder = new RESTPublisher();
                                 } else {
-                                    restForwarder = (RESTPublisher) Class.forName(restSubClass.trim()).getConstructor(Integer.class).newInstance();
+                                    restForwarder = (RESTPublisher) Class.forName(restSubClass.trim()).getConstructor().newInstance();
                                 }
                                 if (restPropFile != null) {
                                     Properties forwarderProps = new Properties();
@@ -632,6 +666,7 @@ public class MuxInitializer {
                             String gpsdPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
                             String gpsdPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String gpsdSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String gpsdVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder gpsdForwarder;
                                 if (gpsdSubClass == null) {
@@ -639,9 +674,14 @@ public class MuxInitializer {
                                 } else {
                                     gpsdForwarder = (GPSdServer) Class.forName(gpsdSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(gpsdPort));
                                 }
-                                if (gpsdPropFile != null) {
+                                if (gpsdPropFile != null || gpsdVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(gpsdPropFile));
+                                    if (gpsdPropFile != null) {
+                                        forwarderProps.load(new FileReader(gpsdPropFile));
+                                    }
+                                    if (gpsdVerbose != null) {
+                                        forwarderProps.setProperty("verbose", gpsdVerbose.trim());
+                                    }
                                     gpsdForwarder.setProperties(forwarderProps);
                                 }
                                 gpsdForwarder.init();
@@ -660,8 +700,8 @@ public class MuxInitializer {
                             String logDir = muxProps.getProperty(String.format("forward.%s.log.dir", MUX_IDX_FMT.format(fwdIdx)));
                             String split = muxProps.getProperty(String.format("forward.%s.split", MUX_IDX_FMT.format(fwdIdx)));
                             String flush = muxProps.getProperty(String.format("forward.%s.flush", MUX_IDX_FMT.format(fwdIdx)));
+                            String fileVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
-                            // TODO verbose on all forwarders ?
                             if (verbose && sentenceFilters != null) {
                                 spitOutSentenceFilters(sentenceFilters);
                             }
@@ -680,9 +720,14 @@ public class MuxInitializer {
                                                 .newInstance(fName, append);
                                     }
                                 }
-                                if (propFile != null) {
+                                if (propFile != null || fileVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(propFile));
+                                    if (propFile != null) {
+                                        forwarderProps.load(new FileReader(propFile));
+                                    }
+                                    if (fileVerbose != null) {
+                                        forwarderProps.setProperty("verbose", fileVerbose.trim());
+                                    }
                                     fileForwarder.setProperties(forwarderProps);
                                 }
                                 fileForwarder.init();
@@ -695,6 +740,7 @@ public class MuxInitializer {
                             String wsUri = muxProps.getProperty(String.format("forward.%s.wsuri", MUX_IDX_FMT.format(fwdIdx)));
                             String wsPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String wsSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String wsVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder wsForwarder;
                                 if (wsSubClass == null) {
@@ -702,9 +748,14 @@ public class MuxInitializer {
                                 } else {
                                     wsForwarder = (WebSocketWriter) Class.forName(wsSubClass.trim()).getConstructor(String.class).newInstance(wsUri);
                                 }
-                                if (wsPropFile != null) {
+                                if (wsPropFile != null || wsVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(wsPropFile));
+                                    if (wsPropFile != null) {
+                                        forwarderProps.load(new FileReader(wsPropFile));
+                                    }
+                                    if (wsVerbose != null) {
+                                        forwarderProps.setProperty("verbose", wsVerbose.trim());
+                                    }
                                     wsForwarder.setProperties(forwarderProps);
                                 }
                                 wsForwarder.init();
@@ -717,6 +768,7 @@ public class MuxInitializer {
                             String wspUri = muxProps.getProperty(String.format("forward.%s.wsuri", MUX_IDX_FMT.format(fwdIdx)));
                             String wspPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String wspSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String wspVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder wspForwarder;
                                 if (wspSubClass == null) {
@@ -724,9 +776,14 @@ public class MuxInitializer {
                                 } else {
                                     wspForwarder = (WebSocketProcessor) Class.forName(wspSubClass.trim()).getConstructor(String.class).newInstance(wspUri);
                                 }
-                                if (wspPropFile != null) {
+                                if (wspPropFile != null || wspVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(wspPropFile));
+                                    if (wspPropFile != null) {
+                                        forwarderProps.load(new FileReader(wspPropFile));
+                                    }
+                                    if (wspVerbose != null) {
+                                        forwarderProps.setProperty("verbose", wspVerbose.trim());
+                                    }
                                     wspForwarder.setProperties(forwarderProps);
                                 }
                                 wspForwarder.init();
@@ -739,15 +796,21 @@ public class MuxInitializer {
                             try {
                                 String consolePropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                                 String consoleSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                                String consoleVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                                 Forwarder consoleForwarder = new ConsoleWriter();
                                 if (consoleSubClass == null) {
                                     consoleForwarder = new ConsoleWriter();
                                 } else {
                                     consoleForwarder = (ConsoleWriter) Class.forName(consoleSubClass.trim()).getConstructor().newInstance();
                                 }
-                                if (consolePropFile != null) {
+                                if (consolePropFile != null || consoleVerbose  != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(consolePropFile));
+                                    if (consolePropFile != null) {
+                                        forwarderProps.load(new FileReader(consolePropFile));
+                                    }
+                                    if (consoleVerbose != null) {
+                                        forwarderProps.setProperty("verbose", consoleVerbose.trim());
+                                    }
                                     consoleForwarder.setProperties(forwarderProps);
                                 }
                                 consoleForwarder.init();
@@ -761,6 +824,7 @@ public class MuxInitializer {
                             String rmiName = muxProps.getProperty(String.format("forward.%s.name", MUX_IDX_FMT.format(fwdIdx)));
                             String rmiPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String subClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx))); // TODO Manage that one...
+                            String rmiVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder rmiServerForwarder;
                                 if (rmiName != null && !rmiName.trim().isEmpty()) {
@@ -768,9 +832,14 @@ public class MuxInitializer {
                                 } else {
                                     rmiServerForwarder = new RMIServer(Integer.parseInt(rmiPort));
                                 }
-                                if (rmiPropFile != null) {
+                                if (rmiPropFile != null || rmiVerbose != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(rmiPropFile));
+                                    if (rmiPropFile != null) {
+                                        forwarderProps.load(new FileReader(rmiPropFile));
+                                    }
+                                    if (rmiVerbose != null) {
+                                        forwarderProps.setProperty("verbose", rmiVerbose.trim());
+                                    }
                                     rmiServerForwarder.setProperties(forwarderProps);
                                 }
                                 rmiServerForwarder.init();
@@ -793,6 +862,7 @@ public class MuxInitializer {
                             String qs = muxProps.getProperty(String.format("forward.%s.rest.query.string", MUX_IDX_FMT.format(fwdIdx)));
                             String closeResource = muxProps.getProperty(String.format("forward.%s.rest.onclose.resource", MUX_IDX_FMT.format(fwdIdx)));
                             String closeVerb = muxProps.getProperty(String.format("forward.%s.rest.onclose.verb", MUX_IDX_FMT.format(fwdIdx)));
+                            // TODO, properties ?
                             try {
                                 if (strPort != null) {
                                     restPort = Integer.parseInt(strPort);
