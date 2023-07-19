@@ -287,11 +287,11 @@ function showGeneratedDialog(station) {
         let data = getCurveData(tideStation);
         console.log("CurveData Done");
         // Example: 
-        // console.log(`${data.tideTable[0].type}: at ${dateFmt.formatDate(data.tideTable[0].at, 'd-m-y H:m')}, ${data.tideTable[0].wh} ${data.tideTable[0].unit}`)
+        // console.log(`${data.tideTable[0].type}: at ${dateFmt.formatDate(data.tideTable[0].at, 'd-m-y H:i')}, ${data.tideTable[0].wh} ${data.tideTable[0].unit}`)
         let tableContent = "<pre>";
         data.tideTable.forEach(line => {
-            console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-m-y H:m')}, ${line.wh} ${line.unit}`);
-            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-m-y H:m')}, ${line.wh.toFixed(2)} ${line.unit}\n`);
+            console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')} (${line.at}), ${line.wh} ${line.unit}`);
+            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}\n`);
         });
         tableContent += "</pre>";
         // Draw the graph.
