@@ -466,6 +466,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     "verb": "PUT",
                     "description": "Clean the screen."
                 }, {
+                    "path": PATH_PREFIX + "/bye-and-clear-screen",
+                    "verb": "PUT",
+                    "description": "Says bye, then clean the screen."
+                }, {
                     "path": PATH_PREFIX + "/exit",
                     "verb": "POST",
                     "description": "Careful: terminate the server process."
@@ -581,7 +585,39 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path == PATH_PREFIX + "/clear-screen":
             try:
-                # Clear screen
+                clear()
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+            except Exception as error:
+                error: str = f"Exception {repr(error)}\n"
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain')
+                content_len = len(error)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(bytes(error, 'utf-8'))
+        elif self.path == PATH_PREFIX + "/bye-and-clear-screen":
+            try:
+                global keep_looping
+                keep_looping = False
+                time.sleep(1.5)
+                # Clear screen. Say Bye for 1 second before clearing the screen.
+                clear()
+                text: str = "Bye SSD1306"
+                (font_width, font_height) = font.getsize(text)
+                draw.text(
+                    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+                    text,
+                    font=font,
+                    fill=WHITE,
+                )
+                # Display image
+                oled.image(image)
+                oled.show()
+                time.sleep(1)  # Give time to read the screen.
                 clear()
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
@@ -620,6 +656,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
+#
+# That one is THE display manager.
+# Whatever is displayed, the way it is displayed,
+# this is done here. It takes the values from the nmea_cache.
+#
 def format_data(id: str) -> List[str]:
     global nmea_cache
 

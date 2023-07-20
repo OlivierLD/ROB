@@ -120,6 +120,7 @@ public class NMEACachePublisher implements Forwarder {
                 while (keepWorking) {
                     NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
                     try {
+                        // TODO An option to minimize the cache ?
                         final String jsonCache = mapper.writeValueAsString(cache);
                         try {
                             // Java 11

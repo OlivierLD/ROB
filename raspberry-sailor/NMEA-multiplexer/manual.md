@@ -458,7 +458,7 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     # rest.query.string: ""
     verbose: true
   ```
-  - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `COntent-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.
+  - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.
   Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.  
   See such an example in `REST_SSD1306_server_v2.py`, it is a REST server written in Python, displaying data on an SSD1306 oled screen.
 

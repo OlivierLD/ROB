@@ -8,7 +8,7 @@ if [[ ${NB_L} == 0 ]]; then
   echo No MUX process found.
 fi
 for pid in `cat km`; do
-  echo Killing process ${pid}
+  echo Killing MUX process ${pid}
   ${SUDO} kill -15 ${pid}
 done
 rm km
@@ -16,7 +16,8 @@ rm km
 ps -ef | grep python | grep REST | awk '{ print $2 }' > server.id.txt
 #
 for pid in `cat server.id.txt`; do
-  echo Killing process ${pid}
+  sleep 5  # Give time to shutdown
+  echo Killing REST process ${pid}
   sudo kill -9 ${pid}
 done
 rm server.id.txt
@@ -24,7 +25,7 @@ rm server.id.txt
 ps -ef | grep python | grep TCP_ | awk '{ print $2 }' > server.id.txt
 #
 for pid in `cat server.id.txt`; do
-  echo Killing process ${pid}
+  echo Killing TCP process ${pid}
   sudo kill -9 ${pid}
 done
 rm server.id.txt
