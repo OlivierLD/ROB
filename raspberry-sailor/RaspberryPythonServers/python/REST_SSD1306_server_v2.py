@@ -17,6 +17,9 @@
 # Work In Progress !
 # Do run a curl -X GET /ssd1306/oplist !
 #
+# See https://readthedocs.org/projects/adafruit-circuitpython-ssd1306/
+# For drawings: https://learn.adafruit.com/micropython-hardware-ssd1306-oled-display/circuitpython#drawing-2902524
+#
 import json
 import sys
 import os
