@@ -1763,6 +1763,18 @@
             evt.currentTarget.className += " active";
         }
 
+        function expandOrCollapse(origin) {
+            console.log(origin);
+            let theZone = document.getElementById('grib-and-faxes');
+            if (origin.innerText === 'Collapse') {
+                theZone.style.maxHeight = '20px';
+                origin.innerText = 'Expand';
+            } else {
+                theZone.style.maxHeight = null;
+                origin.innerText = 'Collapse';
+            }
+        }
+
     </script>
         
 </head>
@@ -2046,39 +2058,42 @@
                     <button onclick="changeCanvasSize(0.9);">-</button>
                     <button onclick="changeCanvasSize(1.1);">+</button>
                     <hr/>
-                    <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
-                        <table>
-                            <tr>
-                                <th>GRIB Date</th>
-                                <th>Data Type</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select id="grib-dates" onchange="redraw(this)"></select>
-                                </td>
-                                <td>
-                                    <select id="grib-types" onchange="redraw()"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
-                                    Scroll through dates
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
-                        <!--span>Show faxes checkbox (TODO)</span-->
-                        <table id="fax-table" class="bordered">
-                            <tr>
-                                <th>Show</th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>x</th>
-                                <th>y</th>
-                                <th>zoom</th>
-                            </tr>
-                        </table>
+                    <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; overflow: scroll;">
+                        <span onmouseover="this.style.cursor='pointer';" onclick="expandOrCollapse(this);">Collapse</span>
+                        <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
+                            <table>
+                                <tr>
+                                    <th>GRIB Date</th>
+                                    <th>Data Type</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select id="grib-dates" onchange="redraw(this)"></select>
+                                    </td>
+                                    <td>
+                                        <select id="grib-types" onchange="redraw()"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
+                                        Scroll through dates
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
+                            <!--span>Show faxes checkbox (TODO)</span-->
+                            <table id="fax-table" class="bordered">
+                                <tr>
+                                    <th>Show</th>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>x</th>
+                                    <th>y</th>
+                                    <th>zoom</th>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                     <div id="min-max-data" class="table-style" style="background: transparent; font-family:'Courier New', Courier, monospace;">
                         <div id="max-wind"></div>
@@ -2095,7 +2110,7 @@
 
 <!-- For now, test only -->
 <div id="tab-02" style="display: none;">
-    <h4>Routing - WiP</h4>
+    <h3>Routing - WiP</h3>
     <div>
         Click on map sets:
         <input type="radio" name="from-to" value="position" id="rb-position" checked>Start from (position)
