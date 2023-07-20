@@ -1904,100 +1904,8 @@
                 <div id="map-container" class="map-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
                     <canvas id="mapCanvas" width="1400" height="900"></canvas>
                 </div>
-            </td>
-            <td valign="top" rowspan="5" style="border: 1px solid transparent;">
-                <!--div style 350px; height: 600px; resize: both; overflow-x: scroll; overflow-y: scroll;"-->
-                <div class="control-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
-                    <input type="checkbox" onchange="changeChart(this);" checked/> With Chart&nbsp;
-                    <input type="checkbox" onchange="changeGrid(this);" checked/> With Grid&nbsp;
-                    <input type="checkbox" onchange="changeTropics(this);"/> With Tropics
-                    <br/>
-                    <input id="grib-checkbox" type="checkbox" onchange="changeGRIB(this);" disabled/> With GRIB Data
-                    <input id="wind-color-checkbox" type="checkbox" checked/> Color Wind
-                    <br/>
-                    <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
-                    <hr/>
-                    <select id="composites" 
-                            onchange="updateGRIBRequest(this); displayCompositeInfo();" 
-                            onmouseover="displayCompositeInfo();"></select> 
-                      <!--  onmouseleave="hideCompositeInfo();"></select --> 
-                    <br/>                            
-                    <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
 
-                    <input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours
-
-                    <div id="composite-info"></div>
-
-                    <hr/>
-                    <input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
-                    <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage
-                    <!-- hr/ -->
-                    <div id="grib-web">
-                    </div>
-                    <div id="grib-json" style="display: none;">
-                        <button onclick="getCompositeList();">Get Composites list</button>
-                        <input type="text" id="comp-name-filter" placeholder="Composite Name Filter"
-                               title="Enter the Composite key, or any part of the name of the directory the composite lives in."/>
-                        <div id="composite-list" class="complist-style"></div>
-                    </div>
-                    <hr/>
-                    Zoom for the whole thing:
-                    <button onclick="changeCanvasSize(0.9);">-</button>
-                    <button onclick="changeCanvasSize(1.1);">+</button>
-                    <hr/>
-                    <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
-                        <table>
-                            <tr>
-                                <th>GRIB Date</th>
-                                <th>Data Type</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select id="grib-dates" onchange="redraw(this)"></select>
-                                </td>
-                                <td>
-                                    <select id="grib-types" onchange="redraw()"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
-                                    Scroll through dates
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
-                        <!--span>Show faxes checkbox (TODO)</span-->
-                        <table id="fax-table" class="bordered">
-                            <tr>
-                                <th>Show</th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>x</th>
-                                <th>y</th>
-                                <th>zoom</th>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="min-max-data" class="table-style" style="background: transparent; font-family:'Courier New', Courier, monospace;">
-                        <div id="max-wind"></div>
-                        <div id="min-max-atemp"></div>
-                        <div id="max-waves"></div>
-                        <div id="max-prate"></div>
-                    </div>
-                    <div id="mouse-data" class="table-style" style="color: black;"></div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="1" style="border: 1px solid transparent;">
-                <div id="err-mess"></div>
-            </td>
-        </tr>
-        <tr>
-            <!-- Web Components for the GRIB Here -->
-            <td title="GRIB Data at the mouse" style="height: 0; border: 1px solid orange; border-radius: 5px;">
-                <div id="grib-web-comps" style="display: none; overflow: auto;">
+                <div id="grib-web-comps" style="display: none; overflow: auto; width: 100%; border: 1px solid orange; border-radius: 5px; margin: 5px;">
                     <div style="display: grid;
                                 grid-template-columns: auto auto auto auto auto auto;
                                 grid-template-areas: 'top top top top top top' 'middle-01 middle-02 middle-03 middle-04 middle-05 middle-06' 'bottom bottom bottom bottom bottom bottom';">
@@ -2096,19 +2004,98 @@
                                         height="60"></beaufort-scale>
                     </div>                            
                 </div>
+
+            </td>
+            <td valign="top" rowspan="1" style="border: 1px solid transparent;">
+                <!--div style 350px; height: 600px; resize: both; overflow-x: scroll; overflow-y: scroll;"-->
+                <div class="control-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
+                    <input type="checkbox" onchange="changeChart(this);" checked/> With Chart&nbsp;
+                    <input type="checkbox" onchange="changeGrid(this);" checked/> With Grid&nbsp;
+                    <input type="checkbox" onchange="changeTropics(this);"/> With Tropics
+                    <br/>
+                    <input id="grib-checkbox" type="checkbox" onchange="changeGRIB(this);" disabled/> With GRIB Data
+                    <input id="wind-color-checkbox" type="checkbox" checked/> Color Wind
+                    <br/>
+                    <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
+                    <hr/>
+                    <select id="composites" 
+                            onchange="updateGRIBRequest(this); displayCompositeInfo();" 
+                            onmouseover="displayCompositeInfo();"></select> 
+                      <!--  onmouseleave="hideCompositeInfo();"></select --> 
+                    <br/>                            
+                    <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
+
+                    <input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours
+
+                    <div id="composite-info"></div>
+
+                    <hr/>
+                    <input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
+                    <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage
+                    <!-- hr/ -->
+                    <div id="grib-web">
+                    </div>
+                    <div id="grib-json" style="display: none;">
+                        <button onclick="getCompositeList();">Get Composites list</button>
+                        <input type="text" id="comp-name-filter" placeholder="Composite Name Filter"
+                               title="Enter the Composite key, or any part of the name of the directory the composite lives in."/>
+                        <div id="composite-list" class="complist-style"></div>
+                    </div>
+                    <hr/>
+                    Zoom for the whole thing:
+                    <button onclick="changeCanvasSize(0.9);">-</button>
+                    <button onclick="changeCanvasSize(1.1);">+</button>
+                    <hr/>
+                    <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
+                        <table>
+                            <tr>
+                                <th>GRIB Date</th>
+                                <th>Data Type</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="grib-dates" onchange="redraw(this)"></select>
+                                </td>
+                                <td>
+                                    <select id="grib-types" onchange="redraw()"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
+                                    Scroll through dates
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
+                        <!--span>Show faxes checkbox (TODO)</span-->
+                        <table id="fax-table" class="bordered">
+                            <tr>
+                                <th>Show</th>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>zoom</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="min-max-data" class="table-style" style="background: transparent; font-family:'Courier New', Courier, monospace;">
+                        <div id="max-wind"></div>
+                        <div id="min-max-atemp"></div>
+                        <div id="max-waves"></div>
+                        <div id="max-prate"></div>
+                    </div>
+                    <div id="mouse-data" class="table-style" style="color: black;"></div>
+                </div>
             </td>
         </tr>
-        <!--tr>
-            <td valign="top" style="border: 1px solid transparent;">
-                <div id="message-zone" class="mess-zone"></div>
-                <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
-            </td>
-        </tr-->
     </table>
 </div>
 
 <!-- For now, test only -->
 <div id="tab-02" style="display: none;">
+    <h4>Routing - WiP</h4>
     <div>
         Click on map sets:
         <input type="radio" name="from-to" value="position" id="rb-position" checked>Start from (position)
@@ -2164,6 +2151,7 @@
 </div>
 
 <div id="tab-errors" style="display: none;">
+    <div id="err-mess"></div>
     <!-- Messages -->
     <div id="message-zone" class="mess-zone" style="margin: 10px;"></div>
     <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
@@ -2173,7 +2161,6 @@
 <div style="min-height: 16px;">
     <span id="current-grib-location"></span>
 </div>
-<!-- End of Test -->
 
 <table width="100%" cellpadding="0" cellspacing="0"> <!--  style="position: fixed; bottom: 0;" -->
     <tr>
