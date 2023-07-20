@@ -123,7 +123,7 @@
             font-family: 'Courier New', 'Source Code Pro', Helvetica, Geneva; 
             padding: 1px; border-radius: 5px; 
             border: 1px solid #CCC; 
-            height: 100px; 
+            height: 300px; 
             max-width: 886px;
             /* width: 900px; */
             min-width: 100px;
@@ -1749,6 +1749,20 @@
                 }
             }
         };
+
+        const TABS = ['tab-01', 'tab-02', 'tab-errors'];
+
+        function openTab(evt, tabNum) {
+            let tabLinks = document.getElementsByClassName("tablinks");
+            for (let i=0; i<tabLinks.length; i++) {
+                tabLinks[i].className = tabLinks[i].className.replace(" active", ""); // Reset
+            }
+            for (let i=0; i<TABS.length; i++) {
+                document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
+            }
+            evt.currentTarget.className += " active";
+        }
+
     </script>
         
 </head>
@@ -1875,9 +1889,15 @@
     </div>
 </dialog>
     
-
 <h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP) <span id="time-last-load"></span> <span id="time-to-next"></span></h2>
-<div>
+
+<div class="tab" style="display: grid; grid-template-columns: auto auto auto;">
+    <button class="tablinks active" onclick="openTab(event, 0);">Main</button>
+    <button class="tablinks" onclick="openTab(event, 1);">Routing</button>
+    <button class="tablinks" onclick="openTab(event, 2);">Messages</button>
+</div>
+
+<div id="tab-01" style="display: block;">
     <table width="100%" style="border: 2px solid transparent;">
         <tr>
             <td valign="top" rowspan="1" style="width: 880px; height: 200px;"> 
@@ -2078,70 +2098,77 @@
                 </div>
             </td>
         </tr>
-        <tr>
+        <!--tr>
             <td valign="top" style="border: 1px solid transparent;">
-                <!-- Messages -->
                 <div id="message-zone" class="mess-zone"></div>
                 <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
             </td>
-        </tr>
+        </tr-->
     </table>
 </div>
 
-<!-- For tests, only -->
-<hr/>
-<div>
-    Click on map sets:
-    <input type="radio" name="from-to" value="position" id="rb-position" checked>Start from (position)
-    <input type="radio" name="from-to" value="going-to" id="rb-going-to">Going to
+<!-- For now, test only -->
+<div id="tab-02" style="display: none;">
+    <div>
+        Click on map sets:
+        <input type="radio" name="from-to" value="position" id="rb-position" checked>Start from (position)
+        <input type="radio" name="from-to" value="going-to" id="rb-going-to">Going to
+    </div>
+    Going to: Latitude:
+    <select id="routing-pos-lat-sign-01">
+        <option value="N" selected>N</option>
+        <option value="S">S</option>
+    </select>
+    <input type="number"
+        id="routing-pos-lat-deg-01"
+        placeholder="Deg"
+        title="Lat degrees to set"
+        style="width: 40px; text-align: center;"
+        min="0"
+        max="90"
+        step="1"
+        value="0"/>
+    <input type="number"
+        id="routing-pos-lat-min-01"
+        placeholder="Minutes"
+        title="Lat minutes to set"
+        style="width: 60px; text-align: center;"
+        min="0"
+        max="59.99"
+        step="0.01"
+        value="00.00"/>
+    &nbsp;&nbsp;Longitude:
+    <select id="routing-pos-lng-sign-01">
+        <option value="E" selected>E</option>
+        <option value="W">W</option>
+    </select>
+    <input type="number"
+        id="routing-pos-lng-deg-01"
+        placeholder="Deg"
+        title="Lng degrees to set"
+        style="width: 40px; text-align: center;"
+        min="0"
+        max="180"
+        step="1"
+        value="0"/>
+    <input type="number"
+        id="routing-pos-lng-min-01"
+        placeholder="Minutes"
+        title="Lng minutes to set"
+        style="width: 60px; text-align: center;"
+        min="0"
+        max="59.99"
+        step="0.01"
+        value="00.00"/>
+    <button onclick="showRoutingDialog();" title="Early test, no UI. Work in Progress." style="color: red;">Routing <b><i>Test</i></b></button>
 </div>
-Going to: Latitude:
-<select id="routing-pos-lat-sign-01">
-    <option value="N" selected>N</option>
-    <option value="S">S</option>
-</select>
-<input type="number"
-       id="routing-pos-lat-deg-01"
-       placeholder="Deg"
-       title="Lat degrees to set"
-       style="width: 40px; text-align: center;"
-       min="0"
-       max="90"
-       step="1"
-       value="0"/>
-<input type="number"
-       id="routing-pos-lat-min-01"
-       placeholder="Minutes"
-       title="Lat minutes to set"
-       style="width: 60px; text-align: center;"
-       min="0"
-       max="59.99"
-       step="0.01"
-       value="00.00"/>
-&nbsp;&nbsp;Longitude:
-<select id="routing-pos-lng-sign-01">
-    <option value="E" selected>E</option>
-    <option value="W">W</option>
-</select>
-<input type="number"
-       id="routing-pos-lng-deg-01"
-       placeholder="Deg"
-       title="Lng degrees to set"
-       style="width: 40px; text-align: center;"
-       min="0"
-       max="180"
-       step="1"
-       value="0"/>
-<input type="number"
-       id="routing-pos-lng-min-01"
-       placeholder="Minutes"
-       title="Lng minutes to set"
-       style="width: 60px; text-align: center;"
-       min="0"
-       max="59.99"
-       step="0.01"
-       value="00.00"/>
-<button onclick="showRoutingDialog();" title="Early test, no UI. Work in Progress." style="color: red;">Routing <b><i>Test</i></b></button>
+
+<div id="tab-errors" style="display: none;">
+    <!-- Messages -->
+    <div id="message-zone" class="mess-zone" style="margin: 10px;"></div>
+    <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
+</div>
+
 <hr/>
 <div style="min-height: 16px;">
     <span id="current-grib-location"></span>
