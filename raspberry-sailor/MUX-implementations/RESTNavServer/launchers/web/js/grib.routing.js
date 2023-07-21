@@ -337,8 +337,9 @@ let getBGColor = function(value, type) {
 				color = 'rgba(255, 0, 0,' + Math.min((value - 273) / (323 - 273), 1) + ')'; // Red
 			}
 			break;
-		case 'htsgw': // green, [0..15]
-			color = 'rgba(0, 100, 0,' + Math.min((value) / 15, 1) + ')';
+		case 'htsgw': 
+			let maxGreen = 6.5; // in meters, green[0..maxGreen]. TODO a prm ?
+			color = 'rgba(0, 100, 0,' + Math.min(1, Math.min((value) / maxGreen, 1)) + ')';
 			break;
 		default:
 			break;
@@ -548,7 +549,6 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 				}
 			}
 			
-
 			// DEBUG, print cell coordinates IN the cell.
 			if (DEBUG) {
 				let label = "h:" + hGRIB;

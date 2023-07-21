@@ -1376,6 +1376,8 @@
                         selectedIndex = 0;
                     }
                     gribDatesList.options.selectedIndex = selectedIndex;
+                    // GRIB Slider ?
+                    updateSlider(gribDatesList);
                     // Redraw, and find min/max
                     redraw(gribDatesList);
                 }, 2000);
@@ -2114,9 +2116,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">
-                                        Scroll through dates
-                                    </td>
+                                    <td colspan="2"><input type="checkbox" onchange="scrollGribs(this);">Auto-scroll through dates</td>
                                 </tr>
                             </table>
                         </div>
