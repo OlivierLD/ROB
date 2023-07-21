@@ -1,7 +1,8 @@
 # TODOs, ideas, and so.
 
 ### Sun Path Web Component
-- Extended to any celestial body, any hemisphere, tropical zone(s).
+- Extended to _**any**_ celestial body, any hemisphere, tropical zone(s).
+- Constellations &#9989;
 
 ### Rhumblines and Great Circles on the WorldMap
 - Great Circle (with `doAfter` callback on the WorldMap WebComponent) &#9989;
@@ -10,6 +11,7 @@
 - Transparent top
 - External GPS
 - Larger screen (like Nokia)
+- eInk and Papirus
 - 2/4-button interface: Back, Yes, Select, No.
 
 ### Lightweight TCP client
@@ -26,8 +28,8 @@
 
 ### Routing
 - In progress. Best route OK
-  - TODO: GRIB version 2.
-- Get all isochronals, TODO
+  - _TODO_: GRIB version 2.
+- Get all isochronals, _TODO_
 
 ### Document the way to use `screen`
 See <https://linuxize.com/post/how-to-use-linux-screen/>
