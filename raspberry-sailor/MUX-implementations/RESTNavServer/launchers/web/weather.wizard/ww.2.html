@@ -1475,14 +1475,17 @@
 
             // 1.1 Grib date slider
             let gribSlider = document.getElementById("grib-slider");
+            gribSlider.value = 0; // Reset
             gribSlider.max = jsonGrib.length - 1;
             gribSlider.oninput = (evt) => {
                 // console.log(`Slider value is now ${evt.target.value}`);
                 gribDate01.value = gribFormattedDate[evt.target.value];
+                document.getElementById("grib-slider").title = gribFormattedDate[evt.target.value];
                 // Sync with drop-down list
                 document.getElementById("grib-dates").value = gribFormattedDate[evt.target.value];
             }
             gribDate01.value = jsonGrib[0].gribDate.formattedUTCDate;
+            document.getElementById("grib-slider").title = jsonGrib[0].gribDate.formattedUTCDate;
 
             // 2. Types
             let gribTypes = document.getElementById("grib-types");
@@ -1953,6 +1956,7 @@
                         <!-- GRIB Slider, tu be updated like 'grib-dates' -->
                         <div id="grib-slider-div" style="grid-area: top2;">
                             <input type="range" id="grib-slider" value="0" min="0" max="200" style="width: 98%; margin-left: 5px; margin-top: 10px;"
+                                   title="GRIB Date"
                                    oninput="/*setPadding(this);*/ gribDate01.value = (this.value);"/>
                             <br/>
                             &nbsp;&nbsp;GRIB Date: <output name="gribDate" id="gribDate01" style="color: cyan;"> - </output>
