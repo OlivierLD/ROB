@@ -1,11 +1,10 @@
 #
-# MUX definition.
+# MUX config definition.
 #
-name: "Replaying logged data, between Bora-Bora & Tongareva"
+name: "Replaying logged data, tacking back in Oyster Point"
 description:
-  - The REST fowarder is for an SSD1306.
-  - It would display plain NMEA sentences
-  - There is something nicer to expect.
+  - First tests on on-the-fly leeway value modification.
+  - See how current calculation is impacted.
 context:
   with.http.server: true
   http.port: 9999
@@ -17,21 +16,16 @@ channels:
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
     zip: true
-    path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
+    path.in.zip:  2010-07-10.tacking.back.in.nmea
     between-records: 1000
     loop: true
     verbose: false
 forwarders:
-  - type: rest
-    rest.protocol: http
-    server.name: 192.168.1.101
-    server.port: 8080
-    rest.resource: /ssd1306/nmea-data
-    rest.verb: PUT
-    http.headers: Content-Type:plain/text
-    verbose: true
   - type: "tcp"
     port: 7001
+  - type: "gpsd"
+    port: 2947
+    properties: mux-configs/gpsd.properties
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m

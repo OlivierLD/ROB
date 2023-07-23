@@ -319,7 +319,7 @@ let getBGColor = function(value, type) {
 			color = 'rgba(0, 0, 255, ' + (1 - Math.min((value - 4700) / (6000 - 4700), 1)) + ')';
 			break;
 		case 'prate': // WAS black, [0..30]. Unit is Kg x m-2 x s-1, which is 1mm.s-1. Turned into mm/h
-			let max = 30;
+			let max = 30; // TODO a prm ?
 			let mm_per_hour = value * 3600;
 			const MULT_FACTOR = 10; // 00; // TODO Tweak that one ?
 			let transp = 	Math.min(((mm_per_hour * MULT_FACTOR) / max), 1);

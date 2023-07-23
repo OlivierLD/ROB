@@ -92,4 +92,8 @@ Displays on the left screenshot are:
 
 The slider on top of the screen can be manually dragged.
 
+## TODO
+- Same as above, but with drag n drop for the data (json) file.
+- Possibility to change the calculated data parameters (Leeway, deviation, etc)
+
 ---

@@ -152,7 +152,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                                                                         |             (there is some current in that one, it's in the SF Bay)                     |"
 	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display (Big file) |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
 	echo -e "|                                                                                         |             (requires a NodeJS WebSocket server to be running)                          |"
-	echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |                                                                                         |"
+	echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |  ${RED}9f${NC}. Tacking back in Oyster Point, with leeway value interaction.                       |"
 	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
 	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
 	echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests.                                                                          |"
@@ -282,6 +282,10 @@ while [[ "${GO}" == "true" ]]; do
 	        ;;
 	      "9e")
 	        PROP_FILE=mux-configs/nmea.mux.bora.fwd.yaml
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9f}
+	        ;;
+	      "9f")
+	        PROP_FILE=mux-configs/nmea.mux.back.in.op.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_9e}
 	        ;;
 	      "10")
@@ -701,6 +705,31 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_9e}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    GO=false
+	    ;;
+	  "9f")
+	    # TODO A web UI like http://localhost:8080/LeafLetAnalysis/one.html
+	    PROP_FILE=mux-configs/nmea.mux.back.in.op.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
+	    export INFRA_VERBOSE=false
+	    # Get date and time from the file
+	    ./runNavServer.sh --mux:${PROP_FILE} ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_9f}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi

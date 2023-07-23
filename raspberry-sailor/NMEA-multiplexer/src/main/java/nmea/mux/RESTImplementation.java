@@ -65,7 +65,8 @@ public class RESTImplementation {
 		MUX_0009("MUX-0009", "Get System Date"),
 		MUX_0010("MUX-0010", "Set Position"),
 		MUX_0011("MUX-0011", "Over Ground"),
-		MUX_0012("MUX-0012", "NMEA Sentence");
+		MUX_0012("MUX-0012", "NMEA Sentence"),
+		MUX_0013("MUX-0013", "Max Leeway");
 
 		private final String label, description;
 		MESSAGE_INDEXES(String label, String description) {
@@ -313,6 +314,16 @@ public class RESTImplementation {
 					REST_PREFIX + "/utc",
 					this::setCurrentTime,
 					"Set 'current' UTC Date."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/max-leeway",
+					this::getMaxLeeway,
+					"Get the max leeway current value"),
+			new Operation(
+					"POST",
+					REST_PREFIX + "/max-leeway",
+					this::setMaxLeeway,
+					"Set the max leeway value"),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/last-sentence",
@@ -3053,6 +3064,54 @@ public class RESTImplementation {
 							.errorCode(MESSAGE_INDEXES.MUX_0011.label())
 							.errorMessage("Request payload not found"));
 			return response;
+		}
+		return response;
+	}
+
+	// Use it like in curl -X POST http://localhost:9999/mux/max-leeway -d 12.0
+	private HTTPServer.Response setMaxLeeway(HTTPServer.Request request) {
+
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+		String payload = new String(request.getContent());
+		if (!"null".equals(payload)) {
+			StringReader stringReader = new StringReader(payload);
+			try {
+				double maxLeeway = mapper.readValue(stringReader, Double.class);
+				ApplicationContext.getInstance().getDataCache().put(NMEADataCache.MAX_LEEWAY, maxLeeway);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode(MESSAGE_INDEXES.MUX_0013.label())
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode(MESSAGE_INDEXES.MUX_0013.label())
+							.errorMessage("Request payload (max-leeway) not found"));
+			return response;
+		}
+		return response;
+	}
+
+	// Use it like in curl [-v] -X GET http://localhost:9999/mux/max-leeway
+	private HTTPServer.Response getMaxLeeway(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+
+		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+		double maxLeeway = (Double) cache.get(NMEADataCache.MAX_LEEWAY);
+
+		try {
+			String content = String.format("{ \"max-leeway\": %f }", maxLeeway);
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+			response.setPayload(content.getBytes());
+		} catch (Exception ex) {
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 		}
 		return response;
 	}
