@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # Suitable for LeafLet. Spits out positions in JSON format, and much more.
+# Can be used to find boat's parameters, like max-leeway.
 #
 if [[ $# == 0 ]]; then
   echo -e "Several CLI prms are available:"
@@ -8,7 +9,9 @@ if [[ $# == 0 ]]; then
   echo -e "--archive-name:sample-data/logged.data.archive.zip"
   echo -e "--dev-curve:dp_2011_04_15.csv"
   echo -e "--polar-file:CheoyLee42.polar-coeff"
+  echo -e "--max-leeway:10"
   echo -e "--current-buffer-length:600000"
+  echo -e "--output-file-name:/path/to/output.json"
   echo -e "example: ${0} --file-name:sample-data/2010-11.03.Taiohae.nmea"
   echo -e "We need at least the --file-name:xxxx "
   exit 1

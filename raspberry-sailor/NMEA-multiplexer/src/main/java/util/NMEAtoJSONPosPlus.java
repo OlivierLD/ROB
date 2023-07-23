@@ -5,10 +5,10 @@ import calc.GreatCirclePoint;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import context.ApplicationContext;
-import context.NMEADataCache;
+// import context.ApplicationContext;
+// import context.NMEADataCache;
 import gribprocessing.utils.PolarHelper;
-import nmea.computers.current.LongTimeCurrentCalculator;
+// import nmea.computers.current.LongTimeCurrentCalculator;
 import nmea.parser.*;
 import nmea.utils.NMEAUtils;
 
@@ -429,6 +429,8 @@ public class NMEAtoJSONPosPlus {
 	private static double hdgOffset = 0.0;
 	private static double maxLeeway = 10.0;
 
+	private static boolean calculateTWwithGPS = true;
+
 	private static CurrentComputer currentComputer = null;
 	private static void transform(String fileInName,
 								  String archiveName,
@@ -527,7 +529,7 @@ public class NMEAtoJSONPosPlus {
 								// Compute TRUE wind
 								if (aws != null) {
 									double[] tw;
-									if (true) {
+									if (calculateTWwithGPS) {
 										// System.out.println("Using the GOOD method");
 										tw = NMEAUtils.calculateTWwithGPS(aws,
 												awsCoeff,
@@ -639,13 +641,16 @@ public class NMEAtoJSONPosPlus {
 		final double avgBsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
 		final double avgSog = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
 		final double avgCsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
-		final double avgPerf = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		final double avgPerf = (polarFileName != null) ? jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble() : 0d;
 
 		// StdDev = sqrt(variance). Variance = avg((x - mean)^2). Good doc at https://www.mathsisfun.com/data/standard-deviation.html
 		double stdDevBsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgBsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevSog = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgSog - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevCsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgCsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
-		double stdDevPerf = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgPerf - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevPerf = 0d;
+		if (polarFileName != null) {
+			Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgPerf - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		}
 
 		System.out.printf("BSP in [%f, %f], avg %f, std %f\n", minBsp.get(), maxBsp.get(), avgBsp, stdDevBsp);
 		System.out.printf("SOG in [%f, %f], avg %f, std %f\n", minSog.get(), maxSog.get(), avgSog, stdDevSog);
@@ -679,6 +684,7 @@ public class NMEAtoJSONPosPlus {
 	private final static String DEV_CURVE_PREFIX = "--dev-curve:";
 	private final static String POLAR_FILE_PREFIX = "--polar-file:";
 	private final static String CC_BUFFER_LENGTH_PREFIX = "--current-buffer-length:";
+	private final static String CALCULATE_TW_WITH_GPS = "--calc-tw-with-gps:";
 
 	public static void main(String... args) {
 
@@ -716,6 +722,8 @@ public class NMEAtoJSONPosPlus {
 					maxLeeway = Double.parseDouble(arg.substring(MAX_LEEWAY_PREFIX.length()));
 				} else if (arg.startsWith(CC_BUFFER_LENGTH_PREFIX)) {
 					currentComputerBufferLength = Long.parseLong(arg.substring(CC_BUFFER_LENGTH_PREFIX.length()));
+				} else if (arg.startsWith(CALCULATE_TW_WITH_GPS)) {
+					calculateTWwithGPS = "true".equals(arg.substring(CALCULATE_TW_WITH_GPS.length()));
 				}
 			}
 		}

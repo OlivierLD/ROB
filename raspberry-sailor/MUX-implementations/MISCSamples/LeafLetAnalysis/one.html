@@ -723,7 +723,9 @@ compass-rose .day {
     // Used as an example, See "// markers" below. Used to hold pictures.
     const MARKERS = [];
 
-    const trackData = '../data/2010-07-10.tacking.back.in.nmea.json';
+    const trackData = // '../data/2010-07-10.tacking.back.in.nmea.json';
+                    // '../data/tbi.max-leeway-10.json';
+                       '../data/tbi.max-leeway-15.json';
                     // '../data/2012-06-10.china.camp-oyster.point.nmea.json';
                     // '../data/2014-08-30.headless.labor.day.week.end.sail.only.nmea.json';
                     // '../data/2012-08-12.OysterPoint.ChinaCamp.valid.nmea.json';
@@ -904,7 +906,7 @@ compass-rose .day {
                     document.getElementById('tw-01').value = `{ "wa": ${pos.twa}, "ws": ${pos.tws} }`;
                     document.getElementById('twd-01').value = pos.twd;
 
-                    document.getElementById('boat-overview-01').awa = pos.awa;
+                    document.getElementById('boat-overview-01').awa = (pos.awa < 180 ? pos.awa : (pos.awa - 360));
                     document.getElementById('boat-overview-01').aws = pos.aws;
                     document.getElementById('boat-overview-01').twa = pos.twa;
                     document.getElementById('boat-overview-01').tws = pos.tws;
