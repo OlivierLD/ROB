@@ -1,0 +1,20 @@
+/*
+ * PEnding: Page numbers, indexes, ...
+ */
+
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.table-content, .content, .blank-for-print {
+    page-break-before: always;
+}
+
+.in-the-middle {
+    margin-top: 400px;
+}
+
+
+.screen-only {
+    display: none;
+}
