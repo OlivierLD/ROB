@@ -11,6 +11,7 @@ import gribprocessing.utils.PolarHelper;
 // import nmea.computers.current.LongTimeCurrentCalculator;
 import nmea.parser.*;
 import nmea.utils.NMEAUtils;
+import nmea.utils.gauss.GaussCurve;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -534,7 +535,7 @@ public class NMEAtoJSONPosPlus {
 										tw = NMEAUtils.calculateTWwithGPS(aws,
 												awsCoeff,
 												awa,
-												awaOffset,
+												0.0, // awaOffset, // already fixed
 												hdt,
 												hdgOffset,
 												rmc.getSog(),
@@ -544,16 +545,20 @@ public class NMEAtoJSONPosPlus {
 										tw = NMEAUtils.calculateTWnoGPS(aws,
 												awsCoeff,
 												awa,
-												awaOffset,
+												0.0, // awaOffset, // already fixed
 												hdt,
 												hdgOffset,
 												bsp,
 												hdt);
 									}
 									double twa = tw[0];
+									if (twa > 180) {
+										twa -= 360;
+									}
 									double tws = tw[1];
 									double twd = tw[2];
-									otl.setAwa(awa + awaOffset);
+
+									otl.setAwa(awa); // Already corrected
 									otl.setAws(aws * awsCoeff);
 									otl.setTwa(twa);
 									otl.setTws(tws);
@@ -605,6 +610,25 @@ public class NMEAtoJSONPosPlus {
 						if (StringParsers.validCheckSum(line)) {
 							final ApparentWind apparentWind = StringParsers.parseVWR(line);
 							awa = (double)apparentWind.getAngle();
+							if (awa > 180) {
+								awa -= 360; // [-180, 180]
+							}
+							double correctedAWA = awa + awaOffset;
+							if (correctedAWA > 180) {
+								correctedAWA -= 360;
+							}
+							// Apply gauss twist (WiP). Twist increases the AWA, put it back in.
+							double gaussTwist = GaussCurve.gauss(45.0, // at 45 degrees
+									15.0, // twist = 10
+									400.0, // (Adjustment. WiP)
+									Math.abs(correctedAWA));
+							if (correctedAWA > 0) {
+								correctedAWA -= gaussTwist;
+							} else {
+								correctedAWA += gaussTwist;
+							}
+							awa = correctedAWA;
+
 							aws = apparentWind.getSpeed();
 						}
 					}

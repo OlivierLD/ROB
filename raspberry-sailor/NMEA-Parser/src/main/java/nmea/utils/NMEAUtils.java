@@ -1,6 +1,7 @@
 package nmea.utils;
 
 import nmea.parser.*;
+import nmea.utils.gauss.GaussCurve;
 import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
@@ -57,7 +58,7 @@ public class NMEAUtils {
      * @param cog Course over Ground in degrees
      * @return triplet { twa, tws, twd }
      */
-    public static double[] calculateTWwithGPS(double aws, double awsCoeff,
+    public static double[] calculateTWwithGPS_v1(double aws, double awsCoeff,
                                               double awa, double awaOffset,
                                               double hdg, double hdgOffset,
                                               double sog,
@@ -111,6 +112,78 @@ public class NMEAUtils {
         return new double[]{ twa, tws, twd };
     }
 
+    /**
+     * Uses COG and SOG for the AW calculation.
+     * Hard-coded AWA Twist (for now)
+     *
+     * @param aws Apparent Wind Speed in knots
+     * @param awsCoeff Coefficient for Apparent Wind Speed
+     * @param awa Apparent Wind Angle in degrees [-180, +180]
+     * @param awaOffset Offset of Apparent Wind Angle, in degrees (+: 0 is on the right, -: 0 is on the left)
+     * @param hdg True Heading [0, 360[
+     * @param hdgOffset Heading offset, in degrees (+: 0 is on the right, -: 0 is on the left)
+     * @param sog Speed Over Ground in knots
+     * @param cog Course over Ground in degrees
+     * @return triplet { twa, tws, twd }
+     */
+    public static double[] calculateTWwithGPS(double aws, double awsCoeff,
+                                              double awa, double awaOffset,
+                                              double hdg, double hdgOffset,
+                                              double sog,
+                                              double cog) {
+        /*
+         * See TWS.calc.odg
+         */
+        double twa = 0d, tws = -1d, twd = 0d;
+        // Warning, the MHU is carried by the boat, that has the HDG...
+        // Only if the boat is moving (ie SOG > 0)
+//        if (awaOffset != 0) {
+//            System.out.printf("AWA offset is %f !\n", awaOffset);
+//        }
+        try {
+            double correctedAWA = awa - awaOffset;
+            double correctedAWS = aws * awsCoeff;
+            double correctedHDG = hdg - hdgOffset;
+            while (correctedHDG < 0) {
+                correctedHDG += 360;
+            }
+
+            // Make sure AWA is in [-180, 180]
+            if (correctedAWA > 180) {
+                correctedAWA -= 360;
+            }
+
+            double trueAWA = correctedHDG + (correctedAWA > 180 ? correctedAWA - 360.0 : correctedAWA) % 360.0; // AWA from True North, in degrees
+
+            // Boat on (0, 0). (AWx, AWy) is the extremity of the AW vector.
+            double AWx = correctedAWS * Math.sin(Math.toRadians(trueAWA));
+            double AWy = correctedAWS * Math.cos(Math.toRadians(trueAWA));
+
+            // Extremity of the GPS vector
+            double GPSx = sog * Math.sin(Math.toRadians(cog));
+            double GPSy = sog * Math.cos(Math.toRadians(cog));
+
+            double TWx = AWx - GPSx;
+            double TWy = AWy - GPSy;
+
+            tws = Math.sqrt((TWx * TWx) + (TWy * TWy)); // Pythagore
+            // twd = getDir(TWx, TWy);
+            twd = Math.toDegrees(Math.atan2(TWx, TWy));
+            while (twd < 0) {
+                twd += 360.0;
+            }
+            twa = twd - correctedHDG;
+            while (twa < 0) {
+                twa += 360.0;
+            }
+            if (twa > 180.0) {
+                twa -= 360.0;
+            }
+        } catch (Exception oops) {
+            oops.printStackTrace();
+        }
+        return new double[]{ twa, tws, twd };
+    }
     public static double[] calculateTWnoGPS(double aws, double awsCoeff,
                                             double awa, double awaOffset,
                                             double hdg, double hdgOffset,
