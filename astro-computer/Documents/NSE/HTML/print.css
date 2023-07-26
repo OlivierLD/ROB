@@ -18,3 +18,7 @@
 .screen-only {
     display: none;
 }
+
+.toc {
+    text-decoration: none;;
+}
