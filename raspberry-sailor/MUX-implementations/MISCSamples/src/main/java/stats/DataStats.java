@@ -33,7 +33,7 @@ public class DataStats {
                                 714; // Without motoring
     public static void main(String... args) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        final List<Map<String, Object>> objectList = mapper.readValue(new File(DATA_FILE), new TypeReference<List<Map<String, Object>>>() {});
+        final List<Map<String, Object>> objectList = mapper.readValue(new File(DATA_FILE), new TypeReference<>() {});
         System.out.printf("Read %d objects\n", objectList.size());
         List<Double> positiveAWA = new ArrayList<>();
         List<Double> negativeAWA = new ArrayList<>();
@@ -83,5 +83,28 @@ public class DataStats {
             avgTWD += 360;
         }
         System.out.printf("AVG TWD: %.02f\u00b0\n", avgTWD);
+
+        System.out.println("----------");
+        // Average speeds
+        final double averageTws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("tws")).filter(d -> d != 0).mapToDouble(d -> d).average().getAsDouble();
+        final double minTws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("tws")).filter(d -> d != 0).mapToDouble(d -> d).min().getAsDouble();
+        final double maxTws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("tws")).filter(d -> d != 0).mapToDouble(d -> d).max().getAsDouble();
+
+        final double averageAws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("aws")).mapToDouble(d -> d).average().getAsDouble();
+        final double minAws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("aws")).filter(d -> d != 0).mapToDouble(d -> d).min().getAsDouble();
+        final double maxAws = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("aws")).filter(d -> d != 0).mapToDouble(d -> d).max().getAsDouble();
+
+        final double averageBsp = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("bsp")).mapToDouble(d -> d).average().getAsDouble();
+        final double minBsp = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("bsp")).filter(d -> d != 0).mapToDouble(d -> d).min().getAsDouble();
+        final double maxBsp = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("bsp")).filter(d -> d != 0).mapToDouble(d -> d).max().getAsDouble();
+
+        final double averageSog = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("sog")).mapToDouble(d -> d).average().getAsDouble();
+        final double minSog = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("sog")).filter(d -> d != 0).mapToDouble(d -> d).min().getAsDouble();
+        final double maxSog = objectList.stream().skip(rangeBottom).limit(rangeTop).map(obj -> (double) obj.get("sog")).filter(d -> d != 0).mapToDouble(d -> d).max().getAsDouble();
+
+        System.out.printf("Average TWS: %.02f kn (in [%.02f, %.02f])\n", averageTws, minTws, maxTws);
+        System.out.printf("Average AWS: %.02f kn (in [%.02f, %.02f])\n", averageAws, minAws, maxAws);
+        System.out.printf("Average BSP: %.02f kn (in [%.02f, %.02f])\n", averageBsp, minBsp, maxBsp);
+        System.out.printf("Average SOG: %.02f kn (in [%.02f, %.02f])\n", averageSog, minSog, maxSog);
     }
 }
