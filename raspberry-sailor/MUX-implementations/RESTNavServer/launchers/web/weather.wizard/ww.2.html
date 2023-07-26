@@ -1797,9 +1797,9 @@
         }
 
         function expandCollapseContent(origin) {
-            console.log(origin);
+            // console.log(origin);
             let theZone = document.getElementById('grib-and-faxes');
-            if (origin.innerText === 'Collapse') {
+            if (origin.innerText === '- Collapse') {
                 theZone.style.maxHeight = '40px';
                 origin.innerText = '+ Expand';
             } else {
