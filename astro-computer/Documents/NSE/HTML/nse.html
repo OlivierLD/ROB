@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <!--
     https://www.sitepoint.com/css-printer-friendly-pages/
+
+    Lorem Ipsum generator: https://lorem-ipsum.perbang.dk/
+    https://css-tricks.com/almanac/properties/p/page-break/
+
+    TODO/PENDING: Page numbers.
+
  +-->
 <html lang="fr">
 <head>
@@ -15,8 +21,37 @@
     <link rel="stylesheet" href="main.css" />
     <!-- link rel="stylesheet" media="screen" href="main.css" /-->
     <link rel="stylesheet" media="print" href="print.css" />
+
+    <!--style type="text/css">
+@page {
+    size: A4;
+    margin: 0; 
+}        
+    </style-->
 </head>
 <body>
+
+<script type="text/javascript">
+
+    window.onload = addPageNumbers;
+
+    function addPageNumbers() {
+        let totalPages = Math.ceil(document.body.scrollHeight / 1123);  //842px A4 pageheight for 72dpi, 1123px A4 pageheight for 96dpi, 
+        for (let i = 1; i <= totalPages; i++) {
+            let pageNumberDiv = document.createElement("div");
+            let pageNumber = document.createTextNode("Page " + i + " of " + totalPages);
+
+            pageNumberDiv.style.display = 'none'; // For now...
+
+            pageNumberDiv.style.position = "absolute";
+            pageNumberDiv.style.top = "calc((" + i + " * (297mm - 0.5px)) - 40px)"; //297mm A4 pageheight; 0,5px unknown needed necessary correction value; additional wanted 40px margin from bottom(own element height included)
+            pageNumberDiv.style.height = "16px";
+            pageNumberDiv.appendChild(pageNumber);
+            document.body.insertBefore(pageNumberDiv, document.getElementById("content"));
+            pageNumberDiv.style.left = "calc(100% - (" + pageNumberDiv.offsetWidth + "px + 20px))";
+        }
+    }
+</script>
 <div class="front-page">
     <h3 style="text-align: center;">Olivier Le Diouris</h3>
     <h1 style="text-align: center; font-size: 3em;">Naviguer sans &eacute;lectricit&eacute;</h1>
@@ -57,7 +92,7 @@
     <ol>
         <li><a class="toc" href="#01">Pr&eacute;ambule</a></li>
         <li><a class="toc" href="#02">Objectifs, en guise de pr&eacute;face</a></li>
-        <li><a class="toc" href="#03">Réhabiliter la navigation à l'estime</a></li>
+        <li><a class="toc" href="#03">R&eacute;habiliter la navigation &agrave; l'estime</a></li>
         <li>
             <a class="toc" href="#04">Instruments</a>
             <ol>
@@ -66,8 +101,9 @@
                 <li>
                     <a class="toc" href="#04-3">Cartes, rapporteurs, pointes s&egrave;ches</a>
                     <ol>
-                        <li><a href="#04-3-1">Cartes</a></li>
-                        <li><a href="#04-3-2">Rapporteurs et autres</a></li>
+                        <li><a class="toc" href="#04-3-1">Cartes</a></li>
+                        <li><a class="toc" href="#04-3-2">Rapporteurs et autres</a></li>
+                        <li><a class="toc" href="#04-3-3">Pointes s&egrave;ches</a></li>
                     </ol>
                 </li>
             </ol>
@@ -107,19 +143,19 @@ C'est de toute &eacute;vidence de la pure fiction, mais on a le droit d'y croire
 </p>
 <p>
 Le monde a &eacute;t&eacute; d&eacute;couvert &agrave; la voile, sans &eacute;lectricit&eacute;, 
-les techniques &agrave; mettre en œuvre sont d'autant mieux connues qu'elles ont longtemps &eacute;t&eacute; les seules disponibles. Un des objectifs de ce document est aussi de les pr&eacute;server, 
+les techniques &agrave; mettre en &oelig;uvre sont d'autant mieux connues qu'elles ont longtemps &eacute;t&eacute; les seules disponibles. Un des objectifs de ce document est aussi de les pr&eacute;server, 
 de ne pas les laisser s'oublier, de ne pas les perdre, ce serait vraiment trop b&ecirc;te.
 </p>
 <p>
 D'autant que la s&eacute;curit&eacute; en mer – comme ailleurs - &eacute;chappe totalement &agrave; la mode et &agrave; l'actualit&eacute;.
 </p>
 <p>
-On &eacute;voquera ici des outils et les techniques qui permettent de les mettre en œuvre, 
-tant en ce qui concerne leur utilisation que la façon d'exploiter les donn&eacute;es qu'ils mesurent.
+On &eacute;voquera ici des outils et les techniques qui permettent de les mettre en &oelig;uvre, 
+tant en ce qui concerne leur utilisation que la fa&ccedil;on d'exploiter les donn&eacute;es qu'ils mesurent.
 </p>
 <p>
-Par contre, on passera rapidement sur la façon d'utiliser un compas de rel&egrave;vement, 
-on ne parlera gu&egrave;re de la façon dont on se sert d'un sextant... 
+Par contre, on passera rapidement sur la fa&ccedil;on d'utiliser un compas de rel&egrave;vement, 
+on ne parlera gu&egrave;re de la fa&ccedil;on dont on se sert d'un sextant... 
 Ce document est plus un aide-m&eacute;moire quant &agrave; la mani&egrave;re d'effectuer les divers 
 calculs qui d&eacute;coulent de l'utilisation des instruments de navigation.
 </p>
@@ -135,20 +171,22 @@ En avant.
 </div>
 
 <div class="content">
-    <h1><a name="03">Réhabiliter la navigation à l'estime</a></h1>
+    <h1><a name="03">R&eacute;habiliter la navigation &agrave; l'estime</a></h1>
 <p>
-Avant de disposer d'aides électroniques à la navigation, on naviguait à l'estime.
-Le principe de la navigation à l'estime est le suivant :
-On part d'un point connu, et on tâche de tenir compte de tous les facteurs qui déplacent le navire, comme sa vitesse et son cap, sa dérive, le courant, etc. Ceci permet d'obtenir une position estimée à n'importe quel moment.
+Avant de disposer d'aides &eacute;lectroniques &agrave; la navigation, on naviguait &agrave; l'estime.
+Le principe de la navigation &agrave; l'estime est le suivant :
+On part d'un point connu, et on t&acirc;che de tenir compte de tous les facteurs qui d&eacute;placent le navire, comme sa vitesse et son cap, 
+sa d&eacute;rive, le courant, etc. Ceci permet d'obtenir une position estim&eacute;e &agrave; n'importe quel moment.
 </p>
 <p>
-À chaque fois que c'est possible, on recale son estime en faisant un point. En fonction de l'endroit où on se trouve, à savoir en vue ou hors de vue des côtes, les méthodes de point seront différentes, et évoquées plus avant dans ce document.
+&agrave; chaque fois que c'est possible, on recale son estime en faisant un point. En fonction de l'endroit où on se trouve, &agrave; savoir en vue ou hors de vue des côtes, les m&eacute;thodes 
+de point seront diff&eacute;rentes, et &eacute;voqu&eacute;es plus avant dans ce document.
 </p>
 <p>
 Pour faire court, la clef d'une estime correcte tient en deux points :
 <ul>
-    <li>La connaissance des facteurs qui déplacent le bateau.</li>
-    <li>La qualité des points qu'on fait pour recaler l'estime.</li>
+    <li>La connaissance des facteurs qui d&eacute;placent le bateau.</li>
+    <li>La qualit&eacute; des points qu'on fait pour recaler l'estime.</li>
 </ul>
 </p>
 <p>
@@ -159,44 +197,44 @@ Pour tenir son estime, il faut pouvoir :
 </ul>
 </p>
 <p>
-Pour mesurer la distance parcourue, on a longtemps mesuré la vitesse du bateau, et calculé la distance parcourue d'après le temps passé à une vitesse donnée, ce qui implique de pouvoir aussi mesurer le temps.
+Pour mesurer la distance parcourue, on a longtemps mesur&eacute; la vitesse du bateau, et calcul&eacute; la distance parcourue d'apr&egrave;s le temps pass&eacute; &agrave; une vitesse donn&eacute;e, ce qui implique de pouvoir aussi mesurer le temps.
 </p>
 <p>
-On verra – notamment dans la section dédiée à la navigation astronomique – que la mesure du temps est un problème critique et important, non pas tant pour la tenue de l'estime, que pour la recaler.
+On verra – notamment dans la section d&eacute;di&eacute;e &agrave; la navigation astronomique – que la mesure du temps est un probl&egrave;me critique et important, non pas tant pour la tenue de l'estime, que pour la recaler.
 </p>
 <p>
-On peut répartir les différents instruments de navigation en plusieurs catégories&nbsp;:
+On peut r&eacute;partir les diff&eacute;rents instruments de navigation en plusieurs cat&eacute;gories&nbsp;:
 <ul>
   <li>
-    Les cartes et les outils associés
+    Les cartes et les outils associ&eacute;s
     <ul>
         <li>cartes</li>
         <li>canevas</li>
         <li>rapporteurs</li>
-        <li>pointes sèches</li>
+        <li>pointes s&egrave;ches</li>
     </ul>
   </li>
   <li>
-    Les instruments nécessaires pour mesurer la route
+    Les instruments n&eacute;cessaires pour mesurer la route
     <ul>
       <li>compas de route</li>
       <li>lochs</li>
-      <li>tables de courant et de marée</li>
+      <li>tables de courant et de mar&eacute;e</li>
     </ul>
   </li>
   <li>
-    Les instruments nécessaires pour mesurer le temps
+    Les instruments n&eacute;cessaires pour mesurer le temps
     <ul>
       <li>sabliers, clepsydres (&lt;- mais non ! Pas sur un bateau !)</li>
-      <li>montres & chronomètres</li>
+      <li>montres & chronom&egrave;tres</li>
     </ul>
   </li>
   <li>
-    Les instruments nécessaires pour recaler l'estime
+    Les instruments n&eacute;cessaires pour recaler l'estime
     <ul>
-        <li>compas de relèvement</li>
+        <li>compas de rel&egrave;vement</li>
         <li>sextant</li>
-        <li>éphémérides, tables et abaques</li>
+        <li>&eacute;ph&eacute;m&eacute;rides, tables et abaques</li>
     </ul>
   </li>
 </ul>
@@ -213,10 +251,10 @@ L'outil fait ce qu'on lui demande. La bo&icirc;te noire d&eacute;cide toute seul
 <div class="content">
     <h1><a name="04">Instruments</a></h1>
     <p>
-      Rien de nouveau ici. Tous les instruments mentionnés ici sont connus depuis au moins cent ans. 
-      Certains peuvent être construits avec les moyens du bord. D'autres non. 
+      Rien de nouveau ici. Tous les instruments mentionn&eacute;s ici sont connus depuis au moins cent ans. 
+      Certains peuvent &ecirc;tre construits avec les moyens du bord. D'autres non. 
       <br/>
-      Il demeure cependant probablement intéressant de mentionner de quels instruments il s'agit.<br/>
+      Il demeure cependant probablement int&eacute;ressant de mentionner de quels instruments il s'agit.<br/>
       Allons-y.
     </p>
     <h2><a name="04-1">Loch</a></h2>
@@ -224,20 +262,20 @@ L'outil fait ce qu'on lui demande. La bo&icirc;te noire d&eacute;cide toute seul
       <div style="display: grid; grid-template-columns: auto auto;">
         <img src="images/loch.jpg" width="400px" style="float: left; margin-right: 10px;">
         <p>
-            <b>Loch à bateau, loch à poisson.</b>
+            <b>Loch &agrave; bateau, loch &agrave; poisson.</b>
             <br/>
-            Le rôle du loch n'est pas tant d'évaluer la vitesse du bateau, que la distance qu'il a parcourue.
+            Le rôle du loch n'est pas tant d'&eacute;valuer la vitesse du bateau, que la distance qu'il a parcourue.
             <br/><br/>
-            <i>Étymologie du mot "loch"</i>
+            <i>&eacute;tymologie du mot "loch"</i>
             <br/>
-            Voici une origine supposée – et plausible – du mot "loch", qu'on prononce "lok".<br/> 
-            Il viendrait du mot anglais "log", qui signifie "bûche". Le navigateur subtilisait une bûche 
-            à la cambuse, et la laissait tomber à l'étrave du bateau. Ensuite, marchant sur le pont 
-            vers l'arrière en suivant la bûche qui flotte le long du bord, et comptant les secondes en 
-            marchant (un..., deux..., trois...), il savait en arrivant à l'arrière le temps que la bûche 
-            avait mis à parcourir la longueur du bateau, qu'il connaissait. <br/>
-            Une simple règle-de-trois permettait alors de connaître la vitesse du bateau, 
-            donnée essentielle à la tenue de l'estime. Cette donnée importante était consignée dans 
+            Voici une origine suppos&eacute;e – et plausible – du mot "loch", qu'on prononce "lok".<br/> 
+            Il viendrait du mot anglais "log", qui signifie "b&ucirc;che". Le navigateur subtilisait une b&ucirc;che 
+            &agrave; la cambuse, et la laissait tomber &agrave; l'&eacute;trave du bateau. Ensuite, marchant sur le pont 
+            vers l'arri&egrave;re en suivant la b&ucirc;che qui flotte le long du bord, et comptant les secondes en 
+            marchant (un..., deux..., trois...), il savait en arrivant &agrave; l'arri&egrave;re le temps que la b&ucirc;che 
+            avait mis &agrave; parcourir la longueur du bateau, qu'il connaissait. <br/>
+            Une simple r&egrave;gle-de-trois permettait alors de conna&icirc;tre la vitesse du bateau, 
+            donn&eacute;e essentielle &agrave; la tenue de l'estime. Cette donn&eacute;e importante &eacute;tait consign&eacute;e dans 
             le "Log Book", ainsi qu'on nomme le Livre de Bord en anglais.
             <br/>
             <br/>
@@ -245,100 +283,133 @@ L'outil fait ce qu'on lui demande. La bo&icirc;te noire d&eacute;cide toute seul
         </p>
       </div>
       <p>
-        Le loch à bateau est une bûche, un peu plus élaborée. 
+        Le loch &agrave; bateau est une b&ucirc;che, un peu plus &eacute;labor&eacute;e. 
         <br/>
-        Il est fait essentiellement d'une planche de bois – c'est elle le <i>bateau</i>, celle qu'on appelle le <i>bateau</i> du loch - à 
-        laquelle est amarrée une ligne par une patte d'oie, de façon à ce qu'elle flotte verticalement.
+        Il est fait essentiellement d'une planche de bois – c'est elle le <i>bateau</i>, celle qu'on appelle le <i>bateau</i> du loch - &agrave; 
+        laquelle est amarr&eacute;e une ligne par une patte d'oie, de fa&ccedil;on &agrave; ce qu'elle flotte verticalement.
         <br/>
-        La ligne comporte des nœuds à intervalles réguliers de 15,43 mètres. Elle est en général enroulée sur un touret. 
-        Le principe de fonctionnement est le suivant : on mouille le loch en même temps qu'on retourne un sablier de 30 secondes, 
-        et on laisse filer la ligne de son touret jusqu'à ce que tout le sable soit écoulé, après quoi on compte les nœuds 
-        qui sont passés à l'eau, et on remonte le tout à bord.
+        La ligne comporte des n&oelig;uds &agrave; intervalles r&eacute;guliers de 15,43 m&egrave;tres. Elle est en g&eacute;n&eacute;ral enroul&eacute;e sur un touret. 
+        Le principe de fonctionnement est le suivant : on mouille le loch en m&ecirc;me temps qu'on retourne un sablier de 30 secondes, 
+        et on laisse filer la ligne de son touret jusqu'&agrave; ce que tout le sable soit &eacute;coul&eacute;, apr&egrave;s quoi on compte les n&oelig;uds 
+        qui sont pass&eacute;s &agrave; l'eau, et on remonte le tout &agrave; bord.
         <br/>
-        30 secondes constituent la 120<sup>e</sup> partie d'une heure, 15,43 mètres la 120<sup>e</sup> partie d'un mille marin.
+        30 secondes constituent la 120<sup>e</sup> partie d'une heure, 15,43 m&egrave;tres la 120<sup>e</sup> partie d'un mille marin (de 1852 m&egrave;tres).
         <br/>
-        C'est ainsi qu'on "file cinq nœuds et demi", et non pas qu'on "avance à cinq milles et demi à l'heure".
+        C'est ainsi qu'on "file cinq n&oelig;uds et demi", et non pas qu'on "avance &agrave; cinq milles et demi &agrave; l'heure".
         <br/>
-        On a tous déjà entendu "cinq nœuds à l'heure". Pas de commentaire !..
+        On a tous d&eacute;j&agrave; entendu "cinq n&oelig;uds &agrave; l'heure". Pas de commentaire !..
         <p>        
-        Le loch à poisson est un instrument mécanique, plus élaboré, qui présente cet avantage d'enregistrer la distance parcourue.        
+        Le loch &agrave; poisson est un instrument m&eacute;canique, plus &eacute;labor&eacute;, qui pr&eacute;sente cet avantage d'enregistrer la distance parcourue.        
         </p>
       </p>
     </p>
 
     <h2><a name="04-2">Compas</a></h2>
     <p>
-        Probablement inventé en Chine. C'est ce que les terriens appellent une boussole.
+        Probablement invent&eacute; en Chine. C'est ce que les terriens appellent une boussole.
         <br/>
-        On utilise des compas de route, et des compas de relèvement.
+        On utilise des compas de route, et des compas de rel&egrave;vement.
         <br/>
-        Le compas de route est fixé au bateau, et posé dans l'axe de la "ligne de foi".
+        Le compas de route est fix&eacute; au bateau, et pos&eacute; dans l'axe de la "ligne de foi".
         <br/>
-        Le compas de relèvement se tient à la main.
+        Le compas de rel&egrave;vement se tient &agrave; la main.
         <br/>
-        Les compas magnétiques sont basés sur le champ magnétique terrestre. 
-        Ils indiquent le nord (&agrave; l'inverse du compas chinois, qui indique le sud) <i>magnétique</i>, qui se déplace avec le temps, et qui n'est pas situé au même endroit que le nord géographique, 
+        Les compas magn&eacute;tiques sont bas&eacute;s sur le champ magn&eacute;tique terrestre. 
+        Ils indiquent le nord (&agrave; l'inverse du compas chinois, qui indique le sud) <i>magn&eacute;tique</i>, qui se d&eacute;place avec le temps, et qui n'est pas situ&eacute; au m&ecirc;me endroit que le nord g&eacute;ographique, 
         qui est celui des cartes.
         <br/>
-        Le cap compas fait l'objet de deux corrections pour restituer le cap vrai (cap géographique), 
-        celui qui s'exprime par rapport au nord de la carte. On verra à ce sujet la section <a href="tdb">Tenue de l’Estime</a>.
+        Le cap compas fait l'objet de deux corrections pour restituer le cap vrai (cap g&eacute;ographique), 
+        celui qui s'exprime par rapport au nord de la carte. On verra &agrave; ce sujet la section <a href="#tdb">Tenue de l’Estime</a>.
         <br/>
-        Le compas de relèvement est utilisé pour connaître l'angle que fait un amer vu du bateau avec le nord magnétique. 
-        La correction de déviation n'est pas appliquée au compas de relèvement, on considère (parfois à tort) qu'il n'est pas sujet 
-        aux masses magnétiques qui engendrent la déviation appliquée au compas de route. Les bateaux – en général des navires – pour 
+        Le compas de rel&egrave;vement est utilis&eacute; pour conna&icirc;tre l'angle que fait un amer vu du bateau avec le nord magn&eacute;tique. 
+        La correction de d&eacute;viation n'est pas appliqu&eacute;e au compas de rel&egrave;vement, on consid&egrave;re (parfois &agrave; tort) qu'il n'est pas sujet 
+        aux masses magn&eacute;tiques qui engendrent la d&eacute;viation appliqu&eacute;e au compas de route. Les bateaux – en g&eacute;n&eacute;ral des navires – pour 
         lesquels c'est faux utilisent plutôt un cercle de gisements. Le gisement est l'angle que fait un amer avec l'axe du bateau. 
-        On aura le relèvement de l'amer en faisant intervenir le cap du bateau, et les corrections (déclinaison et déviation) qui s'imposent.
+        On aura le rel&egrave;vement de l'amer en faisant intervenir le cap du bateau, et les corrections (d&eacute;clinaison et d&eacute;viation) qui s'imposent.
         <br/>
-        Les compas gyroscopiques ne sont pas sujets à ce genre de phénomènes magnétiques, mais ils consomment beaucoup d'énergie.
+        Les compas gyroscopiques ne sont pas sujets &agrave; ce genre de ph&eacute;nom&egrave;nes magn&eacute;tiques, mais ils consomment beaucoup d'&eacute;nergie.
         
         <br/>
-        Les compas étaient autrefois divisés en 32 parties (le compas chinois est divisé en 24 parties) égales appelées "quarts" ; ils sont maintenant 
-        gradués en degrés, de 0° à 360°, dans le sens des aiguilles d'une montre, le nord à 0°, l'est à 90°, le sud à 180° et l'ouest à 270°.     
+        Les compas &eacute;taient autrefois divis&eacute;s en 32 parties (le compas chinois est divis&eacute; en 24 parties) &eacute;gales appel&eacute;es "quarts" ; ils sont maintenant 
+        gradu&eacute;s en degr&eacute;s, de 0° &agrave; 360°, dans le sens des aiguilles d'une montre, le nord &agrave; 0°, l'est &agrave; 90°, le sud &agrave; 180° et l'ouest &agrave; 270°.     
     </p>
 
     <h2><a name="04-3">Cartes, rapporteurs, pointes s&egrave;ches</a></h2>
     <p>
-      <h3><a name="04-3-1">Cartes</a></h3>
-      <p>
-        La carte est le plus important de tous les instruments de navigation.
-        <br/>
-        De nombreux logiciels fournissent maintenant des cartes électroniques.
-        <br/>
-        Les cartes en papier présentent cet inconvénient d'être chères et fragiles.
-        <br/>
-        Elles présentent néanmoins l'avantage incontestable de ne jamais tomber en panne.
-      </p>
-      <h3><a name="04-3-2">Rapporteurs et autres</a></h3>
-      <p>
+      <div class="doc-section">
+        <h3><a name="04-3-1">Cartes</a></h3>
         <p>
-        Moyennant le fait qu'on sait ce qu'on veut mesurer en matière d'angle, le plus simple des rapporteurs sera suffisant, pourvu qu'il soit gradué en degrés. Certains, plus élaborés, seront plus pratiques. D'autres, plus sophistiqués, seront superflus.
+            La carte est le plus important de tous les instruments de navigation.
+            <br/>
+            De nombreux logiciels fournissent maintenant des cartes &eacute;lectroniques.
+            <br/>
+            Les cartes en papier pr&eacute;sentent cet inconv&eacute;nient d'&ecirc;tre ch&egrave;res et fragiles.
+            <br/>
+            Elles pr&eacute;sentent n&eacute;anmoins l'avantage incontestable de ne jamais tomber en panne.
+        </p>
+      </div>
+      <div class="doc-section">
+        <h3><a name="04-3-2">Rapporteurs et autres</a></h3>
+        <p>
+            <p>
+            Moyennant le fait qu'on sait ce qu'on veut mesurer en mati&egrave;re d'angle, le plus simple des rapporteurs sera suffisant, pourvu qu'il soit gradu&eacute; en degr&eacute;s. Certains, plus &eacute;labor&eacute;s, seront plus pratiques. D'autres, plus sophistiqu&eacute;s, seront superflus.
+            </p>
+            <p>
+            Les Anglo-saxons utilisent des "r&egrave;gles parall&egrave;les", les autres des rapporteurs, plus ou moins &eacute;labor&eacute;s. Il n'y a pas lieu de pol&eacute;miquer, mais les r&egrave;gles parall&egrave;les sont faites comme s'il &eacute;tait difficile de mesurer un angle avec un rapporteur...
+            </p>
+            De la m&ecirc;me mani&egrave;re, parmi ceux qui utilisent des rapporteurs, on voit fr&eacute;quemment surgir des multitudes d'accessoires alambiqu&eacute;s qui tournent, pivotent et galipettent, pour s'adresser &agrave; des utilisateurs qui ne savent pas ce que c'est que l'angle qu'ils mesurent.
+            <p>
+            Il <b><i>faut</i></b> savoir ce qu'on mesure, moyennant quoi - disais -je - un rapporteur est amplement suffisant. La "R&egrave;gle de Cras" est son avatar le plus &eacute;labor&eacute;, 
+            et fournit toutes les fonctionnalit&eacute;s qu'on est en droit d'attendre d'un tel outil, avec des risques d'erreur de manipulation minimes.
+            </p>
+            <div style="text-align: center;"><img src="./images/rdc.jpg" alt="R&egrave;gle de Cras"></div>
+            <p>
+            Les soi-disant recherches dans ce domaine sont vaines, la clef de vo&ucirc;te, 
+            c'est les comp&eacute;tences de l'utilisateur. Au lieu d'essayer d'inventer de nouveaux rapporteurs, 
+            il semble plus judicieux d'<i>apprendre</i> &agrave; se servir de ceux qui existent, ils ont en g&eacute;n&eacute;ral fait leurs preuves.<br/> 
+            Il ne s'agit <i><b>que</b></i> de mesurer des angles, en degr&eacute;s, allant de z&eacute;ro &agrave; trois cent soixante. 
+            Si on tient la carte correctement (Il y a des cartes pour lesquelles ce n'est pas vrai. Je sais), le 0 et le 360 sont en haut, 
+            90 &agrave; droite, 180 en bas, et 270 &agrave; gauche. 
+            </p>
+            <p>
+            Celui qui cherche &agrave; mesurer un angle qui part du bas &agrave; gauche de la carte et va vers le haut &agrave; droite, 
+            et qui trouve quelque chose comme 210 pr&eacute;sente au moins une des pathologies suivantes:
+            <ul>
+            <li>Il tient la carte &agrave; l'envers</li>
+            <li>Il ne sait pas ce qu'il mesure</li>
+            <li>Il ne sait pas ce qu'il fait</li>
+            </ul>
+            Un d&eacute;tail : les r&egrave;gles parall&egrave;les esquintent les cartes, et sont moins pr&eacute;cises que les rapporteurs, surtout sur un bateau qui bouge.
+            </p>
+        </p>
+      </div>
+      <div class="doc-section">
+        <h3><a name="04-3-3">Pointes s&egrave;ches</a></h3>
+        <div style="display: grid; grid-template-columns: auto auto;">
+            <img src="images/ptes.seches.jpg" width="100%" style="float: left;">
+            <p>
+               Le compas à pointes sèches est utilisé pour reporter des distances, de la carte sur l'échelle des distances, et vice-versa. 
+               Il est bon de disposer d'un modèle manœuvrable d'une seule main, pour l'ouvrir comme pour le fermer.
+               <br/><br/>
+               À propos des distances, on utilise le mille marin parce qu'il est défini comme étant la représentation d'une minute d'arc prise au centre de la Terre, 
+               et projetée à sa surface (c'est donc en toute rigueur un angle, et non pas une distance, et de fait, la longueur du mille marin varie, entre 1843 et 1862 mètres, 
+               en fonction du diamètre de la Terre, qui n'est pas parfaitement sphérique). Tous les méridiens ont la même longueur, 
+               à l'inverse des parallèles. On mesurera donc les distances sur les méridiens, à savoir sur les <b><i>côtés verticaux</i></b> (lorsqu'il s'agit d’une projection de Mercator, laquelle est orthogonale, 
+               à l'inverse des projections de Lambert, gnomoniques et autres) de la carte.
+            </p>
+        </div>
+        <p>
+          En fonction de la projection utilisée sur la carte (Mercator, Lambert, Gnomonique, etc), les échelles diffèrent. Sur une carte
+          Mercator – par exemple – l'unité de longitude se dilate avec la latitude. 
+          Plus la latitude est haute, plus la représentation d'un angle donné est grande, à tel point qu'elle est infinie au pôle. 
+          Il convient donc dans ce cas de se référer à l'échelle des distances à une latitude voisine de l'endroit où se trouve la distance à mesurer. 
+          Voir à ce sujet la section <a href="#tdb">Mercator et Latitude Croissante</a>.
         </p>
         <p>
-        Les Anglo-saxons utilisent des "règles parallèles", les autres des rapporteurs, plus ou moins élaborés. Il n'y a pas lieu de polémiquer, mais les règles parallèles sont faites comme s'il était difficile de mesurer un angle avec un rapporteur...
+          Dans les films de sous-marins, là où les inondations déclenchent des incendies, on voit les navigateurs faire avec les pointes-sèches des 
+          figures qui s'apparentent au patinage artistique, je n'ai absolument aucune idée de ce qu'il peuvent bien faire...
         </p>
-        De la même manière, parmi ceux qui utilisent des rapporteurs, on voit fréquemment surgir des multitudes d'accessoires alambiqués qui tournent, pivotent et galipettent, pour s'adresser à des utilisateurs qui ne savent pas ce que c'est que l'angle qu'ils mesurent.
-        <p>
-        Il <b><i>faut</i></b> savoir ce qu'on mesure, moyennant quoi - disais -je - un rapporteur est amplement suffisant. La "Règle de Cras" est son avatar le plus élaboré, et fournit toutes les fonctionnalités qu'on est en droit d'attendre d'un tel outil.
-        </p>
-        <div style="text-align: center;"><img src="./images/rdc.jpg" alt="R&egrave;gle de Cras"></div>
-        <p>
-        Les soi-disant recherches dans ce domaine sont vaines, la clef de voûte, 
-        c'est les compétences de l'utilisateur. Au lieu d'essayer d'inventer de nouveaux rapporteurs, 
-        il semble plus judicieux d'<i>apprendre</i> à se servir de ceux qui existent. 
-        Il ne s'agit <i><b>que</b></i> de mesurer des angles, en degrés, allant de zéro à trois cent soixante. 
-        Si on tient la carte correctement (Il y a des cartes pour lesquelles ce n'est pas vrai. Je sais.), le 0 et le 360 sont en haut, 
-        90 à droite, 180 en bas, et 270 à gauche. 
-        </p>
-        <p>
-        Celui qui cherche à mesurer un angle qui part du bas à gauche de la carte et va vers le haut à droite, 
-        et qui trouve quelque chose comme 210 présente au moins une des pathologies suivantes:
-        <ul>
-          <li>Il tient la carte à l'envers</li>
-          <li>Il ne sait pas ce qu'il mesure</li>
-          <li>Il ne sait pas ce qu'il fait</li>
-        </ul>
-        Un detail : les règles parallèles esquintent les cartes, et sont moins précises que les rapporteurs.
-        </p>
+      </div>
     </p>
 </div>
 

@@ -1,5 +1,5 @@
 /*
- * PEnding: Page numbers, indexes, ...
+ * Pending: Page numbers, indexes, ...
  */
 
 * {
@@ -8,6 +8,10 @@
 
 .table-content, .content, .blank-for-print {
     page-break-before: always;
+}
+
+.doc-section {
+    page-break-inside: avoid;
 }
 
 .in-the-middle {
@@ -20,5 +24,12 @@
 }
 
 .toc {
-    text-decoration: none;;
+    text-decoration: none;
+    color: inherit;
 }
+
+@page {
+    @bottom-left {
+         content: counter(page) "/" counter(pages);
+     }
+  }
