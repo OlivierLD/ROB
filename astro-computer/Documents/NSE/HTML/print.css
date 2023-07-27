@@ -27,9 +27,3 @@
     text-decoration: none;
     color: inherit;
 }
-
-@page {
-    @bottom-left {
-         content: counter(page) "/" counter(pages);
-     }
-  }
