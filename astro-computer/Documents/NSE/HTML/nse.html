@@ -153,7 +153,9 @@
                         <li><a class="toc" href="#05-1-2">D&eacute;clinaison Magn&eacute;tique</a></li>
                         <li><a class="toc" href="#05-1-3">D&eacute;rive</a></li>
                         <li><a class="toc" href="#05-1-4">Courant</a></li>
+                        <li><a class="toc" href="#05-1-5">Pour r&eacute;sumer le tout</a></li>
                     </ol>
+                    <li><a class="toc" href="#05-2">Recaler l'estime</a></li>
                 </li>
             </ol>
         </li>
@@ -167,7 +169,7 @@
                 <li><a class="toc" href="#mercator">Mercator et Latitude Croissante</a></li>
                 <li><a class="toc" href="#ps">Plotting Sheets</a></li>
                 <li><a class="toc" href="#equation-du-temps">Équation du temps</a></li>
-                <li><a class="toc" href="#logarithms">Utilisation simplifiée des tables de logarithmes</a></li>
+                <li><a class="toc" href="#logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></li>
                 <li><a class="toc" href="#lop-sample">Exemple de calcul de droites de hauteur</a></li>
                 <li><a class="toc" href="#least-squares">R&eacute;solution d'un polyn&ocirc;me par la m&eacute;thode des moindres carr&eacute;s</a></li>
             </ul>
@@ -846,7 +848,16 @@
             <div class="doc-section">
                 <h3><a name="05-1-3">D&eacute;rive</a></h3>
                 <p>
-
+                    La d&eacute;rive est engendr&eacute;e par les conditions ext&eacute;rieures, le vent, les vagues (voire par le barreur, qui fait son boulot comme un cochon – c'est loin d'&ecirc;tre exceptionnel). 
+                    Un petit voilier y sera bien &eacute;videmment plus sensible qu'un super-tanker. Au pr&egrave;s dans de la mer, une d&eacute;rive de l'ordre de 10 degr&eacute;s n'est pas exceptionnelle. 
+                    La d&eacute;rive est positive lorsqu'elle porte &agrave; tribord, n&eacute;gative lorsqu'elle porte &agrave; bâbord.
+                </p>
+                <p>
+                    On peut supposer (rien de grave dans le marbre) que la d&eacute;rive puisse s'exprimer
+                    $$
+                     derive = derivemax \times \cos(AWA)
+                    $$
+                    où <code>derivemax</code> est de l'ordre de 10 degr&eacute;s (c'est un param&egrave;tre propre au bateau), pour des angles de vent apparent (Apparent Wind Angle) entre -90&deg; et +90&deg;
                 </p>
                 <p>
                     Une fois le Cap Vrai (Cv) corrig&eacute; de la d&eacute;rive, on obtient la Route Surface (Rs).
@@ -855,14 +866,90 @@
             <div class="doc-section">
                 <h3><a name="05-1-4">Courant</a></h3>
                 <p>
-                    
+                    Le courant peut avoir plusieurs origines.
+                    <br/>
+                    Le vent, la mar&eacute;e, des courants oc&eacute;aniques. Ces trois-l&agrave; sont combinables &agrave; merci.
+                    <br/>
+                    Les courants de mar&eacute;e sont donn&eacute;s dans des tables et les atlas.
+                    <br/>
+                    Les courants oc&eacute;aniques – comme le Gulf Stream – ont leur vitesse et direction donn&eacute;es par certaines cartes (comme les Pilot Charts), 
+                    et d'autres documents (Instructions Nautiques, Coast Pilots, etc).
+                    <br/>
+                    Le courant g&eacute;n&eacute;r&eacute; par le vent est d&eacute;termin&eacute; par le pifom&egrave;tre du navigateur&nbsp;!
+                    Lequel peut &ecirc;tre avantageusement assist&eacute; par l'estime tenue dans les heures pr&eacute;c&eacute;dentes.
+                    <p>
+                        Une fois la Route Surface (Rs) corrig&eacute;e du courant, on obtient la Route Fond (Rf).
+                    </p>
+                </p>
+            </div>
+
+            <div class="doc-section">
+                <h3><a name="05-1-5">Pour r&eacute;sumer le tout</a></h3>
+                <p>
+                    <div style="text-align: center;"><img src="images/cc.to.cv.jpg" width="50%" alt="du Cap Compas au Cap Vrai"></div>
+                    Dans l'illustration ci-dessus, les trois diff&eacute;rents caps sont repr&eacute;sent&eacute;s. Cap Compas (Cc), Cap Magn&eacute;tique (Cm), Cap Vrai (Cv). Il s'agit d'additionner des angles.
+                    <br/>
+                    <b>On rappelle que les angles port&eacute;s vers l'est sont positifs, et sont n&eacute;gatifs lorsqu'ils vont vers l'ouest.</b>
+                    <br/>
+                    <b>De m&ecirc;me, les angles ont une valeur positive dans le sens des aiguilles d'une montre (vers la droite), et n&eacute;gative dans le sens contraire des aiguilles d'une montre (vers la gauche)</b>
+                    ...À l'inverse de la pratique couramment r&eacute;pandue en trigonom&eacute;trie, où c'est le contraire.
+                    <br/>
+                    Un coup d'&oelig;il sur la rose du compas convaincra les plus sceptiques.
+                    <div style="text-align: center;"><img src="images/cv.to.cog.jpg" width="50%" alt="du Cap Vrai &agrave; la Route Fond"></div>
+                    <p>
+                        La figure pr&eacute;c&eacute;dente illustre les relations entre Cap Vrai (Cv), Route Surface (Rs) et Route Fond (Rf). 
+                        <br/>
+                        On y voit que la d&eacute;rive est un angle, qui s'ajoute au Cap Vrai pour obtenir la Route Surface. 
+                        <br/>
+                        Tandis que le courant est un vecteur (caract&eacute;ris&eacute; par une vitesse et une direction), qui s'ajoute (somme vectorielle) au vecteur Route Surface, 
+                        caract&eacute;ris&eacute; lui aussi par une vitesse et une direction. En g&eacute;n&eacute;ral, on se contente largement d'une r&eacute;solution 
+                        graphique – effectu&eacute;e sur la carte - pour cette somme de vecteurs.
+                    </p>
                 </p>
                 <p>
-                    Une fois la Route Surface (Rs) corrig&eacute;e du courant, on obtient la Route Fond (Rf).
+                    L'op&eacute;ration qui consiste &agrave; partir du cap compas pour en d&eacute;duire la route fond s'appelle "Corriger un cap".
+                </p>
+                <p>
+                    L'op&eacute;ration inverse, qui consiste &agrave; donner au barreur le cap &agrave; suivre pour maintenir une route donn&eacute;e s'appelle "Faire valoir la route".
+                </p>
+                <p>
+                    <i>Pour r&eacute;sumer:</i>
+                    <br/>
+                    On dispose du Cap Compas. On veut la Route Fond.
+                    <br/>
+                    On obtient le Cap Vrai en ajoutant la variation (W) au Cap Compas (Cc).
+                    <br/>
+                    La variation (W) est la somme alg&eacute;brique de la d&eacute;clinaison (D) et de la d&eacute;viation (d).
+                    <br/>
+                    La Route Surface (Rs) est la somme alg&eacute;brique du Cap Vrai (Cv) et de la d&eacute;rive. 
+                    <br/>
+                    La Route Fond (Rf) est la somme (vectorielle) du vecteur Route Surface (Rs) et du vecteur courant.
+                    <div style="margin-left: 30px; font-weight: bold;">
+                        Cv = Cc + W, où W=D+d
+                        <br/>
+                        Rs = Cv + d&eacute;rive
+                        <br/>
+                        Rf = Rs + Courant (vecteurs)
+                    </div>
+                    <br/>
+                    La d&eacute;clinaison (D) figure sur les cartes.
+                    <br/>
+                    La d&eacute;viation (d) provient de la courbe de d&eacute;viation du compas (propre au compas, et au bateau).
+                    <br/>
+                    La d&eacute;rive est estim&eacute;e par le navigateur en fonction des conditions de vent et de mer.
+                    <br/>
+                    Le courant (direction et vitesse) provient des tables de courant, ou des cartes, 
+                    ou de ce que le navigateur a s&ucirc; d&eacute;duire des heures pr&eacute;c&eacute;dentes.
                 </p>
             </div>
         </p>
     </div>
+</div>
+
+<div class="doc-section">
+    <h2><a name="05-2">Recaler l'estime</a></h2>
+    <p>
+    </p>
 </div>
 
 <div class="content">
@@ -915,7 +1002,7 @@
 </div>
 
 <div class="content">
-    <h2><a name="logarithms">Utilisation simplifiée des tables de logarithmes</a></h2>
+    <h2><a name="logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></h2>
     <p>
 
     </p>
@@ -931,11 +1018,11 @@
 <div class="content">
     <h2><a name="least-squares">R&eacute;solution d'un polyn&ocirc;me par la m&eacute;thode des moindres carr&eacute;s</a></h2>
     <p>
-        Le problème est ici de trouver les coefficients d'un polynôme de degré donné (choisi), afin que la courbe qui le représente soit aussi proche que possible d'un ensemble de points donnés.<br/>
-        Autrement dit, que la courbe trouvée colle autant que possible au nuage des points de départ.
+        Le probl&egrave;me est ici de trouver les coefficients d'un polynôme de degr&eacute; donn&eacute; (choisi), afin que la courbe qui le repr&eacute;sente soit aussi proche que possible d'un ensemble de points donn&eacute;s.<br/>
+        Autrement dit, que la courbe trouv&eacute;e colle autant que possible au nuage des points de d&eacute;part.
     </p>
-    <i>Exemple</i>: D&eacute;termination des coefficients d'une courbe du second degr&eacute;, &agrave; partir d'un nuage de points enregistr&eacute;s. On choisit ici un degré 2 pour simplifier les équations qui suivent.
-    La résolution d'un polynôme de degré supérieur suit le même mode opératoire.
+    <i>Exemple</i>: D&eacute;termination des coefficients d'une courbe du second degr&eacute;, &agrave; partir d'un nuage de points enregistr&eacute;s. On choisit ici un degr&eacute; 2 pour simplifier les &eacute;quations qui suivent.
+    La r&eacute;solution d'un polynôme de degr&eacute; sup&eacute;rieur suit le m&ecirc;me mode op&eacute;ratoire.
     <br/><br/>
     On cherche donc &agrave; d&eacute;terminer une courbe du 2<sup>nd</sup> degr&eacute;, aussi proche que possible des points d'un ensemble donn&eacute;, enregistr&eacute;s &agrave; bord. <br/>
     <br/>
