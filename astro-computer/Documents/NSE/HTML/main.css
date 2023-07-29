@@ -19,3 +19,8 @@ code {
 .indent-one {
     margin-left: 50px;
 }
+
+.indent-one-italic {
+    margin-left: 50px;
+    font-style: italic;
+}

@@ -166,6 +166,16 @@
                         <li><a class="toc" href="#05-2-3">Point par rel&egrave;vement d'un seul amer</a></li>
                         <li><a class="toc" href="#05-2-4">Point par lignes de sonde</a></li>
                         <li><a class="toc" href="#05-2-5">Point par arcs capables</a></li>
+                        <li><a class="toc" href="#05-2-6">Point astronomique</a></li>
+                        <li><a class="toc" href="#05-2-7">Calculs de mar&eacute;e</a></li>
+                        <li><a class="toc" href="#05-2-8">Pr&eacute;visions m&eacute;t&eacute;orologiques</a></li>
+                        <li>
+                            <a class="toc" href="#05-2-9">Navigation Astronomique</a>
+                            <ol>
+                                <li><a class="toc" href="#05-2-9-1">Point par hauteur m&eacute;ridienne.</a></li>
+                                <li><a class="toc" href="#05-2-9-2">Point par droite(s) de hauteur.</a></li>
+                            </ol>
+                        </li>
                     </ol>
                 </li>
             </ol>
@@ -179,7 +189,7 @@
                 <li><a class="toc" href="#arcs-capables">Arcs capables</a></li>
                 <li><a class="toc" href="#mercator">Mercator et Latitude Croissante</a></li>
                 <li><a class="toc" href="#ps">Plotting Sheets</a></li>
-                <li><a class="toc" href="#equation-du-temps">Équation du temps</a></li>
+                <li><a class="toc" href="#equation-du-temps">&Eacute;quation du temps</a></li>
                 <li><a class="toc" href="#logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></li>
                 <li><a class="toc" href="#lop-sample">Exemple de calcul de droites de hauteur</a></li>
                 <li>
@@ -670,7 +680,7 @@
         <div class="doc-section">
             <h3><a name="04-8-1">Calculs infaisables &agrave; bord</a></h3>
             <p>
-                Éph&eacute;m&eacute;rides et almanachs.<br/>
+                &Eacute;ph&eacute;m&eacute;rides et almanachs.<br/>
                 Pas &agrave; la main, les calculs sont &eacute;normes, tant pour les tables de mar&eacute;e que pour les &eacute;ph&eacute;m&eacute;rides astronomiques.
                 <br/>
                 C'est l&agrave; qu'on reparle d'informatique. Il est simple de confier ce genre de calculs &agrave; un ordinateur, 
@@ -1075,7 +1085,7 @@
             ce qui est toujours bienvenu. 
             Cette m&eacute;thode est particuli&egrave;rement bienvenue lors d'un atterrissage, apr&egrave;s une travers&eacute;e. 
             La remont&eacute;e du fond va permettre de savoir &agrave; quel moment on aborde le plateau continental. 
-            Si la sonde est une sonde &agrave; main, il faut avoir quelqu'un de d&eacute;di&eacute; &agrave; cette fonction ; si on sonde des fonds de plus de 20 m&egrave;tres, 
+            Si la sonde est une sonde &agrave; main, il faut avoir quelqu'un de d&eacute;di&eacute; &agrave; cette fonction&nbsp;; si on sonde des fonds de plus de 20 m&egrave;tres, 
             c'est un travail &agrave; plein temps&nbsp;!
             <br/>
             N&eacute;anmoins, cette m&eacute;thode de point &eacute;tait couramment employ&eacute;e lors des atterrissages. 
@@ -1088,7 +1098,7 @@
     <div class="doc-section">
         <h3><a name="05-2-5">Point par arcs capables</a></h3>
         <p>
-            Le plus pr&eacute;cis de tous, et de fort loin !
+            Le plus pr&eacute;cis de tous, et de fort loin&nbsp;!
             <br/>
             Il s'effectue en vue des c&ocirc;tes, et fait intervenir un sextant tenu horizontalement. 
             Voir &agrave; ce sujet l'appendice <a href="#arcs-capables">Arcs capables</a>. 
@@ -1101,6 +1111,13 @@
             Lorsqu'on fait un point par arcs capables, on utilise le sextant tenu horizontalement. 
             Le sextant s'utilise en navigation astronomique pour abaisser un astre sur l'horizon, en d'autres termes, pour obtenir 
             l'angle que fait un astre avec l'horizon. En tenant le sextant horizontalement, on mesure l'angle que fait un amer avec un autre. 
+            <div class="indent-one">
+                Accessoirement, c'est sans doute aussi &agrave; cause de cette utilisation possible du sextant que l'octant a perdu de sa popularit&eacute;. 
+                Pour la navigation astronomique, o&ugrave; les angles ne d&eacute;passent jamais (sauf dans le cas des distances lunaires et exercices analogues) 90 degr&eacute;s, 
+                l'octant suffit. Le sextant (sextant: 6<sup>e</sup> partie d'un cercle, octant: 8<sup>e</sup> partie d'un cercle), mesurant des angles jusqu'&agrave; 120 degr&eacute;s permet 
+                un usage &eacute;tendu dans le domaine des arcs capables.
+            </div>
+            <br/>
             D&egrave;s qu'on a r&eacute;ussi &agrave; aligner les deux amers, la mesure est effectu&eacute;e, il n'y a pas &agrave; attendre que quoi que ce soit se stabilise.
         </p>
         <p>
@@ -1118,12 +1135,460 @@
             </ul>
             <div style="text-align: center;"><img src="images/arcs.capables.01.png" width="50%" alt="Arcs Capables"></div>
             On sait d&egrave;s lors qu'on est quelque part sur le cercle. Un deuxi&egrave;me cercle produira une intersection, &agrave; laquelle on se trouve. 
-            À d&eacute;faut, un rel&egrave;vement produira lui aussi une intersection avec le cercle.
+           &Agrave; d&eacute;faut, un rel&egrave;vement produira lui aussi une intersection avec le cercle.
         </p>
         <p>
             Voici ce qu'on obtient avec 3 amers, on est &agrave; l'intersection des deux cercles :
             <div style="text-align: center;"><img src="images/arcs.capables.02.jpg" width="50%" alt="Arcs Capables"></div>
         </p>
+    </div>
+    <div class="doc-section">
+        <h3><a name="05-2-6">Point astronomique</a></h3>
+        <p>
+            Trait&eacute; en d&eacute;tails dans une prochaine section. C'est de toute &eacute;vidence la technique qui demande le plus de calculs.
+        </p>
+        <p>
+            Comme on le verra dans la section qui lui est consacr&eacute;e, certains aspects de la navigation astronomique 
+            requi&egrave;rent la connaissance du temps, aussi pr&eacute;cis&eacute;ment que possible. 
+            Il existe des techniques qui permettent de recaler les chronom&egrave;tres, &agrave; partir de l'observation de la distance (angulaire) 
+            qui s&eacute;pare la Lune des autres astres (Soleil, plan&egrave;tes, &eacute;toiles). 
+            Cette technique met en &oelig;uvre encore plus de calculs que le point astronomique proprement dit. 
+            Mais &ccedil;a fonctionne. 
+            Les tables qui permettent de conna&icirc;tre cette distance lunaire ont cess&eacute; d'&ecirc;tre publi&eacute;es en 1907 
+            (date &agrave; laquelle des tops horaires ont commenc&eacute; &agrave; &ecirc;tre &eacute;mis par radio), mais grâce &agrave; l'informatique, on est en mesure de re-publier ces tables.
+        </p>
+    </div>
+    <div class="doc-section">
+        <h3><a name="05-2-7">Calculs de mar&eacute;e</a></h3>
+        <p>
+            La connaissance de l'&eacute;tat de la mar&eacute;e permet de savoir deux choses importantes:
+            <ul>
+            <li>Si on a assez d'eau pour naviguer.</li>
+            <li>Comment est orient&eacute; un &eacute;ventuel courant de mar&eacute;e, et quelle est sa force.</li>
+            </ul>
+            Il existe de nombreux atlas destin&eacute;s &agrave; conna&icirc;tre les courants de mar&eacute;e, qui se r&eacute;f&egrave;rent aux heures de mar&eacute;e d'un port 
+            donn&eacute; (dit "port de r&eacute;f&eacute;rence").
+            <br/>
+            La hauteur d'eau est un param&egrave;tre d&eacute;licat &agrave; obtenir, il d&eacute;pend de nombreux &eacute;l&eacute;ments. 
+            Certains peuvent &ecirc;tre anticip&eacute;s et calcul&eacute;s, d'autres non.
+            <div class="doc-section">
+                <h4>Calcul de la hauteur d'eau</h4>
+                <p>
+                   &Agrave; la main, on utilisera la r&egrave;gle des douzi&egrave;mes. 
+                   Elle permet une approximation tout &agrave; fait satisfaisante de la sinuso&iuml;de que suit en fait la hauteur d'eau.
+                </p>
+                <p>
+                    <b>Attention&nbsp;!!</b> Tous les pays (&eacute;diteurs des cartes et des almanachs) n'utilisent pas la m&ecirc;me 
+                    r&eacute;f&eacute;rence pour le z&eacute;ro des cartes&nbsp;!
+                    <div class="indent-one" style="font-style: italic;">
+                        Le SHOM (service hydrographique fran&ccedil;ais) utilise comme r&eacute;f&eacute;rence le niveau des plus basses mers possibles. Ce qui fait qu'il n'y a <b>jamais</b> 
+                        moins d'eau (en fait, &ccedil;a peut arriver tr&egrave;s exceptionnellement, quelques rares fois par si&egrave;cle..., en g&eacute;n&eacute;ral lors d'une sp&eacute;cialement 
+                        grande mar&eacute;e, avec un vent qui amplifie le ph&eacute;nom&egrave;ne) que ce qui est indiqu&eacute; sur la carte, c'est fort pratique.
+                        <br/>
+                        D'autres – comme les &Eacute;tats-Unis – prennent une r&eacute;f&eacute;rence moyenne (comme la valeur moyenne des basses mers en g&eacute;n&eacute;ral..., voyez le genre), 
+                        &agrave; l'&eacute;gard de laquelle on peut &eacute;mettre quelques r&eacute;serves. 
+                        Mais de toute fa&ccedil;on, on n'a pas le choix, il s'agit bel et bien de savoir quelle est la r&eacute;f&eacute;rence utilis&eacute;e, tant pour les cartes, que pour l'almanach.
+                    </div>
+                </p>
+                <p>
+                    Dans l'ordre des priorit&eacute;s, imm&eacute;diatement apr&egrave;s avoir identifi&eacute; le z&eacute;ro des cartes, il convient aussi d'identifier l'unit&eacute; utilis&eacute;e. 
+                    On trouvera des cartes gradu&eacute;es en m&egrave;tres, en pieds, et en brasses. Une brasse &eacute;quivaut &agrave; six pieds (et une encablure &agrave; 100 brasses), 
+                    le m&egrave;tre &agrave; un peu plus de trois&nbsp;; avoir une id&eacute;e de son tirant d'eau dans chacune de ces trois unit&eacute;s peut sans doute contribuer &agrave; 
+                    une certaine forme de s&eacute;r&eacute;nit&eacute;, si on doit avoir recours &agrave; des cartes &eacute;tablies de ces diff&eacute;rentes fa&ccedil;ons... 
+                    Avec trois brasses d'eau, on n'a pas pied. Avec trois pieds, si, et largement.
+                    <div class="indent-one">
+                        En anglais, un pied se dit "foot" ("feet" au pluriel). Une brasse se dit "fathom"&nbsp;; les deux commencent par un "f"... 
+                        Le "f" est l'abr&eacute;viation de "fathom", le pied s'&eacute;crit &agrave; l'aide d'une apostrophe. Ainsi, sur une carte anglophone, "6f" signifie 6 brasses, 
+                        alors que "6'" signifie 6 pieds. 
+                        Ceci ne manquera pas de rappeler aux plus attentifs cette tentative - fran&ccedil;aise - de distinguer la "Vache Folle" de la "Viande Fran&ccedil;aise", 
+                        grâce &agrave; ses initiales… Non, c'est pas une blague.
+                    </div>
+                </p>
+                <p>
+                    Sur les cartes <i>normales</i>, les sondes et les altitudes sont exprim&eacute;es en m&egrave;tres. 
+                    Sur d'autres cartes, il n'est pas exceptionnel d'avoir les sondes en brasses, et les altitudes en pieds. On ne rit pas.
+                </p>                
+                <p>
+                    La mar&eacute;e est d&eacute;crite par la superposition de plusieurs courbes sinuso&iuml;dales, en g&eacute;n&eacute;ral au nombre de neuf (mais &ccedil;a peut aller jusqu'&agrave; 92). 
+                    Les coefficients &agrave; appliquer &agrave; chacune de ces courbes sont appel&eacute;s les coefficients harmoniques, qui varient en fonction du temps, 
+                    et de l'endroit. La d&eacute;termination de ces coefficients harmoniques est la cl&eacute; de l'&eacute;laboration des tables et almanachs de mar&eacute;e.
+                    <br/>
+                    La diff&eacute;rence de hauteur entre la mar&eacute;e haute et la mar&eacute;e basse est appel&eacute;e l'"amplitude", la diff&eacute;rence de temps 
+                    qui s&eacute;pare l'heure de la mar&eacute;e haute et l'heure de la mar&eacute;e basse est appel&eacute;e la "dur&eacute;e".
+                    <br/>
+                    Il existe plusieurs sortes de mar&eacute;e, de semi-diurne &agrave; diurne, en passant par les mar&eacute;es &agrave; in&eacute;galit&eacute;s diurnes... 
+                    N&eacute;anmoins, lorsqu'il s'agit de calculer la hauteur d'eau, la r&egrave;gle des douzi&egrave;mes demeure une valeur s&ucirc;re. 
+                    D'autant que – r&eacute;p&eacute;tons-le – la hauteur d'eau n'est malheureusement pas d&eacute;termin&eacute;e par les seuls coefficients harmoniques. 
+                    La pression atmosph&eacute;rique, le sens et la force du vent ont une influence consid&eacute;rable sur la mar&eacute;e, qui ne saurait malheureusement &ecirc;tre 
+                    prise en compte lors du calcul des almanachs. Les outils dont on dispose &agrave; bord pour &eacute;valuer cette influence sont pour 
+                    l'heure de nature pifom&eacute;trique ou assimil&eacute;e.
+
+                    <h4>R&egrave;gle des douzi&egrave;mes</h4>
+
+                    On divise la dur&eacute;e en <b>six</b> p&eacute;riodes &eacute;gales, l'amplitude en <b>douze</b> parties &eacute;gales.
+                    <ul>
+                        <li>Pendant la premi&egrave;re p&eacute;riode, la hauteur d'eau varie de <b>1</b> douzi&egrave;me</li>
+                        <li>Pendant la deuxi&egrave;me p&eacute;riode, la hauteur d'eau varie de <b>2</b> douzi&egrave;mes</li>
+                        <li>Pendant la troisi&egrave;me p&eacute;riode, la hauteur d'eau varie de <b>3</b> douzi&egrave;mes</li>
+                        <li>Pendant la quatri&egrave;me p&eacute;riode, la hauteur d'eau varie de <b>3</b> douzi&egrave;mes</li>
+                        <li>Pendant la cinqui&egrave;me p&eacute;riode, la hauteur d'eau varie de <b>2</b> douzi&egrave;mes</li>
+                        <li>Pendant la sixi&egrave;me p&eacute;riode, la hauteur d'eau varie de <b>1</b> douzi&egrave;mes</li>
+                    </ul>
+
+                    Pour r&eacute;sumer : <code>[1, 2, 3, 3, 2, 1]</code>, et <code>1+2+3+3+2+1 = 12</code>
+                    <br/><br/>
+                    La figure suivante montre que cette r&egrave;gle permet de disposer d'une sinuso&iuml;de dans des proportions fort acceptables.
+                    <div style="text-align: center;"><img src="images/douxiemes.png" width="50%" alt="R&egrave;gle des douxi&egrave;mes"></div>
+                </p>
+            </div>
+        </p>
+    </div>
+    <div class="doc-section">
+        <h3><a name="05-2-8">Pr&eacute;visions m&eacute;t&eacute;orologiques</a></h3>
+        <p>
+            Voil&agrave; un vaste sujet. Les pr&eacute;visions qu'on sera capable de produire sans &eacute;lectricit&eacute; vont &ecirc;tre bas&eacute;es sur 
+            l'observation, et pas sur la r&eacute;ception de documents (bulletins, fax, GRIBs).
+            <br/>
+            Le livre de bord contribue pour une bonne part &agrave; prendre note de ces observations. 
+            Vitesse et direction du vent, associ&eacute;es &agrave; la pression atmosph&eacute;rique lue au
+             barom&egrave;tre seront les donn&eacute;es mesur&eacute;es, la n&eacute;bulosit&eacute; (nuages en octas et genre, 
+             associ&eacute;s &agrave; la visibilit&eacute;) sera observ&eacute;e. La valeur de la pression lue au barom&egrave;tre n'est pas aussi 
+             importante que la variation dont elle fait l'objet. Le fait que la pression affich&eacute;e soit de 1010 ou de 1030 n'est gu&egrave;re important. 
+             Le fait que cette pression augmente ou diminue de 15 millibars en heure va avoir une importance majeure.
+            <br/>
+            L'&eacute;volution de la forme des nuages, de la visibilit&eacute;, de la pression atmosph&eacute;rique, de la direction et de la force du vent 
+            sont autant de param&egrave;tres qui vont permettre d'anticiper l'approche ou l'&eacute;volution d'une perturbation. 
+            Comme tels, ils seront soigneusement consign&eacute;s dans le livre de bord.
+        </p>
+        <p>
+            La façon d'interpr&eacute;ter ces param&egrave;tres d&eacute;passe de beaucoup le cadre de ce document.
+        </p>
+    </div>
+    <div class="doc-section">
+        <h3><a name="05-2-9">Navigation Astronomique</a></h3>
+        <p style="font-style: italic;">
+            Un petit pr&eacute;ambule : habitu&eacute;s qu'ils sont &agrave; obtenir un r&eacute;sultat en poussant des boutons, les usagers de l'&eacute;lectronique, des t&eacute;l&eacute;commandes et 
+            autres zapettes sont en g&eacute;n&eacute;ral <b>effar&eacute;s</b> par la navigation astronomique, en particulier par les calculs qu'elle met en &oelig;uvre, 
+            et peu s'en faut de devoir les rattraper au lasso, d'autant qu'ils s'imaginent souvent avoir entrepris ce qu'il y a de plus complexe 
+            apr&egrave;s avoir r&eacute;ussi &agrave; corriger un cap ou fait valoir une route. C'est incroyable, il faut r&eacute;fl&eacute;chir&nbsp;!
+            <br/>
+            La quantit&eacute; de calculs est de fait consid&eacute;rable (surtout pour quelqu'un qui ne sait pas compter sans calculette), 
+            mais ces calculs sont simples, ce sont des additions et des soustractions (il y a bien une ou deux multiplications pour les interpolations, 
+            mais rien de dramatique) puisqu'on utilise des tables de logarithmes, voire des tables d&eacute;di&eacute;es &agrave; ce calcul.
+        </p>
+        <p>
+            Les calculs impliqu&eacute;s dans la navigation astronomique font intervenir des &eacute;ph&eacute;m&eacute;rides 
+            nautiques – ou astronomiques – qui fournissent plusieurs des param&egrave;tres n&eacute;cessaires, concernant le ou les astres observ&eacute;s.
+        </p>
+        <p>
+            <div style="text-align: center;"><img src="images/astro.01.jpg" width="50%" alt="Point Pg"></div>
+            Parmi eux, les &eacute;ph&eacute;m&eacute;rides permettent de conna&icirc;tre &agrave; chaque instant ce qu'on appelle la "position g&eacute;ographique instantan&eacute;e" d'un astre, not&eacute;e Pg.
+            La position g&eacute;ographique instantan&eacute;e d'un astre est le point de la terre o&ugrave; l'astre est au z&eacute;nith (&agrave; la verticale). 
+            Il est unique &agrave; un instant donn&eacute; pour un astre donn&eacute;.
+            <div style="text-align: center;"><img src="images/astro.02.jpg" width="50%" alt="Point Pg"></div>
+            La latitude de ce point Pg s'appelle la d&eacute;clinaison (et oui, encore une&nbsp;!) de l'astre.
+            <div style="text-align: center;"><img src="images/astro.03.jpg" width="50%" alt="Point Pg"></div>
+            Sa longitude s'appelle l'Angle Horaire &agrave; Greenwich, not&eacute; AHG, ou AHvo (Angle Horaire au vrai z&eacute;ro).
+        </p>
+        <div class="doc-section">
+            <h4><a name="05-2-9-1">Point par hauteur m&eacute;ridienne.</a></h4>
+            <p>
+                Les calculs sont simples. Il va s'agir de quelques additions, et de quelques interpolations. 
+                Point n'est besoin de tables trigonom&eacute;triques ou logarithmiques. Papier et crayon suffisent.
+                <br/>
+                Le point par hauteur m&eacute;ridienne exploite un cas particulier, qui est celui o&ugrave; l'astre et l'observateur sont sur le m&ecirc;me m&eacute;ridien. 
+                Il est midi au lieu de l'observateur (si tant est que l'astre observ&eacute; soit le Soleil).
+                <div class="indent-one">
+                    Les mots "midi" et "m&eacute;ridien" ont la m&ecirc;me racine. Les m&eacute;ridionaux habitent dans le Midi.
+                </div>
+                <br/>
+                <b>Ce cas particulier se produit une fois par jour, et par astre</b>.
+                <br/>
+                <div class="indent-one">
+                    Le passage au m&eacute;ridien d'un astre est son passage au point le plus haut de sa course dans le ciel. 
+                    Pour les autres astres que le soleil, on peut aussi exploiter leur passage &agrave; leur point le plus bas, on parle alors du passage &agrave; l'anti-m&eacute;ridien. 
+                    <br/>
+                    En fait, on peut aussi le faire avec le soleil, &agrave; condition de pouvoir voir le soleil &agrave; minuit. 
+                    Ce qui arrive en &eacute;t&eacute;, au-del&agrave; des cercles polaires.
+                </div>
+                <div style="text-align: center;"><img src="images/astro.04.jpg" width="50%" alt="Au m&eacute;ridien"></div>
+                Pour faciliter la lecture des figures qui suivent, on fait pivoter le m&eacute;ridien de l'astre dans le plan de la feuille. 
+                <br/>
+                L'observateur se trouve donc lui aussi sur ce m&eacute;ridien.
+                <div style="text-align: center;"><img src="images/astro.05.png" width="50%" alt="Au m&eacute;ridien"></div>
+                <h5>Latitude par hauteur m&eacute;ridienne, en th&eacute;orie</h5>
+                <p>
+                    On introduit ici une nouvelle notion, celle de distance z&eacute;nithale, not&eacute;e Dz, ou &zeta; (lettre grecque dzeta).
+                    <br/>
+                    La distance z&eacute;nithale est le compl&eacute;ment de la hauteur, soit (90˚ - hauteur).
+                    <div style="text-align: center;"><img src="images/astro.06.jpg" width="50%" alt="Distance z&eacute;ithale"></div>
+                    Si la latitude de l'astre (point Pg) et la latitude de l'observateur sont de signes diff&eacute;rents, la distance z&eacute;nithale est 
+                    &eacute;gale &agrave; la somme de la latitude et de la d&eacute;clinaison de l'astre.
+                    <div style="text-align: center;"><img src="images/astro.07.png" width="50%" alt="Distance z&eacute;ithale"></div>
+                    Si la latitude de l'astre (point Pg) et la latitude de l'observateur sont de m&ecirc;me signe, la latitude est 
+                    &eacute;gale &agrave; la somme de la distance z&eacute;nithale et de la d&eacute;clinaison de l'astre.
+                </p>
+                <h5>Longitude par hauteur m&eacute;ridienne, en th&eacute;orie</h5>
+                <p>
+                    C'est &agrave; la fois tr&egrave;s simple, et un peu compliqu&eacute;. La th&eacute;orie est tr&egrave;s simple, 
+                    la pratique est – &agrave; la surprise g&eacute;n&eacute;rale - plus scabreuse.
+                </p>
+                <p>
+                    Le principe repose sur le fait que la terre tourne de 360&deg; sur elle-m&ecirc;me en 24 heures. 
+                    Il existe donc une &eacute;troite corr&eacute;lation entre la longitude et l'heure (il est possible que le terme "angle horaire" vous ait mis la puce &agrave; l'oreille). 
+                    Si un astre passe &agrave; un m&eacute;ridien &agrave; une heure donn&eacute;e, il passera exactement une heure 
+                    plus tard &agrave; un m&eacute;ridien situ&eacute; 15&deg; plus &agrave; l'ouest.
+                    <div class="indent-one">
+                        Ce serait en fait exact si les astres qu'on observe &eacute;taient immobiles&nbsp;; malheureusement, aucun d'eux ne l'est. 
+                        Mais 15&deg; demeurent une approximation raisonnable. On le verra dans les exemples num&eacute;riques comment&eacute;s.
+                    </div>
+                </p>
+                <p>
+                    Les &eacute;ph&eacute;m&eacute;rides nous permettent de savoir &agrave; quelle heure le soleil culmine &agrave; Greenwich. 
+                    Si on arrive &agrave; savoir &agrave; quelle heure le soleil culmine sur le m&eacute;ridien de l'observateur, alors il suffit d'exprimer 
+                    cette diff&eacute;rence de temps en diff&eacute;rence d'angle pour conna&icirc;tre sa longitude.
+                </p>    
+                <p>
+                    Ceci requiert cependant un chronom&egrave;tre pr&eacute;cis. En effet, 360&deg; en 24 heures signifie 15&deg; en une heure. 
+                    Soit 15' en une minute (de temps), ce qui repr&eacute;sente 1' en quatre secondes (de temps). 
+                    Ainsi donc, une erreur de 4 secondes sur la montre correspond &agrave; une erreur d'une minute de longitude. 
+                    Comme on l'a d&eacute;j&agrave; remarqu&eacute;, ça va vite&nbsp;!
+                </p>    
+                <p>
+                    D'autre part, ainsi qu'on va le voir, l'heure exacte de la culmination n'est pas la donn&eacute;e la plus facile &agrave; obtenir.    
+                </p>
+                <h5>Latitude par hauteur m&eacute;ridienne, en pratique</h5>
+                <p>
+                    Une fois de plus, il faut disposer de sa position estim&eacute;e, et de la date.
+                </p>
+                <p>
+                    Il s'agit ici de mettre en &oelig;uvre la technique &eacute;nonc&eacute;e pr&eacute;c&eacute;demment.
+                </p>
+                <p>
+                    Pour cet exemple, on consid&egrave;re que l'astre observ&eacute; est le soleil, mais ceci est valable pour tous les astres observables. 
+                    Il est m&ecirc;me possible pour d'autres astres que le soleil d'utiliser la hauteur anti-m&eacute;ridienne (au minuit de l'astre, 
+                    et non pas &agrave; son midi, c'est-&agrave;-dire non pas lorsqu'il culmine, mais lorsqu'il atteint son point le plus bas).
+                </p>
+                <p>
+                    Supposons qu'on soit le jeudi 8 octobre 2009, et que l'estime nous situe par 34&deg;04' N et 127&deg;54' W.
+                </p>
+                <p>
+                    La premi&egrave;re chose &agrave; savoir, c'est &agrave; quelle heure cette hauteur m&eacute;ridienne va se produire.
+                </p>
+                <p>
+                    On va proc&eacute;der ici &agrave; une s&eacute;rie d'interpolations. 
+                    On les fait ici &agrave; la main, afin d'en d&eacute;tailler le processus. 
+                    Des tables de conversions destin&eacute;es &agrave; cet usage sont fournies dans un document s&eacute;par&eacute;, en annexe.
+                </p>
+                <p>
+                    On va donc convertir sa longitude estim&eacute;e de degr&eacute;s en heures. 
+                    Une heure repr&eacute;sente 15 degr&eacute;s (15&deg; en 1 heure = 360&deg; / 24 heures).
+                </p>
+                <p>
+                    Ainsi, 127&deg; = (127 / 15) = 8.466 heures, et 54' = (54/60) / 15 = 0.06 heure.
+                </p>
+                <p>
+                    Donc 127&deg;54' &eacute;quivaut &agrave; 8.526 heures. 0.526 heures = (0.526 &times; 60) minutes, soit 31.56 minutes, soit encore 31 minutes et 33.6 secondes.
+                    <div class="indent-one-italic">
+                        Encore une fois, il existe des tables qui permettent d'effectuer ce genre d'op&eacute;rations sans faire ce genre de calculs.
+                    </div>
+                </p>
+                <p>
+                    La longitude est <b>ouest</b>, ainsi il sera midi &agrave; notre longitude estim&eacute;e 8 heures 31 minutes et 34 secondes (arrondi) <b>plus tard</b> qu'&agrave; Greenwich.
+                </p>
+                <p style="border: 3px solid red; border-radius: 5px; padding: 5px;">
+                    <b><i>Attention</i></b>: Contrairement &agrave; une rumeur couramment r&eacute;pandue, il n'est pas midi tous les jours &agrave; la m&ecirc;me heure&nbsp;! 
+                    Ceux pour qui c'est nouveau consulteront avec profit et &agrave; ce sujet l'appendice <a href="#equation-du-temps">&Eacute;quation du temps</a>.
+                </p>
+                <p>
+                    Les &eacute;ph&eacute;m&eacute;rides nautiques donnent l'&eacute;quation du temps. L'&eacute;quation du temps repr&eacute;sente l'intervalle qui s&eacute;pare 12:00 UT de 
+                    l'heure de la culmination du soleil (qu'on appelle aussi "temps de passage au m&eacute;ridien").
+                </p>
+                <p>
+                    Pour le 8 octobre 2009 (voir les &eacute;ph&eacute;m&eacute;rides de cette date, plus avant dans le document), l'&eacute;quation du temps &agrave; midi UT est de +12m 29s. 
+                    On doit effectuer une interpolation. Une interpolation lin&eacute;aire est suffisante ici.
+                    Le lendemain, 9 octobre 2009, l'&eacute;quation du temps &agrave; midi UT est de +12m 46s, elle augmente donc de 17s en 24 heures. 
+                    Notre longitude repr&eacute;sente comme on l'a d&eacute;j&agrave; calcul&eacute; 8.526 heures, on doit donc ajouter &agrave; 
+                    l'&eacute;quation du temps la valeur suivante en secondes (17 / 24) &times; 8.526, soit 6.06 secondes.
+                    L'&eacute;quation du temps &agrave; l'heure du passage du soleil &agrave; notre longitude estim&eacute;e est donc de <b>+12m 35s</b>.
+                    <div class="indent-one-italic">
+                        Cette interpolation n'a gu&egrave;re d'importance si on ne se pr&eacute;occupe que de la latitude. 
+                        Elle devient plus cruciale si on se pr&eacute;occupe aussi de la longitude.
+                    </div>
+                </p>
+                <p>
+                    Attention, ceci signifie que la culmination (passage au m&eacute;ridien) du soleil &agrave; notre longitude 
+                    estim&eacute;e se produira 12m 35s avant le midi l&eacute;gal. Soit 8h 31m 34s – 12m 35s, &agrave; savoir 20h 18m 59s UT.
+                </p>
+                <p>
+                    Les &eacute;ph&eacute;m&eacute;rides donnent aussi le temps de passage des astres au m&eacute;ridien de Greenwich. 
+                    On peut aussi proc&eacute;der &agrave; la m&ecirc;me interpolation &agrave; partir du temps de passage. &Eacute;quation du temps et temps de passage sont en effet des donn&eacute;es redondantes. 
+                    Dans notre exemple, le temps de passage du soleil &agrave; Greenwich le 8 octobre est 11:47:30.113 UT, et le 9 octobre 11:47:13.572 UT. 
+                    Chacun choisira la m&eacute;thode qui lui convient le mieux.
+                </p>
+                <p>
+                    On trouverait ainsi un temps de passage &agrave; notre m&eacute;ridien estim&eacute; de 11:47:24 UT.
+                    <br/>
+                    11h 47m 24s + 8h 31m 34s = 20h 18m 58s UT. C'est pareil.
+                </p>
+                <p>
+                    On peut &eacute;galement anticiper la hauteur qu'on devrait observer si l'estime &eacute;tait correcte.
+                    <br/>                    
+                    &Agrave; 20 heures UT le 8 octobre 2009, la d&eacute;clinaison du soleil est S 6&deg;10.09', &agrave; 21 heures, elle est S 6&deg;11.04'. 
+                    Elle augmente donc de 0.95' en une heure. On peut ici interpoler de t&ecirc;te, on arrondi 18m 59s &agrave; 20 minutes, soit 1/3 d'heure.
+                    <br/>
+                    <code>0.95' / 3 = 0.3166'</code>. La d&eacute;clinaison du soleil &agrave; l'heure estim&eacute;e de la culmination sera donc de S 6&deg;10.406', qu'on arrondira &agrave; S 6&deg;10.40'.
+                </p>
+                <p>    
+                    Latitude et d&eacute;clinaison sont de signes diff&eacute;rents, donc Dz = L + D, &agrave; savoir 34&deg;04' + 6&deg;10.4' = 40&deg;14.4'.
+                    Ainsi, la hauteur observ&eacute;e (th&eacute;oriquement) devient 90&deg; - 40&deg;14.4', soit 49&deg;45.6'.
+                </p>
+                <p>    
+                    Reste &agrave; savoir si c'est vrai&nbsp;! On sort le sextant, et on commence &agrave; observer. 
+                    On commence &agrave; observer suffisamment longtemps avant l'heure estim&eacute;e de la culmination, pour &ecirc;tre s&ucirc;r de ne pas la manquer. 
+                    Cet intervalle de temps d&eacute;pend de la qualit&eacute; de l'estime.
+                    <br/>
+                    On continue ainsi &agrave; observer l'astre tant que sa hauteur augmente. 
+                    D&egrave;s lors que l'astre commence &agrave; redescendre (que l'astre commence &agrave; se mouiller - Le sextant permet par son jeu de miroirs de 
+                    descendre l'astre sur l'horizon. On dit qu'on "mouille" un astre lorsqu'il trempe dans l'eau dans le miroir du sextant), 
+                    c'est qu'on a atteint la culmination, et qu'on dispose maintenant de la hauteur instrumentale. 
+                    Pour notre exemple, on a lu sur le sextant 49&deg;32'.
+                </p>
+                <p>    
+                    C'est pas fini&nbsp;!
+                    <br/>
+                    La hauteur instrumentale doit &ecirc;tre corrig&eacute;e, pour obtenir la hauteur observ&eacute;e.
+                    <br/>
+                    Il faut lui apporter quatre corrections:
+                    <ul>
+                        <li>semi-diam&egrave;tre</li>
+                        <li>d&eacute;pression de l'horizon</li>
+                        <li>r&eacute;fraction</li>
+                        <li>parallaxe</li>
+                    </ul>
+                    Le semi-diam&egrave;tre s'applique au soleil et &agrave; la lune, car on abaisse le bord inf&eacute;rieur de l'astre (parfois sup&eacute;rieur 
+                    dans la cas de la lune) sur l'horizon, et non pas son centre.
+                    <br/>
+                    La d&eacute;pression de l'horizon vient de ce que l'observateur n'est pas au niveau de l'eau. 
+                    Si l'&oelig;il est &agrave; 2 m&egrave;tres au-dessus de l'eau, l'horizon est d&eacute;j&agrave; &agrave; environ 1.8 mille...
+                    <br/>
+                    La r&eacute;fraction vient de ce que les rayons de l'astre passent du vide de l'espace dans l'atmosph&egrave;re. 
+                    L'indice de r&eacute;fraction des deux milieux n'est pas le m&ecirc;me - comme lorsqu'on regarde une paille dans un verre d'eau&nbsp;; 
+                    on dirait qu'elle est cass&eacute;e au niveau de la surface de l'eau.. 
+                    <br/>
+                    L'erreur de parallaxe vient de ce qu'on ne fait pas l'observation &agrave; partir du centre de la terre.
+                    <br/>                    
+                    Ces corrections sont en g&eacute;n&eacute;ral rassembl&eacute;es dans une seule table.
+                    <br/>
+                    On trouve ici 0&deg;12.6', qu'on doit donc ajouter &agrave; la hauteur instrumentale.
+                    <br/>
+                    Ce qui donne 49&deg;32' + 0&deg;12.6', soit 49&deg;44.6' pour la hauteur observ&eacute;e.
+                    <br/>
+                    Si l'op&eacute;ration s'est pass&eacute;e aux alentours de l'heure estim&eacute;e pour la culmination, 
+                    on peut consid&eacute;rer que la d&eacute;clinaison du soleil telle qu'on l'a calcul&eacute;e est valide pour cette observation, 
+                    &agrave; savoir ici S 6&deg;10.40'. Sinon, il faut la r&eacute;-interpoler avec de nouveaux param&egrave;tres.
+                    <br/>
+                    La latitude de l'observateur et la d&eacute;clinaison de l'astre &eacute;tant de signes contraires, on a L = Dz – D. 
+                    La distance z&eacute;nithale Dz est (90&deg; - 49&deg;44.6'), soit 40&deg;15.4', &agrave; laquelle on soustrait donc la d&eacute;clinaison pour obtenir la latitude :
+                    <br/>
+                    <b><code>L = 40&deg;15.4' – 6&deg;10.4' = 34&deg;05.0' N</code></b>
+                    <br/><br/>
+                    Voil&agrave; pour la latitude&nbsp;!
+                </p>
+                <h5>Longitude par hauteur m&eacute;ridienne, en pratique</h5>
+                <p>
+                    C'est possible, &agrave; condition bien s&ucirc;r de disposer d'un chronom&egrave;tre fiable. 
+                    Ce qu'il faut, c'est avoir l'heure <i>exacte</i> de la culmination, l'ajouter ou la retrancher au temps de 
+                    passage (midi corrig&eacute; de l'&eacute;quation du temps), de transformer cette grandeur en angle, comme on l'a fait 
+                    en sens inverse pour savoir &agrave; quelle heure commencer &agrave; observer, et le tour est jou&eacute;&nbsp;!
+                    <br/>
+                    Le probl&egrave;me, c'est qu'&agrave; cette heure, le soleil a une course dans le ciel qui tangente l'horizontale, et que le 
+                    moment o&ugrave; la culmination est effective est impossible &agrave; d&eacute;terminer avec la pr&eacute;cision requise&nbsp;; 
+                    on rappelle que 4 secondes de temps repr&eacute;sentent une minute de longitude, et que c'est justement la longitude qu'on cherche &agrave; d&eacute;terminer...
+                    <div style="text-align: center;"><img src="images/astro.08.jpg" width="50%" alt="Culmination"></div>
+                    On va cependant pouvoir pallier cet inconv&eacute;nient. 
+                    On va faire deux mesures, une avant, et une apr&egrave;s la culmination, &agrave; un moment o&ugrave; la course de l'astre est suffisamment verticale pour qu'une 
+                    hauteur donn&eacute;e puisse &ecirc;tre associ&eacute;e &agrave; un temps pr&eacute;cis, et on en fera la moyenne.
+                </p>
+                <p>
+                    On fait une premi&egrave;re observation environ 15 minutes avant l'heure estim&eacute;e de la m&eacute;ridienne. 
+                    On note pr&eacute;cis&eacute;ment &agrave; quelle heure T1 la hauteur a &eacute;t&eacute; prise. On appelle la hauteur "<code>H1</code>".
+                    <div style="text-align: center;"><img src="images/astro.09.jpg" width="50%" alt="Culmination"></div>
+                    On effectue alors les observations n&eacute;cessaires &agrave; la d&eacute;termination de la latitude, comme d&eacute;crit au paragraphe pr&eacute;c&eacute;dent.
+                    <br/>
+                    Ceci &eacute;tant fait, on replace ensuite le sextant &agrave; la valeur qu'il avait &agrave; T1, &agrave; savoir H1. 
+                    On observe &agrave; nouveau le soleil, on attend – sans modifier le r&eacute;glage du sextant – que le soleil repasse par la m&ecirc;me hauteur H1, 
+                    et on note soigneusement le temps T2. 
+                    Moyennant le fait qu'on ne se soit pas d&eacute;plac&eacute; &agrave; des vitesses &eacute;lev&eacute;es entre T1 et T2, 
+                    on peut assumer que l'heure de la culmination est la moyenne de T1 et T2.
+                </p>
+                <p>
+                    <i>Exemple:</i><br/>
+                    On a pris la premi&egrave;re hauteur <code>H1</code> &agrave; <code>T1 = 20:05:00 UT</code>.
+                    <br/>
+                    Le soleil est repass&eacute; par la m&ecirc;me hauteur <code>H1</code> &agrave; <code>T2 = 20:33:10 UT</code>.
+                    <br/>
+                    La moyenne de ces deux temps est <code>20:19:05 UT</code>.
+                    <br/>
+                    Le temps de passage &agrave; Greenwich a &eacute;t&eacute; calcul&eacute; pr&eacute;c&eacute;demment, 
+                    c'est <code>11:47:24 UT</code>, ce qui constitue une diff&eacute;rence de <code>8h 31m 41s</code>.
+                </p>
+                <p>
+                    8h = 8 &times; 15° = 120°
+                    <br/>
+                    31m = (31 / 60) &times; 15° = 7,75°
+                    <br/>
+                    41s = (41 / 3600) &times; 15° = 0,171°
+                </p>
+                <p>
+                    On obtient donc un angle horaire de <code>120 + 7,75 + 0,171 = 127,921°</code> soit une longitude de <code>127°55,26' W</code>.
+                    <div class="indent-one-italic">
+                        Comme d&eacute;j&agrave; dit - fort &agrave; propos, il existe des tables pour ce genre de conversions d&eacute;cimale vers sexag&eacute;simale, et vice-versa.
+                    </div>
+                    <br/>
+                    Et voil&agrave; pour la longitude&nbsp;!
+                </p>
+                <p>
+                    On est ainsi pass&eacute; d'une position estim&eacute;e de <code>34°04' N</code> et <code>127°54' W</code> &agrave; une position corrig&eacute;e de <code>34°05.0' N</code> et <code>127°55.26' W</code>.
+                </p>
+                <p>
+                    <i>Un premier commentaire:</i>
+                    <br/>
+                    On remarque que lors de la recherche de la latitude, on n'a besoin de l'heure que pour savoir &agrave; quelle heure commencer l'observation ; 
+                    la pr&eacute;cision de la minute (de temps) est fort suffisante.
+                    <br/>
+                    Par contre, lors de la recherche de la longitude, la pr&eacute;cision du chronom&egrave;tre impacte directement – et consid&eacute;rablement - la 
+                    pr&eacute;cision du calcul de la longitude. &Agrave; nouveau, quatre secondes sur le chronom&egrave;tre repr&eacute;sentent une minute d'arc en longitude.
+                </p>
+                <p>
+                    <i>Un deuxi&egrave;me commentaire:</i>
+                    <br/>
+                    Il faut peu de temps de pratique du sextant pour r&eacute;aliser qu'il est pr&eacute;somptueux de vouloir effectuer des mesures d'une 
+                    pr&eacute;cision plus fine que la minute d'arc, surtout sur un petit bateau.
+                    <br/>
+                    Les interpolations n&eacute;cessaires pour le calcul des diff&eacute;rentes valeurs issues des &eacute;ph&eacute;m&eacute;rides peuvent en être facilit&eacute;es. 
+                    Ainsi, pour le calcul de la d&eacute;clinaison, on a trouv&eacute; une variation horaire de 0.95'. En pratique, on arrondira &agrave; 1', et tout ira bien. 
+                    Il n'y a gu&egrave;re de raisons de s'encombrer de dixi&egrave;mes de minutes d'arc. 
+                    Attention cependant aux arrondis, il faut arrondir &agrave; la minute la plus proche, et ne pas se contenter de la partie enti&egrave;re.
+                </p>
+            </p>
+        </div>
+        <div class="doc-section">
+            <h4><a name="05-2-9-2">Point par droite(s) de hauteur.</a></h4>
+            <p>
+                Les calculs sont plus complexes, on va voir pourquoi.
+                <br/>
+                Le principe du point par droites de hauteur repose sur les données suivantes :
+                <ul>
+                    <li>La connaissance du temps (autrement dit : "quelle heure il est ?", pas "quel temps il fait"...)</li>
+                    <li>La position de l'astre observé (Pg)</li>
+                    <li>La position estimée de l'observateur</li>
+                    <li>La hauteur de l'astre observé</li>
+                </ul>
+                Le principe de base consiste à comparer ce qu'on devrait observer avec le sextant si on était là où on pense être, 
+                avec ce qu'on observe en réalité, et à corriger son estime en conséquence.
+            </p>
+        </div>
     </div>
 </div>
 
@@ -1145,8 +1610,20 @@
 <div class="content">
     <h2><a name="triangle-resolution">R&eacute;solution de triangles</a></h2>
     <p>
-
-    </p>
+        <div style="text-align: center;"><img src="images/triangle.jpg" width="40%" alt="Arcs Capables"></div>
+        <code>a</code>, <code>b</code> et <code>c</code> sont connus, on veut la valeur des angles &alpha;, &beta; et &gamma;.
+        <div class="postit">
+           $$ \alpha = \arccos \left( \dfrac{b^2 + c^2 - a^2}{2bc} \right) $$
+        </div>
+        <br/>
+        <div class="postit">
+            $$ \beta = \arccos \left( \dfrac{c^2 + a^2 - b^2}{2ac} \right) $$
+         </div>
+         <br/>
+         <div class="postit">
+            $$ \gamma = \arccos \left( \dfrac{a^2 + b^2 - c^2}{2ab} \right) $$
+          </div>
+      </p>
 </div>
 
 <div class="content">
@@ -1169,9 +1646,12 @@
         <br/>  
         <b><i>donc &beta; = 2 &times; &alpha;</i></b>.
         <br/>
-        Ceci &eacute;tant acquis, on passe &agrave; la figure suivante. Si le segment <code>AB</code> est constant, l'angle &alpha; + &beta; est invariant.
+        Ceci &eacute;tant acquis, on passe &agrave; la figure suivante. Si le segment <code>AB</code> est constant, l'angle <b>&alpha; + &beta;</b> est invariant.
+        <br/>&alpha; et &beta; varient, mais leur somme demeure constante.
         <div style="text-align: center;"><img src="images/arcs.capables.03.jpg" width="40%" alt="Arcs Capables"></div>
-        Ainsi, o&ugrave; que soit situ&eacute; le point <code>C</code> sur le cercle, la somme &gamma; + &delta; est &eacute;gale &agrave; la moiti&eacute; de (&alpha; + &beta;). 
+        Comme vu ci-dessus, on peut d&eacute;duire que <b>&gamma; = (&alpha; / 2)</b>, et que <b>&delta; = (&beta; / 2)</b>.
+        <br/>
+        Ainsi, o&ugrave; que soit situ&eacute; le point <code>C</code> sur le cercle, la somme <b>&gamma; + &delta;</b> est &eacute;gale &agrave; la moiti&eacute; de <b>(&alpha; + &beta;)</b>. 
         <br/>
         (&alpha; + &beta;) &eacute;tant invariant, (&gamma; + &delta;) l'est aussi.
         <br/>
@@ -1194,7 +1674,7 @@
 </div>
 
 <div class="content">
-    <h2><a name="equation-du-temps">Équation du temps</a></h2>
+    <h2><a name="equation-du-temps">&Eacute;quation du temps</a></h2>
     <p>
 
     </p>
