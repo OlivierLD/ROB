@@ -2,6 +2,11 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
 .screen-warning {
     font-style: italic;
 }

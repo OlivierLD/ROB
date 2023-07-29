@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <!--
+    Intends to generate a possibly printer-ready document, with appropriate page breaks and so.
+    This doc should be both visualizable and printable.
+
     https://www.sitepoint.com/css-printer-friendly-pages/
 
     Lorem Ipsum generator: https://lorem-ipsum.perbang.dk/
     https://css-tricks.com/almanac/properties/p/page-break/
 
     For LaTeX: https://www.overleaf.com/learn
-
 
     TODO/PENDING: Page numbers.
 
@@ -160,6 +162,8 @@
                     <a class="toc" href="#05-2">Recaler l'estime</a>
                     <ol>
                         <li><a class="toc" href="#05-2-1">Point par rel&egrave;vements</a></li>
+                        <li><a class="toc" href="#05-2-2">Alignements</a></li>
+                        <li><a class="toc" href="#05-2-3">Point par rel&egrave;vement d'un seul amer</a></li>
                     </ol>
                 </li>
             </ol>
@@ -176,7 +180,12 @@
                 <li><a class="toc" href="#equation-du-temps">Équation du temps</a></li>
                 <li><a class="toc" href="#logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></li>
                 <li><a class="toc" href="#lop-sample">Exemple de calcul de droites de hauteur</a></li>
-                <li><a class="toc" href="#least-squares">R&eacute;solution d'un polyn&ocirc;me par la m&eacute;thode des moindres carr&eacute;s</a></li>
+                <li>
+                    <a class="toc" href="#least-squares">R&eacute;solution d'un polyn&ocirc;me par la m&eacute;thode des moindres carr&eacute;s</a>
+                    <ul>
+                        <li><a class="toc" href="#least-square-dev">Cas d'une courbe de d&eacute;viation</a></li>
+                    </ul>
+                </li>
             </ul>
         </li>
     </ol>
@@ -855,7 +864,7 @@
                 <p>
                     La d&eacute;rive est engendr&eacute;e par les conditions ext&eacute;rieures, le vent, les vagues (voire par le barreur, qui fait son boulot comme un cochon – c'est loin d'&ecirc;tre exceptionnel). 
                     Un petit voilier y sera bien &eacute;videmment plus sensible qu'un super-tanker. Au pr&egrave;s dans de la mer, une d&eacute;rive de l'ordre de 10 degr&eacute;s n'est pas exceptionnelle. 
-                    La d&eacute;rive est positive lorsqu'elle porte &agrave; tribord, n&eacute;gative lorsqu'elle porte &agrave; bâbord.
+                    La d&eacute;rive est positive lorsqu'elle porte &agrave; tribord, n&eacute;gative lorsqu'elle porte &agrave; b&acirc;bord.
                 </p>
                 <p>
                     On peut supposer (rien de grave dans le marbre) que la d&eacute;rive puisse s'exprimer
@@ -897,7 +906,7 @@
                     <b>On rappelle que les angles port&eacute;s vers l'est sont positifs, et sont n&eacute;gatifs lorsqu'ils vont vers l'ouest.</b>
                     <br/>
                     <b>De m&ecirc;me, les angles ont une valeur positive dans le sens des aiguilles d'une montre (vers la droite), et n&eacute;gative dans le sens contraire des aiguilles d'une montre (vers la gauche)</b>
-                    ...À l'inverse de la pratique couramment r&eacute;pandue en trigonom&eacute;trie, où c'est le contraire.
+                    ...&Agrave; l'inverse de la pratique couramment r&eacute;pandue en trigonom&eacute;trie, où c'est le contraire.
                     <br/>
                     Un coup d'&oelig;il sur la rose du compas convaincra les plus sceptiques.
                     <div style="text-align: center;"><img src="images/cv.to.cog.jpg" width="50%" alt="du Cap Vrai &agrave; la Route Fond"></div>
@@ -970,7 +979,7 @@
     <div class="doc-section">
         <h3><a name="05-2-1">Point par rel&egrave;vements</a></h3>
         <p>
-            S'effectue en vue des côtes - on rel&egrave;ve des amers, &agrave; l'aide d'un compas de rel&egrave;vement. 
+            S'effectue en vue des c&ocirc;tes - on rel&egrave;ve des amers, &agrave; l'aide d'un compas de rel&egrave;vement. 
             Il est bon de disposer d'au moins trois amers, id&eacute;alement espac&eacute;s l'un de l'autre d'environ 120 degr&eacute;s...
             <br/>
             On rel&egrave;ve les amers au compas, on corrige ce rel&egrave;vement compas pour en d&eacute;duire le rel&egrave;vement vrai, qu'on porte sur la carte. 
@@ -982,7 +991,7 @@
             On voit sur la carte (voir la figure) que la D&eacute;clinaison &eacute;tait de 14&deg;45' E en 2006, et qu'elle diminue de 6' par an. 
             En 2009 (ann&eacute;e de r&eacute;f&eacute;rence pour ces calculs), elle a donc diminu&eacute; de 18', ce qui la ram&egrave;ne &agrave; 14&deg;27'E, qu'on arrondira &agrave; 14&deg;E (D=+14).
             <div style="text-align: center;"><img src="images/relevement.01.jpg" width="50%" alt="D&eacute;clinaison"></div>
-            On effectue ensuite trois rel&egrave;vements, &agrave; l'aide du compas de rel&egrave;vements.
+            On effectue ensuite trois rel&egrave;vements, &agrave; l'aide du compas de rel&egrave;vement.
             <br/><br/>
             On observe&nbsp;:
             <ul>
@@ -1018,13 +1027,52 @@
             </p>
         </p>
     </div>
+    <div class="doc-section">
+        <h3><a name="05-2-2">Alignements</a></h3>
+        <p>
+            Il existe une esp&egrave;ce particuli&egrave;re de rel&egrave;vements, qu'on appelle des alignements. 
+            <br/>
+            Un alignement s'obtient lorsqu'on voit un amer <i>par</i> un autre. Comme "Le clocher par la balise", "la pointe par le ch&acirc;teau d'eau", etc. 
+            L'alignement pr&eacute;sente sur le rel&egrave;vement deux avantages incontestables et &eacute;normes&nbsp;:
+            <ul>
+            <li>Il est infaillible (quand on voit l'alignement, c'est bon, il n'y a aucun doute ou impr&eacute;cision possible).</li>
+            <li>
+                Il ne fait l'objet d'aucune correction (pour la bonne raison qui ne fait l'objet d'aucune mesure&nbsp;! 
+                On trace sur la carte le trait qui passe par les deux amers, et l'affaire est dans le sac).
+            </li>
+            </ul>
+            En g&eacute;n&eacute;ral, quand on est sur le point d'avoir un alignement, on attend de l'avoir, et on l'assortit le moment venu de deux rel&egrave;vements. 
+            On obtient ainsi un point de meilleure qualit&eacute;, puisqu'on est certain de l'alignement.
+        </p>
+    </div>
+    <div class="doc-section">
+        <h3><a name="05-2-3">Point par rel&egrave;vement d'un seul amer</a></h3>
+        <p>
+            C'est la technique qu'on utilisera lorsque les trois amers n&eacute;cessaires pour le point &eacute;voqu&eacute; dans la section pr&eacute;c&eacute;dente ne sont pas disponibles.
+            <br/>
+            S'effectue en vue des c&ocirc;tes, et fait intervenir le compas de rel&egrave;vements, la route suivie (route fond), et distance parcourue. Il faut un loch fiable.
+            <br/>
+            Si on ne dispose que d'un amer, on est fait un rel&egrave;vement, qu'on porte sur la carte (rel&egrave;vement vrai bien s&ucirc;r). On note soigneusement le cap et la valeur du loch. 
+            Plus tard, on effectue un nouveau rel&egrave;vement du m&ecirc;me amer, en m&ecirc;me temps qu'on note la nouvelle valeur du loch. On porte le nouveau rel&egrave;vement sur la carte.
+            <br/>
+            On &eacute;value ensuite la distance parcourue entre les deux rel&egrave;vements, ainsi que la route fond suivie pendant ce temps. 
+            Si n&eacute;cessaire, on corrige cette donn&eacute;e, en fonction du courant potentiellement subi.
+            <br/>
+            &Agrave; l'aide de la r&egrave;gle de Cras et du compas &agrave; pointes s&egrave;ches, on case cette distance, sur cette route, entre les deux rel&egrave;vements.
+            <div style="text-align: center;"><img src="images/only.one.png" width="50%" alt="Un  seul amer"></div>
+            On se trouve alors &agrave; l'intersection de la route ainsi trac&eacute;e et du deuxi&egrave;me rel&egrave;vement.
+            <br/>
+            Toute la difficult&eacute; de cette m&eacute;thode r&eacute;side dans l'&eacute;valuation de la route fond et de la distance parcourue. 
+            Le courant et la d&eacute;rive sont des param&egrave;tres fort susceptibles de g&eacute;n&eacute;rer des impr&eacute;cisions ou des erreurs.
+        </p>
+    </div>
 </div>
 
 <div class="content">
     <h1><a name="xx">La suite...</a></h1>
 
     $$
-    \forall x \in \mathbb{R}^{*}_+, \exists !  n \in \mathbb{Z} / x=10^{n} \times x', x' \in \mathbb{R} \cap [1, 10[
+    \forall x \in \mathbb{R}^{*}_+, \exists&nbsp;!  n \in \mathbb{Z} / x=10^{n} \times x', x' \in \mathbb{R} \cap [1, 10[
     $$
     
     Elle est bien bonne, non&nbsp;?
@@ -1087,11 +1135,11 @@
 <div class="content">
     <h2><a name="least-squares">R&eacute;solution d'un polyn&ocirc;me par la m&eacute;thode des moindres carr&eacute;s</a></h2>
     <p>
-        Le probl&egrave;me est ici de trouver les coefficients d'un polynôme de degr&eacute; donn&eacute; (choisi), afin que la courbe qui le repr&eacute;sente soit aussi proche que possible d'un ensemble de points donn&eacute;s.<br/>
+        Le probl&egrave;me est ici de trouver les coefficients d'un polyn&ocirc;me de degr&eacute; donn&eacute; (choisi), afin que la courbe qui le repr&eacute;sente soit aussi proche que possible d'un ensemble de points donn&eacute;s.<br/>
         Autrement dit, que la courbe trouv&eacute;e colle autant que possible au nuage des points de d&eacute;part.
     </p>
     <i>Exemple</i>: D&eacute;termination des coefficients d'une courbe du second degr&eacute;, &agrave; partir d'un nuage de points enregistr&eacute;s. On choisit ici un degr&eacute; 2 pour simplifier les &eacute;quations qui suivent.
-    La r&eacute;solution d'un polynôme de degr&eacute; sup&eacute;rieur suit le m&ecirc;me mode op&eacute;ratoire.
+    La r&eacute;solution d'un polyn&ocirc;me de degr&eacute; sup&eacute;rieur suit le m&ecirc;me mode op&eacute;ratoire.
     <br/><br/>
     On cherche donc &agrave; d&eacute;terminer une courbe du 2<sup>nd</sup> degr&eacute;, aussi proche que possible des points d'un ensemble donn&eacute;, enregistr&eacute;s &agrave; bord. <br/>
     <br/>
@@ -1117,7 +1165,7 @@
     </div>
     soit la plus petite possible, donc, que pour tous les points enregistr&eacute;s, le carr&eacute; de cette diff&eacute;rence soit le plus proche possible de z&eacute;ro 
     (on &eacute;l&egrave;ve au carr&eacute; pour supprimer le signe, d'o&ugrave; le nom de la m&eacute;thode), et donc que le cumul de ces diff&eacute;rences soit en d&eacute;finitive la plus petite possible. <br/>
-    Ceci revient &agrave; calculer les coefficients a, b et c pour lesquels la deriv&eacute;e premi&egrave;re de cette sommation des carr&eacute;s des diff&eacute;rences 
+    Ceci revient &agrave; calculer les coefficients <code>a</code>, <code>b</code> et <code>c</code> pour lesquels la d&eacute;riv&eacute;e premi&egrave;re de cette sommation des carr&eacute;s des diff&eacute;rences 
     par rapport &agrave; chacun des coefficients <code>a</code>, <code>b</code> et <code>c</code> est nulle&nbsp;:
     <div class="postit">
     $ ([\Sigma(ax^2 + bx + c - y)^2])' = 0 $    
@@ -1129,19 +1177,19 @@
     On d&eacute;rive l'expression ainsi obtenue
     <ul>
         <li>
-            Par rapport &agrave; a:
+            Par rapport &agrave; <code>a</code>&nbsp;:
             <div class="postit">
     $ \dfrac{\partial S}{\partial a} = 2a\Sigma x^4 + 2b\Sigma x^3 + 2c\Sigma x^2 - 2\Sigma yx^2 = 0 $
             </div>
         </li>
         <li>
-            Par rapport &agrave; b:
+            Par rapport &agrave; <code>b</code>&nbsp;:
             <div class="postit">
     $ \dfrac{\partial S}{\partial b} = 2a\Sigma x^3 + 2b\Sigma x^2 + 2c\Sigma x^1 - 2\Sigma yx^1 = 0 $
             </div>
         </li>
         <li>
-            Par rapport &agrave; c:
+            Par rapport &agrave; <code>c</code>&nbsp;:
             <div class="postit">
     $ \dfrac{\partial S}{\partial c} = 2a\Sigma x^2 + 2b\Sigma x^1 + 2c\Sigma x^0 - 2\Sigma yx^0 = 0 $
             </div>
@@ -1151,11 +1199,71 @@
     <div class="postit">
     $ \begin{vmatrix} a & b & c \end{vmatrix} = \begin{vmatrix} \Sigma x^4 & \Sigma x^3 & \Sigma x^2 \\ \Sigma x^3 & \Sigma x^2 & \Sigma x^1 \\ \Sigma x^2 & \Sigma x^1 & \Sigma x^0 \end{vmatrix} ^ {-1} \times \begin{vmatrix} \Sigma yx^2 \\ \Sigma yx^1 \\ \Sigma yx^0 \end{vmatrix} $
     </div>
-    <i>Remarque</i>&nbsp;: Les termes $ \Sigma x^0 $ repr&eacute;sentent le nombre de points dans la courbe &agrave; lisser.
+    <i>Remarques</i>&nbsp;: 
+    <br/>
+    - Les termes $ \Sigma x^0 $ repr&eacute;sentent le nombre de points dans la courbe &agrave; lisser.
+    <br/>
+    - Un polyn&ocirc;me du 2<sup>nd</sup> degr&eacute; a 3 coefficients, la dimension des matrices qu'on g&egrave;re (carr&eacute;e, ligne, et colonne) est donc 3.
     <p>
     Pour un polyn&ocirc;me de degr&eacute; <code>n</code>, le travail &agrave; effectuer se r&eacute;sume ainsi &agrave; inverser la matrice carr&eacute;e $ \Sigma x^{0->2n} $ et de
     la multiplier par la matrice colonne $ \Sigma yx^{0->n} $ pour obtenir la matrice ligne des coefficients du polyn&ocirc;me recherch&eacute;.
     </p>
+    <div class="doc-section">
+        <h3><a name="least-square-dev">Cas d'une courbe de d&eacute;viation</a></h3>
+        <p>
+            On consid&egrave;re donc que la forme g&eacute;n&eacute;rique d'une courbe de d&eacute;viation est
+            <div class="postit">
+            $$
+            d = a + (b \times \cos r) + (c \times \cos r) + (d \times \sin 2r) + (e \times \cos 2r)
+            $$
+            </div>
+            ce qui n'est manifestement pas un polyn&ocirc;me.
+            <br/>
+            Dans l'&eacute;quation ci-dessus, <code>r</code> est le Cap Compas, <code>d</code> est la d&eacute;viation (&delta; entre <code>HDG</code> et <code>HDM</code>).<br/>
+            On cherche donc &agrave; d&eacute;finir une fonction <code>f</code> pour laquelle la d&eacute;viation <code>d</code> est obtneu en fournissant <code>r</code>:
+            <div class="postit">
+                $$ d = f(r) $$
+            </div>
+            Les &eacute;l&eacute;ments du nuage de points dont on dispose (&eacute;labor&eacute; &agrave; partir du logging) sont d&eacute;finis en
+            <div class="postit">
+                $$ P_{d}^{HDC} = P_{d}^{r} = P_{y}^{x} $$
+            </div>
+            En abscisse le Cap Compas, en ordonn&eacute;e la d&eacute;viation.
+            <br/>
+            On cherche les valeurs de 5 coefficients&nbsp;:
+            <div class="postit">
+                $ \begin{vmatrix} a & b & c & d & e \end{vmatrix} $
+            </div>
+            La dimension des matrices &agrave; g&eacute;rer est donc cette fois-ci 5.
+            <br/>
+            On obtient les coefficients en r&eacute;solvant&nbsp;:
+            <div class="postit">
+                $$   
+  \begin{vmatrix}
+  &n  &\sum_{i=0}^{n}\sin(r)  &\sum_{i=0}^{n}\cos(r)  &\sum_{i=0}^{n}\sin(2r)  &\sum_{i=0}^{n}\cos(2r) \\
+  &\sum_{i=0}^{n}\sin(r)  &\sum_{i=0}^{n}\sin(r)^2  &\sum_{i=0}^{n}\sin(r)cos(r)  &\sum_{i=0}^{n}\sin(2r)sin(r))  &\sum_{i=0}^{n}\cos(2r)sin(r) \\
+  &\sum_{i=0}^{n}\cos(r)  &\sum_{i=0}^{n}\cos(r)sin(r)  &\sum_{i=0}^{n}\cos(r)^2  & \sum_{i=0}^{n}\sin(2r)cos(r) &\sum_{i=0}^{n}\cos(2r)cos(r) \\
+  &\sum_{i=0}^{n}\sin(2r)  &\sum_{i=0}^{n}\sin(2r)sin(r)  &\sum_{i=0}^{n}\sin(2r)cos(r)  &\sum_{i=0}^{n}\sin(2r)^2  &\sum_{i=0}^{n}\cos(2r)sin(2r) \\
+  &\sum_{i=0}^{n}\cos(2r)  &\sum_{i=0}^{n}\cos(2r)sin(r)  &\sum_{i=0}^{n}\cos(2r)cos(r)  &\sum_{i=0}^{n}\cos(2r)sin(2r)  &\sum_{i=0}^{n}\cos(2r)^2
+ \end{vmatrix} ^{-1}
+
+\times
+
+ \begin{vmatrix}
+  &\sum_{i=0}^{n}\ d \\
+  &\sum_{i=0}^{n}\ d.sin(r) \\
+  &\sum_{i=0}^{n}\ d.cos(r) \\
+  &\sum_{i=0}^{n}\ d.sin(2r) \\
+  &\sum_{i=0}^{n}\ d.cos(2r)
+ \end{vmatrix}
+
+ $$
+            </div>
+            Fastoche&nbsp;!
+            <br>
+            Pour plus de d&eacute;tails, voir aussi <a href="https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html" target="dev-curve">https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html</a>
+        </p>
+    </div>
 </div>
 
 <hr class="screen-only"/>
