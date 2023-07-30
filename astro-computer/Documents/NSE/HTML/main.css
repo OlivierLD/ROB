@@ -7,6 +7,11 @@ code {
     font-weight: bold;
 }
 
+h5 {
+    font-size: 16px;
+    font-style: italic;
+}
+
 .screen-warning {
     font-style: italic;
 }
@@ -23,4 +28,13 @@ code {
 .indent-one-italic {
     margin-left: 50px;
     font-style: italic;
+}
+
+/* 
+   Believe it or not, that works 
+   <pouet-pouet>Duh</pouet-pouet 
+   is in dark pink
+*/
+pouet-pouet {
+    color: rgb(190, 9, 94);
 }
