@@ -30,6 +30,10 @@ h5 {
     font-style: italic;
 }
 
+.slack-on-top {
+    margin-top: 8px;
+}
+
 /* 
    Believe it or not, that works 
    <pouet-pouet>Duh</pouet-pouet 
