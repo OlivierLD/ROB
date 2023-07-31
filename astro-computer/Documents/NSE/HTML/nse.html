@@ -2556,36 +2556,174 @@
 <div class="content">
     <h2><a name="mercator">Mercator et Latitude Croissante</a></h2>
     <p>
+        La "Latitude Croissante" est le fondement de la construction des cartes Mercator.
+        <br/>
+        On rappelle que l'int&eacute;r&ecirc;t majeur de la projection de Mercator est de repr&eacute;senter un cap constant 
+        entre deux points de la carte par une droite (loxodromie), ce qui n'est <i>pas vrai</i> pour les autres projections.
+        <br/>
+        Pour la latitude &phi;, &lambda; est la latitude croissante de &phi;, exprim&eacute;e en radians.
+        <div class="postit">
+            $$ \lambda = \ln \tan \left( \dfrac{\pi}{4} + \dfrac{\phi}{2} \right) $$
+        </div>
+       <i>Attention</i>&nbsp;: On utilise ici les logarithmes n&eacute;p&eacute;riens (ln), et non d&eacute;cimaux (log), 
+       et la valeur trouv&eacute;e est exprim&eacute;e en radians.
+    </p>
+    <p>
+       On rappelle que &pi;/4 radians = 45&deg;.
+    </p>
+    <p>
+       C'est donc la formule qu'on utilise pour construire les cartes Mercator.
+       <br/>
+        Ces cartes pr&eacute;sentent l'int&eacute;r&ecirc;t majeur de repr&eacute;senter les loxodromies par des lignes droites. 
+        Quand bien m&ecirc;me le problème serait simple, la solution n'est pas complètement triviale&nbsp;!
+    </p>
+    <p>
+        À l'aide de cette formule, il est possible de r&eacute;aliser des canevas Mercator, fort commodes lorsqu'on fait un point par droites de hauteur. De tels canevas, r&eacute;alis&eacute;s &agrave; l'aide de cette formule sont fournis dans un document s&eacute;par&eacute;.
+    </p>
+    <p>
+        Les cartes de Mercator ne peuvent pas repr&eacute;senter les pôles, qui ont du fait de la formule utilis&eacute;e une latitude croissante infinie (tan(90&deg;)=∞). La latitude croissante exprime en fait l'&eacute;chelle &agrave; consid&eacute;rer – le rapport entre un degr&eacute; de latitude et un degr&eacute; de longitude – &agrave; une latitude donn&eacute;e.
+    </p>
+    <p>
 
+        <i>Exemple :</i>
+        <b>Latitude croissante de 45&deg;</b>. 
+        Dans la formule ci-dessus, on a donc φ=45&deg;. On cherche d'abord tan(67.5&deg;), on trouve 2.41421. 
+        Le logarithme n&eacute;p&eacute;rien de cette valeur est 0.88137, qu'on convertit de radians en degr&eacute;s pour trouver 50.498986&deg;, soit <b>50&deg;29.94'</b>.
+    </p>
+    <p>
+        <i>Ceci signifie qu'&agrave; une latitude de 45&deg;, la repr&eacute;sentation sur une carte Mercator de cette valeur &agrave; la taille de 50&deg;29.94' de longitude.</i>
+    </p>
+    <p>
+        La figure suivante illustre le calcul pr&eacute;c&eacute;dent.<br/>
+        Notez aussi la dilatation de l'&eacute;chelle de latitudes au fur et &agrave; mesure qu'on s'approche du pôle.
+
+        <div style="text-align: center;"><img src="images/latitude.croissante.png" width="60%" alt="Latitude Croissante" title="Latitude Croissante"></div>
+
+        L'arc de cercle repr&eacute;sent&eacute; sur la carte est centr&eacute; sur le point de coordonn&eacute;es 0,0.<br/>
+        On voit que la m&ecirc;me distance correspond &agrave; 45&deg;N, et &agrave; 50&deg;29,9'W.
+        </p>
+        <p>
+        Les canevas Mercator sont des cartes vides, mais qui respectent - pour une latitude donn&eacute;e - cette notion de "Latitude Croissante". 
+        À l'Équateur, la projection est presque carr&eacute;e, &agrave; 50&deg; de latitude, ces "carr&eacute;s" sont nettement plus hauts que larges. 
+        <br/>
+        Pour reporter les distances sur un canevas Mercator, on utilise - comme sur n'importe quelle carte Mercator - 
+        les côt&eacute;s verticaux de la carte. D'où l'int&eacute;r&ecirc;t de ces canevas.
     </p>
 </div>
 
 <div class="content">
     <h2><a name="ps">Plotting Sheets</a></h2>
     <p>
-
+        Les "Plotting Sheets" remplissent le m&ecirc;me rôle que les canevas Mercator, et sont au moins aussi pratiques.
+        <br/>
+        Voici une des ces Plotting Sheets, vide elle aussi.
+        <div style="text-align: center;"><img src="images/plotting.sheet.png" width="60%" alt="Plotting Sheet" title="Plotting Sheet"></div>
+        On remarque que la projection semble carr&eacute;e, que les longitudes et les latitudes ont apparemment la m&ecirc;me valeur. 
+        C'est parce que l'&eacute;chelle des longitudes (des distances, donc) est donn&eacute;e par le graphique en bas &agrave; droite, &agrave; reporter 
+        &agrave; l'aide d'un compas &agrave; pointes sèches. À droite du graphe, verticalement, la latitude &agrave; laquelle on souhaite travailler, 
+        et horizontalement, l'&eacute;chelle &agrave; consid&eacute;rer, en minutes d'arc - en milles marins, donc. 
+        Ce graphe en bas &agrave; droite est en fait une sorte d'&eacute;chelle des latitudes croissantes.
+        <br/>
+        On donnera plus loin un exemple d'utilisation de ce genre de documents.
     </p>
 </div>
 
 <div class="content">
     <h2><a name="equation-du-temps">&Eacute;quation du temps</a></h2>
     <p>
-
+        Comme on l'a vu, c'est une donn&eacute;e corr&eacute;l&eacute;e au temps de passage au m&eacute;ridien. 
+        On verra aussi pourquoi on continue de parler de temps de passage au m&eacute;ridien <b><i>et</i></b> d'&eacute;quation du temps.
+    </p>
+    <p>
+        Le fait est que le soleil ne passe pas au m&eacute;ridien &agrave; midi, alors qu'on serait tent&eacute; de penser que c'est 
+        pourtant la d&eacute;finition de ce que midi devrait &ecirc;tre. Voici pourquoi :
+        <br/>
+        La terre tourne sur elle-m&ecirc;me de 360 degr&eacute;s en 24 heures.
+        <br/>
+        En outre, elle se d&eacute;place autour du soleil, dont elle fait le tour en quelque chose comme 365,25 jours. 
+        Et c'est l&agrave; que c'est int&eacute;ressant.
+        <br/>
+        Un petit dessin vaut mieux qu'un long discours, d'autant mieux qu'on exagère l'&eacute;chelle du problème.
+        <div style="text-align: center;"><img src="images/equation.du.temps.jpg" width="40%" alt="&Eacute;quation du temps" title="&Eacute;quation du temps"></div>
+        On considère la terre, en A. Le soleil se trouve dans la direction du trait en pointill&eacute;s longs.
+        <br/>
+        24 heures après, la terre est en B. Le trait en pointill&eacute;s longs rappelle la direction que le soleil avait la veille. 
+        On constate cependant – avec le trait en pointill&eacute;s fins – que le soleil est d&eacute;j&agrave; pass&eacute; au m&eacute;ridien. De midi &agrave; midi, 
+        il s'est pass&eacute; moins de 24 heures.
+    </p>
+    <p>
+        Le temps de passage &agrave; Greenwich est donn&eacute; dans les &eacute;ph&eacute;m&eacute;rides. 
+        Ce temps de passage &eacute;volue d'un jour &agrave; l'autre, et n&eacute;cessite une interpolation si on cherche le 
+        temps de passage d'un astre &agrave; une autre longitude que celle de Greenwich.
+    </p>
+    <p>
+        L'&eacute;quation du temps est en fait la diff&eacute;rence qu'il existe entre le midi local et le temps de passage d'un astre. 
+        ette &eacute;quation du temps peut &ecirc;tre interpol&eacute;e, tandis que le temps de passage &agrave; Greenwich ne saurait &ecirc;tre 
+        autre chose que le temps de passage... &agrave; Greenwich. 
+        En effet, le temps de passage &agrave; Greenwich &eacute;volue de jour en jour. La grandeur qui change – de manière continue – est 
+        appel&eacute;e l'"&eacute;quation du temps".
+        <br/>
+        Pour formuler le problème autrement, essayez de r&eacute;pondre &agrave; cette question :<br/>
+        "Comment est-ce que le temps de passage &agrave; Greenwich pourrait bien varier en fonction de la longitude ?"
+    </p>
+    <p>
+        C'est pourquoi cette notion d'&eacute;quation du temps a &eacute;t&eacute; introduite, pour lever cette ambiguït&eacute; 
+        engendr&eacute;e par l'interpolation du temps de passage &agrave; Greenwich.
     </p>
 </div>
 
 <div class="content">
     <h2><a name="logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></h2>
     <p>
-
+        
     </p>
 </div>
 
 <div class="content">
     <h2><a name="lop-sample">Exemple de calcul de droites de hauteur</a></h2>
     <p>
-
+        Voici un exemple de point par droites de hauteurs. <br/>
+        On utilisera ici une plotting sheet, afin d'illustrer son usage. L'emploi de canevas Mercator 
+        a d&eacute;j&agrave; &eacute;t&eacute; &eacute;voqu&eacute; dans la section <a href="#05-2-9-2-2">Ce qu'on cherche</a>.
     </p>
+    <p>
+        Ici, on est le 23 octobre 2010, notre position estim&eacute;e est 0&deg;51.7' N / 138&deg;08.5' W.
+    </p>
+    <p>
+        On observe <b>Jupiter</b> et la <b>Lune</b>.
+    </p>
+    <p>
+        À 05:21:05 UTC, on observe Jupiter, sa hauteur instrumentale est 67&deg;32'.
+    </p>
+    <div class="doc-section">
+        Voici le formulaire utilis&eacute; avec les tables de Dieumegard, pour d&eacute;terminer l'intercept, qui est ainsi de 0.85', vers l'astre.
+        <div style="text-align: center;"><img src="images/form.dieumegard.01.png" width="40%" alt="Dieumegard" title="Dieumegard"></div>
+    </div>
+    <div class="doc-section">
+        On procède ensuite avec les tables de Bataille, pour d&eacute;terminer l'azimut de Jupiter, qu'on trouve ainsi &ecirc;tre de 98&deg;.
+        <div style="text-align: center;"><img src="images/form.bataille.01.png" width="40%" alt="Bataille" title="Bataille"></div>
+    </div>
+    <div class="doc-section">
+        Pour la Lune - avec son bord inf&eacute;rieur - on r&eacute;utilise le m&ecirc;me formulaire, l'observation date de 05:18:42 UTC,
+         pour les tables de Dieumegard, avec une hauteur instrumentale de 33&deg;01', on trouve ainsi un intercept de 6', dans la direction oppos&eacute;e &agrave; l'astre.
+        <div style="text-align: center;"><img src="images/form.dieumegard.02.png" width="40%" alt="Dieumegard" title="Dieumegard"></div>
+    </div>
+    <div class="doc-section">
+        De m&ecirc;me que pr&eacute;c&eacute;demment, on utilise les tables de Bataille pour l'azimut, on trouve 71&deg;.
+        <div style="text-align: center;"><img src="images/form.bataille.02.png" width="40%" alt="Bataille" title="Bataille"></div>
+    </div>
+    <div class="doc-section">
+        Reste ensuite &agrave; porter ces intercepts et azimut sur un canevas Mercator ou une plotting sheet. 
+        <br/>
+        On note le 138 W, qui d&eacute;crit la 
+        longitude, et les N 1&deg;, 0&deg;, et S 1&deg;, qui indiquent la latitude des observations.
+        <br/>
+        Position estim&eacute;e, azimuts et intercept sont ensuite trac&eacute;s, et on obtient les droites de hauteur, &agrave; l'intersection desquelles on doit se trouver&nbsp;!
+        <div style="text-align: center;"><img src="images/plotting.sheet.02.png" width="60%" alt="Plotting Sheet" title="Plotting Sheet"></div>
+        Pour porter les intercepts, on utilise le compas &agrave; pointes sèches et l'&eacute;chelle des distance donn&eacute;e en bas &agrave; droite de la plotting sheet.
+        <br/>
+        La position corrig&eacute;e se trouve ainsi &ecirc;tre 0&deg;33' N / 138&deg;08' W. 
+    </div>
 </div>
 
 <div class="content">
