@@ -2,6 +2,10 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+pre {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 code {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
@@ -34,6 +38,10 @@ h5 {
     margin-top: 8px;
 }
 
+.overlined {
+    border-top: 2px solid black;
+  }
+  
 /* 
    Believe it or not, that works 
    <pouet-pouet>Duh</pouet-pouet 

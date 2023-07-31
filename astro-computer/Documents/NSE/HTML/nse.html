@@ -14,6 +14,9 @@
     https://latexbase.com/d/bd875c05-4a8d-4605-a1dd-0a472f941efa
     
 
+    CSS text decoration: https://www.zonecss.fr/faq/decoration-du-texte-avec-css.html
+    CSS borders: https://www.w3schools.com/css/css_border.asp
+
     TODO/PENDING: Page numbers.
 
  +-->
@@ -1504,7 +1507,7 @@
                     <br/>
                     <b><code>L = 40&deg;15.4' – 6&deg;10.4' = 34&deg;05.0' N</code></b>
                     <br/><br/>
-                    Voil&agrave; pour la latitude&nbsp;!
+                    Voil&agrave; pour la latitude.
                 </p>
                 <h5>Longitude par hauteur m&eacute;ridienne, en pratique</h5>
                 <p>
@@ -2407,7 +2410,7 @@
                         &agrave; une distance entre deux astres, encore que ceci ne pr&eacute;sente gu&egrave;re d'int&eacute;r&ecirc;t ici. 
                         La Lune est l'astre du ciel qui se d&eacute;place le plus vite, d'o&ugrave; son int&eacute;r&ecirc;t unique dans cette m&eacute;thode.
                     </div>
-                    À l'inverse d'une hauteur qui se prend sur l'horizon, la correction de d&eacute;pression de l'horizon ne s'applique pas &agrave; une distance lunaire. 
+                    &Agrave; l'inverse d'une hauteur qui se prend sur l'horizon, la correction de d&eacute;pression de l'horizon ne s'applique pas &agrave; une distance lunaire. 
                     <br/>
                     La correction de r&eacute;fraction demeure, la correction de parallaxe aussi, et les corrections de demi- diam&egrave;tre plus que 
                     jamais, puisqu’ on a ici deux astres, qui ont potentiellement chacun un diam&egrave;tre, qui sont combinables&nbsp;: on peut prendre 
@@ -2427,7 +2430,7 @@
                     Ensuite, on calculera &agrave; l'aide des &eacute;ph&eacute;m&eacute;rides et almanachs la distance th&eacute;orique &agrave; l'instant de l'observation, 
                     puis on en d&eacute;duira par interpolation, de la diff&eacute;rence de mesure, la diff&eacute;rence de temps et/ou de longitude.
                     <br/>
-                    À partir des donn&eacute;es de l'almanach (D&eacute;clinaison et Angle Horaire), on peut &agrave; tout moment calculer 
+                    &Agrave; partir des donn&eacute;es de l'almanach (D&eacute;clinaison et Angle Horaire), on peut &agrave; tout moment calculer 
                     la distance entre deux corps c&eacute;lestes en utilisant la formule suivante&nbsp;:
                     <div class="postit">
                     $$ Dist = \arccos[\sin(Dec1) \times \sin(Dec2) + \cos(Dec1) \times \cos(Dec2) \times \cos(GHA2-GHA1)] $$
@@ -2575,17 +2578,17 @@
        C'est donc la formule qu'on utilise pour construire les cartes Mercator.
        <br/>
         Ces cartes pr&eacute;sentent l'int&eacute;r&ecirc;t majeur de repr&eacute;senter les loxodromies par des lignes droites. 
-        Quand bien m&ecirc;me le problème serait simple, la solution n'est pas complètement triviale&nbsp;!
+        Quand bien m&ecirc;me le probl&egrave;me serait simple, la solution n'est pas compl&egrave;tement triviale&nbsp;!
     </p>
     <p>
-        À l'aide de cette formule, il est possible de r&eacute;aliser des canevas Mercator, fort commodes lorsqu'on fait un point par droites de hauteur. De tels canevas, r&eacute;alis&eacute;s &agrave; l'aide de cette formule sont fournis dans un document s&eacute;par&eacute;.
+        &Agrave; l'aide de cette formule, il est possible de r&eacute;aliser des canevas Mercator, fort commodes lorsqu'on fait un point par droites de hauteur. De tels canevas, r&eacute;alis&eacute;s &agrave; l'aide de cette formule sont fournis dans un document s&eacute;par&eacute;.
     </p>
     <p>
-        Les cartes de Mercator ne peuvent pas repr&eacute;senter les pôles, qui ont du fait de la formule utilis&eacute;e une latitude croissante infinie (tan(90&deg;)=∞). La latitude croissante exprime en fait l'&eacute;chelle &agrave; consid&eacute;rer – le rapport entre un degr&eacute; de latitude et un degr&eacute; de longitude – &agrave; une latitude donn&eacute;e.
+        Les cartes de Mercator ne peuvent pas repr&eacute;senter les p&ocirc;les, qui ont du fait de la formule utilis&eacute;e une latitude croissante infinie (tan(90&deg;)=∞). La latitude croissante exprime en fait l'&eacute;chelle &agrave; consid&eacute;rer – le rapport entre un degr&eacute; de latitude et un degr&eacute; de longitude – &agrave; une latitude donn&eacute;e.
     </p>
     <p>
 
-        <i>Exemple :</i>
+        <i>Exemple&nbsp;:</i>
         <b>Latitude croissante de 45&deg;</b>. 
         Dans la formule ci-dessus, on a donc φ=45&deg;. On cherche d'abord tan(67.5&deg;), on trouve 2.41421. 
         Le logarithme n&eacute;p&eacute;rien de cette valeur est 0.88137, qu'on convertit de radians en degr&eacute;s pour trouver 50.498986&deg;, soit <b>50&deg;29.94'</b>.
@@ -2595,7 +2598,7 @@
     </p>
     <p>
         La figure suivante illustre le calcul pr&eacute;c&eacute;dent.<br/>
-        Notez aussi la dilatation de l'&eacute;chelle de latitudes au fur et &agrave; mesure qu'on s'approche du pôle.
+        Notez aussi la dilatation de l'&eacute;chelle de latitudes au fur et &agrave; mesure qu'on s'approche du p&ocirc;le.
 
         <div style="text-align: center;"><img src="images/latitude.croissante.png" width="60%" alt="Latitude Croissante" title="Latitude Croissante"></div>
 
@@ -2604,23 +2607,23 @@
         </p>
         <p>
         Les canevas Mercator sont des cartes vides, mais qui respectent - pour une latitude donn&eacute;e - cette notion de "Latitude Croissante". 
-        À l'Équateur, la projection est presque carr&eacute;e, &agrave; 50&deg; de latitude, ces "carr&eacute;s" sont nettement plus hauts que larges. 
+        &Agrave; l'Équateur, la projection est presque carr&eacute;e, &agrave; 50&deg; de latitude, ces "carr&eacute;s" sont nettement plus hauts que larges. 
         <br/>
         Pour reporter les distances sur un canevas Mercator, on utilise - comme sur n'importe quelle carte Mercator - 
-        les côt&eacute;s verticaux de la carte. D'où l'int&eacute;r&ecirc;t de ces canevas.
+        les c&ocirc;t&eacute;s verticaux de la carte. D'o&ugrave; l'int&eacute;r&ecirc;t de ces canevas.
     </p>
 </div>
 
 <div class="content">
     <h2><a name="ps">Plotting Sheets</a></h2>
     <p>
-        Les "Plotting Sheets" remplissent le m&ecirc;me rôle que les canevas Mercator, et sont au moins aussi pratiques.
+        Les "Plotting Sheets" remplissent le m&ecirc;me r&ocirc;le que les canevas Mercator, et sont au moins aussi pratiques.
         <br/>
         Voici une des ces Plotting Sheets, vide elle aussi.
         <div style="text-align: center;"><img src="images/plotting.sheet.png" width="60%" alt="Plotting Sheet" title="Plotting Sheet"></div>
         On remarque que la projection semble carr&eacute;e, que les longitudes et les latitudes ont apparemment la m&ecirc;me valeur. 
         C'est parce que l'&eacute;chelle des longitudes (des distances, donc) est donn&eacute;e par le graphique en bas &agrave; droite, &agrave; reporter 
-        &agrave; l'aide d'un compas &agrave; pointes sèches. À droite du graphe, verticalement, la latitude &agrave; laquelle on souhaite travailler, 
+        &agrave; l'aide d'un compas &agrave; pointes s&egrave;ches. &Agrave; droite du graphe, verticalement, la latitude &agrave; laquelle on souhaite travailler, 
         et horizontalement, l'&eacute;chelle &agrave; consid&eacute;rer, en minutes d'arc - en milles marins, donc. 
         Ce graphe en bas &agrave; droite est en fait une sorte d'&eacute;chelle des latitudes croissantes.
         <br/>
@@ -2636,18 +2639,18 @@
     </p>
     <p>
         Le fait est que le soleil ne passe pas au m&eacute;ridien &agrave; midi, alors qu'on serait tent&eacute; de penser que c'est 
-        pourtant la d&eacute;finition de ce que midi devrait &ecirc;tre. Voici pourquoi :
+        pourtant la d&eacute;finition de ce que midi devrait &ecirc;tre. Voici pourquoi&nbsp;:
         <br/>
         La terre tourne sur elle-m&ecirc;me de 360 degr&eacute;s en 24 heures.
         <br/>
         En outre, elle se d&eacute;place autour du soleil, dont elle fait le tour en quelque chose comme 365,25 jours. 
         Et c'est l&agrave; que c'est int&eacute;ressant.
         <br/>
-        Un petit dessin vaut mieux qu'un long discours, d'autant mieux qu'on exagère l'&eacute;chelle du problème.
+        Un petit dessin vaut mieux qu'un long discours, d'autant mieux qu'on exag&egrave;re l'&eacute;chelle du probl&egrave;me.
         <div style="text-align: center;"><img src="images/equation.du.temps.jpg" width="40%" alt="&Eacute;quation du temps" title="&Eacute;quation du temps"></div>
-        On considère la terre, en A. Le soleil se trouve dans la direction du trait en pointill&eacute;s longs.
+        On consid&egrave;re la terre, en A. Le soleil se trouve dans la direction du trait en pointill&eacute;s longs.
         <br/>
-        24 heures après, la terre est en B. Le trait en pointill&eacute;s longs rappelle la direction que le soleil avait la veille. 
+        24 heures apr&egrave;s, la terre est en B. Le trait en pointill&eacute;s longs rappelle la direction que le soleil avait la veille. 
         On constate cependant – avec le trait en pointill&eacute;s fins – que le soleil est d&eacute;j&agrave; pass&eacute; au m&eacute;ridien. De midi &agrave; midi, 
         il s'est pass&eacute; moins de 24 heures.
     </p>
@@ -2660,10 +2663,10 @@
         L'&eacute;quation du temps est en fait la diff&eacute;rence qu'il existe entre le midi local et le temps de passage d'un astre. 
         ette &eacute;quation du temps peut &ecirc;tre interpol&eacute;e, tandis que le temps de passage &agrave; Greenwich ne saurait &ecirc;tre 
         autre chose que le temps de passage... &agrave; Greenwich. 
-        En effet, le temps de passage &agrave; Greenwich &eacute;volue de jour en jour. La grandeur qui change – de manière continue – est 
+        En effet, le temps de passage &agrave; Greenwich &eacute;volue de jour en jour. La grandeur qui change – de mani&egrave;re continue – est 
         appel&eacute;e l'"&eacute;quation du temps".
         <br/>
-        Pour formuler le problème autrement, essayez de r&eacute;pondre &agrave; cette question :<br/>
+        Pour formuler le probl&egrave;me autrement, essayez de r&eacute;pondre &agrave; cette question&nbsp;:<br/>
         "Comment est-ce que le temps de passage &agrave; Greenwich pourrait bien varier en fonction de la longitude ?"
     </p>
     <p>
@@ -2675,7 +2678,202 @@
 <div class="content">
     <h2><a name="logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></h2>
     <p>
+        Ceci est plut&ocirc;t un exercice de style… Ou alors destin&eacute; &agrave; ceux qui auraient oubli&eacute; 
+        leurs tables (Dieumegard et Bataille) de calcul, et pas leurs tables de log. 
+        C'est n&eacute;anmoins int&eacute;ressant, d'autant que &ccedil;a fonctionne.
+    </p>
+    <p>
+        <i><b>Les tables donnent les logarithmes <span style="color: red;">d&eacute;cimaux</span></b></i>.
+    </p>
+    <p>
+        <div class="postit">
+            $$
+            \forall x \in \mathbb{R}^{*}_+, \exists&nbsp;!  n \in \mathbb{Z} / x=10^{n} \times x', x' \in \mathbb{R} \cap [1, 10[
+            $$
+            $$
+            log(x) = log(x') + log(10^n) = log(x') + n
+            $$
+        </div>
+        <i>Traduction pour les autres&nbsp;:</i><br/>
+        Pour tout r&eacute;el positif non nul x, il existe un seul nombre relatif n pour lequel <code>x=x'.10<sup>n</sup></code>, 
+        o&ugrave; x' est un r&eacute;el sup&eacute;rieur ou &eacute;gal &agrave; 1, et inf&eacute;rieur &agrave; 10.
+        <br/>
+        log(x') s'appelle la mantisse de log(x), $ log(x')  \in \mathbb{R} \cap [0, 1[ $  puisque 1≤ x' &lt; 10, et
+        que log(1) = 0, et log(10) = 1, car 1 = 10<sup>0</sup>, et 10 = 10<sup>1</sup>.
+        <br/>
+        <b>n</b> s'appelle la caract&eacute;ristique de log(x), $ n \in \mathbb{Z} $.
+        <br/>
+        Pour faire court, un nombre s'&eacute;crit <code class="postit">&nbsp;c,m&nbsp;</code>, o&ugrave; <code>c</code> e
+        st la caract&eacute;ristique, et <code>m</code> la mantisse.
+    </p>
+    <p>
+        Donc, $ x' \in \mathbb{R} \cap [1, 10[, log(x') \in \mathbb{R} \cap [0, 1[ $        
+    </p>
+    <p>        
+        en cons&eacute;quence&nbsp;:
+        <br/>
+        log(x) = n + mantisse <br/>
+        log(x) = n + 0,......<br/>
         
+        <ul>
+            <li>si n &ge; 0 alors log(x) = n + 0,xxxxx</li>
+            <li>
+                si n &lt; 0 alors log(x) = -n + 0,xxxxx not&eacute; <span class="overlined">n</span>,xxxx 
+                (caract&eacute;ristique n&eacute;gative, mantisse <i>toujours</i> positive).
+            </li>
+        </ul>
+        <div class="indent-one">
+            Ces caract&eacute;ristiques surlign&eacute;es sont tr&egrave;s pratiques, quand on doit additionner ces valeurs de logarithmes, ainsi que c'est fr&eacute;quent.
+            <br/>
+            Par exemple, si on pose l'addition suivante:
+            <pre>
+                0,1234
+              + 1,2345
+              + 2,3456
+            </pre>
+            On trouve bien &eacute;videmment
+            <pre>
+                3.7035
+            </pre>
+            Mais si on pose
+            <pre>
+                0,1234
+              - 0,7655
+              + 2,3456
+              </pre>
+            On veut trouver 1,7029, mais c'est moins facile, davantage d'erreurs sont possible, surtout si &ccedil;a souffle...
+            <br/>
+            Mais avec, comme <code>-0,7655 = 1 - 0,2345</code>:
+            <pre>
+                0,1234
+              + <span class="overlined">1</span>,2345
+              + 2,3456
+              </pre>
+              On fait une <i>addition</i>, mais en retranchant les valeurs surlign&eacute;es lors de l'addition des caract&eacute;ristiques.
+              <br/>
+              Et on arrive au m&ecirc;me resultat sans s'&ecirc;tre encombr&eacute; avec des retenues. CQFD.
+        </div>
+        <br/>
+        <b><i>&Agrave; propos des caract&eacute;ristiques surlign&eacute;es&nbsp;:</i></b>
+        <br/>
+        <i>
+            Cette notation semble ne pas &ecirc;tre adopt&eacute;e universellement.<br/>
+            Ainsi qu'on va le voir, la partie de la table qui sert &agrave; chercher le logarithme d'un nombre le fait pour des 
+            nombres compris entre 1 et 10. Ceci a pour cons&eacute;quence de ne produire que des valeurs de logarithme positives ou nulles.<br/>
+            Cependant, la partie de la table qui va donner les logarithmes des lignes trigonom&eacute;triques va devoir le 
+            faire entre autres pour des nombres compris entre -1 et +1 (comme les sinus et cosinus). C'est l&agrave; qu'on 
+            verra potentiellement apparaître cette notation o&ugrave; la caract&eacute;ristique est surlign&eacute;e.
+            <br/>
+            De nombreuses tables utilisent un autre type de notation pour ces m&ecirc;mes valeurs.<br/>
+            Prenons le cas de <b>log(sin(30&deg;))</b>. Sin(30&deg;) est &eacute;gal &agrave; &frac12;, 
+            son logarithme est donc inf&eacute;rieur &agrave; z&eacute;ro.
+            <br/><br/>
+            Les tables fran&ccedil;aises de Bouvart et Ratinet indiquent <b><span class="overlined">1</span>,69897</b>, qui
+            signifie d'apr&egrave;s ce qu'on a dit plus haut (-1 + 0,69897), soit -0,30103.<br/>
+            D'autres tables – anglaises ou am&eacute;ricaines – vont indiquer 9,69897, pour signifier la m&ecirc;me chose. 
+            Dans ce cas, on trouve la valeur &agrave; utiliser en soustrayant 10 &agrave; la valeur de la table. 
+            Il convient d'&ecirc;tre pr&eacute;venu...
+        </i>
+        <p>
+            <b>La table donne les logarithmes de nombres de 1 &agrave; 10.</b>
+        </p>
+        <p>
+            On est en log d&eacute;cimaux, donc
+            <pre>
+            log 10<sup>1</sup> = 1
+            log 10<sup>2</sup> = 2
+            log 10<sup>3</sup> = 3
+            etc.
+            </pre>
+        </p>
+        <p>
+            Avant de proc&eacute;der, afin de pouvoir utiliser la table, il est donc n&eacute;cessaire de r&eacute;duire le nombre 
+            dont on cherche le logarithme &agrave; un nombre compris entre 1 et 10, et d'en pr&eacute;server la caract&eacute;ristique.
+        </p>
+        <p>
+            <i>Exemple&nbsp;:</i><br/>
+            Recherche du logarithme d'un nombre &agrave; 4 chiffres&nbsp;: log(2745).
+        </p>
+        <p>
+            2745 = 2,745.10<sup>3</sup><br/>
+            donc log(2745) = <b>3</b> + log(2,745)
+        </p>
+        <div style="text-align: center;"><img src="images/app.log.01.png" width="40%" alt="Logarithms" title="Logarithms"></div>
+        <p>
+            On cherche donc dans la table, non pas 2,745, mais 2745.<br/>
+            274 dans la colonne de gauche, et le dernier chiffre – 5 – dans une colonne de la table.
+            <br/>
+            Le log de 2,745 est &agrave; l'intersection de la ligne 274 et de la colonne 5.<br/>
+            <code>log(2,745) = 0,43854</code>.
+        </p>
+        <p>
+            Donc, <code>log(2745) = 3,43854</code>.
+        </p>
+        <p>
+            De la m&ecirc;me mani&egrave;re, on cherche le logarithme de 0,2745.<br/>
+            0,2745 = 2,745.10<sup>-1</sup>, la valeur &agrave; chercher dans la table demeure la m&ecirc;me.<br/>
+            Donc log(0,2745) = <b>-1</b> + log(2,745), soit 0,43854 – 1, soit -0,56146.
+        </p>
+        <p>
+            <i>Autre exemple&nbsp;:</i>
+            log(2,517) = ?
+            <div style="text-align: center;"><img src="images/app.log.02.png" width="40%" alt="Logarithms" title="Logarithms"></div>
+            On note ici que la valeur est pr&eacute;c&eacute;d&eacute;e d'une &eacute;toile (*). <br/>
+            Ceci signifie que cette valeur se r&eacute;f&egrave;re (2 premiers chiffres de la mantisse) &agrave; la ligne suivante, 
+            &agrave; savoir 0,40088, <i>et non pas 0,39088</i>.
+        </p>
+        <div class="doc-section">
+            <b>Logarithme d'un nombre &agrave; cinq chiffres</b>
+            <p>
+                <i>Exemple&nbsp;:</i><br/>
+                Recherche de la valeur de log(28,864).<br/>
+                Comme pr&eacute;c&eacute;demment, on r&eacute;duit &agrave; un nombre situ&eacute; entre 1 et 10&nbsp;:<br/>
+                Log (28,864) = log(2,8864.101)<br/>
+                Ensuite on situe ce nombre entre deux valeurs &agrave; 4 chiffres&nbsp;:<br/>
+                2,886 < 2,8864 < 2,887
+            </p>
+            <p>
+                De la table, on d&eacute;termine&nbsp;:<br/>
+                log(2,886) = 0,46030<br/>
+                log(2,887) = 0,46045<br/>
+            </p>
+            <p>
+                La diff&eacute;rence entre les deux valeurs des logarithmes est 0,00015, soit 15 cent-milli&egrave;mes.
+                <div style="text-align: center;"><img src="images/app.log.02.png" width="40%" alt="Logarithms" title="Logarithms"></div>
+                Dans la colonne de l'extr&ecirc;me droite, on cherche la table intitul&eacute;e 15, c'est la diff&eacute;rence tabulaire 
+                (not&eacute;e ici P.P. - c'est une table am&eacute;ricaine, Partial Part). <br/>
+                On cherche la valeur du log(2,8864), on a celle de log(2,886). On a donc une diff&eacute;rence de 0,0004, soit <b>4</b> dix-milli&egrave;mes. 
+                La ligne <b>4</b> de la diff&eacute;rence tabulaire donne une valeur de <b>6,0</b> (cent-milli&egrave;mes), qu'on ajoute alors &agrave; la valeur du log(2,886)&nbsp;:
+                <div>
+                    log(2,8864) = 0,46030 + 0,0000<b>60</b> = 0,460360.
+                </div>
+            </p>
+            <p>
+                Pos&eacute; autrement:
+                <pre>
+                    0,46030
+                    +     6,0
+                    ----------
+                    0,46036
+                </pre>
+            </p>
+            <p>
+                Ainsi, log(28,864) = 1,46036.
+            </p>
+            <p>
+                <i>Logarithme des fonctions trigonom&eacute;triques&nbsp;:</i><br/>
+                Il n'est pas n&eacute;cessaire ici de r&eacute;duire la valeur du nombre &agrave; chercher. La table donne la valeur 
+                des fonctions trigonom&eacute;triques usuelles pour des valeurs d'angles pr&eacute;-d&eacute;finis. La pr&eacute;cision 
+                est en g&eacute;n&eacute;ral de l'ordre de la minute d'arc, certaines tables vont jusqu'&agrave; la seconde d'arc.
+                <br/>
+                Ce dont il convient de se pr&eacute;occuper en priorit&eacute;, c'est du syst&egrave;me de notation 
+                employ&eacute;, caract&eacute;ristique surlign&eacute;e, ou 10 &agrave; soustraire de de la valeur.
+                <br/>
+                Il est facile de discerner le syst&egrave;me de notation utilis&eacute;, si on se souvient que les 
+                sinus et cosinus sont forc&eacute;ment compris entre -1 et +1. Un coup d'œil suffit pour savoir si dans leurs cas, 
+                la caract&eacute;ristique est surlign&eacute;e, ou sup&eacute;rieure &agrave; 1.
+            </p>
+        </div>
     </p>
 </div>
 
@@ -2693,24 +2891,24 @@
         On observe <b>Jupiter</b> et la <b>Lune</b>.
     </p>
     <p>
-        À 05:21:05 UTC, on observe Jupiter, sa hauteur instrumentale est 67&deg;32'.
+        &Agrave; 05:21:05 UTC, on observe Jupiter, sa hauteur instrumentale est 67&deg;32'.
     </p>
     <div class="doc-section">
         Voici le formulaire utilis&eacute; avec les tables de Dieumegard, pour d&eacute;terminer l'intercept, qui est ainsi de 0.85', vers l'astre.
-        <div style="text-align: center;"><img src="images/form.dieumegard.01.png" width="40%" alt="Dieumegard" title="Dieumegard"></div>
+        <div style="text-align: center;"><img src="images/form.dieumegard.01.png" width="60%" alt="Dieumegard" title="Dieumegard"></div>
     </div>
     <div class="doc-section">
-        On procède ensuite avec les tables de Bataille, pour d&eacute;terminer l'azimut de Jupiter, qu'on trouve ainsi &ecirc;tre de 98&deg;.
-        <div style="text-align: center;"><img src="images/form.bataille.01.png" width="40%" alt="Bataille" title="Bataille"></div>
+        On proc&egrave;de ensuite avec les tables de Bataille, pour d&eacute;terminer l'azimut de Jupiter, qu'on trouve ainsi &ecirc;tre de 98&deg;.
+        <div style="text-align: center;"><img src="images/form.bataille.02.png" width="60%" alt="Bataille" title="Bataille"></div>
     </div>
     <div class="doc-section">
         Pour la Lune - avec son bord inf&eacute;rieur - on r&eacute;utilise le m&ecirc;me formulaire, l'observation date de 05:18:42 UTC,
          pour les tables de Dieumegard, avec une hauteur instrumentale de 33&deg;01', on trouve ainsi un intercept de 6', dans la direction oppos&eacute;e &agrave; l'astre.
-        <div style="text-align: center;"><img src="images/form.dieumegard.02.png" width="40%" alt="Dieumegard" title="Dieumegard"></div>
+        <div style="text-align: center;"><img src="images/form.dieumegard.02.png" width="60%" alt="Dieumegard" title="Dieumegard"></div>
     </div>
     <div class="doc-section">
         De m&ecirc;me que pr&eacute;c&eacute;demment, on utilise les tables de Bataille pour l'azimut, on trouve 71&deg;.
-        <div style="text-align: center;"><img src="images/form.bataille.02.png" width="40%" alt="Bataille" title="Bataille"></div>
+        <div style="text-align: center;"><img src="images/form.bataille.01.png" width="60%" alt="Bataille" title="Bataille"></div>
     </div>
     <div class="doc-section">
         Reste ensuite &agrave; porter ces intercepts et azimut sur un canevas Mercator ou une plotting sheet. 
@@ -2718,9 +2916,11 @@
         On note le 138 W, qui d&eacute;crit la 
         longitude, et les N 1&deg;, 0&deg;, et S 1&deg;, qui indiquent la latitude des observations.
         <br/>
-        Position estim&eacute;e, azimuts et intercept sont ensuite trac&eacute;s, et on obtient les droites de hauteur, &agrave; l'intersection desquelles on doit se trouver&nbsp;!
+        Position estim&eacute;e, azimuts et intercept sont ensuite trac&eacute;s, et on obtient les droites de hauteur, &agrave; l'intersection 
+        desquelles on doit se trouver&nbsp;!
         <div style="text-align: center;"><img src="images/plotting.sheet.02.png" width="60%" alt="Plotting Sheet" title="Plotting Sheet"></div>
-        Pour porter les intercepts, on utilise le compas &agrave; pointes sèches et l'&eacute;chelle des distance donn&eacute;e en bas &agrave; droite de la plotting sheet.
+        Pour porter les intercepts, on utilise le compas &agrave; pointes s&egrave;ches et l'&eacute;chelle des distance donn&eacute;e en bas &agrave; 
+        droite de la plotting sheet.
         <br/>
         La position corrig&eacute;e se trouve ainsi &ecirc;tre 0&deg;33' N / 138&deg;08' W. 
     </div>
