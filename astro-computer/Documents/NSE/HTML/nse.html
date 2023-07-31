@@ -177,7 +177,15 @@
                             <a class="toc" href="#05-2-9">Navigation Astronomique</a>
                             <ol>
                                 <li><a class="toc" href="#05-2-9-1">Point par hauteur m&eacute;ridienne.</a></li>
-                                <li><a class="toc" href="#05-2-9-2">Point par droite(s) de hauteur.</a></li>
+                                <li>
+                                    <a class="toc" href="#05-2-9-2">Point par droite(s) de hauteur.</a>
+                                    <ol>
+                                        <li><a class="toc" href="#05-2-9-2-1">Principe</a></li>
+                                        <li><a class="toc" href="#05-2-9-2-3">En pratique</a></li>
+                                        <li><a class="toc" href="#05-2-9-2-7">Avec des tables de logarithmes</a></li>
+                                        <li><a class="toc" href="#05-2-9-2-8">Avec des tables de navigation</a></li>
+                                    </ol>
+                                </li>
                                 <li><a class="toc" href="#05-2-9-3">Vieilles techniques, vieilles combines.</a></li>
                             </ol>
                         </li>
@@ -185,8 +193,6 @@
                 </li>
             </ol>
         </li>
-        <li><a class="toc" href="#xx">La suite</a></li>
-
         <li>
             <a class="toc" href="#appendix-page">Appendices</a>
             <ul>
@@ -1559,7 +1565,7 @@
                 <p>
                     <i>Un premier commentaire:</i>
                     <br/>
-                    On remarque que lors de la recherche de la latitude, on n'a besoin de l'heure que pour savoir &agrave; quelle heure commencer l'observation ; 
+                    On remarque que lors de la recherche de la latitude, on n'a besoin de l'heure que pour savoir &agrave; quelle heure commencer l'observation&nbsp;; 
                     la pr&eacute;cision de la minute (de temps) est fort suffisante.
                     <br/>
                     Par contre, lors de la recherche de la longitude, la pr&eacute;cision du chronom&egrave;tre impacte directement – et consid&eacute;rablement - la 
@@ -1884,27 +1890,27 @@
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 1/12 - Recherche de log(sin(37&deg;46'))</b>
                         <div style="text-align: center;"><img src="images/log.01.jpg" width="60%" alt="Recherche de log(sin(37&deg;46'))" title="Recherche de log(sin(37&deg;46'))"></div>
-                        On trouve : <code>log(sin(37&deg;46')) = 9.78707</code> soit <code>9.78707 – 10 = -0.21293</code>
+                        On trouve&nbsp;: <code>log(sin(37&deg;46')) = 9.78707</code> soit <code>9.78707 – 10 = -0.21293</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 2/12 - Recherche de log(sin(6&deg;11'))</b>
                         <div style="text-align: center;"><img src="images/log.02.jpg" width="60%" alt="Recherche de log(sin(6&deg;11'))" title="Recherche de log(sin(6&deg;11'))"></div>
-                        On trouve : <code>log(sin(6&deg;11')) = 9.03226</code> soit <code>9.03226 – 10 = -0.96734</code>
+                        On trouve&nbsp;: <code>log(sin(6&deg;11')) = 9.03226</code> soit <code>9.03226 – 10 = -0.96734</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 3/12 - Recherche de log(cos(37&deg;46'))</b>
                         <div style="text-align: center;"><img src="images/log.03.png" width="60%" alt="Recherche de log(cos(37&deg;46'))" title="Recherche de log(cos(37&deg;46'))"></div>
-                        On trouve : <code>log(cos(37&deg;46')) = 9.89791</code> soit <code>9.89791 – 10 = -0.10209</code>
+                        On trouve&nbsp;: <code>log(cos(37&deg;46')) = 9.89791</code> soit <code>9.89791 – 10 = -0.10209</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 4/12 - Recherche de log(cos(6&deg;11'))</b>
                         <div style="text-align: center;"><img src="images/log.04.jpg" width="60%" alt="Recherche de log(cos(6&deg;11'))" title="Recherche de log(cos(6&deg;11'))"></div>
-                        On trouve : <code>log(cos(6&deg;11')) = 9.99747</code> soit <code>9.99747 – 10 = -0.00253</code>
+                        On trouve&nbsp;: <code>log(cos(6&deg;11')) = 9.99747</code> soit <code>9.99747 – 10 = -0.00253</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 5/12 - Recherche de log(cos(12&deg;26'))</b>
                         <div style="text-align: center;"><img src="images/log.05.jpg" width="60%" alt="Recherche de log(cos(12&deg;26'))" title="Recherche de log(cos(12&deg;26'))"></div>
-                        On trouve : <code>log(cos(12&deg;26')) = 9.98969</code> soit <code>9.98969 – 10 = -0.01031</code>
+                        On trouve&nbsp;: <code>log(cos(12&deg;26')) = 9.98969</code> soit <code>9.98969 – 10 = -0.01031</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 6 &amp; 7/12 - Recherche de sin(L).sin(D)</code></b>
@@ -2012,12 +2018,12 @@
                             <div class="content slack-on-top">
                                 <b>&Eacute;tape 1/12 - Recherche de log(tan(-6&deg;11'))</b>
                                 <div style="text-align: center;"><img src="images/log.10.jpg" width="60%" alt="Recherche de log(tan(-6&deg;11'))" title="Recherche de log(tan(-6&deg;11'))"></div>
-                                Avec la valeur absolue de la d&eacute;clinaison, on trouve : <code>log(tan(6&deg;11')) = 9.03479</code> soit <code>9.03479 – 10 = -0.96521</code>
+                                Avec la valeur absolue de la d&eacute;clinaison, on trouve&nbsp;: <code>log(tan(6&deg;11')) = 9.03479</code> soit <code>9.03479 – 10 = -0.96521</code>
                             </div>
                             <div class="content slack-on-top">
                                 <b>&Eacute;tape 2/12 - Recherche de log(sin(12&deg;26'))</b>
                                 <div style="text-align: center;"><img src="images/log.11.jpg" width="60%" alt="Recherche delog(sin(12&deg;26'))" title="Recherche de log(sin(12&deg;26'))"></div>
-                                On trouve : <code>log(sin(12&deg;26')) = 9.33305</code> soit <code>9.33305 – 10 = -0.66695</code>
+                                On trouve&nbsp;: <code>log(sin(12&deg;26')) = 9.33305</code> soit <code>9.33305 – 10 = -0.66695</code>
                             </div>
                             <div class="content slack-on-top">
                                 <b>&Eacute;tape 3, 4 &amp; 5/12 - Recherche de cos(L).tan(D)</b>
@@ -2075,7 +2081,7 @@
                                 <br/>
                                 L'astre est d&eacute;j&agrave; pass&eacute; au m&eacute;ridien, l'azimut est donc &agrave; porter vers l'ouest.
                                 <br/>
-                                L'azimut <b>Z</b> se lit donc <b>S 17 W</b> (&ccedil;a se lit : &agrave; partir du S, 17&deg; vers l'W), soit <b>197&deg;</b>.
+                                L'azimut <b>Z</b> se lit donc <b>S 17 W</b> (&ccedil;a se lit&nbsp;: &agrave; partir du S, 17&deg; vers l'W), soit <b>197&deg;</b>.
                                 <br/>
                                 De m&ecirc;me que dans le cas de la hauteur m&eacute;ridienne, on constate qu'il n'y a pas lieu de s'emporter 
                                 sur la pr&eacute;cision du calcul, celle de la minute suffit largement (ce qui simplifie les acc&egrave;s &agrave; la table de logarithmes), 
@@ -2092,21 +2098,393 @@
             <div class="content">
                 <h5><a name="05-2-9-2-8">Avec des tables de navigation</a></h5>
                 <p>
-
+                    Les tables de navigation facilitent le calcul, en minimisant le nombre d'&eacute;tapes, et par l&agrave; m&ecirc;me le nombre de sources d'erreur.
+                    <br/>
+                    Avec les tables de Dieumegard, le calcul de la hauteur se r&eacute;duit &agrave; 8 &eacute;tapes, et avec les tables de Bataille, 
+                    le calcul de l'azimut est fait en 5 &eacute;tapes.
+                    <br/>
+                    Il est aussi commode de se pr&eacute;parer des grilles, comme des formulaires, &agrave; remplir au fur et &agrave; mesure du calcul, 
+                    qui fournissent un minimum d'explications sur leur encha&icirc;nement, ainsi qu'un chemin naturel d'une &eacute;tape &agrave; l'autre - on en donnera des exemples.
+                    (Que ceux qui en doutent regardent la section pr&eacute;c&eacute;dente).
+                    <br/>
+                    Il faut toujours se rappeler que si ce genre de calculs - logarithmiques - va tout seul (...bon, faut voir) dans la chaleur 
+                    de son salon &agrave; c&ocirc;t&eacute; de la chemin&eacute;e, il en va parfois diff&eacute;remment en mer... 
+                    Aucune assistance n'est superflue dans ce domaine, d'o&ugrave; ces tables. Encore un fois, on veut (toujours) r&eacute;soudre ces m&ecirc;mes formules&nbsp;:
+                    <div class="postit">
+                        $$
+                          He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
+                        $$
+        
+                        $$
+                          Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
+                        $$
+                    </div>
+                    Donc, les tables de <i><b>Dieumegard</b></i> sont utilis&eacute;es pour r&eacute;soudre le calcul de la <i><b>hauteur</b></i>, celles de <i><b>Bataille</b></i> celui de l'<i><b>azimuth</b></i>.
                 </p>
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-1">Tables de Dieumegard</a></h5>
+                    <p>
+                       Voici comment ces tables fonctionnent. Elles parcourent le m&ecirc;me chemin que le proc&eacute;d&eacute; d&eacute;crit auparavant, celui qui ne met en œuvre que les table de logarithmes. Ces tables permettent de r&eacute;aliser plus vite les m&ecirc;mes op&eacute;rations.
+                    </p>    
+                    <p>
+                       Les tables de Dieumegard se composent en fait de 4 tables&nbsp;: <b>1</b>, <b>2</b>, <b>3</b>, <b>A</b>.
+                    </p>    
+                    <ul>
+                        <li>La table <b>1</b> r&eacute;sout la formule&nbsp;: <code>colog(1 – cos(a))</code></li>
+                        <li>La table <b>2</b> r&eacute;sout la formule&nbsp;: <code>colog(cos(a))</code></li>
+                        <li>La table <b>3</b> r&eacute;sout la formule&nbsp;: <code>colog(n)</code></li>
+                        <li>La table <b>A</b> r&eacute;sout la formule&nbsp;: <code>1 – cos(a)</code></li>
+                    </ul>    
+                    <p>
+                       Note&nbsp;: cologarithme, <code>colog(x) = log(1/x)</code>
+                    </p>
+                    <p>
+                       Le recours aux cologarithmes permet de n'avoir (sauf exceptions, caract&eacute;ristiques surlign&eacute;es) &agrave; manipuler 
+                       que des valeurs positives.
+                    </p>
+                    <p>
+                        Voici d'abord un formulaire, qui guide l'utilisateur dans l'usage des tables de Dieumegard. Les &eacute;tapes sont d&eacute;taill&eacute;es ensuite.
+                        <div class="content slack-on-top">
+                            Le formulaire ci-dessous est rempli des valeurs qu'on va trouver ensuite dans les tables.
+                            <br/>
+                            <div style="text-align: center;"><img src="images/form.dieumegard.png" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tape 1 / 8</i>&nbsp;: On entre table <b>1</b> avec l'angle horaire local (12&deg;26'), pour trouver le nombre <b>a</b>&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.01.jpg" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            On trouve <code><b>a</b> = 1.6298</code>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tape 2 / 8</i>&nbsp;: On entre table <b>2</b> avec L (37&deg;46'), pour trouver le nombre <b>b</b>&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.02.jpg" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            On trouve <code><b>b</b> = 0.1021</code>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tapes 3 &amp; 4 / 8</i>&nbsp;: On entre table <b>2</b> avec D (6&deg;11' S), pour trouver le nombre <b>c</b>&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.03.jpg" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            On trouve <code><b>c</b> = 0.0025</code>
+                            <p>
+                                On calcule ensuite la somme <code><b>d</b> = a + b + c = 1.6298 + 0.1021 + 0.0025 = 1.7344</code>
+                            </p>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tape 5 / 8</i>&nbsp;: On entre <i>&agrave; l'int&eacute;rieur</i> de la table <b>3</b> avec <b>d</b> (1.7344), pour trouver le nombre <b>e</b>,
+                            en haut d'abord, &agrave; gauche ensuite&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.04.png" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            On trouve <code>01</code> en haut, et entre <code>84</code> et <code>85</code> &agrave; gauche, qu'on pose <code>84.5</code>, ce qui nous donne
+                            <br/>
+                            <code><b>e</b> = 0.<b>01845</b></code>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tapes 6 &amp; 7 / 8</i>&nbsp;: On entre table <b>A</b> avec <b>L&PlusMinus;D</b> (43&deg;57'), en haut, &agrave; gauche, pour trouver <b>f</b>&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.05.jpg" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            On trouve <code><b>f</b> = 0.2801</code>
+                            <p>
+                                On calcule ensuite la somme <code><b>g</b> = e + f = 0.01845 + 0.2801 = 0.29855</code>
+                            </p>
+                        </div> 
+                        <div class="content slack-on-top">
+                            <i>&Eacute;tape 8 / 8</i>&nbsp;: On entre <i>&agrave; l'int&eacute;rieur</i> de la table <b>A</b> avec <b>g</b>, et on trouve la hauteur estim&eacute;e en bas, &agrave; droite.
+                            <br/>
+                            <div style="text-align: center;"><img src="images/d.06.png" width="60%" alt="Formulaire&#13;Tables de Dieumegard" title="Formulaire&#13;Tables de Dieumegard"></div>
+                            He = <code>44&deg;33'</code>
+                        </div> 
+                    </p>
+                </div>
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-2">Tables de Bataille</a></h5>
+                    <p>
+                        <!--div class="content slack-on-top"-->
+                            Comme pour les tables de Dieumegard, on va commencer par le formulaire, et d&eacute;tailler ensuite les diff&eacute;rentes &eacute;tapes&nbsp;:
+                            <br/>
+                            <div style="text-align: center;"><img src="images/form.bataille.png" width="60%" alt="Formulaire&#13;Tables de Bataille" title="Formulaire&#13;Tables de Bataille"></div>
+                        <!--/div--> 
+
+                        <div class="content slack-on-top">
+                            On recherche l'<b>angle au p&ocirc;le</b> (12&deg;) en table </b>I</b>.
+                            <br/>
+                            <div style="text-align: center;"><img src="images/b.01.jpg" width="60%" alt="Formulaire&#13;Tables de Bataille" title="Formulaire&#13;Tables de Bataille"></div>
+                            <br/>
+                            12&deg;, soit 0h 48m.
+                            <br/><br/>
+                            Toujours table <b>I</b>, &agrave; la ligne de la latitude (colonne de gauche), on trouve <b>0,61</b>.
+                            <br/>
+                            Comme P est inf&eacute;rieur &agrave; 90&deg;, le nombre trouv&eacute; est n&eacute;gatif.
+                            <div style="text-align: center;"><img src="images/b.02.jpg" width="60%" alt="Formulaire&#13;Tables de Bataille" title="Formulaire&#13;Tables de Bataille"></div>
+                            Ce qui nous fait au final, <code>nombre m = <b>-0.61</b></code>.
+                        </div> 
+
+                        
+                        <div class="content slack-on-top">
+                            M&ecirc;me op&eacute;ration en table <b>II</b>, avec la latitude et la d&eacute;clinaison, on trouve <b>0,08</b>.
+                            <div style="text-align: center;"><img src="images/b.03.png" width="60%" alt="Formulaire&#13;Tables de Bataille" title="Formulaire&#13;Tables de Bataille"></div>
+                            Comme L et D sont de signes contraires, le nombre trouv&eacute; est n&eacute;gatif, soit <code>nombre n = <b>-0,08</b></code>.
+                            <br/><br/>
+                            La somme des deux termes (<code>m+n</code>, -0,61 et -0,08) est &eacute;gale &agrave; -0.69, qu'on cherche <i>&agrave; l'int&eacute;rieur</i> de la table <b>II</b>, avec l'angle au p&ocirc;le <i>&agrave; droite</i>.
+                            <div style="text-align: center;"><img src="images/b.04.jpg" width="60%" alt="Formulaire&#13;Tables de Bataille" title="Formulaire&#13;Tables de Bataille"></div>
+                            On trouve l'azimut <i>en bas</i>, soit <b>17&deg;</b>.
+                            <p>
+                                Comme <code>(m+n)</code> est n&eacute;gatif, on compte &agrave; partir du p&ocirc;le abaiss&eacute;. 
+                                <br/>
+                                L'angle horaire local est compris entre 0&deg; et 180&deg;, on porte donc l'azimut vers l'<i>ouest</i>. 
+                                <br/>
+                                On lit donc <b>S 17&deg; W</b>, soit <b>197&deg;</b>.
+                            </p>
+                        </div> 
+                    </p>    
+                </div>
+
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-3">HO.249, et les autres</a></h5>
+                    <p>
+                        Les tables HO.249 ont &eacute;t&eacute; con&ccedil;ues pour l'a&eacute;ronautique. C'est l'&eacute;quivalent am&eacute;ricain des AP.3270 britanniques. 
+                        Elles permettent en une fois d'obtenir la hauteur estim&eacute;e et l'azimut. Elles sont compos&eacute;es de 3 gros volumes.
+                    </p>
+                    <p>
+                        Elles doivent cependant utiliser une position estim&eacute;e diff&eacute;rente de la position r&eacute;ellement estim&eacute;e.
+                        <br/>
+                        Et il existe de nombreuses autres tables et abaques, de toutes origines, et dans toutes les langues. 
+                        Elles ont toutes le m&ecirc;me but, et sont toutes aussi fiables, pour peu qu'on sache s'en servir. 
+                        Le tout, c'est de trouver celles qu'on pr&eacute;f&egrave;re, et avec lesquelles on est le plus &agrave; l'aise.
+                    </p>
+                </div>
+
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-4">Entorse&nbsp;: avec une calculette d&eacute;di&eacute;e.</a></h5>
+                    <p>
+                        Une calculette est &eacute;lectrique..., mais il existe des calculettes qui remplacent les &eacute;ph&eacute;m&eacute;rides et autres almanachs. 
+                        La tr&egrave;s fameuse Tamaya a eu son heure de gloire. 
+                        Je ne suis pas s&ucirc;r cependant que les programmes qui y tournent prennent en compte les secondes intercalaires... 
+                        &Agrave; v&eacute;rifier.
+                    </p>
+                </div>
+
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-5">Usage de l'informatique</a></h5>
+                    <p>
+                        Il existe nombre de programmes pour &eacute;diter les almanachs et &eacute;ph&eacute;m&eacute;rides, 
+                        ainsi que pour r&eacute;soudre les calculs n&eacute;cessaires pour la navigation astronomique, 
+                        on en fournira une liste en annexe.
+                    </p>
+                    <p>
+                        Dans le cadre de ce document, l'aspect qui nous concerne est l'&eacute;dition des &eacute;ph&eacute;m&eacute;rides.
+                    </p>
+                    <p>
+                        Des classes Java (et dans plusieurs autres langages) sont disponibles dans un git 
+                        repository (<a href="https://github.com/OlivierLD/ROB/tree/master/astro-computer/AstroComputer" target="git">https://github.com/OlivierLD/ROB/tree/master/astro-computer/AstroComputer</a>). 
+                        Ce code est bas&eacute; sur les algorithmes astronomiques de Jean Meeus et le travail remarquable de Hening Umland. 
+                        Ces classes permettent de calculer les donn&eacute;es de l'almanach pour le Soleil, la Lune, quatre 
+                        plan&egrave;tes (V&eacute;nus, Mars, Jupiter et Saturne), ainsi que pour une bonne cinquantaine d'&eacute;toiles. 
+                        On peut aussi par la m&ecirc;me occasion calculer les distances entre les astres, en particulier les distances lunaires.
+                    </p>
+                    <p>
+                        On utilise Java pour g&eacute;n&eacute;rer un fichier XML (eXtensible Markup Language) qu'on transforme 
+                        ensuite en pdf en utilisant XSL (eXtensible Stylesheet Language) et FOP (Formatting Object Processor), 
+                        ce qui apporte une grande souplesse &agrave; la d&eacute;marche. On peut &eacute;diter ce qu'on veut, dans le format qu'on souhaite. 
+                        Plusieurs exemples sont donc – disait-on – disponibles sur le site.
+                    </p>
+                    <p>
+                        Pour les d&eacute;tails sur l'utilisation de ces programmes, voyez sur le site dont l'URL est cit&eacute;e en note de bas de page.
+                    </p>
+                    <p>
+                        On peut aussi g&eacute;n&eacute;rer les tables de calcul (Dieumegard & Bataille), ainsi que les tables 
+                        d'interpolation, tr&egrave;s pratiques. 
+                        Ces derni&egrave;res peuvent &ecirc;tre g&eacute;n&eacute;r&eacute;es en quelques clics dans un tableur, c'est r&eacute;ellement spectaculaire. 
+                        C'est d'autant plus commode qu'il est possible de se r&eacute;aliser ses propres tables d'interpolation, en 
+                        fonction de ses besoins.
+                    </p>
+                </div>
+
+                <div class="content">
+                    <h5><a name="05-2-9-2-8-5">Un dernier commentaire</a></h5>
+                    <p>
+                        Les calculs n&eacute;cessaires pour la navigation astronomique sont longs, c'est le moins qu'on puisse dire. 
+                        Ils ne sont cependant pas difficiles, et avec un peu de pratique, c'est tr&egrave;s facile, et on acquiert 
+                        tr&egrave;s vite une forme de routine. Il ne faut pas h&eacute;siter &agrave; la pratiquer – &agrave; terre et en mer - autant que possible, 
+                        il est essentiel de ne pas avoir &agrave; apprendre cette technique sur le tas, quand le GPS se met en botte... 
+                        Il convient aussi de ne pas rendre cette routine trop automatique, il convient de persister 
+                        &agrave; savoir ce qu'on fait, afin de pouvoir d&eacute;tecter les erreurs et les aberrations.
+                    </p>
+                    <p>
+                        Et surtout, c'est sans doute la technique de navigation la plus gratifiante. 
+                        Quand au terme d'une travers&eacute;e on dit &agrave; l'&eacute;quipage "On devrait voir une terre devant nous dans environ une demi-heure", 
+                        ils ont tous cet air entendu, sur le mode "Mais bien s&ucirc;r...".
+                         Mais quand trente minutes plus tard, la terre appara&icirc;t, ils sont sci&eacute;s, et c'est bien normal.
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="doc-section">
+        <div class="doc-section content">
             <h4><a name="05-2-9-3">Vieilles techniques, vieilles combines.</a></h4>
             <p>
-
+                <h5><a name="05-2-9-3-1">Latitude constante</a></h5>
+                <p>
+                    La donn&eacute;e la plus difficile &agrave; obtenir, c'est l'heure exacte, dont d&eacute;pend directement le calcul de la longitude.
+                    <br/> 
+                    Lorsqu'elle &eacute;tait encore impossible &agrave; obtenir d'un mani&egrave;re fiable, il &eacute;tait courant lors d'un 
+                    long voyage – et lorsque c'&eacute;tait possible - de se caler d&egrave;s que possible sur la latitude d'arriv&eacute;e. 
+                    Le reste du trajet s'effectuait alors d'est en ouest, ou d'ouest en est. 
+                    La latitude est comme on l'a vu facile &agrave; obtenir, m&ecirc;me lorsqu'on ne dispose pas d'un chronom&egrave;tre suffisamment fiable.
+                    <br/> 
+                    De nombreux voyages entre les Am&eacute;riques et l'Europe ont &eacute;t&eacute; effectu&eacute;s de cette fa&ccedil;on. Ainsi qu'entre l'Arabie et l'Inde.
+                </p>
             </p>
+            <p>
+                <h5><a name="05-2-9-3-2">Kamal</a></h5>
+                <p>
+                    C'est une id&eacute;e Arabe, dont Tim Severin parle dans la relation qu'il fait de son “Voyage de Simbad”. 
+                    <br/>
+                    Le Kamal est un instrument rudimentaire, utilis&eacute; pour &eacute;valuer la hauteur d'un astre – des &eacute;toiles en 
+                    particulier – lorsqu'il passe &agrave; son point le plus bas.
+
+                    <div style="text-align: center;"><img src="images/kamal.jpg" width="60%" alt="Kamal" title="Kamal"></div>
+
+                    C'est particuli&egrave;rement adapt&eacute; &agrave; cette technique de latitude constante, &eacute;voqu&eacute;e ci-avant. 
+                    En fonction de la navigation &agrave; envisager, et la p&eacute;riode de l'ann&eacute;e, les
+                    Nacudas avaient &agrave; leur disposition plusieurs kamals, chacun correspondant &agrave; la hauteur 
+                    minimale ou maximale d'un astre donn&eacute; durant la travers&eacute;e &agrave; effectuer. 
+                    <br/>
+                    Il est int&eacute;ressant de constater que la grande majorit&eacute; des noms qu'on donne aux &eacute;toiles sont des noms Arabes.
+                </p>
+            </p>
+            <p>
+                <h5><a name="05-2-9-3-3">Distances lunaires</a></h5>
+                <p>
+                    Plus qu'une m&eacute;thode de d&eacute;termination de la longitude, c'est en fait une fa&ccedil;on de recaler le chronom&egrave;tre, ce qui m&egrave;ne 
+                    &agrave; la d&eacute;termination de la longitude. Joshua Slocum y fait r&eacute;f&eacute;rence.
+                    <br/>
+                    Le principe est simple, il exploite le mouvement tr&egrave;s particulier de la Lune par rapport aux autres astres visibles. 
+                    Elle est en effet l'astre visible dont le mouvement propre est le plus flagrant.
+                    <br/>
+                    La Lune a de nombreuses caract&eacute;ristiques uniques, son mouvement propre fait qu'on a l'impression 
+                    qu'elle se d&eacute;place &agrave; l'envers dans le ciel... 
+                    Son mouvement propre est pr&eacute;cis&eacute;ment ce qui constitue son int&eacute;r&ecirc;t ici.
+                </p>
+                <p>    
+                    Un autre aspect important de cette m&eacute;thode – si ce n'est la raison pour laquelle elle existe, 
+                    c'est que – une fois corrig&eacute;e - l'observation faite d'une distance entre deux astres <b>ne d&eacute;pend pas</b> de 
+                    la position g&eacute;ographique de l'observateur.
+                </p>
+                <p>    
+                    Dans la vo&ucirc;te c&eacute;leste, les astres visibles (Soleil, plan&egrave;tes, &eacute;toiles) seront consid&eacute;r&eacute;s comme les chiffres 
+                    d'une grande pendule, o&ugrave; la Lune jouerait le r&ocirc;le de la grande aiguille.
+                    <br/>
+                    Le probl&egrave;me, c'est que les chiffres bougent aussi. Mais &ccedil;a fonctionne.
+                    On utilise alors le sextant, non plus pour mesurer une hauteur sur l'horizon, mais une distance entre deux astres.
+                    <br/>
+                    On choisira pour mesurer cette distance des astres situ&eacute;s au voisinage du trajet de la Lune dans la ciel, 
+                    de fa&ccedil;on &agrave; ce que la distance qui nous int&eacute;resse varie de mani&egrave;re substantielle avec le temps. 
+                    Par exemple, l'&eacute;toile Polaire ne sera d'aucune utilit&eacute;...
+                </p>
+                <p>    
+                    &Ccedil;a marche, mais il faut savoir quel cr&eacute;dit accorder &agrave; cette m&eacute;thode.
+                    <br/>
+                    Si on consid&egrave;re par exemple la mesure de la distance Lune-Soleil, cette distance varie par heure d'environ 30'. 
+                    Une erreur d'une minute d'arc sur le sextant – et cette mesure est plus difficile &agrave; obtenir que dans le cas d'une 
+                    hauteur sur l'horizon – correspond &agrave; une erreur de temps de l'ordre deux minutes... 
+                    On fait en g&eacute;n&eacute;ral plusieurs observations, dont on calcule ensuite une moyenne.
+                    <br/>
+                    Il faut pouvoir mesurer la distance lunaire avec une pr&eacute;cision inf&eacute;rieure &agrave; une minute d'arc.
+                </p>
+                <p>    
+                    C'est une m&eacute;thode d&eacute;licate, qui requiert beaucoup de pr&eacute;cision, et beaucoup de calculs. 
+                    Mais encore une fois, &ccedil;a marche. On n'en attendra pas cependant la pr&eacute;cision qu'on peut obtenir avec un droite de hauteur. 
+                    La fourchette d'erreur est de l'ordre de plusieurs dizaines minutes de longitude... 
+                    Mais &agrave; nouveau, cette m&eacute;thode a &eacute;t&eacute; d&eacute;velopp&eacute;e alors que les chronom&egrave;tres n'&eacute;taient pas disponibles. 
+                    Et une longitude qui comporte une erreur de 30 minutes vaut mieux que pas de longitude du tout.
+                    <br/>
+                    Une &eacute;tape importante de la mesure d'une distance lunaire (au m&ecirc;me titre qu'une distance entre deux astres, 
+                    qu'il s'agisse de la Lune ou pas), c'est la correction de la mesure effectu&eacute;e avec le sextant. 
+                    <div class="indent-one-italic">
+                        On parle ici de distance lunaire, mais ceci s'applique &agrave; toute distance entre deux astres, quels qu'ils soient. 
+                        Sauf pr&eacute;cision explicite, tout ce qu'on dira dor&eacute;navant sur les distances lunaires s'applique de m&ecirc;me 
+                        &agrave; une distance entre deux astres, encore que ceci ne pr&eacute;sente gu&egrave;re d'int&eacute;r&ecirc;t ici. 
+                        La Lune est l'astre du ciel qui se d&eacute;place le plus vite, d'o&ugrave; son int&eacute;r&ecirc;t unique dans cette m&eacute;thode.
+                    </div>
+                    À l'inverse d'une hauteur qui se prend sur l'horizon, la correction de d&eacute;pression de l'horizon ne s'applique pas &agrave; une distance lunaire. 
+                    <br/>
+                    La correction de r&eacute;fraction demeure, la correction de parallaxe aussi, et les corrections de demi- diam&egrave;tre plus que 
+                    jamais, puisqu’ on a ici deux astres, qui ont potentiellement chacun un diam&egrave;tre, qui sont combinables&nbsp;: on peut prendre 
+                    les bords les plus proches, les plus &eacute;loign&eacute;s, ou le bord &eacute;loign&eacute; de l'un avec le bord proche de l'autre, et vice-versa&nbsp;; 
+                    en particulier quand la Lune n'est pas pleine, ses deux bords peuvent ne pas &ecirc;tre disponibles.
+                    Les corrections de r&eacute;fraction et de parallaxe sont calcul&eacute;es &agrave; partir de la hauteur d'un astre au-dessus de l'horizon. 
+                    On assortira donc la mesure d'une distance lunaire avec la mesure de la hauteur de chacun des astres observ&eacute;s, 
+                    ce qui fera – au moins – trois mesures avec le sextant.
+                    <br/>
+                    La mesure des hauteurs ne requiert pas la m&ecirc;me pr&eacute;cision que celle de la distance. 
+                    Elle n'est l&agrave; que pour calculer la valeur des corrections (r&eacute;fraction, parallaxe) &agrave; apporter &agrave; la distance. 
+                    &Ccedil;a tombe bien, parce qu'il n'est pas possible d'effectuer les trois mesures en m&ecirc;me temps. 
+                    L'ordre des mesures n'a gu&egrave;re d'importance. Le plus important est de mesurer la distance lunaire avec le plus de 
+                    pr&eacute;cision possible.
+                    <br/>
+                    Cette correction de la distance mesur&eacute;e constitue l'essentiel des calculs &agrave; effectuer. 
+                    Ensuite, on calculera &agrave; l'aide des &eacute;ph&eacute;m&eacute;rides et almanachs la distance th&eacute;orique &agrave; l'instant de l'observation, 
+                    puis on en d&eacute;duira par interpolation, de la diff&eacute;rence de mesure, la diff&eacute;rence de temps et/ou de longitude.
+                    <br/>
+                    À partir des donn&eacute;es de l'almanach (D&eacute;clinaison et Angle Horaire), on peut &agrave; tout moment calculer 
+                    la distance entre deux corps c&eacute;lestes en utilisant la formule suivante&nbsp;:
+                    <div class="postit">
+                    $$ Dist = \arccos[\sin(Dec1) \times \sin(Dec2) + \cos(Dec1) \times \cos(Dec2) \times \cos(GHA2-GHA1)] $$
+                    </div>
+                    Il est certainement plus commode d'effectuer ce genre de calculs lors de la publication de l'almanach. 
+                    On fournit en annexe un tel document. Il a &eacute;t&eacute; publi&eacute; s&eacute;par&eacute;ment de l'almanach, &ccedil;a fait carr&eacute;ment doubler son volume...
+                </p>
+                <p>
+                    La correction de cette fameuse distance est effectu&eacute;e &agrave; l'aide de la formule de Young&nbsp;:
+                    <div class="postit">
+                    $$
+ \cos(D) = \dfrac{\cos(Hm).\cos(Hb)}{\cos(Hmapp).\cos(Hbapp)}.[\cos(Dapp) + \cos(Hmapp + Hbapp)] - \cos(Hm + Hb)
+                    $$
+                    </div>
+                    O&ugrave;&nbsp;:
+                    <div class="indent-one">
+                        <code>Hm</code> est la hauteur de la Lune (Height Moon)<br/>
+                        <code>Hb</code> est la hauteur de l'autre corps c&eacute;leste (Height Body)<br/>
+                        <code>Dapp</code> est la distance apparente<br/>
+                        <code>Hmapp</code> est la hauteur apparente de la Lune<br/>
+                        <code>Hbapp</code> est la hauteur apparente de l'autre corps c&eacute;leste<br/>
+                    </div>
+                    Une hauteur apparente est une hauteur corrig&eacute;e de la d&eacute;pression de l'horizon et du demi- diam&egrave;tre de 
+                    l'astre observ&eacute; (ce qui implique de savoir quel bord de l'astre on a pos&eacute; sur l'horizon, inf&eacute;rieur ou sup&eacute;rieur).
+                    <br/>
+                    On passe de la hauteur apparente &agrave; la hauteur observ&eacute;e en y appliquant les corrections de r&eacute;fraction et de parallaxe.
+                    <br/>
+                    La distance apparente est la distance corrig&eacute;e des demi-diam&egrave;tres des astres respectifs. Elle sera corrig&eacute;e par la 
+                    r&eacute;fraction qui modifie le demi-diam&egrave;tre en fonction de la hauteur, et de la parallaxe.
+                </p>
+                <p>                    
+                    Il est indispensable pour atteindre la pr&eacute;cision requise de recourir aux logarithmes. Ce qui complique notoirement la proc&eacute;dure.
+                </p>
+                <p>                    
+                    <i>Bruce Stark</i> a con&ccedil;u de nouvelles tables destin&eacute;es &agrave; corriger la distance observ&eacute;e.
+                    Avec les almanachs qu'on trouvera en annexe, on pourra diviser la quantit&eacute; de calculs par deux, 
+                    puisqu'on y fournit les distances lunaires pour plusieurs astres, assorties de diff&eacute;rences tabulaires. 
+                    Et pendant qu'on y &eacute;tait, on a aussi ajout&eacute; la parallaxe horizontale lorsqu'elle a un sens, &agrave; 
+                    savoir pour la Lune, le Soleil, V&eacute;nus et Mars.
+                </p>
+                <p>
+                    <i><b>Note</b></i>&nbsp;: En plus de mettre en œuvre une grande quantit&eacute; de calculs, cette m&eacute;thode requiert la valeur de la distance d'un 
+                    astre avec la Lune, qui se trouve &ecirc;tre aussi d&eacute;licate &agrave; mesurer.
+                    Quand on mesure la hauteur d'un astre au-dessus de l'horizon, on part le l'astre, qu'on "descend" sur l'horizon, lequel est difficile &agrave; louper.
+                    Dans le cas des arcs capables, idem&nbsp;; on part d'un amer, on va forc&eacute;ment croiser l'autre.
+                    Ici, on part d'un astre, et on "vise" un autre point dans le ciel. Le sextant n'est ni vertical, ni horizontal (ou alors exceptionnellement)&nbsp;; 
+                    on n'est pas s&ucirc;r de ne pas d&eacute;passer le deuxi&egrave;me astre sans le voir…
+                    <br/>
+                    Encore une fois, il faut un peu d'entrainement pour &ecirc;tre &agrave; l'aise avec cette technique. Il faut s'y mettre avant d'y &ecirc;tre confront&eacute;&nbsp;!
+                </p>
+            </p>
+
         </div>
     </div>
 </div>
 
-<div class="content">
+<!--div class="content">
     <h1><a name="xx">La suite...</a></h1>
 
     $$
@@ -2115,7 +2493,7 @@
     
     Elle est bien bonne, non&nbsp;?
 
-</div>
+</div-->
 
 <!-- A P P E N D I C ES -->
 
