@@ -40,11 +40,11 @@ h5 {
 
 .overlined {
     border-top: 2px solid black;
-  }
+}
   
 /* 
    Believe it or not, that works 
-   <pouet-pouet>Duh</pouet-pouet 
+   <pouet-pouet>Duh</pouet-pouet> 
    is in dark pink
 */
 pouet-pouet {
