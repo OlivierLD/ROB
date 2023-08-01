@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dieumegard Bataille Tuto</title>
+    <style type="text/css">
+* {
+  font-family: 'Courier New', Courier, monospace
+}
+
+.one {
+  background-color: yellow;
+}
+.two {
+  background-color: orange;
+}
+.three {
+  background-color: cyan;
+}
+.four {
+  background-color: lime;
+}
+#td {
+  text-align: right;
+}
+
+#td > tbody > tr > td {
+  padding: 5px;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+    </style>
+    <script type="text/javascript">
+if (Math.toRadians === undefined) {
+	Math.toRadians = (deg) => {
+		return Math.PI * deg / 180;
+	};
+}
+
+if (Math.toDegrees === undefined) {
+	Math.toDegrees = (rad) => {
+		return rad * 180 / Math.PI;
+	};
+}
+
+let refresh = () => {
+    let allGood = true;
+
+    let ahlDeg = document.getElementById('ahl-deg').value;
+    let ahlMin = document.getElementById('ahl-min').value;
+    let decimalAHL = 0;
+    if (ahlDeg.trim().length !== 0 && ahlMin.trim().length !== 0) {
+      decimalAHL = sexToDec(parseInt(ahlDeg), parseFloat(ahlMin));
+      document.getElementById("ahl-decimal").innerText = decimalAHL.toFixed(5);
+    } else {
+      allGood = false;
+      document.getElementById("ahl-decimal").innerText = '-';
+    }
+
+    let latDeg = document.getElementById('lat-deg').value;
+    let latMin = document.getElementById('lat-min').value;
+    let latSign = document.getElementById('lat-sign').value;
+    let decimalLat = 0;
+    if (latDeg.trim().length !== 0 && latMin.trim().length !== 0) {
+      decimalLat = sexToDec(parseInt(latDeg), parseFloat(latMin));
+      if (latSign === 'S') {
+        decimalLat *= -1;
+      }
+      document.getElementById("lat-decimal").innerText = decimalLat.toFixed(5);
+    } else {
+      allGood = false;
+      document.getElementById("lat-decimal").innerText = '-';
+    }
+
+    let decDeg = document.getElementById('dec-deg').value;
+    let decMin = document.getElementById('dec-min').value;
+    let decSign = document.getElementById('dec-sign').value;
+    let decimalDec = 0;
+    if (decDeg.trim().length !== 0 && decMin.trim().length !== 0) {
+      decimalDec = sexToDec(parseInt(decDeg), parseFloat(decMin));
+      if (decSign === 'S') {
+        decimalDec *= -1;
+      }
+      document.getElementById("dec-decimal").innerText = decimalDec.toFixed(5);
+    } else {
+      allGood = false;
+      document.getElementById("dec-decimal").innerText = '-';
+    }
+    if (allGood) {
+      let lPMdec = Math.abs(decimalLat - decimalDec);
+      document.getElementById("l_pm_d").innerText = lPMdec.toFixed(5);
+      // The actual table calculus
+      document.getElementById("cos-ahl").innerText = Math.cos(Math.toRadians(decimalAHL)).toFixed(4);
+      document.getElementById("1-cos-ahl").innerText = (1 - Math.cos(Math.toRadians(decimalAHL))).toFixed(4);
+      document.getElementById("log-1-cos-ahl").innerText = Math.log10(1 - Math.cos(Math.toRadians(decimalAHL))).toFixed(4);
+      document.getElementById("colog-1-cos-ahl").innerText = Math.log10( 1 / (1 - Math.cos(Math.toRadians(decimalAHL)))).toFixed(4);
+
+      document.getElementById("l").innerText = decimalLat.toFixed(2);
+      document.getElementById("cos-l").innerText = Math.cos(Math.toRadians(decimalLat)).toFixed(4);
+      document.getElementById("log-cos-l").innerText = Math.log10(Math.cos(Math.toRadians(decimalLat))).toFixed(4);
+      document.getElementById("colog-cos-l").innerText = Math.log10(1 / (Math.cos(Math.toRadians(decimalLat)))).toFixed(4);
+
+      document.getElementById("d").innerText = decimalDec.toFixed(2);
+      document.getElementById("cos-d").innerText = Math.cos(Math.toRadians(decimalDec)).toFixed(4);
+      document.getElementById("log-cos-d").innerText = Math.log10(Math.cos(Math.toRadians(decimalDec))).toFixed(4);
+      document.getElementById("colog-cos-d").innerText = Math.log10(1 / (Math.cos(Math.toRadians(decimalDec)))).toFixed(4);
+
+      let sumD = parseFloat(document.getElementById("colog-1-cos-ahl").innerText) +
+                 parseFloat(document.getElementById("colog-cos-l").innerText) +
+                 parseFloat(document.getElementById("colog-cos-d").innerText);
+      document.getElementById("sum-d").innerText = sumD.toFixed(4);
+
+      let cologN = Math.pow(10, -sumD);
+      document.getElementById("colog-n").innerText = cologN.toFixed(4);
+
+      document.getElementById("cos-l-pm-d").innerText = Math.cos(Math.toRadians(lPMdec)).toFixed(4);      
+      document.getElementById("1-cos-l-pm-d").innerText = (1 - Math.cos(Math.toRadians(lPMdec))).toFixed(4);      
+
+      let sumG = parseFloat(document.getElementById("colog-n").innerText) +
+                 parseFloat(document.getElementById("1-cos-l-pm-d").innerText);
+      document.getElementById("sum-g").innerText = sumG.toFixed(4);
+
+      let he = 90 - Math.toDegrees(Math.acos(1 - sumG));
+      document.getElementById("he-dec").innerText = he.toFixed(4);
+      document.getElementById("he-sex").innerText = decToSex(he);
+    }
+};
+
+let sexToDec = (deg, min) => {
+    return deg + ((min * 10 / 6) / 100);
+};
+
+let decToSex = (val, ns_ew) => {
+    let absVal = Math.abs(val);
+    let intValue = Math.floor(absVal);
+    let dec = absVal - intValue;
+    let i = intValue;
+    dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+    let s = "";
+    if (ns_ew !== undefined) {
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        s += " ";
+    } else {
+        if (val < 0) {
+            s += '-'
+        }
+    }
+    s += i + "\u00b0" + dec.toFixed(2) + "'";
+
+    return s;
+};
+
+    </script>
+</head>
+<body>
+<h1>Dieumegard-Bataille tuto</h1>
+<p>
+  Le but est ici de simuler les &eacute;tapes de calcul avec les tables de Dieumegard &amp; Bataille.
+  <br/>
+  On renseigne les champs requis, et les valeurs &agrave; trouver dans les tables s'affichent.
+  <br/>
+  Ceci afin de valider ce qu'on trouve dans les tables.
+</p>
+
+<h2>Tables de Dieumegard</h2>
+<div>
+  <table id="user-input">
+    <tr>
+      <th></th>
+      <th>Degr&eacute;s</th>
+      <th>Minutes</th>
+      <th>Signe</th>
+      <th>Valeur d&eacute;cimale</th>
+    </tr>
+    <tr>
+      <td>AHL</td>
+      <td>
+        <input type="number" id="ahl-deg" min="0" max="360" step="1" placeholder="ahl degree" value="75" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="ahl-min" min="0" max="59" step="0.01" placeholder="ahl min" value="8.51" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td></td>
+      <td>
+        <span id="ahl-decimal">75.14183</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Latitude</td>
+      <td>
+        <input type="number" id="lat-deg" min="0" max="90" step="1" placeholder="lat degree" value="8" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="lat-min" min="0" max="59" step="0.01" placeholder="lat min" value="8.0" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td>
+        <select id="lat-sign" onchange="refresh()">
+          <option value="N">N</option>
+          <option value="S" selected>S</option>
+        </select>
+      </td>
+      <td>
+        <span id="lat-decimal">-8.1333</span>
+      </td>
+    </tr>
+    <tr>
+      <td>D&eacute;clinaison</td>
+      <td>
+        <input type="number" id="dec-deg" min="0" max="90" step="1" placeholder="lat degree" value="23" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="dec-min" min="0" max="59" step="0.01" placeholder="lat min" value="15.89" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td>
+        <select id="dec-sign" onchange="refresh()">
+          <option value="N" selected>N</option>
+          <option value="S">S</option>
+        </select>
+      </td>
+      <td>
+        <span id="dec-decimal">23.26483</span>
+      </td>
+    </tr>
+    <tr><td colspan="4"></td></tr>
+    <tr>
+      <td>L &PlusMinus; D</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><span id="l_pm_d">31.39817</span></td>
+    </tr>
+  </table>
+</div>
+
+<hr style="margin: 20px;"/>
+
+<div id="note-1">
+  <i>Note: colog(x) = log(1/x)</i>
+</div>
+
+<div id="tables-dieumegard">
+  <table id="td">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>cos(AHL)</th>
+      <th>1 - cos(AHL)</th>
+      <th>log(1 - cos(AHL))</th>
+      <th>colog(1 - cos(AHL))</th>
+    </tr>
+    <tr>
+      <td>Table 1</td>
+      <td>Avec AHL</td>
+      <td><span id="cos-ahl"></span></td>
+      <td><span id="1-cos-ahl"></span></td>
+      <td><span id="log-1-cos-ahl"></span></td>
+      <td class="one"><span id="colog-1-cos-ahl"></span></td>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>&alpha;</th>
+      <th>cos(&alpha;)</th>
+      <th>log(cos(&alpha;))</th>
+      <th>colog(cos(&alpha;))</th>
+    </tr>
+    <tr>
+      <td>Table 2</td>
+      <td>Avec L</td>
+      <td><span id="l"></span></td>
+      <td><span id="cos-l"></span></td>
+      <td><span id="log-cos-l"></span></td>
+      <td class="one"><span id="colog-cos-l"></span></td>
+    </tr>
+    <tr>
+      <td>Table 2</td>
+      <td>Avec D</td>
+      <td><span id="d"></span></td>
+      <td><span id="cos-d"></span></td>
+      <td><span id="log-cos-d"></span></td>
+      <td class="one"><span id="colog-cos-d"></span></td>
+    </tr>
+    <tr>
+      <td class="one">Somme d</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="two"><span id="sum-d"></span></td>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>colog(n)</th>
+    </tr>
+    <tr>
+      <td>Table 3</td>
+      <td class="two">Avec Somme d</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="three"><span id="colog-n"></span></td>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>cos(&alpha;)</th>
+      <th>1 - cos(&alpha;)</th>
+    </tr>
+    <tr>
+      <td>Table A</td>
+      <td>Avec L &PlusMinus; D</td>
+      <td></td>
+      <td></td>
+      <td><span id="cos-l-pm-d"></span></td>
+      <td class="three"><span id="1-cos-l-pm-d"></span></td>
+    </tr>
+    <tr>
+      <td class="three">Somme g</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="four"><span id="sum-g"></span></td>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>He</th>
+    </tr>
+    <tr>
+      <td>Table A</td>
+      <td class="four">Avec Somme g</td>
+      <td></td>
+      <td><span id="he-dec"></span></td>
+      <td></td>
+      <td><span id="he-sex"></span></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>
