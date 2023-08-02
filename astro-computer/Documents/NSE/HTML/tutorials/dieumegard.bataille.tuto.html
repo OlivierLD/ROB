@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!--
+  Simulate/emulate the behavior of Dieumegard Bataille tables.
+  100% self contained.
+ +-->
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -20,6 +24,16 @@
 .four {
   background-color: lime;
 }
+
+th {
+  text-align: right;
+  padding: 10px;
+}
+
+td {
+  text-align: right;
+}
+
 #td {
   text-align: right;
 }
@@ -28,6 +42,35 @@
   padding: 5px;
   border: 1px solid silver;
   border-radius: 5px;
+}
+
+#tb {
+  text-align: right;
+}
+
+#tb > tbody > tr > td {
+  padding: 5px;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+.selectedTab {
+  padding: 5px;
+  border-top-right-radius: 10px;
+  border: 2px solid #CCC;
+  margin-top: 10px;
+  border-bottom: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+.unselectedTab {
+  padding: 5px;
+  border-top-right-radius: 10px;
+  border:1px solid #CCC;
+  margin-top: 10px;
+  border-bottom: none;
+  font-size: 16px;
+  font-weight: normal;
 }
 
     </style>
@@ -43,6 +86,26 @@ if (Math.toDegrees === undefined) {
 		return rad * 180 / Math.PI;
 	};
 }
+const DIEUMEGARD_TAB = "dieumegard-tab";
+const BATAILLE_TAB = "bataille-tab";
+
+const DIEUMEGARD_CONTENT = "tables-dieumegard-content";
+const BATAILLE_CONTENT = "tables-bataille-content";
+
+const TABS = [ DIEUMEGARD_TAB, BATAILLE_TAB ];
+const CONTENTS = [ DIEUMEGARD_CONTENT, BATAILLE_CONTENT ];
+
+let showTab = (tabIdx) => {
+  TABS.forEach((tab, idx) => {
+    if (idx === tabIdx) {
+      document.getElementById(tab).className = 'selectedTab';
+      document.getElementById(CONTENTS[idx]).style.display = 'block';
+    } else {
+      document.getElementById(tab).className = 'unselectedTab';
+      document.getElementById(CONTENTS[idx]).style.display = 'none';
+    }
+  });
+}
 
 let refresh = () => {
     let allGood = true;
@@ -53,6 +116,7 @@ let refresh = () => {
     if (ahlDeg.trim().length !== 0 && ahlMin.trim().length !== 0) {
       decimalAHL = sexToDec(parseInt(ahlDeg), parseFloat(ahlMin));
       document.getElementById("ahl-decimal").innerText = decimalAHL.toFixed(5);
+      document.getElementById("ahl-rounded").innerText = Math.round(decimalAHL);
     } else {
       allGood = false;
       document.getElementById("ahl-decimal").innerText = '-';
@@ -68,9 +132,11 @@ let refresh = () => {
         decimalLat *= -1;
       }
       document.getElementById("lat-decimal").innerText = decimalLat.toFixed(5);
+      document.getElementById("lat-rounded").innerText = Math.round(decimalLat);
     } else {
       allGood = false;
       document.getElementById("lat-decimal").innerText = '-';
+      document.getElementById("lat-rounded").innerText = '-';
     }
 
     let decDeg = document.getElementById('dec-deg').value;
@@ -83,14 +149,17 @@ let refresh = () => {
         decimalDec *= -1;
       }
       document.getElementById("dec-decimal").innerText = decimalDec.toFixed(5);
+      document.getElementById("dec-rounded").innerText = Math.round(decimalDec);
     } else {
       allGood = false;
       document.getElementById("dec-decimal").innerText = '-';
+      document.getElementById("dec-rounded").innerText = '-';
     }
     if (allGood) {
       let lPMdec = Math.abs(decimalLat - decimalDec);
       document.getElementById("l_pm_d").innerText = lPMdec.toFixed(5);
       // The actual table calculus
+      // 1 - Dieumegard
       document.getElementById("cos-ahl").innerText = Math.cos(Math.toRadians(decimalAHL)).toFixed(4);
       document.getElementById("1-cos-ahl").innerText = (1 - Math.cos(Math.toRadians(decimalAHL))).toFixed(4);
       document.getElementById("log-1-cos-ahl").innerText = Math.log10(1 - Math.cos(Math.toRadians(decimalAHL))).toFixed(4);
@@ -124,6 +193,32 @@ let refresh = () => {
       let he = 90 - Math.toDegrees(Math.acos(1 - sumG));
       document.getElementById("he-dec").innerText = he.toFixed(4);
       document.getElementById("he-sex").innerText = decToSex(he);
+
+      // 2 - Bataille
+      document.getElementById("ap-deg").innerText = Math.round(decimalAHL);
+      let apInHours = `${Math.floor(decimalAHL / 15)}h ${Math.floor(60 * (decimalAHL % 15) / 15)}m`;
+      document.getElementById("ap-hour").innerText = apInHours;
+
+      let cosPsinL = Math.abs(Math.cos(Math.toRadians(Math.round(decimalAHL))) * Math.sin(Math.toRadians(Math.round(decimalLat))));
+      if (decimalAHL < 90) {
+        cosPsinL *= -1;
+      }
+      document.getElementById("cos-p-sin-l").innerText = cosPsinL.toFixed(2);
+      let tanDcosL = Math.abs(Math.tan(Math.toRadians(Math.floor(decimalDec))) * Math.cos(Math.toRadians(Math.round(decimalLat))));
+      if (Math.sign(decimalDec) !== Math.sign(decimalLat)) {
+        tanDcosL *= -1;
+      }
+      document.getElementById("tan-d-cos-l").innerText = tanDcosL.toFixed(2);
+
+      let m_plus_n = parseFloat(document.getElementById("cos-p-sin-l").innerText) +
+                     parseFloat(document.getElementById("tan-d-cos-l").innerText); 
+      document.getElementById("m-plus-n").innerText = m_plus_n.toFixed(2);
+
+      let zDec = 90 - Math.round(Math.abs(Math.toDegrees(Math.atan(m_plus_n/Math.cos(Math.toRadians(90 - decimalAHL))))));
+      document.getElementById("z-dec").innerText = zDec;
+      let from = m_plus_n > 0 ? (Math.sign(decimalLat) > 0 ? "N" : "S") : (Math.sign(decimalLat) > 0 ? "S" : "N"); 
+      let to = decimalAHL > 180 ? "E" : "W";
+      document.getElementById("z-deg").innerText = `${from} ${zDec}\u00b0 ${to}`;
     }
 };
 
@@ -164,12 +259,11 @@ let decToSex = (val, ns_ew) => {
 <p>
   Le but est ici de simuler les &eacute;tapes de calcul avec les tables de Dieumegard &amp; Bataille.
   <br/>
-  On renseigne les champs requis, et les valeurs &agrave; trouver dans les tables s'affichent.
+  On renseigne les champs requis (&agrave; savoir Angle Horaire Local, Latitude, D&eacute;clinaison), et les valeurs &agrave; trouver dans les tables s'affichent.
   <br/>
-  Ceci afin de valider ce qu'on trouve dans les tables.
+  Ceci afin de valider ce qu'on trouve dans les tables lorsqu'on apprend &agrave; s'en servir.
 </p>
 
-<h2>Tables de Dieumegard</h2>
 <div>
   <table id="user-input">
     <tr>
@@ -178,6 +272,7 @@ let decToSex = (val, ns_ew) => {
       <th>Minutes</th>
       <th>Signe</th>
       <th>Valeur d&eacute;cimale</th>
+      <th>Valeur arrondie</th>
     </tr>
     <tr>
       <td>AHL</td>
@@ -190,6 +285,9 @@ let decToSex = (val, ns_ew) => {
       <td></td>
       <td>
         <span id="ahl-decimal">75.14183</span>
+      </td>
+      <td>
+        <span id="ahl-rounded">75</span>
       </td>
     </tr>
     <tr>
@@ -209,6 +307,9 @@ let decToSex = (val, ns_ew) => {
       <td>
         <span id="lat-decimal">-8.1333</span>
       </td>
+      <td>
+        <span id="lat-rounded">-8</span>
+      </td>
     </tr>
     <tr>
       <td>D&eacute;clinaison</td>
@@ -227,6 +328,9 @@ let decToSex = (val, ns_ew) => {
       <td>
         <span id="dec-decimal">23.26483</span>
       </td>
+      <td>
+        <span id="dec-rounded">23</span>
+      </td>
     </tr>
     <tr><td colspan="4"></td></tr>
     <tr>
@@ -241,118 +345,202 @@ let decToSex = (val, ns_ew) => {
 
 <hr style="margin: 20px;"/>
 
-<div id="note-1">
-  <i>Note: colog(x) = log(1/x)</i>
+<!-- The tabs -->
+<div style="margin-bottom: 0px;">
+  <span id="dieumegard-tab" onclick="showTab(0);"  class="selectedTab" style="margin-left: 5px; cursor: pointer;">Dieumegard</span>
+  <span id="bataille-tab" onclick="showTab(1);" class="unselectedTab" style="cursor: pointer;">Bataille</span>
 </div>
 
-<div id="tables-dieumegard">
-  <table id="td">
-    <tr>
-      <th></th>
-      <th></th>
-      <th>cos(AHL)</th>
-      <th>1 - cos(AHL)</th>
-      <th>log(1 - cos(AHL))</th>
-      <th>colog(1 - cos(AHL))</th>
-    </tr>
-    <tr>
-      <td>Table 1</td>
-      <td>Avec AHL</td>
-      <td><span id="cos-ahl"></span></td>
-      <td><span id="1-cos-ahl"></span></td>
-      <td><span id="log-1-cos-ahl"></span></td>
-      <td class="one"><span id="colog-1-cos-ahl"></span></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th>&alpha;</th>
-      <th>cos(&alpha;)</th>
-      <th>log(cos(&alpha;))</th>
-      <th>colog(cos(&alpha;))</th>
-    </tr>
-    <tr>
-      <td>Table 2</td>
-      <td>Avec L</td>
-      <td><span id="l"></span></td>
-      <td><span id="cos-l"></span></td>
-      <td><span id="log-cos-l"></span></td>
-      <td class="one"><span id="colog-cos-l"></span></td>
-    </tr>
-    <tr>
-      <td>Table 2</td>
-      <td>Avec D</td>
-      <td><span id="d"></span></td>
-      <td><span id="cos-d"></span></td>
-      <td><span id="log-cos-d"></span></td>
-      <td class="one"><span id="colog-cos-d"></span></td>
-    </tr>
-    <tr>
-      <td class="one">Somme d</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td class="two"><span id="sum-d"></span></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>colog(n)</th>
-    </tr>
-    <tr>
-      <td>Table 3</td>
-      <td class="two">Avec Somme d</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td class="three"><span id="colog-n"></span></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>cos(&alpha;)</th>
-      <th>1 - cos(&alpha;)</th>
-    </tr>
-    <tr>
-      <td>Table A</td>
-      <td>Avec L &PlusMinus; D</td>
-      <td></td>
-      <td></td>
-      <td><span id="cos-l-pm-d"></span></td>
-      <td class="three"><span id="1-cos-l-pm-d"></span></td>
-    </tr>
-    <tr>
-      <td class="three">Somme g</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td class="four"><span id="sum-g"></span></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>He</th>
-    </tr>
-    <tr>
-      <td>Table A</td>
-      <td class="four">Avec Somme g</td>
-      <td></td>
-      <td><span id="he-dec"></span></td>
-      <td></td>
-      <td><span id="he-sex"></span></td>
-    </tr>
-  </table>
+
+<!-- The tab content -->
+<div id="tables-dieumegard-content" style="display: block; border: 1px solid silver; padding: 5px;">
+  <h2>Tables de Dieumegard</h2>
+
+  <div id="note-1">
+    <i>Note: colog(x) = log(1/x)</i>
+  </div>
+
+  <div id="tables-dieumegard">
+    <table id="td">
+      <tr>
+        <th></th>
+        <th></th>
+        <th>cos(AHL)</th>
+        <th>1 - cos(AHL)</th>
+        <th>log(1 - cos(AHL))</th>
+        <th>colog(1 - cos(AHL))</th>
+      </tr>
+      <tr>
+        <td>Table 1</td>
+        <td>Avec AHL</td>
+        <td><span id="cos-ahl"></span></td>
+        <td><span id="1-cos-ahl"></span></td>
+        <td><span id="log-1-cos-ahl"></span></td>
+        <td class="one"><span id="colog-1-cos-ahl"></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>&alpha;</th>
+        <th>cos(&alpha;)</th>
+        <th>log(cos(&alpha;))</th>
+        <th>colog(cos(&alpha;))</th>
+      </tr>
+      <tr>
+        <td>Table 2</td>
+        <td>Avec L</td>
+        <td><span id="l"></span></td>
+        <td><span id="cos-l"></span></td>
+        <td><span id="log-cos-l"></span></td>
+        <td class="one"><span id="colog-cos-l"></span></td>
+      </tr>
+      <tr>
+        <td>Table 2</td>
+        <td>Avec D</td>
+        <td><span id="d"></span></td>
+        <td><span id="cos-d"></span></td>
+        <td><span id="log-cos-d"></span></td>
+        <td class="one"><span id="colog-cos-d"></span></td>
+      </tr>
+      <tr>
+        <td class="one">Somme d</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="two"><span id="sum-d"></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>colog(n)</th>
+      </tr>
+      <tr>
+        <td>Table 3</td>
+        <td class="two">Avec Somme d</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="three"><span id="colog-n"></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>cos(&alpha;)</th>
+        <th>1 - cos(&alpha;)</th>
+      </tr>
+      <tr>
+        <td>Table A</td>
+        <td>Avec L &PlusMinus; D</td>
+        <td></td>
+        <td></td>
+        <td><span id="cos-l-pm-d"></span></td>
+        <td class="three"><span id="1-cos-l-pm-d"></span></td>
+      </tr>
+      <tr>
+        <td class="three">Somme g</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="four"><span id="sum-g"></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>He</th>
+      </tr>
+      <tr>
+        <td>Table A</td>
+        <td class="four">Avec Somme g</td>
+        <td></td>
+        <td></td>
+        <td><span id="he-dec"></span></td>
+        <td><span id="he-sex"></span></td>
+      </tr>
+    </table>
+  </div>
 </div>
+<div id="tables-bataille-content" style="display: none; border: 1px solid silver; padding: 5px;">
+  <h2>Tables de Bataille</h2>
+
+  <div id="tables-bataille">
+    <table id="tb">
+      <tr>
+        <th>Angle au P&ocirc;le</th>
+        <th>En degr&eacute;s</th>
+        <th>En heures</th>
+        <th></th>
+      </tr>
+      <tr>
+        <td><b>P</b></td>
+        <td><span id="ap-deg"><!-- 75 --></span></td>
+        <td><span id="ap-hour"><!-- 5h 0m --></span></td>
+        <td></td>
+      </tr>
+      <tr><td colspan="4"></td></tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>cos(P).sin(L)</th>
+      </tr>
+      <tr>
+        <td>Table 1</td>
+        <td>Avec L &amp; P</td>
+        <td>m</td>
+        <td class="one"><span id="cos-p-sin-l"><!-- -0.04 --></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>tan(D).cos(L)</th>
+      </tr>
+      <tr>
+        <td>Table 2</td>
+        <td>Avec D &amp; L</td>
+        <td>n</td>
+        <td class="one"><span id="tan-d-cos-l"><!-- -0.42 --></span></td>
+      </tr>
+      <tr>
+        <td class="one">Somme m+n</td>
+        <td></td>
+        <td></td>
+        <td class="two"><span id="m-plus-n"><!-- -0.46 --></span></td>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Z</th>
+      </tr>
+      <tr>
+        <td>Table 2</td>
+        <td class="two">Avec m+n</td>
+        <td></td>
+        <td><span id="z-dec"><!-- 65 --></span></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b><span id="z-deg"><!-- N 65&deg;W --></span></b></td>
+      </tr>
+    </table>
+  </div>  
+</div>  
+
+<hr/>
+<span style="font-style: italic;">Oliv-Soft never Stops</span>
 
 </body>
 </html>
