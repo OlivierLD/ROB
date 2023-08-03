@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--
+  Simulate/emulate the behavior of logarithmes tables.
+  100% self contained.
+ +-->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Logarithmes Tuto</title>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <style type="text/css">
+* {
+  font-family: 'Courier New', Courier, monospace
+}
+
+.postit {
+    background: #f7f7e7;
+    padding: 5px;
+}
+
+.one {
+  background-color: yellow;
+}
+.two {
+  background-color: orange;
+}
+.three {
+  background-color: cyan;
+}
+.four {
+  background-color: lime;
+}
+
+th {
+  text-align: right;
+  padding: 10px;
+}
+
+td {
+  text-align: right;
+}
+
+#td {
+  text-align: right;
+}
+
+#td > tbody > tr > td {
+  padding: 5px;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+#tb {
+  text-align: right;
+}
+
+#tb > tbody > tr > td {
+  padding: 5px;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+.selectedTab {
+  padding: 5px;
+  border-top-right-radius: 10px;
+  border: 2px solid #CCC;
+  margin-top: 10px;
+  border-bottom: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+.unselectedTab {
+  padding: 5px;
+  border-top-right-radius: 10px;
+  border:1px solid #CCC;
+  margin-top: 10px;
+  border-bottom: none;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+    </style>
+    <script type="text/javascript">
+if (Math.toRadians === undefined) {
+	Math.toRadians = (deg) => {
+		return Math.PI * deg / 180;
+	};
+}
+
+if (Math.toDegrees === undefined) {
+	Math.toDegrees = (rad) => {
+		return rad * 180 / Math.PI;
+	};
+}
+const HE_TAB = "he-tab";
+const Z_TAB = "z-tab";
+
+const HE_CONTENT = "tables-he-content";
+const Z_CONTENT = "tables-z-content";
+
+const TABS = [ HE_TAB, Z_TAB ];
+const CONTENTS = [ HE_CONTENT, Z_CONTENT ];
+
+let showTab = (tabIdx) => {
+  TABS.forEach((tab, idx) => {
+    if (idx === tabIdx) {
+      document.getElementById(tab).className = 'selectedTab';
+      document.getElementById(CONTENTS[idx]).style.display = 'block';
+    } else {
+      document.getElementById(tab).className = 'unselectedTab';
+      document.getElementById(CONTENTS[idx]).style.display = 'none';
+    }
+  });
+}
+
+let refresh = () => {
+    let allGood = true;
+
+    let ahlDeg = document.getElementById('ahl-deg').value;
+    let ahlMin = document.getElementById('ahl-min').value;
+    let decimalAHL = 0;
+    if (ahlDeg.trim().length !== 0 && ahlMin.trim().length !== 0) {
+      decimalAHL = sexToDec(parseInt(ahlDeg), parseFloat(ahlMin));
+      document.getElementById("ahl-decimal").innerText = decimalAHL.toFixed(5);
+      document.getElementById("ahl-rounded").innerText = Math.round(decimalAHL);
+    } else {
+      allGood = false;
+      document.getElementById("ahl-decimal").innerText = '-';
+    }
+
+    let latDeg = document.getElementById('lat-deg').value;
+    let latMin = document.getElementById('lat-min').value;
+    let latSign = document.getElementById('lat-sign').value;
+    let decimalLat = 0;
+    if (latDeg.trim().length !== 0 && latMin.trim().length !== 0) {
+      decimalLat = sexToDec(parseInt(latDeg), parseFloat(latMin));
+      if (latSign === 'S') {
+        decimalLat *= -1;
+      }
+      document.getElementById("lat-decimal").innerText = decimalLat.toFixed(5);
+      document.getElementById("lat-rounded").innerText = Math.round(decimalLat);
+    } else {
+      allGood = false;
+      document.getElementById("lat-decimal").innerText = '-';
+      document.getElementById("lat-rounded").innerText = '-';
+    }
+
+    let decDeg = document.getElementById('dec-deg').value;
+    let decMin = document.getElementById('dec-min').value;
+    let decSign = document.getElementById('dec-sign').value;
+    let decimalDec = 0;
+    if (decDeg.trim().length !== 0 && decMin.trim().length !== 0) {
+      decimalDec = sexToDec(parseInt(decDeg), parseFloat(decMin));
+      if (decSign === 'S') {
+        decimalDec *= -1;
+      }
+      document.getElementById("dec-decimal").innerText = decimalDec.toFixed(5);
+      document.getElementById("dec-rounded").innerText = Math.round(decimalDec);
+    } else {
+      allGood = false;
+      document.getElementById("dec-decimal").innerText = '-';
+      document.getElementById("dec-rounded").innerText = '-';
+    }
+    if (allGood) {
+      let lPMdec = Math.abs(decimalLat - decimalDec);
+      document.getElementById("l_pm_d").innerText = lPMdec.toFixed(5);
+      // The actual table calculus
+      // 1 - He
+      document.getElementById("l-value").innerText = `${document.getElementById('lat-deg').value}\u00b0${document.getElementById('lat-min').value}`;
+      document.getElementById("log-sin-l").innerText = Math.log10(Math.sin(Math.toRadians(Math.abs(decimalLat)))).toFixed(5);
+
+      document.getElementById("dec-value").innerText = `${document.getElementById('dec-deg').value}\u00b0${document.getElementById('dec-min').value}`;
+      document.getElementById("log-sin-dec").innerText = Math.log10(Math.sin(Math.toRadians(Math.abs(decimalDec)))).toFixed(5);
+
+      document.getElementById("l-value-2").innerText = `${document.getElementById('lat-deg').value}\u00b0${document.getElementById('lat-min').value}`;
+      document.getElementById("log-cos-l").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalLat)))).toFixed(5);
+
+      document.getElementById("dec-value-2").innerText = `${document.getElementById('dec-deg').value}\u00b0${document.getElementById('dec-min').value}`;
+      document.getElementById("log-cos-dec").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalDec)))).toFixed(5);
+
+      document.getElementById("ahl-value").innerText = `${document.getElementById('ahl-deg').value}\u00b0${document.getElementById('ahl-min').value}`;
+      document.getElementById("log-cos-ahl").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalAHL)))).toFixed(5);
+
+      document.getElementById("log-sin-l-value").innerText = document.getElementById("log-sin-l").innerText;
+      document.getElementById("log-sin-d-value").innerText = document.getElementById("log-sin-dec").innerText;
+      document.getElementById("log-sin-l-sin-d").innerText = parseFloat(document.getElementById("log-sin-l").innerText) + 
+                                                             parseFloat(document.getElementById("log-sin-dec").innerText);
+
+      document.getElementById("log-sin-l-sin-d-value").innerText = document.getElementById("log-sin-l-sin-d").innerText;
+      let sinLsinD = Math.pow(10, parseFloat(document.getElementById("log-sin-l-sin-d").innerText));
+      sinLsinD *= Math.sign(decimalDec);
+      sinLsinD *= Math.sign(decimalLat);
+      document.getElementById("sin-l-sin-d").innerText = sinLsinD.toFixed(6);
+
+      document.getElementById("log-cos-l-value").innerText = document.getElementById("log-cos-l").innerText;
+      document.getElementById("log-cos-d-value").innerText = document.getElementById("log-cos-dec").innerText;
+      document.getElementById("log-cos-ahl-value").innerText = document.getElementById("log-cos-ahl").innerText;
+
+      document.getElementById("log-cos-l-cos-d-cos-ahl").innerText = (parseFloat(document.getElementById("log-cos-l").innerText) + 
+                                                                      parseFloat(document.getElementById("log-cos-dec").innerText) + 
+                                                                      parseFloat(document.getElementById("log-cos-ahl").innerText)).toFixed(6);
+                                                                     
+      document.getElementById("log-cos-l-cos-d-cos-ahl-value").innerText = document.getElementById("log-cos-l-cos-d-cos-ahl").innerText;
+      document.getElementById("cos-l-cos-d-cos-ahl").innerText = Math.pow(10, parseFloat(document.getElementById("log-cos-l-cos-d-cos-ahl").innerText)).toFixed(6);
+
+      document.getElementById("sin-l-sin-d-value").innerText = document.getElementById("sin-l-sin-d").innerText;
+      document.getElementById("cos-l-cos-d-cos-ahl-value").innerText = document.getElementById("cos-l-cos-d-cos-ahl").innerText;
+      document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText = (parseFloat(document.getElementById("sin-l-sin-d").innerText) +
+                                                                                   parseFloat(document.getElementById("cos-l-cos-d-cos-ahl").innerText)).toFixed(6);
+
+
+      document.getElementById("asin-value").innerText = document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText;
+      heDec = Math.toDegrees(Math.asin(parseFloat(document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText)));
+      document.getElementById("he-dec").innerText = `${heDec.toFixed(6)}\u00b0`;
+      document.getElementById("he-deg").innerText = `${decToSex(heDec)}`;
+
+    }
+};
+
+let sexToDec = (deg, min) => {
+    return deg + ((min * 10 / 6) / 100);
+};
+
+let decToSex = (val, ns_ew) => {
+    let absVal = Math.abs(val);
+    let intValue = Math.floor(absVal);
+    let dec = absVal - intValue;
+    let i = intValue;
+    dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+    let s = "";
+    if (ns_ew !== undefined) {
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        s += " ";
+    } else {
+        if (val < 0) {
+            s += '-'
+        }
+    }
+    s += i + "\u00b0" + dec.toFixed(2) + "'";
+
+    return s;
+};
+
+    </script>
+</head>
+<body>
+<h1>Logarithmes tuto</h1>
+<p>
+  Le but est ici de simuler les &eacute;tapes de calcul de la hauteur et de l'azimuth avec des tables de logarithmes.
+  <br/>
+  On renseigne les champs requis (&agrave; savoir Angle Horaire Local, Latitude, D&eacute;clinaison), et les valeurs &agrave; trouver dans les tables s'affichent.
+  <br/>
+  Ceci afin de valider ce qu'on trouve dans les tables lorsqu'on apprend &agrave; s'en servir.
+</p>
+
+<div>
+  <table id="user-input">
+    <tr>
+      <th></th>
+      <th>Degr&eacute;s</th>
+      <th>Minutes</th>
+      <th>Signe</th>
+      <th>Valeur d&eacute;cimale</th>
+      <th>Valeur arrondie</th>
+    </tr>
+    <tr>
+      <td>AHL</td>
+      <td>
+        <input type="number" id="ahl-deg" min="0" max="360" step="1" placeholder="ahl degree" value="12" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="ahl-min" min="0" max="59" step="0.01" placeholder="ahl min" value="26.5" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td></td>
+      <td>
+        <span id="ahl-decimal">...</span>
+      </td>
+      <td>
+        <span id="ahl-rounded">...</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Latitude</td>
+      <td>
+        <input type="number" id="lat-deg" min="0" max="90" step="1" placeholder="lat degree" value="37" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="lat-min" min="0" max="59" step="0.01" placeholder="lat min" value="46.0" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td>
+        <select id="lat-sign" onchange="refresh()">
+          <option value="N" selected>N</option>
+          <option value="S">S</option>
+        </select>
+      </td>
+      <td>
+        <span id="lat-decimal">...</span>
+      </td>
+      <td>
+        <span id="lat-rounded">...</span>
+      </td>
+    </tr>
+    <tr>
+      <td>D&eacute;clinaison</td>
+      <td>
+        <input type="number" id="dec-deg" min="0" max="90" step="1" placeholder="lat degree" value="6" style="width: 50px; text-align: right;" onchange="refresh()"/>&deg;
+      </td>
+      <td>
+        <input type="number" id="dec-min" min="0" max="59" step="0.01" placeholder="lat min" value="10.84" style="width: 60px; text-align: right;" onchange="refresh()"/>'
+      </td>
+      <td>
+        <select id="dec-sign" onchange="refresh()">
+          <option value="N">N</option>
+          <option value="S" selected>S</option>
+        </select>
+      </td>
+      <td>
+        <span id="dec-decimal">...</span>
+      </td>
+      <td>
+        <span id="dec-rounded">...</span>
+      </td>
+    </tr>
+    <tr><td colspan="4"></td></tr>
+    <tr>
+      <td>L &PlusMinus; D</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><span id="l_pm_d">...</span></td>
+    </tr>
+  </table>
+  <hr style="margin: 10px 20px 5px 20px;"/>
+  <button onclick="refresh()" 
+          style="margin-left: 20px;"
+          title="Effectue le calcul&#13;avec les valeurs ci-dessus">Calcul</button>
+</div>
+
+<hr style="margin: 5px 20px 20px 20px;"/>
+
+<!-- The tabs -->
+<div style="margin-bottom: 0px;">
+  <span id="he-tab" onclick="showTab(0);"  class="selectedTab" style="margin-left: 5px; cursor: pointer;">Hauteur Estim&eacute;e</span>
+  <span id="z-tab" onclick="showTab(1);" class="unselectedTab" style="cursor: pointer;">Azimuth</span>
+</div>
+
+
+<!-- The tab content -->
+<div id="tables-he-content" style="display: block; border: 1px solid silver; padding: 5px;">
+  <h2>Calcul de la Hauteur</h2>
+
+  <div id="note-1">
+    Formule &agrave; r&eacute;soudre&nbsp;:
+    <div class="postit" style="padding: 10px; border: 1px solid silver; border-radius: 5px;">
+      $
+      He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
+      $
+  </div>
+</div>
+  <!--pre>
+   1. log sin(37°46') = -0.21293
+   2. log sin(6°11') = -0.96734 (Note: on prend la valeur absolue de l'angle)
+   3. log cos(37°46') = -0.10209
+   4. log cos(6°11') = -0.00253
+   5. log cos(12°26') = -0.01031
+   6. log (sin(L).sin(D)) = -0.21293 – 0.96734 = -1.18027
+   7. sin(L).sin(D) = -0.065795
+   8. log(cos(L).cos(D).cos(AHL)) = -0.10209 – 0.00253 – 0.01031 = -0.11493
+   9. cos(L).cos(D).cos(AHL) = 0.7675
+  10. sin(L).sin(D) + cos(L).cos(D).cos(AHL) = 0.701705
+  ( log(0.701705) = log(7.01705.10-1) = log(7.01705) – 1 = 0.846192.10-1 )
+  11. Ainsi, He = 44°33.5'
+  </pre-->
+
+  <div id="tables-he">
+    <table id="td">
+      <tr>
+        <td>log sin(L)</td>
+        <td>log sin(<span id="l-value"></span>)</td>
+        <td>=</td>
+        <td><span id="log-sin-l"></span></td>
+        <td>(Valeur absolue de l'angle)</td>
+      </tr>
+      <tr>
+        <td>log sin(D)</td>
+        <td>log sin(<span id="dec-value"></span>)</td>
+        <td>=</td>
+        <td><span id="log-sin-dec"></span></td>
+        <td>(Valeur absolue de l'angle)</td>
+      </tr>
+      <tr>
+        <td>log cos(L)</td>
+        <td>log cos(<span id="l-value-2"></span>)</td>
+        <td>=</td>
+        <td><span id="log-cos-l"></span></td>
+        <td>(Valeur absolue de l'angle)</td>
+      </tr>
+      <tr>
+        <td>log cos(D)</td>
+        <td>log cos(<span id="dec-value-2"></span>)</td>
+        <td>=</td>
+        <td><span id="log-cos-dec"></span></td>
+        <td>(Valeur absolue de l'angle)</td>
+      </tr>
+      <tr>
+        <td>log cos(AHL)</td>
+        <td>log cos(<span id="ahl-value"></span>)</td>
+        <td>=</td>
+        <td><span id="log-cos-ahl"></span></td>
+        <td>(Valeur absolue de l'angle)</td>
+      </tr>
+      <tr>
+        <td>log (sin(L).sin(D))</td>
+        <td>(<span id="log-sin-l-value"></span>) + (<span id="log-sin-d-value"></span>)</td>
+        <td>=</td>
+        <td><span id="log-sin-l-sin-d"></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sin(L).sin(D)</td>
+        <td>10 <sup><span id="log-sin-l-sin-d-value">...</span></sup></td>
+        <td>=</td>
+        <td><span id="sin-l-sin-d"></span></td>
+        <td>&lt;= Attention au signe</td>
+      </tr>
+      <tr>
+        <td>log(cos(L).cos(D).cos(AHL))</td>
+        <td>(<span id="log-cos-l-value"></span>) + (<span id="log-cos-d-value"></span>) + (<span id="log-cos-ahl-value"></span>)</td>
+        <td>=</td>
+        <td><span id="log-cos-l-cos-d-cos-ahl"></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>cos(L).cos(D).cos(AHL)</td>
+        <td>10 <sup><span id="log-cos-l-cos-d-cos-ahl-value">...</span></sup></td>
+        <td>=</td>
+        <td><span id="cos-l-cos-d-cos-ahl"></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sin(L).sin(D) + cos(L).cos(D).cos(AHL)</td>
+        <td>(<span id="sin-l-sin-d-value"></span>) + (<span id="cos-l-cos-d-cos-ahl-value"></span>)</td>
+        <td>=</td>
+        <td><span id="sin-l-sin-d-plus-cos-l-cos-d-cos-ahl"></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>arcsin(sin(L).sin(D) + cos(L).cos(D).cos(AHL))</td>
+        <td>arcsin(<span id="asin-value"></span>)</td>
+        <td>=</td>
+        <td><span id="he-dec"></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td><b>He</b></td>
+        <td><span id="he-deg"></span></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div id="tables-z-content" style="display: none; border: 1px solid silver; padding: 5px;">
+  <h2>Calcul de l'Azimuth</h2>
+
+  <div id="note-1">
+    <div class="postit" style="padding: 10px; border: 1px solid silver; border-radius: 5px;">
+      $$
+      Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
+      $$
+  </div>
+
+  <div id="tables-bataille">
+    <table id="tb">
+
+      
+    </table>
+  </div>  
+</div>  
+
+<hr/>
+<span style="font-style: italic;">Oliv-Soft never Stops</span>
+
+</body>
+</html>

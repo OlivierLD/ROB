@@ -18,6 +18,7 @@
     CSS borders: https://www.w3schools.com/css/css_border.asp
 
     TODO/PENDING: Page numbers.
+    See https://css-tricks.com/a-perfect-table-of-contents-with-html-css/
 
  +-->
 <html lang="fr">
@@ -42,28 +43,6 @@
     </style-->
 </head>
 <body>
-
-<script type="text/javascript">
-
-    window.onload = addPageNumbers;
-
-    function addPageNumbers() {
-        let totalPages = Math.ceil(document.body.scrollHeight / 1123);  //842px A4 pageheight for 72dpi, 1123px A4 pageheight for 96dpi, 
-        for (let i = 1; i <= totalPages; i++) {
-            let pageNumberDiv = document.createElement("div");
-            let pageNumber = document.createTextNode("Page " + i + " of " + totalPages);
-
-            pageNumberDiv.style.display = 'none'; // For now...
-
-            pageNumberDiv.style.position = "absolute";
-            pageNumberDiv.style.top = "calc((" + i + " * (297mm - 0.5px)) - 40px)"; //297mm A4 pageheight; 0,5px unknown needed necessary correction value; additional wanted 40px margin from bottom(own element height included)
-            pageNumberDiv.style.height = "16px";
-            pageNumberDiv.appendChild(pageNumber);
-            document.body.insertBefore(pageNumberDiv, document.getElementById("content"));
-            pageNumberDiv.style.left = "calc(100% - (" + pageNumberDiv.offsetWidth + "px + 20px))";
-        }
-    }
-</script>
 
 <div id="screen-warning" class="screen-only screen-warning">
     <div style="display: grid; grid-template-columns: auto auto;">
@@ -1826,6 +1805,11 @@
                     <br/>
                     &agrave; vos marques&nbsp;!
                 </p>
+                <p class="screen-only">
+                    Pour ceux que la manipulation de ces tables int&eacute;resse, 
+                    on fournit <a href="./tutorials/logarithmes.tuto.html" target="tuto">ici</a> une page qui permet de valider ses r&eacute;sultats,
+                    &eacute;tape par &eacute;tape.
+                </p>
                 <p>
                     Comme d&eacute;j&agrave; mentionn&eacute;, on cherche donc &agrave; r&eacute;soudre les formules suivantes&nbsp;:
                     <div class="postit">
@@ -1874,10 +1858,10 @@
                         Pour anticiper, et savoir ce qu'on cherche, voici les &eacute;tapes qu'on va suivre&nbsp;:
                         <ol>
                             <li><code>log sin(37&deg;46') = -0.21293</code></li>
-                            <li><code>log sin(12&deg;26') = -0.01031</code></li>
                             <li><code>log sin(6&deg;11') = -0.96734</code>     (<i>Note</i>: on prend la valeur absolue de l'angle)</li>
                             <li><code>log cos(37&deg;46') = -0.10209</code></li>
                             <li><code>log cos(6&deg;11') = -0.00253</code></li>
+                            <li><code>log cos(12&deg;26') = -0.01031</code></li>
                             <li><code>log (sin(L).sin(D)) = -0.21293 – 0.96734 = -1.18027</code></li>
                             <li><code>sin(L).sin(D) = 0.065795</code></li>
                             <li><code>log(cos(L).cos(D).cos(AHL)) = -0.10209 – 0.00253 – 0.01031 = -0.11493</code></li>
@@ -2105,6 +2089,11 @@
                     <br/>
                     Avec les tables de Dieumegard, le calcul de la hauteur se r&eacute;duit &agrave; 8 &eacute;tapes, et avec les tables de Bataille, 
                     le calcul de l'azimut est fait en 5 &eacute;tapes.
+                    <p class="screen-only">
+                        Pour ceux que la manipulation de ces tables int&eacute;resse, 
+                        on fournit <a href="./tutorials/dieumegard.bataille.tuto.html" target="tuto">ici</a> une page qui permet de valider ses r&eacute;sultats,
+                        &eacute;tape par &eacute;tape.
+                    </p>
                     <br/>
                     Il est aussi commode de se pr&eacute;parer des grilles, comme des formulaires, &agrave; remplir au fur et &agrave; mesure du calcul, 
                     qui fournissent un minimum d'explications sur leur encha&icirc;nement, ainsi qu'un chemin naturel d'une &eacute;tape &agrave; l'autre - on en donnera des exemples.
@@ -2607,7 +2596,7 @@
         </p>
         <p>
         Les canevas Mercator sont des cartes vides, mais qui respectent - pour une latitude donn&eacute;e - cette notion de "Latitude Croissante". 
-        &Agrave; l'Équateur, la projection est presque carr&eacute;e, &agrave; 50&deg; de latitude, ces "carr&eacute;s" sont nettement plus hauts que larges. 
+        &Agrave; l'&eacute;quateur, la projection est presque carr&eacute;e, &agrave; 50&deg; de latitude, ces "carr&eacute;s" sont nettement plus hauts que larges. 
         <br/>
         Pour reporter les distances sur un canevas Mercator, on utilise - comme sur n'importe quelle carte Mercator - 
         les c&ocirc;t&eacute;s verticaux de la carte. D'o&ugrave; l'int&eacute;r&ecirc;t de ces canevas.
@@ -2678,9 +2667,19 @@
 <div class="content">
     <h2><a name="logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a></h2>
     <p>
+        Les tables de logarithmes (aka "tables de log") sont des documents <i>imprim&eacute;s</i> qui permettent de r&eacute;sumer des op&eacute;rations complexes 
+        (multiplication de sinus d'arc-tangentes, et autres salades de la m&ecirc;me farine), &agrave; des additions et des soustractions,
+        minimisant par l&agrave; m&ecirc;me les occasions de faire des erreurs de calcul.
+        <br/>
+        En tant que document imprim&eacute;, &ccedil;a ne tombe pas en panne en cas de coupure de courant, d'o&ugrave; son int&eacute;r&ecirc;t ici.
+        <br/>
+        Leur usage n'est cependant pas toujours intuitif..., d'o&ugrave; ce paragraphe.
+    </p>
+    <p>
         Ceci est plut&ocirc;t un exercice de style… Ou alors destin&eacute; &agrave; ceux qui auraient oubli&eacute; 
         leurs tables (Dieumegard et Bataille) de calcul, et pas leurs tables de log. 
-        C'est n&eacute;anmoins int&eacute;ressant, d'autant que &ccedil;a fonctionne.
+        <br/>
+        C'est n&eacute;anmoins int&eacute;ressant, d'autant plus que &ccedil;a fonctionne.
     </p>
     <p>
         <i><b>Les tables donnent les logarithmes <span style="color: red;">d&eacute;cimaux</span></b></i>.
