@@ -211,12 +211,67 @@ let refresh = () => {
       document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText = (parseFloat(document.getElementById("sin-l-sin-d").innerText) +
                                                                                    parseFloat(document.getElementById("cos-l-cos-d-cos-ahl").innerText)).toFixed(6);
 
-
       document.getElementById("asin-value").innerText = document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText;
       heDec = Math.toDegrees(Math.asin(parseFloat(document.getElementById("sin-l-sin-d-plus-cos-l-cos-d-cos-ahl").innerText)));
       document.getElementById("he-dec").innerText = `${heDec.toFixed(6)}\u00b0`;
       document.getElementById("he-deg").innerText = `${decToSex(heDec)}`;
 
+      // 2 - Z
+      document.getElementById("dec-value-3").innerText = `${document.getElementById('dec-deg').value}\u00b0${document.getElementById('dec-min').value}`;
+      document.getElementById("log-tan-dec").innerText = Math.log10(Math.tan(Math.toRadians(Math.abs(decimalDec)))).toFixed(5);
+
+      document.getElementById("ahl-value-2").innerText = `${document.getElementById('ahl-deg').value}\u00b0${document.getElementById('ahl-min').value}`;
+      document.getElementById("log-sin-ahl").innerText = Math.log10(Math.sin(Math.toRadians(Math.abs(decimalAHL)))).toFixed(5);
+
+      document.getElementById("l-value-3").innerText = `${document.getElementById('lat-deg').value}\u00b0${document.getElementById('lat-min').value}`;
+      document.getElementById("log-cos-l-2").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalLat)))).toFixed(5);
+
+      document.getElementById("log-cos-l-value-2").innerText = document.getElementById('log-cos-l-2').innerText;
+      document.getElementById("log-tan-d-value").innerText = document.getElementById('log-tan-dec').innerText;
+      document.getElementById("log-cos-l-tan-d").innerText = parseFloat(document.getElementById('log-cos-l-2').innerText) +
+                                                             parseFloat(document.getElementById('log-tan-dec').innerText);
+
+      document.getElementById("log-cos-l-tan-d-value").innerText = document.getElementById('log-cos-l-tan-d').innerText;
+      let cosLtanD = Math.pow(10, parseFloat(document.getElementById("log-cos-l-tan-d").innerText));
+      cosLtanD *= Math.sign(decimalDec);
+      document.getElementById("cos-l-tan-d-2").innerText = cosLtanD.toFixed(6);
+      
+      document.getElementById("l-value-4").innerText = document.getElementById('log-cos-l-tan-d').innerText;
+      document.getElementById("log-sin-l-2").innerText = Math.log10(Math.sin(Math.toRadians(Math.abs(decimalLat)))).toFixed(5);
+
+      document.getElementById("ahl-value-3").innerText = `${document.getElementById('ahl-deg').value}\u00b0${document.getElementById('ahl-min').value}`;
+      document.getElementById("log-cos-ahl-2").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalAHL)))).toFixed(5);
+
+      document.getElementById("log-sin-l-value-3").innerText = document.getElementById('log-sin-l-2').innerText;
+      document.getElementById("log-cos-ahl-value-2").innerText = document.getElementById('log-cos-ahl-2').innerText;
+      document.getElementById("log-sin-l-cos-ahl-2").innerText = parseFloat(document.getElementById('log-sin-l-2').innerText) +
+                                                                 parseFloat(document.getElementById('log-cos-ahl-2').innerText);
+      
+      document.getElementById("log-sin-l-cos-ahl-2-value").innerText = document.getElementById('log-sin-l-cos-ahl-2').innerText;
+      document.getElementById("sin-l-cos-ahl").innerText = Math.pow(10, parseFloat(document.getElementById("log-sin-l-cos-ahl-2").innerText)).toFixed(6);
+
+      document.getElementById("value-one").innerText = document.getElementById('cos-l-tan-d-2').innerText;
+      document.getElementById("value-two").innerText = document.getElementById('sin-l-cos-ahl').innerText;
+      document.getElementById("diff-one").innerText = parseFloat(document.getElementById('cos-l-tan-d-2').innerText) -
+                                                      parseFloat(document.getElementById('sin-l-cos-ahl').innerText);
+
+      document.getElementById("diff-one-value").innerText = document.getElementById('diff-one').innerText;
+      document.getElementById("log-diff-one").innerText = Math.log10(Math.abs(parseFloat(document.getElementById('diff-one').innerText))).toFixed(6);
+
+      document.getElementById("num-value").innerText = document.getElementById('log-sin-ahl').innerText;
+      document.getElementById("den-value").innerText = document.getElementById('log-diff-one').innerText;
+      document.getElementById("log-quotient").innerText = (parseFloat(document.getElementById('log-sin-ahl').innerText) - 
+                                                           parseFloat(document.getElementById('log-diff-one').innerText)).toFixed(6);
+
+      document.getElementById("log-quotient-value").innerText = document.getElementById('log-quotient').innerText;
+      document.getElementById("quotient").innerText = Math.pow(10, parseFloat(document.getElementById("log-quotient").innerText)).toFixed(6);
+
+      document.getElementById("quotient-value").innerText = document.getElementById('quotient').innerText;
+      document.getElementById("atn-z").innerText = `${Math.toDegrees(Math.atan(parseFloat(document.getElementById("quotient").innerText))).toFixed(4)}\u00b0`;
+
+      document.getElementById("atn-deg").innerText = `${decToSex(Math.toDegrees(Math.atan(parseFloat(document.getElementById("quotient").innerText))))}`;
+    } else {
+      // TODO Reset
     }
 };
 
@@ -473,21 +528,140 @@ let decToSex = (val, ns_ew) => {
 <div id="tables-z-content" style="display: none; border: 1px solid silver; padding: 5px;">
   <h2>Calcul de l'Azimuth</h2>
 
-  <div id="note-1">
+  <div id="note-2">
+    Formule &agrave; r&eacute;soudre&nbsp;:
     <div class="postit" style="padding: 10px; border: 1px solid silver; border-radius: 5px;">
-      $$
+      $
       Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
-      $$
+      $
+    </div>
+
+    <!--pre>
+      log tan(6°11') = -0.96521
+      log sin(12°26') = -0.66695
+      log cos(37°46') = -0.10209
+      log(cos(L).tan(D)) = -0.10209 -0.96521 = -1.06730 = 0.93270 – 2
+      cos(L).tan(D) = 10<sup>(0.93270 – 2)</sup> = 10<sup>0.93270</sup>.10<sup>-2</sup> = 8.5645.10<sup>-2</sup> = 0.085645
+      log sin(37°46') = -0.21293
+      log cos(12°26') = -0.01031
+      log(sin(L).cos(AHL)) = -0.21293 -0.01031 = -0.22324 = 0.77676 – 1
+      sin(L).cos(AHL) = 0.59810
+      log(sin(AHL)) = -0.66695
+      log(arctan(Z)) = 0.49815 – 1
+      Ainsi, Z = 17°29'
+    </pre-->
+
+    <div id="tables-z">
+      <table id="tb">
+        <tr>
+          <td>log tan(D)</td>
+          <td>log tan(<span id="dec-value-3"></span>)</td>
+          <td>=</td>
+          <td><span id="log-tan-dec"></span></td>
+          <td>(Valeur absolue de l'angle)</td>
+        </tr>
+        <tr>
+          <td>log sin(AHL)</td>
+          <td>log sin(<span id="ahl-value-2"></span>)</td>
+          <td>=</td>
+          <td><span id="log-sin-ahl"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>log cos(L)</td>
+          <td>log cos(<span id="l-value-3"></span>)</td>
+          <td>=</td>
+          <td><span id="log-cos-l-2"></span></td>
+          <td>(Valeur absolue de l'angle)</td>
+        </tr>
+        <tr>
+          <td>log(cos(L).tan(D))</td>
+          <td>(<span id="log-cos-l-value-2"></span>) + (<span id="log-tan-d-value"></span>)</td>
+          <td>=</td>
+          <td><span id="log-cos-l-tan-d"></span></td>
+          <td> &lt;- sign ?</td>
+        </tr>
+        <tr>
+          <td>cos(L).tan(D)</td>
+          <td>10 <sup><span id="log-cos-l-tan-d-value">...</span></sup></td>          <td>=</td>
+          <td><span id="cos-l-tan-d-2"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>log sin(L)</td>
+          <td>log sin(<span id="l-value-4"></span>)</td>
+          <td>=</td>
+          <td><span id="log-sin-l-2"></span></td>
+          <td>(Valeur absolue de l'angle)</td>
+        </tr>
+        <tr>
+          <td>log cos(AHL)</td>
+          <td>log cos(<span id="ahl-value-3"></span>)</td>
+          <td>=</td>
+          <td><span id="log-cos-ahl-2"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>log(sin(L).cos(AHL))</td>
+          <td>(<span id="log-sin-l-value-3"></span>) + (<span id="log-cos-ahl-value-2"></span>)</td>
+          <td>=</td>
+          <td><span id="log-sin-l-cos-ahl-2"></span></td>
+          <td>&lt;- attention au signe de L</td>
+        </tr>
+        <tr>
+          <td>sin(L).cos(AHL)</td>
+          <td>10 <sup><span id="log-sin-l-cos-ahl-2-value">...</span></sup></td>          
+          <td>=</td>
+          <td><span id="sin-l-cos-ahl"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>(cos(L).tan(D)) − (sin(L).cos(AHL))</td>
+          <td><span id="value-one">...</span> - <span id="value-two">...</span></td>          
+          <td>=</td>
+          <td><span id="diff-one"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>log ((cos(L).tan(D)) − (sin(L).cos(AHL)))</td>
+          <td>log <span id="diff-one-value">...</span></td>          
+          <td>=</td>
+          <td><span id="log-diff-one"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>log (num / den)</td>
+          <td>(<span id="num-value">...</span>) - (<span id="den-value">...</span>)</td>          
+          <td>=</td>
+          <td><span id="log-quotient"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>num / den</td>
+          <td>10 <sup><span id="log-quotient-value">...</span></sup></td>          
+          <td>=</td>
+          <td><span id="quotient"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>arctan(num / den)</td>
+          <td>atn(<span id="quotient-value">...</span>)</td>          
+          <td>=</td>
+          <td><span id="atn-z"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><b>Z</b></td>          
+          <td>=</td>
+          <td><span id="atn-deg"></span></td>
+          <td></td>
+        </tr>
+
+      </table>
+    </div>
   </div>
-
-  <div id="tables-bataille">
-    <table id="tb">
-
-      
-    </table>
-  </div>  
-</div>  
-
+</div>
 <hr/>
 <span style="font-style: italic;">Oliv-Soft never Stops</span>
 
