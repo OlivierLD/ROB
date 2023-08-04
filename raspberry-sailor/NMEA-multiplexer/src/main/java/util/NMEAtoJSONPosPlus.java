@@ -618,10 +618,10 @@ public class NMEAtoJSONPosPlus {
 								correctedAWA -= 360;
 							}
 							// Apply gauss twist (WiP). Twist increases the AWA, put it back in.
-							double gaussTwist = GaussCurve.gauss(45.0, // at 45 degrees
-									15.0, // twist = 10
-									400.0, // (Adjustment. WiP)
-									Math.abs(correctedAWA));
+							double gaussTwist = GaussCurve.gauss(10.0, // curvePeak, 10 degrees
+									45.0, // peakAbs = at awa = 45
+									5.0,  // stdDev
+									Math.abs(correctedAWA)); // x
 							if (correctedAWA > 0) {
 								correctedAWA -= gaussTwist;
 							} else {
