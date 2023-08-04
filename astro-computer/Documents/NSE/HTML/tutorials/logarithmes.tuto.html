@@ -165,6 +165,16 @@ let refresh = () => {
       document.getElementById("dec-rounded").innerText = '-';
     }
     if (allGood) {
+      // Raw calc, for comparison
+      let directSinHe = (Math.sin(Math.toRadians(decimalLat)) * Math.sin(Math.toRadians(decimalDec))) + (Math.cos(Math.toRadians(decimalLat)) * Math.cos(Math.toRadians(decimalDec)) * Math.cos(Math.toRadians(decimalAHL)));
+      let heDirect = Math.asin(directSinHe);
+      document.getElementById("direct-he").innerText = decToSex(Math.toDegrees(heDirect));
+
+      let tanZ = Math.sin(Math.toRadians(decimalAHL)) / ((Math.cos(Math.toRadians(decimalLat)) * Math.tan(Math.toRadians(decimalDec))) - (Math.sin(Math.toRadians(decimalLat)) * Math.cos(Math.toRadians(decimalAHL))));
+      let zDirect = Math.abs(Math.atan(tanZ));
+      document.getElementById("direct-z").innerText = decToSex(Math.toDegrees(zDirect));
+
+      // Now thw manual ones.
       let lPMdec = Math.abs(decimalLat - decimalDec);
       document.getElementById("l_pm_d").innerText = lPMdec.toFixed(5);
       // The actual table calculus
@@ -221,7 +231,7 @@ let refresh = () => {
       document.getElementById("log-tan-dec").innerText = Math.log10(Math.tan(Math.toRadians(Math.abs(decimalDec)))).toFixed(5);
 
       document.getElementById("ahl-value-2").innerText = `${document.getElementById('ahl-deg').value}\u00b0${document.getElementById('ahl-min').value}`;
-      document.getElementById("log-sin-ahl").innerText = Math.log10(Math.sin(Math.toRadians(Math.abs(decimalAHL)))).toFixed(5);
+      document.getElementById("log-sin-ahl").innerText = Math.log10(Math.abs(Math.sin(Math.toRadians(Math.abs(decimalAHL))))).toFixed(5);
 
       document.getElementById("l-value-3").innerText = `${document.getElementById('lat-deg').value}\u00b0${document.getElementById('lat-min').value}`;
       document.getElementById("log-cos-l-2").innerText = Math.log10(Math.cos(Math.toRadians(Math.abs(decimalLat)))).toFixed(5);
@@ -248,7 +258,9 @@ let refresh = () => {
                                                                  parseFloat(document.getElementById('log-cos-ahl-2').innerText);
       
       document.getElementById("log-sin-l-cos-ahl-2-value").innerText = document.getElementById('log-sin-l-cos-ahl-2').innerText;
-      document.getElementById("sin-l-cos-ahl").innerText = Math.pow(10, parseFloat(document.getElementById("log-sin-l-cos-ahl-2").innerText)).toFixed(6);
+      let sinLcosAHL = Math.pow(10, parseFloat(document.getElementById("log-sin-l-cos-ahl-2").innerText));
+      sinLcosAHL *= Math.sign(decimalLat);
+      document.getElementById("sin-l-cos-ahl").innerText = sinLcosAHL.toFixed(6);
 
       document.getElementById("value-one").innerText = document.getElementById('cos-l-tan-d-2').innerText;
       document.getElementById("value-two").innerText = document.getElementById('sin-l-cos-ahl').innerText;
@@ -394,16 +406,21 @@ let decToSex = (val, ns_ew) => {
       <td><span id="l_pm_d">...</span></td>
     </tr>
   </table>
-  <hr style="margin: 10px 20px 5px 20px;"/>
-  <button onclick="refresh()" 
-          style="margin-left: 20px;"
-          title="Effectue le calcul&#13;avec les valeurs ci-dessus">Calcul</button>
+  <!--hr style="margin: 10px 20px 5px 20px;"/-->
 </div>
 
-<hr style="margin: 5px 20px 20px 20px;"/>
+<div ib="bottom-div" style="height: 40px; margin-top: 10px;">
+  <button onclick="refresh()" 
+          style="margin-left: 20px; float: left;"
+          title="Effectue le calcul&#13;avec les valeurs ci-dessus">Calcul</button>
+  <div id="direct-value-div" style="float: right;">
+      Valeurs &agrave; trouver : He = <span id="direct-he">...</span>, Z = <span id="direct-z">...</span>
+  </div>
+</div>
+<!--hr style="margin: 5px 20px 20px 20px;"/-->
 
 <!-- The tabs -->
-<div style="margin-bottom: 0px;">
+<div style="margin-bottom: 5px;">
   <span id="he-tab" onclick="showTab(0);"  class="selectedTab" style="margin-left: 5px; cursor: pointer;">Hauteur Estim&eacute;e</span>
   <span id="z-tab" onclick="showTab(1);" class="unselectedTab" style="cursor: pointer;">Azimuth</span>
 </div>
@@ -579,7 +596,7 @@ let decToSex = (val, ns_ew) => {
           <td>(<span id="log-cos-l-value-2"></span>) + (<span id="log-tan-d-value"></span>)</td>
           <td>=</td>
           <td><span id="log-cos-l-tan-d"></span></td>
-          <td> &lt;- sign ?</td>
+          <td> <!-- &lt;- sign ? --></td>
         </tr>
         <tr>
           <td>cos(L).tan(D)</td>
@@ -606,14 +623,14 @@ let decToSex = (val, ns_ew) => {
           <td>(<span id="log-sin-l-value-3"></span>) + (<span id="log-cos-ahl-value-2"></span>)</td>
           <td>=</td>
           <td><span id="log-sin-l-cos-ahl-2"></span></td>
-          <td>&lt;- attention au signe de L</td>
+          <td></td>
         </tr>
         <tr>
           <td>sin(L).cos(AHL)</td>
           <td>10 <sup><span id="log-sin-l-cos-ahl-2-value">...</span></sup></td>          
           <td>=</td>
           <td><span id="sin-l-cos-ahl"></span></td>
-          <td></td>
+          <td>&lt;- attention au signe de L</td>
         </tr>
         <tr>
           <td>(cos(L).tan(D)) − (sin(L).cos(AHL))</td>
