@@ -42,7 +42,7 @@ public class SimpleUDPServer extends Thread {
                 if (received.equals("end") || received.startsWith("end")) {
                     System.out.println("(Server exiting.)");
                     running = false;
-                    continue; // To avoid the socket.send below.
+                    continue; // Skip out of the while loop, to avoid the socket.send below.
                 }
                 socket.send(packet);
             } catch (Exception ex) {

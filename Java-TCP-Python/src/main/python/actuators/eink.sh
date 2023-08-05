@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-REST_IP=$(hostname -I | xargs 2>/dev/null) || REST_IP=localhost
+REST_IP=$(hostname -I | awk '{ print $1 }') || REST_IP=localhost
 # REST_IP=localhost
 # REST_IP=192.168.42.36
 REST_PORT=8080
