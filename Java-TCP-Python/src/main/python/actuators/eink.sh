@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-REST_IP=localhost
+REST_IP=$(hostname -I | xargs 2>/dev/null) || REST_IP=localhost
+# REST_IP=localhost
 # REST_IP=192.168.42.36
 REST_PORT=8080
 REST_URL=http://${REST_IP}:${REST_PORT}/eink2_13/display

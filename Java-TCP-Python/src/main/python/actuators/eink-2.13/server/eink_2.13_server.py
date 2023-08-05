@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 #
+# See https://learn.adafruit.com/2-13-in-e-ink-bonnet/overview
+# This is an eInk display, with 2 push buttons.
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7, no need to install it)
