@@ -253,11 +253,11 @@ if enable_screen_saver:
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
-image: PIL.Image.Image = Image.new("1", (eink.width, eink.height))
+image = Image.new("1", (eink.width, eink.height))
 # print(f"Image is a {type(image)}")
 
 # Get drawing object to draw on image.
-draw: PIL.ImageDraw.ImageDraw = ImageDraw.Draw(image)
+draw = ImageDraw.Draw(image)
 # print(f"Draw is a {type(draw)}")
 
 # Clear display.
