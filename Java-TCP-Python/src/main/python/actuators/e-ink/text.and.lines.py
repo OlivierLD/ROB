@@ -19,8 +19,8 @@ rst = digitalio.DigitalInOut(board.D27)
 busy = digitalio.DigitalInOut(board.D17)
 srcs = None
 
-# /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-medium_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+font_name: str = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+medium_font = ImageFont.truetype(font_name, 20)
 
 # give them all to our driver
 print("Creating display")
@@ -54,7 +54,7 @@ if True:
     print("Draw text")
     # text(string: str, x: int, y: int, color: int, *, font_name: str = 'font5x8.bin', size: int = 1)→ None
     display.text('hello world', 25, 10, Adafruit_EPD.BLACK)
-    display.text('Akeu Coucou', 25, 40, Adafruit_EPD.BLACK, font=medium_font)  # , size=2)
+    display.text('Akeu Coucou', 25, 40, Adafruit_EPD.BLACK, font_name=font_name)  # , size=2)
 
     # A circle (test)
     center_x: int = 66
