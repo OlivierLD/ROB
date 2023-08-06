@@ -54,7 +54,7 @@ if True:
     print("Draw text")
     # text(string: str, x: int, y: int, color: int, *, font_name: str = 'font5x8.bin', size: int = 1)→ None
     display.text('hello world', 25, 10, Adafruit_EPD.BLACK)
-    display.text('Akeu Coucou', 25, 40, Adafruit_EPD.BLACK, font=medium_font)  # , size=2)
+    display.text('Akeu Coucou', 25, 40, Adafruit_EPD.BLACK, font_name='DejaVuSans.ttf')  # , size=2)
 
     # A circle (test)
     center_x: int = 66
