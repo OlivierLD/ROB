@@ -71,15 +71,23 @@ draw.rectangle(
 
 # Load a TTF Font
 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
+bold_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", FONTSIZE)
 
 # Draw Some Text
-text = "Lat: N 47\u00b040.66'"
-(font_width, font_height) = font.getsize(text)
+# (font_width, font_height) = font.getsize(text)
+font_height: int = FONTSIZE
 draw.text(
-    (display.width // 2 - font_width // 2, 
-     display.height // 2 - font_height // 2),
-    text,
-    font=font,
+    (30, 
+     30 + font_height),
+    "Lat: N  47\u00b040.66'",
+    font=bold_font,
+    fill=TEXT_COLOR,
+)
+draw.text(
+    (30, 
+     30 + (2 * font_height)),
+    "Lng: W   3\u00b008.14'",
+    font=bold_font,
     fill=TEXT_COLOR,
 )
 
