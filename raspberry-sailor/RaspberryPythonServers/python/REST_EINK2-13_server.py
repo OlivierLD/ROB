@@ -111,16 +111,16 @@ def reset_screen_saver() -> None:
     screen_saver_timer = 0
     
 
-def button_listener(pin, state) -> None:
+def button_listener(button, state) -> None:
     global current_value
     global nmea_data
-    global pin_button_01
-    global pin_button_02
+    global button_01
+    global button_02
     if verbose:
-        print(f"Yo! {pin}, state {state}")
-    if pin == pin_button_01 and state == True:
+        print(f"Yo! {button}, state {state}")
+    if button == button_01 and state == True:
         current_value += 1
-    if pin == pin_button_02 and state == True:
+    if button == button_02 and state == True:
         current_value -= 1
     if current_value < 0:
         current_value = len(nmea_data) - 1
@@ -146,7 +146,7 @@ def button_manager(button, callback) -> None:
                     if not cur_state:
                         if verbose:
                             print("BTN is UP")
-                        callback(pin, False)  # Broadcast wherever needed
+                        callback(button, False)  # Broadcast wherever needed
                     else:
                         if verbose:
                             print("BTN is DOWN")
