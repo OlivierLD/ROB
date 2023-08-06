@@ -267,12 +267,11 @@ if eink is not None:
     eink.display()
 
 # Draw a white background
-draw.rectangle((0, 0, eink.width, eink.height), outline=WHITE, fill=WHITE)
+draw.rectangle((0, 0, eink.width, eink.height), fill=WHITE)
 
 # Draw a smaller inner rectangle, in black
 draw.rectangle(
     (BORDER, BORDER, eink.width - BORDER - 1, eink.height - BORDER - 1),
-    outline=BLACK,
     fill=BLACK,
 )
 
