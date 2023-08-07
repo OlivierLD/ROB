@@ -159,7 +159,7 @@ def button_manager(button, callback) -> None:
         finally:
             if verbose and False:
                 print("button_manager, finally.")
-    print(f"Done with button listener on pin {button}")
+    print(f"Done with listener on button { '1' if button == button_01 else '2' }")
 
 
 def screen_saver_manager() -> None:
