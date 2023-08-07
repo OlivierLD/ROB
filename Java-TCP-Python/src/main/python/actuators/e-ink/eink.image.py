@@ -49,15 +49,31 @@ display.rotation = 1
 image_name: str = "pelican.bw.png"
 image = Image.open(image_name)
 
+print(f"Screen definition: w:{display.width} x h:{display.height}")
+print(f"Image definition: w:{image.width} x h:{image.height}")
 # Scale the image to the smaller screen dimension
 image_ratio = image.width / image.height
 screen_ratio = display.width / display.height
-if screen_ratio < image_ratio:
-    scaled_width = image.width * display.height // image.height
-    scaled_height = display.height
-else:
-    scaled_width = display.width
-    scaled_height = image.height * display.width // image.width
+
+print(f"Image ratio: {image_ratio}")
+print(f"Screen ratio: {screen_ratio}")
+
+h_ratio: float = display.height / image.height
+w_ratio: float = display.width / image.width
+print(f"H ratio: {h_ratio}, W ratio: {w_ratio}")
+scale_ratio = min(h_ratio, w_ratio)
+
+# if screen_ratio < image_ratio:
+#     scaled_width = image.width * display.height // image.height
+#     scaled_height = display.height
+# else:
+#     scaled_width = display.width
+#     scaled_height = image.height * display.width // image.width
+
+scaled_width = round(image.width * scale_ratio)
+scaled_height = round(image.height * scale_ratio)
+
+print(f"Scaled Image definition: w:{scaled_width} x h:{scaled_height}")
 image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
 
 # Crop and center the image
