@@ -262,18 +262,18 @@ draw = ImageDraw.Draw(image)
 
 # Clear display.
 if eink is not None:
-    draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)
+    draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)
     eink.image(image)
     eink.display()
 
 # Draw a white background
-draw.rectangle((0, 0, eink.width, eink.height), fill=WHITE)
+# draw.rectangle((0, 0, eink.width, eink.height), fill=WHITE)
 
 # Draw a smaller inner rectangle, in black
-draw.rectangle(
-    (BORDER, BORDER, eink.width - BORDER - 1, eink.height - BORDER - 1),
-    fill=BLACK,
-)
+# draw.rectangle(
+#     (BORDER, BORDER, eink.width - BORDER - 1, eink.height - BORDER - 1),
+#     fill=BLACK,
+# )
 
 # Draw Some Text, at startup.
 text: str = "Init eInk2.13"   # TODO Add an image ;)
@@ -315,7 +315,7 @@ def display(display_data: List[str]) -> None:
             # Now draw the required text
             for line in display_data:
                 draw.text((x, y), line, font=font, fill=WHITE)
-                y = y + 8
+                y = y + FONTSIZE
 
             # draw.text((x, top), display_data, font=font, fill=WHITE)
             # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
@@ -352,7 +352,7 @@ def clear() -> None:
     global draw
     try:
         # Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)
+        draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)
         # Display image.
         eink.image(image)
         eink.display()
@@ -757,7 +757,7 @@ if eink is not None:
     )
     # Display image
     eink.image(image)
-    eink.disoplay()
+    eink.display()
     time.sleep(2)
     clear()
 print("Done with REST EINK2.13 server.")
