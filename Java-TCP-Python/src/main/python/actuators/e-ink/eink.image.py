@@ -45,7 +45,9 @@ display = Adafruit_SSD1675(122, 250,  # 2.13" HD mono display
 
 display.rotation = 1
 
-image = Image.open("blinka.png")
+# image_name: str = "blinka.png"
+image_name: str = "pelican.bw.png"
+image = Image.open(image_name)
 
 # Scale the image to the smaller screen dimension
 image_ratio = image.width / image.height
