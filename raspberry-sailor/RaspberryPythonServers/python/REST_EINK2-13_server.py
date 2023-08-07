@@ -232,6 +232,8 @@ draw = ImageDraw.Draw(image)
 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
 bold_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", FONTSIZE)
 
+FONT = bold_font
+
 # Now, let's go
 # Initialize buttons
 print("Press button 01 to scroll up")
@@ -277,11 +279,11 @@ if eink is not None:
 
 # Draw Some Text, at startup.
 text: str = "Init eInk2.13"   # TODO Add an image ;)
-(font_width, font_height) = font.getsize(text)
+(font_width, font_height) = FONT.getsize(text)
 draw.text(
     (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
     text,
-    font=font,
+    font=FONT,
     fill=TEXT_COLOR,
 )
 
@@ -301,7 +303,7 @@ x: int = 0
 
 def display(display_data: List[str]) -> None:
     global eink
-    global font
+    global FONT
     global image
     global draw
     global x
@@ -316,7 +318,7 @@ def display(display_data: List[str]) -> None:
             y: int = top
             # Now draw the required text
             for line in display_data:
-                draw.text((x, y), line, font=font, fill=TEXT_COLOR)
+                draw.text((x, y), line, font=FONT, fill=TEXT_COLOR)
                 y = y + FONTSIZE
 
             # draw.text((x, top), display_data, font=font, fill=WHITE)
@@ -331,17 +333,17 @@ def display(display_data: List[str]) -> None:
                 if verbose:
                     print("pixel ON .")
                 # Draw '.' on top left
-                draw.text((x, top), ".", font=font, fill=TEXT_COLOR)
+                draw.text((x, top), ".", font=FONT, fill=TEXT_COLOR)
             elif screen_saver_timer % 4 == 2:
                 if verbose:
                     print("pixel ON ..")
                 # Draw '..' on top left
-                draw.text((x, top), "..", font=font, fill=TEXT_COLOR)
+                draw.text((x, top), "..", font=FONT, fill=TEXT_COLOR)
             elif screen_saver_timer % 4 == 3:
                 if verbose:
                     print("pixel ON ...")
                 # Draw '...' on top left
-                draw.text((x, top), "...", font=font, fill=TEXT_COLOR)
+                draw.text((x, top), "...", font=FONT, fill=TEXT_COLOR)
         if not screen_saver_on:  # NO display if screen saver is on
             # Display image.
             eink.image(image)
@@ -580,11 +582,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # Clear screen. Say Bye for 1 second before clearing the screen.
                 clear()
                 text: str = "Bye EINK2-13"
-                (font_width, font_height) = font.getsize(text)
+                (font_width, font_height) = FONT.getsize(text)
                 draw.text(
                     (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
                     text,
-                    font=font,
+                    font=FONT,
                     fill=WHITE,
                 )
                 # Display image
@@ -728,7 +730,7 @@ server = HTTPServer((machine_name, port_number), ServiceHandler)
 # For dev. Requires import sample_cache
 # nmea_cache = json.loads(sample_cache.sample_json)
 
-print("Server ready for duty.")
+print(f"Server ({type(server)})ready for duty.")
 print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
 print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number,
                                                                                     PATH_PREFIX))
@@ -750,12 +752,12 @@ except KeyboardInterrupt:
 # After all
 if eink is not None:
     clear()
-    text: str = "Bye-bye!.."
-    (font_width, font_height) = font.getsize(text)
+    text: str = "Bye-bye eInk2-13 server!.."
+    (font_width, font_height) = FONT.getsize(text)
     draw.text(
         (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
         text,
-        font=font,
+        font=FONT,
         fill=BLACK,
     )
     # Display image
