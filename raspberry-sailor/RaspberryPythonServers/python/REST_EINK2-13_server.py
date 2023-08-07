@@ -718,9 +718,9 @@ def display_image() -> None:
     scaled_width: int = round(pelican.width * scale_ratio)
     scaled_height: int = round(pelican.height * scale_ratio)
     pelican = pelican.resize((scaled_width, scaled_height), Image.BICUBIC)
-    # Crop and h-center, align left the image
-    # x = scaled_width // 2 - eink.width // 2
-    x = scaled_width - eink.width // 2
+    # Crop and h-center, w-center the image
+    x = scaled_width // 2 - eink.width // 2
+    # x = scaled_width - eink.width // 2
     y = scaled_height // 2 - eink.height // 2
     pelican = pelican.crop((x, y, x + eink.width, y + eink.height))
     # adding dithering for monochrome displays
