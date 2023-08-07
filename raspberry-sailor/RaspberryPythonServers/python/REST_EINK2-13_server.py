@@ -253,7 +253,7 @@ if enable_screen_saver:
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
-image = Image.new("1", (eink.width, eink.height))
+image = Image.new("RGB", (eink.width, eink.height))
 # print(f"Image is a {type(image)}")
 
 # Get drawing object to draw on image.
@@ -262,7 +262,7 @@ draw = ImageDraw.Draw(image)
 
 # Clear display.
 if eink is not None:
-    draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)  # Clear
+    draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)
     eink.image(image)
     eink.display()
 
