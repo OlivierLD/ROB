@@ -74,6 +74,7 @@ We provide here TCP servers reading the following sensors:
 
 And actuators:
 - [SSD1306 oled screen](https://learn.adafruit.com/monochrome-oled-breakouts) (SPI and I2C)
+- [eInk2-13 screen](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=al)
 
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
