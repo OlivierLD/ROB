@@ -656,7 +656,7 @@ def format_data(id: str) -> List[str]:
             grid: str = position["gridSquare"]
             formatted = [id, utils.dec_to_sex(latitude, "NS"), utils.dec_to_sex(longitude, "EW"), grid]
         elif id == "NAV":
-            # Warning: 5 lines, too many lines for a 128x32
+            # Warning: 5 lines
             position: Dict = nmea_cache["Position"]
             latitude: float = position["lat"]
             longitude: float = position["lng"]
@@ -664,9 +664,9 @@ def format_data(id: str) -> List[str]:
             sog = nmea_cache["SOG"]["speed"]
             cog = nmea_cache["COG"]["angle"]
             formatted = [
-                f"POS: {utils.dec_to_sex(latitude, 'NS')}",
-                f"     {utils.dec_to_sex(longitude, 'EW')}",
-                f"     {grid}",
+                f"LAT: {utils.dec_to_sex(latitude, 'NS')}",
+                f"LNG: {utils.dec_to_sex(longitude, 'EW')}",
+                f"GRID: {grid}",
                 f"COG: {cog}°",
                 f"SOG: {sog} kts"]
         elif id == "ATP":
