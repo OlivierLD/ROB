@@ -754,28 +754,27 @@ if eink is not None:
     clear()
     # An image on Bye screen...
     image = Image.open("pelican.bw.png")
-
     # Scale the image to the smaller screen dimension
-    image_ratio = image.width / image.height
-    screen_ratio = eink.width / eink.height
-    if screen_ratio < image_ratio:
-        scaled_width = image.width * eink.height // eink.height
-        scaled_height = eink.height
-    else:
-        scaled_width = eink.width
-        scaled_height = image.height * eink.width // image.width
+
+    h_ratio: float = eink.height / image.height
+    w_ratio: float = eink.width / image.width
+    scale_ratio = min(h_ratio, w_ratio)
+    scaled_width = round(image.width * scale_ratio)
+    scaled_height = round(image.height * scale_ratio)
     image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
-    # Crop and center the image
-    x = scaled_width // 2 - eink.width // 2
+    # Crop and h-center, align left the image
+    # x = scaled_width // 2 - eink.width // 2
+    x = scaled_width - eink.width // 2
     y = scaled_height // 2 - eink.height // 2
     image = image.crop((x, y, x + eink.width, y + eink.height))
     # adding dithering for monochrome displays
     image = image.convert("1").convert("L")
 
-    text: str = "Bye-bye eInk2-13 server!.."
+    text: str = "Bye-bye!.."
     (font_width, font_height) = FONT.getsize(text)
     draw.text(
-        (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
+        # (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
+        (scaled_width, eink.height // 2 - font_height // 2),
         text,
         font=FONT,
         fill=BLACK,
