@@ -172,6 +172,7 @@ def screen_saver_manager() -> None:
             if verbose:
                 print("Turning screen saver ON")
             screen_saver_on = True
+            display_image()  # display the pelican as screen saver
         time.sleep(1.0)
 
 
@@ -704,6 +705,29 @@ def format_data(id: str) -> List[str]:
         formatted = [f"{id}:{repr(oops)}"]
     return formatted
 
+def display_image() -> None:
+    global eink
+    clear()
+    # An image on Bye screen...
+    pelican = Image.open("pelican.bw.png")
+    # Scale the image to the smaller screen dimension
+
+    h_ratio: float = eink.height / pelican.height
+    w_ratio: float = eink.width / pelican.width
+    scale_ratio: float = min(h_ratio, w_ratio)
+    scaled_width: int = round(pelican.width * scale_ratio)
+    scaled_height: int = round(pelican.height * scale_ratio)
+    pelican = pelican.resize((scaled_width, scaled_height), Image.BICUBIC)
+    # Crop and h-center, align left the image
+    # x = scaled_width // 2 - eink.width // 2
+    x = scaled_width - eink.width // 2
+    y = scaled_height // 2 - eink.height // 2
+    pelican = pelican.crop((x, y, x + eink.width, y + eink.height))
+    # adding dithering for monochrome displays
+    pelican = pelican.convert("1").convert("L")
+    eink.image(pelican)
+    eink.display()
+
 
 # Manage what goes on, on the display
 def display_manager() -> None:
@@ -752,29 +776,10 @@ except KeyboardInterrupt:
 # After all
 if eink is not None:
     clear()
-    # An image on Bye screen...
-    image = Image.open("pelican.bw.png")
-    # Scale the image to the smaller screen dimension
-
-    h_ratio: float = eink.height / image.height
-    w_ratio: float = eink.width / image.width
-    scale_ratio = min(h_ratio, w_ratio)
-    scaled_width = round(image.width * scale_ratio)
-    scaled_height = round(image.height * scale_ratio)
-    image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
-    # Crop and h-center, align left the image
-    # x = scaled_width // 2 - eink.width // 2
-    x = scaled_width - eink.width // 2
-    y = scaled_height // 2 - eink.height // 2
-    image = image.crop((x, y, x + eink.width, y + eink.height))
-    # adding dithering for monochrome displays
-    image = image.convert("1").convert("L")
-
-    text: str = "Bye-bye!.."
+    text: str = "Bye-bye eInk 2.13 server!.."
     (font_width, font_height) = FONT.getsize(text)
     draw.text(
-        # (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
-        (scaled_width, eink.height // 2 - font_height // 2),
+        (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
         text,
         font=FONT,
         fill=BLACK,
