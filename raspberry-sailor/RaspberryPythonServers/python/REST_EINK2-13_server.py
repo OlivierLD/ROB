@@ -97,9 +97,9 @@ nmea_data: List[str] = [
 ]
 
 # The buttons
-button_01 = digitalio.DigitalInOut(board.D5)
+button_01 = digitalio.DigitalInOut(board.D6)  # D6 - Top
 button_01.switch_to_input()
-button_02 = digitalio.DigitalInOut(board.D6)
+button_02 = digitalio.DigitalInOut(board.D5)  # D5 - Bottom
 button_02.switch_to_input()
 
 def reset_screen_saver() -> None:
@@ -307,10 +307,12 @@ def display(display_data: List[str]) -> None:
     global x
     global screen_saver_on
     try:
-        # Clear Screen. Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # TODO a clear() ?
+        # Clear Screen.
+        # draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # Moved below (if screen saver is off)
 
         if not screen_saver_on:
+            # Clear Screen.
+            draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # TODO a clear() ?
             y: int = top
             # Now draw the required text
             for line in display_data:
@@ -322,7 +324,7 @@ def display(display_data: List[str]) -> None:
             # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
         else:
-            # Blink dots...
+            # Blink dots... Removed. Nothing displayed if screen saver is on
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")
             if screen_saver_timer % 4 == 1:
@@ -340,9 +342,10 @@ def display(display_data: List[str]) -> None:
                     print("pixel ON ...")
                 # Draw '...' on top left
                 draw.text((x, top), "...", font=font, fill=TEXT_COLOR)
-        # Display image.
-        eink.image(image)
-        eink.display()
+        if not screen_saver_on:  # NO display if screen saver is on
+            # Display image.
+            eink.image(image)
+            eink.display()
     except Exception as error:
         print(f"Error: {repr(error)}")
 
