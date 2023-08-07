@@ -77,8 +77,11 @@ print(f"Scaled Image definition: w:{scaled_width} x h:{scaled_height}")
 image = image.resize((scaled_width, scaled_height), Image.BICUBIC)
 
 # Crop and center the image
-x = scaled_width // 2 - display.width // 2
+# x = scaled_width // 2 - display.width // 2
+x = scaled_width - display.width // 2
+# x = display.width - scaled_width
 y = scaled_height // 2 - display.height // 2
+print(f"x:{x}, y:{y}")
 image = image.crop((x, y, x + display.width, y + display.height))
 
 # adding dithering for monochrome displays
