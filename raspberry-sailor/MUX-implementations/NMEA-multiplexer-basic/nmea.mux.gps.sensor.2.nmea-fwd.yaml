@@ -1,6 +1,8 @@
 #
 # MUX definition.
-# The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py
+# With SSD1306 oled screen.
+# The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py or
+# also REST_EINK2-13_server.py
 # Requires several Python servers to be running.
 #
 name: "Real world scenario."
