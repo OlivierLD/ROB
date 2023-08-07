@@ -308,7 +308,7 @@ def display(display_data: List[str]) -> None:
     global screen_saver_on
     try:
         # Clear Screen. Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, display.width, display.height), fill=BACKGROUND_COLOR)  # TODO a clear() ?
+        draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)  # TODO a clear() ?
 
         if not screen_saver_on:
             y: int = top
@@ -342,7 +342,7 @@ def display(display_data: List[str]) -> None:
                 draw.text((x, top), "...", font=font, fill=WHITE)
         # Display image.
         eink.image(image)
-        eink.show()
+        eink.display()
     except Exception as error:
         print(f"Error: {repr(error)}")
 
@@ -352,7 +352,7 @@ def clear() -> None:
     global draw
     try:
         # Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, display.width, display.height), fill=BACKGROUND_COLOR)
+        draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)
         # Display image.
         eink.image(image)
         eink.display()
@@ -757,7 +757,7 @@ if eink is not None:
     )
     # Display image
     eink.image(image)
-    eink.show()
+    eink.disoplay()
     time.sleep(2)
     clear()
 print("Done with REST EINK2.13 server.")
