@@ -52,7 +52,7 @@ You might want:
 - ... etc. Your imagination is the limit.
 
 If anything is unclear about the way to customize your configuration, if more examples are needed, please use the [issues](https://github.com/OlivierLD/ROB/issues) page of this repo.  
-But pllllease, keep in mind that this is OpenSource..., not free consulting.
+But pllllease, keep in mind that this is OpenSource..., not free consulting. This being said, all comments, requirements, suggestions, ideas, etc, are most welcome.
 
 ---
 #### Some links
@@ -72,7 +72,7 @@ The more I use it, the more I like it.
 
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
-but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉. (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. _**Veeeeery low**_ ⬇️ - if not null - carbon footprint)   
+but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉 (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. _**Veeeeery low**_ ⬇️ - if not null - carbon footprint, this may sound interesting to some).   
 Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
 NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
 At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
@@ -129,7 +129,7 @@ But those guys have restrictions on the version of the JDK, they seem to need at
 
 So, there is something smart to come up with here 🤔.
 
-_**Here is a thing**_: for all the sensors and actuators, we usually have some code, written by the board provider - usually in Python. This is the code that has been re-written in Java, to enable a native communication with those boards, based on the frameworks mentioned before.
+_**Here is a thing**_: for all the sensors and actuators, we usually have some code, written by the board provider - usually in Python. And _**this**_ is the code that has been re-written in Java, to enable a native communication with those boards, based on the frameworks mentioned before.
 If a framework becomes obsolete, or if it needs upgrades, then so does the Java code...  
 We want here to find a way to get rid of this kind of nasty occurrences.  
 So, an idea would be to keep this code as it is - it's working in Python, and the board provider will take care of updates, if needed - and find a way to establish a communication between this Python code and Java...

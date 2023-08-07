@@ -8,6 +8,7 @@
 # It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
+# -> Screen Saver displays a pelican.
 #
 # Work In Progress !
 # Do run a curl -X GET /eink2-13/oplist !

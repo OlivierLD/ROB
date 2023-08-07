@@ -3,11 +3,11 @@
 #
 name: "Replay big log file."
 description:
-  - Forward data to "NMEA Cache forwarder" (on SSD1306)
+  - Forward data to "NMEA Cache forwarder" (on SSD1306 or another screen)
   - Work in Progress
 context:
   with.http.server: true
-  http.port: 8080
+  http.port: 9999
   init.cache: true
   default.declination: 0
 channels:
