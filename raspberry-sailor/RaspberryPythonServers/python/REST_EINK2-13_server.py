@@ -18,7 +18,7 @@
 # EPD: <https://docs.circuitpython.org/projects/epd/en/latest/>
 #      <https://docs.circuitpython.org/projects/epd/en/latest/api.html>
 #
-# WIP !!!! Moving from SSD1306 to eInk 2-13
+# WIP
 #
 import json
 import sys
@@ -117,7 +117,7 @@ def button_listener(button, state) -> None:
     global button_01
     global button_02
     if verbose:
-        print(f"Yo! {button}, state {state}")
+        print(f"Yo! Button { '1' if button == button_01 else '2' }, state {state}")
     if button == button_01 and state == True:
         current_value += 1
     if button == button_02 and state == True:
@@ -308,13 +308,13 @@ def display(display_data: List[str]) -> None:
     global screen_saver_on
     try:
         # Clear Screen. Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, eink.width, eink.height), fill=BACKGROUND_COLOR)  # TODO a clear() ?
+        draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # TODO a clear() ?
 
         if not screen_saver_on:
             y: int = top
             # Now draw the required text
             for line in display_data:
-                draw.text((x, y), line, font=font, fill=WHITE)
+                draw.text((x, y), line, font=font, fill=TEXT_COLOR)
                 y = y + FONTSIZE
 
             # draw.text((x, top), display_data, font=font, fill=WHITE)
@@ -329,17 +329,17 @@ def display(display_data: List[str]) -> None:
                 if verbose:
                     print("pixel ON .")
                 # Draw '.' on top left
-                draw.text((x, top), ".", font=font, fill=WHITE)
+                draw.text((x, top), ".", font=font, fill=TEXT_COLOR)
             elif screen_saver_timer % 4 == 2:
                 if verbose:
                     print("pixel ON ..")
                 # Draw '..' on top left
-                draw.text((x, top), "..", font=font, fill=WHITE)
+                draw.text((x, top), "..", font=font, fill=TEXT_COLOR)
             elif screen_saver_timer % 4 == 3:
                 if verbose:
                     print("pixel ON ...")
                 # Draw '...' on top left
-                draw.text((x, top), "...", font=font, fill=WHITE)
+                draw.text((x, top), "...", font=font, fill=TEXT_COLOR)
         # Display image.
         eink.image(image)
         eink.display()
