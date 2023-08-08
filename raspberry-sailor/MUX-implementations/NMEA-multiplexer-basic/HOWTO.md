@@ -1,8 +1,8 @@
 # From scratch
 ### An example: how to setup a new Raspberry Pi for a minimalist Nav Station.
 We will be setting up a Raspberry Pi Zero W with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
-The NMEA-multiplexer will be 
-- Reading a GPS
+The NMEA-multiplexer will:
+- Read a GPS
 - Log the data into a file
 - Display the data on the EInk screen
   - The two buttons can be used to scroll through the available data
@@ -91,7 +91,7 @@ STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/O
 So, you now have a system that starts at boot.  
 Current data are displayed on the eink screen.  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data.
-It also broadcasts the data on TCP, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.
+It also broadcasts the data on TCP, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
 
 ---
