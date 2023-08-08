@@ -10,7 +10,7 @@
 # If started from rc.local, make sure the python modules are installed with sudo.
 #
 #
-# Link the Serial Port
+# "Link" the Serial Port
 stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 #
 # Start MUX and Co on startup
