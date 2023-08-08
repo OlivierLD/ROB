@@ -11,8 +11,12 @@ sleep 10
 echo -e "Starting the SSD1306 (v2) REST server"
 /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM --screen-saver:on > /home/pi/nmea-dist/ssd1306.python.log 2>&1
 sleep 10
+# Start the REST Server for EINK2-13
+# /home/pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > /home/pi/nmea-dist/eink2-13.python.log 2>&1
+# sleep 10
 # Start the MUX
 echo -e "Starting the MUX"
 cd /home/pi/nmea-dist
 nohup ./mux.sh nmea.mux.gps.sensor.2.nmea-fwd.yaml &
+# nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
 echo -e "Script ${0} completed."
