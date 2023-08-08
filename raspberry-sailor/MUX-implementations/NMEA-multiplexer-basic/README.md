@@ -542,4 +542,7 @@ This is also the structure generated on the target machine, strictly identical.
 All you need to do this  time is to transfer the jar `NMEA-multiplexer-basic-1.0-all.jar` where it already exists, and - if needed - 
 the `web.zip`.
 
+## A Full example
+See [this doc](./HOWTO.md).
+
 ---

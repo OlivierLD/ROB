@@ -4,6 +4,8 @@
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
 #
+# sudo pip3 install adafruit-circuitpython-epd
+#
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
 # It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
@@ -651,7 +653,11 @@ def format_data(id: str) -> List[str]:
             sog = nmea_cache[id]["speed"]
             formatted = ["SOG", f"{sog} kts"]
         elif id == "COG":
-            cog = nmea_cache[id]["angle"]
+            cog = 0
+            try:
+                cog = nmea_cache["COG"]["angle"]
+            except Exception as oops:
+                pass
             formatted = ["COG", f"{cog}°"]
         elif id == "POS":
             position: Dict = nmea_cache["Position"]
@@ -666,7 +672,11 @@ def format_data(id: str) -> List[str]:
             longitude: float = position["lng"]
             grid: str = position["gridSquare"]
             sog = nmea_cache["SOG"]["speed"]
-            cog = nmea_cache["COG"]["angle"]
+            cog = 0
+            try:
+                cog = nmea_cache["COG"]["angle"]
+            except Exception as oops:
+                pass
             formatted = [
                 f"LAT: {utils.dec_to_sex(latitude, 'NS')}",
                 f"LNG: {utils.dec_to_sex(longitude, 'EW')}",
