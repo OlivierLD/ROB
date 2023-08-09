@@ -88,7 +88,7 @@ STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/O
 | ![Three](./doc_resources/03.up.and.running.jpg) | ![Four](./doc_resources/04.closed.jpg)   | 
 | Up and Running                                  | Closed                                   |
 | ![Five](./doc_resources/01.phone.UI.jpg)        | ![Six](./doc_resources/02.phone.UI.jpg)  | 
-| Phone UI                                        | Phone UI                                 |
+| Phone UI (the pelican is the screen saver...)   | Phone UI                                 |
 | ![SP](./doc_resources/solar.panel.png)          |                                          |
 | Solar powered                                   |                                          |
 
