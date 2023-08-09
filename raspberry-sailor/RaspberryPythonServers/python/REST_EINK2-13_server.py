@@ -26,6 +26,7 @@
 import json
 import sys
 import os
+import signal
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from typing import List
@@ -121,21 +122,26 @@ def button_listener(button, state) -> None:
     global button_02
     if verbose:
         print(f"Yo! Button { '1' if button == button_01 else '2' }, state {state}")
-    if button == button_01 and state == True:
+    if button == button_01 and state == True:  # Only on button down
         current_value += 1
-    if button == button_02 and state == True:
+    if button == button_02 and state == True:  # Only on button down
         current_value -= 1
     if current_value < 0:
         current_value = len(nmea_data) - 1
     if current_value >= len(nmea_data):
         current_value = 0
-    if state and verbose:
-        print(f"Current index in list is now {current_value}")
+    # if state and verbose:
+    if verbose:
+        print(f"(button_listener) Current index in list is now {current_value}")
 
 
 def button_manager(button, callback) -> None:
     global keep_looping
     global screen_saver_on
+    global button_01
+    global button_02
+
+    listener_name: str = 'Listener 1' if button == button_01 else 'Listener 2' 
 
     prev_state: bool = False
     # print(f"Button State is a {type(prev_state)}")
@@ -143,18 +149,20 @@ def button_manager(button, callback) -> None:
         try:
             cur_state: bool = button.value
             if cur_state != prev_state:  # Button status has changed
-                if screen_saver_on and cur_state:  # Screen Saver on, and Button DOWN. Wake up !
-                    reset_screen_saver()
-                else:
-                    if not cur_state:
-                        if verbose:
-                            print("BTN is UP")
-                        callback(button, False)  # Broadcast wherever needed
-                    else:
+                if cur_state:  # Button down
+                    # print(f"Button down ({listener_name})")
+                    if not screen_saver_on:
+                        # print(f">> NOT ScreenSaver case ({listener_name})")
                         if verbose:
                             print("BTN is DOWN")
                         callback(button, True)  # Broadcast wherever needed
-                reset_screen_saver()  # Reset when button was clicked.
+                    else:
+                        # print(">> ScreenSaver case")
+                        pass
+                    reset_screen_saver()  # Reset when button was clicked, anyway.
+                else: 
+                    # print(f"Button up (pass) ({listener_name})")
+                    pass   # Nothing when button released
             prev_state = cur_state
             time.sleep(0.1)  # sleep for debounce
         except Exception as oops:
@@ -509,14 +517,14 @@ class ServiceHandler(BaseHTTPRequestHandler):
             response = {"status": "OK"}
             self.wfile.write(json.dumps(response).encode())
         elif self.path.startswith("/exit"):
-                content_len: int = int(self.headers.get('Content-Length'))
-                post_body = self.rfile.read(content_len).decode('utf-8')
-                if verbose:
-                    print("Content: {}".format(post_body))
-                self.send_response(201)
-                response = {"status": "OK"}
-                self.wfile.write(json.dumps(response).encode())
-                os.kill(server_pid, signal.SIGINT)
+            content_len: int = int(self.headers.get('Content-Length'))
+            post_body = self.rfile.read(content_len).decode('utf-8')
+            if verbose:
+                print("Content: {}".format(post_body))
+            self.send_response(201)
+            response = {"status": "OK"}
+            self.wfile.write(json.dumps(response).encode())
+            os.kill(server_pid, signal.SIGINT)
         else:
             if verbose:
                 print("POST on {} not managed".format(self.path))
@@ -595,7 +603,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 )
                 # Display image
                 eink.image(image)
-                eink.show()
+                eink.display()
                 time.sleep(1)  # Give time to read the screen.
                 clear()
                 self.send_response(201)
@@ -603,6 +611,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 response = {"status": "OK"}
                 self.wfile.write(json.dumps(response).encode())
+                # Kill the server
+                print(">> Now killing the server")
+                os.kill(server_pid, signal.SIGINT)
             except Exception as error:
                 error: str = f"Exception {repr(error)}\n"
                 self.send_response(404)

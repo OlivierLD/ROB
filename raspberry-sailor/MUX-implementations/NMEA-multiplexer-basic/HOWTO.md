@@ -94,4 +94,9 @@ It comes with a Web UI, to help you to manage the system, and/or visualize the d
 It also broadcasts the data on TCP, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
 
+### Supplies
+- [eInk bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
+- [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
+- [GPS Dongle](https://www.amazon.com/HiLetgo-G-Mouse-GLONASS-Receiver-Windows/dp/B01MTU9KTF/ref=sr_1_3?keywords=usb+gps+dongle&qid=1691564294&sprefix=USB+GPS%2Caps%2C153&sr=8-3), $11.99 (Aug 2023)
+
 ---

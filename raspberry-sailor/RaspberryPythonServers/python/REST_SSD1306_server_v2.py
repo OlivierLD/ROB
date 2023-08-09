@@ -23,6 +23,7 @@
 import json
 import sys
 import os
+import signal
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from typing import List
