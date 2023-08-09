@@ -81,19 +81,25 @@ before the get too big. There is a Web page for that (in the embarked Web UI), c
 STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
 [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl).
 
-|                                     In its box                                      |                Connected (Power, GPS)                 |
-|:-----------------------------------------------------------------------------------:|:-----------------------------------------------------:|
- |                      ![One](./doc_resources/01.in.the.box.jpg)                      |       ![Two](./doc_resources/02.connected.jpg)        | 
-|                                   Up and Running                                    |                        Closed                         |
-|                   ![Three](./doc_resources/03.up.and.running.jpg)                   |        ![Four](./doc_resources/04.closed.jpg)         | 
-| Phone connected on the RPi network, URL is http://192.168.50.10:9999/zip/index.html | _Note_: The phone does not need to have a SIM card... |
-|                      ![Five](./doc_resources/01.phone.UI.jpg)                       |        ![Six](./doc_resources/02.phone.UI.jpg)        | 
-|                               Connected from OpenCPN                                |                                                       |
-|                        ![Seven](./doc_resources/OpenCPN.png)                        |       | 
+|  |                                          |
+|:----|:-----------------------------------------|
+| ![One](./doc_resources/01.in.the.box.jpg) | ![Two](./doc_resources/02.connected.jpg) | 
+| In its box | Connected (Power, GPS)                   |
+| ![Three](./doc_resources/03.up.and.running.jpg)                                     | ![Four](./doc_resources/04.closed.jpg)              | 
+| Up and Running                                                                      | Closed                                              |
+| ![Five](./doc_resources/01.phone.UI.jpg)                                            | ![Six](./doc_resources/02.phone.UI.jpg)             | 
+| Phone UI | Phone UI |
+
+
+For the phone UI: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
+_Note_: The phone does not need to have a SIM card.
+
+
+Connected from OpenCPN, from a laptop:       
+![Seven](./doc_resources/OpenCPN.png)
 
 <!-- 
    TODO image with a solar panel
-        image of OpenCPN
   -->
 
 ### Summary
@@ -109,7 +115,7 @@ It comes with a Web UI, to help you to manage the system, and/or visualize the d
 It also broadcasts the data on `tcp`, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
 
-### Supplies
+### Supplies, BOM
 - [eInk bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
 - [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
 - [GPS Dongle](https://www.amazon.com/HiLetgo-G-Mouse-GLONASS-Receiver-Windows/dp/B01MTU9KTF/ref=sr_1_3?keywords=usb+gps+dongle&qid=1691564294&sprefix=USB+GPS%2Caps%2C153&sr=8-3), $11.99 (Aug 2023)
