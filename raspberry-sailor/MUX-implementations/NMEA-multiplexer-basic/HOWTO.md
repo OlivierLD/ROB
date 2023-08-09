@@ -81,17 +81,32 @@ before the get too big. There is a Web page for that (in the embarked Web UI), c
 STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
 [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl).
 
-|                  In its box                   |          Connected (Power, GPS)          |
-|:---------------------------------------------:|:----------------------------------------:|
- |   ![One](./doc_resources/01.in.the.box.jpg)   | ![One](./doc_resources/02.connected.jpg) | 
-|                Up and Running                 |                  Closed                  |
-| ![One](./doc_resources/03.up.and.running.jpg) |  ![One](./doc_resources/04.closed.jpg)   | 
+|                                     In its box                                      |                Connected (Power, GPS)                 |
+|:-----------------------------------------------------------------------------------:|:-----------------------------------------------------:|
+ |                      ![One](./doc_resources/01.in.the.box.jpg)                      |       ![Two](./doc_resources/02.connected.jpg)        | 
+|                                   Up and Running                                    |                        Closed                         |
+|                   ![Three](./doc_resources/03.up.and.running.jpg)                   |        ![Four](./doc_resources/04.closed.jpg)         | 
+| Phone connected on the RPi network, URL is http://192.168.50.10:9999/zip/index.html | _Note_: The phone does not need to have a SIM card... |
+|                      ![Five](./doc_resources/01.phone.UI.jpg)                       |        ![Six](./doc_resources/02.phone.UI.jpg)        | 
+|                               Connected from OpenCPN                                |                                                       |
+|                        ![Seven](./doc_resources/OpenCPN.png)                        |       | 
+
+<!-- 
+   TODO image with a solar panel
+        image of OpenCPN
+  -->
 
 ### Summary
-So, you now have a system that starts at boot.  
-Current data are displayed on the eink screen.  
-It comes with a Web UI, to help you to manage the system, and/or visualize the data.
-It also broadcasts the data on TCP, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
+So, you now have a system that starts at boot.    
+The Raspberry emits its own network, so you can connect to it from other machines or devices,
+using `ssh`, `scp`, or just `http` and `tcp`.
+
+> _Note_: There is a network, but _**no**_ Internet.  
+> This is no Cloud Computing..., maybe more like "Flake" Computing. No satellite needed, very low carbon footprint!
+
+Current data are displayed on the eink screen (basic UI).  
+It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
+It also broadcasts the data on `tcp`, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
 
 ### Supplies
