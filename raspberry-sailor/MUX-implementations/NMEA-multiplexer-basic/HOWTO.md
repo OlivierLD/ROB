@@ -81,26 +81,24 @@ before the get too big. There is a Web page for that (in the embarked Web UI), c
 STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
 [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl).
 
-|  |                                          |
-|:----|:-----------------------------------------|
-| ![One](./doc_resources/01.in.the.box.jpg) | ![Two](./doc_resources/02.connected.jpg) | 
-| In its box | Connected (Power, GPS)                   |
-| ![Three](./doc_resources/03.up.and.running.jpg)                                     | ![Four](./doc_resources/04.closed.jpg)              | 
-| Up and Running                                                                      | Closed                                              |
-| ![Five](./doc_resources/01.phone.UI.jpg)                                            | ![Six](./doc_resources/02.phone.UI.jpg)             | 
-| Phone UI | Phone UI |
+|                                                 |                                          |
+|:------------------------------------------------|:-----------------------------------------|
+| ![One](./doc_resources/01.in.the.box.jpg)       | ![Two](./doc_resources/02.connected.jpg) | 
+| In its box                                      | Connected (Power, GPS)                   |
+| ![Three](./doc_resources/03.up.and.running.jpg) | ![Four](./doc_resources/04.closed.jpg)   | 
+| Up and Running                                  | Closed                                   |
+| ![Five](./doc_resources/01.phone.UI.jpg)        | ![Six](./doc_resources/02.phone.UI.jpg)  | 
+| Phone UI                                        | Phone UI                                 |
+| ![SP](./doc_resources/solar.panel.png)          |                                          |
+| Solar powered                                   |                                          |
 
 
-For the phone UI: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
+_For the phone UI_: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
 _Note_: The phone does not need to have a SIM card.
 
 
 Connected from OpenCPN, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
-
-<!-- 
-   TODO image with a solar panel
-  -->
 
 ### Summary
 So, you now have a system that starts at boot.    
@@ -108,7 +106,8 @@ The Raspberry emits its own network, so you can connect to it from other machine
 using `ssh`, `scp`, or just `http` and `tcp`.
 
 > _Note_: There is a network, but _**no**_ Internet.  
-> This is no Cloud Computing..., maybe more like "Flake" ❄️ Computing. No satellite needed, very low carbon footprint!
+> This is no Cloud Computing..., maybe more like "Flake" ❄️ Computing. Very low carbon footprint!
+> The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!
 
 Current data are displayed on the eink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
@@ -119,5 +118,7 @@ Data are logged into some files, so you can analyze or replay them.
 - [eInk bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
 - [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
 - [GPS Dongle](https://www.amazon.com/HiLetgo-G-Mouse-GLONASS-Receiver-Windows/dp/B01MTU9KTF/ref=sr_1_3?keywords=usb+gps+dongle&qid=1691564294&sprefix=USB+GPS%2Caps%2C153&sr=8-3), $11.99 (Aug 2023)
+
+> Note: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.
 
 ---
