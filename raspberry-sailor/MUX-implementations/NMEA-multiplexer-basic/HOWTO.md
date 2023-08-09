@@ -108,7 +108,7 @@ The Raspberry emits its own network, so you can connect to it from other machine
 using `ssh`, `scp`, or just `http` and `tcp`.
 
 > _Note_: There is a network, but _**no**_ Internet.  
-> This is no Cloud Computing..., maybe more like "Flake" Computing. No satellite needed, very low carbon footprint!
+> This is no Cloud Computing..., maybe more like "Flake" ❄️ Computing. No satellite needed, very low carbon footprint!
 
 Current data are displayed on the eink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
