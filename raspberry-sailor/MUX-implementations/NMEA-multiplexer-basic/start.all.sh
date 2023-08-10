@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 #
 # Start MUX and Co on startup

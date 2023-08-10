@@ -1,5 +1,5 @@
 # From scratch
-### An example: how to setup a new Raspberry Pi for a minimalist Nav Station.
+### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
 We will be setting up a Raspberry Pi Zero W with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 The NMEA-multiplexer will:
 - Read a GPS
@@ -8,20 +8,35 @@ The NMEA-multiplexer will:
   - The two buttons can be used to scroll through the available data
 - Broadcast the data on TCP:7001
 
-The server (aka Mux) will be automatically started when the Raspberry Pi boots.
+The server (aka Mux) will be automatically started when the Raspberry Pi boots.  
+
+The process goes in two main steps.
+- One where you clone this repo, do the build, and package for deployment.
+  - This step requires a bit more resources than the next one.
+  - You will need an Internet connection, a keyboard and a screen.
+- Another one where you setup the Raspberry Pi, and make it ready for duty.
+  - You start from a freshly flashed SD card, setup the system to emit its own network,
+    install the required softwares and configure them.
+  - Configuration steps will require an Internet connection.
+  - The Internet connection is not required any more, once the configuration is completed,
+    `ssh` and `scp` will do the job.
+
+#### So, let's go.
 
 - Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card
   - Make sure SSH is enabled.
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
-- Use `./to.prod.sh` to package the current software
-  - Make sure you package the python part as well, when prompted
+- Use `./to.prod.sh` to package the current software. This step happens from the machine you've cloned the repo on.
+  - Make sure you package the Python part as well, when prompted
   - This will prepare a `tar.gz` archive, called - for example - `nmea-dist.tar.gz`.
-  - Send the archive to the new Raspberry Pi (change it's IP address at will)
+  - Send the archive to the newly flashed Raspberry Pi (change it's IP address at will)
     - ` scp nmea-dist.tar.gz pi@192.168.1.15:~`
-- Prepare the new System. This will require an Internet connection.
-  - Boot to CLI
-  - Enable interfaces `SPI`, `I2C`, `Serial Port`
-  - Install Java
+- Log on to the new Raspberry Pi, to prepare the new system. This will require an Internet connection.  
+  - Using `raspi-config` (or its desktop equivalent, `Preferences` > `Raspberry Pi Configuration`):
+    - Boot to Command Line Interface (CLI), Desktop is not required.
+    - Make sure `SSH` is enabled.
+    - Enable interfaces `SPI`, `I2C`, `Serial Port`
+  - Install Java and other required parts
   ```
   sudo apt-get update
   sudo apt-get install openjdk-11-jdk
@@ -38,21 +53,19 @@ The server (aka Mux) will be automatically started when the Raspberry Pi boots.
   ```
   sudo pip3 install adafruit-circuitpython-epd
   ```
-
-- Setup Hotspot (if needed), as explained [here](./HOTSPOT.md).
-- Expand the archive, using a command like `tar -xzvf nmea-dist.tar.gz`
-- Modify the `/etc/rc.local` to start the server when the server boots
-- Issue the required command (links, maps, stty, etc)
-- Give it a try (see for example the script `start.all.sh`)
-- Try `ssh` to make sure it's working as expected
+  - Setup Hotspot (if needed), as explained [here](./HOTSPOT.md).
+  - Expand the archive, using a command like `tar -xzvf nmea-dist.tar.gz`
+  - Modify the `/etc/rc.local` to start the server when the server boots,
+    and issue the required command (links, maps, stty, etc). There is an example in `rc.local.use_case.3.sh`.
+- Plug in the GPS and the eInk screen, and give it a try (see for example the script `start.all.sh`)
 - Try the web interface
   - From a browser on another machine (laptop, cell-phone, tablet, ...), connected on the Raspberry Pi's network, reach
     `http://192.168.50.10:9999/zip/index.html`, and see for yourself!
 
-You're good to go!
+Now, you're good to go!
 
-Last but not least, we will update the `/etc/rc.local` script, to start the 
-required components when the machine boots.  
+About the modification of the `/etc/rc.local` script, to start the 
+required components when the machine boots,
 Here are the lines to add to the file, _**before**_ the `exit` statement at the end:
 ```
 #
@@ -74,11 +87,11 @@ starts the mux with the config file `nmea.mux.gps.nmea-fwd.yaml`, provided [here
 
 The system is now operational, and can be re-booted.
 
-Warning: The data are logged into some log-files. Make sure you download and delete them from time to time...,
-before the get too big. There is a Web page for that (in the embarked Web UI), called "Log Management".
+_**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
+before they get too big. There is a Web page for that (in the embarked Web UI), called "Log Management".
 
 ### 3D Printed enclosures
-STL files available [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
+STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
 [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl).
 
 |                                                 |                                          |
@@ -121,7 +134,7 @@ Data are logged into some files, so you can analyze or replay them.
 
 The price of the config described here comes to $47.94.
 
-> Note: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.  
+> _Note_: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.  
 > Without the eInk screen, the price comes down to $27.99.
 
 Price of the wires is not included here. I know.  
