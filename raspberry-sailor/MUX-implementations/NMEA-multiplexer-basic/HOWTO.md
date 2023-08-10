@@ -27,6 +27,8 @@ The process goes in two main steps.
   - Make sure SSH is enabled.
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
 - Use `./to.prod.sh` to package the current software. This step happens from the machine you've cloned the repo on.
+  - _Warning_: For the build, do make sure you use a jdk compatible with your target! If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
+    Using a JDK11 for the build will not work at runtime on a JDK8.
   - Make sure you package the Python part as well, when prompted
   - This will prepare a `tar.gz` archive, called - for example - `nmea-dist.tar.gz`.
   - Send the archive to the newly flashed Raspberry Pi (change it's IP address at will)
