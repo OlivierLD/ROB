@@ -90,7 +90,12 @@ starts the mux with the config file `nmea.mux.gps.nmea-fwd.yaml`, provided [here
 The system is now operational, and can be re-booted.
 
 _**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
-before they get too big. There is a Web page for that (in the embarked Web UI), called "Log Management".
+before they get too big. There is a Web page for that (in the embarked Web UI), called "Log Management".  
+_**Note**_: For the log-files not to grow to big, we've excluded some strings from the log, see in the `yaml` config file:  
+```yaml
+sentence.filters: ~GGA,~GSV,~GSA
+```
+This excludes the sentences concerning the GPS satellites.
 
 ### 3D Printed enclosures
 STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
@@ -117,7 +122,7 @@ Connected from OpenCPN, from a laptop:
 
 ### Summary
 So, you now have a system that starts at boot.    
-The Raspberry emits its own network, so you can connect to it from other machines or devices,
+The Raspberry Pi emits its own network, so you can connect to it from other machines or devices,
 using `ssh`, `scp`, or just `http` and `tcp`.
 
 > _Note_: There is a network, but _**no**_ Internet.  
