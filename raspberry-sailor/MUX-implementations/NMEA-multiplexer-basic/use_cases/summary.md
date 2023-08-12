@@ -1,22 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Summary</title>
-</head>
-<style>
-    html {
-        font-family: Verdana, Helvetica, Geneva;
-    }
-    td, th {
-        border: 1px solid silver;
-    }
-    code {
-        font-size: 16px;
-    }
-</style>
-<body>
-<h1>Summary of the build process</h1>
+# Summary of the build process
 <table>
     <tr>
         <th width="50%">Machine A</th>
@@ -31,13 +13,13 @@
         <td style="text-align: center"><img src="../doc_resources/raspberrypi.jpeg"></td>
     </tr>
     <tr>
-        <td>Make sure you got <code>git</code> and the right version of <code>java</code></td>
-        <td>On a new image, install the right version of Java, and <code>librxtx-java</code></td>
+        <td>Make sure you got `git` and the right version of `java`</td>
+        <td>On a new image, install the right version of Java, and `librxtx-java`</td>
     </tr>
     <tr><td>Clone the repo</td><td></td></tr>
     <tr><td>Build the Project</td><td></td></tr>
     <tr><td>Package it for Production, create an archive <img src="../doc_resources/zip.archive.jpeg" height="60" style="vertical-align: middle;"></td><td></td></tr>
-    <tr><td colspan="2">Send the archive to the Raspberry Pi (using <code>scp</code>)</td></tr>
+    <tr><td colspan="2">Send the archive to the Raspberry Pi (using `scp`)</td></tr>
     <tr>
         <td colspan="2" style="text-align: center;">
             <img src="../doc_resources/laptop.jpeg" style="vertical-align: middle;">
@@ -49,12 +31,10 @@
     </tr>
 
     <tr><td></td><td><img src="../doc_resources/zip.archive.jpeg" height="60" style="vertical-align: middle;">Unzip the received archive</td></tr>
-    <tr><td></td><td>Plug in the GPS, link the serial port, and give it a try ! With <code>./mux.sh nmea.mux.gps.yaml</code>, for example.</td></tr>
-    <tr><td></td><td>Finally, you can setup the Raspberry Pi to start everything at boot, in <code>/etc/rc.local</code>, and a HotSpot.</td></tr>
+    <tr><td></td><td>Plug in the GPS, link the serial port, and give it a try ! With `./mux.sh nmea.mux.gps.yaml` for example.</td></tr>
+    <tr><td></td><td>Finally, you can setup the Raspberry Pi to start everything at boot, in `/etc/rc.local`, and a HotSpot.</td></tr>
 
 </table>
 
-<hr>
-<i>OlivSoft never stops</i>
-</body>
-</html>
+---
+_OlivSoft never stops_

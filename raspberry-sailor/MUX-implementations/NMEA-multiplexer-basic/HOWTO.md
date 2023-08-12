@@ -4,9 +4,10 @@ We will be setting up a Raspberry Pi Zero W with an [eInk 2.13" bonnet](https://
 The NMEA-multiplexer will:
 - Read a GPS
 - Log the data into a file
-- Display the data on the EInk screen
+- Display the data on the eInk screen
   - The two buttons can be used to scroll through the available data
 - Broadcast the data on TCP:7001
+- Host Web Pages to display the data, manage the system, manage the log files.
 
 The server (aka Mux) will be automatically started when the Raspberry Pi boots.  
 
