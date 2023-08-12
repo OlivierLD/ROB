@@ -1,4 +1,5 @@
 # Summary of the build process
+
 <table>
     <tr>
         <th width="50%">Machine A</th>
@@ -29,11 +30,9 @@
             <img src="../doc_resources/raspberrypi.jpeg" style="vertical-align: middle;">
         </td>
     </tr>
-
     <tr><td></td><td><img src="../doc_resources/zip.archive.jpeg" height="60" style="vertical-align: middle;">Unzip the received archive</td></tr>
-    <tr><td></td><td>Plug in the GPS, link the serial port, and give it a try ! With `./mux.sh nmea.mux.gps.yaml` for example.</td></tr>
-    <tr><td></td><td>Finally, you can setup the Raspberry Pi to start everything at boot, in `/etc/rc.local`, and a HotSpot.</td></tr>
-
+    <tr><td></td><td>Plug in the GPS, link the serial port, and give it a try ! With <code>./mux.sh nmea.mux.gps.yaml</code> for example.</td></tr>
+    <tr><td></td><td>Finally, you can setup the Raspberry Pi to start everything at boot, in <code>/etc/rc.local</code>, and a HotSpot.</td></tr>
 </table>
 
 ---
