@@ -14,8 +14,8 @@
         <td style="text-align: center"><img src="../doc_resources/raspberrypi.jpeg"></td>
     </tr>
     <tr>
-        <td>Make sure you got `git` and the right version of `java`</td>
-        <td>On a new image, install the right version of Java, and `librxtx-java`</td>
+        <td>Make sure you got <code>git</code> and the right version of <code>java</code></td>
+        <td>On a new image, install the right version of Java, and <code>librxtx-java</code></td>
     </tr>
     <tr><td>Clone the repo</td><td></td></tr>
     <tr><td>Build the Project</td><td></td></tr>
