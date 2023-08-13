@@ -9,6 +9,7 @@
 
 body {
     font-family: "Lato", sans-serif;
+    font-size: 20px;
 }
 
 .sidenav {
@@ -51,9 +52,17 @@ body {
     padding-right: 10px;
 }
 
-@media screen and (max-height: 450px) {
-  .sidenav { padding-top: 15px; }
-  .sidenav a { font-size: 18px; }
+@media screen and (max-width: 600px) { /*(max-height: 600px) {*/
+  .sidenav {
+    padding-top: 15px;
+    font-size: 50px;
+  }
+  .sidenav a {
+  	font-size: 50px;
+  }
+  body {
+  	font-size: 50px;
+  }
 }
 
 h2 {
@@ -101,8 +110,8 @@ h2 span {
 	</div>
 
     <div>
-        <span style="font-size:20px; cursor:pointer; color: black;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
-        <span style="font-size:20px; cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
+        <span style="cursor:pointer; color: black;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
+        <span style="cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
     </div>
 
 	<div id="wrap">

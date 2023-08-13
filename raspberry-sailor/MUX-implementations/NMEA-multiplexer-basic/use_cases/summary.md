@@ -20,7 +20,7 @@
     <tr><td>Clone the repo</td><td></td></tr>
     <tr><td>Build the Project</td><td></td></tr>
     <tr><td>Package it for Production, create an archive <img src="../doc_resources/zip.archive.jpeg" height="60" style="vertical-align: middle;"></td><td></td></tr>
-    <tr><td colspan="2">Send the archive to the Raspberry Pi (using `scp`)</td></tr>
+    <tr><td colspan="2">Send the archive to the Raspberry Pi (using <code>scp</code>)</td></tr>
     <tr>
         <td colspan="2" style="text-align: center;">
             <img src="../doc_resources/laptop.jpeg" style="vertical-align: middle;">

@@ -111,7 +111,7 @@ events.subscribe('pos', val => {
 		// console.log(`Buffer length now ${trackBuffer.length}...`);
     }
 	// console.log(`Track: ${trackBuffer.length} element(s).`);
-	document.getElementById('track-length').innerHTML = trackBuffer.length;
+	document.getElementById('track-length').innerHTML = `${trackBuffer.length} points`;
 	if (centerOnBoat) {
 		map.centerLat = val.lat; // This does the repaint...
 		map.centerLng = val.lng;

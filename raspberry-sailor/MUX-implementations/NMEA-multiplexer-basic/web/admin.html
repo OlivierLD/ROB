@@ -707,6 +707,7 @@
         }
 
         window.onload = () => {
+          document.getElementById('system-name').innerText = `Platform: ${navigator.platform}`;
           // Available when canvas is visible
           flowGraph = new Graph("flowCanvas", flowData, graphCallback, "b/s");
 
@@ -829,7 +830,14 @@
 <body>
 <table width="100%">
     <tr>
-        <td><h2>NMEA Multiplexer Admin</h2></td>
+        <td>
+            <table width="100%">
+                <tr>
+                    <td><h2>NMEA Multiplexer Admin</h2></td>
+                    <td><span id="system-name"></span></td>
+                </tr>
+            </table>
+        </td>
         <td align="center">Forwarders are <span id="forwarders-status" onclick="toggleForwarders();" title="Click to toggle value" style="cursor: pointer;"></span></td>
         <td align="center">
             Page CSS:

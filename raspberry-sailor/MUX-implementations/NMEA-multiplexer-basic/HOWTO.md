@@ -11,7 +11,7 @@ The NMEA-multiplexer will:
 
 The server (aka Mux) will be automatically started when the Raspberry Pi boots.  
 
-The process goes in two main steps.
+The process goes in two main steps (also summarized [here](use_cases/summary.md)).
 - One where you clone this repo, do the build, and package for deployment.
   - This step requires a bit more resources than the next one.
   - You will need an Internet connection, a keyboard and a screen.
@@ -19,23 +19,26 @@ The process goes in two main steps.
   - You start from a freshly flashed SD card, setup the system to emit its own network,
     install the required softwares and configure them.
   - Configuration steps will require an Internet connection.
-  - The Internet connection is not required any more, once the configuration is completed,
+  - Once the configuration is completed, the Internet connection is not required any more, 
     `ssh` and `scp` will do the job.
 
 #### So, let's go.
 
 - Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card
-  - Make sure SSH is enabled.
+  - Make sure `SSH` is enabled (it's a setting parameter in the Raspberry Pi imager).
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
-- Use `./to.prod.sh` to package the current software. This step happens from the machine you've cloned the repo on.
-  - _Warning_: For the build, do make sure you use a jdk compatible with your target! If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
+- Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
+  - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
+    If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
     Using a JDK11 for the build will not work at runtime on a JDK8.
-  - Make sure you package the Python part as well, when prompted
-  - This will prepare a `tar.gz` archive, called - for example - `nmea-dist.tar.gz`.
+  - Make sure you package the Python part as well, when prompted.
+  - This will prepare a `tar.gz` archive, called - for example - `nmea-dist.tar.gz` (_**you**_ choose the name `nmea-dist` during the build process).
   - Send the archive to the newly flashed Raspberry Pi (change it's IP address at will)
-    - ` scp nmea-dist.tar.gz pi@192.168.1.15:~`
+    - ` scp nmea-dist.tar.gz pi@192.168.1.15:~`  
+      where `nmea-dist` is a name chosen by _**you**_ during the execution of the `to.prod.sh` script, `pi` is the username _**you**_ chose too, and
+      `192.168.1.15` is the IP Address of the Raspberry Pi, obtained with an `ifconfig` on the Raspberry Pi, or a `fing` on any machine on the same network as the Raspberry Pi.
 - Log on to the new Raspberry Pi, to prepare the new system. This will require an Internet connection.  
-  - Using `raspi-config` (or its desktop equivalent, `Preferences` > `Raspberry Pi Configuration`):
+  - Using `sudo raspi-config` (or its desktop equivalent, `Preferences` > `Raspberry Pi Configuration`):
     - Boot to Command Line Interface (CLI), Desktop is not required.
     - Make sure `SSH` is enabled.
     - Enable interfaces `SPI`, `I2C`, `Serial Port`
@@ -121,6 +124,12 @@ _Note_: The phone does not need to have a SIM card.
 Connected from OpenCPN, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
 
+From a laptop, tablet, or cell-phone, Web UI:
+![Eight](./doc_resources/chartless.track.png)
+
+The web UI is customizable at will. Above is an example of the ChartlessMap WebComponent.  
+In case this is good enough for you, the eInk screen can become optional.
+
 ### Summary
 So, you now have a system that starts at boot.    
 The Raspberry Pi emits its own network, so you can connect to it from other machines or devices,
@@ -135,6 +144,8 @@ It comes with a Web UI, to help you to manage the system, and/or visualize the d
 It also broadcasts the data on `tcp`, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
 
+As no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
+
 ### Supplies, BOM
 - [eInk bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
 - [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
@@ -142,7 +153,8 @@ Data are logged into some files, so you can analyze or replay them.
 
 The price of the config described here comes to $47.94.
 
-> _Note_: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.  
+> _Note_: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.
+> The Python part is not necessary if the eInk screen is not in the picture.  
 > Without the eInk screen, the price comes down to $27.99.
 
 Price of the wires is not included here. I know.  
