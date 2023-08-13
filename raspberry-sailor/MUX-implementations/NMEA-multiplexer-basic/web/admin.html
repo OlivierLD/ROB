@@ -706,8 +706,17 @@
             idx2plot = idx;
         }
 
+        let doOnResize = () => {
+            let w = document.documentElement.clientWidth;
+            let h = document.documentElement.clientHeight;
+            // console.log(`on resize w:${w}, h:${h}`);
+            document.getElementById("doc-dim").innerText = `w:${w} x h:${h}`;
+        };
+
         window.onload = () => {
+  
           document.getElementById('system-name').innerText = `Platform: ${navigator.platform}`;
+          doOnResize();
           // Available when canvas is visible
           flowGraph = new Graph("flowCanvas", flowData, graphCallback, "b/s");
 
@@ -827,7 +836,7 @@
         }
 </script>
 </head>
-<body>
+<body onresize="doOnResize();">
 <table width="100%">
     <tr>
         <td>
@@ -835,6 +844,7 @@
                 <tr>
                     <td><h2>NMEA Multiplexer Admin</h2></td>
                     <td><span id="system-name"></span></td>
+                    <td><span id="doc-dim"></span></td>
                 </tr>
             </table>
         </td>
