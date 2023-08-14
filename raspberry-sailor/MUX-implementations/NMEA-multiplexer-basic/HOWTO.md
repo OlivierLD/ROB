@@ -1,6 +1,6 @@
 # From scratch
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
-We will be setting up a Raspberry Pi Zero W with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
+We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 The NMEA-multiplexer will:
 - Read a GPS
 - Log the data into a file
@@ -53,7 +53,7 @@ The process goes in two main steps (also summarized [here](use_cases/summary.md)
   sudo apt-get update
   sudo apt-get install openjdk-11-jdk
   ```
-  or (for some Raspberry Pi Zero)
+  or (for some Raspberry Pi Zero where JDK11 would not work)
   ```
   sudo apt-get install openjdk-8-jdk-headless
   ```
@@ -105,7 +105,7 @@ _**Note**_: For the log-files not to grow to big, we've excluded some strings fr
 ```yaml
 sentence.filters: ~GGA,~GSV,~GSA
 ```
-This excludes the sentences concerning the GPS satellites.
+This excludes the sentences concerning the GPS satellites from the log files.
 
 ### 3D Printed enclosures
 STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
