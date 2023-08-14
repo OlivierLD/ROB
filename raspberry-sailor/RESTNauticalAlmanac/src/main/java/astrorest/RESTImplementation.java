@@ -929,12 +929,20 @@ public class RESTImplementation {
 									.name(fromStar.getName())
 									.gha(fromStarGHA)
 									.decl(fromStar.getD()));
-							oneLine.put("from-obs", Map.of("he", heFrom, "z", zFrom));
+							// oneLine.put("from-obs", Map.of("he", heFrom, "z", zFrom)); // Java 11
+							Map<String, Double> mapFrom = new HashMap<>(); // Java 8
+							mapFrom.put("he", heFrom);
+							mapFrom.put("z", zFrom);
+							oneLine.put("from-obs", mapFrom);
 							oneLine.put("to", new AstroComputerV2.GP()
 									.name(toStar.getName())
 									.gha(toStarGHA)
 									.decl(toStar.getD()));
-							oneLine.put("to-obs", Map.of("he", heTo, "z", zTo));
+							// oneLine.put("to-obs", Map.of("he", heTo, "z", zTo)); // Java 11
+							Map<String, Double> mapTo = new HashMap<>(); // Java 8
+							mapTo.put("he", heTo);
+							mapTo.put("z", zTo);
+							oneLine.put("to-obs", mapTo);
 							linesInTheSky.add(oneLine);
 						});
 						oneConstellation.setLines(linesInTheSky);
