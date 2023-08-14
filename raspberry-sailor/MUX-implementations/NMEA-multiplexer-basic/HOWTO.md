@@ -9,13 +9,19 @@ The NMEA-multiplexer will:
 - Broadcast the data on TCP:7001
 - Host Web Pages to display the data, manage the system, manage the log files.
 
-The server (aka Mux) will be automatically started when the Raspberry Pi boots.  
+The server (aka Mux) will be automatically started when the Raspberry Pi boots. In this example,
+the multiplexer is driven by the configuration file `nmea.mux.gps.nmea-fwd.yaml`.
 
+We do the build on one machine, where the git repo has been cloned, and we deploy on the Raspberry Pi
+only the parts required at runtime.
+The build is a demanding operation, the Raspberry Pi Zero could do it, but it would indeed take quite some time.
+A more powerful machine is more suitable for this kind of process.  
 The process goes in two main steps (also summarized [here](use_cases/summary.md)).
-- One where you clone this repo, do the build, and package for deployment.
+
+- **Step One**: you clone this repo, do the build, and package for deployment.
   - This step requires a bit more resources than the next one.
   - You will need an Internet connection, a keyboard and a screen.
-- Another one where you setup the Raspberry Pi, and make it ready for duty.
+- **Step Two**: you setup the Raspberry Pi, and make it ready for duty.
   - You start from a freshly flashed SD card, setup the system to emit its own network,
     install the required softwares and configure them.
   - Configuration steps will require an Internet connection.
@@ -129,6 +135,8 @@ From a laptop, tablet, or cell-phone, Web UI:
 
 The web UI is customizable at will. Above is an example of the ChartlessMap WebComponent.  
 In case this is good enough for you, the eInk screen can become optional.
+
+And as soon as you have a configuration that fits your needs, do make a backup of your SD card...
 
 ### Summary
 So, you now have a system that starts at boot.    
