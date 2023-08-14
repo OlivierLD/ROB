@@ -677,7 +677,7 @@ def format_data(id: str) -> List[str]:
             grid: str = position["gridSquare"]
             formatted = [id, utils.dec_to_sex(latitude, "NS"), utils.dec_to_sex(longitude, "EW"), grid]
         elif id == "NAV":
-            # Warning: 5 lines
+            # Warning: 6 lines
             position: Dict = nmea_cache["Position"]
             latitude: float = position["lat"]
             longitude: float = position["lng"]
@@ -689,6 +689,7 @@ def format_data(id: str) -> List[str]:
             except Exception as oops:
                 pass
             formatted = [
+                "NAV",
                 f"LAT: {utils.dec_to_sex(latitude, 'NS')}",
                 f"LNG: {utils.dec_to_sex(longitude, 'EW')}",
                 f"GRID: {grid}",
