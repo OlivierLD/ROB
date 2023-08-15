@@ -145,7 +145,8 @@ using `ssh`, `scp`, or just `http` and `tcp`.
 
 > _Note_: There is a network, but _**no**_ Internet.  
 > This is no Cloud Computing..., maybe more like "Flake" ❄️ Computing. Very low carbon footprint!
-> The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!
+> The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!  
+> A USB Adapter in a 12v cigarette lighter does the job as well.
 
 Current data are displayed on the eink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  

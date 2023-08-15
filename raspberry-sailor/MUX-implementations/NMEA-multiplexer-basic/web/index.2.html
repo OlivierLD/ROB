@@ -47,10 +47,15 @@ body {
 }
 
 .description {
-    color: white;
+    color: gold;
     text-align: right;
     padding-right: 10px;
     font-size: 16px;
+}
+
+.description:hover {
+	color: silver;
+	font-style: italic;
 }
 
 @media screen and (max-width: 600px) { /*(max-height: 600px) {*/
@@ -102,18 +107,18 @@ h2 span {
         <h2><span>Consoles</span></h2>
 		<a href="gps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (analog)</a>
 		<a href="gps.digital.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (digital)</a>
-		<a href="small.console.gps.ais.html" target="iframe_a" title="Small Console, GPS, AIS.">GPS & AIS Demo (Small Screens)</a>
+		<a href="small.console.gps.ais.html" target="new_tab" title="Small Console, GPS, AIS.">GPS & AIS Demo (Small Screens)</a>
         <div class="description">For small screens (tablets, cell-phones)</div>
-		<a href="small.console.gps.ais.2.html?dr=2.0" target="iframe_a" title="Small Console, GPS, AIS.">GPS & AIS Demo (Small Screens), X2</a>
-        <div class="description">For small screens (tablets, cell-phones)</div>
+		<!--a href="small.console.gps.ais.2.html?dr=2.0" target="new_tab" title="Small Console, GPS, AIS.">GPS & AIS Demo (Small Screens),&nbsp;&times;&nbsp;2</a>
+        <div class="description">For small screens (tablets, cell-phones)</div-->
 		<a href="chartless.gps.ais.html" target="iframe_a" title="WebComponent Console, GPS, AIS.">GPS & AIS Demo (WebComponents)</a>
         <div class="description">Featuring the Chartless Map</div>
-		<a href="runner.html" target="iframe_a" title="Mobile client">Small client</a>
-		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Several instruments console</a>
+		<!--a href="runner.html" target="iframe_a" title="Mobile client">Small client</a>
+		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Several instruments console</a-->
 	</div>
 
     <div>
-        <span style="cursor:pointer; color: black;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
+        <span style="cursor:pointer; color: black;" onclick="openNav()">&#9776; Nav Menu</span> <!-- the hamburger -->
         <span style="cursor:pointer; color: black; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
     </div>
 
