@@ -1,11 +1,17 @@
 # From scratch
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
 We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
-The NMEA-multiplexer will:
+
+The eInk technology is quitre interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
+is displayed on the screen, you can pull the plug, whatever's displayed remains displayed.  
+As you would see below, there is a web interface that can be used to see - among others - the data displayed on the screen.
+But having the screen allows you not to use any other device to get to the data.
+
+In the use-case presented here, the NMEA-multiplexer will:
 - Read a GPS
 - Log the data into a file
 - Display the data on the eInk screen
-  - The two buttons can be used to scroll through the available data
+  - The two buttons on the screen's bonnet can be used to scroll through the available data
 - Broadcast the data on TCP:7001
 - Host Web Pages to display the data, manage the system, manage the log files.
 
@@ -16,7 +22,7 @@ We do the build on one machine, where the git repo has been cloned, and we deplo
 only the parts required at runtime.
 The build is a demanding operation, the Raspberry Pi Zero could do it, but it would indeed take quite some time.
 A more powerful machine is more suitable for this kind of process.  
-The process goes in two main steps (also summarized [here](use_cases/summary.md)).
+The process goes in two main big steps (also summarized [here](use_cases/summary.md)).
 
 - **Step One**: you clone this repo, do the build, and package for deployment.
   - This step requires a bit more resources than the next one.
@@ -25,11 +31,10 @@ The process goes in two main steps (also summarized [here](use_cases/summary.md)
   - You start from a freshly flashed SD card, setup the system to emit its own network,
     install the required softwares and configure them.
   - Configuration steps will require an Internet connection.
-  - Once the configuration is completed, the Internet connection is not required any more, 
+  - Once the configuration is completed, the Internet connection is not required anymore, 
     `ssh` and `scp` will do the job.
 
 #### So, let's go.
-
 - Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card
   - Make sure `SSH` is enabled (it's a setting parameter in the Raspberry Pi imager).
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
@@ -51,13 +56,15 @@ The process goes in two main steps (also summarized [here](use_cases/summary.md)
   - Install Java and other required parts
   ```
   sudo apt-get update
-  sudo apt-get install openjdk-11-jdk
-  ```
-  or (for some Raspberry Pi Zero where JDK11 would not work)
-  ```
   sudo apt-get install openjdk-8-jdk-headless
   ```
-  - LibRxTx (optional)
+  JDK8 will work on any Raspberry Pi I know.  
+  Some Raspberry Pi Zero W would not support JDK11, but as long as you know what you're doing,
+  you can install it using:
+  ```
+  sudo apt-get install openjdk-11-jdk
+  ```
+  - LibRxTx (optional, skip it if you don't know it)
   ```
   sudo apt-get install librxtx-java
   ```
@@ -74,11 +81,11 @@ The process goes in two main steps (also summarized [here](use_cases/summary.md)
   - From a browser on another machine (laptop, cell-phone, tablet, ...), connected on the Raspberry Pi's network, reach
     `http://192.168.50.10:9999/zip/index.html`, and see for yourself!
 
-Now, you're good to go!
+Now, you're good to go, the Raspberry Pi should not need an Internet connection anymore.
 
 About the modification of the `/etc/rc.local` script, to start the 
 required components when the machine boots,
-Here are the lines to add to the file, _**before**_ the `exit` statement at the end:
+here are the lines to add to the file, _**before**_ the `exit` statement at the end:
 ```
 #
 # "Link" the Serial Port
@@ -97,10 +104,10 @@ nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
 As you can tell: it starts the Python server that takes care of the eInk display, and
 starts the mux with the config file `nmea.mux.gps.nmea-fwd.yaml`, provided [here](nmea.mux.gps.nmea-fwd.yaml).
 
-The system is now operational, and can be re-booted.
+Again, the system is now operational, and can be re-booted.
 
 _**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
-before they get too big. There is a Web page for that (in the embarked Web UI), called "Log Management".  
+before they get too big (triggering the message "No space left on device"...). There is a Web page for that (in the embarked Web UI), called "Log Management".  
 _**Note**_: For the log-files not to grow to big, we've excluded some strings from the log, see in the `yaml` config file:  
 ```yaml
 sentence.filters: ~GGA,~GSV,~GSA
@@ -126,8 +133,7 @@ STL files available from another repo, [here](https://github.com/OlivierLD/3DPri
 _For the phone UI_: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
 _Note_: The phone does not need to have a SIM card.
 
-
-Connected from OpenCPN, from a laptop:       
+Connected from OpenCPN through TCP, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
 
 From a laptop, tablet, or cell-phone, Web UI:
@@ -144,9 +150,9 @@ The Raspberry Pi emits its own network, so you can connect to it from other mach
 using `ssh`, `scp`, or just `http` and `tcp`.
 
 > _Note_: There is a network, but _**no**_ Internet.  
-> This is no Cloud Computing..., maybe more like "Flake" ❄️ Computing. Very low carbon footprint!
+> This is not Cloud Computing..., maybe more like "Flake" ❄️ Computing. Very low carbon footprint!
 > The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!  
-> A USB Adapter in a 12v cigarette lighter does the job as well.
+> A power bank, or a USB Adapter in a 12v cigarette lighter does the job as well.
 
 Current data are displayed on the eink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
@@ -162,11 +168,13 @@ As no one is going to sell your personal data behind your back, the Web UI does 
 
 The price of the config described here comes to $47.94.
 
-> _Note_: It could be even simpler - and cheaper. The eInk bonnet is an option. The system is logging (in a file) and forwarding (on tcp) data, and there is a Web interface available through http.
+> _**Note**_: It could be even simpler - and cheaper. The eInk bonnet is an option. 
+> In any case, the system is logging data (in a file), forwarding them (on tcp), 
+> and there is a Web interface available through http.  
 > The Python part is not necessary if the eInk screen is not in the picture.  
 > Without the eInk screen, the price comes down to $27.99.
 
-Price of the wires is not included here. I know.  
+Price of the wires and SD card is not included here. I know.  
 But still 😜.
 
 ---
