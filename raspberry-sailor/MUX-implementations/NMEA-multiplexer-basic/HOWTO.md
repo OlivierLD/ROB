@@ -68,7 +68,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   ```
   sudo apt-get install librxtx-java
   ```
-  - Install required Python modules (if any), like for example
+  - Install required Python modules (if any), like here, for example (for the eInk bonnet)
   ```
   sudo pip3 install adafruit-circuitpython-epd
   ```
@@ -152,7 +152,7 @@ using `ssh`, `scp`, or just `http` and `tcp`.
 > _Note_: There is a network, but _**no**_ Internet.  
 > This is not Cloud Computing..., maybe more like "Flake" ❄️ Computing. Very low carbon footprint!
 > The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!  
-> A power bank, or a USB Adapter in a 12v cigarette lighter does the job as well.
+> A power bank, or a USB Adapter in a 12v cigarette lighter do the job as well.
 
 Current data are displayed on the eink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
