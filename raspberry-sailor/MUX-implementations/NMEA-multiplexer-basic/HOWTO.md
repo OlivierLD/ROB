@@ -1,8 +1,8 @@
 # From scratch
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
-We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
+We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [e-ink 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 
-The eInk technology is quite interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
+The e-ink technology is quite interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
 is displayed on the screen, you can pull the plug, whatever's displayed remains displayed.  
 As you would see below, there is a web interface that can be used to see - among others - the data displayed on the screen.
 But having the screen allows you not to use any other device to get to the data.
@@ -10,7 +10,7 @@ But having the screen allows you not to use any other device to get to the data.
 In the use-case presented here, the NMEA-multiplexer will:
 - Read a GPS
 - Log the data into a file
-- Display the data on the eInk screen
+- Display the data on the e-ink screen
   - The two buttons on the screen's bonnet can be used to scroll through the available data
 - Broadcast the data on TCP:7001
 - Host Web Pages to display the data, manage the system, manage the log files.
@@ -71,7 +71,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   ```
   sudo apt-get install librxtx-java
   ```
-  - Install required Python modules (if any), like here, for example (for the eInk bonnet)
+  - Install required Python modules (if any), like here, for example (for the e-ink bonnet)
   ```
   sudo pip3 install adafruit-circuitpython-epd
   ```
@@ -79,7 +79,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Expand the archive, using a command like `tar -xzvf nmea-dist.tar.gz`
   - Modify the `/etc/rc.local` to start the server when the server boots,
     and issue the required command (links, maps, stty, etc). There is an example in `rc.local.use_case.3.sh`.
-- Plug in the GPS and the eInk screen, and give it a try (see for example the script `start.all.sh`)
+- Plug in the GPS and the e-ink screen, and give it a try (see for example the script `start.all.sh`)
 - Try the web interface
   - From a browser on another machine (laptop, cell-phone, tablet, ...), connected on the Raspberry Pi's network, reach
     `http://192.168.50.10:9999/zip/index.html`, and see for yourself!
@@ -104,7 +104,7 @@ cd /home/pi/nmea-dist
 nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
 #
 ```
-As you can tell: it starts the Python server that takes care of the eInk display, and
+As you can tell: it starts the Python server that takes care of the e-ink display, and
 starts the mux with the config file `nmea.mux.gps.nmea-fwd.yaml`, provided [here](nmea.mux.gps.nmea-fwd.yaml).
 
 Again, the system is now operational, and can be re-booted.
@@ -143,7 +143,7 @@ From a laptop, tablet, or cell-phone, Web UI:
 ![Eight](./doc_resources/chartless.track.png)
 
 The web UI is customizable at will. Above is an example of the ChartlessMap WebComponent.  
-In case this is good enough for you, the eInk screen can become optional.
+In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card...
 
@@ -157,7 +157,7 @@ using `ssh`, `scp`, or just `http` and `tcp`.
 > The consumption of the setting described above is below ridiculous. I power mine with a solar panel, it's happy as a clam!  
 > A power bank, or a USB Adapter in a 12v cigarette lighter do the job as well.
 
-Current data are displayed on the eink screen (basic UI).  
+Current data are displayed on the e-ink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
 It also broadcasts the data on `tcp`, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
 Data are logged into some files, so you can analyze or replay them.
@@ -165,17 +165,17 @@ Data are logged into some files, so you can analyze or replay them.
 As no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
 
 ### Supplies, BOM
-- [eInk bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
+- [e-ink bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
 - [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
 - [GPS Dongle](https://www.amazon.com/HiLetgo-G-Mouse-GLONASS-Receiver-Windows/dp/B01MTU9KTF/ref=sr_1_3?keywords=usb+gps+dongle&qid=1691564294&sprefix=USB+GPS%2Caps%2C153&sr=8-3), $11.99 (Aug-2023)
 
 The price of the config described here comes to $47.94.
 
-> _**Note**_: It could be even simpler - and cheaper. The eInk bonnet is an option. 
+> _**Note**_: It could be even simpler - and cheaper. The e-ink bonnet is an option. 
 > In any case, the system is logging data (in a file), forwarding them (on tcp), 
 > and there is a Web interface available through http.  
-> The Python part is not necessary if the eInk screen is not in the picture.  
-> Without the eInk screen, the price comes down to $27.99.
+> The Python part is not necessary if the e-ink screen is not in the picture.  
+> Without the e-ink screen, the price comes down to $27.99.
 
 Price of the wires and SD card is not included here. I know.  
 But still 😜.
