@@ -189,6 +189,12 @@ let NavigationHelper = {
 		return { 'vmgWind': vmgWind, 'vmgWayPoint': vmgWayPoint };
 	},
 
+	/**
+	 * Calculate GC distance (aka ortho) between from and to
+	 * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+	 * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+	 * @returns float in radians
+	 */
 	getGCDistance: function(from, to) {  // lat & lng in radians, returned in radians
 		if (from === undefined || to === undefined) {
 			throw ({err: "From and To are required"});
@@ -197,10 +203,22 @@ let NavigationHelper = {
 		return Math.acos(cos);
 	},
 	
+	/**
+	 * Calculate GC distance (aka ortho) between from and to
+	 * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+	 * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+	 * @returns float in degrees
+	 */
 	getGCDistanceInDegrees: function(from, to) {  // lat & lng in radians
 		return Math.toDegrees(this.getGCDistance(from, to));
 	},
 	
+	/**
+	 * Calculate GC distance (aka ortho) between from and to
+	 * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+	 * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+	 * @returns float in minutes (nantical miles)
+	 */
 	getGCDistanceInNM: function(from, to) {   // lat & lng in radians
 		return (this.getGCDistanceInDegrees(from, to) * 60);
 	},

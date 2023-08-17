@@ -152,8 +152,8 @@ def button_manager(button, callback) -> None:
                 if cur_state:  # Button down
                     # print(f"Button down ({listener_name})")
                     if not screen_saver_on:
-                        # print(f">> NOT ScreenSaver case ({listener_name})")
                         if verbose:
+                            print(f">> NOT ScreenSaver case ({listener_name})")
                             print("BTN is DOWN")
                         callback(button, True)  # Broadcast wherever needed
                     else:
@@ -161,7 +161,8 @@ def button_manager(button, callback) -> None:
                         pass
                     reset_screen_saver()  # Reset when button was clicked, anyway.
                 else: 
-                    # print(f"Button up (pass) ({listener_name})")
+                    if verbose:
+                        print(f"Button up (pass) ({listener_name})")
                     pass   # Nothing when button released
             prev_state = cur_state
             time.sleep(0.1)  # sleep for debounce
@@ -179,11 +180,14 @@ def screen_saver_manager() -> None:
     global screen_saver_on
     while keep_looping:
         screen_saver_timer += 1
-        if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER and not screen_saver_on:
+        if verbose:
+            print(f"screen_saver_manager >> Increasing screen_saver_timer to {screen_saver_timer}")
+        if screen_saver_timer >= ENABLE_SCREEN_SAVER_AFTER:   # and not screen_saver_on:
             if verbose:
                 print("Turning screen saver ON")
             screen_saver_on = True
-            display_image()  # display the pelican as screen saver
+            if screen_saver_timer % ENABLE_SCREEN_SAVER_AFTER == 0:
+                display_image(screen_saver_timer)  # display the pelican as screen saver
         time.sleep(1.0)
 
 
@@ -728,8 +732,9 @@ def format_data(id: str) -> List[str]:
         formatted = [f"{id}:{repr(oops)}"]
     return formatted
 
-def display_image() -> None:
+def display_image(offset: int) -> None:
     global eink
+
     clear()
     # An image on Bye screen...
     pelican = Image.open("pelican.bw.png")
@@ -738,17 +743,19 @@ def display_image() -> None:
     h_ratio: float = eink.height / pelican.height
     w_ratio: float = eink.width / pelican.width
     scale_ratio: float = min(h_ratio, w_ratio)
-    scaled_width: int = round(pelican.width * scale_ratio)
-    scaled_height: int = round(pelican.height * scale_ratio)
+    scaled_width: int = round((pelican.width * 0.9) * scale_ratio)
+    scaled_height: int = round((pelican.height * 0.9) * scale_ratio)
     pelican = pelican.resize((scaled_width, scaled_height), Image.BICUBIC)
     # Crop and h-center, w-center the image
-    x = scaled_width // 2 - eink.width // 2
+    x = (offset % eink.width) - scaled_width // 2 - eink.width // 2
     # x = scaled_width - eink.width // 2
     y = scaled_height // 2 - eink.height // 2
     pelican = pelican.crop((x, y, x + eink.width, y + eink.height))
     # adding dithering for monochrome displays
     pelican = pelican.convert("1").convert("L")
     eink.image(pelican)
+    if verbose:
+        print(f">> Displaying pelican, offset {offset}, x {x}, eWidth {eink.width}, pWidth {scaled_width}")
     eink.display()
 
 
