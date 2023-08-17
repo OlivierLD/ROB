@@ -83,6 +83,7 @@ const EVENT_POS      = 'pos';
 const EVENT_BSP      = 'bsp';
 const EVENT_LOG      = 'log';
 const EVENT_GPS_TIME = 'gps-time';
+const EVENT_GPS_SAT  = 'gps-sat';
 const EVENT_HDG      = 'hdg';
 const EVENT_TWD      = 'twd';
 const EVENT_TWA      = 'twa';
@@ -258,6 +259,14 @@ function onMessage(json) {
 			}
 		} else {
 			console.debug("No HUM");
+		}
+		try {
+		    let satData = json["Satellites in view"];
+		    if (satData) {
+		        events.publish(EVENT_GPS_SAT, satData);
+		    }
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Satellites in view");
 		}
 		if (json.AWS) {
 			try {
