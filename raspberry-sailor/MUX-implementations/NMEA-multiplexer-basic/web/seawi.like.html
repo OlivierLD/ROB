@@ -365,8 +365,9 @@
 		// val.format("Y-M-d H:i:s")
 		// let date = gpsTime.format("d-m-Y-l"); // Requires date.proto.js
 		// console.log(`GPS-TIME: ${val.format("Y-M-d H:i:s")}`);
-		let valDate = new Date(val); // .epoch); // Warning! We need UTC Date !
-		let gpsDate = new Date(valDate.getTime() + (valDate.getTimezoneOffset() * 60000))
+		// let valDate = new Date(val); // .epoch); // Warning! We need UTC Date !
+		// let gpsDate = new Date(valDate.getTime() + (valDate.getTimezoneOffset() * 60000));
+		let gpsDate = new Date(val);
 		document.getElementById('utc-date').innerText = gpsDate.format("M d, Y");
 		document.getElementById('utc-time').innerText = gpsDate.format("H:i:s");
 	});
