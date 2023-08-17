@@ -111,15 +111,15 @@ Again, the system is now operational, and can be re-booted.
 
 _**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
 before they get too big (triggering the message "No space left on device"...). There is a Web page for that (in the embarked Web UI), called "Log Management".  
-_**Note**_: For the log-files not to grow to big, we've excluded some strings from the log, see in the `yaml` config file:  
+_**Note**_: For the log-files not to grow too big, we've excluded some strings from the log, see in the `yaml` config file:  
 ```yaml
 sentence.filters: ~GGA,~GSV,~GSA
 ```
-This excludes the sentences concerning the GPS satellites from the log files.
+This excludes the sentences concerning the GPS satellites from the log files. They're still available in the cache tough, and can be displayed in some Web UI packaged in the archive we've generated.
 
 ### 3D Printed enclosures
 STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
-[here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl).
+[here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl), along with the `scad` code to generate them.
 
 |                                                 |                                          |
 |:------------------------------------------------|:-----------------------------------------|
@@ -142,10 +142,11 @@ Connected from OpenCPN through TCP, from a laptop:
 From a laptop, tablet, or cell-phone, Web UI:
 ![Eight](./doc_resources/chartless.track.png)
 
-The web UI is customizable at will. Above is an example of the ChartlessMap WebComponent.  
+The web UI is customizable at will. Above is _an example_ of the ChartlessMap WebComponent.  
 In case this is good enough for you, the e-ink screen can become optional.
 
-And as soon as you have a configuration that fits your needs, do make a backup of your SD card...
+And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
+this is the kind of things you might regret not to have done.
 
 ### Summary
 So, you now have a system that starts at boot.    
@@ -160,9 +161,9 @@ using `ssh`, `scp`, or just `http` and `tcp`.
 Current data are displayed on the e-ink screen (basic UI).  
 It comes with a Web UI, to help you to manage the system, and/or visualize the data (using plain `http`, as mentioned above).  
 It also broadcasts the data on `tcp`, port 7001, so other software can use them, like OpenCPN, SeaWi, etc.  
-Data are logged into some files, so you can analyze or replay them.
+Data are logged into some files, so you can analyze, transform (to GPX, KML, etc) or replay them.
 
-As no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
+And as no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
 
 ### Supplies, BOM
 - [e-ink bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
