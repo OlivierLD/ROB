@@ -2,7 +2,7 @@
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
 We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [eInk 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 
-The eInk technology is quitre interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
+The eInk technology is quite interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
 is displayed on the screen, you can pull the plug, whatever's displayed remains displayed.  
 As you would see below, there is a web interface that can be used to see - among others - the data displayed on the screen.
 But having the screen allows you not to use any other device to get to the data.
@@ -33,6 +33,9 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Configuration steps will require an Internet connection.
   - Once the configuration is completed, the Internet connection is not required anymore, 
     `ssh` and `scp` will do the job.
+    - Note: `VNC` could also be an option to access the Graphical Desktop running on the Raspberry Pi.
+      But this could be too demanding for a Raspberry Pi Zero... To enable it, use
+      `raspi-config` on the Raspberry Pi, to boot to Desktop, and start the VNC Server.
 
 #### So, let's go.
 - Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card
