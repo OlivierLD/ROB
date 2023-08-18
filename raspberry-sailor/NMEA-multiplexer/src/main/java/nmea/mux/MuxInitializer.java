@@ -7,6 +7,7 @@ import nmea.api.NMEAReader;
 import nmea.computers.Computer;
 import nmea.computers.DewPointTemperatureComputer;
 import nmea.computers.ExtraDataComputer;
+import nmea.computers.LongTermStorage;
 import nmea.consumers.client.*;
 import nmea.consumers.reader.*;
 import nmea.forwarders.*;
@@ -907,7 +908,7 @@ public class MuxInitializer {
         if (verbose) {
             System.out.printf("\t>> %s - Done with forwarders\n", NumberFormat.getInstance().format(System.currentTimeMillis()));
         }
-        // Init cache (for Computers).
+        // Init cache (for Computers et al).
         if ("true".equals(muxProps.getProperty("init.cache", "false"))) {
             try {
                 // If there is a cache, then let's see what computers to start.
@@ -980,6 +981,56 @@ public class MuxInitializer {
                                         Computer dewPointComputer = new DewPointTemperatureComputer(mux, dpPrefix);
                                         dewPointComputer.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
                                         nmeaDataComputers.add(dewPointComputer);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                    break;
+                                case "long-term-storage":
+                                    // properties: "ping-interval", "max-length", "data-path", "object-name"
+                                    Long pingInterval = null;
+                                    Long maxLength = null;
+                                    String[] dataPath = null;
+                                    String objectName = null;
+                                    try {
+                                        String propValue = muxProps.getProperty(String.format("computer.%s.ping-interval", MUX_IDX_FMT.format(cptrIdx)));
+                                        if (propValue != null) {
+                                            pingInterval = Long.parseLong(propValue);
+                                        }
+                                    } catch (Exception ex) {
+                                        System.err.println("ping-interval property:");
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        String propValue = muxProps.getProperty(String.format("computer.%s.max-length", MUX_IDX_FMT.format(cptrIdx)));
+                                        if (propValue != null) {
+                                            maxLength = Long.parseLong(propValue);
+                                        }
+                                    } catch (Exception ex) {
+                                        System.err.println("max-length property:");
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        String propValue = muxProps.getProperty(String.format("computer.%s.data-path", MUX_IDX_FMT.format(cptrIdx)));
+                                        if (propValue != null) {
+                                            dataPath = propValue.split(",");
+                                        }
+                                    } catch (Exception ex) {
+                                        System.err.println("data-path property:");
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        String propValue = muxProps.getProperty(String.format("computer.%s.object-name", MUX_IDX_FMT.format(cptrIdx)));
+                                        if (propValue != null) {
+                                            objectName = propValue;
+                                        }
+                                    } catch (Exception ex) {
+                                        System.err.println("object-name property:");
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        Computer longTermStorage = new LongTermStorage(mux, pingInterval, maxLength, dataPath, objectName);
+                                        longTermStorage.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
+                                        nmeaDataComputers.add(longTermStorage);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }

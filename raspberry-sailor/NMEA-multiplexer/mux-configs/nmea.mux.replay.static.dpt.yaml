@@ -4,6 +4,7 @@
 name: "Replay static log file."
 description:
   - Computes Dew Point Temperature
+  - Test for long-term-storage
 context:
   with.http.server: true
   http.port: 8080
@@ -18,4 +19,10 @@ forwarders:
 computers:
   - type: "dew-point-computer"
     prefix: "DP"
+    verbose: true
+  - type: "long-term-storage"
+    ping-interval: 1  # 3600
+    max-length: 168
+    data-path: "Barometric Pressure,value"
+    object-name: "PRMSL-buff"
     verbose: true

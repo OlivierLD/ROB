@@ -25,4 +25,11 @@ forwarders:
     verbose: false
   - type: tcp
     port: 7002
+computers:
+  - type: "long-term-storage"
+    ping-interval: 3600
+    max-length: 168
+    data-path: "Barometric Pressure,value"
+    object-name: "PRMSL-buff"
+    verbose: true
 
