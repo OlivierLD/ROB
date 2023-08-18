@@ -9,6 +9,7 @@ import nmea.api.Multiplexer;
 import nmea.parser.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -23,13 +24,18 @@ import java.util.stream.Collectors;
 public class LongTermStorage extends Computer {
 
 	private final ObjectMapper jacksonMapper = new ObjectMapper();
+	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	static {
+		DURATION_FMT.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
+	}
+
 	// Properties
 	private long pingInterval = 3_600;  // in seconds
 	private long maxLength = 618; // Nb members. Length of the buffer
 	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ?
 	private String storagePathInCache = "BarographData";
 
-	private Map<Long, Object> objectMap = new TreeMap<>();
+	private Map<String, Object> objectMap = new TreeMap<>();
 
 	private Thread dataCollector = new Thread(() -> {
 		while (true) { // Loop until dead
@@ -57,7 +63,7 @@ public class LongTermStorage extends Computer {
 						measureDate = new Date(System.currentTimeMillis());
 					}
 					// Fill the map
-					objectMap.put(measureDate.getTime(), finalData);
+					objectMap.put(DURATION_FMT.format(measureDate), finalData);
 					if (this.verbose) {
 						System.out.printf(">> Long Storage Map is now %d elements big\n", objectMap.size());
 					}
