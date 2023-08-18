@@ -6,6 +6,13 @@ A Sensor reader / TCP server.
 To install the required packages:
 https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library
 
+Indicated in the above:
+sudo apt-get update
+sudo apt-get install git build-essential python-dev python-smbus
+git clone https://github.com/adafruit/Adafruit_Python_BMP.git
+cd Adafruit_Python_BMP
+sudo python setup.py install
+
 Produces XDR, MTA and MMB Strings, from the data read from a BMP180 (or BMP085),
 on a regular basis, see the between_loops variable.
 """
