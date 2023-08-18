@@ -31,14 +31,23 @@ channels:
     verbose: false
 ```
 
+#### Specific Requirement: Long Term Data
+We want here to be able to display a curve, like the one produce by a barograph, like this one:
+
+![Barograph](../doc_resources/barograph.png)
+
+It displays data on one week (or more). We would need some server-side component to store those data,
+and restore them on demand.  
+Working on it.
+
 
 #### Details
 Wiring, Schemas, Components, 3D printed enclosures...
 
-|                  Wiring                   |
+|        Wiring (VIN, GND, SLC, SDA)        |
 |:-----------------------------------------:|
 | ![BMP180](../doc_resources/BMP180_bb.png) |
 
-3D Printed enclosure, available
+3D Printed enclosure, available (somewhere...)
 
 ---

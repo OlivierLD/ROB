@@ -16,20 +16,20 @@
 
 		<link rel="stylesheet" href="css/web-components.css">
 
-		<!-- Firefox does NOT like modules... Safari OK -->
 		<script type="module" src="webcomponents/Thermometer.js"></script>
 		<script type="module" src="webcomponents/AnalogDisplay.js"></script>
 		<script type="module" src="webcomponents/AnalogWatch.js"></script>
+		<script type="module" src="webcomponents/GraphDisplay.js"></script>
 
 		<script type="text/javascript">
 
-	var status = 'tick';
+	let status = 'tick';
 
-	var setCurrentTime = function() {
+	let setCurrentTime = function() {
 		let date = new Date();
 
 		let tzo = date.getTimezoneOffset() / 60; // in hours
-//	console.log("TimeZoneOffset:" + tzo);
+	    // console.log("TimeZoneOffset:" + tzo);
 
 		let now = (date.getTime() / 1000) % 86400;
 		// One day = 86,400 sec,
@@ -38,9 +38,7 @@
 		let hours = Math.floor(now / 3600) - tzo;
 		// Compose the string HH:MM:SS
 		let timeValue = hours.toFixed(0) + ":" + minutes.toFixed(0) + ":" + seconds.toFixed(0);
-
-//	console.log("Time: %d, => %s", watchValue, timeValue);
-
+        // console.log("Time: %d, => %s", watchValue, timeValue);
 		document.getElementById('watch-01').value = timeValue;
 	};
 
@@ -51,10 +49,10 @@
     	if (status === 'tick') {
     		status = 'tock';
     		document.getElementById('working').style.color = 'red';
-			} else {
+		} else {
 		    status = 'tick';
 		    document.getElementById('working').style.color = 'green';
-			}
+		}
       	console.log("Air Temperature : %f", val);
 	    setData(val, 'thermometer-01');
 	    // Set time (from client)
@@ -66,9 +64,10 @@
     });
   };
 
-  var displayErr = function(err) {
-    if (err !== undefined)
+  let displayErr = function(err) {
+    if (err !== undefined) {
       document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+	}
   };
 
   window.onresize = function() {
@@ -76,9 +75,9 @@
     resizeComponents();
   };
 
-  var resizeComponents = function() {
-    var ww = window.innerWidth;
-    var wh = window.innerHeight;
+  let resizeComponents = function() {
+    let ww = window.innerWidth;
+    let wh = window.innerHeight;
   };
 
   /**
@@ -90,7 +89,7 @@
    */
   function setData(val, to) {
 	  let elem = document.getElementById(to);
-		elem.value = val;                            // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
+	  elem.value = val;                            // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
   }
 
   function setElementBorder(display, border) {
@@ -226,12 +225,12 @@
 	}
 
 	function setPerspective(e) {
-		var v = this.value;
+		let v = this.value;
 		document.body.style.setProperty("--perspective", v + "em");
 	}
 
 	function setRotateX(e) {
-		var v = this.value;
+		let v = this.value;
 		document.body.style.setProperty("--rotateX", v + "deg");
 	}
 		</script>
@@ -315,44 +314,60 @@
 							<td style="text-align: center;">
 								<!-- Air Temperature in &deg;C<br/ -->
 								<thermo-meter id="thermometer-01"
-															class="thermometer-orange"
-															title="Air, Celsius"
-															min-value="-10"
-															max-value="60"
-															major-ticks="10"
-															minor-ticks="1"
-															value="0"
-															width="100"
-															height="220"></thermo-meter>
+											  class="thermometer-orange"
+											  title="Air, Celsius"
+											  min-value="-10"
+											  max-value="60"
+											  major-ticks="10"
+											  minor-ticks="1"
+											  value="0"
+											  width="100"
+											  height="220"></thermo-meter>
 							</td>
 							<td style="text-align: center;">
 								<!-- Station Time<br/ -->
 								<analog-watch class="analogdisplay-monochrome-orange"
-															title="Station Time"
-															id="watch-01"
-															value="00:00:00"
-															hours-ticks="1"
-															minutes-ticks="1"
-															with-second-hand="true"
-															with-border="true"
-															width="200"
-															height="200"></analog-watch>
+											  title="Station Time"
+											  id="watch-01"
+											  value="00:00:00"
+											  hours-ticks="1"
+											  minutes-ticks="1"
+											  with-second-hand="true"
+											  with-border="true"
+											  width="200"
+											  height="200"></analog-watch>
 							</td>
 							<td style="text-align: center;">
 								<!-- Atm Pressure in hPa<br/ -->
 								<analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
-																title="Pressure in hPa"
-																id="prmsl-01"
-																min-value="983"
-																max-value="1043"
-																value="1013.6"
-																major-ticks="10"
-																minor-ticks="1"
-																with-border="true"
-																overlap="40"
-																label="PRMSL"
-																width="200"
-																height="200"></analog-display>
+												title="Pressure in hPa"
+												id="prmsl-01"
+												min-value="983"
+												max-value="1043"
+												value="1013.6"
+												major-ticks="10"
+												minor-ticks="1"
+												with-border="true"
+												overlap="40"
+												label="PRMSL"
+												width="200"
+												height="200"></analog-display>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<graph-display id="barograph-01"
+											   tabindex="-1"
+										   	   class="barograph"
+											   width="600"
+											   height="200"
+											   padding="5"
+											   orientation="horizontal"
+											   value="1013.25"
+											   vgrid="0:0.5"
+											   hgrid="0:10"
+											   label="Barograph"
+											   title="PRMSL"/>								
 							</td>
 						</tr>
 					</table>

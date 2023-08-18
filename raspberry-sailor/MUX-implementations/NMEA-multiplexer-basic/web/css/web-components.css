@@ -583,3 +583,10 @@ compass-rose .gray-flat {
 	--night-color: rgba(192, 192, 192, 0.3);
 	--display-position-color: white;
 }
+
+.barograph {
+    --display-background-gradient-from: white;
+    --display-background-gradient-to: white;
+    --grid-color: orange;
+    --display-color: purple;
+}
