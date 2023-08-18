@@ -32,7 +32,7 @@ public class LongTermStorage extends Computer {
 	// Properties
 	private long pingInterval = 3_600;  // in seconds
 	private long maxLength = 618; // Nb members. Length of the buffer
-	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ?
+	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ? implementation 'net.thisptr:jackson-jq:1.0.0-preview.20220705'
 	private String storagePathInCache = "BarographData";
 
 	private Map<String, Object> objectMap = new TreeMap<>();

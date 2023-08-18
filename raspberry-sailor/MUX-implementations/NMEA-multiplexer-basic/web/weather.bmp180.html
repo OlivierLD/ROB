@@ -62,6 +62,14 @@
       	console.log("Atm Pressure : %f", val);
 	    setData(val, 'prmsl-01');
     });
+	// A "FULL" one to get to the long-term-storage (for barograph)
+	events.subscribe('full', function(val) {
+		// TODO Do it
+		const PRMSL_KEY = "PRMSL-buff"; // As in the computer (long-trem-storage)
+		let theMap = val[PRMSL_KEY];
+      	console.log(`The Map: ${theMap}`);
+	    // setData(val, 'prmsl-01');
+    });
   };
 
   let displayErr = function(err) {
