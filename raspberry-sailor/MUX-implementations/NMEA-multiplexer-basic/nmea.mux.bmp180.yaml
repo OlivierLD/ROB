@@ -1,0 +1,28 @@
+#
+# MUX definition.
+# See .../ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/use_cases/USE_CASES_4.md
+#
+name: "Logging Data from a BMP180"
+description:
+  - Read a BMP180 from a TCP Server in Python, on port 8001
+  - Requires TCP_BMP180_server.py to be running
+  - Broadcast data on TCP
+  - Log data in a file
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  damping: 30
+channels:
+  - type: tcp
+    server: 127.0.0.1
+    port: 8001
+    verbose: false
+forwarders:
+  - type: file
+    filename: ./weather.data.nmea
+    flush: true
+    verbose: false
+  - type: tcp
+    port: 7001
+

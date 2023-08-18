@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-A TCP server.
+A Sensor reader / TCP server.
 
 To install the required packages:
 https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library
@@ -22,7 +22,7 @@ import platform
 from datetime import datetime, timezone
 import logging
 from logging import info
-import NMEABuilder   # local script
+import NMEABuilder                       # local script
 from typing import List
 # import math, yaml ?
 import Adafruit_BMP.BMP085 as BMP085
@@ -164,7 +164,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
             # XDR Temperature is not necessarily Air Temperature...
             nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEA_EOS
             nmea_mmb: str = NMEABuilder.build_MMB(pressure / 100) + NMEA_EOS
-            nmea_xdr: str = NMEABuilder.build_XDR({"value": temperature, "type": "TEMPERATURE"},
+            nmea_xdr: str = NMEABuilder.build_XDR({ "value": temperature, "type": "TEMPERATURE" },
                                                   { "value": pressure, "type": "PRESSURE_P" },
                                                   { "value": pressure / 100_000, "type": "PRESSURE_B" }) + NMEA_EOS
 
