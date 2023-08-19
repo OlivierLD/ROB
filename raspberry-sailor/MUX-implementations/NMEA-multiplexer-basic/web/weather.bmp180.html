@@ -1404,13 +1404,17 @@
 				status = 'tick';
 				document.getElementById('working').style.color = 'green';
 			}
-			console.log("Air Temperature : %f", val);
+			if (VERBOSE) {
+				console.log("Air Temperature : %f", val);
+			}
 			setData(val, 'thermometer-01');
 			// Set time (from client)
 			setCurrentTime();
 		});
 		events.subscribe('prmsl', function(val) {
-			console.log("Atm Pressure : %f", val);
+			if (VERBOSE) {
+				console.log("Atm Pressure : %f", val);
+			}
 			setData(val, 'prmsl-01');
 		});
 		// A "FULL" one to get to the long-term-storage (for barograph)
@@ -1832,7 +1836,7 @@
 											   vgrid="0:0.5"
 											   hgrid="0:10"
 											   label="Barograph"
-											   title="PRMSL"/>								
+											   title="PRMSL, UTC Dates"/>								
 							</td>
 						</tr>
 					</table>
