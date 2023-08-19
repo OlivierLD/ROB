@@ -38,7 +38,7 @@ We want here to be able to display a curve, like the one produce by a barograph,
 
 It displays data on one week (or more). We would need some server-side component to store those data,
 and restore them on demand.  
-Working on it.
+V1 available. See in the `yaml` file.
 
 
 #### Details
@@ -49,5 +49,12 @@ Wiring, Schemas, Components, 3D printed enclosures...
 | ![BMP180](../doc_resources/BMP180_bb.png) |
 
 3D Printed enclosure, available (somewhere...)
+
+#### Running
+```
+../../RaspberryPythonServers/python/scripts/start.BMP180.TCP.server.sh
+. . .
+./mux.sh nmea.mux.bmp180.yaml
+```
 
 ---
