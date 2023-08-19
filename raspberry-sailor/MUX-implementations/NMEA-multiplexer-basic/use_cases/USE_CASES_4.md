@@ -53,6 +53,9 @@ Wiring, Schemas, Components, 3D printed enclosures...
 #### Running
 ```
 ../../RaspberryPythonServers/python/scripts/start.BMP180.TCP.server.sh
+Enter Machine Name > 127.0.0.1
+Enter TCP POrt > 8001
+Verbose > false  
 . . .
 ./mux.sh nmea.mux.bmp180.yaml
 ```

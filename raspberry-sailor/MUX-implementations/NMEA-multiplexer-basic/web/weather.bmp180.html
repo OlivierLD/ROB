@@ -1456,57 +1456,63 @@
 			if (VERBOSE) {
 				console.log(`First midnight at ${startIdx}`);
 			}
-            let fullStrDate = `${MONTHS[parseInt(keys[startIdx].substring(5, 7)) - 1]} ${parseInt(keys[startIdx].substring(8, 10))}, ${parseInt(keys[startIdx].substring(0, 4))} ${keys[startIdx].substring(11)}`;
-            let weekDayIndex = new Date(fullStrDate).getDay();
-            firstWeekDayIdx = (weekDayIndex + 6) % 7;
+			if (startIdx > -1) {
+				let fullStrDate = `${MONTHS[parseInt(keys[startIdx].substring(5, 7)) - 1]} ${parseInt(keys[startIdx].substring(8, 10))}, ${parseInt(keys[startIdx].substring(0, 4))} ${keys[startIdx].substring(11)}`;
+				let weekDayIndex = new Date(fullStrDate).getDay();
+				firstWeekDayIdx = (weekDayIndex + 6) % 7;
 
-            if (VERBOSE) {
-				console.log(`${fullStrDate} is a ${DAYS[firstWeekDayIdx]}`);
+				if (VERBOSE) {
+					console.log(`${fullStrDate} is a ${DAYS[firstWeekDayIdx]}`);
+				}
+				// 2 - Prepare the data, in their expected shape
+				// For day names, look for setVGridLabelsCallback
+				let mini = 980, maxi = 1050;
+
+				let valLabel = // "0:45"; // One label every 45 points
+							`${startIdx}:96`;  // "0:96"; // One label every 96 point (24 * 4 = 96 : every day). See setVGridLabelsCallback function.
+
+				let value = ""; // To display, bottom right.
+
+				let values = { x: [], y: [] };  // Used by the Graph
+				for (let i=0; i<keys.length; i++) {
+					values.x.push(i);
+					values.y.push(theMap[keys[i]]);
+				}
+
+				barograph.data = {
+					withGrid: true,
+					withXLabels: false,
+					withYLabels: true,
+					thickX: 2,
+					thickY: 0,
+					minX: 0,
+					maxX: keys.length,
+					minY: mini,
+					maxY: maxi,
+					data: [{
+							name: 'As is',
+							lineColor: 'purple',
+							fillColor: null,
+							thickness: 3,
+							x: values.x,
+							values: values.y
+						}]
+				};
+
+				// 3 - Update the graph
+				barograph.value = 'null';
+
+				barograph.data.withXLabels = true;
+				barograph.data.withYLabels = false;
+				barograph.vgrid = valLabel;
+				barograph.label = 'PRMSL';
+				barograph.value = value;
+				barograph.repaint();
+			} else {
+				if (VERBOSE) {
+					console.log("No midnight was found");
+				}
 			}
-			// 2 - Prepare the data, in their expected shape
-			// For day names, look for setVGridLabelsCallback
-			let mini = 980, maxi = 1050;
-
-			let valLabel = // "0:45"; // One label every 45 points
-						   `${startIdx}:96`;  // "0:96"; // One label every 96 point (24 * 4 = 96 : every day). See setVGridLabelsCallback function.
-
-			let value = ""; // To display, bottom right.
-
-			let values = { x: [], y: [] };  // Used by the Graph
-			for (let i=0; i<keys.length; i++) {
-				values.x.push(i);
-				values.y.push(theMap[keys[i]]);
-			}
-
-			barograph.data = {
-				withGrid: true,
-				withXLabels: false,
-				withYLabels: true,
-				thickX: 2,
-				thickY: 0,
-				minX: 0,
-				maxX: keys.length,
-				minY: mini,
-				maxY: maxi,
-				data: [{
-						name: 'As is',
-						lineColor: 'purple',
-						fillColor: null,
-						thickness: 3,
-						x: values.x,
-						values: values.y
-					}]
-			};
-
-			// 3 - Update the graph
-			barograph.value = 'null';
-
-			barograph.data.withXLabels = true;
-			barograph.data.withYLabels = false;
-			barograph.vgrid = valLabel;
-			barograph.label = 'PRMSL';
-			barograph.value = value;
-			barograph.repaint();
 		};
 
 		let barograph = document.getElementById('barograph-01');
