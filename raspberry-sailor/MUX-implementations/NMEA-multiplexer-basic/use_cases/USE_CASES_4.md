@@ -49,7 +49,7 @@ Wiring, Schemas, Components, 3D printed enclosures...
 |:-----------------------------------------:|
 | ![BMP180](../doc_resources/BMP180_bb.png) |
 
-3D Printed enclosure, available (somewhere...)
+3D Printed enclosure, see <https://www.thingiverse.com/thing:1067700>
 
 #### Running
 ```

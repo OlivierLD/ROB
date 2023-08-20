@@ -2170,6 +2170,7 @@
 				//
 				let barograph = document.getElementById('barograph-01');
 				prepareData(theMap, barograph);
+				document.getElementById("raw-data").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 			}
 		});
 
@@ -2314,6 +2315,7 @@
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
 			let theMap = FOR_DEV_1;
 			prepareData(theMap, barograph);
+			document.getElementById("raw-data").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 		}
 	};
 
@@ -2623,6 +2625,13 @@
 											   hgrid="0:10"
 											   label="Barograph"
 											   title="PRMSL, UTC Dates"/>		
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align: left;">
+								<div id="raw-data" style="max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
+									<pre>Empty</pre>
+								</div>
 							</td>
 						</tr>
 					</table>
