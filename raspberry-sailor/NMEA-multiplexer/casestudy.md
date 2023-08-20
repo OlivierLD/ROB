@@ -328,11 +328,11 @@ We have:
 - The `dAISy HAT` attached to a Raspberry Pi A+ (address `192.168.42.33`), reading the HAT and POSTing the AIS sentences to `http://192.168.42.6:9999/mux/nmea-sentence` (see the config file above).
 - The Raspberry Pi running a `RESTNavServer` also has a `TCP` forwarder, on port `7002`, used by OpenCPN (wherever it runs)
 
-![AIS Data](../Project-Trunk/dAISy/AIS.png)
+![AIS Data](../dAISy/AIS.png)
 
 Again, this is just a configuration example. Nothing is preventing the `dAISy HAT` from being attached to the
 Raspberry Pi at `192.168.42.6`.  
  
 ---
-_March, April 2017, January 2020_
+_March, April 2017, January 2020, and so on.._
 

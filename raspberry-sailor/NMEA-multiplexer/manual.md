@@ -573,19 +573,20 @@ the code is in `REST_SSD1306_server.py`, in this repository.
   ```yaml
   computers:
     - type: "long-term-storage"
-      ping-interval: 900   # 15 minutes
+      ping-interval: 900   # in seconds, 15 minutes
       max-length: 672      # One week
       data-path: "Barometric Pressure,value"
       # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
       object-name: "PRMSL-buff"
       verbose: true
   ```
-  This computer is dedicated to long storage. Fot rexample, the above
+  This computer is dedicated to long storage. For example, the above
   will read the cache every 900 seconds (15 minutes), get to the data with a path like `["Barometric Pressure"]["value"]`,
   and store it into a buffer that will not be more than 672 elements long (672 quarters of an hour is one week).  
   This buffer is then stored in the cache, as a JSON element name - here - `PRMSL-buff`. This way,
   a regular request to the cache (`GET /mux/cache`) will retrieve the values it contains.  
-  It's been originally designed to get the data for a barograph display, over one week.
+  It's been originally designed to get the data for a barograph display, over one week. It could be
+  use for any data you want to see the evolution of, over a given period of time.
   
   
 > _Important_: Computers may need data coming from the various channels. Those data will
