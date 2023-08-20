@@ -2127,7 +2127,7 @@
 	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 	const VERBOSE = false;
-	const IN_DEV = true;
+	const IN_DEV = false;
 
 	window.onload = function() {
 		initAjax(false);
@@ -2189,7 +2189,7 @@
 			let keys = Object.keys(theMap);
 
 			let nbPts = keys.length;
-			document.getElementById("nb-pts").innerText = `${nbPts} points`;
+			document.getElementById("nb-pts").innerText = `${nbPts} point${nbPts > 1 ? 's' : ''}`;
 
 			// 1 - Find the first "midnight" 
 			startIdx = -1;
