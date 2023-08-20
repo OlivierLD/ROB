@@ -23,6 +23,6 @@ computers:
   - type: "long-term-storage"
     ping-interval: 1  # 3600
     max-length: 168
-    data-path: "Barometric Pressure,value"
+    data-path: "Barometric Pressure,value"   # TODO Change to jq syntax
     object-name: "PRMSL-buff"
     verbose: true

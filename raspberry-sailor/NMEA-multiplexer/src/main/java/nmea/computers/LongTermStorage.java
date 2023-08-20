@@ -32,7 +32,7 @@ public class LongTermStorage extends Computer {
 	// Properties
 	private long pingInterval = 3_600;  // in seconds
 	private long maxLength = 618; // Nb members. Length of the buffer
-	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ? implementation 'net.thisptr:jackson-jq:1.0.0-preview.20220705'
+	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ? Like | jq '."Barometric Pressure".value' implementation 'net.thisptr:jackson-jq:1.0.0-preview.20220705'
 	private String storagePathInCache = "BarographData";
 
 	private Map<String, Object> objectMap = new TreeMap<>();
@@ -67,7 +67,7 @@ public class LongTermStorage extends Computer {
 					if (this.verbose) {
 						System.out.printf(">> Long Storage Map is now %d elements big\n", objectMap.size());
 					}
-					// Cut the Map is too long
+					// Cut the Map if too long
 					while (objectMap.keySet().size() > this.maxLength) {
 						Long first = (Long)objectMap.keySet().toArray()[0];
 						objectMap.remove(first);
@@ -121,14 +121,12 @@ public class LongTermStorage extends Computer {
 	public void setProperties(Properties props) {
 		this.props = props;
 
-		this.pingInterval = Long.parseLong(props.getProperty("ping.interval", String.valueOf(this.pingInterval)));
 		this.verbose = "true".equals(props.getProperty("verbose"));
 
 		if (this.verbose) {
-			System.out.println(String.format("LongTerm Computer %s:\n\tVerbose: %s\n\tPing Interval: %d",
+			System.out.println(String.format("LongTerm Computer %s:\n\tVerbose: %s\n",
 					this.getClass().getName(),
-					this.verbose,
-					this.pingInterval));
+					this.verbose));
 		}
 	}
 

@@ -568,7 +568,26 @@ the code is in `REST_SSD1306_server.py`, in this repository.
   - One computer, to calculate both True Wind and Current (GPS Based, with possibly several time buffers).
 - `dew-point-computer`
   - Calculate the dew point temperature if relative humidity and air temperature are available. 
-
+- `long-term-storage`
+  - Example
+  ```yaml
+  computers:
+    - type: "long-term-storage"
+      ping-interval: 900   # 15 minutes
+      max-length: 672      # One week
+      data-path: "Barometric Pressure,value"
+      # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
+      object-name: "PRMSL-buff"
+      verbose: true
+  ```
+  This computer is dedicated to long storage. Fot rexample, the above
+  will read the cache every 900 seconds (15 minutes), get to the data with a path like `["Barometric Pressure"]["value"]`,
+  and store it into a buffer that will not be more than 672 elements long (672 quarters of an hour is one week).  
+  This buffer is then stored in the cache, as a JSON element name - here - `PRMSL-buff`. This way,
+  a regular request to the cache (`GET /mux/cache`) will retrieve the values it contains.  
+  It's been originally designed to get the data for a barograph display, over one week.
+  
+  
 > _Important_: Computers may need data coming from the various channels. Those data will
 be stored in a cache _if the property `init.cache` is set to `true`_. See below.
 

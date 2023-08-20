@@ -32,12 +32,13 @@ channels:
 ```
 
 #### Specific Requirement: Long Term Data
-We want here to be able to display a curve, like the one produce by a barograph, like this one:
+We want here to be able to display a curve, like the one produced by a barograph, like this one:
 
 ![Barograph](../doc_resources/barograph.png)
 
 It displays data on one week (or more). We would need some server-side component to store those data,
 and restore them on demand.  
+As the server (mux) is running 24x7, that should not be a problem.  
 V1 available. See in the `yaml` file.
 
 
