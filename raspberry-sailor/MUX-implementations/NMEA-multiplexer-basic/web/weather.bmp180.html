@@ -2059,8 +2059,7 @@
 		"2023-03-18T05:55:46": 1001.14,
 		"2023-03-18T06:10:47": 1001.35,
 		"2023-03-18T06:25:48": 1001.52,
-		"2023-03-18T06:40:49": 1001.56,
-		"2023-03-18T06:55:50": 1001.74
+		"2023-03-18T06:40:49": 1001.56
 	};
 
 	const FOR_DEV_2 = {  // 58 entries
@@ -2187,8 +2186,12 @@
 			//  |    5
 			//  0
 
-			// 1 - Find the first "midnight" 
 			let keys = Object.keys(theMap);
+
+			let nbPts = keys.length;
+			document.getElementById("nb-pts").innerText = `${nbPts} points`;
+
+			// 1 - Find the first "midnight" 
 			startIdx = -1;
 			for (let i=0; i<keys.length; i++) {
 				if (keys[i].substring(11, 13) === '00' && parseInt(keys[i].substring(14, 16)) <= 15) {
@@ -2603,6 +2606,8 @@
 						</tr>
 						<tr>
 							<td colspan="3">
+								<span id="nb-pts" style="float: right;">No point</span>											   						
+								<br/>
 								<graph-display id="barograph-01"
 											   tabindex="-1"
 										   	   class="barograph"
@@ -2614,7 +2619,7 @@
 											   vgrid="0:0.5"
 											   hgrid="0:10"
 											   label="Barograph"
-											   title="PRMSL, UTC Dates"/>								
+											   title="PRMSL, UTC Dates"/>		
 							</td>
 						</tr>
 					</table>
