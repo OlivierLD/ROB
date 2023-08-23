@@ -12,7 +12,7 @@ public class STTYAccess {
      *   stty -f /dev/tty.usbserial-14210 raw 38400 cs8 clocal
      *   stty -F /dev/ttyUSB0 raw 38400 cs8 clocal
      *
-     * This could be a workaround to a bug seen in LibRxTx with BR 38400, on Raspberry P.
+     * This could be a workaround to a bug seen in LibRxTx with BR 38400, on Raspberry Pi.
      */
     public static void main(String... args) {
         String file = System.getProperty("port-name", "/dev/tty.usbserial-14210");
