@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <!--
-	TODO: Pressure graph, on one week.
+	Data from a BMP180. Air Temperature, Atm Pressure
+	Plus station time.
+	Pressure graph, on one week.
 -->
 <html>
   <head>
@@ -2135,7 +2137,7 @@
 	window.onload = function() {
 		initAjax(false);
 		// Subscribers here
-		events.subscribe('at', function(val) {
+		events.subscribe('at', function(val) {  // Air temp
 			if (status === 'tick') {
 				status = 'tock';
 				document.getElementById('working').style.color = 'red';
@@ -2150,7 +2152,7 @@
 			// Set time (from client)
 			setCurrentTime();
 		});
-		events.subscribe('prmsl', function(val) {
+		events.subscribe('prmsl', function(val) {  // Pressure at Mean Sea Level
 			if (VERBOSE) {
 				console.log("Atm Pressure : %f", val);
 			}
@@ -2159,7 +2161,7 @@
 		// A "FULL" one to get to the long-term-storage (for barograph)
 		events.subscribe('full', function(val) {
 			// TODO Do it
-			const PRMSL_KEY = "PRMSL-buff"; // As in the computer (long-trem-storage)
+			const PRMSL_KEY = "PRMSL-buff"; // As in the computer (long-trem-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
 				if (VERBOSE) { 

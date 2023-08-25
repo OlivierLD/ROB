@@ -8,7 +8,7 @@ First, make sure the soft can be built smoothly, from the machine where the git 
 machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroComputer:compileScala
 ```
 
-> _**Warning**_: This page summarizes a list of _**examples**_. It goes in two steps:
+> _**Warning**_: This page summarizes a list of _**examples**_. The deployment processes go in two steps:
 > - You choose your config (Raspberry Pi model, sensors, actuators, etc).
 >   - This config may involve Web pages, customizable at will. Some are provided here, you're obviously free to develop your own.
 >   - This will be summarized by a `yaml` file, used to drive the multiplexer at runtime. 

@@ -210,6 +210,7 @@
 				} else {
 					let fullFileName = logFile.split(' ')[1];
 					let fileSize = parseInt(logFile.split(' ')[0]);
+					totalNbLines += fileSize;  // TODO check if this is right... Pb when there is only one log file.
 					let fullPath = fullFileName.split('/');
 					// console.log(`Full path: ${fullPath}`);
 					let current = logFileTree;
@@ -396,7 +397,7 @@
 		With <code>ssh</code>:
 		<pre style="color: yellow; background: black; padding: 5px;">$ ssh pi@192.168.50.10
 $ cd mux-dir
-$ tree .</pre>
+$ tree [-hpu] .</pre>
 	</div>
 	<div id="mess-zone" style="display: none; margin: 5px; border: 2px solid red; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<div id="file-table">
