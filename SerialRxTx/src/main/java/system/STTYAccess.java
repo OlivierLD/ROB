@@ -12,7 +12,8 @@ public class STTYAccess {
      *   stty -f /dev/tty.usbserial-14210 raw 38400 cs8 clocal
      *   stty -F /dev/ttyUSB0 raw 38400 cs8 clocal
      *
-     * This could be a workaround to a bug seen in LibRxTx with BR 38400, on Raspberry Pi.
+     * This could be a workaround to a bug seen in LibRxTx with BR 38400, on Raspberry Pi
+     * The Serial port is read like a file, like a stream..
      */
     public static void main(String... args) {
         String file = System.getProperty("port-name", "/dev/tty.usbserial-14210");
@@ -30,7 +31,7 @@ public class STTYAccess {
             System.out.println("Stop requested.");
         }));
 
-        System.out.println("Start reading...");
+        System.out.println("Start reading... Ctrl-C to stop.");
         try {
             br = new BufferedReader(new FileReader(file));
             String line = "";
