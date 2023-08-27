@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<!--
+ ! Taken from CodePen at https://codepen.io/jaskiranchhokar/pen/wmGXav
+ !
+ ! Work In Progress. An example of a Carrousel Console.
+ !
+ ! Original Config:
+ ! - BSP: 8.0
+ ! - HDG: 235
+ ! - AWS: 15.8
+ ! - AWA: -112
+ ! - COG: 215
+ ! - SOG: 8.2
+ ! - TWS: 18.05
+ ! - TWA: -139
+ ! - TWD: 96
+ +-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrousel Console</title>
+  <link rel="icon" type="image/png" href="./icons/small.boat.png">
+  <style type="text/css">
+
+:root {
+	--bg-transp: 0.75;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	background-color: #202525;
+	color: cyan;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+/* Button tooltips, used below */
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 150px; 
+	background-color: silver;
+	color: navy;
+	text-transform: none;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	top: 150%;
+	left: 50%;
+	margin-left: 85px;
+	/* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+	opacity: 0;
+	transition: opacity 1s;
+}
+
+.tooltip .tooltiptext-right {
+	top: 5px;
+	left: 100%;
+	/*width: 200px;*/
+	margin-left: 10px;  /* Arrow hidden */
+}
+
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent transparent silver transparent;
+}
+
+.tooltip .tooltiptext-right::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	margin-left: -110px;
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent silver transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
+
+/* 3D Slideshow */
+
+#slideshow {
+	margin: 0 auto;
+	padding-top: 50px;
+	height: 600px;
+	width: 100%;
+	background-color: #202525;
+	box-sizing: border-box;
+}
+
+.slideshow-title {
+	font-family: 'Allerta Stencil';
+	font-size: 62px;
+	color: #fff;
+	margin: 0 auto;
+	text-align: center;
+	margin-top: 25%;
+	letter-spacing: 3px;
+	font-weight: 300;
+}
+
+.sub-heading {
+	padding-top: 50px;
+	font-size: 18px;
+} .sub-heading-two {
+	font-size: 15px;
+} .sub-heading-three {
+	font-size: 13px;
+} .sub-heading-four {
+	font-size: 11px;
+} .sub-heading-five {
+	font-size: 9px;
+} .sub-heading-six {
+	font-size: 7px;
+} .sub-heading-seven {
+	font-size: 5px;
+} .sub-heading-eight {
+	font-size: 3px;
+} .sub-heading-nine {
+	font-size: 1px;
+}
+
+.entire-content {
+	margin: auto;
+	width: 190px;
+	perspective: 1000px;
+	position: relative;
+	padding-top: 80px;
+}
+
+.content-carrousel {
+	width: 100%;
+	position: absolute;
+	float: right;
+	animation: rotar 15s infinite linear;
+	transform-style: preserve-3d;
+}
+
+.content-carrousel:hover {
+	animation-play-state: paused;
+	cursor: pointer;
+}
+
+.content-carrousel figure {
+	width: 110%;
+	height: 220px;
+	border: 1px solid #3b444b;
+	overflow: hidden;
+	position: absolute;
+}
+
+.content-carrousel figure:nth-child(1) {
+	transform: rotateY(0deg) translateZ(300px);
+} .content-carrousel figure:nth-child(2) {
+	transform: rotateY(40deg) translateZ(300px);
+} .content-carrousel figure:nth-child(3) {
+	transform: rotateY(80deg) translateZ(300px);
+} .content-carrousel figure:nth-child(4) {
+	transform: rotateY(120deg) translateZ(300px);
+} .content-carrousel figure:nth-child(5) {
+	transform: rotateY(160deg) translateZ(300px);
+} .content-carrousel figure:nth-child(6) {
+	transform: rotateY(200deg) translateZ(300px);
+} .content-carrousel figure:nth-child(7) {
+	transform: rotateY(240deg) translateZ(300px);
+} .content-carrousel figure:nth-child(8) {
+	transform: rotateY(280deg) translateZ(300px);
+} .content-carrousel figure:nth-child(9) {
+	transform: rotateY(320deg) translateZ(300px);
+} .content-carrousel figure:nth-child(10) {
+	transform: rotateY(360deg) translateZ(300px);
+}
+
+.shadow {
+    position: absolute;
+    box-shadow: 0px 0px 20px 0px #000;
+    border-radius: 1px;
+}
+
+.content-carrousel img {
+	image-rendering: auto;
+	transition: all 300ms;
+	width: 100%;
+	height: 100%;
+}
+
+.content-carrousel img:hover {
+	transform: scale(1.2);
+	transition: all 300ms;
+}
+
+@keyframes rotar {
+	from {
+		transform: rotateY(0deg);
+	} to {
+		transform: rotateY(360deg);
+	}
+}
+
+/* Display WebComponents */
+.black-frame {
+            padding: 3px;
+            margin: 1px;
+            border-radius: 5px;
+            border: 1px solid silver;
+        }
+
+.centered {
+	text-align: center;
+}
+
+.analogdisplay-day {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: black;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: black;
+	--minor-tick-color: black;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: black;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-night {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: cyan;
+	--with-gradient: true;
+	--display-background-gradient-from: DarkGrey; /* used if --withGradient: true */
+	--display-background-gradient-to: black;
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: red;
+	--with-display-shadow: true;
+	--shadow-color: black;
+	--outline-color: DarkGrey;
+	--major-tick-color: red;
+	--minor-tick-color: red;
+	--value-color: red;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(255, 0, 0, 0.4);
+	--hand-outline-color: red;
+	--with-hand-shadow: true;
+	--knob-color: #8ed6ff;
+	--knob-outline-color: blue;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+/* Monochrome, cyan */
+.analogdisplay-monochrome-cyan {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: cyan;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(0, 255, 255, 0.5);
+	--label-fill-color: rgba(0, 0, 0, 0);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: cyan;
+	--major-tick-color: cyan;
+	--minor-tick-color: cyan;
+	--value-color: cyan;
+	--value-outline-color: cyan;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0.0);
+	--hand-outline-color: cyan;
+	--with-hand-shadow: false;
+	--knob-color: cyan;
+	--knob-outline-color: cyan;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-monochrome-black {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: black;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(0, 0, 0, 0);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: black;
+	--major-tick-color: black;
+	--minor-tick-color: black;
+	--value-color: black;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0.0);
+	--hand-outline-color: black;
+	--with-hand-shadow: false;
+	--knob-color: black;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-monochrome-white {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: white;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: rgba(0, 0, 0, 0);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: white;
+	--major-tick-color: white;
+	--minor-tick-color: white;
+	--value-color: white;
+	--value-outline-color: white;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0.0);
+	--hand-outline-color: white;
+	--with-hand-shadow: false;
+	--knob-color: white;
+	--knob-outline-color: white;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(0, 255, 0, 0.5); /* green */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-monochrome-yellow {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: yellow;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 255, 0, 0.5); /* yellow */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: yellow;
+	--major-tick-color: yellow;
+	--minor-tick-color: yellow;
+	--value-color: yellow;
+	--value-outline-color: yellow;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: yellow;
+	--with-hand-shadow: false;
+	--knob-color: yellow;
+	--knob-outline-color: yellow;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.analogdisplay-flat-black {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: white;
+	--with-gradient: false;
+	--display-background-gradient-to: black; /* used if --withGradient: false */
+	--display-line-color: white;
+	--label-fill-color: transparent;
+	--with-display-shadow: false;
+	--outline-color: white;
+	--major-tick-color: white;
+	--minor-tick-color: white;
+	--value-color: transparent;
+	--value-outline-color: white;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: red;
+	--with-hand-shadow: false;
+	--knob-color: black;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+direction-display .analogdisplay-day
+				  .analogdisplay-night
+				  .analogdisplay-monochrome-cyan
+				  .analogdisplay-monochrome-black
+				  .analogdisplay-monochrome-yellow
+				  .analogdisplay-monochrome-orange
+				  .analogdisplay-flat-gray {
+	--value-nb-decimal: 0;
+}
+
+analog-display .analog-for-prmsl {
+	/* Default is 1 */
+	--value-font-size-factor: 0.75
+}
+
+/* Misc */
+#whatzat:hover {
+  cursor: pointer;
+  /* text-shadow: rgba(128, 128, 128, .55) 0 1px 6px; */
+  box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.help-dialog {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 2em;
+	color: silver;
+	border: 2px solid silver;
+	border-radius: 5px;
+	width: 800px;
+	margin-left: 200px; 
+	margin-top: 10px; 
+	z-index: 30;
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.dialog-header {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.dialog-header-close {
+  float: right;
+}
+.dialog-header-close:hover {
+  color: cyan;
+  cursor: pointer;
+}
+
+  </style>
+
+  <script type="text/javascript" src="js/date.proto.js"></script>
+  <script type="text/javascript" src="js/pub.sub.js"></script>
+  <script type="text/javascript" src="js/ajax.manager.js"></script>
+  <script type="text/javascript" src="js/NavigationHelper.js"></script>
+
+  <script type="module" src="webcomponents/AnalogDisplay.js"></script>
+  <script type="module" src="webcomponents/DirectionDisplay.js"></script>
+  <script type="module" src="webcomponents/WindAngleDisplay.js"></script>
+  <script type="module" src="webcomponents/BoatOverview.js"></script>
+
+  <script type="text/javascript">
+/**
+ *  SUBSCRIBERS HERE.
+ *
+ * See js/ajax.manager.js
+ * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
+ * 
+ * Required here: bsp, hdg, aws, awa, cog, sog, tws, twa, twd, d, D, leeway
+ */
+var _bsp = 0, _hdg = 0, _aws = 0, _awa = 0, _cog = 0, _sog = 0, _tws = 0, _twa = 0, _twd = 0, _d = 0, _Dec = 0, _leeway = 0;
+
+events.subscribe('bsp', val => {
+	_bsp = val;
+	updateBoatContext();
+});
+events.subscribe('hdg', val => {
+	_hdg = val;
+	updateBoatContext();
+});
+events.subscribe('aws', val => {
+	_aws = val;
+	updateBoatContext();
+});
+events.subscribe('awa', val => {
+	_awa = val;
+	updateBoatContext();
+});
+events.subscribe('sog', val => {
+	_sog = val;
+	updateBoatContext();
+});
+events.subscribe('cog', val => {
+	_cog = val;
+	updateBoatContext();
+});
+/*
+ Those are calculated
+events.subscribe('twa', val => {
+	_twa = val;
+});
+events.subscribe('tws', val => {
+	_tws = val;
+});
+events.subscribe('twd', val => {
+	_twd = val;
+});
+*/
+///// END OF SUBSCRIBERS ////
+
+
+let showAboutDialog = () => {
+	let aboutDialog = document.getElementById("about-dialog");
+	if (aboutDialog.show !== undefined) {
+		aboutDialog.show();
+	} else {
+		alert(NO_DIALOG_MESSAGE);
+		aboutDialog.style.display = 'inline';
+	}
+};
+
+let closeAboutDialog = () => {
+	let aboutDialog = document.getElementById("about-dialog");
+	if (aboutDialog.close !== undefined) {
+		aboutDialog.close();
+	} else {
+		// alert(NO_DIALOG_MESSAGE);
+		aboutDialog.style.display = 'none';
+	}
+};
+
+const BSP_COEFF = 1;
+const HDG_OFFSET = 0;
+const AWS_COEFF = 1;
+const AWA_OFFSET = 0;
+
+let updateBoatContext = () => {
+	let bsp = _bsp;
+	let sog = _sog;
+	let aws = _aws;
+	let awa = _awa;
+	let cog = _cog;
+	let hdc = _hdg;
+
+	let maxLeeway = 10; // TODO Get that one from cache
+
+	let Decl = -14;    // TODO Get from context
+	let dev = 0;       // TODO Calculate this one
+	// Calculation
+	let lwy = NavigationHelper.leewayEvaluator(awa, maxLeeway);
+	let hdg = NavigationHelper.hdgFromHdc(hdc, Decl, dev);
+	let tw = NavigationHelper.twCalculator(
+		aws, AWS_COEFF,
+		awa, AWA_OFFSET,
+		hdg, HDG_OFFSET,
+		sog, cog);
+	let current = NavigationHelper.currentCalculator(bsp, BSP_COEFF, hdg, HDG_OFFSET, lwy, sog, cog);
+
+	let b2wp = 0;
+	try {
+		let b2wpVal = document.getElementById('b2wp01').value; // Exception if missing
+		if (b2wpVal && b2wpVal.length > 0) {
+			b2wp = parseInt(b2wpVal);
+		}
+	} catch (err) {
+		// Absorb ?		
+	}
+	let vmgs = NavigationHelper.vmgCalculator(sog, cog, tw.twd, tw.twa, bsp, hdg, b2wp);
+
+	let resContent =
+		'LWY:' + lwy.toFixed(1) + '\u00b0 \n' +
+		'True HDG:' + hdg.toFixed(1) + '\u00b0 \n' +
+		'TWS:' + tw.tws.toFixed(2) + ' kts\n' +
+		'TWA:' + tw.twa.toFixed(1) + '\u00b0 \n' +
+		'TWD:' + tw.twd.toFixed(1) + '\u00b0 \n' +
+		'D:' + Decl.toFixed(1) + '\u00b0 \n' +
+		'd:' + dev.toFixed(1) + '\u00b0 \n' +
+		'Current Dir:' + current.cdr.toFixed(1) + '\u00b0 \n' +
+		'Current Speed:' + current.csp.toFixed(2) + ' kts';
+
+	console.log(resContent);
+
+	// Update WebComponents in the carrousel
+	document.getElementById('tws-01').value = tw.tws;
+	document.getElementById('twa-01').value = JSON.stringify({ wa: tw.twa, ws: tw.tws });
+	document.getElementById('twd-01').value = tw.twd;
+	document.getElementById('aws-01').value = aws;
+	document.getElementById('awa-01').value = JSON.stringify({ wa: awa, ws: aws });
+	document.getElementById('bsp-01').value = bsp;
+	document.getElementById('hdg-01').value = hdg;
+	document.getElementById('sog-01').value = sog;
+	document.getElementById('cog-01').value = cog;
+
+	// Update graph here (if it exists)
+	let graph = document.getElementById('boat-overview-01');
+	if (graph) {
+		
+		try {
+			let wpName = document.getElementById('wpname01').value;
+		} catch (err) {
+			// absorb
+		}
+
+		graph.bsp = bsp;
+		graph.hdg = hdg;
+		graph.aws = aws;
+		graph.awa = awa;
+		graph.tws = tw.tws;
+		graph.twa = tw.twa;
+		graph.twd = tw.twd;
+		graph.cog = cog;
+		graph.sog = sog;
+		graph.csp = current.csp;
+		graph.cdr = current.cdr;
+		graph.Decl = Decl;
+		graph.dev = dev;
+		graph.lwy = lwy;
+
+		let cmg = (hdg + lwy) % 360;
+		while (cmg < 0) {
+			cmg += 360;
+		}
+		graph.cmg = cmg;
+
+		if (graph.vmgOnWind) {
+			graph.vmg = vmgs.vmgWind;
+		} else {
+			graph.b2wp = b2wp;
+			graph.wpName = wpName;
+			graph.vmg = vmgs.vmgWayPoint;
+		}
+	}
+};
+
+window.onload = () => {
+	initAjax(); // false, ping=250);
+};
+  </script>
+
+</head>
+<body>
+
+<dialog id="about-dialog" class="help-dialog">
+	<div class="dialog-header">
+		<span>What this is...</span>
+		<span class="dialog-header-close" onclick="closeAboutDialog();">&times</span>
+	</div>
+	<div>
+		<!-- About content -->
+		<div style="margin-top: 15px;">
+			This page is part of a work in progress, its goal being to show <b>as much data</b> as possible, <b>as clearly</b> as possible,
+			on <b>one</b> page...
+			<br/>
+			Vast topic indeed.
+		</div>
+		<div style="margin-top: 15px;">
+			Data come from a multiplexer, that must be running on the server.
+		</div>
+		<div style="margin-top: 15px;">
+			Here we want to show a carrousel of WebComponents, displaying boat data like, True Wind Speed (TWS), True Wind Angle (TWA), etc...
+			<br/>
+			True Wind data are <i>calculated</i> from the data read from the boat sensors (BSP, AWA, AWS) and GPS data.
+			<br/>
+			The graph in the background shows a 2D representation of all the data.
+		</div>
+		<div style="margin-top: 15px;">
+			To stop the carrousel, just move the mouse on it.
+		</div>
+		<div style="margin-top: 15px;">
+			And again, this is pure 100% organic HTML5-CSS3-ES6. Absolutely no external library or framework, no GMO.
+		</div>
+		<hr style="margin-top: 15px; margin-bottom: 5px;"/>
+		<i>OlivSoft never stops</i>
+	</div>
+</dialog>
+
+<h3 style="padding-left: 10px;">At work</h3>
+
+<div class="tooltip" style="position: absolute; z-index: 10; margin: 20px;">
+	<img src="./images/drowning.gif" 
+			style="width: 40px; border: 2px solid cyan; border-radius: 50%;"
+			id="whatzat" 
+			title="What is that?" 
+			onclick="showAboutDialog();"/>
+	<span class="tooltiptext tooltiptext-right">Heeeeelp!</span>
+</div>
+
+<table>
+	<tr>
+		<td>
+<!-- 3D Slideshow Section -->
+<section id="slideshow" style="margin-left: 200px;">
+	<div class="entire-content">
+	  <div class="content-carrousel">
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- TWS -->
+			  <analog-display class="analogdisplay-monochrome-orange"
+							  title="True Wind Speed in knots"
+							  id="tws-01"
+							  min-value="0"
+							  max-value="60"
+							  value="0.0"
+							  major-ticks="10"
+							  minor-ticks="1"
+							  with-border="true"
+							  rotate-digits="false"
+							  overlap="40"
+							  label="TWS"
+							  width="200"
+							  height="200"></analog-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- TWA -->
+			  <wind-angle-display class="analogdisplay-monochrome-orange"
+								  title="True Wind Angle"
+								  id="twa-01"
+								  value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
+								  major-ticks="45"
+								  minor-ticks="5"
+								  with-border="true"
+								  with-digits="true"
+								  label="TWA"
+								  hand="wind"
+								  width="200"
+								  height="200"></wind-angle-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- TWD -->
+			  <direction-display class="analogdisplay-monochrome-orange"
+								 title="True Wind Direction"
+								 id="twd-01"
+								 value="0"
+								 major-ticks="45"
+								 minor-ticks="5"
+								 with-rose="true"
+								 with-border="true"
+								 label="TWD"
+								 hand="wind"
+								 width="200"
+								 height="200"></direction-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- AWS -->
+			  <analog-display class="analogdisplay-monochrome-cyan"
+							  title="Apparent Wind Speed in knots"
+							  id="aws-01"
+							  min-value="0"
+							  max-value="60"
+							  value="0.0"
+							  major-ticks="10"
+							  minor-ticks="1"
+							  with-border="true"
+							  rotate-digits="false"
+							  overlap="40"
+							  label="AWS"
+							  width="200"
+							  height="200"></analog-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- AWA -->
+			  <wind-angle-display class="analogdisplay-monochrome-cyan"
+								  title="Apparent Wind Angle"
+								  id="awa-01"
+								  value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
+								  major-ticks="45"
+								  minor-ticks="5"
+								  with-border="true"
+								  with-digits="true"
+								  label="AWA"
+								  hand="wind"
+								  width="200"
+								  height="200"></wind-angle-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- BSP -->
+			  <analog-display class="analogdisplay-monochrome-white"
+							  title="Boat Speed"
+							  id="bsp-01"
+							  min-value="0"
+							  max-value="15"
+							  value="0.0"
+							  major-ticks="1"
+							  minor-ticks="0.1"
+							  with-border="true"
+							  rotate-digits="false"
+							  overlap="40"
+							  label="BSP"
+							  width="200"
+							  height="200"></analog-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- HDG -->
+			  <direction-display class="analogdisplay-monochrome-green"
+								 title="Heading, animated"
+								 id="hdg-01"
+								 value="000"
+								 major-ticks="45"
+								 minor-ticks="5"
+								 with-rose="true"
+								 with-border="true"
+								 label="HDG"
+								 width="200"
+								 height="200"></direction-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- SOG -->
+			  <analog-display class="analogdisplay-monochrome-yellow"
+							  title="Speed Over Ground"
+							  id="sog-01"
+							  min-value="0"
+							  max-value="15"
+							  value="0.0"
+							  major-ticks="1"
+							  minor-ticks="0.1"
+							  with-border="true"
+							  rotate-digits="false"
+							  overlap="40"
+							  label="SOG"
+							  width="200"
+							  height="200"></analog-display>
+		  </div>
+		</figure>
+		<figure class="shadow">
+		  <div class="black-frame centered" style="background-color: rgba(0, 0, 0, var(--bg-transp));">
+			  <!-- COG -->
+			  <direction-display class="analogdisplay-monochrome-yellow"
+								 title="Course Over Ground"
+								 id="cog-01"
+								 value="0"
+								 major-ticks="45"
+								 minor-ticks="5"
+								 with-rose="true"
+								 with-border="true"
+								 label="COG"
+								 width="200"
+								 height="200"></direction-display>
+		  </div>
+		</figure>
+	  </div>
+	</div>
+</section>
+		</td>
+		<td>
+<div>
+	<div class="black-frame" style="margin: 0 0 0 350px;">
+		<boat-overview id="boat-overview-01"
+						class="boat-overview-01"
+						width="800"
+						height="600"
+						boat-shape="MONO"
+						zoom-on-boat="1"
+						cog="0"
+						sog="0.0"
+						bsp="0.0"
+						hdg="0"
+						aws="0.0"
+						awa="0"
+						tws="0.0"
+						twa="0"
+						twd="0"
+						cdr="0"
+						csp="0.0"
+						lwy="0"
+						cmg="0"
+						decl="14"
+						dev="0"
+						b2wp="0"
+						vmg="0"
+						with-current="true"
+						with-w="false"
+						with-vmg="false"/>
+	</div>
+
+</div>
+		</td>
+	</tr>
+</table>
+
+</body>
+</html>
