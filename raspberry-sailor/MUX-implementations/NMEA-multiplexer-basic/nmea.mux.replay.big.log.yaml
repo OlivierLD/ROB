@@ -21,8 +21,9 @@ forwarders:
 #  - type: console
   - type: tcp
     port: 7002
-#  - type: udp
-#    port: 8005
+  - type: udp
+    port: 8005
+    verbose: true
 computers:
   - type: "tw-current"
     prefix: "CC"

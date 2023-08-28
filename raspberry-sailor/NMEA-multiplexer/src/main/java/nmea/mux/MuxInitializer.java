@@ -11,6 +11,7 @@ import nmea.computers.LongTermStorage;
 import nmea.consumers.client.*;
 import nmea.consumers.reader.*;
 import nmea.forwarders.*;
+import nmea.forwarders.UDPClient;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.parser.StringParsers;
 
@@ -592,28 +593,35 @@ public class MuxInitializer {
                                 ex.printStackTrace();
                             }
                             break;
-//                        case "udp": // Forwarder
-//                            String udpPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
-//                            String udpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
-//                            String udpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
-//                            try {
-//                                Forwarder udpForwarder;
-//                                if (udpSubClass == null) {
-//                                    udpForwarder = new UDPServer(Integer.parseInt(udpPort));
-//                                } else {
-//                                    udpForwarder = (UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
-//                                }
-//                                if (udpPropFile != null) {
-//                                    Properties forwarderProps = new Properties();
-//                                    forwarderProps.load(new FileReader(udpPropFile));
-//                                    udpForwarder.setProperties(forwarderProps);
-//                                }
-//                                udpForwarder.init();
-//                                nmeaDataForwarders.add(udpForwarder);
-//                            } catch (Exception ex) {
-//                                ex.printStackTrace();
-//                            }
-//                            break;
+                        case "udp": // Forwarder
+                            String udpPort = muxProps.getProperty(String.format("forward.%s.port", MUX_IDX_FMT.format(fwdIdx)));
+                            String udpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
+                            String udpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
+                            String udpVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
+                            try {
+                                Forwarder udpForwarder;
+                                if (udpSubClass == null) {
+                                    // udpForwarder = new UDPServer(Integer.parseInt(udpPort));
+                                    udpForwarder = new UDPClient(Integer.parseInt(udpPort));  // This is the way OpenCPN likes it.
+                                } else {
+                                    udpForwarder = (UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
+                                }
+                                Properties forwarderProps = new Properties();
+                                if (udpPropFile != null) {
+                                    forwarderProps.load(new FileReader(udpPropFile));
+                                }
+                                if (udpVerbose != null) {
+                                    forwarderProps.setProperty("verbose", udpVerbose);
+                                }
+                                if (!forwarderProps.isEmpty()) {
+                                    udpForwarder.setProperties(forwarderProps);
+                                }
+                                udpForwarder.init();
+                                nmeaDataForwarders.add(udpForwarder);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
                         case "rest": // Forwarder
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));

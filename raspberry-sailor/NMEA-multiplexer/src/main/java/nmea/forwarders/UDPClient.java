@@ -1,15 +1,13 @@
 package nmea.forwarders;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Properties;
 
-/**
- * WiP... Not implemented
- */
-public class UDPServer implements Forwarder {
+public class UDPClient implements Forwarder {
 	private int udpPort = 8001;
 	private InetAddress address = null;
 	private Properties props = null;
@@ -17,15 +15,18 @@ public class UDPServer implements Forwarder {
 	private final static String DEFAULT_HOST = "127.0.0.1"; // "230.0.0.1"
 	private String hostName = DEFAULT_HOST;
 
-	public UDPServer(int port) throws Exception {
+	private DatagramSocket socket;
+
+	public UDPClient(int port) throws Exception {
 		this(port, DEFAULT_HOST);
 	}
 
-	public UDPServer(int port, String host) throws Exception {
+	public UDPClient(int port, String host) throws Exception {
 		this.hostName = host;
 		this.udpPort = port;
 		try {
 			this.address = InetAddress.getByName(this.hostName); // For Broadcasting, multicast address.
+			this.socket = new DatagramSocket();
 		} catch (Exception ex) {
 			throw ex;
 			// ex.printStackTrace();
@@ -35,33 +36,12 @@ public class UDPServer implements Forwarder {
 	@Override
 	public void write(byte[] message) {
 		try {
-			// Create datagram socket
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
-				System.out.printf("Creating Datagram Socket (%s, %d)\n", address, udpPort);
-			}
-			DatagramSocket dsocket = null;
-			if (address.isMulticastAddress()) {
-				dsocket = new MulticastSocket(udpPort);
-				((MulticastSocket) dsocket).joinGroup(address);
-			} else {
-				dsocket = new DatagramSocket(udpPort, address);
-			}
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
-				System.out.println("DatagramSocket created");
-			}
-
 			// Initialize a datagram
 			DatagramPacket packet = new DatagramPacket(message, message.length, address, udpPort);
-			dsocket.send(packet);
+			this.socket.send(packet);
+
 			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
 				System.out.println("UDP Message sent");
-			}
-			if (address.isMulticastAddress()) {
-				((MulticastSocket) dsocket).leaveGroup(address);
-			}
-			dsocket.close();
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
-				System.out.println("DatagramSocket Closed");
 			}
 		} catch (Exception ex) {
 			if ("No such device".equals(ex.getMessage())) {
@@ -75,6 +55,19 @@ public class UDPServer implements Forwarder {
 	@Override
 	public void close() {
 		System.out.println("- Stop writing to " + this.getClass().getName());
+		if (this.socket != null) {
+			try {
+				if (this.address.isMulticastAddress()) {
+					((MulticastSocket) this.socket).leaveGroup(this.address);
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			this.socket.close();
+			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+				System.out.println("DatagramSocket Closed");
+			}
+		}
 	}
 
 	public static class UDPBean {
@@ -83,7 +76,7 @@ public class UDPServer implements Forwarder {
 		private final String type = "udp";
 
 		public UDPBean() {}  // This is for Jackson
-		public UDPBean(UDPServer instance) {
+		public UDPBean(UDPClient instance) {
 			cls = instance.getClass().getName();
 			port = instance.udpPort;
 		}

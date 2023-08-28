@@ -27,3 +27,6 @@ forwarders:
     sentence.filters: ~DPT,~MTW
   - type: "tcp"
     port: 7001
+  - type: udp
+    port: 8002
+    verbose: true

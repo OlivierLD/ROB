@@ -365,6 +365,12 @@ Several "dynamic" forwarders are provided, as examples. See - among others
   > Along the same lines, there is a `put.ais.in.cache` property defaulted to `true`. Set it to `false` if you do not need the 
   > parsed AIS data to end up in the NMEA Cache. 
   >
+- `udp`
+  - UDP Client
+  ```properties
+  forward.01.type=udp
+  forward.01.port=8002
+  ```
 - `rest`
     - Forward the NMEA data (string by string) to a REST endpoint (WiP).
     - Can be used - for example - to push data to the implicit REST channel (see above)
