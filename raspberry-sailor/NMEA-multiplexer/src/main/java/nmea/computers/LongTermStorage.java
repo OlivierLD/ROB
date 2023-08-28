@@ -69,7 +69,10 @@ public class LongTermStorage extends Computer {
 					}
 					// Cut the Map if too long
 					while (objectMap.keySet().size() > this.maxLength) {
-						Long first = (Long)objectMap.keySet().toArray()[0];
+						String first = (String)objectMap.keySet().toArray()[0];
+						if (this.verbose) {
+							System.out.printf("Dropping map element with key %s\n", first);
+						}
 						objectMap.remove(first);
 					}
 					// Push map to cache
