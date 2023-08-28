@@ -719,6 +719,16 @@ let updateBoatContext = () => {
 	}
 };
 
+let popup = (origin) => {
+	console.log(`Current z-index: ${origin.style.zIndex}`);
+	origin.style.zIndex = 10;
+};
+
+let popdown = (origin) => {
+	console.log(`Current z-index: ${origin.style.zIndex}`);
+	origin.style.zIndex = '';
+};
+
 window.onload = () => {
 	initAjax(); // false, ping=250);
 };
@@ -776,7 +786,7 @@ window.onload = () => {
 	<tr>
 		<td>
 <!-- 3D Slideshow Section -->
-<section id="slideshow" style="margin-left: 200px;">
+<section id="slideshow" style="margin-left: 200px;  position: relative; z-index: 10; background: transparent;">
 	<div class="entire-content">
 	  <div class="content-carrousel">
 		<figure class="shadow">
@@ -944,7 +954,10 @@ window.onload = () => {
 		</td>
 		<td>
 <div>
-	<div class="black-frame" style="margin: 0 0 0 350px;">
+	<div class="black-frame" 
+	     style="position: relative;" 
+	     title="Click to bring forward"
+	     onmousedown="popup(this);" onmouseleave="popdown(this);">
 		<boat-overview id="boat-overview-01"
 						class="boat-overview-01"
 						width="800"

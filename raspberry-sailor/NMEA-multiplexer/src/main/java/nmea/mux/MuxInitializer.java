@@ -452,6 +452,7 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
+                        // case "udp":  // TODO
                         case "batt":   // Consumer. Battery Voltage, use XDR
                         default:
                             throw new RuntimeException(String.format("mux type [%s] not supported yet.", type));
