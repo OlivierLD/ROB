@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Used to store data like PRMSL over time.
  *
  * To try:
- * curl -X GET http://localhost:1234/mux/cache | jq '."borders-data"'
+ * curl -X GET http://localhost:1234/mux/cache | jq '."storage-data"'
  * (Cheat Sheet at https://lzone.de/cheat-sheet/jq)
  */
 public class LongTermStorage extends Computer {

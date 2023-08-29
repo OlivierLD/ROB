@@ -27,7 +27,7 @@ forwarders:
   - type: tcp
     port: 7002
 computers:
-  - type: "long-term-storage"
+  - type: long-term-storage
     ping-interval: 900   # 15 minutes
     max-length: 672      # One week
     data-path: "Barometric Pressure,value"
