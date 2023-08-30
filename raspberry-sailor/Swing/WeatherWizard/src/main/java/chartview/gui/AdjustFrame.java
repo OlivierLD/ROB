@@ -786,7 +786,7 @@ public class AdjustFrame extends JFrame {
                     Thread displayThread = new Thread(() -> JOptionPane.showMessageDialog(instance,
                             WWGnlUtilities.buildMessage("under-30"),
                             WWGnlUtilities.buildMessage("geostrophic-wind"),
-                            JOptionPane.ERROR_MESSAGE));
+                            JOptionPane.ERROR_MESSAGE), "Error-message display");
                     displayThread.start();
                 } else {
                     // Get the distance
@@ -1006,7 +1006,7 @@ public class AdjustFrame extends JFrame {
 
             @Override
             public void setStatus(final String str) {
-                new Thread(() -> setStatusLabel(str)).start();
+                new Thread(() -> setStatusLabel(str), "status-thread").start();
             }
 
             @Override
@@ -1039,7 +1039,7 @@ public class AdjustFrame extends JFrame {
                                 // TODO: Add catch code
                                 e.printStackTrace();
                             }
-                        });
+                        }, "play-thread");
                         System.out.println("Pouet-pouet");
                         playThread.start();
                     }
@@ -1049,7 +1049,7 @@ public class AdjustFrame extends JFrame {
                         System.out.println("Gray panel disapears");
                         synchronized (layers) {
 //              Runnable shiftGrayLayerDown = new Runnable()
-                            fader = new Thread() {
+                            fader = new Thread("fader") {
                                 public void run() {
                                     float origTransparency = grayPanelTransparency;
                                     int maxI = (int) layers.getSize().getHeight();

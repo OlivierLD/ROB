@@ -65,7 +65,7 @@ public class SwingPanel
 			} catch (InterruptedException | InvocationTargetException ie) {
 				ie.printStackTrace();
 			}
-		});
+		}, "plotter");
 		plotter.start();
 	}
 

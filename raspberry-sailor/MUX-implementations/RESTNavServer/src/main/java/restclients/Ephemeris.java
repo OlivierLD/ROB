@@ -57,7 +57,7 @@ public class Ephemeris {
 				}
 			}
 			System.out.println("Stopped");
-		});
+		}, "Ephemeris");
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			keepLooping = false;

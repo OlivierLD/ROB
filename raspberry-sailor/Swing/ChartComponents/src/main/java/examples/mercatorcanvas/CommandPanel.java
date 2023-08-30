@@ -203,7 +203,7 @@ public class CommandPanel
 
     private void generateImages() {
         genimage = true;
-        Thread generator = new Thread() {
+        Thread generator = new Thread("Generator") {
             public void run() {
                 for (int i = -2; i <= 60; i += (CHART_LATITUDE_SPAN / 2)) {
                     sLatValueFld.setText(Integer.toString(i));

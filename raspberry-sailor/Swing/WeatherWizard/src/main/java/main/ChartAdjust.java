@@ -325,7 +325,7 @@ public class ChartAdjust {
     private final static SimpleDateFormat SDF = new SimpleDateFormat("E dd MMM yyyy, HH:mm:ss z");
 
     private void startMemoryProbe() {
-        Thread memoryProbeThread = new Thread() {
+        Thread memoryProbeThread = new Thread("memoryProbeThread") {
             public void run() {
                 boolean ok = false;
                 while (ok) {

@@ -29,7 +29,7 @@ public class STTYAccess {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             keepGoing.set(false);
             System.out.println("Stop requested.");
-        }));
+        }, "STTY Shutdown Hook"));
 
         System.out.println("Start reading... Ctrl-C to stop.");
         try {

@@ -1903,7 +1903,7 @@ public class WWGnlUtilities {
                             me.notify();
                         }
                     }
-                });
+                }, "Play thread");
                 System.out.println("Bip-bip!");
                 playThread.start();
                 synchronized(me) {

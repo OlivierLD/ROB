@@ -896,7 +896,7 @@ public class HTTPServer {
 									} catch (Exception ex) {
 										ex.printStackTrace();
 									}
-								});
+								}, "Proxy Thread");
 								proxyThread.start();
 							}
 						}
@@ -999,8 +999,7 @@ public class HTTPServer {
 		}, "Shutdown Hook"));
 
 		// Infinite loop, waiting for requests
-		httpListenerThread = new Thread("HTTPListener") {
-			public void run() {
+		httpListenerThread = new Thread(() -> {
 				try {
 					ServerSocket ss = null;
 					boolean keepTrying = true;
@@ -1072,8 +1071,7 @@ public class HTTPServer {
 					System.out.println("Bye from HTTP");
 				}
 				System.out.println("HTTP Thread, end of run.");
-			}
-		};
+			}, "HTTP-Listener");
 
 		if (startImmediately) {
 			this.startServer();

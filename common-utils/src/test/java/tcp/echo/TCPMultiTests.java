@@ -35,7 +35,7 @@ public class TCPMultiTests {
 			} catch (Exception ex) {
 				fail(ex.toString());
 			}
-		});
+		}, "Test - Server setup");
 		tcpServer.start(); // A Thread
 		// Wait?
 		try {

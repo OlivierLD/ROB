@@ -63,7 +63,7 @@ public class TideServer {
 				System.err.println("When disconnecting:");
 				ex.printStackTrace();
 			}
-		}));
+		}, "Shutdown-Hook"));
 
 		new TideServer();
 	}

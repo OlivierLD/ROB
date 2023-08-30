@@ -375,7 +375,7 @@ public class JTreeFilePanel
                     // ex.printStackTrace();
                 }
                 System.out.println("Online Pattern Thread completed.");
-            });
+            }, "olp thread");
             olpThread.start();
         } else if (getType() == PRE_DEF_FAX_TYPE) {
             // preDefFaxes = new DefaultMutableTreeNode(WWGnlUtilities.buildMessage("pre-def-faxes"));
@@ -398,7 +398,7 @@ public class JTreeFilePanel
                     System.out.println("No PreDefined faxes...:" + ex.getLocalizedMessage());
                     ex.printStackTrace();
                 }
-            });
+            }, "Pre-def loader");
             predefLoader.start();
         }
 

@@ -177,7 +177,7 @@ public class WeatherStationWSReader extends NMEAReader {
 						} catch (URISyntaxException | InterruptedException e) {
 							e.printStackTrace();
 						}
-					});
+					}, "WeatherStation-reconnector");
 					connector.start();
 				}
 			}

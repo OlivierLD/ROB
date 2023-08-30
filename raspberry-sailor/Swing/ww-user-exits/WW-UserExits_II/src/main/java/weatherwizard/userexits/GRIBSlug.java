@@ -44,7 +44,7 @@ public class GRIBSlug
             throws UserExitException {
         boolean ok = true;
         final Thread me = Thread.currentThread();
-        Thread worker = new Thread() {
+        Thread worker = new Thread("Worker") {
             public void run() {
                 showSlug(me, ctx);
             }

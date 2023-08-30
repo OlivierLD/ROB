@@ -180,7 +180,7 @@ public class HTTPClient {
                                     WWGnlUtilities.buildMessage("downloading-fax"),
                                     JOptionPane.ERROR_MESSAGE,
                                     5);
-                        });
+                        }, "Dialog Thread");
                         dialogThread.start();
                     }
                     System.out.println("Found error, moving on");

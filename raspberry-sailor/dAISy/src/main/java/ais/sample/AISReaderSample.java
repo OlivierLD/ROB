@@ -76,7 +76,7 @@ public class AISReaderSample implements SerialIOCallbacks {
 			}
 		}
 		System.out.println("Exiting monitor");
-	});
+	}, "AISReaderSample - monitor");
 
 	private void completeAndSend() {
 		byte[] mess = new byte[bufferIdx];

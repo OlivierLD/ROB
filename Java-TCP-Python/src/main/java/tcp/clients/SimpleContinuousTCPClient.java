@@ -81,7 +81,7 @@ public class SimpleContinuousTCPClient {
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 				System.out.println("Ctrl-C Exiting !");
 				keepWorking.set(false);
-			}));
+			}, "ShutdownHook"));
 
 			while (keepWorking.get()) {
 				String response = client.readMessage();

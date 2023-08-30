@@ -74,7 +74,7 @@ public class SerialReaderSample implements SerialIOCallbacks {
 			}
 		}
 		System.out.println("Exiting monitor");
-	});
+	}, "SerialIO-Monitor");
 
 	private void completeAndSend() {
 		byte[] mess = new byte[bufferIdx];

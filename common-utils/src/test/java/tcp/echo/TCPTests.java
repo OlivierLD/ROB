@@ -26,7 +26,7 @@ public class TCPTests {
 			} catch (Exception ex) {
 				fail(ex.toString());
 			}
-		});
+		}, "Server setup");
 		tcpServer.start(); // A Thread
 		// Wait?
 		try {

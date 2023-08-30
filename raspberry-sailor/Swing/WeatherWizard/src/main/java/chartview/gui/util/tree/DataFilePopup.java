@@ -909,7 +909,7 @@ public class DataFilePopup
                     WWContext.getInstance().fireReloadCompositeTree();
                     WWContext.getInstance().fireReloadFaxTree();
                     WWContext.getInstance().fireReloadGRIBTree();
-                });
+                }, "Reloader");
                 try {
                     t.start();
                     // t.join();
