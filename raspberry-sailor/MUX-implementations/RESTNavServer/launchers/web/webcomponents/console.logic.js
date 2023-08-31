@@ -14,7 +14,12 @@ function openTab(evt, tabNum) {
 	for (let i=0; i<TABS.length; i++) {
 		document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
 	}
-	evt.currentTarget.className += " active";
+	if (evt !== null) {
+		evt.currentTarget.className += " active";
+	} else {
+		// Default to first tab
+		tabLinks[0].className += " active";
+	}
 }
 
 const SUB_TABS_ONE = ['boat-data-1', 'boat-data-2', 'boat-data-3', 'boat-data-4'];
@@ -1309,6 +1314,9 @@ function geoLocationStart() { // Deprecated
 
 let switchBoatData = (value) => {
 	document.getElementById('boat-data-button').style.display = value ? 'block' : 'none';
+	if (!value && document.getElementById('five').style.display === 'block') { // Hide boat data, but Boat Data is visible
+		openTab(null, 0); // Display first tab
+	}
 };
 
 let switchRawData = (value) => {
