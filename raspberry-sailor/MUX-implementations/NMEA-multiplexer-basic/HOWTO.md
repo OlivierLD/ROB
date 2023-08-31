@@ -149,8 +149,8 @@ And as soon as you have a configuration that fits your needs, do make a backup o
 this is the kind of things you might regret not to have done.
 
 ### Consumption
-Measure consumption for the config above (with an e-ink bonnet):   
-> Between 0.18A and 0.24A
+Measured consumption for the config above (with an e-ink bonnet):   
+> Between `0.18 A` and `0.24 A`
 
 ### Summary
 So, you now have a system that starts at boot.    
