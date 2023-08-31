@@ -33,7 +33,12 @@ Deploy the config above fro prod.
 In a separate document, [here](./use_cases/USE_CASES_3.md).
 
 ## Use-case 4
-The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet.  
+A Barograph (Atmospheric Pressure recorder).    
 In a separate document, [here](./use_cases/USE_CASES_4.md).
+
+
+## Use-case 5
+The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet.  
+In a separate document, [here](./HOWTO.md).
 
 ---

@@ -134,7 +134,7 @@ STL files available from another repo, [here](https://github.com/OlivierLD/3DPri
 
 
 _For the phone UI_: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
-_Note_: The phone does not need to have a SIM card.
+_Note_: The phone does _**not**_ need to have a SIM card.
 
 Connected from OpenCPN through TCP, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
@@ -147,6 +147,10 @@ In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
 this is the kind of things you might regret not to have done.
+
+### Consumption
+Measure consumption for the config above (with an e-ink bonnet):   
+> Between 0.18A and 0.24A
 
 ### Summary
 So, you now have a system that starts at boot.    
