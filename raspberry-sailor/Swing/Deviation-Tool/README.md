@@ -1,5 +1,7 @@
 # Deviation Curve
-Here is a graphical tool allowing you to elaborate your own deviation curve from logged data.
+Here is a graphical tool allowing you to elaborate your own deviation curve from logged data.  
+In this example, we're using a web UI. The calculations are thus implemented in JavaScript. Any
+other language can do the same (Java, C, Python, etc).
 
 ## How it works
 The generic format of a deviation curve is
@@ -62,7 +64,7 @@ We will have a dimension 5 square matrix, and a dimension 1 array of 5 coefficie
 in the system above, `r` is the heading, `d` is the deviation (&delta; between `HDG` and `HDM`).
 
 ### The log file
-We need at least `HDG` and `RMC`
+We need at least `HDG` and `RMC`. `RMC` contains the Course Over Ground (`COG`).
 ```
 $IIHDG,126,,,10,E*16
 ...
