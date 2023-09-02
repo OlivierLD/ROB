@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Principle</title>
+	<title>Deviation curve resolution - Principle</title>
 	<link rel="stylesheet" href="web/css/stylesheet.css" type="text/css"/>
 </head>
 <style>
@@ -56,76 +56,76 @@ Regrouped:
 	S = a<sup>2</sup>&Sigma; + 2ab&Sigma;sin(x) + 2ca&Sigma;cos(x) + 2ad&Sigma;sin(2x) + 2ae&Sigma;cos(2x) - 2a&Sigma;y +
 	    b<sup>2</sup>&Sigma;sin(x)<sup>2</sup> + 2bc&Sigma;sin(x).cos(x) + 2bd&Sigma;sin(x).cos(2x) + 2be&Sigma;sin(x).cos(2x) - 2b&Sigma;y.sin(x) +
 	    c<sup>2</sup>&Sigma;cos(x)<sup>2</sup> + 2cd&Sigma;cos(x).sin(2x) + 2ce&Sigma;cos(x).cos(2x) - 2c&Sigma;y.cos(x) +
-	    d<sup>2</sup>&Sigma;sin(2x)<sup>2</sup> + 2de&Sigma;sin(2x).cos(2x) - 2d&Sigma;y.sin(2x) - e&Sigma;y.cos(2x) + &Sigma;y<sup>2</sup>
+	    d<sup>2</sup>&Sigma;sin(2x)<sup>2</sup> + 2de&Sigma;sin(2x).cos(2x) - 2d&Sigma;y.sin(2x) - 2e&Sigma;y.cos(2x) + &Sigma;y<sup>2</sup>
 </pre>
 Derivations:
 <hr/>
 <!-- coeff a -->
 <table>
-	<td>
+	<tr>
 		<td>
 &#8706;S<br/>
 --- =<br/>
 &#8706;a
 		</td>
 		<td>
-2an + 2b&Sigma;sin(x) + 2c&Sigma;cos(x) + 2d&Sigma;sin(2x) + 2e&Sigma;cos(2x) = 0
+2an + 2b&Sigma;sin(x) + 2c&Sigma;cos(x) + 2d&Sigma;sin(2x) + 2e&Sigma;cos(2x) - 2&Sigma;y = 0
 		</td>
 	</tr>
 </table>
 <hr/>
 <!-- coeff b -->
 <table>
-	<td>
+	<tr>
 		<td>
 &#8706;S<br/>
 --- =<br/>
 &#8706;b
 		</td>
 		<td>
-2a&Sigma;sin(x) + 2b&Sigma;sin(x)<sup>2</sup> + 2c&Sigma;sin(x).cos(x) + 2d&Sigma;sin(2x).sin(x) + 2e&Sigma;cos(2x).sin(x) = 0
+2a&Sigma;sin(x) + 2b&Sigma;sin(x)<sup>2</sup> + 2c&Sigma;sin(x).cos(x) + 2d&Sigma;sin(2x).sin(x) + 2e&Sigma;cos(2x).sin(x) - 2&Sigma;y.sin(x) = 0
 		</td>
 	</tr>
 </table>
 <hr/>
 <!-- coeff c -->
 <table>
-	<td>
+	<tr>
 		<td>
 &#8706;S<br/>
 --- =<br/>
 &#8706;c
 		</td>
 		<td>
-2a&Sigma;cos(x) + 2b&Sigma;sin(x).cos(x) + 2c&Sigma;cos(x)<sup>2</sup> + 2d&Sigma;sin(2x).cos(x) + 2e&Sigma;cos(2x).cos(x) = 0
+2a&Sigma;cos(x) + 2b&Sigma;sin(x).cos(x) + 2c&Sigma;cos(x)<sup>2</sup> + 2d&Sigma;sin(2x).cos(x) + 2e&Sigma;cos(2x).cos(x) - 2&Sigma;y.cos(x) = 0
 		</td>
 	</tr>
 </table>
 <hr/>
 <!-- coeff d -->
 <table>
-	<td>
+	<tr>
 		<td>
 &#8706;S<br/>
 --- =<br/>
 &#8706;d
 		</td>
 		<td>
-2a&Sigma;sin(2x) + 2b&Sigma;sin(2x).sin(x) + 2c&Sigma;sin(2x).cos(x) + 2d&Sigma;sin(2x)<sup>2</sup> + 2e&Sigma;cos(2x).sin(2x) = 0
+2a&Sigma;sin(2x) + 2b&Sigma;sin(2x).sin(x) + 2c&Sigma;sin(2x).cos(x) + 2d&Sigma;sin(2x)<sup>2</sup> + 2e&Sigma;cos(2x).sin(2x) - 2&Sigma;y.sin(2x) = 0
 		</td>
 	</tr>
 </table>
 <hr/>
 <!-- coeff e -->
 <table>
-	<td>
+	<tr>
 		<td>
 &#8706;S<br/>
 --- =<br/>
 &#8706;e
 		</td>
 		<td>
-2a&Sigma;cos(2x) + 2b&Sigma;cos(2x).sin(x) + 2c&Sigma;cos(2x).cos(x) + 2d&Sigma;sin(2x).cos(2x) + 2e&Sigma;cos(2x)<sup>2</sup> = 0
+2a&Sigma;cos(2x) + 2b&Sigma;cos(2x).sin(x) + 2c&Sigma;cos(2x).cos(x) + 2d&Sigma;sin(2x).cos(2x) + 2e&Sigma;cos(2x)<sup>2</sup> - 2&Sigma;y.cos(2x) = 0
 		</td>
 	</tr>
 </table>

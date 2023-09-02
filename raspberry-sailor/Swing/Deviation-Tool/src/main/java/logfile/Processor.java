@@ -47,7 +47,7 @@ public class Processor {
 					if ("HDG".equals(parsedData.getSentenceId())) {
 						HDG heading = (HDG) parsedData.getParsedData();
 						double hdg = heading.getHeading();
-						double hdm = hdg;
+						double hdm = hdg; // It's magnetic.
 						if (heading.getVariation() != -Double.MAX_VALUE) {
 							decl = heading.getVariation();
 						}
