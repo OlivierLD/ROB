@@ -1,7 +1,4 @@
-package polarmaker.polars.util;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+package algebra;
 
 public class SystemUtil {
 	public static double[] solveSystem(double[] m,
@@ -31,16 +28,5 @@ public class SystemUtil {
 			}
 		}
 		return result;
-	}
-
-	public static void log(String mess) {
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter("D:\\temp\\matrix.log"));
-			bw.write(mess);
-			bw.flush();
-			bw.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

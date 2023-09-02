@@ -22,9 +22,9 @@ public class StaticUtil {
 
 	public static void main(String... args) throws Exception {
 		String str = "123,45";
-		if (args.length > 0)
+		if (args.length > 0) {
 			str = args[0];
-
+		}
 		System.out.println(parseDouble(str));
 	}
 }

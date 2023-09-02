@@ -229,6 +229,7 @@ var smoothDevCurve = function (data) {
 			cos2Rsin2R = 0, cos2R2 = 0;
 	var d = 0, dSinR = 0, dCosR = 0, dSin2R = 0, dCos2R = 0;
 
+    console.log(`Input data: ${data.length} points`);
 	data.forEach(point => {
 		n += 1;
 		sinR += Math.sin(Math.toRadians(point.x));
@@ -278,7 +279,7 @@ var smoothDevCurve = function (data) {
 	squareMatrix.setElementAt(3, 2, sin2RcosR);
 	squareMatrix.setElementAt(3, 3, sin2R2);
 	squareMatrix.setElementAt(3, 4, cos2Rsin2R);
-	// Line 4
+	// Line 5
 	squareMatrix.setElementAt(4, 0, cos2R);
 	squareMatrix.setElementAt(4, 1, cos2RsinR);
 	squareMatrix.setElementAt(4, 2, cos2RcosR);
