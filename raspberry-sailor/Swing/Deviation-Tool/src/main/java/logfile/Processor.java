@@ -75,7 +75,7 @@ public class Processor {
 					while (dev < -180) {
 						dev += 360;
 					}
-					out.printf("%s{ \"hdm\": %f, \"dev\": %f }\n", (nbRec > 0 ? "," : ""), standingHDM, dev);
+					out.printf("%s{ \"hdm\": %f, \"dev\": %f }\n", (nbRec > 0 ? "," : ""), standingHDM, dev); // Directly generating a JSON string
 					standingCOG = -Double.MAX_VALUE;
 					standingHDM = -Double.MAX_VALUE;
 					nbRec++;

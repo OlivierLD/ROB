@@ -3,6 +3,10 @@ Here is a graphical tool allowing you to elaborate your own deviation curve from
 In this example, we're using a web UI. The calculations are thus implemented in JavaScript. Any
 other language can do the same (Java, C, Python, etc).
 
+> _Note_:   
+> - The file `deviation.tool.html` is obviously a Web interface for this problem.
+> - There is also a Jupyter Notebook `LogfileToDeviation.ipynb` showing how to do it in Java.
+
 ## How it works
 The generic format of a deviation curve is
 ```
@@ -64,7 +68,8 @@ We will have a dimension 5 square matrix, and a dimension 1 array of 5 coefficie
 in the system above, `r` is the heading, `d` is the deviation (&delta; between `HDG` and `HDM`).
 
 ### The log file
-We need at least `HDG` and `RMC`. `RMC` contains the Course Over Ground (`COG`).
+We need at least `HDG` and `RMC`. `RMC` contains the Course Over Ground (`COG`).  
+The file `2010-11-03.Taiohae.nmea` is an example of such data.
 ```
 $IIHDG,126,,,10,E*16
 ...
@@ -103,7 +108,7 @@ The specification of RMC is the following one:
 ```
 
 Notice that the `HDM` and `RMC` sentences _may_ return the Variation (`W` equals to `D + d`).
-In the samples above, this is obviously only the Magnetic Declination (`D`).
+In the samples above, this is obviously _only_ the Magnetic Declination (`D`).
 
 ### Example
 The data file provided here as an example was done motoring in an anchorage, in [Taiohae, Nuku-Hiva](https://www.google.com/maps/d/u/0/viewer?mid=1ZbZm1G1fODnCzGFsiip7Hf2SFc_gNRzX&ll=-8.917066504857377%2C-140.0999415&z=18).
