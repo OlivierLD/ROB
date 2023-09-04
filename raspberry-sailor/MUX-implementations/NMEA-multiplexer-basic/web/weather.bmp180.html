@@ -2134,6 +2134,22 @@
 
 	var currentData;
 
+	let reworkDuration = (duration) => {
+		// "2023-03-19T08:42:33"
+		//  |    |  |  |  |
+		//  |    |  |  |  14
+		//  |    |  |  11
+		//  |    |  8  
+		//  |    5
+		//  0
+		let year = duration.substring(0, 4);
+		let month = SHORT_MONTHS[parseInt(duration.substring(5, 7)) - 1];
+		let day = duration.substring(8, 10);
+		let time = duration.substring(11);
+
+		return `${year}-${month}-${day} ${time} UTC`;
+	};
+
 	window.onload = function() {
 		initAjax(false);
 		// Subscribers here
@@ -2198,9 +2214,15 @@
 			let keys = Object.keys(theMap);
 
 			let nbPts = keys.length;
+			// Nb points
 			document.getElementById("nb-pts").innerText = `${nbPts} / 672 point${nbPts > 1 ? 's' : ''}`;
-			if (nbPts > 0) {
-				document.getElementById('barograph-01').title = `PRMSL, UTC Dates, from ${keys[0]} to ${keys[keys.length - 1]}`;
+			if (true || nbPts > 0) {
+				// From to
+				let d1 = keys[0]; // '1970-01-01T00:00:00'; // keys[0]
+				let d2 = keys[keys.length - 1]; // '2023-09-04T13:47:00'; // keys[keys.length - 1]
+				let mess = `from ${reworkDuration(d1)} to ${reworkDuration(d2)}`;
+				document.getElementById('from-to').innerText = mess;
+				document.getElementById('barograph-01').title = `PRMSL, UTC Dates, from ${mess}`;
 			}
 
 			// 1 - Find the first "midnight" 
@@ -2627,6 +2649,7 @@
 						</tr>
 						<tr>
 							<td colspan="3">
+								<span id="from-to" style="float: left;">Nothing</span>
 								<span id="nb-pts" style="float: right;">No point</span>											   						
 								<br/>
 								<graph-display id="barograph-01"
