@@ -1059,6 +1059,9 @@ public class HTTPServer {
 					HTTPContext.getInstance().getLogger().severe(String.format(">>> Port %d, %s >>>", httpServerInstance.getPort(), e.toString()));
 					HTTPContext.getInstance().getLogger().log(Level.SEVERE, e.getMessage(), e);
 					HTTPContext.getInstance().getLogger().severe(String.format("<<< Port %d <<<", httpServerInstance.getPort()));
+					if (verbose) {
+						e.printStackTrace();
+					}
 				} finally {
 					if (verbose) {
 						HTTPContext.getInstance().getLogger().info("HTTP Server is done.");
