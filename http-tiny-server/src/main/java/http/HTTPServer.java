@@ -567,6 +567,7 @@ public class HTTPServer {
 		private final Socket client;
 
 		public RequestHandler(Socket socket) {
+			super("HTTPServer.RequestHandler");
 			this.client = socket;
 			if (verbose) {
 				System.out.println("Starting new RequestHandler thread");
