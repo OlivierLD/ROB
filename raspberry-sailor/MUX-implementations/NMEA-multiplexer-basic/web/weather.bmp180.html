@@ -2833,7 +2833,7 @@
 					<tr>
 						<td colspan="3">
 
-							<div class="tab" style="display: grid; grid-template-columns: auto auto;">
+							<div class="tab" style="display: grid; grid-template-columns: 50% 50%;">
 								<button class="tablinks active" onclick="openTab(event, 0);">Barograph</button>
 								<button class="tablinks" onclick="openTab(event, 1);">Thermograph</button>
 							</div>
@@ -2843,17 +2843,17 @@
 								<span id="nb-pts-pr" style="float: right;">No point</span>											   						
 								<br/>
 								<graph-display id="barograph-01"
-											tabindex="-1"
-											class="barograph"
-											width="600"
-											height="200"
-											padding="5"
-											orientation="horizontal"
-											value="1013.25"
-											vgrid="0:0.5"
-											hgrid="0:10"
-											label="Barograph"
-											title="PRMSL, UTC Dates"></graph-display>
+											   tabindex="-1"
+											   class="barograph"
+											   width="600"
+											   height="200"
+											   padding="5"
+											   orientation="horizontal"
+											   value="1013.25"
+											   vgrid="0:0.5"
+											   hgrid="0:10"
+											   label="Barograph"
+											   title="PRMSL, UTC Dates"></graph-display>
 							</div>
 							<div id="tab-02" style="display: none;">
 
@@ -2877,11 +2877,11 @@
 					</tr>
 					<tr>
 						<td colspan="3" style="text-align: left;">
-							<div style="display: grid; grid-template-areas: 'left right';">
-								<div id="raw-data-prmsl" style="grid-area: left; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
+							<div style="display: grid; grid-template-areas: 'left right'; grid-template-columns: 50% 50%;">
+								<div id="raw-data-prmsl" style="grid-area: left; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="PRMSL Data">
 									<pre>Empty</pre>
 								</div>
-								<div id="raw-data-temp" style="grid-area: right; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
+								<div id="raw-data-temp" style="grid-area: right; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="Air Temp Data">
 									<pre>Empty</pre>
 								</div>
 							</div>
