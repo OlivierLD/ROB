@@ -119,7 +119,7 @@ This excludes the sentences concerning the GPS satellites from the log files. Th
 
 ### 3D Printed enclosures
 STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
-[here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl), along with the `scad` code to generate them.
+[here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBoxTop.stl), along with the `OpenSCAD` code to generate them.
 
 |                                                 |                                          |
 |:------------------------------------------------|:-----------------------------------------|
@@ -136,10 +136,10 @@ STL files available from another repo, [here](https://github.com/OlivierLD/3DPri
 _For the phone UI_: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
 _Note_: The phone does _**not**_ need to have a SIM card.
 
-Connected from OpenCPN through TCP, from a laptop:       
+Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
 
-From a laptop, tablet, or cell-phone, Web UI:
+From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)
 
 The web UI is customizable at will. Above is _an example_ of the ChartlessMap WebComponent.  
@@ -149,7 +149,7 @@ And as soon as you have a configuration that fits your needs, do make a backup o
 this is the kind of things you might regret not to have done.
 
 ### Consumption
-Measured consumption for the config above (with an e-ink bonnet):   
+Measured consumption for the config above (**with** an e-ink bonnet):   
 > Between `0.18 A` and `0.24 A`
 
 ### Summary
