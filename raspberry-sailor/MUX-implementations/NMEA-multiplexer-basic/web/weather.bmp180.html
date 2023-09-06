@@ -16,14 +16,14 @@
     <script type="text/javascript" src="js/pub.sub.js"></script>
     <script type="text/javascript" src="js/ajax.manager.js"></script>
 
-		<link rel="stylesheet" href="css/web-components.css">
+	<link rel="stylesheet" href="css/web-components.css">
 
-		<script type="module" src="webcomponents/Thermometer.js"></script>
-		<script type="module" src="webcomponents/AnalogDisplay.js"></script>
-		<script type="module" src="webcomponents/AnalogWatch.js"></script>
-		<script type="module" src="webcomponents/GraphDisplay.js"></script>
+	<script type="module" src="webcomponents/Thermometer.js"></script>
+	<script type="module" src="webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="webcomponents/AnalogWatch.js"></script>
+	<script type="module" src="webcomponents/GraphDisplay.js"></script>
 
-		<script type="text/javascript">
+	<script type="text/javascript">
 
 	let status = 'tick';
 
@@ -44,7 +44,7 @@
 		document.getElementById('watch-01').value = timeValue;
 	};
 
-	const FOR_DEV = {  // 1341 entries from 2023-03-11T06:44:38 to 2023-03-25T06:21:59
+	const FOR_DEV = {  // 1341 PRMSL entries from 2023-03-11T06:44:38 to 2023-03-25T06:21:59
 		"2023-03-11T06:44:38": 1003.58,
 		"2023-03-11T06:59:39": 1003.83,
 		"2023-03-11T07:14:40": 1003.84,
@@ -1389,7 +1389,7 @@
 		"2023-03-25T06:21:59": 1011.47
 	};
 
-	const FOR_DEV_1 = {  // 678 entries from 2023-03-11T06:44:38 to 2023-03-18T06:55:50
+	const FOR_DEV_1 = {  // 672 PRMSL entries from 2023-03-11T06:44:38 to 2023-03-18T06:55:50
 		"2023-03-11T06:44:38": 1003.58,
 		"2023-03-11T06:59:39": 1003.83,
 		"2023-03-11T07:14:40": 1003.84,
@@ -2064,65 +2064,152 @@
 		"2023-03-18T06:40:49": 1001.56
 	};
 
-	const FOR_DEV_2 = {  // 58 entries
-		"2023-08-19T15:36:31": 1017.0999999999999,
-		"2023-08-19T15:51:31": 1017.2000000000002,
-		"2023-08-19T16:06:31": 1017.2000000000002,
-		"2023-08-19T16:21:31": 1017.2000000000002,
-		"2023-08-19T16:36:31": 1017.2000000000002,
-		"2023-08-19T16:51:31": 1017.3000000000001,
-		"2023-08-19T17:06:31": 1017.2000000000002,
-		"2023-08-19T17:21:31": 1017.4000000000001,
-		"2023-08-19T17:36:31": 1017.7,
-		"2023-08-19T17:51:31": 1017.6,
-		"2023-08-19T18:06:31": 1017.4000000000001,
-		"2023-08-19T18:21:32": 1017.3000000000001,
-		"2023-08-19T18:36:32": 1017.4000000000001,
-		"2023-08-19T18:51:32": 1017.3000000000001,
-		"2023-08-19T19:06:32": 1017.5000000000001,
-		"2023-08-19T19:21:32": 1017.6,
-		"2023-08-19T19:36:32": 1017.8000000000001,
-		"2023-08-19T19:51:32": 1018.1,
-		"2023-08-19T20:06:32": 1018.2,
-		"2023-08-19T20:21:32": 1018.4,
-		"2023-08-19T20:36:32": 1018.5,
-		"2023-08-19T20:51:32": 1018.6999999999999,
-		"2023-08-19T21:06:32": 1018.6999999999999,
-		"2023-08-19T21:21:32": 1018.5,
-		"2023-08-19T21:36:32": 1018.5999999999999,
-		"2023-08-19T21:51:32": 1018.6999999999999,
-		"2023-08-19T22:06:32": 1018.5999999999999,
-		"2023-08-19T22:21:32": 1018.8,
-		"2023-08-19T22:36:32": 1018.8,
-		"2023-08-19T22:51:32": 1018.8999999999999,
-		"2023-08-19T23:06:32": 1018.8999999999999,
-		"2023-08-19T23:21:32": 1018.8,
-		"2023-08-19T23:36:32": 1018.8999999999999,
-		"2023-08-19T23:51:32": 1019.0999999999999,
-		"2023-08-20T00:06:32": 1018.9999999999999,
-		"2023-08-20T00:21:32": 1018.9999999999999,
-		"2023-08-20T00:36:32": 1018.9999999999999,
-		"2023-08-20T00:51:32": 1018.9999999999999,
-		"2023-08-20T01:06:32": 1018.9999999999999,
-		"2023-08-20T01:21:32": 1018.9999999999999,
-		"2023-08-20T01:36:32": 1018.9999999999999,
-		"2023-08-20T01:51:32": 1019.0999999999999,
-		"2023-08-20T02:06:32": 1019.0999999999999,
-		"2023-08-20T02:21:33": 1019.0999999999999,
-		"2023-08-20T02:36:33": 1019.0999999999999,
-		"2023-08-20T02:51:33": 1019.0999999999999,
-		"2023-08-20T03:06:33": 1019.0999999999999,
-		"2023-08-20T03:21:33": 1019.0999999999999,
-		"2023-08-20T03:36:33": 1019.2000000000002,
-		"2023-08-20T03:51:33": 1019.0999999999999,
-		"2023-08-20T04:06:33": 1019.2000000000002,
-		"2023-08-20T04:21:33": 1019.3000000000001,
-		"2023-08-20T04:36:33": 1019.5000000000001,
-		"2023-08-20T04:51:33": 1019.4000000000001,
-		"2023-08-20T05:06:33": 1019.4000000000001,
-		"2023-08-20T05:21:33": 1019.6,
-		"2023-08-20T05:36:33": 1019.7,
-		"2023-08-20T05:51:33": 1019.8000000000001
+	const FOR_DEV_PRMSL_2 = {  // 71 PRMSL entries
+		"2023-09-05T11:47:57": 1012,
+		"2023-09-05T12:02:57": 1012.2,
+		"2023-09-05T12:17:57": 1012.1,
+		"2023-09-05T12:32:57": 1012.2,
+		"2023-09-05T12:47:57": 1012.2,
+		"2023-09-05T13:02:57": 1012.3,
+		"2023-09-05T13:17:57": 1012.3,
+		"2023-09-05T13:32:57": 1012.2,
+		"2023-09-05T13:47:57": 1012.2,
+		"2023-09-05T14:02:58": 1012.3,
+		"2023-09-05T14:17:58": 1012.2,
+		"2023-09-05T14:32:58": 1012.4,
+		"2023-09-05T14:47:58": 1012.1,
+		"2023-09-05T15:02:58": 1012.1,
+		"2023-09-05T15:17:58": 1012.3,
+		"2023-09-05T15:32:58": 1012.5,
+		"2023-09-05T15:47:58": 1012.4,
+		"2023-09-05T16:02:58": 1012.5999999999999,
+		"2023-09-05T16:17:58": 1012.5999999999999,
+		"2023-09-05T16:32:58": 1012.6999999999999,
+		"2023-09-05T16:47:58": 1012.8,
+		"2023-09-05T17:02:58": 1012.8999999999999,
+		"2023-09-05T17:17:58": 1012.9999999999999,
+		"2023-09-05T17:32:59": 1013.0999999999999,
+		"2023-09-05T17:47:59": 1013.2,
+		"2023-09-05T18:02:59": 1013.2,
+		"2023-09-05T18:17:59": 1013.4000000000001,
+		"2023-09-05T18:32:59": 1013.6,
+		"2023-09-05T18:47:59": 1013.7,
+		"2023-09-05T19:02:59": 1013.8000000000001,
+		"2023-09-05T19:17:59": 1013.8000000000001,
+		"2023-09-05T19:32:59": 1014.1,
+		"2023-09-05T19:47:59": 1014.1,
+		"2023-09-05T20:02:59": 1014.3,
+		"2023-09-05T20:17:59": 1014.3,
+		"2023-09-05T20:33:00": 1014.4,
+		"2023-09-05T20:48:00": 1014.4,
+		"2023-09-05T21:03:00": 1014.5999999999999,
+		"2023-09-05T21:18:00": 1014.5,
+		"2023-09-05T21:33:00": 1014.6999999999999,
+		"2023-09-05T21:48:00": 1014.5,
+		"2023-09-05T22:03:00": 1014.5999999999999,
+		"2023-09-05T22:18:00": 1014.6999999999999,
+		"2023-09-05T22:33:00": 1014.8,
+		"2023-09-05T22:48:00": 1014.6999999999999,
+		"2023-09-05T23:03:01": 1014.8999999999999,
+		"2023-09-05T23:18:01": 1014.9999999999999,
+		"2023-09-05T23:33:01": 1014.8999999999999,
+		"2023-09-05T23:48:01": 1014.8,
+		"2023-09-06T00:03:01": 1014.9999999999999,
+		"2023-09-06T00:18:01": 1014.9999999999999,
+		"2023-09-06T00:33:01": 1015.0999999999999,
+		"2023-09-06T00:48:01": 1014.8,
+		"2023-09-06T01:03:01": 1014.8999999999999,
+		"2023-09-06T01:18:02": 1014.8999999999999,
+		"2023-09-06T01:33:02": 1014.8,
+		"2023-09-06T01:48:02": 1014.8,
+		"2023-09-06T02:03:02": 1014.6999999999999,
+		"2023-09-06T02:18:02": 1014.6999999999999,
+		"2023-09-06T02:33:02": 1014.5999999999999,
+		"2023-09-06T02:48:02": 1014.5999999999999,
+		"2023-09-06T03:03:02": 1014.5,
+		"2023-09-06T03:18:03": 1014.6999999999999,
+		"2023-09-06T03:33:03": 1014.5999999999999,
+		"2023-09-06T03:48:03": 1014.5999999999999,
+		"2023-09-06T04:03:03": 1014.5999999999999,
+		"2023-09-06T04:18:03": 1014.8,
+		"2023-09-06T04:33:03": 1014.6999999999999,
+		"2023-09-06T04:48:03": 1014.6999999999999,
+		"2023-09-06T05:03:03": 1014.6999999999999,
+		"2023-09-06T05:18:04": 1014.8
+	};
+
+	const FOR_DEV_AIR_TEMP_2 = {
+		"2023-09-05T11:47:57": 28.5,
+		"2023-09-05T12:02:57": 28.7,
+		"2023-09-05T12:17:57": 28.9,
+		"2023-09-05T12:32:57": 29.1,
+		"2023-09-05T12:47:57": 29.3,
+		"2023-09-05T13:02:57": 29.6,
+		"2023-09-05T13:17:57": 29.8,
+		"2023-09-05T13:32:57": 30,
+		"2023-09-05T13:47:57": 30.3,
+		"2023-09-05T14:02:58": 30.5,
+		"2023-09-05T14:17:58": 30.8,
+		"2023-09-05T14:32:58": 31.2,
+		"2023-09-05T14:47:58": 35.7,
+		"2023-09-05T15:02:58": 36.8,
+		"2023-09-05T15:17:58": 32.8,
+		"2023-09-05T15:32:58": 32.3,
+		"2023-09-05T15:47:58": 32.1,
+		"2023-09-05T16:02:58": 32,
+		"2023-09-05T16:17:58": 32.4,
+		"2023-09-05T16:32:58": 31.7,
+		"2023-09-05T16:47:58": 31.6,
+		"2023-09-05T17:02:58": 31.5,
+		"2023-09-05T17:17:58": 31.3,
+		"2023-09-05T17:32:59": 31.3,
+		"2023-09-05T17:47:59": 30.8,
+		"2023-09-05T18:02:59": 30.6,
+		"2023-09-05T18:17:59": 30.6,
+		"2023-09-05T18:32:59": 30.3,
+		"2023-09-05T18:47:59": 30.1,
+		"2023-09-05T19:02:59": 29.9,
+		"2023-09-05T19:17:59": 29.9,
+		"2023-09-05T19:32:59": 29.7,
+		"2023-09-05T19:47:59": 29.7,
+		"2023-09-05T20:02:59": 29.6,
+		"2023-09-05T20:17:59": 29.7,
+		"2023-09-05T20:33:00": 29.7,
+		"2023-09-05T20:48:00": 29.6,
+		"2023-09-05T21:03:00": 29.5,
+		"2023-09-05T21:18:00": 29.3,
+		"2023-09-05T21:33:00": 29.2,
+		"2023-09-05T21:48:00": 29.1,
+		"2023-09-05T22:03:00": 28.9,
+		"2023-09-05T22:18:00": 28.8,
+		"2023-09-05T22:33:00": 28.7,
+		"2023-09-05T22:48:00": 28.6,
+		"2023-09-05T23:03:01": 28.4,
+		"2023-09-05T23:18:01": 28.3,
+		"2023-09-05T23:33:01": 28.2,
+		"2023-09-05T23:48:01": 28.1,
+		"2023-09-06T00:03:01": 27.9,
+		"2023-09-06T00:18:01": 27.8,
+		"2023-09-06T00:33:01": 27.7,
+		"2023-09-06T00:48:01": 27.6,
+		"2023-09-06T01:03:01": 27.5,
+		"2023-09-06T01:18:02": 27.4,
+		"2023-09-06T01:33:02": 27.3,
+		"2023-09-06T01:48:02": 27.2,
+		"2023-09-06T02:03:02": 27.1,
+		"2023-09-06T02:18:02": 27,
+		"2023-09-06T02:33:02": 26.9,
+		"2023-09-06T02:48:02": 26.8,
+		"2023-09-06T03:03:02": 26.7,
+		"2023-09-06T03:18:03": 26.6,
+		"2023-09-06T03:33:03": 26.5,
+		"2023-09-06T03:48:03": 26.4,
+		"2023-09-06T04:03:03": 26.4,
+		"2023-09-06T04:18:03": 26.3,
+		"2023-09-06T04:33:03": 26.2,
+		"2023-09-06T04:48:03": 26.1,
+		"2023-09-06T05:03:03": 26,
+		"2023-09-06T05:18:04": 25.9
 	};
 
 	const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
@@ -2177,7 +2264,8 @@
 		// A "FULL" one to get to the long-term-storage (for barograph)
 		events.subscribe('full', function(val) {
 			// TODO Do it
-			const PRMSL_KEY = "PRMSL-buff"; // As in the computer (long-trem-storage), see yaml.
+			const PRMSL_KEY = "PRMSL-buff";  // As in the computer (long-trem-storage), see yaml.
+			const AIR_TEMP_KEY = "air-temp"; // As in the computer (long-trem-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
 				if (VERBOSE) { 
@@ -2190,8 +2278,23 @@
 				}
 				//
 				let barograph = document.getElementById('barograph-01');
-				prepareData(theMap, barograph);
-				document.getElementById("raw-data").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+				prepareData(theMap, barograph, 980, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
+				document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+			}
+			theMap = val[AIR_TEMP_KEY];
+			if (theMap) {
+				if (VERBOSE) { 
+					let keys = Object.keys(theMap);
+					console.log(`The Map: ${ JSON.stringify(theMap) }, ${keys.length} elements.`);
+					for (let i=0; i<keys.length; i++) {
+						// console.log(`Key ${keys[i]}`);
+						let prmsl = theMap[keys[i]];  // To build the graph
+					}
+				}
+				//
+				let thermograph = document.getElementById('thermograph-01');
+				prepareData(theMap, thermograph, -10, 50, 'Air Temp', 'navy', "nb-pts-at", "from-to-at");
+				document.getElementById("raw-data-temp").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 			}
 		});
 
@@ -2199,7 +2302,7 @@
 		let startIdx4 = -1; // First 00, 06, 12 or 18
 		let firstWeekDayIdx = 0;
 
-		let prepareData = (theMap, barograph) => {
+		let prepareData = (theMap, datagraph, graphMini, graphMaxi, graphLabel, graphLineColor, nbPtId, fromToId) => {
 
 			currentData = theMap;
 
@@ -2215,14 +2318,14 @@
 
 			let nbPts = keys.length;
 			// Nb points
-			document.getElementById("nb-pts").innerText = `${nbPts} / 672 point${nbPts > 1 ? 's' : ''}`;
+			document.getElementById(nbPtId).innerText = `${nbPts} / 672 point${nbPts > 1 ? 's' : ''}`;
 			if (true || nbPts > 0) {
 				// From to
 				let d1 = keys[0]; // '1970-01-01T00:00:00'; // keys[0]
 				let d2 = keys[keys.length - 1]; // '2023-09-04T13:47:00'; // keys[keys.length - 1]
 				let mess = `from ${reworkDuration(d1)} to ${reworkDuration(d2)}`;
-				document.getElementById('from-to').innerText = mess;
-				document.getElementById('barograph-01').title = `PRMSL, UTC Dates, from ${mess}`;
+				document.getElementById(fromToId).innerText = mess;
+				datagraph.title = `${graphLabel}, UTC Dates, from ${mess}`;
 			}
 
 			// 1 - Find the first "midnight" 
@@ -2265,7 +2368,7 @@
 				// 2 - Prepare the data, in their expected shape
 				// For day names, look for setVGridLabelsCallback
 				
-				let mini = 980, maxi = 1050;
+				let mini = graphMini, maxi = graphMaxi;
 
 				let valLabel = // "0:45"; // One label every 45 points
 							// `${startIdx}:96`;  // "0:96"; // One label every 96 point (24 * 4 = 96 : every day). See setVGridLabelsCallback function.
@@ -2294,7 +2397,7 @@
 					}
 				}
 
-				barograph.data = {
+				datagraph.data = {
 					withGrid: true,
 					withXLabels: false,
 					withYLabels: true,
@@ -2306,7 +2409,7 @@
 					maxY: maxi,
 					data: [{
 							name: 'As is',
-							lineColor: 'purple',
+							lineColor: graphLineColor,
 							fillColor: null,
 							thickness: 3,
 							x: values.x,
@@ -2315,14 +2418,14 @@
 				};
 
 				// 3 - Update the graph
-				barograph.value = 'null';
+				datagraph.value = 'null';
 
-				barograph.data.withXLabels = true;
-				barograph.data.withYLabels = false;
-				barograph.vgrid = valLabel;
-				barograph.label = 'PRMSL';
-				barograph.value = value;
-				barograph.repaint();
+				datagraph.data.withXLabels = true;
+				datagraph.data.withYLabels = false;
+				datagraph.vgrid = valLabel;
+				datagraph.label = graphLabel;
+				datagraph.value = value;
+				datagraph.repaint();
 			} else {
 				if (VERBOSE) {
 					console.log("No midnight was found");
@@ -2349,11 +2452,34 @@
 				return "";
 			}
         });
+		let thermograph = document.getElementById('thermograph-01');
+		thermograph.setVGridLabelsCallback(val => {  
+            // console.log(`VGridLabel: ${val}`);
+            // 0 to max, step 96
+			if ((val - startIdx) % 96 === 0) {
+				let i = (((val - startIdx) / 96) + firstWeekDayIdx) % 7;
+				let retVal = DAYS[i];
+				if (currentData) {
+					let keys = Object.keys(currentData);
+					let theKey = keys[val];
+					let month = parseInt(theKey.substring(5, 7)) - 1;
+					let day = theKey.substring(8, 10);
+					retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+				}
+				return retVal; 
+			} else {
+				return "";
+			}
+        });
 
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
-			let theMap = FOR_DEV_1;
-			prepareData(theMap, barograph);
-			document.getElementById("raw-data").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+			let theMap = FOR_DEV_PRMSL_2; //  FOR_DEV_1;
+			prepareData(theMap, barograph, 980, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
+			document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+			// Same for temp...
+			theMap = FOR_DEV_AIR_TEMP_2;
+			prepareData(theMap, thermograph, -10, 50, 'Air Temp', 'navy', "nb-pts-at", "from-to-at");
+			document.getElementById("raw-data-temp").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 		}
 	};
 
@@ -2526,179 +2652,267 @@
 		let v = this.value;
 		document.body.style.setProperty("--rotateX", v + "deg");
 	}
-		</script>
-		<style>
-			:root {
-				--perspective: 50em;
-				--rotateX: -40deg;
-			}
+	
+	const TABS = ['tab-01', 'tab-02'];
 
-			html {
-				height: 100%;
-				background-color: black;
-			}
+	function openTab(evt, tabNum) {
+		let tabLinks = document.getElementsByClassName("tablinks");
+		for (let i=0; i<tabLinks.length; i++) {
+			tabLinks[i].className = tabLinks[i].className.replace(" active", ""); // Reset
+		}
+		for (let i=0; i<TABS.length; i++) {
+			document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
+		}
+		evt.currentTarget.className += " active";
+	}
 
-			body {
-				background-color: black;
-				color: silver;
-				font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
-				/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
-				background: radial-gradient(at top, DarkGrey -8%, black 55%);
-				background-repeat: no-repeat;
-				background-size: 100% 100%;
-			}
+	</script>
+	<style>
+	:root {
+		--perspective: 50em;
+		--rotateX: -40deg;
+	}
 
-			.mirror-upside-down {
-				display: block;
-				-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
-				-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
-				-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
-				transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
-			}
+	html {
+		height: 100%;
+		background-color: black;
+	}
 
-		</style>
+	body {
+		background-color: black;
+		color: silver;
+		font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+		/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
+		background: radial-gradient(at top, DarkGrey -8%, black 55%);
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
 
-  </head>
-  <body>
-		<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
-			<tr>
-				<td style="text-align: left;">
-					<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
-						<tr>
-							<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
-							<td>
-								<!-- Traffic witness -->
-								<span id="working" title="Traffic">&#11044;</span>
-							</td>
-							<td>
-								<!-- Display Style -->
-								Widget Style:
-								<select onchange="setStyle(this.value);">
-									<option value="orange" selected>Orange</option>
-									<option value="yellow">Yellow</option>
-									<option value="white">White</option>
-									<option value="white-red">White, red hand</option>
-									<option value="cyan">Cyan</option>
-									<option value="day">Day</option>
-									<option value="night">Night</option>
-									<option value="flat-gray">Flat gray</option>
-									<option value="flat-black">Flat black</option>
-								</select>
-								<!-- Display Border -->
-								<input type="checkbox" checked onchange="setBorder(this.checked);"/>Border
-								&nbsp;&nbsp;
-								<!-- Page BG -->
-								Page Background:
-								<input type="radio" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
-								<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
-								<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
-								<input type="radio" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
-								&nbsp;&nbsp;
-								<button onclick="toggleHeadsUp();" style="border-radius: 5px;">Head Up</button>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
-						<tr>
-							<td style="text-align: center;">
-								<!-- Air Temperature in &deg;C<br/ -->
-								<thermo-meter id="thermometer-01"
-											  class="thermometer-orange"
-											  title="Air, Celsius"
-											  min-value="-10"
-											  max-value="60"
-											  major-ticks="10"
-											  minor-ticks="1"
-											  value="0"
-											  width="100"
-											  height="220"></thermo-meter>
-							</td>
-							<td style="text-align: center;">
-								<!-- Station Time<br/ -->
-								<analog-watch class="analogdisplay-monochrome-orange"
-											  title="Station Time"
-											  id="watch-01"
-											  value="00:00:00"
-											  hours-ticks="1"
-											  minutes-ticks="1"
-											  with-second-hand="true"
-											  with-border="true"
-											  width="200"
-											  height="200"></analog-watch>
-							</td>
-							<td style="text-align: center;">
-								<!-- Atm Pressure in hPa<br/ -->
-								<analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
-												title="Pressure in hPa"
-												id="prmsl-01"
-												min-value="983"
-												max-value="1043"
-												value="1013.6"
-												major-ticks="10"
-												minor-ticks="1"
-												with-border="true"
-												overlap="40"
-												label="PRMSL"
-												width="200"
-												height="200"></analog-display>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<span id="from-to" style="float: left;">Nothing</span>
-								<span id="nb-pts" style="float: right;">No point</span>											   						
+	.mirror-upside-down {
+		display: block;
+		-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+	}
+
+	.tab {
+		overflow: hidden;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		background-color: rgba(241, 241, 241, 0.5);
+	}
+
+	/* Style the buttons inside the tab */
+	.tab button {
+		background-color: inherit;
+		float: left;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 14px 16px;
+		transition: 0.3s;
+		font-size: 17px;
+		text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+	}
+
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+		background-color: #ddd;
+	}
+
+	/* Create an active/current tablink class */
+	.tab button.active {
+		background-color: #f2f0f0;
+	}
+
+	.tab .mess {
+		padding: 14px 16px;
+		transition: 0.3s;
+		font-size: 17px;
+		text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+		color: black;
+		text-align: right;
+	}
+
+	.active {
+		background-color: cyan; /*#717171;*/
+	}
+
+	</style>
+
+</head>
+<body>
+	<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+		<tr>
+			<td style="text-align: left;">
+				<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+					<tr>
+						<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
+						<td>
+							<!-- Traffic witness -->
+							<span id="working" title="Traffic">&#11044;</span>
+						</td>
+						<td>
+							<!-- Display Style -->
+							Widget Style:
+							<select onchange="setStyle(this.value);">
+								<option value="orange" selected>Orange</option>
+								<option value="yellow">Yellow</option>
+								<option value="white">White</option>
+								<option value="white-red">White, red hand</option>
+								<option value="cyan">Cyan</option>
+								<option value="day">Day</option>
+								<option value="night">Night</option>
+								<option value="flat-gray">Flat gray</option>
+								<option value="flat-black">Flat black</option>
+							</select>
+							<!-- Display Border -->
+							<input type="checkbox" checked onchange="setBorder(this.checked);"/>Border
+							&nbsp;&nbsp;
+							<!-- Page BG -->
+							Page Background:
+							<input type="radio" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+							<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
+							<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+							<input type="radio" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+							&nbsp;&nbsp;
+							<button onclick="toggleHeadsUp();" style="border-radius: 5px;">Head Up</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+					<tr>
+						<td style="text-align: center;">
+							<!-- Air Temperature in &deg;C<br/ -->
+							<thermo-meter id="thermometer-01"
+											class="thermometer-orange"
+											title="Air, Celsius"
+											min-value="-10"
+											max-value="60"
+											major-ticks="10"
+											minor-ticks="1"
+											value="0"
+											width="100"
+											height="220"></thermo-meter>
+						</td>
+						<td style="text-align: center;">
+							<!-- Station Time<br/ -->
+							<analog-watch class="analogdisplay-monochrome-orange"
+											title="Station Time"
+											id="watch-01"
+											value="00:00:00"
+											hours-ticks="1"
+											minutes-ticks="1"
+											with-second-hand="true"
+											with-border="true"
+											width="200"
+											height="200"></analog-watch>
+						</td>
+						<td style="text-align: center;">
+							<!-- Atm Pressure in hPa<br/ -->
+							<analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
+											title="Pressure in hPa"
+											id="prmsl-01"
+											min-value="983"
+											max-value="1043"
+											value="1013.6"
+											major-ticks="10"
+											minor-ticks="1"
+											with-border="true"
+											overlap="40"
+											label="PRMSL"
+											width="200"
+											height="200"></analog-display>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+
+							<div class="tab" style="display: grid; grid-template-columns: auto auto;">
+								<button class="tablinks active" onclick="openTab(event, 0);">Barograph</button>
+								<button class="tablinks" onclick="openTab(event, 1);">Thermograph</button>
+							</div>
+							
+							<div id="tab-01" style="display: block;">
+								<span id="from-to-pr" style="float: left;"> - </span>
+								<span id="nb-pts-pr" style="float: right;">No point</span>											   						
 								<br/>
 								<graph-display id="barograph-01"
+											tabindex="-1"
+											class="barograph"
+											width="600"
+											height="200"
+											padding="5"
+											orientation="horizontal"
+											value="1013.25"
+											vgrid="0:0.5"
+											hgrid="0:10"
+											label="Barograph"
+											title="PRMSL, UTC Dates"></graph-display>
+							</div>
+							<div id="tab-02" style="display: none;">
+
+								<span id="from-to-at" style="float: left;"> - </span>
+								<span id="nb-pts-at" style="float: right;">No point</span>											   						
+								<br/>
+								<graph-display id="thermograph-01"
 											   tabindex="-1"
-										   	   class="barograph"
+											   class="thermograph"
 											   width="600"
-											   height="200"
+										   	   height="200"
 											   padding="5"
 											   orientation="horizontal"
-											   value="1013.25"
+											   value="0.0"
 											   vgrid="0:0.5"
 											   hgrid="0:10"
-											   label="Barograph"
-											   title="PRMSL, UTC Dates"/>		
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" style="text-align: left;">
-								<div id="raw-data" style="max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
+											   label="Thermograph"
+											   title="Air Temp, UTC Dates"></graph-display>	
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" style="text-align: left;">
+							<div style="display: grid; grid-template-areas: 'left right';">
+								<div id="raw-data-prmsl" style="grid-area: left; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
 									<pre>Empty</pre>
 								</div>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<!-- Perspective sliders -->
-					<table width="100%">
-						<tr>
-							<td width="50%">
-								<h5>Perspective</h5>
-								<input type="range" value="50" min="0" max="100" style="width: 90%;" oninput="setPerspective.call(this, event); perspective01.value = this.value;" />
-								<output name="perspective" id="perspective01"></output>
-							</td>
-							<td width="50%">
-								<h5>Rotate X</h5>
-								<input type="range" value="-50" min="-100" max="100" style="width: 90%;" oninput="setRotateX.call(this, event); perspective02.value = this.value;" />
-								<output name="perspective" id="perspective02"></output>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
+								<div id="raw-data-temp" style="grid-area: right; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;">
+									<pre>Empty</pre>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				<!-- Perspective sliders -->
+				<table width="100%">
+					<tr>
+						<td width="50%">
+							<h5>Perspective</h5>
+							<input type="range" value="50" min="0" max="100" style="width: 90%;" oninput="setPerspective.call(this, event); perspective01.value = this.value;" />
+							<output name="perspective" id="perspective01"></output>
+						</td>
+						<td width="50%">
+							<h5>Rotate X</h5>
+							<input type="range" value="-50" min="-100" max="100" style="width: 90%;" oninput="setRotateX.call(this, event); perspective02.value = this.value;" />
+							<output name="perspective" id="perspective02"></output>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 
     <div id="err-mess"></div>
-		<hr/>
+	<hr/>
     <address>Oliv did it</address>
-  </body>
+</body>
 </html>

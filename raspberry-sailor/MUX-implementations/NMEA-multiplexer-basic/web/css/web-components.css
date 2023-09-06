@@ -590,3 +590,9 @@ compass-rose .gray-flat {
     --grid-color: orange;
     --display-color: purple;
 }
+.thermograph {
+    --display-background-gradient-from: white;
+    --display-background-gradient-to: white;
+    --grid-color: orange;
+    --display-color: navy;
+}

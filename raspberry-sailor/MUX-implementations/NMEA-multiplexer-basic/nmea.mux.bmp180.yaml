@@ -27,11 +27,18 @@ forwarders:
   - type: tcp
     port: 7002
 computers:
-  - type: long-term-storage
+  - type: long-term-storage   # PRMSL
     ping-interval: 900   # 15 minutes
     max-length: 672      # One week
     data-path: "Barometric Pressure,value"
     # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
     object-name: "PRMSL-buff"
-    verbose: true
+    verbose: false
+  - type: long-term-storage  # Air Temp
+    ping-interval: 900   # 15 minutes
+    max-length: 672      # One week
+    data-path: "Air Temperature,value"
+    # Try curl -X GET http://localhost:9876/mux/cache | jq '."air-temp"'
+    object-name: "air-temp"
+    verbose: false
 
