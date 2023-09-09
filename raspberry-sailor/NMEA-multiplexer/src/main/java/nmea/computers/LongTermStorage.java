@@ -6,16 +6,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.api.Multiplexer;
-import nmea.parser.*;
+import nmea.parser.UTCDate;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TimeZone;
+import java.util.TreeMap;
 
 /**
- * Used to store data like PRMSL over time.
+ * Used to store data like PRMSL, temperature, etc, over time.
  *
  * To try:
  * curl -X GET http://localhost:1234/mux/cache | jq '."storage-data"'
@@ -24,16 +25,20 @@ import java.util.stream.Collectors;
 public class LongTermStorage extends Computer {
 
 	private final ObjectMapper jacksonMapper = new ObjectMapper();
+	// Format used for the key
 	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	static {
 		DURATION_FMT.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 	}
 
 	// Properties
-	private long pingInterval = 3_600;  // in seconds
-	private long maxLength = 618; // Nb members. Length of the buffer
-	private String[] dataPathInCache = { "Barometric Pressure", "value" }; // TODO Use jq ? Like | jq '."Barometric Pressure".value' implementation 'net.thisptr:jackson-jq:1.0.0-preview.20220705'
-	private String storagePathInCache = "BarographData";
+	private long pingInterval = 900; // 3_600;  // in seconds. 900 : 15 minutes
+	private long maxLength = 672; // Max length of the buffer. 900s = 15 minutes, 672 = 4 * 24 * 7: one week, with one point every 15 minutes.
+
+	// TODO Use jq ? Like | jq '."Barometric Pressure".value' implementation 'net.thisptr:jackson-jq:1.0.0-preview.20220705'... Not sure.
+	// See in nmea.consumers.reader.RESTReader.java, look for JsonQuery
+	private String[] dataPathInCache = { "Barometric Pressure", "value" };  // CSV in the yaml...
+	private String storagePathInCache = "BarographData"; // AKA List/Buffer name
 
 	private Map<String, Object> objectMap = new TreeMap<>();
 
@@ -65,9 +70,9 @@ public class LongTermStorage extends Computer {
 					// Fill the map
 					objectMap.put(DURATION_FMT.format(measureDate), finalData);
 					if (this.verbose) {
-						System.out.printf(">> Long Storage Map is now %d elements big\n", objectMap.size());
+						System.out.printf(">> Long Storage Map %d is now %d elements big\n", this.storagePathInCache, objectMap.size());
 					}
-					// Cut the Map if too long
+					// Cut the Map if too long (from the head)
 					while (objectMap.keySet().size() > this.maxLength) {
 						String first = (String)objectMap.keySet().toArray()[0];
 						if (this.verbose) {

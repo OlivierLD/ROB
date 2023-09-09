@@ -30,7 +30,7 @@ computers:
   - type: long-term-storage   # PRMSL
     ping-interval: 900   # 15 minutes
     max-length: 672      # One week
-    data-path: "Barometric Pressure,value"
+    data-path: "Barometric Pressure,value"  # CSV list
     # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
     object-name: "PRMSL-buff"
     verbose: false

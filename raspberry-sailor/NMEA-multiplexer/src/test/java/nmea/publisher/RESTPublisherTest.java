@@ -1,6 +1,8 @@
 package nmea.publisher;
 
 import nmea.forwarders.RESTPublisher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,6 +37,18 @@ public class RESTPublisherTest {
     private final static List<String> DATA_TO_SEND_TO_SSD;
     static {
         DATA_TO_SEND_TO_SSD = Arrays.asList("Ping|Pong|Paf", "Bing|Boom|Bang");
+    }
+
+    // TODO Before/After to start/stop the REST Server
+
+    @Before
+    public void setup() {
+
+    }
+
+    @After
+    public void tearDown() {
+
     }
 
     @Test

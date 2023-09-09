@@ -1022,6 +1022,20 @@ public class MuxInitializer {
                                         String propValue = muxProps.getProperty(String.format("computer.%s.data-path", MUX_IDX_FMT.format(cptrIdx)));
                                         if (propValue != null) {
                                             dataPath = propValue.split(",");
+                                            // Check that one below
+//                                            dataPath = (String[])Arrays.asList(dataPath).stream()
+//                                                                       .map(String::trim)
+//                                                                       // .map(Object::toString)
+//                                                                       .toArray();
+                                            for (int i=0; i<dataPath.length; i++) {
+                                                dataPath[i] = dataPath[i].trim();
+                                            }
+                                            if (verbose) {
+                                                System.out.println("-- Data Path: --");
+                                                Arrays.asList(dataPath).stream()
+                                                        .forEach(el -> System.out.printf("[%s]\n", el));
+                                                System.out.println("----------------");
+                                            }
                                         }
                                     } catch (Exception ex) {
                                         System.err.println("data-path property:");
