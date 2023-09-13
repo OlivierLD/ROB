@@ -13,15 +13,17 @@ import java.util.*;
 
 /**
  * JSON positions generator, from NMEA log.
- * Optional SOG and COG (and others if needed...)
+ * Optional SOG and COG (and others if needed...). See system variable "with.og"
  * LeafLet supports this format, like
  * let latlngs = [
  *         [45.51, -122.68],
  *         [37.77, -122.43],
  *         [34.04, -118.2]
  *     ];
- *
+ *  ----------------
  *  Do see the System Variable "sorted.data" below
+ *  System variable "verbose"
+ *  System variable "minified"
  */
 public class NMEAtoJSONPos {
 
@@ -112,6 +114,27 @@ public class NMEAtoJSONPos {
 				jsonArray.add(rmc.getGp());
 			}
 		});
+
+		// offset, limit. "limit" is the final length of the buffer
+		int offset = Integer.parseInt(System.getProperty("offset", "0"));
+		int limit = Integer.parseInt(System.getProperty("limit", "-1"));
+		if (offset > 0) {
+			System.out.printf("Managing offset %d\n", offset);
+			for (int i=0; i<offset; i++) {
+				jsonArray.remove(0);
+				if (jsonArray.size() == 0) {
+					System.out.println("offset: No record left in data array !!");
+					break;
+				}
+			}
+		}
+		if (limit != -1) {
+			System.out.printf("Managing limit %d\n", limit);
+			while (jsonArray.size() > limit) {
+				jsonArray.remove(jsonArray.size() - 1);
+			}
+		}
+
 		if ("true".equals(System.getProperty("verbose"))) {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
@@ -122,6 +145,7 @@ public class NMEAtoJSONPos {
 			((ObjectNode)node).remove("latInDegMinDec");
 			((ObjectNode)node).remove("lngInDegMinDec");
 		}
+
 		if (minified) {
 			bw.write(mapper.writeValueAsString(jsonNode));
 		} else {

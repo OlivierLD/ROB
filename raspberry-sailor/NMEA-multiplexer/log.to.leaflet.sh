@@ -2,6 +2,7 @@
 #
 # Suitable for LeafLet. Spits out positions in JSON format, and much more.
 # Can be used to find boat's parameters, like max-leeway.
+# Requires GPS and boat data (BSP, current, Wind, etc). Otherwise, use log.to.json.sh.
 #
 if [[ $# == 0 ]]; then
   echo -e "Several CLI prms are available:"
@@ -13,14 +14,16 @@ if [[ $# == 0 ]]; then
   echo -e "--current-buffer-length:600000"
   echo -e "--output-file-name:/path/to/output.json"
   echo -e "example: ${0} --file-name:sample-data/2010-11.03.Taiohae.nmea"
-  echo -e "We need at least the --file-name:xxxx "
+  echo -e "-> We need at least the --file-name:xxxx "
+  echo -e "-> If data are only logged from a GPS, consider using log.to.json.sh"
   exit 1
 fi
 #
-# --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea --archive-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip --dev-curve:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv --polar-file:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff --current-buffer-length:600000
-# --file-name:2010-07-10.tacking.back.in.nmea --archive-name:/Users/olivierlediouris/repos/ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.zip --dev-curve:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv --polar-file:/Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff --current-buffer-length:600000
+# --file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea --archive-name:/.../ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.archive.zip --dev-curve:/.../ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv --polar-file:/.../ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff --current-buffer-length:600000
+# --file-name:2010-07-10.tacking.back.in.nmea --archive-name:/.../ROB/raspberry-sailor/NMEA-multiplexer/sample-data/logged.data.zip --dev-curve:/.../ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/dp_2011_04_15.csv --polar-file:/.../ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/sample.data/polars/CheoyLee42.polar-coeff --current-buffer-length:600000
 #
-CP=$(dirname $0)/build/libs/NMEA-multiplexer-1.0-all.jar
+# CP=$(dirname $0)/build/libs/NMEA-multiplexer-1.0-all.jar
+CP=$(dirname $0)/build/libs/*.jar
 JAVA_OPTIONS=
 #
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80"

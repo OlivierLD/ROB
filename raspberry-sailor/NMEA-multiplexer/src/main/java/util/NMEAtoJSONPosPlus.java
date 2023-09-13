@@ -636,6 +636,28 @@ public class NMEAtoJSONPosPlus {
 			}
 		}
 		br.close();
+
+		// offset, limit
+		// offset, limit. "limit" is the final length of the buffer
+		int offset = Integer.parseInt(System.getProperty("offset", "0"));
+		int limit = Integer.parseInt(System.getProperty("limit", "-1"));
+		if (offset > 0) {
+			System.out.printf("Managing offset %d\n", offset);
+			for (int i=0; i<offset; i++) {
+				jsonArray.remove(0);
+				if (jsonArray.size() == 0) {
+					System.out.println("offset: No record left in data array !!");
+					break;
+				}
+			}
+		}
+		if (limit != -1) {
+			System.out.printf("Managing limit %d\n", limit);
+			while (jsonArray.size() > limit) {
+				jsonArray.remove(jsonArray.size() - 1);
+			}
+		}
+
 		if ("true".equals(System.getProperty("verbose"))) {
 			System.out.println(mapper.writeValueAsString(jsonArray));
 		}
@@ -662,23 +684,33 @@ public class NMEAtoJSONPosPlus {
 			minPerf.set(Math.min(otl.getPerf(), minPerf.get()));
 			maxPerf.set(Math.max(otl.getPerf(), maxPerf.get()));
 		});
-		final double avgBsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		AtomicReference<Double> avgBsp = new AtomicReference<>(0d);
+		try {
+			avgBsp.set(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble());
+		} catch (Exception ex) {
+			System.err.println("avgBsp:" + ex.getMessage());
+		}
 		final double avgSog = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
-		final double avgCsp = jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble();
+		AtomicReference<Double> avgCsp = new AtomicReference<>(0d);
+		try {
+			avgCsp.set(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble());
+		} catch (Exception ex) {
+			System.err.println("avgCsp: " + ex.getMessage());
+		}
 		final double avgPerf = (polarFileName != null) ? jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).average().getAsDouble() : 0d;
 
 		// StdDev = sqrt(variance). Variance = avg((x - mean)^2). Good doc at https://www.mathsisfun.com/data/standard-deviation.html
-		double stdDevBsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgBsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevBsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgBsp.get() - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getBsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevSog = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgSog - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getSog()).filter(value -> !Double.isNaN(value) && value > 0).count());
-		double stdDevCsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgCsp - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
+		double stdDevCsp = Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgCsp.get() - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getCsp()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		double stdDevPerf = 0d;
 		if (polarFileName != null) {
 			Math.sqrt(jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).map(value -> Math.pow(avgPerf - value, 2)).sum() / jsonArray.stream().mapToDouble(obj -> ((ObjectToLog) obj).getPerf()).filter(value -> !Double.isNaN(value) && value > 0).count());
 		}
 
-		System.out.printf("BSP in [%f, %f], avg %f, std %f\n", minBsp.get(), maxBsp.get(), avgBsp, stdDevBsp);
+		System.out.printf("BSP in [%f, %f], avg %f, std %f\n", minBsp.get(), maxBsp.get(), avgBsp.get(), stdDevBsp);
 		System.out.printf("SOG in [%f, %f], avg %f, std %f\n", minSog.get(), maxSog.get(), avgSog, stdDevSog);
-		System.out.printf("CSP in [%f, %f], avg %f, std %f\n", minCsp.get(), maxCsp.get(), avgCsp ,stdDevCsp);
+		System.out.printf("CSP in [%f, %f], avg %f, std %f\n", minCsp.get(), maxCsp.get(), avgCsp.get(), stdDevCsp);
 		System.out.printf("Perf in [%f, %f], avg %f, std %f\n", minPerf.get(), maxPerf.get(), avgPerf, stdDevPerf);
 
 		boolean minified = "true".equals(System.getProperty("minified", "true"));
@@ -694,6 +726,7 @@ public class NMEAtoJSONPosPlus {
 			bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
 		}
 		bw.close();
+		System.out.printf("Data are in [%s]\n", fileOutName);
 	}
 
 	private final static String FILE_NAME_PREFIX = "--file-name:";
@@ -720,8 +753,9 @@ public class NMEAtoJSONPosPlus {
 		String polarFileName = null;
 		Long currentComputerBufferLength = null;
 
-		if (args.length != 1) {
+		if (args.length > 0) {
 			for (String arg : args) {
+				System.out.printf("Processing [%s]\n", arg);
 				if (arg.startsWith(FILE_NAME_PREFIX)) {
 					fileName = arg.substring(FILE_NAME_PREFIX.length());
 				} else if (arg.startsWith(OUTPUT_FILE_NAME_PREFIX)) {

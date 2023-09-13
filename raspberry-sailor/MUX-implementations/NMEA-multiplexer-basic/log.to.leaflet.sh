@@ -13,7 +13,8 @@ if [[ $# == 0 ]]; then
   echo -e "--current-buffer-length:600000"
   echo -e "--output-file-name:/path/to/output.json"
   echo -e "example: ${0} --file-name:sample-data/2010-11.03.Taiohae.nmea"
-  echo -e "We need at least the --file-name:xxxx "
+  echo -e "-> We need at least the --file-name:xxxx "
+  echo -e "-> If data are only logged from a GPS, consider using log.to.json.sh"
   exit 1
 fi
 #
@@ -26,5 +27,12 @@ JAVA_OPTIONS=
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=true"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dminified=false"
-java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPosPlus $*
+#
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=484"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
+#
+# java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPosPlus $*
+COMMAND="java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPosPlus $*"
+echo -e "Running ${COMMAND}"
+${COMMAND}
 #

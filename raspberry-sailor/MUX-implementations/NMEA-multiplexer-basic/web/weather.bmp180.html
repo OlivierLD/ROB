@@ -2443,9 +2443,13 @@
 				if (currentData) {
 					let keys = Object.keys(currentData);
 					let theKey = keys[val];
-					let month = parseInt(theKey.substring(5, 7)) - 1;
-					let day = theKey.substring(8, 10);
-					retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+					if (theKey !== undefined) {
+					    let month = parseInt(theKey.substring(5, 7)) - 1;
+					    let day = theKey.substring(8, 10);
+					    retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+					} else {
+						console.log(`(Baro) val: ${val}, keys: ${keys.length} => theKey is undefined.`);
+					}
 				}
 				return retVal; 
 			} else {
@@ -2462,9 +2466,13 @@
 				if (currentData) {
 					let keys = Object.keys(currentData);
 					let theKey = keys[val];
-					let month = parseInt(theKey.substring(5, 7)) - 1;
-					let day = theKey.substring(8, 10);
-					retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+					if (theKey !== undefined) {
+						let month = parseInt(theKey.substring(5, 7)) - 1;
+						let day = theKey.substring(8, 10);
+						retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+					} else {
+						console.log(`(Temp) val: ${val}, keys: ${keys.length} => theKey is undefined.`);
+					}
 				}
 				return retVal; 
 			} else {

@@ -15,5 +15,9 @@ JAVA_OPTIONS=
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dwith.og=true"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dminified=false"
+#
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=484"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
+#
 java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPos "$1"
 #
