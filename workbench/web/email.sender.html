@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send emails</title>
+</head>
+<body>
+
+  <a href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
+
+</body>
+<script type="text/javascript">
+    window.onload = () => {
+
+    fetch("../members.json")
+            .then(response => {
+                console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                response.json().then(doc => {
+                    let members = doc;
+                    console.log(`Data loaded, ${doc.length} elements`);
+                    let bccString = "";
+                    members.forEach(element => {
+                        bccString += (element.email + ";");
+                    });
+                    console.log(`bcc=${bccString}`);
+                });
+            },
+            (error, errmess) => {
+                console.log("Ooch");
+                let message;
+                if (errmess) {
+                    let mess = JSON.parse(errmess);
+                    if (mess.message) {
+                        message = mess.message;
+                    }
+                }
+                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+            });
+
+    }
+</script>
+</html>
