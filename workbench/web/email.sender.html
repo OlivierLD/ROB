@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Send emails</title>
+    <style type="text/css">
+* {
+    font-family: 'Courier New', Courier, monospace;
+}        
+    </style>
 </head>
 <body>
-
-  <a href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
-
+  <h1>Email sender</h1>  
+  <a id="email-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
+  <hr/>
+  <small><i>OlivSoft never stops</i></small>  
 </body>
 <script type="text/javascript">
     window.onload = () => {
@@ -23,6 +29,8 @@
                         bccString += (element.email + ";");
                     });
                     console.log(`bcc=${bccString}`);
+                    let emailLink = document.getElementById('email-link');
+                    emailLink.href = `mailto:?bcc=${bccString}&subject=News%20letter%20#4`;
                 });
             },
             (error, errmess) => {
