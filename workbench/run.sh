@@ -4,7 +4,9 @@ CP=./build/libs/workbench-1.0-all.jar
 java -cp ${CP} utils.CSVtoJSON
 #
 node server.js &
+NODE_PID=$!
 #
 open http://localhost:8080/web/email.sender.html
 #
 echo -e "Do not forget to stop the node server..."
+echo -e "To kill it, do a: kill -9 ${NODE_PID}"

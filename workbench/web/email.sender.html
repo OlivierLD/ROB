@@ -1,35 +1,74 @@
 <!DOCTYPE html>
+<!--
+    Email sender.
+    bcc element will be composed dynamically.
+ +-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Send emails</title>
     <style type="text/css">
+
 * {
     font-family: 'Courier New', Courier, monospace;
 }        
+
+body {
+    background-color: silver;
+    font-size: 2em;
+}
+
+.mail-box {
+    padding: 20px; 
+    margin: 10px;
+    border: 1px solid blue; 
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+.list-link {
+    color: white;
+    /* font-size: 20px;*/
+    text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 10px orange;
+    text-decoration: none;
+}
+a.list-link:hover {
+    color: cyan;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px cyan;
+}
     </style>
 </head>
 <body>
-  <h1>Email sender</h1>  
-  <a id="email-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
+  <h1 class="list-link">Web email sender</h1>  
+  <div>
+    Dynamically composed bcc string.
+  </div>
+  <!-- TODO An entry for the subject ? -->
+  <div class="mail-box">
+    <a id="email-link" class="list-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
+  </div>
   <hr/>
   <small><i>OlivSoft never stops</i></small>  
 </body>
 <script type="text/javascript">
     window.onload = () => {
 
-    fetch("../members.json")
+        // fetch("../members.json")       // Requires a server. A file:// would trigger a CORS error
+        fetch("../members.for.tests.json") 
             .then(response => {
                 console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                response.json().then(doc => {
+                // response.arrayBuffer().then(doc => {
+                response.json().then(doc => {  // TODO see other methods than json() ?
                     let members = doc;
-                    console.log(`Data loaded, ${doc.length} elements`);
+                    console.log(`Data loaded, ${doc.length} members`);
                     let bccString = "";
                     members.forEach(element => {
                         bccString += (element.email + ";");
                     });
-                    console.log(`bcc=${bccString}`);
+                    // console.log(`bcc=${bccString}`);
                     let emailLink = document.getElementById('email-link');
+                    // bcc only, no to, no cc.
                     emailLink.href = `mailto:?bcc=${bccString}&subject=News%20letter%20#4`;
                 });
             },
@@ -42,7 +81,7 @@
                         message = mess.message;
                     }
                 }
-                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                console.debug("Failed to get data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
             });
 
     }
