@@ -54,8 +54,8 @@ a.list-link:hover {
 <script type="text/javascript">
     window.onload = () => {
 
-        // fetch("../members.json")       // Requires a server. A file:// would trigger a CORS error
-        fetch("../members.for.tests.json") 
+        fetch("../members.json")       // Requires a server. A protocol like file:// would trigger a CORS error
+        // fetch("../members.for.tests.json") 
             .then(response => {
                 console.log(`Data Response: ${response.status} - ${response.statusText}`);
                 // response.arrayBuffer().then(doc => {
@@ -64,11 +64,15 @@ a.list-link:hover {
                     console.log(`Data loaded, ${doc.length} members`);
                     let bccString = "";
                     members.forEach(element => {
-                        bccString += (element.email + ";");
+                        if (element.email.trim().length > 0) {
+                            bccString += (element.email + ";");
+                        } else {
+                            console.log(`No email for ${element.firstName} ${element.lastName}`);
+                        }
                     });
                     // console.log(`bcc=${bccString}`);
                     let emailLink = document.getElementById('email-link');
-                    // bcc only, no to, no cc.
+                    // subject and bcc only, no to, no cc.
                     emailLink.href = `mailto:?bcc=${bccString}&subject=News%20letter%20#4`;
                 });
             },

@@ -41,7 +41,8 @@ public class CSVtoJSON {
             this.email = email;
         }
     }
-    private final static String CSV_FILE = "../temp/passe-coque.adherents.csv";
+    // private final static String CSV_FILE = "../temp/passe-coque.adherents.csv";
+    private final static String CSV_FILE = "../temp/passe-coque-adhesions-FINAL.csv";
     public static void main(String... args) {
         System.out.printf("Running from %s\n", System.getProperty("user.dir"));
         File csv = new File(CSV_FILE);

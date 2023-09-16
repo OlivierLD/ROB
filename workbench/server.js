@@ -161,6 +161,8 @@ let handler = (req, res) => {
 							contentType = "application/x-font-woff";
 						} else if (resource.endsWith(".ttf")) {
 							contentType = "application/octet-stream";
+						} else if (resource.endsWith(".json")) {
+							contentType = "application/json";
 						} else {
 							console.log("+-------------------------------------------")
 							console.log("| Un-managed content type for " + resource);

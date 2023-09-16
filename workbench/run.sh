@@ -1,7 +1,10 @@
 #!/bin/bash
 CP=./build/libs/workbench-1.0-all.jar
 #
-java -cp ${CP} utils.CSVtoJSON
+REBUILD=false
+if [[ "${REBUILD}" == "true" ]]; then
+  java -cp ${CP} utils.CSVtoJSON
+fi
 #
 node server.js &
 NODE_PID=$!
