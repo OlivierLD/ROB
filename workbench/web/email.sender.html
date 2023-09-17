@@ -52,10 +52,11 @@ a.list-link:hover {
   <small><i>OlivSoft never stops</i></small>  
 </body>
 <script type="text/javascript">
+
     window.onload = () => {
 
-        fetch("../members.json")       // Requires a server. A protocol like file:// would trigger a CORS error
-        // fetch("../members.for.tests.json") 
+        fetch("../members.json")   // Requires a server. A protocol like file:// would trigger a CORS error
+        //  fetch("../members.for.tests.json") 
             .then(response => {
                 console.log(`Data Response: ${response.status} - ${response.statusText}`);
                 // response.arrayBuffer().then(doc => {
@@ -89,5 +90,6 @@ a.list-link:hover {
             });
 
     }
+    
 </script>
 </html>
