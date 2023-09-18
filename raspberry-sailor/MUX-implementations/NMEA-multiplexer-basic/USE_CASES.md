@@ -15,30 +15,19 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 > - You deploy it for prod.
 
 # Content
-- Deploy for prod, [Raspberry Pi and GPS](#use-case-1)
-- [A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI), push buttons](#use-case-2)
-- Deploy for prod, [Raspberry Pi, GPS, BME280, SSD1306, push buttons](#use-case-3)
-- Basic (and functional) Navigation Station, deploy for prod, [Raspberry Pi, BMP180](#use-case-4)
-
-## Use-case 1
-Generic example, showing how to deploy _your_ configuration to prod.  
-In a separate document, [here](./use_cases/USE_CASES_1.md).
-
-## Use-case 2
-How to setup a A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306. Two push-buttons.  
-In a separate document, [here](./use_cases/USE_CASES_2.md).
-
-## Use-case 3
-Deploy the config above fro prod.  
-In a separate document, [here](./use_cases/USE_CASES_3.md).
-
-## Use-case 4
-A Barograph (Atmospheric Pressure recorder).    
-In a separate document, [here](./use_cases/USE_CASES_4.md).
-
-
-## Use-case 5
-The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet.  
-In a separate document, [here](./HOWTO.md).
+- Deploy for prod, [Raspberry Pi and GPS]  
+  Generic example, showing how to deploy _your_ configuration to prod.  
+  In a separate document, [here](./use_cases/USE_CASES_1.md).
+- [A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI), push buttons]  
+  How to setup a A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306. Two push-buttons.  
+  In a separate document, [here](./use_cases/USE_CASES_2.md).
+- Deploy for prod, [Raspberry Pi, GPS, BME280, SSD1306, push buttons]  
+  Deploy the config above fro prod.  
+  In a separate document, [here](./use_cases/USE_CASES_3.md).
+- Basic (and functional) data recorder, deploy for prod, [Raspberry Pi, BMP180]  
+  A Barograph (Atmospheric Pressure recorder).    
+  In a separate document, [here](./use_cases/USE_CASES_4.md).
+- The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet.  
+  In a separate document, [here](./HOWTO.md).
 
 ---
