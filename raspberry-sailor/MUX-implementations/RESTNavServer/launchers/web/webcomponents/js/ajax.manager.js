@@ -396,10 +396,12 @@ function onMessage(json) {
                 console.log("Pt:" + latitude + ", " + longitude);
             }
             let gridSquare = json.Position.gridSquare;
+            let googleCodePlus = json.Position.googleCodePlus;
             events.publish(events.topicNames.POS, {
                 'lat': latitude,
                 'lng': longitude,
-                'gridSquare': gridSquare
+                'gridSquare': gridSquare,
+                'googleCodePlus': googleCodePlus
             });
         } catch (err) {
             errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "position");

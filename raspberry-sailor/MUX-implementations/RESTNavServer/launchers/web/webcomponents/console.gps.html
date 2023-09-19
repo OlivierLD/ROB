@@ -270,7 +270,8 @@
             document.getElementById('world-map-01').setUserPosition({
                 latitude: val.lat,
                 longitude: val.lng,
-                gridSquare: val.gridSquare
+                gridSquare: val.gridSquare,
+                googleCodePlus: val.googleCodePlus
             });
             lastKnownPos = { // TODO Something nicer (it's in ajax.manager)...
                 latitude: val.lat,

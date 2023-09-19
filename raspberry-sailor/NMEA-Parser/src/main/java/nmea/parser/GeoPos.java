@@ -43,7 +43,11 @@ public class GeoPos implements Serializable {
 		if (this.gridSquare == null || this.gridSquare.isEmpty()) {
 			this.gridSquare = this.gridSquare();
 		}
-		return this.getLatInDegMinDec() + " / " + this.getLngInDegMinDec() + (this.gridSquare.isEmpty() ? " (-)" : String.format(" (%s)", this.gridSquare));
+		if (this.googleCodePlus == null || this.googleCodePlus.isEmpty()) {
+			this.googleCodePlus = this.googleCodePlus();
+		}
+		return this.getLatInDegMinDec() + " / " + this.getLngInDegMinDec() + (this.gridSquare.isEmpty() ? " (-)" : String.format(" (%s)", this.gridSquare))
+				+ (this.googleCodePlus.isEmpty() ? " (-)" : String.format(" (%s)", this.googleCodePlus));
 	}
 
 	public String getLatInDegMinDec() {
@@ -123,5 +127,10 @@ public class GeoPos implements Serializable {
 
 	public String googleCodePlus() {
 		return GeomUtil.googleCodePlus(this.lat, this.lng);
+	}
+	public GeoPos updateGoogleCodePlus() {
+		this.googleCodePlus = this.googleCodePlus();
+//		System.out.println(String.format(">> from %f/%f => GRID Square: %s", this.lat, this.lng, this.gridSquare));
+		return this;
 	}
 }

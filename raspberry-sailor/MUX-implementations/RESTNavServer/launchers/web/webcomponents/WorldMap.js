@@ -2366,6 +2366,9 @@ class WorldMap extends HTMLElement {
 			if (this.userPosition.gridSquare !== undefined) {
 				context.fillText(this.userPosition.gridSquare, 10, 58);
 			}
+			if (this.userPosition.googleCodePlus !== undefined) {
+				context.fillText(this.userPosition.googleCodePlus, 10, 78);
+			}
 		}
 
 		if (this.astronomicalData !== undefined && this.astronomicalData.deltaT !== undefined) {

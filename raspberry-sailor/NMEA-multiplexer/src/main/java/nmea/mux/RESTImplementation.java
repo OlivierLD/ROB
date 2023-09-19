@@ -2943,7 +2943,9 @@ public class RESTImplementation {
 	private HTTPServer.Response getPosition(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 
-		GeoPos position = ((GeoPos)ApplicationContext.getInstance().getDataCache().get(NMEADataCache.POSITION)).updateGridSquare();
+		GeoPos position = ((GeoPos)ApplicationContext.getInstance().getDataCache().get(NMEADataCache.POSITION))
+				.updateGridSquare()
+				.updateGoogleCodePlus();
 
 		try {
 			String content = position != null ? mapper.writeValueAsString(position) : "";
