@@ -1,5 +1,6 @@
 package calc;
 
+import com.google.openlocationcode.OpenLocationCode;
 import utils.DumpUtil;
 import utils.StringUtils;
 
@@ -410,5 +411,10 @@ public final class GeomUtil {
 		gridSquare += alphabet.toLowerCase().charAt(sixth);
 
 		return gridSquare;
+	}
+
+	public static String googleCodePlus(double lat, double lng) {
+		String codePlus = OpenLocationCode.encode(lat, lng); // testData.length);
+		return codePlus;
 	}
 }

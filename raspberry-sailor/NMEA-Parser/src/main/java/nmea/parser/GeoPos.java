@@ -9,6 +9,7 @@ public class GeoPos implements Serializable {
 	public double lat = 0.0;
 	public double lng = 0.0;
 	public String gridSquare = "";
+	public String googleCodePlus = "";
 
 	private final static DecimalFormat DF_22 = new DecimalFormat("00.00");
 	private final static DecimalFormat DF_2  = new DecimalFormat("00");
@@ -29,6 +30,7 @@ public class GeoPos implements Serializable {
 		this.lat = l;
 		this.lng = g;
 		this.gridSquare = this.gridSquare();
+		this.googleCodePlus = this.googleCodePlus();
 		this.useDegreeSymbol = useSymbol;
 	}
 
@@ -117,5 +119,9 @@ public class GeoPos implements Serializable {
 		this.gridSquare = this.gridSquare();
 //		System.out.println(String.format(">> from %f/%f => GRID Square: %s", this.lat, this.lng, this.gridSquare));
 		return this;
+	}
+
+	public String googleCodePlus() {
+		return GeomUtil.googleCodePlus(this.lat, this.lng);
 	}
 }

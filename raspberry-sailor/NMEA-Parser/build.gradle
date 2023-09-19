@@ -24,6 +24,8 @@ compileJava {
 
 dependencies {
     implementation 'org.yaml:snakeyaml:1.21'
+    // https://mvnrepository.com/artifact/com.google.openlocationcode/openlocationcode
+    implementation 'com.google.openlocationcode:openlocationcode:1.0.4'  // Google CodePlus
     implementation project(':common-utils')
     implementation project(':astro-computer:AstroUtilities')
     testImplementation "junit:junit:$junit_version"
