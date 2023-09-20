@@ -31,7 +31,7 @@ class CompassRose extends HTMLElement {
 		// create and append a <canvas>
 		this.canvas = document.createElement("canvas");
 		let fallbackElemt = document.createElement("h1");
-		let content = document.createTextNode("This is a ComnpassRose, on an HTML5 canvas");
+		let content = document.createTextNode("This is a CompassRose, on an HTML5 canvas");
 		fallbackElemt.appendChild(content);
 		this.canvas.appendChild(fallbackElemt);
 		this.shadowRoot.appendChild(this.canvas);

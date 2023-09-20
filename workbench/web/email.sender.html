@@ -48,10 +48,33 @@ a.list-link:hover {
   <div class="mail-box">
     <a id="email-link" class="list-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
   </div>
+
+  <div id="email-lists">
+
+  </div>
+
   <hr/>
   <small><i>OlivSoft never stops</i></small>  
 </body>
 <script type="text/javascript">
+
+    const EMAIL_SUBJECT = "News%20letter%20#4";
+
+    let displayNewList = (list, batchNum) => {
+        let container = document.getElementById('email-lists');
+		let newList = document.createElement("div");
+        newList.style = "border: 1px solid cyan; border-radius: 5px;";
+
+        // let content = document.createTextNode(list);
+
+        let link = document.createElement("a");
+        link.href = `mailto:?bcc=${list}&subject=${EMAIL_SUBJECT}`;
+        link.innerText = `Send email batch #${batchNum}`;
+
+		// newList.appendChild(content);
+		newList.appendChild(link);
+		container.appendChild(newList);
+    };
 
     window.onload = () => {
 
@@ -64,13 +87,38 @@ a.list-link:hover {
                     let members = doc;
                     console.log(`Data loaded, ${doc.length} members`);
                     let bccString = "";
+                    let currentListId = 0;
+                    let currentBccList = "";
+                    let idx = 0;
                     members.forEach(element => {
                         if (element.email.trim().length > 0) {
-                            bccString += (element.email + ";");
+                            // email with blank or '<' or '>'
+                            if (element.email.includes(" ") || element.email.includes(">") || element.email.includes("<") || element.email.includes("mailto")) {
+                                console.log(`Suspicious email for ${JSON.stringify(element, null, 2)}`);
+                            }
+                            bccString += ((bccString.length > 0 ? ", " : "") + element.email);
+                            if (idx % 100 === 0) { // New list
+                                if (currentBccList.trim().length > 0) {
+                                    // Display previous one
+                                    displayNewList(currentBccList, currentListId);
+                                }
+                                currentBccList = "";
+                                currentListId++;
+                            }
+                            currentBccList += ((currentBccList.length > 0 ? ", " : "") + element.email);
+
+                            idx++;
+                            if (true) {
+                                console.log(`${idx} : ${element.email}`);
+                            }
                         } else {
                             console.log(`No email for ${element.firstName} ${element.lastName}`);
                         }
                     });
+                    if (currentBccList.trim().length > 0) {
+                        // Display previous one
+                        displayNewList(currentBccList, currentListId);
+                    }
                     // console.log(`bcc=${bccString}`);
                     let emailLink = document.getElementById('email-link');
                     // subject and bcc only, no to, no cc.
