@@ -6,6 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/jpg" href="./palm.04.jpg">
     <title>Send emails</title>
     <style type="text/css">
 
@@ -46,11 +47,10 @@ a.list-link:hover {
   </div>
   <!-- TODO An entry for the subject ? -->
   <div class="mail-box">
-    <a id="email-link" class="list-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a>
+    <a id="email-link" class="list-link" href="mailto:?bcc=olivier@lediouris.net,olivier.lediouris@gmail.com&subject=BCC%20test">Send email</a> (all at once).
   </div>
 
   <div id="email-lists">
-
   </div>
 
   <hr/>
@@ -63,11 +63,12 @@ a.list-link:hover {
     let displayNewList = (list, batchNum) => {
         let container = document.getElementById('email-lists');
 		let newList = document.createElement("div");
-        newList.style = "border: 1px solid cyan; border-radius: 5px;";
+        newList.style = "border: 1px solid cyan; border-radius: 5px; padding: 3px; margin: 3px;";
 
         // let content = document.createTextNode(list);
 
         let link = document.createElement("a");
+        link.className = "list-link";
         link.href = `mailto:?bcc=${list}&subject=${EMAIL_SUBJECT}`;
         link.innerText = `Send email batch #${batchNum}`;
 
@@ -98,7 +99,7 @@ a.list-link:hover {
                             }
                             bccString += ((bccString.length > 0 ? ", " : "") + element.email);
                             if (idx % 100 === 0) { // New list
-                                if (currentBccList.trim().length > 0) {
+                                if (currentBccList.trim().length > 0) { // No empty list.
                                     // Display previous one
                                     displayNewList(currentBccList, currentListId);
                                 }
@@ -108,7 +109,7 @@ a.list-link:hover {
                             currentBccList += ((currentBccList.length > 0 ? ", " : "") + element.email);
 
                             idx++;
-                            if (true) {
+                            if (false) {
                                 console.log(`${idx} : ${element.email}`);
                             }
                         } else {
