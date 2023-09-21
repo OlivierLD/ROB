@@ -8,8 +8,6 @@ include 'SerialRxTx'
 include "http-tiny-server"
 include "Java-TCP-Python"
 
-include "workbench"
-
 // Astro Computer
 include('astro-computer:AstroComputer')
 include('astro-computer:AstroUtilities')
