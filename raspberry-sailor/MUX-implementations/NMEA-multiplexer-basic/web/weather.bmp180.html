@@ -2217,7 +2217,7 @@
 	const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 	const VERBOSE = false;
-	const IN_DEV = true;
+	const IN_DEV = false;
 
 	var currentData;
 
@@ -2381,6 +2381,13 @@
 					values.x.push(i);
 					values.y.push(theMap[keys[i]]);
 				}
+				// Hard-coded : fill out 672 values.
+				if (keys.length < 672) {
+					for (let i=keys.length; i<672; i++) {
+						values.x.push(i);
+						values.y.push(null);
+					}
+				}
 
 				// ThickX: every day at midnight
 				let thickX = [];
@@ -2403,7 +2410,7 @@
 					thickX: thickX,
 					thickY: 0,
 					minX: 0,
-					maxX: keys.length,
+					maxX: 672, // keys.length,
 					minY: mini,
 					maxY: maxi,
 					data: [{

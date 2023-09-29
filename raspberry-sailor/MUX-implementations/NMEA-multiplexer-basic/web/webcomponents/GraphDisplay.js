@@ -585,19 +585,21 @@ class GraphDisplay extends HTMLElement {
 				}
 				let firstX = _x, firstY = _y;
 				for (let x = 1; x < curve.x.length; x++) {
-					_x = this._padding + ((curve.x[x] - xOffset) * xRatio);
-					if (this._orientation === HORIZONTAL_GRAPH) {
-						_y = this._height - this._padding - ((curve.values[x] - yOffset) * yRatio);
-					} else {
-						_y = this._padding + ((curve.values[x] - yOffset) * yRatio);
-					}
-					if (graphDisplayVerbose) {
-						console.log(`Lining to ${_x} / ${_y}`);
-					}
-					if (this._orientation === HORIZONTAL_GRAPH) {
-						context.lineTo(_x, _y);
-					} else {
-						context.lineTo(_y, _x);
+					if (curve.values[x] !== null) {  // null value stops the curve design.
+						_x = this._padding + ((curve.x[x] - xOffset) * xRatio);
+						if (this._orientation === HORIZONTAL_GRAPH) {
+							_y = this._height - this._padding - ((curve.values[x] - yOffset) * yRatio);
+						} else {
+							_y = this._padding + ((curve.values[x] - yOffset) * yRatio);
+						}
+						if (graphDisplayVerbose) {
+							console.log(`Lining to ${_x} / ${_y}`);
+						}
+						if (this._orientation === HORIZONTAL_GRAPH) {
+							context.lineTo(_x, _y);
+						} else {
+							context.lineTo(_y, _x);
+						}
 					}
 				}
 				context.lineWidth = curve.thickness;
