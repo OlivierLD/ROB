@@ -2138,7 +2138,7 @@
 		"2023-09-06T05:18:04": 1014.8
 	};
 
-	const FOR_DEV_AIR_TEMP_2 = {
+	const FOR_DEV_AIR_TEMP_2 = {  // 71 air temp entries
 		"2023-09-05T11:47:57": 28.5,
 		"2023-09-05T12:02:57": 28.7,
 		"2023-09-05T12:17:57": 28.9,
@@ -2217,7 +2217,7 @@
 	const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 	const VERBOSE = false;
-	const IN_DEV = false;
+	const IN_DEV = true;
 
 	var currentData;
 
@@ -2315,7 +2315,6 @@
 			//  0
 
 			let keys = Object.keys(theMap);
-
 			let nbPts = keys.length;
 			// Nb points
 			document.getElementById(nbPtId).innerText = `${nbPts} / 672 point${nbPts > 1 ? 's' : ''}`;
@@ -2482,10 +2481,12 @@
 
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
 			let theMap = FOR_DEV_PRMSL_2; //  FOR_DEV_1;
+			console.log(`In dev, ${Object.keys(theMap).length} PRMSL entries.`);
 			prepareData(theMap, barograph, 980, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
 			document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 			// Same for temp...
 			theMap = FOR_DEV_AIR_TEMP_2;
+			console.log(`In dev, ${Object.keys(theMap).length} AIRTEMP entries.`);
 			prepareData(theMap, thermograph, -10, 50, 'Air Temp', 'navy', "nb-pts-at", "from-to-at");
 			document.getElementById("raw-data-temp").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 		}
