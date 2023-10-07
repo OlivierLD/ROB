@@ -51,7 +51,7 @@ dependencies {
 // See https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
     publications {
-        maven(MavenPublication) {  // Required by publishToMavenLocal
+        maven(MavenPublication) {  // Required by "gradlew publishToMavenLocal"
             groupId = 'raspberry.on.board'
             artifactId = 'NMEA-multiplexer'
             version = '1.0'
