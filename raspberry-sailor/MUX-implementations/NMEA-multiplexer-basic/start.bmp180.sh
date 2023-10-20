@@ -6,7 +6,8 @@
 #
 # Start the TCP Server for BMP180
 echo -e "Starting the BMP180 TCP server"
-/home/pi/nmea-dist/python/scripts/start.BMP180.TCP.server.sh --interactive:false  --machine-name:localhost --port:8001 --verbose:false > /home/pi/nmea-dist/bmp180.python.log 2>&1
+IP_ADDR=$(hostname -I)
+/home/pi/nmea-dist/python/scripts/start.BMP180.TCP.server.sh --interactive:false  --machine-name:${IP_ADDR} --port:8001 --verbose:false > /home/pi/nmea-dist/bmp180.python.log 2>&1
 sleep 10
 # Start the MUX
 echo -e "Starting the MUX"

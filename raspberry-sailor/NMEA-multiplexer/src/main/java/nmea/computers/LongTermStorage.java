@@ -46,8 +46,12 @@ public class LongTermStorage extends Computer {
 		while (true) { // Loop until dead
 			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 			try {
-				final String jsonString = jacksonMapper.writeValueAsString(cache);
+				final String jsonString;
+				synchronized (cache) {
+					jsonString = jacksonMapper.writeValueAsString(cache);
+				}
 				final JsonNode jsonNode = jacksonMapper.readTree(jsonString);
+
 				Object finalData = null;
 				JsonNode previousObject = jsonNode;
 				for (String path : this.dataPathInCache) {

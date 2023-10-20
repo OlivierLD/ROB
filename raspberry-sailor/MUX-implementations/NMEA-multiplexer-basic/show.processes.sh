@@ -7,11 +7,11 @@ echo -e "| NMEA Multiplexer(s) : |"
 echo -e "+-----------------------+"
 ps -ef | grep GenericNMEAMultiplexer | grep -v grep | grep -v killns
 #
-echo -e "+-----------------------+"
-echo -e "| Python serve(s) :     |"
-echo -e "+-----------------------+"
+echo -e "+------------------------+"
+echo -e "| Python server(s) :     |"
+echo -e "+------------------------+"
 ps -ef | grep python | grep REST
 #
 ps -ef | grep python | grep TCP_ 
 #
-echo -e "-----------------------------"
+echo -e "---- t h e   e n d ----"
