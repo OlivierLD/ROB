@@ -2278,7 +2278,7 @@
 				}
 				//
 				let barograph = document.getElementById('barograph-01');
-				prepareData(theMap, barograph, 980, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
+				prepareData(theMap, barograph, 960, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
 				document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 			}
 			theMap = val[AIR_TEMP_KEY];
@@ -2489,7 +2489,7 @@
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
 			let theMap = FOR_DEV_PRMSL_2; //  FOR_DEV_1;
 			console.log(`In dev, ${Object.keys(theMap).length} PRMSL entries.`);
-			prepareData(theMap, barograph, 980, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
+			prepareData(theMap, barograph, 960, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
 			document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
 			// Same for temp...
 			theMap = FOR_DEV_AIR_TEMP_2;
@@ -2834,9 +2834,9 @@
 							<analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
 											title="Pressure in hPa"
 											id="prmsl-01"
-											min-value="983"
-											max-value="1043"
-											value="1013.6"
+											min-value="965"
+											max-value="1045"
+											value="1013.3"
 											major-ticks="10"
 											minor-ticks="1"
 											with-border="true"
