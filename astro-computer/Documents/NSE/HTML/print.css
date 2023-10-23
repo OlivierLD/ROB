@@ -18,11 +18,26 @@
     margin-top: 400px;
 }
 
+.below {
+    margin-top: 100px;
+}
+
 .screen-only {
     display: none;
+}
+
+.print-only {  /* overrides the one in main.css */
+    display: block;
 }
 
 .toc {
     text-decoration: none;
     color: inherit;
+}
+
+.smaller {
+    font-size: 45%;
+}
+.smaller-plus {
+    font-size: 75%;
 }

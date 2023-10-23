@@ -20,12 +20,22 @@
     TODO/PENDING: Page numbers.
     See https://css-tricks.com/a-perfect-table-of-contents-with-html-css/
 
+        https://www.michaelperrin.fr/blog/2019/11/printing-the-web-part-2-html-and-css-for-printing-books,
+        to use with https://www.princexml.com/ 
+
+    Google books. logarithm tables:
+    - By Charles Babbage !!  https://www.google.fr/books/edition/Table_of_the_Logarithms_of_the_Natural_N/P11HAAAAYAAJ?hl=en&gbpv=1&dq=subject:%22Logarithms%22&printsec=frontcover
+    - American tables: https://www.google.fr/books/edition/Logarithmic_and_Other_Mathematical_Table/u3zmAAAAMAAJ?hl=en&gbpv=1&dq=logarithm+table&printsec=frontcover
+    - Bouvart et Ratinet: https://books.google.fr/books?id=XTENGa6RvUcC&dq=editions%3AOCLC489715537&source=gbs_book_other_versions
+
  +-->
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Naviguer sans &eacute;lectricit&eacute;</title>
     <!--author>Olivier Le Diouris</author-->
+    <meta name="author" content="Olivier Le Diouris">
+    <link rel="icon" type="image/png" href="./sextant.png">
     <script type="text/x-mathjax-config">
   MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
     </script>
@@ -34,29 +44,27 @@
     <link rel="stylesheet" href="main.css" />
     <!-- link rel="stylesheet" media="screen" href="main.css" /-->
     <link rel="stylesheet" media="print" href="print.css" />
-
-    <!--style type="text/css">
-@page {
-    size: A4;
-    margin: 0; 
-}        
-    </style-->
 </head>
 <body>
 
 <div id="screen-warning" class="screen-only screen-warning">
+    <b><i>Note&nbsp;:</i></b>
     <div style="display: grid; grid-template-columns: auto auto;">
-        <p style="margin: 10px;">
+        <p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
             The following document is designed to be visualized from a web browser, or printed from it. 
             The printed version will have page breaks and other formattings that will not be displayed from the web browser.<br/>
+            Likewise, the web version has links that would be meaningless in a printed document.<br/>
             When printing, you will have the possibility - from the dialog showing up in the browser - to hide or show different 
-            data like headers, footers, page numbers, etc.
+            data like headers, footers, page numbers, etc, and even scale.<br/>
+            <b>But</b>, I'm still looking for a (free) way to generate the page numbers in the table of contents...
         </p>
-        <p style="margin: 10px;">
+        <p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
             Le document qui suit est con&ccedil;u pour &ecirc;tre visualis&eacute; dans un navigateur web, ou imprim&eacute; &agrave; partir ce celui-ci.
             La version imprim&eacute;e comporte des sauts de page et autres formattages qui ne seront pas visibles &agrave; partir du navigateur.<br/>
+            De m&ecirc;me, la version web comporte des liens qui n'auraient gu&egrave;re de sens dans un document imprim&eacute;.<br/>
             Lors de l'impression, vous aurez la possibilit&eacute; - &agrave; partir des boites de dialogue du navigateur - de faire appara&icirc;tre ou pas
-            des donn&eacute;es comme les en-t&ecirc;tes et bas de page, num&eacute;ros de page, etc.
+            des donn&eacute;es comme les en-t&ecirc;tes et bas de page, num&eacute;ros de page, etc, et m&ecirc;me l'&eacute;chelle.<br/>
+            <b>Mais</b>, je suis toujours en train de chercher comment g&eacute;n&eacute;rer (gratuitement) les num&eacute;ros de page dans la table des mati&egrave;res...
         </p>
     </div>
     <hr/>
@@ -87,15 +95,22 @@
     <br/>
     <i>Ceci est une approche pragmatique.</i>
     </div>    
+    <div class="print-only" style="margin-top: 30px; font-style: italic; font-size: 12px;">
+        Le document original est &agrave; https://olivierld.github.io/web.stuff/nse/nse.html
+    </div>
 </div>
 
 <div class="blank-for-print"></div>
 
 <hr class="screen-only"/>
-<div class="content in-the-middle" style="text-align: right; margin-right: 30px;">
-    <i>Pour Sky, Tao, Ellie, Zach, Otto, Eva</i>
-</div>
-<hr class="screen-only"/>
+<div class="print-only content in-the-middle">
+    <div style="text-align: right; margin-right: 30px;">
+        <i>Pour Sky, Tao, Ellie, Zach, Otto, Eva</i>
+    </div>
+    <div style="text-align: left; margin-left: 30px; margin-top: 130px;">
+        <i>The more you know, the less you need...</i>
+    </div>
+</div>    
 
 <div class="table-content">
     <h2>Table</h2>
@@ -219,38 +234,38 @@
         et que les piles sont mortes.
     </p>    
     <p>
-    Et ce m&ecirc;me si il fait nuit, qu'on est au pr&egrave;s, que la m&eacute;t&eacute;o r&eacute;p&egrave;te qu'il y a un avis de 
-    coup de vent (qu'on n'entend pas, puisque les piles sont mortes, disais-je), qu'il va bient&ocirc;t neiger, et que tout le monde a la gerbe.
+        Et ce m&ecirc;me si il fait nuit, qu'on est au pr&egrave;s, que la m&eacute;t&eacute;o r&eacute;p&egrave;te qu'il y a un avis de 
+        coup de vent (qu'on n'entend pas, puisque les piles sont mortes, disais-je), qu'il va bient&ocirc;t neiger, et que tout le monde a la gerbe.
     </p>
     <p>
-    C'est de toute &eacute;vidence de la pure fiction, mais on a le droit d'y croire, et on y croit&nbsp;!
+        C'est de toute &eacute;vidence de la pure fiction, mais on a le droit d'y croire, et on y croit&nbsp;!
     </p>
     <p>
-    Le monde a &eacute;t&eacute; d&eacute;couvert &agrave; la voile, sans &eacute;lectricit&eacute;, 
-    les techniques &agrave; mettre en &oelig;uvre sont d'autant mieux connues qu'elles ont longtemps &eacute;t&eacute; les seules disponibles. Un des objectifs de ce document est aussi de les pr&eacute;server, 
-    de ne pas les laisser s'oublier, de ne pas les perdre, ce serait vraiment trop b&ecirc;te.
+        Le monde a &eacute;t&eacute; d&eacute;couvert &agrave; la voile, sans &eacute;lectricit&eacute;, 
+        les techniques &agrave; mettre en &oelig;uvre sont d'autant mieux connues qu'elles ont longtemps &eacute;t&eacute; les seules disponibles. Un des objectifs de ce document est aussi de les pr&eacute;server, 
+        de ne pas les laisser s'oublier, de ne pas les perdre, ce serait vraiment trop b&ecirc;te.
     </p>
     <p>
-    D'autant que la s&eacute;curit&eacute; en mer – comme ailleurs - &eacute;chappe totalement &agrave; la mode et &agrave; l'actualit&eacute;.
+        D'autant que la s&eacute;curit&eacute; en mer – comme ailleurs - &eacute;chappe totalement &agrave; la mode et &agrave; l'actualit&eacute;.
     </p>
     <p>
-    On &eacute;voquera ici des outils et les techniques qui permettent de les mettre en &oelig;uvre, 
-    tant en ce qui concerne leur utilisation que la fa&ccedil;on d'exploiter les donn&eacute;es qu'ils mesurent.
+        On &eacute;voquera ici des outils et les techniques qui permettent de les mettre en &oelig;uvre, 
+        tant en ce qui concerne leur utilisation que la fa&ccedil;on d'exploiter les donn&eacute;es qu'ils mesurent.
     </p>
     <p>
-    Par contre, on passera rapidement sur la fa&ccedil;on d'utiliser un compas de rel&egrave;vement, 
-    on ne parlera gu&egrave;re de la fa&ccedil;on dont on se sert d'un sextant... 
-    Ce document est plus un aide-m&eacute;moire quant &agrave; la mani&egrave;re d'effectuer les divers 
-    calculs qui d&eacute;coulent de l'utilisation des instruments de navigation.
+        Par contre, on passera rapidement sur la fa&ccedil;on d'utiliser un compas de rel&egrave;vement, 
+        on ne parlera gu&egrave;re de la fa&ccedil;on dont on se sert d'un sextant... 
+        Ce document est plus un aide-m&eacute;moire quant &agrave; la mani&egrave;re d'effectuer les divers 
+        calculs qui d&eacute;coulent de l'utilisation des instruments de navigation.
     </p>
     <p>
-    Donc&nbsp;:
-    <div style="text-align: center; font-style: italic;">
-    Ce document n'a pas la pr&eacute;tention d'&ecirc;tre un cours de navigation.
-    <br/>
-    C'est tout au plus un aide-m&eacute;moire.
-    </div>
-    En avant.
+        Donc&nbsp;:
+        <div style="text-align: center; font-style: italic;">
+            Ce document n'a pas la pr&eacute;tention d'&ecirc;tre un cours de navigation.
+            <br/>
+            C'est tout au plus un aide-m&eacute;moire.
+        </div>
+        En avant.
     </p>
 </div>
 
@@ -258,12 +273,12 @@
     <h1><a name="03">R&eacute;habiliter la navigation &agrave; l'estime</a></h1>
     <p>
     Avant de disposer d'aides &eacute;lectroniques &agrave; la navigation, on naviguait &agrave; l'estime.
-    Le principe de la navigation &agrave; l'estime est le suivant&nbsp;:
+    Le principe de la navigation &agrave; l'estime est le suivant&nbsp;:<br/>
     On part d'un point connu, et on t&acirc;che de tenir compte de tous les facteurs qui d&eacute;placent le navire, comme sa vitesse et son cap, 
     sa d&eacute;rive, le courant, etc. Ceci permet d'obtenir une position estim&eacute;e &agrave; n'importe quel moment.
     </p>
     <p>
-    &agrave; chaque fois que c'est possible, on recale son estime en faisant un point. En fonction de l'endroit o&ugrave; on se trouve, &agrave; savoir en vue ou hors de vue des c&ocirc;tes, les m&eacute;thodes 
+    &Agrave; chaque fois que c'est possible, on recale son estime en faisant un point. En fonction de l'endroit o&ugrave; on se trouve, &agrave; savoir en vue ou hors de vue des c&ocirc;tes, les m&eacute;thodes 
     de point seront diff&eacute;rentes, et &eacute;voqu&eacute;es plus avant dans ce document.
     </p>
     <p>
@@ -301,16 +316,16 @@
     <li>
         Les instruments n&eacute;cessaires pour mesurer la route
         <ul>
-        <li>compas de route</li>
-        <li>lochs</li>
-        <li>tables de courant et de mar&eacute;e</li>
+            <li>compas de route</li>
+            <li>lochs</li>
+            <li>tables de courant et de mar&eacute;e</li>
         </ul>
     </li>
     <li>
         Les instruments n&eacute;cessaires pour mesurer le temps
         <ul>
-        <li>sabliers, clepsydres (&lt;- mais non&nbsp;! Pas sur un bateau&nbsp;!)</li>
-        <li>montres & chronom&egrave;tres</li>
+            <li>sabliers, clepsydres (&lt;- mais non&nbsp;! Pas sur un bateau&nbsp;!)</li>
+            <li>montres & chronom&egrave;tres</li>
         </ul>
     </li>
     <li>
@@ -324,7 +339,7 @@
     </ul>
     <i><b>Note:</b></i><br/> 
     On parle ici d'instruments. On pourrait aussi bien parler d'outils. Outils et instruments sont des accessoires
-    qu'on doit ma&icirc;triser pour s'en servir. Ce qui requiert souvent une phase d'apprentissage.
+    <i>qu'on doit ma&icirc;triser</i> pour s'en servir correctement. Ce qui requiert souvent une phase d'apprentissage.
     <br/>
     Il y a au moins une diff&eacute;rence fondamentale entre un <b>outil</b> et une <b>bo&icirc;te noire</b>. 
     <br/>
@@ -626,10 +641,13 @@
                     <li>L'extr&eacute;mit&eacute; de l'index 1&frac14;&deg;</li>
                     <li>L'extr&eacute;mit&eacute; du petit doigt 1&deg;</li>
                 </ul>
+                <div style="text-align: center;">
+                    <img src="images/all.hands.png" width="50%" alt="Hands and degrees">
+                </div>
                 Et une minute d'arc (analogue, donc, &agrave; un mille marin), c'est &agrave; peu pr&egrave;s l'&eacute;paisseur d'<i>un cheveu &agrave; bout de bras</i>...
             </p>
                 Pr&egrave;s des c&ocirc;tes, on tiendra le sextant horizontalement pour mesurer l'angle apparent entre deux amers. 
-                C'est tr&egrave;s facile, et tr&egrave;s pr&eacute;cis, une pr&eacute;cision de l'ordre du degr&eacute; est suffisante lors de la mesure. Voir &agrave; ce sujet l'appendice <a href="#tbd">Arcs capables</a>.
+                C'est tr&egrave;s facile, et tr&egrave;s pr&eacute;cis, une pr&eacute;cision de l'ordre du degr&eacute; est suffisante lors de la mesure. Voir &agrave; ce sujet l'appendice <a href="#arcs-capables">Arcs capables</a>.
             <p>
                 Le sextant utilise un jeu de deux miroirs pour d&eacute;terminer l'angle entre deux directions, typiquement l'angle entre la direction dans laquelle on voit un astre, et la direction dans laquelle on voit l'horizon.
                 <div style="text-align: center;"><img src="images/sextant.01.png" width="50%" alt="Les miroirs du sextant" title="Les miroirs du sextant"></div>
@@ -638,7 +656,7 @@
                 <p>
                     Le fait qu'on utilise un miroir pour amener l'image du soleil sur l'horizon a pour effet de doubler l'angle de 
                     l'alidade (partie mobile du sextant, sur laquelle est fix&eacute; le grand miroir). Ainsi, pour une hauteur de 90&deg;, l'alidade 
-                    fera avec sa position originale (0&deg;) un angle de 45&deg;, soit la huiti&egrave;me partie d'un cercle. On s'est longtemps content&eacute; d'octants (octant => huit). 
+                    fera avec sa position originale (0&deg;) un angle de 45&deg;, soit la huiti&egrave;me partie d'un cercle. On s'est longtemps content&eacute; d'octants (octant &rArr; huit). 
                     Le sextant repr&eacute;sente la sixi&egrave;me partie d'un cercle, soit 60&deg;, on peut ainsi mesurer des angles de 0 &agrave; 120 degr&eacute;s. 
                     Bien &eacute;videmment, ceci est superflu pour les hauteurs (au-dessus de 90&deg;, retournez-vous, vous avez l'astre dans le dos, andouille), 
                     mais &ccedil;a peut &ecirc;tre utile pour les arcs capables, et pour mesurer des distances lune-soleil.
@@ -652,7 +670,7 @@
                     <div style="text-align: center;"><img src="images/sextant.03.jpg" width="60%" alt="C&ocirc;te en vue" title="C&ocirc;te en vue"></div>
                     pour mesurer l'angle entre la balise visible &agrave; droite, et le phare&nbsp;:
                     <div style="text-align: center;"><img src="images/sextant.04.jpg" width="10%" alt="Align&eacute;" title="Align&eacute;"></div>
-                    On utilisera cette technique dans le cas du point par <a href="#tbd">arcs capables</a>. Comme dit plus haut, ceci justifie le fait 
+                    On utilisera cette technique dans le cas du point par <a href="#arcs-capables">arcs capables</a>. Comme dit plus haut, ceci justifie le fait 
                     de pouvoir mesurer avec le sextant des angles sup&eacute;rieurs &agrave; 90&deg;.
                 </p>
             </p>
@@ -677,7 +695,7 @@
                 Pas &agrave; la main, les calculs sont &eacute;normes, tant pour les tables de mar&eacute;e que pour les &eacute;ph&eacute;m&eacute;rides astronomiques.
                 <br/>
                 C'est l&agrave; qu'on reparle d'informatique. Il est simple de confier ce genre de calculs &agrave; un ordinateur, 
-                de fa&ccedil;on &agrave; calculer publier ces almanachs &agrave; terre, avant de partir.
+                de fa&ccedil;on &agrave; calculer et publier ces almanachs &agrave; terre, avant de partir.
             </p>
         </div>
         <div class="doc-section">
@@ -1012,12 +1030,13 @@
             </ul>
             Ce sont ces rel&egrave;vements vrais qu'on porte sur la carte&nbsp;:
             <div style="text-align: center;"><img src="images/relevement.02.jpg" width="80%" alt="Rel&egrave;vements" title="Rel&egrave;vements"></div>
-            Le point ci-dessus est tout &agrave; fait correct. Le bateau se situe – estime-t-on - dans le triangle form&eacute; par l'intersection des rel&egrave;vements. 
+            Le point ci-dessus est tout &agrave; fait correct. Le bateau se situe - estime-t-on - dans le triangle form&eacute; par l'intersection des rel&egrave;vements. 
             On notera &eacute;galement sur la carte l'heure du point, et la valeur du loch &agrave; ce moment-l&agrave;.
             <p>
                 <b><i>Note &agrave; l'intention de ceux qui portent des lunettes</i></b>&nbsp;:
                 <br/>
-                Les compas de rel&egrave;vement r&eacute;cents s'utilisent pr&egrave;s du visage. Si on porte des lunettes, et si ces lunettes se trouvent ne pas &ecirc;tre 
+                On tenait auparavant les compas de rel&egrave;vement &agrave; bout de bras. Depuis l'apparition du Mini-Morin (ann&eacute;es 1970), les compas 
+                de rel&egrave;vement r&eacute;cents se tiennent pr&egrave;s du visage. Si on porte des lunettes, et si ces lunettes se trouvent ne pas &ecirc;tre 
                 faites dans un mat&eacute;riau amagn&eacute;tique, ceci peut g&eacute;n&eacute;rer des surprises.
 
                 <div style="display: grid; grid-template-columns: 50% 50%; justify-items: center;">
@@ -1794,16 +1813,16 @@
                     Il s'agit surtout ici de d&eacute;montrer la validit&eacute; de la m&eacute;thode.
                     <br/>
                     Ceci peut &ecirc;tre vu plut&ocirc;t comme un exercice de style...
-                    <br/>
-                    <i>Ceux qui ne veulent pas s'encombrer avec des logarithmes (ou qui n'&eacute;coutaient pas en math) peuvent aller directement &agrave; la section <a href="#05-2-9-2-8">Avec des tables de navigation</a>.</i>
-                    <br/>
+                    <p style="margin: 30px;">
+                        <i>Ceux qui ne veulent pas s'encombrer avec des logarithmes (ou qui n'&eacute;coutaient pas en math) peuvent aller directement &agrave; la section <a href="#05-2-9-2-8">Avec des tables de navigation</a>.</i>
+                    </p>
                     Ceux que &ccedil;a persiste &agrave; int&eacute;resser peuvent se rafra&icirc;chir la m&eacute;moire au sujet de la 
                     manipulation de ces ustensiles dans la section <a href="#logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a>.
                 </p>
                 <p>
                     Avec une table de logarithmes, le calcul d'une hauteur comporte <b>12</b> &eacute;tapes, et le calcul de l'azimut en comporte <b>12</b> &eacute;galement.
                     <br/>
-                    &agrave; vos marques&nbsp;!
+                    &Agrave; vos marques&nbsp;!
                 </p>
                 <p class="screen-only">
                     Pour ceux que la manipulation de ces tables int&eacute;resse, 
@@ -1811,7 +1830,7 @@
                     &eacute;tape par &eacute;tape.
                 </p>
                 <p>
-                    Comme d&eacute;j&agrave; mentionn&eacute;, on cherche donc &agrave; r&eacute;soudre les formules suivantes&nbsp;:
+                    Comme d&eacute;j&agrave; mentionn&eacute;, on cherche donc &agrave; r&eacute;soudre lit&eacute;ralement les formules suivantes&nbsp;:
                     <div class="postit">
                         $$
                         He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
@@ -1821,13 +1840,14 @@
                         Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
                         $$
                     </div>
-                    Afin de permettre &agrave; tout le monde de suivre les calculs, on utilise ici des tables de logarithmes am&eacute;ricaines, 
-                    disponibles sur <a href="http://books.google.com" target="GB">http://books.google.com</a><span class="screen-only">, comme <a href="https://www.google.fr/books/edition/Logarithmic_and_Other_Mathematical_Table/u3zmAAAAMAAJ?hl=en&gbpv=1&dq=logarithm+table&printsec=frontcover" target="GB">celles-ci</a></span>. 
+                    On donnera des exemples de calcul utilisant deux sortes de tables de logarithmes&nbsp;; am&eacute;ricaines, et fran&ccedil;aises.<br/>
+                    Des tables am&eacute;ricaines sont disponibles sur <a href="http://books.google.com" target="GB">http://books.google.com</a><span class="screen-only">, comme <a href="https://www.google.fr/books/edition/Logarithmic_and_Other_Mathematical_Table/u3zmAAAAMAAJ?hl=en&gbpv=1&dq=logarithm+table&printsec=frontcover" target="GB">celles-ci</a></span>. 
                     <br>
                     Voir &agrave; leur sujet l'appendice <a href="#logarithms">Utilisation simplifi&eacute;e des tables de logarithmes</a>.
                     <br/>
-                    Je pr&eacute;f&egrave;re personnellement utiliser les tables de Bouvart et Ratinet, malheureusement pas encore disponibles on-line (que je sache).
-                    Leur utilisation est cependant tr&egrave;s similaire &agrave; ce qui est expos&eacute; ici.
+                    Les tables fran&ccedil;aises de Bouvart et Ratinet ne sont malheureusement pas encore disponibles on-line (voir n&eacute;anmoins <a href="https://books.google.fr/books?id=XTENGa6RvUcC&dq=editions%3AOCLC489715537&source=gbs_book_other_versions">https://books.google.fr/books?id=XTENGa6RvUcC&dq=editions%3AOCLC489715537&source=gbs_book_other_versions</a>).
+                    <br/>
+                    Leur utilisation est cependant tr&egrave;s similaire &agrave; celle des tables am&eacute;ricaines.
                     <h5><a name="05-2-9-2-7-1">Calcul de la hauteur estim&eacute;e</a></h5>
                     <p>
                         On donc veut r&eacute;soudre
@@ -1851,7 +1871,7 @@
                             <br/>
                             <code>cos(AHL) = cos(12&deg;26.5')</code> arrondi &agrave; <code>cos(12&deg;26')</code>
                         </p>
-                        <div class="indent-one-italic">
+                        <div class="indent-one-italic" style="margin-top: 10px;">
                             La fa&ccedil;on d'effectuer ce calcul avec les tables de logarithmes est d&eacute;taill&eacute;e dans les pages qui suivent.
                         </div>
                         <br/>
@@ -1871,10 +1891,37 @@
                             <li>Ainsi, <code>He = 44&deg;33.5'</code></li>
                         </ol>
                         <p>
-                            Voyons maintenant comment en arriver l&agrave;.
+                            Voyons maintenant comment en arriver l&agrave;.<br/>
+                            Afin de pouvoir s'adresser au plus grand nombre, on fera ces calculs &agrave; l'aide de
+                            <ul>
+                                <li>Tables am&eacute;ricaines</li>
+                                <li>Tables fran&ccedil;aises (Bouvart et Ratinet)</li>
+                            </ul>
+                            <p>
+                            <i>Le but de ces tables est strictement identique, mais les conventions qu'elles utilisent sont parfois diff&eacute;rentes,
+                            et m&eacute;ritent d'&ecirc;tre evoqu&eacute;es.</i>
+                            <br/><br/>
+                            Une diff&eacute;rence importante concerne la fa&ccedil;on d'afficher les valeurs n&eacute;gatives des logarithmes.<br/>
+                            Un gros avantage des tables de logarithmes est de r&eacute;duire multiplications et divisions &agrave; des additions et soustractions.<br/>
+                            Parmi les membres d'une addition, des valeurs n&eacute;gatives peuvent &ecirc;tre &agrave; l'origine d'erreurs, d'o&ugrave; les diff&eacute;rentes options prises par 
+                            les auteurs des tables pour tenter d'&eacute;clipser cette difficult&eacute;.<br/>
+                            Par exemple&nbsp;:<br/>
+                            <code>log(sin(37&deg;46'))</code>, dont la valeur est <code>-0.21293</code>.
+                            <br/>
+                            <ul>
+                              <li>Les tables am&eacute;ricaines afficheront <code>9.78707</code>, &agrave; lire <code>9.78707 - 10</code></li>
+                              <li>Les tables de Bouvart et Ratinet <code><span class="overlined">1</span>,78707</code>, &agrave; lire <code>0.78707 - 1</code></li>
+                            </ul>
+                            Des exemples seront donn&eacute;s plus avant dans le pr&eacute;sent document.
+                            <br/>
+                            Encore une fois, ces notations sont strictement &eacute;quivalentes. Il s'agit juste d'&ecirc;tre pr&eacute;venu. Et accessoirement d'utiliser celles qu'on pr&eacute;f&egrave;re.
                         </p>
                     </p>
+
+                    <!-- Table US -->
                     <div class="content slack-on-top">
+                        <b><i>- Avec des tables am&eacute;ricaines</i></b>
+                        <br/><br/>
                         <b>&Eacute;tape 1/12 - Recherche de log(sin(37&deg;46'))</b>
                         <div style="text-align: center;"><img src="images/log.01.jpg" width="60%" alt="Recherche de log(sin(37&deg;46'))" title="Recherche de log(sin(37&deg;46'))"></div>
                         On trouve&nbsp;: <code>log(sin(37&deg;46')) = 9.78707</code> soit <code>9.78707 – 10 = -0.21293</code>
@@ -1882,7 +1929,7 @@
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 2/12 - Recherche de log(sin(6&deg;11'))</b>
                         <div style="text-align: center;"><img src="images/log.02.jpg" width="60%" alt="Recherche de log(sin(6&deg;11'))" title="Recherche de log(sin(6&deg;11'))"></div>
-                        On trouve&nbsp;: <code>log(sin(6&deg;11')) = 9.03226</code> soit <code>9.03226 – 10 = -0.96734</code>
+                        On trouve&nbsp;: <code>log(sin(6&deg;11')) = 9.03226</code> soit <code>9.03226 – 10 = -0.96774</code>
                     </div>
                     <div class="content slack-on-top">
                         <b>&Eacute;tape 3/12 - Recherche de log(cos(37&deg;46'))</b>
@@ -1951,6 +1998,116 @@
                         On l'a eu&nbsp;!
                     </div>
 
+                    <!-- Table B & R -->
+                    <div class="content slack-on-top">
+                        <b><i>- Avec les tables Bouvart &amp; Ratinet</i></b>
+                        <br/><br/>
+                        <b>&Eacute;tape 1/12 - Recherche de log(sin(37&deg;46'))</b>
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.01-01.jpg" width="60%" alt="Recherche de log(sin(37&deg;46'))" title="Recherche de log(sin(37&deg;46'))"></div>
+                        On trouve&nbsp;: <code>log(sin(37&deg;46')) = <span class="overlined">1</span>,78707 </code> (notez la caract&eacute;ristique surlign&eacute;e) soit cette fois-ci <code>-1 + 0.78707 = -0.21293</code>
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 2/12 - Recherche de log(sin(6&deg;11'))</b>
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.02-01.jpg" width="60%" alt="Recherche de log(sin(6&deg;11'))" title="Recherche de log(sin(6&deg;11'))"></div>
+                        On trouve&nbsp;: <code>log(sin(6&deg;11')) = <span class="overlined">1</span>,03226 </code> (notez la caract&eacute;ristique surlign&eacute;e) soit cette fois-ci <code>-1 + 0.03226 = -0.96774</code>
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 3/12 - Recherche de log(cos(37&deg;46'))</b>
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.01-02.jpg" width="60%" alt="Recherche de log(cos(37&deg;46'))" title="Recherche de log(cos(37&deg;46'))"></div>
+                        On trouve&nbsp;: <code>log(cos(37&deg;46')) = <span class="overlined">1</span>,89791 </code> (notez la caract&eacute;ristique surlign&eacute;e) soit cette fois-ci <code>-1 + 0.89791 = -0.10209</code>
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 4/12 - Recherche de log(cos(6&deg;11'))</b>
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.02-02.jpg" width="60%" alt="Recherche de log(cos(6&deg;11'))" title="Recherche de log(cos(6&deg;11'))"></div>
+                        On trouve&nbsp;: <code>log(cos(6&deg;11')) = <span class="overlined">1</span>,99747 </code> (notez la caract&eacute;ristique surlign&eacute;e) soit cette fois-ci <code>-1 + 0.99747 = -0.00253</code>
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 5/12 - Recherche de log(cos(12&deg;26'))</b>
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.03-01.jpg" width="60%" alt="Recherche de log(cos(12&deg;26'))" title="Recherche de log(cos(12&deg;26'))"></div>
+                        On trouve&nbsp;: <code>log(cos(12&deg;26')) = <span class="overlined">1</span>,98969 </code> (notez la caract&eacute;ristique surlign&eacute;e) soit cette fois-ci <code>-1 + 0.98969 = -0.01031</code>
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 6 &amp; 7/12 - Recherche de sin(L).sin(D)</code></b>
+                        <br/>
+                        Donc, avec les valeurs trouv&eacute;es ci-dessus, on calcule <code>log(sin(L).sin(D)) = -0.21293 – 0.96774 = -1.18067</code>.
+                        <br/>
+                        On pose la formule suivante, avec ses caract&eacute;ristiques, surlign&eacute;es ou non, on additionne les mantisses:
+                        <pre>
+    <span class="overlined">1</span>,78707 </code>
+    <span class="overlined">1</span>,03226 </code> 
+    --------
+    0,81933
+                        </pre>
+                        On additionne les caract&eacute;ristiques - celles qui sont surlign&eacute;es sont n&eacute;gatives, on trouve <code>-2</code>, le r&eacute;sultat final 
+                        est ainsi <code>0,81933 - 2</code>, soit <code>-1.18067</code>.<br/>
+                        On garde cette formule <code>0,81933 - 2</code>, afin d'avoir un nombre compris entre <code>0</code> et <code>1</code>, <code>-2</code> sera la puissance de <code>10</code>.
+                        <br/>
+                        On cherche de quel nombre cette valeur <code>0,81933</code> est le logarithme.
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.04-01.jpg" width="60%" alt="Recherche de sin(L).sin(D)" title="Recherche de sin(L).sin(D)"></div>
+                        Pour <code>N = 650</code> on a <code>81 291</code>.<br/>
+                        Pour <code>N = 659</code> on a <code>81 928</code> dans la <code>6</code><sup><small>e</small></sup> colonne, le prochain est <code>81 935</code> &rArr; diff&eacute;rence tabulaire (<code>935 - 928</code>) = <code>7</code>.<br/>
+                        Comme on est dans la <code>6</code><sup><small>e</small></sup> colonne, on a maintenant <code>N = 6596</code>.<br/>
+                        On cherche <code>81 933</code>, <code>5</code> au dessus de <code>81 928</code>, on trouve <code>3,5</code> dans la petit table de droite <code>DT 7</code>.<br/>
+                        Ce qui donne finalement <code>N = 659635</code>, lu <code>6,59635</code>.<br/>
+
+                        Ainsi, <code>sin(L).sin(D) = 10<sup>(-1.18067)</sup>=10<sup>(0.81933 – 2)</sup>=6.5935.10<sup>-2</sup>=0.0659635</code>
+                        <br/>
+                        Attention, comme la d&eacute;clinaison est n&eacute;gative (S), son sinus est n&eacute;gatif aussi. 
+                        <br/>
+                        On a donc <code><b>sin(L).sin(D) = -0.0659635</b></code>.
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 8 &amp; 9/12 - Recherche de cos(L).cos(D).cos(AHL)</b>
+                        <br/>
+                        Donc, toujours avec les m&ecirc;mes valeurs, on calcule <code>log(cos(L).cos(D).cos(AHL)) = -0.10209 – 0.00253 – 0.01031 = -0.11493</code>.
+                        <br/>
+                        On pose la formule suivante, avec ses caract&eacute;ristiques, surlign&eacute;es ou non, on additionne les mantisses:
+                        <pre>
+    <span class="overlined">1</span>,89791 </code>
+    <span class="overlined">1</span>,99747 </code> 
+    <span class="overlined">1</span>,98969 </code> 
+    --------
+    2,88507
+                        </pre>
+                        3 caract&eacute;ritiques &agrave; <code>1</code> surlign&eacute;es, 2 de retenue, &ccedil;a fait <code>(-3 + 2 = -1)</code>, on a donc finalement <code>10<sup>(0.88507 - 1)</sup></code>
+
+                        <br/>
+                        On cherche &agrave; nouveau de quel nombre cette valeur est le logarithme.
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.05-01.jpg" width="60%" alt="Recherche de cos(L).cos(D).cos(AHL)" title="Recherche de cos(L).cos(D).cos(AHL)"></div>
+                        On trouve <code>N = 767</code> pour <code>88508</code>, dans la <code>5</code><sup><small>e</small></sup> colonne, on prendra donc <code>N = 7675</code>.<br/>
+                        Ainsi, <code>cos(L).cos(D).cos(AHL) = 10<sup>(-0.11493)</sup> = 
+                            10<sup>(0.88507 – 1)</sup> = 
+                            7.675.10<sup>-1</sup> = 
+                            0.7675
+                            </code>.
+                        <br/>
+                        Le fait que la d&eacute;clinaison soit n&eacute;gative n'affecte pas le signe du cosinus.    
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 10/12 - Recherche de sin(L).sin(D) + cos(L).cos(D).cos(AHL)</b>
+                        <br/>
+                        Avec les valeurs ainsi calcul&eacute;es, on d&eacute;termine que
+                        <code>sin(L).sin(D) + cos(L).cos(D).cos(AHL) = -0.0659635 + 0.7675 = 0.7015365</code>.
+
+                        <br/>
+                        Ensuite, <code>log(0.7015365) = log(7.015365.10<sup>-1</sup>) = log(7.015365) – 1</code>.
+                        <br/>
+                        Quel est le logarithme de cette valeur&nbsp;?
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.05-02.jpg" width="60%" alt="Recherche de sin(L).sin(D) + cos(L).cos(D).cos(AHL)" title="Recherche de sin(L).sin(D) + cos(L).cos(D).cos(AHL)"></div>
+                        On trouve <code>0.84603 10<sup>-1</sup></code>.
+                    </div>
+                    <div class="content slack-on-top">
+                        <b>&Eacute;tape 11 &amp; 12/12 - Recherche de He</b>
+                        <br/>
+                        On cherche ce nombre (<code>0.84603 10<sup>-1</sup></code>, soit <code><span class="overlined">1</span>,84603</code>) dans la partie de la table consacr&eacute;e &agrave; la trigonom&eacute;trie, dans la colonne "sinus".
+                        <div style="text-align: center; margin: 10px;"><img src="images/log.br.06-01.jpg" width="60%" alt="Recherche de He" title="Recherche de He"></div>
+                        On trouve <code><span class="overlined">1</span>,84605</code> dans la table, pour la hauteur estim&eacute;e <b>He 44&deg;33'</b>.
+                        <br/>
+                        La hauteur observ&eacute;e &eacute;tant de 44&deg;32.69', &ccedil;a nous fait un intercept de moins d'une minute d'arc, plus loin de l'astre.
+                        <br/>
+                        On l'a eu&nbsp;!
+                    </div>
+
                     <div class="content">
                         <h5><a name="05-2-9-2-7-2">Calcul de l'azimuth</a></h5>
                         <p>
@@ -2002,7 +2159,10 @@
                                 <li><code>log(arctan(Z)) = 0.49815 – 1</code></li>
                                 <li>Ainsi, <code>Z = 17&deg;29'</code></li>
                             </ol>
+                            <!-- Tables US -->
                             <div class="content slack-on-top">
+                                <b><i>- Avec des tables am&eacute;ricaines</i></b>
+                                <br/><br/>
                                 <b>&Eacute;tape 1/12 - Recherche de log(tan(-6&deg;11'))</b>
                                 <div style="text-align: center;"><img src="images/log.10.jpg" width="60%" alt="Recherche de log(tan(-6&deg;11'))" title="Recherche de log(tan(-6&deg;11'))"></div>
                                 Avec la valeur absolue de la d&eacute;clinaison, on trouve&nbsp;: <code>log(tan(6&deg;11')) = 9.03479</code> soit <code>9.03479 – 10 = -0.96521</code>
@@ -2020,7 +2180,7 @@
                                 Donc <code>log(cos(L).tan(D)) = -0.10209 -0.96521 = -1.06730 = 0.93270 – 2.</code>
                                 <br/>
                                 De quel nombre cette valeur est-elle le logarithme&nbsp;?
-                                <div style="text-align: center;"><img src="images/log.12.png" width="60%" alt="Recherche de Recherche de cos(L).tan(D)" title="Recherche de Recherche de cos(L).tan(D)"></div>
+                                <div style="text-align: center;"><img src="images/log.12.png" width="60%" alt="Recherche de cos(L).tan(D)" title="Recherche de cos(L).tan(D)"></div>
                                 On a donc <code>cos(L).tan(D) = 10 (0.93270 – 2) = 10<sup>0.93270</sup>.10-2 = 8.5645 10<sup>-2</sup> = 0.085645</code>.
                                 <br/>
                                 <i>Attention</i>&nbsp;: D est Sud, et notre latitude estim&eacute;e est Nord. 
@@ -2036,7 +2196,7 @@
                                 Donc, <code>log(sin(L).cos(AHL)) = -0.21293 -0.01031 = -0.22324 = 0.77676 – 1</code>.
                                 <br/>
                                 Quel est le nombre dont cette valeur est le logarithme&nbsp;?
-                                <div style="text-align: center;"><img src="images/log.13.png" width="60%" alt="Recherche de Recherche de sin(L).cos(AHL)" title="Recherche de Recherche de sin(L).cos(AHL)"></div>
+                                <div style="text-align: center;"><img src="images/log.13.png" width="60%" alt="Recherche de sin(L).cos(AHL)" title="Recherche de sin(L).cos(AHL)"></div>
                                 On trouve <code>sin(L).cos(AHL) = 10<sup>(0.77676 – 1)</sup> = 10<sup>0.77676</sup>.10<sup>-1</sup> = 5.9810.10<sup>-1</sup> = 0.59810 </code>
                             </div>
                             <div class="content slack-on-top">
@@ -2046,7 +2206,7 @@
                                 <br/>
                                 On a <code>log(sin(AHL)) = -0.66695</code>.
                                 <br/>
-                                De quel nombre est-ce le logarithme&nbsp;?
+                                De quel nombre <code>-0.683745</code> est-il le logarithme&nbsp;?
                                 <div style="text-align: center;"><img src="images/log.14.png" width="60%" alt="Recherche de sin(AHL)/(cos(L).tan(D))−(sin(L).cos(AHL))" title="Recherche de sin(AHL)/(cos(L).tan(D))−(sin(L).cos(AHL))"></div>
                                 On trouve <code>log(0.683745) = log(6.83745.10-1) = 0.834900 – 1 = -0.16510</code>.
                             </div>
@@ -2061,6 +2221,103 @@
                                 </div>
                                 On a donc <code>log(atan(Z)) = 0.49815 – 1</code>, not&eacute; <code>9.49815</code> pour la partie des tables consacr&eacute;e &agrave; la trigonom&eacute;trie.
                                 <div style="text-align: center;"><img src="images/log.15.png" width="60%" alt="Recherche de Z" title="Recherche de Z"></div>
+                                On trouve ainsi 17&deg;29', qu'on arrondit &agrave; 17&deg;.
+                                <br/>
+                                L et D sont de signes diff&eacute;rents, donc l'azimut est &agrave; porter &agrave; partir du p&ocirc;le abaiss&eacute;, 
+                                donc Sud puisque notre latitude en Nord.
+                                <br/>
+                                L'astre est d&eacute;j&agrave; pass&eacute; au m&eacute;ridien, l'azimut est donc &agrave; porter vers l'ouest.
+                                <br/>
+                                L'azimut <b>Z</b> se lit donc <b>S 17 W</b> (&ccedil;a se lit&nbsp;: &agrave; partir du S, 17&deg; vers l'W), soit <b>197&deg;</b>.
+                                <br/>
+                                De m&ecirc;me que dans le cas de la hauteur m&eacute;ridienne, on constate qu'il n'y a pas lieu de s'emporter 
+                                sur la pr&eacute;cision du calcul, celle de la minute suffit largement (ce qui simplifie les acc&egrave;s &agrave; la table de logarithmes), 
+                                puisqu'encore une fois, la mesure effectu&eacute;e au sextant ne peut pas pr&eacute;tendre aller au-del&agrave;.
+                                <br/>
+                                <br/>
+                                Cette derni&egrave;re &eacute;tape conclut l'exercice&nbsp;!
+                            </div>
+
+                            <!-- Table B & R -->
+                            <div class="content slack-on-top">
+                                <b><i>- Avec les tables Bouvart &amp; Ratinet</i></b>
+                                <br/><br/>
+                                <b>&Eacute;tape 1/12 - Recherche de log(tan(-6&deg;11'))</b>
+                                <div style="text-align: center; margin: 10px;"><img src="images/log.br.02-03.jpg" width="60%" alt="Recherche de log(tan(-6&deg;11'))" title="Recherche de log(tan(-6&deg;11'))"></div>
+                                Avec la valeur absolue de la d&eacute;clinaison, on trouve&nbsp;: <code>log(tan(6&deg;11')) = <span class="overlined">1</span>,03479</code> soit <code>-0.96521</code>
+                            </div>
+                            <div class="content slack-on-top">
+                                <b>&Eacute;tape 2/12 - Recherche de log(sin(12&deg;26'))</b>
+                                <div style="text-align: center; margin: 10px;"><img src="images/log.br.03-02.jpg" width="60%" alt="Recherche delog(sin(12&deg;26'))" title="Recherche de log(sin(12&deg;26'))"></div>
+                                On trouve&nbsp;: <code>log(sin(12&deg;26')) = <span class="overlined">1</span>,33305</code></code> soit -0.66695</code>
+                            </div>
+                            <div class="content slack-on-top">
+                                <b>&Eacute;tape 3, 4 &amp; 5/12 - Recherche de cos(L).tan(D)</b>
+                                <br/>
+                                On a d&eacute;j&agrave; <code>log(cos(L))</code>, c'est <code><span class="overlined">1</span>,89791</code>, soit <code>-0.10209</code>.
+                                <br/>
+                                On pose la formule suivante, avec ses caract&eacute;ristiques, surlign&eacute;es ou non, on additionne les mantisses:
+                                <pre>
+    <span class="overlined">1</span>,89791 </code> 
+    <span class="overlined">1</span>,03479 </code>
+    --------
+    0.93270
+                                </pre>
+                                2 caract&eacute;ristiques &agrave; 1, surlign&eacute;es, pas de retenue, &ccedil;a fait <code>-1</code>.<br/>
+                                Donc <code>log(cos(L).tan(D)) = <code><span class="overlined">2</span>,93270</code> = 0.93270 – 2.</code>
+                                <br/>
+                                De quel nombre cette valeur est-elle le logarithme&nbsp;?
+                                <div style="text-align: center; margin: 10px;"><img src="images/log.br.10-01.jpg" width="60%" alt="Recherche de cos(L).tan(D)" title="Recherche de cos(L).tan(D)"></div>
+                                On a donc <code>cos(L).tan(D) = 10 (0.93270 – 2) = 10<sup>0.93270</sup>.10-2 = 8.5645 10<sup>-2</sup> = 0.085645</code>.
+                                <br/>
+                                <i>Attention</i>&nbsp;: D est Sud, et notre latitude estim&eacute;e est Nord. 
+                                Il faut garder ce d&eacute;tail en t&ecirc;te, on s'en servira pour tracer l'azimut.
+                                La valeur trouv&eacute;e sera comprise entre 0&deg; et 90&deg;, il s'agira de savoir si on la porte &agrave; partir du nord ou &agrave; partir du sud, 
+                                vers l'est ou vers l'ouest.
+                            </div>
+                            <div class="content slack-on-top">
+                                <b>&Eacute;tape 6, 7, 8 &amp; 9/12 - Recherche de sin(L).cos(AHL)</b>
+                                <br/>
+                                On a d&eacute;ja <code>log(sin(L)) = <span class="overlined">1</span>,78707</code> = -0.21293</code>, et <code>log(cos(AHL)) = <span class="overlined">1</span>,98969</code> = -0.01031</code>
+                                <br/>
+                                On pose la formule suivante, avec ses caract&eacute;ristiques, surlign&eacute;es ou non, on additionne les mantisses:
+                                <pre>
+    <span class="overlined">1</span>,78707 </code> 
+    <span class="overlined">1</span>,98969 </code>
+    --------
+    1.77676
+                                </pre>
+                                2 caract&eacute;ristiques &agrave; <code>1</code> surlign&eacute;es, <code>1</code> de retenue, &ccedil;a fait <code>-1</code>.
+                                <br/>
+                                Donc, <code>log(sin(L).cos(AHL)) = 0.77676 – 1</code>.
+                                <br/>
+                                Quel est le nombre dont cette valeur est le logarithme&nbsp;?
+                                <div style="text-align: center; margin: 10px;"><img src="images/log.br.08-01.jpg" width="60%" alt="Recherche de sin(L).cos(AHL)" title="Recherche de sin(L).cos(AHL)"></div>
+                                <code>N = 598</code> pour <code>77 677</code>, dans la colonne <code>1</code>, &ccedil;a fait <code>5981</code>.<br/>
+                                On trouve <code>sin(L).cos(AHL) = 10<sup>(0.77676 – 1)</sup> = 10<sup>0.77676</sup>.10<sup>-1</sup> = 5.9810.10<sup>-1</sup> = 0.59810 </code>
+                            </div>
+                            <div class="content slack-on-top">
+                                <b>&Eacute;tape 10/12 - Recherche de sin(AHL)/(cos(L).tan(D))−(sin(L).cos(AHL))</b>
+                                <br>
+                                <i>Le d&eacute;nominateur <code>log(cos(L).tan(D))−(sin(L).cos(AHL))</code> devient alors <code>(-0.085645 - 0.59810) = <b>-0.683745</b></code></i>.
+                                <br/>
+                                On a <code>log(sin(AHL)) = -0.66695</code>.
+                                <br/>
+                                De quel nombre <code>-0.683745</code> est-il le logarithme&nbsp;?
+                                <div style="text-align: center; margin: 10px;"><img src="images/log.br.04-02.jpg" width="60%" alt="Recherche de sin(AHL)/(cos(L).tan(D))−(sin(L).cos(AHL))" title="Recherche de sin(AHL)/(cos(L).tan(D))−(sin(L).cos(AHL))"></div>
+                                On trouve <code>log(0.683745) = log(6.83745.10-1) = 0.834900 – 1 = -0.16513</code>.
+                            </div>
+                            <div class="content slack-on-top">
+                                <b>&Eacute;tape 11 &amp; 12/12 - Recherche de Z</b>
+                                <br>
+                                Donc,
+                                <div class="postit">
+                                    $$
+                                    log\left(\dfrac{sin(AHL)}{-0.683745}\right) = -0.66695 - (-0.16513) = -0.50182 = 0.49818 - 1
+                                    $$
+                                </div>
+                                On a donc <code>log(atan(Z)) = 0.49818 – 1</code>, not&eacute; <code><span class="overlined">1</span>,49818</code> pour la partie des tables consacr&eacute;e &agrave; la trigonom&eacute;trie.
+                                <div style="text-align: center;"><img src="images/log.br.09-01.jpg" width="60%" alt="Recherche de Z" title="Recherche de Z"></div>
                                 On trouve ainsi 17&deg;29', qu'on arrondit &agrave; 17&deg;.
                                 <br/>
                                 L et D sont de signes diff&eacute;rents, donc l'azimut est &agrave; porter &agrave; partir du p&ocirc;le abaiss&eacute;, 
@@ -2345,7 +2602,7 @@
                     Il est int&eacute;ressant de constater que la grande majorit&eacute; des noms qu'on donne aux &eacute;toiles sont des noms Arabes.
                 </p>
             </p>
-            <p>
+            <p class="content">
                 <h5><a name="05-2-9-3-3">Distances lunaires</a></h5>
                 <p>
                     Plus qu'une m&eacute;thode de d&eacute;termination de la longitude, c'est en fait une fa&ccedil;on de recaler le chronom&egrave;tre, ce qui m&egrave;ne 
@@ -2360,7 +2617,7 @@
                 </p>
                 <p>    
                     Un autre aspect important de cette m&eacute;thode – si ce n'est la raison pour laquelle elle existe, 
-                    c'est que – une fois corrig&eacute;e - l'observation faite d'une distance entre deux astres <b>ne d&eacute;pend pas</b> de 
+                    c'est que – une fois corrig&eacute;e - l'observation faite d'une distance entre deux astres <b>ne d&eacute;pend pas</b> (ou tr&egrave;s peu) de 
                     la position g&eacute;ographique de l'observateur.
                 </p>
                 <p>    
@@ -2421,7 +2678,7 @@
                     <br/>
                     &Agrave; partir des donn&eacute;es de l'almanach (D&eacute;clinaison et Angle Horaire), on peut &agrave; tout moment calculer 
                     la distance entre deux corps c&eacute;lestes en utilisant la formule suivante&nbsp;:
-                    <div class="postit">
+                    <div class="postit smaller-plus">
                     $$ Dist = \arccos[\sin(Dec1) \times \sin(Dec2) + \cos(Dec1) \times \cos(Dec2) \times \cos(GHA2-GHA1)] $$
                     </div>
                     Il est certainement plus commode d'effectuer ce genre de calculs lors de la publication de l'almanach. 
@@ -2429,7 +2686,7 @@
                 </p>
                 <p>
                     La correction de cette fameuse distance est effectu&eacute;e &agrave; l'aide de la formule de Young&nbsp;:
-                    <div class="postit">
+                    <div class="postit smaller-plus">
                     $$
  \cos(D) = \dfrac{\cos(Hm).\cos(Hb)}{\cos(Hmapp).\cos(Hbapp)}.[\cos(Dapp) + \cos(Hmapp + Hbapp)] - \cos(Hm + Hb)
                     $$
@@ -2491,6 +2748,10 @@
 
 <div id="appendix-page" class="content doc-section in-the-middle" style="text-align: center;">
     <h1><a name="appendix">Appendices</a></h1>
+    <p class="below" style="text-align: left; font-style: italic;">
+        Cette section d&eacute;taille des points &eacute;voqu&eacute;s pr&eacute;c&eacute;dement dans le document.<br/>
+        &Ccedil;a devrait en g&eacute;n&eacute;ral amuser ceux qui n'&eacute;coutaient pas en math...
+    </p>
 </div>
 
 <div class="content">
@@ -2650,7 +2911,7 @@
     </p>
     <p>
         L'&eacute;quation du temps est en fait la diff&eacute;rence qu'il existe entre le midi local et le temps de passage d'un astre. 
-        ette &eacute;quation du temps peut &ecirc;tre interpol&eacute;e, tandis que le temps de passage &agrave; Greenwich ne saurait &ecirc;tre 
+        Cette &eacute;quation du temps peut &ecirc;tre interpol&eacute;e, tandis que le temps de passage &agrave; Greenwich ne saurait &ecirc;tre 
         autre chose que le temps de passage... &agrave; Greenwich. 
         En effet, le temps de passage &agrave; Greenwich &eacute;volue de jour en jour. La grandeur qui change – de mani&egrave;re continue – est 
         appel&eacute;e l'"&eacute;quation du temps".
@@ -2673,13 +2934,14 @@
         <br/>
         En tant que document imprim&eacute;, &ccedil;a ne tombe pas en panne en cas de coupure de courant, d'o&ugrave; son int&eacute;r&ecirc;t ici.
         <br/>
-        Leur usage n'est cependant pas toujours intuitif..., d'o&ugrave; ce paragraphe.
+        Leur usage n'est cependant pas toujours compl&egrave;tement intuitif..., d'o&ugrave; ce paragraphe.
     </p>
     <p>
         Ceci est plut&ocirc;t un exercice de style… Ou alors destin&eacute; &agrave; ceux qui auraient oubli&eacute; 
-        leurs tables (Dieumegard et Bataille) de calcul, et pas leurs tables de log. 
+        leurs tables (Dieumegard et Bataille) de calcul, et pas leurs tables de log&nbsp;; ce qui est improbable, certes. 
         <br/>
-        C'est n&eacute;anmoins int&eacute;ressant, d'autant plus que &ccedil;a fonctionne.
+        C'est n&eacute;anmoins int&eacute;ressant, d'autant plus que &ccedil;a fonctionne. La complexit&eacute; du processus est pr&eacute;cisement ce qui a donn&eacute; lieu
+        &agrave; l'&eacute;laboration des tables de calcul comme celles de Dieumegard &amp; Bataille.
     </p>
     <p>
         <i><b>Les tables donnent les logarithmes <span style="color: red;">d&eacute;cimaux</span></b></i>.
@@ -2724,33 +2986,77 @@
         <div class="indent-one">
             Ces caract&eacute;ristiques surlign&eacute;es sont tr&egrave;s pratiques, quand on doit additionner ces valeurs de logarithmes, ainsi que c'est fr&eacute;quent.
             <br/>
-            Par exemple, si on pose l'addition suivante:
+            Par exemple, si on pose l'addition suivante&nbsp;:
             <pre>
-                0,1234
-              + 1,2345
-              + 2,3456
+  0,1234
++ 1,2345
++ 2,3456
             </pre>
             On trouve bien &eacute;videmment
             <pre>
-                3.7035
+  3.7035
             </pre>
             Mais si on pose
             <pre>
-                0,1234
-              - 0,7655
-              + 2,3456
+  0,1234
+- 0,7655
++ 2,3456
               </pre>
-            On veut trouver 1,7029, mais c'est moins facile, davantage d'erreurs sont possible, surtout si &ccedil;a souffle...
+            On veut trouver <code>1,7035</code>, mais c'est moins facile, davantage d'erreurs sont possibles, surtout si &ccedil;a souffle...
             <br/>
-            Mais avec, comme <code>-0,7655 = 1 - 0,2345</code>:
+            Mais, comme <code>-0,7655 = 0,2345 - 1</code>&nbsp;:
             <pre>
-                0,1234
-              + <span class="overlined">1</span>,2345
-              + 2,3456
+  0,1234
++ <span class="overlined-red" style="color: red;">1</span>,2345
++ 2,3456
               </pre>
-              On fait une <i>addition</i>, mais en retranchant les valeurs surlign&eacute;es lors de l'addition des caract&eacute;ristiques.
+              On fait une <i>addition</i> des mantisses, mais en retranchant les valeurs surlign&eacute;es lors de l'addition des caract&eacute;ristiques.
               <br/>
-              Et on arrive au m&ecirc;me resultat sans s'&ecirc;tre encombr&eacute; avec des retenues. CQFD.
+              Et on arrive au m&ecirc;me r&eacute;sultat sans s'&ecirc;tre encombr&eacute; avec des retenues. CQFD.
+              <p>
+                Plus en d&eacute;tails, pour &ecirc;tre s&ucirc;r&nbsp;: <br/>
+                Pour les mantisses&nbsp;:
+                <pre>
+  0,1234
++ <span class="overlined">1</span>,2345
++ 2,3456
+----------
+...,7035
+                </pre>
+                Pour les caract&eacute;ristiques&nbsp;:
+                <pre>
+  0,....
+<b>-</b> 1,.... (surlign&eacute;, donc n&eacute;gatif&nbsp;! )
++ 2,....
+--------
+  1,....
+                </pre>
+                On assemble les r&eacute;sultats obtenus, caract&eacute;ristique (<code>1</code>) et mantisse (<code>7035</code>)&nbsp;: <code>1,7035</code>.<br/>
+                Ainsi, ces deux fa&ccedil;ons de poser le m&ecirc;me probl&egrave;me sont &eacute;quivalentes&nbsp;:
+                <table>
+                    <tr>
+                        <td>
+                            <pre>
+  0,1234
++ <span class="overlined">1</span>,2345
++ 2,3456
+----------
+  1,7035
+                            </pre>
+                        </td>
+                        <td>
+                            <pre>
+  0,1234 
+- 0,7655
++ 2,3456
+----------
+  1,7035
+                            </pre>
+                        </td>
+                    </tr>
+                </table>
+                L'une est plus simple &agrave; r&eacute;soudre que l'autre. Voil&agrave;.
+              </p>
         </div>
         <br/>
         <b><i>&Agrave; propos des caract&eacute;ristiques surlign&eacute;es&nbsp;:</i></b>
@@ -2827,7 +3133,7 @@
                 <i>Exemple&nbsp;:</i><br/>
                 Recherche de la valeur de log(28,864).<br/>
                 Comme pr&eacute;c&eacute;demment, on r&eacute;duit &agrave; un nombre situ&eacute; entre 1 et 10&nbsp;:<br/>
-                Log (28,864) = log(2,8864.101)<br/>
+                Log (28,864) = log(2,8864.10<sup>1</sup>)<br/>
                 Ensuite on situe ce nombre entre deux valeurs &agrave; 4 chiffres&nbsp;:<br/>
                 2,886 < 2,8864 < 2,887
             </p>
@@ -2887,7 +3193,7 @@
         Ici, on est le 23 octobre 2010, notre position estim&eacute;e est 0&deg;51.7' N / 138&deg;08.5' W.
     </p>
     <p>
-        On observe <b>Jupiter</b> et la <b>Lune</b>.
+        On observe <b>Jupiter</b> (&#9795;) et la <b>Lune</b> (son bord inf&eacute;rieur).
     </p>
     <p>
         &Agrave; 05:21:05 UTC, on observe Jupiter, sa hauteur instrumentale est 67&deg;32'.
@@ -2939,18 +3245,49 @@
     Les points peuvent &ecirc;tre d&eacute;finis (coordonn&eacute;s) de diff&eacute;rentes mani&egrave;res, un cap compas (HDC, pour HeaDing Compass) et une route fond (COG, pour Course Over Ground)
     pour une courbe de d&eacute;viation, un angle de vent r&eacute;el et une vitesse du bateau pour des polaires, etc.<br/><br/>
     Pour la commodit&eacute; de la notation, on prendra les points coordonn&eacute;s g&eacute;n&eacute;riquement, comme suit&nbsp;:
-    <div class="postit">
+    <table>
+        <tr>
+            <td>
+                <div class="postit">
+                    $$
+                       P^{HDC}_{COG} = P^x_y
+                    $$
+                </div>
+            </td>
+            <td>
+                , &eacute;crit aussi
+            </td>
+            <td>
+                <div class="postit">
+                    $$
+                       y = f(x)
+                    $$
+                </div>
+            </td>
+            <td>
+                o&ugrave;
+            </td>
+            <td>
+                <div class="postit">
+                    $$
+                       f(x) = ax^2 + bx + c
+                    $$
+                </div>
+            </td>
+        </tr>
+    </table>
+    <!--div class="postit">
     $$
-       P^{HDC}_{COG} = P^x_y
+       P^{HDC}_{COG} = P^x_y, ecrit aussi f(x) = y, ou f(x) = ax^2 + bx + c
     $$
-    </div>
-    On cherche les coefficients <code>a</code>, <code>b</code>, <code>c</code> et <code>d</code> d'un polyn&ocirc;me pour lequel
+    </div-->
+    Donc, pour tous les points $(x, y)$ du nuage de donn&eacute;es enregistr&eacute;es, on cherche les coefficients <code>a</code>, <code>b</code>, <code>c</code> et <code>d</code> d'un polyn&ocirc;me pour lequel
     <div class="postit">
     $$
     ax^2 + bx + c
     $$
     </div>
-    est le plus proche possible de <code>y</code>, c'est &agrave; dire que la somme
+    est le plus proche possible de <code>y</code>, c'est &agrave; dire que la diff&eacute;rence
     <div class="postit">    
     $$
     ax^2 + bx + c - y
@@ -2959,13 +3296,17 @@
     soit la plus petite possible, donc, que pour tous les points enregistr&eacute;s, le carr&eacute; de cette diff&eacute;rence soit le plus proche possible de z&eacute;ro 
     (on &eacute;l&egrave;ve au carr&eacute; pour supprimer le signe, d'o&ugrave; le nom de la m&eacute;thode), et donc que le cumul de ces diff&eacute;rences soit en d&eacute;finitive la plus petite possible. <br/>
     Ceci revient &agrave; calculer les coefficients <code>a</code>, <code>b</code> et <code>c</code> pour lesquels la d&eacute;riv&eacute;e premi&egrave;re de cette sommation des carr&eacute;s des diff&eacute;rences 
-    par rapport &agrave; chacun des coefficients <code>a</code>, <code>b</code> et <code>c</code> est nulle&nbsp;:
+    par rapport &agrave; chacun des coefficients <code>a</code>, <code>b</code> et <code>c</code> est nulle, ce qui s'&eacute;crit&nbsp;:
     <div class="postit">
-    $ ([\Sigma(ax^2 + bx + c - y)^2])' = 0 $    
+    $$ ([\Sigma(ax^2 + bx + c - y)^2])' = 0 $$    
     </div>
     On d&eacute;veloppe la somme avant de d&eacute;river&nbsp;:
-    <div class="postit">
-    $ S = a^2\Sigma x^4 + 2ab\Sigma x^3 + 2ac\Sigma x^2 - 2a\Sigma yx^2 + b^2\Sigma x^2 + 2bc\Sigma x - 2b\Sigma yx + c^2\Sigma x^0 - 2c\Sigma y + \Sigma y^2 $
+    <div class="postit smaller-plus">
+    $
+    
+    S = a^2\Sigma x^4 + 2ab\Sigma x^3 + 2ac\Sigma x^2 - 2a\Sigma yx^2 + b^2\Sigma x^2 + 2bc\Sigma x - 2b\Sigma yx + c^2\Sigma x^0 - 2c\Sigma y + \Sigma y^2 
+    
+    $
     </div>
     On d&eacute;rive l'expression ainsi obtenue
     <ul>
@@ -3004,19 +3345,75 @@
     <div class="doc-section">
         <h3><a name="least-square-dev">Cas d'une courbe de d&eacute;viation</a></h3>
         <p>
+            On cherche ici &agrave; &eacute;laborer une courbe de d&eacute;viation, &agrave; partir de points enregistr&eacute;s depuis la station NMEA du bord.
+            <br/>
+            Dans ce contexte, la station doit comporter un GPS, et un compas (compas &eacute;lectronique, donc). Le GPS permettra &agrave; la station NMEA de g&eacute;n&eacute;rer des cha&icirc;nes RMC - qui vont contenir 
+            la route fond (Course Over Ground, aka COG), le compas fournira &agrave; la station ce dont elle a besoin pour g&eacute;n&eacute;rer les Caps Compas (Heading, aka HDG, HDM, etc, suivant les stations).
+            <br/>
+            Le fichier contenant les informations produites par la station NMEA aura ainsi une allure comme ceci&nbsp;:
+            <pre class="postit">
+    . . .
+    $IIRMC,190402,A,0854.980,S,14006.028,W,00.0,008,031110,10,E,A*07
+    $IIVHW,,,126,M,00.0,N,,*61
+    $IIVLW,02839,N,000.0,N*53
+    $IIVWR,027,R,07.2,N,,,,*61
+    $IIDPT,012.3,+0.7,*40
+    $IIGLL,0854.979,S,14006.029,W,190403,A,A*56
+    $IIHDG,126,,,10,E*16
+    . . .
+            </pre>
+            On note que le fichier peut contenir d'autres donn&eacute;es (<code>VHW</code>, <code>DPT</code>, <code>GLL</code>, <code>VLW</code>, etc), qu'on ignorera ici.
+            <br/>
+            Ce fichier sera ensuite travaill&eacute; pour produire un document o&ugrave; ne figureront que les donn&eacute;es qui nous concernent ici, &agrave; savoir la d&eacute;viation en fonction du cap.
+            <br/>
+            Par exemple (en JSON ici)&nbsp;:
+            <pre class="postit">
+    [
+        { "hdc": 210.000000, "dev": 4.000000 },
+        { "hdc": 210.000000, "dev": 4.000000 },
+        { "hdc": 210.000000, "dev": -1.000000 },
+        { "hdc": 210.000000, "dev": -2.000000 },
+        { "hdc": 208.000000, "dev": -4.000000 },
+        . . .
+    ]  
+            </pre>
+            <div class="screen-only">
+                <p>
+                    Plus de d&eacute;tails sur ces op&eacute;rations sont disponibles dans d'autres documents&nbsp;:
+                    <ul>
+                        <li><a href="https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/notebooks/LogfileToDeviation.ipynb" target="NB">Jupyter Notebook, en Java</a></li>
+                        <li><a href="https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html" target="dev-curve">Sur le proc&eacute;d&eacute;</a></li>
+                        <li><a href="https://github.com/OlivierLD/ROB/tree/master/raspberry-sailor/Swing/Deviation-Tool" target="ROB">Avec des exemples</a></li>
+                    </ul>
+                </p>
+            </div>
+            <br/>
+            <br/>
             On consid&egrave;re donc que la forme g&eacute;n&eacute;rique d'une courbe de d&eacute;viation est
             <div class="postit">
             $$
-            d = a + (b \times \cos r) + (c \times \cos r) + (d \times \sin 2r) + (e \times \cos 2r)
+            dev = a + (b \times \cos r) + (c \times \cos r) + (d \times \sin 2r) + (e \times \cos 2r)
             $$
             </div>
-            ce qui n'est manifestement pas un polyn&ocirc;me.
+            ce qui n'est manifestement pas un polyn&ocirc;me, mais comme ce sont les coefficients de la formule qu'on cherche,
+            la m&eacute;thode des moindres carr&eacute;s peut s'appliquer.
             <br/>
-            Dans l'&eacute;quation ci-dessus, <code>r</code> est le Cap Compas, <code>d</code> est la d&eacute;viation (&delta; entre <code>HDG</code> et <code>HDM</code>).<br/>
-            On cherche donc &agrave; d&eacute;finir une fonction <code>f</code> pour laquelle la d&eacute;viation <code>d</code> est obtneu en fournissant <code>r</code>:
+            Dans l'&eacute;quation ci-dessus, <code>r</code> est le Cap Compas, <code>dev</code> est la d&eacute;viation (&delta; entre <code>HDC</code> et <code>HDM</code>, cap compas et cap magn&eacute;tique<span class="screen-only">, voir <a href="#05-1-5">ici</a></span>).<br/>
+            On cherche donc &agrave; d&eacute;finir une fonction <code>f</code> pour laquelle la d&eacute;viation <code>dev</code> est obtenue en fournissant <code>r</code>:
             <div class="postit">
-                $$ d = f(r) $$
+                $$ dev = f(r) $$
             </div>
+            Gr&acirc;ce au logging, on dispose d'un nuage de points qui comportent chacun au moins les informations suivantes&nbsp;:
+            <ul>
+                <li>HDC (Heading Compass)</li>
+                <li>COG (Course Over Ground)</li>
+            </ul>
+            Le logging doit s'effectuer sans courant, et sans d&eacute;rive, de fa&ccedil;on &agrave; &ecirc;tre s&ucirc;r que la diff&eacute;rence entre 
+            le cap compas <code>HDC</code> (corrig&eacute; de la d&eacute;clinaison locale)
+            et la route fond (<code>COG</code>) est bien la d&eacute;viation <code>d</code>, que l'on cherche. Pas de d&eacute;rive, pas de courant, 
+            la route fond est &eacute;gale &agrave; la route surface, qui est &eacute;gale au 
+            cap vrai du bateau<span class="screen-only"> (voir <a href="#05-1-5">ici</a>)</span>.
+            <br/>
             Les &eacute;l&eacute;ments du nuage de points dont on dispose (&eacute;labor&eacute; &agrave; partir du logging) sont d&eacute;finis en
             <div class="postit">
                 $$ P_{d}^{HDC} = P_{d}^{r} = P_{y}^{x} $$
@@ -3027,11 +3424,13 @@
             <div class="postit">
                 $ \begin{vmatrix} a & b & c & d & e \end{vmatrix} $
             </div>
-            La dimension des matrices &agrave; g&eacute;rer est donc cette fois-ci 5.
+            La dimension des matrices &agrave; g&eacute;rer est donc cette fois-ci 5. On applique la m&eacute;thode des moindres carr&eacute;s, d&eacute;crite ci-dessus.
             <br/>
-            On obtient les coefficients en r&eacute;solvant&nbsp;:
-            <div class="postit">
+            On obtient les coefficients $ \begin{vmatrix} a & b & c & d & e \end{vmatrix} $ en r&eacute;solvant&nbsp;:
+            <div class="postit smaller">
                 $$   
+  \begin{vmatrix} a & b & c & d & e \end{vmatrix} 
+                =
   \begin{vmatrix}
   &n  &\sum_{i=0}^{n}\sin(r)  &\sum_{i=0}^{n}\cos(r)  &\sum_{i=0}^{n}\sin(2r)  &\sum_{i=0}^{n}\cos(2r) \\
   &\sum_{i=0}^{n}\sin(r)  &\sum_{i=0}^{n}\sin(r)^2  &\sum_{i=0}^{n}\sin(r)cos(r)  &\sum_{i=0}^{n}\sin(2r)sin(r))  &\sum_{i=0}^{n}\cos(2r)sin(r) \\
@@ -3043,29 +3442,38 @@
 \times
 
  \begin{vmatrix}
-  &\sum_{i=0}^{n}\ d \\
-  &\sum_{i=0}^{n}\ d.sin(r) \\
-  &\sum_{i=0}^{n}\ d.cos(r) \\
-  &\sum_{i=0}^{n}\ d.sin(2r) \\
-  &\sum_{i=0}^{n}\ d.cos(2r)
+  &\sum_{i=0}^{n}\ dev \\
+  &\sum_{i=0}^{n}\ dev.sin(r) \\
+  &\sum_{i=0}^{n}\ dev.cos(r) \\
+  &\sum_{i=0}^{n}\ dev.sin(2r) \\
+  &\sum_{i=0}^{n}\ dev.cos(2r)
  \end{vmatrix}
 
  $$
             </div>
             Fastoche&nbsp;!
             <br>
-            Pour plus de d&eacute;tails, voir aussi <a href="https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html" target="dev-curve">https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html</a>
+            <span class="screen-only">
+                Pour plus de d&eacute;tails, voir aussi <a href="https://htmlpreview.github.io/?https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/README.html" target="dev-curve">ce document</a>,
+                et aussi <a href="https://github.com/OlivierLD/ROB/tree/master/raspberry-sailor/Swing/Deviation-Tool" target="ROB">celui-ci</a>, pour un exemple 
+                complet (incluant le code pour la r&eacute;solution des matrices), partant du fichier de log, passant par le calcul des coefficients, et aboutissant &agrave; l'affichage de la courbe de d&eacute;viation, avec une interface Web.
+            </span>
         </p>
     </div>
 </div>
 
 <div class="screen-only">
-    <h2>Notebooks</h2>
+    <h2>Jupyter Notebooks</h2>
     <p>
-        Pour les accros de la programmation, deux notebooks:
+        Pour les accros de la programmation: <br/>
+        Deux notebooks, pour l'azimuth et la hauteur estim&eacute;e:
         <ul>
             <li><a href="https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroComputer/notebooks/Z_and_He_byHand_Java.ipynb" target="NB">En Java</a></li>
             <li><a href="https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroComputer/notebooks/Z_and_He_byHand_python.ipynb" target="NB">En Python</a></li>
+        </ul>
+        R&eacute;solution d'une courbe de d&eacute;viation &agrave; partir d'un fichier de log:
+        <ul>
+            <li><a href="https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/Swing/Deviation-Tool/notebooks/LogfileToDeviation.ipynb" target="NB">En Java</a></li>
         </ul>
     </p>
 </div>

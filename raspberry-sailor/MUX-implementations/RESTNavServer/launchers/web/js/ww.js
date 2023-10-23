@@ -64,7 +64,7 @@ let init = function () {
 	worldMap.setWest(-179);
 	worldMap.setEast(179); // Recalculated, anyway.
 
-	worldMap.setUserPosition({ latitude: position.lat, longitude: position.lng });
+	worldMap.setUserPosition({ latitude: position.lat, longitude: position.lng }); // TODO gridSquare & GoogleCodePlus ?
 
 };
 
@@ -210,7 +210,7 @@ let getGPSPosition = function() {
 			console.log(`Pos from Cache ${JSON.stringify(cacheValues)}`);
 		}
 		if (cacheValues.Position) {
-			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });
+			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });  // TODO gridSquare & GoogleCodePlus ?
 			redraw();
 			// console.log(`Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
 		}
