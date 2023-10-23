@@ -6,4 +6,5 @@ Python3 types:
 - see <https://docs.python.org/3/library/typing.html>
 
 To publish:
-- see https://realpython.com/pypi-publish-python-package/
+- see <https://realpython.com/pypi-publish-python-package/>
+

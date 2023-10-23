@@ -3,7 +3,7 @@ The idea is to provide an HTML page that can also be printed, with all the goodi
 
 We'll see.
 
-> Note: To keep in sync with `olivierld.github.io`.
+> _Note_: This is to be kept in sync with `olivierld.github.io`.
 
 # Related documents
 - Jupyter Notebooks
@@ -13,14 +13,14 @@ We'll see.
   - Introduction to Celestial Navigation, [in English](./presentations/NavAstroIntro_en.pdf).
   - Introduction à la navigation astronomique, [en français](./presentations/NavAstroIntro_fr.pdf).
 - Tables and Docs (in the `tables.and.docs` folder)
-  - Canevas Mercator
+  - Mercator Canvases / Canevas Mercator
   - Plotting Sheets
   - Tables de Dieumegard et Bataille
   - Tables de correction des hauteurs
   - etc...
 - Tutorials, web UI
   - Usage des [tables de Dieumegard & Bataille](./tutorials/dieumegard.bataille.tuto.html).
-  - Usage des [tables de logarithme](./tutorials/logarithmes.tuto.html).
+  - Usage des [tables de logarithme](./tutorials/logarithmes.tuto.html), pour la hauteur et l'azimut.
 
 ---
 
