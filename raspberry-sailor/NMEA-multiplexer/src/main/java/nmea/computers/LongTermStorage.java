@@ -74,7 +74,7 @@ public class LongTermStorage extends Computer {
 					// Fill the map
 					objectMap.put(DURATION_FMT.format(measureDate), finalData);
 					if (this.verbose) {
-						System.out.printf(">> Long Storage Map %d is now %d elements big\n", this.storagePathInCache, objectMap.size());
+						System.out.printf(">> Long Storage Map %s is now %d elements big\n", this.storagePathInCache, objectMap.size());
 					}
 					// Cut the Map if too long (from the head)
 					while (objectMap.keySet().size() > this.maxLength) {

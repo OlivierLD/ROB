@@ -16,7 +16,7 @@ context:
   damping: 30
 channels:
   - type: tcp
-    server: 127.0.0.1
+    server: 127.0.0.1  # Or server's IP
     port: 8001
     verbose: false
 forwarders:
