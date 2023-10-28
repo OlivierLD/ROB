@@ -84,6 +84,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 			"with-digits",      // Boolean, default true. Index Values for major-ticks
 			"with-border",      // Boolean, default true
 			"label",            // String. Ignored if digital-data-* are provided.
+			"unit",             // Optional. Like hPa, mmHg, etc.
 			"digital-data-len", // Integer, optional, to display instead of label, like log value along with BSP. Number of characters to display
 			"digital-data-val", // Float, optional. Must be present idf the above exists.
 			"value"             // Float. Value to display
@@ -110,6 +111,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 		this._with_digits      = true;
 		this._with_border      = true;
 		this._label            = undefined;
+		this._unit             = undefined;
 		this._digital_data_len = undefined;
 		this._digital_data_val = undefined;
 
@@ -182,6 +184,9 @@ class AnalogDisplay extends HTMLElement { // WIP
 				break;
 			case "label":
 				this._label = newVal;
+				break;
+			case "unit":
+				this._unit = newVal;
 				break;
 			case "digital-data-len":
 				this._digital_data_len = parseInt(newVal);
@@ -287,6 +292,9 @@ class AnalogDisplay extends HTMLElement { // WIP
 	}
 	get label() {
 		return this._label;
+	}
+	get unit() {
+		return this._unit;
 	}
 	get digitalDataLen() {
 		return this._digital_data_len;
@@ -585,6 +593,25 @@ class AnalogDisplay extends HTMLElement { // WIP
 			context.lineWidth = 1;
 			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
 			context.strokeText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (fontSize * scale * 2.1))); // Outlined
+			context.closePath();
+		}
+		// Unit ?
+		if (this.unit !== undefined) {
+			var fontSize = 14;
+			text = this.unit;
+			len = 0;
+			context.font = "bold " + Math.round(scale * fontSize) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
+			metrics = context.measureText(text);
+			len = metrics.width;
+
+			context.beginPath();
+			context.fillStyle = this.analogDisplayColorConfig.labelFillColor;
+			let y = (2 * radius) - (fontSize * scale * 1.4);
+			console.log(`y:${y}`);
+			context.fillText(text, (this.canvas.width / 2) - (len / 2),  y);
+			context.lineWidth = 1;
+			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+			context.strokeText(text, (this.canvas.width / 2) - (len / 2), y); // Outlined
 			context.closePath();
 		}
 
