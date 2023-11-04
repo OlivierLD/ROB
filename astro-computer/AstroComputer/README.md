@@ -46,7 +46,7 @@ Beside Java, we (will) have
 ### Integrated Development Environment (IDE)
 Here is a quick list of some IDEs I use. They _all_ have a free version.
 - For Java and all JVM-aware languages (Scala, Kotlin, Groovy, ...): IntelliJ, period❗
-- For Python: PyCharm.
+- For Python: PyCharm, Visual Studio.
 - For C & C++: Visual Studio.
 - For Golang: Visual Studio.
 - For JavaScript: IntelliJ (Pro), WebStorm, Visual Studio.
@@ -420,5 +420,7 @@ More Unit tests (for ES6, use [Mocha](https://mochajs.org/)).
 - July 2021, for the Java version, introduced `AstroComputerV2`, deprecated `AstroComputer`.
   - Contains non-static methods, so it can handle several calculations at the same time, or in parallel.
 
+## More resources
+- [Portail IMCCE](https://ssp.imcce.fr/forms)
 
 ---
