@@ -8,3 +8,10 @@ Python3 types:
 To publish:
 - see <https://realpython.com/pypi-publish-python-package/>
 
+# Resources
+- Interesting: <https://www.astrolabe-science.fr/equation-du-temps-python/>
+
+## To run an example
+```
+$ [python3] ./python_sample.py [--now]
+```

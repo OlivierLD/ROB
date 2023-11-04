@@ -637,6 +637,7 @@ class LongTermAlmanac:
     
         # Equation of time
         # EoT = 4*(Lsun_mean-0.0057183-0.0008-RASun+deltaPsi*mu.cosd(eps))
+        # TODO Check the sign.
         LongTermAlmanac.EoT = 4 * LongTermAlmanac.GHASun + 720 - 1440 * LongTermAlmanac.dayFraction
         if LongTermAlmanac.EoT > 20:
             LongTermAlmanac.EoT -= 1440

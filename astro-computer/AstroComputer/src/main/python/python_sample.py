@@ -29,10 +29,10 @@ if len(sys.argv) > 1:
         now = True
 
 if now:
-    print("Calculating current UTC")
+    print("Calculating current UTC...")
     currentUTC: datetime = datetime.now(timezone.utc)
     # print(f" Date Type: {type(currentUTC)}")
-    print(f"Current UTC: {currentUTC.strftime('%Y-%m-%dT%H:%M:%S.000Z')} ")
+    print(f"Current UTC (Duration format): {currentUTC.strftime('%Y-%m-%dT%H:%M:%S.000Z')} ")
     year = int(currentUTC.strftime("%Y"))
     month = int(currentUTC.strftime("%m"))
     day = int(currentUTC.strftime("%d"))
@@ -50,7 +50,7 @@ lta.calculate(year, month, day, hours, minutes, seconds, deltaT)
 after: int = int(round(time.time() * 1000))
 # Display results
 print("----------------------------------------------")
-print(f"Calculations done for {year}-{month:02d}-{day} {hours}:{minutes}:{seconds} UTC")
+print(f"Calculations done for {year}-{month:02d}-{day:02d} {hours:02d}:{minutes:02d}:{seconds:02d} UTC")
 print("In {} ms".format(after - before))
 print("----------------------------------------------")
 
@@ -126,7 +126,14 @@ print("Ecliptic: obliquity {}, true {}".format(OoE, tOoE))
 
 # Equation of time
 fmtEoT: str = lta.outEoT(lta.EoT)
-print("Equation of time {}".format(fmtEoT))
+print("Equation of time {} ({} m)".format(fmtEoT, lta.EoT))
+tPass: float = (12.0 * 60) - lta.EoT  # In minutes. TODO Check the EoT sign...
+tPass /= 60.0  # In hours
+tPassHours: int = int(tPass)
+tPassMinutes: int = int((tPass*60) % 60)
+tPassSeconds: float = (tPass*3600) % 60
+print("TPass Sun: {}h {}m {:.2f}s".format(tPassHours, tPassMinutes, tPassSeconds))
+
 
 # Lunar Distance of Sun
 fmtLDist: str = lta.outHA(lta.LDist)
