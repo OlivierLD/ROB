@@ -225,6 +225,9 @@ public class Constellations {
         return constellations;
     }
 
+    /*
+     * For tests.
+     */
     public static void main(String... args) throws Exception {
 
         final List<Constellation> constellations = Constellations.getInstance().getConstellations();

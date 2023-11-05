@@ -56,6 +56,7 @@ export function sampleMain(userDataObject) {
 // Expose required functions
 window.sampleMain = sampleMain;
 window.gridSquare = CelestialComputer.gridSquare;
+// TODO Google PlusCode
 window.sightReduction = CelestialComputer.sightReduction; // Note: This is the one in utils.js
 window.getGCDistance = getGCDistance;
 window.getGCDistanceDegreesNM = getGCDistanceDegreesNM;

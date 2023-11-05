@@ -30,6 +30,7 @@ import * as Jupiter from './jupiter.js';
 import * as Saturn from './saturn.js';
 
 import STAR_CATALOG from './stars.js';
+import CONSTELLATION_LIST from './constellations.js';
 
 const EPS0_2000 = 23.439291111; // Reference
 

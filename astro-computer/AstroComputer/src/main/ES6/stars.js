@@ -1,4 +1,4 @@
-//       Name, Constellation pos, RA, Dec, deltaRA, deltaD, par
+// Star name, Constellation pos, RA, Dec, deltaRA, deltaD, par
 let STAR_CATALOG;  // Does not like const...
 export default STAR_CATALOG = [
     {
