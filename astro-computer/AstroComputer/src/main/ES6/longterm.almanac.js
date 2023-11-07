@@ -5,7 +5,7 @@
  * https://www.celnav.de/
  * http://www.titulosnauticos.net/astro/
  *
- * DeltaT can be found at http://maia.usno.navy.mil/ (will be back to life in 2020... in your dreams)
+ * DeltaT can be found at http://maia.usno.navy.mil/ (should be back to life in 2020... in your dreams)
  * Also known as CelestialComputer.
  */
 

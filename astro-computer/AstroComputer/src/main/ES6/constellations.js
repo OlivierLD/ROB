@@ -777,12 +777,12 @@ export default CONSTELLATION_LIST = [
         "d": 20.8080314722222
       }
     ],
-    "lines": {
-      "line": {
+    "lines": [
+      {
         "from": "Hamal",
         "to": "beta"
       }
-    }
+    ]
   },
   {
     "name": "Cancer",
@@ -1926,12 +1926,12 @@ export default CONSTELLATION_LIST = [
         "d": 8.28941666666667
       }
     ],
-    "lines": {
-      "line": {
+    "lines": [
+      {
         "from": "Procyon",
         "to": "beta"
       }
-    }
+    ]
   },
   {
     "name": "Carina",
