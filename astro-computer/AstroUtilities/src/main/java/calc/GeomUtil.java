@@ -413,8 +413,8 @@ public final class GeomUtil {
 		return gridSquare;
 	}
 
-	public static String googleCodePlus(double lat, double lng) {
-		String codePlus = OpenLocationCode.encode(lat, lng); // testData.length);
-		return codePlus;
+	public static String googlePlusCode(double lat, double lng) {
+		String plusCode = OpenLocationCode.encode(lat, lng); // testData.length);
+		return plusCode;
 	}
 }

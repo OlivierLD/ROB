@@ -33,7 +33,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     // https://mvnrepository.com/artifact/com.google.openlocationcode/openlocationcode
-    implementation 'com.google.openlocationcode:openlocationcode:1.0.4'  // Google CodePlus
+    // PlusCode, see https://github.com/google/open-location-code
+    implementation 'com.google.openlocationcode:openlocationcode:1.0.4'  // Google PlusCode
     testImplementation 'junit:junit:4.13.2'
 }
 

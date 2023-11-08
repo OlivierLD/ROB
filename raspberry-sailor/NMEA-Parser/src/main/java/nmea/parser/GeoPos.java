@@ -9,7 +9,7 @@ public class GeoPos implements Serializable {
 	public double lat = 0.0;
 	public double lng = 0.0;
 	public String gridSquare = "";
-	public String googleCodePlus = "";
+	public String googlePlusCode = "";
 
 	private final static DecimalFormat DF_22 = new DecimalFormat("00.00");
 	private final static DecimalFormat DF_2  = new DecimalFormat("00");
@@ -30,7 +30,7 @@ public class GeoPos implements Serializable {
 		this.lat = l;
 		this.lng = g;
 		this.gridSquare = this.gridSquare();
-		this.googleCodePlus = this.googleCodePlus();
+		this.googlePlusCode = this.googlePlusCode();
 		this.useDegreeSymbol = useSymbol;
 	}
 
@@ -43,11 +43,11 @@ public class GeoPos implements Serializable {
 		if (this.gridSquare == null || this.gridSquare.isEmpty()) {
 			this.gridSquare = this.gridSquare();
 		}
-		if (this.googleCodePlus == null || this.googleCodePlus.isEmpty()) {
-			this.googleCodePlus = this.googleCodePlus();
+		if (this.googlePlusCode == null || this.googlePlusCode.isEmpty()) {
+			this.googlePlusCode = this.googlePlusCode();
 		}
 		return this.getLatInDegMinDec() + " / " + this.getLngInDegMinDec() + (this.gridSquare.isEmpty() ? " (-)" : String.format(" (%s)", this.gridSquare))
-				+ (this.googleCodePlus.isEmpty() ? " (-)" : String.format(" (%s)", this.googleCodePlus));
+				+ (this.googlePlusCode.isEmpty() ? " (-)" : String.format(" (%s)", this.googlePlusCode));
 	}
 
 	public String getLatInDegMinDec() {
@@ -125,11 +125,11 @@ public class GeoPos implements Serializable {
 		return this;
 	}
 
-	public String googleCodePlus() {
-		return GeomUtil.googleCodePlus(this.lat, this.lng);
+	public String googlePlusCode() {
+		return GeomUtil.googlePlusCode(this.lat, this.lng);
 	}
 	public GeoPos updateGoogleCodePlus() {
-		this.googleCodePlus = this.googleCodePlus();
+		this.googlePlusCode = this.googlePlusCode();
 //		System.out.println(String.format(">> from %f/%f => GRID Square: %s", this.lat, this.lng, this.gridSquare));
 		return this;
 	}
