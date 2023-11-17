@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Used to store data like PRMSL, temperature, etc, over time.
@@ -41,13 +42,17 @@ public class LongTermStorage extends Computer {
 	private String storagePathInCache = "BarographData"; // AKA List/Buffer name
 
 	private Map<String, Object> objectMap = new TreeMap<>();
+	private final AtomicReference<NMEADataCache> cacheReference = new AtomicReference<>();
 
 	private Thread dataCollector = new Thread(() -> {
 		while (true) { // Loop until dead
-			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			// NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			cacheReference.set(ApplicationContext.getInstance().getDataCache());
 			try {
 				final String jsonString;
-				synchronized (cache) {
+				NMEADataCache cache;
+				synchronized (cacheReference) {
+					cache = cacheReference.get();
 					jsonString = jacksonMapper.writeValueAsString(cache);
 				}
 				final JsonNode jsonNode = jacksonMapper.readTree(jsonString);

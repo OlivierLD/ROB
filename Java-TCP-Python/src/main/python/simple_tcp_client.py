@@ -104,6 +104,7 @@ def keep_receiving(_socket: socket.socket) -> None:
                 # Server might be down, exiting.
                 keep_looping = False
                 print("Bye")
+                # print("...")
 
 
 def interrupt(signal, frame):
