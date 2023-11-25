@@ -133,6 +133,8 @@ STL files available from another repo, [here](https://github.com/OlivierLD/3DPri
 | Solar powered                                   |                                          |
 
 
+- Other STL files, including a power bank, instead of an external power supply, can be found [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md).
+
 _For the phone UI_: the phone is connected to the RPi's network, URL in the browser is <http://192.168.50.10:9999/zip/index.html>  
 _Note_: The phone does _**not**_ need to have a SIM card.
 
@@ -171,16 +173,16 @@ And as no one is going to sell your personal data behind your back, the Web UI d
 
 ### Supplies, BOM
 - [e-ink bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
-- [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023)
+- [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023). This one has WiFi capabilities, it does not require an extra WiFi dongle.
 - [GPS Dongle](https://www.amazon.com/HiLetgo-G-Mouse-GLONASS-Receiver-Windows/dp/B01MTU9KTF/ref=sr_1_3?keywords=usb+gps+dongle&qid=1691564294&sprefix=USB+GPS%2Caps%2C153&sr=8-3), $11.99 (Aug-2023)
 
-The price of the config described here comes to $47.94.
+The price of the config described here comes to $47.94.  
 
 > _**Note**_: It could be even simpler - and cheaper. The e-ink bonnet is an option. 
 > In any case, the system is logging data (in a file), forwarding them (on tcp), 
 > and there is a Web interface available through http.  
 > The Python part is not necessary if the e-ink screen is not in the picture.  
-> Without the e-ink screen, the price comes down to $27.99.
+> Without the e-ink screen, **_the price comes down to $27.99_**.
 
 Price of the wires and SD card is not included here. I know.  
 But still 😜.
