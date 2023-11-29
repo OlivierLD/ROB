@@ -43,10 +43,12 @@ sensor: adafruit_bme280.Adafruit_BME280_I2C
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
 PORT: int = 7001  # Port to listen on (non-privileged ports are > 1023)
 verbose: bool = False
+ADDRESS: int = 0x77
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
+ADDRESS_PREFIX: str = "--address:"
 
 CMD_STATUS: str = "STATUS"
 CMD_LOOP_PREFIX: str = "LOOPS:"
@@ -216,6 +218,7 @@ def produce_nmea(connection: socket.socket, address: tuple,
 def main(args: List[str]) -> None:
     global HOST
     global PORT
+    global ADDRESS
     global verbose
     global nb_clients
     global sensor
@@ -234,6 +237,8 @@ def main(args: List[str]) -> None:
                 PORT = int(arg[len(PORT_PRM_PREFIX):])
             if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
                 verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+            if arg[:len(ADDRESS_PREFIX)] == ADDRESS_PREFIX:
+                ADDRESS = int(arg[len(ADDRESS_PREFIX):], 16)  # Expect hex number
 
     if verbose:
         print("-- Received from the command line: --")
@@ -244,7 +249,8 @@ def main(args: List[str]) -> None:
     signal.signal(signal.SIGINT, interrupt)  # callback, defined above.
     i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
     try:
-        sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+        # Sensor I2C address may change..., address=0x76
+        sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=ADDRESS)
         sensor.sea_level_pressure = 1013.25  # Depends on your location
     except:
         print("No BME280 was found...")

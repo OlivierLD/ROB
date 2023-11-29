@@ -245,8 +245,8 @@ def main(args: List[str]) -> None:
     try:
         # sensor = BMP085.BMP085(busnum=1)
         i2c = board.I2C()
+        # TODO Type of sensor, address=0x76
         sensor = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
-        # TODO Type of sensor
     except:
         print("No BMP280 was found...")
         sensor = None

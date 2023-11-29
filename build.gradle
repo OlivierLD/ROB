@@ -21,6 +21,7 @@ tasks.withType(JavaCompile) {
 
     if (JavaVersion.current() != project.targetCompatibility) {
 //    throw new GradleException(
+        println "Minimal JDK requirement for build met: ${Double.parseDouble(JavaVersion.current().toString()) >= Double.parseDouble(project.targetCompatibility.toString())}"
         println "+------ Warning: Java version (JAVA_HOME) possible mismatch -----\n" +
                 "| In task $name ($project.name), the java version used ${JavaVersion.current()} is not the expected version ${project.targetCompatibility}.\n" +
                 "+----------------------------------------------------------------"

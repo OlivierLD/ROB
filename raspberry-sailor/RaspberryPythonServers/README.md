@@ -66,7 +66,8 @@ The code acts as a TCP server, so any TCP client can receive the produced NMEA s
 
 We provide here TCP servers reading the following sensors:
 - [BMP180](https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library). Temperature, Pressure.
-- [BME280](https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout). Temperature, Pressure, Relative Humidity.
+- [BMP280](https://learn.adafruit.com/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout). Temperature, Pressure, Relative Humidity.
+- [BME280](https://github.com/adafruit/Adafruit_CircuitPython_BME280). Temperature, Pressure, Relative Humidity.
 - [HTUDF21D](https://learn.adafruit.com/adafruit-htu21d-f-temperature-humidity-sensor).  Temperature, Relative Humidity.
 - [LSM303](https://learn.adafruit.com/lsm303-accelerometer-slash-compass-breakout). 3-axis Magnetometer, Accelerometer.
 - [LIS3MDL](https://learn.adafruit.com/lis3mdl-triple-axis-magnetometer). 3-axis Magnetometer.
@@ -84,7 +85,7 @@ _**NMEA Sentences examples:**_
 - `MTA`: Air Temperature, Celsius
   - Produced by BMP180, BME280
 - `MMB`: Atm Pressure
-    - Produced by BMP180, BME280
+    - Produced by BMP180, BMP280, BME280
 - `HDM`, `HDG`: Heading
   - Produced by LSM303, HCM5883L, LIS3DML
 
@@ -98,6 +99,8 @@ _**NMEA Sentences examples:**_
 > pip3 install adafruit-circuitpython-htu21d
 > ````
 > After that, you may hop off the Internet.
+
+> The list of the modules to install is given in the code 
 
 **Do look at the script named `install.all.sh`.**
 
