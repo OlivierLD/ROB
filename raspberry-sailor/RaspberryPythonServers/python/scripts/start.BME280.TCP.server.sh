@@ -14,7 +14,7 @@ echo -e "Working from $PWD"
 
 PYTHON_SCRIPT_NAME=./TCP_BME280_server.py
 MACHINE_NAME=localhost
-if MACHINE_NAME=$(hostname -I) ; then
+if MACHINE_NAME=$(hostname -I  | awk '{ print $1 }') ; then
     echo -e "It worked: ${MACHINE_NAME}"
 else
     MACHINE_NAME=$(hostname)
@@ -23,6 +23,7 @@ fi
 MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
+ADDRESS=0x77
 #
 #
 # Prompted, or get prms from CLI
@@ -40,6 +41,12 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
       PORT=${USER_INPUT}
   fi
   # echo "Will use port ${PORT}"
+  echo -en "Enter I2C address - Default [${ADDRESS}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      ADDRESS=${USER_INPUT}
+  fi
+  # echo "Will use address ${ADDRESS}"
   echo -en "Verbose (true or false) ? - Default [${VERBOSE}] > "
   read USER_INPUT
   if [[ "${USER_INPUT}" != "" ]]; then
@@ -55,13 +62,15 @@ else
   	    MACHINE_NAME=${prm#*:}
   	  elif [[ ${prm} == "--port:"* ]]; then
   	    PORT=${prm#*:}
+  	  elif [[ ${prm} == "--address:"* ]]; then
+  	    ADDRESS=${prm#*:}
   	  elif [[ ${prm} == "--verbose:"* ]]; then
   	    VERBOSE=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --address:${ADDRESS}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

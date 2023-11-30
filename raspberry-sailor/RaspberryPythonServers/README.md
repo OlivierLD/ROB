@@ -98,6 +98,13 @@ _**NMEA Sentences examples:**_
 > . . .
 > pip3 install adafruit-circuitpython-htu21d
 > ````
+
+> _Note_: You may need to add a line in `pip.conf` (`/etc/pip.conf`) 
+> ```
+> [global]
+> break-system-packages=true
+> ```
+
 > After that, you may hop off the Internet.
 
 > The list of the modules to install is given in the code 
@@ -228,7 +235,7 @@ $ curl -X GET http://localhost:9999/mux/cache
 ```
 > Notice the way the different TCP ports are mentioned in the yaml. 
 
-## Server interaction
+## Python Server interaction
 The TCP code presented here allows you to interact with the server, using a TCP client.  
 Look into the `Java-TCP-Python` module (in this project, make sure you've built it).  
 You can change the NMEA sentences production frequency, and get the status of the server.

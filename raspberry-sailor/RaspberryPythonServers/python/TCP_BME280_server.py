@@ -12,6 +12,7 @@ Produces XDR, MTA, MMB, from the data read from a BME280, (TODO: MBA ?, MDA (for
 on a regular basis, see the between_loops variable.
 
 See the produce_nmea function.
+See the special commands: CMD_STATUS, CMD_LOOPS, CMD_EXIT
 """
 
 import sys
@@ -93,7 +94,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         if verbose:
             print(f"Producing status: {payload}")
         producing_status = True
-        connection.sendall(payload.encode())  # This one does not go through...
+        connection.sendall(payload.encode())  # FIXME This one does not go through...
         producing_status = False
     except Exception:
         print("Oops!...")
@@ -192,15 +193,16 @@ def produce_nmea(connection: socket.socket, address: tuple,
         try:
             # Send to the client
             if sensor is not None:
-                if mta_sentences:
+                if mta_sentences and not producing_status:
                     connection.sendall(nmea_mta.encode())
-                if mmb_sentences:
+                if mmb_sentences and not producing_status:
                     connection.sendall(nmea_mmb.encode())
-                if xdr_sentences:
+                if xdr_sentences and not producing_status:
                     connection.sendall(nmea_xdr.encode())
             else:
                 print(f"No Sensor: {dummy_str.strip()}")
-                connection.sendall(dummy_str.encode())
+                if not producing_status:
+                    connection.sendall(dummy_str.encode())
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("Client disconnected")
@@ -226,7 +228,7 @@ def main(args: List[str]) -> None:
 
     print("Usage is:")
     print(
-        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false]")
+        f"python3 {__file__} [{MACHINE_NAME_PRM_PREFIX}{HOST}] [{PORT_PRM_PREFIX}{PORT}] [{VERBOSE_PREFIX}true|false] [{ADDRESS_PREFIX}0x77]")
     print(f"\twhere {MACHINE_NAME_PRM_PREFIX} and {PORT_PRM_PREFIX} must match the context's settings.\n")
 
     if len(args) > 0:  # Script name + X args. > 1 should do the job.
@@ -252,6 +254,8 @@ def main(args: List[str]) -> None:
         # Sensor I2C address may change..., address=0x76
         sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=ADDRESS)
         sensor.sea_level_pressure = 1013.25  # Depends on your location
+        if verbose:
+            print("BME280 was found and initialized...")
     except:
         print("No BME280 was found...")
         sensor = None

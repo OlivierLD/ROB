@@ -108,6 +108,7 @@ if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   cp -R ../../${PYTHON_SRC_DIR}/python/ ${distdir}/python
   rm -rf ${distdir}/python/__pycache__
   echo -e "Done with Python"
+  echo -e "Do look at the script named install.all.sh for the dependencies..."
 fi
 #
 # 4 - Archiving

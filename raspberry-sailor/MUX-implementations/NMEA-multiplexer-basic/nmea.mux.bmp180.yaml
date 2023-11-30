@@ -5,7 +5,7 @@
 name: "Reading Data from a BMP180"
 description:
   - Read a BMP180 from a TCP Server in Python, on port 8001
-  - Requires TCP_BMP180_server.py to be running
+  - Requires TCP_BMP180_server.py (or TCP_BME280_server.py) to be running
   - Broadcast data on TCP
   - Log data in a file
   - long-term-storage computer
