@@ -45,13 +45,16 @@ V1 available. See in the `yaml` file.
 #### Details
 Wiring, Schemas, Components, 3D printed enclosures...
 
-|        Wiring (VIN, GND, SLC, SDA)        |
+|      I2C Wiring (VIN, GND, SCL, SDA)      |
 |:-----------------------------------------:|
 | ![BMP180](../doc_resources/BMP180_bb.png) |
 
 3D Printed enclosure, see <https://www.thingiverse.com/thing:1067700>
 
+TODO Enclosure for the Raspberry Pi.
+
 #### Running
+TODO I2C address: 0x77, 0x76...
 ```
 ../../RaspberryPythonServers/python/scripts/start.BMP180.TCP.server.sh
 Enter Machine Name > 127.0.0.1
@@ -60,5 +63,13 @@ Verbose > false
 . . .
 ./mux.sh nmea.mux.bmp180.yaml
 ```
+
+#### More
+- `to.prod.sh`
+- Barograph, thermograph
+- . . .
+
+#### Summary
+
 
 ---

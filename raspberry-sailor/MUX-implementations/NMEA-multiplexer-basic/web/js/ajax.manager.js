@@ -117,6 +117,7 @@ function onMessage(json) {
 			events.publish(EVENT_FULL, json);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "full data");
+			console.debug(`onMessage: ${errMess}`);
 		}
 
 		// Publishes
