@@ -2262,7 +2262,19 @@
 			}
 			setData(val, 'prmsl-01');
 		});
-		events.subscribe('dew', function(val) {
+		events.subscribe(EVENT_HUM, function(val) {
+			console.log(`Relative humidity ${val.toFixed(2)}%`);
+			let display = document.getElementById('rel-hum-display');
+			if (display) {
+				let valToDisplay = val.toFixed(1);
+				while (valToDisplay.length < 5) {
+					valToDisplay = " " + valToDisplay; // lpad...
+				}
+				display.value = valToDisplay;
+				display.repaint();
+			}
+		});
+		events.subscribe(EVENT_DEW, function(val) {
 			console.log('Dew Point: %f\xb0C', val);
 			let display = document.getElementById('dew-point-display');
 			if (display) {
@@ -2875,12 +2887,20 @@
 											height="220"></thermo-meter>
 						</td>
 						<td style="text-align: center;">
+							<!-- Relative Humidity -->
+							Relative Humidity in %
+							<br/>
+							<split-flap-display id="rel-hum-display"
+												nb-char="5"
+												font-size="30"
+												value="     "></split-flap-display>
+							<br/>												
 							<!-- Dew point -->
 							Dew point in &deg;C
 							<br/>
 							<split-flap-display id="dew-point-display"
 												nb-char="6"
-												font-size="40"
+												font-size="30"
 												value="      "></split-flap-display>
 						</td>
 						<td style="text-align: center;">
