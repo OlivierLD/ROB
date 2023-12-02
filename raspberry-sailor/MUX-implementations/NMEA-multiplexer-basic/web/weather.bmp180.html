@@ -2266,7 +2266,11 @@
 			console.log('Dew Point: %f\xb0C', val);
 			let display = document.getElementById('dew-point-display');
 			if (display) {
-				display.value = val.toFixed(2);
+				let valToDisplay = val.toFixed(2);
+				while (valToDisplay.length < 6) {
+					valToDisplay = " " + valToDisplay; // lpad...
+				}
+				display.value = valToDisplay;
 				display.repaint();
 			}
 		});
