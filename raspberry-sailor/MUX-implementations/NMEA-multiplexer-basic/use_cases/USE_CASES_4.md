@@ -1,7 +1,7 @@
 # Use-case 4. Basic Weather Station
-### A Raspberry Pi, with a BMP180 (WiP)
+### A Raspberry Pi, with a BMP180 (or BMP280, BME280, WiP)
 
-#### Read the BMP180 Data
+#### Read the sensor Data
 ```
 $ ../../RaspberryPythonServers/python/scripts/start.BMP180.TCP.server.sh
 ~/repos/ROB/raspberry-sailor/NMEA-multiplexer ~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
@@ -32,6 +32,9 @@ channels:
 ```
 
 #### Specific Requirement: Long Term Data
+A Barograph is a very useful instrument for marine weather and forecasts. 
+But it can be quite expensive (see [here](https://www.naudet.com/barometre-enregistreur-c102x2726134)). We'll trry to build one with a Raspberry Pi Zero, and a sensor like a BME280 sensor (less that $2.00).  
+
 We want here to be able to display a curve, like the one produced by a barograph, like this one:
 
 ![Barograph](../doc_resources/barograph.png)
@@ -51,7 +54,7 @@ Wiring, Schemas, Components, 3D printed enclosures...
 
 3D Printed enclosure, see <https://www.thingiverse.com/thing:1067700>
 
-TODO Enclosure for the Raspberry Pi.
+For 3D-printed enclosures for the Raspberry Pi and other components, see [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md#with-a-bme280-for-prmsl).
 
 #### Running
 TODO I2C address: 0x77, 0x76...
