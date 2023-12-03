@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <!--
-	Data from a BMP180. Air Temperature, Atm Pressure
+	Data from a BMP180, BMP280 or BME280. Air Temperature, Atm Pressure.
+	Optional Relative Humidity and Dew Point
 	Plus station time.
-	Pressure graph, on one week.
+	Pressure (and others) graphs, on one week.
 -->
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-    <title>BMP180 Console</title>
+    <title>One week of data</title>
 
     <link rel="icon" type="image/ico" href="icons/hammerhead.02.ico">
 
@@ -25,6 +26,9 @@
 	<script type="module" src="webcomponents/GraphDisplay.js"></script>
 
 	<script type="text/javascript">
+
+	const VERBOSE = false;
+	const IN_DEV = false;
 
 	let status = 'tick';
 
@@ -2217,9 +2221,6 @@
 	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-	const VERBOSE = false;
-	const IN_DEV = false;
-
 	var currentData;
 
 	let reworkDuration = (duration) => {
@@ -2241,7 +2242,7 @@
 	window.onload = function() {
 		initAjax(false);
 		// Subscribers here
-		events.subscribe('at', function(val) {  // Air temp
+		events.subscribe(EVENT_AT, function(val) {  // Air temp
 			if (status === 'tick') {
 				status = 'tock';
 				document.getElementById('working').style.color = 'red';
@@ -2256,14 +2257,14 @@
 			// Set time (from client)
 			setCurrentTime();
 		});
-		events.subscribe('prmsl', function(val) {  // Pressure at Mean Sea Level
+		events.subscribe(EVENT_PRMSL, function(val) {  // Pressure at Mean Sea Level
 			if (VERBOSE) {
 				console.log("Atm Pressure : %f", val);
 			}
 			setData(val, 'prmsl-01');
 		});
 		events.subscribe(EVENT_HUM, function(val) {
-			console.log(`Relative humidity ${val.toFixed(2)}%`);
+			console.log(`Relative humidity ${val.toFixed(1)}%`);
 			let display = document.getElementById('rel-hum-display');
 			if (display) {
 				let valToDisplay = val.toFixed(1);
@@ -2278,8 +2279,8 @@
 			console.log('Dew Point: %f\xb0C', val);
 			let display = document.getElementById('dew-point-display');
 			if (display) {
-				let valToDisplay = val.toFixed(2);
-				while (valToDisplay.length < 6) {
+				let valToDisplay = val.toFixed(1);
+				while (valToDisplay.length < 5) {
 					valToDisplay = " " + valToDisplay; // lpad...
 				}
 				display.value = valToDisplay;
@@ -2287,7 +2288,7 @@
 			}
 		});
 		// A "FULL" one to get to the long-term-storage (for barograph)
-		events.subscribe('full', function(val) {
+		events.subscribe(EVENT_FULL, function(val) {
 			// TODO Do it
 			const PRMSL_KEY = "PRMSL-buff";  // As in the computer (long-trem-storage), see yaml.
 			const AIR_TEMP_KEY = "air-temp"; // As in the computer (long-trem-storage), see yaml.
@@ -2381,6 +2382,7 @@
 					console.log(`First 1/4 day at ${startIdx4}`);
 				}
 			}
+
 			if (startIdx > -1) { // Found a midnight
 				let fullStrDate = `${MONTHS[parseInt(keys[startIdx].substring(5, 7)) - 1]} ${parseInt(keys[startIdx].substring(8, 10))}, ${parseInt(keys[startIdx].substring(0, 4))} ${keys[startIdx].substring(11)}`;
 				let weekDayIndex = new Date(fullStrDate).getDay();
@@ -2453,7 +2455,7 @@
 
 				let minMaxLabel = "";
 				try {
-					minMaxLabel = `, [${min.toFixed(2)}, ${max.toFixed(2)}]`;
+					minMaxLabel = `, [${min.toFixed(1)}, ${max.toFixed(1)}]`;
 					console.log(`MinMax Label now ${minMaxLabel}`);
 				} catch (err) {
 					console.log(`Oops(2): ${err}`);					
@@ -2486,16 +2488,20 @@
 				datagraph.data.withYLabels = false;
 				datagraph.vgrid = valLabel;
 				datagraph.label = graphLabel + minMaxLabel;
-				datagraph.value = value;
+				if (nbPts > 0) {
+					datagraph.value = theMap[keys[nbPts - 1]].toFixed(1); // Last value of the list ?
+				} else {
+					datagraph.value = value;
+				}
 				datagraph.repaint();
 			} else {
 				if (VERBOSE) {
 					console.log("No midnight was found");
 				}
-				let keys = Object.keys(theMap);
-				let nbPts = keys.length;
+				// let keys = Object.keys(theMap);
+				// let nbPts = keys.length;
 				if (nbPts > 0) {
-					datagraph.value = theMap[keys[nbPts - 1]].toFixed(2); // Last value of the list ?
+					datagraph.value = theMap[keys[nbPts - 1]].toFixed(1); // Last value of the list ?
 					datagraph.repaint();
 				}
 			}
@@ -2888,20 +2894,22 @@
 						</td>
 						<td style="text-align: center;">
 							<!-- Relative Humidity -->
-							Relative Humidity in %
+							Relative Humidity
 							<br/>
 							<split-flap-display id="rel-hum-display"
 												nb-char="5"
 												font-size="30"
 												value="     "></split-flap-display>
+							<span style="font-size: 30px;">%</span>
 							<br/>												
 							<!-- Dew point -->
-							Dew point in &deg;C
+							Dew point
 							<br/>
 							<split-flap-display id="dew-point-display"
-												nb-char="6"
+												nb-char="5"
 												font-size="30"
-												value="      "></split-flap-display>
+												value="     "></split-flap-display>
+							<span style="font-size: 30px;">&deg;C</span>
 						</td>
 						<td style="text-align: center;">
 							<!-- Station Time<br/ -->
