@@ -28,7 +28,7 @@ forwarders:
     port: 7002
 computers:
   - type: long-term-storage   # PRMSL
-    ping-interval: 900   # 15 minutes
+    ping-interval: 900   # 15 minutes, 15 x 60s
     max-length: 672      # One week
     data-path: "Barometric Pressure,value"  # CSV list
     # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
