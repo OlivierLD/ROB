@@ -715,7 +715,7 @@
 
         window.onload = () => {
   
-          document.getElementById('system-name').innerText = `Platform: ${navigator.platform}`;
+          document.getElementById('system-name').innerText = `Client Platform: ${navigator.platform}`; // Add navigator.appName, appVersion ?
           doOnResize();
           // Available when canvas is visible
           flowGraph = new Graph("flowCanvas", flowData, graphCallback, "b/s");

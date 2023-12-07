@@ -21,7 +21,7 @@ channels:
     verbose: false
 forwarders:
   - type: file
-    filename: ./weather.data.nmea
+    filename: ./weather.data.nmea  # Warning, this may grow big !
     flush: true
     verbose: false
   - type: tcp
@@ -31,7 +31,7 @@ computers:
     ping-interval: 900   # 15 minutes, 15 x 60s
     max-length: 672      # One week
     data-path: "Barometric Pressure,value"  # CSV list
-    # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff"'
+    # Try curl -X GET http://localhost:9876/mux/cache | jq '."PRMSL-buff" | length'
     object-name: "PRMSL-buff"
     verbose: false
   - type: long-term-storage  # Air Temp
