@@ -99,6 +99,8 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
             print(f"\tSending status to client: {payload}")
         connection.sendall(payload.encode())  # FIXME This one does not go through...
         producing_status = False
+        if verbose:
+            print("\tStatus was sent to client")
     except Exception:
         print("Oops!...")
         traceback.print_exc(file=sys.stdout)

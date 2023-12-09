@@ -160,7 +160,7 @@ public class SimpleTCPClient {
 						try {
 							synchronized (mainThread) {
 								mainThread.wait();
-								System.out.println("\tMain was released !");
+								System.out.println("\tClient main was released !");
 							}
 						} catch (InterruptedException e) {
 							e.printStackTrace();
