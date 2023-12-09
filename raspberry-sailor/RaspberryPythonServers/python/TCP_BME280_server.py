@@ -96,7 +96,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         payload: str = json.dumps(message) + NMEA_EOS  # str(message) + NMEA_EOS
         producing_status = True
         if verbose:
-            print(f"Sending status to client: {payload}")
+            print(f"\tSending status to client: {payload}")
         connection.sendall(payload.encode())  # FIXME This one does not go through...
         producing_status = False
     except Exception:
@@ -129,6 +129,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                         traceback.print_exc(file=sys.stdout)
                     produce_status(connection, address)
                 elif client_mess == CMD_STATUS:
+                    print("Received STATUS request, processing it.")
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
                     print(">> TCP BME280 received an EXIT message.")
