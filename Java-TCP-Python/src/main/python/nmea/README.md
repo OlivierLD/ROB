@@ -1,6 +1,9 @@
 # Python TCP Server(s)
 > NMEA0183-related components (parsers, etc) are to be pulled from `NMEA-multiplexer` module.  
 
+## Warning
+TCP servers provider here are just _**examples**_. Prefer the ones found in `RaspberryPythonServers.`
+
 _**TODO**_: Cleanup this folder
 
 Can be used from the NMEA-multiplexer, using its `TCP` channel (but not only, it would also work for all sotfware NMEA and TCP savvy).  

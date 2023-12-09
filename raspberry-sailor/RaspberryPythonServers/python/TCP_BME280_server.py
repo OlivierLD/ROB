@@ -12,7 +12,10 @@ Produces XDR, MTA, MMB, from the data read from a BME280, (TODO: MBA ?, MDA (for
 on a regular basis, see the between_loops variable.
 
 See the produce_nmea function.
-See the special commands: CMD_STATUS, CMD_LOOPS, CMD_EXIT
+See the special commands: CMD_STATUS, CMD_LOOPS, CMD_EXIT - To use from a TCP Client (See the module Java-TCP-Python for samples and code.)
+
+Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
+From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
 """
 
 import sys
@@ -72,7 +75,7 @@ def interrupt(sig: int, frame):
 
 
 nb_clients: int = 0
-between_loops: float = 1.0  # in seconds
+between_loops: float = 1.0  # in seconds, between reads of the BME280
 producing_status: bool = False
 
 

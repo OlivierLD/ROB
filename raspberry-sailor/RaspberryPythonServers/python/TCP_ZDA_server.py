@@ -2,7 +2,11 @@
 #
 # That one produces ZDA Strings for each connected client.
 # This server does not need to read a sensor, it takes the time from the system.
-# 
+#
+#
+# Start it with
+# $ python src/main/python/nmea/TCP_ZDA_server.py --port:7002 --verbose:true
+
 # It also understands input from the client: "STATUS", "LOOPS:x.xx", "EXIT" (not case sensitive), see client_listener.
 # LOOPS:xxx will produce a between_loops = x.xx (in seconds), like LOOPS:1.0
 #
@@ -22,7 +26,7 @@ import json
 from datetime import datetime, timezone
 import logging
 from logging import info
-import NMEABuilder   # local script
+import NMEABuilder              # local script
 from typing import List
 
 __version__ = "0.0.1"

@@ -2,9 +2,11 @@
 CP=./build/libs/Java-TCP-Python-1.0-all.jar
 #
 JVM_OPTIONS=
-JVM_OPTIONS="${JVM_OPTIONS} -Dparse.json.response=false"
-echo -e "Will NOT parse JSON server feed."
-# JVM_OPTIONS="${JVM_OPTIONS} -Dparse.json.response=true"
+#JVM_OPTIONS="${JVM_OPTIONS} -Dparse.json.response=false"
+#echo -e "Will NOT parse JSON server feed."
+JVM_OPTIONS="${JVM_OPTIONS} -Dparse.json.response=true"
+echo -e "Will parse JSON server feed."
+#
 # JVM_OPTIONS="${JVM_OPTIONS} -Ddisplay.server.feed=true"
 PRMS=$*
 # PRMS="--port:8888 --host:192.168.1.106"
