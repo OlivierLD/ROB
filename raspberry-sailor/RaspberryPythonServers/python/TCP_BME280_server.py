@@ -197,11 +197,14 @@ def produce_nmea(connection: socket.socket, address: tuple,
             # Send to the client
             if sensor is not None:
                 if mta_sentences and not producing_status:
-                    connection.sendall(nmea_mta.encode())
+                    if not producing_status:
+                        connection.sendall(nmea_mta.encode())
                 if mmb_sentences and not producing_status:
-                    connection.sendall(nmea_mmb.encode())
+                    if not producing_status:
+                        connection.sendall(nmea_mmb.encode())
                 if xdr_sentences and not producing_status:
-                    connection.sendall(nmea_xdr.encode())
+                    if not producing_status:
+                        connection.sendall(nmea_xdr.encode())
             else:
                 print(f"No Sensor: {dummy_str.strip()}")
                 if not producing_status:

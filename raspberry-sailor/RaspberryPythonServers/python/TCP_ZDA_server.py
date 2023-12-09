@@ -5,7 +5,7 @@
 #
 #
 # Start it with
-# $ python src/main/python/nmea/TCP_ZDA_server.py --port:7002 --verbose:true
+# $ python src/main/python/nmea/TCP_ZDA_server.py --port:7002 --verbose:true --machine-name:my-box.home
 
 # It also understands input from the client: "STATUS", "LOOPS:x.xx", "EXIT" (not case sensitive), see client_listener.
 # LOOPS:xxx will produce a between_loops = x.xx (in seconds), like LOOPS:1.0
@@ -90,7 +90,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         if verbose:
             print(f"Producing status: {payload}")
         producing_status = True
-        connection.sendall(payload.encode())  # This one does not go through...
+        connection.sendall(payload.encode())
         producing_status = False
     except Exception:
         print("Oops!...")
