@@ -197,18 +197,21 @@ def produce_nmea(connection: socket.socket, address: tuple,
         try:
             # Send to the client
             if sensor is not None:
-                if mta_sentences and not producing_status:
-                    connection.sendall(nmea_mta.encode())
-                if mmb_sentences and not producing_status:
-                    connection.sendall(nmea_mmb.encode())
-                if xdr_sentences and not producing_status:
-                    connection.sendall(nmea_xdr.encode())
+                if not producing_status:
+                    if mta_sentences:
+                        connection.sendall(nmea_mta.encode())
+                    if mmb_sentences:
+                        connection.sendall(nmea_mmb.encode())
+                    if xdr_sentences:
+                        connection.sendall(nmea_xdr.encode())
+                else:
+                    print("Waiting for the status production to be completed.")
             else:
                 print(f"No Sensor: {dummy_str.strip()}")
                 if not producing_status:
                     connection.sendall(dummy_str.encode())
-            if producing_status:
-                print("Waiting for the status production to be completed.")
+                else:
+                    print("Producing status, wait.")
             if verbose:
                 print(f"\tSleeping between loops for {between_loops} sec.")
             time.sleep(between_loops)  # Wait between loops
@@ -221,7 +224,8 @@ def produce_nmea(connection: socket.socket, address: tuple,
             traceback.print_exc(file=sys.stdout)
             nb_clients -= 1
             break  # Client disconnected
-    print(f"Done with request from {connection}")
+    print(f"Exiting NMEA producer thread. Done with request from {connection}.\nClosing.")
+    connection.close()
     print(f"{nb_clients} {'clients are' if nb_clients > 1 else 'client is'} now connected.")
 
 
@@ -291,7 +295,7 @@ def main(args: List[str]) -> None:
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
-            # Listener thread
+            # Listener thread (client special requests)
             client_listener_thread: threading.Thread = \
                 threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
             client_listener_thread.daemon = True  # Dies on exit

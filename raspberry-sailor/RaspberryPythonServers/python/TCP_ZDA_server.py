@@ -231,7 +231,7 @@ def main(args: List[str]) -> None:
             client_thread.daemon = True  # Dies on exit
             client_thread.start()
 
-            # Listener thread
+            # Listener thread (client special requests)
             client_listener_thread: threading.Thread = \
                 threading.Thread(target=client_listener, args=(conn, addr,))  # Listener
             client_listener_thread.daemon = True  # Dies on exit
