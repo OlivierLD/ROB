@@ -1538,6 +1538,7 @@
                     if (FIND_MIN_MAX_HERE) {
                         if (gribTypeData.gribType.type === 'tmp'  ||
                             gribTypeData.gribType.type === 'htsgw' ||
+                            gribTypeData.gribType.type === 'prmsl' ||
                             gribTypeData.gribType.type === 'prate') { // Switchable...
                             for (let hGRIB=0; hGRIB<gribObj.gribDate.height; hGRIB++) {
                                 let stepX = gribObj.gribDate.stepx;
@@ -1572,6 +1573,15 @@
                                     document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
                                                                                         `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
                                                                                         `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
+                                                                                        "</pre>";
+                                } catch (err) {
+                                }
+                                break;
+                            case 'prmsl':
+                                try {
+                                    document.getElementById('min-max-prmsl').innerHTML = "<pre>" + 
+                                                                                        `PRMSL: min ${(gribTypeData.gribType.min / 100).toFixed(2)} hPa, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
+                                                                                        `       max ${(gribTypeData.gribType.max / 100).toFixed(2)} hPa, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
                                                                                         "</pre>";
                                 } catch (err) {
                                 }
@@ -2142,6 +2152,7 @@
                     <div id="min-max-data" class="table-style" style="background: transparent; font-family:'Courier New', Courier, monospace;">
                         <div id="max-wind"></div>
                         <div id="min-max-atemp"></div>
+                        <div id="min-max-prmsl"></div>
                         <div id="max-waves"></div>
                         <div id="max-prate"></div>
                     </div>

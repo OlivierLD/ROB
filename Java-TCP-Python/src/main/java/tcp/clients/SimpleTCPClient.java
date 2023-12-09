@@ -132,7 +132,7 @@ public class SimpleTCPClient {
 							synchronized (mainThread) {
 								mainThread.notify();
 							}
-							Thread.sleep(500L); // This is gonfled.
+							Thread.sleep(10L); // 500L); // This is gonfled. TODO A better way...
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

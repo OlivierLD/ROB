@@ -457,8 +457,10 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 		console.log("   Dim (W x H) : %d x %d", data.x[0].length, data.x.length);
 	}
 
-	let maxTWS = 0, minTmp = 0, maxTmp = 0, maxWaves = 0, maxPrate = 0;
+	let maxTWS = 0, minTmp = 0, maxTmp = 0, maxWaves = 0, maxPrate = 0; 
+	let maxPRMSL = 0, minPRMSL = 2000; // PRMSL
 	let maxTWSPos = null, maxTmpPos = null, minTmpPos = null, maxPratePos = null, maxWavesPos = null;
+	let maxPRMSLPos = null, minPRMSLPos = null;
 
 	for (let hGRIB=0; hGRIB<oneDateGRIB.gribDate.height; hGRIB++) {
 		// Actual width... Waves Height has a different lng step.
@@ -541,7 +543,15 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 					minTmp = gribValue; 
 					minTmpPos = { lat: lat, lng: lng };
 				}
-
+			} else if (type === 'prmsl') {
+				if (gribValue >= max) { 
+					maxPRMSL = gribValue;
+					maxPRMSLPos = { lat: lat, lng: lng };
+				}
+				if (gribValue <= min) {
+					minPRMSL = gribValue;
+					minPRMSLPos = { lat: lat, lng: lng };
+				}
 			} else if (type === 'prate') {
 				if (gribValue >= max) { 
 					maxPrate = gribValue;
@@ -572,6 +582,16 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 					document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
 																		 `Air Temp: min ${(minTmp - 273).toFixed(2)}\xB0C, at ${decToSex(minTmpPos.lat, "NS") + '/' + decToSex(minTmpPos.lng, "EW")}\n` +
 																		 `          max ${(maxTmp - 273).toFixed(2)}\xB0C, at ${decToSex(maxTmpPos.lat, "NS") + '/' + decToSex(maxTmpPos.lng, "EW")}` +
+																		 "</pre>";
+				} catch (err) {
+					console.debug(err);
+				}
+				break;
+			case 'prmsl':
+				try {
+					document.getElementById('min-max-prmsl').innerHTML = "<pre>" + 
+																		 `PRMSL: min ${(minPRMSL / 100).toFixed(2)} hPa, at ${decToSex(minPRMSLPos.lat, "NS") + '/' + decToSex(minPRMSLPos.lng, "EW")}\n` +
+																		 `       max ${(maxPRMSL / 100).toFixed(2)} hPa, at ${decToSex(maxPRMSLPos.lat, "NS") + '/' + decToSex(maxPRMSLPos.lng, "EW")}` +
 																		 "</pre>";
 				} catch (err) {
 					console.debug(err);

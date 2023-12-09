@@ -47,7 +47,7 @@ sensor: adafruit_bme280.Adafruit_BME280_I2C
 HOST: str = "127.0.0.1"  # Standard loopback interface address (localhost). Set to actual IP or name (from CLI) to make it reacheable from outside.
 PORT: int = 7001  # Port to listen on (non-privileged ports are > 1023)
 verbose: bool = False
-ADDRESS: int = 0x77
+ADDRESS: int = 0x77     # Default. We've seen some 0x76... Hence this parameter.
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
@@ -97,7 +97,7 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
         producing_status = True
         if verbose:
             print(f"\tSending status to client: {payload}")
-        connection.sendall(payload.encode())  # FIXME This one does not go through...
+        connection.sendall(payload.encode())  # If problem, see the client...
         producing_status = False
         if verbose:
             print("\tStatus was sent to client")
