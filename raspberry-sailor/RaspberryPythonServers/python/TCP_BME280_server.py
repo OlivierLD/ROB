@@ -94,9 +94,9 @@ def produce_status(connection: socket.socket, address: tuple) -> None:
     }
     try:
         payload: str = json.dumps(message) + NMEA_EOS  # str(message) + NMEA_EOS
-        if verbose:
-            print(f"Producing status: {payload}")
         producing_status = True
+        if verbose:
+            print(f"Sending status to client: {payload}")
         connection.sendall(payload.encode())  # FIXME This one does not go through...
         producing_status = False
     except Exception:
@@ -131,6 +131,7 @@ def client_listener(connection: socket.socket, address: tuple) -> None:
                 elif client_mess == CMD_STATUS:
                     produce_status(connection, address)
                 elif client_mess == CMD_EXIT:
+                    print(">> TCP BME280 received an EXIT message.")
                     interrupt(None, None)
                 # elif client_mess == "":
                 #     pass  # ignore
@@ -197,19 +198,20 @@ def produce_nmea(connection: socket.socket, address: tuple,
             # Send to the client
             if sensor is not None:
                 if mta_sentences and not producing_status:
-                    if not producing_status:
-                        connection.sendall(nmea_mta.encode())
+                    connection.sendall(nmea_mta.encode())
                 if mmb_sentences and not producing_status:
-                    if not producing_status:
-                        connection.sendall(nmea_mmb.encode())
+                    connection.sendall(nmea_mmb.encode())
                 if xdr_sentences and not producing_status:
-                    if not producing_status:
-                        connection.sendall(nmea_xdr.encode())
+                    connection.sendall(nmea_xdr.encode())
             else:
                 print(f"No Sensor: {dummy_str.strip()}")
                 if not producing_status:
                     connection.sendall(dummy_str.encode())
-            time.sleep(between_loops)
+            if producing_status:
+                print("Waiting for the status production to be completed.")
+            if verbose:
+                print(f"\tSleeping between loops for {between_loops} sec.")
+            time.sleep(between_loops)  # Wait between loops
         except BrokenPipeError as bpe:
             print("Client disconnected")
             nb_clients -= 1

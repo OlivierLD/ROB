@@ -163,7 +163,7 @@ def produce_zda(connection: socket.socket, address: tuple) -> None:
                     print(f"Producing ZDA and sending: {nmea_zda.strip()}")
                 connection.sendall(nmea_zda.encode())  # Send to the client(s), broadcast.
             else:
-                print("Waiting for the status to be completed.")
+                print("Waiting for the status production to be completed.")
             time.sleep(between_loops)
         except BrokenPipeError as bpe:
             print("ZDA Client disconnected")
