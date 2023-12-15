@@ -24,6 +24,9 @@ After several trials, two main communication methods emerged:
 - Representational State Transfer (REST)
   - relies on HTTP, itself relying on TCP
 
+TCP, REST, HTTP, etc, are language agnostic protocols. Both Java and Python can
+implement clients and servers using those protocols.
+
 ### Python Point of Truth
 Please refer to the scripts in [NMEA-Parser/src/main/python](../NMEA-Parser/src/main/python).  
 The homonyms are to be taken from the directory mentioned above.

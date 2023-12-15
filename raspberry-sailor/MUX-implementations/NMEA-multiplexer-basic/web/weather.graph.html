@@ -2350,7 +2350,7 @@
 				let d2 = keys[keys.length - 1]; // '2023-09-04T13:47:00'; // keys[keys.length - 1]
 				let mess = `from ${reworkDuration(d1)} to ${reworkDuration(d2)}`;
 				document.getElementById(fromToId).innerText = mess;
-				datagraph.title = `${graphLabel}, UTC Dates, ${mess}`;
+				// datagraph.title = `${graphLabel}, UTC Dates, ${mess}`;
 			}
 
 			// 1 - Find the first "midnight" 
@@ -2534,6 +2534,23 @@
 				return "";
 			}
         });
+		// MouseMove on the graph
+		barograph.addEventListener('mousemove', evt => {
+			let theGraph = evt.target;
+			let rect = theGraph.getBoundingClientRect();
+			let x = evt.clientX - rect.left; // x position within the element.
+			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
+			// console.log(`MouseMove on graph: ${x}, ${y}`);
+			let height = theGraph.height;
+			let minY = theGraph.data.minY;
+			let maxY = theGraph.data.maxY;
+			let deltaY = maxY - minY;
+			let correctedY = height - y;
+			let yValue = minY + ((correctedY / height) * deltaY);
+			
+			theGraph.title = `${yValue.toFixed(1)} hPa`;
+		});
+
 		let thermograph = document.getElementById('thermograph-01');
 		thermograph.setVGridLabelsCallback(val => {  
             // console.log(`VGridLabel: ${val}`);
@@ -2561,6 +2578,22 @@
 				return "";
 			}
         });
+		// MouseMove on the graph
+		thermograph.addEventListener('mousemove', evt => {
+			let theGraph = evt.target;
+			let rect = theGraph.getBoundingClientRect();
+			let x = evt.clientX - rect.left; // x position within the element.
+			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
+			// console.log(`MouseMove on graph: ${x}, ${y}`);
+			let height = theGraph.height;
+			let minY = theGraph.data.minY;
+			let maxY = theGraph.data.maxY;
+			let deltaY = maxY - minY;
+			let correctedY = height - y;
+			let yValue = minY + ((correctedY / height) * deltaY);
+			
+			theGraph.title = `${yValue.toFixed(1)} \xb0C`;
+		});
 
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
 			let theMap = FOR_DEV_PRMSL_2; //  FOR_DEV_1;
