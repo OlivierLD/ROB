@@ -28,7 +28,7 @@
 	<script type="text/javascript">
 
 	const VERBOSE = false;
-	const IN_DEV = false;
+	const IN_DEV = true;
 
 	let status = 'tick';
 
@@ -2864,6 +2864,11 @@
 		background-color: cyan; /*#717171;*/
 	}
 
+	graph-display.special-pointer {
+		/* cursor: crosshair; */
+		cursor: url('./images/crosshair.png') 19 18, auto;
+	}
+
 	</style>
 
 </head>
@@ -2989,7 +2994,7 @@
 								<br/>
 								<graph-display id="barograph-01"
 											   tabindex="-1"
-											   class="barograph"
+											   class="barograph special-pointer"
 											   width="800"
 											   height="200"
 											   padding="5"
@@ -3007,7 +3012,7 @@
 								<br/>
 								<graph-display id="thermograph-01"
 											   tabindex="-1"
-											   class="thermograph"
+											   class="thermograph special-pointer"
 											   width="800"
 										   	   height="200"
 											   padding="5"
