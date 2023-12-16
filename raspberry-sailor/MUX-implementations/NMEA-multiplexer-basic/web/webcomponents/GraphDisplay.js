@@ -51,6 +51,7 @@ const graphDisplayDefaultColorConfig = {
 		to: 'gray'
 	},
 	gridColor: 'rgba(255, 255, 255, 0.7)',
+	abscissaColor: 'rgba(255, 255, 255, 0.7)',
 	displayColor: 'cyan',
 	labelFont: 'Courier New',
 	valueFont: 'Arial'
@@ -296,6 +297,9 @@ class GraphDisplay extends HTMLElement {
 										case '--grid-color':
 											colorConfig.gridColor = value;
 											break;
+										case '--abscissa-color':
+											colorConfig.abscissaColor = value;
+											break;
 										case '--display-color':
 											colorConfig.displayColor = value;
 											break;
@@ -424,7 +428,7 @@ class GraphDisplay extends HTMLElement {
 
 							// X Label
 							if (this._data.withXLabels === true) {
-								context.fillStyle = this.graphDisplayColorConfig.gridColor;
+								context.fillStyle = this.graphDisplayColorConfig.abscissaColor;
 								context.font = Math.round(scale * 12) + "px " + this.graphDisplayColorConfig.labelFont;
 								let strVal = this._vGridLabelsCallback(abscissa);
 								// let metrics = context.measureText(strVal);
@@ -433,7 +437,7 @@ class GraphDisplay extends HTMLElement {
 								context.save();
 								// context.translate(_x, this._orientation === HORIZONTAL_GRAPH ? this.canvas.height : -this.canvas.height);
 								// context.rotate((this._orientation === HORIZONTAL_GRAPH ? -Math.PI / 2 : Math.PI / 2));
-								context.translate(_x, this.canvas.height);
+								context.translate(_x - 6, this.canvas.height);
 								context.rotate(-Math.PI / 2);
 								// context.fillText(strVal, _x, this._height - this._padding);
 								context.fillText(strVal, this._padding + 1, 1);

@@ -193,7 +193,7 @@
 	--bg-color: white;
 	--display-background-gradient-from: black;
 	--display-background-gradient-to: gray;
-	--grid-color: rgba(255, 255, 255, 0.7);
+	: rgba(255, 255, 255, 0.7);
 	--display-color: cyan;
 	--value-nb-decimal: 2;
 	--label-font: 'Courier New';
@@ -588,11 +588,13 @@ compass-rose .gray-flat {
     --display-background-gradient-from: white;
     --display-background-gradient-to: white;
     --grid-color: orange;
+	--abscissa-color: red;
     --display-color: purple;
 }
 .thermograph {
     --display-background-gradient-from: white;
     --display-background-gradient-to: white;
     --grid-color: orange;
+	--abscissa-color: navy;
     --display-color: navy;
 }
