@@ -63,11 +63,11 @@ function cacheClient(dataManager, bp, errorManager) {
 	(() => {
 		// Long poll
 		setInterval(() => {
-			fetch();
+			fetchData();
 		}, betweenPing);
 	})();
 
-	function fetch() {
+	function fetchData() {
 		let getData = getNMEAData();
 		getData.then((value) => {
 			//  console.log("Done:", value);

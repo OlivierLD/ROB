@@ -9,7 +9,7 @@ function initAjax(forwardErrors=false, ping=1000) {
 
 	forwardAjaxErrors = forwardErrors;
 	let interval = setInterval(function () {
-		fetch();
+		fetchData();
 	}, ping);
 }
 
@@ -60,7 +60,7 @@ function getNMEAData() {
 	return promise;
 }
 
-function fetch() {
+function fetchData() {
 	let getData = getNMEAData();
 	getData.then((value) => {
 		// console.log("Done:", value);
