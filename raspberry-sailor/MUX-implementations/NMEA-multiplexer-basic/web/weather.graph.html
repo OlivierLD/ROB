@@ -32,7 +32,7 @@
 
 	let status = 'tick';
 
-	let setCurrentTime = function() {
+	const setCurrentTime = function() {
 		let date = new Date();
 
 		let tzo = date.getTimezoneOffset() / 60; // in hours
@@ -55,7 +55,7 @@
 
 	var currentData;
 
-	let reworkDuration = (duration) => {
+	const reworkDuration = (duration) => {
 		// "2023-03-19T08:42:33"
 		//  |    |  |  |  |
 		//  |    |  |  |  14
@@ -428,9 +428,9 @@
 		});
 
 		if (IN_DEV) {  // For dev, show how to transform the incoming payload.
-			let theMap; // = FOR_DEV_PRMSL_2; //  FOR_DEV_1;
-			// Read from sample.dta/sample.prmsl.json
-			let dataSource = "./sample.data/sample.prmsl.json";
+			let theMap;
+			// let dataSource = "./sample.data/sample.prmsl.json";
+			let dataSource = "./sample.data/sample.baro.04.json";
 			fetch(dataSource).then(response => {
 					console.log(`Data Response: ${response.status} - ${response.statusText}`);
 					response.json().then(doc => {
@@ -453,8 +453,8 @@
 				});
 
 			// Same for temp...
-			// Read from sample.data/sample.airtemp.json
-			dataSource = "./sample.data/sample.airtemp.json";
+			// dataSource = "./sample.data/sample.airtemp.json";
+			dataSource = "./sample.data/sample.at.04.json";
 			fetch(dataSource).then(response => {
 					console.log(`Data Response: ${response.status} - ${response.statusText}`);
 					response.json().then(doc => {
@@ -489,7 +489,7 @@
     resizeComponents();
   };
 
-  let resizeComponents = function() {
+  const resizeComponents = function() {
     let ww = window.innerWidth;
     let wh = window.innerHeight;
   };
@@ -531,11 +531,10 @@
 		widget.repaint();
 	}
 
-	function setElementsStyle(
-			analogStyle,
-			directionStyle,
-			tempStyle,
-			rainStyle) {
+	function setElementsStyle(analogStyle,
+							  directionStyle,
+							  tempStyle,
+							  rainStyle) {
 		let displays = document.getElementsByTagName('analog-display');
 		for (let i=0; i<displays.length; i++) {
 			setElementStyle(displays[i], analogStyle);

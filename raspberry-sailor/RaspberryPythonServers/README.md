@@ -49,7 +49,11 @@ as fast as boat or wind speed.
 So we are going to use TCP and REST, language agnostic protocol supported by many languages - including Java and Python, and the data going back and forth
 will be encapsulated by JSON (JavaScript Object Notation), also natively supported by the languages we target.
 
-_**A last detail**_: The servers (TCP and/or REST) do not need to run on the same machine as the NMEA-multiplexer. All they need is to see each other on the network.
+_**A last detail**_: The servers (TCP and/or REST) do not need to run on the same machine as the `NMEA-multiplexer`. All they need is to see each other on the network.
+
+### Bonus: Web Server
+Work in progress... There is a `REST_and_WEB_server.py` that can be used to also serve static requests.  
+It is an example, to be extended, but it works.
 
 ## Implementations
 This directory contains _**EXAMPLES**_ of the way to have TCP and REST servers written in Python,
