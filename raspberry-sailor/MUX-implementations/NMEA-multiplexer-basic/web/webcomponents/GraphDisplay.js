@@ -379,19 +379,6 @@ class GraphDisplay extends HTMLElement {
 
 		this._doBefore(this, context);
 
-		context.fillStyle = this.graphDisplayColorConfig.displayColor;
-		// Label
-		context.font = "bold " + Math.round(scale * 16) + "px " + this.graphDisplayColorConfig.labelFont;
-		context.fillText(this.label, 5, 18);
-		// Value
-		if (this._value !== null) {
-			context.font = "bold " + Math.round(scale * 30) + "px " + this.graphDisplayColorConfig.valueFont;
-			let strVal = this._value;
-			let metrics = context.measureText(strVal);
-			let len = metrics.width;
-			context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
-		}
-
 		// Curves & Axis
 		if (this._data !== null) {
 			let minX = this._data.minX;
@@ -626,6 +613,21 @@ class GraphDisplay extends HTMLElement {
 			}
 
 		}
+
+		// Text on top (label, value)
+		context.fillStyle = this.graphDisplayColorConfig.displayColor;
+		// Label
+		context.font = "bold " + Math.round(scale * 16) + "px " + this.graphDisplayColorConfig.labelFont;
+		context.fillText(this.label, 5, 18);
+		// Value
+		if (this._value !== null) {
+			context.font = "bold " + Math.round(scale * 30) + "px " + this.graphDisplayColorConfig.valueFont;
+			let strVal = this._value;
+			let metrics = context.measureText(strVal);
+			let len = metrics.width;
+			context.fillText(strVal, this.canvas.width - len - 5, this.canvas.height - 5);
+		}
+
 		this._doAfter(this, context);
 	}
 

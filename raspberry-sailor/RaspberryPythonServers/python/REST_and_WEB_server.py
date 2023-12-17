@@ -1,49 +1,47 @@
 #!/usr/bin/env python3
 #
+# An example (WiP), showing how to have a REST and Web server.
+# A Skeleton for further dev.
+#
 # Requires:
 # ---------
-# pip3 install http (already in python3.7, no need to install it)
-# [sudo] pip3 install adafruit-circuitpython-bme280
+# pip3 install http (already in python3.7+, no need to install it)
 #
-# Provides REST access to the BME280 data, try GET http://localhost:8080/bme280/data
+# Provides REST access to the ZDA data, try GET http://localhost:8080/utc-date-time/nmea-data
+# Acts as a sensor reader.
 #
-# For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /bme280/nmea-data
+# For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /utc-date-time/nmea-data
 #
 # Start it with 
-# $ python3 <...>/REST_BME280_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false --simulate-when-missing:false
+# $ python3 <...>/REST_and_WEB_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false
 #
 import json
+import signal
 import sys
-import random
+import os
 # import traceback
-# import time
+import time
 # import math
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
-import board
-import busio
 import NMEABuilder   # local script
-import utils         # local script
-
-
-from adafruit_bme280 import basic as adafruit_bme280  # pip3 install adafruit-circuitpython-bme280
+# import utils         # local script
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX = "/bme280"
-# TODO Static resource path prefix ?
+PATH_PREFIX: str = "/utc-date-time"
+STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource
+# TODO zip prefix ?
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
-simulate_when_missing: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
-SIMULATE_WHEN_MISSING_PREFIX: str = "--simulate-when-missing:"
 
-sensor: adafruit_bme280.Adafruit_BME280_I2C
+server_pid: int = os.getpid()  # Used to kill the process
 
 sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
     "1": "First",
@@ -51,46 +49,6 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
     "3": "Third",
     "4": "Fourth"
 }
-
-
-i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
-try:
-    sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
-    sensor.sea_level_pressure = 1013.25  # Depends on your location
-except:
-    print("No BME280 was found...")
-    sensor = None
-
-
-def read_bme280() -> dict:
-    """
-    Reads the sensor, returns a JSON structure.
-    """
-    global sensor
-    temperature: float = None  # Celsius
-    humidity: float = None     # %
-    pressure: float = None     # hPa
-    status: str = None
-
-    if sensor is not None:
-        temperature = sensor.temperature     # Celsius
-        humidity = sensor.relative_humidity  # %
-        pressure = sensor.pressure           # hPa
-        status = "OK"
-    else:
-        if simulate_when_missing:
-            temperature = random.randrange(-100, 400) / 10
-            humidity = random.randrange(0, 1_000) / 10
-            pressure = random.randrange(9_500, 10_400) / 10
-            status = "OK - Simulated"
-        else:
-            status = "No BME280 was found"
-    return {
-        "temperature": temperature,
-        "humidity": humidity,
-        "pressure": pressure,
-        "status": status
-    }
 
 
 # Defining an HTTP request Handler class
@@ -118,10 +76,6 @@ class ServiceHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if verbose:
             print("GET methods")
-        # defining all the headers
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
         #
         full_path = self.path
         split = full_path.split('?')
@@ -140,46 +94,16 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 else:
                     print("oops, no equal sign in {}".format(qs_prm))
 
-        if path == PATH_PREFIX + "/data":
+        if path == PATH_PREFIX + "/nmea-data":
             if verbose:
-                print("BME280 Value request")
+                print("ZDA Value request")
             try:
-                bme280_data: dict = read_bme280()
-                # TODO Headers ?
-                self.wfile.write(json.dumps(bme280_data).encode())
-            except Exception as exception:
-                error = {"message": "{}".format(exception)}
-                self.wfile.write(json.dumps(error).encode())
-                self.send_response(500)
-        elif path == PATH_PREFIX + "/nmea-data":
-            if verbose:
-                print("BME280 NMEA-Value request")
-            try:
-                bme280_data: dict = read_bme280()
-                # Transform sensor data to NMEA Strings
-                nmea_data: dict
-                if not bme280_data['status'].startswith('OK'):  # "OK", or "OK, simulated"
-                    mess: str = NMEABuilder.build_MSG(bme280_data['status']) + NMEABuilder.NMEA_EOS
-                    nmea_data = { "message": mess }
-                else:
-                    temperature: float = bme280_data['temperature']
-                    pressure: float = bme280_data['pressure']
-                    humidity: float = bme280_data['humidity']
-                    dpt: float = utils.dew_point_temperature(humidity, temperature)   # This way, no Computer required on the mux
-
-                    nmea_mta: str = NMEABuilder.build_MTA(temperature) + NMEABuilder.NMEA_EOS
-                    nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS
-                    nmea_xdr: str = NMEABuilder.build_XDR({"value": humidity, "type": "HUMIDITY"},
-                                                          {"value": temperature, "type": "TEMPERATURE"},
-                                                          {"value": dpt, "type": "TEMPERATURE", "extra": "DEWP"},
-                                                          {"value": pressure * 100, "type": "PRESSURE_P"},
-                                                          {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
-                    nmea_data = {
-                        "01": nmea_mta,
-                        "02": nmea_mmb,
-                        "03": nmea_xdr
-                    }
-                self.wfile.write(json.dumps(nmea_data).encode())
+                nmea_zda: str = NMEABuilder.build_ZDA()  # + NMEABuilder.NMEA_EOS
+                # defining all the headers
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(nmea_zda.encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
@@ -191,13 +115,13 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "verb": "GET",
                         "description": "Get the available operation list."
                     }, {
-                        "path": PATH_PREFIX + "/data",
-                        "verb": "GET",
-                        "description": "Get the BME280 data, in json format."
+                        "path": PATH_PREFIX + "/exit",
+                        "verb": "POST",
+                        "description": "Careful: terminate the server process."
                     }, {
                         "path": PATH_PREFIX + "/nmea-data",
                         "verb": "GET",
-                        "description": "Get the BME280 data, NMEA format."
+                        "description": "Get the ZDA data, in NMEA format."
                     }]
             }
             response_content = json.dumps(response).encode()
@@ -208,8 +132,48 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(response_content)
+        elif path.startswith(STATIC_PATH_PREFIX):
+            if verbose:
+                print(f"Static path: {path}")
+            static_resource: str = path[len(STATIC_PATH_PREFIX):]
+            if verbose:
+                print(f"Loading static resource [{static_resource}]")
+
+            content_type: str = "text/html"
+            binary: bool = False
+            if static_resource.endswith(".css"):
+                content_type = "text/css"
+            elif static_resource.endswith(".js"):
+                content_type = "text/javascript"
+            elif static_resource.endswith(".png"):
+                content_type = "image/png"
+                binary = True
+            elif static_resource.endswith(".ico"):
+                content_type = "image/ico"
+                binary = True
+            # TODO more cases. jpg, gif, svg, ttf, pdf, wav, etc.
+
+            # Content type based on file extension
+            if not binary:
+                with open("web" + static_resource) as f:
+                    content = f.read()
+            else:
+                with open("web" + static_resource, "rb") as image:
+                    content = image.read()
+
+            if verbose:
+                print(f"Data type: {type(content)}, content:\n{content}")
+            self.send_response(200)
+            # defining the response headers
+            self.send_header('Content-Type', content_type)
+            content_len = len(content)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            if not binary:
+                self.wfile.write(content.encode())
+            else:
+                self.wfile.write(content)
         else:
-            # TODO Static resource request ?
             if verbose:
                 print("GET on {} not managed".format(self.path))
             error = "NOT FOUND!"
@@ -243,17 +207,25 @@ class ServiceHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         if verbose:
             print("POST request, {}".format(self.path))
-        if self.path.startswith("/whatever/"):  # Dummy POST
-            content_len = int(self.headers.get('Content-Length'))
-            post_body = self.rfile.read(content_len).decode('utf-8')
-            print("Content: {}".format(post_body))
-
-            self.send_response(201)
+            print("POST on {} not managed".format(self.path))
+        if self.path.startswith(PATH_PREFIX + "/exit"):
+            print(">>>>> ZDA server received POST /exit")
+            # content_len: int = int(self.headers.get('Content-Length'))
+            # post_body = self.rfile.read(content_len).decode('utf-8')
+            # if verbose:
+            #    print("Content: {}".format(post_body))
             response = {"status": "OK"}
-            self.wfile.write(json.dumps(response).encode())
+            response_content = json.dumps(response).encode()
+            self.send_response(201)
+            self.send_header('Content-Type', 'application/json')
+            content_len = len(response_content)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(response_content)
+            time.sleep(2)  # Wait for response to be received
+            print(f">>> Killing ZDA server process ({server_pid}).")
+            os.kill(server_pid, signal.SIGKILL)
         else:
-            if verbose:
-                print("POST on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
             self.send_header('Content-Type', 'text/plain')
@@ -261,27 +233,19 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
-
-    # self.wfile.write(json.dumps(data[str(index)]).encode())
 
     # PUT method Definition
     def do_PUT(self):
         if verbose:
             print("PUT request, {}".format(self.path))
-        if self.path.startswith("/whatever/"):
-            self.send_response(201)
-            response = {"status": "OK"}
-            self.wfile.write(json.dumps(response).encode())
-        else:
-            if verbose:
-                print("PUT on {} not managed".format(self.path))
-            error = "NOT FOUND!"
-            self.send_response(404)
-            self.send_header('Content-Type', 'text/plain')
-            content_len = len(error)
-            self.send_header('Content-Length', str(content_len))
-            self.end_headers()
-            self.wfile.write(bytes(error, 'utf-8'))
+            print("PUT on {} not managed".format(self.path))
+        error = "NOT FOUND!"
+        self.send_response(404)
+        self.send_header('Content-Type', 'text/plain')
+        content_len = len(error)
+        self.send_header('Content-Length', str(content_len))
+        self.end_headers()
+        self.wfile.write(bytes(error, 'utf-8'))
 
     # DELETE method definition
     def do_DELETE(self):
@@ -304,8 +268,6 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
-        if arg[:len(SIMULATE_WHEN_MISSING_PREFIX)] == SIMULATE_WHEN_MISSING_PREFIX:
-            simulate_when_missing = (arg[len(SIMULATE_WHEN_MISSING_PREFIX):].lower() == "true")
 
 # Server Initialization
 port_number: int = server_port
@@ -320,4 +282,4 @@ try:
 except KeyboardInterrupt:
     print("\n\t\tUser interrupted (server.serve), exiting.")
 
-print("Done with REST BME280 server.")
+print("Done with REST UTC-DateTime server.")
