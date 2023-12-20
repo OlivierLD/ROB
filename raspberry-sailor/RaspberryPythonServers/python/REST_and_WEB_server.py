@@ -7,10 +7,10 @@
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
 #
-# Provides REST access to the ZDA data, try GET http://localhost:8080/utc-date-time/nmea-data
+# Provides REST access to the JSON data, try GET http://localhost:8080/json-data/data
 # Acts as a sensor reader.
 #
-# For NMEA-multiplexer REST Channel (Consumer), consider looking at GET /utc-date-time/nmea-data
+# For a REST Channel (Consumer), consider looking at GET /json-data/data
 #
 # Start it with 
 # $ python3 <...>/REST_and_WEB_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false
@@ -21,18 +21,21 @@ import sys
 import os
 # import traceback
 import time
+import random
 # import math
+import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
-import NMEABuilder   # local script
+from datetime import datetime, timezone
+# import NMEABuilder   # local script
 # import utils         # local script
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX: str = "/utc-date-time"
+PATH_PREFIX: str = "/json-data"
 STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource
-# TODO zip prefix ?
+# TODO zip prefix ? That'd be kewl...
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
@@ -41,9 +44,12 @@ MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 
-server_pid: int = os.getpid()  # Used to kill the process
+keep_looping: bool = True
+between_loops: int = 1
 
-sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
+server_pid: int = os.getpid()  # Used to kill the process. Bam.
+
+sample_data: Dict[str, str] = {  # Used for VIEW (and non-implemented) operations. Fallback.
     "1": "First",
     "2": "Second",
     "3": "Third",
@@ -94,16 +100,19 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 else:
                     print("oops, no equal sign in {}".format(qs_prm))
 
-        if path == PATH_PREFIX + "/nmea-data":
+        if path == PATH_PREFIX + "/data":
             if verbose:
-                print("ZDA Value request")
+                print("JSON Array Value request")
             try:
-                nmea_zda: str = NMEABuilder.build_ZDA()  # + NMEABuilder.NMEA_EOS
+                json_data: str = json.dumps(DATA_ARRAY)
                 # defining all the headers
                 self.send_response(200)
-                self.send_header('Content-Type', 'text/plain')
+                # self.send_header('Content-Type', 'text/plain')
+                self.send_header('Content-Type', 'application/json')
+                content_len = len(json_data)
+                self.send_header('Content-Length', str(content_len))
                 self.end_headers()
-                self.wfile.write(nmea_zda.encode())
+                self.wfile.write(json_data.encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
@@ -119,9 +128,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "verb": "POST",
                         "description": "Careful: terminate the server process."
                     }, {
-                        "path": PATH_PREFIX + "/nmea-data",
+                        "path": PATH_PREFIX + "/data",
                         "verb": "GET",
-                        "description": "Get the ZDA data, in NMEA format."
+                        "description": "Get the JSON data, in JSON format."
                     }]
             }
             response_content = json.dumps(response).encode()
@@ -260,6 +269,45 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
+DATA_ARRAY: Dict[str, int] = {
+}
+MAP_MAX_LENGTH: int = 10
+
+# THE data producer. To be customized...
+def ping_data(dummy_prm: str) -> None:
+    global keep_looping
+    global between_loops
+    global verbose
+    global DATA_ARRAY
+    global MAP_MAX_LENGTH
+
+    print(f"Data thread")
+    while keep_looping:
+        # Do you job here
+        # print("Pinging data...")
+        # Generating data
+        utc_ms = datetime.now(timezone.utc).timestamp() * 1_000  # System "UTC epoch" in ms
+        dt_object = datetime.fromtimestamp(utc_ms / 1_000, tz=timezone.utc)  # <- Aha !!
+        # Duration: YYYY-MM-DDTHH:MI:SS.sss
+        # duration_date_time: str = dt_object.strftime("%H%M%S.00,%d,%m,%Y")
+        duration_date_time: str = dt_object.strftime("%Y-%m-%dT%H:%M:%S")
+        dummy_data: float = random.randrange(-100, 400) / 10
+        print(f"New element {{ 'key':{duration_date_time}, 'value':{dummy_data} }}")
+        data: Dict = {}
+        data[duration_date_time] = dummy_data
+        DATA_ARRAY.update(data)
+        # Trim if too long
+        while len(DATA_ARRAY) > MAP_MAX_LENGTH:
+            key: str = list(DATA_ARRAY.keys())[0]
+            print(f"Dropping {key}, {DATA_ARRAY.get(key)}")
+            DATA_ARRAY.pop(key)
+
+        if verbose:
+            print(f"\tSleeping between loops for {between_loops} sec.")
+        time.sleep(between_loops)  # Wait between loops
+    print("Done with data thread")
+
+
 if len(sys.argv) > 0:  # Script name + X args
     for arg in sys.argv:
         if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
@@ -268,6 +316,13 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+
+# Start data thread
+client_thread: threading.Thread = \
+                threading.Thread(target=ping_data, args=("Parameter...",))  # Producer
+# print(f"Thread is a {type(client_thread)}")
+client_thread.daemon = True  # Dies on exit
+client_thread.start()
 
 # Server Initialization
 port_number: int = server_port
@@ -280,6 +335,9 @@ print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".for
 try:
     server.serve_forever()
 except KeyboardInterrupt:
-    print("\n\t\tUser interrupted (server.serve), exiting.")
+    keep_looping = False
+    print("\n\t\tUser interrupted (server.serve), exiting...")
+    time.sleep(between_loops * 2)
+    print("\n\t\tOver and out!")
 
-print("Done with REST UTC-DateTime server.")
+print("Done with REST and Web server.")

@@ -458,12 +458,12 @@ jumbo-display .digital-font-green {
 }
 
 direction-display .analogdisplay-day
-									.analogdisplay-night
-									.analogdisplay-monochrome-cyan
-									.analogdisplay-monochrome-white
-									.analogdisplay-monochrome-yellow
-									.analogdisplay-monochrome-orange
-									.analogdisplay-flat-gray {
+				  .analogdisplay-night
+				  .analogdisplay-monochrome-cyan
+				  .analogdisplay-monochrome-white
+				  .analogdisplay-monochrome-yellow
+				  .analogdisplay-monochrome-orange
+				  .analogdisplay-flat-gray {
 	--value-nb-decimal: 0;
 }
 
