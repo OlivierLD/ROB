@@ -69,4 +69,13 @@ On the Raspberry Pi:
 $ sudo pip3 install adafruit-circuitpython-bme280
 ```
 
+### Run the server app
+```
+$ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76]
+```
 
+### Finally
+From anywhere n the same network, you can reach <http://192.168.1.38:8080/web/weather.graph.html>  
+![WebUI](./web.ui.png)
+
+---
