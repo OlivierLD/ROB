@@ -118,7 +118,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             try:
                 full_data: Dict[str, object] = {}
                 full_data["instant"] = instant_data
-                full_data["pressure-buffer"] = PRESSURE_MAP
+                full_data["pressure-map"] = PRESSURE_MAP
                 full_data["temperature-map"] = TEMPERATURE_MAP
                 json_data: str = json.dumps(full_data)
                 # defining all the headers
