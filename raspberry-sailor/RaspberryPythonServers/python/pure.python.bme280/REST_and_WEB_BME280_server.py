@@ -6,6 +6,8 @@
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
+# https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/python-circuitpython-test
+# Use a sudo pip3 install adafruit-circuitpython-bme280
 #
 # Provides REST access to the JSON data, try GET http://localhost:8080/json-data/data
 # Acts as a sensor reader.
@@ -13,22 +15,27 @@
 # For a REST Channel (Consumer), consider looking at GET /json-data/data
 #
 # Start it with 
-# $ python3 <...>/REST_and_WEB_server.py --machine-name:$(hostname -I) --port:9999 --verbose:false
+# $ python3 <...>/REST_and_WEB_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:9999 --verbose:false [--address:0x76]
+#
+# Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
+# From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
+#
 #
 import json
 import signal
 import sys
 import os
-# import traceback
+import traceback
 import time
 import random
-# import math
+import math
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from datetime import datetime, timezone
-# import NMEABuilder   # local script
-# import utils         # local script
+import board
+import busio
+from adafruit_bme280 import basic as adafruit_bme280   # pip3 install adafruit-circuitpython-bme280
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -39,13 +46,18 @@ STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed a
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
+ADDRESS: int = 0x77     # Default. We've seen some 0x76... Hence this parameter.
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
+ADDRESS_PREFIX: str = "--address:"
 
 keep_looping: bool = True
-between_loops: int = 1
+between_loops: int = 1            # 1 sec
+between_big_loops: int = 15 * 60  # 15 minutes
+
+sensor: adafruit_bme280.Adafruit_BME280_I2C
 
 server_pid: int = os.getpid()  # Used to kill the process. Bam.
 
@@ -104,7 +116,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
             if verbose:
                 print("JSON Array Value request")
             try:
-                json_data: str = json.dumps(DATA_ARRAY)
+                full_data: Dict[str, object] = {}
+                full_data["instant"] = instant_data
+                full_data["pressure-buffer"] = PRESSURE_MAP
+                full_data["temperature-map"] = TEMPERATURE_MAP
+                json_data: str = json.dumps(full_data)
                 # defining all the headers
                 self.send_response(200)
                 # self.send_header('Content-Type', 'text/plain')
@@ -269,46 +285,120 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(error, 'utf-8'))
 
 
-DATA_ARRAY: Dict[str, int] = {
-}
-MAP_MAX_LENGTH: int = 10
+PRESSURE_MAP: Dict[str, float] = {}
+TEMPERATURE_MAP: Dict[str, float] = {}
+
+MAP_MAX_LENGTH: int = 672  # 672 * 15 minutes: 7 days
+instant_data: Dict[str, float] = {}
 
 
-# THE data producer. To be customized...
-def ping_data(dummy_prm: str) -> None:
+def dew_point_temperature(hum: float, temp: float) -> float:
+    c1: float = 6.10780
+    c2: float = 17.08085 if (temp > 0) else 17.84362
+    c3: float = 234.175 if (temp > 0) else 245.425
+
+    pz: float = c1 * math.exp((c2 * temp) / (c3 + temp))
+    pd: float = pz * (hum / 100)
+
+    dew_point_temp: float = (- math.log(pd / c1) * c3) / (math.log(pd / c1) - c2)
+
+    return dew_point_temp
+
+
+# THE long storage data producer. To be customized...
+def long_storage_data(dummy_prm: str) -> None:
     global keep_looping
     global between_loops
     global verbose
     global DATA_ARRAY
     global MAP_MAX_LENGTH
 
-    print(f"Data thread")
+    print(f"Long Storage thread")
+    ping: int = 0
     while keep_looping:
-        # Do you job here
-        # print("Pinging data...")
-        # Generating data
-        utc_ms = datetime.now(timezone.utc).timestamp() * 1_000  # System "UTC epoch" in ms
-        dt_object = datetime.fromtimestamp(utc_ms / 1_000, tz=timezone.utc)  # <- Aha !!
-        # Duration: YYYY-MM-DDTHH:MI:SS.sss
-        # duration_date_time: str = dt_object.strftime("%H%M%S.00,%d,%m,%Y")
-        duration_date_time: str = dt_object.strftime("%Y-%m-%dT%H:%M:%S")
-        dummy_data: float = random.randrange(-100, 400) / 10
-        if verbose:
-            print(f"New element {{ 'key':{duration_date_time}, 'value':{dummy_data} }}")
-        data: Dict = {}
-        data[duration_date_time] = dummy_data
-        DATA_ARRAY.update(data)
-        # Trim if too long
-        while len(DATA_ARRAY) > MAP_MAX_LENGTH:
-            key: str = list(DATA_ARRAY.keys())[0]
-            if verbose:
-                print(f"Dropping {key}, {DATA_ARRAY.get(key)}")
-            DATA_ARRAY.pop(key)
-
+        if ping % between_big_loops == 0:
+            # Generating data
+            utc_ms = datetime.now(timezone.utc).timestamp() * 1_000  # System "UTC epoch" in ms
+            dt_object = datetime.fromtimestamp(utc_ms / 1_000, tz=timezone.utc)  # <- Aha !!
+            # Duration: YYYY-MM-DDTHH:MI:SS.sss
+            # duration_date_time: str = dt_object.strftime("%H%M%S.00,%d,%m,%Y")
+            duration_date_time: str = dt_object.strftime("%Y-%m-%dT%H:%M:%S")
+            # 1 - Pressure
+            all_good: bool = True
+            try:
+                pressure_data: float = instant_data["pressure"]
+                if verbose:
+                    print(f"New element {{ 'key':{duration_date_time}, 'value':{pressure_data} }}")
+                data: Dict = {}
+                data[duration_date_time] = pressure_data
+                PRESSURE_MAP.update(data)
+                # Trim if too long
+                while len(PRESSURE_MAP) > MAP_MAX_LENGTH:
+                    key: str = list(PRESSURE_MAP.keys())[0]
+                    if verbose:
+                        print(f"Dropping {key}, {PRESSURE_MAP.get(key)}")
+                    PRESSURE_MAP.pop(key)
+            except KeyError as key_error:
+                print(f"Oops: no {key_error} yet...")
+                all_good = False
+            # 2 - Temperature
+            try:
+                temperature_data: float = instant_data["temperature"]
+                if verbose:
+                    print(f"New element {{ 'key':{duration_date_time}, 'value':{temperature_data} }}")
+                # data: Dict = {}
+                data[duration_date_time] = temperature_data
+                TEMPERATURE_MAP.update(data)
+                # Trim if too long
+                while len(TEMPERATURE_MAP) > MAP_MAX_LENGTH:
+                    key: str = list(TEMPERATURE_MAP.keys())[0]
+                    if verbose:
+                        print(f"Dropping {key}, {TEMPERATURE_MAP.get(key)}")
+                    TEMPERATURE_MAP.pop(key)
+            except KeyError as key_error:
+                print(f"Oops: no {key_error} yet...")
+                all_good = False
+        if all_good:
+            ping += 1
         if verbose:
             print(f"\tSleeping between loops for {between_loops} sec.")
         time.sleep(between_loops)  # Wait between loops
-    print("\tDone with data thread")
+    print("\tDone with long storage data thread")
+
+
+# Reads the BME280
+def produce_data(dummy_prm: str) -> None:
+    global verbose
+    global between_loops
+    global keep_looping
+    global sensor
+
+    while keep_looping:
+        if sensor is not None:
+            temperature: float = sensor.temperature  # Celsius
+            humidity: float = sensor.relative_humidity  # %
+            pressure: float = sensor.pressure  # hPa
+            dpt: float = dew_point_temperature(humidity, temperature) # Celsius
+        else:
+            print("No BME280 was found")
+
+        try:
+            # Send to the client
+            if sensor is not None:
+                data: Dict = {}
+                data["temperature"] = temperature
+                data["humidity"] = humidity
+                data["pressure"] = pressure
+                data["dew-point"] = dpt
+                instant_data.update(data)
+            if verbose:
+                print(f"\tSleeping between loops for {between_loops} sec. Data is {json.dumps(instant_data)}")
+            time.sleep(between_loops)  # Wait between loops
+        except Exception as ex:
+            print("Oops!...")
+            traceback.print_exc(file=sys.stdout)
+            break  # Client disconnected
+    print(f"Exiting data producer thread.\nClosing.")
 
 
 if len(sys.argv) > 0:  # Script name + X args
@@ -319,13 +409,39 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+        if arg[:len(ADDRESS_PREFIX)] == ADDRESS_PREFIX:
+            ADDRESS = int(arg[len(ADDRESS_PREFIX):], 16)  # Expect hex number
+if verbose:
+    print("-- Received from the command line: --")
+    for arg in sys.argv:
+        print(f"{arg}")
+    print("-------------------------------------")
+
+i2c: busio.I2C = board.I2C()  # uses board.SCL and board.SDA
+try:
+    # Sensor I2C address may change..., address=0x76
+    sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=ADDRESS)
+    sensor.sea_level_pressure = 1013.25  # Depends on your location
+    if verbose:
+        print("BME280 was found and initialized...")
+except:
+    print("No BME280 was found...")
+    sensor = None
+
 
 # Start data thread
-client_thread: threading.Thread = \
-                threading.Thread(target=ping_data, args=("Parameter...",))  # Producer
+if True:
+    long_storage_thread: threading.Thread = \
+                    threading.Thread(target=long_storage_data, args=("Parameter...",))  # Long Storage Producer
+    # print(f"Thread is a {type(client_thread)}")
+    long_storage_thread.daemon = True  # Dies on exit
+    long_storage_thread.start()
+
+data_thread: threading.Thread = \
+                threading.Thread(target=produce_data, args=("Parameter...",))  # Data Producer
 # print(f"Thread is a {type(client_thread)}")
-client_thread.daemon = True  # Dies on exit
-client_thread.start()
+data_thread.daemon = True  # Dies on exit
+data_thread.start()
 
 # Server Initialization
 port_number: int = server_port
