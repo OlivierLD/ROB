@@ -13,6 +13,16 @@ It provides
 ---
 
 ## From Scratch
+### You will need
+- A Raspberry Pi (a Zero W here)
+- A breadboard
+- A BME280
+- Jumper wires
+- A power supply for the Raspberry Pi
+- A laptop
+- A network (your home WiFi would do)
+
+
 ### Create a fresh SD Card
 TODO Use the Raspi Imager to configure the Raspberry Pi sd card.  
 Enable SSH, I2C
@@ -33,15 +43,12 @@ $ cd pure.python.bme280
 $ scp -r . pi@192.168.1.38:~/BME280
 ```
 ### Wiring of the BME280
-TODO
-
-### To do once: install required python modules
-On the Raspberry Pi:
-```
-$ sudo pip3 install adafruit-circuitpython-bme280
-```
+Depending on where you got the BME280 from, its shape may vary (Sparkfun here, also available Adafruit, AliBaba, etc).
+But the contact names (`GND`, `3V3`, `SDA`, `SCL`) remain the same.  
+![Fritzing](./RPiZeroBME280_bb.png)
 
 ### Check the I2C availability
+On the Raspberry Pi:
 ```
 $ sudo i2cdetect -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -54,4 +61,12 @@ $ sudo i2cdetect -y 1
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 70: -- -- -- -- -- -- 76 --                         
 ```
+> Note: Here the address is `0x76`, as on the AliBaba BME280 I got. An Adafruit or Sparkfun would say `0x77`.
+
+### To do once: install required python modules
+On the Raspberry Pi:
+```
+$ sudo pip3 install adafruit-circuitpython-bme280
+```
+
 
