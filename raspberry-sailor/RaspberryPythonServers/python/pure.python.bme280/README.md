@@ -1,4 +1,4 @@
-# A Python BME280 server
+# A pure Python BME280 server
 ## A use-case
 
 This shows the implementation of a pure Python server to get to the data emitted by a BME280.
@@ -75,7 +75,7 @@ $ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ pr
 ```
 
 ### Finally
-From anywhere n the same network, you can reach <http://192.168.1.38:8080/web/weather.graph.html>  
+From anywhere on the same network, you can reach, in a browser, <http://192.168.1.38:8080/web/weather.graph.html>  
 ![WebUI](./web.ui.png)
 
 ---
