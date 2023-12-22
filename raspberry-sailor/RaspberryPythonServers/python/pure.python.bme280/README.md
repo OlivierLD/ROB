@@ -96,6 +96,10 @@ $ sudo pip3 install adafruit-circuitpython-bme280
 ```
 $ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76]
 ```
+Or if you want the server to run on its own:
+```
+$ nohup python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
+```
 
 ### Finally
 From anywhere on the same network, you can reach, in a browser, <http://192.168.1.38:8080/web/index.html>  
