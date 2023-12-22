@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 #
-# An example (WiP), showing how to have a REST and Web server.
-# A Skeleton for further dev.
+# REST and Web server.
 #
 # Requires:
 # ---------
@@ -27,7 +26,6 @@ import sys
 import os
 import traceback
 import time
-import random
 import math
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
