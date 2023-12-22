@@ -68,7 +68,7 @@ $ scp -r . pi@192.168.1.38:~/BME280
 ### Wiring of the BME280
 Depending on where you got the BME280 from, its shape may vary (Sparkfun here, also available Adafruit, AliBaba, etc).
 But the contact names (`GND`, `3V3`, `SDA`, `SCL`) remain the same.  
-![Fritzing](./RPiZeroBME280_bb.png)
+![Fritzing](doc/RPiZeroBME280_bb.png)
 
 ### Check the I2C availability
 On the Raspberry Pi:
@@ -99,7 +99,7 @@ $ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ pr
 
 ### Finally
 From anywhere on the same network, you can reach, in a browser, <http://192.168.1.38:8080/web/index.html>  
-![WebUI](./web.ui.png)
+![WebUI](doc/web.ui.png)
 Even on such a small board as the Raspberry Pi Zero (W), you can have such a rich Web UI.  
 Remember that the rendering of a Web UI is done _on the client side_. The Raspberry Pi only serves the
 resources required on the client.
@@ -109,7 +109,12 @@ resources required on the client.
 As you would notice in the picture above, we have two sliders at the bottom of the page.  
 This is for a Head-Up display (enabled when you hit the `Head Up` button at the top right).  
 When activated, this allows you to see the screen, reflected on a windshield for example.  
-> TODO Provide picture
+
+To have an idea:
+
+|              This               |       Would display that       |
+|:-------------------------------:|:------------------------------:|
+| ![this](./doc/baro.head.up.png) | ![That](./doc/head.up.02.jpeg) |
 
 ### The Raspberry Pi emits its own network
 Let's say you're at sea, far away from any 4G antenna... There is no Internet, _but_ you may be
