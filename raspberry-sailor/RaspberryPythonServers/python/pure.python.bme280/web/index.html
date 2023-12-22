@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<!--
+	Data from a BMP180, BMP280 or BME280. Air Temperature, Atm Pressure.
+	Optional Relative Humidity and Dew Point
+	Plus station time.
+	Pressure (and others) graphs, on one week.
+-->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <title>One week of data</title>
+
+    <link rel="icon" type="image/ico" href="icons/hammerhead.02.ico">
+
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+
+    <script type="text/javascript" src="js/pub.sub.js"></script>
+    <script type="text/javascript" src="js/ajax.manager.js"></script>
+
+	<link rel="stylesheet" href="css/web-components.css">
+
+	<script type="module" src="webcomponents/Thermometer.js"></script>
+	<script type="module" src="webcomponents/SplitFlapDisplay.js"></script>
+	<script type="module" src="webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="webcomponents/AnalogWatch.js"></script>
+	<script type="module" src="webcomponents/GraphDisplay.js"></script>
+
+	<script type="text/javascript">
+
+	const VERBOSE = false;  // For debug...
+
+	let status = 'tick';
+
+	const setCurrentTime = function() {
+		let date = new Date();
+
+		let tzo = date.getTimezoneOffset() / 60; // in hours
+	    // console.log("TimeZoneOffset:" + tzo);
+
+		let now = (date.getTime() / 1000) % 86400;
+		// One day = 86,400 sec,
+		let seconds = now % 60;
+		let minutes = ((now - seconds) / 60) % 60;
+		let hours = Math.floor(now / 3600) - tzo;
+		// Compose the string HH:MM:SS
+		let timeValue = hours.toFixed(0) + ":" + minutes.toFixed(0) + ":" + seconds.toFixed(0);
+        // console.log("Time: %d, => %s", watchValue, timeValue);
+		document.getElementById('watch-01').value = timeValue;
+	};
+
+	const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+	var currentData;
+
+	const reworkDuration = (duration) => {
+		// "2023-03-19T08:42:33"
+		//  |    |  |  |  |
+		//  |    |  |  |  14
+		//  |    |  |  11
+		//  |    |  8  
+		//  |    5
+		//  0
+		let year = duration.substring(0, 4);
+		let month = SHORT_MONTHS[parseInt(duration.substring(5, 7)) - 1];
+		let day = duration.substring(8, 10);
+		let time = duration.substring(11);
+
+		return `${year}-${month}-${day} ${time} UTC`;
+	};
+
+	window.onload = function() {
+		initAjax(false);
+		// Subscribers here
+		events.subscribe(EVENT_AT, function(val) {  // Air temp
+			if (status === 'tick') {
+				status = 'tock';
+				document.getElementById('working').style.color = 'red';
+			} else {
+				status = 'tick';
+				document.getElementById('working').style.color = 'green';
+			}
+			if (VERBOSE) {
+				console.log("Air Temperature : %f", val);
+			}
+			setData(val, 'thermometer-01');
+			// Set time (from client)
+			setCurrentTime();
+		});
+		events.subscribe(EVENT_PRMSL, function(val) {  // Pressure at Mean Sea Level
+			if (VERBOSE) {
+				console.log("Atm Pressure : %f", val);
+			}
+			setData(val, 'prmsl-01');
+		});
+		events.subscribe(EVENT_HUM, function(val) {
+			if (VERBOSE) {
+				console.log(`Relative humidity ${val.toFixed(1)}%`);
+			}
+			let display = document.getElementById('rel-hum-display');
+			if (display) {
+				let valToDisplay = val.toFixed(1);
+				while (valToDisplay.length < 5) {
+					valToDisplay = " " + valToDisplay; // lpad...
+				}
+				display.value = valToDisplay;
+				display.repaint();
+			}
+		});
+		events.subscribe(EVENT_DEW, function(val) {
+			if (VERBOSE) {
+				console.log('Dew Point: %f\xb0C', val);
+			}
+			let display = document.getElementById('dew-point-display');
+			if (display) {
+				let valToDisplay = val.toFixed(1);
+				while (valToDisplay.length < 5) {
+					valToDisplay = " " + valToDisplay; // lpad...
+				}
+				display.value = valToDisplay;
+				display.repaint();
+			}
+		});
+		// A "FULL" one to get to the long-term-storage (for barograph)
+		events.subscribe(EVENT_FULL, function(val) {
+			// TODO Do it
+			const PRMSL_KEY = "pressure-map";  // As in the computer (long-trem-storage), see yaml.
+			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-trem-storage), see yaml.
+			let theMap = val[PRMSL_KEY];
+			if (theMap) {
+				if (VERBOSE) { 
+					let keys = Object.keys(theMap);
+					console.log(`The Map: ${ JSON.stringify(theMap) }, ${keys.length} elements.`);
+					for (let i=0; i<keys.length; i++) {
+						// console.log(`Key ${keys[i]}`);
+						let prmsl = theMap[keys[i]];  // To build the graph
+					}
+				}
+				//
+				let barograph = document.getElementById('barograph-01');
+				prepareData(theMap, barograph, 960, 1050, 'PRMSL', 'purple', "nb-pts-pr", "from-to-pr");
+				document.getElementById("raw-data-prmsl").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+			}
+			theMap = val[AIR_TEMP_KEY];
+			if (theMap) {
+				if (VERBOSE) { 
+					let keys = Object.keys(theMap);
+					console.log(`The Map: ${ JSON.stringify(theMap) }, ${keys.length} elements.`);
+					for (let i=0; i<keys.length; i++) {
+						// console.log(`Key ${keys[i]}`);
+						let prmsl = theMap[keys[i]];  // To build the graph
+					}
+				}
+				//
+				let thermograph = document.getElementById('thermograph-01');
+				prepareData(theMap, thermograph, -10, 50, 'Air Temp', 'navy', "nb-pts-at", "from-to-at");
+				document.getElementById("raw-data-temp").innerHTML = `<pre>${ JSON.stringify(theMap, null, 2) }</pre>`;
+			}
+		});
+
+		let startIdx = 0;  // first midnight
+		let startIdx4 = -1; // First 00, 06, 12 or 18
+		let firstWeekDayIdx = 0;
+
+		const prepareData = (theMap, datagraph, graphMini, graphMaxi, graphLabel, graphLineColor, nbPtId, fromToId) => {
+
+			currentData = theMap;
+
+			// "2023-03-19T08:42:33"
+			//  |    |  |  |  |
+			//  |    |  |  |  14
+			//  |    |  |  11
+			//  |    |  8  
+			//  |    5
+			//  0
+
+			let keys = Object.keys(theMap);
+			let nbPts = keys.length;
+			// Nb points
+			document.getElementById(nbPtId).innerText = `${nbPts} / 672 point${nbPts > 1 ? 's' : ''}`;
+			if (true || nbPts > 0) {
+				// From to
+				let d1 = keys[0]; // '1970-01-01T00:00:00'; // keys[0]
+				let d2 = keys[keys.length - 1]; // '2023-09-04T13:47:00'; // keys[keys.length - 1]
+				let mess = `from ${reworkDuration(d1)} to ${reworkDuration(d2)}`;
+				document.getElementById(fromToId).innerText = mess;
+				// datagraph.title = `${graphLabel}, UTC Dates, ${mess}`;
+			}
+
+			// 1 - Find the first "midnight" 
+			startIdx = -1;
+			for (let i=0; i<keys.length; i++) {
+				if (keys[i].substring(11, 13) === '00' && parseInt(keys[i].substring(14, 16)) <= 15) {
+					startIdx = i;
+					break;
+				}
+			}
+			if (VERBOSE) {
+				console.log(`First midnight at ${startIdx}`);
+			}
+			if (startIdx > -1) { // Found a midnight
+				startIdx4 = -1;
+				for (let i=0; i<keys.length; i++) {
+					if ((keys[i].substring(11, 13) === '00' || keys[i].substring(11, 13) === '06' || 
+						 keys[i].substring(11, 13) === '12' || keys[i].substring(11, 13) === '18') && 
+						  parseInt(keys[i].substring(14, 16)) <= 15) { // M:S
+						startIdx4 = i;
+						break;
+					}
+				}
+				while ((startIdx - startIdx4) % 15 !== 0) { // Sync with first midnight
+					startIdx4 += 1;
+				}
+
+				if (VERBOSE) {
+					console.log(`First 1/4 day at ${startIdx4}`);
+				}
+			} else {
+				startIdx = 0;
+			}
+
+			if (startIdx > -1) { // Found a midnight
+				let fullStrDate = `${MONTHS[parseInt(keys[startIdx].substring(5, 7)) - 1]} ${parseInt(keys[startIdx].substring(8, 10))}, ${parseInt(keys[startIdx].substring(0, 4))} ${keys[startIdx].substring(11)}`;
+				let weekDayIndex = new Date(fullStrDate).getDay();
+				firstWeekDayIdx = (weekDayIndex + 6) % 7;
+
+				if (VERBOSE) {
+					console.log(`${fullStrDate} is a ${DAYS[firstWeekDayIdx]}`);
+				}
+				// 2 - Prepare the data, in their expected shape
+				// For day names, look for setVGridLabelsCallback
+				
+				let mini = graphMini, maxi = graphMaxi;
+
+				let valLabel = // "0:45"; // One label every 45 points
+							// `${startIdx}:96`;  // "0:96"; // One label every 96 point (24 * 4 = 96 : every day). See setVGridLabelsCallback function.
+							// Should be startIdx4 below... But not always in sync...
+							`${startIdx}:24`;  // "0:96"; // One label every 24 point (6 hours). See setVGridLabelsCallback function.
+
+				let value = ""; // To display, bottom right.
+
+				let values = { x: [], y: [] };  // Used by the Graph
+				for (let i=0; i<keys.length; i++) {
+					values.x.push(i);
+					values.y.push(theMap[keys[i]]);
+				}
+				// Hard-coded : fill out 672 values.
+				if (keys.length < 672) {
+					for (let i=keys.length; i<672; i++) {
+						values.x.push(i);
+						values.y.push(null);
+					}
+				}
+
+				// ThickX: every day at midnight
+				let thickX = [];
+				let wasMidnightBefore = false;
+				for (let i=startIdx; i<keys.length; i++) {
+					if (keys[i].substring(11, 13) === '00') {
+						if (!wasMidnightBefore) {
+						  thickX.push(i);
+						}
+						wasMidnightBefore = true;
+					} else {
+						wasMidnightBefore = false;
+					}
+				}
+
+				// console.log(`For ${graphLabel}: Mini ${mini}, Maxi ${maxi}`); // Graph extrema
+
+				// Calculate min and max
+				let min = Number.MAX_VALUE;
+				let max = -min;
+				try {
+					values.y.forEach(val => {
+						if (val !== null) {
+							min = Math.min(min, val);
+							max = Math.max(max, val);
+						}
+					});
+					// for (let i=0; i<values.y.length; i++) {
+					// 	let val = values.y[i];
+					// 	if (val !== null) {
+					// 		min = Math.min(min, val);
+					// 		max = Math.max(max, val);
+					// 	}
+					// }
+				} catch (err) {
+					console.log(`Oops: ${err}`);					
+				}
+
+				let minMaxLabel = "";
+				try {
+					minMaxLabel = `, [${min.toFixed(1)}, ${max.toFixed(1)}]`;
+					if (VERBOSE) {
+						console.log(`MinMax Label now ${minMaxLabel}`);
+					}
+				} catch (err) {
+					console.log(`Oops(2): ${err}`);					
+				}
+
+				datagraph.data = {
+					withGrid: true,
+					withXLabels: false,
+					withYLabels: true,
+					thickX: thickX,
+					thickY: 0,
+					minX: 0,
+					maxX: 672, // keys.length,
+					minY: mini,
+					maxY: maxi,
+					data: [{
+							name: 'As is',
+							lineColor: graphLineColor,
+							fillColor: null,
+							thickness: 3,
+							x: values.x,
+							values: values.y
+						}]
+				};
+
+				// 3 - Update the graph
+				datagraph.value = 'null';
+
+				datagraph.data.withXLabels = true;
+				datagraph.data.withYLabels = false;
+				datagraph.vgrid = valLabel;
+				datagraph.label = graphLabel + minMaxLabel;
+				if (nbPts > 0) {
+					datagraph.value = theMap[keys[nbPts - 1]].toFixed(1); // Last value of the list ?
+				} else {
+					datagraph.value = value;
+				}
+				datagraph.repaint();
+			} else {
+				if (VERBOSE) {
+					console.log("No midnight was found");
+				}
+				// let keys = Object.keys(theMap);
+				// let nbPts = keys.length;
+				if (nbPts > 0) {
+					datagraph.value = theMap[keys[nbPts - 1]].toFixed(1); // Last value of the list ?
+					datagraph.repaint();
+				}
+			}
+		};
+
+		let barograph = document.getElementById('barograph-01');
+		barograph.setVGridLabelsCallback(val => {  
+            // console.log(`VGridLabel: ${val}`);
+            // 0 to max, step 96
+			if ((val - startIdx) % 96 === 0) {
+				let i = (((val - startIdx) / 96) + firstWeekDayIdx) % 7;
+				let retVal = DAYS[i];
+				if (currentData) {
+					let keys = Object.keys(currentData);
+					if (keys.length > val) {
+						let theKey = keys[val];
+						if (theKey !== undefined) { // it's like "2023-11-12T05:37:48"
+							let month = parseInt(theKey.substring(5, 7)) - 1;
+							let day = theKey.substring(8, 10);
+							retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+						} else {
+							console.log(`(Baro) startIdx: ${startIdx}, val: ${val}, keys: ${keys.length} => theKey is undefined.`);
+						}
+					} else {
+						// val beyond length. Managed.
+					}
+				}
+				return retVal; 
+			} else {
+				return "";
+			}
+        });
+		// MouseMove on the graph
+		barograph.addEventListener('mousemove', evt => {
+			let theGraph = evt.target;
+			let rect = theGraph.getBoundingClientRect();
+			let x = evt.clientX - rect.left; // x position within the element.
+			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
+			// console.log(`MouseMove on graph: ${x}, ${y}`);
+			let height = theGraph.height;
+			let minY = theGraph.data.minY;
+			let maxY = theGraph.data.maxY;
+			let deltaY = maxY - minY;
+			let correctedY = height - y;
+			let yValue = minY + ((correctedY / height) * deltaY);
+			
+			theGraph.title = `${yValue.toFixed(1)} hPa`;
+		});
+
+		let thermograph = document.getElementById('thermograph-01');
+		thermograph.setVGridLabelsCallback(val => {  
+            // console.log(`VGridLabel: ${val}`);
+            // 0 to max, step 96
+			if ((val - startIdx) % 96 === 0) {
+				let i = (((val - startIdx) / 96) + firstWeekDayIdx) % 7;
+				let retVal = DAYS[i];
+				if (currentData) {
+					let keys = Object.keys(currentData);
+					if (keys.length > val) {
+						let theKey = keys[val];
+						if (theKey !== undefined) { // it's like "2023-11-12T05:37:48"
+							let month = parseInt(theKey.substring(5, 7)) - 1;
+							let day = theKey.substring(8, 10);
+							retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+						} else {
+							console.log(`(Temp) startIdx: ${startIdx}, val: ${val}, keys: ${keys.length} => theKey is undefined.`);
+						}
+					} else {
+						// val beyond length. Managed.
+					}
+				}
+				return retVal; 
+			} else {
+				return "";
+			}
+        });
+		// MouseMove on the graph
+		thermograph.addEventListener('mousemove', evt => {
+			let theGraph = evt.target;
+			let rect = theGraph.getBoundingClientRect();
+			let x = evt.clientX - rect.left; // x position within the element.
+			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
+			// console.log(`MouseMove on graph: ${x}, ${y}`);
+			let height = theGraph.height;
+			let minY = theGraph.data.minY;
+			let maxY = theGraph.data.maxY;
+			let deltaY = maxY - minY;
+			let correctedY = height - y;
+			let yValue = minY + ((correctedY / height) * deltaY);
+			
+			theGraph.title = `${yValue.toFixed(1)} \xb0C`;
+		});
+	};
+
+  let displayErr = function(err) {
+    if (err !== undefined) {
+      document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+	}
+  };
+
+  window.onresize = function() {
+//  console.log("Re-evaluating window size");
+    resizeComponents();
+  };
+
+  const resizeComponents = function() {
+    let ww = window.innerWidth;
+    let wh = window.innerHeight;
+  };
+
+  /**
+   * Set data to the WebComponents
+   * Assume that they all have a 'value' member.
+   *
+   * @param from The field containing the value to set
+   * @param to The WebComponent to set the value to
+   */
+  function setData(val, to) {
+	  let elem = document.getElementById(to);
+	  elem.value = val;                            // value corresponds to the 'set value(val) { ...', invokes the setter in the HTMLElement class
+  }
+
+  function setElementBorder(display, border) {
+	  display.withBorder = border;
+	  display.repaint();
+  }
+
+  function setBorder(border) {
+		let displays = document.getElementsByTagName('analog-display');
+		for (let i=0; i<displays.length; i++) { // forEach does not work?
+			setElementBorder(displays[i], border);
+		}
+		displays = document.getElementsByTagName('analog-watch');
+		for (let i=0; i<displays.length; i++) { // forEach does not work?
+			setElementBorder(displays[i], border);
+		}
+		displays = document.getElementsByTagName('direction-display');
+		for (let i=0; i<displays.length; i++) { // forEach does not work?
+			setElementBorder(displays[i], border);
+		}
+	}
+
+	function setElementStyle(widget, style) {
+		widget.className = style;
+		widget.repaint();
+	}
+
+	function setElementsStyle(analogStyle,
+							  directionStyle,
+							  tempStyle,
+							  rainStyle) {
+		let displays = document.getElementsByTagName('analog-display');
+		for (let i=0; i<displays.length; i++) {
+			setElementStyle(displays[i], analogStyle);
+		}
+		displays = document.getElementsByTagName('analog-watch');
+		for (let i=0; i<displays.length; i++) {
+			setElementStyle(displays[i], analogStyle);
+		}
+		displays = document.getElementsByTagName('thermo-meter');
+		for (let i=0; i<displays.length; i++) {
+			setElementStyle(displays[i], tempStyle);
+		}
+	}
+
+	function changeBG(value) {
+		let bodyStyle = document.getElementsByTagName("body")[0].style;
+		if (value === 'WHITE') {
+			bodyStyle.background = 'white';
+		} else if (value === 'LIGHT') {
+			bodyStyle.background = 'radial-gradient(at top, white -8%, lightgrey 55%)';
+		} else if (value === 'DARK') {
+			bodyStyle.background = 'radial-gradient(at top, DarkGrey -8%, black 55%)';
+		} else if (value === 'BLACK') {
+			bodyStyle.background = 'black';
+		}
+	}
+
+	function setStyle(style) {
+		console.log("Style:" + style);
+		switch (style) {
+			case 'orange':
+				setElementsStyle(
+						'analogdisplay-monochrome-orange',
+						'analogdisplay-monochrome-orange',
+						'thermometer-orange',
+						'pluviometer-orange');
+				break;
+			case 'cyan':
+				setElementsStyle(
+						'analogdisplay-monochrome-cyan',
+						'analogdisplay-monochrome-cyan',
+						'thermometer-cyan',
+						'pluviometer-cyan');
+				break;
+			case 'white':
+				setElementsStyle(
+						'analogdisplay-monochrome-white',
+						'analogdisplay-monochrome-white',
+						'thermometer-white',
+						'pluviometer-white');
+				break;
+			case 'white-red':
+				setElementsStyle(
+						'analogdisplay-monochrome-white-red',
+						'analogdisplay-monochrome-white-red',
+						'thermometer-white',
+						'pluviometer-white');
+				break;
+			case 'yellow':
+				setElementsStyle(
+						'analogdisplay-monochrome-yellow',
+						'analogdisplay-monochrome-yellow',
+						'thermometer-yellow',
+						'pluviometer-yellow');
+				break;
+			case 'day':
+				setElementsStyle(
+						'analogdisplay-day',
+						'analogdisplay-day',
+						'thermometer-day',
+						'pluviometer-day');
+				break;
+			case 'night':
+				setElementsStyle(
+						'analogdisplay-night',
+						'analogdisplay-night',
+						'thermometer-night',
+						'pluviometer-night');
+				break;
+			case 'flat-gray':
+				setElementsStyle(
+						'analogdisplay-flat-gray',
+						'analogdisplay-flat-gray',
+						'thermometer-day',
+						'pluviometer-day');
+				break;
+			case 'flat-black':
+				setElementsStyle(
+						'analogdisplay-flat-black',
+						'analogdisplay-flat-black',
+						'thermometer-night',
+						'pluviometer-night');
+				break;
+			default:
+				break;
+		}
+	}
+
+	function toggleHeadsUp() {
+	  document.body.classList.toggle('mirror-upside-down');
+	}
+
+	function setPerspective(e) {
+		let v = this.value;
+		document.body.style.setProperty("--perspective", v + "em");
+	}
+
+	function setRotateX(e) {
+		let v = this.value;
+		document.body.style.setProperty("--rotateX", v + "deg");
+	}
+	
+	const TABS = ['tab-01', 'tab-02'];
+
+	function openTab(evt, tabNum) {
+		let tabLinks = document.getElementsByClassName("tablinks");
+		for (let i=0; i<tabLinks.length; i++) {
+			tabLinks[i].className = tabLinks[i].className.replace(" active", ""); // Reset
+		}
+		for (let i=0; i<TABS.length; i++) {
+			document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
+		}
+		evt.currentTarget.className += " active";
+	}
+
+	</script>
+	<style>
+	:root {
+		--perspective: 50em;
+		--rotateX: -40deg;
+	}
+
+	html {
+		height: 100%;
+		background-color: black;
+	}
+
+	body {
+		background-color: black;
+		color: silver;
+		font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+		/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
+		background: radial-gradient(at top, DarkGrey -8%, black 55%);
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
+
+	.mirror-upside-down {
+		display: block;
+		-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+	}
+
+	.tab {
+		overflow: hidden;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		background-color: rgba(241, 241, 241, 0.5);
+	}
+
+	/* Style the buttons inside the tab */
+	.tab button {
+		background-color: inherit;
+		float: left;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 14px 16px;
+		transition: 0.3s;
+		font-size: 17px;
+		text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+	}
+
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+		background-color: #ddd;
+	}
+
+	/* Create an active/current tablink class */
+	.tab button.active {
+		background-color: #f2f0f0;
+	}
+
+	.tab .mess {
+		padding: 14px 16px;
+		transition: 0.3s;
+		font-size: 17px;
+		text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+		color: black;
+		text-align: right;
+	}
+
+	.active {
+		background-color: cyan; /*#717171;*/
+	}
+
+	graph-display.special-pointer {
+		/* cursor: crosshair; */
+		cursor: url('./images/crosshair.png') 19 20, auto; /* x, y from top left */
+	}
+
+	</style>
+
+</head>
+<body>
+	<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+		<tr>
+			<td style="text-align: left;">
+				<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+					<tr>
+						<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
+						<td>
+							<!-- Traffic witness -->
+							<span id="working" title="Traffic">&#11044;</span>
+						</td>
+						<td>
+							<!-- Display Style -->
+							Widget Style:
+							<select onchange="setStyle(this.value);">
+								<option value="orange" selected>Orange</option>
+								<option value="yellow">Yellow</option>
+								<option value="white">White</option>
+								<option value="white-red">White, red hand</option>
+								<option value="cyan">Cyan</option>
+								<option value="day">Day</option>
+								<option value="night">Night</option>
+								<option value="flat-gray">Flat gray</option>
+								<option value="flat-black">Flat black</option>
+							</select>
+							<!-- Display Border -->
+							<input type="checkbox" checked onchange="setBorder(this.checked);"/>Border
+							&nbsp;&nbsp;
+							<!-- Page BG -->
+							Page Background:
+							<input type="radio" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+							<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
+							<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+							<input type="radio" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+							&nbsp;&nbsp;
+							<button onclick="toggleHeadsUp();" style="border-radius: 5px;">Head Up</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+					<tr>
+						<td style="text-align: center;">
+							<!-- Air Temperature in &deg;C<br/ -->
+							<thermo-meter id="thermometer-01"
+											class="thermometer-orange"
+											title="Air, Celsius"
+											min-value="-10"
+											max-value="60"
+											major-ticks="10"
+											minor-ticks="1"
+											value="0"
+											width="100"
+											height="220"></thermo-meter>
+						</td>
+						<td style="text-align: center;">
+							<!-- Relative Humidity -->
+							Relative Humidity
+							<br/>
+							<split-flap-display id="rel-hum-display"
+												nb-char="5"
+												font-size="30"
+												value="     "></split-flap-display>
+							<span style="font-size: 40px; font-weight: bold;">%</span>
+							<br/>												
+							<!-- Dew point -->
+							Dew point
+							<br/>
+							<split-flap-display id="dew-point-display"
+												nb-char="5"
+												font-size="30"
+												value="     "></split-flap-display>
+							<span style="font-size: 40px; font-weight: bold;">&deg;C</span>
+						</td>
+						<td style="text-align: center;">
+							<!-- Station Time<br/ -->
+							<analog-watch class="analogdisplay-monochrome-orange"
+											title="Station Time"
+											id="watch-01"
+											value="00:00:00"
+											hours-ticks="1"
+											minutes-ticks="1"
+											with-second-hand="true"
+											with-border="true"
+											width="200"
+											height="200"></analog-watch>
+						</td>
+						<td style="text-align: center;">
+							<!-- Atm Pressure in hPa<br/ -->
+							<analog-display class="analogdisplay-monochrome-orange analog-for-prmsl"
+											title="Pressure in hPa"
+											id="prmsl-01"
+											min-value="965"
+											max-value="1045"
+											value="1013.3"
+											major-ticks="10"
+											minor-ticks="1"
+											with-border="true"
+											overlap="40"
+											label="PRMSL"
+											unit="hPa"
+											width="200"
+											height="200"></analog-display>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+
+							<div class="tab" style="display: grid; grid-template-columns: 50% 50%;">
+								<button class="tablinks active" style="border-radius: 5px;" onclick="openTab(event, 0);">Barograph</button>
+								<button class="tablinks" style="border-radius: 5px;" onclick="openTab(event, 1);">Thermograph</button>
+							</div>
+							
+							<div id="tab-01" style="display: block;">
+								<span id="from-to-pr" style="float: left;"> - </span>
+								<span id="nb-pts-pr" style="float: right;">No point</span>											   						
+								<br/>
+								<graph-display id="barograph-01"
+											   tabindex="-1"
+											   class="barograph special-pointer"
+											   width="800"
+											   height="200"
+											   padding="5"
+											   orientation="horizontal"
+											   value="1013.25"
+											   vgrid="0:0.5"
+											   hgrid="0:10"
+											   label="Barograph"
+											   title="PRMSL, UTC Dates"></graph-display>
+							</div>
+							<div id="tab-02" style="display: none;">
+
+								<span id="from-to-at" style="float: left;"> - </span>
+								<span id="nb-pts-at" style="float: right;">No point</span>											   						
+								<br/>
+								<graph-display id="thermograph-01"
+											   tabindex="-1"
+											   class="thermograph special-pointer"
+											   width="800"
+										   	   height="200"
+											   padding="5"
+											   orientation="horizontal"
+											   value="0.0"
+											   vgrid="0:0.5"
+											   hgrid="0:10"
+											   label="Thermograph"
+											   title="Air Temp, UTC Dates"></graph-display>	
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: left;">
+							<div style="display: grid; grid-template-areas: 'left right'; grid-template-columns: 50% 50%;">
+								<div id="raw-data-prmsl" style="grid-area: left; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="PRMSL Data">
+									<pre>Empty</pre>
+								</div>
+								<div id="raw-data-temp" style="grid-area: right; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="Air Temp Data">
+									<pre>Empty</pre>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				<!-- Perspective sliders -->
+				<table width="100%">
+					<tr>
+						<td width="50%">
+							<h5>Perspective</h5>
+							<input type="range" value="50" min="0" max="100" style="width: 90%;" oninput="setPerspective.call(this, event); perspective01.value = this.value;" />
+							<output name="perspective" id="perspective01"></output>
+						</td>
+						<td width="50%">
+							<h5>Rotate X</h5>
+							<input type="range" value="-50" min="-100" max="100" style="width: 90%;" oninput="setRotateX.call(this, event); perspective02.value = this.value;" />
+							<output name="perspective" id="perspective02"></output>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+    <div id="err-mess"></div>
+	<hr/>
+    <address>Oliv did it</address>
+</body>
+</html>
