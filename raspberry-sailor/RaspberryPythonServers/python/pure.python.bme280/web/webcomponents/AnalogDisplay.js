@@ -607,7 +607,9 @@ class AnalogDisplay extends HTMLElement { // WIP
 			context.beginPath();
 			context.fillStyle = this.analogDisplayColorConfig.labelFillColor;
 			let y = (2 * radius) - (fontSize * scale * 1.4);
-			console.log(`y:${y}`);
+			if (analogVerbose) {
+				console.log(`y:${y}`);
+			}
 			context.fillText(text, (this.canvas.width / 2) - (len / 2),  y);
 			context.lineWidth = 1;
 			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;

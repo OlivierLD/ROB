@@ -41,7 +41,7 @@ __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 PATH_PREFIX: str = "/json-data"
-STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource
+STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource. See below.
 # TODO zip prefix ? That'd be kewl...
 server_port: int = 8080
 verbose: bool = False
@@ -176,6 +176,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
             elif static_resource.endswith(".ico"):
                 content_type = "image/ico"
                 binary = True
+            else:
+                if static_resource.endswith("/"):  # Assuming index.html
+                    static_resource += "index.html"
+                if verbose:
+                    print(f"un-managed ststic_resource type for {static_resource}, assuming html.")
             # TODO more cases. jpg, gif, svg, ttf, pdf, wav, etc.
 
             # Content type based on file extension
@@ -361,7 +366,7 @@ def long_storage_data(dummy_prm: str) -> None:
         if all_good:
             ping += 1
         if verbose:
-            print(f"\tSleeping between loops for {between_loops} sec.")
+            print(f"\t(Big Loop) Sleeping between loops for {between_loops} sec.")
         time.sleep(between_loops)  # Wait between loops
     print("\tDone with long storage data thread")
 
@@ -392,7 +397,7 @@ def produce_data(dummy_prm: str) -> None:
                 data["dew-point"] = dpt
                 instant_data.update(data)
             if verbose:
-                print(f"\tSleeping between loops for {between_loops} sec. Data is {json.dumps(instant_data)}")
+                print(f"\t(Instant loop) Sleeping between loops for {between_loops} sec. Data is {json.dumps(instant_data)}")
             time.sleep(between_loops)  # Wait between loops
         except Exception as ex:
             print("Oops!...")
