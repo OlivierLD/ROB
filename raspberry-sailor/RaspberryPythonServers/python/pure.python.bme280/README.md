@@ -12,7 +12,7 @@ It provides
 - A server (python part) that 
   - serves REST and HTTP requests
   - reads the BME280 on a regular basis
-  - stores BME280 data up to one week
+  - stores BME280 data up to one week (one data every 15 minutes)
 - Web resources, served by the server above, to display the data in a user-friendly way.
 
 ---
@@ -60,7 +60,7 @@ $ git filter-branch --prune-empty --subdirectory-filter raspberry-sailor/Raspber
 ```
 The `ROB` folder should now contain at least all we need to move ahead.
 
-From the laptop where the repo was cloned, from the `pure.python.bme280` (if you've cloned the full repos) of from the
+From the laptop where the repo was cloned, from the `pure.python.bme280` (if you've cloned the full repo) of from the
 `ROB` folder (if you've done the above, to clone only what we need here):
 ```
 $ scp -r . pi@192.168.1.38:~/BME280
