@@ -320,6 +320,7 @@ def long_storage_data(dummy_prm: str) -> None:
     ping: int = 0
     while keep_looping:
         if ping % between_big_loops == 0:
+            ping = 0  # Reset counter, to avoid overflow
             # Generating data
             utc_ms = datetime.now(timezone.utc).timestamp() * 1_000  # System "UTC epoch" in ms
             dt_object = datetime.fromtimestamp(utc_ms / 1_000, tz=timezone.utc)  # <- Aha !!
