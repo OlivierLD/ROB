@@ -39,7 +39,7 @@ Ce qui fournit les fonctionnalit&eacute;s suivantes :
 &Agrave; partir du laptop, utilisez le [Raspberry Pi Imager](https://www.raspberrypi.com/news/raspberry-pi-imager-imaging-utility/) pour configurer la carte SD destin&eacute;e au Raspberry Pi.  
 N'oubliez pas
 - D'activer SSH, I2C
-- De d&eacute;finir les param&egrave;tres du r&eacute;seau, afin d'&ecirc;tre capable d'acc&eacute;der au Raspberry Pi avec SSHG, lorsque la carte SD sera pr&ecirc;te.
+- De d&eacute;finir les param&egrave;tres du r&eacute;seau, afin d'&ecirc;tre capable d'acc&eacute;der au Raspberry Pi avec SSH, lorsque la carte SD sera pr&ecirc;te.
 
 ### Cr&eacute;ez un r&eacute;pertoire sp&eacute;cifique sur le Raspberry Pi
 Dans un terminal sur le laptop, en supposant que l'adresse IP du Raspberry Pi est `192.168.1.38` (&agrave; remplacer par la v&ocirc;tre)
