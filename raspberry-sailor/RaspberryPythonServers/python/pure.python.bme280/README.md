@@ -1,5 +1,7 @@
 # A pure Python BME280 server
 ## A use-case
+(switch to [French](./README_fr.md))  
+
 A barograph (like [this](https://www.naudet.com/barometre-enregistreur-c102x2375473)) is a very useful instrument if you're interested in weather forecast.  
 But it can be pretty expensive...  
 Here we want to show how to implement one with a Raspberry Pi Zero W, and an inexpensive sensor like a BME280.

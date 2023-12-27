@@ -1,6 +1,7 @@
 # Un serveur BME280, en Python
+(en [anglais](./README.md))  
 
-Un barographe (comme [&ccedil;a](https://www.naudet.com/barometre-enregistreur-c102x2375473)) est un instrument tr&egrave;s utile pour les pr&eacute;visions m&eacute;t&eacute;o.  
+Un barographe (comme [ceux-l&agrave;](https://www.naudet.com/barometre-enregistreur-c102x2375473)) est un instrument tr&egrave;s utile pour les pr&eacute;visions m&eacute;t&eacute;o.  
 Mais &ccedil;a peut &ecirc;tre cher...  
 On esp&egrave;re ici montrer comment en faire un, avec un Raspberry Pi Zero W, et un capteur bon march&eacute; comme le BME280.
 
