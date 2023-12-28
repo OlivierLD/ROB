@@ -12,7 +12,7 @@ Ce module est une impl&eacute;mentation d'un serveur en Python pour acc&eacute;d
 Ce qui fournit les fonctionnalit&eacute;s suivantes :
 - Un serveur (en Python) qui 
   - g&egrave;re des requ&ecirc;tes REST et HTTP
-  - lit regulierement le BME280
+  - lit reguli&egrave;rement le BME280
   - stocke jusqu'&agrave; une semaine de donn&eacute;es du BME280 (une donn&eacute;e tous les quarts d'heure)
 - Une interface web, g&eacute;r&eacute;e par le serveur ci-dessus, pour afficher les donn&eacute;es d'une mani&egrave;re graphique et agr&eacute;able.
 

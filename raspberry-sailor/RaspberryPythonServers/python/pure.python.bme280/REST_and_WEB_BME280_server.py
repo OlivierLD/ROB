@@ -364,6 +364,8 @@ def long_storage_data(dummy_prm: str) -> None:
                 all_good = False
         if all_good:
             ping += 1
+            if verbose:
+                print(f"\t=> ping {ping}/{between_big_loops}")
         if verbose:
             print(f"\t(Big Loop) Sleeping between loops for {between_loops} sec.")
         time.sleep(between_loops)  # Wait between loops

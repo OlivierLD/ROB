@@ -1,5 +1,5 @@
 # AstroComputer
-Celestial Computation, in several languages
+Celestial Computation, in several languages (an interesting exercise).
 
 The code is based on the remarkable work done by [Henning Humland](https://celnav.de/).
 
