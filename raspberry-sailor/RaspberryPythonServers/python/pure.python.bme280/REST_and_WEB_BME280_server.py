@@ -135,6 +135,18 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     self.send_response(500)
                 except Exception as exception2:
                     print("Sending error back to client: {}".format(exception2))
+        elif path == PATH_PREFIX + "/verbose":
+            response = {
+                "verbose": verbose
+            }
+            response_content = json.dumps(response).encode()
+            self.send_response(200)
+            # defining the response headers
+            self.send_header('Content-Type', 'application/json')
+            content_len = len(response_content)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(response_content)
         elif path == PATH_PREFIX + "/oplist":
             response = {
                 "oplist": [{
@@ -149,6 +161,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "path": PATH_PREFIX + "/verbose[?value=true|false]",
                         "verb": "POST",
                         "description": "Set verbose to true (default) or false."
+                    }, {
+                        "path": PATH_PREFIX + "/verbose",
+                        "verb": "GET",
+                        "description": "Get the verbose status, in JSON format."
                     }, {
                         "path": PATH_PREFIX + "/data",
                         "verb": "GET",
@@ -240,7 +256,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
 
-    # POST method definition
+    # POST method definition, create
     def do_POST(self):
         global verbose
         if verbose:
@@ -267,8 +283,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
             # Find true or false
             full_path: str = self.path
             status: str = 'true'
-            if full_path.index("?") > 0:
-                query_string = full_path[full_path.index("?") + 1:]
+            two_parts: list = full_path.split("?")
+            if len(two_parts) > 1: # is if there is query string
+                query_string = two_parts[1]
                 # print(f"Full QueryString: {query_string}")
                 qs_params: list = query_string.split('&')
                 # Look for a 'value'
@@ -307,7 +324,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
 
-    # PUT method Definition
+    # PUT method Definition, update
     def do_PUT(self):
         global verbose
         if verbose:
@@ -498,7 +515,7 @@ data_thread.start()
 
 # Server Initialization
 port_number: int = server_port
-print("Starting server on port {}".format(port_number))
+print("Starting server {} on port {}".format(machine_name, port_number))
 server = HTTPServer((machine_name, port_number), ServiceHandler)
 #
 print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
