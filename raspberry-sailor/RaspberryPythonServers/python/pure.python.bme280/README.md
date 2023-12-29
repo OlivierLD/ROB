@@ -110,6 +110,17 @@ Even on such a small board as the Raspberry Pi Zero (W), you can have such a ric
 Remember that the rendering of a Web UI is done _on the client side_. The Raspberry Pi only serves the
 resources required on the client.
 
+### Note
+The web UI is using REST requests to ping the server.  
+You can get the operation list by using
+```
+$ curl -X GET http://192.168.1.36:8080/json-data/oplist
+```
+You can set the `verbose` value to `true` or `false`
+```
+$ curl -X POST http://192.168.1.36:8080/json-data/verbose?value=false|true 
+```
+
 ## Bonuses
 ### Head-up display
 As you would notice in the picture above, we have two sliders at the bottom of the page.  

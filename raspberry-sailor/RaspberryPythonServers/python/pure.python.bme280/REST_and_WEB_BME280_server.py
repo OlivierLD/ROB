@@ -90,10 +90,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # GET Method Definition
     def do_GET(self):
+        global verbose
         if verbose:
             print("GET methods")
         #
-        full_path = self.path
+        full_path: str = self.path
         split = full_path.split('?')
         path = split[0]
         qs = None
@@ -141,6 +142,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "path": PATH_PREFIX + "/exit",
                         "verb": "POST",
                         "description": "Careful: terminate the server process."
+                    }, {
+                        "path": PATH_PREFIX + "/verbose[?value=true|false]",
+                        "verb": "POST",
+                        "description": "Set verbose to true (default) or false."
                     }, {
                         "path": PATH_PREFIX + "/data",
                         "verb": "GET",
@@ -214,6 +219,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # VIEW method definition. Uncommon...
     def do_VIEW(self):
+        global verbose
         # dict var. for pretty print
         display = {}
         temp = self._set_headers()
@@ -233,11 +239,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # POST method definition
     def do_POST(self):
+        global verbose
         if verbose:
             print("POST request, {}".format(self.path))
-            print("POST on {} not managed".format(self.path))
         if self.path.startswith(PATH_PREFIX + "/exit"):
-            print(">>>>> ZDA server received POST /exit")
+            print(">>>>> Server received POST /exit")
             # content_len: int = int(self.headers.get('Content-Length'))
             # post_body = self.rfile.read(content_len).decode('utf-8')
             # if verbose:
@@ -251,9 +257,45 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(response_content)
             time.sleep(2)  # Wait for response to be received
-            print(f">>> Killing ZDA server process ({server_pid}).")
+            print(f">>> Killing Server process ({server_pid}).")
             os.kill(server_pid, signal.SIGKILL)
+        elif self.path.startswith(PATH_PREFIX + "/verbose"):
+            print(">>>>> Server received POST /verbose")
+            # Find true or false
+            full_path: str = self.path
+            status: str = 'true'
+            if full_path.index("?") > 0:
+                query_string = full_path[full_path.index("?") + 1:]
+                # print(f"Full QueryString: {query_string}")
+                qs_params: list = query_string.split('&')
+                # Look for a 'value'
+                for qs_prm in qs_params:
+                    # print(f"Managing {qs_prm}")
+                    nv_pair = qs_prm.split('=')
+                    if len(nv_pair) == 2:
+                        # print(f"We have {nv_pair[0]} = {nv_pair[1]}")
+                        if nv_pair[0] == 'value':
+                            if nv_pair[1] != 'true' and nv_pair[1] != 'false':
+                                print(f"Unsupported value {nv_pair[1]} for 'value' parameter. Defaulting to 'true'")
+                            else:
+                                status = nv_pair[1]
+                        else:
+                            print(f"Unsupported parameter named {nv_pair[0]}")
+                    else:
+                        print("oops, no equal sign in {}".format(qs_prm))
+            print(f"Setting verbose: {status}")
+            verbose = (status == 'true')
+
+            response = {"status": "OK"}
+            response_content = json.dumps(response).encode()
+            self.send_response(201)
+            self.send_header('Content-Type', 'application/json')
+            content_len = len(response_content)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(response_content)
         else:
+            print("POST on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
             self.send_header('Content-Type', 'text/plain')
@@ -264,6 +306,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # PUT method Definition
     def do_PUT(self):
+        global verbose
         if verbose:
             print("PUT request, {}".format(self.path))
             print("PUT on {} not managed".format(self.path))
@@ -277,6 +320,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # DELETE method definition
     def do_DELETE(self):
+        global verbose
         if verbose:
             print("DELETE on {} not managed".format(self.path))
         error = "NOT FOUND!"

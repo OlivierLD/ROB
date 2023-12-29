@@ -109,6 +109,17 @@ M&ecirc;me avec un comoposant aussi petit que le Raspberry Pi Zero (W), on peut 
 Souvenez-vous que l'affichage d'une interface web est faite _sur et par le client_. Le Raspberry Pi se contente de fournir
 au client les resources dont il a besoin pour cet affichage.
 
+### Note
+La page web utilise des requ&ecirc;te REST pour obtenir les donn&eacute;es du serveur.    
+On peut obtenir la liste des operations disponibles en tapant :
+```
+$ curl -X GET http://192.168.1.36:8080/json-data/oplist
+```
+On peut positionner la valeur de `verbose` &agrave; `true` ou `false` :
+```
+$ curl -X POST http://192.168.1.36:8080/json-data/verbose?value=false|true 
+```
+
 ## Bonus
 ### Head-up display
 Comme on le voit sur l'image ci-dessus, on a deux sliders en bas de la page.    
