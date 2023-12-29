@@ -130,8 +130,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json_data.encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
-                self.wfile.write(json.dumps(error).encode())
-                self.send_response(500)
+                try:
+                    self.wfile.write(json.dumps(error).encode())
+                    self.send_response(500)
+                except Exception as exception2:
+                    print("Sending error back to client: {}".format(exception2))
         elif path == PATH_PREFIX + "/oplist":
             response = {
                 "oplist": [{
