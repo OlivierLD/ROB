@@ -160,7 +160,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     }, {
                         "path": PATH_PREFIX + "/verbose[?value=true|false]",
                         "verb": "POST",
-                        "description": "Set verbose to true (default) or false."
+                        "description": "Set verbose to true (default) or false."  # if no value parameter, then will set verbose to true.
                     }, {
                         "path": PATH_PREFIX + "/verbose",
                         "verb": "GET",
