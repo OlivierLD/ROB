@@ -112,6 +112,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     print("oops, no equal sign in {}".format(qs_prm))
 
         if path == PATH_PREFIX + "/data":
+            oops: bool = False
             if verbose:
                 print("JSON Array Value request")
             try:
@@ -130,11 +131,15 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json_data.encode())
             except Exception as exception:
                 error = {"message": "{}".format(exception)}
+                oops = True
                 try:
                     self.wfile.write(json.dumps(error).encode())
                     self.send_response(500)
                 except Exception as exception2:
-                    print("Sending error back to client: {}".format(exception2))
+                    oops = True
+                    print("Sending error back to client (GET {}): {}".format(path, exception2))
+            if oops:
+                print("After error, end of GET /data")
         elif path == PATH_PREFIX + "/verbose":
             response = {
                 "verbose": verbose
