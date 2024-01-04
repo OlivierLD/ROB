@@ -34,7 +34,7 @@ It provides
 > Some are quite cryptic, as you'll see...  
 > Be aware that whatever starts with a `$` tells you that this is something _**you**_ have to type.  
 > If you see `$ mkdir BME280`, it tells you to type _only_ `mkdir BME280`.  
-> If a line does not begin with a `$`, it means it is the output of the command you've typed; 
+> If a line does **_not_** begin with a `$`, it means it is the output of the command you've typed; 
 > this is what you should see if all goes well (like for the `i2cdetect` command you'll see below, for example).
 
 ### Create a fresh SD Card
@@ -100,7 +100,7 @@ $ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ pr
 ```
 Or if you want the server to run on its own:
 ```
-$ nohup python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
+$ nohup python3 -u REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
 ```
 
 ### Finally

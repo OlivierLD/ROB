@@ -33,7 +33,7 @@ Ce qui fournit les fonctionnalit&eacute;s suivantes :
 > Il y en a qui sont un peu cryptiques, comme vous le verrez...  
 > Notez bien que quand une ligne commence par `$`, c'est pour signifier que c'est une commande que _**vous**_ devez taper.  
 > Ainsi, si vous voyez `$ mkdir BME280`, &ccedil;a veut dire que vous ne devez taper _que_ `mkdir BME280`.  
-> Si une ligne ne commence pas par `$`, &ccedil;a signifie qu'il s'agit du r&eacute;sultat de la commande que vous avez tap&eacute;e ; 
+> Si une ligne ne commence _**pas**_ par `$`, &ccedil;a signifie qu'il s'agit du r&eacute;sultat de la commande que vous avez tap&eacute;e ; 
 > et que vous devriez voir aussi (comme pour la commande `i2cdetect` que vous verrez ci-dessous, par exemple).
 
 ### Cr&eacute;ez une nouvelle carte SD
@@ -99,7 +99,7 @@ $ python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ pr
 ```
 Ou si on veut qu'il tourne tout seul&nbsp;:
 ```
-$ nohup python3 REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
+$ nohup python3 -u REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
 ```
 
 ### Et enfin
