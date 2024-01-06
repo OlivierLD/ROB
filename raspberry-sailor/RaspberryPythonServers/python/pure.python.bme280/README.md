@@ -136,7 +136,14 @@ To have an idea:
 ### The Raspberry Pi emits its own network
 Let's say you're at sea, far away from any 4G antenna... There is no Internet, _but_ you may be
 able to create your own boat's network.  
-> Details coming...
+This way, any device capable of joining this network can read the web pages made available 
+by the server running on the Raspberry Pi. 
+It can be a laptop, a tablet, a cell phone. The only requirement is a browser.
+
+For the Raspberry Pi to emit it's own network, you need to set it up as a HotSpot.  
+See details [here](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/HOTSPOT.md)
+
+Again, we can have a network, but no Internet. This is _**not**_ Cloud Computing, but more like Flake Computing...
 
 ### 3D printed enclosure(s) for your work
 - See [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md)

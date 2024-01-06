@@ -135,7 +135,14 @@ Pour avoir une id&eacute;e :
 ### Le Raspberry Pi emet son propre r&eacute;seau
 Imaginons que vous soyez en mer, loin de toute antenne 4G... Il n'y a pas d'Internet, _mais_ vous avez
 la possibilit&eacute; de cr&eacute;er votre propre r&eacute;seau &agrave; partir du Raspberry Pi.  
-> Details coming...
+Ainsi, tout p&eacute;rih&eacute;rique capable de rejoindre ce r&eacute;seau peut lire les pages web mises &agrave; disposition par le serveur
+qui fonctionne sur le Raspberry Pi. &Ccedil;a peut &ecirc;tre un laptop, une tablette, un cell-phone. La seule
+chose qui soit n&eacute;cessaire est un browser.
+
+Pour que le Raspberry Pi to &eacute;mette son propre reseau, on doit le configurer comme un HotSpot.    
+Voir details [ici](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/HOTSPOT.md)
+
+Encore une fois, on peut avoir un r&eacute;seau, mais pas d'Internet. Il ne s’agit pas de Cloud Computing, mais plut&ocirc;t de Flake Computing…
 
 ### Des bo&icirc;tes imprim&eacute;es en 3D pour prot&eacute;ger votre travail
 - Voyez [ici](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md)
