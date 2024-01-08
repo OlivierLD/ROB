@@ -45,11 +45,13 @@ server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
 ADDRESS: int = 0x77     # Default. We've seen some 0x76... Hence this parameter.
+STORE_RESTORE: bool = False;
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 ADDRESS_PREFIX: str = "--address:"
+STORE_RESTORE_PREFIX: str = "--store-restore:"
 
 keep_looping: bool = True
 between_loops: int = 1            # 1 sec
@@ -174,6 +176,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "path": PATH_PREFIX + "/data",
                         "verb": "GET",
                         "description": "Get the JSON data, in JSON format."
+                    }, {
+                        "path": PATH_PREFIX + "/write",
+                        "verb": "PUT",
+                        "description": "Write the JSON data to files, in JSON format."
                     }]
             }
             response_content = json.dumps(response).encode()
@@ -334,14 +340,39 @@ class ServiceHandler(BaseHTTPRequestHandler):
         global verbose
         if verbose:
             print("PUT request, {}".format(self.path))
+        if self.path.startswith(PATH_PREFIX + "/write"):
+            try:
+                print("Write the maps on file system.")
+                with open('pressure.json', 'w') as f:
+                    json.dump(PRESSURE_MAP, f)
+                with open('temperature.json', 'w') as f:
+                    json.dump(TEMPERATURE_MAP, f)
+                response = {"status": "OK"}
+                response_content = json.dumps(response).encode()
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                content_len = len(response_content)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(response_content)
+            except Exception as exception:
+                response = {"status": "{}".format(exception)}
+                response_content = json.dumps(response).encode()
+                self.send_response(401)
+                self.send_header('Content-Type', 'application/json')
+                content_len = len(response_content)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(response_content)
+        else:
             print("PUT on {} not managed".format(self.path))
-        error = "NOT FOUND!"
-        self.send_response(404)
-        self.send_header('Content-Type', 'text/plain')
-        content_len = len(error)
-        self.send_header('Content-Length', str(content_len))
-        self.end_headers()
-        self.wfile.write(bytes(error, 'utf-8'))
+            error = "NOT FOUND!"
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/plain')
+            content_len = len(error)
+            self.send_header('Content-Length', str(content_len))
+            self.end_headers()
+            self.wfile.write(bytes(error, 'utf-8'))
 
     # DELETE method definition
     def do_DELETE(self):
@@ -495,6 +526,8 @@ if len(sys.argv) > 0:  # Script name + X args
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
         if arg[:len(ADDRESS_PREFIX)] == ADDRESS_PREFIX:
             ADDRESS = int(arg[len(ADDRESS_PREFIX):], 16)  # Expect hex number
+        if arg[:len(STORE_RESTORE_PREFIX)] == STORE_RESTORE_PREFIX:
+            STORE_RESTORE = (arg[len(STORE_RESTORE_PREFIX):].lower() == "true")
 if verbose:
     print("-- Received from the command line: --")
     for arg in sys.argv:
@@ -512,6 +545,19 @@ except:
     print("No BME280 was found...")
     sensor = None
 
+if STORE_RESTORE:  # Read previous maps from the file system
+    print("Loading previous data")
+    try:
+        # Pressure
+        f = open('pressure.json')
+        PRESSURE_MAP = json.load(f)
+        f.close()
+        # Temperature
+        f = open('temperature.json')
+        TEMPERATURE_MAP = json.load(f)
+        f.close()
+    except Exception as oops:
+        print(f"Oops: {oops}")
 
 # Start data thread
 if True:
@@ -538,6 +584,14 @@ print(" or curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".for
 try:
     server.serve_forever()
 except KeyboardInterrupt:
+    if STORE_RESTORE:
+        try:
+            with open('pressure.json', 'w') as f:
+                json.dump(PRESSURE_MAP, f)
+            with open('temperature.json', 'w') as f:
+                json.dump(TEMPERATURE_MAP, f)
+        except Exception as exception:
+            print("Error message {}".format(exception))
     keep_looping = False
     print("\n\t\tUser interrupted (server.serve), exiting...")
     time.sleep(between_loops * 2)
