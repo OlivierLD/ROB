@@ -81,8 +81,9 @@ function fetchData() {
 const EVENT_FULL     = 'full';
 const EVENT_AT       = 'at';
 const EVENT_PRMSL    = 'prmsl';
-const EVENT_HUM      = 'hum';
+const EVENT_HUM      = 'hum';  // Relative
 const EVENT_DEW      = 'dew';
+const EVENT_AH       = 'ah';   // Absolute
 
 function onMessage(json) {
 	try {
@@ -140,6 +141,16 @@ function onMessage(json) {
 			}
 		} else {
 			console.debug("No dewpoint");
+		}
+		if (json["instant"]["abs-hum"]) {
+			try {
+				let ah = json["instant"]["abs-hum"];
+				events.publish(EVENT_AH, ah);
+			} catch (err) {
+				errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ah");
+			}
+		} else {
+			console.debug("No Absolute Humidity");
 		}
 
 		if (errMess && forwardAjaxErrors) {

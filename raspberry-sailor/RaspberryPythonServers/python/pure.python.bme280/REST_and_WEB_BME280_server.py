@@ -377,6 +377,13 @@ def dew_point_temperature(hum: float, temp: float) -> float:
     return dew_point_temp
 
 
+# See https://carnotcycle.wordpress.com/2012/08/04/how-to-convert-relative-humidity-to-absolute-humidity/
+# Absolute Humidity (grams/m3) = (6.112 × e^[(17.67 × T)/(T+243.5)] × rh × 2.1674) / (273.15+T)
+def absolute_humidity(temp: float, rh: float) -> float:
+    ah: float = (6.112 * math.exp((17.67 * temp) / (temp + 243.5 )) * rh * 2.1674) / (273.15 + temp)
+    return ah;
+
+
 # THE long storage data producer. To be customized...
 def long_storage_data(dummy_prm: str) -> None:
     global keep_looping
@@ -454,6 +461,7 @@ def produce_data(dummy_prm: str) -> None:
             humidity: float = sensor.relative_humidity  # %
             pressure: float = sensor.pressure  # hPa
             dpt: float = dew_point_temperature(humidity, temperature) # Celsius
+            ah: float = absolute_humidity(temperature, humidity)  # g / m3
         else:
             print("No BME280 was found")
 
@@ -465,6 +473,7 @@ def produce_data(dummy_prm: str) -> None:
                 data["humidity"] = humidity
                 data["pressure"] = pressure
                 data["dew-point"] = dpt
+                data["abs-hum"] = ah
                 instant_data.update(data)
             if verbose:
                 print(f"\t(Instant loop) Sleeping between loops for {between_loops} sec. Data is {json.dumps(instant_data)}")

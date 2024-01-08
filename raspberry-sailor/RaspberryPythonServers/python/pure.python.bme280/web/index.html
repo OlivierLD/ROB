@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 	Data from a BMP180, BMP280 or BME280. Air Temperature, Atm Pressure.
-	Optional Relative Humidity and Dew Point
+	Optional Relative Humidity, Absolute Humidity and Dew Point
 	Plus station time.
 	Pressure (and others) graphs, on one week.
 -->
@@ -113,6 +113,20 @@
 				console.log('Dew Point: %f\xb0C', val);
 			}
 			let display = document.getElementById('dew-point-display');
+			if (display) {
+				let valToDisplay = val.toFixed(1);
+				while (valToDisplay.length < 5) {
+					valToDisplay = " " + valToDisplay; // lpad...
+				}
+				display.value = valToDisplay;
+				display.repaint();
+			}
+		});
+		events.subscribe(EVENT_AH, function(val) {
+			if (VERBOSE) {
+				console.log('Absolute Hum: %f\xb0C', val);
+			}
+			let display = document.getElementById('abs-hum-display');
 			if (display) {
 				let valToDisplay = val.toFixed(1);
 				while (valToDisplay.length < 5) {
@@ -774,6 +788,15 @@
 												font-size="30"
 												value="     "></split-flap-display>
 							<span style="font-size: 40px; font-weight: bold;">&deg;C</span>
+							<br/>												
+							<!-- Absolute Humidity -->
+							Absolute humidity
+							<br/>
+							<split-flap-display id="abs-hum-display"
+												nb-char="5"
+												font-size="30"
+												value="     "></split-flap-display>
+							<span style="font-size: 40px; font-weight: bold;">g/m<sup><small>3</small></sup></span>
 						</td>
 						<td style="text-align: center;">
 							<!-- Station Time<br/ -->
