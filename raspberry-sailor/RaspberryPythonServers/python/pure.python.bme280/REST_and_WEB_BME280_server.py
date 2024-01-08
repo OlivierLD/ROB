@@ -14,11 +14,14 @@
 # For a REST Channel (Consumer), consider looking at GET /json-data/data
 #
 # Start it with 
-# $ python3 <...>/REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76]
+# $ python3 -u  <...>/REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') \
+#                                                   --port:8080 \
+#                                                   --verbose:true|false \
+#                                                   [--address:0x76] \
+#                                                   [--store-restore:true|false]
 #
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
-#
 #
 import json
 import signal

@@ -101,6 +101,8 @@ Ou si on veut qu'il tourne tout seul&nbsp;:
 ```
 $ nohup python3 -u REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') --port:8080 --verbose:false [--address:0x76] > bmp.log 2>&1 &
 ```
+Il y a aussi un param&egrave;tre `--store-restore`. Voir le code pour les d&eacute;tails, ainsi que l'op&eacute;ration REST `PUT /write`.
+Ceci permet d'&eacute;crire dans des fichiers les donn&eacute;es contenues dans les maps &agrave; l'arr&ecirc;t du serveur, et/ou de les lire quand il d&eacute;marre. 
 
 ### Et enfin
 De n'importe o&ugrave; sur le m&ecirc;me r&eacute;seau, dans un navigateur, allez sur <http://192.168.1.38:8080/web/index.html>  
