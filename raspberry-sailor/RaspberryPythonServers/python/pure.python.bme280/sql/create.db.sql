@@ -19,9 +19,9 @@ CREATE TABLE WEATHER_DATA (
 -- Init types
 BEGIN;
 INSERT INTO DATA_TYPES (name, unit, description) VALUES ("PRMSL", "hPa",     "Pressure at Mean Sea Level");
-INSERT INTO DATA_TYPES (name, unit, description) VALUES ("AT",    "Celsius", "Air Temperature");
+INSERT INTO DATA_TYPES (name, unit, description) VALUES ("AT",    char(186) || "C", "Air Temperature");
 INSERT INTO DATA_TYPES (name, unit, description) VALUES ("RH",    "%",       "Relative Humidity");
-INSERT INTO DATA_TYPES (name, unit, description) VALUES ("DEW-P", "Celsius", "Dew Point");
+INSERT INTO DATA_TYPES (name, unit, description) VALUES ("DEW-P", char(186) || "C", "Dew Point");
 INSERT INTO DATA_TYPES (name, unit, description) VALUES ("AH",    "g/m3",    "Absolute Humidity");
 COMMIT;
 
