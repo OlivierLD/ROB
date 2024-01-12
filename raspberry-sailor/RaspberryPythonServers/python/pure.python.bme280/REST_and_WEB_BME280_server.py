@@ -18,7 +18,8 @@
 #                                                   --port:8080 \
 #                                                   --verbose:true|false \
 #                                                   [--address:0x76] \
-#                                                   [--store-restore:true|false]
+#                                                   [--store-restore:true|false] \
+#                                                   [--log-db:true|false]
 #
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
@@ -37,6 +38,7 @@ from datetime import datetime, timezone
 import board
 import busio
 from adafruit_bme280 import basic as adafruit_bme280   # pip3 install adafruit-circuitpython-bme280
+import sqlite3
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -48,17 +50,20 @@ server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
 ADDRESS: int = 0x77     # Default. We've seen some 0x76... Hence this parameter.
-STORE_RESTORE: bool = False;
+STORE_RESTORE: bool = False
+LOG_DB: bool = False
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 ADDRESS_PREFIX: str = "--address:"
 STORE_RESTORE_PREFIX: str = "--store-restore:"
+LOG_DB_PREFIX: str = "--log-db:"
 
 keep_looping: bool = True
 between_loops: int = 1            # 1 sec
 between_big_loops: int = 15 * 60  # 15 minutes
+between_db_loops: int = 15 * 60   # 15 minutes
 
 sensor: adafruit_bme280.Adafruit_BME280_I2C
 
@@ -482,6 +487,62 @@ def long_storage_data(dummy_prm: str) -> None:
     print("\tDone with long storage data thread")
 
 
+# DB Thread. Requires the DB to exist.
+def db_writer(dummy_prm: str) -> None:
+    global keep_looping
+    global between_loops
+    global verbose
+
+    print(f"Starting DB thread\n")
+    ping: int = 0
+    while keep_looping:
+        if ping % between_db_loops == 0:
+            ping = 0  # Reset counter, to avoid overflow
+            # Generating data
+            all_good: bool = True
+            try:
+                prmsl: float = instant_data["pressure"]
+                at: float = instant_data["temperature"]
+                rh: float = instant_data["humidity"]
+                dp: float = instant_data["dew-point"]
+                ah: float = instant_data["abs-hum"]
+                # DB Connection
+                con: sqlite3.Connection = sqlite3.connect("weather.db")
+                cur: sqlite3.Cursor = con.cursor()
+
+                sql_stmt_1: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("PRMSL", datetime("now"), {prmsl});'
+                sql_stmt_2: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AT", datetime("now"), {at});'
+                sql_stmt_3: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("RH", datetime("now"), {rh});'
+                sql_stmt_4: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("DEW-P", datetime("now"), {dp});'
+                sql_stmt_5: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AH", datetime("now"), {ah});'
+
+                try:
+                    cur.execute(sql_stmt_1)
+                    cur.execute(sql_stmt_2)
+                    cur.execute(sql_stmt_3)
+                    cur.execute(sql_stmt_4)
+                    cur.execute(sql_stmt_5)
+                except sqlite3.OperationalError as DBException:
+                    print(f">> Oops: {DBException}")
+                    all_good = False
+                except Exception as exception:
+                    print(f"Exception {type(exception)} : {exception}")
+                    all_good = False
+                con.commit()
+                con.close()
+            except KeyError as key_error:
+                print(f"Oops: no {key_error} yet...")
+                all_good = False
+        if all_good:
+            ping += 1
+            if verbose:
+                print(f"\t=> ping {ping}/{between_db_loops}")
+        if verbose:
+            print(f"\t(DB Loop) Sleeping between loops for {between_loops} sec.")
+        time.sleep(between_loops)  # Wait between loops
+    print("\tDone with DB data thread")
+
+
 # Reads the BME280
 def produce_data(dummy_prm: str) -> None:
     global verbose
@@ -531,6 +592,8 @@ if len(sys.argv) > 0:  # Script name + X args
             ADDRESS = int(arg[len(ADDRESS_PREFIX):], 16)  # Expect hex number
         if arg[:len(STORE_RESTORE_PREFIX)] == STORE_RESTORE_PREFIX:
             STORE_RESTORE = (arg[len(STORE_RESTORE_PREFIX):].lower() == "true")
+        if arg[:len(LOG_DB_PREFIX)] == LOG_DB_PREFIX:
+            LOG_DB = (arg[len(LOG_DB_PREFIX):].lower() == "true")
 if verbose:
     print("-- Received from the command line: --")
     for arg in sys.argv:
@@ -569,6 +632,14 @@ if True:
     # print(f"Thread is a {type(client_thread)}")
     long_storage_thread.daemon = True  # Dies on exit
     long_storage_thread.start()
+
+if LOG_DB:
+    print("Starting DB thread")
+    db_thread: threading.Thread = \
+                    threading.Thread(target=db_writer, args=("Parameter...",))  # Long Storage Producer
+    # print(f"Thread is a {type(client_thread)}")
+    db_thread.daemon = True  # Dies on exit
+    db_thread.start()
 
 data_thread: threading.Thread = \
                 threading.Thread(target=produce_data, args=("Parameter...",))  # Data Producer

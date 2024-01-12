@@ -105,6 +105,13 @@ $ nohup python3 -u REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | 
 There is also a `--store-restore` CLI parameter. See the code for details, along with the `PUT /write` REST operation.
 This allows you to write the maps content to a file when the server exits, and/or restore them at startup.
 
+Data can be logged into a sqlite database.  
+You need to create it before starting the server:
+```
+$ sqlite3 weather.db < sql/create.db.sql
+```
+Then use the `--log-db:true` CLI parameter at startup. This will log 5 data (pressure, relative humidity, air temperature, dew point, absolute humidity) every 15 minutes.
+
 ### Finally
 From anywhere on the same network, you can reach, in a browser, <http://192.168.1.38:8080/web/index.html>  
 ![WebUI](doc/web.ui.png)
