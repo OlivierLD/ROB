@@ -11,7 +11,7 @@ SELECT COUNT(DISTINCT DATA_DATE) AS "Nb Dates" FROM WEATHER_DATA;
 --
 SELECT * FROM WEATHER_DATA ORDER BY DATA_DATE, TYPE;
 --
-.width 30 30 16
+.width 30 40 16
 SELECT A.DATA_DATE || ' UTC' AS "Date",
        A.TYPE || ' - ' || B.DESCRIPTION AS "Data",
        printf("%.2f", A.VALUE) || ' ' || B.UNIT AS "Value"
