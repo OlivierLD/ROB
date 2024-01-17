@@ -1,10 +1,11 @@
 --
 -- See logged data
 -- Date functions: https://www.sqlite.org/lang_datefunc.html
--- Degree sign: chr(186)
 --
 .mode columns
 .headers on
+SELECT COUNT(DISTINCT DATA_DATE) AS "Nb Measures" FROM WEATHER_DATA;
+--
 .width 30 40 16
 SELECT A.DATA_DATE || ' UTC' AS "Date",
        A.TYPE || ' - ' || B.DESCRIPTION AS "Data",
