@@ -1045,8 +1045,11 @@ public class HTTPServer {
 							httpServerInstance.getClass().getName(),
 							httpServerInstance.getPort());
 					while (isRunning()) {
+						if (verbose) {
+							HTTPContext.getInstance().getLogger().info("=> Creating new RequestHandler");
+						}
 						// Socket client = ss.accept(); // Blocking read
-						new RequestHandler(ss.accept()).start();
+						new RequestHandler(ss.accept()).start();           // TODO OutOfMemoryError ?
 					} // while (isRunning())
 					System.out.println("Exit requested.");
 					ss.close();

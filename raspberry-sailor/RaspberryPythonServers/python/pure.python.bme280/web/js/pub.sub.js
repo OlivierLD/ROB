@@ -3,6 +3,10 @@
  events.subscribe('topic', function(val) {
    doSomethingSmart(val);
  });
+ or
+ events.subscribe('topic', (val) => {
+   doSomethingSmart(val);
+ });
 
  Publish like that:
  events.publish('topic', val);
@@ -12,8 +16,8 @@ let events = {
 
     subscribe: function (topic, action) {
         this.listener.push({
-            'topic': topic,
-            'actionListener': action
+            'topic': topic,           // A string
+            'actionListener': action  // A function, with one parameter (value to publish)
         });
     },
 
