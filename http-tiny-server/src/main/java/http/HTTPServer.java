@@ -1049,7 +1049,19 @@ public class HTTPServer {
 							HTTPContext.getInstance().getLogger().info("=> Creating new RequestHandler");
 						}
 						// Socket client = ss.accept(); // Blocking read
-						new RequestHandler(ss.accept()).start();           // TODO OutOfMemoryError ?
+						try {
+							new RequestHandler(ss.accept()).start();           // OutOfMemoryError ?
+						} catch (Error argh) {
+							if (argh instanceof OutOfMemoryError) {
+								HTTPContext.getInstance().getLogger().info("OutOfMemoryError... trying to cleanup.");
+								System.out.println("OutOfMemoryError... trying to cleanup.");
+								System.gc();
+								HTTPContext.getInstance().getLogger().info("OutOfMemoryError... after cleanup.");
+								System.out.println("OutOfMemoryError... after cleanup.");
+							} else {
+								argh.printStackTrace();
+							}
+						}
 					} // while (isRunning())
 					System.out.println("Exit requested.");
 					ss.close();
