@@ -123,7 +123,7 @@ au client les resources dont il a besoin pour cet affichage.
 La page web utilise des requ&ecirc;tes REST pour obtenir les donn&eacute;es du serveur.    
 On peut obtenir la liste des op&eacute;rations disponibles en tapant :
 ```
-$ curl -X GET http://192.168.1.36:8080/json-databme280/oplist
+$ curl -X GET http://192.168.1.36:8080/bme280/oplist
 ```
 On peut positionner la valeur de `verbose` &agrave; `true` ou `false` :
 ```
