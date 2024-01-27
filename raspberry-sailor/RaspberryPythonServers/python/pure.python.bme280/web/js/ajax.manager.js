@@ -15,7 +15,7 @@ function initAjax(forwardErrors=false, ping=1000) {
 
 function getTheData() {
 
-	let url = '/json-data/data',
+	let url = '/bme280/data',
 		xhr = new XMLHttpRequest(),
 		verb = 'GET',
 		data = null,

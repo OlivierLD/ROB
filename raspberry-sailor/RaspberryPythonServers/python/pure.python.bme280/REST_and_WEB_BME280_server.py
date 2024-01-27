@@ -8,10 +8,10 @@
 # https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout/python-circuitpython-test
 # Use a sudo pip3 install adafruit-circuitpython-bme280
 #
-# Provides REST access to the JSON data, try GET http://localhost:8080/json-data/data
+# Provides REST access to the JSON data, try GET http://localhost:8080/bme280/data
 # Acts as a sensor reader.
 #
-# For a REST Channel (Consumer), consider looking at GET /json-data/data
+# For a REST Channel (Consumer), consider looking at GET /bme280/data
 #
 # Start it with 
 # $ python3 -u  <...>/REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') \
@@ -43,7 +43,7 @@ import sqlite3
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX: str = "/json-data"
+PATH_PREFIX: str = "/bme280"
 STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource. See below.
 # TODO zip prefix ? That'd be kewl...
 server_port: int = 8080

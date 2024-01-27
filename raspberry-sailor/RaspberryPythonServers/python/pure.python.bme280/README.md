@@ -123,11 +123,11 @@ resources required on the client.
 The web UI is using REST requests to ping the server.  
 You can get the operation list by using
 ```
-$ curl -X GET http://192.168.1.36:8080/json-data/oplist
+$ curl -X GET http://192.168.1.36:8080/bme280/oplist
 ```
 You can set the `verbose` value to `true` or `false`
 ```
-$ curl -X POST http://192.168.1.36:8080/json-data/verbose?value=false|true 
+$ curl -X POST http://192.168.1.36:8080/bme280/verbose?value=false|true 
 ```
 
 ## Bonuses
