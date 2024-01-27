@@ -147,7 +147,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     self.send_response(500)
                 except Exception as exception2:
                     oops = True
-                    print("Sending error back to client (GET {}): {}".format(path, exception2))
+                    print("Error when sending error back to client (GET {}): {}".format(path, exception2))
             if oops:
                 print("After error, end of GET /data")
         elif path == PATH_PREFIX + "/verbose":

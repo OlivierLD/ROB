@@ -1068,7 +1068,7 @@
         let timerInterval;
         let timeToNextLoad = 0;
     
-        let intervalInSeconds = 3600 * 6;
+        let intervalInSeconds = 3600 * 6; // Between composite auto-reload
     
         let secToHMS = (nbSec) => {
             let h = Math.floor(nbSec / 3600);
@@ -1095,15 +1095,16 @@
                 timeToNextLoad = intervalInSeconds; // In seconds
                 document.getElementById("load-composites").disabled = true;
                 compositeInterval = setInterval(() => {
+                    console.log(`Reloading composite, current time is ${new Date()}, time to reload is now ${secToHMS(timeToNextLoad)}`);
                     loadComposite();
                     timeToNextLoad = intervalInSeconds; // In seconds
                 }, 1000 * intervalInSeconds); // Every 6 hours
+
                 timerInterval = setInterval(() => {
                         timeToNextLoad -= 1; // Decrease
                         let strTime = secToHMS(timeToNextLoad);
                         document.getElementById("time-to-next").innerText = (" (reload in " + strTime + ")");
-                    },
-                    1000); // Every second
+                    }, 1000); // Every second
             } else { // Stop
                 document.getElementById("load-composites").disabled = false;
                 clearInterval(compositeInterval);
