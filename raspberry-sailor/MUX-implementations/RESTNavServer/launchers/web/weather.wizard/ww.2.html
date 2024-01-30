@@ -1065,7 +1065,7 @@
         };
     
         let compositeInterval;
-        let timerInterval;
+        let timerInterval; // Now useless (see below)
         let timeToNextLoad = 0;
     
         let intervalInSeconds = 3600 * 6; // Between composite auto-reload
@@ -1092,35 +1092,47 @@
     
         let continuousLoad = (cb) => {
             if (cb.checked === true) { // Start
-                timeToNextLoad = intervalInSeconds; // In seconds
+                // timeToNextLoad = intervalInSeconds; // In seconds
                 document.getElementById("load-composites").disabled = true;
 
-                function setReloadMess() {
+                let nextReloadDate;
+                let setReloadMess = () => {
                     let now = new Date();
                     let next = new Date(now.getTime() + 1000 * intervalInSeconds);
+                    nextReloadDate = next;
                     let nextLoadMess = `(will reload at ${next.format("Y-M-d H:i:s Z")})`;
                     document.getElementById("time-to-next").innerText = nextLoadMess;
-                }
+                };
 
                 compositeInterval = setInterval(() => {
                     // console.log(`>> Reloading composite, current time is ${new Date()}, time to reload is now ${secToHMS(timeToNextLoad)}`);
                     loadComposite();
-                    timeToNextLoad = intervalInSeconds; // In seconds. Reset (now useless)
+                    // timeToNextLoad = intervalInSeconds; // In seconds. Reset (now useless)
                     setReloadMess();
                 }, 1000 * intervalInSeconds); // Every 6 hours
-                // The decrease below does not work as expected (loop takes too long)
-                // Display the time when the reload will happen
                 setReloadMess(); // First time
                 //
-                // timerInterval = setInterval(() => {
-                //         timeToNextLoad -= 1; // Decrease
-                //         let strTime = secToHMS(timeToNextLoad);
-                //         document.getElementById("time-to-next").innerText = (" (reload in " + strTime + ")");
-                //     }, 1000); // Every second
+                // The decrease below does not work as expected (loop takes too long)
+                // Display instead the time when the reload will happen.
+                timerInterval = setInterval(() => {
+                        // timeToNextLoad -= 1; // Decrease
+                        if (nextReloadDate) {
+                            let now = new Date();
+                            let timeToNextLoad = Math.round((nextReloadDate.getTime() - now.getTime()) / 1000);
+                            // console.log(`Next reload in ${timeToNextLoad}s`)
+                            let strTime = secToHMS(timeToNextLoad);
+                            // console.log(`>> Reload in ${strTime}`);
+                            let nextLoadMess = `(will reload at ${nextReloadDate.format("Y-M-d H:i:s Z")}, in ${strTime})`;
+                            // document.getElementById("time-to-next").innerText = (" (reload in " + strTime + ")");
+                            document.getElementById("time-to-next").innerText = nextLoadMess;
+                        } else {
+
+                        }
+                    }, 1000); // Every second
             } else { // Stop
                 document.getElementById("load-composites").disabled = false;
                 clearInterval(compositeInterval);
-                // clearInterval(timerInterval);
+                clearInterval(timerInterval);
                 document.getElementById("time-to-next").innerText = ("");
             }
         };
