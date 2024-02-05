@@ -56,7 +56,8 @@ $ mkdir BME280
 On the laptop (or on the Raspberry Pi, actually), clone just the part of the repo you're interested in:
 ```
 $ mkdir BME280
-$ git clone --depth 1 https://github.com/OlivierLD/ROB.git
+$ cd BME280
+$ git clone --depth 1 https://github.com/OlivierLD/ROB.git 
 $ cd ROB
 $ git filter-branch --prune-empty --subdirectory-filter raspberry-sailor/RaspberryPythonServers/python/pure.python.bme280 HEAD
 ```
