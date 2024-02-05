@@ -74,7 +74,7 @@ if [[ $# -gt 0 ]]; then
 	done
 fi
 #
-URL_OPTION_1_00="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n",
+URL_OPTION_1_00="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 URL_OPTION_1_01="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_1a="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 URL_OPTION_2="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
