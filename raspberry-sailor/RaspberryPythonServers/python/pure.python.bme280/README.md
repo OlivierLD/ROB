@@ -22,6 +22,7 @@ It provides
 ## From Scratch
 ### You will need
 - A Raspberry Pi (a Zero W would fit, here)
+  - If you only have a Raspberry Pi Zero, you will need a WiFi dongle.
 - A micro SD card for the Raspberry Pi
 - A breadboard
 - A BME280 sensor
@@ -48,7 +49,7 @@ From the laptop terminal, assuming that the address of the Raspberry Pi is `192.
 ```
 $ ssh pi@192.168.1.38
 ```
-You're now connected on the Raspberry Pi
+It will prompt you for the password **you** created when flashing the SD Card. You're now connected on the Raspberry Pi.
 ```
 $ mkdir BME280
 ```

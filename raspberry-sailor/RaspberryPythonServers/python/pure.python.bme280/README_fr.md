@@ -21,6 +21,7 @@ Ce qui fournit les fonctionnalit&eacute;s suivantes :
 ## En partant de z&eacute;ro
 ### Il vous faudra
 - Un Raspberry Pi (le mod&egrave;le Zero W convient ici)
+  - Si vous n'avez que le Raspberry Pi Zero, il faudra y ajouter un dongle WiFi.
 - Une carte SD micro, pour le Raspberry Pi
 - Une breadboard
 - Un capteur BME280
@@ -47,7 +48,8 @@ Dans un terminal sur le laptop, en supposant que l'adresse IP du Raspberry Pi es
 ```
 $ ssh pi@192.168.1.38
 ```
-Vous voil&agrave; connect&egrave; au Raspberry Pi
+Il va vous demander le mot de passe que **vous** avez cr&eacute;&eacute; en configurant la carte SD. 
+Vous voil&agrave; connect&egrave; au Raspberry Pi.
 ```
 $ mkdir BME280
 ```
