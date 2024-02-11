@@ -1100,7 +1100,7 @@
                     let now = new Date();
                     let next = new Date(now.getTime() + 1000 * intervalInSeconds);
                     nextReloadDate = next;
-                    let nextLoadMess = `(will reload at ${next.format("Y-M-d H:i:s Z")})`;
+                    let nextLoadMess = `will reload at ${next.format("Y-M-d H:i:s Z")}`;
                     document.getElementById("time-to-next").innerText = nextLoadMess;
                 };
 
@@ -1122,7 +1122,7 @@
                             // console.log(`Next reload in ${timeToNextLoad}s`)
                             let strTime = secToHMS(timeToNextLoad);
                             // console.log(`>> Reload in ${strTime}`);
-                            let nextLoadMess = `(will reload at ${nextReloadDate.format("Y-M-d H:i:s Z")}, in ${strTime})`;
+                            let nextLoadMess = `will reload at ${nextReloadDate.format("Y-M-d H:i:s Z")}, in ${strTime}`;
                             // document.getElementById("time-to-next").innerText = (" (reload in " + strTime + ")");
                             document.getElementById("time-to-next").innerText = nextLoadMess;
                         } else {
