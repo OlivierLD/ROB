@@ -529,6 +529,13 @@
 		}
 	}
 
+	function changeButtonStyle(bgColor, charColor) {
+		document.querySelectorAll("button").forEach(button => {
+			button.style.background = bgColor;
+			button.style.color = charColor;
+		});
+	}
+
 	function setStyle(style) {
 		console.log("Style:" + style);
 		switch (style) {
@@ -538,6 +545,7 @@
 						'analogdisplay-monochrome-orange',
 						'thermometer-orange',
 						'pluviometer-orange');
+				changeButtonStyle('orange',  '#fff');
 				break;
 			case 'cyan':
 				setElementsStyle(
@@ -545,6 +553,7 @@
 						'analogdisplay-monochrome-cyan',
 						'thermometer-cyan',
 						'pluviometer-cyan');
+				changeButtonStyle('cyan',  '#fff');
 				break;
 			case 'white':
 				setElementsStyle(
@@ -552,6 +561,7 @@
 						'analogdisplay-monochrome-white',
 						'thermometer-white',
 						'pluviometer-white');
+				changeButtonStyle('white',  'gray');
 				break;
 			case 'white-red':
 				setElementsStyle(
@@ -559,6 +569,7 @@
 						'analogdisplay-monochrome-white-red',
 						'thermometer-white',
 						'pluviometer-white');
+				changeButtonStyle('white',  'gray');
 				break;
 			case 'yellow':
 				setElementsStyle(
@@ -566,6 +577,7 @@
 						'analogdisplay-monochrome-yellow',
 						'thermometer-yellow',
 						'pluviometer-yellow');
+				changeButtonStyle('yellow',  'gray');
 				break;
 			case 'day':
 				setElementsStyle(
@@ -573,6 +585,7 @@
 						'analogdisplay-day',
 						'thermometer-day',
 						'pluviometer-day');
+				changeButtonStyle('white',  'gray');
 				break;
 			case 'night':
 				setElementsStyle(
@@ -580,6 +593,7 @@
 						'analogdisplay-night',
 						'thermometer-night',
 						'pluviometer-night');
+				changeButtonStyle('black',  'silver');
 				break;
 			case 'flat-gray':
 				setElementsStyle(
@@ -587,6 +601,7 @@
 						'analogdisplay-flat-gray',
 						'thermometer-day',
 						'pluviometer-day');
+				changeButtonStyle('white',  'gray');
 				break;
 			case 'flat-black':
 				setElementsStyle(
@@ -594,6 +609,7 @@
 						'analogdisplay-flat-black',
 						'thermometer-night',
 						'pluviometer-night');
+				changeButtonStyle('black',  'silver');
 				break;
 			default:
 				break;
@@ -626,6 +642,10 @@
 		}
 		evt.currentTarget.className += " active";
 	}
+
+	let fetchErrCallback = (error, message) => {
+		alert("REST Failed to get data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+	};
 
 	</script>
 	<style>
@@ -749,7 +769,7 @@
 					<tr>
 						<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
 						<td>
-							<button onclick="fetchData();">Update Now</button>
+							<button onclick="fetchData(fetchErrCallback);" title="Refresh the data below">Update Now</button>
 						</td>
 						<td>
 							<button onclick="toggleHeadsUp();">Head Up</button>
@@ -833,7 +853,7 @@
 						<td style="text-align: center;">
 							<!-- Station Time<br/ -->
 							<analog-watch class="analogdisplay-monochrome-orange"
-											title="Station Time"
+											title="Last Update&#13;Station Time"
 											id="watch-01"
 											value="00:00:00"
 											hours-ticks="1"

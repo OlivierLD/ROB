@@ -60,7 +60,7 @@ function getTheData() {
 	return promise;
 }
 
-function fetchData() {
+function fetchData(errCallback) {
 	let getData = getTheData();
 	getData.then((value) => {
 		// console.log("Done:", value);
@@ -74,7 +74,11 @@ function fetchData() {
 				message = mess.message;
 			}
 		}
-		console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		if (errCallback) {
+			errCallback(error, message);
+		} else {
+			console.debug("Failed to get data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		}
 	});
 }
 
