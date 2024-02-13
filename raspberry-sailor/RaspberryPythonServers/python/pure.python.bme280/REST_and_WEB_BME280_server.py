@@ -487,7 +487,7 @@ def long_storage_data(dummy_prm: str) -> None:
     print("\tDone with long storage data thread")
 
 
-# DB Thread. Requires the DB to exist.
+# DB Thread. Requires the DB to exist, and types to be initialized.
 def db_writer(dummy_prm: str) -> None:
     global keep_looping
     global between_loops
@@ -636,7 +636,7 @@ if True:
 if LOG_DB:
     print("Starting DB thread")
     db_thread: threading.Thread = \
-                    threading.Thread(target=db_writer, args=("Parameter...",))  # Long Storage Producer
+                    threading.Thread(target=db_writer, args=("Parameter...",))  # DB Storage Producer
     # print(f"Thread is a {type(client_thread)}")
     db_thread.daemon = True  # Dies on exit
     db_thread.start()
