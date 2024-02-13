@@ -219,6 +219,15 @@
 				}
 				let idx2plot = new Date().getTime(); // Current date/time
 				// console.log("DrawGraph invocation!");
+				if (json.coeffsInBrest) {
+					let i = 0;
+					json.table.forEach(line => {
+						if (line.type === 'HW') {
+							line.coeff = json.coeffsInBrest[i];
+							i++;
+						}
+					});
+				}
 				tideGraph.drawGraph("tideCanvas", tideData, idx2plot, document.getElementById('with-table').checked === true ? json.table : undefined);
 			} catch (err) {
 				console.log(err);

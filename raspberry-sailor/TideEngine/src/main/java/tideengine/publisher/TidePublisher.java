@@ -255,7 +255,8 @@ public class TidePublisher {
 
 		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
 
-		String station = "Ocean Beach, California";
+		// String station = "Ocean Beach, California";
+		String station = "Brest, France";
 		int year = 2023;
 
 		for (String arg : args) {

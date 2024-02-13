@@ -346,6 +346,25 @@ public class TideUtilities {
 		return timeList;
 	}
 
+	/*
+		Tentative for Tide Coefficients in Brest
+		http://marees.free.fr/coefficients.html
+	 */
+	public static List<Integer> getCoeffInBrest(TideStation ts, List<TimedValue> oneDay) {
+		List<Integer> coeffs = new ArrayList<>();
+		assert ts.getFullName().equals("Brest%2C%20France");
+		final double U = 0.032429906542056; // Hard coded
+		double baseHeight = ts.getBaseHeight(); // 4.02 for Brest
+		for (TimedValue tv : oneDay) {
+			if (tv.getType().equals("HW")) { // High Water
+				final double hwValue = tv.getValue();
+				double coeff = (hwValue - baseHeight) / U;
+				coeffs.add((int)Math.round(coeff));
+			}
+		}
+		return coeffs;
+	}
+
 	public static String getHarmonicCoeffName(TideStation ts,
 	                                          List<Coefficient> constSpeed,
 	                                          int constSpeedIdx) {

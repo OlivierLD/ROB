@@ -751,6 +751,9 @@ function TideGraph(cName,       // Canvas Name
             context.fillText(gData.station, 20, 30);
             table.forEach((line, idx) => {
                 let str = line.type + " : " + line.formattedDate + ", " + line.value.toFixed(2) + " " + line.unit;
+                if (line.coeff) {
+                    str += `  Coeff ${line.coeff}`;
+                }
                 context.fillText(str, 20, 30 + ((idx + 1) * 21));
             });
             context.restore();

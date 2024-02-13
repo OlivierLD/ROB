@@ -13,6 +13,7 @@ import tideengine.publisher.TidePublisher;
 
 import java.io.StringReader;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -325,7 +326,7 @@ public class RESTImplementation {
 	 * </ul>
 	 *
 	 * @param request Requires two query string parameters <b>from</b> and <b>to</b>, in Duration format (yyyy-MM-ddThh:mm:ss)
-	 * @return the expect response. Could contain an error, see the "TIDE-XXXX" messages.
+	 * @return the expected response. Could contain an error, see the "TIDE-XXXX" messages.
 	 */
 	private Response getWaterHeight(Request request) {
 		return getWaterHeightWithDetails(request, false);
@@ -519,6 +520,20 @@ public class RESTImplementation {
 										now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
 										timeZoneToUse);
 								tideTable.table = table;
+
+								// Coeff in Brest ?
+								if ("true".equals(System.getProperty("with.tide.coeffs"))) { // A System Var
+									final TideStation brestTideStation = tideRequestManager.getBackEndTideComputer().findTideStation(
+											URLEncoder.encode("Brest, France", StandardCharsets.UTF_8.toString()).replace("+", "%20"), calFrom.get(Calendar.YEAR));
+									assert (brestTideStation != null);
+									List<TideUtilities.TimedValue> brestTable = TideUtilities.getTideTableForOneDay(
+											brestTideStation,
+											this.tideRequestManager.getConstSpeed(),
+											now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
+											timeZoneToUse);
+									final List<Integer> coeffsInBrest = TideUtilities.getCoeffInBrest(brestTideStation, brestTable);
+									tideTable.coeffsInBrest = coeffsInBrest;
+								}
 
 								if ("true".equals(System.getProperty("tide.verbose", "false"))) {
 									SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z z");
@@ -919,6 +934,7 @@ public class RESTImplementation {
 		List<TideUtilities.TimedValue> table;
 		Map<String, WhDate> heights;
 		Hashtable<String, List<DataPoint>> harmonicCurves;
+		List<Integer> coeffsInBrest;
 
 		public String getStationName() {
 			return stationName;
@@ -959,6 +975,8 @@ public class RESTImplementation {
 		public Hashtable<String, List<DataPoint>> getHarmonicCurves() {
 			return harmonicCurves;
 		}
+
+		public List<Integer> getCoeffsInBrest() { return coeffsInBrest; }
 	}
 
 	private enum unit {
