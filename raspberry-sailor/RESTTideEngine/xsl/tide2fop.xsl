@@ -201,7 +201,7 @@
     <xsl:param name="data"/>
     <!-- Create new table here -->
     <fo:table>
-      <fo:table-column column-width="0.35in"/>    <!-- HW/LW/ME/MF/Slack -->
+      <fo:table-column column-width="0.5in"/>   <!-- was 0.35in. HW/LW/ME/MF/Slack, with coeff when exists -->
       <fo:table-column column-width="0.65in"/>   <!-- HH:MM ZZZ -->
       <fo:table-column column-width="0.35in"/>   <!-- Height -->
       <fo:table-column column-width="0.55in"/>   <!-- Unit -->
@@ -236,7 +236,15 @@
           <fo:table-row>
             <fo:table-cell padding="medium">
               <fo:block text-align="left">
-                <xsl:value-of select="./@type"/>
+                <xsl:choose>
+                  <!-- Coeff ? -->
+                  <xsl:when test="./@coeff">
+                    <xsl:value-of select="concat(./@type, ' (', ./@coeff, ')')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="./@type"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </fo:block>
             </fo:table-cell>
             <fo:table-cell padding="medium">
@@ -254,6 +262,14 @@
                 <xsl:value-of select="./@unit"/>
               </fo:block>
             </fo:table-cell>
+            <!-- Coeff ? -->
+            <!--xsl:if test="./@coeff">
+              <fo:table-cell padding="medium">
+                <fo:block text-align="center">
+                  <xsl:value-of select="./@coeff"/>
+                </fo:block>
+              </fo:table-cell>
+            </xsl:if-->
             <xsl:if test="position() = 1">
               <fo:table-cell number-rows-spanned="4" padding="medium"
                        vertical-align="middle" horizontal-align="center">

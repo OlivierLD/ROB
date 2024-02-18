@@ -677,6 +677,7 @@ public class TideUtilities {
 	public static class TimedValue implements Comparable<TimedValue> {
 		private Calendar cal;
 		double value;
+		int coeff; // Coeff in Brest, for HW. Default 0 (ie not set)
 		String type = "";
 
 		long epoch;
@@ -710,6 +711,14 @@ public class TideUtilities {
 
 		public double getValue() {
 			return value;
+		}
+
+		public int getCoeff() {
+			return coeff;
+		}
+
+		public void setCoeff(int coeff) {
+			this.coeff = coeff;
 		}
 
 		public String getType() {

@@ -57,6 +57,7 @@ GRIB_VERBOSE=false
 AIS_VERBOSE=false
 REST_VERBOSE=false
 NMEA_CACHE_VERBOSE=false
+WITH_TIDE_COEFFS=true   # Experimental
 #
 # CP=../build/libs/RESTNavServer-1.0-all.jar
 CP=$(find .. -name '*-all.jar')
@@ -70,6 +71,7 @@ fi
 #
 JAVA_OPTS=
 JAVA_OPTS="${JAVA_OPTS} -Djava.util.logging.config.file=logging.properties"
+JAVA_OPTS="${JAVA_OPTS} -Dwith.tide.coeffs=${WITH_TIDE_COEFFS}"
 #
 # No Declination from HDG...
 JAVA_OPTS="${JAVA_OPTS} -Drmc.decl.only=true"

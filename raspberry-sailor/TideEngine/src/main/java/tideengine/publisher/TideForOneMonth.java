@@ -10,6 +10,8 @@ import tideengine.TideUtilities.SpecialPrm;
 import tideengine.TideUtilities.TimedValue;
 
 import java.io.PrintStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -19,6 +21,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Tide Publisher
@@ -91,6 +94,24 @@ public class TideForOneMonth {
 				ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
 			}
 			List<TimedValue> timeAL = tideForOneDay(acv2, now, timeZone, ts, constSpeed, unitToUse);
+			// Coeffs ?
+			if ("true".equals(System.getProperty("with.tide.coeffs"))) { // A System Var
+				final TideStation brestTideStation = backEndTideComputer.findTideStation(
+						URLEncoder.encode("Brest, France", StandardCharsets.UTF_8.toString()).replace("+", "%20"), now.get(Calendar.YEAR)
+				);
+				assert (brestTideStation != null);
+				List<TideUtilities.TimedValue> brestTable = tideForOneDay(acv2, now, timeZone, brestTideStation, constSpeed, unitToUse);
+				final List<Integer> coeffsInBrest = TideUtilities.getCoeffInBrest(brestTideStation, brestTable);
+				// System.out.println("Tides in Brest. Done.");
+				AtomicInteger idx = new AtomicInteger(0);
+				timeAL.forEach(tv -> {
+					if (tv.getType().equals("HW")) {
+						if (coeffsInBrest.size() > (idx.get())) {
+							tv.setCoeff(coeffsInBrest.get(idx.getAndAdd(1)));
+						}
+					}
+				});
+			}
 			Calendar utcCal = (Calendar) now.clone();
 			utcCal.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
 			// System.out.println("UTC Date:" + utcCal.getTime());
@@ -133,7 +154,6 @@ public class TideForOneMonth {
 			}
 
 			// Sun Altitude at Transit time
-
 
 			Calendar sunSet = new GregorianCalendar();
 			sunSet.setTimeZone(TimeZone.getTimeZone(ts.getTimeZone()));
@@ -255,9 +275,14 @@ public class TideForOneMonth {
 						"' moon-set='" + TF.format(moonSet.getTime()) + "'>");
 				for (TimedValue tv : timeAL) {
 					if ("Slack".equals(tv.getType())) {
-						out.println("  <plot type='" + tv.getType() + "' date='" + TF.format(tv.getCalendar().getTime()) + "'/>");
+						out.println("  <plot type='" + tv.getType() +
+								          "' date='" + TF.format(tv.getCalendar().getTime()) + "'" +
+								(tv.getCoeff() != 0 ? " coeff='" + tv.getCoeff() + "'" : "") + " />");
 					} else {
-						out.println("  <plot type='" + tv.getType() + "' date='" + TF.format(tv.getCalendar().getTime()) + "' height='" + TideUtilities.DF22.format(tv.getValue()) + "' unit='" + unitToUse + "'/>");
+						out.println("  <plot type='" + tv.getType() +
+								          "' date='" + TF.format(tv.getCalendar().getTime()) +
+								          "' height='" + TideUtilities.DF22.format(tv.getValue()) +
+								          "' unit='" + unitToUse + "'" + (tv.getCoeff() != 0 ? " coeff='" + tv.getCoeff() + "'" : "") + "/>");
 					}
 				}
 				out.println("</date>");
