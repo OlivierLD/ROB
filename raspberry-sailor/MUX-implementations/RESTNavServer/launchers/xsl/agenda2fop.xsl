@@ -208,7 +208,7 @@
     <xsl:param name="data"/>
     <!-- Create new table here -->
     <fo:table>
-      <fo:table-column column-width="0.35in"/>    <!-- HW/LW/ME/MF/Slack -->
+      <fo:table-column column-width="0.35in"/>   <!-- HW/LW/ME/MF/Slack -->
       <fo:table-column column-width="0.65in"/>   <!-- HH:MM ZZZ -->
       <fo:table-column column-width="0.35in"/>   <!-- Height -->
       <fo:table-column column-width="0.55in"/>   <!-- Unit -->
@@ -244,6 +244,12 @@
             <fo:table-cell padding="medium">
               <fo:block text-align="left">
                 <!--xsl:value-of select="./@type"/-->
+                <!-- coeff ? -->
+                <xsl:choose>
+                  <xsl:when test="./@coeff">
+                    <xsl:value-of select="./@coeff"/>
+                  </xsl:when>
+                </xsl:choose>
               </fo:block>
             </fo:table-cell>
             <fo:table-cell padding="medium">

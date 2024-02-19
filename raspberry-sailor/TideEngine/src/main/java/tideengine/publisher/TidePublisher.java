@@ -250,6 +250,7 @@ public class TidePublisher {
 	 * For tests
 	 *
 	 * @param args --station-name:XXXX --tide-year:2023.
+	 *        Like --station-name:"Brest, France" --tide-year:2024
 	 */
 	public static void main(String... args) {
 
