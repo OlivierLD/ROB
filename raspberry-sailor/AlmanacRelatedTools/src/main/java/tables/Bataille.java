@@ -9,6 +9,9 @@ import java.text.DecimalFormat;
  * Those data are published in XML format, so they can be transformed later on,
  * using fop, for example, by the appropriate stylesheet.
  *
+ * Table 1: cos(p) * sin(l)
+ * Table 2: cos(l) * tan(p)
+ *
  * Spits out the generated XML on System.out. To be re-directed into a file.
  */
 public class Bataille {
