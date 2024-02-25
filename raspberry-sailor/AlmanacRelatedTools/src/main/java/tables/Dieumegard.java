@@ -9,6 +9,11 @@ import java.text.DecimalFormat;
  * Those data are published in XML format, so they can be transformed later on,
  * using fop, for example, by the appropriate stylesheet.
  *
+ * Table 1: Cologarithme de l'angle au pole. colog(1 - cos(AHL))
+ * Table 2: Cologarithme d'un angle (applicable a L & D). colog(cos(alpha))
+ * Table 3: colog(n)
+ * Table A: 1 - cos(alpha)
+ *
  * Spits out the generated XML on System.out. To be re-directed into a file.
  */
 public class Dieumegard {
