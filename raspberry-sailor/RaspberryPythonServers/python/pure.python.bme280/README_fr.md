@@ -152,7 +152,7 @@ Ainsi, tout p&eacute;rih&eacute;rique capable de rejoindre ce r&eacute;seau peut
 qui fonctionne sur le Raspberry Pi. &Ccedil;a peut &ecirc;tre un laptop, une tablette, un cell-phone. La seule
 chose qui soit n&eacute;cessaire est un browser.
 
-Pour que le Raspberry Pi to &eacute;mette son propre reseau, on doit le configurer comme un HotSpot.    
+Pour que le Raspberry Pi &eacute;mette son propre reseau, on doit le configurer comme un HotSpot.    
 Voir details [ici](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/HOTSPOT.md)
 
 Encore une fois, on peut avoir un r&eacute;seau, mais pas d'Internet. Il ne s’agit pas de Cloud Computing, mais plut&ocirc;t de Flake Computing…
