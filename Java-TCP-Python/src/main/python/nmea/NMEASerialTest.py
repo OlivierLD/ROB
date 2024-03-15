@@ -13,10 +13,18 @@
 # - https://pyserial.readthedocs.io/en/latest/pyserial.html
 #
 # Read Serial port, parse NMEA Data.
-# Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y
+#
+# Supported CLI prms: --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y --verbose:Y|N
+#       like:  python3 NMEASerialTest.py --port-name:/dev/tty.usbmodem142201
+#
+# To see below:
+# - DEBUG
+# - DEEP_DEBUG
+# - DISPLAY_ALL
 #
 import serial
 import sys
+import os
 from typing import Dict, List  # , Set, Tuple, Optional
 
 # Local scripts
@@ -45,6 +53,16 @@ baud_rate: int = 4800
 # baud_rate = 115200
 
 proceed_parser: bool = True
+
+
+def display_help() -> None:
+    print("Usage is:")
+    print(f"python3 {os.path.basename(__file__)} --baud-rate:4800 --port-name:/dev/ttyS80 --proceed-with-parser:Y|N --verbose:Y|N --help")
+    print("Default baud rate is 4800")
+    print("Default port name is /dev/tty.usbmodem1414101 (do check in the code...)")
+    print("Default proceed-with-parser is Y")
+    print("Default verbose is N")
+    print("Warning: this script has external (local) dependencies")
 
 
 def read_nmea_sentence(serial_port: serial.serialposix.Serial) -> str:
@@ -107,12 +125,15 @@ def parse_nmea_sentence(sentence: str) -> Dict:
 PORT_NAME_PREFIX: str = "--port-name:"
 BAUD_RATE_PREFIX: str = "--baud-rate:"
 PROCEED_WITH_PARSER: str = "--proceed-with-parser:"
+VERBOSE_PREFIX: str = "--verbose:"
+HELP_PREFIX: str = "--help"  # No value required.
 
 
 def main(args: List[str]) -> None:
     global port_name
     global baud_rate
     global proceed_parser
+    global DEBUG
 
     if len(args) > 0:  # Script name + X args
         for arg in args:
@@ -124,6 +145,12 @@ def main(args: List[str]) -> None:
                 proceed_flag = arg[len(PROCEED_WITH_PARSER):]
                 if proceed_flag.upper() == 'N' or proceed_flag.upper() == 'NO' or proceed_flag.upper() == 'FALSE':
                     proceed_parser = False
+            if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
+                DEBUG = (arg[len(VERBOSE_PREFIX):].upper() == 'Y')
+            if arg[:len(HELP_PREFIX)] == HELP_PREFIX:
+                # Display help and exit
+                display_help()
+                exit(0)
 
     print(f"Will read {port_name}:{baud_rate}...")
     try:
