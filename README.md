@@ -5,10 +5,10 @@
 <span title="Raspberry Pi">R</span>.<span title="On">O</span>.<span title="Board">B</span>.<span title="Embarked">E</span>.<span title="Research">R</span>.<span title="Technology">T</span>.
 </h1>
 <b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
-Aka <b>ROB</b>.  
+Aka just <b>ROB</b>.  
 <br/>
 <img src="./paperboat.png" alt="PaperBoat">
-<h3>Using the Raspberry Pi, <u>at sea</u>.</h3>
+<h3>Using the Raspberry Pi, <u><i>at sea</i></u>.</h3>
 </td>
 <td valign="top" align="right">
 <img src="./wizard150.png" alt="Weather Wizard">
@@ -16,6 +16,18 @@ Aka <b>ROB</b>.
 </td>
   </tr>
 </table>
+
+### Install Java
+If java is not there (or not in the right version), install JDK 11:
+```
+pi $ sudo apt-get update
+pi $ sudo apt-get install openjdk-11-jdk
+```
+### Install `git`
+- See [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (all OS's)
+### Install Python3
+- See [here](https://www.python.org/downloads/) (all operating systems)
+
 
 ## Java and Python(3).
 The [Raspberry Pi](https://www.raspberrypi.com/) is a small, cheap, but fully featured Linux computer that consumes a ridiculous amount of energy. There is no need
