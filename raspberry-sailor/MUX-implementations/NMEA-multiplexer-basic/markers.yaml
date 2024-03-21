@@ -79,10 +79,14 @@ markers:
     latitude: 47.574503
     longitude: -3.202672
     type: sp    
-  - label: ""
+  - label: "Pierres Noires - Chiviguete"
     latitude: 47.592078
     longitude: -3.221455
-    type: is-dng    
+    type: is-dng
+  - label: "Birvideaux"
+    latitude: 47.485365
+    longitude: -3.290765
+    type: is-dng
   - label: "Les Grands Sables"
     latitude: 47.63827049009266
     longitude: -3.4202241897583012

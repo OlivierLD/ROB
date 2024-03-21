@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- | Chartless GPS, AIS, markers
+ | Chartless GPS, AIS, markers, borders
  +-->
 <html>
 <head>
@@ -53,7 +53,7 @@ function displayErr(err) {
 }
 
 let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
-	// TODO Manage a specific component here.
+	// TODO Manage a specific component here, to display the threat graphically.
 	console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
 	// let aisCollisionZone = document.getElementById('ais-threats');
 };
@@ -305,13 +305,45 @@ let updateMap = (elmt, context) => {
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
 				plotBorder.push(plot);
 			});
+			// Highlight the threats
+			if (borderThreats.length > 0) {
+				borderThreats.forEach(bt => {
+					// Highlight border on the map
+					// See borders and markers variables. 
+					let borderName = bt.borderName;
+					let segmentIndex = bt.segmentIdx;
+					let theBorder = borders.filter(b => b.borderName === borderName);
+					if (theBorder) {
+						// seg index starts at 1.
+						let from = theBorder[0].markerList[segmentIndex - 1];
+						let to = theBorder[0].markerList[segmentIndex];
+						// Draw the line
+						let plotFrom = elmt.posToCanvas(from.latitude, from.longitude);
+						let plotTo = elmt.posToCanvas(to.latitude, to.longitude);
+
+						context.save();
+						context.beginPath();
+						context.strokeStyle = 'rgba(255, 0, 0, 0.25)'; // 'red';
+						context.lineWidth = 6;
+
+						context.moveTo(plotFrom.x, plotFrom.y);
+						context.lineTo(plotTo.x, plotTo.y);
+
+						context.stroke();
+						context.closePath();
+						context.restore();
+					}
+				});
+			}
+
 			// Draw border
 			context.save();
 			context.beginPath();
-			context.strokeStyle = 'red';
+			context.strokeStyle = 'blue';
 			context.lineWidth = 2;
 
 			if (plotBorder.length > 0) {
+				console.log(`Border: plotting ${plotBorder.length} segments.`);
 				context.moveTo(plotBorder[0].x, plotBorder[0].y);
 				for (let i=1; i<plotBorder.length; i++) {
 					context.lineTo(plotBorder[i].x, plotBorder[i].y);
@@ -341,7 +373,8 @@ let updateMap = (elmt, context) => {
 
 		threatText += `</ol>`;
 	} else {
-		// Cleanup
+		// Cleanup ?
+		threatText = "No Border Threat";
 	}
 	document.getElementById('border-threats').innerHTML = threatText;
 
@@ -535,7 +568,7 @@ let setStyle = (opt) => {
 };
 
 window.onload = () => {
-	initAjax(); // false, ping=250);
+	initAjax(false, ping=250);
 
 	map = document.getElementById('chartless-map-01');
 	map.setDoAfter(updateMap);        
