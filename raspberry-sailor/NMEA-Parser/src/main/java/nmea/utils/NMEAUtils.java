@@ -442,6 +442,7 @@ public class NMEAUtils {
                     boolean closed = "closed".equals((String)border.get("type")); // open by default. Can be missing.
                     // System.out.printf("-- Border: %s ---\n", name);
                     Border oneBorder = new Border(name);
+                    oneBorder.setBorderType(closed ? "closed" : "open");
                     List<Map<String, Object>> elements = (List<Map<String, Object>>)border.get("border-elements");
                     // System.out.printf("elements is a %s\n", elements.getClass().getName());
                     List<Marker> markerList = new ArrayList<>();

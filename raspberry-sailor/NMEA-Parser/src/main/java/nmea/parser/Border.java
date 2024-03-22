@@ -5,6 +5,8 @@ import java.util.List;
 public class Border {
 
     private String borderName;
+
+    private String borderType;  // closed, open
     private List<Marker> markerList;
 
     public Border() {}
@@ -22,6 +24,14 @@ public class Border {
 
     public void setBorderName(String borderName) {
         this.borderName = borderName;
+    }
+
+    public String getBorderType() {
+        return borderType;
+    }
+
+    public void setBorderType(String borderType) {
+        this.borderType = borderType;
     }
 
     public List<Marker> getMarkerList() {

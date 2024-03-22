@@ -1,22 +1,23 @@
 package util;
 
-import nmea.parser.*;
+import nmea.parser.Border;
+import nmea.parser.Marker;
 import nmea.utils.NMEAUtils;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
- * Turn Markers and Borders yaml definition into KML
- * @see <a href="https://www.google.com/search?q=load+a+kml+file+in+google+earth+on+mac&rlz=1C5CHFA_enUS756US756&oq=load+a+kml+file+in+google+earth+on+mac&aqs=chrome..69i57.7973j0j4&sourceid=chrome&ie=UTF-8">this</a>.
- * KML: Keyhole Markup Language (Keyhole was acquired by Google, and became Google Maps)
+ * Turn Markers and Borders yaml definition into GPX,
+ * for validation in OpenCPN...
+ * Several hard-coded options for the markers in OpenCPN.
  */
 public class MarkersToGPX {
 	public static void main(String... args) {
 		if (args.length == 0) {
-			throw new IllegalArgumentException("Please provide the name of the file to analyze as first parameter");
+			throw new IllegalArgumentException("Please provide the name of the yaml file to analyze as first parameter");
 		}
 
 		try {
@@ -29,14 +30,15 @@ public class MarkersToGPX {
 
 			BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileName));
 			// GPX start
-			bw.write(String.format("<?xml version = '1.0' encoding = 'UTF-8'?>\n" +
+			bw.write("<?xml version = '1.0' encoding = 'UTF-8'?>\n" +
 					"<gpx version=\"1.1\" " +
 					"     creator=\"OpenCPN\" " +
 					"     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
 					"     xmlns=\"http://www.topografix.com/GPX/1/1\" " +
 					"     xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" " +
-					"     xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd\" " +
-					"     xmlns:opencpn=\"http://www.opencpn.org\">\n"));
+					"     xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd " +
+					"                          http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd\" " +
+					"     xmlns:opencpn=\"http://www.opencpn.org\">\n");
 
 			// Markers
 			markers.forEach(marker -> {
@@ -45,7 +47,7 @@ public class MarkersToGPX {
 							// "    <time>2022-07-13T08:55:16Z</time>\n" +
 							"    <name>%s</name>\n" +
 							"    <desc>%s</desc>\n" +
-							"    <sym>1st-Anchorage</sym>\n" +
+							"    <sym>1st-Diamond</sym>\n" +
 							"    <type>WPT</type>\n" +
 							"    <extensions>\n" +
 							"      <opencpn:guid>06434faf-5a49-4511-875c-17f339ea5602</opencpn:guid>\n" +
@@ -68,29 +70,32 @@ public class MarkersToGPX {
 				try {
 					bw.write(String.format("<trk>\n" +
 							"    <name>%s</name>\n" +
-							"    <desc>Going from Etel to Groix, Port-Tudy, for the Rubi’s Cup. June 23 2023.</desc>\n" +
+							"    <desc>%s</desc>\n" +
 							"    <extensions>\n" +
 							"      <opencpn:guid>21180000-44ac-4218-a090-ed331f980000</opencpn:guid>\n" +
 							"      <opencpn:viz>1</opencpn:viz>\n" +
-							"      <opencpn:start>Etel</opencpn:start>\n" +
-							"      <opencpn:end>Groix</opencpn:end>\n" +
+							"      <opencpn:start> - </opencpn:start>\n" +
+							"      <opencpn:end> - </opencpn:end>\n" +
 							"      <gpxx:TrackExtension>\n" +
-							"        <gpxx:DisplayColor>Blue</gpxx:DisplayColor>\n" +
+							"        <gpxx:DisplayColor>Black</gpxx:DisplayColor>\n" +
 							"      </gpxx:TrackExtension>\n" +
-							"    </extensions>", border.getBorderName()));
+							"    </extensions>",
+							border.getBorderName(),
+							border.getBorderName()));
 					// Points
 					bw.write("<trkseg>\n");
 					border.getMarkerList().forEach(marker -> {
 						try {
 							bw.write(String.format("<trkpt lat=\"%f\" lon=\"%f\">\n" +
 									"        <time></time>\n" +
-									"      </trkpt>\n", marker.getLatitude(), marker.getLongitude()));
+									"      </trkpt>\n",
+									marker.getLatitude(),
+									marker.getLongitude()));
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
 						}
 					});
-					// Open ?
-					// if (border.)
+					// Open ? If closed, marker list has closed the loop.
 					bw.write("</trkseg>\n");
 
 					bw.write("</trk>\n");
