@@ -1,7 +1,7 @@
 package nmea.utils;
 
 import nmea.parser.*;
-import nmea.utils.gauss.GaussCurve;
+// import nmea.utils.gauss.GaussCurve;
 import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
@@ -26,12 +26,13 @@ public class NMEAUtils {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
             if (option == CR_NL) {
-                if (str.charAt(i) == (char) 0x0A) // [NL], \n, [LF]
+                if (str.charAt(i) == (char) 0x0A) { // [NL], \n, [LF]
                     sb.append("[LF]");
-                else if (str.charAt(i) == (char) 0x0D) // [CR], \r
+                } else if (str.charAt(i) == (char) 0x0D) { // [CR], \r
                     sb.append("[CR]");
-                else
+                } else {
                     sb.append(str.charAt(i));
+                }
             } else {
                 String c = Integer.toHexString((int) str.charAt(i) & 0xFF).toUpperCase();
                 sb.append(StringUtils.lpad(c, 2, "0") + " ");
@@ -40,6 +41,11 @@ public class NMEAUtils {
         return sb.toString();
     }
 
+    /**
+     * Degrees to milliseconds
+     * @param longitude in degrees
+     * @return the time equivalent, in milliseconds.
+     */
     public static long longitudeToTime(double longitude) {
         long offset = (long) (longitude * 3_600_000L / 15L);
         return offset;
