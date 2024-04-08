@@ -113,7 +113,7 @@ La base doit avoir ete creee avant de demarrer le serveur :
 $ sqlite3 weather.db < sql/create.db.sql
 ```
 On utilise alors le param&egrave;tre `--log-db:true` au demarrage du serveur. 
-Ceci loggera 5 donn&eacute;es (pressure, relative humidity, air temperature, dew point, absolute humidity) toutes les 15 minutes.
+Ceci enregistrera 5 donn&eacute;es (pression atmosph&eacute;rique, humidit&eacute; relative, temp&eacute;rature de l'air, point de ros&eacute;e, humidit&eacute; absolue) toutes les 15 minutes.
 
 ### Et enfin
 De n'importe o&ugrave; sur le m&ecirc;me r&eacute;seau, dans un navigateur, allez sur <http://192.168.1.38:8080/web/index.html>  
