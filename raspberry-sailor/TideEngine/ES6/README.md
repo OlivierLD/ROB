@@ -25,9 +25,14 @@ Unzip the file `json/json.zip` in the directory it is in. You should end up with
 
 This code heavily uses the `module` feature of `HTML5/ES6`. 
 This `module` allows the usage of `imports`.  
-This requires all this to run on top of a Web Server, HTML pages cannot be used as static resources.
+This requires all this to run on top of a Web Server, HTML pages cannot be used without a server,
+CORS errors would be raised.
 
 For the HTTP server, NodeJS, Python, Java can be used...
+> _Note:_ this server is used to serve static resources (html pages, js scripts, images, web-components, etc).
+> For now, no REST service is needed.  
+> This HTTP server can run locally, no external resource is required (expect when you use cartography like Leaflets, of course).  
+> That's flake computing, _not_ cloud computing.
 
 ### For Python
 Use
@@ -50,7 +55,7 @@ Use
 ```
 node server.js &
 ```
-Default port number is `8888`.  
+Default port number is `8888` (use `--port:XXXX` CLI prm to change it, or look into the code of `server.js`).  
 _Note_: Use `./kill.node.sh` to stop the NodeJS server.
 
 #### Bonus: Debug a nodeJS app
