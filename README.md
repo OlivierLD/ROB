@@ -82,10 +82,15 @@ The Raspberry Pi (see <https://www.raspberrypi.org/> and <https://www.raspberryp
 it comes with a GPIO header that can be used to read sensors, or feed actuators.  
 The more I use it, the more I like it.
 
+### Flake computing
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
-but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉 (this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. _**Veeeeery low**_ ⬇️ - if not null - carbon footprint, this may sound interesting to some).   
-Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline.  
+but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉   
+> this requires no satellite, no 5G antenna,...  nothing but a WiFi dongle. _**Veeeeery low**_ ⬇️ - if not null - carbon footprint, this may sound interesting to some.  
+> There is indeed quite a difference between "network access" and "internet access".  
+> A network can be a local one, like the one emitted by a Raspberry Pi, accessible to whoever is in the same boat.
+
+Some operations (like the build of the project 🙄...) would require an Internet connection. But definitely, we tried here to keep those requirements to a bare minimum. The runtime part can indeed happen offline (off-Internet).  
 NMEA Data management, routing calculation (based on GRIBs and faxes you can receive with an SSB), almanac publication, all this can be done with on-board resources only.  
 At sea, the Raspberry Pi can run 24x7, and its power consumption remains ridiculous.
 

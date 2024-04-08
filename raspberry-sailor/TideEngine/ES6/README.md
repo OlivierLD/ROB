@@ -87,8 +87,11 @@ Default port number is `8080`.
 _Note_: Use `./kill.java.sh` to stop the Java server.
 
 ---
-There is also for now an `index.html`, listing some examples you can get inspiration from.
+There is also for now an `index.html`, listing some examples you can get inspiration from.  
+Reach it from a browser, <http://localhost:XXXX/index.html>, where `XXXX` is thr http port (see above).
 
 ---
 
 TODO: Data management in ES6, on any **TimeZone** (_not_ Time Offset).
+
+---
