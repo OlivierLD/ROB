@@ -743,7 +743,8 @@ markers:
 - `label` as a string
 - `type` as an optional string
 
-`type` is `default` by default. Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp` (for special mark), `is-dng` (for isolated danger).
+`type` is `default` by default.   
+Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp` (for special mark), `is-dng` (for isolated danger).
 
 ###### borders
 
@@ -784,14 +785,14 @@ borders:
 ```
 Notice the optional `type` element, its value can be `open` or `closed` (`open` by default). `closed` can be used to define the border of an island, for example.
 
-Borders can be managed by a `Computer`, like `nmea.computers.BorderManager`. This computer may require a properties file (see the code for details)
+Borders can be managed by a `Computer`, like `nmea.computers.BorderManager`. This computer may require a properties file (`border.mgr.properties` here, see the code for details)
 ```yaml
 computers:
   - class: nmea.computers.BorderManager
     properties: border.mgr.properties
     verbose: true
 ```
-Web UI below is using the "Chartless Map"
+Web UI below is using the "Chartless Map" webcomponent.
 
 |                   AIS, Borders, Markers                    |
 |:----------------------------------------------------------:|
@@ -802,6 +803,9 @@ Web UI below is using the "Chartless Map"
 |                      Markers display                       |
 | ![Border Threat display](./docimages/border.threat.02.png) |
 
+### More
+- See a closed borders example (Groix) in `markers.02.yaml`.
+- See the script `markers.to.gpx.sh`, it generates a GPX file from the markers, that can be used for OpenCPN validation.
 
 
 ### Config Example

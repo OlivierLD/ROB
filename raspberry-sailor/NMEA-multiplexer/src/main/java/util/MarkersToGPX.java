@@ -13,6 +13,8 @@ import java.util.List;
  * Turn Markers and Borders yaml definition into GPX,
  * for validation in OpenCPN...
  * Several hard-coded options for the markers in OpenCPN.
+ *
+ * This will generate a gpx file that can be later imported into OpenCPN.
  */
 public class MarkersToGPX {
 	public static void main(String... args) {
@@ -104,7 +106,7 @@ public class MarkersToGPX {
 				}
 			});
 
-			bw.write("</gpx>\n");
+			bw.write("</gpx>\n"); // The end !
 			bw.close();
 
 			System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
@@ -112,5 +114,4 @@ public class MarkersToGPX {
 			ioe.printStackTrace();
 		}
 	}
-
 }
