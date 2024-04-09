@@ -108,11 +108,11 @@ Il y a aussi un param&egrave;tre `--store-restore`. Voir le code pour les d&eacu
 Ceci permet d'&eacute;crire dans des fichiers les donn&eacute;es contenues dans les maps &agrave; l'arr&ecirc;t du serveur, et/ou de les lire quand il d&eacute;marre. 
 
 On peut aussi logger les donn&eacute;es dans une base sqlite.  
-La base doit avoir ete creee avant de demarrer le serveur :
+La base doit avoir &eacute;t&eacute; cr&eacute;&eacute;e avant de d&eacute;marrer le serveur :
 ```
 $ sqlite3 weather.db < sql/create.db.sql
 ```
-On utilise alors le param&egrave;tre `--log-db:true` au demarrage du serveur. 
+On utilise alors le param&egrave;tre `--log-db:true` au d&eacute;marrage du serveur. 
 Ceci enregistrera 5 donn&eacute;es (pression atmosph&eacute;rique, humidit&eacute; relative, temp&eacute;rature de l'air, point de ros&eacute;e, humidit&eacute; absolue) toutes les 15 minutes.
 
 ### Et enfin

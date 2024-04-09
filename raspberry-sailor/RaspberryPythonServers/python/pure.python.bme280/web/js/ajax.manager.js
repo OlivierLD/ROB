@@ -60,10 +60,37 @@ function getTheData() {
 	return promise;
 }
 
+function showCustomAlert(message) {
+	let dialog = document.getElementById('custom-alert');
+
+	if (dialog) {
+		let content = document.getElementById('custom-alert-content');
+		if (content) {
+			content.innerHTML = message;
+			dialog.show();
+		} else {
+			console.log(message);
+		}
+	} else {
+		console.log(message);
+	}
+}
+
+function closeCustomAlert() {
+	let dialog = document.getElementById('custom-alert');
+	if (dialog) {
+		dialog.close();
+	}
+}
+
 function fetchData(errCallback) {
+	// Display popup, fetching data
+	showCustomAlert('Fetching data, please wait...');
 	let getData = getTheData();
 	getData.then((value) => {
 		// console.log("Done:", value);
+		// Close popup
+		closeCustomAlert();
 		let json = JSON.parse(value);
 		onMessage(json);
 	}, (error, errmess) => {
@@ -73,7 +100,9 @@ function fetchData(errCallback) {
 			if (mess.message) {
 				message = mess.message;
 			}
-		}
+		}		
+		// Close popup
+		closeCustomAlert();
 		if (errCallback) {
 			errCallback(error, message);
 		} else {
