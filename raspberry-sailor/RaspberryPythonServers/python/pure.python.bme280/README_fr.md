@@ -118,8 +118,8 @@ Ceci enregistrera 5 donn&eacute;es (pression atmosph&eacute;rique, humidit&eacut
 ### Et enfin
 De n'importe o&ugrave; sur le m&ecirc;me r&eacute;seau, dans un navigateur, allez sur <http://192.168.1.38:8080/web/index.html>  
 ![WebUI](doc/web.ui.png)
-M&ecirc;me avec un comoposant aussi petit que le Raspberry Pi Zero (W), on peut obtenir ce genre d'interface.  
-Souvenez-vous que l'affichage d'une interface web est faite _sur et par le client_. Le Raspberry Pi se contente de fournir
+M&ecirc;me avec un composant aussi petit que le Raspberry Pi Zero (W), on peut obtenir ce genre d'interface.  
+Souvenez-vous que l'affichage d'une interface web est fait _sur et par le client_. Le Raspberry Pi se contente de fournir
 au client les resources dont il a besoin pour cet affichage.
 
 ### Note

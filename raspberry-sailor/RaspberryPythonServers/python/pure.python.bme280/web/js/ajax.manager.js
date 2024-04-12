@@ -86,9 +86,11 @@ function closeCustomAlert() {
 function fetchData(errCallback) {
 	// Display popup, fetching data
 	showCustomAlert('Fetching data, please wait...');
+	let before = (new Date()).getTime();
 	let getData = getTheData();
 	getData.then((value) => {
-		// console.log("Done:", value);
+		let after = (new Date()).getTime();
+		console.log(`Done in ${after - before} ms.`);
 		// Close popup
 		closeCustomAlert();
 		let json = JSON.parse(value);
