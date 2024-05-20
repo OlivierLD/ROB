@@ -28,6 +28,8 @@ sudo ifconfig wlan0 up
 ```
 
 ### Option 3 - My preferred one
+Also look at [this](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/HOTSPOT.md), in the same repo.
+
 To know what release you're running on:
 ```
 $ lsb_release -a
@@ -92,13 +94,26 @@ On Mac OS:
 ```
 $ diskutil list
 ```
-
+Then once the drive is identified
 ```
-$ sudo dd if=/dev/disk3 of=~/PiSDBackup.dmg
+$ sudo dd if=/dev/disk3 of=~/PiSDBackup.dmg  [bs=1m]
 ```
-
+Or
+```
+$ sudo dd if=/dev/disk3 | gzip -c > backup.raspian.img.gz   << Preferred
+```
+then
+```
+$ diskutil eject /dev/disk3
+```
+           
 ## Similar and interesting soft
+
 - <https://kingtidesailing.blogspot.com/2016/04/make-wireless-nmea-0183-multiplexer.html>
 - <https://opensource.com/article/23/3/build-raspberry-pi-dashboard-appsmith>
+
+
+
+
 
 ---
