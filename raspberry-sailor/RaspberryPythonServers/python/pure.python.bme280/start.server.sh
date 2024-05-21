@@ -4,7 +4,7 @@ IP_ADDR=$(hostname -I | awk '{ print $1 }')
 I2C_ADDR=0x76
 VERBOSE=false
 STORE_RESTORE=false
-LOG_DB=true
+LOG_DB=false
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
 #

@@ -75,6 +75,8 @@ Mais le nom des contacts (`GND`, `3V3`, `SDA`, `SCL`) reste le m&ecirc;me.
 ![Fritzing](doc/RPiZeroBME280_bb.png)
 
 ### V&eacute;rifiez l'adresse I2C
+Assurez-vous d'avoir activ&eacute; l'interface I2C (avec `raspi-config`)  
+
 Sur le Raspberry Pi:
 ```
 $ sudo i2cdetect -y 1
@@ -95,6 +97,7 @@ Sur le Raspberry Pi :
 ```
 $ sudo pip3 install adafruit-circuitpython-bme280
 ```
+En cas de probl&egrave;me "Externally Managed", see [here](https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/)...
 
 ### D&eacute;marrer le serveur
 ```
