@@ -817,7 +817,12 @@ Web UI below is using the "Chartless Map" webcomponent.
   - Start the MUX with `./mux.sh nmea.mux.replay.etel.groix.yaml`
   - Reach in a browser <http://localhost:8080/web/chartless.gps.ais.html>
 
-![Going to Groix](./docimages/markers.to.groix.png)
+This, for example, is (almost) the same chart as above, but with the Groix island, defined by rough markers...
+![Going to Groix](./docimages/markers.to.groix.png)  
+This gives an idea of what can be done. Again, this kind of rendering can be easily served by a small Raspberry Pi, and displayed on a client
+like an old cell-phone, that has no SIM card. All it needs is a browser (recent enough to know about WebComponents, that's all).
+
+In all cases, threat detection belongs to a `computer`, like the `nmea.computers.BorderManager` (which is just an example, do not trust it). 
 
 ### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
