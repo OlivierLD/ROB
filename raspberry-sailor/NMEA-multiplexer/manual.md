@@ -813,7 +813,11 @@ Web UI below is using the "Chartless Map" webcomponent.
 ### More
 - See a closed borders example (Groix) in `markers.02.yaml`.
 - See the script `markers.to.gpx.sh`, it generates a GPX file from the markers, that can be used for OpenCPN validation.
+- For a live example, from the folder `raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic`:
+  - Start the MUX with `./mux.sh nmea.mux.replay.etel.groix.yaml`
+  - Reach in a browser <http://localhost:8080/web/chartless.gps.ais.html>
 
+![Going to Groix](./docimages/markers.to.groix.png)
 
 ### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
