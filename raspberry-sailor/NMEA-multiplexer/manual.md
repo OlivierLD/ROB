@@ -703,7 +703,14 @@ Such a file can be rendered like this:
 
 <img src="./docimages/deviation.curve.png" title="deviation curve" width="318" height="440">
 
-##### markers and borders
+##### Chartless Maps. Markers and Borders
+This is another interesting LowTech concept.  
+You could very well have a small Raspberry Pi with a GPS connected on it, but no chart plotter.  
+The idea behind a chartless map is to prepare the data you'll need before you leave, and then use them at sea.  
+With the appropriate `computer`, those borders and markers will be used by the server (the MUX) to know
+when approaching a mark, or a line between two marks. Then the appropriate action can be taken, and beside, the data representing makers and borders
+can be rendered by some specific WebComponents, as shown below.
+
 `markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers, and possibly borders. Those markers
 will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).
 
