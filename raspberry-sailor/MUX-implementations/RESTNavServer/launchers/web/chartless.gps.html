@@ -366,7 +366,7 @@ let updateMap = (elmt, context) => {
 				  <li>Border [${bt.borderName}]</li>
 				  <li>Segment #${bt.segmentIdx}</li>
 				  <li>At ${new Date(bt.date)}</li>
-				  <li>dist: ${bt.dist.toFixed(2)} nm</li>
+				  <li>dist: ${bt.dist.toFixed(2)} (vs ${bt.minDist.toFixed(2)}) nm</li>
 				</ul>`;
 			threatText += `<li>${innerCode}</li>`;
 		});

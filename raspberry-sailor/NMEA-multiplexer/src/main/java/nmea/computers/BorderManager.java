@@ -1,5 +1,6 @@
 package nmea.computers;
 
+import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.api.Multiplexer;
@@ -40,7 +41,10 @@ import java.util.stream.Collectors;
  */
 public class BorderManager extends Computer {
 
+	final boolean VERBOSE = false;
+
 	public static class BorderThreat {
+		private double minDist;
 		private String borderName;
 		private Date date;
 		private int segmentIdx;
@@ -62,6 +66,10 @@ public class BorderManager extends Computer {
 		}
 		public BorderThreat dist(double dist) {
 			this.dist = dist;
+			return this;
+		}
+		public BorderThreat minDist(double dist) {
+			this.minDist = dist;
 			return this;
 		}
 		public String getBorderName() {
@@ -90,6 +98,9 @@ public class BorderManager extends Computer {
 
 		public double getDist() {
 			return dist;
+		}
+		public double getMinDist() {
+			return minDist;
 		}
 
 		public void setDist(double dist) {
@@ -137,17 +148,18 @@ public class BorderManager extends Computer {
 					// System.out.println("Borders: " + collected);
 
 					// Distance to border's segments
-					// Warning: CARTESIAN Plan!!
+					// Warning: considered as a CARTESIAN Plan!!
 					List<List<Double>> distancesToBorders = new ArrayList<>();
 					borders.forEach(border -> {
 						List<Double> distancesToSegments = new ArrayList<>();
 						final List<Marker> markerList = border.getMarkerList();
-						for (int i=0; i< markerList.size() - 2; i++) {
+						for (int i=0; i< markerList.size() - 1; i++) {
 							final Marker markerOne = markerList.get(i);
 							final Marker markerTwo = markerList.get(i + 1);
 							// Equation de la droite [markerOne, markerTwo], y = ax + b (where y: lng, x: lat)
-							double coeffA = (markerTwo.getLongitude() == markerOne.getLongitude()) ? 0.0 :
-									(markerTwo.getLatitude() - markerOne.getLatitude()) / (markerTwo.getLongitude() - markerOne.getLongitude());
+							double coeffA = (markerTwo.getLongitude() == markerOne.getLongitude()) ?
+									         0.0 :
+									         (markerTwo.getLatitude() - markerOne.getLatitude()) / (markerTwo.getLongitude() - markerOne.getLongitude());
 							// markerOne.lat = (coeffA * markerOne.lng) + b
 							// => b = markerOne.lat - (coeffA * markerOne.lng)
 							double coeffB = markerOne.getLatitude() - (coeffA * markerOne.getLongitude());
@@ -155,6 +167,9 @@ public class BorderManager extends Computer {
 							// distance from position to the segment
 							double distToSegment = Math.abs((coeffA * position.lng) - position.lat + coeffB) / (Math.sqrt((coeffA * coeffA) + 1)); // in degrees
 							double distInNm = distToSegment * 60.0;
+							if (VERBOSE) {
+								System.out.printf(">> From [%s], border [%s], segment %d, dist = %f\n", position.toString(), border.getBorderName(), i, distInNm);
+							}
 							distancesToSegments.add(distInNm);
 						}
 						distancesToBorders.add(distancesToSegments);
@@ -168,16 +183,34 @@ public class BorderManager extends Computer {
 						String name = borders.get(border).getBorderName();
 						for (int seg=0; seg<toBorders.size(); seg++) {
 							double segDist = toBorders.get(seg);
+							if (VERBOSE) {
+								System.out.printf(">>> For border [%s], segment %d, seg-dist is %f (min is %f)...\n", name, seg, segDist, this.minimumDistance);
+							}
 							if (segDist <= this.minimumDistance) { // Threat detected
-								// Boat between milestone's lats on lngs. TODO This may need improvements...
 								Marker markerOne = borders.get(border).getMarkerList().get(seg);
 								Marker markerTwo = borders.get(border).getMarkerList().get(seg + 1);
-								if ((position.lng < Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng > Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
-									(position.lat < Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat > Math.min(markerOne.getLatitude(), markerTwo.getLatitude()))) {
-								  threatDetected = true;
-								  threatMessages.add(String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist));
-								  threats.add(new BorderThreat().borderName(name).date(utcDate.getDate()).segmentIdx(seg + 1).dist(segDist));
-								}
+
+								// Position between segment extremities - in lat, in lng
+								boolean conditionOne = ((position.lng < Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng > Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+										                (position.lat < Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat > Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
+
+								// Distance from position to one (at least) extremity within the minimumDistance
+								double distToOne = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerOne.getLatitude()), Math.toRadians(markerOne.getLongitude()))) * 60.0;
+								double distToTwo = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerTwo.getLatitude()), Math.toRadians(markerTwo.getLongitude()))) * 60.0;
+								boolean conditionTwo = (distToOne < this.minimumDistance || distToTwo < this.minimumDistance);
+
+								if (/*conditionOne*/ conditionTwo) {
+									if (VERBOSE) {
+										System.out.printf("\t>>> Border [%s], seg #%d, Detection granted (one: %f, two: %f).\n", name, seg, distToOne, distToTwo);
+									}
+									threatDetected = true;
+									threatMessages.add(String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist));
+									threats.add(new BorderThreat().borderName(name).date(utcDate.getDate()).segmentIdx(seg + 1).dist(segDist).minDist(this.minimumDistance));
+							    } else {
+								  if (VERBOSE) {
+									System.out.printf("\t>>> Border [%s], seg #%d, Step Detection refused (one: %f, two: %f).\n", name, seg, distToOne, distToTwo);
+								  }
+							    }
 							}
 						}
 					}
