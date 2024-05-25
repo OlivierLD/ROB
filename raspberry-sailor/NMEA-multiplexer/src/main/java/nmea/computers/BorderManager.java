@@ -199,7 +199,9 @@ public class BorderManager extends Computer {
 								double distToTwo = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerTwo.getLatitude()), Math.toRadians(markerTwo.getLongitude()))) * 60.0;
 								boolean conditionTwo = (distToOne < this.minimumDistance || distToTwo < this.minimumDistance);
 
-								if (/*conditionOne*/ conditionTwo) {
+								// TODO? More condition could be added...
+
+								if (conditionOne && conditionTwo) {
 									if (VERBOSE) {
 										System.out.printf("\t>>> Border [%s], seg #%d, Detection granted (one: %f, two: %f).\n", name, seg, distToOne, distToTwo);
 									}
