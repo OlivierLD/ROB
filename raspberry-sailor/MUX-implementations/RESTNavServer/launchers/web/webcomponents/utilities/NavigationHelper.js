@@ -27,6 +27,8 @@ if (Math.toDegrees === undefined) {
 	};
 }
 
+// console.log("In NavigationHelper");
+
 let NavigationHelper = {
 
 	twCalculator: (
@@ -194,5 +196,58 @@ let NavigationHelper = {
 			console.log(error);
 		}
 		return { 'vmgWind': vmgWind, 'vmgWayPoint': vmgWayPoint };
-	}
+	},
+
+    /**
+     * Calculate GC distance (aka ortho) between from and to
+     * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+     * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+     * @returns float in radians
+     */
+    getGCDistance: function(from, to) {  // lat & lng in radians, returned in radians
+        if (from === undefined || to === undefined) {
+            throw ({err: "From and To are required"});
+        }
+        let cos = Math.sin(from.lat) * Math.sin(to.lat) + Math.cos(from.lat) * Math.cos(to.lat) * Math.cos(to.lng - from.lng);
+        return Math.acos(cos);
+    },
+
+    /**
+     * Calculate GC distance (aka ortho) between from and to
+     * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+     * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+     * @returns float in degrees
+     */
+    getGCDistanceInDegrees: function(from, to) {  // lat & lng in radians
+        return Math.toDegrees(this.getGCDistance(from, to));
+    },
+
+    /**
+     * Calculate GC distance (aka ortho) between from and to
+     * @param {object} from { lat:xx.xx, lng: xx.xx } values in radians
+     * @param {object} to { lat:xx.xx, lng: xx.xx } values in radians
+     * @returns float in minutes (nantical miles)
+     */
+    getGCDistanceInNM: function(from, to) {   // lat & lng in radians
+        return (this.getGCDistanceInDegrees(from, to) * 60);
+    },
+
+    // All in radians
+    getBearing: function(from, to) {
+        // Bearing β = atan2(X,Y)
+        // X = cos to.lat * sin ∆G
+        // Y = cos from.lng * sin to.lng – sin from.lng * cos to.lng * cos ∆G
+        let deltaG = to.lng - from.lng;
+        let X = Math.cos(to.lat) * Math.sin(deltaG);
+        let Y = (Math.cos(from.lat) * Math.sin(to.lat)) - (Math.sin(from.lat) * Math.cos(to.lat) * Math.cos(deltaG));
+        return Math.atan2(X, Y);
+    },
+
+    getBearingInDegrees: function(from, to) {
+        let inDegrees = Math.toDegrees(this.getBearing(from, to));
+        if (inDegrees < 0) {
+            inDegrees += 360;
+        }
+        return inDegrees;
+    }
 };

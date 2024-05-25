@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<!--
+ | Chartless GPS, AIS, markers, borders
+ +-->
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Chartless Map</title>
+    <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
+	<style type="text/css">
+html {
+	font-family: "Courier New"
+}
+
+.chartless-map-01 {
+	--bg-color: rgba(224, 215, 215, 0.5);
+	--grid-color: rgba(0, 0, 0, 0.7);
+	--fg-color: gray;
+	--value-font: 'Courier New';
+}
+.chartless-map-02 {
+	--bg-color: rgba(0, 0, 0, 0.5);
+	--grid-color: lime;
+	--fg-color: lime;
+	--value-font: 'Courier New';
+}
+.chartless-map-03 {
+	--bg-color: rgba(0, 0, 0, 1.0);
+	--grid-color: cyan;
+	--fg-color: cyan;
+	--value-font: 'Courier New';
+}
+	</style>
+
+	<script type="text/javascript" src="js/date.proto.js"></script>
+	<script type="text/javascript" src="js/pub.sub.js"></script>
+	<script type="text/javascript" src="js/ajax.manager.js"></script>
+	<script type="text/javascript" src="./webcomponents/utilities/NavigationHelper.js"></script>
+
+	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
+
+	<script type="text/javascript">
+
+const VERBOSE = false;		
+
+let map; 
+
+function displayErr(err) {
+	if (err) {
+		// document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+		console.log(err);
+	}
+}
+
+let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
+	// TODO Manage a specific component here, to display the threat graphically.
+	console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
+	// let aisCollisionZone = document.getElementById('ais-threats');
+};
+
+function onSlider(event) {
+	if (VERBOSE) {
+		console.log(`Setting chart width to ${this.value}.`);
+	}
+	if (this.value > 0) {
+    	map.chartWidth = this.value;
+	} else {
+		console.log(`Chart width ${this.value} !!`);
+	}
+}
+
+const MAX_BUFFER_LENGTH = 1000; // Tweak at will
+
+let trackBuffer = [];
+let aisTargets = [];
+let markers = [];
+let borders = [];
+let borderThreats = [];
+let aisThreats = null;
+let cog = 0;
+let sog;
+let pos;
+let gpsDate;
+
+let centerOnBoat = true;
+let displayMarkers = true;
+let displayBorders = true;
+let displayAISTargets = true;
+let withDistBearing = true;
+
+let boatRadius = 10;
+
+/**
+ *  SUBSCRIBERS HERE.
+ *
+ * See js/ajax.manager.js
+ * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
+ */
+events.subscribe('pos', val => {
+	let strLat = decToSex(val.lat, 'NS');
+	let strLng = decToSex(val.lng, 'EW');
+	if (VERBOSE) {
+		console.log(`Got position: ${strLat} / ${strLng}`);
+	}
+	document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
+	pos = val;
+	trackBuffer.push(val);
+	while (trackBuffer.length > MAX_BUFFER_LENGTH) {
+		// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
+		trackBuffer.splice(0, 1);
+		// console.log(`Buffer length now ${trackBuffer.length}...`);
+    }
+	// console.log(`Track: ${trackBuffer.length} element(s).`);
+	document.getElementById('track-length').innerHTML = `${trackBuffer.length} points`;
+	if (centerOnBoat) {
+		map.centerLat = val.lat; // This does the repaint...
+		map.centerLng = val.lng;
+	} else {
+		map.repaint();
+	}
+});
+events.subscribe('markers', val => {
+	markers = val;
+});
+events.subscribe('borders', val => {
+	borders = val;
+});
+events.subscribe('borders-threats', val => {
+	borderThreats = val;
+});
+events.subscribe('ais', val => {  // Possibly contains threats
+	aisTargets = [];
+	let keys = Object.keys(val);
+	// console.log(`Received AIS Data, ${keys.length} target(s).`);
+	for (let i=0; i<keys.length; i++) {
+		// console.log(`Key ${keys[i]}`);
+		let recSet = val[keys[i]];
+		let recordKeys = Object.keys(recSet);
+		// console.log(`${recordKeys.length} records`);
+		// Is there a "18" (Position report) ?
+		if (recordKeys.indexOf('18') !== -1) {
+			// console.log(`We have a 18`);
+			let rec18 = recSet['18'];
+			let vesselName = rec18['vesselName'];
+			let recContent = rec18['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec18.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec18.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec18.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i], 
+				vesselName: vesselName, 
+				lat: recContent.latitude, 
+				lng: recContent.longitude, 
+				cog: recContent.cog, 
+				sog: recContent.sog, 
+				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
+				threat: rec18.collisionThreat !== null,
+				bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null
+			});
+		}
+		document.getElementById('ais-targets').innerHTML = aisTargets.length;
+	}
+});
+events.subscribe('gps-time', val => {
+	let date = new Date(val);
+	// val.format("Y-M-d H:i:s")
+	// let date = gpsTime.format("d-m-Y-l");
+	// console.log(`GPS-TIME: ${val.format("Y-M-d H:i:s")}`);
+	document.getElementById('gps-date').innerHTML = `${date.format("Y-m-d") + ' UTC'}`;
+	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
+	gpsDate = date;
+});
+events.subscribe('sog', val => {
+	document.getElementById('gps-sog').innerHTML = `${val} kn`;
+	sog = val;
+});
+events.subscribe('cog', val => {
+	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
+	cog = val;
+});
+///// END OF SUBSCRIBERS ////
+
+function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
+	
+	// console.log(`Drawing arrow for heading ${heading}`);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	context.moveTo(canvasX +  ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+
+	context.lineTo(canvasX + ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading - 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading - 10))));
+	context.lineTo(canvasX - ((boatLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
+					canvasY + ((boatLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading + 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading + 10))));
+
+	context.closePath();
+	context.stroke();
+}
+
+let markerAndTrackColor = 'navy';
+
+/*
+ * Used as the doAfter callback on the hartlessMap.
+ */
+let updateMap = (elmt, context) => {
+	
+	if (false) { // Plot Chart Center 
+		let center = elmt.posToCanvas(elmt._centerLat, elmt._centerLng);
+
+		context.save();
+
+		context.beginPath();
+		context.strokeStyle = 'red';
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		context.moveTo(center.x, center.y - 20);
+		context.lineTo(center.x, center.y + 20);
+	
+		context.moveTo(center.x - 20, center.y);
+		context.lineTo(center.x + 20, center.y);
+		context.stroke();
+		context.closePath();
+	
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+	
+		context.restore();
+	}
+
+	// Markers.
+	if (VERBOSE) {
+		console.log(`${markers.length} markers`);
+	}
+	if (displayMarkers) {
+		context.save();
+		let markerRadius = 10;
+		let beaconHeight = 2 * markerRadius;
+		markers.forEach(marker => {
+			let extraMess = [];
+			if (pos && withDistBearing) {
+				// Calculate distance and bearing to mark
+				// 1 - Distance
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
+							                                  { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) });
+				let distMess = `Distance: ${dist.toFixed(2)} nm`;
+				extraMess.push(distMess);
+				// 2 - Bearing
+				let from = { lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) };
+				let to = { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) };
+				let bearing = NavigationHelper.getBearingInDegrees(from, to);
+				let bearingMess = `Bearing: ${bearing.toFixed(0)}\u00b0`;
+				extraMess.push(bearingMess);
+			}
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess); // method defined in the ChartlessMap
+		});
+		context.restore();
+	}
+
+	// Borders.
+	if (VERBOSE) {
+		console.log(`${borders.length} borders`);
+	}
+	if (displayBorders) {
+		context.save();
+		let markerRadius = 10;
+		let beaconHeight = 2 * markerRadius;
+		borders.forEach(border => {
+			let extraMess = [];
+			let borderName = border.borderName;
+			let markerList = border.markerList;
+			// console.log(`Border [${borderName}]`);
+
+			let plotBorder = [];
+			// Plot markers
+			markerList.forEach(marker => {
+				elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
+				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
+				plotBorder.push(plot);
+			});
+			// Highlight the threats
+			if (borderThreats.length > 0) {
+				borderThreats.forEach(bt => {
+					// Highlight border on the map
+					// See borders and markers variables. 
+					let borderName = bt.borderName;
+					let segmentIndex = bt.segmentIdx;
+					let theBorder = borders.filter(b => b.borderName === borderName);
+					if (theBorder) {
+						// seg index starts at 1.
+						let from = theBorder[0].markerList[segmentIndex - 1];
+						let to = theBorder[0].markerList[segmentIndex];
+						// Draw the line
+						let plotFrom = elmt.posToCanvas(from.latitude, from.longitude);
+						let plotTo = elmt.posToCanvas(to.latitude, to.longitude);
+
+						context.save();
+						context.beginPath();
+						context.strokeStyle = 'rgba(255, 0, 0, 0.25)'; // 'red';
+						context.lineWidth = 6;
+
+						context.moveTo(plotFrom.x, plotFrom.y);
+						context.lineTo(plotTo.x, plotTo.y);
+
+						context.stroke();
+						context.closePath();
+						context.restore();
+					}
+				});
+			}
+
+			// Draw border
+			context.save();
+			context.beginPath();
+			context.strokeStyle = 'blue';
+			context.lineWidth = 2;
+
+			if (plotBorder.length > 0) {
+				console.log(`Border: plotting ${plotBorder.length} segments.`);
+				context.moveTo(plotBorder[0].x, plotBorder[0].y);
+				for (let i=1; i<plotBorder.length; i++) {
+					context.lineTo(plotBorder[i].x, plotBorder[i].y);
+				}
+			}
+			context.stroke();
+			context.closePath();
+			context.restore();
+		});
+		context.restore();
+	}
+
+	// Border threats ?
+	let threatText = '';
+	if (borderThreats.length > 0) {
+		threatText = `<i style="font-weight: bold;">Border Threats:</i> <ol>`;
+
+		borderThreats.forEach(bt => {
+			let innerCode = `<ul>
+				  <li>Border [${bt.borderName}]</li>
+				  <li>Segment #${bt.segmentIdx}</li>
+				  <li>At ${new Date(bt.date)}</li>
+				  <li>dist: ${bt.dist.toFixed(2)} nm</li>
+				</ul>`;
+			threatText += `<li>${innerCode}</li>`;
+		});
+
+		threatText += `</ol>`;
+	} else {
+		// Cleanup ?
+		threatText = "No Border Threat";
+	}
+	document.getElementById('border-threats').innerHTML = threatText;
+
+	// AIS Targets
+	if (VERBOSE) {
+		console.log(`${aisTargets.length} AIS Target(s)`);
+	}
+
+	let aisThreatsCodeElmnts = [];
+	let aisThreatsCode = "No AIS Threat";
+	if (displayAISTargets) {
+
+		aisTargets.forEach((target, idx) => {
+			/*
+			* aisTarget: {
+			* 	mmsi: string, 
+			*   vesselName: string, 
+			*   lat: number, 
+			*   lng: number, 
+			*   cog: number, 
+			*   sog: number, 
+			*   radius: number, // From the AIS Manager
+			*   threat: boolean
+			* }
+			*/
+			// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} ${target.threat ? '- Honk!' : ''}`);
+			context.beginPath();
+			context.lineWidth = 3;
+
+			let canvasCoord = elmt.posToCanvas(target.lat, target.lng);
+
+			// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} at ${canvasX}/${canvasY}`);
+
+			context.font = "8px Courier";
+			context.fillStyle = target.threat ? 'red' : 'green';
+			context.strokeStyle = target.threat ? 'red' : 'green'; 
+			context.arc(canvasCoord.x, canvasCoord.y, boatRadius, 0, 2 * Math.PI);
+			context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasCoord.x + boatRadius + 1, canvasCoord.y - boatRadius);
+			context.stroke();
+			context.closePath();
+			drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			// AIS threat ?
+			if (target.threat === true) {
+				// debugger;
+				let oneThreat = `<ul>
+					<li>With ${target.mmsi} - ${target.vesselName}</li>
+					<li>at ${decToSex(target.lat, "NS")} / ${decToSex(target.lng, "EW")}</li>
+					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)} </li>
+					<li>COG: ${target.cog}&deg;</li>
+					<li>SOG: ${target.sog.toFixed(2)} kn</li> 
+					<li>Min Dist: ${target.radius} nm</li>
+					</ul>`;
+				aisThreatsCodeElmnts.push(oneThreat);
+			}
+		});
+	}
+	if (aisThreatsCodeElmnts.length > 0) {
+		aisThreatsCode = `<i style="font-weight: bold;">AIS Threats:</i>`;
+		aisThreatsCode += "<ol>";
+		aisThreatsCodeElmnts.forEach(el => {
+			aisThreatsCode += `<li>${el}</li>`;
+		});
+		aisThreatsCode += "</ol>";
+	}
+	// Populate AIS threats
+	document.getElementById('ais-threats').innerHTML = aisThreatsCode;
+
+
+	// The boat position and heading, last to stay on top
+	if (true && pos) {
+
+		// console.log(`Pos: ${JSON.stringify(pos)}, cog: ${cog}`);
+
+		let boatXY = elmt.posToCanvas(pos.lat, pos.lng);
+
+		context.save();
+
+		context.strokeStyle = 'orange';
+		drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+
+		context.beginPath();
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		context.moveTo(boatXY.x, boatXY.y - 20);
+		context.lineTo(boatXY.x, boatXY.y + 20);
+
+		context.moveTo(boatXY.x - 20, boatXY.y);
+		context.lineTo(boatXY.x + 20, boatXY.y);
+		context.stroke();
+		context.closePath();
+
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(boatXY.x, boatXY.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+
+		context.restore();
+		// } else {
+		// 	console.log("No pos available...");
+	}
+
+	// The points of the track
+	context.beginPath();
+	context.strokeStyle = markerAndTrackColor;
+	context.lineWidth = 1;
+	for (let i=0; i<trackBuffer.length; i++) {
+		let pos = trackBuffer[i];
+		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
+		// console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`)
+		if (i === 0) {
+			context.moveTo(canvasCoord.x, canvasCoord.y);
+		} else {
+			context.lineTo(canvasCoord.x, canvasCoord.y);
+		}
+	}
+	context.stroke();
+	context.closePath();
+};
+
+let lpad = (str, len, pad) => {
+	let s = str;
+	while (s.length < len) {
+		s = (pad === undefined ? ' ' : pad) + s;
+	}
+	return s;
+};
+
+let decToSex = (val, ns_ew) => {
+	let absVal = Math.abs(val);
+	let intValue = Math.floor(absVal);
+	let dec = absVal - intValue;
+	let i = intValue;
+	dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+	let s = "";
+	if (ns_ew !== undefined) {
+		if (val < 0) {
+			s += (ns_ew === 'NS' ? 'S' : 'W');
+		} else {
+			s += (ns_ew === 'NS' ? 'N' : 'E');
+		}
+		s += " ";
+	} else {
+		if (val < 0) {
+			s += '-'
+		}
+	}
+	s += i + "&deg;" + lpad(dec.toFixed(2), 5, '0') + "'";
+
+	return s;
+};
+
+let centerChart = (cb) => {
+	centerOnBoat = cb.checked;
+};
+let plotMarkers = (cb) => {
+	displayMarkers = cb.checked;
+	map.repaint();
+};
+let plotBorders = (cb) => {
+	displayBorders = cb.checked;
+	map.repaint();
+};
+let distBearing = (cb) => {
+	withDistBearing = cb.checked;
+	map.repaint();
+};
+let plotAISTargets = (cb) => {
+	displayAISTargets = cb.checked;
+	map.repaint();
+};
+
+let setStyle = (opt) => {
+	document.getElementById('chartless-map-01').className = opt.value;
+
+	switch (opt.value) {
+		case 'chartless-map-03':
+			markerAndTrackColor = 'cyan';
+			break;
+		case 'chartless-map-02':
+			markerAndTrackColor = 'blue';
+			break;
+		case 'chartless-map-01':
+		default:
+			markerAndTrackColor = 'navy';
+			break;
+	}
+};
+
+window.onload = () => {
+	initAjax(false, ping=250);
+
+	map = document.getElementById('chartless-map-01');
+	map.setDoAfter(updateMap);        
+}
+	</script>
+</head>
+<body>
+	<h1>GPS, AIS, Markers, Borders</h1>
+    <table>
+        <tr>
+            <td valign="top">
+                <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+                    <chartless-map id="chartless-map-01"
+                                   class="chartless-map-01"
+                                   center-lat="0.0"
+                                   center-lng="0.0"
+                                   chart-width="5.0"
+                                   width="800"
+                                   height="600"></chartless-map>
+                </div>
+            </td>
+			<td valign="top">
+				<table>
+					<tr>
+						<td>Style:</td>
+						<td>
+							<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
+								<option value="chartless-map-01" selected>Light</option>
+								<option value="chartless-map-02">Dark</option>
+								<option value="chartless-map-03">Darker</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Position:</td>
+						<td><span id="gps-position"></span></td>
+					</tr>
+					<tr>
+						<td>Track length:</td>
+						<td><span id="track-length"></span></td>
+					</tr>
+					<tr>
+						<td>GPS Date:</td>
+						<td><span id="gps-date"></span></td>
+					</tr>
+					<tr>
+						<td>GPS Time:</td>
+						<td><span id="gps-time"></span></td>
+					</tr>
+					<tr>
+						<td>SOG:</td>
+						<td><span id="gps-sog"></span></td>
+					</tr>
+					<tr>
+						<td>COG:</td>
+						<td><span id="gps-cog"></span></td>
+					</tr>
+					<tr>
+						<td valign="top">AIS Targets:</td>
+						<td><span id="ais-targets">-</span></td>
+					</tr>
+					<tr>
+						<!--td valign="top">Border Threats:</td-->
+						<td colspan="2"><span id="border-threats">-</span></td>
+					</tr>
+					<tr>
+						<!--td valign="top">AIS Threats:</td-->
+						<td colspan="2"><div id="ais-threats">-</div></td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+        <tr>
+            <td>
+                <!-- A slider for the chart scale -->
+                <div id="div-slider" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+					Chart Width:
+                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="10.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                           oninput="onSlider.call(this, event); sliderValue01.value = `${parseFloat(this.value).toFixed(2)}&deg;`;"/>
+                    <output name="padding" id="sliderValue01" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5.00&deg;</output>
+                </div>
+            </td>
+        </tr>
+		<tr>
+			<td>
+				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+				<input type="checkbox" onchange="distBearing(this);" checked>Dist &amp; Bearings
+				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+			</td>
+		</tr>
+    </table>
+
+</body>
+</html>

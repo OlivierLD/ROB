@@ -300,6 +300,34 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "ais (" + err + ")");
 		}
+		// Markers
+		try {
+			let markers = json['markers-data'];
+			if (markers) {
+				events.publish('markers', markers);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Markers (" + err + ")");
+		}
+
+		// Borders
+		try {
+			let borders = json['borders-data'];
+			if (borders) {
+				events.publish('borders', borders);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders (" + err + ")");
+		}
+
+		try {
+			let borderThreats = json['borders-threats'];
+			if (borderThreats) {
+				events.publish('borders-threats', borderThreats);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders threats (" + err + ")");
+		}
 
 		if (errMess !== undefined && forwardAjaxErrors) {
 			displayErr(errMess);
