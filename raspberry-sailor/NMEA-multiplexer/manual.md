@@ -824,6 +824,12 @@ like an old cell-phone, that has no SIM card. All it needs is a browser (recent 
 
 In all cases, threat detection belongs to a `computer`, like the `nmea.computers.BorderManager` (which is just an example, do not trust it). 
 
+#### Bonus
+It's a work in progress, but there is a graphical tool that helps you build your Markers file.  
+Look for `marker.builder.html` in this repository.  
+![Marker Builder](./docimages/marker.builder.png)
+
+
 ### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
 ```properties
