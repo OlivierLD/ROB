@@ -300,8 +300,10 @@ let updateMap = (elmt, context) => {
 
 			let plotBorder = [];
 			// Plot markers
-			markerList.forEach(marker => {
-				elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
+			markerList.forEach((marker, idx) => {
+				if (true || idx < (markerList.length - 1)) { // TODO Manage closed borders...
+					elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
+				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
 				plotBorder.push(plot);
 			});
@@ -344,8 +346,8 @@ let updateMap = (elmt, context) => {
 
 			if (plotBorder.length > 0) {
 				console.log(`Border: plotting ${plotBorder.length} segments.`);
-				context.moveTo(plotBorder[0].x, plotBorder[0].y);
-				for (let i=1; i<plotBorder.length; i++) {
+				context.moveTo(plotBorder[0].x, plotBorder[0].y); // idx 0
+				for (let i=1; i<plotBorder.length; i++) {         // the rest, starts at 1
 					context.lineTo(plotBorder[i].x, plotBorder[i].y);
 				}
 			}
