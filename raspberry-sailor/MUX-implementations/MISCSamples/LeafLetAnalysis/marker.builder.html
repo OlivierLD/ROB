@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ | Marker Builder
+ | Requires Internet connection, but runs in standalone.
+ |
+ | Available from http://leafletjs.com/
+ | Tutorials and examples at https://leafletjs.com/examples.html
+ | Note: No native way to change orientation
+ | Nice doc at https://codepen.io/Tomik23/embed/MWKvwzz?height=550&theme-id=dark&default-tab=result&user=Tomik23&slug-hash=MWKvwzz&pen-title=Add%20move%20and%20delete%20marker%20Leaflet&name=cp_embed_1
+ +-->
+<head>
+
+  <title>Leaflet Marker Builder</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../small.boat.png">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <style type="text/css">
+    
+.list-link {
+  color: white;
+  font-size: 20px;
+  text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 10px orange;
+  text-decoration: none;
+}
+a.list-link:hover {
+  color: cyan;
+  font-weight: bold;
+  cursor: pointer;
+  text-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px cyan;
+}
+
+dialog[open] {
+    -webkit-animation: myFadeIn 3.0s ease normal;
+}
+
+@-webkit-keyframes myFadeIn{
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+.help-dialog {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 2em;
+	color: silver;
+	border: 2px solid silver;
+	border-radius: 10px;
+	width: 800px;
+	margin-left: 200px; 
+	margin-top: 10px; 
+	z-index: 1000;
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.dialog-header {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.dialog-header-close {
+  float: right;
+}
+.dialog-header-close:hover {
+  color: cyan;
+  cursor: pointer;
+  text-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+}
+
+#whatzat {
+    width: 40px; 
+    border: 2px solid silver; 
+    border-radius: 50%;
+}
+
+#whatzat:hover {
+    box-shadow: 5px 5px 10px rgb(78, 39, 39), 0 0 25px white, 0 0 7px cyan;
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}
+
+body {
+    font-family: "Source Code Pro", "Courier New", Helvetica, Geneva; 
+    font-weight: bold;
+    background-color: rgba(192, 192, 192, 0.35);
+}
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background: #ffae00; /* fallback for browsers that don't support gradients */
+  background: -webkit-linear-gradient(top, #ffae00, #d67600);
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  background: linear-gradient(top, #ffae00, #d67600);
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+
+button:hover, button:focus {
+  border: 2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;  
+}
+
+compass-rose .day {
+  --bg-color: white;
+  --digit-color: #404040;
+  --with-gradient: true;
+  --display-background-gradient-from: gray;
+  --display-background-gradient-to: white;
+  --tick-color: darkGray;
+  --index-color: red;
+  --font: Arial;
+}
+
+.analogdisplay-day {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: black;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(255, 255, 255, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: black;
+	--minor-tick-color: black;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: black;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+.directiondisplay-01 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(192, 192, 192, 0.25);
+    --hand-outline-color: lime;
+}
+.directiondisplay-02 {
+	--value-nb-decimal: 0;
+	--hand-color: rgba(255, 0, 0, 0.5);
+    --hand-outline-color: red;
+}
+
+.arrow {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;*/
+    margin-top: 25px;
+    transform: translate(-50%, -50%);
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.arrow span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    margin-left: 15px;
+    animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
+
+.thermometer-day {
+  --bg-color: rgba(0, 0, 0, 0);
+  --digit-color: DarkGrey;
+  --with-gradient: true;
+  --display-background-gradient-from: black;
+  --display-background-gradient-to: LightGrey;
+  --with-display-shadow: true;
+  --shadow-color: rgba(0, 0, 0, 0.75);
+  --major-tick-color: DarkGrey;
+  --minor-tick-color: DarkGrey;
+  --value-color: LightRed;
+  --value-outline-color: black;
+  --value-nb-decimal: 2;
+  --font: 'Arial'; /* 'Source Code Pro' */
+}
+
+/*td {
+    border: 1px solid silver;
+    border-radius: 5px;
+}*/
+
+#top-div button {
+    margin-left: 10px;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(241, 241, 241, 0.5);
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background: silver; /*rgb(101, 99, 99);*/
+    color: rgb(63, 54, 54);
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background: #ddd;
+    color: black;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background: #ffae00; /* fallback for browsers that don't support gradients */
+    background: -webkit-linear-gradient(top, #ffae00, #d67600);
+    background: -moz-linear-gradient(top, #ffae00, #d67600);
+    background: -o-linear-gradient(top, #ffae00, #d67600);
+    background: linear-gradient(top, #ffae00, #d67600);
+}
+
+.tab .mess {
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+    color: black;
+    text-align: right;
+}
+
+.data-container {
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+  </style>
+
+</head>
+<body>
+
+<dialog id="about-dialog" class="help-dialog" style="color: cyan;">
+    <div class="dialog-header">
+        <table width="100%">
+            <tr>
+              <td>Help !...</td>
+              <td style="padding-left: 20px;">
+                <span>
+                    <img src="../n.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                    <br/>
+                    <img src="../c.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                </span>
+              </td>
+              <td>
+                <span class="dialog-header-close" onclick="closeAboutDialog();">&times</span>
+              </td>
+            </tr>
+        </table>
+        
+    </div>
+    <hr/>
+    <div>
+        <div id="help-content" style="max-height: 390px; overflow-y: scroll;">
+            <!-- About content -->
+            <div style="margin-top: 15px;">
+                A simple Leaflet interface to build a markers list.<br/><br/>
+            </div>
+            <hr/>
+            <div style="margin-top: 15px;">
+                Map is draggable.
+                <br/>
+                Zoom in and out using the +/- on the chart (or double-click, and shift + double-click)
+                <br/>
+                Click on the map to generate a marker in the list
+            </div>
+        </div>
+        <hr style="margin-top: 15px; margin-bottom: 5px;"/>
+        <i>OlivSoft never stops</i>
+    </div>
+</dialog>
+    
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <h1 style="padding-left: 10px;">Markers Builder</h1>
+            Click on the map to define a marker.
+        </td>
+        <td style="text-align: right; padding-right: 20px;">
+            <img src="../drowning.gif"
+                 id="whatzat" 
+                 title="Heeeeeeelp !!" 
+                 onclick="showAboutDialog();"/>
+        </td>
+        <td>
+            <div class="arrow" title="Try this!">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<!-- Map, displays, and controls -->
+<table width="100%">
+  <tr>
+    <td valign="top">
+      <!-- Column 1 -->
+      <div id="mapid" style="width: 1200px; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
+    </td>
+    <td valign="top">
+      <!-- Column 2 -->
+      <div style="width: 400px; border: 2px solid black; border-radius: 5px;">
+        <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
+        <div id="curr-pos" style="text-align: right; padding: 2px; margin-top: -10px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
+      </div>  
+      <div id="list" style="width: 400px; height: 100%; text-align: center; border: 2px solid rgba(0, 0, 255, 0.5); border-radius: 5px;" title="Generated List">
+          <textarea id="marker-list" style="width: 96%; height: 600px; margin-top: 5px; font-family: 'Courier New', Courier, monospace; overflow: auto;">
+          </textarea>
+      </div>
+      <button onclick="resetMarkers();">Reset Markers</button>
+    </td>
+  </tr>
+</table>
+<hr/>
+<div style="color: silver;">
+  OpenSource JavaScript map API at <a href="https://leafletjs.com/" target="leaflet">leafletjs.com</a>. Zoom for details...<br/>
+  <i style="color: silver;">OlivSoft never stops</i>
+</div>
+
+<script type="text/javascript">
+
+    const VERBOSE = false;
+    let markers = [];
+
+    function setNeedleShape(id, radio) {
+        // debugger;
+        document.getElementById(id).hand = radio.value;
+    }
+
+    function decToSex(val, ns_ew) {
+        let absVal = Math.abs(val);
+        let intValue = Math.floor(absVal);
+        let dec = absVal - intValue;
+        let i = intValue;
+        dec *= 60;
+        let min = dec.toFixed(4);
+        while (min.length < 7) {
+            min = '0' + min;
+        }
+        let s = i + "°" + min + "'";
+
+        if (val < 0) {
+            s += (ns_ew === 'NS' ? 'S' : 'W');
+        } else {
+            s += (ns_ew === 'NS' ? 'N' : 'E');
+        }
+        return s;
+    }
+
+    let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
+
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+    let latlngs; // To be populated from JSON.
+
+    const ZOOM_POSITIONS = [
+        new L.LatLng(37.663680, -122.378633),   // Harbormaster 37 39.8208 N 122 22.7180 W
+        new L.LatLng(47.677667, -3.135667), // Belz
+        new L.LatLng(47.701918, -3.352430), // Gavres
+    ];
+
+    function flyToZoom(idx) {
+        // map.panTo(ZOOM_POSITIONS[idx]);
+        // map.setView(ZOOM_POSITIONS[idx], 18);
+        map.flyTo(ZOOM_POSITIONS[idx]);
+    }
+
+    // Used as an example, See "// markers" below. Used to hold pictures.
+    let polyline = null;
+
+    let initChart = () => {
+        let pos = ZOOM_POSITIONS[2]; // new L.LatLng(37.663680, -122.378633);
+        map.setView(pos, 15);
+    };
+
+    // To draw in pixels, see https://leafletjs.com/examples/extending/extending-2-layers.html
+    // Also https://codepen.io/adelaide01/pen/EXMwbY
+    let tooltip = null;
+    map.addEventListener('mousemove', (event) => {
+        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
+        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
+        let lat = event.latlng.lat;
+        let lng = event.latlng.lng;
+        while (lng > 180) {
+            lng -= 360;
+        }
+        while (lng < -180) {
+            lng += 360;
+        }
+        document.getElementById('curr-pos').innerHTML = `${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`;
+        if (tooltip != null) {
+            map.removeLayer(tooltip);
+        }
+        tooltip = L.tooltip()
+                        .setLatLng(L.latLng([lat, lng]))
+                        .setContent(`${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`)
+                        .addTo(map);
+        
+
+    });
+
+    function dumpMarkers() {
+        const EOL = '\n'; // '<br/>';
+        let listContent = `markers:${EOL}`;
+        markers.forEach(m => {
+            listContent += `  - latitude: ${m.latitude}${EOL}`;
+            listContent += `    longitude: ${m.longitude}${EOL}`;
+            listContent += `    label: "${m.label}"${EOL}`;
+            listContent += `    type: ${m.type}${EOL}`;
+        });
+        document.getElementById('marker-list').innerHTML = listContent;
+    }
+
+    map.addEventListener('click', (event) => {
+        // let lat = Math.round(event.latlng.lat * 100000) / 100000;
+        // let lng = Math.round(event.latlng.lng * 100000) / 100000;
+        let lat = event.latlng.lat;
+        let lng = event.latlng.lng;
+        while (lng > 180) {
+            lng -= 360;
+        }
+        while (lng < -180) {
+            lng += 360;
+        }
+        // Add marker in the list
+        let marker = {
+            label: `marker #${markers.length + 1}`,
+            latitude: lat,
+            longitude: lng,
+            type: 'default'
+        };
+        markers.push(marker);
+
+        L.marker([(marker.latitude), (marker.longitude)], { title: marker.label })
+                                .addTo(map)
+                                .bindPopup('<b>' + marker.label + '</b><br/>' + marker.type); // .openPopup();
+
+        // Spit it out
+        dumpMarkers();
+
+        // document.getElementById('curr-pos-click').innerHTML = `${decToSex(lat, "NS")}<br/>${decToSex(lng, "EW")}`;
+        // document.getElementById('curr-pos-click-dec').innerHTML = `${lat}<br/>${lng}`;
+    });
+
+    function resetMarkers() {
+        while (markers.length > 0) {
+            markers.pop();
+        }
+        dumpMarkers();
+        map.eachLayer((layer) => {
+            // console.log(`Here ! ${t}`);
+            if (layer instanceof L.Marker){
+                //Do marker specific actions here
+                map.removeLayer(layer);
+            }
+        });
+    }
+
+    function lpad(s, w, len) {
+        let str = s;
+        while (str.length < len) {
+            str = w + str;
+        }
+        return str;
+    }
+
+    function setLabels(cb, id) {
+        let bo = document.getElementById(id);
+        bo.withLabels = cb.checked;
+    }
+
+    let showAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.show !== undefined) {
+            aboutDialog.show();
+        } else {
+            alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'inline';
+        }
+    };
+
+    let closeAboutDialog = () => {
+        let aboutDialog = document.getElementById("about-dialog");
+        if (aboutDialog.close !== undefined) {
+            aboutDialog.close();
+        } else {
+            // alert(NO_DIALOG_MESSAGE);
+            aboutDialog.style.display = 'none';
+        }
+    };
+
+    window.onload = () => {
+      console.log("Page Loaded!");
+      initChart();
+    };
+
+</script>
+
+</body>
+</html>
