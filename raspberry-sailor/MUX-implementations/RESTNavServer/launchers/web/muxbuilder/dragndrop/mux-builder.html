@@ -1221,6 +1221,40 @@ let fileFwdOption = (sel) => {
                 </dialog>            
               </div>
           </div>
+
+          <div id="computer-3" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
+            <div>
+              <span class="close-icon" onclick="remove(this);">&times;</span>
+              <span class="computer-description">Borders Manager Computer</span>
+            </div>
+            <div class="draggable-content">
+                <span>Borders Manager  </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <dialog class="editable-prm" style="min-height: 200px;">
+                  <div class="dialog-header">
+                    <div style="padding: 10px;">
+                      <span style="margin-left: 20px;">Edit Borders Computer Parameters</span>
+                      <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                    </div>
+                  </div>
+                  <div class="editable-zone borders-computer">
+                    <table>
+                      <!--tr>
+                        <td>class</td>
+                        <td>nmea.computers.BorderManager</td>
+                      </tr-->
+                      <tr>
+                          <td>Properties</td>
+                          <td><input type="text" class="properties-file" placeholder="Properties File" value="borders.mgr.properties"></td>
+                      </tr>
+                      <tr>
+                        <td>Verbose</td>
+                        <td><input type="checkbox" class="verbose"></td>
+                      </tr>
+                    </table>
+                  </div>  
+                </dialog>            
+              </div>
+          </div>
           <!-- End of Computers -->
           
         </div>  

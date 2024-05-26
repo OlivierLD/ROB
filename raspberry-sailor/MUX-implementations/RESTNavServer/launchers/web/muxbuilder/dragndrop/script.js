@@ -493,6 +493,15 @@ function generateTWCurrentComputerCode(node) {
   return code;
 }
 
+function generateBordersComputerCode(node) {
+  let code = "";
+  let props = node.querySelector('.properties-file').value;
+  code += `    properties: ${props}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+
+  return code;
+}
 
 function dumpIt(withDialog) { // YAML Generation
 
@@ -637,7 +646,10 @@ function dumpIt(withDialog) { // YAML Generation
       code += "  - class: nmea.computers.AISManager\n";
       code += "    verbose: false\n";
       code += "    # You might want to add properties here\n";
-     } else {
+    } else if (prms.classList.contains("borders-computer")) {
+      code += "  - class: nmea.computers.BorderManager\n";
+      code += generateBordersComputerCode(prms);
+    } else {
        console.log('???');
      }
   }
