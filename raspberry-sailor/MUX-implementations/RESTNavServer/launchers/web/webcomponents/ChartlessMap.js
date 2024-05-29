@@ -506,11 +506,21 @@ class ChartlessMap extends HTMLElement {
 		return ChartlessMap.decToSex(val, ns_ew);
 	}
 
+	/**
+	 * Latitude to Increasing Latitude
+	 * @param {number} lat 
+	 * @returns the increasing latitude
+	 */
 	static getIncLat(lat) {
 		let il = Math.log(Math.tan((Math.PI / 4) + (Math.toRadians(lat) / 2)));
 		return Math.toDegrees(il);
 	}
 
+	/**
+	 * Increasing latitude to latitude
+	 * @param {number} il 
+	 * @returns the correspoonding latitude
+	 */
 	static getInvIncLat(il) {
 		let ret = Math.toRadians(il);
 		ret = Math.exp(ret);
