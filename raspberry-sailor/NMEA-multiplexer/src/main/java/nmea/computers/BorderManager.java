@@ -1,5 +1,7 @@
 package nmea.computers;
 
+import algebra.SquareMatrix;
+import algebra.SystemUtil;
 import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
@@ -121,6 +123,60 @@ public class BorderManager extends Computer {
 	};
 	private Consumer<String> collisionCallback = null;
 
+	private static class DistAndClosestPoint {
+		double dist;
+		GeoPos closest;
+	}
+	private static DistAndClosestPoint getDistanceToSegmentInNM(GeoPos position, Marker markerOne, Marker markerTwo) {
+
+		DistAndClosestPoint dacp = new DistAndClosestPoint();
+		double distToSegment;
+		if (true) {
+			// Equation de la droite [markerOne, markerTwo], y = ax + b (where y: lat, x: lng)
+			double deltaLng = markerTwo.getLongitude() - markerOne.getLongitude();
+			double deltaLat = markerTwo.getLatitude() - markerOne.getLatitude();
+			double coeffA = (deltaLng == 0.0) ? 0.0 : (deltaLat / deltaLng);
+			// markerOne.lat = (coeffA * markerOne.lng) + b
+			// => b = markerOne.lat - (coeffA * markerOne.lng)
+			double coeffB = markerOne.getLatitude() - (coeffA * markerOne.getLongitude());
+			// double coeffB = markerOne.getLongitude() - (coeffA * markerOne.getLatitude());
+			if (false) {
+				System.out.printf("-> From pos %f / %f, coeffA = %f, coeffB = %f, f(x) = %f\n",
+						position.lat, position.lng, coeffA, coeffB, (coeffA * position.lng) + coeffB);
+			}
+			// Coeff of the perpendicular to the segment, going through position
+			double perpCoeffA = - (1.0 / coeffA);
+			double perpCoeffB = position.lat - (perpCoeffA * position.lng);
+
+			// The closest point from "position" is the intersection of the two equations
+			// y = coeffA x + coeffB
+			// y = perpCoeffA x + perpCoeffB
+			// where x = lng, y = lat
+			// Matrix is
+			// | 1.y     -coeffA.x |  |     coeffB |
+			// | 1.y -perpCoeffA.x |  | perpCoeffB |
+			SquareMatrix sqMat = new SquareMatrix(2);
+			sqMat.setMatrixElements(new double [][] { {1.0, -coeffA}, {1.0, -perpCoeffA} });
+			final double[] xy = SystemUtil.solveSystem(sqMat, new double[]{coeffB, perpCoeffB});
+			double closestLat = xy[0];
+			double closestLng = xy[1];
+			dacp.closest = new GeoPos(closestLat, closestLng);
+			// System.out.printf("Closest point from %s is %s\n", position.toString(), dacp.closest.toString());
+			distToSegment = Math.abs((coeffA * position.lng) - position.lat + coeffB) / (Math.sqrt((coeffA * coeffA) + 1)); // in degrees
+			dacp.dist = distToSegment * 60;
+		} else {  // Another method...
+			// from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+			double x0 = position.lng;
+			double y0 = position.lat;
+			double x1 = markerOne.getLongitude();
+			double y1 = markerOne.getLatitude();
+			double x2 = markerTwo.getLongitude();
+			double y2 = markerTwo.getLatitude();
+			distToSegment = Math.abs(((x2 - x1) * (y0 -y1)) - ((x0 - x1) * (y2 - y1))) / Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
+			double distInNm = distToSegment * 60.0;
+		}
+		return dacp;
+	}
 	/**
 	 * Wait for position data (not cached), get the perimeters/borders from the cache,
 	 * and computes threat.
@@ -149,24 +205,14 @@ public class BorderManager extends Computer {
 
 					// Distance to border's segments
 					// Warning: considered as a CARTESIAN Plan!!
-					List<List<Double>> distancesToBorders = new ArrayList<>();
+					List<List<DistAndClosestPoint>> distancesToBorders = new ArrayList<>();
 					borders.forEach(border -> {
-						List<Double> distancesToSegments = new ArrayList<>();
+						List<DistAndClosestPoint> distancesToSegments = new ArrayList<>();
 						final List<Marker> markerList = border.getMarkerList();
 						for (int i=0; i< markerList.size() - 1; i++) {
 							final Marker markerOne = markerList.get(i);
 							final Marker markerTwo = markerList.get(i + 1);
-							// Equation de la droite [markerOne, markerTwo], y = ax + b (where y: lng, x: lat)
-							double coeffA = (markerTwo.getLongitude() == markerOne.getLongitude()) ?
-									         0.0 :
-									         (markerTwo.getLatitude() - markerOne.getLatitude()) / (markerTwo.getLongitude() - markerOne.getLongitude());
-							// markerOne.lat = (coeffA * markerOne.lng) + b
-							// => b = markerOne.lat - (coeffA * markerOne.lng)
-							double coeffB = markerOne.getLatitude() - (coeffA * markerOne.getLongitude());
-
-							// distance from position to the segment
-							double distToSegment = Math.abs((coeffA * position.lng) - position.lat + coeffB) / (Math.sqrt((coeffA * coeffA) + 1)); // in degrees
-							double distInNm = distToSegment * 60.0;
+							DistAndClosestPoint distInNm = getDistanceToSegmentInNM(position, markerOne, markerTwo);
 							if (VERBOSE) {
 								System.out.printf(">> From [%s], border [%s], segment %d, dist = %f\n", position.toString(), border.getBorderName(), i, distInNm);
 							}
@@ -179,10 +225,11 @@ public class BorderManager extends Computer {
 					List<BorderThreat> threats = new ArrayList<>();
 					List<String> threatMessages = new ArrayList<>();
 					for (int border=0; border<distancesToBorders.size(); border++) {
-						final List<Double> toBorders = distancesToBorders.get(border);
+						final List<DistAndClosestPoint> toBorders = distancesToBorders.get(border);
 						String name = borders.get(border).getBorderName();
 						for (int seg=0; seg<toBorders.size(); seg++) {
-							double segDist = toBorders.get(seg);
+							DistAndClosestPoint dacp = toBorders.get(seg);
+							double segDist = dacp.dist; // toBorders.get(seg);
 							if (VERBOSE) {
 								System.out.printf(">>> For border [%s], segment %d, seg-dist is %f (min is %f)...\n", name, seg, segDist, this.minimumDistance);
 							}
@@ -190,18 +237,24 @@ public class BorderManager extends Computer {
 								Marker markerOne = borders.get(border).getMarkerList().get(seg);
 								Marker markerTwo = borders.get(border).getMarkerList().get(seg + 1);
 
+								// TODO Cleanup the unused conditions...
 								// Position between segment extremities - in lat, in lng
-								boolean conditionOne = ((position.lng < Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng > Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
-										                (position.lat < Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat > Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
+//								boolean conditionOne = ((position.lng <= Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng >= Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+//										(position.lat <= Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat >= Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
+								// Closest point IN the segment !
+								boolean conditionOne = ((dacp.closest.lng <= Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && dacp.closest.lng >= Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+										(dacp.closest.lat <= Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && dacp.closest.lat >= Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
 
 								// Distance from position to one (at least) extremity within the minimumDistance
 								double distToOne = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerOne.getLatitude()), Math.toRadians(markerOne.getLongitude()))) * 60.0;
 								double distToTwo = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerTwo.getLatitude()), Math.toRadians(markerTwo.getLongitude()))) * 60.0;
 								boolean conditionTwo = (distToOne < this.minimumDistance || distToTwo < this.minimumDistance);
 
-								// TODO? More condition could be added...
+								double distToClosest = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(dacp.closest.lat), Math.toRadians(dacp.closest.lng))) * 60.0;
+								boolean conditionThree = (distToClosest < this.minimumDistance);
+								// TODO? More condition could be added ?...
 
-								if (conditionOne && conditionTwo) {
+								if (conditionThree && conditionOne /* && conditionTwo */) {
 									if (VERBOSE) {
 										System.out.printf("\t>>> Border [%s], seg #%d, Detection granted (one: %f, two: %f).\n", name, seg, distToOne, distToTwo);
 									}
@@ -307,5 +360,58 @@ public class BorderManager extends Computer {
 	@Override
 	public Object getBean() {
 		return new BorderComputerBean(this);
+	}
+
+	// For threat detection tests, debug.
+	public static void main(String... args) {
+		/*
+		From N 47°38.73' / W 3°26.69' -> 47.645500° / - 3.444833°
+		     N 47°38.85' / W 3°26.16' -> 47.645833° / - 3.436000°
+
+	   - rank: 1
+         latitude: 47.64561482699582
+         longitude: -3.4445571899414067
+       - rank: 2
+         latitude: 47.643764382716846
+         longitude: -3.4296226501464844
+       - rank: 3
+         latitude: 47.6338171216314
+         longitude: -3.41451644897461
+		 */
+		final double MIN_DIST = 0.25; // in nm
+		GeoPos position = new GeoPos(47.645833, -3.436000);
+//		GeoPos position = new GeoPos(47.645500, -3.444833);
+		Marker markerOne = new Marker(47.64561482699582, -3.4445571899414067, "-", "default");
+		Marker markerTwo = new Marker(47.643764382716846, -3.4296226501464844, "-", "default");
+
+		final DistAndClosestPoint dacp = getDistanceToSegmentInNM(position, markerOne, markerTwo);
+		double distInNm = dacp.dist;
+
+		System.out.printf("Dist to segment: %f nm\n", distInNm);
+		if (distInNm < MIN_DIST) {
+			// Position between segment extremities - in lat, in lng
+//			boolean conditionOne = ((position.lng <= Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && position.lng >= Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+//					(position.lat <= Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && position.lat >= Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
+			// Closest point IN the segment !
+			boolean conditionOne = ((dacp.closest.lng <= Math.max(markerOne.getLongitude(), markerTwo.getLongitude()) && dacp.closest.lng >= Math.min(markerOne.getLongitude(), markerTwo.getLongitude())) ||
+					(dacp.closest.lat <= Math.max(markerOne.getLatitude(), markerTwo.getLatitude()) && dacp.closest.lat >= Math.min(markerOne.getLatitude(), markerTwo.getLatitude())));
+
+			// Distance from position to one (at least) extremity within the minimumDistance
+			double distToOne = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerOne.getLatitude()), Math.toRadians(markerOne.getLongitude()))) * 60.0;
+			double distToTwo = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(markerTwo.getLatitude()), Math.toRadians(markerTwo.getLongitude()))) * 60.0;
+			boolean conditionTwo = (distToOne < MIN_DIST || distToTwo < MIN_DIST); // Would not work, if in the middle of a looong segment.
+
+			double distToClosest = new GreatCirclePoint(Math.toRadians(position.lat), Math.toRadians(position.lng)).gcDistanceBetween(new GreatCirclePoint(Math.toRadians(dacp.closest.lat), Math.toRadians(dacp.closest.lng))) * 60.0;
+			boolean conditionThree = (distToClosest < MIN_DIST);
+
+			if (conditionThree && conditionOne /* && conditionTwo */) {
+				System.out.printf("\t>>> Detection granted\n");
+				String.format("Threat detected\n");
+			} else {
+					System.out.printf("\t>>> Detection refused\n");
+			}
+		} else {
+			System.out.println("No threat.");
+		}
 	}
 }

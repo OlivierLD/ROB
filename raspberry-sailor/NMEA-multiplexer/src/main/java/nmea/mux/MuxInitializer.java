@@ -491,7 +491,6 @@ public class MuxInitializer {
                         markerList.add(newFile);
                         System.out.println(newFile);
                     });
-                    // System.out.println("Bam");
                 }
                 ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerList);
             } catch (Exception ex) {

@@ -301,7 +301,12 @@ let updateMap = (elmt, context) => {
 			let plotBorder = [];
 			// Plot markers
 			markerList.forEach((marker, idx) => {
-				if (true || idx < (markerList.length - 1)) { // TODO Manage closed borders...
+				let plotIt = true;
+				// Manage closed borders, don't plot the last point...
+				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
+					plotIt = false;
+				}
+				if (plotIt) { // false || idx < (markerList.length - 1)) { 
 					elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
 				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
