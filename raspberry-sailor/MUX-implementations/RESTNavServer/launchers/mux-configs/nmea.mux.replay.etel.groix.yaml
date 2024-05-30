@@ -12,8 +12,9 @@ context:
   init.cache: true
   default.declination: -1
   markers: mux-configs/markers.02.yaml
-  # markers: mux-configs/bretagne.bumper.markers.yaml
-  # markers: mux-configs/san.juan.markers.yaml
+  markers.list:
+    - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: mux-configs/san.juan.markers.yaml
 channels:
   - type: file
     filename: ./sample.data/going.to.groix.nmea.zip

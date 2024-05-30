@@ -1,10 +1,13 @@
 package context;
 
 import nmea.parser.Angle180EW;
+import nmea.parser.Border;
 import nmea.parser.GeoPos;
+import nmea.parser.Marker;
 import nmea.utils.MuxNMEAUtils;
 import nmea.utils.NMEAUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationContext {
@@ -53,19 +56,32 @@ public class ApplicationContext {
 	                      double hdgOffset,         // Default 0
 	                      double defaultDeclination,// Default 0
 	                      int damping,              // Default 1
-						  String markers) {         // Default null
+						  List<String> markerFiles) {   // Default null
 
 		dataCache = new NMEADataCache();
 
-		if (markers != null) {
-			if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
-				System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
-				System.err.println("Moving on anyway, without markers.");
-			} else {
-				dataCache.put(NMEADataCache.MARKERS_FILE, markers);
-				dataCache.put(NMEADataCache.MARKERS_DATA, NMEAUtils.loadMarkers(markers));
-				dataCache.put(NMEADataCache.BORDERS_DATA, NMEAUtils.loadBorders(markers));
-			}
+		if (markerFiles != null && markerFiles.size() > 0) {
+			// Marker file list, marker list, border list
+			List<String> markerList = new ArrayList<>();
+			List<Marker> allMarkers = new ArrayList<>();
+			List<Border> allBorders = new ArrayList<>();
+			markerFiles.forEach(markers -> {
+				if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
+					System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
+					System.err.println("Moving on anyway, skipping this marker file.");
+				} else {
+					try {
+						markerList.add(markers);
+						allMarkers.addAll(NMEAUtils.loadMarkers(markers));
+						allBorders.addAll(NMEAUtils.loadBorders(markers));
+					} catch (Exception ex) { // File Not found ?
+						System.err.printf("Building markers... \n%s", ex);
+					}
+				}
+			});
+			dataCache.put(NMEADataCache.MARKERS_FILE, markerList);
+			dataCache.put(NMEADataCache.MARKERS_DATA, allMarkers);
+			dataCache.put(NMEADataCache.BORDERS_DATA, allBorders);
 		}
 
 		try {

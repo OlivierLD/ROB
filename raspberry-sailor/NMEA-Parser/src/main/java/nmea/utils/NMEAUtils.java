@@ -405,7 +405,6 @@ public class NMEAUtils {
      * @param markerFileName yaml file name.
      * @return markers list.
      *
-     * TODO The borders...
      */
     @SuppressWarnings("unchecked")
     public static List<Marker> loadMarkers(String markerFileName) {

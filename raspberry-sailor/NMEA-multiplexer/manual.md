@@ -715,7 +715,25 @@ can be rendered by some specific WebComponents, as shown below.
 `markers` (default null) can be used to mention the name of a `yaml` file containing user-defined markers, and possibly borders. Those markers
 will be stored in the cache (like the deviation curve data for example), and can be referred to by some other components (like Map UIs).
 
-The structure of this file is the following one:
+Here is the way to mention those file names in the `mux-config`:
+```yaml
+. . .
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  markers: mux-configs/markers.02.yaml
+  markers.list:
+    - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: mux-configs/san.juan.markers.yaml
+channels:
+  . . .
+```
+Notice that `markers` is used to mention one marker file.  
+`marker.list` can take care of _several_ marker files.
+
+The structure of a marker file is the following one:
 ```yaml
 markers:
   - latitude: 47.659823

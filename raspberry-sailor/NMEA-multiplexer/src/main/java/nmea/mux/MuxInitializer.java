@@ -20,10 +20,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -452,7 +449,7 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
-                        // case "udp":  // TODO
+                        // case "udp":  // TODO. User Defined Protocol
                         case "batt":   // Consumer. Battery Voltage, use XDR
                         default:
                             throw new RuntimeException(String.format("mux type [%s] not supported yet.", type));
@@ -480,7 +477,23 @@ public class MuxInitializer {
                 double defaultDeclination = Double.parseDouble(muxProps.getProperty("default.declination", "0"));
                 int damping = Integer.parseInt(muxProps.getProperty("damping", "1"));
                 String markerFile = muxProps.getProperty("markers"); // default null
-                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerFile);
+                String markerFileList = muxProps.getProperty("markers.list"); // default null, or [{markers=mux-configs/bretagne.bumper.markers.yaml}, {markers=mux-configs/san.juan.markers.yaml}]
+                List<String> markerList = new ArrayList<>();
+                if (markerFile != null) {
+                    markerList.add(markerFile);
+                }
+                if (markerFileList != null) {
+                    markerFileList = markerFileList.trim();
+                    String[] fileList = markerFileList.substring(1, markerFileList.length() - 1).split(","); // Trim [ and ], and split
+                    Arrays.stream(fileList).forEach(f -> {
+                        String fName = f.trim();
+                        String newFile = fName.substring(1, fName.length() - 1).substring("markers=".length());
+                        markerList.add(newFile);
+                        System.out.println(newFile);
+                    });
+                    // System.out.println("Bam");
+                }
+                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerList);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
