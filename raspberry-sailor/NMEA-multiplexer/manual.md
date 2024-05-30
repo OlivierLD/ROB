@@ -14,6 +14,7 @@ describing the features required by an instance of the Multiplexer (channels, fo
 - [Pre-defined forwarder types](#pre-defined-forwarder-types)
 - [Pre-defined computer type(s)](#pre-defined-computer-types)
 - [Other properties](#other-properties)
+- [Chartless Maps](#chartless-maps-markers-and-borders)
 - [Example](#example)
 - [Minimal](#minimal)
 - [And then...](#and-then)
