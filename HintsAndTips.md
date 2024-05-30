@@ -161,13 +161,18 @@ Restore backup:
 $ diskutil list
 $ diskutil unmountDisk /dev/disk2
 $ sudo dd if=backup.my.sdcard-18-oct-2015.img.gz of=/dev/disk2
+
 ### Restores compressed image and write /dev/disk2 ###
 $ sudo sh -c 'gunzip -c backup.disk.img.dd.gz | dd of=/dev/disk2’
+## or juust
+$ gunzip -c backup.disk.img.dd.gz | sudo dd of=/dev/disk2
 ```
 Or use Etcher (recommended).   `<< Preferred (use the gz file)`
 
 Backup:  
 From the Raspberry Pi Graphical Desktop, use the SD Card Copier. Just make sure the card is not locked (write protected).
+
+_Note_: `diskutil` equivalent on Linux is `fdisk`, `diskutil unmountDisk` equivalent would be `unmount`. 
 
 ## Similar and interesting soft
 
