@@ -305,9 +305,9 @@ compass-rose .day {
               <td>Help !...</td>
               <td style="padding-left: 20px;">
                 <span>
-                    <img src="../n.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                    <img src="./n.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
                     <br/>
-                    <img src="../c.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
+                    <img src="./c.gif" width="48" title="NC" style="vertical-align: middle; padding: 5px;">
                 </span>
               </td>
               <td>
@@ -369,7 +369,12 @@ compass-rose .day {
       <div id="mapid" style="width: 1200px; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan;"></div>
     </td>
     <td valign="top">
-      <!-- Column 2 -->
+      <!-- Column 2, the widgets -->
+      <div style="width: 400px; border: 2px solid black; border-radius: 5px;">
+          You want to build a<br/>
+          <input type="radio" name="yaml-type" value="marker" onchange="dumpMarkers();" checked>Marker List<br/>
+          <input type="radio" name="yaml-type" value="border" onchange="dumpMarkers();">Border
+      </div>
       <div style="width: 400px; border: 2px solid black; border-radius: 5px;">
         <div style="padding-left: 10px; color: black; text-align: left; font-style: italic;">Position</div>
         <div id="curr-pos" style="text-align: right; padding: 2px; margin-top: -10px;" title="Cursor's position">&nbsp;<br/>&nbsp;</div>
@@ -475,13 +480,31 @@ compass-rose .day {
 
     function dumpMarkers() {
         const EOL = '\n'; // '<br/>';
-        let listContent = `markers:${EOL}`;
-        markers.forEach(m => {
-            listContent += `  - latitude: ${m.latitude}${EOL}`;
-            listContent += `    longitude: ${m.longitude}${EOL}`;
-            listContent += `    label: "${m.label}"${EOL}`;
-            listContent += `    type: ${m.type}${EOL}`;
-        });
+
+        // YAML option, markers or borders
+        let yamlType = document.querySelector("input[name='yaml-type']:checked").value;
+        console.log(`Will generate a ${yamlType}`);
+
+        let listContent = '';
+        if (yamlType === 'marker') {
+            listContent = `markers:${EOL}`;
+            markers.forEach(m => {
+                listContent += `  - latitude: ${m.latitude}${EOL}`;
+                listContent += `    longitude: ${m.longitude}${EOL}`;
+                listContent += `    label: "${m.label}"${EOL}`;
+                listContent += `    type: ${m.type}${EOL}`;
+            });
+        } else {
+            listContent = `borders:${EOL}`;
+            listContent += `  - border-name: "border-name"${EOL}`;
+            listContent += `    type: "closed"${EOL}`;  // closed | open
+            listContent += `    border-elements:${EOL}`;
+            markers.forEach((m, idx) => {
+                listContent += `      - rank: ${idx + 1}${EOL}`;
+                listContent += `        latitude: ${m.latitude}${EOL}`;
+                listContent += `        longitude: ${m.longitude}${EOL}`;
+            });
+        }
         document.getElementById('marker-list').innerHTML = listContent;
     }
 
@@ -496,6 +519,7 @@ compass-rose .day {
         while (lng < -180) {
             lng += 360;
         }
+
         // Add marker in the list
         let marker = {
             label: `marker #${markers.length + 1}`,

@@ -1,0 +1,189 @@
+#
+# An example.
+# San Juan Islands... very nice place.
+#
+markers:
+  - latitude: 48.53808386598439
+    longitude: -123.01543854904595
+    label: "Friday Harbor"
+    type: default
+
+borders:
+  - border-name: "San Juan Island"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 48.626953641313015
+        longitude: -123.14419931033629
+      - rank: 2
+        latitude: 48.616514138885826
+        longitude: -123.09270089725032
+      - rank: 3
+        latitude: 48.59926153455484
+        longitude: -123.09956735232848
+      - rank: 4
+        latitude: 48.56155771605833
+        longitude: -123.01236337283629
+      - rank: 5
+        latitude: 48.544740926419266
+        longitude: -122.99794381717223
+      - rank: 6
+        latitude: 48.538830997700046
+        longitude: -123.01991647342223
+      - rank: 7
+        latitude: 48.53655776445386
+        longitude: -122.97940438846126
+      - rank: 8
+        latitude: 48.52428054098031
+        longitude: -122.96704476932067
+      - rank: 9
+        latitude: 48.51018079863266
+        longitude: -122.99176400760192
+      - rank: 10
+        latitude: 48.5156392289309
+        longitude: -123.01167672732848
+      - rank: 11
+        latitude: 48.47104483900124
+        longitude: -122.99931710818785
+      - rank: 12
+        latitude: 48.46603689785803
+        longitude: -122.96017831424251
+      - rank: 13
+        latitude: 48.44827748782604
+        longitude: -122.96017831424251
+      - rank: 14
+        latitude: 48.45829638036864
+        longitude: -123.04600900271907
+      - rank: 15
+        latitude: 48.508816099177416
+        longitude: -123.15587228396907
+      - rank: 16
+        latitude: 48.563829826505994
+        longitude: -123.18059152225035
+      - rank: 17
+        latitude: 48.587907922400625
+        longitude: -123.2053107605316
+      - rank: 18
+        latitude: 48.62786132209316
+        longitude: -123.18127816775817
+      - rank: 19
+        latitude: 48.619237695508524
+        longitude: -123.16479867557067
+
+  - border-name: "Orcas Island"
+    type: closed
+    border-elements:
+      - rank: 1
+        latitude: 48.714330526104554
+        longitude: -122.95106563484298
+      - rank: 2
+        latitude: 48.71387746592061
+        longitude: -122.87347469246016
+      - rank: 3
+        latitude: 48.66220185892999
+        longitude: -122.73683223640548
+      - rank: 4
+        latitude: 48.619098340658624
+        longitude: -122.80275020515548
+      - rank: 5
+        latitude: 48.60411691945029
+        longitude: -122.79863033210862
+      - rank: 6
+        latitude: 48.60502501090915
+        longitude: -122.81442317878829
+      - rank: 7
+        latitude: 48.60003030582845
+        longitude: -122.83021602546798
+      - rank: 8
+        latitude: 48.64768689297568
+        longitude: -122.87896785652266
+      - rank: 9
+        latitude: 48.690765986364426
+        longitude: -122.88583431160079
+      - rank: 10
+        latitude: 48.69348553478624
+        longitude: -122.90918025886641
+      - rank: 11
+        latitude: 48.68351313909143
+        longitude: -122.91879329597579
+      - rank: 12
+        latitude: 48.670818142759636
+        longitude: -122.91192684089766
+      - rank: 13
+        latitude: 48.65040876741358
+        longitude: -122.90437374031174
+      - rank: 14
+        latitude: 48.63589040596372
+        longitude: -122.88308772956955
+      - rank: 15
+        latitude: 48.61047321678314
+        longitude: -122.86042842781174
+      - rank: 16
+        latitude: 48.59276439853876
+        longitude: -122.8755346289836
+      - rank: 17
+        latitude: 48.58867686644934
+        longitude: -122.88789424812423
+      - rank: 18
+        latitude: 48.594580973331304
+        longitude: -122.94763240730393
+      - rank: 19
+        latitude: 48.629991127841016
+        longitude: -122.95999202644454
+      - rank: 20
+        latitude: 48.62772199105168
+        longitude: -122.96685848152268
+      - rank: 21
+        latitude: 48.640881564096006
+        longitude: -122.98608455574141
+      - rank: 22
+        latitude: 48.63271395729978
+        longitude: -122.9902044287883
+      - rank: 23
+        latitude: 48.60411691945029
+        longitude: -122.9744115821086
+      - rank: 24
+        latitude: 48.60003030582845
+        longitude: -122.97509822761641
+      - rank: 25
+        latitude: 48.60139267528643
+        longitude: -122.99009520997062
+      - rank: 26
+        latitude: 48.61606685496958
+        longitude: -123.00077834108382
+      - rank: 27
+        latitude: 48.62514488605077
+        longitude: -123.00438322999983
+      - rank: 28
+        latitude: 48.622081233086355
+        longitude: -123.00455489137676
+      - rank: 29
+        latitude: 48.622194705030964
+        longitude: -123.00730147340803
+      - rank: 30
+        latitude: 48.613910582661454
+        longitude: -123.00901808717757
+      - rank: 31
+        latitude: 48.60880325457142
+        longitude: -123.0234376428416
+      - rank: 32
+        latitude: 48.611300235070146
+        longitude: -123.02790083864241
+      - rank: 33
+        latitude: 48.630023653147504
+        longitude: -123.0297891137889
+      - rank: 34
+        latitude: 48.63762451303253
+        longitude: -123.02000441530257
+      - rank: 35
+        latitude: 48.654700400226176
+        longitude: -123.01067071559375
+      - rank: 36
+        latitude: 48.67510803816507
+        longitude: -122.98474984767383
+      - rank: 37
+        latitude: 48.69052166203533
+        longitude: -122.96037393214648
+      - rank: 38
+        latitude: 48.700460307535046
+        longitude: -122.94342193112246
