@@ -364,7 +364,9 @@ class ChartlessMap extends HTMLElement {
 		let chartHeight = incLatTop - incLatBottom; // In Increasing Latitude !!
 		// 0.5, 1, 5, 10. To be tuned...
 		// let gridStep = 0.5;
-		let gridStep = Math.min(0.5, Math.round((this._chartWidth / 4) * 10) / 10);
+		let gridStep = /* Math.min(0.5, */ Math.round((this._chartWidth / 4) * 10) / 20 /*)*/;
+		// console.log(`GridStep: ${gridStep}, vs ${Math.round((this._chartWidth / 4) * 10) / 20}`);
+
 		if (chartlessMapVerbose) {
 			console.log(`GridStep: ${gridStep}`);
 		}

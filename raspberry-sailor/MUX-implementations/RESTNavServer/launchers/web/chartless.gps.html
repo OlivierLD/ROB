@@ -224,7 +224,7 @@ function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
 let markerAndTrackColor = 'navy';
 
 /*
- * Used as the doAfter callback on the hartlessMap.
+ * Used as the doAfter callback on the ChartlessMap.
  */
 let updateMap = (elmt, context) => {
 	
@@ -648,7 +648,7 @@ window.onload = () => {
                 <!-- A slider for the chart scale -->
                 <div id="div-slider" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
 					Chart Width:
-                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="10.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
                            oninput="onSlider.call(this, event); sliderValue01.value = `${parseFloat(this.value).toFixed(2)}&deg;`;"/>
                     <output name="padding" id="sliderValue01" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5.00&deg;</output>
                 </div>
