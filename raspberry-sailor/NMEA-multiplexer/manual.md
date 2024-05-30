@@ -829,7 +829,9 @@ It's a work in progress, but there is a graphical tool that helps you build your
 Look for `marker.builder.html` in this repository.  
 ![Marker Builder](./docimages/marker.builder.png)  
 Also look for `marker.maker.leaflet.html`
-![Marker Builder](./docimages/marker.maker.png)
+![Marker Builder](./docimages/marker.maker.png)  
+This is a work in progress... If you want to create borders, you will need to edit the content of the file, 
+according to the description above.
 
 ### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
