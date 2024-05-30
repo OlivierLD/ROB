@@ -164,7 +164,7 @@ $ sudo dd if=backup.my.sdcard-18-oct-2015.img.gz of=/dev/disk2
 
 ### Restores compressed image and write /dev/disk2 ###
 $ sudo sh -c 'gunzip -c backup.disk.img.dd.gz | dd of=/dev/disk2’
-## or juust
+## or just
 $ gunzip -c backup.disk.img.dd.gz | sudo dd of=/dev/disk2
 ```
 Or use Etcher (recommended).   `<< Preferred (use the gz file)`
