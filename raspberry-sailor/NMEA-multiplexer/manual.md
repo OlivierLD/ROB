@@ -850,7 +850,9 @@ Look for `marker.builder.html` in this repository.
 Also look for `marker.maker.leaflet.html`
 ![Marker Builder](./docimages/marker.maker.png)  
 This is a work in progress... If you want to create borders, you will need to edit the content of the file, 
-according to the description above.
+according to the description above.  
+`Note:` In a software like OpenCPN, you can also build markers (use the `drop mark` feature, when right-clicking on a chart). This
+can also be an option.
 
 ### Config Example
 Here is an example of a simple properties file driving the Multiplexer:
