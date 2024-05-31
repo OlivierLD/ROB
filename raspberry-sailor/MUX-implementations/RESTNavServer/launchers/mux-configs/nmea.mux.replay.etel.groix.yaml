@@ -20,7 +20,7 @@ channels:
     filename: ./sample.data/going.to.groix.nmea.zip
     zip: true
     path.in.zip: going.to.groix.2.nmea
-    between-records: 100   # Speed up
+    between-records: 50   # Speed up
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA

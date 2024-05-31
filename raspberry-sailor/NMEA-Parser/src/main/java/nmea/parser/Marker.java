@@ -61,4 +61,9 @@ public class Marker {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%f / %f, %s, %s", this.latitude, this.longitude, this.label, this.type);
+    }
 }
