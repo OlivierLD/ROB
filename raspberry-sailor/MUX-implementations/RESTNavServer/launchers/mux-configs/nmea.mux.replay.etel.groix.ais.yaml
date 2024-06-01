@@ -1,0 +1,52 @@
+#
+# MUX definition.
+#
+name: "Replay log file. Chartless Map. AIS."
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - AIS Collision threats
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  markers: mux-configs/markers.02.yaml
+  markers.list:
+    - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: mux-configs/san.juan.markers.yaml
+channels:
+  - type: file
+    filename: ./sample.data/going.to.groix.nmea.zip
+    zip: true
+    path.in.zip: going.to.groix.2.nmea
+    between-records: 500
+    verbose: false
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+  - type: tcp  # AIS Data, from a GPSd server (a lot of data, careful)
+    server: sinagot.net
+    port: 2947
+    # initial.request: "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
+    initial.request: ?WATCH={"enable":true,"json":false,"nmea":true,"raw":0,"scaled":false,"timing":false,"split24":false,"pps":false}
+    keep.trying: true
+    verbose: false
+forwarders:
+  - type: file
+    verbose: false
+    timebase.filename: false
+    filename: data.4tests.nmea
+    flush: true
+    # sentence.filters: MWV, VHW, HDG
+    sentence.filters: ~GGA,~GSA,~GSV
+#  - type: console
+#  - type: tcp
+#    port: 7002
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    verbose: false
+  - class: nmea.computers.AISManager
+    properties: mux-configs/ais.mgr.properties
+    verbose: false

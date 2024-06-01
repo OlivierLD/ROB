@@ -96,7 +96,7 @@ let boatRadius = 10;
  * See js/ajax.manager.js
  * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
  */
-events.subscribe('pos', val => {
+events.subscribe(POS, val => {
 	let strLat = decToSex(val.lat, 'NS');
 	let strLng = decToSex(val.lng, 'EW');
 	if (VERBOSE) {
@@ -119,16 +119,16 @@ events.subscribe('pos', val => {
 		map.repaint();
 	}
 });
-events.subscribe('markers', val => {
+events.subscribe(MARKERS, val => {
 	markers = val;
 });
-events.subscribe('borders', val => {
+events.subscribe(BORDERS, val => {
 	borders = val;
 });
-events.subscribe('borders-threats', val => {
+events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
 });
-events.subscribe('ais', val => {  // Possibly contains threats
+events.subscribe(AIS, val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);
 	// console.log(`Received AIS Data, ${keys.length} target(s).`);
@@ -174,10 +174,10 @@ events.subscribe('ais', val => {  // Possibly contains threats
 				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null
 			});
 		}
-		document.getElementById('ais-targets').innerHTML = aisTargets.length;
+		document.getElementById('ais-targets').innerHTML = `${aisTargets.length} / ${keys.length}`;
 	}
 });
-events.subscribe('gps-time', val => {
+events.subscribe(GPS_TIME, val => {
 	let date = new Date(val);
 	// val.format("Y-M-d H:i:s")
 	// let date = gpsTime.format("d-m-Y-l");
@@ -186,15 +186,25 @@ events.subscribe('gps-time', val => {
 	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
 	gpsDate = date;
 });
-events.subscribe('sog', val => {
+events.subscribe(SOG, val => {
 	document.getElementById('gps-sog').innerHTML = `${val} kn`;
 	sog = val;
 });
-events.subscribe('cog', val => {
+events.subscribe(COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
 	cog = val;
 });
+// events.subscribe(FULL, val => {
+// 	console.log(JSON.stringify(val, null, 2));
+// });
 ///// END OF SUBSCRIBERS ////
+
+// Display event subscribers ?
+if (false) {
+	console.log("Event Subscribers:");
+	events.listener.forEach(l => console.log(`- ${l.topic}`));
+	console.log("-------------------");
+}
 
 function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
 	
@@ -350,7 +360,7 @@ let updateMap = (elmt, context) => {
 			context.lineWidth = 2;
 
 			if (plotBorder.length > 0) {
-				console.log(`Border: plotting ${plotBorder.length} segments.`);
+				// console.log(`Border: plotting ${plotBorder.length} segments.`);
 				context.moveTo(plotBorder[0].x, plotBorder[0].y); // idx 0
 				for (let i=1; i<plotBorder.length; i++) {         // the rest, starts at 1
 					context.lineTo(plotBorder[i].x, plotBorder[i].y);

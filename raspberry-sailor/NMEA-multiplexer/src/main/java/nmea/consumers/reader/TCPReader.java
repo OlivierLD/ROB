@@ -181,6 +181,7 @@ public class TCPReader extends NMEAReader {
 	}
 
 	public void manageError(Throwable t) {
+		t.printStackTrace();
 		throw new RuntimeException(t);
 	}
 

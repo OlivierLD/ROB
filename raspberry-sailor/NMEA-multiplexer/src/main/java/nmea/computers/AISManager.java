@@ -122,7 +122,7 @@ public class AISManager extends Computer {
 														"\tBearing from target to current pos. %.02f\272\n" +
 														"\tCOG Target: %.02f",
 												aisRecord.getMMSI(),
-												vesselName.replace("@", " ").trim(),
+												vesselName != null ? vesselName.replace("@", " ").trim() : "-",
 												GeomUtil.decToSex(aisRecord.getLatitude(), GeomUtil.SWING, GeomUtil.NS),
 												GeomUtil.decToSex(aisRecord.getLongitude(), GeomUtil.SWING, GeomUtil.EW),
 												distToTarget,
@@ -134,7 +134,7 @@ public class AISManager extends Computer {
 										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
 										if (collisionCallback != null) {
 											// A test
-											String targetName = vesselName.replace("@", " ").trim();
+											String targetName = vesselName != null ? vesselName.replace("@", " ").trim() : "";
 											if (targetName.length() == 0) {
 												targetName = String.valueOf(aisRecord.getMMSI());
 											}
