@@ -157,9 +157,9 @@ public class TCPReader extends NMEAReader {
 			manageError(e);
 		}
 		if (this.keepTrying && this.goRead) { // Reconnect
-			System.out.println("--------------------------------");
-			System.out.println("-- Re-connecting the TCP feed --");
-			System.out.println("--------------------------------");
+			System.out.println("---------------------------------------");
+			System.out.printf("-- Re-connecting the TCP feed (on %s) --\n", hostName);
+			System.out.println("---------------------------------------");
 			startReader();
 		} else {
 			System.out.println("-- End of TCP reader.");

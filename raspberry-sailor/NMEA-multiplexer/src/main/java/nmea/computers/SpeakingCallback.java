@@ -5,7 +5,7 @@ import util.TextToSpeech;
 import java.util.function.Consumer;
 
 /**
- * This is just an example for AISManager collision callback.
+ * This is just an example for AISManager (or others) collision callback.
  * See in nmea.computers.AISManager and ais.mgr.properties
  *
  * This one is talking the message.

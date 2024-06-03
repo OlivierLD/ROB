@@ -21,7 +21,7 @@ public class TextToSpeech {
 		try {
 			switch (osName) {
 				case "Mac OS X":
-					commands.add("say");
+					commands.add("say"); // -v Thomas
 					commands.add("\"" + text + "\"");
 					Runtime.getRuntime().exec(commands.toArray(new String[0]));
 					break;
@@ -46,5 +46,10 @@ public class TextToSpeech {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	/* for tests... */
+	public static void main(String... args) {
+		speak("Warning! Collision threat!");
 	}
 }

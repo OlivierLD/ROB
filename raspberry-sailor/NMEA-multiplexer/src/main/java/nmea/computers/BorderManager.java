@@ -9,6 +9,7 @@ import nmea.api.Multiplexer;
 import nmea.parser.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -277,7 +278,9 @@ public class BorderManager extends Computer {
 										System.out.printf("\t>>> Border [%s], seg #%d, Detection granted (one: %f, two: %f).\n", name, seg, distToOne, distToTwo);
 									}
 									threatDetected = true;
-									threatMessages.add(String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist));
+									// String threatMessage = String.format("Threat detected at %s on border [%s], segment #%d, %f nm", utcDate, name, (seg + 1), segDist);
+									String threatMessage = String.format("BORDER;[%s];SEGMENT #%d", name, (seg + 1)); // TODO? Add date ?
+									threatMessages.add(threatMessage);
 									threats.add(new BorderThreat().borderName(name).date(utcDate.getDate()).segmentIdx(seg + 1).dist(segDist).minDist(this.minimumDistance));
 							    } else {
 								    if (VERBOSE) {
@@ -329,7 +332,13 @@ public class BorderManager extends Computer {
 				// The speaking callback might be a little too verbose...
 				try {
 					Class<?> aConsumer = Class.forName(callback);
-					this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
+					final Method[] methods = aConsumer.getMethods();
+					if (Arrays.stream(methods).filter(m -> m.getName().equals("getInstance")).findFirst().isPresent()) {
+						// a Singleton
+						this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredMethod("getInstance").invoke(null);
+					} else {
+						this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
+					}
 				} catch (ClassNotFoundException cnfe) {
 					cnfe.printStackTrace();
 				} catch (IllegalAccessException iae) {

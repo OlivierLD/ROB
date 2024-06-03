@@ -11,6 +11,8 @@ import util.TextToSpeech;
 import utils.TimeUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -140,7 +142,11 @@ public class AISManager extends Computer {
 											}
 											int bearingToTarget = (int)(180 + Math.round(bearingFromTarget));
 											bearingToTarget %= 360;
-											String messageToSpeak = String.format("Possible collision threat with %s, %.02f miles in the %d.",
+//											String messageToSpeak = String.format("Possible collision threat with %s, %.02f miles in the %d.",
+//													targetName,
+//													distToTarget,
+//													bearingToTarget);
+											String messageToSpeak = String.format("AIS-COLLISION;%s;%.02f;%d",
 													targetName,
 													distToTarget,
 													bearingToTarget);
@@ -206,8 +212,16 @@ public class AISManager extends Computer {
 				this.collisionCallback = defaultCallback;
 			} else {
 				try {
+//					Class<?> aConsumer = Class.forName(callback);
+//					this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
 					Class<?> aConsumer = Class.forName(callback);
-					this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
+					final Method[] methods = aConsumer.getMethods();
+					if (Arrays.stream(methods).filter(m -> m.getName().equals("getInstance")).findFirst().isPresent()) {
+						// A singleton
+						this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredMethod("getInstance").invoke(null);
+					} else {
+						this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
+					}
 				} catch (ClassNotFoundException cnfe) {
 					cnfe.printStackTrace();
 				} catch (IllegalAccessException iae) {
