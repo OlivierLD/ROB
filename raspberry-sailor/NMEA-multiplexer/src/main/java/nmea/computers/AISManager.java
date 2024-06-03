@@ -93,7 +93,13 @@ public class AISManager extends Computer {
 								// TODO Use the two speeds and headings (here and target). First degree equation solving.
 								if (distToTarget <= this.minimumDistance) {
 									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
-									String inRangeMessage = String.format("(%s) AISManager >> In range (%.02f/%.02f nm), diff heading: %.02f/%.02f", TimeUtil.getTimeStamp(), distToTarget, this.minimumDistance, diffHeading, this.headingFork);
+									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), diff heading: %.02f/%.02f",
+											TimeUtil.getTimeStamp(),
+											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : ""), // MMSI ?
+											distToTarget,
+											this.minimumDistance,
+											diffHeading,
+											this.headingFork);
 									System.out.println(inRangeMessage);
 									if (false) {
 										// A test
