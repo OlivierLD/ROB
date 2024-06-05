@@ -829,6 +829,8 @@ Web UI below is using the "Chartless Map" webcomponent.
 |                      Markers display                       |
 | ![Border Threat display](./docimages/border.threat.02.png) |
 
+For the way the collision threats are managed, see [here](../MUX-implementations/RESTNavServer/README.md#bonus).
+
 ### More
 - See a closed borders example (Groix) in `markers.02.yaml`.
 - See the script `markers.to.gpx.sh`, it generates a GPX file from the markers, that can be used for OpenCPN validation.
