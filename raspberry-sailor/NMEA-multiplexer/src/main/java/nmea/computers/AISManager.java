@@ -1,12 +1,15 @@
 package nmea.computers;
 
 import calc.GeomUtil;
+import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.ais.AISParser;
 import nmea.api.Multiplexer;
 import nmea.parser.GeoPos;
+import nmea.parser.Speed;
 import nmea.parser.StringParsers;
+import util.MercatorUtil;
 import util.TextToSpeech;
 import utils.TimeUtil;
 
@@ -67,6 +70,36 @@ public class AISManager extends Computer {
 	};
 	private Consumer<String> collisionCallback = null;
 
+	private static double findCollision(GeoPos position, double sog, double cog, GeoPos targetPos, double targetSog, double targetCog) {
+		double originalDistance = GeomUtil.haversineNm(position.lat, position.lng, targetPos.lat, targetPos.lng);
+		double smallestDist = originalDistance;
+		boolean keepLooping = true;
+		while (keepLooping) {
+			// New position, 10 seconds later
+			double dist = sog * (10d / 3_600d);
+			GreatCirclePoint pt = MercatorUtil.deadReckoning(position.lat, position.lng, dist, cog);
+			GeoPos newPos = new GeoPos(pt.getL(), pt.getG());
+
+			// New target position, 10 seconds later
+			dist = targetSog * (10d / 3_600d);
+			pt = MercatorUtil.deadReckoning(targetPos.lat, targetPos.lng, dist, targetCog);
+			GeoPos newTargetPos = new GeoPos(pt.getL(), pt.getG());
+
+			double newRange = GeomUtil.haversineNm(position.lat, position.lng, newTargetPos.lat, newTargetPos.lng);
+			if (newRange < smallestDist) { // Still closing
+				smallestDist = newRange;
+				position = newPos;
+				targetPos = newTargetPos;
+				if (true) {
+					System.out.printf("Smallest distance is now %.03f nm\n", smallestDist);
+				}
+			} else {
+				keepLooping = false;
+			}
+		}
+		return smallestDist;
+	}
+
 	/**
 	 * Wait for AIS data (not cached), get the position from the cache,
 	 * and computes threat.
@@ -95,7 +128,7 @@ public class AISManager extends Computer {
 									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
 									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), diff heading: %.02f/%.02f",
 											TimeUtil.getTimeStamp(),
-											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : ""), // MMSI ?
+											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : (aisRecord.getMMSI() != 0 ? aisRecord.getMMSI() : "")), // MMSI ?
 											distToTarget,
 											this.minimumDistance,
 											diffHeading,
@@ -106,7 +139,14 @@ public class AISManager extends Computer {
 										String messToSpeak = String.format("Boat in range %.02f miles! %s", distToTarget, (aisRecord.getVesselName() != null ? aisRecord.getVesselName() : ""));
 										TextToSpeech.speak(messToSpeak);
 									}
-									if (diffHeading < this.headingFork) { // Possible collision route (if you don't move)
+									double sog = cache.get(NMEADataCache.SOG) != null ? ((Speed)cache.get(NMEADataCache.SOG)).getSpeed() : 0d;
+									double cog = cache.get(NMEADataCache.COG) != null ? (Double)cache.get(NMEADataCache.COG) : 0d;
+									double targetSog = aisRecord.getSog();
+									double targetCog = aisRecord.getCog();
+									GeoPos targetPosition = new GeoPos(aisRecord.getLatitude(), aisRecord.getLongitude());
+									double dist = findCollision(position, sog, cog, targetPosition, targetSog, targetCog);
+									// TODO Tweak this condition...
+									if (dist < this.minimumDistance / 2.0) { // diffHeading < this.headingFork) { // Possible collision route (if you don't move)
 										// Collision threat in the cache
 										aisRecord.setCollisionThreat(new AISParser.CollisionThreat(distToTarget, bearingFromTarget, this.minimumDistance));
 										// Find vesselName if it exists
@@ -128,7 +168,9 @@ public class AISManager extends Computer {
 										String warningText = String.format("!!! Possible collision threat with %s (%s), at %s / %s\n" +
 														"\tdistance %.02f nm (min is %.02f)\n" +
 														"\tBearing from target to current pos. %.02f\272\n" +
-														"\tCOG Target: %.02f",
+														"\tCOG Target: %.02f\n" +
+														"\tSOG Target: %.02f\n" +
+														"\tMin dist: %.03fnm",
 												aisRecord.getMMSI(),
 												vesselName != null ? vesselName.replace("@", " ").trim() : "-",
 												GeomUtil.decToSex(aisRecord.getLatitude(), GeomUtil.SWING, GeomUtil.NS),
@@ -136,7 +178,9 @@ public class AISManager extends Computer {
 												distToTarget,
 												this.minimumDistance,
 												bearingFromTarget,
-												aisRecord.getCog());
+												aisRecord.getCog(),
+												aisRecord.getSog(),
+												dist);
 
 										System.out.println(warningText);
 										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
@@ -277,5 +321,19 @@ public class AISManager extends Computer {
 	@Override
 	public Object getBean() {
 		return new AISComputerBean(this);
+	}
+
+	// For tests
+	public static void main(String[] args) {
+		GeoPos A = new GeoPos(47.677667, -3.135667);
+		double sogA = 0.0;
+		double cogA = 90.0;
+
+		GeoPos B = new GeoPos(47.8, -3.135667);
+		double sogB = 5.0;
+		double cogB = 182.0;
+
+		double dist = findCollision(A, sogA, cogA, B, sogB, cogB);
+		System.out.printf("Done, smallest dist is %.03f nm\n", dist);
 	}
 }
