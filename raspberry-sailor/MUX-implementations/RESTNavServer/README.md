@@ -428,9 +428,15 @@ Where `ais.mgr.properties` looks like
 ```properties
 # Properties of the AISManager Computer
 minimum.distance=5
-heading.fork.width=10
+collision.threat.distance=1
 ```
 
+**To compute collision threats**	 
+Find the shortest distance between two trajectories.
+- We start with the boat's position, and the AIS target's position.
+- We measure the distance between those two positions.
+- Now, as long as this distance is shrinking, we keep moving the two position, at their respective speed, in their respective heading.
+- As soon as the distance between the two position starts to grow (or stops shrinking), we stop looping, and return the smallest distance found.
 
 #### AIS plotter
 - See [here](../../dAISy/README.md) and [here](../../NMEA-multiplexer/casestudy.md#ais)

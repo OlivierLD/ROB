@@ -54,8 +54,8 @@ public class AISManager extends Computer {
 
 	private final static double DEFAULT_MINIMUM_DISTANCE = 20D;
 	private double minimumDistance = DEFAULT_MINIMUM_DISTANCE;
-	private final static double DEFAULT_HEADING_FORK = 10;
-	private double headingFork = DEFAULT_HEADING_FORK;
+	private final static double DEFAULT_COLLISION_THREAT_DISTANCE = 1;
+	private double collisionThreatDistance = DEFAULT_COLLISION_THREAT_DISTANCE;
 
 	private final AISParser aisParser = new AISParser();
 
@@ -70,12 +70,30 @@ public class AISManager extends Computer {
 	};
 	private Consumer<String> collisionCallback = null;
 
+
+	/**
+	 * Find the shortest distance between two trajectories.
+	 * <br/>
+	 * We start with the boat's position, and the AIS target's position.<br/>
+	 * We measure the distance between those two positions.<br/>
+	 * Now, as long as this distance is shrinking, we keep moving the two position, at their respective speed, in their respective heading.<br/>
+	 * As soon as the distance between the two position starts to grow (or stops shrinking),
+	 * we stop looping, and return the smallest distance found.<br/>
+	 *
+	 * @param position The boat's original position
+	 * @param sog The boat's SOG
+	 * @param cog The boat's COG
+	 * @param targetPos The AIS target's original position
+	 * @param targetSog The AIS target's SOG
+	 * @param targetCog The AIS target's COG
+	 * @return the shortest distance found, with an interval of 10 seconds
+	 */
 	private static double findCollision(GeoPos position, double sog, double cog, GeoPos targetPos, double targetSog, double targetCog) {
 		double originalDistance = GeomUtil.haversineNm(position.lat, position.lng, targetPos.lat, targetPos.lng);
 		double smallestDist = originalDistance;
 		boolean keepLooping = true;
 		while (keepLooping) {
-			// New position, 10 seconds later
+			// New boat position, 10 seconds later
 			double dist = sog * (10d / 3_600d);
 			GreatCirclePoint pt = MercatorUtil.deadReckoning(position.lat, position.lng, dist, cog);
 			GeoPos newPos = new GeoPos(pt.getL(), pt.getG());
@@ -123,7 +141,7 @@ public class AISManager extends Computer {
 							if (position != null) {
 								double distToTarget = GeomUtil.haversineNm(position.lat, position.lng, aisRecord.getLatitude(), aisRecord.getLongitude());
 								double bearingFromTarget = GeomUtil.bearingFromTo(aisRecord.getLatitude(), aisRecord.getLongitude(), position.lat, position.lng);
-								// TODO Use the two speeds and headings (here and target). First degree equation solving.
+								// It's worth calculating
 								if (distToTarget <= this.minimumDistance) {
 									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
 									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), diff heading: %.02f/%.02f",
@@ -132,7 +150,7 @@ public class AISManager extends Computer {
 											distToTarget,
 											this.minimumDistance,
 											diffHeading,
-											this.headingFork);
+											this.collisionThreatDistance);
 									System.out.println(inRangeMessage);
 									if (false) {
 										// A test
@@ -145,8 +163,8 @@ public class AISManager extends Computer {
 									double targetCog = aisRecord.getCog();
 									GeoPos targetPosition = new GeoPos(aisRecord.getLatitude(), aisRecord.getLongitude());
 									double dist = findCollision(position, sog, cog, targetPosition, targetSog, targetCog);
-									// TODO Tweak this condition...
-									if (dist < this.minimumDistance / 2.0) { // diffHeading < this.headingFork) { // Possible collision route (if you don't move)
+									// Then warn
+									if (dist < this.collisionThreatDistance) { // diffHeading < this.headingFork) { // Possible collision route (if you don't move)
 										// Collision threat in the cache
 										aisRecord.setCollisionThreat(new AISParser.CollisionThreat(distToTarget, bearingFromTarget, this.minimumDistance));
 										// Find vesselName if it exists
@@ -254,7 +272,7 @@ public class AISManager extends Computer {
 	public void setProperties(Properties props) {
 		this.props = props;
 		this.minimumDistance = Double.parseDouble(props.getProperty("minimum.distance", String.valueOf(DEFAULT_MINIMUM_DISTANCE)));
-		this.headingFork = Double.parseDouble(props.getProperty("heading.fork.width", String.valueOf(DEFAULT_HEADING_FORK)));
+		this.collisionThreatDistance = Double.parseDouble(props.getProperty("collision.threat.distance", String.valueOf(DEFAULT_COLLISION_THREAT_DISTANCE)));
 		this.verbose = "true".equals(props.getProperty("verbose"));
 		String callback = props.getProperty("collision.threat.callback");
 		if (callback != null) {
@@ -286,11 +304,11 @@ public class AISManager extends Computer {
 			}
 		}
 		if (this.verbose) {
-			System.out.println(String.format("Computer %s:\nVerbose: %s\nMinimum Distance: %.02f\nHeading Fork: %.01f",
+			System.out.println(String.format("Computer %s:\nVerbose: %s\nMinimum Distance: %.02f\nCollision Threat Distance: %.01f",
 					this.getClass().getName(),
 					this.verbose,
 					this.minimumDistance,
-					this.headingFork));
+					this.collisionThreatDistance));
 		}
 	}
 
