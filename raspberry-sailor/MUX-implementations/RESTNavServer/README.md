@@ -431,8 +431,8 @@ minimum.distance=5
 collision.threat.distance=1
 ```
 
-**To compute collision threats**	 
-Find the shortest distance between two trajectories.
+##### To compute collision threats     
+Find the shortest distance between two trajectories.  
 - We start with the boat's position, and the AIS target's position.
 - We measure the distance between those two positions.
 - Now, as long as this distance is shrinking, we keep moving the two position, at their respective speed, in their respective heading.
