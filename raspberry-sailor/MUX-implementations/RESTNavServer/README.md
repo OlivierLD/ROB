@@ -435,8 +435,8 @@ collision.threat.distance=1
 Find the shortest distance between two trajectories.  
 - We start with the boat's position, and the AIS target's position.
 - We measure the distance between those two positions.
-- Now, as long as this distance is shrinking, we keep moving the two position, at their respective speed, in their respective heading.
-- As soon as the distance between the two position starts to grow (or stops shrinking), we stop looping, and return the smallest distance found.
+  - Now, as long as this distance is shrinking, we keep moving the two positions, at their respective speed, in their respective heading.
+- As soon as the distance between the two positions starts to grow (or stops shrinking), we stop looping, and return the smallest distance found.
 
 The calculation starts if the distance to the target is below the `minimum.distance`.  
 And it becomes a threat if the small distance found is below the `collision.threat.distance`.
