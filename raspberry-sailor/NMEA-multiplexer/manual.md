@@ -704,6 +704,1227 @@ Such a file can be rendered like this:
 
 <img src="./docimages/deviation.curve.png" title="deviation curve" width="318" height="440">
 
+#### Web UI, json, and others
+On the server, there is a cache, which is initialized if `with.http.server` is set to `yes`.  
+This cache is read on a regular basis by a REST service `GET /mux/cache`. This is usually done ina script name `ajax.manager.js`.  
+To see what's retrieved, just do a
+```
+$ curl -X GET http://localhost:9876/mux/cache | jq 
+```
+If you do not have `jq`, install it, it's a cool one.  
+Then, depending on what you want to do in your Web UI, you can `subscribe` to different topics. Look for `events.subscribe` to see some examples.  
+
+<div style="width: 100%; height: 200px; overflow: auto">
+<pre style="font-family='Courier'">
+$ curl -X GET http://localhost:9999/mux/cache | jq
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 16370  100 16370    0     0   150k      0 --:--:-- --:--:-- --:--:--  152k
+{
+  "Damping": 1,
+  "NMEA_AS_IS": {
+    "GGA": "$GPGGA,201053.00,4738.52432,N,00323.04391,W,1,08,1.17,-6.4,M,49.6,M,,*67",
+    "MMB": "$PYMMB,30.3035,I,1.0261,B*72",
+    "GLL": "$GPGLL,4738.52432,N,00323.04391,W,201053.00,A,A*79",
+    "XDR": "$PYXDR,H,44.1,P,0,C,31.6,C,1,C,17.9,C,DEWP,P,102608,P,3,P,1.0261,B,4*4E",
+    "VTG": "$GPVTG,273.49,T,,M,2.690,N,4.983,K,A*3D",
+    "RMC": "$GPRMC,201053.00,A,4738.52432,N,00323.04391,W,2.690,273.49,230623,,,A*7E",
+    "AIS": "!AIVDM,1,1,,A,402:nvAvQRggMOiEsNKAKE?008Ag,0*30\r",
+    "GSV": [
+      "$GPGSV,3,1,12,05,45,304,35,06,13,187,23,07,58,073,32,09,25,076,27*73",
+      "$GPGSV,3,2,12,11,42,226,28,13,28,258,34,14,06,148,21,16,02,019,24*77",
+      "$GPGSV,3,3,12,20,72,281,32,29,04,300,35,30,68,148,29,39,06,107,*7C"
+    ],
+    "MWV": "$CCMWV,061.0,T,002.5,N,A*3B",
+    "TXT": "$GPTXT,01,01,02,LLC FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFF-FFFFFFFD*2C",
+    "VWT": "$CCVWT,61.2,R,2.5,N,1.3,M,4.6,K*7D",
+    "GSA": "$GPGSA,A,3,09,07,13,05,20,11,06,30,,,,,2.01,1.17,1.64*0B",
+    "MLS": "$PNMLS,36,25,3*51\r",
+    "MWD": "$CCMWD,060.0,T,,M,2.5,N,1.3,M*69",
+    "MTA": "$PYMTA,31.6,C*08"
+  },
+  "dewpoint": 17.9,
+  "HDG Offset": 0,
+  "Relative Humidity": 44.1,
+  "Delta Altitude": 37.1,
+  "ais": {
+    "2275065": {
+      "4": {
+        "messageType": 4,
+        "repeatIndicator": 0,
+        "recordTimeStamp": 1717602450279,
+        "messageDescription": "Base Station",
+        "navStatusDesc": null,
+        "aidTypeDesc": null,
+        "vesselNameStr": null,
+        "nameStr": null,
+        "shipTypeStr": null,
+        "recordContent": {
+          "UtcYear": 2024,
+          "UtcHour": 15,
+          "UtcMinute": 47,
+          "UtcSecond": 29,
+          "latitude": 47.661793,
+          "PosAcc": 0,
+          "UtcMonth": 6,
+          "UtDay": 5,
+          "longitude": -3.2019484
+        },
+        "collisionThreat": null,
+        "partNo": 0,
+        "aidType": 0,
+        "funcId": 0,
+        "binData": null,
+        "etaDay": 0,
+        "etaHour": 0,
+        "draught": 0,
+        "offset1": 0,
+        "offset2": 0,
+        "offset3": 0,
+        "offset4": 0,
+        "rot": 0,
+        "posAcc": 0,
+        "hdg": 0,
+        "utc": 0,
+        "utcYear": 2024,
+        "utcDay": 5,
+        "utcHour": 15,
+        "mmsi": 2275065,
+        "sog": 0,
+        "cog": 0,
+        "latitude": 47.661793,
+        "longitude": -3.2019484,
+        "navStatus": 0,
+        "utcMonth": 6,
+        "utcMinute": 47,
+        "utcSecond": 29,
+        "aisVersion": 0,
+        "imoNumber": 0,
+        "shipType": 0,
+        "dimToBow": 0,
+        "dimToStern": 0,
+        "dimToPort": 0,
+        "dimToStbd": 0,
+        "etaMonth": 0,
+        "etaMinute": 0,
+        "callSign": null,
+        "vesselName": null,
+        "destination": null,
+        "designatedAreaCode": 0,
+        "interrogatedMMSI": 0,
+        "firstMessageType": 0,
+        "firstSlotOffset": 0,
+        "secondMessageType": 0,
+        "interrogatedMMSI2": 0,
+        "firstMessageType2": 0,
+        "firstSlotOffset2": 0,
+        "timeout1": 0,
+        "increment1": 0,
+        "timeout2": 0,
+        "increment2": 0,
+        "timeout3": 0,
+        "increment3": 0,
+        "timeout4": 0,
+        "increment4": 0,
+        "nameExtension": null,
+        "unitModelCode": 0,
+        "serialNumber": 0,
+        "motherMMSI": 0,
+        "vendorId": null,
+        "secondSlotOffset": 0,
+        "name": null
+      }
+    }
+  },
+  "NbMess": 468615,
+  "Air Temperature": {
+    "temperature": 31.6,
+    "value": 31.6
+  },
+  "markers-file-name": [
+    "mux-configs/markers.02.yaml",
+    "mux-configs/bretagne.bumper.markers.yaml",
+    "mux-configs/san.juan.markers.yaml"
+  ],
+  "Max Leeway": 0,
+  "COG": {
+    "angle": 273,
+    "doubleValue": 273,
+    "value": 273
+  },
+  "AWA Offset": 0,
+  "TWD": {
+    "angle": 60,
+    "doubleValue": 60,
+    "value": 60
+  },
+  "RMCStatus": true,
+  "Current calculated with damping": {},
+  "markers-data": [
+    {
+      "latitude": 47.705,
+      "longitude": -3.105,
+      "label": "Locoal",
+      "type": "default"
+    },
+    {
+      "latitude": 47.661667,
+      "longitude": -2.758167,
+      "label": "Vannes",
+      "type": null
+    },
+    {
+      "latitude": 47.677667,
+      "longitude": -3.135667,
+      "label": "Belz",
+      "type": "default"
+    },
+    {
+      "latitude": 49.293167,
+      "longitude": -0.098833,
+      "label": "Dives",
+      "type": null
+    },
+    {
+      "latitude": 37.7489,
+      "longitude": -122.507,
+      "label": "SF",
+      "type": null
+    },
+    {
+      "latitude": 48.48518833333333,
+      "longitude": -123.07788833333333,
+      "label": "False Bay, San Juan Island",
+      "type": null
+    },
+    {
+      "latitude": 48.60448,
+      "longitude": -122.819285,
+      "label": "Olga, Orcas Island",
+      "type": null
+    },
+    {
+      "latitude": 39.167398801021655,
+      "longitude": -107.24753700739706,
+      "label": "Redstone, CO.",
+      "type": null
+    },
+    {
+      "latitude": 47.643065,
+      "longitude": -3.214258,
+      "label": "Etel, la barre",
+      "type": "red"
+    },
+    {
+      "latitude": 47.659823,
+      "longitude": -3.211443,
+      "label": "Magouer",
+      "type": "default"
+    },
+    {
+      "latitude": 47.675858,
+      "longitude": -3.200143,
+      "label": "Pont Lorois",
+      "type": "default"
+    },
+    {
+      "latitude": 47.687092,
+      "longitude": -3.18495,
+      "label": "St Cado",
+      "type": "default"
+    },
+    {
+      "latitude": 47.683498,
+      "longitude": -3.171165,
+      "label": "Pte du Perche",
+      "type": null
+    },
+    {
+      "latitude": 47.642375,
+      "longitude": -3.244957,
+      "label": "Roheu",
+      "type": "card-s"
+    },
+    {
+      "latitude": 47.647265,
+      "longitude": -3.425327,
+      "label": "Basse Mélite",
+      "type": "card-n"
+    },
+    {
+      "latitude": 47.651588,
+      "longitude": -3.438815,
+      "label": "SpeerBrecker",
+      "type": "card-e"
+    },
+    {
+      "latitude": 47.617237,
+      "longitude": -3.418165,
+      "label": "Pte des Chats",
+      "type": "card-w"
+    },
+    {
+      "latitude": 47.621502,
+      "longitude": -3.436955,
+      "label": "",
+      "type": "green"
+    },
+    {
+      "latitude": 47.69199,
+      "longitude": -3.419095,
+      "label": "Grasu",
+      "type": "card-s"
+    },
+    {
+      "latitude": 47.697765,
+      "longitude": -3.397415,
+      "label": "",
+      "type": "sp"
+    },
+    {
+      "latitude": 47.574503,
+      "longitude": -3.202672,
+      "label": "",
+      "type": "sp"
+    },
+    {
+      "latitude": 47.592078,
+      "longitude": -3.221455,
+      "label": "Pierres Noires - Chiviguete",
+      "type": "is-dng"
+    },
+    {
+      "latitude": 47.485365,
+      "longitude": -3.290765,
+      "label": "Birvideaux",
+      "type": "is-dng"
+    },
+    {
+      "latitude": 47.63827049009266,
+      "longitude": -3.4202241897583012,
+      "label": "Les Grands Sables",
+      "type": "default"
+    },
+    {
+      "latitude": 47.64488421908084,
+      "longitude": -3.446303757882561,
+      "label": "Port-Tudy",
+      "type": "default"
+    },
+    {
+      "latitude": 0,
+      "longitude": 0,
+      "label": "Dummy Placeholder",
+      "type": "default"
+    },
+    {
+      "latitude": 49.87782278455927,
+      "longitude": -6.4211732394778025,
+      "label": "Scilly",
+      "type": "default"
+    },
+    {
+      "latitude": 48.449243890328724,
+      "longitude": -5.141519489037834,
+      "label": "Ouessant",
+      "type": "default"
+    },
+    {
+      "latitude": 48.05010133315703,
+      "longitude": -4.997748816529507,
+      "label": "Ar men",
+      "type": "default"
+    },
+    {
+      "latitude": 47.79534081403717,
+      "longitude": -4.377272156211105,
+      "label": "Penmarc'h",
+      "type": "default"
+    },
+    {
+      "latitude": 47.69797833149736,
+      "longitude": -3.9993187906962406,
+      "label": "Glénan",
+      "type": "default"
+    },
+    {
+      "latitude": 47.29413372501023,
+      "longitude": -3.235782711604801,
+      "label": "Belle-Ile",
+      "type": "default"
+    },
+    {
+      "latitude": 46.72244683461266,
+      "longitude": -2.403562788866225,
+      "label": "Yeu",
+      "type": "default"
+    },
+    {
+      "latitude": 48.53808386598439,
+      "longitude": -123.01543854904595,
+      "label": "Friday Harbor",
+      "type": "default"
+    }
+  ],
+  "Position": {
+    "lat": 47.642072000000006,
+    "lng": -3.384065166666667,
+    "gridSquare": "IN87hp",
+    "googlePlusCode": "8CVRJJR8+R9",
+    "latInDegMinDec": "N  47°38.52'",
+    "lngInDegMinDec": "W 003°23.04'"
+  },
+  "Solar Time": {
+    "date": 1687550102595,
+    "fmtDate": {
+      "epoch": 1687550102595,
+      "year": 2023,
+      "month": 6,
+      "day": 23,
+      "hour": 19,
+      "min": 55,
+      "sec": 2,
+      "tz": null
+    },
+    "value": 1687550102595
+  },
+  "Default Declination": {
+    "angle": -1,
+    "doubleValue": -1,
+    "value": -1
+  },
+  "Deviation file name": "zero-deviation.csv",
+  "SOG": {
+    "speed": 2.69,
+    "doubleValue": 2.69,
+    "value": 2.69
+  },
+  "GPS Date & Time": {
+    "date": 1687551053000,
+    "epoch": 1687551053000,
+    "fmtDate": {
+      "epoch": 1687551053000,
+      "year": 2023,
+      "month": 6,
+      "day": 23,
+      "hour": 20,
+      "min": 10,
+      "sec": 53,
+      "tz": null
+    },
+    "value": 1687551053000
+  },
+  "BSP Factor": 1,
+  "borders-data": [
+    {
+      "borderName": "Etel, Right bank",
+      "borderType": "open",
+      "markerList": [
+        {
+          "latitude": 47.6600691664467,
+          "longitude": -3.2113552093505864,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 47.65532858402682,
+          "longitude": -3.2104969024658208,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 47.6508766696586,
+          "longitude": -3.209638595581055,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 47.643851123756754,
+          "longitude": -3.213286399841309,
+          "label": "4",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "borderName": "Etel, Left bank",
+      "borderType": "open",
+      "markerList": [
+        {
+          "latitude": 47.65639814326938,
+          "longitude": -3.207557201385498,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 47.651628318194355,
+          "longitude": -3.2067632675170903,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 47.6471038087798,
+          "longitude": -3.2091021537780766,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 47.64318610543658,
+          "longitude": -3.21176290512085,
+          "label": "4",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "borderName": "Groix",
+      "borderType": "closed",
+      "markerList": [
+        {
+          "latitude": 47.64561482699582,
+          "longitude": -3.4445571899414067,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 47.643764382716846,
+          "longitude": -3.4296226501464844,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 47.6338171216314,
+          "longitude": -3.41451644897461,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 47.61935551640258,
+          "longitude": -3.420181274414063,
+          "label": "4",
+          "type": "default"
+        },
+        {
+          "latitude": 47.619702641789864,
+          "longitude": -3.46395492553711,
+          "label": "5",
+          "type": "default"
+        },
+        {
+          "latitude": 47.628727092912776,
+          "longitude": -3.4867858886718754,
+          "label": "6",
+          "type": "default"
+        },
+        {
+          "latitude": 47.63867532295018,
+          "longitude": -3.505840301513672,
+          "label": "7",
+          "type": "default"
+        },
+        {
+          "latitude": 47.64769649845601,
+          "longitude": -3.515796661376953,
+          "label": "8",
+          "type": "default"
+        },
+        {
+          "latitude": 47.65278467943264,
+          "longitude": -3.5142517089843754,
+          "label": "9",
+          "type": "default"
+        },
+        {
+          "latitude": 47.65440354214958,
+          "longitude": -3.4963989257812504,
+          "label": "10",
+          "type": "default"
+        },
+        {
+          "latitude": 47.649662445325056,
+          "longitude": -3.464469909667969,
+          "label": "11",
+          "type": "default"
+        },
+        {
+          "latitude": 47.64561482699582,
+          "longitude": -3.4445571899414067,
+          "label": "12",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "borderName": "East Atlantic Bumper",
+      "borderType": "open",
+      "markerList": [
+        {
+          "latitude": 49.87782278455927,
+          "longitude": -6.4211732394778025,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 48.449243890328724,
+          "longitude": -5.141519489037834,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 48.05010133315703,
+          "longitude": -4.997748816529507,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 47.79534081403717,
+          "longitude": -4.377272156211105,
+          "label": "4",
+          "type": "default"
+        },
+        {
+          "latitude": 47.69797833149736,
+          "longitude": -3.9993187906962406,
+          "label": "5",
+          "type": "default"
+        },
+        {
+          "latitude": 47.29413372501023,
+          "longitude": -3.235782711604801,
+          "label": "6",
+          "type": "default"
+        },
+        {
+          "latitude": 46.72244683461266,
+          "longitude": -2.403562788866225,
+          "label": "7",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "borderName": "San Juan Island",
+      "borderType": "closed",
+      "markerList": [
+        {
+          "latitude": 48.626953641313015,
+          "longitude": -123.14419931033629,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 48.616514138885826,
+          "longitude": -123.09270089725032,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 48.59926153455484,
+          "longitude": -123.09956735232848,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 48.56155771605833,
+          "longitude": -123.01236337283629,
+          "label": "4",
+          "type": "default"
+        },
+        {
+          "latitude": 48.544740926419266,
+          "longitude": -122.99794381717223,
+          "label": "5",
+          "type": "default"
+        },
+        {
+          "latitude": 48.538830997700046,
+          "longitude": -123.01991647342223,
+          "label": "6",
+          "type": "default"
+        },
+        {
+          "latitude": 48.53655776445386,
+          "longitude": -122.97940438846126,
+          "label": "7",
+          "type": "default"
+        },
+        {
+          "latitude": 48.52428054098031,
+          "longitude": -122.96704476932067,
+          "label": "8",
+          "type": "default"
+        },
+        {
+          "latitude": 48.51018079863266,
+          "longitude": -122.99176400760192,
+          "label": "9",
+          "type": "default"
+        },
+        {
+          "latitude": 48.5156392289309,
+          "longitude": -123.01167672732848,
+          "label": "10",
+          "type": "default"
+        },
+        {
+          "latitude": 48.47104483900124,
+          "longitude": -122.99931710818785,
+          "label": "11",
+          "type": "default"
+        },
+        {
+          "latitude": 48.46603689785803,
+          "longitude": -122.96017831424251,
+          "label": "12",
+          "type": "default"
+        },
+        {
+          "latitude": 48.44827748782604,
+          "longitude": -122.96017831424251,
+          "label": "13",
+          "type": "default"
+        },
+        {
+          "latitude": 48.45829638036864,
+          "longitude": -123.04600900271907,
+          "label": "14",
+          "type": "default"
+        },
+        {
+          "latitude": 48.508816099177416,
+          "longitude": -123.15587228396907,
+          "label": "15",
+          "type": "default"
+        },
+        {
+          "latitude": 48.563829826505994,
+          "longitude": -123.18059152225035,
+          "label": "16",
+          "type": "default"
+        },
+        {
+          "latitude": 48.587907922400625,
+          "longitude": -123.2053107605316,
+          "label": "17",
+          "type": "default"
+        },
+        {
+          "latitude": 48.62786132209316,
+          "longitude": -123.18127816775817,
+          "label": "18",
+          "type": "default"
+        },
+        {
+          "latitude": 48.619237695508524,
+          "longitude": -123.16479867557067,
+          "label": "19",
+          "type": "default"
+        },
+        {
+          "latitude": 48.626953641313015,
+          "longitude": -123.14419931033629,
+          "label": "20",
+          "type": "default"
+        }
+      ]
+    },
+    {
+      "borderName": "Orcas Island",
+      "borderType": "closed",
+      "markerList": [
+        {
+          "latitude": 48.714330526104554,
+          "longitude": -122.95106563484298,
+          "label": "1",
+          "type": "default"
+        },
+        {
+          "latitude": 48.71387746592061,
+          "longitude": -122.87347469246016,
+          "label": "2",
+          "type": "default"
+        },
+        {
+          "latitude": 48.66220185892999,
+          "longitude": -122.73683223640548,
+          "label": "3",
+          "type": "default"
+        },
+        {
+          "latitude": 48.619098340658624,
+          "longitude": -122.80275020515548,
+          "label": "4",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60411691945029,
+          "longitude": -122.79863033210862,
+          "label": "5",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60502501090915,
+          "longitude": -122.81442317878829,
+          "label": "6",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60003030582845,
+          "longitude": -122.83021602546798,
+          "label": "7",
+          "type": "default"
+        },
+        {
+          "latitude": 48.64768689297568,
+          "longitude": -122.87896785652266,
+          "label": "8",
+          "type": "default"
+        },
+        {
+          "latitude": 48.690765986364426,
+          "longitude": -122.88583431160079,
+          "label": "9",
+          "type": "default"
+        },
+        {
+          "latitude": 48.69348553478624,
+          "longitude": -122.90918025886641,
+          "label": "10",
+          "type": "default"
+        },
+        {
+          "latitude": 48.68351313909143,
+          "longitude": -122.91879329597579,
+          "label": "11",
+          "type": "default"
+        },
+        {
+          "latitude": 48.670818142759636,
+          "longitude": -122.91192684089766,
+          "label": "12",
+          "type": "default"
+        },
+        {
+          "latitude": 48.65040876741358,
+          "longitude": -122.90437374031174,
+          "label": "13",
+          "type": "default"
+        },
+        {
+          "latitude": 48.63589040596372,
+          "longitude": -122.88308772956955,
+          "label": "14",
+          "type": "default"
+        },
+        {
+          "latitude": 48.61047321678314,
+          "longitude": -122.86042842781174,
+          "label": "15",
+          "type": "default"
+        },
+        {
+          "latitude": 48.59276439853876,
+          "longitude": -122.8755346289836,
+          "label": "16",
+          "type": "default"
+        },
+        {
+          "latitude": 48.58867686644934,
+          "longitude": -122.88789424812423,
+          "label": "17",
+          "type": "default"
+        },
+        {
+          "latitude": 48.594580973331304,
+          "longitude": -122.94763240730393,
+          "label": "18",
+          "type": "default"
+        },
+        {
+          "latitude": 48.629991127841016,
+          "longitude": -122.95999202644454,
+          "label": "19",
+          "type": "default"
+        },
+        {
+          "latitude": 48.62772199105168,
+          "longitude": -122.96685848152268,
+          "label": "20",
+          "type": "default"
+        },
+        {
+          "latitude": 48.640881564096006,
+          "longitude": -122.98608455574141,
+          "label": "21",
+          "type": "default"
+        },
+        {
+          "latitude": 48.63271395729978,
+          "longitude": -122.9902044287883,
+          "label": "22",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60411691945029,
+          "longitude": -122.9744115821086,
+          "label": "23",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60003030582845,
+          "longitude": -122.97509822761641,
+          "label": "24",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60139267528643,
+          "longitude": -122.99009520997062,
+          "label": "25",
+          "type": "default"
+        },
+        {
+          "latitude": 48.61606685496958,
+          "longitude": -123.00077834108382,
+          "label": "26",
+          "type": "default"
+        },
+        {
+          "latitude": 48.62514488605077,
+          "longitude": -123.00438322999983,
+          "label": "27",
+          "type": "default"
+        },
+        {
+          "latitude": 48.622081233086355,
+          "longitude": -123.00455489137676,
+          "label": "28",
+          "type": "default"
+        },
+        {
+          "latitude": 48.622194705030964,
+          "longitude": -123.00730147340803,
+          "label": "29",
+          "type": "default"
+        },
+        {
+          "latitude": 48.613910582661454,
+          "longitude": -123.00901808717757,
+          "label": "30",
+          "type": "default"
+        },
+        {
+          "latitude": 48.60880325457142,
+          "longitude": -123.0234376428416,
+          "label": "31",
+          "type": "default"
+        },
+        {
+          "latitude": 48.611300235070146,
+          "longitude": -123.02790083864241,
+          "label": "32",
+          "type": "default"
+        },
+        {
+          "latitude": 48.630023653147504,
+          "longitude": -123.0297891137889,
+          "label": "33",
+          "type": "default"
+        },
+        {
+          "latitude": 48.63762451303253,
+          "longitude": -123.02000441530257,
+          "label": "34",
+          "type": "default"
+        },
+        {
+          "latitude": 48.654700400226176,
+          "longitude": -123.01067071559375,
+          "label": "35",
+          "type": "default"
+        },
+        {
+          "latitude": 48.67510803816507,
+          "longitude": -122.98474984767383,
+          "label": "36",
+          "type": "default"
+        },
+        {
+          "latitude": 48.69052166203533,
+          "longitude": -122.96037393214648,
+          "label": "37",
+          "type": "default"
+        },
+        {
+          "latitude": 48.700460307535046,
+          "longitude": -122.94342193112246,
+          "label": "38",
+          "type": "default"
+        },
+        {
+          "latitude": 48.714330526104554,
+          "longitude": -122.95106563484298,
+          "label": "39",
+          "type": "default"
+        }
+      ]
+    }
+  ],
+  "Barometric Pressure": {
+    "pressure": 1026.1,
+    "value": 1026.1
+  },
+  "TWS": {
+    "speed": 2.5,
+    "doubleValue": 2.5,
+    "value": 2.5
+  },
+  "GPS Time": {
+    "date": 1687551053000,
+    "fmtDate": {
+      "epoch": 1687551053000,
+      "year": 2023,
+      "month": 6,
+      "day": 23,
+      "hour": 20,
+      "min": 10,
+      "sec": 53,
+      "tz": null
+    },
+    "value": 1687551053000
+  },
+  "AWS Factor": 1,
+  "borders-threats": [],
+  "Satellites in view": {
+    "16": {
+      "svID": 16,
+      "elevation": 2,
+      "azimuth": 19,
+      "snr": 24
+    },
+    "20": {
+      "svID": 20,
+      "elevation": 72,
+      "azimuth": 281,
+      "snr": 32
+    },
+    "5": {
+      "svID": 5,
+      "elevation": 45,
+      "azimuth": 304,
+      "snr": 35
+    },
+    "6": {
+      "svID": 6,
+      "elevation": 13,
+      "azimuth": 187,
+      "snr": 23
+    },
+    "7": {
+      "svID": 7,
+      "elevation": 58,
+      "azimuth": 73,
+      "snr": 32
+    },
+    "39": {
+      "svID": 39,
+      "elevation": 6,
+      "azimuth": 107,
+      "snr": 0
+    },
+    "9": {
+      "svID": 9,
+      "elevation": 25,
+      "azimuth": 76,
+      "snr": 27
+    },
+    "11": {
+      "svID": 11,
+      "elevation": 42,
+      "azimuth": 226,
+      "snr": 28
+    },
+    "13": {
+      "svID": 13,
+      "elevation": 28,
+      "azimuth": 258,
+      "snr": 34
+    },
+    "29": {
+      "svID": 29,
+      "elevation": 4,
+      "azimuth": 300,
+      "snr": 35
+    },
+    "14": {
+      "svID": 14,
+      "elevation": 6,
+      "azimuth": 148,
+      "snr": 21
+    },
+    "30": {
+      "svID": 30,
+      "elevation": 68,
+      "azimuth": 148,
+      "snr": 29
+    }
+  },
+  "Small Distance": 20103.016891409683,
+  "Deviation data": [
+    [
+      0,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      40,
+      0
+    ],
+    [
+      50,
+      0
+    ],
+    [
+      60,
+      0
+    ],
+    [
+      70,
+      0
+    ],
+    [
+      80,
+      0
+    ],
+    [
+      90,
+      0
+    ],
+    [
+      100,
+      0
+    ],
+    [
+      110,
+      0
+    ],
+    [
+      120,
+      0
+    ],
+    [
+      130,
+      0
+    ],
+    [
+      140,
+      0
+    ],
+    [
+      150,
+      0
+    ],
+    [
+      160,
+      0
+    ],
+    [
+      170,
+      0
+    ],
+    [
+      180,
+      0
+    ],
+    [
+      190,
+      0
+    ],
+    [
+      200,
+      0
+    ],
+    [
+      210,
+      0
+    ],
+    [
+      220,
+      0
+    ],
+    [
+      230,
+      0
+    ],
+    [
+      240,
+      0
+    ],
+    [
+      250,
+      0
+    ],
+    [
+      260,
+      0
+    ],
+    [
+      270,
+      0
+    ],
+    [
+      280,
+      0
+    ],
+    [
+      290,
+      0
+    ],
+    [
+      300,
+      0
+    ],
+    [
+      310,
+      0
+    ],
+    [
+      320,
+      0
+    ],
+    [
+      330,
+      0
+    ],
+    [
+      340,
+      0
+    ],
+    [
+      350,
+      0
+    ],
+    [
+      360,
+      0
+    ]
+  ],
+  "NMEA": "$CCMWD,060.0,T,,M,2.5,N,1.3,M*69",
+  "Altitude": -6.4
+}
+</pre>
+</div>
+
 ##### Chartless Maps. Markers and Borders
 This is another interesting LowTech concept.  
 You could very well have a small Raspberry Pi with a GPS connected on it, but no chart plotter.  
