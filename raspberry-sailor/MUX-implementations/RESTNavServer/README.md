@@ -432,14 +432,16 @@ collision.threat.distance=1
 ```
 
 ##### To compute collision threats     
-Find the shortest distance between two trajectories.  
+This is about finding the shortest distance between two trajectories, at a given time.  
 - We start with the boat's position, and the AIS target's position.
 - We measure the distance between those two positions.
-  - Now, as long as this distance is shrinking, we keep moving the two positions, at their respective speed, in their respective heading.
+- Now, as long as this distance is shrinking, we keep moving the two positions, at their respective speed, in their respective heading.
 - As soon as the distance between the two positions starts to grow (or stops shrinking), we stop looping, and return the smallest distance found.
 
 The calculation starts if the distance to the target is below the `minimum.distance`.  
-And it becomes a threat if the small distance found is below the `collision.threat.distance`.
+And it becomes a threat if the small distance found is below the `collision.threat.distance`.  
+Finally, a collision threat can be managed by the `collision.threat.callback` is the properties file the `AISManager` depends on.
+The threats being part of the server cache, they can be subscribed to, from a Web UI. 
 
 This can be combined with the Border Detection.
 
