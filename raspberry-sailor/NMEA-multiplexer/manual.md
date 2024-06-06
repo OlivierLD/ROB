@@ -714,7 +714,7 @@ $ curl -X GET http://localhost:9876/mux/cache | jq
 If you do not have `jq`, install it, it's a cool one.  
 Then, depending on what you want to do in your Web UI, you can `subscribe` to different topics. Look for `events.subscribe` to see some examples.  
 
-```
+```json
 $ curl -X GET http://localhost:9999/mux/cache | jq
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
