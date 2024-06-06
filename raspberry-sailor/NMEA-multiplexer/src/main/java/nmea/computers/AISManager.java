@@ -6,6 +6,7 @@ import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.ais.AISParser;
 import nmea.api.Multiplexer;
+import nmea.parser.Angle360;
 import nmea.parser.GeoPos;
 import nmea.parser.Speed;
 import nmea.parser.StringParsers;
@@ -108,7 +109,7 @@ public class AISManager extends Computer {
 				smallestDist = newRange;
 				position = newPos;
 				targetPos = newTargetPos;
-				if (true) {
+				if (false) {
 					System.out.printf("Smallest distance is now %.03f nm\n", smallestDist);
 				}
 			} else {
@@ -158,7 +159,7 @@ public class AISManager extends Computer {
 										TextToSpeech.speak(messToSpeak);
 									}
 									double sog = cache.get(NMEADataCache.SOG) != null ? ((Speed)cache.get(NMEADataCache.SOG)).getSpeed() : 0d;
-									double cog = cache.get(NMEADataCache.COG) != null ? (Double)cache.get(NMEADataCache.COG) : 0d;
+									double cog = cache.get(NMEADataCache.COG) != null ? ((Angle360)cache.get(NMEADataCache.COG)).getAngle() : 0d;
 									double targetSog = aisRecord.getSog();
 									double targetCog = aisRecord.getCog();
 									GeoPos targetPosition = new GeoPos(aisRecord.getLatitude(), aisRecord.getLongitude());

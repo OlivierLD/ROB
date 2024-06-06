@@ -12,7 +12,8 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: -1
-  markers: mux-configs/markers.02.yaml
+  # markers: mux-configs/markers.02.yaml
+  markers: mux-configs/markers.03.yaml
   markers.list:
     - markers: mux-configs/bretagne.bumper.markers.yaml
     - markers: mux-configs/san.juan.markers.yaml
@@ -21,7 +22,7 @@ channels:
     filename: ./sample.data/going.to.groix.nmea.zip
     zip: true
     path.in.zip: going.to.groix.2.nmea
-    between-records: 500
+    between-records: 50  # 500 is normal...
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA

@@ -1,0 +1,254 @@
+#
+# Markers & Borders
+#
+markers:
+  - latitude: 47.643065
+    longitude: -3.214258
+    type: red
+    label: "Etel, la barre"
+  - latitude: 47.659823
+    longitude: -3.211443
+    type: default
+    label: "Magouer"
+  - latitude: 47.675858
+    longitude: -3.200143
+    type: default
+    label: "Pont Lorois"
+  - latitude: 47.687092
+    longitude: -3.184950
+    type: default
+    label: "St Cado"
+  - latitude: 47.683498
+    longitude: -3.171165
+    label: "Pte du Perche"
+  - label: "Roheu"
+    latitude: 47.642375
+    longitude: -3.244957
+    type: card-s
+  - label: "Basse Mélite"
+    latitude: 47.647265
+    longitude: -3.425327
+    type: card-n
+  - label: "SpeerBrecker"
+    latitude: 47.651588
+    longitude: -3.438815
+    type: card-e
+  - label: "Pte des Chats"
+    latitude: 47.617237
+    longitude: -3.418165
+    type: card-w
+  - label: ""
+    latitude: 47.621502
+    longitude: -3.436955
+    type: green
+  - label: "Grasu"
+    latitude: 47.691990
+    longitude: -3.419095
+    type: card-s
+  - label: ""
+    latitude: 47.697765
+    longitude: -3.397415
+    type: sp
+  - label: ""
+    latitude: 47.574503
+    longitude: -3.202672
+    type: sp
+  - label: "Pierres Noires - Chiviguete"
+    latitude: 47.592078
+    longitude: -3.221455
+    type: is-dng
+  - label: "Birvideaux"
+    latitude: 47.485365
+    longitude: -3.290765
+    type: is-dng
+  - label: "Les Grands Sables"
+    latitude: 47.63827049009266
+    longitude: -3.4202241897583012
+    type: default
+  - latitude: 47.64488421908084
+    longitude: -3.446303757882561
+    label: "Port-Tudy"
+    type: default
+  - label: "Dummy Placeholder"
+    latitude: 0.0
+    longitude: 0.0
+    type: default
+borders:
+  - border-name: "Etel, North Sach"
+    type: "open"
+    border-elements:
+      #
+      # Generated Thu Jun 06 2024 10:37:09 GMT+0200 (Central European Summer Time)
+      #
+      - rank: 1
+        latitude: 47.670127025438994
+        longitude: -3.208823204040528
+      - rank: 2
+        latitude: 47.666572313954916
+        longitude: -3.209338188171387
+      - rank: 3
+        latitude: 47.666283302379604
+        longitude: -3.2072782516479497
+      - rank: 4
+        latitude: 47.666485610650376
+        longitude: -3.204746246337891
+      - rank: 5
+        latitude: 47.665849782016195
+        longitude: -3.203501701354981
+      - rank: 6
+        latitude: 47.66506943628855
+        longitude: -3.2032871246337895
+      - rank: 7
+        latitude: 47.663884444542646
+        longitude: -3.200240135192871
+      - rank: 8
+        latitude: 47.66466480798519
+        longitude: -3.1996500492095947
+      - rank: 9
+        latitude: 47.664224048585645
+        longitude: -3.1991672515869145
+      - rank: 10
+        latitude: 47.66401450592654
+        longitude: -3.1968176364898686
+      - rank: 11
+        latitude: 47.663046263406514
+        longitude: -3.195208311080933
+      - rank: 12
+        latitude: 47.66273555491111
+        longitude: -3.1917965412139897
+      - rank: 13
+        latitude: 47.66293065115915
+        longitude: -3.1909382343292236
+  - border-name: "Etel, Left bank"
+    type: "open"
+    border-elements:
+    #
+    # Generated Thu Jun 06 2024 10:46:59 GMT+0200 (Central European Summer Time)
+    #
+    - rank: 1
+      latitude: 47.661557736148296
+      longitude: -3.1896400451660156
+    - rank: 2
+      latitude: 47.66051718703526
+      longitude: -3.192086219787598
+    - rank: 3
+      latitude: 47.66139876470938
+      longitude: -3.1926226615905766
+    - rank: 4
+      latitude: 47.6613554087784
+      longitude: -3.193674087524414
+    - rank: 5
+      latitude: 47.66228032749687
+      longitude: -3.1968927383422856
+    - rank: 6
+      latitude: 47.66308961793329
+      longitude: -3.19826602935791
+    - rank: 7
+      latitude: 47.66228032749687
+      longitude: -3.1997680664062504
+    - rank: 8
+      latitude: 47.662945102704086
+      longitude: -3.2011198997497563
+    - rank: 9
+      latitude: 47.663696577527176
+      longitude: -3.2019352912902836
+    - rank: 10
+      latitude: 47.66418792060097
+      longitude: -3.2037806510925297
+    - rank: 11
+      latitude: 47.66531510194249
+      longitude: -3.2046604156494145
+    - rank: 12
+      latitude: 47.66472261222055
+      longitude: -3.2067632675170903
+    - rank: 13
+      latitude: 47.66323413276241
+      longitude: -3.208072185516358
+    - rank: 14
+      latitude: 47.66228032749687
+      longitude: -3.2082009315490723
+    - rank: 15
+      latitude: 47.65999690470137
+      longitude: -3.20852279663086
+    - rank: 16
+      latitude: 47.65451917328043
+      longitude: -3.206570148468018
+    - rank: 17
+      latitude: 47.647898878756315
+      longitude: -3.206398487091065
+    - rank: 18
+      latitude: 47.644617330020566
+      longitude: -3.210389614105225
+    - rank: 19
+      latitude: 47.64228976300118
+      longitude: -3.2098531723022465
+  - border-name: "Etel, Right bank"
+    type: "open"
+    border-elements:
+      #
+      # Generated Thu Jun 06 2024 10:55:39 GMT+0200 (Central European Summer Time)
+      #
+      - rank: 1
+        latitude: 47.6714563675326
+        longitude: -3.2062911987304688
+      - rank: 2
+        latitude: 47.67073390320405
+        longitude: -3.2133293151855473
+      - rank: 3
+        latitude: 47.667959547240905
+        longitude: -3.214874267578125
+      - rank: 4
+        latitude: 47.66162999573324
+        longitude: -3.211312294006348
+      - rank: 5
+        latitude: 47.658999682402126
+        longitude: -3.211913108825684
+      - rank: 6
+        latitude: 47.658623912536925
+        longitude: -3.2138013839721684
+      - rank: 7
+        latitude: 47.65778564693788
+        longitude: -3.2118272781372075
+      - rank: 8
+        latitude: 47.651339223883944
+        longitude: -3.210067749023438
+      - rank: 9
+        latitude: 47.64402460540448
+        longitude: -3.213887214660645
+  - border-name: "Groix"
+    type: "closed"
+    border-elements:
+       - rank: 1
+         latitude: 47.64561482699582
+         longitude: -3.4445571899414067
+       - rank: 2
+         latitude: 47.643764382716846
+         longitude: -3.4296226501464844
+       - rank: 3
+         latitude: 47.6338171216314
+         longitude: -3.41451644897461
+       - rank: 4
+         latitude: 47.61935551640258
+         longitude: -3.420181274414063
+       - rank: 5
+         latitude: 47.619702641789864
+         longitude: -3.46395492553711
+       - rank: 6
+         latitude: 47.628727092912776
+         longitude: -3.4867858886718754
+       - rank: 7
+         latitude: 47.63867532295018
+         longitude: -3.505840301513672
+       - rank: 8
+         latitude: 47.64769649845601
+         longitude: -3.515796661376953
+       - rank: 9
+         latitude: 47.65278467943264
+         longitude: -3.5142517089843754
+       - rank: 10
+         latitude: 47.65440354214958
+         longitude: -3.4963989257812504
+       - rank: 11
+         latitude: 47.649662445325056
+         longitude: -3.464469909667969
+
