@@ -85,6 +85,7 @@ let gpsDate;
 let centerOnBoat = true;
 let displayMarkers = true;
 let displayBorders = true;
+let displayBorderMarkers = true;
 let displayAISTargets = true;
 let withDistBearing = true;
 
@@ -316,7 +317,7 @@ let updateMap = (elmt, context) => {
 				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
 					plotIt = false;
 				}
-				if (plotIt) { // false || idx < (markerList.length - 1)) { 
+				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) { 
 					elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
 				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
@@ -558,6 +559,10 @@ let plotBorders = (cb) => {
 	displayBorders = cb.checked;
 	map.repaint();
 };
+let plotBorderMarkers = (cb) => { 
+	displayBorderMarkers = cb.checked;
+	map.repaint();
+}
 let distBearing = (cb) => {
 	withDistBearing = cb.checked;
 	map.repaint();
@@ -673,6 +678,8 @@ window.onload = () => {
 			<td>
 				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
 				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+				<input type="checkbox" onchange="plotBorderMarkers(this);" checked>Plot Borders' Markers
+				<br/>
 				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
 				<input type="checkbox" onchange="distBearing(this);" checked>Dist &amp; Bearings
 				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets

@@ -59,21 +59,25 @@ function getNMEAData() {
 }
 
 function fetch() {
-	let getData = getNMEAData();
-	getData.then((value) => {
-		// console.log("Done:", value);
-		let json = JSON.parse(value);
-		onMessage(json);
-	}, (error, errmess) => {
-		let message;
-		if (errmess !== undefined) {
-			let mess = JSON.parse(errmess);
-			if (mess.message !== undefined) {
-				message = mess.message;
+	try {
+		let getData = getNMEAData();
+		getData.then((value) => {
+			// console.log("Done:", value);
+			let json = JSON.parse(value);
+			onMessage(json);
+		}, (error, errmess) => {
+			let message;
+			if (errmess !== undefined) {
+				let mess = JSON.parse(errmess);
+				if (mess.message !== undefined) {
+					message = mess.message;
+				}
 			}
-		}
-		console.debug("Failed to get nmea data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
-	});
+			console.debug("Failed to get nmea data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+		});
+	} catch (err) {
+		console.log(`Oops: ${err}`);
+	}
 }
 
 // Topics

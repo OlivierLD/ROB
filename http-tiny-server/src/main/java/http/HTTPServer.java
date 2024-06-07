@@ -1216,11 +1216,15 @@ public class HTTPServer {
 	}
 
 	private void manageSocketException(SocketException se, String content) {
-		if (se.getMessage().contains("Broken pipe") || se.getMessage().contains("Protocol wrong type for socket")) {
+		if (se.getMessage().contains("Broken pipe") ||
+			se.getMessage().contains("Protocol wrong type for socket") ||
+			se.getMessage().contains("Connection reset by peer")) {
 			if (verbose) {
 				System.err.println("+-------------------------");
 				System.err.printf("| %s - Managed error, client hung up! Response was:\n%s\n", new Date().toString(), content);
 				System.err.println("+-------------------------");
+			} else {
+				System.err.printf(">> Managed: %s\n", se.getMessage());
 			}
 		} else {
 			System.err.printf(">> Cause: %s, Message: %s\n", se.getCause(), se.getMessage());
@@ -1243,7 +1247,11 @@ public class HTTPServer {
 						}
 					});
 				}
-				os.write("\r\n".getBytes()); // End Of Header
+				try {
+					os.write("\r\n".getBytes()); // End Of Header
+				} catch (SocketException sex) {
+
+				}
 				if (response.getPayload() != null) {
 					os.write(response.getPayload());
 					os.flush();
