@@ -71,9 +71,12 @@ public class AISManager extends Computer {
 	};
 	private Consumer<String> collisionCallback = null;
 
-
 	/**
 	 * Find the shortest distance between two trajectories.
+	 * <br/>
+	 * Finding the roots of the first derivative of the formula of this difference is a bit tough...
+	 * <br/>
+	 * We will iterate.
 	 * <br/>
 	 * We start with the boat's position, and the AIS target's position.<br/>
 	 * We measure the distance between those two positions.<br/>

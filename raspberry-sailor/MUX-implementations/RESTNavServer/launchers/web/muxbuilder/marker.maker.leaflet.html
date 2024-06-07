@@ -7,28 +7,29 @@
  |
  | Clickable map
  |
+ | TODO: "Drive" mode on a track.
  | Note: No native way to change orientation
  +-->
 <head>
 
-    <title>Marker Maker - Leaflet</title>
+  <title>Marker Maker - Leaflet</title>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /-->
-    <!-- link rel="icon" type="image/ico" href="icons/hammerhead.02.ico" -->
-    <link rel="icon" type="image/ico" href="../icons/jellyfish.ico">
+  <!--link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /-->
+  <!-- link rel="icon" type="image/ico" href="icons/hammerhead.02.ico" -->
+  <link rel="icon" type="image/ico" href="icons/jellyfish.ico">
 
-    <!--
-    <link rel="stylesheet" href="leaflet/leaflet.css" />
-    <script src="leaflet/leaflet.js"></script>
-    -->
+  <!--
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <script src="leaflet/leaflet.js"></script>
+  -->
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
-    <style type="text/css">
+  <style type="text/css">
 body {
   background-color: whitesmoke;
 }
@@ -46,11 +47,10 @@ button {
 
 .main-container {
   display: grid;
-  grid-template-columns: auto 350px;
   grid-template-areas: 'left right';
   padding: 10px;
   margin: auto;
-}      
+}
 
 #one-marker {
   min-width: 200px;
@@ -71,70 +71,89 @@ button {
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div style="margin: 5px;">
-A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
-<small style="color: blue;">
-  Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
-  Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
-</small>
+  A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
+  <small style="color: blue;">
+    Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
+    Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
+  </small>
 </div>
 <div>
-Mouse Pos: <span id="mouse-pos"></span>.
+  Mouse Pos: <span id="mouse-pos"></span>.
 </div>
 
 <div id="main-container" class="main-container">
 
-<!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
-<div id="mapid" style="width: 98%; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan; grid-area: left"></div>
+  <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
+  <div id="mapid" style="width: 1200px; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan; grid-area: left"></div>
 
-<div id="markers">
-  <div id="one-marker" style="margin: 10px;">
-    <table>
-      <tr>
-        <th>Name</th><th>Value</th>
-      </tr>
-      <tr>
-        <td>label</td>
-        <td><input type="text" placeholder="Marker label" value="" width="100%" id="one-marker-label"></td>
-      </tr>
-      <tr>
-        <td>latitude</td>
-        <td><div id="one-marker-latitude"></div></td>
-      </tr>
-      <tr>
-        <td>longitude</td>
-        <td ><div id="one-marker-longitude"></div></td>
-      </tr>
-      <tr>
-        <td>type</td>
-        <td>
-          <select id="one-marker-type">
-            <option value="default" selected>-</option>
-            <option value="green">Green</option>
-            <option value="red">Red</option>
-            <option value="card-n">Cardinal North</option>
-            <option value="card-s">Cardinal South</option>
-            <option value="card-e">Cardinal East</option>
-            <option value="card-w">Cardinal West</option>
-            <option value="sp">Special Mark</option>
-            <option value="is-dng">Isolated Danger</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-    <button onclick="addMarker();">Add Marker</button>
-  </div>
-  <div id="markers-code" style="border: 1px solid silver; border-radius: 5px;">
-    <pre>markers:      
+  <div id="markers">
+    <div id="one-marker" style="margin: 10px;">
+      <input type="radio" name="list-type" checked onchange="changeType(this);" value="markers">Markers
+      <input type="radio" name="list-type" onchange="changeType(this);" value="border">Border
+      <table>
+        <tr>
+          <th>Name</th><th>Value</th>
+        </tr>
+        <tr>
+          <td>label</td>
+          <td><input type="text" placeholder="Marker label" value="" width="100%" id="one-marker-label"></td>
+        </tr>
+        <tr>
+          <td>latitude</td>
+          <td><div id="one-marker-latitude"></div></td>
+        </tr>
+        <tr>
+          <td>longitude</td>
+          <td ><div id="one-marker-longitude"></div></td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>
+            <select id="one-marker-type">
+              <option value="default" selected>-</option>
+              <option value="green">Green</option>
+              <option value="red">Red</option>
+              <option value="card-n">Cardinal North</option>
+              <option value="card-s">Cardinal South</option>
+              <option value="card-e">Cardinal East</option>
+              <option value="card-w">Cardinal West</option>
+              <option value="sp">Special Mark</option>
+              <option value="is-dng">Isolated Danger</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button onclick="addMarker();">Add Marker</button>
+    </div>
+    <div id="markers-code" style="border: 1px solid silver; border-radius: 5px;">
+    <pre>markers:
     </pre>
+    </div>
+    <div>
+      <button onclick="copyToClipboard();">Copy to Clipboard</button>
+    </div>
   </div>
-  <div>
-    <button onclick="copyToClipboard();">Copy to Clipboard</button>
-  </div>
-</div>
 
 </div>
 
 <script type="text/javascript">
+    const MARKERS_OPTION = 1;
+    const BORDER_OPTION = 2;
+
+    let LIST_OPTION = MARKERS_OPTION;
+    function changeType(origin) {
+      console.log(origin);
+      if (origin.value === 'markers') {
+        LIST_OPTION = MARKERS_OPTION;
+        document.getElementById('one-marker-label').disabled = false;
+        document.getElementById('one-marker-type').disabled = false;
+      } else if (origin.value === 'border') {
+        LIST_OPTION = BORDER_OPTION;
+        document.getElementById('one-marker-label').disabled = true;
+        document.getElementById('one-marker-type').disabled = true;
+      }
+      generateYamlContent(); // Regenerate content
+    }
 
     // Two lists to maintain in sync...
     let markerList = [];
@@ -157,10 +176,18 @@ Mouse Pos: <span id="mouse-pos"></span>.
     }
 
     // Initial position
-    let currentLatitude = 0.0; // 37.7488500;
-    let currentLongitude = 0.0; // -122.50724263;
+    // let currentLatitude = 0.0;
+    // let currentLongitude = 0.0;
+    // SF
+    // let currentLatitude = 37.7488500;
+    // let currentLongitude = -122.50724263;
+    // Belz
+    let currentLatitude = 47.677667;
+    let currentLongitude = -3.135667;
+    // Original zoom
+    let zoom = 5;
 
-    let map = L.map('mapid').setView([currentLatitude, currentLongitude], 5);
+    let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -194,15 +221,15 @@ Mouse Pos: <span id="mouse-pos"></span>.
       // Remove the associated LeafLet marker and popup
       map.removeLayer(leafletMakerList[idx]);
       leafletMakerList.splice(idx, 1);
-      
+
       generateYamlContent();
     }
 
     function generatePopupContent(label, type, latitude, longitude, idx) {
-      let content = 
-        `<div>` + 
-          `<button onclick="removeFromList(this, ${idx})">Remove</button><br/>` + 
-          `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` + 
+      let content =
+        `<div>` +
+          `<button onclick="removeFromList(this, ${idx})">Remove</button><br/>` +
+          `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` +
         `</div>`;
       return content;
     }
@@ -210,13 +237,24 @@ Mouse Pos: <span id="mouse-pos"></span>.
     function generateYamlContent() {
       let content = "#\n" +
         `# Generated ${new Date()}\n` +
-        "#\n" +
-        'markers:\n';
-      markerList.forEach(mark => {
-        let oneElement = `  - label: "${mark.label}"\n` +
-                         `    latitude: ${mark.latitude}\n` +
-                         `    longitude: ${mark.longitude}\n` +
-                         `    type: ${mark.type}\n`;
+        "#\n";
+      if (LIST_OPTION === MARKERS_OPTION) {
+        content += 'markers:\n';
+      } else {
+        content += 'borders:\n  - border-name: "Border Name Here"\n    type: "open|closed"\n    border-elements:\n';
+      }
+      markerList.forEach((mark, idx) => {
+        let oneElement = '';
+        if (LIST_OPTION === MARKERS_OPTION) {
+          oneElement = `  - label: "${mark.label}"\n` +
+                       `    latitude: ${mark.latitude}\n` +
+                       `    longitude: ${mark.longitude}\n` +
+                       `    type: ${mark.type}\n`;
+        } else {
+          oneElement = `    - rank: ${idx + 1}\n` +
+                       `      latitude: ${mark.latitude}\n` +
+                       `      longitude: ${mark.longitude}\n`;
+        }
         content += oneElement;                 
       });
 

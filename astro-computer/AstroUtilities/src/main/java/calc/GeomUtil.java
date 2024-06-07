@@ -57,6 +57,12 @@ public final class GeomUtil {
 	private final static double MILE_EQUATORIAL_EARTH_RADIUS = 3_964.0379117464D;
 
 	/**
+	 * Great circle distance between two points
+	 * See https://en.wikipedia.org/wiki/Haversine_formula
+	 *
+	 * Formula is
+	 * a = sqrt(sin(deltaL / 2)^2 + cos(lat1 * lat2 * sin(deltaG / 2)^2
+	 * result = 2 * atan(sqrt(a), sqrt(1 - a))
 	 *
 	 * @param lat1 in degrees
 	 * @param long1 in degrees
