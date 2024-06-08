@@ -52,7 +52,7 @@ const worldMapDefaultColorConfig = {
 };
 
 /* The map data */
-import fullWorldMap from "./world.map/worldmap.data.js";
+import fullWorldMap from "./world.map/worldmap.data.js";  // TODO A fetch of a json doc ?
 // import fullWorldMap from "./world.map/worldmap.data"; // minifyJs does NOT like the .js extension
 import * as Utilities from "./utilities/Utilities.js";
 
