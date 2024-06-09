@@ -95,7 +95,8 @@ URL_OPTION_12="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?
 URL_OPTION_13="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 URL_OPTION_13b="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 URL_OPTION_13c="http://localhost:${HTTP_PORT}/web/chartless.gps.html"
-URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.gps.html"
+# URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.gps.html"
+URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then

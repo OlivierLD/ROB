@@ -148,12 +148,12 @@ public class AISManager extends Computer {
 								// It's worth calculating
 								if (distToTarget <= this.minimumDistance) {
 									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
-									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), diff heading: %.02f/%.02f",
+									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), min dist: %.02f/%.02f",
 											TimeUtil.getTimeStamp(),
 											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : (aisRecord.getMMSI() != 0 ? aisRecord.getMMSI() : "")), // MMSI ?
 											distToTarget,
 											this.minimumDistance,
-											diffHeading,
+											distToTarget,
 											this.collisionThreatDistance);
 									System.out.println(inRangeMessage);
 									if (false) {

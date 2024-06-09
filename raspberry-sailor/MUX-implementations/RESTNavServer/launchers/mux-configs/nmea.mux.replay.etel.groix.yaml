@@ -11,7 +11,8 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: -1
-  markers: mux-configs/markers.02.yaml
+  # markers: mux-configs/markers.02.yaml
+  markers: mux-configs/markers.03.yaml
   markers.list:
     - markers: mux-configs/bretagne.bumper.markers.yaml
     - markers: mux-configs/san.juan.markers.yaml

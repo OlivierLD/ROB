@@ -1224,10 +1224,10 @@ public class HTTPServer {
 				System.err.printf("| %s - Managed error, client hung up! Response was:\n%s\n", new Date().toString(), content);
 				System.err.println("+-------------------------");
 			} else {
-				System.err.printf(">> Managed: %s\n", se.getMessage());
+				System.err.printf(">> Managed: %s, for content [%s]\n", se.getMessage(), content);
 			}
 		} else {
-			System.err.printf(">> Cause: %s, Message: %s\n", se.getCause(), se.getMessage());
+			System.err.printf(">> Cause: %s, Message: %s, for content [%s]\n", se.getCause(), se.getMessage(), content);
 			se.printStackTrace();
 		}
 	}
@@ -1250,13 +1250,14 @@ public class HTTPServer {
 				try {
 					os.write("\r\n".getBytes()); // End Of Header
 				} catch (SocketException sex) {
-
+					System.err.printf("Writing end-of-header: %s\n", sex.getMessage());
 				}
 				if (response.getPayload() != null) {
 					os.write(response.getPayload());
 					os.flush();
 				}
 			} catch (SocketException se) {
+				System.err.printf("For OutputStream: %s\n", os);
 				manageSocketException(se, response.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
