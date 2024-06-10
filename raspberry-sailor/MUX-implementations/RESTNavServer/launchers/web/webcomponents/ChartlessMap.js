@@ -339,7 +339,7 @@ class ChartlessMap extends HTMLElement {
 
 		this._doBefore(this, context);
 
-		// The Grid
+		// The Grid. 
 		context.font = "10px Arial";
 		context.fillStyle = this.chartlessMapColorConfig.fgColor;
 		context.strokeStyle = this.chartlessMapColorConfig.gridColor;
@@ -364,8 +364,12 @@ class ChartlessMap extends HTMLElement {
 		let chartHeight = incLatTop - incLatBottom; // In Increasing Latitude !!
 		// 0.5, 1, 5, 10. To be tuned...
 		// let gridStep = 0.5;
-		let gridStep = /* Math.min(0.5, */ Math.round((this._chartWidth / 4) * 10) / 20 /*)*/;
+		// let gridStep = Math.round((this._chartWidth / 4) * 10) / 20;
+		let gridStep = Math.round(this._chartWidth / 4) / 2;
 		// console.log(`GridStep: ${gridStep}, vs ${Math.round((this._chartWidth / 4) * 10) / 20}`);
+		if (gridStep === 0) {
+			gridStep = Math.round((this._chartWidth / 4) * 10) / 8; // because we have a (width / 4)
+		}
 
 		if (chartlessMapVerbose) {
 			console.log(`GridStep: ${gridStep}`);
@@ -373,6 +377,9 @@ class ChartlessMap extends HTMLElement {
 
 		let lngDegreesToPixels = this._width / this._chartWidth;
 		let firstWestMeridian = parseFloat((lngLeft - gridStep).toFixed(0));
+		if (chartlessMapVerbose) {
+			console.log(`firstWestMeridian: ${firstWestMeridian}`);
+		}
 		for (let g=firstWestMeridian; g<lngRight && gridStep>0; g+=gridStep) {
 			// console.log(`Between ${ChartlessMap.decToSex(lngLeft, "EW")} (${lngLeft}) and ${ChartlessMap.decToSex(lngRight, "EW")} (${lngRight}), drawing meridian at ${ChartlessMap.decToSex(g, "EW")}`);
 			let x = (g - lngLeft) * lngDegreesToPixels;
@@ -484,6 +491,11 @@ class ChartlessMap extends HTMLElement {
 		let dec = absVal - intValue;
 		let i = intValue;
 		dec *= 60;
+		// Rounding pb
+		if (parseFloat(dec.toFixed(2)) == 60.0) {
+			i += 1;
+			dec = 0;
+		}
 //    var s = i + "°" + dec.toFixed(2) + "'";
 //    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
 		let s = "";
