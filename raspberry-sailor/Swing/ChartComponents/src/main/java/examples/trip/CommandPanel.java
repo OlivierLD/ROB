@@ -144,7 +144,7 @@ public class CommandPanel
                     new GeoPoint(-GeomUtil.sexToDec("9", "0"), -GeomUtil.sexToDec("140", "0")), // Marquesas
                     new GeoPoint(-GeomUtil.sexToDec("15", "29"), -GeomUtil.sexToDec("145", "44")), // Tuamotus
                     new GeoPoint(-GeomUtil.sexToDec("18", "0"), -GeomUtil.sexToDec("149", "0")), // Tahiti
-                    new GeoPoint(-GeomUtil.sexToDec("19", "0"), -GeomUtil.sexToDec("160", "0")), // Cook Islands
+                    new GeoPoint(-GeomUtil.sexToDec("8", "59"), -GeomUtil.sexToDec("158", "03")), // Cook Islands, Tongareva
                     new GeoPoint(-GeomUtil.sexToDec("18", "30"), -GeomUtil.sexToDec("173", "0")), // Tonga
                     new GeoPoint(-GeomUtil.sexToDec("18", "0"), -GeomUtil.sexToDec("180", "0")), // Fiji
                     new GeoPoint(GeomUtil.sexToDec("21", "15"), -GeomUtil.sexToDec("157", "40")), // Hawaii
@@ -200,8 +200,8 @@ public class CommandPanel
         chartPanel.postit(gr, "Tahiti", gp.x, gp.y, Color.yellow);
         System.out.println("Tahiti:" + lf + ", " + gf);
 
-        lf = -GeomUtil.sexToDec("19", "0");
-        gf = -GeomUtil.sexToDec("160", "0");
+        lf = -GeomUtil.sexToDec("9", "0");
+        gf = -GeomUtil.sexToDec("158", "0");
         gp = chartPanel.getPanelPoint(lf, gf);
         circleAround(gr, lf, gf);
         chartPanel.postit(gr, "Cook\nIslands", gp.x, gp.y, Color.yellow);

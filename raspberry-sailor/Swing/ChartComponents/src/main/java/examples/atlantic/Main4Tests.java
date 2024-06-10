@@ -10,6 +10,9 @@ import java.awt.event.WindowEvent;
 
 public class Main4Tests {
 
+    /**
+     * Chart dimensions are set in CommandPanel
+     */
     public Main4Tests() {
         Frame frame = new SampleFrame();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -26,7 +29,6 @@ public class Main4Tests {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
-
         });
         frame.setVisible(true);
     }
