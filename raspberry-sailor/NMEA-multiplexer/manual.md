@@ -1053,6 +1053,8 @@ $ curl -X GET http://localhost:9999/mux/cache | jq
 
 ##### Chartless Maps. Markers and Borders
 This is another interesting LowTech concept.  
+The idea came to light after working on Mercator Canvases, used for celestial navigation. Those are actually **empty charts**, on which you plot your own data.  
+Mmmmh, interesting, no?  
 You could very well have a small Raspberry Pi with a GPS connected on it, but no chart plotter.  
 The idea behind a chartless map is to prepare the data you'll need before you leave, and then use them at sea.  
 With the appropriate `computer`, those borders and markers will be used by the server (the MUX) to know
