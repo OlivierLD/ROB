@@ -14,6 +14,7 @@ context:
   # markers: mux-configs/markers.02.yaml
   markers: mux-configs/markers.03.yaml
   markers.list:
+    - markers: mux-configs/markers.04.yaml
     - markers: mux-configs/bretagne.bumper.markers.yaml
     - markers: mux-configs/san.juan.markers.yaml
 channels:

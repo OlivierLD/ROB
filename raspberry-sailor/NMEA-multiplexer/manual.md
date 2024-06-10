@@ -1188,6 +1188,7 @@ For the way the collision threats are managed, see [here](../MUX-implementations
 This, for example, is (almost) the same chart as above, but with the Groix island, defined by rough markers...
 ![Going to Groix](./docimages/markers.to.groix.png)    
 ![With display options](./docimages/chartless.options.png)
+![More borders](./docimages/chartless.wow.png)
 This gives an idea of what can be done. Again, this kind of rendering can be easily served by a small Raspberry Pi, and displayed on a client
 like an old cell-phone, that has no SIM card. All it needs is a browser (recent enough to know about WebComponents, that's all).
 
