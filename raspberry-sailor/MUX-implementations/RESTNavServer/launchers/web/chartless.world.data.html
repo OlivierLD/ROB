@@ -53,13 +53,17 @@ let world_map_data = null;
 
 const WORLD_DATA = "./json/world.data.json";
 
-let loadWorldData = () => {
+let loadWorldData = (fn) => {
 	originalFetch(WORLD_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
 			response.json().then(doc => {
 				world_map_data = doc;
 				console.log(`World data loaded`);
+				if (fn) {
+					console.log("Executing next func.");
+					fn();
+				}
 			});
 		}, (error, errmess) => {
 			console.log("Ooch");
@@ -657,8 +661,29 @@ let plotAISTargets = (cb) => {
 let plotWorldMap = (cb) => {
 	withWorldMap = cb.checked;
 	if (withWorldMap && world_map_data === null) {
-		loadWorldData();
-		setTimeout(() => { map.repaint(); }, 3000); // That would be nicer in a promise...
+		if (false) {
+			// Promise option (promise within a promise... Mmmmh)
+			let loadData = () => {
+				let promise = new Promise((resolve, reject) => {
+					try {
+						resolve(loadWorldData());
+					} catch (err) {
+						reject(err);
+					}
+				});
+				return promise;
+			};
+			loadData().then(result => {
+				map.repaint();
+			});
+		} else if (false) {
+			// Timeout option
+			loadWorldData();
+			setTimeout(() => { map.repaint(); }, 3000); 
+		} else if (true) {
+			// DoNext option
+			loadWorldData(() => map.repaint());
+		}
 	} else {
 		if (world_map_data !== null) {
 			map.repaint(); 	
