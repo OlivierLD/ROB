@@ -1224,10 +1224,11 @@ public class HTTPServer {
 				System.err.printf("| %s - Managed error, client hung up! Response was:\n%s\n", new Date().toString(), content);
 				System.err.println("+-------------------------");
 			} else {
-				System.err.printf(">> Managed: %s, for content [%s]\n", se.getMessage(), (content != null && content.length() > 200) ? content.substring(0, 200) : content);
+				// Truncate content if needed
+				System.err.printf(">> Managed: %s, for content [%s]\n", se.getMessage(), (content != null && content.length() > 200) ? (content.substring(0, 200) + "...") : content);
 			}
 		} else {
-			System.err.printf(">> Cause: %s, Message: %s, for content [%s]\n", se.getCause(), se.getMessage(), content);
+			System.err.printf(">> Cause: %s, Message: %s, for content [%s]\n", se.getCause(), se.getMessage(), (content != null && content.length() > 200) ? (content.substring(0, 200) + "...") : content);
 			se.printStackTrace();
 		}
 	}
