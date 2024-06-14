@@ -93,12 +93,18 @@ public class AISManager extends Computer {
 	 * @return the shortest distance found, with an interval of 10 seconds
 	 */
 	private static double findCollision(GeoPos position, double sog, double cog, GeoPos targetPos, double targetSog, double targetCog) {
+		return findCollision(position, sog, cog, targetPos, targetSog, targetCog, false);
+	}
+	private static double findCollision(GeoPos position, double sog, double cog, GeoPos targetPos, double targetSog, double targetCog, boolean verbose) {
 		double originalDistance = GeomUtil.haversineNm(position.lat, position.lng, targetPos.lat, targetPos.lng);
 		double smallestDist = originalDistance;
+		double BETWEEN_LOOPS = 10d; // In seconds
+		long nbLoops = 0;
 		boolean keepLooping = true;
 		while (keepLooping) {
+			nbLoops += 1;
 			// New boat position, 10 seconds later
-			double dist = sog * (10d / 3_600d);
+			double dist = sog * (BETWEEN_LOOPS / 3_600d);
 			GreatCirclePoint pt = MercatorUtil.deadReckoning(position.lat, position.lng, dist, cog);
 			GeoPos newPos = new GeoPos(pt.getL(), pt.getG());
 
@@ -112,8 +118,9 @@ public class AISManager extends Computer {
 				smallestDist = newRange;
 				position = newPos;
 				targetPos = newTargetPos;
-				if (false) {
-					System.out.printf("Smallest distance is now %.03f nm\n", smallestDist);
+				if (verbose) {
+					long _now = (long)(nbLoops * BETWEEN_LOOPS * 1_000L);
+					System.out.printf("Smallest distance is now %.03f nm (loop #%d, %s)\n", smallestDist, nbLoops, TimeUtil.fmtDHMS(TimeUtil.msToHMS(_now)));
 				}
 			} else {
 				keepLooping = false;
@@ -355,7 +362,7 @@ public class AISManager extends Computer {
 		double sogB = 5.0;
 		double cogB = 182.0;
 
-		double dist = findCollision(A, sogA, cogA, B, sogB, cogB);
+		double dist = findCollision(A, sogA, cogA, B, sogB, cogB, true);
 		System.out.printf("Done, smallest dist is %.03f nm\n", dist);
 	}
 }
