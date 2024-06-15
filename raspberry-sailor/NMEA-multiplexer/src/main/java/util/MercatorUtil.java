@@ -1,6 +1,7 @@
 package util;
 
 import calc.GreatCirclePoint;
+import calc.GeomUtil;
 
 public final class MercatorUtil {
 
@@ -35,7 +36,7 @@ public final class MercatorUtil {
 	}
 
 	/**
-	 * @Deprecated, formula is not right. See #GeomUtil.deadReckoning.
+	 * @Deprecated, formula is not right. Use calc.GeomUtil#deadReckoning() instead.
 	 *
 	 * @param l From latitude (in degrees)
 	 * @param g From Longitude (in degrees)
