@@ -14,7 +14,12 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: 0
-  markers: markers.yaml
+  # markers: markers.yaml
+  markers: markers.03.yaml
+  markers.list:
+    - markers: markers.04.yaml
+    - markers: markers.05.yaml
+    # - markers: mux-configs/bretagne.bumper.markers.yaml
 channels:
   - type: serial
     port: /dev/ttyS80

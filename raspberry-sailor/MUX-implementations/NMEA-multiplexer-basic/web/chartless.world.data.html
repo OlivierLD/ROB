@@ -40,7 +40,7 @@ let originalFetch = fetch;		// TODO Fix that !! This is ugly !
 	<script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<script type="text/javascript" src="js/ajax.manager.js"></script>
-	<script type="text/javascript" src="./webcomponents/utilities/NavigationHelper.js"></script>
+	<script type="text/javascript" src="./webcomponents/utils/NavigationHelper.js"></script>
 
 	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
 
@@ -131,7 +131,7 @@ let boatRadius = 10;
  * See js/ajax.manager.js
  * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
  */
-events.subscribe(POS, val => {
+events.subscribe(EVENT_POS, val => {
 	let strLat = decToSex(val.lat, 'NS');
 	let strLng = decToSex(val.lng, 'EW');
 	if (VERBOSE) {
@@ -154,16 +154,16 @@ events.subscribe(POS, val => {
 		map.repaint();
 	}
 });
-events.subscribe(MARKERS, val => {
+events.subscribe(EVENT_MARKERS, val => {
 	markers = val;
 });
-events.subscribe(BORDERS, val => {
+events.subscribe(EVENT_BORDERS, val => {
 	borders = val;
 });
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
 });
-events.subscribe(AIS, val => {  // Possibly contains threats
+events.subscribe(EVENT_AIS, val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);
 	// console.log(`Received AIS Data, ${keys.length} target(s).`);
@@ -214,7 +214,7 @@ events.subscribe(AIS, val => {  // Possibly contains threats
 		document.getElementById('ais-targets').innerHTML = `${aisTargets.length} / ${keys.length}`;
 	}
 });
-events.subscribe(GPS_TIME, val => {
+events.subscribe(EVENT_GPS_TIME, val => {
 	let date = new Date(val);
 	// val.format("Y-M-d H:i:s")
 	// let date = gpsTime.format("d-m-Y-l");
@@ -223,15 +223,15 @@ events.subscribe(GPS_TIME, val => {
 	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
 	gpsDate = date;
 });
-events.subscribe(SOG, val => {
+events.subscribe(EVENT_SOG, val => {
 	document.getElementById('gps-sog').innerHTML = `${val} kn`;
 	sog = val;
 });
-events.subscribe(COG, val => {
+events.subscribe(EVENT_COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
 	cog = val;
 });
-// events.subscribe(FULL, val => {
+// events.subscribe(EVENT_FULL, val => {
 // 	console.log(JSON.stringify(val, null, 2));
 // });
 ///// END OF SUBSCRIBERS ////
