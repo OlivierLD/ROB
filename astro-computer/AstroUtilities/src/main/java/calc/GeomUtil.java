@@ -91,6 +91,33 @@ public final class GeomUtil {
 		return haversineRaw(lat1, long1, lat2, long2) * MILE_EQUATORIAL_EARTH_RADIUS;
 	}
 
+	/**
+	 *
+	 * @param fromLat from Latitude (in degrees)
+	 * @param fromLng from Longitude (in degrees)
+	 * @param dist distance, in nautical miles
+	 * @param heading cog, in degrees
+	 */
+	public static GeoPoint deadReckoning(double fromLat, double fromLng, double dist, double heading) {
+		double distRatio = dist / NM_EQUATORIAL_EARTH_RADIUS;
+		double distRatioSine = Math.sin(distRatio);
+		double distRatioCosine = Math.cos(distRatio);
+
+		double startLatRad = Math.toRadians(fromLat);
+		double startLonRad = Math.toRadians(fromLng);
+
+		double startLatCos = Math.cos(startLatRad);
+		double startLatSin = Math.sin(startLatRad);
+
+		double angleRadHeading = Math.toRadians(heading);
+		double endLatRads = Math.asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.cos(angleRadHeading)));
+
+		double endLonRads = startLonRad +
+				            Math.atan2(Math.sin(angleRadHeading) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
+
+		return new GeoPoint(Math.toDegrees(endLatRads), Math.toDegrees(endLonRads));
+	}
+
 	public static double bearingDiff(double bearingA, double bearingB) {
 		double diff = Math.abs(bearingA - bearingB);
 		while (diff > 180) {
@@ -423,4 +450,43 @@ public final class GeomUtil {
 		String plusCode = OpenLocationCode.encode(lat, lng); // testData.length);
 		return plusCode;
 	}
+
+	// For tests
+	public static void main(String[] args) {
+		{ // One
+			double fromLat = 47.677667;
+			double fromLng = -3.135667;
+			double dist = 10;
+			double cog = 90;
+			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
+			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			// Reverse
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
+		}
+		{ // Two
+			double fromLat = 47.677667;
+			double fromLng = -3.135667;
+			double dist = 10;
+			double cog = 0;
+			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
+			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			// Reverse
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
+		}
+		{ // Three
+			double fromLat = 47.677667;
+			double fromLng = -3.135667;
+			double dist = 10;
+			double cog = 40;
+			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
+			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			// Reverse
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
+		}
+
+	}
+
 }

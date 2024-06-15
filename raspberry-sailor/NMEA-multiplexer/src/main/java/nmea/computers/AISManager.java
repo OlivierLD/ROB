@@ -1,5 +1,6 @@
 package nmea.computers;
 
+import calc.GeoPoint;
 import calc.GeomUtil;
 import calc.GreatCirclePoint;
 import context.ApplicationContext;
@@ -105,12 +106,12 @@ public class AISManager extends Computer {
 			nbLoops += 1;
 			// New boat position, 10 seconds later
 			double dist = sog * (BETWEEN_LOOPS / 3_600d);
-			GreatCirclePoint pt = MercatorUtil.deadReckoning(position.lat, position.lng, dist, cog);
+			GeoPoint pt = GeomUtil.deadReckoning(position.lat, position.lng, dist, cog);
 			GeoPos newPos = new GeoPos(pt.getL(), pt.getG());
 
 			// New target position, 10 seconds later
-			dist = targetSog * (10d / 3_600d);
-			pt = MercatorUtil.deadReckoning(targetPos.lat, targetPos.lng, dist, targetCog);
+			dist = targetSog * (BETWEEN_LOOPS / 3_600d);
+			pt = GeomUtil.deadReckoning(targetPos.lat, targetPos.lng, dist, targetCog);
 			GeoPos newTargetPos = new GeoPos(pt.getL(), pt.getG());
 
 			double newRange = GeomUtil.haversineNm(position.lat, position.lng, newTargetPos.lat, newTargetPos.lng);
@@ -120,7 +121,12 @@ public class AISManager extends Computer {
 				targetPos = newTargetPos;
 				if (verbose) {
 					long _now = (long)(nbLoops * BETWEEN_LOOPS * 1_000L);
-					System.out.printf("Smallest distance is now %.03f nm (loop #%d, %s)\n", smallestDist, nbLoops, TimeUtil.fmtDHMS(TimeUtil.msToHMS(_now)));
+					System.out.printf("Smallest distance is now %.03f nm - between (target) %s and (boat) %s (loop #%d, %s)\n",
+							smallestDist,
+							targetPos,
+							position,
+							nbLoops,
+							TimeUtil.fmtDHMS(TimeUtil.msToHMS(_now)));
 				}
 			} else {
 				keepLooping = false;

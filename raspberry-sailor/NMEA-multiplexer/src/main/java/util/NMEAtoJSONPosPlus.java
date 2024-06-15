@@ -1,5 +1,7 @@
 package util;
 
+import calc.GeoPoint;
+import calc.GeomUtil;
 import calc.GreatCircle;
 import calc.GreatCirclePoint;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -357,7 +359,8 @@ public class NMEAtoJSONPosPlus {
 								double rv = cmgBuffer.get(i - 1); // rv: Route Vraie (aka Surface): French for CMG.
 								// System.out.println("** In " + timeInterval + " ms, at " + bSpeed + " kts, from " + drPos.toString() + " dist:" + dist + ", hdg:" + hdg + "... ");
 								if (dist > 0) {
-									GreatCirclePoint pt = MercatorUtil.deadReckoning(drPos.lat, drPos.lng, dist, rv);
+									// GreatCirclePoint pt = MercatorUtil.deadReckoning(drPos.lat, drPos.lng, dist, rv);
+									GeoPoint pt = GeomUtil.deadReckoning(drPos.lat, drPos.lng, dist, rv);
 									// System.out.println("In " + timeInterval + " ms, from " + drPos.toString() + " dist:" + dist + ", hdg:" + hdg + ", ends up " + pt.toString());
 									drPos = new GeoPos(pt.getL(), pt.getG()); // We should be here if no current
 								}

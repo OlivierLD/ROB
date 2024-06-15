@@ -31,7 +31,7 @@ markers:
     longitude: -4.630908966064454
     type: default
 borders:
-  - border-name: "Rade de rest"
+  - border-name: "Rade de Brest"
     type: "open"
     border-elements:
       - rank: 1
