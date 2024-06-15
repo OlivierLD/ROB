@@ -1286,14 +1286,16 @@ public class AISParser {
 		private double distToTarget;
 		private double bearingFromTarget;
 		private double minimumDistance;
+		private double minimumDistanceWithTarget;
 
 		public CollisionThreat() {
 		}
 
-		public CollisionThreat(double distToTarget, double bearingFromTarget, double minimumDistance) {
+		public CollisionThreat(double distToTarget, double bearingFromTarget, double minimumDistance, double minimumDistanceWithTarget) {
 			this.distToTarget = distToTarget;
 			this.bearingFromTarget = bearingFromTarget;
 			this.minimumDistance = minimumDistance;
+			this.minimumDistanceWithTarget = minimumDistanceWithTarget;
 		}
 
 		public double getDistToTarget() {
@@ -1318,6 +1320,13 @@ public class AISParser {
 
 		public void setMinimumDistance(double minimumDistance) {
 			this.minimumDistance = minimumDistance;
+		}
+
+		public double getMinimumDistanceWithTarget() {
+			return this.minimumDistanceWithTarget;
+		}
+		public void setMinimumDistanceWithTarget(double minimumDistanceWithTarget) {
+			this.minimumDistanceWithTarget = minimumDistanceWithTarget;
 		}
 	}
 

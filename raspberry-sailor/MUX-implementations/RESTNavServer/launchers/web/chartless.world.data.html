@@ -206,7 +206,8 @@ events.subscribe(AIS, val => {  // Possibly contains threats
 				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
 				threat: rec18.collisionThreat !== null,
 				bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
-				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null
+				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null,
+				minDist: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistanceWithTarget : null
 			});
 		}
 		document.getElementById('ais-targets').innerHTML = `${aisTargets.length} / ${keys.length}`;
@@ -529,7 +530,12 @@ let updateMap = (elmt, context) => {
 					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)} </li>
 					<li>COG: ${target.cog}&deg;</li>
 					<li>SOG: ${target.sog.toFixed(2)} kn</li> 
-					<li>Min Dist: ${target.radius} nm</li>
+					<li>
+						Min Dist: 
+						<ul>
+							<li>for detection ${target.radius} nm</li>
+							<li>with target ${target.minDist.toFixed(2)} nm</li>
+						</ul>
 					</ul>`;
 				aisThreatsCodeElmnts.push(oneThreat);
 			}

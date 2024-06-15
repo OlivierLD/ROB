@@ -2,7 +2,7 @@ package nmea.computers;
 
 import calc.GeoPoint;
 import calc.GeomUtil;
-import calc.GreatCirclePoint;
+// import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.ais.AISParser;
@@ -11,7 +11,7 @@ import nmea.parser.Angle360;
 import nmea.parser.GeoPos;
 import nmea.parser.Speed;
 import nmea.parser.StringParsers;
-import util.MercatorUtil;
+// import util.MercatorUtil;
 import util.TextToSpeech;
 import utils.TimeUtil;
 
@@ -160,7 +160,7 @@ public class AISManager extends Computer {
 								double bearingFromTarget = GeomUtil.bearingFromTo(aisRecord.getLatitude(), aisRecord.getLongitude(), position.lat, position.lng);
 								// It's worth calculating
 								if (distToTarget <= this.minimumDistance) {
-									double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
+									// double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
 									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), min dist: %.02f/%.02f",
 											TimeUtil.getTimeStamp(),
 											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : (aisRecord.getMMSI() != 0 ? aisRecord.getMMSI() : "")), // MMSI ?
@@ -183,7 +183,7 @@ public class AISManager extends Computer {
 									// Then warn
 									if (dist < this.collisionThreatDistance) { // diffHeading < this.headingFork) { // Possible collision route (if you don't move)
 										// Collision threat in the cache
-										aisRecord.setCollisionThreat(new AISParser.CollisionThreat(distToTarget, bearingFromTarget, this.minimumDistance));
+										aisRecord.setCollisionThreat(new AISParser.CollisionThreat(distToTarget, bearingFromTarget, this.minimumDistance, dist));
 										// Find vesselName if it exists
 										String vesselName = aisRecord.getVesselName();
 										if (vesselName == null) {
@@ -216,8 +216,8 @@ public class AISManager extends Computer {
 												aisRecord.getCog(),
 												aisRecord.getSog(),
 												dist);
-
 										System.out.println(warningText);
+
 										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
 										if (collisionCallback != null) {
 											// A test
@@ -231,10 +231,11 @@ public class AISManager extends Computer {
 //													targetName,
 //													distToTarget,
 //													bearingToTarget);
-											String messageToSpeak = String.format("AIS-COLLISION;%s;%.02f;%d",
+											String messageToSpeak = String.format("AIS-COLLISION;%s;%.02f;%d;%f",
 													targetName,
 													distToTarget,
-													bearingToTarget);
+													bearingToTarget,
+													dist);
 											collisionCallback.accept(messageToSpeak);
   											// TextToSpeech.speak(messageToSpeak);
 										}
@@ -361,7 +362,7 @@ public class AISManager extends Computer {
 	// For tests
 	public static void main(String[] args) {
 		GeoPos A = new GeoPos(47.677667, -3.135667);
-		double sogA = 0.0;
+		double sogA = 0.10;
 		double cogA = 90.0;
 
 		GeoPos B = new GeoPos(47.8, -3.135667);
