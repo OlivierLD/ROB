@@ -1,6 +1,7 @@
 package chart.components.util;
 
 import calc.GeoPoint;
+import calc.GeomUtil;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -28,20 +29,20 @@ public final class MercatorUtil {
         return ret;
     }
 
-    // TODO Use the AstroComputer dead Reckoning
     public static GeoPoint deadReckoning(GeoPoint p, double d, double r) {
-        return deadReckoning(p.getL(), p.getG(), d, r);
+        return GeomUtil.deadReckoning(p.getL(), p.getG(), d, r);
     }
 
     public static GeoPoint deadReckoning(double l, double g, double d, double r) {
-        double deltaL = (d / 60D) * Math.cos(Math.toRadians(r));
-        double l2 = l + deltaL;
-        double lc1 = getIncLat(l);
-        double lc2 = getIncLat(l2);
-        double deltaLc = lc2 - lc1;
-        double deltaG = deltaLc * Math.tan(Math.toRadians(r));
-        double g2 = g + deltaG;
-        return new GeoPoint(l2, g2);
+        return GeomUtil.deadReckoning(l, g, d, r);
+//        double deltaL = (d / 60D) * Math.cos(Math.toRadians(r));
+//        double l2 = l + deltaL;
+//        double lc1 = getIncLat(l);
+//        double lc2 = getIncLat(l2);
+//        double deltaLc = lc2 - lc1;
+//        double deltaG = deltaLc * Math.tan(Math.toRadians(r));
+//        double g2 = g + deltaG;
+//        return new GeoPoint(l2, g2);
     }
 
     private final static int MERCATOR_SCALE_HEIGHT = 70;

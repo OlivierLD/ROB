@@ -3,13 +3,15 @@ package calc;
 import java.text.DecimalFormat;
 
 /**
- * Dead Reckoning
+ * Dead Reckoning for Celestial Navigation.
+ * Returns what should be observed for given position, GHA and D
+ *
  * <p>
  * Call sequence:
  * <pre>
- *   DeadReckoning dr = new DeadReckoning();
- *
- *
+ *   DeadReckoning dr = new DeadReckoning(dAHG, dD, dL, dG).calculate(); // All angles in degrees
+ *   double he = dr.getHe();
+ *   double z = dr.getZ();
  * </pre>
  */
 public class DeadReckoning {
@@ -211,8 +213,7 @@ public class DeadReckoning {
 	                                      double lat,
 	                                      double Z,
 	                                      int limb,
-	                                      boolean
-			                                      artificialHorizon,
+	                                      boolean artificialHorizon,
 	                                      Correction corrections,
 	                                      boolean verbose) {
 		double observedAltitude = instrAltitude + getAltitudeCorrection(instrAltitude, eyeHeight, hp, sd, lat, Z, limb, artificialHorizon, corrections, verbose);
