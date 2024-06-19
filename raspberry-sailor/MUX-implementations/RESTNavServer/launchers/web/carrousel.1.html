@@ -616,24 +616,24 @@ let updateBoatContext = () => {
 	let vmgs = NavigationHelper.vmgCalculator(sog, cog, tw.twd, tw.twa, bsp, hdg, b2wp);
 
 	let resContent =
-		'LWY:' + lwy.toFixed(1) + '\272 \n' +
-		'True HDG:' + hdg.toFixed(1) + '\272 \n' +
+		'LWY:' + lwy.toFixed(1) + '\xba \n' +
+		'True HDG:' + hdg.toFixed(1) + '\xba \n' +
 		'TWS:' + tw.tws.toFixed(2) + ' kts\n' +
-		'TWA:' + tw.twa.toFixed(1) + '\272 \n' +
-		'TWD:' + tw.twd.toFixed(1) + '\272 \n' +
-		'D:' + Decl.toFixed(1) + '\272 \n' +
-		'd:' + dev.toFixed(1) + '\272 \n' +
-		'Current Dir:' + current.cdr.toFixed(1) + '\272 \n' +
+		'TWA:' + tw.twa.toFixed(1) + '\xba \n' +
+		'TWD:' + tw.twd.toFixed(1) + '\xba \n' +
+		'D:' + Decl.toFixed(1) + '\xba \n' +
+		'd:' + dev.toFixed(1) + '\xba \n' +
+		'Current Dir:' + current.cdr.toFixed(1) + '\xba \n' +
 		'Current Speed:' + current.csp.toFixed(2) + ' kts';
 
 	console.log(resContent);
 
 	// Update WebComponents in the carrousel
 	document.getElementById('tws-01').value = tw.tws;
-	document.getElementById('twa-01').value = JSON.stringify({ wa: tw.twa, ws: tw.tws });
+	document.getElementById('twa-01').value = JSON.stringify({ wa: tw.twa, ws: tw.twa }); // was ws: tw.tws
 	document.getElementById('twd-01').value = tw.twd;
 	document.getElementById('aws-01').value = aws;
-	document.getElementById('awa-01').value = JSON.stringify({ wa: awa, ws: aws });
+	document.getElementById('awa-01').value = JSON.stringify({ wa: awa, ws: awa }); // was ws: tw.tws
 	document.getElementById('bsp-01').value = bsp;
 	document.getElementById('hdg-01').value = hdg;
 	document.getElementById('sog-01').value = sog;
