@@ -92,6 +92,9 @@ public final class GeomUtil {
 	}
 
 	/**
+	 * Inverse of {@link #haversineNm(double lat1, double long1, double lat2, double long2)}.<br/>
+	 * From position (fromLat, fromLng), tells us where we would be after
+	 * moving 'dist' nm in the 'heading' true.
 	 *
 	 * @param fromLat from Latitude (in degrees)
 	 * @param fromLng from Longitude (in degrees)

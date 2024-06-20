@@ -720,7 +720,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'card-n':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // outline
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
@@ -775,7 +775,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'card-s':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // outline
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
@@ -830,7 +830,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'card-e':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // outline
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
@@ -894,7 +894,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'card-w':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // outline
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
@@ -958,7 +958,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'sp':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // 'black';  // Outline
 				context.fillStyle = 'yellow';
 				// Crosshair
 				context.lineWidth = 0.5;
@@ -997,7 +997,7 @@ class ChartlessMap extends HTMLElement {
 				break;
 			case 'is-dng':
 				context.save();
-				context.strokeStyle = 'black';
+				context.strokeStyle = 'gray'; // outline
 				// Crosshair
 				context.lineWidth = 0.5;
 				context.beginPath();
