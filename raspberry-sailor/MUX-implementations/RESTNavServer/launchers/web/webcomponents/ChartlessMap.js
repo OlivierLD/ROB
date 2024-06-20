@@ -538,7 +538,7 @@ class ChartlessMap extends HTMLElement {
 
 	/**
 	 * Latitude to Increasing Latitude
-	 * @param {number} lat 
+	 * @param {number} lat
 	 * @returns the increasing latitude
 	 */
 	static getIncLat(lat) {
@@ -548,8 +548,8 @@ class ChartlessMap extends HTMLElement {
 
 	/**
 	 * Increasing latitude to latitude
-	 * @param {number} il 
-	 * @returns the correspoonding latitude
+	 * @param {number} il
+	 * @returns the corresponding latitude
 	 */
 	static getInvIncLat(il) {
 		let ret = Math.toRadians(il);
