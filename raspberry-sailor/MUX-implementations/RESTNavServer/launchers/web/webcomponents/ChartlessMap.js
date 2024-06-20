@@ -17,6 +17,9 @@ const chartlessMapDefaultColorConfig = {
 	bgColor: 'white',
 	gridColor: 'rgba(0, 0, 0, 0.7)',
 	fgColor: 'silver',
+	markerAndTrackColor: 'blue',
+	targetColor: 'green',
+	borderColor: 'blue',
 	valueFont: 'Courier New'
 };
 
@@ -244,6 +247,10 @@ class ChartlessMap extends HTMLElement {
 		return this._shadowRoot;
 	}
 
+	get colorConfig() {
+		return this.chartlessMapColorConfig;
+	}
+
 	// Component methods
 	getColorConfig(classNames) {
 		let colorConfig = chartlessMapDefaultColorConfig;
@@ -277,6 +284,15 @@ class ChartlessMap extends HTMLElement {
 											break;
 										case '--value-font':
 											colorConfig.valueFont = value;
+											break;
+										case '--marker-and-track-color':
+											colorConfig.markerAndTrackColor = value;
+											break;
+										case '--target-color':
+											colorConfig.targetColor = value;
+											break;
+										case '--border-color':
+											colorConfig.borderColor = value;
 											break;
 										default:
 											break;

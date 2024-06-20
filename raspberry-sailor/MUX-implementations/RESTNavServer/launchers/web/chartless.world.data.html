@@ -13,22 +13,44 @@ html {
 	font-family: "Courier New"
 }
 
+.html-01 {
+	background-color: white;
+	color: black;
+}
+.html-02 {
+	background-color: gray;
+	color: cyan;
+}
+.html-03 {
+	background-color: black;
+	color: silver;
+}
+
 .chartless-map-01 {
 	--bg-color: rgba(224, 215, 215, 0.5);
 	--grid-color: rgba(0, 0, 0, 0.7);
 	--fg-color: gray;
+	--marker-and-track-color: navy;
+	--target-color: green;
+	--border-color: blue;
 	--value-font: 'Courier New';
 }
 .chartless-map-02 {
 	--bg-color: rgba(0, 0, 0, 0.5);
 	--grid-color: lime;
 	--fg-color: lime;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
 	--value-font: 'Courier New';
 }
 .chartless-map-03 {
-	--bg-color: rgba(0, 0, 0, 1.0);
+	--bg-color: rgb(62, 58, 58);
 	--grid-color: cyan;
 	--fg-color: cyan;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
 	--value-font: 'Courier New';
 }
 	</style>
@@ -378,7 +400,7 @@ let updateMap = (elmt, context) => {
 				let bearingMess = `Bearing: ${bearing.toFixed(0)}\u00b0`;
 				extraMess.push(bearingMess);
 			}
-			elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess); // method defined in the ChartlessMap
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.markerAndTrackColor, extraMess); // method defined in the ChartlessMap
 		});
 		context.restore();
 	}
@@ -406,7 +428,7 @@ let updateMap = (elmt, context) => {
 					plotIt = false;
 				}
 				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) { 
-					elmt.plotMark(context, marker, markerRadius, beaconHeight, markerAndTrackColor, extraMess);
+					elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.borderColor, extraMess);
 				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
 				plotBorder.push(plot);
@@ -445,7 +467,7 @@ let updateMap = (elmt, context) => {
 			// Draw border
 			context.save();
 			context.beginPath();
-			context.strokeStyle = 'blue';
+			context.strokeStyle = elmt.colorConfig.borderColor; // 'blue';
 			context.lineWidth = 2;
 
 			if (plotBorder.length > 0) {
@@ -515,8 +537,8 @@ let updateMap = (elmt, context) => {
 			// console.log(`- (AISMap) Plotting AIS Target ${target.vesselName !== null ? target.vesselName : target.mmsi} at ${canvasX}/${canvasY}`);
 
 			context.font = "8px Courier";
-			context.fillStyle = target.threat ? 'red' : 'green';
-			context.strokeStyle = target.threat ? 'red' : 'green'; 
+			context.fillStyle = target.threat ? 'red' : elmt.colorConfig.targetColor;
+			context.strokeStyle = target.threat ? 'red' : elmt.colorConfig.targetColor; 
 			context.arc(canvasCoord.x, canvasCoord.y, boatRadius, 0, 2 * Math.PI);
 			context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasCoord.x + boatRadius + 1, canvasCoord.y - boatRadius);
 			context.stroke();
@@ -564,7 +586,7 @@ let updateMap = (elmt, context) => {
 
 		context.save();
 
-		context.strokeStyle = 'orange';
+		context.strokeStyle = 'orange'; // Only hard-coded one...
 		drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
 
 		context.beginPath();
@@ -592,7 +614,7 @@ let updateMap = (elmt, context) => {
 
 	// The points of the track
 	context.beginPath();
-	context.strokeStyle = markerAndTrackColor;
+	context.strokeStyle = elmt.colorConfig.markerAndTrackColor;
 	context.lineWidth = 1;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
@@ -700,18 +722,31 @@ let plotWorldMap = (cb) => {
 };
 
 let setStyle = (opt) => {
+	let map = document.getElementById('chartless-map-01');
 	document.getElementById('chartless-map-01').className = opt.value;
 
 	switch (opt.value) {
 		case 'chartless-map-03':
-			markerAndTrackColor = 'cyan';
+			// markerAndTrackColor = 'cyan';
+			map.colorConfig.markerAndTrackColor = 'cyan';
+			map.colorConfig.targetColor = 'lime';
+			map.colorConfig.borderColor = 'cyan';
+			document.body.className = 'html-03';
 			break;
 		case 'chartless-map-02':
-			markerAndTrackColor = 'blue';
+			// markerAndTrackColor = 'cyan';
+			map.colorConfig.markerAndTrackColor = 'lightcyan';
+			map.colorConfig.targetColor = 'lime';
+			map.colorConfig.borderColor = 'cyan';
+			document.body.className = 'html-02';
 			break;
 		case 'chartless-map-01':
 		default:
-			markerAndTrackColor = 'navy';
+			// markerAndTrackColor = 'navy';
+			map.colorConfig.markerAndTrackColor = 'navy';
+			map.colorConfig.targetColor = 'green';
+			map.colorConfig.borderColor = 'blue';
+			document.body.className = 'html-01';
 			break;
 	}
 };
@@ -729,7 +764,7 @@ window.onload = () => {
 	<h1>GPS, AIS, Markers, Borders</h1>
     <table>
         <tr>
-            <td valign="top">
+            <td valign="top" style="height: 600px;">
                 <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
                     <chartless-map id="chartless-map-01"
                                    class="chartless-map-01"
@@ -792,9 +827,9 @@ window.onload = () => {
 			</td>
         </tr>
         <tr>
-            <td>
+            <td valign="top" height="50">
                 <!-- A slider for the chart scale -->
-                <div id="div-slider" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+                <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
 					Chart Width:
                     <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
                            oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
@@ -803,7 +838,7 @@ window.onload = () => {
             </td>
         </tr>
 		<tr>
-			<td>
+			<td valign="top">
 				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
 				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
 				<input type="checkbox" onchange="plotBorderMarkers(this);" checked>Plot Borders' Markers
