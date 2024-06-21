@@ -52,25 +52,26 @@ public final class GeomUtil {
 		}
 	}
 
-	private final static double KM_EQUATORIAL_EARTH_RADIUS = 6_378.1370D;
-	private final static double NM_EQUATORIAL_EARTH_RADIUS = 3_443.9184665227D;
-	private final static double MILE_EQUATORIAL_EARTH_RADIUS = 3_964.0379117464D;
+	private final static double KM_EQUATORIAL_EARTH_RADIUS = 6_378.1370D;         // km per radian
+	private final static double NM_EQUATORIAL_EARTH_RADIUS = 3_443.9184665227D;   // nm per radian
+	private final static double MILE_EQUATORIAL_EARTH_RADIUS = 3_964.0379117464D; // statute mile per radian
 
 	/**
-	 * Great circle distance between two points
-	 * See https://en.wikipedia.org/wiki/Haversine_formula
+	 * Great circle distance between two points.<br/>
+	 * See https://en.wikipedia.org/wiki/Haversine_formula<br/>
+	 * and https://fr.wikipedia.org/wiki/Formule_de_haversine<br/>
 	 *
 	 * Formula is
+	 * <pre>
 	 * a = sqrt(sin(deltaL / 2)^2 + cos(lat1 * lat2 * sin(deltaG / 2)^2
 	 * result = 2 * atan(sqrt(a), sqrt(1 - a))
-	 *
+	 * </pre>
 	 * @param lat1 in degrees
 	 * @param long1 in degrees
 	 * @param lat2 in degrees
 	 * @param long2 in degrees
-	 * @return in radians
+	 * @return distance between (lat1, long1) and (lat2, lang2), in radians
 	 */
-
 	private static double haversineRaw(double lat1, double long1, double lat2, double long2) {
 		double deltaG = Math.toRadians(long2 - long1);
 		double deltaL = Math.toRadians(lat2 - lat1);
@@ -79,14 +80,17 @@ public final class GeomUtil {
 		return c;
 	}
 
+	// In Kilometers
 	public static double haversineKm(double lat1, double long1, double lat2, double long2) {
 		return haversineRaw(lat1, long1, lat2, long2) * KM_EQUATORIAL_EARTH_RADIUS;
 	}
 
+	// In nautical miles
 	public static double haversineNm(double lat1, double long1, double lat2, double long2) {
 		return haversineRaw(lat1, long1, lat2, long2) * NM_EQUATORIAL_EARTH_RADIUS;
 	}
 
+	// In US statute miles
 	public static double haversineMile(double lat1, double long1, double lat2, double long2) {
 		return haversineRaw(lat1, long1, lat2, long2) * MILE_EQUATORIAL_EARTH_RADIUS;
 	}
