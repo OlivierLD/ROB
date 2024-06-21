@@ -788,6 +788,9 @@ window.onload = () => {
 						</td>
 					</tr>
 					<tr>
+						<td colspan="2"><hr/></td>
+					</tr>
+					<tr>
 						<td>Position:</td>
 						<td><span id="gps-position"></span></td>
 					</tr>
@@ -833,7 +836,7 @@ window.onload = () => {
 					Chart Width:
                     <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
                            oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
-                    <output name="padding" id="sliderValue01" style="color: black; text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+                    <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
                 </div>
             </td>
         </tr>
