@@ -28,6 +28,9 @@ public final class GeomUtil {
 		public double getAngleInDegrees() {
 			return angleInDegrees;
 		}
+		public double getAngleInHours() {
+			return GeomUtil.degrees2hours(angleInDegrees);
+		}
 
 		private double angleInDegrees;
 		public static final short DEGREES = 0;
@@ -37,18 +40,22 @@ public final class GeomUtil {
 		}
 
 		public PolyAngle(double d, short type) {
-			switch (type) {
-				case 0:
-					angleInDegrees = d;
-					break;
-
-				case 1:
-//      angleInDegrees = GeomUtil.ra2ha(d);
-					break;
-			}
+			set(d, type);
 		}
 
-		public PolyAngle(String str, short type) {
+		public void set(double d, short type) {
+			switch (type) {
+				case DEGREES:
+					this.angleInDegrees = d;
+					break;
+
+				case HOURS:
+					this.angleInDegrees = GeomUtil.hours2degrees(d);
+					break;
+
+				default:
+					throw new RuntimeException(String.format("Unsupported PolyAngle type %d", type));
+			}
 		}
 	}
 
@@ -493,7 +500,13 @@ public final class GeomUtil {
 			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
 		}
-
+		System.out.println("-----------------");
+		// PolyAngle tests
+		double inHours = 2.5;
+		final PolyAngle polyAngle = new PolyAngle(inHours, PolyAngle.HOURS);
+		System.out.printf("%f hours = %f degrees\n", inHours, polyAngle.getAngleInDegrees());
+		polyAngle.set(90d, PolyAngle.DEGREES);
+		System.out.printf("%f degrees = %f hours\n", polyAngle.getAngleInDegrees(), polyAngle.getAngleInHours());
 	}
 
 }

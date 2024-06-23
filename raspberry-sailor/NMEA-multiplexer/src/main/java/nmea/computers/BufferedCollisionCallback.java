@@ -2,7 +2,9 @@ package nmea.computers;
 
 import util.TextToSpeech;
 
+import java.io.FileInputStream;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -12,8 +14,11 @@ import java.util.function.Consumer;
  */
 public class BufferedCollisionCallback implements Consumer<String> {
 
+    private String collisionVocabulary = "collision";
+
     private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
-    private final static long POLLING_INTERVAL = 10; // in seconds
+    private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
+    private long pollingInterval = POLLING_INTERVAL;
     private Set<String> threatList = new HashSet<>();
     private static BufferedCollisionCallback instance = null;
     private BufferedCollisionCallback() {
@@ -24,7 +29,7 @@ public class BufferedCollisionCallback implements Consumer<String> {
                 synchronized (threatList) {
                     int length = threatList.size();
                     if (length > 0) {
-                        String message = String.format("Warning ! %d collision threat%s !", length, length > 1 ? "s" : "");
+                        String message = String.format("Warning ! %d %s threat%s !", length, collisionVocabulary, length > 1 ? "s" : "");
                         TextToSpeech.speak(message);
                         if (VERBOSE) {
                             System.out.printf(">> Found %d threat(s) :\n", length);
@@ -34,11 +39,11 @@ public class BufferedCollisionCallback implements Consumer<String> {
                         }
                         threatList.clear();
                     } else {
-                        System.out.println("Found NO threat.");
+                        System.out.printf(">> Found NO %s threat.\n", collisionVocabulary);
                     }
                 }
                 try {
-                    Thread.sleep(POLLING_INTERVAL * 1_000);
+                    Thread.sleep(pollingInterval * 1_000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -54,9 +59,30 @@ public class BufferedCollisionCallback implements Consumer<String> {
     }
     @Override
     public void accept(String s) {
-        // System.out.printf("Talk to me ! [%s]\n", s);
+        System.out.printf("Accept >> Adding %s threat [%s] to %s\n", collisionVocabulary, s, this.getClass().getName());
         synchronized (threatList) {
             threatList.add(s);
+        }
+    }
+
+    public void setProperties(String propFileName) {
+        System.out.printf("Loading properties file %s\n", propFileName);
+        Properties props = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream(propFileName);
+            props.load(fis);
+
+            if (props.getProperty("collision.name") != null) {
+                collisionVocabulary = props.getProperty("collision.name");
+            }
+
+            if (props.getProperty("polling.interval") != null) {
+                pollingInterval = Long.parseLong(props.getProperty("polling.interval"));
+            }
+
+        } catch (Exception e) {
+            System.out.printf("%s file problem...\n", propFileName);
+            throw new RuntimeException(String.format("File not found: %s", propFileName));
         }
     }
 }

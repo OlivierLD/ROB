@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 /**
  * Dead Reckoning for Celestial Navigation.
- * Returns what should be observed for given position, GHA and D
+ * Returns what should be observed for a given position (L, G), GHA and D
  *
  * <p>
  * Call sequence:

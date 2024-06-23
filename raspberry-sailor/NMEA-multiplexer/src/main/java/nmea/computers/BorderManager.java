@@ -339,6 +339,16 @@ public class BorderManager extends Computer {
 					} else {
 						this.collisionCallback = (Consumer<String>) aConsumer.getDeclaredConstructor().newInstance();
 					}
+					// Specific properties for this consumer ?
+					final String cbProps = props.getProperty("collision.threat.callback.props");
+					if (cbProps != null) {
+						final Method cbMethod = aConsumer.getDeclaredMethod("setProperties", String.class);
+						if (cbMethod != null) {
+							cbMethod.invoke(this.collisionCallback, cbProps);
+						} else {
+							System.out.printf("No such method 'setProperties(String prop)' in %s\n", aConsumer.getName());
+						}
+					}
 				} catch (ClassNotFoundException cnfe) {
 					cnfe.printStackTrace();
 				} catch (IllegalAccessException iae) {
