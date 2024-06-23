@@ -11,8 +11,10 @@ import java.util.function.Consumer;
 /**
  * Just an example for AISManager (or others like BorderManager) collision callback.
  * >> A Singleton
+ *
+ * Just an Example, clone of a singleton.
  */
-public class BufferedCollisionCallback implements Consumer<String> {
+public class BufferedCollisionCallback2 implements Consumer<String> {
 
     private String collisionVocabulary = "collision";
 
@@ -20,9 +22,9 @@ public class BufferedCollisionCallback implements Consumer<String> {
     private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
     private long pollingInterval = POLLING_INTERVAL;
     private Set<String> threatList = new HashSet<>();
-    private static BufferedCollisionCallback instance = null;
-    private BufferedCollisionCallback() {
-        System.out.println(">> BufferedCollisionCallback - creating new Instance!!");
+    private static BufferedCollisionCallback2 instance = null;
+    private BufferedCollisionCallback2() {
+        System.out.println(">> BufferedCollisionCallback2 - creating new Instance!!");
         // Start a thread, polling the threats buffer
         Thread pollingThread = new Thread(() -> {
             while (true) {
@@ -53,11 +55,11 @@ public class BufferedCollisionCallback implements Consumer<String> {
         });
         pollingThread.start();
     }
-    public static synchronized BufferedCollisionCallback getInstance() {
+    public static synchronized BufferedCollisionCallback2 getInstance() {
         if (instance == null) {
-            instance = new BufferedCollisionCallback();
+            instance = new BufferedCollisionCallback2();
         } else {
-            System.out.printf("Reusing instance of %s\n", BufferedCollisionCallback.instance.getClass().getName());
+            System.out.printf("Reusing instance of %s\n", BufferedCollisionCallback2.instance.getClass().getName());
         }
         return instance;
     }
