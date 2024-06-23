@@ -17,6 +17,7 @@ context:
   markers.list:
     - markers: mux-configs/markers.04.yaml
     - markers: mux-configs/markers.05.yaml
+    - markers: mux-configs/markers.06.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
     - markers: mux-configs/san.juan.markers.yaml
 channels:
@@ -24,7 +25,7 @@ channels:
     filename: ./sample.data/going.to.groix.nmea.zip
     zip: true
     path.in.zip: going.to.groix.2.nmea
-    between-records: 50  # 500 is normal...
+    between-records: 50  # 500 is normal... 50: speed up.
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
