@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 /**
  * Just an example for AISManager (or others like BorderManager) collision callback.
- * >> A Singleton
+ * >> NOT A Singleton, the constructor is public, there is NO getInstance() method
  */
 public class BufferedCollisionCallback implements Consumer<String> {
 
@@ -20,8 +20,7 @@ public class BufferedCollisionCallback implements Consumer<String> {
     private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
     private long pollingInterval = POLLING_INTERVAL;
     private Set<String> threatList = new HashSet<>();
-    private static BufferedCollisionCallback instance = null;
-    private BufferedCollisionCallback() {
+    public BufferedCollisionCallback() {
         System.out.println(">> BufferedCollisionCallback - creating new Instance!!");
         // Start a thread, polling the threats buffer
         Thread pollingThread = new Thread(() -> {
@@ -52,14 +51,6 @@ public class BufferedCollisionCallback implements Consumer<String> {
             }
         });
         pollingThread.start();
-    }
-    public static synchronized BufferedCollisionCallback getInstance() {
-        if (instance == null) {
-            instance = new BufferedCollisionCallback();
-        } else {
-            System.out.printf("Reusing instance of %s\n", BufferedCollisionCallback.instance.getClass().getName());
-        }
-        return instance;
     }
     @Override
     public void accept(String s) {

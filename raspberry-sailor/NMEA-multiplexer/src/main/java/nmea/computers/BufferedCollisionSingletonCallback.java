@@ -11,10 +11,8 @@ import java.util.function.Consumer;
 /**
  * Just an example for AISManager (or others like BorderManager) collision callback.
  * >> A Singleton
- *
- * Just an Example, clone of a singleton.
  */
-public class BufferedCollisionCallback2 implements Consumer<String> {
+public class BufferedCollisionSingletonCallback implements Consumer<String> {
 
     private String collisionVocabulary = "collision";
 
@@ -22,9 +20,9 @@ public class BufferedCollisionCallback2 implements Consumer<String> {
     private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
     private long pollingInterval = POLLING_INTERVAL;
     private Set<String> threatList = new HashSet<>();
-    private static BufferedCollisionCallback2 instance = null;
-    private BufferedCollisionCallback2() {
-        System.out.println(">> BufferedCollisionCallback2 - creating new Instance!!");
+    private static BufferedCollisionSingletonCallback instance = null;
+    private BufferedCollisionSingletonCallback() {
+        System.out.println(">> BufferedCollisionCallback - creating new Instance!!");
         // Start a thread, polling the threats buffer
         Thread pollingThread = new Thread(() -> {
             while (true) {
@@ -55,11 +53,18 @@ public class BufferedCollisionCallback2 implements Consumer<String> {
         });
         pollingThread.start();
     }
-    public static synchronized BufferedCollisionCallback2 getInstance() {
+
+    /**
+     * Assuming that the constructor is private.
+     * THIS method is the way to access an existing instance, or create a new one.
+     *
+     * @return the instance, unique in the JVM.
+     */
+    public static synchronized BufferedCollisionSingletonCallback getInstance() {
         if (instance == null) {
-            instance = new BufferedCollisionCallback2();
+            instance = new BufferedCollisionSingletonCallback();
         } else {
-            System.out.printf("Reusing instance of %s\n", BufferedCollisionCallback2.instance.getClass().getName());
+            System.out.printf("Reusing instance of %s\n", BufferedCollisionSingletonCallback.instance.getClass().getName());
         }
         return instance;
     }
