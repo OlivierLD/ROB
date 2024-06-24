@@ -111,7 +111,7 @@ function TrackMap(cName, width, height, bgColor, fgColor, gridColor, textColor, 
 		context.fillStyle = this.tc;
 		context.font = "bold " + fontSize + "px Arial"; // "bold 40px Arial"
 		if (this.lastCog !== undefined) {
-			text = 'COG ' + this.lastCog.toFixed(0) + String.fromCharCode(176);
+			text = 'COG ' + this.lastCog.toFixed(0) + String.fromCharCode(176); // Degree sign
 			let metrics = context.measureText(text);
 			len = metrics.width;
 			// context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + (fontSize) - 2);
