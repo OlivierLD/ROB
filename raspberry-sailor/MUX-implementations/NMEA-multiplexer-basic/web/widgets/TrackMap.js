@@ -105,20 +105,23 @@ function TrackMap(cName, width, height, bgColor, fgColor, gridColor, textColor, 
 
 		context.beginPath();
 		context.fillStyle = this.tc; 
-		context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) - (fontSize) - 2);
+		// context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) - (fontSize) - 2);
+		context.fillText(text, (this.w - len - 2), fontSize); // (this.h / 2) - (fontSize) - 2);
 
 		if (this.lastCog !== undefined) {
 			text = 'COG ' + this.lastCog.toFixed(0) + String.fromCharCode(176);
 			let metrics = context.measureText(text);
 			len = metrics.width;
-			context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + (fontSize) - 2);
+			// context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + (fontSize) - 2);
+			context.fillText(text, 0, this.h - fontSize);
 		}
 
 		if (this.lastSog !== undefined) {
 			text = 'SOG ' + this.lastSog.toFixed(1) + ' kts';
 			let metrics = context.measureText(text);
 			len = metrics.width;
-			context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + (2 * fontSize) - 2);
+			// context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + (2 * fontSize) - 2);
+			context.fillText(text, (this.w / 2), this.h - fontSize);
 		}
 
 		context.closePath();
