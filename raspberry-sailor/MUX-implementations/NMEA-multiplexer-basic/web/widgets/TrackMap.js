@@ -99,15 +99,17 @@ function TrackMap(cName, width, height, bgColor, fgColor, gridColor, textColor, 
 		let fontSize = 12;
 		let text = 'THE TRACK';
 		let len = 0;
-		context.font = "bold " + fontSize + "px Arial"; // "bold 40px Arial"
+		context.font = "bold " + (fontSize * 1.5) + "px Arial"; // "bold 40px Arial"
 		let metrics = context.measureText(text);
 		len = metrics.width;
 
 		context.beginPath();
-		context.fillStyle = this.tc; 
-		// context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) - (fontSize) - 2);
-		context.fillText(text, (this.w - len - 2), fontSize); // (this.h / 2) - (fontSize) - 2);
+		context.fillStyle = 'rgba(128, 128, 128, 0.75)'; // this.tc;
+		context.fillText(text, (this.w / 2) - (len / 2), (this.h / 2) + ((fontSize * 1.5) / 2));
+		// context.fillText(text, (this.w - len - 2), fontSize); // (this.h / 2) - (fontSize) - 2);
 
+		context.fillStyle = this.tc;
+		context.font = "bold " + fontSize + "px Arial"; // "bold 40px Arial"
 		if (this.lastCog !== undefined) {
 			text = 'COG ' + this.lastCog.toFixed(0) + String.fromCharCode(176);
 			let metrics = context.measureText(text);
