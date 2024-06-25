@@ -253,6 +253,7 @@ public class RESTImplementation {
 									resultList.add(txRequest);
 								} catch (Exception ex) {
 									// Return this
+									System.err.println("downloadAndTransform failed (absorbed):");
 									ex.printStackTrace();
 									resultList.add(ex);
 								}

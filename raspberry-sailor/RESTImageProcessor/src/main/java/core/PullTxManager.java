@@ -1,7 +1,7 @@
 package core;
 
-import images.ImageHTTPClient;
-import images.ImageUtil;
+import imageutils.ImageHTTPClient;
+import imageutils.ImageUtil;
 
 import java.awt.Color;
 import java.awt.Desktop;

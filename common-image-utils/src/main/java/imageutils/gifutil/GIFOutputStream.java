@@ -1,4 +1,4 @@
-package images.gifutil;
+package imageutils.gifutil;
 
 /*
    Copyright (C) 2000 Bernhard Haumacher <haui@haumacher.de>

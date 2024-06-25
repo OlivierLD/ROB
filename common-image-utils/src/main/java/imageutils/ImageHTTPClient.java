@@ -1,8 +1,8 @@
-package images;
+package imageutils;
 
-import images.gifutil.GIFInputStream;
-import images.gifutil.GIFOutputStream;
-import images.gifutil.Gif;
+import imageutils.gifutil.GIFInputStream;
+import imageutils.gifutil.GIFOutputStream;
+import imageutils.gifutil.Gif;
 
 import javax.imageio.ImageIO;
 import java.awt.Image;

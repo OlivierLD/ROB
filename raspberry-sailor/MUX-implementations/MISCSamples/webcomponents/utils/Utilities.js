@@ -66,6 +66,7 @@ if (Math.toDegrees === undefined) {
 }
 
 /**
+ * TODO: See #GeomUtil.deadReckoning
  *
  * @param start { lat: xx, lng: xx }, L & G in Degrees
  * @param dist distance in nm
