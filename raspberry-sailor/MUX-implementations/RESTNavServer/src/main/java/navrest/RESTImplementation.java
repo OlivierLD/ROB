@@ -187,6 +187,9 @@ public class RESTImplementation {
 	}
 
 	private Response getCompositeHierarchy(Request request) {
+		if (true || VERBOSE) {
+			System.out.println("getCompositeHierarchy, starting");
+		}
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		Map<String, String> qs = request.getQueryStringParameters();
 		String filter = (qs == null ? null : qs.get("filter")); // Filter on the COMPOSITE name.
@@ -196,7 +199,15 @@ public class RESTImplementation {
 			String content;
 			try {
 				content = mapper.writeValueAsString(compositeHierarchy); // new Gson().toJson(compositeHierarchy);
+				if (true || VERBOSE) {
+					System.out.println("getCompositeHierarchy returned:");
+					System.out.println(content);
+				}
 			} catch (JsonProcessingException jpe) {
+				if (true || VERBOSE) {
+					System.err.println("getCompositeHierarchy failed with JsonProcessingException:");
+					jpe.printStackTrace();
+				}
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
@@ -208,6 +219,10 @@ public class RESTImplementation {
 			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
+			if (true || VERBOSE) {
+				System.err.println("getCompositeHierarchy failed:");
+				ex.printStackTrace();
+			}
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()

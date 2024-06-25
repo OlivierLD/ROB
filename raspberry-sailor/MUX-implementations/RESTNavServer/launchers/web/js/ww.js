@@ -166,7 +166,7 @@ let crawlComposites = function(filter) {
 };
 
 let getExistingComposites = function(callback, filter) {
-	if (WW_VERBOSE) {
+	if (true || WW_VERBOSE) {
 		console.log(`getExistingComposites, starting`);
 	}
 	let getData = crawlComposites(filter);
