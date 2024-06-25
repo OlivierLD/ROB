@@ -846,14 +846,19 @@ public class HTTPServer {
 									}
 									if (restRequestManager.isPresent()) {
 										unManagedRequest = false;
-										Response response = restRequestManager.get().onRequest(request); // REST Request, most likely.
 										try {
-											sendResponse(response, out);
-										} catch (Exception err) {
-											System.err.println("+-----------------------------------------------");
-											System.err.printf("| Caught error sending back response:\n| %s\n", String.valueOf(response));
-											System.err.println("+-----------------------------------------------");
-											err.printStackTrace();
+											Response response = restRequestManager.get().onRequest(request); // REST Request, most likely.
+											try {
+												sendResponse(response, out);
+											} catch (Exception err) {
+												System.err.println("+-----------------------------------------------");
+												System.err.printf("| Caught error sending back response:\n| %s\n", String.valueOf(response));
+												System.err.println("+-----------------------------------------------");
+												err.printStackTrace();
+											}
+										} catch (Exception ex) {
+											System.err.println("onRequest failed.");
+											ex.printStackTrace();
 										}
 									}
 									// Old implementation
