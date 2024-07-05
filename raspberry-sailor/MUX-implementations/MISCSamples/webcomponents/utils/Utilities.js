@@ -66,7 +66,8 @@ if (Math.toDegrees === undefined) {
 }
 
 /**
- * TODO: See #GeomUtil.deadReckoning
+ * TODO: See #GeomUtil.deadReckoning (in Java)
+ *       Use haversineInv, in Scratch.js
  *
  * @param start { lat: xx, lng: xx }, L & G in Degrees
  * @param dist distance in nm

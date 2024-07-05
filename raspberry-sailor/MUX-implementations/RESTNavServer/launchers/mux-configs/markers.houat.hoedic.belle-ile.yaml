@@ -1,0 +1,215 @@
+#
+# Generated Fri Jul 05 2024 09:11:08 GMT+0200 (Central European Summer Time)
+# Houat, Hoedic, Belle-Ile
+#
+markers:
+  - label: "Le Palais"
+    latitude: 47.347391218821265
+    longitude: -3.1519599259991087
+    type: default
+  - label: "La Teignouse"
+    latitude: 47.457324771572395
+    longitude: -3.045830503160688
+    type: default
+borders:
+  - border-name: "Houat"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.40245407853195
+        longitude: -2.9922285678185294
+      - rank: 2
+        latitude: 47.399781685837944
+        longitude: -2.9817572238243883
+      - rank: 3
+        latitude: 47.3929257977472
+        longitude: -2.96699434540642
+      - rank: 4
+        latitude: 47.39466890470727
+        longitude: -2.961157858590014
+      - rank: 5
+        latitude: 47.39071777949346
+        longitude: -2.9527464511193102
+      - rank: 6
+        latitude: 47.39548233489022
+        longitude: -2.94227510712517
+      - rank: 7
+        latitude: 47.39257716943628
+        longitude: -2.9376402499474357
+      - rank: 8
+        latitude: 47.38781235137514
+        longitude: -2.9498282077111075
+      - rank: 9
+        latitude: 47.3814198457392
+        longitude: -2.9536047580040763
+      - rank: 10
+        latitude: 47.380606198503465
+        longitude: -2.9496565463341544
+      - rank: 11
+        latitude: 47.36828371985317
+        longitude: -2.946223318795092
+      - rank: 12
+        latitude: 47.37665401902623
+        longitude: -2.9573813082970446
+      - rank: 13
+        latitude: 47.38420939807393
+        longitude: -2.9609861972130607
+      - rank: 14
+        latitude: 47.38641768898853
+        longitude: -2.9757490756310294
+      - rank: 15
+        latitude: 47.393390631907536
+        longitude: -2.9843321444786857
+      - rank: 16
+        latitude: 47.39304200667168
+        longitude: -2.9936018588341544
+      - rank: 17
+        latitude: 47.39466890470727
+        longitude: -2.9984083773888415
+      - rank: 18
+        latitude: 47.39542467756906
+        longitude: -2.9921004921743597
+      - rank: 19
+        latitude: 47.398823521554995
+        longitude: -2.998065725023481
+      - rank: 20
+        latitude: 47.40030500032173
+        longitude: -2.991199269945355
+      - rank: 21
+        latitude: 47.40190262681572
+        longitude: -2.9934308678457464
+  - border-name: "Hoedic"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.34657704508333
+        longitude: -2.8916354478496946
+      - rank: 2
+        latitude: 47.34314575257595
+        longitude: -2.8808207811016477
+      - rank: 3
+        latitude: 47.34419261122123
+        longitude: -2.8754134477276243
+      - rank: 4
+        latitude: 47.34459971731019
+        longitude: -2.8718943895000852
+      - rank: 5
+        latitude: 47.34925213535308
+        longitude: -2.865886241306726
+      - rank: 6
+        latitude: 47.34884506514491
+        longitude: -2.862882167210046
+      - rank: 7
+        latitude: 47.34116829627169
+        longitude: -2.8610797227520384
+      - rank: 8
+        latitude: 47.33651516573134
+        longitude: -2.8645987809795774
+      - rank: 9
+        latitude: 47.33325773035704
+        longitude: -2.8763575853008665
+      - rank: 10
+        latitude: 47.33052365628806
+        longitude: -2.8816790879864134
+      - rank: 11
+        latitude: 47.33354858097074
+        longitude: -2.8822799028057493
+      - rank: 12
+        latitude: 47.33215248341578
+        longitude: -2.8863997758526247
+      - rank: 13
+        latitude: 47.338085643133844
+        longitude: -2.8904338182110227
+      - rank: 14
+        latitude: 47.342505995406356
+        longitude: -2.887687236179773
+  - border-name: "Belle-Ile"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.390291044798175
+        longitude: -3.252294660051121
+      - rank: 2
+        latitude: 47.3775058595414
+        longitude: -3.219678998430027
+      - rank: 3
+        latitude: 47.36053164267246
+        longitude: -3.1733304266526834
+      - rank: 4
+        latitude: 47.363554848207
+        longitude: -3.158567548234714
+      - rank: 5
+        latitude: 47.34680876324489
+        longitude: -3.1530743841722146
+      - rank: 6
+        latitude: 47.34285405099014
+        longitude: -3.145864606340183
+      - rank: 7
+        latitude: 47.33284963280194
+        longitude: -3.144491315324558
+      - rank: 8
+        latitude: 47.32912657469826
+        longitude: -3.1242352728440896
+      - rank: 9
+        latitude: 47.32330877098677
+        longitude: -3.1228619818284646
+      - rank: 10
+        latitude: 47.32330877098677
+        longitude: -3.111189008195652
+      - rank: 11
+        latitude: 47.31539552962807
+        longitude: -3.099859357316746
+      - rank: 12
+        latitude: 47.31679207010627
+        longitude: -3.066900372941746
+      - rank: 13
+        latitude: 47.307946690384945
+        longitude: -3.0552273993089334
+      - rank: 14
+        latitude: 47.284895195464834
+        longitude: -3.0772000555589334
+      - rank: 15
+        latitude: 47.2783737577061
+        longitude: -3.0926495794847146
+      - rank: 16
+        latitude: 47.27973350799463
+        longitude: -3.096985593492719
+      - rank: 17
+        latitude: 47.28214996523706
+        longitude: -3.0947110802480893
+      - rank: 18
+        latitude: 47.287651636341906
+        longitude: -3.117884695748217
+      - rank: 19
+        latitude: 47.2867201001366
+        longitude: -3.1419172885216544
+      - rank: 20
+        latitude: 47.30092424474068
+        longitude: -3.174704611519701
+      - rank: 21
+        latitude: 47.29242550190736
+        longitude: -3.1970205905236075
+      - rank: 22
+        latitude: 47.29428835694828
+        longitude: -3.226718008736498
+      - rank: 23
+        latitude: 47.31035275795689
+        longitude: -3.251265585640795
+      - rank: 24
+        latitude: 47.32652863316823
+        longitude: -3.2365027072228263
+      - rank: 25
+        latitude: 47.33537090457338
+        longitude: -3.254012167672045
+      - rank: 26
+        latitude: 47.35235321589607
+        longitude: -3.2622519137657946
+      - rank: 27
+        latitude: 47.37246901980511
+        longitude: -3.2612219455040763
+      - rank: 28
+        latitude: 47.3715389783628
+        longitude: -3.246287405709154
+      - rank: 29
+        latitude: 47.37525904572364
+        longitude: -3.252982199410326

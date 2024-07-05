@@ -103,7 +103,7 @@ public final class MercatorUtil {
 		double dist = 10;
 		double cog = 90;
 		GreatCirclePoint greatCirclePoint = deadReckoning(fromLat, fromLng, dist, cog);
-		System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, greatCirclePoint);
+		System.out.printf("New pos, %.02f nm in the %.01f: %s (%f / %f)\n", dist, cog, greatCirclePoint, greatCirclePoint.getL(), greatCirclePoint.getG());
 
 		GreatCirclePoint greatCirclePointV1 = deadReckoningV1(fromLat, fromLng, dist, cog);
 		System.out.printf("V1: New pos, %.02f nm in the %.01f: %s\n", dist, cog, greatCirclePointV1);
@@ -113,7 +113,7 @@ public final class MercatorUtil {
 
 		cog = 45;
 		greatCirclePoint = deadReckoning(fromLat, fromLng, dist, cog);
-		System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, greatCirclePoint);
+		System.out.printf("New pos, %.02f nm in the %.01f: %s (%f / %f)\n", dist, cog, greatCirclePoint, greatCirclePoint.getL(), greatCirclePoint.getG());
 
 		greatCirclePointV1 = deadReckoningV1(fromLat, fromLng, dist, cog);
 		System.out.printf("V1: New pos, %.02f nm in the %.01f: %s\n", dist, cog, greatCirclePointV1);

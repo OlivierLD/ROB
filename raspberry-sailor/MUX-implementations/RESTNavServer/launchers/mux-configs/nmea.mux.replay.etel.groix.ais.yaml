@@ -19,7 +19,7 @@ context:
     - markers: mux-configs/markers.05.yaml
     - markers: mux-configs/markers.06.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
-    - markers: mux-configs/san.juan.markers.yaml
+    - markers: mux-configs/markers.san.juan.yaml
 channels:
   - type: file
     filename: ./sample.data/going.to.groix.nmea.zip

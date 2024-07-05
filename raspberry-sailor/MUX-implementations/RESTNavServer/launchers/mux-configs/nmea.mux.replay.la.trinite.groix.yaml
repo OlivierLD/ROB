@@ -3,7 +3,7 @@
 #
 name: "Replay log file. Chartless Map."
 description:
-  - Replay a log file from the logged folder.
+  - Replay a log file from the logged folder (La Trinite - Groix).
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
 context:
@@ -16,28 +16,18 @@ context:
   markers.list:
     - markers: mux-configs/markers.04.yaml
     - markers: mux-configs/markers.05.yaml
+    - markers: mux-configs/markers.houat.hoedic.belle-ile.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
-    - markers: mux-configs/markers.san.juan.yaml
+    # - markers: mux-configs/markers.san.juan.yaml
 channels:
   - type: file
-    filename: ./sample.data/going.to.groix.nmea.zip
+    filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip
     zip: true
-    path.in.zip: going.to.groix.2.nmea
+    path.in.zip: rubiscup.2024.nmea
     between-records: 50   # Speed up
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
-forwarders:
-  - type: file
-    verbose: false
-    timebase.filename: false
-    filename: data.4tests.nmea
-    flush: true
-    # sentence.filters: MWV, VHW, HDG
-    sentence.filters: ~GGA,~GSA,~GSV
-#  - type: console
-#  - type: tcp
-#    port: 7002
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
