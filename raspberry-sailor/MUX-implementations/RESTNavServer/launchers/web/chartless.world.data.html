@@ -290,6 +290,42 @@ function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
 	context.stroke();
 }
 
+function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
+	const BOAT_FACT = 0.8;
+	let boatPoints = [
+		{ x: 0, y: - boatLen * BOAT_FACT * 0.6 },               // Bow
+		{ x: boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 },   // Starboard, point one
+		{ x: boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 },   // Starboard, point two
+		{ x: boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 },   // Starboard, point three
+		{ x: boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 },   // Starboard, point four
+		{ x: BOAT_FACT * 0, y: + boatLen * BOAT_FACT * 0.6 },                // Mid-transom
+		{ x: - boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 }, // Port, point four
+		{ x: - boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 }, // Port, point three
+		{ x: - boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 }, // Port, point two
+		{ x: - boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 }, // Port, point one
+		{ x: BOAT_FACT * 0, y: - boatLen * BOAT_FACT * 0.6 }                 // Bow
+	];
+	let radAngle = Math.toRadians(heading); // + (Math.PI / 2);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	// Apply rotation to the points of the 'needle'
+	boatPoints.forEach((pt, idx) => {
+		x = canvasX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+		y = canvasY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+		if (idx === 0) {
+			context.moveTo(x, y);
+		} else {
+			context.lineTo(x, y);
+		}
+	});
+	context.closePath();
+	context.stroke();
+}
+
 let markerAndTrackColor = 'navy';
 
 /*
@@ -543,7 +579,8 @@ let updateMap = (elmt, context) => {
 			context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasCoord.x + boatRadius + 1, canvasCoord.y - boatRadius);
 			context.stroke();
 			context.closePath();
-			drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			// drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			drawBoat(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
 			// AIS threat ?
 			if (target.threat === true) {
 				// debugger;
@@ -587,7 +624,8 @@ let updateMap = (elmt, context) => {
 		context.save();
 
 		context.strokeStyle = 'orange'; // Only hard-coded one...
-		drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		// drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		drawBoat(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
 
 		context.beginPath();
 		context.lineWidth = 1;

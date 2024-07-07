@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+x#!/usr/bin/env bash
 #
 # Suitable for LeafLet. Spits out positions in JSON format.
 #
@@ -16,8 +16,8 @@ JAVA_OPTIONS=
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dwith.og=true"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dminified=false"
 #
-JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=484"
-JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=484"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
 #
 java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPos "$1"
 #
