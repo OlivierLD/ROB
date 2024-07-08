@@ -16,8 +16,11 @@ JAVA_OPTIONS=
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dwith.og=true"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dminified=false"
 #
-# JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=484"
-# JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
+# OFFSET=484
+# LIMIT=179
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Doffset=${OFFSET}"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=${LIMIT}"
+# echo -e "Offset: ${OFFSET} Limit ${LIMIT}"
 #
 java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPos "$1"
 #

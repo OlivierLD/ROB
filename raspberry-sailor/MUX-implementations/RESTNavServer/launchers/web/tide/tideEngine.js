@@ -76,7 +76,7 @@ let tideComputer = {
         });
         return siteConstSpeed;
     },
-    findTideStation: (stationName, year) => { // also fixex the coefficients for the given year.
+    findTideStation: (stationName, year) => { // also fixes the coefficients for the given year.
         // Try full match
         let ts = null;
         let keys = Object.keys(tideStations);
@@ -161,6 +161,21 @@ let tideComputer = {
             }
         });
         return value;
+    },
+    getCoeffInBrest: (ts, tideTable) => {
+        let coeffs = [];
+        // assert ts.getFullName().equals("Brest%2C%20France");
+        const U = 0.032429906542056; // Hard coded
+        let baseHeight = ts.baseHeight; // 4.02 for Brest
+        tideTable.forEach(tv => {
+            if (tv.type === "HW") { // High Water
+                let hwValue = tv.wh;
+                let coeff = (hwValue - baseHeight) / U;
+                coeffs.push(parseInt(coeff.toFixed(0)));
+                // tv.coeff = parseInt(coeff.toFixed(0));
+            }
+        });
+        return coeffs;
     }
 };
 

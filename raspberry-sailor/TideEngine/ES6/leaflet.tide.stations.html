@@ -299,12 +299,24 @@ function showGeneratedDialog(station) {
         console.log(`Calculating tide curve for [${decodeURIComponent(station)}]`);
         let data = getCurveData(tideStation);
         console.log("CurveData Done");
+
+        // Coeffs ?
+        let tideStationBrest = tideEngine.default.findTideStation("Brest%2C%20France", THE_YEAR);
+        let brestData = getCurveData(tideStationBrest);
+        let coeffInBrest = tideEngine.default.getCoeffInBrest(tideStationBrest, brestData.tideTable); // <= Send the tide table for Brest !!
+
         // Example: 
         // console.log(`${data.tideTable[0].type}: at ${dateFmt.formatDate(data.tideTable[0].at, 'd-m-y H:i')}, ${data.tideTable[0].wh} ${data.tideTable[0].unit}`)
         let tableContent = "<pre>";
+        let coeffIdx = 0;
         data.tideTable.forEach(line => {
-            console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh} ${line.unit}`);
-            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}\n`);
+            let coeff = null;
+            if (line.type === 'HW') {
+                coeff = coeffInBrest[coeffIdx];
+                coeffIdx++;
+            }
+            console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}`);
+            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}\n`);
         });
         tableContent += "</pre>";
         // Draw the graph.

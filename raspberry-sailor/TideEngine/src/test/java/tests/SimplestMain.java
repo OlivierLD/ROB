@@ -54,9 +54,11 @@ public class SimplestMain {
 //        final String STATION_PATTERN = "ICELAND";
 //        final String STATION_PATTERN = "Patreksfj";
 //        final String STATION_PATTERN = "Harrington";
-        final String STATION_PATTERN = "Hornaf";
+//        final String STATION_PATTERN = "Hornaf";
+        final String STATION_PATTERN = "Port-Tudy";
 
         System.setProperty("tide.verbose", "false");
+        // System.setProperty("with.tide.coeffs", "true");
         location = URLEncoder.encode(STATION_PATTERN, StandardCharsets.UTF_8.toString()).replace("+", "%20");
         ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
         if (ts != null) {
