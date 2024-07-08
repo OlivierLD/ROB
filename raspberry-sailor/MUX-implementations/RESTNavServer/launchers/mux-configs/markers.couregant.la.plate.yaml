@@ -1,0 +1,115 @@
+#
+# Couregant - La Plate
+#
+borders:
+  - border-name: "Courégant - La Plate"
+    type: "open"
+    border-elements:
+    - rank: 1
+      latitude: 47.71107002106549
+      longitude: -3.4763136508263415
+    - rank: 2
+      latitude: 47.766636514320204
+      longitude: -3.530042767961277
+    - rank: 3
+      latitude: 47.762713361277726
+      longitude: -3.5399991278245584
+    - rank: 4
+      latitude: 47.774481932756146
+      longitude: -3.642309308488621
+    - rank: 5
+      latitude: 47.7760970190481
+      longitude: -3.675611615617527
+    - rank: 6
+      latitude: 47.80077852273157
+      longitude: -3.7219601873948704
+    - rank: 7
+      latitude: 47.804543893626914
+      longitude: -3.7394678601413043
+    - rank: 8
+      latitude: 47.79531920370745
+      longitude: -3.7394678601413043
+    - rank: 9
+      latitude: 47.78563151644298
+      longitude: -3.8026392468600543
+    - rank: 10
+      latitude: 47.790244926077094
+      longitude: -3.855510950961617
+    - rank: 11
+      latitude: 47.86907086471151
+      longitude: -3.925548792758492
+    - rank: 12
+      latitude: 47.88795285810258
+      longitude: -3.9537012585788043
+    - rank: 13
+      latitude: 47.89025506945399
+      longitude: -3.977733851352241
+    - rank: 14
+      latitude: 47.88196662963946
+      longitude: -3.985973597445992
+    - rank: 15
+      latitude: 47.85617189021316
+      longitude: -3.9743006238131793
+    - rank: 16
+      latitude: 47.84419139703389
+      longitude: -4.041591883578804
+    - rank: 17
+      latitude: 47.864925115795884
+      longitude: -4.119182825961617
+    - rank: 18
+      latitude: 47.8400436679049
+      longitude: -4.172741175570992
+    - rank: 19
+      latitude: 47.83359097087172
+      longitude: -4.161068201938179
+    - rank: 20
+      latitude: 47.79439665413105
+      longitude: -4.189907313266303
+    - rank: 21
+      latitude: 47.795319213209446
+      longitude: -4.371868372836617
+    - rank: 22
+      latitude: 47.810539073245344
+      longitude: -4.388347865024117
+    - rank: 23
+      latitude: 47.83451283386534
+      longitude: -4.346462489047554
+    - rank: 24
+      latitude: 47.94317769631463
+      longitude: -4.411007166781929
+    - rank: 25
+      latitude: 48.00891032254138
+      longitude: -4.530483485141304
+    - rank: 26
+      latitude: 48.00936969662441
+      longitude: -4.551769495883492
+    - rank: 27
+      latitude: 47.99972198159696
+      longitude: -4.561382532992867
+    - rank: 28
+      latitude: 48.03049648134651
+      longitude: -4.727550745883491
+    - rank: 29
+      latitude: 48.038761134633035
+      longitude: -4.746090174594428
+markers:
+  - label: "Concarneau"
+    latitude: 47.87003257447486
+    longitude: -3.9131064714092654
+    type: default
+  - label: "Glenan"
+    latitude: 47.714995280934595
+    longitude: -3.9880335339694293
+    type: default
+  - label: "Penmarc'h"
+    latitude: 47.79651290986675
+    longitude: -4.376248866428796
+    type: default
+  - label: "Sainte Évette"
+    latitude: 48.006500777568746
+    longitude: -4.552802816087933
+    type: default
+  - label: "La Plate"
+    latitude: 48.039461722002244
+    longitude: -4.7595852334120545
+    type: default
