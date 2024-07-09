@@ -3,7 +3,7 @@
 #
 name: "Replay log file. Chartless Map."
 description:
-  - Replay a log file from the logged folder (La Trinite - Groix).
+  - Replay a log file from the logged folder (La Trinité - Groix).
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
 context:
@@ -31,5 +31,5 @@ channels:
     # sentence.filters: ~GGA
 computers:
   - class: nmea.computers.BorderManager
-    properties: mux-configs/border.mgr.properties
+    properties: mux-configs/border.mgr.default.properties
     verbose: false
