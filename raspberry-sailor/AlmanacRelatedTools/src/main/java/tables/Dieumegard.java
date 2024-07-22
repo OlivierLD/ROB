@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
  * Table 3: colog(n)
  * Table A: 1 - cos(alpha)
  *
+ * Note: colog(x) = log(1/x)
  * Spits out the generated XML on System.out. To be re-directed into a file.
  */
 public class Dieumegard {

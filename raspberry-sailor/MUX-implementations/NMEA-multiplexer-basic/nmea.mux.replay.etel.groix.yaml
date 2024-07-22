@@ -1,7 +1,7 @@
 #
 # MUX definition.
 #
-name: "Replay log file."
+name: "Replay log file, markers and borders."
 description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.

@@ -46,6 +46,18 @@
               on l'a ici <fo:inline font-weight="bold">soulign&#233;e</fo:inline>.
             </fo:block-->
           </fo:block>
+          <!-- What the tables do -->
+          <fo:block break-after="page"> <!-- background-image="url('bg.jpg')"-->
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="bold" margin="0.5in">
+              Fonction des tables
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table 1: cos(p) * sin(l)
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table 2: cos(l) * tan(p)
+            </fo:block>
+          </fo:block>
           <fo:block margin="0.4in">
             <xsl:for-each select="//table[@id=1]">
               <xsl:apply-templates select="."/>
