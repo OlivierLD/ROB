@@ -74,4 +74,4 @@ WORKDIR /workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launcher
 
 EXPOSE 9999
 # This is delivering the functionality. Change it at will.
-# CMD ["./demoLauncher.sh --option:1"]
+# CMD ["./demoLauncher.sh --option:1 --nohup:N"]

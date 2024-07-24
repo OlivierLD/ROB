@@ -7,15 +7,17 @@
 DOCKER_FILE=navserver.Dockerfile
 IMAGE_NAME=mux-sample-vnc
 RUN_CMD="docker run -d --name mux-desktop ${IMAGE_NAME}:latest"
+# RUN_CMD="docker run -d ${IMAGE_NAME}:latest"
 #
 MESSAGE="---------------------------------------------------\n"
 MESSAGE="${MESSAGE}Log in using: docker run -it --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest /bin/bash\n"
 MESSAGE="${MESSAGE}    or using: docker exec -it mux-desktop /bin/bash\n"
+MESSAGE="${MESSAGE}- you can now run ./demoLauncher.sh to start the server you want.\n"
 MESSAGE="${MESSAGE}- then run 'vncserver :1 -geometry 1280x800 (or 1440x900, 1680x1050, etc) -depth 24'\n"
 MESSAGE="${MESSAGE}- then use a vncviewer on localhost:1, password is 'mate'\n"
-MESSAGE="${MESSAGE}- then 'node server.js' or 'npm start', and reach http://localhost:9999/web/index.html ...\n"
+# MESSAGE="${MESSAGE}- then 'node server.js' or 'npm start', and reach http://localhost:9999/web/index.html ...\n"
 MESSAGE="${MESSAGE} \n"
-MESSAGE="${MESSAGE}- Or docker run --detach --name mux-sample --rm -p 5901:5901 -p 9999:9999 -e USER=oliv ${IMAGE_NAME}:latest \n"
+MESSAGE="${MESSAGE}- Or docker run --detach --name mux-sample --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest \n"
 MESSAGE="${MESSAGE}- and reach http://localhost:9999/web/index.html ...\n"
 MESSAGE="${MESSAGE}---------------------------------------------------\n"
 #
@@ -43,6 +45,7 @@ if [[ "${DOCKER_FILE}" != "" ]]; then
 #    CONTAINER_ID=`$RUN_CMD`
     CONTAINER_ID=$(${RUN_CMD})
     echo -e "Running container ID ${CONTAINER_ID}"
+    echo -e "To log in to the running container: docker run -it --rm -e USER=root mux-sample-vnc:latest /bin/bash "
   fi
 fi
 printf "%b" "${MESSAGE}"
