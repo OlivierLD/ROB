@@ -103,7 +103,7 @@ Or
 ```
 $ sudo dd if=/dev/disk3 | gzip -c > backup.raspian.img.gz   << Preferred
 ```
-it can take time (1630 seconds here)... :
+The `dd` command does not produce any output,... and it can take time (1630 seconds here), be patient:
 ```
 $ sudo time dd if=/dev/disk4 | gzip -c > raspi.backup.img.gz
 Password:
