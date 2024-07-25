@@ -6,11 +6,12 @@
 #
 DOCKER_FILE=navserver.Dockerfile
 IMAGE_NAME=mux-sample-vnc
-RUN_CMD="docker run -d --name mux-desktop ${IMAGE_NAME}:latest"
+# RUN_CMD="docker run -d --name mux-desktop ${IMAGE_NAME}:latest"
+RUN_CMD="docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest /bin/bash"
 # RUN_CMD="docker run -d ${IMAGE_NAME}:latest"
 #
 MESSAGE="---------------------------------------------------\n"
-MESSAGE="${MESSAGE}Log in using: docker run -it --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest /bin/bash\n"
+MESSAGE="${MESSAGE}Log in using: ${RUN_CMD}\n"
 MESSAGE="${MESSAGE}    or using: docker exec -it mux-desktop /bin/bash\n"
 MESSAGE="${MESSAGE}- you can now run ./demoLauncher.sh to start the server you want.\n"
 MESSAGE="${MESSAGE}- then run 'vncserver :1 -geometry 1280x800 (or 1440x900, 1680x1050, etc) -depth 24'\n"
@@ -27,15 +28,21 @@ if [[ "${DOCKER_FILE}" != "" ]]; then
   # export HTTP_PROXY=http://www-proxy.us.oracle.com:80
   # export HTTPS_PROXY=http://www-proxy.us.oracle.com:80
   #
-  EXTRA=
+  EXTRA=""
   if [[ "${EXTRA_PRM}" != "" ]]; then
     EXTRA="with ${EXTRA_PRM}"
   fi
   echo -e "---------------------------------------------------"
   echo -e "Generating ${IMAGE_NAME} from ${DOCKER_FILE} ${EXTRA}"
   echo -e "---------------------------------------------------"
-  # Possibly use --quiet
-  docker build -f ${DOCKER_FILE} -t ${IMAGE_NAME} ${EXTRA_PRM} .
+  # Possibly use --quiet, --no-cache
+  NO_CACHE=
+  echo -en "Use the docker cache [y]|n ? > "
+  read REPLY
+  if [[ ${REPLY} =~ ^(no|n|N)$ ]]; then
+    NO_CACHE="--no-cache"
+  fi
+  docker build ${NO_CACHE} -f ${DOCKER_FILE} -t ${IMAGE_NAME} ${EXTRA_PRM} .
   #
   # Now run
   echo -e "To create a container, run ${RUN_CMD} ..."

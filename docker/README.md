@@ -117,7 +117,7 @@ The server is using port `5901`, also exposed.
 Then, from a `vncviewer` you can get connected to the server. 
 Use - for example - `localhost:1`; password is `mate`.
 
-![VNC Viewer](./images/VNCViewer.png)
+![VNC Viewer](pix/VNCViewer.png)
 
 ---
 
