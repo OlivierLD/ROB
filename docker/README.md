@@ -99,7 +99,7 @@ $ ./demoLaucher.sh
 And you can choose the option you want!
 
 As seen above, the port `9999` is exposed.  
-This means that you can reach it. Depending on the option you choosed for the demo, in a browser (from the machine you started docker, for example),
+This means that you can reach it. Depending on the option you chose for the demo, in a browser (from the machine you started docker, for example),
 you can run `http://localhost:9999/web/index.html`, and start from there.
 
 ### Graphical Desktop
