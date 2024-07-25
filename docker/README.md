@@ -126,7 +126,7 @@ Use - for example - `localhost:1`; password is `mate`.
 
 ### And then
 See for yourself !  
-`http://localhost:9999/web/index.html` is a good way to get started, once the `/demoLauncher.js` has been executed.
+`http://localhost:9999/web/index.html` is a good way to get started, once the `/demoLauncher.sh` has been executed.
 
 ---
 
