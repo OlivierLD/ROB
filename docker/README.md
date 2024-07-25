@@ -1,6 +1,11 @@
 # Docker
+
+![Docker](./pix/Container_ship.jpg)
+
 Here we build a docker image, to run the demo script, the one available in
 `raspberry-sailor/MUX-implementations/RESTNavServer`.
+
+The following instructions require `docker` to be installed on the machine you run them from..., obviously.
 
 ## To build the image
 Run the script
