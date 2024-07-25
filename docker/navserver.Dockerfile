@@ -33,6 +33,8 @@ RUN \
   DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y curl git build-essential default-jdk sysvbanner mate-desktop-environment-core tightvncserver vim && \
   rm -rf /var/lib/apt/lists/*
 
+# RUN apt-get install net-tools -y
+
 RUN mkdir ~/.vnc
 RUN echo "mate" | vncpasswd -f >> ~/.vnc/passwd
 RUN chmod 600 ~/.vnc/passwd

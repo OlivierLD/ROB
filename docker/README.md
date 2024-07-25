@@ -40,6 +40,11 @@ OpenJDK Runtime Environment (build 17.0.11+9-Debian-1deb12u1)
 OpenJDK 64-Bit Server VM (build 17.0.11+9-Debian-1deb12u1, mixed mode, sharing)
 root@f0188710580d:/workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers# 
 ```
+#### Small extra
+You might want to install `netstat:
+```
+$ apt-get install net-tools
+```
 
 ### Demo script
 From there, you can start the demo script:
