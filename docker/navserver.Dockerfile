@@ -30,12 +30,13 @@ RUN echo "alias lll='ls -lisah'" >> $HOME/.bashrc
 RUN \
   apt-get update && \
   apt-get upgrade -y && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y curl git build-essential default-jdk sysvbanner mate-desktop-environment-core tightvncserver vim && \
+  DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y curl wget git build-essential default-jdk sysvbanner mate-desktop-environment-core tightvncserver vim && \
   rm -rf /var/lib/apt/lists/*
 
 # RUN apt-get install net-tools -y
 
 RUN mkdir ~/.vnc
+
 RUN echo "mate" | vncpasswd -f >> ~/.vnc/passwd
 RUN chmod 600 ~/.vnc/passwd
 
@@ -44,13 +45,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
 
 RUN apt-get install -y chromium
+RUN apt-get install -y firefox-esr
 RUN apt-get install -y inkscape
 
 RUN apt-get install -y libgtk2.0-dev
 
 EXPOSE 5901
 
-RUN useradd -d /home/oliv -ms /bin/bash -g root -G sudo -p oliv oliv
+RUN useradd -m oliv -d /home/oliv -s /bin/bash -g root -G sudo -p oliv
+# passwd oliv
 
 RUN echo "banner Nav Server" >> $HOME/.bashrc
 RUN echo "git --version" >> $HOME/.bashrc
@@ -76,4 +79,4 @@ WORKDIR /workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launcher
 
 EXPOSE 9999
 # This is delivering the functionality. Change it at will.
-# CMD ["./demoLauncher.sh --option:1 --nohup:N"]
+# CMD ["./demoLauncher.sh", "--option:1", "--nohup:N"]

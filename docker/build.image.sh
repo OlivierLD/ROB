@@ -18,7 +18,7 @@ MESSAGE="${MESSAGE}- then run 'vncserver :1 -geometry 1280x800 (or 1440x900, 168
 MESSAGE="${MESSAGE}- then use a vncviewer on localhost:1, password is 'mate'\n"
 # MESSAGE="${MESSAGE}- then 'node server.js' or 'npm start', and reach http://localhost:9999/web/index.html ...\n"
 MESSAGE="${MESSAGE} \n"
-MESSAGE="${MESSAGE}- Or docker run --detach --name mux-sample --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest \n"
+MESSAGE="${MESSAGE}- Or docker run --detach --name mux-sample --rm -p 5901:5901 -p 9999:9999 ${IMAGE_NAME}:latest \n"
 MESSAGE="${MESSAGE}- and reach http://localhost:9999/web/index.html ...\n"
 MESSAGE="${MESSAGE}---------------------------------------------------\n"
 #

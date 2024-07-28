@@ -19,6 +19,7 @@ From this image, you can run a container:
 ```
 $ docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root mux-sample-vnc:latest /bin/bash
 ```
+The `USER=root` is here for `VNC`.  
 The container will be here named `mux-desktop`, and you would be seeing a terminal:  
 ```
 #     #
