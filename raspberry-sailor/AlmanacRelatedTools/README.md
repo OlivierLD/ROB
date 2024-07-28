@@ -26,7 +26,7 @@ $ ./pub/almanac.sh
 
 ### Mercator Canvases, Plotting Sheets, etc.
 For now, look into the `ChartComponents` module (under `Swing`),
-[here](raspberry-sailor/Swing/ChartComponents).  
+[here](../Swing/ChartComponents).  
 From the module's folder, do a 
 ```
 $ ../../../gradlew shadowJar
