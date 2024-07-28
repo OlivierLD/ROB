@@ -1,33 +1,7 @@
-# Almanac Related Tools
-## Mostly almanacs and tables publishing.
+# Swing Chart Components
+Various samples, using Swing.
 
-Uses Java to generate `XML` data files, and then `xsl-fo` to create `pdf` files from the `XML` data.  
-The Java code can be (and is) reused from REST interfaces.
-
-Look into the `pub` folder, the scripts will prompt you if needed.  
-Try:
-
-For the T900 (Dieumegard & Bataille):
-```
-$ ./pub/publish.tables.sh
-```
-For the altitude correction tables:
-```
-$ ./pub/corrections.sh
-```
-For a "perpetual" (aka long-term) almanac:
-```
-$ ./pub/perpetual.sh
-```
-For Nautical Almanacs or Lunar Distances:
-```
-$ ./pub/almanac.sh
-```
-
-### Mercator Canvases, Plotting Sheets, etc.
-For now, look into the `ChartComponents` module (under `Swing`),
-[here](raspberry-sailor/Swing/ChartComponents).  
-From the module's folder, do a 
+See for yourself:
 ```
 $ ../../../gradlew shadowJar
 $ ./run.samples.sh 
@@ -48,11 +22,5 @@ $ ./run.samples.sh
 +--------------------------------------------------------------------------------+
 You choose > 
 ```
-
-### Misc links and stuff...
-- <https://www.crawfordnautical.com/2018/09/16/chart-projections/>
-
-### More tables
-- Also look into <https://olivierld.github.io/web.stuff/nse/index.html>
 
 ---
