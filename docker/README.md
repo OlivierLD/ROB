@@ -119,7 +119,7 @@ $ vncserver :1 -geometry 1280x800 -depth 24
 ```
 The server is using port `5901`, also exposed.   
 `-geometry` can be `1280x800`, `1440x900`, `1680x1050`, etc).  
-Then, from a `vncviewer` you can get connected to the server. 
+Then, from a `vncviewer` on the same network, you can get connected to the server. 
 Use - for example - `localhost:1`; password is `mate`.
 
 ![VNC Viewer](pix/VNCViewer.png)
