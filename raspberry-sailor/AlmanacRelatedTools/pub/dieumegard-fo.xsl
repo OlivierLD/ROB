@@ -33,7 +33,7 @@
               <fo:external-graphic src="url('sextant.gif')"/>
             </fo:block-->
             <fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
-              &#169; Oliv Cool Stuff Soft  
+              &#169; Passe-Coque <!-- Oliv Cool Stuff Soft -->
             </fo:block>
             <fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
               <fo:inline font-style="normal">Note:</fo:inline> contrairement &#224; la convention habituelle pour les valeurs n&#233;gatives, 
@@ -41,6 +41,28 @@
               on l'a ici <fo:inline font-weight="bold">soulign&#233;e</fo:inline>.
             </fo:block>
           </fo:block>
+          <!-- What the tables do -->
+          <fo:block break-after="page"> <!-- background-image="url('bg.jpg')"-->
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="bold" margin="0.5in">
+              Fonction des tables
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table 1: Cologarithme de l'angle au p&#x000F4;le (AHL). colog(1 - cos(alpha))
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table 2: Cologarithme d'un angle (applicable &#224; L &amp; D). colog(cos(alpha))
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table 3: colog(n)
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.1in" padding-left="0.5in">
+              Table A: 1 - cos(alpha)
+            </fo:block>
+            <fo:block text-align="left" font-family="Courier" font-size="10pt" font-weight="normal" margin="0.5in" padding-left="1in">
+              <fo:inline font-style="italic">Note:</fo:inline> : colog(x) = log(1/x)
+            </fo:block>
+          </fo:block>
+
           <fo:block margin="0.4in">
             <xsl:for-each select="//table[@id=1]">
               <xsl:apply-templates select="."/>

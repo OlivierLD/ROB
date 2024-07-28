@@ -166,7 +166,7 @@
               </fo:block>
               <fo:block margin="0.8in"/>
               <fo:block text-align="left" font-family="Arial" font-size="8pt" font-style="italic">
-                &#169; Oliv Cool Stuff Soft (<xsl:value-of select="$language"/>, <xsl:value-of select="$with-stars"/>) 
+                &#169; Passe-Coque <!-- Oliv Cool Stuff Soft --> (<xsl:value-of select="$language"/>, <xsl:value-of select="$with-stars"/>)
               </fo:block>
             </fo:block>
           </fo:block>

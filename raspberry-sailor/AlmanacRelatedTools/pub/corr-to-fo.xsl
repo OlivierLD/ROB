@@ -47,7 +47,7 @@
               <fo:external-graphic src="url('sextant.gif')"/>
             </fo:block>
             <fo:block text-align="left" font-family="Courier" font-size="8pt" font-style="italic" margin="1in">
-              &#169; Oliv Cool Stuff Soft  
+              &#169; Passe-Coque <!-- Oliv Cool Stuff Soft -->
             </fo:block>
           </fo:block>
           <fo:block margin="0.2in">

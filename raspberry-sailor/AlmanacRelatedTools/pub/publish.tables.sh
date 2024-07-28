@@ -20,7 +20,7 @@ XSL_STYLESHEET=
 PRM_OPTION="-docconf ./config.cfg"
 LOOP=true
 while [ "$LOOP" == "true" ]; do
-	clear
+	# clear
 	echo -e "+-------------------------------+"
 	echo -e "| Publication - Tables 900      |"
 	echo -e "+-------------------------------+"
