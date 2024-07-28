@@ -40,6 +40,7 @@ while [ "$LOOP" == "true" ]; do
     "Q" | "q")
       LOOP=false
       printf "You're done.\n   Please come back soon!\n"
+      printf "More docs available at https://olivierld.github.io/web.stuff/nse/index.html \n"
       ;;
     "0")
       # Doc at https://docs.oracle.com/cd/B24289_01/current/acrobat/115xdoug.pdf
