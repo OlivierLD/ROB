@@ -69,7 +69,7 @@ $ ./demoLaucher.sh
 |               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                                                                                                             |
 +-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+
 |  P. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |                                                                                         |
-| PG. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |                                                                                         |
+| PG. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                               |                                                                                         |
 +------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+
 |  J. JConsole (JVM Monitoring) 📡   |  JV. JVisualVM 📡                                  |                                                                                         |
 |                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |
@@ -112,7 +112,7 @@ $ ./demoLaucher.sh
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
  ==> You choose: 
 ```
-And you can choose the option you want!
+And you can choose the option you want! (Try option `10`, and from a Web UI, check out the various NMEA consoles...)
 
 As seen above, the port `9999` is exposed.  
 This means that you can reach it. Depending on the option you chose for the demo, in a browser (from the machine you started docker, for example),
