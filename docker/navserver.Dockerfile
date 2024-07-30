@@ -30,7 +30,8 @@ RUN echo "alias lll='ls -lisah'" >> $HOME/.bashrc
 RUN \
   apt-get update && \
   apt-get upgrade -y && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --fix-missing -y curl wget git build-essential default-jdk sysvbanner mate-desktop-environment-core tightvncserver vim && \
+  DEBIAN_FRONTEND=noninteractive && \
+  apt-get install --fix-missing -y curl wget git build-essential default-jdk sysvbanner mate-desktop-environment-core tightvncserver vim net-tools && \
   rm -rf /var/lib/apt/lists/*
 
 # RUN apt-get install net-tools -y
@@ -52,7 +53,8 @@ RUN apt-get install -y libgtk2.0-dev
 
 EXPOSE 5901
 
-RUN useradd -m oliv -d /home/oliv -s /bin/bash -g root -G sudo -p oliv
+RUN useradd -d /home/oliv -s /bin/bash -g root -G sudo -p oliv oliv
+# Command above seems NOT to encrypt the password... Run 'passwd oliv' (as root) to do it.
 # passwd oliv
 
 RUN echo "banner Nav Server" >> $HOME/.bashrc
@@ -60,6 +62,10 @@ RUN echo "git --version" >> $HOME/.bashrc
 RUN echo "echo -n 'node:' && node -v" >> $HOME/.bashrc
 RUN echo "echo -n 'npm:' && npm -v" >> $HOME/.bashrc
 RUN echo "java -version" >> $HOME/.bashrc
+#
+RUN echo "echo -e \"Architecture: $(getconf LONG_BIT) bits\"" >> $HOME/.bashrc
+RUN echo "lsb_release -a" >> $HOME/.bashrc
+RUN echo "echo -e \"Type 'lscpu' for more\"" >> $HOME/.bashrc
 
 RUN mkdir /workdir
 WORKDIR /workdir

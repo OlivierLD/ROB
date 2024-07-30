@@ -19,6 +19,11 @@ From this image, you can run a container:
 ```
 $ docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root mux-sample-vnc:latest /bin/bash
 ```
+or
+```
+$ docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=oliv --user oliv mux-sample-vnc:latest /bin/bash
+```
+
 The `USER=root` is here for `VNC`.  
 The container will be here named `mux-desktop`, and you would be seeing a terminal:  
 ```
@@ -46,11 +51,11 @@ OpenJDK Runtime Environment (build 17.0.11+9-Debian-1deb12u1)
 OpenJDK 64-Bit Server VM (build 17.0.11+9-Debian-1deb12u1, mixed mode, sharing)
 root@f0188710580d:/workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers# 
 ```
-#### Small extra
-You might want to install `netstat:
+<!-- #### Small extra
+You might want to install `netstat`:
 ```
 $ apt-get install net-tools
-```
+```-->
 
 ### Demo script
 From there, you can start the demo script:

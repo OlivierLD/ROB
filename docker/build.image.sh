@@ -7,7 +7,7 @@
 DOCKER_FILE=navserver.Dockerfile
 IMAGE_NAME=mux-sample-vnc
 # RUN_CMD="docker run -d --name mux-desktop ${IMAGE_NAME}:latest"
-RUN_CMD="docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root ${IMAGE_NAME}:latest /bin/bash"
+RUN_CMD="docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root [--user oliv] ${IMAGE_NAME}:latest /bin/bash"
 # RUN_CMD="docker run -d ${IMAGE_NAME}:latest"
 #
 MESSAGE="---------------------------------------------------\n"
