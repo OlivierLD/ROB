@@ -71,6 +71,7 @@ But pllllease, keep in mind that this is OpenSource..., not free consulting. Thi
 - [Get Started](./GET_STARTED.md), fast
 - Package for Prod [example](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/USE_CASES.md)
 - [Sample implementation and demos](./raspberry-sailor/MUX-implementations/RESTNavServer/README.md), REST services, Web Interfaces, and more.
+- [Run from a Docker image](./docker/README.md) (the fastest way for the impatients, with more demos).
 ---
 
 ## Preliminary note
