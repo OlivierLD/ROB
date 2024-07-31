@@ -121,18 +121,30 @@ you can run `http://localhost:9999/web/index.html`, and start from there.
 ### Graphical Desktop
 From the same docker terminal as above, you can also start a VNC server, that will give you access to a graphical desktop.  
 ```
-$ vncserver :1 -geometry 1280x800 -depth 24
+$ vncserver :1 -geometry 1680x1050 -depth 24
 ```
 The VNC server is using port `5901`, also exposed.   
 `-geometry` can be `1280x800`, `1440x900`, `1680x1050`, etc).  
 Then, from a `vncviewer` on the same network, you can get connected to the server. 
 Use - for example - `localhost:1`; password is `mate`.
 
-![VNC Viewer](pix/VNCViewer.png)
+![VNC Viewer](./pix/VNCViewer.png)
 
-### And then
+### Sample Web UI
 See for yourself !  
-`http://localhost:9999/web/index.html` is a good way to get started, once the `/demoLauncher.sh` has been executed.
+`http://localhost:9999/web/index.html` is a good way to get started, once the `/demoLauncher.sh` has been executed.  
+This can be done from the VNC Viewer window, or from any browser (laptop, tablet, cell-phone, ...) on the same network.  
+![Browser](./pix/VNC.browser.png)
+![Browser](./pix/VNC.AIS.01.png)
+![Browser](./pix/VNC.AIS.02.png)
 
+Cell-Phone UI samples:  
+
+|            01            |            02            |            03            |            04            |            05            |  
+|:------------------------:|:------------------------:|:------------------------:|:------------------------:|:------------------------:|
+| ![01](./pix/Cell.01.png) | ![02](./pix/Cell.02.png) | ![03](./pix/Cell.03.png) | ![04](./pix/Cell.04.png) | ![05](./pix/Cell.05.png) |
+
+etc!  
+All those are just examples of what can be done, it's easy to build your own UI, your imagination is the limit.
 ---
 
