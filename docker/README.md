@@ -134,9 +134,14 @@ Use - for example - `localhost:1`; password is `mate`.
 See for yourself !  
 `http://localhost:9999/web/index.html` is a good way to get started, once the `/demoLauncher.sh` has been executed.  
 This can be done from the VNC Viewer window, or from any browser (laptop, tablet, cell-phone, ...) on the same network.  
-![Browser](./pix/VNC.browser.png)
-![Browser](./pix/VNC.AIS.01.png)
-![Browser](./pix/VNC.AIS.02.png)
+![Browser](./pix/VNC.browser.png)  
+Sample Boat Data console  
+
+![Browser](./pix/VNC.AIS.01.png)  
+Chartless Map and AIS
+
+![Browser](./pix/VNC.AIS.02.png)  
+Chartless Map and AIS
 
 Cell-Phone UI samples:  
 
@@ -146,5 +151,6 @@ Cell-Phone UI samples:
 
 etc!  
 All those are just examples of what can be done, it's easy to build your own UI, your imagination is the limit.
+
 ---
 
