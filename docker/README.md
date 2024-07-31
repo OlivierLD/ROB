@@ -7,6 +7,11 @@ Here we build a docker image, to run the demo script, the one available in
 
 The following instructions require `docker` to be installed on the machine you run them from..., obviously.
 
+We will be showing here:
+- How to build a docker image
+- How to run a container from it
+- A couple of UI examples
+
 ## To build the image
 Run the script
 ```
@@ -142,6 +147,13 @@ Chartless Map and AIS
 
 ![Browser](./pix/VNC.AIS.02.png)  
 Chartless Map and AIS
+
+![Browser](./pix/Console.01.png)  
+Overview
+
+![Browser](./pix/ww.01.png)  
+Weather Wizard
+
 
 Cell-Phone UI samples:  
 
