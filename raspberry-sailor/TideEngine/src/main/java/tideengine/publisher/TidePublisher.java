@@ -281,7 +281,7 @@ public class TidePublisher {
 				recurseTreeNode(subTree, stationList);
 			});
 
-			System.out.printf("List has %d entries\n", stationList.size());
+			// System.out.printf("Full list has %d entries\n", stationList.size());
 
 			final List<TideStation> selectedList = new ArrayList<>();
 			stationList.forEach(namedStation -> {
@@ -307,7 +307,7 @@ public class TidePublisher {
 					throw new RuntimeException(ex1);
 				}
 			});
-			System.out.printf("Selected list has %d entries\n", selectedList.size());
+			// System.out.printf("Selected list has %d entries\n", selectedList.size());
 			// Sort on latitude, increasing
 			Collections.sort(selectedList, Comparator.comparingDouble(ts -> ts.getLatitude()));
 			Collections.reverse(selectedList); // N to S

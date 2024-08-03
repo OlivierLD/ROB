@@ -1,0 +1,169 @@
+package tiderest.utils;
+
+import tideengine.BackEndTideComputer;
+import tideengine.TideStation;
+import tideengine.publisher.TidePublisher;
+
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+
+import static tideengine.publisher.TidePublisher.TIDE_TABLE;
+
+public class StationSelector {
+
+    static void positionSelector(double nLat, double sLat, double wLng, double eLng) {
+        try {
+            List<TideStation> selectedList = TidePublisher.getStationList(nLat, sLat, wLng, eLng);
+            if (selectedList != null) {
+                selectedList.stream().forEach(station -> {
+                    try {
+                        // String decodedStationName = URLDecoder.decode(station.getFullName(), StandardCharsets.ISO_8859_1.toString());
+                        // System.out.printf("%s\n", decodedStationName); // , GeomUtil.decToSex(station.getLatitude()));
+                        System.out.printf("%s\n", station.getFullName()); // Encoded !! No blank !
+                    } catch (Exception ex2) {
+                        ex2.printStackTrace();
+                    }
+                });
+            }
+            // System.out.println("Et hop!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    private final static String N_LAT = "--n-lat:";
+    private final static String S_LAT = "--s-lat:";
+    private final static String W_LNG = "--w-lng:";
+    private final static String E_LNG = "--e-lng:";
+
+    private final static String PUBLISH = "--publish";
+    private final static String SELECT = "--select";
+    private final static String TIDE_YEAR = "--tide-year:";
+    private final static String STATION_NAME = "--station-name:";
+
+    public static void main(String[] args) {
+        double nLat =  90d;
+        double sLat = -90d;
+        double eLng =  180d;
+        double wLng = -180d;
+
+        boolean select = false;
+        boolean publish = false;
+
+        String stationName = "Brest, France";
+        int tideYear = 2024;
+
+        for (String arg : args) {
+            // System.out.printf("Processing arg [%s]\n", arg);
+            if (arg.startsWith(N_LAT)) {
+                String value = arg.substring(N_LAT.length());
+                try {
+                    nLat = Double.parseDouble(value);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.startsWith(S_LAT)) {
+                String value = arg.substring(S_LAT.length());
+                try {
+                    sLat = Double.parseDouble(value);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.startsWith(E_LNG)) {
+                String value = arg.substring(S_LAT.length());
+                try {
+                    eLng = Double.parseDouble(value);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.startsWith(W_LNG)) {
+                String value = arg.substring(S_LAT.length());
+                try {
+                    wLng = Double.parseDouble(value);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.startsWith(TIDE_YEAR)) {
+                String value = arg.substring(TIDE_YEAR.length());
+                try {
+                    tideYear = Integer.parseInt(value);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.startsWith(STATION_NAME)) {
+                String value = arg.substring(STATION_NAME.length());
+                try {
+                    stationName = value;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else if (arg.equals(SELECT)) {
+                select = true;
+            } else if (arg.equals(PUBLISH)) {
+                publish = true;
+            }
+        }
+        // Now, proceed
+        if (select) {
+            try {
+                positionSelector(nLat, sLat, wLng, eLng);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (publish) {
+
+            if ((stationName.startsWith("'") && stationName.endsWith("'")) || stationName.startsWith("\"") && stationName.endsWith("\"")) { // Trim quotes
+                stationName = stationName.substring(1, stationName.length() - 1);
+            }
+            stationName = stationName.replace("+", " ");  // Ugly escape trick...
+            System.out.printf(">> Publishing for [%s], year %d\n", stationName, tideYear);
+            try {
+                BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
+                backEndTideComputer.connect();
+
+                String f = TidePublisher.publish(
+                        stationName, // URLEncoder.encode(stationName, StandardCharsets.UTF_8.toString()).replace("+", "%20"),
+                        Calendar.JANUARY,
+                        tideYear,
+                        1,
+                        Calendar.YEAR,
+                        TIDE_TABLE);  // Change at will AGENDA_TABLE, MOON_CALENDAR
+                System.out.printf("Generated %s\n", f);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static void main__(String[] args) {
+
+        String stationName = "Brest, France";
+        TideStation ts = null;
+        try {
+            BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
+            backEndTideComputer.connect();
+
+            // List<TideStation> stationData = BackEndTideComputer.getStationData();
+            Optional<TideStation> optTs = BackEndTideComputer.getStationData()
+                    .stream()
+                    .filter(station -> station.getFullName().equals(stationName))
+                    .findFirst();
+            if (!optTs.isPresent()) {
+                throw new Exception(String.format("Station [%s] not found.", stationName));
+            } else {
+                ts = optTs.get();
+                System.out.println("Found it");
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+}
