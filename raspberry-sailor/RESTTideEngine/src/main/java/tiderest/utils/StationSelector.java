@@ -123,8 +123,9 @@ public class StationSelector {
                 stationName = stationName.substring(1, stationName.length() - 1);
             }
             stationName = stationName.replace("+", " ");  // Ugly escape trick...
-            System.out.printf(">> Publishing for [%s], year %d\n", stationName, tideYear);
             try {
+                System.out.printf(">> Publishing for [%s], year %d\n", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()), tideYear);
+
                 BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
                 backEndTideComputer.connect();
 
@@ -134,7 +135,8 @@ public class StationSelector {
                         tideYear,
                         1,
                         Calendar.YEAR,
-                        TIDE_TABLE);  // Change at will AGENDA_TABLE, MOON_CALENDAR
+                        TIDE_TABLE,
+                        String.format("%s.%d", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()).replace(" ", "_"), tideYear));  // Change at will AGENDA_TABLE, MOON_CALENDAR
                 System.out.printf("Generated %s\n", f);
             } catch (Exception ex) {
                 ex.printStackTrace();

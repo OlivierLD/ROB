@@ -791,7 +791,8 @@ public class RESTImplementation {
 							options.startYear,
 							options.nb,
 							(options.quantity.equals(Quantity.MONTH) ? Calendar.MONTH : Calendar.YEAR),
-							script);
+							script,
+							null);
 					response.setPayload(generatedFileName.getBytes());
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,

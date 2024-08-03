@@ -24,6 +24,18 @@ public class TidePublisher {
 	public final static String SCRIPT_PATH = System.getProperty("script.path", "./xsl");
 	public final static String PDF_PATH = System.getProperty("pdf.path", "./web");
 
+	public static String publish(
+			TideStation ts,
+			String timeZoneId,
+			int sm,
+			int sy,
+			int nb,
+			int q,
+			String utu,
+			TideUtilities.SpecialPrm sPrm,
+			String scriptToRun) throws Exception {
+		return publish(ts, timeZoneId, sm, sy, nb, q, utu, sPrm, scriptToRun, null);
+	}
 
 	/**
 	 * @param ts         TideStation
@@ -34,6 +46,7 @@ public class TidePublisher {
 	 * @param q          quantity. Calendar.MONTH or Calendar.YEAR
 	 * @param utu        Unit to use
 	 * @param sPrm       Special parameters
+	 * @param . . .
 	 */
 	public static String publish(
 			TideStation ts,
@@ -44,7 +57,8 @@ public class TidePublisher {
 			int q,
 			String utu,
 			TideUtilities.SpecialPrm sPrm,
-			String scriptToRun)
+			String scriptToRun,
+			String finalFileName)
 			throws Exception {
 
 		final TideUtilities.SpecialPrm specialBGPrm = sPrm;
@@ -86,7 +100,9 @@ public class TidePublisher {
 			} else {
 				out.println("  <period month='" + (start.get(Calendar.MONTH) + 1) + "' year='" + start.get(Calendar.YEAR) + "'>");
 				try {
-					System.out.println("Calculating tide for " + start.getTime().toString());
+					if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+						System.out.println("Calculating tide for " + start.getTime().toString());
+					}
 					TideForOneMonth.tideForOneMonth(out,
 							timeZoneId,
 							start.get(Calendar.YEAR),
@@ -105,7 +121,9 @@ public class TidePublisher {
 		}
 		out.println("</tide>");
 		out.close();
-		System.out.println("Generation completed.");
+		if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+			System.out.println("Generation completed.");
+		}
 		// Ready for transformation
 		try {
 			// This part customizable, see script.path VM variable nd Co
@@ -116,8 +134,9 @@ public class TidePublisher {
 			int exitStatus = p.waitFor();
 			System.out.println("Script completed, status " + exitStatus);
 			System.out.printf("See %s.pdf\n", radical);
-			System.out.printf("Now moving %s to %s\n", radical, PDF_PATH);
-			cmd = String.format("mv %s.pdf %s", radical, PDF_PATH);
+			String movingTo = PDF_PATH + (finalFileName != null ? String.format("%s%s.pdf", File.separator, finalFileName) : "");
+			System.out.printf("-- Now moving %s to %s\n", radical, movingTo);
+			cmd = String.format("mv %s.pdf %s", radical, movingTo);
 			p = Runtime.getRuntime().exec(cmd);
 			exitStatus = p.waitFor();
 			System.out.printf("Command [%s] completed, status %s\n", cmd, exitStatus);
@@ -135,6 +154,10 @@ public class TidePublisher {
 
 	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script)
 			throws Exception {
+		return publish(stationName, startMonth, startYear, nb, quantity, script, null);
+	}
+	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName)
+			throws Exception {
 		TideStation ts = null;
 		try {
 			Optional<TideStation> optTs = BackEndTideComputer.getStationData()
@@ -145,7 +168,7 @@ public class TidePublisher {
 				throw new Exception(String.format("Station [%s] not found.", stationName));
 			} else {
 				ts = optTs.get();
-				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script);
+				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script, finalFileName);
 			}
 		} catch (Exception ex) {
 			throw ex;

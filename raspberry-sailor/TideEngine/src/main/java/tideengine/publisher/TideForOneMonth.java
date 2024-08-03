@@ -87,8 +87,10 @@ public class TideForOneMonth {
 		boolean loop = true;
 		int prevMoonAge = 0; // Workaround...
 		while (loop) {
-			String mess = now.getTime().toString();
-			System.out.println(" -- " + mess);
+			if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+				String mess = now.getTime().toString();
+				System.out.println(" -- " + mess);
+			}
 			// If year changes, recompute TideStation
 			if (now.get(Calendar.YEAR) != prevYear) {
 				ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
@@ -293,7 +295,9 @@ public class TideForOneMonth {
 				loop = false;
 			}
 		}
-		System.out.println("Ok!");
+		if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+			System.out.println("Ok!");
+		}
 	}
 
 	public static List<TimedValue> tideForOneDay(AstroComputerV2 acv2,
@@ -578,6 +582,8 @@ public class TideForOneMonth {
 				loop = false;
 			}
 		}
-		System.out.println("Ok!");
+		if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+			System.out.println("Ok!");
+		}
 	}
 }
