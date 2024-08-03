@@ -46,7 +46,7 @@ public class TidePublisher {
 	 * @param q          quantity. Calendar.MONTH or Calendar.YEAR
 	 * @param utu        Unit to use
 	 * @param sPrm       Special parameters
-	 * @param . . .
+	 * . . .
 	 */
 	public static String publish(
 			TideStation ts,
