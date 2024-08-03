@@ -98,9 +98,15 @@
     
   <xsl:variable name="SHA-warning">SHA is given for Sun, Moon and Planets. This is redundant, but convenient to plot those bodies in the Star Finder 2102-D.</xsl:variable>
 
+  <xsl:param name="language">EN</xsl:param>
+
   <xsl:variable name="perpetual-almanac">Long Term Almanac</xsl:variable>
+  <xsl:variable name="sun-and-aries">For Sun &amp; Aries</xsl:variable>
   <xsl:variable name="nautical-almanac">Nautical Almanac</xsl:variable>
   <xsl:variable name="lunar-distances">Lunar Distances</xsl:variable>
+
+  <xsl:variable name="henning-umland">based on Henning Umland's formula</xsl:variable>
+
   <xsl:variable name="for">for </xsl:variable>
   
   <xsl:variable name="from">from </xsl:variable>

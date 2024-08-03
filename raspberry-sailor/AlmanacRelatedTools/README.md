@@ -7,19 +7,24 @@ The Java code can be (and is) reused from REST interfaces.
 Look into the `pub` folder, the scripts will prompt you if needed.  
 Try:
 
-For the T900 (Dieumegard & Bataille):
+### For the T900 (Dieumegard & Bataille):
 ```
 $ ./pub/publish.tables.sh
 ```
-For the altitude correction tables:
+### For the altitude correction tables:
 ```
 $ ./pub/corrections.sh
 ```
-For a "perpetual" (aka long-term) almanac:
+### For a "perpetual" (aka long-term) almanac:
 ```
 $ ./pub/perpetual.sh
 ```
-For Nautical Almanacs or Lunar Distances:
+The main interest of the perpetual almanac is its concision.  
+It gives ephemeris data for the Sun and Aries, this requires more interpolations
+than the "regular" Nautical Almanac. The idea is to put one copy in the bag
+you grab when something goes _very_ wrong. This is more for emergency navigation.
+
+### For Nautical Almanacs or Lunar Distances:
 ```
 $ ./pub/almanac.sh
 ```

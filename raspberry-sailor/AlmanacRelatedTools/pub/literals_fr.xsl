@@ -96,9 +96,15 @@
   
   <xsl:variable name="SHA-warning">AHso est donn&eacute; pour le Soleil, la Lune et les Plan&egrave;tes. C'est redondant, mais pratique pour porter ces corps c&eacute;lestes sur le Star Finder 2102-D.</xsl:variable>
 
+  <xsl:param name="language">FR</xsl:param>
+
   <xsl:variable name="perpetual-almanac">&Eacute;ph&eacute;m&eacute;rides &agrave; long terme</xsl:variable>
+  <xsl:variable name="sun-and-aries">Pour le Soleil et le Point Vernal</xsl:variable>
   <xsl:variable name="nautical-almanac">&Eacute;ph&eacute;m&eacute;rides Nautiques</xsl:variable>
   <xsl:variable name="lunar-distances">Distances Lunaires</xsl:variable>
+
+  <xsl:variable name="henning-umland">d'apr&egrave;s les formules d'Henning Umland</xsl:variable>
+
   <xsl:variable name="for">pour </xsl:variable>
   
   <xsl:variable name="from">du </xsl:variable>

@@ -84,7 +84,7 @@
                 exclude-result-prefixes="data j-string xsl-util geom-util"
                 version="2.0">
   <xsl:import href="literals.xsl"/>
-  <xsl:param name="language">EN</xsl:param>
+  <!--xsl:param name="language">EN</xsl:param-->
 
   <xsl:template match="/">
     <fo:root>
@@ -113,11 +113,12 @@
             <fo:block text-align="center" font-family="Book Antiqua" font-size="40pt" font-weight="bold" margin="0.5in">
               <xsl:value-of select="$perpetual-almanac"/>
             </fo:block>
-            <fo:block text-align="center" font-family="Book Antiqua" font-size="10pt" font-weight="bold" margin="0.25in">
+            <fo:block text-align="center" font-family="Book Antiqua" font-size="10pt" font-weight="bold" font-style="italic" margin="0.25in">
               <xsl:value-of select="$oliv-soft"/>
             </fo:block>
             <fo:block text-align="center" font-family="Book Antiqua" font-size="30pt" font-weight="bold" margin="1in">       
-              For the Sun &amp; Aries
+              <!-- For the Sun &amp; Aries -->
+              <xsl:value-of select="$sun-and-aries"/>
             </fo:block>
             <fo:block text-align="center">
               <fo:external-graphic src="url('sextant.gif')"/>
@@ -138,35 +139,35 @@
                       <fo:table-cell number-columns-spanned="2"><fo:block text-align="left">y : year, m : month, d : day</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
-                      <fo:table-cell number-columns-spanned="2"><fo:block text-align="left">T = 367&times;y-floor(1.75&times;(y+floor((m+9)/12)))+floor(275&times;(m/9))+d+(UT[h]/24)-730531.5</fo:block></fo:table-cell>
+                      <fo:table-cell number-columns-spanned="2"><fo:block text-align="left">T = 367&nbsp;&times;&nbsp;y-floor(1.75&nbsp;&times;&nbsp;(y+floor((m+9)/12)))+floor(275&nbsp;&times;&nbsp;(m/9))+d+(UT[h]/24)-730531.5</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">Mean anomaly of the Sun</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">g[&deg;] = 0.9856003&times;T-2.472</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">g[&deg;] = 0.9856003&nbsp;&times;&nbsp;T-2.472</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">Mean longitude of the Sun</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">L<fo:inline font-size="6pt" baseline-shift="sub">m</fo:inline> = 0.9856474&times;T-79.53938</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">L<fo:inline font-size="6pt" baseline-shift="sub">m</fo:inline> = 0.9856474&nbsp;&times;&nbsp;T-79.53938</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">True longitude of the Sun</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>[&deg;] = L<fo:inline font-size="6pt" baseline-shift="sub">m</fo:inline>[&deg;]+1.915&times;sin(g)+0.02&times;sin(2&times;g)</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>[&deg;] = L<fo:inline font-size="6pt" baseline-shift="sub">m</fo:inline>[&deg;]+1.915&nbsp;&times;&nbsp;sin(g)+0.02&nbsp;&times;&nbsp;sin(2&nbsp;&times;&nbsp;g)</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">Obliquity of the ecliptic</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left"><fo:inline font-family="Symbol">e</fo:inline>[&deg;] = 23.439-4&times;T.10-7</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left"><fo:inline font-family="Symbol">e</fo:inline>[&deg;] = 23.439-4&nbsp;&times;&nbsp;T.10-7</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left" font-weight="bold">Declination of the Sun</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">Dec[&deg;] = arcsin(sin(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>)&times;sin(<fo:inline font-family="Symbol">e</fo:inline>))</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">Dec[&deg;] = arcsin(sin(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>)&nbsp;&times;&nbsp;sin(<fo:inline font-family="Symbol">e</fo:inline>))</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">Right Ascension of the Sun</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">RA[&deg;] = 2&times;arctan((cos(<fo:inline font-family="Symbol">e</fo:inline>)&times;sin(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>))/(cos(Dec)&times;cos(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>)))</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">RA[&deg;] = 2&nbsp;&times;&nbsp;arctan((cos(<fo:inline font-family="Symbol">e</fo:inline>)&nbsp;&times;&nbsp;sin(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>))/(cos(Dec)&nbsp;&times;&nbsp;cos(L<fo:inline font-size="6pt" baseline-shift="sub">t</fo:inline>)))</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">GHA Aries</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">GHA<fo:inline font-size="6pt" baseline-shift="sub">Aries</fo:inline> = 0.9865474&times;T+15&times;UT[h]+100.46062</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">GHA<fo:inline font-size="6pt" baseline-shift="sub">Aries</fo:inline> = 0.9865474&nbsp;&times;&nbsp;T+15&nbsp;&times;&nbsp;UT[h]+100.46062</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left" font-weight="bold">Greenwich hour angle of the Sun</fo:block></fo:table-cell>
@@ -190,7 +191,7 @@
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left" font-weight="bold">Semidiameter and Horizontal Parallax</fo:block></fo:table-cell>
-                      <fo:table-cell><fo:block text-align="left">R[AU] = 1.00014 - 0.01671&times;cos(g) - 0.00014&times;cos(2&times;g)</fo:block></fo:table-cell>
+                      <fo:table-cell><fo:block text-align="left">R[AU] = 1.00014 - 0.01671&nbsp;&times;&nbsp;cos(g) - 0.00014&nbsp;&times;&nbsp;cos(2&nbsp;&times;&nbsp;g)</fo:block></fo:table-cell>
                     </fo:table-row>
                     <fo:table-row>
                       <fo:table-cell><fo:block text-align="left">&nbsp;</fo:block></fo:table-cell>
@@ -209,7 +210,7 @@
               </fo:block>
               <fo:block margin="0.25in"/> <!-- Filler -->
               <fo:block text-align="left" font-family="Arial" font-size="8pt" font-style="italic">
-                &copy; Passe-Coque<!--Oliv Cool Stuff Soft--> (<xsl:value-of select="$language"/>), based on Henning Umland's formula.
+                &copy; Passe-Coque<!--Oliv Cool Stuff Soft--> (<xsl:value-of select="$language"/>), <xsl:value-of select="$henning-umland"/>.
               </fo:block>
             </fo:block>
           </fo:block>
