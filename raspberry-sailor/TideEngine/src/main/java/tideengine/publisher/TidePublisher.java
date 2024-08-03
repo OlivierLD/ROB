@@ -12,9 +12,7 @@ import java.io.PrintStream;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Optional;
+import java.util.*;
 // import java.util.TimeZone;
 
 public class TidePublisher {
@@ -246,13 +244,88 @@ public class TidePublisher {
 
 	private static String STATION_PREFIX = "--station-name:";
 	private static String YEAR_PREFIX = "--tide-year:";
+
+
+	private static void recurseTreeNode(TreeMap<String, TideUtilities.StationTreeNode> subTree, List<TideUtilities.StationTreeNode> stationList) {
+		subTree.keySet().forEach(name -> {
+			final TideUtilities.StationTreeNode stationTreeNode = subTree.get(name);
+			if (stationTreeNode.getFullStationName() != null) {
+				// System.out.printf("Adding %s\n", stationTreeNode.getFullStationName());
+				stationList.add(stationTreeNode);
+			} else {
+				recurseTreeNode(stationTreeNode.getSubTree(), stationList);
+			}
+		});
+	}
+
+	/**
+	 * Select tide stations based on their position
+	 * @param nLat
+	 * @param sLat
+	 * @param wLng
+	 * @param eLng
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<TideStation> getStationList(double nLat, double sLat, double wLng, double eLng) throws Exception {
+		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
+		try {
+			backEndTideComputer.connect();
+			backEndTideComputer.setVerbose("true".equals(System.getProperty("tide.verbose", "false")));
+			final Map<String, TideUtilities.StationTreeNode> stationTreeNodeMap = backEndTideComputer.buildStationTree();
+
+			final List<TideUtilities.StationTreeNode> stationList = new ArrayList<>();
+			stationTreeNodeMap.keySet().forEach(nodeName -> {
+				final TideUtilities.StationTreeNode stationTreeNode = stationTreeNodeMap.get(nodeName);
+				final TreeMap<String, TideUtilities.StationTreeNode> subTree = stationTreeNode.getSubTree();
+				recurseTreeNode(subTree, stationList);
+			});
+
+			System.out.printf("List has %d entries\n", stationList.size());
+
+			final List<TideStation> selectedList = new ArrayList<>();
+			stationList.forEach(namedStation -> {
+				String stationName = namedStation.getFullStationName();
+				// System.out.println(stationName);
+				TideStation ts = null;
+				try {
+					Optional<TideStation> optTs = BackEndTideComputer.getStationData()
+							.stream()
+							.filter(station -> station.getFullName().equals(stationName))
+							.findFirst();
+					if (!optTs.isPresent()) {
+						throw new Exception(String.format("Station [%s] not found.", stationName));
+					} else {
+						ts = optTs.get();
+						if (ts.isTideStation()) {
+							if (ts.getLatitude() >= sLat && ts.getLatitude() <= nLat && ts.getLongitude() <= eLng && ts.getLongitude() >= wLng) {
+								selectedList.add(ts);
+							}
+						}
+					}
+				} catch (Exception ex1) {
+					throw new RuntimeException(ex1);
+				}
+			});
+			System.out.printf("Selected list has %d entries\n", selectedList.size());
+			// Sort on latitude, increasing
+			Collections.sort(selectedList, Comparator.comparingDouble(ts -> ts.getLatitude()));
+			Collections.reverse(selectedList); // N to S
+
+			return selectedList;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * For tests
+	 *  requires ./xsl/publishtide.sh to be available !!
 	 *
 	 * @param args --station-name:XXXX --tide-year:2023.
 	 *        Like --station-name:"Brest, France" --tide-year:2024
 	 */
-	public static void main(String... args) {
+	public static void main__(String... args) {
 
 		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
 
@@ -290,6 +363,30 @@ public class TidePublisher {
 
 			System.out.printf("%s generated, in %s\n", f, System.getProperty("user.dir"));
 			System.out.println("Done!");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static void main(String... args) {
+		try {
+			List<TideStation> selectedList = getStationList(50.0, 42.5, -10.0, 5.0);
+			if (selectedList != null) {
+				selectedList.stream().forEach(station -> {
+					try {
+						String decodedStationName = URLDecoder.decode(station.getFullName(), StandardCharsets.ISO_8859_1.toString());
+						System.out.printf("%s, %s\n", decodedStationName, GeomUtil.decToSex(station.getLatitude(), GeomUtil.SWING, GeomUtil.NS, GeomUtil.TRAILING_SIGN));
+//						main__(new String[]{
+//								String.format("--station-name:\"%s\"", URLDecoder.decode(station.getFullName(), StandardCharsets.ISO_8859_1.toString())),
+//								"--tide-year:2024"
+//						});
+						// System.out.println("More!");
+					} catch (Exception ex2) {
+						ex2.printStackTrace();
+					}
+				});
+			}
+			System.out.println("Et hop!");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
