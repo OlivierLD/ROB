@@ -1,17 +1,27 @@
 #!/bin/bash
+#
+# Stolen from gradlew
+die ( ) {
+    echo
+    echo "$*"
+    echo
+    exit 1
+}
+#
 echo ---------------------------------------
 echo Tide publisher, from filtered positions
 echo ---------------------------------------
 #
-export SCRIPT_DIR=`dirname ${0}`
+# shellcheck disable=SC2006
+export SCRIPT_DIR=$(dirname "${0}")
 echo -e "moving to folder ${SCRIPT_DIR}"
-cd ${SCRIPT_DIR}
+cd "${SCRIPT_DIR}" || die "No folder ${SCRIPT_DIR}"
 #
 export HOME=..
 #
 export CP=${CP}:../build/libs/RESTTideEngine-1.0-all.jar
 #
-# France Atlantic Facade
+# France Atlantic Facade # TODO Make those script prms
 # N_LAT=50.0
 # S_LAT=42.5
 N_LAT=48.0
@@ -24,7 +34,7 @@ $CMD > station.list.txt
 #
 DATA_DIR=pdf-folder
 echo -e "Will generate tide almanacs for $(echo $(wc -l < station.list.txt)) station(s), in $(pwd)/${DATA_DIR}."
-echo -en "Hit [Return] when ready. "
+echo -en "Hit [Return] when ready... "
 read REPLY
 #
 if [[ -d ${DATA_DIR} ]]; then
