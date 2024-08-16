@@ -166,3 +166,6 @@ All those are just examples of what can be done, it's easy to build your own UI,
 
 ---
 
+More details on Docker [here](./README_2.md).
+
+---

@@ -17,7 +17,7 @@ public class StationSelector {
 
     static void positionSelector(double nLat, double sLat, double wLng, double eLng) {
         try {
-            List<TideStation> selectedList = TidePublisher.getStationList(nLat, sLat, wLng, eLng);
+            List<TideStation> selectedList = TidePublisher.getStationList(nLat, sLat, wLng, eLng); // TODO FIRST FILTER
             if (selectedList != null) {
                 selectedList.stream().forEach(station -> {
                     try {
@@ -35,7 +35,6 @@ public class StationSelector {
         }
     }
 
-
     private final static String N_LAT = "--n-lat:";
     private final static String S_LAT = "--s-lat:";
     private final static String W_LNG = "--w-lng:";
@@ -47,6 +46,8 @@ public class StationSelector {
     private final static String STATION_NAME = "--station-name:";
 
     public static void main(String[] args) {
+
+        // Default values
         double nLat =  90d;
         double sLat = -90d;
         double eLng =  180d;
@@ -58,6 +59,7 @@ public class StationSelector {
         String stationName = "Brest, France";
         int tideYear = 2024;
 
+        // Script prms management
         for (String arg : args) {
             // System.out.printf("Processing arg [%s]\n", arg);
             if (arg.startsWith(N_LAT)) {
@@ -75,14 +77,14 @@ public class StationSelector {
                     ex.printStackTrace();
                 }
             } else if (arg.startsWith(E_LNG)) {
-                String value = arg.substring(S_LAT.length());
+                String value = arg.substring(E_LNG.length());
                 try {
                     eLng = Double.parseDouble(value);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             } else if (arg.startsWith(W_LNG)) {
-                String value = arg.substring(S_LAT.length());
+                String value = arg.substring(W_LNG.length());
                 try {
                     wLng = Double.parseDouble(value);
                 } catch (Exception ex) {
@@ -111,14 +113,13 @@ public class StationSelector {
         // Now, proceed
         if (select) {
             try {
-                positionSelector(nLat, sLat, wLng, eLng);
+                positionSelector(nLat, sLat, wLng, eLng); // Spits out the list out the standard output
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
         if (publish) {
-
             if ((stationName.startsWith("'") && stationName.endsWith("'")) || stationName.startsWith("\"") && stationName.endsWith("\"")) { // Trim quotes
                 stationName = stationName.substring(1, stationName.length() - 1);
             }

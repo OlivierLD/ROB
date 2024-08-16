@@ -156,9 +156,22 @@ public class TidePublisher {
 			throws Exception {
 		return publish(stationName, startMonth, startYear, nb, quantity, script, null);
 	}
+
+	/**
+	 *
+	 * @param stationName Station name
+	 * @param startMonth between Calendar.JANUARY and Calendar.DECEMBER
+	 * @param startYear like 2024
+	 * @param nb Number of quantity (see below)
+	 * @param quantity like Calendar.YEAR, Calendar.MONTH, etc
+	 * @param script Name of the script to execute to publish. Can come from a System Variable (See TIDE_TABLE & Co). Warning: See the script.path System variable !!
+	 * @param finalFileName Will be used if not null. Also see the pdf.path System Variable.
+	 * @return The name of the result-file of the fop publication.
+	 * @throws Exception
+	 */
 	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName)
 			throws Exception {
-		TideStation ts = null;
+		TideStation ts;
 		try {
 			Optional<TideStation> optTs = BackEndTideComputer.getStationData()
 					.stream()
@@ -281,16 +294,20 @@ public class TidePublisher {
 		});
 	}
 
+	public static List<TideStation> getStationList(double nLat, double sLat, double wLng, double eLng) {
+		return getStationList(nLat, sLat, wLng, eLng, null);
+	}
 	/**
 	 * Select tide stations based on their position
 	 * @param nLat
 	 * @param sLat
 	 * @param wLng
 	 * @param eLng
+	 * @param firstFilter one of "Africa", "America", "Antarctica", "Asia", "Atlantic", "Australia", "Etc", "Europe", Indian", "Pacific".
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<TideStation> getStationList(double nLat, double sLat, double wLng, double eLng) throws Exception {
+	public static List<TideStation> getStationList(double nLat, double sLat, double wLng, double eLng, String firstFilter) {
 		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
 		try {
 			backEndTideComputer.connect();
@@ -298,7 +315,15 @@ public class TidePublisher {
 			final Map<String, TideUtilities.StationTreeNode> stationTreeNodeMap = backEndTideComputer.buildStationTree();
 
 			final List<TideUtilities.StationTreeNode> stationList = new ArrayList<>();
-			stationTreeNodeMap.keySet().forEach(nodeName -> {
+
+			Set<String> keys;
+			if (firstFilter == null) {
+				keys = stationTreeNodeMap.keySet();
+			} else {
+				keys = new HashSet<>();
+				keys.add(firstFilter);
+			}
+			keys.forEach(nodeName -> {
 				final TideUtilities.StationTreeNode stationTreeNode = stationTreeNodeMap.get(nodeName);
 				final TreeMap<String, TideUtilities.StationTreeNode> subTree = stationTreeNode.getSubTree();
 				recurseTreeNode(subTree, stationList);
@@ -393,7 +418,8 @@ public class TidePublisher {
 
 	public static void main(String... args) {
 		try {
-			List<TideStation> selectedList = getStationList(50.0, 42.5, -10.0, 5.0);
+//			List<TideStation> selectedList = getStationList(50.0, 42.5, -10.0, 5.0, "Pacific");
+			List<TideStation> selectedList = getStationList(90.0, -90, -180.0, 1805.0, "Pacific");
 			if (selectedList != null) {
 				selectedList.stream().forEach(station -> {
 					try {
