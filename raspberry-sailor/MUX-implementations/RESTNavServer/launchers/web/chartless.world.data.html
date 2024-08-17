@@ -124,7 +124,13 @@ function onSlider(event) {
 	}
 }
 
+function setMaxLength(origin) {
+	maxBufferLength = parseInt(origin.value);
+}
+
 const MAX_BUFFER_LENGTH = 1000; // Tweak at will
+
+let maxBufferLength = MAX_BUFFER_LENGTH;
 
 let trackBuffer = [];
 let aisTargets = [];
@@ -133,6 +139,8 @@ let borders = [];
 let borderThreats = [];
 let aisThreats = null;
 let cog = 0;
+let hdg;
+let bsp;
 let sog;
 let pos;
 let gpsDate;
@@ -162,13 +170,13 @@ events.subscribe(POS, val => {
 	document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
 	pos = val;
 	trackBuffer.push(val);
-	while (trackBuffer.length > MAX_BUFFER_LENGTH) {
+	while (trackBuffer.length > maxBufferLength) {
 		// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
 		trackBuffer.splice(0, 1);
 		// console.log(`Buffer length now ${trackBuffer.length}...`);
     }
 	// console.log(`Track: ${trackBuffer.length} element(s).`);
-	document.getElementById('track-length').innerHTML = `${trackBuffer.length} points`;
+	document.getElementById('track-length').innerHTML = `${trackBuffer.length}/${maxBufferLength} points`;
 	if (centerOnBoat) {
 		map.centerLat = val.lat; // This does the repaint...
 		map.centerLng = val.lng;
@@ -253,9 +261,22 @@ events.subscribe(COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
 	cog = val;
 });
-// events.subscribe(FULL, val => {
-// 	console.log(JSON.stringify(val, null, 2));
-// });
+events.subscribe(TRUE_HDG, val => {
+	document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
+	hdg = val; // Managed in repaint
+	// console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`); 
+});
+events.subscribe(BSP, val => {
+	document.getElementById('bsp').innerHTML = `${val} kn`;
+	bsp = val; // Managed in repaint
+	// console.log(`BSP:	${bsp.toFixed(2)}`); 
+});
+// For debug, mainly.
+if (false) {
+	events.subscribe(FULL, val => {
+		console.log(JSON.stringify(val, null, 2));
+	});
+}
 ///// END OF SUBSCRIBERS ////
 
 // Display event subscribers ?
@@ -625,11 +646,12 @@ let updateMap = (elmt, context) => {
 
 		context.strokeStyle = 'orange'; // Only hard-coded one...
 		// drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
-		drawBoat(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		drawBoat(context, boatXY.x, boatXY.y, 5 * boatRadius, (hdg ? hdg : cog), context.strokeStyle);
 
 		context.beginPath();
 		context.lineWidth = 1;
 		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		// A cross-hair
 		context.moveTo(boatXY.x, boatXY.y - 20);
 		context.lineTo(boatXY.x, boatXY.y + 20);
 
@@ -638,12 +660,45 @@ let updateMap = (elmt, context) => {
 		context.stroke();
 		context.closePath();
 
+		// Circle around boat position
 		context.beginPath();
 		context.lineWidth = 4;
 		context.arc(boatXY.x, boatXY.y, 10, 0, 2 * Math.PI, false);
 
 		context.stroke();
 		context.closePath();
+
+		// COG, HDG ?
+		if (cog && hdg) {
+			const ARROW_LEN = 80;
+			context.lineWidth = 2;
+
+			context.beginPath();
+
+			// console.log(`Plotting HDG & COG... ${hdg} / ${cog}, from ${boatXY.x}, ${boatXY.y}`);
+			context.strokeStyle = elmt.colorConfig.borderColor; // 'cyan'; // TODO Coast color...
+			context.moveTo(boatXY.x, boatXY.y);
+
+			let length = ARROW_LEN * (bsp ? bsp / 5.0 : 1.0);
+
+			let xHDG = boatXY.x + (length * Math.sin(Math.toRadians(hdg)));
+			let yHDG = boatXY.y - (length * Math.cos(Math.toRadians(hdg)));
+			// console.log(`HDG: ${xHDG} ${yHDG}`);
+			context.lineTo(xHDG, yHDG);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.strokeStyle = 'red';
+			context.moveTo(boatXY.x, boatXY.y);
+			length = ARROW_LEN * (sog ? sog / 5.0 : 1.0);
+			let xCOG = boatXY.x + (length * Math.sin(Math.toRadians(cog)));
+			let yCOG = boatXY.y - (length * Math.cos(Math.toRadians(cog)));
+			// console.log(`COG: ${xCOG} ${yCOG}`);
+			context.lineTo(xCOG, yCOG);
+			context.stroke();
+			context.closePath();
+		}
 
 		context.restore();
 		// } else {
@@ -652,7 +707,7 @@ let updateMap = (elmt, context) => {
 
 	// The points of the track
 	context.beginPath();
-	context.strokeStyle = elmt.colorConfig.markerAndTrackColor;
+	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
 	context.lineWidth = 1;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
@@ -809,7 +864,7 @@ window.onload = () => {
                                    center-lat="0.0"
                                    center-lng="0.0"
                                    chart-width="5.0"
-                                   width="800"
+                                   width="1000"
                                    height="600"></chartless-map>
                 </div>
             </td>
@@ -829,14 +884,6 @@ window.onload = () => {
 						<td colspan="2"><hr/></td>
 					</tr>
 					<tr>
-						<td>Position:</td>
-						<td><span id="gps-position"></span></td>
-					</tr>
-					<tr>
-						<td>Track length:</td>
-						<td><span id="track-length"></span></td>
-					</tr>
-					<tr>
 						<td>GPS Date:</td>
 						<td><span id="gps-date"></span></td>
 					</tr>
@@ -845,12 +892,35 @@ window.onload = () => {
 						<td><span id="gps-time"></span></td>
 					</tr>
 					<tr>
+						<td colspan="2"><hr/></td>
+					</tr>
+					<tr>
+						<td>Position:</td>
+						<td><span id="gps-position"></span></td>
+					</tr>
+					<tr>
+						<td>Track length:</td>
+						<td><span id="track-length"></span></td>
+					</tr>
+					<tr>
+						<td>Track Max length:</td>
+						<td><input type="number" id="track-max-length" value="1000" style="text-align: right;" onchange="setMaxLength(this);"></input></td>
+					</tr>
+					<tr>
 						<td>SOG:</td>
 						<td><span id="gps-sog"></span></td>
 					</tr>
 					<tr>
 						<td>COG:</td>
 						<td><span id="gps-cog"></span></td>
+					</tr>
+					<tr>
+						<td>BSP:</td>
+						<td><span id="bsp">-</span></td>
+					</tr>
+					<tr>
+						<td>HDG (true):</td>
+						<td><span id="true-hdg">-</span></td>
 					</tr>
 					<tr>
 						<td valign="top">AIS Targets:</td>

@@ -9,6 +9,11 @@ context:
   deviation.file.name: "dp_2011_04_15.csv"
   max.leeway: 10.0
   damping: 30
+  markers: mux-configs/markers.sf.bay.yaml
+#  markers.list:
+#    - markers: mux-configs/markers.04.yaml
+#    - markers: mux-configs/markers.05.yaml
+#    - markers: mux-configs/markers.06.yaml
 channels:
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip

@@ -116,6 +116,7 @@ const AIS = 'ais';
 const MARKERS = 'markers';
 const BORDERS = 'borders';
 const BORDERS_THREATS = 'borders-threats';
+const TRUE_HDG = 'true-hdg';
 
 function onMessage(json) {
 	try {
@@ -373,6 +374,24 @@ function onMessage(json) {
 			}
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders threats (" + err + ")");
+		}
+
+		try {
+		    let hdg = json["HDG true"].angle;
+		    if (hdg) {
+                events.publish(TRUE_HDG, hdg);
+		    }
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "True Heading (" + err + ")");
+		}
+
+		try {
+		    let bsp = json["BSP"].speed;
+		    if (bsp) {
+                events.publish(BSP, bsp);
+		    }
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "True Heading (" + err + ")");
 		}
 
 		if (errMess !== undefined && forwardAjaxErrors) {
