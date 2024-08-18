@@ -6,12 +6,12 @@ description:
   - Replay a log file from the logged folder (La Trinité - Groix).
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
+  - Optional AIS with sinagot.net
 context:
   with.http.server: true
   http.port: 9999
   init.cache: true
   default.declination: -1
-  # markers: mux-configs/markers.02.yaml
   markers: mux-configs/markers.03.yaml
   markers.list:
     - markers: mux-configs/markers.04.yaml
@@ -30,6 +30,14 @@ channels:
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
+  # AIS Data, from a GPSd server (a lot of data, careful)
+  - type: tcp
+    server: sinagot.net
+    port: 2947
+    # initial.request: "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
+    initial.request: ?WATCH={"enable":true,"json":false,"nmea":true,"raw":0,"scaled":false,"timing":false,"split24":false,"pps":false}
+    keep.trying: true
+    verbose: false
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.default.properties
