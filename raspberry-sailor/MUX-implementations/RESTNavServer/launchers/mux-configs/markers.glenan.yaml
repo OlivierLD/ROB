@@ -1,0 +1,596 @@
+#
+# Generated Sun Aug 18 2024 11:28:18 GMT+0200 (Central European Summer Time)
+#
+markers:
+  - label: "Penfret"
+    latitude: 47.71863555000012
+    longitude: -3.9556358010122494
+    type: default
+  - label: "Gueotec"
+    latitude: 47.7129042077326
+    longitude: -3.9663326181607776
+    type: default
+  - label: "Ile du Loch"
+    latitude: 47.70533322590406
+    longitude: -3.995675593723718
+    type: default
+  - label: "Saint Nicolas"
+    latitude: 47.72410159028504
+    longitude: -4.000653773655359
+    type: default
+  - label: "Bananec"
+    latitude: 47.7229468092135
+    longitude: -3.992328196873132
+    type: default
+  - label: "Drenec"
+    latitude: 47.71722079091218
+    longitude: -4.010224118883344
+    type: default
+  - label: "Ile Cigogne"
+    latitude: 47.71675774842585
+    longitude: -3.993342490873602
+    type: default
+  - label: "Vieux Glenan"
+    latitude: 47.71595650881519
+    longitude: -3.974491925916937
+    type: default
+
+borders:
+  - border-name: "Penfret"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.724654482683
+        longitude: -3.955445665928892
+      - rank: 2
+        latitude: 47.72228717906151
+        longitude: -3.953471560093931
+      - rank: 3
+        latitude: 47.720757035335964
+        longitude: -3.9508108087511578
+      - rank: 4
+        latitude: 47.720121868136985
+        longitude: -3.9507678934069195
+      - rank: 5
+        latitude: 47.7186494053013
+        longitude: -3.9523128457994976
+      - rank: 6
+        latitude: 47.71812970259991
+        longitude: -3.954072374913267
+      - rank: 7
+        latitude: 47.71657056339209
+        longitude: -3.9541152902575054
+      - rank: 8
+        latitude: 47.71469375987346
+        longitude: -3.9563039728136578
+      - rank: 9
+        latitude: 47.71261476014085
+        longitude: -3.9550594278307476
+      - rank: 10
+        latitude: 47.71169073363557
+        longitude: -3.957419771763853
+      - rank: 11
+        latitude: 47.71402964397491
+        longitude: -3.9590505548449078
+      - rank: 12
+        latitude: 47.71420289241663
+        longitude: -3.957720179173521
+      - rank: 13
+        latitude: 47.716166334500045
+        longitude: -3.959265131566099
+      - rank: 14
+        latitude: 47.71810083007561
+        longitude: -3.9579776712389507
+      - rank: 15
+        latitude: 47.71989089632647
+        longitude: -3.9583639093370953
+      - rank: 16
+        latitude: 47.722056216850774
+        longitude: -3.95450152835565
+      - rank: 17
+        latitude: 47.722777970359346
+        longitude: -3.955402750584654
+  - border-name: "Gueotec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.71319132704561
+        longitude: -3.968441392499927
+      - rank: 2
+        latitude: 47.713552266455686
+        longitude: -3.968441392499927
+      - rank: 3
+        latitude: 47.71372551648453
+        longitude: -3.9679156795330077
+      - rank: 4
+        latitude: 47.71372551648453
+        longitude: -3.9672719493694335
+      - rank: 5
+        latitude: 47.71352339139488
+        longitude: -3.9666496768779784
+      - rank: 6
+        latitude: 47.713581141500505
+        longitude: -3.965963031370166
+      - rank: 7
+        latitude: 47.71323463990681
+        longitude: -3.9650832668132816
+      - rank: 8
+        latitude: 47.712772634197876
+        longitude: -3.964922334272388
+      - rank: 9
+        latitude: 47.712592162105295
+        longitude: -3.9652120128459964
+      - rank: 10
+        latitude: 47.71244778398125
+        longitude: -3.9652763858623534
+      - rank: 11
+        latitude: 47.71231062439289
+        longitude: -3.9656840816326175
+      - rank: 12
+        latitude: 47.712455002896945
+        longitude: -3.9659523025341064
+      - rank: 13
+        latitude: 47.711891924469136
+        longitude: -3.966113235075
+      - rank: 14
+        latitude: 47.71166813519934
+        longitude: -3.966585303861621
+      - rank: 15
+        latitude: 47.71177642044987
+        longitude: -3.9667784229106933
+      - rank: 16
+        latitude: 47.71224565393556
+        longitude: -3.966520930845264
+      - rank: 17
+        latitude: 47.712455002896945
+        longitude: -3.9671217456646
+      - rank: 18
+        latitude: 47.71280872854138
+        longitude: -3.9669071689434086
+      - rank: 19
+        latitude: 47.71286647943902
+        longitude: -3.967411424238208
+      - rank: 20
+        latitude: 47.71324907751921
+        longitude: -3.9672934070415526
+      - rank: 21
+        latitude: 47.71345120367287
+        longitude: -3.9678513065166507
+      - rank: 22
+        latitude: 47.713198545858305
+        longitude: -3.968269731122974
+  - border-name: "Brilimec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.704311809029
+        longitude: -3.9799395200725494
+      - rank: 2
+        latitude: 47.70382084378116
+        longitude: -3.978952467155068
+      - rank: 3
+        latitude: 47.703221498423936
+        longitude: -3.97989559915061
+      - rank: 4
+        latitude: 47.703730519629
+        longitude: -3.9802550151586056
+  - border-name: "Cigogne"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.71741759297844
+        longitude: -3.9946742354391067
+      - rank: 2
+        latitude: 47.71692675118093
+        longitude: -3.992270976161763
+      - rank: 3
+        latitude: 47.71665245522129
+        longitude: -3.992421179866597
+      - rank: 4
+        latitude: 47.71590174310567
+        longitude: -3.9938373862264602
+      - rank: 5
+        latitude: 47.71663801855182
+        longitude: -3.9940519629476516
+      - rank: 6
+        latitude: 47.71679682169583
+        longitude: -3.9946742354391067
+  - border-name: "Ile du Loch"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.7107240023787
+        longitude: -3.999966277044678
+      - rank: 2
+        latitude: 47.71049298890709
+        longitude: -3.99891485111084
+      - rank: 3
+        latitude: 47.70816835885406
+        longitude: -3.9962111844238284
+      - rank: 4
+        latitude: 47.70831274883394
+        longitude: -3.99267066852417
+      - rank: 5
+        latitude: 47.706796634094886
+        longitude: -3.9927564992126467
+      - rank: 6
+        latitude: 47.70597358191092
+        longitude: -3.991554869573975
+      - rank: 7
+        latitude: 47.70335994408047
+        longitude: -3.9904605282958987
+      - rank: 8
+        latitude: 47.70182924450485
+        longitude: -3.991275919836426
+      - rank: 9
+        latitude: 47.701757040584624
+        longitude: -3.991855276983643
+      - rank: 10
+        latitude: 47.702941172247634
+        longitude: -3.9934860600646975
+      - rank: 11
+        latitude: 47.70213249987772
+        longitude: -3.9943872822937014
+      - rank: 12
+        latitude: 47.701193846574824
+        longitude: -3.998571528356934
+      - rank: 13
+        latitude: 47.701944770569206
+        longitude: -4.000116480749512
+      - rank: 14
+        latitude: 47.70275344585123
+        longitude: -4.000502718847657
+      - rank: 15
+        latitude: 47.70356210858882
+        longitude: -3.9993010892089846
+      - rank: 16
+        latitude: 47.70478951913033
+        longitude: -4.000245226782227
+      - rank: 17
+        latitude: 47.70597358191092
+        longitude: -3.9984856976684573
+      - rank: 18
+        latitude: 47.70712873919076
+        longitude: -3.9983998669799807
+      - rank: 19
+        latitude: 47.707662990774466
+        longitude: -3.9999233617004397
+      - rank: 20
+        latitude: 47.70640676889092
+        longitude: -4.0016614331420906
+      - rank: 21
+        latitude: 47.7069987852748
+        longitude: -4.002305163305665
+      - rank: 22
+        latitude: 47.707850699490336
+        longitude: -4.002541197698975
+      - rank: 23
+        latitude: 47.70845713841381
+        longitude: -4.001275195043946
+      - rank: 24
+        latitude: 47.70885067532928
+        longitude: -4.001361999253845
+      - rank: 25
+        latitude: 47.70876765199663
+        longitude: -4.000466141442871
+      - rank: 26
+        latitude: 47.71008871292721
+        longitude: -4.000309599798585
+  - border-name: "Saint Nicolas"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.72323314912758
+        longitude: -4.009338346623963
+      - rank: 2
+        latitude: 47.723471323509834
+        longitude: -4.008866277837342
+      - rank: 3
+        latitude: 47.7233702799655
+        longitude: -4.006495205068178
+      - rank: 4
+        latitude: 47.72385384372363
+        longitude: -4.003566232823914
+      - rank: 5
+        latitude: 47.725845790379815
+        longitude: -4.001302448415345
+      - rank: 6
+        latitude: 47.72586022449787
+        longitude: -3.9997038518424697
+      - rank: 7
+        latitude: 47.725506587453715
+        longitude: -3.9991888677116103
+      - rank: 8
+        latitude: 47.72572310021474
+        longitude: -3.998759714269227
+      - rank: 9
+        latitude: 47.725614843946744
+        longitude: -3.9982232724662485
+      - rank: 10
+        latitude: 47.725398330735736
+        longitude: -3.9980945264335337
+      - rank: 11
+        latitude: 47.725398330735736
+        longitude: -3.9971182023521132
+      - rank: 12
+        latitude: 47.724936432877755
+        longitude: -3.9969358121391
+      - rank: 13
+        latitude: 47.724460096421836
+        longitude: -3.9972898637290664
+      - rank: 14
+        latitude: 47.7239621036515
+        longitude: -3.9969250833030405
+      - rank: 15
+        latitude: 47.723933234359386
+        longitude: -3.9977404748435683
+      - rank: 16
+        latitude: 47.72348575828589
+        longitude: -3.9987275277610483
+      - rank: 17
+        latitude: 47.72308880048712
+        longitude: -3.998909917974061
+      - rank: 18
+        latitude: 47.72275679709615
+        longitude: -4.002536264562196
+      - rank: 19
+        latitude: 47.72250418440295
+        longitude: -4.004059759282654
+      - rank: 20
+        latitude: 47.72304549581701
+        longitude: -4.006741968297547
+      - rank: 21
+        latitude: 47.72311767024721
+        longitude: -4.008791175984925
+      - rank: 22
+        latitude: 47.72287949424801
+        longitude: -4.009091583394594
+  - border-name: "Bananec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.72297504856047
+        longitude: -3.9954300805050034
+      - rank: 2
+        latitude: 47.72288122152482
+        longitude: -3.9940246029811997
+      - rank: 3
+        latitude: 47.72299670092934
+        longitude: -3.993101923080076
+      - rank: 4
+        latitude: 47.723530789845306
+        longitude: -3.991438953490843
+      - rank: 5
+        latitude: 47.72288122152482
+        longitude: -3.99050554475366
+      - rank: 6
+        latitude: 47.722505911692224
+        longitude: -3.99077376565515
+      - rank: 7
+        latitude: 47.722433736414395
+        longitude: -3.9919861241298813
+      - rank: 8
+        latitude: 47.72265026194781
+        longitude: -3.9926620408016342
+      - rank: 9
+        latitude: 47.72246982406582
+        longitude: -3.9938743992763652
+      - rank: 10
+        latitude: 47.722621391928705
+        longitude: -3.994668333144774
+  - border-name: "Drenec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.71649797888143
+        longitude: -4.013302144305727
+      - rank: 2
+        latitude: 47.71890885371664
+        longitude: -4.011499699847719
+      - rank: 3
+        latitude: 47.7186923126327
+        longitude: -4.009654340045473
+      - rank: 4
+        latitude: 47.71742192014583
+        longitude: -4.006929215686342
+      - rank: 5
+        latitude: 47.71662790911174
+        longitude: -4.007379826800844
+      - rank: 6
+        latitude: 47.71618037028783
+        longitude: -4.008688744800112
+      - rank: 7
+        latitude: 47.71560289515762
+        longitude: -4.011242207782289
+      - rank: 8
+        latitude: 47.716281427777595
+        longitude: -4.011177834765932
+      - rank: 9
+        latitude: 47.71618037028783
+        longitude: -4.011843022601625
+      - rank: 10
+        latitude: 47.71690220520058
+        longitude: -4.011843022601625
+  - border-name: "Le veau"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.71759239660362
+        longitude: -4.006466224018936
+      - rank: 2
+        latitude: 47.71770788773182
+        longitude: -4.006262376133805
+      - rank: 3
+        latitude: 47.717614051209665
+        longitude: -4.005945875470048
+      - rank: 4
+        latitude: 47.71794969645234
+        longitude: -4.005377247158891
+      - rank: 5
+        latitude: 47.71811210466447
+        longitude: -4.004175617520218
+      - rank: 6
+        latitude: 47.71800022350594
+        longitude: -4.004100515667802
+      - rank: 7
+        latitude: 47.717787287733955
+        longitude: -4.004197075192337
+      - rank: 8
+        latitude: 47.71777646046805
+        longitude: -4.004062964741593
+      - rank: 9
+        latitude: 47.717422768545
+        longitude: -4.003923489872818
+      - rank: 10
+        latitude: 47.71726757643311
+        longitude: -4.00414879543007
+      - rank: 11
+        latitude: 47.717256749059224
+        longitude: -4.005205585781938
+      - rank: 12
+        latitude: 47.71732532238921
+        longitude: -4.005527450863724
+      - rank: 13
+        latitude: 47.71749134165647
+        longitude: -4.005843951527481
+      - rank: 14
+        latitude: 47.71740833208896
+        longitude: -4.006262376133805
+  - border-name: "La tombe"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.71609716068248
+        longitude: -4.004850782112613
+      - rank: 2
+        latitude: 47.715981665983996
+        longitude: -4.004630840973392
+      - rank: 3
+        latitude: 47.71573984812995
+        longitude: -4.004636205391422
+      - rank: 4
+        latitude: 47.71541501641049
+        longitude: -4.004528917030826
+      - rank: 5
+        latitude: 47.71517680519591
+        longitude: -4.0050653588338045
+      - rank: 6
+        latitude: 47.715137103220925
+        longitude: -4.004984892563358
+      - rank: 7
+        latitude: 47.71498912286589
+        longitude: -4.005129731850162
+      - rank: 8
+        latitude: 47.715227334938476
+        longitude: -4.005226291374698
+      - rank: 9
+        latitude: 47.715234553469124
+        longitude: -4.0054247748418
+      - rank: 10
+        latitude: 47.715404188651654
+        longitude: -4.0056661736531405
+      - rank: 11
+        latitude: 47.7156171341628
+        longitude: -4.005784190849796
+      - rank: 12
+        latitude: 47.715837297250914
+        longitude: -4.005639351562992
+  - border-name: "Guiriden"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.725391959441396
+        longitude: -3.9742060091342073
+      - rank: 2
+        latitude: 47.72529452819092
+        longitude: -3.9739538814868074
+      - rank: 3
+        latitude: 47.72502027628518
+        longitude: -3.973841228708182
+      - rank: 4
+        latitude: 47.72504192780392
+        longitude: -3.974138953908835
+      - rank: 5
+        latitude: 47.72522776963631
+        longitude: -3.974310615285788
+      - rank: 6
+        latitude: 47.7253378309914
+        longitude: -3.974315979703818
+  - border-name: "Quignenec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.70944292153693
+        longitude: -4.018491858006429
+      - rank: 2
+        latitude: 47.70992661456616
+        longitude: -4.0178695855149735
+      - rank: 3
+        latitude: 47.70972447474174
+        longitude: -4.015788191319417
+      - rank: 4
+        latitude: 47.70934907013065
+        longitude: -4.016152971745441
+      - rank: 5
+        latitude: 47.709327412089806
+        longitude: -4.01671087122054
+      - rank: 6
+        latitude: 47.70959452729775
+        longitude: -4.016560667515706
+      - rank: 7
+        latitude: 47.7094212635351
+        longitude: -4.017161482335042
+      - rank: 8
+        latitude: 47.709219121750664
+        longitude: -4.017569178105306
+  - border-name: "Quignenec - 2"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.70937914094587
+        longitude: -4.014753214433143
+      - rank: 2
+        latitude: 47.709933222443716
+        longitude: -4.01345234306092
+      - rank: 3
+        latitude: 47.70983756710091
+        longitude: -4.01321094424958
+      - rank: 4
+        latitude: 47.7087366156115
+        longitude: -4.013009778573462
+      - rank: 5
+        latitude: 47.708545300357926
+        longitude: -4.013288728311012
+      - rank: 6
+        latitude: 47.7086192997374
+        longitude: -4.014096073224494
+      - rank: 7
+        latitude: 47.708852126367994
+        longitude: -4.014090708806464
+      - rank: 8
+        latitude: 47.70900373384736
+        longitude: -4.014383069589088
+      - rank: 9
+        latitude: 47.70897485626623
+        longitude: -4.014538637711951
+  - border-name: "Quignenec - 3"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.707842972954886
+        longitude: -4.015278026345471
+      - rank: 2
+        latitude: 47.70750365280929
+        longitude: -4.014712080243329
+      - rank: 3
+        latitude: 47.70739355377676
+        longitude: -4.014749631169536
+      - rank: 4
+        latitude: 47.70720403850392
+        longitude: -4.015857383492688
+      - rank: 5
+        latitude: 47.70764443483995
+        longitude: -4.015725955250958
+      - rank: 6
+        latitude: 47.707790631161636
+        longitude: -4.015578433755138
