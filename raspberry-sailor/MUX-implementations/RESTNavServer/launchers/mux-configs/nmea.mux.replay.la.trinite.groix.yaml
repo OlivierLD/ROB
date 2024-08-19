@@ -19,6 +19,7 @@ context:
     - markers: mux-configs/markers.houat.hoedic.belle-ile.yaml
     - markers: mux-configs/markers.couregant.la.plate.yaml
     - markers: mux-configs/markers.glenan.yaml
+    - markers: mux-configs/markers.uk.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
     # - markers: mux-configs/markers.san.juan.yaml
 channels:

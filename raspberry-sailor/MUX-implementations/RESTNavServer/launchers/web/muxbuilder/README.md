@@ -11,4 +11,9 @@ It requires absolutely _NO_ external library, and can run in standalone (no serv
 
 The yaml is generated in the html page, it is intended to be copied into the final yaml document.  
 Enjoy!
+
+## Bonus: Markers and Borders generator
+See `marker.builder.html` and `marker.maker.leaflet.html`.  
+They can run in standalone (no server required) but they need an Internet connection.
+
 ---

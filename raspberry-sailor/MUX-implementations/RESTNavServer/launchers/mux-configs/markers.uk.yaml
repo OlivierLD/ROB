@@ -1,0 +1,16 @@
+#
+# Generated Mon Aug 19 2024 09:14:41 GMT+0200 (Central European Summer Time)
+#
+markers:
+  - label: "Wolf Rock"
+    latitude: 49.939694239066554
+    longitude: -5.814942866672936
+    type: default
+  - label: "Eddystone Rocks"
+    latitude: 50.18072965321114
+    longitude: -4.265634985647467
+    type: default
+  - label: "Lizard Point"
+    latitude: 49.9581961118919
+    longitude: -5.206231623997156
+    type: default

@@ -44,9 +44,44 @@ input[type=text], input[type=number], select {
   font-family: 'Courier New', Courier, monospace;
 }
 
-button {
+/* button {
   font-family: 'Courier New', Courier, monospace;
   margin: 5px;
+} */
+
+button {
+			padding: 4px 20px;
+			/* give the background a gradient */
+			background:#ffae00; /* fallback for browsers that don't support gradients */
+			background: -webkit-linear-gradient(top, #ffae00, #d67600);
+			background: -moz-linear-gradient(top, #ffae00, #d67600);
+			background: -o-linear-gradient(top, #ffae00, #d67600);
+			background: linear-gradient(top, #ffae00, #d67600);
+			border:2px outset #dad9d8;
+			/* style the text */
+			font-family:Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+			font-size:1.1em;
+			letter-spacing:0.05em;
+			text-transform:uppercase;
+			color:#fff;
+			text-shadow: 0px 1px 10px #000;
+			/* add to small curve to the corners of the button */
+			-webkit-border-radius: 15px;
+			-moz-border-radius: 15px;
+			border-radius: 15px;
+			/* give the button a drop shadow */
+			-webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			-moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+/* NOW STYLE THE BUTTON'S HOVER STATE */
+/*	button#rCoffee:hover, button#rCoffee:focus { */
+button:hover, button:focus {
+  border:2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;  
 }
 
 .main-container {
