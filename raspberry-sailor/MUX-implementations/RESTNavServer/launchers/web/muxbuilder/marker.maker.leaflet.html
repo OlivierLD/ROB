@@ -75,7 +75,7 @@ button {
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div style="margin: 5px;">
-  A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
+  A simple web UI to build the marker.yaml files. Click on the map to define a marker. Try 'sat=Y' QS Parameter.<br/>
   <small style="color: blue;">
     Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
     Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
@@ -141,6 +141,25 @@ button {
 </div>
 
 <script type="text/javascript">
+
+    let getQSPrm = (prm) => {
+        let value;
+        let loc = document.location.toString();
+        if (loc.indexOf("?") > -1) {
+            let qs = loc.substring(loc.indexOf("?") + 1);
+            let prms = qs.split('&');
+            for (let i=0; i<prms.length; i++) {
+                let nv = prms[i].split('=');
+                if (nv.length === 2) {
+                    if (nv[0] === prm) {
+                        return nv[1];
+                    }
+                }
+            }
+        }
+        return value;
+    };
+
     const MARKERS_OPTION = 1;
     const BORDER_OPTION = 2;
 
@@ -193,21 +212,24 @@ button {
 
     let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    let addSatPix = 'Y' === getQSPrm('sat');
 
-    let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-    let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+    if (!addSatPix) {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    } else {
+      let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+      let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
-    const satLayer = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: mbAttr, opacity: 1.0});
-    satLayer.addTo(map);
-    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 25,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        opacity: 0.5
-	}).addTo(map);
-
+      const satLayer = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: mbAttr, opacity: 1.0});
+      satLayer.addTo(map);
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 25,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          opacity: 0.5
+      }).addTo(map);
+    }
     let popup = L.popup(); // Used below.
 
     map.on('click', e => {
