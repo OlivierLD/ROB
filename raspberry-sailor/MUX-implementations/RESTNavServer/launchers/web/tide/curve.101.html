@@ -94,6 +94,7 @@
 			// Query parameters?
 			let station = getQueryParameterByName("station");
 			if (station !== undefined && station !== null) {
+				document.getElementById('filter').value = station; // Fill out the filter field
 				// alert("Station " + station);
 				// Do it, for now, 1 day
 				document.getElementById('with-table').checked = true;
