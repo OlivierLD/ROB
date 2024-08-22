@@ -77,6 +77,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:fo="http://www.w3.org/1999/XSL/Format"
         xmlns:fox="http://xml.apache.org/fop/extensions" version="2.0">
+  <!--xsl:import href="literals.xsl"/-->
+  <xsl:param name="language">EN</xsl:param>
+
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
@@ -128,7 +131,14 @@
                        border="0.5pt solid black">
                 <fo:block text-align="left" font-family="Courier"
                       font-size="9pt">
-                  <xsl:value-of select="concat('Tide at ', ../@station, ', ', ../@station-lat, ' / ', ../@station-lng)"/>
+                  <xsl:choose>
+                    <xsl:when test="$language = 'FR'">
+                      <xsl:value-of select="concat('Mar&eacute;e &agrave; ', ../@station, ', ', ../@station-lat, ' / ', ../@station-lng)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="concat('Tide at ', ../@station, ', ', ../@station-lat, ' / ', ../@station-lng)"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
@@ -146,18 +156,30 @@
                 <fo:block text-align="center" font-family="Courier" font-weight="bold"
                       font-size="9pt">
                   <xsl:choose>
-                    <xsl:when test="./@month = '1'">January</xsl:when>
-                    <xsl:when test="./@month = '2'">February</xsl:when>
-                    <xsl:when test="./@month = '3'">March</xsl:when>
-                    <xsl:when test="./@month = '4'">April</xsl:when>
-                    <xsl:when test="./@month = '5'">May</xsl:when>
-                    <xsl:when test="./@month = '6'">June</xsl:when>
-                    <xsl:when test="./@month = '7'">July</xsl:when>
-                    <xsl:when test="./@month = '8'">August</xsl:when>
-                    <xsl:when test="./@month = '9'">September</xsl:when>
-                    <xsl:when test="./@month = '10'">October</xsl:when>
-                    <xsl:when test="./@month = '11'">November</xsl:when>
-                    <xsl:when test="./@month = '12'">December</xsl:when>
+                    <xsl:when test="./@month = '1' and $language = 'EN'">January</xsl:when>
+                    <xsl:when test="./@month = '1' and $language = 'FR'">Janvier</xsl:when>
+                    <xsl:when test="./@month = '2' and $language = 'EN'">February</xsl:when>
+                    <xsl:when test="./@month = '2' and $language = 'FR'">F&eacute;vrier</xsl:when>
+                    <xsl:when test="./@month = '3' and $language = 'EN'">March</xsl:when>
+                    <xsl:when test="./@month = '3' and $language = 'FR'">Mars</xsl:when>
+                    <xsl:when test="./@month = '4' and $language = 'EN'">April</xsl:when>
+                    <xsl:when test="./@month = '4' and $language = 'FR'">Avril</xsl:when>
+                    <xsl:when test="./@month = '5' and $language = 'EN'">May</xsl:when>
+                    <xsl:when test="./@month = '5' and $language = 'FR'">Mai</xsl:when>
+                    <xsl:when test="./@month = '6' and $language = 'EN'">June</xsl:when>
+                    <xsl:when test="./@month = '6' and $language = 'FR'">Juin</xsl:when>
+                    <xsl:when test="./@month = '7' and $language = 'EN'">July</xsl:when>
+                    <xsl:when test="./@month = '7' and $language = 'FR'">Juillet</xsl:when>
+                    <xsl:when test="./@month = '8' and $language = 'EN'">August</xsl:when>
+                    <xsl:when test="./@month = '8' and $language = 'FR'">Ao&ucirc;t</xsl:when>
+                    <xsl:when test="./@month = '9' and $language = 'EN'">September</xsl:when>
+                    <xsl:when test="./@month = '9' and $language = 'FR'">Septembre</xsl:when>
+                    <xsl:when test="./@month = '10' and $language = 'EN'">October</xsl:when>
+                    <xsl:when test="./@month = '10' and $language = 'FR'">Octobre</xsl:when>
+                    <xsl:when test="./@month = '11' and $language = 'EN'">November</xsl:when>
+                    <xsl:when test="./@month = '11' and $language = 'FR'">Novembre</xsl:when>
+                    <xsl:when test="./@month = '12' and $language = 'EN'">December</xsl:when>
+                    <xsl:when test="./@month = '12' and $language = 'FRN'">D&eacute;cembre</xsl:when>
                   </xsl:choose>
                   <xsl:text disable-output-escaping="yes">&nbsp;</xsl:text>
                   <xsl:value-of select="./@year"/>
@@ -192,7 +214,7 @@
                       That's it
                     </fo:table-footer-->
         </fo:table>
-        <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in">by OlivSoft</fo:block>
+        <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in">by <!--OlivSoft-->Passe-Coque</fo:block>
       </fo:block>
     </fo:block>
   </xsl:template>
@@ -211,7 +233,80 @@
           <!-- Date -->
           <fo:table-cell number-columns-spanned="5">
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="$data/@val"/>
+              <xsl:choose>
+                <xsl:when test="$language = 'FR'">
+                  <xsl:variable name="wday" select='substring($data/@val, 1, 3)'/>
+                  <xsl:variable name="mday" select='substring($data/@val, 5, 2)'/>
+                  <xsl:variable name="month-name" select='substring($data/@val, 8, 3)'/>
+                  <xsl:variable name="date-year" select='substring($data/@val, 12, 4)'/>
+
+                  <xsl:if test="$wday = 'Mon'">
+                    <xsl:value-of select="concat('Lun', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Tue'">
+                    <xsl:value-of select="concat('Mar', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Wed'">
+                    <xsl:value-of select="concat('Mer', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Thu'">
+                    <xsl:value-of select="concat('Jeu', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Fri'">
+                    <xsl:value-of select="concat('Ven', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Sat'">
+                    <xsl:value-of select="concat('Sam', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$wday = 'Sun'">
+                    <xsl:value-of select="concat('Dim', ' ')"/>
+                  </xsl:if>
+
+                  <xsl:value-of select="concat($mday, ' ')"/>
+
+                  <xsl:if test="$month-name = 'Jan'">
+                    <xsl:value-of select="concat('Jan', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Feb'">
+                    <xsl:value-of select="concat('F&eacute;v', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Mar'">
+                    <xsl:value-of select="concat('Mar', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Apr'">
+                    <xsl:value-of select="concat('Avr', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'May'">
+                    <xsl:value-of select="concat('Mai', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Jun'">
+                    <xsl:value-of select="concat('Juin', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Jul'">
+                    <xsl:value-of select="concat('Juil', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Aug'">
+                    <xsl:value-of select="concat('Ao&ucirc;t', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Sep'">
+                    <xsl:value-of select="concat('Sep', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Oct'">
+                    <xsl:value-of select="concat('Oct', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Nov'">
+                    <xsl:value-of select="concat('Nov', ' ')"/>
+                  </xsl:if>
+                  <xsl:if test="$month-name = 'Dec'">
+                    <xsl:value-of select="concat('D&eacute;', ' ')"/>
+                  </xsl:if>
+
+                  <xsl:value-of select="$date-year"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$data/@val"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </fo:block>
           </fo:table-cell>
         </fo:table-row>
@@ -219,13 +314,20 @@
           <!-- Sunrise, sunset -->
           <fo:table-cell number-columns-spanned="5">
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="concat('Sun rise:', $data/@sun-rise, ', Sun set:', $data/@sun-set)"/>
+              <xsl:choose>
+                <xsl:when test="$language = 'FR'">
+                  <xsl:value-of select="concat('Soleil : ', $data/@sun-rise, ' - ', $data/@sun-set)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat('Sun rise:', $data/@sun-rise, ', Sun set:', $data/@sun-set)"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </fo:block>
             <fo:block text-align="left" font-weight="bold">
               <xsl:value-of select="concat('  Z rise: ', $data/@sun-rise-Z, '°, Z set: ', $data/@sun-set-Z, '°')"/>
             </fo:block>
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="concat(' Sun transit:', $data/@sun-transit, ' (El ', $data/@sun-elev-at-transit, '°)')"/>
+              <xsl:value-of select="concat(' Transit: ', $data/@sun-transit, ' (El ', $data/@sun-elev-at-transit, '°)')"/>
             </fo:block>
             <!--fo:block text-align="left" font-weight="bold">
               <xsl:value-of select="concat('Moon rise:', $data/@moon-rise, ', Moon set:', $data/@moon-set)"/>
@@ -236,13 +338,30 @@
           <fo:table-row>
             <fo:table-cell padding="medium">
               <fo:block text-align="left">
+                <xsl:variable name="type" select="./@type"/>
                 <xsl:choose>
                   <!-- Coeff ? -->
                   <xsl:when test="./@coeff">
-                    <xsl:value-of select="concat(./@type, ' (', ./@coeff, ')')"/>
+                    <xsl:if test="$language = 'FR' and $type = 'HW'">
+                      <xsl:value-of select="concat('PM', ' (', ./@coeff, ')')"/>
+                    </xsl:if>
+                    <xsl:if test="$language = 'FR' and $type = 'LW'">
+                      <xsl:value-of select="concat('BM', ' (', ./@coeff, ')')"/>
+                    </xsl:if>
+                    <xsl:if test="$language != 'FR'">
+                      <xsl:value-of select="concat($type, ' (', ./@coeff, ')')"/>
+                    </xsl:if>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="./@type"/>
+                    <xsl:if test="$language = 'FR' and $type = 'HW'">
+                      <xsl:value-of select="'PM'"/>
+                    </xsl:if>
+                    <xsl:if test="$language = 'FR' and $type = 'LW'">
+                      <xsl:value-of select="'BM'"/>
+                    </xsl:if>
+                    <xsl:if test="$language != 'FR'">
+                      <xsl:value-of select="$type"/>
+                    </xsl:if>
                   </xsl:otherwise>
                 </xsl:choose>
               </fo:block>
@@ -259,7 +378,15 @@
             </fo:table-cell>
             <fo:table-cell padding="medium">
               <fo:block text-align="center">
-                <xsl:value-of select="./@unit"/>
+                <xsl:if test="$language = 'FR' and ./@unit = 'meters'">
+                  <xsl:value-of select="'m&egrave;tres'"/>
+                </xsl:if>
+                <xsl:if test="$language = 'FR' and ./@unit = 'feet'">
+                  <xsl:value-of select="'pieds'"/>
+                </xsl:if>
+                <xsl:if test="$language != 'FR'">
+                  <xsl:value-of select="./@unit"/>
+                </xsl:if>
               </fo:block>
             </fo:table-cell>
             <!-- Coeff ? -->

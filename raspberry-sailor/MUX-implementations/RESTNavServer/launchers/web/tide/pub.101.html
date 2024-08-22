@@ -187,6 +187,14 @@
 
 	  <hr/>
 
+	  <label for="lang-to-use">Publish in </label>
+	  <select id="lang-to-use">
+		  <option value="EN">English</option>
+		  <option value="FR">French</option>
+	  </select>
+
+	  <hr/>
+
 	  <!-- Below, the dataManager is a callback to display the pdf link -->
 	  <button id="publish" disabled
 			  onclick="getStarted();
@@ -194,7 +202,8 @@
 						   startYear: parseInt(document.getElementById('year').value),
 						   startMonth: parseInt(document.getElementById('month').value),
 						   nb: parseInt(document.getElementById('nb').value),
-						   quantity: document.getElementById('quantity').value
+						   quantity: document.getElementById('quantity').value,
+						   lang: document.getElementById('lang-to-use').value
 					   },
 					   dataManager);">Publish</button>
 

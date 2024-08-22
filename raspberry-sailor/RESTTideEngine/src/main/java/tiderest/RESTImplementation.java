@@ -708,7 +708,8 @@ public class RESTImplementation {
 	 *   "startMonth": 0,             // Optional, default 0
 	 *   "startYear": 2017,
 	 *   "nb": 1,                     // Optional, default 1
-	 *   "quantity": "YEAR" | "MONTH" // Optional, default "YEAR"
+	 *   "quantity": "YEAR" | "MONTH",// Optional, default "YEAR"
+	 *   "lang": "EN" | "FR"          // Optional, default "EN"
 	 * }
 	 * </pre>
 	 * @param request Request
@@ -760,7 +761,7 @@ public class RESTImplementation {
 		}
 		if (request.getContent() != null && request.getContent().length > 0) {
 			String payload = new String(request.getContent());
-			if (!"null".equals(payload)) {
+			if ( ! "null".equals(payload)) {
 				StringReader stringReader = new StringReader(payload);
 				String errMess = "";
 				PublishingOptions options;
@@ -774,6 +775,9 @@ public class RESTImplementation {
 					}
 					if (options.quantity == null) {
 						errMess += ((errMess.length() > 0 ? "\n" : "") + "Quantity must be YEAR or MONTH.");
+					}
+					if (! "FR".equals(options.getLang())) {
+						System.out.printf("Received lang [%s], assuming [EN]\n", options.getLang());
 					}
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,
@@ -792,7 +796,8 @@ public class RESTImplementation {
 							options.nb,
 							(options.quantity.equals(Quantity.MONTH) ? Calendar.MONTH : Calendar.YEAR),
 							script,
-							null);
+							null,
+							options.getLang());
 					response.setPayload(generatedFileName.getBytes());
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,
@@ -1033,6 +1038,7 @@ public class RESTImplementation {
 		GeoPoint position;
 		String timeZone;
 		String stationName;
+		String lang;
 
 		public void setStartMonth(int startMonth) {
 			this.startMonth = startMonth;
@@ -1088,6 +1094,14 @@ public class RESTImplementation {
 
 		public String getStationName() {
 			return stationName;
+		}
+
+		public String getLang() {
+			return lang;
+		}
+
+		public void setLang(String lang) {
+			this.lang = lang;
 		}
 	}
 

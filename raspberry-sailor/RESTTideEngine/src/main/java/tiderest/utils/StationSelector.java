@@ -44,6 +44,7 @@ public class StationSelector {
     private final static String SELECT = "--select";
     private final static String TIDE_YEAR = "--tide-year:";
     private final static String STATION_NAME = "--station-name:";
+    private final static String LANG = "--lang:";
 
     public static void main(String[] args) {
 
@@ -53,11 +54,14 @@ public class StationSelector {
         double eLng =  180d;
         double wLng = -180d;
 
+        // Select station, or publish almanac ?
         boolean select = false;
         boolean publish = false;
 
         String stationName = "Brest, France";
         int tideYear = 2024;
+
+        String lang = null;
 
         // Script prms management
         for (String arg : args) {
@@ -104,6 +108,13 @@ public class StationSelector {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            } else if (arg.startsWith(LANG)) {
+                String value = arg.substring(LANG.length());
+                try {
+                    lang = value;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else if (arg.equals(SELECT)) {
                 select = true;
             } else if (arg.equals(PUBLISH)) {
@@ -125,7 +136,7 @@ public class StationSelector {
             }
             stationName = stationName.replace("+", " ");  // Ugly escape trick...
             try {
-                System.out.printf(">> Publishing for [%s], year %d\n", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()), tideYear);
+                System.out.printf(">> Publishing for [%s], year %d, lang %s\n", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()), tideYear, lang);
 
                 BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
                 backEndTideComputer.connect();
@@ -136,8 +147,9 @@ public class StationSelector {
                         tideYear,
                         1,
                         Calendar.YEAR,
-                        TIDE_TABLE,
-                        String.format("%s.%d", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()).replace(" ", "_"), tideYear));  // Change at will AGENDA_TABLE, MOON_CALENDAR
+                        TIDE_TABLE, // Change at will AGENDA_TABLE, MOON_CALENDAR
+                        String.format("%s.%d", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()).replace(" ", "_"), tideYear), // final file name
+                        lang);
                 System.out.printf("Generated %s\n", f);
             } catch (Exception ex) {
                 ex.printStackTrace();

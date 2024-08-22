@@ -34,7 +34,7 @@ public class TidePublisher {
 			String utu,
 			TideUtilities.SpecialPrm sPrm,
 			String scriptToRun) throws Exception {
-		return publish(ts, timeZoneId, sm, sy, nb, q, utu, sPrm, scriptToRun, null);
+		return publish(ts, timeZoneId, sm, sy, nb, q, utu, sPrm, scriptToRun, null, null);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class TidePublisher {
 	 * @param q          quantity. Calendar.MONTH or Calendar.YEAR
 	 * @param utu        Unit to use
 	 * @param sPrm       Special parameters
-	 * . . .
+	 * . . . and more.
 	 */
 	public static String publish(
 			TideStation ts,
@@ -58,7 +58,8 @@ public class TidePublisher {
 			String utu,
 			TideUtilities.SpecialPrm sPrm,
 			String scriptToRun,
-			String finalFileName)
+			String finalFileName,
+			String lang)
 			throws Exception {
 
 		final TideUtilities.SpecialPrm specialBGPrm = sPrm;
@@ -126,9 +127,14 @@ public class TidePublisher {
 		}
 		// Ready for transformation
 		try {
-			// This part customizable, see script.path VM variable nd Co
+			// This part customizable, see script.path VM variable and Co
 			String cmd = // "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
 			SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+			if (lang != null) {
+				cmd += String.format(" %s", lang);
+			} else {
+				System.out.println("Will use default language (EN)");
+			}
 			System.out.println("Executing System Command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			int exitStatus = p.waitFor();
@@ -154,7 +160,7 @@ public class TidePublisher {
 
 	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script)
 			throws Exception {
-		return publish(stationName, startMonth, startYear, nb, quantity, script, null);
+		return publish(stationName, startMonth, startYear, nb, quantity, script, null, null);
 	}
 
 	/**
@@ -166,10 +172,12 @@ public class TidePublisher {
 	 * @param quantity like Calendar.YEAR, Calendar.MONTH, etc
 	 * @param script Name of the script to execute to publish. Can come from a System Variable (See TIDE_TABLE & Co). Warning: See the script.path System variable !!
 	 * @param finalFileName Will be used if not null. Also see the pdf.path System Variable.
+	 * @param lang Optional language, EN or FR (EN is the default)
+	 *
 	 * @return The name of the result-file of the fop publication.
 	 * @throws Exception
 	 */
-	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName)
+	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName, String lang)
 			throws Exception {
 		TideStation ts;
 		try {
@@ -181,7 +189,7 @@ public class TidePublisher {
 				throw new Exception(String.format("Station [%s] not found.", stationName));
 			} else {
 				ts = optTs.get();
-				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script, finalFileName);
+				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script, finalFileName, lang);
 			}
 		} catch (Exception ex) {
 			throw ex;

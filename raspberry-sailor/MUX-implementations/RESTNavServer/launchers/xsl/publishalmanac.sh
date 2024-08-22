@@ -28,7 +28,7 @@ PRM_OPTION=
 if [[ $LANG == "FR" ]]; then
   echo On parle francais
   PRM_OPTION="-docconf ./lang_fr.cfg"
-  if [[] $WITH_STARS = "false" ]]; then
+  if [[ $WITH_STARS = "false" ]]; then
     PRM_OPTION="-docconf ./lang_fr_ns.cfg"
   fi
   cp literals_fr.xsl literals.xsl

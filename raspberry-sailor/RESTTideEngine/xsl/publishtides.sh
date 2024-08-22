@@ -28,6 +28,7 @@ N_LAT=48.0
 S_LAT=46.0
 W_LNG=-10.0
 E_LNG=5.0
+LANG=FR
 echo -e "Selecting tide stations with latitudes in [${S_LAT}, ${N_LAT}], and longitudes in [${W_LNG}, ${E_LNG}]."
 CMD="java -classpath ${CP} tiderest.utils.StationSelector --select --n-lat:${N_LAT} --s-lat:${S_LAT} --w-lng:${W_LNG} --e-lng:${E_LNG}"
 $CMD > station.list.txt
@@ -47,7 +48,7 @@ while read -r station; do
   # echo -e "Processing data for [${station}], in ${DATA_YEAR}"
   # Now, publish it !
   SYSTEM_VARS="-Dscript.path=. -Dpdf.path=${DATA_DIR} -Dwith.tide.coeffs=true -Dtide.calc.verbose=false"
-  CMD="java -classpath ${CP} ${SYSTEM_VARS} tiderest.utils.StationSelector --publish --tide-year:${DATA_YEAR} --station-name:${station}"
+  CMD="java -classpath ${CP} ${SYSTEM_VARS} tiderest.utils.StationSelector --publish --tide-year:${DATA_YEAR} --station-name:${station} --lang:${LANG}"
   # echo -e "Executing ${CMD} ..."
   ${CMD}
 done < station.list.txt
