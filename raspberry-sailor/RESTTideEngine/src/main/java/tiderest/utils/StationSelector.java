@@ -13,6 +13,13 @@ import java.util.Optional;
 
 import static tideengine.publisher.TidePublisher.TIDE_TABLE;
 
+/**
+ * Two main features:
+ * - Filter stations, based on their location
+ * - Publish almanacs for the selected station, for a given year
+ *
+ * See the script publishtides.sh for an example of the way to use it.
+ */
 public class StationSelector {
 
     static void positionSelector(double nLat, double sLat, double wLng, double eLng) {
@@ -39,7 +46,6 @@ public class StationSelector {
     private final static String S_LAT = "--s-lat:";
     private final static String W_LNG = "--w-lng:";
     private final static String E_LNG = "--e-lng:";
-
     private final static String PUBLISH = "--publish";
     private final static String SELECT = "--select";
     private final static String TIDE_YEAR = "--tide-year:";
@@ -179,6 +185,5 @@ public class StationSelector {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
     }
 }

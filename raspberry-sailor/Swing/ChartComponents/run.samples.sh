@@ -60,7 +60,7 @@ while [[ "${KEEP_LOOPING}" == "true" ]]; do
       java -cp ${CP} examples.misc.VikingSunCompass
       ;;
     "13")
-      java -cp ${CP} examples.nightandday.Main4Tests
+      java -cp ${CP} examples.nightnday.Main4Tests
       ;;
     "14")
       java -cp ${CP} examples.northamerica.Main4Tests
