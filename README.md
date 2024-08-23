@@ -64,7 +64,8 @@ You might want:
 - ... etc. Your imagination is the limit.
 
 If anything is unclear about the way to customize your configuration, if more examples are needed, please use the [issues](https://github.com/OlivierLD/ROB/issues) page of this repo.  
-But pllllease, keep in mind that this is OpenSource..., not free consulting. This being said, all comments, requirements, suggestions, ideas, etc, are most welcome.
+But pllllease, keep in mind that this is OpenSource..., not free consulting. You _have_ to know what you're doing.   
+This being said, all comments, requirements, suggestions, ideas, etc, are most welcome.
 
 ---
 #### Some links

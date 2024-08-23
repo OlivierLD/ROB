@@ -14,7 +14,7 @@ It provides
 - A server (python part) that 
   - serves REST and HTTP requests
   - reads the BME280 on a regular basis
-  - stores BME280 data up to one week (one data every 15 minutes)
+  - stores BME280 data up to one week (one data set every 15 minutes)
 - Web resources, served by the server above, to display the data in a user-friendly way.
 
 ---
