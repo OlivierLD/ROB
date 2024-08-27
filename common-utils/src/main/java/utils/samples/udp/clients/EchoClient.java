@@ -1,5 +1,8 @@
 package utils.samples.udp.clients;
 
+import utils.StaticUtil;
+import utils.samples.tcp.clients.SimpleTCPClient;
+
 import java.io.IOException;
 import java.net.*;
 
@@ -48,15 +51,21 @@ public class EchoClient {
 
     public static void main(String[] args) {
         EchoClient client  = new EchoClient();
+        System.out.println("Send '.' to the server to stop it.");
         try {
-            String echo = client.sendEcho("hello server");
-            System.out.printf("After send 'hello server': [%s]\n", echo);
-            echo = client.sendEcho("server is working");
-            System.out.printf("After send 'server is working': [%s]\n", echo);
-
-            /* echo = */ client.sendEcho("end");
-            System.out.printf("After send 'end'\n");
-
+            boolean keepWorking = true;
+            while (keepWorking) {
+                String request = StaticUtil.userInput("Request > ");
+                if (".".equals(request)) {
+                    keepWorking = false;
+                    client.sendEcho("end");
+                } else {
+                    // Response works if server talks when told to.
+                    // Continuous feed would not like this.
+                    String response = client.sendEcho(request);
+                    System.out.printf("Server responded %s\n", response.trim());
+                }
+            }
             client.close();
         } catch (Exception ex) {
             ex.printStackTrace();
