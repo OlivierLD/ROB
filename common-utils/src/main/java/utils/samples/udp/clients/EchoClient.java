@@ -1,7 +1,6 @@
 package utils.samples.udp.clients;
 
 import utils.StaticUtil;
-import utils.samples.tcp.clients.SimpleTCPClient;
 
 import java.io.IOException;
 import java.net.*;

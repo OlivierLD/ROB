@@ -34,6 +34,42 @@ markers:
     latitude: 47.71595650881519
     longitude: -3.974491925916937
     type: default
+  - label: "Rochers Leuriou"
+    latitude: 47.7524
+    longitude: -3.99888
+    type: card-e
+  - label: "Basse Perennes"
+    latitude: 47.6849
+    longitude: -4.10447
+    type: card-e
+  - label: "Les Bluiniers"
+    latitude: 47.7225
+    longitude: -4.06346
+    type: card-e
+  - label: "Le Broc'h"
+    latitude: 47.7192
+    longitude: -4.02311
+    type: card-n
+  - label: "La Pie"
+    latitude: 47.7292
+    longitude: -3.99577
+    type: is-dng
+  - label: "Sud St Nic"
+    latitude: 47.7217
+    longitude: -4.00355
+    type: card-s
+  - label: "Pointe de la baleine"
+    latitude: 47.7211
+    longitude: -3.98683
+    type: card-e
+  - label: "Jument de Glénan"
+    latitude: 47.6461
+    longitude: -4.02359
+    type: card-s
+  - label: "Jaune de Glénan"
+    latitude: 47.7093
+    longitude: -3.83066
+    type: card-e
 
 borders:
   - border-name: "Penfret"
