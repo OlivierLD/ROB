@@ -9,10 +9,12 @@ import java.net.InetAddress;
 
 public class SimpleUDPServer extends Thread {
 
-    private final static int PORT = 4_445;
+    private final static int PORT = 8_002; // 4_445;
     private DatagramSocket socket;
     private boolean running;
     private byte[] buf = new byte[256];
+
+    private final static boolean VERBOSE = /*true || */ "true".equals(System.getProperty("udp.verbose"));
 
     public SimpleUDPServer() {
         try {
@@ -31,25 +33,40 @@ public class SimpleUDPServer extends Thread {
                     buf[i] = (byte)0;
                 }
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                if (VERBOSE) {
+                    System.out.println("Receiving...");
+                }
                 socket.receive(packet);
 
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);
                 String received = new String(packet.getData(), 0, packet.getLength());
-
+                if (VERBOSE) {
+                    System.out.println("Received !");
+                    System.out.printf("[%s]\n", received);
+                }
                 // TODO Warning: packet was not reset...
                 if (received.equals("end") || received.startsWith("end")) {
                     System.out.println("(Server exiting.)");
                     running = false;
                     continue; // Skip out of the while loop, to avoid the socket.send below.
                 }
-                socket.send(packet);
+                socket.send(packet); // Send it back
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
         socket.close();
         System.out.println("Server's out.");
+    }
+
+    /*
+        This is just for tests.
+        Use it with a UDP forwarder from OpenCPN... Sett VERBOSE to true.
+        Make sure the port is right.
+     */
+    public static void main(String[] args) {
+        new SimpleUDPServer().start();
     }
 }

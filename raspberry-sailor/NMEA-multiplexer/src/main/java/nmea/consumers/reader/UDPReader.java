@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UDPReader extends NMEAReader {
 	private final static String DEFAULT_HOST_NAME = "localhost";
-	private final static int DEFAULT_UDP_PORT = 8_001;
+	private final static int DEFAULT_UDP_PORT = 8_002;
 	private String host = DEFAULT_HOST_NAME;
 	private int udpPort = DEFAULT_UDP_PORT;
 	private long timeout = 5_000L; // Default value

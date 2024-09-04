@@ -37,7 +37,7 @@ public class UDPClient extends NMEAClient {
 		}
 	}
 
-	private static UDPClient nmeaClient = null;
+	private static UDPClient udpClient = null;
 
 	public static class UDPBean implements ClientBean {
 		private String cls;
@@ -97,23 +97,25 @@ public class UDPClient extends NMEAClient {
 	}
 
 	public static void main(String... args) {
+		final int UDP_PORT = 8_002;
+
 		System.out.println("CustomUDPClient invoked with " + args.length + " Parameter(s).");
 		for (String s : args) {
 			System.out.println("CustomUDPClient prm:" + s);
 		}
 
-		String serverName = "localhost"; // "230.0.0.1";
+		final String SERVER_NAME = "localhost"; // "230.0.0.1";
 
-		nmeaClient = new UDPClient();
+		udpClient = new UDPClient();
 
 		Runtime.getRuntime().addShutdownHook(new Thread("UDPClient shutdown hook") {
 			public void run() {
 				System.out.println("Shutting down nicely.");
-				nmeaClient.stopDataRead();
+				udpClient.stopDataRead();
 			}
 		});
-		nmeaClient.initClient();
-		nmeaClient.setReader(new UDPReader("UDPReader", nmeaClient.getListeners(), serverName, 8_001));
-		nmeaClient.startWorking();
+		udpClient.initClient();
+		udpClient.setReader(new UDPReader("UDPReader", udpClient.getListeners(), SERVER_NAME, UDP_PORT));
+		udpClient.startWorking();
 	}
 }
