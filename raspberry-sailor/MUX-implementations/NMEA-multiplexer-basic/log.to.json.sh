@@ -1,4 +1,4 @@
-x#!/usr/bin/env bash
+#!/usr/bin/env bash
 #
 # Suitable for LeafLet. Spits out positions in JSON format.
 #

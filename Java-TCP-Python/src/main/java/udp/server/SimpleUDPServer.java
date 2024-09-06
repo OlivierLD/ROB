@@ -14,7 +14,9 @@ public class SimpleUDPServer extends Thread {
     private boolean running;
     private byte[] buf = new byte[256];
 
-    private final static boolean VERBOSE = /*true || */ "true".equals(System.getProperty("udp.verbose"));
+    private final static boolean VERBOSE = /* true; */ "true".equals(System.getProperty("udp.verbose"));
+    // Default true
+    private final static boolean SEND_BACK = /* false; */ !("false".equals(System.getProperty("udp.send.back")));
 
     public SimpleUDPServer() {
         try {
@@ -46,13 +48,15 @@ public class SimpleUDPServer extends Thread {
                     System.out.println("Received !");
                     System.out.printf("[%s]\n", received);
                 }
-                // TODO Warning: packet was not reset...
+                // TODO Warning: packet might not have been reset...
                 if (received.equals("end") || received.startsWith("end")) {
                     System.out.println("(Server exiting.)");
                     running = false;
-                    continue; // Skip out of the while loop, to avoid the socket.send below.
+                    continue; // Skip out of the while loop, to avoid (anyway) the socket.send below.
                 }
-                socket.send(packet); // Send it back
+                if (SEND_BACK) {
+                    socket.send(packet); // Send it back
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

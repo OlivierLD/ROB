@@ -98,6 +98,7 @@ URL_OPTION_13c="http://localhost:${HTTP_PORT}/web/chartless.gps.html"
 # URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.gps.html"
 URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13e="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+URL_OPTION_13f="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -165,6 +166,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                                                                         | ${RED}13c${NC}. GPS only, Chartless Map (Etel-Groix).                                              |"
 	echo -e "|                                                                                         | ${RED}13d${NC}. GPS only, AIS, Chartless Map (Etel-Groix). (demanding...)                          |"
 	echo -e "|                                                                                         | ${RED}13e${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only.                              |"
+	echo -e "|                                                                                         | ${RED}13f${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only, no AIS.                   |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -323,6 +325,10 @@ while [[ "${GO}" == "true" ]]; do
 	      "13e")
 	        PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.yaml
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13e}
+	        ;;
+	      "13f")
+	        PROP_FILE=mux-configs/nmea.mux.replay.kernevel.la.trinite.yaml
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13f}
 	        ;;
 	      "20")
 	      	echo -e "Uses a 'curl' to display the current data cache, using REST"
@@ -900,6 +906,29 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "13e")
   	  PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+        LAUNCH_BROWSER=Y
+        echo -e ">> Will launch a browser"
+        fi
+      fi
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_13e}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    GO=false
+	    ;;
+	  "13f")
+  	  PROP_FILE=mux-configs/nmea.mux.replay.kernevel.la.trinite.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
       # Ask to launch a browser in interactive mode (and not provided already)
       # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
