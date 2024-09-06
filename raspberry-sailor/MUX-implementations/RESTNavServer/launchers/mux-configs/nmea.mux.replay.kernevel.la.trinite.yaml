@@ -26,11 +26,10 @@ channels:
     filename: ./sample.data/kernevel.latrinite.nmea.zip
     zip: true
     path.in.zip: kernevel.latrinite.nmea
-    between-records: 50   # Speed up
+    # between-records: 50   # Speed up
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
-  # AIS Data, from a GPSd server (a lot of data, careful)
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.default.properties
