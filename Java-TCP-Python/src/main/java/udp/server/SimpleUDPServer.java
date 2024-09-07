@@ -6,6 +6,7 @@ package udp.server;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 public class SimpleUDPServer extends Thread {
 
@@ -14,7 +15,7 @@ public class SimpleUDPServer extends Thread {
     private boolean running;
     private byte[] buf = new byte[256];
 
-    private final static boolean VERBOSE = /* true; */ "true".equals(System.getProperty("udp.verbose"));
+    private final static boolean VERBOSE =  /* true; */ "true".equals(System.getProperty("udp.verbose"));
     // Default true
     private final static boolean SEND_BACK = /* false; */ !("false".equals(System.getProperty("udp.send.back")));
 
@@ -43,7 +44,15 @@ public class SimpleUDPServer extends Thread {
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);
-                String received = new String(packet.getData(), 0, packet.getLength());
+                byte ba[] = packet.getData();
+                int len = -1;
+                for (int i=0; i<buf.length; i++) { // Find first null byte
+                    if (ba[i] == (byte)0) {
+                        len = i;
+                        break;
+                    }
+                }
+                String received = new String(packet.getData(), 0, len); // packet.getLength());
                 if (VERBOSE) {
                     System.out.println("Received !");
                     System.out.printf("[%s]\n", received);
@@ -67,10 +76,11 @@ public class SimpleUDPServer extends Thread {
 
     /*
         This is just for tests.
-        Use it with a UDP forwarder from OpenCPN... Sett VERBOSE to true.
+        In OpenCPN, define an UDP connection, as an OUTPUT.
+        Use it as a UDP consumer from OpenCPN... Set VERBOSE to true.
         Make sure the port is right.
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         new SimpleUDPServer().start();
     }
 }

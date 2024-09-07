@@ -617,7 +617,7 @@ public class MuxInitializer {
                                     // udpForwarder = new UDPServer(Integer.parseInt(udpPort));
                                     udpForwarder = new UDPClient(Integer.parseInt(udpPort));  // This is the way OpenCPN likes it.
                                 } else {
-                                    udpForwarder = (UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
+                                    udpForwarder = (nmea.forwarders.UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
                                 }
                                 Properties forwarderProps = new Properties();
                                 if (udpPropFile != null) {

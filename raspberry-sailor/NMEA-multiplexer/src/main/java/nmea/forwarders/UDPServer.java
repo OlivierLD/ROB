@@ -10,7 +10,7 @@ import java.util.Properties;
  * WiP... Not implemented
  */
 public class UDPServer implements Forwarder {
-	private int udpPort = 8001;
+	private int udpPort = 8_001;
 	private InetAddress address = null;
 	private Properties props = null;
 

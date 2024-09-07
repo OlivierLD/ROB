@@ -3,26 +3,30 @@ package nmea.consumers.client;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
-// import nmea.consumers.reader.TCPReader;
 import nmea.consumers.reader.UDPReader;
+import java.util.Properties;
 
 /**
- * Read NMEA Data from a UDP server
+ * WiP... See if OpenCPN is happy
  */
-public class UDPClient extends NMEAClient {
-	public UDPClient() {
+public class UDPServer extends NMEAClient {
+
+	private final static String DEFAULT_HOST = "127.0.0.1"; // "230.0.0.1"
+	private String hostName = DEFAULT_HOST;
+
+	public UDPServer() {
 		this(null, null, null);
 	}
 
-	public UDPClient(Multiplexer mux) {
+	public UDPServer(Multiplexer mux) {
 		this(null, null, mux);
 	}
 
-	public UDPClient(String[] s, String[] sa) {
+	public UDPServer(String[] s, String[] sa) {
 		this(s, sa, null);
 	}
 
-	public UDPClient(String[] s, String[] sa, Multiplexer mux) {
+	public UDPServer(String[] s, String[] sa, Multiplexer mux) {
 		super(s, sa, mux);
 		this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
 	}
@@ -37,7 +41,7 @@ public class UDPClient extends NMEAClient {
 		}
 	}
 
-	private static UDPClient udpClient = null;
+	private static UDPServer nmeaClient = null;
 
 	public static class UDPBean implements ClientBean {
 		private String cls;
@@ -93,29 +97,37 @@ public class UDPClient extends NMEAClient {
 
 	@Override
 	public Object getBean() {
-		return new UDPBean(this);
+		return new UDPBean();
 	}
 
+	@Override
+	public void setProperties(Properties props) {
+		this.props = props;
+	}
+
+	/**
+	 * For standalone tests
+	 * @param args Unused
+	 */
 	public static void main(String... args) {
-		final int UDP_PORT = 8_002;
-
-		System.out.println("CustomUDPClient invoked with " + args.length + " Parameter(s).");
+		System.out.println("CustomUDPServer invoked with " + args.length + " Parameter(s).");
 		for (String s : args) {
-			System.out.println("CustomUDPClient prm:" + s);
+			System.out.println("CustomUDPServer prm:" + s);
 		}
+		String serverName = "localhost"; // "sinagot.net"; // "192.168.42.2";
+		int serverPort = 8_002; // 7_001;
 
-		final String SERVER_NAME = "localhost"; // "230.0.0.1";
+		System.setProperty("nmea.parser.verbose", "true");
 
-		udpClient = new UDPClient();
+		nmeaClient = new UDPServer();
 
-		Runtime.getRuntime().addShutdownHook(new Thread("UDPClient shutdown hook") {
-			public void run() {
-				System.out.println("Shutting down nicely.");
-				udpClient.stopDataRead();
-			}
-		});
-		udpClient.initClient();
-		udpClient.setReader(new UDPReader("UDPReader", udpClient.getListeners(), SERVER_NAME, UDP_PORT));
-		udpClient.startWorking();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			System.out.println("Shutting down nicely.");
+			nmeaClient.stopDataRead();
+		}, "CustomUDPServer shutdown hook"));
+		nmeaClient.initClient();
+		nmeaClient.setReader(new UDPReader("UDPReader", nmeaClient.getListeners(), serverName, serverPort));
+		nmeaClient.startWorking();
 	}
 }
+

@@ -183,7 +183,7 @@ public class TCPServer implements Forwarder {
 		String gpsd = "?WATCH={...};";
 		String wpl = "$GPWPL,3739.856,N,12222.812,W,OPMRNA*59";
 		try {
-			TCPServer tcpw = new TCPServer(2947); // 2947
+			TCPServer tcpw = new TCPServer(2_947); // 2947
 			// TCPWriter tcpw = new TCPWriter(7001);
 			// TCPWriter tcpw = new TCPWriter(7001, "theketch-lap.mshome.net");
 			for (int i = 0; i < 50; i++) {
