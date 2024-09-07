@@ -1,0 +1,27 @@
+#
+# MUX definition.
+#
+name: "UDP Client Test. Can receive data from OpenCPN."
+context:
+  with.http.server: true
+  http.port: 1234
+  init.cache: true
+channels:
+  - type: file
+    filename: ./sample-data/logged.data.zip
+    zip: true
+    path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
+    verbose: false
+  - type: udp
+    server: "localhost"
+    port: 8002
+    timeout: -1
+    verbose: false
+forwarders:
+  - type: file
+    filename: sample-data/data.nmea
+    device.filters: AI
+    sentence.filters: VDM
+    flush: true
+  - type: console
+

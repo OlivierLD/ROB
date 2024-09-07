@@ -8,6 +8,7 @@ import java.util.Properties;
 
 /**
  * WiP... See if OpenCPN is happy
+ * Receives data through UDP channel.
  */
 public class UDPServer extends NMEAClient {
 
@@ -118,6 +119,7 @@ public class UDPServer extends NMEAClient {
 		int serverPort = 8_002; // 7_001;
 
 		System.setProperty("nmea.parser.verbose", "true");
+		System.setProperty("udp.data.verbose", "true");
 
 		nmeaClient = new UDPServer();
 

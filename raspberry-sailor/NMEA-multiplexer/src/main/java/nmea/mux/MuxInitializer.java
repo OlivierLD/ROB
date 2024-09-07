@@ -9,6 +9,7 @@ import nmea.computers.DewPointTemperatureComputer;
 import nmea.computers.ExtraDataComputer;
 import nmea.computers.LongTermStorage;
 import nmea.consumers.client.*;
+import nmea.consumers.client.UDPServer;
 import nmea.consumers.reader.*;
 import nmea.forwarders.*;
 import nmea.forwarders.UDPClient;
@@ -449,7 +450,42 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
-                        // case "udp":  // TODO. User Defined Protocol
+                        case "udp":    // User Defined Protocol
+                            try {
+                                String udpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
+                                String udpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
+                                String udpServerTimeout = muxProps.getProperty(String.format("mux.%s.timeout", MUX_IDX_FMT.format(muxIdx)));
+//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
+//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                                // String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
+                                // boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
+                                nmea.consumers.client.UDPServer udpClient = new nmea.consumers.client.UDPServer(
+                                        !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
+                                        !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
+                                        mux);
+                                String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
+                                String propFileName = muxProps.getProperty(propProp);
+                                if (propFileName != null) {
+                                    try {
+                                        Properties readerProperties = new Properties();
+                                        readerProperties.load(new FileReader(propFileName));
+                                        udpClient.setProperties(readerProperties);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                                udpClient.initClient();
+                                final UDPReader udpReader = new UDPReader("MUX-UDPReader", udpClient.getListeners(), udpServer, Integer.parseInt(udpPort));
+                                if (udpServerTimeout != null) {
+                                    udpReader.setTimeout(Long.parseLong(udpServerTimeout));
+                                }
+                                udpClient.setReader(udpReader);
+                                udpClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                nmeaDataClients.add(udpClient);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
                         case "batt":   // Consumer. Battery Voltage, use XDR
                         default:
                             throw new RuntimeException(String.format("mux type [%s] not supported yet.", type));
