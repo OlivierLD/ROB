@@ -1,7 +1,7 @@
 #
 # MUX definition.
 #
-name: "UDP Client Test. Can receive data from OpenCPN."
+name: "UDP Client Test. Can receive data from OpenCPN (udp:8002)."
 context:
   with.http.server: true
   http.port: 1234
@@ -23,5 +23,9 @@ forwarders:
     device.filters: AI
     sentence.filters: VDM
     flush: true
+  - type: udp
+    port: 8003
+    server: localhost
+    sentence.filters: ~VDM,~VDO
   - type: console
 
