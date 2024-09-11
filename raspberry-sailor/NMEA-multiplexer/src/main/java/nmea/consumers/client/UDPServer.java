@@ -115,7 +115,7 @@ public class UDPServer extends NMEAClient {
 		for (String s : args) {
 			System.out.println("CustomUDPServer prm:" + s);
 		}
-		String serverName = "localhost"; // "sinagot.net"; // "192.168.42.2";
+		String serverName = "localhost"; // "192.168.42.2";
 		int serverPort = 8_002; // 7_001;
 
 		System.setProperty("nmea.parser.verbose", "true");

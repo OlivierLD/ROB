@@ -17,7 +17,7 @@ public class UDPReader extends NMEAReader {
 	private final static int DEFAULT_UDP_PORT = 8_002;
 	private String host = DEFAULT_HOST_NAME;
 	private int udpPort = DEFAULT_UDP_PORT;
-	private long timeout = 5_000L; // Default value
+	private long timeout = 5_000L; // Default value. Can be set by a property of the channel (timeout: -1). -1 means NO timeout.
 
 	public UDPReader(List<NMEAListener> al) {
 		this(null, al, DEFAULT_HOST_NAME, DEFAULT_UDP_PORT);

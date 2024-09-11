@@ -1,5 +1,6 @@
 #
 # MUX definition.
+# UDP Consumer
 #
 name: "UDP Client Test. Can receive data from OpenCPN (udp:8002)."
 context:
