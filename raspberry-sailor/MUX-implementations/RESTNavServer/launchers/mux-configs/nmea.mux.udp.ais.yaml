@@ -1,0 +1,51 @@
+#
+# MUX definition.
+# With AIS Data from OpenCPN
+#
+name: "Replay log file. Chartless Map."
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - AIS Data forwarded by OpenCPN, reading from sinagot.net
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  # markers: mux-configs/markers.02.yaml
+  markers: mux-configs/markers.03.yaml
+  markers.list:
+    - markers: mux-configs/markers.04.yaml
+    - markers: mux-configs/markers.05.yaml
+    # - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: mux-configs/markers.san.juan.yaml
+channels:
+  - type: file
+    filename: ./sample.data/going.to.groix.nmea.zip
+    zip: true
+    path.in.zip: going.to.groix.2.nmea
+    between-records: 50   # Speed up
+    verbose: false
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+  - type: udp
+    server: "localhost"
+    port: 8002
+    timeout: -1
+    verbose: false
+#forwarders:
+#  - type: file
+#    verbose: false
+#    timebase.filename: false
+#    filename: data.4tests.nmea
+#    flush: true
+#    # sentence.filters: MWV, VHW, HDG
+#    sentence.filters: ~GGA,~GSA,~GSV
+#  - type: console
+#  - type: tcp
+#    port: 7002
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    verbose: false
