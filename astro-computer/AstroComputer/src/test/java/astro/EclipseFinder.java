@@ -209,7 +209,7 @@ public class EclipseFinder {
                             sunGHA,
                             moonDecl,
                             moonGHA);
-                    // TODO Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
+                    // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
                     Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
                     narrowSearch(startCal, EclipseType.SOLAR); // cal - 1 day
@@ -225,7 +225,7 @@ public class EclipseFinder {
                             sunGHA,
                             moonDecl,
                             moonGHA);
-                    // TODO Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
+                    // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
                     Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
                     narrowSearch(startCal, EclipseType.LUNAR); // cal - 1 day
