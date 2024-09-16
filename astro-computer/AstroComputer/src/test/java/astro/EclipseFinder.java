@@ -106,6 +106,9 @@ public class EclipseFinder {
         MinimalConfig minimalGHA  = new MinimalConfig(Double.MAX_VALUE, Double.MAX_VALUE);
         MinimalConfig minimalD = new MinimalConfig(Double.MAX_VALUE, Double.MAX_VALUE);
 
+        boolean started = false;
+        String startedAt = "-", finishedAt = "-";
+
         for (int i=0; i<howLong; i++) {
             // System.out.printf("Narrowing, now %s...\n", SDF_UTC.format(new Date(startCal.getTime().getTime())));
             astroComputerV2.calculate(
@@ -135,24 +138,42 @@ public class EclipseFinder {
                 minimalD.setWhen(localCal);
             }
             // Delta GHA & Delta D below SUN_DIAM...
-            if (deltaGHA < SUN_DIAM && deltaDecl < SUN_DIAM) {
-                System.out.printf("\t\t--> GHA => \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",
-                        deltaGHA,
-                        deltaDecl,
-                        SDF_UTC.format(new Date(localCal.getTime().getTime())));
+            if (deltaGHA < SUN_DIAM && deltaDecl < SUN_DIAM) { // TODO Start/Stop ?
+                if (!started) {
+                    started = true;
+                    startedAt = SDF_UTC.format(new Date(localCal.getTime().getTime()));
+                }
+                if (VERBOSE) {
+                    System.out.printf("\t\t--> GHA => \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",
+                            deltaGHA,
+                            deltaDecl,
+                            SDF_UTC.format(new Date(localCal.getTime().getTime())));
+                }
+            } else {
+                if (started) {
+                    finishedAt = SDF_UTC.format(new Date(localCal.getTime().getTime()));
+                    // Display
+                    System.out.printf("Possible %s Eclipse from %s to %s\n",
+                            (type == EclipseType.SOLAR) ? "SOLAR" : "LUNAR",
+                            startedAt,
+                            finishedAt);
+                }
+                started = false;
             }
 
             // Increment
             localCal.add(delta, 1);
         }
-        System.out.printf("\tGHA => min \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",  // U+0384: δ
-                          minimalGHA.getDeltaGHA(),
-                          minimalGHA.getDeltaDecl(),
-                          SDF_UTC.format(new Date(minimalGHA.getWhen().getTime().getTime())));
-        System.out.printf("\tDecl => \u03B4 GHA: %f, min \u03B4 Decl: %f, At %s\n",
-                minimalD.getDeltaGHA(),
-                minimalD.getDeltaDecl(),
-                SDF_UTC.format(new Date(minimalD.getWhen().getTime().getTime())));
+        if (VERBOSE) {
+            System.out.printf("\tGHA => min \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",  // U+0384: δ
+                    minimalGHA.getDeltaGHA(),
+                    minimalGHA.getDeltaDecl(),
+                    SDF_UTC.format(new Date(minimalGHA.getWhen().getTime().getTime())));
+            System.out.printf("\tDecl => \u03B4 GHA: %f, min \u03B4 Decl: %f, At %s\n",
+                    minimalD.getDeltaGHA(),
+                    minimalD.getDeltaDecl(),
+                    SDF_UTC.format(new Date(minimalD.getWhen().getTime().getTime())));
+        }
     }
 
     public static void main(String... args) {
@@ -202,13 +223,15 @@ public class EclipseFinder {
             if (deltaGHA < 1) {
                 // Check Declinations
                 if (Math.abs(sunDecl - moonDecl) < 1.0) {
-                    System.out.printf("%s, SOLAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
-                            SDF_UTC.format(new Date(cal.getTime().getTime())),
-                            deltaGHA, Math.abs(sunDecl - moonDecl),
-                            sunDecl,
-                            sunGHA,
-                            moonDecl,
-                            moonGHA);
+                    if (VERBOSE) {
+                        System.out.printf("%s, SOLAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
+                                SDF_UTC.format(new Date(cal.getTime().getTime())),
+                                deltaGHA, Math.abs(sunDecl - moonDecl),
+                                sunDecl,
+                                sunGHA,
+                                moonDecl,
+                                moonGHA);
+                    }
                     // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
                     Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
@@ -218,13 +241,15 @@ public class EclipseFinder {
             if (deltaGHA2 < 1) {
                 // Check Declinations
                 if (Math.abs(sunDecl + moonDecl) < 1.0) {
-                    System.out.printf("%s, LUNAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
-                            SDF_UTC.format(new Date(cal.getTime().getTime())),
-                            deltaGHA2, Math.abs(sunDecl + moonDecl),
-                            sunDecl,
-                            sunGHA,
-                            moonDecl,
-                            moonGHA);
+                    if (VERBOSE) {
+                        System.out.printf("%s, LUNAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
+                                SDF_UTC.format(new Date(cal.getTime().getTime())),
+                                deltaGHA2, Math.abs(sunDecl + moonDecl),
+                                sunDecl,
+                                sunGHA,
+                                moonDecl,
+                                moonGHA);
+                    }
                     // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
                     Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);

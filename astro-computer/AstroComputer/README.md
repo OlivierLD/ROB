@@ -416,11 +416,16 @@ Jupyter Notebooks exist for pretty much all the languages having a REPL (Read Ex
 
 Look into the [`notebooks`](./notebooks) folder...
 
+### Bonuses
+In Java, look at the classes `astro.EclipseFinder` and `astro.SpringSummerFallWinter`...  
+The first one is trying to detect eclipses, the second one give you the _exact_ time of solstices and equinoxes.  
+For fun.
+
 ## TODO
 More Unit tests (for ES6, use [Mocha](https://mochajs.org/)).
 
 ## History
-- July 2021, for the Java version, introduced `AstroComputerV2`, deprecated `AstroComputer`.
+- July 2021, for the Java version, introduced `AstroComputerV2`, and deprecated `AstroComputer`.
   - Contains non-static methods, so it can handle several calculations at the same time, or in parallel.
 
 ## More resources
