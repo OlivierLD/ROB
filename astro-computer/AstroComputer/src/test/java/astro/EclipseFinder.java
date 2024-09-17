@@ -13,6 +13,7 @@ import java.util.TimeZone;
 /**
  * A test
  * Trying to find solar or lunar eclipses...
+ * See https://www.timeanddate.com/eclipse/2024
  */
 public class EclipseFinder {
 
@@ -94,14 +95,17 @@ public class EclipseFinder {
         }
 
         public void setWhen(Calendar when) {
-            this.when = (Calendar)((GregorianCalendar)when).clone();;
+            this.when = (Calendar)when.clone();
         }
     }
-    private static void narrowSearch(Calendar startCal, EclipseType type) {
+    private static Calendar narrowSearch(Calendar startCal, EclipseType type) {
+
+        Calendar lastCalendar = null;
+
         final int delta = STEPS[Step.MINUTE.getIndex()];
         final long howLong = MIN_PER_DAY * 3; // Nb days. Depends on delta above
 
-        Calendar localCal = (Calendar)((GregorianCalendar)startCal).clone();
+        Calendar localCal = (Calendar)startCal.clone();
 
         MinimalConfig minimalGHA  = new MinimalConfig(Double.MAX_VALUE, Double.MAX_VALUE);
         MinimalConfig minimalD = new MinimalConfig(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -152,6 +156,7 @@ public class EclipseFinder {
             } else {
                 if (started) {
                     finishedAt = SDF_UTC.format(new Date(localCal.getTime().getTime()));
+                    lastCalendar = localCal;  // For the returned value !
                     // Display
                     System.out.printf("Possible %s Eclipse from %s to %s\n",
                             (type == EclipseType.SOLAR) ? "SOLAR" : "LUNAR",
@@ -174,6 +179,7 @@ public class EclipseFinder {
                     minimalD.getDeltaDecl(),
                     SDF_UTC.format(new Date(minimalD.getWhen().getTime().getTime())));
         }
+        return lastCalendar;
     }
 
     public static void main(String... args) {
@@ -199,9 +205,9 @@ public class EclipseFinder {
         System.out.printf("Will use DeltaT for [%04d-%02d]: %f\n", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, deltaT);
 
         long iterations = 0L;
-        int stepIndex = Step.HOUR.getIndex(); // 2; // 3 is second; // Second, 0 is Day;... See above.
+        int stepIndex = Step.HOUR.getIndex(); // See above.
         long before = System.currentTimeMillis();
-        while (cal.get(Calendar.YEAR) == currentYear) {
+        while (cal.get(Calendar.YEAR) <= (currentYear + 4)) { // on 5 years
             iterations++;
             if (cal.get(Calendar.DAY_OF_MONTH) == 1 && cal.get(Calendar.HOUR_OF_DAY) == 0) {
                 System.out.printf("- Now working on %s\n", SDF_MONTH.format(new Date(cal.getTime().getTime())));
@@ -232,10 +238,20 @@ public class EclipseFinder {
                                 moonDecl,
                                 moonGHA);
                     }
+                    System.out.println("\tDrilling down...");
                     // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
-                    Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
+                    Calendar startCal = (Calendar)cal.clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
-                    narrowSearch(startCal, EclipseType.SOLAR); // cal - 1 day
+                    Calendar narrowCal = narrowSearch(startCal, EclipseType.SOLAR); // cal - 1 day
+                    if (narrowCal != null) {
+                        // Depends on the step (stepIndex) !!!
+                        cal.set(Calendar.YEAR, narrowCal.get(Calendar.YEAR));
+                        cal.set(Calendar.MONTH, narrowCal.get(Calendar.MONTH));
+                        cal.set(Calendar.DAY_OF_MONTH, narrowCal.get(Calendar.DAY_OF_MONTH));
+                        cal.set(Calendar.HOUR_OF_DAY, narrowCal.get(Calendar.HOUR_OF_DAY));
+                        // cal.set(Calendar.MINUTE, 0);
+                        // cal.set(Calendar.SECOND, 0);
+                    }
                 }
             }
             if (deltaGHA2 < 1) {
@@ -251,9 +267,19 @@ public class EclipseFinder {
                                 moonGHA);
                     }
                     // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
-                    Calendar startCal = (Calendar)((GregorianCalendar)cal).clone();
+                    System.out.println("\tDrilling down...");
+                    Calendar startCal = (Calendar)cal.clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
-                    narrowSearch(startCal, EclipseType.LUNAR); // cal - 1 day
+                    Calendar narrowCal = narrowSearch(startCal, EclipseType.LUNAR); // cal - 1 day
+                    if (narrowCal != null) {
+                        // Depends on the step (stepIndex) !!!
+                        cal.set(Calendar.YEAR, narrowCal.get(Calendar.YEAR));
+                        cal.set(Calendar.MONTH, narrowCal.get(Calendar.MONTH));
+                        cal.set(Calendar.DAY_OF_MONTH, narrowCal.get(Calendar.DAY_OF_MONTH));
+                        cal.set(Calendar.HOUR_OF_DAY, narrowCal.get(Calendar.HOUR_OF_DAY));
+                        // cal.set(Calendar.MINUTE, 0);
+                        // cal.set(Calendar.SECOND, 0);
+                    }
                 }
             }
             if (VERBOSE) {
@@ -262,7 +288,7 @@ public class EclipseFinder {
             cal.add(STEPS[stepIndex], 1);
         }
         long after = System.currentTimeMillis();
-        System.out.printf("Used %s iterations, in %s ms.\n",
+        System.out.printf("Used %s (first level) iterations, in %s ms.\n",
                 NumberFormat.getInstance().format(iterations),
                 NumberFormat.getInstance().format(after - before));
     }
