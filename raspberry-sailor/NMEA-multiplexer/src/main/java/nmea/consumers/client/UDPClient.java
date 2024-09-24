@@ -8,7 +8,7 @@ import nmea.consumers.reader.UDPReader;
 
 /**
  * Read NMEA Data from a UDP server.
- * Not used. UDP Data are read by a UDP server (acting as a Consumer, aka Channel).
+ * Not used... UDP Data are read by a UDP server (acting as a Consumer, aka Channel).
  */
 public class UDPClient extends NMEAClient {
 	public UDPClient() {

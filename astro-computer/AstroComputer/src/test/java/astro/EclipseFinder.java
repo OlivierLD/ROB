@@ -57,9 +57,9 @@ public class EclipseFinder {
         return Math.abs(diff);
     }
 
-    private final static long SEC_PER_DAY = (24 * 3_600);
-    private final static long MIN_PER_DAY = (24 * 60);
-    private final static long HOUR_PER_DAY = (24);
+    private final static long HOUR_PER_DAY = 24;
+    private final static long SEC_PER_DAY = HOUR_PER_DAY * 3_600;
+    private final static long MIN_PER_DAY = HOUR_PER_DAY * 60;
     private final static double SUN_DIAM = 2 * 0.266667; // In degrees. And moon too...
 
     private static class MinimalConfig {

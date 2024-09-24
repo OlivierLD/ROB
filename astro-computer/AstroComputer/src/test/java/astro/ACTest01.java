@@ -27,8 +27,8 @@ public class ACTest01 {
         System.out.println(String.format("Moon phase for date %d-%d-%d %d:%d:%d: ", 2011, 8, 22, 12, 0, 0) + AstroComputer.getMoonPhase(2011, 8, 22, 12, 0, 0));
         System.out.println("TimeOffset:" + AstroComputer.getTimeOffsetInHours("-09:30"));
         String[] tz = new String[]{"Pacific/Marquesas", "America/Los_Angeles", "GMT", "Europe/Paris", "Europe/Moscow", "Australia/Sydney", "Australia/Adelaide"};
-        for (int i = 0; i < tz.length; i++) {
-            System.out.println("TimeOffset for " + tz[i] + ":" + AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(tz[i])));
+        for (String s : tz) {
+            System.out.println("TimeOffset for " + s + ":" + AstroComputer.getTimeZoneOffsetInHours(TimeZone.getTimeZone(s)));
         }
         System.out.println("TZ:" + TimeZone.getTimeZone(tz[0]).getDisplayName() + ", " + (TimeZone.getTimeZone(tz[0]).getOffset(new Date().getTime()) / (3_600_000d)));
 

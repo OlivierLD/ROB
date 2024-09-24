@@ -1,0 +1,45 @@
+#
+# MUX definition.
+#
+name: "Replay log file. Chartless Map."
+description:
+  - Replay a log file from the logged folder (Groix - Gavres).
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - Optional AIS with sinagot.net
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  markers: mux-configs/markers.03.yaml
+  markers.list:
+    - markers: mux-configs/markers.04.yaml
+    # - markers: mux-configs/markers.05.yaml
+    - markers: mux-configs/markers.houat.hoedic.belle-ile.yaml
+    # - markers: mux-configs/markers.couregant.la.plate.yaml
+    # - markers: mux-configs/markers.glenan.yaml
+    # - markers: mux-configs/markers.uk.yaml
+    # - markers: mux-configs/bretagne.bumper.markers.yaml
+    # - markers: mux-configs/markers.san.juan.yaml
+channels:
+  - type: file
+    filename: ./sample.data/gx.sep.2024/gx.to.gavres.2024-09-23.nmea.zip
+    zip: true
+    path.in.zip: gx.to.gavres.nmea
+    # between-records: 50   # Speed up
+    verbose: false
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+  # AIS Data, from a GPSd server (a lot of data, careful)
+  - type: tcp
+    server: sinagot.net
+    port: 2947
+    # initial.request: "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
+    initial.request: ?WATCH={"enable":true,"json":false,"nmea":true,"raw":0,"scaled":false,"timing":false,"split24":false,"pps":false}
+    keep.trying: true
+    verbose: false
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.default.properties
+    verbose: false

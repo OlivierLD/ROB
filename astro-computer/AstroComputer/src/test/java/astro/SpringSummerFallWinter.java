@@ -27,31 +27,31 @@ public class SpringSummerFallWinter {
         SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
 
-    private final static AstroComputerV2 astroComputerV2 = new AstroComputerV2();
+    private final static AstroComputerV2 astroComputer = new AstroComputerV2();
 
     private final static int[] STEPS = { Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND };
     private final static int STEP_BACK_FOR_NARROWING = 2;
 
     private static Calendar narrowSpringFall(Calendar from, int stepIndex, boolean goingUp) {
         Calendar cal = (Calendar)from.clone();
-        astroComputerV2.calculate(
+        astroComputer.calculate(
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH) + 1,
                 cal.get(Calendar.DAY_OF_MONTH),
                 cal.get(Calendar.HOUR_OF_DAY), // and not just HOUR !!!!
                 cal.get(Calendar.MINUTE),
                 cal.get(Calendar.SECOND));
-        double decl = astroComputerV2.getSunDecl();
+        double decl = astroComputer.getSunDecl();
         while ((goingUp && decl < 0) || (!goingUp && decl > 0)) {
             cal.add(STEPS[stepIndex], 1);
-            astroComputerV2.calculate(
+            astroComputer.calculate(
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH) + 1,
                     cal.get(Calendar.DAY_OF_MONTH),
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
                     cal.get(Calendar.SECOND));
-            decl = astroComputerV2.getSunDecl();
+            decl = astroComputer.getSunDecl();
         }
         if (stepIndex < STEPS.length - 1) {
             cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);
@@ -63,25 +63,25 @@ public class SpringSummerFallWinter {
 
     private static Calendar narrowSummerWinter(Calendar from, int stepIndex, boolean goingUp) {
         Calendar cal = (Calendar)from.clone();
-        astroComputerV2.calculate(
+        astroComputer.calculate(
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH) + 1,
                 cal.get(Calendar.DAY_OF_MONTH),
                 cal.get(Calendar.HOUR_OF_DAY), // and not just HOUR !!!!
                 cal.get(Calendar.MINUTE),
                 cal.get(Calendar.SECOND));
-        double prevDecl = astroComputerV2.getSunDecl();
+        double prevDecl = astroComputer.getSunDecl();
         double deltaDecl = goingUp ? 1 : -1;
         while ((goingUp && deltaDecl > 0) || (!goingUp && deltaDecl < 0)) {
             cal.add(STEPS[stepIndex], 1);
-            astroComputerV2.calculate(
+            astroComputer.calculate(
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH) + 1,
                     cal.get(Calendar.DAY_OF_MONTH),
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
                     cal.get(Calendar.SECOND));
-            double decl = astroComputerV2.getSunDecl();
+            double decl = astroComputer.getSunDecl();
             deltaDecl = decl - prevDecl;
             prevDecl = decl;
         }
@@ -125,7 +125,7 @@ public class SpringSummerFallWinter {
         long before = System.currentTimeMillis();
         while (cal.get(Calendar.YEAR) == currentYear) {
             iterations++;
-            astroComputerV2.calculate(
+            astroComputer.calculate(
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH) + 1,
                     cal.get(Calendar.DAY_OF_MONTH),
@@ -133,7 +133,7 @@ public class SpringSummerFallWinter {
                     cal.get(Calendar.MINUTE),
                     cal.get(Calendar.SECOND));
 
-            double sunDecl = astroComputerV2.getSunDecl();
+            double sunDecl = astroComputer.getSunDecl();
             if (goingUp && sunDecl > 0 && !crossed) { // Equinox
                 Calendar savedCal = (Calendar)cal.clone();
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);

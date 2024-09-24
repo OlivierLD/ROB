@@ -7,7 +7,7 @@ description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
-  - AIS Data forwarded by OpenCPN, reading from sinagot.net
+  - AIS Data forwarded by OpenCPN, reading from sinagot.net (and read from udp channel)
 context:
   with.http.server: true
   http.port: 9999

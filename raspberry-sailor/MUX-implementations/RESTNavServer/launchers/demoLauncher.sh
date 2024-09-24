@@ -100,6 +100,7 @@ URL_OPTION_13d="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13e="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13f="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13g="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+URL_OPTION_13h="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -124,7 +125,8 @@ GO=true
 #
 # Banner done with https://manytools.org/hacker-tools/ascii-banner/, 'Slant Relief'
 #
-cat banner.txt
+# cat banner.txt
+cat banner.stby.txt
 sleep 1
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
@@ -169,6 +171,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|                                                                                         | ${RED}13e${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only.                              |"
 	echo -e "|                                                                                         | ${RED}13f${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only, no AIS.                   |"
 	echo -e "|                                                                                         | ${RED}13g${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only, AIS from OpenCPN/UDP.        |"
+	echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
 	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -334,6 +337,11 @@ while [[ "${GO}" == "true" ]]; do
 	        ;;
 	      "13g")
 	        PROP_FILE=mux-configs/nmea.mux.udp.ais.yaml
+	        echo -e "Use OpenCPN to forward AIS data through UDP:8002"
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13g}
+	        ;;
+	      "13h")
+	        PROP_FILE=mux-configs/nmea.mux.replay.groix.gavres.yaml
 	        echo -e "Use OpenCPN to forward AIS data through UDP:8002"
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13g}
 	        ;;
@@ -951,7 +959,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser ${URL_OPTION_13e}
+		    openBrowser ${URL_OPTION_13f}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
@@ -974,7 +982,30 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser ${URL_OPTION_13e}
+		    openBrowser ${URL_OPTION_13g}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    GO=false
+	    ;;
+	  "13h")
+  	  PROP_FILE=mux-configs/nmea.mux.replay.groix.gavres.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+        LAUNCH_BROWSER=Y
+        echo -e ">> Will launch a browser"
+        fi
+      fi
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_13h}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
