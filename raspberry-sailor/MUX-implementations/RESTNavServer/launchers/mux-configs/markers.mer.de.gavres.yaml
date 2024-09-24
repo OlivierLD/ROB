@@ -1,0 +1,190 @@
+#
+# Generated Tue Sep 24 2024 17:21:01 GMT+0200 (Central European Summer Time)
+#
+borders:
+  - border-name: "Mer de Gavres"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.7029839944608
+        longitude: -3.35151582978142
+      - rank: 2
+        latitude: 47.70376422445735
+        longitude: -3.3495423943350042
+      - rank: 3
+        latitude: 47.70532374683636
+        longitude: -3.349370732958051
+      - rank: 4
+        latitude: 47.704890550855666
+        longitude: -3.3461949974844183
+      - rank: 5
+        latitude: 47.70702287834446
+        longitude: -3.345143683282004
+      - rank: 6
+        latitude: 47.708048061635104
+        longitude: -3.3452295139704806
+      - rank: 7
+        latitude: 47.70843791456253
+        longitude: -3.339779265252219
+      - rank: 8
+        latitude: 47.70738386104258
+        longitude: -3.331839926568137
+      - rank: 9
+        latitude: 47.70822132996285
+        longitude: -3.3283208683405974
+      - rank: 10
+        latitude: 47.70887108106183
+        longitude: -3.3269475773249724
+      - rank: 11
+        latitude: 47.70848123137447
+        longitude: -3.325939066735373
+      - rank: 12
+        latitude: 47.70823576896419
+        longitude: -3.3261321857844455
+      - rank: 13
+        latitude: 47.7046836540983
+        longitude: -3.3223556354914763
+      - rank: 14
+        latitude: 47.70471253405698
+        longitude: -3.3203815296565153
+      - rank: 15
+        latitude: 47.70578108127968
+        longitude: -3.320102579918967
+      - rank: 16
+        latitude: 47.70978049471801
+        longitude: -3.3103175462383665
+      - rank: 17
+        latitude: 47.70856764061093
+        longitude: -3.309030085911218
+      - rank: 18
+        latitude: 47.708047837353455
+        longitude: -3.310660868992273
+      - rank: 19
+        latitude: 47.7046978697836
+        longitude: -3.310403376926843
+      - rank: 20
+        latitude: 47.70227189679432
+        longitude: -3.3057685197491087
+      - rank: 21
+        latitude: 47.70273399559181
+        longitude: -3.2926364244121946
+      - rank: 22
+        latitude: 47.700885575824714
+        longitude: -3.290576487888757
+      - rank: 23
+        latitude: 47.70082781165094
+        longitude: -3.2877440751690306
+      - rank: 24
+        latitude: 47.68979368089008
+        longitude: -3.280620128025476
+      - rank: 25
+        latitude: 47.68933146739756
+        longitude: -3.279246837009851
+      - rank: 26
+        latitude: 47.68557583091764
+        longitude: -3.2819075883526243
+      - rank: 27
+        latitude: 47.69470444626872
+        longitude: -3.3113475145000857
+      - rank: 28
+        latitude: 47.69551323385833
+        longitude: -3.321561366428796
+      - rank: 29
+        latitude: 47.69648109778139
+        longitude: -3.3214329555903537
+      - rank: 30
+        latitude: 47.695600112756885
+        longitude: -3.317119963494406
+      - rank: 31
+        latitude: 47.69857518276828
+        longitude: -3.31428755077468
+      - rank: 32
+        latitude: 47.699614972890494
+        longitude: -3.323299773064719
+      - rank: 33
+        latitude: 47.701915841622885
+        longitude: -3.3246514946768
+      - rank: 34
+        latitude: 47.702204655823934
+        longitude: -3.3267114312002386
+      - rank: 35
+        latitude: 47.698478829816715
+        longitude: -3.3317325264761166
+      - rank: 36
+        latitude: 47.69844994640454
+        longitude: -3.338856473619672
+      - rank: 37
+        latitude: 47.69579260403032
+        longitude: -3.3460662514517034
+      - rank: 38
+        latitude: 47.698796546861196
+        longitude: -3.3500144631216253
+      - rank: 39
+        latitude: 47.700529511751164
+        longitude: -3.3517310768911557
+      - rank: 40
+        latitude: 47.700731687236136
+        longitude: -3.3529327065298276
+  - border-name: "Ile Kerneur"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.70544896783172
+        longitude: -3.3177851513300993
+      - rank: 2
+        latitude: 47.70562224479971
+        longitude: -3.3166908100520236
+      - rank: 3
+        latitude: 47.70555004613305
+        longitude: -3.3124851063166716
+      - rank: 4
+        latitude: 47.704178252466036
+        longitude: -3.311390765038596
+      - rank: 5
+        latitude: 47.70253205241195
+        longitude: -3.307313807335959
+      - rank: 6
+        latitude: 47.70129014779437
+        longitude: -3.3067559078608615
+      - rank: 7
+        latitude: 47.70175225529429
+        longitude: -3.3059834316645724
+      - rank: 8
+        latitude: 47.70058253774681
+        longitude: -3.305082209435568
+      - rank: 9
+        latitude: 47.70043812635299
+        longitude: -3.3071421459590056
+      - rank: 10
+        latitude: 47.70201218896289
+        longitude: -3.312141783562766
+      - rank: 11
+        latitude: 47.70238764641833
+        longitude: -3.316175825921164
+  - border-name: "Ile aux Pins"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.70098688800625
+        longitude: -3.2988380268488986
+      - rank: 2
+        latitude: 47.70069806705866
+        longitude: -3.2959626987849333
+      - rank: 3
+        latitude: 47.70156452510124
+        longitude: -3.2956193760310275
+      - rank: 4
+        latitude: 47.70144899819427
+        longitude: -3.293688185540305
+      - rank: 5
+        latitude: 47.700568097110214
+        longitude: -3.293580897179709
+      - rank: 6
+        latitude: 47.699788270615244
+        longitude: -3.2948468998347384
+      - rank: 7
+        latitude: 47.69999044897473
+        longitude: -3.2967137173091037
+      - rank: 8
+        latitude: 47.7004958914433
+        longitude: -3.2987092808161838

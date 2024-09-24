@@ -75,7 +75,8 @@ public class ApplicationContext {
 						allMarkers.addAll(NMEAUtils.loadMarkers(markers));
 						allBorders.addAll(NMEAUtils.loadBorders(markers));
 					} catch (Exception ex) { // File Not found ?
-						System.err.printf("Building markers... \n%s", ex);
+						System.err.printf("Building markers (%s)... \n%s\n", markers, ex);
+						ex.printStackTrace();
 					}
 				}
 			});

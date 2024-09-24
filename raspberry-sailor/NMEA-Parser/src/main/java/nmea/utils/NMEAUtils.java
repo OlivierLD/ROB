@@ -415,15 +415,17 @@ public class NMEAUtils {
             Map<String, Object> map = yaml.load(inputStream);
             List<Map<String, Object>> yamlMarkerList = (List<Map<String, Object>>)map.get("markers");
             markerList = new ArrayList<>();
-            yamlMarkerList.forEach(yamlMarker -> {
-                markerList.add(new Marker(
-                        (Double)yamlMarker.get("latitude"),
-                        (Double)yamlMarker.get("longitude"),
-                        (String)yamlMarker.get("label"),
-                        (String)yamlMarker.get("type")
-                ));
-            });
-            // System.out.println("Markers loaded.");
+            if (yamlMarkerList != null) {
+                yamlMarkerList.forEach(yamlMarker -> {
+                    markerList.add(new Marker(
+                            (Double) yamlMarker.get("latitude"),
+                            (Double) yamlMarker.get("longitude"),
+                            (String) yamlMarker.get("label"),
+                            (String) yamlMarker.get("type")
+                    ));
+                });
+                System.out.println("Markers loaded.");
+            }
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
         }
