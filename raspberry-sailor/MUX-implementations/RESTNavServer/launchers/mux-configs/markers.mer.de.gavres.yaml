@@ -1,6 +1,36 @@
 #
 # Generated Tue Sep 24 2024 17:21:01 GMT+0200 (Central European Summer Time)
+# Mer de Gavres et abords
 #
+markers:
+  - label: "Ile aux souris"
+    latitude: 47.702633192059565
+    longitude: -3.3585387189009457
+    type: green
+  - label: "Le Cabon"
+    latitude: 47.7019075493042
+    longitude: -3.360748859129217
+    type: red
+  - label: "La Paix"
+    latitude: 47.69947055975195
+    longitude: -3.364519961205588
+    type: is-dng
+  - label: "Le Soulard"
+    latitude: 47.699947124677976
+    longitude: -3.3593915775691134
+    type: is-dng
+  - label: "Les trois pierres"
+    latitude: 47.69204713764684
+    longitude: -3.3744763210688693
+    type: default
+  - label: "Les Truies"
+    latitude: 47.68567361581739
+    longitude: -3.387291999540594
+    type: green
+  - label: "Les errants"
+    latitude: 47.68549423462283
+    longitude: -3.3773409761624866
+    type: default
 borders:
   - border-name: "Mer de Gavres"
     type: "open"
