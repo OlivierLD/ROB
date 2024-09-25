@@ -1,6 +1,6 @@
 #
 # Generated Tue Sep 24 2024 17:21:01 GMT+0200 (Central European Summer Time)
-# Mer de Gavres et abords
+# Petite Mer de Gavres et abords
 #
 markers:
   - label: "Ile aux souris"
@@ -31,7 +31,45 @@ markers:
     latitude: 47.68549423462283
     longitude: -3.3773409761624866
     type: default
+  - label: "Port de Ban-Gavres"
+    latitude: 47.700438182058065
+    longitude: -3.3505832869627743
+    type: default
+  - label: "Locmalo"
+    latitude: 47.70574261285125
+    longitude: -3.346474114819103
+    type: default
 borders:
+  - border-name: "Ile aux souris"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.70264402233147
+        longitude: -3.358533354482916
+      - rank: 2
+        latitude: 47.70277398710454
+        longitude: -3.358082743368414
+      - rank: 3
+        latitude: 47.702687343958516
+        longitude: -3.3578628022291928
+      - rank: 4
+        latitude: 47.702517667380334
+        longitude: -3.3578198868849545
+      - rank: 5
+        latitude: 47.702452684714785
+        longitude: -3.3575194794752865
+      - rank: 6
+        latitude: 47.70227939721063
+        longitude: -3.357487292967108
+      - rank: 7
+        latitude: 47.70221441424805
+        longitude: -3.357637496671942
+      - rank: 8
+        latitude: 47.70226856672247
+        longitude: -3.3580934722044735
+      - rank: 9
+        latitude: 47.70238048165804
+        longitude: -3.3584636170485287
   - border-name: "Mer de Gavres"
     type: "open"
     border-elements:

@@ -148,9 +148,9 @@ let gpsDate;
 let centerOnBoat = true;
 let displayMarkers = true;
 let displayBorders = true;
-let displayBorderMarkers = true;
+let displayBorderMarkers = false;
 let displayAISTargets = true;
-let withDistBearing = true;
+let withDistBearing = false;
 let withWorldMap = false;
 
 let boatRadius = 10;
@@ -845,7 +845,7 @@ let setStyle = (opt) => {
 };
 
 window.onload = () => {
-	initAjax(false, ping=250);
+	initAjax(false, ping=250); // ping ununsed
 	// console.log("Commented initAjax!");
 
 	map = document.getElementById('chartless-map-01');
@@ -950,15 +950,17 @@ window.onload = () => {
         </tr>
 		<tr>
 			<td valign="top">
-				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
-				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
-				<input type="checkbox" onchange="plotBorderMarkers(this);" checked>Plot Borders' Markers
-				<br/>
-				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
-				<input type="checkbox" onchange="distBearing(this);" checked>Dist &amp; Bearings
-				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
-				<br/>
-				<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
+				<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+					<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+					<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+					<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+					<!--br/-->
+					<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+					<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+					<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+					<!--br/-->
+					<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
+				</div>
 			</td>
 		</tr>
     </table>

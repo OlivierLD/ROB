@@ -12,6 +12,8 @@ function initAjax(forwardErrors) {
 	}, 1000);
 }
 
+const FETCH_TIMEOUT = 15000;
+
 function getNMEAData() {
 
 	let url = '/mux/cache',
@@ -19,7 +21,7 @@ function getNMEAData() {
 			verb = 'GET',
 			data = null,
 			happyCode = 200,
-			TIMEOUT = 10000;
+			TIMEOUT = FETCH_TIMEOUT;
 
 	return new Promise(function (resolve, reject) {
 		let xhr = new XMLHttpRequest();
@@ -58,11 +60,15 @@ function getNMEAData() {
 	});
 }
 
+const FETCH_VERBOSE = false;
+
 function fetch() {
 	try {
 		let getData = getNMEAData();
 		getData.then((value) => {
-			// console.log("Done:", value);
+			if (FETCH_VERBOSE) {
+				console.log("Done:", value);
+			}
 			let json = JSON.parse(value);
 			onMessage(json);
 		}, (error, errmess) => {
