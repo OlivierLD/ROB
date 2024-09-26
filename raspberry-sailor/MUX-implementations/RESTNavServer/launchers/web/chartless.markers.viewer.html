@@ -75,7 +75,8 @@ let map;
 let markers = [];
 let borders = [];
 
-const MARKERS_DATA = "./json/markers.yaml.json";
+// const MARKERS_DATA = "./json/markers.yaml.json";
+const MARKERS_DATA = "./json/markers.houat.hoedic.belle-ile.yaml.json";
 let pos = { lat: 47.5, lng: -3 }; // Hard-coded
 
 let loadData = (fn) => {
@@ -112,7 +113,7 @@ let loadData = (fn) => {
 					map.centerLng = pos.lng;
 				}
 				// Map width ?
-				let chartWidth = (Math.abs(maxLng - minLng) / 5).toFixed(0) * 5;
+				let chartWidth = (Math.abs(maxLng - minLng) / 5).toFixed(1) * 5;
 				document.getElementById('ChartWidth').innerText = chartWidth;
 				map.chartWidth = chartWidth;
 
