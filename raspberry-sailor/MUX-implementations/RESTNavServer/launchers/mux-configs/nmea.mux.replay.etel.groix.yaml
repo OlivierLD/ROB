@@ -11,12 +11,12 @@ context:
   http.port: 9999
   init.cache: true
   default.declination: -1
-  # markers: mux-configs/markers.02.yaml
-  markers: mux-configs/markers.03.yaml
+  # markers: mux-configs/markers.01.yaml
+  markers: mux-configs/markers.etel.gx.stphil.yaml
   markers.list:
-    - markers: mux-configs/markers.04.yaml
-    - markers: mux-configs/markers.05.yaml
-    # - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: mux-configs/markers.lorient.blavet.yaml
+    - markers: mux-configs/markers.rade.de.brest.yaml
+    # - markers: mux-configs/markers.bretagne.bumper.yaml
     - markers: mux-configs/markers.san.juan.yaml
 channels:
   - type: file

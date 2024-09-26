@@ -1,0 +1,170 @@
+#
+# Markers & Borders
+# Etel, Groix, San Juan, various stuff
+#
+markers:
+  - latitude: 47.705 
+    longitude: -3.105 
+    type: default
+    label: Locoal
+  - latitude: 47.661667 
+    longitude: -2.758167
+    label: Vannes
+  - latitude: 47.677667
+    longitude: -3.135667
+    type: default
+    label: Belz
+  - latitude: 49.293167 
+    longitude: -0.098833
+    label: Dives
+  - latitude: 37.7489 
+    longitude: -122.5070
+    label: SF
+  - latitude: 48.48518833333333 
+    longitude: -123.07788833333333
+    label: "False Bay, San Juan Island"
+  - latitude: 48.60448
+    longitude: -122.819285
+    label: "Olga, Orcas Island"
+  - latitude: 39.167398801021655
+    longitude: -107.24753700739706
+    label: "Redstone, CO."
+  - latitude: 47.643065
+    longitude: -3.214258
+    type: red
+    label: "Etel, la barre"
+  - latitude: 47.659823
+    longitude: -3.211443
+    type: default
+    label: "Magouer"
+  - latitude: 47.675858
+    longitude: -3.200143
+    type: default
+    label: "Pont Lorois"
+  - latitude: 47.687092
+    longitude: -3.184950
+    type: default
+    label: "St Cado"
+  - latitude: 47.683498
+    longitude: -3.171165
+    label: "Pte du Perche"
+  - label: "Roheu"
+    latitude: 47.642375
+    longitude: -3.244957
+    type: card-s
+  - label: "Basse Mélite"
+    latitude: 47.647265
+    longitude: -3.425327
+    type: card-n
+  - label: "SpeerBrecker"
+    latitude: 47.651588
+    longitude: -3.438815
+    type: card-e    
+  - label: "Pte des Chats"
+    latitude: 47.617237
+    longitude: -3.418165
+    type: card-w    
+  - label: ""
+    latitude: 47.621502
+    longitude: -3.436955
+    type: green    
+  - label: "Grasu"
+    latitude: 47.691990
+    longitude: -3.419095
+    type: card-s    
+  - label: ""
+    latitude: 47.697765
+    longitude: -3.397415
+    type: sp    
+  - label: ""
+    latitude: 47.574503
+    longitude: -3.202672
+    type: sp    
+  - label: "Pierres Noires - Chiviguete"
+    latitude: 47.592078
+    longitude: -3.221455
+    type: is-dng
+  - label: "Birvideaux"
+    latitude: 47.485365
+    longitude: -3.290765
+    type: is-dng
+  - label: "Les Grands Sables"
+    latitude: 47.63827049009266
+    longitude: -3.4202241897583012
+    type: default
+  - latitude: 47.64488421908084
+    longitude: -3.446303757882561
+    label: "Port-Tudy"
+    type: default
+  - label: "Dummy Placeholder"
+    latitude: 0.0
+    longitude: 0.0
+    type: default    
+borders:
+  - border-name: "Etel, Right bank"
+    type: "open"
+    border-elements:
+    - rank: 1
+      latitude: 47.6600691664467
+      longitude: -3.2113552093505864
+    - rank: 2
+      latitude: 47.65532858402682
+      longitude: -3.2104969024658208
+    - rank: 3
+      latitude: 47.6508766696586
+      longitude: -3.209638595581055
+    - rank: 4
+      latitude: 47.643851123756754
+      longitude: -3.213286399841309
+  - border-name: "Etel, Left bank"
+    type: "open"
+    border-elements:
+    - rank: 1
+      latitude: 47.65639814326938
+      longitude: -3.207557201385498
+    - rank: 2
+      latitude: 47.651628318194355
+      longitude: -3.2067632675170903
+    - rank: 3
+      latitude: 47.6471038087798
+      longitude: -3.2091021537780766
+    - rank: 4
+      latitude: 47.64318610543658
+      longitude: -3.21176290512085
+  - border-name: "Groix"
+    type: "closed"
+    border-elements:
+       - rank: 1
+         latitude: 47.64561482699582
+         longitude: -3.4445571899414067
+       - rank: 2
+         latitude: 47.643764382716846
+         longitude: -3.4296226501464844
+       - rank: 3
+         latitude: 47.6338171216314
+         longitude: -3.41451644897461
+       - rank: 4
+         latitude: 47.61935551640258
+         longitude: -3.420181274414063
+       - rank: 5
+         latitude: 47.619702641789864
+         longitude: -3.46395492553711
+       - rank: 6
+         latitude: 47.628727092912776
+         longitude: -3.4867858886718754
+       - rank: 7
+         latitude: 47.63867532295018
+         longitude: -3.505840301513672
+       - rank: 8
+         latitude: 47.64769649845601
+         longitude: -3.515796661376953
+       - rank: 9
+         latitude: 47.65278467943264
+         longitude: -3.5142517089843754
+       - rank: 10
+         latitude: 47.65440354214958
+         longitude: -3.4963989257812504
+       - rank: 11
+         latitude: 47.649662445325056
+         longitude: -3.464469909667969
+

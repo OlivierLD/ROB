@@ -11,9 +11,9 @@ context:
   damping: 30
   markers: mux-configs/markers.sf.bay.yaml
 #  markers.list:
-#    - markers: mux-configs/markers.04.yaml
-#    - markers: mux-configs/markers.05.yaml
-#    - markers: mux-configs/markers.06.yaml
+#    - markers: mux-configs/markers.lorient.blavet.yaml
+#    - markers: mux-configs/markers.rade.de.brest.yaml
+#    - markers: mux-configs/markers.remote.places.yaml
 channels:
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip

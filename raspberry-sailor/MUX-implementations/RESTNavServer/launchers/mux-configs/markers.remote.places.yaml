@@ -1,0 +1,33 @@
+#
+# Generated Sun Jun 23 2024 17:24:37 GMT+0200 (Central European Summer Time)
+# Remote places ;)
+#
+markers:
+  - label: "Faroe - Torshavn"
+    latitude: 61.99937350811496
+    longitude: -6.761913299560548
+    type: default
+  - label: "Cap Farewell"
+    latitude: 59.77437430143953
+    longitude: -43.905143737792976
+    type: default
+  - label: "Estrecho de Le Maire"
+    latitude: -54.829172274521376
+    longitude: -64.98138427734376
+    type: default
+  - label: "Cabo de Hornos"
+    latitude: -55.98052160337238
+    longitude: -67.2916889190674
+    type: default
+  - label: "Shetland"
+    latitude: 60.28272771685622
+    longitude: -1.2716674804687502
+    type: default
+  - label: "Nord Kapp"
+    latitude: 71.17091864969487
+    longitude: 25.784912109375004
+    type: default
+  - label: "Spitsberg"
+    latitude: 78.78489872650539
+    longitude: 17.907714843750004
+    type: default
