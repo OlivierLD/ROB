@@ -76,7 +76,7 @@ let markers = [];
 let borders = [];
 
 const MARKERS_DATA = "./json/markers.yaml.json";
-const pos = { lat: 47.5, lng: -3 }; // Hard-coded
+let pos = { lat: 47.5, lng: -3 }; // Hard-coded
 
 let loadData = (fn) => {
 	originalFetch(MARKERS_DATA)
@@ -86,6 +86,39 @@ let loadData = (fn) => {
 				markers = doc["markers-data"];
 				borders = doc["borders-data"];
 				console.log(`Data loaded`);
+				// Center in the middle, find it.
+				let minLat = 90, maxLat = -90;
+				let minLng = 180, maxLng = -180;
+				markers.forEach(mark => {
+					minLat = Math.min(minLat, mark.latitude);
+					maxLat = Math.max(maxLat, mark.latitude);
+					
+					minLng = Math.min(minLng, mark.longitude);
+					maxLng = Math.max(maxLng, mark.longitude);
+				});
+				borders.forEach(border => {
+					border.markerList.forEach(mark => {
+						minLat = Math.min(minLat, mark.latitude);
+						maxLat = Math.max(maxLat, mark.latitude);
+						
+						minLng = Math.min(minLng, mark.longitude);
+						maxLng = Math.max(maxLng, mark.longitude);
+					});
+				});
+				pos.lat = (maxLat + minLat) / 2;
+				pos.lng = (maxLng + minLng) / 2;
+				if (centerOnBoat) {
+					map.centerLat = pos.lat; // This does the repaint...
+					map.centerLng = pos.lng;
+				}
+				// Map width ?
+				let chartWidth = (Math.abs(maxLng - minLng) / 5).toFixed(0) * 5;
+				document.getElementById('ChartWidth').innerText = chartWidth;
+				map.chartWidth = chartWidth;
+
+				console.log(`Centered on ${ JSON.stringify(pos) }`);
+
+
 				if (map !== undefined) {
 					map.repaint();
 				} else {
@@ -126,6 +159,21 @@ function onSlider(event) {
 	} else {
 		console.log(`Chart width ${this.value} !!`);
 	}
+}
+
+function zoomIn() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 0.89).toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	document.getElementById('ChartWidth').innerText = newWidth;
+}
+function zoomOut() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 1.11).toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	document.getElementById('ChartWidth').innerText = newWidth;
 }
 
 let centerOnBoat = true;
@@ -390,12 +438,14 @@ window.onload = () => {
         <tr>
             <td valign="top" height="50">
                 <!-- A slider for the chart scale -->
-                <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+                <!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
 					Chart Width:
                     <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
                            oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
                     <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
-                </div>
+                </div-->
+				<!-- Zoom in / out -->
+				<button onclick="zoomIn();">Zoom in</button> <button onclick="zoomOut();">Zoom out</button> Chart Width: <span id="ChartWidth">5</span>&deg;
             </td>
         </tr>
 		<tr>
