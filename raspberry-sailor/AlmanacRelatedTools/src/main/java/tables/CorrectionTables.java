@@ -64,12 +64,12 @@ public class CorrectionTables {
             out.println("  <obs-altitude value=\"" + obsAltitude[i] + "\">");
             for (int j = 0; j < eyeHeight.length; j++) {
                 double corr = SightReductionUtil.getAltitudeCorrection(obsAltitude[i],
-                        eyeHeight[j],
-                        hp / 60d,
-                        sd / 60d,
-                        LOWER_LIMB,
-                        false,
-                        verbose);
+                                                                       eyeHeight[j],
+                                                                       hp / 60d,
+                                                                       sd / 60d,
+                                                                       LOWER_LIMB,
+                                                                       false, // TODO A section for artificial horizon !
+                                                                       verbose);
                 out.println("    <corr eye-height=\"" + eyeHeight[j] + "\">" + /*GeomUtil.decToSex(corr, GeomUtil.SWING, GeomUtil.NONE)*/ df.format(corr * 60d) + "</corr>");
             }
             out.println("  </obs-altitude>");
@@ -101,12 +101,12 @@ public class CorrectionTables {
             for (int j = 0; j < horParallax.length; j++) {
                 // Refraction + Parallax
                 double corr = SightReductionUtil.getAltitudeCorrection(obsAltitude[i],
-                        0d, // Eye Height
-                        horParallax[j] / 60d,
-                        sd / 60d,
-                        NO_LIMB,
-                        false,
-                        verbose);
+                                                                       0d, // Eye Height
+                                                                       horParallax[j] / 60d,
+                                                                       sd / 60d,
+                                                                       NO_LIMB,
+                                                                       false, // TODO A section for artificial horizon !
+                                                                       verbose);
                 corr += ((moonDiameter[j] / 2d) / 60d);
                 out.println("    <corr-ref-pa hp=\"" + horParallax[j] + "\">" + /*GeomUtil.decToSex(corr, GeomUtil.SWING, GeomUtil.NONE)*/ df.format(corr * 60d) + "</corr-ref-pa>");
             }
@@ -139,7 +139,7 @@ public class CorrectionTables {
                         hp / 60d,
                         sd / 60d,
                         NO_LIMB,
-                        false,
+                        false, // TODO A section for artificial horizon !
                         verbose);
                 out.println("    <corr eye-height=\"" + eyeHeight[j] + "\">" + /*GeomUtil.decToSex(corr, GeomUtil.SWING, GeomUtil.NONE)*/ df.format(corr * 60d) + "</corr>");
             }

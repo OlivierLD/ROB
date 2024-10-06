@@ -10,6 +10,7 @@ The documents are also available from <https://drive.google.com/drive/folders/0B
 To look at, in this repo:
 - Publishing the T900 (and more):
   - ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/pub/publish.tables.sh
+  - ROB/raspberry-sailor/MUX-implementations/RESTNavServer/menu.sh
   - ROB/raspberry-sailor/AlmanacRelatedTools
 - ROB/raspberry-sailor/RESTNauticalAlmanac/spreadsheets
 - ROB/raspberry-sailor/RESTNauticalAlmanac/spreadsheets/DnB.html
