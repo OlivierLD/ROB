@@ -46,6 +46,9 @@
             <fo:block text-align="center">
               <fo:external-graphic src="url('sextant.gif')"/>
             </fo:block>
+            <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" margin="0.5in">
+              <fo:inline font-family="Symbol">p</fo:inline> est la parallaxe horizontale, obtenue dans les &#233;ph&#233;m&#233;rides.
+            </fo:block>
             <fo:block text-align="left" font-family="Courier" font-size="8pt" font-style="italic" margin="1in">
               &#169; Passe-Coque <!-- Oliv Cool Stuff Soft -->
             </fo:block>
