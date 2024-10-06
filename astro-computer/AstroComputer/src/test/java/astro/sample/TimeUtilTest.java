@@ -26,12 +26,12 @@ public class TimeUtilTest {
         TimeUtil.delay(1.5f, TimeUnit.MICROSECONDS);
         TimeUtil.delay(150f, TimeUnit.NANOSECONDS);
 
-        boolean more = false;
+        boolean more = true;
         if (more) {
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
             BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
             String retString = "";
-            String prompt = "?> ";
+            String prompt = "Hit [Return] ?> ";
             System.err.print(prompt);
             try {
                 retString = stdin.readLine();
@@ -47,6 +47,13 @@ public class TimeUtilTest {
             int month = 0;
             int day = 0;
             int h = 0;
+
+            try {
+                Thread.sleep(100L); // 500L); // This is gonfled. TODO A better way...
+            } catch (InterruptedException ie) {
+                ie.printStackTrace(); // Oops
+            }
+
             System.err.print(prompt);
             try {
                 retString = stdin.readLine();
@@ -123,10 +130,11 @@ public class TimeUtilTest {
             System.out.println("To DMS:" + TimeUtil.decHoursToDMS(13.831260480533272));
 
             long _now = System.currentTimeMillis();
-            System.out.println(String.format("Now: %s", TimeUtil.fmtDHMS(TimeUtil.msToHMS(_now))));
+            System.out.println(String.format("Now: %s (since 1970-Jan-1 at 00:00:00 UTC)", TimeUtil.fmtDHMS(TimeUtil.msToHMS(_now))));
 
             long elapsed = 231_234_567_890L; // 123456L; //
             System.out.println("Readable time (" + elapsed + ") : " + TimeUtil.readableTime(elapsed));
+            System.out.println();
         }
         String[] months = new String[] {"Jan", "Feb", "Mar","Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -147,7 +155,7 @@ public class TimeUtilTest {
         year = 2017; month = 6;
         System.out.println(String.format("DeltaT %s %d: %f", months[month - 1], year, TimeUtil.getDeltaT(year, month)));
 
-        if (true) {
+        if (false) {
             StringBuffer duh = new StringBuffer();
             for (int i = -1_999; i < 2_020; i++) {
                 duh.append(String.format("%d;%f;\n", i, TimeUtil.getDeltaT(i, 1)));
