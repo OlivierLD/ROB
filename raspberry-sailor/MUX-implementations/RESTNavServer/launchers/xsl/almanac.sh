@@ -147,10 +147,10 @@ echo -en "Format: US Letter [1], A4 [2] > "
 read FORMAT  # Default Letter
 if [[ "${FORMAT}" == "2" ]]; then
   echo -e "A4 selected"
-  cp page_portrait_A4.xsl page_portrait.xsl
+  cp page_A4.xsl page.xsl
 else
   echo -e "US Letter selected"
-  cp page_portrait_Letter.xsl page_portrait.xsl
+  cp page_USLetter.xsl page.xsl
 fi
 #
 echo -e "Now Publishing (bumping Memory to 2048Mb)"
