@@ -81,6 +81,7 @@
                 xmlns:xsl-util="http://www.oracle.com/XSL/Transform/java/calc.calculation.nauticalalmanac.xsl.XSLUtil"
                 exclude-result-prefixes="data j-string xsl-util geom-util"
                 version="1.0">
+  <xsl:import href="page_portrait.xsl"/>
   <xsl:import href="literals.xsl"/>
   <xsl:param name="language">EN</xsl:param>
   <xsl:param name="with-stars">true</xsl:param>
@@ -89,14 +90,14 @@
     <fo:root>
       <fo:layout-master-set>
         <fo:simple-page-master master-name="portrait-page"
-                               page-width="8.5in"
-                               page-height="11in"> <!-- Portrait, Letter -->
+                               page-width="{$page-width}"
+                               page-height="{$page-height}"> <!-- Portrait, Letter or A4 -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
         </fo:simple-page-master>
         <fo:simple-page-master master-name="landscape-page"
                                page-height="8.5in"
-                               page-width="11in"> <!-- Portrait -->
+                               page-width="11in"> <!-- TODO Externalize. Portrait, try {$length} -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
         </fo:simple-page-master>

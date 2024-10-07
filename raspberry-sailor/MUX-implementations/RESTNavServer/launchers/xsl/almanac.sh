@@ -142,6 +142,17 @@ else
     fi
   fi
 fi
+# Page Format
+echo -en "Format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_portrait_A4.xsl page_portrait.xsl
+else
+  echo -e "US Letter selected"
+  cp page_portrait_Letter.xsl page_portrait.xsl
+fi
+#
 echo -e "Now Publishing (bumping Memory to 2048Mb)"
 java -Xms256m -Xmx2048m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ./data.xml -xsl ${XSL_STYLESHEET} -pdf data.pdf
 echo -e "Done calculating, checkout data.pdf ! (in $(pwd))"
