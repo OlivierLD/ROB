@@ -73,8 +73,6 @@
 		let publish = function() {
 			document.body.style.cursor = 'wait';
 
-			let pageType = document.getElementById('page-fmt').value;
-
 			if (typeToPublish !== undefined) {
 				switch (typeToPublish) {
 					case "perpetual":
@@ -82,7 +80,7 @@
 							publishPerpetual({
 								"from": parseInt(document.getElementById("p-from-year").value), 
 								"to": parseInt(document.getElementById("p-to-year").value),
-								"fmt": pageType
+								"format": document.getElementById('page-fmt-p').value
 							}, dataManager);
 						} catch (err) {
 							errManager(err);
@@ -91,7 +89,7 @@
 					case "sun-moon-planets":
 					case "lunar-distances":
 						let options = {
-							format: pageType
+							format: document.getElementById('page-fmt').value
 						};
 						options.withStars = document.getElementById("with-stars").checked;
 						options.language = document.getElementById("almanac-lang").value;
@@ -250,6 +248,11 @@
 
 	<div id="perpetual-prms" style="display: none;">
 		From year <input type="text" size="4" placeholder="From" id="p-from-year"/> to year <input type="text" size="4" placeholder="To" id="p-to-year"/>
+		Page format:
+		<select id="page-fmt-p">
+			<option value="US">Letter US</option>
+			<option value="A4">A4</option>
+		</select>
 	</div>
 	<div id="almanac-prms" style="display: none;">
 
