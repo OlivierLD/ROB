@@ -72,18 +72,27 @@
 
 		let publish = function() {
 			document.body.style.cursor = 'wait';
+
+			let pageType = document.getElementById('page-fmt').value;
+
 			if (typeToPublish !== undefined) {
 				switch (typeToPublish) {
 					case "perpetual":
 						try {
-							publishPerpetual({"from": parseInt(document.getElementById("p-from-year").value), "to": parseInt(document.getElementById("p-to-year").value) }, dataManager);
+							publishPerpetual({
+								"from": parseInt(document.getElementById("p-from-year").value), 
+								"to": parseInt(document.getElementById("p-to-year").value),
+								"fmt": pageType
+							}, dataManager);
 						} catch (err) {
 							errManager(err);
 						}
 						break;
 					case "sun-moon-planets":
 					case "lunar-distances":
-						let options = {};
+						let options = {
+							format: pageType
+						};
 						options.withStars = document.getElementById("with-stars").checked;
 						options.language = document.getElementById("almanac-lang").value;
 						if (almanacFlavor === 'period') {
@@ -251,6 +260,11 @@
 			<select id="almanac-lang">
 				<option value="EN">In English</option>
 				<option value="FR">En fran&ccedil;ais</option>
+			</select>
+			Page format:
+			<select id="page-fmt">
+				<option value="US">Letter US</option>
+				<option value="A4">A4</option>
 			</select>
 		</div>
 		<div id="period-div" style="display: block; border: 1px solid silver;">

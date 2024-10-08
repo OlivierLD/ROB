@@ -1358,10 +1358,15 @@ public class RESTImplementation {
 					// Ready for transformation
 					try {
 						String tempPdfFileName = File.createTempFile("almanac", ".pdf").getAbsolutePath();
-						String almanacTxPrm = String.format("%s %s %s %s", options.language, options.withStars ? "true" : "false", tempFileName, tempPdfFileName);
+						String almanacTxPrm = String.format("%s %s %s %s %s",
+								options.language,
+								options.withStars ? "true" : "false",
+								tempFileName,
+								tempPdfFileName,
+								options.format);
 						// Script name in a System variable, must be in the xsl folder
 						String cmd = "." + File.separator + "xsl" + File.separator + String.format("%s ", System.getProperty("publishalmanac.script", "publishalmanac.sh")) + almanacTxPrm;
-						System.out.printf("Tx Command: %s\n", cmd);
+						System.out.printf("--------\nTx Command: %s\n--------\n", cmd);
 						Process p = Runtime.getRuntime().exec(cmd);
 						BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()));
 						String line = null;
@@ -1431,10 +1436,14 @@ public class RESTImplementation {
 					// Ready for transformation
 					try {
 						String tempPdfFileName = File.createTempFile("lunar", ".pdf").getAbsolutePath();
-						String almanacTxPrm = String.format("%s %s %s", options.language, tempFileName, tempPdfFileName);
+						String almanacTxPrm = String.format("%s %s %s %s",
+								options.language,
+								tempFileName,
+								tempPdfFileName,
+								options.format);
 						// Script name in a System variable. Must be in the xsl folder
 						String cmd = "." + File.separator + "xsl" + File.separator + String.format("%s ", System.getProperty("publishlunar.script", "publishlunar.sh")) + almanacTxPrm;
-						System.out.println("Tx Command:" + cmd);
+						System.out.printf("--------\nTx Command: %s\n--------\n", cmd);
 						Process p = Runtime.getRuntime().exec(cmd);
 						BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()));
 						String line = null;
@@ -2782,6 +2791,7 @@ public class RESTImplementation {
 		AlmanacType type;
 		String language;
 		boolean withStars;
+		String format;
 
 		int day;
 		int month;
@@ -2806,6 +2816,9 @@ public class RESTImplementation {
 			return withStars;
 		}
 
+		public String getFormat() {
+			return format;
+		}
 		public int getDay() {
 			return day;
 		}

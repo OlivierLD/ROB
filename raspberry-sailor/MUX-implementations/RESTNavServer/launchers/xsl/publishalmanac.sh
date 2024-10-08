@@ -6,7 +6,7 @@ echo lang: EN\|FR
 echo withStars: true\|false
 echo xmlData: computed XML data file
 echo pdf: name of the final document
-echo example: ${0} EN true ../../data.2017.xml almanac.2017.pdf
+echo example: ${0} EN true ../../data.2017.xml almanac.2017.pdf A4
 echo ----------------------------
 #
 export SCRIPT_DIR=`dirname ${0}`
@@ -24,6 +24,7 @@ export CP=${CP}:${HOME}/libs/xdo-0301.jar
 XSL_STYLESHEET=./data2fop_2pages.xsl
 LANG=$1
 WITH_STARS=$2
+FORMAT=$5
 PRM_OPTION=
 if [[ $LANG == "FR" ]]; then
   echo On parle francais
@@ -41,14 +42,24 @@ else
   fi
 fi
 # Page Format?
-echo -en "Final document format: US Letter [1], A4 [2] > "
-read FORMAT  # Default Letter
-if [[ "${FORMAT}" == "2" ]]; then
-  echo -e "A4 selected"
-  cp page_A4.xsl page.xsl
+if [[ $FORMAT == "" ]]; then
+  echo -en "Final document format: US Letter [1], A4 [2] > "
+  read FORMAT  # Default Letter
+  if [[ "${FORMAT}" == "2" ]]; then
+    echo -e "A4 selected"
+    cp page_A4.xsl page.xsl
+  else
+    echo -e "US Letter selected"
+    cp page_USLetter.xsl page.xsl
+  fi
 else
-  echo -e "US Letter selected"
-  cp page_USLetter.xsl page.xsl
+  if [[ "${FORMAT}" == "A4" ]]; then
+    echo -e "A4 selected"
+    cp page_A4.xsl page.xsl
+  else
+    echo -e "US Letter selected"
+    cp page_USLetter.xsl page.xsl
+  fi
 fi
 echo Publishing, be patient.
 #

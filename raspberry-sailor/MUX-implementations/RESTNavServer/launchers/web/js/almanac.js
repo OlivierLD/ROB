@@ -42,7 +42,7 @@ function getPromise(url,                          // full api path
 					timeout,                      // After that, fail.
 					verb,                         // GET, PUT, DELETE, POST, etc
 					happyCode,                    // if met, resolve, otherwise fail.
-					data,                         // payload, when needed (PUT, POST...)
+					data,                         // payload, when needed (PUT, POST...) TODO: page fmt
 					show) {                       // Show the traffic [true]|false
 
 	if (show === undefined) {
@@ -99,16 +99,16 @@ let getPerpetualDoc = function(options) {
 
 let getAlmanac = function(options) {
 	let url = "/astro/publish/almanac";
-	return getPromise(url, 1000 * DEFAULT_TIMEOUT, 'POST', 200, options, false);
+	return getPromise(url, 1000 * DEFAULT_TIMEOUT, 'POST', 200, options, false); // TODO Manage page format
 };
 
 let getLunar = function(options) {
 	let url = "/astro/publish/lunar";
-	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, options, false);
+	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, options, false); // TODO Manage page format
 };
 
 let publishPerpetual = function(options, callback) {
-	let getData = getPerpetualDoc(options);
+	let getData = getPerpetualDoc(options); // TODO Manage page format
 	getData.then((value) => {
 		// console.log("Done:", value);
 		if (callback === undefined) {
@@ -161,6 +161,9 @@ let publishAlmanac = function(options, callback) {
 };
 
 let publishLunar= function(options, callback) {
+
+	console.log(`publishLunar, options: ${JSON.stringify(options)}`);
+
 	let getData = getLunar(options);
 	getData.then((value) => {
 		// console.log("Done:", value);
