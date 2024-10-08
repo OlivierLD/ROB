@@ -20,6 +20,16 @@ export CP=${CP}:${HOME}/libs/fnd2.zip
 export CP=${CP}:${HOME}/libs/xdo-0301.jar
 #
 export XSL_STYLESHEET=./lunarcal2fop.xsl
+# Page Format?
+echo -en "Final document format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_A4.xsl page.xsl
+else
+  echo -e "US Letter selected"
+  cp page_USLetter.xsl page.xsl
+fi
 echo Publishing
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor -xml ${RADICAL}.xml -xsl ${XSL_STYLESHEET} -pdf ${RADICAL}.pdf
 echo Done transforming, document is ready.

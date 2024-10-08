@@ -23,6 +23,16 @@ else
   # cat ./tide_lang_en.cfg
   # cp literals_en.xsl literals.xsl
 fi
+# Page Format?
+echo -en "Final document format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_A4.xsl page.xsl
+else
+  echo -e "US Letter selected"
+  cp page_USLetter.xsl page.xsl
+fi
 echo Publishing, please be patient.
 #
 export RADICAL=$1

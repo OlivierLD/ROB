@@ -18,6 +18,16 @@ export CP=${CP}:${HOME}/libs/xdo-0301.jar
 echo Processing PDF file
 echo Publishing perpetual almanac
 cp literals_en.xsl literals.xsl
+# Page Format?
+echo -en "Final document format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_A4.xsl page.xsl
+else
+  echo -e "US Letter selected"
+  cp page_USLetter.xsl page.xsl
+fi
 XSL_STYLESHEET=./perpetual.xsl
 PRM_OPTION="-docconf ./scalable.cfg"
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml $1 -xsl $XSL_STYLESHEET -pdf $2

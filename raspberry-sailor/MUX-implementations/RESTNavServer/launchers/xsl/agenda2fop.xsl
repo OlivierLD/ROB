@@ -81,19 +81,21 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="2.0">
+  <xsl:import href="page.xsl"/>
+
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
         <fo:simple-page-master master-name="portrait-page"
-                               page-width="8.5in"
-                               page-height="11in">
-          <!-- Portrait, Letter -->
+                               page-width="{$page-width}"
+                               page-height="{$page-height}">
+          <!-- Portrait, Letter or A4 -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
         </fo:simple-page-master>
         <fo:simple-page-master master-name="landscape-page"
-                               page-height="8.5in"
-                               page-width="11in">
+                               page-height="{$page-width}"
+                               page-width="{$page-height}">
           <!-- Portrait -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>

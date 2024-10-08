@@ -9,9 +9,11 @@
                 xmlns:xsl-util="http://www.oracle.com/XSL/Transform/java/nauticalalmanac.xsl.XSLUtil"
                 exclude-result-prefixes="xsl-util"
                 version="1.0">
+  <xsl:import href="page.xsl"/>
+
   <xsl:variable name="GEOMUTIL.HTML"   select="0"/>
   <xsl:variable name="GEOMUTIL.SHELL"  select="1"/>
-  <xsl:variable name="GEOMUTIL.SWING"  select="2"/>Tables de correction des hauteurs
+  <xsl:variable name="GEOMUTIL.SWING"  select="2"/>
   <xsl:variable name="GEOMUTIL.NO_DEG" select="3"/>
 
   <xsl:variable name="GEOMUTIL.NONE" select="0"/>
@@ -27,8 +29,8 @@
     <fo:root>
       <fo:layout-master-set>
         <fo:simple-page-master master-name="my-page"
-                               page-width="11in"
-                               page-height="8.5in">
+                               page-width="{$page-height}"
+                               page-height="{$page-width}"> <!-- Landscape, USLetter or A4 -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
         </fo:simple-page-master>

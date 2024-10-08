@@ -31,6 +31,16 @@ else
   PRM_OPTION="-docconf ./lang_en.cfg"
   cp literals_en.xsl literals.xsl
 fi
+# Page Format?
+echo -en "Final document format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_A4.xsl page.xsl
+else
+  echo -e "US Letter selected"
+  cp page_USLetter.xsl page.xsl
+fi
 echo Publishing, be patient.
 java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml $2 -xsl $XSL_STYLESHEET -pdf $3
 echo Done calculating, $3 is ready.

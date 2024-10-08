@@ -3,12 +3,13 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:fox="http://xml.apache.org/fop/extensions" 
                 version="1.0">
+  <xsl:import href="../../xsl/page.xsl"/>
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
         <fo:simple-page-master master-name="my-page"
-                               page-width="8.5in"
-                               page-height="11in">
+                               page-width="{$page-width}"
+                               page-height="{$page-height}">
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="10mm"/>
         </fo:simple-page-master>

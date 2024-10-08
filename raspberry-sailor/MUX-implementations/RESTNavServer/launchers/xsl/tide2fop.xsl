@@ -78,19 +78,22 @@
         xmlns:fo="http://www.w3.org/1999/XSL/Format"
         xmlns:fox="http://xml.apache.org/fop/extensions" version="2.0">
   <!--xsl:import href="literals.xsl"/-->
+  <xsl:import href="page.xsl"/>
   <xsl:param name="language">EN</xsl:param>
 
   <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
-        <fo:simple-page-master master-name="portrait-page" page-width="8.5in"
-                     page-height="11in">
+        <fo:simple-page-master master-name="portrait-page"
+                               page-width="{$page-width}"
+                               page-height="{$page-height}">
           <!-- Portrait, Letter -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
         </fo:simple-page-master>
-        <fo:simple-page-master master-name="landscape-page" page-height="8.5in"
-                     page-width="11in">
+        <fo:simple-page-master master-name="landscape-page"
+                               page-height="{$page-width}"
+                               page-width="{$page-height}">
           <!-- Portrait -->
           <fo:region-body margin="0in"/>
           <fo:region-after region-name="footer" extent="20mm"/>
@@ -104,7 +107,7 @@
         <fo:flow flow-name="xsl-region-body">
           <!-- First Page -->
           <!--fo:block break-after="page">
-                    </fo:block-->
+          </fo:block-->
           <fo:block margin="0.1in">
             <xsl:for-each select="//period">
               <xsl:apply-templates select="."/>

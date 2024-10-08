@@ -40,6 +40,16 @@ else
     PRM_OPTION="-docconf ./lang_en_ns.cfg"
   fi
 fi
+# Page Format?
+echo -en "Final document format: US Letter [1], A4 [2] > "
+read FORMAT  # Default Letter
+if [[ "${FORMAT}" == "2" ]]; then
+  echo -e "A4 selected"
+  cp page_A4.xsl page.xsl
+else
+  echo -e "US Letter selected"
+  cp page_USLetter.xsl page.xsl
+fi
 echo Publishing, be patient.
 #
 # Note on -Xmx:

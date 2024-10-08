@@ -52,6 +52,17 @@ while [ "$LOOP" == "true" ]; do
     "1")
 			echo Publishing, please be patient...
 			#
+      # Page Format?
+      echo -en "Final document format: US Letter [1], A4 [2] > "
+      read FORMAT  # Default Letter
+      if [[ "${FORMAT}" == "2" ]]; then
+        echo -e "A4 selected"
+        cp ../../xsl/page_A4.xsl ../../page.xsl
+      else
+        echo -e "US Letter selected"
+        cp ../../page_USLetter.xsl ../../page.xsl
+      fi
+      #
 			java -classpath ${CP} tables.Dieumegard > dieumegard.xml
 			#
 			COMMAND="java -Xms256m -Xmx1536m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml dieumegard.xml -xsl ./dieumegard-fo.xsl -pdf dieumegard.pdf"
