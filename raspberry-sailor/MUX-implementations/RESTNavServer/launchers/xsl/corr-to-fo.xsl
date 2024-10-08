@@ -52,7 +52,7 @@
               <fo:inline font-family="Symbol">p</fo:inline> est la parallaxe horizontale, obtenue dans les &#233;ph&#233;m&#233;rides.
             </fo:block>
             <fo:block text-align="left" font-family="Courier" font-size="8pt" font-style="italic" margin="1in">
-              &#169; Oliv Cool Stuff Soft  
+              &#169; Passe-Coque <!-- Oliv Cool Stuff Soft -->
             </fo:block>
           </fo:block>
           <fo:block margin="0.2in">

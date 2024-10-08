@@ -143,6 +143,7 @@ else
   fi
 fi
 echo -e "Now Publishing (bumping Memory to 2048Mb)"
+echo -e "Warning: hard-coded US-Letter format."
 java -Xms256m -Xmx2048m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ./data.xml -xsl ${XSL_STYLESHEET} -pdf data.pdf
 echo -e "Done calculating, checkout data.pdf ! (in $(pwd))"
 popd

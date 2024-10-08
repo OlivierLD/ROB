@@ -32,6 +32,7 @@ while [ "$LOOP" == "true" ]; do
 	echo -e "+-------------------------------+"
 	echo -e "| Q. Quit                       |"
 	echo -e "+-------------------------------+"
+	echo -e "Warning: hard-coded US-Letter format."
 	echo -en "You choose > "
 	read resp
 	case "$resp" in

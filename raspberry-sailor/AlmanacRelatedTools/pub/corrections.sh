@@ -18,6 +18,7 @@ export CP=${CP}:${FOP_HOME}/libs/fnd2.zip
 export CP=${CP}:${FOP_HOME}/libs/xdo-0301.jar
 #
 java -classpath ${CP} tables.CorrectionTables
+echo -e "Warning: Hard-coder US-Letter format."
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor -xml ./corrections.xml -xsl corr-to-fo.xsl -pdf corrections.pdf
 echo Done calculating, checkout corrections.pdf.
 # call corrections.pdf

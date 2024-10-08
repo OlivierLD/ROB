@@ -90,7 +90,7 @@
   
   <xsl:variable name="star-per-col" select="29"/>
 
-  <xsl:variable name="oliv-soft">par Oliv Soft</xsl:variable>
+  <xsl:variable name="oliv-soft">par Passe-Coque<!--Oliv Soft--></xsl:variable>
   <xsl:variable name="calculated-with">Calcul&eacute; avec&nbsp;</xsl:variable>
   <xsl:variable name="compare-with">&Agrave; comparer avec</xsl:variable>
   

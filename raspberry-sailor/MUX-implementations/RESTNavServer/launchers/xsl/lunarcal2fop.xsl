@@ -255,7 +255,7 @@
             </fo:table>
           </fo:block>
           <!--fo:block id="last-page"/-->
-          <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in" background-color="black" color="yellow">by OlivSoft</fo:block>
+          <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in" background-color="black" color="yellow">by Passe-Coque<!--OlivSoft--></fo:block>
         </fo:flow>
       </fo:page-sequence>
     </fo:root>

@@ -33,7 +33,7 @@
               <fo:external-graphic src="url('sextant.gif')"/>
             </fo:block-->
             <fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
-              &#169; Oliv Cool Stuff Soft  
+              &#169; Passe-Coque<!-- Oliv Cool Stuff Soft -->
             </fo:block>
             <fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
               <fo:inline font-style="normal">Note:</fo:inline> contrairement &#224; la convention habituelle pour les valeurs n&#233;gatives, 

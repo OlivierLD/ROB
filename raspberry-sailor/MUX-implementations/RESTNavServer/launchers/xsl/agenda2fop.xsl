@@ -201,7 +201,7 @@
                       That's it
                     </fo:table-footer-->
         </fo:table>
-        <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in">by OlivSoft</fo:block>
+        <fo:block text-align="left" font-family="Book Antiqua" font-size="8pt" font-weight="normal" font-style="italic" margin="0.1in">by Passe-Coque <!--OlivSoft--></fo:block>
       </fo:block>
     </fo:block>
   </xsl:template>

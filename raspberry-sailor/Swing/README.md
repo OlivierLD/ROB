@@ -1,7 +1,7 @@
 # Swing Components
 We will gather here several Swing Components and related utilities, to be run from a Desktop UI.
 
-> _**Warning**_: These are demanding components. This might be a bit tough for small boards...
+> _**Warning**_: These are demanding components. This might be a bit tough for small boards (like a Raspberry Pi Zero)...
 
 ## ChartComponents
 Do checkout the `examples` package, there is a lot in there, about several projections (Mercator, Gnomonic, Lambert, etc)  

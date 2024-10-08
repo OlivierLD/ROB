@@ -36,6 +36,7 @@ else
   echo -e "Will speak English"
   cp literals_en.xsl literals.xsl
 fi
+echo -e "Warning: Hard-coder US-Letter format."
 XSL_STYLESHEET=./perpetual.xsl
 PRM_OPTION="-docconf ./scalable.cfg"
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ./data.xml -xsl ${XSL_STYLESHEET} -pdf perpetual.pdf

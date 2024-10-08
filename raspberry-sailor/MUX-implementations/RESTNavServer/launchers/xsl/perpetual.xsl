@@ -210,7 +210,7 @@
               </fo:block>
               <fo:block margin="0.25in"/> <!-- Filler -->
               <fo:block text-align="left" font-family="Arial" font-size="8pt" font-style="italic">
-                &copy; Oliv Cool Stuff Soft (<xsl:value-of select="$language"/>), based on Henning Umland's formula.
+                &copy; Passe-Coque<!--Oliv Cool Stuff Soft--> (<xsl:value-of select="$language"/>), based on Henning Umland's formula.
               </fo:block>
             </fo:block>
           </fo:block>
