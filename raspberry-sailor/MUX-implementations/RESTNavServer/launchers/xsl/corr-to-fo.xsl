@@ -32,7 +32,7 @@
                                page-width="{$page-height}"
                                page-height="{$page-width}"> <!-- Landscape, USLetter or A4 -->
           <fo:region-body margin="0in"/>
-          <fo:region-after region-name="footer" extent="20mm"/>
+          <fo:region-after region-name="footer" extent="10mm"/>
         </fo:simple-page-master>
       </fo:layout-master-set>
       <fo:page-sequence master-reference="my-page">
@@ -268,7 +268,7 @@
               <fo:table-cell number-columns-spanned="14" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt">Premi&#232;re Correction (horizon) &#224; soustraire de la hauteur</fo:block></fo:table-cell>
             </fo:table-row>
             <fo:table-row>
-              <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt">Hauteur</fo:block></fo:table-cell>
+              <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt"> - </fo:block></fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt">0m</fo:block></fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt">2m</fo:block></fo:table-cell>
               <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt">4m</fo:block></fo:table-cell>

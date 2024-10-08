@@ -16,4 +16,7 @@ Enjoy!
 See `marker.builder.html` and `marker.maker.leaflet.html`.  
 They can run in standalone (no server required) but they need an Internet connection.
 
+## More, next
+See https://leafletjs.com/examples/layers-control/
+
 ---
