@@ -43,6 +43,8 @@ This would tell you if your installation was successful.
 This project also provides a script that will build pre-defined Docker images (different OS's, with various features).
 Look into the script, the images are defined by the files `*.Dockerfile`.
 
+See in [Raspberry-Coffee](https://github.com/OlivierLD/raspberry-coffee/tree/master/docker).
+
 Just run `image.builder.sh` (may require a `sudo`...):
 ```
  $ [sudo] ./image.builder.sh
