@@ -31,7 +31,8 @@ dump_manifest() {
   rm -rf temp
 }
 # Default
-JAR_FILE_NAME=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+# JAR_FILE_NAME=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+JAR_FILE_NAME=./build/libs/WeatherWizard-1.0-all.jar
 # User provided as CLI prm
 if [[ $# -gt 0 ]]; then
   JAR_FILE_NAME=$1
