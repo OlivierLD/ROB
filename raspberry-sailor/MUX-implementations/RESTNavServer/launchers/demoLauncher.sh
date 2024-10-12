@@ -410,7 +410,7 @@ while [[ "${GO}" == "true" ]]; do
         if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
           # 2 Choices for that one
           URL_01=${URL_OPTION_1_00}
-          echo -en "Open Console [1] (default) or Menu [2] > "
+          echo -en "Open NMEA Console [1] (default) or Nav Menu [2] > "
           read REPLY
           if [[ "${REPLY}" == "2" ]]; then
             URL_01=${URL_OPTION_1_01}
