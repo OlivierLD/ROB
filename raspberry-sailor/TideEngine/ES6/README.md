@@ -32,7 +32,7 @@ For the HTTP server, NodeJS, Python, Java can be used...
 > _Note:_ this server is used to serve static resources (html pages, js scripts, images, web-components, etc).
 > For now, no REST service is needed.  
 > This HTTP server can run locally, no external resource is required (expect when you use cartography like Leaflets, of course).  
-> That's flake computing, _not_ cloud computing.
+> That's flake computing, _not_ cloud computing (aka EZ - Entropy Zero).
 
 ### For Python
 Use

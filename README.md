@@ -84,7 +84,7 @@ The Raspberry Pi (see <https://www.raspberrypi.org/> and <https://www.raspberryp
 it comes with a GPIO header that can be used to read sensors, or feed actuators.  
 The more I use it, the more I like it.
 
-### Flake computing
+### Flake computing (aka EZ - Entropy Zero)
 One _major_ requirement here is to be able to do everything _<u>at sea</u>_ - that means with _**NO**_ Internet access, nothing in the cloud.  
 There can be a network on board, emitted by one machine (...like the Raspberry Pi), with several other machines connected on it to visualize or manage the data going back and forth,
 but definitely _**NO**_ Internet access. We could call this "flake" ❄️ computing 😉   

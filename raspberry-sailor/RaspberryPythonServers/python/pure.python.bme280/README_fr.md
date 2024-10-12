@@ -158,7 +158,7 @@ chose qui soit n&eacute;cessaire est un browser.
 Pour que le Raspberry Pi &eacute;mette son propre reseau, on doit le configurer comme un HotSpot.    
 Voir details [ici](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/HOTSPOT.md)
 
-Encore une fois, on peut avoir un r&eacute;seau, mais pas d'Internet. Il ne s’agit pas de Cloud Computing, mais plut&ocirc;t de Flake Computing…
+Encore une fois, on peut avoir un r&eacute;seau, mais pas d'Internet. Il ne s’agit pas de Cloud Computing, mais plut&ocirc;t de Flake Computing (qu'on appelle aussi EZ - Entropy Zero)…
 
 ### Des bo&icirc;tes imprim&eacute;es en 3D pour prot&eacute;ger votre travail
 - Voyez [ici](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md)
