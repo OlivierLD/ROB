@@ -53,6 +53,148 @@ html {
 	--border-color: cyan;
 	--value-font: 'Courier New';
 }
+compass-display .green {
+	--bg-color: transparent;
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: lime;
+	--cross-hair-color: red;
+	--display-line-color: lime;
+	--label-fill-color: green;
+	--with-display-shadow: false;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: green;
+	--value-outline-color: lime;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .orange {
+	--bg-color: transparent;
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: orange;
+	--cross-hair-color: red;
+	--display-line-color: orange;
+	--label-fill-color: orange;
+	--with-display-shadow: false;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .gray {
+	--bg-color: transparent;
+	--digit-color: gray;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: gray;
+	--cross-hair-color: red;
+	--display-line-color: gray;
+	--label-fill-color: blue;
+	--with-display-shadow: false;
+	--outline-color: gray;
+	--major-tick-color: gray;
+	--minor-tick-color: gray;
+	--value-color: navy;
+	--value-outline-color: gray;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+.display-data {
+	grid-area: middle;
+	text-align: center;
+	vertical-align: baseline;
+	margin: auto;
+	color: inherit;
+	font-size: 48px;
+	font-weight: bold;
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
 	</style>
 
 	<script type="text/javascript">
@@ -66,7 +208,10 @@ let originalFetch = fetch;		// TODO Fix that !! This is ugly !
 
 	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
 
-	<script type="text/javascript">
+	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="./webcomponents/CompassDisplay.js"></script>
+
+<script type="text/javascript">
 
 const VERBOSE = false;		
 
@@ -255,10 +400,12 @@ events.subscribe(GPS_TIME, val => {
 });
 events.subscribe(SOG, val => {
 	document.getElementById('gps-sog').innerHTML = `${val} kn`;
+	document.getElementById('sog').value = val.toFixed(1);
 	sog = val;
 });
 events.subscribe(COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
+	document.getElementById('cog').value = val;
 	cog = val;
 });
 events.subscribe(TRUE_HDG, val => {
@@ -816,6 +963,9 @@ let plotWorldMap = (cb) => {
 
 let setStyle = (opt) => {
 	let map = document.getElementById('chartless-map-01');
+	let cog = document.getElementById('cog');
+	let sog = document.getElementById('sog');
+
 	document.getElementById('chartless-map-01').className = opt.value;
 
 	switch (opt.value) {
@@ -825,6 +975,14 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'lime';
 			map.colorConfig.borderColor = 'cyan';
 			document.body.className = 'html-03';
+			// Compass ...
+			cog.classList.remove('gray'); 
+			cog.classList.add('green'); 
+			cog.classList.remove('orange'); 
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray'); 
+			sog.classList.add('analogdisplay-monochrome-green'); 
+			sog.classList.remove('analogdisplay-monochrome-orange'); 
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -832,6 +990,14 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'lime';
 			map.colorConfig.borderColor = 'cyan';
 			document.body.className = 'html-02';
+			// Compass ...
+			cog.classList.remove('gray'); 
+			cog.classList.remove('green'); 
+			cog.classList.add('orange'); 
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray'); 
+			sog.classList.remove('analogdisplay-monochrome-green'); 
+			sog.classList.add('analogdisplay-monochrome-orange'); 
 			break;
 		case 'chartless-map-01':
 		default:
@@ -840,6 +1006,14 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'green';
 			map.colorConfig.borderColor = 'blue';
 			document.body.className = 'html-01';
+			// Compass ...
+			cog.classList.add('gray'); 
+			cog.classList.remove('green'); 
+			cog.classList.remove('orange'); 
+			// Speedo
+			sog.classList.add('analogdisplay-flat-gray'); 
+			sog.classList.remove('analogdisplay-monochrome-green'); 
+			sog.classList.remove('analogdisplay-monochrome-orange'); 
 			break;
 	}
 };
@@ -882,6 +1056,37 @@ window.onload = () => {
 					</tr>
 					<tr>
 						<td colspan="2"><hr/></td>
+					</tr>
+					<tr>
+						<td>
+							<compass-display id="cog"
+											 class="gray display-data"
+											 title="Course Over Ground"
+											 value="0"
+											 width="200"
+											 height="200"
+											 major-ticks="45"
+											 minor-ticks="5"
+											 label="COG"></compass-display>
+				
+						</td>
+						<td>
+							<analog-display class="analogdisplay-flat-gray display-data"
+											title="Speed Over Ground&#13;in knots"
+											id="sog"
+											min-value="0"
+											max-value="15"
+											major-ticks="1"
+											minor-ticks="0.1"
+											with-border="true"
+											with-min-max="true"
+											overlap="40"
+											label="SOG"
+											unit="kn"
+											rotate-digits="false"
+											width="200"
+											height="200"></analog-display>
+						</td>
 					</tr>
 					<tr>
 						<td>GPS Date:</td>
