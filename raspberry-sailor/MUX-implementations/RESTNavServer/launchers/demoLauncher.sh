@@ -380,21 +380,21 @@ while [[ "${GO}" == "true" ]]; do
       NOHUP=""
       if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
         if [[ "${WITH_NOHUP}" == "Y" ]]; then
-        NOHUP="nohup "
-        echo -e ">> Will use nohup"
-        rm nohup.out
+          NOHUP="nohup "
+          echo -e ">> Will use nohup"
+          rm nohup.out
         else
-        NOHUP=""
-        echo -e ">> Will not use nohup"
+          NOHUP=""
+          echo -e ">> Will not use nohup"
         fi
       else
         # Ask if nohup, just in this case
         echo -en " ==> Use nohup (y|n) ? > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        NOHUP="nohup "
-        echo -e ">> Will use nohup"
-        rm nohup.out
+          NOHUP="nohup "
+          echo -e ">> Will use nohup"
+          rm nohup.out
         fi
       fi
       # Ask to launch a browser in interactive mode (and not provided already)
@@ -402,8 +402,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser, for option [${option}]"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser, for option [${option}]"
         fi
       fi
       if [[ "${option}" == "1" ]]; then
@@ -445,8 +445,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    # QUESTION: a 'screen' option ?
@@ -478,8 +478,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -509,8 +509,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -531,8 +531,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date --sun-flower ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -554,8 +554,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -576,8 +576,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-rmc-time --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -621,8 +621,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    export INFRA_VERBOSE=false
@@ -646,8 +646,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    export INFRA_VERBOSE=false
@@ -670,8 +670,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    export INFRA_VERBOSE=false
@@ -693,8 +693,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
@@ -718,8 +718,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    export INFRA_VERBOSE=false
@@ -742,8 +742,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    export INFRA_VERBOSE=false
@@ -766,8 +766,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    # NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --delta-t:AUTO:2010-11"
@@ -790,8 +790,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --proxy --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -812,8 +812,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -837,8 +837,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -859,8 +859,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -882,8 +882,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -905,8 +905,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -928,8 +928,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -951,8 +951,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -974,8 +974,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -997,8 +997,8 @@ while [[ "${GO}" == "true" ]]; do
         echo -en "Launch a browser ? y|[n] > "
         read REPLY
         if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
         fi
       fi
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
@@ -1058,7 +1058,7 @@ while [[ "${GO}" == "true" ]]; do
       pushd other-clients/python
         COMMAND="python3 tcp_mux_client.py --machine-name:${MACHINE_NAME} --port:${TCP_PORT} --verbose:${VERBOSE}"
         ${COMMAND}
-        popd
+      popd
       echo -e "\nHit [Return]"
       read resp
 	    ;;
