@@ -21,6 +21,8 @@ This builds an image named `mux-sample-vnc:latest`.
 
 ## Run a container from the image
 From this image, you can run a container.  
+> On Mac, to start the docker daemon : `open -a Docker`  
+
 On the machine you built the image on:  
 ```
 $ docker run -it --name mux-desktop --rm -p 5901:5901 -p 9999:9999 -e USER=root mux-sample-vnc:latest /bin/bash
@@ -155,7 +157,6 @@ Overview
 ![Browser](./pix/ww.01.png)  
 Weather Wizard
 
-
 Cell-Phone UI samples:  
 
 |            01            |            02            |            03            |            04            |            05            |  
@@ -164,6 +165,15 @@ Cell-Phone UI samples:
 
 etc!  
 All those are just examples of what can be done, it's easy to build your own UI, your imagination is the limit.
+
+### Graphical Desktop UI
+From the Mate desktop, you can also try  
+```
+$ cd ../../../Swing/WeatherWizard/
+$ ./run-ww.sh 
+```
+And see for yourself!  
+This would be a Java/Swing UI
 
 ---
 

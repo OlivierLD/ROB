@@ -994,7 +994,7 @@ function astroCallback(data) {
 		// console.log("Transit:", tPass);
 		let now = new Date();
 		document.getElementById('sun-path-01').now = { time: now.getTime() };
-		if (moonPos !== {}) {
+		if (moonPos != {}) {
 			document.getElementById('sun-path-01').moonPos = moonPos;
 		}
 	}
@@ -1018,22 +1018,22 @@ function astroCallback(data) {
 
 		document.getElementById('sun-path-01').moonToSunSkyRoute = withMoonToSunRoute ? data.moonToSunSkyRoute : undefined;
 
-		if (venusPos !== {} && withWanderingBodies) {
+		if (venusPos != {} && withWanderingBodies) {
 			document.getElementById('sun-path-01').venusPos = venusPos;
 		} else {
 			document.getElementById('sun-path-01').venusPos = undefined;
 		}
-		if (marsPos !== {} && withWanderingBodies) {
+		if (marsPos != {} && withWanderingBodies) {
 			document.getElementById('sun-path-01').marsPos = marsPos;
 		} else {
 			document.getElementById('sun-path-01').marsPos = undefined;
 		}
-		if (jupiterPos !== {} && withWanderingBodies) {
+		if (jupiterPos != {} && withWanderingBodies) {
 			document.getElementById('sun-path-01').jupiterPos = jupiterPos;
 		} else {
 			document.getElementById('sun-path-01').jupiterPos = undefined;
 		}
-		if (saturnPos !== {} && withWanderingBodies) {
+		if (saturnPos != {} && withWanderingBodies) {
 			document.getElementById('sun-path-01').saturnPos = saturnPos;
 		} else {
 			document.getElementById('sun-path-01').saturnPos = undefined;

@@ -66,7 +66,8 @@ RUN echo "java -version" >> $HOME/.bashrc
 RUN echo "echo -e \"Architecture: $(getconf LONG_BIT) bits\"" >> $HOME/.bashrc
 RUN echo "lsb_release -a" >> $HOME/.bashrc
 RUN echo "echo -e \"Type 'lscpu' for more\"" >> $HOME/.bashrc
-
+RUN echo "echo -e \"To start VNCServer: type 'vncserver :1 -geometry 1680x1050 -depth 24' \"" >> $HOME/.bashrc
+#
 RUN mkdir /workdir
 WORKDIR /workdir
 RUN git clone https://github.com/OlivierLD/ROB.git
@@ -76,6 +77,11 @@ RUN ./gradlew tasks
 # RUN ./gradlew tasks -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80
 WORKDIR /workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer
 RUN ../../../gradlew shadowJar
+#
+# Build the Swing stuff, usable from the Mate Desktop
+WORKDIR /workdir/ROB/raspberry-sailor/Swing/WeatherWizard
+RUN ../../../gradlew shadowJar
+# Will be ready to use with ./run-ww.sh
 # RUN ../gradlew shadowJar -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80
 WORKDIR /workdir/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers
 
