@@ -31,7 +31,7 @@ if [[ "$FORMAT" == "" ]]; then
   echo -en "Final document format: US Letter [1], A4 [2] > "
   read FORMAT  # Default Letter
 fi
-if [[ "${FORMAT}" == "2" ]]; then
+if [[ "${FORMAT}" == "2" || "${FORMAT}" == "A4" ]]; then
   echo -e "A4 selected"
   cp page_A4.xsl page.xsl
 else
