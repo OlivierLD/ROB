@@ -52,6 +52,8 @@ public class StationSelector {
     private final static String STATION_NAME = "--station-name:";
     private final static String LANG = "--lang:";
 
+    private final static String FMT = "--fmt:";
+
     public static void main(String[] args) {
 
         // Default values
@@ -68,6 +70,7 @@ public class StationSelector {
         int tideYear = 2024;
 
         String lang = null;
+        String fmt = null;
 
         // Script prms management
         for (String arg : args) {
@@ -121,6 +124,13 @@ public class StationSelector {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            } else if (arg.startsWith(FMT)) {
+                String value = arg.substring(FMT.length());
+                try {
+                    fmt = value;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else if (arg.equals(SELECT)) {
                 select = true;
             } else if (arg.equals(PUBLISH)) {
@@ -155,7 +165,8 @@ public class StationSelector {
                         Calendar.YEAR,
                         TIDE_TABLE, // Change at will AGENDA_TABLE, MOON_CALENDAR
                         String.format("%s.%d", URLDecoder.decode(stationName, StandardCharsets.ISO_8859_1.toString()).replace(" ", "_"), tideYear), // final file name
-                        lang);
+                        lang,
+                        fmt);
                 System.out.printf("Generated %s\n", f);
             } catch (Exception ex) {
                 ex.printStackTrace();

@@ -797,7 +797,8 @@ public class RESTImplementation {
 							(options.quantity.equals(Quantity.MONTH) ? Calendar.MONTH : Calendar.YEAR),
 							script,
 							null,
-							options.getLang());
+							options.getLang(),
+							options.getFmt());
 					response.setPayload(generatedFileName.getBytes());
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,
@@ -1039,6 +1040,7 @@ public class RESTImplementation {
 		String timeZone;
 		String stationName;
 		String lang;
+		String fmt;
 
 		public void setStartMonth(int startMonth) {
 			this.startMonth = startMonth;
@@ -1102,6 +1104,14 @@ public class RESTImplementation {
 
 		public void setLang(String lang) {
 			this.lang = lang;
+		}
+
+		public String getFmt() {
+			return fmt;
+		}
+
+		public void setFmt(String fmt) {
+			this.fmt = fmt;
 		}
 	}
 

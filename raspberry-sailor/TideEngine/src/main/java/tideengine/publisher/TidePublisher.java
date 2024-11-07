@@ -34,7 +34,7 @@ public class TidePublisher {
 			String utu,
 			TideUtilities.SpecialPrm sPrm,
 			String scriptToRun) throws Exception {
-		return publish(ts, timeZoneId, sm, sy, nb, q, utu, sPrm, scriptToRun, null, null);
+		return publish(ts, timeZoneId, sm, sy, nb, q, utu, sPrm, scriptToRun, null, null, null);
 	}
 
 	/**
@@ -59,7 +59,8 @@ public class TidePublisher {
 			TideUtilities.SpecialPrm sPrm,
 			String scriptToRun,
 			String finalFileName,
-			String lang)
+			String lang,
+			String fmt)
 			throws Exception {
 
 		final TideUtilities.SpecialPrm specialBGPrm = sPrm;
@@ -135,6 +136,11 @@ public class TidePublisher {
 			} else {
 				System.out.println("Will use default language (EN)");
 			}
+			if (fmt != null) {
+				cmd += String.format(" %s", fmt);
+			} else {
+				System.out.println("No format provided, might be asked...");
+			}
 			System.out.println("Executing System Command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 			int exitStatus = p.waitFor();
@@ -160,7 +166,7 @@ public class TidePublisher {
 
 	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script)
 			throws Exception {
-		return publish(stationName, startMonth, startYear, nb, quantity, script, null, null);
+		return publish(stationName, startMonth, startYear, nb, quantity, script, null, null, null);
 	}
 
 	/**
@@ -173,11 +179,12 @@ public class TidePublisher {
 	 * @param script Name of the script to execute to publish. Can come from a System Variable (See TIDE_TABLE & Co). Warning: See the script.path System variable !!
 	 * @param finalFileName Will be used if not null. Also see the pdf.path System Variable.
 	 * @param lang Optional language, EN or FR (EN is the default)
+	 * @param fmt Optional format, default US Letter.
 	 *
 	 * @return The name of the result-file of the fop publication.
 	 * @throws Exception
 	 */
-	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName, String lang)
+	public static String publish(String stationName, int startMonth, int startYear, int nb, int quantity, String script, String finalFileName, String lang, String fmt)
 			throws Exception {
 		TideStation ts;
 		try {
@@ -189,7 +196,7 @@ public class TidePublisher {
 				throw new Exception(String.format("Station [%s] not found.", stationName));
 			} else {
 				ts = optTs.get();
-				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script, finalFileName, lang);
+				return publish(ts, ts.getTimeZone(), startMonth, startYear, nb, quantity, null, null, script, finalFileName, lang, fmt);
 			}
 		} catch (Exception ex) {
 			throw ex;

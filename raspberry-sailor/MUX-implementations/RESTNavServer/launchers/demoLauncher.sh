@@ -151,7 +151,7 @@ while [[ "${GO}" == "true" ]]; do
 	echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context. External (and demanding on the browser). Requires Internet Connection.                                                                            |"
 	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
 	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
-	echo -e "|                                                                                         |             Does not require a GPS                                                      |"
+	echo -e "|     (Including almanacs publication)                                                    |             Does not require a GPS                                                      |"
 	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
 	echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
 	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
