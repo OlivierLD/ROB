@@ -779,6 +779,9 @@ public class RESTImplementation {
 					if (! "FR".equals(options.getLang())) {
 						System.out.printf("Received lang [%s], assuming [EN]\n", options.getLang());
 					}
+					if (! "A4".equals(options.getFmt())) {
+						System.out.printf("Received fmt [%s], assuming [US]\n", options.getLang());
+					}
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,

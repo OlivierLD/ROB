@@ -67,6 +67,7 @@ public class TidePublisher {
 
 		System.out.println("Starting month:" + sm + ", year:" + sy);
 		System.out.println("For " + nb + " " + (q == Calendar.MONTH ? "month(s)" : "year(s)"));
+		System.out.printf("In %s, format %s\n", "FR".equals(lang) ? "French" : "English", "A4".equals(fmt) ? "A4" : "US");
 
 		GregorianCalendar start = new GregorianCalendar(sy, sm, 1);
 		GregorianCalendar end = (GregorianCalendar) start.clone();

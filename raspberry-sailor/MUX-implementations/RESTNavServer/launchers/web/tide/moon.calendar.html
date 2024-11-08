@@ -107,8 +107,29 @@
 
 	<hr/>
 
+    <label for="lang-to-use">Publish in </label>
+    <select id="lang-to-use">
+	    <option value="EN">English</option>
+	    <option value="FR">French</option>
+    </select>
+    Page format:
+    <select id="page-fmt-p">
+	    <option value="US">Letter US</option>
+	    <option value="A4">A4</option>
+    </select>
+
+    <hr/>
+
 	<button id="publish" disabled
-	        onclick="getStarted(); publishMoonCal(document.getElementById('station-list').value, { startYear: parseInt(document.getElementById('year').value), startMonth: 0, nb: 1, quantity: 'YEAR' }, dataManager);">Publish</button>
+	        onclick="getStarted();
+	                 publishMoonCal(document.getElementById('station-list').value,
+	                                { startYear: parseInt(document.getElementById('year').value),
+	                                  startMonth: 0,
+	                                  nb: 1,
+	                                  quantity: 'YEAR',
+						   			  lang: document.getElementById('lang-to-use').value,
+						   			  fmt: document.getElementById('page-fmt-p').value },
+	                                dataManager);">Publish</button>
 	<hr/>
     Your document is <span id="doc-url">...</span>
   <hr/>
