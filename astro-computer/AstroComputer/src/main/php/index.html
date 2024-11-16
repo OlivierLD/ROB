@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Celestial Computer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style type="text/css">
+		* {
+			font-family: 'Courier New', Courier, monospace;
+		}
+    </style>
+</head>
+
+<body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+<h2>This is just a placeholder...</h2>
+
+<div id="place-holder">
+ . . .
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+window.onload = () => {
+	console.log("Loaded!");
+	console.log(`${window.location.href} loaded !`);
+
+	// Do what's to be done...
+	function requestData() {
+		fetch("./celestial.computer.php", {
+			method: "GET",
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		}).then(response => {
+			console.log(`Received from PHP: \nResponse Status:${response.status}`);
+			// Assumimg this is text (not json, or what not)
+			response.json().then(data => {
+				// console.log(`Content: ${JSON.stringify(data)}`);
+				document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
+			});
+		},
+		(error, errmess) => {
+			console.log("requestData: Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get to the celestial.computer.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	};
+
+	requestData(); // Will do what's expected
+
+};
+
+</script>
+
+</html>
