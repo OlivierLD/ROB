@@ -23,7 +23,7 @@ class Utils {
 	}
 
 	public static function cost(float $x) : float {
-		return cos(Utils->trunc2($x));
+		return cos(Utils::trunc2($x));
 	}
 
 }

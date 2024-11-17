@@ -40,8 +40,13 @@ window.onload = () => {
 				// Assumimg this is text (not json, or what not)
 				response.text().then(data => {
 					console.log("Received [" + data + "]");
-					let parsedData = JSON.parse(data);
-					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+					try {
+						let parsedData = JSON.parse(data);
+						document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+					} catch (err) {
+						console.log(err);
+						document.getElementById('place-holder').innerHTML = data;
+					}
 				});
 			} else {
 				// Assuming valid json

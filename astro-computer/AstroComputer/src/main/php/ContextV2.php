@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Class ContextV2
  */
 class ContextV2 {
-    public float $EPS0_2000 = 23.439291111;
+    public static float $EPS0_2000 = 23.439291111;
 
     public float $T, $T2, $T3, $T4, $T5, $TE, $TE2, $TE3, $TE4, $TE5, $Tau, $Tau2, $Tau3, $Tau4, $Tau5, $deltaT;
     public float $eps0, $eps, $delta_psi, $delta_eps;

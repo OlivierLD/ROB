@@ -66,10 +66,11 @@ public class Core {
 		//GAST
 //  SidTa = OutSidTime(GHAAtrue);
 
-		//Equation of the equinoxes
+		// Equation of the equinoxes
 		double EoE = 240 * context.delta_psi * Utils.cosd(context.eps);
 		String EoEout = Double.toString(Math.round(1000 * EoE) / 1000D);
 		EoEout = " " + EoEout + "s";
+		// TODO Store this somewhere ?
 	}
 
 
