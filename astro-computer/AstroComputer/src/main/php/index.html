@@ -36,11 +36,20 @@ window.onload = () => {
 			}
 		}).then(response => {
 			console.log(`Received from PHP: \nResponse Status:${response.status}`);
-			// Assumimg this is text (not json, or what not)
-			response.json().then(data => {
-				// console.log(`Content: ${JSON.stringify(data)}`);
-				document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
-			});
+			if (true) {
+				// Assumimg this is text (not json, or what not)
+				response.text().then(data => {
+					console.log("Received [" + data + "]");
+					let parsedData = JSON.parse(data);
+					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+				});
+			} else {
+				// Assuming valid json
+				response.json().then(data => {
+					// console.log(`Content: ${JSON.stringify(data)}`);
+					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
+				});
+			}
 		},
 		(error, errmess) => {
 			console.log("requestData: Ooch");

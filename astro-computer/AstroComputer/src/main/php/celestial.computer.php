@@ -1,6 +1,7 @@
 <?php
 
-// require __DIR__ . "/db.cred.php";
+include __DIR__ . '/autoload.php';
+
 
 $VERBOSE = false;
 
@@ -11,9 +12,26 @@ $VERBOSE = false;
  */
 
 function doYourJob(bool $verbose): string {
+
+
     try {
         $json_result = "[";
 
+
+        $json_result .= "{ \"text\": \"Function doYourJob\"}, ";
+
+        // Quick test
+        try {
+            // $util = new Utils();
+            $data = 60.0;
+            // echo ("COSD $data degrees = " . Utils::cosd($data));
+            $json_result .= ("{ \"cosd\" : " . Utils::cosd($data) . "}, ");
+    
+        } catch (Throwable $e) {
+            echo "[ Captured Throwable for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
+            throw $e;
+        }
+    
         // . . .
         $json_result .= "{ \"akeu\": \"coucou\" }";
 
