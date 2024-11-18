@@ -181,8 +181,8 @@ class Core {
 		// $eps0_2000 = 23.439291111;
 
 		// Transformation to ecliptic coordinates in radians (mean equinox and equator 2000.0)
-		$lambdapol1 = atan2((Utils::sind($RApol1) * Utils::cosd($context::EPS0_2000) + Utils::tand($DECpol1) * Utils::sind($context::EPS0_2000)), Utils::cosd($RApol1));
-		$betapol1 = asin(Utils::sind($DECpol1) * Utils::cosd($context::EPS0_2000) - Utils::cosd($DECpol1) * Utils::sind($context::EPS0_2000) * Utils::sind($RApol1));
+		$lambdapol1 = atan2((Utils::sind($RApol1) * Utils::cosd(ContextV2::$EPS0_2000) + Utils::tand($DECpol1) * Utils::sind(ContextV2::$EPS0_2000)), Utils::cosd($RApol1));
+		$betapol1 = asin(Utils::sind($DECpol1) * Utils::cosd(ContextV2::$EPS0_2000) - Utils::cosd($DECpol1) * Utils::sind(ContextV2::$EPS0_2000) * Utils::sind($RApol1));
 
 		// Precession
 		$eta = deg2rad(47.0029 * $context->TE - 0.03302 * $context->TE2 + 0.00006 * $context->TE3) / 3600;
@@ -303,7 +303,7 @@ class Core {
 			$quarter = " LQ";
 		if ($x > 270 && $x < 360)
 			$quarter = " -cre";
-		return quarter;
+		return $quarter;
 	}
 
 	public static function weekDay(ContextV2 $context) : int {

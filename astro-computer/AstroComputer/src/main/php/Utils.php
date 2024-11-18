@@ -26,4 +26,49 @@ class Utils {
 		return cos(Utils::trunc2($x));
 	}
 
+	public static int $NONE = 0;
+	public static int $NS = 1;
+	public static int $EW = 2;
+
+	public static int $LEADING_SIGN = 0;
+	public static int $TRAILING_SIGN = 1;
+
+	public static function decToSex(float $v, int $displayType, int $signPosition, bool $truncMinute) : string {
+		$s = "";
+		$absVal = abs($v);
+		$intValue = floor($absVal);
+		$dec = $absVal - $intValue;
+		$i = (int) $intValue;
+		$dec *= 60; // "%02d:%02d:%02.02f"
+		$df = ($truncMinute ? "%02f" : "%02.02f");
+		$s = sprintf("%d", $i) . "&deg;" . sprintf(df, $dec) . "'";
+		if ($v < 0.0) {
+			switch ($displayType) {
+				case $NONE:
+					$s = "-" . $s;
+					break;
+				case $NS:
+					$s = ($signPosition == $TRAILING_SIGN ? $s . "S" : "S " . str_pad($s, 13, " ", STR_PAD_LEFT));
+					break;
+				case $EW:
+					$s = ($signPosition == $TRAILING_SIGN ? $s . "W" : "W " . str_pad($s, 14, " ", STR_PAD_LEFT));
+					break;
+			}
+		} else {
+			switch ($displayType) {
+				case $NONE:
+					$s = " " . $s;
+					break;
+				case $NS:
+					$s = ($signPosition == $TRAILING_SIGN ? s . "N" : "N " . str_pad($s, 13, " ", STR_PAD_LEFT));
+					break;
+				case $EW:
+					$s = ($signPosition == $TRAILING_SIGN ? s . "E" : "E " + str_pad($s, 14, " ", STR_PAD_LEFT));
+					break;
+			}
+		}
+		return $s;
+	}
+
+
 }

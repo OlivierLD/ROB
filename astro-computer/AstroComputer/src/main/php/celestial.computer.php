@@ -13,7 +13,7 @@ $VERBOSE = false;
  */
 
 
-function doYourJob(bool $verbose): string {
+function doYourJob(bool $verbose) : string {
 
     $ac = new AstroComputer(); // See below
 
@@ -25,7 +25,6 @@ function doYourJob(bool $verbose): string {
 
         // Quick test
         try {
-
             // ContextV2::$EPS0_2000
             $json_result .= ("{ \"EPS_2000\" : " . ContextV2::$EPS0_2000 . "}, ");
 
@@ -33,7 +32,6 @@ function doYourJob(bool $verbose): string {
             $json_result .= ("{ \"cosd\" : " . Utils::cosd($data) . "}, ");
 
             // Core test
-            $context = new ContextV2();
 
             $year = (int)date("Y");
             $month = (int)date("m");
@@ -53,8 +51,12 @@ function doYourJob(bool $verbose): string {
             $context2 = $ac->getContext();
             // echo ("From calculate: EoT:" . $context2->EoT . " ");
             $json_result .= ("{ \"from-calc-eot\" : " . $context2->EoT . " }, ");
+
+            $json_result .= ("{ \"moon-phase\" : " . $context2->moonPhase . " }, ");
         
             if (false) {
+                $context = new ContextV2();
+
                 Core::julianDate($context, $year, $month, $day, $hours, $minutes, $seconds, $deltaT);
 
                 $json_result .= ("{ \"TE\": " . $context->TE . " }, ");
@@ -86,7 +88,7 @@ function doYourJob(bool $verbose): string {
                 $json_result .= ("{ \"Sun EoT\": " . $context->EoT . " }, ");
             }
         } catch (Throwable $e) {
-            if ($VERBOSE) {
+            if ($verbose) {
                 echo "[ Captured Throwable for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
             }
             throw $e;
