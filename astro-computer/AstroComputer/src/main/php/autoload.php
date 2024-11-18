@@ -9,3 +9,5 @@ require __DIR__ . "/Core.php";
 require __DIR__ . "/AstroComputer.php";
 require __DIR__ . "/Earth.php";
 require __DIR__ . "/Moon.php";
+require __DIR__ . "/Venus.php";
+require __DIR__ . "/Star.php";
