@@ -65,7 +65,7 @@ class AstroComputer {
         Venus::compute($this->context);
         Mars::compute($this->context);
         Jupiter::compute($this->context);
-        // Saturn::compute($this->context);
+        Saturn::compute($this->context);
 
         Core::polaris($this->context);
         $this->moonPhase = Core::moonPhase($this->context);

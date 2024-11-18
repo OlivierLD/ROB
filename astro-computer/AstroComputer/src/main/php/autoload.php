@@ -12,4 +12,5 @@ require __DIR__ . "/Moon.php";
 require __DIR__ . "/Venus.php";
 require __DIR__ . "/Mars.php";
 require __DIR__ . "/Jupiter.php";
+require __DIR__ . "/Saturn.php";
 require __DIR__ . "/Star.php";
