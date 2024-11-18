@@ -3,21 +3,12 @@
 class AstroComputer {
 
     private $context;
-    private $calculateHasBeenInvoked = false;
-    // private $year;
-    // private $month;
-    // private $day;
-    // private $hour;
-    // private $minute;
-    // private $second;
-    // private $deltaT;
+    private bool $calculateHasBeenInvoked = false;
 
     private int $year = -1, $month = -1, $day = -1, $hour = -1, $minute = -1, $second = -1;
     private float $deltaT = 66.4749; // 2011. Overridden by deltaT system variable, or calculated on the fly.
 
-    private static array $WEEK_DAYS = [
-            "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"
-    ];
+    private static array $WEEK_DAYS = [ "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" ];
     private string $dow = "";
     private string $moonPhase = "";
 
@@ -40,6 +31,7 @@ class AstroComputer {
     public function setDeltaT(float $deltaT) : void {
         $this->deltaT = $deltaT;
     }
+    
     public function getDeltaT() : float {
         return $this->deltaT;
     }
@@ -68,6 +60,7 @@ class AstroComputer {
         Saturn::compute($this->context);
 
         Core::polaris($this->context);
+
         $this->moonPhase = Core::moonPhase($this->context);
         $this->dow = AstroComputer::$WEEK_DAYS[Core::weekDay($this->context)];
 
@@ -78,5 +71,4 @@ class AstroComputer {
     public function getContext() : ContextV2 {
         return $this->context;
     }
-
 }
