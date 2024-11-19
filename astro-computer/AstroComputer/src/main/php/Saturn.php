@@ -1,7 +1,12 @@
 <?php 
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
 
 class Saturn {
-	//Heliocentric longitude of Saturn
+	// Heliocentric longitude of Saturn
 
 	private static function lSaturn(float $x) : float {
 		$L0 = 0;

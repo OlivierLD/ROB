@@ -16,17 +16,19 @@ $VERBOSE = false;
     public $deltaT;
     public $calcDate;
     public $ctx;
+    public $oneStar;
+    public $starGHA;
+    public $starCatalog;
  }
 
 function doYourJob(bool $verbose) : string {
-
-    $ac = new AstroComputer(); // See below
 
     try {
         // Quick test
         try {
             // Core test
 
+            // Current dateTime
             $year = (int)date("Y");
             $month = (int)date("m");
             $day = (int)date("d");
@@ -36,17 +38,40 @@ function doYourJob(bool $verbose) : string {
 
             $container = new Container();
 
+            // Astro Computer basic test
+            $ac = new AstroComputer(); 
             // $ac->setDateTime($year, $month, $day, $hours, $minutes, $seconds);
             $ac->calculate($year, $month, $day, $hours, $minutes, $seconds, true);
             $context2 = $ac->getContext();
             // echo ("From calculate: EoT:" . $context2->EoT . " ");
-        
-            $container->ctx = $context2;
+
+            $ALDEBARAN = "Aldebaran";
+			$star = Star::getStar($ALDEBARAN);
+			// assertTrue(String.format("%s not found in Star Catalog", ALDEBARAN), star != null);
+
+			$ac->starPos($ALDEBARAN);
+			$starGHA = $ac->getStarGHA($ALDEBARAN);
+
+
+            $container->ctx = $context2; // The full Context
             $container->deltaT = $ac->getDeltaT();
             $container->calcDate = "$year:$month:$day $hours:$minutes:$seconds UTC";
+            $container->oneStar = Star::getStar("Zubenelgenubi");
+            $container->starCatalog = Star::getCatalog();
+            $container->starGHA = $starGHA;
 
-            $jsonData = json_encode($container);
+            $jsonData = json_encode($container); // , JSON_FORCE_OBJECT);
+            // End of Basic Test
 
+            echo("Invoking SightReductionUtil...<br/>");
+            $sru = new SightReductionUtil(
+                $ac->getSunGHA(),
+                $ac->getSunDecl(),
+                43.0,
+                -3); // 0, 0, 0, 0);
+            $sru->calculate();
+            echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f&deg;", $sru->getZ()) . "<br/>");
+            echo("Done invoking SightReductionUtil.<br/>");
         } catch (Throwable $e) {
             if ($verbose) {
                 echo "[ Captured Throwable (2) for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
@@ -64,13 +89,23 @@ function doYourJob(bool $verbose) : string {
     return null;
 }
 
-try {
-    $data = doYourJob($VERBOSE);
-    header('Content-Type: application/json; charset=utf-8');
-    // echo json_encode($data); // This is for text (not json)
-    echo $data;
-    http_response_code(200);
-} catch (Throwable $e) {
-    echo "[Captured Throwable (3) for celestial.computer.php : " . $e . "] " . PHP_EOL;
+$option = "basic";
+// Whatever you want it to be 
+if (isset($_GET['option'])) {
+    $option = $_GET['option'];
+}
+
+if ($option == "basic") {
+    try {
+        $data = doYourJob($VERBOSE);
+        header('Content-Type: application/json; charset=utf-8');
+        // echo json_encode($data); // This is for text (not json)
+        echo $data;
+        // http_response_code(200);
+    } catch (Throwable $e) {
+        echo "[Captured Throwable (3) for celestial.computer.php : " . $e . "] " . PHP_EOL;
+    }
+} else {
+    echo "Option is [$option], not supported.";
 }
 ?>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
 
 function sign(float $n) : int {
     if ($n == 0) {

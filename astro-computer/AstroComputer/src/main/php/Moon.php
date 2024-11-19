@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
 
 class Moon {
 	public static function compute(ContextV2 $context) : void {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
 
 class DMS {
     private $hours; // int
@@ -60,7 +65,7 @@ class TimeUtil {
 
 	private static function getY(int $year, int $month) : float {
 		if ($year < -1999 || $year > 3000) {
-			throw new RuntimeException("Year must be in [-1999, 3000]");
+			throw new Exception("Year must be in [-1999, 3000]");
 		} else {
 			return ($year + (($month - 0.5) / 12));
 		}
@@ -82,10 +87,10 @@ class TimeUtil {
 	 */
 	public static function getDeltaT(int $year, int $month) : float {
 		if ($year < -1999 || $year > 3000) {
-			throw new RuntimeException("Year must be in [-1999, 3000]");
+			throw new Exception("Year must be in [-1999, 3000]");
 		}
 		if ($month < 1 || $month > 12) {
-			throw new RuntimeException("Month must be in [1, 12]");
+			throw new Exception("Month must be in [1, 12]");
 		}
 
 		$deltaT;

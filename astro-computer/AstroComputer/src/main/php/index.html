@@ -15,7 +15,13 @@
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
 <h2>This is just a placeholder for now...</h2>
 
+<div>
+	<button onclick="requestData();">Basic</button>
+	<button onclick="requestData(1);">More Specific</button>
+</div>
+
 <div id="place-holder">
+	<!-- for the result -->
  . . .
 </div>
 
@@ -23,51 +29,64 @@
 
 <script type="text/javascript">
 
+// Do what's to be done...
+function requestData(option) {
+
+	let url = "./celestial.computer.php"; 
+	if (option) {
+		switch (option) {
+			case 1:
+				url = "./celestial.computer.php?option=1";
+				break;
+			default: 
+				break;
+		}
+	}
+
+
+	fetch(url, {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then(response => {
+		console.log(`Received from PHP: \nResponse Status:${response.status}`);
+		if (true) {
+			// Assumimg this is text (not json, or what not)
+			response.text().then(data => {
+				console.log("Received [" + data + "]");
+				try {
+					let parsedData = JSON.parse(data);
+					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+				} catch (err) {
+					console.log(err);
+					document.getElementById('place-holder').innerHTML = data;
+				}
+			});
+		} else {
+			// Assuming valid json
+			response.json().then(data => {
+				// console.log(`Content: ${JSON.stringify(data)}`);
+				document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
+			});
+		}
+	},
+	(error, errmess) => {
+		console.log("requestData: Ooch");
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
+			}
+		}
+		console.debug("Failed to get to the celestial.computer.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+	});
+};
+
 window.onload = () => {
 	console.log("Loaded!");
 	console.log(`${window.location.href} loaded !`);
-
-	// Do what's to be done...
-	function requestData() {
-		fetch("./celestial.computer.php", {
-			method: "GET",
-			headers: {
-				"Content-type": "application/json; charset=UTF-8"
-			}
-		}).then(response => {
-			console.log(`Received from PHP: \nResponse Status:${response.status}`);
-			if (true) {
-				// Assumimg this is text (not json, or what not)
-				response.text().then(data => {
-					console.log("Received [" + data + "]");
-					try {
-						let parsedData = JSON.parse(data);
-						document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
-					} catch (err) {
-						console.log(err);
-						document.getElementById('place-holder').innerHTML = data;
-					}
-				});
-			} else {
-				// Assuming valid json
-				response.json().then(data => {
-					// console.log(`Content: ${JSON.stringify(data)}`);
-					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
-				});
-			}
-		},
-		(error, errmess) => {
-			console.log("requestData: Ooch");
-			let message;
-			if (errmess) {
-				let mess = JSON.parse(errmess);
-				if (mess.message) {
-					message = mess.message;
-				}
-			}
-			console.debug("Failed to get to the celestial.computer.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-		});
-	};
 
 	requestData(); // Will do what's expected
 

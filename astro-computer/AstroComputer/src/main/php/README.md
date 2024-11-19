@@ -15,4 +15,9 @@ $ php -S localhost:8000
 
 Then, in a browser, load `http://localhost:8000/index.html`.
 
+## How many lines ?
+```
+$ (find . -name '*.php' -print0 | xargs -0 cat) |  wc -l
+```
+
 ---

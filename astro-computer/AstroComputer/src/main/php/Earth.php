@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
+declare(strict_types=1);
 
 class Earth {
 	// Heliocentric longitude of Earth

@@ -1,9 +1,11 @@
 <?php
+/**
+ * @author    Olivier Le Diouris <olivier.lediouris@gmail.com>
+ * @copyright 2024, OlivSoft
+ * @license   Proprietary
+ */
 declare(strict_types=1);
 
-/**
- * Class ContextV2
- */
 class ContextV2 {
     public static float $EPS0_2000 = 23.439291111;
 
