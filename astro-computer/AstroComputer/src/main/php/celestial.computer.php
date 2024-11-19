@@ -112,15 +112,14 @@ function moreSpecific_1(bool $verbose) : string {
         $context2 = $ac->getContext();
         // echo ("From calculate: EoT:" . $context2->EoT . " ");
 
-        $container .= ("<li>Calulated at $year:$month:$day $hours:$minutes:$seconds UTC</li>" . PHP_EOL);
+        $container .= ("<li>Calculated at $year:$month:$day $hours:$minutes:$seconds UTC</li>" . PHP_EOL);
         $container .= ("<li>DeltaT: " . $ac->getDeltaT() . " s</li>" . PHP_EOL);
-
         // End of Basic Test
 
         if ($verbose) {
             echo("Invoking SightReductionUtil...<br/>");
         }
-        $lat = 43.0; $lng = -3.0;
+        $lat = 43.677667; $lng = -3.135667;
         $sru = new SightReductionUtil(
             $ac->getSunGHA(),
             $ac->getSunDecl(),
@@ -148,6 +147,65 @@ function moreSpecific_1(bool $verbose) : string {
     return $container;
 }
 
+function oneDayAlmanac(bool $verbose) : string {
+    try {
+        // Current dateTime
+        $year = (int)date("Y");
+        $month = (int)date("m");
+        $day = (int)date("d");
+        $hours = (int)date("H");
+        $minutes = (int)date("i");
+        $seconds = (int)date("s");
+
+        $nbDaysThisMonth = TimeUtil::getNbDays($year, $month);
+        // echo("This month, $nbDaysThisMonth days.<br/>" . PHP_EOL);
+
+        $container = ("<p>Calculated at $year:$month:$day $hours:$minutes:$seconds UTC</p>" . PHP_EOL);
+        $container .= "<table>" . PHP_EOL;
+        $container .= "<tr><th>UT</th><th>Sun GHA</th><th>&delta; GHA</th><th>Sun RA</th><th>Sun Decl</th><th>Aries GHA</th></tr>" . PHP_EOL;
+        $container .= "<tr><th>TU</th><th>Soleil AHvo</th><th>&delta; AHvo</th><th>Soleil AHso</th><th>Soleil Decl</th><th>Pt Vernal AHso</th></tr>" . PHP_EOL;
+
+        // Astro Computer
+        $ac = new AstroComputer(); 
+
+        $prevGHA = null;
+
+        for ($i=0; $i<24; $i++) {
+            $h = $i;
+            $ac->calculate($year, $month, $day, $h, 0, 0, true);
+            $context2 = $ac->getContext();
+            $deltaGHA = "";
+            if ($prevGHA != null) {
+                $diff = $ac->getSunGHA() - $prevGHA;
+                while ($diff < 0) {
+                    $diff += 360;
+                }
+                $deltaGHA = sprintf("%1\$.4f&deg;", $diff);
+            }
+            $prevGHA = $ac->getSunGHA();
+            $container .= ("<tr><td>" . sprintf("%02d", $h) . 
+                               "</td><td>" . Utils::decToSex($ac->getSunGHA()) . 
+                               "</td><td>" . $deltaGHA . 
+                               "</td><td>" . Utils::decToSex($ac->getSunRA(), Utils::$NONE) . 
+                               "</td><td>" . Utils::decToSex($ac->getSunDecl(), Utils::$NS) . 
+                               "</td><td>" . Utils::decToSex($ac->getAriesGHA(), Utils::$NONE) .
+                               "</td></tr>" . PHP_EOL); 
+        }
+        // End of Test
+
+        $container .= ("</table>" . PHP_EOL);
+        $container .= ("<hr/>" . PHP_EOL);
+
+        return $container;
+
+    } catch (Throwable $e) {
+        if ($verbose) {
+            echo "[ Captured Throwable (2) for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
+        }
+        throw $e;
+    }
+}
+
 $option = "basic";
 // Whatever you want it to be 
 if (isset($_GET['option'])) {
@@ -168,13 +226,21 @@ if ($option == "basic") {
     try {
         $data = moreSpecific_1($VERBOSE);
         header('Content-Type: text/html; charset=utf-8');
-        // echo json_encode($data); // This is for text (not json)
         echo $data;
         // http_response_code(200);
     } catch (Throwable $e) {
         echo "[Captured Throwable (4) for celestial.computer.php : " . $e . "] " . PHP_EOL;
     }
-} else { // TODO Invoke the SightReductionUtil
+} else if ($option == "2") {
+    try {
+        $data = oneDayAlmanac($VERBOSE);
+        header('Content-Type: text/html; charset=utf-8');
+        echo $data;
+        // http_response_code(200);
+    } catch (Throwable $e) {
+        echo "[Captured Throwable (5) for celestial.computer.php : " . $e . "] " . PHP_EOL;
+    }
+} else { 
     echo "Option is [$option], not supported.";
 }
 ?>

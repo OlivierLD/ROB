@@ -5,7 +5,7 @@ See the examples to see how.
 
 Based on Jean Meus and Hening Humland's work.
 
-- Also see https://www.w3schools.com/php/default.asp
+- Also see [W3Schools](https://www.w3schools.com/php/default.asp)
 - [How to debug PhP](https://www.google.com/search?q=how+to+debug+php&oq=how+to+debug+php&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhA0gEINDAzMmowajGoAgCwAgA&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:4b06443e,vid:8ka_Efpl21Y,st:0)
 
 ## To run a sample locally
@@ -15,9 +15,13 @@ $ php -S localhost:8000
 
 Then, in a browser, load `http://localhost:8000/index.html`.
 
-## How many lines ?
+## How many code lines ?
 ```
 $ (find . -name '*.php' -print0 | xargs -0 cat) |  wc -l
+```
+ou aussi 
+```
+$ echo -e "$((find . -name '*.php' -print0 | xargs -0 cat) |  wc -l) lignes de php code"
 ```
 
 ---

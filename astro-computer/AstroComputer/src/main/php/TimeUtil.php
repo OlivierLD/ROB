@@ -4,6 +4,7 @@
  * @copyright 2024, OlivSoft
  * @license   Proprietary
  */
+declare(strict_types=1);
 
 class DMS {
     private $hours; // int
@@ -39,7 +40,6 @@ class DMS {
 class TimeUtil {
 
     private $verbose = false; // Change at will
-
 
 	public static function decimalToDMS(float $decimalHours) : DMS {
 		$hours = (int)floor($decimalHours);
@@ -198,4 +198,45 @@ class TimeUtil {
 
 		return $deltaT;
 	}
+
+	private static array $DAYS_PER_MONTH = array (
+		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+	);
+	private static int $JANUARY = 1;
+	private static int $FEBRUARY = 2;
+	private static int $MARCH = 3;
+	private static int $APRIL = 4;
+	private static int $MAY = 5;
+	private static int $JUNE = 6;
+	private static int $JULY = 7;
+	private static int $AUGUST = 8;
+	private static int $SEPTEMBER = 9;
+	private static int $OCTOBER = 10;
+	private static int $NOVEMBER = 11;
+	private static int $DECEMBER = 12;
+
+	/**
+	 * Get the number of days for a given month and year. Takes care of leap years.
+	 *
+	 * @param y year
+	 * @param m month Jan:1, Dec:12
+	 * @return the number of days in the given month.
+	 */
+	public static function getNbDays(int $y, int $m) : int {
+		$nd = self::$DAYS_PER_MONTH[$m - 1];
+		if ($m == self::$FEBRUARY) {
+			$leap = false;
+			if ($y % 4 == 0) { // Leap
+				$leap = true;
+				if ($y % 100 == 0) { // Not leap
+					$leap = $y % 400 == 0; // Except if %400 = 0
+				}
+			}
+			if ($leap) {
+				$nd += 1; // 29;
+			}
+		}
+		return $nd;
+	}
+
 }

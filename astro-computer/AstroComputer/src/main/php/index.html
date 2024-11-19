@@ -9,6 +9,11 @@
 		* {
 			font-family: 'Courier New', Courier, monospace;
 		}
+		td {
+			border: 1px solid silver;
+			padding: 0 5px 0 5px;
+			text-align: right;
+		}
     </style>
 </head>
 
@@ -18,6 +23,7 @@
 <div>
 	<button onclick="requestData();">Basic</button>
 	<button onclick="requestData(1);">More Specific</button>
+	<button onclick="requestData(2);">One Day Almanach</button>
 </div>
 
 <div id="place-holder">
@@ -38,11 +44,13 @@ function requestData(option) {
 			case 1:
 				url = "./celestial.computer.php?option=1";
 				break;
+			case 2:
+				url = "./celestial.computer.php?option=2";
+				break;
 			default: 
 				break;
 		}
 	}
-
 
 	fetch(url, {
 		method: "GET",
