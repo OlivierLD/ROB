@@ -12,14 +12,14 @@ $VERBOSE = false;
  * from some ES6 code...
  */
 
- class Container {
+class Container {
     public $deltaT;
     public $calcDate;
     public $ctx;
     public $oneStar;
     public $starGHA;
     public $starCatalog;
- }
+}
 
 function doYourJob(bool $verbose) : string {
 
@@ -52,7 +52,6 @@ function doYourJob(bool $verbose) : string {
 			$ac->starPos($ALDEBARAN);
 			$starGHA = $ac->getStarGHA($ALDEBARAN);
 
-
             $container->ctx = $context2; // The full Context
             $container->deltaT = $ac->getDeltaT();
             $container->calcDate = "$year:$month:$day $hours:$minutes:$seconds UTC";
@@ -63,15 +62,19 @@ function doYourJob(bool $verbose) : string {
             $jsonData = json_encode($container); // , JSON_FORCE_OBJECT);
             // End of Basic Test
 
-            echo("Invoking SightReductionUtil...<br/>");
+            if ($verbose) {
+                echo("Invoking SightReductionUtil...<br/>");
+            }
             $sru = new SightReductionUtil(
                 $ac->getSunGHA(),
                 $ac->getSunDecl(),
                 43.0,
                 -3); // 0, 0, 0, 0);
             $sru->calculate();
-            echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f&deg;", $sru->getZ()) . "<br/>");
-            echo("Done invoking SightReductionUtil.<br/>");
+            if ($verbose) {
+                echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f&deg;", $sru->getZ()) . "<br/>");
+                echo("Done invoking SightReductionUtil.<br/>");
+            }
         } catch (Throwable $e) {
             if ($verbose) {
                 echo "[ Captured Throwable (2) for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
@@ -87,6 +90,62 @@ function doYourJob(bool $verbose) : string {
         throw $e;
     }
     return null;
+}
+
+
+function moreSpecific_1(bool $verbose) : string {
+    try {
+        // Current dateTime
+        $year = (int)date("Y");
+        $month = (int)date("m");
+        $day = (int)date("d");
+        $hours = (int)date("H");
+        $minutes = (int)date("i");
+        $seconds = (int)date("s");
+
+        $container = "<ul>" . PHP_EOL;
+
+        // Astro Computer basic test
+        $ac = new AstroComputer(); 
+        // $ac->setDateTime($year, $month, $day, $hours, $minutes, $seconds);
+        $ac->calculate($year, $month, $day, $hours, $minutes, $seconds, true);
+        $context2 = $ac->getContext();
+        // echo ("From calculate: EoT:" . $context2->EoT . " ");
+
+        $container .= ("<li>Calulated at $year:$month:$day $hours:$minutes:$seconds UTC</li>" . PHP_EOL);
+        $container .= ("<li>DeltaT: " . $ac->getDeltaT() . " s</li>" . PHP_EOL);
+
+        // End of Basic Test
+
+        if ($verbose) {
+            echo("Invoking SightReductionUtil...<br/>");
+        }
+        $lat = 43.0; $lng = -3.0;
+        $sru = new SightReductionUtil(
+            $ac->getSunGHA(),
+            $ac->getSunDecl(),
+            $lat,
+            $lng);
+        $sru->calculate();
+        if ($verbose) {
+            echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f&deg;", $sru->getZ()) . "<br/>");
+            echo("Done invoking SightReductionUtil.<br/>");
+        }
+        $container .= ("<li>From Pos: " . Utils::decToSex($lat, Utils::$NS) . " / " . Utils::decToSex($lng, Utils::$EW) . "</li>" . PHP_EOL);
+        $container .= ("<li>Sun He:" . Utils::decToSex($sru->getHe()) . ", Sun Z:" . sprintf("%f&deg;", $sru->getZ()) . "</li>" . PHP_EOL);
+
+        $container .= ("</ul>" . PHP_EOL);
+        $container .= ("<hr/>" . PHP_EOL);
+
+    } catch (Throwable $e) {
+        if ($verbose) {
+            echo "[ Captured Throwable (2) for doYourJob : " . $e->getMessage() . "] " . PHP_EOL;
+        }
+        throw $e;
+    }
+
+    // Final one
+    return $container;
 }
 
 $option = "basic";
@@ -105,7 +164,17 @@ if ($option == "basic") {
     } catch (Throwable $e) {
         echo "[Captured Throwable (3) for celestial.computer.php : " . $e . "] " . PHP_EOL;
     }
-} else {
+} else if ($option == "1") {
+    try {
+        $data = moreSpecific_1($VERBOSE);
+        header('Content-Type: text/html; charset=utf-8');
+        // echo json_encode($data); // This is for text (not json)
+        echo $data;
+        // http_response_code(200);
+    } catch (Throwable $e) {
+        echo "[Captured Throwable (4) for celestial.computer.php : " . $e . "] " . PHP_EOL;
+    }
+} else { // TODO Invoke the SightReductionUtil
     echo "Option is [$option], not supported.";
 }
 ?>

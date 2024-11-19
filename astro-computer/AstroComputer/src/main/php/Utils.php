@@ -49,14 +49,14 @@ class Utils {
 		$s = sprintf("%d", $i) . "&deg;" . sprintf($df, $dec) . "'";
 		if ($v < 0.0) {
 			switch ($displayType) {
-				case $NONE:
+				case self::$NONE:
 					$s = "-" . $s;
 					break;
-				case $NS:
-					$s = ($signPosition == $TRAILING_SIGN ? $s . "S" : "S " . str_pad($s, 13, " ", STR_PAD_LEFT));
+				case self::$NS:
+					$s = ($signPosition == self::$TRAILING_SIGN ? $s . "S" : "S " . str_pad($s, 13, " ", STR_PAD_LEFT));
 					break;
-				case $EW:
-					$s = ($signPosition == $TRAILING_SIGN ? $s . "W" : "W " . str_pad($s, 14, " ", STR_PAD_LEFT));
+				case self::$EW:
+					$s = ($signPosition == self::$TRAILING_SIGN ? $s . "W" : "W " . str_pad($s, 14, " ", STR_PAD_LEFT));
 					break;
 			}
 		} else {
@@ -65,10 +65,10 @@ class Utils {
 					$s = " " . $s;
 					break;
 				case self::$NS:
-					$s = ($signPosition == $TRAILING_SIGN ? s . "N" : "N " . str_pad($s, 13, " ", STR_PAD_LEFT));
+					$s = ($signPosition == self::$TRAILING_SIGN ? $s . "N" : "N " . str_pad($s, 13, " ", STR_PAD_LEFT));
 					break;
 				case self::$EW:
-					$s = ($signPosition == $TRAILING_SIGN ? s . "E" : "E " + str_pad($s, 14, " ", STR_PAD_LEFT));
+					$s = ($signPosition == self::$TRAILING_SIGN ? $s . "E" : "E " + str_pad($s, 14, " ", STR_PAD_LEFT));
 					break;
 			}
 		}
