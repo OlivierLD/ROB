@@ -44,6 +44,7 @@ Beside Java, we (will) have
 - [Python](./Python/README.md)
 - [Golang](./src/main/go/Celest/README.md)
 - [Scala](#from-scala)
+- [php](#from-php)
 - ... and more when possible (Kotlin,...)
 
 ### Integrated Development Environment (IDE)
@@ -247,6 +248,13 @@ Done with Golang!
 $
 ```
 Calculation took 3676 μs (3.676 ms)
+
+#### From php
+```
+$ cd src/main/php
+$ php -S localhost:8000
+```
+Then from a browser, load [http://localhost:8000/index.html](http://localhost:8000/index.html).
 
 ##### Quick execution time comparison
 | Language | Time in ms |
