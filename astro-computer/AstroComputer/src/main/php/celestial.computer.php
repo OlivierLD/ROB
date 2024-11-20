@@ -1,4 +1,5 @@
 <?php
+// phpinfo();
 
 include __DIR__ . '/autoload.php';
 
@@ -92,8 +93,8 @@ function doYourJob(bool $verbose) : string {
     return null;
 }
 
-
 function moreSpecific_1(bool $verbose) : string {
+    // Sun current status
     try {
         // Current dateTime
         $year = (int)date("Y");
@@ -103,7 +104,8 @@ function moreSpecific_1(bool $verbose) : string {
         $minutes = (int)date("i");
         $seconds = (int)date("s");
 
-        $container = "<ul>" . PHP_EOL;
+        $container = "<h4>Sun current status</h4>" . PHP_EOL;
+        $container .= "<ul>" . PHP_EOL;
 
         // Astro Computer basic test
         $ac = new AstroComputer(); 
@@ -114,7 +116,7 @@ function moreSpecific_1(bool $verbose) : string {
 
         $container .= ("<li>Calculated at $year:$month:$day $hours:$minutes:$seconds UTC</li>" . PHP_EOL);
         $container .= ("<li>DeltaT: " . $ac->getDeltaT() . " s</li>" . PHP_EOL);
-        // End of Basic Test
+        $container .= ("<li>Sun GHA: " . Utils::decToSex($ac->getSunGHA(), Utils::$NONE) . ", Sun Dec: " . Utils::decToSex($ac->getSunDecl(), Utils::$NS) . "</li>" . PHP_EOL);
 
         if ($verbose) {
             echo("Invoking SightReductionUtil...<br/>");
@@ -161,6 +163,8 @@ function oneDayAlmanac(bool $verbose) : string {
         // echo("This month, $nbDaysThisMonth days.<br/>" . PHP_EOL);
 
         $container = ("<p>Calculated at $year:$month:$day $hours:$minutes:$seconds UTC</p>" . PHP_EOL);
+        // date("l jS \of F Y h:i:s A"). See https://www.w3schools.com/php/func_date_date.asp
+        $container .= "<div class='sub-title'>Sun almanac for " . date("l F jS, Y") .  "</div>" . PHP_EOL;
         $container .= "<table>" . PHP_EOL;
         $container .= "<tr><th>UT</th><th>Sun GHA</th><th>&delta; GHA</th><th>Sun RA</th><th>Sun Decl</th><th>Aries GHA</th></tr>" . PHP_EOL;
         $container .= "<tr><th>TU</th><th>Soleil AHvo</th><th>&delta; AHvo</th><th>Soleil AHso</th><th>Soleil Decl</th><th>Pt Vernal AHso</th></tr>" . PHP_EOL;
@@ -240,7 +244,9 @@ if ($option == "basic") {
     } catch (Throwable $e) {
         echo "[Captured Throwable (5) for celestial.computer.php : " . $e . "] " . PHP_EOL;
     }
+} else if ($option == "info") {
+    phpinfo();
 } else { 
-    echo "Option is [$option], not supported.";
+    echo "Option is [$option], not supported.<br/>";
 }
 ?>

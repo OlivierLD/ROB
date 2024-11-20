@@ -14,16 +14,23 @@
 			padding: 0 5px 0 5px;
 			text-align: right;
 		}
+		.sub-title {
+			font-style: italic;
+			font-weight: bold;
+			color: blue;
+		}
     </style>
 </head>
 
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
-<h2>This is just a placeholder for now...</h2>
+<h2>Development Page.</h2>
+<h3>This is a work in progress...</h3>
 
 <div>
-	<button onclick="requestData();">Basic</button>
+	<button onclick="requestData();">Basic Dump</button>
 	<button onclick="requestData(1);">More Specific</button>
 	<button onclick="requestData(2);">One Day Almanach</button>
+	<button onclick="requestData(3);">Context info</button>
 </div>
 
 <div id="place-holder">
@@ -46,6 +53,9 @@ function requestData(option) {
 				break;
 			case 2:
 				url = "./celestial.computer.php?option=2";
+				break;
+			case 3:
+				url = "./celestial.computer.php?option=info";
 				break;
 			default: 
 				break;
