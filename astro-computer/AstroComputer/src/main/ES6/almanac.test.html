@@ -61,6 +61,13 @@ th {
     border: 1px solid silver;
     padding: 0 5px 0 5px;
 }
+
+table.no-border td {
+    border: none;
+    padding: 0 5px 0 5px;
+    text-align: left;
+}
+
 .sub-title {
     font-style: italic;
     font-weight: bold;
@@ -71,10 +78,10 @@ th {
 <body>
 <h1>Almanac Test, ES6 Celestial Computer</h1>
 <h2>Compute Sun Almanac for one day</h2>
-<table>
+<table class="no-border">
     <tr>
         <td style="vertical-align: top;">
-            <small>Enter UTC date and time, then click the Compute button.</small>
+            <small>Enter UTC date to start from, then click the Compute button.</small>
             <div>
                 <input class="day" type="number" id="UTC-day" placeholder="day" min="1" max="31" title="Day of the Month">
                 <select class="month" id="UTC-month" title="Month of the year">
@@ -92,15 +99,22 @@ th {
                     <option value="12">Dec</option>
                 </select>
                 <input class="year" type="number" id="UTC-year" placeholder="year" min="0" title="year">
-                at
+                <!-- at
                 <input class="day" type="number" id="UTC-hour" placeholder="hours" min="0" max="23" title="Hour of the day [0..23]">:
                 <input class="day" type="number" id="UTC-minute" placeholder="minutes" min="0" max="59" title="minutes">:
                 <input class="day" type="number" id="UTC-second" placeholder="seconds" min="0" max="59" title="seconds"> UTC
+                -->
+            </div>
+            <div style="vertical-align: middle;">
+                For <input type="radio" name="duration" value="one-day" checked>One Day 
+                    <input type="radio" name="duration" value="one-week">One Week
+                    <input type="radio" name="duration" value="one-month">One Month
+                    <input type="radio" name="duration" value="one-year">One Year
             </div>
             <div>
                 <input type="checkbox" id="verbose" onchange="verbose(this);"><small>Console Verbose</small>
             </div>
-            <button id="now" onclick="updateUTCDate();" title="Update time to current time">Now</button>&nbsp;
+            <button id="now" onclick="updateUTCDate();" title="Update time to current time">Today</button>&nbsp;
             <button id="compute" onclick="compute();">Compute</button>&nbsp;
         </td>
     </tr>
@@ -170,171 +184,245 @@ th {
 
     let compute = () => {
 
-        let today = {
+        let durationElements = document.getElementsByName("duration");
+        let duration = 'dunno';
+        for (let i=0; i < durationElements.length; i++) {
+            if (durationElements[i].checked) {
+                duration = durationElements[i].value;
+                break;
+            }
+        }
+        console.log(`Duration: ${duration}`);
+
+        let today = { // Start date
             year: parseInt(document.getElementById('UTC-year').value),
             month: parseInt(document.getElementById('UTC-month').value),
             day: parseInt(document.getElementById('UTC-day').value)
         };
 
-        let htmlContentSunMoonAries = "";
-        let htmlContentPlanets = "";
-        let htmlContentSemiDiamAndCo = "";
-
-
-        const now = new Date(`${today.year}-${today.month}-${today.day}`);
-        htmlContentSunMoonAries += `<h2> ${ formatDate(now) }</h2>`;
-        htmlContentSunMoonAries += "<table style='margin: auto;'>";
-        htmlContentSunMoonAries += "<tr><th rowspan='2'>UT</th><th colspan='5'>Sun</th><th colspan='6'>Moon</th><th>Aries</th><th rowspan='2'>UT</th></tr>";
-        htmlContentSunMoonAries += "<tr><th>GHA</th><th>&delta;GHA</th><th>SHA</th><th>Decl</th><th>d</th><th>GHA</th><th>&delta;GHA</th><th>SHA</th><th>Decl</th><th>d</th><th>hp (&Pi;)</th><th>GHA</th></tr>";
-
-        htmlContentPlanets += "<table style='margin: auto;'>";
-        htmlContentPlanets += "<tr><th rowspan='2'>UT</th><th colspan='3'>Venus</th><th colspan='3'>Mars</th><th colspan='3'>Jupiter</th><th colspan='3'>Saturn</th><th rowspan='2'>UT</th></tr>";
-        htmlContentPlanets += "<tr><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th></tr>";
-
-        // htmlContentSemiDiamAndCo += "<table>";
-
-        let prevSunGHA, prevSunDecl, prevMoonGHA, prevMoonDecl;
-
-        for (let hours=0; hours<24; hours++) {
-            let calculationData = {
-                utcyear: today.year,
-                utcmonth: today.month,
-                utcday: today.day,
-                utchour: hours,
-                utcminute: 0,
-                utcsecond: 0,
-                deltaT: DELTA_T, /// Recalculated
-                noPlanets: false
-            };
-
-            // The heart of the system
-            let calcResult = sampleMain(calculationData); // in app.js
-            if (consoleVerbose) {
-                console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
-                console.log("Result:\n", JSON.stringify(calcResult, null, 2));
-            }
-
-            let ut = lpad(hours.toFixed(0), '0', 2);
-            let sunGHA = decToSex(calcResult.sun.GHA.raw); // calcResult.sun.GHA.fmt;
-            let moonGHA = decToSex(calcResult.moon.GHA.raw); // calcResult.sun.GHA.fmt;
-
-            let deltaSunGHA = "";
-            let deltaSunDecl = "";
-            let deltaMoonGHA = "";
-            let deltaMoonDecl = "";
-
-            let moonHp = `${(calcResult.moon.HP.raw / 60).toFixed(4)}'`;
-
-            if (prevSunGHA) {
-                let delta = calcResult.sun.GHA.raw - prevSunGHA;
-                while (delta < 0) {
-                    delta += 360;
+        let calDate = new Date(`${today.year}-${today.month}-${today.day} 00:00:00`);
+        let endDate;
+        switch (duration) {
+            case 'one-day':
+                endDate = new Date();
+                endDate.setDate(calDate.getDate() + 1);
+                break;
+            case 'one-week':
+                endDate = new Date();
+                endDate.setDate(calDate.getDate() + 7);
+                break;
+            case 'one-month':
+                let nextMonth = today.month + 1;
+                if (nextMonth > 12) {
+                    nextMonth = 1;
+                    endDate = new Date(`${today.year + 1}-${nextMonth}-${today.day}`); // Watch it, 30, 31, 28, 29...
+                } else {
+                    endDate = new Date(`${today.year}-${nextMonth}-${today.day}`); // Watch it, 30, 31, 28, 29...
                 }
-                deltaSunGHA = `${delta.toFixed(4)}&deg;`;
-            }
-            if (prevSunDecl) {
-                let delta = Math.abs(calcResult.sun.DEC.raw - prevSunDecl);
-                // while (delta < 0) {
-                //     delta += 360;
-                // }
-                delta *= 60.0; // in minutes
-                deltaSunDecl = `${delta.toFixed(4)}'`;
-            }
-            if (prevMoonGHA) {
-                let delta = calcResult.moon.GHA.raw - prevMoonGHA;
-                while (delta < 0) {
-                    delta += 360;
-                }
-                deltaMoonGHA = `${delta.toFixed(4)}&deg;`;
-            }
-            if (prevMoonDecl) {
-                let delta = Math.abs(calcResult.moon.DEC.raw - prevMoonDecl);
-                // while (delta < 0) {
-                //     delta += 360;
-                // }
-                delta *= 60.0; // in minutes
-                deltaMoonDecl = `${delta.toFixed(4)}'`;
-            }
-
-            prevSunGHA = calcResult.sun.GHA.raw;
-            prevMoonGHA = calcResult.moon.GHA.raw;
-            prevSunDecl = calcResult.sun.DEC.raw;
-            prevMoonDecl = calcResult.moon.DEC.raw;
-
-            let sunRA = decToSex(calcResult.sun.RA.raw);
-            let sunDecl = decToSex(calcResult.sun.DEC.raw, "NS"); // calcResult.sun.DEC.fmt;
-
-            let moonRA = decToSex(calcResult.moon.RA.raw);
-            let moonDecl = decToSex(calcResult.moon.DEC.raw, "NS"); // calcResult.sun.DEC.fmt;
-
-            let ariesGHA = decToSex(calcResult.aries.GHA.raw); // calcResult.aries.GHA.fmt;
-
-            htmlContentSunMoonAries += (`<tr><td style='font-weight: bold;'>${ut}</td><td>${sunGHA}</td><td>${deltaSunGHA}</td><td>${sunRA}</td><td>${sunDecl}</td><td>${deltaSunDecl}</td>` + 
-                                              `<td>${moonGHA}</td><td>${deltaMoonGHA}</td><td>${moonRA}</td><td>${moonDecl}</td><td>${deltaMoonDecl}</td><td>${moonHp}</td><td>${ariesGHA}</td>` + 
-                                              `<td style='font-weight: bold;'>${ut}</td></tr>`);
-
-            let venusGHA = decToSex(calcResult.venus.GHA.raw);
-            let venusRA = decToSex(calcResult.venus.RA.raw);
-            let venusDecl = decToSex(calcResult.venus.DEC.raw, "NS");
-
-            let marsGHA = decToSex(calcResult.mars.GHA.raw);
-            let marsRA = decToSex(calcResult.mars.RA.raw);
-            let marsDecl = decToSex(calcResult.mars.DEC.raw, "NS");
-
-            let jupiterGHA = decToSex(calcResult.jupiter.GHA.raw);
-            let jupiterRA = decToSex(calcResult.jupiter.RA.raw);
-            let jupiterDecl = decToSex(calcResult.jupiter.DEC.raw, "NS");
-
-            let saturnGHA = decToSex(calcResult.saturn.GHA.raw);
-            let saturnRA = decToSex(calcResult.saturn.RA.raw);
-            let saturnDecl = decToSex(calcResult.saturn.DEC.raw, "NS");
-
-            htmlContentPlanets += (`<tr><td style='font-weight: bold;'>${ut}</td><td>${venusGHA}</td><td>${venusRA}</td><td>${venusDecl}</td>` + 
-                                                                               `<td>${marsGHA}</td><td>${marsRA}</td><td>${marsDecl}</td>` + 
-                                                                               `<td>${jupiterGHA}</td><td>${jupiterRA}</td><td>${jupiterDecl}</td>` + 
-                                                                               `<td>${saturnGHA}</td><td>${saturnRA}</td><td>${saturnDecl}</td>` + 
-                                              `<td style='font-weight: bold;'>${ut}</td></tr>`);
-
-            if (hours === 12) {
-                let semiDiamSun = (calcResult.sun.SD.raw / 60).toFixed(4);
-                let sunHP = (calcResult.sun.HP.raw / 60).toFixed(4);
-                let semiDiamMoon = (calcResult.moon.SD.raw / 60).toFixed(4);
-                let moonPhase = `${calcResult.moon.illum.toFixed(2)}% ${calcResult.moon.phase.phase}`;
-                let phaseIndex = Math.floor(calcResult.moon.phase.phaseAngle / (360 / 28.5)) + 1;
-                let phaseImageName = `./moon/phase${(phaseIndex < 10 ? '0' : '') + phaseIndex}.gif`;
-
-                let tPassSun = decimalHoursToHMS(12 - (calcResult.EOT.raw / 60));
-                let moonAge = (calcResult.moon.phase.phaseAngle * 28 / 360);
-
-                htmlContentSemiDiamAndCo += (
-                    `<tr><td colspan='14'>&nbsp;</td></tr>` +
-                    `<tr>` + 
-                        `<td rowspan='3'></td>` + 
-                        `<td colspan='2'>&frac12;&nbsp;\u2300 ${semiDiamSun}'</td>` + 
-                        `<td colspan='3'>hp (&pi;) ${sunHP}'</td>` + 
-                        `<td colspan='3'>&frac12;&nbsp;\u2300 ${semiDiamMoon}'</td>` + 
-                        `<td colspan='2'>${moonPhase}</td>` + 
-                        `<td rowspan='3' colspan='2'><img src='${phaseImageName}' alt='${calcResult.moon.phase.phaseAngle}' title='${calcResult.moon.phase.phaseAngle + '&deg'}'>` +
-                        `<td rowspan='3'></td>` + 
-                    `</tr>` +
-                    `<tr><td colspan='5'>EoT at 12:00 UTC : ${calcResult.EOT.fmt}</td><td colspan='5'>Phase at 12:00 UTC : ${calcResult.moon.phase.phaseAngle.toFixed(2)}&deg;</td></tr>` +
-                    `<tr><td colspan='5'>Meridian Pass. Time : ${tPassSun}</td><td colspan='5'>Age : ${moonAge.toFixed(1)} day(s)</td></tr>` 
-                );
-            }
-
+                break;
+            case 'one-year':
+                endDate = new Date(`${today.year + 1}-${today.month}-${today.day}`);
+                break;
+            default:
+                break;
         }
+        endDate.setHours(0);
+        endDate.setMinutes(0);
+        endDate.setSeconds(0);
+        endDate.setMilliseconds(0);
+        console.log(`End Date : ${endDate}`);
 
-        htmlContentSunMoonAries += htmlContentSemiDiamAndCo ; // Add it to the same table
+        let fullHTMLContent = "";
 
-        htmlContentSunMoonAries += "</table>";
-        htmlContentPlanets += "</table>";
-        // htmlContentSemiDiamAndCo += "</table>";
+        let keepWorking = true;
 
-        document.getElementById("final-result").innerHTML = (
-            htmlContentSunMoonAries + "<br/>" + 
-            /* htmlContentSemiDiamAndCo + "<br/>" + */
-            htmlContentPlanets 
-        );
+        while (keepWorking) {
+
+            keepWorking = (calDate < endDate);
+            console.log(`${calDate} < ${endDate} ? ... keep working: ${keepWorking}`);
+
+            if (keepWorking) {
+
+                today = { // Start date
+                    year: calDate.getFullYear(),
+                    month: calDate.getMonth() + 1, // [0..11]
+                    day: calDate.getDate()
+                };
+
+                let htmlContentSunMoonAries = "";
+                let htmlContentPlanets = "";
+                let htmlContentSemiDiamAndCo = "";
+
+                const now = new Date(`${today.year}-${today.month}-${today.day}`);
+                htmlContentSunMoonAries += `<h2> ${ formatDate(now) }</h2>`;
+                htmlContentSunMoonAries += "<table style='margin: auto;'>";
+                htmlContentSunMoonAries += "<tr><th rowspan='2'>UT</th><th colspan='5'>Sun</th><th colspan='6'>Moon</th><th>Aries</th><th rowspan='2'>UT</th></tr>";
+                htmlContentSunMoonAries += "<tr><th>GHA</th><th>&delta;GHA</th><th>SHA</th><th>Decl</th><th>d</th><th>GHA</th><th>&delta;GHA</th><th>SHA</th><th>Decl</th><th>d</th><th>hp (&Pi;)</th><th>GHA</th></tr>";
+
+                htmlContentPlanets += "<table style='margin: auto;'>";
+                htmlContentPlanets += "<tr><th rowspan='2'>UT</th><th colspan='3'>Venus</th><th colspan='3'>Mars</th><th colspan='3'>Jupiter</th><th colspan='3'>Saturn</th><th rowspan='2'>UT</th></tr>";
+                htmlContentPlanets += "<tr><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th><th>GHA</th><th>SHA</th><th>Decl</th></tr>";
+
+                // htmlContentSemiDiamAndCo += "<table>";
+
+                let prevSunGHA, prevSunDecl, prevMoonGHA, prevMoonDecl;
+
+                for (let hours=0; hours<24; hours++) {
+                    let calculationData = {
+                        utcyear: today.year,
+                        utcmonth: today.month,
+                        utcday: today.day,
+                        utchour: hours,
+                        utcminute: 0,
+                        utcsecond: 0,
+                        deltaT: DELTA_T, /// Recalculated
+                        noPlanets: false
+                    };
+
+                    // The heart of the system
+                    let calcResult = sampleMain(calculationData); // in app.js
+                    if (consoleVerbose) {
+                        console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
+                        console.log("Result:\n", JSON.stringify(calcResult, null, 2));
+                    }
+
+                    let ut = lpad(hours.toFixed(0), '0', 2);
+                    let sunGHA = decToSex(calcResult.sun.GHA.raw); // calcResult.sun.GHA.fmt;
+                    let moonGHA = decToSex(calcResult.moon.GHA.raw); // calcResult.sun.GHA.fmt;
+
+                    let deltaSunGHA = "";
+                    let deltaSunDecl = "";
+                    let deltaMoonGHA = "";
+                    let deltaMoonDecl = "";
+
+                    let moonHp = `${(calcResult.moon.HP.raw / 60).toFixed(4)}'`;
+
+                    if (prevSunGHA) {
+                        let delta = calcResult.sun.GHA.raw - prevSunGHA;
+                        while (delta < 0) {
+                            delta += 360;
+                        }
+                        deltaSunGHA = `${delta.toFixed(4)}&deg;`;
+                    }
+                    if (prevSunDecl) {
+                        let delta = Math.abs(calcResult.sun.DEC.raw - prevSunDecl);
+                        // while (delta < 0) {
+                        //     delta += 360;
+                        // }
+                        delta *= 60.0; // in minutes
+                        deltaSunDecl = `${delta.toFixed(4)}'`;
+                    }
+                    if (prevMoonGHA) {
+                        let delta = calcResult.moon.GHA.raw - prevMoonGHA;
+                        while (delta < 0) {
+                            delta += 360;
+                        }
+                        deltaMoonGHA = `${delta.toFixed(4)}&deg;`;
+                    }
+                    if (prevMoonDecl) {
+                        let delta = Math.abs(calcResult.moon.DEC.raw - prevMoonDecl);
+                        // while (delta < 0) {
+                        //     delta += 360;
+                        // }
+                        delta *= 60.0; // in minutes
+                        deltaMoonDecl = `${delta.toFixed(4)}'`;
+                    }
+
+                    prevSunGHA = calcResult.sun.GHA.raw;
+                    prevMoonGHA = calcResult.moon.GHA.raw;
+                    prevSunDecl = calcResult.sun.DEC.raw;
+                    prevMoonDecl = calcResult.moon.DEC.raw;
+
+                    let sunRA = decToSex(calcResult.sun.RA.raw);
+                    let sunDecl = decToSex(calcResult.sun.DEC.raw, "NS"); // calcResult.sun.DEC.fmt;
+
+                    let moonRA = decToSex(calcResult.moon.RA.raw);
+                    let moonDecl = decToSex(calcResult.moon.DEC.raw, "NS"); // calcResult.sun.DEC.fmt;
+
+                    let ariesGHA = decToSex(calcResult.aries.GHA.raw); // calcResult.aries.GHA.fmt;
+
+                    htmlContentSunMoonAries += (`<tr><td style='font-weight: bold;'>${ut}</td><td>${sunGHA}</td><td>${deltaSunGHA}</td><td>${sunRA}</td><td>${sunDecl}</td><td>${deltaSunDecl}</td>` + 
+                                                    `<td>${moonGHA}</td><td>${deltaMoonGHA}</td><td>${moonRA}</td><td>${moonDecl}</td><td>${deltaMoonDecl}</td><td>${moonHp}</td><td>${ariesGHA}</td>` + 
+                                                    `<td style='font-weight: bold;'>${ut}</td></tr>`);
+
+                    let venusGHA = decToSex(calcResult.venus.GHA.raw);
+                    let venusRA = decToSex(calcResult.venus.RA.raw);
+                    let venusDecl = decToSex(calcResult.venus.DEC.raw, "NS");
+
+                    let marsGHA = decToSex(calcResult.mars.GHA.raw);
+                    let marsRA = decToSex(calcResult.mars.RA.raw);
+                    let marsDecl = decToSex(calcResult.mars.DEC.raw, "NS");
+
+                    let jupiterGHA = decToSex(calcResult.jupiter.GHA.raw);
+                    let jupiterRA = decToSex(calcResult.jupiter.RA.raw);
+                    let jupiterDecl = decToSex(calcResult.jupiter.DEC.raw, "NS");
+
+                    let saturnGHA = decToSex(calcResult.saturn.GHA.raw);
+                    let saturnRA = decToSex(calcResult.saturn.RA.raw);
+                    let saturnDecl = decToSex(calcResult.saturn.DEC.raw, "NS");
+
+                    htmlContentPlanets += (`<tr><td style='font-weight: bold;'>${ut}</td><td>${venusGHA}</td><td>${venusRA}</td><td>${venusDecl}</td>` + 
+                                                                                    `<td>${marsGHA}</td><td>${marsRA}</td><td>${marsDecl}</td>` + 
+                                                                                    `<td>${jupiterGHA}</td><td>${jupiterRA}</td><td>${jupiterDecl}</td>` + 
+                                                                                    `<td>${saturnGHA}</td><td>${saturnRA}</td><td>${saturnDecl}</td>` + 
+                                                    `<td style='font-weight: bold;'>${ut}</td></tr>`);
+
+                    if (hours === 12) {
+                        let semiDiamSun = (calcResult.sun.SD.raw / 60).toFixed(4);
+                        let sunHP = (calcResult.sun.HP.raw / 60).toFixed(4);
+                        let semiDiamMoon = (calcResult.moon.SD.raw / 60).toFixed(4);
+                        let moonPhase = `${calcResult.moon.illum.toFixed(2)}% ${calcResult.moon.phase.phase}`;
+                        let phaseIndex = Math.floor(calcResult.moon.phase.phaseAngle / (360 / 28.5)) + 1;
+                        let phaseImageName = `./moon/phase${(phaseIndex < 10 ? '0' : '') + phaseIndex}.gif`;
+
+                        let tPassSun = decimalHoursToHMS(12 - (calcResult.EOT.raw / 60));
+                        let moonAge = (calcResult.moon.phase.phaseAngle * 28 / 360);
+
+                        htmlContentSemiDiamAndCo += (
+                            `<tr><td colspan='14'>&nbsp;</td></tr>` +
+                            `<tr>` + 
+                                `<td rowspan='3'></td>` + 
+                                `<td colspan='2'>&frac12;&nbsp;\u2300 ${semiDiamSun}'</td>` + 
+                                `<td colspan='3'>hp (&pi;) ${sunHP}'</td>` + 
+                                `<td colspan='3'>&frac12;&nbsp;\u2300 ${semiDiamMoon}'</td>` + 
+                                `<td colspan='2'>${moonPhase}</td>` + 
+                                `<td rowspan='3' colspan='2'><img src='${phaseImageName}' alt='${calcResult.moon.phase.phaseAngle}' title='${calcResult.moon.phase.phaseAngle + '&deg'}'>` +
+                                `<td rowspan='3'></td>` + 
+                            `</tr>` +
+                            `<tr><td colspan='5'>EoT at 12:00 UTC : ${calcResult.EOT.fmt}</td><td colspan='5'>Phase at 12:00 UTC : ${calcResult.moon.phase.phaseAngle.toFixed(2)}&deg;</td></tr>` +
+                            `<tr><td colspan='5'>Meridian Pass. Time : ${tPassSun}</td><td colspan='5'>Age : ${moonAge.toFixed(1)} day(s)</td></tr>` 
+                        );
+                    }
+
+                }
+
+                htmlContentSunMoonAries += htmlContentSemiDiamAndCo ; // Add it to the same table
+
+                htmlContentSunMoonAries += "</table>";
+                htmlContentPlanets += "</table>";
+                // htmlContentSemiDiamAndCo += "</table>";
+
+                fullHTMLContent += ("<div class='page-break'><hr/></div>" + "<br/>" + (
+                    htmlContentSunMoonAries + "<br/>" + 
+                    /* htmlContentSemiDiamAndCo + "<br/>" + */
+                    htmlContentPlanets 
+                ));
+
+                // document.getElementById("final-result").innerHTML = (
+                //     htmlContentSunMoonAries + "<br/>" + 
+                //     /* htmlContentSemiDiamAndCo + "<br/>" + */
+                //     htmlContentPlanets 
+                // );
+
+            } // End keepWorking
+
+            calDate.setDate(calDate.getDate() + 1); // One more day
+
+            // Fix this...
+            document.getElementById("final-result").innerHTML = (
+                fullHTMLContent + ("<div class='page-break'><hr/></div>")
+            );
+        }
     };
 
     let updateUTCDate = () => {
@@ -342,9 +430,9 @@ th {
         document.getElementById('UTC-day').value = now.getUTCDate();
         document.getElementById('UTC-month').value = now.getUTCMonth() + 1;
         document.getElementById('UTC-year').value = now.getUTCFullYear();
-        document.getElementById('UTC-hour').value = (now.getUTCHours().toString().length < 2 ? "0" : "") + now.getUTCHours();
-        document.getElementById('UTC-minute').value = (now.getUTCMinutes().toString().length < 2 ? "0" : "") + now.getUTCMinutes();
-        document.getElementById('UTC-second').value = (now.getUTCSeconds().toString().length < 2 ? "0" : "") + now.getUTCSeconds();
+        // document.getElementById('UTC-hour').value = (now.getUTCHours().toString().length < 2 ? "0" : "") + now.getUTCHours();
+        // document.getElementById('UTC-minute').value = (now.getUTCMinutes().toString().length < 2 ? "0" : "") + now.getUTCMinutes();
+        // document.getElementById('UTC-second').value = (now.getUTCSeconds().toString().length < 2 ? "0" : "") + now.getUTCSeconds();
     };
 
     let verbose = (cb) => {
