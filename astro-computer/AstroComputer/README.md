@@ -322,7 +322,7 @@ You should get a `JSON` object, and some formatted output, like this:
 - Do an `npm start`
 - Open `http://localhost:8080/index.html` in a browser
 - Look into the Console
-  - Eventually, wee want to produce what `RESTImplementation.getSunDataForAllDay` is producing.
+  - Eventually, we want to produce what `RESTImplementation.getSunDataForAllDay` is producing.
 
 ## Timing
 ```
