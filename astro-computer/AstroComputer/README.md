@@ -250,20 +250,33 @@ $
 Calculation took 3676 μs (3.676 ms)
 
 #### From php
+Designed with `php 8`.
 ```
 $ cd src/main/php
 $ php -S localhost:8000
 ```
 Then from a browser, load [http://localhost:8000/index.html](http://localhost:8000/index.html).
 
+> Sun current status
+> - Calculated in 57.885885 ms (From 1732173701.004826 to 1732173701.062712)
+> - Calculated at 2024:11:21 7:21:41 UTC
+> - DeltaT: 74.392259828125 s
+> - Sun GHA: 293°56.54', Sun Dec: S 20°2.19'
+> - From Pos: N 43°40.66' / W 3°8.14'
+> - Sun He: 0°16.30', Sun Z:118.572166°
+
+
+
+
 ##### Quick execution time comparison
 | Language | Time in ms |
-|:-----|-----:|
-| Go | 3.676 |
-| C | 4.412 |
-| Java | 55.000 |
-| Scala | 64.000 |
-| Python | 142.000 |
+|:---------|-----------:|
+| Go       |      3.676 |
+| C        |      4.412 |
+| Java     |     55.000 |
+| php      |     57.886 |
+| Scala    |     64.000 |
+| Python   |    142.000 |
 
 > _Note_: For Java and Scala, the JVM and the classes have to be loaded first. 
 > Subsequent executions should be must faster. For example, 10 consecutive java executions:

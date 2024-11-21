@@ -6,6 +6,11 @@ include __DIR__ . '/autoload.php';
 
 $VERBOSE = false;
 
+$phpVersion = (int)phpversion()[0];
+if ($phpVersion < 8) {
+    echo("PHP Version is " . phpversion() . "... This might be too low.");
+}
+
 /*
  * This is a layer on top of the AstroComputer
  * 
@@ -108,9 +113,15 @@ function moreSpecific_1(bool $verbose) : string {
         $container .= "<ul>" . PHP_EOL;
 
         // Astro Computer basic test
+        $before = microtime(true); // See https://www.w3schools.com/php/func_date_microtime.asp
         $ac = new AstroComputer(); 
         // $ac->setDateTime($year, $month, $day, $hours, $minutes, $seconds);
         $ac->calculate($year, $month, $day, $hours, $minutes, $seconds, true);
+        $after = microtime(true);
+
+        $timeDiff = ($after - $before) * 1000;
+        $container .= ("<li>Calculated in " . sprintf("%f ms", $timeDiff)  .  " (" . sprintf("From %f to %f", $before, $after)  . ")</li>" . PHP_EOL);
+
         $context2 = $ac->getContext();
         // echo ("From calculate: EoT:" . $context2->EoT . " ");
 
