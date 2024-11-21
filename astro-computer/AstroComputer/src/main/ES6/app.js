@@ -67,7 +67,7 @@ window.decimalToDMS = CelestialComputer.decimalToDMS;
 // window.getSunDataForAllDay = CelestialComputer.getSunDataForAllDay;
 
 let STANDALONE = false;
-let STANDALONE_2 = true;
+let STANDALONE_2 = false;
 
 if (STANDALONE) {
 	console.log("SRU Test:" + JSON.stringify(sightReduction(37.5,-122.3, 80, 22)));
