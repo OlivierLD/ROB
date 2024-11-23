@@ -76,20 +76,48 @@ table.no-border td {
     font-weight: bold;
     color: blue;
 }
+.bottom-of-page {
+    position: absolute;
+    bottom: 10px;
+}
     </style>
 </head>
 <body>
 <div class="ui screen-only">
     <h1>Almanac Test, ES6 Celestial Computer</h1>
     <h2>Compute Celestial Almanac for a given period</h2>
-    <div style="font-style: italic;">
-        This page is designed to be printed from your browser, as a paper document, or as a pdf. Once the document is generated in the browser, use the browser
-        capabilities to print it. Then use the different parameters (like scale, backgrounds, etc) to size it appropriately, and send it to
-        your printer, or generate a pdf file from it. The screen version and the printed one are slightly different, there are some artifacts - like page breaks -
-        that will not be visible in the screen version, just like messages - like the one you're currently reading - will not show up in the printed version.
-        <br/>
-        Be patient, the generation can take time...
+    <div>
+        Compare the results with <a href="https://neoprogrammics.com/de405_usno_ae98/DE405_Sun.php" target="_new">this</a>.
     </div>
+    <div id="screen-warning" class="screen-only screen-warning">
+        <b><i>Note&nbsp;:</i></b>
+        <div style="display: grid; grid-template-columns: auto auto;">
+            <p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
+                This page is designed to be printed from your browser, as a paper document, or as a pdf. Once the document is generated in the browser, use the browser
+                capabilities to print it. Then use the different parameters (like scale, backgrounds, etc) to size it appropriately, and send it to
+                your printer, or generate a pdf file from it. The screen version and the printed one are slightly different, there are some artifacts - like page breaks -
+                that will not be visible in the screen version, just like messages - like the one you're currently reading - will not show up in the printed version.
+                <br/>
+                Be patient, the generation can take time...
+            </p>
+            <p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
+                Cette page est con&ccedil;ue pour être imprim&eacute;e depuis votre navigateur, sous forme de document papier ou de PDF. 
+                Une fois le document g&eacute;n&eacute;r&eacute; dans le navigateur, utilisez les fonctionnalit&eacute;s du navigateur
+                pour l'imprimer. Utilisez ensuite les diff&eacute;rents param&egrave;tres (comme l'&eacute;chelle, les arri&egrave;re-plans, etc.) pour le dimensionner 
+                de mani&egrave;re appropri&eacute;e, et envoyez-le
+                &agrave; votre imprimante, ou g&eacute;n&eacute;rez un fichier PDF &agrave; partir de celui-ci. La version &eacute;cran et la version 
+                imprim&eacute;e sont l&eacute;g&egrave;rement diff&eacute;rentes, il y a quelques artefacts - comme les sauts de page -
+                qui ne seront pas visibles dans la version &eacute;cran, tout comme les messages - comme celui que vous lisez actuellement - n'apparaîtront pas dans la version imprim&eacute;e.
+                <br/>
+                Soyez patient, la g&eacute;n&eacute;ration peut prendre du temps...
+            </p>
+        </div>
+        <hr/>
+        <div>
+            All calculations are done in ES6 (aka JavaScript), on the client side (ie in the browser). It generates absolutely NO network traffic.
+        </div>
+    </div>
+
     <table class="no-border">
         <tr>
             <td style="vertical-align: top;">
@@ -532,9 +560,10 @@ table.no-border td {
         } else {
             let lastDate = new Date(endDate);
             lastDate.setDate(endDate.getDate() - 1);
-            firstPage += `<h1 style='text-align: center; font-size: 4.5em;'>Celestial Almanac <br/>from ${calDate.toDateString()} <br/>to ${lastDate.toDateString()}</h1>`;
+            firstPage += `<h1 style='text-align: center; font-size: 4.5em; color: black;'>Celestial Almanac <br/>from ${calDate.toDateString()} <br/>to ${lastDate.toDateString()}</h1>`;
         }
         firstPage += "</div>";
+        firstPage += "<div style='width: 100%; font-style: italic; font-weight: bold; text-align: center;' class='bottom-of-page'>Oliv Soft never stops</div>";
         firstPage += "</div>";
         document.getElementById("final-result").innerHTML += firstPage;
 
