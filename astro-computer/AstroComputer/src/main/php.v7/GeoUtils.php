@@ -16,10 +16,10 @@ function sign(float $n) : int {
 }
 
 class GP {
-    private string $name; // string
-    private float $decl; // float
-    private float $gha;  // float
-    private BodyFromPos $fromPos; // BodyFromPos
+    private $name; // string
+    private $decl; // float
+    private $gha;  // float
+    private $fromPos; // BodyFromPos
 
     function __construct() {}
 
@@ -65,8 +65,8 @@ class GP {
 }
 
 class OBS {
-    private float $alt; // float
-    private float $z;   // float
+    private $alt; // float
+    private $z;   // float
 
     public function toString() : string {
         return "OBS{" . "alt=" . $this->alt . ", z=" . $this->z . "}";
@@ -92,8 +92,8 @@ class OBS {
 }
 
 class Pos {
-    private float $latitude; // float
-    private float $longitude; // float
+    private $latitude; // float
+    private $longitude; // float
 
     public function toString() : string {
         return sprintf("%s/%s", Utils::decToSex($this->latitude, Utils::NS, Utils::$LEADING_SIGN, false), Utils::decToSex($longitude, Utils::EW, Utils::$LEADING_SIGN, false));
@@ -114,13 +114,13 @@ class Pos {
     }
 
     public function getLongitude() : float {
-        return this->longitude;
+        return $this->longitude;
     }
 }
 
 class BodyFromPos {
-    private Pos $observer; // Pos
-    private OBS $observed; // OBS
+    private $observer; // Pos
+    private $observed; // OBS
 
     function __construct() {}
 
@@ -151,8 +151,8 @@ class BodyFromPos {
  * RhumbLine data holder
  */
 class RLData {
-    private float $rv;
-    private float $dLoxo;
+    private $rv;
+    private $dLoxo;
 
     function __cnstruct(float $rv, float $d) {
         $this->rv = $rv;
@@ -169,8 +169,8 @@ class RLData {
 }
 
 class GeoPoint {
-	private float $latitude;
-	private float $longitude;
+	private $latitude;
+	private $longitude;
 
 	// function __construct() {}
 
@@ -265,18 +265,18 @@ class GeoPoint {
 }
 
 class GreatCircle {
-	public static int $TO_NORTH = 0;
-	public static int $TO_SOUTH = 1;
-	public static int $TO_EAST = 2;
-	public static int $TO_WEST = 3;
+	public static $TO_NORTH = 0;
+	public static $TO_SOUTH = 1;
+	public static $TO_EAST = 2;
+	public static $TO_WEST = 3;
 	
-	private int $ewDir;
-	private int $nsDir;
-	private GreatCirclePoint $start;   // Angles in radians or degrees !!
-	private GreatCirclePoint $arrival; // Angles in radians or degrees !!
-	private array $route; // Vector<GreatCircleWayPoint>
+	private $ewDir;
+	private $nsDir;
+	private $start;   // GreatCirclePoint, Angles in radians or degrees !!
+	private $arrival; //GreatCirclePoint, Angles in radians or degrees !!
+	private $route; // array, Vector<GreatCircleWayPoint>
 
-	private static float $TOLERANCE = 1;
+	private static $TOLERANCE = 1;
 
 	// function __construct() {
 	// 	$this->start = null;
@@ -997,8 +997,8 @@ class GreatCircle {
 }
 
 class GreatCirclePoint {
-    private float $latitude;   // In Radians
-    private float $longitude;  // In Radians
+    private $latitude;   // In Radians
+    private $longitude;  // In Radians
 
     function __construct(float $l, float $g) {
         $this->latitude = $l;
@@ -1084,8 +1084,8 @@ class GreatCirclePoint {
 }
 
 class GreatCircleWayPoint {
-	private GreatCirclePoint $p;
-	private float $z;
+	private $p; // GreatCirclePoint
+	private $z; // float
 
 	public function toString() : string {
 		return "GreatCircleWayPoint{ p=" . $this->p->toString() . ", z=" . $this->z . "}";
@@ -1106,7 +1106,7 @@ class GreatCircleWayPoint {
 }
 
 class GreatCircleWayPointWithBodyFromPos extends GreatCircleWayPoint {
-    private BodyFromPos $wpFromPos;
+    private $wpFromPos; // BodyFromPos
 
     // function __construct(GreatCirclePoint $p, float $z) {
     //     super($p, $z);

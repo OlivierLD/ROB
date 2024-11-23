@@ -1,4 +1,6 @@
 <?php
+
+try {
 // phpinfo();
 
 include __DIR__ . '/autoload.php';
@@ -259,5 +261,9 @@ if ($option == "basic") {
     phpinfo();
 } else { 
     echo "Option is [$option], not supported.<br/>";
+}
+
+} catch (Throwable $plaf) {
+    echo "[Captured Throwable (big) for celestial.computer.php : " . $plaf . "] " . PHP_EOL;
 }
 ?>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Celestial Computer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style type="text/css">
+		* {
+			font-family: 'Courier New', Courier, monospace;
+		}
+		td {
+			border: 1px solid silver;
+			padding: 0 5px 0 5px;
+			text-align: right;
+		}
+		.sub-title {
+			font-style: italic;
+			font-weight: bold;
+			color: blue;
+		}
+    </style>
+</head>
+
+<body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+<h2>Development Page.</h2>
+<h3>This is a work in progress...</h3>
+
+<div>
+	<button onclick="requestData();">Basic Dump</button>
+	<button onclick="requestData(1);">More Specific</button>
+	<button onclick="requestData(2);">One Day Almanac</button>
+	<button onclick="requestData(3);">Context info</button>
+</div>
+
+<div id="place-holder">
+	<!-- for the result -->
+ . . .
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+// Do what's to be done...
+function requestData(option) {
+
+	let url = "./celestial.computer.php"; 
+	if (option) {
+		switch (option) {
+			case 1:
+				url = "./celestial.computer.php?option=1";
+				break;
+			case 2:
+				url = "./celestial.computer.php?option=2";
+				break;
+			case 3:
+				url = "./celestial.computer.php?option=info";
+				break;
+			default: 
+				break;
+		}
+	}
+
+	fetch(url, {
+		method: "GET",
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then(response => {
+		console.log(`Received from PHP: \nResponse Status:${response.status}`);
+		if (true) {
+			// Assumimg this is text (not json, or what not)
+			response.text().then(data => {
+				console.log("Received [" + data + "]");
+				try {
+					let parsedData = JSON.parse(data);
+					document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(parsedData, null, 2)}</pre>`;
+				} catch (err) {
+					console.log(err);
+					document.getElementById('place-holder').innerHTML = data;
+				}
+			});
+		} else {
+			// Assuming valid json
+			response.json().then(data => {
+				// console.log(`Content: ${JSON.stringify(data)}`);
+				document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
+			});
+		}
+	},
+	(error, errmess) => {
+		console.log("requestData: Ooch");
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
+			}
+		}
+		console.debug("Failed to get to the celestial.computer.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+	});
+};
+
+window.onload = () => {
+	console.log("Loaded!");
+	console.log(`${window.location.href} loaded !`);
+
+	// requestData(); // Will do what's expected
+
+};
+
+</script>
+
+</html>
