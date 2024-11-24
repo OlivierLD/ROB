@@ -49,7 +49,7 @@ function doYourJob(bool $verbose) : string {
             // Astro Computer basic test
             $ac = new AstroComputer(); 
             // $ac->setDateTime($year, $month, $day, $hours, $minutes, $seconds);
-            $ac->calculate($year, $month, $day, $hours, $minutes, $seconds, true);
+            $ac->calculate($year, $month, $day, $hours, $minutes, $seconds, true, true);
             $context2 = $ac->getContext();
             // echo ("From calculate: EoT:" . $context2->EoT . " ");
 

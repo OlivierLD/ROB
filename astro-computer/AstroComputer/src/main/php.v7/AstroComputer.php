@@ -6,6 +6,14 @@
  */
 declare(strict_types=1);
 
+class StarInTheSky {
+    public $name;
+    public $GHAStar;
+    public $SHAStar;
+    public $DECStar;
+    public $starMoonDist;
+}
+
 class AstroComputer {
 
     private $context;
@@ -17,12 +25,14 @@ class AstroComputer {
     private static $WEEK_DAYS = [ "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" ];
     private $dow = "";
     private $moonPhase = "";
+    private $stars = array();  // An array
 
     function __construct() {
        $this->context = new ContextV2();
        $this->calculateHasBeenInvoked = false;
+       $this->stars = array(); // Reset
     }
-    
+
     public function setDateTime(int $y, int $m, int $d, int $h, int $mi, int $s) : void {
         $this->year = $y;
         $this->month = $m;
@@ -32,17 +42,18 @@ class AstroComputer {
         $this->second = $s;
         $this->calculateHasBeenInvoked = false;
         $this->context->starName = null;
+        $this->stars = array(); // Reset
     }
 
     public function setDeltaT(float $deltaT) : void {
         $this->deltaT = $deltaT;
     }
-    
+
     public function getDeltaT() : float {
         return $this->deltaT;
     }
 
-    public function calculate(int $y, int $m, int $d, int $h, int $mi, int $s, bool $reCalcDeltaT) : void {
+    public function calculate(int $y, int $m, int $d, int $h, int $mi, int $s, bool $reCalcDeltaT, bool $withStars=false) : void {
         $this->setDateTime($y, $m, $d, $h, $mi, $s);
         // this.calculate(reCalcDeltaT);
 
@@ -72,6 +83,26 @@ class AstroComputer {
 
         $this->calculateHasBeenInvoked = true;
 
+        if ($withStars) {
+            $starArray = [];
+            $starCatalog = Star::getCatalog();
+            for ($i=0; $i<count($starCatalog); $i++) {
+                $starName = $starCatalog[$i][0];
+                $star = Star::getStar($starName);
+                if ($star != null) {
+                    $starPos = $this->starPos($starName);
+                    $starInTheSky = new StarInTheSky();
+                    $starInTheSky->name = $starName;
+                    $starInTheSky->GHAStar = $this->context->GHAstar;
+                    $starInTheSky->SHAStar = $this->context->SHAstar;
+                    $starInTheSky->DECStar = $this->context->DECstar;
+                    $starInTheSky->starMoonDist = $this->context->starMoonDist;
+                    array_push($this->stars, $starInTheSky);
+                }
+            }
+        }
+
+
     }
 
     public function getContext() : ContextV2 {
@@ -80,7 +111,7 @@ class AstroComputer {
 
     // More functions, for stars !
 
-    public function starPos(string $starName) : void { 
+    public function starPos(string $starName) : void {
         if (!$this->calculateHasBeenInvoked) {
             throw new Exception("Calculation was never invoked in this context");
         }
@@ -151,6 +182,10 @@ class AstroComputer {
         } else {
             throw new Exception(sprintf(starName + " not found in the catalog..."));
         }
+    }
+
+    public function getStars() : array {
+        return $this->stars;
     }
 
     public function getStarGHA(string $starName) : float {
