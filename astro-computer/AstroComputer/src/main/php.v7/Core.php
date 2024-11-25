@@ -6,6 +6,11 @@
  */
 declare(strict_types=1);
 
+class MoonPhase {
+	public $quarter;
+	public $phase;
+}
+
 class Core {
 
 	private static $VERBOSE = false;
@@ -288,11 +293,13 @@ class Core {
 			echo(starName + " not found in the catalog...");
 	}
 
-	public static function moonPhase(ContextV2 $context) : string {
+
+	public static function moonPhase(ContextV2 $context) : MoonPhase {
 		$quarter = "";
 		$x = $context->lambdaMapp - $context->lambda_sun;
 		$x = Utils::trunc($x);
 		$x = round(10 * $x) / 10;
+		$moonPhaseAngle = $x;
 		if ($x == 0)
 			$quarter = " New";
 		if ($x > 0 && $x < 90)
@@ -309,7 +316,10 @@ class Core {
 			$quarter = " LQ";
 		if ($x > 270 && $x < 360)
 			$quarter = " -cre";
-		return $quarter;
+		$moonPhase = new MoonPhase();
+		$moonPhase->quarter = $quarter;
+		$moonPhase->phase = $x;
+		return $moonPhase;
 	}
 
 	public static function weekDay(ContextV2 $context) : int {
