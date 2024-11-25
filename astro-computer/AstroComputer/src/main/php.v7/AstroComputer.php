@@ -509,14 +509,14 @@ class AstroComputer {
         if (!$this->calculateHasBeenInvoked) {
             throw new RuntimeException("Calculation was never invoked in this context");
         }
-        return this.dow;
+        return $this->dow;
     }
 
     public function getMoonPhaseStr() : string {
         if (!$this->calculateHasBeenInvoked) {
             throw new RuntimeException("Calculation was never invoked in this context");
         }
-        return this.moonPhase;
+        return $this->moonPhase;
     }
 
     // Etc. Whatever is needed
@@ -547,7 +547,7 @@ class AstroComputer {
         if ($longitude >= 0) { // E
             $gha = 360 - $longitude;
         }
-        return gha;
+        return $gha;
     }
 
     public static function raToGHA(float $ra, float $ghaAries) : float {
