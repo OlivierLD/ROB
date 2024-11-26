@@ -24,7 +24,7 @@ class AstroComputer {
 
     private static $WEEK_DAYS = [ "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" ];
     private $dow = "";
-    private $moonPhase = "";
+    private $moonPhase = null;
     private $stars = array();  // An array
 
     function __construct() {
@@ -513,6 +513,13 @@ class AstroComputer {
     }
 
     public function getMoonPhaseStr() : string {
+        if (!$this->calculateHasBeenInvoked) {
+            throw new RuntimeException("Calculation was never invoked in this context");
+        }
+        return $this->moonPhase->quarter;
+    }
+
+    public function getMoonPhase() : MoonPhase {
         if (!$this->calculateHasBeenInvoked) {
             throw new RuntimeException("Calculation was never invoked in this context");
         }

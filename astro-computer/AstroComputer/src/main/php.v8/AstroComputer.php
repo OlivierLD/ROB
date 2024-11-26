@@ -519,6 +519,13 @@ class AstroComputer {
         return $this->moonPhase;
     }
 
+    public function getMoonPhase() : MoonPhase {
+        if (!$this->calculateHasBeenInvoked) {
+            throw new RuntimeException("Calculation was never invoked in this context");
+        }
+        return $this->moonPhase;
+    }
+
     // Etc. Whatever is needed
 
     public function getMeanObliquityOfEcliptic() : float {

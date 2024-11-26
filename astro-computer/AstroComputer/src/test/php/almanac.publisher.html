@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<!-- Dynamically translatable -->
+<!--html lang="fr"-->
+<head>
+  <meta charset="UTF-8">
+  <title>Celestial Computer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./main.css" />
+  <link rel="stylesheet" media="print" href="./print.css" />
+
+  <style type="text/css">
+		* {
+			font-family: 'Courier New', Courier, monospace;
+		}
+		th {
+			border: 1px solid silver;
+			padding: 0 5px 0 5px;
+		}
+		td {
+			border: 1px solid silver;
+			padding: 0 5px 0 5px;
+			text-align: right;
+		}
+		.sub-title {
+			font-style: italic;
+			font-size: 1.5rem;
+			font-weight: bold;
+			color: black;
+		}
+		.bottom-of-page {
+			position: absolute;
+			bottom: 10px;
+		}
+    </style>
+</head>
+
+<body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+
+<div class="ui screen-only">
+
+	<h2><span id='main-title'>Celestial Almanacs Publication.</span></h2>
+
+	<div>
+		<span id='compare-with'>Compare the results with</span> <a href="https://neoprogrammics.com/de405_usno_ae98/DE405_Sun.php" target="_new"><span id='with-this'>this</span></a>.
+	</div>
+	<div id="screen-warning" class="screen-only screen-warning">
+		<b><i>Note&nbsp;:</i></b>
+		<div style="display: grid; grid-template-columns: auto auto;">
+			<p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
+				This page is designed to be printed from your browser, as a paper document, or as a pdf. Once the document is generated in the browser, use the browser
+				capabilities to print it. Then use the different parameters (like scale, backgrounds, etc) to size it appropriately, and send it to
+				your printer, or generate a pdf file from it. The screen version and the printed one are slightly different, there are some artifacts - like page breaks -
+				that will not be visible in the screen version, just like messages - like the one you're currently reading - will not show up in the printed version.
+				<br/>
+				Be patient, the generation can take time...<br/>
+				In case of "Internal Server Error", try to reduce the period (over 6 months, it's risky)...
+			</p>
+			<p style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;">
+				Cette page est con&ccedil;ue pour être imprim&eacute;e depuis votre navigateur, sous forme de document papier ou de PDF. 
+				Une fois le document g&eacute;n&eacute;r&eacute; dans le navigateur, utilisez les fonctionnalit&eacute;s du navigateur
+				pour l'imprimer. Utilisez ensuite les diff&eacute;rents param&egrave;tres (comme l'&eacute;chelle, les arri&egrave;re-plans, etc.) pour le dimensionner 
+				de mani&egrave;re appropri&eacute;e, et envoyez-le
+				&agrave; votre imprimante, ou g&eacute;n&eacute;rez un fichier PDF &agrave; partir de celui-ci. La version &eacute;cran et la version 
+				imprim&eacute;e sont l&eacute;g&egrave;rement diff&eacute;rentes, il y a quelques artefacts - comme les sauts de page -
+				qui ne seront pas visibles dans la version &eacute;cran, tout comme les messages - comme celui que vous lisez actuellement - n'apparaîtront pas dans la version imprim&eacute;e.
+				<br/>
+				Soyez patient, la g&eacute;n&eacute;ration peut prendre du temps...<br/>
+				En cas d' "Internal Server Error", essayez une p&eacute;riode plus restreinte (au del&agrave; de 6 mois, c'est risqu&eacute;)...
+			</p>
+		</div>
+		<hr/>
+		<div id="method">
+			All calculations are done on the server, in php. Rendering is done on the client.
+		</div>
+	</div>
+
+	<span class="sub-title" id="manual">Enter UTC dates from and to, then click the Compute button.</span>
+	<table class="no-border">
+		<tr><th><span id='from-label'>From</span></th><th><span id='to-label'>To</span></th></tr>
+        <tr>
+            <td style="vertical-align: top;">
+                <div>
+                    <input class="day" type="number" id="UTC-day-from" placeholder="day" min="1" max="31" title="Day of the Month">
+                    <select class="month" id="UTC-month-from" title="Month of the year">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">May</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Aug</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Oct</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dec</option>
+                    </select>
+                    <input class="year" type="number" id="UTC-year-from" placeholder="year" min="0" title="year">
+                    <!-- at
+                    <input class="day" type="number" id="UTC-hour" placeholder="hours" min="0" max="23" title="Hour of the day [0..23]">:
+                    <input class="day" type="number" id="UTC-minute" placeholder="minutes" min="0" max="59" title="minutes">:
+                    <input class="day" type="number" id="UTC-second" placeholder="seconds" min="0" max="59" title="seconds"> UTC
+                    -->
+                </div>
+            </td>
+            <td style="vertical-align: top;">
+                <div>
+                    <input class="day" type="number" id="UTC-day-to" placeholder="day" min="1" max="31" title="Day of the Month">
+                    <select class="month" id="UTC-month-to" title="Month of the year">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">May</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Aug</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Oct</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dec</option>
+                    </select>
+                    <input class="year" type="number" id="UTC-year-to" placeholder="year" min="0" title="year">
+                    <!-- at
+                    <input class="day" type="number" id="UTC-hour" placeholder="hours" min="0" max="23" title="Hour of the day [0..23]">:
+                    <input class="day" type="number" id="UTC-minute" placeholder="minutes" min="0" max="59" title="minutes">:
+                    <input class="day" type="number" id="UTC-second" placeholder="seconds" min="0" max="59" title="seconds"> UTC
+                    -->
+                </div>
+            </td>
+            <td style="vertical-align: top;">
+				<select id="user-lang" title="Langue / Language" onchange="translatePage(this);">
+					<option value="FR">Fran&ccedil;ais</option>
+					<option value="EN">English</option>
+				</select>
+            </td>
+        </tr>
+    </table>
+
+	<div>
+		<!--input type="checkbox" id="verbose" onchange="verbose(this);"><small>Console Verbose</small-->
+		<button id="now" onclick="updateUTCDates();" title="Update time to current time"><span id='today'>Today</span></button>&nbsp;
+		<input type="checkbox" id="with-stars" onchange="withStars(this);"><small><span id='with-stars-label'>With Stars</span></small>
+		<button onclick="requestData(1);">Compute</button>
+	</div>
+
+</div>
+
+<div id="place-holder">
+	<!-- for the result -->
+ . . .
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+let consoleVerbose = false;
+let consoleWithStars = false;
+
+let starCatalog = null;
+
+let lpad = (str, pad, len) => {
+	while (str.length < len) {
+		str = pad + str;
+	}
+	return str;
+};
+
+let decToSex = (val, ns_ew) => {
+	let absVal = Math.abs(val);
+	let intValue = Math.floor(absVal);
+	let dec = absVal - intValue;
+	let i = intValue;
+	dec *= 60; //    let s = i + "°" + dec.toFixed(2) + "'";
+	//    let s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+
+	let s = ""; // sign
+
+	if (ns_ew !== undefined) {
+		if (val < 0) {
+			s += ns_ew === 'NS' ? 'S' : 'W';
+		} else {
+			s += ns_ew === 'NS' ? 'N' : 'E';
+		}
+		s += " ";
+	} else {
+		if (val < 0) {
+			s += '-';
+		}
+	}
+
+	s += i + "°" + dec.toFixed(2) + "'";
+	return s;
+};
+
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+let formatDate = (date) => {
+	let month = MONTHS[date.getMonth()];
+	let day = DAYS[date.getDay()];
+	return `${day}, ${month} ${date.getDate()}, ${date.getFullYear()}`;
+};
+
+let decimalHoursToHMS = (decHours) => {
+	let hours = Math.floor(decHours);
+	let min = (decHours - hours) * 60;
+	let sec = (min - Math.floor(min)) * 60;
+	return `${lpad(hours, '0', 2)}:${lpad(Math.floor(min), '0', 2)}:${lpad(sec.toFixed(3), '0', 6)}`;
+}
+
+let updateUTCDates = () => {
+	let now = new Date();
+	document.getElementById('UTC-day-from').value = now.getUTCDate();
+	document.getElementById('UTC-month-from').value = now.getUTCMonth() + 1;
+	document.getElementById('UTC-year-from').value = now.getUTCFullYear();
+
+	document.getElementById('UTC-day-to').value = now.getUTCDate();
+	document.getElementById('UTC-month-to').value = now.getUTCMonth() + 1;
+	document.getElementById('UTC-year-to').value = now.getUTCFullYear();
+};
+
+let verbose = (cb) => {
+	consoleVerbose = cb.checked;
+};
+let withStars = (cb) => {
+	consoleWithStars = cb.checked;
+};
+
+let checkChronology = () => {
+	let fromStr = `${document.getElementById('UTC-year-from').value}-${document.getElementById('UTC-month-from').value}-${document.getElementById('UTC-day-from').value}`;
+	let toStr = `${document.getElementById('UTC-year-to').value}-${document.getElementById('UTC-month-to').value}-${document.getElementById('UTC-day-to').value}`;
+	const from = new Date(fromStr);
+	const to = new Date(toStr);
+	// debugger;
+	return (from <= to);
+};
+// Do what's to be done...
+function requestData(option) {
+	if (!checkChronology()) {
+		alert('Bad chronology. TO must be greater or equal to FROM.');
+		return;
+	} else {
+		console.log("Chronology OK, proceeding.");
+	}
+
+	document.getElementById('place-holder').innerHTML = ". . ."; // Reset
+
+	let fromStr = `${document.getElementById('UTC-year-from').value}-${document.getElementById('UTC-month-from').value}-${document.getElementById('UTC-day-from').value}`;
+	let toStr = `${document.getElementById('UTC-year-to').value}-${document.getElementById('UTC-month-to').value}-${document.getElementById('UTC-day-to').value}`;
+	// consoleWithStars
+
+	let url = "./almanac.publisher.php"; 
+	if (option) {
+		switch (option) {
+			case 1:
+				url = `./almanac.publisher.php?option=1&from=${fromStr}&to=${toStr}&stars=${consoleWithStars}&lang=${document.getElementById('user-lang').value}`;
+				console.log(`URL will be ${url}`);
+				break;
+			default: 
+				break;
+		}
+	}
+
+	fetch(url, {
+		method: "GET",
+		headers: {
+			// "Content-type": "application/json; charset=UTF-8"
+			"Content-type": "text/html; charset=UTF-8"
+		}
+	}).then(response => {
+		console.log(`Received from PHP: \nResponse Status:${response.status}`);
+		if (true) {
+			// Assumimg this is text (not json, or what not)
+			response.text().then(data => {
+				console.log("Received [" + data + "]");
+				try {
+					document.getElementById('place-holder').innerHTML = data;
+				} catch (err) {
+					console.log(err);
+					document.getElementById('place-holder').innerHTML = err;
+				}
+			});
+		} else {
+			// Assuming valid json
+			response.json().then(data => {
+				// console.log(`Content: ${JSON.stringify(data)}`);
+				document.getElementById('place-holder').innerHTML = `<pre>${JSON.stringify(data)}</pre>`;
+			});
+		}
+	},
+	(error, errmess) => {
+		console.log("requestData: Ooch");
+		let message;
+		if (errmess) {
+			let mess = JSON.parse(errmess);
+			if (mess.message) {
+				message = mess.message;
+			}
+		}
+		console.debug("Failed to get to the almanac.publisher.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+	});
+};
+
+let getQueryParameterByName = (name, url) => {
+    if (!url) {
+        url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) {
+        return null;
+    }
+    if (!results[2]) {
+        return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
+const TRANSLATIONS = [
+	{
+		id: 'main-title',
+		content: {
+			'EN': 'Celestial Almanacs Publication.',
+			'FR': 'Publication d\'&Eacute;ph&eacute;m&eacute;rides Nautiques.'
+		}
+	}, {
+		id: 'compare-with',
+		content: {
+			'EN': 'Compare the results with',
+			'FR': 'Comparez les r&eacute;sultats avec'
+		}
+	}, {
+		id: 'with-this',
+		content: {
+			'EN': 'this',
+			'FR': 'ceci'
+		}
+	}, {
+		id: 'method',
+		content: {
+			'EN': 'All calculations are done on the server, in php. Rendering is done on the client.',
+			'FR': 'Tous les calculs sont faits sur le server, en php. L\'affichage est fait sur le client.'
+		}
+	}, {
+		id: 'manual',
+		content: {
+			'EN': 'Enter UTC dates from and to, then click the Compute button.',
+			'FR': 'Saisissez les dates (UTC) de d&eacute;but et de fin, puis cliquez le bouton Compute.'
+		}
+	}, {
+		id: 'from-label',
+		content: {
+			'EN': 'From',
+			'FR': 'D&eacute;but'
+		}
+	}, {
+		id: 'to-label',
+		content: {
+			'EN': 'To',
+			'FR': 'Fin'
+		}
+	}, {
+		id: 'today',
+		content: {
+			'EN': 'Today',
+			'FR': 'Aujourd\'hui'
+		}
+	}, {
+		id: 'with-stars-label',
+		content: {
+			'EN': 'With Stars',
+			'FR': 'Avec &Eacute;toiles'
+		}
+	}
+];
+
+let switchLang = (lng) => {
+	TRANSLATIONS.forEach(item => {
+		document.getElementById(item.id).innerHTML = item.content[lng];
+	});
+}
+
+let translatePage = (cb) => {
+	// console.log('Work to do!');
+	let userLang = cb.value;
+	// debugger;
+	switchLang(userLang);
+}
+
+window.onload = () => {
+	console.log("Loaded!");
+	console.log(`${window.location.href} loaded !`);
+
+	updateUTCDates();
+	// requestData(); // Will do what's expected
+
+	let userLang = getQueryParameterByName('lang');
+
+	if (!userLang) { 
+		let browserUserLang = navigator.language || navigator.userLanguage; 
+		console.log("The browser's language is: " + browserUserLang);
+		if (browserUserLang) {
+			if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+				userLang = 'FR';
+			} else {
+				userLang = 'EN';
+				console.log("We'll speak english");
+			}
+		}
+	}
+	document.getElementById('user-lang').value = userLang;
+	if (userLang !== 'EN') {
+		switchLang(userLang);
+	}
+
+};
+
+</script>
+
+</html>
