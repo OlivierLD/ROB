@@ -9,4 +9,9 @@ Trying `sqlite`... That seems to work.
 
 More soon.
 
+See:
+- <https://www.php.net/manual/en/sqlite3.query.php>
+- <https://www.php.net/manual/en/book.sqlite3.php>
+- 
+
 ---

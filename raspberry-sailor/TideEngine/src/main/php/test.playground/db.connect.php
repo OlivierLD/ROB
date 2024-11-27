@@ -1,6 +1,9 @@
 <?php
 try {
     $db = new SQLite3('../sql/tides.db');
+    echo("Connected.<br/>" . PHP_EOL);
+    var_dump($db);
+    echo "<br/>" . PHP_EOL;
 
     $results = $db->query('SELECT COUNT(*) FROM STATIONS');
     while ($row = $results->fetchArray()) {
@@ -18,6 +21,8 @@ try {
     }
     echo ("</table>");
     echo "Done.<br/>" . PHP_EOL;
+
+    $db->close();
 
 } catch (Throwable $bam) {
     echo "[Captured Throwable (big) for db.connect.php : " . $bam . "] " . PHP_EOL;
