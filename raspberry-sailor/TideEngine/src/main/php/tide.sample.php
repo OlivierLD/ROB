@@ -38,7 +38,13 @@ try {
     if ($portTudyStation == null) {
         echo("Port-Tudy was not found...<br/>" . PHP_EOL);
     } else {
-        var_dump($portTudyStation);
+        // var_dump($portTudyStation);
+        if ($portTudyStation->isCurrentStation()) {
+            echo("Port-Tudy IS a current station.<br/>" . PHP_EOL);
+        } else {
+            echo("Port-Tudy IS NOT a current station.<br/>" . PHP_EOL);
+            echo("Displa Unit: " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+        }
     }
 
     $backend->closeDB();

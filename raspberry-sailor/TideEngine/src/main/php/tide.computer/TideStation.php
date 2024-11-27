@@ -92,15 +92,15 @@ class TideStation {
 	}
 
 	public function isCurrentStation() : bool {
-		return $this->unit.startsWith(self::$KNOTS);
+		return TideUtilities::startsWith($this->unit, self::$KNOTS);
 	}
 
 	public function isTideStation() : bool {
-		return ! $this->unit.startsWith(self::$KNOTS);
+		return ! TideUtilities::startsWith($this->unit, self::$KNOTS);
 	}
 
 	public function getDisplayUnit() : string {
-		if ($this->unit.equals(self::$SQUARE_KNOTS)) {
+		if ($this->unit == (self::$SQUARE_KNOTS)) {
 			return self::$KNOTS;
 		} else {
 			return $this->unit;
