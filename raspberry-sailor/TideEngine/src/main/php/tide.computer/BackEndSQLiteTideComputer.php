@@ -2,7 +2,7 @@
 
 class BackEndSQLiteTideComputer {
 
-    private static SQLite3 $db;
+    private static $db; // SQLite3 
 
     public function connectDB(string $location) : void {
         self::$db = new SQLite3($location);
@@ -46,11 +46,14 @@ class BackEndSQLiteTideComputer {
                     $tideStation->setTimeZone($tzName);
                     $tideStation->setBaseHeight($baseHeightValue);
                     $tideStation->setUnit($baseHeightUnit);
-                    // for (String part : fullName.split(",")) {
-                    //     $tideStation->getNameParts().add(URLEncoder.encode(URLDecoder.decode(part.trim(), StandardCharsets.ISO_8859_1.toString()), StandardCharsets.UTF_8.toString()).replace("+", "%20"));
-                    // }
+
+                    $str_arr = explode (",", $fullName); 
+                    // print_r($str_arr);
+                    for ($i=0; $i<count($str_arr); $i++) {
+                        $tideStation->appendNamePart(trim($str_arr[$i]));
+                    }
                     
-					// TODO Other data, like isCurrentStation, etc
+					// TODO Check Other data, like isCurrentStation, etc
 					// Harmonics
                     $coeffStmt = "select t2.coeffname, t2.amplitude, t2.epoch " .
                                  "from stationdata as t2 " .

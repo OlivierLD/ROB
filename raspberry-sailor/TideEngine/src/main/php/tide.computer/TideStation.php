@@ -7,7 +7,7 @@ class TideStation {
 	public static $SQUARE_KNOTS = "knots^2";
 
 	private $fullName = "";
-	private $nameParts = null; // new ArrayList<>();
+	private $nameParts = array(); // new ArrayList<>();
 	private $latitude = 0;
 	private $longitude = 0;
 	private $baseHeight = 0;
@@ -28,6 +28,10 @@ class TideStation {
 
 	public function getNameParts() : array {
 		return $this->nameParts;
+	}
+
+	public function appendNamePart(string $part) : void {
+		array_push($this->nameParts, $part);
 	}
 
 	public function setLatitude(float $latitude) : void {

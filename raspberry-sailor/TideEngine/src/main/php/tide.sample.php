@@ -29,7 +29,8 @@ try {
     // Find Port-Tudy...
     $portTudyStation = null;
     for ($i=0; $i<count($stationData); $i++) {
-        if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) {
+        // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
+        if (strpos($stationData[$i]->getFullName(),  "Port-Tudy") !== false) {
             $portTudyStation = $stationData[$i];
             break;
         }
