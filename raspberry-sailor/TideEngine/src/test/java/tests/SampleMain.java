@@ -44,7 +44,8 @@ public class SampleMain {
 				if (true) {
 //					System.setProperty("tide.verbose", "true");
 //					location = URLEncoder.encode("Port Townsend", StandardCharsets.UTF_8.toString()).replace("+", "%20");
-					location = URLEncoder.encode("Port-Navalo", StandardCharsets.UTF_8.toString()).replace("+", "%20");
+//					location = URLEncoder.encode("Port-Navalo", StandardCharsets.UTF_8.toString()).replace("+", "%20");
+					location = URLEncoder.encode("Port-Tudy", StandardCharsets.UTF_8.toString()).replace("+", "%20");
 					ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
 					if (ts != null) {
 						now.setTimeZone(TimeZone.getTimeZone(ts.getTimeZone()));

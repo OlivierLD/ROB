@@ -20,6 +20,14 @@ try {
     $backend->connectDB("./sql/tides.db");
     echo("Connection created.<br/>". PHP_EOL);
 
+    echo("Executing buildConstituents...<br/>". PHP_EOL);
+    $ConstituentsObject = $backend->buildConstituents();
+
+    // var_dump($ConstituentsObject);
+    // echo("<br/>" . PHP_EOL);
+
+    echo("buildConstituents executed, " . count($ConstituentsObject->getConstSpeedMap()) . " element(s) in the ConstSpeedMap.<br/>". PHP_EOL);
+
     echo("Executing getStationData...<br/>". PHP_EOL);
     $stationData = $backend->getStationData();
     // var_dump($stationData);
@@ -38,13 +46,26 @@ try {
     if ($portTudyStation == null) {
         echo("Port-Tudy was not found...<br/>" . PHP_EOL);
     } else {
+        echo("Port-Tudy: Base height: " . $portTudyStation->getBaseHeight() . " " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
         // var_dump($portTudyStation);
         if ($portTudyStation->isCurrentStation()) {
             echo("Port-Tudy IS a current station.<br/>" . PHP_EOL);
         } else {
             echo("Port-Tudy IS NOT a current station.<br/>" . PHP_EOL);
-            echo("Displa Unit: " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+            echo("Display Unit: " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
         }
+
+        // Water Heights test
+        $UTdate = gmdate("Y-m-d H:i:s");
+        
+        // $date = new DateTime("2024-11-28 15:47:26"); // Yeah !!!
+        // // Convert DateTime to string using date_format()
+        // $UTdate = date_format($date, 'Y-m-d H:i:s');
+
+        $wh = TideUtilities::getWaterHeight($portTudyStation, $ConstituentsObject->getConstSpeedMap(), $UTdate);
+        echo("Water Height in Port-Tudy, at " . $UTdate . " UTC : " . sprintf("%.02f", $wh) . " " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+        $mm = TideUtilities::getMinMaxWH($portTudyStation, $ConstituentsObject->getConstSpeedMap(), $UTdate);
+        echo("Min-Max Height in Port-Tudy, at " . $UTdate . " UTC : min:" . sprintf("%.02f", $mm["min"]) . ", max:" . sprintf("%.02f", $mm["max"])  . ", in " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
     }
 
     $backend->closeDB();

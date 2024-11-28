@@ -13,12 +13,14 @@ if ($phpVersion < 8) {
     echo("PHP Version is " . phpversion() . "... This might be too low.");
 }
 
-/*
- * This is a layer on top of the AstroComputer
- * 
- * We are going to produce a JSON structure, that is then going to be fetched
- * from some ES6 code...
- */
+    /*
+    * This is a layer on top of the AstroComputer
+    *
+    * We are going to produce a JSON structure, that is then going to be fetched
+    * from some ES6 code...
+    *
+    * For PHP UTC Dates, see https://www.w3schools.com/php/func_date_gmdate.asp
+    */
 
 class Container {
     public $deltaT;
@@ -36,13 +38,13 @@ function doYourJob(bool $verbose) : string {
         try {
             // Core test
 
-            // Current dateTime
-            $year = (int)date("Y");
-            $month = (int)date("m");
-            $day = (int)date("d");
-            $hours = (int)date("H");
-            $minutes = (int)date("i");
-            $seconds = (int)date("s");
+            // Current UTC dateTime
+            $year = (int)gmdate("Y");
+            $month = (int)gmdate("m");
+            $day = (int)gmdate("d");
+            $hours = (int)gmdate("H");
+            $minutes = (int)gmdate("i");
+            $seconds = (int)gmdate("s");
 
             $container = new Container();
 
@@ -104,12 +106,12 @@ function moreSpecific_1(bool $verbose) : string {
     // Sun current status
     try {
         // Current dateTime
-        $year = (int)date("Y");
-        $month = (int)date("m");
-        $day = (int)date("d");
-        $hours = (int)date("H");
-        $minutes = (int)date("i");
-        $seconds = (int)date("s");
+        $year = (int)gmdate("Y");
+        $month = (int)gmdate("m");
+        $day = (int)gmdate("d");
+        $hours = (int)gmdate("H");
+        $minutes = (int)gmdate("i");
+        $seconds = (int)gmdate("s");
 
         $container = "<h4>Sun current status</h4>" . PHP_EOL;
         $container .= "<ul>" . PHP_EOL;
@@ -165,12 +167,12 @@ function moreSpecific_1(bool $verbose) : string {
 function oneDayAlmanac(bool $verbose) : string {
     try {
         // Current dateTime
-        $year = (int)date("Y");
-        $month = (int)date("m");
-        $day = (int)date("d");
-        $hours = (int)date("H");
-        $minutes = (int)date("i");
-        $seconds = (int)date("s");
+        $year = (int)gmdate("Y");
+        $month = (int)gmdate("m");
+        $day = (int)gmdate("d");
+        $hours = (int)gmdate("H");
+        $minutes = (int)gmdate("i");
+        $seconds = (int)gmdate("s");
 
         $nbDaysThisMonth = TimeUtil::getNbDays($year, $month);
         // echo("This month, $nbDaysThisMonth days.<br/>" . PHP_EOL);

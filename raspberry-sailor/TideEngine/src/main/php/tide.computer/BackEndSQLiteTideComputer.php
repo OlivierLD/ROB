@@ -86,4 +86,67 @@ class BackEndSQLiteTideComputer {
         }
     }
 
+    public function buildConstituents() : Constituents { // Constituents
+		$constituents = null;
+
+        if (self::$db == null) {
+            throw new Exception("DB Not connected yet.");
+        } else {
+			$constituents = new Constituents();
+			// Map<String, Constituents.ConstSpeed> constSpeedMap = constituents.getConstSpeedMap();
+
+			$sqlStmt = "select t1.rank, t1.name, t2.coeffvalue from coeffdefs as t1 join speedconstituents as t2 on t1.name = t2.coeffname order by t1.rank";
+			// "select t1.rank, t1.name, t2.coeffvalue, t3.year, t3.value as year_value from coeffdefs as t1 join speedconstituents as t2 on t1.name = t2.coeffname join equilibriums as t3 on t1.name = t3.coeffname order by t1.rank, t3.year";
+			// "select t1.rank, t1.name, t2.coeffvalue, t3.year, t3.value as year_value from coeffdefs as t1 join speedconstituents as t2 on t1.name = t2.coeffname join nodefactors as t3 on t1.name = t3.coeffname order by t1.rank, t3.year";
+			try {
+                $results = self::$db->query($sqlStmt);
+                while ($row = $results->fetchArray()) {
+					$rank = (int)$row[0];
+					$name =  $row[1];
+					$value = (float)$row[2];
+					// Append to map
+					$constSpeed = new ConstSpeed($rank, $name, $value * TideUtilities::$COEFF_FOR_EPOCH);
+                    $constituents->appendToConstSpeedMap($name, $constSpeed);
+					// if ("true".equals(System.getProperty("data.verbose", "false"))) {
+					// 	System.out.printf("Rank %d, coeff: %s, value: %f\n", rank, name, value);
+					// }
+					// Nested queries here
+					// Equilibriums
+					$speedCoeffsStmt = "select t3.year, t3.value from equilibriums as t3 where t3.coeffname = :coeff_name order by t3.year";
+                    $stmt = self::$db->prepare($speedCoeffsStmt);
+                    $stmt->bindValue(':coeff_name', $name, SQLITE3_TEXT);
+
+                    $coeffResult = $stmt->execute();
+                    while ($coeffRow = $coeffResult->fetchArray()) {
+						$year = (int)$coeffRow[0];
+						$speedCoeffValue = (float)$coeffRow[1];
+						// Populate equilibrium Map
+						$constSpeed->putEquilibrium($year, $speedCoeffValue);
+						// if ("true".equals(System.getProperty("data.verbose", "false"))) {
+						// 	System.out.printf("\tSpeedCoeff -> Year %d, val: %f\n", year, speedCoeffValue);
+						// }
+					}
+					// nodefactors
+					$nodeFactorStmt = "select t3.year, t3.value from nodefactors as t3 where t3.coeffname = :coeff_name order by t3.year";
+                    $stmt = self::$db->prepare($nodeFactorStmt);
+                    $stmt->bindValue(':coeff_name', $name, SQLITE3_TEXT);
+
+                    $coeffResult = $stmt->execute();
+                    while ($coeffRow = $coeffResult->fetchArray()) {
+						$year = (int)$coeffRow[0]; 
+						$nodeFactorValue = (float)$coeffRow[1];
+						// Populate nodefactors Map
+						$constSpeed->putFactor($year, $nodeFactorValue);
+						// if ("true".equals(System.getProperty("data.verbose", "false"))) {
+						// 	System.out.printf("\tNodeFactors -> Year %d, val: %f\n", year, nodeFactorValue);
+						// }
+					}
+				}
+			} catch (Throwable $sqlEx) {
+				throw $sqlEx;
+			}
+		}
+		return $constituents;
+	}
+
 }
