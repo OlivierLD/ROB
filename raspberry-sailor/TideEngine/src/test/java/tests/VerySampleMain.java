@@ -38,6 +38,7 @@ public class VerySampleMain {
 				TideStation ts = null;
 
 				List<Coefficient> constSpeed = BackEndTideComputer.buildSiteConstSpeed();
+				// TODO Dump at will (system variable ?)
 
 				Calendar now = GregorianCalendar.getInstance();
 				String location = null;

@@ -86,7 +86,7 @@ class BackEndSQLiteTideComputer {
         }
     }
 
-    public function buildConstituents() : Constituents { // Constituents
+    public function buildConstituents() : Constituents { // Constituents, equivaent of the Java buildSiteConstSpeed
 		$constituents = null;
 
         if (self::$db == null) {
