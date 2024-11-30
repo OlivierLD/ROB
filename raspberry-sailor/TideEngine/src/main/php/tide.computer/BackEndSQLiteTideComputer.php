@@ -3,6 +3,7 @@
 class BackEndSQLiteTideComputer {
 
     private static $db; // SQLite3 
+    public $stationList = null;  // Array
 
     public function connectDB(string $location) : void {
         self::$db = new SQLite3($location);
@@ -12,7 +13,14 @@ class BackEndSQLiteTideComputer {
         self::$db->close();
     }
 
-    public function getStationData() : array {
+    public function getStationsData() : array {
+        if ($this->stationList == null) {
+            $this->stationList = $this->buildStationData();
+        }
+        return $this->stationList;
+    }
+
+    private function buildStationData() : array {
         if (self::$db == null) {
             throw new Exception("DB Not connected yet.");
         } else {
@@ -147,6 +155,104 @@ class BackEndSQLiteTideComputer {
 			}
 		}
 		return $constituents;
+	}
+
+    public static function getAmplitudeFix(Constituents $doc, int $year, string $name) : float {
+		$d = 0;
+		try {
+            $cs = TideUtilities::findConstSpeed($doc, $name); // ConstSpeed
+            if ($cs != null) {
+                $f = $cs->getFactors()[sprintf("%04d", $year)];
+                $d = $f;
+            } else {
+                // TODO Throw something
+                echo("!!!! getAmplitudeFix : " . $name . " NOT FOUND for " . $year . ", in " . $year . "<br/>" . PHP_EOL);
+            }
+		} catch (Throwable $ex) {
+			echo("Error in getAmplitudeFix for [" . $name . "] in [" . $year . "].<br/>" . PHP_EOL);
+			throw $ex;
+		}
+		return $d;
+	}
+
+	public static function getEpochFix(Constituents $doc, int $year, string $name) : float {
+		$d = 0;
+		try {
+            $cs = TideUtilities::findConstSpeed($doc, $name); // ConstSpeed
+            if ($cs != null) {
+                $f = $cs->getEquilibrium()[sprintf("%04d", $year)];
+                $d = $f * TideUtilities::$COEFF_FOR_EPOCH;
+            } else {
+                // TODO Throw something
+                echo("!!!! getEpochFix : " . $name . " NOT FOUND for " . $year . ", in " . $year . "<br/>" . PHP_EOL);
+            }
+		} catch (Throwable $ex) {
+			echo("Error in getEpochFix for [" . $name . "] in [" . $year . "].<br/>" . PHP_EOL);
+			throw $ex;
+		}
+		return $d;
+	}
+
+    public function findTideStation(string $stationName, int $year, Constituents $constituents, array $stations) : TideStation {
+        $before = microtime(true); // See https://www.w3schools.com/php/func_date_microtime.asp
+
+        $tideStation = null;
+        for ($i=0; $i<count($stations); $i++) {
+            // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
+            if (strpos($stations[$i]->getFullName(),  $stationName) !== false) { // Partial match already
+                $tideStation = $stations[$i];
+                break;
+            }
+        }
+        if ($tideStation == null) {
+            echo("Station [" . $stationName . "] was not found, trying partial match...<br/>" . PHP_EOL);
+            // try with strtoupper
+            for ($i=0; $i<count($stations); $i++) {
+                // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
+                if (strpos(strtoupper($stations[$i]->getFullName()),  strtoupper($stationName)) !== false) { // Partial match, uppercase
+                    $tideStation = $stations[$i];
+                    break;
+                }
+            }
+        }
+
+        $after = microtime(true);
+        $timeDiff = ($after - $before) * 1000;
+
+		if (true) {
+			echo(sprintf("Finding the station node took %d ms.<br/>", $timeDiff) . PHP_EOL);
+		}
+		// Fix for the given year
+        //  System.out.println("findTideStation: We are in " + year + ", coeff fixed for " + station.yearHarmonicsFixed());
+		// Correction to the Harmonics
+		if ($tideStation != null && ($tideStation->yearHarmonicsFixed() == -1 || $tideStation->yearHarmonicsFixed() != $year)) {
+            $stationHarmonics = $tideStation->getHarmonics();
+			for ($i=0; $i<count($stationHarmonics); $i++) {
+                $harm = $stationHarmonics[$i];
+				$name = $harm->getName();
+				if ("x" != $name) {
+					$amplitudeFix = self::getAmplitudeFix($constituents, $year, $name);
+					$epochFix = self::getEpochFix($constituents, $year, $name);
+
+					$harm->setAmplitude($harm->getAmplitude() * $amplitudeFix);
+					$harm->setEpoch($harm->getEpoch() - $epochFix);
+                    if (false) {
+                        echo($stationName . ": Amplitude Fix for " . $name . " in " . $year . " is " . $amplitudeFix . " (->" . $harm->getAmplitude() . ")<br/>" . PHP_EOL);
+                        echo($stationName . ": Epoch Fix for " . $name . " in " . $year ." is " . $epochFix . " (->" . $harm->getEpoch() . ")<br/>" . PHP_EOL);
+                    }
+				}
+			}
+			$tideStation->setHarmonicsFixedForYear($year);
+
+             // TODO Push it, with its harmonics !!
+
+			if (true) {
+				echo("==> Sites coefficients of [" . $tideStation->getFullName() . "] fixed for " . $year . ".<br/>" . PHP_EOL);
+			}
+		} else if (true) {
+			echo("Coefficients already fixed for " . $year . ".<br/>" . PHP_EOL);
+		}
+		return $tideStation;
 	}
 
 }

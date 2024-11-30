@@ -211,7 +211,7 @@ public class TideUtilities {
 //  System.out.println(" ----- NbSec for " + d.getTime().toString() + " = " + nbSecSinceJan1st);
 		double timeOffset = nbSecSinceJan1st * 0.00027777777777777778D;
 		if ("true".equals(System.getProperty("tide.verbose"))) {
-			System.out.printf("Current: %s, Jan 1st: %s\n", d.getTime(), jan1st.getTime());
+			System.out.printf("Current: %s (%d), Jan 1st: %s (%d)\n", d.getTime(), d.getTime().getTime() / 1000, jan1st.getTime(), jan1st.getTime().getTime() / 1000);
 			System.out.println("Used TimeOffset in hours:" + timeOffset + " (" + nbSecSinceJan1st + " s), base height:" + stationBaseHeight);
 		}
 		value = stationBaseHeight;

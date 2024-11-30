@@ -133,7 +133,7 @@ let tideComputer = {
         let jan1stMS = jan1st.getTime();
 
         let nbSecSinceJan1st = (dateMS - jan1stMS) / 1000;
-        let timeOffset = nbSecSinceJan1st * 0.00027777777777777778; // 1 / 3600
+        let timeOffset = nbSecSinceJan1st * 0.00027777777777777778; // in hours, 1 / 3600
 
         if (VERBOSE) {
             console.log(`Used TimeOffset in hours: ${timeOffset}, base height: ${baseHeight}`);

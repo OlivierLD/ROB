@@ -1,3 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tide Workbench</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style type="text/css">
+		* {
+			font-family: 'Courier New', Courier, monospace;
+		}
+    </style>
+</head>
+
+<body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+
 <?php
 
 try {
@@ -15,7 +31,7 @@ try {
     $backend = new BackEndSQLiteTideComputer();
     echo("Backend created.<br/>". PHP_EOL);
 
-    // $backend->getStationData();
+    // $backend->getStationsData();
 
     $backend->connectDB("./sql/tides.db");
     echo("Connection created.<br/>". PHP_EOL);
@@ -33,20 +49,15 @@ try {
     echo("buildConstituents executed, " . count($constituentsObject->getConstSpeedMap()) . " element(s) in the ConstSpeedMap.<br/>". PHP_EOL);
 
     echo("Executing getStationData...<br/>". PHP_EOL);
-    $stationData = $backend->getStationData(); // TODO The year !!!
-    // var_dump($stationData);
+    $stationsData = $backend->getStationsData(); // TODO The year !!!
+    // var_dump($stationsData);
     // echo("<br/>" . PHP_EOL);
-    echo("getStationData executed, " . count($stationData) . " element(s).<br/>". PHP_EOL);
+    echo("getStationData executed, " . count($stationsData) . " element(s).<br/>". PHP_EOL);
 
-    // Find Port-Tudy...
-    $portTudyStation = null;
-    for ($i=0; $i<count($stationData); $i++) {
-        // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
-        if (strpos($stationData[$i]->getFullName(),  "Port-Tudy") !== false) {
-            $portTudyStation = $stationData[$i];
-            break;
-        }
-    }
+    // Find Port-Tudy... for the given year.
+    $stationName = "Port-Tudy";
+    $year = 2024;
+    $portTudyStation = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
     if ($portTudyStation == null) {
         echo("Port-Tudy was not found...<br/>" . PHP_EOL);
     } else {
@@ -57,19 +68,31 @@ try {
         } else {
             echo("Port-Tudy IS NOT a current station.<br/>" . PHP_EOL);
             echo("Display Unit: " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+            echo("Time Zone: " . $portTudyStation->getTimeZone() . ", Time Zone Offset: " . $portTudyStation->getTimeOffset() . "<br/>" . PHP_EOL);
         }
 
         // Water Heights test
-        $UTdate = gmdate("Y-m-d H:i:s");
+        // $UTdate = gmdate("Y-m-d H:i:s");
+        $UTdate = microtime(true);
+        $now = DateTime::createFromFormat('U.u', $UTdate); // UTC
+
+        echo("Now is " . $now->format("H:i:s.v") . " (UTC).<br/>");
         
         // $date = new DateTime("2024-11-28 15:47:26"); // Yeah !!!
         // // Convert DateTime to string using date_format()
         // $UTdate = date_format($date, 'Y-m-d H:i:s');
 
-        $wh = TideUtilities::getWaterHeight($portTudyStation, $constituentsObject->getConstSpeedMap(), $UTdate);
-        echo("Water Height in Port-Tudy, at " . $UTdate . " UTC : " . sprintf("%.02f", $wh) . " " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+        // $date->setTimezone(new DateTimeZone('Pacific/Chatham'));
+        // echo $date->format('Y-m-d H:i:sP') . "\n";
+        $now->setTimeZone(new DateTimeZone($portTudyStation->getTimeZone()));
+        echo "Local Time in Port-Tudy: " . $now->format('Y-m-d H:i:sP') . "<br/>";
+
+        $localTime = date_format($now, 'Y-m-d H:i:s');
+
+        $wh = TideUtilities::getWaterHeight($portTudyStation, $constituentsObject->getConstSpeedMap(), $localTime);
+        echo("Water Height in Port-Tudy, at " . $localTime . " (local) : " . sprintf("%.02f", $wh) . " " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
         $mm = TideUtilities::getMinMaxWH($portTudyStation, $constituentsObject->getConstSpeedMap(), $UTdate);
-        echo("Min-Max Height in Port-Tudy, at " . $UTdate . " UTC : min:" . sprintf("%.02f", $mm["min"]) . ", max:" . sprintf("%.02f", $mm["max"])  . ", in " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+        echo("Min-Max Height in Port-Tudy, at " . $localTime . " (local) : min: " . sprintf("%.02f", $mm["min"]) . ", max: " . sprintf("%.02f", $mm["max"])  . ", in " . $portTudyStation->getDisplayUnit() . "<br/>" . PHP_EOL);
     }
 
     $backend->closeDB();
@@ -81,3 +104,5 @@ try {
     echo "[Captured Throwable (big) for tide.sample.php : " . $plaf . "] " . PHP_EOL;
 }
 ?>
+</body>
+</html>

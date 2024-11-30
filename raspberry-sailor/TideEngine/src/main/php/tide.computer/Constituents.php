@@ -31,7 +31,7 @@ class ConstSpeed {
     }
 
     public function getEquilibrium() : array {
-        return $this->putFactorequilibrium;
+        return $this->equilibrium;
     }
 
     public function getFactors() : array {
