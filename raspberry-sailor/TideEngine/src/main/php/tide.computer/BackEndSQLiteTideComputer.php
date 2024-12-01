@@ -197,10 +197,12 @@ class BackEndSQLiteTideComputer {
         $before = microtime(true); // See https://www.w3schools.com/php/func_date_microtime.asp
 
         $tideStation = null;
+        $tideStationIndex = -1;
         for ($i=0; $i<count($stations); $i++) {
             // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
             if (strpos($stations[$i]->getFullName(),  $stationName) !== false) { // Partial match already
                 $tideStation = $stations[$i];
+                $tideStationIndex = $i;
                 break;
             }
         }
@@ -234,23 +236,25 @@ class BackEndSQLiteTideComputer {
 					$amplitudeFix = self::getAmplitudeFix($constituents, $year, $name);
 					$epochFix = self::getEpochFix($constituents, $year, $name);
 
-					$harm->setAmplitude($harm->getAmplitude() * $amplitudeFix);
-					$harm->setEpoch($harm->getEpoch() - $epochFix);
+		/* $harm */ $stationHarmonics[$i]->setAmplitude($harm->getAmplitude() * $amplitudeFix);
+		/* $harm */ $stationHarmonics[$i]->setEpoch($harm->getEpoch() - $epochFix);
                     if (false) {
                         echo($stationName . ": Amplitude Fix for " . $name . " in " . $year . " is " . $amplitudeFix . " (->" . $harm->getAmplitude() . ")<br/>" . PHP_EOL);
                         echo($stationName . ": Epoch Fix for " . $name . " in " . $year ." is " . $epochFix . " (->" . $harm->getEpoch() . ")<br/>" . PHP_EOL);
                     }
 				}
 			}
+            $tideStation->setHarmonics($stationHarmonics);
 			$tideStation->setHarmonicsFixedForYear($year);
 
-             // TODO Push it, with its harmonics !!
+            // Push it, with its harmonics !!
+            $this->stationList[$tideStationIndex] = $tideStation;
 
 			if (true) {
 				echo("==> Sites coefficients of [" . $tideStation->getFullName() . "] fixed for " . $year . ".<br/>" . PHP_EOL);
 			}
 		} else if (true) {
-			echo("Coefficients already fixed for " . $year . ".<br/>" . PHP_EOL);
+			echo("Coefficients were <i><b>already fixed</b></i> for " . $year . ".<br/>" . PHP_EOL);
 		}
 		return $tideStation;
 	}

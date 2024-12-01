@@ -70,6 +70,10 @@ class TideStation {
 		return $this->harmonics;
 	}
 
+	public function setHarmonics(array $harmonics) : void {
+		$this->harmonics = $harmonics;
+	}
+
     public function appendToHarmonics(Harmonic $harmonic) : void {
 		// echo("In " . $this->getFullName() . ", appending harmonic " . $harmonic->getName() . ".<br/>" . PHP_EOL);
         array_push($this->harmonics, $harmonic);

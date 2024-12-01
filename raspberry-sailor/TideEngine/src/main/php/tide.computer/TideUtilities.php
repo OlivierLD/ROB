@@ -85,7 +85,7 @@ class TideUtilities {
         //  long nbSecSinceJan1st = (d.getTime().getTime() - jan1st.getTime().getTime() ) / 1_000L;
         //  System.out.println(" ----- NbSec for " + d.getTime().toString() + " = " + nbSecSinceJan1st);
 		$timeOffset = $nbSecSinceJan1st * 0.00027777777777777778; // aka divided by 3600. That one seems OK.
-		if (true) {
+		if (false) {
             // gmdate("Y-m-d\TH:i:s\Z", $timestamp) 
             // TODO Change to local time (not Z)
             echo("Current: " . gmdate("Y-m-d\TH:i:sP", $secNow) . ", Jan 1st: " . gmdate("Y-m-d\TH:i:sP", $secJan1st) . "<br/>");
@@ -128,8 +128,43 @@ class TideUtilities {
         return $value;
     }
 
+    // Calculate min/max, for the graph
     public static function getMinMaxWH(TideStation $ts, array $constSpeed, string $when) : array {
-        return array("min" => 0, "max" => 0);
+		$minMax = array("min" => 0, "max" => 0); // Init keyed array
+		if ($ts != null) {
+
+            $calcDate = date_parse($when); // Returns an array
+            $year = (int)$calcDate["year"];
+            $month = (int)$calcDate["month"];
+            $day = (int)$calcDate["day"];
+            $hours = (int)$calcDate["hour"]; 
+            $minutes = (int)$calcDate["minute"];
+            $seconds = (float)$calcDate["second"];
+    
+
+            // Calc Jan 1st of the current year
+            $jan1st = date_create(sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, 1, 1, 0, 0, 0)); // "2024-01-01 00:00:00");
+			// 31 Dec, At noon
+            $dec31st = date_create(sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, 12, 31, 12, 0, 0)); // "2024-12-31 12:00:00");
+			$max = -100000.0;
+			$min = 100000.0;;
+			$date = $jan1st;
+			while ($date < $dec31st) {
+				$d = self::getWaterHeight($ts, $constSpeed, date_format($date, "Y-m-d H:i:s")); // (date, jan1st, ts, constSpeed);
+                if (false) {
+                    echo("-- For MinMax: Height at " . $ts->getFullName() . " at " . date_format($date, "Y-m-d H:i:s") . " = " . $d . ".<br/>" . PHP_EOL);
+                }
+				$max = max($max, $d);
+				$min = min($min, $d);
+
+				// date.add(Calendar.HOUR, 2); // date = new Date(date.getTime() + (7200 * 1000)); // Plus 2 hours
+                $date = date_add($date, DateInterval::createFromDateString('2 hours'));
+			}
+			//  System.out.println("In " + year + ", Min:" + min + ", Max:" + max);
+			$minMax["min"] = $min;
+			$minMax["max"] = $max;
+		}
+		return $minMax;
     }
 
     public static function findConstSpeed(Constituents $doc, string $constName) : ConstSpeed {
