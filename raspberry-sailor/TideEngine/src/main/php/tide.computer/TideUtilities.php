@@ -1,5 +1,97 @@
 <?php
 
+$RISING = 1;
+$FALLING = -1;
+
+class TimedValue { // implements Comparable<TimedValue>
+    private $cal; // DateTime
+    private $value;
+    private $coeff = 0; // Coeff in Brest, for HW. Default 0 (ie not set)
+    private $type = "";
+
+    private $epoch;
+    private $unit;
+    private $formattedDate;
+
+    function __construct(string $type, DateTime $cal, float $d) {
+        $this->type = $type;
+        $this->cal = $cal;
+        $this->epoch = $cal->getTimestamp() * 1000; // cal.getTimeInMillis();
+        $this->value = $d;
+    }
+
+    public function unit(string $unit) : TimedValue {
+        $this->unit = $unit;
+        return $this;
+    }
+
+    public function formattedDate(string $formattedDate) : TimedValue {
+        $this->formattedDate = $formattedDate;
+        return $this;
+    }
+
+    public function setUnit(string $unit) : void {
+        $this->unit = $unit;
+    }
+
+    public function setFormattedDate(string $formattedDate) : void {
+        $this->formattedDate = $formattedDate;
+    }
+
+    // See usort, https://www.geeksforgeeks.org/sort-array-of-objects-by-object-fields-in-php/
+    public function compareTo(TimedValue $tv) : int {
+        return ($this->cal > $tv->getCalendar());  // TODO Check this, is it needed ?
+    }
+
+    public function getCalendar() : DateTime {
+        return $this->cal;
+    }
+
+    public function getValue() : float {
+        return $this->value;
+    }
+
+    public function getCoeff() : int {
+        return $this->coeff;
+    }
+
+    public function setCoeff(int $coeff) : void {
+        $this->coeff = $coeff;
+    }
+
+    public function getType() : string {
+        return $this->type;
+    }
+
+    public function getCal() : DateTime {
+        return $this->cal;
+    }
+
+    public function getEpoch() : int {
+        return $this->epoch;
+    }
+
+    public function getUnit() : string {
+        return $this->unit;
+    }
+
+    public function getFormattedDate() : string {
+        return $this->formattedDate;
+    }
+}
+
+// To sort the list of TimedValues
+function comparator(TimedValue $object1, TimedValue $object2) {
+    if ($object1->getCalendar() > $object2->getCalendar()) {
+        return 1;
+    } else if ($object1->getCalendar() < $object2->getCalendar()) {
+        return -1;
+    } else {
+        return 0;
+    }
+    // return $object1->getCalendar() > $object2->getCalendar();
+}
+
 class TideUtilities {
     public static $FEET_2_METERS = 0.30480061; // US feet to meters
 	public static $COEFF_FOR_EPOCH = 0.017453292519943289;
@@ -77,7 +169,8 @@ class TideUtilities {
         // $calcDateTime = mktime($hours, $minutes, $seconds, $month, $day, $year); // Watch the order !!
         // $jan1st = mktime(0, 0, 0, 1, 1, $year);
 
-        $secNow = strtotime(sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $month, $day, $hours, $minutes, $seconds)); // Same as $when "2024-11-28 12:34:56");
+        $secNow = strtotime($when); // Same as $when "2024-11-28 12:34:56");
+        // $secNow = strtotime(sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $month, $day, $hours, $minutes, $seconds)); // Same as $when "2024-11-28 12:34:56");
         $secJan1st = strtotime(sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, 1, 1, 0, 0, 0)); // "2024-01-01 00:00:00");
 
         $nbSecSinceJan1st = ($secNow - $secJan1st);
@@ -186,4 +279,133 @@ class TideUtilities {
         }
         return $theConstSpeed;
     }
+
+    public static function getTideTableForOneDay(TideStation $ts, 
+                                                 array $constSpeed, 
+                                                 int $year, 
+                                                 int $month, 
+                                                 int $day, 
+                                                 ?string $timeZone2Use) : array { // List<TimedValue>
+		$low1 = null;
+		$low2 = null;
+		$high1 = null;
+		$high2 = null;
+		$low1Cal = null;
+		$low2Cal = null;
+		$high1Cal = null;
+		$high2Cal = null;
+		$slackList = array(); // List<TimedValue> 
+		$trend = 0;
+
+		$previousWH = null;
+
+		for ($h = 0; $h < 24; $h++) {
+			for ($m = 0; $m < 60; $m++) {
+                $strDate = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $month, $day, $h, $m, 0);
+                // $secNow = strtotime($strDate);
+                $tz = new DateTimeZone($timeZone2Use != null ? $timeZone2Use: $ts->getTimeZone());
+                $dateTime = DateTime::createFromFormat("Y-m-d H:i:s", $strDate, $tz); // String to DateTime
+                if (false) {
+                    echo("Managing tide data for $strDate (" . $dateTime->format('Y-m-d H:i:s e') . ") <br/>" . PHP_EOL);
+                }
+				$wh = 0;
+				try {
+					$wh = TideUtilities::getWaterHeight($ts, $constSpeed, $strDate);
+                } catch (Throwable $ex) {
+                    throw $ex;
+                }
+				if ($previousWH != null) {
+					if ($ts->isCurrentStation()) {
+						if (($previousWH > 0 && $wh <= 0) || ($previousWH < 0 && $wh >= 0)) {
+                            array_push($slackList, new TimedValue("Slack", $dateTime, 0)); 
+						}
+					}
+					if ($trend == 0) {
+						if ($previousWH > $wh) {
+							$trend = $GLOBALS['FALLING'];
+						} else if ($previousWH < $wh) {
+							$trend = $GLOBALS['RISING'];
+						}
+					} else {
+						switch ($trend) {
+							case $GLOBALS['RISING']:
+								if ($previousWH > $wh) { // Was going up, now going down
+									$prev = $dateTime;
+                                    date_sub($prev, date_interval_create_from_date_string("1 minute"));
+									// prev.add(Calendar.MINUTE, -1);
+									if ($high1 == null) {
+										$high1 = $previousWH;
+										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
+										$high1Cal = $dateTime;
+									} else {
+										$high2 = $previousWH;
+										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
+										$high2Cal = $dateTime;
+									}
+									$trend = $GLOBALS['FALLING']; // Now falling
+								}
+								break;
+							case $GLOBALS['FALLING']:
+								if ($previousWH < $wh) { // Was going down, now going up
+									$prev = $dateTime;
+                                    date_sub($prev, date_interval_create_from_date_string("1 minute"));
+									if ($low1 == null) {
+										$low1 = $previousWH;
+                                        if (false) {
+                                            echo($dateTime->format('Y-m-d H:i:s') . " - 1 minute is...<br/>" . PHP_EOL);
+                                        }                        
+										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
+										$low1Cal = $dateTime;
+                                        if (false) {
+                                            echo($low1Cal->format('Y-m-d H:i:s') . " !<br/>" . PHP_EOL);
+                                        }                        
+									} else {
+										$low2 = $previousWH;
+										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
+										$low2Cal = $dateTime;
+									}
+									$trend = $GLOBALS['RISING']; // Now rising
+								}
+								break;
+						}
+					}
+				}
+				$previousWH = $wh;
+			}
+		}
+        $timeList = array();
+		if ($low1Cal != null) {
+            $tv = new TimedValue("LW", $low1Cal, $low1);
+            $tv->setUnit($ts->getDisplayUnit());
+            $tv->setFormattedDate($low1Cal->format('Y-m-d H:i:s e'));
+            array_push($timeList, $tv); 
+		}
+		if ($low2Cal != null) {
+            $tv = new TimedValue("LW", $low2Cal, $low2);
+            $tv->setUnit($ts->getDisplayUnit());
+            $tv->setFormattedDate($low2Cal->format('Y-m-d H:i:s e'));
+            array_push($timeList, $tv); 
+		}
+		if ($high1Cal != null) {
+            $tv = new TimedValue("HW", $high1Cal, $high1);
+            $tv->setUnit($ts->getDisplayUnit());
+            $tv->setFormattedDate($high1Cal->format('Y-m-d H:i:s e'));
+            array_push($timeList, $tv); 
+		}
+		if ($high2Cal != null) {
+            $tv = new TimedValue("HW", $high2Cal, $high2);
+            $tv->setUnit($ts->getDisplayUnit());
+            $tv->setFormattedDate($high2Cal->format('Y-m-d H:i:s e'));
+            array_push($timeList, $tv); 
+		}
+
+		// if (ts.isCurrentStation() && slackList != null && slackList.size() > 0) {
+		// 	slackList.stream().forEach(timeList::add);
+		// }
+
+		// Collections.sort(timeList);
+        usort($timeList, 'comparator');
+		return $timeList;
+	}
+
 }

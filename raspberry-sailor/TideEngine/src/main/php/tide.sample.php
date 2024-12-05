@@ -46,7 +46,7 @@ function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $
         // $date->setTimezone(new DateTimeZone('Pacific/Chatham'));
         // echo $date->format('Y-m-d H:i:sP') . "\n";
         $now->setTimeZone(new DateTimeZone($theTideStation->getTimeZone()));
-        echo "Local Time in " . $stationName . ": " . $now->format('Y-m-d H:i:sP') . "<br/>";
+        echo "Local Time in " . $stationName . ": " . $now->format('l, Y-m-d H:i:sP') . "<br/>";
 
         $localTime = date_format($now, 'Y-m-d H:i:s');
 
@@ -54,6 +54,17 @@ function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $
         echo("Water Height in " . $stationName . ", at " . $localTime . " (local) : " . sprintf("%.02f", $wh) . " " . $theTideStation->getDisplayUnit() . "<br/>" . PHP_EOL);
         $mm = TideUtilities::getMinMaxWH($theTideStation, $constituentsObject->getConstSpeedMap(), $localTime);
         echo("Min-Max Height in " . $stationName . ", at " . $localTime . " (local) : min: " . sprintf("%.02f", $mm["min"]) . ", max: " . sprintf("%.02f", $mm["max"])  . ", in " . $theTideStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+
+        // More...
+        echo("Tide table for one day...<br/>" . PHP_EOL);
+        $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 5, null /*$theTideStation->getTimeZone()*/);
+        echo("Tide table for one day, done.<br/>" . PHP_EOL);
+
+        // var_dump($tideForOneDay);
+        for ($i=0; $i<count($tideForOneDay); $i++) {
+            echo("- " . $tideForOneDay[$i]->getType() . " at " . $tideForOneDay[$i]->getFormattedDate() . ", " . $tideForOneDay[$i]->getValue() . " " . $tideForOneDay[$i]->getUnit() . "<br/>" . PHP_EOL);
+        }
+
     }
 }
 
