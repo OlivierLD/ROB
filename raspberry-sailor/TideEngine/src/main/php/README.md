@@ -14,4 +14,16 @@ See:
 - <https://www.php.net/manual/en/book.sqlite3.php>
 
 
+## A test
+From the `php` folder, start the server:  
+```
+$ php -S localhost:8000
+```
+Then from a browser, reach `http://localhost:8000/tide.sample.php`.  
+Or from a terminal, do a 
+```
+$ curl http://localhost:8000/tide.sample.php
+```
+
+
 ---

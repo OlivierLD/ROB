@@ -427,4 +427,25 @@ class TideUtilities {
 		return $timeList;
 	}
 
+    /**
+     * $brestOneDay is the TideTable for Brest at the given date.
+     * It must have been computed befgore invoking this one
+     */
+    public static function getCoeffInBrest(TideStation $ts, array $brestOneDay) : array {
+		$coeffs = array();
+		// assert ts.getFullName().equals("Brest%2C%20France");
+		$U = 0.032429906542056; // Hard coded
+		$baseHeight = $ts->getBaseHeight(); // 4.02 for Brest
+
+        for ($i=0; $i<count($brestOneDay); $i++) {
+            $tv = $brestOneDay[$i];
+            if ($tv->getType() == "HW") { 
+                $hwValue = $tv->getValue();
+                $coeff = ($hwValue - $baseHeight) / $U;
+                array_push($coeffs, round($coeff));
+            }
+        }
+		return $coeffs;
+	}
+
 }

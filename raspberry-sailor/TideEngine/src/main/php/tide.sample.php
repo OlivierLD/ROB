@@ -16,13 +16,13 @@
 
 <?php
 
-function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData) : void {
+function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, ?bool $withCoeffs=false) : void {
 
     $theTideStation = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
     if ($theTideStation == null) {
         echo($stationName . " was not found...<br/>" . PHP_EOL);
     } else {
-        echo($stationName . " : Base height: " . $theTideStation->getBaseHeight() . " " . $theTideStation->getDisplayUnit() . "<br/>" . PHP_EOL);
+        echo("<b>" . $stationName . "</b> : Base height: " . $theTideStation->getBaseHeight() . " " . $theTideStation->getDisplayUnit() . "<br/>" . PHP_EOL);
         // var_dump($theTideStation);
         if ($theTideStation->isCurrentStation()) {
             echo($stationName . " IS a current station.<br/>" . PHP_EOL);
@@ -61,9 +61,28 @@ function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $
         $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 6, $tz2Use /*$theTideStation->getTimeZone()*/);
         echo("Tide table for one day, done.<br/>" . PHP_EOL);
 
+        if ($withCoeffs) {
+            $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
+
+			// assert (brestTideStation != null);
+            $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 6, $tz2Use);
+            $coeffsInBrest = TideUtilities::getCoeffInBrest($brestTideStation, $brestTable);
+            $indexInCoeffs = 0;
+            for ($i=0; $i<count($tideForOneDay); $i++) {
+                $tv = $tideForOneDay[$i];
+                if (count($coeffsInBrest) > $indexInCoeffs) {
+                    $tv->setCoeff($coeffsInBrest[$indexInCoeffs]);
+                    $indexInCoeffs++;
+                }
+            }
+        }
+
         // var_dump($tideForOneDay);
         for ($i=0; $i<count($tideForOneDay); $i++) {
-            echo("- " . $tideForOneDay[$i]->getType() . " at " . $tideForOneDay[$i]->getFormattedDate() . ", " . sprintf("%.02f", $tideForOneDay[$i]->getValue()) . " " . $tideForOneDay[$i]->getUnit() . "<br/>" . PHP_EOL);
+            echo("- " . $tideForOneDay[$i]->getType() . 
+                 " at " . $tideForOneDay[$i]->getFormattedDate() . 
+                 ", " . sprintf("%.02f", $tideForOneDay[$i]->getValue()) . " " . $tideForOneDay[$i]->getUnit() . 
+                 ($tideForOneDay[$i]->getCoeff() != 0 ? sprintf(", Coeff: %02d", $tideForOneDay[$i]->getCoeff()) : "") . "<br/>" . PHP_EOL);
         }
 
     }
@@ -113,7 +132,7 @@ try {
     // Find Port-Tudy... for the given year.
     $stationName = "Port-Tudy";
     $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData, true);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     // And so on...
