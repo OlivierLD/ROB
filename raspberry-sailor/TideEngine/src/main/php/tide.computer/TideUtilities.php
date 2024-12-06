@@ -311,9 +311,13 @@ class TideUtilities {
 				$wh = 0;
 				try {
 					$wh = TideUtilities::getWaterHeight($ts, $constSpeed, $strDate);
+                    if (false) {
+                        echo("Water height in " . $ts->getFullName() . " at " . $dateTime->format('Y-m-d H:i:s e') . " is " . sprintf("%.02f", $wh) . " " . $ts->getUnit() . "<br/>" . PHP_EOL);
+                    }
                 } catch (Throwable $ex) {
                     throw $ex;
                 }
+                $applyTimeZone = true; // Set to true for local times.
 				if ($previousWH != null) {
 					if ($ts->isCurrentStation()) {
 						if (($previousWH > 0 && $wh <= 0) || ($previousWH < 0 && $wh >= 0)) {
@@ -337,10 +341,19 @@ class TideUtilities {
 										$high1 = $previousWH;
 										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
 										$high1Cal = $dateTime;
+                                        if ($applyTimeZone) {
+                                            $high1Cal->setTimeZone(new DateTimeZone($ts->getTimeZone()));
+                                        }
+                                        if (false) {
+                                            echo("--> Now going down. Water height in " . $ts->getFullName() . " at " . $dateTime->format('Y-m-d H:i:s e') . " is " . sprintf("%.02f", $wh) . " " . $ts->getUnit() . "<br/>" . PHP_EOL);
+                                        }                    
 									} else {
 										$high2 = $previousWH;
 										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
 										$high2Cal = $dateTime;
+                                        if ($applyTimeZone) {
+                                            $high2Cal->setTimeZone(new DateTimeZone($ts->getTimeZone()));
+                                        }
 									}
 									$trend = $GLOBALS['FALLING']; // Now falling
 								}
@@ -356,6 +369,9 @@ class TideUtilities {
                                         }                        
 										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
 										$low1Cal = $dateTime;
+                                        if ($applyTimeZone) {
+                                            $low1Cal->setTimeZone(new DateTimeZone($ts->getTimeZone()));
+                                        }
                                         if (false) {
                                             echo($low1Cal->format('Y-m-d H:i:s') . " !<br/>" . PHP_EOL);
                                         }                        
@@ -363,6 +379,9 @@ class TideUtilities {
 										$low2 = $previousWH;
 										date_sub($dateTime, date_interval_create_from_date_string("1 minute"));
 										$low2Cal = $dateTime;
+                                        if ($applyTimeZone) {
+                                            $low2Cal->setTimeZone(new DateTimeZone($ts->getTimeZone()));
+                                        }
 									}
 									$trend = $GLOBALS['RISING']; // Now rising
 								}
@@ -399,12 +418,12 @@ class TideUtilities {
             array_push($timeList, $tv); 
 		}
 
+        // TODO Current stations
 		// if (ts.isCurrentStation() && slackList != null && slackList.size() > 0) {
 		// 	slackList.stream().forEach(timeList::add);
 		// }
 
-		// Collections.sort(timeList);
-        usort($timeList, 'comparator');
+        usort($timeList, 'comparator'); // Sort the list on times
 		return $timeList;
 	}
 

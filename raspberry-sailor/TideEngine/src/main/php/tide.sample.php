@@ -57,12 +57,13 @@ function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $
 
         // More...
         echo("Tide table for one day...<br/>" . PHP_EOL);
-        $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 5, null /*$theTideStation->getTimeZone()*/);
+        $tz2Use = null ; // "Europe/Paris"; // Enforce
+        $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 6, $tz2Use /*$theTideStation->getTimeZone()*/);
         echo("Tide table for one day, done.<br/>" . PHP_EOL);
 
         // var_dump($tideForOneDay);
         for ($i=0; $i<count($tideForOneDay); $i++) {
-            echo("- " . $tideForOneDay[$i]->getType() . " at " . $tideForOneDay[$i]->getFormattedDate() . ", " . $tideForOneDay[$i]->getValue() . " " . $tideForOneDay[$i]->getUnit() . "<br/>" . PHP_EOL);
+            echo("- " . $tideForOneDay[$i]->getType() . " at " . $tideForOneDay[$i]->getFormattedDate() . ", " . sprintf("%.02f", $tideForOneDay[$i]->getValue()) . " " . $tideForOneDay[$i]->getUnit() . "<br/>" . PHP_EOL);
         }
 
     }
@@ -123,6 +124,17 @@ try {
     echo("-------------------------------<br/>" . PHP_EOL);
     // Find Port-Tudy... for the given year, again.
     $stationName = "Port-Tudy";
+    $year = 2024;
+    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+
+    echo("-------------------------------<br/>" . PHP_EOL);
+    // Find Johnston Atoll, Pacific Ocean... for the given year.
+    $stationName = "Johnston Atoll";
+    $year = 2024;
+    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+
+    echo("-------------------------------<br/>" . PHP_EOL);
+    $stationName = "Falmouth";
     $year = 2024;
     stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
 
