@@ -24,7 +24,8 @@ function stationTest(string $stationName,
                      BackEndSQLiteTideComputer $backend, 
                      Constituents $constituentsObject, 
                      array $stationsData, 
-                     ?bool $withCoeffs=false) : void {
+                     ?bool $withCoeffs=false,
+                     ?bool $oneMonthTable=false) : void {
 
     $theTideStation = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
     if ($theTideStation == null) {
@@ -65,15 +66,19 @@ function stationTest(string $stationName,
 
         // More...
         echo("Tide table for one day...<br/>" . PHP_EOL);
+        $before = microtime(true);
         $tz2Use = null ; // "Europe/Paris"; // Enforce
-        $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 6, $tz2Use /*$theTideStation->getTimeZone()*/);
-        echo("Tide table for one day, done.<br/>" . PHP_EOL);
+        $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $day, $tz2Use /*$theTideStation->getTimeZone()*/);
+
+        $after = microtime(true);
+        $timeDiff = ($after - $before) * 1000;
+        echo("Tide table for one day, done in " . sprintf("%.02f", $timeDiff) . " ms<br/>" . PHP_EOL);
 
         if ($withCoeffs) {
             $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
 
 			// assert (brestTideStation != null);
-            $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, 12, 6, $tz2Use);
+            $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $day, $tz2Use);
             $coeffsInBrest = TideUtilities::getCoeffInBrest($brestTideStation, $brestTable);
             $indexInCoeffs = 0;
             for ($i=0; $i<count($tideForOneDay); $i++) {
@@ -91,6 +96,19 @@ function stationTest(string $stationName,
                  " at " . $tideForOneDay[$i]->getFormattedDate() . 
                  ", " . sprintf("%.02f", $tideForOneDay[$i]->getValue()) . " " . $tideForOneDay[$i]->getUnit() . 
                  ($tideForOneDay[$i]->getCoeff() != 0 ? sprintf(", Coeff: %02d", $tideForOneDay[$i]->getCoeff()) : "") . "<br/>" . PHP_EOL);
+        }
+
+        // Tide for one month ?
+        if ($oneMonthTable) {
+            $nbDaysThisMonth = TideUtilities::getNbDays($year, $month);
+            echo("Will process tide for one month:" . $year . ", " . $month . ", " . $nbDaysThisMonth . " days.<br/>" . PHP_EOL);
+            $monthTable = array();
+            for ($d=1; $d<=$nbDaysThisMonth; $d++) {
+                // echo(">>> Processing day :" . $d . ".<br/>" . PHP_EOL);
+                $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $d, $tz2Use /*$theTideStation->getTimeZone()*/);
+                $monthTable += [sprintf("%04d-%02d-%02d", $year, $month, $d) => $tideForOneDay];
+            }
+            var_dump($monthTable);
         }
 
     }
@@ -144,7 +162,7 @@ try {
 
     // Find Port-Tudy... for the given year.
     $stationName = "Port-Tudy";
-    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData, true);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData, true, true);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     // And so on...

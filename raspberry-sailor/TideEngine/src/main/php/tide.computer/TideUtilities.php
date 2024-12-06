@@ -96,6 +96,47 @@ class TideUtilities {
     public static $FEET_2_METERS = 0.30480061; // US feet to meters
 	public static $COEFF_FOR_EPOCH = 0.017453292519943289;
 
+    private static $DAYS_PER_MONTH = array (
+		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+	);
+	private static $JANUARY = 1;
+	private static $FEBRUARY = 2;
+	private static $MARCH = 3;
+	private static $APRIL = 4;
+	private static $MAY = 5;
+	private static $JUNE = 6;
+	private static $JULY = 7;
+	private static $AUGUST = 8;
+	private static $SEPTEMBER = 9;
+	private static $OCTOBER = 10;
+	private static $NOVEMBER = 11;
+	private static $DECEMBER = 12;
+
+	/**
+	 * Get the number of days for a given month and year. Takes care of leap years.
+	 *
+	 * @param y year
+	 * @param m month Jan:1, Dec:12
+	 * @return the number of days in the given month.
+	 */
+	public static function getNbDays(int $y, int $m) : int {
+		$nd = self::$DAYS_PER_MONTH[$m - 1];
+		if ($m == self::$FEBRUARY) {
+			$leap = false;
+			if ($y % 4 == 0) { // Leap
+				$leap = true;
+				if ($y % 100 == 0) { // Not leap
+					$leap = $y % 400 == 0; // Except if %400 = 0
+				}
+			}
+			if ($leap) {
+				$nd += 1; // 29;
+			}
+		}
+		return $nd;
+	}
+
+
     public static function startsWith (string $string, string $startString) : bool { 
         $len = strlen($startString); 
         return (substr($string, 0, $len) === $startString); 
