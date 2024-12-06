@@ -34,7 +34,7 @@ For the HTTP server, NodeJS, Python, Java can be used...
 > This HTTP server can run locally, no external resource is required (expect when you use cartography like Leaflets, of course).  
 > That's flake computing, _not_ cloud computing (aka EZ - Entropy Zero).
 
-### For Python
+### With a Python server
 Use
 ```
 python3 -m http.server [port-number] &
@@ -50,7 +50,7 @@ To see some basic steps:
 - <http://localhost:8000/scratch.html>
 
 ---
-### For NodeJS
+### With a NodeJS server
 Use
 ```
 node server.js &
@@ -71,7 +71,7 @@ chrome://inspect
 Then from another browser, reach the URL served by the node server, like <http://localhost:8888/leaflet.tide.stations.html>,
 and you can set breakpoints in the server's code.
 
-### For Java
+### With a Java server
 This repo contains a small Java HTTP server.  
 To build it:
 ```

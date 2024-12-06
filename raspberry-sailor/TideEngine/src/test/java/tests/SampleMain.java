@@ -401,9 +401,18 @@ public class SampleMain {
 						}
 						List<TimedValue> table = TideUtilities.getTideTableForOneDay(ts, constSpeed, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
 
+						// GMT Times
 						for (TimedValue tv : table) {
 							System.out.println(tv.getType() + " " + tv.getCalendar().getTime() + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
 						}
+						System.out.println("------------");
+						// Local Times
+						final String timeZone = ts.getTimeZone();
+						SDF.setTimeZone(TimeZone.getTimeZone(timeZone));
+						for (TimedValue tv : table) {
+							System.out.println(tv.getType() + " " + SDF.format(tv.getCalendar().getTime()) + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+						}
+						System.out.println("------------");
 
 						System.out.println("Done");
 					}

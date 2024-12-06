@@ -13,10 +13,18 @@
 </head>
 
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+<h2>PHP Tides Test</h2>    
 
 <?php
 
-function stationTest(string $stationName, int $year, BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, ?bool $withCoeffs=false) : void {
+function stationTest(string $stationName, 
+                     int $year, 
+                     int $month, 
+                     int $day,
+                     BackEndSQLiteTideComputer $backend, 
+                     Constituents $constituentsObject, 
+                     array $stationsData, 
+                     ?bool $withCoeffs=false) : void {
 
     $theTideStation = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
     if ($theTideStation == null) {
@@ -129,33 +137,33 @@ try {
     echo("-------------------------------<br/>" . PHP_EOL);
     echo("----- <b>Water Height Tests</b> ------<br/>" . PHP_EOL);
     echo("-------------------------------<br/>" . PHP_EOL);
+
+    $year = (int)date("Y"); // gmdate ?
+    $month = (int)date("m");
+    $day = (int)date("d");
+
     // Find Port-Tudy... for the given year.
     $stationName = "Port-Tudy";
-    $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData, true);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData, true);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     // And so on...
     $stationName = "Half Moon Bay";
-    $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     // Find Port-Tudy... for the given year, again.
     $stationName = "Port-Tudy";
-    $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     // Find Johnston Atoll, Pacific Ocean... for the given year.
     $stationName = "Johnston Atoll";
-    $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     $stationName = "Falmouth";
-    $year = 2024;
-    stationTest($stationName, $year, $backend, $constituentsObject, $stationsData);
+    stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData);
 
     echo("-------------------------------<br/>" . PHP_EOL);
     

@@ -315,8 +315,12 @@ function showGeneratedDialog(station) {
                 coeff = coeffInBrest[coeffIdx];
                 coeffIdx++;
             }
+            // console.log(`TimeZone: ${tideStation.timeZone}`);
+            // console.log(`Date, zoned: ${line.at.toLocaleString('en', {timeZone: tideStation.timeZone})}`);
             console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}`);
-            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}\n`);
+            // tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}\n`);
+            // TODO Some cleanup in the date format...
+            tableContent += (`${line.type}: at ${line.at.toLocaleString('en', {timeZone: tideStation.timeZone})}, ${line.wh.toFixed(2)} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}\n`);
         });
         tableContent += "</pre>";
         // Draw the graph.
@@ -387,7 +391,7 @@ function showGeneratedDialog(station) {
         graph.data = graphData;
         graph.label = `WH at ${dateFmt.formatDate(new Date(data.now), 'd-M-y H:i')}, ${data.wh.toFixed(2)} ${tideStation.displayUnit}`;
         graph.repaint();
-        document.getElementById("station-name").innerText = decodeURIComponent(station);
+        document.getElementById("station-name").innerText = decodeURIComponent(station) + ` (${tideStation.timeZone})`;
         document.getElementById("tide-table").innerHTML = tableContent;
     }
     graphDialog.show();
