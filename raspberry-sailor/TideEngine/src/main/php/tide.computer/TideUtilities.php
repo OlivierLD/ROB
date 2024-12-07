@@ -92,6 +92,32 @@ function comparator(TimedValue $object1, TimedValue $object2) {
     // return $object1->getCalendar() > $object2->getCalendar();
 }
 
+$NS = 1;
+$EW = 2;
+
+function decToSex($value, $type) {
+  global $NS, $EW;
+
+  $absValue = abs($value);
+  $intValue = floor($absValue);
+  $dec = $absValue - $intValue;
+  $dec *= 60;
+
+  $formatted = $intValue . "&deg;" . number_format($dec, 2) . "'";
+  $sign = "N";
+  if ($type == $EW) {
+    $sign = "E";
+  }
+  if ($value < 0) {
+    if ($type == $NS) {
+      $sign = "S";
+    } else {
+      $sign = "W";
+    }
+  }
+  return $sign . " " . $formatted;
+}
+
 class TideUtilities {
     public static $FEET_2_METERS = 0.30480061; // US feet to meters
 	public static $COEFF_FOR_EPOCH = 0.017453292519943289;

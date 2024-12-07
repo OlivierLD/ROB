@@ -9,6 +9,11 @@
 		* {
 			font-family: 'Courier New', Courier, monospace;
 		}
+        td {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+        }
     </style>
 </head>
 
@@ -16,6 +21,14 @@
 <h2>PHP Tides Test</h2>    
 
 <?php
+
+function getCoeffData (BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, int $year, int $month, int $day, ?string $tz2Use) : array {
+    $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
+    // assert (brestTideStation != null);
+    $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $day, $tz2Use);
+    $coeffsInBrest = TideUtilities::getCoeffInBrest($brestTideStation, $brestTable);
+    return $coeffsInBrest;
+}
 
 function stationTest(string $stationName, 
                      int $year, 
@@ -75,15 +88,17 @@ function stationTest(string $stationName,
         echo("Tide table for one day, done in " . sprintf("%.02f", $timeDiff) . " ms<br/>" . PHP_EOL);
 
         if ($withCoeffs) {
-            $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
+            // $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
 
-			// assert (brestTideStation != null);
-            $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $day, $tz2Use);
-            $coeffsInBrest = TideUtilities::getCoeffInBrest($brestTideStation, $brestTable);
+			// // assert (brestTideStation != null);
+            // $brestTable = TideUtilities::getTideTableForOneDay($brestTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $day, $tz2Use);
+            // $coeffsInBrest = TideUtilities::getCoeffInBrest($brestTideStation, $brestTable);
+
+            $coeffsInBrest = getCoeffData ($backend, $constituentsObject, $stationsData, $year, $month, $day, $tz2Use);
             $indexInCoeffs = 0;
             for ($i=0; $i<count($tideForOneDay); $i++) {
                 $tv = $tideForOneDay[$i];
-                if (count($coeffsInBrest) > $indexInCoeffs) {
+                if ($tv->getType() == "HW" && count($coeffsInBrest) > $indexInCoeffs) {
                     $tv->setCoeff($coeffsInBrest[$indexInCoeffs]);
                     $indexInCoeffs++;
                 }
@@ -106,9 +121,73 @@ function stationTest(string $stationName,
             for ($d=1; $d<=$nbDaysThisMonth; $d++) {
                 // echo(">>> Processing day :" . $d . ".<br/>" . PHP_EOL);
                 $tideForOneDay = TideUtilities::getTideTableForOneDay($theTideStation, $constituentsObject->getConstSpeedMap(), $year, $month, $d, $tz2Use /*$theTideStation->getTimeZone()*/);
+                // Coeffs
+                $coeffsInBrest = getCoeffData($backend, $constituentsObject, $stationsData, $year, $month, $d, $tz2Use);
+                $indexInCoeffs = 0;
+                for ($i=0; $i<count($tideForOneDay); $i++) {
+                    $tv = $tideForOneDay[$i];
+                    if ($tv->getType() == "HW" && count($coeffsInBrest) > $indexInCoeffs) {
+                        $tv->setCoeff($coeffsInBrest[$indexInCoeffs]);
+                        $indexInCoeffs++;
+                    }
+                }
+                // Done.
                 $monthTable += [sprintf("%04d-%02d-%02d", $year, $month, $d) => $tideForOneDay];
             }
-            var_dump($monthTable);
+            // var_dump($monthTable);
+
+            $arrayKeys = array_keys($monthTable);
+
+            if (false) {
+                $colCounter = 0;
+                while ($colCounter < count($arrayKeys)) {
+                    echo($arrayKeys[$colCounter] . (sprintf(" %02d", $colCounter % 3)) . "<br/>" . PHP_EOL);
+                    $colCounter += 1;
+                }
+            }
+
+            if (true) {
+                // A table test...
+                echo("<p>" . PHP_EOL);
+                echo("<b>" . $theTideStation->getFullName() . "</b>, " . 
+                              decToSex($theTideStation->getLatitude(), "NS") . " / " . decToSex($theTideStation->getLongitude(), "EW") . ", TZ " . 
+                              $theTideStation->getTimeZone() . "<br/>" . PHP_EOL);
+                echo("<i>For " . DateTime::createFromFormat("Y-m", sprintf("%04d-%02d", $year, $month))->format("F Y") . "</i><br/>" . PHP_EOL);
+                echo("<table style='border: 1px solid black;'>" . PHP_EOL);
+                $colCounter = 0;
+                $nbCol = 4;
+                while ($colCounter < count($arrayKeys)/* && $colCounter < 10*/) {
+                    echo("<tr>" . PHP_EOL);
+                    for ($j=0; $j<$nbCol; $j++) {
+                        if ($colCounter < count($arrayKeys)) {
+                            $dateTime = DateTime::createFromFormat("Y-m-d", $arrayKeys[$colCounter]); // , $tz); 
+                            echo("<td style='vertical-align: top;'>" . PHP_EOL);
+                            // Inner table
+                            echo("<table>" . PHP_EOL);
+                            echo(  "<tr><td colspan='5'><b>" . $dateTime->format('l, M d, Y') . "</b></td></tr>" . PHP_EOL);
+                            echo(  "<tr><th></th><th>Time</th><th>Height</th><th>Unit</th><th>Coeff</th></tr>" . PHP_EOL);
+                            $tideData = $monthTable[$arrayKeys[$colCounter]];
+
+                            for ($k=0; $k<count($tideData); $k++) {
+                                echo("<tr>" . PHP_EOL);
+                                echo(  "<td><b>" . $tideData[$k]->getType() . "</b></td>" .
+                                       "<td>" . $tideData[$k]->getCalendar()->format("H:i") . "</td>" .
+                                       "<td>" . sprintf("%.02f", $tideData[$k]->getValue()) . "</td>" . 
+                                       "<td>" . $tideData[$k]->getUnit() . "</td>" .
+                                       "<td style='text-align: center;'>" . ($tideData[$k]->getCoeff() != 0 ? sprintf("%02d", $tideData[$k]->getCoeff()) : "") . "</td>" . PHP_EOL);
+                                echo("<tr>" . PHP_EOL);
+                            }
+                            echo("</table>" . PHP_EOL);
+                            echo("</td>" . PHP_EOL);
+                            $colCounter++;
+                        }
+                    }
+                    // $colCounter += 1; // Oho !
+                    echo("</tr>" . PHP_EOL);
+                }
+                echo("</table>" . PHP_EOL);
+                echo("</p>" . PHP_EOL);
+            }
         }
 
     }
