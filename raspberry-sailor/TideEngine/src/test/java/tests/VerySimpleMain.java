@@ -4,9 +4,7 @@ import tideengine.BackEndTideComputer;
 import tideengine.Coefficient;
 import tideengine.TideStation;
 import tideengine.TideUtilities;
-import tideengine.TideUtilities.TimedValue;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -16,7 +14,7 @@ import java.util.*;
  * This is just a test, not a unit-test.
  * Direct access, no REST here.
  */
-public class VerySampleMain {
+public class VerySimpleMain {
 	private final static SimpleDateFormat SDF = new SimpleDateFormat("yyy-MMM-dd HH:mm z (Z)");
 
 	private final static BackEndTideComputer backEndTideComputer = new BackEndTideComputer();

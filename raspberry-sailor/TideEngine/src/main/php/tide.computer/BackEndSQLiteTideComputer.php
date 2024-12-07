@@ -193,7 +193,7 @@ class BackEndSQLiteTideComputer {
 		return $d;
 	}
 
-    public function findTideStation(string $stationName, int $year, Constituents $constituents, array $stations) : TideStation {
+    public function findTideStation(string $stationName, int $year, Constituents $constituents, array $stations, ?bool $verbose=false) : TideStation {
         $before = microtime(true); // See https://www.w3schools.com/php/func_date_microtime.asp
 
         $tideStation = null;
@@ -207,7 +207,9 @@ class BackEndSQLiteTideComputer {
             }
         }
         if ($tideStation == null) {
-            echo("Station [" . $stationName . "] was not found, trying partial match...<br/>" . PHP_EOL);
+            if ($verbose) {
+                echo("Station [" . $stationName . "] was not found, trying partial match...<br/>" . PHP_EOL);
+            }
             // try with strtoupper
             for ($i=0; $i<count($stations); $i++) {
                 // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
@@ -221,7 +223,7 @@ class BackEndSQLiteTideComputer {
         $after = microtime(true);
         $timeDiff = ($after - $before) * 1000;
 
-		if (true) {
+		if ($verbose) {
 			echo(sprintf("Finding the station node took %d ms.<br/>", $timeDiff) . PHP_EOL);
 		}
 		// Fix for the given year
@@ -250,10 +252,10 @@ class BackEndSQLiteTideComputer {
             // Push it, with its harmonics !!
             $this->stationList[$tideStationIndex] = $tideStation;
 
-			if (true) {
+			if ($verbose) {
 				echo("==> Sites coefficients of [" . $tideStation->getFullName() . "] fixed for " . $year . ".<br/>" . PHP_EOL);
 			}
-		} else if (true) {
+		} else if ($verbose) {
 			echo("Coefficients were <i><b>already fixed</b></i> for " . $year . ".<br/>" . PHP_EOL);
 		}
 		return $tideStation;
