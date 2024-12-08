@@ -261,4 +261,25 @@ class BackEndSQLiteTideComputer {
 		return $tideStation;
 	}
 
+    public function getStationList(string $pattern) : array {
+        $list = array();
+        if (self::$db == null) {
+            throw new Exception("DB Not connected yet.");
+        } else {
+			$selectStatement = "select t1.name " .
+                               "from stations as t1 " .
+                               "where upper(t1.name) like upper('%" . $pattern . "%')";
+			try {
+                $results = self::$db->query($selectStatement);
+                while ($row = $results->fetchArray()) {
+                    // echo ("We have " . $row[0] . "...<br/>" . PHP_EOL);
+                    $fullName = $row[0];
+                    array_push($list, $fullName);
+                }
+			} catch (Throwable $ex) {
+				throw $ex;
+			}
+        }
+        return $list;
+    }
 }
