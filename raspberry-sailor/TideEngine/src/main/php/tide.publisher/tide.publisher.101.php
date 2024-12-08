@@ -2,22 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tide Publisher 101</title>
+  <title>Tide Publisher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style type="text/css">
-		* {
-			font-family: 'Courier New', Courier, monospace;
-		}
-        td {
-            border: 1px solid black;
-            border-radius: 5px;
-            padding: 5px;
-        }
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+td {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+table {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media screen {
+    .screen-only {
+        display: inline-block;
+    }
+
+    #result-to-publish {
+		display: block;
+        /* color: darkred; */
+	}
+}
+
+@media print {
+    .table-content, .content, .blank-for-print {
+        page-break-before: always;
+    }
+
+    .doc-section {
+        page-break-inside: avoid;
+    }
+
+    .page-break {
+		page-break-after: always
+	}
+
+    .screen-only {
+        display: none;
+    }
+
+    .print-only {  /* overrides the one in main.css */
+        display: block;
+    }
+	
+    #result-to-publish {
+		display: block;
+        /* color: black; */
+	}
+} 
+
     </style>
 </head>
 
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
+<div id="user-entry" class="screen-only">
 <h2>PHP Tides Publisher</h2>
 
 <?php
@@ -105,12 +150,12 @@ function publishAlmanac(string $stationName,
         $arrayKeys = array_keys($monthTable);
         // Table for 1 month...
         $content .= ("<p>" . PHP_EOL);
-        $content .= ("<b>" . $theTideStation->getFullName() . "</b>, " . 
+        $content .= ("<span style='font-size: 1.5rem;'><b>" . $theTideStation->getFullName() . "</b>, " . 
                         decToSex($theTideStation->getLatitude(), "NS") . " / " . decToSex($theTideStation->getLongitude(), "EW") . ", TZ " . 
                         $theTideStation->getTimeZone() . ", base height " . 
-                        $theTideStation->getBaseHeight() . " " . $theTideStation->getDisplayUnit() . "<br/>" . PHP_EOL);
-        $content .= ("<i>For " . DateTime::createFromFormat("Y-m", sprintf("%04d-%02d", $year, $month))->format("F Y") . "</i><br/>" . PHP_EOL);
-        $content .= ("<table style='border: 1px solid black;'>" . PHP_EOL);
+                        $theTideStation->getBaseHeight() . " " . $theTideStation->getDisplayUnit() . "<span><br/>" . PHP_EOL);
+        $content .= ("<span style='font-size: 2.0rem; font-style: italic; font-weight: bold;'>" . DateTime::createFromFormat("Y-m", sprintf("%04d-%02d", $year, $month))->format("F Y") . "</span><br/>" . PHP_EOL);
+        $content .= ("<table>" . PHP_EOL);
         $colCounter = 0;
         $nbCol = 4;
         while ($colCounter < count($arrayKeys)/* && $colCounter < 10*/) {
@@ -183,21 +228,29 @@ function publishStationDuration(string $stationName, int $year, ?int $month=null
         echo("getStationData executed, " . count($stationsData) . " element(s).<br/>". PHP_EOL);
     }
 
+    ?>
+    <p>
+        <button onclick="history.back()">Go Back</button>
+    </p>
+    <?php
+
     // $year = (int)date("Y"); // gmdate ?
     // $month = (int)date("m");
+    $content = "";
     if ($month != null) {
         $content = publishAlmanac($stationName, $year, $month, $backend, $constituentsObject, $stationsData);
-        // display it
-        echo($content);
     } else {
         // One year, loop.
-        $fullContent = "";
+        $content = "";
         for ($m=1; $m<=12; $m++) {
-            $fullContent .= publishAlmanac($stationName, $year, $m, $backend, $constituentsObject, $stationsData);
+            $content .= publishAlmanac($stationName, $year, $m, $backend, $constituentsObject, $stationsData);
+            $content .= ("<div class='page-break'></div>" . PHP_EOL);
         }
-        // Display
-        echo($fullContent);
     }
+    echo("</div>"); // Close the screen-only div
+    echo("<div id='result-to-publish'>" . PHP_EOL);
+    echo($content);
+    // echo("</div>");
 
     $backend->closeDB();
     if ($VERBOSE) {
@@ -233,7 +286,7 @@ function blankScreen() : void {
           name="formStation" 
           style="padding:0; margin:0">
         
-        Enter a part of the name: <input type="text" size="40" name="pattern" placeholder="Name pattern">
+        Enter a part of the name: <input type="text" size="40" name="pattern" placeholder="Name pattern" title="Enter '%' for all stations" required>
         <br/>
         <input type="submit" value="Submit">
     </form>
@@ -245,9 +298,17 @@ function selectStationAndDuration(array $list) : void {
 
     if (count($list) == 0) {
         echo("No station selected... Try again.<br/>" . PHP_EOL);
+    ?>
+    <p>
+        <button onclick="history.back()">Go Back</button>
+    </p>
+    <?php
     } else {
     ?>
-    <h2>Choose your tide station, select duration</h2>
+    <p>
+        <button onclick="history.back()">Go Back</button>
+    </p>
+    <h2>Choose your tide station, select period</h2>
 
     <script type="text/javascript">
         let updateMonthField = (item) => {
@@ -384,12 +445,12 @@ try {
         // echo ("Blank Screen<br/>" . PHP_EOL);
         blankScreen();
     } else if ($option == $PICK_UP_STATION) {
-        echo ("Pick-up Station<br/>" . PHP_EOL);
+        // echo ("Pick-up Station<br/>" . PHP_EOL);
         // $pattern = "Brest";
         $list = getStationsList($pattern);
         selectStationAndDuration($list);
     } else if ($option == $SELECT_DURATION) {
-        echo ("Select Duration<br/>" . PHP_EOL);
+        // echo ("Select Duration<br/>" . PHP_EOL);
         selectDuration($stationName); // Done in the above, probably useless.
     } else if ($option == $PUBLISH) {
         // like publishStationDuration("Port-Tudy", 2024, 12);
@@ -405,5 +466,6 @@ try {
     echo "[Captured Throwable (big loop) for " . __FILE__ . " : " . $plaf . "] " . PHP_EOL;
 }
 ?>
+</div>
 </body>
 </html>
