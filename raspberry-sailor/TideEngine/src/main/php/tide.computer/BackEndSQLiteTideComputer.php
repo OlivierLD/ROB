@@ -261,7 +261,7 @@ class BackEndSQLiteTideComputer {
 		return $tideStation;
 	}
 
-    public function getStationList(string $pattern) : array {
+    public function getStationList(string $pattern, ?bool $tideOnly=false) : array {
         $list = array();
         if (self::$db == null) {
             throw new Exception("DB Not connected yet.");
@@ -269,6 +269,9 @@ class BackEndSQLiteTideComputer {
 			$selectStatement = "select t1.name " .
                                "from stations as t1 " .
                                "where upper(t1.name) like upper('%" . $pattern . "%')";
+            if ($tideOnly) {
+                $selectStatement .= " and t1.baseheightunit <> 'knots'";
+            }
 			try {
                 $results = self::$db->query($selectStatement);
                 while ($row = $results->fetchArray()) {
