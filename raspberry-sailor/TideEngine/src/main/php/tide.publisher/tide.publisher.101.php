@@ -72,6 +72,121 @@ table {
 
 $VERBOSE = false;
 
+$lang = "EN"; 
+// Get it from the browser
+$browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+echo "Browser Language: [" . $browserLang . "]<br/>";
+if ($browserLang == 'fr') {
+    $lang = 'FR';
+} else {
+    // leave it to English
+}
+
+$translations = array(
+    "go-back" => array("EN" => "Go Back", "FR" => "Retour"),
+    "choose-station" => array("EN" => "Choose your tide station", "FR" => "Choisissez la station"),
+    "part-of-name" => array("EN" => "Enter a part of the name", "FR" => "Saisissez une partie du nom"),
+    "choose-station-2" => array("EN" => "Choose your tide station, select period", "FR" => "Choisissez la station, et sélectionnez la période"),
+    "station" => array("EN" => "Station", "FR" => "Station"),
+    "duration" => array("EN" => "Duration", "FR" => "Durée"),
+    "one-month" => array("EN" => "One month", "FR" => "Un mois"),
+    "one-year" => array("EN" => "One year", "FR" => "Un an"),
+    "year" => array("EN" => "Year", "FR" => "Année"),
+    "month" => array("EN" => "Month", "FR" => "Mois"),
+    "january" => array("EN" => "January", "FR" => "Janvier"),
+    "february" => array("EN" => "February", "FR" => "Février"),
+    "march" => array("EN" => "March", "FR" => "Mars"),
+    "april" => array("EN" => "April", "FR" => "Avril"),
+    "may" => array("EN" => "May", "FR" => "Mai"),
+    "june" => array("EN" => "June", "FR" => "Juin"),
+    "july" => array("EN" => "July", "FR" => "Juillet"),
+    "august" => array("EN" => "August", "FR" => "Août"),
+    "september" => array("EN" => "September", "FR" => "Septembre"),
+    "october" => array("EN" => "October", "FR" => "Octobre"),
+    "november" => array("EN" => "November", "FR" => "Novembre"),
+    "december" => array("EN" => "December", "FR" => "Décembre"),
+    "base-height" => array("EN" => "base height", "FR" => "niveau moyen"),
+    "time" => array("EN" => "Timet", "FR" => "Heure"),
+    "height" => array("EN" => "Height", "FR" => "Hauteur"),
+    "unit" => array("EN" => "Unit", "FR" => "Unité"),
+    "coeff" => array("EN" => "Coeff", "FR" => "Coeff"),
+    "HW" => array("EN" => "HW", "FR" => "PM"),
+    "LW" => array("EN" => "LW", "FR" => "BM"),
+    "meters" => array("EN" => "meters", "FR" => "mètres"),
+    "feet" => array("EN" => "feet", "FR" => "pieds"),
+    "knots" => array("EN" => "knots", "FR" => "nœuds"),
+);
+
+function translate (string $lang, string $textId) : string {
+    global $translations;
+
+    if (false) {
+        echo ("Translation requested for [" . $textId . "] in [" . $lang . "]<br/>" . PHP_EOL);
+    }
+
+    $translated = $translations[$textId][$lang];
+    return $translated;
+}
+
+$ENGLISH_MONTHS = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+$ENGLISH_DOW = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+
+$FRENCH_MONTHS = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
+$FRENCH_DOW = array("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
+
+$DATE_FMT_DOW_DAY_MONTH_YEAR = 0;
+$DATE_FMT_FULL_MONTH_YEAR = 1;
+
+function englishDate(DateTime $date, ?int $option=0) : string {
+    global $ENGLISH_MONTHS, $ENGLISH_DOW;
+    global $DATE_FMT_DOW_DAY_MONTH_YEAR, $DATE_FMT_FULL_MONTH_YEAR;
+
+    $dow =   (int)$date->format("N");
+    $month = (int)$date->format("m");
+    $year =  (int)$date->format("Y");
+    $day =   (int)$date->format("d");
+
+    $englishDate = "";
+    switch ($option) {
+        case $DATE_FMT_DOW_DAY_MONTH_YEAR:
+            $englishDate = $ENGLISH_DOW[$dow - 1] . " " . $ENGLISH_MONTHS[$month - 1] . " " . $day . ", " . $year;
+            break;
+        case $DATE_FMT_FULL_MONTH_YEAR:
+            $englishDate = $ENGLISH_MONTHS[$month - 1] . " " . $year;
+            break;
+    }
+    return $englishDate;
+}
+
+function frenchDate(DateTime $date, ?int $option=0) : string {
+    global $FRENCH_MONTHS, $FRENCH_DOW;
+    global $DATE_FMT_DOW_DAY_MONTH_YEAR, $DATE_FMT_FULL_MONTH_YEAR;
+
+    $dow =   (int)$date->format("N");
+    $month = (int)$date->format("m");
+    $year =  (int)$date->format("Y");
+    $day =   (int)$date->format("d");
+
+    $frenchDate = "";
+    switch ($option) {
+        case $DATE_FMT_DOW_DAY_MONTH_YEAR:
+            $frenchDate = $FRENCH_DOW[$dow - 1] . " " . $day . " " . $FRENCH_MONTHS[$month - 1] . " " . $year;
+            break;
+        case $DATE_FMT_FULL_MONTH_YEAR:
+            $frenchDate = $FRENCH_MONTHS[$month - 1] . " " . $year;
+            break;
+    }
+    return $frenchDate;
+}
+
+function translateDate(string $lang, DateTime $date, ?int $option=0) : string {
+    if ($lang == "FR") {
+        return frenchDate($date, $option);
+    } else {
+        return englishDate($date, $option);
+    }
+}
+
 function getCoeffData (BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, int $year, int $month, int $day, ?string $tz2Use) : array {
     $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
     // assert (brestTideStation != null);
@@ -90,8 +205,9 @@ function publishAlmanac(string $stationName,
                         Constituents $constituentsObject, 
                         array $stationsData) : string {
 
-    global $VERBOSE;        
-    
+    global $VERBOSE, $lang;        
+    global $DATE_FMT_DOW_DAY_MONTH_YEAR, $DATE_FMT_FULL_MONTH_YEAR;
+
     $content = "";
 
     $theTideStation = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
@@ -151,13 +267,14 @@ function publishAlmanac(string $stationName,
         // var_dump($monthTable);
 
         $arrayKeys = array_keys($monthTable);
-        // Table for 1 month...
+        // Dsplay Table for 1 month...
         $content .= ("<p>" . PHP_EOL);
         $content .= ("<span style='font-size: 1.5rem;'><b>" . $theTideStation->getFullName() . "</b>, " . 
-                        decToSex($theTideStation->getLatitude(), "NS") . " / " . decToSex($theTideStation->getLongitude(), "EW") . ", TZ " . 
-                        $theTideStation->getTimeZone() . ", base height " . 
-                        $theTideStation->getBaseHeight() . " " . $theTideStation->getDisplayUnit() . "<span><br/>" . PHP_EOL);
-        $content .= ("<span style='font-size: 2.0rem; font-style: italic; font-weight: bold;'>" . DateTime::createFromFormat("Y-m", sprintf("%04d-%02d", $year, $month))->format("F Y") . "</span><br/>" . PHP_EOL);
+                        decToSex($theTideStation->getLatitude(), "NS") . " / " . decToSex($theTideStation->getLongitude(), "EW") . ", TZ : " . 
+                        $theTideStation->getTimeZone() . ", " . translate($lang, "base-height") . " : " . 
+                        $theTideStation->getBaseHeight() . " " . translate($lang, $theTideStation->getDisplayUnit()) . "<span><br/>" . PHP_EOL);
+        $content .= ("<span style='font-size: 2.0rem; font-style: italic; font-weight: bold;'>" . 
+                        translateDate($lang, DateTime::createFromFormat("Y-m", sprintf("%04d-%02d", $year, $month)), $DATE_FMT_FULL_MONTH_YEAR) . "</span><br/>" . PHP_EOL);
         $content .= ("<table>" . PHP_EOL);
         $colCounter = 0;
         $nbCol = 4;
@@ -169,17 +286,17 @@ function publishAlmanac(string $stationName,
                     $content .= ("<td style='vertical-align: top;'>" . PHP_EOL);
                     // Inner table
                     $content .= ("<table>" . PHP_EOL);
-                    $content .= (  "<tr><td colspan='6'><b>" . $dateTime->format('l, M d, Y') . "</b></td></tr>" . PHP_EOL);
-                    $content .= (  "<tr><th></th><th>Time</th><th>Height</th><th>Unit</th><th>Coeff</th></tr>" . PHP_EOL);
+                    $content .= (  "<tr><td colspan='6'><b>" . translateDate($lang, $dateTime, $DATE_FMT_DOW_DAY_MONTH_YEAR) . "</b></td></tr>" . PHP_EOL);
+                    $content .= (  "<tr><th></th><th>" . translate($lang, "time") . "</th><th>" . translate($lang, "height") . "</th><th>" . translate($lang, "unit") . "</th><th>" . translate($lang, "coeff") . "</th></tr>" . PHP_EOL);
                     $tideData = $monthTable[$arrayKeys[$colCounter]]["tide.data"];
                     $moonPhase = $monthTable[$arrayKeys[$colCounter]]["moon.phase"];
 
                     for ($k=0; $k<count($tideData); $k++) {
                         $content .= ("<tr>" . PHP_EOL);
-                        $content .= (  "<td><b>" . $tideData[$k]->getType() . "</b></td>" .
+                        $content .= (  "<td><b>" . translate($lang, $tideData[$k]->getType()) . "</b></td>" .
                                 "<td>" . $tideData[$k]->getCalendar()->format("H:i") . "</td>" .
                                 "<td>" . sprintf("%.02f", $tideData[$k]->getValue()) . "</td>" . 
-                                "<td>" . $tideData[$k]->getUnit() . "</td>" .
+                                "<td>" . translate($lang, $tideData[$k]->getUnit()) . "</td>" .
                                 "<td style='text-align: center;'>" . ($tideData[$k]->getCoeff() != 0 ? sprintf("%02d", $tideData[$k]->getCoeff()) : "") . "</td>" . 
                                 ($k == 0 ? "<td rowspan='4'><img src='" . $moonPhase . "'></td>" : "") . PHP_EOL);
                         $content .= ("<tr>" . PHP_EOL);
@@ -199,7 +316,7 @@ function publishAlmanac(string $stationName,
 }
 
 function publishStationDuration(string $stationName, int $year, ?int $month=null) : void {
-    global $VERBOSE;
+    global $VERBOSE, $lang;
 
     $backend = new BackEndSQLiteTideComputer();
     if ($VERBOSE) {
@@ -233,7 +350,7 @@ function publishStationDuration(string $stationName, int $year, ?int $month=null
 
     ?>
     <p>
-        <button onclick="history.back()">Go Back</button>
+        <button onclick="history.back()"><?php echo translate($lang, "go-back"); ?></button>
     </p>
     <?php
 
@@ -282,14 +399,16 @@ function getStationsList(string $pattern) : array {
 }
 
 function blankScreen() : void {
+    global $lang;
     ?>
-    <h2>Choose your tide station</h2>
+    <h2><?php echo translate($lang, "choose-station"); ?></h2>
     <form action="<?php echo basename(__FILE__); ?>" 
           method="get" 
           name="formStation" 
           style="padding:0; margin:0">
+        <input type="hidden" name="lang" value="<?php echo $lang; ?>">
         
-        Enter a part of the name: <input type="text" size="40" name="pattern" placeholder="Name pattern" title="Enter '%' for all stations" required>
+        <?php echo translate($lang, "part-of-name"); ?>: <input type="text" size="40" name="pattern" placeholder="Name pattern" title="Joker is '%'.&#13;Enter '%' for all stations" required>
         <br/>
         <input type="submit" value="Submit">
     </form>
@@ -297,21 +416,22 @@ function blankScreen() : void {
 }
 
 function selectStationAndDuration(array $list) : void {
+    global $lang;
     echo("Selected " . count($list) . " station(s)<br/>" . PHP_EOL);
 
     if (count($list) == 0) {
         echo("No station selected... Try again.<br/>" . PHP_EOL);
     ?>
     <p>
-        <button onclick="history.back()">Go Back</button>
+        <button onclick="history.back()"><?php echo translate($lang, "go-back"); ?></button>
     </p>
     <?php
     } else {
     ?>
     <p>
-        <button onclick="history.back()">Go Back</button>
+        <button onclick="history.back()"><?php echo translate($lang, "go-back"); ?></button>
     </p>
-    <h2>Choose your tide station, select period</h2>
+    <h2><?php echo translate($lang, "choose-station-2"); ?></h2>
 
     <script type="text/javascript">
         let updateMonthField = (item) => {
@@ -324,9 +444,10 @@ function selectStationAndDuration(array $list) : void {
           method="get" 
           id="formStation" 
           style="padding:0; margin:0">
-        <table>
+          <input type="hidden" name="lang" value="<?php echo $lang; ?>">
+          <table>
             <tr>
-                <td>Station</td>
+                <td><?php echo translate($lang, "station"); ?></td>
                 <td>
                     <select name="station-name" form="formStation">
     <?php
@@ -338,37 +459,37 @@ function selectStationAndDuration(array $list) : void {
                 </td>
             </tr>
             <tr>
-                <td>Duration</td>
+                <td><?php echo translate($lang, "duration"); ?></td>
                 <td>
                     <!--input type="hidden" name="duration" value="MONTH"-->
                     <select name="duration" form="formStation" onchange="updateMonthField(this);">
-                        <option value="MONTH">One month</option>
-                        <option value="YEAR">One year</option>
+                        <option value="MONTH"><?php echo translate($lang, "one-month"); ?></option>
+                        <option value="YEAR"><?php echo translate($lang, "one-year"); ?></option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td>Year</td>
+                <td><?php echo translate($lang, "year"); ?></td>
                 <td>
-                    <input type="number" name="year" value="2024">
+                    <input type="number" name="year" value="<?php echo date("Y"); ?>">
                 </td>
             </tr>
             <tr>
-                <td>Month</td>
+                <td><?php echo translate($lang, "month"); ?></td>
                 <td>
-                    <select id="month-list" name="month" form="formStation">
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
+                    <select id="month-list" name="month" form="formStation"> <!-- defaulted to current month -->
+                        <option value="1"<?php echo ((date("m") == 1) ? " selected" : "") ?>><?php echo translate($lang, "january"); ?></option>
+                        <option value="2"<?php echo ((date("m") == 2) ? " selected" : "") ?>><?php echo translate($lang, "february"); ?></option>
+                        <option value="3"<?php echo ((date("m") == 3) ? " selected" : "") ?>><?php echo translate($lang, "march"); ?></option>
+                        <option value="4"<?php echo ((date("m") == 4) ? " selected" : "") ?>><?php echo translate($lang, "april"); ?></option>
+                        <option value="5"<?php echo ((date("m") == 5) ? " selected" : "") ?>><?php echo translate($lang, "may"); ?></option>
+                        <option value="6"<?php echo ((date("m") == 6) ? " selected" : "") ?>><?php echo translate($lang, "june"); ?></option>
+                        <option value="7"<?php echo ((date("m") == 7) ? " selected" : "") ?>><?php echo translate($lang, "july"); ?></option>
+                        <option value="8"<?php echo ((date("m") == 8) ? " selected" : "") ?>><?php echo translate($lang, "august"); ?></option>
+                        <option value="9"<?php echo ((date("m") == 9) ? " selected" : "") ?>><?php echo translate($lang, "september"); ?></option>
+                        <option value="10"<?php echo ((date("m") == 10) ? " selected" : "") ?>><?php echo translate($lang, "october"); ?></option>
+                        <option value="11"<?php echo ((date("m") == 11) ? " selected" : "") ?>><?php echo translate($lang, "november"); ?></option>
+                        <option value="12"<?php echo ((date("m") == 12) ? " selected" : "") ?>><?php echo translate($lang, "december"); ?></option>
                     </select>
                 </td>
             </tr>
@@ -393,6 +514,7 @@ $publishYear = null;
 $publishMonth = null;
 $pattern = null;
 
+
 $BLANK_SCREEN = 0;
 $PICK_UP_STATION = 1;
 $SELECT_DURATION = 2;
@@ -410,7 +532,7 @@ try {
     }
 
     /**
-     * URL Like http://.../tide.publisher.101.php?station-name=Port-Tudy&duration=MONTH&year=2024&month=12
+     * URL Like http://.../tide.publisher.101.php?station-name=Port-Tudy&duration=MONTH&year=2024&month=12 optional &lang=FR
      */
 
     if (isset($_GET['station-name'])) {
@@ -427,6 +549,9 @@ try {
     }
     if (isset($_GET['pattern'])) {
         $pattern = $_GET['pattern']; 
+    }
+    if (isset($_GET['lang'])) {
+        $lang = $_GET['lang']; 
     }
 
     // Verify coherence
