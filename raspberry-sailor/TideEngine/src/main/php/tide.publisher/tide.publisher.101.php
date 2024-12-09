@@ -106,7 +106,7 @@ $translations = array(
     "november" => array("EN" => "November", "FR" => "Novembre"),
     "december" => array("EN" => "December", "FR" => "Décembre"),
     "base-height" => array("EN" => "base height", "FR" => "niveau moyen"),
-    "time" => array("EN" => "Timet", "FR" => "Heure"),
+    "time" => array("EN" => "Time", "FR" => "Heure"),
     "height" => array("EN" => "Height", "FR" => "Hauteur"),
     "unit" => array("EN" => "Unit", "FR" => "Unité"),
     "coeff" => array("EN" => "Coeff", "FR" => "Coeff"),
