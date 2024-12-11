@@ -8,8 +8,7 @@ import java.awt.event.WindowEvent;
 public class Main4Tests
 {
 
-  public Main4Tests()
-  {
+  public Main4Tests() {
     Frame frame = new SampleFrame();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension frameSize = frame.getSize();
@@ -19,9 +18,7 @@ public class Main4Tests
       frameSize.width = screenSize.width;
     frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
     frame.addWindowListener(new WindowAdapter() {
-
-      public void windowClosing(WindowEvent e)
-      {
+      public void windowClosing(WindowEvent e) {
         System.exit(0);
       }
 
@@ -29,15 +26,12 @@ public class Main4Tests
     frame.setVisible(true);
   }
 
-  public static void main(String args[])
-  {
-    try
-    {
+  public static void main(String args[]) {
+    try {
       if (System.getProperty("swing.defaultlaf") == null)
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
-    catch(Exception e)
-    {
+    catch(Exception e) {
       e.printStackTrace();
     }
     new Main4Tests();

@@ -1,3 +1,7 @@
+<!--
+    include __DIR__ . '/../tide.computer/autoload.php';
+    include __DIR__ . '/../../../../../../astro-computer/AstroComputer/src/main/php.v7/autoload.php'; // Modify at will !!
+-->
 <!DOCTYPE html>
 <!--
  | Full UI for Tide Almanac publication.
@@ -21,6 +25,15 @@ table {
     border: 1px solid black;
     border-radius: 5px;
     padding: 5px;
+}
+
+.final-form {
+    border: 2px solid blue;
+    border-radius: 5px;
+    padding: 10px;
+}
+.final-submit {
+    margin-top: 5px;
 }
 
 @media screen {
@@ -431,75 +444,93 @@ function selectStationAndDuration(array $list) : void {
     <p>
         <button onclick="history.back()"><?php echo translate($lang, "go-back"); ?></button>
     </p>
-    <h2><?php echo translate($lang, "choose-station-2"); ?></h2>
+    <div class="final-form"> <!-- The div for the final form -->
+        <h2><?php echo translate($lang, "choose-station-2"); ?></h2>
 
-    <script type="text/javascript">
-        let updateMonthField = (item) => {
-            console.log(`Duration is now ${item.value}`);
-            document.getElementById('month-list').disabled = (item.value === 'YEAR');
-        };
-    </script>
+        <script type="text/javascript">
+            let updateMonthField = (item) => {
+                console.log(`Duration is now ${item.value}`);
+                document.getElementById('month-list').disabled = (item.value === 'YEAR');
+            };
+            let sendAck = (form) => {
+                // console.log("The received Obj:" + form);
+                // debugger;
+                let lang = form.querySelector("input[name = 'lang']").value;
+                let station = form.querySelector("select[name = 'station-name']").value;
+                let duration = form.querySelector("select[name = 'duration']").value;
 
-    <form action="<?php echo basename(__FILE__); ?>" 
-          method="get" 
-          id="formStation" 
-          style="padding:0; margin:0">
-          <input type="hidden" name="lang" value="<?php echo $lang; ?>">
-          <table>
-            <tr>
-                <td><?php echo translate($lang, "station"); ?></td>
-                <td>
-                    <select name="station-name" form="formStation">
-    <?php
-    for ($i=0; $i<count($list); $i++) {
-        echo("<option value='" . $list[$i] . "'>" . $list[$i] . "</option>" . PHP_EOL);
-    }
-    ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><?php echo translate($lang, "duration"); ?></td>
-                <td>
-                    <!--input type="hidden" name="duration" value="MONTH"-->
-                    <select name="duration" form="formStation" onchange="updateMonthField(this);">
-                        <option value="MONTH"><?php echo translate($lang, "one-month"); ?></option>
-                        <option value="YEAR"><?php echo translate($lang, "one-year"); ?></option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><?php echo translate($lang, "year"); ?></td>
-                <td>
-                    <input type="number" name="year" value="<?php echo date("Y"); ?>">
-                </td>
-            </tr>
-            <tr>
-                <td><?php echo translate($lang, "month"); ?></td>
-                <td>
-                    <select id="month-list" name="month" form="formStation"> <!-- defaulted to current month -->
-                        <option value="1"<?php echo ((date("m") == 1) ? " selected" : "") ?>><?php echo translate($lang, "january"); ?></option>
-                        <option value="2"<?php echo ((date("m") == 2) ? " selected" : "") ?>><?php echo translate($lang, "february"); ?></option>
-                        <option value="3"<?php echo ((date("m") == 3) ? " selected" : "") ?>><?php echo translate($lang, "march"); ?></option>
-                        <option value="4"<?php echo ((date("m") == 4) ? " selected" : "") ?>><?php echo translate($lang, "april"); ?></option>
-                        <option value="5"<?php echo ((date("m") == 5) ? " selected" : "") ?>><?php echo translate($lang, "may"); ?></option>
-                        <option value="6"<?php echo ((date("m") == 6) ? " selected" : "") ?>><?php echo translate($lang, "june"); ?></option>
-                        <option value="7"<?php echo ((date("m") == 7) ? " selected" : "") ?>><?php echo translate($lang, "july"); ?></option>
-                        <option value="8"<?php echo ((date("m") == 8) ? " selected" : "") ?>><?php echo translate($lang, "august"); ?></option>
-                        <option value="9"<?php echo ((date("m") == 9) ? " selected" : "") ?>><?php echo translate($lang, "september"); ?></option>
-                        <option value="10"<?php echo ((date("m") == 10) ? " selected" : "") ?>><?php echo translate($lang, "october"); ?></option>
-                        <option value="11"<?php echo ((date("m") == 11) ? " selected" : "") ?>><?php echo translate($lang, "november"); ?></option>
-                        <option value="12"<?php echo ((date("m") == 12) ? " selected" : "") ?>><?php echo translate($lang, "december"); ?></option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Submit">
-                </td>
-            </tr>
-        </table>
-    </form>
+                let message = "";
+                if (lang === 'FR') {
+                    message = `Votre requête pour "${station}", sur une durée d'un ${(duration === 'YEAR') ? 'an' : 'mois'}, est en cours de traitement.\nSoyez patient, ça peut prendre du temps...`;
+                } else {    
+                    message = `Your request for "${station}", on one ${(duration === 'YEAR') ? 'year' : 'month'}, is being processed.\nBe patient, it may take some time...`;
+                }
+                setTimeout(() => { // Non-blocking alert. TODO A custom dialog (with the header I want)
+                    alert(message);
+                }, 1);
+            };
+        </script>
+
+        <form action="<?php echo basename(__FILE__); ?>" 
+            onsubmit="sendAck(this);"
+            method="get" 
+            id="formStation" 
+            style="padding:0; margin:0">
+            <input type="hidden" name="lang" value="<?php echo $lang; ?>">
+            <table>
+                <tr>
+                    <td><?php echo translate($lang, "station"); ?></td>
+                    <td>
+                        <select name="station-name" form="formStation">
+        <?php
+                        for ($i=0; $i<count($list); $i++) {
+                            echo("<option value='" . $list[$i] . "'>" . $list[$i] . "</option>" . PHP_EOL);
+                        }
+        ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo translate($lang, "duration"); ?></td>
+                    <td>
+                        <!--input type="hidden" name="duration" value="MONTH"-->
+                        <select name="duration" form="formStation" onchange="updateMonthField(this);">
+                            <option value="MONTH"><?php echo translate($lang, "one-month"); ?></option>
+                            <option value="YEAR"><?php echo translate($lang, "one-year"); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo translate($lang, "year"); ?></td>
+                    <td>
+                        <input type="number" name="year" value="<?php echo date("Y"); ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo translate($lang, "month"); ?></td>
+                    <td>
+                        <select id="month-list" name="month" form="formStation"> <!-- defaulted to current month -->
+                            <option value="1"<?php echo ((date("m") == 1) ? " selected" : "") ?>><?php echo translate($lang, "january"); ?></option>
+                            <option value="2"<?php echo ((date("m") == 2) ? " selected" : "") ?>><?php echo translate($lang, "february"); ?></option>
+                            <option value="3"<?php echo ((date("m") == 3) ? " selected" : "") ?>><?php echo translate($lang, "march"); ?></option>
+                            <option value="4"<?php echo ((date("m") == 4) ? " selected" : "") ?>><?php echo translate($lang, "april"); ?></option>
+                            <option value="5"<?php echo ((date("m") == 5) ? " selected" : "") ?>><?php echo translate($lang, "may"); ?></option>
+                            <option value="6"<?php echo ((date("m") == 6) ? " selected" : "") ?>><?php echo translate($lang, "june"); ?></option>
+                            <option value="7"<?php echo ((date("m") == 7) ? " selected" : "") ?>><?php echo translate($lang, "july"); ?></option>
+                            <option value="8"<?php echo ((date("m") == 8) ? " selected" : "") ?>><?php echo translate($lang, "august"); ?></option>
+                            <option value="9"<?php echo ((date("m") == 9) ? " selected" : "") ?>><?php echo translate($lang, "september"); ?></option>
+                            <option value="10"<?php echo ((date("m") == 10) ? " selected" : "") ?>><?php echo translate($lang, "october"); ?></option>
+                            <option value="11"<?php echo ((date("m") == 11) ? " selected" : "") ?>><?php echo translate($lang, "november"); ?></option>
+                            <option value="12"<?php echo ((date("m") == 12) ? " selected" : "") ?>><?php echo translate($lang, "december"); ?></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <div class="final-submit">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
     <?php
     }
 }
@@ -553,6 +584,18 @@ try {
     if (isset($_GET['lang'])) {
         $lang = $_GET['lang']; 
     }
+
+?>
+    <!-- Language switch -->
+     Language switch. Current lang is <?php echo $lang; ?>.
+    <form id="lang-swicth" action="<?php echo basename(__FILE__); ?>" method="get" name="lang-switch">
+        <input type="radio" onchange="this.form.submit();" id="fr" name="lang" value="FR"<?php echo(($lang == 'FR') ? " checked" : ""); ?>>
+        <label for="fr">FR</label><br>
+        <input type="radio" onchange="this.form.submit();" id="en" name="lang" value="EN"<?php echo(($lang == 'EN') ? " checked" : ""); ?>>
+        <label for="en">EN</label><br>
+    </form>
+    <hr/>
+<?php
 
     // Verify coherence
     $option = -1;
