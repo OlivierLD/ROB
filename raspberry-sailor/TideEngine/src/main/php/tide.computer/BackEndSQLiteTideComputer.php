@@ -262,22 +262,32 @@ class BackEndSQLiteTideComputer {
 	}
 
     public function getStationList(string $pattern, ?bool $tideOnly=false) : array {
+
+        $escapedPattern = str_replace("'", "''", $pattern); // Escape single quotes. ' => '' in SQLite.
+
         $list = array();
         if (self::$db == null) {
             throw new Exception("DB Not connected yet.");
         } else {
 			$selectStatement = "select t1.name " .
                                "from stations as t1 " .
-                               "where upper(t1.name) like upper('%" . $pattern . "%')";
+                               "where upper(t1.name) like upper('%" . $escapedPattern . "%')";
+            if (false) {
+                echo("SQL to execute : [" . $selectStatement . "]<br/>" . PHP_EOL);
+            }                               
             if ($tideOnly) {
                 $selectStatement .= " and t1.baseheightunit <> 'knots'";
             }
 			try {
                 $results = self::$db->query($selectStatement);
-                while ($row = $results->fetchArray()) {
-                    // echo ("We have " . $row[0] . "...<br/>" . PHP_EOL);
-                    $fullName = $row[0];
-                    array_push($list, $fullName);
+                if ($results != false) {
+                    while ($row = $results->fetchArray()) {
+                        // echo ("We have " . $row[0] . "...<br/>" . PHP_EOL);
+                        $fullName = $row[0];
+                        array_push($list, $fullName);
+                    }
+                } else {
+                    echo("SQL [" . $selectStatement . "] failed...<br/>" . PHP_EOL);
                 }
 			} catch (Throwable $ex) {
 				throw $ex;

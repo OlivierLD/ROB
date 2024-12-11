@@ -456,7 +456,8 @@ function selectStationAndDuration(array $list) : void {
                 // console.log("The received Obj:" + form);
                 // debugger;
                 let lang = form.querySelector("input[name = 'lang']").value;
-                let station = form.querySelector("select[name = 'station-name']").value;
+                // let station = form.querySelector("select[name = 'station-name']").value;
+                let station = form.querySelector("select[name = 'station-name']").querySelector('option:checked').innerText
                 let duration = form.querySelector("select[name = 'duration']").value;
 
                 let message = "";
