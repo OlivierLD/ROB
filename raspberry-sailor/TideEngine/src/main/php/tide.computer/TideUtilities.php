@@ -105,11 +105,11 @@ function decToSex($value, $type) {
 
   $formatted = $intValue . "&deg;" . number_format($dec, 2) . "'";
   $sign = "N";
-  if ($type == $EW) {
+  if ($type == $EW || $type == "EW") {
     $sign = "E";
   }
   if ($value < 0) {
-    if ($type == $NS) {
+    if ($type == $NS || $type == "NS") {
       $sign = "S";
     } else {
       $sign = "W";

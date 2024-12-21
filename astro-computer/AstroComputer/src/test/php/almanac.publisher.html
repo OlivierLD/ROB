@@ -70,7 +70,15 @@
 			</p>
 		</div>
 		<hr/>
-		<div id="method">
+        <div style="vertical-align: top; margin: 10px 0 10px 0;">
+            Langue /  Language :
+            <select id="user-lang" title="Langue / Language" onchange="translatePage(this);">
+                <option value="FR">Fran&ccedil;ais</option>
+                <option value="EN">English</option>
+            </select>
+        </div>
+
+        <div id="method">
 			All calculations are done on the server, in php. Rendering is done on the client.
 		</div>
 	</div>
@@ -129,12 +137,12 @@
                     -->
                 </div>
             </td>
-            <td style="vertical-align: top;">
+            <!--td style="vertical-align: top;">
 				<select id="user-lang" title="Langue / Language" onchange="translatePage(this);">
 					<option value="FR">Fran&ccedil;ais</option>
 					<option value="EN">English</option>
 				</select>
-            </td>
+            </td-->
         </tr>
     </table>
 
