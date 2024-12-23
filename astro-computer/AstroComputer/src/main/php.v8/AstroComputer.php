@@ -535,6 +535,71 @@ class AstroComputer {
         return $this->context->eps0;
     }
 
+    public function sunRiseAndSet(float $latitude, float $longitude) : array {
+        if (!$this->calculateHasBeenInvoked) {
+            throw new RuntimeException("Calculation was never invoked in this context");
+        }
+        $h0 = ($this->context->HPsun / 3600.0) - ($this->context->SDsun / 3600.0) - (34.0 / 60.0);
+        //  out.println("Sin Sun H0:" + sin(deg2rad(h0)));
+        $cost = sin(deg2rad($h0)) - (tan(deg2rad($latitude)) * tan(deg2rad($this->context->DECsun)));
+        $t = acos($cost);
+
+        $alt = false;
+        if ($alt) {
+            // 0.83, apparent diameter of the sun on the horizon
+            $cost = (sin(deg2rad(-0.83)) - (sin(deg2rad($latitude)) * sin(deg2rad($this->context->DECsun)))) /
+                    (cos(deg2rad($latitude)) * cos(deg2rad($this->context->DECsun)));
+            $t = acos($cost);
+        }
+
+        // TASK Look into this next line...
+        //  out.println("Sun GHA: " + $this->context->GHAsun);
+        //  double lon = - $this->context->GHAsun; // - rad2deg(t);
+        //  double lon = $this->context->GHAsun; // - rad2deg(t);
+        $lon = $longitude;
+        while ($lon < -180.0) {
+            $lon += 360.0;
+        }
+        //  out.println("Lon:" + lon + ", Eot:" + $this->context->EoT + " (" + ($this->context->EoT / 60D) + ")" + ", t:" + rad2deg(t));
+        $utRise = 12.0 - ($this->context->EoT / 60.0) - ($lon / 15.0) - (rad2deg($t) / 15.0);
+        $utSet = 12.0 - ($this->context->EoT / 60.0) - ($lon / 15.0) + (rad2deg($t) / 15.0);
+
+        $Z = acos((sin(deg2rad($this->context->DECsun)) + (0.0145 * sin(deg2rad($latitude)))) / (0.9999 * cos(deg2rad($latitude))));
+        $Z = rad2deg($Z);
+
+        return array($utRise, $utSet, $Z, (360.0 - $Z));
+    }
+
+	public function moonRiseAndSet(float $latitude, float $longitude) : array {
+        if (!$this->calculateHasBeenInvoked) {
+            throw new RuntimeException("Calculation was never invoked in this context");
+        }
+        $h0 = ($this->context->HPmoon / 3600.0) - ($this->context->SDmoon / 3600.0) - (34.0 / 60.0);
+        $cost = sin(deg2rad($h0)) - (tan(deg2rad($latitude)) * tan(deg2rad($this->context->DECmoon)));
+        $t = acos($cost);
+
+        $lon = $longitude;
+        while ($lon < -180.0) {
+            $lon += 360.0;
+        }
+        $utRise = 12.0 - ($this->context->moonEoT / 60.0) - ($lon / 15.0) - (rad2deg($t) / 15.0);
+        while ($utRise < 0) {
+            $utRise += 24;
+        }
+        while ($utRise > 24) {
+            $utRise -= 24;
+        }
+        $utSet = 12.0 - ($this->context->moonEoT / 60.0) - ($lon / 15.0) + (rad2deg($t) / 15.0);
+        while ($utSet < 0) {
+            $utSet += 24;
+        }
+        while ($utSet > 24) {
+            $utSet -= 24;
+        }
+
+        return array($utRise, $utSet);
+    }
+
     public static function ghaToLongitude(float $gha) : float {
         $longitude = 0;
         if ($gha < 180) {
