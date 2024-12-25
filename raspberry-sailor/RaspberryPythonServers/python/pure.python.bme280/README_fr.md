@@ -1,4 +1,4 @@
-# Un serveur BME280, en Python
+# Un serveur BME280, tout en Python (uniquement)
 (en [anglais](./README.md))  
 
 Un barographe (comme [ceux-l&agrave;](https://www.naudet.com/barometre-enregistreur-c102x2375473)) est un instrument tr&egrave;s utile pour les pr&eacute;visions m&eacute;t&eacute;o.  
