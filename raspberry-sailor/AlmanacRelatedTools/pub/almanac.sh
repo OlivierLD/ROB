@@ -2,6 +2,7 @@
 echo ----------------------------
 echo Nautical Almanac or Lunar Distances Calculation
 echo and pdf generation.
+echo Dates provided by the user
 echo ----------------------------
 #
 export def_month=$(date +%m)

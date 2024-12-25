@@ -269,14 +269,14 @@ Then from a browser, load [http://localhost:8000/index.html](http://localhost:80
 
 
 ##### Quick execution time comparison
-| Language | Time in ms |
-|:---------|-----------:|
-| Go       |      3.676 |
-| C        |      4.412 |
-| Java     |     55.000 |
-| php      |     57.886 |
-| Scala    |     64.000 |
-| Python   |    142.000 |
+| Language | Time in ms |                  |
+|:---------|-----------:|:-----------------|
+| Go       |      3.676 |                  |
+| C        |      4.412 |                  |
+| Java     |     55.000 | (See note below) |
+| php      |     57.886 |                  |
+| Scala    |     64.000 | (See note below) |
+| Python   |    142.000 |                  |
 
 > _Note_: For Java and Scala, the JVM and the classes have to be loaded first. 
 > Subsequent executions should be must faster. For example, 10 consecutive java executions:
@@ -424,8 +424,8 @@ $
 ```
 
 ### Micronaut
-There is also a Micronaut service.
-See in the [`Micronaut`](./Micronaut/README.md) (Serverless MicroService) folder.
+There is also a way to write Micronaut services.
+See [`Micronaut`](https://micronaut.io/) (Serverless MicroService) for details.  
 Very trending.
 
 It is based on the Java implementation of the Celestial Almanac, and
