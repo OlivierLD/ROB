@@ -28,7 +28,7 @@ It provides
 - A BME280 sensor
 - Jumper wires
 - A power supply for the Raspberry Pi
-- A laptop
+- A laptop (for the initial configuration)
 - A network with Internet access (your home WiFi would do)
 
 > _**A Note**_: you will have to type some commands in a terminal, as shown below.  

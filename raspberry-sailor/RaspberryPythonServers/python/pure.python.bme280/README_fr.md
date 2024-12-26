@@ -27,7 +27,7 @@ Ce qui fournit les fonctionnalit&eacute;s suivantes :
 - Un capteur BME280
 - Des cables, jumpers
 - Une alim pour le Raspberry Pi
-- Un laptop
+- Un laptop (pour la configuration initiale)
 - Un r&eacute;seau avec un acc&egrave;s Internet (celui que vous avez &agrave; la maison fait l'affaire)
 
 > _**Attention**_: vous allez avoir &agrave; taper des commandes dans un terminal, comme indiqu&eacute; ci-dessous.  
