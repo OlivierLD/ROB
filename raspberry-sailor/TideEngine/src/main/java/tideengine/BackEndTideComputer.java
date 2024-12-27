@@ -213,6 +213,7 @@ public class BackEndTideComputer {
 			System.out.println("Reloading Station Data for corrections in year " + year);
 			try {
 				TideStation newTs = reloadTideStation(URLDecoder.decode(station.getFullName(), StandardCharsets.UTF_8.toString()));
+				// TideStation newTs = reloadTideStation(station.getFullName());
 				stations.getStations().put(station.getFullName(), newTs);
 				station = newTs;
 			} catch (Exception ex) {
@@ -230,8 +231,8 @@ public class BackEndTideComputer {
 					harm.setAmplitude(harm.getAmplitude() * amplitudeFix);
 					harm.setEpoch(harm.getEpoch() - epochFix);
 
-					//      System.out.println(stationName + ": Amplitude Fix for " + name + " in " + year + " is " + amplitudeFix + " (->" + harm.getAmplitude() + ")");
-					//      System.out.println(stationName + ": Epoch Fix for " + name + " in " + year + " is " + epochFix + " (->" + harm.getEpoch() + ")");
+					// System.out.println(stationName + ": Amplitude Fix for " + name + " in " + year + " is " + amplitudeFix + " (->" + harm.getAmplitude() + ")");
+					// System.out.println(stationName + ": Epoch Fix for " + name + " in " + year + " is " + epochFix + " (->" + harm.getEpoch() + ")");
 				}
 			}
 			station.setHarmonicsFixedForYear(year);

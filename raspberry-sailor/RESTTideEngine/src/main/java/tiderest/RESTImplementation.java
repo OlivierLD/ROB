@@ -155,6 +155,7 @@ public class RESTImplementation {
 		try {
 			content = mapper.writeValueAsString(opList);
 		} catch (JsonProcessingException jpe) {
+			jpe.printStackTrace();
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
@@ -181,6 +182,7 @@ public class RESTImplementation {
 			try {
 				content = mapper.writeValueAsString(this.tideRequestManager.getCoeffDefinitions());
 			} catch (JsonProcessingException jpe) {
+				jpe.printStackTrace();
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
@@ -217,7 +219,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("TIDE-0001")
+							.errorCode("TIDE-0003")
 							.errorMessage("Need tideRequestManager path parameter {coeff-name}."));
 			return response;
 		}
@@ -227,10 +229,11 @@ public class RESTImplementation {
 			try {
 				content = mapper.writeValueAsString(new NameValuePair<String>().name(coeffName).value(definition == null ? "unknown" : definition));
 			} catch (JsonProcessingException jpe) {
+				jpe.printStackTrace();
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("TIDE-0003")
+								.errorCode("TIDE-0004")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -291,10 +294,11 @@ public class RESTImplementation {
 			try {
 				content = mapper.writeValueAsString(stationNames);
 			} catch (JsonProcessingException jpe) {
+				jpe.printStackTrace();
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("TIDE-0004")
+								.errorCode("TIDE-0005")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -369,7 +373,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("TIDE-0002")
+							.errorCode("TIDE-0006")
 							.errorMessage("Need tideRequestManager path parameter {station-name}."));
 			proceed = false;
 		}
@@ -379,7 +383,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("TIDE-0003")
+								.errorCode("TIDE-0007")
 								.errorMessage("Query parameters 'from' and 'to' are required."));
 				proceed = false;
 			} else {
@@ -404,7 +408,7 @@ public class RESTImplementation {
 								response = HTTPServer.buildErrorResponse(response,
 										Response.BAD_REQUEST,
 										new HTTPServer.ErrorPayload()
-												.errorCode("TIDE-0011")
+												.errorCode("TIDE-0008")
 												.errorMessage(String.format("Invalid payload: %s", payload)));
 								proceed = false;
 							} else {
@@ -412,7 +416,7 @@ public class RESTImplementation {
 									response = HTTPServer.buildErrorResponse(response,
 											Response.BAD_REQUEST,
 											new HTTPServer.ErrorPayload()
-													.errorCode("TIDE-0012")
+													.errorCode("TIDE-0009")
 													.errorMessage(String.format("Step MUST be positive: %d", options.step)));
 									proceed = false;
 								}
@@ -421,7 +425,7 @@ public class RESTImplementation {
 										response = HTTPServer.buildErrorResponse(response,
 												Response.BAD_REQUEST,
 												new HTTPServer.ErrorPayload()
-														.errorCode("TIDE-0013")
+														.errorCode("TIDE-0010")
 														.errorMessage(String.format("Invalid TimeZone: %s", options.timezone)));
 										proceed = false;
 									}
@@ -440,10 +444,11 @@ public class RESTImplementation {
 								}
 							}
 						} catch (Exception ex) {
+							ex.printStackTrace();
 							response = HTTPServer.buildErrorResponse(response,
 									Response.BAD_REQUEST,
 									new HTTPServer.ErrorPayload()
-											.errorCode("TIDE-0010")
+											.errorCode("TIDE-0011")
 											.errorMessage(ex.toString()));
 							proceed = false;
 						}
@@ -461,7 +466,7 @@ public class RESTImplementation {
 							response = HTTPServer.buildErrorResponse(response,
 									Response.NOT_FOUND,
 									new HTTPServer.ErrorPayload()
-											.errorCode("TIDE-0005")
+											.errorCode("TIDE-0012")
 											.errorMessage(String.format("Station [%s] not found", stationName)));
 							proceed = false;
 						} else {
@@ -494,22 +499,29 @@ public class RESTImplementation {
 									response = HTTPServer.buildErrorResponse(response,
 											Response.BAD_REQUEST,
 											new HTTPServer.ErrorPayload()
-													.errorCode("TIDE-0014")
+													.errorCode("TIDE-0013")
 													.errorMessage(String.format("Bad date chronology. %s is after %s", fromPrm, toPrm)));
 									proceed = false;
 								}
 							} catch (ParseException pe) {
+								pe.printStackTrace();
 								response = HTTPServer.buildErrorResponse(response,
 										Response.BAD_REQUEST,
 										new HTTPServer.ErrorPayload()
-												.errorCode("TIDE-0004")
+												.errorCode("TIDE-0014")
 												.errorMessage(pe.toString()));
 								proceed = false;
 							}
 
 							if (proceed) {
 								// IMPORTANT: re-init TideStation to takes the year in account.
+								if (false) {
+									System.out.printf("-> For findTideStation, with [%s], year %d\n", stationFullName, calFrom.get(Calendar.YEAR));
+								}
 								ts = tideRequestManager.getBackEndTideComputer().findTideStation(stationFullName, calFrom.get(Calendar.YEAR));
+								if (false) {
+									System.out.printf("-> For findTideStation, with [%s], ts: %s\n", stationFullName, ts == null ? "null" : ts.getFullName());
+								}
 
 								Calendar now = (Calendar)calFrom.clone();
 								Calendar upTo = (Calendar)calTo.clone();
@@ -630,7 +642,7 @@ public class RESTImplementation {
 									response = HTTPServer.buildErrorResponse(response,
 											Response.BAD_REQUEST,
 											new HTTPServer.ErrorPayload()
-													.errorCode("TIDE-0005")
+													.errorCode("TIDE-0015")
 													.errorMessage(jpe.toString())
 													.errorStack(HTTPServer.dumpException(jpe)));
 									return response;
@@ -641,10 +653,11 @@ public class RESTImplementation {
 							}
 						}
 					} catch (Exception ex) {
+						ex.printStackTrace();
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("TIDE-0006")
+										.errorCode("TIDE-0016")
 										.errorMessage(ex.toString()));
 					}
 				}
@@ -666,7 +679,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("TIDE-0008")
+							.errorCode("TIDE-0017")
 							.errorMessage("Need tideRequestManager path parameter {regex}."));
 			return response;
 		}
@@ -679,10 +692,11 @@ public class RESTImplementation {
 			try {
 				content = mapper.writeValueAsString(ts);
 			} catch (JsonProcessingException jpe) {
+				jpe.printStackTrace();
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("TIDE-0006")
+								.errorCode("TIDE-0018")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -691,10 +705,11 @@ public class RESTImplementation {
 			response.setPayload(content.getBytes());
 			return response;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("TIDE-0009")
+							.errorCode("TIDE-0019")
 							.errorMessage(ex.toString()));
 			return response;
 		}

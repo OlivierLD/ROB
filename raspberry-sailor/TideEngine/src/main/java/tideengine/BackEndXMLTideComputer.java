@@ -72,7 +72,6 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 		} catch (Exception ex) {
 			throw ex;
 		}
-
 		return stationData;
 	}
 
@@ -92,7 +91,6 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 		if (verbose) {
 			System.out.printf("Finding all the stations took %s ms\n", NumberFormat.getInstance().format(after - before) );
 		}
-
 		return stationData;
 	}
 

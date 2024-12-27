@@ -15,11 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BackEndSQLITETideComputer implements BackendDataComputer {
 
@@ -249,7 +246,15 @@ public class BackEndSQLITETideComputer implements BackendDataComputer {
 	@Override
 	public TideStation reloadOneStation(String stationName) throws Exception {
 		// TODO Implement?
-		return null;
+		System.err.println("Method not implemented !!");
+		// Where am I ?
+		Throwable t = new Throwable();
+		List<String> stackTrace = Arrays.stream(t.getStackTrace())
+				.filter(el -> !el.equals(t.getStackTrace()[0])) // Except first one
+				.map(StackTraceElement::toString)
+				.collect(Collectors.toList());
+		throw new Exception("Method not implemented !!!");
+		// return null;
 	}
 
 	@Override

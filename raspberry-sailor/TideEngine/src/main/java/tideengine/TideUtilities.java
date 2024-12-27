@@ -262,7 +262,14 @@ public class TideUtilities {
 		double previousWH = Double.NaN;
 
 		for (int h = 0; h < 24; h++) {
-			for (int m = 0; m < 60; m++) {
+			for (int m = 0; m < 60; m++) { // minutes
+				if (false) {
+					if (ts != null) {
+						// System.out.printf("Station: %s, tz to use: %s, ts.tz: %s\n", ts.getFullName(), timeZone2Use, ts.getTimeZone());
+					} else {
+						System.out.println("ts is null !!");
+					}
+				}
 				Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZone2Use != null ? timeZone2Use : ts.getTimeZone()));
 				cal.set(year,
 						month,
