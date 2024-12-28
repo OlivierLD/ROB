@@ -98,7 +98,7 @@
 				// alert("Station " + station);
 				// Do it, for now, 1 day
 				document.getElementById('with-table').checked = true;
-				tideTable(station, { year: year, month: month + 1, day: day }, '', '', '', false, 1, dataManager);
+				tideTable(station, { year: year, month: month + 1, day: day }, '', '', '', false, 1, dataManager, errorManager);
 			}
 		};
 
@@ -237,6 +237,11 @@
 			document.getElementById('backend-data').style.cursor = 'auto';
 		};
 
+		let errorManager = (err) => {
+			let tab = document.getElementById('error-tab');
+			manageClick(tab);
+		};
+
 		let manageClick = (div) => {
 			// Set the right class to the clicked tab
 			[ 'error-tab', 'message-tab', 'data-tab' ].forEach((tab, idx) => {
@@ -296,7 +301,7 @@
 					  '',
 					  document.getElementById("with-details").checked,
 					  document.getElementById("nb-days").value,
-					  dataManager);
+					  dataManager, errorManager);
 		};
 
 		let previousDay = () => {
@@ -307,7 +312,7 @@
 					'',
 					document.getElementById("with-details").checked,
 					document.getElementById("nb-days").value,
-					dataManager);
+					dataManager, errorManager);
 		};
 
 	</script>
@@ -362,7 +367,7 @@
 		<tr>
 		<td style="text-align: left;">
 			Starting <select id="year" onchange="populateDays();"></select> <select id="month" onchange="populateDays();"></select> <select id="day"></select>
-			<button id="draw-curve" disabled onclick="tideTable(document.getElementById('station-list').value, { year: parseInt(document.getElementById('year').value), month: parseInt(document.getElementById('month').value), day: parseInt(document.getElementById('day').value) }, '', '', '', document.getElementById('with-details').checked, document.getElementById('nb-days').value, dataManager);">Draw Curve</button>
+			<button id="draw-curve" disabled onclick="tideTable(document.getElementById('station-list').value, { year: parseInt(document.getElementById('year').value), month: parseInt(document.getElementById('month').value), day: parseInt(document.getElementById('day').value) }, '', '', '', document.getElementById('with-details').checked, document.getElementById('nb-days').value, dataManager, errorManager);">Draw Curve</button>
 			&nbsp;<input type="checkbox" id="with-details" title="Include Harmonics"> With harmonic details,
 			&nbsp;<input type="checkbox" id="with-table" title="Include Time Table"> With time table.
 		</td>

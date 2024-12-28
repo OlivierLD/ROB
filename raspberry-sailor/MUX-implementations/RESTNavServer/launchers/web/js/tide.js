@@ -8,6 +8,8 @@ let errManager = (mess) => {
     let content =  errDiv.innerHTML;
     errDiv.innerHTML = (content.length > 0 ? content + "<br/>" : "") + new Date() + ": " + mess;
     errDiv.scrollTop = errDiv.scrollHeight;
+    // Show the error tab ?
+
 };
 
 // let messManager = console.log;
@@ -343,7 +345,7 @@ let showTime = () => {
 let lastRequiredDate;
 let lastRequiredStation;
 
-let tideTable = (station, at, tz, step, unit, withDetails, nbDays, callback) => {
+let tideTable = (station, at, tz, step, unit, withDetails, nbDays, callback, errorCallback) => {
     lastRequiredStation = station;
     lastRequiredDate = at;
     let getData = getTideTable(station, at, tz, step, unit, withDetails, nbDays);
@@ -356,6 +358,9 @@ let tideTable = (station, at, tz, step, unit, withDetails, nbDays, callback) => 
                 document.getElementById("result").innerHTML = ("<pre>" + JSON.stringify(json, null, 2) + "</pre>");
             } catch (err) {
                 errManager(err + '\nFor\n' + value);
+                if (errorCallback) {
+                    errorCallback(err);
+                }
             }
         } else {
             callback(value);
@@ -370,6 +375,9 @@ let tideTable = (station, at, tz, step, unit, withDetails, nbDays, callback) => 
             }
         }
         errManager("Failed to get the station data..." + (error !== undefined ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message !== undefined ? JSON.stringify(message, null, 2) : ' - '));
+        if (errorCallback) {
+            errorCallback(error);
+        }
     });
 };
 
