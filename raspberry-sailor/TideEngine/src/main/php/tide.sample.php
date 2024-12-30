@@ -22,7 +22,7 @@
 
 <?php
 
-ini_set('memory_limit', '-1'); // Required for reloadOneStation
+ini_set('memory_limit', '-1'); // Required for reloadOneStation (or its equivalent)
 
 function getCoeffData (BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, int $year, int $month, int $day, ?string $tz2Use) : array {
     $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
