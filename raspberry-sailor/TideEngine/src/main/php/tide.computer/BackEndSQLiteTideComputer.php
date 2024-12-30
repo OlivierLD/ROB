@@ -13,8 +13,8 @@ class BackEndSQLiteTideComputer {
         self::$db->close();
     }
 
-    public function getStationsData() : array {
-        if ($this->stationList == null) {
+    public function getStationsData(?bool $force=false) : array {
+        if ($force || $this->stationList == null) {
             $this->stationList = $this->buildStationData();
         }
         return $this->stationList;
@@ -229,7 +229,58 @@ class BackEndSQLiteTideComputer {
 		// Fix for the given year
         //  System.out.println("findTideStation: We are in " + year + ", coeff fixed for " + station.yearHarmonicsFixed());
 		// Correction to the Harmonics
+		if ($verbose) {
+		  echo ("tideStation is " . ($tideStation != null ? $tideStation->getFullName() : "null") . "<br/>" . PHP_EOL);
+		  if ($tideStation != null) {
+		    echo(sprintf("yearHarmonicsFixed is %d", $tideStation->yearHarmonicsFixed()) . "<br/>" . PHP_EOL);
+		  }
+		}
 		if ($tideStation != null && ($tideStation->yearHarmonicsFixed() == -1 || $tideStation->yearHarmonicsFixed() != $year)) {
+
+            if ($tideStation->yearHarmonicsFixed() != -1 && $tideStation->yearHarmonicsFixed() != $year) {
+                // Rebuild constituents and stations
+                if ($verbose) {
+                    echo(". . . Rebuilding for " . $stationName . " in " . $year . "...<br/>". PHP_EOL);
+                }
+                // $constituents = self::buildConstituents();
+                $this->stationList = null;
+                $stationData = self::getStationsData(true);
+
+                // Find it again
+                $tideStation = null;
+                $tideStationIndex = -1;
+                for ($i=0; $i<count($stationData); $i++) {
+                    // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
+                    if (strpos($stationData[$i]->getFullName(),  $stationName) !== false) { // Partial match already
+                        $tideStation = $stationData[$i];
+                        $tideStationIndex = $i;
+                        break;
+                    }
+                }
+                if ($tideStation == null) {
+                    if ($verbose) {
+                        echo("Station [" . $stationName . "] was not found, trying partial match...<br/>" . PHP_EOL);
+                    }
+                    // try with strtoupper
+                    for ($i=0; $i<count($stations); $i++) {
+                        // if (str_contains($stationData[$i]->getFullName(), "Port-Tudy")) { // PhP 8...
+                        if (strpos(strtoupper($stationData[$i]->getFullName()),  strtoupper($stationName)) !== false) { // Partial match, uppercase
+                            $tideStation = $stationData[$i];
+                            $tideStationIndex = $i;
+                            break;
+                        }
+                    }
+                } else {
+                    if ($verbose) {
+                        echo("Station [" . $stationName . "] was found!<br/>" . PHP_EOL);
+                    }
+                }
+                if ($verbose) {
+                    echo("      Station [" . $stationName . "] => [" . ($tideStation == null ? "NULL!!!" : $tideStation->getFullName()) . "]...<br/>" . PHP_EOL);
+                    echo(". . . End of rebuild.<br/>" . PHP_EOL);
+                }
+            }
+
             $stationHarmonics = $tideStation->getHarmonics();
 			for ($i=0; $i<count($stationHarmonics); $i++) {
                 $harm = $stationHarmonics[$i];
@@ -253,7 +304,7 @@ class BackEndSQLiteTideComputer {
             $this->stationList[$tideStationIndex] = $tideStation;
 
 			if ($verbose) {
-				echo("==> Sites coefficients of [" . $tideStation->getFullName() . "] fixed for " . $year . ".<br/>" . PHP_EOL);
+				echo("==> Sites coefficients of [" . $tideStation->getFullName() . "] now fixed for " . $year . ".<br/>" . PHP_EOL);
 			}
 		} else if ($verbose) {
 			echo("Coefficients were <i><b>already fixed</b></i> for " . $year . ".<br/>" . PHP_EOL);
