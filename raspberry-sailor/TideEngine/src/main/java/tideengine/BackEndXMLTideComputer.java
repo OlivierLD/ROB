@@ -96,7 +96,9 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 
 	@Override
 	public TideStation reloadOneStation(String stationName) throws Exception {
-		StationFinder sf = new StationFinder();
+		Map<String, TideStation> stationData = new HashMap<>();
+		StationFinder sf = new StationFinder(stationData);
+		// StationFinder sf = new StationFinder(); // This would fail in DoneWithSiteException
 		sf.setStationName(stationName);
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -109,6 +111,8 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 			dwse.printStackTrace();
 			System.err.println("-----------------------------");
 			throw new RuntimeException(dwse);
+		} catch (SAXException saxE) {
+			throw saxE;
 		} catch (Exception ex) {
 			throw ex;
 		}
@@ -195,7 +199,7 @@ public class BackEndXMLTideComputer implements BackendDataComputer {
 			if (foundStation && "station".equals(qName)) {
 				foundStation = false;
 				if (stationMap == null) {
-					throw new DoneWithSiteException("Done with it.");
+					throw new DoneWithSiteException(String.format("Done with it. qName[%s], localName[%s]", qName, localName));
 				} else {
 					stationMap.put(ts.getFullName(), ts);
 				}

@@ -10,7 +10,8 @@ import java.util.*;
 
 /**
  * Method agnostic front end access.
- * Calls the right methods, depending on the chosen option (XML, SQL, JSON, etc)
+ * Calls the right methods, depending on the chosen option (XML, SQL, JSON, etc),
+ * see the system variable "tide.flavor" below for details.
  *
  * >> There is no abstract method here, to keep control on what's done.
  * It all depends on the Option.
@@ -94,7 +95,7 @@ public class BackEndTideComputer {
 			System.out.printf("Objects loaded in %s ms\n", NumberFormat.getInstance().format(after - before) );
 		}
 		if (dataVerbose) {
-			// dump the maps
+			// dump the maps, can be big...
 			ObjectMapper mapper = new ObjectMapper();
 			String constituentStr = mapper.writerWithDefaultPrettyPrinter()
 					.writeValueAsString(constituentsObject);

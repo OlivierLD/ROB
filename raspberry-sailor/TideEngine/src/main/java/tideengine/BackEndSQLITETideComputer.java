@@ -23,7 +23,7 @@ public class BackEndSQLITETideComputer implements BackendDataComputer {
 	// Default DB Path, possibly overridden by a System variable -Ddb.path...
 	public final static String DB_PATH = "sql/tides.db";
 
-	private static boolean verbose = false;
+	private static boolean verbose = "true".equals(System.getProperty("tide.verbose")) || "true".equals(System.getProperty("data.verbose")) ;
 
 	private static Connection conn = null;
 
@@ -208,6 +208,9 @@ public class BackEndSQLITETideComputer implements BackendDataComputer {
 					coefficientsRS.close();
 					preparedStatement_02.close();
 
+					if (verbose) {
+						System.out.printf("getStationData, for [%s]\n", fullName);
+					}
 					stationData.put(URLEncoder.encode(URLDecoder.decode(fullName, StandardCharsets.ISO_8859_1.toString()), StandardCharsets.UTF_8.toString()).replace("+", "%20"),
 							        tideStation);
 				}
@@ -245,15 +248,24 @@ public class BackEndSQLITETideComputer implements BackendDataComputer {
 
 	@Override
 	public TideStation reloadOneStation(String stationName) throws Exception {
-		// TODO Implement?
-		System.err.println("Method not implemented !!");
-		// Where am I ?
-		Throwable t = new Throwable();
-		List<String> stackTrace = Arrays.stream(t.getStackTrace())
-				.filter(el -> !el.equals(t.getStackTrace()[0])) // Except first one
-				.map(StackTraceElement::toString)
-				.collect(Collectors.toList());
-		throw new Exception("Method not implemented !!!");
+		if (false) {
+			System.err.println("Method not implemented !!");
+			// Where am I ?
+			Throwable t = new Throwable();
+			List<String> stackTrace = Arrays.stream(t.getStackTrace())
+					.filter(el -> !el.equals(t.getStackTrace()[0])) // Except first one
+					.map(StackTraceElement::toString)
+					.collect(Collectors.toList());
+			throw new Exception("Method not implemented !!!");
+		} else {
+			final Map<String, TideStation> stationData = this.getStationData();
+			String sName = URLEncoder.encode(stationName, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+			TideStation ts = stationData.get(sName);
+			if (false) {
+				System.out.printf("--> reloadOneStation for [%s] (%s), ts: %s\n", stationName, sName, ts == null ? "null!" : ts.getFullName());
+			}
+			return ts;
+		}
 		// return null;
 	}
 

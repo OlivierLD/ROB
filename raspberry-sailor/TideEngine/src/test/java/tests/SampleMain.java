@@ -19,14 +19,22 @@ import java.util.*;
 public class SampleMain {
 	private final static SimpleDateFormat SDF = new SimpleDateFormat("yyy-MMM-dd HH:mm z (Z)");
 
-	private final static BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
+	private static BackEndTideComputer backEndTideComputer; // = new BackEndTideComputer();
 
 	public static void main(String... args) throws Exception {
 		System.out.println(args.length + " Argument(s)...");
-		boolean xmlTest = true;
 
-		if (xmlTest) {
-			System.out.println("XML Tests");
+		System.setProperty("tide.verbose", "false");
+		System.setProperty("data.verbose", "true");
+		System.setProperty("tide.flavor", BackEndTideComputer.Option.JSON.name()); // JSON, SQLITE, XML
+		// System.setProperty("db.path", "/Users/olivierlediouris/repos/Passe-Coque/web-site/tech.and.nav/tides.php/sql/tides.db"); // For SQLite
+
+		backEndTideComputer = new BackEndTideComputer();
+
+		boolean tideTests = true;
+
+		if (tideTests) {
+			System.out.printf("Tide Tests, flavor: %s\n", System.getProperty("tide.flavor", "JSON"));
 			backEndTideComputer.connect();
 			backEndTideComputer.setVerbose(false);
 
@@ -414,11 +422,35 @@ public class SampleMain {
 						}
 						System.out.println("------------");
 
+						// For reloadOneStation test
+						now.add(Calendar.YEAR, 1);
+						ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
+						now.setTimeZone(TimeZone.getTimeZone(ts.getTimeZone()));
+						if (ts != null) {
+
+							table = TideUtilities.getTideTableForOneDay(ts, constSpeed, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
+
+							// GMT Times
+							for (TimedValue tv : table) {
+								System.out.println(tv.getType() + " " + tv.getCalendar().getTime() + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+							}
+							System.out.println("------------");
+							// Local Times
+							final String timeZone2 = ts.getTimeZone();
+							SDF.setTimeZone(TimeZone.getTimeZone(timeZone2));
+							for (TimedValue tv : table) {
+								System.out.println(tv.getType() + " " + SDF.format(tv.getCalendar().getTime()) + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+							}
+							System.out.println("------------");
+						}
+
 						System.out.println("Done");
 					}
 				}
 			}
 			backEndTideComputer.disconnect();
+		} else {
+			System.out.println("Bam !");
 		}
 	}
 }
