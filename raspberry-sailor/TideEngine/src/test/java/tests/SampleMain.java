@@ -27,7 +27,7 @@ public class SampleMain {
 		System.setProperty("tide.verbose", "false");
 		System.setProperty("data.verbose", "true");
 		System.setProperty("tide.flavor", BackEndTideComputer.Option.JSON.name()); // JSON, SQLITE, XML
-		// System.setProperty("db.path", "/Users/olivierlediouris/repos/Passe-Coque/web-site/tech.and.nav/tides.php/sql/tides.db"); // For SQLite
+		// System.setProperty("db.path", "/Users/olivierlediouris/repos/ROB/raspberry-sailor/TideEngine/src/main/php/sql/tides.db"); // For SQLite
 
 		backEndTideComputer = new BackEndTideComputer();
 
@@ -448,6 +448,64 @@ public class SampleMain {
 					}
 				}
 			}
+
+			if (true) {
+				List<Coefficient> constSpeed = BackEndTideComputer.buildSiteConstSpeed();
+				// Tide table for one day:
+				Calendar now = GregorianCalendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
+				String location = null;
+				if (true) {
+					location = URLEncoder.encode("Falmouth, England", StandardCharsets.UTF_8.toString()).replace("+", "%20");
+					TideStation ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
+					now.setTimeZone(TimeZone.getTimeZone(ts.getTimeZone()));
+					if (ts != null) {
+						if (true) {
+							double[] mm = TideUtilities.getMinMaxWH(ts, constSpeed, now);
+							System.out.println("At " + URLDecoder.decode(location, StandardCharsets.UTF_8.toString()) + " on " + now.getTime() + ", min : " + TideUtilities.DF22PLUS.format(mm[TideUtilities.MIN_POS]) + " " + ts.getUnit() + ", max : " + TideUtilities.DF22PLUS.format(mm[TideUtilities.MAX_POS]) + " " + ts.getDisplayUnit());
+							System.out.println("------------");
+						}
+						List<TimedValue> table = TideUtilities.getTideTableForOneDay(ts, constSpeed, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
+
+						// GMT Times
+						for (TimedValue tv : table) {
+							System.out.println(tv.getType() + " " + tv.getCalendar().getTime() + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+						}
+						System.out.println("------------");
+						// Local Times
+						final String timeZone = ts.getTimeZone();
+						SDF.setTimeZone(TimeZone.getTimeZone(timeZone));
+						for (TimedValue tv : table) {
+							System.out.println(tv.getType() + " " + SDF.format(tv.getCalendar().getTime()) + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+						}
+						System.out.println("------------");
+
+						// For reloadOneStation test
+						now.add(Calendar.YEAR, 1);
+						ts = backEndTideComputer.findTideStation(location, now.get(Calendar.YEAR));
+						now.setTimeZone(TimeZone.getTimeZone(ts.getTimeZone()));
+						if (ts != null) {
+
+							table = TideUtilities.getTideTableForOneDay(ts, constSpeed, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), null);
+
+							// GMT Times
+							for (TimedValue tv : table) {
+								System.out.println(tv.getType() + " " + tv.getCalendar().getTime() + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+							}
+							System.out.println("------------");
+							// Local Times
+							final String timeZone2 = ts.getTimeZone();
+							SDF.setTimeZone(TimeZone.getTimeZone(timeZone2));
+							for (TimedValue tv : table) {
+								System.out.println(tv.getType() + " " + SDF.format(tv.getCalendar().getTime()) + " : " + TideUtilities.DF22PLUS.format(tv.getValue()) + " " + ts.getDisplayUnit());
+							}
+							System.out.println("------------");
+						}
+
+						System.out.println("Done");
+					}
+				}
+			}
+
 			backEndTideComputer.disconnect();
 		} else {
 			System.out.println("Bam !");

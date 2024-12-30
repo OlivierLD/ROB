@@ -57,6 +57,10 @@ function stationTest(string $stationName,
         // Water Heights test
         // $UTdate = gmdate("Y-m-d H:i:s");
         $UTdate = microtime(true);
+        echo ("microtime: " . $UTdate . "<br/>");
+        // var_dump($UTdate);
+        // echo ("<br/>");
+
         $now = DateTime::createFromFormat('U.u', $UTdate); // UTC
 
         echo("Now is " . $now->format("H:i:s.v") . " (UTC).<br/>");
@@ -68,6 +72,14 @@ function stationTest(string $stationName,
         // $date->setTimezone(new DateTimeZone('Pacific/Chatham'));
         // echo $date->format('Y-m-d H:i:sP') . "\n";
         $now->setTimeZone(new DateTimeZone($theTideStation->getTimeZone()));
+
+        // Trick, horrible (for tests)
+        if ($year !== (int)$now->format("Y")) {
+            echo("==> Requested year:" . $year . ", current year:" . (int)$now->format("Y") . "<br/>");
+            $d = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $month, $day, (int)$now->format('H'), (int)$now->format('i'), (int)$now->format('s'));
+            $now = DateTime::createFromFormat("Y-m-d H:i:s", $d);  // The one to remember !!
+        }
+
         echo "Local Time in " . $stationName . ": " . $now->format('l, Y-m-d H:i:sP') . "<br/>";
 
         $localTime = date_format($now, 'Y-m-d H:i:s');
@@ -262,7 +274,12 @@ try {
     stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData);
 
     echo("-------------------------------<br/>" . PHP_EOL);
-    
+    // reloadOneStation...
+    $stationName = "Falmouth"; // year + 1. Needs fixes.
+    stationTest($stationName, $year + 1, $month, $day, $backend, $constituentsObject, $stationsData);
+
+    echo("-------------------------------<br/>" . PHP_EOL);
+
     $backend->closeDB();
     echo("Connection closed.<br/>". PHP_EOL);
 
