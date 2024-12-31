@@ -5,7 +5,8 @@ Here, size does matter.
 `php` array representation of the stations is too big (fails in memory allocation).  
 Same when reading the corresponding JSON file.  
 
-Trying a RDBMS approach with `sqlite`... That seems to work. This requires the DB to exist and to be available (`sql/tides.db`).
+Trying a RDBMS approach with `sqlite`... That seems to work. This requires the DB to exist and to be available (`sql/tides.db`).  
+And the `SQLite` drivers are available in `php`...  
 
 More soon.
 
