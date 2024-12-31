@@ -244,7 +244,7 @@ class BackEndSQLiteTideComputer {
                 }
                 // $constituents = self::buildConstituents();
                 $this->stationList = null;
-                $stationData = self::getStationsData(true);
+                $stationData = self::getStationsData(true); // May require a ini_set('memory_limit', '-1');
 
                 // Find it again
                 $tideStation = null;
