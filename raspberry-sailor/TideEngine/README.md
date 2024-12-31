@@ -1,5 +1,5 @@
 # 🌊 Tide Engine
-## In Java & ES6
+## In Java, ES6, and php (in progress)
 
 <!--
 ### Java
@@ -13,6 +13,7 @@ _**To be published as its own artifact on Maven.**_
 The artifacts are - at least for now - published in a github repo, accessed as a Maven repository.
 See [here](https://github.com/OlivierLD/ROB/blob/repository/README.md).
 
+### Java implementation
 
 > Several implementations of the data storage (coefficients, tide stations) are
 > available. For now, we have
@@ -53,8 +54,11 @@ the SAX parser scans it until the expected data are found.
 #### Unit Tests
 Some basic tests are available in the `test (src/main/test/java)` folder.
 
-### ES6
-More like experimental for now, but seems to be working OK.
+### ES6 Implementation
+More like experimental for now, but seems to be working OK.  
 See instructions [here](./ES6/README.md).
+
+### PHP Implementation
+See this [doc](./src/main/php/README.md).
 
 ---
