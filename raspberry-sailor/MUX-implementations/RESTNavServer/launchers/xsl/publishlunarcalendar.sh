@@ -35,7 +35,11 @@ else
   cp page_USLetter.xsl page.xsl
 fi
 #
-# TODO Manage $LANG
+# Language ?
+#
+if [[ "${LANG}" == "FR" ]]; then
+  export XSL_STYLESHEET=./lunarcal2fop_FR.xsl
+fi
 #
 echo Publishing
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor -xml ${RADICAL}.xml -xsl ${XSL_STYLESHEET} -pdf ${RADICAL}.pdf

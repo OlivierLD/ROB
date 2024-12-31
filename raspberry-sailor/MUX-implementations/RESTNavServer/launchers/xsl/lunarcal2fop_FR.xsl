@@ -110,7 +110,7 @@
           <!-- Put a title here, assume the xml data is a one year document -->
 	        <!--fo:block text-align="center" font-family="Helvetica Neue" font-size="24pt" font-weight="bold" margin="0.25in" background-color="black" color="yellow"-->
 	        <fo:block text-align="center" font-family="Helvetica Neue" font-size="18pt" font-weight="bold" margin="0.25in" background-color="black" color="yellow">
-		        <xsl:value-of select="concat('Moon Calendar, ', /tide/period[1]/@year)"/>
+		        <xsl:value-of select="concat('Calendier Lunaire, ', /tide/period[1]/@year)"/>
 	        </fo:block>
 
           <fo:block margin="0.1in" background-color="black" color="white">
@@ -196,17 +196,17 @@
 				              <fo:block text-align="center" font-family="Book Antiqua" font-size="10pt" font-weight="bold">
 					              <xsl:choose>
 						              <xsl:when test="position() = 1"><xsl:value-of select="'Jan'"/></xsl:when>
-						              <xsl:when test="position() = 2"><xsl:value-of select="'Feb'"/></xsl:when>
-						              <xsl:when test="position() = 3"><xsl:value-of select="'Mar'"/></xsl:when>
-						              <xsl:when test="position() = 4"><xsl:value-of select="'Apr'"/></xsl:when>
-						              <xsl:when test="position() = 5"><xsl:value-of select="'May'"/></xsl:when>
-						              <xsl:when test="position() = 6"><xsl:value-of select="'Jun'"/></xsl:when>
-						              <xsl:when test="position() = 7"><xsl:value-of select="'Jul'"/></xsl:when>
-						              <xsl:when test="position() = 8"><xsl:value-of select="'Aug'"/></xsl:when>
-						              <xsl:when test="position() = 9"><xsl:value-of select="'Sep'"/></xsl:when>
+						              <xsl:when test="position() = 2"><xsl:value-of select="'F&eacute;v'"/></xsl:when>
+						              <xsl:when test="position() = 3"><xsl:value-of select="'Mars'"/></xsl:when>
+						              <xsl:when test="position() = 4"><xsl:value-of select="'Avr'"/></xsl:when>
+						              <xsl:when test="position() = 5"><xsl:value-of select="'Mai'"/></xsl:when>
+						              <xsl:when test="position() = 6"><xsl:value-of select="'Juin'"/></xsl:when>
+						              <xsl:when test="position() = 7"><xsl:value-of select="'Juil'"/></xsl:when>
+						              <xsl:when test="position() = 8"><xsl:value-of select="'Ao&ucirc;t'"/></xsl:when>
+						              <xsl:when test="position() = 9"><xsl:value-of select="'Sept'"/></xsl:when>
 						              <xsl:when test="position() = 10"><xsl:value-of select="'Oct'"/></xsl:when>
 						              <xsl:when test="position() = 11"><xsl:value-of select="'Nov'"/></xsl:when>
-						              <xsl:when test="position() = 12"><xsl:value-of select="'Dec'"/></xsl:when>
+						              <xsl:when test="position() = 12"><xsl:value-of select="'D&eacute;c'"/></xsl:when>
 						              <xsl:otherwise><xsl:value-of select="position()"/></xsl:otherwise>
 					              </xsl:choose>
 				              </fo:block>
@@ -308,7 +308,7 @@
             <xsl:when test="./@moon-phase = '07'">
               <fo:external-graphic src="url('phase07.gif')"
                                    vertical-align="middle" text-align="center"/>
-	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">First Q</fo:block>
+	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Premier</fo:block>
             </xsl:when>
             <xsl:when test="./@moon-phase = '08'">
               <fo:external-graphic src="url('phase08.gif')"
@@ -348,7 +348,7 @@
             <xsl:when test="./@moon-phase = '15'"> <!-- Full moon -->
               <fo:external-graphic src="url('phase15.gif')"
                                    vertical-align="middle" text-align="center"/>
-	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Full</fo:block>
+	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Pleine</fo:block>
             </xsl:when>
             <xsl:when test="./@moon-phase = '16'">
               <fo:external-graphic src="url('phase16.gif')"
@@ -383,7 +383,7 @@
             <xsl:when test="./@moon-phase = '22'">
               <fo:external-graphic src="url('phase22.gif')"
                                    vertical-align="middle" text-align="center"/>
-	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Last Q</fo:block>
+	            <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Dernier</fo:block>
             </xsl:when>
             <xsl:when test="./@moon-phase = '23'">
               <fo:external-graphic src="url('phase23.gif')"
@@ -418,14 +418,24 @@
 	          <xsl:when test="./@moon-phase = '29'">
 		          <fo:external-graphic src="url('phase01.gif')"
 		                               vertical-align="middle" text-align="center"/>
-		          <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">New</fo:block>
+		          <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="white">Nouvelle</fo:block>
 	          </xsl:when>
           </xsl:choose>
         </fo:block>
-	      <fo:block text-align="center">
-		      <!--xsl:value-of select="position()"/-->
-		      <xsl:value-of select="substring(./@val, 1, 3)"/> <!-- Day of Week -->
-	      </fo:block>
+	    <fo:block text-align="center">
+			  <!-- Day of Week -->
+			  <xsl:choose>
+			  	<!--xsl:when test="$dow = 'Mon'"><xsl:value-of select="'Lun'"/></xsl:when-->
+				<xsl:when test="substring(./@val, 1, 3) = 'Mon'"><xsl:value-of select="'Lun'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Tue'"><xsl:value-of select="'Mar'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Wed'"><xsl:value-of select="'Mer'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Thu'"><xsl:value-of select="'Jeu'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Fri'"><xsl:value-of select="'Ven'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Sat'"><xsl:value-of select="'Sam'"/></xsl:when>
+			    <xsl:when test="substring(./@val, 1, 3) = 'Sun'"><xsl:value-of select="'Dim'"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="substring(./@val, 1, 3)"/></xsl:otherwise>
+			  </xsl:choose>
+	    </fo:block>
       </fo:table-cell>
     </xsl:for-each>
   </xsl:template>
