@@ -70,7 +70,8 @@
  <!ENTITY uacute  "&#250;">
  <!ENTITY ucirc   "&#251;">
  <!ENTITY uuml    "&#252;">
- <!ENTITY yacute  "&#253;">  
+ <!ENTITY yacute  "&#253;">
+ <!ENTITY nbsp    "&#160;">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"

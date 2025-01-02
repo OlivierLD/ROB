@@ -270,11 +270,11 @@
           <!--xsl:value-of select="./@val"/-->
           <!--xsl:apply-templates select="."/-->
           <xsl:choose>
-	          <xsl:when test="./@moon-phase = '00'">
-		          <fo:external-graphic src="url('phase01.gif')"
-		                               vertical-align="middle" text-align="center"/>
-		          <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="black">.</fo:block>
-	          </xsl:when>
+			<xsl:when test="./@moon-phase = '00'">
+			  <fo:external-graphic src="url('phase01.gif')"
+								   vertical-align="middle" text-align="center"/>
+			  <fo:block text-align="right" font-size="4pt" font-weight="normal" background-color="black" color="black">.</fo:block>
+			</xsl:when>
             <xsl:when test="./@moon-phase = '01'">
               <fo:external-graphic src="url('phase01.gif')"
                                    vertical-align="middle" text-align="center"/>
@@ -423,7 +423,7 @@
           </xsl:choose>
         </fo:block>
 	    <fo:block text-align="center">
-			  <!-- Day of Week -->
+			  <!-- Day of Week, could also be a <xsl:call-template name="xxxx"> -->
 			  <xsl:choose>
 			  	<!--xsl:when test="$dow = 'Mon'"><xsl:value-of select="'Lun'"/></xsl:when-->
 				<xsl:when test="substring(./@val, 1, 3) = 'Mon'"><xsl:value-of select="'Lun'"/></xsl:when>
