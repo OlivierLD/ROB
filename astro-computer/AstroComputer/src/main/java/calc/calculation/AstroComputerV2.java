@@ -212,7 +212,7 @@ public class AstroComputerV2 {
 
     // Updated after the calculate invocation.
     public synchronized double getDeltaT() {
-        if (!this.calculateHasBeenInvoked) {
+        if (false && !this.calculateHasBeenInvoked) {
             throw new RuntimeException("Calculation was never invoked in this context");
         }
         return this.deltaT;
