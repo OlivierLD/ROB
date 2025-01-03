@@ -7,6 +7,9 @@ import utils.StringUtils
 import utils.TimeUtil
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 object KotlinSample {
     private val SDF_UTC = SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'")
@@ -21,10 +24,9 @@ object KotlinSample {
      * @return
      */
     private fun renderSdHp(value: Double): String {
-        var formatted = ""
-        val minutes = Math.floor(value / 60.0).toInt()
+        val minutes = floor(value / 60.0).toInt()
         val seconds = value - minutes * 60
-        formatted = if (minutes > 0) {
+        val formatted = if (minutes > 0) {
             String.format("%d'%05.02f\"", minutes, seconds)
         } else {
             String.format("%05.02f\"", seconds)
@@ -33,13 +35,11 @@ object KotlinSample {
     }
 
     private fun renderRA(ra: Double): String {
-        var formatted = ""
         val t = ra / 15.0
-        val raH = Math.floor(t).toInt()
-        val raMin = Math.floor(60 * (t - raH)).toInt()
-        val raSec = Math.round(10.0 * (3600.0 * (t - raH - raMin / 60.0))).toFloat() / 10
-        formatted = String.format("%02dh %02dm %05.02fs", raH, raMin, raSec)
-        return formatted
+        val raH = floor(t).toInt()
+        val raMin = floor(60 * (t - raH)).toInt()
+        val raSec = (10.0 * (3600.0 * (t - raH - raMin / 60.0))).roundToInt().toFloat() / 10
+        return String.format("%02dh %02dm %05.02fs", raH, raMin, raSec)
     }
 
     /**
@@ -48,11 +48,10 @@ object KotlinSample {
      * @return
      */
     private fun renderEoT(eot: Double): String {
-        var formatted = ""
-        val dEoT = Math.abs(eot)
-        val eotMin = Math.floor(dEoT).toInt()
-        val eotSec = Math.round(600 * (dEoT - eotMin)) / 10.0
-        formatted = if (eotMin == 0) { // Less than 1 minute
+        val dEoT = abs(eot)
+        val eotMin = floor(dEoT).toInt()
+        val eotSec = (600 * (dEoT - eotMin)).roundToInt() / 10.0
+        val formatted = if (eotMin == 0) { // Less than 1 minute
             String.format("%s %04.01fs", if (eot > 0) "+" else "-", eotSec)
         } else {
             String.format("%s %02dm %04.01fs", if (eot > 0) "+" else "-", eotMin, eotSec)
