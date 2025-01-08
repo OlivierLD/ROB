@@ -257,6 +257,14 @@ try {
     $stationName = "Port-Tudy";
     stationTest($stationName, $year, $month, $day, $backend, $constituentsObject, $stationsData, true, true);
 
+    $station = $backend->findTideStation($stationName, $year, $constituentsObject, $stationsData);
+
+    echo("--- CURVE DATA ---<br/>" . PHP_EOL);
+    $curveData = TideUtilities::getCurveData($backend, $constituentsObject, $station);
+    var_dump($curveData);
+    echo("<br/>" . PHP_EOL);
+    echo("--- END CURVE DATA ---<br/>" . PHP_EOL);
+
     echo("-------------------------------<br/>" . PHP_EOL);
     // And so on...
     $stationName = "Half Moon Bay";

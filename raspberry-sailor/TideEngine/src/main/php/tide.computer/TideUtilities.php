@@ -515,4 +515,89 @@ class TideUtilities {
 		return $coeffs;
 	}
 
+    // WiP
+    public static function getCurveData(BackEndSQLiteTideComputer $backend, 
+                                        Constituents $constituentsObject, 
+                                        TideStation $station, 
+                                        ?bool $verbose=false,
+                                        ?int $year=null, ?int $month=null, ?int $day=null) : array {
+        if ($verbose) {
+            echo("Base height: " . $station->getBaseHeight() . " " . $station->getDisplayUnit() . "<br/>" . PHP_EOL);
+            echo("Pos: " . $station->getLatitude() . " " . $station->getLongitude() . "<br/>" . PHP_EOL);
+        }
+    
+        if ($year == null && $month == null && $day == null) {
+            $year = (int)date("Y"); // gmdate ?
+            $month = (int)date("m");
+            $day = (int)date("d");
+        }
+    
+        $UTdate = microtime(true);
+        $now = DateTime::createFromFormat('U.u', $UTdate); // UTC
+        $now->setTimeZone(new DateTimeZone($station->getTimeZone()));
+
+
+        if ($verbose) {
+            echo("Calculation started for " . $now->format("Y-M-d") ." " . $station->getTimeZone() . "<br/>" . PHP_EOL);
+        }
+        // buildSiteConstSpeed, fixedForYear ?
+        // let siteCoeff = station.harmonicFixedForYear === undefined ?
+        //                     tideEngine.default.buildSiteConstSpeed() :
+        //                     station.harmonics; // station.harmonicFixedForYear === THE_YEAR
+        $constituentsObject = $backend->buildConstituents();
+    
+        // Calculate WH for the whole day, each minute. And tide table.
+        $d = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year, $month, $day, 0, 0, 0); // (int)$now->format('H'), (int)$now->format('i'), (int)$now->format('s'));
+        $now = DateTime::createFromFormat("Y-m-d H:i:s", $d);  // The one to remember !!
+
+        if ($verbose) {
+            echo("Starting tide curve calculation at " . $now->format("Y-m-d H:i:s") . "<br/>" . PHP_EOL);
+        }
+        // $ONE_MINUTE = 1000 * 60;
+        $tideData = array();
+        $tideTable = array();
+        $goingUp = null;
+        $prevWH = null;
+    
+        for ($i=0; $i<=(60 * 24); $i++) {
+            if ($verbose) {
+                echo "Local Time in " . $station->getFullName() . ": " . $now->format('l, Y-m-d H:i:sP') . "<br/>";
+            }
+            $localTime = date_format($now, 'Y-m-d H:i:s');
+    
+            $wh = TideUtilities::getWaterHeight($station, $constituentsObject->getConstSpeedMap(), $localTime);
+
+            if ($verbose && $i < 5) {
+                echo("WH in " . $station->getFullName() . " on " . $now->format('l, Y-m-d H:i:sP') . " : " . $wh . " " . $station->getDisplayUnit() . "<br/>" . PHP_EOL);
+            }
+            array_push($tideData, array("at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+            if ($goingUp !== null) {
+                if ($goingUp) { // Rising
+                    if ($prevWH >= $wh) { // Changing trend
+                        // console.log(`High Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
+                        array_push($tideTable, array("type" => "HW", "at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+                    }
+                } else { // Going down
+                    if ($prevWH < $wh) { // Changing trend
+                        // console.log(`Low Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
+                        array_push($tideTable, array("type" => "LW", "at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+                    }
+                }
+            }
+            if ($prevWH !== null) {
+                $goingUp = $prevWH < $wh;
+            }
+            $prevWH = $wh;
+            $now->modify('+1 minute');
+        }
+        if ($verbose) {
+            echo("Calculation completed.<br/>" . PHP_EOL);
+        }
+        return array(
+            "completed" => $now,
+            // "wh" => $whNow,
+            "tideTable" => $tideTable,
+            "tideData" => $tideData
+        );
+    }
 }
