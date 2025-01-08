@@ -17,6 +17,9 @@ Aka just <b>ROB</b>.
   </tr>
 </table>
 
+### Impatient ? 
+[Get started](./GET_STARTED.md) now!
+
 ### Install Java
 If java is not there (or not in the right version), install JDK 11:
 ```

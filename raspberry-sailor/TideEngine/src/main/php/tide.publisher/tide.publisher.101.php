@@ -311,7 +311,7 @@ function publishAlmanac(string $stationName,
                                 "<td>" . sprintf("%.02f", $tideData[$k]->getValue()) . "</td>" . 
                                 "<td>" . translate($lang, $tideData[$k]->getUnit()) . "</td>" .
                                 "<td style='text-align: center;'>" . ($tideData[$k]->getCoeff() != 0 ? sprintf("%02d", $tideData[$k]->getCoeff()) : "") . "</td>" . 
-                                ($k == 0 ? "<td rowspan='4'><img src='" . $moonPhase . "'></td>" : "") . PHP_EOL);
+                                ($k == 0 ? "<td rowspan='4'><img src='" . $moonPhase . "'/></td>" : "") . PHP_EOL);
                         $content .= ("<tr>" . PHP_EOL);
                     }
                     $content .= ("</table>" . PHP_EOL);
@@ -380,7 +380,7 @@ function publishStationDuration(string $stationName, int $year, ?int $month=null
             $content .= ("<div class='page-break'></div>" . PHP_EOL);
         }
     }
-    echo("</div>"); // Close the screen-only div
+    echo("</div>" . PHP_EOL); // Close the screen-only div
     echo("<div id='result-to-publish'>" . PHP_EOL);
     echo($content);
     // echo("</div>");
@@ -591,9 +591,9 @@ try {
      Language switch. Current lang is <?php echo $lang; ?>.
     <form id="lang-swicth" action="<?php echo basename(__FILE__); ?>" method="get" name="lang-switch">
         <input type="radio" onchange="this.form.submit();" id="fr" name="lang" value="FR"<?php echo(($lang == 'FR') ? " checked" : ""); ?>>
-        <label for="fr">FR</label><br>
+        <label for="fr">FR</label><br/>
         <input type="radio" onchange="this.form.submit();" id="en" name="lang" value="EN"<?php echo(($lang == 'EN') ? " checked" : ""); ?>>
-        <label for="en">EN</label><br>
+        <label for="en">EN</label><br/>
     </form>
     <hr/>
 <?php
