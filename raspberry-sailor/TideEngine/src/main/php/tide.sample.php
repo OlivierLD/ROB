@@ -263,6 +263,10 @@ try {
     $curveData = TideUtilities::getCurveData($backend, $constituentsObject, $station);
     var_dump($curveData);
     echo("<br/>" . PHP_EOL);
+    $jsonData = json_encode($curveData); // , JSON_FORCE_OBJECT);
+    echo("-- JSON Curve Data --<br/>" . PHP_EOL);
+    echo($jsonData);
+    echo("<br/>" . PHP_EOL);
     echo("--- END CURVE DATA ---<br/>" . PHP_EOL);
 
     echo("-------------------------------<br/>" . PHP_EOL);

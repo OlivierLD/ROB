@@ -570,17 +570,17 @@ class TideUtilities {
             if ($verbose && $i < 5) {
                 echo("WH in " . $station->getFullName() . " on " . $now->format('l, Y-m-d H:i:sP') . " : " . $wh . " " . $station->getDisplayUnit() . "<br/>" . PHP_EOL);
             }
-            array_push($tideData, array("at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+            array_push($tideData, array("at" => $now->format("Y-m-d H:i:s"), "wh" => $wh, "unit" => $station->getDisplayUnit()));
             if ($goingUp !== null) {
                 if ($goingUp) { // Rising
                     if ($prevWH >= $wh) { // Changing trend
                         // console.log(`High Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
-                        array_push($tideTable, array("type" => "HW", "at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+                        array_push($tideTable, array("type" => "HW", "at" => $now->format("Y-m-d H:i:s"), "wh" => $wh, "unit" => $station->getDisplayUnit()));
                     }
                 } else { // Going down
                     if ($prevWH < $wh) { // Changing trend
                         // console.log(`Low Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
-                        array_push($tideTable, array("type" => "LW", "at" => $now, "wh" => $wh, "unit" => $station->getDisplayUnit()));
+                        array_push($tideTable, array("type" => "LW", "at" => $now->format("Y-m-d H:i:s"), "wh" => $wh, "unit" => $station->getDisplayUnit()));
                     }
                 }
             }
@@ -594,7 +594,7 @@ class TideUtilities {
             echo("Calculation completed.<br/>" . PHP_EOL);
         }
         return array(
-            "completed" => $now,
+            "completed" => $now->format("Y-m-d H:i:s"),
             // "wh" => $whNow,
             "tideTable" => $tideTable,
             "tideData" => $tideData
