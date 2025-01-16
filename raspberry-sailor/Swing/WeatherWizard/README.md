@@ -49,4 +49,4 @@ And to simplify your life - specially when sailing - all this is as automated as
 
 More details and screenshots are available on the [Weather Wizard site](http://weather.lediouris.net).
 
-Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject=Weather+Wizard) for any further question.
+Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject=Weather+Wizard) for any further question(s).

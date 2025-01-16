@@ -209,6 +209,8 @@ public final class World {
                 List<Point> sectionPts = new ArrayList<>(nl2.getLength());
                 Point previous = null;
                 Point first = null;
+                double maxLength = 0d;
+                final double MAX_LENGTH = 50d;
                 for (int j = 0; j < nl2.getLength(); j++) {
                     XMLElement pt = (XMLElement) nl2.item(j);
                     String latValue = pt.getElementsByTagName("Lat").item(0).getFirstChild().getNodeValue();
@@ -222,6 +224,22 @@ public final class World {
                         int w = cpi.getWidth();
                         int h = cpi.getHeight();
                         boolean drawIt = true;
+
+                        if (cpi.getProjection() == ChartPanelInterface.MERCATOR) { // TODO ANAXIMANDRE Too ?
+                            if (previous != null) {
+                                // To avoid too big lines...
+                                // To Point: l/g
+                                // Distance in the graph... Room for improvement, get the geographical coordinates.
+                                double length = Math.sqrt(Math.pow(previous.x - gpt.x , 2) + Math.pow(previous.y - gpt.y , 2));
+                                // System.out.printf("Distance with previous: %f\n", length);
+                                if (length > MAX_LENGTH) {
+                                    drawIt = false;
+                                }
+                                if (drawIt) {
+                                    maxLength = Math.max(maxLength, length);
+                                }
+                            }
+                        }
                         if (cpi.getProjection() == ChartPanelInterface.GLOBE_VIEW && !cpi.isTransparentGlobe() && cpi.isBehind(l, g - cpi.getGlobeViewLngOffset())) {
                             drawIt = false;
                         } else if (cpi.getProjection() == ChartPanelInterface.GLOBE_VIEW && !cpi.isAntiTransparentGlobe() && !cpi.isBehind(l, g - cpi.getGlobeViewLngOffset())) {
@@ -253,6 +271,9 @@ public final class World {
                             }
                         }
                     }
+                }
+                if (false && maxLength > 0d) {
+                    System.out.printf("MaxLength: %f\n", maxLength);
                 }
                 // Close the loop
                 if (previous != null) { // && !(cpi.getProjection() == ChartPanelInterface.GLOBE_VIEW && !cpi.isTransparentGlobe()) )
