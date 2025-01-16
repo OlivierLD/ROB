@@ -30,7 +30,7 @@ public class Splasher {
             System.out.println(WWGnlUtilities.buildMessage("welcome"));
             //  SplashWindow.splash(Splasher.class.getResource("LogiSail.png"));
             SplashWindow.splash(AboutBox.class.getResource("wizard150.png"));
-            SplashWindow.invokeMain("main.ChartAdjust", args);
+            SplashWindow.invokeMain("main.ChartAdjust", args); // invokes what's to invoke.
             SplashWindow.disposeSplash();
         } else {
             try {

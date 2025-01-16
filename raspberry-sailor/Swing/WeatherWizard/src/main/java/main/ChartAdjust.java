@@ -27,7 +27,9 @@ import java.util.jar.Manifest;
 
 
 /**
- * Main GUI entry point
+ * Weather Wizard
+ * Main GUI entry point.
+ * To invoke from main.splash.Splasher
  */
 public class ChartAdjust {
     protected AdjustFrame frame = null;
