@@ -1,7 +1,7 @@
 package main.splash;
 
-import calc.GeoPoint;
-import calc.GeomUtil;
+// import calc.GeoPoint;
+// import calc.GeomUtil;
 import chartview.ctx.ApplicationEventListener;
 import chartview.ctx.WWContext;
 import chartview.util.WWGnlUtilities;
