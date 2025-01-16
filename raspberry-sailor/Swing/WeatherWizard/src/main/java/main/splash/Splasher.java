@@ -8,6 +8,7 @@ import chartview.util.WWGnlUtilities;
 import coreutilities.Utilities;
 import main.help.AboutBox;
 
+import javax.swing.*;
 import java.lang.reflect.Method;
 import java.util.Date;
 
@@ -28,8 +29,22 @@ public class Splasher {
         boolean headlessMode = ("true".equals(System.getProperty("headless", "false")) || "yes".equals(System.getProperty("headless", "false")));
         if (!headlessMode) {
             System.out.println(WWGnlUtilities.buildMessage("welcome"));
-            //  SplashWindow.splash(Splasher.class.getResource("LogiSail.png"));
-            SplashWindow.splash(AboutBox.class.getResource("wizard150.png"));
+            try {
+                //  SplashWindow.splash(Splasher.class.getResource("LogiSail.png"));
+                SplashWindow.splash(AboutBox.class.getResource("wizard150.png"));
+            } catch (Error ex) {
+                ex.printStackTrace(); // UIManager ? LnF Class not found ?
+                // Try to load default LnF
+                try {
+                    String laf = UIManager.getSystemLookAndFeelClassName();
+                    // laf = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+                    UIManager.setLookAndFeel(laf);
+                    // Then try again
+                    SplashWindow.splash(AboutBox.class.getResource("wizard150.png"));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
             SplashWindow.invokeMain("main.ChartAdjust", args); // invokes what's to invoke.
             SplashWindow.disposeSplash();
         } else {
