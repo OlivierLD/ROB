@@ -73,7 +73,7 @@
 	};
 
 	window.onload = function() {
-		// initAjax(false); // Contiuously pings, a fetch() every 1 sec
+		// initAjax(false); // Continuously pings, a fetch() every 1 sec
 
 		// Subscribers here
 		events.subscribe(EVENT_AT, function(val) {  // Air temp
@@ -388,7 +388,7 @@
 			let theGraph = evt.target;
 			let rect = theGraph.getBoundingClientRect();
 			let x = evt.clientX - rect.left; // x position within the element.
-			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
+			let y = evt.offsetY - rect.height - 4; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
 			// console.log(`MouseMove on graph: ${x}, ${y}`);
 			let height = theGraph.height;
 			let minY = theGraph.data ? theGraph.data.minY : 0;
@@ -432,15 +432,15 @@
 			let theGraph = evt.target;
 			let rect = theGraph.getBoundingClientRect();
 			let x = evt.clientX - rect.left; // x position within the element.
-			let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
-			// console.log(`MouseMove on graph: ${x}, ${y}`);
+			let y = evt.offsetY - rect.height + 2; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6, rect.height ?
 			let height = theGraph.height;
 			let minY = theGraph.data ? theGraph.data.minY : 0;
 			let maxY = theGraph.data ? theGraph.data.maxY : 0;
 			let deltaY = maxY - minY;
 			let correctedY = height - y;
 			let yValue = minY + ((correctedY / height) * deltaY);
-			
+			// console.log(`MouseMove on graph: ${x}, ${y} => corrected: ${correctedY}, value ${yValue}`);
+
 			theGraph.title = `${yValue.toFixed(1)} \xb0C`;
 		});
 	};
