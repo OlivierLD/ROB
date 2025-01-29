@@ -50,3 +50,21 @@ And to simplify your life - specially when sailing - all this is as automated as
 More details and screenshots are available on the [Weather Wizard site](http://weather.lediouris.net).
 
 Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject=Weather+Wizard) for any further question(s).
+
+## Quick walk thru
+
+- Send the email to `query@saildocs.com` as mentioned in the [Weather Wizard site](http://weather.lediouris.net), like `GFS:67N,8S,79W,12E|0.5,0.5|0,3,6..72|WIND,PRESS,WIND500,HGT500`, _**in plain text**_.
+  ![Send email](./images/GRIB.01.png)
+- When the GRIB is received, store it on your file system in a directory we'll use later. Here is it named `GFS20250129072100778.grb`.
+- Run the script named `run-ww.sh`
+  ![Weather Wizard](./images/GRIB.02.png)
+- See in the GRIB folder (where you put the GRIB)
+  ![Weather Wizard](./images/GRIB.03.png)
+- and open it.
+  ![Weather Wizard](./images/GRIB.04.png)
+- Required contours can be seen
+  ![Weather Wizard](./images/GRIB.05.png)
+- As well as required 3D pictures
+  ![Weather Wizard](./images/GRIB.06.png)
+
+Refer to the doc for more details.

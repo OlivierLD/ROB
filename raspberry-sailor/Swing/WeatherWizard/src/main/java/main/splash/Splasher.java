@@ -12,6 +12,10 @@ import javax.swing.*;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+/*
+ For the GRIBs, also try "send GFS:51N,44N,7W,1E|0.25,0.25|0,3,6..72|WIND,PRESS,WIND500,HGT500" to query@saildocs.com (in plain text).
+ https://sailmail.com/grib-files-saildocs-weather-data/
+ */
 public class Splasher {
     static {
         WWContext.getInstance().addApplicationListener(new ApplicationEventListener() {
