@@ -67,4 +67,4 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
 - As well as required 3D pictures
   ![Weather Wizard](./images/GRIB.06.png)
 
-Refer to the doc for more details.
+Many other options are available. Refer to the doc for details.
