@@ -55,7 +55,7 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
 
 - Send the email to `query@saildocs.com` as mentioned in the [Weather Wizard site](http://weather.lediouris.net), like `GFS:67N,8S,79W,12E|0.5,0.5|0,3,6..72|WIND,PRESS,WIND500,HGT500`, _**in plain text**_.
    <!-- ![Send email](./images/GRIB.01.png) -->
-  <img src="./images/GRIB.01.png" style="width: 40%;">
+  <img src="./images/GRIB.01.png" style="width: 40%; border: 1px solid silver;">
 - When the GRIB is received, store it on your file system in a directory we'll use later. Here is it named `GFS20250129072100778.grb`.
 - Run the script named `run-ww.sh`
   ![Weather Wizard](./images/GRIB.02.png)
