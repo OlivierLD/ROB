@@ -62,9 +62,10 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
   ![Weather Wizard](./images/GRIB.03.png)
 - and open it.
   ![Weather Wizard](./images/GRIB.04.png)
-- Required contours can be seen
+- Required contours can be seen.  
+ _Note_: Contours (looking like faxes) are calculated from the GRIB data.
   ![Weather Wizard](./images/GRIB.05.png)
 - As well as required 3D pictures
   ![Weather Wizard](./images/GRIB.06.png)
 
-Many other options are available. Refer to the doc for details.
+Many other options are available. Refer to the [manual](https://www.lediouris.net/donpedro/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf) for details.
