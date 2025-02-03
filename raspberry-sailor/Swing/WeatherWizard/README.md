@@ -71,3 +71,8 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
   ![Weather Wizard](./images/GRIB.06.png)
 
 Many other options are available. Refer to the [manual](https://www.lediouris.net/donpedro/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf) for details.
+
+### Hints and tips
+- Make a [desktop shortcut](https://askubuntu.com/questions/299052/how-to-execute-sh-script-from-a-desktop-shortcut) on Linux. And [that one](https://www.baeldung.com/linux/desktop-entry-files) too.
+
+--- 
