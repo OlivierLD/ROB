@@ -2,7 +2,7 @@
 # MUX definition.
 # See .../ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/use_cases/USE_CASES_4.md
 #
-name: "Reading Data from a BMP180"
+name: "Reading Data from a BMP180 or a BME280"
 description:
   - Read a BMP180 from a TCP Server in Python, on port 8001
   - Requires TCP_BMP180_server.py (or TCP_BME280_server.py) to be running

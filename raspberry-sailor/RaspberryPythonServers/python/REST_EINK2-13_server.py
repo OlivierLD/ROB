@@ -73,12 +73,13 @@ PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
 SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
+SCREEN_SAVER_OPTION_PREFIX: str = "--screen-saver-option:"  # default "pelican", also available "sleep"
 
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
 # BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM
-# TODO: More data, and graphics
+# TODO: More data, and graphics (displays...)
 
 eink = None
 server_pid: int = os.getpid()
@@ -91,6 +92,7 @@ ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
 enable_screen_saver: bool = True
+screen_saver_option: str = "pelican"  # Option are "pelican", "sleep"
 
 # Default list
 nmea_data: List[str] = [
@@ -174,20 +176,27 @@ def button_manager(button, callback) -> None:
     print(f"Done with listener on button { '1' if button == button_01 else '2' }")
 
 
+# There is a blank screen saver option... ("sleep")
 def screen_saver_manager() -> None:
     global keep_looping
     global screen_saver_timer
     global screen_saver_on
+    global screen_saver_option
     while keep_looping:
         screen_saver_timer += 1
         if verbose:
             print(f"screen_saver_manager >> Increasing screen_saver_timer to {screen_saver_timer}")
         if screen_saver_timer >= ENABLE_SCREEN_SAVER_AFTER:   # and not screen_saver_on:
             if verbose:
-                print("Turning screen saver ON")
+                print(f"Turning screen saver ON, option {screen_saver_option}, screen_save_timer:{screen_saver_timer} / {ENABLE_SCREEN_SAVER_AFTER} ")
             screen_saver_on = True
             if screen_saver_timer % ENABLE_SCREEN_SAVER_AFTER == 0:
-                display_image(screen_saver_timer)  # display the pelican as screen saver
+                if screen_saver_option == "sleep":
+                    if screen_saver_timer <= ENABLE_SCREEN_SAVER_AFTER:  # Just once
+                        display_sleep_message()
+                else:
+                    # print(f"Pelican Screen Saver, {screen_saver_timer}")
+                    display_image(screen_saver_timer)  # display the pelican as screen saver
         time.sleep(1.0)
 
 
@@ -220,6 +229,12 @@ if len(sys.argv) > 0:  # Script name + X args
                     enable_screen_saver = False
             except Exception as error:
                 print(f"Screen Saver Mode error: {repr(error)}")
+        if arg[:len(SCREEN_SAVER_OPTION_PREFIX)] == SCREEN_SAVER_OPTION_PREFIX:
+            try:
+                screen_saver_option = arg[len(SCREEN_SAVER_OPTION_PREFIX):]
+                print(f"Screen Saver Option now {screen_saver_option}")
+            except Exception as error:
+                print(f"Screen Saver Option error: {repr(error)}")
 
         if arg[:len(DATA_PREFIX)] == DATA_PREFIX:
             user_list = arg[len(DATA_PREFIX):].split(',')
@@ -758,6 +773,21 @@ def display_image(offset: int) -> None:
         print(f">> Displaying pelican, offset {offset}, x {x}, eWidth {eink.width}, pWidth {scaled_width}")
     eink.display()
 
+def display_sleep_message() -> None:
+    global eink
+    text: str = "Screen sleeping..."
+    clear()
+    if verbose:
+        print("Displaying sleep message.")
+    (font_width, font_height) = FONT.getsize(text)
+    draw.text(
+        (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
+        text,
+        font=FONT,
+        fill=TEXT_COLOR,
+    )
+    eink.image(image)
+    eink.display()
 
 # Manage what goes on, on the display
 def display_manager() -> None:

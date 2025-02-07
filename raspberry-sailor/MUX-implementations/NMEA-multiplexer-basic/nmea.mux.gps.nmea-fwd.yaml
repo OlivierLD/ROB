@@ -3,6 +3,7 @@
 # With eink screen.
 # The "NMEA Cache forwarder" is implemented by REST_EINK2-13_server.py
 # Requires the Python server to be running.
+# Small logger in the yellow 3D-printed box ;)
 #
 name: "Real world scenario."
 description:
