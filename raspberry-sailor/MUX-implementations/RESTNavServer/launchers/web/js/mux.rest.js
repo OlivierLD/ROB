@@ -94,7 +94,7 @@ let updateSystemDate = (newFmtDate) => {
 };
 
 let enableLogging = (b) => {
-    return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 200, null, false);
+    return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 201, null, false);
 };
 
 let getForwarderStatus = () => {

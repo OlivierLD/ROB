@@ -386,6 +386,8 @@ def display(display_data: List[str]) -> None:
 def clear() -> None:
     global eink
     global draw
+    global image
+    global draw
     try:
         # Draw a black filled box to clear the image.
         draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)
@@ -775,6 +777,10 @@ def display_image(offset: int) -> None:
 
 def display_sleep_message() -> None:
     global eink
+    global FONT
+    global draw
+    global image
+
     text: str = "Screen sleeping..."
     clear()
     if verbose:
