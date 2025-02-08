@@ -59,7 +59,7 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
   if [[ "${USER_INPUT}" != "" ]]; then
       SS_MODE=${USER_INPUT}
   fi
-  # echo "Will use screen saver mode option ${SS_MODE}"
+  # echo "Will use screen saver mode option ${SS_MODE}, sleep or pelican (default)"
 else
   echo -e "Getting prms from CLI"
   if [[ $# -gt 0 ]]; then
