@@ -360,7 +360,7 @@ def display(display_data: List[str]) -> None:
             # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
         else:
-            # Blink dots... Removed (see display_dots). Nothing displayed if screen saver is on
+            # Blink dots... Removed (see display_dots). This is not displayed if screen saver is on
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")   # For the log
             if display_dots:
