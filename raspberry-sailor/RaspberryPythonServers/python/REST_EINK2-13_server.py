@@ -339,13 +339,16 @@ def display(display_data: List[str]) -> None:
     global draw
     global x
     global screen_saver_on
+
+    display_dots = False
+
     try:
         # Clear Screen.
         # draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # Moved below (if screen saver is off)
 
         if not screen_saver_on:
             # Clear Screen.
-            draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # TODO a clear() ?
+            draw.rectangle((0, 0, eink.width, eink.height), fill=FOREGROUND_COLOR)  # TODO a clear() instead ?
             y: int = top
             # Now draw the required text
             for line in display_data:
@@ -357,25 +360,26 @@ def display(display_data: List[str]) -> None:
             # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
             # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
         else:
-            # Blink dots... Removed. Nothing displayed if screen saver is on
+            # Blink dots... Removed (see display_dots). Nothing displayed if screen saver is on
             if verbose:
-                print(f"screen_saver_timer  {screen_saver_timer}")
-            if screen_saver_timer % 4 == 1:
-                if verbose:
-                    print("pixel ON .")
-                # Draw '.' on top left
-                draw.text((x, top), ".", font=FONT, fill=TEXT_COLOR)
-            elif screen_saver_timer % 4 == 2:
-                if verbose:
-                    print("pixel ON ..")
-                # Draw '..' on top left
-                draw.text((x, top), "..", font=FONT, fill=TEXT_COLOR)
-            elif screen_saver_timer % 4 == 3:
-                if verbose:
-                    print("pixel ON ...")
-                # Draw '...' on top left
-                draw.text((x, top), "...", font=FONT, fill=TEXT_COLOR)
-        if not screen_saver_on:  # NO display if screen saver is on
+                print(f"screen_saver_timer  {screen_saver_timer}")   # For the log
+            if display_dots:
+                if screen_saver_timer % 4 == 1:
+                    if verbose:
+                        print("pixel ON .")
+                    # Draw '.' on top left
+                    draw.text((x, top), ".", font=FONT, fill=TEXT_COLOR)
+                elif screen_saver_timer % 4 == 2:
+                    if verbose:
+                        print("pixel ON ..")
+                    # Draw '..' on top left
+                    draw.text((x, top), "..", font=FONT, fill=TEXT_COLOR)
+                elif screen_saver_timer % 4 == 3:
+                    if verbose:
+                        print("pixel ON ...")
+                    # Draw '...' on top left
+                    draw.text((x, top), "...", font=FONT, fill=TEXT_COLOR)
+        if not screen_saver_on:  # display if screen saver is on
             # Display image.
             eink.image(image)
             eink.display()
