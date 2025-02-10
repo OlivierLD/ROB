@@ -785,14 +785,23 @@ def display_sleep_message() -> None:
     global draw
     global image
 
-    text: str = "Screen sleeping..."
+    text_1: str = "Server running,"
+    text_2: str = "Screen sleeping..."
     clear()
     if verbose:
         print("Displaying sleep message.")
-    (font_width, font_height) = FONT.getsize(text)
+
+    (font_width, font_height) = FONT.getsize(text_1)
     draw.text(
-        (eink.width // 2 - font_width // 2, eink.height // 2 - font_height // 2),
-        text,
+        (eink.width // 2 - font_width // 2, eink.height // 2 - font_height),  # (x, y)
+        text_1,
+        font=FONT,
+        fill=TEXT_COLOR,
+    )
+    (font_width, font_height) = FONT.getsize(text_2)
+    draw.text(
+        (eink.width // 2 - font_width // 2, eink.height // 2),
+        text_2,
         font=FONT,
         fill=TEXT_COLOR,
     )
