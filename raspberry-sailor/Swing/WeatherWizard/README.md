@@ -73,6 +73,7 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
 Many other options are available. Refer to the [manual](https://www.lediouris.net/donpedro/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf) for details.
 
 ### Hints and tips
-- Make a [desktop shortcut](https://askubuntu.com/questions/299052/how-to-execute-sh-script-from-a-desktop-shortcut) on Linux. And [that one](https://www.baeldung.com/linux/desktop-entry-files) too.
+- Make a [desktop shortcut](https://askubuntu.com/questions/299052/how-to-execute-sh-script-from-a-desktop-shortcut) on Linux. And [that one](https://www.baeldung.com/linux/desktop-entry-files) too.  
+- On Raspberry Pi, see [this](https://forums.raspberrypi.com/viewtopic.php?t=337131).
 
 --- 

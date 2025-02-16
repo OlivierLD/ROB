@@ -144,11 +144,26 @@ Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:
 From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)
 
+Once data have been logged, they can be merged and cleaned with scripts like `log.merge.deep.sh` and its neighbors, and `log.to.json.sh`...
+Data can be re-played from several web UIs. See in `ROB/raspberry-sailor/MUX-implementations/MISCSamples/LeafLetAnalysis` for examples.
+
 The web UI is customizable at will. Above is _an example_ of the ChartlessMap WebComponent.  
 In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
 this is the kind of things you might regret not to have done.
+
+### REST Clients
+Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long),, using REST or other standard protocols.
+
+|                    Server                    |               M5Stick Client               |
+|:--------------------------------------------:|:------------------------------------------:|
+| ![Server](./doc_resources/SmallRESTNav.jpeg) | ![M5 Client](./doc_resources/M5Stick.jpeg) |
+
+Details on those small boards can be found at <https://github.com/OlivierLD/small-boards/>.  
+For the M5Stick featured above, see <https://github.com/OlivierLD/small-boards/tree/master/M5StickC>, and the code
+itself is [here](https://github.com/OlivierLD/small-boards/blob/master/M5StickC/HttpClient/HttpClient.ino). That would give you an idea.  
+The M5Stick is quite affordable (less then $10.00 in 2025), see [here](https://shop.m5stack.com/products/stick-c?variant=43982750843137).
 
 ### Consumption
 Measured consumption for the config above (**with** an e-ink bonnet):   

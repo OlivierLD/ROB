@@ -6,11 +6,11 @@
 #
 # sudo pip3 install adafruit-circuitpython-epd
 #
-# That one receives full the cache (as JSON) and manages the display of the data by itself.
-# It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
+# That one receives the full cache (as JSON) and manages the display of the data by itself.
+# It can also deal with 2 push-buttons (on the eInk2-13) for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
-# -> Screen Saver displays a pelican.
+# -> Screen Saver displays a pelican (default) or a static text.
 #
 # Work In Progress !
 # Do run a curl -X GET /eink2-13/oplist !
@@ -20,8 +20,6 @@
 # Code samples and doc: <https://learn.adafruit.com/2-13-in-e-ink-bonnet/usage>  
 # EPD: <https://docs.circuitpython.org/projects/epd/en/latest/>
 #      <https://docs.circuitpython.org/projects/epd/en/latest/api.html>
-#
-# WIP
 #
 import json
 import sys
@@ -63,11 +61,13 @@ srcs = None
 rst = digitalio.DigitalInOut(board.D27)
 busy = digitalio.DigitalInOut(board.D17)
 
+# REST prms
 PATH_PREFIX = "/eink2-13"
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"  # aka localhost
 
+# CLI prms
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
@@ -780,6 +780,9 @@ def display_image(offset: int) -> None:
     eink.display()
 
 def display_sleep_message() -> None:
+    #
+    # Two line text.
+    #
     global eink
     global FONT
     global draw
