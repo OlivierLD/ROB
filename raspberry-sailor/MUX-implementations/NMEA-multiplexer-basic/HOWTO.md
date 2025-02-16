@@ -154,7 +154,7 @@ And as soon as you have a configuration that fits your needs, do make a backup o
 this is the kind of things you might regret not to have done.
 
 ### REST Clients
-Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long),, using REST or other standard protocols.
+Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long), using REST or other standard protocols.
 
 |                    Server                    |               M5Stick Client               |
 |:--------------------------------------------:|:------------------------------------------:|
