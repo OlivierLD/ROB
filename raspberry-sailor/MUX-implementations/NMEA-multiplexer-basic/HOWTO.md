@@ -163,7 +163,7 @@ Small boards that can be wifi-aware can connect to the network emitted by the Ra
 Details on those small boards can be found at <https://github.com/OlivierLD/small-boards/>.  
 For the M5Stick featured above, see <https://github.com/OlivierLD/small-boards/tree/master/M5StickC>, and the code
 itself is [here](https://github.com/OlivierLD/small-boards/blob/master/M5StickC/HttpClient/HttpClient.ino). That would give you an idea.  
-The M5Stick is quite affordable (less then $10.00 in 2025), see [here](https://shop.m5stack.com/products/stick-c?variant=43982750843137).
+The M5Stick is quite affordable (less than $10.00 in 2025), see [here](https://shop.m5stack.com/products/stick-c?variant=43982750843137).
 
 ### Consumption
 Measured consumption for the config above (**with** an e-ink bonnet):   
