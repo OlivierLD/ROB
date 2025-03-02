@@ -1,4 +1,5 @@
 # How to
+### Data replay
 Reads and streams a json file, containing data processed by `log.to.leaflet.sh`, like in
 ```
  ./log.to.leaflet.sh --file-name:2010-07-10.tacking.back.in.nmea \
@@ -52,9 +53,13 @@ used to calculate the Course Made Good (CMG).
 
 Same for all calculated data, like True Wind - Speed and Direction.
 
+## Replay data
+See the file `one.html`. It uses [leaflet.js](https://leafletjs.com).  
+Data to replay are mentioned in the variable `trackData`. See the source for details.
 
-## TODO
+## TODO ?
 - Draw the Boat on the Track
 - Plot True Wind on the Track
 - Plot Current on the Track
 
+---

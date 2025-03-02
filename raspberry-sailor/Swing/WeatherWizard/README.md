@@ -73,7 +73,22 @@ Contact [me](mailto:olivier.lediouris@gmail.com?cc=olivier@lediouris.net&subject
 Many other options are available. Refer to the [manual](https://www.lediouris.net/donpedro/software/structure/datafiles/manual/WeatherWizardUserManual.2nd.edition.pdf) for details.
 
 ### Hints and tips
-- Make a [desktop shortcut](https://askubuntu.com/questions/299052/how-to-execute-sh-script-from-a-desktop-shortcut) on Linux. And [that one](https://www.baeldung.com/linux/desktop-entry-files) too.  
+- Make a [desktop shortcut](https://askubuntu.com/questions/299052/how-to-execute-sh-script-from-a-desktop-shortcut) on Linux. And [that one](https://www.baeldung.com/linux/desktop-entry-files) too.
+```bash
+$ cat Desktop/test_one.desktop 
+
+[Desktop Entry]
+Version=1.0
+Exec=/home/oliv/repos/ROB/raspberry-sailor/Swing/WeatherWizard/run-ww.sh
+Name=Weather Wizard
+GenericName=Weather Wizard
+Comment=GRIBs and Co.
+Encoding=UTF-8
+Terminal=true
+Icon=/home/oliv/repos/ROB/wizard150.png
+Type=Application
+Categories=Application;Network;
+```
 - On Raspberry Pi, see [this](https://forums.raspberrypi.com/viewtopic.php?t=337131).
 
 --- 

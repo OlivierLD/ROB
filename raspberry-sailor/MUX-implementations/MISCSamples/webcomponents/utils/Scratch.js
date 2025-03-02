@@ -1,6 +1,9 @@
 /*
  * Haversine and friends
  * NodeJS compatible
+ * 
+ * try:
+ *      node Scratch.js
  */
 
 const KM_EQUATORIAL_EARTH_RADIUS   = 6378.1370;       // km per radian. Pi * 6378.1370 = 20037.5083 km
@@ -105,5 +108,6 @@ dist = 5400;
 cog = 0;
 greatCirclePoint = haversineInv({ lat: fromLat, lng: fromLng }, dist, cog);
 console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
+console.log("... Penser à prendre une petite laine...");
 
 console.log("\nEnd of test.");
