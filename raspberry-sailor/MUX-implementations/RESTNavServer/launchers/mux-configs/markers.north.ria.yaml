@@ -1,0 +1,486 @@
+#
+# Ria d'Etel, nord de Pont-Lorois
+#
+markers:
+  - latitude: 47.67826842816778
+    longitude: -3.199330473435112
+    label: "Tog Ru"
+    type: default
+  - latitude: 47.67772665159037
+    longitude: -3.19788208056707
+    label: "Nod-Vihan"
+    type: default
+  - latitude: 47.680288106282845
+    longitude: -3.198459280683892
+    label: "Men Halen"
+    type: default
+  - latitude: 47.681219912764206
+    longitude: -3.197783364012139
+    label: "Gravignez"
+    type: default
+  - latitude: 47.68568619362553
+    longitude: -3.187556212360505
+    label: "Nichtarguer"
+    type: default
+  - latitude: 47.68721048582041
+    longitude: -3.184757205453935
+    label: "St Cado"
+    type: default
+  - latitude: 47.687620828651525
+    longitude: -3.178379358032544
+    label: "Niheu"
+    type: default
+  - latitude: 47.68444289553178
+    longitude: -3.178111137131055
+    label: "Petit Niheu"
+    type: default
+  - latitude: 47.68630634343218
+    longitude: -3.175557674148877
+    label: "Ile des Moines"
+    type: default
+  - latitude: 47.68330087793559
+    longitude: -3.1712317811252437
+    label: "Pte du Perche"
+    type: default
+  - latitude: 47.68704924623554
+    longitude: -3.1705523915297826
+    label: "Ile de Riec'h"
+    type: default
+  - latitude: 47.6963839600436
+    longitude: -3.161955662799301
+    label: "La foret"
+    type: default
+  - latitude: 47.695269280457346
+    longitude: -3.1838828161198767
+    label: "Fandouillec"
+    type: default
+  - latitude: 47.69944302254926
+    longitude: -3.1752782896001013
+    label: "Pte du Mane Heilec"
+    type: default
+
+borders:
+  - border-name: "Pont-Lorois"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.6758944333358
+        longitude: -3.201457874129119
+      - rank: 2
+        latitude: 47.675865537412314
+        longitude: -3.198904411146941
+  - border-name: "Ria-NE"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.67403074445805
+        longitude: -3.198252299407614
+      - rank: 2
+        latitude: 47.675432227593284
+        longitude: -3.1995826750790006
+      - rank: 3
+        latitude: 47.67647247939578
+        longitude: -3.1992178946529752
+      - rank: 4
+        latitude: 47.67624131412077
+        longitude: -3.197200873473776
+      - rank: 5
+        latitude: 47.678105054992784
+        longitude: -3.1959134131466276
+      - rank: 6
+        latitude: 47.678394001105254
+        longitude: -3.1968575507198698
+      - rank: 7
+        latitude: 47.67892854719476
+        longitude: -3.1951623946224577
+      - rank: 8
+        latitude: 47.678726287156316
+        longitude: -3.1939178496395475
+      - rank: 9
+        latitude: 47.67965089807419
+        longitude: -3.19335995016445
+      - rank: 10
+        latitude: 47.679405299897326
+        longitude: -3.1926733046566373
+      - rank: 11
+        latitude: 47.678755181495525
+        longitude: -3.1922012358700163
+      - rank: 12
+        latitude: 47.679015229828366
+        longitude: -3.191128352264059
+      - rank: 13
+        latitude: 47.677171259065105
+        longitude: -3.187822993277223
+      - rank: 14
+        latitude: 47.67974286923606
+        longitude: -3.188337977408083
+      - rank: 15
+        latitude: 47.680956394059685
+        longitude: -3.1909558134066183
+      - rank: 16
+        latitude: 47.68172205591286
+        longitude: -3.1908699827181417
+      - rank: 17
+        latitude: 47.68349757167096
+        longitude: -3.18915862859285
+      - rank: 18
+        latitude: 47.68332422115448
+        longitude: -3.188150118003251
+      - rank: 19
+        latitude: 47.684884355064796
+        longitude: -3.186068723807694
+      - rank: 20
+        latitude: 47.68533216266095
+        longitude: -3.185575197348954
+      - rank: 21
+        latitude: 47.68624221141443
+        longitude: -3.185489366660477
+      - rank: 22
+        latitude: 47.687238913260074
+        longitude: -3.1862189275125283
+      - rank: 23
+        latitude: 47.68794670445498
+        longitude: -3.186111639151932
+      - rank: 24
+        latitude: 47.688033372104485
+        longitude: -3.184588144431473
+      - rank: 25
+        latitude: 47.687816702710656
+        longitude: -3.1845023137429966
+      - rank: 26
+        latitude: 47.68754225351969
+        longitude: -3.183794210563065
+      - rank: 27
+        latitude: 47.68718113396299
+        longitude: -3.1838585835794224
+      - rank: 28
+        latitude: 47.68686334668486
+        longitude: -3.1835152608255166
+      - rank: 29
+        latitude: 47.68609776029144
+        longitude: -3.18441648305452
+      - rank: 30
+        latitude: 47.68622776632012
+        longitude: -3.185317705283524
+      - rank: 31
+        latitude: 47.68527117151438
+        longitude: -3.1854511252095112
+      - rank: 32
+        latitude: 47.68425276360747
+        longitude: -3.183305357997597
+      - rank: 33
+        latitude: 47.68325600470097
+        longitude: -3.1830693236042866
+      - rank: 34
+        latitude: 47.682260991522675
+        longitude: -3.1839576521088024
+      - rank: 35
+        latitude: 47.68142310549509
+        longitude: -3.1830349722076794
+      - rank: 36
+        latitude: 47.68141588228119
+        longitude: -3.1815651216675183
+      - rank: 37
+        latitude: 47.682145421836196
+        longitude: -3.180942849176063
+      - rank: 38
+        latitude: 47.681690363706934
+        longitude: -3.1801811018158332
+      - rank: 39
+        latitude: 47.68200095936807
+        longitude: -3.1792155065704724
+      - rank: 40
+        latitude: 47.68155312317458
+        longitude: -3.1788829126526252
+      - rank: 41
+        latitude: 47.68145160861194
+        longitude: -3.175657740648604
+      - rank: 42
+        latitude: 47.682693985847145
+        longitude: -3.175657740648604
+      - rank: 43
+        latitude: 47.68344517633356
+        longitude: -3.174456111009932
+      - rank: 44
+        latitude: 47.68278066222457
+        longitude: -3.1722245131095406
+      - rank: 45
+        latitude: 47.683360479611196
+        longitude: -3.1714996078153495
+      - rank: 46
+        latitude: 47.68356994460052
+        longitude: -3.1710704543729666
+      - rank: 47
+        latitude: 47.6830715610044
+        longitude: -3.170963166012371
+      - rank: 48
+        latitude: 47.682804309868445
+        longitude: -3.171360132946575
+      - rank: 49
+        latitude: 47.682067556403965
+        longitude: -3.170566199078167
+      - rank: 50
+        latitude: 47.68154983297018
+        longitude: -3.168668227117451
+      - rank: 51
+        latitude: 47.68115255568464
+        longitude: -3.1682068871668894
+      - rank: 52
+        latitude: 47.68050968239576
+        longitude: -3.1681854294947702
+      - rank: 53
+        latitude: 47.68064692567306
+        longitude: -3.1668765114955026
+      - rank: 54
+        latitude: 47.6803002051185
+        longitude: -3.166490273397358
+      - rank: 55
+        latitude: 47.68003190503567
+        longitude: -3.162214732692519
+      - rank: 56
+        latitude: 47.68073257071617
+        longitude: -3.1616890197256002
+      - rank: 57
+        latitude: 47.68096371609293
+        longitude: -3.1627511744954977
+      - rank: 58
+        latitude: 47.6819244030914
+        longitude: -3.163394904659072
+      - rank: 59
+        latitude: 47.68266838161914
+        longitude: -3.163394904659072
+      - rank: 60
+        latitude: 47.683085552891136
+        longitude: -3.1629071630231924
+      - rank: 61
+        latitude: 47.68295553903091
+        longitude: -3.162241975187499
+      - rank: 62
+        latitude: 47.68338891730492
+        longitude: -3.1617055333845205
+      - rank: 63
+        latitude: 47.68502127648238
+        longitude: -3.162027398466308
+      - rank: 64
+        latitude: 47.686218296863906
+        longitude: -3.1642763541094614
+      - rank: 65
+        latitude: 47.686521643059145
+        longitude: -3.1641154215685674
+      - rank: 66
+        latitude: 47.686189406658045
+        longitude: -3.1632249281756235
+      - rank: 67
+        latitude: 47.6873666695864
+        longitude: -3.161615602766688
+      - rank: 68
+        latitude: 47.689403660863555
+        longitude: -3.1582202322897506
+      - rank: 69
+        latitude: 47.68635343691955
+        longitude: -3.1560215490753762
+      - rank: 70
+        latitude: 47.6890112605165
+        longitude: -3.152759982913267
+      - rank: 71
+        latitude: 47.68958903033342
+        longitude: -3.1498417395050646
+      - rank: 72
+        latitude: 47.695886306234264
+        longitude: -3.147180988162291
+      - rank: 73
+        latitude: 47.696695075554175
+        longitude: -3.1422028082306497
+      - rank: 74
+        latitude: 47.69860141074479
+        longitude: -3.1404861944611193
+      - rank: 75
+        latitude: 47.6980237407747
+        longitude: -3.1373104589874856
+      - rank: 76
+        latitude: 47.69704168713677
+        longitude: -3.136452152102721
+      - rank: 77
+        latitude: 47.70062320523751
+        longitude: -3.1324181097443224
+      - rank: 78
+        latitude: 47.70021885261125
+        longitude: -3.130358173220885
+      - rank: 79
+        latitude: 47.70091202662186
+        longitude: -3.1270966070587756
+      - rank: 80
+        latitude: 47.697619367987436
+        longitude: -3.1194576757843606
+      - rank: 81
+        latitude: 47.69490421233792
+        longitude: -3.1155952948029153
+  - border-name: "Ria-NW"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.67248584075481
+        longitude: -3.205155850300799
+      - rank: 2
+        latitude: 47.67676254034996
+        longitude: -3.208159924397478
+      - rank: 3
+        latitude: 47.67658916745354
+        longitude: -3.2042975434160326
+      - rank: 4
+        latitude: 47.67554891797738
+        longitude: -3.2011218079424006
+      - rank: 5
+        latitude: 47.67612336074161
+        longitude: -3.2008797046910336
+      - rank: 6
+        latitude: 47.6772647319118
+        longitude: -3.202521216608148
+      - rank: 7
+        latitude: 47.678239934334265
+        longitude: -3.201995503641229
+      - rank: 8
+        latitude: 47.678572221366544
+        longitude: -3.202371012903314
+      - rank: 9
+        latitude: 47.68106197840313
+        longitude: -3.199872881614284
+      - rank: 10
+        latitude: 47.68251383414726
+        longitude: -3.20047369643362
+      - rank: 11
+        latitude: 47.68280028593427
+        longitude: -3.1987987492357206
+      - rank: 12
+        latitude: 47.683045868129135
+        longitude: -3.198358866957279
+      - rank: 13
+        latitude: 47.68380427643268
+        longitude: -3.199238631514163
+      - rank: 14
+        latitude: 47.68371760175604
+        longitude: -3.200665566710086
+      - rank: 15
+        latitude: 47.684506027282765
+        longitude: -3.2054638384215655
+      - rank: 16
+        latitude: 47.684202669365504
+        longitude: -3.21134324058221
+      - rank: 17
+        latitude: 47.6865428133245
+        longitude: -3.2102274416320147
+      - rank: 18
+        latitude: 47.68610946125284
+        longitude: -3.207867097698909
+      - rank: 19
+        latitude: 47.68745284095589
+        longitude: -3.2065367220275225
+      - rank: 20
+        latitude: 47.69124985810285
+        longitude: -3.213428615199519
+      - rank: 21
+        latitude: 47.69026767688409
+        longitude: -3.2145444141497146
+      - rank: 22
+        latitude: 47.693647458090126
+        longitude: -3.2154027210344798
+      - rank: 23
+        latitude: 47.69835567701887
+        longitude: -3.212226985560847
+      - rank: 24
+        latitude: 47.690960983193946
+        longitude: -3.2107678638567454
+      - rank: 25
+        latitude: 47.689083257283
+        longitude: -3.205274699794246
+      - rank: 26
+        latitude: 47.68934325413376
+        longitude: -3.2020989643206126
+      - rank: 27
+        latitude: 47.687349911821684
+        longitude: -3.1993523822893626
+      - rank: 28
+        latitude: 47.688476592924104
+        longitude: -3.1957904087175857
+      - rank: 29
+        latitude: 47.692751981835194
+        longitude: -3.188151477443171
+      - rank: 30
+        latitude: 47.69266532202672
+        longitude: -3.1911555515398513
+      - rank: 31
+        latitude: 47.695033971630664
+        longitude: -3.190855144130183
+      - rank: 32
+        latitude: 47.69601606308311
+        longitude: -3.1919709430803787
+      - rank: 33
+        latitude: 47.693040846823365
+        longitude: -3.1948891864885813
+      - rank: 34
+        latitude: 47.69858674430383
+        longitude: -3.1971636997332107
+      - rank: 35
+        latitude: 47.701706052422246
+        longitude: -3.194460033046199
+      - rank: 36
+        latitude: 47.70258939163877
+        longitude: -3.19164898370218
+      - rank: 37
+        latitude: 47.70386014583304
+        longitude: -3.1894173858017902
+      - rank: 38
+        latitude: 47.702387223342626
+        longitude: -3.1856408355088206
+      - rank: 39
+        latitude: 47.70331141486748
+        longitude: -3.1831946608872386
+      - rank: 40
+        latitude: 47.70501535003785
+        longitude: -3.184010052427767
+      - rank: 41
+        latitude: 47.70484207103919
+        longitude: -3.1806197402329426
+      - rank: 42
+        latitude: 47.70432223058709
+        longitude: -3.180834316954134
+      - rank: 43
+        latitude: 47.70449551131378
+        longitude: -3.1789031264634113
+      - rank: 44
+        latitude: 47.70695025972708
+        longitude: -3.1758990523667308
+      - rank: 45
+        latitude: 47.70596837423416
+        longitude: -3.173967861876009
+      - rank: 46
+        latitude: 47.7048998307694
+        longitude: -3.175813221678254
+      - rank: 47
+        latitude: 47.699065774804446
+        longitude: -3.17516949151468
+      - rank: 48
+        latitude: 47.70212729152417
+        longitude: -3.173195385679719
+      - rank: 49
+        latitude: 47.70403342809582
+        longitude: -3.1685605285019847
+      - rank: 50
+        latitude: 47.70458215146115
+        longitude: -3.162638210997102
+      - rank: 51
+        latitude: 47.70689250226893
+        longitude: -3.169676327452181
+      - rank: 52
+        latitude: 47.71081986362862
+        longitude: -3.169375920042513
+      - rank: 53
+        latitude: 47.70926050557223
+        longitude: -3.172122502073763
+      - rank: 54
+        latitude: 47.710213452150796
+        longitude: -3.172723316893099
+      - rank: 55
+        latitude: 47.71473186268995
+        longitude: -3.1679817083204402
+

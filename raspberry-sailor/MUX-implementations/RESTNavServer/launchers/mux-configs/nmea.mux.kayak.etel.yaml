@@ -5,6 +5,9 @@ name: "Replaying logged data, kayaking Pte du Perche, with Corine."
 context:
   with.http.server: true
   http.port: 9999
+  markers: ./mux-configs/markers.yaml
+  markers.list:
+    - markers: ./mux-configs/markers.north.ria.yaml
   init.cache: true
 channels:
   - type: file

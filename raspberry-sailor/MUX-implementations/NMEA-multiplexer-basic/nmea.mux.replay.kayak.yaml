@@ -12,6 +12,8 @@ context:
   init.cache: true
   default.declination: -1
   markers: markers.yaml
+  markers.list:
+    - markers: markers.north.ria.yaml
 channels:
   - type: file
     filename: ../RESTNavServer/launchers/sample.data/Kayak.Patrick.nmea
