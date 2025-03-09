@@ -424,7 +424,7 @@ public class NMEAUtils {
                             (String) yamlMarker.get("type")
                     ));
                 });
-                System.out.println("Markers loaded.");
+                System.out.printf("Markers loaded from %s.\n", markerFileName);
             }
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
@@ -469,7 +469,7 @@ public class NMEAUtils {
                     borderList.add(oneBorder);
                 });
             }
-            System.out.println("Borders loaded.");
+            System.out.printf("Borders loaded from %s.\n", borderFileName);
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", borderFileName, System.getProperty("user.dir")));
         }
