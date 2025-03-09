@@ -75,8 +75,11 @@ let markers = [];
 let borders = [];
 
 // const MARKERS_DATA = "./json/markers.yaml.json";
-const MARKERS_DATA = "./json/markers.houat.hoedic.belle-ile.yaml.json";
-let pos = { lat: 47.5, lng: -3 }; // Hard-coded
+const MARKERS_DATA = "./json/markers.north.ria.yaml.json";
+let pos = { lat: 47.7 / -3.13 }; // Hard coded
+
+// const MARKERS_DATA = "./json/markers.houat.hoedic.belle-ile.yaml.json";
+// let pos = { lat: 47.5, lng: -3 }; // Hard-coded
 
 let loadData = (fn) => {
 	originalFetch(MARKERS_DATA)
@@ -113,7 +116,8 @@ let loadData = (fn) => {
 					map.centerLng = pos.lng;
 				}
 				// Map width ?
-				let chartWidth = (Math.abs(maxLng - minLng) / 5).toFixed(1) * 5;
+				// let chartWidth = (Math.abs(maxLng - minLng) / 50).toFixed(2) * 50;
+				let chartWidth = Math.abs(maxLng - minLng);
 				document.getElementById('ChartWidth').innerText = chartWidth;
 				map.chartWidth = chartWidth;
 
@@ -163,14 +167,14 @@ function onSlider(event) {
 
 function zoomIn() {
 	let currentWidth = map.chartWidth;
-	let newWidth = (currentWidth * 0.89).toFixed(1);
+	let newWidth = (currentWidth * 0.89); // .toFixed(1);
 	map.chartWidth = newWidth;
 	map.repaint();
 	document.getElementById('ChartWidth').innerText = newWidth;
 }
 function zoomOut() {
 	let currentWidth = map.chartWidth;
-	let newWidth = (currentWidth * 1.11).toFixed(1);
+	let newWidth = (currentWidth * 1.11); // .toFixed(1);
 	map.chartWidth = newWidth;
 	map.repaint();
 	document.getElementById('ChartWidth').innerText = newWidth;
