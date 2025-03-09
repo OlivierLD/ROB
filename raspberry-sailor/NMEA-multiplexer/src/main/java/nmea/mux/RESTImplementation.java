@@ -3044,9 +3044,9 @@ public class RESTImplementation {
 		if (!"null".equals(payload)) {
 			StringReader stringReader = new StringReader(payload);
 			try {
-				Map data = mapper.readValue(stringReader, Map.class); // gson.fromJson(stringReader, Map.class);
-				Double cog = (Double)((Map)data.get("cog")).get("cog");
-				Double sog = (Double)((Map)data.get("sog")).get("sog");
+				Map<?, ?> data = mapper.readValue(stringReader, Map.class); // gson.fromJson(stringReader, Map.class);
+				Double cog = (Double)((Map<?, ?>)data.get("cog")).get("cog");
+				Double sog = (Double)((Map<?, ?>)data.get("sog")).get("sog");
 //				System.out.printf(">> Setting COG: %f, SOG: %f\n", cog, sog);
 				ApplicationContext.getInstance().getDataCache().put(NMEADataCache.COG, new Angle360(cog));
 				ApplicationContext.getInstance().getDataCache().put(NMEADataCache.SOG, new Speed(sog));
@@ -3490,7 +3490,7 @@ public class RESTImplementation {
 	private static List<String> getSerialPortList() {
 		List<String> portList = new ArrayList<>();
 		// Opening Serial port
-		Enumeration enumeration = CommPortIdentifier.getPortIdentifiers();
+		Enumeration<?> enumeration = CommPortIdentifier.getPortIdentifiers();
 		while (enumeration.hasMoreElements()) {
 			CommPortIdentifier cpi = (CommPortIdentifier) enumeration.nextElement();
 			portList.add(cpi.getName());

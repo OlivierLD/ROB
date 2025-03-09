@@ -1,5 +1,6 @@
 #
 # Ria d'Etel, nord de Pont-Lorois
+# WiP...
 #
 markers:
   - latitude: 47.67826842816778
@@ -57,6 +58,10 @@ markers:
   - latitude: 47.69944302254926
     longitude: -3.1752782896001013
     label: "Pte du Mane Heilec"
+    type: default
+  - latitude: 47.70670309003601
+    longitude: -3.1599808052123994
+    label: "Pte du Verdon"
     type: default
 
 borders:
@@ -939,3 +944,45 @@ borders:
       - rank: 9
         latitude: 47.69652645531201
         longitude: -3.186158448152128
+  - border-name: "Verdon"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.72015889687993
+        longitude: -3.1634569480956998
+      - rank: 2
+        latitude: 47.71836883970065
+        longitude: -3.1636715248168916
+      - rank: 3
+        latitude: 47.71409555134482
+        longitude: -3.1606245353759737
+      - rank: 4
+        latitude: 47.71158338719738
+        longitude: -3.162126572424313
+      - rank: 5
+        latitude: 47.70820476860474
+        longitude: -3.1597233131469697
+      - rank: 6
+        latitude: 47.70678972651409
+        longitude: -3.160495789343259
+      - rank: 7
+        latitude: 47.706760847704054
+        longitude: -3.1588220909179654
+      - rank: 8
+        latitude: 47.70834915849474
+        longitude: -3.1572342231811494
+      - rank: 9
+        latitude: 47.70987966673646
+        longitude: -3.158264191442868
+      - rank: 10
+        latitude: 47.71129462493761
+        longitude: -3.159294159704587
+      - rank: 11
+        latitude: 47.7135758031814
+        longitude: -3.1568479850830045
+      - rank: 12
+        latitude: 47.716174492158565
+        longitude: -3.1556892707885713
+      - rank: 13
+        latitude: 47.71914838829023
+        longitude: -3.156075508886716

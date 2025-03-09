@@ -7,6 +7,10 @@ markers:
     longitude: -3.214258
     type: red
     label: "Etel, la barre"
+  - latitude: 47.659251047295
+    longitude: -3.208009912559647
+    label: "Port d'Etel"
+    type: default
   - latitude: 47.659823
     longitude: -3.211443
     type: default
