@@ -1147,7 +1147,19 @@ public class MuxInitializer {
                     break;
                 case "context":
                     Map<String, Object> context = (Map<String, Object>) yamlMap.get(k);
-                    context.keySet().forEach(ck -> properties.setProperty(ck, context.get(ck).toString()));
+                    context.keySet().forEach(ck -> {
+                        Object thatOne = context.get(ck);
+                        if ("markers.list".equals(ck)) {
+                            List<?> thatList = (List<?>)thatOne;
+                            AtomicInteger idx = new AtomicInteger(0);
+                            thatList.forEach(item -> {
+                                idx.incrementAndGet();
+                                properties.setProperty(String.format("%s.%02d", ck, idx.get()), ((Map<String, String>)item).get("markers"));
+                            });
+                        } else {
+                            properties.setProperty(ck, thatOne.toString());
+                        }
+                    });
                     System.out.println(context);
                     break;
                 case "channels":

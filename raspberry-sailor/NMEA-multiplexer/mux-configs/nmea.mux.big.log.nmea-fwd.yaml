@@ -4,12 +4,18 @@
 name: "Replay big log file."
 description:
   - Forward data to "NMEA Cache forwarder"
-  - Work in Progress
+  - Work in Progress, mostly for tests.
 context:
   with.http.server: true
   http.port: 8080
   init.cache: true
   default.declination: 0
+  deviation.file.name: dp_2011_04_15.csv
+  max.leeway: 10.0
+  damping: 30
+  markers: ./mux-configs/markers.yaml
+  markers.list:
+    - markers: ./mux-configs/markers.02.yaml
 channels:
   - type: file
     filename: ./sample-data/logged.data.zip

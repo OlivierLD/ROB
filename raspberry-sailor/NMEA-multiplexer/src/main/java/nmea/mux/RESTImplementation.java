@@ -100,6 +100,8 @@ public class RESTImplementation {
 		this.nmeaDataComputers = nmeaDataComputers;
 		this.mux = mux;
 
+		// TODO: final Context context = Context.getInstance(); Contains markers and other stuff...
+
 		// Check duplicates in operation list. Barfs if duplicate is found.
 		RESTProcessorUtil.checkDuplicateOperations(operations);
 	}
@@ -385,6 +387,13 @@ public class RESTImplementation {
 					.errorCode(MESSAGE_INDEXES.MUX_0001.label())
 					.errorMessage(error.toString()));
 		}
+		return response;
+	}
+
+	// TODO getContext
+	private HTTPServer.Response getContext(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+
 		return response;
 	}
 

@@ -59,6 +59,7 @@ function getNMEAData() {
 	return promise;
 }
 
+// TODO Change that name. To fetchNMEA or so.
 function fetch() {
 	let getData = getNMEAData();
 	getData.then((value) => {

@@ -29,11 +29,127 @@ public class Context {
 
 	private static Context instance;
 
+	/**
+	 * Used for the global context.
+	 * Displayed in the Admin pages.
+	 */
+	public static class TopContext {
+		private String name;
+		private List<String> description;
+		private Boolean withHTTPServer = false;
+		private int httpPort = -1;
+		private Boolean initCache = false;
+		private double defaultDeclination = 0d;
+		private String deviationFileName;
+		private double maxLeeway = 0d;
+		private int damping = 0;
+		private String markers;
+		private List<String> markerList;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public List<String> getDescription() {
+			return description;
+		}
+
+		public void setDescription(List<String> description) {
+			this.description = description;
+		}
+
+		public Boolean getWithHTTPServer() {
+			return withHTTPServer;
+		}
+
+		public void setWithHTTPServer(Boolean withHTTPServer) {
+			this.withHTTPServer = withHTTPServer;
+		}
+
+		public int getHttpPort() {
+			return httpPort;
+		}
+
+		public void setHttpPort(int httpPort) {
+			this.httpPort = httpPort;
+		}
+
+		public Boolean getInitCache() {
+			return initCache;
+		}
+
+		public void setInitCache(Boolean initCache) {
+			this.initCache = initCache;
+		}
+
+		public double getDefaultDeclination() {
+			return defaultDeclination;
+		}
+
+		public void setDefaultDeclination(double defaultDeclination) {
+			this.defaultDeclination = defaultDeclination;
+		}
+
+		public String getDeviationFileName() {
+			return deviationFileName;
+		}
+
+		public void setDeviationFileName(String deviationFileName) {
+			this.deviationFileName = deviationFileName;
+		}
+
+		public double getMaxLeeway() {
+			return maxLeeway;
+		}
+
+		public void setMaxLeeway(double maxLeeway) {
+			this.maxLeeway = maxLeeway;
+		}
+
+		public int getDamping() {
+			return damping;
+		}
+
+		public void setDamping(int damping) {
+			this.damping = damping;
+		}
+
+		public String getMarkers() {
+			return markers;
+		}
+
+		public void setMarkers(String markers) {
+			this.markers = markers;
+		}
+
+		public List<String> getMarkerList() {
+			return markerList;
+		}
+
+		public void setMarkerList(List<String> markerList) {
+			this.markerList = markerList;
+		}
+	}
+
+	private TopContext mainContext;
+
 	public synchronized static Context getInstance() {
 		if (instance == null) {
 			instance = new Context();
 		}
 		return instance;
+	}
+
+	public TopContext getMainContext() {
+		return mainContext;
+	}
+
+	public void setMainContext(TopContext mainContext) {
+		this.mainContext = mainContext;
 	}
 
 	/**

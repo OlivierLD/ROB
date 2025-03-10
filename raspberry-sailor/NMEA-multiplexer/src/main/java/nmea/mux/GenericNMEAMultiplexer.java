@@ -423,6 +423,31 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         return props;
     }
 
+    /**
+     *
+     * @param definitions
+     * definition like (in yaml here):
+     *
+     * name: "Log GPS and AIS Data."    => 'name'
+     * description:                     => 'description.01..xx'
+     *   - Reads GPS and AIS from serial ports
+     *   - Log data in 'logged' folder
+     *   - Collision detection
+     * context:
+     *   with.http.server: true         => 'with.http.server'
+     *   http.port: 9999                => 'http.port'
+     *   init.cache: true               => 'init.cache'
+     *   default.declination: -1        => 'default.declination'
+     *   deviation.file.name: "dp_2011_04_15.csv"   => 'deviation.file.name'
+    *    max.leeway: 10.0                           => 'max.leeway'
+    *    damping: 30                                => 'damping'
+     *   markers: markers.yaml                      => 'markers'
+     *   markers.list:                              => 'markers.list.01..xx'
+     *     - markers: markers.04.yaml
+     *     - markers: markers.05.yaml
+     *     - markers: markers.houat.hoedic.belle-ile.yaml
+     *     - markers: markers.couregant.la.plate.yaml
+     */
     public static void initDefinitions(Properties definitions) {
         if (definitions.get("name") != null) {
             System.out.printf("Definition Name: %s\n", definitions.get("name"));
@@ -445,9 +470,93 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         }
 
         if (infraVerbose) {
-            System.out.println("MUX Definitions:");
+            System.out.println("-- MUX Definitions: --");
             definitions.list(System.out);
+            System.out.println("----------------------");
         }
+        /* From definition into context: name, description, context
+         * -----------------------------
+         * name: "Log GPS and AIS Data."
+         * description:
+         *   - Reads GPS and AIS from serial ports
+         *   - Log data in 'logged' folder
+         *   - Collision detection
+         * context:
+         *   with.http.server: true
+         *   http.port: 9999
+         *   init.cache: true
+         *   default.declination: -1
+         *   deviation.file.name: "dp_2011_04_15.csv"
+         *   max.leeway: 10.0
+         *   damping: 30
+         *   markers: markers.yaml
+         *   markers.list:
+         *     - markers: markers.04.yaml
+         *     - markers: markers.05.yaml
+         *     - markers: markers.houat.hoedic.belle-ile.yaml
+         *     - markers: markers.couregant.la.plate.yaml
+         */
+        final Context context = Context.getInstance();
+        Context.TopContext instanceContext = new Context.TopContext();
+        // name
+        instanceContext.setName(definitions.getProperty("name"));
+        // description
+        int _descIdx = 1;
+        List<String> desc = null;
+        while (definitions.getProperty(String.format("description.%02d", _descIdx)) != null) {
+            String value = definitions.getProperty(String.format("description.%02d", _descIdx));
+            _descIdx++;
+            if (desc == null) {
+                desc = new ArrayList<>();
+            }
+            desc.add(value);
+        }
+        if (desc != null) {
+            instanceContext.setDescription(desc);
+        }
+        // with.http.server
+        if (definitions.getProperty("with.http.server") != null) {
+            instanceContext.setWithHTTPServer("true".equals(definitions.getProperty("with.http.server")));
+        }
+        // http.port
+        if (definitions.getProperty("http.port") != null) {
+            instanceContext.setHttpPort(Integer.parseInt(definitions.getProperty("http.port")));
+        }
+        // init.cache
+        if (definitions.getProperty("init.cache") != null) {
+            instanceContext.setInitCache("true".equals(definitions.getProperty("init.cache")));
+        }
+        // default.declination
+        if (definitions.getProperty("default.declination") != null) {
+            instanceContext.setDefaultDeclination(Double.parseDouble(definitions.getProperty("default.declination")));
+        }
+        // deviation.file.name
+        instanceContext.setDeviationFileName(definitions.getProperty("deviation.file.name"));
+        // max.leeway
+        if (definitions.getProperty("max.leeway") != null) {
+            instanceContext.setMaxLeeway(Double.parseDouble(definitions.getProperty("max.leeway")));
+        }
+        // damping
+        if (definitions.getProperty("damping") != null) {
+            instanceContext.setDamping(Integer.parseInt(definitions.getProperty("damping")));
+        }
+        // markers and markers.list
+        instanceContext.setMarkers(definitions.getProperty("markers"));
+        _descIdx = 1;
+        List<String> markers = null;
+        while (definitions.getProperty(String.format("markers.list.%02d", _descIdx)) != null) {
+            String value = definitions.getProperty(String.format("markers.list.%02d", _descIdx));
+            _descIdx++;
+            if (markers == null) {
+                markers = new ArrayList<>();
+            }
+            markers.add(value);
+        }
+        if (markers != null) {
+            instanceContext.setMarkerList(markers);
+        }
+        // And finally
+        context.setMainContext(instanceContext);
 
         boolean startProcessingOnStart = "true".equals(System.getProperty("process.on.start", "true"));
         if (infraVerbose) {
@@ -494,6 +603,8 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         });
 
         Properties definitions = interactiveConfig.get() ? GenericNMEAMultiplexer.interactiveConfig() :  GenericNMEAMultiplexer.getDefinitions();
+        System.out.println("TOP Level, definition:\n>>------------\n" + definitions + "\n------------<<\n");
+
         initDefinitions(definitions);
     }
 }
