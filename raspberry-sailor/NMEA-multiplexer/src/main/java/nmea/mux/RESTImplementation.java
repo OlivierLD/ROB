@@ -23,16 +23,10 @@ import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
 import nmea.parser.*;
+import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -82,6 +76,7 @@ public class RESTImplementation {
 	}
 	private final static ObjectMapper mapper = new ObjectMapper();
 
+	private Context.TopContext topMUXContext; // Contains markers and other stuff...
 	private final List<NMEAClient> nmeaDataClients;
 	private final List<Forwarder> nmeaDataForwarders;
 	private final List<Computer> nmeaDataComputers;
@@ -98,9 +93,12 @@ public class RESTImplementation {
 		this.nmeaDataClients = nmeaDataClients;
 		this.nmeaDataForwarders = nmeaDataForwarders;
 		this.nmeaDataComputers = nmeaDataComputers;
-		this.mux = mux;
+		this.mux = mux;  // Contains original Properties
 
-		// TODO: final Context context = Context.getInstance(); Contains markers and other stuff...
+		Context context = Context.getInstance();
+		this.topMUXContext = context.getMainContext(); // Contains markers and other stuff...
+
+		System.out.println("Got the Context");
 
 		// Check duplicates in operation list. Barfs if duplicate is found.
 		RESTProcessorUtil.checkDuplicateOperations(operations);
@@ -145,6 +143,16 @@ public class RESTImplementation {
 					REST_PREFIX + "/serial-ports",
 					this::getSerialPorts,
 					"Get the list of the available serial ports."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/context",
+					this::getContext,
+					"Get the MUX Context (name, description, and others)."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/marker-files",
+					this::getMarkerFiles,
+					"Get the available marker and border files, from user.home."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/channels",
@@ -390,13 +398,77 @@ public class RESTImplementation {
 		return response;
 	}
 
-	// TODO getContext
+	// getContext. Added March 2025
 	private HTTPServer.Response getContext(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		String content;
+		try {
+			content = mapper.writeValueAsString(this.topMUXContext);
+			if (restVerbose()) {
+				System.out.printf("-- MUX Context --\n%s\n--------------------\n", content);
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
+			}
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		} catch (JsonProcessingException jpe) {
+			content = jpe.getMessage();
+			jpe.printStackTrace();
+		}
+		response.setPayload(content.getBytes());
 
 		return response;
 	}
 
+	private HTTPServer.Response getMarkerFiles(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		String content = "";
+		try {
+			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", System.getProperty("user.dir")) };
+			Process process = Runtime.getRuntime().exec(shellCommand);
+
+			int exitCode = process.waitFor();
+			System.out.printf("Exit code for [%s] was %d\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")), exitCode);
+
+			InputStreamReader isr = new InputStreamReader(process.getInputStream());
+			BufferedReader br = new BufferedReader(isr);
+
+			List<String> borderFileList = new ArrayList<>();
+			Yaml yaml = new Yaml(); // Yaml parser
+			String line = "";
+			while (line != null) {
+				line = br.readLine();
+				if (line != null) {
+					// System.out.printf("Read: [%s]\n", line);
+					// Check if it's the right kind of file...
+					try {
+						InputStream inputStream = new FileInputStream(line);
+						Map<String, Object> map = yaml.load(inputStream);
+						if (map.get("markers") != null || map.get("borders") != null) {
+							borderFileList.add(line);
+						}
+					} catch (IOException ioe) {
+						throw new RuntimeException(String.format("Wow! File [%s] not found in %s", line, System.getProperty("user.dir")));
+					}
+				} else {
+					System.out.println("Done reading.");
+				}
+			}
+
+			content = mapper.writeValueAsString(borderFileList);
+			if (restVerbose()) {
+				System.out.printf("-- Border files list --\n%s\n--------------------\n", content);
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
+			}
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		}  catch (JsonProcessingException jpe) {
+			content = jpe.getMessage();
+			jpe.printStackTrace();
+		} catch (IOException | InterruptedException ie) {
+
+		}
+		response.setPayload(content.getBytes());
+
+		return response;
+	}
 	private HTTPServer.Response getChannels(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 

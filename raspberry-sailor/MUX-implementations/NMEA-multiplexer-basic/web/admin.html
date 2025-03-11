@@ -669,7 +669,7 @@
             document.getElementById('showChannels').className = (div.id === 'showChannels' ? 'selectedButton' : 'unselectedButton');
             document.getElementById('showForwarders').className = (div.id === 'showForwarders' ? 'selectedButton' : 'unselectedButton');
             document.getElementById('showComputers').className = (div.id === 'showComputers' ? 'selectedButton' : 'unselectedButton');
-            document.getElementById('showDiagram').className = (div.id === 'showDiagram' ? 'selectedButton' : 'unselectedButton');
+            document.getElementById('showDiagram').className = (div.id === 'showDiagram' ? 'selectedButton' : 'unselectedButton'); // Full view
             document.getElementById('showCache').className = (div.id === 'showCache' ? 'selectedButton' : 'unselectedButton');
             switch (div.id) {
                 case 'showPorts':
@@ -684,7 +684,7 @@
                 case 'showComputers':
                     computerList();
                     break;
-                case 'showDiagram':
+                case 'showDiagram': // Full view
                     generateDiagram();
                     break;
                 case 'showCache':
