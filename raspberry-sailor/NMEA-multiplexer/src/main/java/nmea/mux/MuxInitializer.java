@@ -513,20 +513,32 @@ public class MuxInitializer {
                 double defaultDeclination = Double.parseDouble(muxProps.getProperty("default.declination", "0"));
                 int damping = Integer.parseInt(muxProps.getProperty("damping", "1"));
                 String markerFile = muxProps.getProperty("markers"); // default null
-                String markerFileList = muxProps.getProperty("markers.list"); // default null, or [{markers=mux-configs/bretagne.bumper.markers.yaml}, {markers=mux-configs/san.juan.markers.yaml}]
                 List<String> markerList = new ArrayList<>();
                 if (markerFile != null) {
                     markerList.add(markerFile);
                 }
-                if (markerFileList != null) {
-                    markerFileList = markerFileList.trim();
-                    String[] fileList = markerFileList.substring(1, markerFileList.length() - 1).split(","); // Trim [ and ], and split
-                    Arrays.stream(fileList).forEach(f -> {
-                        String fName = f.trim();
-                        String newFile = fName.substring(1, fName.length() - 1).substring("markers=".length());
-                        markerList.add(newFile);
-                        System.out.println(newFile);
-                    });
+                int listIdx = 1;
+                while (true) {
+                    String makerFileFromList = muxProps.getProperty(String.format("markers.list.%02d", listIdx));
+                    if (makerFileFromList != null) {
+                        markerList.add(makerFileFromList);
+                        listIdx++;
+                    } else {
+                        break;
+                    }
+                }
+                if (false) {
+                    String markerFileList = muxProps.getProperty("markers.list"); // default null, or [{markers=mux-configs/bretagne.bumper.markers.yaml}, {markers=mux-configs/san.juan.markers.yaml}]
+                    if (markerFileList != null) {
+                        markerFileList = markerFileList.trim();
+                        String[] fileList = markerFileList.substring(1, markerFileList.length() - 1).split(","); // Trim [ and ], and split
+                        Arrays.stream(fileList).forEach(f -> {
+                            String fName = f.trim();
+                            String newFile = fName.substring(1, fName.length() - 1).substring("markers=".length());
+                            markerList.add(newFile);
+                            System.out.println(newFile);
+                        });
+                    }
                 }
                 ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerList);
             } catch (Exception ex) {
