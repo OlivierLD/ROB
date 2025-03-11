@@ -650,7 +650,7 @@ let buildTable = (context, markerFiles, channels, forwarders, computers) => {
         "</table>" +
 
         "<br/><br/>" + 
-        
+
         "<table width='100%'>" +
         // Data
         "<tr><th width='45%'>Pulled in from</th><th width='10%'></th><th width='45%'>Pushed out to</th></tr>" +
@@ -1004,8 +1004,8 @@ let generateDiagram = () => {
         }
         forwarderTable = "<span style='color: red;'>" + message + "</span>";
         nbPromises += 1;
-        if (nbPromises === 3) {
-            document.getElementById("diagram").innerHTML = (buildTable(channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }

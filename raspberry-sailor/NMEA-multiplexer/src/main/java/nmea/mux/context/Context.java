@@ -133,6 +133,16 @@ public class Context {
 		public void setMarkerList(List<String> markerList) {
 			this.markerList = markerList;
 		}
+
+		@Override
+		public String toString() {
+			return(String.format("Context.toString:%s", this.getName()));
+		}
+
+		@Override
+		public Object clone() throws CloneNotSupportedException {
+			return super.clone();
+		}
 	}
 
 	private TopContext mainContext;

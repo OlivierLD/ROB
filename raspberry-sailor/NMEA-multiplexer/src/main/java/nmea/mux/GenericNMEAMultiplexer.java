@@ -33,11 +33,16 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
     private HTTPServer adminServer; // = null;
     protected Properties muxProperties;
 
+    private Context.TopContext topContext;
     private final List<NMEAClient> nmeaDataClients = new ArrayList<>(); // Consumers, aka Channels
     private final List<Forwarder> nmeaDataForwarders = new ArrayList<>();
     private final List<Computer> nmeaDataComputers = new ArrayList<>();
 
     private final RESTImplementation restImplementation;
+
+    public Context.TopContext getTopContext() {
+        return this.topContext;
+    }
 
     /**
      * Implements the management of the REST requests (see {@link RESTImplementation})
@@ -178,7 +183,93 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
      *
      * @param muxProps Initial config. See {@link #main(String...)} method.
      */
+
     public GenericNMEAMultiplexer(Properties muxProps) { // TODO A Constructor with yaml?
+
+        /* From definition into context: name, description, context
+         * -----------------------------
+         * name: "Log GPS and AIS Data."
+         * description:
+         *   - Reads GPS and AIS from serial ports
+         *   - Log data in 'logged' folder
+         *   - Collision detection
+         * context:
+         *   with.http.server: true
+         *   http.port: 9999
+         *   init.cache: true
+         *   default.declination: -1
+         *   deviation.file.name: "dp_2011_04_15.csv"
+         *   max.leeway: 10.0
+         *   damping: 30
+         *   markers: markers.yaml
+         *   markers.list:
+         *     - markers: markers.04.yaml
+         *     - markers: markers.05.yaml
+         *     - markers: markers.houat.hoedic.belle-ile.yaml
+         *     - markers: markers.couregant.la.plate.yaml
+         */
+        final Context context = Context.getInstance();
+        Context.TopContext instanceContext = new Context.TopContext();
+        // name
+        instanceContext.setName(muxProps.getProperty("name"));
+        // description
+        int _descIdx = 1;
+        List<String> desc = null;
+        while (muxProps.getProperty(String.format("description.%02d", _descIdx)) != null) {
+            String value = muxProps.getProperty(String.format("description.%02d", _descIdx));
+            _descIdx++;
+            if (desc == null) {
+                desc = new ArrayList<>();
+            }
+            desc.add(value);
+        }
+        if (desc != null) {
+            instanceContext.setDescription(desc);
+        }
+        // with.http.server
+        if (muxProps.getProperty("with.http.server") != null) {
+            instanceContext.setWithHTTPServer("true".equals(muxProps.getProperty("with.http.server")));
+        }
+        // http.port
+        if (muxProps.getProperty("http.port") != null) {
+            instanceContext.setHttpPort(Integer.parseInt(muxProps.getProperty("http.port")));
+        }
+        // init.cache
+        if (muxProps.getProperty("init.cache") != null) {
+            instanceContext.setInitCache("true".equals(muxProps.getProperty("init.cache")));
+        }
+        // default.declination
+        if (muxProps.getProperty("default.declination") != null) {
+            instanceContext.setDefaultDeclination(Double.parseDouble(muxProps.getProperty("default.declination")));
+        }
+        // deviation.file.name
+        instanceContext.setDeviationFileName(muxProps.getProperty("deviation.file.name"));
+        // max.leeway
+        if (muxProps.getProperty("max.leeway") != null) {
+            instanceContext.setMaxLeeway(Double.parseDouble(muxProps.getProperty("max.leeway")));
+        }
+        // damping
+        if (muxProps.getProperty("damping") != null) {
+            instanceContext.setDamping(Integer.parseInt(muxProps.getProperty("damping")));
+        }
+        // markers and markers.list
+        instanceContext.setMarkers(muxProps.getProperty("markers"));
+        _descIdx = 1;
+        List<String> markers = null;
+        while (muxProps.getProperty(String.format("markers.list.%02d", _descIdx)) != null) {
+            String value = muxProps.getProperty(String.format("markers.list.%02d", _descIdx));
+            _descIdx++;
+            if (markers == null) {
+                markers = new ArrayList<>();
+            }
+            markers.add(value);
+        }
+        if (markers != null) {
+            instanceContext.setMarkerList(markers);
+        }
+        // And finally
+        context.setMainContext(instanceContext);
+        this.topContext = instanceContext;
 
         // Display logging config
         LogManager logManager = LogManager.getLogManager();
@@ -474,89 +565,6 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             definitions.list(System.out);
             System.out.println("----------------------");
         }
-        /* From definition into context: name, description, context
-         * -----------------------------
-         * name: "Log GPS and AIS Data."
-         * description:
-         *   - Reads GPS and AIS from serial ports
-         *   - Log data in 'logged' folder
-         *   - Collision detection
-         * context:
-         *   with.http.server: true
-         *   http.port: 9999
-         *   init.cache: true
-         *   default.declination: -1
-         *   deviation.file.name: "dp_2011_04_15.csv"
-         *   max.leeway: 10.0
-         *   damping: 30
-         *   markers: markers.yaml
-         *   markers.list:
-         *     - markers: markers.04.yaml
-         *     - markers: markers.05.yaml
-         *     - markers: markers.houat.hoedic.belle-ile.yaml
-         *     - markers: markers.couregant.la.plate.yaml
-         */
-        final Context context = Context.getInstance();
-        Context.TopContext instanceContext = new Context.TopContext();
-        // name
-        instanceContext.setName(definitions.getProperty("name"));
-        // description
-        int _descIdx = 1;
-        List<String> desc = null;
-        while (definitions.getProperty(String.format("description.%02d", _descIdx)) != null) {
-            String value = definitions.getProperty(String.format("description.%02d", _descIdx));
-            _descIdx++;
-            if (desc == null) {
-                desc = new ArrayList<>();
-            }
-            desc.add(value);
-        }
-        if (desc != null) {
-            instanceContext.setDescription(desc);
-        }
-        // with.http.server
-        if (definitions.getProperty("with.http.server") != null) {
-            instanceContext.setWithHTTPServer("true".equals(definitions.getProperty("with.http.server")));
-        }
-        // http.port
-        if (definitions.getProperty("http.port") != null) {
-            instanceContext.setHttpPort(Integer.parseInt(definitions.getProperty("http.port")));
-        }
-        // init.cache
-        if (definitions.getProperty("init.cache") != null) {
-            instanceContext.setInitCache("true".equals(definitions.getProperty("init.cache")));
-        }
-        // default.declination
-        if (definitions.getProperty("default.declination") != null) {
-            instanceContext.setDefaultDeclination(Double.parseDouble(definitions.getProperty("default.declination")));
-        }
-        // deviation.file.name
-        instanceContext.setDeviationFileName(definitions.getProperty("deviation.file.name"));
-        // max.leeway
-        if (definitions.getProperty("max.leeway") != null) {
-            instanceContext.setMaxLeeway(Double.parseDouble(definitions.getProperty("max.leeway")));
-        }
-        // damping
-        if (definitions.getProperty("damping") != null) {
-            instanceContext.setDamping(Integer.parseInt(definitions.getProperty("damping")));
-        }
-        // markers and markers.list
-        instanceContext.setMarkers(definitions.getProperty("markers"));
-        _descIdx = 1;
-        List<String> markers = null;
-        while (definitions.getProperty(String.format("markers.list.%02d", _descIdx)) != null) {
-            String value = definitions.getProperty(String.format("markers.list.%02d", _descIdx));
-            _descIdx++;
-            if (markers == null) {
-                markers = new ArrayList<>();
-            }
-            markers.add(value);
-        }
-        if (markers != null) {
-            instanceContext.setMarkerList(markers);
-        }
-        // And finally
-        context.setMainContext(instanceContext);
 
         boolean startProcessingOnStart = "true".equals(System.getProperty("process.on.start", "true"));
         if (infraVerbose) {
@@ -564,6 +572,11 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         }
         GenericNMEAMultiplexer mux = new GenericNMEAMultiplexer(definitions);
         mux.setEnableProcess(startProcessingOnStart);
+//        if (true) {
+//            System.out.printf("TopContext is %s\n", instanceContext == null ? "Null !" : String.format("not null: %s", instanceContext.toString()));
+//        }
+//        mux.topContext = instanceContext;
+
         // with.http.server=yes
         // http.port=9999
         String withHttpServer = definitions.getProperty("with.http.server", "no");

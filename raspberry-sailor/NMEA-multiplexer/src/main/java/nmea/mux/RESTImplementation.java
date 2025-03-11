@@ -95,10 +95,14 @@ public class RESTImplementation {
 		this.nmeaDataComputers = nmeaDataComputers;
 		this.mux = mux;  // Contains original Properties
 
-		Context context = Context.getInstance();
-		this.topMUXContext = context.getMainContext(); // Contains markers and other stuff...
-
-		System.out.println("Got the Context");
+		if (mux instanceof GenericNMEAMultiplexer) {
+//			Context context = Context.getInstance();
+//			this.topMUXContext = context.getMainContext(); // Contains markers and other stuff...
+			this.topMUXContext = ((GenericNMEAMultiplexer)mux).getTopContext();
+			System.out.println("-- Got the Context:" + this.topMUXContext.toString());
+		} else {
+			System.out.printf("--> Oops, MUX is a %s\n", mux.getClass().getName());
+		}
 
 		// Check duplicates in operation list. Barfs if duplicate is found.
 		RESTProcessorUtil.checkDuplicateOperations(operations);
@@ -403,8 +407,11 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content;
 		try {
+			if (true) {
+				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
+			}
 			content = mapper.writeValueAsString(this.topMUXContext);
-			if (restVerbose()) {
+			if (true || restVerbose()) {
 				System.out.printf("-- MUX Context --\n%s\n--------------------\n", content);
 				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
