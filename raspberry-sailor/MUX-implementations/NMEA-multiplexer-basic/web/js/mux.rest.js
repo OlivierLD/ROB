@@ -150,6 +150,10 @@ let getMUXContext = () => {
     return getPromise('/mux/context', DEFAULT_TIMEOUT, 'GET', 200);
 };
 
+let getMarkerFiles = () => {
+    return getPromise('/mux/marker-files', DEFAULT_TIMEOUT, 'GET', 200);
+};
+
 let getChannels = () => {
     return getPromise('/mux/channels', DEFAULT_TIMEOUT, 'GET', 200);
 };
@@ -638,11 +642,16 @@ let computerList = () => {
     });
 };
 
-let buildTable = (context, channels, forwarders, computers) => {
+let buildTable = (context, markerFiles, channels, forwarders, computers) => {
     let html = "<table width='100%'>" +
-        // Context
-        "<tr><th colspan='3'>Context</th></tr>" +
-        "<tr><td colspan='3'>" + context + "</td></tr>" +
+        // Context and Markers
+        "<tr><th  width='55%' colspan='2'>Context</th><th width='45%'>Available Markers Files</th></tr>" +
+        "<tr><td colspan='2' style='vertical-align: top;'>" + context + "</td><td width='45%' style='vertical-align: top; overflow-x: scroll;'>" + markerFiles + "</td></tr>" +
+        "</table>" +
+
+        "<br/><br/>" + 
+        
+        "<table width='100%'>" +
         // Data
         "<tr><th width='45%'>Pulled in from</th><th width='10%'></th><th width='45%'>Pushed out to</th></tr>" +
         "<tr><td valign='middle' align='center' rowspan='2' title='Channels'>" + channels + "</td>" +
@@ -666,6 +675,7 @@ let generateDiagram = () => {
 
     let nbPromises = 0;
     let contextTable = "";
+    let markersTable = "";
     let channelTable = "";
     let forwarderTable = "";
     let computerTable = "";
@@ -693,7 +703,7 @@ let generateDiagram = () => {
         }
         // TODO Other stuff here (deviation file, declination, etc)
 
-        // Markers
+        // Used Markers
         if (json['markers'] || json['markerList']) {
             html += '<tr><td>';
             html += 'Markers and Borders:<br/>';
@@ -712,8 +722,8 @@ let generateDiagram = () => {
         html += "</table>";
         contextTable = html;
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
@@ -732,13 +742,61 @@ let generateDiagram = () => {
         }
         contextTable = "<span style='color: red;'>" + message + "</span>";
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
         errManager.display("Failed to get MUX Context..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
     });
+
+    let getMarkerFilesPromise = getMarkerFiles(); // March 2025
+    getMarkerFilesPromise.then( value => {
+        let before = new Date().getTime();
+        let after = new Date().getTime();
+        document.body.style.cursor = 'default';
+        let json = JSON.parse(value);
+        setRESTPayload(json, (after - before));
+        console.log("Building Context Table");
+        let html = "<table width='100%'>";
+        html += "<tr><td style='max-height: 100px; overflow-y: scroll;'>";
+        html += "<pre>";
+        json.forEach(fname => {
+            html += `${fname}\n`;
+        });
+        html += "</pre>";
+        html == "</td></tr>";
+        html += "</table>";
+        markersTable = html;
+        nbPromises += 1;
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
+            document.getElementById("diagram").style.display = 'block';
+            document.getElementById("lists").style.display = 'none';
+        }
+
+    }, (error, errMess) => {
+        document.body.style.cursor = 'default';
+        let message;
+        if (errMess !== undefined) {
+            if (errMess.message !== undefined) {
+                message = errMess.message;
+            } else {
+                message = errMess;
+            }
+        } else {
+            message = 'Failed to get the MUX Context';
+        }
+        contextTable = "<span style='color: red;'>" + message + "</span>";
+        nbPromises += 1;
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
+            document.getElementById("diagram").style.display = 'block';
+            document.getElementById("lists").style.display = 'none';
+        }
+        errManager.display("Failed to get MUX Context..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+    });
+
 
     let getChannelPromise = getChannels();
     getChannelPromise.then((value) => {
@@ -836,8 +894,8 @@ let generateDiagram = () => {
         html += "</table>";
         channelTable = html;
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
@@ -855,8 +913,8 @@ let generateDiagram = () => {
         }
         channelTable = "<span style='color: red;'>" + message + "</span>";
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
@@ -927,8 +985,8 @@ let generateDiagram = () => {
         html += "</table>";
         forwarderTable = html;
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
@@ -976,8 +1034,8 @@ let generateDiagram = () => {
         html += "</table>";
         computerTable = html;
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
@@ -993,8 +1051,8 @@ let generateDiagram = () => {
         }
         computerTable = "<span style='color: red;'>" + message + "</span>";
         nbPromises += 1;
-        if (nbPromises === 4) {
-            document.getElementById("diagram").innerHTML = (buildTable(contextTable, channelTable, forwarderTable, computerTable));
+        if (nbPromises === 5) {
+            document.getElementById("diagram").innerHTML = (buildTable(contextTable, markersTable, channelTable, forwarderTable, computerTable));
             document.getElementById("diagram").style.display = 'block';
             document.getElementById("lists").style.display = 'none';
         }
