@@ -171,7 +171,11 @@ public class NMEADataCache
 					DEFAULT_DECLINATION,
 					DEVIATION_FILE,
 					DEVIATION_DATA,
-					DAMPING); /*,
+					DAMPING,
+					MARKERS_FILE,
+					MARKERS_DATA,
+					BORDERS_DATA
+	); /*,
 					CALCULATED_CURRENT); */
 
 	private final transient HashMap<String, List<Object>> dampingMap = new HashMap<>();

@@ -23,6 +23,7 @@ import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
 import nmea.parser.*;
+import nmea.utils.NMEAUtils;
 import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
@@ -32,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -248,6 +250,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/cache",
 					this::resetCache,
 					"Reset the cache"),
+			new Operation( // Use curl -X POST http://localhost:8080/mux/reload -d '[ "akeu.yaml", "coucou.yaml" ]' | jq
+					"POST",
+					REST_PREFIX + "/reload",
+					this::reloadMarkerFiles,
+					"Reload the Markers and Borders from their file name(s)"),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/dev-curve",
@@ -407,6 +414,7 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content;
 		try {
+			// TODO Get those values from the cache.
 			if (true) {
 				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
 			}
@@ -3298,6 +3306,7 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.ACCEPTED);
 
 		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+		// See the NMEADataCache.NOT_TO_RESET List.
 		cache.reset();
 		// Also reset computers
 		nmeaDataComputers.stream()
@@ -3305,6 +3314,68 @@ public class RESTImplementation {
 				.forEach(extraDataComputer -> ((ExtraDataComputer) extraDataComputer).resetCurrentComputers());
 		RESTProcessorUtil.generateResponseHeaders(response, 0);
 
+		return response;
+	}
+	private HTTPServer.Response reloadMarkerFiles(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.ACCEPTED);
+		NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+
+		// Also See the NMEADataCache elements MARKERS_FILE, MARKERS_DATA, BORDERS_DATA
+
+		String payload = new String(request.getContent());
+		if (!"null".equals(payload)) {
+			StringReader stringReader = new StringReader(payload);
+			try {
+				List<String> fileList = (List<String>) mapper.readValue(stringReader, Object.class);
+				if (false) {
+					System.out.printf("Will reset marker files: %s\n",
+									fileList.stream().collect(Collectors.joining(", ")));
+				}
+				List<String> markerList = new ArrayList<>();
+				List<Marker> allMarkers = new ArrayList<>();
+				List<Border> allBorders = new ArrayList<>();
+				for (String markers : fileList) {
+					if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
+						System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
+						System.err.println("Moving on anyway, skipping this marker file.");
+					} else {
+						try {
+							markerList.add(markers);
+							allMarkers.addAll(NMEAUtils.loadMarkers(markers));
+							allBorders.addAll(NMEAUtils.loadBorders(markers));
+						} catch (Exception ex) { // File Not found ?
+							System.err.printf("Building markers (%s)... \n%s\n", markers, ex);
+							ex.printStackTrace();
+							response = HTTPServer.buildErrorResponse(response,
+									Response.BAD_REQUEST,
+									new HTTPServer.ErrorPayload()
+											.errorCode(MESSAGE_INDEXES.MUX_0010.label())
+											.errorMessage(ex.toString()));
+							return response;
+						}
+					}
+				}
+				cache.put(NMEADataCache.MARKERS_FILE, markerList);
+				cache.put(NMEADataCache.MARKERS_DATA, allMarkers);
+				cache.put(NMEADataCache.BORDERS_DATA, allBorders);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode(MESSAGE_INDEXES.MUX_0010.label())
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode(MESSAGE_INDEXES.MUX_0010.label())
+							.errorMessage("Request payload not found"));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, 0);
 		return response;
 	}
 
