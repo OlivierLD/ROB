@@ -68,7 +68,7 @@ mkdir ${distdir}/build/libs
 #
 # 3 - Copying required resources
 #
-echo -e "Copying resources"
+echo -e "Copying resources..."
 cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs
 # Log folder
 # mkdir ${distdir}/logged
@@ -113,7 +113,7 @@ fi
 #
 # 4 - Archiving
 #
-echo -e "Now archiving"
+echo -e "Now archiving..."
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
 # Drop directory ?

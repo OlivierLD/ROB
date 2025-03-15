@@ -1,5 +1,6 @@
 #
 # Ria d'Etel, nord de Pont-Lorois
+# WiP...
 #
 markers:
   - latitude: 47.67826842816778
@@ -57,6 +58,10 @@ markers:
   - latitude: 47.69944302254926
     longitude: -3.1752782896001013
     label: "Pte du Mane Heilec"
+    type: default
+  - latitude: 47.70670309003601
+    longitude: -3.1599808052123994
+    label: "Pte du Verdon"
     type: default
 
 borders:
@@ -315,6 +320,204 @@ borders:
       - rank: 81
         latitude: 47.69490421233792
         longitude: -3.1155952948029153
+      - rank: 82
+        latitude: 47.695543949911354
+        longitude: -3.116305818257388
+      - rank: 83
+        latitude: 47.70172902779411
+        longitude: -3.1223313759255693
+      - rank: 84
+        latitude: 47.70562789877284
+        longitude: -3.1255929420876787
+      - rank: 85
+        latitude: 47.70340413401795
+        longitude: -3.1255929420876787
+      - rank: 86
+        latitude: 47.70383734238449
+        longitude: -3.129927391855745
+      - rank: 87
+        latitude: 47.70363517892812
+        longitude: -3.1307856987405103
+      - rank: 88
+        latitude: 47.70181567253952
+        longitude: -3.131987328379182
+      - rank: 89
+        latitude: 47.699996102644256
+        longitude: -3.136665100901155
+      - rank: 90
+        latitude: 47.69962062793608
+        longitude: -3.1431024025368974
+      - rank: 91
+        latitude: 47.6991296184683
+        longitude: -3.1447761009621904
+      - rank: 92
+        latitude: 47.69834977039731
+        longitude: -3.1444756935525224
+      - rank: 93
+        latitude: 47.69791651642874
+        longitude: -3.145376915781526
+      - rank: 94
+        latitude: 47.69803205117237
+        longitude: -3.1486813972878736
+      - rank: 95
+        latitude: 47.698609721050374
+        longitude: -3.1517713020730302
+      - rank: 96
+        latitude: 47.69988057225282
+        longitude: -3.1538741539407056
+      - rank: 97
+        latitude: 47.69728107076245
+        longitude: -3.158466095774202
+      - rank: 98
+        latitude: 47.695750192582715
+        longitude: -3.153316254465608
+      - rank: 99
+        latitude: 47.69372820912141
+        longitude: -3.1551616142678545
+      - rank: 100
+        latitude: 47.693974972242664
+        longitude: -3.158377951222065
+      - rank: 101
+        latitude: 47.69472600026976
+        longitude: -3.161618059712055
+      - rank: 102
+        latitude: 47.69424938758358
+        longitude: -3.1639569459730414
+      - rank: 103
+        latitude: 47.69557811512474
+        longitude: -3.1653516946607856
+      - rank: 104
+        latitude: 47.695621442626674
+        longitude: -3.167218512135151
+      - rank: 105
+        latitude: 47.69722453488958
+        longitude: -3.1686776338392524
+      - rank: 106
+        latitude: 47.69846947168505
+        longitude: -3.1685556941738473
+      - rank: 107
+        latitude: 47.69844058826544
+        longitude: -3.166710334371601
+      - rank: 108
+        latitude: 47.70044794783885
+        longitude: -3.165337043355976
+      - rank: 109
+        latitude: 47.69923487647381
+        longitude: -3.1629337840786325
+      - rank: 110
+        latitude: 47.69959591256832
+        longitude: -3.1586851649990426
+      - rank: 111
+        latitude: 47.70032874204464
+        longitude: -3.1547554292046707
+      - rank: 112
+        latitude: 47.702177181695795
+        longitude: -3.153553799565998
+      - rank: 113
+        latitude: 47.70313025778184
+        longitude: -3.154626683171956
+      - rank: 114
+        latitude: 47.70489195861268
+        longitude: -3.152695492681233
+      - rank: 115
+        latitude: 47.70382339308184
+        longitude: -3.15050681012508
+      - rank: 116
+        latitude: 47.70373675167336
+        longitude: -3.1480177201592605
+      - rank: 117
+        latitude: 47.70743332376445
+        longitude: -3.1484897889458807
+      - rank: 118
+        latitude: 47.7073178098547
+        longitude: -3.150850132878986
+      - rank: 119
+        latitude: 47.711287738967464
+        longitude: -3.149867401880329
+      - rank: 120
+        latitude: 47.71339566694998
+        longitude: -3.146648751062458
+      - rank: 121
+        latitude: 47.71443516168618
+        longitude: -3.1473783119145087
+      - rank: 122
+        latitude: 47.71411754049456
+        longitude: -3.1492236717167548
+      - rank: 123
+        latitude: 47.71530139145967
+        longitude: -3.149824486536091
+      - rank: 124
+        latitude: 47.71769788546801
+        longitude: -3.148966179651325
+      - rank: 125
+        latitude: 47.71527251736588
+        longitude: -3.146176682275837
+      - rank: 126
+        latitude: 47.716542962356435
+        longitude: -3.1445888145390204
+      - rank: 127
+        latitude: 47.716456342091085
+        longitude: -3.1429580314579657
+      - rank: 128
+        latitude: 47.71405979097899
+        longitude: -3.1420138938847235
+      - rank: 129
+        latitude: 47.7120962693696
+        longitude: -3.142485962671345
+      - rank: 130
+        latitude: 47.709208603189836
+        longitude: -3.1454900367680243
+      - rank: 131
+        latitude: 47.70646419209242
+        longitude: -3.1431028812221484
+      - rank: 132
+        latitude: 47.70724391878469
+        longitude: -3.1399700610927543
+      - rank: 133
+        latitude: 47.7058288506078
+        longitude: -3.1375668018154106
+      - rank: 134
+        latitude: 47.708341292146656
+        longitude: -3.136107680111309
+      - rank: 135
+        latitude: 47.704124942029615
+        longitude: -3.1314299075893364
+      - rank: 136
+        latitude: 47.7058288506078
+        longitude: -3.1277391879848437
+      - rank: 137
+        latitude: 47.71076698285601
+        longitude: -3.1286833255580864
+      - rank: 138
+        latitude: 47.712470674309735
+        longitude: -3.131773230343242
+      - rank: 139
+        latitude: 47.71391443702612
+        longitude: -3.132374045162578
+      - rank: 140
+        latitude: 47.7115466451791
+        longitude: -3.138553854732891
+      - rank: 141
+        latitude: 47.713134810127286
+        longitude: -3.138553854732891
+      - rank: 142
+        latitude: 47.71394331187245
+        longitude: -3.1367514102748832
+      - rank: 143
+        latitude: 47.713827812391145
+        longitude: -3.1347773044399223
+      - rank: 144
+        latitude: 47.7182703740923
+        longitude: -3.1259300511010233
+      - rank: 145
+        latitude: 47.71803939405593
+        longitude: -3.123870114577586
+      - rank: 146
+        latitude: 47.720839957933904
+        longitude: -3.120823125136668
+      - rank: 147
+        latitude: 47.723149588060714
+        longitude: -3.1262304585106904
   - border-name: "Ria-NW"
     type: "open"
     border-elements:
@@ -483,4 +686,303 @@ borders:
       - rank: 55
         latitude: 47.71473186268995
         longitude: -3.1679817083204402
-
+  - border-name: "Tog Ru"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.678420410742426
+        longitude: -3.199617862701416
+      - rank: 2
+        latitude: 47.678416798927735
+        longitude: -3.199290633201599
+      - rank: 3
+        latitude: 47.67826871430969
+        longitude: -3.1990921497344975
+      - rank: 4
+        latitude: 47.67813868844488
+        longitude: -3.199129700660706
+      - rank: 5
+        latitude: 47.67823620787386
+        longitude: -3.1995213031768803
+  - border-name: "Nod Vihan"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.67780278679432
+        longitude: -3.198357224464417
+      - rank: 2
+        latitude: 47.67797254381272
+        longitude: -3.197933435440064
+      - rank: 3
+        latitude: 47.67778111564582
+        longitude: -3.197477459907532
+      - rank: 4
+        latitude: 47.67749938989638
+        longitude: -3.1975632905960087
+      - rank: 5
+        latitude: 47.677427152279684
+        longitude: -3.197976350784302
+  - border-name: "Gravignez"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.681674839650704
+        longitude: -3.198366418200749
+      - rank: 2
+        latitude: 47.68164233533704
+        longitude: -3.197567119914311
+      - rank: 3
+        latitude: 47.681259505230095
+        longitude: -3.1972023394882854
+      - rank: 4
+        latitude: 47.68072859467769
+        longitude: -3.19735254319312
+      - rank: 5
+        latitude: 47.680620244921535
+        longitude: -3.197717323619145
+      - rank: 6
+        latitude: 47.680782769471364
+        longitude: -3.198420062381047
+  - border-name: "Men Halen"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.68047036072122
+        longitude: -3.1985058930695236
+      - rank: 2
+        latitude: 47.68025365991125
+        longitude: -3.1982162144959148
+      - rank: 3
+        latitude: 47.68010919220457
+        longitude: -3.1983610537827194
+      - rank: 4
+        latitude: 47.68025004822348
+        longitude: -3.1986400035202682
+  - border-name: "Nichtarguer"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.68581909849457
+        longitude: -3.187688855978195
+      - rank: 2
+        latitude: 47.68573603847397
+        longitude: -3.187388448568527
+      - rank: 3
+        latitude: 47.68549769159359
+        longitude: -3.187640576215927
+  - border-name: "Petit Niheu"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.68458038822871
+        longitude: -3.1785690362448804
+      - rank: 2
+        latitude: 47.685104036878855
+        longitude: -3.1778609330649488
+      - rank: 3
+        latitude: 47.68411090565941
+        longitude: -3.177480059384834
+      - rank: 4
+        latitude: 47.68409645997487
+        longitude: -3.1771421010489576
+      - rank: 5
+        latitude: 47.68385810560268
+        longitude: -3.177061634778511
+      - rank: 6
+        latitude: 47.68376420812673
+        longitude: -3.1771206433768384
+      - rank: 7
+        latitude: 47.68398450578419
+        longitude: -3.1774639661307456
+      - rank: 8
+        latitude: 47.6839375571811
+        longitude: -3.177898483991158
+      - rank: 9
+        latitude: 47.683959225772405
+        longitude: -3.1781452472205274
+  - border-name: "Ile de Niheu"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.687256277850075
+        longitude: -3.180054306867533
+      - rank: 2
+        latitude: 47.686707372126214
+        longitude: -3.179024338605814
+      - rank: 3
+        latitude: 47.68589122530469
+        longitude: -3.1794213055400182
+      - rank: 4
+        latitude: 47.68579733148843
+        longitude: -3.1788204907206823
+      - rank: 5
+        latitude: 47.68638235943538
+        longitude: -3.177683234098368
+      - rank: 6
+        latitude: 47.686851821560964
+        longitude: -3.1772433518199255
+      - rank: 7
+        latitude: 47.68693126857956
+        longitude: -3.1765996216563512
+      - rank: 8
+        latitude: 47.68753795091305
+        longitude: -3.176760554197245
+      - rank: 9
+        latitude: 47.68792795725822
+        longitude: -3.1767390965251256
+      - rank: 10
+        latitude: 47.68819518214443
+        longitude: -3.1773935555247594
+      - rank: 11
+        latitude: 47.68909795879625
+        longitude: -3.1772218941478063
+      - rank: 12
+        latitude: 47.689617951055105
+        longitude: -3.1772111653117467
+      - rank: 13
+        latitude: 47.68972628212316
+        longitude: -3.177608132245951
+      - rank: 14
+        latitude: 47.689639617286716
+        longitude: -3.1786381005076696
+      - rank: 15
+        latitude: 47.68805795872522
+        longitude: -3.179206728818827
+      - rank: 16
+        latitude: 47.68761739688654
+        longitude: -3.179496407392435
+      - rank: 17
+        latitude: 47.68758850745563
+        longitude: -3.1799684761790563
+  - border-name: "Ile des Moines"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.68736187919817
+        longitude: -3.174942866462516
+      - rank: 2
+        latitude: 47.68711631732242
+        longitude: -3.1746102725446694
+      - rank: 3
+        latitude: 47.68637962475854
+        longitude: -3.174792662757682
+      - rank: 4
+        latitude: 47.68630017689969
+        longitude: -3.1751896296918862
+      - rank: 5
+        latitude: 47.68570070279071
+        longitude: -3.175393477577018
+      - rank: 6
+        latitude: 47.68526734372272
+        longitude: -3.175790444511222
+      - rank: 7
+        latitude: 47.68528901176165
+        longitude: -3.176144496101188
+      - rank: 8
+        latitude: 47.68576570634039
+        longitude: -3.176369801658439
+      - rank: 9
+        latitude: 47.686329067044184
+        longitude: -3.1761123095930093
+      - rank: 10
+        latitude: 47.68653852011317
+        longitude: -3.175640240806388
+  - border-name: "Ile de Riec'h"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.687355623083626
+        longitude: -3.172862197825453
+      - rank: 2
+        latitude: 47.68878563709097
+        longitude: -3.170169259974501
+      - rank: 3
+        latitude: 47.687398957417464
+        longitude: -3.1695148009748673
+      - rank: 4
+        latitude: 47.68571611433839
+        longitude: -3.1695791739912242
+      - rank: 5
+        latitude: 47.68557166175847
+        longitude: -3.169954683253309
+      - rank: 6
+        latitude: 47.68588945690629
+        longitude: -3.1721862811537003
+      - rank: 7
+        latitude: 47.686503373867914
+        longitude: -3.1721326369734024
+      - rank: 8
+        latitude: 47.687218397455574
+        longitude: -3.172883655497572
+  - border-name: "Fandouillec"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.69736409873459
+        longitude: -3.186008244447294
+      - rank: 2
+        latitude: 47.697017489295256
+        longitude: -3.1848280724807414
+      - rank: 3
+        latitude: 47.69567435595466
+        longitude: -3.184184342317167
+      - rank: 4
+        latitude: 47.69508221091258
+        longitude: -3.181673794679228
+      - rank: 5
+        latitude: 47.69447561633608
+        longitude: -3.1813304719253215
+      - rank: 6
+        latitude: 47.69412898769556
+        longitude: -3.1819527444167766
+      - rank: 7
+        latitude: 47.694677815312296
+        longitude: -3.1843774613662394
+      - rank: 8
+        latitude: 47.69568879843264
+        longitude: -3.1848280724807414
+      - rank: 9
+        latitude: 47.69652645531201
+        longitude: -3.186158448152128
+  - border-name: "Verdon"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.72015889687993
+        longitude: -3.1634569480956998
+      - rank: 2
+        latitude: 47.71836883970065
+        longitude: -3.1636715248168916
+      - rank: 3
+        latitude: 47.71409555134482
+        longitude: -3.1606245353759737
+      - rank: 4
+        latitude: 47.71158338719738
+        longitude: -3.162126572424313
+      - rank: 5
+        latitude: 47.70820476860474
+        longitude: -3.1597233131469697
+      - rank: 6
+        latitude: 47.70678972651409
+        longitude: -3.160495789343259
+      - rank: 7
+        latitude: 47.706760847704054
+        longitude: -3.1588220909179654
+      - rank: 8
+        latitude: 47.70834915849474
+        longitude: -3.1572342231811494
+      - rank: 9
+        latitude: 47.70987966673646
+        longitude: -3.158264191442868
+      - rank: 10
+        latitude: 47.71129462493761
+        longitude: -3.159294159704587
+      - rank: 11
+        latitude: 47.7135758031814
+        longitude: -3.1568479850830045
+      - rank: 12
+        latitude: 47.716174492158565
+        longitude: -3.1556892707885713
+      - rank: 13
+        latitude: 47.71914838829023
+        longitude: -3.156075508886716
