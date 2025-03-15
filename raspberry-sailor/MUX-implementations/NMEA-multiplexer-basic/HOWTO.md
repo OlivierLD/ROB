@@ -144,17 +144,17 @@ Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:
 From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)
 
-![Nine](./doc_resources/chartless.north.ria.png)
+![Nine](./doc_resources/chartless.north.ria.png)  
+![Nine-Two](./doc_resources/chartless.north.ria.02.png)  
+![Nine-Three](./doc_resources/chartless.north.ria.03.png)
 
 Chartless maps can be dynamically managed from the Admin UI  
 ![Ten](./doc_resources/01.admin.png)
 
-
-
 Once data have been logged, they can be merged and cleaned with scripts like `log.merge.deep.sh` and its neighbors, and `log.to.json.sh`...
 Data can be re-played from several web UIs. See in `ROB/raspberry-sailor/MUX-implementations/MISCSamples/LeafLetAnalysis` for examples.
 
-The web UI is customizable at will. Above is _an example_ of the ChartlessMap WebComponent.  
+The web UI is customizable at will. Above is _examples_ of the ChartlessMap WebComponent.  
 In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
