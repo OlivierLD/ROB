@@ -165,7 +165,8 @@ let tideComputer = {
     getCoeffInBrest: (ts, tideTable) => {
         let coeffs = [];
         // assert ts.getFullName().equals("Brest%2C%20France");
-        const U = 0.032429906542056; // Hard coded
+        // const U = 0.032429906542056; // Hard coded
+        const U = 0.03068181818;
         let baseHeight = ts.baseHeight; // 4.02 for Brest
         tideTable.forEach(tv => {
             if (tv.type === "HW") { // High Water

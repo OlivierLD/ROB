@@ -409,15 +409,17 @@ public class RESTImplementation {
 		return response;
 	}
 
-	// getContext. Added March 2025
+	// Added March 2025
 	private HTTPServer.Response getContext(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content;
 		try {
-			// TODO Get those values from the cache.
-			if (true) {
+			if (false) {
 				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
 			}
+			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			List<String> markerList = (List<String>)cache.get(NMEADataCache.MARKERS_FILE);
+			this.topMUXContext.setMarkerList(markerList); // TODO Cancel/nullify setMarkers ?
 			content = mapper.writeValueAsString(this.topMUXContext);
 			if (true || restVerbose()) {
 				System.out.printf("-- MUX Context --\n%s\n--------------------\n", content);

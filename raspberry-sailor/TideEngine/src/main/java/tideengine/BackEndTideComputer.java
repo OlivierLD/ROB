@@ -166,6 +166,16 @@ public class BackEndTideComputer {
 		double d = 0;
 		try {
 			Constituents.ConstSpeed cs = doc.getConstSpeedMap().get(name);
+			if (year < 1970) {
+				StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+				System.err.printf("Warning: in %s, Year %d too early, using 1970 instead...\n", stackTrace[0].getMethodName(), year);
+				year = 1970;
+			}
+			if (year > 2037) {
+				StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+				System.err.printf("Warning: in %s, Year %d too late, using 2037 instead...\n", stackTrace[0].getMethodName(), year);
+				year = 2037;
+			}
 			double f = cs.getFactors().get(year);
 			d = f;
 		} catch (Exception ex) {
@@ -179,6 +189,16 @@ public class BackEndTideComputer {
 		double d = 0;
 		try {
 			Constituents.ConstSpeed cs = doc.getConstSpeedMap().get(name);
+			if (year < 1970) {
+				StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+				System.err.printf("Warning: in %s, Year %d too early, using 1970 instead...\n", stackTrace[0].getMethodName(), year);
+				year = 1970;
+			}
+			if (year > 2037) {
+				StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+				System.err.printf("Warning: in %s, Year %d too late, using 2037 instead...\n", stackTrace[0].getMethodName(), year);
+				year = 2037;
+			}
 			double f = cs.getEquilibrium().get(year);
 			d = f * TideUtilities.COEFF_FOR_EPOCH;
 		} catch (Exception ex) {

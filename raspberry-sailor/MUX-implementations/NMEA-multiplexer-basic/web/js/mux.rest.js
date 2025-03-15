@@ -93,6 +93,10 @@ let updateSystemDate = (newFmtDate) => {
     return getPromise('/mux/system-date', DEFAULT_TIMEOUT, 'POST', 201, newFmtDate, false);
 };
 
+let updateMarkersConfig = (markerList) => {
+    return getPromise('/mux/reload', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, markerList, false);
+};
+
 let enableLogging = (b) => {
     return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 201, null, false);
 };
@@ -645,11 +649,11 @@ let computerList = () => {
 let buildTable = (context, markerFiles, channels, forwarders, computers) => {
     let html = "<table width='100%'>" +
         // Context and Markers
-        "<tr><th  width='55%' colspan='2'>Context</th><th width='45%'>Available Markers Files</th></tr>" +
+        "<tr><th  width='45%' colspan='2'>Context</th><th width='55%'>Available Markers Files</th></tr>" +
         "<tr><td colspan='2' style='vertical-align: top;'>" + context + "</td><td width='45%' style='vertical-align: top; overflow-x: scroll;'>" + markerFiles + "</td></tr>" +
         "</table>" +
 
-        "<br/><br/>" + 
+        "<br/><br/>" +
 
         "<table width='100%'>" +
         // Data
@@ -669,6 +673,108 @@ let valueOrText = (value, ifEmpty) => {
     } else {
         return value;
     }
+};
+
+let updateMarkerConfig = () => {
+
+    let buttonList_toggle = document.querySelectorAll(".toggle-marker-config");
+    buttonList_toggle.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    let buttonList_01 = document.querySelectorAll(".remove-marker-button");
+    buttonList_01.forEach(button => {
+        button.style.display = 'inline';
+    });
+
+    let buttonList_02 = document.querySelectorAll(".update-marker-button");
+    buttonList_02.forEach(button => {
+        button.style.display = 'inline';
+    });
+
+    let buttonList_03 = document.querySelectorAll(".add-marker-button");
+    buttonList_03.forEach(button => {
+        button.style.display = 'inline';
+    });
+
+};
+
+let cancelMarkersUpdate = () => {
+    let buttonList_toggle = document.querySelectorAll(".toggle-marker-config");
+    buttonList_toggle.forEach(button => {
+        button.style.display = 'inline';
+    });
+
+    let buttonList_01 = document.querySelectorAll(".remove-marker-button");
+    buttonList_01.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    let buttonList_02 = document.querySelectorAll(".update-marker-button");
+    buttonList_02.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    let markerList = document.getElementById('full-markers-list');
+    markerList.childNodes.forEach(line => line.style.display = 'block');
+
+    let buttonList_03 = document.querySelectorAll(".add-marker-button");
+    buttonList_03.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    let markerFilesList = document.getElementById('available-markers');
+    markerFilesList.childNodes.forEach(line => {
+        line.style.display = 'block';
+        line.style = '';
+    });
+}
+
+let removeMarkerLine = (clickedButton) => {
+    let theLine = clickedButton.parentNode;
+    console.log(`Clicked: ${theLine.childNodes[0].textContent}`);
+    theLine.style.display = 'none';
+};
+
+let addMarkerFile = (clickedButton) => {
+    let theLine = clickedButton.parentNode;
+    console.log(`Clicked: ${theLine.childNodes[0].textContent}`);
+    // theLine.style.display = 'none';
+    theLine.style = 'color: red;';
+    // Add line in markers list?
+}
+
+let updateMarkerList = () => { // The final one
+    // Build the new list
+    let newList = [];
+    let markerList = document.getElementById('full-markers-list');
+    markerList.childNodes.forEach(line => {
+        if (line.style.display !== 'none') {
+            newList.push(line.childNodes[0].textContent.trim());
+        }
+    });
+    let markerFilesList = document.getElementById('available-markers');
+    markerFilesList.childNodes.forEach(line => {
+        if (line.style.color === 'red') {
+            newList.push(line.childNodes[0].textContent.trim());
+        }
+    });
+
+    console.log("New file list:" );
+    newList.forEach(el => console.log(`- ${el}`));
+
+    // Update, POST /mux/reload
+    let markerUpdater = updateMarkersConfig(newList);
+    markerUpdater.then(value => {
+        console.log(`After update ! ${value}`);
+        // Reload at the end
+        generateDiagram();
+    }, (error, errMess) => {
+        console.log(error);
+        console.log(errMess);
+        alert("Failed to update markers config");
+        generateDiagram();
+    });
 };
 
 let generateDiagram = () => {
@@ -707,16 +813,20 @@ let generateDiagram = () => {
         if (json['markers'] || json['markerList']) {
             html += '<tr><td>';
             html += 'Markers and Borders:<br/>';
-            html += '<ul>';
+            html += '<ul id="full-markers-list">';
             if (json['markers']) {
-                html += `<li>${json['markers']}</li>`;
+                html += `<li>${json['markers']}  <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></li>`;
             }
             if (json['markerList']) {
                 json['markerList'].forEach(marker => {
-                    html += `<li>${marker}</li>`;
+                    html += `<li>${marker} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></li>`;
                 })
             }
-            html += '</ul></td></tr>';
+            html += '</ul>';
+            html += '<button class="toggle-marker-config" onclick="updateMarkerConfig();">Update markers config?</button>';
+            html += '<button class="update-marker-button" style="display: none;" onclick="updateMarkerList();">Update</button>';
+            html += '<button class="update-marker-button" style="display: none;" onclick="cancelMarkersUpdate();">Cancel</button>';
+            html += '</td></tr>';
         }
 
         html += "</table>";
@@ -759,13 +869,13 @@ let generateDiagram = () => {
         setRESTPayload(json, (after - before));
         console.log("Building Context Table");
         let html = "<table width='100%'>";
-        html += "<tr><td style='max-height: 100px; overflow-y: scroll;'>";
-        html += "<pre>";
+        html += "<tr><td><div style='max-height: 200px; overflow-y: scroll;'>";
+        html += "<ul id='available-markers'>";
         json.forEach(fname => {
-            html += `${fname}\n`;
+            html += `<li>${fname} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></li>`;
         });
-        html += "</pre>";
-        html == "</td></tr>";
+        html += "</ul>";
+        html == "</div></td></tr>";
         html += "</table>";
         markersTable = html;
         nbPromises += 1;

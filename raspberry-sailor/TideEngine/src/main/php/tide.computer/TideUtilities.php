@@ -501,7 +501,8 @@ class TideUtilities {
     public static function getCoeffInBrest(TideStation $ts, array $brestOneDay) : array {
 		$coeffs = array();
 		// assert ts.getFullName().equals("Brest%2C%20France");
-		$U = 0.032429906542056; // Hard coded
+		// $U = 0.032429906542056; // Hard coded
+		$U = 0.03068181818;
 		$baseHeight = $ts->getBaseHeight(); // 4.02 for Brest
 
         for ($i=0; $i<count($brestOneDay); $i++) {
