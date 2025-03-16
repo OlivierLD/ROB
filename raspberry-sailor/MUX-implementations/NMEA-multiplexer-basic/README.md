@@ -542,6 +542,66 @@ This is also the structure generated on the target machine, strictly identical.
 All you need to do this  time is to transfer the jar `NMEA-multiplexer-basic-1.0-all.jar` where it already exists, and - if needed - 
 the `web.zip`.
 
+### JDK Versions
+You need to make sure that the version you use to package the soft is compatible
+with the machine you plan to deploy it on.  
+For example, some Raspberry Pi Zero would not support JDK 11. 
+
+#### Switch JDK on Mac:
+```
+$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (2):
+9.0.1, x86_64:"Java SE 9.0.1"/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home
+1.8.0_144, x86_64:"Java SE 8"/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
+```
+Then:
+```
+$ export JAVA_HOME=`/usr/libexec/java_home -v 1.8.0_144`
+$ export JAVA_HOME=`/usr/libexec/java_home -v 1.8.0_211`
+$ export JAVA_HOME=`/usr/libexec/java_home -v 1.8.0_252`
+$ export JAVA_HOME=`/usr/libexec/java_home -v 9.0.1`
+$ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.6`
+```
+or
+```
+$ export JAVA_HOME=$(/usr/libexec/java_home -v 11.0.6)
+$ export JAVA_HOME=$(/usr/libexec/java_home -v 1.8.0_252)
+$ export JAVA_HOME=$(/usr/libexec/java_home -v 11.0.7)
+```
+```
+$ export JAVA_HOME=~/graalvm-ce-19.1.1/Contents/Home
+$ export PATH=${JAVA_HOME}/bin:${PATH}
+```
+
+#### Switch JDK on Debian
+```
+$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+```
+
+#### Get the Java Class version
+<!--```
+$ javap -cp /usr/local/Cellar/opencv/4.3.0_5/share/java/opencv4/opencv-430.jar -verbose org.opencv.core.Core | grep "major"
+```-->
+```
+$ javap -verbose -cp build/libs/NMEA-multiplexer-basic-1.0-all.jar nmea.mux.GenericNMEAMultiplexer | grep "major"
+  major version: 52
+```
+or
+```
+$ javap -verbose -cp build/libs/NMEA-multiplexer-basic-1.0-all.jar nmea.mux.GenericNMEAMultiplexer | head
+Classfile jar:file:///Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/build/libs/NMEA-multiplexer-basic-1.0-all.jar!/nmea/mux/GenericNMEAMultiplexer.class
+  Last modified Mar 15, 2025; size 18466 bytes
+  MD5 checksum 7526912d8821d89502bcb23d8459d291
+  Compiled from "GenericNMEAMultiplexer.java"
+public class nmea.mux.GenericNMEAMultiplexer implements http.RESTRequestManager,nmea.api.Multiplexer
+  minor version: 0
+  major version: 52
+  flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+  this_class: #228                        // nmea/mux/GenericNMEAMultiplexer
+  super_class: #69                        // java/lang/Object
+```
+
 ## A Full example
 See [this doc](./HOWTO.md).
 
