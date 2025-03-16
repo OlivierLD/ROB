@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tide Workbench</title>
+  <title>Tide Sample</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style type="text/css">
@@ -18,7 +18,7 @@
 </head>
 
 <body style="background-color: rgba(255, 255, 255, 0.2); background-image: none;"> <!-- background="bground.jpg" style="min-height: 900px;"> -->
-<h2>PHP Tides Test</h2>    
+<h2>PHP Tides Test, this month, in Port-Tudy, and others...</h2>    
 
 <?php
 

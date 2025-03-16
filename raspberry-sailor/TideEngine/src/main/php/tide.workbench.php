@@ -1,6 +1,8 @@
 <?php
 
 // To use with curl. Not from a browser...
+// like curl -X GET http://localhost:8000/tide.workbench.php
+// Plain text output.
 
 function getCoeffData (BackEndSQLiteTideComputer $backend, Constituents $constituentsObject, array $stationsData, int $year, int $month, int $day, ?string $tz2Use) : array {
     $brestTideStation = $backend->findTideStation("Brest, France", $year, $constituentsObject, $stationsData);
