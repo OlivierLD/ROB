@@ -440,6 +440,7 @@ public class RESTImplementation {
 		String content = "";
 		try {
 			String userDir = System.getProperty("user.dir");
+			// Find all yaml files under user.dir
 			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			Process process = Runtime.getRuntime().exec(shellCommand);
 
@@ -466,7 +467,7 @@ public class RESTImplementation {
 							if (map.get("description") != null) {
 								description = (String)map.get("description");
 							}
-							if (yamlFileName.startsWith(userDir)) {
+							if (yamlFileName.startsWith(userDir)) {  // Very likely...
 								yamlFileName = "." + yamlFileName.substring(userDir.length());
 							}
 							borderFileList.add(new String[] { yamlFileName, description });
@@ -489,7 +490,7 @@ public class RESTImplementation {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		} catch (IOException | InterruptedException ie) {
-
+			ie.printStackTrace();
 		}
 		response.setPayload(content.getBytes());
 
