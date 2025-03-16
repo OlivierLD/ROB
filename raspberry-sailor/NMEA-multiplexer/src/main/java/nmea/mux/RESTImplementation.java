@@ -439,7 +439,8 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content = "";
 		try {
-			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", System.getProperty("user.dir")) };
+			String userDir = System.getProperty("user.dir");
+			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			Process process = Runtime.getRuntime().exec(shellCommand);
 
 			int exitCode = process.waitFor();
@@ -448,7 +449,7 @@ public class RESTImplementation {
 			InputStreamReader isr = new InputStreamReader(process.getInputStream());
 			BufferedReader br = new BufferedReader(isr);
 
-			List<String> borderFileList = new ArrayList<>();
+			List<String[]> borderFileList = new ArrayList<>();
 			Yaml yaml = new Yaml(); // Yaml parser
 			String line = "";
 			while (line != null) {
@@ -456,11 +457,19 @@ public class RESTImplementation {
 				if (line != null) {
 					// System.out.printf("Read: [%s]\n", line);
 					// Check if it's the right kind of file...
+					String yamlFileName = line;
 					try {
-						InputStream inputStream = new FileInputStream(line);
+						InputStream inputStream = new FileInputStream(yamlFileName);
 						Map<String, Object> map = yaml.load(inputStream);
 						if (map.get("markers") != null || map.get("borders") != null) {
-							borderFileList.add(line);
+							String description = "(no description)";
+							if (map.get("description") != null) {
+								description = (String)map.get("description");
+							}
+							if (yamlFileName.startsWith(userDir)) {
+								yamlFileName = "." + yamlFileName.substring(userDir.length());
+							}
+							borderFileList.add(new String[] { yamlFileName, description });
 						}
 					} catch (IOException ioe) {
 						throw new RuntimeException(String.format("Wow! File [%s] not found in %s", line, System.getProperty("user.dir")));

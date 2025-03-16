@@ -1,6 +1,8 @@
 #
 # Markers & Borders
 #
+description:
+  Markers and Borders, for misc tests.
 markers:
   - latitude: 47.705 
     longitude: -3.105 

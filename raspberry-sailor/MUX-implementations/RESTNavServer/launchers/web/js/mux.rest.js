@@ -755,8 +755,8 @@ let updateMarkerList = () => { // The final one
     });
     let markerFilesList = document.getElementById('available-markers');
     markerFilesList.childNodes.forEach(line => {
-        if (line.style.color === 'red') {
-            newList.push(line.childNodes[0].textContent.trim());
+        if (line.firstChild.style.color === 'red') {
+            newList.push(line.childNodes[0].firstChild.textContent.trim());
         }
     });
 
@@ -871,8 +871,8 @@ let generateDiagram = () => {
         let html = "<table width='100%'>";
         html += "<tr><td><div style='max-height: 200px; overflow-y: scroll;'>";
         html += "<ul id='available-markers'>";
-        json.forEach(fname => {
-            html += `<li>${fname} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></li>`;
+        json.forEach(fDesc => {
+            html += `<li><span>${fDesc[0]} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></span> - <span>${fDesc[1]}</span></li>`;
         });
         html += "</ul>";
         html == "</div></td></tr>";

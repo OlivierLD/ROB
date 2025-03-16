@@ -1,6 +1,8 @@
 #
 # Markers, for tests
 #
+description:
+  Markers, no borders, for tests.
 markers:
   - latitude: 47.705 
     longitude: -3.105 
