@@ -28,6 +28,14 @@ if (VERBOSE) {
 const COEFF_FOR_EPOCH = 0.01745329251994329;
 
 function getAmplitudeFix(constMap, year, name) {
+    if (year < 1970) {
+        console.log(`Warning, in getAmplitudeFix, ${year} is too early. Using 1970 instead.`);
+        year = 1970;
+    }
+    if (year > 2037) {
+        console.log(`Warning, in getAmplitudeFix, ${year} is too late. Using 2037 instead.`);
+        year = 2037;
+    }
     let speedMap = constMap[name];
     if (speedMap) {
         let factors = speedMap.factors;
@@ -40,6 +48,14 @@ function getAmplitudeFix(constMap, year, name) {
 }
 
 function getEpochFix(constMap, year, name) {
+    if (year < 1970) {
+        console.log(`Warning, in getEpochFix, ${year} is too early. Using 1970 instead.`);
+        year = 1970;
+    }
+    if (year > 2037) {
+        console.log(`Warning, in getEpochFix, ${year} is too late. Using 2037 instead.`);
+        year = 2037;
+    }
     let speedMap = constMap[name];
     if (speedMap) {
         let equilibrium = speedMap.equilibrium;

@@ -159,6 +159,14 @@ class BackEndSQLiteTideComputer {
 
     public static function getAmplitudeFix(Constituents $doc, int $year, string $name) : float {
 		$d = 0;
+        if ($year < 1970) {
+            echo("Warning: in getAmplitudeFix, Year " . $year . " too early, using 1970 instead...<br/>" . PHP_EOL);
+			$year = 1970;
+        }
+        if ($year > 2037) {
+            echo("Warning: in getAmplitudeFix, Year " . $year . " too late, using 2037 instead...<br/>" . PHP_EOL);
+			$year = 2037;
+        }
 		try {
             $cs = TideUtilities::findConstSpeed($doc, $name); // ConstSpeed
             if ($cs != null) {
@@ -177,6 +185,14 @@ class BackEndSQLiteTideComputer {
 
 	public static function getEpochFix(Constituents $doc, int $year, string $name) : float {
 		$d = 0;
+        if ($year < 1970) {
+            echo("Warning: in getEpochFix, Year " . $year . " too early, using 1970 instead...<br/>" . PHP_EOL);
+			$year = 1970;
+        }
+        if ($year > 2037) {
+            echo("Warning: in getEpochFix, Year " . $year . " too late, using 2037 instead...<br/>" . PHP_EOL);
+			$year = 2037;
+        }
 		try {
             $cs = TideUtilities::findConstSpeed($doc, $name); // ConstSpeed
             if ($cs != null) {
