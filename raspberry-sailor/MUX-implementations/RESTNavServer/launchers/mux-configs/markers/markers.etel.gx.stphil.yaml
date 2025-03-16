@@ -2,6 +2,8 @@
 # Markers & Borders
 # Etel, Groix, Etel - St-Phil
 #
+description:
+  Étel, Groix, St Philibert
 markers:
   - latitude: 47.643065
     longitude: -3.214258

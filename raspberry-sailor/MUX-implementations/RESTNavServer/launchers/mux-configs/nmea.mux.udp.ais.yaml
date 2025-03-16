@@ -14,13 +14,13 @@ context:
   init.cache: true
   default.declination: -1
   # markers: mux-configs/markers.01.yaml
-  markers: mux-configs/markers.etel.gx.stphil.yaml
+  markers: mux-configs/markers/markers.etel.gx.stphil.yaml
   markers.list:
-    - markers: mux-configs/markers.lorient.blavet.yaml
-    - markers: mux-configs/markers.houat.hoedic.belle-ile.yaml
-    # - markers: mux-configs/markers.rade.de.brest.yaml
-    # - markers: mux-configs/markers.bretagne.bumper.yaml
-    # - markers: mux-configs/markers.san.juan.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    # - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
+    # - markers: mux-configs/markers/markers.san.juan.yaml
 channels:
   - type: file
     filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip

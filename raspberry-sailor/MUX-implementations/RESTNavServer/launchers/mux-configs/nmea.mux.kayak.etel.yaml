@@ -5,10 +5,10 @@ name: "Replaying logged data, kayaking Pte du Perche, with Corine."
 context:
   with.http.server: true
   http.port: 9999
-  markers: ./mux-configs/markers.yaml
   markers.list:
-    - markers: ./mux-configs/markers.north.ria.yaml
-    - markers: ./mux-configs/markers.etel.gx.stphil.yaml
+    - markers: ./mux-configs/markers/markers.yaml
+    - markers: ./mux-configs/markers/markers.north.ria.yaml
+    - markers: ./mux-configs/markers/markers.etel.gx.stphil.yaml
   init.cache: true
 channels:
   - type: file

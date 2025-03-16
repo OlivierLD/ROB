@@ -2,6 +2,8 @@
 # Generated Tue Sep 24 2024 17:21:01 GMT+0200 (Central European Summer Time)
 # Petite Mer de Gavres et abords
 #
+description:
+  Petite mer de Gâvres et abords
 markers:
   - label: "Ile aux souris"
     latitude: 47.702633192059565

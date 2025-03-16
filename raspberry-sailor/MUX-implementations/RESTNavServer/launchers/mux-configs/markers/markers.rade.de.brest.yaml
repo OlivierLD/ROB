@@ -1,6 +1,8 @@
 #
 # Rade de Brest, and Co.
 #
+description:
+  Rade de Brest
 markers:
   - label: "Bertheaume"
     latitude: 48.339078831461

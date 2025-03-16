@@ -2,6 +2,8 @@
 # West of Etel
 # Gavres, Blavet
 #
+description:
+  Ouest d'Étel, Gâvres, le Blavet
 markers:
   - label: "Gâvres"
     latitude: 47.69416554585294

@@ -2,6 +2,8 @@
 # An example.
 # San Juan Islands... very nice place.
 #
+description:
+  San Juan Islands
 markers:
   - latitude: 48.53808386598439
     longitude: -123.01543854904595

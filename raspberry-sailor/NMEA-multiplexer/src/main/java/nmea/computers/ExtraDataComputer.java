@@ -95,7 +95,7 @@ public class ExtraDataComputer extends Computer {
 						if (rmc != null && rmc.isValid()) {
 							Map<String, Object> rmcMap = new HashMap<>(5);
 							rmcMap.put(NMEADataCache.SOG, rmc.getSog() == -1 ? null : new Speed(rmc.getSog()));
-							rmcMap.put(NMEADataCache.POSITION, rmc.getGp());
+							rmcMap.put(NMEADataCache.POSITION, rmc.getGp()); // TODO Make sure not null?
 							Date date = rmc.getRmcDate();
 							if (date != null) {
 								rmcMap.put(NMEADataCache.GPS_DATE_TIME, new UTCDate(date));

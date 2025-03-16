@@ -413,6 +413,7 @@ public class NMEAUtils {
         try {
             InputStream inputStream = new FileInputStream(markerFileName);
             Map<String, Object> map = yaml.load(inputStream);
+            System.out.printf("");
             List<Map<String, Object>> yamlMarkerList = (List<Map<String, Object>>)map.get("markers");
             markerList = new ArrayList<>();
             if (yamlMarkerList != null) {
@@ -424,7 +425,7 @@ public class NMEAUtils {
                             (String) yamlMarker.get("type")
                     ));
                 });
-                System.out.printf("Markers loaded from %s.\n", markerFileName);
+                System.out.printf("Markers loaded from %s, %s.\n", markerFileName, (map.get("description") != null ? map.get("description") : "No description"));
             }
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
@@ -469,7 +470,7 @@ public class NMEAUtils {
                     borderList.add(oneBorder);
                 });
             }
-            System.out.printf("Borders loaded from %s.\n", borderFileName);
+            System.out.printf("Borders loaded from %s, %s.\n", borderFileName, (map.get("description") != null ? map.get("description") : "No description"));
         } catch (IOException ioe) {
             throw new RuntimeException(String.format("File [%s] not found in %s", borderFileName, System.getProperty("user.dir")));
         }

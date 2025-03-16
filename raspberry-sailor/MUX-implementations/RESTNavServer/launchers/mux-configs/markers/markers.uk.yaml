@@ -2,6 +2,8 @@
 # Generated Mon Aug 19 2024 09:14:41 GMT+0200 (Central European Summer Time)
 # South Cornwall
 #
+description:
+  A few UK markers
 markers:
   - label: "Wolf Rock"
     latitude: 49.939694239066554

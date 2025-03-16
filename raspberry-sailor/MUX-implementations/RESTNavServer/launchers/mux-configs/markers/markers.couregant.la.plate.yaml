@@ -1,6 +1,8 @@
 #
 # Couregant - La Plate
 #
+description:
+  Du Courégant à La Plate, Bretagne sud
 borders:
   - border-name: "Courégant - La Plate"
     type: "open"

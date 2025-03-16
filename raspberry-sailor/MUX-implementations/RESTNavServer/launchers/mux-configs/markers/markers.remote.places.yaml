@@ -2,6 +2,8 @@
 # Generated Sun Jun 23 2024 17:24:37 GMT+0200 (Central European Summer Time)
 # Remote places ;)
 #
+description:
+  Some remote places
 markers:
   - label: "Faroe - Torshavn"
     latitude: 61.99937350811496
