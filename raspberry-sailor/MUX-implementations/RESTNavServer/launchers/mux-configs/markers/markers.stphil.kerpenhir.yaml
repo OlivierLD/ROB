@@ -1,0 +1,109 @@
+description:
+  St Philibert to Kerpenhir
+markers:
+  - latitude: 47.56289131033303
+    longitude: -3.0016435380184707
+    label: "Mousker"
+    type: default
+  - latitude: 47.55438791679859
+    longitude: -2.988246933964547
+    label: "Er Gazeg"
+    type: card-s
+  - latitude: 47.567656052850474
+    longitude: -3.0015578388702133
+    label: "Kernevest"
+    type: default
+borders:
+  - border-name: "stphil-kerpenhir"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.565682478956894
+        longitude: -3.0037307739257817
+      - rank: 2
+        latitude: 47.55409844017708
+        longitude: -2.987766265869141
+      - rank: 3
+        latitude: 47.56487167961143
+        longitude: -2.98604965209961
+      - rank: 4
+        latitude: 47.58316952388631
+        longitude: -2.9965209960937504
+      - rank: 5
+        latitude: 47.588958649151685
+        longitude: -2.9978942871093754
+      - rank: 6
+        latitude: 47.59119452737457
+        longitude: -2.994203567504883
+      - rank: 7
+        latitude: 47.586042457328055
+        longitude: -2.993860244750977
+      - rank: 8
+        latitude: 47.58407411691416
+        longitude: -2.9902553558349614
+      - rank: 9
+        latitude: 47.58123726082449
+        longitude: -2.9924011230468754
+      - rank: 10
+        latitude: 47.576142112908165
+        longitude: -2.985620498657227
+      - rank: 11
+        latitude: 47.578516050333015
+        longitude: -2.981672286987305
+      - rank: 12
+        latitude: 47.574926152056754
+        longitude: -2.9771232604980473
+      - rank: 13
+        latitude: 47.571451822605006
+        longitude: -2.9715442657470703
+      - rank: 14
+        latitude: 47.568498461335395
+        longitude: -2.9706001281738286
+      - rank: 15
+        latitude: 47.569367114291005
+        longitude: -2.97480583190918
+      - rank: 16
+        latitude: 47.56328624105779
+        longitude: -2.970514297485352
+      - rank: 17
+        latitude: 47.55957945775943
+        longitude: -2.968711853027344
+      - rank: 18
+        latitude: 47.559753219085444
+        longitude: -2.973604202270508
+      - rank: 19
+        latitude: 47.562243734764195
+        longitude: -2.9753208160400395
+      - rank: 20
+        latitude: 47.56415498045471
+        longitude: -2.973003387451172
+      - rank: 21
+        latitude: 47.56212789945092
+        longitude: -2.979955673217774
+      - rank: 22
+        latitude: 47.55818934640498
+        longitude: -2.974977493286133
+      - rank: 23
+        latitude: 47.55316533069836
+        longitude: -2.9624421632615854
+      - rank: 24
+        latitude: 47.55727803093353
+        longitude: -2.962527993950062
+      - rank: 25
+        latitude: 47.55924737871986
+        longitude: -2.9519708192674448
+      - rank: 26
+        latitude: 47.55756764554448
+        longitude: -2.9511983430711557
+      - rank: 27
+        latitude: 47.55623540507953
+        longitude: -2.951455835136585
+      - rank: 28
+        latitude: 47.55397631122345
+        longitude: -2.9388387239305303
+      - rank: 29
+        latitude: 47.55397631122345
+        longitude: -2.927423242363148
+      - rank: 30
+        latitude: 47.557514127769785
+        longitude: -2.9255362402182077
