@@ -733,7 +733,7 @@ let cancelMarkersUpdate = () => {
 let removeMarkerLine = (clickedButton) => {
     let theLine = clickedButton.parentNode;
     console.log(`Clicked: ${theLine.childNodes[0].textContent}`);
-    theLine.style.display = 'none';
+    theLine.parentElement.style.display = 'none';
 };
 
 let addMarkerFile = (clickedButton) => {
@@ -750,7 +750,7 @@ let updateMarkerList = () => { // The final one
     let markerList = document.getElementById('full-markers-list');
     markerList.childNodes.forEach(line => {
         if (line.style.display !== 'none') {
-            newList.push(line.childNodes[0].textContent.trim());
+            newList.push(line.childNodes[0].firstChild.textContent.trim());
         }
     });
     let markerFilesList = document.getElementById('available-markers');
