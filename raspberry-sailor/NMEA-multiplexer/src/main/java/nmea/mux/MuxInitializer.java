@@ -513,15 +513,15 @@ public class MuxInitializer {
                 double defaultDeclination = Double.parseDouble(muxProps.getProperty("default.declination", "0"));
                 int damping = Integer.parseInt(muxProps.getProperty("damping", "1"));
                 String markerFile = muxProps.getProperty("markers"); // default null
-                List<String> markerList = new ArrayList<>();
+                List<String[]> markerList = new ArrayList<>();
                 if (markerFile != null) {
-                    markerList.add(markerFile);
+                    markerList.add(new String[] { markerFile, "no-description" });
                 }
                 int listIdx = 1;
                 while (true) {
                     String makerFileFromList = muxProps.getProperty(String.format("markers.list.%02d", listIdx));
                     if (makerFileFromList != null) {
-                        markerList.add(makerFileFromList);
+                        markerList.add(new String[] { makerFileFromList, "no-description-yet" });
                         listIdx++;
                     } else {
                         break;
@@ -535,7 +535,7 @@ public class MuxInitializer {
                         Arrays.stream(fileList).forEach(f -> {
                             String fName = f.trim();
                             String newFile = fName.substring(1, fName.length() - 1).substring("markers=".length());
-                            markerList.add(newFile);
+                            markerList.add(new String[] { newFile, "dummy" });
                             System.out.println(newFile);
                         });
                     }

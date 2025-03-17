@@ -6,9 +6,13 @@ import nmea.parser.GeoPos;
 import nmea.parser.Marker;
 import nmea.utils.MuxNMEAUtils;
 import nmea.utils.NMEAUtils;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ApplicationContext {
 
@@ -56,26 +60,35 @@ public class ApplicationContext {
 	                      double hdgOffset,         // Default 0
 	                      double defaultDeclination,// Default 0
 	                      int damping,              // Default 1
-						  List<String> markerFiles) {   // Default null
+						  List<String[]> markerFiles) {   // Default null
 
 		dataCache = new NMEADataCache();
 
 		if (markerFiles != null && markerFiles.size() > 0) {
 			// Marker file list, marker list, border list
-			List<String> markerList = new ArrayList<>();
+			List<String[]> markerList = new ArrayList<>();
 			List<Marker> allMarkers = new ArrayList<>();
 			List<Border> allBorders = new ArrayList<>();
+			Yaml yaml = new Yaml(); // Yaml parser
 			markerFiles.forEach(markers -> {
-				if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
-					System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
+				if (!markers[0].trim().endsWith(".yaml") && !markers[0].trim().endsWith(".yml")) {
+					System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers[0]);
 					System.err.println("Moving on anyway, skipping this marker file.");
 				} else {
 					try {
-						markerList.add(markers);
-						allMarkers.addAll(NMEAUtils.loadMarkers(markers));
-						allBorders.addAll(NMEAUtils.loadBorders(markers));
+						String description = "no description";
+						InputStream inputStream = new FileInputStream(markers[0]);
+						Map<String, Object> map = yaml.load(inputStream);
+						if (map.get("markers") != null || map.get("borders") != null) { // Just to make sure...
+							if (map.get("description") != null) {
+								description = (String) map.get("description");
+							}
+						}
+						markerList.add(new String[] { markers[0], description });
+						allMarkers.addAll(NMEAUtils.loadMarkers(markers[0]));
+						allBorders.addAll(NMEAUtils.loadBorders(markers[0]));
 					} catch (Exception ex) { // File Not found ?
-						System.err.printf("Building markers (%s)... \n%s\n", markers, ex);
+						System.err.printf("Building markers (%s)... \n%s\n", markers[0], ex);
 						ex.printStackTrace();
 					}
 				}

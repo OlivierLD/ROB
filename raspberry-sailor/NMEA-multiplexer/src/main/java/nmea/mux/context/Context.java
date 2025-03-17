@@ -44,7 +44,7 @@ public class Context {
 		private double maxLeeway = 0d;
 		private int damping = 0;
 		private String markers;
-		private List<String> markerList;
+		private List<String[]> markerList;
 
 		public String getName() {
 			return name;
@@ -126,11 +126,11 @@ public class Context {
 			this.markers = markers;
 		}
 
-		public List<String> getMarkerList() {
+		public List<String[]> getMarkerList() {
 			return markerList;
 		}
 
-		public void setMarkerList(List<String> markerList) {
+		public void setMarkerList(List<String[]> markerList) {
 			this.markerList = markerList;
 		}
 

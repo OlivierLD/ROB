@@ -418,7 +418,7 @@ public class RESTImplementation {
 				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
 			}
 			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
-			List<String> markerList = (List<String>)cache.get(NMEADataCache.MARKERS_FILE);
+			List<String[]> markerList = (List<String[]>)cache.get(NMEADataCache.MARKERS_FILE);
 			this.topMUXContext.setMarkerList(markerList); // TODO Cancel/nullify setMarkers ?
 			content = mapper.writeValueAsString(this.topMUXContext);
 			if (true || restVerbose()) {
@@ -3343,16 +3343,25 @@ public class RESTImplementation {
 					System.out.printf("Will reset marker files: %s\n",
 									fileList.stream().collect(Collectors.joining(", ")));
 				}
-				List<String> markerList = new ArrayList<>();
+				List<String[]> markerList = new ArrayList<>();
 				List<Marker> allMarkers = new ArrayList<>();
 				List<Border> allBorders = new ArrayList<>();
+				Yaml yaml = new Yaml(); // Yaml parser
 				for (String markers : fileList) {
 					if (!markers.trim().endsWith(".yaml") && !markers.trim().endsWith(".yml")) {
 						System.err.printf("Markers and Borders file must be a yaml file, not %s\n", markers);
 						System.err.println("Moving on anyway, skipping this marker file.");
 					} else {
 						try {
-							markerList.add(markers);
+							String description = "no description";
+							InputStream inputStream = new FileInputStream(markers);
+							Map<String, Object> map = yaml.load(inputStream);
+							if (map.get("markers") != null || map.get("borders") != null) { // Just to make sure...
+								if (map.get("description") != null) {
+									description = (String) map.get("description");
+								}
+							}
+							markerList.add(new String[] { markers, description });
 							allMarkers.addAll(NMEAUtils.loadMarkers(markers));
 							allBorders.addAll(NMEAUtils.loadBorders(markers));
 						} catch (Exception ex) { // File Not found ?

@@ -815,11 +815,11 @@ let generateDiagram = () => {
             html += 'Markers and Borders:<br/>';
             html += '<ul id="full-markers-list">';
             if (json['markers']) {
-                html += `<li>${json['markers']}  <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></li>`;
+                html += `<li><span>${json['markers']}  <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span> </span></li>`;
             }
             if (json['markerList']) {
                 json['markerList'].forEach(marker => {
-                    html += `<li>${marker} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></li>`;
+                    html += `<li><span>${marker[0]} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span><i>${marker[1]}</i></span></li>`;
                 })
             }
             html += '</ul>';
@@ -872,7 +872,7 @@ let generateDiagram = () => {
         html += "<tr><td><div style='max-height: 200px; overflow-y: scroll;'>";
         html += "<ul id='available-markers'>";
         json.forEach(fDesc => {
-            html += `<li><span>${fDesc[0]} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></span> - <span>${fDesc[1]}</span></li>`;
+            html += `<li><span>${fDesc[0]} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></span> - <span><i>${fDesc[1]}</i></span></li>`;
         });
         html += "</ul>";
         html == "</div></td></tr>";

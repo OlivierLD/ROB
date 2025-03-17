@@ -255,14 +255,14 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         // markers and markers.list
         instanceContext.setMarkers(muxProps.getProperty("markers"));
         _descIdx = 1;
-        List<String> markers = null;
+        List<String[]> markers = null;
         while (muxProps.getProperty(String.format("markers.list.%02d", _descIdx)) != null) {
             String value = muxProps.getProperty(String.format("markers.list.%02d", _descIdx));
             _descIdx++;
             if (markers == null) {
                 markers = new ArrayList<>();
             }
-            markers.add(value);
+            markers.add(new String[] { value, "--" });
         }
         if (markers != null) {
             instanceContext.setMarkerList(markers);
