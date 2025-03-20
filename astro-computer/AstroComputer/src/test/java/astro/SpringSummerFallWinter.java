@@ -138,7 +138,7 @@ public class SpringSummerFallWinter {
                 Calendar savedCal = (Calendar)cal.clone();
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);
                 cal = narrowSpringFall(cal, 1, goingUp);
-                System.out.println("Northern Spring / Southern Fall:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
+                System.out.println("Equinox: Northern Spring / Southern Fall:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
                 crossed = true;
                 cal = savedCal; // To re-start when we left
             }
@@ -146,7 +146,7 @@ public class SpringSummerFallWinter {
                 Calendar savedCal = (Calendar)cal.clone();
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);
                 cal = narrowSpringFall(cal, 1, goingUp);
-                System.out.println("Northern Fall / Southern Spring:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
+                System.out.println("Equinox: Northern Fall / Southern Spring:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
                 crossed = true;
                 cal = savedCal; // To re-start when we left
             }
@@ -155,7 +155,7 @@ public class SpringSummerFallWinter {
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);
                 cal = narrowSummerWinter(cal, 1, goingUp);
                 // Northern Summer
-                System.out.println("Northern Summer / Southern Winter:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
+                System.out.println("Solstice: Northern Summer / Southern Winter:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
                 cal = savedCal; // To re-start when we left
                 goingUp = false;
                 crossed = false;
@@ -165,7 +165,7 @@ public class SpringSummerFallWinter {
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);
                 cal = narrowSummerWinter(cal, 1, goingUp);
                 // Southern Summer
-                System.out.println("Northern Winter / Southern Summer:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
+                System.out.println("Solstice: Northern Winter / Southern Summer:\t" + SDF_UTC.format(new Date(cal.getTime().getTime())));
                 cal = savedCal; // To re-start when we left
                 goingUp = true;
                 crossed = false;

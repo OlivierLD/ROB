@@ -6,22 +6,25 @@ description:
   - Replay a log file from the logged folder (La Trinité - Groix).
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
-  - Optional AIS with sinagot.net
+  - Optional AIS with sinagot.net (requires Internet connection)
+  - Logged on board Zephir, Birvidic 700
 context:
   with.http.server: true
   http.port: 9999
   init.cache: true
   default.declination: -1
-  markers: mux-configs/markers.etel.gx.stphil.yaml
+  # markers: mux-configs/markers.etel.gx.stphil.yaml
   markers.list:
-    - markers: mux-configs/markers.lorient.blavet.yaml
-    - markers: mux-configs/markers.rade.de.brest.yaml
-    - markers: mux-configs/markers.houat.hoedic.belle-ile.yaml
-    - markers: mux-configs/markers.couregant.la.plate.yaml
-    - markers: mux-configs/markers.glenan.yaml
-    - markers: mux-configs/markers.uk.yaml
-    # - markers: mux-configs/markers.bretagne.bumper.yaml
-    # - markers: mux-configs/markers.san.juan.yaml
+    - markers: mux-configs/markers/markers.stphil.kerpenhir.yaml
+    - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    # - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    # - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    # - markers: mux-configs/markers/markers.glenan.yaml
+    # - markers: mux-configs/markers/markers.uk.yaml
+    # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
+    # - markers: mux-configs/markers/markers.san.juan.yaml
 channels:
   - type: file
     filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip
