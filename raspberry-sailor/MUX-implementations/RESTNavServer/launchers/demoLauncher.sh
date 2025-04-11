@@ -430,7 +430,7 @@ while [[ "${GO}" == "true" ]]; do
       if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
         echo -e ">>> Waiting for the server to start..."
         sleep 5  # Wait (5s) for the server to be operational
-        openBrowser ${URL_01}
+        openBrowser ${URL_01} &
       else
         echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
       fi
