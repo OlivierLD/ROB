@@ -210,7 +210,7 @@ public class LogAnalyzer {
 			long previousDate = -1L;
 			long statLineNo = 0;
 
-			bw.write("Idx;time (epoch);deltaT;deltaDist (km);deltaT(2);cog;sog (kn);fmt-utc-date-time;lat;long;fmt-lat;fmt-long\n");
+			bw.write("Idx\ttime (epoch)\tdeltaT\tdeltaDist (km)\tdeltaT(2)\tcog\tsog (kn)\tfmt-utc-date-time\tlat\tlong\tfmt-lat\tfmt-long\n");
 			statLineNo += 1;
 
 			long minLatIdx = -1,
@@ -343,7 +343,7 @@ public class LogAnalyzer {
 //											if (verbose) {
 //												System.out.printf("Small step: %.03f km, distance now : %.03f km\n", distanceKm, distanceInKm);
 //											}
-											bw.write(String.format("%d;%d;%d;%f;=(B%d-B%d);%s;%s;%s;%s;%s;%s;%s\n",
+											bw.write(String.format("%d\t%d\t%d\t%f\t=(B%d-B%d)\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 													(totalNbRec - 1),
 													rmcTime != null ? rmcTime.getTime() : 0,
 													rmcTime != null ? (rmcTime.getTime() - previousDate) : 0,
@@ -352,24 +352,30 @@ public class LogAnalyzer {
 													statLineNo,
 													cog == -1 ? "": cog,
 													sog,
-													String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+												 // String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													String.format("=TEXT(B%d/1000/(60*60*24) + 25569; \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
 													gp != null ? gp.lat : "",
 													gp != null ? gp.lng : "",
-													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
-													String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
+												 // String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+													String.format("=CONCAT(IF(I%d<0;\"S \";\"N \"); FLOOR(ABS(I%d)); \"\u00b0 \"; INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100;\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+												 // String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
+													String.format("=CONCAT(IF(J%d<0;\"W \";\"E \"); FLOOR(ABS(J%d)); \"\u00b0 \"; INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100;\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
 											prevRMCTime = rmcTime;
 										} else {
-											bw.write(String.format("%d;%d;%s;;;%s;%s;%s;%s;%s;%s;%s\n",
+											bw.write(String.format("%d\t%d\t%s\t\t\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 													(totalNbRec - 1),
 													rmcTime.getTime(),
 													previousDate != -1 ? String.format("%d", (rmcTime.getTime() - previousDate)) : "",
 													cog == -1 ? "": cog,
 													sog,
-													String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+												 // String.format("=TEXT(B%d/1000/(60*60*24) + 25569, \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
+													String.format("=TEXT(B%d/1000/(60*60*24) + 25569; \"DD MMM YYYY HH:MM:SS\")", (statLineNo + 1)), // Format as Date + Time, YYYY-MMM-DD HH:MM:SS
 													gp != null ? gp.lat : "",
 													gp != null ? gp.lng : "",
-													String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
-													String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
+												 // String.format("=CONCAT(IF(I%d<0,\"S \",\"N \"), FLOOR(ABS(I%d)), \"\u00b0 \", INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+													String.format("=CONCAT(IF(I%d<0;\"S \";\"N \"); FLOOR(ABS(I%d)); \"\u00b0 \"; INT(6000*(ABS(I%d)-FLOOR(ABS(I%d))))/100;\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1)),
+												 // String.format("=CONCAT(IF(J%d<0,\"W \",\"E \"), FLOOR(ABS(J%d)), \"\u00b0 \", INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100,\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
+													String.format("=CONCAT(IF(J%d<0;\"W \";\"E \"); FLOOR(ABS(J%d)); \"\u00b0 \"; INT(6000*(ABS(J%d)-FLOOR(ABS(J%d))))/100;\"'\")", (statLineNo + 1), (statLineNo + 1), (statLineNo + 1), (statLineNo + 1))));
 										}
 										statLineNo += 1;
 										previousPos = gp;
@@ -413,7 +419,7 @@ public class LogAnalyzer {
 			bw.close();
 //			System.out.println("+-------------------------------------+");
 //			System.out.println("| Checkout the spreadsheet stat.csv.  |");
-//			System.out.println("| Use ONLY ';' as separator !!!       |");
+//			System.out.println("| Use ONLY 'TAB' as separator !!!     |");
 //			System.out.println("| Use Unicode-UTF-8 as character set. |");
 //			System.out.println("+-------------------------------------+");
 
@@ -496,7 +502,7 @@ public class LogAnalyzer {
 			}
 			System.out.println("+---------------------------------------+");
 			System.out.printf("| Checkout the spreadsheet %s.%s.\n", System.getProperty("user.dir"), csvName);
-			System.out.println("| Use ONLY ';' as separator !!!         |");
+			System.out.println("| Use ONLY 'TAB' as separator !!!       |");
 			System.out.println("| Use Unicode (UTF-8) as character set. |");
 			System.out.println("+---------------------------------------+");
 
