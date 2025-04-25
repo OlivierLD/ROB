@@ -1055,6 +1055,24 @@ class ChartlessMap extends HTMLElement {
 				context.fill();
 				context.restore();
 				break;
+			case 'red-triangle':
+			case 'green-triangle':
+			case 'blue-triangle':
+				context.save();
+				context.strokeStyle = defaultColor;
+				// Crosshair
+				context.lineWidth = 0.5;
+				context.beginPath();
+				context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+				context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+				context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+				context.stroke();
+				context.closePath();
+				// TODO The triangle
+
+				context.restore();
+                break;
 			case 'default':
 			default:
 				context.save();

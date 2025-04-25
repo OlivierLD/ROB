@@ -343,7 +343,7 @@ while [[ "${GO}" == "true" ]]; do
 	      "13h")
 	        PROP_FILE=mux-configs/nmea.mux.replay.groix.gavres.yaml
 	        echo -e "Use OpenCPN to forward AIS data through UDP:8002"
-	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13g}
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13h}
 	        ;;
 	      "20")
 	      	echo -e "Uses a 'curl' to display the current data cache, using REST"

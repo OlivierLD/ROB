@@ -5,13 +5,15 @@ public class Marker {
     private double longitude;
     private String label;
     private String type;
+    private String id;
 
     public Marker() {}
-    public Marker(double latitude, double longitude, String label, String type) {
+    public Marker(double latitude, double longitude, String label, String type, String id) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.label = label;
         this.type = type;
+        this.id = id;
     }
     public Marker latitude(double latitude) {
         this.latitude = latitude;
@@ -64,6 +66,6 @@ public class Marker {
 
     @Override
     public String toString() {
-        return String.format("%f / %f, %s, %s", this.latitude, this.longitude, this.label, this.type);
+        return String.format("%f / %f, %s, %s%s", this.latitude, this.longitude, this.label, this.type, (this.id != null) ? String.format(" - %s", this.id) : "");
     }
 }

@@ -1,0 +1,46 @@
+#
+# Waypoints and routes, for tests
+#
+label:
+  Waypoints, and routes
+markers:
+  - latitude: 47.5
+    longitude: -3.004833
+    label: Rond Garmin
+    type: red-triangle
+    id: garmin
+  - latitude: 47.519667
+    longitude: -3.090833
+    label: Bugalet
+    type: is-dng
+    id: bugalet
+  - latitude: 47.467000
+    longitude: -3.038667
+    label: Sud Quiberon
+    type: card-s
+    id: sud-quiberon
+  - latitude: 47.493000
+    longitude: -3.043833
+    label: Nord Quiberon
+    type: card-n
+    id: nord-quiberon
+  - latitude: 47.555833
+    longitude: -3.010417
+    label: Arrivée Spi
+    type: default
+    id: finish
+route:
+  - route-name: "Côtier A"
+    route-elements:
+      - rank: 1
+        id: garmin
+      - rank: 2
+        id: bugalet
+      - rank: 3
+        id: sud-quiberon
+      - rank: 4
+        id: nord-quiberon
+      - rank: 5
+        id: bugalet
+      - rank: 6
+        id: finish

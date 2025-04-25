@@ -422,7 +422,8 @@ public class NMEAUtils {
                             (Double) yamlMarker.get("latitude"),
                             (Double) yamlMarker.get("longitude"),
                             (String) yamlMarker.get("label"),
-                            (String) yamlMarker.get("type")
+                            (String) yamlMarker.get("type"),
+                            (String) yamlMarker.get("id")
                     ));
                 });
                 System.out.printf("Markers loaded from %s, %s.\n", markerFileName, (map.get("description") != null ? map.get("description") : "No description"));
@@ -458,13 +459,15 @@ public class NMEAUtils {
                         int rank = (Integer)el.get("rank");
                         double lat = (Double)el.get("latitude");
                         double lng = (Double)el.get("longitude");
-                        markerList.add(new Marker(lat, lng, String.valueOf(rank), "default"));
+                        String id = (String)el.get("id");
+                        markerList.add(new Marker(lat, lng, String.valueOf(rank), "default", id));
                     });
                     if (closed) { // Then close the loop !
                         int rank = elements.size() + 1;
                         double lat = (Double)elements.get(0).get("latitude");
                         double lng = (Double)elements.get(0).get("longitude");
-                        markerList.add(new Marker(lat, lng, String.valueOf(rank), "default"));
+                        String id = (String)elements.get(0).get("id");
+                        markerList.add(new Marker(lat, lng, String.valueOf(rank), "default", id));
                     }
                     oneBorder.setMarkerList(markerList);
                     borderList.add(oneBorder);

@@ -418,8 +418,8 @@ public class BorderManager extends Computer {
 		final double MIN_DIST = 0.25; // in nm
 		GeoPos position = new GeoPos(47.645833, -3.436000);
 //		GeoPos position = new GeoPos(47.645500, -3.444833);
-		Marker markerOne = new Marker(47.64561482699582, -3.4445571899414067, "-", "default");
-		Marker markerTwo = new Marker(47.643764382716846, -3.4296226501464844, "-", "default");
+		Marker markerOne = new Marker(47.64561482699582, -3.4445571899414067, "-", "default", null);
+		Marker markerTwo = new Marker(47.643764382716846, -3.4296226501464844, "-", "default", null);
 
 		final DistAndClosestPoint dacp = getProximity(position, markerOne, markerTwo);
 		double distInNm = dacp.dist;

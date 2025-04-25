@@ -1,11 +1,12 @@
 #
 # MUX definition.
 #
-name: "Replay log file. Chartless Map."
+name: "Replay log file. Chartless Map. Waypoints"
 description:
   - Replay a log file from the logged folder (La Trinité - Groix).
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
+  - Waypoints and Routes demo/tests
   - Optional AIS with sinagot.net (requires Internet connection)
   - Logged on board Zephir, Birvidic 700
 context:
@@ -25,6 +26,7 @@ context:
     # - markers: mux-configs/markers/markers.uk.yaml
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     # - markers: mux-configs/markers/markers.san.juan.yaml
+    - markers: mux-configs/waypoints/waypoints.yaml
 channels:
   - type: file
     filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip
