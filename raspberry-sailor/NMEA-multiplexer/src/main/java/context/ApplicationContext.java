@@ -1,9 +1,6 @@
 package context;
 
-import nmea.parser.Angle180EW;
-import nmea.parser.Border;
-import nmea.parser.GeoPos;
-import nmea.parser.Marker;
+import nmea.parser.*;
 import nmea.utils.MuxNMEAUtils;
 import nmea.utils.NMEAUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -60,7 +57,7 @@ public class ApplicationContext {
 	                      double hdgOffset,         // Default 0
 	                      double defaultDeclination,// Default 0
 	                      int damping,              // Default 1
-						  List<String[]> markerFiles) {   // Default null
+						  List<String[]> markerFiles) {   // Default null TODO: routes ?
 
 		dataCache = new NMEADataCache();
 
@@ -69,6 +66,7 @@ public class ApplicationContext {
 			List<String[]> markerList = new ArrayList<>();
 			List<Marker> allMarkers = new ArrayList<>();
 			List<Border> allBorders = new ArrayList<>();
+			List<Route> allRoutes = new ArrayList<>();
 			Yaml yaml = new Yaml(); // Yaml parser
 			markerFiles.forEach(markers -> {
 				if (!markers[0].trim().endsWith(".yaml") && !markers[0].trim().endsWith(".yml")) {
@@ -87,6 +85,10 @@ public class ApplicationContext {
 						markerList.add(new String[] { markers[0], description });
 						allMarkers.addAll(NMEAUtils.loadMarkers(markers[0]));
 						allBorders.addAll(NMEAUtils.loadBorders(markers[0]));
+						Route route = NMEAUtils.loadRoute(markers[0], allMarkers);
+						if (route.getWaypoints() != null && route.getWaypoints().size() > 0) {
+							allRoutes.add(route);
+						}
 					} catch (Exception ex) { // File Not found ?
 						System.err.printf("Building markers (%s)... \n%s\n", markers[0], ex);
 						ex.printStackTrace();
@@ -96,6 +98,7 @@ public class ApplicationContext {
 			dataCache.put(NMEADataCache.MARKERS_FILE, markerList);
 			dataCache.put(NMEADataCache.MARKERS_DATA, allMarkers);
 			dataCache.put(NMEADataCache.BORDERS_DATA, allBorders);
+			dataCache.put(NMEADataCache.ROUTES_DATA, allRoutes);
 		}
 
 		try {

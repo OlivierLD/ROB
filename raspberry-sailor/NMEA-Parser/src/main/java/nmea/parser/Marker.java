@@ -64,6 +64,14 @@ public class Marker {
         this.type = type;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format("%f / %f, %s, %s%s", this.latitude, this.longitude, this.label, this.type, (this.id != null) ? String.format(" - %s", this.id) : "");

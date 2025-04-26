@@ -62,12 +62,12 @@ function getNMEAData() {
 
 const FETCH_VERBOSE = false;
 
-function fetch() {
+function fetch() { // TODO Change this name...
 	try {
 		let getData = getNMEAData();
 		getData.then((value) => {
 			if (FETCH_VERBOSE) {
-				console.log("Done:", value);
+				console.log("Done:", value); // Value is text data
 			}
 			let json = JSON.parse(value);
 			onMessage(json);
@@ -121,6 +121,7 @@ const DEW = 'dew';
 const AIS = 'ais';
 const MARKERS = 'markers';
 const BORDERS = 'borders';
+const ROUTES = 'routes';
 const BORDERS_THREATS = 'borders-threats';
 const TRUE_HDG = 'true-hdg';
 
@@ -380,6 +381,16 @@ function onMessage(json) {
 			}
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Borders threats (" + err + ")");
+		}
+
+        // Routes
+		try {
+			let routes = json['routes-data'];
+			if (routes) {
+				events.publish(ROUTES, routes);
+			}
+		} catch (err) {
+			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Routes (" + err + ")");
 		}
 
 		try {

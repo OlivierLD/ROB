@@ -342,6 +342,11 @@ events.subscribe(BORDERS, val => {
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
 });
+
+events.subscribe(ROUTES, val => {
+	console.log(`Routes subscription: ${JSON.stringify(val)}`); // TODO Manage this
+});
+
 events.subscribe(AIS, val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);

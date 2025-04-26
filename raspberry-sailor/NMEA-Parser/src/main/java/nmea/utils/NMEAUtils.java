@@ -6,13 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 import utils.StringUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 // Merged with NMEA-multiplexer's nmea.utils.NMEAUtils, Oct 12, 2022.
 public class NMEAUtils {
@@ -432,6 +426,53 @@ public class NMEAUtils {
             throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
         }
         return markerList;
+    }
+
+    /**
+     * Load routes,
+     * @param markerFileName yaml file name.
+     * @return markers list.
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public static Route loadRoute(String markerFileName, List<Marker> allMarkers) {
+        Route route = new Route();
+        List<Marker> markerList;
+        Yaml yaml = new Yaml();
+        try {
+            InputStream inputStream = new FileInputStream(markerFileName);
+            Map<String, Object> map = yaml.load(inputStream);
+            System.out.printf("");
+            List<Map<String, Object>> yamlRoute = (List<Map<String, Object>>)map.get("route");
+            markerList = new ArrayList<>(); // The route
+            if (yamlRoute != null) {
+                String name = (String)yamlRoute.get(0).get("route-name");
+                route.setName(name);
+                List<Map<String, Object>> waypoints = (List<Map<String, Object>>)yamlRoute.get(0).get("route-elements");
+                waypoints.forEach(waypoint -> {
+                    String id = (String)waypoint.get("id");
+                    final Optional<Marker> optMarker = allMarkers.stream().filter(m ->  id.equals(m.getId())).findFirst();
+                    if (optMarker.isPresent()) {
+                        markerList.add(optMarker.get());
+                    } else {
+                        // Oops
+                        System.err.printf("Waypoint with ID %s not found\n", id);
+                    }
+                });
+                System.out.printf("Route loaded from %s, %s.\n", markerFileName, (map.get("description") != null ? map.get("description") : "No description"));
+                if (markerList.size() > 0) {
+                    route.setWaypoints(markerList);
+                    if (true) {
+                        System.out.printf("- Found route [%s]\n", route.getName());
+                        route.getWaypoints().forEach(m -> System.out.printf("\t- %s\n", m.toString()));
+                        System.out.println("------------------");
+                    }
+                }
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(String.format("File [%s] not found in %s", markerFileName, System.getProperty("user.dir")));
+        }
+        return route;
     }
 
     @SuppressWarnings("unchecked")

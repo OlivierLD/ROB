@@ -148,6 +148,7 @@ public class NMEADataCache
 	public static final String MARKERS_FILE = "markers-file-name";
 	public static final String MARKERS_DATA = "markers-data";
 	public static final String BORDERS_DATA = "borders-data";
+	public static final String ROUTES_DATA = "routes-data";
 
 	public static final String BORDERS_THREATS = "borders-threats";
 	public static final String AIS_THREATS = "ais-threats";
