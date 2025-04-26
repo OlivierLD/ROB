@@ -1,7 +1,7 @@
 #
 # Waypoints and routes, for tests
 #
-label:
+description:
   Waypoints, and routes
 markers:
   - latitude: 47.5

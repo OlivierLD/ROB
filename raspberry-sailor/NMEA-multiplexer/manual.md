@@ -1117,7 +1117,7 @@ markers:
 - `longitude` as a number
 - `label` as a string
 - `type` as an optional string
-- `id` as an optional unique string (used for the routes)
+- `id` as an optional unique string (used for the routes). Markers with an `id` can be used as waypoints.
 
 `type` is `default` by default.   
 Supported types are `default`, `green`, `red`, `card-n`, `card-s`, `card-e`, `card-w`, `sp` (for special mark), `is-dng` (for isolated danger), `red-triangle`, `green-triangle`, `blue-triangle`.

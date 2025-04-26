@@ -1,0 +1,87 @@
+description:
+  De la Pte du Talud à Ste Marine, Bretagne sud
+borders:
+  - border-name: "Pte du Talud - Ste Marine"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.695898664798875
+        longitude: -3.4524536132812504
+      - rank: 2
+        latitude: 47.70040450447458
+        longitude: -3.462924957275391
+      - rank: 3
+        latitude: 47.710916616083715
+        longitude: -3.476829528808594
+      - rank: 4
+        latitude: 47.7627530340412
+        longitude: -3.5242080688476567
+      - rank: 5
+        latitude: 47.766676184390946
+        longitude: -3.5322761535644536
+      - rank: 6
+        latitude: 47.76286842503948
+        longitude: -3.5377693176269536
+      - rank: 7
+        latitude: 47.76575311681051
+        longitude: -3.5475540161132817
+      - rank: 8
+        latitude: 47.76263764278695
+        longitude: -3.5503005981445312
+      - rank: 9
+        latitude: 47.77625204393236
+        longitude: -3.6749267578125004
+      - rank: 10
+        latitude: 47.79862729652303
+        longitude: -3.722648620605469
+      - rank: 11
+        latitude: 47.81361563260797
+        longitude: -3.707542419433594
+      - rank: 12
+        latitude: 47.80393135603966
+        longitude: -3.7326049804687504
+      - rank: 13
+        latitude: 47.824220149350246
+        longitude: -3.744277954101563
+      - rank: 14
+        latitude: 47.79862729652303
+        longitude: -3.7394714355468754
+      - rank: 15
+        latitude: 47.786864189318266
+        longitude: -3.802299499511719
+      - rank: 16
+        latitude: 47.78940155530948
+        longitude: -3.857231140136719
+      - rank: 17
+        latitude: 47.83459203725764
+        longitude: -3.901176452636719
+      - rank: 18
+        latitude: 47.8491091981148
+        longitude: -3.8991165161132817
+      - rank: 19
+        latitude: 47.855790335328116
+        longitude: -3.917312622070313
+      - rank: 20
+        latitude: 47.86822877992205
+        longitude: -3.911819458007813
+      - rank: 21
+        latitude: 47.871222774564146
+        longitude: -3.9303588867187504
+      - rank: 22
+        latitude: 47.89424772020999
+        longitude: -3.953018188476563
+      - rank: 23
+        latitude: 47.882276025691695
+        longitude: -3.987693786621094
+      - rank: 24
+        latitude: 47.86200993068552
+        longitude: -3.9828872680664067
+      - rank: 25
+        latitude: 47.85440810169976
+        longitude: -3.9746475219726567
+      - rank: 26
+        latitude: 47.84427059588327
+        longitude: -4.042282104492188
+      - rank: 27
+        latitude: 47.862240271740234
+        longitude: -4.095840454101563

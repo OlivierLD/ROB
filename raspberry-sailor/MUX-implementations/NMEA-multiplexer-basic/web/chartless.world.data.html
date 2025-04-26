@@ -7,10 +7,16 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Chartless Map</title>
-    <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
+	<link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
 	<style type="text/css">
 html {
-	font-family: "Courier New"
+	font-family: "Courier New";
+}
+
+select, input {
+	font-family: "Courier New";
+	font-weight: bold;
+	font-size: 1.1em;
 }
 
 .html-01 {
@@ -53,6 +59,148 @@ html {
 	--border-color: cyan;
 	--value-font: 'Courier New';
 }
+compass-display .green {
+	--bg-color: transparent;
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: lime;
+	--cross-hair-color: red;
+	--display-line-color: lime;
+	--label-fill-color: green;
+	--with-display-shadow: false;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: green;
+	--value-outline-color: lime;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .orange {
+	--bg-color: transparent;
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: orange;
+	--cross-hair-color: red;
+	--display-line-color: orange;
+	--label-fill-color: orange;
+	--with-display-shadow: false;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .gray {
+	--bg-color: transparent;
+	--digit-color: gray;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: gray;
+	--cross-hair-color: red;
+	--display-line-color: gray;
+	--label-fill-color: blue;
+	--with-display-shadow: false;
+	--outline-color: gray;
+	--major-tick-color: gray;
+	--minor-tick-color: gray;
+	--value-color: navy;
+	--value-outline-color: gray;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+.display-data {
+	grid-area: middle;
+	text-align: center;
+	vertical-align: baseline;
+	margin: auto;
+	color: inherit;
+	font-size: 48px;
+	font-weight: bold;
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
 	</style>
 
 	<script type="text/javascript">
@@ -62,15 +210,18 @@ let originalFetch = fetch;		// TODO Fix that !! This is ugly !
 	<script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<script type="text/javascript" src="js/ajax.manager.js"></script>
-	<script type="text/javascript" src="./webcomponents/utils/NavigationHelper.js"></script>
+	<script type="text/javascript" src="./webcomponents/utilities/NavigationHelper.js"></script>
 
 	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
 
+	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="./webcomponents/CompassDisplay.js"></script>
+
 	<script type="text/javascript">
 
-const VERBOSE = false;		
+const VERBOSE = false;
 
-let map; 
+let map;
 let world_map_data = null;
 
 const WORLD_DATA = "./json/world.data.json";
@@ -124,15 +275,24 @@ function onSlider(event) {
 	}
 }
 
+function setMaxLength(origin) {
+	maxBufferLength = parseInt(origin.value);
+}
+
 const MAX_BUFFER_LENGTH = 1000; // Tweak at will
+
+let maxBufferLength = MAX_BUFFER_LENGTH;
 
 let trackBuffer = [];
 let aisTargets = [];
 let markers = [];
 let borders = [];
 let borderThreats = [];
+let waypoints = [];
 let aisThreats = null;
 let cog = 0;
+let hdg;
+let bsp;
 let sog;
 let pos;
 let gpsDate;
@@ -140,9 +300,9 @@ let gpsDate;
 let centerOnBoat = true;
 let displayMarkers = true;
 let displayBorders = true;
-let displayBorderMarkers = true;
+let displayBorderMarkers = false;
 let displayAISTargets = true;
-let withDistBearing = true;
+let withDistBearing = false;
 let withWorldMap = false;
 
 let boatRadius = 10;
@@ -153,39 +313,92 @@ let boatRadius = 10;
  * See js/ajax.manager.js
  * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
  */
-events.subscribe(EVENT_POS, val => {
-	let strLat = decToSex(val.lat, 'NS');
-	let strLng = decToSex(val.lng, 'EW');
-	if (VERBOSE) {
-		console.log(`Got position: ${strLat} / ${strLng}`);
-	}
-	document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
-	pos = val;
-	trackBuffer.push(val);
-	while (trackBuffer.length > MAX_BUFFER_LENGTH) {
-		// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
-		trackBuffer.splice(0, 1);
-		// console.log(`Buffer length now ${trackBuffer.length}...`);
-    }
-	// console.log(`Track: ${trackBuffer.length} element(s).`);
-	document.getElementById('track-length').innerHTML = `${trackBuffer.length} points`;
-	if (centerOnBoat) {
-		map.centerLat = val.lat; // This does the repaint...
-		map.centerLng = val.lng;
+events.subscribe(POS, val => {
+	if (val.lat == 0 && val.lng == 0) {
+		console.log("Suspicious pos, all 0...");
 	} else {
-		map.repaint();
+		let strLat = decToSex(val.lat, 'NS');
+		let strLng = decToSex(val.lng, 'EW');
+		if (VERBOSE) {
+			console.log(`Got position: ${strLat} / ${strLng}`);
+		}
+		document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
+		pos = val;
+		trackBuffer.push(val);
+		while (trackBuffer.length > maxBufferLength) {
+			// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
+			trackBuffer.splice(0, 1);
+			// console.log(`Buffer length now ${trackBuffer.length}...`);
+		}
+		// console.log(`Track: ${trackBuffer.length} element(s).`);
+		document.getElementById('track-length').innerHTML = `${trackBuffer.length}/${maxBufferLength} points`;
+		if (centerOnBoat) {
+			map.centerLat = val.lat; // This does the repaint...
+			map.centerLng = val.lng;
+		} else {
+			map.repaint();
+		}
+		// XTE ?
+		let waypointSelect = document.getElementById('next-wp');
+		// console.log(`Waypoint select: ${waypointSelect.value}`);
+		if (waypointSelect.value !== '0') {
+			let waypoint = waypoints.filter(wp => wp.id === waypointSelect.value);
+			if (waypoint.length > 0) {
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+				                                            { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				let bearing = NavigationHelper.getBearingInDegrees({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+				                                               { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				document.getElementById('xte').innerHTML = `XTE to ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+			}
+		} else {
+			document.getElementById('xte').innerHTML = '';
+		}
 	}
 });
-events.subscribe(EVENT_MARKERS, val => {
+events.subscribe(MARKERS, val => {
 	markers = val;
+
+	// Identify potential waypoints, for XTE and Co. TODO: refresh option
+	if (markers.length > 0) {
+		let _waypoints = markers.filter(m => m.id !== null);
+		if (_waypoints.length > 0 && waypoints.length === 0) {
+			console.log(`Found ${_waypoints.length} waypoint(s).`);
+			_waypoints.forEach(wp => {
+				console.log(`- ${wp.id} at ${wp.latitude} / ${wp.longitude}`);
+			});
+			waypoints = _waypoints;
+			// Populate the select list
+			let waypointSelect = document.getElementById('next-wp');
+			while (waypointSelect.firstChild) {  // Drop all options
+				waypointSelect.removeChild(waypointSelect.firstChild);
+			}
+			let blankOption = document.createElement('option');
+			blankOption.value = '0';
+			blankOption.innerHTML = 'None';
+			waypointSelect.appendChild(blankOption); // Add a blank option
+			// Add potential waypoints
+			_waypoints.forEach(wp => {
+				let option = document.createElement('option');
+				option.value = wp.id;
+				option.innerHTML = wp.id;
+				waypointSelect.appendChild(option);
+			});
+		}
+	}
 });
-events.subscribe(EVENT_BORDERS, val => {
+events.subscribe(BORDERS, val => {
 	borders = val;
 });
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
 });
-events.subscribe(EVENT_AIS, val => {  // Possibly contains threats
+
+events.subscribe(ROUTES, val => {
+	// TODO Manage this
+	// console.log(`Routes subscription: ${JSON.stringify(val)}`);
+});
+
+events.subscribe(AIS, val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);
 	// console.log(`Received AIS Data, ${keys.length} target(s).`);
@@ -219,12 +432,12 @@ events.subscribe(EVENT_AIS, val => {  // Possibly contains threats
 			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
 
 			aisTargets.push({
-				mmsi: keys[i], 
-				vesselName: vesselName, 
-				lat: recContent.latitude, 
-				lng: recContent.longitude, 
-				cog: recContent.cog, 
-				sog: recContent.sog, 
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
 				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
 				threat: rec18.collisionThreat !== null,
 				bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
@@ -236,7 +449,7 @@ events.subscribe(EVENT_AIS, val => {  // Possibly contains threats
 		document.getElementById('ais-targets').innerHTML = `${aisTargets.length} / ${keys.length}`;
 	}
 });
-events.subscribe(EVENT_GPS_TIME, val => {
+events.subscribe(GPS_TIME, val => {
 	let date = new Date(val);
 	// val.format("Y-M-d H:i:s")
 	// let date = gpsTime.format("d-m-Y-l");
@@ -245,17 +458,32 @@ events.subscribe(EVENT_GPS_TIME, val => {
 	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
 	gpsDate = date;
 });
-events.subscribe(EVENT_SOG, val => {
+events.subscribe(SOG, val => {
 	document.getElementById('gps-sog').innerHTML = `${val} kn`;
+	document.getElementById('sog').value = val.toFixed(1);
 	sog = val;
 });
-events.subscribe(EVENT_COG, val => {
+events.subscribe(COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
+	document.getElementById('cog').value = val;
 	cog = val;
 });
-// events.subscribe(EVENT_FULL, val => {
-// 	console.log(JSON.stringify(val, null, 2));
-// });
+events.subscribe(TRUE_HDG, val => {
+	document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
+	hdg = val; // Managed in repaint
+	// console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`);
+});
+events.subscribe(BSP, val => {
+	document.getElementById('bsp').innerHTML = `${val} kn`;
+	bsp = val; // Managed in repaint
+	// console.log(`BSP:	${bsp.toFixed(2)}`);
+});
+// For debug, mainly.
+if (false) {
+	events.subscribe(FULL, val => {
+		console.log(JSON.stringify(val, null, 2));
+	});
+}
 ///// END OF SUBSCRIBERS ////
 
 // Display event subscribers ?
@@ -266,7 +494,7 @@ if (false) {
 }
 
 function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
-	
+
 	// console.log(`Drawing arrow for heading ${heading}`);
 
 	context.beginPath();
@@ -290,14 +518,50 @@ function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
 	context.stroke();
 }
 
+function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
+	const BOAT_FACT = 0.8;
+	let boatPoints = [
+		{ x: 0, y: - boatLen * BOAT_FACT * 0.6 },                            // Bow
+		{ x: boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 },   // Starboard, point one
+		{ x: boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 },   // Starboard, point two
+		{ x: boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 },   // Starboard, point three
+		{ x: boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 },   // Starboard, point four
+		{ x: BOAT_FACT * 0, y: + boatLen * BOAT_FACT * 0.6 },                // Mid-transom
+		{ x: - boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 }, // Port, point four
+		{ x: - boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 }, // Port, point three
+		{ x: - boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 }, // Port, point two
+		{ x: - boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 }, // Port, point one
+		{ x: BOAT_FACT * 0, y: - boatLen * BOAT_FACT * 0.6 }                 // Bow
+	];
+	let radAngle = Math.toRadians(heading); // + (Math.PI / 2);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	// Apply rotation to the points of the 'needle'
+	boatPoints.forEach((pt, idx) => {
+		x = canvasX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+		y = canvasY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+		if (idx === 0) {
+			context.moveTo(x, y);
+		} else {
+			context.lineTo(x, y);
+		}
+	});
+	context.closePath();
+	context.stroke();
+}
+
 let markerAndTrackColor = 'navy';
 
 /*
  * Used as the doAfter callback on the ChartlessMap.
  */
 let updateMap = (elmt, context) => {
-	
-	if (false) { // Plot Chart Center 
+
+	if (false) { // Plot Chart Center
 		let center = elmt.posToCanvas(elmt._centerLat, elmt._centerLng);
 
 		context.save();
@@ -308,19 +572,19 @@ let updateMap = (elmt, context) => {
 		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
 		context.moveTo(center.x, center.y - 20);
 		context.lineTo(center.x, center.y + 20);
-	
+
 		context.moveTo(center.x - 20, center.y);
 		context.lineTo(center.x + 20, center.y);
 		context.stroke();
 		context.closePath();
-	
+
 		context.beginPath();
 		context.lineWidth = 4;
 		context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
 
 		context.stroke();
 		context.closePath();
-	
+
 		context.restore();
 	}
 
@@ -365,8 +629,8 @@ let updateMap = (elmt, context) => {
 						context.lineTo(firstPt.x, firstPt.y);
 					}
 				}
-				context.lineWidth = 1;        
-				context.strokeStyle = 'gray'; 
+				context.lineWidth = 1;
+				context.strokeStyle = 'gray';
 				context.stroke();
 				context.closePath();
 			}
@@ -389,7 +653,7 @@ let updateMap = (elmt, context) => {
 			if (pos && withDistBearing) {
 				// Calculate distance and bearing to mark
 				// 1 - Distance
-				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
 							                                  { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) });
 				let distMess = `Distance: ${dist.toFixed(2)} nm`;
 				extraMess.push(distMess);
@@ -427,7 +691,7 @@ let updateMap = (elmt, context) => {
 				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
 					plotIt = false;
 				}
-				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) { 
+				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) {
 					elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.borderColor, extraMess);
 				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
@@ -437,7 +701,7 @@ let updateMap = (elmt, context) => {
 			if (borderThreats.length > 0) {
 				borderThreats.forEach(bt => {
 					// Highlight border on the map
-					// See borders and markers variables. 
+					// See borders and markers variables.
 					let borderName = bt.borderName;
 					let segmentIndex = bt.segmentIdx;
 					let theBorder = borders.filter(b => b.borderName === borderName);
@@ -518,12 +782,12 @@ let updateMap = (elmt, context) => {
 		aisTargets.forEach((target, idx) => {
 			/*
 			* aisTarget: {
-			* 	mmsi: string, 
-			*   vesselName: string, 
-			*   lat: number, 
-			*   lng: number, 
-			*   cog: number, 
-			*   sog: number, 
+			* 	mmsi: string,
+			*   vesselName: string,
+			*   lat: number,
+			*   lng: number,
+			*   cog: number,
+			*   sog: number,
 			*   radius: number, // From the AIS Manager
 			*   threat: boolean
 			* }
@@ -543,7 +807,8 @@ let updateMap = (elmt, context) => {
 			context.fillText(target.vesselName !== null ? target.vesselName : target.mmsi, canvasCoord.x + boatRadius + 1, canvasCoord.y - boatRadius);
 			context.stroke();
 			context.closePath();
-			drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			// drawArrow(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
+			drawBoat(context, canvasCoord.x, canvasCoord.y, 5 * boatRadius, target.cog, context.strokeStyle);
 			// AIS threat ?
 			if (target.threat === true) {
 				// debugger;
@@ -552,10 +817,10 @@ let updateMap = (elmt, context) => {
 					<li>at ${decToSex(target.lat, "NS")} / ${decToSex(target.lng, "EW")}</li>
 					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)} </li>
 					<li>COG: ${target.cog}&deg;</li>
-					<li>SOG: ${target.sog.toFixed(2)} kn</li> 
+					<li>SOG: ${target.sog.toFixed(2)} kn</li>
 					<li>At: ${target.date.format("Y-M-d H:i:s")}</li>
 					<li>
-						Min Dist: 
+						Min Dist:
 						<ul>
 							<li>for detection ${target.radius} nm</li>
 							<li>with target ${target.minDist.toFixed(2)} nm</li>
@@ -587,11 +852,13 @@ let updateMap = (elmt, context) => {
 		context.save();
 
 		context.strokeStyle = 'orange'; // Only hard-coded one...
-		drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		// drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		drawBoat(context, boatXY.x, boatXY.y, 5 * boatRadius, (hdg ? hdg : cog), context.strokeStyle);
 
 		context.beginPath();
 		context.lineWidth = 1;
 		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		// A cross-hair
 		context.moveTo(boatXY.x, boatXY.y - 20);
 		context.lineTo(boatXY.x, boatXY.y + 20);
 
@@ -600,12 +867,45 @@ let updateMap = (elmt, context) => {
 		context.stroke();
 		context.closePath();
 
+		// Circle around boat position
 		context.beginPath();
 		context.lineWidth = 4;
 		context.arc(boatXY.x, boatXY.y, 10, 0, 2 * Math.PI, false);
 
 		context.stroke();
 		context.closePath();
+
+		// COG, HDG ?
+		if (cog && hdg) {
+			const ARROW_LEN = 80;
+			context.lineWidth = 2;
+
+			context.beginPath();
+
+			// console.log(`Plotting HDG & COG... ${hdg} / ${cog}, from ${boatXY.x}, ${boatXY.y}`);
+			context.strokeStyle = elmt.colorConfig.borderColor; // 'cyan'; // TODO Coast color...
+			context.moveTo(boatXY.x, boatXY.y);
+
+			let length = ARROW_LEN * (bsp ? bsp / 5.0 : 1.0);
+
+			let xHDG = boatXY.x + (length * Math.sin(Math.toRadians(hdg)));
+			let yHDG = boatXY.y - (length * Math.cos(Math.toRadians(hdg)));
+			// console.log(`HDG: ${xHDG} ${yHDG}`);
+			context.lineTo(xHDG, yHDG);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.strokeStyle = 'red';
+			context.moveTo(boatXY.x, boatXY.y);
+			length = ARROW_LEN * (sog ? sog / 5.0 : 1.0);
+			let xCOG = boatXY.x + (length * Math.sin(Math.toRadians(cog)));
+			let yCOG = boatXY.y - (length * Math.cos(Math.toRadians(cog)));
+			// console.log(`COG: ${xCOG} ${yCOG}`);
+			context.lineTo(xCOG, yCOG);
+			context.stroke();
+			context.closePath();
+		}
 
 		context.restore();
 		// } else {
@@ -614,7 +914,7 @@ let updateMap = (elmt, context) => {
 
 	// The points of the track
 	context.beginPath();
-	context.strokeStyle = elmt.colorConfig.markerAndTrackColor;
+	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
 	context.lineWidth = 1;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
@@ -675,7 +975,7 @@ let plotBorders = (cb) => {
 	displayBorders = cb.checked;
 	map.repaint();
 };
-let plotBorderMarkers = (cb) => { 
+let plotBorderMarkers = (cb) => {
 	displayBorderMarkers = cb.checked;
 	map.repaint();
 }
@@ -708,14 +1008,14 @@ let plotWorldMap = (cb) => {
 		} else if (false) {
 			// Timeout option
 			loadWorldData();
-			setTimeout(() => { map.repaint(); }, 3000); 
+			setTimeout(() => { map.repaint(); }, 3000);
 		} else if (true) {
 			// DoNext option
 			loadWorldData(() => map.repaint());
 		}
 	} else {
 		if (world_map_data !== null) {
-			map.repaint(); 	
+			map.repaint();
 		}
 	}
 	// map.repaint(); // TODO in a promise ? then ?
@@ -723,6 +1023,9 @@ let plotWorldMap = (cb) => {
 
 let setStyle = (opt) => {
 	let map = document.getElementById('chartless-map-01');
+	let cog = document.getElementById('cog');
+	let sog = document.getElementById('sog');
+
 	document.getElementById('chartless-map-01').className = opt.value;
 
 	switch (opt.value) {
@@ -732,6 +1035,14 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'lime';
 			map.colorConfig.borderColor = 'cyan';
 			document.body.className = 'html-03';
+			// Compass ...
+			cog.classList.remove('gray');
+			cog.classList.add('green');
+			cog.classList.remove('orange');
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray');
+			sog.classList.add('analogdisplay-monochrome-green');
+			sog.classList.remove('analogdisplay-monochrome-orange');
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -739,6 +1050,14 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'lime';
 			map.colorConfig.borderColor = 'cyan';
 			document.body.className = 'html-02';
+			// Compass ...
+			cog.classList.remove('gray');
+			cog.classList.remove('green');
+			cog.classList.add('orange');
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray');
+			sog.classList.remove('analogdisplay-monochrome-green');
+			sog.classList.add('analogdisplay-monochrome-orange');
 			break;
 		case 'chartless-map-01':
 		default:
@@ -747,114 +1066,189 @@ let setStyle = (opt) => {
 			map.colorConfig.targetColor = 'green';
 			map.colorConfig.borderColor = 'blue';
 			document.body.className = 'html-01';
+			// Compass ...
+			cog.classList.add('gray');
+			cog.classList.remove('green');
+			cog.classList.remove('orange');
+			// Speedo
+			sog.classList.add('analogdisplay-flat-gray');
+			sog.classList.remove('analogdisplay-monochrome-green');
+			sog.classList.remove('analogdisplay-monochrome-orange');
 			break;
 	}
 };
 
 window.onload = () => {
-	initAjax(false, ping=250);
+	initAjax(false, ping=250); // ping ununsed
 	// console.log("Commented initAjax!");
 
 	map = document.getElementById('chartless-map-01');
-	map.setDoAfter(updateMap);        
+	map.setDoAfter(updateMap);
 }
 	</script>
 </head>
 <body>
-	<h1>GPS, AIS, Markers, Borders</h1>
-    <table>
-        <tr>
-            <td valign="top" style="height: 600px;">
-                <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
-                    <chartless-map id="chartless-map-01"
-                                   class="chartless-map-01"
-                                   center-lat="0.0"
-                                   center-lng="0.0"
-                                   chart-width="5.0"
-                                   width="800"
-                                   height="600"></chartless-map>
-                </div>
-            </td>
-			<td valign="top" rowspan="3">
-				<table>
-					<tr>
-						<td>Style:</td>
-						<td>
-							<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
-								<option value="chartless-map-01" selected>Light</option>
-								<option value="chartless-map-02">Dark</option>
-								<option value="chartless-map-03">Darker</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2"><hr/></td>
-					</tr>
-					<tr>
-						<td>Position:</td>
-						<td><span id="gps-position"></span></td>
-					</tr>
-					<tr>
-						<td>Track length:</td>
-						<td><span id="track-length"></span></td>
-					</tr>
-					<tr>
-						<td>GPS Date:</td>
-						<td><span id="gps-date"></span></td>
-					</tr>
-					<tr>
-						<td>GPS Time:</td>
-						<td><span id="gps-time"></span></td>
-					</tr>
-					<tr>
-						<td>SOG:</td>
-						<td><span id="gps-sog"></span></td>
-					</tr>
-					<tr>
-						<td>COG:</td>
-						<td><span id="gps-cog"></span></td>
-					</tr>
-					<tr>
-						<td valign="top">AIS Targets:</td>
-						<td><span id="ais-targets">-</span></td>
-					</tr>
-					<tr>
-						<!--td valign="top">Border Threats:</td-->
-						<td colspan="2"><span id="border-threats">-</span></td>
-					</tr>
-					<tr>
-						<!--td valign="top">AIS Threats:</td-->
-						<td colspan="2"><div id="ais-threats">-</div></td>
-					</tr>
-				</table>
-			</td>
-        </tr>
-        <tr>
-            <td valign="top" height="50">
-                <!-- A slider for the chart scale -->
-                <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
-					Chart Width:
-                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
-                           oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
-                    <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
-                </div>
-            </td>
-        </tr>
-		<tr>
-			<td valign="top">
+<h1>GPS, AIS, Markers, Borders, Waypoints</h1>
+<table>
+	<tr>
+		<td valign="top" style="height: 600px;">
+			<div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+				<chartless-map id="chartless-map-01"
+							   class="chartless-map-01"
+							   center-lat="0.0"
+							   center-lng="0.0"
+							   chart-width="5.0"
+							   width="1000"
+							   height="600"></chartless-map>
+			</div>
+		</td>
+		<td valign="top" rowspan="3">
+			<table>
+				<tr>
+					<td>Style:</td>
+					<td>
+						<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
+							<option value="chartless-map-01" selected>Light</option>
+							<option value="chartless-map-02">Dark</option>
+							<option value="chartless-map-03">Darker</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr/></td>
+				</tr>
+				<tr>
+					<td>
+						<compass-display id="cog"
+										 class="gray display-data"
+										 title="Course Over Ground"
+										 value="0"
+										 width="200"
+										 height="200"
+										 major-ticks="45"
+										 minor-ticks="5"
+										 label="COG"></compass-display>
+
+					</td>
+					<td>
+						<analog-display class="analogdisplay-flat-gray display-data"
+										title="Speed Over Ground&#13;in knots"
+										id="sog"
+										min-value="0"
+										max-value="15"
+										major-ticks="1"
+										minor-ticks="0.1"
+										with-border="true"
+										with-min-max="true"
+										overlap="40"
+										label="SOG"
+										unit="kn"
+										rotate-digits="false"
+										width="200"
+										height="200"></analog-display>
+					</td>
+				</tr>
+				<tr>
+					<td>GPS Date:</td>
+					<td><span id="gps-date"></span></td>
+				</tr>
+				<tr>
+					<td>GPS Time:</td>
+					<td><span id="gps-time"></span></td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr/></td>
+				</tr>
+				<tr>
+					<td>Position:</td>
+					<td><span id="gps-position"></span></td>
+				</tr>
+				<tr>
+					<td>Next Waypoint</td>
+					<td>
+						<select id="next-wp">
+							<option value="0" selected>None</option>
+							<option value="1">Waypoint 1</option>
+							<option value="2">Waypoint 2</option>
+							<option value="3">Waypoint 3</option>
+							<option value="4">Waypoint 4</option>
+							<option value="5">Waypoint 5</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><span id="xte"></span></td>
+				</tr>
+				<tr>
+					<td colspan="2"><hr/></td>
+				</tr>
+				<tr>
+					<td>Track length:</td>
+					<td><span id="track-length"></span></td>
+				</tr>
+				<tr>
+					<td>Track Max length:</td>
+					<td><input type="number" id="track-max-length" value="1000" style="text-align: right;" onchange="setMaxLength(this);"></input></td>
+				</tr>
+				<tr>
+					<td>SOG:</td>
+					<td><span id="gps-sog"></span></td>
+				</tr>
+				<tr>
+					<td>COG:</td>
+					<td><span id="gps-cog"></span></td>
+				</tr>
+				<tr>
+					<td>BSP:</td>
+					<td><span id="bsp">-</span></td>
+				</tr>
+				<tr>
+					<td>HDG (true):</td>
+					<td><span id="true-hdg">-</span></td>
+				</tr>
+				<tr>
+					<td valign="top">AIS Targets:</td>
+					<td><span id="ais-targets">-</span></td>
+				</tr>
+				<tr>
+					<!--td valign="top">Border Threats:</td-->
+					<td colspan="2"><span id="border-threats">-</span></td>
+				</tr>
+				<tr>
+					<!--td valign="top">AIS Threats:</td-->
+					<td colspan="2"><div id="ais-threats">-</div></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" height="50">
+			<!-- A slider for the chart scale -->
+			<div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+				Chart Width:
+				<input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+					   oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+				<output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
 				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
 				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
-				<input type="checkbox" onchange="plotBorderMarkers(this);" checked>Plot Borders' Markers
-				<br/>
+				<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+				<!--br/-->
 				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
-				<input type="checkbox" onchange="distBearing(this);" checked>Dist &amp; Bearings
+				<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
 				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
-				<br/>
+				<!--br/-->
 				<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
-			</td>
-		</tr>
-    </table>
+			</div>
+		</td>
+	</tr>
+</table>
 
-	<!--button onclick="loadWorldData();">Load World Data</button-->
+<!--button onclick="loadWorldData();">Load World Data</button-->
 </body>
 </html>
