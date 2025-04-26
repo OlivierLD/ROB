@@ -10,7 +10,13 @@
     <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
 	<style type="text/css">
 html {
-	font-family: "Courier New"
+	font-family: "Courier New";
+}
+
+select, input {
+	font-family: "Courier New";
+	font-weight: bold;
+	font-size: 1.1em;
 }
 
 .html-01 {
@@ -282,6 +288,7 @@ let aisTargets = [];
 let markers = [];
 let borders = [];
 let borderThreats = [];
+let waypoints = [];
 let aisThreats = null;
 let cog = 0;
 let hdg;
@@ -331,10 +338,53 @@ events.subscribe(POS, val => {
 		} else {
 			map.repaint();
 		}
+		// XTE ?
+		let waypointSelect = document.getElementById('next-wp');
+		// console.log(`Waypoint select: ${waypointSelect.value}`);
+		if (waypointSelect.value !== '0') {
+			let waypoint = waypoints.filter(wp => wp.id === waypointSelect.value);
+			if (waypoint.length > 0) {
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
+				                                            { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				let bearing = NavigationHelper.getBearingInDegrees({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
+				                                               { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				document.getElementById('xte').innerHTML = `XTE to ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+			}
+		} else {
+			document.getElementById('xte').innerHTML = '';
+		}
 	}
 });
 events.subscribe(MARKERS, val => {
 	markers = val;
+
+	// Identify potential waypoints, for XTE and Co. TODO: refresh option
+	if (markers.length > 0) {
+		let _waypoints = markers.filter(m => m.id !== null);
+		if (_waypoints.length > 0 && waypoints.length === 0) {
+			console.log(`Found ${_waypoints.length} waypoint(s).`);
+			_waypoints.forEach(wp => {
+				console.log(`- ${wp.id} at ${wp.latitude} / ${wp.longitude}`);
+			});
+			waypoints = _waypoints;
+			// Populate the select list
+			let waypointSelect = document.getElementById('next-wp');
+			while (waypointSelect.firstChild) {  // Drop all options
+				waypointSelect.removeChild(waypointSelect.firstChild);
+			}
+			let blankOption = document.createElement('option');
+			blankOption.value = '0';
+			blankOption.innerHTML = 'None';
+			waypointSelect.appendChild(blankOption); // Add a blank option
+			// Add potential waypoints
+			_waypoints.forEach(wp => {
+				let option = document.createElement('option');
+				option.value = wp.id;
+				option.innerHTML = wp.id;
+				waypointSelect.appendChild(option);
+			});
+		}
+	}
 });
 events.subscribe(BORDERS, val => {
 	borders = val;
@@ -344,7 +394,8 @@ events.subscribe(BORDERS_THREATS, val => {
 });
 
 events.subscribe(ROUTES, val => {
-	console.log(`Routes subscription: ${JSON.stringify(val)}`); // TODO Manage this
+	// TODO Manage this
+	// console.log(`Routes subscription: ${JSON.stringify(val)}`); 
 });
 
 events.subscribe(AIS, val => {  // Possibly contains threats
@@ -1111,6 +1162,25 @@ window.onload = () => {
 					<tr>
 						<td>Position:</td>
 						<td><span id="gps-position"></span></td>
+					</tr>
+					<tr>
+						<td>Next Waypoint</td>
+						<td>
+							<select id="next-wp">
+								<option value="0" selected>None</option>
+								<option value="1">Waypoint 1</option>
+								<option value="2">Waypoint 2</option>
+								<option value="3">Waypoint 3</option>
+								<option value="4">Waypoint 4</option>
+								<option value="5">Waypoint 5</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><span id="xte"></span></td>
+					</tr>
+					<tr>
+						<td colspan="2"><hr/></td>
 					</tr>
 					<tr>
 						<td>Track length:</td>
