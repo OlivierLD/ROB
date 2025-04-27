@@ -55,12 +55,6 @@ html {
 }
 	</style>
 
-	<script type="text/javascript">
-
-// const originalFetch = fetch;		// TODO Fix that !! This is ugly ! See the fetch in ajax.manager.js
-
-	</script>
-
 	<!--script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<script type="text/javascript" src="js/ajax.manager.js"></script-->
@@ -90,7 +84,7 @@ let loadData = (fn) => {
 	fetch(MARKERS_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
-			document.getElementById('filename').innerHTML = `Rendering ${MARKERS_DATA}`;
+			document.getElementById('filename').innerHTML = `Rendering ${MARKERS_DATA} (hard-coded in the source)`;
 			response.json().then(doc => {
 				markers = doc["markers-data"];
 				borders = doc["borders-data"];
