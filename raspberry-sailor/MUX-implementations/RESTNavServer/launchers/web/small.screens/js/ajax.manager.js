@@ -13,7 +13,7 @@ const DEBUG = false;
 
 function initAjax() {
 	let interval = setInterval(() => {
-		fetch();
+		fetchNMEA();
 	}, 1000);
 }
 
@@ -86,7 +86,7 @@ function getNMEAData() {
 	return getPromise('/mux/cache', DEFAULT_TIMEOUT, 'GET', [{ name: 'Accept', value: 'application/json' }], 200, null, false);
 }
 
-function fetch() {
+function fetchNMEA() {
 	let getData = getNMEAData();
 	getData.then((value) => { // Resolve
 //  console.log("Done:", value);

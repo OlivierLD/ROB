@@ -8,7 +8,7 @@ function initAjax(forwardErrors) {
 		forwardAjaxErrors = forwardErrors;
 	}
 	let interval = setInterval(() => {
-		fetch();
+		fetchNMEA();
 	}, 1000);
 }
 
@@ -59,8 +59,7 @@ function getNMEAData() {
 	return promise;
 }
 
-// TODO Change that name. To fetchNMEA or so.
-function fetch() {
+function fetchNMEA() {
 	let getData = getNMEAData();
 	getData.then((value) => {
 		console.log("Done:", value);

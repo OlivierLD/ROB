@@ -57,7 +57,7 @@ html {
 
 	<script type="text/javascript">
 
-const originalFetch = fetch;		// TODO Fix that !! This is ugly ! See the fetch in ajax.manager.js
+// const originalFetch = fetch;		// TODO Fix that !! This is ugly ! See the fetch in ajax.manager.js
 
 	</script>
 
@@ -87,7 +87,7 @@ let pos = { lat: 47.7 / -3.13 }; // Hard coded
 // let pos = { lat: 47.5, lng: -3 }; // Hard-coded
 
 let loadData = (fn) => {
-	originalFetch(MARKERS_DATA)
+	fetch(MARKERS_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
 			document.getElementById('filename').innerHTML = `Rendering ${MARKERS_DATA}`;

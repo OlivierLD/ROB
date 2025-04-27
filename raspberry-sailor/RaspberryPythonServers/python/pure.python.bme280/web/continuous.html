@@ -73,7 +73,7 @@
 	};
 
 	window.onload = function() {
-		initAjax(false); // Contiuously pings, a fetch() every 1 sec
+		initAjax(false); // Contiuously pings, a fetchNMEA() every 1 sec
 		// Subscribers here
 		events.subscribe(EVENT_AT, function(val) {  // Air temp
 			if (status === 'tick') {

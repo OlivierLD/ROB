@@ -8,7 +8,7 @@ function initAjax(forwardErrors) {
 		forwardAjaxErrors = forwardErrors;
 	}
 	let interval = setInterval(function () {
-		fetch();
+		fetchNMEA();
 	}, 1000);
 }
 
@@ -62,7 +62,7 @@ function getNMEAData() {
 
 const FETCH_VERBOSE = false;
 
-function fetch() { // TODO Change this name...
+function fetchNMEA() { 
 	try {
 		let getData = getNMEAData();
 		getData.then((value) => {

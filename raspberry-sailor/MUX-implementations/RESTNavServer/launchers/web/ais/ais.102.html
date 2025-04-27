@@ -389,7 +389,7 @@
         return promise;
     }
 
-    function fetch() {
+    function fetchNMEA() {
         let getData = getNMEAData();
         getData.then((value) => {
             //  console.log("Done:", value);
@@ -422,10 +422,10 @@
 
     if (!FOR_TEST) {
         (() => {
-            fetch();
+            fetchNMEA();
             // Long poll for NMEA/AIS
             setInterval(() => {
-                fetch();
+                fetchNMEA();
             }, betweenPing);
         })();
     } else {

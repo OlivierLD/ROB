@@ -62,11 +62,11 @@ function cacheClient(dataManager, bp) {
 		}
 		// Long poll
 		setInterval(() => {
-			fetch();
+			fetchNMEA();
 		}, betweenPing);
 	})();
 
-	function fetch() {
+	function fetchNMEA() {
 		let getData = getNMEAData();
 		getData.then((value) => {
 			if (VERBOSE) {

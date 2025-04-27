@@ -117,7 +117,7 @@ body {
         return promise;
     }
 
-    function fetch() {
+    function fetchNMEA() {
         let getData = getNMEAData();
         getData.then((value) => {
             //  console.log("Done:", value);
@@ -147,7 +147,7 @@ body {
         window.onload = () => {
             // Long poll
             setInterval(() => {
-                fetch();
+                fetchNMEA();
             }, betweenPing);
         };
     } else {

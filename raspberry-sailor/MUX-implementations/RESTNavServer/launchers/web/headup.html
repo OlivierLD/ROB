@@ -385,7 +385,7 @@
 		}
 	}
 
-	function fetch() {
+	function fetchNMEA() {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise("/mux/cache", DEFAULT_TIMEOUT, "GET", headers, [200, 201]);
 		getData.then((value) => {
@@ -431,7 +431,7 @@
 	(() => {
 		// console.log("Let's go!");
 		let intervalOne = setInterval(function () {
-			fetch();
+			fetchNMEA();
 		}, 1000);
 		scroll(5000);
 	})();

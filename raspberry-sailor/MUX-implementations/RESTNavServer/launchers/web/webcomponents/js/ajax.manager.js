@@ -7,7 +7,7 @@ const DEBUG = false;
 
 function initAjax() {
     let interval = setInterval(() => {
-        fetch();
+        fetchNMEA();
         // console.log(`LoadSunData, gpstime: ${gpsTime}, pos: ${lastKnownPos}`);
         if (lastKnownPos && gpsTime) {
             loadSunData({ position: lastKnownPos, utcdate: gpsTime});
@@ -147,7 +147,7 @@ function getISSData() {
         }]);
 }
 
-function fetch() {
+function fetchNMEA() {
     let getData = getNMEAData();
     getData.then((value) => { // Resolve
 //  console.log("Done:", value);
