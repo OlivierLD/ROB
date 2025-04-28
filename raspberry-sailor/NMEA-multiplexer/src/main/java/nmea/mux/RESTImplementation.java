@@ -51,6 +51,7 @@ import java.util.stream.Stream;
 public class RESTImplementation {
 
 	enum MESSAGE_INDEXES {
+		MUX_0000("MUX-0000", "Generic one"),
 		MUX_0001("MUX-0001", "Serial Ports"),
 		MUX_0002("MUX-0002", "Channels"),
 		MUX_0003("MUX-0003", "Current Time"),
@@ -170,7 +171,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/waypoints/{id}",
 					this::getWaypoint,
 					"Get the data TO the waypoint."),
-			// TODO a PUT to update the current waypoint. Use NMEADataCache.NEXT_WAYPOINT
+			new Operation(
+					"PUT",
+					REST_PREFIX + "/waypoints/{id}",
+					this::setWaypoint,
+					"Set the waypoint to reach."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/channels",
@@ -531,7 +536,6 @@ public class RESTImplementation {
 			jpe.printStackTrace();
 		}
 		response.setPayload(content.getBytes());
-
 		return response;
 	}
 	private HTTPServer.Response getWaypoint(HTTPServer.Request request) {
@@ -543,11 +547,6 @@ public class RESTImplementation {
 			// System.out.printf("Looking for %s\n", id);
 			try {
 				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
-				/*
-					public static final String TO_WP = "To Waypoint";
-					public static final String D2WP = "Distance to WP";
-					public static final String B2WP = "Bearing to WP";
-				 */
 				String currentWP = (String)cache.get(NMEADataCache.TO_WP);  // Set with NMEADataCache.NEXT_WAYPOINT
 				if (id.equals(currentWP)) {
 					// System.out.println("Found it !!");
@@ -614,6 +613,43 @@ public class RESTImplementation {
 				jpe.printStackTrace();
 			}
 			// response.setPayload(content.getBytes());
+		} else {
+			System.out.println("Ooch - 1");
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "missing path parameter");
+			return response;
+		}
+		response.setPayload(content.getBytes());
+		return response;
+	}
+	private HTTPServer.Response setWaypoint(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		String content = "";
+		List<String> prmValues = request.getPathParameters();
+		if (prmValues.size() == 1) {
+			String id = prmValues.get(0);
+			try {
+				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+				List<Marker> markerList = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
+				final List<Marker> markers = markerList.stream()
+						.filter(mark -> mark.getId() != null)
+						.collect(Collectors.toList());
+				final Optional<Marker> first = markers.stream().filter(mark -> id.equals(mark.getId())).findFirst();
+				if (first.isPresent()) {
+					cache.put(NMEADataCache.NEXT_WAYPOINT, first.get());
+				} else {
+					// Oops
+					System.out.println(String.format("Oops: WP: %s not available.", id));
+//					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					response.setStatus(HTTPServer.Response.NOT_FOUND);
+					RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Current WP: %s, noit available", id));
+					return response;
+				}
+				RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+			} catch (Exception jpe) {
+				content = jpe.getMessage();
+				jpe.printStackTrace();
+			}
 		} else {
 			System.out.println("Ooch - 1");
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
