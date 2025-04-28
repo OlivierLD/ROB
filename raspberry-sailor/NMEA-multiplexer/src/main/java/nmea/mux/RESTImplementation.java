@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class defines the REST operations supported by the HTTP Server, including Admin operations
@@ -159,6 +160,17 @@ public class RESTImplementation {
 					REST_PREFIX + "/marker-files",
 					this::getMarkerFiles,
 					"Get the available marker and border files, from user.home."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/waypoints",
+					this::getWaypoints,
+					"Get the available waypoint list."),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/waypoints/{id}",
+					this::getWaypoint,
+					"Get the data TO the waypoint."),
+			// TODO a PUT to update the current waypoint. Use NMEADataCache.NEXT_WAYPOINT
 			new Operation(
 					"GET",
 					REST_PREFIX + "/channels",
@@ -494,6 +506,121 @@ public class RESTImplementation {
 		}
 		response.setPayload(content.getBytes());
 
+		return response;
+	}
+	private HTTPServer.Response getWaypoints(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		String content;
+		try {
+			if (false) {
+				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
+			}
+			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			List<Marker> markerList = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
+			final List<Marker> markerStream = markerList.stream()
+														.filter(mark -> mark.getId() != null)
+														.collect(Collectors.toList());
+			content = mapper.writeValueAsString(markerStream);
+			if (true || restVerbose()) {
+				System.out.printf("-- Waypoints --\n%s\n--------------------\n", content);
+				System.out.printf("\tlength: %d\n", content.getBytes().length);
+			}
+			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		} catch (JsonProcessingException jpe) {
+			content = jpe.getMessage();
+			jpe.printStackTrace();
+		}
+		response.setPayload(content.getBytes());
+
+		return response;
+	}
+	private HTTPServer.Response getWaypoint(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		String content = "";
+		List<String> prmValues = request.getPathParameters();
+		if (prmValues.size() == 1) {
+			String id = prmValues.get(0);
+			// System.out.printf("Looking for %s\n", id);
+			try {
+				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+				/*
+					public static final String TO_WP = "To Waypoint";
+					public static final String D2WP = "Distance to WP";
+					public static final String B2WP = "Bearing to WP";
+				 */
+				String currentWP = (String)cache.get(NMEADataCache.TO_WP);  // Set with NMEADataCache.NEXT_WAYPOINT
+				if (id.equals(currentWP)) {
+					// System.out.println("Found it !!");
+					double dist = ((Distance)cache.get(NMEADataCache.D2WP)).getDistance();
+					double route = ((Angle360)cache.get(NMEADataCache.B2WP)).getAngle();
+
+					if (restVerbose()) {
+						System.out.printf("-- Found %s, in %f nm, in the %f \272\n", id, dist, route);
+					}
+
+					class WPStatus {
+						private String name;
+						private double dist;
+						private double route;
+
+						public WPStatus() {
+						}
+
+						public WPStatus(String name, double dist, double route) {
+							this.name = name;
+							this.dist = dist;
+							this.route = route;
+						}
+						public String getName() {
+							return name;
+						}
+
+						public void setName(String name) {
+							this.name = name;
+						}
+
+						public double getDist() {
+							return dist;
+						}
+
+						public void setDist(double dist) {
+							this.dist = dist;
+						}
+
+						public double getRoute() {
+							return route;
+						}
+
+						public void setRoute(double route) {
+							this.route = route;
+						}
+					}
+					WPStatus wpStatus = new WPStatus(id, dist, route);
+					content = mapper.writeValueAsString(wpStatus);
+					if (true || restVerbose()) {
+						System.out.printf("-- To --\n%s\n--------------------\n", content);
+						System.out.printf("\tlength: %d\n", content.getBytes().length);
+					}
+					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+				} else {
+					System.out.println(String.format("Oops: Current WP: %s, requested %s", currentWP, id));
+//					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					response.setStatus(HTTPServer.Response.NOT_FOUND);
+					RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Current WP: %s, requested %s", currentWP, id));
+					return response;
+				}
+			} catch (JsonProcessingException jpe) {
+				content = jpe.getMessage();
+				jpe.printStackTrace();
+			}
+			// response.setPayload(content.getBytes());
+		} else {
+			System.out.println("Ooch - 1");
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "missing path parameter");
+			return response;
+		}
+		response.setPayload(content.getBytes());
 		return response;
 	}
 	private HTTPServer.Response getChannels(HTTPServer.Request request) {

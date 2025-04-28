@@ -97,7 +97,7 @@ public class NextWaypointManager extends Computer {
 
 	@Override
 	public void close() {
-		System.out.println("- Stop Computing Border data, " + this.getClass().getName());
+		System.out.println("- Stop Computing WayPoints data, " + this.getClass().getName());
 	}
 
 	@Override
