@@ -19,6 +19,7 @@ context:
     - markers: mux-configs/markers/markers.rade.de.brest.yaml
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     - markers: mux-configs/markers/markers.san.juan.yaml
+  next-waypoint: BUGALET
 channels:
   - type: file
     filename: ./sample.data/going.to.groix.nmea.zip
@@ -43,3 +44,5 @@ computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
     verbose: false
+  - class: nmea.computers.NextWaypointManager
+    verbose: true

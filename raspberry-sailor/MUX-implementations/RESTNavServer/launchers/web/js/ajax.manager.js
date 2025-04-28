@@ -79,7 +79,7 @@ function fetchNMEA() {
 					message = mess.message;
 				}
 			}
-			console.debug("Failed to get nmea data..." + (error !== undefined ? error : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+			console.debug("Failed to get nmea data..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? JSON.stringify(message) : ' - '));
 		});
 	} catch (err) {
 		console.log(`Oops: ${err}`);
@@ -124,6 +124,8 @@ const BORDERS = 'borders';
 const ROUTES = 'routes';
 const BORDERS_THREATS = 'borders-threats';
 const TRUE_HDG = 'true-hdg';
+const TO_WP = 'to-wp';
+
 
 function onMessage(json) {
 	try {
@@ -143,6 +145,16 @@ function onMessage(json) {
 				'lat': latitude,
 				'lng': longitude
 			});
+			if (json["To Waypoint"] !== undefined && json["Bearing to WP"] !== undefined && json["Distance to WP"] !== undefined) {
+				events.publish(TO_WP, {
+					'lat': latitude,
+					'lng': longitude,
+					'to_wp': json["To Waypoint"],
+					'b2wp': json["Bearing to WP"].angle,
+					'd2wp': json["Distance to WP"].distance
+				});
+			}
+
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "position");
 		}

@@ -27,6 +27,7 @@ context:
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     # - markers: mux-configs/markers/markers.san.juan.yaml
     - markers: mux-configs/waypoints/waypoints.yaml
+  next-waypoint: BUGALET
 channels:
   - type: file
     filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip
@@ -39,4 +40,6 @@ channels:
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.default.properties
+    verbose: false
+  - class: nmea.computers.NextWaypointManager
     verbose: false

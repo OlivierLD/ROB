@@ -540,7 +540,8 @@ public class MuxInitializer {
                         });
                     }
                 }
-                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerList);
+                String nextWayPoint = muxProps.getProperty("next-waypoint");
+                ApplicationContext.getInstance().initCache(deviationFile, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, markerList, nextWayPoint);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

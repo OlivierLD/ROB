@@ -81,7 +81,7 @@ let pos = { lat: 47.7 / -3.13 }; // Hard coded
 // let pos = { lat: 47.5, lng: -3 }; // Hard-coded
 
 let loadData = (fn) => {
-	fetch(MARKERS_DATA)
+	window.fetch(MARKERS_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
 			document.getElementById('filename').innerHTML = `Rendering ${MARKERS_DATA} (hard-coded in the source)`;

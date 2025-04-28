@@ -84,6 +84,7 @@ public class NMEADataCache
 	public static final String AIR_TEMP = "Air Temperature";
 	public static final String BARO_PRESS = "Barometric Pressure";
 	public static final String RELATIVE_HUMIDITY = "Relative Humidity";
+
 	public static final String AWA = "AWA";
 	public static final String AWS = "AWS";
 	public static final String HDG_COMPASS = "HDG c.";
@@ -149,6 +150,7 @@ public class NMEADataCache
 	public static final String MARKERS_DATA = "markers-data";
 	public static final String BORDERS_DATA = "borders-data";
 	public static final String ROUTES_DATA = "routes-data";
+	public static final String NEXT_WAYPOINT = "next-waypoint";
 
 	public static final String BORDERS_THREATS = "borders-threats";
 	public static final String AIS_THREATS = "ais-threats";

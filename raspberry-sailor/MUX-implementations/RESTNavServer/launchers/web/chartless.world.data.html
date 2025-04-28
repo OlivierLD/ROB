@@ -223,7 +223,7 @@ let world_map_data = null;
 const WORLD_DATA = "./json/world.data.json";
 
 let loadWorldData = (fn) => {
-	fetch(WORLD_DATA)
+	window.fetch(WORLD_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
 			response.json().then(doc => {
@@ -344,7 +344,7 @@ events.subscribe(POS, val => {
 				                                            { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
 				let bearing = NavigationHelper.getBearingInDegrees({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) }, 
 				                                               { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
-				document.getElementById('xte').innerHTML = `XTE to ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+				document.getElementById('xte').innerHTML = `To ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
 			}
 		} else {
 			document.getElementById('xte').innerHTML = '';
@@ -387,6 +387,14 @@ events.subscribe(BORDERS, val => {
 });
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
+});
+
+events.subscribe(TO_WP, val => {
+	let WPName = val.to_wp;
+	let bearing = val.b2wp;
+	let dist =  val.d2wp;
+	console.log(`Going to waypoint ${WPName}`);
+	document.getElementById('to_wp').innerHTML = `To ${WPName} (GC): ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
 });
 
 events.subscribe(ROUTES, val => {
@@ -1163,16 +1171,19 @@ window.onload = () => {
 						<td>
 							<select id="next-wp">
 								<option value="0" selected>None</option>
-								<option value="1">Waypoint 1</option>
+								<!--option value="1">Waypoint 1</option>
 								<option value="2">Waypoint 2</option>
 								<option value="3">Waypoint 3</option>
 								<option value="4">Waypoint 4</option>
-								<option value="5">Waypoint 5</option>
+								<option value="5">Waypoint 5</option-->
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2"><span id="xte"></span></td>
+					</tr>
+					<tr>
+						<td colspan="2"><span id="to_wp"></span></td>
 					</tr>
 					<tr>
 						<td colspan="2"><hr/></td>

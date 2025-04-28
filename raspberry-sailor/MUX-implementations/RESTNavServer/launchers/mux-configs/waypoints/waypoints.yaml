@@ -1,5 +1,6 @@
 #
 # Waypoints and routes, for tests
+# For NMEA Compatibility, limit waypoint ids to 8 characters, all uppercase.
 #
 description:
   Waypoints, and routes
@@ -8,17 +9,17 @@ markers:
     longitude: -3.004833
     label: Rond Garmin
     type: red-triangle
-    id: garmin
+    id: GARMIN
   - latitude: 47.519667
     longitude: -3.090833
     label: Bugalet
     type: is-dng
-    id: bugalet
+    id: BUGALET
   - latitude: 47.467000
     longitude: -3.038667
     label: Sud Quiberon
     type: card-s
-    id: sud-quiberon
+    id: SUD-QUIB
   - latitude: 47.493000
     longitude: -3.043833
     label: Nord Quiberon
@@ -28,19 +29,19 @@ markers:
     longitude: -3.010417
     label: Arrivée Spi
     type: default
-    id: finish
+    id: FINISH
 route:
   - route-name: "Côtier A"
     route-elements:
       - rank: 1
-        id: garmin
+        id: GARMIN
       - rank: 2
-        id: bugalet
+        id: BUGALET
       - rank: 3
-        id: sud-quiberon
+        id: SUD-QUIB
       - rank: 4
         id: nord-quiberon
       - rank: 5
-        id: bugalet
+        id: BUGALET
       - rank: 6
-        id: finish
+        id: FINISH

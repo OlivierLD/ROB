@@ -460,6 +460,43 @@ public class StringGenerator {
 		return "$" + rmc;
 	}
 
+	/**
+	 * WIP
+	 *
+	 * RMB Recommended Minimum Navigation Information<br>
+	 * <pre>
+	 *        1 2   3 4    5    6       7 8        9 10  11  12  13
+	 * $GPRMB,A,x.x,a,c--c,d--d,llll.ll,e,yyyyy.yy,f,g.g,h.h,i.i,j*kk
+	 *        | |   | |    |    |       | |        | |   |   |   |
+	 *        | |   | |    |    |       | |        | |   |   |   A=Entered or perpendicular passed, V:not there yet
+	 *        | |   | |    |    |       | |        | |   |   Destination closing velocity in knots
+	 *        | |   | |    |    |       | |        | |   Bearing to destination, degrees, True
+	 *        | |   | |    |    |       | |        | Range to destination, nm
+	 *        | |   | |    |    |       | |        E or W
+	 *        | |   | |    |    |       | Destination Waypoint longitude
+	 *        | |   | |    |    |       N or S
+	 *        | |   | |    |    Destination Waypoint latitude
+	 *        | |   | |    Destination Waypoint ID
+	 *        | |   | Origin Waypoint ID
+	 *        | |   Direction to steer (L or R) to correct error
+	 *        | Crosstrack error in nm
+	 *        Data Status (Active or Void)
+	 * </pre>
+	 * Example: $IIRMB,A,0.00,L,,HAKAAU  ,,,,,026.60,173,,V,A*67
+	 *
+	 * @param devicePrefix
+	 * @return
+	 */
+	public static String generateRMB(String devicePrefix) {
+		String rmb = devicePrefix + "RMB,";
+
+		// Checksum
+		int cs = StringParsers.calculateCheckSum(rmb);
+		rmb += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
+
+		return "$" + rmb;
+	}
+
 	public static String generateMWV(String devicePrefix, double aws, int awa) {
 		return generateMWV(devicePrefix, aws, awa, StringParsers.APPARENT_WIND);
 	}

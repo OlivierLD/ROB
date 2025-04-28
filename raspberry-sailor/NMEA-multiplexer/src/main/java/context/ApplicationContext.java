@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ApplicationContext {
 
@@ -46,18 +47,19 @@ public class ApplicationContext {
 						  double hdgOffset,         // Default 0
 						  double defaultDeclination,// Default 0
 						  int damping) {            // Default 1
-		initCache(deviationFileName, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, null);
+		initCache(deviationFileName, maxLeeway, bspFactor, awsFactor, awaOffset, hdgOffset, defaultDeclination, damping, null, null);
 	}
 
-	public void initCache(String deviationFileName, // Default "zero-deviation.csv"
-	                      double maxLeeway,         // Default 0
-	                      double bspFactor,         // Default 1
-	                      double awsFactor,         // Default 1
-	                      double awaOffset,         // Default 0
-	                      double hdgOffset,         // Default 0
-	                      double defaultDeclination,// Default 0
-	                      int damping,              // Default 1
-						  List<String[]> markerFiles) {   // Default null TODO: routes ?
+	public void initCache(String deviationFileName,   // Default "zero-deviation.csv"
+	                      double maxLeeway,           // Default 0
+	                      double bspFactor,           // Default 1
+	                      double awsFactor,           // Default 1
+	                      double awaOffset,           // Default 0
+	                      double hdgOffset,           // Default 0
+	                      double defaultDeclination,  // Default 0
+	                      int damping,                // Default 1
+						  List<String[]> markerFiles, // Default null
+						  String nextWayPointId) {    // Default null
 
 		dataCache = new NMEADataCache();
 
@@ -95,10 +97,24 @@ public class ApplicationContext {
 					}
 				}
 			});
+			if (nextWayPointId != null) {
+				// Check availability
+				final Optional<Marker> optionalMarker = allMarkers.stream().filter(mark -> mark.getId() != null).filter(mark -> nextWayPointId.equals(mark.getId())).findFirst();
+				if (optionalMarker.isPresent()) {
+					System.out.printf("- Next Waypoint %s was found. OK!\n", nextWayPointId);
+					dataCache.put(NMEADataCache.NEXT_WAYPOINT, optionalMarker.get());
+				} else {
+					// Oops...
+					dataCache.put(NMEADataCache.NEXT_WAYPOINT, null);
+					System.out.printf("- Oops. Next Waypoint %s was not found...\n", nextWayPointId);
+				}
+			}
+
 			dataCache.put(NMEADataCache.MARKERS_FILE, markerList);
 			dataCache.put(NMEADataCache.MARKERS_DATA, allMarkers);
 			dataCache.put(NMEADataCache.BORDERS_DATA, allBorders);
 			dataCache.put(NMEADataCache.ROUTES_DATA, allRoutes);
+
 		}
 
 		try {

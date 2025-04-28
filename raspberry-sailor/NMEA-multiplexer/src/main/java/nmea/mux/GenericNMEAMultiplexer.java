@@ -347,7 +347,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
     public static Properties getDefinitions() {
         Properties properties = null;
         String propertiesFile = System.getProperty("mux.properties", "nmea.mux.properties");
-        if (propertiesFile.endsWith(".yaml") || propertiesFile.endsWith(".yml")) {
+        if (propertiesFile.endsWith(".yaml") || propertiesFile.endsWith(".yml")) { // Yaml to props
             Yaml yaml = new Yaml();
             try {
                 InputStream inputStream = new FileInputStream(propertiesFile);
@@ -538,6 +538,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
      *     - markers: markers.05.yaml
      *     - markers: markers.houat.hoedic.belle-ile.yaml
      *     - markers: markers.couregant.la.plate.yaml
+     *   next-waypoint: BUGALET
      */
     public static void initDefinitions(Properties definitions) {
         if (definitions.get("name") != null) {
