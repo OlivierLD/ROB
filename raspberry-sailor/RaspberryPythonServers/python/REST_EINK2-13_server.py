@@ -747,8 +747,8 @@ def format_data(id: str) -> List[str]:
         elif id == "WPT": # Waypoint direction and distance
             # pass
             wpid: string = nmea_cache["To Waypoint"]
-            b2wp: float = nmea_cache["Bearing to WP"].value
-            d2wp: float = nmea_cache["Distance to WP"].value
+            b2wp: float = nmea_cache["Bearing to WP"]["value"]
+            d2wp: float = nmea_cache["Distance to WP"]["value"]
             formatted = [
                 f"To waypoint {wpid}",
                 f"{d2wp:.02f} nm",

@@ -1069,8 +1069,27 @@ class ChartlessMap extends HTMLElement {
 				context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
 				context.stroke();
 				context.closePath();
-				// TODO The triangle
+				// The triangle
+                // console.log("Will draw a triangle");
+                if (markType === 'red-triangle') {
+                    context.strokeStyle = "red";
+                } else if (markType === 'green-triangle') {
+                    context.strokeStyle = "green";
+                } else if (markType === 'blue-triangle') {
+                    context.strokeStyle = "blue";
+                }
+                context.lineWidth = 2;
+                context.beginPath();
+                const triangleSide = 30;
+                // Define the start point
+                context.moveTo(canvasCoord.x, canvasCoord.y - ((triangleSide / 2) * Math.cos(Math.toRadians(30)))); // top
+                // Define points
+                context.lineTo(canvasCoord.x + (triangleSide / 2), canvasCoord.y + ((triangleSide / 2) * Math.cos(Math.toRadians(30)))); // bottom right
+                context.lineTo(canvasCoord.x - (triangleSide / 2), canvasCoord.y + ((triangleSide / 2) * Math.cos(Math.toRadians(30)))); // bottom left
+                context.lineTo(canvasCoord.x, canvasCoord.y - ((triangleSide / 2) * Math.cos(Math.toRadians(30))));  // top
 
+                // Draw it
+                context.stroke();
 				context.restore();
                 break;
 			case 'default':
