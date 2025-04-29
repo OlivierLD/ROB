@@ -78,7 +78,7 @@ SCREEN_SAVER_OPTION_PREFIX: str = "--screen-saver-option:"  # default "pelican",
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM
+# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
 # TODO: More data, and graphics (displays...)
 
 eink = None
@@ -743,6 +743,16 @@ def format_data(id: str) -> List[str]:
                 f"AIR  : {atp:.01f}°C",
                 f"HUM  : {hum:.01f} %",
                 f"DEW  : {dew:.01f}°C"
+            ]
+        elif id == "WPT": # Waypoint direction and distance
+            # pass
+            wpid: string = nmea_cache["To Waypoint"]
+            b2wp: float = nmea_cache["Bearing to WP"].value
+            d2wp: float = nmea_cache["Distance to WP"].value
+            formatted = [
+                f"To waypoint {wpid}",
+                f"{d2wp:.02f} nm",
+                f"{b2wp:.01f}°"
             ]
         else:
             formatted = [id, "Not implemented"]

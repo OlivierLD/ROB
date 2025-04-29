@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+echo -e "Warning !! Make sure this is matching the one in rc.local !!"
+#
 stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 #
 # Start MUX and Co on startup

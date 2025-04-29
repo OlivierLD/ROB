@@ -57,7 +57,7 @@ SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM
+# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
 # TODO: More data, and graphics
 
 oled = None
@@ -82,7 +82,8 @@ nmea_data: List[str] = [
     "BSP",  # Boat Speed
     "SOG",  # Speed Over Ground
     "COG",  # Course Over Ground
-    "POS"   # Position
+    "POS",  # Position
+    "WPT"   # Waypoint, distance and bearing
 ]
 
 pin_button_01 = board.D20  # pin #38

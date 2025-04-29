@@ -97,6 +97,10 @@ let updateMarkersConfig = (markerList) => {
     return getPromise('/mux/reload', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, markerList, false);
 };
 
+let updateNextWaypoint = (waypointId) => {
+    return getPromise(`/mux/waypoints/${waypointId}`, DEFAULT_TIMEOUT, 'PUT', (ret) => { return (ret === 201 || ret === 202); }, waypointId, false);
+}
+
 let enableLogging = (b) => {
     return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 201, null, false);
 };
@@ -697,6 +701,8 @@ let updateMarkerConfig = () => {
         button.style.display = 'inline';
     });
 
+    let nextWPselect = document.getElementById('currentWaypoint');
+    nextWPselect.disabled = false;
 };
 
 let cancelMarkersUpdate = () => {
@@ -728,6 +734,8 @@ let cancelMarkersUpdate = () => {
         line.style.display = 'block';
         line.style = '';
     });
+    let nextWPselect = document.getElementById('currentWaypoint'); // TODO Reset to previous value
+    nextWPselect.disabled = true;
 }
 
 let removeMarkerLine = (clickedButton) => {
@@ -775,6 +783,23 @@ let updateMarkerList = () => { // The final one
         alert("Failed to update markers config");
         generateDiagram();
     });
+
+    // Next Waypoint
+    let nextWPselect = document.getElementById('currentWaypoint');
+    let selectedValue = nextWPselect.options[nextWPselect.selectedIndex].value;
+    console.log(`Selected waypoint: ${selectedValue}`);
+    let wpUpdater = updateNextWaypoint(selectedValue); //  === "null" ? null : selectedValue);
+    wpUpdater.then(value => {
+        console.log(`After waypoint update ! ${value}`);
+        // Reload at the end
+        generateDiagram();
+    }, (error, errMess) => {
+        console.log(error);
+        console.log(errMess);
+        alert("Failed to update next waypoint");
+        generateDiagram();
+    });
+
 };
 
 let generateDiagram = () => {
@@ -809,7 +834,7 @@ let generateDiagram = () => {
         }
         // TODO Other stuff here (deviation file, declination, etc)
 
-        // Used Markers
+        // Used Markers and borders, waypoints
         if (json['markers'] || json['markerList']) {
             html += '<tr><td>';
             html += 'Markers and Borders:<br/>';
@@ -822,6 +847,19 @@ let generateDiagram = () => {
                     html += `<li><span>${marker[0]} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span><i>${marker[1]}</i></span></li>`;
                 })
             }
+            // Current waypoint
+            // if (json['currentWaypointName']) {
+                html += `<li>` +
+                            `<span>Current Waypoint: ` + // ${json['currentWaypointName']}</span>&nbsp;&nbsp;` +
+                            `<select id="currentWaypoint" onchange="/*updateCurrentWaypoint(this);*/" disabled>` +
+                                `<option value="null">None</option>`;
+                json['waypointList'].forEach(waypoint => {
+                        html += `<option value="${waypoint.id}"${waypoint.id === json['currentWaypointName'] ? " selected" : ""}>${waypoint.id}</option>`;
+                });
+                html +=     `</select>` +
+                        `</li>`;
+            // }
+
             html += '</ul>';
             html += '<button class="toggle-marker-config" onclick="updateMarkerConfig();">Update markers config?</button>';
             html += '<button class="update-marker-button" style="display: none;" onclick="updateMarkerList();">Update</button>';

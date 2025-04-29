@@ -23,6 +23,7 @@ context:
     - markers: markers.04.yaml
     - markers: markers.05.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
+    - markers: waypoints.yaml
 channels:
   # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal (in /etc/rc.local ?)"
   - type: file
@@ -55,3 +56,6 @@ forwarders:
     sentence.filters: ~GGA,~GSV,~GSA
   - type: tcp
     port: 7001
+computers:
+  - class: nmea.computers.NextWaypointManager
+    verbose: false

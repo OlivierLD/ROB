@@ -203,10 +203,6 @@ compass-display .gray {
 }
 	</style>
 
-	<script type="text/javascript">
-// let originalFetch = fetch;		// TODO Fix that !! This is ugly !
-	</script>
-
 	<script type="text/javascript" src="js/date.proto.js"></script>
 	<script type="text/javascript" src="js/pub.sub.js"></script>
 	<script type="text/javascript" src="js/ajax.manager.js"></script>
@@ -227,7 +223,7 @@ let world_map_data = null;
 const WORLD_DATA = "./json/world.data.json";
 
 let loadWorldData = (fn) => {
-	fetch(WORLD_DATA)
+	window.fetch(WORLD_DATA)
 		.then(response => {
 			console.log(`Data Response: ${response.status} - ${response.statusText}`);
 			response.json().then(doc => {
@@ -348,7 +344,7 @@ events.subscribe(POS, val => {
 				                                            { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
 				let bearing = NavigationHelper.getBearingInDegrees({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
 				                                               { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
-				document.getElementById('xte').innerHTML = `XTE to ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+				document.getElementById('xte').innerHTML = `To ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
 			}
 		} else {
 			document.getElementById('xte').innerHTML = '';
@@ -391,6 +387,18 @@ events.subscribe(BORDERS, val => {
 });
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
+});
+
+events.subscribe(TO_WP, val => {
+	if (val !== null) {
+		let WPName = val.to_wp;
+		let bearing = val.b2wp;
+		let dist =  val.d2wp;
+		console.log(`Going to waypoint ${WPName}`);
+		document.getElementById('to_wp').innerHTML = `To ${WPName} (GC): ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+	} else {
+		document.getElementById('to_wp').innerHTML = '';
+	}
 });
 
 events.subscribe(ROUTES, val => {
@@ -908,8 +916,8 @@ let updateMap = (elmt, context) => {
 		}
 
 		context.restore();
-		// } else {
-		// 	console.log("No pos available...");
+	// } else {
+	// 	console.log("No pos available...");
 	}
 
 	// The points of the track
@@ -1128,7 +1136,6 @@ window.onload = () => {
 										 major-ticks="45"
 										 minor-ticks="5"
 										 label="COG"></compass-display>
-
 					</td>
 					<td>
 						<analog-display class="analogdisplay-flat-gray display-data"
@@ -1168,16 +1175,19 @@ window.onload = () => {
 					<td>
 						<select id="next-wp">
 							<option value="0" selected>None</option>
-							<option value="1">Waypoint 1</option>
-							<option value="2">Waypoint 2</option>
-							<option value="3">Waypoint 3</option>
-							<option value="4">Waypoint 4</option>
-							<option value="5">Waypoint 5</option>
-						</select>
+							<!--option value="1">Waypoint 1</option>
+                            <option value="2">Waypoint 2</option>
+                            <option value="3">Waypoint 3</option>
+                            <option value="4">Waypoint 4</option>
+                            <option value="5">Waypoint 5</option-->
+						</select> (client side)
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2"><span id="xte"></span></td>
+				</tr>
+				<tr>
+					<td colspan="2"><span id="to_wp"></span></td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr/></td>
