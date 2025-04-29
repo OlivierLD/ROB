@@ -2,6 +2,8 @@ package nmea.mux.context;
 
 //import http.HTTPServer;
 
+import nmea.parser.Marker;
+
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
@@ -45,6 +47,9 @@ public class Context {
 		private int damping = 0;
 		private String markers;
 		private List<String[]> markerList;
+
+		private List<Marker> waypointList;
+		private String currentWaypointName;
 
 		public String getName() {
 			return name;
@@ -132,6 +137,22 @@ public class Context {
 
 		public void setMarkerList(List<String[]> markerList) {
 			this.markerList = markerList;
+		}
+
+		public List<Marker> getWaypointList() {
+			return waypointList;
+		}
+
+		public void setWaypointList(List<Marker> waypointList) {
+			this.waypointList = waypointList;
+		}
+
+		public String getCurrentWaypointName() {
+			return currentWaypointName;
+		}
+
+		public void setCurrentWaypointName(String currentWaypointName) {
+			this.currentWaypointName = currentWaypointName;
 		}
 
 		@Override

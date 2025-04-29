@@ -437,6 +437,15 @@ public class RESTImplementation {
 			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 			List<String[]> markerList = (List<String[]>)cache.get(NMEADataCache.MARKERS_FILE);
 			this.topMUXContext.setMarkerList(markerList); // TODO Cancel/nullify setMarkers ?
+			Marker nextWaypoint = (Marker)cache.get(NMEADataCache.NEXT_WAYPOINT); // Next Waypoint
+			this.topMUXContext.setCurrentWaypointName(nextWaypoint != null ? nextWaypoint.getId() : null);
+			// Find potential waypoints
+			List<Marker> markerData = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
+			final List<Marker> wpList = markerData.stream()
+					.filter(mark -> mark.getId() != null)
+					.collect(Collectors.toList());
+			this.topMUXContext.setWaypointList(wpList);
+
 			content = mapper.writeValueAsString(this.topMUXContext);
 			if (true || restVerbose()) {
 				System.out.printf("-- MUX Context --\n%s\n--------------------\n", content);
@@ -623,27 +632,35 @@ public class RESTImplementation {
 		return response;
 	}
 	private HTTPServer.Response setWaypoint(HTTPServer.Request request) {
-		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), Response.ACCEPTED);
 		String content = "";
 		List<String> prmValues = request.getPathParameters();
 		if (prmValues.size() == 1) {
 			String id = prmValues.get(0);
 			try {
 				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
-				List<Marker> markerList = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
-				final List<Marker> markers = markerList.stream()
-						.filter(mark -> mark.getId() != null)
-						.collect(Collectors.toList());
-				final Optional<Marker> first = markers.stream().filter(mark -> id.equals(mark.getId())).findFirst();
-				if (first.isPresent()) {
-					cache.put(NMEADataCache.NEXT_WAYPOINT, first.get());
+				List<Marker> markerList = (List<Marker>) cache.get(NMEADataCache.MARKERS_DATA);
+				if (id.equals("null")) {
+					cache.remove(NMEADataCache.NEXT_WAYPOINT); // , null);
+					// Computer results...
+					cache.remove(NMEADataCache.TO_WP);
+					cache.remove(NMEADataCache.D2WP);
+					cache.remove(NMEADataCache.B2WP);
 				} else {
-					// Oops
-					System.out.println(String.format("Oops: WP: %s not available.", id));
-//					response.setStatus(HTTPServer.Response.BAD_REQUEST);
-					response.setStatus(HTTPServer.Response.NOT_FOUND);
-					RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Current WP: %s, noit available", id));
-					return response;
+					final List<Marker> markers = markerList.stream()
+							.filter(mark -> mark.getId() != null)
+							.collect(Collectors.toList());
+					final Optional<Marker> first = markers.stream().filter(mark -> id.equals(mark.getId())).findFirst();
+					if (first.isPresent()) {
+						cache.put(NMEADataCache.NEXT_WAYPOINT, first.get());
+					} else {
+						// Oops
+						System.out.println(String.format("Oops: WP: %s not available.", id));
+//						response.setStatus(HTTPServer.Response.BAD_REQUEST);
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Current WP: %s, noit available", id));
+						return response;
+					}
 				}
 				RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			} catch (Exception jpe) {

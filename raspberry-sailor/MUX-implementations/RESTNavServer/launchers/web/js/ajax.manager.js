@@ -153,6 +153,8 @@ function onMessage(json) {
 					'b2wp': json["Bearing to WP"].angle,
 					'd2wp': json["Distance to WP"].distance
 				});
+			} else {
+				events.publish(TO_WP, null);
 			}
 
 		} catch (err) {

@@ -594,7 +594,12 @@ the code is in `REST_SSD1306_server.py`, in this repository.
   a regular request to the cache (`GET /mux/cache`) will retrieve the values it contains.  
   It's been originally designed to get the data for a barograph display, over one week. It could be
   use for any data you want to see the evolution of, over a given period of time.
-  
+- `ais-manager`
+  - Manage AIS Collisions
+- `border-manager`
+  - Manage border collisions
+- `next-waypoint-manager`
+  - Set (or remove) the next waypoint
   
 > _Important_: Computers may need data coming from the various channels. Those data will
 be stored in a cache _if the property `init.cache` is set to `true`_. See below.

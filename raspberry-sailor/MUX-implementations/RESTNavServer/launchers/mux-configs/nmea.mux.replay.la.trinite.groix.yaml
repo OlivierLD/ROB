@@ -38,8 +38,8 @@ channels:
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
 computers:
-  #  - class: nmea.computers.BorderManager
-  #    properties: mux-configs/border.mgr.default.properties
-  #    verbose: false
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.default.properties
+    verbose: false
   - class: nmea.computers.NextWaypointManager
     verbose: false
