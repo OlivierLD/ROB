@@ -146,6 +146,10 @@ button:disabled {
           <td ><div id="one-marker-longitude"></div></td>
         </tr>
         <tr>
+          <td>ID</td>
+          <td><input type="text" placeholder="Marker ID (optional)" value="" width="100%" id="one-marker-id"></td>
+        </tr>
+        <tr>
           <td>type</td>
           <td>
             <select id="one-marker-type">
@@ -204,11 +208,14 @@ button:disabled {
       if (origin.value === 'markers') {
         LIST_OPTION = MARKERS_OPTION;
         document.getElementById('one-marker-label').disabled = false;
+        document.getElementById('one-marker-id').disabled = false;
+
         document.getElementById('one-marker-type').disabled = false;
       } else if (origin.value === 'border') {
         LIST_OPTION = BORDER_OPTION;
         document.getElementById('one-marker-label').disabled = true;
         document.getElementById('one-marker-type').disabled = true;
+        document.getElementById('one-marker-id').disabled = true;
       }
       generateYamlContent(); // Regenerate content
     }
@@ -272,6 +279,7 @@ button:disabled {
         document.getElementById('one-marker-label').value = "";
         document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
         document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
+        document.getElementById('one-marker-id').value = "";
         document.getElementById('one-marker-type').value = "default";
 
         popup
@@ -321,7 +329,8 @@ button:disabled {
           oneElement = `  - label: "${mark.label}"\n` +
                        `    latitude: ${mark.latitude}\n` +
                        `    longitude: ${mark.longitude}\n` +
-                       `    type: ${mark.type}\n`;
+                       `    type: ${mark.type}\n` +
+                       (mark.id.trim().length > 0 ? `    id: ${mark.id}\n` : ``);
         } else {
           oneElement = `    - rank: ${idx + 1}\n` +
                        `      latitude: ${mark.latitude}\n` +
@@ -338,12 +347,14 @@ button:disabled {
       let longitude = document.getElementById('one-marker-longitude').innerText;
       let label = document.getElementById('one-marker-label').value;
       let type = document.getElementById('one-marker-type').value;
+      let id = document.getElementById('one-marker-id').value;
 
       markerList.push({
         label: label,
         type: type,
         latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude)
+        longitude: parseFloat(longitude),
+        id: id
       });
 
       generateYamlContent();

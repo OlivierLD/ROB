@@ -10,6 +10,7 @@ markers:
   - label: "La Teignouse"
     latitude: 47.457324771572395
     longitude: -3.045830503160688
+    id: TEIGNOUSE
     type: default
 borders:
   - border-name: "Houat"

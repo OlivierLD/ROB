@@ -30,6 +30,36 @@ markers:
     label: Arrivée Spi
     type: default
     id: FINISH
+  - label: "Golden-Gate"
+    latitude: 37.81751395270554
+    longitude: -122.47867584228517
+    id: GGATE
+    type: default
+  - label: "Taiohae"
+    latitude: -8.929843710746997
+    longitude: -140.10160446166995
+    id: TAIOHAE
+    type: default
+  - label: "Anaho"
+    latitude: -8.820320598950408
+    longitude: -140.06577014923099
+    id: ANAHO
+    type: default
+  - label: "Horta"
+    latitude: 38.53527591154413
+    longitude: -28.616638183593754
+    id: HORTA
+    type: default
+  - label: "Lofoten"
+    latitude: 67.78433459163759
+    longitude: 12.810058593750002
+    id: LOFOTEN
+    type: default
+  - label: "Ar Men"
+    latitude: 48.05008698911922
+    longitude: -4.997684955596925
+    type: default
+    id: ARMEN
 route:
   - route-name: "Côtier A"
     route-elements:
