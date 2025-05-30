@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--
+ | Also see mux.rest.js. It contains some logic associated with this dashboard.
+ +-->
+<html lang="en">
+<head>
+  <title>System Admin</title>
+
+  <link rel="icon" type="image/ico" href="icons/ajax.ico">
+  <!--link rel="icon" type="image/jpg" href="icons/palm.04.jpg"-->
+
+  <script type="text/javascript" src="./js/pub.sub.js"></script>
+  <script type="text/javascript" src="./js/mux.rest.js"></script>
+  <link id="page-ux" rel="stylesheet" href="./css/stylesheet.css" type="text/css"/>
+  <style>
+
+      button {
+        border-radius: 5px;
+        background-color: rgba(255, 165, 0, 0.5);
+      }
+
+      .selectedButton {
+        padding:5px;
+        border-top-right-radius: 10px;
+        border: 1px solid #CCC;
+        margin-top:10px;
+        border-bottom: none;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .unselectedButton {
+        padding:5px;
+        border-top-right-radius: 10px;
+        border: 1px solid #CCC;
+        margin-top:10px;
+        border-bottom: none;
+        font-size: 12px;
+        font-weight: normal;
+      }
+      .addbox {
+        padding: 1px;
+        border-radius: 5px;
+        border: 1px solid #CCC;
+        width: auto;
+        height: auto;
+        margin: 80px auto 0px auto;
+        overflow: auto;
+      }
+
+      th, td {
+         border: 1px solid #CCC;
+         border-radius: 5px;
+         padding: 3px;
+      }
+
+      canvas {
+        width: 100%;
+        height: 100px;
+      }
+
+      .smooth {
+        /*height: 0;*/
+        /*visibility: hidden;*/
+        /*opacity: 0;*/
+        /*transition: visibility 0.5s, height 0.5s, opacity 0.5s linear;*/
+        height: 0;
+        max-height: 0;
+        margin: auto;
+        /*transition: transform 0.5s, max-height 1s, height 1s;*/
+        transition: all 0.5s ease;
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top;
+        overflow: hidden;
+      }
+
+      .visible-div {
+        opacity: 1;
+        width: auto;
+        height: auto;
+        max-height: 1600px;
+        transform: scaleY(1);
+        margin-top: 5px;
+      }
+
+  </style>
+  <script type="text/javascript">
+
+        /**
+         * Displays the errors in a non-modal way.
+         * @param mess the error message to display.
+         */
+        let errMessages = [];
+        const MAX_NB_MESS = 10;
+
+        function errorHandler(mess) {
+          let messZone = document.getElementById("err-mess");
+          if (false) { // Stby
+            messZone.innerText = mess;
+            setTimeout(function() {
+                messZone.innerText = "";
+            }, 10000);
+          } else {
+            errMessages.push(`${new Date()}: ${mess}`);
+            while (errMessages.length > MAX_NB_MESS) {
+              errMessages.splice(0, 1);
+            }
+            let newMessage = '';
+            errMessages.forEach(mess => newMessage += (mess + "\n"));
+            messZone.innerText = newMessage;
+            messZone.scrollTop = messZone.scrollHeight; // Scroll at the bottom
+          }
+        }
+
+        // Executed at startup
+        (function () {
+            errManager.display = errorHandler; // above.
+        })();
+
+        function shutdownSystem() {
+          if (confirm("You are about to bring the whole Multiplexer down.\nPlease confirm.") === true) {
+            terminate();
+            document.body.innerHTML = '<h1>Bye-bye...</h1>' +
+            '<h2>Server is going down upon your request.</h2>' +
+            '<p>Restart the server from a console to resume...</p>';
+          } else {
+            console.log('Canceled');
+          }
+        }
+
+        function getSystemDate() {
+            let promise = systemDate();
+            promise.then((value) => {
+                console.log(value);
+                let sysDate = JSON.parse(value)
+                document.getElementById('system-day').value = sysDate.day;
+                document.getElementById('system-month').value = sysDate.month;
+                document.getElementById('system-year').value = sysDate.year;
+                document.getElementById('system-hours').value = sysDate.hours;
+                document.getElementById('system-mins').value = sysDate.mins;
+                document.getElementById('system-secs').value = sysDate.secs;
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to get System Date..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function setSystemDate() {
+            let day = document.getElementById('system-day').value;
+            let month = document.getElementById('system-month').value;
+            let year = document.getElementById('system-year').value;
+            let hours = document.getElementById('system-hours').value;
+            let mins = document.getElementById('system-mins').value;
+            let secs = document.getElementById('system-secs').value;
+            let newFmtDate = `${lpad(day, '0', 2)} ${month} ${lpad(year, '0', 4)} ${lpad(hours, '0', 2)}:${lpad(mins, '0', 2)}:${lpad(secs, '0', 2)}`;
+            console.log(`Setting new System Date [${newFmtDate}]`);
+            let promise = updateSystemDate(newFmtDate);
+            promise.then(retVal => {
+                console.log(`SystemDate - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to set System Date..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function shutdownMultiplexer() {
+            let promise = stopMux();
+            promise.then(retVal => {
+                console.log(`StopMux - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to Stop Mux..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function startMultiplexer() {
+            let promise = startMux();
+            promise.then(retVal => {
+                console.log(`StartMux - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to Start Mux..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+</script>
+</head>
+<body onresize="doOnResize();">
+<table width="100%">
+  <tr>
+      <td>
+          <table width="100%">
+              <tr>
+                  <td><h2>System Admin</h2></td>
+              </tr>
+          </table>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="1" align="left">
+          System Date:
+          <input type="number" id="system-day" min="1" max="31" step="1" placeholder="Day" value="1">
+          <select id="system-month">
+              <option value="JAN" selected>JAN</option>
+              <option value="FEB">FEB</option>
+              <option value="MAR">MAR</option>
+              <option value="APR">APR</option>
+              <option value="MAY">MAY</option>
+              <option value="JUN">JUN</option>
+              <option value="JUL">JUL</option>
+              <option value="AUG">AUG</option>
+              <option value="SEP">SEP</option>
+              <option value="OCT">OCT</option>
+              <option value="NOV">NOV</option>
+              <option value="DEC">DEC</option>
+          </select>
+          <input type="number" id="system-year" min="1970" max="3000" step="1" placeholder="Year" value="1970">
+          <input type="number" id="system-hours" min="0" max="59" step="1" placeholder="Hour" value="0">
+          <input type="number" id="system-mins" min="0" max="59" step="1" placeholder="Min" value="0">
+          <input type="number" id="system-secs" min="0" max="59" step="1" placeholder="Sec" value="0">
+          &nbsp;&nbsp;
+          <button onclick="getSystemDate();">Get</button>
+          &nbsp;
+          <button onclick="setSystemDate();" title="Carefull !!&#13;Requires sudo - and password.">Set</button>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="1" align="left">Stop MUX: <button title="Really? At your own risk..." onclick="shutdownMultiplexer();">Stop</button></td>
+  </tr>
+  <tr>
+    <td colspan="1" align="left">Start MUX: <button title="Really? At your own risk..." onclick="startMultiplexer();">Start</button></td>
+  </tr>
+  <tr>
+    <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownSystem();">Shutdown</button></td>
+  </tr>
+</table>
+
+<div id="err-mess" style="color: red; min-height: 0; max-height: 80px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
+<!--button onclick="protocolTest();">Protocol test</button>
+<hr/-->
+<address>Oliv fecit, AD 2025.</address>
+</body>
+</html>
