@@ -9,8 +9,6 @@ import http.HTTPServer.Response;
 import http.HttpHeaders;
 import http.RESTProcessorUtil;
 import http.client.HTTPClient;
-import navrest.CompositeCrawler;
-import navrest.NavServerContext;
 import utils.StringUtils;
 import utils.SystemUtils;
 
