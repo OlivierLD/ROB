@@ -1,4 +1,4 @@
-package navrest;
+package systemrest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,10 +9,17 @@ import http.HTTPServer.Response;
 import http.HttpHeaders;
 import http.RESTProcessorUtil;
 import http.client.HTTPClient;
+import navrest.CompositeCrawler;
+import navrest.NavServerContext;
+import utils.StringUtils;
 import utils.SystemUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * This class defines the REST operations supported by the HTTP Server.
@@ -21,7 +28,7 @@ import java.util.logging.Level;
  * <br>
  * Those operation mostly retrieve the state of the SunFlower class, and device.
  * <br>
- * The NavRequestManager will use the {@link #processRequest(Request)} method of this class to
+ * The SystemRequestManager will use the {@link #processRequest(Request)} method of this class to
  * have the required requests processed.
  * </p>
  */
@@ -29,18 +36,18 @@ public class RESTImplementation {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
 
-	private NavRequestManager navRequestManager;
+	private SystemRequestManager systemRequestManager;
 
-	private final static String SERVER_PREFIX = "/server";
-	private final static String WW_PREFIX = "/ww";
-	private final static String NAV_PREFIX = "/nav";
-	private final static String FEATHER_PREFIX = "/feather";
+	private final static String SYSTEM_PREFIX = "/system";
 
 	private final static boolean VERBOSE = "true".equals(System.getProperty("rest.verbose"));
+	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	private final static SimpleDateFormat SYSDATE_FMT = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
-	public RESTImplementation(NavRequestManager restRequestManager) {
 
-		this.navRequestManager = restRequestManager;
+	public RESTImplementation(SystemRequestManager restRequestManager) {
+
+		this.systemRequestManager = restRequestManager;
 		// Check duplicates in operation list. Barfs if duplicate is found.
 		RESTProcessorUtil.checkDuplicateOperations(operations);
 	}
@@ -60,82 +67,77 @@ public class RESTImplementation {
 					"/oplist", // Yes, no prefix here.
 					this::getOperationList,
 					"List of all available operations, on all request managers."),
-			/*
-			 * This resource involves both the Routing (for the GRIB) and the ImageProcessing (for the faxes) services.
-			 * This is why it is here. It may go somewhere else in the future...
-			 */
 			new Operation(
 					"GET",
-					WW_PREFIX + "/composite-hierarchy", // QS Prm: filter
-					this::getCompositeHierarchy,
-					"Retrieve the list of the composites already available on the file system"),
-
-			new Operation(
-					"GET",
-					NAV_PREFIX + "/polar-file-location",
-					this::getPolarFileLocation,
-					"Returns the polar file location passed as System variable."),
-//			new Operation(
-//					"GET",
-//					NAV_PREFIX + "/dev-curve",
-//					this::getDeviationCurve,
-//					"Returns the deviation curve as a JSON Object."),
-
-			new Operation(
-					"POST",
-					FEATHER_PREFIX + "/lifespan",
-					this::setFeatherLifespan,
-					"A small utility used to evaluate the lifespan of a feather running on a LiPo battery."),
-			new Operation(
-					"GET",
-					FEATHER_PREFIX + "/lifespan",
-					this::getFeatherLifespan,
-					"Get the last value set by the above."),
-			new Operation(
-					"GET",
-					SERVER_PREFIX + "/generic-get",
+					SYSTEM_PREFIX + "/generic-get",
 					this::genericGet,
 					"GET on a specific resource, from the server (no CORS). Provide the URL in the headers (get-url), and expected Content-Type."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/networks",
+					SYSTEM_PREFIX + "/networks",
 					this::getNetworks,
 					"Get the list of the networks the server is on."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/ip-address",
+					SYSTEM_PREFIX + "/ip-address",
 					this::getIpAddress,
 					"Get IP Address (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/cpu-load",
+					SYSTEM_PREFIX + "/cpu-load",
 					this::getCPULoad,
 					"Get CPU Load (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/cpu-temperature",
+					SYSTEM_PREFIX + "/cpu-temperature",
 					this::getCPUTemperature,
 					"Get CPU Temperature (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/disk-usage",
+					SYSTEM_PREFIX + "/disk-usage",
 					this::getDiskUsage,
 					"Get Disk Usage (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/memory-usage",
+					SYSTEM_PREFIX + "/memory-usage",
 					this::getMemoryUsage,
 					"Get Memory Usage (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/system-data",
+					SYSTEM_PREFIX + "/system-data",
 					this::getSystemData,
 					"Get all system data (Linux only)."),
 			new Operation(
 					"GET",
-					SERVER_PREFIX + "/addresses", // Optional QS Prm: v4Only=true|[false], iface=wlan0
+					SYSTEM_PREFIX + "/addresses", // Optional QS Prm: v4Only=true|[false], iface=wlan0
 					this::getIps,                       // Returns couples like ("iface", "address")
-					"Get the list of IP addresses of the server, with the interface names. QS prms: v4Only [false]|true, iface=XXX (optional)")
+					"Get the list of IP addresses of the server, with the interface names. QS prms: v4Only [false]|true, iface=XXX (optional)"),
+			new Operation(
+					"GET",
+					SYSTEM_PREFIX + "/system-date",
+					this::getSystemDate,
+					"Get the System Date, in JSON format."),
+			new Operation(
+					"POST",
+					SYSTEM_PREFIX + "/system-date",
+					this::setSystemDate,
+					"Set the System Date. VERY unusual REST resource..."),
+			new Operation(
+					"POST",
+					SYSTEM_PREFIX + "/start-mux",
+					this::emptyOperation,
+					"Starts the Multiplexer"),
+			new Operation(
+					"POST",
+					SYSTEM_PREFIX + "/stop-mux",
+					this::emptyOperation,
+					"Stops the Multiplexer"),
+			new Operation(
+					"POST",
+					SYSTEM_PREFIX + "/stop-all",
+					this::emptyOperation,
+					"System Shutdown")
+
 	);
 
 	protected List<Operation> getOperations() {
@@ -165,9 +167,9 @@ public class RESTImplementation {
 
 	private Response getOperationList(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-		List<Operation> opList = this.navRequestManager.getAllOperationList(); // Aggregates ops from all request managers
+		List<Operation> opList = this.systemRequestManager.getAllOperationList(); // Aggregates ops from all request managers
 		if (VERBOSE) {
-			this.navRequestManager.getLogger().log(Level.INFO, String.format("getOperationList required in %s => %d operation(s)", this.getClass().getName(), opList.size()));
+			this.systemRequestManager.getLogger().log(Level.INFO, String.format("getOperationList required in %s => %d operation(s)", this.getClass().getName(), opList.size()));
 		}
 		String content;
 		try {
@@ -183,112 +185,6 @@ public class RESTImplementation {
 		}
 		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 		response.setPayload(content.getBytes());
-		return response;
-	}
-
-	private Response getCompositeHierarchy(Request request) {
-		if (true || VERBOSE) {
-			System.out.println("getCompositeHierarchy, starting");
-		}
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-		Map<String, String> qs = request.getQueryStringParameters();
-		String filter = (qs == null ? null : qs.get("filter")); // Filter on the COMPOSITE name.
-		try {
-			// compositeHierarchy is still ordered.
-			Map<String, Object> compositeHierarchy = new CompositeCrawler().getCompositeHierarchy(filter);
-			String content;
-			try {
-				content = mapper.writeValueAsString(compositeHierarchy); // new Gson().toJson(compositeHierarchy);
-				if (true || VERBOSE) {
-					System.out.println("getCompositeHierarchy returned:");
-					System.out.println(content);
-				}
-			} catch (JsonProcessingException jpe) {
-				if (true || VERBOSE) {
-					System.err.println("getCompositeHierarchy failed with JsonProcessingException:");
-					jpe.printStackTrace();
-				}
-				response = HTTPServer.buildErrorResponse(response,
-						Response.BAD_REQUEST,
-						new HTTPServer.ErrorPayload()
-								.errorCode("COMP-0001-2")
-								.errorMessage(jpe.toString())
-								.errorStack(HTTPServer.dumpException(jpe)));
-				return response;
-			}
-			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
-			response.setPayload(content.getBytes());
-		} catch (Exception ex) {
-			if (true || VERBOSE) {
-				System.err.println("getCompositeHierarchy failed:");
-				ex.printStackTrace();
-			}
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("COMP-0001")
-							.errorMessage(ex.toString())
-							.errorStack(HTTPServer.dumpException(ex)));
-			return response;
-		}
-		return response;
-	}
-
-	private Response getPolarFileLocation(Request request) {
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-		try {
-			String content = System.getProperty("polar.file.location");
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
-			response.setPayload(content.getBytes());
-		} catch (Exception ex) {
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("NAV-0001")
-							.errorMessage(ex.toString())
-							.errorStack(HTTPServer.dumpException(ex)));
-			return response;
-		}
-		return response;
-	}
-
-	private Response setFeatherLifespan(Request request) {
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-
-		if (request.getContent() != null && request.getContent().length > 0) {
-			String payload = new String(request.getContent());
-			if (!"null".equals(payload)) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("Feather Service received: %s", payload));
-				NavServerContext.getInstance().put("FEATHER_LIFESPAN", payload);
-			}
-		}
-		String content = "OK";
-		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
-		response.setPayload(content.getBytes());
-		return response;
-	}
-
-	private Response getFeatherLifespan(Request request) {
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-		try {
-			String content = "";
-			try {
-				content = NavServerContext.getInstance().get("FEATHER_LIFESPAN").toString();
-			} catch (NullPointerException npe) {
-				// Missing, no worries.
-				content = "null";
-			}
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
-			response.setPayload(content.getBytes());
-		} catch (Exception ex) {
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("FEATHER-0001")
-							.errorMessage(ex.toString())
-							.errorStack(HTTPServer.dumpException(ex)));
-			return response;
-		}
 		return response;
 	}
 
@@ -382,7 +278,7 @@ public class RESTImplementation {
 			String content = ipAddress; // new Gson().toJson(ipAddress);
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", ipAddress, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", ipAddress, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
@@ -406,7 +302,7 @@ public class RESTImplementation {
 			String content = cpuTemperature; // new Gson().toJson(cpuTemperature);
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuTemperature, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuTemperature, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
@@ -430,7 +326,7 @@ public class RESTImplementation {
 			String content = diskUsage; // new Gson().toJson(diskUsage);
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", diskUsage, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", diskUsage, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
@@ -454,7 +350,7 @@ public class RESTImplementation {
 			String content = memoryUsage; // new Gson().toJson(memoryUsage);
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", memoryUsage, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", memoryUsage, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
@@ -478,7 +374,7 @@ public class RESTImplementation {
 			String content = cpuLoad; // new Gson().toJson(cpuLoad);
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuLoad, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuLoad, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
@@ -543,6 +439,7 @@ public class RESTImplementation {
 			return diskUsage;
 		}
 	}
+
 	private Response getSystemData(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		try {
@@ -572,7 +469,7 @@ public class RESTImplementation {
 			}
 
 			if (VERBOSE) {
-				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", systemData, content));
+				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", systemData, content));
 			}
 
 			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
@@ -586,6 +483,116 @@ public class RESTImplementation {
 							.errorStack(HTTPServer.dumpException(ex)));
 			return response;
 		}
+		return response;
+	}
+
+	private HTTPServer.Response getSystemDate(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+
+		String content = "";
+		try {
+			String formattedSysDate = SYSDATE_FMT.format(new Date());
+			/*
+			 *      30 MAY 2023 07:56:31
+			 *      |  |   |    |  |  |
+			 *      |  |   |    |  |  18
+			 *      |  |   |    |  15
+			 *      |  |   |    12
+			 *      |  |   7
+			 *      |  3
+			 *      0
+			 */
+			Map<String, Object> dateHolder = new HashMap<>();
+			dateHolder.put("day", Integer.parseInt(formattedSysDate.substring(0, 2)));
+			dateHolder.put("month", formattedSysDate.substring(3, 6).toUpperCase());
+			dateHolder.put("year", Integer.parseInt(formattedSysDate.substring(7, 11)));
+			dateHolder.put("hours", Integer.parseInt(formattedSysDate.substring(12, 14)));
+			dateHolder.put("mins", Integer.parseInt(formattedSysDate.substring(15, 17)));
+			dateHolder.put("secs", Integer.parseInt(formattedSysDate.substring(18)));
+			content = mapper.writeValueAsString(dateHolder);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.getBytes().length);
+			response.setPayload(content.getBytes());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("Get System Date")
+							.errorMessage(ex.toString()));
+			return response;
+		}
+		return response;
+	}
+
+	/*
+	 * On Linux/bash, no password for sudo.
+	 * curl -X POST http://192.168.50.10:9999/mux/system-date -d '28 MAY 2023 12:19:00'.
+	 */
+	private HTTPServer.Response setSystemDate(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+
+		String payload = new String(request.getContent());
+		if (!"null".equals(payload) && payload != null && payload.trim().length() != 0) {
+			try {
+				String newDate = payload; // Like "19 APR 2012 11:14:00"
+				// Trim quotes
+				if (newDate.startsWith("\"") || newDate.endsWith("\"")) {
+					newDate = StringUtils.trimDoubleQuotes(newDate);
+				}
+				String command = String.format("sudo date -s '%s'", newDate);
+				System.out.printf("Executing command [%s]\n", command);
+
+				Process process = Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", command }); // Note the '/bin/bash -c' !!
+				int exitCode = process.waitFor();
+				System.out.printf("Exit code: %d\n", exitCode);
+				List<String> returned = new ArrayList<>();
+				BufferedReader in = null;
+				if (exitCode == 0) {
+					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				} else {
+					in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				}
+				while (true) {
+					String line = in.readLine();
+					System.out.println(line);
+					if (line == null) {
+						break;
+					} else {
+						returned.add(line);
+					}
+				}
+				if (in != null) {
+					in.close();
+				}
+				String responsePayload = returned.stream().collect(Collectors.joining("\n"));
+				if (exitCode == 0) {
+					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
+					response.setPayload(responsePayload.getBytes());
+				} else {
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("Set System Date")
+									.errorMessage(responsePayload));
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("Set System Date")
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("Set System Date")
+							.errorMessage("Request payload not found. Need one like '19 APR 2012 11:14:00'."));
+			return response;
+		}
+
 		return response;
 	}
 

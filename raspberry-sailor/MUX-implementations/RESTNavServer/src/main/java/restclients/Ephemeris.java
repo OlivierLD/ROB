@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A code example. Noy used.
+ */
 public class Ephemeris {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
