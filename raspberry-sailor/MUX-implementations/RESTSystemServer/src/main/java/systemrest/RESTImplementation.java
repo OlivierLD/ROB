@@ -121,20 +121,25 @@ public class RESTImplementation {
 					this::setSystemDate,
 					"Set the System Date. VERY unusual REST resource..."),
 			new Operation(
+					"GET",
+					SYSTEM_PREFIX + "/mux-stat",
+					this::muxStatus,
+					"Status of the Multiplexer, executes the script 'show.processes.sh'"),
+			new Operation(
 					"POST",
 					SYSTEM_PREFIX + "/start-mux",
 					this::startMux,
-					"Starts the Multiplexer"),
+					"Starts the Multiplexer, executes the script 'startall.sh'"),
 			new Operation(
 					"POST",
 					SYSTEM_PREFIX + "/stop-mux",
 					this::stopMux,
-					"Stops the Multiplexer"),
+					"Stops the Multiplexer, executes the script 'killall.sh'"),
 			new Operation(
 					"POST",
 					SYSTEM_PREFIX + "/stop-all",
 					this::shutdown,
-					"System Shutdown")
+					"System Shutdown, executes `sudo init 0'")
 
 	);
 
@@ -594,38 +599,124 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private HTTPServer.Response muxStatus(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+
+		if (true) { // !"null".equals(payload) && payload != null && payload.trim().length() != 0) {
+			try {
+				String responsePayload = "";
+				int exitCode = 0;
+//              Thread starter = new Thread(() -> {
+					String command = "./show.processes.sh"; // Hard-coded script name
+					System.out.printf("Executing command [%s] in a thread.\n", command);
+
+					try {
+						Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", command}); // Note the '/bin/bash -c' !!
+						exitCode = process.waitFor();
+						System.out.printf("Exit code: %d.\n", exitCode);
+						List<String> returned = new ArrayList<>();
+						BufferedReader in;
+						if (exitCode == 0) {
+							in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+						} else {
+							in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+						}
+						while (true) {
+							String line = in.readLine();
+							System.out.println(line);
+							if (line == null) {
+								break;
+							} else {
+								returned.add(line);
+							}
+						}
+						if (in != null) {
+							in.close();
+						}
+						responsePayload = String.format("\nExit code: %d.\n", exitCode);
+						responsePayload += returned.stream().collect(Collectors.joining("\n"));
+						// Thread Completed
+						System.out.println("--- Gathered command output ---");
+						System.out.println(responsePayload);
+						System.out.println("-------------------------------");
+					} catch (Exception ex) {
+						System.err.println(ex);
+					}
+//				});
+//				starter.start();
+
+//				String responsePayload = "Thread started";
+
+				if (exitCode == 0) {
+					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
+					response.setPayload(responsePayload.getBytes());
+				} else {
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MuxStatus")
+									.errorMessage(responsePayload));
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("MuxStatus")
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		}
+
+		return response;
+	}
+
 	private HTTPServer.Response startMux(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
 
 		if (true) { // !"null".equals(payload) && payload != null && payload.trim().length() != 0) {
 			try {
-				String command = "./startall.sh"; // Hard-coded script name
-				System.out.printf("Executing command [%s]\n", command);
+				Thread starter = new Thread(() -> {
+					String command = "./startall.sh"; // Hard-coded script name
+					System.out.printf("Executing command [%s] in a thread.\n", command);
 
-				Process process = Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", command }); // Note the '/bin/bash -c' !!
-				int exitCode = process.waitFor();
-				System.out.printf("Exit code: %d\n", exitCode);
-				List<String> returned = new ArrayList<>();
-				BufferedReader in = null;
-				if (exitCode == 0) {
-					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				} else {
-					in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				}
-				while (true) {
-					String line = in.readLine();
-					System.out.println(line);
-					if (line == null) {
-						break;
-					} else {
-						returned.add(line);
+					try {
+						Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", command}); // Note the '/bin/bash -c' !!
+						int exitCode = process.waitFor();
+						System.out.printf("Exit code: %d\n", exitCode);
+						List<String> returned = new ArrayList<>();
+						BufferedReader in;
+						if (exitCode == 0) {
+							in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+						} else {
+							in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+						}
+						while (true) {
+							String line = in.readLine();
+							System.out.println(line);
+							if (line == null) {
+								break;
+							} else {
+								returned.add(line);
+							}
+						}
+						if (in != null) {
+							in.close();
+						}
+						String responsePayload = returned.stream().collect(Collectors.joining("\n"));
+						// Thread Completed
+						System.out.println("--- Gathered command output ---");
+						System.out.println(responsePayload);
+						System.out.println("-------------------------------");
+					} catch (Exception ex) {
+						System.err.println(ex);
 					}
-				}
-				if (in != null) {
-					in.close();
-				}
-				String responsePayload = returned.stream().collect(Collectors.joining("\n"));
-				if (exitCode == 0) {
+				});
+				starter.start();
+
+				String responsePayload = "Thread started";
+
+				if (true) { // exitCode == 0) {
 					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
 					response.setPayload(responsePayload.getBytes());
 				} else {
@@ -654,40 +745,52 @@ public class RESTImplementation {
 
 		if (true) { // !"null".equals(payload) && payload != null && payload.trim().length() != 0) {
 			try {
-				String command = "./killall.sh";
-				System.out.printf("Executing command [%s]\n", command);
-
-				Process process = Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", command }); // Note the '/bin/bash -c' !!
-				int exitCode = process.waitFor();
-				System.out.printf("Exit code: %d\n", exitCode);
-				List<String> returned = new ArrayList<>();
-				BufferedReader in = null;
-				if (exitCode == 0) {
-					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				} else {
-					in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				}
-				while (true) {
-					String line = in.readLine();
-					System.out.println(line);
-					if (line == null) {
-						break;
-					} else {
-						returned.add(line);
+				Thread killer = new Thread(() -> {
+					String command = "./killall.sh";
+					System.out.printf("Executing command [%s] in a thread.\n", command);
+					try {
+						Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", command}); // Note the '/bin/bash -c' !!
+						int exitCode = process.waitFor();
+						System.out.printf("Exit code: %d\n", exitCode);
+						List<String> returned = new ArrayList<>();
+						BufferedReader in = null;
+						if (exitCode == 0) {
+							in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+						} else {
+							in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+						}
+						while (true) {
+							String line = in.readLine();
+							System.out.println(line);
+							if (line == null) {
+								break;
+							} else {
+								returned.add(line);
+							}
+						}
+						if (in != null) {
+							in.close();
+						}
+						String responsePayload = returned.stream().collect(Collectors.joining("\n"));
+						// Thread Completed
+						System.out.println("--- Gathered command output ---");
+						System.out.println(responsePayload);
+						System.out.println("-------------------------------");
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				}
-				if (in != null) {
-					in.close();
-				}
-				String responsePayload = returned.stream().collect(Collectors.joining("\n"));
-				if (exitCode == 0) {
+				});
+				killer.start();
+
+				String responsePayload = "Thread Started"; // returned.stream().collect(Collectors.joining("\n"));
+				if (true) { // exitCode == 0) {
 					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
 					response.setPayload(responsePayload.getBytes());
 				} else {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("Set System Date")
+									.errorCode("Killer Thread")
 									.errorMessage(responsePayload));
 				}
 			} catch (Exception ex) {
@@ -695,12 +798,11 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("Set System Date")
+								.errorCode("Killer Thread")
 								.errorMessage(ex.toString()));
 				return response;
 			}
 		}
-
 		return response;
 	}
 
@@ -749,7 +851,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("Set System Date")
+								.errorCode("Shutdown")
 								.errorMessage(ex.toString()));
 				return response;
 			}

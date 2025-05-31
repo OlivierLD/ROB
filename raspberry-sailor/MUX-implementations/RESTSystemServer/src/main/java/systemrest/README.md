@@ -1,4 +1,0 @@
-# A System REST Server
-
-TODO The same, in Python...  
-

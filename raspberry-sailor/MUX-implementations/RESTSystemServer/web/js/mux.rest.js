@@ -93,8 +93,12 @@ let updateSystemDate = (newFmtDate) => {
     return getPromise('/system/system-date', DEFAULT_TIMEOUT, 'POST', 201, newFmtDate, false);
 };
 
+let muxStatus = () => {
+    return getPromise('/system/mux-stat', DEFAULT_TIMEOUT, 'GET', 201, null, false);
+}
+
 let startMux = () => {
-    return getPromise('/system/start-mux', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
+    return getPromise('/system/start-mux', 2 * DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
 };
 
 let stopMux = () => {

@@ -1,7 +1,9 @@
 #!/bin/bash
 #
-echo -e "Executing ${0}"
-# exit
+echo -e "Executing ${0}..."
+# For tests
+echo -e "In the script ${0}, for tests..."
+exit
 #
 # Start MUX and Co on startup
 # Suitable for the mux with nmea.mux.gps.nmea-fwd.yaml, see that one.

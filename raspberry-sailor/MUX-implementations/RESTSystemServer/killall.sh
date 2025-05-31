@@ -3,7 +3,7 @@
 # For a list of the kill signals:
 # Try $> kill -l
 #
-echo -e "Executing ${0}"
+echo -e "Executing ${0}..."
 #
 # Kill all servers (MUX, Python-REST, Python-TCP)
 #

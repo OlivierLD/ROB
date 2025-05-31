@@ -198,6 +198,7 @@
             let promise = startMux();
             promise.then(retVal => {
                 console.log(`StartMux - success ${retVal}`);
+                alert(`StartMux - success ${retVal}`);
             }, (error, errMess) => {
                 let message;
                 if (errMess !== undefined) {
@@ -208,6 +209,24 @@
                     }
                 }
                 errManager.display("Failed to Start Mux..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function multiplexerStatus() {
+            let promise = muxStatus();
+            promise.then(retVal => {
+                console.log(`MuxStatus - success ${retVal}`);
+                alert(`MuxStatus - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to get Mux Status..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
             });
         }
 </script>
@@ -251,11 +270,14 @@
           <button onclick="setSystemDate();" title="Carefull !!&#13;Requires sudo - and password.">Set</button>
       </td>
   </tr>
+ <tr>
+     <td colspan="1" align="left">MUX Status: <button title="Mux Status" onclick="multiplexerStatus();">Status</button></td>
+ </tr>
   <tr>
       <td colspan="1" align="left">Stop MUX: <button title="Really? At your own risk..." onclick="shutdownMultiplexer();">Stop</button></td>
   </tr>
   <tr>
-    <td colspan="1" align="left">Start MUX: <button title="Really? At your own risk..." onclick="startMultiplexer();">Start</button></td>
+    <td colspan="1" align="left">Start MUX: <button title="Starts the MUX..." onclick="startMultiplexer();">Start</button></td>
   </tr>
   <tr>
     <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownSystem();">Shutdown</button></td>
