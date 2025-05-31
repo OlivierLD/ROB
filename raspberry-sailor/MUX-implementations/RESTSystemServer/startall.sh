@@ -25,6 +25,7 @@ stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 sleep 10
 # Start the MUX
 cd /home/pi/nmea-dist
+rm nohup.out
 # nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
-nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
-#
+# nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
+./mux.sh nmea.mux.gps.nmea-fwd.yaml &

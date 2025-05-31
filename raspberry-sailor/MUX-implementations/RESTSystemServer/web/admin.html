@@ -93,8 +93,8 @@
         let errMessages = [];
         const MAX_NB_MESS = 10;
 
-        function errorHandler(mess) {
-          let messZone = document.getElementById("err-mess");
+        function messageHandler(mess) {
+          let messZone = document.getElementById("output-mess");
           if (false) { // Stby
             messZone.innerText = mess;
             setTimeout(function() {
@@ -112,9 +112,15 @@
           }
         }
 
+        function clearLog() {
+            errMessages = [];
+            let messZone = document.getElementById("output-mess");
+            messZone.innerText = '';
+        }
+
         // Executed at startup
         (function () {
-            errManager.display = errorHandler; // above.
+            errManager.display = messageHandler; // above.
         })();
 
         function shutdownSystem() {
@@ -181,6 +187,7 @@
             let promise = stopMux();
             promise.then(retVal => {
                 console.log(`StopMux - success ${retVal}`);
+                messageHandler(`StopMux - success.\n ${retVal}`);
             }, (error, errMess) => {
                 let message;
                 if (errMess !== undefined) {
@@ -197,8 +204,8 @@
         function startMultiplexer() {
             let promise = startMux();
             promise.then(retVal => {
-                console.log(`StartMux - success ${retVal}`);
-                alert(`StartMux - success ${retVal}`);
+                console.log(`StartMux - success.\n ${retVal}`);
+                messageHandler(`StartMux - success ${retVal}`);
             }, (error, errMess) => {
                 let message;
                 if (errMess !== undefined) {
@@ -216,7 +223,7 @@
             let promise = muxStatus();
             promise.then(retVal => {
                 console.log(`MuxStatus - success ${retVal}`);
-                alert(`MuxStatus - success ${retVal}`);
+                messageHandler(`MuxStatus - success ${retVal}`);
             }, (error, errMess) => {
                 let message;
                 if (errMess !== undefined) {
@@ -284,9 +291,9 @@
   </tr>
 </table>
 
-<div id="err-mess" style="color: red; min-height: 0; max-height: 80px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
-<!--button onclick="protocolTest();">Protocol test</button>
-<hr/-->
+<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: blue; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
+<button onclick="clearLog();">Clear Log</button>
+<!--hr/-->
 <address>Oliv fecit, AD 2025.</address>
 </body>
 </html>

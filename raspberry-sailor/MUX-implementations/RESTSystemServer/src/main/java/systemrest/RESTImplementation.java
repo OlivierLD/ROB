@@ -677,7 +677,7 @@ public class RESTImplementation {
 		if (true) { // !"null".equals(payload) && payload != null && payload.trim().length() != 0) {
 			try {
 				Thread starter = new Thread(() -> {
-					String command = "./startall.sh"; // Hard-coded script name
+					String command = "sudo ./startall.sh"; // Hard-coded script name
 					System.out.printf("Executing command [%s] in a thread.\n", command);
 
 					try {
