@@ -36,8 +36,16 @@ curl -X GET http://${HOST}:${HTTP_PORT}/system/system-date | jq
 # curl -X POST http://${HOST}:${HTTP_PORT}/system/system-date
 echo -e "MUX Status"
 curl -X GET http://${HOST}:${HTTP_PORT}/system/mux-stat
+echo -e ""
 # curl -X POST http://${HOST}:${HTTP_PORT}/system/start-mux
 # curl -X POST http://${HOST}:${HTTP_PORT}/system/stop-mux
+#
+# Date like "19 APR 2012 11:14:00"
+# DATE=$(date '+%d %m %Y %H:%M:%S')
+DATE=$(date '+%d %b %Y %H:%M:%S' | tr '[:lower:]' '[:upper:]')
+echo -e "Setting Date to ${DATE}"
+curl -X POST http://${HOST}:${HTTP_PORT}/system/system-date --data "${DATE}" # or -d @data.json
+echo -e ""
 #
 echo -e "Bye now ✋"
 #
