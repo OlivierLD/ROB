@@ -87,8 +87,8 @@
   <script type="text/javascript">
 
         /**
-         * Displays the errors in a non-modal way.
-         * @param mess the error message to display.
+         * Displays the messages in a non-modal way.
+         * @param mess the message to display.
          */
         let errMessages = [];
         const MAX_NB_MESS = 10;
@@ -126,11 +126,12 @@
         function shutdownSystem() {
           if (confirm("You are about to bring the whole Multiplexer down.\nPlease confirm.") === true) {
             terminate();
-            document.body.innerHTML = '<h1>Bye-bye...</h1>' +
-            '<h2>Server is going down upon your request.</h2>' +
-            '<p>Restart the server from a console to resume...</p>';
+            document.body.innerHTML =
+                '<h1>Bye-bye...</h1>' +
+                '<h2>Server is going down upon your request.</h2>' +
+                '<p>Restart the server from a console to resume...</p>';
           } else {
-            console.log('Canceled');
+            console.log('Canceled...');
           }
         }
 
@@ -291,7 +292,7 @@
   </tr>
 </table>
 
-<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: blue; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
+<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: black; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
 <button onclick="clearLog();">Clear Log</button>
 <!--hr/-->
 <address>Oliv fecit, AD 2025.</address>

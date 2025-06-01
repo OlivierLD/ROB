@@ -139,7 +139,7 @@ public class RESTImplementation {
 					"POST",
 					SYSTEM_PREFIX + "/stop-all",
 					this::shutdown,
-					"System Shutdown, executes `sudo init 0'")
+					"System Shutdown, executes a system shutdown")
 
 	);
 
@@ -810,33 +810,13 @@ public class RESTImplementation {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
 		if (true) {
 			try {
-				String command = "sudo init 0";
-				System.out.printf("Executing command [%s]\n", command);
-
-				Process process = Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", command }); // Note the '/bin/bash -c' !!
-				int exitCode = process.waitFor();
-				System.out.printf("Exit code: %d\n", exitCode);
-				List<String> returned = new ArrayList<>();
-				BufferedReader in = null;
-				if (exitCode == 0) {
-					in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				} else {
-					in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				}
-				while (true) {
-					String line = in.readLine();
-					System.out.println(line);
-					if (line == null) {
-						break;
-					} else {
-						returned.add(line);
-					}
-				}
-				if (in != null) {
-					in.close();
-				}
-				String responsePayload = returned.stream().collect(Collectors.joining("\n"));
-				if (exitCode == 0) {
+				String shutdownCommand = "sudo shutdown -h now";
+				System.out.printf("Executing [%s]...\n", shutdownCommand);
+				Runtime.getRuntime().exec(shutdownCommand);
+				System.out.printf("Done executing [%s]...\n", shutdownCommand);
+				System.exit(0); // Bam !
+				String responsePayload = "";
+				if (true) {
 					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
 					response.setPayload(responsePayload.getBytes());
 				} else {
@@ -856,7 +836,6 @@ public class RESTImplementation {
 				return response;
 			}
 		}
-
 		return response;
 	}
 	/**

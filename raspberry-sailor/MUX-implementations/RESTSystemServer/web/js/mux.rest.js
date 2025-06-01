@@ -74,7 +74,7 @@ let getPromise = (
     });
 };
 
-const DEFAULT_TIMEOUT = 10000;
+const DEFAULT_TIMEOUT = 10000; // 10s
 
 let protocolTestFunc = () => {
     let url = document.location.origin.replace('http', 'mux') + '/this-is-a-test';
@@ -82,7 +82,7 @@ let protocolTestFunc = () => {
 };
 
 let terminate = () => {
-    return getPromise('/system/shutdown', DEFAULT_TIMEOUT, 'POST', 200, null, false);
+    return getPromise('/system/stop-all', DEFAULT_TIMEOUT, 'POST', 200, null, false);
 };
 
 let systemDate = () => {
@@ -98,6 +98,7 @@ let muxStatus = () => {
 }
 
 let startMux = () => {
+    //                                     The script has a sleep...
     return getPromise('/system/start-mux', 2 * DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
 };
 
