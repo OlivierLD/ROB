@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
  | Also see mux.rest.js. It contains some logic associated with this dashboard.
+ | TODO A Better UI
  +-->
 <html lang="en">
 <head>
@@ -14,74 +15,19 @@
   <link id="page-ux" rel="stylesheet" href="./css/stylesheet.css" type="text/css"/>
   <style>
 
-      button {
+    * {
+        font-size: 1rem;
+    }
+      /* button {
         border-radius: 5px;
         background-color: rgba(255, 165, 0, 0.5);
-      }
+      } */
 
-      .selectedButton {
-        padding:5px;
-        border-top-right-radius: 10px;
+    th, td {
         border: 1px solid #CCC;
-        margin-top:10px;
-        border-bottom: none;
-        font-size: 12px;
-        font-weight: bold;
-      }
-      .unselectedButton {
-        padding:5px;
-        border-top-right-radius: 10px;
-        border: 1px solid #CCC;
-        margin-top:10px;
-        border-bottom: none;
-        font-size: 12px;
-        font-weight: normal;
-      }
-      .addbox {
-        padding: 1px;
         border-radius: 5px;
-        border: 1px solid #CCC;
-        width: auto;
-        height: auto;
-        margin: 80px auto 0px auto;
-        overflow: auto;
-      }
-
-      th, td {
-         border: 1px solid #CCC;
-         border-radius: 5px;
-         padding: 3px;
-      }
-
-      canvas {
-        width: 100%;
-        height: 100px;
-      }
-
-      .smooth {
-        /*height: 0;*/
-        /*visibility: hidden;*/
-        /*opacity: 0;*/
-        /*transition: visibility 0.5s, height 0.5s, opacity 0.5s linear;*/
-        height: 0;
-        max-height: 0;
-        margin: auto;
-        /*transition: transform 0.5s, max-height 1s, height 1s;*/
-        transition: all 0.5s ease;
-        opacity: 0;
-        transform: scaleY(0);
-        transform-origin: top;
-        overflow: hidden;
-      }
-
-      .visible-div {
-        opacity: 1;
-        width: auto;
-        height: auto;
-        max-height: 1600px;
-        transform: scaleY(1);
-        margin-top: 5px;
-      }
+        padding: 3px;
+    }
 
   </style>
   <script type="text/javascript">
@@ -239,17 +185,9 @@
         }
 </script>
 </head>
-<body onresize="doOnResize();">
+<body onresize="">
+<h1 style="font-size: 1.5rem;">Basic System Admin (through REST)</h1>
 <table width="100%">
-  <tr>
-      <td>
-          <table width="100%">
-              <tr>
-                  <td><h2>System Admin</h2></td>
-              </tr>
-          </table>
-      </td>
-  </tr>
   <tr>
       <td colspan="1" align="left">
           System Date:
@@ -268,7 +206,7 @@
               <option value="NOV">NOV</option>
               <option value="DEC">DEC</option>
           </select>
-          <input type="number" id="system-year" min="1970" max="3000" step="1" placeholder="Year" value="1970">
+          <input type="number" id="system-year" min="1970" max="3000" step="1" placeholder="Year" value="1970" size="4">
           <input type="number" id="system-hours" min="0" max="59" step="1" placeholder="Hour" value="0">
           <input type="number" id="system-mins" min="0" max="59" step="1" placeholder="Min" value="0">
           <input type="number" id="system-secs" min="0" max="59" step="1" placeholder="Sec" value="0">
@@ -279,22 +217,21 @@
       </td>
   </tr>
  <tr>
-     <td colspan="1" align="left">MUX Status: <button title="Mux Status" onclick="multiplexerStatus();">Status</button></td>
- </tr>
-  <tr>
-      <td colspan="1" align="left">Stop MUX: <button title="Really? At your own risk..." onclick="shutdownMultiplexer();">Stop</button></td>
-  </tr>
-  <tr>
-    <td colspan="1" align="left">Start MUX: <button title="Starts the MUX..." onclick="startMultiplexer();">Start</button></td>
+    <td colspan="1" align="left">
+        Multiplexer 
+        <button title="Mux Status" onclick="multiplexerStatus();">MUX Status</button>
+        <button title="Really?..." onclick="shutdownMultiplexer();">Stop MUX</button>
+        <button title="Starts the MUX..." onclick="startMultiplexer();">Start MUX</button>
+    </td>
   </tr>
   <tr>
     <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownSystem();">Shutdown</button></td>
   </tr>
 </table>
 
-<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: black; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px;"></div>
+<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: lime; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px; margin: 10px; padding: 5px;"></div>
 <button onclick="clearLog();">Clear Log</button>
-<!--hr/-->
+<hr style="margin: 10px;"/>
 <address>Oliv fecit, AD 2025.</address>
 </body>
 </html>
