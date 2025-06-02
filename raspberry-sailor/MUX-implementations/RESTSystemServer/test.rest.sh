@@ -44,7 +44,7 @@ echo -e ""
 # DATE=$(date '+%d %m %Y %H:%M:%S')
 DATE=$(date '+%d %b %Y %H:%M:%S' | tr '[:lower:]' '[:upper:]')
 echo -e "Setting Date to ${DATE}"
-curl -X POST http://${HOST}:${HTTP_PORT}/system/system-date --data "${DATE}" # or -d @data.json
+curl -X POST http://${HOST}:${HTTP_PORT}/system/system-date --data "${DATE}" # or -d @data.txt
 echo -e ""
 #
 echo -e "Bye now ✋"

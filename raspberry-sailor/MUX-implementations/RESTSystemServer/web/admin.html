@@ -29,6 +29,19 @@
         padding: 3px;
     }
 
+    .message {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.5em;
+        color: lime;
+        min-height: 50px;
+        max-height: 280px;
+        overflow-y: auto;
+        border: 1px solid silver;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 5px;
+    }
+
   </style>
   <script type="text/javascript">
 
@@ -229,7 +242,7 @@
   </tr>
 </table>
 
-<div id="output-mess" style="font-family: 'Courier New', Courier, monospace; color: lime; min-height: 50px; max-height: 280px; overflow-y: auto; border: 1px solid silver; border-radius: 5px; margin: 10px; padding: 5px;"></div>
+<div id="output-mess" class="message"></div>
 <button onclick="clearLog();">Clear Log</button>
 <hr style="margin: 10px;"/>
 <address>Oliv fecit, AD 2025.</address>
