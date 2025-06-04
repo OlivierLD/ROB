@@ -93,6 +93,30 @@
             console.log('Canceled...');
           }
         }
+        function systemData() {
+            let promise = sysData();
+            promise.then(retVal => {
+                console.log(`SysData - success ${retVal}`);
+                try {
+                    let json = JSON.parse(retVal);
+                    messageHandler(`SysData - success.\n ${JSON.stringify(json, null, 2)}`);
+                } catch (err) {
+                    messageHandler(`SysData - success.\n ${retVal}`);
+
+                }
+                // messageHandler(`SysData - success.\n ${JSON.stringify(retVal)}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to get SysData..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
 
         function getSystemDate() {
             let promise = systemDate();
@@ -202,7 +226,7 @@
 <h1 style="font-size: 1.5rem;">Basic System Admin (through REST)</h1>
 <table width="100%">
   <tr>
-      <td colspan="1" align="left">
+      <td colspan="1" style="text-align: left;">
           System Date:
           <input type="number" id="system-day" min="1" max="31" step="1" placeholder="Day" value="1">
           <select id="system-month">
@@ -230,7 +254,7 @@
       </td>
   </tr>
  <tr>
-    <td colspan="1" align="left">
+    <td colspan="1" style="text-align: left;">
         Multiplexer 
         <button title="Mux Status" onclick="multiplexerStatus();">MUX Status</button>
         <button title="Really?..." onclick="shutdownMultiplexer();">Stop MUX</button>
@@ -238,7 +262,11 @@
     </td>
   </tr>
   <tr>
-    <td colspan="1" align="left">Bring the house down: <button title="Really? At your own risk..." onclick="shutdownSystem();">Shutdown</button></td>
+    <td colspan="1" style="text-align: left;">
+        System 
+        <button title="Sys Data" onclick="systemData();">System Data</button>
+        <button title="Really? At your own risk..." onclick="shutdownSystem();">Shutdown</button>
+    </td>
   </tr>
 </table>
 

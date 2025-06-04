@@ -93,6 +93,10 @@ let updateSystemDate = (newFmtDate) => {
     return getPromise('/system/system-date', DEFAULT_TIMEOUT, 'POST', 201, newFmtDate, false);
 };
 
+let sysData = () => {
+    return getPromise('/system/system-data', DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
 let muxStatus = () => {
     return getPromise('/system/mux-stat', DEFAULT_TIMEOUT, 'GET', 201, null, false);
 }
