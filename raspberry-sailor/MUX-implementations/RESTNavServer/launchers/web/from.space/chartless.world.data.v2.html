@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <!--
  | Chartless. WiP.
- | World Data
+ | World Data.
+ |
+ | All WebComponents
+ |
+ | With SOG Over Time Graph
+ | With a Globe, SunPath and Sky Map, like in https://olivierld.github.io/web.stuff/astro/index_02.html
  +-->
 <html>
 <head>
@@ -30,6 +35,42 @@ select, input {
 .html-03 {
 	background-color: black;
 	color: silver;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(241, 241, 241, 0.5);
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background: silver; /*rgb(101, 99, 99);*/
+    color: rgb(63, 54, 54);
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px silver;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background: #ddd;
+    color: black;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background: #ffae00; /* fallback for browsers that don't support gradients */
+    background: -webkit-linear-gradient(top, #ffae00, #d67600);
+    background: -moz-linear-gradient(top, #ffae00, #d67600);
+    background: -o-linear-gradient(top, #ffae00, #d67600);
+    background: linear-gradient(top, #ffae00, #d67600);
 }
 
 .chartless-map-01 {
@@ -208,6 +249,8 @@ compass-display .gray {
 	<script type="text/javascript" src="js/ajax.manager.js"></script>
 	<script type="text/javascript" src="./webcomponents/utilities/NavigationHelper.js"></script>
 
+	<script type="text/javascript" src="./webcomponents/GraphDisplay.js"></script>
+
 	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
 
 	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
@@ -246,6 +289,24 @@ let loadWorldData = (fn) => {
 			console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 		});
 };
+
+const TABS = ['chart-div', 'globe-div'];
+
+function openTab(evt, tabNum) {
+	let tabLinks = document.getElementsByClassName("tablinks");
+	for (let i=0; i<tabLinks.length; i++) {
+		tabLinks[i].className = tabLinks[i].className.replace(" active", ""); // Reset
+	}
+	for (let i=0; i<TABS.length; i++) {
+		document.getElementById(TABS[i]).style.display = (i === tabNum) ? 'block' : 'none';
+	}
+	if (evt !== null) {
+		evt.currentTarget.className += " active";
+	} else {
+		// Default to first tab
+		tabLinks[0].className += " active";
+	}
+}
 
 function displayErr(err) {
 	if (err) {
@@ -1051,6 +1112,7 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray'); 
 			sog.classList.add('analogdisplay-monochrome-green'); 
 			sog.classList.remove('analogdisplay-monochrome-orange'); 
+			sog.repaint();
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -1066,6 +1128,7 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray'); 
 			sog.classList.remove('analogdisplay-monochrome-green'); 
 			sog.classList.add('analogdisplay-monochrome-orange'); 
+			sog.repaint();
 			break;
 		case 'chartless-map-01':
 		default:
@@ -1082,6 +1145,7 @@ let setStyle = (opt) => {
 			sog.classList.add('analogdisplay-flat-gray'); 
 			sog.classList.remove('analogdisplay-monochrome-green'); 
 			sog.classList.remove('analogdisplay-monochrome-orange'); 
+			sog.repaint();
 			break;
 	}
 };
@@ -1100,15 +1164,67 @@ window.onload = () => {
     <table>
         <tr>
             <td valign="top" style="height: 600px;">
-                <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
-                    <chartless-map id="chartless-map-01"
-                                   class="chartless-map-01"
-                                   center-lat="0.0"
-                                   center-lng="0.0"
-                                   chart-width="5.0"
-                                   width="1000"
-                                   height="600"></chartless-map>
-                </div>
+				<!-- left part -->
+				<div class="tab" style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto;">
+					<button class="tablinks active" onclick="openTab(event, 0);">Chart</button>
+					<button class="tablinks" onclick="openTab(event, 1);">Globe</button>
+				</div>
+
+				<div id="chart-div" style="display: block;">
+					<div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+						<graph-display id="sog-graph-01"
+									tabindex="-1"
+									class=""
+									width="1000"
+									height="100"
+									padding="5"
+									value="null"
+									label="SOG over Time"
+									title="SOG over Time"></graph-display>
+						<br/>
+						<chartless-map id="chartless-map-01"
+									class="chartless-map-01"
+									center-lat="0.0"
+									center-lng="0.0"
+									chart-width="5.0"
+									width="1000"
+									height="600"></chartless-map>
+					</div>
+					<table style="width: 100%;">
+						<tr>
+							<td valign="top" height="50">
+								<!-- A slider for the chart scale -->
+								<div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+									Chart Width:
+									<input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+										oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+									<output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td valign="top">
+								<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+									<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+									<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+									<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+									<!--br/-->
+									<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+									<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+									<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+									<!--br/-->
+									<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="globe-div" style="display: none;">
+					<div style="width: 1000px; border: 1px solid silver; border-radius: 5px; padding: 10px;">
+						Globe div goes here
+					</div>
+				</div>
             </td>
 			<td valign="top" rowspan="3">
 				<table>
@@ -1231,32 +1347,6 @@ window.onload = () => {
 				</table>
 			</td>
         </tr>
-        <tr>
-            <td valign="top" height="50">
-                <!-- A slider for the chart scale -->
-                <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
-					Chart Width:
-                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
-                           oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
-                    <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
-                </div>
-            </td>
-        </tr>
-		<tr>
-			<td valign="top">
-				<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
-					<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
-					<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
-					<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
-					<!--br/-->
-					<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
-					<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
-					<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
-					<!--br/-->
-					<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
-				</div>
-			</td>
-		</tr>
     </table>
 
 	<!--button onclick="loadWorldData();">Load World Data</button-->

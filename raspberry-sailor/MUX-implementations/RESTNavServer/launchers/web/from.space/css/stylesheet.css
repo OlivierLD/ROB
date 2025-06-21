@@ -1,0 +1,236 @@
+body {
+  color : rgba(0, 0, 255, 0.75);
+  font-weight: normal;
+  font-size: 10pt;
+  font-family: "Helvetica Neue", "Lato", Verdana, Helvetica, Geneva, sans-serif;
+  background-position: top left;
+  background-repeat: repeat;
+}
+
+h1 {
+  /*color: silver;*/
+  font-style: italic;
+  font-size: 26pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  padding-bottom: 1pt;
+  padding-top: 1pt;
+}
+h2 {
+  /*color: silver;*/
+  font-size: 12pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+h3 {
+  /*color: silver;*/
+  font-style: italic;
+  font-weight: bold;
+  font-size: 11pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+h4 {
+  /*color: silver;*/
+  font-style: italic;
+  font-weight: bold;
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+h5 {
+  /*color: silver;*/
+  font-style: normal;
+  font-weight: bold;
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+h6 {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+li {
+  font-weight: normal;
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+dt {
+  font-size: 10pt;
+  font-weight: bold;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+dd {
+  font-size: 10pt;
+  font-weight: normal;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+p {
+  font-size: 10pt;
+  font-weight: normal;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+td {
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+small {
+  font-size: 8pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+blockquote {
+  font-style: italic;
+  font-size: 10pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+em {
+  font-size: 10pt;
+  font-style: italic;
+  font-weight: bold;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+pre {
+  margin-top: 0px;
+  font-size: 9pt;
+  font-family: "Source Code Pro", "Courier New", Helvetica, Geneva;
+/*background-color: #d3d3d3;*/
+}
+address {
+  font-size: 8pt;
+/*font-family: Verdana, Arial, Helvetica, Geneva;*/
+}
+img {
+  vertical-align: middle;
+}
+
+a:link { color : #0000A0}
+a:active { color: #8080FF}
+a:visited { color : #8080FF}
+
+:root {
+  --slide-width: 500px;
+  --slide-height: 400px;
+  --expanded-nav-width: 450px;
+  --slider-scale: 0.5;
+}
+
+/* For the switch (slider) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: calc(var(--slider-scale) * 60px);
+    height: calc(var(--slider-scale) * 34px);
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--slider-scale) * 26px);
+    width: calc(var(--slider-scale) * 26px);
+    left: calc(var(--slider-scale) * 4px);
+    bottom: calc(var(--slider-scale) * 4px);
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196f3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(calc(var(--slider-scale) * 26px));
+    -ms-transform: translateX(calc(var(--slider-scale) * 26px));
+    transform: translateX(calc(var(--slider-scale) * 26px));
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: calc(var(--slider-scale) * 34px);
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Switch grid */
+.switch-container {
+    display: grid;
+    grid-template-columns: calc(var(--slider-scale) * 80px) 200px;
+}
+.switch-element {
+    place-self: flex-start;
+}
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background:#ffae00; /* fallback for browsers that don't support gradients */
+  /* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
+  background: -webkit-linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  /* background: linear-gradient(top, #ffae00, #d67600); */
+  background: linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0px 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+/* NOW STYLE THE BUTTON'S HOVER STATE */
+/*	button#rCoffee:hover, button#rCoffee:focus { */
+button:hover, button:focus {
+  border:2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;
+    color: gray;
+}

@@ -57,6 +57,7 @@ while [[ "${KEEP_LOOPING}" == "true" ]]; do
       java -cp ${CP} examples.midatlantic.Main4Tests
       ;;
     "12")
+      echo -e "Also try: java -cp ${CP} examples.misc.VikingSunCompass -help"
       java -cp ${CP} examples.misc.VikingSunCompass
       ;;
     "13")

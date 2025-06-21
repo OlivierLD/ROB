@@ -41,7 +41,7 @@ public class VikingSunCompass extends JFrame {
     private final static NumberFormat Z_FMT = new DecimalFormat("#00");
 
     private static GeoPos gps = null;
-    private static double latitude = 38;
+    private static double latitude = 38.0;
     private static double longitude = 0; // -122;
     private static int frameSize = 750;
 
@@ -245,7 +245,12 @@ public class VikingSunCompass extends JFrame {
     private final static String SIZE_PRM = "-size";
     private final static String HELP_PRM = "-help";
 
-    public static void main(String[] args) {
+    /**
+     * Also try
+     * java -cp ${CP} examples.misc.VikingSunCompass -help
+     * @param args runtime parameters
+     */
+    public static void main(String... args) {
 //  latitude  = 38; // Must be positive
         longitude = 0;
 
