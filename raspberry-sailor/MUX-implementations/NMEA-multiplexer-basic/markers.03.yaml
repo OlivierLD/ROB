@@ -1,6 +1,8 @@
 #
 # Markers & Borders
 #
+description:
+  Etel, Groix, La Trinité, etc.
 markers:
   - latitude: 47.643065
     longitude: -3.214258
@@ -77,6 +79,21 @@ markers:
     latitude: 47.557858
     longitude: -3.012553
     type: red
+  - label: "Roche Révision"
+    latitude: 47.543777
+    longitude: -2.989197
+    type: card-w
+    id: REVISION
+  - label: "Er Gazeg"
+    latitude: 47.554253
+    longitude: -2.988197
+    type: card-s
+    id: ERGAZEG
+  - label: "Men er Beleg"
+    latitude: 47.562252
+    longitude: -2.982468
+    type: red
+    id: BELEG
 borders:
   - border-name: "Etel, North Sach"
     type: "open"

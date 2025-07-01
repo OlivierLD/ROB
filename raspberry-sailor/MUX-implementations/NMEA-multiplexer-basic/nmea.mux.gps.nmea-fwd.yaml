@@ -22,6 +22,7 @@ context:
     - markers: markers.03.yaml
     - markers: markers.04.yaml
     - markers: markers.05.yaml
+    - markers: markers.houat.hoedic.belle-ile.yaml
     # - markers: mux-configs/bretagne.bumper.markers.yaml
     - markers: waypoints.yaml
 channels:

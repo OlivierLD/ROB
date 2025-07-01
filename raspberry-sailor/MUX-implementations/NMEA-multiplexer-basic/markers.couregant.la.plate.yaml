@@ -1,6 +1,8 @@
 #
 # Couregant - La Plate
 #
+description:
+  Couregant - La Plate
 borders:
   - border-name: "Courégant - La Plate"
     type: "open"

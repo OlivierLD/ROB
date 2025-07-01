@@ -9,7 +9,7 @@
 # That one receives the full cache (as JSON) and manages the display of the data by itself.
 # It can also deal with 2 push-buttons (on the eInk2-13) for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
-# Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
+# Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER and enable_screen_saver_after variables.
 # -> Screen Saver displays a pelican (default) or a static text.
 #
 # Work In Progress !
@@ -53,6 +53,10 @@ BACKGROUND_COLOR = BLACK
 FOREGROUND_COLOR = WHITE
 TEXT_COLOR = BLACK
 
+MONTHS = [
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+]
+
 # create the spi device and pins we will need
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 ecs = digitalio.DigitalInOut(board.CE0)
@@ -74,6 +78,7 @@ VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
 SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
 SCREEN_SAVER_OPTION_PREFIX: str = "--screen-saver-option:"  # default "pelican", also available "sleep"
+SCREEN_SAVER_AFTER_PREFIX: str = "--screen-saver-after:"  # default 30s
 
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
@@ -89,6 +94,7 @@ keep_looping: bool = True
 nmea_cache: Dict[str, object] = None
 
 ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
+enable_screen_saver_after: int = ENABLE_SCREEN_SAVER_AFTER  # default
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
 enable_screen_saver: bool = True
@@ -186,13 +192,13 @@ def screen_saver_manager() -> None:
         screen_saver_timer += 1
         if verbose:
             print(f"screen_saver_manager >> Increasing screen_saver_timer to {screen_saver_timer}")
-        if screen_saver_timer >= ENABLE_SCREEN_SAVER_AFTER:   # and not screen_saver_on:
+        if screen_saver_timer >= enable_screen_saver_after:   # and not screen_saver_on:
             if verbose:
-                print(f"Turning screen saver ON, option {screen_saver_option}, screen_save_timer:{screen_saver_timer} / {ENABLE_SCREEN_SAVER_AFTER} ")
+                print(f"Turning screen saver ON, option {screen_saver_option}, screen_save_timer:{screen_saver_timer} / {enable_screen_saver_after} ")
             screen_saver_on = True
-            if screen_saver_timer % ENABLE_SCREEN_SAVER_AFTER == 0:
+            if screen_saver_timer % enable_screen_saver_after == 0:
                 if screen_saver_option == "sleep":
-                    if screen_saver_timer <= ENABLE_SCREEN_SAVER_AFTER:  # Just once
+                    if screen_saver_timer <= enable_screen_saver_after:  # Just once
                         display_sleep_message()
                 else:
                     # print(f"Pelican Screen Saver, {screen_saver_timer}")
@@ -235,6 +241,14 @@ if len(sys.argv) > 0:  # Script name + X args
                 print(f"Screen Saver Option now {screen_saver_option}")
             except Exception as error:
                 print(f"Screen Saver Option error: {repr(error)}")
+
+        if arg[:len(SCREEN_SAVER_AFTER_PREFIX)] == SCREEN_SAVER_AFTER_PREFIX:
+            try:
+                screen_saver_after_str = arg[len(SCREEN_SAVER_AFTER_PREFIX):]
+                print(f"Screen Saver After is now {screen_saver_after_str}")
+                enable_screen_saver_after = int(screen_saver_after_str)
+            except Exception as error:
+                print(f"Screen Saver After error: {repr(error)}")
 
         if arg[:len(DATA_PREFIX)] == DATA_PREFIX:
             user_list = arg[len(DATA_PREFIX):].split(',')
@@ -702,13 +716,23 @@ def format_data(id: str) -> List[str]:
             grid: str = position["gridSquare"]
             formatted = [id, utils.dec_to_sex(latitude, "NS"), utils.dec_to_sex(longitude, "EW"), grid]
         elif id == "NAV":
-            # Warning: 6 lines
+            # Warning: 6 lines (or more)
             position: Dict = nmea_cache["Position"]
             latitude: float = position["lat"]
             longitude: float = position["lng"]
             grid: str = position["gridSquare"]
             sog = nmea_cache["SOG"]["speed"]
             cog = 0
+            gps: str = "-"
+            try:
+                gps = f"{nmea_cache['GPS Time']['fmtDate']['year']}-" + \
+                      f"{MONTHS[nmea_cache['GPS Time']['fmtDate']['month'] - 1]}-" + \
+                      f"{nmea_cache['GPS Time']['fmtDate']['day']:02} " + \
+                      f"{nmea_cache['GPS Time']['fmtDate']['hour']:02}:" + \
+                      f"{nmea_cache['GPS Time']['fmtDate']['min']:02}:" + \
+                      f"{nmea_cache['GPS Time']['fmtDate']['sec']:02}"
+            except Exception as oops:
+                pass
             try:
                 cog = nmea_cache["COG"]["angle"]
             except Exception as oops:
@@ -719,7 +743,8 @@ def format_data(id: str) -> List[str]:
                 f"LNG: {utils.dec_to_sex(longitude, 'EW')}",
                 f"GRID: {grid}",
                 f"COG: {cog}°",
-                f"SOG: {sog} kts"]
+                f"SOG: {sog} kts",
+                f"UTC: {gps}"]
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
             formatted = [ "AIR", f"{atp:.01f}°C" ]
@@ -800,6 +825,7 @@ def display_sleep_message() -> None:
 
     text_1: str = "Server running,"
     text_2: str = "Screen sleeping..."
+    text_3: str = "Hit a button to resume"
     clear()
     if verbose:
         print("Displaying sleep message.")
@@ -815,6 +841,13 @@ def display_sleep_message() -> None:
     draw.text(
         (eink.width // 2 - font_width // 2, eink.height // 2),
         text_2,
+        font=FONT,
+        fill=TEXT_COLOR,
+    )
+    (font_width, font_height) = FONT.getsize(text_3)
+    draw.text(
+        (eink.width // 2 - font_width // 2, eink.height // 2 + font_height),  # (x, y)
+        text_3,
         font=FONT,
         fill=TEXT_COLOR,
     )

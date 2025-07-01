@@ -26,6 +26,7 @@ VERBOSE=false
 DATA="BSP,SOG,COG,POS"
 SS_MODE="on"
 SS_OPTION="sleep"
+SS_AFTER_OPTION=30
 #
 # Prompted, or get prms from CLI
 #
@@ -77,11 +78,13 @@ else
   	    SS_MODE=${prm#*:}
   	  elif [[ ${prm} == "--screen-saver-option:"* ]]; then
   	    SS_OPTION=${prm#*:}
+  	  elif [[ ${prm} == "--screen-saver-after:"* ]]; then
+  	    SS_AFTER_OPTION=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --data:${DATA} --screen-saver:${SS_MODE} --screen-saver-option:${SS_OPTION}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --data:${DATA} --screen-saver:${SS_MODE} --screen-saver-option:${SS_OPTION} --screen-saver-after:${SS_AFTER_OPTION}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

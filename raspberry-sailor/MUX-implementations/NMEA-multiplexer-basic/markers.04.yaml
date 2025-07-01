@@ -1,6 +1,8 @@
 #
 # West of Etel
 #
+description:
+  West of Etel
 markers:
   - label: "Gâvres"
     latitude: 47.69416554585294

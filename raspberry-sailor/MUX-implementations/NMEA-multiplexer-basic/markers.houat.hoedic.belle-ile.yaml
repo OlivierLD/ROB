@@ -2,6 +2,8 @@
 # Generated Fri Jul 05 2024 09:11:08 GMT+0200 (Central European Summer Time)
 # Houat, Hoedic, Belle-Ile
 #
+description:
+  Houat, Hoedic, Belle-Ile
 markers:
   - label: "Le Palais"
     latitude: 47.347391218821265
