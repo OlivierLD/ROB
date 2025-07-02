@@ -61,6 +61,10 @@ markers:
     latitude: 47.651588
     longitude: -3.438815
     type: card-e    
+  - label: "Edouard de Cougy"
+    latitude: 47.632230
+    longitude: -3.398262
+    type: card-e
   - label: "Pte des Chats"
     latitude: 47.617237
     longitude: -3.418165

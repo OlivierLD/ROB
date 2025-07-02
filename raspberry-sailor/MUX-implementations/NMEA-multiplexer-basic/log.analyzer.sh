@@ -8,6 +8,9 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dspeed.unit=KN"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=false"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dsummary=true"
 #
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dgencsv=true"
+JAVA_OPTIONS="${JAVA_OPTIONS} -DswingGUI=true"
+#
 JAVA_OPTIONS="${JAVA_OPTIONS} -ea"  # Enable Assertions
 #
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Drmc.date.offset=7168"

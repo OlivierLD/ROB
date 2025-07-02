@@ -558,8 +558,22 @@ function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
 			context.lineTo(x, y);
 		}
 	});
+	// context.closePath();
+	// context.stroke();
+
+	// Add a long arrow ?
+	let arrowLen = 2 * boatLen
+	x = canvasX; // + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+	y = canvasY; // + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+
+	// context.strokeStyle = 'black';
+	context.moveTo(x, y);
+	context.lineTo(x + (arrowLen * Math.sin(radAngle)),
+				   y - (arrowLen * Math.cos(radAngle)));
+
 	context.closePath();
 	context.stroke();
+
 }
 
 let markerAndTrackColor = 'navy';
