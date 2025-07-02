@@ -106,6 +106,10 @@ let startMux = () => {
     return getPromise('/system/start-mux', 2 * DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
 };
 
+let dropLogs = () => {
+    return getPromise('/system/drop-log', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
+};
+
 let stopMux = () => {
     return getPromise('/system/stop-mux', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 201 || ret === 202); }, null, false);
 }

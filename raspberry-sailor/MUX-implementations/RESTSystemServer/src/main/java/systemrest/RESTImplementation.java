@@ -121,6 +121,11 @@ public class RESTImplementation {
 					this::setSystemDate,
 					"Set the System Date. VERY unusual REST resource..."),
 			new Operation(
+					"POST",
+					SYSTEM_PREFIX + "/drop-log",
+					this::dropLog,
+					"Drop all files and folders in the 'logged' directory."),
+			new Operation(
 					"GET",
 					SYSTEM_PREFIX + "/mux-stat",
 					this::muxStatus,
@@ -732,6 +737,75 @@ public class RESTImplementation {
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
 								.errorCode("Startall")
+								.errorMessage(ex.toString()));
+				return response;
+			}
+		}
+
+		return response;
+	}
+
+	private HTTPServer.Response dropLog(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+
+		if (true) { // !"null".equals(payload) && payload != null && payload.trim().length() != 0) {
+			try {
+				Thread starter = new Thread(() -> {
+					String command = "sudo ./droplog.sh"; // Hard-coded script name
+					System.out.printf("Executing command [%s] in a thread.\n", command);
+
+					try {
+						Process process = Runtime.getRuntime().exec(new String[]{"/bin/bash", "-c", command}); // Note the '/bin/bash -c' !!
+						int exitCode = process.waitFor();
+						System.out.printf("Exit code: %d\n", exitCode);
+						List<String> returned = new ArrayList<>();
+						BufferedReader in;
+						if (exitCode == 0) {
+							in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+						} else {
+							in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+						}
+						while (true) {
+							String line = in.readLine();
+							System.out.println(line);
+							if (line == null) {
+								break;
+							} else {
+								returned.add(line);
+							}
+						}
+						if (in != null) {
+							in.close();
+						}
+						String responsePayload = returned.stream().collect(Collectors.joining("\n"));
+						// Thread Completed
+						System.out.println("--- Gathered command output ---");
+						System.out.println(responsePayload);
+						System.out.println("-------------------------------");
+					} catch (Exception ex) {
+						System.err.println(ex);
+					}
+				});
+				starter.start();
+
+				String responsePayload = "Thread started";
+
+				if (true) { // exitCode == 0) {
+					RESTProcessorUtil.generateResponseHeaders(response, responsePayload.length());
+					response.setPayload(responsePayload.getBytes());
+				} else {
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("DropLog")
+									.errorMessage(responsePayload));
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("DropLog")
 								.errorMessage(ex.toString()));
 				return response;
 			}

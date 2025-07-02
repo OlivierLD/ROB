@@ -188,8 +188,8 @@
         function startMultiplexer() {
             let promise = startMux();
             promise.then(retVal => {
-                console.log(`StartMux - success.\n ${retVal}`);
-                messageHandler(`StartMux - success ${retVal}`);
+                console.log(`StartNux - success.\n ${retVal}`);
+                messageHandler(`StartNux - success ${retVal}`);
             }, (error, errMess) => {
                 let message;
                 if (errMess !== undefined) {
@@ -199,7 +199,7 @@
                         message = errMess;
                     }
                 }
-                errManager.display("Failed to Start Mux..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+                errManager.display("Failed to Drop Logs..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
             });
         }
 
@@ -218,6 +218,24 @@
                     }
                 }
                 errManager.display("Failed to get Mux Status..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+            });
+        }
+
+        function dropAllLogs() {
+            let promise = dropLogs();
+            promise.then(retVal => {
+                console.log(`DropLogs - success ${retVal}`);
+                messageHandler(`DropLogs - success ${retVal}`);
+            }, (error, errMess) => {
+                let message;
+                if (errMess !== undefined) {
+                    if (errMess.message !== undefined) {
+                        message = errMess.message;
+                    } else {
+                        message = errMess;
+                    }
+                }
+                errManager.display("Failed to drop log-files..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
             });
         }
 </script>
@@ -259,6 +277,12 @@
         <button title="Mux Status" onclick="multiplexerStatus();">MUX Status</button>
         <button title="Really?..." onclick="shutdownMultiplexer();">Stop MUX</button>
         <button title="Starts the MUX..." onclick="startMultiplexer();">Start MUX</button>
+    </td>
+  </tr>
+ <tr>
+    <td colspan="1" style="text-align: left;">
+        Logging 
+        <button title="Drop all logs" onclick="dropAllLogs();">Drop all logs</button>
     </td>
   </tr>
   <tr>
