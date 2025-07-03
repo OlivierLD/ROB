@@ -402,7 +402,7 @@ events.subscribe(TO_WP, val => {
 });
 
 events.subscribe(ROUTES, val => {
-	// TODO Manage this
+	// TODO Manage this ?
 	// console.log(`Routes subscription: ${JSON.stringify(val)}`);
 });
 
@@ -959,7 +959,6 @@ let lpad = (str, len, pad) => {
 	}
 	return s;
 };
-
 let decToSex = (val, ns_ew) => {
 	let absVal = Math.abs(val);
 	let intValue = Math.floor(absVal);
@@ -1106,6 +1105,19 @@ window.onload = () => {
 
 	map = document.getElementById('chartless-map-01');
 	map.setDoAfter(updateMap);
+
+	// Invoked by onClick on the map
+	map._clickHandler = (event) => {
+		// console.log(`Click on map at ${event.lat} / ${event.lng}`);
+		let lat = event.pos.lat;
+		let lng = event.pos.lng;
+		// let pos = map.canvasToPos(event.x, event.y);
+		// if (pos) {
+		// 	lat = pos.lat;
+		// 	lng = pos.lng;
+		// }
+		console.log(`Click Handler: ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
+	};
 }
 	</script>
 </head>

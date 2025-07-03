@@ -1106,6 +1106,28 @@ window.onload = () => {
 
 	map = document.getElementById('chartless-map-01');
 	map.setDoAfter(updateMap);        
+
+	// Invoked by onClick on the map
+	map._clickHandler = (event) => {
+		// console.log(`Click on map at ${event.lat} / ${event.lng}`);
+		let lat = event.pos.lat;
+		let lng = event.pos.lng;
+		// let pos = map.canvasToPos(event.x, event.y);
+		// if (pos) {
+		// 	lat = pos.lat;
+		// 	lng = pos.lng;
+		// }
+		console.log(`Click Handler: ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
+		// Ask if waypoint is to be created
+		let text = `Do we create a WayPoint at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")} ?`;
+		if (confirm(text) == true) {
+			console.log("You pressed OK!");
+			// Wip
+		} else {
+			console.log("You canceled!");
+		}
+		// document.getElementById("demo").innerHTML = text;
+	};
 }
 	</script>
 </head>

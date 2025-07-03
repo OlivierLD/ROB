@@ -77,6 +77,8 @@ class ChartlessMap extends HTMLElement {
 		this._previousClassName = "";
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
 
+		this._clickHandler = null;
+
 		let instance = this;
 		let mouseIsDown = false;
 		let lastDraggedPos = null;
@@ -126,6 +128,20 @@ class ChartlessMap extends HTMLElement {
 					instance.centerLng = newCenterLng;
 					lastDraggedPos = { x: x, y: y, pos: mousePos };
 				}
+			}
+		});
+		this.canvas.addEventListener('click', function(evt) {
+			// console.log("onClick", event);
+			let rect = evt.currentTarget.getBoundingClientRect();
+			let x = evt.clientX - rect.left;
+			let y = evt.clientY - rect.top;
+
+			let pos = instance.canvasToPos(x, y);
+			// this.dispatchEvent(new CustomEvent('click', { detail: pos }));
+			if (instance._clickHandler !== null) {
+				instance._clickHandler({ x: Math.round(x), y: Math.round(y), pos: pos });
+			} else {
+				console.log(`Click at ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
 			}
 		});
 
