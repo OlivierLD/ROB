@@ -282,6 +282,7 @@ let maxBufferLength = MAX_BUFFER_LENGTH;
 let trackBuffer = [];
 let aisTargets = [];
 let markers = [];
+let userDefinedWP = [];
 let borders = [];
 let borderThreats = [];
 let waypoints = [];
@@ -352,7 +353,8 @@ events.subscribe(POS, val => {
 	}
 });
 events.subscribe(MARKERS, val => {
-	markers = val;
+	// concat with user defined
+	markers = val.concat(userDefinedWP);
 
 	// Identify potential waypoints, for XTE and Co. TODO: refresh option
 	if (markers.length > 0) {
@@ -1123,6 +1125,24 @@ window.onload = () => {
 		if (confirm(text) == true) {
 			console.log("You pressed OK!");
 			// Wip
+			let waypointSelect = document.getElementById('next-wp');
+			let newOption = document.createElement('option');
+			let idx = waypointSelect.childNodes.length;
+			newOption.value = `USER-DEF-${(idx - 1).toFixed(0)}`;
+			newOption.innerHTML = `UserDef at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+			newOption.selected = true;
+			// _waypoints
+			waypointSelect.appendChild(newOption); 
+
+			let newWP = {
+				id: `USER-DEF-${(idx - 1).toFixed(0)}`,
+				label: 'User Defined',
+				latitude: lat,
+				longitude: lng,
+				type: 'red-triangle'
+			};
+			waypoints.push(newWP);
+			userDefinedWP.push(newWP);
 		} else {
 			console.log("You canceled!");
 		}
