@@ -68,7 +68,7 @@ class ChartlessMap extends HTMLElement {
 		this._centerLat = 0.0;
 		this._centerLng = 0.0;
 		this._chartWidth = 10.0;
-		this._projection = "MERCATOR";
+		this._projection = "MERCATOR"; // TODO Add ANAXIMANDRE, LAMBERT
 
 		this._doBefore = function(graphDisplay, context) {}; // Do-nothing by default
 		this._doAfter = function(graphDisplay, context) {};  // Do-nothing by default
@@ -82,6 +82,7 @@ class ChartlessMap extends HTMLElement {
 		let instance = this;
 		let mouseIsDown = false;
 		let lastDraggedPos = null;
+		let mouseDownPos = null;
 
 		this.canvas.addEventListener('mousedown', function(evt) {
 			// console.log("Mouse down");
@@ -91,11 +92,27 @@ class ChartlessMap extends HTMLElement {
 			let y = evt.clientY - rect.top;
 			let pos = instance.canvasToPos(x, y);
 			lastDraggedPos = { x: x, y: y, pos: pos };
+			mouseDownPos = lastDraggedPos;
 		});
 
 		this.canvas.addEventListener('mouseup', function(evt) {
 			// console.log("Mouse up");
 			mouseIsDown = false;
+			// Substitute mouseclick here.
+			if (true) {
+				let rect = evt.currentTarget.getBoundingClientRect();
+				let x = evt.clientX - rect.left;
+				let y = evt.clientY - rect.top;
+				let pos = instance.canvasToPos(x, y);
+				if (mouseDownPos.x === x && mouseDownPos.y === y) {
+					console.log("Mouse was just clicked !!!");
+					if (instance._clickHandler !== null) {
+						instance._clickHandler({ x: Math.round(x), y: Math.round(y), pos: pos });
+					} else {
+						console.log(`Click at ${Math.round(x)} / ${Math.round(y)}: ${JSON.stringify(pos)} => ${ChartlessMap.decToSex(pos.lat, "NS")} / ${ChartlessMap.decToSex(pos.lng, "EW")}`);
+					}
+				}
+			}
 			lastDraggedPos = null;
 		});
 
@@ -130,7 +147,7 @@ class ChartlessMap extends HTMLElement {
 				}
 			}
 		});
-		this.canvas.addEventListener('click', function(evt) {
+		this.canvas.addEventListener('click-or-so', function(evt) { // Dummy stuff...
 			// console.log("onClick", event);
 			let rect = evt.currentTarget.getBoundingClientRect();
 			let x = evt.clientX - rect.left;

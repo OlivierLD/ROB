@@ -201,6 +201,12 @@ compass-display .gray {
 	--font: Arial;
 	--value-font-size-factor: 1
 }
+
+chartless-map#chartless-map-01 {
+	/* cursor: crosshair; */
+	cursor: url('./images/crosshair.png') 19 20, auto;
+}
+
 	</style>
 
 	<script type="text/javascript" src="js/date.proto.js"></script>
@@ -282,6 +288,7 @@ let maxBufferLength = MAX_BUFFER_LENGTH;
 let trackBuffer = [];
 let aisTargets = [];
 let markers = [];
+let userDefinedWP = [];
 let borders = [];
 let borderThreats = [];
 let waypoints = [];
@@ -352,7 +359,8 @@ events.subscribe(POS, val => {
 	}
 });
 events.subscribe(MARKERS, val => {
-	markers = val;
+	// concat with user defined
+	markers = val.concat(userDefinedWP);
 
 	// Identify potential waypoints, for XTE and Co. TODO: refresh option
 	if (markers.length > 0) {
@@ -558,6 +566,7 @@ function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
 			context.lineTo(x, y);
 		}
 	});
+
 	// context.closePath();
 	// context.stroke();
 
@@ -573,7 +582,6 @@ function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
 
 	context.closePath();
 	context.stroke();
-
 }
 
 let markerAndTrackColor = 'navy';
@@ -959,6 +967,7 @@ let lpad = (str, len, pad) => {
 	}
 	return s;
 };
+
 let decToSex = (val, ns_ew) => {
 	let absVal = Math.abs(val);
 	let intValue = Math.floor(absVal);
@@ -1117,6 +1126,34 @@ window.onload = () => {
 		// 	lng = pos.lng;
 		// }
 		console.log(`Click Handler: ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
+		// Ask if waypoint is to be created
+		let text = `Do we create a WayPoint at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")} ?`;
+		if (confirm(text) == true) {
+			// console.log("You pressed OK!");
+			// Wip...
+			let waypointSelect = document.getElementById('next-wp');
+			let newOption = document.createElement('option');
+			let idx = waypointSelect.childNodes.length;
+			newOption.value = `USER-DEF-${(idx - 1).toFixed(0)}`;
+			newOption.innerHTML = `UserDef-${(idx - 1).toFixed(0)}`; //  at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+			// newOption.title = `User Defined Waypoint #${(idx - 1).toFixed(0)} at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+			newOption.selected = true;
+			// _waypoints
+			waypointSelect.appendChild(newOption);
+
+			let newWP = {
+				id: `USER-DEF-${(idx - 1).toFixed(0)}`,
+				label: `User Defined (${(idx - 1).toFixed(0)})`,
+				latitude: lat,
+				longitude: lng,
+				type: 'red-triangle'
+			};
+			waypoints.push(newWP);
+			userDefinedWP.push(newWP);
+		} else {
+			console.log("WP creation canceled.");
+		}
+		// document.getElementById("demo").innerHTML = text;
 	};
 }
 	</script>

@@ -201,6 +201,12 @@ compass-display .gray {
 	--font: Arial;
 	--value-font-size-factor: 1
 }
+
+chartless-map#chartless-map-01 {
+	/* cursor: crosshair; */
+	cursor: url('./images/crosshair.png') 19 20, auto;
+}
+
 	</style>
 
 	<script type="text/javascript" src="js/date.proto.js"></script>
@@ -1123,20 +1129,21 @@ window.onload = () => {
 		// Ask if waypoint is to be created
 		let text = `Do we create a WayPoint at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")} ?`;
 		if (confirm(text) == true) {
-			console.log("You pressed OK!");
-			// Wip
+			// console.log("You pressed OK!");
+			// Wip...
 			let waypointSelect = document.getElementById('next-wp');
 			let newOption = document.createElement('option');
 			let idx = waypointSelect.childNodes.length;
 			newOption.value = `USER-DEF-${(idx - 1).toFixed(0)}`;
-			newOption.innerHTML = `UserDef at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+			newOption.innerHTML = `UserDef-${(idx - 1).toFixed(0)}`; //  at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+			// newOption.title = `User Defined Waypoint #${(idx - 1).toFixed(0)} at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
 			newOption.selected = true;
 			// _waypoints
 			waypointSelect.appendChild(newOption); 
 
 			let newWP = {
 				id: `USER-DEF-${(idx - 1).toFixed(0)}`,
-				label: 'User Defined',
+				label: `User Defined (${(idx - 1).toFixed(0)})`,
 				latitude: lat,
 				longitude: lng,
 				type: 'red-triangle'
@@ -1144,7 +1151,7 @@ window.onload = () => {
 			waypoints.push(newWP);
 			userDefinedWP.push(newWP);
 		} else {
-			console.log("You canceled!");
+			console.log("WP creation canceled.");
 		}
 		// document.getElementById("demo").innerHTML = text;
 	};
