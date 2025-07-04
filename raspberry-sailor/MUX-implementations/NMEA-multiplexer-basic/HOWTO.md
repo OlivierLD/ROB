@@ -187,7 +187,7 @@ When building the SD Card, you enabled `ssh`, this allows you to use `ssh` and `
 $ ssh pi@192.168.50.10
 ```
 Similarly, you can also use `VNC`.  
-You need - using `raspi-config` to enable `VNC`, and make sure you boot to a desktop (not command line).  
+You need - using `sudo raspi-config` from the command line - to enable `VNC`, and make sure you boot to a desktop (not command line).  
 Once done, you can use a VNC-viewer from another machine, and see the Raspberry Pi's desktop !
 ![VNC](./doc_resources/VNCDesktop.png)
 
