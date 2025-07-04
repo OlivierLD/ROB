@@ -182,7 +182,7 @@ Measured consumption for the config above (**with** an e-ink bonnet):
 > Between `0.18 A` and `0.24 A`
 
 ### Remote access
-When building the SD Card, you enabled `ssh`, this allows you to use `ssh` and `scp` from another machine connected on the same network (the one emitted by the Raspberry Pi).
+When [building the SD Card](#so-lets-go), you enabled `ssh`, this allows you to use `ssh` and `scp` from another machine connected on the same network (the one emitted by the Raspberry Pi).
 ```
 $ ssh pi@192.168.50.10
 ```
