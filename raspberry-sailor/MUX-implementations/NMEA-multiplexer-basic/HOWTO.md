@@ -181,6 +181,16 @@ The M5Stick is quite affordable (less than $10.00 in 2025), see [here](https://s
 Measured consumption for the config above (**with** an e-ink bonnet):   
 > Between `0.18 A` and `0.24 A`
 
+### Remote access
+When building the SD Card, you enabled `ssh`, this allows you to use `ssh` and `scp` from another machine connected on the same network (the one emitted by the Raspberry Pi).
+```
+$ ssh pi@192.168.50.10
+```
+Similarly, you can also use `VNC`.  
+You need - using `raspi-config` to enable `VNC`, and make sure you boot to a desktop (not command line).  
+Once done, you can use a VNC-viewer from another machine, and see the Raspberry Pi's desktop !
+![VNC](./doc_resources/VNCDesktop.png)
+
 ### Summary
 So, you now have a system that starts at boot.    
 The Raspberry Pi emits its own network, so you can connect to it from other machines or devices,
