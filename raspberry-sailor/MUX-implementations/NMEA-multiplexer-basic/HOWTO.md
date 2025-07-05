@@ -1,5 +1,6 @@
 # From scratch
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
+##### A tracker for less than $50...  
 We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [e-ink 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 
 The e-ink technology is quite interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
@@ -166,7 +167,7 @@ And as soon as you have a configuration that fits your needs, do make a backup o
 this is the kind of things you might regret not to have done.
 
 ### REST Clients
-Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long), using REST or other standard protocols.
+Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long), using REST or other _standard_ protocols.
 
 |                    Server                    |               M5Stick Client               |
 |:--------------------------------------------:|:------------------------------------------:|
