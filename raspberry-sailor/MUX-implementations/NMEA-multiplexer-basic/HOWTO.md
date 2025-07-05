@@ -144,6 +144,9 @@ _Note_: The phone does _**not**_ need to have a SIM card.
 Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:       
 ![Seven](./doc_resources/OpenCPN.png)
 
+When a graphical user interface is needed, we use web pages. All you need 
+to see them is a (recent) browser. No need to worry about the operating system of the client you use (Android, iPhone, etc).
+The Web pages presented here require absolutely _**NO**_ external framework.  
 From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)  
 Exiting &Eacute;tel
