@@ -34,7 +34,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Once the configuration is completed, the Internet connection is not required anymore, 
     `ssh` and `scp` will do the job.
     - Note: `VNC` could also be an option to access the Graphical Desktop running on the Raspberry Pi.
-      But this could be too demanding for a Raspberry Pi Zero... To enable it, use
+      But this could be too demanding for a Raspberry Pi Zero (but it works)... To enable it, use
       `raspi-config` on the Raspberry Pi, to boot to Desktop, and start the VNC Server.
 
 #### So, let's go.
@@ -50,7 +50,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Send the archive to the newly flashed Raspberry Pi (change it's IP address at will)
     - ` scp nmea-dist.tar.gz pi@192.168.1.15:~`  
       where `nmea-dist` is a name chosen by _**you**_ during the execution of the `to.prod.sh` script, `pi` is the username _**you**_ chose too, and
-      `192.168.1.15` is the IP Address of the Raspberry Pi, obtained with an `ifconfig` on the Raspberry Pi, or a `fing` on any machine on the same network as the Raspberry Pi.
+      `192.168.1.15` is the IP Address of the Raspberry Pi, obtained with an `ifconfig` on the Raspberry Pi, or a [`fing`](https://www.fing.com/) on any machine on the same network as the Raspberry Pi.
 - Log on to the new Raspberry Pi, to prepare the new system. This will require an Internet connection.  
   - Using `sudo raspi-config` (or its desktop equivalent, `Preferences` > `Raspberry Pi Configuration`):
     - Boot to Command Line Interface (CLI), Desktop is not required.
@@ -186,8 +186,8 @@ When [building the SD Card](#so-lets-go), you enabled `ssh`, this allows you to 
 ```
 $ ssh pi@192.168.50.10
 ```
-Similarly, you can also use `VNC`.  
-You need - using `sudo raspi-config` from the command line - to enable `VNC`, and make sure you boot to a desktop (not command line).  
+Similarly, as already mentioned above, you can also use `VNC`.  
+You need - using `sudo raspi-config` from the command line - to enable `VNC`, and make sure you boot to a graphical desktop (not to the command line).  
 Once done, you can use a VNC-viewer from another machine, and see the Raspberry Pi's desktop !
 ![VNC](./doc_resources/VNCDesktop.png)
 
