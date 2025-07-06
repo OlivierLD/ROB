@@ -112,7 +112,7 @@
 					getFwdrs.then((value) => {
 						document.body.style.cursor = 'default';
 						let fwdrs = JSON.parse(value);
-						buildFileList(logFiles, fwdrs);
+						buildFileList(logFiles, fwdrs); // TODO Hierarchical, indented !
 					}, (error, errmess) => {
 						document.body.style.cursor = 'default';
 						let message;
@@ -176,6 +176,69 @@
 
 			let tableHtml = '';
 			document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
+
+			// For tests
+			let recurse = (dirStructure, splittedPath, lf) => {
+				console.log(`Managing ${lf}`);
+
+				let arrayLength = splittedPath.length;
+				let currentDir = [ dirStructure ];
+				let parentDir = null;
+				for (let i=0; i<arrayLength - 1; i++) { // Through directories...
+					console.log(`- Managing directory ${splittedPath[i]} ...`);
+					let thisDir = currentDir.filter(d => d.dir === splittedPath[i]);
+					if (thisDir.length === 0) {  // Then append it
+						console.log(`- directory ${splittedPath[i]} NOT found, adding it`);
+						let newDir = {
+							dir: splittedPath[i],
+							subdirs: [],
+							files: []
+						};
+						parentDir.subdirs.push(newDir);
+						currentDir = newDir.subdirs; // Go deeper
+						parentDir = newDir; // Remember the parent
+					} else {
+						console.log(`- ${splittedPath[i]} found, going deeper`);
+						currentDir = thisDir[0].subdirs;
+						parentDir = thisDir[0]; // Remember the parent
+					}
+				}
+				// The file
+				let fName = splittedPath[arrayLength - 1];
+				console.log(`Adding file ${fName} to the current dir ${currentDir.dir}`);
+				parentDir.files.push({name: fName, path: lf});
+			};
+
+			let hierarchy = { // An empty one.
+				dir: ".",
+				subdirs: [],
+				files: []
+			};
+
+			fileArray.forEach(lf => {
+				let isActive = false;
+				let isTotal = false;
+				activeLogFile.forEach(fname => {
+					if (lf.split(' ')[1].indexOf(fname) > -1) {
+						isActive = true;
+					}
+				});
+				if (lf.split(' ')[1] === 'total') {
+					isTotal = true;
+				} else {
+					// Tests
+					if (lf.split(' ').length > 1 && lf.split(' ')[1] !== 'total') {
+						let splitted = lf.split(' ')[1].split('/');
+						let currentDir = hierarchy; // This is the top
+						recurse(currentDir, splitted, lf); // Recurse through file path.
+					}
+				}
+			});
+			document.getElementById("mess-container").style.display = 'block'; // Hide the message zone
+			document.getElementById("message").innerText = JSON.stringify(hierarchy, null, 2);
+			console.log("Bam!");
+			// End of tests
+			
 			fileArray.forEach(lf => {
 				let isActive = false;
 				let isTotal = false;
@@ -187,6 +250,7 @@
 				if (lf.split(' ')[1] === 'total') {
 					isTotal = true;
 				}
+
 //			console.log("List", activeLogFile, "lf", lf);
 				tableHtml +=
 						'<tr>\n' +
@@ -238,8 +302,8 @@
 		</table>
 
 	</div>
-	<div style="display: none"> <!-- turn display to block or inline for debugging -->
-		<textarea id="message" style="width: 98%; height: 150px;"></textarea>
+	<div id="mess-container" style="display: none;"> <!-- turn display to block or inline for debugging, none for regular usage -->
+		<pre id="message" style="width: 98%; height: 150px;"></pre>
 	</div>
 </div>
 <script>

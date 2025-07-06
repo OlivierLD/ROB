@@ -1,0 +1,26 @@
+$ curl -X GET http://localhost:9999/mux/log-files | jq
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+Dload  Upload   Total   Spent    Left  Speed
+100  1080  100  1080    0     0   3984      0 --:--:-- --:--:-- --:--:--  3985
+[
+"41207 ./12-may-2023/2023-04-12_22-17-40_UTC_LOG.nmea",
+"57112 ./12-may-2023/2023-04-12_23-00-00_UTC_LOG.nmea",
+"57120 ./12-may-2023/2023-04-13_00-00-00_UTC_LOG.nmea",
+"52799 ./12-may-2023/2023-04-13_01-00-00_UTC_LOG.nmea",
+"208238 ./12-may-2023/voile-mag.nmea",
+"294553 ./data.4tests.nmea",
+"103411 ./sample.data/Kayak.Patrick.nmea",
+"12604 ./sample.data/gx.sep.2024/gx.to.gavres.nmea",
+"2621 ./sample.data/rubis.cup.2024/2024-06-15_14-44-49_UTC_LOG.nmea",
+"10289 ./sample.data/rubis.cup.2024/2024-06-15_15-00-00_UTC_LOG.nmea",
+"10205 ./sample.data/rubis.cup.2024/2024-06-15_16-00-00_UTC_LOG.nmea",
+"10228 ./sample.data/rubis.cup.2024/2024-06-15_17-00-00_UTC_LOG.nmea",
+"10109 ./sample.data/rubis.cup.2024/2024-06-15_18-00-00_UTC_LOG.nmea",
+"10304 ./sample.data/rubis.cup.2024/2024-06-15_19-00-00_UTC_LOG.nmea",
+"10221 ./sample.data/rubis.cup.2024/2024-06-15_20-00-00_UTC_LOG.nmea",
+"10304 ./sample.data/rubis.cup.2024/2024-06-15_21-00-00_UTC_LOG.nmea",
+"6555 ./sample.data/rubis.cup.2024/2024-06-15_22-00-00_UTC_LOG.nmea",
+"80837 ./sample.data/rubis.cup.2024/rubiscup.2024.nmea",
+"988717 total"
+]
+olivierlediouris@macbookpro:~/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/nmea-dist (master) $
