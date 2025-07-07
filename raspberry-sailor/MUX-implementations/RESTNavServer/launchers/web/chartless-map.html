@@ -4,16 +4,239 @@
   Display a track on a chartless map, from a BLOB.
 -->
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-    <title>Chartless Map</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+        <title>Chartless Map</title>
+        <link rel="icon" type="image/ico" href="icons/hammerhead.02.ico">
+        <script type="module" src="./webcomponents/ChartlessMap.js"></script>
+	    <style type="text/css">
+html {
+	font-family: "Courier New";
+}
 
-    <link rel="icon" type="image/ico" href="icons/hammerhead.02.ico">
-  </head>
-  <body>
+select, input {
+	font-family: "Courier New";
+	font-weight: bold;
+	font-size: 1.1em;
+}
 
-  </body>
-  <script type="text/javascript">
+.html-01 {
+	background-color: white;
+	color: black;
+}
+.html-02 {
+	background-color: gray;
+	color: cyan;
+}
+.html-03 {
+	background-color: black;
+	color: silver;
+}
+
+.chartless-map-01 {
+	--bg-color: rgba(224, 215, 215, 0.5);
+	--grid-color: rgba(0, 0, 0, 0.7);
+	--fg-color: gray;
+	--marker-and-track-color: navy;
+	--target-color: green;
+	--border-color: blue;
+	--value-font: 'Courier New';
+}
+.chartless-map-02 {
+	--bg-color: rgba(0, 0, 0, 0.5);
+	--grid-color: lime;
+	--fg-color: lime;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+.chartless-map-03 {
+	--bg-color: rgb(62, 58, 58);
+	--grid-color: cyan;
+	--fg-color: cyan;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+compass-display .green {
+	--bg-color: transparent;
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: lime;
+	--cross-hair-color: red;
+	--display-line-color: lime;
+	--label-fill-color: green;
+	--with-display-shadow: false;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: green;
+	--value-outline-color: lime;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .orange {
+	--bg-color: transparent;
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: orange;
+	--cross-hair-color: red;
+	--display-line-color: orange;
+	--label-fill-color: orange;
+	--with-display-shadow: false;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .gray {
+	--bg-color: transparent;
+	--digit-color: gray;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: gray;
+	--cross-hair-color: red;
+	--display-line-color: gray;
+	--label-fill-color: blue;
+	--with-display-shadow: false;
+	--outline-color: gray;
+	--major-tick-color: gray;
+	--minor-tick-color: gray;
+	--value-color: navy;
+	--value-outline-color: gray;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+.display-data {
+	grid-area: middle;
+	text-align: center;
+	vertical-align: baseline;
+	margin: auto;
+	color: inherit;
+	font-size: 48px;
+	font-weight: bold;
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+chartless-map#chartless-map-01 {
+	/* cursor: crosshair; */
+	cursor: url('./images/crosshair.png') 19 20, auto;
+}
+
+    	</style>
+    </head>
+    <body>
+
+        <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+            <chartless-map id="chartless-map-01"
+                            class="chartless-map-01"
+                            center-lat="0.0"
+                            center-lng="0.0"
+                            chart-width="5.0"
+                            width="1000"
+                            height="600"></chartless-map>
+        </div>
+
+        <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+            Chart Width:
+            <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                    oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+            <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+        </div>
+
+        <div id="free-stuff" style="margin-top: 10px;">
+        </div>
+
+    </body>
+    <script type="text/javascript">
+
+let map; 
+const VERBOSE = false;		
 
 let getQSPrm = function(prm) {
     let value;
@@ -69,9 +292,84 @@ function getLOGData(url) {
 	return promise;
 }
 
+function onSlider(event) {
+	if (VERBOSE) {
+		console.log(`Setting chart width to ${this.value}.`);
+	}
+	if (this.value > 0) {
+    	map.chartWidth = this.value;
+	} else {
+		console.log(`Chart width ${this.value} !!`);
+	}
+}
+
+let lpad = (str, len, pad) => {
+	let s = str;
+	while (s.length < len) {
+		s = (pad === undefined ? ' ' : pad) + s;
+	}
+	return s;
+};
+
+let decToSex = (val, ns_ew) => {
+	let absVal = Math.abs(val);
+	let intValue = Math.floor(absVal);
+	let dec = absVal - intValue;
+	let i = intValue;
+	dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+	let s = "";
+	if (ns_ew !== undefined) {
+		if (val < 0) {
+			s += (ns_ew === 'NS' ? 'S' : 'W');
+		} else {
+			s += (ns_ew === 'NS' ? 'N' : 'E');
+		}
+		s += " ";
+	} else {
+		if (val < 0) {
+			s += '-'
+		}
+	}
+	s += i + "\xba" + lpad(dec.toFixed(2), 5, '0') + "'";
+
+	return s;
+};
+
+/*
+ * Used as the doAfter callback on the ChartlessMap.
+ */
+let updateMap = (elmt, context) => {
+	
+	// The points of the track
+	context.beginPath();
+	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
+	context.lineWidth = 1;
+	for (let i=0; i<trackBuffer.length; i++) {
+		let pos = trackBuffer[i];
+		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
+        if (true) {
+            console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`);
+        }
+		if (i === 0) {
+			context.moveTo(canvasCoord.x, canvasCoord.y);
+		} else {
+			context.lineTo(canvasCoord.x, canvasCoord.y);
+		}
+	}
+	context.stroke();
+	context.closePath();
+};
+
+let trackBuffer = [];
 
 // Read the log data, json format
 window.onload = function() {
+    
+    map = document.getElementById('chartless-map-01');
+    map.setDoAfter(updateMap);        
+
     let loadURL = getQSPrm("json");
     if (loadURL) {
         console.log(`Load URL: ${ decodeURIComponent(loadURL) }`);
@@ -80,11 +378,15 @@ window.onload = function() {
         getData.then((value) => {
             // console.log("Done:", value);
             let json = JSON.parse(value);
+            trackBuffer = json;
             // console.log(`Content:\n${json}`);
-            document.body.innerHTML = 
+            document.getElementById('free-stuff').innerHTML = 
                 "<h1>JSON Data (WiP)</h1>" + 
                 `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
             // TODO: destroyClickedElement...
+
+            map.repaint();
+
         }, (error, errmess) => {
             let message;
             if (errmess) {
@@ -96,9 +398,9 @@ window.onload = function() {
             console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
         });
     } else {
-        document.body.innerHTML = "<h1>Oops! No json QS prm!</h1>";
+        document.getElementById('free-stuff').innerHTML = "<h1>Oops! No json QS prm!</h1>";
     }
 };
 
-  </script>
+    </script>
 </html>
