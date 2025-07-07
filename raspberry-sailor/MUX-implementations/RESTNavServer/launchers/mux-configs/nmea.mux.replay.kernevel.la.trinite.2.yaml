@@ -1,0 +1,46 @@
+#
+# MUX definition.
+#
+name: "Replay log file. Chartless Map. Re-log."
+description:
+  - Replay a log file from the logged folder (Kernevel - La Trinité).
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - Re-log the data (for log mgmt test)
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  # markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+  markers.list:
+    - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    - markers: mux-configs/markers/markers.glenan.yaml
+    - markers: mux-configs/markers/markers.uk.yaml
+    # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
+    # - markers: mux-configs/markers/markers.san.juan.yaml
+channels:
+  - type: file
+    filename: ./sample.data/kernevel.latrinite.nmea.zip
+    zip: true
+    path.in.zip: kernevel.latrinite.nmea
+    # between-records: 50   # Speed up
+    verbose: false
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+forwarders:
+  - type: file
+    verbose: false
+    timebase.filename: true
+    filename.suffix: "_LOG"
+    log.dir: "sample.data/log.test"
+    split: "hour"
+    flush: true
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.default.properties
+    verbose: false

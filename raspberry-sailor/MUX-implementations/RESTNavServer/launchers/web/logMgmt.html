@@ -2,6 +2,10 @@
 <!--
  ! This page allows you to deal with the log files available on the server.
  ! You can download or delete them, and/or see which is the active one (if any).
+ !
+ ! TODO: 
+ ! Log file summary 
+ ! Log file display (on charless map, leaflet)
  +-->
 <html>
 <head>
@@ -177,8 +181,8 @@
 			let tableHtml = '';
 			document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
 
-			// For tests
-			let recurse = (dirStructure, splittedPath, lf) => {
+			// For tests. Populates the hierarchy variable.
+			let recurse = (dirStructure, splittedPath, lf, active=false) => {
 				console.log(`Managing ${lf}`);
 
 				let arrayLength = splittedPath.length;
@@ -206,7 +210,7 @@
 				// The file
 				let fName = splittedPath[arrayLength - 1];
 				console.log(`Adding file ${fName} to the current dir ${currentDir.dir}`);
-				parentDir.files.push({name: fName, path: lf});
+				parentDir.files.push({name: fName, path: lf, active: active});
 			};
 
 			let hierarchy = { // An empty one.
@@ -230,7 +234,7 @@
 					if (lf.split(' ').length > 1 && lf.split(' ')[1] !== 'total') {
 						let splitted = lf.split(' ')[1].split('/');
 						let currentDir = hierarchy; // This is the top
-						recurse(currentDir, splitted, lf); // Recurse through file path.
+						recurse(currentDir, splitted, lf, isActive); // Recurse through file path. Populates the hierarchy variable.
 					}
 				}
 			});
