@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+  WiP...
+  Display a track on a chartless map, from a BLOB.
+-->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <title>Chartless Map</title>
+
+    <link rel="icon" type="image/ico" href="icons/hammerhead.02.ico">
+  </head>
+  <body>
+
+  </body>
+  <script type="text/javascript">
+
+let getQSPrm = function(prm) {
+    let value;
+    let loc = document.location.toString();
+    if (loc.indexOf("?") > -1) {
+      let qs = loc.substring(loc.indexOf("?") + 1);
+      let prms = qs.split('&');
+      for (let i=0; i<prms.length; i++) {
+        let nv = prms[i].split('=');
+        if (nv.length === 2) {
+          if (nv[0] === prm) {
+            return nv[1];
+          }
+        }
+      }
+    }
+    return value;
+};
+
+function getLOGData(url) {
+
+	let xhr = new XMLHttpRequest(),
+		verb = 'GET',
+		happyCode = 200,
+		TIMEOUT = 10000;
+
+	let promise = new Promise((resolve, reject) => {
+		let xhr = new XMLHttpRequest();
+
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			xhr.send();
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(() => {
+			xhr.abort();
+			let mess = {code: 408, message: `Timeout (${TIMEOUT}ms) for ${verb} ${url}`};
+			reject(mess);
+		}, TIMEOUT);
+
+		xhr.onload = function () {
+			clearTimeout(requestTimer);
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+	return promise;
+}
+
+
+// Read the log data, json format
+window.onload = function() {
+    let loadURL = getQSPrm("json");
+    if (loadURL) {
+        console.log(`Load URL: ${ decodeURIComponent(loadURL) }`);
+
+        let getData = getLOGData(decodeURIComponent(loadURL));
+        getData.then((value) => {
+            // console.log("Done:", value);
+            let json = JSON.parse(value);
+            // console.log(`Content:\n${json}`);
+            document.body.innerHTML = 
+                "<h1>JSON Data (WiP)</h1>" + 
+                `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
+            // TODO: destroyClickedElement...
+        }, (error, errmess) => {
+            let message;
+            if (errmess) {
+                let mess = JSON.parse(errmess);
+                if (mess.message) {
+                    message = mess.message;
+                }
+            }
+            console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+        });
+    } else {
+        document.body.innerHTML = "<h1>Oops! No json QS prm!</h1>";
+    }
+};
+
+  </script>
+</html>

@@ -71,8 +71,12 @@ public class NMEAtoJSONPos {
 
 		List<Object> jsonArray = new ArrayList<>();
 		BufferedReader br = new BufferedReader(new FileReader(fileInName));
-		BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutName));
+		BufferedWriter bw = null;
+		if (fileOutName != null) {
+			bw = new BufferedWriter(new FileWriter(fileOutName));
+		}
 
+		// With Over Ground data
 		boolean withOG = "true".equals(System.getProperty("with.og", "false"));
 
 		// 1 - Build a list of RMC
@@ -147,11 +151,21 @@ public class NMEAtoJSONPos {
 		}
 
 		if (minified) {
-			bw.write(mapper.writeValueAsString(jsonNode));
+			if (bw != null) {
+				bw.write(mapper.writeValueAsString(jsonNode));
+			} else {
+				System.out.println(mapper.writeValueAsString(jsonNode));
+			}
 		} else {
-			bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+			if (bw != null) {
+				bw.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+			} else {
+				System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+			}
 		}
-		bw.close();
+		if (bw != null) {
+			bw.close();
+		}
 	}
 
 	public static void main(String... args) {
@@ -159,14 +173,24 @@ public class NMEAtoJSONPos {
 			throw new IllegalArgumentException("Please provide the name of the file to analyze as first parameter");
 		}
 
+		String inputFileName = args[0];
+		String outputFileName = inputFileName + ".json";
+
+		String userOutput = System.getProperty("output-file");
+		if (userOutput != null) {
+			outputFileName = userOutput;
+		}
+
 		try {
-			String inputFileName = args[0];
-			String outputFileName = inputFileName + ".json";
 			NMEAtoJSONPos.transform(inputFileName, outputFileName);
-			System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
+			if (outputFileName != null) {
+				System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		map.keySet().forEach(key -> System.out.printf("%s: %d records\n", key, map.get(key)));
+		if (outputFileName != null) {
+			map.keySet().forEach(key -> System.out.printf("%s: %d records\n", key, map.get(key)));
+		}
 	}
 }

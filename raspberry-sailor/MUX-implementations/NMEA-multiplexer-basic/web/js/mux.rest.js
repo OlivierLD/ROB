@@ -99,7 +99,7 @@ let updateMarkersConfig = (markerList) => {
 
 let updateNextWaypoint = (waypointId) => {
     return getPromise(`/mux/waypoints/${waypointId}`, DEFAULT_TIMEOUT, 'PUT', (ret) => { return (ret === 201 || ret === 202); }, waypointId, false);
-}
+};
 
 let enableLogging = (b) => {
     return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 201, null, false);
@@ -120,6 +120,10 @@ let getLogFile = (fileName) => {
 
 let getLogFileDetails = (fileName) => {
     return getPromise('/mux/log-file-details/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
+let getLogToJSON = (fileName) => {
+    return getPromise('/mux/log-file-to-json/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
 let deleteLogFile = (logFile) => {

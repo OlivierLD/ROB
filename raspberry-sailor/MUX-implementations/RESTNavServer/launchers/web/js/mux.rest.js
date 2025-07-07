@@ -122,6 +122,10 @@ let getLogFileDetails = (fileName) => {
     return getPromise('/mux/log-file-details/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
+let getLogToJSON = (fileName) => {
+    return getPromise('/mux/log-file-to-json/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+};
+
 let deleteLogFile = (logFile) => {
     return getPromise('/mux/log-files/' + logFile, DEFAULT_TIMEOUT, 'DELETE', (ret) => { return (ret >= 200 || ret < 300); }, null, false);
 };

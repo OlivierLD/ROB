@@ -15,6 +15,7 @@ JAVA_OPTIONS=
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dwith.og=true"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dminified=false"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Doutput-file=JSON.json"
 #
 # OFFSET=484
 # LIMIT=179

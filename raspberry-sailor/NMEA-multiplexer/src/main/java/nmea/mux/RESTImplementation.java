@@ -26,6 +26,7 @@ import nmea.parser.*;
 import nmea.utils.NMEAUtils;
 import org.yaml.snakeyaml.Yaml;
 import util.LogAnalyzer;
+import util.NMEAtoJSONPos;
 import utils.StringUtils;
 
 import java.io.*;
@@ -338,6 +339,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/log-file-details/{log-file}",
 					this::getLogFileDetails,
 					"Get the log file details"),
+			new Operation(
+					"GET",
+					REST_PREFIX + "/log-file-to-json/{log-file}",
+					this::getLogFileToJSON,
+					"Get the log file translated to json"),
 			new Operation(
 					"DELETE",
 					REST_PREFIX + "/log-files/{log-file}",
@@ -2827,6 +2833,74 @@ public class RESTImplementation {
 			String content = sb.toString();
 
 			RESTProcessorUtil.generateResponseHeaders(response, "plain/text", content.getBytes().length);
+			response.setPayload(content.getBytes());
+
+			return response;
+		} catch (Exception ex) {
+			response.setStatus(HTTPServer.Response.NOT_FOUND);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "Problem redirecting stdout");
+			return response;
+		}
+	}
+
+	/**
+	 * @param request file name is the first (only) request prm. MUST be URLEncoded, specially if it contains slashes ('/' => %2F)
+	 * @return The details!
+	 */
+	private HTTPServer.Response getLogFileToJSON(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+		List<String> prmValues = request.getPathParameters();
+		if (prmValues.size() != 1) {
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "missing path parameter {log-file-name}");
+			return response;
+		}
+		String logFileName = prmValues.get(0); // Slashes are escaped, as %2F
+		try {
+			logFileName = URLDecoder.decode(logFileName, StandardCharsets.UTF_8.toString());
+		} catch (/*UnsupportedEncoding*/ Exception uee) {
+			uee.printStackTrace();
+		}
+		File file = new File(logFileName);
+		if (!file.exists()) {
+			response.setStatus(HTTPServer.Response.NOT_FOUND);
+			RESTProcessorUtil.addErrorMessageToResponse(response, String.format("File %s was not found.", logFileName));
+			return response;
+		}
+		// Set the properties here
+		System.setProperty("with.og", "true");
+
+		try {
+			File temp = File.createTempFile("LOGtoJSON", ".json");
+			System.out.println("Temporary file created at: " + temp.getAbsolutePath());
+
+			System.setProperty("output-file", temp.getAbsolutePath());
+
+			NMEAtoJSONPos.main(logFileName);
+
+			// Read the output
+			StringBuffer sb = new StringBuffer();
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(temp));
+				String line = "";
+				boolean go = true;
+				while (go) {
+					line = br.readLine();
+					if (line == null) {
+						go = false;
+					} else {
+						sb.append(line + "\n");
+					}
+				}
+				br.close();
+			} catch (FileNotFoundException fnfe) {
+				fnfe.printStackTrace();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			String content = sb.toString();
+
+			RESTProcessorUtil.generateResponseHeaders(response, "application/json", content.getBytes().length);
 			response.setPayload(content.getBytes());
 
 			return response;
