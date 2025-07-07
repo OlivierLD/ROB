@@ -2,10 +2,10 @@
 <!--
  ! This page allows you to deal with the log files available on the server.
  ! You can download or delete them, and/or see which is the active one (if any).
+ ! - Log file details/summary 
  !
  ! TODO: 
- ! Log file details/summary 
- ! Log file display (on chartless map, leaflet)
+ ! - Log file display (on chartless map, leaflet)
  +-->
 <html>
 <head>
@@ -174,6 +174,28 @@
 			});
 		}
 
+		function getLogDetails(fName) {
+			let logDetails = getLogFileDetails(fName); // A promise
+			logDetails.then((value) => {
+                // var json = JSON.parse(value);
+				console.log("Details OK");
+				// Display Details
+				console.log("Log file details:", value);
+				document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
+				document.getElementById("message").innerText = value; //
+			}, (error, errmess) => {
+				let message;
+				if (errmess) {
+					if (errmess.message) {
+						message = errmess.message;
+					} else {
+						message = errmess;
+					}
+				}
+				messageManager("Failed to get the log file details..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+			});
+		}
+
 		const formatter = new Intl.NumberFormat('en-US', {
 			minimumFractionDigits: 0
 		});
@@ -322,12 +344,14 @@
 							let fileSize = formatter.format(file.size);
 							let isActive = file.active ? '&#10006;' : '';
 							let deleteButton = !file.active && !root.total ? '<button onclick="deleteLog(\'' + encodeURIComponent(file.path) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button>' : '';
+							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?<!--img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"--></button>' : '';
 							console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
 							htmlContent += `<div style="margin-left: ${level * 20}px;">` +
 								`<span class="scrollable-file-name"><a href="/mux/log-files/${encodeURIComponent(file.path)}" target="ext" title="Click to download">${fileName}</a></span>` +
 								` <span style="text-align: right; font-style: italic;">${fileSize} lines</span>` +
 								` <span class="active-file" title="File is active!">${isActive}</span>` +
-								` <span class="delete-file">${deleteButton}</span>` +
+								` <span class="delete-file">${deleteButton}</span>` + 
+								` <span class="delete-file">${detailsButton}</span>` +
 								`</div>`;
 						});
 					}
@@ -391,8 +415,13 @@
 	</div>
 
 	<div id="mess-container" style="display: none;"> <!-- turn display to block or inline for debugging, none for regular usage -->
-		<pre id="message" style="width: 98%; height: 150px;"></pre>
+		<pre id="message" style="width: 98%; height: 150px; overflow: scroll;"></pre>
 	</div>
+</div>
+<hr/>
+<div id="footer">
+	<p>Raspberry Sailor - Log Manager</p>
+	<p>© 2025 Olivier Le Diouris</p>
 </div>
 <script>
 
