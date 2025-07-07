@@ -2,6 +2,10 @@
 <!--
  ! This page allows you to deal with the log files available on the server.
  ! You can download or delete them, and/or see which is the active one (if any).
+ ! - Log file details/summary
+ !
+ ! TODO:
+ ! - Log file display (on chartless map, leaflet)
  +-->
 <html>
 <head>
@@ -21,8 +25,7 @@
 
 		.scrollable-file-name {
 			min-width: 300px;
-			/* width: auto; */
-			width: 90%;
+			width: auto;
 			border: 1px solid silver;
 			border-radius: 5px;
 			white-space: nowrap;
@@ -69,6 +72,15 @@
 	</style>
 	<script type="text/javascript">
 
+		function showHide(element, id) {
+			let divToManage = document.getElementById(id);
+			if (divToManage.style.display === 'none' || divToManage.style.display === '') {
+				divToManage.style.display = 'block';
+			} else {
+				divToManage.style.display = 'none';
+			}
+		}
+
 		function messageManager(mess) {
 			// mess-zone
 			let messZone = document.getElementById('mess-zone');
@@ -102,22 +114,6 @@
 			});
 		}
 
-		/**
-		 * Returns a structure (array of strings, sorted) like 
-		 * $ curl -X GET http://192.168.1.15:9999/mux/log-files
-         * [ "2314 ./akeu.coucou.nmea",
-		 *   "1003991 ./logged/2023-01-21_09-49-32/2023-01-21_09-49-32_UTC_LOG.nmea",
-		 *   "4611 ./logged/2023-01-22_07-45-17/2023-01-22_07-45-17_UTC_LOG.nmea",
-		 *   "1405702 ./logged/2023-01-22_07-54-23/2023-01-22_07-54-23_UTC_LOG.nmea",
-		 *   "974993 ./logged/2023-01-23_13-20-37/2023-01-23_13-20-37_UTC_LOG.nmea",
-		 *   "1123482 ./logged/2023-02-07_10-36-56/2023-02-07_10-36-56_UTC_LOG.nmea",
-		 *   "2170 ./logged/2023-02-10_10-44-02/2023-02-10_10-44-02_UTC_LOG.nmea",
-		 *   "2403 ./logged/2023-02-10_12-32-21/2023-02-10_12-32-21_UTC_LOG.nmea",
-		 *   "1317 ./logged/2023-02-10_12-45-12/2023-02-10_12-45-12_UTC_LOG.nmea",
-		 *   "2763 ./logged/2023-02-10_12-51-52/2023-02-10_12-51-52_UTC_LOG.nmea",
-		 *   "103411 ./sample.data/Kayak.Patrick.nmea",
-		 *   "4627157 total" ]
-		 */
 		function getLogFilesList() {
 			let getData = getLogFiles(); // A promise
 			getData.then((value) => {
@@ -178,12 +174,33 @@
 			});
 		}
 
+		function getLogDetails(fName) {
+			let logDetails = getLogFileDetails(fName); // A promise
+			logDetails.then((value) => {
+                // var json = JSON.parse(value);
+				console.log("Details OK");
+				// Display Details
+				console.log("Log file details:", value);
+				document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
+				document.getElementById("message").innerText = value; //
+			}, (error, errmess) => {
+				let message;
+				if (errmess) {
+					if (errmess.message) {
+						message = errmess.message;
+					} else {
+						message = errmess;
+					}
+				}
+				messageManager("Failed to get the log file details..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+			});
+		}
+
 		const formatter = new Intl.NumberFormat('en-US', {
 			minimumFractionDigits: 0
 		});
 
-		const useList = true;
-
+		// Formatted file list
 		function buildFileList(fileArray, forwarders) {
 
 			let activeLogFile = [];
@@ -193,126 +210,82 @@
 				}
 			}
 
-			let totalNbLines = 0;
-			// Build a tree
-			let logFileTree = {};
-			fileArray.forEach(logFile => {
+			let tableHtml = '';
+			document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
+
+			// Populates the hierarchy variable.
+			let recurse = (dirStructure, splittedPath, lf, active=false) => {
+				console.log(`Managing ${lf}`);
+
+				let arrayLength = splittedPath.length;
+				let currentDir = [ dirStructure ];
+				let parentDir = null;
+				for (let i=0; i<arrayLength - 1; i++) { // Through directories...
+					console.log(`- Managing directory ${splittedPath[i]} ...`);
+					let thisDir = currentDir.filter(d => d.dir === splittedPath[i]);
+					if (thisDir.length === 0) {  // Then append it
+						console.log(`- directory ${splittedPath[i]} NOT found, adding it`);
+						let newDir = {
+							dir: splittedPath[i],
+							subdirs: [],
+							files: []
+						};
+						parentDir.subdirs.push(newDir);
+						currentDir = newDir.subdirs; // Go deeper
+						parentDir = newDir; // Remember the parent
+					} else {
+						console.log(`- ${splittedPath[i]} found, going deeper`);
+						currentDir = thisDir[0].subdirs;
+						parentDir = thisDir[0]; // Remember the parent
+					}
+				}
+				// The file
+				let fName = splittedPath[arrayLength - 1];
+				console.log(`Adding file ${fName} to the current dir ${parentDir.dir}`);
+				parentDir.files.push({
+					name: fName,
+					size: parseInt(lf.split(' ')[0]),
+					original: lf,
+					path: lf.split(' ')[1],
+					active: active
+				});
+			};
+
+			let hierarchy = { // An empty one.
+				dir: ".",
+				subdirs: [],
+				files: []
+			};
+
+			fileArray.forEach(lf => {
 				let isActive = false;
 				let isTotal = false;
 				activeLogFile.forEach(fname => {
-					if (logFile.split(' ')[1].indexOf(fname) > -1) {
+					if (lf.split(' ')[1].indexOf(fname) > -1) {
 						isActive = true;
 					}
 				});
-				if (logFile.split(' ')[1] === 'total') {
+				if (lf.split(' ')[1] === 'total') {
 					isTotal = true;
-					totalNbLines = parseInt(logFile.split(' ')[0]);
+					hierarchy.total = lf.split(' ')[0];
 				} else {
-					let fullFileName = logFile.split(' ')[1];
-					let fileSize = parseInt(logFile.split(' ')[0]);
-					totalNbLines += fileSize;  // TODO check if this is right... Pb when there is only one log file.
-					let fullPath = fullFileName.split('/');
-					// console.log(`Full path: ${fullPath}`);
-					let current = logFileTree;
-					fullPath.forEach((elem, idx) => {
-						if (idx > 0) {
-							if (!current[elem]) {
-								if (idx === fullPath.length - 1) { // } elem.endsWith('.nmea')) { // leaf
-									// console.log(`Leaf node ${elem}`);
-									current[elem] = {
-										type: 'leaf',
-										fullPath: fullFileName,
-										name: elem,
-										size: fileSize,
-										isActive: isActive
-									};
-								} else {
-									current[elem] = {
-										type: 'node'
-									};
-								}
-							}
-							current = current[elem]; // drill down
-						} else {
-							current = logFileTree; // top
-						}
-					});
-				}
-			});
-
-			// console.log(`Total nb lines: ${totalNbLines}`);
-
-			// Loop on keys
-			let keys = Object.keys(logFileTree);
-			let htmlList = document.createElement('ul');
-			let drillDown = function(nodeName, fileParent, listParent) { // recursive
-				// console.log(`In drillDown, at ${JSON.stringify(fileParent)}`);
-				if (fileParent.type) {
-					if (fileParent.type === 'node') {
-						let li = document.createElement('li');
-						li.innerText = nodeName; 
-						listParent.appendChild(li);
-						let ul = document.createElement('ul');
-						li.appendChild(ul);
-						let subKeys = Object.keys(fileParent);
-						subKeys.forEach(k => {
-							drillDown(k, fileParent[k], ul);
-						});
-					} else { // It is a leaf
-						let li = document.createElement('li');
-						// li.innerText = fileParent.name; // TODO other members, links, garbage, nb lines, etc.
-						let div = document.createElement('div');
-						div.setAttribute('class', 'scrollable-file-name');
-						let anchor = document.createElement('a');
-						anchor.setAttribute('href', '/mux/log-files/' + encodeURIComponent(fileParent.fullPath));
-						div.appendChild(anchor);
-						anchor.innerText = fileParent.name;
-						// Nb lines, active, delete
-						// console.log(`${fileParent.name} => size:${fileParent.size}, active: ${fileParent.isActive}`);
-						let nbl = document.createElement('span');
-						nbl.innerHTML = `,&nbsp;${formatter.format(fileParent.size)} lines&nbsp;`;
-						div.appendChild(nbl);
-						if (fileParent.isActive) {
-							let active = document.createElement('span');
-							active.setAttribute('style', 'padding: 5px;');
-							active.innerHTML = "&#10006;";
-							active.setAttribute('title', 'File is active!');
-							div.appendChild(active);
-						} else {
-							// <td class="delete-file"><button onclick="deleteLog(\'' + encodeURIComponent(lf.split(' ')[1]) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button></td>
-							let del = document.createElement('span');
-							del.setAttribute('class', 'delete-file');
-							let button = document.createElement('button');
-							button.setAttribute('onclick', `deleteLog('${encodeURIComponent(fileParent.fullPath)}')`);
-							button.setAttribute('title', 'Delete log file');
-							button.setAttribute('style', 'width: 24px; height: 24px; border-radius: 12px; padding: 0;');
-							let img = document.createElement('img');
-							// src="icons/delete.png" width="16" height="16" style="vertical-align: middle;""
-							img.setAttribute('src', 'icons/delete.png');
-							img.setAttribute('width', '20px');
-							img.setAttribute('height', '20px');
-							img.setAttribute('style', 'vertical-align: middle;');
-
-							button.appendChild(img);
-							del.appendChild(button);
-							div.appendChild(del);
-						}
-
-						li.appendChild(div);
-						listParent.appendChild(li);
+					// Tests
+					if (lf.split(' ').length > 1 && lf.split(' ')[1] !== 'total') {
+						let splitted = lf.split(' ')[1].split('/');
+						let currentDir = hierarchy; // This is the top
+						recurse(currentDir, splitted, lf, isActive); // Recurse through file path. Populates the hierarchy variable.
 					}
-				// } else {
-				// 	console.log(`No type in ${JSON.stringify(fileParent)}`);
 				}
-			}
-			keys.forEach(k => {
-				// console.log(`Top Drill Down ${k}`);
-				drillDown(k, logFileTree[k], htmlList);
 			});
+			if (false) {
+				document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
+				document.getElementById("message").innerText = JSON.stringify(hierarchy, null, 2);
+			}
+			console.log("Bam! Hierarchy comleted.");
+			// End of hierarchy variable population
 
-			if (!useList) {
-				let tableHtml = '';
-				document.getElementById("count").innerText = "Found " + fileArray.length + " log file(s)";
+			// Now build the table. V1
+			if (false) {
 				fileArray.forEach(lf => {
 					let isActive = false;
 					let isTotal = false;
@@ -324,6 +297,7 @@
 					if (lf.split(' ')[1] === 'total') {
 						isTotal = true;
 					}
+
 	//			console.log("List", activeLogFile, "lf", lf);
 					tableHtml +=
 							'<tr>\n' +
@@ -338,32 +312,63 @@
 				});
 
 				document.getElementById("table-body").innerHTML = tableHtml;
-			} else {
-				let theDiv = document.getElementById("file-list");
-				// Remove, then add
-				while (theDiv.firstChild) {
-					theDiv.removeChild(theDiv.firstChild)
-				}
-				// Add
-				theDiv.appendChild(htmlList);
-				let nbl = document.createElement('span');
-				nbl.setAttribute('style', 'font-weight: bold; font-style: italic;');
-				nbl.innerText = `Total lines: ${formatter.format(totalNbLines)}`;
-				theDiv.appendChild(nbl);
 			}
-		}
 
-		let helpVisible = false;
-		function showHideHelp() {
-			let helpDiv = document.getElementById('help-zone');
-			let helpSwitch = document.getElementById('the-switch');
-			helpVisible = !helpVisible;
-			if (helpVisible) {
-				helpDiv.style.display = 'block';
-				helpSwitch.innerText = '-';
-			} else {
-				helpDiv.style.display = 'none';
-				helpSwitch.innerText = '+';
+			// V2: Hierarchical view
+			if (true) {
+
+				let htmlContent = '';
+
+				let drillDownFolders = (root, level) => {
+					let dirName = root.dir;
+					let subdirs = root.subdirs;
+					if (subdirs.length > 0) {
+						subdirs.forEach(subdir => {
+							let subdirName = subdir.dir;
+							// console.log(`` + ' '.repeat(level * 2) + `- Subdir: ${subdirName}`);
+							htmlContent += `<div style="margin-left: ${level * 20}px;"><span onclick="showHide(this, '${subdirName}');"><b>${subdirName}</b></span>`;
+							htmlContent += `<div id="${subdirName}" style="display: block;">`; // Show the subdir content by default
+							drillDownFolders(subdir, level + 1);
+							drillDownFiles(subdir, level + 1);
+							// console.log(`` + ' '.repeat(level * 2) + `- End of Subdir: ${subdirName}`);
+							htmlContent += `</div>`;
+							htmlContent += `</div>`;
+						});
+					}
+				};
+				let drillDownFiles = (root, level) => {
+					let files = root.files;
+					if (files.length > 0) {
+						files.forEach(file => {
+							let fileName = file.name;
+							let fileSize = formatter.format(file.size);
+							let isActive = file.active ? '&#10006;' : '';
+							let deleteButton = !file.active && !root.total ? '<button onclick="deleteLog(\'' + encodeURIComponent(file.path) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button>' : '';
+							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?<!--img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"--></button>' : '';
+							console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
+							htmlContent += `<div style="margin-left: ${level * 20}px;">` +
+								`<span class="scrollable-file-name"><a href="/mux/log-files/${encodeURIComponent(file.path)}" target="ext" title="Click to download">${fileName}</a></span>` +
+								` <span style="text-align: right; font-style: italic;">${fileSize} lines</span>` +
+								` <span class="active-file" title="File is active!">${isActive}</span>` +
+								` <span class="delete-file">${deleteButton}</span>` +
+								` <span class="delete-file">${detailsButton}</span>` +
+								`</div>`;
+						});
+					}
+				};
+
+				let thisLevelDir = hierarchy.subdirs;
+				let thisLevelFiles = hierarchy.files;
+				let level = 0;
+
+				console.log(`Starting from Directory [${hierarchy.dir}]`);
+				drillDownFiles(hierarchy, level);
+				drillDownFolders(hierarchy, level);
+
+				htmlContent += `Total: ${formatter.format(hierarchy.total)} lines.`; // End of the hierarchy
+				// Display htmlContent
+				document.getElementById("hierarchical-view").style.display = 'block'; // Show-Hide the message zone
+				document.getElementById("hierarchical-content").innerHTML = htmlContent;
 			}
 		}
 
@@ -383,44 +388,40 @@
 <div id="main">
 	<div>
 		<h1 style="margin-left: 10px;"><span onclick="window.history.back();" title="Go back">&#8678;&nbsp;</span> Log Manager <img src="icons/reload.png" title="reload page" width="36" height="36" style="vertical-align: middle; margin-left: 20px;" onclick="location.reload();"></h1>
+		<span>TODO: Terminal help, how to get to the log files from a CLI.</span>
 	</div>
 	<div id="syst-date" style="margin: 10px;"></div>
-	<div id="help-switch"><span id="the-switch" style="padding: 5px; border: 1px solid blue; border-radius: 50%; cursor: pointer;" onclick="showHideHelp();">+</span> Help</div>
-	<div id="help-zone" style="margin: 10px; display: none;">
-		You can also get to those files with <code>ssh</code> or <code>scp</code><br/>
-		<code>mux-dir</code> is the name of the root of the multiplexer (where the file <code>mux.sh</code> is).<br/>
-		and <code>pi</code> is the username to use on the Raspberry Pi.<br/>
-		<code>192.168.50.10</code> is the address (or name) or the Raspberry Pi.<br/>
-		<code>logged</code> is in this example the name of the folder you want the files from.<br/>
-		With <code>scp</code>:
-		<pre style="color: yellow; background: black; padding: 5px;">$ scp -r pi@192.168.50.10:~/mux-dir/logged/* .</pre>
-		With <code>ssh</code>:
-		<pre style="color: yellow; background: black; padding: 5px;">$ ssh pi@192.168.50.10
-$ cd mux-dir
-$ tree [-hpu] .</pre>
-	</div>
 	<div id="mess-zone" style="display: none; margin: 5px; border: 2px solid red; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<div id="file-table">
 		<div id="count" style="margin-left: 10px;"></div>
-
-		<!--table id="log-files-table" class="data-table">
-			<thead>
-			<tr>
-				<th>File Name</th>
-				<th>Nb Lines</th>
-				<th title="Active log file">Act?</th>
-				<th>Del.</th>
-			</tr>
-			</thead>
+		<table id="log-files-table" class="data-table">
+			<!--thead>
+				<tr>
+					<th>File Name</th>
+					<th>Nb Lines</th>
+					<th title="Active log file">Act?</th>
+					<th>Del.</th>
+				</tr>
+			</thead-->
 			<tbody id="table-body"></tbody>
-		</table-->
-
-		<div id="file-list" style="font-family: 'Courier New', Courier, monospace;"></div>
+		</table>
 
 	</div>
-	<div style="display: none"> <!-- turn display to block or inline for debugging -->
-		<textarea id="message" style="width: 98%; height: 150px;"></textarea>
+
+	<div id="hierarchical-view" style="margin: 10px; display: none;">
+		<h2>Hierarchical View</h2>
+		<p>Click on a file name to download it. Click on a folder name to expand/collapse it.</p>
+		<div id="hierarchical-content" style="max-height: 400px; overflow-y: auto;"></div>
 	</div>
+
+	<div id="mess-container" style="display: none;"> <!-- turn display to block or inline for debugging, none for regular usage -->
+		<pre id="message" style="width: 98%; height: 150px; overflow: scroll;"></pre>
+	</div>
+</div>
+<hr/>
+<div id="footer">
+	Raspberry Sailor - Log Manager<br/>
+	© 2025 Olivier Le Diouris
 </div>
 <script>
 

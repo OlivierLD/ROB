@@ -125,7 +125,7 @@
 					getFwdrs.then((value) => {
 						document.body.style.cursor = 'default';
 						let fwdrs = JSON.parse(value);
-						buildFileList(logFiles, fwdrs); // TODO Hierarchical, indented !
+						buildFileList(logFiles, fwdrs);
 					}, (error, errmess) => {
 						document.body.style.cursor = 'default';
 						let message;
@@ -420,8 +420,8 @@
 </div>
 <hr/>
 <div id="footer">
-	<p>Raspberry Sailor - Log Manager</p>
-	<p>© 2025 Olivier Le Diouris</p>
+	Raspberry Sailor - Log Manager<br/>
+	© 2025 Olivier Le Diouris
 </div>
 <script>
 
