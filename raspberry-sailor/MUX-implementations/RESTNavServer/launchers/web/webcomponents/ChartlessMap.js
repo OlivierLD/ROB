@@ -78,6 +78,7 @@ class ChartlessMap extends HTMLElement {
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
 
 		this._clickHandler = null;
+		this._delayedRepaint = false;
 
 		let instance = this;
 		let mouseIsDown = false;
@@ -116,7 +117,7 @@ class ChartlessMap extends HTMLElement {
 			lastDraggedPos = null;
 		});
 
-		// Attach a mousemovelistener to the canvas
+		// Attach a mousemove listener to the canvas
 		this.canvas.addEventListener('mousemove', function(evt) {
 
 			let rect = evt.currentTarget.getBoundingClientRect();
@@ -210,7 +211,9 @@ class ChartlessMap extends HTMLElement {
 			default:
 				break;
 		}
-		this.repaint();
+		if (!this._delayedRepaint) {
+			this.repaint();
+		}
 	}
 
 	// Called whenever the custom element has been moved into a new document.

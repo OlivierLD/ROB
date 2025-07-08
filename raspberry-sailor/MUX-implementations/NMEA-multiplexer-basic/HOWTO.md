@@ -212,6 +212,10 @@ Data are logged into some files, so you can analyze, transform (to GPX, KML, etc
 
 And as no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
 
+### One piece of advice...
+Once you have a configuration that fits you, _**do make a backup of your SD Card**_ !  
+This way, you can restore it in no time in case something goes wrong...
+
 ### Supplies, BOM
 - [e-ink bonnet](https://www.adafruit.com/product/4687), $19.95 (Aug-2023)
 - [Raspberry Pi Zero W](https://www.adafruit.com/product/3708), $16.00 (Aug-2023). This one has WiFi capabilities, it does not require an extra WiFi dongle.

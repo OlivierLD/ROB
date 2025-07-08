@@ -69,15 +69,30 @@
 			/*direction: rtl;*/
 		}
 
+		.collapsible:hover {
+			cursor: pointer
+		}
+
 	</style>
 	<script type="text/javascript">
+
+  /*
+    ◄ = &#9668;
+    ► = &#9658;
+    ▼ = &#9660;
+    ▲ = &#9650;
+  */
 
 		function showHide(element, id) {
 			let divToManage = document.getElementById(id);
 			if (divToManage.style.display === 'none' || divToManage.style.display === '') {
 				divToManage.style.display = 'block';
+				// Set arrow to ▼ = &#9660;
+				element.parentElement.querySelector('.arrow-left-down').innerHTML = '&#9660;';
 			} else {
 				divToManage.style.display = 'none';
+				// Set arrow to ► = &#9658;
+				element.parentElement.querySelector('.arrow-left-down').innerHTML = '&#9658;';
 			}
 		}
 
@@ -177,10 +192,10 @@
 		function getLogDetails(fName) {
 			let logDetails = getLogFileDetails(fName); // A promise
 			logDetails.then((value) => {
-                // var json = JSON.parse(value);
-				console.log("Details OK");
+                // let json = JSON.parse(value);
+				// console.log("Details OK");
 				// Display Details
-				console.log("Log file details:", value);
+				// console.log("Log file details:", value);
 				document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
 				document.getElementById("message").innerText = value; //
 			}, (error, errmess) => {
@@ -193,6 +208,58 @@
 					}
 				}
 				messageManager("Failed to get the log file details..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+			});
+		}
+		function getLogJSON(fName) {
+			let logJSON = getLogToJSON(fName); // A promise
+			logJSON.then((value) => {
+                // var json = JSON.parse(value);
+				// console.log("JSON OK");
+				// Display Details
+				if (false) {
+					console.log("JSON version:", value);
+					// Temporary, for debug...
+					document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
+					let json = JSON.parse(value);
+					document.getElementById("message").innerText = JSON.stringify(json, null, 2);
+				}
+
+				// Now... Show on a chartless map
+				let textToWrite = value;
+				let textFileAsBlob = new Blob([textToWrite], {type:'application/json'});
+				// let fileNameToSaveAs = "akeu.coucou.json"; // document.getElementById("inputFileNameToSaveAs").value;
+				let downloadLink = document.createElement("a");
+				// downloadLink.download = fileNameToSaveAs;
+				downloadLink.innerHTML = "Download File";
+				if (window.webkitURL != null) {
+					// Chrome allows the link to be clicked
+					// without actually adding it to the DOM.
+					downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+				} else {
+					// Firefox requires the link to be added to the DOM
+					// before it can be clicked.
+					downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+					downloadLink.onclick = destroyClickedElement;
+					downloadLink.style.display = "none";
+					document.body.appendChild(downloadLink);
+				}
+				console.log(`Will download ${downloadLink.href} `);
+
+				let nextURL = "chartless-map.html?json=" + encodeURIComponent(downloadLink.href);
+				window.open(nextURL, "ChLM"); // Open the chartless map with the JSON file as a parameter
+
+				// downloadLink.click();
+
+			}, (error, errmess) => {
+				let message;
+				if (errmess) {
+					if (errmess.message) {
+						message = errmess.message;
+					} else {
+						message = errmess;
+					}
+				}
+				messageManager("Failed to get the log's JSON Version..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
 			});
 		}
 
@@ -215,16 +282,16 @@
 
 			// Populates the hierarchy variable.
 			let recurse = (dirStructure, splittedPath, lf, active=false) => {
-				console.log(`Managing ${lf}`);
+				// console.log(`Managing ${lf}`);
 
 				let arrayLength = splittedPath.length;
 				let currentDir = [ dirStructure ];
 				let parentDir = null;
 				for (let i=0; i<arrayLength - 1; i++) { // Through directories...
-					console.log(`- Managing directory ${splittedPath[i]} ...`);
+					// console.log(`- Managing directory ${splittedPath[i]} ...`);
 					let thisDir = currentDir.filter(d => d.dir === splittedPath[i]);
 					if (thisDir.length === 0) {  // Then append it
-						console.log(`- directory ${splittedPath[i]} NOT found, adding it`);
+						// console.log(`- directory ${splittedPath[i]} NOT found, adding it`);
 						let newDir = {
 							dir: splittedPath[i],
 							subdirs: [],
@@ -234,14 +301,14 @@
 						currentDir = newDir.subdirs; // Go deeper
 						parentDir = newDir; // Remember the parent
 					} else {
-						console.log(`- ${splittedPath[i]} found, going deeper`);
+						// console.log(`- ${splittedPath[i]} found, going deeper`);
 						currentDir = thisDir[0].subdirs;
 						parentDir = thisDir[0]; // Remember the parent
 					}
 				}
 				// The file
 				let fName = splittedPath[arrayLength - 1];
-				console.log(`Adding file ${fName} to the current dir ${parentDir.dir}`);
+				// console.log(`Adding file ${fName} to the current dir ${parentDir.dir}`);
 				parentDir.files.push({
 					name: fName,
 					size: parseInt(lf.split(' ')[0]),
@@ -281,7 +348,7 @@
 				document.getElementById("mess-container").style.display = 'block'; // Show-Hide the message zone
 				document.getElementById("message").innerText = JSON.stringify(hierarchy, null, 2);
 			}
-			console.log("Bam! Hierarchy comleted.");
+			console.log("Bam! Hierarchy completed.");
 			// End of hierarchy variable population
 
 			// Now build the table. V1
@@ -326,8 +393,8 @@
 						subdirs.forEach(subdir => {
 							let subdirName = subdir.dir;
 							// console.log(`` + ' '.repeat(level * 2) + `- Subdir: ${subdirName}`);
-							htmlContent += `<div style="margin-left: ${level * 20}px;"><span onclick="showHide(this, '${subdirName}');"><b>${subdirName}</b></span>`;
-							htmlContent += `<div id="${subdirName}" style="display: block;">`; // Show the subdir content by default
+							htmlContent += `<div style="margin-left: ${level * 20}px;"><span class="arrow-left-down">&#9660;</span>&nbsp;<span class="collapsible" onclick="showHide(this, '${subdirName}');"><b>${subdirName}</b></span>`;
+							htmlContent += `<div id="${subdirName}" style="display: block; height: 100%;">`; // Show the subdir content by default
 							drillDownFolders(subdir, level + 1);
 							drillDownFiles(subdir, level + 1);
 							// console.log(`` + ' '.repeat(level * 2) + `- End of Subdir: ${subdirName}`);
@@ -344,14 +411,16 @@
 							let fileSize = formatter.format(file.size);
 							let isActive = file.active ? '&#10006;' : '';
 							let deleteButton = !file.active && !root.total ? '<button onclick="deleteLog(\'' + encodeURIComponent(file.path) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button>' : '';
-							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?<!--img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"--></button>' : '';
-							console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
+							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?</button>' : '';
+							let jsonButton = !file.active && !root.total ? '<button onclick="getLogJSON(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">&#128521;</button>' : '';
+							// console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
 							htmlContent += `<div style="margin-left: ${level * 20}px;">` +
 								`<span class="scrollable-file-name"><a href="/mux/log-files/${encodeURIComponent(file.path)}" target="ext" title="Click to download">${fileName}</a></span>` +
 								` <span style="text-align: right; font-style: italic;">${fileSize} lines</span>` +
 								` <span class="active-file" title="File is active!">${isActive}</span>` +
 								` <span class="delete-file">${deleteButton}</span>` +
 								` <span class="delete-file">${detailsButton}</span>` +
+								` <span class="delete-file">${jsonButton}</span>` +
 								`</div>`;
 						});
 					}
@@ -361,7 +430,7 @@
 				let thisLevelFiles = hierarchy.files;
 				let level = 0;
 
-				console.log(`Starting from Directory [${hierarchy.dir}]`);
+				// console.log(`Starting from Directory [${hierarchy.dir}]`);
 				drillDownFiles(hierarchy, level);
 				drillDownFolders(hierarchy, level);
 

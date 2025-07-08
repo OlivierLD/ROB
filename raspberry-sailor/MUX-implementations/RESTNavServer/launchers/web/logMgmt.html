@@ -69,15 +69,30 @@
 			/*direction: rtl;*/
 		}
 
+		.collapsible:hover {
+			cursor: pointer
+		}
+
 	</style>
 	<script type="text/javascript">
+
+  /*
+    ◄ = &#9668;
+    ► = &#9658;
+    ▼ = &#9660;
+    ▲ = &#9650;
+  */
 
 		function showHide(element, id) {
 			let divToManage = document.getElementById(id);
 			if (divToManage.style.display === 'none' || divToManage.style.display === '') {
 				divToManage.style.display = 'block';
+				// Set arrow to ▼ = &#9660;
+				element.parentElement.querySelector('.arrow-left-down').innerHTML = '&#9660;';
 			} else {
 				divToManage.style.display = 'none';
+				// Set arrow to ► = &#9658;
+				element.parentElement.querySelector('.arrow-left-down').innerHTML = '&#9658;';
 			}
 		}
 
@@ -378,8 +393,8 @@
 						subdirs.forEach(subdir => {
 							let subdirName = subdir.dir;
 							// console.log(`` + ' '.repeat(level * 2) + `- Subdir: ${subdirName}`);
-							htmlContent += `<div style="margin-left: ${level * 20}px;"><span onclick="showHide(this, '${subdirName}');"><b>${subdirName}</b></span>`; 
-							htmlContent += `<div id="${subdirName}" style="display: block;">`; // Show the subdir content by default
+							htmlContent += `<div style="margin-left: ${level * 20}px;"><span class="arrow-left-down">&#9660;</span>&nbsp;<span class="collapsible" onclick="showHide(this, '${subdirName}');"><b>${subdirName}</b></span>`; 
+							htmlContent += `<div id="${subdirName}" style="display: block; height: 100%;">`; // Show the subdir content by default
 							drillDownFolders(subdir, level + 1);
 							drillDownFiles(subdir, level + 1);
 							// console.log(`` + ' '.repeat(level * 2) + `- End of Subdir: ${subdirName}`);
@@ -396,8 +411,8 @@
 							let fileSize = formatter.format(file.size);
 							let isActive = file.active ? '&#10006;' : '';
 							let deleteButton = !file.active && !root.total ? '<button onclick="deleteLog(\'' + encodeURIComponent(file.path) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button>' : '';
-							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?<!--img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"--></button>' : '';
-							let jsonButton = !file.active && !root.total ? '<button onclick="getLogJSON(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">Chart<!--img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"--></button>' : '';
+							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?</button>' : '';
+							let jsonButton = !file.active && !root.total ? '<button onclick="getLogJSON(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">&#128521;</button>' : '';
 							// console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
 							htmlContent += `<div style="margin-left: ${level * 20}px;">` +
 								`<span class="scrollable-file-name"><a href="/mux/log-files/${encodeURIComponent(file.path)}" target="ext" title="Click to download">${fileName}</a></span>` +

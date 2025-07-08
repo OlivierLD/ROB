@@ -186,7 +186,6 @@ let getCache = () => {
     return getPromise('/mux/cache', DEFAULT_TIMEOUT, 'GET', 200);
 };
 
-
 let addForwarder = (forwarder) => {
     return getPromise('/mux/forwarders', DEFAULT_TIMEOUT, 'POST', (ret) => { return (ret === 200 || ret === 201); }, forwarder);
 };

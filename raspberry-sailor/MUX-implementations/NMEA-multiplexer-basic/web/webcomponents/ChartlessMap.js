@@ -78,6 +78,7 @@ class ChartlessMap extends HTMLElement {
 		this.chartlessMapColorConfig = chartlessMapDefaultColorConfig;
 
 		this._clickHandler = null;
+		this._delayedRepaint = false;
 
 		let instance = this;
 		let mouseIsDown = false;
@@ -210,7 +211,9 @@ class ChartlessMap extends HTMLElement {
 			default:
 				break;
 		}
-		this.repaint();
+		if (!this._delayedRepaint) {
+			this.repaint();
+		}
 	}
 
 	// Called whenever the custom element has been moved into a new document.
