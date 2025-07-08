@@ -99,7 +99,7 @@ let updateMarkersConfig = (markerList) => {
 
 let updateNextWaypoint = (waypointId) => {
     return getPromise(`/mux/waypoints/${waypointId}`, DEFAULT_TIMEOUT, 'PUT', (ret) => { return (ret === 201 || ret === 202); }, waypointId, false);
-}
+};
 
 let enableLogging = (b) => {
     return getPromise('/mux/mux-process/' + (b === true ? 'on' : 'off'), DEFAULT_TIMEOUT, 'PUT', 201, null, false);
@@ -122,8 +122,8 @@ let getLogFileDetails = (fileName) => {
     return getPromise('/mux/log-file-details/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
-let getLogToJSON = (fileName) => {
-    return getPromise('/mux/log-file-to-json/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+let getLogToJSON = (fileName, timeoutFactor = 1) => {
+    return getPromise('/mux/log-file-to-json/' + fileName, timeoutFactor * DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
 let deleteLogFile = (logFile) => {
@@ -856,7 +856,7 @@ let generateDiagram = () => {
             }
             // Current waypoint
             // if (json['currentWaypointName']) {
-                html += `<li>` + 
+                html += `<li>` +
                             `<span>Current Waypoint: ` + // ${json['currentWaypointName']}</span>&nbsp;&nbsp;` +
                             `<select id="currentWaypoint" onchange="/*updateCurrentWaypoint(this);*/" disabled>` +
                                 `<option value="null">None</option>`;

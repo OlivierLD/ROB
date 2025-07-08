@@ -122,8 +122,8 @@ let getLogFileDetails = (fileName) => {
     return getPromise('/mux/log-file-details/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
-let getLogToJSON = (fileName) => {
-    return getPromise('/mux/log-file-to-json/' + fileName, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+let getLogToJSON = (fileName, timeoutFactor = 1) => {
+    return getPromise('/mux/log-file-to-json/' + fileName, timeoutFactor * DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
 let deleteLogFile = (logFile) => {

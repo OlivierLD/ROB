@@ -328,6 +328,10 @@ function zoomOut() {
     // map.repaint();
 }
 
+function messageManager(mess) { // Ro be overridden
+    console.log(`Message: ${mess}`);
+}
+
 const displayMarkers = true; // false;
 const displayBorders = true; // false;
 const displayBorderMarkers = false;
@@ -408,7 +412,7 @@ let updateMap = (elmt, context) => {
 	// The points of the track
 	context.beginPath();
 	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
-	context.lineWidth = 1;
+	context.lineWidth = 2;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
 		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
@@ -457,7 +461,7 @@ let getDataFromLog = (url) => {
 };
 
 function getLogJSON(fName) {
-    let logJSON = getLogToJSON(fName); // A promise
+    let logJSON = getLogToJSON(fName, 10); // A promise
     logJSON.then((value) => {
         let json = JSON.parse(value);
         trackBuffer = json;
