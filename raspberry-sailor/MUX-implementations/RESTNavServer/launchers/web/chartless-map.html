@@ -2,6 +2,7 @@
 <!--
   WiP...
   Display a track on a chartless map, from a BLOB.
+  Or get the data from a REST service (with the right parameter(s))
 -->
 <html>
     <head>
@@ -427,6 +428,28 @@ let updateMap = (elmt, context) => {
 	}
 	context.stroke();
 	context.closePath();
+
+    // A Circle around the center of the tack
+    if (trackBuffer.length > 0) {
+        // map.centerLat = centerLat;
+        // map.centerLng = centerLng;
+        canvasCoord = elmt.posToCanvas(elmt.centerLat, elmt.centerLng);
+
+        context.beginPath();
+        context.strokeStyle = 'darkred'; // elmt.colorConfig.markerAndTrackColor;
+        context.lineWidth = 2;
+        context.arc(canvasCoord.x, canvasCoord.y, 50, 0, 2 * Math.PI, false);
+        context.stroke();
+        // context.restore();
+
+        context.font = "bold 12px Arial";
+		context.fillStyle = 'navy';
+		if (true) { // Optional extra lines, near the label
+			context.font = "12px Arial";
+			context.fillText("Data center", canvasCoord.x + 2, canvasCoord.y);
+            context.closePath();
+		}
+    }
 };
 
 let trackBuffer = [];
@@ -498,7 +521,7 @@ function plotOnMap() {
     let centerLng = (minLng + maxLng) / 2.0;
     if (true) {
         map._delayedRepaint = true;
-        map.centerLat = centerLat; // This does the repaint... Delay it (_delayedRepaint).
+        map.centerLat = centerLat; // This does the repaint... Delay it (see _delayedRepaint).
         map.centerLng = centerLng;
         map.chartWidth = Math.max(maxLat - minLat, maxLng - minLng) * 1.2; // 20% margin
         map.repaint();
