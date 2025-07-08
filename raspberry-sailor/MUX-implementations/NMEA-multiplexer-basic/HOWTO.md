@@ -213,7 +213,7 @@ Data are logged into some files, so you can analyze, transform (to GPX, KML, etc
 And as no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
 
 ### One piece of advice...
-Once you have a configuration that fits you, _**do make a backup of your SD Card**_ !  
+Once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   
 This way, you can restore it in no time in case something goes wrong...
 
 ### Supplies, BOM

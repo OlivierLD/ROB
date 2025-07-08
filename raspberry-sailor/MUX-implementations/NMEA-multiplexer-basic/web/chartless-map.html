@@ -245,8 +245,8 @@ chartless-map#chartless-map-01 {
     </body>
     <script type="text/javascript">
 
-let map; 
-const VERBOSE = false;		
+let map;
+const VERBOSE = false;
 
 let getQSPrm = function(prm) {
     let value;
@@ -338,7 +338,7 @@ let borders = [];
  * Used as the doAfter callback on the ChartlessMap.
  */
 let updateMap = (elmt, context) => {
-	
+
     console.log(`...updateMap. Plotting ${trackBuffer.length} points.`);
 
     // Markers.
@@ -378,7 +378,7 @@ let updateMap = (elmt, context) => {
 				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
 					plotIt = false;
 				}
-				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) { 
+				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) {
 					elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.borderColor, extraMess);
 				}
 				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
@@ -437,36 +437,12 @@ let getDataFromLog = (url) => {
         trackBuffer = json;
         // console.log(`Content:\n${json}`);
         if (false) {
-            document.getElementById('free-stuff').innerHTML = 
-                "<h1>JSON Data (WiP)</h1>" + 
+            document.getElementById('free-stuff').innerHTML =
+                "<h1>JSON Data (WiP)</h1>" +
                 `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
         }
         // TODO: destroyClickedElement...
-
-        let minLat = 90.0, maxLat = -90.0;
-        let minLng = 180.0, maxLng = -180.0;
-
-        for (let i=0; i<trackBuffer.length; i++) {
-            let pos = trackBuffer[i];
-
-            minLat = Math.min(minLat, pos.lat);
-            maxLat = Math.max(maxLat, pos.lat);
-            minLng = Math.min(minLng, pos.lng);
-            maxLng = Math.max(maxLng, pos.lng);
-
-        }
-        let centerLat = (minLat + maxLat) / 2.0;
-        let centerLng = (minLng + maxLng) / 2.0;
-        if (true) {
-            map._delayedRepaint = true;
-            map.centerLat = centerLat; // This does the repaint... Delay it (_delayedRepaint).
-            map.centerLng = centerLng;
-            map.chartWidth = Math.max(maxLat - minLat, maxLng - minLng) * 1.2; // 20% margin
-            map.repaint();
-            map._delayedRepaint = false;
-        } else {
-            map.repaint();
-        }
+        plotOnMap();
 
     }, (error, errmess) => {
         let message;
@@ -480,11 +456,58 @@ let getDataFromLog = (url) => {
     });
 };
 
+function getLogJSON(fName) {
+    let logJSON = getLogToJSON(fName); // A promise
+    logJSON.then((value) => {
+        let json = JSON.parse(value);
+        trackBuffer = json;
+
+        plotOnMap();
+
+    }, (error, errmess) => {
+        let message;
+        if (errmess) {
+            if (errmess.message) {
+                message = errmess.message;
+            } else {
+                message = errmess;
+            }
+        }
+        messageManager("Failed to get the log's JSON Version..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+    });
+}
+
+function plotOnMap() {
+    let minLat = 90.0, maxLat = -90.0;
+    let minLng = 180.0, maxLng = -180.0;
+
+    for (let i=0; i<trackBuffer.length; i++) {
+        let pos = trackBuffer[i];
+
+        minLat = Math.min(minLat, pos.lat);
+        maxLat = Math.max(maxLat, pos.lat);
+        minLng = Math.min(minLng, pos.lng);
+        maxLng = Math.max(maxLng, pos.lng);
+
+    }
+    let centerLat = (minLat + maxLat) / 2.0;
+    let centerLng = (minLng + maxLng) / 2.0;
+    if (true) {
+        map._delayedRepaint = true;
+        map.centerLat = centerLat; // This does the repaint... Delay it (_delayedRepaint).
+        map.centerLng = centerLng;
+        map.chartWidth = Math.max(maxLat - minLat, maxLng - minLng) * 1.2; // 20% margin
+        map.repaint();
+        map._delayedRepaint = false;
+    } else {
+        map.repaint();
+    }
+}
 // Read the log data, json format
 window.onload = function() {
-    
+
     map = document.getElementById('chartless-map-01');
-    map.setDoAfter(updateMap);        
+    map.setDoAfter(updateMap);
 
     let loadURL = getQSPrm("json");
     if (loadURL) {
@@ -514,8 +537,8 @@ window.onload = function() {
                 trackBuffer = json;
                 // console.log(`Content:\n${json}`);
                 if (false) {
-                    document.getElementById('free-stuff').innerHTML = 
-                        "<h1>JSON Data (WiP)</h1>" + 
+                    document.getElementById('free-stuff').innerHTML =
+                        "<h1>JSON Data (WiP)</h1>" +
                         `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
                 }
                 // TODO: destroyClickedElement...
@@ -557,7 +580,30 @@ window.onload = function() {
             });
         }
     } else {
-        document.getElementById('free-stuff').innerHTML = "<h1>Oops! No json QS prm!</h1>";
+        console.warn("No json QS prm provided, will try 'log'.");
+        // document.getElementById('free-stuff').innerHTML = "<h1>Oops! No json QS prm!</h1>";
+    }
+    let logFileName = getQSPrm("log");
+    if (logFileName) {
+        let getAllCache = getCache(); // For the borders and markers
+        getAllCache.then((value) => {
+            // console.log("Cache:", value);
+            if (value && value.length > 0) {
+                let cache = JSON.parse(value);
+                dataCache = cache;
+                borders = cache['borders-data'];
+                markers = cache['markers-data'];
+                // Now get the log file's data
+                getLogJSON(decodeURIComponent(logFileName));
+            }
+        }, (error, errmess) => {
+            console.debug("Failed to get cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (errmess ? errmess : ' - '));
+            // Now get the log file's data
+            getLogJSON(decodeURIComponent(logFileName));
+        });
+
+    } else {
+        console.warn("No log file name provided in the query string.");
     }
 };
 
