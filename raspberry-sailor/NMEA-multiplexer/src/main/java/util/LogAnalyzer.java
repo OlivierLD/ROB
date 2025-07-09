@@ -230,6 +230,8 @@ public class LogAnalyzer {
 			Date start = null;
 			Date arrival = null;
 			Date prevRMCTime = null;
+			GeoPos firstValidPos = null;
+			GeoPos lastValidPos = null;
 			String line;
 			boolean keepReading = true;
 			while (keepReading) {
@@ -281,6 +283,10 @@ public class LogAnalyzer {
 									double distanceKm = 0;
 									double distanceGcNm = 0d;
 									double calcSpeed = 0;
+									if (firstValidPos == null) {
+										firstValidPos = gp;
+									}
+									lastValidPos = gp;
 									if (previousPos != null) {
 										distanceKm = GeomUtil.haversineKm(previousPos.lat, previousPos.lng, gp.lat, gp.lng);
 										distanceGcNm = new GreatCirclePoint(previousPos.lat, previousPos.lng).gcDistanceBetween(new GreatCirclePoint(gp.lat, gp.lng));
@@ -462,8 +468,8 @@ public class LogAnalyzer {
 			}
 			assert (start != null && arrival != null);
 			if (start != null && arrival != null) {
-				System.out.printf("Started %s\n", SDF.format(start));
-				System.out.printf("Arrived %s\n", SDF.format(arrival));
+				System.out.printf("Started %s, at %s\n", SDF.format(start), firstValidPos);
+				System.out.printf("Arrived %s, at %s\n", SDF.format(arrival), lastValidPos);
 				System.out.printf("Used %s record(s) out of %s. \nTotal distance: %.03f (%.03f) %s, in %s. Avg speed:%.03f %s\n",
 						NumberFormat.getInstance().format(nbRec), // nb recs
 						NumberFormat.getInstance().format(totalNbRec), // total recs
@@ -480,7 +486,9 @@ public class LogAnalyzer {
 					System.out.printf("Min alt: %.02f m, Max alt: %.02f m, delta %.02f m\n", minAlt, maxAlt, (maxAlt - minAlt));
 				}
 				System.out.printf("Top-Left    :%s (%f / %f)\n", new GeoPos(maxLat, minLng).toString(), maxLat, minLng);
+				System.out.printf("Top-Right   :%s (%f / %f)\n", new GeoPos(maxLat, maxLng).toString(), maxLat, maxLng);
 				System.out.printf("Bottom-Right:%s (%f / %f)\n", new GeoPos(minLat, maxLng).toString(), minLat, maxLng);
+				System.out.printf("Bottom-Left :%s (%f / %f)\n", new GeoPos(minLat, minLng).toString(), minLat, minLng);
 				System.out.printf("Min Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLat, GeomUtil.SWING, GeomUtil.NS), args[0], minLatIdx, SDF.format(minLatDate));
 				System.out.printf("Max Lat (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(maxLat, GeomUtil.SWING, GeomUtil.NS), args[0], maxLatIdx, SDF.format(maxLatDate));
 				System.out.printf("Min Lng (%s) record idx (in %s): %d, at %s\n", GeomUtil.decToSex(minLng, GeomUtil.SWING, GeomUtil.EW), args[0], minLngIdx, SDF.format(minLngDate));

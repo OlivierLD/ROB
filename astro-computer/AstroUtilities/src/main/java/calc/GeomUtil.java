@@ -431,6 +431,7 @@ public final class GeomUtil {
 
 	/*
 	 * See http://en.wikipedia.org/wiki/Maidenhead_Locator_System
+	 * Used by amateur radio
 	 */
 	public static String gridSquare(double lat, double lng) {
 		String gridSquare = "";
@@ -460,6 +461,9 @@ public final class GeomUtil {
 		return gridSquare;
 	}
 
+	/*
+	 * See https://en.wikipedia.org/wiki/Open_Location_Code
+	 */
 	public static String googlePlusCode(double lat, double lng) {
 		String plusCode = OpenLocationCode.encode(lat, lng); // testData.length);
 		return plusCode;

@@ -430,21 +430,33 @@ let updateMap = (elmt, context) => {
 	context.closePath();
 
     // A Circle around the center of the tack
-    if (trackBuffer.length > 0) {
+    // TODO Tune this...
+    if (trackBuffer.length > 0 && trackCenterLat && trackCenterLng) {
         // map.centerLat = centerLat;
         // map.centerLng = centerLng;
-        canvasCoord = elmt.posToCanvas(elmt.centerLat, elmt.centerLng);
+        canvasCoord = elmt.posToCanvas(trackCenterLat, trackCenterLng);
+
+        let markerRadius = 50;
+
+        context.lineWidth = 0.5;
+        context.strokeStyle = 'cyan'; // elmt.colorConfig.markerAndTrackColor;
+        context.beginPath();
+        context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
+        context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
+        context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
+        context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
+        context.stroke();
+        context.closePath();
 
         context.beginPath();
-        context.strokeStyle = 'darkred'; // elmt.colorConfig.markerAndTrackColor;
+        context.strokeStyle = 'cyan'; // elmt.colorConfig.markerAndTrackColor;
         context.lineWidth = 2;
-        context.arc(canvasCoord.x, canvasCoord.y, 50, 0, 2 * Math.PI, false);
+        context.arc(canvasCoord.x, canvasCoord.y, markerRadius, 0, 2 * Math.PI, false);
         context.stroke();
-        // context.restore();
 
         context.font = "bold 12px Arial";
-		context.fillStyle = 'navy';
-		if (true) { // Optional extra lines, near the label
+		context.fillStyle = 'red';
+		if (true) {
 			context.font = "12px Arial";
 			context.fillText("Data center", canvasCoord.x + 2, canvasCoord.y);
             context.closePath();
@@ -454,6 +466,27 @@ let updateMap = (elmt, context) => {
 
 let trackBuffer = [];
 let dataCache = {};
+
+let getLogDetails = (fname) => {
+    let getDetails = getLogFileDetails(fname);
+    getDetails.then((value) => {
+        // console.log("Done:", value);
+        if (true) {
+            document.getElementById('free-stuff').innerHTML =
+                `<h1>Log file ${ decodeURIComponent(fname) }</h1>` +
+                `<pre style="width: 98%; height: 90vh; overflow: scroll;">${ value }</pre>`;
+        }
+    }, (error, errmess) => {
+        let message;
+        if (errmess) {
+            let mess = JSON.parse(errmess);
+            if (mess.message) {
+                message = mess.message;
+            }
+        }
+        console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+    });
+}
 
 let getDataFromLog = (url) => {
 
@@ -519,6 +552,10 @@ function plotOnMap() {
     }
     let centerLat = (minLat + maxLat) / 2.0;
     let centerLng = (minLng + maxLng) / 2.0;
+
+    trackCenterLat = centerLat;
+    trackCenterLng = centerLng;
+
     if (true) {
         map._delayedRepaint = true;
         map.centerLat = centerLat; // This does the repaint... Delay it (see _delayedRepaint).
@@ -530,6 +567,10 @@ function plotOnMap() {
         map.repaint();
     }
 }
+
+let trackCenterLat = null;
+let trackCenterLng = null;
+
 // Read the log data, json format
 window.onload = function() {
 
@@ -556,56 +597,6 @@ window.onload = function() {
             // Now get the log file's data
             getDataFromLog(decodeURIComponent(loadURL));
         });
-        if (false) {
-            let getData = getLOGData(decodeURIComponent(loadURL));
-            getData.then((value) => {
-                // console.log("Done:", value);
-                let json = JSON.parse(value);
-                trackBuffer = json;
-                // console.log(`Content:\n${json}`);
-                if (false) {
-                    document.getElementById('free-stuff').innerHTML =
-                        "<h1>JSON Data (WiP)</h1>" +
-                        `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
-                }
-                // TODO: destroyClickedElement...
-
-                let minLat = 90.0, maxLat = -90.0;
-                let minLng = 180.0, maxLng = -180.0;
-
-                for (let i=0; i<trackBuffer.length; i++) {
-                    let pos = trackBuffer[i];
-
-                    minLat = Math.min(minLat, pos.lat);
-                    maxLat = Math.max(maxLat, pos.lat);
-                    minLng = Math.min(minLng, pos.lng);
-                    maxLng = Math.max(maxLng, pos.lng);
-
-                }
-                let centerLat = (minLat + maxLat) / 2.0;
-                let centerLng = (minLng + maxLng) / 2.0;
-                if (true) {
-                    map._delayedRepaint = true;
-                    map.centerLat = centerLat; // This does the repaint... Delay it (_delayedRepaint).
-                    map.centerLng = centerLng;
-                    map.chartWidth = Math.max(maxLat - minLat, maxLng - minLng) * 1.2; // 20% margin
-                    map.repaint();
-                    map._delayedRepaint = false;
-                } else {
-                    map.repaint();
-                }
-
-            }, (error, errmess) => {
-                let message;
-                if (errmess) {
-                    let mess = JSON.parse(errmess);
-                    if (mess.message) {
-                        message = mess.message;
-                    }
-                }
-                console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-            });
-        }
     } else {
         console.warn("No json QS prm provided, will try 'log'.");
         // document.getElementById('free-stuff').innerHTML = "<h1>Oops! No json QS prm!</h1>";
@@ -628,6 +619,7 @@ window.onload = function() {
             // Now get the log file's data
             getLogJSON(decodeURIComponent(logFileName));
         });
+        getLogDetails(decodeURIComponent(logFileName));
 
     } else {
         console.warn("No log file name provided in the query string.");
