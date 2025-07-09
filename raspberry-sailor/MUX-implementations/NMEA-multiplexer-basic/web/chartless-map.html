@@ -214,6 +214,7 @@ chartless-map#chartless-map-01 {
     </head>
     <body>
 
+        <div id="cardinality"></div>
         <div style="display: grid; grid-template-columns: 1020px auto;">
             <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
                 <chartless-map id="chartless-map-01"
@@ -232,6 +233,11 @@ chartless-map#chartless-map-01 {
                         onclick="zoomOut();">-</button>
             </div>
         </div>
+        <div>
+            <input type="checkbox" id="display-center" name="display-center" checked="checked"
+                   onchange="displayCenter = this.checked; map.repaint();">
+            <label for="display-center">Display Data Center</label>
+        </div>
 
         <!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
             Chart Width:
@@ -247,6 +253,7 @@ chartless-map#chartless-map-01 {
     <script type="text/javascript">
 
 let map;
+let displayCenter = true; // Display the center of the track on the map
 const VERBOSE = false;
 
 let getQSPrm = function(prm) {
@@ -429,9 +436,8 @@ let updateMap = (elmt, context) => {
 	context.stroke();
 	context.closePath();
 
-    // A Circle around the center of the tack
-    // TODO Tune this...
-    if (trackBuffer.length > 0 && trackCenterLat && trackCenterLng) {
+    // A Circle around the center of the tack. Optional.
+    if (displayCenter && trackBuffer.length > 0 && trackCenterLat && trackCenterLng) {
         // map.centerLat = centerLat;
         // map.centerLng = centerLng;
         canvasCoord = elmt.posToCanvas(trackCenterLat, trackCenterLng);
@@ -496,6 +502,7 @@ let getDataFromLog = (url) => {
         let json = JSON.parse(value);
         trackBuffer = json;
         // console.log(`Content:\n${json}`);
+        document.getElementById('cardinality').innerHTML = `Read ${trackBuffer.length} point(s) in the log file`;
         if (false) {
             document.getElementById('free-stuff').innerHTML =
                 "<h1>JSON Data (WiP)</h1>" +
@@ -521,6 +528,7 @@ function getLogJSON(fName) {
     logJSON.then((value) => {
         let json = JSON.parse(value);
         trackBuffer = json;
+        document.getElementById('cardinality').innerHTML = `Read ${trackBuffer.length} point(s) in the log file`;
 
         plotOnMap();
 
