@@ -146,7 +146,13 @@ Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:
 
 When a graphical user interface is needed, we use web pages. All you need 
 to see them is a (recent) browser. No need to worry about the operating system of the client you use (Android, iPhone, etc).
-The Web pages presented here require absolutely _**NO**_ external framework.  
+The Web pages presented (and packaged) here require absolutely _**NO**_ external framework.  
+There is an `index.html`, accessible for example from `http://192.168.50.10:9999/zip/index.html`, that gathers
+several examples you can use.  
+Again, those are only _examples_, intending to demonstrate what can be done. Nothing carved in stone.  
+And _this_ is Open Source. Everything is here, but nothing more. Feel free to contribute!
+
+
 From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)  
 Exiting &Eacute;tel
@@ -213,7 +219,7 @@ Data are logged into some files, so you can analyze, transform (to GPX, KML, etc
 And as no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
 
 ### One piece of advice...
-Once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   
+Again, once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   
 This way, you can restore it in no time in case something goes wrong...
 
 ### Supplies, BOM
