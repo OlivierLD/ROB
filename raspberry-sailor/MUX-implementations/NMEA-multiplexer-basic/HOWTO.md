@@ -145,7 +145,7 @@ Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:
 ![Seven](./doc_resources/OpenCPN.png)
 
 When a graphical user interface is needed, we use web pages. All you need 
-to see them is a (recent) browser. No need to worry about the operating system of the client you use (Android, iPhone, etc), nor about the type of device you use (laptop, tablet, cell-phone, etc).
+to see them is a (recent) browser. No need to worry about the operating system of the client you use (Android, iPhone, etc), nor about the type of device (laptop, tablet, cell-phone, etc).
 The Web pages presented (and packaged) here require absolutely _**NO**_ external framework.  
 There is an `index.html`, accessible for example from `http://192.168.50.10:9999/zip/index.html`, that gathers
 several examples you can use. This includes `admin` pages, and log files management as well.    
