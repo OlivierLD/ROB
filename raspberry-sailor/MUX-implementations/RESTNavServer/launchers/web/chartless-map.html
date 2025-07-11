@@ -237,7 +237,11 @@ chartless-map#chartless-map-01 {
             <input type="checkbox" id="display-center" name="display-center" checked="checked"
                    onchange="displayCenter = this.checked; map.repaint();">
             <label for="display-center">Display Data Center</label>
-        </div>
+
+			<!--br/-->
+			<input type="checkbox" id="plot-world-map" onchange="plotWorldMap(this);">
+			<label for="plot-world-map">Display World Map</label>
+		</div>
 
         <!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
             Chart Width:
@@ -253,6 +257,36 @@ chartless-map#chartless-map-01 {
     <script type="text/javascript">
 
 let map;
+let world_map_data = null;
+let withWorldMap = false;
+
+const WORLD_DATA = "./json/world.data.json";
+
+let loadWorldData = (fn) => {
+	window.fetch(WORLD_DATA)
+		.then(response => {
+			console.log(`Data Response: ${response.status} - ${response.statusText}`);
+			response.json().then(doc => {
+				world_map_data = doc;
+				console.log(`World data loaded`);
+				if (fn) {
+					console.log("Executing next func.");
+					fn();
+				}
+			});
+		}, (error, errmess) => {
+			console.log("Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
+};
+
 let displayCenter = true; // Display the center of the track on the map
 const VERBOSE = false;
 
@@ -336,9 +370,43 @@ function zoomOut() {
     // map.repaint();
 }
 
-function messageManager(mess) { // Ro be overridden
+function messageManager(mess) { // To be overridden
     console.log(`Message: ${mess}`);
 }
+
+let plotWorldMap = (cb) => {
+	withWorldMap = cb.checked;
+	if (withWorldMap && world_map_data === null) {
+		if (false) {
+			// Promise option (promise within a promise... Mmmmh)
+			let loadData = () => {
+				let promise = new Promise((resolve, reject) => {
+					try {
+						resolve(loadWorldData());
+					} catch (err) {
+						reject(err);
+					}
+				});
+				return promise;
+			};
+			loadData().then(result => {
+				map.repaint();
+			});
+		} else if (false) {
+			// Timeout option
+			loadWorldData();
+			setTimeout(() => { map.repaint(); }, 3000);
+		} else if (true) {
+			// DoNext option
+			loadWorldData(() => map.repaint());
+		}
+	} else {
+		if (world_map_data !== null) {
+			map.repaint();
+		}
+	}
+	// map.repaint(); // TODO in a promise ? then ?
+};
 
 const displayMarkers = true; // false;
 const displayBorders = true; // false;
@@ -353,7 +421,59 @@ let updateMap = (elmt, context) => {
 
     console.log(`...updateMap. Plotting ${trackBuffer.length} points.`);
 
-    // Markers.
+	if (withWorldMap) { // Draw World Chart
+		context.save();
+		try {
+			let worldTop = world_map_data.top;
+			let section = worldTop.section; // We assume top has been found.
+
+			// console.log("Found " + section.length + " section(s).")
+			for (let i = 0; i < section.length; i++) {
+				let point = section[i].point;
+				if (point !== undefined) {
+					let firstPt = null;
+					let previousPt = null;
+					context.beginPath();
+					for (let p = 0; p < point.length; p++) {
+						let lat = parseFloat(point[p].Lat);
+						let lng = parseFloat(point[p].Lng);
+						if (lng < -180) {
+							lng += 360;
+						}
+						if (lng > 180) {
+							lng -= 360;
+						}
+
+						let pt = elmt.posToCanvas(lat, lng);
+
+						if (previousPt === null) { // p === 0) {
+							context.moveTo(pt.x, pt.y);
+							firstPt = pt;
+							previousPt = pt;
+						} else {
+							// if (Math.abs(previousPt.x - pt.x) < (this.width / 2) && Math.abs(previousPt.y - pt.y) < (this.height / 2)) {
+								context.lineTo(pt.x, pt.y);
+								previousPt = pt;
+							// }
+						}
+					}
+					// Close the loop
+					if (firstPt !== null && previousPt !== null) {
+						context.lineTo(firstPt.x, firstPt.y);
+					}
+				}
+				context.lineWidth = 1;
+				context.strokeStyle = 'gray';
+				context.stroke();
+				context.closePath();
+			}
+		} catch (ex) {
+			console.log("Oops:" + ex);
+		}
+		context.restore();
+	}
+
+	// Markers.
 	if (VERBOSE) {
 		console.log(`${markers.length} markers`);
 	}
