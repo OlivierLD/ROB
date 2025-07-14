@@ -2,7 +2,7 @@
 # West of Etel
 #
 description:
-  West of Etel
+  West of Etel, Lorient, Blavet
 markers:
   - label: "Gâvres"
     latitude: 47.69416554585294
@@ -24,6 +24,15 @@ markers:
     latitude: 47.7206182220987
     longitude: -3.3680820465087895
     type: default
+  - label: "Ferry Lorient-Groix"
+    latitude: 47.74079523993348
+    longitude: -3.350315093994141
+    type: default
+  - label: "Bassin à flot"
+    latitude: 47.74472004600229
+    longitude: -3.3595418930053715
+    type: default
+
 borders:
   - border-name: "Étel - Gâvres"
     type: "open"
