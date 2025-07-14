@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!--
-  WiP...
-  Display a track on a chartless map, from a BLOB.
-  Or get the data from a REST service (with the right parameter(s))
+  Display a track on a chartless map, from a BLOB (optional),
+  Or get the data from a REST service (with the right parameter(s)).
+
+  See the updateMap function below, called after repaonting the map (to add required data and details).
 -->
 <html>
     <head>
@@ -238,6 +239,10 @@ chartless-map#chartless-map-01 {
                    onchange="displayCenter = this.checked; map.repaint();">
             <label for="display-center">Display Data Center</label>
 
+            <input type="checkbox" id="display-labels" name="display-labels" checked="checked"
+                   onchange="displayLabels = this.checked; map.repaint();">
+            <label for="display-labels">Display Markers Labels</label>
+
 			<!--br/-->
 			<input type="checkbox" id="plot-world-map" onchange="plotWorldMap(this);">
 			<label for="plot-world-map">Display World Map</label>
@@ -288,6 +293,7 @@ let loadWorldData = (fn) => {
 };
 
 let displayCenter = true; // Display the center of the track on the map
+let displayLabels = true; // Display the markers labels on the map
 const VERBOSE = false;
 
 let getQSPrm = function(prm) {
@@ -483,7 +489,7 @@ let updateMap = (elmt, context) => {
 		let beaconHeight = 2 * markerRadius;
 		markers.forEach(marker => {
 			let extraMess = [];
-			elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.markerAndTrackColor, extraMess); // method defined in the ChartlessMap
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.markerAndTrackColor, extraMess, displayLabels); // method defined in the ChartlessMap
 		});
 		context.restore();
 	}

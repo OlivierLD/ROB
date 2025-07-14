@@ -12,6 +12,8 @@
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER and enable_screen_saver_after variables.
 # -> Screen Saver displays a pelican (default) or a static text.
 #
+# CLI prms: Look for "# CLI prms" in the code below.
+#
 # Work In Progress !
 # Do run a curl -X GET /eink2-13/oplist !
 #

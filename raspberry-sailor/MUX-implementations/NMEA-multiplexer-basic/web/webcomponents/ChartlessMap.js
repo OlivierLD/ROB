@@ -2,10 +2,10 @@
  * This is the chartless-map Web Component.
  * Can be used to plot a grid, markers, tracks... without having to have a cartography available. (or
  * a device supporting it).
- * 
+ *
  * Supported projection(s):
  * - Mercator
- * 
+ *
  * With callbacks.
  */
 
@@ -448,7 +448,7 @@ class ChartlessMap extends HTMLElement {
 			context.translate(Math.round(x + 5), 0); // len / 2);
 			context.rotate(Math.PI / 2);
 			context.fillText(label, 1, 1); //i * xScale, cHeight - (len));
-	  
+
 			context.stroke();
 			context.closePath();
 			context.restore();
@@ -501,7 +501,7 @@ class ChartlessMap extends HTMLElement {
 			context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
 			context.stroke();
 			context.closePath();
-		
+
 			context.restore();
 		}
 
@@ -685,12 +685,13 @@ class ChartlessMap extends HTMLElement {
 	}
 
 	// Markers (display)  displays
-	plotMark(context, marker, markerRadius, beaconHeight, defaultColor, extraData) {
+	plotMark(context, marker, markerRadius, beaconHeight, defaultColor, extraData, withLabel = true) {
 		let lat = marker.latitude;
 		let lng = marker.longitude;
 		let label = marker.label;
 		let markType = marker.type || 'default'; // Can be undefined or null
-		
+
+		// The shape of the mark
 		let canvasCoord = this.posToCanvas(lat, lng);
 		switch (markType) {
 			case 'red':
@@ -1150,15 +1151,17 @@ class ChartlessMap extends HTMLElement {
 				context.restore();
 				break;
 		}
-		// Label
-		context.font = "bold 12px Arial";
-		context.fillStyle = defaultColor;
-		context.fillText(label, canvasCoord.x + markerRadius + 2, canvasCoord.y);
-		if (extraData !== null) { // Optional extra lines, near the label
-			context.font = "12px Arial";
-			extraData.forEach((line, idx) => {
-				context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + (label.trim().length == 0 ? 0 : 1))));
-			}); 
+		// Label of the mark, and extra lines
+		if (withLabel) {
+			context.font = "bold 12px Arial";
+			context.fillStyle = defaultColor;
+			context.fillText(label, canvasCoord.x + markerRadius + 2, canvasCoord.y);
+			if (extraData !== null) { // Optional extra lines, near the label
+				context.font = "12px Arial";
+				extraData.forEach((line, idx) => {
+					context.fillText(line, canvasCoord.x + markerRadius + 2, canvasCoord.y + (12 * (idx + (label.trim().length == 0 ? 0 : 1))));
+				});
+			}
 		}
 		context.closePath();
 	}
