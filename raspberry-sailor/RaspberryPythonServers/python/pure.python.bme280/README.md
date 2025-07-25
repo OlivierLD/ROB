@@ -97,7 +97,8 @@ On the Raspberry Pi:
 ```
 $ sudo pip3 install adafruit-circuitpython-bme280
 ```
-In case you see an "Externally Managed" message, see [here](https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/)...
+In case you see an "Externally Managed" message, see [here](https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/)...  
+Also, in case of some "name" issue, try `sudo pip install --upgrade setuptools`... 
 
 
 ### Run the server app

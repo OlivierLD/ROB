@@ -174,7 +174,12 @@ The web UI is customizable at will. Above is _examples_ of the ChartlessMap WebC
 In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
-this is the kind of things you might regret not to have done.
+this is the kind of things you might regret not to have done.  
+
+It comes with many web components and examples.  
+![From Space 01](./doc_resources/from.space.01.png)  
+![From Space 02](./doc_resources/from.space.02.png)  
+![From Space 03](./doc_resources/from.space.03.png)  
 
 ### REST Clients
 Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long), using REST or other _standard_ protocols.
