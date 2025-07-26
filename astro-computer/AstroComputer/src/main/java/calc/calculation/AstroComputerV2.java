@@ -946,6 +946,11 @@ public class AstroComputerV2 {
         public float getSeconds() {
             return seconds;
         }
+
+        @Override
+        public String toString() {
+            return String.format("%02d-%02d-%04d %02d:%02d:%02.0f", day, month, year, h24, minutes, seconds);
+        }
     }
 
     /**

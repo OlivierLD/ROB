@@ -132,9 +132,15 @@ public class ACV2Test01 {
         Calendar calculationDateTime = astroComputerV2.getCalculationDateTime();
         System.out.println(String.format("At %s, Moon Tilt: %.03f", SDF_UTC.format(calculationDateTime.getTime()), moonTilt));
 
-        System.out.println(String.format("Solar Time for %s, at pos %s, => %s",
-                SDF_UTC.format(calculationDateTime.getTime()),
-                new GeoPoint(lat, lng).toString(),
-                SDF_NO_UTC.format(astroComputerV2.getSolarDateAtPos(lat, lng))));
+        try {
+            AstroComputerV2.YMDHMSs solarDate = astroComputerV2.getSolarDateAtPos(lat, lng);
+            System.out.println(String.format("Solar Time for %s, at pos %s, => %s",
+                    SDF_UTC.format(calculationDateTime.getTime()),
+                    new GeoPoint(lat, lng).toString(),
+                    solarDate.toString() /*
+                    SDF_NO_UTC.format(solarDate) */));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -1912,7 +1912,7 @@ public class ChartPanel extends JPanel
         double newY = _y;
         double newZ = _z;
 
-        // rotation yz (for stellite latitude)
+        // rotation yz (for satellite latitude)
         if (true) {
             rotated = rotation(new double[]{newX, newY, newZ},
                     new double[][]{{1D, 0D, 0D},
