@@ -244,7 +244,7 @@ public class AstroComputerV2 {
     }
 
     public synchronized Calendar getCalculationDateTime() {
-        Calendar calcDate = GregorianCalendar.getInstance();
+        Calendar calcDate = GregorianCalendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
         calcDate.set(Calendar.YEAR, this.year);
         calcDate.set(Calendar.MONTH, this.month - 1);
         calcDate.set(Calendar.DAY_OF_MONTH, this.day);
