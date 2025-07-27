@@ -37,7 +37,7 @@ public class ForComparison {
         date.set(Calendar.MINUTE, 40);
         date.set(Calendar.SECOND, 31);
 
-        System.out.printf("Calculating at %s\n", SDF_UTC.format(date.getTime()));
+        System.out.printf("Calculation launched for %s\n", SDF_UTC.format(date.getTime()));
 
         ac.calculate(date.get(Calendar.YEAR),
                 date.get(Calendar.MONTH) + 1,
@@ -55,8 +55,8 @@ public class ForComparison {
         double z = dr.getZ();
 
         System.out.printf("After Dead Reckoning: For %s,\n" +
-                          "Sun at GHA: %.02f\272, Decl: %.02f\272 \n" +
-                          " From position %s / %s\n" +
+                          "Venus at GHA: %.02f\272, Decl: %.02f\272 \n" +
+                          "From position %s / %s\n" +
                           "Obs Alt: %s, Z: %.01f\272\n",
                             SDF_UTC.format(ac.getCalculationDateTime().getTime()),
                             venusGHA, venusDecl,
@@ -64,7 +64,6 @@ public class ForComparison {
                             GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
                             GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                             z);
-
     }
 
 }

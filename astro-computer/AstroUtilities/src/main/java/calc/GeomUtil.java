@@ -103,6 +103,58 @@ public final class GeomUtil {
 	}
 
 	/**
+	 * AKA Dead Reckoning
+	 * @param from Starting point. All in degrees
+	 * @param dist in nm
+	 * @param heading in degrees
+	 * @return The final point, all in degrees
+	 */
+	public static GeoPoint haversineInv(GeoPoint from, double dist, double heading) {
+		double distRatio = dist / NM_EQUATORIAL_EARTH_RADIUS; // THE key.
+		double distRatioSine = Math.sin(distRatio);
+		double distRatioCosine = Math.cos(distRatio);
+
+		double startLatRad = Math.toRadians(from.getLatitude());
+		double startLonRad = Math.toRadians(from.getLongitude());
+
+		double startLatCos = Math.cos(startLatRad);
+		double startLatSin = Math.sin(startLatRad);
+
+		double angleRadHeading = Math.toRadians(heading);
+		double endLatRads = Math.asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.cos(angleRadHeading)));
+
+		double endLonRads = startLonRad + Math.atan2(Math.sin(angleRadHeading) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
+
+		return new GeoPoint(Math.toDegrees(endLatRads), Math.toDegrees(endLonRads));
+	}
+
+	/**
+	 * AKA Dead Reckoning
+	 * @param from Starting point. All in radians
+	 * @param dist in nm
+	 * @param heading in degrees
+	 * @return The final point, all in radians
+	 */
+	public static GeoPoint haversineInvRad(GeoPoint from, double dist, double heading) {
+		double distRatio = dist / NM_EQUATORIAL_EARTH_RADIUS; // THE key.
+		double distRatioSine = Math.sin(distRatio);
+		double distRatioCosine = Math.cos(distRatio);
+
+		double startLatRad = from.getLatitude();
+		double startLonRad = from.getLongitude();
+
+		double startLatCos = Math.cos(startLatRad);
+		double startLatSin = Math.sin(startLatRad);
+
+		double angleRadHeading = Math.toRadians(heading);
+		double endLatRads = Math.asin((startLatSin * distRatioCosine) + (startLatCos * distRatioSine * Math.cos(angleRadHeading)));
+
+		double endLonRads = startLonRad + Math.atan2(Math.sin(angleRadHeading) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
+
+		return new GeoPoint(endLatRads, endLonRads);
+	}
+
+	/**
 	 * Inverse of {@link #haversineNm(double lat1, double long1, double lat2, double long2)}.<br/>
 	 * From position (fromLat, fromLng), tells us where we would be after
 	 * moving 'dist' nm in the 'heading' true.
@@ -130,6 +182,10 @@ public final class GeomUtil {
 				            Math.atan2(Math.sin(angleRadHeading) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
 
 		return new GeoPoint(Math.toDegrees(endLatRads), Math.toDegrees(endLonRads));
+	}
+
+	public static GeoPoint deadReckoning(GeoPoint from, double dist, double heading) {
+		return deadReckoning(from.getLatitude(), from.getLongitude(), dist, heading);
 	}
 
 	public static double bearingDiff(double bearingA, double bearingB) {
@@ -477,7 +533,9 @@ public final class GeomUtil {
 			double dist = 10;
 			double cog = 90;
 			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
-			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			System.out.printf("DR : New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
+			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 			// Reverse
 			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
@@ -488,7 +546,10 @@ public final class GeomUtil {
 			double dist = 10;
 			double cog = 0;
 			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
-			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			System.out.printf("DR : New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
+			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
+
 			// Reverse
 			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
@@ -500,6 +561,21 @@ public final class GeomUtil {
 			double cog = 40;
 			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
 			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
+			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
+			// Reverse
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
+		}
+		{ // Four
+			double fromLat = 0.0;
+			double fromLng = 0.0;
+			double dist = 5400;
+			double cog = 0;
+			final GeoPoint reachedPoint = deadReckoning(fromLat, fromLng, dist, cog);
+			System.out.printf("New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedPoint);
+			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
+			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 			// Reverse
 			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);

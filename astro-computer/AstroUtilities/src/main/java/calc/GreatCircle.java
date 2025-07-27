@@ -1,5 +1,7 @@
 package calc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 // TODO Cleanup in the radians / degrees ...
@@ -144,11 +146,90 @@ public final class GreatCircle {
 		return ira;
 	}
 
+	public static double getIRAInDegrees(GreatCirclePoint from, GreatCirclePoint to) {
+		double ari = Double.MIN_VALUE;
+
+		int nsDir = (to.getL() > from.getL()) ? TO_NORTH : TO_SOUTH;
+		int ewDir = (to.getG() > from.getG()) ? TO_EAST : TO_WEST;
+		if (Math.abs(to.getG() - from.getG()) > Math.PI) { // Then turn the other way
+			if (ewDir == TO_EAST) {
+				ewDir = TO_WEST;
+				to.setG(to.getG() - (2 * Math.PI));
+			} else {
+				ewDir = TO_EAST;
+				to.setG(to.getG() + (2 * Math.PI));
+			}
+		}
+		double deltaG = to.getG() - from.getG();
+		List<GreatCirclePoint> route = new ArrayList<>();
+		int nbPoints = 20;
+		double interval = deltaG / 20;
+		GreatCirclePoint smallStart = from;
+		for (double g=from.getG(); route.size() <= nbPoints && ari == Double.MIN_VALUE; g+=interval) {
+			double deltag = to.getG() - g;
+			double tanStartAngle = Math.sin(deltag) / (Math.cos(smallStart.getL()) * Math.tan(to.getL()) - Math.sin(smallStart.getL()) * Math.cos(deltag));
+			double smallL = tanStartAngle != 0.0 ?
+					Math.atan(Math.tan(smallStart.getL()) * Math.cos(interval) + Math.sin(interval) / (tanStartAngle * Math.cos(smallStart.getL()))) :
+					smallStart.getL();
+			double rpG = g + interval;
+			if (rpG > Math.PI) {
+				rpG -= (2 * Math.PI);
+			}
+			if (rpG < -Math.PI) {
+				rpG = (2 * Math.PI) + rpG;
+			}
+			GreatCirclePoint routePoint = new GreatCirclePoint(smallL, rpG);
+			if (ari == Double.MIN_VALUE) {
+				ari = Math.toDegrees(Math.atan(tanStartAngle));
+			}
+			// if (ari < 0.0) {
+			//     ari = Math.abs(ari);
+			// }
+			int _nsDir;
+			if (routePoint.getL() >= smallStart.getL()) {
+				_nsDir = TO_NORTH;
+			} else {
+				_nsDir = TO_SOUTH;
+			}
+			double arrG = routePoint.getG();
+			double staG = smallStart.getG();
+			if (Math.signum(arrG) != Math.signum(staG)) {
+				if (Math.signum(arrG) > 0) {
+					arrG -= (2 * Math.PI);
+				} else {
+					arrG = Math.PI - arrG;
+				}
+			}
+			int _ewDir;
+			if (arrG > staG) {
+				_ewDir = TO_EAST;
+			} else {
+				_ewDir = TO_WEST;
+			}
+			double _start = 0.0;
+			if (_nsDir == TO_SOUTH) {
+				_start = 180;
+				ari = _start + ari;
+			} else if (_ewDir == TO_EAST) {
+				ari = _start + ari;
+			} else {
+				ari = ari; // _start - ari;
+			}
+			while (ari < 0.0) {
+				ari += 360;
+			}
+			// route.push({ point: smallStart, z: to === smallStart ? null : ari });
+			route.add(new GreatCirclePoint(0, 0));
+			smallStart = routePoint;
+		}
+		return ari;
+	}
+
 	/**
 	 * Prefer this one, rather than getInitialRouteAngleInDegreesV2
 	 *
-	 * @param from all values in degrees
-	 * @param to all values in degrees
+	 * @param @NotNull from all values (L & G) in degrees
+	 * @param @NotNull to all values (L & G) in degrees
 	 * @return Initial Route Angle in degrees
 	 */
 	public static double getInitialRouteAngleInDegrees(GreatCirclePoint from, GreatCirclePoint to) {
@@ -170,14 +251,14 @@ public final class GreatCircle {
 			if (g < 0) { // to West
 				V = (2 * Math.PI) - V;
 			}
-		} else { // From the south
+		} else if (V < 0) { // From the south
 //			V = Math.abs(V);
 			if (g > 0) { // to East
 				V = Math.PI - V;
 			} else { // To West
 				V = Math.PI + V;
 			}
-		}
+		} // else if (V == 0) { }
 		return Math.toDegrees(V);
 	}
 

@@ -1,7 +1,7 @@
 /*
- * Haversine and friends
+ * Haversine and friends. RhumbLines.
  * NodeJS compatible
- * 
+ *
  * try:
  *      node Scratch.js
  */
@@ -81,17 +81,21 @@ let haversineInvRad = (from, dist, heading) => {
 // tests
 let fromLat = 47.677667;
 let fromLng = -3.135667;
-let dist = 10;
+let dist = 10.0; // nautical miles
 let cog = 90;
 
 console.log("Let's go...\n");
 
 let greatCirclePoint = haversineInv({ lat: fromLat, lng: fromLng }, dist, cog);
-console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
+console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}°: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
 
 cog = 45;
 greatCirclePoint = haversineInv({ lat: fromLat, lng: fromLng }, dist, cog);
-console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
+console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}°: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
+
+cog = 0;
+greatCirclePoint = haversineInv({ lat: fromLat, lng: fromLng }, dist, cog);
+console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}°: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
 
 cog = 45;
 greatCirclePoint = haversineInvRad({ lat: Math.toRadians(fromLat), lng: Math.toRadians(fromLng) }, dist, cog);
@@ -107,7 +111,7 @@ fromLng = 0;
 dist = 5400;
 cog = 0;
 greatCirclePoint = haversineInv({ lat: fromLat, lng: fromLng }, dist, cog);
-console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
-console.log("... Penser à prendre une petite laine...");
+console.log(`From ${decToSex(fromLat, 'NS') + ' / ' + decToSex(fromLng, 'EW')}. New pos, ${dist} nm in the ${cog}°: ${greatCirclePoint.lat + ' / ' + greatCirclePoint.lng} => ${decToSex(greatCirclePoint.lat, 'NS') + ' / ' + decToSex(greatCirclePoint.lng, 'EW')}`);
+console.log("... Penser à prendre une petite laine.");
 
 console.log("\nEnd of test.");
