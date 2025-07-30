@@ -14,6 +14,26 @@ markers:
     longitude: -3.045830503160688
     id: TEIGNOUSE
     type: default
+  - label: "Le Grand Coin"
+    latitude: 47.407420
+    longitude: -3.004338
+    type: card-e
+    id: GRANDCOIN
+  - label: "Bonen Bras"
+    latitude: 47.404373
+    longitude: -2.998042
+    type: card-w
+    id: BBRAS
+  - label: "Le Rouleau"
+    latitude: 47.394497
+    longitude: -3.005142
+    type: card-w
+    id: ROULEAU
+  - label: "Port Saint-Gildas"
+    latitude: 47.39277144427804
+    longitude: -2.955601215362549
+    type: default
+    id: STGILDAS
 borders:
   - border-name: "Houat"
     type: "closed"

@@ -33,7 +33,7 @@ markers:
     latitude: 47.39277144427804
     longitude: -2.955601215362549
     type: default
-    id: GILDAS
+    id: STGILDAS
 borders:
   - border-name: "Houat"
     type: "closed"
