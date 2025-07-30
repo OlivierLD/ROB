@@ -73,6 +73,19 @@
 			cursor: pointer
 		}
 
+		.logContent {
+			max-height: 60vh; /* 40vh for a cell phone, see below */
+			overflow-y: auto;
+		}
+
+		@media screen and (max-width: 450px) {
+			.logContent {
+				max-height: 40vh;
+				overflow-y: auto;
+			}
+		}
+
+
 	</style>
 	<script type="text/javascript">
 
@@ -494,7 +507,7 @@ $ scp -r pi@192.168.50.10:~/nmea-dist/logged/*.nmea .
 	<div id="hierarchical-view" style="margin: 10px; display: none;">
 		<h2>Hierarchical View</h2>
 		<p>Click on a file name to download it. Click on a folder name to expand/collapse it.</p>
-		<div id="hierarchical-content" style="max-height: 400px; overflow-y: auto;"></div>
+		<div id="hierarchical-content" class="logContent"></div>
 	</div>
 
 	<div id="mess-container" style="display: none;"> <!-- turn display to block or inline for debugging, none for regular usage -->

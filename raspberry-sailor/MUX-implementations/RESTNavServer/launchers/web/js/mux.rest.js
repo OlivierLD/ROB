@@ -869,7 +869,7 @@ let generateDiagram = () => {
 
             html += '</ul>';
             html += '<button class="toggle-marker-config" onclick="updateMarkerConfig();">Update markers config?</button>';
-            html += '<button class="update-marker-button" style="display: none;" onclick="updateMarkerList(); alert(\'Reload charts after update\');">Update</button>';
+            html += '<button class="update-marker-button" style="display: none;" onclick="updateMarkerList(); alert(\'Reload charts after markers update\nto see the updated waypoints.\');">Update</button>';
             html += '<button class="update-marker-button" style="display: none;" onclick="cancelMarkersUpdate();">Cancel</button>';
             html += '</td></tr>';
         }
