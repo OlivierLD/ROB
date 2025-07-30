@@ -162,8 +162,8 @@ public final class GreatCircle {
 		}
 		double deltaG = to.getG() - from.getG();
 		List<GreatCirclePoint> route = new ArrayList<>();
-		int nbPoints = 20;
-		double interval = deltaG / 20;
+		int nbPoints = 200;
+		double interval = deltaG / nbPoints;
 		GreatCirclePoint smallStart = from;
 		for (double g=from.getG(); route.size() <= nbPoints && ari == Double.MIN_VALUE; g+=interval) {
 			double deltag = to.getG() - g;
@@ -815,7 +815,7 @@ public final class GreatCircle {
 	}
 
 	/**
-	 * Dead Reckoning
+	 * Dead Reckoning. Very approximative. Cartesian, not spherical.
 	 *
 	 * @param from  GeoPoint, L &amp; G in Radians
 	 * @param dist  distance in nm
@@ -835,7 +835,7 @@ public final class GreatCircle {
 	}
 
 	/**
-	 * Dead Reckoning
+	 * Dead Reckoning. See above.
 	 *
 	 * @param from  GeoPoint, L &amp; G in Degrees
 	 * @param dist  distance in nm

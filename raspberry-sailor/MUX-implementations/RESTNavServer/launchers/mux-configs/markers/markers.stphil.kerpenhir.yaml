@@ -8,6 +8,7 @@ markers:
   - latitude: 47.55438791679859
     longitude: -2.988246933964547
     label: "Er Gazeg"
+    id: ERGAZEG
     type: card-s
   - latitude: 47.567656052850474
     longitude: -3.0015578388702133

@@ -3715,6 +3715,14 @@ public class RESTImplementation {
 						}
 					}
 				}
+				// Rebuild Waypoints list ? Should be in allMarkers, with id not null.
+				if (false) {
+					final List<Marker> wpList = allMarkers.stream()
+							.filter(mark -> mark.getId() != null)
+							.collect(Collectors.toList());
+					this.topMUXContext.setWaypointList(wpList);
+				}
+
 				cache.put(NMEADataCache.MARKERS_FILE, markerList);
 				cache.put(NMEADataCache.MARKERS_DATA, allMarkers);
 				cache.put(NMEADataCache.BORDERS_DATA, allBorders);
