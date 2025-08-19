@@ -526,7 +526,7 @@ public final class GreatCircle {
 	}
 
 	/**
-	 * Input in degrees, output in nautical miles.
+	 * Input in degrees (hence the name of the method), output in nautical miles.
 	 *
 	 * @param from in Degrees
 	 * @param to   in Degrees
@@ -815,7 +815,7 @@ public final class GreatCircle {
 	}
 
 	/**
-	 * Dead Reckoning. Very approximative. Cartesian, not spherical.
+	 * Dead Reckoning. <b>Very approximative!</b> Cartesian, not spherical.
 	 *
 	 * @param from  GeoPoint, L &amp; G in Radians
 	 * @param dist  distance in nm
@@ -825,10 +825,10 @@ public final class GreatCircle {
 	public static GreatCirclePoint dr(GreatCirclePoint from, double dist, double route) {
 		double deltaL = Math.toRadians(dist / 60D) * Math.cos(Math.toRadians(route));
 		double l2 = from.getL() + deltaL;
-//  double lc1 = Math.log(Math.tan((Math.PI / 4D) + from.getL() / 2D));
-//  double lc2 = Math.log(Math.tan((Math.PI / 4D) + l2 / 2D));
-//  double deltaLc = lc2 - lc1;
-//  double deltaG = deltaLc * Math.tan(Math.toRadians(route));
+	//  double lc1 = Math.log(Math.tan((Math.PI / 4D) + from.getL() / 2D));
+	//  double lc2 = Math.log(Math.tan((Math.PI / 4D) + l2 / 2D));
+	//  double deltaLc = lc2 - lc1;
+	//  double deltaG = deltaLc * Math.tan(Math.toRadians(route));
 		double deltaG = Math.toRadians(dist / (60D * Math.cos((from.getL() + l2) / 2D))) * Math.sin(Math.toRadians(route)); // 2009-mar-10
 		double g2 = from.getG() + deltaG;
 		return new GreatCirclePoint(l2, g2);

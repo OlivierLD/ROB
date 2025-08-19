@@ -57,7 +57,7 @@ public final class GreatCirclePoint
     }
 
     /**
-     * In nautical degrees
+     * In degrees
      *
      * @param target the point to aim to.
      * @return the distance, in degrees.
@@ -82,8 +82,8 @@ public final class GreatCirclePoint
 
     public String toString() {
         return String.format("%s / %s",
-                GeomUtil.decToSex(this.latitude, GeomUtil.SWING, GeomUtil.NS),
-                GeomUtil.decToSex(this.longitude, GeomUtil.SWING, GeomUtil.EW));
+                             GeomUtil.decToSex(this.latitude, GeomUtil.SWING, GeomUtil.NS),
+                             GeomUtil.decToSex(this.longitude, GeomUtil.SWING, GeomUtil.EW));
     }
 
     public GreatCirclePoint degreesToRadians() {

@@ -13,14 +13,13 @@ public class GCTest02 {
                 new GreatCirclePoint(37.73, -122.50),
                 new GreatCirclePoint(38.73, -122.50)
         );
-        System.out.println("Dist:" + gcDistInNM);
+        System.out.printf("Dist: %.02f nm (should be close to 60.00...)\n", gcDistInNM);
 
-        GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint(Math.toRadians(45D),
-                Math.toRadians(-130D)),
-                55,
-                270);
+        GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint(Math.toRadians(45d), Math.toRadians(-130d)),
+                                        55,
+                                       270);
         System.out.println("Reaching " + new GreatCirclePoint(Math.toDegrees(dr.getL()),
-                Math.toDegrees(dr.getG())).toString());
+                                                              Math.toDegrees(dr.getG())).toString());
         System.out.println("Done.");
 
         System.out.println("----------------------");

@@ -34,7 +34,7 @@ public class GCTest01 {
         GreatCircle.RLData rlData = test.calculateRhumbLine();
         double dist = rlData.getdLoxo();
         double route = rlData.getRv();
-        System.out.println("Dist Loxo:" + dist + " (GC:" + gcDist + "), route (loxo):" + Math.toDegrees(route));
+        System.out.println("Dist Loxo: " + dist + " (GC:" + gcDist + "), route (loxo): " + Math.toDegrees(route));
 
         System.out.println("-------------");
         test = new GreatCircle();
@@ -44,7 +44,7 @@ public class GCTest01 {
         dist = rlData.getdLoxo();
         route = rlData.getRv();
         gcDist = Math.toDegrees(test.getDistance()) * 60.0;
-        System.out.println("Dist (loxo):" + dist + " (GC:" + gcDist + "), route (loxo):" + Math.toDegrees(route));
+        System.out.println("Dist (loxo): " + dist + " (GC:" + gcDist + "), route (loxo): " + Math.toDegrees(route));
     }
 
 }

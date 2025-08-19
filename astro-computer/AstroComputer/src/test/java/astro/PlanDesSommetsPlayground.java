@@ -187,7 +187,7 @@ public class PlanDesSommetsPlayground {
             while (hdg >= 360) {
                 hdg -= 360;
             }
-            // The point of the circle. TODO Use a Great Circle, not a RhumbLine... GreatCircle.dr needs tune-up.
+            // The point of the circle. TODO Use a Great Circle, not a RhumbLine... GreatCircle.dr needs (big) tune-up.
             if (true) { // Use RL
                 final GeoPoint drRL = GeomUtil.deadReckoning(new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA)), distanceInNM, hdg);
 

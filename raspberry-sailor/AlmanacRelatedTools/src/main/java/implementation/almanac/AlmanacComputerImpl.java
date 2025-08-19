@@ -705,7 +705,7 @@ public class AlmanacComputerImpl {
 		//  out.println("Dec:" + GeomUtil.decToSex(Context.DECpol, DEGREE_OPTION, GeomUtil.NS) + "\t(" + GeomUtil.formatDMS(Context.DECpol, "\370") + ")");
 
 		for (int i = 0; i < Star.getCatalog().length; i++) {
-			out.println("<body name='" + escapeXML(Star.getCatalog()[i].getStarName()) + "'");
+			out.println("<body name='" + escapeXML(Star.getCatalog()[i].getStarName()) + "'"); // Like Sirius
 			out.println("      loc='" + Star.getCatalog()[i].getConstellation() + "'"); // Like alpha Canis Majoris
 			Core.starPos(Star.getCatalog()[i].getStarName());
 			if (prevStarLunars[i] != Double.MAX_VALUE) {
