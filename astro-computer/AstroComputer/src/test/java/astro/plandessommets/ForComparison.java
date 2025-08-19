@@ -1,17 +1,10 @@
-package astro;
+package astro.plandessommets;
 
 import calc.DeadReckoning;
 import calc.GeomUtil;
-import calc.GreatCircle;
-import calc.GreatCirclePoint;
 import calc.calculation.AstroComputerV2;
 import calc.calculation.SightReductionUtil;
-import calc.calculation.nauticalalmanacV2.ContextV2;
-import calc.calculation.nauticalalmanacV2.Core;
-import calc.calculation.nauticalalmanacV2.Star;
-import calc.calculation.nauticalalmanacV2.Utils;
 
-import java.nio.charset.CoderResult;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -21,7 +14,7 @@ import java.util.TimeZone;
  * Doc at https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=
  * stored as plan.des.sommets.02.pdf
  * <br/>
- * There is a ~180&deg; difference with the GHAs...
+ * There is a ~180&deg; difference with the GHAs... (see below in the code)
  * <br/>
  * WiP...
  */
@@ -33,6 +26,8 @@ public class ForComparison {
     }
 
     public static void main(String... args) {
+
+        System.out.println("--------- S T A R T ----------");
 
         double latitude = GeomUtil.sexToDec("27", "39.13");
         double longitude = 0d;
@@ -61,23 +56,26 @@ public class ForComparison {
                 true);
         double deltaT = ac.getDeltaT();
 
-        final double venusGHA = ac.getVenusGHA();
+        double venusGHA = ac.getVenusGHA();
         final double venusDecl = ac.getVenusDecl();
 
-        DeadReckoning dr = new DeadReckoning(venusGHA, venusDecl, latitude, longitude).calculate(); // All angles in degrees
+        venusGHA = (180 + venusGHA) % 360; // Bizarre...
+
+        DeadReckoning dr = new DeadReckoning(/*AstroComputerV2.ghaToLongitude*/(venusGHA), venusDecl, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
 
         System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
                           "Venus at GHA: %.04f\272 (Y.R-J: 39.7250\272), Decl: %.04f\272 (Y.R-J: -20.7950\272)\n" +
                           "From position %s / %s\n" +
-                          "Obs Alt: %s, Z: %.01f\272\n",
+                          "Venus Obs Alt: %s - %.2f\272 (Y.R-J: 28.9133\272), Z: %.01f\272\n",
                             SDF_UTC.format(ac.getCalculationDateTime().getTime()),
                             deltaT,
                             venusGHA, venusDecl,
                             GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
                             GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
                             GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
+                            he,
                             z);
         System.out.println();
         /*
@@ -118,19 +116,21 @@ public class ForComparison {
                             GeomUtil.decToSex(spicaDEC, GeomUtil.SHELL, GeomUtil.NS),
                             deltaT);
 
-        /*DeadReckoning*/ dr = new DeadReckoning(AstroComputerV2.ghaToLongitude(spicaGHA), spicaDEC, latitude, longitude).calculate(); // All angles in degrees
+        spicaGHA = (spicaGHA + 180) % 360; // Mmmmh.
+        /*DeadReckoning*/ dr = new DeadReckoning(/*AstroComputerV2.ghaToLongitude*/(spicaGHA), spicaDEC, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 
         System.out.printf("After Dead Reckoning: For %s,\n" +
                         "Spica at GHA: %.04f\272 (Y.R-J: 105.2350\272), Decl: %.04f\272 (Y.R-J: -11.1367\272) \n" +
                         "From position %s / %s\n" +
-                        "Obs Alt: %s, Z: %.01f\272\n",
+                        "Spica Obs Alt: %s - %.2f\272 (Y.R-J: 47.5633\272), Z: %.01f\272\n",
                 SDF_UTC.format(ac.getCalculationDateTime().getTime()),
                 spicaGHA, spicaDEC,
                 GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
                 GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
+                he,
                 z);
 
         System.out.println();
@@ -197,7 +197,6 @@ public class ForComparison {
                 GeomUtil.decToSex(spicaDEC, GeomUtil.SHELL, GeomUtil.NS),
                 deltaT);
 
+        System.out.println("----------- E N D ------------");
     }
-
-
 }
