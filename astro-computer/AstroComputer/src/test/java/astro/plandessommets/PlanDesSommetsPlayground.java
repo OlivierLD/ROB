@@ -1,4 +1,4 @@
-package astro;
+package astro.plandessommets;
 
 import calc.*;
 import calc.calculation.AstroComputerV2;
@@ -13,7 +13,7 @@ import java.util.TimeZone;
  */
 public class PlanDesSommetsPlayground {
 
-    private final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'");
+    private final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss 'UTC'");
     static {
         SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
@@ -27,6 +27,15 @@ public class PlanDesSommetsPlayground {
 
         AstroComputerV2 ac = new AstroComputerV2();
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
+        if (true) { // Enforce date
+            date.set(Calendar.YEAR, 2025);
+            date.set(Calendar.MONTH, 7); // Aug
+            date.set(Calendar.DAY_OF_MONTH, 20);
+            date.set(Calendar.HOUR_OF_DAY, 10); // and not just HOUR !!!!
+            date.set(Calendar.MINUTE, 40);
+            date.set(Calendar.SECOND, 31);
+        }
+
         ac.calculate(date.get(Calendar.YEAR),
                 date.get(Calendar.MONTH) + 1,
                 date.get(Calendar.DAY_OF_MONTH),
@@ -38,11 +47,12 @@ public class PlanDesSommetsPlayground {
         final double sunGHA = ac.getSunGHA();
         final double sunDecl = ac.getSunDecl();
 
-        DeadReckoning dr = new DeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
+        CelestialDeadReckoning dr = new CelestialDeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
 
-        System.out.printf("Original Context : Sun Decl %s, Sun GHA %s, from pos is %s / %s, seeing the Sun at altitude %s, in the %.02f\272\n",
+        System.out.printf("Original Context : at %s, Sun Decl %s, Sun GHA %s, from pos is %s / %s, seeing the Sun at altitude %s, in the %.02f\272\n",
+                SDF_UTC.format(ac.getCalculationDateTime().getTime()),
                 GeomUtil.decToSex(sunDecl, GeomUtil.SHELL, GeomUtil.NS),
                 GeomUtil.decToSex(sunGHA, GeomUtil.SHELL, GeomUtil.EW),
                 GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
@@ -50,10 +60,10 @@ public class PlanDesSommetsPlayground {
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 z);
 
-        final double refraction = DeadReckoning.getRefraction(he);
+        final double refraction = CelestialDeadReckoning.getRefraction(he);
 
         final double eyeHeight = 1.8; // in meters
-        final double horizonDip = DeadReckoning.getHorizonDip(eyeHeight);
+        final double horizonDip = CelestialDeadReckoning.getHorizonDip(eyeHeight);
         final double sunHp = ac.getSunHp() / 60d; // Here in minutes of arc. Returned in seconds of arc
         final double sunSd = ac.getSunSd() / 60d; // Here in minutes of arc. Returned in seconds of arc
 
@@ -105,7 +115,9 @@ public class PlanDesSommetsPlayground {
         he = sightReductionUtil.getHe();
         z = sightReductionUtil.getZ();
 
-        System.out.printf("Obs Alt: %.02f\272 (%s), Z: %.01f\272 \n", he, GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(), z);
+        double distInNM = (90.0 - he) * 60.0;
+
+        System.out.printf("Obs Alt: %.02f\272 (%s), Z: %.01f\272, dist to Pg: %.02f nm\n", he, GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(), z, distInNM);
 
         // Compare GC & RhumbLine, S to N. Should be identical
         if (true) {
@@ -124,6 +136,7 @@ public class PlanDesSommetsPlayground {
                     distanceInNM, initialRouteAngle);
 
             double hdg = initialRouteAngle;
+            // This is a rhumbline, prefer haversine.
             final GeoPoint geoPoint = GeomUtil.deadReckoning(latitude, longitude, distanceInNM, hdg);
             System.out.printf("-- RL: From [%s / %s], %.02f nm in the %.0f\272, pos is [%s / %s]\n",
                     GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
@@ -143,10 +156,11 @@ public class PlanDesSommetsPlayground {
         GreatCirclePoint to = new GreatCirclePoint(Math.toRadians(latitude), Math.toRadians(longitude)); // Observer
 
         System.out.println();
-        final double distanceInNM = GreatCircle.getDistanceInNM(from, to);
+        final double distanceInNM = GreatCircle.getDistanceInNM(from, to); // Body to Observer
+        assert(distInNM == distanceInNM);
+
         // final double initialRouteAngle = GreatCircle.getInitialRouteAngleInDegrees(from, to);
         final double initialRouteAngle = GreatCircle.getIRAInDegrees(from, to);
-
 
 //        final double distanceInNM = GreatCircle.calculateRhumbLineDistance(from, to);
 //        final double initialRouteAngle = Math.toDegrees(GreatCircle.calculateRhumbLineRoute(from, to));
@@ -165,11 +179,11 @@ public class PlanDesSommetsPlayground {
 
             final double reverseInitialRouteAngleV2 = GreatCircle.getInitialRouteAngleInDegreesV2(to, from);
             System.out.printf("Reverse: From the observer [%s / %s], to Sun [%s / %s (GHA: %s)], dist: %.02f', IRA: %.02f\272 (V2: %.02f\272)\n",
-                    GeomUtil.decToSex(Math.toDegrees(to.getL()), GeomUtil.SHELL, GeomUtil.NS),
-                    GeomUtil.decToSex(Math.toDegrees(to.getG()), GeomUtil.SHELL, GeomUtil.EW),
-                    GeomUtil.decToSex(Math.toDegrees(from.getL()), GeomUtil.SHELL, GeomUtil.NS),
-                    GeomUtil.decToSex(Math.toDegrees(from.getG()), GeomUtil.SHELL, GeomUtil.EW),
-                    GeomUtil.decToSex(sunGHA, GeomUtil.SHELL, GeomUtil.NONE),
+                    GeomUtil.decToSex(Math.toDegrees(to.getL()), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                    GeomUtil.decToSex(Math.toDegrees(to.getG()), GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    GeomUtil.decToSex(Math.toDegrees(from.getL()), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                    GeomUtil.decToSex(Math.toDegrees(from.getG()), GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    GeomUtil.decToSex(sunGHA, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                     reverseDistanceInNM, reverseInitialRouteAngle, reverseInitialRouteAngleV2);
         }
 
@@ -180,15 +194,17 @@ public class PlanDesSommetsPlayground {
         System.out.printf("Cone radius, in nautical miles: %.02f'\n", coneDiameter);
 
         // Find all the points seeing the Sun at the same altitude
-        System.out.println("---- The Circle ----");
+        System.out.println("---- The Circle, Cone base ----");
         long ari = Math.round(initialRouteAngle);
         for (int i=0; i<360; i++) {
-            double hdg = ari + i;
-            while (hdg >= 360) {
-                hdg -= 360;
-            }
-            // The point of the circle. TODO Use a Great Circle, not a RhumbLine... GreatCircle.dr needs (big) tune-up.
-            if (true) { // Use RL
+//            double hdg = ari + i;
+//            while (hdg >= 360) {
+//                hdg -= 360;
+//            }
+            double hdg = i;
+            // The point of the circle. Use a Great Circle, not a RhumbLine... GreatCircle.dr needs (big) tune-up, use haversine.
+            if (false) {
+                // Use RL
                 final GeoPoint drRL = GeomUtil.deadReckoning(new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA)), distanceInNM, hdg);
 
                 GreatCirclePoint sunPt = new GreatCirclePoint(Math.toRadians(sunDecl), Math.toRadians(AstroComputerV2.ghaToLongitude(sunGHA))); // Body
@@ -215,30 +231,34 @@ public class PlanDesSommetsPlayground {
                         GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                         z, radiusInNM, toTheObs);
 
-            } else { // Use GC
-                final GreatCirclePoint drGC = GreatCircle.dr(new GreatCirclePoint(new GeoPoint(Math.toRadians(sunDecl), Math.toRadians(AstroComputerV2.ghaToLongitude(sunGHA)))), distanceInNM, hdg);
+            } else {
+                // Use GC
+                GeoPoint sunPos = new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA));
+                // hdg = 335.29;
+                final GeoPoint drGC = GeomUtil.haversineInv(sunPos, distanceInNM, hdg); // THE dr to use
 
                 GreatCirclePoint sunPt = new GreatCirclePoint(Math.toRadians(sunDecl), Math.toRadians(AstroComputerV2.ghaToLongitude(sunGHA))); // Body
-                GreatCirclePoint circlePt = new GreatCirclePoint((drGC.getL()), drGC.getG()); // Observer, circle point
+                GreatCirclePoint circlePt = new GreatCirclePoint(Math.toRadians(drGC.getL()), Math.toRadians(drGC.getG())); // Observer, circle point
                 // GC calc, for validation
-                final double radiusInNM = GreatCircle.getDistanceInNM(sunPt, circlePt);
+                // final double radiusInNM = GreatCircle.getDistanceInNM(sunPt, circlePt);
+                final double radiusInNM = GeomUtil.haversineNm(sunPos.getL(), sunPos.getG(), drGC.getL(), drGC.getG()); // THE one to prefer
                 // final double toTheObs = GreatCircle.getInitialRouteAngleInDegrees(sunPt, circlePt);
                 final double toTheObs = GreatCircle.getIRAInDegrees(sunPt, circlePt);
 
                 // Validation for the altitude
-                SightReductionUtil sru = new SightReductionUtil(sunGHA, sunDecl, Math.toDegrees(drGC.getL()), Math.toDegrees(drGC.getG()));
+                SightReductionUtil sru = new SightReductionUtil(sunGHA, sunDecl, drGC.getL(), drGC.getG());
                 sru.calculate();
                 // He and Z, from body's position and observer's position
                 he = sru.getHe();
                 z = sru.getZ();
 
-                System.out.printf("From %s / %s, %.02f nm in the %.0f\272, pos is %s / %s, seeing the Sun at altitude %s, in the %.02f\272 (GC: %.02f' in the %.02f\272)\n",
-                        GeomUtil.decToSex(sunDecl, GeomUtil.SHELL, GeomUtil.NS),
-                        GeomUtil.decToSex(AstroComputerV2.ghaToLongitude(sunGHA), GeomUtil.SHELL, GeomUtil.EW),
+                System.out.printf("From Pg %s / %s, %.02f nm in the %.02f\272, pos on circle is %s / %s, seeing the Sun at altitude %s, in the %.02f\272 (GC: %.02f' in the %.02f\272)\n",
+                        GeomUtil.decToSex(sunDecl, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                        GeomUtil.decToSex(AstroComputerV2.ghaToLongitude(sunGHA), GeomUtil.SHELL, GeomUtil.EW).trim(),
                         distanceInNM,
                         hdg,
-                        GeomUtil.decToSex(Math.toDegrees(drGC.getL()), GeomUtil.SHELL, GeomUtil.NS),
-                        GeomUtil.decToSex(Math.toDegrees(drGC.getG()), GeomUtil.SHELL, GeomUtil.EW),
+                        GeomUtil.decToSex(drGC.getL(), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                        GeomUtil.decToSex(drGC.getG(), GeomUtil.SHELL, GeomUtil.EW).trim(),
                         GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                         z, radiusInNM, toTheObs);
             }

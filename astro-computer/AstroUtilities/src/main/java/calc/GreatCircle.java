@@ -472,6 +472,7 @@ public final class GreatCircle {
 
 	/**
 	 * GC Distance
+	 * TODO Use haversine
 	 * @return in radians
 	 */
 	public double getDistance() {
@@ -504,6 +505,7 @@ public final class GreatCircle {
 	}
 
 	/**
+	 * TODO Use haversine
 	 * @param from in degrees
 	 * @param to   in degrees
 	 * @return in nautical miles
@@ -514,7 +516,8 @@ public final class GreatCircle {
 
 	/**
 	 * Input in radians, output in nautical miles.
-	 * 
+	 * TODO Use haversine
+	 *
 	 * @param from in Radians
 	 * @param to   in Radians
 	 * @return in miles
@@ -528,6 +531,7 @@ public final class GreatCircle {
 	/**
 	 * Input in degrees (hence the name of the method), output in nautical miles.
 	 *
+	 * TODO Use haversine
 	 * @param from in Degrees
 	 * @param to   in Degrees
 	 * @return in miles

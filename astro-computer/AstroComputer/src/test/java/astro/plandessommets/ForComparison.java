@@ -1,9 +1,8 @@
 package astro.plandessommets;
 
-import calc.DeadReckoning;
+import calc.CelestialDeadReckoning;
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
-import calc.calculation.SightReductionUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -61,7 +60,7 @@ public class ForComparison {
 
         venusGHA = (180 + venusGHA) % 360; // Bizarre...
 
-        DeadReckoning dr = new DeadReckoning(/*AstroComputerV2.ghaToLongitude*/(venusGHA), venusDecl, latitude, longitude).calculate(); // All angles in degrees
+        CelestialDeadReckoning dr = new CelestialDeadReckoning(/*AstroComputerV2.ghaToLongitude*/(venusGHA), venusDecl, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
 
@@ -117,7 +116,7 @@ public class ForComparison {
                             deltaT);
 
         spicaGHA = (spicaGHA + 180) % 360; // Mmmmh.
-        /*DeadReckoning*/ dr = new DeadReckoning(/*AstroComputerV2.ghaToLongitude*/(spicaGHA), spicaDEC, latitude, longitude).calculate(); // All angles in degrees
+        /*DeadReckoning*/ dr = new CelestialDeadReckoning(/*AstroComputerV2.ghaToLongitude*/(spicaGHA), spicaDEC, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 

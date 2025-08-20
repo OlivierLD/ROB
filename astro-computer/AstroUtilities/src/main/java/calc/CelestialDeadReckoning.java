@@ -9,12 +9,12 @@ import java.text.DecimalFormat;
  * <p>
  * Call sequence:
  * <pre>
- *   DeadReckoning dr = new DeadReckoning(dAHG, dD, dL, dG).calculate(); // All angles in degrees
+ *   CelestialDeadReckoning dr = new CelestialDeadReckoning(dAHG, dD, dL, dG).calculate(); // All angles in degrees
  *   double he = dr.getHe();
  *   double z = dr.getZ();
  * </pre>
  */
-public class DeadReckoning {
+public class CelestialDeadReckoning {
 	private Double dHe;
 	private Double dZ;
 	private double AHG;
@@ -108,15 +108,15 @@ public class DeadReckoning {
 		}
 	}
 
-	public DeadReckoning() {
+	public CelestialDeadReckoning() {
 		dHe = null;
 		dZ = null;
 	}
 
-	public DeadReckoning(double dAHG,
-	                     double dD,
-	                     double dL,
-	                     double dG) {
+	public CelestialDeadReckoning(double dAHG,
+								  double dD,
+								  double dL,
+								  double dG) {
 		dHe = null;
 		dZ = null;
 		AHG = dAHG;
@@ -125,7 +125,7 @@ public class DeadReckoning {
 		G = dG;
 	}
 
-	public DeadReckoning calculate() {
+	public CelestialDeadReckoning calculate() {
 		double AHL = AHG + G;
 		if (AHL < 0.0D) {
 			AHL = 360D + AHL;

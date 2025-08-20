@@ -1,6 +1,6 @@
 package astro.plandessommets;
 
-import calc.DeadReckoning;
+import calc.CelestialDeadReckoning;
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
 
@@ -65,7 +65,7 @@ public class Context01 {
         final double jupiterDecl = ac.getJupiterDecl();
 
         // Sun
-        DeadReckoning dr = new DeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
+        CelestialDeadReckoning dr = new CelestialDeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
 
@@ -84,7 +84,7 @@ public class Context01 {
         System.out.println();
 
         // Moon
-        dr = new DeadReckoning(moonGHA, moonDecl, latitude, longitude).calculate(); // All angles in degrees
+        dr = new CelestialDeadReckoning(moonGHA, moonDecl, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 
@@ -103,7 +103,7 @@ public class Context01 {
         System.out.println();
 
         // Venus
-        dr = new DeadReckoning(venusGHA, venusDecl, latitude, longitude).calculate(); // All angles in degrees
+        dr = new CelestialDeadReckoning(venusGHA, venusDecl, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 
@@ -122,7 +122,7 @@ public class Context01 {
         System.out.println();
 
         // Mars
-        dr = new DeadReckoning(marsGHA, marsDecl, latitude, longitude).calculate(); // All angles in degrees
+        dr = new CelestialDeadReckoning(marsGHA, marsDecl, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 
@@ -141,7 +141,7 @@ public class Context01 {
         System.out.println();
 
         // Jupiter
-        dr = new DeadReckoning(jupiterGHA, jupiterDecl, latitude, longitude).calculate(); // All angles in degrees
+        dr = new CelestialDeadReckoning(jupiterGHA, jupiterDecl, latitude, longitude).calculate(); // All angles in degrees
         he = dr.getHe();
         z = dr.getZ();
 

@@ -103,10 +103,10 @@ public final class GeomUtil {
 	}
 
 	/**
-	 * AKA Dead Reckoning
+	 * AKA Dead Reckoning (GC)
 	 * @param from Starting point. All in degrees
-	 * @param dist in nm
-	 * @param heading in degrees
+	 * @param dist in nm (aka minutes of arc)
+	 * @param heading in degrees (IRA-ICA)
 	 * @return The final point, all in degrees
 	 */
 	public static GeoPoint haversineInv(GeoPoint from, double dist, double heading) {

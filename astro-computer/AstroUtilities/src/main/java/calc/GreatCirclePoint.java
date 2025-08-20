@@ -44,6 +44,8 @@ public final class GreatCirclePoint
     /**
      * In nautical miles
      *
+     * TODO Use haversine
+     *
      * @param target the point to aim to.
      * @return the distance, in nm.
      */
@@ -59,6 +61,7 @@ public final class GreatCirclePoint
     /**
      * In degrees
      *
+     * TODO Use haversine
      * @param target the point to aim to.
      * @return the distance, in degrees.
      */

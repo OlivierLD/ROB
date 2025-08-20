@@ -1,19 +1,19 @@
 package astro.sample;
 
-import calc.DeadReckoning;
+import calc.CelestialDeadReckoning;
 
 public class DRTest {
     public static void main(String... args) {
 //  getSunCorrectionTable();
 //  getMoonCorrectionTable();
 //  getPlanetStarsCorrectionTable();
-        double corr = DeadReckoning.getAltitudeCorrection(7d,
+        double corr = CelestialDeadReckoning.getAltitudeCorrection(7d,
                 2d,
                 0.1,
                 16d,
                 Double.MAX_VALUE,
                 Double.MAX_VALUE,
-                DeadReckoning.LOWER_LIMB,
+                CelestialDeadReckoning.LOWER_LIMB,
                 false,
                 null,
                 true);
