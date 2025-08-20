@@ -3,6 +3,8 @@ package mps;
 import calc.CelestialDeadReckoning;
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,14 +15,28 @@ import java.util.TimeZone;
  */
 public class Context01 {
 
+    private final static ObjectMapper mapper = new ObjectMapper();
+
     private final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss 'UTC'");
     static {
         SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
 
-    public static void main(String... args) {
+    // Output
+    public static void spitOut(PlanDesSommetsPlayground.ConeDefinition coneDefinition) {
+        try {
+            System.out.printf("-------------- %s ----------------\n", coneDefinition.bodyName);
+            System.out.printf("Producing an array of %d element(s)\n", coneDefinition.circle.size());
+            String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(coneDefinition);
+            System.out.println(content);
+            System.out.println("--------------------------------");
+        } catch (JsonProcessingException jpe) {
+            jpe.printStackTrace();
+        }
 
-        System.out.println("--------- S T A R T ----------");
+    }
+
+    public static void main(String... args) {
 
         double latitude = 47.677667;
         double longitude = -3.135667;
@@ -47,7 +63,8 @@ public class Context01 {
                 date.get(Calendar.MINUTE),
                 date.get(Calendar.SECOND),
                 true);
-        double deltaT = ac.getDeltaT();
+
+        double deltaT = ac.getDeltaT(); // Unused for now
 
         final double sunGHA = ac.getSunGHA();
         final double sunDecl = ac.getSunDecl();
@@ -65,100 +82,85 @@ public class Context01 {
         final double jupiterDecl = ac.getJupiterDecl();
 
         // Sun
-        CelestialDeadReckoning dr = new CelestialDeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
-        double he = dr.getHe();
-        double z = dr.getZ();
-
-        System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
-                        "Sun at GHA: %.04f\272, Decl: %.04f\272\n" +
-                        "From position %s / %s\n" +
-                        "Sun Obs Alt: %s - %.2f\272, Z: %.01f\272\n",
-                SDF_UTC.format(ac.getCalculationDateTime().getTime()),
-                deltaT,
-                sunGHA, sunDecl,
-                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
-                GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
-                he,
-                z);
-        System.out.println();
+        final PlanDesSommetsPlayground.ConeDefinition sunCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                sunGHA,
+                sunDecl,
+                "the Sun");
 
         // Moon
-        dr = new CelestialDeadReckoning(moonGHA, moonDecl, latitude, longitude).calculate(); // All angles in degrees
-        he = dr.getHe();
-        z = dr.getZ();
-
-        System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
-                          "Moon at GHA: %.04f\272, Decl: %.04f\272\n" +
-                          "From position %s / %s\n" +
-                          "Moon Obs Alt: %s - %.2f\272, Z: %.01f\272\n",
-                            SDF_UTC.format(ac.getCalculationDateTime().getTime()),
-                            deltaT,
-                            moonGHA, moonDecl,
-                            GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                            GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
-                            GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
-                            he,
-                            z);
-        System.out.println();
+        final PlanDesSommetsPlayground.ConeDefinition moonCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                moonGHA,
+                moonDecl,
+                "the Moon");
 
         // Venus
-        dr = new CelestialDeadReckoning(venusGHA, venusDecl, latitude, longitude).calculate(); // All angles in degrees
-        he = dr.getHe();
-        z = dr.getZ();
-
-        System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
-                        "Venus at GHA: %.04f\272, Decl: %.04f\272\n" +
-                        "From position %s / %s\n" +
-                        "Venus Obs Alt: %s - %.2f\272, Z: %.01f\272\n",
-                SDF_UTC.format(ac.getCalculationDateTime().getTime()),
-                deltaT,
-                venusGHA, venusDecl,
-                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
-                GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
-                he,
-                z);
-        System.out.println();
+        final PlanDesSommetsPlayground.ConeDefinition venusCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                venusGHA,
+                venusDecl,
+                "Venus");
 
         // Mars
-        dr = new CelestialDeadReckoning(marsGHA, marsDecl, latitude, longitude).calculate(); // All angles in degrees
-        he = dr.getHe();
-        z = dr.getZ();
-
-        System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
-                        "Mars at GHA: %.04f\272, Decl: %.04f\272\n" +
-                        "From position %s / %s\n" +
-                        "Mars Obs Alt: %s - %.2f\272, Z: %.01f\272\n",
-                SDF_UTC.format(ac.getCalculationDateTime().getTime()),
-                deltaT,
-                marsGHA, marsDecl,
-                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
-                GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
-                he,
-                z);
-        System.out.println();
+        final PlanDesSommetsPlayground.ConeDefinition marsCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                marsGHA,
+                marsDecl,
+                "Mars");
 
         // Jupiter
-        dr = new CelestialDeadReckoning(jupiterGHA, jupiterDecl, latitude, longitude).calculate(); // All angles in degrees
-        he = dr.getHe();
-        z = dr.getZ();
+        final PlanDesSommetsPlayground.ConeDefinition jupiterCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                jupiterGHA,
+                jupiterDecl,
+                "Jupiter");
 
-        System.out.printf("After Dead Reckoning: For %s, (deltaT: %f s)\n" +
-                        "Jupiter at GHA: %.04f\272, Decl: %.04f\272\n" +
-                        "From position %s / %s\n" +
-                        "Jupiter Obs Alt: %s - %.2f\272, Z: %.01f\272\n",
-                SDF_UTC.format(ac.getCalculationDateTime().getTime()),
-                deltaT,
-                jupiterGHA, jupiterDecl,
-                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
-                GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
-                he,
-                z);
-        System.out.println();
+        spitOut(sunCone);
+        spitOut(moonCone);
+        spitOut(venusCone);
+        spitOut(marsCone);
+        spitOut(jupiterCone);
 
-        System.out.println("----------- E N D ------------");
     }
 }
