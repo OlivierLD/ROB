@@ -293,6 +293,7 @@ public class PlanDesSommetsPlayground {
 
         if (jsonOutput) {
             // Print circle values, in JSON
+            // TODO: Pg of the body
             try {
                 System.out.println("--------------------------------");
                 System.out.printf("Producing ann array of %d element(s)\n", theCircle.size());

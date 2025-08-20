@@ -2215,6 +2215,19 @@ let toggleForeground = () => {
         }
     };
 
+    function plotConeBase(context, worldMap, color, circleData) {
+
+        circleData.forEach((point) => {
+            let p = worldMap.getPanelPoint(point.latitude, point.longitude);
+            if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
+                return; // Behind the globe
+            }
+            worldMap.fillCircle(context, p, 1.5, color);
+        });
+        // TODO The cone itself, and the cone's axis. And point S (cone's summit)
+    }
+
+
     let extraDrawingWorldMap = (wm, context) => {
 
         // https://www.w3schools.com/tags/canvas_arc.asp
@@ -2289,6 +2302,30 @@ let toggleForeground = () => {
 			context.restore();
 		}
 		context.closePath();
+
+        // Draw the cone's base from json data
+        fetch('./json/data.01.json')
+            .then(response => {
+                console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                response.json().then(doc => {
+                    latlngs = doc;
+                    console.log(`Path data loaded, ${doc.length} elements`);
+                    // Draw the data on the globe
+                    plotConeBase(context, wm, 'red', latlngs);
+                });
+            },
+            (error, errmess) => {
+                console.log("Ooch");
+                let message;
+                if (errmess) {
+                    let mess = JSON.parse(errmess);
+                    if (mess.message) {
+                        message = mess.message;
+                    }
+                }
+                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+            });
+
     };
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
