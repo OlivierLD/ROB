@@ -34,11 +34,59 @@ public class PlanDesSommetsPlayground {
     private final static double rhoE = 635677D; // Earth radius, in 100s of km. It's 6356.77 km.
     private final static double earthRadiusNM = (rhoE / 100d) / 1.852; // Earth radius, in nm.
 
+    private final static class ConeDefinition {
+        GeoPoint pg;
+        double earthCenterToConeSummit;
+        String bodyName;
+        String observationTime;
+        List<GeoPoint> circle;
+
+        public GeoPoint getPg() {
+            return pg;
+        }
+
+        public void setPg(GeoPoint pg) {
+            this.pg = pg;
+        }
+        public double getEarthCenterToConeSummit() {
+            return earthCenterToConeSummit;
+        }
+
+        public void setEarthCenterToConeSummit(double earthCenterToConeSummit) {
+            this.earthCenterToConeSummit = earthCenterToConeSummit;
+        }
+
+        public String getBodyName() {
+            return bodyName;
+        }
+
+        public void setBodyName(String bodyName) {
+            this.bodyName = bodyName;
+        }
+
+        public String getObservationTime() {
+            return observationTime;
+        }
+
+        public void setObservationTime(String observationTime) {
+            this.observationTime = observationTime;
+        }
+
+        public List<GeoPoint> getCircle() {
+            return circle;
+        }
+
+        public void setCircle(List<GeoPoint> circle) {
+            this.circle = circle;
+        }
+    }
     public static void main(String... args) {
 
+        // Position of the user, used to get to what should be seen. Not used in the real world.
         double latitude = 47.677667d;
         double longitude = -3.135667d;
 
+        // Get to the body's coordinates at the given time
         AstroComputerV2 ac = new AstroComputerV2();
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         if (true) { // Enforce date
@@ -61,6 +109,7 @@ public class PlanDesSommetsPlayground {
         final double sunGHA = ac.getSunGHA();
         final double sunDecl = ac.getSunDecl();
 
+        // Used here to get to what should be observed (he). Z is not required with this method.
         CelestialDeadReckoning dr = new CelestialDeadReckoning(sunGHA, sunDecl, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
@@ -213,10 +262,18 @@ public class PlanDesSommetsPlayground {
         double coneDiameter = earthRadiusNM * Math.cos(Math.toRadians(he));
         System.out.printf("Cone radius, in nautical miles: %.02f'\n", coneDiameter);
 
+        double earthCenterToConeSummit = Math.sqrt((FS * FS) + (earthRadiusNM * earthRadiusNM));
+
         // Find all the points seeing the Sun at the same altitude
         System.out.println("---- The Circle, Cone base ----");
 
-        List<GeoPoint> theCircle = new ArrayList<>();
+        // List<GeoPoint> theCircle = new ArrayList<>();
+        ConeDefinition cd = new ConeDefinition();
+        cd.circle = new ArrayList<>();
+        cd.bodyName = "Sun";
+        cd.pg = new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA));
+        cd.earthCenterToConeSummit = earthCenterToConeSummit;
+        cd.observationTime = SDF_UTC.format(ac.getCalculationDateTime().getTime());
 
         long ari = Math.round(initialRouteAngle);
         for (int i=0; i<360; i++) {
@@ -229,7 +286,8 @@ public class PlanDesSommetsPlayground {
             if (false) {
                 // Use RL
                 final GeoPoint drRL = GeomUtil.deadReckoning(new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA)), distanceInNM, hdg);
-                theCircle.add(drRL);
+                // theCircle.add(drRL);
+                cd.circle.add(drRL);
 
                 GreatCirclePoint sunPt = new GreatCirclePoint(Math.toRadians(sunDecl), Math.toRadians(AstroComputerV2.ghaToLongitude(sunGHA))); // Body
                 GreatCirclePoint circlePt = new GreatCirclePoint(Math.toRadians(drRL.getLatitude()), Math.toRadians(drRL.getLongitude())); // Observer, circle point
@@ -260,7 +318,8 @@ public class PlanDesSommetsPlayground {
                 GeoPoint sunPos = new GeoPoint(sunDecl, AstroComputerV2.ghaToLongitude(sunGHA));
                 // hdg = 335.29;
                 final GeoPoint drGC = GeomUtil.haversineInv(sunPos, distanceInNM, hdg); // THE dr to use
-                theCircle.add(drGC);
+                // theCircle.add(drGC);
+                cd.circle.add(drGC);
 
                 if (verboseCircle) {
                     GreatCirclePoint sunPt = new GreatCirclePoint(Math.toRadians(sunDecl), Math.toRadians(AstroComputerV2.ghaToLongitude(sunGHA))); // Body
@@ -293,11 +352,11 @@ public class PlanDesSommetsPlayground {
 
         if (jsonOutput) {
             // Print circle values, in JSON
-            // TODO: Pg of the body
+            // Pg of the body, summit of the cone...
             try {
                 System.out.println("--------------------------------");
-                System.out.printf("Producing ann array of %d element(s)\n", theCircle.size());
-                String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(theCircle);
+                System.out.printf("Producing an array of %d element(s)\n", cd.circle.size());
+                String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cd);
                 System.out.println(content);
                 System.out.println("--------------------------------");
             } catch (JsonProcessingException jpe) {
