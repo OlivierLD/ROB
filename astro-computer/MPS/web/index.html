@@ -2367,32 +2367,146 @@ let toggleForeground = () => {
 		context.closePath();
 
         // Draw the cone's base from json data
-        fetch('./json/data.01.json')
-            .then(response => {
-                console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                response.json().then(doc => {
-                    latlngs = doc;
-                    console.log(`Path data loaded, ${doc.circle.length} elements`);
-                    // Draw the data on the globe
-                    // The circle (cone base)
-                    plotConeBase(context, wm, 'red', latlngs);
-                    // The axis of the cone
-                    plotCone(context, wm, 'red', 'rgba(255, 0, 0, 0.4)', doc);
+        // Sun
+        if (true) {
+            fetch('./json/data.01.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'red', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'red', 'rgba(255, 0, 0, 0.4)', doc);
 
-                });
-            },
-            (error, errmess) => {
-                console.log("Ooch");
-                let message;
-                if (errmess) {
-                    let mess = JSON.parse(errmess);
-                    if (mess.message) {
-                        message = mess.message;
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
                     }
-                }
-                console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-            });
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Moon
+        if (true) {
+            fetch('./json/data.02.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
 
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Venus
+        if (false) {
+            fetch('./json/data.03.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'lime', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
+
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Mars
+        if (true) {
+            fetch('./json/data.04.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'orange', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'orange', 'rgba(128, 0, 0, 0.4)', doc);
+
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Jupiter
+        if (false) {
+            fetch('./json/data.05.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'blue', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
     };
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
