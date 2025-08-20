@@ -36,6 +36,7 @@ public class PlanDesSommetsPlayground {
 
     final static class ConeDefinition {
         GeoPoint pg;
+        double obsAlt;
         double earthCenterToConeSummit;
         String bodyName;
         String observationTime;
@@ -48,8 +49,16 @@ public class PlanDesSommetsPlayground {
         public void setPg(GeoPoint pg) {
             this.pg = pg;
         }
+
+        public double getObsAlt() {
+            return obsAlt;
+        }
+
         public double getEarthCenterToConeSummit() {
             return earthCenterToConeSummit;
+        }
+        public void setObsAlt(double obsAlt) {
+            this.obsAlt = obsAlt;
         }
 
         public void setEarthCenterToConeSummit(double earthCenterToConeSummit) {
@@ -275,6 +284,7 @@ public class PlanDesSommetsPlayground {
         ConeDefinition cd = new ConeDefinition();
         cd.circle = new ArrayList<>();
         cd.bodyName = bodyName;
+        cd.obsAlt = he;
         cd.pg = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
         cd.earthCenterToConeSummit = earthCenterToConeSummit;
         cd.observationTime = SDF_UTC.format(ac.getCalculationDateTime().getTime());
@@ -391,7 +401,7 @@ public class PlanDesSommetsPlayground {
         final double sunGHA = ac.getSunGHA();
         final double sunDecl = ac.getSunDecl();
 
-        final ConeDefinition coneDefinition = calculateCone(ac, latitude, longitude, year, month, day, hours, minutes, seconds, sunGHA, sunDecl, "Sun");
+        final ConeDefinition coneDefinition = calculateCone(ac, latitude, longitude, year, month, day, hours, minutes, seconds, sunGHA, sunDecl, "the Sun");
 
         if (jsonOutput) {
             // Print circle values, in JSON

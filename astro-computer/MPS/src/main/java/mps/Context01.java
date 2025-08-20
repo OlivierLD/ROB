@@ -12,7 +12,7 @@ import java.util.TimeZone;
 
 /**
  * Sun, Moon, Venus, Mars, Jupiter
- * Used to produce output for the web/index.html
+ * Used to produce output for the web/index.html (web/json/*.json)
  */
 public class Context01 {
 

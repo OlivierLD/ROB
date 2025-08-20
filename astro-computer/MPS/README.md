@@ -14,3 +14,9 @@ Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90&deg; - h1)`.
 La distance (grand cercle) `F - Pied1` est donc `(90&deg; - h1) * 60.0`.
 
 ---
+
+## Le principe  
+- On est capable de d&eacute;terminer les points d'un cercle d&eacute;fini par les points qui voient un astre &agrave; la m&ecirc;me hauteur - &agrave; un instant donn&eacute;.
+- Avec plusieurs observations (plusieurs astres), l'observateur se trouve &agrave; l';'intersection de ces cercles.
+
+---

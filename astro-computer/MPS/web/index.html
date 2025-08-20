@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpg" href="./palm.04.jpg">
-    <title>ES6 Celestial Computer test page</title>
+    <title>ES6 Celestial Computer and MPS</title>
 
     <!-- Main Module -->
     <script type="module" src="./app.js"></script> <!-- THAT is the key -->
@@ -1515,12 +1515,12 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- SPA with BG Components</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- MPS Demo</span></h1>
     </div>
-    <div style="text-align: right;"><small>Last code update June 15, 2025, 07:00 CET</small></div>
+    <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
 <div class="background bg-container"
-     style="margin: 10px; margin-top: 50px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
+     style="margin: 10px; margin-top: 80px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
     <!--
         WORLD MAP BG
     +-->
@@ -1538,39 +1538,10 @@ let toggleForeground = () => {
     <!-- JUMBO -->
     <div class="centered" style="grid-area: jumbos; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
-        <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">JUMBOS</div>
-        <!-- HDG -->
-        <jumbo-display id="jumbo-01"
-                       title="True Heading"
-                       class="jumbo-01 digital-font-orange"
-                       value="000"
-                       label="HDG"
-                       width="180"
-                       height="80"></jumbo-display>
-        <!-- BSP -->
-        <jumbo-display id="jumbo-02"
-                       title="Boat Speed"
-                       class="jumbo-01 digital-font-green one-decimal"
-                       value="00.0"
-                       label="BSP"
-                       width="180"
-                       height="80"></jumbo-display>
-        <!-- COG -->
-        <jumbo-display id="jumbo-03"
-                       title="Course Over Ground"
-                       class="jumbo-01 digital-font-red one-decimal"
-                       value="00.0"
-                       label="COG"
-                       width="180"
-                       height="80"></jumbo-display>
-        <!-- SOG -->
-        <jumbo-display id="jumbo-04"
-                       title="Speed Over Ground"
-                       class="jumbo-01 digital-font-cyan one-decimal"
-                       value="00.0"
-                       label="SOG"
-                       width="180"
-                       height="80"></jumbo-display>
+        <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">MPS Data</div>
+        <div id="mps-data" class="result" style="font-size: 0.75em; text-align: left; min-height: 100px; border: 1px solid silver; border-radius: 5px; padding: 10px;"> <!--" font-family: 'Courier New', Courier, monospace; margin: 0 0 20px 0; width: 100%; overflow: auto;"> -->
+            MPS Data goes here...
+        </div>
         <!-- MOON PHASE and TILT -->
         <moon-phase-2 id="moon-phase-01"
                       width="180"
@@ -2192,11 +2163,11 @@ let toggleForeground = () => {
             }
             document.getElementById("jumbo-01").value = _hdg; // .toFixed(0);
         } else {
-            document.getElementById("jumbo-01").value = 0.0;
+            // document.getElementById("jumbo-01").value = 0.0;
         }
-        document.getElementById("jumbo-02").value = 0.0;
-        document.getElementById("jumbo-03").value = 0.0;
-        document.getElementById("jumbo-04").value = 0.0;
+        // document.getElementById("jumbo-02").value = 0.0;
+        // document.getElementById("jumbo-03").value = 0.0;
+        // document.getElementById("jumbo-04").value = 0.0;
     };
 
     let prmslUpdater = () => { // Simulator
@@ -2284,7 +2255,7 @@ let toggleForeground = () => {
             // context.strokeStyle = 'lime';
             context.beginPath();
             worldMap.fillCircle(context, {x: summitX, y: summitY}, 5, 'lime'); // The summit
-            context.fillText('S', Math.round(summitX) + 3, Math.round(summitY) - 3);
+            context.fillText('S ' + data.bodyName, Math.round(summitX) + 3, Math.round(summitY) - 3);
             context.stroke();
             context.closePath();
         }
@@ -2367,6 +2338,8 @@ let toggleForeground = () => {
 		context.closePath();
 
         // Draw the cone's base from json data
+        let mpsData = document.getElementById('mps-data');
+        mpsData.innerHTML = ''; // Clear previous data
         // Sun
         if (true) {
             fetch('./json/data.01.json')
@@ -2377,10 +2350,17 @@ let toggleForeground = () => {
                         console.log(`Path data loaded, ${doc.circle.length} elements`);
                         // Draw the data on the globe
                         // The circle (cone base)
-                        plotConeBase(context, wm, 'red', latlngs);
+                        plotConeBase(context, wm, 'yellow', latlngs);
                         // The axis of the cone
-                        plotCone(context, wm, 'red', 'rgba(255, 0, 0, 0.4)', doc);
-
+                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
                     });
                 },
                 (error, errmess) => {
@@ -2408,7 +2388,14 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, 'white', latlngs);
                         // The axis of the cone
                         plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
                     });
                 },
                 (error, errmess) => {
@@ -2436,7 +2423,14 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, 'lime', latlngs);
                         // The axis of the cone
                         plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
-
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
                     });
                 },
                 (error, errmess) => {
@@ -2464,7 +2458,14 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, 'orange', latlngs);
                         // The axis of the cone
                         plotCone(context, wm, 'orange', 'rgba(128, 0, 0, 0.4)', doc);
-
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
                     });
                 },
                 (error, errmess) => {
@@ -2492,7 +2493,14 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, 'blue', latlngs);
                         // The axis of the cone
                         plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
-
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
                     });
                 },
                 (error, errmess) => {
