@@ -1,0 +1,13 @@
+{
+	"name": "olivs-pages-github",
+	"version": "0.0.1",
+	"description": "Olivs github pages",
+	"keywords": [
+		"Stuff",
+		"Oliv",
+		"pages.github"
+	],
+	"scripts": {
+		"start": "node server.js"
+	}
+}

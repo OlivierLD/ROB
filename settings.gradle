@@ -11,6 +11,7 @@ include "Java-TCP-Python"
 // Astro Computer
 include('astro-computer:AstroComputer')
 include('astro-computer:AstroUtilities')
+include('astro-computer:MPS')
 
 // Raspberry Sailor
 include('raspberry-sailor:routing')

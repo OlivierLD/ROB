@@ -1,4 +1,4 @@
-package astro.plandessommets;
+package mps;
 
 import calc.CelestialDeadReckoning;
 import calc.GeomUtil;

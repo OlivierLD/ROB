@@ -1,0 +1,70 @@
+buildscript {
+    ext.scala_version = '2.13.8'
+}
+
+plugins {
+  id 'java'
+  id 'idea'
+  id 'maven-publish'
+  id 'com.github.johnrengelman.shadow' // version '6.0.0' // Remove version if used in a gradle submodule.
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+//compileJava.options.encoding = 'ISO-8859-1'
+compileJava.options.compilerArgs += ["-Xlint:unchecked"]
+
+group = 'astro.computer'
+version = '1.0'
+
+tasks.withType(JavaCompile) {
+  if (JavaVersion.current() != project.targetCompatibility) {
+//    throw new GradleException(
+    println "+------ Warning: Java version (JAVA_HOME) possible mismatch -----\n" +
+            "| In task $name ($project.name), the java version used ${JavaVersion.current()} is not the expected version ${project.targetCompatibility}.\n" +
+            "+----------------------------------------------------------------"
+//    )
+  } else {
+    println ">> From task $name (in $project.name), using java version ${JavaVersion.current()} "
+  }
+  options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':astro-computer:AstroComputer')
+    implementation project(':astro-computer:AstroUtilities')
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+    // https://mvnrepository.com/artifact/com.google.openlocationcode/openlocationcode
+    // PlusCode, see https://github.com/google/open-location-code
+    implementation 'com.google.openlocationcode:openlocationcode:1.0.4'  // Google PlusCode
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// See https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+    publications {
+        maven(MavenPublication) {  // Required by publishToMavenLocal
+            groupId = 'astro.computer'
+            artifactId = 'MPS'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+}

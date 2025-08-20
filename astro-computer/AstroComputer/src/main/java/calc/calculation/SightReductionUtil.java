@@ -441,39 +441,39 @@ public class SightReductionUtil {
 			correction -= (horizonDip / 60D);
 		}
 		if (verbose) {
-			System.out.println("Original Altitude:" + df.format(instrAltitude));
+			System.out.printf("Original (Instr) Altitude: %s\272\n", df.format(instrAltitude));
 		}
 		double observedAltitude = instrAltitude + correction;
 		if (verbose && !artificialHorizon) {
-			System.out.println("-> With Hor.Dip :" + df.format(observedAltitude) + " (Horizon Dip:" + df.format(horizonDip) + "')");
+			System.out.printf("-> With Hor.Dip, Obs Alt: %s\272 (Horizon Dip: %s')\n", df.format(observedAltitude), df.format(horizonDip));
 		}
 		refraction = getRefraction(observedAltitude);
 		correction -= (refraction / 60D);
 		observedAltitude = instrAltitude + correction;
 		if (verbose) {
-			System.out.println("-> With Refr    :" + df.format(observedAltitude) + " (Refraction:" + df.format(refraction) + "')");
+			System.out.printf("-> With Refr, Obs Alt : %s\272 (Refraction: %s')\n", df.format(observedAltitude), df.format(refraction));
 		}
 		double pa = getParallax(hp, observedAltitude);
 		correction += pa;
 		observedAltitude = instrAltitude + correction;
 		if (verbose) {
-			System.out.println("-> With Parallax:" + df.format(observedAltitude) + " (Parallax:" + df.format(pa * 57.295779513082323D) + "')");
+			System.out.printf("-> With Parallax, Obs Alt: %s\272 (Parallax: %s')\n", df.format(observedAltitude), df.format(pa * 57.295779513082323D));
 		}
 		if (limb == LOWER_LIMB) {
 			correction += sd;
 			if (verbose) {
-				System.out.println("  Semi-Diameter:" + df.format(sd * 60d) + "'");
+				System.out.printf("  Semi-Diameter: %s'\n", df.format(sd * 60d));
 			}
 		} else if (limb == UPPER_LIMB) {
 			correction -= sd;
 			if (verbose) {
-				System.out.println("  Semi-Diameter:" + df.format(-sd * 60d) + "'");
+				System.out.printf("  Semi-Diameter: %s'\n", df.format(-sd * 60d));
 			}
 		}
 		observedAltitude = instrAltitude + correction;
 		if (verbose) {
-			System.out.println("-> With Semi-Diam:" + df.format(observedAltitude));
-			System.out.println("- Total Correction:" + df.format(correction) + "\272");
+			System.out.printf("-> With Semi-Diam: %s\272\n", df.format(observedAltitude));
+			System.out.printf("- Total Correction: %s\272\n", df.format(correction));
 		}
 		return correction;
 	}

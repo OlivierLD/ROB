@@ -1,11 +1,11 @@
-package astro.plandessommets;
+package mps;
 
 import calc.GeoPoint;
 import calc.GeomUtil;
 
 /**
- * See https://en.wikipedia.org/wiki/Haversine_formula and/or https://fr.wikipedia.org/wiki/Formule_de_haversine
- * See also https://github.com/search5/latlon it's in Python
+ * See <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a> and/or <a href="https://fr.wikipedia.org/wiki/Formule_de_haversine">Formule de Haversine</a>
+ * See also <a href="https://github.com/search5/latlon">LatLon</a>, it's in Python
  */
 public class LatLongWorkBench {
 
