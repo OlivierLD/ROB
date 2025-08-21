@@ -2,7 +2,7 @@
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
 Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manuellememt - sans recours &agrave; l'informatique.  
-&Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq de Saint Hilaire, 1851), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
+&Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
 - Voir [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
@@ -47,5 +47,20 @@ Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
 
 ## En pratique
 Vaste sujet... &Ccedil;a vient !
+
+#### Une remarque &agrave; propos du point par droites de hauteurs, de Marcq Saint-Hilaire
+Pour mettre cette m&eacute;thode en &oelig;uvre, on mesure la hauteur d'un astre au sextant, qu'on compare &agrave; ce qu'on
+devrait observer si on &eacute;tait l&agrave; o&ugrave; l'estime nous situe, cette hauteur "&eacute;stim&eacute;e" est calcul&eacute;e gr&acirc;ce aux &eacute;ph&eacute;m&eacute;rides, pour l'heure (exacte)
+de l'observation.  
+La droite de hauteur obtenue est ensuite port&eacute;e sur la carte, perpendiculairement &agrave; l'azimut de 
+l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les Tables de Bataille), _**et non pas observ&eacute;**_ !  
+Ceci justifie - entre autres - la raison pour laquelle un intercept de plus de 15 miles est consid&eacute;r&eacute; comme louche. Le
+calcul de l'azimut se faisant &agrave; partir de la position estim&eacute;e, une "mauvaise" estime donne lieu
+&agrave; un azimut potentiellement &eacute;rron&eacute;.
+
+### Une premi&egrave;re approche...
+On va partir - pour l'instant - d'une position estim&eacute;e, d'o&ugrave; on pourra calculer l'azimut des astres observ&eacute;s &agrave; l'aide des tables de Bataille.  
+On pourra alors calculer le point du cercle d'&eacute;gales hauteur (de cet astre) pour cet azimut.
+
 
 ---
