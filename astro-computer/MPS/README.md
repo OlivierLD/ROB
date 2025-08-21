@@ -1,5 +1,5 @@
 # M&eacute;thode du Plan des Sommets (MPS)
-Methode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
+M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
 Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manuellememt - sans recours &agrave; l'informatique.  
 &Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq de Saint Hilaire, 1851), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
@@ -25,8 +25,8 @@ La distance (grand cercle) `F - Pied1` est donc `(90&deg; - h1) * 60.0`.
   - La hauteur de l'astre observ&eacute;
   - L'heure de l'observation
 - On en d&eacute;duit :
-  - Avec les &eacute;ph&eacute;m&eacute;rides, la position du point Pg de l'astre (D&eacute;clinaison et AHG)
-  - Par le calcul, le lieu des points (un cercle centr&eacute; sur ce Pg) qui voient l'astre &agrave; la m&ecirc;me hauteur (celle qu'on a observ&eacute;e)
+  - Avec les &eacute;ph&eacute;m&eacute;rides, la position du point Pg de l'astre (D&eacute;clinaison et AHG), le centre du cercle.
+  - Par le calcul, le lieu des points (un cercle centr&eacute; sur ce Pg) qui voient l'astre &agrave; la m&ecirc;me hauteur (celle qu'on a observ&eacute;e).
 
 Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &agrave; l'intersection de ces cercles.
 
