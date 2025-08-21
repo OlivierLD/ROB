@@ -479,6 +479,12 @@ let setUserPos = (lat, lng) => {
     // Set user position!!
     worldMap.setUserPosition(userPos);
     worldMap.repaint();
+
+    let worldMapMercator = document.getElementById('world-map-02');
+
+    // Set user position!!
+    worldMapMercator.setUserPosition(userPos);
+    worldMapMercator.repaint();
 };
 
 let hidden = true;
@@ -1011,7 +1017,8 @@ let toggleForeground = () => {
             grid-template-areas:
                 "wm jumbos prmsl"
                 "utc utc utc"
-                "solar solar solar";
+                "solar solar solar"
+                "wm-m wm-m wm-m";
         }
         /* For the switch (slider) */
         .switch {
@@ -1520,9 +1527,9 @@ let toggleForeground = () => {
     <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
 <div class="background bg-container"
-     style="margin: 10px; margin-top: 80px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
+     style="margin: 10px; margin-top: 80px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px; padding-bottom: 20px;">
     <!--
-        WORLD MAP BG
+        WORLD MAP BG. GLOBE
     +-->
     <div id="world-map" style="grid-area: wm; text-align: right;">
         <div class="centered" style="width: 600px; border: 0px solid silver; border-radius: 5px;">
@@ -1535,7 +1542,7 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <!-- JUMBO -->
+    <!-- JUMBO / MPS Data -->
     <div class="centered" style="grid-area: jumbos; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
         <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">MPS Data</div>
@@ -1643,7 +1650,25 @@ let toggleForeground = () => {
         </div>
     </div>
 
+    <!--
+     | WORLD MAP BG. MERCATOR
+     +-->
+    <div id="world-map-mercator" style="grid-area: wm-m; text-align: center;">
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <world-map id="world-map-02"
+                       class="worldmap-display-bg"
+                       title="World Map&#13;Mercator"
+                       projection="MERCATOR"
+                       width="800"
+                       height="700"></world-map>
+        </div>
+    </div>
+
+    <div>
+        <!-- Empty -->
+    </div>
 </div>
+
 
 <div id="full-foreground" style="display: block;">
     <div style="padding: 6px; border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px; margin-top: 50px;">
@@ -2189,11 +2214,15 @@ let toggleForeground = () => {
     function plotConeBase(context, worldMap, color, circleData) {
 
         circleData.circle.forEach((point) => {
-            let p = worldMap.getPanelPoint(point.latitude, point.longitude);
-            if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
-                return; // Behind the globe
+            if (worldMap.projection.type === 'GLOBE') {
+                let p = worldMap.getPanelPoint(point.latitude, point.longitude);
+                if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
+                    return; // Behind the globe
+                }
+                worldMap.fillCircle(context, p, 1.5, color);
+            } else {
+                worldMap.plotPosToCanvas(context, point.latitude, point.longitude, "", color, 0.75);
             }
-            worldMap.fillCircle(context, p, 1.5, color);
         });
     }
 
@@ -2202,64 +2231,68 @@ let toggleForeground = () => {
 
     function plotCone(context, worldMap, color, coneColor, data) {
 
-        // The cone's axis
-        let pg = worldMap.getPanelPoint(data.pg.latitude, data.pg.longitude);
-        context.save();
-        let thisPointIsBehind = worldMap.isBehind(Math.toRadians(data.pg.latitude), Math.toRadians(data.pg.longitude - worldMap.globeViewLngOffset));
-        if (!thisPointIsBehind || worldMap.transparentGlobe) {
-            // Draw Body
-            worldMap.plot(context, pg, color);
-            context.fillStyle = color;
-            context.fillText(data.bodyName, Math.round(pg.x) + 3, Math.round(pg.y) - 3);
-            // Arrow, to the Body
-            context.setLineDash([2]);
-            context.strokeStyle = color;
-            context.beginPath();
-            let center = worldMap.getPanelPoint(worldMap.userPosition.latitude, worldMap.userPosition.longitude);
-            context.moveTo(center.x, center.y);
-            context.lineTo(pg.x, pg.y);
-            context.stroke();
-            context.closePath();
-            context.setLineDash([0]); // Reset
-            context.strokeStyle = color;
-            let deltaX = pg.x - center.x;
-            let deltaY = pg.y - center.y;
-            context.beginPath();
-            context.moveTo(pg.x, pg.y);
-            // Cone summit offset
-            console.log(`Dist to summit ${data.earthCenterToConeSummit} nm`);
-
-            let distToSummitRatio = data.earthCenterToConeSummit / earthRadiusNM; // in nm
-
-            // context.lineTo(pg.x + deltaX, pg.y + deltaY); // To the cone's summit
-            context.lineTo(center.x + (deltaX * distToSummitRatio), center.y + (deltaY * distToSummitRatio)); // The summit
-            context.stroke();
-            context.closePath();
-            let summitX = center.x + (deltaX * distToSummitRatio);
-            let summitY = center.y + (deltaY * distToSummitRatio);
-
-            // The cone itself
-            context.strokeStyle = coneColor; // Cone color
-            data.circle.forEach((point) => {
-                let p = worldMap.getPanelPoint(point.latitude, point.longitude);
-                if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
-                    return; // Behind the globe
-                }
+        if (worldMap.projection.type === 'GLOBE') {
+            // The cone's axis
+            let pg = worldMap.getPanelPoint(data.pg.latitude, data.pg.longitude);
+            context.save();
+            let thisPointIsBehind = worldMap.isBehind(Math.toRadians(data.pg.latitude), Math.toRadians(data.pg.longitude - worldMap.globeViewLngOffset));
+            if (!thisPointIsBehind || worldMap.transparentGlobe) {
+                // Draw Body
+                worldMap.plot(context, pg, color);
+                context.fillStyle = color;
+                context.fillText(data.bodyName, Math.round(pg.x) + 3, Math.round(pg.y) - 3);
+                // Arrow, to the Body
+                context.setLineDash([2]);
+                context.strokeStyle = color;
                 context.beginPath();
-                context.moveTo(summitX, summitY); // The cone's summit
-                context.lineTo(p.x, p.y);         // The cone's base
+                let center = worldMap.getPanelPoint(worldMap.userPosition.latitude, worldMap.userPosition.longitude);
+                context.moveTo(center.x, center.y);
+                context.lineTo(pg.x, pg.y);
                 context.stroke();
                 context.closePath();
-            });
-            context.fillStyle = 'lime'; // Summit color
-            // context.strokeStyle = 'lime';
-            context.beginPath();
-            worldMap.fillCircle(context, {x: summitX, y: summitY}, 5, 'lime'); // The summit
-            context.fillText('S ' + data.bodyName, Math.round(summitX) + 3, Math.round(summitY) - 3);
-            context.stroke();
-            context.closePath();
+                context.setLineDash([0]); // Reset
+                context.strokeStyle = color;
+                let deltaX = pg.x - center.x;
+                let deltaY = pg.y - center.y;
+                context.beginPath();
+                context.moveTo(pg.x, pg.y);
+                // Cone summit offset
+                console.log(`Dist to summit ${data.earthCenterToConeSummit} nm`);
+
+                let distToSummitRatio = data.earthCenterToConeSummit / earthRadiusNM; // in nm
+
+                // context.lineTo(pg.x + deltaX, pg.y + deltaY); // To the cone's summit
+                context.lineTo(center.x + (deltaX * distToSummitRatio), center.y + (deltaY * distToSummitRatio)); // The summit
+                context.stroke();
+                context.closePath();
+                let summitX = center.x + (deltaX * distToSummitRatio);
+                let summitY = center.y + (deltaY * distToSummitRatio);
+
+                // The cone itself
+                context.strokeStyle = coneColor; // Cone color
+                data.circle.forEach((point) => {
+                    let p = worldMap.getPanelPoint(point.latitude, point.longitude);
+                    if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
+                        return; // Behind the globe
+                    }
+                    context.beginPath();
+                    context.moveTo(summitX, summitY); // The cone's summit
+                    context.lineTo(p.x, p.y);         // The cone's base
+                    context.stroke();
+                    context.closePath();
+                });
+                context.fillStyle = 'lime'; // Summit color
+                // context.strokeStyle = 'lime';
+                context.beginPath();
+                worldMap.fillCircle(context, {x: summitX, y: summitY}, 5, 'lime'); // The summit
+                context.fillText('S ' + data.bodyName, Math.round(summitX) + 3, Math.round(summitY) - 3);
+                context.stroke();
+                context.closePath();
+            }
+            context.restore();
+        } else {
+            worldMap.plotPosToCanvas(context, data.pg.latitude, data.pg.longitude, data.bodyName, color, 2);
         }
-        context.restore();
     }
 
     let extraDrawingWorldMap = (wm, context) => {
@@ -2517,6 +2550,144 @@ let toggleForeground = () => {
         }
     };
 
+    let extraDrawingWorldMapMercator = (wm, context) => {
+        // Sun
+        if (true) {
+            fetch('./json/data.01.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Sun path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'yellow', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Moon
+        if (true) {
+            fetch('./json/data.02.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Moon path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Venus
+        if (false) {
+            fetch('./json/data.03.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Venus path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'lime', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Mars
+        if (true) {
+            fetch('./json/data.04.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Mars path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'orange', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'orange', 'rgba(128, 0, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Jupiter
+        if (false) {
+            fetch('./json/data.05.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Jupiter path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'blue', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+    }
+
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
         let rightLimit = (userZ + 90) % 360;
         let leftLimit = (userZ - 90) % 360;
@@ -2646,6 +2817,7 @@ let toggleForeground = () => {
         document.getElementById("world-map-01").setDoAfter(extraDrawingWorldMap);
         document.getElementById("sun-path-01").setDoAfter(extraDrawingSunPath);
         document.getElementById("sky-map-01").setDoAfter(extraDrawingSkyMap);
+        document.getElementById("world-map-02").setDoAfter(extraDrawingWorldMapMercator);
 
         let hdgUpdater = window.setInterval(sensorUpdater, 1000); // Simulation
         let prmslData = window.setInterval(prmslUpdater, 2000);   // Simulation

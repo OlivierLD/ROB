@@ -2,7 +2,7 @@
 Methode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
 Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manuellememt - sans recours &agrave; l'informatique.  
-Cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
+&Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq de Saint Hilaire, 1851), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
 - Voir [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
@@ -31,6 +31,14 @@ La distance (grand cercle) `F - Pied1` est donc `(90&deg; - h1) * 60.0`.
 Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &agrave; l'intersection de ces cercles.
 
 ![Context](01.png)
+
+L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
+Mercator.  
+Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
+- Les cercles de hauteur ne sont pas ronds sur cette projection.
+- Ils peuvent &ecirc;tre &eacute;normes.
+
+![Context Mercator](02.png)
 
 ## En pratique
 Vaste sujet... &Ccedil;a vient !

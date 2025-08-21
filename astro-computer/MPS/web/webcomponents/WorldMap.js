@@ -831,14 +831,14 @@ class WorldMap extends HTMLElement {
 		return lng;
 	}
 
-	plotPoint(context, pt, color) {
-		WorldMap.plot(context, pt, color);
+	plotPoint(context, pt, color, radius=2) {
+		WorldMap.plot(context, pt, color, radius);
 	}
 
-	static plot(context, pt, color) {
+	static plot(context, pt, color, radius=2) {
 		context.beginPath();
 		context.fillStyle = color;
-		context.arc(pt.x, pt.y, 2, 0, 2 * Math.PI);
+		context.arc(pt.x, pt.y, radius, 0, 2 * Math.PI);
 		context.stroke();
 		context.fill();
 		context.closePath();
@@ -962,7 +962,7 @@ class WorldMap extends HTMLElement {
 		// TODO A style for the constellation name
 		context.fillText(text,
 			minX + ((maxX - minX) / 2) - (metrics.width / 2),
-			minY + ((maxY - minY) / 2) + (10 / 2)); 
+			minY + ((maxY - minY) / 2) + (10 / 2));
 		// context.fillText(constellation.name, minX, minY);
 		context.closePath();
 
@@ -1312,7 +1312,7 @@ class WorldMap extends HTMLElement {
 						context.lineWidth = this.worldmapColorConfig.chartLineWidth;
 						context.beginPath();
 						context.strokeStyle = this.worldmapColorConfig.chartColor;
-	
+
 						for (let p = 0; p < point.length; p++) {
 							let lat = parseFloat(point[p].Lat);
 							let lng = parseFloat(point[p].Lng);
@@ -1664,10 +1664,10 @@ class WorldMap extends HTMLElement {
 	 * @param label
 	 * @param color
 	 */
-	plotPosToCanvas(context, lat, lng, label, color) {
+	plotPosToCanvas(context, lat, lng, label, color, radius=2) {
 
 		let pt = this.posToCanvas(lat, lng);
-		WorldMap.plot(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor));
+		WorldMap.plot(context, pt, (color !== undefined ? color : this.worldmapColorConfig.defaultPlotPointColor), radius);
 		if (label !== undefined) {
 			try {
 				// BG
@@ -2356,7 +2356,7 @@ class WorldMap extends HTMLElement {
 		if (this.astronomicalData !== undefined && this.astronomicalData.deltaT !== undefined) {
 			context.fillStyle = this.worldmapColorConfig.displayPositionColor;
 			context.font = "12px Arial"; // "bold 40px Arial"
-			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";  
+			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";
 			context.fillText(deltaT, 10, this.height - 5);
 		}
 	}
