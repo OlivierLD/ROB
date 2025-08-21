@@ -50,7 +50,7 @@ Vaste sujet... &Ccedil;a vient !
 
 #### Une remarque &agrave; propos du point par droites de hauteurs, de Marcq Saint-Hilaire
 Pour mettre cette m&eacute;thode en &oelig;uvre, on mesure la hauteur d'un astre au sextant, qu'on compare &agrave; ce qu'on
-devrait observer si on &eacute;tait l&agrave; o&ugrave; l'estime nous situe, cette hauteur "&eacute;stim&eacute;e" est calcul&eacute;e gr&acirc;ce aux &eacute;ph&eacute;m&eacute;rides, pour l'heure (exacte)
+devrait observer si on &eacute;tait l&agrave; o&ugrave; l'estime nous situe, cette hauteur "&eacute;stim&eacute;e" est calcul&eacute;e gr&acirc;ce aux &eacute;ph&eacute;m&eacute;rides et aux tables de Dieumegard, pour l'heure (exacte)
 de l'observation.  
 La droite de hauteur obtenue est ensuite port&eacute;e sur la carte, perpendiculairement &agrave; l'azimut de 
 l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les Tables de Bataille), _**et non pas observ&eacute;**_ !  
