@@ -32,6 +32,11 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 
 ![Context](01.png)
 
+Voici la m&ecirc;me figure, d'un autre point de vue.  
+On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, sur le cercle d'&eacute;gales hauteurs.  
+
+![Context](03.png)
+
 L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
 Mercator.  
 Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
