@@ -6,6 +6,9 @@ import calc.calculation.AstroComputerV2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -24,13 +27,26 @@ public class Context01 {
     }
 
     // Output
-    public static void spitOut(PlanDesSommetsPlayground.ConeDefinition coneDefinition) {
+    public static void spitOut(PlanDesSommetsPlayground.ConeDefinition coneDefinition, boolean verbose) {
         try {
-            System.out.printf("-------------- %s ----------------\n", coneDefinition.bodyName);
-            System.out.printf("Producing an array of %d element(s)\n", coneDefinition.circle.size());
             String content = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(coneDefinition);
-            System.out.println(content);
-            System.out.println("--------------------------------");
+            if (verbose) {
+                System.out.printf("-------------- %s ----------------\n", coneDefinition.bodyName);
+                System.out.printf("Producing an array of %d element(s)\n", coneDefinition.circle.size());
+                System.out.println(content);
+                System.out.println("--------------------------------");
+            }
+            String userDir = System.getProperty("user.dir");
+            String fileName = String.format("%s/web/json/%s.json", userDir, coneDefinition.bodyName.replace(" ", "-"));
+            try {
+                File f = new File(fileName);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                bw.write(content + "\n");
+                bw.close();
+                System.out.printf("Data written to %s\n", f.getAbsolutePath());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         } catch (JsonProcessingException jpe) {
             jpe.printStackTrace();
         }
@@ -157,11 +173,13 @@ public class Context01 {
                 jupiterDecl,
                 "Jupiter");
 
-        spitOut(sunCone);
-        spitOut(moonCone);
-        spitOut(venusCone);
-        spitOut(marsCone);
-        spitOut(jupiterCone);
+        boolean verbose = "true".equals(System.getProperty("verbose"));
+
+        spitOut(sunCone, verbose);
+        spitOut(moonCone, verbose);
+        spitOut(venusCone, verbose);
+        spitOut(marsCone, verbose);
+        spitOut(jupiterCone, verbose);
 
     }
 }

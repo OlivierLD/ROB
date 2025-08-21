@@ -1,12 +1,15 @@
 # M&eacute;thode du Plan des Sommets (MPS)
-Yves Robin-Jouan,1995-96
+Methode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
-This is a workbench... We want to see if this can be done manually.  
-Some investigations need to be done.
+Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manuellememt - sans recours &agrave; l'informatique.  
+Cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
+C'est ce qu'on se propose de voir ici.
 
-- See [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
-- See [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
-- See [here](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets)
+- Voir [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
+- Voir [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
+- Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
+- Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
+- Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets)
 
 ![Context](img.png)
 
@@ -18,7 +21,7 @@ La distance (grand cercle) `F - Pied1` est donc `(90&deg; - h1) * 60.0`.
 ## Le principe  
 - On est capable de d&eacute;terminer les points d'un cercle d&eacute;fini par les points qui voient un astre &agrave; la m&ecirc;me hauteur, &agrave; un instant donn&eacute;.
 - Avec plusieurs observations (plusieurs astres), l'observateur se trouve &agrave; l'intersection de ces cercles.
-- Les param&egrave;tres de l'&eacute;quation sont :
+- Pour chaque astre, les param&egrave;tres de l'&eacute;quation sont :
   - La hauteur de l'astre observ&eacute;
   - L'heure de l'observation
 - On en d&eacute;duit :
@@ -30,6 +33,6 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 ![Context](01.png)
 
 ## En pratique
-Vaste sujet...
+Vaste sujet... &Ccedil;a vient !
 
 ---
