@@ -1669,15 +1669,16 @@ let toggleForeground = () => {
     </div>
 
     <div id="graph-lat" style="grid-area: gl; text-align: center;">
+        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Graphs (tentatives...)</div>
         <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
             <graph-display id="graph-01"
                             width="800"
                             height="400"
                             padding="5"
                             value=""
-                            vgrid="0:10.0"
-                            hgrid="-90:10.0"
-                            label="Latitudes / idx"
+                            vgrid="-90:10.0"
+                            hgrid="0:10.0"
+                            label="idx / Latitudes"
                             title="Latitudes"/>
         </div>
     </div>
@@ -1717,6 +1718,8 @@ let toggleForeground = () => {
                             <i>How-to:</i> Use the hamburger (&#8801;) at the top left to set the background parameters (Wandering bodies, Sunlight, Real Time...)
                             <br/>
                             Then you can show or hide the computed data... And you can use the "Help" in the sliding menu.
+                            <br/>
+                            The "Set Position" button will also display the expected MPS cones.
                         </div>
                     </div>
                 </td>
@@ -2329,10 +2332,10 @@ let toggleForeground = () => {
         withGrid: true,
         withXLabels: true,
         withYLabels: true,
-        minX: 0,
-        maxX: 360,
-        minY: -90,
-        maxY: 90,
+        minX: -90,
+        maxX: 90,
+        minY: 0,
+        maxY: 360,
         data: [ // Samples below...
             {
                 name: 'data one',
@@ -2393,8 +2396,8 @@ let toggleForeground = () => {
         };
 
         coneData.circle.forEach((point, idx) => {
-            newData.x.push(idx); // point.longitude); // idx ?
-            newData.values.push(point.latitude);
+            newData.x.push(point.latitude);
+            newData.values.push(idx);
             // newData.x.push(point.latitude);
             // newData.values.push(idx);
         });
@@ -3015,6 +3018,60 @@ let toggleForeground = () => {
 
         document.getElementById('sun-path-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
         document.getElementById('sky-map-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+
+        let graphLat = document.getElementById('graph-01');
+        graphLat.addEventListener('mousemove', evt => {
+            // wow !
+            let theGraph = evt.target;
+            let rect = theGraph.getBoundingClientRect();
+            let padding = theGraph.padding;
+            console.log(`Graph size: padding ${padding}`);
+
+            let x = evt.clientX - rect.left; // x position within the element.
+            let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6... rect.height ?
+            // let y = evt.clientY - rect.height;
+            // let y = evt.clientY - rect.top;
+            // console.log(`MouseMove on graph: ${x}, ${y}`);
+            // Tooltip: Use theGraph.data.minX/maxX/minY/maxY if needed...
+            let height = theGraph.height - (2 * padding); // Includes padding, 2x !
+            let width = theGraph.width - (2 * padding);   // Includes padding, 2x !
+
+            let minX = theGraph.data !== null ? theGraph.data.minX : 0;
+            let maxX = theGraph.data !== null ? theGraph.data.maxX : 0;
+            let deltaX = maxX - minX;
+            // let correctedX = width - x + padding;
+            let correctedX = x - padding;
+            let xValue = minX + ((correctedX / width) * deltaX);
+            // console.log(`xValue = ${minX} + ((${correctedX} / ${width}) * ${deltaX}) = ${xValue}`);
+
+            let minY = theGraph.data !== null ? theGraph.data.minY : 0;
+            let maxY = theGraph.data !== null ? theGraph.data.maxY : 0;
+            let deltaY = maxY - minY;
+            // let correctedY = /*height -*/ y - padding;
+            let correctedY = /*height -*/ y + (2 * padding);
+            // let yValue = minY + ((correctedY / height) * deltaY);
+            let yValue = maxY - ((correctedY / height) * deltaY);
+            // console.log(`y = ${y}, yValue = ${maxY} - ((${correctedY} / ${height}) * ${deltaY}) = ${yValue}`);
+            if (false) {
+                console.log("+=========================================");
+                // console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
+                // console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
+                console.log(`| Rect: top ${rect.top}, left ${rect.left}, width ${rect.width}, height ${rect.height}`);
+                console.log(`| Padding: ${padding}`);
+                // console.log(`| MinX: ${theGraph.data !== null ? theGraph.data.minX : 'null'}, MaxX: ${theGraph.data !== null ? theGraph.data.maxX : 'null'}`);
+                console.log(`| MinY: ${theGraph.data !== null ? theGraph.data.minY : 'null'}, MaxY: ${theGraph.data !== null ? theGraph.data.maxY : 'null'}`);
+                // console.log(`| DeltaX: ${deltaX}, width: ${width}, correctedX: ${correctedX}, xValue: ${xValue}`);
+                console.log(`| Data range: X [${minX}..${maxX}] Y [${minY}..${maxY}]`);
+                console.log(`| Data range: dX ${deltaX} dY ${deltaY}, w ${width}, h ${height}, cX ${correctedX}, cY ${correctedY}`);
+                console.log(`| Corrected: x ${correctedX}, y ${correctedY}`);
+                console.log(`| MouseMove on graph: ${x}, ${y} -> idx ${yValue.toFixed(1)}, Lat ${xValue.toFixed(1)}`);
+                console.log("+=========================================");
+            }
+
+            // theGraph.title = `To Be Tweaked\nMouse at idx ${yValue.toFixed(0)}, Lat ${xValue.toFixed(2)}\xb0`;
+            theGraph.title = `Mouse at idx ${yValue.toFixed(0)},\nLat ${decToSex(xValue, "NS")}`;
+        });
+
 
         console.log('On Load, done!');
     };
