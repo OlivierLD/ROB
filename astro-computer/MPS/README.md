@@ -33,7 +33,7 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 ![Context](01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
-On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, sur le cercle d'&eacute;gales hauteurs.  
+On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
 
 ![Context](03.png)
 
@@ -53,8 +53,8 @@ Pour mettre cette m&eacute;thode en &oelig;uvre, on mesure la hauteur d'un astre
 devrait observer si on &eacute;tait l&agrave; o&ugrave; l'estime nous situe, cette hauteur "&eacute;stim&eacute;e" est calcul&eacute;e gr&acirc;ce aux &eacute;ph&eacute;m&eacute;rides et aux tables de Dieumegard, pour l'heure (exacte)
 de l'observation.  
 La droite de hauteur obtenue est ensuite port&eacute;e sur la carte, perpendiculairement &agrave; l'azimut de 
-l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les Tables de Bataille), _**et non pas observ&eacute;**_ !  
-Ceci justifie - entre autres - la raison pour laquelle un intercept de plus de 15 miles est consid&eacute;r&eacute; comme louche. Le
+l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les tables de Bataille), _**et non pas observ&eacute;**_ !  
+Ceci justifie - entre autres - la raison pour laquelle un intercept de plus de 15 miles est consid&eacute;r&eacute; comme suspect. Le
 calcul de l'azimut se faisant &agrave; partir de la position estim&eacute;e, une "mauvaise" estime donne lieu
 &agrave; un azimut potentiellement &eacute;rron&eacute;.
 
@@ -62,5 +62,17 @@ calcul de l'azimut se faisant &agrave; partir de la position estim&eacute;e, une
 On va partir - pour l'instant - d'une position estim&eacute;e, d'o&ugrave; on pourra calculer l'azimut des astres observ&eacute;s &agrave; l'aide des tables de Bataille.  
 On pourra alors calculer le point du cercle d'&eacute;gales hauteur (de cet astre) pour cet azimut.
 
+#### Exemple
+```
+On 2025-Aug-20 10:40:31 UTC: 
+the Sun Decl 12º16.80'N, GHA 339º17.40', from 47º40.66'N / 3º08.14'W.
+Seeing the Sun at altitude 49º22.52', in the 142.65º
+```
+
+### Une approche graphique ?
+Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) communs.  
+On peut essayer graphiquement, pour la latitude, puis pour la longitude.
+
+Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources consid&eacute;rables (si on fait &ccedil;a manuellement)...
 
 ---

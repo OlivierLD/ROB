@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpg" href="./palm.04.jpg">
-    <title>ES6 Celestial Computer and MPS</title>
+    <title>MPS Workbench</title>
 
     <!-- Main Module -->
     <script type="module" src="./app.js"></script> <!-- THAT is the key -->
@@ -29,6 +29,7 @@
     <script type="module" src="./webcomponents/moonphase.2/MoonPhase.js"></script>
     <script type="module" src="./webcomponents/SunPath.js"></script>
     <script type="module" src="./webcomponents/skymap/SkyMap.js"></script>
+    <script type="module" src="./webcomponents/GraphDisplay.js"></script>
 
     <!-- Specific Scripts -->
     <script type="text/javascript" src="date.proto.js"></script>
@@ -1018,7 +1019,10 @@ let toggleForeground = () => {
                 "wm jumbos prmsl"
                 "utc utc utc"
                 "solar solar solar"
-                "wm-m wm-m wm-m";
+                "wm-m wm-m wm-m"
+                "gl gl gl"
+                "gg gg gg"
+                "botton-padding botton-padding botton-padding";
         }
         /* For the switch (slider) */
         .switch {
@@ -1664,7 +1668,33 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <div>
+    <div id="graph-lat" style="grid-area: gl; text-align: center;">
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <graph-display id="graph-01"
+                            width="800"
+                            height="400"
+                            padding="5"
+                            value=""
+                            vgrid="0:10.0"
+                            hgrid="-90:10.0"
+                            label="Latitudes / idx"
+                            title="Latitudes"/>
+        </div>
+    </div>
+    <div id="graph-lng" style="grid-area: gg; text-align: center;">
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <graph-display id="graph-02"
+                            width="800"
+                            height="400"
+                            padding="5"
+                            value=""
+                            vgrid="0:10.0"
+                            hgrid="-180:10.0"
+                            label="Longitudes / idx"
+                            title="Longitudes"/>
+        </div>
+    </div>
+    <div style="grid-area: botton-padding; min-height: 10px;">
         <!-- Empty -->
     </div>
 </div>
@@ -2295,6 +2325,132 @@ let toggleForeground = () => {
         }
     }
 
+    let graphDataLat = {
+        withGrid: true,
+        withXLabels: true,
+        withYLabels: true,
+        minX: 0,
+        maxX: 360,
+        minY: -90,
+        maxY: 90,
+        data: [ // Samples below...
+            {
+                name: 'data one',
+                lineColor: 'orange',
+                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
+                thickness: 3,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
+            },
+            {
+                name: 'data two',
+                lineColor: 'red',
+                fillColor: null, // No color
+                thickness: 1,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
+            }
+        ]
+    };
+    let graphDataLng = {
+        withGrid: true,
+        withXLabels: true,
+        withYLabels: true,
+        minX: 0,
+        maxX: 360,
+        minY: -180,
+        maxY: 180,
+        data: [ // Samples below...
+            {
+                name: 'data one',
+                lineColor: 'orange',
+                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
+                thickness: 3,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
+            },
+            {
+                name: 'data two',
+                lineColor: 'red',
+                fillColor: null, // No color
+                thickness: 1,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
+            }
+        ]
+    };
+
+    function plotGraphLat(graphId, color, coneData, graphData) {
+
+        // Buid graphData from cone's data
+        let newData = {
+            name: coneData.bodyName,
+            lineColor: color,
+            fillColor: null,
+            thickness: 1,
+            x: [],
+            values: [] // Same cardinality as x
+        };
+
+        coneData.circle.forEach((point, idx) => {
+            newData.x.push(idx); // point.longitude); // idx ?
+            newData.values.push(point.latitude);
+            // newData.x.push(point.latitude);
+            // newData.values.push(idx);
+        });
+
+        graphData.data.push(newData);
+
+        let elmt = document.getElementById(graphId);
+
+        // Graph unit labels
+        elmt.setHGridLabelsCallback((value) => {
+            return (value > 0 ? "+" : "") + value.toFixed(0);
+        });
+        elmt.setVGridLabelsCallback((value) => {
+            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
+        });
+
+        elmt.data = graphData;
+        elmt.repaint();
+    }
+
+    function plotGraphLng(graphId, color, coneData, graphData) {
+
+        // Buid graphData from cone's data
+        let newData = {
+            name: coneData.bodyName,
+            lineColor: color,
+            fillColor: null,
+            thickness: 1,
+            x: [],
+            values: [] // Same cardinality as x
+        };
+
+        coneData.circle.forEach((point, idx) => {
+            newData.x.push(idx); // point.longitude); // idx ?
+            newData.values.push(point.longitude);
+            // newData.x.push(point.latitude);
+            // newData.values.push(idx);
+        });
+
+        graphData.data.push(newData);
+
+        let elmt = document.getElementById(graphId);
+
+        // Graph unit labels
+        elmt.setHGridLabelsCallback((value) => {
+            return (value > 0 ? "+" : "") + value.toFixed(0);
+        });
+        elmt.setVGridLabelsCallback((value) => {
+            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
+        });
+
+        elmt.data = graphData;
+        elmt.repaint();
+    }
+
+
     let extraDrawingWorldMap = (wm, context) => {
 
         // https://www.w3schools.com/tags/canvas_arc.asp
@@ -2373,6 +2529,10 @@ let toggleForeground = () => {
         // Draw the cone's base from json data
         let mpsData = document.getElementById('mps-data');
         mpsData.innerHTML = ''; // Clear previous data
+
+        graphDataLat.data = []; // Clear previous graph data
+        graphDataLng.data = []; // Clear previous graph data
+
         // Sun
         if (true) {
             fetch('./json/data.01.json')
@@ -2394,6 +2554,9 @@ let toggleForeground = () => {
                             newData = before + '<br/>' + newData;
                         }
                         mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'yellow', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'yellow', latlngs, graphDataLng);
                     });
                 },
                 (error, errmess) => {
@@ -2429,6 +2592,9 @@ let toggleForeground = () => {
                             newData = before + '<br/>' + newData;
                         }
                         mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
                     });
                 },
                 (error, errmess) => {
@@ -2464,6 +2630,9 @@ let toggleForeground = () => {
                             newData = before + '<br/>' + newData;
                         }
                         mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'lime', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'lime', latlngs, graphDataLng);
                     });
                 },
                 (error, errmess) => {
@@ -2499,6 +2668,9 @@ let toggleForeground = () => {
                             newData = before + '<br/>' + newData;
                         }
                         mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'orange', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'orange', latlngs, graphDataLng);
                     });
                 },
                 (error, errmess) => {
@@ -2534,6 +2706,9 @@ let toggleForeground = () => {
                             newData = before + '<br/>' + newData;
                         }
                         mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'blue', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'blue', latlngs, graphDataLng);
                     });
                 },
                 (error, errmess) => {

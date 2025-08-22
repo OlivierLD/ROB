@@ -21,8 +21,8 @@ public class PlanDesSommetsPlayground {
     private final static boolean processCorrections = false;
     private final static boolean compareGCRL = false;
     private final static boolean recalculateSRU = false;
-    private final static boolean jsonOutput = true;
-    private final static boolean verboseCircle = false;
+    private final static boolean jsonOutput = false;
+    private final static boolean verboseCircle = true;
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -109,7 +109,7 @@ public class PlanDesSommetsPlayground {
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
 
         date.set(Calendar.YEAR, year);
-        date.set(Calendar.MONTH, month); // Aug
+        date.set(Calendar.MONTH, month);
         date.set(Calendar.DAY_OF_MONTH, day);
         date.set(Calendar.HOUR_OF_DAY, hours); // and not just HOUR !!!!
         date.set(Calendar.MINUTE,minutes);
@@ -120,16 +120,56 @@ public class PlanDesSommetsPlayground {
         double he = dr.getHe();
         double z = dr.getZ();
 
-        System.out.printf("Original Context : at %s, %s Decl %s, GHA %s, from pos is %s / %s, seeing %s at altitude %s, in the %.02f\272\n",
+        System.out.printf("Original Context : On %s, %s Decl %s, GHA %s, from %s / %s.\n\tSeeing %s at altitude %s, in the %.02f\272\n",
                 SDF_UTC.format(date.getTime()),
                 bodyName,
-                GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(gha, GeomUtil.SHELL, GeomUtil.EW),
+                GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                GeomUtil.decToSex(gha, GeomUtil.SHELL, GeomUtil.NONE).trim(),
+                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
                 bodyName,
-                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
-                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 z);
+
+        if (true) { // Reverse tests
+            GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
+
+            final double userToBodyIRA = GeomUtil.bearingFromTo(latitude, longitude, bodyPos.getL(), bodyPos.getG()); // IRA
+            // Reverse look, body to user
+            final double bodyToUserIRA = GeomUtil.bearingFromTo(bodyPos.getL(), bodyPos.getG(), latitude, longitude); // IRA
+            System.out.printf("-> Reverse: From body %s / %s, to user %s / %s, bearing: %.02f\272 (opposite is %.02f\272)\n",
+                    GeomUtil.decToSex(bodyPos.getL(), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                    GeomUtil.decToSex(bodyPos.getG(), GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                    GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    bodyToUserIRA, userToBodyIRA);
+
+            double distInNM = (90.0 - he) * 60.0; // Could be the observed one
+            double reverseZ = (z + 180.0) % 360;  // If loxo (aka RL)...
+            double z2use;
+
+            // final GeoPoint drGC2 = GeomUtil.deadReckoning(bodyPos, distInNM, reverseZ); // Ortho, same as above
+
+            if (true) {
+                z2use = bodyToUserIRA;
+                final GeoPoint drGC = GeomUtil.haversineInv(bodyPos, distInNM, z2use); // reverseZ); // THE dr to use. GC
+                System.out.printf("- GC: Plot Z (%.02f\272) from: %s / %s\n",
+                        z2use,
+                        GeomUtil.decToSex(drGC.getLatitude(), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                        GeomUtil.decToSex(drGC.getLongitude(), GeomUtil.SHELL, GeomUtil.EW).trim());
+            }
+            if (false) {
+                z2use = reverseZ;
+                // distInNM is GC, probably unappropriate here
+                GreatCirclePoint drRL = GreatCircle.dr(new GreatCirclePoint(Math.toRadians(bodyPos.getLatitude()),
+                                                                            Math.toRadians(bodyPos.getLongitude())),
+                                                        distInNM, z2use);
+                System.out.printf("- RL: Plot Z (%.02f\272) from: %s / %s\n",
+                        z2use,
+                        GeomUtil.decToSex(Math.toDegrees(drRL.getL()), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                        GeomUtil.decToSex(Math.toDegrees(drRL.getG()), GeomUtil.SHELL, GeomUtil.EW).trim());
+            }
+        }
 
         if (processCorrections) { // TODO Needs to be adjusted to the body
             final double refraction = CelestialDeadReckoning.getRefraction(he);
@@ -351,7 +391,7 @@ public class PlanDesSommetsPlayground {
                     he = sru.getHe();
                     z = sru.getZ();
 
-                    System.out.printf("From Pg %s / %s, %.02f nm in the %.02f\272, pos on circle is %s / %s, seeing %s at altitude %s, in the %.02f\272 (GC: %.02f' in the %.02f\272)\n",
+                    System.out.printf("From Pg %s / %s, %.02f nm in the %.02f\272, Pos on circle is %s / %s, seeing %s at altitude %s, in the %.02f\272 (GC: %.02f' in the %.02f\272)\n",
                             GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS).trim(),
                             GeomUtil.decToSex(AstroComputerV2.ghaToLongitude(gha), GeomUtil.SHELL, GeomUtil.EW).trim(),
                             distanceInNM,
