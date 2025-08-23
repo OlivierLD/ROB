@@ -56,6 +56,26 @@ Ni sur une carte Anaximandre :
 
 En fait, ils ne sont ronds que sur un globe.
 
+## Demo (comme ci-dessus)
+
+### 1 - G&eacute;n&eacute;rer les data
+&Agrave; partir du r&eacute;pertoire `MPS` :
+```
+$ ./generate.cones.sh
+```
+Ceci g&eacute;n&egrave;re les fichiers `.json` dans le r&eacute;pertoire `web/json`, qui seront utilis&eacute;s &agrave; partir d'une page HTML.
+
+### 2 - Affichage des diagrammes
+&Agrave; partir du r&eacute;pertoire `MPS/web` :
+````
+$ npm start
+````
+Ceci suppose que `nodeJS` est disponible sur le syst&egrave;me.  
+Puis &agrave; partir d'un browser, acc&eacute;der &agrave; `http://localhost:8080/index.html`.  
+
+Les diagrammes ci-dessus sont affich&eacute;s lorsqu'on utilise le bouton `SET POSITION`, visible 
+sous la rubrique `Position on Earth`.
+
 ## En pratique
 Vaste sujet... &Ccedil;a vient !
 
@@ -89,7 +109,7 @@ Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert 
 Si on part d'une position estim&eacute;e, on revient &agrave; un point par droites de hauteurs classique (Saint-Hilaire).
 Si on a trois astres, on a trois droites, et on est &agrave; leur intersection...
 
-D'o&ugrave; la question : _Quel est alors l'int&eacute;ret de la m&eacute;thode du plan des sommets ?_
+D'o&ugrave; la question : _Quel est alors dans ce contexte l'int&eacute;ret de la m&eacute;thode du plan des sommets ?_
 
 
 ---
