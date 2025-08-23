@@ -14,7 +14,7 @@ C'est ce qu'on se propose de voir ici.
 ![Context](img.png)
 
 Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90° - h1)`.  
-La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0`.
+La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0` nm.
 
 ---
 
@@ -36,6 +36,11 @@ Voici la m&ecirc;me figure, d'un autre point de vue.
 On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
 
 ![Context](02.png)
+
+Les cercles se croisent &agrave; la position de l'observateur. Ainsi, la position de l'observateur et
+toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan.
+
+![Context](02.bis.png)
 
 L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
 Mercator.  
