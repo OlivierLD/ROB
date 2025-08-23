@@ -35,7 +35,7 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 Voici la m&ecirc;me figure, d'un autre point de vue.  
 On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
 
-![Context](03.png)
+![Context](02.png)
 
 L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
 Mercator.  
@@ -43,7 +43,13 @@ Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
 - Les cercles de hauteur ne sont pas ronds sur cette projection.
 - Ils peuvent &ecirc;tre &eacute;normes.
 
-![Context Mercator](02.png)
+Ils ne sont ronds ni sur une carte Mercator :
+![Context Mercator](03.png)
+
+Ni sur une carte Anaximandre :
+![Context Mercator](04.png)
+
+En fait, ils ne sont ronds que sur un globe.
 
 ## En pratique
 Vaste sujet... &Ccedil;a vient !
