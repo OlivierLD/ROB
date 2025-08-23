@@ -63,6 +63,7 @@ En fait, ils ne sont ronds que sur un globe.
 ```
 $ ./generate.cones.sh
 ```
+Ce script execute le code Java de la classe `mps.Context01.java`. Ceux que ce int&eacute;resse iront voir le code.   
 Ceci g&eacute;n&egrave;re les fichiers `.json` dans le r&eacute;pertoire `web/json`, qui seront utilis&eacute;s &agrave; partir d'une page HTML.
 
 ### 2 - Affichage des diagrammes
