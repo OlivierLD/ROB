@@ -13,8 +13,8 @@ C'est ce qu'on se propose de voir ici.
 
 ![Context](img.png)
 
-Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90&deg; - h1)`.  
-La distance (grand cercle) `F - Pied1` est donc `(90&deg; - h1) * 60.0`.
+Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90° - h1)`.  
+La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0`.
 
 ---
 
