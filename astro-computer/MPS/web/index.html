@@ -2538,7 +2538,7 @@ let toggleForeground = () => {
 
         // Sun
         if (true) {
-            fetch('./json/data.01.json')
+            fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2576,7 +2576,7 @@ let toggleForeground = () => {
         }
         // Moon
         if (true) {
-            fetch('./json/data.02.json')
+            fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2614,7 +2614,7 @@ let toggleForeground = () => {
         }
         // Venus
         if (false) {
-            fetch('./json/data.03.json')
+            fetch('./json/Venus.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2652,7 +2652,7 @@ let toggleForeground = () => {
         }
         // Mars
         if (true) {
-            fetch('./json/data.04.json')
+            fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2690,7 +2690,7 @@ let toggleForeground = () => {
         }
         // Jupiter
         if (false) {
-            fetch('./json/data.05.json')
+            fetch('./json/Jupiter.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2726,12 +2726,90 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
+        // Spica
+        if (true) {
+            fetch('./json/Spica.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Denebola
+        if (false) {
+            fetch('./json/Denebola.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `<b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+
     };
+
 
     let extraDrawingWorldMapMercator = (wm, context) => {
         // Sun
         if (true) {
-            fetch('./json/data.01.json')
+            fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2758,7 +2836,7 @@ let toggleForeground = () => {
         }
         // Moon
         if (true) {
-            fetch('./json/data.02.json')
+            fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2785,7 +2863,7 @@ let toggleForeground = () => {
         }
         // Venus
         if (false) {
-            fetch('./json/data.03.json')
+            fetch('./json/Venus.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2812,7 +2890,7 @@ let toggleForeground = () => {
         }
         // Mars
         if (true) {
-            fetch('./json/data.04.json')
+            fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2839,7 +2917,7 @@ let toggleForeground = () => {
         }
         // Jupiter
         if (false) {
-            fetch('./json/data.05.json')
+            fetch('./json/Jupiter.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
                     response.json().then(doc => {
@@ -2850,6 +2928,60 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, 'blue', latlngs);
                         // The axis of the cone
                         plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Spica
+        if (true) {
+            fetch('./json/Spica.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Spica path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Denebola
+        if (false) {
+            fetch('./json/Denebola.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Denebola path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
                     });
                 },
                 (error, errmess) => {
@@ -3025,7 +3157,7 @@ let toggleForeground = () => {
             let theGraph = evt.target;
             let rect = theGraph.getBoundingClientRect();
             let padding = theGraph.padding;
-            console.log(`Graph size: padding ${padding}`);
+            // console.log(`Graph size: padding ${padding}`);
 
             let x = evt.clientX - rect.left; // x position within the element.
             let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6... rect.height ?
@@ -3054,13 +3186,13 @@ let toggleForeground = () => {
             // console.log(`y = ${y}, yValue = ${maxY} - ((${correctedY} / ${height}) * ${deltaY}) = ${yValue}`);
             if (false) {
                 console.log("+=========================================");
-                // console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
-                // console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
-                console.log(`| Rect: top ${rect.top}, left ${rect.left}, width ${rect.width}, height ${rect.height}`);
+                console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
+                console.log(`| evt.offsetY ${evt.offsetY}, rect.height ${rect.height} => x ${y}`);
+                console.log(`| - Rect: top ${rect.top}, left ${rect.left}, width ${rect.width}, height ${rect.height}`);
                 console.log(`| Padding: ${padding}`);
-                // console.log(`| MinX: ${theGraph.data !== null ? theGraph.data.minX : 'null'}, MaxX: ${theGraph.data !== null ? theGraph.data.maxX : 'null'}`);
+                console.log(`| MinX: ${theGraph.data !== null ? theGraph.data.minX : 'null'}, MaxX: ${theGraph.data !== null ? theGraph.data.maxX : 'null'}`);
                 console.log(`| MinY: ${theGraph.data !== null ? theGraph.data.minY : 'null'}, MaxY: ${theGraph.data !== null ? theGraph.data.maxY : 'null'}`);
-                // console.log(`| DeltaX: ${deltaX}, width: ${width}, correctedX: ${correctedX}, xValue: ${xValue}`);
+                console.log(`| DeltaX: ${deltaX}, width: ${width}, correctedX: ${correctedX}, xValue: ${xValue}`);
                 console.log(`| Data range: X [${minX}..${maxX}] Y [${minY}..${maxY}]`);
                 console.log(`| Data range: dX ${deltaX} dY ${deltaY}, w ${width}, h ${height}, cX ${correctedX}, cY ${correctedY}`);
                 console.log(`| Corrected: x ${correctedX}, y ${correctedY}`);

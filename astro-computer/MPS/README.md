@@ -71,8 +71,14 @@ Seeing the Sun at altitude 49º22.52', in the 142.65º
 
 ### Une approche graphique ?
 Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) communs.  
-On peut essayer graphiquement, pour la latitude, puis pour la longitude.
+On peut essayer graphiquement, pour la latitude, puis pour la longitude...
 
 Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources consid&eacute;rables (si on fait &ccedil;a manuellement)...
+
+Si on part d'une position estim&eacute;e, on revient &agrave; un point par droites de hauteurs classique (Saint-Hilaire).
+Si on a trois astres, on a trois droites, et on est &agrave; leur intersection...
+
+D'o&ugrave; la question : _Quel est alors l'int&eacute;ret de la m&eacute;thode du plan des sommets ?_
+
 
 ---

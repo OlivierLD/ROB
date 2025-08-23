@@ -98,6 +98,17 @@ public class Context01 {
         final double jupiterGHA = ac.getJupiterGHA();
         final double jupiterDecl = ac.getJupiterDecl();
 
+        // Star spica = Star.getStar("Spica"); // Case sensitive name
+        ac.starPos("Spica");
+        final double spicaSHA = ac.getStarSHA("Spica");
+        final double spicaGHA = ac.getStarGHA("Spica");
+        final double spicaDEC = ac.getStarDec("Spica");
+
+        ac.starPos("Denebola");
+        final double denebolaSHA = ac.getStarSHA("Denebola");
+        final double denebolaGHA = ac.getStarGHA("Denebola");
+        final double denebolaDEC = ac.getStarDec("Denebola");
+
         // Sun
         final PlanDesSommetsPlayground.ConeDefinition sunCone = PlanDesSommetsPlayground.calculateCone(
                 ac,
@@ -173,6 +184,36 @@ public class Context01 {
                 jupiterDecl,
                 "Jupiter");
 
+        // Spica
+        final PlanDesSommetsPlayground.ConeDefinition spicaCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                spicaGHA,
+                spicaDEC,
+                "Spica");
+
+        // Denebola
+        final PlanDesSommetsPlayground.ConeDefinition denebolaCone = PlanDesSommetsPlayground.calculateCone(
+                ac,
+                latitude,
+                longitude,
+                2025,
+                7,
+                19,
+                12,
+                58,
+                25,
+                denebolaGHA,
+                denebolaDEC,
+                "Denebola");
+
         boolean verbose = "true".equals(System.getProperty("verbose"));
 
         spitOut(sunCone, verbose);
@@ -180,6 +221,8 @@ public class Context01 {
         spitOut(venusCone, verbose);
         spitOut(marsCone, verbose);
         spitOut(jupiterCone, verbose);
+        spitOut(spicaCone, verbose);
+        spitOut(denebolaCone, verbose);
 
     }
 }
