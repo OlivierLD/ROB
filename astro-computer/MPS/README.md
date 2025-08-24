@@ -5,6 +5,18 @@ Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manu
 &Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
+## Rappels
+
+$$
+He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
+$$
+
+$$
+Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
+$$
+
+---
+
 - Voir [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
 - Voir [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)

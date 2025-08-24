@@ -259,7 +259,32 @@ chartless-map#chartless-map-01 {
         </div>
 
     </body>
+	<!--script type="module">
+
+import * as Utilities from "./webcomponents/utilities/Utilities.js";
+
+	</script-->
     <script type="text/javascript">
+
+/**
+ *
+ * @param start { lat: xx, lng: xx }, L & G in Degrees
+ * @param dist distance in nm
+ * @param bearing route in Degrees
+ * @return DR Position, L & G in Degrees
+ */
+function deadReckoning(start, dist, bearing) {
+	let radianDistance = Math.toRadians(dist / 60);
+	let finalLat = (Math.asin((Math.sin(Math.toRadians(start.lat)) * Math.cos(radianDistance)) +
+			(Math.cos(Math.toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(bearing)))));
+	let finalLng = Math.toRadians(start.lng) + Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(start.lat)),
+			Math.cos(radianDistance) - Math.sin(Math.toRadians(start.lat)) * Math.sin(finalLat));
+	finalLat = Math.toDegrees(finalLat);
+	finalLng = Math.toDegrees(finalLng);
+
+	return {lat: finalLat, lng: finalLng};
+}
+
 
 let map;
 let world_map_data = null;
@@ -414,18 +439,124 @@ let plotWorldMap = (cb) => {
 	// map.repaint(); // TODO in a promise ? then ?
 };
 
-const displayMarkers = true; // false;
-const displayBorders = true; // false;
+const displayMarkers = false; // false;
+const displayBorders = false; // false;
 const displayBorderMarkers = false;
 
 let markers = [];
 let borders = [];
+
+function drawArrow(context, canvasX, canvasY, arrowLen, heading, color) {
+
+	// console.log(`Drawing arrow for heading ${heading}`);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	context.moveTo(canvasX +  ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
+
+	context.lineTo(canvasX + ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading - 10))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading - 10))));
+	context.lineTo(canvasX - ((arrowLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
+					canvasY + ((arrowLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading + 10))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading + 10))));
+
+	context.closePath();
+	context.stroke();
+}
+
+let plotLOP = (map, context, dr, azimuth, intercept, bodyName) => {
+	let color = 'gray';
+
+	context.save();
+	context.strokeStyle = color;
+	context.fillStyle = color;
+	context.lineWidth = 1;
+	let drCanvasPos = map.posToCanvas(dr.latitude, dr.longitude); // DR
+	console.log(`DR Canvas Pos: ${dr.latitude} / ${dr.longitude} => ${drCanvasPos.x} / ${drCanvasPos.y}`);
+	// The DR point
+	let markerRadius = 2;
+	context.beginPath();
+	// context.arc(drCanvasPos.x, drCanvasPos.y /*- beaconHeight*/ - (3 * (markerRadius / 3)), markerRadius / 3, 0, 2 * Math.PI, false);
+	context.arc(drCanvasPos.x, drCanvasPos.y, markerRadius, 0, 2 * Math.PI, false);
+	//          |              |              |             |  |            |
+	//          |              |              |             |  |            Copnter clok-wise
+	//          |              |              |             |  To angle (rad)
+	//          |              |              |             From angle (rad)
+	//          |              |              radius
+	//          |              Canvas y
+	//		    Canvas x
+    context.stroke();
+	context.fill();
+
+	context.closePath();
+
+	// Azimuth
+	let azimuthLengh = 200; // pixels
+	let azimuthRad = (azimuth * Math.PI) / 180.0;
+	let azimuthFront = {
+		x: drCanvasPos.x + (azimuthLengh * Math.sin(azimuthRad)),
+		y: drCanvasPos.y - (azimuthLengh * Math.cos(azimuthRad))
+	};
+	let azimuthBack = {
+		x: drCanvasPos.x - ((azimuthLengh / 2) * Math.sin(azimuthRad)),
+		y: drCanvasPos.y + ((azimuthLengh / 2) * Math.cos(azimuthRad))
+	};
+	context.beginPath();
+	context.moveTo(azimuthBack.x, azimuthBack.y);
+	context.lineTo(azimuthFront.x, azimuthFront.y); // Arrow head
+	context.lineWidth = 1;
+	context.strokeStyle = color;
+	context.stroke();
+	context.closePath();
+	drawArrow(context, azimuthFront.x, azimuthFront.y, 10, azimuth, color);
+	// Body Name
+	context.fillText(bodyName, azimuthFront.x + 3, azimuthFront.y);
+
+	// The LOP
+	// 1 - Get the point coordinates from the DR position, the azimuth and the intercept
+	let zPoint = /*Utilities.*/deadReckoning(
+		{ lat: dr.latitude, lng: dr.longitude },
+		intercept,                                // positive: to the body, negative, away from the body
+		azimuth); // in nautical miles
+	// 2 - Get the canvas coordinates of that point
+	let ZDrCanvasPos = map.posToCanvas(zPoint.lat, zPoint.lng);
+	console.log(`LOP Canvas Pos: ${zPoint.lat} / ${zPoint.lng} => ${ZDrCanvasPos.x} / ${ZDrCanvasPos.y}`);
+
+	// 3 - Draw the LOP
+	let lopLen = 200; // pixels
+	let lopRad = ((azimuth + 90) * Math.PI) / 180.0;
+	let lopLeft = {
+		x: ZDrCanvasPos.x + (lopLen * Math.sin(lopRad)),
+		y: ZDrCanvasPos.y - (lopLen * Math.cos(lopRad))
+	};
+	let lopRight = {
+		x: ZDrCanvasPos.x - (lopLen * Math.sin(lopRad)),
+		y: ZDrCanvasPos.y + (lopLen * Math.cos(lopRad))
+	};
+	context.beginPath();
+	context.moveTo(lopLeft.x, lopLeft.y);
+	context.lineTo(lopRight.x, lopRight.y);
+	context.lineWidth = 2;
+	context.strokeStyle = 'darkgray';
+	context.stroke();
+	context.closePath();
+
+	context.restore();
+}
+
 /*
  * Used as the doAfter callback on the ChartlessMap.
  */
 let updateMap = (elmt, context) => {
 
-    console.log(`...updateMap. Plotting ${trackBuffer.length} points.`);
+    console.log(`...updateMap. Plotting DR Data and LOPs.`);
 
 	if (withWorldMap) { // Draw World Chart
 		context.save();
@@ -479,73 +610,22 @@ let updateMap = (elmt, context) => {
 		context.restore();
 	}
 
-	// Markers.
-	if (VERBOSE) {
-		console.log(`${markers.length} markers`);
-	}
-	if (displayMarkers) {
-		context.save();
-		let markerRadius = 10;
-		let beaconHeight = 2 * markerRadius;
-		markers.forEach(marker => {
-			let extraMess = [];
-			elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.markerAndTrackColor, extraMess, displayLabels); // method defined in the ChartlessMap
-		});
-		context.restore();
-	}
 
-	// Borders.
-	if (VERBOSE) {
-		console.log(`${borders.length} borders`);
-	}
-	if (displayBorders) {
-		context.save();
-		let markerRadius = 10;
-		let beaconHeight = 2 * markerRadius;
-		borders.forEach(border => {
-			let extraMess = [];
-			let borderName = border.borderName;
-			let markerList = border.markerList;
-			// console.log(`Border [${borderName}]`);
+	let DRLat = 47.60;
+	let DRLng = -3.13;
+	// plot DR position
+	elmt.plotMark(context,
+		{ latitude: DRLat, longitude: DRLng, label: "DR" },
+		10, 20,
+		'red',
+		["Dead Reckoning Position"],
+		true);
 
-			let plotBorder = [];
-			// Plot markers
-			markerList.forEach((marker, idx) => {
-				let plotIt = true;
-				// Manage closed borders, don't plot the last point...
-				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
-					plotIt = false;
-				}
-				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) {
-					elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.borderColor, extraMess);
-				}
-				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
-				plotBorder.push(plot);
-			});
-
-			// Draw border
-			context.save();
-			context.beginPath();
-			context.strokeStyle = elmt.colorConfig.borderColor; // 'blue';
-			context.lineWidth = 2;
-
-			if (plotBorder.length > 0) {
-				// console.log(`Border: plotting ${plotBorder.length} segments.`);
-				context.moveTo(plotBorder[0].x, plotBorder[0].y); // idx 0
-				for (let i=1; i<plotBorder.length; i++) {         // the rest, starts at 1
-					context.lineTo(plotBorder[i].x, plotBorder[i].y);
-				}
-			}
-			context.stroke();
-			context.closePath();
-			context.restore();
-		});
-		context.restore();
-	}
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 125, 1.5, "Sun");
 
 	// The points of the track
 	context.beginPath();
-	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
+	context.strokeStyle = 'gray'; // elmt.colorConfig.markerAndTrackColor;
 	context.lineWidth = 2;
 	for (let i=0; i<trackBuffer.length; i++) {
 		let pos = trackBuffer[i];
