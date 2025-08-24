@@ -15,17 +15,19 @@ Dans les formules suivantes :
 - `AHG` est l'Angle Horaire a Greenwich de l'astre
 - `AHL` est l'Angle Horaire Local de l'astre (lequel d&eacute;pend de `AHG` et `G`)
 
-Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :  
-$$
-He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
+Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :
+
+$$ 
+  He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right) 
 $$
 
-Calcul de l'azimut d'un astre &agrave; partir de la position de l'observateur :  
-$$
-Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
+Calcul de l'azimut d'un astre &agrave; partir de la position de l'observateur :
+
+$$ 
+  Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right) 
 $$
 
-Voir une implementation en Java [ici](https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroUtilities/src/main/java/calc/CelestialDeadReckoning.java).
+Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroUtilities/src/main/java/calc/CelestialDeadReckoning.java).
 
 ### Haversine
 La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agrave; un autre :
@@ -37,7 +39,7 @@ La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on at
 - en suivant un arc de grand cercle (aka orthodromie)
 - avec un angle de route initial donn&eacute;
 
-Voir une implementation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour.
+Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour.
 
 &Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
 m&eacute;ritent un coup d'&oelig;il.
