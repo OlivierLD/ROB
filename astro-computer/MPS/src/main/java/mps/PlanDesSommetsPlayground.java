@@ -23,6 +23,7 @@ public class PlanDesSommetsPlayground {
     private final static boolean recalculateSRU = false;
     private final static boolean jsonOutput = false;
     private final static boolean verboseCircle = false;
+    private final static boolean fromAlternatePos = false;
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -140,7 +141,9 @@ public class PlanDesSommetsPlayground {
                 z);
 
         // From another position
-        getDR(altUserLat, altUserLng, gha, dec);
+        if (fromAlternatePos) {
+            getDR(altUserLat, altUserLng, gha, dec);
+        }
 
         if (true) { // Reverse tests
             GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));

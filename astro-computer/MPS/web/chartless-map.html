@@ -227,21 +227,21 @@ chartless-map#chartless-map-01 {
                                 height="600"></chartless-map>
             </div>
             <div style="padding: 10px;">
-                <button id="btn-zoom-in" style="margin-top: 10px; margin-bottom: 10px; width: 20px; height: 20px;" title="Zoom in"
+                <button id="btn-zoom-in" style="margin-top: 10px; min-width: 30px; margin-bottom: 0px; padding: 5px;" title="Zoom in"
                         onclick="zoomIn();">+</button>
                 <br/>
-                <button id="btn-zoom-out" style="margin-top: 10px; margin-bottom: 10px; width: 20px; height: 20px;" title="Zoom out"
+                <button id="btn-zoom-out" style="margin-top: 10px; min-width: 30px; margin-bottom: 0px; padding: 5px;" title="Zoom out"
                         onclick="zoomOut();">-</button>
             </div>
         </div>
         <div>
-            <input type="checkbox" id="display-center" name="display-center" checked="checked"
+            <!--input type="checkbox" id="display-center" name="display-center" checked="checked"
                    onchange="displayCenter = this.checked; map.repaint();">
-            <label for="display-center">Display Data Center</label>
+            <label for="display-center">Display Data Center</label-->
 
-            <input type="checkbox" id="display-labels" name="display-labels" checked="checked"
+            <!--input type="checkbox" id="display-labels" name="display-labels" checked="checked"
                    onchange="displayLabels = this.checked; map.repaint();">
-            <label for="display-labels">Display Markers Labels</label>
+            <label for="display-labels">Display Markers Labels</label-->
 
 			<!--br/-->
 			<input type="checkbox" id="plot-world-map" onchange="plotWorldMap(this);">
@@ -455,17 +455,18 @@ function drawArrow(context, canvasX, canvasY, arrowLen, heading, color) {
 	// context.fillStyle = color;
 	context.strokeStyle = color;
 
+	let headAngle = 30;
 	context.moveTo(canvasX +  ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
 					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
 
 	context.lineTo(canvasX + ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
 					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
-	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading - 10))),
-					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading - 10))));
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading - headAngle))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading - headAngle))));
 	context.lineTo(canvasX - ((arrowLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
 					canvasY + ((arrowLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
-	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading + 10))),
-					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading + 10))));
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading + headAngle))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading + headAngle))));
 
 	context.closePath();
 	context.stroke();
@@ -627,11 +628,11 @@ let updateMap = (elmt, context) => {
 /*
 Original Context : On 2025-Aug-19 12:58:25 UTC, the Sun Decl 12º34.69'N, GHA 13º42.68', from 47º40.66'N / 3º08.14'W.
 	Seeing the Sun at altitude 53º48.18', in the 197.66º
-Alt UserPos => For D: 12º34.69'N, GHA: 13º42.68', from 47º36.00'N / 3º07.80'W, H: 53º52.55', Z: 197.70. Intercept: 4.45nm
+Alt UserPos => For D: 12º34.69'N, GHA: 13º42.68', from 47º36.00'N / 3º07.80'W, H: 53º52.55', Z: 197.70. Intercept: -4.45nm
 
 Original Context : On 2025-Aug-19 12:58:25 UTC, the Moon Decl 27º52.70'N, GHA 61º01.15', from 47º40.66'N / 3º08.14'W.
 	Seeing the Moon at altitude 41º27.79', in the 267.50º
-Alt UserPos => For D: 27º52.70'N, GHA: 61º01.15', from 47º36.00'N / 3º07.80'W, H: 41º27.76', Z: 267.58, intercept: 0.03nm
+Alt UserPos => For D: 27º52.70'N, GHA: 61º01.15', from 47º36.00'N / 3º07.80'W, H: 41º27.76', Z: 267.58, intercept: +0.03nm
 
 Original Context : On 2025-Aug-19 12:58:25 UTC, Venus Decl 21º00.44'N, GHA 48º19.78', from 47º40.66'N / 3º08.14'W.
 	Seeing Venus at altitude 45º04.34', in the 249.70º
@@ -639,7 +640,7 @@ Alt UserPos => For D: 21º00.44'N, GHA: 48º19.78', from 47º36.00'N / 3º07.80'
 
 Original Context : On 2025-Aug-19 12:58:25 UTC, Mars Decl 2º46.45'S, GHA 335º19.25', from 47º40.66'N / 3º08.14'W.
 	Seeing Mars at altitude 33º59.30', in the 145.80º
-Alt UserPos => For D: 2º46.45'S, GHA: 335º19.25', from 47º36.00'N / 3º07.80'W, H: 34º03.29', Z: 145.78, intercept: 0.40nm ??
+Alt UserPos => For D: 2º46.45'S, GHA: 335º19.25', from 47º36.00'N / 3º07.80'W, H: 34º03.29', Z: 145.78, intercept: -0.40nm ??
 
 Original Context : On 2025-Aug-19 12:58:25 UTC, Jupiter Decl 22º28.97'N, GHA 55º53.75', from 47º40.66'N / 3º08.14'W.
 	Seeing Jupiter at altitude 41º14.42', in the 258.03º
@@ -655,9 +656,9 @@ Alt UserPos => For D: 14º25.85'N, GHA: 345º08.88', from 47º36.00'N / 3º07.80
 
 */
 
-	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 198, -4.45, "Sun");
-	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 268, -0.03, "Moon");
-	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 146, -3.6, "Mars");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 198, -4.45, "Sun \u2609");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 268, +0.03, "Moon \u263D");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 146, -3.6, "Mars \u2642");
 
 };
 
@@ -823,6 +824,9 @@ window.onload = function() {
     } else {
         console.warn("No log file name provided in the query string.");
     }
+
+	// First display
+	map.repaint();
 };
 
     </script>

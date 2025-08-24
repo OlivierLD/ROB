@@ -55,6 +55,7 @@ public class Context01 {
 
     public static void main(String... args) {
 
+        // Point de reference
         double latitude = 47.677667;
         double longitude = -3.135667;
 

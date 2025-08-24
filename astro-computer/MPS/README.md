@@ -154,5 +154,9 @@ Si on a trois astres, on a trois droites, et on est &agrave; leur intersection..
 
 D'o&ugrave; la question : _Quel est alors dans ce contexte l'int&eacute;ret de la m&eacute;thode du plan des sommets ?_
 
+La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :  
+![Context](05.png)
+
+Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
 ---
