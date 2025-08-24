@@ -82,7 +82,7 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 ![Context](01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
-On note que les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
+On note que - comme attendu - les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
 
 ![Context](02.png)
 

@@ -91,13 +91,18 @@ public class PlanDesSommetsPlayground {
         }
     }
 
+    // Position of the user, used to get to what should be seen. Not used in the real world.
+    private final static double userLatitude = 47.677667d;
+    private final static double userLongitude = -3.135667d;
+
+    // Alternate user position, see in the code.
+    private final static double altUserLat = 47.60; // 46°36.0' N
+    private final static double altUserLng = -3.13; // 3°7.8' W
+
     public static CelestialDeadReckoning calculateDR(double gha, double dec, double UserLatitude, double userLongitude) {
         CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, UserLatitude, userLongitude).calculate();
         return dr;
     }
-
-    private final static double altUserLat = 47.60; // 46° 36.0' N
-    private final static double altUserLng = -3.13; // 3° 7.8' W
 
     public static ConeDefinition calculateCone(AstroComputerV2 ac,
                                                double userLat,
@@ -323,7 +328,7 @@ public class PlanDesSommetsPlayground {
 
         // Find FS, distance from observer to summit.
         double FS = earthRadiusNM * (1 / Math.tan(Math.toRadians(he)));
-        System.out.printf("FS, in nautical miles: %.02f'\n", FS);
+        System.out.printf("FS (obs to summit), in nautical miles: %.02f'\n", FS);
         double coneDiameter = earthRadiusNM * Math.cos(Math.toRadians(he));
         System.out.printf("Cone radius, in nautical miles: %.02f'\n", coneDiameter);
 
@@ -445,10 +450,6 @@ public class PlanDesSommetsPlayground {
 
     public static void main(String... args) {
 
-        // Position of the user, used to get to what should be seen. Not used in the real world.
-        double latitude = 47.677667d;
-        double longitude = -3.135667d;
-
         // Get to the body's coordinates at the given time
         AstroComputerV2 ac = new AstroComputerV2();
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
@@ -478,7 +479,7 @@ public class PlanDesSommetsPlayground {
         final double sunGHA = ac.getSunGHA();
         final double sunDecl = ac.getSunDecl();
 
-        final ConeDefinition coneDefinition = calculateCone(ac, latitude, longitude, year, month, day, hours, minutes, seconds, sunGHA, sunDecl, "the Sun");
+        final ConeDefinition coneDefinition = calculateCone(ac, userLatitude, userLongitude, year, month, day, hours, minutes, seconds, sunGHA, sunDecl, "the Sun");
 
         if (jsonOutput) {
             // Print circle values, in JSON
