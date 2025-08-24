@@ -544,7 +544,7 @@ let plotLOP = (map, context, dr, azimuth, intercept, bodyName) => {
 	context.moveTo(lopLeft.x, lopLeft.y);
 	context.lineTo(lopRight.x, lopRight.y);
 	context.lineWidth = 2;
-	context.strokeStyle = 'darkgray';
+	context.strokeStyle = 'blue';
 	context.stroke();
 	context.closePath();
 
@@ -611,8 +611,10 @@ let updateMap = (elmt, context) => {
 	}
 
 
-	let DRLat = 47.60;
-	let DRLng = -3.13;
+	// DR Position
+	let DRLat = 47.60; // 46° 36.0' N
+	let DRLng = -3.13; // 3° 7.8' W
+
 	// plot DR position
 	elmt.plotMark(context,
 		{ latitude: DRLat, longitude: DRLng, label: "DR" },
@@ -621,59 +623,42 @@ let updateMap = (elmt, context) => {
 		["Dead Reckoning Position"],
 		true);
 
-	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 125, 1.5, "Sun");
+	// Plot LOPs
+/*
+Original Context : On 2025-Aug-19 12:58:25 UTC, the Sun Decl 12º34.69'N, GHA 13º42.68', from 47º40.66'N / 3º08.14'W.
+	Seeing the Sun at altitude 53º48.18', in the 197.66º
+Alt UserPos => For D: 12º34.69'N, GHA: 13º42.68', from 47º36.00'N / 3º07.80'W, H: 53º52.55', Z: 197.70. Intercept: 4.45nm
 
-	// The points of the track
-	context.beginPath();
-	context.strokeStyle = 'gray'; // elmt.colorConfig.markerAndTrackColor;
-	context.lineWidth = 2;
-	for (let i=0; i<trackBuffer.length; i++) {
-		let pos = trackBuffer[i];
-		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
-        if (false) {
-            console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`);
-        }
-		if (i === 0) {
-			context.moveTo(canvasCoord.x, canvasCoord.y);
-		} else {
-			context.lineTo(canvasCoord.x, canvasCoord.y);
-		}
-	}
-	context.stroke();
-	context.closePath();
+Original Context : On 2025-Aug-19 12:58:25 UTC, the Moon Decl 27º52.70'N, GHA 61º01.15', from 47º40.66'N / 3º08.14'W.
+	Seeing the Moon at altitude 41º27.79', in the 267.50º
+Alt UserPos => For D: 27º52.70'N, GHA: 61º01.15', from 47º36.00'N / 3º07.80'W, H: 41º27.76', Z: 267.58, intercept: 0.03nm
 
-    // A Circle around the center of the tack. Optional.
-    if (displayCenter && trackBuffer.length > 0 && trackCenterLat && trackCenterLng) {
-        // map.centerLat = centerLat;
-        // map.centerLng = centerLng;
-        canvasCoord = elmt.posToCanvas(trackCenterLat, trackCenterLng);
+Original Context : On 2025-Aug-19 12:58:25 UTC, Venus Decl 21º00.44'N, GHA 48º19.78', from 47º40.66'N / 3º08.14'W.
+	Seeing Venus at altitude 45º04.34', in the 249.70º
+Alt UserPos => For D: 21º00.44'N, GHA: 48º19.78', from 47º36.00'N / 3º07.80'W, H: 45º05.74', Z: 249.78
 
-        let markerRadius = 50;
+Original Context : On 2025-Aug-19 12:58:25 UTC, Mars Decl 2º46.45'S, GHA 335º19.25', from 47º40.66'N / 3º08.14'W.
+	Seeing Mars at altitude 33º59.30', in the 145.80º
+Alt UserPos => For D: 2º46.45'S, GHA: 335º19.25', from 47º36.00'N / 3º07.80'W, H: 34º03.29', Z: 145.78, intercept: 0.40nm ??
 
-        context.lineWidth = 0.5;
-        context.strokeStyle = 'cyan'; // elmt.colorConfig.markerAndTrackColor;
-        context.beginPath();
-        context.moveTo(canvasCoord.x - markerRadius, canvasCoord.y);
-        context.lineTo(canvasCoord.x + markerRadius, canvasCoord.y);
-        context.moveTo(canvasCoord.x, canvasCoord.y - markerRadius);
-        context.lineTo(canvasCoord.x, canvasCoord.y + markerRadius);
-        context.stroke();
-        context.closePath();
+Original Context : On 2025-Aug-19 12:58:25 UTC, Jupiter Decl 22º28.97'N, GHA 55º53.75', from 47º40.66'N / 3º08.14'W.
+	Seeing Jupiter at altitude 41º14.42', in the 258.03º
+Alt UserPos => For D: 22º28.97'N, GHA: 55º53.75', from 47º36.00'N / 3º07.80'W, H: 41º15.16', Z: 258.10
 
-        context.beginPath();
-        context.strokeStyle = 'cyan'; // elmt.colorConfig.markerAndTrackColor;
-        context.lineWidth = 2;
-        context.arc(canvasCoord.x, canvasCoord.y, markerRadius, 0, 2 * Math.PI, false);
-        context.stroke();
+Original Context : On 2025-Aug-19 12:58:25 UTC, Spica Decl 11º17.68'S, GHA 321º06.13', from 47º40.66'N / 3º08.14'W.
+	Seeing Spica at altitude 20º13.11', in the 135.60º
+Alt UserPos => For D: 11º17.68'S, GHA: 321º06.13', from 47º36.00'N / 3º07.80'W, H: 20º16.60', Z: 135.58
 
-        context.font = "bold 12px Arial";
-		context.fillStyle = 'red';
-		if (true) {
-			context.font = "12px Arial";
-			context.fillText("Data center", canvasCoord.x + 2, canvasCoord.y);
-            context.closePath();
-		}
-    }
+Original Context : On 2025-Aug-19 12:58:25 UTC, Denebola Decl 14º25.85'N, GHA 345º08.88', from 47º40.66'N / 3º08.14'W.
+	Seeing Denebola at altitude 53º33.41', in the 149.77º
+Alt UserPos => For D: 14º25.85'N, GHA: 345º08.88', from 47º36.00'N / 3º07.80'W, H: 53º37.55', Z: 149.73
+
+*/
+
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 198, -4.45, "Sun");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 268, -0.03, "Moon");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 146, -3.6, "Mars");
+
 };
 
 let trackBuffer = [];

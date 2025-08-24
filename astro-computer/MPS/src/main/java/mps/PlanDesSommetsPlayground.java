@@ -22,7 +22,7 @@ public class PlanDesSommetsPlayground {
     private final static boolean compareGCRL = false;
     private final static boolean recalculateSRU = false;
     private final static boolean jsonOutput = false;
-    private final static boolean verboseCircle = true;
+    private final static boolean verboseCircle = false;
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -90,6 +90,14 @@ public class PlanDesSommetsPlayground {
         }
     }
 
+    public static CelestialDeadReckoning calculateDR(double gha, double dec, double UserLatitude, double userLongitude) {
+        CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, UserLatitude, userLongitude).calculate();
+        return dr;
+    }
+
+    private final static double altUserLat = 47.60; // 46° 36.0' N
+    private final static double altUserLng = -3.13; // 3° 7.8' W
+
     public static ConeDefinition calculateCone(AstroComputerV2 ac,
                                                double userLat,
                                                double userLong,
@@ -116,7 +124,7 @@ public class PlanDesSommetsPlayground {
         date.set(Calendar.SECOND, seconds);
 
         // Used here to get to what should be observed (he). Z is not required with this method.
-        CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, latitude, longitude).calculate(); // All angles in degrees
+        CelestialDeadReckoning dr = calculateDR(gha, dec, latitude, longitude).calculate(); // All angles in degrees
         double he = dr.getHe();
         double z = dr.getZ();
 
@@ -130,6 +138,9 @@ public class PlanDesSommetsPlayground {
                 bodyName,
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 z);
+
+        // From another position
+        getDR(altUserLat, altUserLng, gha, dec);
 
         if (true) { // Reverse tests
             GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
@@ -406,6 +417,29 @@ public class PlanDesSommetsPlayground {
         }
         return cd;
     }
+
+    public static void getDR(double userLat,
+                             double userLong,
+                             double gha,
+                             double dec) {
+
+        double latitude = userLat;
+        double longitude = userLong;
+
+        // Used here to get to what should be observed.
+        CelestialDeadReckoning dr = calculateDR(gha, dec, latitude, longitude).calculate(); // All angles in degrees
+        double he = dr.getHe();
+        double z = dr.getZ();
+
+        System.out.printf("Alt UserPos => For D: %s, GHA: %s, from %s / %s, H: %s, Z: %.02f\n",
+                GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                GeomUtil.decToSex(gha, GeomUtil.SHELL, GeomUtil.NONE).trim(),
+                GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
+                GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
+                GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
+                z);
+    }
+
     public static void main(String... args) {
 
         // Position of the user, used to get to what should be seen. Not used in the real world.
