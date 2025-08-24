@@ -79,6 +79,9 @@ La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0` nm.
 
 Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &agrave; l'intersection de ces cercles.
 
+_Note_ : On fait figurer plusieurs astres dans les diagrammes ci-dessous - le Soleil, la Lune, Mars, Spica (&alpha; Libra). C'est juste pour l'exemple. Il est hautement improbable 
+de les voir tous en m&ecirc;me temps.
+
 ![Context](01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
@@ -112,7 +115,7 @@ En fait, ils ne sont ronds que sur un globe.
 ```
 $ ./generate.cones.sh
 ```
-Ce script execute le code Java de la classe `mps.Context01.java`. Ceux que ce int&eacute;resse iront voir le code.   
+Ce script execute le code Java de la classe `mps.Context01.java`. Ceux que &ccedil;a int&eacute;resse iront voir le code.   
 Ceci g&eacute;n&egrave;re les fichiers `.json` dans le r&eacute;pertoire `web/json`, qui seront utilis&eacute;s &agrave; partir d'une page HTML.
 
 ### 2 - Affichage des diagrammes
@@ -165,5 +168,9 @@ La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur pro
 ![Context](05.png)
 Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).  
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
+
+---
+
+_&Agrave; suivre..._
 
 ---
