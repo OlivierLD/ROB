@@ -144,7 +144,7 @@ Seeing the Sun at altitude 49º22.52', in the 142.65º
 ```
 
 ### Une approche graphique ?
-Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) communs.  
+Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) commun(s).  
 On peut essayer graphiquement, pour la latitude, puis pour la longitude...
 
 Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources consid&eacute;rables (si on fait &ccedil;a manuellement)...
