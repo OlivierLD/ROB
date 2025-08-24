@@ -34,6 +34,14 @@ La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agra
 - la distance (GC, orthodromique) qui les s&eacute;pare
 - l'angle de route initial
 
+- Le point de d&eacute;part est `(L1, G1)`
+- Le point d'arriv&eacute;e est `(L2, G2)`
+
+```
+a = sqrt(sin((L2 - L1) / 2)^2 + cos(L1 * L2 * sin((G2 - G1) / 2)^2
+diatance = 2 * atan(sqrt(a), sqrt(1 - a))
+```
+
 La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteind :
 - en partant d'un point donn&eacute;
 - en suivant un arc de grand cercle (aka orthodromie)
@@ -43,7 +51,6 @@ Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/bl
 
 &Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
 m&eacute;ritent un coup d'&oelig;il.
-
 
 ---
 
