@@ -5,15 +5,43 @@ Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manu
 &Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
-## Rappels
+## Rappels...
 
+### Hauteur et azimut d'un astre
+Dans les formules suivantes : 
+- `D` est la d&eacute;clinaison de l'astre observ&eacute;
+- `L` est la latitude de l'observateur
+- `G` est la longitude de l'observateur
+- `AHG` est l'Angle Horaire a Greenwich de l'astre
+- `AHL` est l'Angle Horaire Local de l'astre (lequel d&eacute;pend de `AHG` et `G`)
+
+Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :  
 $$
 He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
 $$
 
+Calcul de l'azimut d'un astre &agrave; partir de la position de l'observateur :  
 $$
 Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
 $$
+
+Voir une implementation en Java [ici](https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroUtilities/src/main/java/calc/CelestialDeadReckoning.java).
+
+### Haversine
+La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agrave; un autre :
+- la distance (GC, orthodromique) qui les s&eacute;pare
+- l'angle de route initial
+
+La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteind :
+- en partant d'un point donn&eacute;
+- en suivant un arc de grand cercle (aka orthodromie)
+- avec un angle de route initial donn&eacute;
+
+Voir une implementation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour.
+
+&Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
+m&eacute;ritent un coup d'&oelig;il.
+
 
 ---
 
@@ -21,7 +49,7 @@ $$
 - Voir [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
-- Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets)
+- Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
 
 ![Context](img.png)
 
