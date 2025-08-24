@@ -156,7 +156,7 @@ D'o&ugrave; la question : _Quel est alors dans ce contexte l'int&eacute;ret de l
 
 La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :  
 ![Context](05.png)
-
+Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).  
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
 ---
