@@ -9,6 +9,20 @@ C'est ce qu'on se propose de voir ici.
 > Toutes les figures de ce document - &agrave; l'exception de la premi&egrave;re - sont r&eacute;alis&eacute;es
 > &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet. 
 
+> _Note_ :  
+> Dans cet exemple, on utilise Java pour les calculs d'&eacute;ph&eacute;m&eacute;rides en backend. Le code Java
+> qui permet ces calculs est disponible dans ce r&eacute;f&eacute;rentiel (voir `astro-computer:AstroComputer`).
+> Il l'est aussi dans d'autres langages : 
+> - C
+> - Golang
+> - php
+> - Python
+> - Scala
+> - ES6 (aka JavaScript)
+> - Kotlin (en acc&eacute;dant aux classes Java compil&eacute;es)  
+> 
+> La partie frontend est r&eacute;alis&eacute;e en HTML5/CSS3/ES6, avec des WebComponents, d&eacute;j&agrave; mentionn&eacute;s ci-dessus.
+
 ## Rappels...
 
 ### Hauteur et azimut d'un astre

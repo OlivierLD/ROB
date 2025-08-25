@@ -23,7 +23,7 @@ public class PlanDesSommetsPlayground {
     private final static boolean recalculateSRU = false;
     private final static boolean jsonOutput = false;
     private final static boolean verboseCircle = false;
-    private final static boolean fromAlternatePos = false;
+    private final static boolean fromAlternatePos = true;
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -134,13 +134,14 @@ public class PlanDesSommetsPlayground {
         double he = dr.getHe();
         double z = dr.getZ();
 
-        System.out.printf("Original Context : On %s, %s Decl %s, GHA %s, from %s / %s.\n\tSeeing %s at altitude %s, in the %.02f\272\n",
+        System.out.printf("Original Context : On %s, %s Decl %s, GHA %s, from %s / %s (%f / %f).\n\tSeeing %s at altitude %s, in the %.02f\272\n",
                 SDF_UTC.format(date.getTime()),
                 bodyName,
                 GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS).trim(),
                 GeomUtil.decToSex(gha, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
                 GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
+                latitude, longitude,
                 bodyName,
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 z);
@@ -156,11 +157,12 @@ public class PlanDesSommetsPlayground {
             final double userToBodyIRA = GeomUtil.bearingFromTo(latitude, longitude, bodyPos.getL(), bodyPos.getG()); // IRA
             // Reverse look, body to user
             final double bodyToUserIRA = GeomUtil.bearingFromTo(bodyPos.getL(), bodyPos.getG(), latitude, longitude); // IRA
-            System.out.printf("-> Reverse: From body %s / %s, to user %s / %s, bearing: %.02f\272 (opposite is %.02f\272)\n",
+            System.out.printf("-> Reverse: From body %s / %s, to user %s / %s (%f / %f), bearing: %.02f\272 (opposite ICA is %.02f\272)\n",
                     GeomUtil.decToSex(bodyPos.getL(), GeomUtil.SHELL, GeomUtil.NS).trim(),
                     GeomUtil.decToSex(bodyPos.getG(), GeomUtil.SHELL, GeomUtil.EW).trim(),
                     GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
                     GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    latitude, longitude,
                     bodyToUserIRA, userToBodyIRA);
 
             double distInNM = (90.0 - he) * 60.0; // Could be the observed one
@@ -211,7 +213,7 @@ public class PlanDesSommetsPlayground {
 
             System.out.printf("After Dead Reckoning: For %s,\n" +
                             " - %s at GHA: %.02f\272, Decl: %.02f\272 \n" +
-                            " - From position %s / %s\n" +
+                            " - From position %s / %s (%F / %f)\n" +
                             " - Obs Alt: %s, Instr Alt: %s, Z: %.01f\272\n" +
                             " - with sunSD: %f', sunHP: %f', refraction: %f', horizon dip: %f' \n",
                     SDF_UTC.format(date.getTime()),
@@ -219,6 +221,7 @@ public class PlanDesSommetsPlayground {
                     gha, dec,
                     GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
                     GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
+                    latitude, longitude,
                     GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                     GeomUtil.decToSex(instrAlt, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                     z,
@@ -265,22 +268,26 @@ public class PlanDesSommetsPlayground {
             // final double initialRouteAngle = GreatCircle.getInitialRouteAngleInDegrees(from, to);
             final double initialRouteAngle = GreatCircle.getIRAInDegrees(from, to); // Should be 0 !
             assert (initialRouteAngle == 0.0);
-            System.out.printf("-- GC: From [%s / %s] to  [%s / %s], dist: %.02f', IRA: %.02f\272\n",
+            System.out.printf("-- GC: From [%s / %s] to  [%s / %s] (%f / %f to %f / %f), dist: %.02f', IRA: %.02f\272\n",
                     GeomUtil.decToSex(Math.toDegrees(from.getL()), GeomUtil.SHELL, GeomUtil.NS),
                     GeomUtil.decToSex(Math.toDegrees(from.getG()), GeomUtil.SHELL, GeomUtil.EW),
                     GeomUtil.decToSex(Math.toDegrees(to.getL()), GeomUtil.SHELL, GeomUtil.NS),
                     GeomUtil.decToSex(Math.toDegrees(to.getG()), GeomUtil.SHELL, GeomUtil.EW),
+                    Math.toDegrees(from.getL()), Math.toDegrees(from.getG()),
+                    Math.toDegrees(to.getL()), Math.toDegrees(to.getG()),
                     distanceInNM, initialRouteAngle);
 
             double hdg = initialRouteAngle;
             // This is a rhumbline, prefer haversine.
             final GeoPoint geoPoint = GeomUtil.deadReckoning(latitude, longitude, distanceInNM, hdg);
-            System.out.printf("-- RL: From [%s / %s], %.02f nm in the %.0f\272, pos is [%s / %s]\n",
+            System.out.printf("-- RL: From [%s / %s] (%f / %f), %.02f nm in the %.0f\272, pos is [%s / %s] (%f / %f)\n",
                     GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS),
                     GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW),
+                    latitude, longitude,
                     distanceInNM, hdg,
                     GeomUtil.decToSex(geoPoint.getLatitude(), GeomUtil.SHELL, GeomUtil.NS),
-                    GeomUtil.decToSex(geoPoint.getLongitude(), GeomUtil.SHELL, GeomUtil.EW));
+                    GeomUtil.decToSex(geoPoint.getLongitude(), GeomUtil.SHELL, GeomUtil.EW),
+                    geoPoint.getLatitude(), geoPoint.getLongitude());
 
             assert(Math.toDegrees(to.getL()) == geoPoint.getLatitude());
             assert(Math.toDegrees(to.getG()) == geoPoint.getLongitude());
@@ -439,11 +446,12 @@ public class PlanDesSommetsPlayground {
         double he = dr.getHe();
         double z = dr.getZ();
 
-        System.out.printf("Alt UserPos => For D: %s, GHA: %s, from %s / %s, H: %s, Z: %.02f\n",
+        System.out.printf("Alt UserPos => For D: %s, GHA: %s, from %s / %s (%f / %f), H: %s, Z: %.02f\n",
                 GeomUtil.decToSex(dec, GeomUtil.SHELL, GeomUtil.NS).trim(),
                 GeomUtil.decToSex(gha, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
                 GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
+                latitude, longitude,
                 GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                 z);
     }

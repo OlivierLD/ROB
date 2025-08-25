@@ -4,8 +4,12 @@ import calc.GeoPoint;
 import calc.GeomUtil;
 
 /**
- * See <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a> and/or <a href="https://fr.wikipedia.org/wiki/Formule_de_haversine">Formule de Haversine</a>
+ * See <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a> and/or
+ * <a href="https://fr.wikipedia.org/wiki/Formule_de_haversine">Formule de Haversine</a>
+ *
  * See also <a href="https://github.com/search5/latlon">LatLon</a>, it's in Python
+ *
+ * This code is here to make sure we find the same results as the ones found with <a href="https://github.com/search5/latlon">LatLon</a>.
  */
 public class LatLongWorkBench {
 
