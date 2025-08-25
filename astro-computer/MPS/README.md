@@ -5,6 +5,10 @@ Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manu
 &Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
+> _Note_ :  
+> Toutes les figures de ce document - &agrave; l'exception de la premi&egrave;re - sont r&eacute;alis&eacute;es
+> &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet. 
+
 ## Rappels...
 
 ### Hauteur et azimut d'un astre
