@@ -66,12 +66,15 @@ distance = 2 * atan(sqrt(a), sqrt(1 - a))
 $$
 a = sin^2(\frac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\frac{L2 - L1} {2})
 $$
+
 $$
 c = 2 . atan2(\sqrt{a}, \sqrt{(1-a)}))
 $$
+
 $$
 distance = R . c
 $$
+
 o&ugrave; R est le rayon de la Terre.
 
 La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteind :
