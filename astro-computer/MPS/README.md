@@ -64,7 +64,7 @@ distance = 2 * atan(sqrt(a), sqrt(1 - a))
 &eacute;crit aussi
 
 $$
-a = \sqrt{(sin(L2 - L1) / 2)^2 + (cos(L1 * L2) * sin((G2 - G1) / 2)^2)}
+a = \sqrt{(\frac{sin(L2 - L1)} {2})^2 + (cos(L1 * L2) * sin(\frac{(G2 - G1)} {2})^2)}
 $$
 
 $$
