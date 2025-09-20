@@ -56,9 +56,18 @@ La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agra
 - Le point d'arriv&eacute;e est `(L2, G2)`
 
 ```
-a = sqrt(sin((L2 - L1) / 2)^2 + cos(L1 * L2 * sin((G2 - G1) / 2)^2
-diatance = 2 * atan(sqrt(a), sqrt(1 - a))
+a = sqrt(sin((L2 - L1) / 2)^2 + cos(L1 * L2) * sin((G2 - G1) / 2)^2
+
+distance = 2 * atan(sqrt(a), sqrt(1 - a))
 ```
+<!-- With LaTex -->
+&eacute;crit aussi
+
+$$
+a = \sqrt{(sin(L2 - L1) / 2)^2 + (cos(L1 * L2) * sin((G2 - G1) / 2)^2)}
+
+distance = 2 * arctan (\sqrt(a), \sqrt(1 - a))
+$$
 
 La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteind :
 - en partant d'un point donn&eacute;
@@ -100,6 +109,9 @@ Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &
 _Note_ : On fait figurer plusieurs astres dans les diagrammes ci-dessous - le Soleil, la Lune, Mars, Spica (&alpha; Libra). C'est juste pour l'exemple. Il est hautement improbable 
 de les voir tous en m&ecirc;me temps.
 
+_Une autre Note_ : Le sommet de tous les c&ocirc;nes, et la position de l'observateur, se trouvent tous dans le m&ecirc;me plan.
+D'o&ugrave; - sans doute - le nom de la m&eacute;thode...
+
 ![Context](01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
@@ -108,7 +120,8 @@ On note que - comme attendu - les g&eacute;n&eacute;ratrices des c&ocirc;nes tan
 ![Context](02.png)
 
 Les cercles se croisent &agrave; la position de l'observateur. Ainsi, la position de l'observateur et
-toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan.
+toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan. Et elles ne sont pas - loin de l&agrave; - 
+n&eacute;cessairement align&eacute;es.
 
 ![Context](02.bis.png)
 
