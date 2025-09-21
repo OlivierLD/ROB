@@ -58,7 +58,7 @@ La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agra
 ```
 a = sin((G2 - G1) / 2)^2 + cos(G1) * cos(G2) * sin((L2 - L1) / 2)^2
 
-distance = 2 * atan(sqrt(a), sqrt(1 - a))
+distance = 2 * atan2(sqrt(a), sqrt(1 - a))
 ```
 <!-- With LaTex -->
 &eacute;crit aussi
@@ -82,7 +82,7 @@ La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on at
 - en suivant un arc de grand cercle (aka orthodromie)
 - avec un angle de route initial donn&eacute;
 
-Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour.
+Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour, m&eacute;thode `haversineRaw`.
 
 &Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
 m&eacute;ritent un coup d'&oelig;il.

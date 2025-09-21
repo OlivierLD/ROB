@@ -22,6 +22,7 @@ public final class GeomUtil {
 	public static final int TRAILING_SIGN = 1;
 
 	public final static String DEGREE_SYMBOL = "\u00b0";
+	public final static String ALT_DEGREE_SYMBOL = "º";
 
 	public static class PolyAngle {
 
@@ -95,6 +96,11 @@ public final class GeomUtil {
 	// In nautical miles
 	public static double haversineNm(double lat1, double long1, double lat2, double long2) {
 		return haversineRaw(lat1, long1, lat2, long2) * NM_EQUATORIAL_EARTH_RADIUS;
+	}
+
+	// In nautical miles, with GeoPoints
+	public static double haversineNm(GeoPoint from, GeoPoint to) {
+		return haversineRaw(from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude()) * NM_EQUATORIAL_EARTH_RADIUS;
 	}
 
 	// In US statute miles
@@ -196,7 +202,7 @@ public final class GeomUtil {
 		return diff;
 	}
 	/**
-	 * Calculates great-circle (orthodromie) bearing between two points from and to.
+	 * Calculates great-circle (orthodromie) bearing (ARI, ICA) between two points from and to.
 	 * @param fromL latitude from, in degrees
 	 * @param fromG longitude from, in degrees
 	 * @param toL latitude to, in degrees
@@ -213,6 +219,15 @@ public final class GeomUtil {
 			b += 360;
 		}
 		return b;
+	}
+
+	public static double bearingFromTo(GeoPoint from, GeoPoint to) {
+		return bearingFromTo(from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
+	}
+
+	// Get the ICA (Initial Course Angle), ARI in French (Angle de Route Initial)
+	public static double getICA(GeoPoint from, GeoPoint to) {
+		return bearingFromTo(from, to);
 	}
 
 	/**
@@ -236,7 +251,7 @@ public final class GeomUtil {
 	}
 
 	/**
-	 * @param fullString like [N 37 55.49], or [N 37 55'12.49"]
+	 * @param fullString like [N 37 55.49], or [N 37 55'12.49"], or [N 37º55.49], or [N 37º55'12.49"]
 	 * @return The expected string
 	 * @throws RuntimeException when failing
 	 */
@@ -245,7 +260,10 @@ public final class GeomUtil {
 			String sgn = fullString.substring(0, 1);
 			int degSignIndex = fullString.indexOf(DEGREE_SYMBOL);
 			if (degSignIndex < 0) {
-				degSignIndex = fullString.indexOf(DEGREE_SYMBOL);
+				degSignIndex = fullString.indexOf(ALT_DEGREE_SYMBOL);
+				if (degSignIndex < 0) {
+					degSignIndex = fullString.lastIndexOf(" ");
+				}
 			}
 			String degrees = fullString.substring(2, degSignIndex);
 			String minutes = "";

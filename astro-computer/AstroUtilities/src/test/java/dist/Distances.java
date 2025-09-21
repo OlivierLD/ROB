@@ -1,5 +1,6 @@
 package dist;
 
+import calc.GeoPoint;
 import calc.GeomUtil;
 
 public class Distances {
@@ -43,5 +44,12 @@ public class Distances {
         extPointLat = -1;
         distToSegment = Math.abs((coeffA * extPointLng) - extPointLat + coeffB) / (Math.sqrt((coeffA * coeffA) + 1)); // in degrees
         System.out.printf("(2) Dist to segment: %f units.\n", distToSegment);
+
+        GeoPoint belz = new GeoPoint(47.677667, -3.135667);
+        double gcDist = GeomUtil.haversineNm(belz, new GeoPoint(GeomUtil.sexToDec("N 59 35.60"), GeomUtil.sexToDec("E 160º10.26")));
+        System.out.printf("Distance is %.02f\n", gcDist);
+        double ari = GeomUtil.getICA(belz, new GeoPoint(GeomUtil.sexToDec("N 59 35.60"), GeomUtil.sexToDec("E 160º10.26")));
+        System.out.printf("ARI is %.02f\n", ari);
+
     }
 }
