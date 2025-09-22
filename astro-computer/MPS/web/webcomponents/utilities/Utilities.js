@@ -164,6 +164,7 @@ export function calculateGreatCircle(start, arrival, nbPoints) {
 	return route;
 }
 
+// Same as above, but in degrees
 export function calculateGreatCircleInDegrees(start, arrival, nbPoints) {
 	let radRoute = calculateGreatCircle(
 			{ lat: Math.toRadians(start.lat), lng: Math.toRadians(start.lng) },

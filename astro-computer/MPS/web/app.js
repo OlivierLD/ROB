@@ -1,9 +1,9 @@
 import * as CelestialComputer from './longterm.almanac.js';
-import { 
-	// sightReduction, 
-	getGCDistance, 
-	getGCDistanceDegreesNM, 
-	calculateGreatCircle, 
+import {
+	// sightReduction,
+	getGCDistance,
+	getGCDistanceDegreesNM,
+	calculateGreatCircle,
 	getMoonTilt,
 	calcLHA,
 	ghaToLongitude,
@@ -14,7 +14,8 @@ import {
 // let CelestialComputer = require('./longterm.almanac.js');
 
 import {
-	decToSex
+	decToSex,
+	calculateGreatCircleInDegrees
 } from './webcomponents/utilities/Utilities.js';
 
 export function sampleMain(userDataObject) {
@@ -57,7 +58,7 @@ export function sampleMain(userDataObject) {
 
 	let noPlanets = userDataObject.noPlanets || false;
 	let calcResult = CelestialComputer.calculate(year, month, day, hour, minute, second, delta_t, noPlanets); // Implicit stars and constellations
-	
+
 	try {
 		let solarDate = CelestialComputer.getSolarDateAtPos(userPos.latitude, userPos.longitude, calcResult.EOT.raw, year, month, day, hour, minute, second, delta_t);
 		calcResult.solarDate = solarDate; // Adding SolarDate at user's position
@@ -83,6 +84,7 @@ window.getMoonTilt = getMoonTilt;
 
 window.calcLHA = calcLHA;
 window.decToSex = decToSex;
+window.calculateGreatCircleInDegrees = calculateGreatCircleInDegrees;
 
 window.ghaToLongitude = ghaToLongitude;
 
