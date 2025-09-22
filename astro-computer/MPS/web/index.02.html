@@ -409,6 +409,7 @@ let setGeolocation = (slider) => {
 let userPosDataExpanded = false;
 let userDateExpanded = false;
 let useHelpExpanded = false;
+let userGCExpanded = false;
 
 let expandCollapseSetPosData = () => {
 
@@ -448,6 +449,19 @@ let expandCollapseHelpData = () => {
         document.getElementById('help-char').innerHTML = '&#9660;';
     }
     useHelpExpanded = !useHelpExpanded;
+};
+
+let expandCollapseGCData = () => {
+    document.getElementById('user-gc-widgets').classList.toggle('visible-div');
+    // document.getElementById('user-help-widgets').classList.toggle('visible-div');
+    if (userGCExpanded) {
+        // document.getElementById('user-date-widgets').style.display = 'none';
+        document.getElementById('gc-char').innerHTML = '&#9658;';
+    } else {
+        // document.getElementById('user-date-widgets').style.display = 'block';
+        document.getElementById('gc-char').innerHTML = '&#9660;';
+    }
+    userGCExpanded = !userGCExpanded;
 };
 
 let updatePosition = () => {
@@ -1557,7 +1571,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- MPS Demo</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- GC Demo</span></h1>
     </div>
     <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
@@ -1810,6 +1824,124 @@ let toggleForeground = () => {
             </td>
             <td style="vertical-align: top; min-width: 50px; max-width: 55px; width: 50px; border: 0px solid silver; border-radius: 4px;" rowspan="2">
                 <div id="moon-phase-div" style="text-align: right;" title=""></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top;" colspan="1">
+                <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
+                    <div id="user-gc-switch" onclick="expandCollapseGCData();" title="Click to expand/collase"
+                         style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="gc-char">&#9658;</span> Define start and finish for GC</div>
+                        <div id="user-gc-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
+
+                            Will generate Great Circle, after repaint.<br/>
+                            <div style="display: grid; grid-template-columns: 50% 50%;">
+                                <div>
+                                    <b>From:</b>
+                                    <div id="gc-from-pos" class="gc-smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;"> <!-- display: none;  -->
+                                        Latitude:
+                                        <select id="from-gc-pos-lat-sign-01">
+                                            <option value="N" selected>N</option> <!-- Default value -->
+                                            <option value="S">S</option>
+                                        </select>
+                                        <input type="number"
+                                            id="from-gc-pos-lat-deg-01"
+                                            placeholder="Deg"
+                                            title="Lat degrees to set"
+                                            style="width: 40px; text-align: center;"
+                                            min="0"
+                                            max="90"
+                                            step="1"
+                                            value="47"/> <!-- Default value -->
+                                        <input type="number"
+                                            id="from-gc-pos-lat-min-01"
+                                            placeholder="Minutes"
+                                            title="Lat minutes to set"
+                                            style="width: 60px; text-align: center;"
+                                            min="0"
+                                            max="59.99"
+                                            step="0.01"
+                                            value="40.66"/> <!-- Default value -->
+                                        &nbsp;&nbsp;Longitude:
+                                        <select id="from-gc-pos-lng-sign-01">
+                                            <option value="E">E</option>
+                                            <option value="W" selected>W</option> <!-- Default value -->
+                                        </select>
+                                        <input type="number"
+                                            id="from-gc-pos-lng-deg-01"
+                                            placeholder="Deg"
+                                            title="Lng degrees to set"
+                                            style="width: 40px; text-align: center;"
+                                            min="0"
+                                            max="180"
+                                            step="1"
+                                            value="3"/> <!-- Default value -->
+                                        <input type="number"
+                                            id="from-gc-pos-lng-min-01"
+                                            placeholder="Minutes"
+                                            title="Lng minutes to set"
+                                            style="width: 60px; text-align: center;"
+                                            min="0"
+                                            max="59.99"
+                                            step="0.01"
+                                            value="08.14"/> <!-- Default value -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <b>To:</b>
+                                    <div id="gc-to-pos" class="gc-smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;"> <!-- display: none;  -->
+                                        Latitude:
+                                        <select id="to-gc-pos-lat-sign-01">
+                                            <option value="N" selected>N</option> <!-- Default value -->
+                                            <option value="S">S</option>
+                                        </select>
+                                        <input type="number"
+                                            id="to-gc-pos-lat-deg-01"
+                                            placeholder="Deg"
+                                            title="Lat degrees to set"
+                                            style="width: 40px; text-align: center;"
+                                            min="0"
+                                            max="90"
+                                            step="1"
+                                            value="59"/> <!-- Default value -->
+                                        <input type="number"
+                                            id="to-gc-pos-lat-min-01"
+                                            placeholder="Minutes"
+                                            title="Lat minutes to set"
+                                            style="width: 60px; text-align: center;"
+                                            min="0"
+                                            max="59.99"
+                                            step="0.01"
+                                            value="35.60"/> <!-- Default value -->
+                                        &nbsp;&nbsp;Longitude:
+                                        <select id="to-gc-pos-lng-sign-01">
+                                            <option value="E" selected>E</option>
+                                            <option value="W">W</option> <!-- Default value -->
+                                        </select>
+                                        <input type="number"
+                                            id="to-gc-pos-lng-deg-01"
+                                            placeholder="Deg"
+                                            title="Lng degrees to set"
+                                            style="width: 40px; text-align: center;"
+                                            min="0"
+                                            max="180"
+                                            step="1"
+                                            value="160"/> <!-- Default value -->
+                                        <input type="number"
+                                            id="to-gc-pos-lng-min-01"
+                                            placeholder="Minutes"
+                                            title="Lng minutes to set"
+                                            style="width: 60px; text-align: center;"
+                                            min="0"
+                                            max="59.99"
+                                            step="0.01"
+                                            value="10.26"/> <!-- Default value -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </td>
         </tr>
         <tr>
@@ -2243,7 +2375,7 @@ let toggleForeground = () => {
 
         let from = null;
         wpData.forEach((point) => {
-            console.log(`Plotting GC point: lat:${point.pos.lat} lng:${point.pos.lng}`);
+            // console.log(`Plotting GC point: lat:${point.pos.lat} lng:${point.pos.lng}`);
             if (worldMap.projection.type === 'GLOBE') {
                 let p = worldMap.getPanelPoint(point.pos.lat, point.pos.lng);
                 if (worldMap.isBehind(worldMap.toRadians(point.pos.lat), worldMap.toRadians(point.pos.lng - worldMap.globeViewLngOffset))) {
@@ -2338,23 +2470,49 @@ let toggleForeground = () => {
 		}
 		context.closePath();
 
+        /*
+         * Extra Stuff begins here
+         */
+
         // Draw the cone's base from json data
         let mpsData = document.getElementById('mps-data');
         mpsData.innerHTML = ''; // Clear previous data
 
         // Plot GC from start to finish
-        // From 47º40.66'N / 3º08.14'W
-        // To   59º35.60'N / 160º10.26'E
-        // ICA 8.8 degrees
-        // Distance 4319.65 nm
+        // Default values:
+        // - From 47º40.66'N / 3º08.14'W
+        // - To   59º35.60'N / 160º10.26'E
+        // - ICA 8.8 degrees
+        // - Distance 4319.65 nm
+
+        let sgnLat = document.getElementById("from-gc-pos-lat-sign-01").value;
+        let degLat = parseInt(document.getElementById("from-gc-pos-lat-deg-01").value);
+        let minLat = parseFloat(document.getElementById("from-gc-pos-lat-min-01").value);
+        let lat = (degLat + (minLat / 60.0)) * (sgnLat === 'N' ? 1 : -1);
+
+        let sgnLng = document.getElementById("from-gc-pos-lng-sign-01").value;
+        let degLng = parseInt(document.getElementById("from-gc-pos-lng-deg-01").value);
+        let minLng = parseFloat(document.getElementById("from-gc-pos-lng-min-01").value);
+        let lng = (degLng + (minLng / 60.0)) * (sgnLng === 'E' ? 1 : -1);
 
         let start = {
-            lat: 47.6777,
-            lng: -3.1357
+            lat: lat, // 47.6777,
+            lng: lng  // -3.1357
         };
+
+        sgnLat = document.getElementById("to-gc-pos-lat-sign-01").value;
+        degLat = parseInt(document.getElementById("to-gc-pos-lat-deg-01").value);
+        minLat = parseFloat(document.getElementById("to-gc-pos-lat-min-01").value);
+        lat = (degLat + (minLat / 60.0)) * (sgnLat === 'N' ? 1 : -1);
+
+        sgnLng = document.getElementById("to-gc-pos-lng-sign-01").value;
+        degLng = parseInt(document.getElementById("to-gc-pos-lng-deg-01").value);
+        minLng = parseFloat(document.getElementById("to-gc-pos-lng-min-01").value);
+        lng = (degLng + (minLng / 60.0)) * (sgnLng === 'E' ? 1 : -1);
+
         let finish = {
-            lat: 59.5933,
-            lng: 160.1709
+            lat: lat, // 59.5933,
+            lng: lng  // 160.1709
         };
         wpList = calculateGreatCircleInDegrees(start, finish, 50);
         console.log(`GC from ${start.lat},${start.lng} to ${finish.lat},${finish.lng}: ${wpList.length} points`);
