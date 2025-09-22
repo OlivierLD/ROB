@@ -272,6 +272,30 @@ let setSolarDate = (wcId, cb) => {
 	// document.getElementById(wcId).repaint();
 };
 
+let spinnerProcess = null;
+
+let spinTheGlobe = (globeId, cb) => {
+    // console.log("Spin was clicked!");
+    if (cb.checked) { // Start
+        console.log("Start the spin");
+        spinnerProcess = window.setInterval(() => {
+            let pos = userPos;
+            let newLng = pos.longitude + 1.0;
+            if (newLng > 180) {
+                newLng = -180 + (newLng - 180);
+            }
+            setUserPos(pos.latitude, newLng);
+        }, 1000);
+
+    } else { // Stop
+        console.log("Stop the spin");
+        if (spinnerProcess !== null) {
+            window.clearInterval(spinnerProcess);
+            spinnerProcess = null;
+        }
+    }
+};
+
 let setGrid = (wcId, cb) => {
 	document.getElementById(wcId).withGrid = (cb.checked ? 'true' : 'false');
 	document.getElementById(wcId).repaint();
@@ -1349,6 +1373,13 @@ let toggleForeground = () => {
                           <span class="slider round"></span>
                         </label>
                         <span class="switch-element">Solar Date Foreground</span>
+                    </div>
+                    <div class="switch-container" style="margin-left: 30px;" title="Spin!">
+                        <label class="switch switch-element">
+                          <input id="spin-slider" type="checkbox" onchange="spinTheGlobe('world-map-01', this);">
+                          <span class="slider round"></span>
+                        </label>
+                        <span class="switch-element">Spin!</span>
                     </div>
 
                     <!--
