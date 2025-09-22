@@ -8,7 +8,8 @@
  |
  | Good grid stuff: https://css-tricks.com/snippets/css/complete-guide-grid/
  |
- | Used to draw a GC Route on the globe
+ | Used to draw a GC Route on the globe.
+ | See function plotGC, and how it is invoked.
  +-->
 <html lang="en_US">
 <head>
@@ -2209,6 +2210,7 @@ let toggleForeground = () => {
 
     function plotGC(context, worldMap, color, wpData) {
 
+        let from = null;
         wpData.forEach((point) => {
             console.log(`Plotting GC point: lat:${point.pos.lat} lng:${point.pos.lng}`);
             if (worldMap.projection.type === 'GLOBE') {
@@ -2216,7 +2218,11 @@ let toggleForeground = () => {
                 if (worldMap.isBehind(worldMap.toRadians(point.pos.lat), worldMap.toRadians(point.pos.lng - worldMap.globeViewLngOffset))) {
                     return; // Behind the globe
                 }
-                worldMap.fillCircle(context, p, 1.5, color); // TODO MoveTo, LineTo
+                // worldMap.fillCircle(context, p, 1.5, color);
+                if (from != null) {
+                    worldMap.lineFromTo(context, from, p, color, 1.5);
+                }
+                from = p;
             } else {
                 worldMap.plotPosToCanvas(context, point.pos.lat, point.pos.lng, "", color, 0.75);
             }

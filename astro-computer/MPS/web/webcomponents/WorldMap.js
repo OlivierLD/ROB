@@ -863,6 +863,23 @@ class WorldMap extends HTMLElement {
 		WorldMap.fillCircle(context, pt, radius, color);
 	}
 
+	static lineFromTo(context, from, to, color, lineWidth=1, lineDash=[]) {
+		context.save();
+		context.beginPath();
+		context.setLineDash(lineDash);
+		context.strokeStyle = color;
+		context.lineWidth = lineWidth;
+		context.moveTo(from.x, from.y);
+		context.lineTo(to.x, to.y);
+		context.stroke();
+		context.closePath();
+		context.restore();
+	}
+
+	lineFromTo(context, from, to, color, lineWidth=1, lineDash=[]) {
+		WorldMap.lineFromTo(context, from, to, color, lineWidth, lineDash);
+	}
+
 	/* TODO userPos from this.userPosition? */
 	positionBody(context, userPos, color, name, decl, gha, drawCircle, isStar) {
 		isStar = isStar || false;
