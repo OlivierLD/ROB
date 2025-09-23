@@ -3,7 +3,7 @@ package calc;
 import java.io.Serializable;
 
 public final class GeoPoint
-		implements Serializable {
+		implements Serializable, Cloneable {
 	double latitude;
 	double longitude;
 
@@ -110,4 +110,12 @@ public final class GeoPoint
 		return new GeoPoint(Math.toDegrees(this.getL()), Math.toDegrees(this.getG()));
 	}
 
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error("Something impossible just happened");
+		}
+	}
 }

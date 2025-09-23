@@ -99,8 +99,8 @@ public class PlanDesSommetsPlayground {
     private final static double altUserLat = 47.60; // 46°36.0' N
     private final static double altUserLng = -3.13; // 3°7.8' W
 
-    public static CelestialDeadReckoning calculateDR(double gha, double dec, double UserLatitude, double userLongitude) {
-        CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, UserLatitude, userLongitude).calculate();
+    public static CelestialDeadReckoning calculateDR(double gha, double dec, double userLatitude, double userLongitude) {
+        CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, userLatitude, userLongitude).calculate();
         return dr;
     }
 

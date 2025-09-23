@@ -221,6 +221,13 @@ La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur pro
 Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).  
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
+### Approche it&eacute;rative
+Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
+
+
+### &Eacute;quation de la distance entre les points de deux points de deux cercles...
+Il doit y avoir un - voire deux - point(s) ou cette diff&eacute;rence est nulle.
+
 ---
 
 _&Agrave; suivre..._
