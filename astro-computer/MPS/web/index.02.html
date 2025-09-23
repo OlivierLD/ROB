@@ -2474,7 +2474,7 @@ let toggleForeground = () => {
          * Extra Stuff begins here
          */
 
-        // Draw the cone's base from json data
+        // Draw the cone's base from json data. Not used here.
         let mpsData = document.getElementById('mps-data');
         mpsData.innerHTML = ''; // Clear previous data
 
@@ -2482,8 +2482,8 @@ let toggleForeground = () => {
         // Default values:
         // - From 47º40.66'N / 3º08.14'W
         // - To   59º35.60'N / 160º10.26'E
-        // - ICA 8.8 degrees
-        // - Distance 4319.65 nm
+        // - ICA 8.8 degrees (not used for calculation)
+        // - Distance 4319.65 nm (not used for calculation)
 
         let sgnLat = document.getElementById("from-gc-pos-lat-sign-01").value;
         let degLat = parseInt(document.getElementById("from-gc-pos-lat-deg-01").value);

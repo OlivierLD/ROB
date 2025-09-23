@@ -5,6 +5,19 @@ Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manu
 &Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
+Le principe de la m&eacute;thode repose sur les assertions suivantes :
+- &Agrave; un instant donn&eacute;, si on a observ&eacute; un astre &agrave; une hauteur donn&eacute;e, on est capable de d&eacute;terminer
+le lieu des points qui voient cet astre &agrave; cette hauteur (c'est le tr&egrave;s fameux "cercle d'&eacute;gales hauteurs").
+- En observant plusieurs astres, il s'agit de d&eacute;terminer le lieu des points communs (id&eacute;alement **_du_** ppoint commun) aux diff&eacute;rents cercles de hauteur ainsi obtenus, qui 
+devrait en toute logique correspondre &agrave; la position de l'observateur.
+
+L'&eacute;quation &agrave; r&eacute;soudre n'est pas triviale..., c'est bien l'objet de ce document.
+
+Mais on voit bien ici que la d&eacute;termination ces cercles d'&eacute;gales hauteurs ne fait en aucun cas intervenir
+une position estim&eacute;e. On a juste besoin ici de connaitre :
+- La hauteur observ&eacute;e de l'astre
+- L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e).
+
 > _Note_ :  
 > Toutes les figures de ce document - &agrave; l'exception de la premi&egrave;re - sont r&eacute;alis&eacute;es
 > &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet. 
