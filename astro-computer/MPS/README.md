@@ -102,7 +102,10 @@ m&eacute;ritent un coup d'&oelig;il.
 
 $$
 finalLat = \arcsin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading))
-finalLng = startLng + \atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
+$$
+
+$$
+finalLng = startLng + atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
 $$
 
 ---
