@@ -77,15 +77,9 @@ distance = 2 * atan2(sqrt(a), sqrt(1 - a))
 &eacute;crit aussi
 
 $$
-a = sin^2(\frac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\frac{L2 - L1} {2})
-$$
-
-$$
-c = 2 . atan2(\sqrt{a}, \sqrt{(1-a)}))
-$$
-
-$$
-distance = R . c
+a = sin^2(\frac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\frac{L2 - L1} {2}) \\
+c = 2 . atan2(\sqrt{a}, \sqrt{(1-a)})) \\
+distance = R . c \\
 $$
 
 o&ugrave; R est le rayon de la Terre.
@@ -101,10 +95,7 @@ Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/bl
 m&eacute;ritent un coup d'&oelig;il.
 
 $$
-finalLat = \arcsin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading))
-$$
-
-$$
+finalLat = \arcsin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading)) \\
 finalLng = startLng + atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
 $$
 
