@@ -97,8 +97,13 @@ La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on at
 
 Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/577f32344e8e486e0d44b7bff9a4a47e100e6551/astro-computer/AstroUtilities/src/main/java/calc/GeomUtil.java#L82) et autour, m&eacute;thode `haversineRaw`.
 
-&Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
+&Agrave; ce sujet, les documents [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula) et [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine) (aka Sinus Verse)
 m&eacute;ritent un coup d'&oelig;il.
+
+$$
+finalLat = \arcsin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading))
+finalLng = startLng + \atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
+$$
 
 ---
 
@@ -115,7 +120,7 @@ Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90° - h1)`.
 La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0` nm.
 
 La distance FS est `r * (1 / tg(h1))`, o&ugrave; r est le rayon de la Terre.  
-Le diam&egrave;tre du cone est `r * cos(h1)`.  
+Le rayon de la base du cone est `r * cos(h1)`.  
 La distance du centre le la Terre au sommet S<small><sub>1</sub></small> est `sqrt(FS^2 + r^2)`, not&eacute; aussi
 
 $$

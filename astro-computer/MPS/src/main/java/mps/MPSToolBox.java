@@ -120,17 +120,18 @@ public class MPSToolBox {
     }
 
     /**
+     * Return the cone definition for a body defined by its GHA and DEC, and a given observed altitude.
      *
-     * @param calculationTime
-     * @param obsAlt
-     * @param gha
-     * @param dec
-     * @param bodyName
-     * @param fromZ
-     * @param toZ
-     * @param zStep
-     * @param verbose
-     * @return
+     * @param calculationTime Used for the ConeDefinition containing the requested data
+     * @param obsAlt Observed altitude of the body
+     * @param gha GHA of the body (obtained from almanacs)
+     * @param dec DEV of the body (obtained from almanacs)
+     * @param bodyName Name, used for the ConeDefinition containing the requested data
+     * @param fromZ The Z (from Pg) used to start the iteration for the circle
+     * @param toZ The Z (from Pg) used to finish the iteration for the circle
+     * @param zStep The step for the iteration
+     * @param verbose guess what !
+     * @return the requested ConeDefinition
      */
     public static ConeDefinition calculateCone(Date calculationTime,
                                                double obsAlt,

@@ -142,6 +142,13 @@ public final class GeomUtil {
 	 * AKA Dead Reckoning (GC).
 	 * Starting from a point, sailing a given distance, in a given bearing (ICA), where do we arrive ?
 	 *
+	 * Formula is (with dist, heading, lat, lng in radians):
+	 * <pre>
+	 *  finalLat = arcsin(sin(startLat) * cos(dist)) + (cos(startLat) * sin(dist) * cos(heading))
+	 *  finalLng = startLng + atan2(sin(heading) * sin(dist) * cos(startLat), cos(dist) - (sin(startLat) * sin(finalLat)))
+	 * </pre>
+	 * <i>Note:</i> <code>atan2</code> return an angle between -&PI; and +&PI;, as opposed to <code>atan</code>, that returns an angle between -&PI;/2 and +&PI;/2.
+	 *
 	 * @param from Starting point. All in degrees
 	 * @param dist in nm (aka minutes of arc)
 	 * @param heading bearing in degrees (IRA-ICA)
