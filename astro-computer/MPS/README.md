@@ -101,12 +101,14 @@ Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/bl
 m&eacute;ritent un coup d'&oelig;il.
 
 $$
-finalLat = \arcsin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading))
+finalLat = \asin(\sin(startLat) * \cos(dist)) + (\cos(startLat) * \sin(dist) * \cos(heading))
 $$
 
 $$
 finalLng = startLng + atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
 $$
+
+<i>Note:</i> <code>atan2</code> return an angle between -&PI; and +&PI;, as opposed to <code>atan</code>, that returns an angle between -&PI;/2 and +&PI;/2.
 
 ---
 
