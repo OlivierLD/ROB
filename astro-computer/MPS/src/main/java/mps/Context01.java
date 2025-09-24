@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 /**
  * Sun, Moon, Venus, Mars, Jupiter, Spica, Denebola
- * Used to produce output for the web/index.html (web/json/*.json)
+ * Used to produce output for the web/index.01.html (web/json/*.json)
  */
 public class Context01 {
 

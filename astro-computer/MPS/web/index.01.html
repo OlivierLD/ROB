@@ -7,20 +7,15 @@
  | Some (if not many) functions returning boat data are faked (or simulated)
  |
  | Good grid stuff: https://css-tricks.com/snippets/css/complete-guide-grid/
- |
- | Used to draw a GC Route on the globe.
- | See function plotGC, and how it is invoked.
  +-->
 <html lang="en_US">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpg" href="./palm.04.jpg">
-    <title>GC Workbench</title>
+    <title>MPS Workbench</title>
 
     <!-- Main Module -->
     <script type="module" src="./app.js"></script> <!-- THAT is the key -->
-    <!-- For utilities like calculateGreatCircleInDegrees -->
-    <script type="module" src="./webcomponents/utilities/Utilities.js"> </script>
 
     <!-- Web Components -->
     <script type="module" src="./webcomponents/WorldMap.js"></script>
@@ -272,30 +267,6 @@ let setSolarDate = (wcId, cb) => {
 	// document.getElementById(wcId).repaint();
 };
 
-let spinnerProcess = null;
-
-let spinTheGlobe = (globeId, cb) => {
-    // console.log("Spin was clicked!");
-    if (cb.checked) { // Start
-        console.log("Start the spin");
-        spinnerProcess = window.setInterval(() => {
-            let pos = userPos;
-            let newLng = pos.longitude + 1.0;
-            if (newLng > 180) {
-                newLng = -180 + (newLng - 180);
-            }
-            setUserPos(pos.latitude, newLng);
-        }, 1000);
-
-    } else { // Stop
-        console.log("Stop the spin");
-        if (spinnerProcess !== null) {
-            window.clearInterval(spinnerProcess);
-            spinnerProcess = null;
-        }
-    }
-};
-
 let setGrid = (wcId, cb) => {
 	document.getElementById(wcId).withGrid = (cb.checked ? 'true' : 'false');
 	document.getElementById(wcId).repaint();
@@ -409,7 +380,6 @@ let setGeolocation = (slider) => {
 let userPosDataExpanded = false;
 let userDateExpanded = false;
 let useHelpExpanded = false;
-let userGCExpanded = false;
 
 let expandCollapseSetPosData = () => {
 
@@ -449,19 +419,6 @@ let expandCollapseHelpData = () => {
         document.getElementById('help-char').innerHTML = '&#9660;';
     }
     useHelpExpanded = !useHelpExpanded;
-};
-
-let expandCollapseGCData = () => {
-    document.getElementById('user-gc-widgets').classList.toggle('visible-div');
-    // document.getElementById('user-help-widgets').classList.toggle('visible-div');
-    if (userGCExpanded) {
-        // document.getElementById('user-date-widgets').style.display = 'none';
-        document.getElementById('gc-char').innerHTML = '&#9658;';
-    } else {
-        // document.getElementById('user-date-widgets').style.display = 'block';
-        document.getElementById('gc-char').innerHTML = '&#9660;';
-    }
-    userGCExpanded = !userGCExpanded;
 };
 
 let updatePosition = () => {
@@ -523,6 +480,18 @@ let setUserPos = (lat, lng) => {
     // Set user position!!
     worldMap.setUserPosition(userPos);
     worldMap.repaint();
+
+    let worldMapMercator = document.getElementById('world-map-02');
+
+    // Set user position!!
+    worldMapMercator.setUserPosition(userPos);
+    worldMapMercator.repaint();
+
+    let worldMapAnaximandre = document.getElementById('world-map-03');
+
+    // Set user position!!
+    worldMapAnaximandre.setUserPosition(userPos);
+    worldMapAnaximandre.repaint();
 };
 
 let hidden = true;
@@ -1388,13 +1357,6 @@ let toggleForeground = () => {
                         </label>
                         <span class="switch-element">Solar Date Foreground</span>
                     </div>
-                    <div class="switch-container" style="margin-left: 30px;" title="Spin!">
-                        <label class="switch switch-element">
-                          <input id="spin-slider" type="checkbox" onchange="spinTheGlobe('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Spin!</span>
-                    </div>
 
                     <!--
                     <br/>
@@ -1571,7 +1533,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- GC Demo</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> ES6 Celestial Computer <span style="font-size: 0.75em;">- MPS Demo</span></h1>
     </div>
     <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
@@ -1594,12 +1556,11 @@ let toggleForeground = () => {
     <!-- JUMBO / MPS Data -->
     <div class="centered" style="grid-area: jumbos; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
-        <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);"> <!-- MPS Data --></div>
+        <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">MPS Data</div>
         <div id="mps-data-div" class="result" style="font-size: 0.75em; text-align: left; min-height: 100px; border: 1px solid silver; border-radius: 5px; padding: 10px; overflow: auto;">
             <div id="mps-data" style="width: 400%;">
                 <ul>
                     <li>MPS Data goes here...</li>
-                    <li>Empty for now</li>
                 </ul>
 
             </div>
@@ -1705,6 +1666,63 @@ let toggleForeground = () => {
         </div>
     </div>
 
+    <!--
+     | WORLD MAP BG. MERCATOR
+     +-->
+    <div id="world-map-mercator" style="grid-area: wm-m; text-align: center;">
+        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Mercator</div>
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <world-map id="world-map-02"
+                       class="worldmap-display-bg"
+                       title="World Map&#13;Mercator"
+                       projection="MERCATOR"
+                       width="800"
+                       height="700"></world-map>
+        </div>
+    </div>
+
+    <!--
+     | WORLD MAP BG. ANAXIMANDRE
+     +-->
+    <div id="world-map-anaximandre" style="grid-area: wm-a; text-align: center;">
+        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Anaximandre</div>
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <world-map id="world-map-03"
+                       class="worldmap-display-bg"
+                       title="World Map&#13;Anaximandre"
+                       projection="ANAXIMANDRE"
+                       width="800"
+                       height="700"></world-map>
+        </div>
+    </div>
+
+    <div id="graph-lat" style="grid-area: gl; text-align: center;">
+        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Graphs (tentatives...)</div>
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <graph-display id="graph-01"
+                            width="800"
+                            height="400"
+                            padding="5"
+                            value=""
+                            vgrid="-90:10.0"
+                            hgrid="0:10.0"
+                            label="idx / Latitudes"
+                            title="Latitudes"/>
+        </div>
+    </div>
+    <div id="graph-lng" style="grid-area: gg; text-align: center;">
+        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
+            <graph-display id="graph-02"
+                            width="800"
+                            height="400"
+                            padding="5"
+                            value=""
+                            vgrid="0:10.0"
+                            hgrid="-180:10.0"
+                            label="Longitudes / idx"
+                            title="Longitudes"/>
+        </div>
+    </div>
     <div style="grid-area: botton-padding; min-height: 10px;">
         <!-- Empty -->
     </div>
@@ -1825,124 +1843,6 @@ let toggleForeground = () => {
             </td>
             <td style="vertical-align: top; min-width: 50px; max-width: 55px; width: 50px; border: 0px solid silver; border-radius: 4px;" rowspan="2">
                 <div id="moon-phase-div" style="text-align: right;" title=""></div>
-            </td>
-        </tr>
-        <tr>
-            <td style="vertical-align: top;" colspan="1">
-                <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
-                    <div id="user-gc-switch" onclick="expandCollapseGCData();" title="Click to expand/collase"
-                         style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="gc-char">&#9658;</span> Define start and finish for GC</div>
-                        <div id="user-gc-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
-
-                            Will generate Great Circle, after repaint.<br/>
-                            <div style="display: grid; grid-template-columns: 50% 50%;">
-                                <div>
-                                    <b>From:</b>
-                                    <div id="gc-from-pos" class="gc-smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;"> <!-- display: none;  -->
-                                        Latitude:
-                                        <select id="from-gc-pos-lat-sign-01">
-                                            <option value="N" selected>N</option> <!-- Default value -->
-                                            <option value="S">S</option>
-                                        </select>
-                                        <input type="number"
-                                            id="from-gc-pos-lat-deg-01"
-                                            placeholder="Deg"
-                                            title="Lat degrees to set"
-                                            style="width: 40px; text-align: center;"
-                                            min="0"
-                                            max="90"
-                                            step="1"
-                                            value="47"/> <!-- Default value -->
-                                        <input type="number"
-                                            id="from-gc-pos-lat-min-01"
-                                            placeholder="Minutes"
-                                            title="Lat minutes to set"
-                                            style="width: 60px; text-align: center;"
-                                            min="0"
-                                            max="59.99"
-                                            step="0.01"
-                                            value="40.66"/> <!-- Default value -->
-                                        &nbsp;&nbsp;Longitude:
-                                        <select id="from-gc-pos-lng-sign-01">
-                                            <option value="E">E</option>
-                                            <option value="W" selected>W</option> <!-- Default value -->
-                                        </select>
-                                        <input type="number"
-                                            id="from-gc-pos-lng-deg-01"
-                                            placeholder="Deg"
-                                            title="Lng degrees to set"
-                                            style="width: 40px; text-align: center;"
-                                            min="0"
-                                            max="180"
-                                            step="1"
-                                            value="3"/> <!-- Default value -->
-                                        <input type="number"
-                                            id="from-gc-pos-lng-min-01"
-                                            placeholder="Minutes"
-                                            title="Lng minutes to set"
-                                            style="width: 60px; text-align: center;"
-                                            min="0"
-                                            max="59.99"
-                                            step="0.01"
-                                            value="08.14"/> <!-- Default value -->
-                                    </div>
-                                </div>
-                                <div>
-                                    <b>To:</b>
-                                    <div id="gc-to-pos" class="gc-smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;"> <!-- display: none;  -->
-                                        Latitude:
-                                        <select id="to-gc-pos-lat-sign-01">
-                                            <option value="N" selected>N</option> <!-- Default value -->
-                                            <option value="S">S</option>
-                                        </select>
-                                        <input type="number"
-                                            id="to-gc-pos-lat-deg-01"
-                                            placeholder="Deg"
-                                            title="Lat degrees to set"
-                                            style="width: 40px; text-align: center;"
-                                            min="0"
-                                            max="90"
-                                            step="1"
-                                            value="59"/> <!-- Default value -->
-                                        <input type="number"
-                                            id="to-gc-pos-lat-min-01"
-                                            placeholder="Minutes"
-                                            title="Lat minutes to set"
-                                            style="width: 60px; text-align: center;"
-                                            min="0"
-                                            max="59.99"
-                                            step="0.01"
-                                            value="35.60"/> <!-- Default value -->
-                                        &nbsp;&nbsp;Longitude:
-                                        <select id="to-gc-pos-lng-sign-01">
-                                            <option value="E" selected>E</option>
-                                            <option value="W">W</option> <!-- Default value -->
-                                        </select>
-                                        <input type="number"
-                                            id="to-gc-pos-lng-deg-01"
-                                            placeholder="Deg"
-                                            title="Lng degrees to set"
-                                            style="width: 40px; text-align: center;"
-                                            min="0"
-                                            max="180"
-                                            step="1"
-                                            value="160"/> <!-- Default value -->
-                                        <input type="number"
-                                            id="to-gc-pos-lng-min-01"
-                                            placeholder="Minutes"
-                                            title="Lng minutes to set"
-                                            style="width: 60px; text-align: center;"
-                                            min="0"
-                                            max="59.99"
-                                            step="0.01"
-                                            value="10.26"/> <!-- Default value -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </td>
             </td>
         </tr>
         <tr>
@@ -2372,29 +2272,215 @@ let toggleForeground = () => {
         }
     };
 
-    function plotGC(context, worldMap, color, wpData) {
+    function plotConeBase(context, worldMap, color, circleData) {
 
-        let from = null;
-        wpData.forEach((point) => {
-            // console.log(`Plotting GC point: lat:${point.pos.lat} lng:${point.pos.lng}`);
+        circleData.circle.forEach((point) => {
             if (worldMap.projection.type === 'GLOBE') {
-                let p = worldMap.getPanelPoint(point.pos.lat, point.pos.lng);
-                if (worldMap.isBehind(worldMap.toRadians(point.pos.lat), worldMap.toRadians(point.pos.lng - worldMap.globeViewLngOffset))) {
+                let p = worldMap.getPanelPoint(point.latitude, point.longitude);
+                if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
                     return; // Behind the globe
                 }
-                // worldMap.fillCircle(context, p, 1.5, color);
-                if (from != null) {
-                    worldMap.lineFromTo(context, from, p, color, 1.5);
-                }
-                from = p;
+                worldMap.fillCircle(context, p, 1.5, color);
             } else {
-                worldMap.plotPosToCanvas(context, point.pos.lat, point.pos.lng, "", color, 0.75);
+                worldMap.plotPosToCanvas(context, point.latitude, point.longitude, "", color, 0.75);
             }
         });
     }
 
     const rhoE = 635677; // Earth radius, in 100s of km. It's 6356.77 km.
     const earthRadiusNM = (rhoE / 100.0) / 1.852; // Earth radius, in nm.
+
+    function plotCone(context, worldMap, color, coneColor, data) {
+
+        if (worldMap.projection.type === 'GLOBE') {
+            // The cone's axis
+            let pg = worldMap.getPanelPoint(data.pg.latitude, data.pg.longitude);
+            context.save();
+            let thisPointIsBehind = worldMap.isBehind(Math.toRadians(data.pg.latitude), Math.toRadians(data.pg.longitude - worldMap.globeViewLngOffset));
+            if (!thisPointIsBehind || worldMap.transparentGlobe) {
+                // Draw Body
+                worldMap.plot(context, pg, color);
+                context.fillStyle = color;
+                context.fillText(data.bodyName, Math.round(pg.x) + 3, Math.round(pg.y) - 3);
+                // Arrow, to the Body
+                context.setLineDash([2]);
+                context.strokeStyle = color;
+                context.beginPath();
+                let center = worldMap.getPanelPoint(worldMap.userPosition.latitude, worldMap.userPosition.longitude);
+                context.moveTo(center.x, center.y);
+                context.lineTo(pg.x, pg.y);
+                context.stroke();
+                context.closePath();
+                context.setLineDash([0]); // Reset
+                context.strokeStyle = color;
+                let deltaX = pg.x - center.x;
+                let deltaY = pg.y - center.y;
+                context.beginPath();
+                context.moveTo(pg.x, pg.y);
+                // Cone summit offset
+                console.log(`Dist to summit ${data.earthCenterToConeSummit} nm`);
+
+                let distToSummitRatio = data.earthCenterToConeSummit / earthRadiusNM; // in nm
+
+                // context.lineTo(pg.x + deltaX, pg.y + deltaY); // To the cone's summit
+                context.lineTo(center.x + (deltaX * distToSummitRatio), center.y + (deltaY * distToSummitRatio)); // The summit
+                context.stroke();
+                context.closePath();
+                let summitX = center.x + (deltaX * distToSummitRatio);
+                let summitY = center.y + (deltaY * distToSummitRatio);
+
+                // The cone itself
+                context.strokeStyle = coneColor; // Cone color
+                data.circle.forEach((point) => {
+                    let p = worldMap.getPanelPoint(point.latitude, point.longitude);
+                    if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
+                        return; // Behind the globe
+                    }
+                    context.beginPath();
+                    context.moveTo(summitX, summitY); // The cone's summit
+                    context.lineTo(p.x, p.y);         // The cone's base
+                    context.stroke();
+                    context.closePath();
+                });
+                context.fillStyle = 'lime'; // Summit color
+                // context.strokeStyle = 'lime';
+                context.beginPath();
+                worldMap.fillCircle(context, {x: summitX, y: summitY}, 5, 'lime'); // The summit
+                context.fillText('S ' + data.bodyName, Math.round(summitX) + 3, Math.round(summitY) - 3);
+                context.stroke();
+                context.closePath();
+            }
+            context.restore();
+        } else {
+            worldMap.plotPosToCanvas(context, data.pg.latitude, data.pg.longitude, data.bodyName, color, 2);
+        }
+    }
+
+    let graphDataLat = {
+        withGrid: true,
+        withXLabels: true,
+        withYLabels: true,
+        minX: -90,
+        maxX: 90,
+        minY: 0,
+        maxY: 360,
+        data: [ // Samples below...
+            {
+                name: 'data one',
+                lineColor: 'orange',
+                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
+                thickness: 3,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
+            },
+            {
+                name: 'data two',
+                lineColor: 'red',
+                fillColor: null, // No color
+                thickness: 1,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
+            }
+        ]
+    };
+    let graphDataLng = {
+        withGrid: true,
+        withXLabels: true,
+        withYLabels: true,
+        minX: 0,
+        maxX: 360,
+        minY: -180,
+        maxY: 180,
+        data: [ // Samples below...
+            {
+                name: 'data one',
+                lineColor: 'orange',
+                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
+                thickness: 3,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
+            },
+            {
+                name: 'data two',
+                lineColor: 'red',
+                fillColor: null, // No color
+                thickness: 1,
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
+            }
+        ]
+    };
+
+    function plotGraphLat(graphId, color, coneData, graphData) {
+
+        // Buid graphData from cone's data
+        let newData = {
+            name: coneData.bodyName,
+            lineColor: color,
+            fillColor: null,
+            thickness: 1,
+            x: [],
+            values: [] // Same cardinality as x
+        };
+
+        coneData.circle.forEach((point, idx) => {
+            newData.x.push(point.latitude);
+            newData.values.push(idx);
+            // newData.x.push(point.latitude);
+            // newData.values.push(idx);
+        });
+
+        graphData.data.push(newData);
+
+        let elmt = document.getElementById(graphId);
+
+        // Graph unit labels
+        elmt.setHGridLabelsCallback((value) => {
+            return (value > 0 ? "+" : "") + value.toFixed(0);
+        });
+        elmt.setVGridLabelsCallback((value) => {
+            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
+        });
+
+        elmt.data = graphData;
+        elmt.repaint();
+    }
+
+    function plotGraphLng(graphId, color, coneData, graphData) {
+
+        // Buid graphData from cone's data
+        let newData = {
+            name: coneData.bodyName,
+            lineColor: color,
+            fillColor: null,
+            thickness: 1,
+            x: [],
+            values: [] // Same cardinality as x
+        };
+
+        coneData.circle.forEach((point, idx) => {
+            newData.x.push(idx); // point.longitude); // idx ?
+            newData.values.push(point.longitude);
+            // newData.x.push(point.latitude);
+            // newData.values.push(idx);
+        });
+
+        graphData.data.push(newData);
+
+        let elmt = document.getElementById(graphId);
+
+        // Graph unit labels
+        elmt.setHGridLabelsCallback((value) => {
+            return (value > 0 ? "+" : "") + value.toFixed(0);
+        });
+        elmt.setVGridLabelsCallback((value) => {
+            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
+        });
+
+        elmt.data = graphData;
+        elmt.repaint();
+    }
+
 
     let extraDrawingWorldMap = (wm, context) => {
 
@@ -2471,57 +2557,667 @@ let toggleForeground = () => {
 		}
 		context.closePath();
 
-        /*
-         * Extra Stuff begins here
-         */
+        // Draw the cone's base from json data
+        let mpsData = document.getElementById('mps-data');
+        mpsData.innerHTML = ''; // Clear previous data
 
-        // Draw the cone's base from json data. Not used here.
+        graphDataLat.data = []; // Clear previous graph data
+        graphDataLng.data = []; // Clear previous graph data
 
-        // let mpsData = document.getElementById('mps-data');
-        // mpsData.innerHTML = ''; // Clear previous data
-
-        // Plot GC from start to finish
-        // Default values:
-        // - From 47º40.66'N / 3º08.14'W
-        // - To   59º35.60'N / 160º10.26'E
-        // - ICA 8.8 degrees (not used for calculation)
-        // - Distance 4319.65 nm (not used for calculation)
-
-        let sgnLat = document.getElementById("from-gc-pos-lat-sign-01").value;
-        let degLat = parseInt(document.getElementById("from-gc-pos-lat-deg-01").value);
-        let minLat = parseFloat(document.getElementById("from-gc-pos-lat-min-01").value);
-        let lat = (degLat + (minLat / 60.0)) * (sgnLat === 'N' ? 1 : -1);
-
-        let sgnLng = document.getElementById("from-gc-pos-lng-sign-01").value;
-        let degLng = parseInt(document.getElementById("from-gc-pos-lng-deg-01").value);
-        let minLng = parseFloat(document.getElementById("from-gc-pos-lng-min-01").value);
-        let lng = (degLng + (minLng / 60.0)) * (sgnLng === 'E' ? 1 : -1);
-
-        let start = {
-            lat: lat, // 47.6777,
-            lng: lng  // -3.1357
-        };
-
-        sgnLat = document.getElementById("to-gc-pos-lat-sign-01").value;
-        degLat = parseInt(document.getElementById("to-gc-pos-lat-deg-01").value);
-        minLat = parseFloat(document.getElementById("to-gc-pos-lat-min-01").value);
-        lat = (degLat + (minLat / 60.0)) * (sgnLat === 'N' ? 1 : -1);
-
-        sgnLng = document.getElementById("to-gc-pos-lng-sign-01").value;
-        degLng = parseInt(document.getElementById("to-gc-pos-lng-deg-01").value);
-        minLng = parseFloat(document.getElementById("to-gc-pos-lng-min-01").value);
-        lng = (degLng + (minLng / 60.0)) * (sgnLng === 'E' ? 1 : -1);
-
-        let finish = {
-            lat: lat, // 59.5933,
-            lng: lng  // 160.1709
-        };
-        wpList = calculateGreatCircleInDegrees(start, finish, 50);
-        console.log(`GC from ${start.lat},${start.lng} to ${finish.lat},${finish.lng}: ${wpList.length} points`);
-
-        plotGC(context, wm, 'yellow', wpList);
+        // Sun
+        if (true) {
+            fetch('./json/the-Sun.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'yellow', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'yellow', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'yellow', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Moon
+        if (true) {
+            fetch('./json/the-Moon.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Venus
+        if (false) {
+            fetch('./json/Venus.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'lime', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'lime', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'lime', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Mars
+        if (true) {
+            fetch('./json/Mars.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'red', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'red', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'red', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Jupiter
+        if (false) {
+            fetch('./json/Jupiter.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'blue', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'blue', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'blue', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Spica
+        if (true) {
+            fetch('./json/Spica.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Denebola
+        if (false) {
+            fetch('./json/Denebola.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                        // MSP Data
+                        let before = mpsData.innerHTML;
+                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                        if (before.length > 0) {
+                            newData = before + '<br/>' + newData;
+                        }
+                        mpsData.innerHTML = newData
+                        // Graph(s)
+                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
+                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
 
     };
+
+
+    let extraDrawingWorldMapMercator = (wm, context) => {
+        // Sun
+        if (true) {
+            fetch('./json/the-Sun.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Sun path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'yellow', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Moon
+        if (true) {
+            fetch('./json/the-Moon.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Moon path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Venus
+        if (false) {
+            fetch('./json/Venus.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Venus path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'lime', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Mars
+        if (true) {
+            fetch('./json/Mars.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Mars path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'red', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Jupiter
+        if (false) {
+            fetch('./json/Jupiter.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Jupiter path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'blue', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Spica
+        if (true) {
+            fetch('./json/Spica.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Spica path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Denebola
+        if (false) {
+            fetch('./json/Denebola.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Denebola path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+    }
+
+    let extraDrawingWorldMapAnaximandre = (wm, context) => {
+        // Sun
+        if (true) {
+            fetch('./json/the-Sun.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Sun path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'yellow', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Moon
+        if (true) {
+            fetch('./json/the-Moon.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Moon path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Venus
+        if (false) {
+            fetch('./json/Venus.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Venus path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'lime', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Mars
+        if (true) {
+            fetch('./json/Mars.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Mars path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'red', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Jupiter
+        if (false) {
+            fetch('./json/Jupiter.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Jupiter path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'blue', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Spica
+        if (true) {
+            fetch('./json/Spica.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Spica path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+        // Denebola
+        if (false) {
+            fetch('./json/Denebola.json')
+                .then(response => {
+                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                    response.json().then(doc => {
+                        latlngs = doc;
+                        console.log(`Mercator - Denebola path data loaded, ${doc.circle.length} elements`);
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, 'white', latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
+                    });
+                },
+                (error, errmess) => {
+                    console.log("Ooch");
+                    let message;
+                    if (errmess) {
+                        let mess = JSON.parse(errmess);
+                        if (mess.message) {
+                            message = mess.message;
+                        }
+                    }
+                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                });
+        }
+    }
+
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
         let rightLimit = (userZ + 90) % 360;
@@ -2652,6 +3348,8 @@ let toggleForeground = () => {
         document.getElementById("world-map-01").setDoAfter(extraDrawingWorldMap);
         document.getElementById("sun-path-01").setDoAfter(extraDrawingSunPath);
         document.getElementById("sky-map-01").setDoAfter(extraDrawingSkyMap);
+        document.getElementById("world-map-02").setDoAfter(extraDrawingWorldMapMercator);
+        document.getElementById("world-map-03").setDoAfter(extraDrawingWorldMapAnaximandre);
 
         let hdgUpdater = window.setInterval(sensorUpdater, 1000); // Simulation
         let prmslData = window.setInterval(prmslUpdater, 2000);   // Simulation
@@ -2674,6 +3372,60 @@ let toggleForeground = () => {
 
         document.getElementById('sun-path-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
         document.getElementById('sky-map-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+
+        let graphLat = document.getElementById('graph-01');
+        graphLat.addEventListener('mousemove', evt => {
+            // wow !
+            let theGraph = evt.target;
+            let rect = theGraph.getBoundingClientRect();
+            let padding = theGraph.padding;
+            // console.log(`Graph size: padding ${padding}`);
+
+            let x = evt.clientX - rect.left; // x position within the element.
+            let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6... rect.height ?
+            // let y = evt.clientY - rect.height;
+            // let y = evt.clientY - rect.top;
+            // console.log(`MouseMove on graph: ${x}, ${y}`);
+            // Tooltip: Use theGraph.data.minX/maxX/minY/maxY if needed...
+            let height = theGraph.height - (2 * padding); // Includes padding, 2x !
+            let width = theGraph.width - (2 * padding);   // Includes padding, 2x !
+
+            let minX = theGraph.data !== null ? theGraph.data.minX : 0;
+            let maxX = theGraph.data !== null ? theGraph.data.maxX : 0;
+            let deltaX = maxX - minX;
+            // let correctedX = width - x + padding;
+            let correctedX = x - padding;
+            let xValue = minX + ((correctedX / width) * deltaX);
+            // console.log(`xValue = ${minX} + ((${correctedX} / ${width}) * ${deltaX}) = ${xValue}`);
+
+            let minY = theGraph.data !== null ? theGraph.data.minY : 0;
+            let maxY = theGraph.data !== null ? theGraph.data.maxY : 0;
+            let deltaY = maxY - minY;
+            // let correctedY = /*height -*/ y - padding;
+            let correctedY = /*height -*/ y + (2 * padding);
+            // let yValue = minY + ((correctedY / height) * deltaY);
+            let yValue = maxY - ((correctedY / height) * deltaY);
+            // console.log(`y = ${y}, yValue = ${maxY} - ((${correctedY} / ${height}) * ${deltaY}) = ${yValue}`);
+            if (false) {
+                console.log("+=========================================");
+                console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
+                console.log(`| evt.offsetY ${evt.offsetY}, rect.height ${rect.height} => x ${y}`);
+                console.log(`| - Rect: top ${rect.top}, left ${rect.left}, width ${rect.width}, height ${rect.height}`);
+                console.log(`| Padding: ${padding}`);
+                console.log(`| MinX: ${theGraph.data !== null ? theGraph.data.minX : 'null'}, MaxX: ${theGraph.data !== null ? theGraph.data.maxX : 'null'}`);
+                console.log(`| MinY: ${theGraph.data !== null ? theGraph.data.minY : 'null'}, MaxY: ${theGraph.data !== null ? theGraph.data.maxY : 'null'}`);
+                console.log(`| DeltaX: ${deltaX}, width: ${width}, correctedX: ${correctedX}, xValue: ${xValue}`);
+                console.log(`| Data range: X [${minX}..${maxX}] Y [${minY}..${maxY}]`);
+                console.log(`| Data range: dX ${deltaX} dY ${deltaY}, w ${width}, h ${height}, cX ${correctedX}, cY ${correctedY}`);
+                console.log(`| Corrected: x ${correctedX}, y ${correctedY}`);
+                console.log(`| MouseMove on graph: ${x}, ${y} -> idx ${yValue.toFixed(1)}, Lat ${xValue.toFixed(1)}`);
+                console.log("+=========================================");
+            }
+
+            // theGraph.title = `To Be Tweaked\nMouse at idx ${yValue.toFixed(0)}, Lat ${xValue.toFixed(2)}\xb0`;
+            theGraph.title = `Mouse at idx ${yValue.toFixed(0)},\nLat ${decToSex(xValue, "NS")}`;
+        });
+
 
         console.log('On Load, done!');
     };

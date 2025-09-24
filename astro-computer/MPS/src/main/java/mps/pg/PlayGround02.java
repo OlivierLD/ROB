@@ -82,9 +82,9 @@ public class PlayGround02 {
 
         // Now, Create a list of pairs of points , with the distance between them.
         class PPD implements Comparable<PPD> {  // Pair of points and distance
-            MPSToolBox.ConePoint point1;
-            MPSToolBox.ConePoint point2;
-            double distance;
+            final MPSToolBox.ConePoint point1;
+            final MPSToolBox.ConePoint point2;
+            final double distance;
 
             public PPD(MPSToolBox.ConePoint point1, MPSToolBox.ConePoint point2, double distance) {
                 this.point1 = point1;
@@ -113,8 +113,11 @@ public class PlayGround02 {
         theList.stream()
                 .filter(item -> item.distance < 50.0)
                 .forEach(item -> {
-            System.out.printf("%f nm between %s and %s\n", item.distance, item.point1.getPoint(), item.point2.getPoint());
-        });
+                    System.out.printf("%f nm between %s and %s\n",
+                            item.distance,
+                            item.point1.getPoint(),
+                            item.point2.getPoint());
+                });
 
         GeoPoint userPos = new GeoPoint(userLatitude, userLongitude);
         System.out.printf("-> For comparison, User pos is %s\n", userPos);

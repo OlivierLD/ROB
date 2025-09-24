@@ -2,9 +2,6 @@ package mps;
 
 import calc.*;
 import calc.calculation.AstroComputerV2;
-import calc.calculation.SightReductionUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
