@@ -213,7 +213,7 @@ public class PlanDesSommetsPlayground {
 
             System.out.printf("After Dead Reckoning: For %s,\n" +
                             " - %s at GHA: %.02f\272, Decl: %.02f\272 \n" +
-                            " - From position %s / %s (%F / %f)\n" +
+                            " - From position %s / %s (%f / %f)\n" +
                             " - Obs Alt: %s, Instr Alt: %s, Z: %.01f\272\n" +
                             " - with sunSD: %f', sunHP: %f', refraction: %f', horizon dip: %f' \n",
                     SDF_UTC.format(date.getTime()),
@@ -244,7 +244,7 @@ public class PlanDesSommetsPlayground {
             System.out.println("Total Correction (SRU): " + (corr * 60d) + "' (minutes)");
         }
 
-        if (recalculateSRU) {
+        if (recalculateSRU) { // SRU: Sight Reduction Utility
             // Opposite of Dead Reckoning. Use CelestialDeadReckoning instead (should be the same values) ?
             System.out.printf("-- He and Z, V1: He = %s, Z: %.02f\n", GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(), z);
 

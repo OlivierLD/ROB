@@ -66,7 +66,7 @@ public class Context01 {
          */
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         date.set(Calendar.YEAR, 2025);
-        date.set(Calendar.MONTH, 7); // Aug
+        date.set(Calendar.MONTH, Calendar.AUGUST); // 7); // Aug
         date.set(Calendar.DAY_OF_MONTH, 19);
         date.set(Calendar.HOUR_OF_DAY, 12); // and not just HOUR !!!!
         date.set(Calendar.MINUTE, 58);

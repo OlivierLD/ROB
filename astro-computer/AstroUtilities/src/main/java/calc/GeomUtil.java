@@ -137,20 +137,11 @@ public final class GeomUtil {
 	}
 
 	/**
-	 * From JS
-	 * export function deadReckoning(start, dist, bearing) {
-	 * 	let radianDistance = Math.toRadians(dist / 60);
-	 * 	let finalLat = (Math.asin((Math.sin(Math.toRadians(start.lat)) * Math.cos(radianDistance)) +
-	 * 			(Math.cos(Math.toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(bearing)))));
-	 * 	let finalLng = Math.toRadians(start.lng) + Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(start.lat)),
-	 * 			Math.cos(radianDistance) - Math.sin(Math.toRadians(start.lat)) * Math.sin(finalLat));
-	 * 	finalLat = Math.toDegrees(finalLat);
-	 * 	finalLng = Math.toDegrees(finalLng);
+	 * Translated from JS's function deadReckoning(start, dist, bearing)
 	 *
-	 * 	return {lat: finalLat, lng: finalLng};
-	 * }
+	 * AKA Dead Reckoning (GC).
+	 * Starting from a point, sailing a given distance, in a given bearing (ICA), where do we arrive ?
 	 *
-	 * AKA Dead Reckoning (GC)
 	 * @param from Starting point. All in degrees
 	 * @param dist in nm (aka minutes of arc)
 	 * @param heading bearing in degrees (IRA-ICA)

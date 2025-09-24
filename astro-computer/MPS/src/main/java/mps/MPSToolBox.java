@@ -19,6 +19,11 @@ public class MPSToolBox {
         SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
 
+    /*
+     * If Earth is a perfect sphere:
+     *    R = (360*60) / (2*PI) = 3,437.7467707849 nm
+     *    R = 3,437.7467707849 * 1.852 = 6,366.7070194937 km
+     */
     private final static double rhoE = 635677D; // Earth radius, in 100s of km. It's 6356.77 km.
     private final static double earthRadiusNM = (rhoE / 100d) / 1.852; // Earth radius, in nm.
 

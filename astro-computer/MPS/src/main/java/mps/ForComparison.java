@@ -38,7 +38,7 @@ public class ForComparison {
          */
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         date.set(Calendar.YEAR, 1995);
-        date.set(Calendar.MONTH, 1); // Feb
+        date.set(Calendar.MONTH, Calendar.FEBRUARY); // Feb
         date.set(Calendar.DAY_OF_MONTH, 4);
         date.set(Calendar.HOUR_OF_DAY, 23); // and not just HOUR !!!!
         date.set(Calendar.MINUTE, 40);
@@ -82,7 +82,7 @@ public class ForComparison {
          */
         // Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         date.set(Calendar.YEAR, 1995);
-        date.set(Calendar.MONTH, 1); // Feb
+        date.set(Calendar.MONTH, Calendar.FEBRUARY); // Feb
         date.set(Calendar.DAY_OF_MONTH, 4);
         date.set(Calendar.HOUR_OF_DAY, 23); // and not just HOUR !!!!
         date.set(Calendar.MINUTE, 29);
@@ -136,7 +136,7 @@ public class ForComparison {
         // Spica, 2010-Nov-05 at 00:00:00 UTC
         // Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         date.set(Calendar.YEAR, 2010);
-        date.set(Calendar.MONTH, 10);
+        date.set(Calendar.MONTH, Calendar.NOVEMBER);
         date.set(Calendar.DAY_OF_MONTH, 5);
         date.set(Calendar.HOUR_OF_DAY, 0); // and not just HOUR !!!!
         date.set(Calendar.MINUTE, 0);
@@ -169,7 +169,7 @@ public class ForComparison {
         // Spica, 2025-Aug-01 at 00:00:00 UTC
         // Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         date.set(Calendar.YEAR, 2025);
-        date.set(Calendar.MONTH, 7);
+        date.set(Calendar.MONTH, Calendar.AUGUST);
         date.set(Calendar.DAY_OF_MONTH, 1);
         date.set(Calendar.HOUR_OF_DAY, 0); // and not just HOUR !!!!
         date.set(Calendar.MINUTE, 0);
