@@ -22,7 +22,7 @@ public class PlayGround01 {
         AstroComputerV2 ac = new AstroComputerV2();
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
 
-        // A Test. The Sun, 2025-AUG-20 10:40:31 UTC
+        // A Test. The Sun, 2025-AUG-20 10:40:31 UTC, from 47º40.66'N / 3º08.14'W
         // We start from a known position to evaluate the observed altitude... (a trick)
         double userLatitude = 47.677667d;
         double userLongitude = -3.135667d;
@@ -115,12 +115,8 @@ public class PlayGround01 {
         }
         // End of first loop !
         System.out.printf("Loop 1 - Smallest distance: %.04f nm, between (Sun circle, z: %.04f) %s and (Moon circle, z: %.04f) %s \n", smallest, closestSunPointZ, closestSunPoint.toString(), closestMoonPointZ, closestMoonPoint.toString());
-        // Wow !
 
-//        double fromZ = 0d;
-//        double toZ = 360d;
-//        double zStep = 1d;
-
+        // Starting loop 2
         sunCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), sunObsAlt, sunGHA, sunDecl, "the Sun", closestSunPointZ - zStep, closestSunPointZ + zStep, zStep / 10.0, false);
         moonCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), moonObsAlt, moonGHA, moonDecl, "the Moon", closestMoonPointZ - zStep, closestMoonPointZ + zStep, zStep / 10.0, false);
 
@@ -147,6 +143,7 @@ public class PlayGround01 {
         // End of second loop !
         System.out.printf("Loop 2 - Smallest distance: %.04f nm, between (Sun circle, z: %.04f) %s and (Moon circle, z: %.04f) %s \n", smallest, closestSunPointZ, closestSunPoint.toString(), closestMoonPointZ, closestMoonPoint.toString());
 
+        // Starting loop 3
         sunCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), sunObsAlt, sunGHA, sunDecl, "the Sun", closestSunPointZ - zStep, closestSunPointZ + zStep, zStep / 10.0, false);
         moonCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), moonObsAlt, moonGHA, moonDecl, "the Moon", closestMoonPointZ - zStep, closestMoonPointZ + zStep, zStep / 10.0, false);
 

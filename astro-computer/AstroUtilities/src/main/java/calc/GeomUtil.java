@@ -112,11 +112,13 @@ public final class GeomUtil {
 	 * AKA Dead Reckoning (GC)
 	 * @param from Starting point. All in degrees
 	 * @param dist in nm (aka minutes of arc)
-	 * @param heading in degrees (IRA-ICA)
+	 * @param heading bearing in degrees (IRA-ICA)
 	 * @return The final point, all in degrees
+	 *
+	 * TODO Compare with the one below, see why this one doesn't work.
 	 */
-	public static GeoPoint haversineInv(GeoPoint from, double dist, double heading) {
-		double distRatio = dist / NM_EQUATORIAL_EARTH_RADIUS; // THE key.
+	public static GeoPoint haversineInv_V1(GeoPoint from, double dist, double heading) {
+		double distRatio = dist / NM_EQUATORIAL_EARTH_RADIUS; // THE key. TODO Could that be the problem ?
 		double distRatioSine = Math.sin(distRatio);
 		double distRatioCosine = Math.cos(distRatio);
 
@@ -132,6 +134,39 @@ public final class GeomUtil {
 		double endLonRads = startLonRad + Math.atan2(Math.sin(angleRadHeading) * distRatioSine * startLatCos, distRatioCosine - startLatSin * Math.sin(endLatRads));
 
 		return new GeoPoint(Math.toDegrees(endLatRads), Math.toDegrees(endLonRads));
+	}
+
+	/**
+	 * From JS
+	 * export function deadReckoning(start, dist, bearing) {
+	 * 	let radianDistance = Math.toRadians(dist / 60);
+	 * 	let finalLat = (Math.asin((Math.sin(Math.toRadians(start.lat)) * Math.cos(radianDistance)) +
+	 * 			(Math.cos(Math.toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(bearing)))));
+	 * 	let finalLng = Math.toRadians(start.lng) + Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(start.lat)),
+	 * 			Math.cos(radianDistance) - Math.sin(Math.toRadians(start.lat)) * Math.sin(finalLat));
+	 * 	finalLat = Math.toDegrees(finalLat);
+	 * 	finalLng = Math.toDegrees(finalLng);
+	 *
+	 * 	return {lat: finalLat, lng: finalLng};
+	 * }
+	 *
+	 * AKA Dead Reckoning (GC)
+	 * @param from Starting point. All in degrees
+	 * @param dist in nm (aka minutes of arc)
+	 * @param heading bearing in degrees (IRA-ICA)
+	 * @return The final point, all in degrees
+	 */
+
+	public static GeoPoint haversineInv(GeoPoint from, double dist, double heading) {
+		double radianDistance = Math.toRadians(dist / 60d);
+	    double finalLat = (Math.asin((Math.sin(Math.toRadians(from.getLatitude())) * Math.cos(radianDistance)) +
+						   (Math.cos(Math.toRadians(from.getLatitude())) * Math.sin(radianDistance) * Math.cos(Math.toRadians(heading)))));
+	    double finalLng = Math.toRadians(from.getLongitude()) + Math.atan2(Math.sin(Math.toRadians(heading)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(from.getLatitude())),
+				          Math.cos(radianDistance) - Math.sin(Math.toRadians(from.getLatitude())) * Math.sin(finalLat));
+	    finalLat = Math.toDegrees(finalLat);
+	    finalLng = Math.toDegrees(finalLng);
+
+	    return new GeoPoint(finalLat, finalLng);
 	}
 
 	/**

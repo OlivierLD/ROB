@@ -116,6 +116,20 @@ public class MPSToolBox {
                                                boolean verbose) {
         return calculateCone(calculationTime, obsAlt, gha, dec, bodyName, 0d, 360d, 1d, verbose);
     }
+
+    /**
+     *
+     * @param calculationTime
+     * @param obsAlt
+     * @param gha
+     * @param dec
+     * @param bodyName
+     * @param fromZ
+     * @param toZ
+     * @param zStep
+     * @param verbose
+     * @return
+     */
     public static ConeDefinition calculateCone(Date calculationTime,
                                                double obsAlt,
                                                double gha,
@@ -157,10 +171,19 @@ public class MPSToolBox {
             double hdg = z;
             GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
             final GeoPoint drGC = GeomUtil.haversineInv(bodyPos, distInNM, hdg); // THE dr to use
+            // final GeoPoint drGC = GeomUtil.deadReckoning(bodyPos, distInNM, hdg);
+
+            // altitude tests, reverse
+            if (verbose) {
+                // for 20-AUG-2025 10:40:31, GHA: 339°17.40', D: N 12°16.80', Obs Alt: 49°22.51'
+                CelestialDeadReckoning cdr = calculateDR(gha, dec, drGC.getLatitude(), drGC.getLongitude());
+                double he = cdr.getHe();
+                System.out.printf("GHA: %s, D: %s \n", GeomUtil.decToSex(gha, GeomUtil.SWING, GeomUtil.NONE), GeomUtil.decToSex(dec, GeomUtil.SWING, GeomUtil.NS));
+                System.out.printf("For obsAlt=%f (%s), he (from circle)=%f (%s)\n", obsAlt, GeomUtil.decToSex(obsAlt, GeomUtil.SWING, GeomUtil.NONE), he, GeomUtil.decToSex(he, GeomUtil.SWING, GeomUtil.NONE));
+            }
             cd.circle.add(new ConePoint(drGC, hdg));
         }
         return cd;
     }
-
 
 }

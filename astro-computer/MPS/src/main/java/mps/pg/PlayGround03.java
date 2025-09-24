@@ -8,7 +8,7 @@ import mps.MPSToolBox;
 
 import java.util.*;
 
-public class PlayGround02 {
+public class PlayGround03 {
 
     public static void main(String... args) {
 
@@ -53,13 +53,13 @@ public class PlayGround02 {
 
         double sunObsAlt = he; // 49.37536262617141;
 
-        System.out.printf("Sun expected observed altitude: %f\n", sunObsAlt);
+        System.out.printf("Sun expected observed altitude: %f, %s\n", sunObsAlt, GeomUtil.decToSex(sunObsAlt, GeomUtil.SWING, GeomUtil.NONE));
 
         double fromZ = 0d;
         double toZ = 360d;
-        double zStep = 1.0; // 0.1;
+        double zStep = 90.0; // 0.1;
 
-        MPSToolBox.ConeDefinition sunCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), sunObsAlt, sunGHA, sunDecl, "the Sun", fromZ, toZ, zStep, false);
+        MPSToolBox.ConeDefinition sunCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), sunObsAlt, sunGHA, sunDecl, "the Sun", fromZ, toZ, zStep, true);
 
         double randomIndex = Math.random();
         int nbPts = sunCone.getCircle().size();
@@ -67,57 +67,17 @@ public class PlayGround02 {
         CelestialDeadReckoning rndDr = MPSToolBox.calculateDR(sunGHA, sunDecl, rndPoint.getLatitude(), rndPoint.getLongitude()).calculate(); // All angles in degrees
         double rndHe = rndDr.getHe();
         // double z = rndDr.getZ();
-        System.out.printf("Sun random observed altitude: %f\n", rndHe);
-
-        // TODO Honk if not the expected one (sunObsAlt).
-
-        final double moonGHA = ac.getMoonGHA();
-        final double moonDecl = ac.getMoonDecl();
-        dr = MPSToolBox.calculateDR(moonGHA, moonDecl, userLatitude, userLongitude).calculate(); // All angles in degrees
-        he = dr.getHe();
-        // double z = dr.getZ();
-
-        double moonObsAlt = he; // 41.46314233337399;
-        MPSToolBox.ConeDefinition moonCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), moonObsAlt, moonGHA, moonDecl, "the Moon", fromZ, toZ, zStep, false);
-
-        // Now, Create a list of pairs of points , with the distance between them.
-        class PPD implements Comparable<PPD> {  // Pair of points and distance
-            MPSToolBox.ConePoint point1;
-            MPSToolBox.ConePoint point2;
-            double distance;
-
-            public PPD(MPSToolBox.ConePoint point1, MPSToolBox.ConePoint point2, double distance) {
-                this.point1 = point1;
-                this.point2 = point2;
-                this.distance = distance;
-            }
-
-            @Override
-            public int compareTo(PPD other) {
-                return Double.compare(this.distance, other.distance); // Sort by distance in ascending order
-            }
-
-        }
-
-        List<PPD> theList = new ArrayList<>();
-        for (MPSToolBox.ConePoint sunPoint : sunCone.getCircle()) {
-            for (MPSToolBox.ConePoint moonPoint : moonCone.getCircle()) {
-                double dist =  GeomUtil.haversineNm(sunPoint.getPoint(), moonPoint.getPoint()); // GC distance from-to
-                theList.add(new PPD(sunPoint, moonPoint, dist));
-            }
-        }
-        // List populated, now sort it by distance.
-        Collections.sort(theList);
-
-        // Display when distance < 50
-        theList.stream()
-                .filter(item -> item.distance < 50.0)
-                .forEach(item -> {
-            System.out.printf("%f nm between %s and %s\n", item.distance, item.point1.getPoint(), item.point2.getPoint());
-        });
+        System.out.printf("Sun random observed altitude: %f, %s\n", rndHe, GeomUtil.decToSex(rndHe, GeomUtil.SWING, GeomUtil.NONE));
 
         GeoPoint userPos = new GeoPoint(userLatitude, userLongitude);
         System.out.printf("-> For comparison, User pos is %s\n", userPos);
+
+        // Original pos
+        CelestialDeadReckoning finalDR = MPSToolBox.calculateDR(sunGHA, sunDecl, userLatitude, userLongitude).calculate(); // All angles in degrees
+        double finalHe = finalDR.getHe();
+        // double z = rndDr.getZ();
+        System.out.printf("Sun final observed altitude: %f, %s\n", finalHe, GeomUtil.decToSex(finalHe, GeomUtil.SWING, GeomUtil.NONE));
+
     }
 
 }

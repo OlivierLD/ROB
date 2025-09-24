@@ -222,10 +222,13 @@ Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersect
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
 ### Approche it&eacute;rative
-Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
+Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...  
+Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01`.  
+On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave; valider.
 
 
 ### &Eacute;quation de la distance entre les points de deux points de deux cercles...
+Reste &agrave; faire...  
 Il doit y avoir un - voire deux - point(s) ou cette diff&eacute;rence est nulle.
 
 ---
