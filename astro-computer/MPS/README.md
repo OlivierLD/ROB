@@ -107,6 +107,7 @@ m&eacute;ritent un coup d'&oelig;il.
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
 - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
+- Pour les donn&eacute;es (&eacute;ph&eacute;m&eacute;rides et autres) voir [ici](https://olivierld.github.io/web.stuff/astro/index_03.html).
 
 ![Context](img.png)
 
