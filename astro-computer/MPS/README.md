@@ -108,7 +108,7 @@ $$
 finalLng = startLng + atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
 $$
 
-<i>Note:</i> <code>atan2</code> return an angle between -&PI; and +&PI;, as opposed to <code>atan</code>, that returns an angle between -&PI;/2 and +&PI;/2.
+<i>Note:</i> <code>atan2</code> return an angle between -$\Pi$; and +$\Pi$, as opposed to <code>atan</code>, that returns an angle between -$\Pi$/2 and +$\Pi$/2.
 
 ---
 
