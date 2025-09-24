@@ -119,7 +119,7 @@ Le diam&egrave;tre du cone est `r * cos(h1)`.
 La distance du centre le la Terre au sommet S<small><sub>1</sub></small> est `sqrt(FS^2 + r^2)`, not&eacute; aussi
 
 $$
-  \sqrt{FA^2 + r^2}
+  \sqrt{FS^2 + r^2}
 $$
 
 ---
