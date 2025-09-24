@@ -117,8 +117,9 @@ La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0` nm.
 La distance FS est `r * (1 / tg(h1))`, o&ugrave; r est le rayon de la Terre.  
 Le diam&egrave;tre du cone est `r * cos(h1)`.  
 La distance du centre le la Terre au sommet S<small><sub>1</sub></small> est sqrt(FS<small><sup>2</sup></small> + r<small><sup>2</sup></small>), not&eacute; aussi
+
 $$
-  \sqrt{ FA^2 + r^2}
+  \sqrt{FA^2 + r^2}
 $$
 
 ---
