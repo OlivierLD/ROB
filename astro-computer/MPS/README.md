@@ -110,7 +110,7 @@ $$
 
 _Note:_ 
 
-`atan2` returns an angle between -&Pi; and +&Pi;, as opposed to `atan`, that returns an angle between -$\frac{\Pi} {2}$ and +$\frac{\Pi} {2}$.
+`atan2` returns an angle between -&Pi; and +&Pi;, as opposed to `atan`, that returns an angle between -&Pi; / 2 and +&Pi; / 2.
 
 ---
 
