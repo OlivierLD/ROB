@@ -8,6 +8,10 @@ import mps.MPSToolBox;
 
 import java.util.*;
 
+/**
+ * Validate the cone.
+ * Generated position vs altitude to observe.
+ */
 public class PlayGround03 {
 
     public static void main(String... args) {
@@ -77,7 +81,5 @@ public class PlayGround03 {
         double finalHe = finalDR.getHe();
         // double z = rndDr.getZ();
         System.out.printf("Sun final observed altitude: %f, %s\n", finalHe, GeomUtil.decToSex(finalHe, GeomUtil.SWING, GeomUtil.NONE));
-
     }
-
 }

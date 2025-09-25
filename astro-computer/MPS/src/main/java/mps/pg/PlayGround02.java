@@ -8,6 +8,9 @@ import mps.MPSToolBox;
 
 import java.util.*;
 
+/**
+ * Another cone validation.
+ */
 public class PlayGround02 {
 
     public static void main(String... args) {
@@ -81,7 +84,7 @@ public class PlayGround02 {
         MPSToolBox.ConeDefinition moonCone = MPSToolBox.calculateCone(ac.getCalculationDateTime().getTime(), moonObsAlt, moonGHA, moonDecl, "the Moon", fromZ, toZ, zStep, false);
 
         // Now, Create a list of pairs of points , with the distance between them.
-        class PPD implements Comparable<PPD> {  // Pair of points and distance
+        class PPD implements Comparable<PPD> {  // Pair of Points and Distance
             final MPSToolBox.ConePoint point1;
             final MPSToolBox.ConePoint point2;
             final double distance;

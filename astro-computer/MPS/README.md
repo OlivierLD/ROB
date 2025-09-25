@@ -74,7 +74,7 @@ a = sin((G2 - G1) / 2)^2 + cos(G1) * cos(G2) * sin((L2 - L1) / 2)^2
 distance = 2 * atan2(sqrt(a), sqrt(1 - a))
 ```
 <!-- With LaTeX -->
-&eacute;crit aussi
+&eacute;crit aussi <!-- inline LaTeX not well suoopterd in md files... -->
 
 $$
 a = sin^2(\frac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\frac{L2 - L1} {2})
