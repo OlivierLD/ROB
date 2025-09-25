@@ -48,15 +48,11 @@ Dans les formules suivantes :
 
 Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :
 
-$$ 
-  He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right) 
-$$
+$ He = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right) $
 
 Calcul de l'azimut d'un astre &agrave; partir de la position de l'observateur :
 
-$$ 
-  Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right) 
-$$
+$ Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right) $
 
 Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroUtilities/src/main/java/calc/CelestialDeadReckoning.java).
 
