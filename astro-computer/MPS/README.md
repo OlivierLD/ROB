@@ -121,18 +121,36 @@ _Note:_
 - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
 - Pour les donn&eacute;es (&eacute;ph&eacute;m&eacute;rides et autres) voir [ici](https://olivierld.github.io/web.stuff/astro/index_03.html).
 
-![Context](img.png)
+#### Quelques angles et d&eacute;finitions utiles pour la suite...
+<img src="figure.02.png" width="400">
+<!-- ![Context](figure.02.png) -->
 
-Pour le c&ocirc;ne 1 (le rouge), l'angle en O est `(90° - h1)`.  
-La distance (grand cercle) `F - Pied1` est donc `(90° - h1) * 60.0` nm.
+`M` est la position de l'observateur sur la Terre.  
+La hauteur observ&eacute;e en `M` de l'astre est not&eacute;e `h`. Notez les autres endroits o&ugrave; cette hauteur `h` est reproduite, &agrave; partir de `S`, et &agrave; partir de `M` vers `O`.  
+La hauteur observ&eacute;e est l'angle que fait l'astre avec l'horizon.  
+L'angle que fait l'astre observ&eacute; avec le z&eacute;nith (la verticale de l'observateur) est le compl&eacute;ment de cette hauteur, `90 - h`, et s'appelle
+la Distance Z&eacute;nithale, not&eacute;e aussi &zeta;, la lettre grecque "dzeta" (&ccedil;a commence par "dz"...).  
 
-La distance FS est `r * (1 / tg(h1))`, o&ugrave; r est le rayon de la Terre.  
-Le rayon de la base du cone est `r * cos(h1)`.  
-La distance du centre le la Terre au sommet S<small><sub>1</sub></small> est `sqrt(FS^2 + r^2)`, not&eacute; aussi
+> _Note_: sur la figure, la direction de l'astre &agrave; partir de M est identique &agrave; sa direction &agrave; partir de O.
+> Ceci convient &agrave; un astre tr&egrave;s &eacute;loign&eacute; de l'observateur. &Ccedil;a ne serait pas applicable pour un satellite.
+
+Pour le c&ocirc;ne, l'angle en O (MOP) est `(90° - h)`.  
+La distance (grand cercle) `M - P` est donc `(90° - h) * 60.0` nm.
+
+La distance `MS` est `r * (1 / tg(h))`, o&ugrave; `r` est le rayon de la Terre.  
+Le rayon de la base du cone est `r * cos(h)`.  
+La distance du centre le la Terre `O` au sommet `S` est `sqrt(MS^2 + r^2)`, not&eacute; aussi
 
 $$
   \sqrt{FS^2 + r^2}
 $$
+
+La distance `OS` est `MS / cos(h)`.   
+Comme `MS` = `1 / tg(h)`, `OS` s'&eacute;crit aussi `(cos(h) / sin(h)) / cos(h)`, soit
+`1 / sin(h)`.  
+`OS` = `1 / sin(h)`.  
+La distance `PS` est &eacute;gale &agrave; `OS - r`.    
+Donc `PS = (1 / sin(h)) - r`.
 
 ---
 

@@ -145,17 +145,17 @@ public class MPSToolBox {
 
         double distInNM = (90.0 - obsAlt) * 60.0;
 
-        // Find FS, distance from observer to summit.
-        double FS = earthRadiusNM * (1 / Math.tan(Math.toRadians(obsAlt)));
+        // Find MS, distance from observer to summit.
+        double MS = earthRadiusNM * (1 / Math.tan(Math.toRadians(obsAlt)));
         if (verbose) {
-            System.out.printf("FS (obs to summit), in nautical miles: %.02f'\n", FS);
+            System.out.printf("MS (obs to summit), in nautical miles: %.02f'\n", MS);
         }
         double coneDiameter = earthRadiusNM * Math.cos(Math.toRadians(obsAlt));
         if (verbose) {
             System.out.printf("Cone radius, in nautical miles: %.02f'\n", coneDiameter);
         }
 
-        double earthCenterToConeSummit = Math.sqrt((FS * FS) + (earthRadiusNM * earthRadiusNM));
+        double earthCenterToConeSummit = Math.sqrt((MS * MS) + (earthRadiusNM * earthRadiusNM));
 
         // Find all the points seeing the body at the same altitude
         if (verbose) {
