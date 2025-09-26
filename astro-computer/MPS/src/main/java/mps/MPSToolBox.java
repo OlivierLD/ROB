@@ -170,8 +170,9 @@ public class MPSToolBox {
         cd.earthCenterToConeSummit = earthCenterToConeSummit;
         cd.observationTime = SDF_UTC.format(calculationTime);
 
-        for (double z=fromZ; z<toZ; z += zStep) { // The steps and interval here !
+        for (double z=fromZ; (zStep > 0 && z < toZ) || (zStep < 0 && z > toZ); z += zStep) { // The steps and interval here !
             double hdg = z;
+            // System.out.printf("Calculating cone point for Z=%.4f (zStep = %.4f)\n", hdg, zStep);
             GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
             final GeoPoint drGC = GeomUtil.haversineInv(bodyPos, distInNM, hdg); // THE dr to use
             // final GeoPoint drGC = GeomUtil.deadReckoning(bodyPos, distInNM, hdg);
@@ -187,6 +188,122 @@ public class MPSToolBox {
             cd.circle.add(new ConePoint(drGC, hdg));
         }
         return cd;
+    }
+
+    private static List<ConePoint> intersectionDelegation(MPSToolBox.ConeDefinition coneBody1, MPSToolBox.ConeDefinition coneBody2, int loop, double zStep, boolean verbose) {
+
+        List<ConePoint> result = null;
+
+        double smallest = Double.MAX_VALUE;
+        GeoPoint closestPointBody1 = null;
+        GeoPoint closestPointBody2 = null;
+        Double closestPointZBody1 = null;
+        Double closestPointZBody2 = null;
+
+        double smallestSecond = Double.MAX_VALUE;
+        GeoPoint closestPointBody1Second = null;
+        GeoPoint closestPointBody2Second = null;
+        Double closestPointZBody1Second = null;
+        Double closestPointZBody2Second = null;
+
+        for (MPSToolBox.ConePoint conePointBody1 : coneBody1.getCircle()) {
+            for (MPSToolBox.ConePoint conePointBody2 : coneBody2.getCircle()) {
+                // GC distance from-to, use GeomUtil.haversineNm
+                double dist = GeomUtil.haversineNm(conePointBody1.getPoint(), conePointBody2.getPoint());
+                // For some tests..., to find the 2 intersections
+                if (loop == 0 && dist < 3.0) { // TODO Fix that 3...
+                    if (false) {
+                        System.out.printf("Found dist = %.03f, zStep=%.03f, between %s (Z=%.02f) and %s (Z=%.02f)\n",
+                                dist, zStep / 10d,
+                                conePointBody1.getPoint(),
+                                conePointBody1.getZ(),
+                                conePointBody2.getPoint(),
+                                conePointBody2.getZ());
+                    }
+                    // For loop 0, we'll need 2 smallest dist, identified by their Z
+                    if (closestPointZBody1 != null && closestPointZBody2 != null) {
+                        if (false) {
+                            System.out.printf("DeltaZ_1 %.04f, DeltaZ_2 %.04f, compare to %.04f\n",
+                                    Math.abs(conePointBody1.getZ() - closestPointZBody1),
+                                    Math.abs(conePointBody2.getZ() - closestPointZBody2),
+                                    (5 * zStep));
+                        }
+                        if (Math.abs(conePointBody1.getZ() - closestPointZBody1) > (5 * zStep) &&
+                                Math.abs(conePointBody2.getZ() - closestPointZBody2) > (5 * zStep)) {
+                            if (dist < smallestSecond) {
+                                smallestSecond = dist;
+                                closestPointBody1Second = (GeoPoint) conePointBody1.getPoint().clone();
+                                closestPointBody2Second = (GeoPoint) conePointBody2.getPoint().clone();
+                                closestPointZBody1Second = conePointBody1.getZ();
+                                closestPointZBody2Second = conePointBody2.getZ();
+                                if (verbose) {
+                                    System.out.printf("2nd Intersection: Found dist = %.03f, zStep=%.03f, between %s (Z=%.02f) and %s (Z=%.02f)\n",
+                                            dist, zStep / 10d,
+                                            conePointBody1.getPoint(),
+                                            conePointBody1.getZ(),
+                                            conePointBody2.getPoint(),
+                                            conePointBody2.getZ());
+                                    System.out.printf("-- (1st : between %s (Z=%.02f) and %s (Z=%.02f))\n",
+                                            closestPointBody1.toString(),
+                                            closestPointZBody1,
+                                            closestPointBody2.toString(),
+                                            closestPointZBody2);
+                                }
+                            }
+                        }
+                    }
+                }
+                if ((loop != 0) || (loop == 0 && closestPointZBody1Second == null && closestPointZBody2Second == null)) {
+                    if (dist < smallest) {
+                        smallest = dist;
+                        closestPointBody1 = (GeoPoint) conePointBody1.getPoint().clone();
+                        closestPointBody2 = (GeoPoint) conePointBody2.getPoint().clone();
+                        closestPointZBody1 = conePointBody1.getZ();
+                        closestPointZBody2 = conePointBody2.getZ();
+                        if (verbose && dist < 3.0 && loop == 0) {
+                            System.out.printf("1st Intersection: Found dist = %.03f, zStep=%.03f, between %s (Z=%.02f) and %s (Z=%.02f)\n",
+                                    dist, zStep / 10d,
+                                    conePointBody1.getPoint(),
+                                    conePointBody1.getZ(),
+                                    conePointBody2.getPoint(),
+                                    conePointBody2.getZ());
+                        }
+                    }
+                }
+            }
+        }
+        // End of loop #n
+        if (verbose) {
+            System.out.printf("Loop %d - Smallest distance: %.04f nm, between (first circle, z: %.04f) %s and (second circle, z: %.04f) %s \n",
+                    loop + 1,
+                    smallest,
+                    closestPointZBody1,
+                    closestPointBody1.toString(),
+                    closestPointZBody2,
+                    closestPointBody2.toString());
+            if (loop == 0) {
+                System.out.printf("=> 2nd Intersection: Loop %d - Smallest distance: %.04f nm, between (first circle, z: %.04f) %s and (second circle, z: %.04f) %s \n",
+                        loop + 1,
+                        smallestSecond,
+                        closestPointZBody1Second,
+                        closestPointBody1Second.toString(),
+                        closestPointZBody2Second,
+                        closestPointBody2Second.toString());
+            }
+        }
+
+        if (closestPointBody1 != null && closestPointBody2 != null) {
+            result = new ArrayList<>();
+            result.add(new ConePoint(closestPointBody1, closestPointZBody1));
+            result.add(new ConePoint(closestPointBody2, closestPointZBody2));
+
+            if (loop == 0 && closestPointBody1Second != null && closestPointBody2Second != null) {
+                result.add(new ConePoint(closestPointBody1Second, closestPointZBody1Second));
+                result.add(new ConePoint(closestPointBody2Second, closestPointZBody2Second));
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -208,24 +325,37 @@ public class MPSToolBox {
      * @param secondGHA GHA of the second body (at secondTime)
      * @param secondDecl Decl of the second body (at secondTime)
      * @param nbLoops Number of recursions
+     * @param reverse Build the cones Counterclockwise if true
      * @param verbose true or false
      * @return a List of the two GeoPoints (one on each cone) closest to each other.
      */
     public static List<GeoPoint> resolve2Cones(Date firstTime, double firstObsAlt, double firstGHA, double firstDecl,
                                                Date secondTime, double secondObsAlt, double secondGHA, double secondDecl,
-                                               int nbLoops, boolean verbose) {
+                                               int nbLoops, boolean reverse, boolean verbose) {
 
         List<GeoPoint> result = null;
 
-        double smallest = Double.MAX_VALUE;
+        // double smallest = Double.MAX_VALUE;
         GeoPoint closestPointBody1 = null;
         GeoPoint closestPointBody2 = null;
         Double closestPointZBody1 = null;
         Double closestPointZBody2 = null;
 
+        // double smallestSecond = Double.MAX_VALUE;
+        GeoPoint closestPointBody1Second = null;
+        GeoPoint closestPointBody2Second = null;
+        Double closestPointZBody1Second = null;
+        Double closestPointZBody2Second = null;
+
         double fromZ = 0d;
         double toZ = 360d;
         double zStep = 1d; // Will thus start with step = 0.1
+
+        if (reverse) {
+            fromZ = 360d;
+            toZ = 0d;
+            zStep *= -1;
+        }
 
         for (int loop=0; loop<nbLoops; loop++) {
 
@@ -239,35 +369,48 @@ public class MPSToolBox {
                     zStep / 10d, false);
 
             // Now, find the intersection of the two cones...
-            for (MPSToolBox.ConePoint conePointBody1 : coneBody1.getCircle()) {
-                for (MPSToolBox.ConePoint conePointBody2 : coneBody2.getCircle()) {
-                    // GC distance from-to, use GeomUtil.haversineNm
-                    double dist = GeomUtil.haversineNm(conePointBody1.getPoint(), conePointBody2.getPoint());
-                    if (dist < smallest) {
-                        smallest = dist;
-                        closestPointBody1 = (GeoPoint) conePointBody1.getPoint().clone();
-                        closestPointBody2 = (GeoPoint) conePointBody2.getPoint().clone();
-                        closestPointZBody1 = conePointBody1.getZ();
-                        closestPointZBody2 = conePointBody2.getZ();
-                    }
-                }
-            }
-            // End of loop #n
-            if (verbose) {
-                System.out.printf("Loop %d - Smallest distance: %.04f nm, between (first circle, z: %.04f) %s and (second circle, z: %.04f) %s \n",
-                        loop + 1,
-                        smallest,
-                        closestPointZBody1,
-                        closestPointBody1.toString(),
-                        closestPointZBody2,
-                        closestPointBody2.toString());
+            List<ConePoint> geoPointsFirst = intersectionDelegation(coneBody1, coneBody2, loop, zStep / 10, verbose);
+            closestPointBody1 = geoPointsFirst.get(0).getPoint();
+            closestPointZBody1 = geoPointsFirst.get(0).getZ();
+            closestPointBody2 = geoPointsFirst.get(1).getPoint();
+            closestPointZBody2 = geoPointsFirst.get(1).getZ();
+
+            if (loop == 0) { // Populate second ones
+                closestPointBody1Second = geoPointsFirst.get(2).getPoint();
+                closestPointZBody1Second = geoPointsFirst.get(2).getZ();
+                closestPointBody2Second = geoPointsFirst.get(3).getPoint();
+                closestPointZBody2Second = geoPointsFirst.get(3).getZ();
             }
 
-            result = Arrays.asList(new GeoPoint[] {  // List.of not supported in Java8
-                    closestPointBody1, closestPointBody2
-            });
-            zStep /= 10.0; // For the next one
+            // 2nd intersection ?
+            if (loop > 0) { // Deal with 2nd intersection
+                if (verbose) {
+                    System.out.println("Dealing with second Intersection...");
+                }
+                MPSToolBox.ConeDefinition coneBody1Second = MPSToolBox.calculateCone(firstTime, firstObsAlt, firstGHA, firstDecl, "Body 1",
+                        closestPointZBody1Second == null ? fromZ : closestPointZBody1Second - zStep,
+                        closestPointZBody1Second == null ? toZ : closestPointZBody1Second + zStep,
+                        zStep / 10d, false);
+                MPSToolBox.ConeDefinition coneBody2Second = MPSToolBox.calculateCone(secondTime, secondObsAlt, secondGHA, secondDecl, "Body 2",
+                        closestPointZBody2Second == null ? fromZ : closestPointZBody2Second - zStep,
+                        closestPointZBody2Second == null ? toZ : closestPointZBody2Second + zStep,
+                        zStep / 10d, false);
+                List<ConePoint> geoPointsSecond = intersectionDelegation(coneBody1Second, coneBody2Second, loop, zStep / 10, verbose);
+                closestPointBody1Second = geoPointsSecond.get(0).getPoint();
+                closestPointZBody1Second = geoPointsSecond.get(0).getZ();
+                closestPointBody2Second = geoPointsSecond.get(1).getPoint();
+                closestPointZBody2Second = geoPointsSecond.get(1).getZ();
+            }
+
+            zStep /= 10.0; // For the next loop
         }
+
+        result = new ArrayList<>();
+        result.add(closestPointBody1);
+        result.add(closestPointBody2);
+        result.add(closestPointBody1Second);
+        result.add(closestPointBody2Second);
+
         return result;
     }
 }

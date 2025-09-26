@@ -237,11 +237,14 @@ public class PlayGround07 {
         // Now, find the intersection of the two cones...
         List<GeoPoint> closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                                                            dateTwo, altTwo, ghaTwo, declTwo,
-                                                           nbIter, verbose);
+                                                           nbIter, false, verbose);
 
         if (closests != null) {
-            final double d = GeomUtil.haversineNm(closests.get(0), closests.get(1));
-            System.out.printf("Position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d);
+            final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
+            System.out.printf("1st Position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
+
+            final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
+            System.out.printf("2nd Position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(3), d2);
         } else {
             System.out.println("Oops ! Not found...");
         }
