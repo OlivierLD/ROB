@@ -284,7 +284,7 @@ public final class GeomUtil {
 	}
 
 	/**
-	 * @param fullString like [N 37 55.49], or [N 37 55'12.49"], or [N 37º55.49], or [N 37º55'12.49"]
+	 * @param fullString like [N 37 55.49], or [N 37 55'12.49"], or [N 37º55.49], or [N 37º55'12.49"], or [N37º55'12.49"], etc
 	 * @return The expected string
 	 * @throws RuntimeException when failing
 	 */
@@ -298,12 +298,14 @@ public final class GeomUtil {
 					degSignIndex = fullString.lastIndexOf(" ");
 				}
 			}
-			String degrees = fullString.substring(2, degSignIndex);
+			String degrees = fullString.substring(1, degSignIndex).trim();
 			String minutes = "";
 			String seconds = "";
 			if (fullString.contains("\"")) {
 				minutes = fullString.substring(degSignIndex + 1, fullString.indexOf("'"));
 				seconds = fullString.substring(fullString.indexOf("'") + 1, fullString.indexOf("\""));
+			} else if (fullString.contains("'")) {
+				minutes = fullString.substring(degSignIndex + 1, fullString.indexOf("'"));
 			} else {
 				minutes = fullString.substring(degSignIndex + 1);
 			}

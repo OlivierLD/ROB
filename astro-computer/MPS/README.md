@@ -265,6 +265,15 @@ Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
 Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01`.  
 On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave; valider.
 
+#### Exemple (see the code for details)
+
+```commandline
+$ ./test.one.sh 
+OK. Proceeding with user's input.
+Position between 47º40.66'N / 3º08.15'W and 47º40.66'N / 3º08.15'W, dist 0.00 nm.
+Done
+$ 
+```
 
 ### &Eacute;quation de la distance entre les points de deux points de deux cercles...
 Reste &agrave; faire...  
