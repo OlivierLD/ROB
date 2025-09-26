@@ -119,7 +119,10 @@ _Note:_
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
 - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
-- Pour les donn&eacute;es (&eacute;ph&eacute;m&eacute;rides et autres) voir [ici](https://olivierld.github.io/web.stuff/astro/index_03.html).
+- Pour faire des tests avec des donn&eacute;es valides (&eacute;ph&eacute;m&eacute;rides et autres) voir ces pages, avec des composants graphiques.
+  - https://olivierld.github.io/web.stuff/astro/index_01.html
+  - https://olivierld.github.io/web.stuff/astro/index_02.html
+  - https://olivierld.github.io/web.stuff/astro/index_03.html
 
 #### Quelques angles et d&eacute;finitions utiles pour la suite...
 <img src="figure.02.png" width="400">
@@ -267,7 +270,7 @@ On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave
 
 #### Exemple (see the code for details)
 
-```commandline
+```
 $ ./test.one.sh 
 OK. Proceeding with user's input.
 Position between 47º40.66'N / 3º08.15'W and 47º40.66'N / 3º08.15'W, dist 0.00 nm.

@@ -1,7 +1,5 @@
-package mps;
+package mps.samplesandtools;
 
-import calc.CelestialDeadReckoning;
-import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +13,7 @@ import java.util.TimeZone;
 
 /**
  * Sun, Moon, Venus, Mars, Jupiter, Spica, Denebola
- * Used to produce output for the web/index.01.html (web/json/*.json)
+ * Used to produce output for the web/index.01.html (web/json/*.json) and others.
  */
 public class Context01 {
 

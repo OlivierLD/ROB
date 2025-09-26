@@ -1,4 +1,4 @@
-package mps;
+package mps.samplesandtools;
 
 import calc.CelestialDeadReckoning;
 import calc.GeomUtil;

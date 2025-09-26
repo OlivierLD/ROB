@@ -190,18 +190,26 @@ public class MPSToolBox {
     }
 
     /**
+     * Find the intersection of two cones, defined by their Observed Altitude, GHA and Declination.
+     * No user position involved here  - this is what we want to find.
      *
-     * @param firstTime
-     * @param firstObsAlt
-     * @param firstGHA
-     * @param firstDecl
-     * @param secondTime
-     * @param secondObsAlt
-     * @param secondGHA
-     * @param secondDecl
-     * @param nbLoops
-     * @param verbose
-     * @return
+     * This uses a method close to the Newton's method.
+     * We look for the points as close to each other as possible, starting from all the points of cone1, and checking for each of them
+     * all the points of cone2, with a given step for Z.
+     * Then we restrict the Z interval, and the Z step.
+     * This as many times as required by the nbLoops parameter.
+     *
+     * @param firstTime Date when the firstObsAlt was taken
+     * @param firstObsAlt Observed Altitude of the first body
+     * @param firstGHA GHA of the first body (at firstTime)
+     * @param firstDecl Decl of the first body (at firstTime)
+     * @param secondTime Date when the secondObsAlt was taken
+     * @param secondObsAlt Observed Altitude of the second body
+     * @param secondGHA GHA of the second body (at secondTime)
+     * @param secondDecl Decl of the second body (at secondTime)
+     * @param nbLoops Number of recursions
+     * @param verbose true or false
+     * @return a List of the two GeoPoints (one on each cone) closest to each other.
      */
     public static List<GeoPoint> resolve2Cones(Date firstTime, double firstObsAlt, double firstGHA, double firstDecl,
                                                Date secondTime, double secondObsAlt, double secondGHA, double secondDecl,
