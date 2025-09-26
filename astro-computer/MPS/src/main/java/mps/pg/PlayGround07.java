@@ -8,13 +8,10 @@ import mps.MPSToolBox;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
- * Full stuff, Invoking method from MPSToolBox
+ * Full stuff, Invoking method from MPSToolBox, for 2 bodies.
  * Start from the cones, and find the position.
  * Observed Altitude, GHA and Decl can be received from the main (or calculated from it).
  * See input (CLI) parameters.
@@ -43,17 +40,17 @@ public class PlayGround07 {
     private static Double parseWithNoSign(String str) {
         String degrees = null;
         String minutes = null;
-        if (str.indexOf(GeomUtil.DEGREE_SYMBOL) >= 0) {
+        if (str.contains(GeomUtil.DEGREE_SYMBOL)) {
             degrees = str.substring(0, str.indexOf(GeomUtil.DEGREE_SYMBOL));
             minutes = str.substring(str.indexOf(GeomUtil.DEGREE_SYMBOL) + 1);
-        } else if (str.indexOf(GeomUtil.ALT_DEGREE_SYMBOL) >= 0) {
+        } else if (str.contains(GeomUtil.ALT_DEGREE_SYMBOL)) {
             degrees = str.substring(0, str.indexOf(GeomUtil.ALT_DEGREE_SYMBOL));
             minutes = str.substring(str.indexOf(GeomUtil.ALT_DEGREE_SYMBOL) + 1);
-        } else if (str.indexOf(" ") >= 0) {
+        } else if (str.contains(" ")) {
             degrees = str.substring(0, str.indexOf(" "));
             minutes = str.substring(str.indexOf(" ") + 1);
         }
-        if (minutes.endsWith("'")) {
+        if (minutes != null && minutes.endsWith("'")) {
             minutes = minutes.substring(0, minutes.indexOf("'"));
         }
         Double d = GeomUtil.sexToDec(degrees, minutes);
@@ -100,7 +97,7 @@ public class PlayGround07 {
                     // System.out.printf("DECL 1: %.06f\n", declOne);
                 } else if (arg.startsWith(ALT_ONE)) {
                     String str = arg.substring(ALT_ONE.length()).trim();
-                    altOne = parseWithNoSign(str);;
+                    altOne = parseWithNoSign(str);
                     // System.out.printf("ALT 1: %.06f\n", altOne);
                 } else if (arg.startsWith(TIME_TWO)) {
                     String str = arg.substring(TIME_TWO.length()).trim();
@@ -119,7 +116,7 @@ public class PlayGround07 {
                     // System.out.printf("DECL 2: %.06f\n", declTwo);
                 } else if (arg.startsWith(ALT_TWO)) {
                     String str = arg.substring(ALT_TWO.length()).trim();
-                    altTwo = parseWithNoSign(str);;
+                    altTwo = parseWithNoSign(str);
                     // System.out.printf("ALT 2: %.06f\n", altTwo);
                 } else if (arg.startsWith(NB_ITERATIONS)) {
                     String str = arg.substring(NB_ITERATIONS.length()).trim();
@@ -234,7 +231,9 @@ public class PlayGround07 {
             System.out.println("------------------------------------------------");
         }
 
-        // Now, find the intersection of the two cones...
+        List<MPSToolBox.ConesIntersection> conesIntersectionList = new ArrayList<>();
+
+        // Now, find the intersection(s) of the two cones...
         List<GeoPoint> closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                                                            dateTwo, altTwo, ghaTwo, declTwo,
                                                            nbIter, false, verbose);
@@ -245,10 +244,12 @@ public class PlayGround07 {
 
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
             System.out.printf("2nd Position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(3), d2);
+
+            conesIntersectionList.add(new MPSToolBox.ConesIntersection("BodyOne", "BodyTwo",
+                    closests.get(0) , closests.get(1), closests.get(2), closests.get(3)));
         } else {
             System.out.println("Oops ! Not found...");
         }
-
         // System.out.printf("-> For comparison, User pos is %s\n", new GeoPoint(userLatitude, userLongitude));
     }
 }

@@ -104,7 +104,74 @@ public class MPSToolBox {
             this.circle = circle;
         }
     }
+    final public static class ConesIntersection {
+        String bodyOneName;
+        String bodyTwoName;
 
+        GeoPoint coneOneIntersectionOne;
+        GeoPoint coneOneIntersectionTwo;
+        GeoPoint coneTwoIntersectionOne;
+        GeoPoint coneTwoIntersectionTwo;
+
+        public ConesIntersection(String bodyOneName, String bodyTwoName,
+                                 GeoPoint coneOneIntersectionOne, GeoPoint coneOneIntersectionTwo,
+                                 GeoPoint coneTwoIntersectionOne, GeoPoint coneTwoIntersectionTwo) {
+            this.bodyOneName = bodyOneName;
+            this.bodyTwoName = bodyTwoName;
+            this.coneOneIntersectionOne = coneOneIntersectionOne;
+            this.coneOneIntersectionTwo = coneOneIntersectionTwo;
+            this.coneTwoIntersectionOne = coneTwoIntersectionOne;
+            this.coneTwoIntersectionTwo = coneTwoIntersectionTwo;
+        }
+
+        public String getBodyOneName() {
+            return bodyOneName;
+        }
+
+        public void setBodyOneName(String bodyOneName) {
+            this.bodyOneName = bodyOneName;
+        }
+
+        public String getBodyTwoName() {
+            return bodyTwoName;
+        }
+
+        public void setBodyTwoName(String bodyTwoName) {
+            this.bodyTwoName = bodyTwoName;
+        }
+
+        public GeoPoint getConeOneIntersectionOne() {
+            return coneOneIntersectionOne;
+        }
+
+        public void setConeOneIntersectionOne(GeoPoint coneOneIntersectionOne) {
+            this.coneOneIntersectionOne = coneOneIntersectionOne;
+        }
+
+        public GeoPoint getConeOneIntersectionTwo() {
+            return coneOneIntersectionTwo;
+        }
+
+        public void setConeOneIntersectionTwo(GeoPoint coneOneIntersectionTwo) {
+            this.coneOneIntersectionTwo = coneOneIntersectionTwo;
+        }
+
+        public GeoPoint getConeTwoIntersectionOne() {
+            return coneTwoIntersectionOne;
+        }
+
+        public void setConeTwoIntersectionOne(GeoPoint coneTwoIntersectionOne) {
+            this.coneTwoIntersectionOne = coneTwoIntersectionOne;
+        }
+
+        public GeoPoint getConeTwoIntersectionTwo() {
+            return coneTwoIntersectionTwo;
+        }
+
+        public void setConeTwoIntersectionTwo(GeoPoint coneTwoIntersectionTwo) {
+            this.coneTwoIntersectionTwo = coneTwoIntersectionTwo;
+        }
+    }
     public static CelestialDeadReckoning calculateDR(double gha, double dec, double userLatitude, double userLongitude) {
         CelestialDeadReckoning dr = new CelestialDeadReckoning(gha, dec, userLatitude, userLongitude).calculate();
         return dr;
