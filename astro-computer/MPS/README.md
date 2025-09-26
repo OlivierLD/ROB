@@ -264,7 +264,9 @@ Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersect
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
 ### Approche it&eacute;rative
-Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...  
+Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
+C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et 
+`2nd Position`.
 Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01`.  
 On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave; valider.
 
@@ -273,7 +275,17 @@ On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave
 ```
 $ ./test.one.sh 
 OK. Proceeding with user's input.
-Position between 47º40.66'N / 3º08.15'W and 47º40.66'N / 3º08.15'W, dist 0.00 nm.
+1st Position between 2º56.79'N / 19º14.49'W and 2º56.79'N / 19º14.49'W, dist 0.00 nm.
+2nd Position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
+Done
+$ 
+```
+On peut aussi fournir les param&egrave;tres directement sur la command line:
+```
+$ ./test.one.sh --time-1:2025-08-20T10:40:31 --gha-1:339º17.40 --decl-1:N12º16.80 --alt-1:49º22.52 --time-2:2025-08-20T10:40:31 --alt-2:66º33.85 --gha-2:13º41.85 --decl-2:N25º46.13 --verbose:false
+OK. Proceeding with user's input.
+1st Position between 2º56.79'N / 19º14.49'W and 2º56.79'N / 19º14.49'W, dist 0.00 nm.
+2nd Position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
 Done
 $ 
 ```
