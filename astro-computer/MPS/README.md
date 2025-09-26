@@ -77,7 +77,7 @@ distance = 2 * atan2(sqrt(a), sqrt(1 - a))
 &eacute;crit aussi <!-- inline LaTeX not well suoopterd in md files... -->
 
 $$
-a = sin^2(\frac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\frac{L2 - L1} {2})
+a = sin^2(\dfrac{G2 - G1} {2}) + cos G1 . cos G2 . sin^2(\dfrac{L2 - L1} {2})
 $$
 
 $$
