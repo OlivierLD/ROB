@@ -6,7 +6,6 @@ import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
 import mps.MPSToolBox;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -359,8 +358,8 @@ public class PlayGround08 {
             });
             System.out.println("-----------------------------");
             // An average ?
-            double averageLat = candidates.stream().mapToDouble(p -> p.getLatitude()).average().getAsDouble();
-            double averageLng = candidates.stream().mapToDouble(p -> p.getLongitude()).average().getAsDouble();
+            double averageLat = candidates.stream().mapToDouble(GeoPoint::getLatitude).average().getAsDouble();
+            double averageLng = candidates.stream().mapToDouble(GeoPoint::getLongitude).average().getAsDouble();
             GeoPoint avgPoint = new GeoPoint(averageLat, averageLng);
             System.out.printf("=> Average: %s\n", avgPoint);
 

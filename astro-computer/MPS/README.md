@@ -175,6 +175,9 @@ de les voir tous en m&ecirc;me temps.
 _Une autre Note_ : Le sommet de tous les c&ocirc;nes, et la position de l'observateur, se trouvent tous dans le m&ecirc;me plan.
 D'o&ugrave; - sans doute - le nom de la m&eacute;thode...
 
+La position de l'observateur - celle qu'on cherche, donc - est a l'intersection de la base des cones, dans les figures qui suivent, 
+c'est `47º40.66'N / 3º08.14'W`.
+
 ![Context](01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
@@ -251,12 +254,21 @@ Seeing the Sun at altitude 49º22.52', in the 142.65º
 Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) commun(s).  
 On peut essayer graphiquement, pour la latitude, puis pour la longitude...
 
-Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources consid&eacute;rables (si on fait &ccedil;a manuellement)...
+Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources et un nombre d'op&eacute;rations consid&eacute;rables (effrayant on fait &ccedil;a manuellement)...  
+
+On peut cependant facilement calculer le rayon de la base du c&ocirc;ne (du cercle). Les coordonn&eacute;es du centre 
+sont restitu&eacute;es par les &eacute;ph&eacute;m&eacute;rides.  
+Mais deux probl&egrave;mes se posent alors :
+- Le cercle n'est rond que sur une sph&egrave;re (un globe), les cartes dont on dispose (Mercator, Lambert, St&eacute;r&eacute;ographiques, etc) ne permettent certainement 
+pas de tracer ces cercles avec un compas, ni avec aucun outil connu.
+- Quand bien m&ecirc;me on parviendrait &agrave; tracer ce cercle, il est parfois tellement vaste - &agrave; l'&eacute;chelle de la Terre - que 
+les coordonn&eacute;es des intersections avec un autre cercle seraient fort impr&eacute;cises. C'est &agrave; cause de &ccedil;a qu'on a - dans le contexte des droites de hauteur -
+&eacute;labor&eacute; Canevas Mercator et autres Plotting Sheets...
 
 Si on part d'une position estim&eacute;e, on revient &agrave; un point par droites de hauteurs classique (Saint-Hilaire).
 Si on a trois astres, on a trois droites, et on est &agrave; leur intersection...
 
-D'o&ugrave; la question : _Quel est alors dans ce contexte l'int&eacute;ret de la m&eacute;thode du plan des sommets ?_
+D'o&ugrave; la question : _Quel est alors dans ce contexte (graphique) l'int&eacute;ret de la M&eacute;thode du Plan des Sommets ?_
 
 La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :  
 ![Context](05.png)
@@ -267,11 +279,12 @@ Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit
 Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
 C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et 
 `2nd Position`.
-Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01`.  
-On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton. &Agrave; valider.
+Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.  
+On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton (details &agrave; suivre). 
+&Agrave; valider.
 
 #### Exemple (see the code for details)
-
+Dans les exemples ci-dessous, la hauteur des astres est celle observ&eacute;e &agrave; partir de la position `47º40.66'N / 3º08.14'W`.  
 ```
 $ ./test.one.sh 
 OK. Proceeding with user's input.
@@ -289,7 +302,7 @@ OK. Proceeding with user's input.
 Done
 $ 
 ```
-De nombreux exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java` :  
+Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java` :  
 ```
 $ java -classpath [...] mps.pg.PlayGround08
 
@@ -335,7 +348,9 @@ We have 4 intersections to process:
 ==> Difference/offset: 0.00 nm
 ------- End of the story -------
 ```
-... Look in the code for details.
+... Look in the code for details.  
+Ceci semble fonctionner comme on l'attend, mais il est totalement **_inenvisageable_** de faire
+le boulot sans un calculateur - programmable.
 
 ### &Eacute;quation de la distance entre les points de deux points de deux cercles...
 Reste &agrave; faire...  
