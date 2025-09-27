@@ -1230,7 +1230,7 @@ let toggleForeground = () => {
                 in a dialog, on top of others.
             </p>
             <p>
-                <sppan style="font-style: italic; font-weight: bold;">Featuring:</sppan>
+                <span style="font-style: italic; font-weight: bold;">Featuring:</span>
                 <ul>
                     <li>Web Components</li>
                     <li>Custom Tooltips</li>
@@ -1594,8 +1594,9 @@ let toggleForeground = () => {
     <!-- JUMBO / MPS Data -->
     <div class="centered" style="grid-area: jumbos; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
-        <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);"> <!-- MPS Data --></div>
-        <div id="mps-data-div" class="result" style="font-size: 0.75em; text-align: left; min-height: 100px; border: 1px solid silver; border-radius: 5px; padding: 10px; overflow: auto;">
+        <!-- min-height below, acts as a padding for the moon phase. -->
+        <div style="min-height: 100px; margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);"> <!-- MPS Data --></div>
+        <div id="mps-data-div" class="result" style="display: none; font-size: 0.75em; text-align: left; min-height: 100px; border: 1px solid silver; border-radius: 5px; padding: 10px; overflow: auto;">
             <div id="mps-data" style="width: 400%;">
                 <ul>
                     <li>MPS Data goes here...</li>
@@ -1615,8 +1616,8 @@ let toggleForeground = () => {
                       small-label="..."/>
     </div>
 
-    <!-- SCROLL-DISPLAY (PRMSL) -->
-    <div class="centered" style="grid-area: prmsl; width: 240px; border: 0px solid silver; border-radius: 5px;">
+    <!-- SCROLL-DISPLAY (PRMSL) hidden -->
+    <div class="centered" style="display: none; grid-area: prmsl; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
         <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">PRMSL</div>
         <scroll-digit-display id="scroll-digit-display-01"
@@ -1832,9 +1833,9 @@ let toggleForeground = () => {
                 <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                     <div id="user-gc-switch" onclick="expandCollapseGCData();" title="Click to expand/collase"
                          style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="gc-char">&#9658;</span> Define start and finish for GC</div>
-                        <div id="user-gc-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
+                        <div id="user-gc-widgets" class="smooth" style="width: 80%; float: left; padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
 
-                            Will generate Great Circle, after repaint.<br/>
+                            Will generate the corresponding Great Circle, after repaint.<br/>
                             <div style="display: grid; grid-template-columns: 50% 50%;">
                                 <div>
                                     <b>From:</b>

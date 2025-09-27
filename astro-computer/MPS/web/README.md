@@ -1,7 +1,8 @@
-# WebComponents sample.
+# WebComponents samples.
 
-
-- Use `npm start` and then reach `http://localhost:8080/index.html and click the first link.  
+- Use `npm start` from `MPS/web`
+  - requires `nodejs` to be installed
+- Then reach `http://localhost:8080/index.html from a browser, and click the first link.  
 
 Will be used to display the cones...
 
