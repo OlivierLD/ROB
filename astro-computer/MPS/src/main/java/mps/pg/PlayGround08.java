@@ -13,8 +13,8 @@ import java.util.*;
 /**
  * Full stuff, Invoking method from MPSToolBox, for more than 2 bodies.
  * Start from the cones, and find the position.
- * Observed Altitude, GHA and Decl can be received from the main (or calculated from it).
- * See input (CLI) parameters.
+ * GHA, Decl, and Observed Altitude are calculated in the main.
+ * Observer's position is found at the end.
  */
 public class PlayGround08 {
 
@@ -27,7 +27,11 @@ public class PlayGround08 {
         DURATION_FMT.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
      }
 
-    // Point of reference, user's position
+    /*
+     * Point of reference, user's position
+     * Used for Observed Altitude calculation
+     * Should be the one found at the end.
+     */
     static double userLatitude = 47.677667;
     static double userLongitude = -3.135667;
 
@@ -319,9 +323,10 @@ public class PlayGround08 {
         }
 
         // Now process all intersections...
+        System.out.println("-----------------------------");
         System.out.printf("We have %d intersections to process:\n", conesIntersectionList.size());
         if (conesIntersectionList.size() > 1) {
-            conesIntersectionList.forEach(ci -> System.out.printf("Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
+            conesIntersectionList.forEach(ci -> System.out.printf("- Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
             MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0); // TODO Iterate on the reference as well ?...
 
             List<GeoPoint> candidates = new ArrayList<>();
@@ -347,17 +352,26 @@ public class PlayGround08 {
                 }
             }
             // The result...
+            System.out.println("-----------------------------");
             System.out.printf("%d candidate(s):\n", candidates.size());
             candidates.stream().forEach(pt -> {
-                System.out.printf("%s\n", pt);
+                System.out.printf("\u2022 %s\n", pt);
             });
+            System.out.println("-----------------------------");
             // An average ?
             double averageLat = candidates.stream().mapToDouble(p -> p.getLatitude()).average().getAsDouble();
             double averageLng = candidates.stream().mapToDouble(p -> p.getLongitude()).average().getAsDouble();
-            System.out.printf("=> Average: %s\n", new GeoPoint(averageLat, averageLng));
+            GeoPoint avgPoint = new GeoPoint(averageLat, averageLng);
+            System.out.printf("=> Average: %s\n", avgPoint);
+
+            GeoPoint original = new GeoPoint(userLatitude, userLongitude);
+            System.out.printf("=> Compare to original position: %s\n", original);
+
+            System.out.printf("==> Difference/offset: %.02f nm\n", GeomUtil.haversineNm(original, avgPoint));
 
         } else {
             System.out.println("Not enough intersections to process...");
         }
+        System.out.println("------- End of the story -------");
     }
 }

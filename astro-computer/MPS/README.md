@@ -289,6 +289,53 @@ OK. Proceeding with user's input.
 Done
 $ 
 ```
+De nombreux exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java` :  
+```
+$ java -classpath [...] mps.pg.PlayGround08
+
+Calculation launched for 2025-Sep-26 03:15:00 UTC
+Sun      :	 ObsAlt: -27º59.56',	 GHA:  230º54.36',	 Decl: 1º18.81'S
+Moon     :	 ObsAlt: -64º38.88',	 GHA:  186º45.86',	 Decl: 22º29.58'S
+----------------------------------------------------
+Saturn   :	 ObsAlt:  22º16.56',	 GHA:  54º39.20',	 Decl: 3º02.88'S
+Jupiter  :	 ObsAlt:  33º59.69',	 GHA:  300º20.17',	 Decl: 21º40.69'N
+Rigel    :	 ObsAlt:  28º51.39',	 GHA:  334º59.47',	 Decl: 8º10.09'S
+Aldebaran:	 ObsAlt:  55º20.72',	 GHA:  344º35.06',	 Decl: 16º33.74'N
+Saturn & Jupiter
+After 4 iterations:
+1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
+2nd position between 10º54.28'S / 13º14.41'E and 10º54.28'S / 13º14.41'E, dist 0.00 nm.
+Saturn & Rigel
+After 4 iterations:
+1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
+2nd position between 63º12.51'S / 12º06.38'W and 63º12.51'S / 12º06.38'W, dist 0.00 nm.
+Rigel & Jupiter
+After 4 iterations:
+1st position between 27º54.85'S / 86º36.17'E and 27º54.84'S / 86º36.17'E, dist 0.00 nm.
+2nd position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
+Rigel & Aldebaran
+After 5 iterations:
+1st position between 47º35.55'N / 3º20.13'W and 47º35.51'N / 3º20.09'W, dist 0.05 nm.
+2nd position between 48º03.44'N / 2º13.10'W and 48º03.44'N / 2º13.10'W, dist 0.08 nm.
+-----------------------------
+We have 4 intersections to process:
+- Intersection between Saturn and Jupiter
+- Intersection between Saturn and Rigel
+- Intersection between Rigel and Jupiter
+- Intersection between Rigel and Aldebaran
+-----------------------------
+4 candidate(s):
+• 47º40.66'N / 3º08.14'W
+• 47º40.66'N / 3º08.14'W
+• 47º40.66'N / 3º08.14'W
+• 47º40.66'N / 3º08.14'W
+-----------------------------
+=> Average: 47º40.66'N / 3º08.14'W
+=> Compare to original position: 47º40.66'N / 3º08.14'W
+==> Difference/offset: 0.00 nm
+------- End of the story -------
+```
+... Look in the code for details.
 
 ### &Eacute;quation de la distance entre les points de deux points de deux cercles...
 Reste &agrave; faire...  
