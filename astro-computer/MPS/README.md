@@ -387,8 +387,20 @@ Ces formules sont donc la base de l'&eacute;quation &agrave; r&eacute;soudre.
 Pour trouver les intersections entre deux cercles d&eacute;finis comme ci-dessus, 
 le probl&egrave;me &agrave; poser - et r&eacute;soudre - est donc :
 
-Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
-quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2`.
+- Avec `Pg1` et `Pg2` d&eacute;finis par les &eacute;h&eacute;merides &agrave; l'heure de l'observation, pour les astres observ&eacute;s,
+`radius1` et `radius2` d&eacute;finis par la hauteur des astres observe&eacute;
+- Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
+- Quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` ?
+
+Le syst&egrave;me complet devient ainsi
+```
+finalLat1 = arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1))
+finalLng1 = pg1Lng + atan2(sin(Z1) * sin(radius1) * cos(pg1Lat), cos(radius1) - (sin(pg1Lat) * sin(finalLat1)))
+finalLat2 = arcsin(sin(pg2Lat) * cos(radius2)) + (cos(pg2Lat) * sin(radius2) * cos(Z2))
+finalLng2 = pg2Lng + atan2(sin(Z2) * sin(radius2) * cos(pg2Lat), cos(radius2) - (sin(pg2Lat) * sin(finalLat2)))
+finalLat1 = finalLat2
+finalLng1 = finalLng2
+```
 
 Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
