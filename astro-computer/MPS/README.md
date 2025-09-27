@@ -405,6 +405,9 @@ finalLat1 = finalLat2
 finalLng1 = finalLng2
 ```
 
+&Agrave; comparer avec les [formules &agrave; r&eacute;soudre](#hauteur-et-azimut-dun-astre) pour la hauteur et l'azimuth, 
+celles auxquelles s'attaquent les tables de Dieumegard et Bataille.
+
 Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
 ---
