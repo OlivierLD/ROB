@@ -110,7 +110,7 @@ $$
 
 _Note:_ 
 
-`atan2` restitue un angle entre -&Pi; et +&Pi;, au cintraire de `atan`, qui restitue un angle entre -&Pi; / 2 et +&Pi; / 2.
+`atan2` restitue des angles entre -&Pi; et +&Pi;, au contraire de `atan`, qui restitue des angles entre -&Pi; / 2 et +&Pi; / 2.
 
 ---
 
@@ -352,9 +352,45 @@ We have 4 intersections to process:
 Ceci semble fonctionner comme on l'attend, mais il est totalement **_inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
-### &Eacute;quation de la distance entre les points de deux points de deux cercles...
-Reste &agrave; faire...  
+### &Eacute;quation de la distance entre les points de deux cercles...
 Il doit y avoir un - voire deux - point(s) ou cette diff&eacute;rence est nulle.
+
+Pour chaque cercle - base du c&ocirc;ne - on a
+- La hauteur de l'astre observ&eacute;
+- Les coordonn&eacute;es du pied de l'astre (point Pg)
+
+Le rayon du cercle est d&eacute;duit de la hauteur observ&eacute;e `h`, comme d&eacute;j&agrave; vu plus haut,
+c'est `r * cos(h)`.
+
+&Agrave; l'aide le la formule de Haversine inverse, on peut d&eacute;terminer les coordonn&eacute;es de chaque point du cercle recherch&eacute;.
+
+$$
+finalLat = \arcsin(\sin(pgLat) * \cos(radius)) + (\cos(pgLat) * \sin(radius) * \cos(Z))
+$$
+
+$$
+finalLng = pgLng + atan2(\sin(Z) * \sin(radius) * \cos(pgLat), \cos(radius) - (\sin(pgLat) * \sin(finalLat)))
+$$
+
+Dans les formules ci-dessus :
+- `pgLat` est la latitude du pied de l'astre
+- `pgLng` est la longitude du pied de l'astre
+- `radius` est le rayon du cercle
+- `Z` est l'azimuth - le rel&egrave;vement - du point recherch&eacute; du cercle, &agrave; partir de son centre (le pied de l'astre).
+`Z` va de 0&deg; &agrave; 360&deg;, soit 0 &agrave; 2&times;&Pi; radians, pour d&eacute;finir un cercle complet.
+
+Tous les angles (y compris `radius`) sont &agrave; exprimer en radians.
+
+Les valeurs `finalLat` et `finalLng` sont ainsi les coordon&eacute;es du point du cercle de centre `Pg`, de rayon `radius`, pour un angle `Z`.
+
+Ces formules sont donc la base de l'&eacute;quation &agrave; r&eacute;soudre.  
+Pour trouver les intersections entre deux cercles d&eacute;finis comme ci-dessus, 
+le probl&egrave;me &agrave; poser - et r&eacute;soudre - est donc :
+
+Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
+quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2`.
+
+Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
 ---
 
