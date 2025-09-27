@@ -362,7 +362,7 @@ Pour chaque cercle - base du c&ocirc;ne - on a
 Le rayon du cercle est d&eacute;duit de la hauteur observ&eacute;e `h`, comme d&eacute;j&agrave; vu plus haut,
 c'est `r * cos(h)`.
 
-&Agrave; l'aide le la formule de Haversine inverse, on peut d&eacute;terminer les coordonn&eacute;es de chaque point du cercle recherch&eacute;.
+&Agrave; l'aide de la formule de Haversine inverse, on peut d&eacute;terminer les coordonn&eacute;es de chaque point du cercle recherch&eacute;.
 
 $$
 finalLat = \arcsin(\sin(pgLat) * \cos(radius)) + (\cos(pgLat) * \sin(radius) * \cos(Z))
@@ -377,7 +377,7 @@ Dans les formules ci-dessus :
 - `pgLng` est la longitude du pied de l'astre
 - `radius` est le rayon du cercle
 - `Z` est l'azimuth - le rel&egrave;vement - du point recherch&eacute; du cercle, &agrave; partir de son centre (le pied de l'astre).
-`Z` va de 0&deg; &agrave; 360&deg;, soit 0 &agrave; 2&times;&Pi; radians, pour d&eacute;finir un cercle complet.
+`Z` va de 0&deg; &agrave; 360&deg;, soit de 0 &agrave; 2&times;&Pi; radians, pour d&eacute;finir un cercle complet.
 
 Tous les angles (y compris `radius`) sont &agrave; exprimer en radians.
 
