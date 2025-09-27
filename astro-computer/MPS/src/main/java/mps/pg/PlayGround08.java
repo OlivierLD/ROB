@@ -326,7 +326,7 @@ public class PlayGround08 {
 
             List<GeoPoint> candidates = new ArrayList<>();
 
-            double criticalDist = 5.0; // TODO Fix that one !...
+            double criticalDist = 5.0; // TODO Fix that one !... Change it from 5 to 15, to see the impact.
             for (int i=1; i<conesIntersectionList.size(); i++) {
                 MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
                 double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
@@ -348,10 +348,13 @@ public class PlayGround08 {
             }
             // The result...
             System.out.printf("%d candidate(s):\n", candidates.size());
-            // TODO An average ?
             candidates.stream().forEach(pt -> {
                 System.out.printf("%s\n", pt);
             });
+            // An average ?
+            double averageLat = candidates.stream().mapToDouble(p -> p.getLatitude()).average().getAsDouble();
+            double averageLng = candidates.stream().mapToDouble(p -> p.getLongitude()).average().getAsDouble();
+            System.out.printf("=> Average: %s\n", new GeoPoint(averageLat, averageLng));
 
         } else {
             System.out.println("Not enough intersections to process...");

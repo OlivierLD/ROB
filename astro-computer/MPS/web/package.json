@@ -1,11 +1,11 @@
 {
-	"name": "olivs-pages-github",
+	"name": "olivs-pages-MPS",
 	"version": "0.0.1",
-	"description": "Olivs github pages",
+	"description": "Olivs MPS pages",
 	"keywords": [
 		"Stuff",
 		"Oliv",
-		"pages.github"
+		"pages.MPS"
 	],
 	"scripts": {
 		"start": "node server.js"
