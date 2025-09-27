@@ -146,7 +146,7 @@ public class PlayGround08 {
         int nbIter = 4;
         boolean reverse = false;
 
-        boolean verbose = true;
+        boolean verbose = false;
 
         if (verbose) {
             System.out.println("------------------------------------------------");
@@ -319,6 +319,42 @@ public class PlayGround08 {
         }
 
         // Now process all intersections...
-        System.out.printf("We have %d intersections to process...\n", conesIntersectionList.size());
+        System.out.printf("We have %d intersections to process:\n", conesIntersectionList.size());
+        if (conesIntersectionList.size() > 1) {
+            conesIntersectionList.forEach(ci -> System.out.printf("Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
+            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0); // TODO Iterate on the reference as well ?...
+
+            List<GeoPoint> candidates = new ArrayList<>();
+
+            double criticalDist = 5.0; // TODO Fix that one !...
+            for (int i=1; i<conesIntersectionList.size(); i++) {
+                MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
+                double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
+                if (distOneOne < criticalDist) {
+                    candidates.add(thatOne.getConeOneIntersectionOne());
+                }
+                double distOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo());
+                if (distOneTwo < criticalDist) {
+                    candidates.add(thatOne.getConeOneIntersectionTwo());
+                }
+                double distTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne());
+                if (distTwoOne < criticalDist) {
+                    candidates.add(thatOne.getConeOneIntersectionOne());
+                }
+                double distTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
+                if (distTwoTwo < criticalDist) {
+                    candidates.add(thatOne.getConeOneIntersectionTwo());
+                }
+            }
+            // The result...
+            System.out.printf("%d candidate(s):\n", candidates.size());
+            // TODO An average ?
+            candidates.stream().forEach(pt -> {
+                System.out.printf("%s\n", pt);
+            });
+
+        } else {
+            System.out.println("Not enough intersections to process...");
+        }
     }
 }
