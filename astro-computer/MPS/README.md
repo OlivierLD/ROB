@@ -1,8 +1,10 @@
 # M&eacute;thode du Plan des Sommets (MPS)
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
-Ceci est un chantier... On veut voir si cette m&eacute;thode est applicable manuellememt - sans recours &agrave; l'informatique.  
-&Agrave; la diff&eacute;rence de la methode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
+Ceci est un chantier...  
+On veut voir si cette m&eacute;thode est applicable manuellement - sans recours &agrave; l'informatique - pour la partie de cette m&eacute;thode applicable aux astres, les satellites ne concernant
+gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.      
+&Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
 C'est ce qu'on se propose de voir ici.
 
 Le principe de la m&eacute;thode repose sur les assertions suivantes :
