@@ -74,7 +74,7 @@ a = sin((G2 - G1) / 2)^2 + cos(G1) * cos(G2) * sin((L2 - L1) / 2)^2
 distance = 2 * atan2(sqrt(a), sqrt(1 - a))
 ```
 <!-- With LaTeX -->
-&eacute;crit aussi <!-- inline LaTeX not well suoopterd in md files... -->
+&eacute;crit aussi <!-- inline LaTeX not well suoppterd in md files... -->
 
 $$
 a = sin^2\left(\dfrac{G2 - G1} {2}\right) + cos G1 . cos G2 . sin^2\left(\dfrac{L2 - L1} {2}\right)
@@ -110,7 +110,7 @@ $$
 
 _Note:_ 
 
-`atan2` returns an angle between -&Pi; and +&Pi;, as opposed to `atan`, that returns an angle between -&Pi; / 2 and +&Pi; / 2.
+`atan2` restitue un angle entre -&Pi; et +&Pi;, au cintraire de `atan`, qui restitue un angle entre -&Pi; / 2 et +&Pi; / 2.
 
 ---
 
@@ -254,7 +254,7 @@ Seeing the Sun at altitude 49º22.52', in the 142.65º
 Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) commun(s).  
 On peut essayer graphiquement, pour la latitude, puis pour la longitude...
 
-Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources et un nombre d'op&eacute;rations consid&eacute;rables (effrayant on fait &ccedil;a manuellement)...  
+Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources et un nombre d'op&eacute;rations consid&eacute;rables (effrayant si on fait &ccedil;a manuellement)...  
 
 On peut cependant facilement calculer le rayon de la base du c&ocirc;ne (du cercle). Les coordonn&eacute;es du centre 
 sont restitu&eacute;es par les &eacute;ph&eacute;m&eacute;rides.  
@@ -280,7 +280,7 @@ Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
 C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et 
 `2nd Position`.
 Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.  
-On proc&egrave;de en plusieurs fois - ambiance m&eacute;thode de Newton (details &agrave; suivre). 
+On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton) (details &agrave; suivre). 
 &Agrave; valider.
 
 #### Exemple (see the code for details)
