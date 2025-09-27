@@ -131,6 +131,7 @@ _Note:_
 <!-- ![Context](figure.02.png) -->
 
 `M` est la position de l'observateur sur la Terre.  
+`P` est le point de la Terre o&ugrave; l'astre est &agrave; la verticale. Ce point est appel&eacute; le "Pied de l'astre", ou aussi la "Position G&eacute;ographique Instantan&eacute;e" de l'astre, souvent not&eacute;e `Pg`.  
 La hauteur observ&eacute;e en `M` de l'astre est not&eacute;e `h`. Notez les autres endroits o&ugrave; cette hauteur `h` est reproduite, &agrave; partir de `S`, et &agrave; partir de `M` vers `O`.  
 La hauteur observ&eacute;e est l'angle que fait l'astre avec l'horizon.  
 L'angle que fait l'astre observ&eacute; avec le z&eacute;nith (la verticale de l'observateur) est le compl&eacute;ment de cette hauteur, `90 - h`, et s'appelle
