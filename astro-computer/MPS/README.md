@@ -172,7 +172,8 @@ la majorit&eacute; des cas.
 > _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.  
 > On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tr&egrave;s vari&eacute;es.
 
-Voici la m&ecirc;me figure, "pench&eacute;e" vers celui qui la regarde...
+Voici la m&ecirc;me figure, "pench&eacute;e" vers celui qui la regarde,
+ou bien qui s'est lev&eacute; de sa chaise, la figure est vue de plus haut...
 <!-- ![Another one](./figure.04.png) -->   
 <img src="figure.04.png" width="400">
 
