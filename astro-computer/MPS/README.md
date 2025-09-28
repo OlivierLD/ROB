@@ -159,13 +159,15 @@ La distance `PS` est &eacute;gale &agrave; `OS - r`.
 Donc `PS = (1 / sin(h)) - r`.
 
 Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
-![Another one](./figure.03.png)  
+<!-- ![Another one](./figure.03.png) -->  
+<img src="figure.03.png" width="400">
+
 On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;senter _deux_ intersections.  
 En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin - 
 la majorit&eacute; des cas.
 
 > _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.  
-> On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tres vari&eacute;es.
+> On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tr&egrave;s vari&eacute;es.
 
 ---
 
