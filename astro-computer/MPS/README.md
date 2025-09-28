@@ -164,6 +164,9 @@ On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;sente
 En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin - 
 la majorit&eacute; des cas.
 
+> _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.  
+> On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tres vari&eacute;es.
+
 ---
 
 ## Le principe  
