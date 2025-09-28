@@ -130,6 +130,9 @@ _Note:_
 <img src="figure.02.png" width="400">
 <!-- ![Context](figure.02.png) -->
 
+La figure ci-dessus est faite pour &ecirc;tre aussi simple que possible. Tout est dans le m&ecirc;me plan `MOP` (celui de la feuille).
+Et m&ecirc;me les astres.
+
 `M` est la position de l'observateur sur la Terre.  
 `P` est le point de la Terre o&ugrave; l'astre est &agrave; la verticale. Ce point est appel&eacute; le "Pied de l'astre", ou aussi la "Position G&eacute;ographique Instantan&eacute;e" de l'astre, souvent not&eacute;e `Pg`.  
 La hauteur observ&eacute;e en `M` de l'astre est not&eacute;e `h`. Notez les autres endroits o&ugrave; cette hauteur `h` est reproduite, &agrave; partir de `S`, et &agrave; partir de `M` vers `O`.  
@@ -158,7 +161,7 @@ Comme `MS` = `1 / tg(h)`, `OS` s'&eacute;crit aussi `(cos(h) / sin(h)) / cos(h)`
 La distance `PS` est &eacute;gale &agrave; `OS - r`.    
 Donc `PS = (1 / sin(h)) - r`.
 
-Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
+Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Ici, les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
 <!-- ![Another one](./figure.03.png) -->  
 <img src="figure.03.png" width="400">
 
@@ -168,6 +171,12 @@ la majorit&eacute; des cas.
 
 > _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.  
 > On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tr&egrave;s vari&eacute;es.
+
+Voici la m&ecirc;me figure, "pench&eacute;e" vers celui qui la regarde...
+<!-- ![Another one](./figure.04.png) -->   
+<img src="figure.04.png" width="400">
+
+Le "Plan des Sommets" est celui qui est d&eacute;fini par `S2`, `M` et `S1`, il est tangent &agrave; la Terre en `M`.
 
 ---
 
