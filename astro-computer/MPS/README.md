@@ -158,6 +158,12 @@ Comme `MS` = `1 / tg(h)`, `OS` s'&eacute;crit aussi `(cos(h) / sin(h)) / cos(h)`
 La distance `PS` est &eacute;gale &agrave; `OS - r`.    
 Donc `PS = (1 / sin(h)) - r`.
 
+Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
+![Another one](./figure.03.png)  
+On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;senter _deux_ intersections.  
+En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin - 
+la majorit&eacute; des cas.
+
 ---
 
 ## Le principe  
