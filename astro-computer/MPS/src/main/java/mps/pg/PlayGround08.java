@@ -6,6 +6,7 @@ import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
 import mps.MPSToolBox;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -167,10 +168,13 @@ public class PlayGround08 {
             System.out.println("------------------------------------------------");
         }
 
+        double firstZStep = 0.1d; // More than 0.1 not good enough...
+        final long before = System.currentTimeMillis();
+
         // Now, find the intersection(s) of the two cones...
         List<GeoPoint> closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                 dateTwo, altTwo, ghaTwo, declTwo,
-                nbIter, reverse, verbose);
+                firstZStep, nbIter, reverse, verbose);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
@@ -214,7 +218,7 @@ public class PlayGround08 {
         // Now, find the intersection(s) of the two cones...
         closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                 dateTwo, altTwo, ghaTwo, declTwo,
-                nbIter, reverse, verbose);
+                firstZStep, nbIter, reverse, verbose);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
@@ -258,7 +262,7 @@ public class PlayGround08 {
         // Now, find the intersection(s) of the two cones...
         closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                 dateTwo, altTwo, ghaTwo, declTwo,
-                nbIter, reverse, verbose);
+                firstZStep, nbIter, reverse, verbose);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
@@ -304,7 +308,7 @@ public class PlayGround08 {
         // Now, find the intersection(s) of the two cones...
         closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                 dateTwo, altTwo, ghaTwo, declTwo,
-                nbIter, reverse, verbose);
+                firstZStep, nbIter, reverse, verbose);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
@@ -320,6 +324,9 @@ public class PlayGround08 {
         } else {
             System.out.println("Oops ! Not found...");
         }
+        final long after = System.currentTimeMillis();
+        System.out.println("-----------------------------");
+        System.out.printf("Full Intersection Processing took %s ms\n", NumberFormat.getInstance().format(after - before));
 
         // Now process all intersections...
         System.out.println("-----------------------------");

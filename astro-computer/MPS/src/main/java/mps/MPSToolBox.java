@@ -391,6 +391,7 @@ public class MPSToolBox {
      * @param secondObsAlt Observed Altitude of the second body
      * @param secondGHA GHA of the second body (at secondTime)
      * @param secondDecl Decl of the second body (at secondTime)
+     * @param firstZStep Azimuth step to start with.
      * @param nbLoops Number of recursions
      * @param reverse Build the cones Counterclockwise if true
      * @param verbose true or false
@@ -398,7 +399,7 @@ public class MPSToolBox {
      */
     public static List<GeoPoint> resolve2Cones(Date firstTime, double firstObsAlt, double firstGHA, double firstDecl,
                                                Date secondTime, double secondObsAlt, double secondGHA, double secondDecl,
-                                               int nbLoops, boolean reverse, boolean verbose) {
+                                               double firstZStep, int nbLoops, boolean reverse, boolean verbose) {
 
         List<GeoPoint> result = null;
 
@@ -416,7 +417,7 @@ public class MPSToolBox {
 
         double fromZ = 0d;
         double toZ = 360d;
-        double zStep = 1d; // Will thus start with step = 0.1
+        double zStep = firstZStep * 10d; // because divided by 10, even when starting the first loop.
 
         if (reverse) {
             fromZ = 360d;
@@ -443,10 +444,14 @@ public class MPSToolBox {
             closestPointZBody2 = geoPointsFirst.get(1).getZ();
 
             if (loop == 0) { // Populate second ones
-                closestPointBody1Second = geoPointsFirst.get(2).getPoint();
-                closestPointZBody1Second = geoPointsFirst.get(2).getZ();
-                closestPointBody2Second = geoPointsFirst.get(3).getPoint();
-                closestPointZBody2Second = geoPointsFirst.get(3).getZ();
+                if (geoPointsFirst.size() == 4) {
+                    closestPointBody1Second = geoPointsFirst.get(2).getPoint();
+                    closestPointZBody1Second = geoPointsFirst.get(2).getZ();
+                    closestPointBody2Second = geoPointsFirst.get(3).getPoint();
+                    closestPointZBody2Second = geoPointsFirst.get(3).getZ();
+                } else {
+                    System.err.printf("Ooops !!! Second intersection was not found ! Only %d point(s) available.\n", geoPointsFirst.size());
+                }
             }
 
             // 2nd intersection ?
