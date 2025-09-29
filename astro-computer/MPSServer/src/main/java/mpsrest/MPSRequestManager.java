@@ -1,4 +1,4 @@
-package astrorest;
+package mpsrest;
 
 import http.HTTPServer;
 import http.RESTRequestManager;
@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class AstroRequestManager implements RESTRequestManager {
+public class MPSRequestManager implements RESTRequestManager {
 
 	private boolean httpVerbose = "true".equals(System.getProperty("http.verbose", "false"));
 	private RESTImplementation restImplementation;
@@ -37,7 +37,7 @@ public class AstroRequestManager implements RESTRequestManager {
 		System.out.println("-------------------------------------");
 	}
 
-	public AstroRequestManager() {
+	public MPSRequestManager() {
 		System.out.println("-------------------------------------");
 		System.out.println(String.format("Using Delta-T:%f", deltaT));
 		System.out.println("-------------------------------------");

@@ -1,15 +1,15 @@
-package astrorest;
+package mpsrest;
 
 import http.HTTPServer;
 
-public class AstroServer {
+public class MPSServer {
 
 	//private boolean httpVerbose = "true".equals(System.getProperty("http.verbose", "false"));
 	private HTTPServer httpServer = null;
 	private int httpPort = 9999;
-	private AstroRequestManager requestManager;
+	private MPSRequestManager requestManager;
 
-	public AstroServer() {
+	public MPSServer() {
 		String port = System.getProperty("http.port");
 		if (port != null) {
 			try {
@@ -19,18 +19,18 @@ public class AstroServer {
 			}
 		}
 		System.out.printf("Running on port %d\n", httpPort);
-		requestManager = new AstroRequestManager();
+		requestManager = new MPSRequestManager();
 		this.httpServer = startHttpServer(httpPort);
 	}
 
-	public AstroServer(int port) {
+	public MPSServer(int port) {
 		httpPort = port;
-		requestManager = new AstroRequestManager();
+		requestManager = new MPSRequestManager();
 		this.httpServer = startHttpServer(httpPort);
 	}
 
 	public static void main(String... args) {
-		new AstroServer();
+		new MPSServer();
 	}
 
 

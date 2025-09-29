@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow'
+}
+
+group 'raspberry.on.board'
+version '1.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+
+    implementation project(':http-tiny-server')
+    implementation project(':raspberry-sailor:NMEA-Parser') // Mostly for durationToDate
+    implementation project(':astro-computer:AstroUtilities')
+    implementation project(':astro-computer:AstroComputer')
+    implementation project(':astro-computer:MPS')
+    implementation project(':raspberry-sailor:AlmanacRelatedTools')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    zip64 true
+}

@@ -44,3 +44,6 @@ include('raspberry-sailor:MUX-implementations:MISCSamples')
 include('raspberry-sailor:MUX-implementations:NMEA-mux-extensions')
 include('raspberry-sailor:MUX-implementations:RESTNavServer')
 include('raspberry-sailor:MUX-implementations:RESTSystemServer')
+include 'astro-computer:MPSServer'
+findProject(':astro-computer:MPSServer')?.name = 'MPSServer'
+
