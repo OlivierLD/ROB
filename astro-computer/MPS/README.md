@@ -306,7 +306,7 @@ C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et
 Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.  
 On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton) (details &agrave; suivre).   
 La m&eacute;thode de Newton est fort pratique quand on cherche la solution d'une &eacute;quation (ou d'un syst&egrave;me d'&eacute;quations) 
-tr&egrave;s (voire trop) complexe. La solution a laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.  
+tr&egrave;s (voire trop) complexe. La solution &agrave; laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.  
 Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.
 
 #### La m&eacute;thode de Newton, en deux mots.
@@ -326,6 +326,7 @@ Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera
 
 #### Exemple (tous les d&eacute;tails sont dans le code)
 Dans les exemples ci-dessous, la hauteur des astres est celle observ&eacute;e &agrave; partir de la position `47º40.66'N / 3º08.14'W`.  
+Les astres par d&eacute;faut sont la Lune et le Soleil.  
 ```
 $ ./test.one.sh 
 OK. Proceeding with user's input.

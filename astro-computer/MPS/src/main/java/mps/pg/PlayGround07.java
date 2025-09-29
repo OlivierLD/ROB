@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Full stuff, Invoking method from MPSToolBox, for 2 bodies.
+ * Full stuff, Invoking method from MPSToolBox, for 2 bodies. Sun and Moo by default
  * Start from the cones, and find the position.
  * Observed Altitude, GHA and Decl can be received from the main (or calculated from it).
  * See input (CLI) parameters.
