@@ -257,7 +257,11 @@ public class MPSToolBox {
         return cd;
     }
 
-    private static List<ConePoint> intersectionDelegation(MPSToolBox.ConeDefinition coneBody1, MPSToolBox.ConeDefinition coneBody2, int loop, double zStep, boolean verbose) {
+    private static List<ConePoint> intersectionDelegation(MPSToolBox.ConeDefinition coneBody1,
+                                                          MPSToolBox.ConeDefinition coneBody2,
+                                                          int loop,
+                                                          double zStep,
+                                                          boolean verbose) {
 
         List<ConePoint> result = null;
 
@@ -395,7 +399,7 @@ public class MPSToolBox {
      * @param secondDecl Decl of the second body (at secondTime)
      * @param firstZStep Azimuth step to start with.
      * @param nbLoops Number of recursions
-     * @param reverse Build the cones Counterclockwise if true
+     * @param reverse Build the cones counterclockwise if true
      * @param verbose true or false
      * @return a List of the two GeoPoints (one on each cone) closest to each other.
      */

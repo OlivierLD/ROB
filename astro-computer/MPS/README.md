@@ -10,7 +10,7 @@ M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 - [En pratique](#en-pratique)
 - [Une approche graphique](#une-approche-graphique-)
 - [Approche itérative](#approche-itérative)
-- [Résooudre l'équation de la distance entre les points de deux cercles](#résoudre-léquation-de-la-distance-entre-les-points-de-deux-cercles)
+- [Résoudre l'équation de la distance entre les points de deux cercles](#résoudre-léquation-de-la-distance-entre-les-points-de-deux-cercles)
 ---
 
 ## Introduction
