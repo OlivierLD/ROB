@@ -197,7 +197,7 @@ public class MPSToolBox {
      * @param fromZ The Z (from Pg) used to start the iteration for the circle
      * @param toZ The Z (from Pg) used to finish the iteration for the circle
      * @param zStep The step for the iteration
-     * @param verbose guess what !
+     * @param verbose guess what!
      * @return the requested ConeDefinition
      */
     public static ConeDefinition calculateCone(Date calculationTime,
@@ -273,12 +273,14 @@ public class MPSToolBox {
         Double closestPointZBody1Second = null;
         Double closestPointZBody2Second = null;
 
+        final double distMin = 3.0; // TODO Fix that 3...
+
         for (MPSToolBox.ConePoint conePointBody1 : coneBody1.getCircle()) {
             for (MPSToolBox.ConePoint conePointBody2 : coneBody2.getCircle()) {
                 // GC distance from-to, use GeomUtil.haversineNm
                 double dist = GeomUtil.haversineNm(conePointBody1.getPoint(), conePointBody2.getPoint());
                 // For some tests..., to find the 2 intersections
-                if (loop == 0 && dist < 3.0) { // TODO Fix that 3...
+                if (loop == 0 && dist < distMin) {
                     if (false) {
                         System.out.printf("Found dist = %.03f, zStep=%.03f, between %s (Z=%.02f) and %s (Z=%.02f)\n",
                                 dist, zStep / 10d,
@@ -327,7 +329,7 @@ public class MPSToolBox {
                         closestPointBody2 = (GeoPoint) conePointBody2.getPoint().clone();
                         closestPointZBody1 = conePointBody1.getZ();
                         closestPointZBody2 = conePointBody2.getZ();
-                        if (verbose && dist < 3.0 && loop == 0) {
+                        if (verbose && dist < distMin && loop == 0) {
                             System.out.printf("1st Intersection: Found dist = %.03f, zStep=%.03f, between %s (Z=%.02f) and %s (Z=%.02f)\n",
                                     dist, zStep / 10d,
                                     conePointBody1.getPoint(),

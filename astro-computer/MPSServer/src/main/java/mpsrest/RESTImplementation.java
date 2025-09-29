@@ -276,7 +276,7 @@ public class RESTImplementation {
 	 *
 	 * @param request MUST contain a GeoPoint payload (observer's position). If not present, will try default.mux.latitude & longitude,
 	 *                an error will be returned if the position is not there, and if no default position is available.
-	 * @return
+	 * @return See below
 	 */
 	private Response getSunDataNow(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
@@ -287,7 +287,7 @@ public class RESTImplementation {
 
 		if (request.getContent() != null && request.getContent().length > 0) {
 			String payload = new String(request.getContent());
-			if ("true".equals(System.getProperty("rest.nav.verbose"))) {
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
 				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getSunDataNow with payload %s", payload));
 			}
 			if (!"null".equals(payload)) {
@@ -297,7 +297,7 @@ public class RESTImplementation {
 					pos = pad.position; // gson.fromJson(stringReader, GeoPoint.class);
 					String utcDate = pad.utcdate;
 //					System.out.println("getSunDataNow >> UTC Date:" + utcDate);
-					if ("true".equals(System.getProperty("rest.nav.verbose"))) {
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
 						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getSunDataNow with pos %s, date %s", pos, utcDate));
 					}
 					if (utcDate != null) {
@@ -320,13 +320,13 @@ public class RESTImplementation {
 				}
 			} else {
 				tryDefaultPos = true;
-				if ("true".equals(System.getProperty("rest.nav.verbose"))) {
+				if ("true".equals(System.getProperty("rest.mps.verbose"))) {
 					this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> TryDefaultPos, 1"));
 				}
 			}
 		} else {
 			tryDefaultPos = true;
-			if ("true".equals(System.getProperty("rest.nav.verbose"))) {
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
 				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> TryDefaultPos, 2"));
 			}
 		}
@@ -358,7 +358,7 @@ public class RESTImplementation {
 
 		BodyDataForPos sunData = (refDate == null) ?
 				getSunData(pos.getL(), pos.getG()) :
-				getSunDataForDate(pos.getL(), pos.getG(), refDate);;
+				getSunDataForDate(pos.getL(), pos.getG(), refDate);
 		String content;
 		try {
 			content = mapper.writeValueAsString(sunData);
