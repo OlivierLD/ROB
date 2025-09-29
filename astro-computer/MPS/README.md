@@ -396,7 +396,7 @@ We have 4 intersections to process:
 Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalement inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
-### &Eacute;quation de la distance entre les points de deux cercles...
+### R&eacute;soudre l'&eacute;quation de la distance entre les points de deux cercles...
 Il doit y avoir un - voire deux - point(s) ou cette diff&eacute;rence est nulle.
 
 Pour chaque cercle - base du c&ocirc;ne - on a
