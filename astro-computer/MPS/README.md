@@ -310,16 +310,16 @@ tr&egrave;s (voire trop) complexe. La solution a laquelle on arrive n'est pas "e
 Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.
 
 #### La m&eacute;thode de Newton, en deux mots.
-La facon de proc&eacute;der est la suivante&nbsp;:
+La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - Admettons pour cet exemple qu'on cherche la valeur de `x` pour laquelle `y = f(x) = 0`.
-- On va partir d'une valeur de `x` pour laquelle on sait qu'`y` est d'un c&ocirc;t&eacute; de la solution (qui est donc `0`), qu'on va se retrouver de l'autre en faisant progresser d'une valeur `deltaX`.
+- On va partir d'une valeur de `x` pour laquelle on sait qu'`y` est d'un c&ocirc;t&eacute; de la solution (qui est donc `0`), qu'on va finir par se retrouver de l'autre en faisant progresser `x` d'une valeur `deltaX`.
 - On commence. On part de `x`, on calcule `y`, on trouve une valeur inf&eacute;rieure &agrave; `0`. On note cet `x`.
 - On continue, on augmente `x` de `detlaX`. On recalcule `y`.
   - Tant que le signe de `y` ne change pas, on continue.
 - Le signe de `y` change ! On note la valeur de `x`, on l'appelle `x2`.
   - Et la pr&eacute;c&eacute;dente valeur de `x`, on l'appelle `x1`.
 - On reprend le proc&eacute;d&eacute; au d&eacute;but, mais entre `x1` et `x2`, avec un `deltaX` plus petit (par exemple divis&eacute; par 10).
-- Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `delatX`) est atteinte.
+- Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte.
 
 Dans le cas qui nous occupe, on commencera avec `Z` allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
 Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire).
