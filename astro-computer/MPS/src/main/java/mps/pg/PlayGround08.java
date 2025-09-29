@@ -168,7 +168,10 @@ public class PlayGround08 {
             System.out.println("------------------------------------------------");
         }
 
-        double firstZStep = 0.1d; // More than 0.1 not good enough...
+        // Ephemeris and Altitudes OK, let's proceed.
+
+        double criticalDist = 5.0; // TODO Fix that one !... Change it from 5 to 15, to see the impact.
+        double firstZStep = 0.1d;  // More than 0.1 not good enough...
         final long before = System.currentTimeMillis();
 
         // Now, find the intersection(s) of the two cones...
@@ -326,18 +329,17 @@ public class PlayGround08 {
         }
         final long after = System.currentTimeMillis();
         System.out.println("-----------------------------");
-        System.out.printf("Full Intersection Processing took %s ms\n", NumberFormat.getInstance().format(after - before));
+        System.out.printf("Full Intersection Processing took %s ms (System Time)\n", NumberFormat.getInstance().format(after - before));
 
         // Now process all intersections...
         System.out.println("-----------------------------");
         System.out.printf("We have %d intersections to process:\n", conesIntersectionList.size());
         if (conesIntersectionList.size() > 1) {
             conesIntersectionList.forEach(ci -> System.out.printf("- Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
-            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0); // TODO Iterate on the reference as well ?...
+            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0); // TODO Question: Iterate on the reference as well ?...
 
             List<GeoPoint> candidates = new ArrayList<>();
 
-            double criticalDist = 5.0; // TODO Fix that one !... Change it from 5 to 15, to see the impact.
             for (int i=1; i<conesIntersectionList.size(); i++) {
                 MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
                 double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());

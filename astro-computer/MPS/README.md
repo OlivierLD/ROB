@@ -373,6 +373,8 @@ After 5 iterations:
 1st position between 47º35.55'N / 3º20.13'W and 47º35.51'N / 3º20.09'W, dist 0.05 nm.
 2nd position between 48º03.44'N / 2º13.10'W and 48º03.44'N / 2º13.10'W, dist 0.08 nm.
 -----------------------------
+Full Intersection Processing took 6,683 ms (System Time)
+-----------------------------
 We have 4 intersections to process:
 - Intersection between Saturn and Jupiter
 - Intersection between Saturn and Rigel
@@ -391,7 +393,7 @@ We have 4 intersections to process:
 ------- End of the story -------
 ```
 ... Look in the code for details.  
-Ceci semble fonctionner comme on l'attend, mais il est totalement **_inenvisageable_** de faire
+Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalement inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
 ### &Eacute;quation de la distance entre les points de deux cercles...
