@@ -131,6 +131,7 @@ _Note:_
 
 - Voir [Haversine Formula](https://en.wikipedia.org/wiki/Haversine_formula)
 - Voir [Formule de Haversine](https://fr.wikipedia.org/wiki/Formule_de_haversine)
+- Voir [La guerre du sinus verse et de l'haversine](https://www.navigare-necesse-est.ch/files/1551171181-85-la-guerre-du-sinus-verse-et-de-l-haversine-929.pdf)
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
 - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
@@ -138,6 +139,8 @@ _Note:_
   - https://olivierld.github.io/web.stuff/astro/index_01.html
   - https://olivierld.github.io/web.stuff/astro/index_02.html
   - https://olivierld.github.io/web.stuff/astro/index_03.html
+
+---
 
 #### Quelques angles et d&eacute;finitions utiles pour la suite...
 <img src="images/figure.02.png" width="400">
