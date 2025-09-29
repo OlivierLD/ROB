@@ -33,21 +33,17 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
- * This class defines the REST operations supported by the HTTP Server.
+ * This class defines the REST operations supported by the HTTP Server. The heart of the thing.
  * <p>
  * This list is defined in the <code>List&lt;Operation&gt;</code> named <code>operations</code>.
  * <br>
- * Those operation mostly retrieve the state of the SunFlower class, and device.
- * <br>
- * The SunFlower will use the {@link #processRequest(Request)} method of this class to
+ * The Server will serve the {@link #processRequest(Request)} method of this class to
  * have the required requests processed.
  * </p>
- * For the SunPath, there is something to fix depending on the timezone.
- * Ex: Something wrong in Sun's pos in the sky if TZ is America/Los_Angeles and user pos in Brittany.
  */
 public class RESTImplementation {
 
-	private final static ObjectMapper mapper = new ObjectMapper();
+	private final static ObjectMapper mapper = new ObjectMapper(); // For JSON
 
 	private final MPSRequestManager MPSRequestManager;
 	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -59,7 +55,7 @@ public class RESTImplementation {
 		UTC_FMT.setTimeZone(TimeZone.getTimeZone(UTC_TZ));
 	}
 
-	private final static String ASTRO_PREFIX = "/astro";
+	private final static String MPS_PREFIX = "/mps";
 
 	public RESTImplementation(MPSRequestManager MPSRequestManager) {
 		this.MPSRequestManager = MPSRequestManager;
@@ -79,73 +75,78 @@ public class RESTImplementation {
 	private final List<Operation> operations = Arrays.asList(
 			new Operation(
 					"GET",
-					ASTRO_PREFIX + "/oplist",
+					MPS_PREFIX + "/oplist",
 					this::getOperationList,
 					"List of all available operations, on astro request manager."),
+			new Operation( // QueryString contains nothing
+					"GET",
+					MPS_PREFIX + "/bodies",
+					this::getBodies,
+					"Get the list of the bodies available here."),
 			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00 &fromL=...&fromG=... &wandering=true&stars=true&constellations=true
 					"GET",
-					ASTRO_PREFIX + "/positions-in-the-sky",
+					MPS_PREFIX + "/positions-in-the-sky",
 					this::getPositionsInTheSky,
 					"Get the Sun's and Moon's position (D & GHA) for an UTC date passed as QS prm named 'at', in DURATION Format. Optional: 'fromL' and 'fromG', 'wandering' (true|[false]), 'stars' (true|[false]), 'constellations' (true|[false])."),
 			new Operation( // Payload like { position: { latitude: 37.76661945, longitude: -122.5166988 }, utcdate: "DURATION" }
 					"POST",
-					ASTRO_PREFIX + "/sun-now",
+					MPS_PREFIX + "/sun-now",
 					this::getSunDataNow,
 					"Create a request for Sun data now. Requires body payload (GeoPoint)"),
-			new Operation( // Payload like { position: { latitude: 37.76661945, longitude: -122.5166988 }, step: 10, utcdate: "DURATION" } . POST /astro/sun-path-today
+			new Operation( // Payload like { position: { latitude: 37.76661945, longitude: -122.5166988 }, step: 10, utcdate: "DURATION" } . POST /mps/sun-path-today
 					"POST",
-					ASTRO_PREFIX + "/sun-path-today",
+					MPS_PREFIX + "/sun-path-today",
 					this::getSunPathInTheSky,
 					"Create a request for Sun path today. Requires body payload (GeoPoint & step)"),
 			new Operation( // See payload in the method definition
 					"POST",
-					ASTRO_PREFIX + "/declination",
+					MPS_PREFIX + "/declination",
 					this::getBodyDeclination,
 					"Get declination of one or more bodies between two UTC dates"),
-			new Operation(  // Payload like { latitude: 37.76661945, longitude: -122.5166988 }. POST /astro/sun-between-dates?from=2017-09-01T00:00:00&to=2017-09-02T00:00:01&tz=Europe%2FParis
+			new Operation(  // Payload like { latitude: 37.76661945, longitude: -122.5166988 }. POST /mps/sun-between-dates?from=2017-09-01T00:00:00&to=2017-09-02T00:00:01&tz=Europe%2FParis
 					"POST",
-					ASTRO_PREFIX + "/sun-between-dates",
+					MPS_PREFIX + "/sun-between-dates",
 					this::getSunDataBetween,
 					"Create a request for Sun data between 2 dates. Requires body payload (GeoPoint), and 3 queryString prm : from and to, in DURATION Format, and tz, the timezone name."),
-			new Operation( // Payload like { latitude: 37.76661945, longitude: -122.5166988 }. POST /astro/sun-moon-dec-alt?from=2017-09-01T00:00:00&to=2017-09-02T00:00:01&tz=Europe%2FParis
+			new Operation( // Payload like { latitude: 37.76661945, longitude: -122.5166988 }. POST /mps/sun-moon-dec-alt?from=2017-09-01T00:00:00&to=2017-09-02T00:00:01&tz=Europe%2FParis
 					"POST",
-					ASTRO_PREFIX + "/sun-moon-dec-alt",
+					MPS_PREFIX + "/sun-moon-dec-alt",
 					this::getSunMoonDecAlt,
 					"Create a request for Sun data between 2 dates. Requires body payload (GeoPoint), and 2 to 3 queryString prm : from and to, in DURATION Format, and optional tz, the timezone name."),
-			new Operation( // Example: GET /astro/utc?tz=America%2FNome,America%2FNew_York,Europe%2FParis,Pacific%2FMarquesas
+			new Operation( // Example: GET /mps/utc?tz=America%2FNome,America%2FNew_York,Europe%2FParis,Pacific%2FMarquesas
 					"GET",
-					ASTRO_PREFIX + "/utc",
+					MPS_PREFIX + "/utc",
 					this::getCurrentTime,
 					"Get current UTC Date. Will return UTC time, system time, and optionally, the time(s) at the time zone(s) passed in QS prm 'tz', UTF-8 encoded, comma separated."),
 			new Operation(
 					"POST",
-					ASTRO_PREFIX + "/publish/almanac",
+					MPS_PREFIX + "/publish/almanac",
 					this::publishAlmanac,
 					"Generates nautical almanac document (pdf)"),
 			new Operation(
 					"POST",
-					ASTRO_PREFIX + "/publish/lunar",
+					MPS_PREFIX + "/publish/lunar",
 					this::publishLunar,
 					"Generates lunar distances document (pdf)"),
 			new Operation(
 					"POST",
-					ASTRO_PREFIX + "/publish/perpetual",
+					MPS_PREFIX + "/publish/perpetual",
 					this::publishPerpetual,
 					"Generates perpetual nautical almanac document (pdf)"),
 
 			new Operation(
 					"GET",
-					ASTRO_PREFIX + "/sight-reduction",
+					MPS_PREFIX + "/sight-reduction",
 					this::getSightReductionUserData,
 					"Sight reduction user data sample (for development, to get the shape of the returned object)"),
 			new Operation(
 					"POST",
-					ASTRO_PREFIX + "/sight-reduction",
+					MPS_PREFIX + "/sight-reduction",
 					this::sightReduction,
 					"Sight reduction"),
 			new Operation(
 					"POST",
-					ASTRO_PREFIX + "/reverse-sight",
+					MPS_PREFIX + "/reverse-sight",
 					this::reverseSightReduction,
 					"Reverse Sight reduction")
 
@@ -187,7 +188,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0001")
+							.errorCode("MPS-0001")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -233,7 +234,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0001")
+								.errorCode("MPS-0001")
 								.errorMessage(String.format("Invalid time zone(s): [%s]", errors.stream().collect(Collectors.joining(", ")))));
 				return response;
 			} else {
@@ -261,7 +262,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0002")
+							.errorCode("MPS-0002")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -313,7 +314,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0004")
+									.errorCode("MPS-0004")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -350,7 +351,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0006")
+							.errorCode("MPS-0006")
 							.errorMessage("getSunDataNow: No position provided, no default position found"));
 			return response;
 		}
@@ -365,7 +366,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0006-2")
+							.errorCode("MPS-0006-2")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -449,7 +450,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0004")
+									.errorCode("MPS-0004")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -459,7 +460,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0005")
+							.errorCode("MPS-0005")
 							.errorMessage("getSunPathInTheSky: No position provided, no default position found."));
 			return response;
 		}
@@ -478,7 +479,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0005-2")
+							.errorCode("MPS-0005-2")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -525,7 +526,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0002")
+									.errorCode("MPS-0002")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -538,7 +539,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0003")
+							.errorCode("MPS-0003")
 							.errorMessage("Query parameters 'tz', 'from' and 'to' are required."));
 			return response;
 		} else {
@@ -551,7 +552,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0006")
+								.errorCode("MPS-0006")
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -559,7 +560,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0005")
+								.errorCode("MPS-0005")
 								.errorMessage(String.format("Invalid TimeZone: %s", tzName)));
 				return response;
 			}
@@ -589,7 +590,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0006-2")
+								.errorCode("MPS-0006-2")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -601,7 +602,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0006")
+							.errorCode("MPS-0006")
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -626,7 +627,7 @@ public class RESTImplementation {
 	 * - constellations
 	 *
 	 * To test:
-	 * curl -X GET "http://localhost:XXXX/astro/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true"
+	 * curl -X GET "http://localhost:XXXX/mps/positions-in-the-sky?fromL=47.677667&at=2023-07-13T08:17:47&stars=true&wandering=true&fromG=-3.135667&constellations=true"
 	 *
 	 * Compare with https://stellarium-web.org/
 	 *
@@ -649,7 +650,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0400")
+							.errorCode("MPS-0400")
 							.errorMessage("Query parameters 'at' is required."));
 			return response;
 		} else {
@@ -660,7 +661,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0402")
+									.errorCode("MPS-0402")
 									.errorMessage("Query parameters 'fromL' and 'fromG' must both be here, or none. Just one of them does not work."));
 					return response;
 				}
@@ -722,7 +723,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0403")
+										.errorCode("MPS-0403")
 										.errorMessage(String.format("Invalid Query parameters 'fromL' and 'fromG' [%s], [%s]", prms.get("fromL"), prms.get("fromG"))));
 						return response;
 					}
@@ -972,7 +973,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0401-2")
+									.errorCode("MPS-0401-2")
 									.errorMessage(jpe.toString())
 									.errorStack(HTTPServer.dumpException(jpe)));
 					return response;
@@ -988,7 +989,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0401")
+								.errorCode("MPS-0401")
 								.errorMessage(ex.toString())
 								.errorStack(Arrays.asList(ex.getStackTrace())
 														.stream()
@@ -1002,6 +1003,45 @@ public class RESTImplementation {
 				return response;
 			}
 		}
+		return response;
+	}
+
+	private Response getBodies(Request request) {
+
+		if (false) {
+			System.out.printf("getBodies, %s\n", request.toClassicalString());
+		}
+
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+		Map<String, String> prms = request.getQueryStringParameters(); // Should not be here nor necessary
+
+		final List<Star> starCatalog = Arrays.asList(Star.getCatalog());
+		final List<String> wanderingBodies = Arrays.asList(new String[] {  // List.of not supported in Java8
+				"Aries", "Venus", "Mars", "Jupiter", "Saturn"
+		});
+		final List<String> incontournables = Arrays.asList(new String[] {  // List.of not supported in Java8
+				"Sun", "Moon"
+		});
+		List<String> bodies = new ArrayList<>();
+		incontournables.stream().forEach(body -> bodies.add(body));
+		wanderingBodies.stream().forEach(body -> bodies.add(body));
+		starCatalog.stream().forEach(star -> bodies.add(star.getStarName()));
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(bodies);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0006-3")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+
 		return response;
 	}
 
@@ -1031,7 +1071,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0402")
+										.errorCode("MPS-0402")
 										.errorMessage(String.format("Invalid body(ies): %s",
 												invalids.stream()
 														.collect(Collectors.joining(", ")))));
@@ -1042,7 +1082,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0403")
+										.errorCode("MPS-0403")
 										.errorMessage("to and from dates are required."));
 						return response;
 					}
@@ -1060,7 +1100,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0404")
+										.errorCode("MPS-0404")
 										.errorMessage(String.format("Bad chronology, %s should be AFTER %s", UTC_FMT.format(toCal.getTime()), UTC_FMT.format(fromCal.getTime()))));
 						return response;
 					}
@@ -1116,7 +1156,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0401-0")
+										.errorCode("MPS-0401-0")
 										.errorMessage(jpe.toString())
 										.errorStack(HTTPServer.dumpException(jpe)));
 						return response;
@@ -1127,7 +1167,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0401-1")
+									.errorCode("MPS-0401-1")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1136,7 +1176,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0400-1")
+							.errorCode("MPS-0400-1")
 							.errorMessage("Empty payload. Cannot proceed."));
 			return response;
 		}
@@ -1175,7 +1215,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0007")
+									.errorCode("MPS-0007")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1188,7 +1228,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0008")
+							.errorCode("MPS-0008")
 							.errorMessage("Query parameters 'tz', 'from' and 'to' are required."));
 			return response;
 		} else {
@@ -1201,7 +1241,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0009")
+								.errorCode("MPS-0009")
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -1209,7 +1249,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0010")
+								.errorCode("MPS-0010")
 								.errorMessage(String.format("Invalid TimeZone: %s", tzName)));
 				return response;
 			}
@@ -1271,7 +1311,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0006-1")
+								.errorCode("MPS-0006-1")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -1283,7 +1323,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0006")
+							.errorCode("MPS-0006")
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -1393,7 +1433,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0104")
+										.errorCode("MPS-0104")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -1402,7 +1442,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0103")
+									.errorCode("MPS-0103")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1411,7 +1451,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0101")
+							.errorCode("MPS-0101")
 							.errorMessage("Required payload not found."));
 			return response;
 		}
@@ -1470,7 +1510,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0204")
+										.errorCode("MPS-0204")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -1479,7 +1519,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0203")
+									.errorCode("MPS-0203")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1488,7 +1528,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0201")
+							.errorCode("MPS-0201")
 							.errorMessage("Required payload not found."));
 			return response;
 		}
@@ -1528,7 +1568,7 @@ public class RESTImplementation {
 							response = HTTPServer.buildErrorResponse(response,
 									Response.BAD_REQUEST,
 									new HTTPServer.ErrorPayload()
-											.errorCode("ASTRO-0300")
+											.errorCode("MPS-0300")
 											.errorMessage(errMess));
 							return response;
 						}
@@ -1536,7 +1576,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0301")
+										.errorCode("MPS-0301")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -1589,7 +1629,7 @@ public class RESTImplementation {
 							response = HTTPServer.buildErrorResponse(response,
 									Response.BAD_REQUEST,
 									new HTTPServer.ErrorPayload()
-											.errorCode("ASTRO-0304")
+											.errorCode("MPS-0304")
 											.errorMessage(ex.toString()));
 							return response;
 						}
@@ -1598,7 +1638,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("ASTRO-0303")
+										.errorCode("MPS-0303")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -1606,7 +1646,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("ASTRO-0302")
+									.errorCode("MPS-0302")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1614,7 +1654,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("ASTRO-0306")
+								.errorCode("MPS-0306")
 								.errorMessage("Required payload not found."));
 				return response;
 			}
@@ -1721,7 +1761,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("ASTRO-0100-1")
+							.errorCode("MPS-0100-1")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;

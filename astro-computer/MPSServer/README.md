@@ -7,9 +7,10 @@ WiP...
 
 # Status
 - Infrastructure in place. 
-- No operation is defined yet.
+- Not all operations are defined yet.
 
 ### Operations to be defined
+- Get the body list ✅
 - For a given date (UTC), for a given body, get GHA and D
 - For a given position on Earth, with a given GHA and D, get ObsAlt and Z
 - For a given ObsAlt, with GHA and D, get the Cone Definition
@@ -22,11 +23,22 @@ From this module's root:
 $ ../../gradlew clean shadowJar
 ```
 
+## To run it
+```
+$ ./runMPSServer.sh [--http-port:1234]
+```
+
 ## To invoke it
-Whatever REST client can do it.
+Whatever REST client can do it.  
+For example
 ```
-$ curl ....
+$ curl -X GET http://localhost:9999/mps/oplist
 ```
+or, if `jq` is available
+```
+$ curl -X GET http://localhost:9999/mps/oplist | jq
+```
+
 
 
 ---
