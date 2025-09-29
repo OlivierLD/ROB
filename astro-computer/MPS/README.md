@@ -1,7 +1,20 @@
 # M&eacute;thode du Plan des Sommets (MPS)
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
-Ceci est un chantier...  
+---
+**Sommaire**
+- [Introduction](#introduction)
+- [Rappels](#rappels)
+- [Quelques angles utiles pour la suite](#quelques-angles-et-définitions-utiles-pour-la-suite)
+- [Le principe](#le-principe)
+- [En pratique](#en-pratique)
+- [Une approche graphique](#une-approche-graphique-)
+- [Approche itérative](#approche-itérative)
+- [Résooudre l'équation de la distance entre les points de deux cercles](#résoudre-léquation-de-la-distance-entre-les-points-de-deux-cercles)
+---
+
+## Introduction
+<image src="./images/cone.png" width="40"> Ceci est un chantier...   
 On veut voir si cette m&eacute;thode est applicable manuellement - sans recours &agrave; l'informatique - pour la partie de cette m&eacute;thode applicable aux astres, les satellites ne concernant
 gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.      
 &Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
@@ -127,8 +140,8 @@ _Note:_
   - https://olivierld.github.io/web.stuff/astro/index_03.html
 
 #### Quelques angles et d&eacute;finitions utiles pour la suite...
-<img src="figure.02.png" width="400">
-<!-- ![Context](figure.02.png) -->
+<img src="images/figure.02.png" width="400">
+<!-- ![Context](images/figure.02.png) -->
 
 La figure ci-dessus est faite pour &ecirc;tre aussi simple que possible. Tout est dans le m&ecirc;me plan `MOP` (celui de la feuille).
 Et m&ecirc;me les astres.
@@ -162,8 +175,8 @@ La distance `PS` est &eacute;gale &agrave; `OS - r`.
 Donc `PS = (1 / sin(h)) - r`.
 
 Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Ici, les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
-<!-- ![Another one](./figure.03.png) -->  
-<img src="figure.03.png" width="400">
+<!-- ![Another one](./images/figure.03.png) -->  
+<img src="images/figure.03.png" width="400">
 
 On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;senter _deux_ intersections.  
 En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin - 
@@ -174,8 +187,8 @@ la majorit&eacute; des cas.
 
 Voici la m&ecirc;me figure, "pench&eacute;e" vers celui qui la regarde,
 ou bien qui s'est lev&eacute; de sa chaise, la figure est vue de plus haut...
-<!-- ![Another one](./figure.04.png) -->   
-<img src="figure.04.png" width="400">
+<!-- ![Another one](./images/figure.04.png) -->   
+<img src="images/figure.04.png" width="400">
 
 Le "Plan des Sommets" est celui qui est d&eacute;fini par `S2`, `M` et `S1`, il est tangent &agrave; la Terre en `M`.
 
@@ -202,18 +215,18 @@ D'o&ugrave; - sans doute - le nom de la m&eacute;thode...
 La position de l'observateur - celle qu'on cherche, donc - est a l'intersection de la base des cones, dans les figures qui suivent, 
 c'est `47º40.66'N / 3º08.14'W`.
 
-![Context](01.png)
+![Context](images/01.png)
 
 Voici la m&ecirc;me figure, d'un autre point de vue.  
 On note que - comme attendu - les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
 
-![Context](02.png)
+![Context](images/02.png)
 
 Les cercles se croisent &agrave; la position de l'observateur. Ainsi, la position de l'observateur et
 toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan. Et elles ne sont pas - loin de l&agrave; - 
 n&eacute;cessairement align&eacute;es.
 
-![Context](02.bis.png)
+![Context](images/02.bis.png)
 
 L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
 Mercator.  
@@ -222,10 +235,10 @@ Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
 - Ils peuvent &ecirc;tre &eacute;normes.
 
 Ils ne sont ronds ni sur une carte Mercator :
-![Context Mercator](03.png)
+![Context Mercator](images/03.png)
 
 Ni sur une carte Anaximandre :
-![Context Mercator](04.png)
+![Context Mercator](images/04.png)
 
 En fait, ils ne sont ronds que sur un globe.
 
@@ -295,7 +308,7 @@ Si on a trois astres, on a trois droites, et on est &agrave; leur intersection..
 D'o&ugrave; la question : _Quel est alors dans ce contexte (graphique) l'int&eacute;ret de la M&eacute;thode du Plan des Sommets ?_
 
 La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :  
-![Context](05.png)
+![Context](images/05.png)
 Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).  
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
