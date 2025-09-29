@@ -136,9 +136,9 @@ Des liens&nbsp;:
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
 - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
 - Pour faire des tests avec des donn&eacute;es valides (&eacute;ph&eacute;m&eacute;rides et autres) voir ces pages, avec des composants graphiques.
-  - [https://olivierld.github.io/web.stuff/astro/index_01.html](ES6 Celestial Computer test, with WebComponents)
-  - [https://olivierld.github.io/web.stuff/astro/index_02.html](ES6 Celestial Computer - SPA with BG Components)
-  - [https://olivierld.github.io/web.stuff/astro/index_03.html](Sight Reduction / Correction des hauteurs)
+  - [ES6 Celestial Computer test, with WebComponents](https://olivierld.github.io/web.stuff/astro/index_01.html)
+  - [ES6 Celestial Computer - SPA with BG Components](https://olivierld.github.io/web.stuff/astro/index_02.html)
+  - [Sight Reduction / Correction des hauteurs](https://olivierld.github.io/web.stuff/astro/index_03.html)
 
 ---
 
