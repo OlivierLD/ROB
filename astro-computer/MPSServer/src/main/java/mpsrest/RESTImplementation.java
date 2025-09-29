@@ -1427,7 +1427,7 @@ public class RESTImplementation {
 							System.out.println(line);
 						}
 						exitStatus = p.waitFor();
-						System.out.println("Copy command completed, status " + exitStatus);
+						System.out.println("Move command completed, status " + exitStatus);
 						response.setPayload(String.format(".%s", tempPdfFileName.substring(tempPdfFileName.lastIndexOf(File.separator))).getBytes());
 					} catch (Exception ex) {
 						response = HTTPServer.buildErrorResponse(response,
@@ -1662,7 +1662,6 @@ public class RESTImplementation {
 		return response;
 	}
 
-
 	public static class CelestialBodyData {
 		String name; // Sun, Moon, Planet, or star.
 		double instrumentalAltitude;
@@ -1805,7 +1804,6 @@ public class RESTImplementation {
 
 		return sightReductionImplementation(response, payload, false);
 	}
-
 
 	private Response reverseSightReduction(Request request) {
 

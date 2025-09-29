@@ -10,9 +10,9 @@ WiP...
 - Not all operations are defined yet.
 
 ### Operations to be defined
-- Get the body list ✅
-- For a given date (UTC), for a given body, get GHA and D
-- For a given position on Earth, with a given GHA and D, get ObsAlt and Z
+- Get the body list ✅ `GET /mps/bodies`
+- For a given date (UTC), for a given body, get GHA and D. See `/sight-reduction` and `/reverse-sight`
+- For a given position on Earth, with a given GHA and D, get ObsAlt and Z. See `/sight-reduction` and `/reverse-sight`
 - For a given ObsAlt, with GHA and D, get the Cone Definition
 - For 2 Cone Definitions, get Intersections
 - Process Intersections

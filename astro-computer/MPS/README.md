@@ -14,7 +14,7 @@ M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 ---
 
 ## Introduction
-<image src="./images/cone.png" width="40"> Ceci est un chantier...   
+<image src="./images/cone.png" width="40"/> Ceci est un chantier...   
 On veut voir si cette m&eacute;thode est applicable manuellement - sans recours &agrave; l'informatique - pour la partie de cette m&eacute;thode applicable aux astres, les satellites ne concernant
 gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.      
 &Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e. L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
@@ -337,7 +337,7 @@ La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - On reprend le proc&eacute;d&eacute; au d&eacute;but, mais entre `x1` et `x2`, avec un `deltaX` plus petit (par exemple divis&eacute; par 10).
 - Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte.
 
-Dans le cas qui nous occupe, on commencera avec `Z` allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
+Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
 Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire).
 
 #### Exemple (tous les d&eacute;tails sont dans le code)
