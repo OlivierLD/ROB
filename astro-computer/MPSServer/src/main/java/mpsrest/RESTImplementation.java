@@ -16,6 +16,7 @@ import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
 import implementation.almanac.AlmanacComputerImpl;
 import implementation.perpetualalmanac.Publisher;
+import mps.MPSToolBox;
 import nmea.parser.StringParsers;
 import utils.TimeUtil;
 
@@ -96,8 +97,8 @@ public class RESTImplementation {
 			new Operation( // Payload TDB
 					"POST",
 					MPS_PREFIX + "/cone",
-					this::emptyOperation,
-					"For a given GHD, D, and ObsAlt, get the Cone definition (MPSToolBox.ConeDefinition)."),
+					this::getCone,
+					"For a given GHA, D, and ObsAlt, get the Cone definition (MPSToolBox.ConeDefinition)."),
 			new Operation( // Payload TDB
 					"POST",
 					MPS_PREFIX + "/2-cones-intersections",
@@ -476,6 +477,81 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private Response getCone(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		// Duh
+		if (true) {
+			try {
+				ConeInput dummyConeInput = new ConeInput("Dummy Body", 123.45, 23.45, 34.56);
+				String duh = mapper.writeValueAsString(dummyConeInput);
+				System.out.printf("dummyConeInput (payload) : [%s]\n", duh);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		ConeInput coneInput = null;
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			String payload = new String(request.getContent());
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getCone with payload %s", payload));
+			}
+			if (!"null".equals(payload)) {
+				StringReader stringReader = new StringReader(payload);
+				try {
+					coneInput = mapper.readValue(stringReader, ConeInput.class);
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getCone with coneInput %s", coneInput));
+					}
+				} catch (Exception ex) {
+					System.err.println("--- getCone ---");
+					ex.printStackTrace();
+					System.err.println("---------------------");
+
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MPS-0052")
+									.errorMessage(ex.toString()));
+					return response;
+				}
+			}
+		}
+
+		MPSToolBox.ConeDefinition coneDefinition;
+		try {
+			double fromZ = 0d, toZ = 360d, zStep = 1d; // TODO Get those from input payload
+			coneDefinition = MPSToolBox.calculateCone(new Date(), // Date not really used...
+					coneInput.getObsAlt(), coneInput.getGHA(), coneInput.getD(), coneInput.getBodyName(),
+					fromZ, toZ, zStep,false);
+		} catch (Exception ex) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0052-1")
+							.errorMessage(String.format("PSToolBox.calculateCone: %s", ex.toString())));
+			return response;
+		}
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(coneDefinition);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0052-2")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
+
 	public static class Pg {
 		double GHA;
 		double D;
@@ -575,6 +651,54 @@ public class RESTImplementation {
 
 		public void setZ(double z) {
 			this.z = z;
+		}
+	}
+
+	public static class ConeInput {
+		String bodyName;
+		double GHA;
+		double D;
+		double obsAlt;
+
+		public ConeInput() {
+		}
+		public ConeInput(String bodyName, double GHA, double d, double obsAlt) {
+			this.bodyName = bodyName;
+			this.GHA = GHA;
+			D = d;
+			this.obsAlt = obsAlt;
+		}
+
+		public String getBodyName() {
+			return bodyName;
+		}
+
+		public void setBodyName(String bodyName) {
+			this.bodyName = bodyName;
+		}
+
+		public double getGHA() {
+			return GHA;
+		}
+
+		public void setGHA(double GHA) {
+			this.GHA = GHA;
+		}
+
+		public double getD() {
+			return D;
+		}
+
+		public void setD(double d) {
+			D = d;
+		}
+
+		public double getObsAlt() {
+			return obsAlt;
+		}
+
+		public void setObsAlt(double obsAlt) {
+			this.obsAlt = obsAlt;
 		}
 	}
 	/**
