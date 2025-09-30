@@ -8,13 +8,14 @@ WiP...
 # Status
 - Infrastructure in place. 
 - Not all operations are implemented yet.
+- TODO: Unify the error codes
 
 ### Operations to be defined
 - Get the body list ✅ `curl -X GET http://localhost:9999/mps/bodies`
 - For a given date (UTC), for a given body, get GHA and D. ✅ `curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-30T12:34:56`
 - For a given position on Earth, with a given GHA and D, get ObsAlt and Z. ✅ `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.0,"longitude":-3.0},"pg":{"hp":0.0,"sd":0.0,"gha":123.4,"d":-2.0}}'`, or just `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.0,"longitude":-3.0},"pg":{"gha":123.4,"d":-2.0}}'`  
 - For a given ObsAlt, with GHA and D, get the Cone Definition. ✅ `curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Dummy Body","obsAlt":34.56,"gha":123.45,"d":23.45}'`
-- For 2 Cone Definitions, get Intersections
+- For 2 Cone Definitions, get Intersections, using `MPSToolBox.resolve2Cones`. ✅ `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Body 1","obsAlt":34.56,"gha":123.45,"d":23.45},{"bodyName":"Body 2","obsAlt":45.67,"gha":234.56,"d":34.56}]' `
 - Process Intersections
 
 ## To build it

@@ -102,7 +102,7 @@ public class RESTImplementation {
 			new Operation( // Payload TDB
 					"POST",
 					MPS_PREFIX + "/2-cones-intersections",
-					this::emptyOperation,
+					this::getConesIntersections,
 					"Get the intersections of two MPSToolBox.ConeDefinition."),
 			new Operation( // Payload TDB
 					"POST",
@@ -481,7 +481,7 @@ public class RESTImplementation {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
 		// Duh
-		if (true) {
+		if (false) {
 			try {
 				ConeInput dummyConeInput = new ConeInput("Dummy Body", 123.45, 23.45, 34.56);
 				String duh = mapper.writeValueAsString(dummyConeInput);
@@ -552,6 +552,86 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private Response getConesIntersections(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		// Duh
+		if (false) {
+			try {
+				ConeInput coneInput1 = new ConeInput("Body 1", 123.45, 23.45, 34.56);
+				ConeInput coneInput2 = new ConeInput("Body 2", 234.56, 34.56, 45.67);
+				List<ConeInput> coneList = Arrays.asList(new ConeInput[] { coneInput1, coneInput2 });
+				String duh = mapper.writeValueAsString(coneList);
+				System.out.printf("conesList (payload) : [%s]\n", duh);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		ConeInput[] conesInput = null;
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			String payload = new String(request.getContent());
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConesIntersections with payload %s", payload));
+			}
+			if (!"null".equals(payload)) {
+				StringReader stringReader = new StringReader(payload);
+				try {
+					conesInput = mapper.readValue(stringReader, ConeInput[].class); // List<ConeInput>.class);
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConesIntersections with coneInput %s", conesInput));
+					}
+				} catch (Exception ex) {
+					System.err.println("--- getCone ---");
+					ex.printStackTrace();
+					System.err.println("---------------------");
+
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MPS-0052")
+									.errorMessage(ex.toString()));
+					return response;
+				}
+			}
+		}
+
+		List<GeoPoint> intersections;
+		try {
+			// TODO Get those from input payload ?
+			double zStep = 0.1d; // 1 is too small
+			int nbLoops  = 5;
+			intersections = MPSToolBox.resolve2Cones(new Date(), // Date not really used...
+					conesInput[0].getObsAlt(), conesInput[0].getGHA(), conesInput[0].getD(),
+					new Date(), // Date not really used...
+					conesInput[1].getObsAlt(), conesInput[1].getGHA(), conesInput[1].getD(),
+					zStep, nbLoops, false, false);
+		} catch (Exception ex) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0052-1")
+							.errorMessage(String.format("PSToolBox.calculateCone: %s", ex.toString())));
+			return response;
+		}
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(intersections);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0052-2")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
 	public static class Pg {
 		double GHA;
 		double D;
