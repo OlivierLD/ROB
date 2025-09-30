@@ -416,7 +416,7 @@ Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalem
 le boulot sans un calculateur - programmable.
 
 ### R&eacute;soudre l'&eacute;quation de la distance entre les points de deux cercles...
-Il doit y avoir un - voire deux - point(s) ou cette diff&eacute;rence est nulle.
+Il doit y avoir un - voire deux - point(s) ou cette distance est nulle.
 
 Pour chaque cercle - base du c&ocirc;ne - on a
 - La hauteur de l'astre observ&eacute;
