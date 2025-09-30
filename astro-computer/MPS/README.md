@@ -58,7 +58,7 @@ Dans les formules suivantes :
 - `D` est la d&eacute;clinaison de l'astre observ&eacute; (calculée ou trouvée dans les éphémérides)
 - `L` est la latitude de l'observateur
 - `G` est la longitude de l'observateur
-- `AHG` est l'Angle Horaire a Greenwich de l'astre  (calculé ou trouvé dans les éphémérides)
+- `AHG` est l'Angle Horaire a Greenwich de l'astre (calculé ou trouvé dans les éphémérides)
 - `AHL` est l'Angle Horaire Local de l'astre (lequel d&eacute;pend de `AHG` et `G`)
 
 Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :
@@ -77,7 +77,7 @@ Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/bl
 
 ### Haversine
 La formule de haversine permet de conna&icirc;tre, d'un point donn&eacute; &agrave; un autre :
-- la distance (GC, orthodromique) qui les s&eacute;pare
+- la distance (GC = Grand Cercle = Great Circle = orthodromique) qui les s&eacute;pare
 - l'angle de route initial
 
 - Le point de d&eacute;part est `(L1, G1)`
