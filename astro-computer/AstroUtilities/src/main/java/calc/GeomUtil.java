@@ -590,7 +590,7 @@ public final class GeomUtil {
 			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
 			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 			// Reverse
-			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getLatitude(), reachedPoint.getLongitude());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
 		}
 		{ // Two
@@ -604,7 +604,7 @@ public final class GeomUtil {
 			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 
 			// Reverse
-			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getLatitude(), reachedPoint.getLongitude());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
 		}
 		{ // Three
@@ -617,7 +617,7 @@ public final class GeomUtil {
 			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
 			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 			// Reverse
-			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getLatitude(), reachedPoint.getLongitude());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
 		}
 		{ // Four
@@ -630,7 +630,7 @@ public final class GeomUtil {
 			final GeoPoint reachedHaversine = haversineInv(new GeoPoint(fromLat, fromLng), dist, cog);
 			System.out.printf("Hav: New pos, %.02f nm in the %.01f: %s\n", dist, cog, reachedHaversine);
 			// Reverse
-			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getL(), reachedPoint.getG());
+			final double haversineNm = haversineNm(fromLat, fromLng, reachedPoint.getLatitude(), reachedPoint.getLongitude());
 			System.out.printf("Between the 2: %.03f nm\n", haversineNm);
 		}
 		System.out.println("-----------------");

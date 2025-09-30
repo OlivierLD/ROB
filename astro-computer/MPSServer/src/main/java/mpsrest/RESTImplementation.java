@@ -88,6 +88,26 @@ public class RESTImplementation {
 					MPS_PREFIX + "/pg/{body}/{utc-date}",
 					this::getBodyPgData,
 					"Get the GHA and D for a given {body} at a given {utc duration}"),
+			new Operation( // Payload like { position: { latitude: 37.76661945, longitude: -122.5166988 }, pg: { ... } }
+					"POST",
+					MPS_PREFIX + "/alt-and-z",
+					this::getAltAndZ,
+					"For a given user position, a given Pg (GHA, D, ...), get Observed Altitude and Azimut."),
+			new Operation( // Payload TDB
+					"POST",
+					MPS_PREFIX + "/cone",
+					this::emptyOperation,
+					"For a given GHD, D, and ObsAlt, get the Cone definition (MPSToolBox.ConeDefinition)."),
+			new Operation( // Payload TDB
+					"POST",
+					MPS_PREFIX + "/2-cones-intersections",
+					this::emptyOperation,
+					"Get the intersections of two MPSToolBox.ConeDefinition."),
+			new Operation( // Payload TDB
+					"POST",
+					MPS_PREFIX + "/process-intersections",
+					this::emptyOperation,
+					"Process the intersections of two MPSToolBox.ConeDefinition."),
 			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00 &fromL=...&fromG=... &wandering=true&stars=true&constellations=true
 					"GET",
 					MPS_PREFIX + "/positions-in-the-sky",
@@ -362,8 +382,8 @@ public class RESTImplementation {
 		}
 
 		BodyDataForPos sunData = (refDate == null) ?
-				getSunData(pos.getL(), pos.getG()) :
-				getSunDataForDate(pos.getL(), pos.getG(), refDate);
+				getSunData(pos.getLatitude(), pos.getLongitude()) :
+				getSunDataForDate(pos.getLatitude(), pos.getLongitude(), refDate);
 		String content;
 		try {
 			content = mapper.writeValueAsString(sunData);
@@ -381,13 +401,94 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private Response getAltAndZ(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		// Duh
+		if (false) {
+			try {
+				PosAndPg dummyPosAndPg = new PosAndPg(new GeoPoint(47.00, -3), new Pg(123.4, -2, 0, 0));
+				String duh = mapper.writeValueAsString(dummyPosAndPg);
+				System.out.printf("DummyPosAndPg (payload) : [%s]\n", duh);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		GeoPoint pos = null;
+		Pg pg = null;
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			String payload = new String(request.getContent());
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getAltAndZ with payload %s", payload));
+			}
+			if (!"null".equals(payload)) {
+				StringReader stringReader = new StringReader(payload);
+				try {
+					PosAndPg pap = mapper.readValue(stringReader, PosAndPg.class);
+					pos = pap.getPos(); // gson.fromJson(stringReader, GeoPoint.class);
+					pg = pap.getPg();
+//					System.out.println("getSunDataNow >> UTC Date:" + utcDate);
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getAltAndZ with pos %s, pg %s", pos, pg));
+					}
+				} catch (Exception ex) {
+					System.err.println("--- getAltAndZ ---");
+					ex.printStackTrace();
+					System.err.println("---------------------");
+
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MPS-0051")
+									.errorMessage(ex.toString()));
+					return response;
+				}
+			}
+		}
+
+		SightReductionUtil sru = new SightReductionUtil();
+
+		sru.setL(pos.getLatitude());
+		sru.setG(pos.getLongitude());
+
+		sru.setAHG(pg.getGHA());
+		sru.setD(pg.getD());
+		sru.calculate();
+
+		AltAndZ altAndZ = new AltAndZ(sru.getHe(), sru.getZ());
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(altAndZ);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0051-2")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
+
 	public static class Pg {
 		double GHA;
 		double D;
+		double hp;
+		double sd;
 
-		public Pg(double GHA, double D) {
+		public Pg() {
+		}
+		public Pg(double GHA, double D, double sd, double hp) {
 			this.GHA = GHA;
 			this.D = D;
+			this.sd = sd;
+			this.hp = hp;
 		}
 
 		public double getGHA() {
@@ -405,8 +506,77 @@ public class RESTImplementation {
 		public void setD(double d) {
 			D = d;
 		}
+
+		public double getHp() {
+			return hp;
+		}
+
+		public void setHp(double hp) {
+			this.hp = hp;
+		}
+
+		public double getSd() {
+			return sd;
+		}
+
+		public void setSd(double sd) {
+			this.sd = sd;
+		}
 	}
 
+	public static class PosAndPg {
+		GeoPoint pos;
+		Pg pg;
+
+		public PosAndPg() {
+		}
+		public PosAndPg(GeoPoint pos, Pg pg) {
+			this.pos = pos;
+			this.pg = pg;
+		}
+
+		public GeoPoint getPos() {
+			return pos;
+		}
+
+		public void setPos(GeoPoint pos) {
+			this.pos = pos;
+		}
+
+		public Pg getPg() {
+			return pg;
+		}
+
+		public void setPg(Pg pg) {
+			this.pg = pg;
+		}
+	}
+
+	public static class AltAndZ {
+		double alt;
+		double z;
+
+		public AltAndZ(double alt, double z) {
+			this.alt = alt;
+			this.z = z;
+		}
+
+		public double getAlt() {
+			return alt;
+		}
+
+		public void setAlt(double alt) {
+			this.alt = alt;
+		}
+
+		public double getZ() {
+			return z;
+		}
+
+		public void setZ(double z) {
+			this.z = z;
+		}
+	}
 	/**
 	 *
 	 * @param request MUST {body} and {utc-date} path parameters
@@ -478,40 +648,56 @@ public class RESTImplementation {
 				true);          // Recalculate DeltaT everytime
 		Double GHA = null;
 		Double D = null;
+		Double sd = null;
+		Double hp = null;
 
 		switch (bodyName) {
 			case "Sun":
 				GHA = acv2.getSunGHA();
 				D = acv2.getSunDecl();
+				hp  = acv2.getSunHp() / 3_600d;
+				sd  = acv2.getSunSd() / 3_600d;
 				break;
 			case "Moon":
 				GHA = acv2.getMoonGHA();
 				D = acv2.getMoonDecl();
+				hp  = acv2.getMoonHp() / 3_600d;
+				sd  = acv2.getMoonSd() / 3_600d;
 				break;
 			case "Venus":
 				GHA = acv2.getVenusGHA();
 				D = acv2.getVenusDecl();
+				hp  = acv2.getVenusHp() / 3_600d;
+				sd  = acv2.getVenusSd() / 3_600d;
 				break;
 			case "Mars":
 				GHA = acv2.getMarsGHA();
 				D = acv2.getMarsDecl();
+				hp  = acv2.getMarsHp() / 3_600d;
+				sd  = acv2.getMarsSd() / 3_600d;
 				break;
 			case "Jupiter":
 				GHA = acv2.getJupiterGHA();
 				D = acv2.getJupiterDecl();
+				hp  = acv2.getJupiterHp() / 3_600d;
+				sd  = acv2.getJupiterSd() / 3_600d;
 				break;
 			case "Saturn":
 				GHA = acv2.getSaturnGHA();
 				D = acv2.getSaturnDecl();
+				hp  = acv2.getSaturnHp() / 3_600d;
+				sd  = acv2.getSaturnSd() / 3_600d;
 				break;
 			default: // Stars
 				acv2.starPos(bodyName);
 				GHA = acv2.getStarGHA(bodyName);
 				D = acv2.getStarDec(bodyName);
+				hp = 0d;
+				sd = 0d;
 				break;
 		}
 
-		Pg pg = new Pg(GHA, D);
+		Pg pg = new Pg(GHA, D, sd, hp);
 
 		String content;
 		try {
@@ -624,8 +810,8 @@ public class RESTImplementation {
 			refDate.setTimeInMillis(ld);
 		}
 		List<BodyAt> sunPath = refDate == null ?
-				getSunDataForAllDay(pas.position.getL(), pas.position.getG(), pas.step) :
-				getSunDataForAllDay(pas.position.getL(), pas.position.getG(), pas.step, refDate);
+				getSunDataForAllDay(pas.position.getLatitude(), pas.position.getLongitude(), pas.step) :
+				getSunDataForAllDay(pas.position.getLatitude(), pas.position.getLongitude(), pas.step, refDate);
 		String content;
 		try {
 			content = mapper.writeValueAsString(sunPath);
@@ -733,7 +919,7 @@ public class RESTImplementation {
 				this.MPSRequestManager.getLogger().log(Level.INFO, String.format("Starting SunData calculation at %s (%s)", current.getTime(), fromPrm));
 			}
 			do {
-				BodyDataForPos data = getSunDataForDate(pos.getL(), pos.getG(), current);
+				BodyDataForPos data = getSunDataForDate(pos.getLatitude(), pos.getLongitude(), current);
 				map.put(current.getTimeInMillis(), data);
 				current.add(Calendar.DATE , 1); // Add one day
 			} while (current.before(toCal));
@@ -1439,13 +1625,13 @@ public class RESTImplementation {
 						utc.get(Calendar.HOUR_OF_DAY), // and not HOUR !!!!
 						utc.get(Calendar.MINUTE),
 						0, // current.get(Calendar.SECOND),
-						pos.getL(),
-						pos.getG());
+						pos.getLatitude(),
+						pos.getLongitude());
 
 				SunMoonDecAlt data = new SunMoonDecAlt()
 						.epoch(current.getTimeInMillis())
-						.lat(pos.getL())
-						.lng(pos.getG())
+						.lat(pos.getLatitude())
+						.lng(pos.getLongitude())
 						.sunAlt(astroData[AstroComputerV2.HE_SUN_IDX])
 						.sunDecl(astroData[AstroComputerV2.DEC_SUN_IDX])
 						.moonAlt(astroData[AstroComputerV2.HE_MOON_IDX])

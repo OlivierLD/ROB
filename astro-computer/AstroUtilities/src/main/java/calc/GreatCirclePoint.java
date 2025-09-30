@@ -13,8 +13,8 @@ public final class GreatCirclePoint
     }
 
     public GreatCirclePoint(GeoPoint gp) {
-        latitude = gp.getL();
-        longitude = gp.getG();
+        latitude = gp.getLatitude();
+        longitude = gp.getLongitude();
     }
 
     public double getL() {

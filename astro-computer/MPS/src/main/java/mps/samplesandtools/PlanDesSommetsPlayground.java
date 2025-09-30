@@ -154,12 +154,12 @@ public class PlanDesSommetsPlayground {
         if (true) { // Reverse tests
             GeoPoint bodyPos = new GeoPoint(dec, AstroComputerV2.ghaToLongitude(gha));
 
-            final double userToBodyIRA = GeomUtil.bearingFromTo(latitude, longitude, bodyPos.getL(), bodyPos.getG()); // IRA
+            final double userToBodyIRA = GeomUtil.bearingFromTo(latitude, longitude, bodyPos.getLatitude(), bodyPos.getLongitude()); // IRA
             // Reverse look, body to user
-            final double bodyToUserIRA = GeomUtil.bearingFromTo(bodyPos.getL(), bodyPos.getG(), latitude, longitude); // IRA
+            final double bodyToUserIRA = GeomUtil.bearingFromTo(bodyPos.getLatitude(), bodyPos.getLongitude(), latitude, longitude); // IRA
             System.out.printf("-> Reverse: From body %s / %s, to user %s / %s (%f / %f), bearing: %.02f\272 (opposite ICA is %.02f\272)\n",
-                    GeomUtil.decToSex(bodyPos.getL(), GeomUtil.SHELL, GeomUtil.NS).trim(),
-                    GeomUtil.decToSex(bodyPos.getG(), GeomUtil.SHELL, GeomUtil.EW).trim(),
+                    GeomUtil.decToSex(bodyPos.getLatitude(), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                    GeomUtil.decToSex(bodyPos.getLongitude(), GeomUtil.SHELL, GeomUtil.EW).trim(),
                     GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS).trim(),
                     GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW).trim(),
                     latitude, longitude,
@@ -403,15 +403,15 @@ public class PlanDesSommetsPlayground {
 
                 if (verboseCircle) {
                     GreatCirclePoint bodyPt = new GreatCirclePoint(Math.toRadians(dec), Math.toRadians(AstroComputerV2.ghaToLongitude(gha))); // Body
-                    GreatCirclePoint circlePt = new GreatCirclePoint(Math.toRadians(drGC.getL()), Math.toRadians(drGC.getG())); // Observer, circle point
+                    GreatCirclePoint circlePt = new GreatCirclePoint(Math.toRadians(drGC.getLatitude()), Math.toRadians(drGC.getLongitude())); // Observer, circle point
                     // GC calc, for validation
                     // final double radiusInNM = GreatCircle.getDistanceInNM(bodyPt, circlePt);
-                    final double radiusInNM = GeomUtil.haversineNm(bodyPos.getL(), bodyPos.getG(), drGC.getL(), drGC.getG()); // THE one to prefer
+                    final double radiusInNM = GeomUtil.haversineNm(bodyPos.getLatitude(), bodyPos.getLongitude(), drGC.getLatitude(), drGC.getLongitude()); // THE one to prefer
                     // final double toTheObs = GreatCircle.getInitialRouteAngleInDegrees(bodyPt, circlePt);
                     final double toTheObs = GreatCircle.getIRAInDegrees(bodyPt, circlePt);
 
                     // Validation for the altitude
-                    SightReductionUtil sru = new SightReductionUtil(gha, dec, drGC.getL(), drGC.getG());
+                    SightReductionUtil sru = new SightReductionUtil(gha, dec, drGC.getLatitude(), drGC.getLongitude());
                     sru.calculate();
                     // He and Z, from body's position and observer's position
                     he = sru.getHe();
@@ -422,8 +422,8 @@ public class PlanDesSommetsPlayground {
                             GeomUtil.decToSex(AstroComputerV2.ghaToLongitude(gha), GeomUtil.SHELL, GeomUtil.EW).trim(),
                             distanceInNM,
                             hdg,
-                            GeomUtil.decToSex(drGC.getL(), GeomUtil.SHELL, GeomUtil.NS).trim(),
-                            GeomUtil.decToSex(drGC.getG(), GeomUtil.SHELL, GeomUtil.EW).trim(),
+                            GeomUtil.decToSex(drGC.getLatitude(), GeomUtil.SHELL, GeomUtil.NS).trim(),
+                            GeomUtil.decToSex(drGC.getLongitude(), GeomUtil.SHELL, GeomUtil.EW).trim(),
                             bodyName,
                             GeomUtil.decToSex(he, GeomUtil.SHELL, GeomUtil.NONE).trim(),
                             z, radiusInNM, toTheObs);

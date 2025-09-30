@@ -22,27 +22,27 @@ public final class GeoPoint
 		return longitude;
 	}
 
-	public double getL() {
-		return latitude;
-	}
-
-	public double getG() {
-		return longitude;
-	}
-
-	public void setL(double l) {
-		latitude = l;
-	}
-
-	public void setG(double g) {
-		longitude = g;
-	}
+//	public double getL() {
+//		return latitude;
+//	}
+//
+//	public double getG() {
+//		return longitude;
+//	}
+//
+//	public void setL(double l) {
+//		latitude = l;
+//	}
+//
+//	public void setG(double g) {
+//		longitude = g;
+//	}
 
 	public boolean equals(GeoPoint p) {
 		String g = GeomUtil.decToSex(longitude, GeomUtil.SHELL, GeomUtil.EW);
-		String gp = GeomUtil.decToSex(p.getG(), GeomUtil.SHELL, GeomUtil.EW);
+		String gp = GeomUtil.decToSex(p.getLongitude(), GeomUtil.SHELL, GeomUtil.EW);
 		String l = GeomUtil.decToSex(latitude, GeomUtil.SHELL, GeomUtil.NS);
-		String lp = GeomUtil.decToSex(p.getL(), GeomUtil.SHELL, GeomUtil.NS);
+		String lp = GeomUtil.decToSex(p.getLatitude(), GeomUtil.SHELL, GeomUtil.NS);
 		return g.equals(gp) && l.equals(lp);
 	}
 
@@ -54,8 +54,8 @@ public final class GeoPoint
 	 */
 	public double orthoDistanceBetween(GeoPoint target) {
 		GreatCircle gc = new GreatCircle();
-		gc.setStart(new GreatCirclePoint(Math.toRadians(this.getL()), Math.toRadians(this.getG())));
-		gc.setArrival(new GreatCirclePoint(Math.toRadians(target.getL()), Math.toRadians(target.getG())));
+		gc.setStart(new GreatCirclePoint(Math.toRadians(this.getLatitude()), Math.toRadians(this.getLongitude())));
+		gc.setArrival(new GreatCirclePoint(Math.toRadians(target.getLatitude()), Math.toRadians(target.getLongitude())));
 		gc.calculateGreatCircle(1);
 		double d = Math.toDegrees(gc.getDistance());
 		return d * 60D;
@@ -68,8 +68,8 @@ public final class GeoPoint
 	 * @return distance in degrees
 	 */
 	public double gcDistanceBetween(GeoPoint target) {
-		GreatCirclePoint from = new GreatCirclePoint(Math.toRadians(this.getL()), Math.toRadians(this.getG()));
-		GreatCirclePoint to = new GreatCirclePoint(Math.toRadians(target.getL()), Math.toRadians(target.getG()));
+		GreatCirclePoint from = new GreatCirclePoint(Math.toRadians(this.getLatitude()), Math.toRadians(this.getLongitude()));
+		GreatCirclePoint to = new GreatCirclePoint(Math.toRadians(target.getLatitude()), Math.toRadians(target.getLongitude()));
 		return GreatCircle.getGCDistanceInDegrees(from, to);
 	}
 
@@ -81,8 +81,8 @@ public final class GeoPoint
 	 */
 	public double loxoDistanceBetween(GeoPoint target) {
 		GreatCircle gc = new GreatCircle();
-		gc.setStart(new GreatCirclePoint(Math.toRadians(this.getL()), Math.toRadians(this.getG())));
-		gc.setArrival(new GreatCirclePoint(Math.toRadians(target.getL()), Math.toRadians(target.getG())));
+		gc.setStart(new GreatCirclePoint(Math.toRadians(this.getLatitude()), Math.toRadians(this.getLongitude())));
+		gc.setArrival(new GreatCirclePoint(Math.toRadians(target.getLatitude()), Math.toRadians(target.getLongitude())));
 		GreatCircle.RLData rlData = gc.calculateRhumbLine();
 		return rlData.getdLoxo();
 	}
@@ -103,11 +103,11 @@ public final class GeoPoint
 	}
 
 	public GeoPoint degreesToRadians() {
-		return new GeoPoint(Math.toRadians(this.getL()), Math.toRadians(this.getG()));
+		return new GeoPoint(Math.toRadians(this.getLatitude()), Math.toRadians(this.getLongitude()));
 	}
 
 	public GeoPoint radiansToDegrees() {
-		return new GeoPoint(Math.toDegrees(this.getL()), Math.toDegrees(this.getG()));
+		return new GeoPoint(Math.toDegrees(this.getLatitude()), Math.toDegrees(this.getLongitude()));
 	}
 
 	@Override
