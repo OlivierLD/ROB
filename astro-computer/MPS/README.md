@@ -328,7 +328,7 @@ Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un conte
 #### La m&eacute;thode de Newton, en deux mots.
 La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - Admettons pour cet exemple qu'on cherche la valeur de `x` pour laquelle `y = f(x) = 0`. `f(x)` est cette fonction (pas n&eacute;cessairement une fonction, d'ailleurs, &ccedil;a peut &ecirc;tre une conique, ou n'importe quelle autre acrobatie), dont on a la formule, mais dont l'obtention de la (ou des) racine(s) fait peur.
-- On va partir d'une valeur de `x` pour laquelle on sait qu'`y` est d'un c&ocirc;t&eacute; de la solution (qui est donc `0`), qu'on va finir par se retrouver de l'autre en faisant progresser `x` d'une valeur `deltaX`.
+- On va partir d'une valeur de `x` pour laquelle on sait qu'`y` est d'un c&ocirc;t&eacute; du r&eacute;sultat attendu (qui est donc `0`), qu'on va finir par se retrouver de l'autre en faisant progresser `x` d'une valeur `deltaX`.
 - On commence. On part de `x`, on calcule `y`, on trouve une valeur inf&eacute;rieure &agrave; `0`. On note cet `x`.
 - On continue, on augmente `x` de `detlaX`. On recalcule `y`.
   - Tant que le signe de `y` ne change pas, on continue.
