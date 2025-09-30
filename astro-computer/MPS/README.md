@@ -338,7 +338,7 @@ La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte. La racine (le r&eacute;sultat) recherch&eacute;e est entre `x1` et `x2`, lesquels sont
 s&eacute;par&eacute;s d'une valeur `deltaX`. Il appartient d&egrave;s lors &agrave; l'utilisateur de savoir si cette pr&eacute;cision est suffisante, ou s'il faut poursuivre les it&eacute;rations.
 
-Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
+Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien, qui s'appelle `z` aussi) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
 Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire). Ainsi, avec ce `10`,
 si on demarre avec un pas de `0.1` (10<sup><small>-1</small></sup>) degr&eacute;, et qu'on proc&egrave;de en 4 it&eacute;rations, on finira avec un pas de 10<sup><small>-4</small></sup > degr&eacute;s, mais sur un intervalle (un arc de cercle)
 beaucoup plus restreint que lors de la premi&egrave;re it&eacute;ration (qui faisait tout le cercle). D'o&ugrave; l'int&eacute;r&ecirc;t de la m&eacute;thode, merci Isaac&nbsp;!
@@ -411,7 +411,7 @@ We have 4 intersections to process:
 ==> Difference/offset: 0.00 nm
 ------- End of the story -------
 ```
-... Look in the code for details.  
+... Encore un fois, les d&eacute;tails sont dans le code.  
 Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalement inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
@@ -459,16 +459,18 @@ le probl&egrave;me &agrave; poser - et r&eacute;soudre - est donc :
 - Avec `Pg1` et `Pg2` d&eacute;finis par les &eacute;h&eacute;merides &agrave; l'heure de l'observation, pour les astres observ&eacute;s,
 `radius1` et `radius2` d&eacute;finis par la hauteur des astres observ&eacute;s
 - Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
-- Quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` ?
+- **_On cherche_** quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` ?
 
 Le syst&egrave;me complet devient ainsi
 ```
-finalLat1 = arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1))
-finalLng1 = pg1Lng + atan2(sin(Z1) * sin(radius1) * cos(pg1Lat), cos(radius1) - (sin(pg1Lat) * sin(finalLat1)))
-finalLat2 = arcsin(sin(pg2Lat) * cos(radius2)) + (cos(pg2Lat) * sin(radius2) * cos(Z2))
-finalLng2 = pg2Lng + atan2(sin(Z2) * sin(radius2) * cos(pg2Lat), cos(radius2) - (sin(pg2Lat) * sin(finalLat2)))
-finalLat1 = finalLat2
-finalLng1 = finalLng2
+ /
+ | finalLat1 = arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1))
+ | finalLng1 = pg1Lng + atan2(sin(Z1) * sin(radius1) * cos(pg1Lat), cos(radius1) - (sin(pg1Lat) * sin(finalLat1)))
+<  finalLat2 = arcsin(sin(pg2Lat) * cos(radius2)) + (cos(pg2Lat) * sin(radius2) * cos(Z2))
+ | finalLng2 = pg2Lng + atan2(sin(Z2) * sin(radius2) * cos(pg2Lat), cos(radius2) - (sin(pg2Lat) * sin(finalLat2)))
+ | finalLat1 = finalLat2
+ | finalLng1 = finalLng2
+ \
 ```
 
 &Agrave; comparer avec les [formules &agrave; r&eacute;soudre](#hauteur-et-azimut-dun-astre) pour la hauteur et l'azimuth, 
