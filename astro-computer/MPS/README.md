@@ -23,7 +23,7 @@ C'est ce qu'on se propose de voir ici.
 Le principe de la m&eacute;thode repose sur les assertions suivantes :
 - &Agrave; un instant donn&eacute;, si on a observ&eacute; un astre &agrave; une hauteur donn&eacute;e, on est capable de d&eacute;terminer
 le lieu des points qui voient cet astre &agrave; cette hauteur (c'est le tr&egrave;s fameux "cercle d'&eacute;gales hauteurs").
-- En observant plusieurs astres, il s'agit de d&eacute;terminer le lieu des points communs (id&eacute;alement **_du_** ppoint commun) aux diff&eacute;rents cercles de hauteur ainsi obtenus, qui 
+- En observant plusieurs astres, il s'agit de d&eacute;terminer le lieu des points communs (id&eacute;alement **_du_** point commun) aux diff&eacute;rents cercles de hauteur ainsi obtenus, qui 
 devrait en toute logique correspondre &agrave; la position de l'observateur.
 
 L'&eacute;quation &agrave; r&eacute;soudre n'est pas triviale..., c'est bien l'objet de ce document.
@@ -34,7 +34,7 @@ une position estim&eacute;e. On a juste besoin ici de connaitre :
 - L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e).
 
 > _Note_ :  
-> Toutes les figures de ce document - &agrave; l'exception de la premi&egrave;re - sont r&eacute;alis&eacute;es
+> Toutes les figures de ce document - &agrave; l'exception des trois premi&egrave;res - sont r&eacute;alis&eacute;es
 > &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet. 
 
 > _Note_ :  
@@ -163,7 +163,7 @@ Pour le c&ocirc;ne, l'angle en O (MOP) est `(90° - h)`.
 La distance (grand cercle) `M - P` est donc `(90° - h) * 60.0` nm.
 
 La distance `MS` est `r * (1 / tg(h))`, o&ugrave; `r` est le rayon de la Terre.  
-Le rayon de la base du cone est `r * cos(h)`.  
+Le rayon de la base du c&ocirc;ne est `r * cos(h)`.  
 La distance du centre le la Terre `O` au sommet `S` est `sqrt(MS^2 + r^2)`, not&eacute; aussi
 
 $$
@@ -215,7 +215,7 @@ de les voir tous en m&ecirc;me temps.
 _Une autre Note_ : Le sommet de tous les c&ocirc;nes, et la position de l'observateur, se trouvent tous dans le m&ecirc;me plan.
 D'o&ugrave; - sans doute - le nom de la m&eacute;thode...
 
-La position de l'observateur - celle qu'on cherche, donc - est a l'intersection de la base des cones, dans les figures qui suivent, 
+La position de l'observateur - celle qu'on cherche, donc - est &agrave; l'intersection de la base des c&ocirc;nes, dans les figures qui suivent, 
 c'est `47º40.66'N / 3º08.14'W`.
 
 ![Context](images/01.png)
@@ -320,14 +320,14 @@ Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
 C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et 
 `2nd Position`.
 Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.  
-On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton) (details &agrave; suivre).   
+On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton).   
 La m&eacute;thode de Newton est fort pratique quand on cherche la solution d'une &eacute;quation (ou d'un syst&egrave;me d'&eacute;quations) 
 tr&egrave;s (voire trop) complexe. La solution &agrave; laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.  
 Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.
 
 #### La m&eacute;thode de Newton, en deux mots.
 La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
-- Admettons pour cet exemple qu'on cherche la valeur de `x` pour laquelle `y = f(x) = 0`.
+- Admettons pour cet exemple qu'on cherche la valeur de `x` pour laquelle `y = f(x) = 0`. `f(x)` est cette fonction (pas n&eacute;cessairement une fonction, d'ailleurs, &ccedil;a peut &ecirc;tre une conique, ou n'importe quelle autre acrobatie), dont on a la formule, mais dont l'obtention de la (ou des) racine(s) fait peur.
 - On va partir d'une valeur de `x` pour laquelle on sait qu'`y` est d'un c&ocirc;t&eacute; de la solution (qui est donc `0`), qu'on va finir par se retrouver de l'autre en faisant progresser `x` d'une valeur `deltaX`.
 - On commence. On part de `x`, on calcule `y`, on trouve une valeur inf&eacute;rieure &agrave; `0`. On note cet `x`.
 - On continue, on augmente `x` de `detlaX`. On recalcule `y`.
