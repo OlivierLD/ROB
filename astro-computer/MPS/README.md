@@ -459,7 +459,7 @@ le probl&egrave;me &agrave; poser - et r&eacute;soudre - est donc :
 - Avec `Pg1` et `Pg2` d&eacute;finis par les &eacute;h&eacute;merides &agrave; l'heure de l'observation, pour les astres observ&eacute;s,
 `radius1` et `radius2` d&eacute;finis par la hauteur des astres observ&eacute;s
 - Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
-- **_On cherche_** quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` ?
+- **_On cherche_** quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` !
 
 Le syst&egrave;me complet devient ainsi
 ```
