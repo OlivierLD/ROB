@@ -335,7 +335,8 @@ La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - Le signe de `y` change ! On note la valeur de `x`, on l'appelle `x2`.
   - Et la pr&eacute;c&eacute;dente valeur de `x`, on l'appelle `x1`.
 - On reprend le proc&eacute;d&eacute; au d&eacute;but, mais entre `x1` et `x2`, avec un `deltaX` plus petit (par exemple divis&eacute; par 10).
-- Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte.
+- Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte. La racine (le r&eacute;sultat) recherch&eacute;e est entre `x1` et `x2`, lesquels sont
+s&eacute;par&eacute;s d'une valeur `deltaX`. Il appartient d&egrave;s lors &agrave; l'utilisateur de savoir si cette pr&eacute;cision est suffisante, ou s'il faut poursuivre les it&eacute;rations.
 
 Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
 Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire).
