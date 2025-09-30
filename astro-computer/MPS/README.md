@@ -339,11 +339,12 @@ La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 s&eacute;par&eacute;s d'une valeur `deltaX`. Il appartient d&egrave;s lors &agrave; l'utilisateur de savoir si cette pr&eacute;cision est suffisante, ou s'il faut poursuivre les it&eacute;rations.
 
 Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
-Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire).
+Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire). Ainsi, avec ce `10`,
+si on demarre avec un pas de `0.1` (10<sup><small>-1</small></sup>) degr&eacute;, et qu'on proc&egrave;de en 4 it&eacute;rations, on finira avec un pas de 10<sup><small>-4</small></sup >.
 
 #### Exemple (tous les d&eacute;tails sont dans le code)
 Dans les exemples ci-dessous, la hauteur des astres est celle observ&eacute;e &agrave; partir de la position `47º40.66'N / 3º08.14'W`.  
-Les astres par d&eacute;faut sont la Lune et le Soleil.  
+Les astres par d&eacute;faut (dans le script) sont la Lune et le Soleil.  
 ```
 $ ./test.one.sh 
 OK. Proceeding with user's input.
