@@ -78,11 +78,16 @@ public class RESTImplementation {
 					MPS_PREFIX + "/oplist",
 					this::getOperationList,
 					"List of all available operations, on astro request manager."),
-			new Operation( // QueryString contains nothing
+			new Operation( // QueryString contains nothing.
 					"GET",
 					MPS_PREFIX + "/bodies",
 					this::getBodies,
 					"Get the list of the bodies available here."),
+			new Operation( // No payload required. Like curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-30T12:34:56 | jq
+					"GET",
+					MPS_PREFIX + "/pg/{body}/{utc-date}",
+					this::getBodyPgData,
+					"Get the GHA and D for a given {body} at a given {utc duration}"),
 			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00 &fromL=...&fromG=... &wandering=true&stars=true&constellations=true
 					"GET",
 					MPS_PREFIX + "/positions-in-the-sky",
@@ -367,6 +372,155 @@ public class RESTImplementation {
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
 							.errorCode("MPS-0006-2")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
+
+	public static class Pg {
+		double GHA;
+		double D;
+
+		public Pg(double GHA, double D) {
+			this.GHA = GHA;
+			this.D = D;
+		}
+
+		public double getGHA() {
+			return GHA;
+		}
+
+		public void setGHA(double GHA) {
+			this.GHA = GHA;
+		}
+
+		public double getD() {
+			return D;
+		}
+
+		public void setD(double d) {
+			D = d;
+		}
+	}
+
+	/**
+	 *
+	 * @param request MUST {body} and {utc-date} path parameters
+	 * @return See below. A Pg Bean.
+	 */
+	private Response getBodyPgData(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		final List<String> pathParameters = request.getPathParameters();
+		if (pathParameters.size() != 2) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0050")
+							.errorMessage("Need 2 path parameters, {body} and {utc-date}"));
+			return response;
+		}
+		String bodyName = pathParameters.get(0);
+		// Check if body in the list
+		List<String> bodies = getBodyList();
+		if (!bodies.contains(bodyName)) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0050-1")
+							.errorMessage(String.format("Path parameter {body} [%s] was not found.", bodyName)));
+			return response;
+		}
+
+		String strUtcDate = pathParameters.get(1);
+		if (false) {
+			System.out.printf("getBodyPgData: for %s, at %s\n", bodyName, strUtcDate);
+		}
+		Calendar refDate = null;
+		if (strUtcDate != null) {
+			try {
+				long ld = StringParsers.durationToDate(strUtcDate);
+				refDate = Calendar.getInstance(); // TimeZone.getTimeZone("Etc/UTC"));
+				refDate.setTimeInMillis(ld);
+				if (false) {
+					System.out.println("   >> Turned to Calendar:" + refDate.getTime());
+				}
+			} catch (Exception ex) {
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("MPS-0050-2")
+								.errorMessage(String.format("Parsing Duration Date failed: %s", ex.toString())));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0050-3")
+							.errorMessage("Path parameter {utc-date} missing."));
+			return response;
+		}
+
+		// The real calculation
+		AstroComputerV2 acv2 = new AstroComputerV2();
+		acv2.calculate(
+				refDate.get(Calendar.YEAR),
+				refDate.get(Calendar.MONTH) + 1,
+				refDate.get(Calendar.DAY_OF_MONTH),
+				refDate.get(Calendar.HOUR_OF_DAY), // and not HOUR !!!!
+				refDate.get(Calendar.MINUTE),
+				refDate.get(Calendar.SECOND),
+				true);          // Recalculate DeltaT everytime
+		Double GHA = null;
+		Double D = null;
+
+		switch (bodyName) {
+			case "Sun":
+				GHA = acv2.getSunGHA();
+				D = acv2.getSunDecl();
+				break;
+			case "Moon":
+				GHA = acv2.getMoonGHA();
+				D = acv2.getMoonDecl();
+				break;
+			case "Venus":
+				GHA = acv2.getVenusGHA();
+				D = acv2.getVenusDecl();
+				break;
+			case "Mars":
+				GHA = acv2.getMarsGHA();
+				D = acv2.getMarsDecl();
+				break;
+			case "Jupiter":
+				GHA = acv2.getJupiterGHA();
+				D = acv2.getJupiterDecl();
+				break;
+			case "Saturn":
+				GHA = acv2.getSaturnGHA();
+				D = acv2.getSaturnDecl();
+				break;
+			default: // Stars
+				acv2.starPos(bodyName);
+				GHA = acv2.getStarGHA(bodyName);
+				D = acv2.getStarDec(bodyName);
+				break;
+		}
+
+		Pg pg = new Pg(GHA, D);
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(pg);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0051")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -1006,15 +1160,7 @@ public class RESTImplementation {
 		return response;
 	}
 
-	private Response getBodies(Request request) {
-
-		if (false) {
-			System.out.printf("getBodies, %s\n", request.toClassicalString());
-		}
-
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
-		Map<String, String> prms = request.getQueryStringParameters(); // Should not be here nor necessary
-
+	private List<String> getBodyList() {
 		final List<Star> starCatalog = Arrays.asList(Star.getCatalog());
 		final List<String> wanderingBodies = Arrays.asList(new String[] {  // List.of not supported in Java8
 				"Aries", "Venus", "Mars", "Jupiter", "Saturn"
@@ -1026,6 +1172,20 @@ public class RESTImplementation {
 		incontournables.stream().forEach(body -> bodies.add(body));
 		wanderingBodies.stream().forEach(body -> bodies.add(body));
 		starCatalog.stream().forEach(star -> bodies.add(star.getStarName()));
+
+		return bodies;
+	}
+
+	private Response getBodies(Request request) {
+
+		if (false) {
+			System.out.printf("getBodies, %s\n", request.toClassicalString());
+		}
+
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+		Map<String, String> prms = request.getQueryStringParameters(); // Should not be here nor necessary
+
+		List<String> bodies = getBodyList();
 
 		String content;
 		try {
