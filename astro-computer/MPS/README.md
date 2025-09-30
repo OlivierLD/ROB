@@ -432,6 +432,10 @@ $$
 finalLng = pgLng + atan2(\sin(Z) * \sin(radius) * \cos(pgLat), \cos(radius) - (\sin(pgLat) * \sin(finalLat)))
 $$
 
+$$
+\begin{array}{lcl} z & = & a \\ f(x,y,z) & = & x + y + z \end{array}
+$$
+
 Dans les formules ci-dessus :
 - `pgLat` est la latitude du pied de l'astre
 - `pgLng` est la longitude du pied de l'astre

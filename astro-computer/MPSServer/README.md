@@ -19,6 +19,7 @@ WiP...
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Rigel","obsAlt":28.856483,"gha":334.991105,"d":-8.168236},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
 - Process Intersections
+  - Each intersection returns 4 points (2 on each circle)
 
 ## To build it
 From this module's root:
