@@ -618,6 +618,7 @@ public class RESTImplementation {
 
 		String content;
 		try {
+			// Should contain 4 points, 2 for each circle.
 			content = mapper.writeValueAsString(intersections);
 		} catch (JsonProcessingException jpe) {
 			response = HTTPServer.buildErrorResponse(response,

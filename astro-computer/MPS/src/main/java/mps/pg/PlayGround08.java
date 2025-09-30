@@ -109,31 +109,49 @@ public class PlayGround08 {
         he = dr.getHe();
         double aldebaranObsAlt = he; // Should be read (and corrected) from the sextant
 
-        System.out.printf("Sun      :\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+        System.out.printf("Sun      :\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(sunObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                sunObsAlt,
                 GeomUtil.decToSex(sunGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(sunDecl, GeomUtil.SHELL, GeomUtil.NS));
-        System.out.printf("Moon     :\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+                sunGHA,
+                GeomUtil.decToSex(sunDecl, GeomUtil.SHELL, GeomUtil.NS),
+                sunDecl);
+        System.out.printf("Moon     :\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(moonObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                moonObsAlt,
                 GeomUtil.decToSex(moonGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(moonDecl, GeomUtil.SHELL, GeomUtil.NS));
+                moonGHA,
+                GeomUtil.decToSex(moonDecl, GeomUtil.SHELL, GeomUtil.NS),
+                moonDecl);
         System.out.println("----------------------------------------------------");
-        System.out.printf("Saturn   :\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+        System.out.printf("Saturn   :\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(saturnObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                saturnObsAlt,
                 GeomUtil.decToSex(saturnGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(saturnDecl, GeomUtil.SHELL, GeomUtil.NS));
-        System.out.printf("Jupiter  :\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+                saturnGHA,
+                GeomUtil.decToSex(saturnDecl, GeomUtil.SHELL, GeomUtil.NS),
+                saturnDecl);
+        System.out.printf("Jupiter  :\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(jupiterObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                jupiterObsAlt,
                 GeomUtil.decToSex(jupiterGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(jupiterDecl, GeomUtil.SHELL, GeomUtil.NS));
-        System.out.printf("Rigel    :\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+                jupiterGHA,
+                GeomUtil.decToSex(jupiterDecl, GeomUtil.SHELL, GeomUtil.NS),
+                jupiterDecl);
+        System.out.printf("Rigel    :\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(rigelObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                rigelObsAlt,
                 GeomUtil.decToSex(rigelGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(rigelDecl, GeomUtil.SHELL, GeomUtil.NS));
-        System.out.printf("Aldebaran:\t ObsAlt: %s,\t GHA: %s,\t Decl: %s\n",
+                rigelGHA,
+                GeomUtil.decToSex(rigelDecl, GeomUtil.SHELL, GeomUtil.NS),
+                rigelDecl);
+        System.out.printf("Aldebaran:\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                 GeomUtil.decToSex(aldebaranObsAlt, GeomUtil.SHELL, GeomUtil.NONE),
+                aldebaranObsAlt,
                 GeomUtil.decToSex(aldebaranGHA, GeomUtil.SHELL, GeomUtil.NONE),
-                GeomUtil.decToSex(aldebaranDecl, GeomUtil.SHELL, GeomUtil.NS));
+                aldebaranGHA,
+                GeomUtil.decToSex(aldebaranDecl, GeomUtil.SHELL, GeomUtil.NS),
+                aldebaranDecl);
 
         List<MPSToolBox.ConesIntersection> conesIntersectionList = new ArrayList<>();
 
