@@ -55,10 +55,10 @@ une position estim&eacute;e. On a juste besoin ici de connaitre :
 
 ### Hauteur et azimut d'un astre
 Dans les formules suivantes : 
-- `D` est la d&eacute;clinaison de l'astre observ&eacute;
+- `D` est la d&eacute;clinaison de l'astre observ&eacute; (calculée ou trouvée dans les éphémérides)
 - `L` est la latitude de l'observateur
 - `G` est la longitude de l'observateur
-- `AHG` est l'Angle Horaire a Greenwich de l'astre
+- `AHG` est l'Angle Horaire a Greenwich de l'astre  (calculé ou trouvé dans les éphémérides)
 - `AHL` est l'Angle Horaire Local de l'astre (lequel d&eacute;pend de `AHG` et `G`)
 
 Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :
