@@ -125,7 +125,7 @@ $$
 
 _Note:_ 
 
-`atan2` restitue des angles entre -&Pi; et +&Pi;, au contraire de `atan`, qui restitue des angles entre -&Pi; / 2 et +&Pi; / 2.
+`atan2` restitue des angles entre -&Pi; et +&Pi;, &agrave; la diff&eacute;rence de `atan`, qui restitue des angles entre -&Pi; / 2 et +&Pi; / 2.
 
 ---
 Des liens&nbsp;:
