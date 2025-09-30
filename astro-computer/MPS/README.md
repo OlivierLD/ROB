@@ -156,7 +156,7 @@ La hauteur observ&eacute;e est l'angle que fait l'astre avec l'horizon.
 L'angle que fait l'astre observ&eacute; avec le z&eacute;nith (la verticale de l'observateur) est le compl&eacute;ment de cette hauteur, `90 - h`, et s'appelle
 la Distance Z&eacute;nithale, not&eacute;e aussi &zeta;, la lettre grecque "dzeta" (&ccedil;a commence par "dz"...).  
 
-> _Note_: sur la figure, la direction de l'astre &agrave; partir de M est identique &agrave; sa direction &agrave; partir de O.
+> _Note_: sur la figure, la direction de l'astre &agrave; partir de M est identique (parall&egrave;le) &agrave; sa direction &agrave; partir de O.
 > Ceci convient &agrave; un astre tr&egrave;s &eacute;loign&eacute; de l'observateur. &Ccedil;a ne serait pas applicable pour un satellite.
 
 Pour le c&ocirc;ne, l'angle en O (MOP) est `(90° - h)`.  
@@ -474,7 +474,7 @@ Le syst&egrave;me complet devient ainsi
 ```
 
 &Agrave; comparer avec les [formules &agrave; r&eacute;soudre](#hauteur-et-azimut-dun-astre) pour la hauteur et l'azimuth, 
-celles auxquelles s'attaquent les tables de Dieumegard et Bataille.
+celles auxquelles s'attaquent (avec succ&egrave;s) les tables de Dieumegard et Bataille.
 
 Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
