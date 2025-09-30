@@ -134,7 +134,7 @@ Des liens&nbsp;:
 - Voir [La guerre du sinus verse et de l'haversine](https://www.navigare-necesse-est.ch/files/1551171181-85-la-guerre-du-sinus-verse-et-de-l-haversine-929.pdf)
 - Voir [ce document](https://www.aftopo.org/download.php?type=pdf&matricule=aHR0cHM6Ly93d3cuYWZ0b3BvLm9yZy93cC1jb250ZW50L3VwbG9hZHMvYXJ0aWNsZXMvcGRmL2FydGljbGUxNzYwNy5wZGY=)
 - Voir [Navigation aux Astres et aux Satellites](https://navastro.fr/index.html?p659.html)
-- Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi.
+<!-- - Voir [ici](https://les-mathematiques.net/vanilla/discussion/59651/astronomie-plan-des-sommets) aussi. -->
 - Pour faire des tests avec des donn&eacute;es valides (&eacute;ph&eacute;m&eacute;rides et autres) voir ces pages, avec des composants graphiques.
   - [ES6 Celestial Computer test, with WebComponents](https://olivierld.github.io/web.stuff/astro/index_01.html)
   - [ES6 Celestial Computer - SPA with BG Components](https://olivierld.github.io/web.stuff/astro/index_02.html)
