@@ -514,28 +514,161 @@ public class MPSToolBox {
             if (verbose) {
                 conesIntersectionList.forEach(ci -> System.out.printf("- Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
             }
-            // TODO Needs improvements: Iterate on the reference as well...
-            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0);
-
             List<GeoPoint> candidates = new ArrayList<>();
 
-            for (int i=1; i<conesIntersectionList.size(); i++) {
-                MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
-                double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
-                if (distOneOne < CRITICAL_DIST) {
-                    candidates.add(thatOne.getConeOneIntersectionOne());
+            // TODO Needs improvements: Iterate on the reference as well...
+            for (int ref = 0; ref < conesIntersectionList.size(); ref++) {
+
+                if (verbose) {
+                    System.out.printf("-- Ref: %d\n", ref);
                 }
-                double distOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo());
-                if (distOneTwo < CRITICAL_DIST) {
-                    candidates.add(thatOne.getConeOneIntersectionTwo());
-                }
-                double distTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne());
-                if (distTwoOne < CRITICAL_DIST) {
-                    candidates.add(thatOne.getConeOneIntersectionOne());
-                }
-                double distTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
-                if (distTwoTwo < CRITICAL_DIST) {
-                    candidates.add(thatOne.getConeOneIntersectionTwo());
+                MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(ref);
+
+                /*
+                   Need to manage
+                        cone 1 - intersection 1 with cone 1 - intersection 1
+                        cone 1 - intersection 1 with cone 1 - intersection 2
+                        cone 1 - intersection 2 with cone 1 - intersection 1
+                        cone 1 - intersection 2 with cone 1 - intersection 2
+
+                        cone 2 - intersection 1 with cone 1 - intersection 1
+                        cone 2 - intersection 1 with cone 1 - intersection 2
+                        cone 2 - intersection 2 with cone 1 - intersection 1
+                        cone 2 - intersection 2 with cone 1 - intersection 2
+
+                        etc.
+
+                 */
+
+                for (int i = 0; i < conesIntersectionList.size(); i++) {
+                    if (i != ref) {
+                        if (verbose) {
+                            System.out.printf("---- i: %d\n", i);
+                        }
+                        MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
+
+                        // Cartesian product !
+
+                        // Cone 1 - Cone 1
+                        double oneOneDistOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne(), oneOneDistOneOne);
+                        }
+                        if (oneOneDistOneOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionOne());
+                        }
+                        double oneOneDistOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo(), oneOneDistOneTwo);
+                        }
+                        if (oneOneDistOneTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionTwo());
+                        }
+                        double oneOneDistTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne(), oneOneDistTwoOne);
+                        }
+                        if (oneOneDistTwoOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionOne());
+                        }
+                        double oneOneDistTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo(), oneOneDistTwoTwo);
+                        }
+                        if (oneOneDistTwoTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionTwo());
+                        }
+
+                        // Cone 1 - Cone 2
+                        double oneTwoDistOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeTwoIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeTwoIntersectionOne(), oneTwoDistOneOne);
+                        }
+                        if (oneTwoDistOneOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionOne());
+                        }
+                        double oneTwoDistOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeTwoIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeTwoIntersectionTwo(), oneTwoDistOneTwo);
+                        }
+                        if (oneTwoDistOneTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionTwo());
+                        }
+                        double oneTwoDistTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeTwoIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeTwoIntersectionOne(), oneTwoDistTwoOne);
+                        }
+                        if (oneTwoDistTwoOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionOne());
+                        }
+                        double oneTwoDistTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeTwoIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeTwoIntersectionTwo(), oneTwoDistTwoTwo);
+                        }
+                        if (oneTwoDistTwoTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionTwo());
+                        }
+
+                        // Cone 2 - Cone 1
+                        double twoOneDistOneOne = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionOne(), twoOneDistOneOne);
+                        }
+                        if (twoOneDistOneOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionOne());
+                        }
+                        double twoOneDistOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionTwo(), twoOneDistOneTwo);
+                        }
+                        if (twoOneDistOneTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionTwo());
+                        }
+                        double twoOneDistTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeOneIntersectionOne(), oneOneDistTwoOne);
+                        }
+                        if (twoOneDistTwoOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionOne());
+                        }
+                        double twoOneDistTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionTwo(), thatOne.getConeOneIntersectionTwo(), twoOneDistTwoTwo);
+                        }
+                        if (twoOneDistTwoTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeOneIntersectionTwo());
+                        }
+
+                        // Cone 2 - Cone 2
+                        double twoTwoDistOneOne = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeTwoIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeTwoIntersectionOne(), twoTwoDistOneOne);
+                        }
+                        if (twoTwoDistOneOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionOne());
+                        }
+                        double twoTwoDistOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeTwoIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionOne(), thatOne.getConeTwoIntersectionTwo(), twoTwoDistOneTwo);
+                        }
+                        if (twoTwoDistOneTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionTwo());
+                        }
+                        double twoTwoDistTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionTwo(), thatOne.getConeTwoIntersectionOne());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeTwoIntersectionTwo(), thatOne.getConeTwoIntersectionOne(), twoTwoDistTwoOne);
+                        }
+                        if (twoTwoDistTwoOne < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionOne());
+                        }
+                        double twoTwoDistTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeTwoIntersectionTwo(), thatOne.getConeTwoIntersectionTwo());
+                        if (verbose) {
+                            System.out.printf("ref: %d, i: %d. Between %s and %s, dist = %f\n", ref, i, referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeTwoIntersectionTwo(), twoTwoDistTwoTwo);
+                        }
+                        if (twoTwoDistTwoTwo < CRITICAL_DIST) {
+                            candidates.add(thatOne.getConeTwoIntersectionTwo());
+                        }
+                    }
                 }
             }
             // The result...
