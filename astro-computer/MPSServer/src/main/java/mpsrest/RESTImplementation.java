@@ -260,7 +260,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0001")
+								.errorCode("MPS-0002")
 								.errorMessage(String.format("Invalid time zone(s): [%s]", errors.stream().collect(Collectors.joining(", ")))));
 				return response;
 			} else {
@@ -288,7 +288,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0002")
+							.errorCode("MPS-0003")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -377,7 +377,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0006")
+							.errorCode("MPS-0005")
 							.errorMessage("getSunDataNow: No position provided, no default position found"));
 			return response;
 		}
@@ -392,7 +392,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0006-2")
+							.errorCode("MPS-0006")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -442,7 +442,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0051")
+									.errorCode("MPS-0007")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -467,7 +467,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0051-2")
+							.errorCode("MPS-0008")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -513,7 +513,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0052")
+									.errorCode("MPS-0009")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -530,7 +530,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0052-1")
+							.errorCode("MPS-0010")
 							.errorMessage(String.format("PSToolBox.calculateCone: %s", ex.toString())));
 			return response;
 		}
@@ -542,7 +542,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0052-2")
+							.errorCode("MPS-0011")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -590,7 +590,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0052")
+									.errorCode("MPS-0012")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -611,7 +611,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0052-1")
+							.errorCode("MPS-0013")
 							.errorMessage(String.format("PSToolBox.calculateCone: %s", ex.toString())));
 			return response;
 		}
@@ -624,7 +624,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0052-2")
+							.errorCode("MPS-0014")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -677,7 +677,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0053")
+									.errorCode("MPS-0015")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -691,7 +691,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0053-1")
+							.errorCode("MPS-0016")
 							.errorMessage(String.format("PSToolBox.processIntersectionsList: %s", ex.toString())));
 			return response;
 		}
@@ -705,7 +705,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0052-2")
+							.errorCode("MPS-0017")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -876,7 +876,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0050")
+							.errorCode("MPS-0018")
 							.errorMessage("Need 2 path parameters, {body} and {utc-date}"));
 			return response;
 		}
@@ -887,7 +887,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0050-1")
+							.errorCode("MPS-0019")
 							.errorMessage(String.format("Path parameter {body} [%s] was not found.", bodyName)));
 			return response;
 		}
@@ -909,7 +909,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0050-2")
+								.errorCode("MPS-0020")
 								.errorMessage(String.format("Parsing Duration Date failed: %s", ex.toString())));
 				return response;
 			}
@@ -917,7 +917,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0050-3")
+							.errorCode("MPS-0021")
 							.errorMessage("Path parameter {utc-date} missing."));
 			return response;
 		}
@@ -992,7 +992,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0051")
+							.errorCode("MPS-0022")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -1076,7 +1076,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0004")
+									.errorCode("MPS-0023")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1086,7 +1086,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0005")
+							.errorCode("MPS-0024")
 							.errorMessage("getSunPathInTheSky: No position provided, no default position found."));
 			return response;
 		}
@@ -1105,7 +1105,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0005-2")
+							.errorCode("MPS-0025")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -1152,7 +1152,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0002")
+									.errorCode("MPS-0026")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1165,7 +1165,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0003")
+							.errorCode("MPS-0027")
 							.errorMessage("Query parameters 'tz', 'from' and 'to' are required."));
 			return response;
 		} else {
@@ -1178,7 +1178,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0006")
+								.errorCode("MPS-0028")
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -1186,7 +1186,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0005")
+								.errorCode("MPS-0029")
 								.errorMessage(String.format("Invalid TimeZone: %s", tzName)));
 				return response;
 			}
@@ -1216,7 +1216,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0006-2")
+								.errorCode("MPS-0030")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -1228,7 +1228,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0006")
+							.errorCode("MPS-0031")
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -1276,7 +1276,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0400")
+							.errorCode("MPS-0032")
 							.errorMessage("Query parameters 'at' is required."));
 			return response;
 		} else {
@@ -1287,7 +1287,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0402")
+									.errorCode("MPS-0033")
 									.errorMessage("Query parameters 'fromL' and 'fromG' must both be here, or none. Just one of them does not work."));
 					return response;
 				}
@@ -1349,7 +1349,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0403")
+										.errorCode("MPS-0034")
 										.errorMessage(String.format("Invalid Query parameters 'fromL' and 'fromG' [%s], [%s]", prms.get("fromL"), prms.get("fromG"))));
 						return response;
 					}
@@ -1599,7 +1599,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0401-2")
+									.errorCode("MPS-0035")
 									.errorMessage(jpe.toString())
 									.errorStack(HTTPServer.dumpException(jpe)));
 					return response;
@@ -1615,7 +1615,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0401")
+								.errorCode("MPS-0036")
 								.errorMessage(ex.toString())
 								.errorStack(Arrays.asList(ex.getStackTrace())
 														.stream()
@@ -1666,7 +1666,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0006-3")
+							.errorCode("MPS-0037")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
@@ -1703,7 +1703,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0402")
+										.errorCode("MPS-0038")
 										.errorMessage(String.format("Invalid body(ies): %s",
 												invalids.stream()
 														.collect(Collectors.joining(", ")))));
@@ -1714,7 +1714,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0403")
+										.errorCode("MPS-0039")
 										.errorMessage("to and from dates are required."));
 						return response;
 					}
@@ -1732,7 +1732,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0404")
+										.errorCode("MPS-0040")
 										.errorMessage(String.format("Bad chronology, %s should be AFTER %s", UTC_FMT.format(toCal.getTime()), UTC_FMT.format(fromCal.getTime()))));
 						return response;
 					}
@@ -1788,7 +1788,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0401-0")
+										.errorCode("MPS-0041")
 										.errorMessage(jpe.toString())
 										.errorStack(HTTPServer.dumpException(jpe)));
 						return response;
@@ -1799,7 +1799,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0401-1")
+									.errorCode("MPS-0042")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1808,7 +1808,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0400-1")
+							.errorCode("MPS-0043")
 							.errorMessage("Empty payload. Cannot proceed."));
 			return response;
 		}
@@ -1847,7 +1847,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0007")
+									.errorCode("MPS-0044")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -1860,7 +1860,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0008")
+							.errorCode("MPS-0045")
 							.errorMessage("Query parameters 'tz', 'from' and 'to' are required."));
 			return response;
 		} else {
@@ -1873,7 +1873,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0009")
+								.errorCode("MPS-0046")
 								.errorMessage(ex.toString()));
 				return response;
 			}
@@ -1881,7 +1881,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0010")
+								.errorCode("MPS-0047")
 								.errorMessage(String.format("Invalid TimeZone: %s", tzName)));
 				return response;
 			}
@@ -1943,7 +1943,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0006-1")
+								.errorCode("MPS-0048")
 								.errorMessage(jpe.toString())
 								.errorStack(HTTPServer.dumpException(jpe)));
 				return response;
@@ -1955,7 +1955,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0006")
+							.errorCode("MPS-0049")
 							.errorMessage(ex.toString()));
 			return response;
 		}
@@ -2065,7 +2065,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0104")
+										.errorCode("MPS-0050")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -2074,7 +2074,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0103")
+									.errorCode("MPS-0051")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -2083,7 +2083,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0101")
+							.errorCode("MPS-0052")
 							.errorMessage("Required payload not found."));
 			return response;
 		}
@@ -2142,7 +2142,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0204")
+										.errorCode("MPS-0053")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -2151,7 +2151,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0203")
+									.errorCode("MPS-0054")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -2160,7 +2160,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0201")
+							.errorCode("MPS-0055")
 							.errorMessage("Required payload not found."));
 			return response;
 		}
@@ -2200,7 +2200,7 @@ public class RESTImplementation {
 							response = HTTPServer.buildErrorResponse(response,
 									Response.BAD_REQUEST,
 									new HTTPServer.ErrorPayload()
-											.errorCode("MPS-0300")
+											.errorCode("MPS-0056")
 											.errorMessage(errMess));
 							return response;
 						}
@@ -2208,7 +2208,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0301")
+										.errorCode("MPS-0057")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -2261,7 +2261,7 @@ public class RESTImplementation {
 							response = HTTPServer.buildErrorResponse(response,
 									Response.BAD_REQUEST,
 									new HTTPServer.ErrorPayload()
-											.errorCode("MPS-0304")
+											.errorCode("MPS-0058")
 											.errorMessage(ex.toString()));
 							return response;
 						}
@@ -2270,7 +2270,7 @@ public class RESTImplementation {
 						response = HTTPServer.buildErrorResponse(response,
 								Response.BAD_REQUEST,
 								new HTTPServer.ErrorPayload()
-										.errorCode("MPS-0303")
+										.errorCode("MPS-0059")
 										.errorMessage(ex.toString()));
 						return response;
 					}
@@ -2278,7 +2278,7 @@ public class RESTImplementation {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
 							new HTTPServer.ErrorPayload()
-									.errorCode("MPS-0302")
+									.errorCode("MPS-0060")
 									.errorMessage(ex.toString()));
 					return response;
 				}
@@ -2286,7 +2286,7 @@ public class RESTImplementation {
 				response = HTTPServer.buildErrorResponse(response,
 						Response.BAD_REQUEST,
 						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0306")
+								.errorCode("MPS-0061")
 								.errorMessage("Required payload not found."));
 				return response;
 			}
@@ -2392,7 +2392,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0100-1")
+							.errorCode("MPS-0062")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;

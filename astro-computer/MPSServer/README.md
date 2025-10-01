@@ -7,8 +7,8 @@ WiP...
 
 # Status
 - Infrastructure in place. 
-- Not all operations are implemented yet.
-- TODO: Unify the error codes
+- All operations are implemented.
+- TODO: Sample web page invoking the services.
 
 ### Operations to be defined for MPS
 - Get the body list ✅ `curl -X GET http://localhost:9999/mps/bodies`
