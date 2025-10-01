@@ -1,6 +1,9 @@
 # M&eacute;thode du Plan des Sommets (MPS)
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
+Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir d'une observation au sextant d'un astre.  
+Ceci requiert - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
+
 ---
 **Sommaire**
 - [Introduction](#introduction)

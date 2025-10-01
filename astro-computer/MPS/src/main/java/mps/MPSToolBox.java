@@ -516,7 +516,7 @@ public class MPSToolBox {
             }
             List<GeoPoint> candidates = new ArrayList<>();
 
-            // TODO Needs improvements: Iterate on the reference as well...
+            // Iterate on the reference as well...
             for (int ref = 0; ref < conesIntersectionList.size(); ref++) {
 
                 if (verbose) {
