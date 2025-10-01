@@ -187,6 +187,7 @@ public class PlayGround08 {
         }
 
         // Ephemeris and Altitudes OK, let's proceed.
+        int nbProcess = 0;
 
         double criticalDist = 5.0; // TODO Fix that one !... Change it from 5 to 15, to see the impact.
         double firstZStep = 0.1d;  // More than 0.1 not good enough...
@@ -200,7 +201,7 @@ public class PlayGround08 {
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
-            System.out.println("Saturn & Jupiter");
+            System.out.printf("%d - Saturn & Jupiter\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
             System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
             System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
@@ -244,7 +245,7 @@ public class PlayGround08 {
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
-            System.out.println("Saturn & Rigel");
+            System.out.printf("%d - Saturn & Rigel\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
             System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
             System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
@@ -288,7 +289,7 @@ public class PlayGround08 {
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
-            System.out.println("Rigel & Jupiter");
+            System.out.printf("%d - Rigel & Jupiter\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
             System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
             System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
@@ -334,7 +335,7 @@ public class PlayGround08 {
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
-            System.out.println("Rigel & Aldebaran");
+            System.out.printf("%d - Rigel & Aldebaran\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
             System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
             System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);

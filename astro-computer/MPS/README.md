@@ -368,31 +368,31 @@ Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08
 $ java -classpath [...] mps.pg.PlayGround08
 
 Calculation launched for 2025-Sep-26 03:15:00 UTC
-Sun      :	 ObsAlt: -27º59.56',	 GHA:  230º54.36',	 Decl: 1º18.81'S
-Moon     :	 ObsAlt: -64º38.88',	 GHA:  186º45.86',	 Decl: 22º29.58'S
+Sun      :	 ObsAlt: -27º59.56' (-27.992677),	 GHA:  230º54.36' (230.905951),	 Decl: 1º18.81'S (-1.313542)
+Moon     :	 ObsAlt: -64º38.88' (-64.647941),	 GHA:  186º45.86' (186.764356),	 Decl: 22º29.58'S (-22.493011)
 ----------------------------------------------------
-Saturn   :	 ObsAlt:  22º16.56',	 GHA:  54º39.20',	 Decl: 3º02.88'S
-Jupiter  :	 ObsAlt:  33º59.69',	 GHA:  300º20.17',	 Decl: 21º40.69'N
-Rigel    :	 ObsAlt:  28º51.39',	 GHA:  334º59.47',	 Decl: 8º10.09'S
-Aldebaran:	 ObsAlt:  55º20.72',	 GHA:  344º35.06',	 Decl: 16º33.74'N
-Saturn & Jupiter
+Saturn   :	 ObsAlt:  22º16.56' (22.276078),	 GHA:  54º39.20' (54.653345),	 Decl: 3º02.88'S (-3.048023)
+Jupiter  :	 ObsAlt:  33º59.69' (33.994908),	 GHA:  300º20.17' (300.336092),	 Decl: 21º40.69'N (21.678212)
+Rigel    :	 ObsAlt:  28º51.39' (28.856483),	 GHA:  334º59.47' (334.991105),	 Decl: 8º10.09'S (-8.168236)
+Aldebaran:	 ObsAlt:  55º20.72' (55.345321),	 GHA:  344º35.06' (344.584258),	 Decl: 16º33.74'N (16.562267)
+1 - Saturn & Jupiter
 After 4 iterations:
 1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
 2nd position between 10º54.28'S / 13º14.41'E and 10º54.28'S / 13º14.41'E, dist 0.00 nm.
-Saturn & Rigel
+2 - Saturn & Rigel
 After 4 iterations:
 1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
 2nd position between 63º12.51'S / 12º06.38'W and 63º12.51'S / 12º06.38'W, dist 0.00 nm.
-Rigel & Jupiter
+3 - Rigel & Jupiter
 After 4 iterations:
 1st position between 27º54.85'S / 86º36.17'E and 27º54.84'S / 86º36.17'E, dist 0.00 nm.
 2nd position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
-Rigel & Aldebaran
+4 - Rigel & Aldebaran
 After 5 iterations:
 1st position between 47º35.55'N / 3º20.13'W and 47º35.51'N / 3º20.09'W, dist 0.05 nm.
 2nd position between 48º03.44'N / 2º13.10'W and 48º03.44'N / 2º13.10'W, dist 0.08 nm.
 -----------------------------
-Full Intersection Processing took 6,683 ms (System Time)
+Full Intersection Processing took 7,352 ms (System Time)
 -----------------------------
 We have 4 intersections to process:
 - Intersection between Saturn and Jupiter
