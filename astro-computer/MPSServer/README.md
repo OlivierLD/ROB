@@ -91,6 +91,174 @@ $ curl -X GET http://localhost:9999/mps/oplist | jq
 ]
 ```
 
+```
+$ curl -X GET http://localhost:9999/mps/bodies
+```
+
+```json
+[
+  "Sun",
+  "Moon",
+  "Aries",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Acamar",
+  "Achenar",
+  "Acrux",
+  "Adhara",
+  "Aldebaran",
+  . . .
+  "Shaula",
+  "Sirius",
+  "Spica",
+  "Suhail",
+  "Vega",
+  "Zubenelgenubi"
+]
+```
+
+```
+$ curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
+```
+
+```json
+{
+  "hp": 0.002436097482257691,
+  "sd": 0.26583491322480646,
+  "gha": 140.8845418176559,
+  "d": -1.2161652494865915
+}
+```
+
+```
+$ curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'
+```
+
+```json
+{
+  "alt": -27.99267688201456,
+  "z": 56.96535412553529
+}
+```
+
+```
+$ curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
+```
+
+```json
+{
+  "pg": {
+    "latitude": -3.048023,
+    "longitude": -54.653345
+  },
+  "obsAlt": 22.276078,
+  "earthCenterToConeSummit": 9054.74636065408,
+  "bodyName": "Saturn",
+  "observationTime": "2025-Oct-01 01:42:13 UTC",
+  "circle": [
+    {
+      "point": {
+        "latitude": 64.67589899999999,
+        "longitude": -54.65334500000001
+      },
+      "z": 0
+    },
+    {
+      "point": {
+        "latitude": 64.65705352112906,
+        "longitude": -52.491045430213255
+      },
+      "z": 1
+    },
+    {
+      "point": {
+        "latitude": 64.60060116656845,
+        "longitude": -50.335316840711485
+      },
+      "z": 2
+    },
+    {
+      "point": {
+        "latitude": 64.50679232209163,
+        "longitude": -48.19261416843048
+      },
+      "z": 3
+    },
+    {
+      "point": {
+        "latitude": 64.3760381912995,
+        "longitude": -46.06916534911687
+      },
+      "z": 4
+    },
+    {
+      "point": {
+        "latitude": 64.20890196130344,
+        "longitude": -43.97087011951062
+      },
+      "z": 5
+    },
+    {
+      "point": {
+        "latitude": 64.00608705409687,
+        "longitude": -41.90321248467024
+      },
+      "z": 6
+    },
+    . . .
+    {
+      "point": {
+        "latitude": 64.50679232209163,
+        "longitude": -61.11407583156959
+      },
+      "z": 357
+    },
+    {
+      "point": {
+        "latitude": 64.60060116656845,
+        "longitude": -58.971373159288504
+      },
+      "z": 358
+    },
+    {
+      "point": {
+        "latitude": 64.65705352112906,
+        "longitude": -56.81564456978676
+      },
+      "z": 359
+    }
+  ]
+}
+```
+
+```
+$ curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'
+```
+
+```json
+[
+  {
+    "latitude": 47.67766804891214,
+    "longitude": -3.135666894012773
+  },
+  {
+    "latitude": 47.67766807844463,
+    "longitude": -3.135666341694059
+  },
+  {
+    "latitude": -10.904707499551664,
+    "longitude": 13.240186639763486
+  },
+  {
+    "latitude": -10.904708058980065,
+    "longitude": 13.240187004313771
+  }
+]
+```
+
+
 Next, we'll provide Web Pages invoking those REST services. That's going to be interesting.
 
 ---
