@@ -686,7 +686,7 @@ public class RESTImplementation {
 
 		GeoPoint avgPoint;
 		try {
-			avgPoint = MPSToolBox.processIntersectionsList(Arrays.asList(conesIntersections), true);
+			avgPoint = MPSToolBox.processIntersectionsList(Arrays.asList(conesIntersections), "true".equals(System.getProperty("rest.mps.verbose")));
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
@@ -700,7 +700,9 @@ public class RESTImplementation {
 		try {
 			// Should contain the avg point
 			content = mapper.writeValueAsString(avgPoint);
-			System.out.printf("Returned Content: %s\n", content);
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				System.out.printf("Returned Content: %s\n", content);
+			}
 		} catch (JsonProcessingException jpe) {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,

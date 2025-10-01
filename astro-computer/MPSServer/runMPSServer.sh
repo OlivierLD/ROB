@@ -67,7 +67,7 @@ fi
 JAVA_OPTS="${JAVA_OPTS} -Dastro.verbose=${ASTRO_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${REST_VERBOSE}"
 # Hard-coded ones:
-JAVA_OPTS="${JAVA_OPTS} -Drest.mps.verbose=true"
+JAVA_OPTS="${JAVA_OPTS} -Drest.mps.verbose=false"
 # JAVA_OPTS="${JAVA_OPTS} -Dnmea.utils.verbose=true"
 JAVA_OPTS="${JAVA_OPTS} -Drest.feeder.verbose=true"
 #
