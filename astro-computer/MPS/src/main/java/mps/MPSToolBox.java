@@ -113,6 +113,8 @@ public class MPSToolBox {
         GeoPoint coneTwoIntersectionOne;
         GeoPoint coneTwoIntersectionTwo;
 
+        public ConesIntersection() { // Required by ObjectMapper...
+        }
         public ConesIntersection(String bodyOneName, String bodyTwoName,
                                  GeoPoint coneOneIntersectionOne, GeoPoint coneOneIntersectionTwo,
                                  GeoPoint coneTwoIntersectionOne, GeoPoint coneTwoIntersectionTwo) {
@@ -490,5 +492,71 @@ public class MPSToolBox {
         result.add(closestPointBody2Second);
 
         return result;
+    }
+
+    public static class MotEnoughIntersectionsException extends Exception {
+        public MotEnoughIntersectionsException() {
+            super();
+        }
+        public MotEnoughIntersectionsException(String message) {
+            super(message);
+        }
+    }
+
+    private final static double CRITICAL_DIST = 5.0; // TODO Fix/tweak that one !... Change it from 5 to 15, to see the impact.
+
+    public static GeoPoint processIntersectionsList(List<MPSToolBox.ConesIntersection> conesIntersectionList,
+                                                    boolean verbose) throws MotEnoughIntersectionsException {
+        if (verbose) {
+            System.out.printf("We have %d intersections to process.\n", conesIntersectionList.size());
+        }
+        if (conesIntersectionList.size() > 1) {
+            if (verbose) {
+                conesIntersectionList.forEach(ci -> System.out.printf("- Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
+            }
+            // TODO Needs improvements: Iterate on the reference as well...
+            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0);
+
+            List<GeoPoint> candidates = new ArrayList<>();
+
+            for (int i=1; i<conesIntersectionList.size(); i++) {
+                MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
+                double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
+                if (distOneOne < CRITICAL_DIST) {
+                    candidates.add(thatOne.getConeOneIntersectionOne());
+                }
+                double distOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo());
+                if (distOneTwo < CRITICAL_DIST) {
+                    candidates.add(thatOne.getConeOneIntersectionTwo());
+                }
+                double distTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne());
+                if (distTwoOne < CRITICAL_DIST) {
+                    candidates.add(thatOne.getConeOneIntersectionOne());
+                }
+                double distTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
+                if (distTwoTwo < CRITICAL_DIST) {
+                    candidates.add(thatOne.getConeOneIntersectionTwo());
+                }
+            }
+            // The result...
+            if (verbose) {
+                System.out.println("-----------------------------");
+                System.out.printf("%d candidate(s):\n", candidates.size());
+                candidates.stream().forEach(pt -> {
+                    System.out.printf("\u2022 %s\n", pt);
+                });
+                System.out.println("-----------------------------");
+            }
+            // An average ?
+            double averageLat = candidates.stream().mapToDouble(GeoPoint::getLatitude).average().getAsDouble();
+            double averageLng = candidates.stream().mapToDouble(GeoPoint::getLongitude).average().getAsDouble();
+            GeoPoint avgPoint = new GeoPoint(averageLat, averageLng);
+            if (verbose) {
+                System.out.printf("=> Average: %s\n", avgPoint);
+            }
+            return avgPoint;
+        } else {
+            throw new  MotEnoughIntersectionsException(String.format("Not enough intersections to process. Need at least 2, got %d", conesIntersectionList.size()));
+        }
     }
 }

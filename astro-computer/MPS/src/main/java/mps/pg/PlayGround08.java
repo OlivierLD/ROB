@@ -189,7 +189,6 @@ public class PlayGround08 {
         // Ephemeris and Altitudes OK, let's proceed.
         int nbProcess = 0;
 
-        double criticalDist = 5.0; // TODO Fix that one !... Change it from 5 to 15, to see the impact.
         double firstZStep = 0.1d;  // More than 0.1 not good enough...
         final long before = System.currentTimeMillis();
 
@@ -203,8 +202,8 @@ public class PlayGround08 {
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
             System.out.printf("%d - Saturn & Jupiter\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
-            System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
-            System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
+            System.out.printf("1st position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(0), closests.get(0).toNumericalString(), closests.get(1), closests.get(1).toNumericalString(), d1);
+            System.out.printf("2nd position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(2), closests.get(2).toNumericalString(), closests.get(2), closests.get(2).toNumericalString(), d2);
             // For later
             conesIntersectionList.add(new MPSToolBox.ConesIntersection("Saturn", "Jupiter",
                     closests.get(0), closests.get(1),
@@ -247,8 +246,8 @@ public class PlayGround08 {
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
             System.out.printf("%d - Saturn & Rigel\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
-            System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
-            System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
+            System.out.printf("1st position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(0), closests.get(0).toNumericalString(), closests.get(1), closests.get(1).toNumericalString(), d1);
+            System.out.printf("2nd position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(2), closests.get(2).toNumericalString(), closests.get(2), closests.get(2).toNumericalString(), d2);
             // For later
             conesIntersectionList.add(new MPSToolBox.ConesIntersection("Saturn", "Rigel",
                     closests.get(0), closests.get(1),
@@ -291,8 +290,8 @@ public class PlayGround08 {
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
             System.out.printf("%d - Rigel & Jupiter\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
-            System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
-            System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
+            System.out.printf("1st position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(0), closests.get(0).toNumericalString(), closests.get(1), closests.get(1).toNumericalString(), d1);
+            System.out.printf("2nd position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(2), closests.get(2).toNumericalString(), closests.get(2), closests.get(2).toNumericalString(), d2);
             // For later
             conesIntersectionList.add(new MPSToolBox.ConesIntersection("Rigel", "Jupiter",
                     closests.get(0), closests.get(1),
@@ -337,8 +336,8 @@ public class PlayGround08 {
             final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
             System.out.printf("%d - Rigel & Aldebaran\n", ++nbProcess);
             System.out.printf("After %d iterations:\n", nbIter);
-            System.out.printf("1st position between %s and %s, dist %.02f nm.\n", closests.get(0), closests.get(1), d1);
-            System.out.printf("2nd position between %s and %s, dist %.02f nm.\n", closests.get(2), closests.get(2), d2);
+            System.out.printf("1st position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(0), closests.get(0).toNumericalString(), closests.get(1), closests.get(1).toNumericalString(), d1);
+            System.out.printf("2nd position between %s (%s) and %s (%s), dist %.02f nm.\n", closests.get(2), closests.get(2).toNumericalString(), closests.get(2), closests.get(2).toNumericalString(), d2);
             // For later
             conesIntersectionList.add(new MPSToolBox.ConesIntersection("Rigel", "Aldebaran",
                     closests.get(0), closests.get(1),
@@ -348,56 +347,20 @@ public class PlayGround08 {
         }
         final long after = System.currentTimeMillis();
         System.out.println("-----------------------------");
-        System.out.printf("Full Intersection Processing took %s ms (System Time)\n", NumberFormat.getInstance().format(after - before));
+        System.out.printf("Full Intersection Calculation took %s ms (System Time)\n", NumberFormat.getInstance().format(after - before));
 
         // Now process all intersections...
         System.out.println("-----------------------------");
-        System.out.printf("We have %d intersections to process:\n", conesIntersectionList.size());
-        if (conesIntersectionList.size() > 1) {
-            conesIntersectionList.forEach(ci -> System.out.printf("- Intersection between %s and %s\n", ci.getBodyOneName(), ci.getBodyTwoName()));
-            MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(0); // TODO Question: Iterate on the reference as well ?...
 
-            List<GeoPoint> candidates = new ArrayList<>();
-
-            for (int i=1; i<conesIntersectionList.size(); i++) {
-                MPSToolBox.ConesIntersection thatOne = conesIntersectionList.get(i);
-                double distOneOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionOne());
-                if (distOneOne < criticalDist) {
-                    candidates.add(thatOne.getConeOneIntersectionOne());
-                }
-                double distOneTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionOne(), thatOne.getConeOneIntersectionTwo());
-                if (distOneTwo < criticalDist) {
-                    candidates.add(thatOne.getConeOneIntersectionTwo());
-                }
-                double distTwoOne = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionOne());
-                if (distTwoOne < criticalDist) {
-                    candidates.add(thatOne.getConeOneIntersectionOne());
-                }
-                double distTwoTwo = GeomUtil.haversineNm(referenceIntersection.getConeOneIntersectionTwo(), thatOne.getConeOneIntersectionTwo());
-                if (distTwoTwo < criticalDist) {
-                    candidates.add(thatOne.getConeOneIntersectionTwo());
-                }
-            }
-            // The result...
-            System.out.println("-----------------------------");
-            System.out.printf("%d candidate(s):\n", candidates.size());
-            candidates.stream().forEach(pt -> {
-                System.out.printf("\u2022 %s\n", pt);
-            });
-            System.out.println("-----------------------------");
-            // An average ?
-            double averageLat = candidates.stream().mapToDouble(GeoPoint::getLatitude).average().getAsDouble();
-            double averageLng = candidates.stream().mapToDouble(GeoPoint::getLongitude).average().getAsDouble();
-            GeoPoint avgPoint = new GeoPoint(averageLat, averageLng);
-            System.out.printf("=> Average: %s\n", avgPoint);
-
+        try {
+            GeoPoint avgPoint = MPSToolBox.processIntersectionsList(conesIntersectionList, false);
+            System.out.printf("Found intersection at %s\n", avgPoint);
             GeoPoint original = new GeoPoint(userLatitude, userLongitude);
             System.out.printf("=> Compare to original position: %s\n", original);
 
             System.out.printf("==> Difference/offset: %.02f nm\n", GeomUtil.haversineNm(original, avgPoint));
-
-        } else {
-            System.out.println("Not enough intersections to process...");
+        } catch (MPSToolBox.MotEnoughIntersectionsException mei) {
+            mei.printStackTrace();
         }
         System.out.println("------- End of the story -------");
     }

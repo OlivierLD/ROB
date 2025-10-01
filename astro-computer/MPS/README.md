@@ -363,9 +363,11 @@ OK. Proceeding with user's input.
 Done
 $ 
 ```
-Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java` :  
+Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java`.  
+From the `MPSServer` directory:
 ```
-$ java -classpath [...] mps.pg.PlayGround08
+$ ../../gradlew clean shadowJar
+$ java -cp build/libs/MPSServer-1.0-all.jar mps.pg.PlayGround08
 
 Calculation launched for 2025-Sep-26 03:15:00 UTC
 Sun      :	 ObsAlt: -27º59.56' (-27.992677),	 GHA:  230º54.36' (230.905951),	 Decl: 1º18.81'S (-1.313542)
@@ -377,36 +379,24 @@ Rigel    :	 ObsAlt:  28º51.39' (28.856483),	 GHA:  334º59.47' (334.991105),	 D
 Aldebaran:	 ObsAlt:  55º20.72' (55.345321),	 GHA:  344º35.06' (344.584258),	 Decl: 16º33.74'N (16.562267)
 1 - Saturn & Jupiter
 After 4 iterations:
-1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
-2nd position between 10º54.28'S / 13º14.41'E and 10º54.28'S / 13º14.41'E, dist 0.00 nm.
+1st position between 47º40.66'N / 3º08.14'W (47.677668 / -3.135668) and 47º40.66'N / 3º08.14'W (47.677643 / -3.135670), dist 0.00 nm.
+2nd position between 10º54.28'S / 13º14.41'E (-10.904689 / 13.240187) and 10º54.28'S / 13º14.41'E (-10.904689 / 13.240187), dist 0.00 nm.
 2 - Saturn & Rigel
 After 4 iterations:
-1st position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
-2nd position between 63º12.51'S / 12º06.38'W and 63º12.51'S / 12º06.38'W, dist 0.00 nm.
+1st position between 47º40.66'N / 3º08.14'W (47.677668 / -3.135668) and 47º40.66'N / 3º08.14'W (47.677678 / -3.135640), dist 0.00 nm.
+2nd position between 63º12.51'S / 12º06.38'W (-63.208440 / -12.106294) and 63º12.51'S / 12º06.38'W (-63.208440 / -12.106294), dist 0.00 nm.
 3 - Rigel & Jupiter
 After 4 iterations:
-1st position between 27º54.85'S / 86º36.17'E and 27º54.84'S / 86º36.17'E, dist 0.00 nm.
-2nd position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
+1st position between 27º54.85'S / 86º36.17'E (-27.914095 / 86.602860) and 27º54.84'S / 86º36.17'E (-27.914056 / 86.602848), dist 0.00 nm.
+2nd position between 47º40.66'N / 3º08.14'W (47.677678 / -3.135640) and 47º40.66'N / 3º08.14'W (47.677678 / -3.135640), dist 0.00 nm.
 4 - Rigel & Aldebaran
 After 5 iterations:
-1st position between 47º35.55'N / 3º20.13'W and 47º35.51'N / 3º20.09'W, dist 0.05 nm.
-2nd position between 48º03.44'N / 2º13.10'W and 48º03.44'N / 2º13.10'W, dist 0.08 nm.
+1st position between 47º35.55'N / 3º20.13'W (47.592451 / -3.335450) and 47º35.51'N / 3º20.09'W (47.591775 / -3.334816), dist 0.05 nm.
+2nd position between 48º03.44'N / 2º13.10'W (48.057372 / -2.218396) and 48º03.44'N / 2º13.10'W (48.057372 / -2.218396), dist 0.08 nm.
 -----------------------------
-Full Intersection Processing took 7,352 ms (System Time)
+Full Intersection Calculation took 5,398 ms (System Time)
 -----------------------------
-We have 4 intersections to process:
-- Intersection between Saturn and Jupiter
-- Intersection between Saturn and Rigel
-- Intersection between Rigel and Jupiter
-- Intersection between Rigel and Aldebaran
------------------------------
-4 candidate(s):
-• 47º40.66'N / 3º08.14'W
-• 47º40.66'N / 3º08.14'W
-• 47º40.66'N / 3º08.14'W
-• 47º40.66'N / 3º08.14'W
------------------------------
-=> Average: 47º40.66'N / 3º08.14'W
+Found intersection at 47º40.66'N / 3º08.14'W
 => Compare to original position: 47º40.66'N / 3º08.14'W
 ==> Difference/offset: 0.00 nm
 ------- End of the story -------

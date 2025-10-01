@@ -102,6 +102,10 @@ public final class GeoPoint
 				GeomUtil.decToSex(this.longitude, degreeDisplayOption, GeomUtil.EW));
 	}
 
+	public String toNumericalString() {
+		return String.format("%f / %f", this.latitude, this.longitude);
+	}
+
 	public GeoPoint degreesToRadians() {
 		return new GeoPoint(Math.toRadians(this.getLatitude()), Math.toRadians(this.getLongitude()));
 	}

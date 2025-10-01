@@ -18,8 +18,9 @@ WiP...
 - For 2 Cone Definitions, get Intersections, using `MPSToolBox.resolve2Cones`. ✅ 
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Rigel","obsAlt":28.856483,"gha":334.991105,"d":-8.168236},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
-- Process Intersections
+- Process Intersections. ✅
   - Each intersection returns 4 points (2 on each circle)
+  - `curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneName":"Saturn","bodyTwoName":"Jupiter","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},"coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}},{"bodyOneName":"Saturn","bodyTwoName":"Rigel","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},"coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}}]'`
 
 ## To build it
 From this module's root:
@@ -256,6 +257,17 @@ $ curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":
     "longitude": 13.240187004313771
   }
 ]
+```
+
+```
+$ curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneName":"Saturn","bodyT{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},"coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}},{"bodyOneName":"Saturn","bodyTwoName":"Rigel","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},"coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}}]' | jq
+```
+
+```json
+{
+  "latitude": 47.677643,
+  "longitude": -3.13567
+}
 ```
 
 ---
