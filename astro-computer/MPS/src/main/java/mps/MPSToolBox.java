@@ -525,7 +525,7 @@ public class MPSToolBox {
                 MPSToolBox.ConesIntersection referenceIntersection = conesIntersectionList.get(ref);
 
                 /*
-                   Need to manage
+                   Need to manage:
                         cone 1 - intersection 1 with cone 1 - intersection 1
                         cone 1 - intersection 1 with cone 1 - intersection 2
                         cone 1 - intersection 2 with cone 1 - intersection 1
@@ -536,7 +536,17 @@ public class MPSToolBox {
                         cone 2 - intersection 2 with cone 1 - intersection 1
                         cone 2 - intersection 2 with cone 1 - intersection 2
 
-                        etc.
+                        cone 1 - intersection 1 with cone 2 - intersection 1
+                        cone 1 - intersection 1 with cone 2 - intersection 2
+                        cone 1 - intersection 2 with cone 2 - intersection 1
+                        cone 1 - intersection 2 with cone 2 - intersection 2
+
+                        cone 2 - intersection 1 with cone 2 - intersection 1
+                        cone 2 - intersection 1 with cone 2 - intersection 2
+                        cone 2 - intersection 2 with cone 2 - intersection 1
+                        cone 2 - intersection 2 with cone 2 - intersection 2
+
+                        Good luck.
 
                  */
 

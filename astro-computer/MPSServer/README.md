@@ -270,6 +270,8 @@ $ curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneNam
 }
 ```
 
+Postman too does a good job with those requests.
+
 ---
 
 Next, we'll provide Web Pages invoking those REST services. That's going to be interesting.
