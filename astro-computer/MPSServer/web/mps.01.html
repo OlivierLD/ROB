@@ -2557,7 +2557,20 @@ let toggleForeground = () => {
 		context.closePath();
 
         // TODO Change that to actually required cone definitions
+
         // Get obsAlt, GHA, D from the REST services, for given body, given UTC.
+        let utcyear = parseInt(document.getElementById('UTC-year').value);
+        let utcmonth = parseInt(document.getElementById('UTC-month').value);
+        let utcday = parseInt(document.getElementById('UTC-day').value);
+        let utchour = parseInt(document.getElementById('UTC-hour').value);
+        let utcminute = parseInt(document.getElementById('UTC-minute').value);
+        let utcsecond = parseInt(document.getElementById('UTC-second').value);
+
+        let UTCDuration = `${utcyear.toFixed(0)}-${utcmonth.toFixed(0).padStart(2,'0')}-${utcday.toFixed(0).padStart(2,'0')}T${utchour.toFixed(0).padStart(2,'0')}:${utcminute.toFixed(0).padStart(2,'0')}:${utcsecond.toFixed(0).padStart(2,'0')}`;
+        console.log(`UTC Duration: ${UTCDuration}`);
+
+        fetchDadatForBody("Sun", UTCDuration);
+
         let payload = {
             "bodyName":"Saturn",
             "obsAlt":22.276078,
@@ -3419,6 +3432,43 @@ let toggleForeground = () => {
 			// events.publish('valid', null);
 		});
 	}
+
+    // curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
+    function fetchDadatForBody(body, utcdate) {
+      	let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise(`/mps/pg/${body}/${utcdate}`,
+                                DEFAULT_TIMEOUT,
+                                'GET',
+                                [200, 201], // Can be an array
+                                null,       // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+                    alert('Got the Body Data!!\n' + JSON.stringify(json));
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("fetchDadatForBody : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+    }
 
     // Set default date values, start process(es), etc
     window.onload = () => {
