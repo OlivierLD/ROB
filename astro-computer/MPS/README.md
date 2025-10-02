@@ -182,7 +182,7 @@ Comme `MS` = `1 / tg(h)`, `OS` s'&eacute;crit aussi `(cos(h) / sin(h)) / cos(h)`
 La distance `PS` est &eacute;gale &agrave; `OS - r`.    
 Donc `PS = (1 / sin(h)) - r`.
 
-Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Ici, les astres ne sont pas ici situ&eacute;s dans le plan de la feuille...
+Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Ici, les astres ne sont pas situ&eacute;s dans le plan de la feuille...
 <!-- ![Another one](./images/figure.03.png) -->  
 <img src="images/figure.03.png" width="400">
 

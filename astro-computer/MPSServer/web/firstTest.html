@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A First Test</title>
+    <link rel="icon" type="image/jpg" href="./palm.04.jpg">
+    <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+    <script type="text/javascript" src="./js/ajax.manager.js"></script>
+</head>
+<body>
+    <h1>First Test</h1>
+    Invoke REST Service <code>/mps/bodies</code>
+    <br/>
+    <textarea rows="10" cols="80" id="output" style="max-height: 200px; overflow: auto;">
+
+    </textarea>
+    <hr/>
+    <i>OlivSoft</i>
+</body>
+<script type="text/javascript">
+    function onMessage(json) {
+        console.log(JSON.stringify(json, null, 2));
+        document.getElementById('output').innerHTML = JSON.stringify(json, null, 2); //  + '</pre>';
+    }
+
+    function messManager(mess) {
+        console.error(JSON.stringify(mess, null, 2));
+        document.getElementById('output').innerText = JSON.stringify(mess, null, 2);
+    }
+
+	function fetchBodyList() {
+		let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise('/mps/bodies',
+                                DEFAULT_TIMEOUT,
+                                'GET',
+                                [200, 201],    // Can be an array
+                                null,  // data
+                                false, // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					onMessage(json);
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+	}
+
+    window.onload = () => {
+        console.log("On load");
+
+        fetchBodyList();
+    }
+</script>
+</html>

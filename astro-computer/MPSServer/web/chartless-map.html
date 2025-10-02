@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<!--
+  Display a track on a chartless map, from a BLOB (optional),
+  Or get the data from a REST service (with the right parameter(s)).
+
+  See the updateMap function below, called after repainting the map (to add required data and details).
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Chartless Map</title>
+        <link rel="icon" type="image/ico" href="./hammerhead.02.ico">
+        <script type="module" src="./webcomponents/ChartlessMap.js"></script>
+        <!--script type="text/javascript" src="./js/mux.rest.js"></script-->
+	    <style type="text/css">
+html {
+	font-family: "Courier New";
+}
+
+select, input {
+	font-family: "Courier New";
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.html-01 {
+	background-color: white;
+	color: black;
+}
+.html-02 {
+	background-color: gray;
+	color: cyan;
+}
+.html-03 {
+	background-color: black;
+	color: silver;
+}
+
+.chartless-map-01 {
+	--bg-color: rgba(224, 215, 215, 0.5);
+	--grid-color: rgba(0, 0, 0, 0.7);
+	--fg-color: gray;
+	--marker-and-track-color: navy;
+	--target-color: green;
+	--border-color: blue;
+	--value-font: 'Courier New';
+}
+.chartless-map-02 {
+	--bg-color: rgba(0, 0, 0, 0.5);
+	--grid-color: lime;
+	--fg-color: lime;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+.chartless-map-03 {
+	--bg-color: rgb(62, 58, 58);
+	--grid-color: cyan;
+	--fg-color: cyan;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+compass-display .green {
+	--bg-color: transparent;
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: lime;
+	--cross-hair-color: red;
+	--display-line-color: lime;
+	--label-fill-color: green;
+	--with-display-shadow: false;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: green;
+	--value-outline-color: lime;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .orange {
+	--bg-color: transparent;
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: orange;
+	--cross-hair-color: red;
+	--display-line-color: orange;
+	--label-fill-color: orange;
+	--with-display-shadow: false;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .gray {
+	--bg-color: transparent;
+	--digit-color: gray;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: gray;
+	--cross-hair-color: red;
+	--display-line-color: gray;
+	--label-fill-color: blue;
+	--with-display-shadow: false;
+	--outline-color: gray;
+	--major-tick-color: gray;
+	--minor-tick-color: gray;
+	--value-color: navy;
+	--value-outline-color: gray;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+.display-data {
+	grid-area: middle;
+	text-align: center;
+	vertical-align: baseline;
+	margin: auto;
+	color: inherit;
+	font-size: 48px;
+	font-weight: bold;
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+chartless-map#chartless-map-01 {
+	/* cursor: crosshair; */
+	cursor: url('./images/crosshair.png') 19 20, auto;
+}
+
+    	</style>
+    </head>
+    <body>
+
+        <div id="cardinality"></div>
+        <div style="display: grid; grid-template-columns: 1020px auto;">
+            <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+                <chartless-map id="chartless-map-01"
+                                class="chartless-map-01"
+                                center-lat="47.677667"
+                                center-lng="-3.135667"
+                                chart-width="5.0"
+                                width="1000"
+                                height="600"></chartless-map>
+            </div>
+            <div style="padding: 10px;">
+                <button id="btn-zoom-in" style="margin-top: 10px; min-width: 30px; margin-bottom: 0px; padding: 5px;" title="Zoom in"
+                        onclick="zoomIn();">+</button>
+                <br/>
+                <button id="btn-zoom-out" style="margin-top: 10px; min-width: 30px; margin-bottom: 0px; padding: 5px;" title="Zoom out"
+                        onclick="zoomOut();">-</button>
+            </div>
+        </div>
+        <div>
+            <!--input type="checkbox" id="display-center" name="display-center" checked="checked"
+                   onchange="displayCenter = this.checked; map.repaint();">
+            <label for="display-center">Display Data Center</label-->
+
+            <!--input type="checkbox" id="display-labels" name="display-labels" checked="checked"
+                   onchange="displayLabels = this.checked; map.repaint();">
+            <label for="display-labels">Display Markers Labels</label-->
+
+			<!--br/-->
+			<input type="checkbox" id="plot-world-map" onchange="plotWorldMap(this);">
+			<label for="plot-world-map">Display World Map</label>
+		</div>
+
+        <!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+            Chart Width:
+            <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                    oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+            <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+        </div-->
+
+        <div id="free-stuff" style="margin-top: 10px;">
+        </div>
+
+    </body>
+	<!--script type="module">
+
+import * as Utilities from "./webcomponents/utilities/Utilities.js";
+
+	</script-->
+    <script type="text/javascript">
+
+/**
+ *
+ * @param start { lat: xx, lng: xx }, L & G in Degrees
+ * @param dist distance in nm
+ * @param bearing route in Degrees
+ * @return DR Position, L & G in Degrees
+ */
+function deadReckoning(start, dist, bearing) {
+	let radianDistance = Math.toRadians(dist / 60);
+	let finalLat = (Math.asin((Math.sin(Math.toRadians(start.lat)) * Math.cos(radianDistance)) +
+			(Math.cos(Math.toRadians(start.lat)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(bearing)))));
+	let finalLng = Math.toRadians(start.lng) + Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(start.lat)),
+			Math.cos(radianDistance) - Math.sin(Math.toRadians(start.lat)) * Math.sin(finalLat));
+	finalLat = Math.toDegrees(finalLat);
+	finalLng = Math.toDegrees(finalLng);
+
+	return {lat: finalLat, lng: finalLng};
+}
+
+
+let map;
+let world_map_data = null;
+let withWorldMap = false;
+
+const WORLD_DATA = "./json/world.data.json";
+
+let loadWorldData = (fn) => {
+	window.fetch(WORLD_DATA)
+		.then(response => {
+			console.log(`Data Response: ${response.status} - ${response.statusText}`);
+			response.json().then(doc => {
+				world_map_data = doc;
+				console.log(`World data loaded`);
+				if (fn) {
+					console.log("Executing next func.");
+					fn();
+				}
+			});
+		}, (error, errmess) => {
+			console.log("Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
+};
+
+let displayCenter = true; // Display the center of the track on the map
+let displayLabels = true; // Display the markers labels on the map
+const VERBOSE = false;
+
+let getQSPrm = function(prm) {
+    let value;
+    let loc = document.location.toString();
+    if (loc.indexOf("?") > -1) {
+      let qs = loc.substring(loc.indexOf("?") + 1);
+      let prms = qs.split('&');
+      for (let i=0; i<prms.length; i++) {
+        let nv = prms[i].split('=');
+        if (nv.length === 2) {
+          if (nv[0] === prm) {
+            return nv[1];
+          }
+        }
+      }
+    }
+    return value;
+};
+
+function getLOGData(url) {
+
+	let xhr = new XMLHttpRequest(),
+		verb = 'GET',
+		happyCode = 200,
+		TIMEOUT = 10000;
+
+	let promise = new Promise((resolve, reject) => {
+		let xhr = new XMLHttpRequest();
+
+		xhr.open(verb, url, true);
+		xhr.setRequestHeader("Content-type", "application/json");
+		try {
+			xhr.send();
+		} catch (err) {
+			console.log("Send Error ", err);
+		}
+
+		let requestTimer = setTimeout(() => {
+			xhr.abort();
+			let mess = {code: 408, message: `Timeout (${TIMEOUT}ms) for ${verb} ${url}`};
+			reject(mess);
+		}, TIMEOUT);
+
+		xhr.onload = function () {
+			clearTimeout(requestTimer);
+			if (xhr.status === happyCode) {
+				resolve(xhr.response);
+			} else {
+				reject({code: xhr.status, message: xhr.response});
+			}
+		};
+	});
+	return promise;
+}
+
+function onSlider(event) {
+	if (VERBOSE) {
+		console.log(`Setting chart width to ${this.value}.`);
+	}
+	if (this.value > 0) {
+    	map.chartWidth = this.value;
+	} else {
+		console.log(`Chart width ${this.value} !!`);
+	}
+}
+
+function zoomIn() {
+    if (VERBOSE) {
+        console.log("Zooming in...");
+    }
+    map.chartWidth *= 0.8; // 20% zoom in
+    // map.repaint();
+}
+function zoomOut() {
+    if (VERBOSE) {
+        console.log("Zooming out...");
+    }
+    map.chartWidth *= 1.2; // 20% zoom out
+    // map.repaint();
+}
+
+function messageManager(mess) { // To be overridden
+    console.log(`Message: ${mess}`);
+}
+
+let plotWorldMap = (cb) => {
+	withWorldMap = cb.checked;
+	if (withWorldMap && world_map_data === null) {
+		if (false) {
+			// Promise option (promise within a promise... Mmmmh)
+			let loadData = () => {
+				let promise = new Promise((resolve, reject) => {
+					try {
+						resolve(loadWorldData());
+					} catch (err) {
+						reject(err);
+					}
+				});
+				return promise;
+			};
+			loadData().then(result => {
+				map.repaint();
+			});
+		} else if (false) {
+			// Timeout option
+			loadWorldData();
+			setTimeout(() => { map.repaint(); }, 3000);
+		} else if (true) {
+			// DoNext option
+			loadWorldData(() => map.repaint());
+		}
+	} else {
+		if (world_map_data !== null) {
+			map.repaint();
+		}
+	}
+	// map.repaint(); // TODO in a promise ? then ?
+};
+
+const displayMarkers = false; // false;
+const displayBorders = false; // false;
+const displayBorderMarkers = false;
+
+let markers = [];
+let borders = [];
+
+function drawArrow(context, canvasX, canvasY, arrowLen, heading, color) {
+
+	// console.log(`Drawing arrow for heading ${heading}`);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	let headAngle = 30;
+	context.moveTo(canvasX +  ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
+
+	context.lineTo(canvasX + ((arrowLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((arrowLen / 2) * Math.cos(Math.toRadians(heading))));
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading - headAngle))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading - headAngle))));
+	context.lineTo(canvasX - ((arrowLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
+					canvasY + ((arrowLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
+	context.lineTo(canvasX - ((arrowLen / 2) * Math.sin(Math.toRadians(heading + headAngle))),
+					canvasY + ((arrowLen / 2) * Math.cos(Math.toRadians(heading + headAngle))));
+
+	context.closePath();
+	context.stroke();
+}
+
+let plotLOP = (map, context, dr, azimuth, intercept, bodyName) => {
+	let color = 'gray';
+
+	context.save();
+	context.strokeStyle = color;
+	context.fillStyle = color;
+	context.lineWidth = 1;
+	let drCanvasPos = map.posToCanvas(dr.latitude, dr.longitude); // DR
+	console.log(`DR Canvas Pos: ${dr.latitude} / ${dr.longitude} => ${drCanvasPos.x} / ${drCanvasPos.y}`);
+	// The DR point
+	let markerRadius = 2;
+	context.beginPath();
+	// context.arc(drCanvasPos.x, drCanvasPos.y /*- beaconHeight*/ - (3 * (markerRadius / 3)), markerRadius / 3, 0, 2 * Math.PI, false);
+	context.arc(drCanvasPos.x, drCanvasPos.y, markerRadius, 0, 2 * Math.PI, false);
+	//          |              |              |             |  |            |
+	//          |              |              |             |  |            Counter clockwise
+	//          |              |              |             |  To angle (rad)
+	//          |              |              |             From angle (rad)
+	//          |              |              radius
+	//          |              Canvas y
+	//		    Canvas x
+    context.stroke();
+	context.fill();
+
+	context.closePath();
+
+	// Azimuth
+	let azimuthLengh = 200; // pixels
+	let azimuthRad = (azimuth * Math.PI) / 180.0;
+	let azimuthFront = {
+		x: drCanvasPos.x + (azimuthLengh * Math.sin(azimuthRad)),
+		y: drCanvasPos.y - (azimuthLengh * Math.cos(azimuthRad))
+	};
+	let azimuthBack = {
+		x: drCanvasPos.x - ((azimuthLengh / 2) * Math.sin(azimuthRad)),
+		y: drCanvasPos.y + ((azimuthLengh / 2) * Math.cos(azimuthRad))
+	};
+	context.beginPath();
+	context.moveTo(azimuthBack.x, azimuthBack.y);
+	context.lineTo(azimuthFront.x, azimuthFront.y); // Arrow head
+	context.lineWidth = 1;
+	context.strokeStyle = color;
+	context.stroke();
+	context.closePath();
+	drawArrow(context, azimuthFront.x, azimuthFront.y, 10, azimuth, color);
+	// Body Name
+	context.fillText(bodyName, azimuthFront.x + 3, azimuthFront.y);
+
+	// The LOP
+	// 1 - Get the point coordinates from the DR position, the azimuth and the intercept
+	let zPoint = /*Utilities.*/deadReckoning(
+		{ lat: dr.latitude, lng: dr.longitude },
+		intercept,                                // positive: to the body, negative, away from the body
+		azimuth); // in nautical miles
+	// 2 - Get the canvas coordinates of that point
+	let ZDrCanvasPos = map.posToCanvas(zPoint.lat, zPoint.lng);
+	console.log(`LOP Canvas Pos: ${zPoint.lat} / ${zPoint.lng} => ${ZDrCanvasPos.x} / ${ZDrCanvasPos.y}`);
+
+	// 3 - Draw the LOP
+	let lopLen = 200; // pixels
+	let lopRad = ((azimuth + 90) * Math.PI) / 180.0;
+	let lopLeft = {
+		x: ZDrCanvasPos.x + (lopLen * Math.sin(lopRad)),
+		y: ZDrCanvasPos.y - (lopLen * Math.cos(lopRad))
+	};
+	let lopRight = {
+		x: ZDrCanvasPos.x - (lopLen * Math.sin(lopRad)),
+		y: ZDrCanvasPos.y + (lopLen * Math.cos(lopRad))
+	};
+	context.beginPath();
+	context.moveTo(lopLeft.x, lopLeft.y);
+	context.lineTo(lopRight.x, lopRight.y);
+	context.lineWidth = 2;
+	context.strokeStyle = 'blue';
+	context.stroke();
+	context.closePath();
+
+	context.restore();
+}
+
+/*
+ * Used as the doAfter callback on the ChartlessMap.
+ */
+let updateMap = (elmt, context) => {
+
+    console.log(`...updateMap. Plotting DR Data and LOPs.`);
+
+	if (withWorldMap) { // Draw World Chart
+		context.save();
+		try {
+			let worldTop = world_map_data.top;
+			let section = worldTop.section; // We assume top has been found.
+
+			// console.log("Found " + section.length + " section(s).")
+			for (let i = 0; i < section.length; i++) {
+				let point = section[i].point;
+				if (point !== undefined) {
+					let firstPt = null;
+					let previousPt = null;
+					context.beginPath();
+					for (let p = 0; p < point.length; p++) {
+						let lat = parseFloat(point[p].Lat);
+						let lng = parseFloat(point[p].Lng);
+						if (lng < -180) {
+							lng += 360;
+						}
+						if (lng > 180) {
+							lng -= 360;
+						}
+
+						let pt = elmt.posToCanvas(lat, lng);
+
+						if (previousPt === null) { // p === 0) {
+							context.moveTo(pt.x, pt.y);
+							firstPt = pt;
+							previousPt = pt;
+						} else {
+							// if (Math.abs(previousPt.x - pt.x) < (this.width / 2) && Math.abs(previousPt.y - pt.y) < (this.height / 2)) {
+								context.lineTo(pt.x, pt.y);
+								previousPt = pt;
+							// }
+						}
+					}
+					// Close the loop
+					if (firstPt !== null && previousPt !== null) {
+						context.lineTo(firstPt.x, firstPt.y);
+					}
+				}
+				context.lineWidth = 1;
+				context.strokeStyle = 'gray';
+				context.stroke();
+				context.closePath();
+			}
+		} catch (ex) {
+			console.log("Oops:" + ex);
+		}
+		context.restore();
+	}
+
+
+	// DR Position
+	let DRLat = 47.60; // 46° 36.0' N
+	let DRLng = -3.13; // 3° 7.8' W
+
+	// plot DR position
+	elmt.plotMark(context,
+		{ latitude: DRLat, longitude: DRLng, label: "DR" },
+		10, 20,
+		'red',
+		["Dead Reckoning Position"],
+		true);
+
+	// Plot LOPs
+/*
+Original Context : On 2025-Aug-19 12:58:25 UTC, the Sun Decl 12º34.69'N, GHA 13º42.68', from 47º40.66'N / 3º08.14'W.
+	Seeing the Sun at altitude 53º48.18', in the 197.66º
+Alt UserPos => For D: 12º34.69'N, GHA: 13º42.68', from 47º36.00'N / 3º07.80'W, H: 53º52.55', Z: 197.70. Intercept: -4.45nm
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, the Moon Decl 27º52.70'N, GHA 61º01.15', from 47º40.66'N / 3º08.14'W.
+	Seeing the Moon at altitude 41º27.79', in the 267.50º
+Alt UserPos => For D: 27º52.70'N, GHA: 61º01.15', from 47º36.00'N / 3º07.80'W, H: 41º27.76', Z: 267.58, intercept: +0.03nm
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, Venus Decl 21º00.44'N, GHA 48º19.78', from 47º40.66'N / 3º08.14'W.
+	Seeing Venus at altitude 45º04.34', in the 249.70º
+Alt UserPos => For D: 21º00.44'N, GHA: 48º19.78', from 47º36.00'N / 3º07.80'W, H: 45º05.74', Z: 249.78
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, Mars Decl 2º46.45'S, GHA 335º19.25', from 47º40.66'N / 3º08.14'W.
+	Seeing Mars at altitude 33º59.30', in the 145.80º
+Alt UserPos => For D: 2º46.45'S, GHA: 335º19.25', from 47º36.00'N / 3º07.80'W, H: 34º03.29', Z: 145.78, intercept: -0.40nm ??
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, Jupiter Decl 22º28.97'N, GHA 55º53.75', from 47º40.66'N / 3º08.14'W.
+	Seeing Jupiter at altitude 41º14.42', in the 258.03º
+Alt UserPos => For D: 22º28.97'N, GHA: 55º53.75', from 47º36.00'N / 3º07.80'W, H: 41º15.16', Z: 258.10
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, Spica Decl 11º17.68'S, GHA 321º06.13', from 47º40.66'N / 3º08.14'W.
+	Seeing Spica at altitude 20º13.11', in the 135.60º
+Alt UserPos => For D: 11º17.68'S, GHA: 321º06.13', from 47º36.00'N / 3º07.80'W, H: 20º16.60', Z: 135.58
+
+Original Context : On 2025-Aug-19 12:58:25 UTC, Denebola Decl 14º25.85'N, GHA 345º08.88', from 47º40.66'N / 3º08.14'W.
+	Seeing Denebola at altitude 53º33.41', in the 149.77º
+Alt UserPos => For D: 14º25.85'N, GHA: 345º08.88', from 47º36.00'N / 3º07.80'W, H: 53º37.55', Z: 149.73
+
+*/
+
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 198, -4.45, "Sun \u2609");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 268, +0.03, "Moon \u263D");
+	plotLOP(elmt, context, { latitude: DRLat, longitude: DRLng, label: "DR" }, 146, -3.6, "Mars \u2642");
+
+};
+
+let trackBuffer = [];
+let dataCache = {};
+
+let getLogDetails = (fname) => {
+    let getDetails = getLogFileDetails(fname);
+    getDetails.then((value) => {
+        // console.log("Done:", value);
+        if (true) {
+            document.getElementById('free-stuff').innerHTML =
+                `<h1>Log file ${ decodeURIComponent(fname) }</h1>` +
+                `<pre style="width: 98%; height: 90vh; overflow: scroll;">${ value }</pre>`;
+        }
+    }, (error, errmess) => {
+        let message;
+        if (errmess) {
+            let mess = JSON.parse(errmess);
+            if (mess.message) {
+                message = mess.message;
+            }
+        }
+        console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+    });
+}
+
+let getDataFromLog = (url) => {
+
+    let getData = getLOGData(url);
+    getData.then((value) => {
+        // console.log("Done:", value);
+        let json = JSON.parse(value);
+        trackBuffer = json;
+        // console.log(`Content:\n${json}`);
+        document.getElementById('cardinality').innerHTML = `Read ${trackBuffer.length} point(s) in the log file`;
+        if (false) {
+            document.getElementById('free-stuff').innerHTML =
+                "<h1>JSON Data (WiP)</h1>" +
+                `<pre style="width: 98%; height: 90vh; overflow: scroll;">${JSON.stringify(json, null, 2)}</pre>`;
+        }
+        // TODO: destroyClickedElement...
+        plotOnMap();
+
+    }, (error, errmess) => {
+        let message;
+        if (errmess) {
+            let mess = JSON.parse(errmess);
+            if (mess.message) {
+                message = mess.message;
+            }
+        }
+        console.debug("Failed to get nmea data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+    });
+};
+
+function getLogJSON(fName) {
+    let logJSON = getLogToJSON(fName, 10); // A promise
+    logJSON.then((value) => {
+        let json = JSON.parse(value);
+        trackBuffer = json;
+        document.getElementById('cardinality').innerHTML = `Read ${trackBuffer.length} point(s) in the log file`;
+
+        plotOnMap();
+
+    }, (error, errmess) => {
+        let message;
+        if (errmess) {
+            if (errmess.message) {
+                message = errmess.message;
+            } else {
+                message = errmess;
+            }
+        }
+        messageManager("Failed to get the log's JSON Version..." + (error ? JSON.stringify(error) : ' - ') + ', ' + (message ? JSON.stringify(message) : ' - '));
+    });
+}
+
+function plotOnMap() {
+    let minLat = 90.0, maxLat = -90.0;
+    let minLng = 180.0, maxLng = -180.0;
+
+    for (let i=0; i<trackBuffer.length; i++) {
+        let pos = trackBuffer[i];
+
+        minLat = Math.min(minLat, pos.lat);
+        maxLat = Math.max(maxLat, pos.lat);
+        minLng = Math.min(minLng, pos.lng);
+        maxLng = Math.max(maxLng, pos.lng);
+
+    }
+    let centerLat = (minLat + maxLat) / 2.0;
+    let centerLng = (minLng + maxLng) / 2.0;
+
+    trackCenterLat = centerLat;
+    trackCenterLng = centerLng;
+
+    if (true) {
+        map._delayedRepaint = true;
+        map.centerLat = centerLat; // This does the repaint... Delay it (see _delayedRepaint).
+        map.centerLng = centerLng;
+        map.chartWidth = Math.max(maxLat - minLat, maxLng - minLng) * 1.2; // 20% margin
+        map.repaint();
+        map._delayedRepaint = false;
+    } else {
+        map.repaint();
+    }
+}
+
+let trackCenterLat = null;
+let trackCenterLng = null;
+
+// Read the log data, json format
+window.onload = function() {
+
+    map = document.getElementById('chartless-map-01');
+    map.setDoAfter(updateMap);
+
+    let loadURL = getQSPrm("json");
+    if (loadURL) {
+        console.log(`Load URL: ${ decodeURIComponent(loadURL) }`);
+
+        let getAllCache = getCache(); // For the borders and markers
+        getAllCache.then((value) => {
+            // console.log("Cache:", value);
+            if (value && value.length > 0) {
+                let cache = JSON.parse(value);
+                dataCache = cache;
+                borders = cache['borders-data'];
+                markers = cache['markers-data'];
+                // Now get the log file's data
+                getDataFromLog(decodeURIComponent(loadURL));
+            }
+        }, (error, errmess) => {
+            console.debug("Failed to get cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (errmess ? errmess : ' - '));
+            // Now get the log file's data
+            getDataFromLog(decodeURIComponent(loadURL));
+        });
+    } else {
+        console.warn("No json QS prm provided, will try 'log'.");
+        // document.getElementById('free-stuff').innerHTML = "<h1>Oops! No json QS prm!</h1>";
+    }
+    let logFileName = getQSPrm("log");
+    if (logFileName) {
+        let getAllCache = getCache(); // For the borders and markers
+        getAllCache.then((value) => {
+            // console.log("Cache:", value);
+            if (value && value.length > 0) {
+                let cache = JSON.parse(value);
+                dataCache = cache;
+                borders = cache['borders-data'];
+                markers = cache['markers-data'];
+                // Now get the log file's data
+                getLogJSON(decodeURIComponent(logFileName));
+            }
+        }, (error, errmess) => {
+            console.debug("Failed to get cache..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (errmess ? errmess : ' - '));
+            // Now get the log file's data
+            getLogJSON(decodeURIComponent(logFileName));
+        });
+        getLogDetails(decodeURIComponent(logFileName));
+
+    } else {
+        console.warn("No log file name provided in the query string.");
+    }
+
+	// First display
+	map.repaint();
+};
+
+    </script>
+</html>
