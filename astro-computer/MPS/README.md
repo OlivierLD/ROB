@@ -33,8 +33,8 @@ devrait en toute logique correspondre &agrave; la position de l'observateur.
 
 L'&eacute;quation &agrave; r&eacute;soudre n'est pas triviale..., c'est bien l'objet de ce document.
 
-Mais on voit bien ici que la d&eacute;termination ces cercles d'&eacute;gales hauteurs ne fait en aucun cas intervenir
-une position estim&eacute;e. On a juste besoin ici de connaitre :
+Mais on voit bien ici que la d&eacute;termination de ces cercles d'&eacute;gales hauteurs ne fait en aucun cas intervenir
+une position estim&eacute;e. On a juste besoin ici de conna&icirc;tre :
 - La hauteur observ&eacute;e de l'astre
 - L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e).
 
@@ -110,7 +110,7 @@ $$
 
 o&ugrave; R est le rayon de la Terre.
 
-La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteind :
+La formule de haversine _inverse_ permet de conna&icirc;tre la position qu'on atteint :
 - en partant d'un point donn&eacute;
 - en suivant un arc de grand cercle (aka orthodromie)
 - avec un angle de route initial donn&eacute;
