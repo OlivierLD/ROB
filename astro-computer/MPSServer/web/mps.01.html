@@ -2556,6 +2556,16 @@ let toggleForeground = () => {
 		}
 		context.closePath();
 
+        // TODO Change that to actually required cone definitions
+        // Get obsAlt, GHA, D from the REST services, for given body, given UTC.
+        let payload = {
+            "bodyName":"Saturn",
+            "obsAlt":22.276078,
+            "gha":54.653345,
+            "d":-3.048023
+        };
+        fetchConeData(payload);
+
         // Draw the cone's base from json data
         let mpsData = document.getElementById('mps-data');
         mpsData.innerHTML = ''; // Clear previous data
@@ -3328,10 +3338,97 @@ let toggleForeground = () => {
         }
     };
 
-    // Set default date values, start process(es)
+    function populateBodyList(json) {
+        console.log(JSON.stringify(json, null, 2));
+        // document.getElementById('output').innerHTML = JSON.stringify(json, null, 2); //  + '</pre>';
+    }
+
+    function messManager(mess) {
+        // console.error(JSON.stringify(mess, null, 2));
+        alert(JSON.stringify(mess, null, 2));
+    }
+
+	function fetchBodyList() {
+		let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise('/mps/bodies',
+                                DEFAULT_TIMEOUT,
+                                'GET',
+                                [200, 201],    // Can be an array
+                                null,  // data
+                                false, // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					populateBodyList(json); // TODO Something more clever...
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("fetchBodyList : Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+	}
+
+    // curl -X http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
+	function fetchConeData(payload) {
+		let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise('/mps/cone',
+                                DEFAULT_TIMEOUT,
+                                'POST',
+                                [200, 201], // Can be an array
+                                payload,    // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+                    alert('Got the cone!!');
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("fetchConeData : Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+	}
+
+    // Set default date values, start process(es), etc
     window.onload = () => {
 
         console.log('On Load, ready...');
+
+        // Populate the available celestial bodies
+        fetchBodyList(); // See this cde for details...
+
+
         updateUTCDate();
         // Check QS for location
         let qsLat = getQueryParameterByName('lat');
