@@ -40,4 +40,5 @@ dependencies {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url "https://www.datanucleus.org/downloads/maven2" }  // For XML Parser
 }
