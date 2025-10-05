@@ -15,6 +15,7 @@ WiP...
 - For a given date (UTC), for a given body, get GHA and D. ✅ `curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00`
 - For a given position on Earth, with a given GHA and D, get ObsAlt and Z. ✅ `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"hp":0.0,"sd":0.0,"gha":230.905951,"d":-1.313542}}'`, or just `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'`  
 - For a given ObsAlt, with GHA and D, get the Cone Definition. ✅ `curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'`
+- Get the Cone Definition for Body, UTCDate, Position. ✅ `curl -X POST http://localhost:9999/mps/getcone -d '{"bodyName":"Saturn","utcDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}'`
 - For 2 Cone Definitions, get Intersections, using `MPSToolBox.resolve2Cones`. ✅ 
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
   - `curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Rigel","obsAlt":28.856483,"gha":334.991105,"d":-8.168236},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'`
@@ -141,6 +142,54 @@ $ curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677
 {
   "alt": -27.99267688201456,
   "z": 56.96535412553529
+}
+```
+
+```
+$ curl -X POST http://localhost:9999/mps/getcone -d '{"bodyName":"Saturn","utcDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}'
+```
+
+```json
+{
+  "pg": {
+    "latitude": -3.324662628988861,
+    "longitude": -161.93516509878785
+  },
+  "obsAlt": -42.03268623253824,
+  "earthCenterToConeSummit": 5126.366074188747,
+  "bodyName": "Saturn",
+  "observationTime": "2025-Oct-05 06:20:07 UTC",
+  "circle": [
+    {
+      "point": {
+        "latitude": 51.291976396450615,
+        "longitude": 18.064834901212155
+      },
+      "z": 0
+    },
+    {
+      "point": {
+        "latitude": 51.28163017874775,
+        "longitude": 16.8773257933454
+      },
+      "z": 1
+    },
+    {
+      "point": {
+        "latitude": 51.25060864666276,
+        "longitude": 15.691271801899415
+      },
+      "z": 2
+    },
+    { . . . },
+    {
+      "point": {
+        "latitude": 64.65705352112906,
+        "longitude": -56.81564456978676
+      },
+      "z": 359
+    }
+  ]
 }
 ```
 

@@ -94,17 +94,22 @@ public class RESTImplementation {
 					MPS_PREFIX + "/alt-and-z",
 					this::getAltAndZ,
 					"For a given user position, a given Pg (GHA, D, ...), get Observed Altitude and Azimut."),
-			new Operation( // TODO Payload TDB
+			new Operation( // payload like {"bodyName":"Saturn","UTCDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}
+					"POST",
+					MPS_PREFIX + "/getcone",
+					this::getConeFromScratch,
+					"For a given Body, date, and position, get the Cone definition (MPSToolBox.ConeDefinition)."),
+			new Operation(
 					"POST",
 					MPS_PREFIX + "/cone",
 					this::getCone,
 					"For a given GHA, D, and ObsAlt, get the Cone definition (MPSToolBox.ConeDefinition)."),
-			new Operation( // TODO Payload TDB
+			new Operation(
 					"POST",
 					MPS_PREFIX + "/2-cones-intersections",
 					this::getConesIntersections,
 					"Get the intersections of two MPSToolBox.ConeDefinition."),
-			new Operation( // TODO Payload TDB
+			new Operation(
 					"POST",
 					MPS_PREFIX + "/process-intersections",
 					this::processConesIntersections,
@@ -552,6 +557,115 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private Response getConeFromScratch(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		// Duh
+		if (false) {
+			try {
+				ConeInputV2 dummyConeInput = new ConeInputV2("Dummy Body", "2025-10-05T07:45:00", new GeoPoint(47.0, -3.0));
+				String duh = mapper.writeValueAsString(dummyConeInput);
+				System.out.printf("dummyConeInput (payload) : [%s]\n", duh);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		ConeInputV2 coneInput = null;
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			String payload = new String(request.getContent());
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConeFromScratch with payload %s", payload));
+			}
+			if (!"null".equals(payload)) {
+				StringReader stringReader = new StringReader(payload);
+				try {
+					coneInput = mapper.readValue(stringReader, ConeInputV2.class);
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConeFromScratch with coneInput %s", coneInput));
+					}
+					// System.out.printf(">> getConeFromScratch with coneInput [%s], %s, %s\n", coneInput.getBodyName(), coneInput.getUtcDate(), coneInput.getPos());
+				} catch (Exception ex) {
+					System.err.println("--- getConeFromScratch ---");
+					ex.printStackTrace();
+					System.err.println("---------------------");
+
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MPS-0009-1")
+									.errorMessage(ex.toString()));
+					return response;
+				}
+			}
+		}
+
+		MPSToolBox.ConeDefinition coneDefinition;
+		try {
+			// For date and body, get D and GHA
+			Calendar refDate = null;
+			if (coneInput.getUtcDate() != null) {
+				try {
+					long ld = StringParsers.durationToDate(coneInput.getUtcDate());
+					refDate = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
+					refDate.setTimeInMillis(ld);
+				} catch (Exception ex) {
+
+				}
+			}
+			Pg pg = getBodyPg(refDate, coneInput.getBodyName());
+			// Get Obs Alt (and Z)
+			SightReductionUtil sru = new SightReductionUtil();
+
+			sru.setL(coneInput.getPos().getLatitude());
+			sru.setG(coneInput.getPos().getLongitude());
+
+			sru.setAHG(pg.getGHA());
+			sru.setD(pg.getD());
+			sru.calculate();
+
+			AltAndZ altAndZ = new AltAndZ(sru.getHe(), sru.getZ());
+
+			if (false) {
+				System.out.printf("For %s at %s, GHA: %s, D: %s, Alt: %s\n",
+						coneInput.getBodyName(),
+						refDate.getTime(),
+						GeomUtil.decToSex(pg.getGHA(), GeomUtil.SHELL, GeomUtil.NONE),
+						GeomUtil.decToSex(pg.getD(), GeomUtil.SHELL, GeomUtil.NS),
+						GeomUtil.decToSex(altAndZ.getAlt(), GeomUtil.SHELL, GeomUtil.NONE));
+			}
+
+			double fromZ = 0d, toZ = 360d, zStep = 1d; // TODO Get those from input payload
+			coneDefinition = MPSToolBox.calculateCone(refDate.getTime(), // Date not really used...
+					altAndZ.getAlt(), pg.getGHA(), pg.getD(), coneInput.getBodyName(),
+					fromZ, toZ, zStep,false);
+		} catch (Exception ex) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0010-1")
+							.errorMessage(String.format("PSToolBox.calculateCone: %s", ex.toString())));
+			return response;
+		}
+
+		String content;
+		try {
+			content = mapper.writeValueAsString(coneDefinition);
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0011-1")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
+
 	private Response getConesIntersections(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
@@ -865,65 +979,46 @@ public class RESTImplementation {
 			this.obsAlt = obsAlt;
 		}
 	}
-	/**
-	 *
-	 * @param request MUST {body} and {utc-date} path parameters
-	 * @return See below. A Pg Bean.
-	 */
-	private Response getBodyPgData(Request request) {
-		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
-		final List<String> pathParameters = request.getPathParameters();
-		if (pathParameters.size() != 2) {
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0018")
-							.errorMessage("Need 2 path parameters, {body} and {utc-date}"));
-			return response;
+	public static class ConeInputV2 {
+		String bodyName;
+		String utcDate;
+		GeoPoint pos;
+
+		public ConeInputV2() {
 		}
-		String bodyName = pathParameters.get(0);
-		// Check if body in the list
-		List<String> bodies = getBodyList();
-		if (!bodies.contains(bodyName)) {
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0019")
-							.errorMessage(String.format("Path parameter {body} [%s] was not found.", bodyName)));
-			return response;
+		public ConeInputV2(String bodyName, String utcDate, GeoPoint pos) {
+			this.bodyName = bodyName;
+			this.utcDate = utcDate;
+			this.pos = pos;
 		}
 
-		String strUtcDate = pathParameters.get(1);
-		if (false) {
-			System.out.printf("getBodyPgData: for %s, at %s\n", bodyName, strUtcDate);
-		}
-		Calendar refDate = null;
-		if (strUtcDate != null) {
-			try {
-				long ld = StringParsers.durationToDate(strUtcDate);
-				refDate = Calendar.getInstance(); // TimeZone.getTimeZone("Etc/UTC"));
-				refDate.setTimeInMillis(ld);
-				if (false) {
-					System.out.println("   >> Turned to Calendar:" + refDate.getTime());
-				}
-			} catch (Exception ex) {
-				response = HTTPServer.buildErrorResponse(response,
-						Response.BAD_REQUEST,
-						new HTTPServer.ErrorPayload()
-								.errorCode("MPS-0020")
-								.errorMessage(String.format("Parsing Duration Date failed: %s", ex.toString())));
-				return response;
-			}
-		} else {
-			response = HTTPServer.buildErrorResponse(response,
-					Response.BAD_REQUEST,
-					new HTTPServer.ErrorPayload()
-							.errorCode("MPS-0021")
-							.errorMessage("Path parameter {utc-date} missing."));
-			return response;
+		public String getBodyName() {
+			return bodyName;
 		}
 
+		public void setBodyName(String bodyName) {
+			this.bodyName = bodyName;
+		}
+
+		public String getUtcDate() {
+			return utcDate;
+		}
+
+		public void setUtcDate(String utcDate) {
+			this.utcDate = utcDate;
+		}
+
+		public GeoPoint getPos() {
+			return pos;
+		}
+
+		public void setPos(GeoPoint pos) {
+			this.pos = pos;
+		}
+	}
+
+	private static Pg getBodyPg(Calendar refDate, String bodyName) {
 		// The real calculation
 		AstroComputerV2 acv2 = new AstroComputerV2();
 		acv2.calculate(
@@ -986,6 +1081,70 @@ public class RESTImplementation {
 		}
 
 		Pg pg = new Pg(GHA, D, sd, hp);
+		return pg;
+	}
+
+	/**
+	 *
+	 * @param request MUST {body} and {utc-date} path parameters
+	 * @return See below. A Pg Bean.
+	 */
+	private Response getBodyPgData(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		final List<String> pathParameters = request.getPathParameters();
+		if (pathParameters.size() != 2) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0018")
+							.errorMessage("Need 2 path parameters, {body} and {utc-date}"));
+			return response;
+		}
+		String bodyName = pathParameters.get(0);
+		// Check if body in the list
+		List<String> bodies = getBodyList();
+		if (!bodies.contains(bodyName)) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0019")
+							.errorMessage(String.format("Path parameter {body} [%s] was not found.", bodyName)));
+			return response;
+		}
+
+		String strUtcDate = pathParameters.get(1);
+		if (false) {
+			System.out.printf("getBodyPgData: for %s, at %s\n", bodyName, strUtcDate);
+		}
+		Calendar refDate = null;
+		if (strUtcDate != null) {
+			try {
+				long ld = StringParsers.durationToDate(strUtcDate);
+				refDate = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
+				refDate.setTimeInMillis(ld);
+				if (false) {
+					System.out.println("   >> Turned to Calendar:" + refDate.getTime());
+				}
+			} catch (Exception ex) {
+				response = HTTPServer.buildErrorResponse(response,
+						Response.BAD_REQUEST,
+						new HTTPServer.ErrorPayload()
+								.errorCode("MPS-0020")
+								.errorMessage(String.format("Parsing Duration Date failed: %s", ex.toString())));
+				return response;
+			}
+		} else {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0021")
+							.errorMessage("Path parameter {utc-date} missing."));
+			return response;
+		}
+
+		// The real calculation
+		Pg pg = getBodyPg(refDate, bodyName);
 
 		String content;
 		try {

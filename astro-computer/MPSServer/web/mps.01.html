@@ -1172,7 +1172,7 @@ let toggleForeground = () => {
             <span class="dialog-header-close" onclick="closeCustomAlert();">&times</span>
         </div>
         <div style="margin-bottom: 10px;" id="alert-content">
-            <!-- Place holder for message -->
+            <!-- Placeholder for message -->
         </div>
     </dialog>
 
@@ -2273,7 +2273,8 @@ let toggleForeground = () => {
 
     function plotConeBase(context, worldMap, color, circleData) {
 
-        circleData.circle.forEach((point) => {
+        circleData.circle.forEach((pt) => {
+            let point = pt.point;
             if (worldMap.projection.type === 'GLOBE') {
                 let p = worldMap.getPanelPoint(point.latitude, point.longitude);
                 if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
@@ -2330,7 +2331,8 @@ let toggleForeground = () => {
 
                 // The cone itself
                 context.strokeStyle = coneColor; // Cone color
-                data.circle.forEach((point) => {
+                data.circle.forEach((pt) => {
+                    let point = pt.point;
                     let p = worldMap.getPanelPoint(point.latitude, point.longitude);
                     if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
                         return; // Behind the globe
@@ -2569,15 +2571,69 @@ let toggleForeground = () => {
         let UTCDuration = `${utcyear.toFixed(0)}-${utcmonth.toFixed(0).padStart(2,'0')}-${utcday.toFixed(0).padStart(2,'0')}T${utchour.toFixed(0).padStart(2,'0')}:${utcminute.toFixed(0).padStart(2,'0')}:${utcsecond.toFixed(0).padStart(2,'0')}`;
         console.log(`UTC Duration: ${UTCDuration}`);
 
-        fetchDadatForBody("Sun", UTCDuration);
 
-        let payload = {
-            "bodyName":"Saturn",
-            "obsAlt":22.276078,
-            "gha":54.653345,
-            "d":-3.048023
-        };
-        fetchConeData(payload);
+        if (true) {
+            let payload = {
+                bodyName:"Sun",
+                utcDate: UTCDuration,
+                pos: {
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude
+                }
+            };
+            fetchConeDataV2(payload, json => {
+                console.log("Cone data received");
+                // console.log(json);
+                latlngs = json;
+                // Draw the data on the globe
+                // The circle (cone base)
+                plotConeBase(context, wm, 'yellow', latlngs);
+                // The axis of the cone
+                plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', json);
+                // MSP Data ?
+
+            });
+            payload = {
+                bodyName:"Sirius",
+                utcDate: UTCDuration,
+                pos: {
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude
+                }
+            };
+            fetchConeDataV2(payload, json => {
+                console.log("Cone data received");
+                // console.log(json);
+                latlngs = json;
+                // Draw the data on the globe
+                // The circle (cone base)
+                plotConeBase(context, wm, 'red', latlngs);
+                // The axis of the cone
+                plotCone(context, wm, 'red', 'rgba(255, 0, 33, 0.4)', json);
+                // MSP Data ?
+
+            });
+            payload = {
+                bodyName:"Polaris",
+                utcDate: UTCDuration,
+                pos: {
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude
+                }
+            };
+            fetchConeDataV2(payload, json => {
+                console.log("Cone data received");
+                // console.log(json);
+                latlngs = json;
+                // Draw the data on the globe
+                // The circle (cone base)
+                plotConeBase(context, wm, 'lime', latlngs);
+                // The axis of the cone
+                plotCone(context, wm, 'lime', 'rgba(0, 255, 33, 0.4)', json);
+                // MSP Data ?
+
+            });
+        }
 
         // Draw the cone's base from json data
         let mpsData = document.getElementById('mps-data');
@@ -2586,8 +2642,8 @@ let toggleForeground = () => {
         graphDataLat.data = []; // Clear previous graph data
         graphDataLng.data = []; // Clear previous graph data
 
-        // Sun
-        if (true) {
+        // Sun ?
+        if (false) {
             fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2625,7 +2681,7 @@ let toggleForeground = () => {
                 });
         }
         // Moon
-        if (true) {
+        if (false) {
             fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2701,7 +2757,7 @@ let toggleForeground = () => {
                 });
         }
         // Mars
-        if (true) {
+        if (false) {
             fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2777,7 +2833,7 @@ let toggleForeground = () => {
                 });
         }
         // Spica
-        if (true) {
+        if (false) {
             fetch('./json/Spica.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2858,7 +2914,7 @@ let toggleForeground = () => {
 
     let extraDrawingWorldMapMercator = (wm, context) => {
         // Sun
-        if (true) {
+        if (false) {
             fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2885,7 +2941,7 @@ let toggleForeground = () => {
                 });
         }
         // Moon
-        if (true) {
+        if (false) {
             fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2939,7 +2995,7 @@ let toggleForeground = () => {
                 });
         }
         // Mars
-        if (true) {
+        if (false) {
             fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2993,7 +3049,7 @@ let toggleForeground = () => {
                 });
         }
         // Spica
-        if (true) {
+        if (false) {
             fetch('./json/Spica.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3050,7 +3106,7 @@ let toggleForeground = () => {
 
     let extraDrawingWorldMapAnaximandre = (wm, context) => {
         // Sun
-        if (true) {
+        if (false) {
             fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3077,7 +3133,7 @@ let toggleForeground = () => {
                 });
         }
         // Moon
-        if (true) {
+        if (false) {
             fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3131,7 +3187,7 @@ let toggleForeground = () => {
                 });
         }
         // Mars
-        if (true) {
+        if (false) {
             fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3185,7 +3241,7 @@ let toggleForeground = () => {
                 });
         }
         // Spica
-        if (true) {
+        if (false) {
             fetch('./json/Spica.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3366,7 +3422,7 @@ let toggleForeground = () => {
 		let getData = getPromise('/mps/bodies',
                                 DEFAULT_TIMEOUT,
                                 'GET',
-                                [200, 201],    // Can be an array
+                                [200, 201],    // Can be an array of ints, or an int
                                 null,  // data
                                 false, // show traffic
                                 headers);
@@ -3396,7 +3452,53 @@ let toggleForeground = () => {
 		});
 	}
 
-    // curl -X http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
+    // curl -X POST http://localhost:9999/mps/getcone -d '{"bodyName":"Saturn","utcDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}'
+    // Requires bodyName, utcDate, and position
+	function fetchConeDataV2(payload, callback) {
+		let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise('/mps/getcone',
+                                DEFAULT_TIMEOUT,
+                                'POST',
+                                [200, 201], // Can be an array
+                                payload,    // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					// console.log(JSON.stringify(json, null, 2));
+                    // alert('Got the cone!!');
+                    if (callback) {
+                        callback(json);
+                    } else {
+                        console.log("No callback for fetchConeDataV2");
+                    }
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("fetchConeDataV2 : Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+	}
+
+
+
+    // curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
+    // Requires bodyName, obsAlt, gha, d
 	function fetchConeData(payload) {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise('/mps/cone',
@@ -3411,7 +3513,7 @@ let toggleForeground = () => {
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
-					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever... With a callback ?
                     alert('Got the cone!!');
 				} else {
 					console.log('Empty response');
@@ -3433,14 +3535,14 @@ let toggleForeground = () => {
 		});
 	}
 
-    // curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
-    function fetchDadatForBody(body, utcdate) {
+    // curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'
+    function fetchAltAndZ(payload) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise(`/mps/pg/${body}/${utcdate}`,
+		let getData = getPromise(`/mps/alt-and-z`,
                                 DEFAULT_TIMEOUT,
-                                'GET',
+                                'POST',
                                 [200, 201], // Can be an array
-                                null,       // JSON.stringify(payload),  // data
+                                payload,       // JSON.stringify(payload),  // data
                                 false,      // show traffic
                                 headers);
 		getData.then((value) => {
@@ -3449,7 +3551,13 @@ let toggleForeground = () => {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
 					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
-                    alert('Got the Body Data!!\n' + JSON.stringify(json));
+                    alert('Got the Body Alt and Z!!\n' + JSON.stringify(json));
+                    /* Returns a {
+                            "alt": -27.99267688201456,
+                            "z": 56.96535412553529
+                        }
+                    */
+
 				} else {
 					console.log('Empty response');
 				}
@@ -3465,7 +3573,70 @@ let toggleForeground = () => {
 					message += mess.message;
 				}
 			}
-			messManager("fetchDadatForBody : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			messManager("fetchDataForBody : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+    }
+
+    // curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
+    function fetchDataForBody(body, utcdate) {
+      	let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise(`/mps/pg/${body}/${utcdate}`,
+                                DEFAULT_TIMEOUT,
+                                'GET',
+                                [200, 201], // Can be an array
+                                null,       // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+                    alert('Got the Body Data!!\n' + JSON.stringify(json));
+                    /* Returns a {
+                        "hp": 0.0024363295653005066,
+                        "sd": 0.2658602388843899,
+                        "gha": 260.9130769856097,
+                        "d": -1.345999030567647
+                      }
+                    */
+
+                    // Get altitude, from userPos
+                    let payloadForH = {
+                        "pos": userPos, // {latitude: 47.677667, longitude: -3.135667},
+                        "pg": {         // From the 'value'
+                            "gha": json.gha,
+                            "d": json.d
+                        }
+                    };
+                    fetchAltAndZ(payloadForH);
+
+                    let payload = {       // Get it from the 'value'
+                        "bodyName": body,
+                        "obsAlt":22.276078, // From another service, fetchAltAndZ...
+                        "gha": json.gha,
+                        "d": json.d
+                    };
+                    fetchConeData(payload);
+
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("fetchDataForBody : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
 			// events.publish('valid', null);
 		});
     }
