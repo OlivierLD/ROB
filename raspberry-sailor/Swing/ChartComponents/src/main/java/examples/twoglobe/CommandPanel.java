@@ -372,15 +372,15 @@ public class CommandPanel
                 GeoPoint start = gpa[i];
                 GeoPoint finish = gpa[i + 1];
                 System.out.println("From " + start.toString() + " to " + finish.toString());
-                displayGreatCircle(start.getL(), start.getG(), finish.getL(), finish.getG());
+                displayGreatCircle(start.getLatitude(), start.getLongitude(), finish.getLatitude(), finish.getLongitude());
             }
             //    System.out.println("---------------------------");
 
             if (from != null && to != null) {
-                ls = from.getL();
-                gs = from.getG();
-                lf = to.getL();
-                gf = to.getG();
+                ls = from.getLatitude();
+                gs = from.getLongitude();
+                lf = to.getLatitude();
+                gf = to.getLongitude();
                 gp = chartPanel.getPanelPoint(ls, gs);
                 drawRhumbLine(gr, ls, gs, lf, gf);
                 plotGreatCircle(gr, ls, gs, lf, gf, true);
@@ -398,8 +398,8 @@ public class CommandPanel
                 for (int i = 0; i < gpa.length - 1; i++) {
                     GeoPoint start = gpa[i];
                     GeoPoint finish = gpa[i + 1];
-//        Point gps = chartPanel.getPanelPoint(start.getL(), start.getG());
-                    plotGreatCircle(gr, start.getL(), start.getG(), finish.getL(), finish.getG());
+//        Point gps = chartPanel.getPanelPoint(start.getLatitude(), start.getLongitude());
+                    plotGreatCircle(gr, start.getLatitude(), start.getLongitude(), finish.getLatitude(), finish.getLongitude());
                 }
             }
         }

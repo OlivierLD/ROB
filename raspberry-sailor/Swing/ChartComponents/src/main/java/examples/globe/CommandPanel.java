@@ -150,10 +150,10 @@ public class CommandPanel
         List<GeoPoint> al = new ArrayList<GeoPoint>(10);
         for (int i = 1; i < gpa.length; i++) {
             GreatCircle gc = new GreatCircle();
-            gc.setStart(new GreatCirclePoint(Math.toRadians(gpa[i - 1].getL()),
-                    Math.toRadians(gpa[i - 1].getG())));
-            gc.setArrival(new GreatCirclePoint(Math.toRadians(gpa[i].getL()),
-                    Math.toRadians(gpa[i].getG())));
+            gc.setStart(new GreatCirclePoint(Math.toRadians(gpa[i - 1].getLatitude()),
+                    Math.toRadians(gpa[i - 1].getLongitude())));
+            gc.setArrival(new GreatCirclePoint(Math.toRadians(gpa[i].getLatitude()),
+                    Math.toRadians(gpa[i].getLongitude())));
             gc.calculateGreatCircle(20);
             Vector route = gc.getRoute();
             Enumeration enumeration = route.elements();
@@ -378,15 +378,15 @@ public class CommandPanel
                 GeoPoint start = gpa[i];
                 GeoPoint finish = gpa[i + 1];
                 System.out.println("From " + start.toString() + " to " + finish.toString());
-                displayGreatCircle(start.getL(), start.getG(), finish.getL(), finish.getG());
+                displayGreatCircle(start.getLatitude(), start.getLongitude(), finish.getLatitude(), finish.getLongitude());
             }
 //    System.out.println("---------------------------");
 
             if (from != null && to != null) {
-                ls = from.getL();
-                gs = from.getG();
-                lf = to.getL();
-                gf = to.getG();
+                ls = from.getLatitude();
+                gs = from.getLongitude();
+                lf = to.getLatitude();
+                gf = to.getLongitude();
                 gp = chartPanel.getPanelPoint(ls, gs);
                 drawRhumbLine(gr, ls, gs, lf, gf);
                 plotGreatCircle(gr, ls, gs, lf, gf, true);
@@ -406,8 +406,8 @@ public class CommandPanel
                 for (int i = 0; i < gpa.length - 1; i++) {
                     GeoPoint start = gpa[i];
                     GeoPoint finish = gpa[i + 1];
-//        Point gps = chartPanel.getPanelPoint(start.getL(), start.getG());
-                    plotGreatCircle(gr, start.getL(), start.getG(), finish.getL(), finish.getG());
+//        Point gps = chartPanel.getPanelPoint(start.getLatitude(), start.getLongitude());
+                    plotGreatCircle(gr, start.getLatitude(), start.getLongitude(), finish.getLatitude(), finish.getLongitude());
                 }
             }
         }

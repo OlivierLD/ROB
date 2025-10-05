@@ -353,8 +353,8 @@ public class RESTImplementation {
 		}
 
 		BodyDataForPos sunData = (refDate == null) ?
-				getSunData(pos.getL(), pos.getG()) :
-				getSunDataForDate(pos.getL(), pos.getG(), refDate);;
+				getSunData(pos.getLatitude(), pos.getLongitude()) :
+				getSunDataForDate(pos.getLatitude(), pos.getLongitude(), refDate);;
 		String content;
 		try {
 			content = mapper.writeValueAsString(sunData);
@@ -466,8 +466,8 @@ public class RESTImplementation {
 			refDate.setTimeInMillis(ld);
 		}
 		List<BodyAt> sunPath = refDate == null ?
-				getSunDataForAllDay(pas.position.getL(), pas.position.getG(), pas.step) :
-				getSunDataForAllDay(pas.position.getL(), pas.position.getG(), pas.step, refDate);
+				getSunDataForAllDay(pas.position.getLatitude(), pas.position.getLongitude(), pas.step) :
+				getSunDataForAllDay(pas.position.getLatitude(), pas.position.getLongitude(), pas.step, refDate);
 		String content;
 		try {
 			content = mapper.writeValueAsString(sunPath);
@@ -575,7 +575,7 @@ public class RESTImplementation {
 				this.astroRequestManager.getLogger().log(Level.INFO, String.format("Starting SunData calculation at %s (%s)", current.getTime(), fromPrm));
 			}
 			do {
-				BodyDataForPos data = getSunDataForDate(pos.getL(), pos.getG(), current);
+				BodyDataForPos data = getSunDataForDate(pos.getLatitude(), pos.getLongitude(), current);
 				map.put(current.getTimeInMillis(), data);
 				current.add(Calendar.DATE , 1); // Add one day
 			} while (current.before(toCal));
@@ -1236,13 +1236,13 @@ public class RESTImplementation {
 						utc.get(Calendar.HOUR_OF_DAY), // and not HOUR !!!!
 						utc.get(Calendar.MINUTE),
 						0, // current.get(Calendar.SECOND),
-						pos.getL(),
-						pos.getG());
+						pos.getLatitude(),
+						pos.getLongitude());
 
 				SunMoonDecAlt data = new SunMoonDecAlt()
 						.epoch(current.getTimeInMillis())
-						.lat(pos.getL())
-						.lng(pos.getG())
+						.lat(pos.getLatitude())
+						.lng(pos.getLongitude())
 						.sunAlt(astroData[AstroComputerV2.HE_SUN_IDX])
 						.sunDecl(astroData[AstroComputerV2.DEC_SUN_IDX])
 						.moonAlt(astroData[AstroComputerV2.HE_MOON_IDX])

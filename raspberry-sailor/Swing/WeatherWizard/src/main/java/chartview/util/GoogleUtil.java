@@ -59,23 +59,24 @@ public class GoogleUtil {
                 GeoPoint topLeft = chartPanel.getGeoPos(topLeftX, topLeftY);
                 GeoPoint bottomRight = chartPanel.getGeoPos((int) (topLeftX + (width * fScale)),
                         (int) (topLeftY + (height * fScale)));
-                centerL += topLeft.getL();
-                centerL += bottomRight.getL();
-                double left = topLeft.getG();
-                if (bottomRight.getG() < left)
+                centerL += topLeft.getLatitude();
+                centerL += bottomRight.getLatitude();
+                double left = topLeft.getLongitude();
+                if (bottomRight.getLongitude() < left)
                     left -= 360D;
                 centerG += left;
-                centerG += bottomRight.getG();
+                centerG += bottomRight.getLongitude();
             }
             if (faxImage != null) {
                 centerL /= (2 * faxImage.length);
                 centerG /= (2 * faxImage.length);
             }
             BufferedWriter bw = null;
-            if (option == OPTION_MAP)
+            if (option == OPTION_MAP) {
                 bw = new BufferedWriter(new FileWriter("temp" + File.separator + "googlefax.js"));
-            else
+            } else {
                 bw = new BufferedWriter(new FileWriter("temp" + File.separator + "doc.kml"));
+            }
 
             if (option == OPTION_MAP) {
                 bw.write("centerlatitude=" + Double.toString(centerL) + ";\n" +
@@ -155,10 +156,10 @@ public class GoogleUtil {
                     if (caller.getProjection() == ChartPanel.MERCATOR) {
                         BufferedImage image = ImageUtil.mercatorToAnaximandre(ImageUtil.toBufferedImage(faximg, Math.toRadians(faxImage[i].imageRotationAngle)),
                                 Color.black,
-                                topLeft.getL(),
-                                bottomRight.getL(),
-                                topLeft.getG(),
-                                bottomRight.getG());
+                                topLeft.getLatitude(),
+                                bottomRight.getLatitude(),
+                                topLeft.getLongitude(),
+                                bottomRight.getLongitude());
                         //   Image img = ImageUtil.makeTransparentImage(null, Toolkit.getDefaultToolkit().createImage(image.getSource()), c);
                         Image img = ImageUtil.switchColorAndMakeColorTransparent(Toolkit.getDefaultToolkit().createImage(image.getSource()), Color.black, c, Color.white, caller.getBlurSharpOption());
 
@@ -170,10 +171,10 @@ public class GoogleUtil {
                     }
                     if (option == OPTION_MAP)
                         bw.write((first ? "" : ",\n") + "  {name:\"" + ("temp/" + anaxFileName + ".png") + "\",\n" +
-                                "   top:" + Double.toString(topLeft.getL()) + ",\n" +
-                                "   bottom:" + Double.toString(bottomRight.getL()) + ",\n" +
-                                "   left:" + Double.toString(topLeft.getG()) + ",\n" +
-                                "   right:" + Double.toString(bottomRight.getG()) + "\n" +
+                                "   top:" + Double.toString(topLeft.getLatitude()) + ",\n" +
+                                "   bottom:" + Double.toString(bottomRight.getLatitude()) + ",\n" +
+                                "   left:" + Double.toString(topLeft.getLongitude()) + ",\n" +
+                                "   right:" + Double.toString(bottomRight.getLongitude()) + "\n" +
                                 "  }\n");
                     else // Earth
                     {
@@ -186,8 +187,8 @@ public class GoogleUtil {
                         fin.close();
 
                         // then the data
-                        double right = bottomRight.getG();
-                        double left = topLeft.getG();
+                        double right = bottomRight.getLongitude();
+                        double left = topLeft.getLongitude();
                         if (right < left)
                             left -= 360D;
                         bw.write(
@@ -198,8 +199,8 @@ public class GoogleUtil {
                                         "        <viewBoundScale>0.75</viewBoundScale>\n" +
                                         "      </Icon>\n" +
                                         "      <LatLonBox>\n" +
-                                        "        <north>" + Double.toString(topLeft.getL()) + "</north>\n" +
-                                        "        <south>" + Double.toString(bottomRight.getL()) + "</south>\n" +
+                                        "        <north>" + Double.toString(topLeft.getLatitude()) + "</north>\n" +
+                                        "        <south>" + Double.toString(bottomRight.getLatitude()) + "</south>\n" +
                                         "        <east>" + Double.toString(right) + "</east>\n" +
                                         "        <west>" + Double.toString(left) + "</west>\n" +
                                         "      </LatLonBox>\n" +

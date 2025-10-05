@@ -362,7 +362,7 @@ public class NMEAtoJSONPosPlus {
 									// GreatCirclePoint pt = MercatorUtil.deadReckoning(drPos.lat, drPos.lng, dist, rv);
 									GeoPoint pt = GeomUtil.deadReckoning(drPos.lat, drPos.lng, dist, rv);
 									// System.out.println("In " + timeInterval + " ms, from " + drPos.toString() + " dist:" + dist + ", hdg:" + hdg + ", ends up " + pt.toString());
-									drPos = new GeoPos(pt.getL(), pt.getG()); // We should be here if no current
+									drPos = new GeoPos(pt.getLatitude(), pt.getLongitude()); // We should be here if no current
 								}
 							}
 						} // else we set the starting point

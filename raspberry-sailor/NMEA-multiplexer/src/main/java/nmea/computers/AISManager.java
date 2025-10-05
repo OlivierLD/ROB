@@ -107,12 +107,12 @@ public class AISManager extends Computer {
 			// New boat position, 10 seconds later
 			double dist = sog * (BETWEEN_LOOPS / 3_600d);
 			GeoPoint pt = GeomUtil.deadReckoning(position.lat, position.lng, dist, cog);
-			GeoPos newPos = new GeoPos(pt.getL(), pt.getG());
+			GeoPos newPos = new GeoPos(pt.getLatitude(), pt.getLongitude());
 
 			// New target position, 10 seconds later
 			dist = targetSog * (BETWEEN_LOOPS / 3_600d);
 			pt = GeomUtil.deadReckoning(targetPos.lat, targetPos.lng, dist, targetCog);
-			GeoPos newTargetPos = new GeoPos(pt.getL(), pt.getG());
+			GeoPos newTargetPos = new GeoPos(pt.getLatitude(), pt.getLongitude());
 
 			double newRange = GeomUtil.haversineNm(position.lat, position.lng, newTargetPos.lat, newTargetPos.lng);
 			if (newRange < smallestDist) { // Still closing

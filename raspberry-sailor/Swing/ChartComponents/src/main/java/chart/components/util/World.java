@@ -330,7 +330,7 @@ public final class World {
             lp = getChartPolygon();
         }
         boolean b = false;
-        Point p = new Point((int) (gp.getG() * 1_000), (int) (gp.getL() * 1_000));
+        Point p = new Point((int) (gp.getLongitude() * 1_000), (int) (gp.getLatitude() * 1_000));
         for (Polygon poly : lp) {
             if (poly.contains(p)) {
                 b = true;
@@ -371,8 +371,8 @@ public final class World {
         }
         Polygon pg = null;
 
-        Point pFrom = new Point((int) (from.getG() * 1_000), (int) (from.getL() * 1_000));
-        Point pTo = new Point((int) (to.getG() * 1_000), (int) (to.getL() * 1_000));
+        Point pFrom = new Point((int) (from.getLongitude() * 1_000), (int) (from.getLatitude() * 1_000));
+        Point pTo = new Point((int) (to.getLongitude() * 1_000), (int) (to.getLatitude() * 1_000));
         for (Polygon poly : lp) {
             Polygon inter = lineIntersectsPolygon(pFrom, pTo, poly);
             if (inter != null) {

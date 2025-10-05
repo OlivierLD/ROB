@@ -327,8 +327,8 @@ public class CommandPanel extends JPanel
             } else {
                 to = gp;
                 GreatCircle gc = new GreatCircle();
-                gc.setStart(new GreatCirclePoint(Math.toRadians(from.getL()), Math.toRadians(from.getG())));
-                gc.setArrival(new GreatCirclePoint(Math.toRadians(to.getL()), Math.toRadians(to.getG())));
+                gc.setStart(new GreatCirclePoint(Math.toRadians(from.getLatitude()), Math.toRadians(from.getLongitude())));
+                gc.setArrival(new GreatCirclePoint(Math.toRadians(to.getLatitude()), Math.toRadians(to.getLongitude())));
                 gc.calculateGreatCircle(20);
                 double gcDist = gc.getDistance();
                 gc.calculateRhumbLine();

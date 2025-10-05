@@ -542,7 +542,7 @@ public class ImageUtil {
             GeoPoint geoPos = getGeoPos(x, y, top, bottom, right, left, width, height);
             if (onePixel[0] == 0 && onePixel[1] == 0 && onePixel[2] == 0) { // black
                 // x is unchanged
-                int squareY = newHeight - (int) Math.round((geoPos.getL() - bottom) * squareFactor);
+                int squareY = newHeight - (int) Math.round((geoPos.getLatitude() - bottom) * squareFactor);
                 g2d.drawLine(x, squareY, x, squareY);
             }
             x++;
@@ -610,7 +610,7 @@ public class ImageUtil {
             Color currentColor = new Color(onePixel[0], onePixel[1], onePixel[2]);
             g2d.setColor(currentColor);
             // x is unchanged
-            int squareY = newHeight - (int) Math.round((geoPos.getL() - bottom) * squareFactor);
+            int squareY = newHeight - (int) Math.round((geoPos.getLatitude() - bottom) * squareFactor);
             g2d.drawLine(x, squareY, x, squareY);
             x++;
             if (x >= width) {

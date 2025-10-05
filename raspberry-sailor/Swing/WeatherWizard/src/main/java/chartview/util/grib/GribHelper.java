@@ -573,8 +573,8 @@ public class GribHelper {
          */
         public List<Integer> getDataPointsAround(GeoPoint pt) {
             List<Integer> array = null;
-            double l = pt.getL();
-            double g = pt.getG();
+            double l = pt.getLatitude();
+            double g = pt.getLongitude();
             // G same sign...
             double _wLng = gribPointData[0][0].getLng(), _eLng = eLng;
             double _sLat = gribPointData[0][0].getLat(), _nLat = nLat;
@@ -1205,8 +1205,8 @@ public class GribHelper {
             }
         }
 
-        double pointLng = gp.getG();
-        double pointLat = gp.getL();
+        double pointLng = gp.getLongitude();
+        double pointLat = gp.getLatitude();
         double stepx = wgd.getStepX();
         double stepy = wgd.getStepY();
         GribPointData[][] wpd = wgd.getGribPointData();
@@ -1272,8 +1272,8 @@ public class GribHelper {
     public static GribCondition gribLookup(GeoPoint gp, GribConditionData wgd) {
         GribCondition gribCond = null;
 
-        double pointLng = gp.getG();
-        double pointLat = gp.getL();
+        double pointLng = gp.getLongitude();
+        double pointLat = gp.getLatitude();
         double stepx = wgd.getStepX();
         double stepy = wgd.getStepY();
         GribPointData[][] wpd = wgd.getGribPointData();

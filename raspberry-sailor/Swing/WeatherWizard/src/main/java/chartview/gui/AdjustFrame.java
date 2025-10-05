@@ -781,8 +781,8 @@ public class AdjustFrame extends JFrame {
         menuToolsGeostrophicWind.addActionListener(ae -> {
             if (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom() != null &&
                     ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo() != null) {
-                if (Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()) < 30D ||
-                        Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) < 30D) {
+                if (Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getLatitude()) < 30D ||
+                        Math.abs(((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getLatitude()) < 30D) {
                     Thread displayThread = new Thread(() -> JOptionPane.showMessageDialog(instance,
                             WWGnlUtilities.buildMessage("under-30"),
                             WWGnlUtilities.buildMessage("geostrophic-wind"),
@@ -790,12 +790,12 @@ public class AdjustFrame extends JFrame {
                     displayThread.start();
                 } else {
                     // Get the distance
-                    WWContext.getInstance().getGreatCircle().setStart(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getG())));
-                    WWContext.getInstance().getGreatCircle().setArrival(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getG())));
+                    WWContext.getInstance().getGreatCircle().setStart(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getLatitude()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getLongitude())));
+                    WWContext.getInstance().getGreatCircle().setArrival(new GreatCirclePoint((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getLatitude()), (((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getLongitude())));
                     double gcDist = Math.toDegrees(WWContext.getInstance().getGreatCircle().getDistance()) * 60.0;
 
                     int interval = ((Integer) ParamPanel.data[ParamData.INTERVAL_BETWEEN_ISOBARS][ParamData.VALUE_INDEX]).intValue();
-                    double gws = WWGnlUtilities.getGeostrophicWindSpeed(gcDist, Math.abs((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getL() + ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getL()) / 2D), interval);
+                    double gws = WWGnlUtilities.getGeostrophicWindSpeed(gcDist, Math.abs((((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getFrom().getLatitude() + ((CompositeTabbedPane) masterTabPane.getSelectedComponent()).getCommandPanel().getTo().getLatitude()) / 2D), interval);
                     // Display result
                     String result = WWGnlUtilities.buildMessage("geostrophic-wind-speed") + WWGnlUtilities.DF2.format(gws) + " kts.\n" +
                             WWGnlUtilities.buildMessage("with-friction") + WWGnlUtilities.DF2.format(gws * 0.7) + " kts.";

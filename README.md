@@ -227,6 +227,10 @@ You might also want to exclude some tests (look into their code for details)
 ```
 $ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 ```
+or simply
+```
+$ [...]/gradlew clean build -x test
+```
 
 # Highlights
 ### NMEA Data Management, real time and replay
@@ -295,4 +299,3 @@ $ ./line.counter.sh
 And more to come... See you again soon.
 
 ---
-

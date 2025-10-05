@@ -591,10 +591,10 @@ public class JTreeGRIBRequestPanel
                 GeoPoint topLeft = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel().getChartPanel().getGeoPos(topLeftX, topLeftY);
                 GeoPoint bottomRight = ((AdjustFrame) WWContext.getInstance().getMasterTopFrame()).getCommandPanel().getChartPanel().getGeoPos(topLeftX + viewWidth,
                         topLeftY + viewHeight);
-                int top = (int) Math.round(topLeft.getL());
-                int bottom = (int) Math.round(bottomRight.getL());
-                int left = (int) Math.round(topLeft.getG());
-                int right = (int) Math.round(bottomRight.getG());
+                int top = (int) Math.round(topLeft.getLatitude());
+                int bottom = (int) Math.round(bottomRight.getLatitude());
+                int left = (int) Math.round(topLeft.getLongitude());
+                int right = (int) Math.round(bottomRight.getLongitude());
 
                 String currentZoneReq = "GFS:";
                 currentZoneReq += (WWGnlUtilities.DF2.format(Math.abs(top)) + (top > 0 ? "N" : "S"));

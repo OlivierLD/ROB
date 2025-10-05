@@ -2654,8 +2654,8 @@ public class CommandPanel
                                             boatPosition = bp.getPos();
                                             boatHeading = bp.getHeading();
                                             chartPanel.repaint();
-                                            WWGnlUtilities.storeBoatPosAndHeading(boatPosition.getL(),
-                                                    boatPosition.getG(),
+                                            WWGnlUtilities.storeBoatPosAndHeading(boatPosition.getLatitude(),
+                                                    boatPosition.getLongitude(),
                                                     boatHeading,
                                                     new File("." + File.separator + "config" + File.separator + WWContext.MANUAL_POSITION_FILE));
                                         }
@@ -4170,10 +4170,10 @@ public class CommandPanel
                     System.out.println("<dyn-fax title=\"" + faxImage[i].faxTitle + "\"\n" +
                             "         rotation=\"" + faxImage[i].imageRotationAngle + "\"\n" +
                             "         origin=\"" + faxImage[i].faxOrigin + "\"\n" +
-                            "         top=\"" + topLeft.getL() + "\"\n" +
-                            "         left=\"" + topLeft.getG() + "\"\n" +
-                            "         bottom=\"" + bottomRight.getL() + "\"\n" +
-                            "         right=\"" + bottomRight.getG() + "\"\n" +
+                            "         top=\"" + topLeft.getLatitude() + "\"\n" +
+                            "         left=\"" + topLeft.getLongitude() + "\"\n" +
+                            "         bottom=\"" + bottomRight.getLatitude() + "\"\n" +
+                            "         right=\"" + bottomRight.getLongitude() + "\"\n" +
                             "         transparent=\"" + faxImage[i].transparent + "\"\n" +
                             "         change-color=\"" + faxImage[i].colorChange + "\"/>");
 
@@ -4325,7 +4325,7 @@ public class CommandPanel
             g2d.setStroke(originalStroke);
         }
         if (from != null) {
-            Point gp = chartPanel.getPanelPoint(from.getL(), from.getG());
+            Point gp = chartPanel.getPanelPoint(from.getLatitude(), from.getLongitude());
             String prefix = "";
             if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
                 prefix = "1. ";
@@ -4343,7 +4343,7 @@ public class CommandPanel
             gr.setColor(orig);
         }
         if (to != null) {
-            Point gp = chartPanel.getPanelPoint(to.getL(), to.getG());
+            Point gp = chartPanel.getPanelPoint(to.getLatitude(), to.getLongitude());
             String prefix = "";
             if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
                 prefix = Integer.toString(intermediateRoutingWP.size() + 2) + ". ";
@@ -4363,7 +4363,7 @@ public class CommandPanel
         if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
             int nbIntPt = 0;
             for (GeoPoint gp : intermediateRoutingWP) {
-                Point pt = chartPanel.getPanelPoint(gp.getL(), gp.getG());
+                Point pt = chartPanel.getPanelPoint(gp.getLatitude(), gp.getLongitude());
                 chartPanel.postit(gr, Integer.toString(2 + (nbIntPt++)) + ".", pt.x + 5, pt.y, Color.yellow);
                 Color orig = gr.getColor();
                 gr.setColor(Color.black);
@@ -4380,8 +4380,8 @@ public class CommandPanel
 
         // Some plots - places.xml
         for (int i = 0; showPlaces /*&& drawChart*/ && gpa != null && i < gpa.length; i++) {
-            Point gp = chartPanel.getPanelPoint(gpa[i].getL(), gpa[i].getG());
-            if (gp != null && isVisible(gpa[i].getL(), gpa[i].getG())) {
+            Point gp = chartPanel.getPanelPoint(gpa[i].getLatitude(), gpa[i].getLongitude());
+            if (gp != null && isVisible(gpa[i].getLatitude(), gpa[i].getLongitude())) {
                 if (showPlacesArray[i].booleanValue()) {
                     chartPanel.postit(gr, ptLabels[i].replace("\\n", "\n"), gp.x, gp.y, Color.yellow);
                     // Draw a red ball
@@ -4717,8 +4717,8 @@ public class CommandPanel
         if (boatPosition != null) {
             WWGnlUtilities.drawBoat((Graphics2D) gr,
                     (Color) ParamPanel.data[ParamData.GPS_BOAT_COLOR][ParamData.VALUE_INDEX],
-                    chartPanel.getPanelPoint(boatPosition.getL(),
-                            boatPosition.getG()),
+                    chartPanel.getPanelPoint(boatPosition.getLatitude(),
+                            boatPosition.getLongitude()),
                     30,
                     boatHeading,
                     0.50f,
@@ -4729,8 +4729,8 @@ public class CommandPanel
         if (routingPoint != null) {
             WWGnlUtilities.drawBoat((Graphics2D) gr,
                     (Color) ParamPanel.data[ParamData.ROUTING_BOAT_COLOR][ParamData.VALUE_INDEX],
-                    chartPanel.getPanelPoint(routingPoint.getL(),
-                            routingPoint.getG()),
+                    chartPanel.getPanelPoint(routingPoint.getLatitude(),
+                            routingPoint.getLongitude()),
                     30,
                     routingHeading,
                     0.50f);
@@ -4773,10 +4773,10 @@ public class CommandPanel
             postit += ("\nHDG :" + Integer.toString(thisPoint.getHdg()) + "\272t");
             chartPanel.bubble(gr,
                     postit,
-                    chartPanel.getPanelPoint(routingPoint.getL(),
-                            routingPoint.getG()).x,
-                    chartPanel.getPanelPoint(routingPoint.getL(),
-                            routingPoint.getG()).y,
+                    chartPanel.getPanelPoint(routingPoint.getLatitude(),
+                            routingPoint.getLongitude()).x,
+                    chartPanel.getPanelPoint(routingPoint.getLatitude(),
+                            routingPoint.getLongitude()).y,
                     Color.cyan,
                     Color.blue,
                     0.40f);
@@ -4820,7 +4820,7 @@ public class CommandPanel
                     }
                     try {
                         RoutingPoint rp = bestRoute.get(index);
-                        gp = new GeoPoint(rp.getPosition().getL(), rp.getPosition().getG());
+                        gp = new GeoPoint(rp.getPosition().getLatitude(), rp.getPosition().getLongitude());
                     } catch (Exception ex) {
                         System.out.println(ex.toString());
                         System.out.println("Len:" + len + ", gribSliceInfo:" + gribSliceInfo + ", index:" + index);
@@ -5445,8 +5445,8 @@ public class CommandPanel
             String br = displayAltTooltip ? "\n" : "<br>";
             String mess = header;
             if (displayAltTooltip) {
-                mess += (GeomUtil.decToSex(gp.getL(), GeomUtil.SWING, GeomUtil.NS) + "\n");
-                mess += (GeomUtil.decToSex(gp.getG(), GeomUtil.SWING, GeomUtil.EW) + "\n");
+                mess += (GeomUtil.decToSex(gp.getLatitude(), GeomUtil.SWING, GeomUtil.NS) + "\n");
+                mess += (GeomUtil.decToSex(gp.getLongitude(), GeomUtil.SWING, GeomUtil.EW) + "\n");
                 mess += ("In " + (World.isInLand(gp) ? "land" : "the water") + "\n");
             }
             if (wgd != null) {

@@ -118,8 +118,8 @@ public class CommandPanel extends JPanel
 
         spatial.drawChart(chartPanel, gr);
         if (from != null && to != null) {
-            drawRhumbLine(gr, from.getL(), from.getG(), to.getL(), to.getG());
-            plotGreatCircle(gr, from.getL(), from.getG(), to.getL(), to.getG());
+            drawRhumbLine(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
+            plotGreatCircle(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
         }
 
         Point pt = chartPanel.getPanelPoint(37.75, -124.1);
@@ -174,8 +174,8 @@ public class CommandPanel extends JPanel
             } else {
                 to = gp;
                 GreatCircle gc = new GreatCircle();
-                gc.setStart(new GreatCirclePoint(Math.toRadians(from.getL()), Math.toRadians(from.getG())));
-                gc.setArrival(new GreatCirclePoint(Math.toRadians(to.getL()), Math.toRadians(to.getG())));
+                gc.setStart(new GreatCirclePoint(Math.toRadians(from.getLatitude()), Math.toRadians(from.getLongitude())));
+                gc.setArrival(new GreatCirclePoint(Math.toRadians(to.getLatitude()), Math.toRadians(to.getLongitude())));
                 gc.calculateGreatCircle(20);
                 double gcDist = gc.getDistance();
                 gc.calculateRhumbLine();

@@ -53,8 +53,8 @@ public class RoutingUtil {
 
     private static int getBearing(RoutingPoint center) {
         int brg;
-        gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
-        gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
+        gc.setStart(new GreatCirclePoint((center.getPosition().getLatitude()), (center.getPosition().getLongitude())));
+        gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getLatitude()), (finalDestination.getPosition().getLongitude())));
         //  gc.calculateGreatCircle_degrees(10);
         //  double gcDistance = Math.toDegrees(gc.getDistance_degrees() * 60D);
         // GreatCircle.calculateRhumbLine();
@@ -65,8 +65,8 @@ public class RoutingUtil {
 
     private static int getBearingTo(RoutingPoint center, RoutingPoint dest) {
         int brg;
-        gc.setStart(new GreatCirclePoint((center.getPosition().getL()), (center.getPosition().getG())));
-        gc.setArrival(new GreatCirclePoint((dest.getPosition().getL()), (dest.getPosition().getG())));
+        gc.setStart(new GreatCirclePoint((center.getPosition().getLatitude()), (center.getPosition().getLongitude())));
+        gc.setArrival(new GreatCirclePoint((dest.getPosition().getLatitude()), (dest.getPosition().getLongitude())));
         //  gc.calculateGreatCircle_degrees(10);
         //  double gcDistance = Math.toDegrees(gc.getDistance_degrees() * 60D);
         // GreatCircle.calculateRhumbLine();
@@ -277,8 +277,8 @@ public class RoutingUtil {
                                 double dist = timeInterval * speed;
                                 arrivalDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
                                 GreatCirclePoint dr = GreatCircle.dr_degrees(
-                                        new GreatCirclePoint(newCurveCenter.getPosition().getL(),
-                                                newCurveCenter.getPosition().getG()),
+                                        new GreatCirclePoint(newCurveCenter.getPosition().getLatitude(),
+                                                newCurveCenter.getPosition().getLongitude()),
                                         dist,
                                         bearing);
                                 GeoPoint forecast = new GeoPoint(dr.getL(), dr.getG());
@@ -298,7 +298,7 @@ public class RoutingUtil {
                                 if (chartPanel != null) {
                                     forecastPoint = chartPanel.getPanelPoint(forecast);
                                 } else {
-                                    forecastPoint = new Point((int) Math.round(forecast.getG() * 1_000), (int) Math.round(forecast.getL() * 1_000));
+                                    forecastPoint = new Point((int) Math.round(forecast.getLongitude() * 1_000), (int) Math.round(forecast.getLatitude() * 1_000));
                                 }
                                 RoutingPoint ip = new RoutingPoint(forecastPoint);
 
@@ -370,11 +370,11 @@ public class RoutingUtil {
                 while (!interruptRouting && finalIterator != null && finalIterator.hasNext()) {
                     timer = logDiffTime(timer, "Milestone 10");
                     RoutingPoint forecast = finalIterator.next();
-                    gc.setStart(new GreatCirclePoint((forecast.getPosition().getL()), (forecast.getPosition().getG())));
+                    gc.setStart(new GreatCirclePoint((forecast.getPosition().getLatitude()), (forecast.getPosition().getLongitude())));
                     if (aimFor == null) {
-                        gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getL()), (finalDestination.getPosition().getG())));
+                        gc.setArrival(new GreatCirclePoint((finalDestination.getPosition().getLatitude()), (finalDestination.getPosition().getLongitude())));
                     } else {
-                        gc.setArrival(new GreatCirclePoint((aimFor.getPosition().getL()), (aimFor.getPosition().getG())));
+                        gc.setArrival(new GreatCirclePoint((aimFor.getPosition().getLatitude()), (aimFor.getPosition().getLongitude())));
                     }
                     try {
                         // gc.calculateGreatCircle_degrees(10);
@@ -899,7 +899,7 @@ public class RoutingUtil {
 
                 double dist = timeStep * speed;
                 currentDate = new Date(currentDate.getTime() + (long) (timeStep * 3_600D * 1_000D));
-                GreatCirclePoint dr = GreatCircle.dr_degrees(new GreatCirclePoint((currentPt.getL()), (currentPt.getG())),
+                GreatCirclePoint dr = GreatCircle.dr_degrees(new GreatCirclePoint((currentPt.getLatitude()), (currentPt.getLongitude())),
                         dist,
                         hdg);
                 currentPt = new GeoPoint(dr.getL(), dr.getG());
@@ -1061,17 +1061,17 @@ public class RoutingUtil {
                 }
                 // Route points
                 if (clipboardOption == ParamPanel.RoutingOutputList.CSV) {
-                    String lat = GeomUtil.decToSex(rp.getPosition().getL(), GeomUtil.SWING, GeomUtil.NS);
-                    String lng = GeomUtil.decToSex(rp.getPosition().getG(), GeomUtil.SWING, GeomUtil.EW);
+                    String lat = GeomUtil.decToSex(rp.getPosition().getLatitude(), GeomUtil.SWING, GeomUtil.NS);
+                    String lng = GeomUtil.decToSex(rp.getPosition().getLongitude(), GeomUtil.SWING, GeomUtil.EW);
                     String tws = WWGnlUtilities.XX22.format(ic.getTws());
                     String twd = Integer.toString(ic.getTwd());
                     String bsp = WWGnlUtilities.XX22.format(ic.getBsp());
                     String hdg = Integer.toString(ic.getHdg());
 
                     clipboardContent += (lat + ";" +
-                            Double.toString(rp.getPosition().getL()) + ";" +
+                            Double.toString(rp.getPosition().getLatitude()) + ";" +
                             lng + ";" +
-                            Double.toString(rp.getPosition().getG()) + ";" +
+                            Double.toString(rp.getPosition().getLongitude()) + ";" +
                             date + ";" +
                             time + ";" +
                             tws + ";" +
@@ -1083,7 +1083,7 @@ public class RoutingUtil {
                         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
                         nf.setMaximumFractionDigits(2);
                         clipboardContent +=
-                                ("       <rtept lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
+                                ("       <rtept lat=\"" + rp.getPosition().getLatitude() + "\" lon=\"" + rp.getPosition().getLongitude() + "\">\n" +
                                         "            <name>" + WWGnlUtilities.DF3.format(routesize - r) + "_WW</name>\n" +
                                         "            <desc>Waypoint " + Integer.toString(routesize - r) + ";VMG=" + nf.format(ic.getBsp()) + ";</desc>\n" +
                                         //  "            <sym>triangle</sym>\n" +
@@ -1097,7 +1097,7 @@ public class RoutingUtil {
                                         "        </rtept>\n");
                     } else {
                         clipboardContent +=
-                                ("  <wpt lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
+                                ("  <wpt lat=\"" + rp.getPosition().getLatitude() + "\" lon=\"" + rp.getPosition().getLongitude() + "\">\n" +
                                         "    <time>" + date + "</time>\n" +
                                         "    <name>" + WWGnlUtilities.DF3.format(r) + "_WW</name>\n" +
                                         "    <sym>triangle</sym>\n" +
@@ -1121,7 +1121,7 @@ public class RoutingUtil {
                     if (firstKMLHeading == -1) {
                         firstKMLHeading = ic.getHdg();
                     }
-                    kmlRoute += (rp.getPosition().getG() + "," + rp.getPosition().getL() + ",0\n");
+                    kmlRoute += (rp.getPosition().getLongitude() + "," + rp.getPosition().getLatitude() + ",0\n");
                     String tws = WWGnlUtilities.XX22.format(ic.getTws());
                     String twd = Integer.toString(ic.getTwd());
                     String bsp = WWGnlUtilities.XX22.format(ic.getBsp());
@@ -1141,14 +1141,14 @@ public class RoutingUtil {
                                     "            ]]>\n" +
                                     "           </description>\n" +
                                     "           <LookAt>\n" +
-                                    "             <longitude>" + rp.getPosition().getG() + "</longitude>\n" +
-                                    "             <latitude>" + rp.getPosition().getL() + "</latitude>\n" +
+                                    "             <longitude>" + rp.getPosition().getLongitude() + "</longitude>\n" +
+                                    "             <latitude>" + rp.getPosition().getLatitude() + "</latitude>\n" +
                                     "             <range>50000</range>\n" +
                                     "             <tilt>45</tilt>\n" +
                                     "             <heading>" + Integer.toString(ic.getHdg()) + "</heading>\n" +
                                     "           </LookAt>\n" +
                                     "           <Point>\n" +
-                                    "             <coordinates>" + rp.getPosition().getG() + "," + rp.getPosition().getL() + ",0 </coordinates>\n" +
+                                    "             <coordinates>" + rp.getPosition().getLongitude() + "," + rp.getPosition().getLatitude() + ",0 </coordinates>\n" +
                                     "           </Point>\n" +
                                     "         </Placemark>\n");
                 } else if (clipboardOption == ParamPanel.RoutingOutputList.JSON) {
@@ -1160,8 +1160,8 @@ public class RoutingUtil {
                             ("    {\n" +
                                     "      \"datetime\":\"" + date + "\",\n" +
                                     "      \"position\": {\n" +
-                                    "                  \"latitude\":\"" + rp.getPosition().getL() + "\",\n" +
-                                    "                  \"longitude\":\"" + rp.getPosition().getG() + "\"\n" +
+                                    "                  \"latitude\":\"" + rp.getPosition().getLatitude() + "\",\n" +
+                                    "                  \"longitude\":\"" + rp.getPosition().getLongitude() + "\"\n" +
                                     "                },\n" +
                                     "      \"tws\":" + tws + ",\n" +
                                     "      \"twd\":" + twd + ",\n" +
@@ -1186,8 +1186,8 @@ public class RoutingUtil {
                         ("      <Placemark>\n" +
                                 "          <name>Suggested route</name>\n" +
                                 "          <LookAt>\n" +
-                                "             <longitude>" + from.getG() + "</longitude>\n" +
-                                "             <latitude>" + from.getL() + "</latitude>\n" +
+                                "             <longitude>" + from.getLongitude() + "</longitude>\n" +
+                                "             <latitude>" + from.getLatitude() + "</latitude>\n" +
                                 "             <range>100000</range>\n" +
                                 "             <tilt>45</tilt>\n" +
                                 "             <heading>" + Integer.toString(firstKMLHeading) + "</heading>\n" +

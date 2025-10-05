@@ -163,8 +163,8 @@ public class WhatIfRoutingPanel
     }
 
     public void setFromPos(GeoPoint gp) {
-        latLabel.setText(GeomUtil.decToSex(gp.getL(), GeomUtil.SWING, GeomUtil.NS));
-        lngLabel.setText(GeomUtil.decToSex(gp.getG(), GeomUtil.SWING, GeomUtil.EW));
+        latLabel.setText(GeomUtil.decToSex(gp.getLatitude(), GeomUtil.SWING, GeomUtil.NS));
+        lngLabel.setText(GeomUtil.decToSex(gp.getLongitude(), GeomUtil.SWING, GeomUtil.EW));
     }
 
     public int getRoutingStep() {

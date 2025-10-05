@@ -299,10 +299,10 @@ public class BlindRouting {
 		if (verbose) {
 			System.out.println("Routing from " + isoFrom.toString() + "\nto " + isoTo.toString());
 		}
-		Point point = new Point((int) Math.round(isoFrom.getG() * 1_000), (int) Math.round(isoFrom.getL() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
+		Point point = new Point((int) Math.round(isoFrom.getLongitude() * 1_000), (int) Math.round(isoFrom.getLatitude() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
 		RoutingPoint center = new RoutingPoint(point);
 		center.setPosition(from);
-		point = new Point((int) Math.round(to.getG() * 1_000), (int) Math.round(to.getL() * 1_000)); // chartPanel.getPanelPoint(to);
+		point = new Point((int) Math.round(to.getLongitude() * 1_000), (int) Math.round(to.getLatitude() * 1_000)); // chartPanel.getPanelPoint(to);
 		RoutingPoint destination = new RoutingPoint(point);
 		destination.setPosition(to);
 
@@ -310,7 +310,7 @@ public class BlindRouting {
 		if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
 			interWP = new ArrayList<>(intermediateRoutingWP.size());
 			for (GeoPoint gp : intermediateRoutingWP) {
-				RoutingPoint rp = new RoutingPoint(new Point((int) Math.round(gp.getG() * 1_000), (int) Math.round(gp.getL() * 1_000)));
+				RoutingPoint rp = new RoutingPoint(new Point((int) Math.round(gp.getLongitude() * 1_000), (int) Math.round(gp.getLatitude() * 1_000)));
 				rp.setPosition(gp);
 				interWP.add(rp);
 			}

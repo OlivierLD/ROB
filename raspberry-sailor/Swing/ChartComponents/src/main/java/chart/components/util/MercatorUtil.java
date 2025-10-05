@@ -30,7 +30,7 @@ public final class MercatorUtil {
     }
 
     public static GeoPoint deadReckoning(GeoPoint p, double d, double r) {
-        return GeomUtil.deadReckoning(p.getL(), p.getG(), d, r);
+        return GeomUtil.deadReckoning(p.getLatitude(), p.getLongitude(), d, r);
     }
 
     public static GeoPoint deadReckoning(double l, double g, double d, double r) {

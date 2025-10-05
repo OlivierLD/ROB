@@ -195,10 +195,10 @@ public class GRIBDustlet
                 double newE = wgd[gribIndex].getELng();
 
                 if (displayOption == VISIBLE_PART_ONLY_DISPLAY) {
-                    newN = topLeft.getL();
-                    newS = bottomRight.getL();
-                    newW = topLeft.getG();
-                    newE = bottomRight.getG();
+                    newN = topLeft.getLatitude();
+                    newS = bottomRight.getLatitude();
+                    newW = topLeft.getLongitude();
+                    newE = bottomRight.getLongitude();
                     // System.out.println("Chart boundaries:" + newN + ", " + newS + " and " + newW + ", " + newE);
                 }
 
@@ -338,9 +338,9 @@ public class GRIBDustlet
             for (int w = 0; w < gribData.getGribPointData()[h].length; w++) {
                 if (displayOption == FULL_CHART_DISPLAY ||
                         (displayOption == VISIBLE_PART_ONLY_DISPLAY &&
-                                gribData.getGribPointData()[h][w].getLat() <= topLeft.getL() &&
-                                gribData.getGribPointData()[h][w].getLat() >= bottomRight.getL()) &&
-                                GRIBDataUtil.isBetween(topLeft.getG(), bottomRight.getG(), gribData.getGribPointData()[h][w].getLng())) {
+                                gribData.getGribPointData()[h][w].getLat() <= topLeft.getLatitude() &&
+                                gribData.getGribPointData()[h][w].getLat() >= bottomRight.getLatitude()) &&
+                                GRIBDataUtil.isBetween(topLeft.getLongitude(), bottomRight.getLongitude(), gribData.getGribPointData()[h][w].getLng())) {
                     float x = gribData.getGribPointData()[h][w].getU();
                     line += (Integer.toString(value * Math.round(x)) + " ");
                 }
@@ -358,9 +358,9 @@ public class GRIBDustlet
             for (int w = 0; w < gribData.getGribPointData()[h].length; w++) {
                 if (displayOption == FULL_CHART_DISPLAY ||
                         (displayOption == VISIBLE_PART_ONLY_DISPLAY &&
-                                gribData.getGribPointData()[h][w].getLat() <= topLeft.getL() &&
-                                gribData.getGribPointData()[h][w].getLat() >= bottomRight.getL()) &&
-                                GRIBDataUtil.isBetween(topLeft.getG(), bottomRight.getG(), gribData.getGribPointData()[h][w].getLng())) {
+                                gribData.getGribPointData()[h][w].getLat() <= topLeft.getLatitude() &&
+                                gribData.getGribPointData()[h][w].getLat() >= bottomRight.getLatitude()) &&
+                                GRIBDataUtil.isBetween(topLeft.getLongitude(), bottomRight.getLongitude(), gribData.getGribPointData()[h][w].getLng())) {
                     float y = gribData.getGribPointData()[h][w].getV();
                     line += (Integer.toString(value * Math.round(y)) + " ");
                 }

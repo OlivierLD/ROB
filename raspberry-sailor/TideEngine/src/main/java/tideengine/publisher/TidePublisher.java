@@ -245,8 +245,8 @@ public class TidePublisher {
 
 			out.println("<position print-time-zone='" + timeZoneId +
 					"' station='" + (stationName != null ? stationName : "User-Defined") +
-					"' station-lat='" + GeomUtil.decToSex(position.getL(), GeomUtil.SWING, GeomUtil.NS, GeomUtil.TRAILING_SIGN).replace("'", "&apos;") +
-					"' station-lng='" + GeomUtil.decToSex(position.getG(), GeomUtil.SWING, GeomUtil.EW, GeomUtil.TRAILING_SIGN).replace("'", "&apos;") + "'>");
+					"' station-lat='" + GeomUtil.decToSex(position.getLatitude(), GeomUtil.SWING, GeomUtil.NS, GeomUtil.TRAILING_SIGN).replace("'", "&apos;") +
+					"' station-lng='" + GeomUtil.decToSex(position.getLongitude(), GeomUtil.SWING, GeomUtil.EW, GeomUtil.TRAILING_SIGN).replace("'", "&apos;") + "'>");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

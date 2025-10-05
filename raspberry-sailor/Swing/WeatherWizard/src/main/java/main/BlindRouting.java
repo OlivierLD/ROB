@@ -176,10 +176,10 @@ public class BlindRouting implements RoutingClientInterface {
           System.out.println("Routing from " + isoFrom.toString() + "\nto " + isoTo.toString());
         }
         int i = 0;
-        Point point = new Point((int) Math.round(isoFrom.getG() * 1_000), (int) Math.round(isoFrom.getL() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
+        Point point = new Point((int) Math.round(isoFrom.getLongitude() * 1_000), (int) Math.round(isoFrom.getLatitude() * 1_000)); //chartPanel.getPanelPoint(isoFrom);
         RoutingPoint center = new RoutingPoint(point);
         center.setPosition(from);
-        point = new Point((int) Math.round(to.getG() * 1_000), (int) Math.round(to.getL() * 1_000)); // chartPanel.getPanelPoint(to);
+        point = new Point((int) Math.round(to.getLongitude() * 1_000), (int) Math.round(to.getLatitude() * 1_000)); // chartPanel.getPanelPoint(to);
         RoutingPoint destination = new RoutingPoint(point);
         destination.setPosition(to);
 
@@ -187,7 +187,7 @@ public class BlindRouting implements RoutingClientInterface {
         if (intermediateRoutingWP != null && intermediateRoutingWP.size() > 0) {
             interWP = new ArrayList<>(intermediateRoutingWP.size());
             for (GeoPoint gp : intermediateRoutingWP) {
-                RoutingPoint rp = new RoutingPoint(new Point((int) Math.round(gp.getG() * 1000), (int) Math.round(gp.getL() * 1000)));
+                RoutingPoint rp = new RoutingPoint(new Point((int) Math.round(gp.getLongitude() * 1000), (int) Math.round(gp.getLatitude() * 1000)));
                 rp.setPosition(gp);
                 interWP.add(rp);
             }
@@ -336,17 +336,17 @@ public class BlindRouting implements RoutingClientInterface {
                     }
                 }
                 if (clipboardOption == ParamPanel.RoutingOutputList.CSV) {
-                    String lat = GeomUtil.decToSex(rp.getPosition().getL(), GeomUtil.SWING, GeomUtil.NS);
-                    String lng = GeomUtil.decToSex(rp.getPosition().getG(), GeomUtil.SWING, GeomUtil.EW);
+                    String lat = GeomUtil.decToSex(rp.getPosition().getLatitude(), GeomUtil.SWING, GeomUtil.NS);
+                    String lng = GeomUtil.decToSex(rp.getPosition().getLongitude(), GeomUtil.SWING, GeomUtil.EW);
                     String tws = WWGnlUtilities.XX22.format(ic.getTws());
                     String twd = Integer.toString(ic.getTwd());
                     String bsp = WWGnlUtilities.XX22.format(ic.getBsp());
                     String hdg = Integer.toString(ic.getHdg());
 
                     clipboardContent += (lat + ";" +
-                            Double.toString(rp.getPosition().getL()) + ";" +
+                            Double.toString(rp.getPosition().getLatitude()) + ";" +
                             lng + ";" +
-                            Double.toString(rp.getPosition().getG()) + ";" +
+                            Double.toString(rp.getPosition().getLongitude()) + ";" +
                             date + ";" +
                             time + ";" +
                             tws + ";" +
@@ -358,7 +358,7 @@ public class BlindRouting implements RoutingClientInterface {
                         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
                         nf.setMaximumFractionDigits(2);
                         clipboardContent +=
-                                ("       <rtept lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
+                                ("       <rtept lat=\"" + rp.getPosition().getLatitude() + "\" lon=\"" + rp.getPosition().getLongitude() + "\">\n" +
                                         "            <name>" + WWGnlUtilities.DF3.format(routesize - r) + "_WW</name>\n" +
                                         "            <desc>Waypoint " + Integer.toString(routesize - r) + ";VMG=" + nf.format(ic.getBsp()) + ";</desc>\n" +
                                         //  "            <sym>triangle</sym>\n" +
@@ -372,7 +372,7 @@ public class BlindRouting implements RoutingClientInterface {
                                         "        </rtept>\n");
                     } else {
                         clipboardContent +=
-                                ("  <wpt lat=\"" + rp.getPosition().getL() + "\" lon=\"" + rp.getPosition().getG() + "\">\n" +
+                                ("  <wpt lat=\"" + rp.getPosition().getLatitude() + "\" lon=\"" + rp.getPosition().getLongitude() + "\">\n" +
                                         "    <time>" + date + "</time>\n" +
                                         "    <name>" + WWGnlUtilities.DF3.format(r) + "_WW</name>\n" +
                                         "    <sym>triangle</sym>\n" +

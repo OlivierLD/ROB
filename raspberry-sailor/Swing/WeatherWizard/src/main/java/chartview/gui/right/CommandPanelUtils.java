@@ -539,8 +539,8 @@ public class CommandPanelUtils {
             root.appendChild(gpxDataNode);
             // Loop on the GPX Data content
             for (GeoPoint gpxPoint : cp.getGPXData()) {
-                double l = gpxPoint.getL();
-                double g = gpxPoint.getG();
+                double l = gpxPoint.getLatitude();
+                double g = gpxPoint.getLongitude();
                 XMLElement gpxNode = (XMLElement) storage.createElement("gpx-point");
                 gpxNode.setAttribute("lat", Double.toString(l));
                 gpxNode.setAttribute("lng", Double.toString(g));
@@ -650,8 +650,8 @@ public class CommandPanelUtils {
         if (cp.getBoatPosition() != null) {
             XMLElement boatLocation = (XMLElement) storage.createElement("boat-position");
             root.appendChild(boatLocation);
-            boatLocation.setAttribute("lat", Double.toString(cp.getBoatPosition().getL()));
-            boatLocation.setAttribute("lng", Double.toString(cp.getBoatPosition().getG()));
+            boatLocation.setAttribute("lat", Double.toString(cp.getBoatPosition().getLatitude()));
+            boatLocation.setAttribute("lng", Double.toString(cp.getBoatPosition().getLongitude()));
             boatLocation.setAttribute("hdg", Integer.toString(cp.getBoatHeading()));
         }
 
@@ -669,8 +669,8 @@ public class CommandPanelUtils {
                 for (GeoPoint gp : oneDrawing) {
                     XMLElement geoPoint = (XMLElement) storage.createElement("gp");
                     oneLine.appendChild(geoPoint);
-                    geoPoint.setAttribute("lat", Double.toString(gp.getL()));
-                    geoPoint.setAttribute("lng", Double.toString(gp.getG()));
+                    geoPoint.setAttribute("lat", Double.toString(gp.getLatitude()));
+                    geoPoint.setAttribute("lng", Double.toString(gp.getLongitude()));
                 }
             }
         }

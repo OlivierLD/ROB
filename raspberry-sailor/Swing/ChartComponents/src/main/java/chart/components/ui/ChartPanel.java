@@ -617,8 +617,8 @@ public class ChartPanel extends JPanel
             }
             g.setColor(videoTrackColor);
             for (int i = 0; i <= currentVideoIndex; i++) {
-                Point pt = this.getPanelPoint(((GeoPoint) array.get(i)).getL(),
-                        ((GeoPoint) array.get(i)).getG());
+                Point pt = this.getPanelPoint(((GeoPoint) array.get(i)).getLatitude(),
+                        ((GeoPoint) array.get(i)).getLongitude());
                 if (previous != null)
                     g.drawLine(previous.x, previous.y, pt.x, pt.y);
                 previous = pt;
@@ -660,8 +660,8 @@ public class ChartPanel extends JPanel
                     while (iterator2.hasNext()) {
                         GeoPoint dpt = iterator2.next();
                         if (previous != null) {
-                            Point f = getPanelPoint(previous.getL(), previous.getG());
-                            Point t = getPanelPoint(dpt.getL(), dpt.getG());
+                            Point f = getPanelPoint(previous.getLatitude(), previous.getLongitude());
+                            Point t = getPanelPoint(dpt.getLatitude(), dpt.getLongitude());
                             g.drawLine(f.x, f.y, t.x, t.y);
                         }
                         previous = dpt;
@@ -676,8 +676,8 @@ public class ChartPanel extends JPanel
                 while (iterator3.hasNext()) {
                     GeoPoint dpt = (GeoPoint) iterator3.next();
                     if (previous != null) {
-                        Point f = getPanelPoint(previous.getL(), previous.getG());
-                        Point t = getPanelPoint(dpt.getL(), dpt.getG());
+                        Point f = getPanelPoint(previous.getLatitude(), previous.getLongitude());
+                        Point t = getPanelPoint(dpt.getLatitude(), dpt.getLongitude());
                         g.drawLine(f.x, f.y, t.x, t.y);
                     }
                     previous = dpt;
@@ -711,8 +711,8 @@ public class ChartPanel extends JPanel
             GeoPoint from = getGeoPos(p1.x, p1.y);
             GeoPoint to = getGeoPos(p2.x, p2.y);
             // Calculate GC
-            GeoPoint geoFrom = new GeoPoint(Math.toRadians(from.getL()), Math.toRadians(from.getG()));
-            GeoPoint geoTo = new GeoPoint(Math.toRadians(to.getL()), Math.toRadians(to.getG()));
+            GeoPoint geoFrom = new GeoPoint(Math.toRadians(from.getLatitude()), Math.toRadians(from.getLongitude()));
+            GeoPoint geoTo = new GeoPoint(Math.toRadians(to.getLatitude()), Math.toRadians(to.getLongitude()));
             if (gc == null) {
                 gc = new GreatCircle();
             }
@@ -2090,7 +2090,7 @@ public class ChartPanel extends JPanel
     }
 
     public Point getPanelPoint(GeoPoint gp) {
-        return getPanelPoint(gp.getL(), gp.getG());
+        return getPanelPoint(gp.getLatitude(), gp.getLongitude());
     }
 
     /**
@@ -2356,23 +2356,23 @@ public class ChartPanel extends JPanel
 
     public boolean contains(GeoPoint gp) {
         boolean ret = false;
-        if (gp.getL() > south && gp.getL() < north) {
+        if (gp.getLatitude() > south && gp.getLatitude() < north) {
             if (west < east) {
-                if (gp.getG() < east && gp.getG() > west) {
+                if (gp.getLongitude() < east && gp.getLongitude() > west) {
                     ret = true;
                 }
 //        else
-//          System.out.println(gp.getG() + " not between " + west + " and " + east);
+//          System.out.println(gp.getLongitude() + " not between " + west + " and " + east);
             } else if (east < 0.0D) {
                 double _east_ = 360D + east;
-                double _lng_ = gp.getG();
+                double _lng_ = gp.getLongitude();
                 if (_lng_ < 0.0D) {
                     _lng_ += 360D;
                 }
                 if (_lng_ < _east_ && _lng_ > west) {
                     ret = true;
                 }
-            } else if (gp.getG() > east || gp.getG() < west) { // Not sure...
+            } else if (gp.getLongitude() > east || gp.getLongitude() < west) { // Not sure...
                 ret = true;
             }
         }
@@ -2544,7 +2544,7 @@ public class ChartPanel extends JPanel
     }
 
     public void plotLOP(Graphics g, GeoPoint gp, double azimuth, double intercept, String bodyName) {
-        Point pt = getPanelPoint(gp.getL(), gp.getG());
+        Point pt = getPanelPoint(gp.getLatitude(), gp.getLongitude());
         g.setColor(lopColor);
         g.drawLine(pt.x, pt.y, pt.x, pt.y);
         g.drawOval(pt.x - 2, pt.y - 2, 4, 4);
@@ -2553,9 +2553,9 @@ public class ChartPanel extends JPanel
         postit(g, bodyName, extr.x, extr.y, postitBGColor);
         extr = new Point((int) ((double) pt.x - (double) 50 * Math.sin(Math.toRadians(azimuth))), (int) ((double) pt.y + (double) 50 * Math.cos(Math.toRadians(azimuth))));
         g.drawLine(pt.x, pt.y, extr.x, extr.y);
-        GeoPoint x = MercatorUtil.deadReckoning(gp.getL(), gp.getG(), intercept, azimuth);
+        GeoPoint x = MercatorUtil.deadReckoning(gp.getLatitude(), gp.getLongitude(), intercept, azimuth);
         g.setColor(lopLineColor);
-        pt = getPanelPoint(x.getL(), x.getG());
+        pt = getPanelPoint(x.getLatitude(), x.getLongitude());
         g.drawLine(pt.x, pt.y, pt.x, pt.y);
         g.drawOval(pt.x - 2, pt.y - 2, 4, 4);
         extr = new Point((int) ((double) pt.x - (double) 50 * Math.sin(Math.toRadians(azimuth + (double) 90))), (int) ((double) pt.y + (double) 50 * Math.cos(Math.toRadians(azimuth + (double) 90))));
@@ -2656,10 +2656,10 @@ public class ChartPanel extends JPanel
         int nbTest = 0, maxTest = 100;
         Point topLeftOnThePanel = null, bottomRightOnThePanel = null;
         while (!zoneSizeOK && nbTest < maxTest) {
-            topLeftOnThePanel = this.getPanelPoint(geoTopLeft.getL(),
-                    geoTopLeft.getG());
-            bottomRightOnThePanel = this.getPanelPoint(geoBottomRight.getL(),
-                    geoBottomRight.getG());
+            topLeftOnThePanel = this.getPanelPoint(geoTopLeft.getLatitude(),
+                    geoTopLeft.getLongitude());
+            bottomRightOnThePanel = this.getPanelPoint(geoBottomRight.getLatitude(),
+                    geoBottomRight.getLongitude());
             if (topLeftOnThePanel.x != bottomRightOnThePanel.x &&
                     topLeftOnThePanel.y != bottomRightOnThePanel.y) {
                 int deltaX = Math.abs(topLeftOnThePanel.x - bottomRightOnThePanel.x);
@@ -2689,11 +2689,11 @@ public class ChartPanel extends JPanel
             setZoomFactor(oldZoom);
 //    parent.zoomFactorHasChanged(oldZoom);
 
-            double middleLat = ((geoTopLeft.getL() + geoBottomRight.getL()) / 2.0);
-            double middleLong = ((geoTopLeft.getG() + geoBottomRight.getG()) / 2.0);
-            if (sign(geoTopLeft.getG()) != sign(geoBottomRight.getG())) {
-                double delta = Math.abs(geoTopLeft.getG() + geoBottomRight.getG());
-                middleLong = geoTopLeft.getG() + (delta / 2);
+            double middleLat = ((geoTopLeft.getLatitude() + geoBottomRight.getLatitude()) / 2.0);
+            double middleLong = ((geoTopLeft.getLongitude() + geoBottomRight.getLongitude()) / 2.0);
+            if (sign(geoTopLeft.getLongitude()) != sign(geoBottomRight.getLongitude())) {
+                double delta = Math.abs(geoTopLeft.getLongitude() + geoBottomRight.getLongitude());
+                middleLong = geoTopLeft.getLongitude() + (delta / 2);
                 if (middleLong > 180)
                     middleLong -= 360;
             }
@@ -2730,7 +2730,7 @@ public class ChartPanel extends JPanel
     }
 
     public void positionTo(GeoPoint centerPoint) {
-        Point middle = getPanelPoint(centerPoint.getL(), centerPoint.getG());
+        Point middle = getPanelPoint(centerPoint.getLatitude(), centerPoint.getLongitude());
         int _w = getVisibleRect().width;
         int _h = getVisibleRect().height;
         Point topLeft = new Point(middle.x - (_w / 2),
@@ -2750,10 +2750,10 @@ public class ChartPanel extends JPanel
                     (draggedFromY - e.getY()) != 0) {
                 GeoPoint from = getGeoPos(Math.min(draggedFromX, e.getX()), Math.min(draggedFromY, e.getY()));
                 GeoPoint to = getGeoPos(Math.max(draggedFromX, e.getX()), Math.max(draggedFromY, e.getY()));
-                double nLat = Math.max(from.getL(), to.getL());
-                double wLong = Math.min(from.getG(), to.getG());
-                double sLat = Math.min(from.getL(), to.getL());
-                double eLong = Math.max(from.getG(), to.getG());
+                double nLat = Math.max(from.getLatitude(), to.getLatitude());
+                double wLong = Math.min(from.getLongitude(), to.getLongitude());
+                double sLat = Math.min(from.getLatitude(), to.getLatitude());
+                double eLong = Math.max(from.getLongitude(), to.getLongitude());
                 // If lng signs are different
                 if (sign(wLong) != sign(eLong)) {
                     if (Math.abs(wLong - eLong) > 180D) {
@@ -2784,8 +2784,8 @@ public class ChartPanel extends JPanel
                         to = getGeoPos(e.getX(), e.getY());
                         goZoom = false;
                         // Calculate distance between from and to
-                        GeoPoint geoFrom = new GeoPoint(Math.toRadians(from.getL()), Math.toRadians(from.getG()));
-                        GeoPoint geoTo = new GeoPoint(Math.toRadians(to.getL()), Math.toRadians(to.getG()));
+                        GeoPoint geoFrom = new GeoPoint(Math.toRadians(from.getLatitude()), Math.toRadians(from.getLongitude()));
+                        GeoPoint geoTo = new GeoPoint(Math.toRadians(to.getLatitude()), Math.toRadians(to.getLongitude()));
                         if (gc == null)
                             gc = new GreatCircle();
                         gc.setStart(new GreatCirclePoint(geoFrom));
@@ -2819,7 +2819,7 @@ public class ChartPanel extends JPanel
                     if (goZoom) {
                         zoomToZone(topLeft,     // top left
                                 bottomRight);// bottom right
-                        parent.chartDDZ(topLeft.getL(), bottomRight.getL(), topLeft.getG(), bottomRight.getG());
+                        parent.chartDDZ(topLeft.getLatitude(), bottomRight.getLatitude(), topLeft.getLongitude(), bottomRight.getLongitude());
                     }
                 } catch (ChartPanel.ZoneTooSmallException ztse) {
                     System.err.println(ztse.getMessage());
@@ -2982,8 +2982,8 @@ public class ChartPanel extends JPanel
                 int y = e.getY();
                 GeoPoint gp = getGeoPos(x, y);
                 if (gp != null) {
-                    String mess = "<html>" + (enforceTooltip ? "" : GeomUtil.decToSex(gp.getL(), GeomUtil.SWING, GeomUtil.NS) + "<br>" +
-                            GeomUtil.decToSex(gp.getG(), GeomUtil.SWING, GeomUtil.EW)) +
+                    String mess = "<html>" + (enforceTooltip ? "" : GeomUtil.decToSex(gp.getLatitude(), GeomUtil.SWING, GeomUtil.NS) + "<br>" +
+                            GeomUtil.decToSex(gp.getLongitude(), GeomUtil.SWING, GeomUtil.EW)) +
                             (toAdd == null ? "" : ((enforceTooltip ? "" : "<br>") + toAdd)) +
                             "<html>";
                     setToolTipText(mess);

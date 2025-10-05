@@ -157,7 +157,7 @@ public class CommandPanel
     if (type == ChartPanel.MOUSE_CLICKED)
     {
       GeoPoint clicked = chartPanel.getGeoPos(((MouseEvent)e).getX(), ((MouseEvent)e).getY()); 
-      System.out.println("<point rank='" + (track.size() + 1) + "' lat='" + clicked.getL() + "' lng='" + clicked.getG() + "'/>");
+      System.out.println("<point rank='" + (track.size() + 1) + "' lat='" + clicked.getLatitude() + "' lng='" + clicked.getLongitude() + "'/>");
       track.add(clicked);
       chartPanel.repaint();
     }

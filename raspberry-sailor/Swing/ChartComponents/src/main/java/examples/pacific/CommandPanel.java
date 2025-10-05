@@ -216,10 +216,10 @@ public class CommandPanel
     
     if (from != null && to != null)
     {
-      ls = from.getL();
-      gs = from.getG();
-      lf = to.getL();
-      gf = to.getG();
+      ls = from.getLatitude();
+      gs = from.getLongitude();
+      lf = to.getLatitude();
+      gf = to.getLongitude();
       gp = chartPanel.getPanelPoint(ls, gs);
       drawRhumbLine(gr, ls, gs, lf, gf);
       plotGreatCircle(gr, ls, gs, lf, gf, true);

@@ -456,8 +456,8 @@ public class TideForOneMonth {
 					utcCal.get(Calendar.HOUR_OF_DAY),
 					utcCal.get(Calendar.MINUTE),
 					utcCal.get(Calendar.SECOND));
-			double[] rsSun = acv2.sunRiseAndSet(position.getL(), position.getG());
-			// acv2.EpochAndZ[] rsSun = acv2.sunRiseAndSetEpoch(position.getL(), position.getG());
+			double[] rsSun = acv2.sunRiseAndSet(position.getLatitude(), position.getLongitude());
+			// acv2.EpochAndZ[] rsSun = acv2.sunRiseAndSetEpoch(position.getLatitude(), position.getLongitude());
 
 			Calendar sunRise = new GregorianCalendar();
 			sunRise.setTimeZone(TimeZone.getTimeZone(timeZone));
@@ -479,7 +479,7 @@ public class TideForOneMonth {
 			sunTransit.set(Calendar.SECOND, 0);
 
 			if (position != null) {
-				double tPass = acv2.getSunMeridianPassageTime(position.getL(), position.getG());
+				double tPass = acv2.getSunMeridianPassageTime(position.getLatitude(), position.getLongitude());
 				r = tPass + AstroComputerV2.getTimeZoneOffsetInHours(TimeZone.getTimeZone(timeZone), sunTransit.getTime());
 				min = (int) ((r - ((int) r)) * 60);
 				sunTransit.set(Calendar.MINUTE, min);
@@ -500,7 +500,7 @@ public class TideForOneMonth {
 			sunSet.set(Calendar.HOUR_OF_DAY, (int) r);
 
 			// Moon rise and set
-			double[] rsMoon = acv2.moonRiseAndSet(position.getL(), position.getG());
+			double[] rsMoon = acv2.moonRiseAndSet(position.getLatitude(), position.getLongitude());
 			Calendar moonRise = new GregorianCalendar();
 			moonRise.setTimeZone(TimeZone.getTimeZone(timeZone));
 			moonRise.set(Calendar.YEAR, now.get(Calendar.YEAR));
@@ -551,7 +551,7 @@ public class TideForOneMonth {
 				TF.setTimeZone(TimeZone.getTimeZone(timeZone));
 			}
 //			System.out.println(">> Calculating transit elev at " + acv2.getCalculationDateTime().getTime());
-			double sunElevAtTransit = acv2.getSunElevAtTransit(position.getL(), position.getG());
+			double sunElevAtTransit = acv2.getSunElevAtTransit(position.getLatitude(), position.getLongitude());
 
 			if (flavor == TEXT_FLAVOR) {
 				out.println("- " + SDF.format(now.getTime()) + " - Moon Age:" + DF2.format(phaseInDay));

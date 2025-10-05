@@ -3483,7 +3483,7 @@ public class WWGnlUtilities {
         try {
             Date ut = WWContext.getInstance().getCurrentUTC(); // TimeUtil.getGMT();
             long longUT = ut.getTime();
-            long solarTime = longUT + (long) ((gp.getG() / 15D) * 3600000D);
+            long solarTime = longUT + (long) ((gp.getLongitude() / 15D) * 3_600_000D);
             Date solarDate = new Date(solarTime);
             SDF_SOLAR.setTimeZone(TimeZone.getDefault());
             str = buildMessage("solar") + ":" + SDF_SOLAR.format(solarDate);
