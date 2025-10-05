@@ -11,7 +11,9 @@ version '1.0'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://mvnrepository.com/artifact/oracle/xmlparser" }
+    // maven { url "https://mvnrepository.com/artifact/oracle/xmlparser" }
+    maven { url "https://www.datanucleus.org/downloads/maven2" }
+
 }
 
 
