@@ -11,6 +11,7 @@ version '1.0'
 repositories {
     mavenLocal()
     mavenCentral()
+    maven { url "https://oss.sonatype.org/content/groups/public" }
 }
 
 
