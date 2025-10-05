@@ -1621,6 +1621,18 @@ let toggleForeground = () => {
         </div>
     </div>
 
+    <div>
+        <span>Select cones to plot below <span style="color: orange;">(toggle foreground to modify the values)</span></span>
+        <div id="bodies-container" class="" style="padding: 10px; max-height: 500px; display: grid; grid-area: prmsl; width: 240px; border: 1px solid silver; border-radius: 5px; margin-top: 10px; overflow-y: scroll;">
+            <!--div>
+                <label for="Spica">Spica</label> <input type="checkbox" name="Spica" id="Spica" value="Spica"/>
+            </div>
+            <div>
+                <label for="Polaris">Polaris</label> <input type="checkbox" name="Polaris" id="Polaris" value="Polaris"/>
+            </div-->
+        </div>
+    </div>
+
     <div class="centered" style="grid-area: utc">
         <!-- SPLIT-FLAP UTC -->
         <div style="margin: 10px;">
@@ -2572,7 +2584,57 @@ let toggleForeground = () => {
         console.log(`UTC Duration: ${UTCDuration}`);
 
 
-        if (true) {
+        // Find the cones to plot
+        let container = document.getElementById("bodies-container");
+        let selected = container.querySelectorAll('input[type="checkbox"]:checked');
+
+        let coneColors = [
+            {
+                one: "yellow",
+                two: "rgba(255, 222, 33, 0.4)"
+            },
+            {
+                one: "red",
+                two: "rgba(255, 0, 33, 0.4)"
+            },
+            {
+                one: "lime",
+                two: "rgba(0, 255, 33, 0.4)"
+            },
+            {
+                one: "cyan",
+                two: "rgba(0, 255, 255, 0.4)"
+            }
+
+        ];
+
+        selected.forEach((cb, idx) => {
+            console.log(`Selected ${cb.value}`);
+            let payload = {
+                bodyName: cb.value,
+                utcDate: UTCDuration,
+                pos: {
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude
+                }
+            };
+            let colorOne = coneColors[idx % coneColors.length].one; // Base
+            let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
+            fetchConeDataV2(payload, json => {
+                console.log("Cone data received");
+                // console.log(json);
+                latlngs = json;
+                // Draw the data on the globe
+                // The circle (cone base)
+                plotConeBase(context, wm, colorOne, latlngs);
+                // The axis of the cone
+                plotCone(context, wm, colorOne, colorTwo, json);
+                // MSP Data ?
+
+            });
+        })
+
+        if (false) { // Arbitrary bodies
             let payload = {
                 bodyName:"Sun",
                 utcDate: UTCDuration,
@@ -3408,8 +3470,18 @@ let toggleForeground = () => {
     };
 
     function populateBodyList(json) {
-        console.log(JSON.stringify(json, null, 2));
-        // document.getElementById('output').innerHTML = JSON.stringify(json, null, 2); //  + '</pre>';
+        // console.log(JSON.stringify(json, null, 2));
+        let container = document.getElementById('bodies-container');
+        container.innerHTML = '';
+        json.forEach(body => {
+            // console.log(`Body [${body}]`);
+//          <div>
+//            <input type="checkbox" name="Spica" id="Spica" value="Spica"/><label for="Spica">Spica</label>
+//          </div>
+            let oneNode = `<div><input type="checkbox" name="${body}" id="${body}", value="${body}"/><label for="${body}">${body}</label></div>`;
+            container.innerHTML += oneNode;
+
+        });
     }
 
     function messManager(mess) {
@@ -3647,7 +3719,7 @@ let toggleForeground = () => {
         console.log('On Load, ready...');
 
         // Populate the available celestial bodies
-        fetchBodyList(); // See this cde for details...
+        fetchBodyList(); // See this code for details...
 
 
         updateUTCDate();
