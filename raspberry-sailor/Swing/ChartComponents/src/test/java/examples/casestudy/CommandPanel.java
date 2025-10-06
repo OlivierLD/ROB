@@ -154,8 +154,8 @@ public class CommandPanel
 //      spatial = new Spatial();
 //    spatial.drawChart(chartPanel, gr);
         if (from != null && to != null) {
-            drawRhumbLine(gr, from.getL(), from.getG(), to.getL(), to.getG());
-            plotGreatCircle(gr, from.getL(), from.getG(), to.getL(), to.getG());
+            drawRhumbLine(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
+            plotGreatCircle(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
         }
         boolean title = false;
         if (title) {
@@ -167,22 +167,22 @@ public class CommandPanel
 
         GeoPoint drOne = new GeoPoint(GeomUtil.sexToDec("24", "58.5"),
                 -GeomUtil.sexToDec("142", "01.9"));
-        Point ptOne = chartPanel.getPanelPoint(drOne.getL(),
-                drOne.getG());
+        Point ptOne = chartPanel.getPanelPoint(drOne.getLatitude(),
+                drOne.getLongitude());
         chartPanel.plotLOP(gr, drOne, 80D, 1.617, "Sun");
         chartPanel.postit(gr, "Log:99.63", ptOne.x, ptOne.y, Color.yellow);
 
         GeoPoint drTwo = new GeoPoint(GeomUtil.sexToDec("24", "55.9"),
                 -GeomUtil.sexToDec("142", "28.1"));
-        Point ptTwo = chartPanel.getPanelPoint(drTwo.getL(),
-                drTwo.getG());
+        Point ptTwo = chartPanel.getPanelPoint(drTwo.getLatitude(),
+                drTwo.getLongitude());
         chartPanel.plotLOP(gr, drTwo, 102D, 0.571, "Sun");
         chartPanel.postit(gr, "Log:123.48", ptTwo.x, ptTwo.y, Color.yellow);
 
         GeoPoint drThree = new GeoPoint(GeomUtil.sexToDec("24", "50.8"),
                 -GeomUtil.sexToDec("143", "02.4"));
-        Point ptThree = chartPanel.getPanelPoint(drThree.getL(),
-                drThree.getG());
+        Point ptThree = chartPanel.getPanelPoint(drThree.getLatitude(),
+                drThree.getLongitude());
         chartPanel.plotLOP(gr, drThree, 276D, 0.647, "Sun");
         chartPanel.postit(gr, "Log:155.26", ptThree.x, ptThree.y, Color.yellow);
 
@@ -209,20 +209,20 @@ public class CommandPanel
         // First translation: 25.9 miles in 264t
         GreatCirclePoint dr = GreatCircle.dr(new GreatCirclePoint(drOne), 25.9, 264);
         GeoPoint forecastOne = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG()));  // TODO toDegrees?
-        Point gpfOne = chartPanel.getPanelPoint(forecastOne.getL(), forecastOne.getG());
+        Point gpfOne = chartPanel.getPanelPoint(forecastOne.getLatitude(), forecastOne.getLongitude());
         chartPanel.plotLOP(gr, forecastOne, 80D, 1.617, "Sun");
         chartPanel.postit(gr, "Log:99.63", gpfOne.x, gpfOne.y, Color.yellow);
 
         // Second translation: 33.6 miles in 261t
         dr = GreatCircle.dr(new GreatCirclePoint(drTwo), 33.6, 261);
         GeoPoint forecastTwo = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG()));
-        Point gpfTwo = chartPanel.getPanelPoint(forecastTwo.getL(), forecastTwo.getG());
+        Point gpfTwo = chartPanel.getPanelPoint(forecastTwo.getLatitude(), forecastTwo.getLongitude());
         chartPanel.plotLOP(gr, forecastTwo, 102D, 0.571, "Sun");
         chartPanel.postit(gr, "Log:123.48", gpfTwo.x, gpfTwo.y, Color.yellow);
         // First again
         dr = GreatCircle.dr(new GreatCirclePoint(forecastOne), 33.6, 261);
         GeoPoint forecastOneTwo = new GeoPoint(Math.toDegrees(dr.getL()), Math.toDegrees(dr.getG()));
-        Point gpfOneTwo = chartPanel.getPanelPoint(forecastOneTwo.getL(), forecastOneTwo.getG());
+        Point gpfOneTwo = chartPanel.getPanelPoint(forecastOneTwo.getLatitude(), forecastOneTwo.getLongitude());
         chartPanel.plotLOP(gr, forecastOneTwo, 80D, 1.617, "Sun");
         chartPanel.postit(gr, "Log:99.63", gpfTwo.x, gpfTwo.y, Color.yellow);
 

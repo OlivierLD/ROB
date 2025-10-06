@@ -172,6 +172,7 @@ public class SimpleTCPClient {
 						// Parse as JSON ?
 						if (parseReturnedJSON) {
 							try {
+								@SuppressWarnings("unchecked")
 								final Map<String, Object> sensorData = mapper.readValue(response, Map.class);
 								sensorData.forEach((k, v) -> System.out.printf("- Key: %s, Value (%s): %s\n", k, v.getClass().getName(), v));
 							} catch (Throwable boom) {

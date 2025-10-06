@@ -227,6 +227,11 @@ You might also want to exclude some tests (look into their code for details)
 ```
 $ [...]/gradlew clean build -x :raspberry-sailor:NMEA-multiplexer:test
 ```
+or
+```
+$ [...]/gradlew clean build --continue -x :Java-TCP-Python:test
+```
+(notice the `--continue` above, it moves on even if a test fails)  
 or simply
 ```
 $ [...]/gradlew clean build -x test

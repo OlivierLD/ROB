@@ -694,7 +694,7 @@ public class RESTImplementation {
 				try {
 					conesInput = mapper.readValue(stringReader, ConeInput[].class); // List<ConeInput>.class);
 					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
-						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConesIntersections with coneInput %s", conesInput));
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> getConesIntersections with coneInput %s", Arrays.toString(conesInput)));
 					}
 				} catch (Exception ex) {
 					System.err.println("--- getConesIntersections ---");
@@ -781,7 +781,7 @@ public class RESTImplementation {
 				try {
 					conesIntersections = mapper.readValue(stringReader, MPSToolBox.ConesIntersection[].class); // List<ConeInput>.class);
 					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
-						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> processConesIntersections with conesIntersections %s", conesIntersections));
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> processConesIntersections with conesIntersections %s", Arrays.toString(conesIntersections)));
 					}
 				} catch (Exception ex) {
 					System.err.println("--- processConesIntersections ---");

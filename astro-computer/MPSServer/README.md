@@ -3,12 +3,12 @@
 Defines and implements REST operations to be invoked from a Web Browser, or any REST client.  
 Based on the `http.HTTPServer`, aka `http-tiny-server`, in this project.  
 
-WiP...  
-
 # Status
 - Infrastructure in place. 
 - All operations are implemented.
-- TODO: Sample web page invoking the services.
+- Sample web pages invoking the services.
+  - To see the cones from a given place (`mps.01.html`).
+  - To get the position from several observations
 
 ### Operations to be defined for MPS
 - Get the body list ✅ `curl -X GET http://localhost:9999/mps/bodies`
@@ -26,7 +26,7 @@ WiP...
 ## To build it
 From this module's root:
 ```
-$ ../../gradlew clean shadowJar
+$ ../../gradlew clean build shadowJar
 ```
 
 ## To run it
@@ -323,6 +323,7 @@ Postman too does a good job with those requests.
 
 ---
 
-Next, we'll provide Web Pages invoking those REST services. That's going to be interesting.
+Next, we'll provide Web Pages invoking those REST services. That's going to be interesting.  
+This HTTP Server can also act as an Web Server, static documents (`html`, `js`, `css`, etc) are in the `web` folder, by default.
 
 ---

@@ -187,12 +187,17 @@ public class HTTPServerTests {
 			fail("Custom protocol should not be supported.");
 		} catch (ProtocolException pe) {
 			// Expected
-			System.out.println("As expected");
+			System.out.println("As expected.");
 		} catch (Exception ex) {
 			fail(ex.toString());
 		} finally {
 			System.out.println("Stopping HTTP Server...");
-			httpServer.stopRunning();
+			try {
+				httpServer.stopRunning();
+			} catch (Exception ex) {
+				System.err.println("Managed Exception");
+				ex.printStackTrace();
+			}
 			System.out.println("... HTTP Server stopped");
 		}
 	}

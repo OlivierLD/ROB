@@ -191,10 +191,10 @@ public class CommandPanel
         chartPanel.postit(gr, "Guam", gp.x, gp.y, Color.yellow);
 
         if (from != null && to != null) {
-            ls = from.getL();
-            gs = from.getG();
-            lf = to.getL();
-            gf = to.getG();
+            ls = from.getLatitude();
+            gs = from.getLongitude();
+            lf = to.getLatitude();
+            gf = to.getLongitude();
             gp = chartPanel.getPanelPoint(ls, gs);
             drawRhumbLine(gr, ls, gs, lf, gf);
             plotGreatCircle(gr, ls, gs, lf, gf, true);

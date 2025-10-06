@@ -14,7 +14,8 @@ public class UDPTest {
     EchoClient client;
 
     @Before
-    public void setup(){
+    public void setup() {
+        System.setProperty("udp.verbose", "true");
         new SimpleUDPServer().start();
         client = new EchoClient();
     }
