@@ -474,6 +474,55 @@ celles auxquelles s'attaquent (avec succ&egrave;s) les tables de Dieumegard et B
 
 Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
+On va distinguer les &eacute;quations concernant la latitude de celles qui concernent la longitude.  
+
+On commence par les latitudes :  
+On obtient ainsi
+```
+ /
+ | finalLat1 = arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1))
+<  finalLat2 = arcsin(sin(pg2Lat) * cos(radius2)) + (cos(pg2Lat) * sin(radius2) * cos(Z2))
+ | finalLat1 = finalLat2
+ \
+```
+Ou aussi
+```
+arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1)) = arcsin(sin(pg2Lat) * cos(radius2)) + (cos(pg2Lat) * sin(radius2) * cos(Z2))
+```
+
+Si on pose `A1 = sin(pg1Lat) * cos(radius1)` et `B1 = cos(pg1Lat) * sin(radius1)`, on a alors
+```
+arcsin(A1) + (B1 * cos(Z1)) = arcsin(A2) + (B2 * cos(Z2))
+```
+<!--
+```
+(B1 * cos(Z1)) = arcsin(A2) + (B2 * cos(Z2)) - arcsin(A1)
+```
+
+```
+          arcsin(A2) + (B2 * cos(Z2)) - arcsin(A1)
+cos(Z1) = ----------------------------------------
+                          B1
+```
+
+```
+            / arcsin(A2) + (B2 * cos(Z2)) - arcsin(A1) \
+Z1 = arccos | ---------------------------------------- |
+            \                B1                        /
+```
+-->
+ou de mani&egrave;re encore plus concise, comme `Z1` et `Z2` sont les seules variables, `A1`, `A2`, `B1` et `B2`
+&eacute;tant connus dans ce contexte :
+```
+f1(z) = arcsin(A1) + (B1 * cos(z))
+f2(z) = arcsin(A2) + (B2 * cos(z))
+```
+
+On cherche donc les valeurs `Z1` et `Z2` pour lesquelles 
+```
+f1(Z1) = f2(Z2)
+```
+
 ---
 
 _&Agrave; suivre..._
