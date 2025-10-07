@@ -5,7 +5,9 @@
  | All the skill in the "compute" function below, invoked on click.
  | Dynamic background test.
  |
- | Draws MPS Cones for selected bodies.
+ | Computes the position, intersections of the cones, defined by
+ | - The selected bodies
+ |     - Obs Alt, UTC Date -> GHA, Dec
  |
  | Good grid stuff: https://css-tricks.com/snippets/css/complete-guide-grid/
  +-->
@@ -13,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpg" href="./palm.04.jpg">
-    <title>MPS Workbench</title>
+    <title>MPS For real</title>
 
     <!-- Main Module -->
     <script type="module" src="./app.js"></script> <!-- THAT is the key -->
@@ -1181,6 +1183,38 @@ let toggleForeground = () => {
 </head>
 <body>
 
+<!-- A node to be cloned, for the bodies and their observed altitude -->
+<div id="one-body-template" style="display: none; grid-template-columns: 30px 130px auto; text-align: left;">
+    <input type="checkbox" name="${body}" id="${body}", value="${body}"/>
+    <label for="${body}">${body}</label>
+    <div>On
+        <input class="day" type="number" placeholder="day" min="1" max="31" title="Day of the Month">
+        <select class="month" title="Month of the year">
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+        </select>
+        <input class="year" type="number" placeholder="year" min="0" title="year">
+        at
+        <input class="hours" type="number" placeholder="hours" min="0" max="23" title="Hour of the day [0..23]">:
+        <input class="minutes" type="number" placeholder="minutes" min="0" max="59" title="minutes">:
+        <input class="seconds" type="number" placeholder="seconds" min="0" max="59" title="seconds"> UTC,
+        Obs Alt
+        <input class="alt-deg" type="number" placeholder="degrees" min="0" max="90" title="Observed Altitude in degrees">°
+        <input class="alt-min" type="number" placeholder="minutes" min="0.00" max="59.99" title="minutes" size="4">'
+    </div>
+</div>
+
+
     <!-- alert-dialog -->
     <dialog id="custom-alert" class="shadow-menu" style="z-index: 10;">
         <div class="dialog-header">
@@ -1551,7 +1585,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; Java)<span style="font-size: 0.75em;">- MPS Demo</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; Java)<span style="font-size: 0.75em;">- MPS for real</span></h1>
     </div>
     <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
@@ -1877,14 +1911,9 @@ let toggleForeground = () => {
                     <div id="user-mps-switch" onclick="expandCollapseMPSData();" title="Click to expand/collapse"
                          style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="mps-char">&#9658;</span> Select the bodies for MPS Cones</div>
                     <div id="user-mps-widgets" class="smooth" style="width: 80%; float: left; padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
-                        Check the bodies you want to display the MPS cones of.
-                        <div id="bodies-container" class="" style="padding: 10px; max-height: 200px; display: grid; grid-area: prmsl; width: 240px; border: 1px solid silver; border-radius: 5px; margin-top: 10px; overflow-y: scroll;">
-            <!--div>
-                <label for="Spica">Spica</label> <input type="checkbox" name="Spica" id="Spica" value="Spica"/>
-            </div>
-            <div>
-                <label for="Polaris">Polaris</label> <input type="checkbox" name="Polaris" id="Polaris" value="Polaris"/>
-            </div-->
+                        Select the bodies, and provide the observed altitude and observation (UTC) time.
+                        <div id="bodies-container" class="" style="padding: 10px; max-height: 200px; display: grid; /*grid-area: prmsl;*/ max-width: 840px; border: 1px solid silver; border-radius: 5px; margin-top: 10px; overflow-y: scroll; overflow-x: scroll;">
+                            <!-- populated by populateBodyList() -->
                         </div>
                     </div>
                 </div>
@@ -2642,19 +2671,89 @@ let toggleForeground = () => {
 
         ];
 
+        let payloads = [];
+
         selected.forEach((cb, idx) => {
             console.log(`Selected ${cb.value}`);
+            // Date and obs altitude
+            let body = cb.value;
+            let day = parseInt(cb.parentNode.querySelector('input.day').value);
+            let month = parseInt(cb.parentNode.querySelector('select.month').value);
+            let year = parseInt(cb.parentNode.querySelector('input.year').value);
+            let hour = parseInt(cb.parentNode.querySelector('input.hours').value);
+            let minute = parseInt(cb.parentNode.querySelector('input.minutes').value);
+            let second = parseInt(cb.parentNode.querySelector('input.seconds').value);
+            let obsAltDeg = parseFloat(cb.parentNode.querySelector('input.alt-deg').value);
+            let obsAltMin = parseFloat(cb.parentNode.querySelector('input.alt-min').value);
+            let obsAlt = obsAltDeg + (obsAltMin / 60.0);
+
+            let UTCObsTime = `${year.toFixed(0)}-${month.toFixed(0).padStart(2,'0')}-${day.toFixed(0).padStart(2,'0')}T${hour.toFixed(0).padStart(2,'0')}:${minute.toFixed(0).padStart(2,'0')}:${second.toFixed(0).padStart(2,'0')}`;
+            // console.log(`For ${body}: ${year}-${month}-${day} ${hour}:${minute}:${second} (${UTCObsTime}), obsAlt: ${obsAltDeg}°${obsAltMin}' (${obsAlt}°)`);
+
+            // THE calculation is going to be done here (GHA, D)
+            fetchDataForBody(body, UTCObsTime, (payload) => {
+
+                /* callback's payload like:
+                    {
+                        "hp": 0.0024363295653005066,
+                        "sd": 0.2658602388843899,
+                        "gha": 260.9130769856097,
+                        "d": -1.345999030567647
+                    }
+                */
+                let gha = payload.gha;
+                let dec = payload.d;
+                console.log(`For ${body} - GHA: ${gha.toFixed(2)}°, Dec: ${dec.toFixed(2)}°`);
+
+                if (false) {
+                    let conePayload = {
+                        bodyName : body,
+                        obsAlt : obsAlt,
+                        gha : gha,
+                        d : dec
+                    };
+                    fetchConeData(conePayload);
+                } else {
+                    /*
+                    Acumulate data for a single call:
+
+                    curl -X POST http://localhost:9999/mps/2-cones-intersections -d
+                    '[{
+                        "bodyName":"Saturn",
+                        "obsAlt":22.276078,
+                        "gha":54.653345,
+                        "d":-3.048023
+                    },
+                    {
+                        "bodyName":"Jupiter",
+                        "obsAlt":33.994908,
+                        "gha":300.336092,
+                        "d":21.678212
+                    }]'
+                    */
+                    payloads.push({
+                        bodyName: body,
+                        obsAlt: obsAlt,
+                        gha: gha,
+                        d: dec
+                    });
+                }
+
+            }); // End of fetchDataForBody
+
+            // Get the cones from userPos, body, UTC (reverse of above)
             let payload = {
                 bodyName: cb.value,
-                utcDate: UTCDuration,
+                utcDate: UTCDuration, // User set date
                 pos: {
                     latitude: userPos.latitude,
                     longitude: userPos.longitude
                 }
             };
+
             let colorOne = coneColors[idx % coneColors.length].one; // Base
             let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
-            fetchConeDataV2(payload, json => {
+            fetchConeDataV2(payload, json => { // With a callback
                 console.log("Cone data received");
                 // console.log(json);
                 latlngs = json;
@@ -2666,7 +2765,28 @@ let toggleForeground = () => {
                 // MSP Data ?
 
             });
-        })
+        }); // End of selected.forEach
+
+        // Now calculate intersections if we have more than 1 body selected
+        console.log(`Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
+        // Wait until numbers are equal
+        let waitForPayloads = setInterval(() => {
+            console.log(`In the loop: Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
+            if (payloads.length === selected.length) {
+                clearInterval(waitForPayloads);
+                // console.log("All payloads ready, calling intersections");
+                // 2 first payloads only for now
+                if (payloads.length >= 2) {
+                    let pl = [];
+                    pl.push(payloads[0]);
+                    pl.push(payloads[1]);
+                    processConesIntersection(pl);
+                } else {
+                    console.log("Not enough payloads to compute intersections");
+                }
+            }
+        }, 500);
+        // console.log(`Behind the loop: Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
 
         if (false) { // Arbitrary bodies
             let payload = {
@@ -3505,16 +3625,33 @@ let toggleForeground = () => {
 
     function populateBodyList(json) {
         // console.log(JSON.stringify(json, null, 2));
+
+        let now = new Date();
+
+        let template = document.getElementById('one-body-template'); // the one to clone
         let container = document.getElementById('bodies-container');
         container.innerHTML = '';
         json.forEach(body => {
             // console.log(`Body [${body}]`);
-//          <div>
-//            <input type="checkbox" name="Spica" id="Spica" value="Spica"/><label for="Spica">Spica</label>
-//          </div>
-            let oneNode = `<div><input type="checkbox" name="${body}" id="${body}", value="${body}"/><label for="${body}">${body}</label></div>`;
-            container.innerHTML += oneNode;
+            let clone = template.cloneNode(true);
+            clone.style.display = 'grid';
+            clone.id = `body-${body}`;
+            let cb = clone.querySelectorAll("input[type='checkbox']")[0];
+            cb.name = body;
+            cb.id = body;
+            cb.value = body;
+            let label = clone.querySelectorAll("label")[0];
+            label.for = body;
+            label.innerText = body;
 
+            clone.querySelectorAll("input.day")[0].value = now.getUTCDate();
+            clone.querySelectorAll("select.month")[0].value = now.getUTCMonth() + 1;
+            clone.querySelectorAll("input.year")[0].value = now.getUTCFullYear();
+            clone.querySelectorAll("input.hours")[0].value = (now.getUTCHours().toString().length < 2 ? "0" : "") + now.getUTCHours();
+            clone.querySelectorAll("input.minutes")[0].value = (now.getUTCMinutes().toString().length < 2 ? "0" : "") + now.getUTCMinutes();
+            clone.querySelectorAll("input.seconds")[0].value = (now.getUTCSeconds().toString().length < 2 ? "0" : "") + now.getUTCSeconds();
+
+            container.appendChild(clone);
         });
     }
 
@@ -3575,6 +3712,7 @@ let toggleForeground = () => {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
 					// console.log(JSON.stringify(json, null, 2));
+                    console.log(`Body:${json.bodyName}, at ${json.observationTime}, Alt ${decToSex(json.obsAlt)}`);
                     // alert('Got the cone!!');
                     if (callback) {
                         callback(json);
@@ -3600,8 +3738,6 @@ let toggleForeground = () => {
 			// events.publish('valid', null);
 		});
 	}
-
-
 
     // curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
     // Requires bodyName, obsAlt, gha, d
@@ -3679,13 +3815,13 @@ let toggleForeground = () => {
 					message += mess.message;
 				}
 			}
-			messManager("fetchDataForBody : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			messManager("fetchAltAndZ : Failed to get body data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
 			// events.publish('valid', null);
 		});
     }
 
     // curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
-    function fetchDataForBody(body, utcdate) {
+    function fetchDataForBody(body, utcdate, callback) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise(`/mps/pg/${body}/${utcdate}`,
                                 DEFAULT_TIMEOUT,
@@ -3699,8 +3835,6 @@ let toggleForeground = () => {
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
-					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
-                    alert('Got the Body Data!!\n' + JSON.stringify(json));
                     /* Returns a {
                         "hp": 0.0024363295653005066,
                         "sd": 0.2658602388843899,
@@ -3708,24 +3842,13 @@ let toggleForeground = () => {
                         "d": -1.345999030567647
                       }
                     */
-
-                    // Get altitude, from userPos
-                    let payloadForH = {
-                        "pos": userPos, // {latitude: 47.677667, longitude: -3.135667},
-                        "pg": {         // From the 'value'
-                            "gha": json.gha,
-                            "d": json.d
-                        }
-                    };
-                    fetchAltAndZ(payloadForH);
-
-                    let payload = {       // Get it from the 'value'
-                        "bodyName": body,
-                        "obsAlt":22.276078, // From another service, fetchAltAndZ...
-                        "gha": json.gha,
-                        "d": json.d
-                    };
-                    fetchConeData(payload);
+                   if (callback) {
+                       callback(json);
+                   } else {
+                       console.log("No callback for fetchDataForBody");
+                        console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+                        alert('Got the Body Data!!\n' + JSON.stringify(json));
+                   }
 
 				} else {
 					console.log('Empty response');
@@ -3747,14 +3870,80 @@ let toggleForeground = () => {
 		});
     }
 
+    // curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'
+    function processConesIntersection(payload) {
+      	let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise(`/mps/2-cones-intersections`,
+                                DEFAULT_TIMEOUT,
+                                'POST',
+                                [200, 201], // Can be an array
+                                payload,    // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+					// console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
+                    // alert('Got the Intersections!!\n' + JSON.stringify(json));
+                    let mess = `Intersections:\n` +
+                                `${decToSex(json[0].latitude, "NS")} / ${decToSex(json[0].longitude, "EW")}\n` +
+                                `${decToSex(json[1].latitude, "NS")} / ${decToSex(json[1].longitude, "EW")}\n` +
+                                `${decToSex(json[2].latitude, "NS")} / ${decToSex(json[2].longitude, "EW")}\n` +
+                                `${decToSex(json[3].latitude, "NS")} / ${decToSex(json[3].longitude, "EW")}`;
+                    alert(mess);
+
+                    /*
+                        Returns an array of 4 GeoPoints
+
+                        To be done Next:
+                        curl -X POST http://localhost:9999/mps/process-intersections -d
+                        '[{
+                            "bodyOneName":"Saturn",
+                            "bodyTwoName":"Jupiter",
+                            "coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},
+                            "coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},
+                            "coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},
+                            "coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}
+                           },
+                           {
+                            "bodyOneName":"Saturn",
+                            "bodyTwoName":"Rigel",
+                            "coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},
+                            "coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},
+                            "coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},
+                            "coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}
+                        }]'
+                   */
+
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("processConesIntersection : Failed to get data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+    }
+
     // Set default date values, start process(es), etc
     window.onload = () => {
 
         console.log('On Load, ready...');
 
         // Populate the available celestial bodies
-        fetchBodyList(); // See this code for details...
-
+        fetchBodyList(); // See this code for details... Populates the list of bodies for the MPS cones.
 
         updateUTCDate();
         // Check QS for location

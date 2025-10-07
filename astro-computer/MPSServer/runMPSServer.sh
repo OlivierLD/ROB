@@ -12,7 +12,15 @@ echo -e "----------------------------------------"
 echo -e "Args are $@"
 echo -e "----------------------------------------"
 #
-HTTP_PORT=
+function openBrowser() {
+  if [[ $(uname -s) == *Linux* ]]; then
+    sensible-browser "$1"
+  else
+    open "$1"  # Darwin
+  fi
+}
+#
+HTTP_PORT=9999
 #
 for ARG in "$@"; do
   echo -e "Managing prm ${ARG}"
@@ -104,7 +112,17 @@ if [[ "${CMD_VERBOSE}" == "Y" || 1 -eq 1 ]]; then    # Always true...
   echo -e "Running ${COMMAND}"
 fi
 #
-${COMMAND}
+${COMMAND} &
 #
+echo -e ">>> Waiting for the server to start..."
+sleep 5  # Wait (5s) for the server to be operational
+echo -en " ==> Open index.html in browser (y|n) ? > "
+read REPLY
+if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+  # openBrowser ${URL_01} &
+  openBrowser "http://localhost:${HTTP_PORT}/web/index.html" &
+fi
+#
+echo -e "Use killMPSServer.sh to turn it down."
 echo -e "Bye now ✋"
 #

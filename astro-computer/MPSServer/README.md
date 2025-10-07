@@ -309,7 +309,7 @@ $ curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":
 ```
 
 ```
-$ curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneName":"Saturn","bodyT{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},"coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}},{"bodyOneName":"Saturn","bodyTwoName":"Rigel","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},"coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}}]' | jq
+$ curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneName":"Saturn","bodyTwoName":"Jupiter","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},"coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}},{"bodyOneName":"Saturn","bodyTwoName":"Rigel","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},"coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}}]' | jq
 ```
 
 ```json

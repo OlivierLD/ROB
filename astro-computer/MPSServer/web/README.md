@@ -1,9 +1,9 @@
-# WebComponents samples.
+# WebComponents samples, for MPS.
 
-- Use `npm start` from `MPS/web`
-  - requires `nodejs` to be installed
-- Then reach `http://localhost:8080/index.html from a browser, and click the first link.  
+- Requires the `MPSServer` to run.
+- It can be started with `./runMPSServer.sh`,
+- Then access `http://localhost:9999/web/index.html` to get started.
 
-Will be used to display the cones...
+Will be used to display the cones, or compute your position (based on your observations)...
 
 ---
