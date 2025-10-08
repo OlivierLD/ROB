@@ -5,6 +5,8 @@ import calc.calculation.AstroComputerV2;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * For the SRU and DR, compare with <a href="https://olivierld.github.io/web.stuff/astro/index_03.html">...</a>
@@ -690,7 +692,56 @@ public class MPSToolBox {
                 });
                 System.out.println("-----------------------------");
             }
+            // Create lists of points, put together by their distance to each other
+            Map<GeoPoint, List<GeoPoint>> pointMap = new HashMap<>();
+            AtomicReference<GeoPoint> ref = new AtomicReference<>(null);
+            candidates.stream().forEach(pt -> {
+                if (ref.get() != null) {
+                    // Calculate distance with ref
+                    final double nm = GeomUtil.haversineNm(ref.get(), pt);
+                    if (nm < CRITICAL_DIST) {
+                        pointMap.get(ref.get()).add(pt);
+                    } else {
+                        // See distance with other lists (ref)
+                        System.out.printf("%s too far from %s (%f)\n", pt, ref.get(), nm);
+                        final Object[] keys = pointMap.keySet().toArray();
+                        boolean found = false;
+                        for (int k=0; k<keys.length; k++) {
+                            GeoPoint gpKey = (GeoPoint)keys[k];
+                            double dist = GeomUtil.haversineNm(gpKey, pt);
+                            if (dist < CRITICAL_DIST) {
+                                ref.set(gpKey);
+                                pointMap.get(gpKey).add(pt);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            pointMap.put(pt, new ArrayList<>());
+                            ref.set(pt);
+                        }
+                    }
+                } else {
+                    ref.set(pt);
+                    pointMap.put(pt, new ArrayList<>());
+                }
+            });
+            System.out.printf("PointMap has %d entries\n", pointMap.keySet().size());
+            // We will do the average of the biggest list
+            AtomicReference<List<GeoPoint>> restricted = new AtomicReference<>(null);
+            AtomicInteger maxCard = new AtomicInteger(-1);
+            pointMap.forEach((pt, list) -> {
+                        if (list.size() > maxCard.get()) {
+                            maxCard.set(list.size());
+                            restricted.set(list);
+                        }
+                    });
+
             // An average ?
+            candidates = restricted.get();
+            if (verbose) {
+                System.out.printf("Working on %d positions\n", candidates.size());
+            }
             double averageLat = candidates.stream().mapToDouble(GeoPoint::getLatitude).average().getAsDouble();
             double averageLng = candidates.stream().mapToDouble(GeoPoint::getLongitude).average().getAsDouble();
             GeoPoint avgPoint = new GeoPoint(averageLat, averageLng);

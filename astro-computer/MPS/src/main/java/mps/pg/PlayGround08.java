@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Full stuff, Invoking method from MPSToolBox, for more than 2 bodies.
  * Start from the cones, and find the position.
- * GHA, Decl, and Observed Altitude are calculated in the main.
+ * GHA, Decl, and Observed Altitude are calculated in the main, for the given time.
  * Observer's position is found at the end.
  */
 public class PlayGround08 {

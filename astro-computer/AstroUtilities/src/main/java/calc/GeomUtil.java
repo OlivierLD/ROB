@@ -298,7 +298,14 @@ public final class GeomUtil {
 					degSignIndex = fullString.lastIndexOf(" ");
 				}
 			}
-			String degrees = fullString.substring(1, degSignIndex).trim();
+			int firstOffset = 1;
+			try {
+				int firstDigit = Integer.parseInt(sgn);
+				firstOffset = 0;
+			} catch (NumberFormatException nfe) {
+				// No change in offset
+			}
+			String degrees = fullString.substring(firstOffset /* 1 */, degSignIndex).trim();
 			String minutes = "";
 			String seconds = "";
 			if (fullString.contains("\"")) {
@@ -315,7 +322,7 @@ public final class GeomUtil {
 			} else {
 				d = sexToDec(degrees, minutes);
 			}
-			if (sgn.equals("S") || sgn.equals("W")) {
+			if (sgn.equals("S") || sgn.equals("W") || sgn.equals("-")) {
 				d = -d;
 			}
 			return d;

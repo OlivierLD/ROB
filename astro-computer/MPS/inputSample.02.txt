@@ -1,0 +1,5 @@
+Body=Mars;Date=2025-10-07T15:36:00; ObsAlt=21º56.54'
+Body=Venus;Date=2025-10-07T15:36:00;ObsAlt=14.014
+Body=Altair;Date=2025-10-07T15:36:00;ObsAlt=32º28.63'
+# Body=Zebulon;Date=2025-10-07T15:36:00;ObsAlt=12.34
+# Body=Zebulon;ObsAlt=12.34
