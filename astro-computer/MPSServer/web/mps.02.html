@@ -2736,7 +2736,7 @@ let toggleForeground = () => {
                         obsAlt: obsAlt,
                         gha: gha,
                         d: dec
-                    });
+                    }); // TODO Draw those cones !
                 }
 
             }); // End of fetchDataForBody
@@ -2744,7 +2744,7 @@ let toggleForeground = () => {
             // Get the cones from userPos, body, UTC (reverse of above)
             let payload = {
                 bodyName: cb.value,
-                utcDate: UTCDuration, // User set date
+                utcDate: UTCObsTime, // UTCDuration, // User set date
                 pos: {
                     latitude: userPos.latitude,
                     longitude: userPos.longitude
@@ -2756,14 +2756,21 @@ let toggleForeground = () => {
             fetchConeDataV2(payload, json => { // With a callback
                 console.log("Cone data received");
                 // console.log(json);
-                latlngs = json;
+                let latlngs = json;
                 // Draw the data on the globe
                 // The circle (cone base)
                 plotConeBase(context, wm, colorOne, latlngs);
                 // The axis of the cone
                 plotCone(context, wm, colorOne, colorTwo, json);
-                // MSP Data ?
-
+                // MSP Data ? (in the text box)
+                let mpsData = document.getElementById('mps-data');
+                let before = mpsData.innerHTML;
+                let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
+                if (before.length > 0) {
+                    newData = before + '<br/>' + newData;
+                }
+                mpsData.innerHTML = newData
             });
         }); // End of selected.forEach
 
@@ -2780,7 +2787,7 @@ let toggleForeground = () => {
                     let pl = [];
                     pl.push(payloads[0]);
                     pl.push(payloads[1]);
-                    processConesIntersection(pl);
+                    processConesIntersection(pl); // TODO Like on MPSToolBox.processIntersectionsList
                 } else {
                     console.log("Not enough payloads to compute intersections");
                 }
