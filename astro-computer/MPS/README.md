@@ -410,6 +410,81 @@ Found intersection at 47º40.66'N / 3º08.14'W
 Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalement inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
+#### Une premi&egrave;re approche interactive
+Un script interactif, `cones.resolution.sh` :
+```
+$ ./cones.resolution.sh 
+
+You will be prompted to enter body names, dates, and observed altitudes.
+
+Body name: Mars
+Date (duration format): 2025-10-07T15:36:00
+Observed Altitude: 21.98
+More [n]|y ? > y
+Ok, another one.
+Body name: Venus
+Date (duration format): 2025-10-07T15:36:00
+Observed Altitude: 14.014
+More [n]|y ? > y
+Ok, another one.
+Body name: Altair
+Date (duration format): 2025-10-07T15:36:00
+Observed Altitude: 32º28.63'
+More [n]|y ? >  
+Now proceeding.
+Read line [Body=Mars;Date=2025-10-07T15:36:00;ObsAlt=21.98]
+        Body : [Mars]
+        Date : [2025-10-07T15:36:00]
+        Alt : [21.98] => [21.980000]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Mars at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 21.942255 ( 21º56.54')
+Read line [Body=Venus;Date=2025-10-07T15:36:00;ObsAlt=14.014]
+        Body : [Venus]
+        Date : [2025-10-07T15:36:00]
+        Alt : [14.014] => [14.014000]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Venus at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 14.013912 ( 14º00.83')
+Read line [Body=Altair;Date=2025-10-07T15:36:00;ObsAlt=32º28.63']
+        Body : [Altair]
+        Date : [2025-10-07T15:36:00]
+        Alt : [32º28.63'] => [32.477167]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Altair at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 32.477156 ( 32º28.63')
+We have 3 bodies.
+Mars:    ObsAlt:  21º58.80' (21.980000),         GHA:  32º35.17' (32.586194),    Decl: 15º05.10'S (-15.084996)
+Venus:   ObsAlt:  14º00.84' (14.014000),         GHA:  77º04.14' (77.068942),    Decl: 4º22.30'N (4.371674)
+Altair:  ObsAlt:  32º28.63' (32.477167),         GHA:  312º31.51' (312.525102),  Decl: 8º56.33'N (8.938912)
+[0, 1], Mars and Venus
+1 - Mars & Venus
+After 4 iterations:
+1st position between 47º37.75'N / 3º07.46'W (47.629198 / -3.124387) and 47º37.75'N / 3º07.46'W (47.629210 / -3.124347), dist 0.00 nm.
+2nd position between 70º06.79'S / 99º21.31'W (-70.113119 / -99.355096) and 70º06.79'S / 99º21.31'W (-70.113119 / -99.355096), dist 0.00 nm.
+[0, 2], Mars and Altair
+2 - Mars & Altair
+
+. . .
+
+6 - Altair & Venus
+After 4 iterations:
+1st position between 19º02.37'S / 3º31.58'W (-19.039437 / -3.526361) and 19º02.37'S / 3º31.58'W (-19.039445 / -3.526371), dist 0.00 nm.
+2nd position between 47º40.65'N / 3º08.15'W (47.677496 / -3.135769) and 47º40.65'N / 3º08.15'W (47.677496 / -3.135769), dist 0.00 nm.
+End of permutations, 6 intersections
+-----------------------------
+Full Intersection Calculation took 7,348 ms (System Time)
+-----------------------------
+70º06.78'S / 99º21.30'W too far from 47º38.60'N / 3º09.58'W (8176.094466)
+47º40.65'N / 3º08.15'W too far from 70º06.78'S / 99º21.30'W (8178.358130)
+. . .
+47º38.60'N / 3º09.58'W too far from 48º18.67'S / 41º08.50'E (6212.995889)
+19º02.37'S / 3º31.58'W too far from 47º38.60'N / 3º09.58'W (4008.198989)
+47º40.65'N / 3º08.15'W too far from 19º02.37'S / 3º31.58'W (4010.258270)
+PointMap has 4 entries
+Found (avg) intersection at 47º39.00'N / 3º08.38'W
+------- End of the story -------
+Done
+```
+
+
 ### R&eacute;soudre l'&eacute;quation de la distance entre les points de deux cercles...
 Il doit y avoir un - voire deux - point(s) ou cette distance est nulle.
 

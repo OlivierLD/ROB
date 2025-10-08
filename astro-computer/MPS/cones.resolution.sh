@@ -8,6 +8,7 @@ export OPTIONS="-Dverbose=false"
 #
 # User input
 #
+echo -e "You will be prompted to enter body names, dates, and observed altitudes.\n"
 rm cones.input.txt 2> /dev/null
 KEEP_LOOPING=true
 while [[ "${KEEP_LOOPING}" == "true" ]]; do
