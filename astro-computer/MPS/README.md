@@ -484,12 +484,16 @@ Found (avg) intersection at 47º39.00'N / 3º08.38'W
 Done
 ```
 
-#### Une premiere impl&eacute;mentation, front-end et back-end (voir MPSServer)
+#### Une premi&egrave;re impl&eacute;mentation, web front-end et HTTP/REST back-end
 
-L'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la date de l'observation, et la hauteur (corrig&eacute;e) de l'astre
+Apres avoir d&eacute;marr&eacute; le serveur MPS (voir le project `MPSServer`, jumeau de celui-ci), et charg&eacute; la page web ad&eacute;quate dans un navigateur, 
+l'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la date de l'observation, et la hauteur (corrig&eacute;e) de l'astre :
+
+
 ![MPS 101](./images/mps.101.png)
 
-La position calcul&eacute;e apparait dans la boite "MPS Data"
+La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
+
 ![MPS 102](./images/mps.102.png)  
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
