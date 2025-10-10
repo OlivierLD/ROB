@@ -484,9 +484,17 @@ Found (avg) intersection at 47º39.00'N / 3º08.38'W
 Done
 ```
 
+#### Une premiere impl&eacute;mentation, front-end et back-end (voir MPSServer)
+
+L'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la date de l'observation, et la hauteur (corrig&eacute;e) de l'astre
+![MPS 101](./images/mps.101.png)
+
+La position calcul&eacute;e apparait dans la boite "MPS Data"
+![MPS 102](./images/mps.102.png)  
+Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
 ### R&eacute;soudre l'&eacute;quation de la distance entre les points de deux cercles...
-Il doit y avoir un - voire deux - point(s) ou cette distance est nulle.
+Il doit y avoir un - voire deux - point(s) des cercles o&ugrave; cette distance est nulle.
 
 Pour chaque cercle - base du c&ocirc;ne - on a
 - La hauteur de l'astre observ&eacute;

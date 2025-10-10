@@ -3979,10 +3979,20 @@ let toggleForeground = () => {
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
-                    // TODO To be displayed in a better place
-                    let mess = `Calculated position - Intersections:\n` +
-                                `${decToSex(json.latitude, "NS")} / ${decToSex(json.longitude, "EW")}`;
-                    alert(mess);
+                    // To be displayed in the "mps-data" box.
+                    let mess = `Calculated intersection:<br/>` +
+                                `<b>${decToSex(json.latitude, "NS")} / ${decToSex(json.longitude, "EW")}</b>`;
+                    // alert(mess);
+
+                    let mpsData = document.getElementById('mps-data');
+                    let before = mpsData.innerHTML;
+                    let newData = mess;
+                    if (before.length > 0) {
+                        newData = before + '<br/>' + newData;
+                    }
+                    mpsData.innerHTML = newData;
+
+
 				} else {
 					console.log('Empty response');
 				}
