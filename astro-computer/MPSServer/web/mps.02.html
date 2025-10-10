@@ -2671,7 +2671,8 @@ let toggleForeground = () => {
 
         ];
 
-        let payloads = [];
+        let payloads_1 = [];
+        let payloads_2 = [];
 
         selected.forEach((cb, idx) => {
             console.log(`Selected ${cb.value}`);
@@ -2690,7 +2691,7 @@ let toggleForeground = () => {
             let UTCObsTime = `${year.toFixed(0)}-${month.toFixed(0).padStart(2,'0')}-${day.toFixed(0).padStart(2,'0')}T${hour.toFixed(0).padStart(2,'0')}:${minute.toFixed(0).padStart(2,'0')}:${second.toFixed(0).padStart(2,'0')}`;
             // console.log(`For ${body}: ${year}-${month}-${day} ${hour}:${minute}:${second} (${UTCObsTime}), obsAlt: ${obsAltDeg}°${obsAltMin}' (${obsAlt}°)`);
 
-            // THE calculation is going to be done here (GHA, D)
+            // THE calculation is going to be done here (GHA, D), for the cones display (not the position !)
             fetchDataForBody(body, UTCObsTime, (payload) => {
 
                 /* callback's payload like:
@@ -2731,15 +2732,23 @@ let toggleForeground = () => {
                         "d":21.678212
                     }]'
                     */
-                    payloads.push({
+                    payloads_1.push({
                         bodyName: body,
                         obsAlt: obsAlt,
                         gha: gha,
                         d: dec
-                    }); // TODO Draw those cones !
+                    });
                 }
 
             }); // End of fetchDataForBody
+
+            payloads_2.push({
+                        bodyName: body,
+                        date: UTCObsTime,
+                        obsAlt: obsAlt,
+                        gha: null,
+                        decl: null
+                    });
 
             // Get the cones from userPos, body, UTC (reverse of above)
             let payload = {
@@ -2770,26 +2779,37 @@ let toggleForeground = () => {
                 if (before.length > 0) {
                     newData = before + '<br/>' + newData;
                 }
-                mpsData.innerHTML = newData
+                mpsData.innerHTML = newData;
             });
         }); // End of selected.forEach
 
         // Now calculate intersections if we have more than 1 body selected
-        console.log(`Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
+        console.log(`-- Bodies selected: ${selected.length}, payloads: ${payloads_2.length}`);
         // Wait until numbers are equal
         let waitForPayloads = setInterval(() => {
-            console.log(`In the loop: Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
-            if (payloads.length === selected.length) {
+            console.log(`==> In the loop: Bodies selected: ${selected.length}, payloads: ${payloads_2.length}`);
+            if (payloads_2.length === selected.length) {
                 clearInterval(waitForPayloads);
-                // console.log("All payloads ready, calling intersections");
-                // 2 first payloads only for now
-                if (payloads.length >= 2) {
-                    let pl = [];
-                    pl.push(payloads[0]);
-                    pl.push(payloads[1]);
-                    processConesIntersection(pl); // TODO Like on MPSToolBox.processIntersectionsList
+                console.log("All payloads ready, calling intersections");
+                console.log("Payloads: ", JSON.stringify(payloads_2, null, 2));
+                if (payloads_2.length > 1) {
+                    computeCones(payloads_2);
                 } else {
-                    console.log("Not enough payloads to compute intersections");
+                    console.log(`Not enough payloads to compute intersections (have ${payloads_2.length}, need 2+)`);
+                }
+
+                if (false) {  // Previous tentative..., using payloads_1
+                    // 2 first payloads only for now
+                    if (payloads_1.length >= 2) {
+                        let pl = [];
+                        pl.push(payloads_1[0]);
+                        pl.push(payloads_1[1]);
+                        processConesIntersection(pl); // TODO Like on MPSToolBox.processIntersectionsList
+                        // Or better: ConesSolver.computeCones (as above with payloads_2)
+
+                    } else {
+                        console.log("Not enough payloads to compute intersections");
+                    }
                 }
             }
         }, 500);
@@ -3894,7 +3914,7 @@ let toggleForeground = () => {
 					let json = JSON.parse(value);
 					// console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
                     // alert('Got the Intersections!!\n' + JSON.stringify(json));
-                    let mess = `Intersections:\n` +
+                    let mess = `processConesIntersection - Intersections:\n` +
                                 `${decToSex(json[0].latitude, "NS")} / ${decToSex(json[0].longitude, "EW")}\n` +
                                 `${decToSex(json[1].latitude, "NS")} / ${decToSex(json[1].longitude, "EW")}\n` +
                                 `${decToSex(json[2].latitude, "NS")} / ${decToSex(json[2].longitude, "EW")}\n` +
@@ -3940,6 +3960,45 @@ let toggleForeground = () => {
 				}
 			}
 			messManager("processConesIntersection : Failed to get data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			// events.publish('valid', null);
+		});
+    }
+
+    // curl -X POST http://localhost:9999/mps/compute-cones -d '[ {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334}, {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014}, {"bodyName" : "Altair","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 32.47716666666667} ]'
+    function computeCones(payload) {
+      	let headers = [ {name: 'Accept', value: 'application/json'}];
+		let getData = getPromise(`/mps/compute-cones`,
+                                DEFAULT_TIMEOUT,
+                                'POST',
+                                [200, 201], // Can be an array
+                                payload,    // JSON.stringify(payload),  // data
+                                false,      // show traffic
+                                headers);
+		getData.then((value) => {
+         // console.log("Done:", value);
+			try {
+				if (value.length > 0) {
+					let json = JSON.parse(value);
+                    // TODO To be displayed in a better place
+                    let mess = `Calculated position - Intersections:\n` +
+                                `${decToSex(json.latitude, "NS")} / ${decToSex(json.longitude, "EW")}`;
+                    alert(mess);
+				} else {
+					console.log('Empty response');
+				}
+			} catch (error) {
+				console.error('For data', value);
+				console.error(error);
+			}
+		}, (error, errmess) => {
+			let message = "";
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message += mess.message;
+				}
+			}
+			messManager("computeCones : Failed to get data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
 			// events.publish('valid', null);
 		});
     }

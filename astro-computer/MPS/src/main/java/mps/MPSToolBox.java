@@ -703,7 +703,9 @@ public class MPSToolBox {
                         pointMap.get(ref.get()).add(pt);
                     } else {
                         // See distance with other lists (ref)
-                        System.out.printf("%s too far from %s (%f)\n", pt, ref.get(), nm);
+                        if (verbose) {
+                            System.out.printf("%s too far from %s (%f)\n", pt, ref.get(), nm);
+                        }
                         final Object[] keys = pointMap.keySet().toArray();
                         boolean found = false;
                         for (int k=0; k<keys.length; k++) {
@@ -726,7 +728,9 @@ public class MPSToolBox {
                     pointMap.put(pt, new ArrayList<>());
                 }
             });
-            System.out.printf("PointMap has %d entries\n", pointMap.keySet().size());
+            if (verbose) {
+                System.out.printf("PointMap has %d entries\n", pointMap.keySet().size());
+            }
             // We will do the average of the biggest list
             AtomicReference<List<GeoPoint>> restricted = new AtomicReference<>(null);
             AtomicInteger maxCard = new AtomicInteger(-1);

@@ -22,6 +22,7 @@ Based on the `http.HTTPServer`, aka `http-tiny-server`, in this project.
 - Process Intersections. ✅
   - Each intersection returns 4 points (2 on each circle)
   - `curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneName":"Saturn","bodyTwoName":"Jupiter","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},"coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}},{"bodyOneName":"Saturn","bodyTwoName":"Rigel","coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},"coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},"coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},"coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}}]'`
+- Process Intersections from List<ConesSolver.BodyData>. ✅ `curl -X POST http://localhost:9999/mps/compute-cones -d '[ {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334}, {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014}, {"bodyName" : "Altair","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 32.47716666666667} ]'`
 
 ## To build it
 From this module's root:

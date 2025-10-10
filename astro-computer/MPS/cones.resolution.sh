@@ -2,6 +2,7 @@
 #
 # Cones Resolution
 # Generate the input file from user's input, and pass it to PlayGround09
+# A data file can be provided from the CLI. Like inputSample*.txt.
 #
 export CP=./build/libs/MPS-1.0-all.jar
 export OPTIONS="-Dverbose=false"

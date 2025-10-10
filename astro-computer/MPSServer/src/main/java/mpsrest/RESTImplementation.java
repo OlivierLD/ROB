@@ -16,6 +16,7 @@ import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
 import implementation.almanac.AlmanacComputerImpl;
 import implementation.perpetualalmanac.Publisher;
+import mps.ConesSolver;
 import mps.MPSToolBox;
 import nmea.parser.StringParsers;
 import utils.TimeUtil;
@@ -114,6 +115,11 @@ public class RESTImplementation {
 					MPS_PREFIX + "/process-intersections",
 					this::processConesIntersections,
 					"Process the intersections of several MPSToolBox.ConeDefinition."),
+			new Operation(
+					"POST",
+					MPS_PREFIX + "/compute-cones",
+					this::computeCones,
+					"Process the the cones intersections (GeoPoint) from scratch (name, date, obsAlt), from a list of ConesSolver.BodyData. Can take some time..."),
 			new Operation( // QueryString contains date /positions-in-the-sky?at=2017-09-01T00:00:00 &fromL=...&fromG=... &wandering=true&stars=true&constellations=true
 					"GET",
 					MPS_PREFIX + "/positions-in-the-sky",
@@ -822,6 +828,84 @@ public class RESTImplementation {
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
 							.errorCode("MPS-0017")
+							.errorMessage(jpe.toString())
+							.errorStack(HTTPServer.dumpException(jpe)));
+			return response;
+		}
+		RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+		response.setPayload(content.getBytes());
+		return response;
+	}
+	private Response computeCones(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+
+		// Duh
+		if (false) {
+			try {
+				List<ConesSolver.BodyData> conesToSolve = new ArrayList<>();
+				conesToSolve.add(new ConesSolver.BodyData("Mars", "2025-10-07T15:36:00", null, null, 21.942333333333334));
+				conesToSolve.add(new ConesSolver.BodyData("Venus", "2025-10-07T15:36:00", null, null, 14.014));
+				conesToSolve.add(new ConesSolver.BodyData("Altair", "2025-10-07T15:36:00", null, null, 32.47716666666667));
+				String duh = mapper.writeValueAsString(conesToSolve);
+				System.out.printf("conesToSolve (payload) : [%s]\n", duh);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		ConesSolver.BodyData[] conesProperties = null;
+
+		if (request.getContent() != null && request.getContent().length > 0) {
+			String payload = new String(request.getContent());
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> processConesIntersections with payload %s", payload));
+			}
+			if (!"null".equals(payload)) {
+				StringReader stringReader = new StringReader(payload);
+				try {
+					conesProperties = mapper.readValue(stringReader, ConesSolver.BodyData[].class);
+					if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+						this.MPSRequestManager.getLogger().log(Level.INFO, String.format(">> computeCones with conePropertiess %s", Arrays.toString(conesProperties)));
+					}
+				} catch (Exception ex) {
+					System.err.println("--- computeCones ---");
+					ex.printStackTrace();
+					System.err.println("---------------------");
+
+					response = HTTPServer.buildErrorResponse(response,
+							Response.BAD_REQUEST,
+							new HTTPServer.ErrorPayload()
+									.errorCode("MPS-0015-1")
+									.errorMessage(ex.toString()));
+					return response;
+				}
+			}
+		}
+
+		GeoPoint avgPoint;
+		try {
+			avgPoint = ConesSolver.computeCones(Arrays.asList(conesProperties), "true".equals(System.getProperty("rest.mps.verbose")));
+		} catch (Exception ex) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0016-2")
+							.errorMessage(String.format("ConesSolver.computeCones: %s", ex.toString())));
+			return response;
+		}
+
+		String content;
+		try {
+			// Should contain the avg point
+			content = mapper.writeValueAsString(avgPoint);
+			if ("true".equals(System.getProperty("rest.mps.verbose"))) {
+				System.out.printf("Returned Content: %s\n", content);
+			}
+		} catch (JsonProcessingException jpe) {
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("MPS-0017-3")
 							.errorMessage(jpe.toString())
 							.errorStack(HTTPServer.dumpException(jpe)));
 			return response;
