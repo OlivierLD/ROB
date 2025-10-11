@@ -410,7 +410,6 @@ public class MPSToolBox {
     public static List<GeoPoint> resolve2Cones(Date firstTime, double firstObsAlt, double firstGHA, double firstDecl,
                                                Date secondTime, double secondObsAlt, double secondGHA, double secondDecl,
                                                double firstZStep, int nbLoops, boolean reverse, boolean verbose) {
-
         List<GeoPoint> result = null;
 
         // double smallest = Double.MAX_VALUE;
@@ -483,7 +482,6 @@ public class MPSToolBox {
                 closestPointBody2Second = geoPointsSecond.get(1).getPoint();
                 closestPointZBody2Second = geoPointsSecond.get(1).getZ();
             }
-
             zStep /= 10.0; // For the next loop
         }
 
@@ -496,11 +494,11 @@ public class MPSToolBox {
         return result;
     }
 
-    public static class MotEnoughIntersectionsException extends Exception {
-        public MotEnoughIntersectionsException() {
+    public static class NotEnoughIntersectionsException extends Exception {
+        public NotEnoughIntersectionsException() {
             super();
         }
-        public MotEnoughIntersectionsException(String message) {
+        public NotEnoughIntersectionsException(String message) {
             super(message);
         }
     }
@@ -508,7 +506,7 @@ public class MPSToolBox {
     private final static double CRITICAL_DIST = 5.0; // TODO Fix/tweak that one !... Change it from 5 to 15, to see the impact.
 
     public static GeoPoint processIntersectionsList(List<MPSToolBox.ConesIntersection> conesIntersectionList,
-                                                    boolean verbose) throws MotEnoughIntersectionsException {
+                                                    boolean verbose) throws NotEnoughIntersectionsException {
         if (verbose) {
             System.out.printf("We have %d intersections to process.\n", conesIntersectionList.size());
         }
@@ -549,7 +547,6 @@ public class MPSToolBox {
                         cone 2 - intersection 2 with cone 2 - intersection 2
 
                         Good luck.
-
                  */
 
                 for (int i = 0; i < conesIntersectionList.size(); i++) {
@@ -708,8 +705,10 @@ public class MPSToolBox {
                         }
                         final Object[] keys = pointMap.keySet().toArray();
                         boolean found = false;
-                        for (int k=0; k<keys.length; k++) {
-                            GeoPoint gpKey = (GeoPoint)keys[k];
+                        // for (int k=0; k<keys.length; k++) {
+                        for (Object key : keys) {
+                            // GeoPoint gpKey = (GeoPoint)keys[k];
+                            GeoPoint gpKey = (GeoPoint)key;
                             double dist = GeomUtil.haversineNm(gpKey, pt);
                             if (dist < CRITICAL_DIST) {
                                 ref.set(gpKey);
@@ -754,7 +753,7 @@ public class MPSToolBox {
             }
             return avgPoint;
         } else {
-            throw new  MotEnoughIntersectionsException(String.format("Not enough intersections to process. Need at least 2, got %d", conesIntersectionList.size()));
+            throw new NotEnoughIntersectionsException(String.format("Not enough intersections to process. Need at least 2, got %d", conesIntersectionList.size()));
         }
     }
 }

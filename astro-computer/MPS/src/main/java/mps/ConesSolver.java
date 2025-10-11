@@ -1,6 +1,5 @@
 package mps;
 
-import calc.CelestialDeadReckoning;
 import calc.GeoPoint;
 import calc.GeomUtil;
 import calc.calculation.AstroComputerV2;
@@ -43,7 +42,7 @@ public class ConesSolver {
      *                         |    5
      *                         0
      * @return The corresponding UTC Date
-     * @throws Exception
+     * @throws Exception when something goes wrong...
      */
     private static Calendar parseDuration(String duration) throws Exception {
         int year = Integer.parseInt(duration.substring(0, 4));
@@ -237,18 +236,18 @@ public class ConesSolver {
                     }
                     String bodyOne = listBodyData.get(i).getBodyName();
                     double altOne = listBodyData.get(i).getObsAlt(); // saturnObsAlt;
-                    double ghaOne = listBodyData.get(i).getGha(); // saturnGHA;
-                    double declOne = listBodyData.get(i).getDecl(); // saturnDecl;
+                    double ghaOne = listBodyData.get(i).getGha();    // saturnGHA;
+                    double declOne = listBodyData.get(i).getDecl();  // saturnDecl;
                     Date dateOne = parseDuration(listBodyData.get(i).getDate()).getTime(); // date.getTime();
 
                     String bodyTwo = listBodyData.get(j).getBodyName();
                     double altTwo = listBodyData.get(j).getObsAlt(); // jupiterObsAlt;
-                    double ghaTwo = listBodyData.get(j).getGha(); // jupiterGHA;
-                    double declTwo = listBodyData.get(j).getDecl(); // jupiterDecl;
+                    double ghaTwo = listBodyData.get(j).getGha();    // jupiterGHA;
+                    double declTwo = listBodyData.get(j).getDecl();  // jupiterDecl;
                     Date dateTwo = parseDuration(listBodyData.get(j).getDate()).getTime(); // date.getTime();
 
-                    int nbIter = 4;
-                    boolean reverse = false;
+                    int nbIter = 4;            // Hard-coded for now.
+                    boolean reverse = false;   // Hard-coded for now.
 
                     if (verbose) {
                         System.out.println("------------------------------------------------");
@@ -270,10 +269,10 @@ public class ConesSolver {
 
                     // Now, find the intersection(s) of the two cones...
                     List<GeoPoint> closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
-                            dateTwo, altTwo, ghaTwo, declTwo,
-                            firstZStep, nbIter, reverse, verbose);
+                                                                       dateTwo, altTwo, ghaTwo, declTwo,
+                                                                       firstZStep, nbIter, reverse, verbose);
 
-                    if (closests != null) {
+                    if (/*closests != null ||*/ closests.size() >= 4) {
                         final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
                         final double d2 = GeomUtil.haversineNm(closests.get(2), closests.get(3));
                         if (verbose) {
@@ -284,12 +283,11 @@ public class ConesSolver {
                         }
                         // For later
                         conesIntersectionList.add(new MPSToolBox.ConesIntersection(bodyOne, bodyTwo,
-                                closests.get(0), closests.get(1),
-                                closests.get(2), closests.get(3)));
+                                                                                   closests.get(0), closests.get(1),
+                                                                                   closests.get(2), closests.get(3)));
                     } else {
                         System.out.println("Oops ! Not found...");
                     }
-
                 }
             }
         }
@@ -308,7 +306,7 @@ public class ConesSolver {
                 System.out.printf("Found (avg) intersection at %s\n", avgPoint);
             }
             return avgPoint;
-        } catch (MPSToolBox.MotEnoughIntersectionsException mei) {
+        } catch (MPSToolBox.NotEnoughIntersectionsException mei) {
             // mei.printStackTrace();
             throw new RuntimeException(mei);
         }
@@ -317,7 +315,7 @@ public class ConesSolver {
     /**
      * For tests and validation
      *
-     * @param args
+     * @param args CLI prms.
      */
     public static void main(String... args) {
 
@@ -330,7 +328,7 @@ public class ConesSolver {
         } else {
             File inputFile = new File(args[0]);
             if (!inputFile.exists()) {
-                throw new RuntimeException(String.format("File %s was not found"));
+                throw new RuntimeException(String.format("File %s was not found", inputFile.getAbsolutePath()));
             } else {
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(inputFile));
@@ -395,8 +393,8 @@ public class ConesSolver {
                         }
                     }
                     br.close();
-                } catch (FileNotFoundException fnfe) {
-                    throw new RuntimeException(fnfe);
+//                } catch (FileNotFoundException fnfe) {
+//                    throw new RuntimeException(fnfe);
                 } catch (IOException ioe) {
                     throw new RuntimeException(ioe);
                 }

@@ -32,7 +32,7 @@ public class PlayGround09 {
      }
 
     /*
-     * Point of reference, user's position
+     * Point of reference, user's position. FOR TESTS ONLY!!
      * Used for Observed Altitude calculation
      * Should be the one found at the end.
      */
@@ -228,7 +228,7 @@ public class PlayGround09 {
         } else {
             File inputFile = new File(args[0]);
             if (!inputFile.exists()) {
-                throw new RuntimeException(String.format("File %s was not found"));
+                throw new RuntimeException(String.format("File %s was not found", inputFile.getAbsolutePath()));
             } else {
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(inputFile));
@@ -324,15 +324,15 @@ public class PlayGround09 {
                     System.out.printf("[%d, %d], %s and %s\n", i, j, listBodyData.get(i).getBodyName(), listBodyData.get(j).getBodyName());
                     String bodyOne = listBodyData.get(i).getBodyName();
                     double altOne = listBodyData.get(i).getObsAlt(); // saturnObsAlt;
-                    double ghaOne = listBodyData.get(i).getGha(); // saturnGHA;
-                    double declOne = listBodyData.get(i).getDecl(); // saturnDecl;
-                    Date dateOne = listBodyData.get(i).getDate(); // date.getTime();
+                    double ghaOne = listBodyData.get(i).getGha();    // saturnGHA;
+                    double declOne = listBodyData.get(i).getDecl();  // saturnDecl;
+                    Date dateOne = listBodyData.get(i).getDate();    // date.getTime();
 
                     String bodyTwo = listBodyData.get(j).getBodyName();
                     double altTwo = listBodyData.get(j).getObsAlt(); // jupiterObsAlt;
-                    double ghaTwo = listBodyData.get(j).getGha(); // jupiterGHA;
-                    double declTwo = listBodyData.get(j).getDecl(); // jupiterDecl;
-                    Date dateTwo = listBodyData.get(j).getDate(); // date.getTime();
+                    double ghaTwo = listBodyData.get(j).getGha();    // jupiterGHA;
+                    double declTwo = listBodyData.get(j).getDecl();  // jupiterDecl;
+                    Date dateTwo = listBodyData.get(j).getDate();    // date.getTime();
 
                     int nbIter = 4;
                     boolean reverse = false;
@@ -396,7 +396,7 @@ public class PlayGround09 {
 
                 System.out.printf("==> Difference/offset: %.02f nm\n", GeomUtil.haversineNm(original, avgPoint));
             }
-        } catch (MPSToolBox.MotEnoughIntersectionsException mei) {
+        } catch (MPSToolBox.NotEnoughIntersectionsException mei) {
             mei.printStackTrace();
         }
         System.out.println("------- End of the story -------");

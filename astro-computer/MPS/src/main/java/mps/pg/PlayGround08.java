@@ -359,7 +359,7 @@ public class PlayGround08 {
             System.out.printf("=> Compare to original position: %s\n", original);
 
             System.out.printf("==> Difference/offset: %.02f nm\n", GeomUtil.haversineNm(original, avgPoint));
-        } catch (MPSToolBox.MotEnoughIntersectionsException mei) {
+        } catch (MPSToolBox.NotEnoughIntersectionsException mei) {
             mei.printStackTrace();
         }
         System.out.println("------- End of the story -------");

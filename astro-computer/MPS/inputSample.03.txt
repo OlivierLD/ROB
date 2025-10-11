@@ -1,0 +1,10 @@
+Position Latitude=N 47 40.66' Longitude=W 3º08.14'
+Body=Mars;Date=2025-10-07T15:36:00;
+Body=Venus;Date=2025-10-07T15:36:00
+Body=Altair;Date=2025-10-07T15:36:00
+Body=Sun;Date=2025-10-07T15:36:00
+Body=Moon;Date=2025-10-07T15:36:00
+Body=Polaris;Date=2025-10-07T15:36:00
+Body=Saturn;Date=2025-10-07T15:36:00
+Body=Jupiter;Date=2025-10-07T15:36:00
+Body=Spica;Date=2025-10-07T15:36:00
