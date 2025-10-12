@@ -488,7 +488,7 @@ Done
 
 #### Une premi&egrave;re impl&eacute;mentation, web front-end et HTTP/REST back-end
 
-Apres avoir d&eacute;marr&eacute; le serveur MPS (voir le project `MPSServer`, jumeau de celui-ci), et charg&eacute; la page web ad&eacute;quate dans un navigateur, 
+Apr&egrave;s avoir d&eacute;marr&eacute; le serveur MPS (voir le project `MPSServer`, jumeau de celui-ci), et charg&eacute; la page web ad&eacute;quate (`mps.02.html`) dans un navigateur, 
 l'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la date de l'observation, et la hauteur (corrig&eacute;e) de l'astre :
 
 
