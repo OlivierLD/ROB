@@ -1,8 +1,10 @@
 # M&eacute;thode du Plan des Sommets (MPS)
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
-Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir d'une observation au sextant d'un astre.  
-Ceci requiert - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
+Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir de l'observation d'un astre au sextant.  
+Ceci requiert - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte - &agrave; la seconde pr&egrave;s - de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
+
+<image src="./images/cone.png" width="40"/> Ce document est en chantier...  
 
 ---
 **Sommaire**
@@ -17,8 +19,6 @@ Ceci requiert - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre 
 ---
 
 ## Introduction
-<image src="./images/cone.png" width="40"/> Ce document est en chantier...  
-
 On veut voir si cette m&eacute;thode est applicable manuellement - sans recours &agrave; l'informatique - pour la partie (de cette m&eacute;thode) applicable aux astres, les satellites ne concernant
 gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.      
 &Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e.  
@@ -36,7 +36,7 @@ L'&eacute;quation &agrave; r&eacute;soudre n'est pas triviale..., c'est bien l'o
 Mais on voit bien ici que la d&eacute;termination de ces cercles d'&eacute;gales hauteurs ne fait en aucun cas intervenir
 une position estim&eacute;e. On a juste besoin ici de conna&icirc;tre :
 - La hauteur observ&eacute;e de l'astre
-- L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e).
+- L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e, aka Pg).
 
 > _Note_ :  
 > Toutes les figures de ce document - &agrave; l'exception des trois premi&egrave;res - sont r&eacute;alis&eacute;es
