@@ -29,7 +29,7 @@ if [[ "${ASK_USER}" == "true" ]]; then
   echo "Position Latitude=${LATITUDE} Longitude=${LONGITUDE}" >> cones.input.txt
   #
   KEEP_LOOPING=true
-  echo -e "Now, you will be prompted to enter body names, dates, and observed altitudes.\n"
+  echo -e "\nNow, you will be prompted to enter body names, and dates.\n"
   while [[ "${KEEP_LOOPING}" == "true" ]]; do
     echo -en "Body name: "
     read BODY_NAME

@@ -507,7 +507,8 @@ You will be prompted to enter the user's position.
 
 Latitude (format like N 47º40.66'):  N 47º40.66'
 Longitude (format like W 3º08.14'):  W 3º08.14'
-Now, you will be prompted to enter body names, dates, and observed altitudes.
+
+Now, you will be prompted to enter body names, and dates.
 
 Body name: Venus
 Date (duration format): 2025-10-07T15:36:00
