@@ -59,8 +59,8 @@ une position estim&eacute;e. On a juste besoin ici de conna&icirc;tre :
 ## Rappels...
 
 ### Hauteur et azimut d'un astre
-_Attention_ : ce qu'on appelle la **hauteur** d'un astre dans les lignes qui suivent est l'_**angle**_ apparent que fait un astre avec l'horizon,
-vu de la position de l'observateur. Ceci est visible et illustr&eacute; sur les figures qui suivent. `h` est un _**angle**_, est non pas une distance... Il en est pour qui c'est potentiellement ambigu. 
+> _Attention_ : ce qu'on appelle la **hauteur** d'un astre dans les lignes qui suivent est l'_**angle**_ apparent que fait un astre avec l'horizon,
+> vu de la position de l'observateur. Ceci est visible et illustr&eacute; sur les figures qui suivent. `h` est un _**angle**_, est non pas une distance... Il en est pour qui c'est potentiellement ambigu. 
 
 Dans les formules suivantes : 
 - `D` est la d&eacute;clinaison de l'astre observ&eacute; (calculée ou trouvée dans les éphémérides)
