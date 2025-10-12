@@ -499,6 +499,51 @@ La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
 ![MPS 102](./images/mps.102.png)  
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
+#### Pour les tests
+Le script `what.should.i.see.sh` peut aider &agrave; trouver les hauteurs qu'on devrait observer, pour un astre et une heure (date) donn&eacute;s.
+```
+$ ./what.should.i.see.sh 
+You will be prompted to enter the user's position.
+
+Latitude (format like N 47º40.66'):  N 47º40.66'
+Longitude (format like W 3º08.14'):  W 3º08.14'
+Now, you will be prompted to enter body names, dates, and observed altitudes.
+
+Body name: Venus
+Date (duration format): 2025-10-07T15:36:00
+More [n]|y ? > y
+Ok, another one.
+Body name: Mars
+Date (duration format): 2025-10-07T15:36:00
+More [n]|y ? > y
+Ok, another one.
+Body name: Altair
+Date (duration format): 2025-10-07T15:36:00
+More [n]|y ? > 
+Now proceeding.
+Read line [Body=Venus;Date=2025-10-07T15:36:00]
+        Body : [Venus]
+        Date : [2025-10-07T15:36:00]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Venus at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 14.013912 ( 14º00.83')
+Read line [Body=Mars;Date=2025-10-07T15:36:00]
+        Body : [Mars]
+        Date : [2025-10-07T15:36:00]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Mars at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 21.942255 ( 21º56.54')
+Read line [Body=Altair;Date=2025-10-07T15:36:00]
+        Body : [Altair]
+        Date : [2025-10-07T15:36:00]
+Calculation launched for 2025-Oct-07 15:36:00 UTC
+For Altair at 2025-Oct-07 15:36:00 UTC, ObsAlt should be 32.477157 ( 32º28.63')
+We have 3 bodies.
+Venus:   At 2025-Oct-07 15:36:00 UTC     ObsAlt:  14º00.83' (14.013912),         GHA:  77º04.14' (77.068942),    Decl: 4º22.30'N (4.371674)
+Mars:    At 2025-Oct-07 15:36:00 UTC     ObsAlt:  21º56.54' (21.942255),         GHA:  32º35.17' (32.586194),    Decl: 15º05.10'S (-15.084996)
+Altair:  At 2025-Oct-07 15:36:00 UTC     ObsAlt:  32º28.63' (32.477157),         GHA:  312º31.51' (312.525102),  Decl: 8º56.33'N (8.938912)
+------- End of the story -------
+Done
+```
+
 ### R&eacute;soudre l'&eacute;quation de la distance entre les points de deux cercles...
 Il doit y avoir un - voire deux - point(s) des cercles o&ugrave; cette distance est nulle.
 
