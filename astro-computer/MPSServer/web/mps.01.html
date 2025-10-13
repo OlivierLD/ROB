@@ -1756,7 +1756,8 @@ let toggleForeground = () => {
 <div id="full-foreground" style="display: block;">
     <div style="padding: 6px; border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px; margin-top: 50px;">
         <small>
-            Once the page is loaded, all calculations and renderings happen only in the browser, it generates absolutely NO network traffic.<br/>
+            All renderings happen only in the browser, it generates absolutely NO network traffic.<br/>
+            Some REST calls are made to the MPSServer, for cones related calculations.<br/>
             Guaranteed <b><i>0%</i></b> external libraries (100% pure organic HTML5/CSS3/ES6), no GMO.
         </small>
     </div>
@@ -3518,9 +3519,14 @@ let toggleForeground = () => {
         });
     }
 
-    function messManager(mess) {
-        // console.error(JSON.stringify(mess, null, 2));
-        alert(JSON.stringify(mess, null, 2));
+    function messManager(err, mess) {
+        // console.error(mess);
+        // alert(mess); // JSON.stringify(mess, null, 2));
+        if (mess) {
+            showCustomAlert(err, mess);
+        } else {
+            alert(err)
+        }
     }
 
 	function fetchBodyList() {
@@ -3553,7 +3559,8 @@ let toggleForeground = () => {
 					message += mess.message;
 				}
 			}
-			messManager("fetchBodyList : Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
+			messManager("fetchBodyList : Failed to get bodies data...",
+            (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
 			// events.publish('valid', null);
 		});
 	}
