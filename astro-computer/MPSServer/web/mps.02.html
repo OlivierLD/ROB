@@ -1585,7 +1585,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; Java)<span style="font-size: 0.75em;">- MPS for real</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; Java)<span style="font-size: 0.75em;"> - MPS for real</span></h1>
     </div>
     <div style="text-align: right;"><small>Last code update Aug 20, 2025, 07:00 CET</small></div>
 </div>
@@ -3988,7 +3988,6 @@ let toggleForeground = () => {
                     // To be displayed in the "mps-data" box.
                     let mess = `Calculated intersection:<br/>` +
                                 `<b>${decToSex(json.latitude, "NS")} / ${decToSex(json.longitude, "EW")}</b>`;
-                    // alert(mess);
 
                     let mpsData = document.getElementById('mps-data');
                     let before = mpsData.innerHTML;
@@ -3998,6 +3997,7 @@ let toggleForeground = () => {
                     }
                     mpsData.innerHTML = newData;
 
+                    messManager("Calculated intersection", `<b>${decToSex(json.latitude, "NS")} / ${decToSex(json.longitude, "EW")}</b>`);
 
 				} else {
 					console.log('Empty response');

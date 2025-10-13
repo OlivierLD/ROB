@@ -460,6 +460,7 @@ public class MPSToolBox {
                     closestPointZBody2Second = geoPointsFirst.get(3).getZ();
                 } else {
                     System.err.printf("Ooops !!! Second intersection was not found ! Only %d point(s) available.\n", geoPointsFirst.size());
+                    throw new RuntimeException(String.format("Ooops !!! Second intersection was not found ! Only %d point(s) available.", geoPointsFirst.size()));
                 }
             }
 

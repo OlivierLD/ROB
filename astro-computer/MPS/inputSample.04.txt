@@ -1,0 +1,4 @@
+Position Latitude=N 47º40.66' Longitude=W 3º08.14'
+Body=Sun;Date=2025-10-13T09:47:30
+Body=Moon;Date=2025-10-13T09:47:30
+Body=Mars;Date=2025-10-13T09:47:30

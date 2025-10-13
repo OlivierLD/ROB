@@ -657,6 +657,7 @@ On cherche donc les valeurs `Z1` et `Z2` pour lesquelles
 ```
 f1(Z1) = f2(Z2)
 ```
+... qui constitue donc un syst&egrave;me de **1** &eacute;quation &agrave; **2** inconnues. Ouille...
 
 ---
 
