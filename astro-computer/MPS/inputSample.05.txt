@@ -1,0 +1,4 @@
+# Input for cones.resolution.sh
+Body=Sun; Date=2025-10-13T09:47:30;ObsAlt=27º16.87'
+Body=Moon;Date=2025-10-13T09:47:30;ObsAlt=40º45.58'
+Body=Mars;Date=2025-10-13T09:47:30;ObsAlt=8º51.09'

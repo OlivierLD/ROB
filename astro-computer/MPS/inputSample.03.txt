@@ -1,3 +1,4 @@
+# Input for what.should.i.see.sh
 Position Latitude=N 47º40.66' Longitude=W 3º08.14'
 Body=Mars;Date=2025-10-07T15:36:00
 Body=Venus;Date=2025-10-07T15:36:00

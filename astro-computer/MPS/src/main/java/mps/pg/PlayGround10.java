@@ -291,9 +291,9 @@ public class PlayGround10 {
 
         // Good to go ?
         System.out.printf("We have %d bodies.\n", listBodyData.size());
-        listBodyData.forEach(bd-> System.out.printf("%s:\t At %s\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
+        listBodyData.forEach(bd-> System.out.printf("%s:\t At %s (%s)\t ObsAlt: %s (%f),\t GHA: %s (%f),\t Decl: %s (%f)\n",
                                                     bd.getBodyName(),
-                                                    SDF_UTC.format(bd.getDate()),
+                                                    SDF_UTC.format(bd.getDate()), DURATION_FMT.format(bd.getDate()),
                                                     GeomUtil.decToSex(bd.getObsAlt(), GeomUtil.SHELL, GeomUtil.NONE),
                                                     bd.getObsAlt(),
                                                     GeomUtil.decToSex(bd.getGha(), GeomUtil.SHELL, GeomUtil.NONE),
