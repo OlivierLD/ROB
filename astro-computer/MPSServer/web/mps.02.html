@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--
- | Real Time Celestial status
+ | Real Time Celestial status.
+ | MPS Positioning System demo, WiP. Several components are not used, or hidden..., maybe some day.
  |
  | All the skill in the "compute" function below, invoked on click.
  | Dynamic background test.
@@ -1179,12 +1180,26 @@ let toggleForeground = () => {
             opacity: 1;
         }
 
+        .button-like {
+            position: relative;
+            background-color: darkgrey;
+            color: navy;
+            border: 1px solid silver;
+            border-radius: 6px;
+            padding: 0 4px;
+        }
+
+        .button-like:hover {
+            box-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px cyan;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
 
 <!-- A node to be cloned, for the bodies and their observed altitude -->
-<div id="one-body-template" style="display: none; grid-template-columns: 30px 130px auto; text-align: left;">
+<div id="one-body-template" style="display: none; grid-template-columns: 30px 150px 800px; text-align: left;">
     <input type="checkbox" name="${body}" id="${body}" value="${body}"/>
     <label for="${body}">${body}</label>
     <div>On
@@ -1211,6 +1226,8 @@ let toggleForeground = () => {
         Obs Alt
         <input class="alt-deg" type="number" placeholder="degrees" min="0" max="90" title="Observed Altitude in degrees">°
         <input class="alt-min" type="number" placeholder="minutes" min="0.00" max="59.99" title="minutes" size="4">'
+
+        <a class="button-like" onclick="reverseHeightForBody(this);" title="Calculate what the altitue should be">Reverse</a>
     </div>
 </div>
 
@@ -1725,9 +1742,9 @@ let toggleForeground = () => {
     </div>
 
     <!--
-     | WORLD MAP BG. MERCATOR
+     | WORLD MAP BG. MERCATOR, hidden.
      +-->
-    <div id="world-map-mercator" style="grid-area: wm-m; text-align: center;">
+    <div id="world-map-mercator" style="display: none; grid-area: wm-m; text-align: center;">
         <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Mercator</div>
         <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
             <world-map id="world-map-02"
@@ -1740,9 +1757,9 @@ let toggleForeground = () => {
     </div>
 
     <!--
-     | WORLD MAP BG. ANAXIMANDRE
+     | WORLD MAP BG. ANAXIMANDRE, hidden.
      +-->
-    <div id="world-map-anaximandre" style="grid-area: wm-a; text-align: center;">
+    <div id="world-map-anaximandre" style="display: none; grid-area: wm-a; text-align: center;">
         <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Anaximandre</div>
         <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
             <world-map id="world-map-03"
@@ -1754,7 +1771,8 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <div id="graph-lat" style="grid-area: gl; text-align: center;">
+    <!-- Hidden -->
+    <div id="graph-lat" style="display: none; grid-area: gl; text-align: center;">
         <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Graphs (tentatives...)</div>
         <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
             <graph-display id="graph-01"
@@ -1768,7 +1786,8 @@ let toggleForeground = () => {
                             title="Latitudes"/>
         </div>
     </div>
-    <div id="graph-lng" style="grid-area: gg; text-align: center;">
+    <!-- Hidden -->
+    <div id="graph-lng" style="display: none; grid-area: gg; text-align: center;">
         <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
             <graph-display id="graph-02"
                             width="800"
@@ -2229,6 +2248,88 @@ let toggleForeground = () => {
         document.getElementById('UTC-hour').value = (now.getUTCHours().toString().length < 2 ? "0" : "") + now.getUTCHours();
         document.getElementById('UTC-minute').value = (now.getUTCMinutes().toString().length < 2 ? "0" : "") + now.getUTCMinutes();
         document.getElementById('UTC-second').value = (now.getUTCSeconds().toString().length < 2 ? "0" : "") + now.getUTCSeconds();
+    };
+
+    let reverseHeightForBody = (button) => {
+
+        // This caluclation happens on the Client (in ES6).
+
+        let body = button.parentNode.parentNode.querySelector('label').innerText;
+        let year = parseInt(button.parentNode.querySelector(".year").value);
+        let month = parseInt(button.parentNode.querySelector(".month").value);
+        let day = parseInt(button.parentNode.querySelector(".day").value);
+        let hours = parseInt(button.parentNode.querySelector(".hours").value);
+        let minutes = parseInt(button.parentNode.querySelector(".minutes").value);
+        let seconds = parseInt(button.parentNode.querySelector(".seconds").value);
+
+        let UTCDuration = `${year.toFixed(0)}-${month.toFixed(0).padStart(2,'0')}-${day.toFixed(0).padStart(2,'0')}T${hours.toFixed(0).padStart(2,'0')}:${minutes.toFixed(0).padStart(2,'0')}:${seconds.toFixed(0).padStart(2,'0')}`;
+
+        let calculationData = {
+            utcyear: year,
+            utcmonth: month,
+            utcday: day,
+            utchour: hours,
+            utcminute: minutes,
+            utcsecond: seconds,
+            deltaT: DELTA_T,
+            noPlanets: false,
+            noStars: false
+        };
+
+        let computed = sampleMain(calculationData); // in app.js
+        if (consoleVerbose) {
+            console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
+            console.log("Result:\n", JSON.stringify(computed, null, 2));
+        }
+
+
+        let gha = 0, dec = 0;
+        switch (body) {
+            case 'Sun':
+                gha = computed.sun.GHA.raw;
+                dec = computed.sun.DEC.raw;
+                break;
+            case 'Moon':
+                gha = computed.moon.GHA.raw;
+                dec = computed.moon.DEC.raw;
+                break;
+            case 'Venus':
+                gha = computed.venus.GHA.raw;
+                dec = computed.venus.DEC.raw;
+                break;
+            case 'Mars':
+                gha = computed.mars.GHA.raw;
+                dec = computed.mars.DEC.raw;
+                break;
+            case 'Jupiter':
+                gha = computed.jupiter.GHA.raw;
+                dec = computed.jupiter.DEC.raw;
+                break;
+            case 'Saturn':
+                gha = computed.saturn.GHA.raw;
+                dec = computed.saturn.DEC.raw;
+                break;
+            default:
+                let theStar = computed.stars.filter(star => {
+                    return star.name == body;
+                });
+                if (theStar && theStar[0]) {
+                    gha = theStar[0].gha;
+                    dec = theStar[0].decl;
+                }
+                break;
+        }
+
+        // SRU - Sight Reduction Utility
+        try {
+            let sru = sightReduction(userPos.latitude, userPos.longitude, gha, dec);
+            // console.log(`${body} at ${UTCDuration}, H: ${sru.alt}`);
+
+            button.parentNode.querySelector(".alt-deg").value = Math.trunc(sru.alt);
+            button.parentNode.querySelector(".alt-min").value = ((sru.alt - Math.trunc(sru.alt)) * 60.0).toFixed(2);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     let interval = undefined;
