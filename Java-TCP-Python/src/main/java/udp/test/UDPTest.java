@@ -41,6 +41,7 @@ public class UDPTest {
     }
 
     public static void main(String... args) {
+        System.out.println("Get ready...");
         UDPTest test = new UDPTest();
         test.setup();
         test.whenCanSendAndReceivePacket_thenCorrect();

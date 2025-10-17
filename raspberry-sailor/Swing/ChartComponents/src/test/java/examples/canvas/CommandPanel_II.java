@@ -253,8 +253,8 @@ public class CommandPanel_II
         //      spatial = new Spatial();
         //    spatial.drawChart(chartPanel, gr);
         if (from != null && to != null) {
-            drawRhumbLine(gr, from.getL(), from.getG(), to.getL(), to.getG());
-            plotGreatCircle(gr, from.getL(), from.getG(), to.getL(), to.getG());
+            drawRhumbLine(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
+            plotGreatCircle(gr, from.getLatitude(), from.getLongitude(), to.getLatitude(), to.getLongitude());
         }
         boolean title = true;
         if (title) {

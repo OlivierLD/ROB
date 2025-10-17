@@ -3418,6 +3418,12 @@ $--VPW,x.x,N,x.x,M*hh&lt;CR&gt;&lt;LF&gt;
 		return calendar.getTimeInMillis() - (long) (utcOffset * (3_600_000));
 	}
 
+	/**
+	 *
+	 * @param duration like "2025-10-17T07:52:10"
+	 * @return "2025/10/17 07:52:10"
+	 * @throws RuntimeException
+	 */
 	public static String durationToExcel(String duration)
 					throws RuntimeException {
 		String yyyy = duration.substring(0, 4);

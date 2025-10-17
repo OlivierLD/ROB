@@ -36,7 +36,7 @@ public class StringGenerator {
 	private final static double KNOTS_TO_MS  = 1.852 * 0.27777777;
 
 /*
- * Common talker IDs
+ * Common talker IDs:
   |================================================================
   |GP    |  Global Positioning System receiver
   |LC    |  Loran-C receiver
@@ -497,6 +497,9 @@ public class StringGenerator {
 		return "$" + rmb;
 	}
 
+	/*
+		Apparent Wind Speed nd Angle
+	 */
 	public static String generateMWV(String devicePrefix, double aws, int awa) {
 		return generateMWV(devicePrefix, aws, awa, StringParsers.APPARENT_WIND);
 	}
@@ -514,6 +517,9 @@ public class StringGenerator {
 		return "$" + mwv;
 	}
 
+	/*
+		True Wind Speed and Angle
+	 */
 	public static String generateVWT(String devicePrefix, double tws, double twa) {
 		String vwt = devicePrefix + "VWT,";
 		vwt += (SPEED_FMT.format(Math.abs(twa)) + "," + (twa > 0 ? "R" : "L") + ",");
@@ -527,6 +533,9 @@ public class StringGenerator {
 		return "$" + vwt;
 	}
 
+	/*
+		Water speed and heading
+	 */
 	public static String generateVHW(String devicePrefix, double bsp, int cc) {
 		String vhw = devicePrefix + "VHW,,,";
 		vhw += (LONG_DEG_FMT.format(cc) + ",M,");
@@ -538,6 +547,9 @@ public class StringGenerator {
 		return "$" + vhw;
 	}
 
+	/*
+		Heading, Magnetic.
+	 */
 	public static String generateHDM(String devicePrefix, int cc) {
 		String hdm = devicePrefix + "HDM,";
 		hdm += (LONG_DEG_FMT.format(cc) + ",M");
@@ -548,6 +560,9 @@ public class StringGenerator {
 		return "$" + hdm;
 	}
 
+	/*
+	     Time & Date - UTC, day, month, year and local time zone
+	 */
 	public static String generateZDA(String devicePrefix, long epoch) {
     /* Structure is
      * $GPZDA,hhmmss.ss,dd,mm,yyyy,xx,yy*CC

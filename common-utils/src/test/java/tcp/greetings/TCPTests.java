@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * Requires a greetings.TCPServer to be running. Hence the @Before.
+ * Requires a greetings.TCPServer to be running. Hence, the @Before.
  */
 public class TCPTests {
 
@@ -59,6 +59,7 @@ public class TCPTests {
 		try {
 			String response = client.sendMessage("hello server");
 			assertEquals("hello client", response);
+			System.out.println("\t>> Response received, OK.");
 		} catch (ConnectException ce) {
 			System.out.println(ce.toString());
 			System.out.println("Check your server...");
