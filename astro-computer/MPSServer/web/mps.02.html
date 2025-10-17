@@ -15,7 +15,7 @@
 <html lang="en_US">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/jpg" href="./palm.04.jpg">
+    <link rel="icon" type="image/png" href="./images/sextant.png">
     <title>MPS For real</title>
 
     <!-- Main Module -->
@@ -1187,6 +1187,7 @@ let toggleForeground = () => {
             border: 1px solid silver;
             border-radius: 6px;
             padding: 0 4px;
+            font-size: 0.8rem;
         }
 
         .button-like:hover {
@@ -1227,7 +1228,7 @@ let toggleForeground = () => {
         <input class="alt-deg" type="number" placeholder="degrees" min="0" max="90" title="Observed Altitude in degrees">°
         <input class="alt-min" type="number" placeholder="minutes" min="0.00" max="59.99" title="minutes" size="4">'
 
-        <a class="button-like" onclick="reverseHeightForBody(this);" title="Calculate what the altitue should be">Reverse</a>
+        <a class="button-like" onclick="reverseHeightForBody(this);" title="Calculate what the altitue should be" style="display: none; margin-left: 10px;">Reverse</a>
     </div>
 </div>
 
@@ -1932,6 +1933,15 @@ let toggleForeground = () => {
                          style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="mps-char">&#9658;</span> Select the bodies for MPS Cones</div>
                     <div id="user-mps-widgets" class="smooth" style="width: 80%; float: left; padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                         Select the bodies, and provide the observed altitude and observation (UTC) time.
+                        <!-- input type="checkbox" id="enable-reverse" onchange="enableReverseCalc(this);"><small>Enable reverse calc.</small-->
+                        <div class="switch-container" style="margin-left: 30px;" title="Enable Reverse Calculation for Altitudes">
+                            <label class="switch switch-element">
+                                <input id="enable-reverse" type="checkbox" onchange="enableReverseCalc(this);">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="switch-element" style="width: 150%; text-align: left;">Enable Reverse Calculation</span>
+                        </div>
+
                         <div id="bodies-container" class="" style="padding: 10px; max-height: 200px; display: grid; /*grid-area: prmsl;*/ max-width: 840px; border: 1px solid silver; border-radius: 5px; margin-top: 10px; overflow-y: scroll; overflow-x: scroll;">
                             <!-- populated by populateBodyList() -->
                         </div>
@@ -2250,9 +2260,16 @@ let toggleForeground = () => {
         document.getElementById('UTC-second').value = (now.getUTCSeconds().toString().length < 2 ? "0" : "") + now.getUTCSeconds();
     };
 
+    let enableReverseCalc = (cb) => {
+        let buttons = document.querySelectorAll('#bodies-container a.button-like');
+        buttons.forEach(b => {
+            b.style.display = cb.checked ? 'inline-block' : 'none';
+        });
+    };
+
     let reverseHeightForBody = (button) => {
 
-        // This caluclation happens on the Client (in ES6).
+        // This calculation happens on the Client (in ES6).
 
         let body = button.parentNode.parentNode.querySelector('label').innerText;
         let year = parseInt(button.parentNode.querySelector(".year").value);
@@ -2281,7 +2298,6 @@ let toggleForeground = () => {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
             console.log("Result:\n", JSON.stringify(computed, null, 2));
         }
-
 
         let gha = 0, dec = 0;
         switch (body) {
