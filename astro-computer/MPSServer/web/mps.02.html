@@ -1228,7 +1228,7 @@ let toggleForeground = () => {
         <input class="alt-deg" type="number" placeholder="degrees" min="0" max="90" title="Observed Altitude in degrees">°
         <input class="alt-min" type="number" placeholder="minutes" min="0.00" max="59.99" title="minutes" size="4">'
 
-        <a class="button-like" onclick="reverseHeightForBody(this);" title="Calculate what the altitue should be" style="display: none; margin-left: 10px;">Reverse</a>
+        <a class="button-like" onclick="reverseHeightForBody(this);" title="Calculate what the altitue should be&#13;for ${body}" style="display: none; margin-left: 10px;">Reverse</a>
     </div>
 </div>
 
@@ -1262,7 +1262,12 @@ let toggleForeground = () => {
                 Use the Show/Hide Computed Data button to display the computed data in the foreground.
             </p>
             <p>
-                Select the bodies you want to display tha cones of (for the date YOU've set).
+                Select the bodies you want to display the cones for (for the date YOU've set).<br/>
+                You can also set the observed altitude for each body, to see how it affects the cone.<br/>
+                Based on those cones, the intersection will be calculated, to find the observer's position.<br/>
+                You can click on the Reverse link to calculate what the observed altitude should be for that body, from the user's position.<br/>
+                For a better precision, the bearing of the selected bodies shpuld be as close to 120&deg; as possible, just like with an hand bearing compass.<br/>
+                To trigger a cone calcuation, you need a repaint, like when you click the "Set position" button.
             </p>
             <p>
                 The Marquee panel (available from the hamburger &#8801; menu) will show the same data, formatted,
@@ -1826,9 +1831,15 @@ let toggleForeground = () => {
                             <br/>
                             Then you can show or hide the computed data... And you can use the "Help" in the sliding menu.
                             <br/>
-                            The "Set Position" button will also display the expected MPS cones.
+                            <!-- The "Set Position" button will also display the expected MPS cones. -->
                             <br/>
-                            Select the bodies you want to display tha cones of (for the date YOU've set).
+                            <h4>MPS Cones Computing</h4>
+                            Select the bodies you want to display the cones for (for the date YOU've set).<br/>
+                            You can also set the observed altitude for each body, to see how it affects the cone.<br/>
+                            Based on those cones, the intersection will be calculated, to find the observer's position.<br/>
+                            You can click on the Reverse link to calculate what the observed altitude should be for that body, from the user's position.<br/>
+                            For a better precision, the bearing of the selected bodies shpuld be as close to 120&deg; as possible, just like with an hand bearing compass.<br/>
+                            To trigger a cone calcuation, you need a repaint, like when you click the "Set position" button.
                         </div>
                     </div>
                 </div>
@@ -1839,7 +1850,7 @@ let toggleForeground = () => {
                 <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                     <!-- See https://unicode-table.com/en/sets/arrow-symbols/ -->
                     <div id="user-pos-switch" onclick="expandCollapseSetPosData();" title="Click to expand/collase"
-                        style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="pos-char">&#9658;</span> Position on Earth</div>
+                        style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="pos-char">&#9658;</span> User's Position on Earth</div>
 
                     <div id="user-pos-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;"> <!-- display: none;  -->
                         Latitude:
@@ -2264,6 +2275,10 @@ let toggleForeground = () => {
         let buttons = document.querySelectorAll('#bodies-container a.button-like');
         buttons.forEach(b => {
             b.style.display = cb.checked ? 'inline-block' : 'none';
+            if (cb.checked) {
+                // console.log("Enabling reverse calculation for body:", b.parentNode.parentNode.querySelector('label').innerText);
+                b.setAttribute("title", `Reverse calculation\nfor ${b.parentNode.parentNode.querySelector('label').innerText}`);
+            }
         });
     };
 
@@ -2473,7 +2488,9 @@ let toggleForeground = () => {
                 if (worldMap.isBehind(worldMap.toRadians(point.latitude), worldMap.toRadians(point.longitude - worldMap.globeViewLngOffset))) {
                     return; // Behind the globe
                 }
-                worldMap.fillCircle(context, p, 1.5, color);
+                // TODO Try worldMap.lineFromTo ?
+                worldMap.fillCircle(context, p, 1.5, color); // A dot on the circle
+                // worldMap.plotPoint(context, pt, color, 1.5);
             } else {
                 worldMap.plotPosToCanvas(context, point.latitude, point.longitude, "", color, 0.75);
             }
@@ -2488,6 +2505,7 @@ let toggleForeground = () => {
         if (worldMap.projection.type === 'GLOBE') {
             // The cone's axis
             let pg = worldMap.getPanelPoint(data.pg.latitude, data.pg.longitude);
+            // console.log(`Plotting cone for ${data.bodyName} at pg (${pg.x}, ${pg.y}, lat: ${data.pg.latitude}, lng: ${data.pg.longitude})`);
             context.save();
             let thisPointIsBehind = worldMap.isBehind(Math.toRadians(data.pg.latitude), Math.toRadians(data.pg.longitude - worldMap.globeViewLngOffset));
             if (!thisPointIsBehind || worldMap.transparentGlobe) {
@@ -2675,7 +2693,6 @@ let toggleForeground = () => {
         elmt.repaint();
     }
 
-
     let extraDrawingWorldMap = (wm, context) => {
 
         // https://www.w3schools.com/tags/canvas_arc.asp
@@ -2751,7 +2768,7 @@ let toggleForeground = () => {
 		}
 		context.closePath();
 
-        // TODO Change that to actually required cone definitions
+        // Required cone definitions
 
         // Get obsAlt, GHA, D from the REST services, for given body, given UTC.
         let utcyear = parseInt(document.getElementById('UTC-year').value);
@@ -2824,6 +2841,32 @@ let toggleForeground = () => {
                 let dec = payload.d;
                 console.log(`For ${body} - GHA: ${gha.toFixed(2)}°, Dec: ${dec.toFixed(2)}°`);
 
+                let colorOne = coneColors[idx % coneColors.length].one; // Base
+                let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
+
+                if (true) {
+                    let conePayload = {
+                        bodyName : body,
+                        obsAlt : obsAlt,
+                        gha : gha,
+                        d : dec
+                    };
+
+                    fetchConeData(conePayload, json => {
+                        console.log("Cone data received");
+                        // console.log(json);
+                        let latlngs = json;
+                        // Draw the data on the globe
+                        // The circle (cone base)
+                        plotConeBase(context, wm, colorOne, latlngs);
+                        // The axis of the cone
+                        plotCone(context, wm, colorOne, colorTwo, latlngs);
+                        // Graphs
+                        // plotGraphLat('graph-latitude', 'orange', latlngs, graphDataLat);
+                        // plotGraphLng('graph-longitude', 'orange', latlngs, graphDataLng);
+                    });
+                }
+
                 if (false) {
                     let conePayload = {
                         bodyName : body,
@@ -2880,15 +2923,19 @@ let toggleForeground = () => {
 
             let colorOne = coneColors[idx % coneColors.length].one; // Base
             let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
+
+            // This one uses the User's position + body + UTC to get the cone data
             fetchConeDataV2(payload, json => { // With a callback
                 console.log("Cone data received");
                 // console.log(json);
                 let latlngs = json;
-                // Draw the data on the globe
-                // The circle (cone base)
-                plotConeBase(context, wm, colorOne, latlngs);
-                // The axis of the cone
-                plotCone(context, wm, colorOne, colorTwo, json);
+                if (false) {
+                    // Draw the data on the globe
+                    // The circle (cone base)
+                    plotConeBase(context, wm, colorOne, latlngs);
+                    // The axis of the cone
+                    plotCone(context, wm, colorOne, colorTwo, latlngs);
+                }
                 // MSP Data ? (in the text box)
                 let mpsData = document.getElementById('mps-data');
                 let before = mpsData.innerHTML;
@@ -2909,7 +2956,7 @@ let toggleForeground = () => {
             if (payloads_2.length === selected.length) {
                 clearInterval(waitForPayloads);
                 console.log("All payloads ready, calling intersections");
-                console.log("Payloads: ", JSON.stringify(payloads_2, null, 2));
+                // console.log("Payloads: ", JSON.stringify(payloads_2, null, 2));
                 if (payloads_2.length > 1) {
                     computeCones(payloads_2);
                 } else {
@@ -3847,7 +3894,7 @@ let toggleForeground = () => {
 	}
 
     // curl -X POST http://localhost:9999/mps/getcone -d '{"bodyName":"Saturn","utcDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}'
-    // Requires bodyName, utcDate, and position
+    // Requires bodyName, utcDate, and user's position
 	function fetchConeDataV2(payload, callback) {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise('/mps/getcone',
@@ -3892,7 +3939,7 @@ let toggleForeground = () => {
 
     // curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
     // Requires bodyName, obsAlt, gha, d
-	function fetchConeData(payload) {
+	function fetchConeData(payload, callback) {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise('/mps/cone',
                                 DEFAULT_TIMEOUT,
@@ -3906,8 +3953,13 @@ let toggleForeground = () => {
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
-					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever... With a callback ?
-                    alert('Got the cone!!');
+                    if (callback) {
+                        callback(json);
+                    } else {
+                        console.log("No callback for fetchConeData");
+    					console.log(JSON.stringify(json, null, 2)); // TODO Something more clever... With a callback ?
+                    }
+                    // alert('Got the cone!!');
 				} else {
 					console.log('Empty response');
 				}

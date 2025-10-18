@@ -6,6 +6,7 @@
  | Dynamic background test.
  |
  | Draws MPS Cones for selected bodies.
+ | See function extraDrawingWorldMap nelow.
  |
  | Good grid stuff: https://css-tricks.com/snippets/css/complete-guide-grid/
  +-->
@@ -2605,7 +2606,7 @@ let toggleForeground = () => {
 		}
 		context.closePath();
 
-        // TODO Change that to actually required cone definitions
+        // Get the cones to draw from the boxes checked by the user
 
         // Get obsAlt, GHA, D from the REST services, for given body, given UTC.
         let utcyear = parseInt(document.getElementById('UTC-year').value);
@@ -2617,7 +2618,6 @@ let toggleForeground = () => {
 
         let UTCDuration = `${utcyear.toFixed(0)}-${utcmonth.toFixed(0).padStart(2,'0')}-${utcday.toFixed(0).padStart(2,'0')}T${utchour.toFixed(0).padStart(2,'0')}:${utcminute.toFixed(0).padStart(2,'0')}:${utcsecond.toFixed(0).padStart(2,'0')}`;
         console.log(`UTC Duration: ${UTCDuration}`);
-
 
         // Find the cones to plot
         let container = document.getElementById("bodies-container");
@@ -2647,8 +2647,8 @@ let toggleForeground = () => {
             console.log(`Selected ${cb.value}`);
             let payload = {
                 bodyName: cb.value,
-                utcDate: UTCDuration,
-                pos: {
+                utcDate: UTCDuration,             // UTC Date, set by the user for the whole page
+                pos: {                            // User potition, set by the user for the whole page
                     latitude: userPos.latitude,
                     longitude: userPos.longitude
                 }
@@ -2669,7 +2669,7 @@ let toggleForeground = () => {
             });
         })
 
-        if (false) { // Arbitrary bodies
+        if (false) { // Arbitrary bodies. Sun, Sirius, Polaris.
             let payload = {
                 bodyName:"Sun",
                 utcDate: UTCDuration,
@@ -2739,8 +2739,8 @@ let toggleForeground = () => {
         graphDataLat.data = []; // Clear previous graph data
         graphDataLng.data = []; // Clear previous graph data
 
-        // Sun ?
-        if (false) {
+        // Hard-coded bodies data, for testing.
+        if (false /* Sun ? */) {
             fetch('./json/the-Sun.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2777,8 +2777,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Moon
-        if (false) {
+        if (false /* Moon ? */) {
             fetch('./json/the-Moon.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2815,8 +2814,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Venus
-        if (false) {
+        if (false /* Venus ? */) {
             fetch('./json/Venus.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2853,8 +2851,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Mars
-        if (false) {
+        if (false /* Mars ? */) {
             fetch('./json/Mars.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2891,8 +2888,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Jupiter
-        if (false) {
+        if (false /* Jupiter ? */) {
             fetch('./json/Jupiter.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2929,8 +2925,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Spica
-        if (false) {
+        if (false /* Spica ? */) {
             fetch('./json/Spica.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -2967,8 +2962,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-        // Denebola
-        if (false) {
+        if (false /* Denebola ? */) {
             fetch('./json/Denebola.json')
                 .then(response => {
                     console.log(`Data Response: ${response.status} - ${response.statusText}`);
@@ -3005,9 +2999,7 @@ let toggleForeground = () => {
                     console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
         }
-
     };
-
 
     let extraDrawingWorldMapMercator = (wm, context) => {
         // Sun
@@ -3393,7 +3385,6 @@ let toggleForeground = () => {
         }
     }
 
-
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
         let rightLimit = (userZ + 90) % 360;
         let leftLimit = (userZ - 90) % 360;
@@ -3504,6 +3495,7 @@ let toggleForeground = () => {
         }
     };
 
+    /* Executed onload to populate the body list */
     function populateBodyList(json) {
         // console.log(JSON.stringify(json, null, 2));
         let container = document.getElementById('bodies-container');
@@ -3515,7 +3507,6 @@ let toggleForeground = () => {
 //          </div>
             let oneNode = `<div><input type="checkbox" name="${body}" id="${body}", value="${body}"/><label for="${body}">${body}</label></div>`;
             container.innerHTML += oneNode;
-
         });
     }
 
@@ -3543,7 +3534,7 @@ let toggleForeground = () => {
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
-					populateBodyList(json); // TODO Something more clever...
+					populateBodyList(json);
 				} else {
 					console.log('Empty response');
 				}
@@ -3762,7 +3753,6 @@ let toggleForeground = () => {
         // Populate the available celestial bodies
         fetchBodyList(); // See this code for details...
 
-
         updateUTCDate();
         // Check QS for location
         let qsLat = getQueryParameterByName('lat');
@@ -3855,7 +3845,6 @@ let toggleForeground = () => {
             // theGraph.title = `To Be Tweaked\nMouse at idx ${yValue.toFixed(0)}, Lat ${xValue.toFixed(2)}\xb0`;
             theGraph.title = `Mouse at idx ${yValue.toFixed(0)},\nLat ${decToSex(xValue, "NS")}`;
         });
-
 
         console.log('On Load, done!');
     };

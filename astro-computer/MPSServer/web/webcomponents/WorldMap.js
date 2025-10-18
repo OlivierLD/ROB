@@ -1398,6 +1398,11 @@ class WorldMap extends HTMLElement {
 		// User position
 		if (this.userPosition !== {}) {
 			let userPos = this.getPanelPoint(this.userPosition.latitude, this.userPosition.longitude);
+			if (false) {
+				console.log(`User position (Lat: ${this.userPosition.latitude}, Lng: ${this.userPosition.longitude}) at x: ${userPos.x}, y: ${userPos.y})`);
+				let polePos = this.getPanelPoint(90.0, this.userPosition.longitude);
+				console.log(`  Pole position at x: ${polePos.x}, y: ${polePos.y})`);
+			}
 			WorldMap.plot(context, userPos, this.worldmapColorConfig.userPosColor);
 			context.fillStyle = this.worldmapColorConfig.userPosColor;
 			context.fillText(this.positionLabel, Math.round(userPos.x) + 3, Math.round(userPos.y) - 3);
