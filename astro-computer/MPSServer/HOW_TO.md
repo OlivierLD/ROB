@@ -7,7 +7,7 @@ The code needs to be compiled, and the server needs to be launched (as explained
 First, you load the page `mps.02.html`
 ![01](./doc/MPS.01.png)
 
-To have an idea of what's going on, set the user's position (use "Enable GoeLocation" if you have an Internet connection), and hit the "Set Position" button.
+To have an idea of what's going on, set the user's position (use "Enable GeoLocation" if you have an Internet connection), and hit the "Set Position" button.
 ![02](./doc/MPS.02.png)
 
 To see what bodies would be available, use the "Background parameters" menu available in the sliding navigation bar, hit the "Compute" button. 
