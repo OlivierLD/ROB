@@ -8,7 +8,7 @@ Based on the `http.HTTPServer`, aka `http-tiny-server`, in this project.
 - All operations are implemented.
 - Sample web pages invoking the services.
   - To see the cones from a given place (`mps.01.html`).
-  - To get the position from several observations
+  - To get the position from several observations (`mps.02.html`).
 
 ### Operations to be defined for MPS
 - Get the body list ✅ `curl -X GET http://localhost:9999/mps/bodies`
@@ -320,11 +320,16 @@ $ curl -X POST http://localhost:9999/mps/process-intersections -d '[{"bodyOneNam
 }
 ```
 
-Postman too does a good job with those requests.
+[Postman](https://learning.postman.com/docs/introduction/overview/) too does a good job with those requests.
 
 ---
 
+## Web User Interface
 Next, we'll provide Web Pages invoking those REST services. That's going to be interesting.  
 This HTTP Server can also act as an Web Server, static documents (`html`, `js`, `css`, etc) are in the `web` folder, by default.
+
+With the server above up and running, load in your browser the page at <http://localhost:9999/web/index.html>. This will lead you to several other pages.  
+
+Also see a [HowTo](HOW_TO.md).
 
 ---
