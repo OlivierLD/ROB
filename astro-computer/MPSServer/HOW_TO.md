@@ -13,7 +13,7 @@ To have an idea of what's going on, set the user's position (use "Enable GoeLoca
 To see what bodies would be available, use the "Background parameters" menu available in the sliding navigation bar, hit the "Compute" button. 
 ![03](./doc/MPS.03.png)
 
-Next, you need to choose what body(ies) to use.  
+Next, you need to choose what body(ies) to use. Here Mars, Jupiter, and Deneb.  
 _Note:_ if you enable the "Reverse Calculation", you will have the possibility to calculate what you should observe from the user's position, at the given time.  
 Do check the boxes corresponding to the bodies you want to use.
 ![04](./doc/MPS.04.png)
