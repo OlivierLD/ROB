@@ -16,7 +16,6 @@ header("Content-Type: application/json");
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
 
-
 if ($VERBOSE) {
     echo "Method is [" . $method . "]" . PHP_EOL;
 }
@@ -69,6 +68,8 @@ class Position {
 }
 
 function handleGet() {
+    // Error code
+    header('HTTP/1.0 404 Not Found');
     echo json_encode(['message' => 'GET Not Implemented here.']);
 }
 
@@ -77,7 +78,7 @@ function handlePost($input) {
     $pg = new Pg(
         (float)$input["pg"]["gha"],
         (float)$input["pg"]["d"],
-        0, 0
+        0, 0 // sd, hp
     );
 
     $position = new Position(
@@ -110,10 +111,14 @@ function handlePost($input) {
 }
 
 function handlePut($input) {
+    // Error code
+    header('HTTP/1.0 404 Not Found');
     echo json_encode(['message' => 'PUT Not Implemented', 'input' => $input]);
 }
 
 function handleDelete($input) {
+    // Error code
+    header('HTTP/1.0 404 Not Found');
     echo json_encode(['message' => 'DELETE Not Implemented', 'input' => $input]);
 }
 ?>

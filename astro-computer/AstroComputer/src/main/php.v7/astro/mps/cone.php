@@ -1,8 +1,8 @@
 <?php
 /*
- * Implementation of GET astro/bodies.php
+ * Implementation of POST /astro/mps/cone.php -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
  */
-include __DIR__ . '/../autoload.php';
+include __DIR__ . '/../../autoload.php';
 
 $VERBOSE = false;
 
@@ -22,10 +22,10 @@ if ($VERBOSE) {
 
 switch ($method) {
     case 'GET':
-        handleGet(); // GET astro/bodies
+        handleGet();
         break;
     case 'POST':
-        handlePost($input);
+        handlePost($input); // THAT one
         break;
     case 'PUT':
         handlePut($input);
@@ -38,24 +38,43 @@ switch ($method) {
         break;
 }
 
-function handleGet() {
-    $starCatalog = Star::getCatalog();
-    $stars = array();
-    for ($i=0; $i<count($starCatalog); $i++) {
-        $starName = $starCatalog[$i][0];
-        array_push($stars, $starName);
+// {"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}
+class ConeInput {
+
+    public $bodyName;
+	public $obsAlt;
+	public $gha;
+	public $d;
+
+    public function __construct(string $bodyName,
+                                float $obsAlt,
+                                float $gha,
+                                float $d) {
+        $this->bodyName = $bodyName;
+        $this->obsAlt = $obsAlt;
+        $this->gha = $gha;
+        $this->d = $d;
     }
+}
 
-    $incontournables = array("Sun", "Moon");
-    $wanderingBodies = array("Aries", "Venus", "Mars", "Jupiter", "Saturn");
-
-    echo json_encode(array_merge($incontournables, $wanderingBodies, $stars));
+function handleGet() {
+    // Error code
+    header('HTTP/1.0 404 Not Found');
+    echo json_encode(['message' => 'GET Not Implemented here.']);
 }
 
 function handlePost($input) {
-    // Error code
-    header('HTTP/1.0 404 Not Found');
-    echo json_encode(['message' => 'POST Not Implemented', 'input' => $input]);
+
+    $coneInput = new ConeInput(
+        (string)$input["bodyName"],
+        (float)$input["obsAlt"],
+        (float)$input["gha"],
+        (float)$input["d"]
+    );
+
+
+    // And more... See MPSToolBox.calculateCone
+    echo json_encode(['message' => 'POST Received', 'reworked-input' => $coneInput]);
 }
 
 function handlePut($input) {

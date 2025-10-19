@@ -533,7 +533,7 @@ public class RESTImplementation {
 
 		MPSToolBox.ConeDefinition coneDefinition;
 		try {
-			double fromZ = 0d, toZ = 360d, zStep = 1d; // TODO Get those from input payload
+			double fromZ = 0d, toZ = 360d, zStep = 1d; // TODO Get those from input payload ?..
 			coneDefinition = MPSToolBox.calculateCone(new Date(), // Date not really used...
 					coneInput.getObsAlt(), coneInput.getGHA(), coneInput.getD(), coneInput.getBodyName(),
 					fromZ, toZ, zStep,false);
