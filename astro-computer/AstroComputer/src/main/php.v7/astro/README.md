@@ -1,10 +1,16 @@
-This directory contains what could be an Astro REST server...
+# A PHP REST Astro Server ?
+This directory contains what could look like a `php` Astro REST server...  
+_But_ when you write php, you write a _page_, **not** a server... This could be a problem for path parameters (for example). Also, all the urls for the requests would contain a `php` extension, like below,
+in `http://machine:8000/astro/bodies.php`.
+
 
 ### Operations List
 
 - `curl -X GET http://machine:8000/astro/bodies.php`
 - `curl -X GET http://machine:9999/astro/mps/pg.php?body=Sun&date=2025-09-26T03:15:00`
-- and more to come !
+- `curl -X POST http://localhost:9999/astro/mps/alt-and-z.php -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"hp":0.0,"sd":0.0,"gha":230.905951,"d":-1.313542}}'`
+  - or just `curl -X POST http://localhost:9999/astro/mps/alt-and-z.php -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'`
+- ... and more to come !
 
 
 ---

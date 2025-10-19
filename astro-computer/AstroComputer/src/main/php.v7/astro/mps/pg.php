@@ -1,6 +1,6 @@
 <?php
 /*
- * Implementation of GET astro/mps/pg.php?body=XXX&date=YYY
+ * Implementation of GET /astro/mps/pg.php?body=XXX&date=YYY
  */
 include __DIR__ . '/../../autoload.php';
 
