@@ -31,6 +31,7 @@
 	<button onclick="requestData(1);">More Specific</button>
 	<button onclick="requestData(2);">One Day Almanac</button>
 	<button onclick="requestData(3);">Context info</button>
+    <button onclick="requestData(4);">REST Test</button>
 </div>
 
 <div id="place-holder">
@@ -57,7 +58,10 @@ function requestData(option) {
 			case 3:
 				url = "./celestial.computer.php?option=info";
 				break;
-			default: 
+			case 4:
+				url = "./astro/bodies.php";
+				break;
+			default:
 				break;
 		}
 	}
@@ -70,7 +74,7 @@ function requestData(option) {
 	}).then(response => {
 		console.log(`Received from PHP: \nResponse Status:${response.status}`);
 		if (true) {
-			// Assumimg this is text (not json, or what not)
+			// Assuming this is text (not json, or what not)
 			response.text().then(data => {
 				console.log("Received [" + data + "]");
 				try {
