@@ -2,7 +2,7 @@
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
 Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir de l'observation d'un astre au sextant.  
-Ceci requiert - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte - &agrave; la seconde pr&egrave;s - de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
+Ceci n&eacute;cessite - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte - &agrave; la seconde pr&egrave;s - de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
 
 <image src="./images/cone.png" width="40"/> Ce document est en chantier...  
 
