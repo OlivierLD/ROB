@@ -1,16 +1,18 @@
 # A MPS REST Server
 
 Defines and implements REST operations to be invoked from a Web Browser, or any REST client.  
-Based on the `http.HTTPServer`, aka `http-tiny-server`, in this project.  
+Based on the `http.HTTPServer`, aka `http-tiny-server`, in this project.
+
+The MPS (M&eacute;thode du Plan des Sommets) is defined (explained) in [another project](../MPS/README.md).
 
 # Status
-- Infrastructure in place. 
+- Infrastructure, in place. 
 - All operations are implemented.
 - Sample web pages invoking the services.
   - To see the cones from a given place (`mps.01.html`).
   - To get the position from several observations (`mps.02.html`).
 
-### Operations to be defined for MPS
+### Operations to be defined for the MPS Server
 - Get the body list ✅ `curl -X GET http://localhost:9999/mps/bodies`
 - For a given date (UTC), for a given body, get GHA and D. ✅ `curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00`
 - For a given position on Earth, with a given GHA and D, get ObsAlt and Z. ✅ `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"hp":0.0,"sd":0.0,"gha":230.905951,"d":-1.313542}}'`, or just `curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'`  

@@ -2781,7 +2781,6 @@ let toggleForeground = () => {
         let UTCDuration = `${utcyear.toFixed(0)}-${utcmonth.toFixed(0).padStart(2,'0')}-${utcday.toFixed(0).padStart(2,'0')}T${utchour.toFixed(0).padStart(2,'0')}:${utcminute.toFixed(0).padStart(2,'0')}:${utcsecond.toFixed(0).padStart(2,'0')}`;
         console.log(`UTC Duration: ${UTCDuration}`);
 
-
         // Find the cones to plot
         let container = document.getElementById("bodies-container");
         let selected = container.querySelectorAll('input[type="checkbox"]:checked');
@@ -2827,7 +2826,7 @@ let toggleForeground = () => {
             // console.log(`For ${body}: ${year}-${month}-${day} ${hour}:${minute}:${second} (${UTCObsTime}), obsAlt: ${obsAltDeg}°${obsAltMin}' (${obsAlt}°)`);
 
             // THE calculation is going to be done here (GHA, D), for the cones display (not the position !)
-            fetchDataForBody(body, UTCObsTime, (payload) => {
+            fetchDataForBody(body, UTCObsTime, (payload) => { // This is the callback
 
                 /* callback's payload like:
                     {
@@ -3319,7 +3318,6 @@ let toggleForeground = () => {
 
     };
 
-
     let extraDrawingWorldMapMercator = (wm, context) => {
         // Sun
         if (false) {
@@ -3703,7 +3701,6 @@ let toggleForeground = () => {
                 });
         }
     }
-
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
         let rightLimit = (userZ + 90) % 360;
