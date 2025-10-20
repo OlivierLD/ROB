@@ -4137,7 +4137,11 @@ let toggleForeground = () => {
 		});
     }
 
-    // curl -X POST http://localhost:9999/mps/compute-cones -d '[ {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334}, {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014}, {"bodyName" : "Altair","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 32.47716666666667} ]'
+    // curl -X POST http://localhost:9999/mps/compute-cones -d '[
+    //              {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334},
+    //              {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014},
+    //              {"bodyName" : "Altair","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 32.47716666666667}
+    //  ]'
     function computeCones(payload) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
 		let getData = getPromise(`/mps/compute-cones`,

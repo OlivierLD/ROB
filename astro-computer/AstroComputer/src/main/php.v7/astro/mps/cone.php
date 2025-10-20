@@ -130,6 +130,13 @@ class CelestialDeadReckoning {
 		$this->G = $dG;
 	}
 
+    public function getHe() : float {
+        return $this->dHe;
+    }
+    public function getZ() : float {
+        return $this->dZ;
+    }
+
 	public function calculate() : CelestialDeadReckoning {
 		$AHL = $this->AHG + $this->G;
 		if ($AHL < 0.0) {
@@ -240,8 +247,9 @@ function calculateCone(ConeInput $input,
         // altitude tests, reverse
         if ($verbose) {
             // for 20-AUG-2025 10:40:31, GHA: 339°17.40', D: N 12°16.80', Obs Alt: 49°22.51'
-            $cdr = new CelestialDeadReckoning($input->gha, $input->d, $drGC->latitude, $drGC->longitude).calculate();
-            $he = $cdr->He;
+            $cdr = new CelestialDeadReckoning($input->gha, $input->d, $drGC->latitude, $drGC->longitude);
+            $cdr = $cdr->calculate();
+            $he = $cdr->getHe();
             echo sprintf("GHA: %s, D: %s \n", Utils::decToSex($input->gha), Utils::decToSex($input->d));
             echo sprintf("For obsAlt=%f (%s), he (from circle)=%f (%s)\n", $input->obsAlt, Utils::decToSex($input->obsAlt), $he, Utils::decToSex($he));
         }

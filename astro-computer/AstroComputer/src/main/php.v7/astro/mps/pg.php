@@ -90,6 +90,7 @@ class Pg {
 
 function handleGet($body, $date) {
 
+    global $VERBOSE;
     try {
         // Current dateTime
         $year = (int)substr($date, 0, 4);
@@ -99,7 +100,7 @@ function handleGet($body, $date) {
         $minutes = (int)substr($date, 14, 2);
         $seconds = (int)substr($date, 17, 2);
 
-        if (false) {
+        if ($VERBOSE) {
             echo "Request for body [" . $body . "] at date [" . $date . "]" . PHP_EOL;
             echo "Parsed to Y=" . $year . " M=" . $month . " D=" . $day .
                  " h=" . $hours . " m=" . $minutes . " s=" . $seconds . PHP_EOL;
