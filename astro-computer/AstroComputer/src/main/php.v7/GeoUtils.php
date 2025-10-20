@@ -169,8 +169,8 @@ class RLData {
 }
 
 class GeoPoint {
-	private $latitude;
-	private $longitude;
+	public $latitude;
+	public $longitude;
 
 	// function __construct() {}
 
@@ -204,7 +204,7 @@ class GeoPoint {
 	}
 
 	public function equals(GeoPoint $p) : bool {
-		return $this.longitude == $p->getG() && $this.latitude == $p.getL();
+		return $this->longitude == $p->getG() && $this->latitude == $p.getL();
 	}
 
 	/**
@@ -269,7 +269,7 @@ class GreatCircle {
 	public static $TO_SOUTH = 1;
 	public static $TO_EAST = 2;
 	public static $TO_WEST = 3;
-	
+
 	private $ewDir;
 	private $nsDir;
 	private $start;   // GreatCirclePoint, Angles in radians or degrees !!
@@ -670,7 +670,7 @@ class GreatCircle {
 	public static function getDistanceInDegreesBetweenPoints(GreatCirclePoint $from, GreatCirclePoint $to) : float {
 		return rad2deg(getDistance($from, $to));
 	}
-	
+
 	public function getDistanceInNM() : float {
 		return ($this->getDistanceInDegrees() * 60);
 	}
@@ -686,7 +686,7 @@ class GreatCircle {
 
 	/**
 	 * Input in radians, output in nautical miles.
-	 * 
+	 *
 	 * @param from in Radians
 	 * @param to   in Radians
 	 * @return in miles
@@ -852,7 +852,7 @@ class GreatCircle {
 			if ($_nsDir == $TO_NORTH) {
 				$_rv = (2 * M_PI) - $_rv;
 			} else {
-				$_rv = M_PI + $_rv; 
+				$_rv = M_PI + $_rv;
 			}
 		}
 		for (; $_rv >= (2 * M_PI); $_rv -= (2 * M_PI));

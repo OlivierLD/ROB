@@ -75,6 +75,7 @@ function handleGet() {
 
 function handlePost($input) {
 
+    global $VERBOSE;
     $pg = new Pg(
         (float)$input["pg"]["gha"],
         (float)$input["pg"]["d"],
@@ -86,7 +87,7 @@ function handlePost($input) {
         (float)$input["pos"]["longitude"]
     );
 
-    if (false) {
+    if ($VERBOSE) {
         echo "Pos:" . json_encode($input["pos"]) . PHP_EOL;
         echo "Pg:" . json_encode($input["pg"]) . PHP_EOL;
 
@@ -100,14 +101,12 @@ function handlePost($input) {
                                   $position->latitude,
                                   $position->longitude);
     $sru->calculate();
-    if (false) {
-        echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f", $sru->getZ()) . "<br/>");
-        echo("Done invoking SightReductionUtil.<br/>");
+    if ($VERBOSE) {
+        echo("He:" . Utils::decToSex($sru->getHe()) . ", Z:" . sprintf("%f", $sru->getZ()) . "<br/>" . PHP_EOL);
+        echo("Done invoking SightReductionUtil.<br/>" . PHP_EOL);
     }
     echo json_encode(['He' => $sru->getHe(),
-                      'Z' => $sru->getZ()
-         ]);
-
+                      'Z' => $sru->getZ()]);
 }
 
 function handlePut($input) {
