@@ -1,7 +1,8 @@
 # A PHP REST Astro Server ?
 This directory contains what could look like a `php` Astro REST server...
-_But_ when you write php, you write a _page_, **not** a server... This could be a problem for path parameters (for example). Also, all the urls for the requests would contain a `php` extension, like below,
-in `http://machine:8000/astro/bodies.php`.
+_But_ when you write php, you write a _page_, **not** a server... This could be a problem for path parameters (for example). Also, all the urls for the requests would contain a `php` extension, like below, in `http://machine:8000/astro/bodies.php`.
+But it could be good enough for now.
+Notice the `header("Access-Control-Allow-Origin: *");` made to allow CORS.
 
 
 ### Operations List

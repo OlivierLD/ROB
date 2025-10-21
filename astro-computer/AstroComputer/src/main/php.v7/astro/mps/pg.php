@@ -12,6 +12,8 @@ if ($phpVersion < 7) {
 }
 
 header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Credentials: true');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
@@ -58,8 +60,8 @@ switch ($method) {
 
 class Pg {
 
-    public $GHA;
-	public $D;
+    public $gha;
+	public $d;
 	public $hp;
 	public $sd;
 
@@ -67,8 +69,8 @@ class Pg {
                                 float $dec,
                                 float $hp,
                                 float $sd) {
-        $this->GHA = $gha;
-        $this->D = $dec;
+        $this->gha = $gha;
+        $this->d = $dec;
         $this->hp = $hp;
         $this->sd = $sd;
     }
@@ -117,48 +119,48 @@ function handleGet($body, $date) {
 
         switch (strtolower($body)) {
             case 'sun':
-                $pg->GHA = $ac->getSunGHA();
-                $pg->D = $ac->getSunDecl();
+                $pg->gha = $ac->getSunGHA();
+                $pg->d = $ac->getSunDecl();
                 $pg->hp = $ac->getSunHp() / 3600.0;
                 $pg->sd = $ac->getSunSd() / 3600.0;
                 break;
             case 'moon':
-                $pg->GHA = $ac->getMoonGHA();
-                $pg->D = $ac->getMoonDecl();
+                $pg->gha = $ac->getMoonGHA();
+                $pg->d = $ac->getMoonDecl();
                 $pg->hp = $ac->getMoonHp() / 3600.0;
                 $pg->sd = $ac->getMoonSd() / 3600.0;
                 break;
             case 'venus':
-                $pg->GHA = $ac->getVenusGHA();
-                $pg->D = $ac->getVenusDecl();
+                $pg->gha = $ac->getVenusGHA();
+                $pg->d = $ac->getVenusDecl();
                 $pg->hp = $ac->getVenusHp() / 3600.0;
                 $pg->sd = $ac->getVenusSd() / 3600.0;
                 break;
             case 'mars':
-                $pg->GHA = $ac->getMarsGHA();
-                $pg->D = $ac->getMarsDecl();
+                $pg->gha = $ac->getMarsGHA();
+                $pg->d = $ac->getMarsDecl();
                 $pg->hp = $ac->getMarsHp() / 3600.0;
                 $pg->sd = $ac->getMarsSd() / 3600.0;
                 break;
             case 'jupiter':
-                $pg->GHA = $ac->getJupiterGHA();
-                $pg->D = $ac->getJupiterDecl();
+                $pg->gha = $ac->getJupiterGHA();
+                $pg->d = $ac->getJupiterDecl();
                 $pg->hp = $ac->getJupiterHp() / 3600.0;
                 $pg->sd = $ac->getJupiterSd() / 3600.0;
                 break;
             case 'saturn':
-                $pg->GHA = $ac->getSaturnGHA();
-                $pg->D = $ac->getSaturnDecl();
+                $pg->gha = $ac->getSaturnGHA();
+                $pg->d = $ac->getSaturnDecl();
                 $pg->hp = $ac->getSaturnHp() / 3600.0;
                 $pg->sd = $ac->getSaturnSd() / 3600.0;
                 break;
             default:
                 // For stars
                 $ac->starPos($body);
-                $pg->GHA = $ac->getStarGHA($body);
+                $pg->gha = $ac->getStarGHA($body);
                 $star = Star::getStar($body);
                 if ($star != null) {
-                    $pg->D = $star->dec;
+                    $pg->d = $star->dec;
                     $pg->hp = 0.0;
                     $pg->sd = 0.0;
                 } else {

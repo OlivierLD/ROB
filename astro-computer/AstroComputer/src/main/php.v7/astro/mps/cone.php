@@ -12,6 +12,8 @@ if ($phpVersion < 7) {
 }
 
 header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Credentials: true');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
@@ -57,29 +59,18 @@ class ConeInput {
     }
 }
 
-$rhoE = 635677.0; // Earth radius, in 100s of km. It's 6356.77 km.
-$earthRadiusNM = ($rhoE / 100.0) / 1.852; // Earth radius, in nm.
+// $rhoE = 635677.0; // Earth radius, in 100s of km. It's 6356.77 km.
+// $earthRadiusNM = ($rhoE / 100.0) / 1.852; // Earth radius, in nm.
 
-// Already defined in GeoUtils.php
-//
-// class GeoPoint {
-//     public $latitude;
-//     public $longitude;
-
-//     public function __construct(float $lat,
-//                                 float $lon) {
-//         $this->latitude = $lat;
-//         $this->longitude = $lon;
-//     }
-// }
+// GeoPoint already defined in GeoUtils.php
 
 class ConePoint {
-    public $geoPoint;
+    public $point;
     public $z;
 
     public function __construct(GeoPoint $gp,
                                 float $z) {
-        $this->geoPoint = $gp;
+        $this->point = $gp;
         $this->z = $z;
     }
 }
@@ -209,7 +200,11 @@ function calculateCone(ConeInput $input,
                        float $zStep,
                        bool $verbose) : ConeDefinition {
 
-    global $earthRadiusNM;
+    // global $earthRadiusNM;
+    // global $rhoE;
+    $rhoE = 635677.0; // Earth radius, in 100s of km. It's 6356.77 km.
+    $earthRadiusNM = ($rhoE / 100.0) / 1.852; // Earth radius, in nm.
+
     $distInNM = (90.0 - $input->obsAlt) * 60.0;
 
     // Find MS, distance from observer to summit.
@@ -226,7 +221,12 @@ function calculateCone(ConeInput $input,
 
     // Find all the points seeing the body at the same altitude
     if ($verbose) {
-        echo ("---- The Circle, Cone base ----");
+        echo sprintf("rhoE: %f, Earth Radius: %.02f'\n", $rhoE, $earthRadiusNM) . PHP_EOL;
+        echo sprintf("ObsAlt: %.02f'\n", $input->obsAlt) . PHP_EOL;
+        echo sprintf("MS (obs to summit), in nautical miles: %.02f'\n", $MS) . PHP_EOL;
+        echo sprintf("Cone radius, in nautical miles: %.02f'\n", $coneDiameter) . PHP_EOL;
+        echo sprintf("earthCenterToConeSummit, in nautical miles: %.02f'\n", $earthCenterToConeSummit) . PHP_EOL;
+        echo ("---- The Circle, Cone base ----" . PHP_EOL);
     }
 
     $cd = new ConeDefinition();

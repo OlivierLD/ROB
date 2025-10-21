@@ -30,7 +30,9 @@
 
 	function fetchBodyList() {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise('/mps/bodies',
+	//  let getData = getPromise('/mps/bodies',
+	//  let getData = getPromise('http://localhost:9999/mps/bodies',        // That one's OK
+        let getData = getPromise('http://localhost:8000/astro/bodies.php',  // May rriggers a CORS...
                                 DEFAULT_TIMEOUT,
                                 'GET',
                                 [200, 201],    // Can be an array

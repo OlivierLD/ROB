@@ -9,6 +9,8 @@ if ($applyTimeout) {
 }
 
 /*
+ * Will return the position of the observer, based on the intersections of the cones of the given bodies.
+ *
  * Implementation of POST /astro/mps/compute-cones.php -d '[
  *         {"bodyName" : "Mars", "date" : "2025-10-07T15:36:00", "gha" : null, "decl" : null, "obsAlt" : 21.942333333333334},
  *         {"bodyName" : "Venus", "date" : "2025-10-07T15:36:00", "gha" : null, "decl" : null, "obsAlt" : 14.014},
@@ -28,6 +30,8 @@ if ($phpVersion < 7) {
 }
 
 header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Credentials: true');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <!--
  | Real Time Celestial status.
- | MPS Positioning System demo, WiP, messy workbench! Several components are not used, or hidden..., maybe some day.
+ | MPS Positioning System demo, WiP.
+ | Clean version (or so) for the MPSServer backend, the PHP one.
+ | Do check put the variable PHP_SERVER_LOCATION
  |
  | All the skill in the "compute" function below, invoked on click.
  | Dynamic background test.
@@ -9,8 +11,6 @@
  | Computes the position, intersections of the cones, defined by
  | - The selected bodies
  |     - Obs Alt, UTC Date -> GHA, Dec
- |
- | Good grid stuff: https://css-tricks.com/snippets/css/complete-guide-grid/
  +-->
 <html lang="en_US">
 <head>
@@ -498,18 +498,6 @@ let setUserPos = (lat, lng) => {
     // Set user position!!
     worldMap.setUserPosition(userPos);
     worldMap.repaint();
-
-    let worldMapMercator = document.getElementById('world-map-02');
-
-    // Set user position!!
-    worldMapMercator.setUserPosition(userPos);
-    worldMapMercator.repaint();
-
-    let worldMapAnaximandre = document.getElementById('world-map-03');
-
-    // Set user position!!
-    worldMapAnaximandre.setUserPosition(userPos);
-    worldMapAnaximandre.repaint();
 };
 
 let hidden = true;
@@ -1608,7 +1596,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">
-        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; Java)<span style="font-size: 0.75em;"> - MPS for real</span></h1>
+        <h1 style="cursor: pointer;" onclick="openNav()" title="Click for menu"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> Celestial Computer (ES6 &amp; PHP back-end)<span style="font-size: 0.75em;"> - MPS for real</span></h1>
     </div>
     <div style="text-align: right;"><small>Last code update Oct 18, 2025, 14:00 CET</small></div>
 </div>
@@ -1697,12 +1685,6 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <!--div>
-        <span>Select cones to plot below <span style="color: orange;">(toggle foreground to modify the values)</span></span>
-        <div id="bodies-container" class="" style="padding: 10px; max-height: 500px; display: grid; grid-area: prmsl; width: 240px; border: 1px solid silver; border-radius: 5px; margin-top: 10px; overflow-y: scroll;">
-        </div>
-    </div-->
-
     <div class="centered" style="grid-area: utc">
         <!-- SPLIT-FLAP UTC -->
         <div style="margin: 10px;">
@@ -1747,65 +1729,6 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <!--
-     | WORLD MAP BG. MERCATOR, hidden.
-     +-->
-    <div id="world-map-mercator" style="display: none; grid-area: wm-m; text-align: center;">
-        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Mercator</div>
-        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
-            <world-map id="world-map-02"
-                       class="worldmap-display-bg"
-                       title="World Map&#13;Mercator"
-                       projection="MERCATOR"
-                       width="800"
-                       height="700"></world-map>
-        </div>
-    </div>
-
-    <!--
-     | WORLD MAP BG. ANAXIMANDRE, hidden.
-     +-->
-    <div id="world-map-anaximandre" style="display: none; grid-area: wm-a; text-align: center;">
-        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Anaximandre</div>
-        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
-            <world-map id="world-map-03"
-                       class="worldmap-display-bg"
-                       title="World Map&#13;Anaximandre"
-                       projection="ANAXIMANDRE"
-                       width="800"
-                       height="700"></world-map>
-        </div>
-    </div>
-
-    <!-- Hidden -->
-    <div id="graph-lat" style="display: none; grid-area: gl; text-align: center;">
-        <div style="font-weight: bold; color: rgba(0, 255, 255, 0.5); margin-top: 10px;">Graphs (tentatives...)</div>
-        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
-            <graph-display id="graph-01"
-                            width="800"
-                            height="400"
-                            padding="5"
-                            value=""
-                            vgrid="-90:10.0"
-                            hgrid="0:10.0"
-                            label="idx / Latitudes"
-                            title="Latitudes"/>
-        </div>
-    </div>
-    <!-- Hidden -->
-    <div id="graph-lng" style="display: none; grid-area: gg; text-align: center;">
-        <div class="centered" style="width: 100%; border: 0px solid silver; border-radius: 5px;">
-            <graph-display id="graph-02"
-                            width="800"
-                            height="400"
-                            padding="5"
-                            value=""
-                            vgrid="0:10.0"
-                            hgrid="-180:10.0"
-                            label="Longitudes / idx"
-                            title="Longitudes"/>
-        </div>
-    </div>
     <div style="grid-area: botton-padding; min-height: 10px;">
         <!-- Empty -->
     </div>
@@ -1815,8 +1738,8 @@ let toggleForeground = () => {
 <div id="full-foreground" style="display: block;">
     <div style="padding: 6px; border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px; margin-top: 50px;">
         <small>
-            All renderings happen only in the browser, it generates absolutely NO network traffic.<br/>
-            Some REST calls are made to the MPSServer, for cones related calculations.<br/>
+            All renderings happen only in the browser, it generates absolutely NO network traffic,<br/>
+            except some REST calls made to the MPSServer, for MPS cones related calculations.<br/>
             Guaranteed <b><i>0%</i></b> external libraries (100% pure organic HTML5/CSS3/ES6), no GMO.
         </small>
     </div>
@@ -2441,44 +2364,6 @@ let toggleForeground = () => {
     let hdg = 0.0;
     let prmsl = 1013.5;
 
-    // Random Simulation
-    let sensorUpdater = () => {
-        if (simulatePressureAndHeading) {
-            let diff = (Math.random() - 0.5) * 2.0; // [-1..1]
-            hdg += diff;
-            let _hdg = Math.trunc(hdg);
-            // _hdg %= 360;
-            while (_hdg < 0) {
-                _hdg += 360;
-            }
-            while (_hdg >= 360) {
-                _hdg -= 360;
-            }
-            document.getElementById("jumbo-01").value = _hdg; // .toFixed(0);
-        } else {
-            // document.getElementById("jumbo-01").value = 0.0;
-        }
-        // document.getElementById("jumbo-02").value = 0.0;
-        // document.getElementById("jumbo-03").value = 0.0;
-        // document.getElementById("jumbo-04").value = 0.0;
-    };
-
-    let prmslUpdater = () => { // Simulator
-        if (simulatePressureAndHeading) {
-            let prmslDiff = (Math.random() - 0.5) * 0.2; // [-0.1..0.1]
-            prmsl += prmslDiff;
-            if (prmsl > 1040) {
-                prmsl -= (2 * prmslDiff);
-            }
-            if (prmsl < 950) {
-                prmsl += (2 * prmslDiff);
-            }
-
-            // document.getElementById("scroll-digit-display-01").value = prmsl.toFixed(1);
-            setScrollDigitValue("scroll-digit-display-01", prmsl.toFixed(1));
-        }
-    };
-
     function plotConeBase(context, worldMap, color, circleData) {
 
         circleData.circle.forEach((pt) => {
@@ -2566,131 +2451,6 @@ let toggleForeground = () => {
         } else {
             worldMap.plotPosToCanvas(context, data.pg.latitude, data.pg.longitude, data.bodyName, color, 2);
         }
-    }
-
-    let graphDataLat = {
-        withGrid: true,
-        withXLabels: true,
-        withYLabels: true,
-        minX: -90,
-        maxX: 90,
-        minY: 0,
-        maxY: 360,
-        data: [ // Samples below...
-            {
-                name: 'data one',
-                lineColor: 'orange',
-                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
-                thickness: 3,
-                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
-            },
-            {
-                name: 'data two',
-                lineColor: 'red',
-                fillColor: null, // No color
-                thickness: 1,
-                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
-            }
-        ]
-    };
-    let graphDataLng = {
-        withGrid: true,
-        withXLabels: true,
-        withYLabels: true,
-        minX: 0,
-        maxX: 360,
-        minY: -180,
-        maxY: 180,
-        data: [ // Samples below...
-            {
-                name: 'data one',
-                lineColor: 'orange',
-                fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
-                thickness: 3,
-                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                values: [1.2, 1.3, 2, 5, 10, 8, 9, 9, 6, 10] // Same cardinality as x
-            },
-            {
-                name: 'data two',
-                lineColor: 'red',
-                fillColor: null, // No color
-                thickness: 1,
-                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                values: [5, 2.4, 1.3, 2, 5, 9, 8, 2, 9, 6] // Same cardinality as x
-            }
-        ]
-    };
-
-    function plotGraphLat(graphId, color, coneData, graphData) {
-
-        // Buid graphData from cone's data
-        let newData = {
-            name: coneData.bodyName,
-            lineColor: color,
-            fillColor: null,
-            thickness: 1,
-            x: [],
-            values: [] // Same cardinality as x
-        };
-
-        coneData.circle.forEach((point, idx) => {
-            newData.x.push(point.latitude);
-            newData.values.push(idx);
-            // newData.x.push(point.latitude);
-            // newData.values.push(idx);
-        });
-
-        graphData.data.push(newData);
-
-        let elmt = document.getElementById(graphId);
-
-        // Graph unit labels
-        elmt.setHGridLabelsCallback((value) => {
-            return (value > 0 ? "+" : "") + value.toFixed(0);
-        });
-        elmt.setVGridLabelsCallback((value) => {
-            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
-        });
-
-        elmt.data = graphData;
-        elmt.repaint();
-    }
-
-    function plotGraphLng(graphId, color, coneData, graphData) {
-
-        // Build graphData from cone's data
-        let newData = {
-            name: coneData.bodyName,
-            lineColor: color,
-            fillColor: null,
-            thickness: 1,
-            x: [],
-            values: [] // Same cardinality as x
-        };
-
-        coneData.circle.forEach((point, idx) => {
-            newData.x.push(idx); // point.longitude); // idx ?
-            newData.values.push(point.longitude);
-            // newData.x.push(point.latitude);
-            // newData.values.push(idx);
-        });
-
-        graphData.data.push(newData);
-
-        let elmt = document.getElementById(graphId);
-
-        // Graph unit labels
-        elmt.setHGridLabelsCallback((value) => {
-            return (value > 0 ? "+" : "") + value.toFixed(0);
-        });
-        elmt.setVGridLabelsCallback((value) => {
-            return /*(value > 0 ? "+" : "") +*/ value.toFixed(0);
-        });
-
-        elmt.data = graphData;
-        elmt.repaint();
     }
 
     let extraDrawingWorldMap = (wm, context) => {
@@ -2805,7 +2565,7 @@ let toggleForeground = () => {
 
         ];
 
-        let payloads_1 = [];
+        // let payloads_1 = [];
         let payloads_2 = [];
 
         selected.forEach((cb, idx) => {
@@ -2866,40 +2626,6 @@ let toggleForeground = () => {
                     });
                 }
 
-                if (false) {
-                    let conePayload = {
-                        bodyName : body,
-                        obsAlt : obsAlt,
-                        gha : gha,
-                        d : dec
-                    };
-                    fetchConeData(conePayload);
-                } else {
-                    /*
-                    Acumulate data for a single call:
-
-                    curl -X POST http://localhost:9999/mps/2-cones-intersections -d
-                    '[{
-                        "bodyName":"Saturn",
-                        "obsAlt":22.276078,
-                        "gha":54.653345,
-                        "d":-3.048023
-                    },
-                    {
-                        "bodyName":"Jupiter",
-                        "obsAlt":33.994908,
-                        "gha":300.336092,
-                        "d":21.678212
-                    }]'
-                    */
-                    payloads_1.push({
-                        bodyName: body,
-                        obsAlt: obsAlt,
-                        gha: gha,
-                        d: dec
-                    });
-                }
-
             }); // End of fetchDataForBody
 
             payloads_2.push({
@@ -2925,16 +2651,9 @@ let toggleForeground = () => {
 
             // This one uses the User's position + body + UTC to get the cone data
             fetchConeDataV2(payload, json => { // With a callback
-                console.log("Cone data received");
+                console.log("Cone data received - fetchConeDataV2");
                 // console.log(json);
                 let latlngs = json;
-                if (false) {
-                    // Draw the data on the globe
-                    // The circle (cone base)
-                    plotConeBase(context, wm, colorOne, latlngs);
-                    // The axis of the cone
-                    plotCone(context, wm, colorOne, colorTwo, latlngs);
-                }
                 // MSP Data ? (in the text box)
                 let mpsData = document.getElementById('mps-data');
                 let before = mpsData.innerHTML;
@@ -2961,746 +2680,14 @@ let toggleForeground = () => {
                 } else {
                     console.log(`Not enough payloads to compute intersections (have ${payloads_2.length}, need 2+)`);
                 }
-
-                if (false) {  // Previous tentative..., using payloads_1
-                    // 2 first payloads only for now
-                    if (payloads_1.length >= 2) {
-                        let pl = [];
-                        pl.push(payloads_1[0]);
-                        pl.push(payloads_1[1]);
-                        processConesIntersection(pl); // TODO Like on MPSToolBox.processIntersectionsList
-                        // Or better: ConesSolver.computeCones (as above with payloads_2)
-
-                    } else {
-                        console.log("Not enough payloads to compute intersections");
-                    }
-                }
             }
         }, 500);
         // console.log(`Behind the loop: Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
 
-        if (false) { // Arbitrary bodies
-            let payload = {
-                bodyName:"Sun",
-                utcDate: UTCDuration,
-                pos: {
-                    latitude: userPos.latitude,
-                    longitude: userPos.longitude
-                }
-            };
-            fetchConeDataV2(payload, json => {
-                console.log("Cone data received");
-                // console.log(json);
-                latlngs = json;
-                // Draw the data on the globe
-                // The circle (cone base)
-                plotConeBase(context, wm, 'yellow', latlngs);
-                // The axis of the cone
-                plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', json);
-                // MSP Data ?
-
-            });
-            payload = {
-                bodyName:"Sirius",
-                utcDate: UTCDuration,
-                pos: {
-                    latitude: userPos.latitude,
-                    longitude: userPos.longitude
-                }
-            };
-            fetchConeDataV2(payload, json => {
-                console.log("Cone data received");
-                // console.log(json);
-                latlngs = json;
-                // Draw the data on the globe
-                // The circle (cone base)
-                plotConeBase(context, wm, 'red', latlngs);
-                // The axis of the cone
-                plotCone(context, wm, 'red', 'rgba(255, 0, 33, 0.4)', json);
-                // MSP Data ?
-
-            });
-            payload = {
-                bodyName:"Polaris",
-                utcDate: UTCDuration,
-                pos: {
-                    latitude: userPos.latitude,
-                    longitude: userPos.longitude
-                }
-            };
-            fetchConeDataV2(payload, json => {
-                console.log("Cone data received");
-                // console.log(json);
-                latlngs = json;
-                // Draw the data on the globe
-                // The circle (cone base)
-                plotConeBase(context, wm, 'lime', latlngs);
-                // The axis of the cone
-                plotCone(context, wm, 'lime', 'rgba(0, 255, 33, 0.4)', json);
-                // MSP Data ?
-
-            });
-        }
-
-        // Draw the cone's base from json data
+        // Clean MPS Data box
         let mpsData = document.getElementById('mps-data');
         mpsData.innerHTML = ''; // Clear previous data
-
-        graphDataLat.data = []; // Clear previous graph data
-        graphDataLng.data = []; // Clear previous graph data
-
-        // Sun ?
-        if (false) {
-            fetch('./json/the-Sun.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'yellow', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'yellow', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'yellow', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Moon
-        if (false) {
-            fetch('./json/the-Moon.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Venus
-        if (false) {
-            fetch('./json/Venus.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'lime', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'lime', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'lime', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Mars
-        if (false) {
-            fetch('./json/Mars.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'red', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'red', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'red', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Jupiter
-        if (false) {
-            fetch('./json/Jupiter.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'blue', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                      `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'blue', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'blue', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Spica
-        if (false) {
-            fetch('./json/Spica.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Denebola
-        if (false) {
-            fetch('./json/Denebola.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                        // MSP Data
-                        let before = mpsData.innerHTML;
-                        let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                        `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                        if (before.length > 0) {
-                            newData = before + '<br/>' + newData;
-                        }
-                        mpsData.innerHTML = newData
-                        // Graph(s)
-                        plotGraphLat('graph-01', 'white', latlngs, graphDataLat);
-                        plotGraphLng('graph-02', 'white', latlngs, graphDataLng);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-
     };
-
-    let extraDrawingWorldMapMercator = (wm, context) => {
-        // Sun
-        if (false) {
-            fetch('./json/the-Sun.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Sun path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'yellow', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Moon
-        if (false) {
-            fetch('./json/the-Moon.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Moon path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Venus
-        if (false) {
-            fetch('./json/Venus.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Venus path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'lime', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Mars
-        if (false) {
-            fetch('./json/Mars.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Mars path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'red', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Jupiter
-        if (false) {
-            fetch('./json/Jupiter.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Jupiter path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'blue', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Spica
-        if (false) {
-            fetch('./json/Spica.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Spica path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Denebola
-        if (false) {
-            fetch('./json/Denebola.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Denebola path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-    }
-
-    let extraDrawingWorldMapAnaximandre = (wm, context) => {
-        // Sun
-        if (false) {
-            fetch('./json/the-Sun.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Sun path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'yellow', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'yellow', 'rgba(255, 222, 33, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Moon
-        if (false) {
-            fetch('./json/the-Moon.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Moon path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Venus
-        if (false) {
-            fetch('./json/Venus.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Venus path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'lime', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'lime', 'rgba(0, 255, 0, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Mars
-        if (false) {
-            fetch('./json/Mars.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Mars path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'red', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'red', 'rgba(128, 0, 0, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Jupiter
-        if (false) {
-            fetch('./json/Jupiter.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Jupiter path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'blue', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'blue', 'rgba(0, 0, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Spica
-        if (false) {
-            fetch('./json/Spica.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Spica path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-        // Denebola
-        if (false) {
-            fetch('./json/Denebola.json')
-                .then(response => {
-                    console.log(`Data Response: ${response.status} - ${response.statusText}`);
-                    response.json().then(doc => {
-                        latlngs = doc;
-                        console.log(`Mercator - Denebola path data loaded, ${doc.circle.length} elements`);
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, 'white', latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, 'white', 'rgba(255, 255, 255, 0.4)', doc);
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
-        }
-    }
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
         let rightLimit = (userZ + 90) % 360;
@@ -3855,9 +2842,11 @@ let toggleForeground = () => {
         }
     }
 
+    const PHP_SERVER_LOCATION = "http://localhost:8000";
+
 	function fetchBodyList() {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise('/mps/bodies',
+		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/bodies.php`,
                                 DEFAULT_TIMEOUT,
                                 'GET',
                                 [200, 201],    // Can be an array of ints, or an int
@@ -3894,7 +2883,7 @@ let toggleForeground = () => {
     // Requires bodyName, utcDate, and user's position
 	function fetchConeDataV2(payload, callback) {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise('/mps/getcone',
+		let getData = getPromise('/mps/getcone',  // TODO Reach the PHP one
                                 DEFAULT_TIMEOUT,
                                 'POST',
                                 [200, 201], // Can be an array
@@ -3938,7 +2927,7 @@ let toggleForeground = () => {
     // Requires bodyName, obsAlt, gha, d
 	function fetchConeData(payload, callback) {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise('/mps/cone',
+		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/mps/cone.php`,
                                 DEFAULT_TIMEOUT,
                                 'POST',
                                 [200, 201], // Can be an array
@@ -3980,7 +2969,7 @@ let toggleForeground = () => {
     // curl -X POST http://localhost:9999/mps/alt-and-z -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'
     function fetchAltAndZ(payload) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise(`/mps/alt-and-z`,
+		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/mps/alt-n-z.php`,
                                 DEFAULT_TIMEOUT,
                                 'POST',
                                 [200, 201], // Can be an array
@@ -4023,7 +3012,7 @@ let toggleForeground = () => {
     // curl -X GET http://localhost:9999/mps/pg/Sun/2025-09-26T03:15:00
     function fetchDataForBody(body, utcdate, callback) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise(`/mps/pg/${body}/${utcdate}`,
+		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/mps/pg.php?body=${body}&date=${utcdate}`, //   `/mps/pg/${body}/${utcdate}`,
                                 DEFAULT_TIMEOUT,
                                 'GET',
                                 [200, 201], // Can be an array
@@ -4070,73 +3059,6 @@ let toggleForeground = () => {
 		});
     }
 
-    // curl -X POST http://localhost:9999/mps/2-cones-intersections -d '[{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023},{"bodyName":"Jupiter","obsAlt":33.994908,"gha":300.336092,"d":21.678212}]'
-    function processConesIntersection(payload) {
-      	let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise(`/mps/2-cones-intersections`,
-                                DEFAULT_TIMEOUT,
-                                'POST',
-                                [200, 201], // Can be an array
-                                payload,    // JSON.stringify(payload),  // data
-                                false,      // show traffic
-                                headers);
-		getData.then((value) => {
-         // console.log("Done:", value);
-			try {
-				if (value.length > 0) {
-					let json = JSON.parse(value);
-					// console.log(JSON.stringify(json, null, 2)); // TODO Something more clever...
-                    // alert('Got the Intersections!!\n' + JSON.stringify(json));
-                    let mess = `processConesIntersection - Intersections:\n` +
-                                `${decToSex(json[0].latitude, "NS")} / ${decToSex(json[0].longitude, "EW")}\n` +
-                                `${decToSex(json[1].latitude, "NS")} / ${decToSex(json[1].longitude, "EW")}\n` +
-                                `${decToSex(json[2].latitude, "NS")} / ${decToSex(json[2].longitude, "EW")}\n` +
-                                `${decToSex(json[3].latitude, "NS")} / ${decToSex(json[3].longitude, "EW")}`;
-                    alert(mess);
-
-                    /*
-                        Returns an array of 4 GeoPoints
-
-                        To be done Next:
-                        curl -X POST http://localhost:9999/mps/process-intersections -d
-                        '[{
-                            "bodyOneName":"Saturn",
-                            "bodyTwoName":"Jupiter",
-                            "coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},
-                            "coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},
-                            "coneTwoIntersectionOne":{"latitude":-10.904689,"longitude":13.240187},
-                            "coneTwoIntersectionTwo":{"latitude":-10.904689,"longitude":13.240187}
-                           },
-                           {
-                            "bodyOneName":"Saturn",
-                            "bodyTwoName":"Rigel",
-                            "coneOneIntersectionOne":{"latitude":47.677643,"longitude":-3.13567},
-                            "coneOneIntersectionTwo":{"latitude":47.677643,"longitude":-3.13567},
-                            "coneTwoIntersectionOne":{"latitude":-63.20844,"longitude":-12.106294},
-                            "coneTwoIntersectionTwo":{"latitude":-63.20844,"longitude":-12.106294}
-                        }]'
-                   */
-
-				} else {
-					console.log('Empty response');
-				}
-			} catch (error) {
-				console.error('For data', value);
-				console.error(error);
-			}
-		}, (error, errmess) => {
-			let message = "";
-			if (errmess) {
-				let mess = JSON.parse(errmess);
-				if (mess.message) {
-					message += mess.message;
-				}
-			}
-			messManager("processConesIntersection : Failed to get data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
-			// events.publish('valid', null);
-		});
-    }
-
     // curl -X POST http://localhost:9999/mps/compute-cones -d '[
     //              {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334},
     //              {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014},
@@ -4144,7 +3066,7 @@ let toggleForeground = () => {
     //  ]'
     function computeCones(payload) {
       	let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise(`/mps/compute-cones`,
+		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/mps/compute-cones.php`,
                                 DEFAULT_TIMEOUT,
                                 'POST',
                                 [200, 201], // Can be an array
@@ -4213,11 +3135,6 @@ let toggleForeground = () => {
         document.getElementById("world-map-01").setDoAfter(extraDrawingWorldMap);
         document.getElementById("sun-path-01").setDoAfter(extraDrawingSunPath);
         document.getElementById("sky-map-01").setDoAfter(extraDrawingSkyMap);
-        document.getElementById("world-map-02").setDoAfter(extraDrawingWorldMapMercator);
-        document.getElementById("world-map-03").setDoAfter(extraDrawingWorldMapAnaximandre);
-
-        let hdgUpdater = window.setInterval(sensorUpdater, 1000); // Simulation
-        let prmslData = window.setInterval(prmslUpdater, 2000);   // Simulation
 
         initAjax(); // ISS Station?
 
@@ -4237,60 +3154,6 @@ let toggleForeground = () => {
 
         document.getElementById('sun-path-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
         document.getElementById('sky-map-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
-
-        let graphLat = document.getElementById('graph-01');
-        graphLat.addEventListener('mousemove', evt => {
-            // wow !
-            let theGraph = evt.target;
-            let rect = theGraph.getBoundingClientRect();
-            let padding = theGraph.padding;
-            // console.log(`Graph size: padding ${padding}`);
-
-            let x = evt.clientX - rect.left; // x position within the element.
-            let y = evt.offsetY - rect.height; // evt.clientY - rect.top;  // y position within the element. // TODO The value is to big by ~6... rect.height ?
-            // let y = evt.clientY - rect.height;
-            // let y = evt.clientY - rect.top;
-            // console.log(`MouseMove on graph: ${x}, ${y}`);
-            // Tooltip: Use theGraph.data.minX/maxX/minY/maxY if needed...
-            let height = theGraph.height - (2 * padding); // Includes padding, 2x !
-            let width = theGraph.width - (2 * padding);   // Includes padding, 2x !
-
-            let minX = theGraph.data !== null ? theGraph.data.minX : 0;
-            let maxX = theGraph.data !== null ? theGraph.data.maxX : 0;
-            let deltaX = maxX - minX;
-            // let correctedX = width - x + padding;
-            let correctedX = x - padding;
-            let xValue = minX + ((correctedX / width) * deltaX);
-            // console.log(`xValue = ${minX} + ((${correctedX} / ${width}) * ${deltaX}) = ${xValue}`);
-
-            let minY = theGraph.data !== null ? theGraph.data.minY : 0;
-            let maxY = theGraph.data !== null ? theGraph.data.maxY : 0;
-            let deltaY = maxY - minY;
-            // let correctedY = /*height -*/ y - padding;
-            let correctedY = /*height -*/ y + (2 * padding);
-            // let yValue = minY + ((correctedY / height) * deltaY);
-            let yValue = maxY - ((correctedY / height) * deltaY);
-            // console.log(`y = ${y}, yValue = ${maxY} - ((${correctedY} / ${height}) * ${deltaY}) = ${yValue}`);
-            if (false) {
-                console.log("+=========================================");
-                console.log(`| evt.clientX ${evt.clientX}, rect.left ${rect.left} => x ${x}`);
-                console.log(`| evt.offsetY ${evt.offsetY}, rect.height ${rect.height} => x ${y}`);
-                console.log(`| - Rect: top ${rect.top}, left ${rect.left}, width ${rect.width}, height ${rect.height}`);
-                console.log(`| Padding: ${padding}`);
-                console.log(`| MinX: ${theGraph.data !== null ? theGraph.data.minX : 'null'}, MaxX: ${theGraph.data !== null ? theGraph.data.maxX : 'null'}`);
-                console.log(`| MinY: ${theGraph.data !== null ? theGraph.data.minY : 'null'}, MaxY: ${theGraph.data !== null ? theGraph.data.maxY : 'null'}`);
-                console.log(`| DeltaX: ${deltaX}, width: ${width}, correctedX: ${correctedX}, xValue: ${xValue}`);
-                console.log(`| Data range: X [${minX}..${maxX}] Y [${minY}..${maxY}]`);
-                console.log(`| Data range: dX ${deltaX} dY ${deltaY}, w ${width}, h ${height}, cX ${correctedX}, cY ${correctedY}`);
-                console.log(`| Corrected: x ${correctedX}, y ${correctedY}`);
-                console.log(`| MouseMove on graph: ${x}, ${y} -> idx ${yValue.toFixed(1)}, Lat ${xValue.toFixed(1)}`);
-                console.log("+=========================================");
-            }
-
-            // theGraph.title = `To Be Tweaked\nMouse at idx ${yValue.toFixed(0)}, Lat ${xValue.toFixed(2)}\xb0`;
-            theGraph.title = `Mouse at idx ${yValue.toFixed(0)},\nLat ${decToSex(xValue, "NS")}`;
-        });
-
 
         console.log('On Load, done!');
     };

@@ -12,6 +12,8 @@ if ($phpVersion < 7) {
 }
 
 header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Credentials: true');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
