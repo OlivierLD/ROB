@@ -236,7 +236,7 @@ public class PlayGround07 {
         // Now, find the intersection(s) of the two cones...
         List<GeoPoint> closests = MPSToolBox.resolve2Cones(dateOne, altOne, ghaOne, declOne,
                                                            dateTwo, altTwo, ghaTwo, declTwo,
-                                                           0.1d, nbIter, false, verbose);
+                                                           1d /*0.1d*/, nbIter, false, verbose);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));

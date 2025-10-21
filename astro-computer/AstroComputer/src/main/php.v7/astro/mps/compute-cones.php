@@ -8,15 +8,6 @@ if ($applyTimeout) {
     ini_set("max_execution_time", $timeout);
 }
 
-// try {
-//     if ($applyTimeout) {
-//       ini_set("session.gc_maxlifetime", $timeout);
-//       ini_set("session.cookie_lifetime", $timeout);
-//     }
-// } catch (Throwable $e) {
-//   echo "Session settings: Captured Throwable: " . $e->getMessage() . "<br/>" . PHP_EOL;
-// }
-
 /*
  * Implementation of POST /astro/mps/compute-cones.php -d '[
  *         {"bodyName" : "Mars", "date" : "2025-10-07T15:36:00", "gha" : null, "decl" : null, "obsAlt" : 21.942333333333334},
@@ -24,10 +15,12 @@ if ($applyTimeout) {
  *         {"bodyName" : "Altair", "date" : "2025-10-07T15:36:00", "gha" : null, "decl" : null, "obsAlt" : 32.47716666666667}
  * ]'
  * This can be a demanding one, as it computes multiple cones.
+ * Do keep an eye on $distMin, and $firstZStep.
  */
 include __DIR__ . '/../../autoload.php';
 
 $VERBOSE = false;
+$PHP_LOG = false;
 
 $phpVersion = (int)phpversion()[0];
 if ($phpVersion < 7) {
@@ -321,6 +314,10 @@ function haversineNm(float $lat1, float $long1, float $lat2, float $long2) : flo
     return haversineRaw($lat1, $long1, $lat2, $long2) * $NM_EQUATORIAL_EARTH_RADIUS;
 }
 
+function haversineNm2(GeoPoint $from, GeoPoint $to) : float {
+    return haversineNm($from->latitude, $from->longitude, $to->latitude, $to->longitude);
+}
+
 /**
  * Translated from JS's function deadReckoning(start, dist, bearing)
  *
@@ -556,6 +553,7 @@ function calculateCone(ConeInput $input,
 function resolve2Cones(string $firstTime, float $firstObsAlt, float $firstGHA, float $firstDecl,
                        string $secondTime, float $secondObsAlt, float $secondGHA, float $secondDecl,
                        float $firstZStep, int $nbLoops, bool $reverse, bool $verbose) : array {
+    global $PHP_LOG;
     $result = array();
 
     // double smallest = Double.MAX_VALUE;
@@ -581,7 +579,9 @@ function resolve2Cones(string $firstTime, float $firstObsAlt, float $firstGHA, f
     }
 
     for ($loop=0; $loop<$nbLoops; $loop++) {
-        error_log(sprintf("---- Loop %d: fromZ=%.04f toZ=%.04f zStep=%.04f ----", $loop + 1, $fromZ, $toZ, $zStep / 10.0), 0);
+        if ($PHP_LOG) {
+            error_log(sprintf("---- Loop %d: fromZ=%.04f toZ=%.04f zStep=%.04f ----", $loop + 1, $fromZ, $toZ, $zStep / 10.0), 0);
+        }
         $coneBody1 = calculateCone(new ConeInput("Body 1", $firstObsAlt, $firstGHA, $firstDecl),
                 $closestPointZBody1 == null ? $fromZ : $closestPointZBody1 - $zStep,
                 $closestPointZBody1 == null ? $toZ : $closestPointZBody1 + $zStep,
@@ -631,7 +631,9 @@ function resolve2Cones(string $firstTime, float $firstObsAlt, float $firstGHA, f
             $closestPointZBody2Second = $geoPointsSecond[1]->z;
         }
         $zStep /= 10.0; // For the next loop
-        error_log(sprintf("---- End of Loop %d ----", $loop + 1), 0);
+        if ($PHP_LOG) {
+            error_log(sprintf("---- End of Loop %d ----", $loop + 1), 0);
+        }
     }
 
     array_push($result, $closestPointBody1);
@@ -640,6 +642,297 @@ function resolve2Cones(string $firstTime, float $firstObsAlt, float $firstGHA, f
     array_push($result, $closestPointBody2Second);
 
     return $result;
+}
+
+class MapOfGeoPoints {
+    public $key;    // GeoPoint
+    public $points; // array of GeoPoint
+
+    public function __construct(GeoPoint $key) {
+        $this->key = $key;
+        $this->points = array();
+    }
+
+    public function addPoint(GeoPoint $gp) {
+        array_push($this->points, $gp);
+    }
+}
+
+function processIntersectionsList(array $conesIntersectionList,
+                                  bool $verbose) : GeoPoint {
+
+    $CRITICAL_DIST = 5.0;
+
+    if ($verbose) {
+        echo sprinf("We have %d intersections to process.\n", count($conesIntersectionList));
+    }
+    if (count($conesIntersectionList) > 1) {
+        if ($verbose) {
+            foreach ($conesIntersectionList as $ci) {
+                echo sprinf("- Intersection between %s and %s\n", $ci->bodyOneName, $ci->bodyTwoName);
+            }
+        }
+        $candidates = array(); // GeoPoints
+
+        // Iterate on the reference as well...
+        for ($ref = 0; $ref < count($conesIntersectionList); $ref++) {
+
+            if ($verbose) {
+                echo sprinf("-- Ref: %d\n", $ref);
+            }
+            $referenceIntersection = $conesIntersectionList[$ref];
+
+            /*
+                Need to manage:
+                    cone 1 - intersection 1 with cone 1 - intersection 1
+                    cone 1 - intersection 1 with cone 1 - intersection 2
+                    cone 1 - intersection 2 with cone 1 - intersection 1
+                    cone 1 - intersection 2 with cone 1 - intersection 2
+
+                    cone 2 - intersection 1 with cone 1 - intersection 1
+                    cone 2 - intersection 1 with cone 1 - intersection 2
+                    cone 2 - intersection 2 with cone 1 - intersection 1
+                    cone 2 - intersection 2 with cone 1 - intersection 2
+
+                    cone 1 - intersection 1 with cone 2 - intersection 1
+                    cone 1 - intersection 1 with cone 2 - intersection 2
+                    cone 1 - intersection 2 with cone 2 - intersection 1
+                    cone 1 - intersection 2 with cone 2 - intersection 2
+
+                    cone 2 - intersection 1 with cone 2 - intersection 1
+                    cone 2 - intersection 1 with cone 2 - intersection 2
+                    cone 2 - intersection 2 with cone 2 - intersection 1
+                    cone 2 - intersection 2 with cone 2 - intersection 2
+
+                    Good luck.
+                */
+
+            for ($i = 0; $i < count($conesIntersectionList); $i++) {
+                if ($i != $ref) {
+                    if ($verbose) {
+                        echo sprinf("---- i: %d\n", $i);
+                    }
+                    $thatOne = $conesIntersectionList[$i];
+
+                    // Cartesian product !
+
+                    // Cone 1 - Cone 1
+                    $oneOneDistOneOne = haversineNm2($referenceIntersection->coneOneIntersectionOne, $thatOne->coneOneIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionOne), json_encode($thatOne->coneOneIntersectionOne), $oneOneDistOneOne);
+                    }
+                    if ($oneOneDistOneOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionOne);
+                    }
+                    $oneOneDistOneTwo = haversineNm2($referenceIntersection->coneOneIntersectionOne, $thatOne->coneOneIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionOne), json_encode($thatOne->coneOneIntersectionTwo), $oneOneDistOneTwo);
+                    }
+                    if ($oneOneDistOneTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionTwo);
+                    }
+                    $oneOneDistTwoOne = haversineNm2($referenceIntersection->coneOneIntersectionTwo, $thatOne->coneOneIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionTwo), json_encode($thatOne->coneOneIntersectionOne), $oneOneDistTwoOne);
+                    }
+                    if ($oneOneDistTwoOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionOne);
+                    }
+                    $oneOneDistTwoTwo = haversineNm2($referenceIntersection->coneOneIntersectionTwo, $thatOne->coneOneIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionTwo), json_encode($thatOne->coneOneIntersectionTwo), $oneOneDistTwoTwo);
+                    }
+                    if ($oneOneDistTwoTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionTwo);
+                    }
+
+                    // Cone 1 - Cone 2
+                    $oneTwoDistOneOne = haversineNm2($referenceIntersection->coneOneIntersectionOne, $thatOne->coneTwoIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionOne), json_encode($thatOne->coneTwoIntersectionOne), $oneTwoDistOneOne);
+                    }
+                    if ($oneTwoDistOneOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionOne);
+                    }
+                    $oneTwoDistOneTwo = haversineNm2($referenceIntersection->coneOneIntersectionOne, $thatOne->coneTwoIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionOne), json_encode($thatOne->coneTwoIntersectionTwo), $oneTwoDistOneTwo);
+                    }
+                    if ($oneTwoDistOneTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionTwo);
+                    }
+                    $oneTwoDistTwoOne = haversineNm2($referenceIntersection->coneOneIntersectionTwo, $thatOne->coneTwoIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionTwo), json_encode($thatOne->coneTwoIntersectionOne), $oneTwoDistTwoOne);
+                    }
+                    if ($oneTwoDistTwoOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionOne);
+                    }
+                    $oneTwoDistTwoTwo = haversineNm2($referenceIntersection->coneOneIntersectionTwo, $thatOne->coneTwoIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionTwo), json_encode($thatOne->coneTwoIntersectionTwo), $oneTwoDistTwoTwo);
+                    }
+                    if ($oneTwoDistTwoTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionTwo);
+                    }
+
+                    // Cone 2 - Cone 1
+                    $twoOneDistOneOne = haversineNm2($referenceIntersection->coneTwoIntersectionOne, $thatOne->coneOneIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionOne), json_encode($thatOne->coneOneIntersectionOne), $twoOneDistOneOne);
+                    }
+                    if ($twoOneDistOneOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionOne);
+                    }
+                    $twoOneDistOneTwo = haversineNm2($referenceIntersection->coneTwoIntersectionOne, $thatOne->coneOneIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionOne), json_encode($thatOne->coneOneIntersectionTwo), $twoOneDistOneTwo);
+                    }
+                    if ($twoOneDistOneTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionTwo);
+                    }
+                    $twoOneDistTwoOne = haversineNm2($referenceIntersection->coneTwoIntersectionOne, $thatOne->coneOneIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionOne), json_encode($thatOne->coneOneIntersectionOne), $oneOneDistTwoOne);
+                    }
+                    if ($twoOneDistTwoOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionOne);
+                    }
+                    $twoOneDistTwoTwo = haversineNm2($referenceIntersection->coneTwoIntersectionTwo, $thatOne->coneOneIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionTwo), json_encode($thatOne->coneOneIntersectionTwo), $twoOneDistTwoTwo);
+                    }
+                    if ($twoOneDistTwoTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneOneIntersectionTwo);
+                    }
+
+                    // Cone 2 - Cone 2
+                    $twoTwoDistOneOne = haversineNm2($referenceIntersection->coneTwoIntersectionOne, $thatOne->coneTwoIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionOne), json_encode($thatOne->coneTwoIntersectionOne), $twoTwoDistOneOne);
+                    }
+                    if ($twoTwoDistOneOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionOne);
+                    }
+                    $twoTwoDistOneTwo = haversineNm2($referenceIntersection->coneTwoIntersectionOne, $thatOne->coneTwoIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionOne), json_encode($thatOne->coneTwoIntersectionTwo), $twoTwoDistOneTwo);
+                    }
+                    if ($twoTwoDistOneTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionTwo);
+                    }
+                    $twoTwoDistTwoOne = haversineNm2($referenceIntersection->coneTwoIntersectionTwo, $thatOne->coneTwoIntersectionOne);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneTwoIntersectionTwo), json_encode($thatOne->coneTwoIntersectionOne), $twoTwoDistTwoOne);
+                    }
+                    if ($twoTwoDistTwoOne < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionOne);
+                    }
+                    $twoTwoDistTwoTwo = haversineNm2($referenceIntersection->coneTwoIntersectionTwo, $thatOne->coneTwoIntersectionTwo);
+                    if ($verbose) {
+                        echo sprinf("ref: %d, i: %d. Between %s and %s, dist = %f\n", $ref, $i, json_encode($referenceIntersection->coneOneIntersectionTwo), json_encode($thatOne->coneTwoIntersectionTwo), $twoTwoDistTwoTwo);
+                    }
+                    if ($twoTwoDistTwoTwo < $CRITICAL_DIST) {
+                        array_push($candidates, $thatOne->coneTwoIntersectionTwo);
+                    }
+                }
+            }
+        }
+        // The result...
+        if ($verbose) {
+            echo ("-----------------------------" . PHP_EOL);
+            echo sprinf("%d candidate(s):\n", count($candidates));
+            foreach ($candidates as $pt) {
+                echo sprinf("\u2022 %s\n", $pt);
+            }
+            echo ("-----------------------------" . PHP_EOL);
+        }
+        // Create lists of points, put together by their distance to each other
+        // Map<GeoPoint, List<GeoPoint>> pointMap = new HashMap<>();
+        $pointMap = array(); // MapOfGeoPoints
+        $ref = null;
+        foreach ($candidates as $pt) {
+            if ($ref != null) {
+                // Calculate distance with ref
+                $nm = haversineNm2($ref, $pt);
+                if ($nm < $CRITICAL_DIST) {
+                    // pointMap.get(ref.get()).add(pt);
+                    for ($i=0; $i<count($pointMap); $i++) {
+                        if ($pointMap[$i]->key == $ref) {
+                            $pointMap[$i]->addPoint($pt);
+                            break;
+                        }
+                    }
+                } else {
+                    // See distance with other lists (ref)
+                    if ($verbose) {
+                        echo sprinf("%s too far from %s (%f)\n", $pt, $ref, $nm);
+                    }
+                    // $keys = $pointMap.keySet().toArray();
+                    $found = false;
+                    // for (int k=0; k<keys.length; k++) {
+                    foreach ($pointMap as $mapElement) {
+                        // GeoPoint gpKey = (GeoPoint)keys[k];
+                        $gpKey = $mapElement->key;
+                        $dist = haversineNm2($gpKey, $pt);
+                        if ($dist < $CRITICAL_DIST) {
+                            $ref = $gpKey;
+                            $mapElement->addPoint($pt);
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        $newPointMap = new MapOfGeoPoints($pt);
+                        array_push($pointMap, $newPointMap);
+                        $ref = $pt;
+                    }
+                }
+            } else {
+                $ref = $pt;
+                $newPointMap = new MapOfGeoPoints($pt);
+                array_push($pointMap, $newPointMap);
+            }
+        }
+        if ($verbose) {
+            echo sprinf("PointMap has %d entries\n", count($pointMap));
+        }
+        // We will do the average of the biggest list
+        $restricted = array();
+        $maxCard = -1;
+        foreach ($pointMap as $mapElement) { // }.forEach((pt, list) -> {
+            $list = $mapElement->points;
+            if (count($list) > $maxCard) {
+                $maxCard = count($list);
+                $restricted = $list;
+            }
+        }
+
+        // An average ?
+        $candidates = $restricted;
+        if ($verbose) {
+            echo sprinf("Working on %d positions\n", count($candidates));
+        }
+
+        $latitudeSum = 0.0;
+        $longitudeSum = 0.0;
+        foreach ($candidates as $pt) {
+            $latitudeSum += $pt->latitude;
+            $longitudeSum += $pt->longitude;
+        }
+
+        $averageLat = $latitudeSum / count($candidates);
+        $averageLng = $longitudeSum / count($candidates);
+
+        $avgPoint = new GeoPoint($averageLat, $averageLng);
+        if ($verbose) {
+            echo sprinf("=> Average: %s\n", json_encode(avgPoint));
+        }
+        return $avgPoint;
+    } else {
+        header('HTTP/1.0 404 Not Found');
+        throw new Exception(sprintf("Not enough intersections to process. Need at least 2, got %d", count($conesIntersectionList)));
+    }
 }
 
 function handleGet() {
@@ -651,6 +944,7 @@ function handleGet() {
 function handlePost($input) {
 
     global $VERBOSE;
+    global $PHP_LOG;
 
     $listBodyData = array();
     foreach ($input as $bodyRequest) {
@@ -671,7 +965,9 @@ function handlePost($input) {
                     echo sprintf("[%d, %d], %s and %s\n", $i, $j, $listBodyData[$i]->bodyName, $listBodyData[$j]->bodyName);
                 }
                 // Write to the server log, in real time.
-                error_log(sprintf("[%d, %d], %s and %s", $i, $j, $listBodyData[$i]->bodyName, $listBodyData[$j]->bodyName), 0);
+                if ($PHP_LOG) {
+                    error_log(sprintf("[%d, %d], %s and %s", $i, $j, $listBodyData[$i]->bodyName, $listBodyData[$j]->bodyName), 0);
+                }
 
                 $bodyOne = $listBodyData[$i]->bodyName;
                 $altOne = $listBodyData[$i]->obsAlt; // saturnObsAlt;
@@ -731,8 +1027,10 @@ function handlePost($input) {
         echo sprintf("End of permutations, %d intersections\n",
                      count($conesIntersectionList));
     }
-    error_log(sprintf("End of permutations, %d intersections",
-                     count($conesIntersectionList)), 0);
+    if ($PHP_LOG) {
+        error_log(sprintf("End of permutations, %d intersections",
+                        count($conesIntersectionList)), 0);
+    }
 
     // Now process all intersections...
     if ($VERBOSE) {
@@ -740,17 +1038,15 @@ function handlePost($input) {
     }
 
     try {
-        // Still TBD !
-
-        // GeoPoint avgPoint = MPSToolBox.processIntersectionsList(conesIntersectionList, false);
-
-        $avgPoint = new GeoPoint(47, -3);
+        // Final step!
+        $avgPoint = processIntersectionsList($conesIntersectionList, $VERBOSE);
+        // $avgPoint = new GeoPoint(47, -3);
         if (false && $VERBOSE) {
             echo sprintf("Found (avg) intersection at %s\n", $avgPoint);
         }
-        // echo json_encode($avgPoint); // The final output !
         // Return the position
-        echo json_encode(['message' => 'POST. Not finished yet', 'calculated-position' => $avgPoint, 'current' => $listBodyData, 'intersections' => $conesIntersectionList]);
+        // echo json_encode(['message' => 'POST. Not finished yet', 'calculated-position' => $avgPoint, 'current' => $listBodyData, 'intersections' => $conesIntersectionList]);
+        echo json_encode($avgPoint); // Finally !
 
     } catch (Exception $mei) {
         // mei.printStackTrace();

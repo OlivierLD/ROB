@@ -281,7 +281,7 @@ public class MPSToolBox {
         Double closestPointZBody1Second = null;
         Double closestPointZBody2Second = null;
 
-        final double distMin = 3.0; // TODO Fix that 3...
+        final double distMin = 30.0; // Was 3.0 TODO Fix that 3... Relate to first firstZStep ?
 
         for (MPSToolBox.ConePoint conePointBody1 : coneBody1.getCircle()) {
             for (MPSToolBox.ConePoint conePointBody2 : coneBody2.getCircle()) {

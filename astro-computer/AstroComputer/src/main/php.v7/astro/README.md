@@ -11,6 +11,7 @@ in `http://machine:8000/astro/bodies.php`.
 - `curl -X POST http://machine:8000/astro/mps/alt-and-z.php -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"hp":0.0,"sd":0.0,"gha":230.905951,"d":-1.313542}}'`
   - or just `curl -X POST http://machine:8000/astro/mps/alt-and-z.php -d '{"pos":{"latitude":47.677667,"longitude":-3.135667},"pg":{"gha":230.905951,"d":-1.313542}}'`
 - `curl -X POST http://machine:8000/astro/mps/cone.php -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'`
+- `curl -X POST http://localhost:8000/astro/mps/compute-cones.php -d '[ {"bodyName" : "Mars","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 21.942333333333334}, {"bodyName" : "Venus","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 14.014}, {"bodyName" : "Altair","date" : "2025-10-07T15:36:00","gha" : null,"decl" : null,"obsAlt" : 32.47716666666667} ]'`
 - ... and more to come !
 
 

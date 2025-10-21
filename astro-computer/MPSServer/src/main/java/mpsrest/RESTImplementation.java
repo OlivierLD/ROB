@@ -720,8 +720,8 @@ public class RESTImplementation {
 		List<GeoPoint> intersections;
 		try {
 			// TODO Get those two from input payload ?
-			double zStep = 0.1d; // 1 is too small
-			int nbLoops  = 5;
+			double zStep = 1.0d; // 0.1d; // 1 may be too small..
+			int nbLoops  = 5; // 4 should be good enough
 			intersections = MPSToolBox.resolve2Cones(new Date(), // Date not really used...
 					conesInput[0].getObsAlt(), conesInput[0].getGHA(), conesInput[0].getD(),
 					new Date(), // Date not really used...

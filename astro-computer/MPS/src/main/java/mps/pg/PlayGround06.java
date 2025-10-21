@@ -92,7 +92,7 @@ public class PlayGround06 {
         List<GeoPoint> closests =
                 MPSToolBox.resolve2Cones(dateOne, sunObsAlt, sunGHA, sunDecl,
                                          dateTwo, moonObsAlt, moonGHA, moonDecl,
-                                         0.1d, 4, false, false);
+                                         1d /*0.1d*/, 4, false, false);
 
         if (closests != null) {
             final double d1 = GeomUtil.haversineNm(closests.get(0), closests.get(1));
