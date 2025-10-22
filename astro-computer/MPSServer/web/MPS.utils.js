@@ -775,13 +775,13 @@ class MPSToolBox {
                             }
 						}
                         if (!found) {
-                            pointMap.set(pt, []);
+                            pointMap.set(pt, [ pt ]);
                             ref = pt;
                         }
                     }
                 } else {
                     ref = pt;
-                    pointMap.set(pt, []);
+                    pointMap.set(pt, [ pt ]);
                 }
             });
             if (verbose) {
