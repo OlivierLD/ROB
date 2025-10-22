@@ -12,6 +12,7 @@ if ($phpVersion < 7) {
 }
 
 header("Content-Type: application/json");
+// header("Content-Type: plain/txt");
 header("Access-Control-Allow-Origin: *");
 // header('Access-Control-Allow-Credentials: true');
 
@@ -260,7 +261,7 @@ function calculateCone(ConeInput $input,
 
 function handleGet() {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'GET Not Implemented here.']);
 }
 
@@ -285,13 +286,13 @@ function handlePost($input) {
 
 function handlePut($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'PUT Not Implemented', 'input' => $input]);
 }
 
 function handleDelete($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'DELETE Not Implemented', 'input' => $input]);
 }
 ?>

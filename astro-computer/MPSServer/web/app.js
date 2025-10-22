@@ -1,3 +1,7 @@
+/*
+ * Main Astro features.
+ */
+
 import * as CelestialComputer from './longterm.almanac.js';
 import {
 	// sightReduction,
@@ -18,7 +22,7 @@ import {
 	calculateGreatCircleInDegrees
 } from './webcomponents/utilities/Utilities.js';
 
-export function sampleMain(userDataObject) {
+export function astroMain(userDataObject) {
 	let year = userDataObject.utcyear;
 	let	month = userDataObject.utcmonth;
 	if (month < 1 || month > 12) {
@@ -69,7 +73,7 @@ export function sampleMain(userDataObject) {
 }
 
 // To facilitate the syntax
-window.sampleMain = sampleMain;
+window.astroMain = astroMain;
 window.CelestialComputer = CelestialComputer;
 
 window.gridSquare = CelestialComputer.gridSquare;

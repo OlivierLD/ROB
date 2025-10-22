@@ -56,19 +56,19 @@ function handleGet() {
 
 function handlePost($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'POST Not Implemented', 'input' => $input]);
 }
 
 function handlePut($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'PUT Not Implemented', 'input' => $input]);
 }
 
 function handleDelete($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'DELETE Not Implemented', 'input' => $input]);
 }
 ?>

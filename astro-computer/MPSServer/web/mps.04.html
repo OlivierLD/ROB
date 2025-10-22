@@ -1992,7 +1992,7 @@ let toggleForeground = () => {
             noStars: !document.getElementById('no-star').checked
         };
 
-        let testResult = sampleMain(calculationData); // in app.js
+        let testResult = astroMain(calculationData); // in app.js
         globalAstroData = testResult;  // Now includes the solar date.
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
@@ -2231,7 +2231,7 @@ let toggleForeground = () => {
             noStars: false
         };
 
-        let computed = sampleMain(calculationData); // in app.js
+        let computed = astroMain(calculationData); // in app.js
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
             console.log("Result:\n", JSON.stringify(computed, null, 2));
@@ -2842,7 +2842,8 @@ let toggleForeground = () => {
         }
     }
 
-    const PHP_SERVER_LOCATION = "http://localhost:8000";
+    const PHP_SERVER_LOCATION = "http://localhost:8000"; // php -S localhost:8000 from the php folder (in AstroComputer/src/main/php.v7)
+                                // "https://passe-coque.com/tech.and.nav/astro.php/celestial.computer";
 
 	function fetchBodyList() {
 		let headers = [ {name: 'Accept', value: 'application/json'}];
@@ -2855,6 +2856,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
@@ -2892,6 +2896,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
@@ -2926,7 +2933,7 @@ let toggleForeground = () => {
     // curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'
     // Requires bodyName, obsAlt, gha, d
 	function fetchConeData(payload, callback) {
-		let headers = [ {name: 'Accept', value: 'application/json'}];
+		let headers = [ {name: 'Accept', value: 'application/json'}, {name: 'Accept', value: 'text/plain'} ];
 		let getData = getPromise(`${PHP_SERVER_LOCATION}/astro/mps/cone.php`,
                                 DEFAULT_TIMEOUT,
                                 'POST',
@@ -2936,6 +2943,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
@@ -2978,6 +2988,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
@@ -3021,6 +3034,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);
@@ -3075,6 +3091,9 @@ let toggleForeground = () => {
                                 headers);
 		getData.then((value) => {
          // console.log("Done:", value);
+            if (value.indexOf("<!--") > -1) { // Matomo & Co...
+                value = value.substring(0, value.indexOf("<!--"));
+            }
 			try {
 				if (value.length > 0) {
 					let json = JSON.parse(value);

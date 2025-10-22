@@ -59,8 +59,8 @@ export function gridSquare(lat, lng) {
     lat +=  90;
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     //                0         1         2  |
-    //                01234567890123456789012345. 
-	//                                       | 
+    //                01234567890123456789012345.
+	//                                       |
 	//                                       Useless beyond X
     let first = Math.trunc(lng / 20.0);
     gridSquare += alphabet.charAt(first);
@@ -144,7 +144,7 @@ export function getHorizonDip(eyeHeight) { // In meters
 };
 
 /**
- * 
+ *
  * @param {float} alt Observed altitude, in degrees
  * @returns refraction, in degrees
  */
@@ -167,13 +167,13 @@ if (Math.toDegrees === undefined) {
 }
 
 /**
- * 
+ *
  * @param { lat: float, lng: float } from values in Radians
  * @param { lat: float, lng: float } to values in Radians
  * Return distance in radians
  */
 export function getGCDistance(from, to) {
-	let cos = Math.sin(from.lat) * Math.sin(to.lat) + Math.cos(from.lat) * 
+	let cos = Math.sin(from.lat) * Math.sin(to.lat) + Math.cos(from.lat) *
 			  Math.cos(to.lat) * Math.cos(to.lng - from.lng);
 	let dist = Math.acos(cos);
 	return dist;
@@ -198,10 +198,10 @@ const TO_EAST  = 2;
 const TO_WEST  = 3;
 
 /**
- * 
+ *
  * @param { lat: float, lng: float } from values in Radians
  * @param { lat: float, lng: float } to values in Radians
- * @param { int } nbPoints 
+ * @param { int } nbPoints
  */
 export function calculateGreatCircle(from, to, nbPoints) {
 	let nsDir = (to.lat > from.lat) ? TO_NORTH : TO_SOUTH;
@@ -299,7 +299,7 @@ export function getMoonTilt(obs, sunCoord, moonCoord ) {
 					 observed: { alt: sru.alt,
 					  			 z: sru.Z }
 				   });
-	});									
+	});
 	// Take the first triangle, from the Moon.
 	let z0 = route[0].observed.z;
 	let z1 = route[1].observed.z;
@@ -350,7 +350,7 @@ export function calcLHA(gha, longitude) {
 };
 
 /**
- * 
+ *
  * @param {string} duration string, like "2011-02-06T14:41:42.000Z"
  * @returns { year: {int}, month: {int}, day: {int}, hour: {int}, minute: {int}, second: {float}, tz: {string} }
  *
@@ -374,6 +374,33 @@ export function parseDuration(duration) {
 		tz: result[7]
 	};
 };
+
+export function haversineInv(from, dist, heading) {
+	let radianDistance = Math.toRadians(dist / 60);
+	let finalLat = (Math.asin((Math.sin(Math.toRadians(from.latitude)) * Math.cos(radianDistance)) +
+						(Math.cos(Math.toRadians(from.latitude)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(heading)))));
+	let finalLng = Math.toRadians(from.longitude) + Math.atan2(Math.sin(Math.toRadians(heading)) * Math.sin(radianDistance) * Math.cos(Math.toRadians(from.latitude)),
+						Math.cos(radianDistance) - Math.sin(Math.toRadians(from.latitude)) * Math.sin(finalLat));
+	finalLat = Math.toDegrees(finalLat);
+	finalLng = Math.toDegrees(finalLng);
+
+	return { latitude: finalLat, longitude: finalLng };
+}
+
+function haversineRaw(lat1, long1, lat2, long2) {
+	let deltaG = Math.toRadians(long2 - long1);
+	let deltaL = Math.toRadians(lat2 - lat1);
+	let a = Math.pow(Math.sin(deltaL / 2.0), 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.pow(Math.sin(deltaG / 2.0), 2);
+	let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	return c;
+}
+
+// In nautical miles, with GeoPoints
+export function haversineNm(from, to) {
+	const NM_EQUATORIAL_EARTH_RADIUS = 3443.9184665227;   // nm per radian
+	return haversineRaw(from.latitude, from.longitude, to.latitude, to.longitude) * NM_EQUATORIAL_EARTH_RADIUS;
+}
+
 
 /*
  * This would be for NodeJS *

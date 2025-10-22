@@ -1367,6 +1367,10 @@ function getStar(name) {
 	return null;
 }
 
+export function getStars() {
+	return STAR_CATALOG;
+}
+
 function calcStarPos(ra, dec, deltaRA, deltaD, starPar) {
 	let RAstar0 = 15.0 * ra;
 	let DECstar0 = dec;
@@ -1437,8 +1441,8 @@ function calcStarPos(ra, dec, deltaRA, deltaD, starPar) {
 /**
  * Calculate the actual position of a star.
  * D & GHA from  Dec & RA
- * @param {string} starName 
- * @returns 
+ * @param {string} starName
+ * @returns
  */
 function getStarPos(starName) {
 	let star = getStar(starName);
@@ -1782,7 +1786,7 @@ function gatherOutput(noPlanets=false, withStars=false, withConstellations=false
       }, {
 		. . .
 	  }]
-	}	  
+	}
 			 */
 			// console.log(`Calculating constellation ${constellation.name}`);
 			let calculatedConst = {
@@ -1830,10 +1834,10 @@ function gatherOutput(noPlanets=false, withStars=false, withConstellations=false
 }
 
 /**
- * 
- * @param {float} lat 
- * @param {float} lng 
- * @param {float} sunEoT 
+ *
+ * @param {float} lat
+ * @param {float} lng
+ * @param {float} sunEoT
  * @returns decimal hours, UTC.
  */
  export function getSunMeridianPassageTime(latitude, longitude, sunEoT) {
@@ -1843,10 +1847,10 @@ function gatherOutput(noPlanets=false, withStars=false, withConstellations=false
 };
 
 /**
- * 
- * @param {float} lat 
- * @param {float} lng 
- * @param {float} sunEoT 
+ *
+ * @param {float} lat
+ * @param {float} lng
+ * @param {float} sunEoT
  * @param {int} year
  * @param {int} month [1..12]
  * @param {int} day
@@ -1874,8 +1878,8 @@ function gatherOutput(noPlanets=false, withStars=false, withConstellations=false
 };
 
 /**
- * 
- * @param {float} decimalHours 
+ *
+ * @param {float} decimalHours
  * @returns a JSON object like { hours: {float}, minutes: {float}, seconds: {float} }
  */
 export function decimalToDMS(decimalHours) {
@@ -1925,42 +1929,42 @@ export function sunRiseAndSetEpoch(delta_t, year, month, day, latitude, longitud
 
 	if (sr.alt !== 0) { // if elevation (altitude) not 0, then adjust
 		while (sr.alt > 0) {
-			
+
 			// console.log(`From ${rise}, alt ${sr.alt}`);
 
 			let _epoch = rise.getTime() - (10 * 1000);
 			rise.setTime(_epoch);
-			
+
 			// console.log(`Decreasing date to ${rise}`);
 			// console.log(`Set as: ${rise.getUTCFullYear()}, ${rise.getUTCMonth() + 1}, ${rise.getUTCDate()}, ${rise.getUTCHours()}, ${rise.getUTCMinutes()}, ${rise.getUTCSeconds()}`);
 
-			resultForRise = calculate(rise.getUTCFullYear(), 
-									  rise.getUTCMonth() + 1, 
-			                          rise.getUTCDate(), 
-									  rise.getUTCHours(), 
-									  rise.getUTCMinutes(), 
-									  rise.getUTCSeconds(), 
+			resultForRise = calculate(rise.getUTCFullYear(),
+									  rise.getUTCMonth() + 1,
+			                          rise.getUTCDate(),
+									  rise.getUTCHours(),
+									  rise.getUTCMinutes(),
+									  rise.getUTCSeconds(),
 									  delta_t, true, false);
 			// console.log(`Fine tuning (1): Sun GHA: ${resultForRise.sun.GHA.raw}, DEC: ${resultForRise.sun.DEC.raw}`);
 			sr = Utils.sightReduction(latitude, longitude, resultForRise.sun.GHA.raw, resultForRise.sun.DEC.raw);
 		}
 		// Starting tuning
 		while (sr.alt < 0) {
-			
+
 			// console.log(`From ${rise}, alt ${sr.alt}`);
 
 			let _epoch = rise.getTime() + (1 * 1000);
 			rise.setTime(_epoch);
-			
+
 			// console.log(`Increasing date to ${rise}`);
 			// console.log(`Set as: ${rise.getUTCFullYear()}, ${rise.getUTCMonth() + 1}, ${rise.getUTCDate()}, ${rise.getUTCHours()}, ${rise.getUTCMinutes()}, ${rise.getUTCSeconds()}`);
 
-			resultForRise = calculate(rise.getUTCFullYear(), 
-									  rise.getUTCMonth() + 1, 
-			                          rise.getUTCDate(), 
-									  rise.getUTCHours(), 
-									  rise.getUTCMinutes(), 
-									  rise.getUTCSeconds(), 
+			resultForRise = calculate(rise.getUTCFullYear(),
+									  rise.getUTCMonth() + 1,
+			                          rise.getUTCDate(),
+									  rise.getUTCHours(),
+									  rise.getUTCMinutes(),
+									  rise.getUTCSeconds(),
 									  delta_t, true, false);
 
 			// console.log(`Fine tuning (2): Sun GHA: ${resultForRise.sun.GHA.raw}, DEC: ${resultForRise.sun.DEC.raw}`);
@@ -1989,42 +1993,42 @@ export function sunRiseAndSetEpoch(delta_t, year, month, day, latitude, longitud
 
 	if (sr.alt !== 0) { // Elevation not 0, then adjust
 		while (sr.alt < 0) {
-			
+
 			// console.log(`From ${set}, alt ${sr.alt}`);
 
 			let _epoch = set.getTime() - (10 * 1000);
 			set.setTime(_epoch);
-			
+
 			// console.log(`Decreasing date to ${set}`);
 			// console.log(`Set as: ${set.getUTCFullYear()}, ${set.getUTCMonth() + 1}, ${set.getUTCDate()}, ${set.getUTCHours()}, ${set.getUTCMinutes()}, ${set.getUTCSeconds()}`);
 
-			resultForSet = calculate(set.getUTCFullYear(), 
-									 set.getUTCMonth() + 1, 
-									 set.getUTCDate(), 
-									 set.getUTCHours(), 
-									 set.getUTCMinutes(), 
-									 set.getUTCSeconds(), 
+			resultForSet = calculate(set.getUTCFullYear(),
+									 set.getUTCMonth() + 1,
+									 set.getUTCDate(),
+									 set.getUTCHours(),
+									 set.getUTCMinutes(),
+									 set.getUTCSeconds(),
 									 delta_t, true, false);
 			// console.log(`Fine tuning (1): Sun GHA: ${resultForSet.sun.GHA.raw}, DEC: ${resultForSet.sun.DEC.raw}`);
 			sr = Utils.sightReduction(latitude, longitude, resultForSet.sun.GHA.raw, resultForSet.sun.DEC.raw);
 		}
 		// Starting tuning
 		while (sr.alt > 0) {
-			
+
 			// console.log(`From ${set}, alt ${sr.alt}`);
 
 			let _epoch = set.getTime() + (1 * 1000);
 			set.setTime(_epoch);
-			
+
 			// console.log(`Increasing date to ${set}`);
 			// console.log(`Set as: ${set.getUTCFullYear()}, ${set.getUTCMonth() + 1}, ${set.getUTCDate()}, ${set.getUTCHours()}, ${set.getUTCMinutes()}, ${set.getUTCSeconds()}`);
 
-			resultForSet = calculate(set.getUTCFullYear(), 
-									 set.getUTCMonth() + 1, 
-			                         set.getUTCDate(), 
-									 set.getUTCHours(), 
-									 set.getUTCMinutes(), 
-									 set.getUTCSeconds(), 
+			resultForSet = calculate(set.getUTCFullYear(),
+									 set.getUTCMonth() + 1,
+			                         set.getUTCDate(),
+									 set.getUTCHours(),
+									 set.getUTCMinutes(),
+									 set.getUTCSeconds(),
 									 delta_t, true, false);
 
 			// console.log(`Fine tuning (2): Sun GHA: ${resultForSet.sun.GHA.raw}, DEC: ${resultForSet.sun.DEC.raw}`);
@@ -2049,27 +2053,27 @@ export function sunRiseAndSetEpoch(delta_t, year, month, day, latitude, longitud
 
 /**
  * Sun Data for given date and observer's position
- * @param {float} delta_t 
+ * @param {float} delta_t
  * @param {string} duration Duration Format of current date-time
- * @param {float} latitude 
- * @param {float} longitude 
- * @param {float} epoch 
- * @param {float} decSun 
- * @param {float} ghaSun 
- * @param {float} hpSun 
- * @param {float} sdSun 
- * @param {float} sunEoT 
+ * @param {float} latitude
+ * @param {float} longitude
+ * @param {float} epoch
+ * @param {float} decSun
+ * @param {float} ghaSun
+ * @param {float} hpSun
+ * @param {float} sdSun
+ * @param {float} sunEoT
  * @returns { see below... }
  */
-export function getSunDataForDate(delta_t, 
-								  duration, 
-								  latitude, 
-								  longitude, 
+export function getSunDataForDate(delta_t,
+								  duration,
+								  latitude,
+								  longitude,
 								  epoch,
-								  decSun, 
+								  decSun,
 								  ghaSun,
-								  hpSun, 
-								  sdSun, 
+								  hpSun,
+								  sdSun,
 								  sunEoT) {
 
 	let parsed = Utils.parseDuration(duration);
@@ -2096,7 +2100,7 @@ export function getSunDataForDate(delta_t,
 		z: sr.Z,
 		eot: sunEoT,
 		riseTime: sunRiseAndSet.rise.epoch,
-		setTime: sunRiseAndSet.set.epoch, 		
+		setTime: sunRiseAndSet.set.epoch,
 		sunTransitTime: transitEpoch,  // epoch
 		riseZ: sunRiseAndSet.rise.z,
 		setZ:  sunRiseAndSet.set.z
@@ -2105,11 +2109,11 @@ export function getSunDataForDate(delta_t,
 };
 
 /**
- * 
+ *
  * @param {obj} bodyData returned by getSunDataForDate
- * @param {float} delta_t 
- * @param {float} latitude 
- * @param {float} longitude 
+ * @param {float} delta_t
+ * @param {float} latitude
+ * @param {float} longitude
  * @param {number} step in minutes (default 10 used if null)
  * @param {number} refDate epoch
  * @returns [ { epoch: {number}, he: {number}, z: {number} } ]
@@ -2131,12 +2135,12 @@ export function getSunDataForAllDay(bodyData, delta_t, latitude, longitude, step
 	// Now calculate the Sun Path
 	for (let time=from; time<=to; time += _STEP_MINUTES) {
 		let current = new Date(time);
-		let currentResult = calculate(current.getUTCFullYear(), 
-									  current.getUTCMonth() + 1, 
-									  current.getUTCDate(), 
-									  current.getUTCHours(), 
-									  current.getUTCMinutes(), 
-									  current.getUTCSeconds(), 
+		let currentResult = calculate(current.getUTCFullYear(),
+									  current.getUTCMonth() + 1,
+									  current.getUTCDate(),
+									  current.getUTCHours(),
+									  current.getUTCMinutes(),
+									  current.getUTCSeconds(),
 									  delta_t, true, false);
 
 		let sr = Utils.sightReduction(latitude, longitude, currentResult.sun.GHA.raw, currentResult.sun.DEC.raw);

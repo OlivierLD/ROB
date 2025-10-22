@@ -146,7 +146,7 @@ function getBodyData(string $date, string $body, float $obsAlt) : BodyData {
                 if ($star != null) {
                     $bd->decl = $star->dec;
                 } else {
-                    header('HTTP/1.0 404 Not Found');
+                    header('HTTP/1.0 400 Bad Request');
                     throw new Exception("Star [$body] not found in catalog");
                 }
                 break;
@@ -155,7 +155,7 @@ function getBodyData(string $date, string $body, float $obsAlt) : BodyData {
         // if ($verbose) {
         //     echo "[ Captured Throwable (2) for handleGet : " . $e->getMessage() . "] " . PHP_EOL;
         // }
-        header('HTTP/1.0 404 Not Found');
+        header('HTTP/1.0 400 Bad Request');
         throw $e;
     }
     // Finally
@@ -610,7 +610,7 @@ function resolve2Cones(string $firstTime, float $firstObsAlt, float $firstGHA, f
                 $closestPointZBody2Second = $geoPointsFirst[3]->z;
             } else {
                 echo sprintf("Ooops !!! Second intersection was not found ! Only %d point(s) available.\n", count($geoPointsFirst));
-                header('HTTP/1.0 404 Not Found');
+                header('HTTP/1.0 400 Bad Request');
                 throw new Exception(sprintf("Ooops !!! Second intersection was not found ! Only %d point(s) available.", count($geoPointsFirst)));
             }
         }
@@ -934,14 +934,14 @@ function processIntersectionsList(array $conesIntersectionList,
         }
         return $avgPoint;
     } else {
-        header('HTTP/1.0 404 Not Found');
+        header('HTTP/1.0 400 Bad Request');
         throw new Exception(sprintf("Not enough intersections to process. Need at least 2, got %d", count($conesIntersectionList)));
     }
 }
 
 function handleGet() {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'GET Not Implemented here.']);
 }
 
@@ -1054,20 +1054,20 @@ function handlePost($input) {
 
     } catch (Exception $mei) {
         // mei.printStackTrace();
-        header('HTTP/1.0 404 Not Found');
+        header('HTTP/1.0 400 Bad Request');
         throw $mei;
     }
 }
 
 function handlePut($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'PUT Not Implemented', 'input' => $input]);
 }
 
 function handleDelete($input) {
     // Error code
-    header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 400 Bad Request');
     echo json_encode(['message' => 'DELETE Not Implemented', 'input' => $input]);
 }
 ?>

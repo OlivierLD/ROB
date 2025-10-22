@@ -39,6 +39,8 @@
 
     <script type="text/javascript">
 
+// import { astroMain } from "./app.js";
+
 let globalAstroData;
 let globalSRUSun;
 let globalSRUMoon;
@@ -1991,7 +1993,7 @@ let toggleForeground = () => {
             noStars: !document.getElementById('no-star').checked
         };
 
-        let testResult = sampleMain(calculationData); // in app.js
+        let testResult = astroMain(calculationData); // in app.js
         globalAstroData = testResult;  // Now includes the solar date.
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
@@ -2230,7 +2232,7 @@ let toggleForeground = () => {
             noStars: false
         };
 
-        let computed = sampleMain(calculationData); // in app.js
+        let computed = astroMain(calculationData); // in app.js
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
             console.log("Result:\n", JSON.stringify(computed, null, 2));
