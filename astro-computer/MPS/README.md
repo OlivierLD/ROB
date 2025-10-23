@@ -499,7 +499,7 @@ La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
 ![MPS 102](./images/mps.102.png)  
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
-Un exemple plus complet est d&eacute;crit [ici](../MPSServer/README.md).
+Un exemple plus complet est d&eacute;crit [ici](../MPSServer/HOW_TO.md).
 
 #### Pour les tests
 Le script `what.should.i.see.sh` peut aider &agrave; trouver les hauteurs qu'on devrait observer, pour un astre et une heure (date) donn&eacute;s.
