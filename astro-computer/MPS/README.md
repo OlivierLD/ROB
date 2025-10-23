@@ -499,6 +499,8 @@ La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
 ![MPS 102](./images/mps.102.png)  
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
+Un exemple plus complet est d&eacute;crit [ici](../MPSServer/README.md).
+
 #### Pour les tests
 Le script `what.should.i.see.sh` peut aider &agrave; trouver les hauteurs qu'on devrait observer, pour un astre et une heure (date) donn&eacute;s.
 ```
@@ -611,8 +613,8 @@ Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
 On va distinguer les &eacute;quations concernant la latitude de celles qui concernent la longitude.  
 
-On commence par les latitudes :  
-On obtient ainsi
+#### On commence par les latitudes
+On obtient alors
 ```
  /
  | finalLat1 = arcsin(sin(pg1Lat) * cos(radius1)) + (cos(pg1Lat) * sin(radius1) * cos(Z1))
@@ -657,7 +659,42 @@ On cherche donc les valeurs `Z1` et `Z2` pour lesquelles
 ```
 f1(Z1) = f2(Z2)
 ```
-... qui constitue donc un syst&egrave;me de **1** &eacute;quation &agrave; **2** inconnues. Ouille...
+... qui constitue donc un syst&egrave;me de **1** &eacute;quation &agrave; **2** inconnues. Ouille.
+
+#### Les longitudes ensuite
+
+```
+ /
+ | finalLng1 = pg1Lng + atan2(sin(Z1) * sin(radius1) * cos(pg1Lat), cos(radius1) - (sin(pg1Lat) * sin(finalLat1)))
+<  finalLng2 = pg2Lng + atan2(sin(Z2) * sin(radius2) * cos(pg2Lat), cos(radius2) - (sin(pg2Lat) * sin(finalLat2)))
+ | finalLng1 = finalLng2
+ \
+```
+Ou aussi, comme pr&eacute;c&eacute;demment
+```
+ pg1Lng + atan2(sin(Z1) * sin(radius1) * cos(pg1Lat), cos(radius1) - (sin(pg1Lat) * sin(finalLat1))) = pg2Lng + atan2(sin(Z2) * sin(radius2) * cos(pg2Lat), cos(radius2) - (sin(pg2Lat) * sin(finalLat2)))
+```
+On note cette fois que ces formules font intervenir les valeurs `finalLat1`, et `finalLat2`, r&eacute;sultats du syst&egrave;me pr&eacute;c&eacute;dent...
+Cette fois-ci, on pose `C1 = pg1Lng`, `C2 = pg2Lng`, `D1 = sin(radius1) * cos(pg1Lat)`, `D2 = sin(radius2) * cos(pg2Lat)`,
+`E1 = cos(radius1)`, `E2 = cos(radius2)`.  
+Et on a
+```
+ C1 + atan2(sin(Z1) * D1, E1 - (sin(C1) * sin(finalLat1))) = C2 + atan2(sin(Z2) * D2, E2 - (sin(C2) * sin(finalLat2))) 
+```
+On d&eacute;fini les m&ecirc;me sortes de fonctions qu'auparavant, `g1` et `g2` :
+```
+ g1(z, fl) = atan2(sin(z) * D1, E1 - (sin(C1) * sin(fl)))
+ g2(z, fl) = atan2(sin(z) * D2, E2 - (sin(C2) * sin(fl)))
+```
+Avec les `fl` (`finalLat1` et `finalLat2`) trouv&eacute;es pr&eacute;c&eacute;demment, on cherche `Z1` et `Z2` o&ugrave; :
+```
+ g1(Z1, fl1) = g2(Z2, fl2)
+```
+qu'on peut donc aussi &eacute;crire
+```
+ g1(Z1, f1(Z1)) = g2(Z2, f2(Z2))
+```
+... ce qui ne simplifie gu&egrave;re notre affaire.
 
 ---
 
