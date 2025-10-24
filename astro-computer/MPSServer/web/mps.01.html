@@ -17,7 +17,7 @@
     <title>MPS Workbench</title>
 
     <!-- Main Module -->
-    <script type="module" src="./app.js"></script> <!-- THAT is the key -->
+    <script type="module" src="./astro.js"></script> <!-- THAT is the key -->
 
     <!-- Web Components -->
     <script type="module" src="./webcomponents/WorldMap.js"></script>
@@ -153,7 +153,7 @@ let transformDataForWorldWebComp = json => {
     newObj.from = userPos; // pos;
 
     // GRID coordinates
-    let maidenHeadGridSquare = gridSquare(userPos.latitude, userPos.longitude); // exposed in app.js
+    let maidenHeadGridSquare = gridSquare(userPos.latitude, userPos.longitude); // exposed in astro.js
     newObj.gridSquare = maidenHeadGridSquare;
 
     let sun = {
@@ -2003,11 +2003,11 @@ let toggleForeground = () => {
             noStars: !document.getElementById('no-star').checked
         };
 
-        let testResult = astroMain(calculationData); // in app.js
-        globalAstroData = testResult;  // Now includes the solar date.
+        let astroResult = astroMain(calculationData); // in astro.js
+        globalAstroData = astroResult;  // Now includes the solar date.
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
-            console.log("Result:\n", JSON.stringify(testResult, null, 2));
+            console.log("Result:\n", JSON.stringify(astroResult, null, 2));
         }
 
         if (userSunPos) { // Use SUN position
@@ -2017,7 +2017,7 @@ let toggleForeground = () => {
 
         // SRU - Sight Reduction Utility
         try {
-            let sruSun = sightReduction(userPos.latitude, userPos.longitude, testResult.sun.GHA.raw, testResult.sun.DEC.raw);
+            let sruSun = sightReduction(userPos.latitude, userPos.longitude, astroResult.sun.GHA.raw, astroResult.sun.DEC.raw);
             globalSRUSun = sruSun;
             // document.getElementById('sru-elev-z').innerHTML =
             //     `SUN<br/>Elev: ${sru.alt.toFixed(2)}&deg;<br/>Z: ${sru.Z.toFixed(1)}&deg;`;
@@ -2032,14 +2032,14 @@ let toggleForeground = () => {
                 if (sruSun.alt > 0) {
                     refraction = getRefraction(sruSun.alt);
                 }
-                let hp = testResult.sun.HP.raw; // in seconds of arc
+                let hp = astroResult.sun.HP.raw; // in seconds of arc
                 let limb = LOWER_LIMB;
                 let sd = 0;
                 if (limb === LOWER_LIMB) {
-                    sd = testResult.sun.SD.raw; // in seconds of arc.
+                    sd = astroResult.sun.SD.raw; // in seconds of arc.
                 }
                 if (limb === UPPER_LIMB) {
-                    sd = -testResult.sun.SD.raw; // in seconds of arc.
+                    sd = -astroResult.sun.SD.raw; // in seconds of arc.
                 }
 
                 console.log(`Sun SD: ${sd / 60.0}', dip:${horizonDip}', refraction:${refraction}', HP: ${hp / 60.0}'`);
@@ -2058,7 +2058,7 @@ let toggleForeground = () => {
             if (!isNaN(sruSun.alt)) {
                 drawElevation('sun-elevation', sruSun.alt);
             }
-            let sruMoon = sightReduction(userPos.latitude, userPos.longitude, testResult.moon.GHA.raw, testResult.moon.DEC.raw);
+            let sruMoon = sightReduction(userPos.latitude, userPos.longitude, astroResult.moon.GHA.raw, astroResult.moon.DEC.raw);
             globalSRUMoon = sruMoon;
             if (!isNaN(sruMoon.Z)) {
                 drawArrow('moon-azimuth', sruMoon.Z, 'Moon');
@@ -2079,30 +2079,30 @@ let toggleForeground = () => {
         document.getElementById('lha-sun').innerText = `LHA Sun: ${decToSex(lhaSun)}`;
         document.getElementById('lha-moon').innerText = `LHA Moon: ${decToSex(lhaMoon)}`;
 
-        document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(testResult, null, 2) + '</pre>';
+        document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(astroResult, null, 2) + '</pre>';
         // More here, ...
         let detailsContent =
-            " Sun     : GHA: " + testResult.sun.GHA.fmt + ", RA: " + testResult.sun.RA.fmt + ", Dec: " + testResult.sun.DEC.fmt + ", sd:" + testResult.sun.SD.fmt + ", hp:" + testResult.sun.HP.fmt + "\n" +
-            " Moon    : GHA: " + testResult.moon.GHA.fmt + ", RA: " + testResult.moon.RA.fmt + ", Dec: " + testResult.moon.DEC.fmt + ", sd:" + testResult.moon.SD.fmt + ", hp:" + testResult.moon.HP.fmt + "\n" +
-            "     Moon Phase:" + testResult.moon.phase.phaseAngle + "&deg;, " + testResult.moon.phase.phase + "\n" +
+            " Sun     : GHA: " + astroResult.sun.GHA.fmt + ", RA: " + astroResult.sun.RA.fmt + ", Dec: " + astroResult.sun.DEC.fmt + ", sd:" + astroResult.sun.SD.fmt + ", hp:" + astroResult.sun.HP.fmt + "\n" +
+            " Moon    : GHA: " + astroResult.moon.GHA.fmt + ", RA: " + astroResult.moon.RA.fmt + ", Dec: " + astroResult.moon.DEC.fmt + ", sd:" + astroResult.moon.SD.fmt + ", hp:" + astroResult.moon.HP.fmt + "\n" +
+            "     Moon Phase:" + astroResult.moon.phase.phaseAngle + "&deg;, " + astroResult.moon.phase.phase + "\n" +
             ` LHA Sun : ${decToSex(lhaSun)}\n` +
             ` LHA Moon: ${decToSex(lhaMoon)}\n`;
 
         if (!document.getElementById('no-planet').checked) {
             detailsContent +=
-                " Venus   : GHA: " + testResult.venus.GHA.fmt + ", RA: " + testResult.venus.RA.fmt + ", Dec: " + testResult.venus.DEC.fmt + ", sd:" + testResult.venus.SD.fmt + ", hp:" + testResult.venus.HP.fmt + "\n" +
-                " Mars    : GHA: " + testResult.mars.GHA.fmt + ", RA: " + testResult.mars.RA.fmt + ", Dec: " + testResult.mars.DEC.fmt + ", sd:" + testResult.mars.SD.fmt + ", hp:" + testResult.mars.HP.fmt + "\n" +
-                " Jupiter : GHA: " + testResult.jupiter.GHA.fmt + ", RA: " + testResult.jupiter.RA.fmt + ", Dec: " + testResult.jupiter.DEC.fmt + ", sd:" + testResult.jupiter.SD.fmt + ", hp:" + testResult.jupiter.HP.fmt + "\n" +
-                " Saturn  : GHA: " + testResult.saturn.GHA.fmt + ", RA: " + testResult.saturn.RA.fmt + ", Dec: " + testResult.saturn.DEC.fmt + ", sd:" + testResult.saturn.SD.fmt + ", hp:" + testResult.saturn.HP.fmt + "\n" +
+                " Venus   : GHA: " + astroResult.venus.GHA.fmt + ", RA: " + astroResult.venus.RA.fmt + ", Dec: " + astroResult.venus.DEC.fmt + ", sd:" + astroResult.venus.SD.fmt + ", hp:" + astroResult.venus.HP.fmt + "\n" +
+                " Mars    : GHA: " + astroResult.mars.GHA.fmt + ", RA: " + astroResult.mars.RA.fmt + ", Dec: " + astroResult.mars.DEC.fmt + ", sd:" + astroResult.mars.SD.fmt + ", hp:" + astroResult.mars.HP.fmt + "\n" +
+                " Jupiter : GHA: " + astroResult.jupiter.GHA.fmt + ", RA: " + astroResult.jupiter.RA.fmt + ", Dec: " + astroResult.jupiter.DEC.fmt + ", sd:" + astroResult.jupiter.SD.fmt + ", hp:" + astroResult.jupiter.HP.fmt + "\n" +
+                " Saturn  : GHA: " + astroResult.saturn.GHA.fmt + ", RA: " + astroResult.saturn.RA.fmt + ", Dec: " + astroResult.saturn.DEC.fmt + ", sd:" + astroResult.saturn.SD.fmt + ", hp:" + astroResult.saturn.HP.fmt + "\n" +
                 "\n" +
-                " Polaris : GHA: " + testResult.polaris.GHA.fmt + ", RA: " + testResult.polaris.RA.fmt + ", Dec: " + testResult.polaris.DEC.fmt + "\n";
+                " Polaris : GHA: " + astroResult.polaris.GHA.fmt + ", RA: " + astroResult.polaris.RA.fmt + ", Dec: " + astroResult.polaris.DEC.fmt + "\n";
         }
         if (!document.getElementById('no-star').checked) {
             // TODO Display star data ?
             // Calculate SRU for stars
-            if (testResult.stars !== undefined) {
+            if (astroResult.stars !== undefined) {
                 globalSRUStars = [];
-                testResult.stars.forEach(star => {
+                astroResult.stars.forEach(star => {
                     // console.log(`Computing SRU for ${star.name}`);
                     let sruStar = sightReduction(userPos.latitude, userPos.longitude, star.gha, star.decl);
                     globalSRUStars.push({name: star.name, h: sruStar.alt, z: sruStar.Z });
@@ -2113,17 +2113,17 @@ let toggleForeground = () => {
             }
         }
         detailsContent +=
-            " Equation of time: " + testResult.EOT.fmt + "\n" +
-            " Lunar Distance: " + testResult.lunarDist.fmt + "\n" +
-            " Day of Week: " + testResult.dayOfWeek;
+            " Equation of time: " + astroResult.EOT.fmt + "\n" +
+            " Lunar Distance: " + astroResult.lunarDist.fmt + "\n" +
+            " Day of Week: " + astroResult.dayOfWeek;
 
         document.getElementById('details').innerHTML = '<pre>' + detailsContent + '</pre>';
 
         /* Moon Phase and illum, redundant with moon phase web-comp */
         /*
         try {
-            if (testResult.moon.phase.phaseAngle !== undefined) {
-                let phaseIndex = Math.floor(testResult.moon.phase.phaseAngle / (360 / 28.5)) + 1;
+            if (astroResult.moon.phase.phaseAngle !== undefined) {
+                let phaseIndex = Math.floor(astroResult.moon.phase.phaseAngle / (360 / 28.5)) + 1;
                 if (phaseIndex > 28) {
                     phaseIndex = 1;
                 }
@@ -2133,18 +2133,18 @@ let toggleForeground = () => {
                 }
                 let phaseDivImage = document.getElementById('moon-phase-div');
                 phaseDivImage.innerHTML =
-                    `<img src='${phaseImageName}' alt='${testResult.moon.phase.phaseAngle}' title='Phase ${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}&#13;Illum ${testResult.moon.illum.toFixed(0) + '%'}'><br/><small>Phase&nbsp;${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}<br/>Illum&nbsp;${testResult.moon.illum.toFixed(0) + '%'}</small>`;
-                // phaseDivImage.title = `Phase ${testResult.moon.phase.phaseAngle.toFixed(0)}\272`;
+                    `<img src='${phaseImageName}' alt='${astroResult.moon.phase.phaseAngle}' title='Phase ${astroResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}&#13;Illum ${astroResult.moon.illum.toFixed(0) + '%'}'><br/><small>Phase&nbsp;${astroResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}<br/>Illum&nbsp;${astroResult.moon.illum.toFixed(0) + '%'}</small>`;
+                // phaseDivImage.title = `Phase ${astroResult.moon.phase.phaseAngle.toFixed(0)}\272`;
             }
         } catch (oops) {
             console.log(oops);
         }
         */
         // Update World Map
-        displayWorldData(transformDataForWorldWebComp(testResult));
+        displayWorldData(transformDataForWorldWebComp(astroResult));
         // Update Calendar
         let utcOffsetInMinutes = new Date().getTimezoneOffset();
-        let utcTime = new Date(testResult.epoch + (utcOffsetInMinutes * 60 * 1000)); // .getUTCDate();
+        let utcTime = new Date(astroResult.epoch + (utcOffsetInMinutes * 60 * 1000)); // .getUTCDate();
 
 //      let date = utcTime.format("d-m-Y-l");
         let date = utcTime.format("D d M Y");
@@ -2162,7 +2162,7 @@ let toggleForeground = () => {
         splitFlap.repaint();
 
         // Solar date and time if available
-        let solarDate = testResult.solarDate;
+        let solarDate = astroResult.solarDate;
         let splitFlapSolarDate = document.getElementById('split-flap-solar-date-display'); // Date
         splitFlapSolarDate.value = `SOLAR: ${lpad(solarDate.day.toFixed(0), '0', 2)} ${MONTHS[solarDate.month - 1]} ${solarDate.year.toFixed(0)}`;
         splitFlapSolarDate.repaint();
@@ -2183,13 +2183,13 @@ let toggleForeground = () => {
         // Moon-tilt
         // userPos.latitude, userPos.longitude
         let moonTilt = getMoonTilt({lat: userPos.latitude, lng: userPos.longitude},
-							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw},
-							{gha: testResult.moon.GHA.raw, dec: testResult.moon.DEC.raw});
+							{gha: astroResult.sun.GHA.raw, dec: astroResult.sun.DEC.raw},
+							{gha: astroResult.moon.GHA.raw, dec: astroResult.moon.DEC.raw});
         // console.log(`Moon Tilt: ${moonTilt}`);
         let moonPhase = document.getElementById('moon-phase-01');
-        moonPhase.phase = testResult.moon.phase.phaseAngle;
+        moonPhase.phase = astroResult.moon.phase.phaseAngle;
         moonPhase.tilt = moonTilt;
-        let illum = `${testResult.moon.illum.toFixed(0)} %`;
+        let illum = `${astroResult.moon.illum.toFixed(0)} %`;
         moonPhase.title = `Tilt:${moonTilt.toFixed(1)}°\nIllum:${illum}`; // Update tooltip
 		// Update small label
 		moonPhase.smallLabel = `Tilt:${moonTilt.toFixed(1)}°`;
