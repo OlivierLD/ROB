@@ -499,7 +499,17 @@ La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
 ![MPS 102](./images/mps.102.png)  
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
-Un exemple plus complet est d&eacute;crit [ici](../MPSServer/HOW_TO.md).
+Un exemple plus complet est d&eacute;crit [ici](../MPSServer/HOW_TO.md).  
+
+_**Note**_ : dans le projet [MPSServer](../MPSServer), on propose 3 impl&eacute;mentations de la m&eacute;thode&nbsp;;
+ present&eacute;e sous la forme d'une page web (comme vu plus haut), et qui del&egrave;gue les calculs relatifs aux c&ocirc;nes
+&agrave;&nbsp;:
+- Un server Java
+- Un server PHP
+- Du code en ES6 (sur le client)
+
+Voir les d&eacute;tails dans le projet correspondant.
+
 
 #### Pour les tests
 Le script `what.should.i.see.sh` peut aider &agrave; trouver les hauteurs qu'on devrait observer, pour un astre et une heure (date) donn&eacute;s.
