@@ -36,7 +36,7 @@ class MPSToolBox {
 	};
 
 	static welcome() {
-		console.log("Interesting...");
+		// console.log("Interesting...");
 		console.log(`${MPSToolBox.name} is now loaded.`);
 	};
 

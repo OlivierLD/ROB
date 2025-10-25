@@ -2546,6 +2546,10 @@ let toggleForeground = () => {
 
         // Required cone definitions
 
+        // Clean MPS Data box
+        let mpsData = document.getElementById('mps-data');
+        mpsData.innerHTML = ''; // Clear previous data
+
         // Get obsAlt, GHA, D from the REST services, for given body, given UTC.
         let utcyear = parseInt(document.getElementById('UTC-year').value);
         let utcmonth = parseInt(document.getElementById('UTC-month').value);
@@ -2619,29 +2623,34 @@ let toggleForeground = () => {
                 let colorOne = coneColors[idx % coneColors.length].one; // Base
                 let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
 
-                if (true) {
-                    let conePayload = {
-                        bodyName : body,
-                        obsAlt : obsAlt,
-                        gha : gha,
-                        d : dec
-                    };
+                let conePayload = {
+                    bodyName : body,
+                    obsAlt : obsAlt,
+                    gha : gha,
+                    d : dec
+                };
 
-                    fetchConeData(conePayload, json => {
-                        console.log("Cone data received");
-                        // console.log(json);
-                        let latlngs = json;
-                        // Draw the data on the globe
-                        // The circle (cone base)
-                        plotConeBase(context, wm, colorOne, latlngs);
-                        // The axis of the cone
-                        plotCone(context, wm, colorOne, colorTwo, latlngs);
-                        // Graphs
-                        // plotGraphLat('graph-latitude', 'orange', latlngs, graphDataLat);
-                        // plotGraphLng('graph-longitude', 'orange', latlngs, graphDataLng);
-                    });
-                }
+                fetchConeData(conePayload, json => {
+                    console.log("Cone data received");
+                    // console.log(json);
+                    let latlngs = json;
+                    // Draw the data on the globe
+                    // The circle (cone base)
+                    plotConeBase(context, wm, colorOne, latlngs);
+                    // The axis of the cone
+                    plotCone(context, wm, colorOne, colorTwo, latlngs);
 
+                    // MPS Data box
+                    let mpsData = document.getElementById('mps-data');
+                    let before = mpsData.innerHTML;
+                    let newData = `- <b>${body}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
+                                    `Obs Alt: ${decToSex(obsAlt)}, at ${UTCObsTime} UTC`;
+                    if (before.length > 0) {
+                        newData = before + '<br/>' + newData;
+                    }
+                    mpsData.innerHTML = newData;
+
+                });
             }); // End of fetchDataForBody
 
             payloads_2.push({
@@ -2651,35 +2660,6 @@ let toggleForeground = () => {
                         gha: null,
                         decl: null
                     });
-
-            // Get the cones from userPos, body, UTC (reverse of above)
-            let payload = {
-                bodyName: cb.value,
-                utcDate: UTCObsTime, // UTCDuration, // User set date
-                pos: {
-                    latitude: userPos.latitude,
-                    longitude: userPos.longitude
-                }
-            };
-
-            let colorOne = coneColors[idx % coneColors.length].one; // Base
-            let colorTwo = coneColors[idx % coneColors.length].two; // Cone itself (generatrices)
-
-            // This one uses the User's position + body + UTC to get the cone data
-            fetchConeDataV2(payload, json => { // With a callback
-                console.log("Cone data received - fetchConeDataV2");
-                // console.log(json);
-                let latlngs = json;
-                // MSP Data ? (in the text box)
-                let mpsData = document.getElementById('mps-data');
-                let before = mpsData.innerHTML;
-                let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +
-                                `Obs Alt: ${decToSex(latlngs.obsAlt)}, at ${latlngs.observationTime}`;
-                if (before.length > 0) {
-                    newData = before + '<br/>' + newData;
-                }
-                mpsData.innerHTML = newData;
-            });
         }); // End of selected.forEach
 
         // Now calculate intersections if we have more than 1 body selected
@@ -2699,10 +2679,6 @@ let toggleForeground = () => {
             }
         }, 500);
         // console.log(`Behind the loop: Bodies selected: ${selected.length}, payloads: ${payloads.length}`);
-
-        // Clean MPS Data box
-        let mpsData = document.getElementById('mps-data');
-        mpsData.innerHTML = ''; // Clear previous data
     };
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
@@ -2861,50 +2837,6 @@ let toggleForeground = () => {
 	function fetchBodyList() {
         let json = MPSToolBox.getBodyList();
         populateBodyList(json);
-	}
-
-    // curl -X POST http://localhost:9999/mps/getcone -d '{"bodyName":"Saturn","utcDate":"2025-10-05T07:45:00","pos":{"latitude":47.677667,"longitude":-3.135667}}'
-    // Requires bodyName, utcDate, and user's position
-	function fetchConeDataV2(payload, callback) {
-		let headers = [ {name: 'Accept', value: 'application/json'}];
-		let getData = getPromise('/mps/getcone',
-                                DEFAULT_TIMEOUT,
-                                'POST',
-                                [200, 201], // Can be an array
-                                payload,    // JSON.stringify(payload),  // data
-                                false,      // show traffic
-                                headers);
-		getData.then((value) => {
-         // console.log("Done:", value);
-			try {
-				if (value.length > 0) {
-					let json = JSON.parse(value);
-					// console.log(JSON.stringify(json, null, 2));
-                    console.log(`Body:${json.bodyName}, at ${json.observationTime}, Alt ${decToSex(json.obsAlt)}`);
-                    // alert('Got the cone!!');
-                    if (callback) {
-                        callback(json);
-                    } else {
-                        console.log("No callback for fetchConeDataV2");
-                    }
-				} else {
-					console.log('Empty response');
-				}
-			} catch (error) {
-				console.error('For data', value);
-				console.error(error);
-			}
-		}, (error, errmess) => {
-			let message = "";
-			if (errmess) {
-				let mess = JSON.parse(errmess);
-				if (mess.message) {
-					message += mess.message;
-				}
-			}
-			messManager("fetchConeDataV2 : Failed to get bodies data..." + (error ? (typeof(error) === 'object' ? JSON.stringify(error, null, 2) : error.toString()) : ' - ') + ', ' + (message.length > 0 ? message : ' - '));
-			// events.publish('valid', null);
-		});
 	}
 
     // curl -X POST http://localhost:9999/mps/cone -d '{"bodyName":"Saturn","obsAlt":22.276078,"gha":54.653345,"d":-3.048023}'

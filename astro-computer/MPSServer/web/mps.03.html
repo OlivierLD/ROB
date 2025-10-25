@@ -2622,9 +2622,6 @@ let toggleForeground = () => {
                         plotConeBase(context, wm, colorOne, latlngs);
                         // The axis of the cone
                         plotCone(context, wm, colorOne, colorTwo, latlngs);
-                        // Graphs
-                        // plotGraphLat('graph-latitude', 'orange', latlngs, graphDataLat);
-                        // plotGraphLng('graph-longitude', 'orange', latlngs, graphDataLng);
                     });
                 }
 
@@ -2656,7 +2653,7 @@ let toggleForeground = () => {
                 console.log("Cone data received - fetchConeDataV2");
                 // console.log(json);
                 let latlngs = json;
-                // MSP Data ? (in the text box)
+                // MSP Data ? (in the text box) - TODO This could be done in fetchConeData
                 let mpsData = document.getElementById('mps-data');
                 let before = mpsData.innerHTML;
                 let newData = `- <b>${latlngs.bodyName}</b>, Pg ${decToSex(latlngs.pg.latitude, "NS")} / ${decToSex(latlngs.pg.longitude, "EW")}, ` +

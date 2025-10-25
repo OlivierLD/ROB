@@ -174,7 +174,7 @@ Le rayon de la base du c&ocirc;ne est `r * cos(h)`.
 La distance du centre le la Terre `O` au sommet `S` est `sqrt(MS^2 + r^2)`, not&eacute; aussi
 
 $$
-  \sqrt{FS^2 + r^2}
+  \sqrt{MS^2 + r^2}
 $$
 
 La distance `OS` est `MS / cos(h)`.   
@@ -681,7 +681,7 @@ Et on a
 ```
  C1 + atan2(sin(Z1) * D1, E1 - (sin(C1) * sin(finalLat1))) = C2 + atan2(sin(Z2) * D2, E2 - (sin(C2) * sin(finalLat2))) 
 ```
-On d&eacute;fini les m&ecirc;me sortes de fonctions qu'auparavant, `g1` et `g2` :
+On d&eacute;finit les m&ecirc;me sortes de fonctions qu'auparavant, `g1` et `g2` :
 ```
  g1(z, fl) = atan2(sin(z) * D1, E1 - (sin(C1) * sin(fl)))
  g2(z, fl) = atan2(sin(z) * D2, E2 - (sin(C2) * sin(fl)))
