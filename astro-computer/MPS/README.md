@@ -288,7 +288,7 @@ calcul de l'azimut se faisant &agrave; partir de la position estim&eacute;e, une
 
 ### Une premi&egrave;re approche...
 On va partir - pour l'instant - d'une position estim&eacute;e, d'o&ugrave; on pourra calculer l'azimut des astres observ&eacute;s &agrave; l'aide des tables de Bataille.  
-On pourra alors calculer le point du cercle d'&eacute;gales hauteur (de cet astre) pour cet azimut.
+On pourra alors calculer le point du cercle d'&eacute;gales hauteurs (de cet astre) pour cet azimut.
 
 #### Exemple
 ```
