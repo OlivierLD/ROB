@@ -23,7 +23,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * WiP.
+ * WiP. Some cleanup would be welcome (unused options...)
  *
  * JSON positions generator, from GPX log, for a possible replay in LeafLet
  * Optional SOG and COG (and others if needed, see below...)

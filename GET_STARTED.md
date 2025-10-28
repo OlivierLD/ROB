@@ -161,6 +161,8 @@ If you reached this step without error messages, you are in good shape!
 You will notice a bunch of other scripts (`log.analyzer.sh`, `log.merge.sh`, `log.shrinker.sh`, `log.to.csv.sh`, 
 `log.to.gpx.sh`, `log.to.json.sh`, `log.to.kml.sh`, `log.to.polars.sh`, `mk.link.sh`, ...). We'll come back to them later.
 
+For more details on what the `NMEA-multiplexer` is, check out its [manual](./raspberry-sailor/NMEA-multiplexer/manual.md).
+
 # Other modules
 Other modules are based on the same kind of structure, they would be built the same way as above.
 
