@@ -167,6 +167,12 @@ Again, those are only _examples_, intending to demonstrate what can be done.
 It also uses several WebComponents (a [W3C standard](https://www.w3.org/TR/components-intro/)), their source code is here too.  
 Nothing carved in stone. And _this_ is Open Source. Everything is here, but nothing more. Feel free to contribute!
 
+Among many others, we've introduced this concept of **Chartless Maps**.  
+The idea is to prepare your own - light - cartography before leaving, with some dedicated UI. You can define
+markers, borders, way-points, etc..., stored in some data files you can then refer to in the Mux's config.  
+All this support proximity detection, waypoint calculation, and all this kind of things.  
+The idea is to know where you are on this chartless map, and when a proximity is detected, then you go
+back to your paper charts!
 
 From a laptop, tablet, or cell-phone, Web UI (100% hosted on the Raspberry Pi):
 ![Eight](./doc_resources/chartless.track.png)  
@@ -174,9 +180,15 @@ Exiting &Eacute;tel
 
 ![Nine](./doc_resources/chartless.north.ria.png)  
 North Ria (Etel)  
+
 ![Nine-Two](./doc_resources/chartless.north.ria.02.png)    
 Pointe du Perche (Ria d'&Eacute;tel)  
+
 ![Nine-Three](./doc_resources/chartless.north.ria.03.png)
+Same, with marker names
+
+![Nine-Four](./doc_resources/groix.quiberon.png)
+You can define all kind of borders, markers, way-points...
 
 Chartless maps (borders, markers, waypoints, ...) can be dynamically managed from the Admin UI  
 ![Ten](./doc_resources/01.admin.png)
