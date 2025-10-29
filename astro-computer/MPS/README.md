@@ -1,10 +1,11 @@
 # M&eacute;thode du Plan des Sommets (MPS)
+
 M&eacute;thode &eacute;labor&eacute;e par Yves Robin-Jouan, en 1995-96.
 
-Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir de l'observation d'un astre au sextant.  
-Ceci n&eacute;cessite - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte - &agrave; la seconde pr&egrave;s - de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.  
+Il s'agit d'une m&eacute;thode de point astronomique destin&eacute;e &agrave; trouver sa position sur la Terre, &agrave; partir de l'observation d'un astre au sextant.
+Ceci n&eacute;cessite - comme dans le cas d'autres m&eacute;thodes - de conna&icirc;tre l'heure exacte - &agrave; la seconde pr&egrave;s - de l'observation, afin d'en d&eacute;duire les coordonn&eacute;es de l'astre observ&eacute;.
 
-<image src="./images/cone.png" width="40"/> Ce document est en chantier...  
+<image src="./images/cone.png" width="40"/> Ce document est en chantier...
 
 ---
 **Sommaire**
@@ -20,15 +21,15 @@ Ceci n&eacute;cessite - comme dans le cas d'autres m&eacute;thodes - de conna&ic
 
 ## Introduction
 On veut voir si cette m&eacute;thode est applicable manuellement - sans recours &agrave; l'informatique - pour la partie (de cette m&eacute;thode) applicable aux astres, les satellites ne concernant
-gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.      
-&Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e.  
-L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...  
+gu&egrave;re ceux qui n'ont qu'un sextant &agrave; leur disposition.
+&Agrave; la diff&eacute;rence de la m&eacute;thode des droites de hauteur (Marcq Saint-Hilaire, 1875), cette m&eacute;thode pr&eacute;sente l'avantage de ne pas avoir &agrave; recourir &agrave; une position estim&eacute;e.
+L'inconv&eacute;nient potentiel pourrait &ecirc;tre la quantit&eacute; de calculs &agrave; mettre en &oelig;uvre...
 C'est ce qu'on se propose de voir ici.
 
 Le principe de la m&eacute;thode repose sur les assertions suivantes :
 - &Agrave; un instant donn&eacute;, si on a observ&eacute; un astre &agrave; une hauteur donn&eacute;e, on est capable de d&eacute;terminer
 le lieu des points qui voient cet astre &agrave; cette hauteur (c'est le tr&egrave;s fameux "cercle d'&eacute;gales hauteurs").
-- En observant plusieurs astres, il s'agit de d&eacute;terminer le lieu des points communs (id&eacute;alement **_du_** point commun) aux diff&eacute;rents cercles de hauteur ainsi obtenus, qui 
+- En observant plusieurs astres, il s'agit de d&eacute;terminer le lieu des points communs (id&eacute;alement **_du_** point commun) aux diff&eacute;rents cercles de hauteur ainsi obtenus, qui
 devrait en toute logique correspondre &agrave; la position de l'observateur.
 
 L'&eacute;quation &agrave; r&eacute;soudre n'est pas triviale..., c'est bien l'objet de ce document.
@@ -38,31 +39,31 @@ une position estim&eacute;e. On a juste besoin ici de conna&icirc;tre :
 - La hauteur observ&eacute;e de l'astre
 - L'heure de l'observation - destin&eacute;e &agrave; d&eacute;terminer la position de l'astre observ&eacute; (position g&eacute;ographique instantan&eacute;e, aka Pg).
 
-> _Note_ :  
+> _Note_ :
 > Toutes les figures de ce document - &agrave; l'exception des trois premi&egrave;res - sont r&eacute;alis&eacute;es
-> &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet. 
+> &agrave; partir de WebComponents, disponibles dans le pr&eacute;sent projet.
 
-> _Note_ :  
+> _Note_ :
 > Dans cet exemple, on utilise Java pour les calculs d'&eacute;ph&eacute;m&eacute;rides en backend. Le code Java
 > qui permet ces calculs est disponible dans ce r&eacute;f&eacute;rentiel (voir `astro-computer:AstroComputer`).
-> Il l'est aussi dans d'autres langages : 
+> Il l'est aussi dans d'autres langages :
 > - C
 > - Golang
 > - php
 > - Python
 > - Scala
 > - ES6 (aka JavaScript)
-> - Kotlin (en acc&eacute;dant aux classes Java compil&eacute;es)  
-> 
+> - Kotlin (en acc&eacute;dant aux classes Java compil&eacute;es)
+>
 > La partie frontend est r&eacute;alis&eacute;e en HTML5/CSS3/ES6, avec des WebComponents, d&eacute;j&agrave; mentionn&eacute;s ci-dessus.
 
 ## Rappels...
 
 ### Hauteur et azimut d'un astre
 > _Attention_ : ce qu'on appelle la **hauteur** d'un astre dans les lignes qui suivent est l'_**angle**_ apparent que fait un astre avec l'horizon,
-> vu de la position de l'observateur. Ceci est visible et illustr&eacute; sur les figures qui suivent. `h` est un _**angle**_, est non pas une distance... Il en est pour qui c'est potentiellement ambigu. 
+> vu de la position de l'observateur. Ceci est visible et illustr&eacute; sur les figures qui suivent. `h` est un _**angle**_, est non pas une distance... Il en est pour qui c'est potentiellement ambigu.
 
-Dans les formules suivantes : 
+Dans les formules suivantes :
 - `D` est la d&eacute;clinaison de l'astre observ&eacute; (calculée ou trouvée dans les éphémérides)
 - `L` est la latitude de l'observateur
 - `G` est la longitude de l'observateur
@@ -72,13 +73,13 @@ Dans les formules suivantes :
 Calcul de la hauteur d'un astre &agrave; partir de la position de l'observateur :
 
 $$
-H = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right) 
+H = \arcsin \left( (\sin(L).\sin(D)) + (\cos(L).\cos(D).\cos(AHL)) \right)
 $$
 
 Calcul de l'azimut d'un astre &agrave; partir de la position de l'observateur :
 
 $$
-Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right) 
+Z = \arctan \left( \dfrac{\sin(AHL)}{(\cos(L).\tan(D)) - (\sin(L).\cos(AHL))}\right)
 $$
 
 Voir une impl&eacute;mentation en Java [ici](https://github.com/OlivierLD/ROB/blob/master/astro-computer/AstroUtilities/src/main/java/calc/CelestialDeadReckoning.java).
@@ -104,11 +105,11 @@ a = sin^2\left(\dfrac{G2 - G1} {2}\right) + cos G1 . cos G2 . sin^2\left(\dfrac{
 $$
 
 $$
-c = 2 . atan2(\sqrt{a}, \sqrt{(1-a)})) 
+c = 2 . atan2(\sqrt{a}, \sqrt{(1-a)}))
 $$
 
 $$
-distance = R . c 
+distance = R . c
 $$
 
 o&ugrave; R est le rayon de la Terre.
@@ -131,7 +132,7 @@ $$
 finalLng = startLng + atan2(\sin(heading) * \sin(dist) * \cos(startLat), \cos(dist) - (\sin(startLat) * \sin(finalLat)))
 $$
 
-_Note:_  
+_Note:_
 On utilise ici `atan2`, qui restitue des angles entre -&Pi; et +&Pi;, &agrave; la diff&eacute;rence de `atan`, qui restitue des angles entre -&Pi; / 2 et +&Pi; / 2.
 
 ---
@@ -156,55 +157,55 @@ Des liens&nbsp;:
 La figure ci-dessus est faite pour &ecirc;tre aussi simple que possible. Tout est dans le m&ecirc;me plan `MOP` (celui de la feuille).
 Et m&ecirc;me les astres.
 
-`M` est la position de l'observateur sur la Terre.  
-`P` est le point de la Terre o&ugrave; l'astre est &agrave; la verticale. Ce point est appel&eacute; le "Pied de l'astre", ou aussi la "Position G&eacute;ographique Instantan&eacute;e" de l'astre, souvent not&eacute;e `Pg`.  
-La hauteur observ&eacute;e en `M` de l'astre est not&eacute;e `h`. Notez les autres endroits o&ugrave; cette hauteur `h` est reproduite, &agrave; partir de `S`, et &agrave; partir de `M` vers `O`.  
-La hauteur observ&eacute;e est l'angle que fait l'astre avec l'horizon.  
+`M` est la position de l'observateur sur la Terre.
+`P` est le point de la Terre o&ugrave; l'astre est &agrave; la verticale. Ce point est appel&eacute; le "Pied de l'astre", ou aussi la "Position G&eacute;ographique Instantan&eacute;e" de l'astre, souvent not&eacute;e `Pg`.
+La hauteur observ&eacute;e en `M` de l'astre est not&eacute;e `h`. Notez les autres endroits o&ugrave; cette hauteur `h` est reproduite, &agrave; partir de `S`, et &agrave; partir de `M` vers `O`.
+La hauteur observ&eacute;e est l'angle que fait l'astre avec l'horizon.
 L'angle que fait l'astre observ&eacute; avec le z&eacute;nith (la verticale de l'observateur) est le compl&eacute;ment de cette hauteur, `90 - h`, et s'appelle
-la Distance Z&eacute;nithale, not&eacute;e aussi &zeta;, la lettre grecque "dzeta" (&ccedil;a commence par "dz"...).  
+la Distance Z&eacute;nithale, not&eacute;e aussi &zeta;, la lettre grecque "dzeta" (&ccedil;a commence par "dz"...).
 
 > _Note_: sur la figure, la direction de l'astre &agrave; partir de M est identique (parall&egrave;le) &agrave; sa direction &agrave; partir de O.
 > Ceci convient &agrave; un astre tr&egrave;s &eacute;loign&eacute; de l'observateur. &Ccedil;a ne serait pas applicable pour un satellite.
 
-Pour le c&ocirc;ne, l'angle en O (MOP) est `(90° - h)`.  
+Pour le c&ocirc;ne, l'angle en O (MOP) est `(90° - h)`.
 La distance (grand cercle) `M - P` est donc `(90° - h) * 60.0` nm.
 
-La distance `MS` est `r * (1 / tg(h))`, o&ugrave; `r` est le rayon de la Terre.  
-Le rayon de la base du c&ocirc;ne est `r * cos(h)`.  
+La distance `MS` est `r * (1 / tg(h))`, o&ugrave; `r` est le rayon de la Terre.
+Le rayon de la base du c&ocirc;ne est `r * cos(h)`.
 La distance du centre le la Terre `O` au sommet `S` est `sqrt(MS^2 + r^2)`, not&eacute; aussi
 
 $$
   \sqrt{MS^2 + r^2}
 $$
 
-La distance `OS` est `MS / cos(h)`.   
+La distance `OS` est `MS / cos(h)`.
 Comme `MS` = `1 / tg(h)`, `OS` s'&eacute;crit aussi `(cos(h) / sin(h)) / cos(h)`, soit
-`1 / sin(h)`.  
-`OS` = `1 / sin(h)`.  
-La distance `PS` est &eacute;gale &agrave; `OS - r`.    
+`1 / sin(h)`.
+`OS` = `1 / sin(h)`.
+La distance `PS` est &eacute;gale &agrave; `OS - r`.
 Donc `PS = (1 / sin(h)) - r`.
 
 Voici le m&ecirc;me sch&eacute;ma (simpliste) avec deux astres. Ici, les astres ne sont pas situ&eacute;s dans le plan de la feuille...
-<!-- ![Another one](./images/figure.03.png) -->  
+<!-- ![Another one](./images/figure.03.png) -->
 <img src="images/figure.03.png" width="400">
 
-On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;senter _deux_ intersections.  
-En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin - 
+On remarque ici que _deux_ cercles (le vert et le rouge) peuvent pr&eacute;senter _deux_ intersections.
+En fait, ils n'en ont qu'une que lorsqu'ils sont tangents l'un &agrave; l'autre, ce qui ne constitue pas - et de loin -
 la majorit&eacute; des cas.
 
-> _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.  
+> _Note_ : Sur la figure  ci-dessus, ce qu'on appelle le "Plan des Sommets" est ici perpendiculaire au plan de la feuille.
 > On en voit les points `S1`, `M`, et `S2`, sur "la tranche" du plan, qui ont ici tous la m&ecirc;me cote (z), mais des abscisses (x) et ordonn&eacute;es (y) tr&egrave;s vari&eacute;es.
 
 Voici la m&ecirc;me figure, "pench&eacute;e" vers celui qui la regarde,
 ou bien qui s'est lev&eacute; de sa chaise, la figure est vue de plus haut...
-<!-- ![Another one](./images/figure.04.png) -->   
+<!-- ![Another one](./images/figure.04.png) -->
 <img src="images/figure.04.png" width="400">
 
 Le "Plan des Sommets" est celui qui est d&eacute;fini par `S2`, `M` et `S1`, il est tangent &agrave; la Terre en `M`.
 
 ---
 
-## Le principe  
+## Le principe
 - On est capable de d&eacute;terminer les points d'un cercle d&eacute;fini par les points qui voient un astre &agrave; la m&ecirc;me hauteur, &agrave; un instant donn&eacute;.
 - Avec plusieurs observations (plusieurs astres), l'observateur se trouve &agrave; l'intersection de ces cercles.
 - Pour chaque astre, les param&egrave;tres de l'&eacute;quation sont :
@@ -216,30 +217,30 @@ Le "Plan des Sommets" est celui qui est d&eacute;fini par `S2`, `M` et `S1`, il 
 
 Avec plus d'un astre, la position de l'observateur - celle qu'on cherche - est &agrave; l'intersection de ces cercles.
 
-_Note_ : On fait figurer plusieurs astres dans les diagrammes ci-dessous - le Soleil, la Lune, Mars, Spica (&alpha; Libra). C'est juste pour l'exemple. Il est hautement improbable 
+_Note_ : On fait figurer plusieurs astres dans les diagrammes ci-dessous - le Soleil, la Lune, Mars, Spica (&alpha; Libra). C'est juste pour l'exemple. Il est hautement improbable
 de les voir tous en m&ecirc;me temps.
 
 _Une autre Note_ : Le sommet de tous les c&ocirc;nes, et la position de l'observateur, se trouvent tous dans le m&ecirc;me plan.
 D'o&ugrave; - sans doute - le nom de la m&eacute;thode...
 
-La position de l'observateur - celle qu'on cherche, donc - est &agrave; l'intersection de la base des c&ocirc;nes, dans les figures qui suivent, 
+La position de l'observateur - celle qu'on cherche, donc - est &agrave; l'intersection de la base des c&ocirc;nes, dans les figures qui suivent,
 c'est `47º40.66'N / 3º08.14'W`.
 
 ![Context](images/01.png)
 
-Voici la m&ecirc;me figure, d'un autre point de vue.  
-On note que - comme attendu - les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.  
+Voici la m&ecirc;me figure, d'un autre point de vue.
+On note que - comme attendu - les g&eacute;n&eacute;ratrices des c&ocirc;nes tangentent la Terre &agrave; la base du c&ocirc;ne, _sur_ le cercle d'&eacute;gales hauteurs.
 
 ![Context](images/02.png)
 
 Les cercles se croisent &agrave; la position de l'observateur. Ainsi, la position de l'observateur et
-toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan. Et elles ne sont pas - loin de l&agrave; - 
+toutes celles des sommets des c&ocirc;nes sont dans le m&ecirc;me plan. Et elles ne sont pas - loin de l&agrave; -
 n&eacute;cessairement align&eacute;es.
 
 ![Context](images/02.bis.png)
 
-L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte 
-Mercator.  
+L'&eacute;chelle des cartes pose ici un premier probl&egrave;me. Voici le contexte ci-dessus repr&eacute;sent&eacute; sur une carte
+Mercator.
 Deux premiers &eacute;l&eacute;ments sont &agrave; noter :
 - Les cercles de hauteur ne sont pas ronds sur cette projection.
 - Ils peuvent &ecirc;tre &eacute;normes.
@@ -259,7 +260,7 @@ En fait, ils ne sont ronds que sur un globe.
 ```
 $ ./generate.cones.sh
 ```
-Ce script execute le code Java de la classe `mps.Context01.java`. Ceux que &ccedil;a int&eacute;resse iront voir le code.   
+Ce script execute le code Java de la classe `mps.Context01.java`. Ceux que &ccedil;a int&eacute;resse iront voir le code.
 Ceci g&eacute;n&egrave;re les fichiers `.json` dans le r&eacute;pertoire `web/json`, qui seront utilis&eacute;s &agrave; partir d'une page HTML.
 
 ### 2 - Affichage des diagrammes
@@ -267,10 +268,10 @@ Ceci g&eacute;n&egrave;re les fichiers `.json` dans le r&eacute;pertoire `web/js
 ````
 $ npm start
 ````
-Ceci suppose que `nodeJS` est disponible sur le syst&egrave;me.  
-Puis &agrave; partir d'un browser, acc&eacute;der &agrave; `http://localhost:8080/index.html`.  
+Ceci suppose que `nodeJS` est disponible sur le syst&egrave;me.
+Puis &agrave; partir d'un browser, acc&eacute;der &agrave; `http://localhost:8080/index.html`.
 
-Les diagrammes ci-dessus sont affich&eacute;s lorsqu'on utilise le bouton `SET POSITION`, visible 
+Les diagrammes ci-dessus sont affich&eacute;s lorsqu'on utilise le bouton `SET POSITION`, visible
 sous la rubrique `Position on Earth`.
 
 ## En pratique
@@ -279,36 +280,36 @@ Vaste sujet... &Ccedil;a vient !
 #### Une remarque &agrave; propos du point par droites de hauteurs, de Marcq Saint-Hilaire
 Pour mettre cette m&eacute;thode en &oelig;uvre, on mesure la hauteur d'un astre au sextant, qu'on compare &agrave; ce qu'on
 devrait observer si on &eacute;tait l&agrave; o&ugrave; l'estime nous situe, cette hauteur "&eacute;stim&eacute;e" est calcul&eacute;e gr&acirc;ce aux &eacute;ph&eacute;m&eacute;rides et aux tables de Dieumegard, pour l'heure (exacte)
-de l'observation.  
-La droite de hauteur obtenue est ensuite port&eacute;e sur la carte, perpendiculairement &agrave; l'azimut de 
-l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les tables de Bataille), _**et non pas observ&eacute;**_ !  
+de l'observation.
+La droite de hauteur obtenue est ensuite port&eacute;e sur la carte, perpendiculairement &agrave; l'azimut de
+l'astre observ&eacute;, lequel est _**calcul&eacute;**_ (par les tables de Bataille), _**et non pas observ&eacute;**_ !
 Ceci justifie - entre autres - la raison pour laquelle un intercept de plus de 15 miles est consid&eacute;r&eacute; comme suspect. Le
 calcul de l'azimut se faisant &agrave; partir de la position estim&eacute;e, une "mauvaise" estime donne lieu
 &agrave; un azimut potentiellement &eacute;rron&eacute;.
 
 ### Une premi&egrave;re approche...
-On va partir - pour l'instant - d'une position estim&eacute;e, d'o&ugrave; on pourra calculer l'azimut des astres observ&eacute;s &agrave; l'aide des tables de Bataille.  
+On va partir - pour l'instant - d'une position estim&eacute;e, d'o&ugrave; on pourra calculer l'azimut des astres observ&eacute;s &agrave; l'aide des tables de Bataille.
 On pourra alors calculer le point du cercle d'&eacute;gales hauteurs (de cet astre) pour cet azimut.
 
 #### Exemple
 ```
-On 2025-Aug-20 10:40:31 UTC: 
+On 2025-Aug-20 10:40:31 UTC:
 the Sun Decl 12º16.80'N, GHA 339º17.40', from 47º40.66'N / 3º08.14'W.
 Seeing the Sun at altitude 49º22.52', in the 142.65º
 ```
 
 ### Une approche graphique ?
-Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) commun(s).  
+Le challenge ici est donc de trouver pour _**tous**_ les cercles le (ou les) point(s) commun(s).
 On peut essayer graphiquement, pour la latitude, puis pour la longitude...
 
-Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources et un nombre d'op&eacute;rations consid&eacute;rables (effrayant si on fait &ccedil;a manuellement)...  
+Mais le calcul des coordonn&eacute;es de chaque cercle (ou c&ocirc;ne) requiert des ressources et un nombre d'op&eacute;rations consid&eacute;rables (effrayant si on fait &ccedil;a manuellement)...
 
-On peut cependant facilement calculer le rayon de la base du c&ocirc;ne (du cercle). Les coordonn&eacute;es du centre 
-sont restitu&eacute;es par les &eacute;ph&eacute;m&eacute;rides.  
+On peut cependant facilement calculer le rayon de la base du c&ocirc;ne (du cercle). Les coordonn&eacute;es du centre
+sont restitu&eacute;es par les &eacute;ph&eacute;m&eacute;rides.
 Mais deux probl&egrave;mes se posent alors :
-- Le cercle n'est rond que sur une sph&egrave;re (un globe), les cartes dont on dispose (Mercator, Lambert, St&eacute;r&eacute;ographiques, etc) ne permettent certainement 
+- Le cercle n'est rond que sur une sph&egrave;re (un globe), les cartes dont on dispose (Mercator, Lambert, St&eacute;r&eacute;ographiques, etc) ne permettent certainement
 pas de tracer ces cercles avec un compas, ni avec aucun outil connu.
-- Quand bien m&ecirc;me on parviendrait &agrave; tracer ce cercle, il est parfois tellement vaste - &agrave; l'&eacute;chelle de la Terre - que 
+- Quand bien m&ecirc;me on parviendrait &agrave; tracer ce cercle, il est parfois tellement vaste - &agrave; l'&eacute;chelle de la Terre - que
 les coordonn&eacute;es des intersections avec un autre cercle seraient fort impr&eacute;cises. C'est &agrave; cause de &ccedil;a qu'on a - dans le contexte des droites de hauteur -
 &eacute;labor&eacute; Canevas Mercator et autres Plotting Sheets...
 
@@ -317,19 +318,19 @@ Si on a trois astres, on a trois droites, et on est &agrave; leur intersection..
 
 D'o&ugrave; la question : _Quel est alors dans ce contexte (graphique) l'int&eacute;ret de la M&eacute;thode du Plan des Sommets ?_
 
-La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :  
+La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :
 ![Context](images/05.png)
-Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).  
+Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 
 ### Approche it&eacute;rative
 Le probl&egrave;me est que deux cercles peuvent avoir deux intersections...
-C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et 
+C'est ce qui est restitu&eacute; ci-dessous, dans les lignes `1st Position` et
 `2nd Position`.
-Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.  
-On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton).   
-La m&eacute;thode de Newton est fort pratique quand on cherche la solution d'une &eacute;quation (ou d'un syst&egrave;me d'&eacute;quations) 
-tr&egrave;s (voire trop) complexe. La solution &agrave; laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.  
+Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.
+On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton).
+La m&eacute;thode de Newton est fort pratique quand on cherche la solution d'une &eacute;quation (ou d'un syst&egrave;me d'&eacute;quations)
+tr&egrave;s (voire trop) complexe. La solution &agrave; laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.
 Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.
 
 #### La m&eacute;thode de Newton, en deux mots.
@@ -345,21 +346,21 @@ La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:
 - Et on arr&ecirc;te - arbitrairement - quand la pr&eacute;cision requise (analogue &agrave; `deltaX`) est atteinte. La racine (le r&eacute;sultat) recherch&eacute;e est entre `x1` et `x2`, lesquels sont
 s&eacute;par&eacute;s d'une valeur `deltaX`. Il appartient d&egrave;s lors &agrave; l'utilisateur de savoir si cette pr&eacute;cision est suffisante, ou s'il faut poursuivre les it&eacute;rations.
 
-Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien, qui s'appelle `z` aussi) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.  
+Dans le cas qui nous occupe, on commencera avec `Z` (`Z` est ici un azimuth, rien &agrave; voir avec la cote d'un rep&egrave;re cart&eacute;sien, qui s'appelle `z` aussi) allant de `0` &agrave; `360`, tous les `0.1` degr&eacute;s.
 Le nombre d'it&eacute;rations correspond au nombre de fois o&ugrave; on divisera cet intervalle de degr&eacute;s par 10 (ce `10` est arbitraire). Ainsi, avec ce `10`,
 si on demarre avec un pas de `0.1` (10<sup><small>-1</small></sup>) degr&eacute;, et qu'on proc&egrave;de en 4 it&eacute;rations, on finira avec un pas de 10<sup><small>-4</small></sup > degr&eacute;s, mais sur un intervalle (un arc de cercle)
 beaucoup plus restreint que lors de la premi&egrave;re it&eacute;ration (qui faisait tout le cercle). D'o&ugrave; l'int&eacute;r&ecirc;t de la m&eacute;thode, merci Isaac&nbsp;!
 
 #### Exemple (tous les d&eacute;tails sont dans le code)
-Dans les exemples ci-dessous, la hauteur des astres est celle observ&eacute;e &agrave; partir de la position `47º40.66'N / 3º08.14'W`.  
-Les astres par d&eacute;faut (dans le script) sont la Lune et le Soleil.  
+Dans les exemples ci-dessous, la hauteur des astres est celle observ&eacute;e &agrave; partir de la position `47º40.66'N / 3º08.14'W`.
+Les astres par d&eacute;faut (dans le script) sont la Lune et le Soleil.
 ```
-$ ./test.one.sh 
+$ ./test.one.sh
 OK. Proceeding with user's input.
 1st Position between 2º56.79'N / 19º14.49'W and 2º56.79'N / 19º14.49'W, dist 0.00 nm.
 2nd Position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
 Done
-$ 
+$
 ```
 On peut aussi fournir les param&egrave;tres directement sur la command line:
 ```
@@ -368,9 +369,9 @@ OK. Proceeding with user's input.
 1st Position between 2º56.79'N / 19º14.49'W and 2º56.79'N / 19º14.49'W, dist 0.00 nm.
 2nd Position between 47º40.66'N / 3º08.14'W and 47º40.66'N / 3º08.14'W, dist 0.00 nm.
 Done
-$ 
+$
 ```
-Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java`.  
+Plusieurs exemples figurent dans le package `mps.pg`, comme `mps.pg.PlayGround08.java`.
 From the `MPSServer` directory:
 ```
 $ ../../gradlew clean shadowJar
@@ -408,14 +409,14 @@ Found intersection at 47º40.66'N / 3º08.14'W
 ==> Difference/offset: 0.00 nm
 ------- End of the story -------
 ```
-... Encore un fois, les d&eacute;tails sont dans le code.  
+... Encore un fois, les d&eacute;tails sont dans le code.
 Ceci semble fonctionner comme on l'attend, mais il est pour le moment **_totalement inenvisageable_** de faire
 le boulot sans un calculateur - programmable.
 
 #### Une premi&egrave;re approche interactive
 Un script interactif, `cones.resolution.sh` :
 ```
-$ ./cones.resolution.sh 
+$ ./cones.resolution.sh
 
 You will be prompted to enter body names, dates, and observed altitudes.
 
@@ -432,7 +433,7 @@ Ok, another one.
 Body name: Altair
 Date (duration format): 2025-10-07T15:36:00
 Observed Altitude: 32º28.63'
-More [n]|y ? >  
+More [n]|y ? >
 Now proceeding.
 Read line [Body=Mars;Date=2025-10-07T15:36:00;ObsAlt=21.98]
         Body : [Mars]
@@ -488,7 +489,7 @@ Done
 
 #### Une premi&egrave;re impl&eacute;mentation, web front-end et HTTP/REST back-end
 
-Apr&egrave;s avoir d&eacute;marr&eacute; le serveur MPS (voir le project [`MPSServer`](../MPSServer/README.md), jumeau de celui-ci), et charg&eacute; la page web ad&eacute;quate (`mps.02.html`) dans un navigateur, 
+Apr&egrave;s avoir d&eacute;marr&eacute; le serveur MPS (voir le project [`MPSServer`](../MPSServer/README.md), jumeau de celui-ci), et charg&eacute; la page web ad&eacute;quate (`mps.02.html`) dans un navigateur,
 l'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la date de l'observation, et la hauteur (corrig&eacute;e) de l'astre :
 
 
@@ -496,10 +497,10 @@ l'utilisateur s&eacute;lectionne les corps c&eacute;lestes observ&eacute;s, la d
 
 La position calcul&eacute;e apparait dans la bo&icirc;te "MPS Data"
 
-![MPS 102](./images/mps.102.png)  
+![MPS 102](./images/mps.102.png)
 Les calculs sont effectu&eacute;s par le serveur, &agrave; l'aide de services REST.
 
-Un exemple plus complet est d&eacute;crit [ici](../MPSServer/HOW_TO.md).  
+Un exemple plus complet est d&eacute;crit [ici](../MPSServer/HOW_TO.md).
 
 _**Note**_ : dans le projet [MPSServer](../MPSServer), on propose 3 impl&eacute;mentations de la m&eacute;thode&nbsp;;
  present&eacute;e sous la forme d'une page web (comme vu plus haut), et qui del&egrave;gue les calculs relatifs aux c&ocirc;nes
@@ -514,7 +515,7 @@ Voir les d&eacute;tails dans le projet correspondant.
 #### Pour les tests
 Le script `what.should.i.see.sh` peut aider &agrave; trouver les hauteurs qu'on devrait observer, pour un astre et une heure (date) donn&eacute;s.
 ```
-$ ./what.should.i.see.sh 
+$ ./what.should.i.see.sh
 You will be prompted to enter the user's position.
 
 Latitude (format like N 47º40.66'):  N 47º40.66'
@@ -532,7 +533,7 @@ More [n]|y ? > y
 Ok, another one.
 Body name: Altair
 Date (duration format): 2025-10-07T15:36:00
-More [n]|y ? > 
+More [n]|y ? >
 Now proceeding.
 Read line [Body=Venus;Date=2025-10-07T15:36:00]
         Body : [Venus]
@@ -577,7 +578,7 @@ $$
 finalLng = pgLng + atan2(\sin(Z) * \sin(radius) * \cos(pgLat), \cos(radius) - (\sin(pgLat) * \sin(finalLat)))
 $$
 
-<!-- This is not understood by md on git... Too bad. 
+<!-- This is not understood by md on git... Too bad.
 $$
 \begin{array}{lcl} z & = & a \\ f(x,y,z) & = & x + y + z \end{array}
 $$
@@ -594,13 +595,13 @@ Tous les angles (y compris `radius`) sont &agrave; exprimer en radians.
 
 Les valeurs `finalLat` et `finalLng` sont ainsi les coordon&eacute;es du point du cercle de centre `Pg`, de rayon `radius`, pour un angle `Z`.
 
-Ces formules sont donc la base de l'&eacute;quation &agrave; r&eacute;soudre.  
-Pour trouver les intersections entre deux cercles d&eacute;finis comme ci-dessus, 
+Ces formules sont donc la base de l'&eacute;quation &agrave; r&eacute;soudre.
+Pour trouver les intersections entre deux cercles d&eacute;finis comme ci-dessus,
 le probl&egrave;me &agrave; poser - et r&eacute;soudre - est donc :
 
 - Avec `Pg1` et `Pg2` d&eacute;finis par les &eacute;ph&eacute;merides &agrave; l'heure de l'observation, pour les astres observ&eacute;s,
 `radius1` et `radius2` d&eacute;finis par la hauteur des astres observ&eacute;s
-- Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`, 
+- Pour les cercles d&eacute;finis par `Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`,
 - **_On cherche_** quels sont les points de la Terre o&ugrave; `finalLat1 = finalLat2` et `finalLng1 = finalLng2` !
   - Les variables cruciales sont ici `Z1` et `Z2`, les autres (`Pg1[pg1Lat, pg1Lng]`, `radius1`, et `Pg2[pg2Lat, pg2Lng]`, `radius2`) &eacute;tant invariantes dans le contexte du calcul.
 
@@ -616,12 +617,12 @@ Le syst&egrave;me complet devient ainsi
  \
 ```
 
-&Agrave; comparer avec les [formules &agrave; r&eacute;soudre](#hauteur-et-azimut-dun-astre) pour la hauteur et l'azimuth, 
+&Agrave; comparer avec les [formules &agrave; r&eacute;soudre](#hauteur-et-azimut-dun-astre) pour la hauteur et l'azimuth,
 celles auxquelles s'attaquent (avec succ&egrave;s) les tables de Dieumegard et Bataille.
 
 Ce qui est s&ucirc;r, c'est qu'on va bien rigoler !
 
-On va distinguer les &eacute;quations concernant la latitude de celles qui concernent la longitude.  
+On va distinguer les &eacute;quations concernant la latitude de celles qui concernent la longitude.
 
 #### On commence par les latitudes
 On obtient alors
@@ -665,7 +666,7 @@ f1(z) = arcsin(A1) + (B1 * cos(z))
 f2(z) = arcsin(A2) + (B2 * cos(z))
 ```
 
-On cherche donc les valeurs `Z1` et `Z2` pour lesquelles 
+On cherche donc les valeurs `Z1` et `Z2` pour lesquelles
 ```
 f1(Z1) = f2(Z2)
 ```
@@ -686,10 +687,10 @@ Ou aussi, comme pr&eacute;c&eacute;demment
 ```
 On note cette fois que ces formules font intervenir les valeurs `finalLat1`, et `finalLat2`, r&eacute;sultats du syst&egrave;me pr&eacute;c&eacute;dent...
 Cette fois-ci, on pose `C1 = pg1Lng`, `C2 = pg2Lng`, `D1 = sin(radius1) * cos(pg1Lat)`, `D2 = sin(radius2) * cos(pg2Lat)`,
-`E1 = cos(radius1)`, `E2 = cos(radius2)`.  
+`E1 = cos(radius1)`, `E2 = cos(radius2)`.
 Et on a
 ```
- C1 + atan2(sin(Z1) * D1, E1 - (sin(C1) * sin(finalLat1))) = C2 + atan2(sin(Z2) * D2, E2 - (sin(C2) * sin(finalLat2))) 
+ C1 + atan2(sin(Z1) * D1, E1 - (sin(C1) * sin(finalLat1))) = C2 + atan2(sin(Z2) * D2, E2 - (sin(C2) * sin(finalLat2)))
 ```
 On d&eacute;finit les m&ecirc;me sortes de fonctions qu'auparavant, `g1` et `g2` :
 ```

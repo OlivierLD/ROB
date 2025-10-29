@@ -178,6 +178,9 @@ this is the kind of things you might regret not to have done.
 
 It comes with many web components and examples.  
 ![From Space 01](./doc_resources/from.space.01.png)  
+
+The two ones below have been added recently. Sailing at night, I was wondering 
+"What is this star ahead of us?". Those components answer the question 😉.
 ![From Space 02](./doc_resources/from.space.02.png)  
 ![From Space 03](./doc_resources/from.space.03.png)  
 
