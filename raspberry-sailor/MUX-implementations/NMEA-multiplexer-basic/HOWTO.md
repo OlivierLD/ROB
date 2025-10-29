@@ -84,6 +84,8 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
 - Try the web interface
   - From a browser on another machine (laptop, cell-phone, tablet, ...), connected on the Raspberry Pi's network, reach
     `http://192.168.50.10:9999/zip/index.html`, and see for yourself!
+  - Again, the code of the Web UI is not carved in stone, they're all _examples_ (including the admin pages), suggesting what can be done.
+    Do feel free to come up with your own pages!
 
 Now, you're good to go, the Raspberry Pi should not need an Internet connection anymore.
 
@@ -117,6 +119,18 @@ _**Note**_: For the log-files not to grow too big, we've excluded some strings f
 sentence.filters: ~GGA,~GSV,~GSA
 ```
 This excludes the sentences concerning the GPS satellites from the log files. They're still available in the cache tough, and can be displayed in some Web UI packaged in the archive we've generated.
+
+#### To check if your GPS is working as expected...
+You can use the [`find.port.sh`](../../NMEA-multiplexer/find.port.sh) script, to find the serial port name of your GPS, and then (assuming that the port name is `/dev/ttyACM0`):
+```
+$ stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+$ cat /dev/ttyACM0
+```
+or, if you want to see only some sentences, and log them into a file:
+```
+$ stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+$ cat /dev/ttyACM0 | grep -e "RMC" -e "GLL" -e "VTG" >> data.log
+```
 
 ### 3D Printed enclosures
 STL files available from another repo, [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/ProjectBoxRPiZeroBox.stl), and
