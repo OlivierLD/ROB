@@ -26,10 +26,14 @@
     <script src="leaflet/leaflet.js"></script>
     -->
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <!--link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script-->
 
-    <style type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+
+  <style type="text/css">
 body {
   background-color: whitesmoke;
 }
@@ -190,11 +194,21 @@ Mouse Pos: <span id="mouse-pos"></span>.
     // Original zoom
     let zoom = 5;
 
+    // let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
+
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }).addTo(map);
+
     let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+	let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+	let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+
+    const tiles = L.tileLayer(mbUrl, {
+		maxZoom: 19,
+		attribution: mbAttr
+	}).addTo(map);
 
     let popup = L.popup(); // Used below.
 
