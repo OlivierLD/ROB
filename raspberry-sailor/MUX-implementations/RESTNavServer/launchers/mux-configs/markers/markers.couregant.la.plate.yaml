@@ -94,6 +94,27 @@ borders:
     - rank: 29
       latitude: 48.038761134633035
       longitude: -4.746090174594428
+  - border-name: "Ile aux moutons"
+    type: "closed"
+    border-elements:
+      - rank: 1
+        latitude: 47.77638182509766
+        longitude: -4.0299439430236825
+      - rank: 2
+        latitude: 47.77612226244313
+        longitude: -4.028463363647462
+      - rank: 3
+        latitude: 47.774319708266255
+        longitude: -4.027218818664552
+      - rank: 4
+        latitude: 47.77398803149108
+        longitude: -4.028313159942628
+      - rank: 5
+        latitude: 47.774189921954004
+        longitude: -4.029407501220704
+      - rank: 6
+        latitude: 47.775386827885434
+        longitude: -4.031038284301759
 markers:
   - label: "Concarneau"
     latitude: 47.87003257447486
@@ -103,6 +124,18 @@ markers:
     latitude: 47.714995280934595
     longitude: -3.9880335339694293
     type: default
+  - label: "Ile aux moutons"
+    latitude: 47.775314725898326
+    longitude: -4.029278755187989
+    type: default
+  - label: "Basse Perennes"
+    latitude: 47.683072220525
+    longitude: -4.103307723999024
+    type: card-w
+  - label: "Jument de Glenan"
+    latitude: 47.64561482699582
+    longitude: -4.023056030273438
+    type: card-s
   - label: "Penmarc'h"
     latitude: 47.79651290986675
     longitude: -4.376248866428796
@@ -114,4 +147,12 @@ markers:
   - label: "La Plate"
     latitude: 48.039461722002244
     longitude: -4.7595852334120545
+    type: default
+  - label: "Raguenez"
+    latitude: 47.78395183249432
+    longitude: -3.800582885742188
+    type: default
+  - label: "Ile verte"
+    latitude: 47.77185371294052
+    longitude: -3.800196647644043
     type: default
