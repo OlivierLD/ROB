@@ -120,6 +120,10 @@ markers:
     latitude: 47.87003257447486
     longitude: -3.9131064714092654
     type: default
+  - label: "Le Cochon"
+    latitude: 47.8578
+    longitude: -3.92573
+    type: green
   - label: "Archipel de Glenan"
     latitude: 47.714995280934595
     longitude: -3.9880335339694293

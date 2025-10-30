@@ -9,6 +9,7 @@ import http.HTTPServer.Response;
 import http.HttpHeaders;
 import http.RESTProcessorUtil;
 import http.client.HTTPClient;
+import util.MarkersToJSON;
 import utils.SystemUtils;
 
 import java.util.*;
@@ -75,6 +76,11 @@ public class RESTImplementation {
 					NAV_PREFIX + "/polar-file-location",
 					this::getPolarFileLocation,
 					"Returns the polar file location passed as System variable."),
+			new Operation(
+					"POST",
+					NAV_PREFIX + "/yaml-to-json",
+					this::yamlToJson,
+					"Returns the JSON version of a YAML marker file."),
 //			new Operation(
 //					"GET",
 //					NAV_PREFIX + "/dev-curve",
@@ -245,6 +251,41 @@ public class RESTImplementation {
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
 							.errorCode("NAV-0001")
+							.errorMessage(ex.toString())
+							.errorStack(HTTPServer.dumpException(ex)));
+			return response;
+		}
+		return response;
+	}
+
+	private Response yamlToJson(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+		try {
+			String content = "No file name to process...";
+			if (request.getContent() != null && request.getContent().length > 0) {
+				String payload = new String(request.getContent());
+				System.out.println("Payload:" + payload);
+				if (!"null".equals(payload)) {
+					String fileName = payload;
+					// Trim the quotes
+					fileName = fileName.replaceAll("\"", "");
+					// content = String.format("{ filename: '%s', json: 'Happy!' }", fileName);
+					System.out.printf("yamlToJSON requested for [%s], from %s\n", fileName, System.getProperty("user.dir"));
+
+					content = MarkersToJSON.convertToJSON(fileName);
+					this.navRequestManager.getLogger().log(Level.INFO, String.format("YamlToJSON requested for: %s", payload));
+				}
+			}
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.getBytes().length);
+			response.setPayload(content.getBytes());
+		} catch (Exception ex) {
+
+			ex.printStackTrace();
+
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("NAV-0001-1")
 							.errorMessage(ex.toString())
 							.errorStack(HTTPServer.dumpException(ex)));
 			return response;

@@ -22,6 +22,18 @@ import java.util.Map;
 public class MarkersToJSON {
 	private final static ObjectMapper mapper = new ObjectMapper();
 
+	public static String convertToJSON(String inputFileName) throws Exception {
+		final List<Marker> markers = NMEAUtils.loadMarkers(inputFileName);
+		final List<Border> borders = NMEAUtils.loadBorders(inputFileName);
+
+		Map<String, Object> cache = new HashMap<>();
+
+		cache.put(NMEADataCache.MARKERS_DATA, markers);
+		cache.put(NMEADataCache.BORDERS_DATA, borders);
+
+		return mapper.writeValueAsString(cache);
+	}
+
 	public static void main(String... args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("Please provide the name of the yaml file to analyze as first parameter");
@@ -30,24 +42,15 @@ public class MarkersToJSON {
 		try {
 			String inputFileName = args[0]; // The name of the yaml file
 
-			final List<Marker> markers = NMEAUtils.loadMarkers(inputFileName);
-			final List<Border> borders = NMEAUtils.loadBorders(inputFileName);
+			String jsonVersion = convertToJSON(inputFileName);
 
 			String outputFileName = inputFileName + ".json";
-
 			BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileName));
-
-			Map<String, Object> cache = new HashMap<>();
-
-			cache.put(NMEADataCache.MARKERS_DATA, markers);
-			cache.put(NMEADataCache.BORDERS_DATA, borders);
-
-			bw.write(mapper.writeValueAsString(cache));
-
+			bw.write(jsonVersion);
 			bw.close();
 
 			System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
-		} catch (IOException ioe) {
+		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
 	}
