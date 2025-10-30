@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  *
  * Gathers other REST Services, all in one place.
  * See RESTTideEngine, RESTNauticalAlmanac, etc.
+ * See the addRequestManager invocations below.
  */
 public class NavServer {
 

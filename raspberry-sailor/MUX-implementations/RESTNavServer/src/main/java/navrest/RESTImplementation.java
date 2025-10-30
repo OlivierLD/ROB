@@ -270,7 +270,9 @@ public class RESTImplementation {
 					// Trim the quotes
 					fileName = fileName.replaceAll("\"", "");
 					// content = String.format("{ filename: '%s', json: 'Happy!' }", fileName);
-					System.out.printf("yamlToJSON requested for [%s], from %s\n", fileName, System.getProperty("user.dir"));
+					if (VERBOSE) {
+						System.out.printf("yamlToJSON requested for [%s], from %s\n", fileName, System.getProperty("user.dir"));
+					}
 
 					content = MarkersToJSON.convertToJSON(fileName);
 					this.navRequestManager.getLogger().log(Level.INFO, String.format("YamlToJSON requested for: %s", payload));
