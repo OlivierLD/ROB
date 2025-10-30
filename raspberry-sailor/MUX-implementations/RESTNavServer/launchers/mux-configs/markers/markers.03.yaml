@@ -75,10 +75,10 @@ markers:
     longitude: -3.446303757882561
     label: "Port-Tudy"
     type: default
-  - label: "Dummy Placeholder"
-    latitude: 0.0
-    longitude: 0.0
-    type: default
+# - label: "Dummy Placeholder"
+#   latitude: 0.0
+#   longitude: 0.0
+#   type: default
   - label: "Petit Trého"
     latitude: 47.557858
     longitude: -3.012553
