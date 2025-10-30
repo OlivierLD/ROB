@@ -10,7 +10,7 @@ cleanup() {
     KEEP_LOOPING=false
     if [[ "${pid}" != "" ]]; then
         echo "Killing process #${FILE_NO}, ${pid}..."
-        kill -15 ${pid}
+        kill -9 ${pid}
     fi
 }
 
@@ -18,12 +18,15 @@ export KEEP_LOOPING=true
 export FILE_NO=1
 while [[ "${KEEP_LOOPING}" == "true" ]]; do
     echo "Processing iteration #${FILE_NO}"
-    NB=1
-    ./serial.log.sh > LOG_${FILE_NO}.log 2>&1 &
+    cat /dev/ttyACM0 | grep -e "RMC" > LOG_${FILE_NO}.log 2>&1 &
+    # ./serial.log.sh > LOG_${FILE_NO}.log 2>&1 &
     pid=$!
     sleep 30
     echo "Killing process #${FILE_NO}, ${pid}..."
-    kill -15 ${pid}
+    kill -9 ${pid}
+    #
+    # See log file...
+    echo "LOG_${FILE_NO}.log contains $(cat LOG_${FILE_NO}.log | wc -l) lines..."
     #
     FILE_NO=$(expr ${FILE_NO} + 1)
 done
