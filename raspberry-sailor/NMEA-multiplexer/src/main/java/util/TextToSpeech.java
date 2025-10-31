@@ -16,16 +16,23 @@ public class TextToSpeech {
 	}
 
 	public static void speak(String text) {
+		speak(text, null);
+	}
+	public static void speak(String text, String lang) {
 		String osName = System.getProperty("os.name");
 		List<String> commands = new ArrayList<>();
 		try {
 			switch (osName) {
 				case "Mac OS X":
-					commands.add("say"); // -v Thomas
+					commands.add("say");
+					if ("FR".equals(lang)) { // -v Thomas
+						commands.add("-v");
+						commands.add("Thomas");
+					}
 					commands.add("\"" + text + "\"");
 					Runtime.getRuntime().exec(commands.toArray(new String[0]));
 					break;
-				case "Linux":
+				case "Linux": // TODO Other languages
 					commands.add("/bin/bash");
 					commands.add("-c");
 					commands.add("\"espeak -a 200 '" + text + "' --stdout | aplay\""); // No single quote in the message!!
@@ -50,6 +57,7 @@ public class TextToSpeech {
 
 	/* for tests... */
 	public static void main(String... args) {
-		speak("Warning! Collision threat!");
+		// speak("Warning! Collision threat!");
+		speak("Attention ! Détection de collision !", "FR");
 	}
 }

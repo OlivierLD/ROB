@@ -58,6 +58,7 @@ markers:
     latitude: 47.647265
     longitude: -3.425327
     type: card-n
+    id: BMELITE
   - label: "SpeerBrecker"
     latitude: 47.651588
     longitude: -3.438815
@@ -173,4 +174,3 @@ borders:
        - rank: 11
          latitude: 47.649662445325056
          longitude: -3.464469909667969
-

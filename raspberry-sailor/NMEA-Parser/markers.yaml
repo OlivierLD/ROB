@@ -6,7 +6,8 @@ markers:
     latitude: 47.647265
     longitude: -3.425327
     type: card-n
-  - latitude: 47.705 
+    id: BMELITE
+  - latitude: 47.705
     longitude: -3.105 
     label: Locoal
   - latitude: 47.661667 
@@ -30,4 +31,3 @@ markers:
   - latitude: 39.167398801021655
     longitude: -107.24753700739706
     label: "Redstone, CO."
-    

@@ -11,9 +11,12 @@ import java.util.function.Consumer;
 /**
  * Just an example for AISManager (or others like BorderManager) collision callback.
  * >> NOT A Singleton, the constructor is public, there is NO getInstance() method
+ *
+ * TODO A PlaySound callback (like a fog horn)
  */
 public class BufferedCollisionCallback implements Consumer<String> {
 
+    private String collisionLanguage = "EN";
     private String collisionVocabulary = "collision";
 
     private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
@@ -29,7 +32,10 @@ public class BufferedCollisionCallback implements Consumer<String> {
                     int length = threatList.size();
                     if (length > 0) {
                         String message = String.format("Warning ! %d %s threat%s !", length, collisionVocabulary, length > 1 ? "s" : "");
-                        TextToSpeech.speak(message);
+                        if ("FR".equals(collisionLanguage)) {
+                            message = String.format("Attention ! %d danger%s de %s !", length, length > 1 ? "s" : "", collisionVocabulary);
+                        }
+                        TextToSpeech.speak(message, collisionLanguage);
                         if (VERBOSE) {
                             System.out.printf(">> Found %d threat(s) :\n", length);
                             threatList.stream().forEach(el -> {
@@ -68,6 +74,10 @@ public class BufferedCollisionCallback implements Consumer<String> {
         try {
             FileInputStream fis = new FileInputStream(propFileName);
             props.load(fis);
+
+            if (props.getProperty("collision.lang") != null) {
+                collisionLanguage = props.getProperty("collision.lang");
+            }
 
             if (props.getProperty("collision.name") != null) {
                 collisionVocabulary = props.getProperty("collision.name");
