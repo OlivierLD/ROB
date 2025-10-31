@@ -101,10 +101,10 @@ markers:
     longitude: -3.446303757882561
     label: "Port-Tudy"
     type: default
-  - label: "Dummy Placeholder"
-    latitude: 0.0
-    longitude: 0.0
-    type: default    
+#  - label: "Dummy Placeholder"
+#    latitude: 0.0
+#    longitude: 0.0
+#    type: default
 borders:
   - border-name: "Etel, Right bank"
     type: "open"
@@ -172,4 +172,3 @@ borders:
        - rank: 11
          latitude: 47.649662445325056
          longitude: -3.464469909667969
-

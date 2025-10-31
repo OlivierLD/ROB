@@ -26,20 +26,43 @@ import nmea.parser.*;
 import nmea.utils.NMEAUtils;
 import org.yaml.snakeyaml.Yaml;
 import util.LogAnalyzer;
+import util.MarkersToJSON;
 import util.NMEAtoJSONPos;
 import utils.StringUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
+//import java.util.concurrent.ConcurrentHashMap;
+//import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+//import java.util.stream.Stream;
 
 /**
  * This class defines the REST operations supported by the HTTP Server, including Admin operations
@@ -163,6 +186,11 @@ public class RESTImplementation {
 					REST_PREFIX + "/marker-files",
 					this::getMarkerFiles,
 					"Get the available marker and border files, from user.home."),
+			new Operation(
+					"POST",
+					REST_PREFIX + "/yaml-to-json",
+					this::yamlToJson,
+					"Returns the JSON version of a YAML marker file."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/waypoints",
@@ -534,6 +562,44 @@ public class RESTImplementation {
 
 		return response;
 	}
+
+	private Response yamlToJson(Request request) {
+		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+		try {
+			String content = "No file name to process...";
+			if (request.getContent() != null && request.getContent().length > 0) {
+				String payload = new String(request.getContent());
+				System.out.println("Payload:" + payload);
+				if (!"null".equals(payload)) {
+					String fileName = payload;
+					// Trim the quotes
+					fileName = fileName.replaceAll("\"", "");
+					// content = String.format("{ filename: '%s', json: 'Happy!' }", fileName);
+					if (restVerbose()) {
+						System.out.printf("yamlToJSON requested for [%s], from %s\n", fileName, System.getProperty("user.dir"));
+					}
+
+					content = MarkersToJSON.convertToJSON(fileName);
+					// this.navRequestManager.getLogger().log(Level.INFO, String.format("YamlToJSON requested for [%s] from [%s]", payload, System.getProperty("user.dir")));
+				}
+			}
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.APPLICATION_JSON, content.getBytes().length);
+			response.setPayload(content.getBytes());
+		} catch (Exception ex) {
+
+			ex.printStackTrace();
+
+			response = HTTPServer.buildErrorResponse(response,
+					Response.BAD_REQUEST,
+					new HTTPServer.ErrorPayload()
+							.errorCode("NAV-0001-1")
+							.errorMessage(ex.toString())
+							.errorStack(HTTPServer.dumpException(ex)));
+			return response;
+		}
+		return response;
+	}
+
 	private HTTPServer.Response getWaypoints(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content;

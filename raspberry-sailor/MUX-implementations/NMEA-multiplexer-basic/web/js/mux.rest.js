@@ -751,6 +751,17 @@ let removeMarkerLine = (clickedButton) => {
     theLine.parentElement.style.display = 'none';
 };
 
+let viewMarkers = (clickedButton) => {
+    let theLine = clickedButton.parentNode;
+    let markerFileName = theLine.childNodes[0].innerText;
+    let mess = (`View requested on: ${markerFileName}`);
+    console.log(mess);
+    // alert(mess);
+    // Redirect to another page, with the json equivalent of the yaml.
+    let nextURL = `chartless.markers.admin.viewer.html?marker-file=${markerFileName}`;
+    window.open(nextURL, "WPViewer");
+}
+
 let addMarkerFile = (clickedButton) => {
     let theLine = clickedButton.parentNode;
     console.log(`Clicked: ${theLine.childNodes[0].textContent}`);
@@ -847,11 +858,11 @@ let generateDiagram = () => {
             html += 'Markers and Borders:<br/>';
             html += '<ul id="full-markers-list">';
             if (json['markers']) {
-                html += `<li><span>${json['markers']}  <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span> </span></li>`;
+                html += `<li><span>${json['markers']}  <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span> </span><button onclick='viewMarkers(this);' style='margin-left: 5px;'>View - 1</button></li>`;
             }
             if (json['markerList']) {
                 json['markerList'].forEach(marker => {
-                    html += `<li><span>${marker[0]} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span><i>${marker[1]}</i></span></li>`;
+                    html += `<li><span>${marker[0]} <button class='remove-marker-button' style='display: none;' onclick='removeMarkerLine(this);'>Remove</button></span> - <span><i>${marker[1]}</i></span><button onclick='viewMarkers(this);' style='margin-left: 5px;'>View - 2</button></li>`;
                 })
             }
             // Current waypoint
@@ -917,7 +928,7 @@ let generateDiagram = () => {
         html += "<tr><td><div style='max-height: 200px; overflow-y: scroll;'>";
         html += "<ul id='available-markers'>";
         json.forEach(fDesc => {
-            html += `<li><span>${fDesc[0]} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></span> - <span><i>${fDesc[1]}</i></span></li>`;
+            html += `<li><span>${fDesc[0]} <button class='add-marker-button' style='display: none;' onclick='addMarkerFile(this);'>Add</button></span> - <span><i>${fDesc[1]}</i></span><button onclick='viewMarkers(this);' style='margin-left: 5px;'>View - 3</button></li>`;
         });
         html += "</ul>";
         html == "</div></td></tr>";

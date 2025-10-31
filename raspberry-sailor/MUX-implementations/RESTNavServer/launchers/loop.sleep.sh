@@ -18,9 +18,10 @@ export KEEP_LOOPING=true
 export FILE_NO=1
 while [[ "${KEEP_LOOPING}" == "true" ]]; do
     echo "Processing iteration #${FILE_NO}"
-    cat /dev/ttyACM0 | grep -e "RMC" > LOG_${FILE_NO}.log 2>&1 &
-    # ./serial.log.sh > LOG_${FILE_NO}.log 2>&1 &
+    # cat /dev/ttyACM0 | grep -e "RMC" > LOG_${FILE_NO}.log 2>&1 &
+    ./serial.dump.sh > LOG_${FILE_NO}.log 2>&1 &
     pid=$!
+    echo "Process #${pid} on its way..."
     sleep 30
     echo "Killing process #${FILE_NO}, ${pid}..."
     kill -9 ${pid}

@@ -757,7 +757,7 @@ let viewMarkers = (clickedButton) => {
     let mess = (`View requested on: ${markerFileName}`);
     console.log(mess);
     // alert(mess);
-    // TODO Redirect to another page, with the json equivalent of the yaml.
+    // Redirect to another page, with the json equivalent of the yaml.
     let nextURL = `chartless.markers.admin.viewer.html?marker-file=${markerFileName}`;
     window.open(nextURL, "WPViewer");
 }
