@@ -55,7 +55,9 @@ public class SoundUtil {
     // For tests
     public static void main(String[] args) {
         try {
-            final URL url = new File("misc/vista.wav").toURI().toURL();
+            // final URL url = new File("misc/vista.wav").toURI().toURL();
+            final URL url = new File("misc/loud-fog-horn.wav").toURI().toURL();
+            // final URL url = new File("misc/loud-boat-horn.wav").toURI().toURL();
             playSound(url);
         } catch (Exception ex) {
             ex.printStackTrace();
