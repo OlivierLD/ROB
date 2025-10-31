@@ -8,7 +8,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Chartless Map</title>
-    <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
+	<link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
 	<style type="text/css">
 html {
 	font-family: "Courier New"
@@ -54,6 +54,70 @@ html {
 	--border-color: cyan;
 	--value-font: 'Courier New';
 }
+
+.chart-only {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 5px;
+  right: 5px;
+}
+.chart-buttons {
+  z-index: 10;
+  position: relative;
+  top: -74px;
+  left: 96%;
+}
+.zoom-button {
+  padding: 4px 6px;
+  min-width: 32px;
+}
+
+/* button {
+	margin: 2px;
+	padding: 2px;
+	min-width: 20px;
+} */
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background:#ffae00; /* fallback for browsers that don't support gradients */
+  /* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
+  background: -webkit-linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  /* background: linear-gradient(top, #ffae00, #d67600); */
+  background: linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0px 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+/* NOW STYLE THE BUTTON'S HOVER STATE */
+/*	button#rCoffee:hover, button#rCoffee:focus { */
+button:hover, button:focus {
+  border:2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;
+    color: gray;
+}
+
 	</style>
 
 	<!--script type="text/javascript" src="js/date.proto.js"></script>
@@ -66,7 +130,7 @@ html {
 
 	<script type="text/javascript">
 
-const VERBOSE = true;
+const VERBOSE = false;
 
 let getQSPrm = function(prm) {
     let value;
@@ -116,7 +180,6 @@ let borders = [];
 let pos = { lat: 47.5, lng: -3 }; // Hard-coded. Will be overriden
 
 let loadData = (markerFileName, fn) => {
-
 
 	document.getElementById('filename').innerText = markerFileName;
 	// curl -X POST /mux/yaml-to-json -d 'fileName.yaml'
@@ -387,6 +450,8 @@ let setStyle = (opt) => {
 
 window.onload = () => {
 
+	map = document.getElementById('chartless-map-01');
+
 	let markerFileName = getQSPrm("marker-file");
 	if (markerFileName) {
 		// alert(`Will display ${markerFileName}`);
@@ -437,7 +502,6 @@ window.onload = () => {
 		// initAjax(false, ping=250); // ping ununsed
 		// console.log("Commented initAjax!");
 
-		map = document.getElementById('chartless-map-01');
 		map.setDoAfter(updateMap);
 		if (centerOnBoat) {
 			map.centerLat = pos.lat; // This does the repaint...
@@ -451,61 +515,67 @@ window.onload = () => {
 	</script>
 </head>
 <body>
-	<h1>Viewer for Markers and Borders</h1>
-	<div id="filename"></div>
-    <table>
-        <tr>
-            <td valign="top" style="height: 600px;">
-                <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
-                    <chartless-map id="chartless-map-01"
-                                   class="chartless-map-01"
-                                   center-lat="47.0"
-                                   center-lng="-3.0"
-                                   chart-width="5.0"
-                                   width="1000"
-                                   height="600"></chartless-map>
-                </div>
-            </td>
-			<td valign="top" rowspan="3">
-				<table>
-					<tr>
-						<td>Style:</td>
-						<td>
-							<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
-								<option value="chartless-map-01" selected>Light</option>
-								<option value="chartless-map-02">Dark</option>
-								<option value="chartless-map-03">Darker</option>
-							</select>
-						</td>
-					</tr>
-				</table>
-			</td>
-        </tr>
-        <tr>
-            <td valign="top" height="50">
-                <!-- A slider for the chart scale -->
-                <!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
-					Chart Width:
-                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
-                           oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
-                    <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
-                </div-->
-				<!-- Zoom in / out -->
-				<button onclick="zoomIn();">Zoom in</button> <button onclick="zoomOut();">Zoom out</button> Chart Width: <span id="ChartWidth">5</span>&deg;
-            </td>
-        </tr>
-		<tr>
-			<td valign="top">
-				<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
-					<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
-					<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
-					<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
-					<!--br/-->
-					<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
-					<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+<h1>Viewer for Markers and Borders</h1>
+<div id="filename"></div>
+<table>
+	<tr>
+		<td valign="top" style="height: 600px;">
+			<div class="chart-container" style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+				<chartless-map id="chartless-map-01"
+							   class="chart-only chartless-map-01"
+							   center-lat="47.0"
+							   center-lng="-3.0"
+							   chart-width="5.0"
+							   width="1000"
+							   height="600"></chartless-map>
+				<div class="chart-buttons">
+					<!-- Zoom in / out -->
+					<button class="zoom-button" onclick="zoomIn();" title="Zoom in">+</button>
+					<br/>
+					<button class="zoom-button" onclick="zoomOut();" title="Zoom out">-</button>
 				</div>
-			</td>
-		</tr>
-    </table>
+			</div>
+		</td>
+		<td valign="top" rowspan="3">
+			<table>
+				<tr>
+					<td>Style:</td>
+					<td>
+						<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
+							<option value="chartless-map-01" selected>Light</option>
+							<option value="chartless-map-02">Dark</option>
+							<option value="chartless-map-03">Darker</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" height="50">
+			<!-- A slider for the chart scale -->
+			<!--div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+                Chart Width:
+                <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                       oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+                <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+            </div-->
+			<!-- Zoom in / out -->
+			<button onclick="zoomIn();">Zoom in</button> <button onclick="zoomOut();">Zoom out</button> Chart Width: <span id="ChartWidth">5</span>&deg;
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+				<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+				<!--br/-->
+				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+				<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+			</div>
+		</td>
+	</tr>
+</table>
 </body>
 </html>
