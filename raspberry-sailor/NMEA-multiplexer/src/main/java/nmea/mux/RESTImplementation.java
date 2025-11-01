@@ -496,7 +496,7 @@ public class RESTImplementation {
 			this.topMUXContext.setWaypointList(wpList);
 
 			content = mapper.writeValueAsString(this.topMUXContext);
-			if (true || restVerbose()) {
+			if (restVerbose()) {
 				System.out.printf("-- MUX Context --\n%s\n--------------------\n", content);
 				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
@@ -623,7 +623,7 @@ public class RESTImplementation {
 														.filter(mark -> mark.getId() != null)
 														.collect(Collectors.toList());
 			content = mapper.writeValueAsString(markerStream);
-			if (true || restVerbose()) {
+			if (restVerbose()) {
 				System.out.printf("-- Waypoints --\n%s\n--------------------\n", content);
 				System.out.printf("\tlength: %d\n", content.getBytes().length);
 			}
@@ -693,7 +693,7 @@ public class RESTImplementation {
 					}
 					WPStatus wpStatus = new WPStatus(id, dist, route);
 					content = mapper.writeValueAsString(wpStatus);
-					if (true || restVerbose()) {
+					if (restVerbose()) {
 						System.out.printf("-- To --\n%s\n--------------------\n", content);
 						System.out.printf("\tlength: %d\n", content.getBytes().length);
 					}
