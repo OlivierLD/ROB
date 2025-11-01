@@ -22,7 +22,14 @@ import nmea.forwarders.*;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
-import nmea.parser.*;
+import nmea.parser.Angle360;
+import nmea.parser.Border;
+import nmea.parser.Distance;
+import nmea.parser.GeoPos;
+import nmea.parser.Marker;
+import nmea.parser.SolarDate;
+import nmea.parser.Speed;
+import nmea.parser.UTCDate;
 import nmea.utils.NMEAUtils;
 import org.yaml.snakeyaml.Yaml;
 import util.LogAnalyzer;
@@ -56,13 +63,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
-//import java.util.concurrent.ConcurrentHashMap;
-//import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-//import java.util.stream.Stream;
+import java.util.stream.Stream;
 
 /**
  * This class defines the REST operations supported by the HTTP Server, including Admin operations
@@ -475,11 +482,13 @@ public class RESTImplementation {
 				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
 			}
 			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			@SuppressWarnings("unchecked")
 			List<String[]> markerList = (List<String[]>)cache.get(NMEADataCache.MARKERS_FILE);
 			this.topMUXContext.setMarkerList(markerList); // TODO Cancel/nullify setMarkers ?
 			Marker nextWaypoint = (Marker)cache.get(NMEADataCache.NEXT_WAYPOINT); // Next Waypoint
 			this.topMUXContext.setCurrentWaypointName(nextWaypoint != null ? nextWaypoint.getId() : null);
 			// Find potential waypoints
+			@SuppressWarnings("unchecked")
 			List<Marker> markerData = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
 			final List<Marker> wpList = markerData.stream()
 					.filter(mark -> mark.getId() != null)
@@ -608,6 +617,7 @@ public class RESTImplementation {
 				System.out.printf("MUX Context: %s\n",  this.topMUXContext);
 			}
 			NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+			@SuppressWarnings("unchecked")
 			List<Marker> markerList = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
 			final List<Marker> markerStream = markerList.stream()
 														.filter(mark -> mark.getId() != null)
@@ -717,6 +727,7 @@ public class RESTImplementation {
 			String id = prmValues.get(0);
 			try {
 				NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+				@SuppressWarnings("unchecked")
 				List<Marker> markerList = (List<Marker>) cache.get(NMEADataCache.MARKERS_DATA);
 				if (id.equals("null")) {
 					cache.remove(NMEADataCache.NEXT_WAYPOINT); // , null);
@@ -3754,6 +3765,7 @@ public class RESTImplementation {
 		if (!"null".equals(payload)) {
 			StringReader stringReader = new StringReader(payload);
 			try {
+				@SuppressWarnings("unchecked")
 				List<String> fileList = (List<String>) mapper.readValue(stringReader, Object.class);
 				if (false) {
 					System.out.printf("Will reset marker files: %s\n",

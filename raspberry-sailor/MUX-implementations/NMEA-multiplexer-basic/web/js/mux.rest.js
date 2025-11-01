@@ -627,15 +627,25 @@ let computerList = () => {
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
         let html = "<h5>Computes and writes</h5>" + "<table>";
-        html += "<tr><th>Type</th><th>Parameters</th><th>verb.</th></tr>";
+        html += "<tr><th>Type</th><th>Parameters</th><th>verb.</th><th>act.</th></tr>";
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
                 case 'tw-current':
-                    html += ("<tr><td valign='top'><b>tw-current</b></td><td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td><td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td><td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b>tw-current</b></td>" +
+                                 "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td></td>" + // Active placeholder
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
                     break;
                 default:
-                    html += ("<tr><td valign='top'><b><i>" + type + "</i></b></td><td valign='top'>" + json[i].cls + "</td><td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td><td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+                    html += ("<tr><td valign='top'><b><i>" + type + "</i></b></td>" +
+                                 "<td valign='top'>" + json[i].cls + "</td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
                     break;
             }
         }
@@ -1451,10 +1461,18 @@ let manageChannelVerbose = (cb, channel) => {
     changeChannel(channel);
 };
 
+let manageComputerActive = (cb, computer) => {
+    // PUT on the computer.
+    computer.active = cb.checked;
+    console.log('=> Clicked active checkbox on', computer, ' checked:', cb.checked);
+    changeComputer(computer);
+};
+
+
 let manageComputerVerbose = (cb, computer) => {
-    console.log('Clicked checkbox on', computer, ' checked:', cb.checked);
-    // PUT on the channel.
+    // PUT on the computer.
     computer.verbose = cb.checked;
+    console.log('Clicked verbose checkbox on', computer, ' checked:', cb.checked);
     changeComputer(computer);
 };
 
