@@ -20,7 +20,7 @@ context:
     - markers: mux-configs/markers/markers.couregant.la.plate.yaml
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     # - markers: mux-configs/markers/markers.san.juan.yaml
-  next-waypoint: BUGALET
+  next-waypoint: BMELITE
 channels:
   - type: file
     filename: ./sample.data/going.to.groix.nmea.zip

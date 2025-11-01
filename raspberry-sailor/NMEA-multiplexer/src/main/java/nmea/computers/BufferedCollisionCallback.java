@@ -16,6 +16,7 @@ import java.util.function.Consumer;
  */
 public class BufferedCollisionCallback implements Consumer<String> {
 
+    private boolean active = true;
     private String collisionLanguage = "EN";
     private String collisionVocabulary = "collision";
 
@@ -29,23 +30,29 @@ public class BufferedCollisionCallback implements Consumer<String> {
         Thread pollingThread = new Thread(() -> {
             while (true) {
                 synchronized (threatList) {
-                    int length = threatList.size();
-                    if (length > 0) {
-                        String message = String.format("Warning ! %d %s threat%s !", length, collisionVocabulary, length > 1 ? "s" : "");
-                        if ("FR".equals(collisionLanguage)) {
-                            message = String.format("Attention ! %d danger%s de %s !", length, length > 1 ? "s" : "", collisionVocabulary);
+                    if (this.active) {
+                        int length = threatList.size();
+                        if (length > 0) {
+                            String message = String.format("Warning ! %d %s threat%s !", length, collisionVocabulary, length > 1 ? "s" : "");
+                            if ("FR".equals(collisionLanguage)) {
+                                message = String.format("Attention ! %d danger%s de %s !", length, length > 1 ? "s" : "", collisionVocabulary);
+                            }
+                            TextToSpeech.speak(message, collisionLanguage);
+                            if (VERBOSE) {
+                                System.out.printf(">> Found %d threat(s) :\n", length);
+                                threatList.stream().forEach(el -> {
+                                    System.out.printf("Threat with: %s\n", el);
+                                });
+                            }
+                            threatList.clear();
+                        } else {
+                            if (VERBOSE) {
+                                System.out.printf(">> Found NO %s threat.\n", collisionVocabulary);
+                            }
                         }
-                        TextToSpeech.speak(message, collisionLanguage);
-                        if (VERBOSE) {
-                            System.out.printf(">> Found %d threat(s) :\n", length);
-                            threatList.stream().forEach(el -> {
-                                System.out.printf("Threat with: %s\n", el);
-                            });
-                        }
-                        threatList.clear();
                     } else {
                         if (VERBOSE) {
-                            System.out.printf(">> Found NO %s threat.\n", collisionVocabulary);
+                            System.out.printf("=> INFO: %s is not active.\n", this.getClass().getName());
                         }
                     }
                 }
@@ -57,6 +64,10 @@ public class BufferedCollisionCallback implements Consumer<String> {
             }
         });
         pollingThread.start();
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
     @Override
     public void accept(String s) {

@@ -151,6 +151,7 @@ public class LongTermStorage extends Computer {
 		private String cls;
 		private final String type = "longterm-data-computer";
 		private boolean verbose;
+		private boolean active;
 
 		public String getCls() {
 			return cls;
@@ -164,10 +165,15 @@ public class LongTermStorage extends Computer {
 			return verbose;
 		}
 
+		public boolean isActive() {
+			return active;
+		}
+
 		public LongTermComputerBean() {}  // This is for Jackson
 		public LongTermComputerBean(LongTermStorage instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
+			this.active = instance.isActive();
 		}
 	}
 

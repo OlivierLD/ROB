@@ -10,6 +10,7 @@ public abstract class Computer implements Forwarder {
 	private Multiplexer multiplexer;
 
 	protected boolean verbose = false;
+	protected boolean active = true;
 	protected Properties props = null;
 
 	public Computer(Multiplexer mux){
@@ -30,6 +31,14 @@ public abstract class Computer implements Forwarder {
 
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public void setProperties(Properties props) {

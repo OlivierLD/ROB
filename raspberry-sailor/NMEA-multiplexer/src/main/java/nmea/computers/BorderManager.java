@@ -111,7 +111,7 @@ public class BorderManager extends Computer {
 		}
 	}
 
-	private final static double DEFAULT_MINIMUM_DISTANCE = 20D;
+	private final static double DEFAULT_MINIMUM_DISTANCE = 20d;
 	private double minimumDistance = DEFAULT_MINIMUM_DISTANCE;
 	public BorderManager(Multiplexer mux) {
 		super(mux);
@@ -294,7 +294,7 @@ public class BorderManager extends Computer {
 					// Threats in the cache
 					cache.put(NMEADataCache.BORDERS_THREATS, threats);
 
-					if (threatDetected) {
+					if (threatDetected && this.isActive()) {
 						String warningText = threatMessages.stream().collect(Collectors.joining("\n"));
 						if (this.verbose) {
 							System.out.println(warningText);
@@ -315,6 +315,20 @@ public class BorderManager extends Computer {
 	@Override
 	public void close() {
 		System.out.println("- Stop Computing Border data, " + this.getClass().getName());
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (isVerbose()) {
+			System.out.printf("Setting active to %b for %s (%s)\n", active, ((BorderComputerBean) this.getBean()).getType(), this.getClass().getName());
+		}
+		super.setActive(active);
+		if (collisionCallback != null && collisionCallback instanceof BufferedCollisionCallback) {
+			if (isVerbose()) {
+				System.out.printf("Setting BufferedCollisionCallback to %b\n", active);
+			}
+			((BufferedCollisionCallback)collisionCallback).setActive(active);
+		}
 	}
 
 	@Override
@@ -374,6 +388,7 @@ public class BorderManager extends Computer {
 		private String cls;
 		private final String type = "border-computer";
 		private boolean verbose;
+		private boolean active;
 
 		public String getCls() {
 			return cls;
@@ -387,10 +402,15 @@ public class BorderManager extends Computer {
 			return verbose;
 		}
 
+		public boolean isActive() {
+			return active;
+		}
+
 		public BorderComputerBean() {}  // This is for Jackson
 		public BorderComputerBean(BorderManager instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
+			this.active = instance.isActive();
 		}
 	}
 

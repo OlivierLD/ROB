@@ -2588,6 +2588,12 @@ public class RESTImplementation {
 		return response;
 	}
 
+	/**
+	 * Used for verbose and active
+	 *
+	 * @param request
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private HTTPServer.Response putComputer(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
@@ -2655,8 +2661,13 @@ public class RESTImplementation {
 						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
 					} else { // Then update
 						Computer computer = opComputer.get();
+						// verbose ?
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						computer.setVerbose(verbose);
+						// active ?
+						boolean active = ((Boolean) custom.get("active")).booleanValue();
+						computer.setActive(active);
+
 						String content = mapper.writeValueAsString(computer.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -4062,6 +4073,20 @@ public class RESTImplementation {
 		} else {
 			response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.NOT_FOUND);
 			RESTProcessorUtil.addErrorMessageToResponse(response, "channel not found");
+		}
+		return response;
+	}
+
+	private HTTPServer.Response activateComputerIfPresent(HTTPServer.Request request, Optional<Computer> nmeaComputer) {
+		HTTPServer.Response response;
+		if (nmeaComputer.isPresent()) {
+			Computer computer = nmeaComputer.get();
+			computer.close();
+			nmeaDataComputers.remove(computer);
+			response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.NO_CONTENT);
+		} else {
+			response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.NOT_FOUND);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "computer not found");
 		}
 		return response;
 	}
