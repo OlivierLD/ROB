@@ -5,6 +5,10 @@ To edit the code, I like to use [Atom](https://atom.io/), free, open source, and
 
 Also look [here](https://www.guru99.com/best-free-code-editors-windows-mac.html).
 
+## `bash` on Windows
+All the scripts available in this repository are written to run on the `bash` shell, available on Linux and MacOS.  
+It is also possible to run it on Windows. Not natively, but it can be done. A search on the net will tell you how 😉.
+
 ## Instructions for Windows 10
 When asked to type commands, type only the commands in **bold**.
 Others are sample outputs.
