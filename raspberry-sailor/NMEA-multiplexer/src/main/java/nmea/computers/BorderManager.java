@@ -323,11 +323,18 @@ public class BorderManager extends Computer {
 			System.out.printf("Setting active to %b for %s (%s)\n", active, ((BorderComputerBean) this.getBean()).getType(), this.getClass().getName());
 		}
 		super.setActive(active);
-		if (collisionCallback != null && collisionCallback instanceof BufferedCollisionCallback) {
+		// Specific to some callback, as they run on their own...
+		if (collisionCallback != null && (collisionCallback instanceof BufferedCollisionCallback ||
+				                          collisionCallback instanceof BufferedCollisionSingletonCallback)) {
 			if (isVerbose()) {
-				System.out.printf("Setting BufferedCollisionCallback to %b\n", active);
+				System.out.printf("Setting BufferedCollision(*)Callback to %b\n", active);
 			}
-			((BufferedCollisionCallback)collisionCallback).setActive(active);
+			if (collisionCallback instanceof BufferedCollisionCallback) {
+				((BufferedCollisionCallback) collisionCallback).setActive(active);
+			}
+			if (collisionCallback instanceof BufferedCollisionSingletonCallback) {
+				((BufferedCollisionSingletonCallback) collisionCallback).setActive(active);
+			}
 		}
 	}
 
