@@ -5,6 +5,7 @@ A batch of useful and other things...
 - Fing CLI: <https://www.fing.com/products/development-toolkit>
   - Doc at <https://get.fing.com/fing-business/devrecog/documentation/Fing_CLI.pdf>
 - Many useful hints: <https://www.raspberrypi.com/documentation/computers/raspberry-pi.html>
+- Command-line task manager: `htop`.
 
 ## Find the Serial port of your GPS (or whatever)
 - Run `raspberry-sailor/NMEA-multiplexer/find.port.sh`
@@ -40,6 +41,7 @@ May need, to begin with:
 ```
 $ sudo apt-get update
 $ sudo apt-get upgrade
+$ sudo apt-get full-upgrade
 $ sudo apt-get dist-upgrade
 ```
 This way, it works even on a Raspberry Pi A+.  

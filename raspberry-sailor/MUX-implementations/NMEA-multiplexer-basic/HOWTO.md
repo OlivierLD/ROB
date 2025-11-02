@@ -60,6 +60,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Install Java and other required parts
   ```
   sudo apt-get update
+  #
   sudo apt-get install openjdk-8-jdk-headless
   ```
   JDK8 will work on any Raspberry Pi I know.  
@@ -68,6 +69,13 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   ```
   sudo apt-get install openjdk-11-jdk
   ```
+
+  ##### The following might be required on recent versions of the RapiOS...
+  ```
+  sudo apt install default-jre-headless
+  sudo apt install default-jdk
+  ```
+
   - LibRxTx (optional, skip it if you don't know it)
   ```
   sudo apt-get install librxtx-java
