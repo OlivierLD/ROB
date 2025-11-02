@@ -132,14 +132,6 @@ markers:
     latitude: 47.775314725898326
     longitude: -4.029278755187989
     type: default
-  - label: "Basse Perennes"
-    latitude: 47.683072220525
-    longitude: -4.103307723999024
-    type: card-w
-  - label: "Jument de Glenan"
-    latitude: 47.64561482699582
-    longitude: -4.023056030273438
-    type: card-s
   - label: "Penmarc'h"
     latitude: 47.79651290986675
     longitude: -4.376248866428796

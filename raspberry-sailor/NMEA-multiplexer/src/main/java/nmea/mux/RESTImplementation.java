@@ -16,9 +16,29 @@ import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
 import nmea.computers.Computer;
 import nmea.computers.ExtraDataComputer;
-import nmea.consumers.client.*;
-import nmea.consumers.reader.*;
-import nmea.forwarders.*;
+import nmea.consumers.client.DataFileClient;
+import nmea.consumers.client.RESTClient;
+import nmea.consumers.client.RandomClient;
+import nmea.consumers.client.SerialClient;
+import nmea.consumers.client.TCPClient;
+import nmea.consumers.client.WebSocketClient;
+import nmea.consumers.client.ZDAClient;
+import nmea.consumers.reader.DataFileReader;
+import nmea.consumers.reader.RESTReader;
+import nmea.consumers.reader.RandomReader;
+import nmea.consumers.reader.SerialReader;
+import nmea.consumers.reader.TCPReader;
+import nmea.consumers.reader.WebSocketReader;
+import nmea.consumers.reader.ZDAReader;
+import nmea.forwarders.ConsoleWriter;
+import nmea.forwarders.DataFileWriter;
+import nmea.forwarders.Forwarder;
+import nmea.forwarders.GPSdServer;
+import nmea.forwarders.RESTPublisher;
+import nmea.forwarders.SerialWriter;
+import nmea.forwarders.TCPServer;
+import nmea.forwarders.WebSocketProcessor;
+import nmea.forwarders.WebSocketWriter;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
@@ -63,13 +83,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * This class defines the REST operations supported by the HTTP Server, including Admin operations
@@ -96,7 +110,8 @@ public class RESTImplementation {
 		MUX_0010("MUX-0010", "Set Position"),
 		MUX_0011("MUX-0011", "Over Ground"),
 		MUX_0012("MUX-0012", "NMEA Sentence"),
-		MUX_0013("MUX-0013", "Max Leeway");
+		MUX_0013("MUX-0013", "Max Leeway"),
+		MUX_0014("MUX-0014", "Specific");
 
 		private final String label, description;
 		MESSAGE_INDEXES(String label, String description) {
@@ -167,7 +182,7 @@ public class RESTImplementation {
 					"POST",
 					REST_PREFIX + "/terminate",
 					this::stopAll,
-					"Hard stop, shutdown. VERY unusual REST resource..."),
+					"Hard stop, shutdown. VERY unusual REST resource... Be careful."),
 			new Operation(
 					"GET",
 					REST_PREFIX + "/system-date",
@@ -510,6 +525,12 @@ public class RESTImplementation {
 		return response;
 	}
 
+	/**
+	 * Depends on an OS command... Would not work on Windows...
+	 *
+	 * @param request
+	 * @return
+	 */
 	private HTTPServer.Response getMarkerFiles(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
 		String content = "";
@@ -572,13 +593,21 @@ public class RESTImplementation {
 		return response;
 	}
 
+	/**
+	 * Returns the json version of a yaml markers file.
+	 *
+	 * @param request
+	 * @return
+	 */
 	private Response yamlToJson(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		try {
-			String content = "No file name to process...";
+			String content = "No file name to process..."; // Oops message.
 			if (request.getContent() != null && request.getContent().length > 0) {
 				String payload = new String(request.getContent());
-				System.out.println("Payload:" + payload);
+				if (restVerbose()) {
+					System.out.println("Payload:" + payload);
+				}
 				if (!"null".equals(payload)) {
 					String fileName = payload;
 					// Trim the quotes
@@ -587,7 +616,6 @@ public class RESTImplementation {
 					if (restVerbose()) {
 						System.out.printf("yamlToJSON requested for [%s], from %s\n", fileName, System.getProperty("user.dir"));
 					}
-
 					content = MarkersToJSON.convertToJSON(fileName);
 					// this.navRequestManager.getLogger().log(Level.INFO, String.format("YamlToJSON requested for [%s] from [%s]", payload, System.getProperty("user.dir")));
 				}
@@ -601,7 +629,7 @@ public class RESTImplementation {
 			response = HTTPServer.buildErrorResponse(response,
 					Response.BAD_REQUEST,
 					new HTTPServer.ErrorPayload()
-							.errorCode("NAV-0001-1")
+							.errorCode(MESSAGE_INDEXES.MUX_0014.label())
 							.errorMessage(ex.toString())
 							.errorStack(HTTPServer.dumpException(ex)));
 			return response;
@@ -3988,6 +4016,32 @@ public class RESTImplementation {
 		return response;
 	}
 
+	private static class OpList {
+		int operationNumber;
+		Operation[] channelArray;
+
+		public OpList() {}
+		public OpList(int operationNumber, Operation[] channelArray) {
+			this.operationNumber = operationNumber;
+			this.channelArray = channelArray;
+		}
+
+		public int getOperationNumber() {
+			return operationNumber;
+		}
+
+		public void setOperationNumber(int operationNumber) {
+			this.operationNumber = operationNumber;
+		}
+
+		public Operation[] getChannelArray() {
+			return channelArray;
+		}
+
+		public void setChannelArray(Operation[] channelArray) {
+			this.channelArray = channelArray;
+		}
+	}
 	/**
 	 * Dynamically composed, based on the <code>operations</code> List.
 	 *
@@ -4000,7 +4054,9 @@ public class RESTImplementation {
 				.collect(Collectors.toList())
 				.toArray(new Operation[operations.size()]);
 		try {
-			String content = mapper.writeValueAsString(channelArray);
+			// OpList also contains the number of operations
+			OpList opList = new OpList(channelArray.length, channelArray);
+			String content = mapper.writeValueAsString(opList); // channelArray);
 			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (JsonProcessingException jpe) {
@@ -4011,7 +4067,7 @@ public class RESTImplementation {
 	}
 
 	/**
-	 * Use this as a temporary placeholder when creating a new operation.
+	 * Use this as a temporary placeholder used when creating a new operation.
 	 *
 	 * @param request
 	 * @return

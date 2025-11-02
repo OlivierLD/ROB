@@ -81,6 +81,14 @@ markers:
     longitude: -3.446303757882561
     label: "Port-Tudy"
     type: default
+  - label: "Locmaria"
+    latitude: 47.625227410592636
+    longitude: -3.438634872436524
+    type: default
+  - label: "Port Saint-Nicolas"
+    latitude: 47.632118090462804
+    longitude: -3.4840929508209233
+    type: default
 # - label: "Dummy Placeholder"
 #   latitude: 0.0
 #   longitude: 0.0
