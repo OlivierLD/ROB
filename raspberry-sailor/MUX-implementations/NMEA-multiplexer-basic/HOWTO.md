@@ -39,7 +39,8 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
       `raspi-config` on the Raspberry Pi, to boot to Desktop, and start the VNC Server.
 
 #### So, let's go.
-- Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card
+- Use [Raspberry Pi imager](https://www.raspberrypi.com/software/) to flash a new SD Card.
+  - Warning: Use `bookworm`, **_not_** `trixie`, for JDK compatibility reasons
   - Make sure `SSH` is enabled (it's a setting parameter in the Raspberry Pi imager).
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
 - Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
@@ -75,6 +76,8 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   sudo apt install default-jre-headless
   sudo apt install default-jdk
   ```
+  But be careful, some jdk version might not be compatible with the build (Gradle 7).  
+  If JDK 11 cannot be installed, you might want to downgrade the version of the OS (like from `trixie` to `bookworm`).
 
   - LibRxTx (optional, skip it if you don't know it)
   ```

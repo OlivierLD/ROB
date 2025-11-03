@@ -46,4 +46,3 @@ include('raspberry-sailor:MUX-implementations:RESTNavServer')
 include('raspberry-sailor:MUX-implementations:RESTSystemServer')
 include 'astro-computer:MPSServer'
 findProject(':astro-computer:MPSServer')?.name = 'MPSServer'
-
