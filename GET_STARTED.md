@@ -1,6 +1,9 @@
 # Off we go!
 ### Aka "Get Started" for dummies
 
+> Just in case, check [this](https://pi-apps.io/install-app/install-more-ram-on-raspberry-pi/) out 
+> to install  ore RAM on the Raspberry Pi.
+
 The goal here is to see something interesting, as fast as possible.
 
 This document should help anyone who's not familiar with programming, build, and such technologies.  

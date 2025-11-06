@@ -914,7 +914,7 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * $xxMTW,+18.0,C*hh
 	 *        |     |
 	 *        |     Celsius
-	 *        Temparature
+	 *        Temperature
 	 * </pre>
 	 * @param sentence the one to parse
 	 * @return The result, in Celsius, as a double

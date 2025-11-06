@@ -138,7 +138,7 @@ public class SystemUtils {
     }
 
     public static String getCPUTemperature() throws Exception {
-        String command = "cat /sys/class/thermal/thermal_zone0/temp |  awk '{printf \"CPU Temp: %.1f C\", $(NF-0) / 1000}'";
+        String command = "cat /sys/class/thermal/thermal_zone0/temp |  awk '{printf \"CPU Temp: %.1fºC\", $(NF-0) / 1000}'";
         return getCommandResult(command).get(0);
     }
 

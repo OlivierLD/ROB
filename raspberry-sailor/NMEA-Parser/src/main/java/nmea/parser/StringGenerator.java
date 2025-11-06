@@ -338,6 +338,19 @@ public class StringGenerator {
 	}
 
 	/*
+	 * Water temperature
+	 */
+	public static String generateMTW(String devicePrefix, double temperature) { // in Celsius
+		String mta = devicePrefix + "MTW,";
+		mta += (TEMP_FMT.format(temperature) + ",C");
+		// Checksum
+		int cs = StringParsers.calculateCheckSum(mta);
+		mta += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
+
+		return "$" + mta;
+	}
+
+	/*
 	 * Set and Drift (current speed and direction)
 	 */
 	public static String generateVDR(String devicePrefix, double speed, double dirT, double dirM) {

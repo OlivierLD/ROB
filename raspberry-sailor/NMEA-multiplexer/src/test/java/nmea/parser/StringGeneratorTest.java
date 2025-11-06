@@ -36,6 +36,9 @@ public class StringGeneratorTest {
         String mta = StringGenerator.generateMTA("II", 20.5);
         System.out.println("Generated MTA:" + mta);
 
+        String mtw = StringGenerator.generateMTW("AE", 12.34);
+        System.out.println("Generated MTW:" + mtw);
+
         String xdr = StringGenerator.generateXDR("II", new StringGenerator.XDRElement(StringGenerator.XDRTypes.PRESSURE_B, 1.0136, "BMP180"));
         System.out.println("Generated XDR:" + xdr);
         xdr = StringGenerator.generateXDR("II",
@@ -46,6 +49,11 @@ public class StringGeneratorTest {
         System.out.println("Generated XDR:" + xdr);
 
         xdr = StringGenerator.generateXDR("XX", new StringGenerator.XDRElement(StringGenerator.XDRTypes.VOLTAGE, 12.34, "TRINKET"));
+        System.out.println("Generated XDR:" + xdr);
+
+        xdr = StringGenerator.generateXDR("AE",
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE, 12.34, "FIREBEETLE"), // Celsius
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.SALINITY, 23.45, "FIREBEETLE")); // In Parts per Thousand
         System.out.println("Generated XDR:" + xdr);
 
         System.out.println("Generating MDA...");
