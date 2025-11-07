@@ -504,11 +504,18 @@ public class RESTImplementation {
 			this.topMUXContext.setCurrentWaypointName(nextWaypoint != null ? nextWaypoint.getId() : null);
 			// Find potential waypoints
 			@SuppressWarnings("unchecked")
-			List<Marker> markerData = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA);
-			final List<Marker> wpList = markerData.stream()
-					.filter(mark -> mark.getId() != null)
-					.collect(Collectors.toList());
-			this.topMUXContext.setWaypointList(wpList);
+			List<Marker> markerData = (List<Marker>)cache.get(NMEADataCache.MARKERS_DATA); // yaml file(s), charts and markers.
+
+			if (restVerbose()) {
+				System.out.printf("==> MarkerData is %snull\n", markerData == null ? "" : "not ");
+			}
+
+			if (markerData != null) {
+				final List<Marker> wpList = markerData.stream()
+						.filter(mark -> mark.getId() != null)
+						.collect(Collectors.toList());
+				this.topMUXContext.setWaypointList(wpList);
+			}
 
 			content = mapper.writeValueAsString(this.topMUXContext);
 			if (restVerbose()) {

@@ -11,6 +11,9 @@ context:
   init.cache: true
 channels:
   - type: zda
+  - class: nmea.consumers.client.RandomMTWClient   # This is for debugging
+    reader: nmea.consumers.reader.RandomMTWReader
+    verbose: false
 forwarders:
   - type: "tcp"
     port: 7001
