@@ -52,7 +52,7 @@ For example, `mux.01.xxx`, followed by `mux.02.yyy`.
 The third part of the property name (the `type` in `mux.0X.type` for example) is the attribute.
 _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes depend on this `type`.
 
-> _**Exception**_: if an element does _not_ have a `type` attribute, then it is a custom element, it _must_ have a _cls_ attribute
+> _**Exception**_: if an element does _not_ have a `type` attribute, then it is a custom element, it _must_ have a _class_ attribute
 > containing the name of the Java `class` to load dynamically, with a `Class.forName`.
 > For example, a line like that one
 ```properties
@@ -61,6 +61,17 @@ _**ALL**_ elements _have_ a mandatory `type` attribute, the other attributes dep
 > would tell the Multiplexer to load a forwarder defined in the class `nmea.forwarders.LedBlinker`.
 > If the loaded class does not extend the right `superclass` or implement the right `interface`, an error
 > will be raised.
+
+The properties to resolve depend on the type (channel, forwarder, computer, ...). For a channel - for example -
+you could have (in a `yaml` way):
+```yaml
+channels:
+  - class: nmea.consumers.client.RandomMTWClient
+    reader: nmea.consumers.reader.RandomMTWReader
+    verbose: false
+```
+Here, as it is a channel, the `reader` property is required.  
+For now, looking in the code is the best way to know what to do... This will be fixed.
 
 #### YAML
 > _Note_: Since October 2019, a `yaml` format is also supported for the properties of the multiplexer.
