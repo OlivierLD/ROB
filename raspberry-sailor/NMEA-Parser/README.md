@@ -8,4 +8,6 @@ Look into the `test` folder to see how it works, and there is also some Jupyter 
 
 The Javadoc of the `StringParsers` is worth a look.
 
+Good details on NMEA Sentences at <https://gpsd.gitlab.io/gpsd/NMEA.html#_nmea_standard_sentences>.
+
 ---
