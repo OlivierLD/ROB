@@ -34,14 +34,40 @@ public class RandomMTWReader extends NMEAReader {
 				double valueDiff = (Math.random() - 0.5) * 0.2; // [-0.1..0.1]
 				randomValue += valueDiff;
 
-				// Generate NMEA String // TODO Fix this
+				// Generate NMEA String (MTW)
 				String customString = generateSentence("AE", "MTW", String.format("%.01f,C", randomValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
+
+				// More strings ? Like MMB, MTA, MDA...
+				String sensorName = "FIREBEETLE";
+				double salinity = 23.45;  // TODO Random Generation
+				String stringContent = "C," + String.format("%.01f", randomValue) +
+							",C," + sensorName +
+							",L," + String.format("%.02f", salinity) + ",S," + sensorName;
+				customString = generateSentence("AE", "XDR", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				fireDataRead(new NMEAEvent(this, customString));
+
+				customString = generateSentence("AE", "MTA", String.format("%.01f,C", randomValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				fireDataRead(new NMEAEvent(this, customString));
+
+				double pressure = 1.01325;
+				stringContent =
+						String.format("%.04f", pressure / 33.8639) + ",I," +  // 1-Pressure in inches
+						String.format("%.04f", pressure) + ",B," +            // 3-Pressure in Bars
+						String.format("%.01f", randomValue) + ",C," +         // 5-Air Temp in Celsius
+						",,,,,,,,,,,,,,,";                                    // The rest is empty for now
+				customString = generateSentence("AE", "MDA", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				fireDataRead(new NMEAEvent(this, customString));
+
+				stringContent =	String.format("%.04f", pressure / 33.8639) + ",I," + String.format("%.04f", pressure) + ",B";
+				customString = generateSentence("AE", "MMB", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				fireDataRead(new NMEAEvent(this, customString));
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				Thread.sleep(1_000L); // TODO Make this a parameter
+				Thread.sleep(1_000L); // TODO Make this a parameter?
 			} catch (InterruptedException ie) {
 				ie.printStackTrace();
 			}

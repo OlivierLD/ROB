@@ -1,7 +1,7 @@
 "use strict";
 
 /*
- * Good NMEA Reference : http://catb.org/gpsd/NMEA.html
+ * Good NMEA Reference : http://catb.org/gpsd/NMEA.html. Re-directed to https://gpsd.gitlab.io/gpsd/NMEA.html
  */
 function checksum(str) {
   let cs = 0;
