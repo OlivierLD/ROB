@@ -15,7 +15,11 @@ import java.util.List;
  */
 public class RandomMTWReader extends NMEAReader {
 
-	double randomValue = 10d;
+	double randomWTValue = 10d;
+	double randomATValue = 20d;
+	double randomPRMSLValue = 1013.25d;
+	double randomSalinityValue = 23.45d;
+
 
 	public RandomMTWReader(List<NMEAListener> al) {
 		this(null, al);
@@ -32,29 +36,35 @@ public class RandomMTWReader extends NMEAReader {
 			try {
 
 				double valueDiff = (Math.random() - 0.5) * 0.2; // [-0.1..0.1]
-				randomValue += valueDiff;
+				randomWTValue += valueDiff;
+				valueDiff = (Math.random() - 0.5) * 0.2;
+				randomATValue += valueDiff;
+				valueDiff = (Math.random() - 0.5) * 0.2;
+				randomPRMSLValue += valueDiff;
+				valueDiff = (Math.random() - 0.5) * 0.2;
+				randomSalinityValue += valueDiff;
 
 				// Generate NMEA String (MTW)
-				String customString = generateSentence("AE", "MTW", String.format("%.01f,C", randomValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				String customString = generateSentence("AE", "MTW", String.format("%.01f,C", randomWTValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
 
-				// More strings ? Like MMB, MTA, MDA...
+				// More strings ? Like XDR, MMB, MTA, MDA...
 				String sensorName = "FIREBEETLE";
-				double salinity = 23.45;  // TODO Random Generation
-				String stringContent = "C," + String.format("%.01f", randomValue) +
+				double salinity = randomSalinityValue;
+				String stringContent = "C," + String.format("%.01f", randomWTValue) +
 							",C," + sensorName +
 							",L," + String.format("%.02f", salinity) + ",S," + sensorName;
 				customString = generateSentence("AE", "XDR", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
 
-				customString = generateSentence("AE", "MTA", String.format("%.01f,C", randomValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+				customString = generateSentence("AE", "MTA", String.format("%.01f,C", randomATValue)) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
 
-				double pressure = 1.01325;
+				double pressure = randomPRMSLValue / 1_000d;
 				stringContent =
 						String.format("%.04f", pressure / 33.8639) + ",I," +  // 1-Pressure in inches
 						String.format("%.04f", pressure) + ",B," +            // 3-Pressure in Bars
-						String.format("%.01f", randomValue) + ",C," +         // 5-Air Temp in Celsius
+						String.format("%.01f", randomATValue) + ",C," +       // 5-Air Temp in Celsius
 						",,,,,,,,,,,,,,,";                                    // The rest is empty for now
 				customString = generateSentence("AE", "MDA", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
