@@ -42,18 +42,18 @@ public class StringGeneratorTest {
         String xdr = StringGenerator.generateXDR("II", new StringGenerator.XDRElement(StringGenerator.XDRTypes.PRESSURE_B, 1.0136, "BMP180"));
         System.out.println("Generated XDR:" + xdr);
         xdr = StringGenerator.generateXDR("II",
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.PRESSURE_B, 1.0136, "BMP180"),
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE, 15.5, "BMP180"),
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.HUMIDITY, 65.5, "HTU21DF"),
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.GENERIC, 0.014270, "PRATE"));
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.PRESSURE_B, 1.0136, "BMP180"),  // PRMSL
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE, 15.5, "BMP180"),   // Air Temp
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.HUMIDITY, 65.5, "HTU21DF"),     // Rel Humidity
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.GENERIC, 0.014270, "PRATE"));   // Precipitation Rate
         System.out.println("Generated XDR:" + xdr);
 
         xdr = StringGenerator.generateXDR("XX", new StringGenerator.XDRElement(StringGenerator.XDRTypes.VOLTAGE, 12.34, "TRINKET"));
         System.out.println("Generated XDR:" + xdr);
 
         xdr = StringGenerator.generateXDR("AE",
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE, 12.34, "FIREBEETLE"), // Celsius
-                new StringGenerator.XDRElement(StringGenerator.XDRTypes.SALINITY, 23.45, "FIREBEETLE")); // In Parts per Thousand
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE, 12.34, "TSG"), // Temperature, in Celsius, from ThermoSalinoGraph
+                new StringGenerator.XDRElement(StringGenerator.XDRTypes.SALINITY, 23.45, "CTD"));   // Salinity,  in Parts per Thousand (0/00), from Conductivity Temperature Depth
         System.out.println("Generated XDR:" + xdr);
 
         System.out.println("Generating MDA...");

@@ -49,11 +49,12 @@ public class RandomMTWReader extends NMEAReader {
 				fireDataRead(new NMEAEvent(this, customString));
 
 				// More strings ? Like XDR, MMB, MTA, MDA...
-				String sensorName = "FIREBEETLE";
+				String tsgSensorName = "TSG"; // ThermoSalinoGraphe
+				String ctdSensorName = "CTD"; // Conductivity Temperature Depth
 				double salinity = randomSalinityValue;
 				String stringContent = "C," + String.format("%.01f", randomWTValue) +
-							",C," + sensorName +
-							",L," + String.format("%.02f", salinity) + ",S," + sensorName;
+							",C," + ctdSensorName +
+							",L," + String.format("%.02f", salinity) + ",S," + tsgSensorName;
 				customString = generateSentence("AE", "XDR", stringContent) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
 				fireDataRead(new NMEAEvent(this, customString));
 
