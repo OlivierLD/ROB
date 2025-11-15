@@ -15,10 +15,11 @@ import java.util.List;
  */
 public class RandomMTWReader extends NMEAReader {
 
-	double randomWTValue = 10d;
-	double randomATValue = 20d;
-	double randomPRMSLValue = 1013.25d;
-	double randomSalinityValue = 23.45d;
+	// Initial values. Will be "randomly" modified below.
+	double randomWTValue = 10d; // Water Temp, in Celsius
+	double randomATValue = 20d; // Air Temp, in Celsius
+	double randomPRMSLValue = 1013.25d; // That one in millibars. Will be used as bars.
+	double randomSalinityValue = 23.45d; // in ‰ (parts per thousand), \u2030, &permil;
 
 
 	public RandomMTWReader(List<NMEAListener> al) {
@@ -34,8 +35,8 @@ public class RandomMTWReader extends NMEAReader {
 		while (this.canRead()) {
 			// Read data every 1 second
 			try {
-
-				double valueDiff = (Math.random() - 0.5) * 0.2; // [-0.1..0.1]
+				// valueDiff in [-0.1..0.1]
+				double valueDiff = (Math.random() - 0.5) * 0.2;
 				randomWTValue += valueDiff;
 				valueDiff = (Math.random() - 0.5) * 0.2;
 				randomATValue += valueDiff;

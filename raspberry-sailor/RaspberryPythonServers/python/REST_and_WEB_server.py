@@ -8,7 +8,7 @@
 # pip3 install http (already in python3.7+, no need to install it)
 #
 # Provides REST access to the JSON data, try GET http://localhost:8080/json-data/data
-# Acts as a sensor reader.
+# Can act as a sensor reader.
 #
 # For a REST Channel (Consumer), consider looking at GET /json-data/data
 #
@@ -117,7 +117,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
                 self.send_response(500)
-        elif path == PATH_PREFIX + "/oplist":
+        elif path == PATH_PREFIX + "/oplist":  # Warning ! That one is NOT dynamic, like the Java version...
             response = {
                 "oplist": [{
                         "path": PATH_PREFIX + "/oplist",
@@ -141,7 +141,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(response_content)
-        elif path.startswith(STATIC_PATH_PREFIX):
+        elif path.startswith(STATIC_PATH_PREFIX):  # Static content...
             if verbose:
                 print(f"Static path: {path}")
             static_resource: str = path[len(STATIC_PATH_PREFIX):]
@@ -218,7 +218,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("POST request, {}".format(self.path))
             print("POST on {} not managed".format(self.path))
         if self.path.startswith(PATH_PREFIX + "/exit"):
-            print(">>>>> ZDA server received POST /exit")
+            print(">>>>> REST server received POST /exit")
             # content_len: int = int(self.headers.get('Content-Length'))
             # post_body = self.rfile.read(content_len).decode('utf-8')
             # if verbose:
@@ -232,7 +232,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(response_content)
             time.sleep(2)  # Wait for response to be received
-            print(f">>> Killing ZDA server process ({server_pid}).")
+            print(f">>> Killing REST server process ({server_pid}).")
             os.kill(server_pid, signal.SIGKILL)
         else:
             error = "NOT FOUND!"
