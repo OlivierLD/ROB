@@ -54,6 +54,7 @@ public class RESTClient extends NMEAClient {
 		private String queryPath = "/";
 		private String queryString = "";
 		private String jsonQueryString;
+		private String nmeaProcessor;
 		private long frequency = 1_000L;
 		private String verb = "GET";        // TODO See if more verbs are needed.
 		private String[] deviceFilters;
@@ -80,9 +81,11 @@ public class RESTClient extends NMEAClient {
 			return jsonQueryString;
 		}
 
+		public String getNmeaProcessor() { return this.nmeaProcessor; }
+
 		public String getVerb() {
 			return verb;
-		}
+		} // Not used yet
 
 		public long getFrequency() { return frequency; }
 
@@ -100,6 +103,7 @@ public class RESTClient extends NMEAClient {
 			queryPath = ((RESTReader) instance.getReader()).getQueryPath();
 			queryString = ((RESTReader) instance.getReader()).getQueryString();
 			jsonQueryString = ((RESTReader) instance.getReader()).getJQString();
+			nmeaProcessor = ((RESTReader) instance.getReader()).getNmeaProcessor();
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
@@ -147,7 +151,8 @@ public class RESTClient extends NMEAClient {
 			System.out.println("CustomRESTClient prm:" + s);
 		}
 //		String serverNameOrIP = "192.168.1.105";
-		String serverNameOrIP = "192.168.1.101";
+//		String serverNameOrIP = "192.168.1.101";
+		String serverNameOrIP = "192.168.1.41";
 
 		nmeaClient = new RESTClient();
 
@@ -158,13 +163,24 @@ public class RESTClient extends NMEAClient {
 			}
 		});
 		nmeaClient.initClient();
+//		nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
+//				"http",
+//				serverNameOrIP,
+//				9_999, // 8_080,
+//				"/mux/cache", // ""/bme280/oplist", // /bme280/data, /bme280/nmea-data
+//				"",
+//				".NMEA_AS_IS | { RMC, GLL }", // ".NMEA_AS_IS .RMC", // ".NMEA",  // null,
+//				null, // NMEAProcessor
+//				null));
+		// With an NMEAProcessor
 		nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
 				"http",
 				serverNameOrIP,
 				9_999, // 8_080,
-				"/mux/cache", // ""/bme280/oplist", // /bme280/data, /bme280/nmea-data
+				"/sense-hat/all-env-sensors", // ""/bme280/oplist", // /bme280/data, /bme280/nmea-data
 				"",
-				".NMEA_AS_IS | { RMC, GLL }", // ".NMEA_AS_IS .RMC", // ".NMEA",  // null,
+				".pressure", // ".NMEA_AS_IS .RMC", // ".NMEA",  // null,
+				"nmea.parser.StringGenerator.generateMMB(String:\"SH\", double:value)", // NMEAProcessor. 'value' is a reserved word.
 				null));
 		nmeaClient.setVerbose(true);
 		nmeaClient.startWorking();

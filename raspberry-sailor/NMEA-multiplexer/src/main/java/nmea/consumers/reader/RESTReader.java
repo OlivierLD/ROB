@@ -17,13 +17,12 @@ import utils.TimeUtil;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.BindException;
 import java.net.ConnectException;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -49,23 +48,24 @@ public class RESTReader extends NMEAReader {
 	private String queryPath = DEFAULT_QUERY_PATH;
 	private String queryString = DEFAULT_QUERY_STRING;
 	private String jqsString = null; // jq syntax doc: https://lzone.de/cheat-sheet/jq, jackson-jq repo: https://github.com/eiiches/jackson-jq
+	private String nmeaProcessor = null;
 	private long betweenLoops = DEFAULT_BETWEEN_LOOPS;
 
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final Scope ROOT_SCOPE = Scope.newEmptyScope(); // jq scope
 
 	public RESTReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
+		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
 
 	public RESTReader(List<NMEAListener> al, int http) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
+		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
 
 	public RESTReader(List<NMEAListener> al, String host, int http) {
-		this(null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null);
+		this(null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
-	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs, Long betweenLoops) {
+	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs, String nmeaProcessor, Long betweenLoops) {
 		super(threadName != null ? threadName : "rest-thread", al);
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
@@ -76,6 +76,7 @@ public class RESTReader extends NMEAReader {
 		this.queryPath = path;
 		this.queryString = qs;
 		this.jqsString = jqs;
+		this.nmeaProcessor = nmeaProcessor;
 		if (betweenLoops != null) {
 			this.betweenLoops = betweenLoops;
 		}
@@ -99,15 +100,93 @@ public class RESTReader extends NMEAReader {
 	public String getJQString() {
 		return this.jqsString;
 	}
+	public String getNmeaProcessor() { return this.nmeaProcessor; }
 	public long getBetweenLoops() { return this.betweenLoops; }
 
 	public Consumer<HTTPServer.Response> responseProcessor = this::manageRESTResponse;
 
 	/**
+	 * Invoke a static method, with parameters
+	 *
+	 * @param definition, like "nmea.parser.StringGenerator.generateMMB("SH", value)". "value" is a reserved word
+	 * @param value the String to replace "value" with
+	 * @return A valid NMEA String
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	private String invokeNMEAProcessor(String definition, String value) throws NoSuchMethodException,
+			                                                                   InvocationTargetException,
+																			   ClassNotFoundException,
+																			   IllegalAccessException {
+		// Isolate class, method, and parameters
+		String className = definition.substring(0, definition.lastIndexOf("."));
+		String methodName = definition.substring(definition.lastIndexOf(".") + 1, definition.indexOf("("));
+		String[] arguments = definition.substring(definition.indexOf("(") + 1, definition.indexOf(")")).split(",");
+
+		List<Class> argTypes = new ArrayList<>();
+		List<Object> argValues = new ArrayList<>();
+		Arrays.stream(arguments).forEach(arg -> {
+			String[] argVal = arg.split(":");
+			String argType = argVal[0].trim();
+			String argValue = argVal[1].trim();
+			if ("value".equals(argValue)) {
+				argValue = value; // From the method's prms
+			}
+			// TODO more types ?
+			switch (argType) {
+				case "double":
+					argTypes.add(double.class);
+					argValues.add(Double.parseDouble(argValue));
+					break;
+				case "Double":
+					argTypes.add(Double.class);
+					argValues.add(Double.parseDouble(argValue));
+					break;
+				case "float":
+					argTypes.add(float.class);
+					argValues.add(Float.parseFloat(argValue));
+					break;
+				case "Float":
+					argTypes.add(Float.class);
+					argValues.add(Float.parseFloat(argValue));
+					break;
+				case "int":
+					argTypes.add(int.class);
+					argValues.add(Integer.parseInt(argValue));
+					break;
+				case "Integer":
+					argTypes.add(Integer.class);
+					argValues.add(Integer.parseInt(argValue));
+					break;
+				case "Object":
+					argTypes.add(Object.class);
+					argValues.add((Object)argValue);
+					break;
+				case "String":
+					if (argValue.startsWith("\"") && argValue.endsWith("\"")) {
+						argValue = argValue.substring(1, argValue.length() - 1);
+					}
+				default:
+					argTypes.add(String.class);
+					argValues.add(argValue);
+					break;
+			}
+		});
+
+		// String result = "$SHMMB, ... *XX\n";
+		Class<?> clazz = Class.forName(className);
+  		Method method = clazz.getMethod(methodName, argTypes.toArray(new Class[]{})); // Get those types from definition
+
+		Object result = method.invoke(null, argValues.toArray());
+		return (String)result;
+	}
+
+	/**
 	 * Processes the REST response. Designed in case it needs to be overridden.
 	 * Used as responseProcessor (see above)
 	 * Does a super.fireDataRead(new NMEAEvent(this, nmeaContent));
-	 * (TODO Illustrate extension)
+	 * (TODO Illustrate extension...)
 	 *
 	 * IMPORTANT: It's the server's responsibility to provide well formed NMEA Sentences.
 	 * If the payload is a JSON Map, every member of the map will be considered as 'sendable'.
@@ -151,8 +230,18 @@ public class RESTReader extends NMEAReader {
 				}
 			}
 			if (verbose) {
-				System.out.printf(">> REST Reader: %s\n", payload);
+				System.out.printf(">> REST Reader: %s, type %s\n", payload, payload.getClass().getName());
 			}
+			// nmea-processor management.
+			if (this.nmeaProcessor != null) {
+				// like StringGenerator.generateMMB("SH", value)
+				if (verbose) {
+					System.out.printf("Firing nmeaProcessor [%s] on [%s]\n", this.nmeaProcessor, payload);
+				}
+				String nmeaSentence = invokeNMEAProcessor(this.nmeaProcessor.trim(), payload);
+				payload = nmeaSentence;
+			}
+
 			final List<String> dataToFire = new ArrayList<>();
 			// Multi-node result here? Re-parse.
 			try {

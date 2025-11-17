@@ -24,14 +24,25 @@ public class RESTReaderTest {
             }
         });
         nmeaClient.initClient();
+//        nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
+//                "http",     // protocol
+//                serverNameOrIP,     // machine name
+//                8_080,              // port
+//                "/eink2_13/oplist", // path
+//                "",                 // query string
+//                null,               // jqs
+//                null,               // nmea-processor
+//                null));             // between loops
         nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
-                "http",
-                serverNameOrIP,
-                8_080,
-                "/eink2_13/oplist",
-                "",
-                null,
-                null));
+                "http",     // protocol
+                "192.168.1.41",     // machine name
+                9999,              // port
+                "/sense-hat/all-env-sensors/", // path
+                "",                 // query string
+                ".pressure",        // jqs
+                "nmea.parser.StringGenerator.generateMMB(String:\"SH\", double:value)", // nmea-processor
+                null));             // between loops
+
         nmeaClient.startWorking();
 
         TimeUtil.delay(10_000L);

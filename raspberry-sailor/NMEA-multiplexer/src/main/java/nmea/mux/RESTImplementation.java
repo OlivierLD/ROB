@@ -2081,6 +2081,7 @@ public class RESTImplementation {
 									restJson.getQueryPath(),
 									restJson.getQueryString(),
 									restJson.getJsonQueryString(),
+									restJson.getNmeaProcessor(),
 									restJson.getFrequency()));
 							nmeaDataClients.add(restClient);
 							restClient.startWorking();
