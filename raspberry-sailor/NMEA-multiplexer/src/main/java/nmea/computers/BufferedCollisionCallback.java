@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  * Just an example for AISManager (or others like BorderManager) collision callback.
  * >> NOT A Singleton, the constructor is public, there is NO getInstance() method
  *
- * TODO A PlaySound callback (like a fog horn)
+ * TODO A PlaySound callback (like a fog horn). Done. See FogHornCallback.java
  */
 public class BufferedCollisionCallback implements Consumer<String> {
 

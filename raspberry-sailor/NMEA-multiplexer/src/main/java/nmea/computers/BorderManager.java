@@ -335,6 +335,9 @@ public class BorderManager extends Computer {
 			if (collisionCallback instanceof BufferedCollisionSingletonCallback) {
 				((BufferedCollisionSingletonCallback) collisionCallback).setActive(active);
 			}
+			if (collisionCallback instanceof RESTClientCollisionCallback) {
+				((RESTClientCollisionCallback) collisionCallback).setActive(active);
+			}
 		}
 	}
 

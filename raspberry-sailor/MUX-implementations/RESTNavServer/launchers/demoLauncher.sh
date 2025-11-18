@@ -884,7 +884,9 @@ while [[ "${GO}" == "true" ]]; do
 	  "13c")
   	  PROP_FILE=mux-configs/nmea.mux.replay.etel.groix.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
-	    echo -e "Do check mux-configs/border.mgr.properties for proximity management."
+	    echo -e "-----------------------------------------------------------------------"
+	    echo -e ">> Do check mux-configs/border.mgr.properties for proximity management."
+	    echo -e "-----------------------------------------------------------------------"
       # Ask to launch a browser in interactive mode (and not provided already)
       # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
       if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
