@@ -24,6 +24,7 @@ compileJava {
 
 dependencies {
     implementation 'org.yaml:snakeyaml:1.21'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
     // https://mvnrepository.com/artifact/com.google.openlocationcode/openlocationcode
     implementation 'com.google.openlocationcode:openlocationcode:1.0.4'  // Google CodePlus
     implementation project(':common-utils')

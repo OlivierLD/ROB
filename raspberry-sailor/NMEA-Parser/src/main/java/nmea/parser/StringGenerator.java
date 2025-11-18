@@ -1,5 +1,8 @@
 package nmea.parser;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.TimeZone;
 
 import java.text.DecimalFormat;
@@ -8,6 +11,7 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import utils.StringUtils;
+import utils.WeatherUtil;
 
 public class StringGenerator {
 	private static final SimpleDateFormat SDF_DATETIME = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
@@ -85,7 +89,6 @@ public class StringGenerator {
       Non-numeric transducer IDs seem to be used as needed, like PTCH, PITCH, ROLL, MAGX, MAGY, MAGZ, AIRT, ENGT, ...
       I found no list of "official" transducer IDs.
    */
-
 	public enum XDRTypes { // See above for more details
 		TEMPERATURE("C", "C"), // in Celsius
 		ANGULAR_DISPLACEMENT("A", "D"), // In degrees
@@ -605,5 +608,63 @@ public class StringGenerator {
 		int cs = StringParsers.calculateCheckSum(zda);
 		zda += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
 		return "$" + zda;
+	}
+
+	/**
+	 * Generate a TXT sentence, like $GPTXT,01,01,02,ANTSTATUS=OK*3B
+	 * Unresolved question: What are 01,01,02 ?
+	 * @param devicePrefix
+	 * @param txtContent
+	 * @return the expected TXT sentence.
+	 */
+	public static String generateTXT(String devicePrefix, String txtContent) {
+		String txt = devicePrefix + "TXT,01,01,02,";  // 01,01,02 hard-coded. What is that ??
+		txt += txtContent;
+		// Checksum
+		int cs = StringParsers.calculateCheckSum(txt);
+		txt += ("*" + StringUtils.lpad(Integer.toString(cs, 16).toUpperCase(), 2, "0"));
+		// Done.
+		return "$" + txt;
+	}
+
+	/**
+	 * A specific use case...
+	 * @param devicePrefix like "SH" for sense HAT
+	 * @param jsonContent returned by a request like 'curl -X GET http://192.168.1.41:9999/sense-hat/all-env-sensors', json like {
+	 *   "rel-humidity": 70.78926849365234,
+	 *   "pressure": 3952.994140625,
+	 *   "temperature": 25.966564178466797
+	 * }
+	 * @return an MDA Sentence, with pressure, air temp, rel hum, abs hum, dew point
+	 */
+	public static String senseHatENVtoMDA(String devicePrefix, String jsonContent) {
+		String nmeaContent = "";
+		try {
+			// 1 - parse the JSON object
+			ObjectMapper mapper = new ObjectMapper();
+			// read the json strings and convert it into JsonNode
+			JsonNode node = mapper.readTree(jsonContent);
+			double pressure = node.get("pressure").asDouble();
+			double relHum = node.get("rel-humidity").asDouble();
+			double temperature = node.get("temperature").asDouble();
+			// 2 - calculate abs humidity and dew point
+			double dewPointTemp = WeatherUtil.dewPointTemperature(relHum, temperature);
+			double absHum = WeatherUtil.absoluteHumidity(temperature, relHum);
+			// 3 - compose the final sentence
+			nmeaContent = generateMDA(devicePrefix,
+					                  pressure,
+									  temperature,
+					                  -Double.MAX_VALUE,
+					                  relHum,
+					                  absHum,
+					                  dewPointTemp,
+					                  -Double.MAX_VALUE,
+					                  -Double.MAX_VALUE,
+					                  -Double.MAX_VALUE);
+		} catch (Exception ex) {
+			// Wrap error message in a TXT sentence
+			nmeaContent = generateTXT(devicePrefix, ex.toString());
+		}
+		return nmeaContent;
 	}
 }

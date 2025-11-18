@@ -22,4 +22,16 @@ public class WeatherUtil {
 
 		return dewPointTemp;
 	}
+
+	/**
+	 * See https://carnotcycle.wordpress.com/2012/08/04/how-to-convert-relative-humidity-to-absolute-humidity/
+	 * Absolute Humidity (grams/m3) = (6.112 × e^[(17.67 × T)/(T+243.5)] × rh × 2.1674) / (273.15+T)
+	 * @param temp Air Temp in Celsius
+	 * @param rh Relative Humidity in %
+	 * @return the Absolute humidity on g/m3
+	 */
+	public static double absoluteHumidity(double temp, double rh) {
+		double ah = (6.112 * Math.exp((17.67 * temp) / (temp + 243.5)) * rh * 2.1674) / (273.15 + temp);
+		return ah;
+	}
 }

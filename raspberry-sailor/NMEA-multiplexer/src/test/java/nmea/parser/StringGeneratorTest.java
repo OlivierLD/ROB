@@ -121,5 +121,14 @@ public class StringGeneratorTest {
         GLL parsedGLL = StringParsers.parseGLL(gll);
         GeoPos ll = parsedGLL.getGllPos();
         System.out.printf(">> Pos %s\n", ll.toString());
+
+        String json = "{ \"rel-humidity\": 70.78926849365234," +
+                      "  \"pressure\": 1013.994140625," +
+                      "  \"temperature\": 25.966564178466797 }";
+        String goodMBA = StringGenerator.senseHatENVtoMDA("SH", json);
+        System.out.println(goodMBA);
+        json = "{ \"bancal\": \"que dalle\" }";
+        String badMBA = StringGenerator.senseHatENVtoMDA("SH", json);
+        System.out.println(badMBA);
     }
 }
