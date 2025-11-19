@@ -108,7 +108,7 @@ public class RESTReader extends NMEAReader {
 	/**
 	 * Invoke a static method, with parameters
 	 *
-	 * @param definition, like "nmea.parser.StringGenerator.generateMMB("SH", value)". "value" is a reserved word
+	 * @param definition, like "nmea.parser.StringGenerator.generateMMB(String:"SH", double:value)". "value" is a reserved word
 	 * @param value the String to replace "value" with
 	 * @return A valid NMEA String
 	 * @throws NoSuchMethodException
@@ -206,6 +206,7 @@ public class RESTReader extends NMEAReader {
 				AtomicReference<String> objPayload = new AtomicReference<>(payload);
 				if ("application/json".equals(contentType)) {
 					String jqString = getJQString();
+					// Apply jq query
 					if (jqString != null && jqString.trim().length() > 0) {  // Compatible Java 8
 						try {
 							JsonQuery jq = JsonQuery.compile(jqString /*".NMEA_AS_IS.RMC" */, Versions.JQ_1_6);

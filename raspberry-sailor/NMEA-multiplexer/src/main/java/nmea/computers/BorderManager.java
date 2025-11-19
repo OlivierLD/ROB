@@ -325,7 +325,8 @@ public class BorderManager extends Computer {
 		super.setActive(active);
 		// Specific to some callback, as they run on their own...
 		if (collisionCallback != null && (collisionCallback instanceof BufferedCollisionCallback ||
-				                          collisionCallback instanceof BufferedCollisionSingletonCallback)) {
+				                          collisionCallback instanceof BufferedCollisionSingletonCallback ||
+				                          collisionCallback instanceof RESTClientCollisionCallback)) {
 			if (isVerbose()) {
 				System.out.printf("Setting BufferedCollision(*)Callback to %b\n", active);
 			}

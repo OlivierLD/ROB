@@ -23,38 +23,44 @@ public class RESTClientCollisionCallback implements Consumer<String> {
     private int port = 80;
     private String path = "/this/that";
     private String data = null; // Unused. See accept method.
-
     private Map<String, String> headers = null; // Optional. From properties ?
-
+    private boolean verbose = false; // Possibly overridden by properties.
     private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
     public RESTClientCollisionCallback() {
         System.out.println(">> RESTClientCollisionCallback - creating new Instance!!");
         headers = new HashMap<>();
-        headers.put("Content-Type", "plain/text");
+        headers.put("Content-Type", "plain/text"); // TODO Get this from the properties
     }
 
     public void setActive(boolean active) {
         this.active = active;
     }
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+    public boolean isVerbose() {
+        return this.verbose;
+    }
     @Override
     public void accept(String s) {
-        if (VERBOSE) {
+        if (VERBOSE || isVerbose()) {
             System.out.printf("Accept >> [%s] in %s\n", s, this.getClass().getName());
         }
         String command = String.format("http://%s:%d%s", machine, port, path);
-        System.out.printf("Command: curl +X %s %s\n", verb, command);
-
+        if (VERBOSE || isVerbose()) {
+            System.out.printf("Command: curl +X %s %s\n", verb, command);
+        }
         if (this.active) {
             try {
                 switch (this.verb) {
                     case "POST":
                         String postRequest = command;
                         String strContent = new String(s).trim();
-                        if (VERBOSE) {
+                        if (VERBOSE || isVerbose()) {
                             System.out.printf("%s\n%s\n", postRequest, strContent);
                         }
                         HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, strContent);
-                        if (true || VERBOSE) {
+                        if (VERBOSE || isVerbose()) {
                             System.out.printf("POST %s with %s: Response code %d, message: %s\n",
                                     postRequest,
                                     strContent,
@@ -67,11 +73,11 @@ public class RESTClientCollisionCallback implements Consumer<String> {
                         String putRequest = command;
                         String putStrContent = new String(s).trim();
 //					System.out.println("Verbose: [" + this.props.getProperty("verbose") + "]");
-                        if (VERBOSE) {
+                        if (VERBOSE || isVerbose()) {
                             System.out.printf("%s\n%s\n", putRequest, putStrContent);
                         }
                         HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
-                        if (VERBOSE) {
+                        if (VERBOSE || isVerbose()) {
                             System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
                                     putRequest,
                                     putStrContent,
@@ -84,7 +90,7 @@ public class RESTClientCollisionCallback implements Consumer<String> {
                         break;
                 }
             } catch (Exception ex) {
-                if (VERBOSE) {
+                if (VERBOSE || isVerbose()) {
                     System.err.println(">> Error!");
                     ex.printStackTrace();
                 }
@@ -114,6 +120,9 @@ public class RESTClientCollisionCallback implements Consumer<String> {
             }
             if (props.getProperty("rest-data") != null) {
                 data = props.getProperty("rest-data");
+            }
+            if (props.getProperty("rest-verbose") != null) {
+                verbose = "true".equals(props.getProperty("rest-verbose"));
             }
         } catch (Exception e) {
             System.out.printf("%s file problem...\n", propFileName);

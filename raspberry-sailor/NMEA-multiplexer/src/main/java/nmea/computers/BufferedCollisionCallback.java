@@ -19,7 +19,7 @@ public class BufferedCollisionCallback implements Consumer<String> {
     private boolean active = true;
     private String collisionLanguage = "EN";
     private String collisionVocabulary = "collision";
-
+    private boolean verbose = false;
     private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
     private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
     private long pollingInterval = POLLING_INTERVAL;
@@ -38,7 +38,7 @@ public class BufferedCollisionCallback implements Consumer<String> {
                                 message = String.format("Attention ! %d danger%s de %s !", length, length > 1 ? "s" : "", collisionVocabulary);
                             }
                             TextToSpeech.speak(message, collisionLanguage);
-                            if (VERBOSE) {
+                            if (VERBOSE || isVerbose()) {
                                 System.out.printf(">> Found %d threat(s) :\n", length);
                                 threatList.stream().forEach(el -> {
                                     System.out.printf("Threat with: %s\n", el);
@@ -46,12 +46,12 @@ public class BufferedCollisionCallback implements Consumer<String> {
                             }
                             threatList.clear();
                         } else {
-                            if (VERBOSE) {
+                            if (VERBOSE || isVerbose()) {
                                 System.out.printf(">> Found NO %s threat.\n", collisionVocabulary);
                             }
                         }
                     } else {
-                        if (VERBOSE) {
+                        if (VERBOSE || isVerbose()) {
                             System.out.printf("=> INFO: %s is not active.\n", this.getClass().getName());
                         }
                     }
@@ -69,9 +69,15 @@ public class BufferedCollisionCallback implements Consumer<String> {
     public void setActive(boolean active) {
         this.active = active;
     }
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+    public boolean isVerbose() {
+        return this.verbose;
+    }
     @Override
     public void accept(String s) {
-        if (VERBOSE) {
+        if (VERBOSE || isVerbose()) {
             System.out.printf("Accept >> Adding %s threat [%s] to %s\n", collisionVocabulary, s, this.getClass().getName());
         }
         synchronized (threatList) {
@@ -92,6 +98,10 @@ public class BufferedCollisionCallback implements Consumer<String> {
 
             if (props.getProperty("collision.name") != null) {
                 collisionVocabulary = props.getProperty("collision.name");
+            }
+
+            if (props.getProperty("collision.verbose") != null) {
+                verbose = "true".equals(props.getProperty("collision.verbose"));
             }
 
             if (props.getProperty("polling.interval") != null) {

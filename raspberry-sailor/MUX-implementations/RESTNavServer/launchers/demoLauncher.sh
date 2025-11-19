@@ -886,6 +886,7 @@ while [[ "${GO}" == "true" ]]; do
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
 	    echo -e "-----------------------------------------------------------------------"
 	    echo -e ">> Do check mux-configs/border.mgr.properties for proximity management."
+	    echo -e ">> Also check out the 'computers' management in the admin, at ${RED}http://localhost:${HTTP_PORT}/web/admin.html${NC}"
 	    echo -e "-----------------------------------------------------------------------"
       # Ask to launch a browser in interactive mode (and not provided already)
       # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
