@@ -90,7 +90,7 @@ Notice above, the network name and password:
 - Network name is `NMEANetwork`
 - Network password is `PassWord`
 
-Those values can be changed at will, as you wish.  
+Those values can be changed at will (in `/etc/hostapd/hostapd.conf`), as you wish.  
 
 Once the above is done, you can reboot the Raspberry Pi.
 

@@ -148,7 +148,7 @@ public class StringGenerator {
 		}
 
 		public String toString() {
-			return this.transducerName + ", " + this.getTypeNunit() + ", " + this.getTypeNunit().type() + ", " + Double.toString(this.getValue()) + " " + this.getTypeNunit().unit();
+			return "From [" + this.transducerName + "], " + this.getTypeNunit() + ", " + this.getTypeNunit().type() + ", " + Double.toString(this.getValue()) + " " + this.getTypeNunit().unit();
 		}
 	}
 

@@ -73,13 +73,34 @@ public class StringParsersTest {
         System.out.println("Parsed:" + str);
         System.out.println("RMC:" + rmc);
 
-        str = "$IIVWR,148.,L,02.4,N,01.2,M,04.4,K*XX";
-        w = StringParsers.parseVWR(str);
-        System.out.println("Wind  :" + w);
+        try {
+            str = "$IIVWR,148.,L,02.4,N,01.2,M,04.4,K*XX";
+            w = StringParsers.parseVWR(str);
+            System.out.println("Wind  :" + w);
+        } catch (Exception ex) {
+            // Invalid Checksum
+            String errMess = ex.getMessage();
+            if (errMess.contains("Invalid checksum")) {
+                System.err.println("Expected Invalid Checksum");
+            } else {
+                ex.printStackTrace();
+            }
+        }
 
-        str = "$IIVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*XX";
-        OverGround og = StringParsers.parseVTG(str);
-        System.out.println("Over Ground:" + og);
+        OverGround og;
+        try {
+            str = "$IIVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*XX";
+            og = StringParsers.parseVTG(str);
+            System.out.println("Over Ground:" + og);
+        } catch (Exception ex) {
+            // Invalid Checksum
+            String errMess = ex.getMessage();
+            if (errMess.contains("Invalid checksum")) {
+                System.err.println("Expected Invalid Checksum");
+            } else {
+                ex.printStackTrace();
+            }
+        }
 
         str = "$IIMWV,127.0,R,8.5,N,A*34";
         w = StringParsers.parseMWV(str);
@@ -90,15 +111,15 @@ public class StringParsersTest {
         System.out.println("Wind  :" + w);
 
         str = "$aaVLW,123.45,N,12.34,N*hh";
-        VLW vlw = StringParsers.parseVLW(str);
+        VLW vlw = StringParsers.parseVLW(str, true);
         System.out.println("Log - Cumul:" + vlw.getLog() + ", Daily:" + vlw.getDaily());
 
         str = "$xxMTW,+18.0,C*hh";
-        double t = StringParsers.parseMTW(str);
+        double t = StringParsers.parseMTW(str, true);
         System.out.println("Temperature:" + t + "\272C");
 
         str = "$iiRMB,A,0.66,L,003,004,4917.24,N,12309.57,W,001.3,052.5,000.5,V*0B";
-        RMB rmb = StringParsers.parseRMB(str);
+        RMB rmb = StringParsers.parseRMB(str, true, true);
         System.out.println("RMB:");
         if (rmb != null) {
             System.out.println("  XTE:" + rmb.getXte() + " nm (steer " + (rmb.getDts().equals("R") ? "Right" : "Left") + ")");
@@ -124,7 +145,7 @@ public class StringParsersTest {
         System.out.println("Over Ground:" + og);
 
         str = "$IIDPT,007.4,+1.0,*43";
-        float depth = StringParsers.parseDPT(str, StringParsers.DEPTH_IN_METERS);
+        float depth = StringParsers.parseDPT(str, StringParsers.DEPTH_IN_METERS, true);
         System.out.println("Depth:" + depth);
 
         str = "$IIVWR,024,R,08.4,N,,,,*6B";
@@ -255,7 +276,7 @@ public class StringParsersTest {
 
         System.out.println("------- GSA -------");
         str = "$GPGSA,A,3,19,28,14,18,27,22,31,39,,,,,1.7,1.0,1.3*35";
-        GSA gsa = StringParsers.parseGSA(str);
+        GSA gsa = StringParsers.parseGSA(str, true);
         System.out.println("- Mode: " + (gsa.getMode1().equals(GSA.ModeOne.Auto) ? "Automatic" : "Manual"));
         System.out.println("- Mode: " + (gsa.getMode2().equals(GSA.ModeTwo.NoFix) ? "No Fix" : (gsa.getMode2().equals(GSA.ModeTwo.TwoD) ? "2D" : "3D")));
         System.out.println("- Sat in View:" + gsa.getSvArray().size());
@@ -273,7 +294,7 @@ public class StringParsersTest {
         System.out.println("-> RMC date:" + rmc.getRmcDate().toString() + " (" + rmc.getRmcDate().getTime() + ")");
 
         str = "$IIRMC,144432.086,V,,,,,00.0,0.00,190214,,,N*48";
-        rmc = StringParsers.parseRMC(str);
+        rmc = StringParsers.parseRMC(str, true, true);
         try {
             System.out.println("-> RMC date:" + rmc.getRmcDate() + " (" + rmc.getRmcDate().getTime() + ")");
         } catch (Exception ex) {
@@ -340,6 +361,17 @@ public class StringParsersTest {
             }
         }
 
+        // Invalid?
+        str = "$WIXDR,C,008.0,C,,*5A"; // Returned by a ShipModul.
+        System.out.println("[" + str + "] is " + (StringParsers.validCheckSum(str) ? "" : "not ") + "valid.");
+        xdr = StringParsers.parseXDR(str);
+        for (StringGenerator.XDRElement x : xdr) {
+            System.out.println(" => " + x.toString());
+            if (x.getTypeNunit().equals(StringGenerator.XDRTypes.TEMPERATURE)) {
+                System.out.println("Temperature:" + x.getValue() + "\272C");
+            }
+        }
+
         str = "$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A";
         rmc = StringParsers.parseRMC(str);
         try {
@@ -359,18 +391,19 @@ public class StringParsersTest {
 
         // A bad one
         str = "$IIRMC,051811,A,3730.079,N,12228.853,W,,,070215,19.905,I,1.013,B,28.8,C,14.0,C,,,,,172.0,T,173.0,M,35.1,N,18.1,M*66";
-        rmc = StringParsers.parseRMC(str);
+        rmc = StringParsers.parseRMC(str, true, true);
         if (rmc != null) {
             try {
                 System.out.println("-> RMC date:" + rmc.getRmcDate() + " (" + rmc.getRmcDate().getTime() + ")");
             } catch (Exception ex) {
                 System.out.println("Expected:" + ex.toString());
             }
-        } else
+        } else {
             System.out.println("Invalid string:" + str);
+        }
 
         str = "$$IIRMC,055549,A,3730.080,N,29.908,I,1.013,B,28.8,C,14.0,C,,,,,169.0,T,170.0,M,28.3,N,14.6,M*67";
-        rmc = StringParsers.parseRMC(str);
+        rmc = StringParsers.parseRMC(str, true, true);
         if (rmc != null) {
             try {
                 System.out.println("-> RMC date:" + rmc.getRmcDate() + " (" + rmc.getRmcDate().getTime() + ")");
@@ -382,7 +415,7 @@ public class StringParsersTest {
 
         str = "$RPMMB,29.9276,I,1.0133,B*LW,08200,N,000.0,N*59";
         System.out.println("[" + str + "] is " + (StringParsers.validCheckSum(str) ? "" : "not ") + "valid.");
-        pressure = StringParsers.parseMMB(str);
+        pressure = StringParsers.parseMMB(str, true);
         System.out.println(" ==> " + pressure + " hPa");
 
         System.out.println("Done");
@@ -463,7 +496,7 @@ public class StringParsersTest {
         str = "$GPRMC,12,58,325,06,24,46,227,27,25,22,310,,17,13,064,*78";
         valid = StringParsers.validCheckSum(str);
         System.out.println("RMC Chain is " + (valid ? "" : "not ") + "valid [" + str + "]");
-        rmc = StringParsers.parseRMC(str);
+        rmc = StringParsers.parseRMC(str, true, true);
         System.out.println("Parsed");
 
         System.setProperty("rmc.date.offset", "7168");

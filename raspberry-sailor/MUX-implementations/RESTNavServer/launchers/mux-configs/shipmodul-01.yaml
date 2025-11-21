@@ -1,0 +1,52 @@
+#
+# MUX definition.
+#
+name: "ShipModul. Replay log file. Chartless Map."
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - Used by option 13c in the demoLauncher
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  # markers: mux-configs/markers.01.yaml
+  # markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+  markers.list:
+    - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    # - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    - markers: mux-configs/markers/markers.stphil.kerpenhir.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    # - markers: mux-configs/markers/markers.pte.du.talud.ste.marine.yaml
+  next-waypoint: BMELITE
+channels:
+  - type: file
+    filename: ./sample.data/la.reveuse.01.nmea
+    # zip: true
+    # path.in.zip: going.to.groix.2.nmea
+    # between-records: 50   # Speed up
+    verbose: false
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+  #
+forwarders:
+  - type: file
+    verbose: false
+    timebase.filename: false
+    filename: data.4tests.nmea
+    flush: true
+    # sentence.filters: MWV, VHW, HDG
+    sentence.filters: ~GGA,~GSA,~GSV
+#  - type: console
+#  - type: tcp
+#    port: 7002
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    verbose: false
+  - class: nmea.computers.NextWaypointManager
+    verbose: false

@@ -1,0 +1,25 @@
+#
+# MUX definition.
+# Astronomical data can be rendered at http://localhost:9999/web/webcomponents/console.gps.html?style=orange&bg=black&border=n&boat-data=n
+#
+name: "With a Shipmodul"
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+channels:
+  - type: serial
+    port: /dev/ttyUSB0
+    baudrate: 460800  # Wow!
+    verbose: false
+forwarders:
+  - type: "tcp"
+    port: 7002
+  - type: file
+    # filename: ./data.nmea
+    flush: true
+    timebase.filename: true
+    filename.suffix: _LOG
+    log.dir: logged
+    split: hour   # |hour|day|week|month|year
+    verbose: false

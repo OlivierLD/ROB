@@ -39,12 +39,13 @@ channels:
     query-path: /sense-hat/all-env-sensors   # /sense-hat/pressure
     # query-string:      # Would include the ?, and subsequent &...
     # ----------------------
-    # Just the pressure
+    # -> Just the pressure
     # jqs: ".pressure"     # JQ String, to apply on the response
     # nmea-processor: nmea.parser.StringGenerator.generateMMB(String:"SH", double:value) # 'value' is a reserved word
     # ----------------------
-    # Full MBA
+    # -> Full MDA
     # jqs: ""
+    # -- nmea-processor code in RESTReader.invokeNMEAProcessor
     nmea-processor: nmea.parser.StringGenerator.senseHatENVtoMDA(String:"SH", String:value) # 'value' is a reserved word
     # ----------------------
     between-loops: 2000  # in ms

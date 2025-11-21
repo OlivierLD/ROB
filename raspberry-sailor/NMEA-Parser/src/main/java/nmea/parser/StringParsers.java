@@ -108,8 +108,22 @@ public class StringParsers {
 		List<StringGenerator.XDRElement> lxdr = new ArrayList<>();
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
 		if ((sa.length - 1) % 4 != 0) { // Mismatch
-			System.out.println("XDR String invalid (" + sa.length + " element(s) found, expected a multiple of 4)");
-			return lxdr;
+			// "$WIXDR,C,008.0,C,,*5A".split(",") returns ["C", "008.0", "C"], missing last empty element
+			long nbComma = sentence.chars().filter(ch -> ch == ',').count();
+			if ((sa.length - 1) == 3 && nbComma == 5) {
+				// Only one sensor, without a name..., moving on
+				List<String> lst = Arrays.asList(sa);
+				List<String> newList = new ArrayList<>();
+				lst.forEach(newList::add);
+				newList.add("");
+				sa = (String[])newList.toArray(new String[] {});
+				if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+					System.out.println("Only one sensor, with no name. Moving on.");
+				}
+			} else {
+				System.err.printf("XDR String invalid (%d element(s) found, expected a multiple of 4) [%s]\n", (sa.length - 1), sentence);
+				return lxdr;
+			}
 		}
 		for (int i = 1; i < sa.length; i += 4) {
 			String type = sa[i];
@@ -270,10 +284,17 @@ public class StringParsers {
 	 * @return Pressure in Mb / hPa
 	 */
 	public static double parseMMB(String sentence) {
+		return parseMMB(sentence, false);
+	}
+	public static double parseMMB(String sentence, boolean keepParsing) {
 		final int PR_IN_HG = 1;
 		final int PR_BARS = 3;
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.printf("Invalid checksum for [%s], but keeping parsing.\n", sentence);
+			}
 		}
 		double d = 0d;
 		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
@@ -753,13 +774,20 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @return The result.
 	 */
 	public static GSA parseGSA(String sentence) {
+		return parseGSA(sentence, false);
+	}
+	public static GSA parseGSA(String sentence, boolean keepParsing) {
 		final int MODE_1 = 1;
 		final int MODE_2 = 2;
 		final int PDOP = 15;
 		final int HDOP = 16;
 		final int VDOP = 17;
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.printf("Invalid checksum for [%s], but keeping parsing.\n", sentence);
+			}
 		}
 		GSA gsa = new GSA();
 		String[] elements = sentence.substring(0, sentence.indexOf("*")).split(",");
@@ -884,6 +912,9 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @return The result.
 	 */
 	public static VLW parseVLW(String sentence) {
+		return parseVLW(sentence, false);
+	}
+	public static VLW parseVLW(String sentence, boolean keepParsing) {
 		final int CUM_DIST = 1;
 		final int SINCE_RESET = 3;
 
@@ -892,7 +923,11 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 			return (VLW) null;
 		}
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.println("Invalid checksum, but keeping parsing.");
+			}
 		}
 		double cumulative = 0d;
 		double sinceReset = 0d;
@@ -920,13 +955,20 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @return The result, in Celsius, as a double
 	 */
 	public static double parseMTW(String sentence) {
+		return parseMTW(sentence, false);
+	}
+	public static double parseMTW(String sentence, boolean keepParsing) {
 		final int TEMP_CELSIUS = 1;
 		String s = sentence.trim();
 		if (s.length() < MIN_NMEA_LENGTH) {
 			return 0d;
 		}
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.println("Invalid checksum, but keeping parsing.");
+			}
 		}
 
 		double temp = 0d;
@@ -1511,6 +1553,9 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	public static RMB parseRMB(String sentence) {
 		return parseRMB(sentence, true);
 	}
+	public static RMB parseRMB(String sentence, boolean useSymbol) {
+		return parseRMB(sentence, useSymbol, false);
+	}
 	/**
 	 * RMB Recommended Minimum Navigation Information<br>
 	 * <pre>
@@ -1535,7 +1580,7 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @param useSymbol Use degree symbol in GeoPos.toString()
 	 * @return The result.
 	 */
-	public static RMB parseRMB(String sentence, boolean useSymbol) {
+	public static RMB parseRMB(String sentence, boolean useSymbol, boolean keepParsing) {
 		final int RMB_STATUS = 1;
 		final int RMB_XTE = 2;
 		final int RMB_STEER = 3;
@@ -1556,7 +1601,11 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 			return null;
 		}
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.println("Invalid checksum, but keeping parsing.");
+			}
 		}
 		try {
 			if (s.contains("RMB,")) {
@@ -1672,6 +1721,9 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @return The result.
 	 */
 	public static RMC parseRMC(String sentence, boolean useSymbol) {
+		return parseRMC(sentence, useSymbol, false);
+	}
+	public static RMC parseRMC(String sentence, boolean useSymbol, boolean keepParsing) {
 		final int RMC_UTC = 1;
 		final int RMC_ACTIVE_VOID = 2;
 		final int RMC_LATITUDE_VALUE = 3;
@@ -1691,7 +1743,11 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 			return null;
 		}
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.println("Invalid checksum, but keeping parsing.");
+			}
 		}
 		String s = sentence.substring(0, sentence.indexOf("*"));
 		try {
@@ -2042,6 +2098,12 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @return The result, as a float.
 	 */
 	public static float parseDPT(String sentence, short unit) {
+		return parseDPT(sentence, unit, false);
+	}
+	public static float parseDPT(String sentence, boolean keepParsing) {
+		return parseDPT(sentence, DEPTH_IN_METERS, keepParsing);
+	}
+	public static float parseDPT(String sentence, short unit, boolean keepParsing) {
 		final int IN_METERS = 1;
 		final int OFFSET = 2;
 		String s = sentence.trim();
@@ -2049,7 +2111,11 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 			return -1F;
 		}
 		if (!validCheckSum(sentence)) {
-			throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s]", sentence));
+			} else {
+				System.err.println("Invalid checksum, but keeping parsing.");
+			}
 		}
 		float feet = 0.0F;
 		float meters = 0.0F;
