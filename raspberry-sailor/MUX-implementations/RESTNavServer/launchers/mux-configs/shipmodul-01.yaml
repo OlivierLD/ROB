@@ -29,7 +29,7 @@ channels:
     filename: ./sample.data/la.reveuse.01.nmea
     # zip: true
     # path.in.zip: going.to.groix.2.nmea
-    # between-records: 50   # Speed up
+    between-records: 50   # Speed up
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
