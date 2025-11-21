@@ -152,6 +152,7 @@ public class AISManager extends Computer {
 				try {
 					AISParser.AISRecord aisRecord = aisParser.parseAIS(sentence);
 					if (aisRecord != null) {
+						// TODO Manage MMSI to ignore (like the one of the boat we're in...)
 						if (aisRecord.getLatitude() != 0f && aisRecord.getLongitude() != 0f) {
 							NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 							GeoPos position = (GeoPos) cache.get(NMEADataCache.POSITION);
