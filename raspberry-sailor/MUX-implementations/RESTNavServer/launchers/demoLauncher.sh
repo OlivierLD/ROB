@@ -1074,6 +1074,7 @@ while [[ "${GO}" == "true" ]]; do
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
+	    echo -e "Also try, ${RED}in a browser: http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n ${NC}"
 	    GO=false
 	    ;;
 	  "20")

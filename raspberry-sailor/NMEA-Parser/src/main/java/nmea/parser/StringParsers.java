@@ -909,6 +909,7 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 *        Total cumulative distance
 	 * </pre>
 	 * @param sentence the one to parse
+	 * @param keepParsing move on, even if checksum is invalid
 	 * @return The result.
 	 */
 	public static VLW parseVLW(String sentence) {

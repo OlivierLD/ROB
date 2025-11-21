@@ -1,0 +1,48 @@
+#
+# Generated Fri Nov 21 2025 14:37:58 GMT+0100 (Central European Standard Time)
+#
+description:
+  De Port-Navalo à la Vilaine
+borders:
+  - border-name: "Port-Navalo à la Vilaine"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 47.54872547286774
+        longitude: -2.9154968261718754
+      - rank: 2
+        latitude: 47.536674120125326
+        longitude: -2.9031372070312504
+      - rank: 3
+        latitude: 47.53713768492089
+        longitude: -2.8839111328125004
+      - rank: 4
+        latitude: 47.51117174476537
+        longitude: -2.847518920898438
+      - rank: 5
+        latitude: 47.49772004565108
+        longitude: -2.8530120849609375
+      - rank: 6
+        latitude: 47.48565697095909
+        longitude: -2.8166198730468754
+      - rank: 7
+        latitude: 47.48380086737799
+        longitude: -2.7877807617187504
+      - rank: 8
+        latitude: 47.50421439972969
+        longitude: -2.7328491210937504
+      - rank: 9
+        latitude: 47.49261677528683
+        longitude: -2.6786041259765625
+      - rank: 10
+        latitude: 47.502358951968596
+        longitude: -2.6257324218750004
+      - rank: 11
+        latitude: 47.51117174476537
+        longitude: -2.5515747070312504
+      - rank: 12
+        latitude: 47.5153457091302
+        longitude: -2.5007629394531254
+      - rank: 13
+        latitude: 47.49957565736371
+        longitude: -2.445144653320313

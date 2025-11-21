@@ -6,7 +6,7 @@ description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
-  - Used by option 13c in the demoLauncher
+  - Used by option 14 in the demoLauncher
 context:
   with.http.server: true
   http.port: 9999
@@ -21,7 +21,8 @@ context:
     - markers: mux-configs/markers/markers.couregant.la.plate.yaml
     - markers: mux-configs/markers/markers.stphil.kerpenhir.yaml
     - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
-    # - markers: mux-configs/markers/markers.pte.du.talud.ste.marine.yaml
+    - markers: mux-configs/markers/markers.port-navalo.vilaine.yaml
+    - markers: mux-configs/markers/markers.vilaine.loire.yaml
   next-waypoint: BMELITE
 channels:
   - type: file
@@ -47,6 +48,9 @@ forwarders:
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
+    verbose: false
+  - class: nmea.computers.AISManager
+    properties: mux-configs/ais.mgr.properties
     verbose: false
   - class: nmea.computers.NextWaypointManager
     verbose: false
