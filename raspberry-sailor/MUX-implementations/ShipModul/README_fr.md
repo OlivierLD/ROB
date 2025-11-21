@@ -1,6 +1,6 @@
 # Des notes à ne pas perdre...
 
-## Lecture d'un ShipModul
+## Lecture d'un [ShipModul](http://www.shipmodul.com)
 
 MMSI La Rêveuse: `228210480`.
 
@@ -8,9 +8,9 @@ On dispose de plusieurs chaînes NMEA, qui nous donnent :
 - Position
 - Vitesse et route fond
 - Température (de l'eau)
-- log (distance parcourue)
-- vitesse et route surface
-- vitesse et direction du vent
+- Log (distance parcourue)
+- Vitesse et route surface
+- Vitesse et direction du vent (apparent)
 - AIS.
 
 ```
@@ -30,6 +30,7 @@ ROT : 7,730 element(s) (un-managed)
 MDN : 82 element(s) (un-managed)
 VDM : 429 element(s) (AIS)
 CJE : 727 element(s) (un-managed)
+
 Valid Talker IDs:
 II : 723 element(s)
 VW : 774 element(s)
