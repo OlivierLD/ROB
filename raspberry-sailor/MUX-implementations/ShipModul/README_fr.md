@@ -1,18 +1,22 @@
 # Des notes à ne pas perdre...
 
+MMSI La Rêveuse: `228210480`.
+
 ## Lecture d'un [ShipModul](http://www.shipmodul.com)
 
-MMSI La Rêveuse: `228210480`.
+Le baud rate du ShipModul est `460800` ; c'est _**énorme**_, mais c'est vrai.
 
 On dispose de plusieurs chaînes NMEA, qui nous donnent :
 - Position
-- Vitesse et route fond
+- Vitesse et route fond (SOG, COG)
 - Température (de l'eau)
 - Log (distance parcourue)
-- Vitesse et route surface
-- Vitesse et direction du vent (apparent)
+- Vitesse et route surface (BSP, HDG)
+- Vitesse et direction du vent apparent (AWS, AWA)
+- Assiette du bateau (tangage, gîte, état de la mer)
 - AIS.
 
+Analyse d'un log de 6 minutes 32.0 sec, réalisé au sec, à St Philibert :
 ```
 Analyzing logged/shipmodul/2025-11-20_06-34-59_UTC_LOG.nmea.
 Valid Strings:
