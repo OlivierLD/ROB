@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * <ol>
  *   <li>AAM (Waypoint Arrival Alarm)</li>
  *   <li>APB (Heading/Track Controller (Autopilot) Sentence "B")</li>
- *   <li>BAT (battery status, NOT standard)</li>
+ *   <li>BAT (battery status, NOT standard). Could be replaced with an XDR</li>
  *   <li>BOD (Bearing - Origin to Destination)</li>
  *   <li>BWC, through BWx (Bearing &amp; Distance to Waypoint)</li>
  *   <li>BWR, through BWx (Bearing &amp; Distance to Waypoint - Rhumb Line)</li>
@@ -73,6 +73,9 @@ import java.util.regex.Pattern;
  *    Also see: https://www.plaisance-pratique.com/IMG/pdf/NMEA0183-2.pdf
  *
  * TODO: getters for all public static classes ?...
+ *
+ * <b>Note</b>: For now, we manage only sentences with a 3-character ID.<br/>
+ * Some "Proprietary Sentences" may not be managed (yet) here.
  *
  * More output with -Dnmea.parser.verbose=true
  */
