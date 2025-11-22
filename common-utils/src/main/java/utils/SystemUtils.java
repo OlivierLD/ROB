@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class SystemUtils {
 
@@ -294,6 +295,13 @@ public class SystemUtils {
         matrix2022.put("c03140", new String[] { "-------", "CM4", "1.0", "4GB", "Sony UK" });
         matrix2022.put("d03140", new String[] { "-------", "CM4", "1.0", "8GB", "Sony UK" });
         matrix2022.put("902120", new String[] { "-------", "Zero 2 W", "1.0", "512MB", "Sony UK" });
+        matrix2022.put("b04170", new String[] { "-------", "5", "1.0", "2 GB", "Sony UK"});
+        matrix2022.put("c04170", new String[] { "-------", "5", "1.0", "4 GB", "Sony UK"});
+        matrix2022.put("d04170", new String[] { "-------", "5", "1.0", "8 GB", "Sony UK"});
+        matrix2022.put("b04171", new String[] { "-------", "5", "1.1", "2 GB", "Sony UK"});
+        matrix2022.put("c04171", new String[] { "-------", "5", "1.1", "4 GB", "Sony UK"});
+        matrix2022.put("d04171", new String[] { "-------", "5", "1.1", "8 GB", "Sony UK"});
+        matrix2022.put("e04171", new String[] { "-------", "5", "1.1", "16 GB", "Sony UK"});
     }
 
     public final static int RELEASE_IDX = 0;
@@ -307,8 +315,12 @@ public class SystemUtils {
     public static String[] getRPiHardwareRevision() throws Exception {
         String command = "cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^1000//'";
         List<String> commandResult = getCommandResult(command);
+        String fullResult = commandResult.stream().collect(Collectors.joining(", "));
+        System.out.printf("Command result: %s\n", fullResult);
+
         if (commandResult.size() > 0) {
             String result = getCommandResult(command).get(0);
+            System.out.printf("Result #2: %s\n", result);
             return USE_2022_DATA ?
                     matrix2022.get(result) :
                     matrix.get(result);
@@ -335,6 +347,7 @@ public class SystemUtils {
             String[] hardwareData = getRPiHardwareRevision();
             if (hardwareData != null) {
                 if (USE_2022_DATA) {
+                    System.out.println("HW Data:" + Arrays.asList(hardwareData).stream().collect(Collectors.joining(", ")));
                     System.out.printf("Running on:\n" +
                                     "          Model: %s\n" +
                                     "        PCB Rev: %s\n" +
