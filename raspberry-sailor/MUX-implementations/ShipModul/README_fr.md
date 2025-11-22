@@ -38,7 +38,7 @@ HDG : 7,734 element(s) (Heading - Deviation & Variation)
 VBW : 772 element(s) (un-managed) - Dual Ground/Water Speed
 MWV : 723 element(s) (Wind Speed and Angle)
 MTW : 386 element(s) (Mean Temperature of Water)
-ROT : 7,730 element(s) (un-managed). Rate and direction Of Turn
+ROT : 7,730 element(s) (un-managed). Rate and direction Of Turn. Just added.
 MDNC : 82 element(s) (un-managed) MiniPlex-3 NMEA Proprietary Sentence
 VDM : 429 element(s) (AIS)
 CJE8FC8 : 727 element(s) (un-managed) MiniPlex-3 NMEA Proprietary Sentence

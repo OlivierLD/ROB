@@ -246,6 +246,13 @@ public class SystemUtils {
         matrix.put("c03112", new String[]{"-------", "4 Model B", "1.2", "4 GB", "(Mfg by Sony UK)"});
         matrix.put("d03114", new String[]{"-------", "4 Model B", "1.4", "8 GB", "(Mfg by Sony UK)"});
         matrix.put("c03130", new String[]{"-------", "Pi 400", "1.0", "4 GB", "(Mfg by Sony UK)"});
+        matrix.put("b04170", new String[]{"-------", "5", "1.0", "2 GB", "Sony UK"});
+        matrix.put("c04170", new String[]{"-------", "5", "1.0", "4 GB", "Sony UK"});
+        matrix.put("d04170", new String[]{"-------", "5", "1.0", "8 GB", "Sony UK"});
+        matrix.put("b04171", new String[]{"-------", "5", "1.1", "2 GB", "Sony UK"});
+        matrix.put("c04171", new String[]{"-------", "5", "1.1", "4 GB", "Sony UK"});
+        matrix.put("d04171", new String[]{"-------", "5", "1.1", "8 GB", "Sony UK"});
+        matrix.put("e04171", new String[]{"-------", "5", "1.1", "16 GB", "Sony UK"});
     }
 
     private final static Map<String, String[]> matrix2022 = new HashMap<>(); // Too big for a Map.of
