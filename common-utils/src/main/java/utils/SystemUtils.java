@@ -316,11 +316,11 @@ public class SystemUtils {
         String command = "cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^1000//'";
         List<String> commandResult = getCommandResult(command);
         String fullResult = commandResult.stream().collect(Collectors.joining(", "));
-        System.out.printf("Command result: %s\n", fullResult);
+        // System.out.printf(">> Command result: %s\n", fullResult);
 
         if (commandResult.size() > 0) {
             String result = getCommandResult(command).get(0);
-            System.out.printf("Result #2: %s\n", result);
+            // System.out.printf(">> Result #2: %s\n", result);
             return USE_2022_DATA ?
                     matrix2022.get(result) :
                     matrix.get(result);
@@ -347,7 +347,7 @@ public class SystemUtils {
             String[] hardwareData = getRPiHardwareRevision();
             if (hardwareData != null) {
                 if (USE_2022_DATA) {
-                    System.out.println("HW Data:" + Arrays.asList(hardwareData).stream().collect(Collectors.joining(", ")));
+                    // System.out.println(">> HW Data:" + Arrays.asList(hardwareData).stream().collect(Collectors.joining(", ")));
                     System.out.printf("Running on:\n" +
                                     "          Model: %s\n" +
                                     "        PCB Rev: %s\n" +
@@ -375,6 +375,8 @@ public class SystemUtils {
             System.err.println("Not on a Raspberry Pi?");
             ex.printStackTrace();
         }
+
+        System.out.println("=====================================================");
 
         try {
             System.out.printf("OS Details:\n%s\n", String.join("\n", getOSDetails()));
