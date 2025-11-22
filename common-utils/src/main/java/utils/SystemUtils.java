@@ -343,6 +343,7 @@ public class SystemUtils {
             }
         });
 
+        System.out.println("=====================================================");
         try {
             String[] hardwareData = getRPiHardwareRevision();
             if (hardwareData != null) {
@@ -375,7 +376,6 @@ public class SystemUtils {
             System.err.println("Not on a Raspberry Pi?");
             ex.printStackTrace();
         }
-
         System.out.println("=====================================================");
 
         try {
