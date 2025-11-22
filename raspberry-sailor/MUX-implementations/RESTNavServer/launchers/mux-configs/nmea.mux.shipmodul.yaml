@@ -11,6 +11,7 @@ channels:
   - type: serial
     port: /dev/ttyUSB0
     baudrate: 460800  # Wow!
+    device.filters: II, GP, HC, YX
     verbose: false
 forwarders:
   - type: "tcp"

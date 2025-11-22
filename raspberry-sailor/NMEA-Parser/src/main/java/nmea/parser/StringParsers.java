@@ -2080,7 +2080,7 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 
 	private final static double METERS_TO_FEET = 3.28083;
 
-	// DBT Depth of Water
+	// DPT Depth of Water
 	public static float parseDPT(String sentence) {
 		return parseDPT(sentence, DEPTH_IN_METERS);
 	}

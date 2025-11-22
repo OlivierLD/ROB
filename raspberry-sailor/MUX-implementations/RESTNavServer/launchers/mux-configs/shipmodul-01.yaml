@@ -31,6 +31,7 @@ channels:
     # path.in.zip: going.to.groix.2.nmea
     between-records: 50   # Speed up
     verbose: false
+    device.filters: II, GP, HC, YX
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
   #

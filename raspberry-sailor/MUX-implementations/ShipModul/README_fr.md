@@ -4,7 +4,7 @@ MMSI La Rêveuse: `228210480`.
 
 ## Lecture d'un [ShipModul](http://www.shipmodul.com)
 
-Le baud rate du ShipModul est `460800` ; c'est _**énorme**_, mais c'est vrai.
+Le baud rate du ShipModul est `460800` ; c'est _**énorme**_, mais c'est vrai, et ça marche.
 
 On dispose de plusieurs chaînes NMEA, qui nous donnent :
 - Position
@@ -76,5 +76,9 @@ Done
 On dispose donc de toutes les données nécessaires pour élaborer les polaires du bateau, et faire du routage. Même en croisière, ça marche. L'objectif n'est pas forcément d'arriver le plus vite possible, on peut paramétrer le routage sur le mode "Je ne veux pas de vents de plus de 30 noeuds, et je ne veux pas être au près".
 
 On va aussi pouvoir établir la courbe de déviation du bateau.
+
+_Note_: On n'a ici ni `DBT`, ni `DPT` (Water Depth). Rien non plus sur `GGA`, `GSA`, `GSV` (Satellites GPS).
+
+On remarque aussi qu'il existe plusieurs Talker IDs inhabituels, et des phrases NMEA non-standard.
 
 ---
