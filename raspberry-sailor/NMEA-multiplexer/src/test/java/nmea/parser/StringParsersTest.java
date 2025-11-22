@@ -496,7 +496,11 @@ public class StringParsersTest {
         str = "$GPRMC,12,58,325,06,24,46,227,27,25,22,310,,17,13,064,*78";
         valid = StringParsers.validCheckSum(str);
         System.out.println("RMC Chain is " + (valid ? "" : "not ") + "valid [" + str + "]");
-        rmc = StringParsers.parseRMC(str, true, true);
+        try {
+            rmc = StringParsers.parseRMC(str, true, true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         System.out.println("Parsed");
 
         System.setProperty("rmc.date.offset", "7168");
@@ -521,6 +525,10 @@ public class StringParsersTest {
 
         str = "$IIRMC,224044,A,0909.226,S,14015.162,W,06.7,222,211110,10,E,A*05";
         System.out.println(StringParsers.parseRMCtoString(str));
+
+        str = "$GPROT,35.6,A*4E";
+        double rot = StringParsers.parseROT(str, true);
+        System.out.printf("Rate of Turn: %f\272 per minute, %s\n", Math.abs(rot), (rot >= 0) ? "Starboard" : "Port");
 
         System.out.println("\nDone!");
     }

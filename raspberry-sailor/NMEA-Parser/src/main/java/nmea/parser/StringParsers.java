@@ -51,6 +51,7 @@ import java.util.regex.Pattern;
  *   <li>MWV (Wind Speed and Angle)</li>
  *   <li>RMB (Recommended Minimum, version B)</li>
  *   <li>RMC (Recommended Minimum, version C)</li>
+ *   <li>ROT (Rate Of Turn)</li>
  *   <li>SSD (Ship Static Data)</li>
  *   <li>STD (Not standard, STarteD)</li>
  *   <li>TXT (Text)</li>
@@ -304,6 +305,44 @@ public class StringParsers {
 		try {
 			d = Double.parseDouble(sa[PR_BARS]);
 			d *= 1_000d;
+		} catch (NumberFormatException nfe) {
+			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
+				nfe.printStackTrace();
+			}
+		}
+		return d;
+	}
+
+	/**
+	 * Rate Of Turn
+	 * $GPROT,35.6,A*4E
+	 *        |    |
+	 *        |    A: Active, V: invalid
+	 *        In degrees per minute. Positive: to starboard, negative: to port.
+	 *
+	 * @param sentence
+	 * @return The rate of turn, in degrees per minute.
+	 */
+	public static double parseROT(String sentence) {
+		return parseROT(sentence, false);
+	}
+	public static double parseROT(String sentence, boolean keepParsing) {
+		if (!validCheckSum(sentence)) {
+			int calcCheckSum = calculateCheckSum(sentence);
+			String actualCheckSum = sentence.substring(sentence.length() - 2);
+			if (!keepParsing) {
+				throw new RuntimeException(String.format("Invalid checksum for [%s], found %s, expected %02X", sentence, actualCheckSum, calcCheckSum));
+			} else {
+				System.err.println(String.format("Invalid checksum for [%s], found %s, expected %02X, but keeping parsing.", sentence, actualCheckSum, calcCheckSum));
+			}
+		}
+		double d = 0d;
+		String[] sa = sentence.substring(0, sentence.indexOf("*")).split(",");
+		try {
+			String valid = sa[2];
+			if ("A".equals(valid)) {
+				d = Double.parseDouble(sa[1]);
+			}
 		} catch (NumberFormatException nfe) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
 				nfe.printStackTrace();
