@@ -382,6 +382,7 @@ public class TidePublisher {
 		}
 		return null;
 	}
+
 	/**
 	 * For tests
 	 *  requires ./xsl/publishtide.sh to be available !!
@@ -432,10 +433,14 @@ public class TidePublisher {
 		}
 	}
 
-	public static void main(String... args) {
+	/**
+	 * Station list
+	 * @param args
+	 */
+	public static void main_(String... args) {
 		try {
 //			List<TideStation> selectedList = getStationList(50.0, 42.5, -10.0, 5.0, "Pacific");
-			List<TideStation> selectedList = getStationList(90.0, -90, -180.0, 1805.0, "Pacific");
+			List<TideStation> selectedList = getStationList(90.0, -90, -180.0, 180.0, "Pacific");
 			if (selectedList != null) {
 				selectedList.stream().forEach(station -> {
 					try {
@@ -452,6 +457,65 @@ public class TidePublisher {
 				});
 			}
 			System.out.println("Et hop!");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * With special parameters
+	 * @param args
+	 */
+	public static void main(String... args) {
+
+		BackEndTideComputer backEndTideComputer = new BackEndTideComputer();
+
+		// String station = "Ocean Beach, California";
+		String station = "Port-Tudy";
+		int year = 2025;
+
+		for (String arg : args) {
+			System.out.printf("Processing arg [%s]\n", arg);
+			if (arg.startsWith(STATION_PREFIX)) {
+				station = arg.substring(STATION_PREFIX.length());
+				if ((station.startsWith("'") && station.endsWith("'")) || station.startsWith("\"") && station.endsWith("\"")) { // Trim quotes
+					station = station.substring(1, station.length() - 1);
+				}
+				station = station.replace("+", " ");  // Ugly escape trick...
+			}
+			if (arg.startsWith(YEAR_PREFIX)) {
+				year = Integer.parseInt(arg.substring(YEAR_PREFIX.length()));
+			}
+		}
+
+		System.out.printf("Station [%s], for year %d\n", station, year);
+
+		try {
+			backEndTideComputer.connect();
+			backEndTideComputer.setVerbose("true".equals(System.getProperty("tide.verbose", "false")));
+
+			final TideStation tideStation = backEndTideComputer.findTideStation(station, year);
+
+
+			TideUtilities.SpecialPrm sPrm = new TideUtilities.SpecialPrm();
+			sPrm.setTideType(TideForOneMonth.HIGH_TIDE);
+			sPrm.setFromHour(11);
+			sPrm.setToHour(13);
+
+			String f = publish(tideStation,
+					"Europe/Paris",
+					Calendar.JANUARY,
+					year,
+					1,
+					Calendar.MONTH,
+					"meters",
+					sPrm,
+					TIDE_TABLE,
+					"Port-Tudy.2025.pdf",
+					"FR",
+					"A4");
+			System.out.printf("%s generated, in %s\n", f, System.getProperty("user.dir"));
+			System.out.println("Done!");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

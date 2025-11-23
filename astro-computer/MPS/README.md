@@ -320,6 +320,10 @@ D'o&ugrave; la question : _Quel est alors dans ce contexte (graphique) l'int&eac
 
 La r&eacute;solution du probl&egrave;me ci-dessus par les droites de hauteur produit la figure suivante :
 ![Context](images/05.png)
+- en <span style="color: red;">rouge</span>, la position estim&eacute;e
+- en <span style="color: blue;">bleu</span>, les droites de hauteur
+- en <span style="color: gray;">gris</span>, les azimuts des astres observ&eacute;s
+
 Le tooltip sur la figure repr&eacute;sente les coordonn&eacute;es de l'intersection des droites de hauteur (en bleu).
 Et ceci est r&eacute;alisable sans informatique, ni m&ecirc;me &eacute;lectricit&eacute;.
 

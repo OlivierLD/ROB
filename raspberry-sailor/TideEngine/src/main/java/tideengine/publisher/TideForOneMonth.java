@@ -233,7 +233,9 @@ public class TideForOneMonth {
 //        System.out.println("Special BG required");
 					for (TimedValue tv : timeAL) {
 						double tideHour = tv.getCalendar().get(Calendar.HOUR_OF_DAY) + (tv.getCalendar().get(Calendar.MINUTE) / 60d);
-						System.out.println("Tidetype:" + tv.getType() + " hour:" + tideHour + " within [" + sPrm.getFromHour() + ", " + sPrm.getToHour() + "], weekday=" + tv.getCalendar().get(Calendar.DAY_OF_WEEK));
+						if ("true".equals(System.getProperty("tide.calc.verbose"))) {
+							System.out.println("Tidetype:" + tv.getType() + " hour:" + tideHour + " within [" + sPrm.getFromHour() + ", " + sPrm.getToHour() + "] ?, weekday=" + tv.getCalendar().get(Calendar.DAY_OF_WEEK));
+						}
 						if (((sPrm.getTideType() == HIGH_TIDE && tv.getType().equals("HW")) ||
 								(sPrm.getTideType() == LOW_TIDE && tv.getType().equals("LW"))) &&
 								(tideHour >= sPrm.getFromHour() && tideHour <= sPrm.getToHour())) {

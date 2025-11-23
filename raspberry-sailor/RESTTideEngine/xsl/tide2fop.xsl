@@ -179,7 +179,7 @@
                     <xsl:when test="./@month = '11' and $language = 'EN'">November</xsl:when>
                     <xsl:when test="./@month = '11' and $language = 'FR'">Novembre</xsl:when>
                     <xsl:when test="./@month = '12' and $language = 'EN'">December</xsl:when>
-                    <xsl:when test="./@month = '12' and $language = 'FRN'">D&eacute;cembre</xsl:when>
+                    <xsl:when test="./@month = '12' and $language = 'FR'">D&eacute;cembre</xsl:when>
                   </xsl:choose>
                   <xsl:text disable-output-escaping="yes">&nbsp;</xsl:text>
                   <xsl:value-of select="./@year"/>
@@ -298,7 +298,7 @@
                     <xsl:value-of select="concat('Nov', ' ')"/>
                   </xsl:if>
                   <xsl:if test="$month-name = 'Dec'">
-                    <xsl:value-of select="concat('D&eacute;', ' ')"/>
+                    <xsl:value-of select="concat('D&eacute;c', ' ')"/>
                   </xsl:if>
 
                   <xsl:value-of select="$date-year"/>
