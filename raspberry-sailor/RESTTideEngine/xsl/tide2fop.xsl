@@ -196,7 +196,7 @@
               <fo:table-cell border="0.5pt solid black"
                              text-align="center">
                 <xsl:if test="./@specBG = 'y'">
-                  <xsl:attribute name="background-color">silver</xsl:attribute>
+                  <xsl:attribute name="background-color">#f7f7e7<!-- silver --></xsl:attribute>
                 </xsl:if>
                 <fo:block>
                   <xsl:call-template name="one-day-tide">
