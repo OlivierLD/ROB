@@ -9,13 +9,14 @@ import java.nio.charset.StandardCharsets;
 
 public class EchoServer extends Thread {
 
+    private final static int UDP_PORT = 4_445;
     private DatagramSocket socket;
     private boolean running;
     private byte[] buf = new byte[256];
 
     public EchoServer() {
         try {
-            socket = new DatagramSocket(4_445);
+            socket = new DatagramSocket(UDP_PORT);
         } catch (SocketException se) {
             se.printStackTrace();
         }

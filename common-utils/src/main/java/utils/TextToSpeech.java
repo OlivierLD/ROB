@@ -3,6 +3,10 @@ package utils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * For Linux or Mac OS.
+ * Windows, pending.
+ */
 public class TextToSpeech {
     private final static Map<String, String> speechTools = new HashMap<>();
 

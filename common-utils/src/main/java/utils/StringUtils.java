@@ -75,8 +75,16 @@ public class StringUtils {
 		return cleanString;
 	}
 
+	/**
+	 * Trim a string, beginning and ending with a specific (non-blank) character, like double or simple quote.
+	 * Also see {@link StaticUtil#superTrim(String)}
+	 *
+	 * @param original The original string
+	 * @param toTrim the specific character
+	 * @return the trimmed string
+	 */
 	private static String trimSpecific(String original, String toTrim) {
-		String trimmed = original.trim();
+		String trimmed = original.trim(); // remove blanks if any
 		while (trimmed.startsWith(toTrim) && trimmed.length() > 0) {
 			trimmed = trimmed.substring(1);
 		}

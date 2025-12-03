@@ -3,7 +3,7 @@ package utils;
 public class WeatherUtil {
 
 	/**
-	 * Compliant with http://www.dpcalc.org/
+	 * Compliant with <a href="http://www.dpcalc.org/">http://www.dpcalc.org/</a>
 	 *
 	 * @param hum in %
 	 * @param temp in Celsius

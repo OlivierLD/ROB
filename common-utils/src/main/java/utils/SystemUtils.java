@@ -16,6 +16,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * For Linux or BSD systems.
+ * Several system commands are used
+ */
 public class SystemUtils {
 
     public static List<String[]> getIPAddresses() {

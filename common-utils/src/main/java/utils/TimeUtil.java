@@ -161,6 +161,7 @@ public class TimeUtil {
 		delay(amount, unit, null);
 	}
 	public static void delay(float amount, TimeUnit unit, String debugMess) {
+		// Milli, micro, and nano
 		double amountToMs = 1_000;
 		long amountToNanoS = 1_000_000_000;
 		final long msToNanoS = 1_000_000;
