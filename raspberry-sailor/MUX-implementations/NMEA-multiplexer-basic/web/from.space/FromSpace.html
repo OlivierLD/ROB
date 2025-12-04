@@ -1515,7 +1515,7 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div><h1 style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> As seen from Space...</h1></div>
-    <div style="text-align: right;"><small>Last code update June 21, 2025, 07:00 CET</small></div>    
+    <div style="text-align: right;"><small>Last code update December 4, 2025, 07:00 CET</small></div>
 </div>
 <div class="background bg-container" 
      style="margin: 10px; margin-top: 50px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
@@ -1540,7 +1540,7 @@ let toggleForeground = () => {
         <!-- HDG -->
         <jumbo-display id="jumbo-01"
                        title="True Heading"
-                       class="jumbo-01 digital-font-orange"
+                       class="jumbo-01 digital-font-orange zero-decimal"
                        value="---"
                        label="HDG"
                        width="180"
@@ -1556,7 +1556,7 @@ let toggleForeground = () => {
         <!-- COG -->               
         <jumbo-display id="jumbo-03"
                        title="Course Over Ground"
-                       class="jumbo-01 digital-font-red one-decimal"
+                       class="jumbo-01 digital-font-red zero-decimal"
                        value="---"
                        label="COG"
                        width="180"
@@ -2202,10 +2202,10 @@ let toggleForeground = () => {
             }
             document.getElementById("jumbo-01").value = _hdg; // .toFixed(0);
         } else {
-            // document.getElementById("jumbo-01").value = "-"; // 0;
+            document.getElementById("jumbo-01").value = hdg.toFixed(0); //  "-"; // 0;
             document.getElementById("jumbo-01").repaint();
         }
-        // document.getElementById("jumbo-02").value = "-"; // 0.0;
+        document.getElementById("jumbo-02").value = bsp.toFixed(1); // "-"; // 0.0;
         document.getElementById("jumbo-02").repaint();
         // document.getElementById("jumbo-03").value = 0.0;
         // document.getElementById("jumbo-04").value = 0.0;
@@ -2584,11 +2584,11 @@ let toggleForeground = () => {
             hdg = val; // Managed in repaint
             // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`); 
         });
-        // events.subscribe(BSP, val => {
-        //     document.getElementById('bsp').innerHTML = `${val} kn`;
-        //     bsp = val; // Managed in repaint
-        //     // console.log(`BSP:	${bsp.toFixed(2)}`); 
-        // });
+        events.subscribe(BSP, val => {
+            // document.getElementById('bsp').innerHTML = `${val} kn`;
+            bsp = val; // Managed in repaint
+            // console.log(`BSP:	${bsp.toFixed(2)}`);
+        });
         // For debug, mainly.
         if (false) {
             events.subscribe(FULL, val => {

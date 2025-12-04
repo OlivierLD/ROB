@@ -159,6 +159,9 @@
 	--value-font: 'Courier New';
 }
 
+.zero-decimal {
+	--value-nb-decimal: 0;
+}
 .one-decimal {
 	--value-nb-decimal: 1;
 }
