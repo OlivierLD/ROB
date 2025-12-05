@@ -1142,7 +1142,7 @@
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
-            console.log(`loadComposite: ${existingData === undefined ? '' : existingData}`);
+            console.log(`loadComposite ${existingData === undefined ? '' : ': ' + existingData}`);
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
             let key = document.getElementById('composites').value;
