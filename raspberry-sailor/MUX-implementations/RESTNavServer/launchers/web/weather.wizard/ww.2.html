@@ -1146,7 +1146,7 @@
             document.getElementById("grib-web-comps").style.display = 'none';
 
             let key = document.getElementById('composites').value;
-            console.log(`loadComposite: ${existingData === undefined ? findCompositeByKey(key) : existingData}`);
+            console.log(`loadComposite: ${existingData === undefined ? JSON.stringify(findCompositeByKey(key), null, 2) : existingData}`);
 
             let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
 
