@@ -34,12 +34,12 @@
         }
 
         .control-style {
-            width: 100%; 
-            min-width: 350px; 
+            width: 100%;
+            min-width: 350px;
             height: 100%;
-            min-height: 400px; 
-            resize: both; 
-            overflow-x: scroll; 
+            min-height: 400px;
+            resize: both;
+            overflow-x: scroll;
             overflow-y: scroll;
         }
 
@@ -118,12 +118,12 @@
         }
 
         .mess-zone {
-            background-color: white; 
-            color: black; 
-            font-family: 'Courier New', 'Source Code Pro', Helvetica, Geneva; 
-            padding: 1px; border-radius: 5px; 
-            border: 1px solid #CCC; 
-            height: 300px; 
+            background-color: white;
+            color: black;
+            font-family: 'Courier New', 'Source Code Pro', Helvetica, Geneva;
+            padding: 1px; border-radius: 5px;
+            border: 1px solid #CCC;
+            height: 300px;
             max-width: 886px;
             /* width: 900px; */
             min-width: 100px;
@@ -280,7 +280,7 @@
     <script type="text/javascript" src="../js/date.proto.js"></script>
     <script type="text/javascript" src="../js/routes.utils.js"></script>
     <script type="text/javascript" src="../js/grib.routing.js"></script>
-    <!--script type="text/javascript" src="../catalog/catalog.js"></script--> <!-- Composites catalog --> 
+    <!--script type="text/javascript" src="../catalog/catalog.js"></script--> <!-- Composites catalog -->
     <script type="text/javascript" src="../js/ww.js"></script> <!-- Contains definition of worldMap -->
 
     <!-- WebComponents -->
@@ -330,12 +330,12 @@
         }
 
         let flavor = 'Ajax'; // Default, WebSocket not implemented here (we run on a small http server).
-    
+
         let currentFax = 1;
         let canvas, context;
-    
+
         let thisZoomFactor = 1;
-    
+
         let messageManager = (mess) => {
             let messZone = document.getElementById("message-zone");
             if (messZone) {
@@ -353,12 +353,12 @@
                 console.log(mess);
             }
         }
-    
+
         let clearMessZone = () => {
             let messZone = document.getElementById("message-zone");
             messZone.innerText = '';
         }
-    
+
         let mouseClickCallback = (obj) => {
             let lat = obj.lat;
             let lng = obj.lng;
@@ -372,7 +372,7 @@
                 lng = Math.abs(lng);
                 document.getElementById('routing-pos-lat-deg-01').value = Math.floor(lat).toFixed(0);
                 document.getElementById('routing-pos-lng-deg-01').value = Math.floor(lng).toFixed(0);
-    
+
                 document.getElementById('routing-pos-lat-min-01').value = ((lat - Math.floor(lat)) * 60).toFixed(2);
                 document.getElementById('routing-pos-lng-min-01').value = ((lng - Math.floor(lng)) * 60).toFixed(2);
             } else {
@@ -382,7 +382,7 @@
                 redraw();
             }
         };
-    
+
         let mouseMoveCallback = (obj) => {
             //  Display position, GRIB Data, etc...
             let mouseDataElmt = document.getElementById("mouse-data");
@@ -391,7 +391,7 @@
             str += ("\nG: " + decToSex(obj.lng, "EW"));
 
             document.getElementById('mouse-pos').innerText = `${decToSex(obj.lat, "NS")} / ${decToSex(obj.lng, "EW")}`;
-    
+
             if (gribData !== undefined) {
                 let date = document.getElementById("grib-dates").value;
                 let oneDateGRIB = gribData[0]; // Default
@@ -406,9 +406,9 @@
                 // Find the GRIB Cell
                 let xCell = oneDateGRIB.gribDate.width - 1,
                     yCell = oneDateGRIB.gribDate.height - 1;
-    
+
                 // console.log("  > xCell %d", xCell);
-    
+
                 for (let hGRIB = 0; hGRIB < oneDateGRIB.gribDate.height; hGRIB++) {
                     let lat = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB));
                     if (lat > obj.lat) {
@@ -416,7 +416,7 @@
                         break;
                     }
                 }
-    
+
                 for (let wGRIB = 0; wGRIB < oneDateGRIB.gribDate.width; wGRIB++) {
                     let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB));
                     if (lng > 0 && obj.lng > 0 && lng > obj.lng) {
@@ -434,7 +434,7 @@
                 // 		xCell,
                 // 		oneDateGRIB.gribDate.height,
                 // 		oneDateGRIB.gribDate.width);
-    
+
                 str += ("\nGRIB cell row <b>" + yCell + "</b>, col <b>" + xCell + "</b>");
                 let foundWind = false;
                 for (let idx = 0; idx < oneDateGRIB.typedData.length; idx++) {
@@ -446,9 +446,9 @@
                     let value = oneDateGRIB.typedData[idx].data[yCell][xCell]; // TODO xCell === -1
                     let unit = oneDateGRIB.typedData[idx].gribType.unit;
                     let type = oneDateGRIB.typedData[idx].gribType.type;
-    
+
                     // console.log("  >>> Type: %s, xCell: %d", type, xCell);
-    
+
                     let displayValue = '-', displayUnit = '-', displayType = '-';
                     if (value !== undefined) {  // xCell === -1 ?
                         switch (type) {
@@ -549,30 +549,30 @@
             }
             mouseDataElmt.innerHTML = ("<pre>" + str + "</pre>");
         };
-    
+
         let displayErr = (err) => {
             if (err !== undefined) {
                 document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
             }
         };
-    
+
         let withChart = true;
-    
+
         let changeChart = (cb) => {
             withChart = cb.checked;
             redraw();
         };
-    
+
         let changeGrid = (cb) => {
             worldMap.setWithGrid(cb.checked);
             redraw();
         };
-    
+
         let changeTropics = (cb) => {
             worldMap.setWithTropics(cb.checked);
             redraw();
         };
-    
+
         let changeGRIB = (cb) => {
             if (CHART_ON_TOP_OF_GRIB) {
                 worldMap.setBeforeDrawing(cb.checked ? renderGRIBData : undefined); // That is the callback. GRIB under the chart.
@@ -581,7 +581,7 @@
             }
             redraw();
         };
-    
+
         // changeFAXES
         let changeFAXES = (cb) => {
             // worldMap.setAfterDrawing(cb.checked ? renderGRIBData : undefined);
@@ -606,7 +606,7 @@
 
             redraw();
         };
-    
+
         let show = []; // [true, true, true];
         let faxName = [];
         // For 3 faxes Sfc, 500mb, StreamLines
@@ -618,10 +618,10 @@
         //	  [-41, 460]
         //  ];
         let faxObj = [];
-    
+
         let faxRequestCallback = (val, originalRequest) => {
             let returned = (typeof(val) === 'string') ? JSON.parse(val) : val;
-    
+
             // get data from originalRequest
             show = [];
             zoom = [];
@@ -630,7 +630,7 @@
             faxName = [];
             for (let idx = 0; idx < originalRequest.faxData.length; idx++) {
                 show.push(true);
-    
+
                 let fax = new Image();
                 let x = originalRequest.faxData[idx].location.x;
                 let y = originalRequest.faxData[idx].location.y;
@@ -658,7 +658,7 @@
                 faxObj.push(fax);
             }
         };
-    
+
         let gribCallback = (mess) => {
             console.log(`GRIB Callback: ${mess}`);
         };
@@ -673,12 +673,12 @@
             }
             return comp;
         };
-    
+
         const monthNames = [
-            "January", "February", "March", "April", "May", "June", 
+            "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
-    
+
         /*
          * Reload an existing composite.
          */
@@ -689,13 +689,13 @@
 
             let composite = JSON.parse(JSON.stringify(originalComposite));  // This is a deep copy, not to modify the catalog
 
-            // Fill out with actual file locations  
+            // Fill out with actual file locations
             if (composite.faxData !== undefined) {
                 for (let i = 0; i < composite.faxData.length; i++) {
                     for (let f = 0; f < compositeData.length; f++) {
                         if (compositeData[f].type === 'FAX' &&
                             compositeData[f].name === '_' + key + '_' + i + '.png') {
-                            composite.faxData[i].faxUrl = compositeData[f].resource; 
+                            composite.faxData[i].faxUrl = compositeData[f].resource;
                             break;
                         }
                     }
@@ -704,7 +704,7 @@
                 if (composite.gribRequest !== undefined) {
                     for (let f = 0; f < compositeData.length; f++) {
                         if (compositeData[f].type === 'GRIB') { // name='grib.grb'
-                            composite.gribRequest = compositeData[f].resource; 
+                            composite.gribRequest = compositeData[f].resource;
                             break;
                         }
                     }
@@ -712,25 +712,25 @@
             }
             loadComposite(composite);
         };
-    
+
         let getKeyFromName = (name) => {
             let key = name.substring(0, name.indexOf('_'));
             return key;
         };
-    
+
         let readableName = (name) => {
             let key = getKeyFromName(name);
             let time = name.substring(name.indexOf('_') + 1);
             let hours = time.substring(0, 2);
             let min = time.substring(2, 4);
             let sec = time.substring(4);
-    
+
             let comp = findCompositeByKey(key);
             let desc = comp.name;
-    
+
             return (key + " @ " + hours + ":" + min + ":" + sec + (desc !== undefined ? "<br><small>" + desc + "</small>" : ""));
         };
-    
+
         let expandCollapse = (id) => {
             // 	console.log('>> Exp/Coll ' + id);
             let elmt = document.getElementById(id);
@@ -740,10 +740,10 @@
                 elmt.style.display = "none";
             }
         };
-    
+
         /*
             Sample data:
-    
+
             {
             "2017": {
                 "12": {
@@ -773,29 +773,29 @@
                             "compositeElements": [
                                 {
                         ...
-    
+
             */
-    
+
         let sortObject = (o) => { // Sort by property of level 1
             let sorted = {},
                 key, a = [];
-    
+
             for (key in o) {
                 if (o.hasOwnProperty(key)) {
                     a.push(key);
                 }
             }
-    
+
             a.sort();
-    
+
             for (key = 0; key < a.length; key++) {
                 sorted[a[key]] = o[a[key]];
             }
             return sorted;
         };
-    
+
         const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    
+
         let makeCompositeTree = (tree) => {
             let htmlCode = "<b>Existing Composites:</b><ul style='margin-left: -20px;'>";
             for (let year in tree) {
@@ -814,7 +814,7 @@
                     htmlCode += (monthNames[parseInt(month) - 1] + " (" + nbDays + " day" + (nbDays > 1 ? "s" : "") + ") :");
                     htmlCode += ("</span>");
                     htmlCode += ("<ul id='" + year + "-" + month + "' style='display: none; padding-left: 10px;'>");
-    
+
                     let sortedDays = Object.keys(days);
                     sortedDays.sort();
                     for (let x = 0; x < sortedDays.length; x++) {
@@ -845,7 +845,7 @@
             htmlCode += "</ul>";
             return htmlCode;
         };
-    
+
         let getCompositeList = () => {
             let filter = document.getElementById("comp-name-filter").value;
     //  console.log("Filtering: " + filter);
@@ -856,7 +856,7 @@
             };
             getExistingComposites(cb, filter);
         };
-    
+
         let displaySummary = (routingOutput) => {
 
             let waypoints;
@@ -871,7 +871,7 @@
                 console.log("  TWS", wp.tws, "TWD", wp.twd, "BSP", wp.bsp, "HDG", wp.hdg);
             });
         };
-    
+
         const OUTPUT_ZONES = [
                     "routing-output-1",  // JSON
                     "routing-output-2",  // TXT
@@ -894,16 +894,16 @@
 
         const DURATION_FMT = "Y-m-dTH:i:s";
         const ROUTING_VERBOSE = true;
-    
+
         function htmlEntities(str) {
             return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         let testRouting = () => {
-    
+
             console.log('GRIB Data in:', gribFileLocation); // Use this one?
             console.log('With polars at ' + polarFile); // polarFile in ww.js
-    
+
             if (gribFileLocation === undefined) {
                 alert("No GRIB File location, aborting");
                 return;
@@ -1063,18 +1063,18 @@
             };
             getBestRoute(routingRequest, callback);
         };
-    
+
         let compositeInterval;
         let timerInterval; // Now useless (see below)
         let timeToNextLoad = 0;
-    
+
         let intervalInSeconds = 3600 * 6; // Between composite auto-reload
-    
+
         let secToHMS = (nbSec) => {
             let h = Math.floor(nbSec / 3600);
             let m = Math.floor((nbSec - (h * 3600)) / 60);
             let s = nbSec % 60;
-    
+
             let strH = h.toFixed(0);
             while (strH.length < 2) {
                 strH = '0' + strH;
@@ -1089,7 +1089,7 @@
             }
             return strH + ":" + strM + ":" + strS;
         };
-    
+
         let continuousLoad = (cb) => {
             if (cb.checked === true) { // Start
                 // timeToNextLoad = intervalInSeconds; // In seconds
@@ -1136,22 +1136,22 @@
                 document.getElementById("time-to-next").innerText = ("");
             }
         };
-    
+
         /**
          * If existing data is provided, it comes from the file system.
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
-            console.log(`loadComposite: ${existingData === undefined ? findCompositeByKey(key) : existingData}`);
+            console.log(`loadComposite: ${existingData === undefined ? '' : existingData}`);
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
             let key = document.getElementById('composites').value;
-    
+
             let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
-    
+
             // Clear previous one if any
             gribData = undefined;
-    
+
             gribFileLocation = undefined;
             if (existingData !== undefined && existingData.gribRequest !== undefined) {
                 gribFileLocation = existingData.gribRequest;
@@ -1163,12 +1163,12 @@
                 }
                 document.getElementById('current-grib-location').innerText = ('GRIB in ' + gribFileLocation);
             }
-    
+
             errManager = (mess) => { // Override the one in ww.js. Console, and TextArea
                 console.log(mess);
                 messageManager(mess);
             };
-    
+
             // console.log("Loading", (typeof(compositeData) === 'object' ? JSON.stringify(compositeData, null, 2) : compositeData));
             messageManager(`--- Loading ${compositeData.key} ---`);
             messageManager(compositeData);
@@ -1181,17 +1181,17 @@
             worldMap.setWest(compositeData.map.west);
             worldMap.setEast(compositeData.map.east); // Recalculated, anyway.
             worldMap.setProjection(compositeData.map.projection);
-    
+
             worldMap.drawWorldMap();
             document.getElementById("grib-checkbox").disabled = true;
             document.getElementById("grib-checkbox").checked = false;
 
             // document.getElementById("grib-widgets").style.display = 'block';
             // document.getElementById("grib-web-comps").style.display = 'block';
-    
+
             // $("#fax-checkbox").prop("disabled", true);
             // $("#fax-checkbox").prop("checked", false);
-    
+
             // Clean up dynamic data
             // 1 - Fax Table rows
             let idx = 1;
@@ -1217,17 +1217,17 @@
                     go = false;
                 }
             }
-    
+
             let year, month, day, time;
             let now = new Date();
             year = now.format('Y');
             month = now.format('m');
             day = now.format('d');
             time = compositeData.key + '_' + now.format('His');
-    
+
             let requestData = [];
             if (compositeData.faxData !== undefined) {
-    
+
                 compositeData.faxData.forEach((fax, idx) => {
                     let oneFax = {
                         url: fax.faxUrl,
@@ -1246,7 +1246,7 @@
                         oneFax.rotation = fax.rotation;
                     }
                     requestData.push(oneFax);
-    
+
                     /*
                         Adding rows like
                     <tr>
@@ -1261,11 +1261,11 @@
                     let faxTable = document.getElementById('fax-table');
                     let row = document.createElement('tr');
                     row.id = 'row-' + (idx + 1);
-    
+
                     // Adding a checkbox <input type="checkbox" onchange="showHide(1, this);" checked>Show fax #1 <br/>
                     let div = document.createElement('div');
                     div.id = 'cb-' + (idx + 1);
-    
+
                     let cb = document.createElement('input');
                     cb.type = 'checkbox';
                     cb.id = 'cb-' + (idx + 1);
@@ -1276,11 +1276,11 @@
                     col0.setAttribute('style', 'text-align: center;');
                     row.appendChild(col0);
                     col0.appendChild(cb);
-    
+
                     let col1 = document.createElement('td');
                     row.appendChild(col1);
                     col1.appendChild(document.createTextNode((idx + 1)));
-    
+
                     let col2 = document.createElement('td');
                     row.appendChild(col2);
                     let div2 = document.createElement('div');
@@ -1288,7 +1288,7 @@
                     div2.style.whiteSpace = "nowrap";
                     div2.appendChild(document.createTextNode(fax.name));
                     col2.appendChild(div2);
-    
+
                     let col3 = document.createElement('td');
                     row.appendChild(col3);
                     let div3 = document.createElement('div');
@@ -1296,7 +1296,7 @@
                     div3.setAttribute('style', 'text-align: right;');
                     div3.appendChild(document.createTextNode(fax.location.x));
                     col3.appendChild(div3);
-    
+
                     let col4 = document.createElement('td');
                     row.appendChild(col4);
                     let div4 = document.createElement('div');
@@ -1304,7 +1304,7 @@
                     div4.setAttribute('style', 'text-align: right;');
                     div4.appendChild(document.createTextNode(fax.location.y));
                     col4.appendChild(div4);
-    
+
                     let col5 = document.createElement('td');
                     row.appendChild(col5);
                     let div5 = document.createElement('div');
@@ -1312,19 +1312,19 @@
                     div5.setAttribute('style', 'text-align: left;');
                     div5.appendChild(document.createTextNode(fax.zoom));
                     col5.appendChild(div5);
-    
+
                     faxTable.appendChild(row);
-    
+
                 }); // end forEach
-    
+
                 // Request ready
                 // console.log(requestData);
                 messageManager(requestData);
                 getCompositeFaxes(requestData, compositeData, faxRequestCallback);
             }
-    
+
             if (compositeData.gribRequest !== undefined) {
-                makeGRIBRequest(compositeData.gribRequest, 
+                makeGRIBRequest(compositeData.gribRequest,
                                 existingData === undefined ? 'web/' + year + '/' + month + '/' + day + '/' + time : undefined,
                                 gribCallback); // grib file Location
             }
@@ -1334,61 +1334,61 @@
                 feedbackField.innerText = `${compositeData.key} requested on ${ new Date().format("Y-M-d H:i:s Z") }`;
             }
         };
-    
+
         let speakUp = (num) => {
             document.getElementById("name-" + num).innerText = faxName[num - 1];
             document.getElementById("x-" + num).innerText = (topLeft[num - 1][0] * thisZoomFactor).toFixed(0);
             document.getElementById("y-" + num).innerText = (topLeft[num - 1][1] * thisZoomFactor).toFixed(0);
             document.getElementById("zoom-" + num).innerText = (zoom[num - 1] * thisZoomFactor);
         };
-    
+
         let zoomFax = (num, factor) => {
             zoom[num - 1] *= factor;
             speakUp(num);
             redraw();
         };
-    
+
         let zoomIn = () => {
             let factor = parseFloat(document.getElementById("zoom-factor").value);
             zoomFax(currentFax, factor);
         };
-    
+
         let zoomOut = () => {
             let factor = parseFloat(document.getElementById("zoom-factor").value);
             zoomFax(currentFax, 1 / factor);
         };
-    
+
         let up = () => {
             topLeft[currentFax - 1][1] -= 1;
             speakUp(currentFax);
             redraw();
         };
-    
+
         let down = () => {
             topLeft[currentFax - 1][1] += 1;
             speakUp(currentFax);
             redraw();
         };
-    
+
         let left = () => {
             topLeft[currentFax - 1][0] -= 1;
             speakUp(currentFax);
             redraw();
         };
-    
+
         let right = () => {
             topLeft[currentFax - 1][0] += 1;
             speakUp(currentFax);
             redraw();
         };
-    
+
         let showHide = (num, cb) => {
             show[num - 1] = cb.checked;
             redraw();
         };
-    
+
         let scrollGribInterval = -1;
-    
+
         let scrollGribs = (cb) => {
             // console.log("Yes! %s", cb.checked);
             let gribDatesList = document.getElementById("grib-dates");
@@ -1410,7 +1410,7 @@
                 window.clearInterval(scrollGribInterval);
             }
         }
-    
+
         let redraw = (caller) => {
             worldMap.clear();
             // worldMap.setPositionLabel("");
@@ -1421,11 +1421,11 @@
                     findMinMax(lastGRIBData, lastGRIBidx === -1 ? 0 : lastGRIBidx);
                 }
             }
-    
+
             if (withChart && FAXES_ON_TOP) { // Chart (and GRIBs) *under* the faxes
                 worldMap.drawWorldMap(false);
             }
-    
+
             for (let sh = 0; sh < show.length; sh++) {
                 if (show[sh] === true && faxObj[sh] !== undefined) {
                     context.drawImage(
@@ -1454,14 +1454,14 @@
             document.getElementById('grib-slider').value = idx;
             gribDate01.value = selectedDate; // Slider value field
         };
-    
+
         let changeFax = (val) => {
             currentFax = val;
         };
-    
+
         const GRIB_DEBUG = false;
         let gribFormattedDate = [];
-    
+
         let plotGrib = (jsonGrib) => {
 
             lastGRIBData = jsonGrib;
@@ -1474,7 +1474,7 @@
                     // console.log('GRIB Date:', grib.gribDate.formattedUTCDate);
                     messageManager('GRIB Date:' + grib.gribDate.formattedUTCDate);
                 });
-    
+
                 jsonGrib[0].typedData.forEach((type, idx) => {
                     // console.log('Type:', type.gribType.desc);
                     messageManager('Type:' + type.gribType.desc);
@@ -1491,7 +1491,7 @@
                 gribDates.remove(0);
             }
             gribFormattedDate = [];
-    
+
             jsonGrib.forEach((grib, idx) => {
                 let option = document.createElement("option");
                 option.text = grib.gribDate.formattedUTCDate;
@@ -1519,7 +1519,7 @@
             while (gribTypes.options.length > 0) {
                 gribTypes.remove(0);
             }
-    
+
             let foundWind = false;
             jsonGrib[0].typedData.forEach((type, idx) => {
                 let option = document.createElement("option");
@@ -1537,13 +1537,13 @@
                     gribTypes.add(option);
                 }
             });
-    
+
             gribData = jsonGrib; // gribData is a function prm
             // Min and max for each grib data
             findMinMax(gribData, 0);
             redraw();
         };
-    
+
         const FIND_MIN_MAX_HERE = true;
 
         let findMinMax = (gribData, idx) => { // Also call this when GRIB date changes
@@ -1572,21 +1572,21 @@
                                     let gribValue = gribTypeData.data[hGRIB][wGRIB];
                                     let lng = ajustedLongitude(gribObj.gribDate.left, (gribObj.gribDate.stepx * wGRIB) + (gribObj.gribDate.stepx / 2));
                                     let lat  = gribObj.gribDate.bottom + ((gribObj.gribDate.stepy * hGRIB) + (gribObj.gribDate.stepy / 2));
-                                    if (gribValue >= gribTypeData.gribType.max) { 
+                                    if (gribValue >= gribTypeData.gribType.max) {
                                         maxPos = { lat: lat, lng: lng };
                                     }
-                                    if (gribValue <= gribTypeData.gribType.min) { 
+                                    if (gribValue <= gribTypeData.gribType.min) {
                                         minPos = { lat: lat, lng: lng };
                                     }
                                 }
                             }
-                            console.log("Type %s (%s), min=%f (%s / %s), max=%f (%s / %s)", 
-                                        gribTypeData.gribType.desc, 
-                                        gribTypeData.gribType.type, 
-                                        gribTypeData.gribType.min, 
+                            console.log("Type %s (%s), min=%f (%s / %s), max=%f (%s / %s)",
+                                        gribTypeData.gribType.desc,
+                                        gribTypeData.gribType.type,
+                                        gribTypeData.gribType.min,
                                         decToSex(minPos.lat, "NS"),
                                         decToSex(minPos.lng, "EW"),
-                                        gribTypeData.gribType.max, 
+                                        gribTypeData.gribType.max,
                                         decToSex(maxPos.lat, "NS"),
                                         decToSex(maxPos.lng, "EW"));
                         } else {
@@ -1595,7 +1595,7 @@
                         switch (gribTypeData.gribType.type) {
                             case 'tmp':
                                 try {
-                                    document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
+                                    document.getElementById('min-max-atemp').innerHTML = "<pre>" +
                                                                                         `Air Temp: min ${(gribTypeData.gribType.min - 273).toFixed(2)}\xB0C, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
                                                                                         `          max ${(gribTypeData.gribType.max - 273).toFixed(2)}\xB0C, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
                                                                                         "</pre>";
@@ -1604,7 +1604,7 @@
                                 break;
                             case 'prmsl':
                                 try {
-                                    document.getElementById('min-max-prmsl').innerHTML = "<pre>" + 
+                                    document.getElementById('min-max-prmsl').innerHTML = "<pre>" +
                                                                                         `PRMSL: min ${(gribTypeData.gribType.min / 100).toFixed(2)} hPa, at ${decToSex(minPos.lat, "NS") + '/' + decToSex(minPos.lng, "EW")}\n` +
                                                                                         `       max ${(gribTypeData.gribType.max / 100).toFixed(2)} hPa, at ${decToSex(maxPos.lat, "NS") + '/' + decToSex(maxPos.lng, "EW")}` +
                                                                                         "</pre>";
@@ -1659,13 +1659,13 @@
             }
             infoDiv.innerHTML = content;
         };
-    
+
         let hideCompositeInfo = () => {
             // console.log('Hiding');
             let infoDiv = document.getElementById('composite-info');
             infoDiv.innerHTML = "";
         };
-    
+
         let makeGRIBRequest = (gribRequest, where, cb) => {
 
             lastGRIBData = null; // Reset
@@ -1693,7 +1693,7 @@
                 cb("GRIB loaded");
             }
         };
-    
+
         let renderGRIB = () => {
             let rawGrib = JSON.parse(document.getElementById("json-grib").value);
             if (CHART_ON_TOP_OF_GRIB) {
@@ -1703,7 +1703,7 @@
             }
             plotGrib(rawGrib);
         };
-    
+
         let flipGRIB = (radio) => {
             if (radio.value === 'web') {
                 document.getElementById("grib-web").style.display = 'block';
@@ -1715,7 +1715,7 @@
                 document.getElementById("load-composites").disabled = true;  // Disable Load Composite button
             }
         };
-    
+
         let updateGRIBRequest = (option) => {
             let key = option.value;
             for (let i = 0; i < compositeCatalog.length; i++) {
@@ -1731,7 +1731,7 @@
                 }
             }
         };
-    
+
         let changeCanvasSize = (factor) => {
             thisZoomFactor *= factor;
             worldMap.setCanvasHeight(worldMap.getCanvasHeight() * factor);
@@ -1749,14 +1749,14 @@
 
             // Fill out parameters
             if (position) {
-                document.getElementById('position-from').innerText = 
+                document.getElementById('position-from').innerText =
                     `${ decToSex(position.lat, 'NS') } / ${ decToSex(position.lng, 'EW') }`;
             }
             let toL = (document.getElementById('routing-pos-lat-sign-01').value === 'S' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lat-deg-01').value) +
                 (parseFloat(parseInt(document.getElementById('routing-pos-lat-min-01').value) / 60)));
             let toG = (document.getElementById('routing-pos-lng-sign-01').value === 'W' ? -1 : 1) * (parseInt(document.getElementById('routing-pos-lng-deg-01').value) +
                 (parseFloat(parseInt(document.getElementById('routing-pos-lng-min-01').value) / 60)));
-            document.getElementById('position-to').innerText = 
+            document.getElementById('position-to').innerText =
                 `${ decToSex(toL, 'NS') } / ${ decToSex(toG, 'EW') }`;
             /*
             let now = new Date();
@@ -1765,7 +1765,7 @@
 
             document.getElementById('polar-location').value = polarFile;
 
-            routingDialog.show(); 
+            routingDialog.show();
         };
 
         let closeRoutingDialog = () => {
@@ -1776,7 +1776,7 @@
         let activateField = (cb, fieldId) => {
             document.getElementById(fieldId).disabled = !cb.checked;
         };
-    
+
         let closeRoutingOutputDialog = () => {
             let codeDialog = document.getElementById("routing-output-dialog");
             codeDialog.close();
@@ -1791,7 +1791,7 @@
                         let content = container.querySelector('pre').innerText;
                         copyToClipboard(content);
                         alert("Content copied to clipboard.");
-                    }                    
+                    }
                 }
             });
         };
@@ -1844,7 +1844,7 @@
         }
 
     </script>
-        
+
 </head>
 <body style="background-color: rgba(47, 55, 61, 0.95); background-image: none;">
 
@@ -1869,7 +1869,7 @@
                 <tr>
                     <td>Output</td>
                     <td>
-                        JSON, 
+                        JSON,
                         <input type="checkbox" id="txt-flavor"> TXT,
                         <input type="checkbox" id="gpx-flavor"> GPX,
                         <input type="checkbox" id="kml-flavor"> KML,
@@ -1937,8 +1937,8 @@
         <button onclick="closeRoutingDialog();">Cancel</button>
         <button onclick="closeRoutingDialog(); testRouting();">Compute Routing</button>
     </div>
-</dialog>    
-    
+</dialog>
+
 <dialog id="routing-output-dialog" style="min-height: 300px; min-width: 400px; z-index: 50; border-radius: 10px; background-color: rgba(255, 255, 255, 0.85); overflow: hidden;">
     <div class="dialog-header">
         <div style="padding: 10px;">
@@ -1968,7 +1968,7 @@
         </div>
     </div>
 </dialog>
-    
+
 <h2>Weather Wizard. GRIB &amp; Faxes. Pure HTML5/ES6/CSS3. Operations (WiP)<br/><span id="time-last-load"> - </span><br/><span id="time-to-next"> - </span></h2>
 
 <div class="tab" style="display: grid; grid-template-columns: auto auto auto;">
@@ -1980,7 +1980,7 @@
 <div id="tab-01" style="display: block;">
     <table width="100%" style="border: 2px solid transparent;">
         <tr>
-            <td valign="top" rowspan="1" style="width: 880px; height: 200px;"> 
+            <td valign="top" rowspan="1" style="width: 880px; height: 200px;">
                 <div id="map-container" class="map-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
                     <canvas id="mapCanvas" width="1400" height="900"></canvas>
                 </div>
@@ -2095,7 +2095,7 @@
                                         orientation="HORIZONTAL"
                                         width="200"
                                         height="60"></beaufort-scale>
-                    </div>                            
+                    </div>
                 </div>
 
             </td>
@@ -2111,11 +2111,11 @@
                     <br/>
                     <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/> With Faxes
                     <hr/>
-                    <select id="composites" 
-                            onchange="updateGRIBRequest(this); displayCompositeInfo();" 
-                            onmouseover="displayCompositeInfo();"></select> 
-                      <!--  onmouseleave="hideCompositeInfo();"></select --> 
-                    <br/>                            
+                    <select id="composites"
+                            onchange="updateGRIBRequest(this); displayCompositeInfo();"
+                            onmouseover="displayCompositeInfo();"></select>
+                      <!--  onmouseleave="hideCompositeInfo();"></select -->
+                    <br/>
                     <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
 
                     <input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours
@@ -2307,7 +2307,7 @@
             } }, 2000);
         }
 
-        const URL = '../catalog/compositeCatalog.json';	
+        const URL = '../catalog/compositeCatalog.json';
 
         window.fetch(URL)
             .then(
@@ -2315,7 +2315,7 @@
                     console.log(`Response: ${response.ok}`);
                     compositeCatalog = response.json().then(doc => {
                         compositeCatalog = doc;
-                        console.log(`Composites Catalog loaded, ${doc.length} elements`); 
+                        console.log(`Composites Catalog loaded, ${doc.length} elements`);
 
                         // Now populate the drop-down list.
                         for (let i = 0; i < compositeCatalog.length; i++) {
@@ -2330,7 +2330,7 @@
                             }
                         }
                     });
-                }, 
+                },
                 (error, errmess) => {
                     console.log("Ooch");
                     let message;
