@@ -7,6 +7,12 @@ other language can do the same (Java, C, Python, etc).
 > - The file `deviation.tool.html` is obviously a Web interface for this problem.
 > - There is also a Jupyter Notebook `LogfileToDeviation.ipynb` showing how to do it in Java.
 
+Start the Jupyter server:
+```
+$ cd notebooks
+$ jupyter notebook
+```
+
 ## How it works
 The generic format of a deviation curve is
 ```

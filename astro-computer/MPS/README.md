@@ -335,7 +335,8 @@ Il y a un premier test qui semble fonctionner, voir `mps.pg.PlayGround01.java`.
 On proc&egrave;de en plusieurs fois - ambiance [m&eacute;thode de Newton](https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Newton).
 La m&eacute;thode de Newton est fort pratique quand on cherche la solution d'une &eacute;quation (ou d'un syst&egrave;me d'&eacute;quations)
 tr&egrave;s (voire trop) complexe. La solution &agrave; laquelle on arrive n'est pas "exacte", mais on a une id&eacute;e de sa pr&eacute;cision, et c'est d&eacute;j&agrave; pas mal.
-Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.
+Cette m&eacute;thode est particuli&egrave;rement s&eacute;duisante dans un contexte informatique.  
+Un exemple en Java [ici](https://github.com/OlivierLD/raspberry-coffee/blob/master/Algebra/src/main/java/matrix/PolynomialUtil.java).
 
 #### La m&eacute;thode de Newton, en deux mots.
 La fa&ccedil;on de proc&eacute;der est la suivante&nbsp;:

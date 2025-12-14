@@ -20,6 +20,7 @@ targetCompatibility = 1.8
 
 dependencies {
     implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
     testImplementation "junit:junit:$junit_version"
 }
 

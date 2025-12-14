@@ -1,4 +1,5 @@
 ## General purpose utilities, used all over the place.
+Beside, also look at <https://github.com/OlivierLD/raspberry-coffee/tree/master/Algebra>
 
 
 #### To try (for tests, illustration...)
