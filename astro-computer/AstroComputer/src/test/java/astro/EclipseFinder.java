@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * A test
+ * A test. WiP...
  * Trying to find solar or lunar eclipses...
  * See https://www.timeanddate.com/eclipse/2024
  */
@@ -193,8 +193,8 @@ public class EclipseFinder {
         Calendar cal = new GregorianCalendar();
         cal.setTimeZone(TimeZone.getTimeZone("Etc/UTC" /*"America/Los_Angeles"*/));
         cal.set(Calendar.YEAR, currentYear);
-        cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, date.get(Calendar.MONTH)); // 0);
+        cal.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH)); // 1);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);

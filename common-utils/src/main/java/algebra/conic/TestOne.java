@@ -15,7 +15,7 @@ import java.util.List;
 public class TestOne {
 
     private final static ObjectMapper mapper = new ObjectMapper(); // Jackson
-    private static String jsonPointsCloud = "cloud.json";
+    private final static String jsonPointsCloud = "cloud.json";
 
     private static class Point {
         double x;
