@@ -2885,15 +2885,15 @@ public class CommandPanel
                             // Proceed for variation with gribFile
                             GribFile gf = WWContext.getInstance().getGribFile();
                             setThereIsWind(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_TWS));
-                            //              setThereIsPrmsl(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_PRMSL));
+                         // setThereIsPrmsl(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_PRMSL));
                             setThereIsPrmsl(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_PRMSL));
-                            //              setThereIs500mb(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_500MB));
+                         // setThereIs500mb(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_500MB));
                             setThereIs500mb(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_500MB));
-                            //              setThereIsTemperature(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_TMP));
+                         // setThereIsTemperature(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_TMP));
                             setThereIsTemperature(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_TMP));
-                            //              setThereIsWaves(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_WAVE));
+                         // setThereIsWaves(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_WAVE));
                             setThereIsWaves(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_WAVE));
-                            //              setThereIsRain(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_RAIN));
+                         // setThereIsRain(GRIBDataUtil.thereIsVariation(gribData, GRIBDataUtil.TYPE_RAIN));
                             setThereIsRain(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_RAIN));
                             setThereIsCurrent(GRIBDataUtil.thereIsVariation(gf, GRIBDataUtil.TYPE_CURRENT));
                             WWContext.getInstance().fireGribInfo(gribIndex,

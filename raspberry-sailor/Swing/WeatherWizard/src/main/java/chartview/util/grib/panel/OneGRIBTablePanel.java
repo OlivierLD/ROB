@@ -50,6 +50,7 @@ public class OneGRIBTablePanel
         titleLabel.setText("Title...");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
         generateObjButton.setText("Generate Obj");
+        generateObjButton.setToolTipText("Wavefront object generation,\nfile test.obj.");
         generateObjButton.addActionListener(this::generateObj_actionPerformed);
         topPanel.setLayout(new BorderLayout());
         //  topPanel.add(fileNameLabel, null);
@@ -169,6 +170,7 @@ public class OneGRIBTablePanel
             }
             bw.write("\n");
             bw.close();
+            System.out.println("Wavefront test.obj generated.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

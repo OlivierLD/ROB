@@ -39,11 +39,11 @@ public class Panel3D
         }
 
         public void new500mbObj(List<Point> al) {
-            prmslCheckBox.setEnabled(true);
+            hgt500CheckBox.setEnabled(true);
         }
 
         public void newPrmslObj(List<Point> al) {
-            hgt500CheckBox.setEnabled(true);
+            prmslCheckBox.setEnabled(true);
         }
 
         public void newTmpObj(List<Point> al) {

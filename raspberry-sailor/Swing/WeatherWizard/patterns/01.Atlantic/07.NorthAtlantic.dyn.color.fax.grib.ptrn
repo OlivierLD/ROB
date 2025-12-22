@@ -23,7 +23,7 @@
          <dynamic-resource url="https://ocean.weather.gov/shtml/ppaa50.gif" dir="./WeatherFaxes/noaa/500mb" prefix="NOAA_Atl_500_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
       </fax>
    </fax-collection>
-   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="false" display-PRMSL-3D="false" display-500HGT-3D="false" display-WAVES-3D="false" display-TEMP-3D="false" display-PRATE-3D="false" display-TWS-contour="false" display-PRMSL-contour="false" display-500HGT-contour="false" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="1" time-smooth="1">
+   <grib display-TWS-Data="true" display-PRMSL-Data="true" display-500HGT-Data="true" display-WAVES-Data="true" display-TEMP-Data="true" display-PRATE-Data="true" display-TWS-3D="true" display-PRMSL-3D="true" display-500HGT-3D="true" display-WAVES-3D="true" display-TEMP-3D="true" display-PRATE-3D="true" display-TWS-contour="false" display-PRMSL-contour="true" display-500HGT-contour="true" display-WAVES-contour="false" display-TEMP-contour="false" display-PRATE-contour="false" smooth="1" time-smooth="1">
       <dynamic-grib hint="North Atlantic GRIB" request="GFS:65N,14N,100W,10E|1,1|0,6..96|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN" dir="./GRIBFiles/yyyy/MM" prefix="NorthAtlantic_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="grb"/>
    </grib>
    <projection type="MERCATOR"/>
