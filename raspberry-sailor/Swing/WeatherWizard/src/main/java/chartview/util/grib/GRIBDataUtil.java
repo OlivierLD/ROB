@@ -46,6 +46,8 @@ public class GRIBDataUtil {
             "tws"
     };
 
+    private static boolean enforceWackyPrmsl500mbValues = true; // TODO A System variable?
+
     public static double[] getWindSpeedBoundaries(GribHelper.GribConditionData gribData) {
         double minValue = Double.MAX_VALUE;
         double maxValue = Double.MIN_VALUE;
@@ -540,7 +542,6 @@ public class GRIBDataUtil {
 
 //  System.out.println("3D Generation: h=" + gribData.getGribPointData().length + ", w=" + gribData.getGribPointData()[0].length);
 
-        boolean enforceWackyPrmsl500mbValues = true; // TODO A System variable?
         double prevValue = -1;
         double minValue = Double.MAX_VALUE;
         double maxValue = Double.MIN_VALUE;
@@ -727,8 +728,7 @@ public class GRIBDataUtil {
                         double lat = gribData.getGribPointData()[h][w].getLat();
                         double lng = gribData.getGribPointData()[h][w].getLng();
                         Point pp = chartPanel.getPanelPoint(lat, lng);
-                        if (pp.x < 0 || pp.x > chartPanel.getWidth() ||
-                                pp.y < 0 || pp.y > chartPanel.getHeight()) {
+                        if (pp.x < 0 || pp.x > chartPanel.getWidth() || pp.y < 0 || pp.y > chartPanel.getHeight()) {
                           continue;
                         }
                         if (!xIsSet) {
@@ -738,6 +738,14 @@ public class GRIBDataUtil {
                         double value = 0;
                         if (option == TYPE_500MB) {
                           value = gribData.getGribPointData()[h][w].getHgt();
+                          if (value == 0.0) {
+                              if (enforceWackyPrmsl500mbValues) {
+                                  System.out.printf("Enforcing 500MB value to %f\n", prevValue);
+                                  value = prevValue;
+                              } else {
+                                  System.out.println("Agrh ! 0 value for 500MB !");
+                              }
+                          }
                         } else if (option == TYPE_PRMSL) {
                           value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
                         } else if (option == TYPE_TMP) {
@@ -767,6 +775,8 @@ public class GRIBDataUtil {
                         txt = xmlDoc.createTextNode("txt#");
                         txt.setNodeValue(WWGnlUtilities.BIG_DOUBLE.format((-(value - minValue) * valueFactor) / 2));
                         z.appendChild(txt);
+
+                        prevValue = value;
                     }
                 }
                 if (_east2west.getChildNodes().getLength() == 0) {
