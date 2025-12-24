@@ -132,8 +132,8 @@ public class GRIBDataUtil {
                 if (gribData.getGribPointData()[h][w] != null) {
                     double val = gribData.getGribPointData()[h][w].getHgt();
                     if (val == 0.0) {
-                        System.out.println("Bam !");
-                        val = prevVal; // TODO Honk !!
+                        System.out.printf("0 value for 500MB boundaries, enforcing %f\n", prevVal);
+                        val = prevVal;
                     }
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
