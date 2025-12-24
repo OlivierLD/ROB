@@ -184,9 +184,8 @@ public class JTreeFilePanel
                                                                 GeomUtil.decToSex(wgd[0].getELng(), GeomUtil.HTML, GeomUtil.EW) +
                                                                 "</html>";
                                                 dftn.setBubble(bubble);
-                                            } catch (Exception npe) // inline-requests...
-                                            {
-                                                System.out.println("Problem -> " + localFileName);
+                                            } catch (Exception npe) { // inline-requests...
+                                                System.out.println("Problem (1) -> " + localFileName);
                                             }
                                         } else if (dftn instanceof PatternFileTreeNode) {
                                             String bubble = getPatternBubble(localFileName);
@@ -667,9 +666,8 @@ public class JTreeFilePanel
                                             "");
                                     parent.add(dtn);
                                     WWContext.getInstance().fireReadGRIB();
-                                } catch (Exception npe) // inline-requests...
-                                {
-                                    System.out.println("Problem -> " + f.getAbsolutePath());
+                                } catch (Exception npe) { // inline-requests...
+                                    System.out.println("Problem (2) -> " + f.getAbsolutePath());
                                 }
                                 break;
                             case JTreeFilePanel.COMPOSITE_TYPE:

@@ -28,6 +28,7 @@ import oracle.xml.parser.v2.XMLElement;
 import oracle.xml.parser.v2.XMLParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import utils.DumpUtil;
 import utils.TimeUtil;
 
 import javax.swing.*;
@@ -1009,16 +1010,30 @@ public class AdjustFrame extends JFrame {
                 new Thread(() -> setStatusLabel(str), "status-thread").start();
             }
 
+            private int nbLoadingInProgress = 0;
+            /**
+             *
+             * @param b true: start, false: end
+             * @param mess
+             */
             @Override
             public void setLoading(boolean b, String mess) {
+
+                // DumpUtil.whoCalledMe().stream().forEach(System.out::println);
+
                 message2Display = mess;
                 setLoadingProgressBar(b, mess);
                 grayPanelOption = Integer.parseInt(((ParamPanel.GrayPanelOptionList) (ParamPanel.data[ParamData.GRAY_PANEL_OPTION][ParamData.VALUE_INDEX])).getStringIndex());
                 if (b) {
+                    nbLoadingInProgress += 1;
                     grayPanelY = 0;
                     grayPanelTransparency = (Float) ParamPanel.data[ParamData.GRAY_PANEL_OPACITY][ParamData.VALUE_INDEX];
                     layers.add(grayTransparentPanel, grayLayerIndex); // Add gray layer
                 } else {
+                    nbLoadingInProgress -= 1;
+                    if (nbLoadingInProgress != 0) {
+                        System.out.printf("Loading(s) in progress: %d, will not play sound.\n", nbLoadingInProgress);
+                    }
                     // WWContext.getInstance().fireInterruptProgress();
                     String _soundName = "";
                     try {
@@ -1026,9 +1041,11 @@ public class AdjustFrame extends JFrame {
                     } catch (NullPointerException npe) {
                     }
                     final String soundName = _soundName;
-                    if (soundName.trim().length() > 0) { // Play Sound on Completion
+                    if (soundName.trim().length() > 0 && nbLoadingInProgress == 0) { // Play Sound on Completion
                         Thread playThread = new Thread(() -> {
                             try {
+                                System.out.printf("Playing sound [%s]\n", soundName);
+                                // DumpUtil.whoCalledMe().stream().forEach(System.out::println);
                                 WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
                             } catch (MalformedURLException murle) {
                                 System.err.println("Error playing [" + soundName + "]");

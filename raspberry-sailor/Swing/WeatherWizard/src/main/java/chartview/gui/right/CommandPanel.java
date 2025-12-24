@@ -2519,7 +2519,7 @@ public class CommandPanel
                             }
                         });
                         WWContext.getInstance().addApplicationListener(WWContext.getInstance().getAel4monitor());
-                        WWContext.getInstance().fireSetLoading(true);
+                        WWContext.getInstance().fireSetLoading(true, String.format("Restoring Composite %s", fileName));
                         try {
                             restoreComposite(fileName);
                         } catch (ConcurrentModificationException cme) {
@@ -2552,7 +2552,7 @@ public class CommandPanel
                                 }
                             }
                         }
-                        WWContext.getInstance().fireSetLoading(false);
+                        WWContext.getInstance().fireSetLoading(false); // turn loading off
                     };
                     new Thread(heavyRunnable, "composite-restorer").start();
 

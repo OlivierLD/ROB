@@ -36,7 +36,7 @@
    <param id="34">true</param>
    <param id="35">false</param>
    <param id="36">2</param>
-   <param id="37">./patterns/01.Atlantic/07.NorthAtlantic.dyn.color.fax.grib.ptrn</param>
+   <param id="37">./patterns/01.Atlantic/02.NorthAtlantic.dyn.fax.grib.ptrn</param>
    <param id="38">0;0;0</param>
    <param id="39">10, 20, 30, 40, 60, 15, 25, 35, 5</param>
    <param id="40">1.01</param>
@@ -76,12 +76,12 @@
    <param id="74">192.168.1.101</param>
    <param id="75">2947</param>
    <param id="76">2</param>
-   <param id="77">./sounds/R2D2.wav</param>
+   <param id="77">./sounds/lazer.wav</param>
    <param id="78">false</param>
    <param id="79">75.0</param>
    <param id="80">60</param>
    <param id="81">1.0</param>
    <param id="82">Arial, 12, , </param>
    <param id="83">false</param>
-   <param id="84">./sounds/vista.wav</param>
+   <param id="84">./sounds/saberdown.wav</param>
 </app-parameters>

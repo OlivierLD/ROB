@@ -1887,6 +1887,7 @@ public class WWGnlUtilities {
                 Thread playThread = new Thread(() -> {
                     try {
                         synchronized(me) {
+                            System.out.println("Playing exit sound.");
                             WWGnlUtilities.playSound(new File(soundName).toURI().toURL());
 //                            me.notify();
                         }
