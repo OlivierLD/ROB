@@ -29,6 +29,27 @@ dependencies {
   testImplementation "junit:junit:$junit_version"
 }
 
+jar {
+  // User-exit specific.
+  manifest {
+    attributes(
+            "Manifest-Version": "1.0",
+            "Compile-Date": new Date().toString(),
+            'Built-By': System.properties['user.name'],
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS': "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+    )
+    attributes([
+            "WW-User-Exit-Action"  : "weatherwizard.userexits.GRIBProcessing",    // The UE class
+            "WW-User-Exit-Comment" : "Processing!",
+            "WW-User-Exit-Location": "Processing",                      // Location in user-exit menu, ';' separated hierarchy.
+            "WW-User-Exit-ack"     : "true",
+            "WW-User-Exit-sync"    : "true"
+    ], "GRIB Processing" )
+  }
+}
+
 shadowJar {
   zip64 true
 }
