@@ -1,6 +1,5 @@
 package weatherwizard.userexits;
 
-
 import chartadjustmentuserexits.PAppletFrame;
 import chartview.ctx.WWContext;
 import chartview.gui.right.CommandPanel;
@@ -14,7 +13,6 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
-
 
 public class GRIBProcessing
         implements UserExitInterface {
@@ -47,9 +45,7 @@ public class GRIBProcessing
         boolean ok = true;
         if (false) {
             // Standalone, closes the application when shut down.
-            PApplet.main(new String[]
-                    {"--bgcolor=#ece9d8",
-                            "chartadjustmentuserexits.ProcessingGRIBPApplet"});
+            PApplet.main(new String[] {"--bgcolor=#ece9d8", "chartadjustmentuserexits.ProcessingGRIBPApplet"});
         } else {
             frame = new PAppletFrame();
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -65,13 +61,14 @@ public class GRIBProcessing
                 public void windowClosing(WindowEvent e) {
                     frame.stopPApplet();
                     e.getComponent().setVisible(false);
-//          System.out.println("Notifying...");
-                    if (feedback != null)
+        //          System.out.println("Notifying...");
+                    if (feedback != null) {
                         feedback.add("Success!");
-//          synchronized (parent) { parent.notify(); }
+                    }
+        //          synchronized (parent) { parent.notify(); }
                 }
             });
-//    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        //  frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
             frame.setVisible(true);
         }
         return ok;
