@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html lan="en">
+<head>
+  <title>Math demo - MathML</title>
+  <style type="text/css">
+* {
+  font-family:'Courier New', Courier, monospace;
+}
+  </style>
+</head>
+
+<body>
+
+<h2>Math in MathML notation, no script, nothing.</h2>
+
+MathML, see <a href="https://www.w3.org/TR/mathml4/" target="MML">here</a>.<br/>
+
+When <math xmlns='http://www.w3.org/1998/Math/MathML'><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
+there are two solutions to <math xmlns='http://www.w3.org/1998/Math/MathML'>
+  <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
+  <mo>+</mo> <mi>b</mi><mi>x</mi>
+  <mo>+</mo> <mi>c</mi> <mo>=</mo> <mn>0</mn>
+</math> and they are
+<math mode="display">
+  <mi>x</mi> <mo>=</mo>
+  <mrow style="border: 1px solid silver; font-size: 2em;">
+    <mfrac>
+      <mrow style="color:red;">
+        <mo>&#x2212;</mo>
+        <mi>b</mi>
+        <mo>&#x00B1;</mo>
+        <msqrt>
+          <msup><mi>b</mi><mn>2</mn></msup>
+          <mo>&#x2212;</mo>
+          <mn>4</mn><mi>a</mi><mi>c</mi>
+        </msqrt>
+      </mrow>
+      <mrow style="color:blue;"> <mn>2</mn><mi>a</mi> </mrow>
+    </mfrac>
+  </mrow>
+  <mtext>.</mtext>
+</math>
+
+<hr/>
+
+<semantics>
+  <apply>
+    <intersect/>
+    <ci>A</ci>
+    <ci>B</ci>
+  </apply>
+  <annotation-xml encoding="image/svg+xml">
+    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 290 180">
+      <clipPath id="a">
+        <circle cy="90" cx="100" r="60"/>
+      </clipPath>
+      <circle fill="#AAAAAA" cy="90" cx="190" r="60" style="clip-path:url(#a)"/>
+      <circle stroke="black" fill="none" cy="90" cx="100" r="60"/>
+      <circle stroke="black" fill="none" cy="90" cx="190" r="60"/>
+    </svg>
+  </annotation-xml>
+  <annotation-xml encoding="application/xhtml+xml">
+    <img xmlns="http://www.w3.org/1999/xhtml" src="intersect.png" alt="A intersect B"/>
+  </annotation-xml>
+</semantics>
+
+<hr/>
+</body>
+</html>

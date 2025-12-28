@@ -46,6 +46,12 @@ Otherwise...:
 - To access Serial Ports (GPS and/or NMEA data), `librxtx-java`
 - `Python 3` (in some cases, to access external devices, like sensors, oled screens, etc.)
 
+> On Windows (WiP)
+> - Install a JDK (up to JKD 17)
+> - Install git (`gh`, aka GitHub CLI, seems to be a good option), then
+>  - gh auth login (to do once)
+>  - gh repo clone OlivierLD/ROB
+
 All the commands described below are to be run from a terminal (unless mentioned otherwise).
 
 > _**Note**_: in the following instructions, make sure you respect the provided syntax.  

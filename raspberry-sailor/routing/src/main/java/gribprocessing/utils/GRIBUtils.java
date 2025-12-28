@@ -19,6 +19,7 @@ public class GRIBUtils {
 
 	/**
 	 * For SailMail requests
+	 * (to the saildocs.com server. For me only)
 	 *
 	 * @param gribRequest, like "GFS:65N,45S,130E,110W|2,2|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 	 * @return The full request, ready to use.
