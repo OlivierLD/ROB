@@ -17,10 +17,10 @@ set LNF=
 :: set LNF="-Dkeep.system.lnf=true"
 ::
 :: System Specific
-:: LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
-:: LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
+:: set LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+set LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
 :: Generic
-set LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
+:: set LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
 :: set LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"
 ::
 set LANG=
