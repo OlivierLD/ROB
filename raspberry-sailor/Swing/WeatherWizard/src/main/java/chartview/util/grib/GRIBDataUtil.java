@@ -526,13 +526,16 @@ public class GRIBDataUtil {
                         value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
                         if (spitoutCSV) { // Temp spit out
                             // System.out.printf("[%d][%d] PRMSL= %f\n", h, w, value);
-                            System.out.printf("%f ;", value);
+                            System.out.printf("%f ;", value); // Caution: would display the 0 values ! Not the substituted prevValue !
                         }
                         if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
                             value = prevValue;  // TODO Gonfled !
                         }
                     } else if (option == TYPE_TMP) {
-                      value = gribData.getGribPointData()[h][w].getAirtmp();
+                        value = gribData.getGribPointData()[h][w].getAirtmp();
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
+                            value = prevValue;  // TODO Gonfled !
+                        }
                     } else if (option == TYPE_WAVE) {
                         double wh = gribData.getGribPointData()[h][w].getWHgt();
                         if (wh > 3_000 || wh < 0) {
@@ -547,7 +550,7 @@ public class GRIBDataUtil {
                     }
                     //      value *= valueFactor;
                     // below, should not happen, see why above.
-                    if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) { // ie PRMSL or 500MB
+                    if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) { // ie PRMSL, TMP, or 500MB
                         if (enforceWackyPrmsl500mbValues) {
                             if (!spitoutCSV) {
                                 System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
@@ -638,6 +641,9 @@ public class GRIBDataUtil {
                             }
                         } else if (option == TYPE_TMP) {
                           value = gribData.getGribPointData()[h][w].getAirtmp();
+                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
+                                value = prevValue; // TODO Gonfled !
+                            }
                         } else if (option == TYPE_RAIN) {
                           value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
                         } else if (option == TYPE_WAVE) {
@@ -725,11 +731,11 @@ public class GRIBDataUtil {
                                   }
                                   value = prevValue;
                               } else {
-                                  System.out.println("Agrh ! 0 value for 500MB !");
+                                  System.out.println("Argh ! 0 value for 500MB !");
                               }
                           }
                         } else if (option == TYPE_PRMSL) {
-                          value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                            value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
                             if (value <= 0.0) {
                                 if (enforceWackyPrmsl500mbValues) {
                                     if (!spitoutCSV) {
@@ -737,11 +743,21 @@ public class GRIBDataUtil {
                                     }
                                     value = prevValue;
                                 } else {
-                                    System.out.println("Agrh ! 0 value for 500MB !");
+                                    System.out.println("Argh ! 0 value for PRMSL !");
                                 }
                             }
                         } else if (option == TYPE_TMP) {
-                          value = gribData.getGribPointData()[h][w].getAirtmp();
+                            value = gribData.getGribPointData()[h][w].getAirtmp();
+                            if (value <= 0.0) {
+                                if (enforceWackyPrmsl500mbValues) {
+                                    if (!spitoutCSV) {
+                                        System.out.printf("Enforcing TMP value to %f\n", prevValue);
+                                    }
+                                    value = prevValue;
+                                } else {
+                                    System.out.println("Argh ! 0 value for TMP !");
+                                }
+                            }
                         } else if (option == TYPE_RAIN) {
                           value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
                         } else if (option == TYPE_WAVE) {
