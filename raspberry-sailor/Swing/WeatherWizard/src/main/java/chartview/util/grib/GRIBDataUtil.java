@@ -47,6 +47,8 @@ public class GRIBDataUtil {
     };
 
     private static boolean enforceWackyPrmsl500mbValues = true; // TODO A System variable?
+    private static boolean spitoutCSV = false;
+
 
     public static double[] getWindSpeedBoundaries(GribHelper.GribConditionData gribData) {
         double minValue = Double.MAX_VALUE;
@@ -59,12 +61,6 @@ public class GRIBDataUtil {
                     double speed = getGRIBWindSpeed(x, y); // Already adjusted
                     minValue = Math.min(minValue, speed);
                     maxValue = Math.max(maxValue, speed);
-//                    if (speed < minValue) {
-//                      minValue = speed;
-//                    }
-//                    if (speed > maxValue) {
-//                      maxValue = speed;
-//                    }
                 }
             }
         }
@@ -82,12 +78,6 @@ public class GRIBDataUtil {
                     double speed = getGRIBWindSpeed(x, y);
                     minValue = Math.min(minValue, speed);
                     maxValue = Math.max(maxValue, speed);
-//                    if (speed < minValue) {
-//                      minValue = speed;
-//                    }
-//                    if (speed > maxValue) {
-//                      maxValue = speed;
-//                    }
                 }
             }
         }
@@ -104,19 +94,18 @@ public class GRIBDataUtil {
     public static double[] getPRMSLBoundaries(GribHelper.GribConditionData gribData) {
         double minValue = Double.MAX_VALUE;
         double maxValue = Double.MIN_VALUE;
+        double prevVal = 0.0;
         for (int h = 0; gribData.getGribPointData() != null && h < gribData.getGribPointData().length; h++) {
             for (int w = 0; w < gribData.getGribPointData()[h].length; w++) {
                 if (gribData.getGribPointData()[h][w] != null) {
                     double val = gribData.getGribPointData()[h][w].getPrmsl() / 100D;
-                    // TODO Val == 0 ?
+                    if (val <= 0.0) {
+                        System.out.printf("\n- 0 value for PRMSL boundaries, enforcing %f\n", prevVal);
+                        val = prevVal;
+                    }
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
-//                    if (val < minValue) {
-//                      minValue = val;
-//                    }
-//                    if (val > maxValue) {
-//                      maxValue = val;
-//                    }
+                    prevVal = val;
                 }
             }
         }
@@ -132,17 +121,11 @@ public class GRIBDataUtil {
                 if (gribData.getGribPointData()[h][w] != null) {
                     double val = gribData.getGribPointData()[h][w].getHgt();
                     if (val == 0.0) {
-                        System.out.printf("0 value for 500MB boundaries, enforcing %f\n", prevVal);
+                        System.out.printf("\n- 0 value for 500MB boundaries, enforcing %f\n", prevVal);
                         val = prevVal;
                     }
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
-//                    if (val < minValue) {
-//                      minValue = val;
-//                    }
-//                    if (val > maxValue) {
-//                      maxValue = val;
-//                    }
                     prevVal = val;
                 }
             }
@@ -159,12 +142,6 @@ public class GRIBDataUtil {
                     double val = gribData.getGribPointData()[h][w].getAirtmp() - 273D;
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
-//                    if (val < minValue) {
-//                      minValue = val;
-//                    }
-//                    if (val > maxValue) {
-//                      maxValue = val;
-//                    }
                 }
             }
         }
@@ -180,12 +157,6 @@ public class GRIBDataUtil {
                     double val = gribData.getGribPointData()[h][w].getWHgt() / 100D;
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
-//                    if (val < minValue) {
-//                      minValue = val;
-//                    }
-//                    if (val > maxValue) {
-//                      maxValue = val;
-//                    }
                 }
             }
         }
@@ -201,12 +172,6 @@ public class GRIBDataUtil {
                     double val = gribData.getGribPointData()[h][w].getRain() * 3_600D;
                     minValue = Math.min(minValue, val);
                     maxValue = Math.max(maxValue, val);
-//                    if (val < minValue) {
-//                      minValue = val;
-//                    }
-//                    if (val > maxValue) {
-//                      maxValue = val;
-//                    }
                 }
             }
         }
@@ -545,17 +510,27 @@ public class GRIBDataUtil {
         double prevValue = -1;
         double minValue = Double.MAX_VALUE;
         double maxValue = Double.MIN_VALUE;
+        if (spitoutCSV && option == TYPE_PRMSL) {
+            System.out.println("");
+        }
         for (int h = 0; gribData.getGribPointData() != null && h < gribData.getGribPointData().length && ok; h++) {
             for (int w = 0; w < gribData.getGribPointData()[h].length && ok; w++) {
                 if (gribData.getGribPointData()[h][w] != null) {
                     double value = 0D;
                     if (option == TYPE_500MB) {
                         value = gribData.getGribPointData()[h][w].getHgt();
-                        if (false && value == 0.0) {
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
                             value = prevValue;  // TODO Gonfled !
                         }
                     } else if (option == TYPE_PRMSL) {
-                      value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                        value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                        if (spitoutCSV) { // Temp spit out
+                            // System.out.printf("[%d][%d] PRMSL= %f\n", h, w, value);
+                            System.out.printf("%f ;", value);
+                        }
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
+                            value = prevValue;  // TODO Gonfled !
+                        }
                     } else if (option == TYPE_TMP) {
                       value = gribData.getGribPointData()[h][w].getAirtmp();
                     } else if (option == TYPE_WAVE) {
@@ -571,30 +546,30 @@ public class GRIBDataUtil {
                               gribData.getGribPointData()[h][w].getV());
                     }
                     //      value *= valueFactor;
-                    if (value == 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                    // below, should not happen, see why above.
+                    if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) { // ie PRMSL or 500MB
                         if (enforceWackyPrmsl500mbValues) {
-                            System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
-                                    DATA_NAME[option], h, w, gribData.getDate(), prevValue);
+                            if (!spitoutCSV) {
+                                System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
+                                        DATA_NAME[option], h, w, gribData.getDate(), prevValue);
+                            }
                             value = prevValue; // Bam !
                         } else {
                             System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s\n",
                                     DATA_NAME[option], h, w, gribData.getDate());
                         }
                     }
-                    if (!enforceWackyPrmsl500mbValues && value == 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                    if (!enforceWackyPrmsl500mbValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
                       ok = false;
                     } else {
                         minValue = Math.min(minValue, value);
                         maxValue = Math.max(maxValue, value);
-//                        if (value < minValue) {
-//                          minValue = value;
-//                        }
-//                        if (value > maxValue) {
-//                          maxValue = value;
-//                        }
                     }
                     prevValue = value;
                 }
+            }
+            if (spitoutCSV && option == TYPE_PRMSL) {
+                System.out.println("");
             }
         }
         if (minValue == 0 && maxValue == 0) {
@@ -653,11 +628,14 @@ public class GRIBDataUtil {
                         double value = 0;
                         if (option == TYPE_500MB) {
                             value = gribData.getGribPointData()[h][w].getHgt();
-                            if (false && value == 0.0) {
+                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
                                 value = prevValue; // TODO Gonfled !
                             }
                         } else if (option == TYPE_PRMSL) {
-                          value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                            value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
+                                value = prevValue; // TODO Gonfled !
+                            }
                         } else if (option == TYPE_TMP) {
                           value = gribData.getGribPointData()[h][w].getAirtmp();
                         } else if (option == TYPE_RAIN) {
@@ -672,17 +650,19 @@ public class GRIBDataUtil {
                           value = getGRIBWindSpeed(gribData.getGribPointData()[h][w].getU(),
                                   gribData.getGribPointData()[h][w].getV());
                         }
-                        if (value == 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                        if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
                             if (enforceWackyPrmsl500mbValues) {
-                                System.out.printf("-- 2 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
-                                        DATA_NAME[option], h, w, gribData.getDate(), prevValue);
+                                if (!spitoutCSV) {
+                                    System.out.printf("-- 2 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
+                                            DATA_NAME[option], h, w, gribData.getDate(), prevValue);
+                                }
                                 value = prevValue;
                             } else {
                                 System.out.printf("-- 2 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s\n",
                                         DATA_NAME[option], h, w, gribData.getDate());
                             }
                         }
-                        if (!enforceWackyPrmsl500mbValues && value == 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                        if (!enforceWackyPrmsl500mbValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
                           ok = false;
                         } else {
                             if (!yIsSet) {
@@ -738,9 +718,11 @@ public class GRIBDataUtil {
                         double value = 0;
                         if (option == TYPE_500MB) {
                           value = gribData.getGribPointData()[h][w].getHgt();
-                          if (value == 0.0) {
+                          if (value <= 0.0) {
                               if (enforceWackyPrmsl500mbValues) {
-                                  System.out.printf("Enforcing 500MB value to %f\n", prevValue);
+                                  if (!spitoutCSV) {
+                                      System.out.printf("Enforcing 500MB value to %f\n", prevValue);
+                                  }
                                   value = prevValue;
                               } else {
                                   System.out.println("Agrh ! 0 value for 500MB !");
@@ -748,6 +730,16 @@ public class GRIBDataUtil {
                           }
                         } else if (option == TYPE_PRMSL) {
                           value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
+                            if (value <= 0.0) {
+                                if (enforceWackyPrmsl500mbValues) {
+                                    if (!spitoutCSV) {
+                                        System.out.printf("Enforcing PRMSL value to %f\n", prevValue);
+                                    }
+                                    value = prevValue;
+                                } else {
+                                    System.out.println("Agrh ! 0 value for 500MB !");
+                                }
+                            }
                         } else if (option == TYPE_TMP) {
                           value = gribData.getGribPointData()[h][w].getAirtmp();
                         } else if (option == TYPE_RAIN) {
@@ -1116,17 +1108,11 @@ public class GRIBDataUtil {
                         }
                         value = wh / 10D;
                     }
-                    if (value == 0 && option != TYPE_WAVE) {
+                    if (value <= 0 && option != TYPE_WAVE) {
                       ok = false;
                     } else {
                         minValue = Math.min(minValue, value);
                         maxValue = Math.max(maxValue, value);
-//                        if (value < minValue) {
-//                          minValue = value;
-//                        }
-//                        if (value > maxValue) {
-//                          maxValue = value;
-//                        }
                     }
                 }
             }

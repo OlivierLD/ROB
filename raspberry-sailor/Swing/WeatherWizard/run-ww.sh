@@ -21,16 +21,16 @@ CP=${CP}:/Applications/Processing.v4.app/Contents/Java/core/library/core.jar
 #
 LNF=
 #
-# LNF="-Dkeep.system.lnf=true"  # Applied if -Dswing.defaultlaf is NOT here.
+LNF="-Dkeep.system.lnf=true"  # Applied if -Dswing.defaultlaf is NOT here.
 #
 # System Specific
 # LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
 # LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
 # Generic
-LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
+# LNF="-Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel"
 # LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"
 #
 LANG=
 # LANG="-Duser.country=FR -Duser.language=fr"
 #
-java -cp ${CP} ${LNF} ${LANG} ${TIDE_EMAILS} main.splash.Splasher
+java -cp ${CP} ${LNF} ${LANG} -Dswing.defaultlaf main.splash.Splasher

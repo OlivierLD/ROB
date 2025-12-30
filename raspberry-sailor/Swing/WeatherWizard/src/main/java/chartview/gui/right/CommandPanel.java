@@ -3579,7 +3579,7 @@ public class CommandPanel
     private final boolean doItAfter = true;
     private boolean smoothingRequired = true;
     // GRIB Data
-    private transient GribHelper.GribConditionData gribData = null;
+    private transient GribHelper.GribConditionData gribData = null; // Will contain ALL the grib data
 
     public void chartPanelPaintComponentFeature(/*final*/Graphics gr) {
         ((Graphics2D) gr).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
