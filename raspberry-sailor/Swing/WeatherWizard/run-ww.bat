@@ -27,8 +27,13 @@ set LANG=
 :: set LANG="-Duser.country=FR -Duser.language=fr"
 ::
 set OPT=
-:: set OPT="%OPT% -Dswing.defaultlaf"
-set OPT="%OPT% -Dfix-wacky-values=true"
+:: set OPT=%OPT% -Dswing.defaultlaf
+set OPT=%OPT% -Dfix-wacky-values=true
 ::
-java -cp %CP% %LNF% %LANG% %OPT% main.splash.Splasher
+set COMMAND=java -cp %CP% %LNF% %LANG% %OPT% main.splash.Splasher
+echo Running %COMMAND%
+::
+:: java -cp %CP% %LNF% %LANG% %OPT% main.splash.Splasher
+%COMMAND%
+::
 @endlocal
