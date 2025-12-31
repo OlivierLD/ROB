@@ -36,5 +36,5 @@ LANG=
 OPT=
 OPT="${OPT} -Dswing.defaultlaf"
 OPT="${OPT} -Dfix-wacky-values=true"
-#
+# For Mac: -Xdock:name="Weather Wizard"
 java -cp ${CP} ${LNF} ${LANG} ${OPT} -Xdock:name="Weather Wizard" main.splash.Splasher
