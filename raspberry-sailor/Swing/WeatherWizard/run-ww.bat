@@ -26,5 +26,9 @@ set LNF="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"
 set LANG=
 :: set LANG="-Duser.country=FR -Duser.language=fr"
 ::
-java -cp %CP% %LNF% %LANG% main.splash.Splasher
+set OPT=
+:: set OPT="%OPT% -Dswing.defaultlaf"
+set OPT="%OPT% -Dfix-wacky-values=true"
+::
+java -cp %CP% %LNF% %LANG% %OPT% main.splash.Splasher
 @endlocal

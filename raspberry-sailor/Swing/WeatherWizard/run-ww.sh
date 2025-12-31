@@ -33,4 +33,8 @@ LNF="-Dkeep.system.lnf=true"  # Applied if -Dswing.defaultlaf is NOT here.
 LANG=
 # LANG="-Duser.country=FR -Duser.language=fr"
 #
-java -cp ${CP} ${LNF} ${LANG} -Dswing.defaultlaf main.splash.Splasher
+OPT=
+OPT="${OPT} -Dswing.defaultlaf"
+OPT="${OPT} -Dfix-wacky-values=true"
+#
+java -cp ${CP} ${LNF} ${LANG} ${OPT} -Xdock:name="Weather Wizard" main.splash.Splasher

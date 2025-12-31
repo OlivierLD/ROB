@@ -46,9 +46,9 @@ public class GRIBDataUtil {
             "tws"
     };
 
-    private static boolean enforceWackyPrmsl500mbValues = true; // TODO A System variable?
-    private static boolean spitoutCSV = false;
-
+    // Some idiot cut the credits of the NOAA. Some 0 values sometimes appear in the GRIBs...
+    private static boolean enforceWackyPrmsl500mbTmpValues = "true".equals(System.getProperty("fix-wacky-values")); // A System variable
+    private static boolean spitoutCSV = false; // This is for tests. See the code for details.
 
     public static double[] getWindSpeedBoundaries(GribHelper.GribConditionData gribData) {
         double minValue = Double.MAX_VALUE;
@@ -519,8 +519,8 @@ public class GRIBDataUtil {
                     double value = 0D;
                     if (option == TYPE_500MB) {
                         value = gribData.getGribPointData()[h][w].getHgt();
-                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
-                            value = prevValue;  // TODO Gonfled !
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbTmpValues) {
+                            value = prevValue;  // TODO Gonfled ! TBR
                         }
                     } else if (option == TYPE_PRMSL) {
                         value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
@@ -528,13 +528,13 @@ public class GRIBDataUtil {
                             // System.out.printf("[%d][%d] PRMSL= %f\n", h, w, value);
                             System.out.printf("%f ;", value); // Caution: would display the 0 values ! Not the substituted prevValue !
                         }
-                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
-                            value = prevValue;  // TODO Gonfled !
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbTmpValues) {
+                            value = prevValue;  // TODO Gonfled ! TBR
                         }
                     } else if (option == TYPE_TMP) {
                         value = gribData.getGribPointData()[h][w].getAirtmp();
-                        if (false && value <= 0.0 && enforceWackyPrmsl500mbValues) {
-                            value = prevValue;  // TODO Gonfled !
+                        if (false && value <= 0.0 && enforceWackyPrmsl500mbTmpValues) {
+                            value = prevValue;  // TODO Gonfled ! TBR
                         }
                     } else if (option == TYPE_WAVE) {
                         double wh = gribData.getGribPointData()[h][w].getWHgt();
@@ -551,7 +551,7 @@ public class GRIBDataUtil {
                     //      value *= valueFactor;
                     // below, should not happen, see why above.
                     if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) { // ie PRMSL, TMP, or 500MB
-                        if (enforceWackyPrmsl500mbValues) {
+                        if (enforceWackyPrmsl500mbTmpValues) {
                             if (!spitoutCSV) {
                                 System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
                                         DATA_NAME[option], h, w, gribData.getDate(), prevValue);
@@ -562,7 +562,7 @@ public class GRIBDataUtil {
                                     DATA_NAME[option], h, w, gribData.getDate());
                         }
                     }
-                    if (!enforceWackyPrmsl500mbValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                    if (!enforceWackyPrmsl500mbTmpValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
                       ok = false;
                     } else {
                         minValue = Math.min(minValue, value);
@@ -631,18 +631,18 @@ public class GRIBDataUtil {
                         double value = 0;
                         if (option == TYPE_500MB) {
                             value = gribData.getGribPointData()[h][w].getHgt();
-                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
-                                value = prevValue; // TODO Gonfled !
+                            if (enforceWackyPrmsl500mbTmpValues && value <= 0.0) {
+                                value = prevValue;
                             }
                         } else if (option == TYPE_PRMSL) {
                             value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
-                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
-                                value = prevValue; // TODO Gonfled !
+                            if (enforceWackyPrmsl500mbTmpValues && value <= 0.0) {
+                                value = prevValue;
                             }
                         } else if (option == TYPE_TMP) {
                           value = gribData.getGribPointData()[h][w].getAirtmp();
-                            if (enforceWackyPrmsl500mbValues && value <= 0.0) {
-                                value = prevValue; // TODO Gonfled !
+                            if (enforceWackyPrmsl500mbTmpValues && value <= 0.0) {
+                                value = prevValue;
                             }
                         } else if (option == TYPE_RAIN) {
                           value = gribData.getGribPointData()[h][w].getRain() * 3_600D;
@@ -657,7 +657,7 @@ public class GRIBDataUtil {
                                   gribData.getGribPointData()[h][w].getV());
                         }
                         if (value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
-                            if (enforceWackyPrmsl500mbValues) {
+                            if (enforceWackyPrmsl500mbTmpValues) {
                                 if (!spitoutCSV) {
                                     System.out.printf("-- 2 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s, enforcing to %f\n",
                                             DATA_NAME[option], h, w, gribData.getDate(), prevValue);
@@ -668,7 +668,7 @@ public class GRIBDataUtil {
                                         DATA_NAME[option], h, w, gribData.getDate());
                             }
                         }
-                        if (!enforceWackyPrmsl500mbValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
+                        if (!enforceWackyPrmsl500mbTmpValues && value <= 0 && option != TYPE_WAVE && option != TYPE_RAIN && option != TYPE_TWS) {
                           ok = false;
                         } else {
                             if (!yIsSet) {
@@ -725,7 +725,7 @@ public class GRIBDataUtil {
                         if (option == TYPE_500MB) {
                           value = gribData.getGribPointData()[h][w].getHgt();
                           if (value <= 0.0) {
-                              if (enforceWackyPrmsl500mbValues) {
+                              if (enforceWackyPrmsl500mbTmpValues) {
                                   if (!spitoutCSV) {
                                       System.out.printf("Enforcing 500MB value to %f\n", prevValue);
                                   }
@@ -737,7 +737,7 @@ public class GRIBDataUtil {
                         } else if (option == TYPE_PRMSL) {
                             value = gribData.getGribPointData()[h][w].getPrmsl() / 10D;
                             if (value <= 0.0) {
-                                if (enforceWackyPrmsl500mbValues) {
+                                if (enforceWackyPrmsl500mbTmpValues) {
                                     if (!spitoutCSV) {
                                         System.out.printf("Enforcing PRMSL value to %f\n", prevValue);
                                     }
@@ -749,7 +749,7 @@ public class GRIBDataUtil {
                         } else if (option == TYPE_TMP) {
                             value = gribData.getGribPointData()[h][w].getAirtmp();
                             if (value <= 0.0) {
-                                if (enforceWackyPrmsl500mbValues) {
+                                if (enforceWackyPrmsl500mbTmpValues) {
                                     if (!spitoutCSV) {
                                         System.out.printf("Enforcing TMP value to %f\n", prevValue);
                                     }
