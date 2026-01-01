@@ -136,7 +136,7 @@ public class NavServer {
 	}
 
 	private static class MemoryGauge extends Thread {
-		private long pollingInterval;
+		private final long pollingInterval;
 		public MemoryGauge(long pollingInterval) {
 			super();
 			this.pollingInterval = pollingInterval;
