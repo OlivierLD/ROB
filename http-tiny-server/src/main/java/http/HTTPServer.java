@@ -1057,14 +1057,23 @@ public class HTTPServer {
 						try {
 							new RequestHandler(ss.accept()).start();           // OutOfMemoryError ?
 						} catch (Error argh) {
+							argh.printStackTrace();
 							if (argh instanceof OutOfMemoryError) {
 								HTTPContext.getInstance().getLogger().info("OutOfMemoryError... trying to cleanup.");
-								System.out.println("OutOfMemoryError... trying to cleanup.");
+								System.out.println("- OutOfMemoryError... trying to cleanup.");
+								Runtime runtime = Runtime.getRuntime();
+								long memoryMax = runtime.maxMemory();
+								System.out.printf("- Max Memory: %s bytes (%s Mb, %s Gb)\n",
+										NumberFormat.getInstance().format(memoryMax),
+										NumberFormat.getInstance().format(memoryMax / (1024 * 1024)),
+										NumberFormat.getInstance().format(memoryMax / (1024 * 1024 * 1024)));
+								long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
+								double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
+								System.out.printf("- Used by program: %f %%\n", memoryUsedPercent);
 								System.gc();
+								memoryUsedPercent = (runtime.totalMemory() - runtime.freeMemory() * 100.0) / memoryMax;
+								System.out.printf("- After Cleanup: %f %%\n", memoryUsedPercent);
 								HTTPContext.getInstance().getLogger().info("OutOfMemoryError... after cleanup.");
-								System.out.println("OutOfMemoryError... after cleanup.");
-							} else {
-								argh.printStackTrace();
 							}
 						}
 					} // while (isRunning())
