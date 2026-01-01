@@ -161,15 +161,17 @@ public class NavServer {
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
 							memoryUsedPercent);
 					if (memoryUsedPercent > 50) { // Arbitrary 50%...
-						System.out.println("- Trying garbage collector.");
+						System.out.println("===============================");
+						System.out.println("-- Trying garbage collector...");
 						System.gc();
 						memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 						memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-						System.out.printf("- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
+						System.out.printf("-- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
 								NumberFormat.getInstance().format(memoryUsed),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
 								memoryUsedPercent);
+						System.out.println("===============================");
 					}
 					try {
 						Thread.sleep(pollingInterval);
