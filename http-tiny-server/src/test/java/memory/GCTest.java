@@ -12,7 +12,7 @@ public class GCTest {
                 NumberFormat.getInstance().format(memoryMax / (1024 * 1024 * 1024)));
         long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
         double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-        System.out.printf("The memory used by program (in percent): %f %%\n", memoryUsedPercent);
+        System.out.printf("The memory used by program (in percent): %.02f %%\n", memoryUsedPercent);
         if (memoryUsedPercent > 90.0){
             System.gc();
         }

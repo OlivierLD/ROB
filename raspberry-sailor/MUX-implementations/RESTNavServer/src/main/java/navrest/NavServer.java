@@ -155,7 +155,7 @@ public class NavServer {
 							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));
 					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %f %%\n",
+					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
 							NumberFormat.getInstance().format(memoryUsed),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
@@ -165,7 +165,7 @@ public class NavServer {
 						System.gc();
 						memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 						memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-						System.out.printf("- After GC, used by program: %s bytes (%s Mb, %s Gb), %f %%\n",
+						System.out.printf("- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
 								NumberFormat.getInstance().format(memoryUsed),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),

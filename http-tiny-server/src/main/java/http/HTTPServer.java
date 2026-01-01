@@ -1069,10 +1069,10 @@ public class HTTPServer {
 										NumberFormat.getInstance().format(memoryMax / (1024 * 1024 * 1024)));
 								long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
 								double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-								System.out.printf("- Used by program: %f %%\n", memoryUsedPercent);
+								System.out.printf("- Used by program: %.02f %%\n", memoryUsedPercent);
 								System.gc();
 								memoryUsedPercent = (runtime.totalMemory() - runtime.freeMemory() * 100.0) / memoryMax;
-								System.out.printf("- After Cleanup: %f %%\n", memoryUsedPercent);
+								System.out.printf("- After Cleanup: %.02f %%\n", memoryUsedPercent);
 								HTTPContext.getInstance().getLogger().info("OutOfMemoryError... after cleanup.");
 							}
 						}
