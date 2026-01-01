@@ -439,6 +439,8 @@ while [[ "${GO}" == "true" ]]; do
       #
       # bash -c "exec -a ProcessName Command"
       if [[ "${CMD_VERBOSE}" == "Y" ]]; then
+        echo -e "- CMD_VERBOSE=Y"
+        NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} -Dhttp.verbose=true -Dhttp.verbose.dump=true -Dhttp.client.verbose=true"
         echo -e "Running command: [${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
       fi
       ${NOHUP}./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
