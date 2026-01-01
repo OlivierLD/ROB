@@ -6,6 +6,7 @@ echo -e "Usage is ${0} [-p|--proxy] [-m:propertiesfile|--mux:propertiesfile] [--
 echo -e "     -p or --proxy means with a proxy (proxy definition in the script ${0})"
 echo -e "     -m or --mux points to the properties file to use for the Multiplexer, default is nmea.mux.properties"
 echo -e "     -sf or --sun-flower means with Sun Flower option (extra Request Manager)"
+echo -e "     --http-verbose:true|false"
 echo -e "     --no-date does not put any GPS date or time (replayed or live) in the cache (allows you to use a ZDA generator)"
 echo -e "     --no-rmc-time will NOT set rmc time (only date & time). Useful when replaying data"
 echo -e "----------------------------"
@@ -22,6 +23,7 @@ SUN_FLOWER=false
 PROP_FILE=
 DELTA_T=
 HTTP_PORT=
+HTTP_VERBOSE=false
 #
 for ARG in "$@"; do
   echo -e "Managing prm ${ARG}"
@@ -33,6 +35,9 @@ for ARG in "$@"; do
     NO_DATE=true
   elif [[ "${ARG}" == "--http-port:"* ]]; then
     HTTP_PORT=${ARG#*:}
+  elif [[ "${ARG}" == "--http-verbose:"* ]]; then
+    HTTP_VERBOSE=${ARG#*:}
+    echo -e "HTTP_VERBOSE: ${HTTP_VERBOSE}"
   elif [[ "${ARG}" == "--no-rmc-time" ]]; then
     RMC_TIME_OK=false
   elif [[ "${ARG}" == "-sf" ]] || [[ "${ARG}" == "--sun-flower" ]]; then
@@ -48,7 +53,7 @@ if [[ "${INFRA_VERBOSE}" == "" ]]; then
   INFRA_VERBOSE=true
   echo -e "Setting INFRA_VERBOSE to ${INFRA_VERBOSE}"
 fi
-HTTP_VERBOSE=false
+# HTTP_VERBOSE=true
 TIDE_VERBOSE=false
 BREST_COEFF=true
 ASTRO_VERBOSE=false
@@ -94,8 +99,7 @@ else
   echo -e "Using default DeltaT"
   JAVA_OPTS="${JAVA_OPTS} -DdeltaT=AUTO" # can also use -DdeltaT=68.9677, -DdeltaT=AUTO:2025-10, if needed
 fi
-# JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
-#
+JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=true"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose.dump=true"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=true"
