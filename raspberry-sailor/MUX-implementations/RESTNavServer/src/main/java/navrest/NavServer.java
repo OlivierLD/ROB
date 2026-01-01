@@ -9,6 +9,7 @@ import nmea.mux.GenericNMEAMultiplexer;
 import tiderest.TideRequestManager;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -134,7 +135,61 @@ public class NavServer {
 		return newHttpServer;
 	}
 
+	private static class MemoryGauge extends Thread {
+		private long pollingInterval;
+		public MemoryGauge(long pollingInterval) {
+			super();
+			this.pollingInterval = pollingInterval;
+		}
+		@Override
+		public void run() {
+			boolean keepLooping = true;
+			while (keepLooping) {
+				try {
+					Runtime runtime = Runtime.getRuntime();
+					long memoryMax = runtime.maxMemory();
+					System.out.printf("At %s:\n", new Date());
+					System.out.printf("- Max Memory: %s bytes (%s Mb, %s Gb)\n",
+							NumberFormat.getInstance().format(memoryMax),
+							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L)),
+							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));
+					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
+					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
+					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %f %%\n",
+							NumberFormat.getInstance().format(memoryUsed),
+							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
+							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
+							memoryUsedPercent);
+					if (memoryUsedPercent > 50) { // Arbitrary 50%...
+						System.out.println("- Trying garbage collector.");
+						System.gc();
+						memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
+						memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
+						System.out.printf("- After GC, used by program: %s bytes (%s Mb, %s Gb), %f %%\n",
+								NumberFormat.getInstance().format(memoryUsed),
+								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
+								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
+								memoryUsedPercent);
+					}
+					try {
+						Thread.sleep(pollingInterval);
+					} catch (InterruptedException ie) {
+						keepLooping = false;
+						ie.printStackTrace();
+					}
+				} catch (Error error) {
+					error.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public static void main(String... args) {
 		new NavServer();
+		// Display memory usage after startup,
+		if (true) {
+			MemoryGauge memoryGauge = new MemoryGauge(2 + 60 * 1_000); // 2 minutes
+			memoryGauge.start();
+		}
 	}
 }

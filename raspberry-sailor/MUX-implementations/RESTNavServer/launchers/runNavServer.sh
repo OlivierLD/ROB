@@ -99,10 +99,10 @@ else
   echo -e "Using default DeltaT"
   JAVA_OPTS="${JAVA_OPTS} -DdeltaT=AUTO" # can also use -DdeltaT=68.9677, -DdeltaT=AUTO:2025-10, if needed
 fi
-JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
+#JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=true"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose.dump=true"
-#JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=true"
+JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=$HTTP_VERBOSE"
 #
 JAVA_OPTS="${JAVA_OPTS} -Dmux.infra.verbose=${INFRA_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dtide.verbose=${TIDE_VERBOSE}"
