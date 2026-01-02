@@ -145,6 +145,7 @@ public class NavServer {
 		@Override
 		public void run() {
 			boolean keepLooping = true;
+			double previousValue = -1d;
 			while (keepLooping) {
 				try {
 					Runtime runtime = Runtime.getRuntime();
@@ -156,28 +157,51 @@ public class NavServer {
 							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));
 					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s\n",
+					String orientationMessage = "";
+					if (previousValue != -1) {
+						if (previousValue < memoryUsedPercent) {
+							orientationMessage = "- Going up.";
+						} else if (previousValue > memoryUsedPercent) {
+							orientationMessage = "- Going down.";
+						} else {
+							orientationMessage = "- stable.";
+						}
+					}
+					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s %s\n",
 							NumberFormat.getInstance().format(memoryUsed),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
 							(memoryUsedPercent > 50 ? EscapeCodes.RED : EscapeCodes.GREEN),
 							memoryUsedPercent,
-							EscapeCodes.NC);
+							EscapeCodes.NC,
+							orientationMessage);
 					if (memoryUsedPercent > 50) { // Arbitrary 50%...
 						System.out.printf("%s===============================%s\n", EscapeCodes.RED, EscapeCodes.NC);
 						System.out.printf("%s-- Trying garbage collector...%s\n", EscapeCodes.RED, EscapeCodes.NC);
 						System.gc();
 						memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 						memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-						System.out.printf("%s-- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %% %s\n",
+						orientationMessage = "";
+						if (previousValue != -1) {
+							if (previousValue < memoryUsedPercent) {
+								orientationMessage = "- Going up.";
+							} else if (previousValue > memoryUsedPercent) {
+								orientationMessage = "- Going down.";
+							} else {
+								orientationMessage = "- stable.";
+							}
+						}
+						System.out.printf("%s-- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %% %s %s\n",
 								EscapeCodes.GREEN,
 								NumberFormat.getInstance().format(memoryUsed),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
 								memoryUsedPercent,
-								EscapeCodes.NC);
+								EscapeCodes.NC,
+								orientationMessage);
 						System.out.printf("%s===============================%s\n", EscapeCodes.RED, EscapeCodes.NC);
 					}
+					previousValue = memoryUsedPercent;
 					try {
 						Thread.sleep(pollingInterval);
 					} catch (InterruptedException ie) {
@@ -194,7 +218,7 @@ public class NavServer {
 	public static void main(String... args) {
 		new NavServer();
 		// Display memory usage after startup,
-		if (true) {
+		if ("true".equals(System.getProperty("memory.gauge", "true"))) {
 			MemoryGauge memoryGauge = new MemoryGauge(2 + 60 * 1_000); // 2 minutes
 			memoryGauge.start();
 		}
