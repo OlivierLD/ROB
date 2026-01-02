@@ -50,6 +50,7 @@ public class PullTxManager {
 
 		if (!urlIn.startsWith("file:")) {
 			// Create output directory if they don't exist
+			locationOut = locationOut.replace("/", File.separator); // For Windows... WiP.
 			String outputDir = locationOut.substring(0, locationOut.lastIndexOf(File.separator));
 			File dir = new File(outputDir);
 			if (!dir.exists()) {
