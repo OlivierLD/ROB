@@ -7,6 +7,7 @@ import imageprocessing.ImgRequestManager;
 import nmea.api.Multiplexer;
 import nmea.mux.GenericNMEAMultiplexer;
 import tiderest.TideRequestManager;
+import utils.EscapeCodes;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -155,23 +156,27 @@ public class NavServer {
 							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));
 					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
+					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s\n",
 							NumberFormat.getInstance().format(memoryUsed),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
-							memoryUsedPercent);
+							(memoryUsedPercent > 50 ? EscapeCodes.RED : EscapeCodes.GREEN),
+							memoryUsedPercent,
+							EscapeCodes.NC);
 					if (memoryUsedPercent > 50) { // Arbitrary 50%...
-						System.out.println("===============================");
-						System.out.println("-- Trying garbage collector...");
+						System.out.printf("%s===============================%s\n", EscapeCodes.RED, EscapeCodes.NC);
+						System.out.printf("%s-- Trying garbage collector...%s\n", EscapeCodes.RED, EscapeCodes.NC);
 						System.gc();
 						memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 						memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
-						System.out.printf("-- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %%\n",
+						System.out.printf("%s-- After GC, used by program: %s bytes (%s Mb, %s Gb), %.02f %% %s\n",
+								EscapeCodes.GREEN,
 								NumberFormat.getInstance().format(memoryUsed),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 								NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
-								memoryUsedPercent);
-						System.out.println("===============================");
+								memoryUsedPercent,
+								EscapeCodes.NC);
+						System.out.printf("%s===============================%s\n", EscapeCodes.RED, EscapeCodes.NC);
 					}
 					try {
 						Thread.sleep(pollingInterval);
