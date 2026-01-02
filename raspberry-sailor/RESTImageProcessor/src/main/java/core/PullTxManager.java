@@ -57,6 +57,7 @@ public class PullTxManager {
 				boolean ok = dir.mkdirs();
 				System.out.println(String.format("Directory(ies) %s created:", outputDir) + ok);
 			}
+			finalLocation = finalLocation.replace("/", File.separator); // For Windows... WiP.
 			outputDir = finalLocation.substring(0, finalLocation.lastIndexOf(File.separator));
 			dir = new File(outputDir);
 			if (!dir.exists()) {
