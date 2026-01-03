@@ -50,14 +50,18 @@ public class PullTxManager {
 
 		if (!urlIn.startsWith("file:")) {
 			// Create output directory if they don't exist
-			locationOut = locationOut.replace("/", File.separator); // For Windows... WiP.
+			if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {
+				locationOut = locationOut.replace("/", File.separator); // For Windows... WiP.
+			}
 			String outputDir = locationOut.substring(0, locationOut.lastIndexOf(File.separator));
 			File dir = new File(outputDir);
 			if (!dir.exists()) {
 				boolean ok = dir.mkdirs();
 				System.out.println(String.format("Directory(ies) %s created:", outputDir) + ok);
 			}
-			finalLocation = finalLocation.replace("/", File.separator); // For Windows... WiP.
+			if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {
+				finalLocation = finalLocation.replace("/", File.separator); // For Windows... WiP.
+			}
 			outputDir = finalLocation.substring(0, finalLocation.lastIndexOf(File.separator));
 			dir = new File(outputDir);
 			if (!dir.exists()) {
