@@ -1832,6 +1832,11 @@
             evt.currentTarget.className += " active";
         }
 
+        function zoomWebComps(zoom) {
+            let container = document.getElementById('grib-web-comps');
+            container.style.zoom = `${zoom}%`;
+        }
+
         function expandCollapseContent(origin) {
             // console.log(origin);
             let theZone = document.getElementById('grib-and-faxes');
@@ -1985,7 +1990,13 @@
                 <div id="map-container" class="map-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
                     <canvas id="mapCanvas" width="1400" height="900"></canvas>
                 </div>
-
+                <div id="wc-scale-slider-div" style="grid-area: top2;">
+                    <input type="range" id="grib-slider" value="100" min="0" max="100" style="width: 80%; margin-left: 5px; margin-top: 10px;"
+                            title="Components Scale"
+                            oninput="/*setPadding(this);*/ compScale01.value = (this.value) + '%'; zoomWebComps(this.value);"/>
+                    <!--br/-->
+                    &nbsp;&nbsp;Components scale: <output name="compScale" id="compScale01" style="color: cyan;"> 100% </output>
+                </div>
                 <div id="grib-web-comps" style="display: none;
                                                 overflow: auto;
                                                 width: 100%;
