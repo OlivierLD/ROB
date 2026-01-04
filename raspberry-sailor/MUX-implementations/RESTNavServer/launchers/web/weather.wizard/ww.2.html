@@ -18,6 +18,13 @@
     <link rel="stylesheet" href="../css/composites.css" type="text/css"/>
 
     <style>
+        :root {
+            --slide-width: 500px;
+            --slide-height: 400px;
+            --expanded-nav-width: 450px;
+            --slider-scale: 0.5;
+        }
+
         .map-style {
             display: block;
             height: 400px; /* Overridden onload */
@@ -2324,7 +2331,7 @@
                                 grid-template-columns: auto auto auto auto auto auto;
                                 grid-template-areas: 'top top top top top top' 'top2 top2 top2 top2 top2 top2' 'middle-01 middle-02 middle-03 middle-04 middle-05 middle-06' 'bottom bottom bottom bottom bottom bottom';">
                         <span style="grid-area: top; padding-left: 5px;"><span id="in-out" style="margin: 5px; padding: 5px; border: 2px solid orange; border-radius: 14px;" title="Expand/collapse" onclick="showHideDiv(this, 'grib-web-comps');">-</span>GRIB Data, at the mouse, on the chart <span id="mouse-pos" style="font-family:'Courier New', Courier, monospace; font-weight: bold;"></span></span>
-                        <!-- GRIB Slider, tu be updated like 'grib-dates' -->
+                        <!-- GRIB Slider, to be updated like 'grib-dates' -->
                         <div id="grib-slider-div" style="grid-area: top2;">
                             <input type="range" id="grib-slider" value="0" min="0" max="200" style="width: 98%; margin-left: 5px; margin-top: 10px;"
                                    title="GRIB Date"
@@ -2553,7 +2560,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <!--input type="checkbox" onchange="scrollGribs(this);">Auto-scroll through dates -->
-                                        <div class="switch-container" style="margin-left: 30px;" title="Make globe transparent">
+                                        <div class="switch-container" style="margin-left: 30px;" title="Scroll through GRIB dates">
                                             <label class="switch switch-element">
                                             <input id="transp-slider" type="checkbox" onchange="scrollGribs(this);">
                                             <span class="slider round"></span>
