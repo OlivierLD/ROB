@@ -34,7 +34,7 @@
         }
 
         .control-style {
-            width: 100%;
+            width: 40%;
             min-width: 350px;
             height: 100%;
             min-height: 400px;
@@ -56,6 +56,7 @@
         .complist-style {
             padding: 5px;
             background: #fff;
+            color: black;
             border-radius: 5px;
             height: 100px;
             overflow-y: auto;
@@ -2336,9 +2337,9 @@
                     <button onclick="changeCanvasSize(0.9);">-</button>
                     <button onclick="changeCanvasSize(1.1);">+</button>
                     <hr/>
-                    <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; overflow: scroll;">
+                    <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; padding: 5px; overflow: scroll;">
                         <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">- Collapse</span>
-                        <div id="grib-widgets" class="table-style" style="display: none; background: rgba(0, 255, 0, 0.25);">
+                        <div id="grib-widgets" class="table-style" style="display: none; background: rgba(77, 159, 160, 0.25);">
                             <table>
                                 <tr>
                                     <th>GRIB Date</th>
@@ -2357,7 +2358,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <div id="dyn-faxes" class="table-style" style="background: rgba(0, 255, 0, 0.25);">
+                        <div id="dyn-faxes" class="table-style" style="background: rgba(77, 159, 160, 0.25);">
                             <!--span>Show faxes checkbox (TODO)</span-->
                             <table id="fax-table" class="bordered">
                                 <tr>
