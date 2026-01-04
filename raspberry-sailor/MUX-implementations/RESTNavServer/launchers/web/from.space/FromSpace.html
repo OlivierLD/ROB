@@ -70,8 +70,8 @@ let marqueeScrollUp = (marqueeId) => {
             // defaultMarqueeTextArray.forEach(item => {
             //     toDisplay.push(item);
             // });
-            // Other values    
-            if (globalAstroData !== undefined) {        
+            // Other values
+            if (globalAstroData !== undefined) {
                 toDisplay.push("Sun GHA: " + globalAstroData.sun.GHA.fmt);
                 toDisplay.push("Sun D: " + globalAstroData.sun.DEC.fmt);
                 toDisplay.push("Moon GHA: " + globalAstroData.moon.GHA.fmt);
@@ -161,7 +161,7 @@ let transformDataForWorldWebComp = json => {
     let moon ={
         decl: json.moon.DEC.raw,
         gha: json.moon.GHA.raw
-    }; 
+    };
     newObj.moon = moon;
 
     newObj.moonPhase = json.moon.phase.phaseAngle;
@@ -208,7 +208,7 @@ let transformDataForWorldWebComp = json => {
     if (json.constellations !== undefined) {
         newObj.constellations = json.constellations;
     }
-    
+
     return newObj;
 };
 
@@ -223,7 +223,7 @@ let displayWorldData = (astroData) => {
         worldMap.setAstronomicalData(astroData);
         worldMap.repaint();
     }
-};        
+};
 
 let userSunPos = false; // user by default
 let simulatePressureAndHeading = false;
@@ -328,7 +328,7 @@ const onPosSuccess = (pos) => {
     //
     console.log('lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude); // + ' hdg= ' + pos.coords.heading + ' spd= ' + pos.coords.speed + ' m/s');
     //  console.log("Pos data:" + pos.coords);
-    // Feed the fields: 
+    // Feed the fields:
     // pos-lat-sign-01, pos-lat-deg-01, pos-lat-min-01
     // pos-lng-sign-01, pos-lng-deg-01, pos-lng-min-01
     let latSign = (pos.coords.latitude < 0) ? 'S' : 'N';
@@ -415,7 +415,7 @@ let expandCollapseHelpData = () => {
         document.getElementById('help-char').innerHTML = '&#9658;';
     } else {
         // document.getElementById('user-date-widgets').style.display = 'block';
-        document.getElementById('help-char').innerHTML = '&#9660;';    
+        document.getElementById('help-char').innerHTML = '&#9660;';
     }
     useHelpExpanded = !useHelpExpanded;
 };
@@ -450,7 +450,7 @@ let updatePosition = () => {
 };
 
 let updateFromUserPos = () => {
-    document.getElementById("pos-lat-sign-01").value = userPos.latitude < 0 ? "S" : "N"; 
+    document.getElementById("pos-lat-sign-01").value = userPos.latitude < 0 ? "S" : "N";
     document.getElementById("pos-lng-sign-01").value = userPos.longitude < 0 ? "W" : "E";
     let absLat = Math.abs(userPos.latitude);
     let absLong = Math.abs(userPos.longitude);
@@ -985,17 +985,18 @@ let toggleForeground = () => {
 		input:checked + .switch-left + .switch-right::before {
 			background-color: #ccc;
 		}
+        /* Switch end */
 
         .bookmark {
-            font-family: 'Courier New', Courier, monospace; 
-            background-color: rgba(240, 255, 240, 0.75); 
-            color:black; 
-            margin-left:20px; 
-            margin-right: 20px; 
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(240, 255, 240, 0.75);
+            color:black;
+            margin-left:20px;
+            margin-right: 20px;
             margin-bottom: 4px;
             margin-top: 8px;
-            padding-left: 5px; 
-            padding-right: 5px; 
+            padding-left: 5px;
+            padding-right: 5px;
             border-radius: 8px;
         }
 
@@ -1008,7 +1009,7 @@ let toggleForeground = () => {
             display: grid;
             grid-template-columns: 800px 250px 280px;
             grid-template-rows: auto;
-            grid-template-areas: 
+            grid-template-areas:
                 "wm jumbos prmsl"
                 "utc utc utc"
                 "solar solar solar";
@@ -1158,7 +1159,7 @@ let toggleForeground = () => {
             <!-- Place holder for message -->
         </div>
     </dialog>
-    
+
     <!-- help-dialog -->
     <dialog id="help-dialog" class="shadow-menu" style="z-index: 10;">
         <div class="dialog-header">
@@ -1177,7 +1178,7 @@ let toggleForeground = () => {
                 Use the Show/Hide Computed Data button to display the computed data in the foreground.
             </p>
             <p>
-                The Marquee panel (available from the hamburger &#8801; menu) will show the same data, formatted, 
+                The Marquee panel (available from the hamburger &#8801; menu) will show the same data, formatted,
                 in a dialog, on top of others.
             </p>
             <p>
@@ -1227,7 +1228,7 @@ let toggleForeground = () => {
             <!--input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);"><small>Auto Refresh</small-->
             Real Time
             <div class="tooltip">
-                <label class="rocker rocker-small" 
+                <label class="rocker rocker-small"
                     style="margin-bottom: -15px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
                     <input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);">
                     <span class="switch-left">On</span>
@@ -1356,8 +1357,8 @@ let toggleForeground = () => {
                 </div>
             </div>
         </div>
-        
-    </dialog>    
+
+    </dialog>
 
     <!-- Marquee values -->
     <dialog id="marquee-dialog" class="shadow-menu" style="z-index: 10;">
@@ -1375,24 +1376,24 @@ let toggleForeground = () => {
                         nb-lines="68"
                         title="Computed Data"
                         display-data='{ "text-array": ["You must have", "triggered a computation", "to see something", "in here..."], "x": 4, "y": 12 }'/>
-        </div>    
+        </div>
     </dialog>
 
     <!-- Sun Path - Draggable dialog (drag it from the header)
-        See in window.onload the 
+        See in window.onload the
         ondragover, ondrop functions.
     -->
-    <dialog id="sun-path-dialog" 
-            class="shadow-menu" 
+    <dialog id="sun-path-dialog"
+            class="shadow-menu"
             style="z-index: 10; width: 470px;" >
             <!--
             draggable="true"
-            ondragstart="dragStartSP(event)" 
+            ondragstart="dragStartSP(event)"
             ondrag="draggingSP(event)"> -->
         <!-- Draggable header -->
         <div class="dialog-header"
              draggable="true"
-             ondragstart="dragStartSP(event)" 
+             ondragstart="dragStartSP(event)"
              ondrag="draggingSP(event)">
             <span>Sun Path</span> <!-- This is tweaked by the window.onload -->
             <span id="sun-path-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
@@ -1408,22 +1409,22 @@ let toggleForeground = () => {
                                       width="450"
                                       height="450"
                                       tilt="-10"></sun-path>
-                        </div>    
+                        </div>
                     </td>
                     <td>
                         <input type="range"
-                               style="-webkit-appearance: slider-vertical; width: 8px; height: 440px; margin-left: 0;" 
+                               style="-webkit-appearance: slider-vertical; width: 8px; height: 440px; margin-left: 0;"
                                min="-90"
-                               max="90" 
-                               value="-10" 
+                               max="90"
+                               value="-10"
                                onchange="setNewTilt(this, 'sun-path-01');">
                      </td>
                 </tr>
                 <tr>
                     <td>
-                        <input type="range" style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;" 
-                               min="-90" 
-                               max="90" 
+                        <input type="range" style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;"
+                               min="-90"
+                               max="90"
                                value="0"
                                onchange="setNewZOffset(this, 'sun-path-01');">
                     </td>
@@ -1434,16 +1435,16 @@ let toggleForeground = () => {
     </dialog>
 
     <dialog id="sky-map-dialog"
-            class="shadow-menu" 
+            class="shadow-menu"
             style="z-index: 10; width: 820px;" >
             <!--
             draggable="true"
-            ondragstart="dragStartSP(event)" 
+            ondragstart="dragStartSP(event)"
             ondrag="draggingSP(event)"> -->
         <!-- Draggable header -->
         <div class="dialog-header"
              draggable="true"
-             ondragstart="dragStartSM(event)" 
+             ondragstart="dragStartSM(event)"
              ondrag="draggingSM(event)">
             <span>Sky Map(s)</span> <!-- This is tweaked by the window.onload -->
             <span id="sky-map-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
@@ -1453,14 +1454,14 @@ let toggleForeground = () => {
             <table style="width: 98%;">
                 <tr>
                     <td>
-                        <div class="black-frame centered"> 
+                        <div class="black-frame centered">
                             <!-- Sky Map goes here -->
                             <sky-map id="sky-map-01"
                                     class="skymap-display-01"
                                     width="800"
                                     height="500"
                                     latitude="35"/>
-                        </div>    
+                        </div>
                         Type:
                         <select onchange="setMapType('sky-map-01', this);">
                             <option value="STARFINDER" selected>Star Finder</option>
@@ -1492,7 +1493,7 @@ let toggleForeground = () => {
     ▼ = &#9660;
     ▲ = &#9650;
   -->
-<div id="side-nav" class="sidenav" onmouseleave="closeNav()"> 
+<div id="side-nav" class="sidenav" onmouseleave="closeNav()">
     <a href="javascript:void(0)" id="close-nav-button" class="closebtn" onclick="closeNav()">&times;</a>
 
     <a href="javascript:void(0)" class="active-link list-link" style="margin-top: 20px; margin-right: 20px; text-align: right;" onclick="showHelpDialog();">Help!</a>
@@ -1502,7 +1503,7 @@ let toggleForeground = () => {
     <a href="javascript:void(0)" class="active-link list-link" onclick="showMarqueeDialog();">Marquee Panel</a>
     <hr style="color: rgb(192,192,192, 0.5); width: 90%;"/>
     <span>
-        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSunPathDialog();" title="Can take time...&#13;Be patient.">Sun Path</a> 
+        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSunPathDialog();" title="Can take time...&#13;Be patient.">Sun Path</a>
         <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSkyMapDialog();" title="Can take time...&#13;Be patient.">Sky Map</a>
     </span>
     <hr style="color: rgb(192,192,192, 0.5); width: 90%;"/>
@@ -1517,7 +1518,7 @@ let toggleForeground = () => {
     <div><h1 style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> As seen from Space...</h1></div>
     <div style="text-align: right;"><small>Last code update December 4, 2025, 07:00 CET</small></div>
 </div>
-<div class="background bg-container" 
+<div class="background bg-container"
      style="margin: 10px; margin-top: 50px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
     <!--
         WORLD MAP BG
@@ -1553,7 +1554,7 @@ let toggleForeground = () => {
                        label="BSP"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- COG -->               
+        <!-- COG -->
         <jumbo-display id="jumbo-03"
                        title="Course Over Ground"
                        class="jumbo-01 digital-font-red zero-decimal"
@@ -1561,7 +1562,7 @@ let toggleForeground = () => {
                        label="COG"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- SOG -->               
+        <!-- SOG -->
         <jumbo-display id="jumbo-04"
                        title="Speed Over Ground"
                        class="jumbo-01 digital-font-cyan one-decimal"
@@ -1569,7 +1570,7 @@ let toggleForeground = () => {
                        label="SOG"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- MOON PHASE and TILT -->                
+        <!-- MOON PHASE and TILT -->
         <moon-phase-2 id="moon-phase-01"
                       width="180"
                       height="180"
@@ -1591,7 +1592,7 @@ let toggleForeground = () => {
                               justified="RIGHT"
                               nb-dec="1"
                               value="----.-"></scroll-digit-display>
-        <div style="margin-top: 50px; margin-top: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">Sun & Moon</div>                      
+        <div style="margin-top: 50px; margin-top: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">Sun & Moon</div>
         <!--div id="sru-elev-z" style="margin-top: 10px; text-align: left; color: rgba(0, 255, 255, 0.5);"-->
         <div id="sru-elev-z" style="margin-top: 0px; display: grid; grid-template-columns: auto auto;">
             <!-- Sun Z -->
@@ -1645,7 +1646,7 @@ let toggleForeground = () => {
                                 justified="LEFT"
                                 title="UTC Time"
                                 value="00:00:00 UTC"></split-flap-display>
-        </div>    
+        </div>
     </div>
 
     <div class="centered" style="grid-area: solar">
@@ -1667,7 +1668,7 @@ let toggleForeground = () => {
                                 justified="LEFT"
                                 title="Solar Time"
                                 value="00:00:00"></split-flap-display>
-        </div>    
+        </div>
     </div>
 
 </div>
@@ -1690,7 +1691,7 @@ let toggleForeground = () => {
                             <br/>
                             Then you can show or hide the computed data... And you can use the "Help" in the sliding menu.
                         </div>
-                    </div>    
+                    </div>
                 </td>
             </td>
         </tr>
@@ -1738,7 +1739,7 @@ let toggleForeground = () => {
                             min="0"
                             max="180"
                             step="1"
-                            value="122"/> 
+                            value="122"/>
                         <input type="number"
                             id="pos-lng-min-01"
                             placeholder="Minutes"
@@ -1747,16 +1748,16 @@ let toggleForeground = () => {
                             min="0"
                             max="59.99"
                             step="0.01"
-                            value="30.42"/> 
+                            value="30.42"/>
                         &nbsp;&nbsp;
                         <button id="update-position"
-                                class="tooltip" 
+                                class="tooltip"
                                 onclick="updatePosition();"
                                 style="margin-top: 3px;">Set Position
                             <span class="tooltiptext tooltiptext-right">Set position value on the map</span>
                         </button>
                         <br/-->
-                        <!-- Enable Geolocation APIs -->        
+                        <!-- Enable Geolocation APIs -->
                         <!--div class="switch-container" style="margin-left: 30px;" title="Enable GeoLocation APIs">
                             <label class="switch switch-element">
                               <input id="geoloc-slider" type="checkbox" onchange="setGeolocation(this);">
@@ -1765,12 +1766,12 @@ let toggleForeground = () => {
                             <span class="switch-element">Enable GeoLocation</span>
                         </div>
                         <div id="geo-mess" style="display: none;"><small style="font-style: italic; color: yellow;">(hit "Set Position" when GeoLocation is obtained)</small></div>
-    
+
                         <div id="url-placeHolder" style="display: none;">
                             <div id="alert-zone" class="smooth" style="padding: 2px; border: 1px solid red; border-radius: 5px; padding: 5px;">
                                 <div id="alert-mess" style="color: green; background-color: orange; border-radius: 5px; padding: 5px;"></div>
-                            </div>    
-                    
+                            </div>
+
                             <div style="display: grid; grid-template-columns: auto auto auto; align-items: center; border: 1px solid rgba(128, 128, 128, 0.75); border-radius: 5px; margin: 5px; padding: 3px;">
                                 <small style="text-align: right;">Bookmark this URL:</small>
                                 <div id="url-to-bookmark" class="bookmark" style="white-space: nowrap; overflow-x: scroll; height: fit-content;"></div>
@@ -1843,8 +1844,8 @@ let toggleForeground = () => {
                                 <span class="switch-element"><small>Console verbose</small></span>
                             </div>
                         </div>
-                    </div>    
-                </div>    
+                    </div>
+                </div>
             </td>
         </tr>
     </table>
@@ -2030,7 +2031,7 @@ let toggleForeground = () => {
                 let phaseDivImage = document.getElementById('moon-phase-div');
                 phaseDivImage.innerHTML =
                     `<img src='${phaseImageName}' alt='${testResult.moon.phase.phaseAngle}' title='Phase ${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}&#13;Illum ${testResult.moon.illum.toFixed(0) + '%'}'><br/><small>Phase&nbsp;${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}<br/>Illum&nbsp;${testResult.moon.illum.toFixed(0) + '%'}</small>`;
-                // phaseDivImage.title = `Phase ${testResult.moon.phase.phaseAngle.toFixed(0)}\272`;    
+                // phaseDivImage.title = `Phase ${testResult.moon.phase.phaseAngle.toFixed(0)}\272`;
             }
         } catch (oops) {
             console.log(oops);
@@ -2071,20 +2072,20 @@ let toggleForeground = () => {
         let bigUTCJumbo = document.getElementById('jumbo-plus-01');
         bigUTCJumbo.value = `${lpad(solarDate.day.toFixed(0), '0', 2)} ${MONTHS[solarDate.month - 1]} ${solarDate.year.toFixed(0)}` +
                             `|${lpad(solarDate.hour.toFixed(0), '0', 2)}:${lpad(solarDate.minute.toFixed(0), '0', 2)}:${lpad(solarDate.second.toFixed(0), '0', 2)}`;
-        bigUTCJumbo.label = 'Solar, from ' + // 'Solar Date & Time from ' + 
+        bigUTCJumbo.label = 'Solar, from ' + // 'Solar Date & Time from ' +
             decToSex(userPos.latitude, "NS") + " / " +
             decToSex(userPos.longitude, "EW");
         bigUTCJumbo.repaint();
 
         // Moon-tilt
         // userPos.latitude, userPos.longitude
-        let moonTilt = getMoonTilt({lat: userPos.latitude, lng: userPos.longitude}, 
-							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw}, 
+        let moonTilt = getMoonTilt({lat: userPos.latitude, lng: userPos.longitude},
+							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw},
 							{gha: testResult.moon.GHA.raw, dec: testResult.moon.DEC.raw});
         // console.log(`Moon Tilt: ${moonTilt}`);
         let moonPhase = document.getElementById('moon-phase-01');
         moonPhase.phase = testResult.moon.phase.phaseAngle;
-        moonPhase.tilt = moonTilt;   
+        moonPhase.tilt = moonTilt;
         let illum = `${testResult.moon.illum.toFixed(0)} %`;
         moonPhase.title = `Tilt:${moonTilt.toFixed(1)}°\nIllum:${illum}`; // Update tooltip
 		// Update small label
@@ -2179,7 +2180,7 @@ let toggleForeground = () => {
     // Display real COG
     let hdg = 0;
     let prmsl = 1013.5;
-    
+
     // Random Simulation
     let sensorUpdater = () => {
         // Display real COG
@@ -2196,7 +2197,7 @@ let toggleForeground = () => {
             // _hdg %= 360;
             while (_hdg < 0) {
                 _hdg += 360;
-            } 
+            }
             while (_hdg >= 360) {
                 _hdg -= 360;
             }
@@ -2338,7 +2339,7 @@ let toggleForeground = () => {
                 let radius = (sp.canvas.width / 2) * .8;
 
                 // Draw forward / backwards half circle...
-                if (globalSRUStars.length > 0) { 
+                if (globalSRUStars.length > 0) {
                     context.save()
                     context.strokeStyle = 'orange'; // sp.sunPathColorConfig.gridColor;
                     context.beginPath();
@@ -2364,7 +2365,7 @@ let toggleForeground = () => {
                             z += 360;
                         }
                         // Do not display stars behind...
-                        if (isWithin90degrees(z, star.z)) { // (star.z > (z - 90) && star.z < (z + 90)) { 
+                        if (isWithin90degrees(z, star.z)) { // (star.z > (z - 90) && star.z < (z + 90)) {
                             sp.plotCelestialBody(context, center, radius, 'white', 'white', star.h, star.z, star.name, false);
                         }
                     }
@@ -2501,7 +2502,7 @@ let toggleForeground = () => {
         // });
         // events.subscribe(ROUTES, val => {
         //     // TODO Manage this
-        //     // console.log(`Routes subscription: ${JSON.stringify(val)}`); 
+        //     // console.log(`Routes subscription: ${JSON.stringify(val)}`);
         // });
         // events.subscribe(AIS, val => {  // Possibly contains threats
         //     aisTargets = [];
@@ -2537,12 +2538,12 @@ let toggleForeground = () => {
         //             // console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
 
         //             aisTargets.push({
-        //                 mmsi: keys[i], 
-        //                 vesselName: vesselName, 
-        //                 lat: recContent.latitude, 
-        //                 lng: recContent.longitude, 
-        //                 cog: recContent.cog, 
-        //                 sog: recContent.sog, 
+        //                 mmsi: keys[i],
+        //                 vesselName: vesselName,
+        //                 lat: recContent.latitude,
+        //                 lng: recContent.longitude,
+        //                 cog: recContent.cog,
+        //                 sog: recContent.sog,
         //                 radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
         //                 threat: rec18.collisionThreat !== null,
         //                 bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
@@ -2582,7 +2583,7 @@ let toggleForeground = () => {
         events.subscribe(TRUE_HDG, val => {
             // document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
             hdg = val; // Managed in repaint
-            // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`); 
+            // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`);
         });
         events.subscribe(BSP, val => {
             // document.getElementById('bsp').innerHTML = `${val} kn`;
