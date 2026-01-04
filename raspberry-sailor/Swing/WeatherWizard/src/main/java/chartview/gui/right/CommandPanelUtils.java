@@ -1349,12 +1349,12 @@ public class CommandPanelUtils {
                             if (patternElements.length == 4) { // Old version
                                 dir = compositeDir + patternElements[0].trim(); // "/yyyy/MM-MMM";
                                 prefix = patternElements[1].trim();             // "Auto_";
-                                pattern = patternElements[2].trim();             // "yyyy_MM_dd_HH_mm_ss_z";
+                                pattern = patternElements[2].trim();            // "yyyy_MM_dd_HH_mm_ss_z";
                                 ext = patternElements[3].trim();                // "waz";
                             } else if (patternElements.length == 5) { // New version
                                 dir = compositeDir + patternElements[0].trim(); // "/yyyy/MM-MMM";
                                 prefix = patternElements[1].trim();             // "Auto_";
-                                pattern = patternElements[2].trim();             // "yyyy_MM_dd_HH_mm_ss_z";
+                                pattern = patternElements[2].trim();            // "yyyy_MM_dd_HH_mm_ss_z";
                                 suffix = patternElements[3].trim();             // "_Pacific";
                                 ext = patternElements[4].trim();                // "waz";
                             }

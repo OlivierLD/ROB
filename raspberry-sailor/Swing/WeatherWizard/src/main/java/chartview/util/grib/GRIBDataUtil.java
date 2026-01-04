@@ -558,7 +558,7 @@ public class GRIBDataUtil {
                             }
                             value = prevValue; // Bam !
                         } else {
-                            System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s\n",
+                            System.out.printf("-- 1 - %s - Suspicious 0 value on coordinates [h=%d][w=%d], on %s (try -Dfix-wacky-values=true)\n",
                                     DATA_NAME[option], h, w, gribData.getDate());
                         }
                     }
