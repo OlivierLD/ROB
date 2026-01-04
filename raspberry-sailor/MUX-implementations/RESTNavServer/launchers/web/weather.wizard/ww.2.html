@@ -528,6 +528,14 @@
             messZone.innerText = '';
         }
 
+        let scrollDownMessZone = () => {
+            let messZone = document.getElementById("message-zone");
+            if (messZone) {
+                // Scroll at the bottom
+                messZone.scrollTop = messZone.scrollHeight;
+            }
+        }
+
         let mouseClickCallback = (obj) => {
             let lat = obj.lat;
             let lng = obj.lng;
@@ -2486,6 +2494,7 @@
     <!-- Messages -->
     <div id="message-zone" class="mess-zone" style="margin: 10px;"></div>
     <button onclick="clearMessZone();" style="margin: 5px;">Clear</button>
+    <button onclick="scrollDownMessZone();" style="margin: 5px;">Scroll Down</button>
 </div>
 
 <hr/>
