@@ -437,6 +437,12 @@
 			-moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
 			box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
 		}
+
+        .round-button {
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
 		/* NOW STYLE THE BUTTON'S HOVER STATE */
 		/*	button#rCoffee:hover, button#rCoffee:focus { */
 		button:hover, button:focus {
@@ -446,6 +452,9 @@
         button:disabled {
             background: silver;
             color: gray;
+        }
+        button:active {
+            color: cyan;
         }
         /* ==== Radio buttons ===== */
         .rad-label {
@@ -2539,8 +2548,8 @@
                     </div>
                     <hr/>
                     Zoom for the whole thing:
-                    <button onclick="changeCanvasSize(0.9);">-</button>
-                    <button onclick="changeCanvasSize(1.1);">+</button>
+                    <button onclick="changeCanvasSize(0.9);" class="round-button">-</button>
+                    <button onclick="changeCanvasSize(1.1);" class="round-button">+</button>
                     <hr/>
                     <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; padding: 5px; overflow: scroll;">
                         <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">- Collapse</span>
