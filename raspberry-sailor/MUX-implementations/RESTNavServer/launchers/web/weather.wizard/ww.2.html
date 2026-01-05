@@ -595,6 +595,17 @@
         .switch-element {
             place-self: flex-start;
         }
+
+        select {
+            /* width: 10rem; */
+            background-color: #c3f0c6;
+            padding: 5px;
+            border: #b2eeac 2px solid;
+            border-radius: 5px;
+        }
+        select > option {
+            background-color: #b8e1ba;
+        }
     </style>
 
     <script type="text/javascript" src="../widgets/WorldMapData.js"></script>
@@ -2171,15 +2182,22 @@
             container.style.zoom = `${zoom}%`;
         }
 
+        /*
+            ◄ = &#9668;
+            ► = &#9658;
+            ▼ = &#9660;
+            ▲ = &#9650;
+         */
+
         function expandCollapseContent(origin) {
             // console.log(origin);
             let theZone = document.getElementById('grib-and-faxes');
-            if (origin.innerText === '- Collapse') {
+            if (origin.innerText.includes('Collapse')) {
                 theZone.style.maxHeight = '40px';
-                origin.innerText = '+ Expand';
+                origin.innerHTML = '&#9658; Expand';
             } else {
                 theZone.style.maxHeight = null;
-                origin.innerText = '- Collapse';
+                origin.innerHTML = '&#9660; Collapse';
             }
         }
 
@@ -2450,7 +2468,55 @@
                 <div class="control-style" style="padding: 5px; border: 1px solid silver; border-radius: 5px; max-height: 725px;">
                     <h3>Composite Controls</h3>
                     <hr/>
-                    <div style="display: grid; grid-template-columns: auto auto auto; margin: -10px 0 12px 0; justify-content: left;">
+                    <div id="doc-origin">
+                        Documents Origin
+                        <label class="rad-label">
+                            <input type="radio" class="rad-input" name="grib-origin" value="web" checked onchange="flipGRIB(this);">
+                            <div class="rad-design"></div>
+                            <div class="rad-text">the Web</div>
+                        </label>
+
+                        <label class="rad-label">
+                            <input type="radio" class="rad-input" name="grib-origin" value="json" onchange="flipGRIB(this);">
+                            <div class="rad-design"></div>
+                            <div class="rad-text">Server Storage</div>
+                        </label>
+
+                        <!--input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
+                        <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage -->
+                        <!-- hr/ -->
+                        <div id="grib-web">
+                        </div>
+                        <div id="grib-json" style="display: none;">
+                            <button onclick="getCompositeList();">Get Composites list</button>
+                            <input type="text" id="comp-name-filter" placeholder="Composite Name Filter"
+                                title="Enter the Composite key, or any part of the name of the directory the composite lives in."/>
+                            <div id="composite-list" class="complist-style"></div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div id="composite-list">
+                        <select id="composites"
+                                onchange="updateGRIBRequest(this); displayCompositeInfo();"
+                                onmouseover="displayCompositeInfo();"></select>
+                        <!--  onmouseleave="hideCompositeInfo();"></select -->
+                        <br/>
+                        <div style="display: grid; grid-template-columns: auto auto; margin: 5px 0 5px 0; justify-content: left;">
+                            <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
+                            <div style="vertical-align: middle; margin-bottom: 5px; display: grid; grid-template-columns: auto auto;">
+                                <label class="rocker rocker-tiny" style="margin-bottom: 5px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
+                                    <input type="checkbox" onchange="continuousLoad(this);"/>
+                                    <span class="switch-left">On</span>
+                                    <span class="switch-right">Off</span>
+                                </label>
+                                <span style="margin-top: 12px;">Every 6 hours</span>
+                            </div>
+                            <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
+                        </div>
+                        <div id="composite-info"></div>
+                    </div>
+                    <hr/>
+                    <div id="composite-switches" style="display: grid; grid-template-columns: auto auto auto; margin: -10px 0 12px 0; justify-content: left;">
                         <div style="vertical-align: middle;">
                             <label class="rocker rocker-tiny" style="margin-bottom: -10px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
                                 <input type="checkbox" onchange="changeChart(this);" checked/>
@@ -2502,57 +2568,20 @@
                         </div>
                     </div>
                     <hr/>
-                    <select id="composites"
-                            onchange="updateGRIBRequest(this); displayCompositeInfo();"
-                            onmouseover="displayCompositeInfo();"></select>
-                      <!--  onmouseleave="hideCompositeInfo();"></select -->
-                    <br/>
-                    <div style="display: grid; grid-template-columns: auto auto; margin: 5px 0 5px 0; justify-content: left;">
-                        <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
-                        <div style="vertical-align: middle; margin-bottom: 5px; display: grid; grid-template-columns: auto auto;">
-                            <label class="rocker rocker-tiny" style="margin-bottom: 5px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
-                                <input type="checkbox" onchange="continuousLoad(this);"/>
-                                <span class="switch-left">On</span>
-                                <span class="switch-right">Off</span>
-                            </label>
-                            <span style="margin-top: 12px;">Every 6 hours</span>
-                        </div>
-                        <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
-                    </div>
-                    <div id="composite-info"></div>
-
-                    <hr/>
-                    Documents Origin
-                    <label class="rad-label">
-                        <input type="radio" class="rad-input" name="grib-origin" value="web" checked onchange="flipGRIB(this);">
-                        <div class="rad-design"></div>
-                        <div class="rad-text">the Web</div>
-                    </label>
-
-                    <label class="rad-label">
-                        <input type="radio" class="rad-input" name="grib-origin" value="json" onchange="flipGRIB(this);">
-                        <div class="rad-design"></div>
-                        <div class="rad-text">Server Storage</div>
-                    </label>
-
-                    <!--input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
-                    <input type="radio" name="grib-origin" value="json" onchange="flipGRIB(this);">From Server Storage -->
-                    <!-- hr/ -->
-                    <div id="grib-web">
-                    </div>
-                    <div id="grib-json" style="display: none;">
-                        <button onclick="getCompositeList();">Get Composites list</button>
-                        <input type="text" id="comp-name-filter" placeholder="Composite Name Filter"
-                               title="Enter the Composite key, or any part of the name of the directory the composite lives in."/>
-                        <div id="composite-list" class="complist-style"></div>
+                    <div id="composite-zoom">
+                        Zoom for the whole thing:
+                        <button onclick="changeCanvasSize(0.9);" class="round-button">-</button>
+                        <button onclick="changeCanvasSize(1.1);" class="round-button">+</button>
                     </div>
                     <hr/>
-                    Zoom for the whole thing:
-                    <button onclick="changeCanvasSize(0.9);" class="round-button">-</button>
-                    <button onclick="changeCanvasSize(1.1);" class="round-button">+</button>
-                    <hr/>
+                    <!--
+                        ◄ = &#9668;
+                        ► = &#9658;
+                        ▼ = &#9660;
+                        ▲ = &#9650;
+                    -->
                     <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; padding: 5px; overflow: scroll;">
-                        <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">- Collapse</span>
+                        <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">&#9660; Collapse</span>
                         <div id="grib-widgets" class="table-style" style="display: none; background: rgba(77, 159, 160, 0.25);">
                             <table>
                                 <tr>
