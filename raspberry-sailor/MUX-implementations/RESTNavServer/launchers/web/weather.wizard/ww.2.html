@@ -2481,14 +2481,14 @@
                         Documents Origin
                         <label class="rad-label">
                             <input type="radio" class="rad-input" name="grib-origin" value="web" checked onchange="flipGRIB(this);">
-                            <div class="rad-design"></div>
-                            <div class="rad-text">the Web</div>
+                            <label class="rad-design"></label>
+                            <label class="rad-text">the Web</label>
                         </label>
 
                         <label class="rad-label">
                             <input type="radio" class="rad-input" name="grib-origin" value="json" onchange="flipGRIB(this);">
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Server Storage</div>
+                            <label class="rad-design"></label>
+                            <label class="rad-text">Server Storage</label>
                         </label>
 
                         <!--input type="radio" name="grib-origin" value="web" checked onchange="flipGRIB(this);">From the Web
@@ -2500,7 +2500,7 @@
                             <button onclick="getCompositeList();">Get Composites list</button>
                             <input type="text" id="comp-name-filter" placeholder="Composite Name Filter"
                                 title="Enter the Composite key, or any part of the name of the directory the composite lives in."/>
-                            <div id="composite-list" class="complist-style"></div>
+                            <div id="composite-list-server" class="complist-style"></div>
                         </div>
                     </div>
                     <hr/>
