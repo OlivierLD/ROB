@@ -1203,7 +1203,7 @@
             let cb = (value) => {
     //		console.log(value);
                 let data = (typeof(value) === 'string') ? JSON.parse(value) : value;
-                document.getElementById("composite-list").innerHTML = (makeCompositeTree(data)); // "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+                document.getElementById("composite-list-server").innerHTML = (makeCompositeTree(data)); // "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
             };
             getExistingComposites(cb, filter);
         };
