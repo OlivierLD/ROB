@@ -144,17 +144,74 @@
             overflow-x: scroll;
         }
 
+        button {
+			padding: 4px 20px;
+			/* give the background a gradient */
+			background:#ffae00; /* fallback for browsers that don't support gradients */
+			/* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
+			background: -webkit-linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+			background: -moz-linear-gradient(top, #ffae00, #d67600);
+			background: -o-linear-gradient(top, #ffae00, #d67600);
+			/* background: linear-gradient(top, #ffae00, #d67600); */
+			background: linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+			border: 2px outset #dad9d8;
+			/* style the text */
+			font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+			font-size: 1.1em;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+			color: #fff;
+			text-shadow: 0px 1px 10px #000;
+			/* add to small curve to the corners of the button */
+			-webkit-border-radius: 15px;
+			-moz-border-radius: 15px;
+			border-radius: 15px;
+			/* give the button a drop shadow */
+			-webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			-moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+		}
+
+        .round-button {
+            padding: 5px 10px;
+            border-radius: 50%;
+        }
+
+		/* NOW STYLE THE BUTTON'S HOVER STATE */
+		/*	button#rCoffee:hover, button#rCoffee:focus { */
+		button:hover, button:focus {
+			border:2px solid #dad9d8;
+		}
+
+        button:disabled {
+            background: silver;
+            color: gray;
+        }
+        button:active {
+            color: cyan;
+        }
+
 		.tab {
             overflow: hidden;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: rgba(241, 241, 241, 0.5);
+
         }
 
         /* Style the buttons inside the tab */
         .tab button {
             background-color: inherit;
             /* background-color: rgba(241, 241, 241, 0.5); */
+            /* background:#ffae00; fallback for browsers that don't support gradients */
+			/* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
+			background: -webkit-linear-gradient(top, rgba(241, 241, 241, 0.5), rgba(214, 118, 0, 0.6));
+			background: -moz-linear-gradient(top, #2e2e2c, #d67600);
+			background: -o-linear-gradient(top, #35332f, #d67600);
+			/* background: linear-gradient(top, #ffae00, #d67600); */
+			background: linear-gradient(top, rgba(66, 65, 63, 0.6), rgba(214, 118, 0, 0.6));
+			border: 2px outset #dad9d8;
+
             float: left;
             border: none;
             outline: none;
@@ -414,52 +471,6 @@
 		}
         /* Switch end */
 
-		button {
-			padding: 4px 20px;
-			/* give the background a gradient */
-			background:#ffae00; /* fallback for browsers that don't support gradients */
-			/* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
-			background: -webkit-linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
-			background: -moz-linear-gradient(top, #ffae00, #d67600);
-			background: -o-linear-gradient(top, #ffae00, #d67600);
-			/* background: linear-gradient(top, #ffae00, #d67600); */
-			background: linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
-			border: 2px outset #dad9d8;
-			/* style the text */
-			font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
-			font-size: 1.1em;
-			letter-spacing: 0.05em;
-			text-transform: uppercase;
-			color: #fff;
-			text-shadow: 0px 1px 10px #000;
-			/* add to small curve to the corners of the button */
-			-webkit-border-radius: 15px;
-			-moz-border-radius: 15px;
-			border-radius: 15px;
-			/* give the button a drop shadow */
-			-webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
-			-moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
-			box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
-		}
-
-        .round-button {
-            padding: 5px 10px;
-            border-radius: 50%;
-        }
-
-		/* NOW STYLE THE BUTTON'S HOVER STATE */
-		/*	button#rCoffee:hover, button#rCoffee:focus { */
-		button:hover, button:focus {
-			border:2px solid #dad9d8;
-		}
-
-        button:disabled {
-            background: silver;
-            color: gray;
-        }
-        button:active {
-            color: cyan;
-        }
         /* ==== Radio buttons ===== */
         .rad-label {
             display: flex;
