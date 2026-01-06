@@ -158,7 +158,7 @@ public class NavServer {
 					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
 					int orientation = 0;
-					String orientationMessage = "";
+					String orientationMessage = " ";
 					if (previousValue != -1) {
 						if (previousValue < memoryUsedPercent) {
 							orientation = 1;
@@ -171,7 +171,7 @@ public class NavServer {
 							orientationMessage = "- stable.";
 						}
 					}
-					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s %s%s%s\n",
+					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s %s %s %s\n",
 							NumberFormat.getInstance().format(memoryUsed),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
 							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
