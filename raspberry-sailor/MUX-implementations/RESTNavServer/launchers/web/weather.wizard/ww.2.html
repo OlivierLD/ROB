@@ -1997,8 +1997,15 @@
             let content = "<h1>Not found</h1>";
             for (let i = 0; i < compositeCatalog.length; i++) {
                 if (compositeCatalog[i].key === compositeId) {
-                    infoDiv.style.maxHeight = null;
-                    content = "<h3><span onclick='expandCollapseCompInfo(this);' onmouseover='this.style.cursor=\"pointer\";' title='Collapse'>&#9660;&nbsp;</span>" + compositeCatalog[i].name + "</h3>";
+                    let title = 'Collapse';
+                    let arrow = '&#9660;&nbsp;';
+                    console.log('infoDiv.style.maxHeight=', infoDiv.style.maxHeight);
+                    if (infoDiv.style.maxHeight != null && infoDiv.style.maxHeight !== '' && infoDiv.style.maxHeight !== 'none') {
+                        title = 'Expand';
+                        arrow = '&#9658;&nbsp;';
+                    }
+                    //  infoDiv.style.maxHeight = null;
+                    content = `<h3><span onclick='expandCollapseCompInfo(this);' onmouseover='this.style.cursor="pointer";' title='${title}'>${arrow}</span> ${compositeCatalog[i].name}</h3>`;
                     content += "<ul>";
                     if (compositeCatalog[i].gribRequest !== undefined) {
                         content += ("<li>" + compositeCatalog[i].gribRequest + "</li>");
