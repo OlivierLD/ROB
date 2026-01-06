@@ -1997,7 +1997,8 @@
             let content = "<h1>Not found</h1>";
             for (let i = 0; i < compositeCatalog.length; i++) {
                 if (compositeCatalog[i].key === compositeId) {
-                    content = "<h3>" + compositeCatalog[i].name + "</h3>";
+                    infoDiv.style.maxHeight = null;
+                    content = "<h3><span onclick='expandCollapseCompInfo(this);' onmouseover='this.style.cursor=\"pointer\";' title='Collapse'>&#9660;&nbsp;</span>" + compositeCatalog[i].name + "</h3>";
                     content += "<ul>";
                     if (compositeCatalog[i].gribRequest !== undefined) {
                         content += ("<li>" + compositeCatalog[i].gribRequest + "</li>");
@@ -2206,6 +2207,19 @@
             } else {
                 theZone.style.maxHeight = null;
                 origin.innerHTML = '&#9660; Collapse';
+            }
+        }
+
+        function expandCollapseCompInfo(origin) {
+            let theZone = document.getElementById('composite-info');
+            if (origin.title.includes('Collapse')) {
+                theZone.style.maxHeight = '18px';
+                origin.innerHTML = '&#9658;&nbsp;';
+                origin.title = 'Expand';
+            } else {
+                theZone.style.maxHeight = null;
+                origin.innerHTML = '&#9660;&nbsp;';
+                origin.title = 'Collapse';
             }
         }
 
@@ -2522,7 +2536,9 @@
                             </div>
                             <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
                         </div>
-                        <div id="composite-info" style="overflow-y: scroll;"></div>
+                        <div id="composite-info" style="overflow-y: scroll;">
+
+                        </div>
                     </div>
                     <hr/>
                     <div id="composite-switches" style="display: grid; grid-template-columns: auto auto auto; margin: -10px 0 12px 0; justify-content: left;">
