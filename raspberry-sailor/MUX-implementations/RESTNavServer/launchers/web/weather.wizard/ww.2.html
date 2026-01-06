@@ -8,7 +8,7 @@
     <!--meta charset="windows-1252"-->
     <!--meta charset="iso-8859-1"-->
     <!--meta charset="utf-8"-->
-    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Weather Wizard</title>
 
     <link rel="icon" type="image/ico" href="../icons/hammerhead.02.ico">
@@ -2544,20 +2544,20 @@
                                 onmouseover="displayCompositeInfo();"></select>
                         <!--  onmouseleave="hideCompositeInfo();"></select -->
                         <br/>
-                        <div style="display: grid; grid-template-columns: auto auto; margin: 5px 0 5px 0; justify-content: left;">
-                            <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
-                            <div style="vertical-align: middle; margin-bottom: 5px; display: grid; grid-template-columns: auto auto;">
-                                <label class="rocker rocker-tiny" style="margin-bottom: 5px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
-                                    <input type="checkbox" onchange="continuousLoad(this);"/>
-                                    <span class="switch-left">On</span>
-                                    <span class="switch-right">Off</span>
-                                </label>
-                                <span style="margin-top: 12px;">Every 6 hours</span>
+                        <div style="overflow: scroll;">
+                            <div style="display: grid; grid-template-columns: auto auto; margin: 5px 0 5px 0; justify-content: left;"> <!-- left... fails on firefox -->
+                                <button id="load-composites" onclick="loadComposite();" title="Download and display">Load documents</button>
+                                <div style="vertical-align: middle; margin-bottom: 5px; display: grid; grid-template-columns: auto auto;">
+                                    <label class="rocker rocker-tiny" style="margin-bottom: 5px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
+                                        <input type="checkbox" onchange="continuousLoad(this);"/>
+                                        <span class="switch-left">On</span>
+                                        <span class="switch-right">Off</span>
+                                    </label>
+                                    <span style="margin-top: 12px;">Every 6 hours</span>
+                                </div>
+                                <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
                             </div>
-                            <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
-                        </div>
-                        <div id="composite-info" style="overflow-y: scroll;">
-
+                            <div id="composite-info" style="overflow-y: scroll;"></div>
                         </div>
                     </div>
                     <hr/>
@@ -2626,7 +2626,7 @@
                         ▲ = &#9650;
                     -->
                     <div id="grib-and-faxes" style="border: 1px solid lime; border-radius: 5px; padding: 5px; overflow: scroll;">
-                        <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">&#9660; Collapse</span> Details
+                        <span style="margin-left: 5px;" onmouseover="this.style.cursor='pointer';" onclick="expandCollapseContent(this);">&#9660; Collapse</span> Current Composite Details
                         <div id="grib-widgets" class="table-style" style="display: none; background: rgba(77, 159, 160, 0.25);">
                             <table>
                                 <tr>
