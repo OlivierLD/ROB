@@ -541,7 +541,7 @@
 		"gribRequest": "GFS:45N,30N,10W,40E|0.5,0.5|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 	},
 	{
-		"key": "GULF_STREAM-0001",
+		"key": "GULF-STREAM-0001",
 		"name": "North Atlantic, Gulf Stream, Surface faxes",
 		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
 		"map": {
@@ -592,7 +592,7 @@
 		"gribRequest": "RTOFS:65N,9S,100W,10E|1.0,1.0|0,12..72|CUR"
 	},
 	{
-		"key": "GULF_STREAM-0002",
+		"key": "GULF-STREAM-0002",
 		"name": "North Atlantic, Surface faxes",
 		"comment": "Faxes only.",
 		"map": {
@@ -642,7 +642,7 @@
 		]
 	},
 	{
-		"key": "GULF_STREAM-0003",
+		"key": "GULF-STREAM-0003",
 		"name": "North Atlantic, Gulf Stream, No fax",
 		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
 		"map": {
