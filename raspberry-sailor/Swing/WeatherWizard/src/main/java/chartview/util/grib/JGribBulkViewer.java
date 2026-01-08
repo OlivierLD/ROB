@@ -55,6 +55,12 @@ public class JGribBulkViewer {
                     for (int row = 0; row < height; row++) {
                         try {
                             val = gr.getValue(col, row);
+                            if (val > grbds.getMaxValue() || val < grbds.getMinValue()) {
+                                if (false) {
+                                    System.out.println("type:" + type + " val:" + val + " is out of [" + grbds.getMinValue() + ", " + grbds.getMaxValue() + "]");
+                                }
+                                val = 0; // grbds.getMinValue() + ((grbds.getMaxValue() - grbds.getMinValue()) / 2); // grbds.getMinValue(); // TODO Make sure that's right...
+                            }
                             data[row][col] = val;
                         } catch (Exception ex) {
                             ex.printStackTrace();
