@@ -70,7 +70,7 @@ public class GRIBDump {
 					GribDate gDate = new GribDate(date, height, width, stepX, stepY, top, bottom, left, right);
 
 					Float[][] data = new Float[height][width];
-					float val = 0F;
+					float val = 0F; // Can be 9.9999E24...
 					for (int col = 0; col < width; col++) {
 						for (int row = 0; row < height; row++) {
 							try {
@@ -79,7 +79,7 @@ public class GRIBDump {
 									if (verbose) {
 										System.out.println("type:" + type + " val:" + val + " is out of [" + grbds.getMinValue() + ", " + grbds.getMaxValue() + "]");
 									}
-									val = grbds.getMinValue(); // TODO Make sure that's right...
+									val = 0; // grbds.getMinValue() + ((grbds.getMaxValue() - grbds.getMinValue()) / 2); // grbds.getMinValue(); // TODO Make sure that's right...
 								}
 								data[row][col] = val;
 							} catch (Exception ex) {
@@ -200,7 +200,8 @@ public class GRIBDump {
 		GRIBDump gribDump = new GRIBDump();
 //	"GRIB_2017_10_16_07_31_47_PDT.grb", "GRIB_2009_02_25_Sample.grb";
 		String gribFileName = // "GRIB_2009_02_25_Sample.grb";
-		                      "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/GRIB_2009_02_25_Sample.grb";
+		                      // "/Users/olivierlediouris/repos/ROB/raspberry-sailor/RESTRouting/GRIB_2009_02_25_Sample.grb";
+						      "/Users/olivierlediouris/repos/ROB/raspberry-sailor/Swing/WeatherWizard/GRIBFiles/2026/01/RTOFS20260108093301577.grb";
 //		String gribFileName = "grib.grb";
 		URL gribURL = new File(gribFileName).toURI().toURL();
 		GribFile gf = new GribFile(gribURL.openStream());

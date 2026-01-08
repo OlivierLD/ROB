@@ -287,13 +287,15 @@ let drawCurrentArrow = function(context, at, cdr, csp) {
 	let y = at.y;
 
 	// Arrow
-	let featherX = ARROW_LENGTH * Math.sin(dCDR);
-	let featherY = ARROW_LENGTH * Math.cos(dCDR);
-	context.beginPath();
-	context.moveTo(x, y);
-	context.lineTo(x + featherX, y - featherY);
-	context.closePath();
-	context.stroke();
+	if (csp > 0) {
+		let featherX = ARROW_LENGTH * Math.sin(dCDR);
+		let featherY = ARROW_LENGTH * Math.cos(dCDR);
+		context.beginPath();
+		context.moveTo(x, y);
+		context.lineTo(x + featherX, y - featherY);
+		context.closePath();
+		context.stroke();
+	}
 
 	// Feathers
 	let origin = ARROW_LENGTH;

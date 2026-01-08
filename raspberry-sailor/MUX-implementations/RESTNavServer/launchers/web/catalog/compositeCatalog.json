@@ -543,7 +543,7 @@
 	{
 		"key": "GULF-STREAM-0001",
 		"name": "North Atlantic, Gulf Stream, Surface faxes",
-		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
+		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now). RTOFS just good for current.",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
@@ -644,7 +644,7 @@
 	{
 		"key": "GULF-STREAM-0003",
 		"name": "North Atlantic, Gulf Stream, No fax",
-		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
+		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now). RTOFS just good for current.",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
