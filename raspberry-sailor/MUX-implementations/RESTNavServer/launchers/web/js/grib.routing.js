@@ -144,7 +144,7 @@ let getSpeed = function(x, y) {
 /**
  * Get wind direction from ugrd, vgrd.
  * TODO: use Math.atan2
- * 
+ *
  * @param x ugrd
  * @param y vgrd
  * @returns {number} Direction in degrees [0..360]
@@ -274,6 +274,74 @@ let drawWindArrow = function(context, at, twd, tws) {
 	}
 };
 
+let drawCurrentArrow = function(context, at, cdr, csp) {
+
+	context.lineWidth = 1;
+
+	let roundCSP = Math.round(csp);
+	let dCDR = Math.toRadians(cdr);
+
+	context.strokeStyle = 'green'; // 'rgba(0, 255, 0, 1)'; // 0.4)';
+
+	let x = at.x;
+	let y = at.y;
+
+	// Arrow
+	let featherX = ARROW_LENGTH * Math.sin(dCDR);
+	let featherY = ARROW_LENGTH * Math.cos(dCDR);
+	context.beginPath();
+	context.moveTo(x, y);
+	context.lineTo(x + featherX, y - featherY);
+	context.closePath();
+	context.stroke();
+
+	// Feathers
+	let origin = ARROW_LENGTH;
+	while (roundCSP >= 50) {
+		roundCSP -= 50;
+		let featherStartX = x + (origin * Math.sin(dCDR));
+		let featherStartY = y - (origin * Math.cos(dCDR));
+		let featherEndX = featherStartX + (10 * Math.sin(dCDR + Math.toRadians(60)));
+		let featherEndY = featherStartY - (10 * Math.cos(dCDR + Math.toRadians(60)));
+		let featherStartX2 = x + ((origin - 5) * Math.sin(dCDR));
+		let featherStartY2 = y - ((origin - 5) * Math.cos(dCDR));
+		origin -= 5;
+
+		context.beginPath();
+		context.moveTo(featherStartX, featherStartY);
+		context.lineTo(featherEndX, featherEndY);
+		context.lineTo(featherStartX2, featherStartY2);
+		context.closePath();
+		context.fill();
+	}
+	while (roundCSP >= 10) {
+		roundCSP -= 10;
+		let featherStartX = x + (origin * Math.sin(dCDR));
+		let featherStartY = y - (origin * Math.cos(dCDR));
+		let featherEndX = featherStartX + (7 * Math.sin(dCDR + Math.toRadians(60)));
+		let featherEndY = featherStartY - (7 * Math.cos(dCDR + Math.toRadians(60)));
+
+		context.beginPath();
+		context.moveTo(featherStartX, featherStartY);
+		context.lineTo(featherEndX, featherEndY);
+		context.closePath();
+		context.stroke();
+		origin -= 3;
+	}
+	if (roundCSP >= 5) {
+		let featherStartX = x + (origin * Math.sin(dCDR));
+		let featherStartY = y - (origin * Math.cos(dCDR));
+		let featherEndX = featherStartX + (4 * Math.sin(dCDR + Math.toRadians(60)));
+		let featherEndY = featherStartY - (4 * Math.cos(dCDR + Math.toRadians(60)));
+
+		context.beginPath();
+		context.moveTo(featherStartX, featherStartY);
+		context.lineTo(featherEndX, featherEndY);
+		context.closePath();
+		context.stroke();
+	}
+};
+
 const BLUE_BASED = 1;
 const BEAUFORT_BASED = 2; // Based on the colors used for the Beaufort WebComponent.
 let WIND_BG_COLOR_OPTION = BEAUFORT_BASED;
@@ -309,8 +377,13 @@ let getBGColor = function(value, type) {
 				let transpColor = beaufortColor.replace(/rgb/i, "rgba");
 				transpColor = transpColor.replace(/\)/i,`, ${transp})`);
 				color = transpColor;
-				// console.log(`Force ${force}, color is ${color}`);	
+				// console.log(`Force ${force}, color is ${color}`);
 			}
+			break;
+		case 'current': // green, [0..10]
+			let maxCurr = 5.0;
+			// leave it white
+			// color = 'rgba(0, 255, 0,' + Math.min(1, Math.min((value) / maxCurr, 1)) + ')';
 			break;
 		case 'prmsl': // red, 101300, [95000..104000], inverted
 			color = 'rgba(255, 0, 0,' + (1 - Math.min((value - 95000) / (104000 - 95000), 1)) + ')';
@@ -337,7 +410,7 @@ let getBGColor = function(value, type) {
 				color = 'rgba(255, 0, 0,' + Math.min((value - 273) / (323 - 273), 1) + ')'; // Red
 			}
 			break;
-		case 'htsgw': 
+		case 'htsgw':
 			let maxGreen = 6.5; // in meters, green[0..maxGreen]. TODO a prm ?
 			color = 'rgba(0, 100, 0,' + Math.min(1, Math.min((value) / maxGreen, 1)) + ')';
 			break;
@@ -397,7 +470,7 @@ let plotBestRoute = function(canvas, context) {
 		let canvasPt = worldMap.getCanvasLocation(canvas, waypoints[i].position.latitude, waypoints[i].position.longitude);
 		// console.log();
 		if (i === 0) {
-			context.moveTo(canvasPt.x, canvasPt.y); 
+			context.moveTo(canvasPt.x, canvasPt.y);
 		} else {
 			context.lineTo(canvasPt.x, canvasPt.y);
 		}
@@ -423,7 +496,7 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 	}
 
 	// Base this on the type.
-	let data = {}; // ugrd, vgrd
+	let data = {}; // ugrd, vgrd, or uogrd, vogrd
 	let min = null, max = null;
 	// Look for the right data
 	switch (type) {
@@ -432,6 +505,15 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 				if (oneDateGRIB.typedData[i].gribType.type === 'ugrd') {
 					data.x = oneDateGRIB.typedData[i].data;
 				} else if (oneDateGRIB.typedData[i].gribType.type === 'vgrd') {
+					data.y = oneDateGRIB.typedData[i].data;
+				}
+			}
+			break;
+		case 'current': // Hybrid type
+			for (let i = 0; i < oneDateGRIB.typedData.length; i++) {
+				if (oneDateGRIB.typedData[i].gribType.type === 'uogrd') {
+					data.x = oneDateGRIB.typedData[i].data;
+				} else if (oneDateGRIB.typedData[i].gribType.type === 'vogrd') {
 					data.y = oneDateGRIB.typedData[i].data;
 				}
 			}
@@ -457,9 +539,10 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 		console.log("   Dim (W x H) : %d x %d", data.x[0].length, data.x.length);
 	}
 
-	let maxTWS = 0, minTmp = 0, maxTmp = 0, maxWaves = 0, maxPrate = 0; 
+	let maxTWS = 0, maxCSP = 0, minTmp = 0, maxTmp = 0, maxWaves = 0, maxPrate = 0;
 	let maxPRMSL = 0, minPRMSL = 2000; // PRMSL
-	let maxTWSPos = null, maxTmpPos = null, minTmpPos = null, maxPratePos = null, maxWavesPos = null;
+	let maxTWSPos = null, maxCSPPos = null, maxTmpPos = null,
+	    minTmpPos = null, maxPratePos = null, maxWavesPos = null;
 	let maxPRMSLPos = null, minPRMSLPos = null;
 
 	for (let hGRIB=0; hGRIB<oneDateGRIB.gribDate.height; hGRIB++) {
@@ -500,6 +583,8 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 			let gribValue;
 			if (type === 'wind') {
 				gribValue = getSpeed(data.x[hGRIB][wGRIB], data.y[hGRIB][wGRIB]);
+			} else if (type === 'current') {
+				gribValue = getSpeed(data.x[hGRIB][wGRIB], data.y[hGRIB][wGRIB]) * 1.944; // m/s to knots
 			} else {
 				if (data.x) {
 					gribValue = data.x[hGRIB][wGRIB];
@@ -529,22 +614,34 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 					// maxTWSlng = lng;
 				}
 				maxTWS = Math.max(maxTWS, speed);
+			} else if (type === 'current') {
+				// data
+				let dir = getDir(data.x[hGRIB][wGRIB], data.y[hGRIB][wGRIB]);
+				let speed = gribValue;
+		    // console.log("%f / %f (cell %d, %d), dir %s, speed %f kn (u: %f, v: %f)", lat, lng, hGRIB, wGRIB, dir.toFixed(0), speed, data.x[hGRIB][wGRIB], data.y[hGRIB][wGRIB]);
+
+				let canvasPt = worldMap.getCanvasLocation(canvas, lat, lng);
+				drawCurrentArrow(context, canvasPt, dir, speed);
+				if (speed > maxCSP) { // Locate it
+					maxCSPPos = { lat: lat, lng: lng };
+				}
+				maxCSP = Math.max(maxCSP, speed);
 			} else if (type === 'htsgw') {
-				if (gribValue >= max) { 
+				if (gribValue >= max) {
 					maxWaves = gribValue;
 					maxWavesPos = { lat: lat, lng: lng };
 				}
 			} else if (type === 'tmp') {
-				if (gribValue >= max) { 
+				if (gribValue >= max) {
 					maxTmp = gribValue;
 					maxTmpPos = { lat: lat, lng: lng };
 				}
 				if (gribValue <= min) {
-					minTmp = gribValue; 
+					minTmp = gribValue;
 					minTmpPos = { lat: lat, lng: lng };
 				}
 			} else if (type === 'prmsl') {
-				if (gribValue >= max) { 
+				if (gribValue >= max) {
 					maxPRMSL = gribValue;
 					maxPRMSLPos = { lat: lat, lng: lng };
 				}
@@ -553,12 +650,12 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 					minPRMSLPos = { lat: lat, lng: lng };
 				}
 			} else if (type === 'prate') {
-				if (gribValue >= max) { 
+				if (gribValue >= max) {
 					maxPrate = gribValue;
 					maxPratePos = { lat: lat, lng: lng };
 				}
 			}
-			
+
 			// DEBUG, print cell coordinates IN the cell.
 			if (DEBUG) {
 				let label = "h:" + hGRIB;
@@ -577,9 +674,12 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 			case 'wind':
 				document.getElementById('max-wind').innerText = `Max GRIB TWS: ${maxTWS.toFixed(2)} kn (Force ${ getBeaufortScale(maxTWS) }) at ${ decToSex(maxTWSPos.lat, "NS") } / ${ decToSex(maxTWSPos.lng, "EW") }`;
 				break;
+			case 'current':
+				document.getElementById('max-wind').innerText = `Max GRIB Current: ${maxCSP.toFixed(2)} kn at ${ decToSex(maxCSPPos.lat, "NS") } / ${ decToSex(maxCSPPos.lng, "EW") }`;
+				break;
 			case 'tmp':
 				try {
-					document.getElementById('min-max-atemp').innerHTML = "<pre>" + 
+					document.getElementById('min-max-atemp').innerHTML = "<pre>" +
 																		 `Air Temp: min ${(minTmp - 273).toFixed(2)}\xB0C, at ${decToSex(minTmpPos.lat, "NS") + '/' + decToSex(minTmpPos.lng, "EW")}\n` +
 																		 `          max ${(maxTmp - 273).toFixed(2)}\xB0C, at ${decToSex(maxTmpPos.lat, "NS") + '/' + decToSex(maxTmpPos.lng, "EW")}` +
 																		 "</pre>";
@@ -589,7 +689,7 @@ let drawGrib = function(canvas, context, gribData, date, type, windColorOption) 
 				break;
 			case 'prmsl':
 				try {
-					document.getElementById('min-max-prmsl').innerHTML = "<pre>" + 
+					document.getElementById('min-max-prmsl').innerHTML = "<pre>" +
 																		 `PRMSL: min ${(minPRMSL / 100).toFixed(2)} hPa, at ${decToSex(minPRMSLPos.lat, "NS") + '/' + decToSex(minPRMSLPos.lng, "EW")}\n` +
 																		 `       max ${(maxPRMSL / 100).toFixed(2)} hPa, at ${decToSex(maxPRMSLPos.lat, "NS") + '/' + decToSex(maxPRMSLPos.lng, "EW")}` +
 																		 "</pre>";

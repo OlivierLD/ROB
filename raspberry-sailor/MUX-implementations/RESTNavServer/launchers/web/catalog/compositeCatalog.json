@@ -2,6 +2,7 @@
 	{
 		"key": "PAC-0001-NORTH-FINE",
 		"name": "North Pacific, current analysis (fine)",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 66.5,
@@ -82,6 +83,7 @@
 	{
 		"key": "PAC-0001-NEW",
 		"name": "All Pacific, current analysis (fine)",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 66.5,
@@ -178,6 +180,7 @@
 	{
 		"key": "PAC-0002",
 		"name": "All Pacific, current analysis (WIP)",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 66.5,
@@ -238,6 +241,7 @@
 	{
 		"key": "ATL-0001-FINE",
 		"name": "North Atlantic, current analysis (fine)",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
@@ -318,6 +322,7 @@
 	{
 		"key": "ATL-0002-FINE",
 		"name": "North Atlantic, current analysis (fine, 2-day GRIB)",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
@@ -398,6 +403,7 @@
 	{
 		"key": "ATL-0003-FINE",
 		"name": "North Atlantic, current analysis (fine, 5-day GRIB)",
+		"comment": "GRIB and Faxes. Bigger GRIB.",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
@@ -478,6 +484,7 @@
 	{
 		"key": "ATL-0001-48H",
 		"name": "North Atlantic, 48h Prediction",
+		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
@@ -519,6 +526,7 @@
 	{
 		"key": "MED-0001",
 		"name": "Mediterranean GRIBs",
+		"comment": "GRIB only",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 50,
@@ -531,5 +539,123 @@
 			"h": 600
 		},
 		"gribRequest": "GFS:45N,30N,10W,40E|0.5,0.5|0,6..24|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
+	},
+	{
+		"key": "GULF_STREAM-0001",
+		"name": "North Atlantic, Gulf Stream, Surface faxes",
+		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
+		"map": {
+			"projection": "MERCATOR",
+			"north": 65.5,
+			"south": -10.0,
+			"east": 10.0,
+			"west": -100.0
+		},
+		"canvas": {
+			"w": 700,
+			"h": 600
+		},
+		"faxData": [
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+				"name": "North-West Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.25800030840061555,
+				"location": {
+					"x": -2,
+					"y": 5
+				}
+			},
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+				"name": "North-East Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.2542802153408085,
+				"location": {
+					"x": 308,
+					"y": 8
+				}
+			}
+		],
+		"gribRequest": "RTOFS:65N,9S,100W,10E|1.0,1.0|0,12..72|CUR"
+	},
+	{
+		"key": "GULF_STREAM-0002",
+		"name": "North Atlantic, Surface faxes",
+		"comment": "Faxes only.",
+		"map": {
+			"projection": "MERCATOR",
+			"north": 65.5,
+			"south": -10.0,
+			"east": 10.0,
+			"west": -100.0
+		},
+		"canvas": {
+			"w": 700,
+			"h": 600
+		},
+		"faxData": [
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+				"name": "North-West Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.25800030840061555,
+				"location": {
+					"x": -2,
+					"y": 5
+				}
+			},
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+				"name": "North-East Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.2542802153408085,
+				"location": {
+					"x": 308,
+					"y": 8
+				}
+			}
+		]
+	},
+	{
+		"key": "GULF_STREAM-0003",
+		"name": "North Atlantic, Gulf Stream, No fax",
+		"comment": "GRIB and Faxes. Warning: do not display Wind and Current at the same time (for now)",
+		"map": {
+			"projection": "MERCATOR",
+			"north": 65.5,
+			"south": -10.0,
+			"east": 10.0,
+			"west": -100.0
+		},
+		"canvas": {
+			"w": 700,
+			"h": 600
+		},
+		"gribRequest": "RTOFS:65N,9S,100W,10E|1.0,1.0|0,12..72|CUR"
 	}
 ]

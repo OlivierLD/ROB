@@ -801,6 +801,7 @@
 
                 str += ("\nGRIB cell row <b>" + yCell + "</b>, col <b>" + xCell + "</b>");
                 let foundWind = false;
+                let foundCurrent = false;
                 for (let idx = 0; idx < oneDateGRIB.typedData.length; idx++) {
                     let skip = false;
                     if (oneDateGRIB.typedData[idx].data[yCell] === undefined) {
@@ -848,6 +849,13 @@
                                         let dir = getDir(u, v);
                                         displayValue = tws.toFixed(1) + " kts, " + dir.toFixed(0) + "&deg; (u:" + u.toFixed(1) + ", v:" + v.toFixed(1) + "), Cell <b>" + yCell + "</b>, <b>" + xCell + "</b>.";
                                         // Update Web Components
+                                        document.getElementById('tws-01').style.display = 'grid';
+                                        document.getElementById('twd-01').style.display = 'grid';
+                                        document.getElementById('beaufort-01').style.display = 'grid';
+
+                                        document.getElementById('csp-01').style.display = 'none';
+                                        document.getElementById('cdr-01').style.display = 'none';
+
                                         document.getElementById('tws-01').value = tws;
                                         document.getElementById('beaufort-01').value = tws;
                                         document.getElementById('twd-01').value = dir.toFixed(0);
@@ -859,6 +867,44 @@
                                 }
                                 break;
                             case 'vgrd':
+                                skip = true;
+                                break;
+                            case 'uogrd':
+                                if (!foundCurrent) {
+                                    let vogrd;
+                                    for (let i = 0; i < oneDateGRIB.typedData.length; i++) {
+                                        if (oneDateGRIB.typedData[i].gribType.type === 'vogrd') {
+                                            vogrd = oneDateGRIB.typedData[i].data;
+                                            break;
+                                        }
+                                    }
+                                    if (vogrd !== undefined) {
+                                        displayUnit = ''; // m/s
+                                        displayType = "CURRENT";
+                                        let u = value;
+                                        let v = vogrd[yCell][xCell];
+                                        let csp = getSpeed(u, v) * 1.94384; // to knots
+                                        let dir = getDir(u, v);
+                                        displayValue = csp.toFixed(1) + " kts, " + dir.toFixed(0) + "&deg; (u:" + u.toFixed(1) + ", v:" + v.toFixed(1) + "), Cell <b>" + yCell + "</b>, <b>" + xCell + "</b>.";
+                                        // Update Web Components
+                                        document.getElementById('tws-01').style.display = 'none';
+                                        document.getElementById('twd-01').style.display = 'none';
+                                        document.getElementById('beaufort-01').style.display = 'none';
+
+                                        document.getElementById('csp-01').style.display = 'grid';
+                                        document.getElementById('cdr-01').style.display = 'grid';
+
+                                        document.getElementById('csp-01').value = csp;
+                                        // document.getElementById('beaufort-01').value = tws;
+                                        document.getElementById('cdr-01').value = dir.toFixed(0);
+                                        // console.log('w:%d, h:%d', yCell, xCell);
+                                        foundCurrent = true;
+                                    }
+                                } else {
+                                    skip = true;
+                                }
+                                break;
+                            case 'vogrd':
                                 skip = true;
                                 break;
                             case 'prate':
@@ -1888,9 +1934,10 @@
             }
 
             let foundWind = false;
+            let foundCurrent = false;
             jsonGrib[0].typedData.forEach((type, idx) => {
                 let option = document.createElement("option");
-                if (type.gribType.type === 'vgrd' || type.gribType.type === 'ugrd') {
+                if (type.gribType.type === 'vgrd' || type.gribType.type === 'ugrd') { // Wind Speed
                     if (!foundWind) {
                         option.text = 'Surface Wind';
                         option.value = 'wind';
@@ -1898,6 +1945,14 @@
                         gribTypes.add(option);
                     }
                     foundWind = true;
+                } else if (type.gribType.type === 'vogrd' || type.gribType.type === 'uogrd') { // Current Speed
+                    if (!foundCurrent) {
+                        option.text = 'Current Speed';
+                        option.value = 'current';
+                        option.selected = 'selected';
+                        gribTypes.add(option);
+                    }
+                    foundCurrent = true;
                 } else {
                     option.text = type.gribType.desc;
                     option.value = type.gribType.type;
@@ -1922,13 +1977,14 @@
             console.log(gribObj.gribDate.formattedUTCDate);
             for (let i = 0; i < gribObj.typedData.length; i++) {
                 let gribTypeData = gribObj.typedData[i];
-                if (gribTypeData.gribType.type !== 'vgrd' && gribTypeData.gribType.type !== 'ugrd') {
+                if (gribTypeData.gribType.type !== 'vgrd' && gribTypeData.gribType.type !== 'ugrd' &&
+                    gribTypeData.gribType.type !== 'vogrd' && gribTypeData.gribType.type !== 'uogrd') { // No Wind nor Current Speed
                     // Find min and max position.
                     // console.log("Type %s (%s), min=%f, max=%f", gribTypeData.gribType.desc, gribTypeData.gribType.type, gribTypeData.gribType.min, gribTypeData.gribType.max);
                     let minPos = null, maxPos = null;
                     // Find min & max location ?
                     if (FIND_MIN_MAX_HERE) {
-                        if (gribTypeData.gribType.type === 'tmp'  ||
+                        if (gribTypeData.gribType.type === 'tmp'  ||     // No Speed (wind or current) here
                             gribTypeData.gribType.type === 'htsgw' ||
                             gribTypeData.gribType.type === 'prmsl' ||
                             gribTypeData.gribType.type === 'prate') { // Switchable...
@@ -2019,6 +2075,10 @@
                     }
                     //  infoDiv.style.maxHeight = null;
                     content = `<h3><span onclick='expandCollapseCompInfo(this);' onmouseover='this.style.cursor="pointer";' title='${title}'>${arrow}</span> ${compositeCatalog[i].name}</h3>`;
+                    if (compositeCatalog[i].comment !== undefined) {
+                        content += `<p>${compositeCatalog[i].comment}</p>`;
+                    }
+
                     content += "<ul>";
                     if (compositeCatalog[i].gribRequest !== undefined) {
                         content += ("<li>" + compositeCatalog[i].gribRequest + "</li>");
@@ -2432,6 +2492,21 @@
                                         label="TWS"
                                         width="200"
                                         height="200"></analog-display>
+                        <!-- Current Speed in knots<br/ -->
+                        <analog-display class="analogdisplay-monochrome-orange"
+                                        style="grid-area: middle-01; display: none;"
+                                        title="Current Speed in knots"
+                                        id="csp-01"
+                                        min-value="0"
+                                        max-value="60"
+                                        value="0"
+                                        major-ticks="10"
+                                        minor-ticks="1"
+                                        with-border="true"
+                                        overlap="40"
+                                        label="CSP"
+                                        width="200"
+                                        height="200"></analog-display>
 
                         <!-- Wind Direction in &deg;<br/ -->
                         <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
@@ -2444,6 +2519,19 @@
                                         with-rose="true"
                                         with-border="true"
                                         label="TWD"
+                                        width="200"
+                                        height="200"></direction-display>
+                        <!-- Current Direction in &deg;<br/ -->
+                        <direction-display class="analogdisplay-monochrome-orange analog-for-dir"
+                                        style="grid-area: middle-02; display: none;"
+                                        title="CDR"
+                                        id="cdr-01"
+                                        value="0"
+                                        major-ticks="45"
+                                        minor-ticks="5"
+                                        with-rose="true"
+                                        with-border="true"
+                                        label="CDR"
                                         width="200"
                                         height="200"></direction-display>
 
