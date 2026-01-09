@@ -390,7 +390,7 @@ public class JTreeFilePanel
                         XMLDocument pdfDoc = parser.getDocument();
                         //        drillDownPreDefFaxes((XMLElement)pdfDoc.getDocumentElement(), preDefFaxes);
                         drillDownPreDefFaxes((XMLElement) pdfDoc.getDocumentElement(), root);
-                        System.out.println("Pre-defined faxes thread completed.");
+                        System.out.println("\nPre-defined faxes thread completed.");
                     }
                 } catch (Exception ex) {
                     root.add(new DefaultMutableTreeNode("No pre-defined fax definition found.")); // LOCALIZE
