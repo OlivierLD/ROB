@@ -488,9 +488,9 @@
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,
-			"south": 10,
-			"east": 28.2,
-			"west": -101.8
+			"south": -0.5,
+			"east": 11.0,
+			"west": -102.0
 		},
 		"canvas": {
 			"w": 900,
