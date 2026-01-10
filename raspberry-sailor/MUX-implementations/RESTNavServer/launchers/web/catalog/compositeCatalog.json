@@ -560,7 +560,7 @@
 				}
 			}
 		],
-		"gribRequest": "GFS:65N,14N,100W,10E|1,1|0,6..168|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
+		"gribRequest": "GFS:65N,0N,100W,10E|1,1|0,6..168|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 	},
 	{
 		"key": "ATL-0001-48H",
