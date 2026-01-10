@@ -102,7 +102,7 @@ fi
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=true"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose.dump=true"
-JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=$HTTP_VERBOSE"
+JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=${HTTP_VERBOSE}"
 #
 JAVA_OPTS="${JAVA_OPTS} -Dmux.infra.verbose=${INFRA_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dtide.verbose=${TIDE_VERBOSE}"

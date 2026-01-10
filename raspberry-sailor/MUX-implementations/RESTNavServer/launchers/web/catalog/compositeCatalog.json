@@ -240,7 +240,7 @@
 	},
 	{
 		"key": "ATL-0001-FINE",
-		"name": "North Atlantic, current analysis (fine)",
+		"name": "North Atlantic, current analysis (fine, 1-day GRIB)",
 		"comment": "GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
@@ -480,6 +480,87 @@
 			}
 		],
 		"gribRequest": "GFS:65N,10N,100W,10E|1,1|0,3..120|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
+	},
+	{
+		"key": "ATL-0004-FINE",
+		"name": "North Atlantic, current analysis (fine, 7-day GRIB)",
+		"comment": "GRIB and Faxes. Bigger GRIB.",
+		"map": {
+			"projection": "MERCATOR",
+			"north": 65.5,
+			"south": 10,
+			"east": 28.2,
+			"west": -101.8
+		},
+		"canvas": {
+			"w": 900,
+			"h": 600
+		},
+		"faxData": [
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+				"name": "North-West Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.32291855775920775,
+				"location": {
+					"x": 13,
+					"y": 8
+				}
+			},
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+				"name": "North-East Atl surface analysis",
+				"transp": "WHITE",
+				"rotation": 90,
+				"tx": {
+					"from": "BLACK",
+					"to": "RED"
+				},
+				"effect": "BLUR",
+				"zoom": 0.32291855775920775,
+				"location": {
+					"x": 401,
+					"y": 8
+				}
+			},
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PPAA10.gif",
+				"name": "North Atl 500mb analysis",
+				"transp": "WHITE",
+				"tx": {
+					"from": "BLACK",
+					"to": "BLUE"
+				},
+				"effect": "BLUR",
+				"zoom": 0.49330500605497085,
+				"location": {
+					"x": 26,
+					"y": 27
+				}
+			},
+			{
+				"faxUrl": "https://tgftp.nws.noaa.gov/fax/PJAA99.gif",
+				"name": "North Atl Sea state",
+				"transp": "WHITE",
+				"tx": {
+					"from": "BLACK",
+					"to": "DARKGREEN"
+				},
+				"effect": "BLUR",
+				"zoom": 0.4928121938611098,
+				"location": {
+					"x": 26,
+					"y": 27
+				}
+			}
+		],
+		"gribRequest": "GFS:65N,14N,100W,10E|1,1|0,6..168|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 	},
 	{
 		"key": "ATL-0001-48H",
