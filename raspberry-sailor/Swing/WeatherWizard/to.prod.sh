@@ -77,9 +77,9 @@ fi
 #
 echo -e "----------------------------------------------------------------------------------"
 echo -e "You can now send the archive ww-prod.zip to the destination machine, and unzip it."
-echo -e "You need java to be available on the destination machine, then you're good to go"
-echo -e "On Windows, run the script run-ww.bat"
-echo -e "On other systems, run the script run-ww.sh"
+echo -e "You need java to be available on the destination machine, then you're good to go."
+echo -e "On Windows, from a terminal, run the script run-ww.bat"
+echo -e "On other systems, from a terminal, run the script run-ww.sh"
 echo -e "----------------------------------------------------------------------------------"
 #
 echo -e "Ready! Bye!"

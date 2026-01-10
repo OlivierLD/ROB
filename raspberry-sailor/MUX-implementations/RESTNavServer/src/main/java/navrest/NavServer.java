@@ -162,10 +162,10 @@ public class NavServer {
 					if (previousValue != -1) {
 						if (previousValue < memoryUsedPercent) {
 							orientation = 1;
-							orientationMessage = "- Going up.";
+							orientationMessage = "- Went up.";
 						} else if (previousValue > memoryUsedPercent) {
 							orientation = -1;
-							orientationMessage = "- Going down.";
+							orientationMessage = "- Went down.";
 						} else {
 							orientation = 0;
 							orientationMessage = "- stable.";
@@ -190,9 +190,9 @@ public class NavServer {
 						orientationMessage = "";
 						if (previousValue != -1) {
 							if (previousValue < memoryUsedPercent) {
-								orientationMessage = "- Going up.";
+								orientationMessage = "- Went up.";
 							} else if (previousValue > memoryUsedPercent) {
-								orientationMessage = "- Going down.";
+								orientationMessage = "- Went down.";
 							} else {
 								orientationMessage = "- stable.";
 							}
