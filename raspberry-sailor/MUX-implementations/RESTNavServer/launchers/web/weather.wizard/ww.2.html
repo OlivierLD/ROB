@@ -2954,10 +2954,11 @@
                     console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
                 });
 
-        // Get position from cache every second
+        window.setTimeout(() => getGPSPosition(), 1000); // Initial get position from cache
+        // Get position from cache every so often
         let posInterval = window.setInterval(() => {
             getGPSPosition();
-        }, 1000);
+        }, 10 * ONE_MINUTE); // Every 10 minutes
 
     };
 
