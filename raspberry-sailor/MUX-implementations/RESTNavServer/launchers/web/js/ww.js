@@ -3,7 +3,7 @@
  *
  * Shows how to use the WorldMap object
  * and the REST APIs of the img service.
- * 
+ *
  * Displays faxes.
  */
 "use strict";
@@ -198,8 +198,11 @@ let getExistingComposites = function(callback, filter) {
 };
 
 // Get position from cache ?
-let getPositionFromNMEACache = function() {
+let getPositionFromNMEACache = function(verbose=false) {
 	let url = "/mux/cache";
+	if (verbose) {
+		console.log(`getPositionFromNMEACache, starting, GET ${url}`);
+	}
 	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
 };
 
@@ -207,13 +210,16 @@ let getGPSPosition = function() {
 	if (WW_VERBOSE) {
 		console.log(`getGPSPosition, starting`);
 	}
-	let posPromise = getPositionFromNMEACache();
+	let posPromise = getPositionFromNMEACache(WW_VERBOSE);
 	posPromise.then(cache => {
 		let cacheValues = JSON.parse(cache);
 		if (WW_VERBOSE) {
 			console.log(`Pos from Cache ${JSON.stringify(cacheValues)}`);
 		}
 		if (cacheValues.Position) {
+			if (WW_VERBOSE) {
+				console.log(`Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
+			}
 			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });  // TODO gridSquare & GoogleCodePlus ?
 			redraw();
 			// console.log(`Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
