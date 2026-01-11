@@ -129,6 +129,10 @@ let requestCompositeFaxes = function(requestPayload) {
 	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, requestPayload, false);
 };
 
+let setWWVerbose = function(value) {
+    WW_VERBOSE = value;
+}
+
 let getCompositeFaxes = function(options, compositeData, callback) {
 	if (WW_VERBOSE) {
 		console.log(`getCompositeFaxes, starting`);
