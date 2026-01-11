@@ -23,7 +23,7 @@ SUN_FLOWER=false
 PROP_FILE=
 DELTA_T=
 HTTP_PORT=
-HTTP_VERBOSE=false
+HTTP_VERBOSE=false   # Default. Can be set below with --http-verbose:true|false
 #
 for ARG in "$@"; do
   echo -e "Managing prm ${ARG}"
@@ -99,7 +99,7 @@ else
   echo -e "Using default DeltaT"
   JAVA_OPTS="${JAVA_OPTS} -DdeltaT=AUTO" # can also use -DdeltaT=68.9677, -DdeltaT=AUTO:2025-10, if needed
 fi
-#JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
+JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=${HTTP_VERBOSE}"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=true"
 #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose.dump=true"
 JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=${HTTP_VERBOSE}"
@@ -112,7 +112,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dimage.verbose=${IMAGE_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dgrib.verbose=${GRIB_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.cache.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.verbose=${AIS_VERBOSE}"
-JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${REST_VERBOSE}"
+JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${HTTP_VERBOSE}"  # Was REST_VERBOSE
 # Hard-coded ones:
 # JAVA_OPTS="${JAVA_OPTS} -Drest.nav.verbose=true"
 # JAVA_OPTS="${JAVA_OPTS} -Dnmea.utils.verbose=true"
@@ -223,7 +223,10 @@ fi
 #
 COMMAND="${SUDO}java -cp ${CP} ${JAVA_OPTS} navrest.NavServer"
 if [[ "${CMD_VERBOSE}" == "Y" || 1 -eq 1 ]]; then    # Always true...
-  echo -e "Running ${COMMAND}"
+  echo -e "----------------------------------------"
+  echo -e "Running the following command:"
+  echo -e "${COMMAND}"
+  echo -e "----------------------------------------"
 fi
 #
 ${COMMAND}

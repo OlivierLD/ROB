@@ -1,0 +1,11 @@
+Several GRIB sources
+
+https://openskiron.org/en/openwrf
+=> Exception in thread "main" jgrib.NotSupportedException: Grib table not supported; center 7, sub 21, table 0
+           at jgrib.GribPDSParamTable.getParameterTable(GribPDSParamTable.java:972)
+           at jgrib.GribRecordPDS.<init>(GribRecordPDS.java:229)
+           at jgrib.GribFile.<init>(GribFile.java:170)
+           at jgrib.GribFile.<init>(GribFile.java:131)
+           at jgrib.GribFile.<init>(GribFile.java:116)
+           at chartview.util.grib.JGribBulkViewer.<init>(JGribBulkViewer.java:21)
+           at main.BulkGribViewer.main(BulkGribViewer.java:24)
