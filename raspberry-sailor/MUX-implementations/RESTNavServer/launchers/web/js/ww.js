@@ -26,7 +26,8 @@ if (typeof(errManager) !== 'function') {
 	};
 }
 
-var DEFAULT_TIMEOUT = 300000; // 120000: 2 minutes, 300000: 5 minutes
+var ONE_MINUTE = 60000; // in ms.
+var DEFAULT_TIMEOUT = 5 * ONE_MINUTE; // 120000: 2 minutes, 300000: 5 minutes
 var WW_VERBOSE = false;
 
 /*
@@ -203,7 +204,7 @@ let getPositionFromNMEACache = function(verbose=false) {
 	if (verbose) {
 		console.log(`getPositionFromNMEACache, starting, GET ${url}`);
 	}
-	return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+	return getPromise(url, 30 * ONE_MINUTE, 'GET', 200, null, false);
 };
 
 let getGPSPosition = function() {
