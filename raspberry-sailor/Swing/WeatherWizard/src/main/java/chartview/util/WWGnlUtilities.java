@@ -3793,39 +3793,53 @@ public class WWGnlUtilities {
     public static BoatPosition getHTTPBoatPosition() throws Exception {
         BoatPosition bp = null;
         try {
+            // TODO a JQ Expression for lng, lat, cog ?
             String nmeaPayload = HTTPClient.getContent((String) ParamPanel.data[ParamData.NMEA_SERVER_URL][ParamData.VALUE_INDEX]);
             /*
              * Returned payload like
              * {
-             *   "pos": {
-             *        "lat":47.677667,
-             *        "lng":-3.135667,
-             *        "gridSquare":"IN87kq",
-             *        "latInDegMinDec":"N  47*40.66'",
-             *        "lngInDegMinDec":"W 003*08.14'"
-             *      },
-             *   "sog":{"sog":null,"unit":"kt"},
-             *   "cog":{"cog":null,"unit":"deg"}
-             * }
+             *   ...,
+             *    "Position": {
+             *       "lat": 47.677667,
+             *       "lng": -3.135667,
+             *       "gridSquare": "IN87kq",
+             *       "googlePlusCode": "8CVRMVH7+3P",
+             *       "latInDegMinDec": "N  47°40.66'",
+             *       "lngInDegMinDec": "W 003°08.14'"
+             *    },
+             *    ...
+             *    "COG": {
+             *       "angle": 327,
+             *       "value": 327,
+             *       "doubleValue": 327
+             *    },
+             *    ...
+             *
              */
             final Map<String, Object> gpsData = mapper.readValue(nmeaPayload, Map.class);
 
             try {
                 double lat = 0d;
                 try {
-                    lat = (double)((Map<String, Object>)gpsData.get("pos")).get("lat");
+                    lat = (double)((Map<String, Object>)gpsData.get("Position")).get("lat");
                 } catch (Exception ignore) {
+                    System.err.println("Getting latitude from cache");
+                    ignore.printStackTrace();
                 }
                 double lng = 0d;
                 try {
-                    lng = (double)((Map<String, Object>)gpsData.get("pos")).get("lng");
+                    lng = (double)((Map<String, Object>)gpsData.get("Position")).get("lng");
                 } catch (Exception ignore) {
+                    System.err.println("Getting longitude from cache");
+                    ignore.printStackTrace();
                 }
                 GeoPoint gp = new GeoPoint(lat, lng);
                 int hdg = 0;
                 try {
-                    hdg = (int)((Map<String, Object>)gpsData.get("cog")).get("cog");
+                    hdg = (int)((Map<String, Object>)gpsData.get("COG")).get("value");
                 } catch (Exception ignore) {
+                    System.err.println("Getting COG from cache");
+                    ignore.printStackTrace();
                 }
                 bp = new BoatPosition(gp, hdg);
             } catch (Exception ex) {
