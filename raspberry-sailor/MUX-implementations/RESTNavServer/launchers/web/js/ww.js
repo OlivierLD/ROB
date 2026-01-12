@@ -219,7 +219,7 @@ let getGPSPosition = function() {
 		}
 		if (cacheValues.Position) {
 			if (WW_VERBOSE) {
-				console.log(`Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
+				console.log(`${(new Date())}: Position from Data Cache: ${JSON.stringify(cacheValues.Position)}`);
 			}
 			worldMap.setUserPosition({ latitude: cacheValues.Position.lat, longitude: cacheValues.Position.lng });  // TODO gridSquare & GoogleCodePlus ?
 			redraw();
