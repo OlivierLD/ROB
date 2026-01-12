@@ -160,7 +160,7 @@ public class ChartAdjust {
                         }
                     } else if (args[a].startsWith("-interval:")) {
                         String s = args[a].substring("-interval:".length());
-                        ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX] = new Integer(s);
+                        ParamPanel.data[ParamData.RELOAD_DEFAULT_COMPOSITE_INTERVAL][ParamData.VALUE_INDEX] = Integer.valueOf(s);
                     } else if (args[a].startsWith("-pattern:")) {
                         String s = args[a].substring("-pattern:".length());
                         ParamPanel.data[ParamData.AUTO_SAVE_DEFAULT_COMPOSITE][ParamData.VALUE_INDEX] = s;
