@@ -1,7 +1,7 @@
 <app-parameters>
    <param id="0">102;0;0</param>
    <param id="1">204;204;204</param>
-   <param id="2">http://192.168.1.101:9999/mux/sog-cog</param>
+   <param id="2">http://192.168.1.27:9999/mux/cache</param>
    <param id="3">60</param>
    <param id="4">./polars/CheoyLee42.polar-coeff</param>
    <param id="5">10</param>
