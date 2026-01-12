@@ -45,6 +45,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class AdjustFrame extends JFrame {
@@ -327,7 +328,8 @@ public class AdjustFrame extends JFrame {
 
     private void askAndWaitForLoadAtStartup(final String compositeName, int timeout) {
         final LoadAtStartupPanel specialPanel = new LoadAtStartupPanel(compositeName);
-        final WWGnlUtilities.SpecialBool imDone = new WWGnlUtilities.SpecialBool(false);
+        // final WWGnlUtilities.SpecialBool imDone = new WWGnlUtilities.SpecialBool(false);
+        final AtomicBoolean imDone = new AtomicBoolean(false);
 
         final Thread me = Thread.currentThread();
         Thread thread = new Thread("startup-loader") {
@@ -337,7 +339,7 @@ public class AdjustFrame extends JFrame {
                             specialPanel, WWGnlUtilities.buildMessage("load-composite-at-startup"),
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE);
-                    imDone.setValue(true);
+                    imDone.set(true);
                     synchronized (me) {
                         me.notify();
                     }
@@ -363,7 +365,7 @@ public class AdjustFrame extends JFrame {
 
         synchronized (me) {
             try {
-                for (int i = 0; i < timeout && !imDone.valueOf(); i++) {
+                for (int i = 0; i < timeout && !imDone.get(); i++) {
                     specialPanel.setLineFiveMessage(WWGnlUtilities.buildMessage("you-said-5", new String[]{Integer.toString(timeout - i)}));
                     me.wait(1_000L);
                 }

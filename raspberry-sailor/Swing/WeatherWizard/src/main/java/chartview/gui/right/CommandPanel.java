@@ -988,22 +988,22 @@ public class CommandPanel
         final List<Integer> contourList = new ArrayList<>();
 
         if (gribData != null && isDisplayContourTWS()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_TWS));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_TWS));
         }
         if (gribData != null && isTherePrmsl() && isDisplayContourPRMSL()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_PRMSL));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_PRMSL));
         }
         if (gribData != null && isThere500mb() && isDisplayContour500mb()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_500MB));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_500MB));
         }
         if (gribData != null && isThereWaves() && isDisplayContourWaves()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_WAVE));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_WAVE));
         }
         if (gribData != null && isThereTemperature() && isDisplayContourTemp()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_TMP));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_TMP));
         }
         if (gribData != null && isThereRain() && isDisplayContourPrate()) {
-            contourList.add(new Integer(GRIBDataUtil.TYPE_RAIN));
+            contourList.add(Integer.valueOf(GRIBDataUtil.TYPE_RAIN));
         }
         nbContour = contourList.size();
 
@@ -5767,9 +5767,9 @@ public class CommandPanel
                     }
                     //        System.out.println("2 - Adding to slice:" + (gribPoint.rain * 3600f));
                     data2plot.add(gribPoint);
-                    bsp.add((i == (routeSize - 1)) ? new Double(bestRoute.get(i - 1).getBsp()) : new Double(rp.getBsp()));
-                    hdg.add((i == (routeSize - 1)) ? new Integer(bestRoute.get(i - 1).getHdg()) : new Integer(rp.getHdg()));
-                    twa.add((i == (routeSize - 1)) ? new Integer(bestRoute.get(i - 1).getTwa()) : new Integer(rp.getTwa()));
+                    bsp.add((i == (routeSize - 1)) ? Double.valueOf(bestRoute.get(i - 1).getBsp()) : Double.valueOf(rp.getBsp()));
+                    hdg.add((i == (routeSize - 1)) ? Integer.valueOf(bestRoute.get(i - 1).getHdg()) : Integer.valueOf(rp.getHdg()));
+                    twa.add((i == (routeSize - 1)) ? Integer.valueOf(bestRoute.get(i - 1).getTwa()) : Integer.valueOf(rp.getTwa()));
                 } catch (Exception ignore) {
                     ignore.printStackTrace();
                 }

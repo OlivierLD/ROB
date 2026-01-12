@@ -1969,7 +1969,7 @@ public class WWGnlUtilities {
     /**
      * Old version, turns XML into WAZ
      *
-     * @Deprecated
+     * @deprecated
      */
     public static void archiveCompositeDirectory_(final String compositeDirectoryName) {
         // 1 - Ask: Copy or Move
@@ -3608,12 +3608,14 @@ public class WWGnlUtilities {
             if (thumbnail != null) {
                 int x = getWidth() / 2 - thumbnail.getIconWidth() / 2;
                 int y = getHeight() / 2 - thumbnail.getIconHeight() / 2;
-                if (y < 0) {
-                    y = 0;
-                }
-                if (x < 5) {
-                    x = 5;
-                }
+                y = Math.max(y, 0);
+//                if (y < 0) {
+//                    y = 0;
+//                }
+                x = Math.max(x, 5);
+//                if (x < 5) {
+//                    x = 5;
+//                }
                 thumbnail.paintIcon(this, g, x, y);
             } else {
                 final Dimension dimension = this.getSize();
@@ -3633,7 +3635,7 @@ public class WWGnlUtilities {
             extends JPanel
             implements PropertyChangeListener {
 
-        JButton playButton = new JButton("Play"); // LOCALIZE
+        JButton playButton = new JButton("Play"); // TODO Localize
         String soundFileName = null;
 
         private final static int DEFAULT_WIDTH = 100;
@@ -3686,9 +3688,9 @@ public class WWGnlUtilities {
     }
 
     /**
-     * @deprecated Use AtomicBoolean
+     * @deprecated Replaced with AtomicBoolean
      */
-    public static class SpecialBool {  // TODO Replace with Atomic
+    public static class SpecialBool {
         private boolean b = true;
 
         public SpecialBool(boolean b) {

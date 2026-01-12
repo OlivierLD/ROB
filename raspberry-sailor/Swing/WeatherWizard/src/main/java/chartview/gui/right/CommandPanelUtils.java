@@ -226,6 +226,7 @@ public class CommandPanelUtils {
                 y = me.getY() - (int) chartPanel.getVisibleRect().getY();
         //  System.out.println("X:" + x + ", Y:" + y + " (winY:" + altTooltipY + ", winX:" + altTooltipX + ", winW:" + altTooltipW);
         if (y > altTooltipY + 7 && y < altTooltipY + 21) {
+            //
         }
         if (x < (altTooltipX + altTooltipW - 3) && x > (altTooltipX + altTooltipW - (3 + buttonWidth))) {
             //    System.out.println("Close");
@@ -362,7 +363,7 @@ public class CommandPanelUtils {
     public static void runStorageThread(CommandPanel cp,
                                         boolean update,
                                         String compositeName,
-                                        GribHelper.GribConditionData wgd[]) {
+                                        GribHelper.GribConditionData[] wgd) {
         WWContext.getInstance().fireSetLoading(true, "Please wait, storing..."); // LOCALIZE
         XMLDocument storage = new XMLDocument();
 
@@ -851,7 +852,7 @@ public class CommandPanelUtils {
                     double nl = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("nadir-latitude"));
                     double ng = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("nadir-longitude"));
                     double alt = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("altitude"));
-                    boolean opaque = new Boolean(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("opaque")).booleanValue();
+                    boolean opaque = Boolean.parseBoolean(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("opaque"));
                     cp.getChartPanel().setSatelliteAltitude(alt);
                     cp.getChartPanel().setSatelliteLatitude(nl);
                     cp.getChartPanel().setSatelliteLongitude(ng);
@@ -1208,7 +1209,7 @@ public class CommandPanelUtils {
                     }
                     String wo = gribNode.getAttribute("wind-only"); // deprecated
                     if (wo.trim().length() > 0) {
-                        cp.setWindOnly(Boolean.valueOf(wo));
+                        cp.setWindOnly(Boolean.parseBoolean(wo));
                         if (!cp.isWindOnly()) {
                             cp.setDisplayPrmsl(true);
                             cp.setDisplay500mb(true);
@@ -1219,7 +1220,7 @@ public class CommandPanelUtils {
                     }
                     String wc = gribNode.getAttribute("with-contour"); // deprecated
                     if (wc.trim().length() > 0) {
-                        cp.setDisplayContourLines(Boolean.valueOf(wc));
+                        cp.setDisplayContourLines(Boolean.parseBoolean(wc));
                     }
                     if (gribNode.selectNodes("dynamic-grib").getLength() == 0) {
                         String gribHint = gribNode.getFirstChild().getNodeValue();
@@ -1236,7 +1237,7 @@ public class CommandPanelUtils {
                                     false);
                             if (grib != null && grib.trim().length() > 0) {
                                 String gribFileName = grib;
-                                GribHelper.GribConditionData wgd[] = GribHelper.getGribData(gribFileName, true);
+                                GribHelper.GribConditionData[] wgd = GribHelper.getGribData(gribFileName, true);
                                 cp.setGribFileName(gribFileName);
                                 cp.setGribData(wgd, gribFileName);
                             } else {
@@ -1253,7 +1254,7 @@ public class CommandPanelUtils {
                             String gribFileName = SearchUtil.dynamicSearch(gribRequest);
                             // System.out.println("For " + hintName + ", search: found [" + gribFileName + "]");
                             if (gribFileName != null && gribFileName.trim().length() > 0) {
-                                GribHelper.GribConditionData wgd[] = GribHelper.getGribData(gribFileName, true);
+                                GribHelper.GribConditionData[] wgd = GribHelper.getGribData(gribFileName, true);
                                 cp.setGribData(wgd, gribFileName);
                             } else {
                                 gribFileName = "";
@@ -1277,7 +1278,7 @@ public class CommandPanelUtils {
                             try {
                                 byte[] gribContent = HTTPClient.getGRIB(WWGnlUtilities.generateGRIBRequest(request), gribDir, gribFileName, true);
                                 WWContext.getInstance().fireReloadGRIBTree();
-                                GribHelper.GribConditionData wgd[] = GribHelper.getGribData(new ByteArrayInputStream(gribContent), request);
+                                GribHelper.GribConditionData[] wgd = GribHelper.getGribData(new ByteArrayInputStream(gribContent), request);
                                 cp.setGribData(wgd, gribFileName);
                                 cp.setGribFileName(gribFileName);
                             } catch (CannotWriteException cwe) { // Case of a permission
@@ -1328,7 +1329,7 @@ public class CommandPanelUtils {
                 //      System.out.println("Default Composite: [" + ((ParamPanel.DataFile) ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX]).toString() + "]");
                 boolean autoSaveDefaultComposite = ((String) ParamPanel.data[ParamData.AUTO_SAVE_DEFAULT_COMPOSITE][ParamData.VALUE_INDEX]).trim().length() > 0;
                 String compositeName = ((ParamPanel.DataFile) ParamPanel.data[ParamData.LOAD_COMPOSITE_STARTUP][ParamData.VALUE_INDEX]).toString();
-                String ca[] = compositeName.split(",");
+                String[] ca = compositeName.split(",");
                 for (int i = 0; i < ca.length; i++) {
                     if (ca[i].equals(fileName) && autoSaveDefaultComposite) {
                         try {
@@ -1336,7 +1337,7 @@ public class CommandPanelUtils {
                             String compositeDir = ((ParamPanel.DataDirectory) ParamPanel.data[ParamData.COMPOSITE_ROOT_DIR][ParamData.VALUE_INDEX]).toString();
                             // Warning!! If the LOAD_COMPOSITE_STARTUP is an array, the AUTO_SAVE_DEFAULT_COMPOSITE must be an array too.
                             String bigPattern = ((String) ParamPanel.data[ParamData.AUTO_SAVE_DEFAULT_COMPOSITE][ParamData.VALUE_INDEX]);
-                            String patterns[] = bigPattern.split(",");
+                            String[] patterns = bigPattern.split(",");
                             String onePattern = "";
                             if (patterns.length != ca.length) {
                                 onePattern = patterns[0];
@@ -1624,7 +1625,7 @@ public class CommandPanelUtils {
                     double nl = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("nadir-latitude"));
                     double ng = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("nadir-longitude"));
                     double alt = Double.parseDouble(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("altitude"));
-                    boolean opaque = new Boolean(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("opaque")).booleanValue();
+                    boolean opaque = Boolean.parseBoolean(((XMLElement) doc.selectNodes("//projection").item(0)).getAttribute("opaque"));
                     cp.getChartPanel().setSatelliteAltitude(alt);
                     cp.getChartPanel().setSatelliteLatitude(nl);
                     cp.getChartPanel().setSatelliteLongitude(ng);
@@ -1928,10 +1929,10 @@ public class CommandPanelUtils {
                                 GribFile gf = (GribFile) o;
                                 WWContext.getInstance().setGribFile(gf);
                                 List<GribHelper.GribConditionData> agcd = GribHelper.dumper(gf, displayFileName);
-                                GribHelper.GribConditionData wgd[] = agcd.toArray(new GribHelper.GribConditionData[agcd.size()]);
+                                GribHelper.GribConditionData[] wgd = agcd.toArray(new GribHelper.GribConditionData[agcd.size()]);
                                 cp.setGribData(wgd, displayFileName);
                             } else { // For backward compatibility. 27-Feb-2009
-                                GribHelper.GribConditionData wgd[] = (GribHelper.GribConditionData[]) o;
+                                GribHelper.GribConditionData[] wgd = (GribHelper.GribConditionData[]) o;
                                 //        setGribData(wgd, gribRequest);
                                 cp.setGribData(wgd, displayFileName);
                             }
@@ -1939,7 +1940,7 @@ public class CommandPanelUtils {
                             cp.setGribFileName(gribNode.getFirstChild().getNodeValue());
                             WWContext.getInstance().fireProgressing(WWGnlUtilities.buildMessage("restoring-grib"));
                             String displayFileName = cp.getGribFileName();
-                            GribHelper.GribConditionData wgd[] = null;
+                            GribHelper.GribConditionData[] wgd = null;
                             if (fromArchive) {
                                 if (cp.getGribFileName().startsWith(WWContext.WAZ_PROTOCOL_PREFIX)) {
                                     cp.setGribFileName(cp.getGribFileName().substring(WWContext.WAZ_PROTOCOL_PREFIX.length()));
@@ -2054,7 +2055,7 @@ public class CommandPanelUtils {
     public static GribHelper.GribConditionData[] getGribFromComposite(String fileName) {
         ZipFile waz = null;
         XMLDocument doc = null;
-        GribHelper.GribConditionData wgd[] = null;
+        GribHelper.GribConditionData[] wgd = null;
         DOMParser parser = WWContext.getInstance().getParser();
         synchronized (parser) {
             parser.setValidationMode(DOMParser.NONVALIDATING);
