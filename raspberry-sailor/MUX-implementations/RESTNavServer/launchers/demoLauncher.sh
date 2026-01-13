@@ -14,9 +14,9 @@ echo -e "Moving to ${SCRIPT_DIR}"
 cd ${SCRIPT_DIR}
 echo -e "Working from $(pwd -P)"
 #
-RED='\033[0;31;1m'    # Red and Bold
+RED='\033[0;31;1m'                 # Red and Bold
 BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
-NC='\033[0m'          # Back to No Color
+NC='\033[0m'                       # Back to No Color
 #
 HTTP_PORT=9999
 #
@@ -26,6 +26,7 @@ LNCH_BRWSR_PROVIDED=N
 WITH_PROXY=N
 USER_OPTION=
 WITH_NOHUP=
+SMALL_MENU=N
 export CMD_VERBOSE=N
 # Program parameters
 NAV_SERVER_EXTRA_OPTIONS=
@@ -33,6 +34,7 @@ NAV_SERVER_EXTRA_OPTIONS=
 function displayUsage() {
   echo -e "-- Several CLI Parameters --"
   echo -e " ${RED}--help, -h, help, ?${NC}: produces this message."
+  echo -e " ${RED}--small, ${NC}: reduced menu."
   echo -e " ${RED}--http-port:XXXX${NC}, default ${HTTP_PORT}, where XXXX overrides the default port, ${HTTP_PORT}, hard-coded in ${0}."
   echo -e " ${RED}--option:XX${NC}, automatically launches option XX, without prompting the user"
   echo -e " ${RED}--browser:Y|N${NC}, default N, will open a browser (URL depends on the option)"
@@ -47,7 +49,9 @@ function displayUsage() {
 if [[ $# -gt 0 ]]; then
 	for prm in $*; do
 	  echo "Processing ${prm} ..."
-	  if [[ ${prm} == "--browser:"* ]]; then
+	  if [[ ${prm} == "--small" ]]; then
+	    SMALL_MENU=Y
+	  elif [[ ${prm} == "--browser:"* ]]; then
 	    LAUNCH_BROWSER=${prm#*:}
 	    LNCH_BRWSR_PROVIDED=Y
 	  elif [[ ${prm} == "--http-port:"* ]]; then
@@ -129,70 +133,96 @@ GO=true
 #
 # Banner done with https://manytools.org/hacker-tools/ascii-banner/, 'Slant Relief'
 #
-# cat banner.txt
-cat banner.stby.txt
+if [[ "${SMALL_MENU}" == "Y" ]]; then
+  cat banner.txt
+else
+  cat banner.stby.txt
+fi
 sleep 1
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #
 while [[ "${GO}" == "true" ]]; do
 	clear
-	echo -e ">> Note ⚠️ : Optional Script Parameters : "
-	echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y --help -h help ?"
-	echo -e "    --option:X will not prompt the user for his choice, it will go directly for it."
-	echo -e "    --nohup:Y will launch some commands with nohup (see the script for details)"
-	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                                                                                                             |"
-	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}P${NC}. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |                                                                                         |"
-	echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |                                                                                         |"
-	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}J${NC}. JConsole (JVM Monitoring) 📡   |  ${RED}JV${NC}. JVisualVM 📡                                  |                                                                                         |"
-	echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |"
-	echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
-	echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
-	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context. External (and demanding on the browser). Requires Internet Connection.                                                                            |"
-	echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
-	echo -e "|     (Including almanacs publication)                                                    |             Does not require a GPS                                                      |"
-	echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
-	echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
-	echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
-	echo -e "|  ${RED}6${NC}. Replay logged kayak data (Drakes Estero)                                            |  ${RED}6b${NC}. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
-	echo -e "|  ${RED}7${NC}. Replay logged driving data (with a Maps)                                            |  ${RED}8${NC}.  Replay logged kayak data, ANSI console display                                     |"
-	echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), TCP & GPSd forwarders (Big file)|  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point),                            |"
-	echo -e "|                                                                                         |             (there is some current in that one, it's in the SF Bay)                     |"
-	echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display (Big file) |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
-	echo -e "|                                                                                         |             (requires a NodeJS WebSocket server to be running)                          |"
-	echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |                                                                                         |"
-	echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
-	echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
-	echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests. With markers (Dives).                                                    |"
-	echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              | ${RED}13b${NC}. GPS, + AIS data from sinagot.net (demanding...).                                   |"
-	echo -e "|                                                                                         | ${RED}13c${NC}. GPS only, Chartless Map (Etel-Groix).                                              |"
-	echo -e "|                                                                                         | ${RED}13d${NC}. GPS only, AIS, Chartless Map (Etel-Groix). (demanding...)                          |"
-	echo -e "|                                                                                         | ${RED}13e${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only.                              |"
-	echo -e "|                                                                                         | ${RED}13e2${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only. Re-logs the data.        |"
-	echo -e "|                                                                                         | ${RED}13f${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only, no AIS.                   |"
-	echo -e "|                                                                                         | ${RED}13g${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only, AIS from OpenCPN/UDP.        |"
-	echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
-	echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse                                                               |"
-	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
-	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	# echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
-	# echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                        | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                            |"
-	echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
-	echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-	echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
-	echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
-	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
-	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-	echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
-	echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+	if [[ "${SMALL_MENU}" == "Y" ]]; then
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|               N A V   S E R V E R   -   L A U N C H E R  🚀                                                       |"
+    echo -e "+-----------------------------------------------------------------------------------------+-------------------------+"
+    echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context. External (and demanding on the browser). Requires Internet Connection.            |"
+    echo -e "+-----------------------------------------------------------------------------------------+-------------------------+"
+    echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS                           |"
+    echo -e "|     (Including almanacs publication)                                                                              |"
+    echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging                              |"
+    echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file)                           |"
+    echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay.                           |"
+    echo -e "|                   - See or modify nmea.mux.properties for details.                                                |"
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                                                 |"
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+    echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                       |"
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                     |"
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                        |"
+    echo -e "+-------------------------------------------------------------------------------------------------------------------+"
+	else
+    echo -e ">> Note ⚠️ : Optional Script Parameters : "
+    echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y --help -h help ?"
+    echo -e "    --option:X will not prompt the user for his choice, it will go directly for it."
+    echo -e "    --nohup:Y will launch some commands with nohup (see the script for details)"
+    echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                                                                                                             |"
+    echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}P${NC}. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |                                                                                         |"
+    echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |                                                                                         |"
+    echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}J${NC}. JConsole (JVM Monitoring) 📡   |  ${RED}JV${NC}. JVisualVM 📡                                  |                                                                                         |"
+    echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |"
+    echo -e "|                                    |         running on the remote machine.             |                                                                                         |"
+    echo -e "|                                    |     Enter 'JVH' for some help.                     |                                                                                         |"
+    echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}0${NC}. Pure ES6 Celestial Context. External (and demanding on the browser). Requires Internet Connection.                                                                            |"
+    echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
+    echo -e "|     (Including almanacs publication)                                                    |             Does not require a GPS                                                      |"
+    echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
+    echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
+    echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
+    echo -e "|  ${RED}6${NC}. Replay logged kayak data (Drakes Estero)                                            |  ${RED}6b${NC}. Replay logged kayak data (Ria d'Etel. GPS - Satellites - PRMSL, Air Temp, Hum)     |"
+    echo -e "|  ${RED}7${NC}. Replay logged driving data (with a Maps)                                            |  ${RED}8${NC}.  Replay logged kayak data, ANSI console display                                     |"
+    echo -e "|  ${RED}9${NC}. Replay logged sailing data (Bora-Bora - Tongareva), TCP & GPSd forwarders (Big file)|  ${RED}9b${NC}. Replay logged sailing data (China Camp - Oyster Point),                            |"
+    echo -e "|                                                                                         |             (there is some current in that one, it's in the SF Bay)                     |"
+    echo -e "|  ${RED}9c${NC}. Replay logged sailing data (Nuku-Hiva - Rangiroa), ANSI console display (Big file) |  ${RED}9d${NC}. Replay logged sailing data (Oyster Point), heading back in.                        |"
+    echo -e "|                                                                                         |             (requires a NodeJS WebSocket server to be running)                          |"
+    echo -e "|  ${RED}9e${NC}. Replay logged sailing data (Bora-Bora - Tongareva), forwarders TCP, WS, GPSd       |                                                                                         |"
+    echo -e "| ${RED}10${NC}. Full Nav Server Home Page. NMEA, Tides, Weather Wizard, Almanacs, etc. Data replay. | ${RED}11${NC}. Same as 10, with proxy.                                                             |"
+    echo -e "|     - See or modify nmea.mux.properties for details.                                    |     - See or modify nmea.mux.properties for details.                                    |"
+    echo -e "| ${RED}12${NC}. With 2 input serial ports.                                                          | ${RED}13${NC}. AIS Tests. With markers (Dives).                                                    |"
+    echo -e "|     - See or modify nmea.mux.2.serial.yaml for details. Or try option H:12              | ${RED}13b${NC}. GPS, + AIS data from sinagot.net (demanding...).                                   |"
+    echo -e "|                                                                                         | ${RED}13c${NC}. GPS only, Chartless Map (Etel-Groix).                                              |"
+    echo -e "|                                                                                         | ${RED}13d${NC}. GPS only, AIS, Chartless Map (Etel-Groix). (demanding...)                          |"
+    echo -e "|                                                                                         | ${RED}13e${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only.                              |"
+    echo -e "|                                                                                         | ${RED}13e2${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only. Re-logs the data.        |"
+    echo -e "|                                                                                         | ${RED}13f${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only, no AIS.                   |"
+    echo -e "|                                                                                         | ${RED}13g${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only, AIS from OpenCPN/UDP.        |"
+    echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
+    echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse                                                               |"
+    echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
+    echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    # echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
+    # echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                        | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                            |"
+    echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
+    echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
+    echo -e "| >> Hint: use './killproxy.sh' to stop any running Proxy Server 💣                                                                                                                 |"
+    echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
+    echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+    echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
+    echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
+  fi
 	if [[ "${USER_OPTION}" != "" ]]; then
 	  echo -e "------------------------------"
 	  echo -e ">> Using option ${USER_OPTION}"
