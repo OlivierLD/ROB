@@ -168,6 +168,7 @@ while [[ "${GO}" == "true" ]]; do
 	else
     echo -e ">> Note ⚠️ : Optional Script Parameters : "
     echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y --help -h help ?"
+    echo -e "    --small will show a smaller version of this menu"
     echo -e "    --option:X will not prompt the user for his choice, it will go directly for it."
     echo -e "    --nohup:Y will launch some commands with nohup (see the script for details)"
     echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
