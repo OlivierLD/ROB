@@ -32,7 +32,9 @@ var WW_VERBOSE = false;
 
 /*
  * Demo features
- * TODO Get it from another channel, like a GPS...
+ * Will get the position from the cache...
+ * Default position can be set when starting the NavServer,
+ * with -Ddefault.mux.latitude=47.677667 -Ddefault.mux.longitude=-3.135667
  */
 
 //let position = { // SF

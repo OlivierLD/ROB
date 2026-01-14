@@ -191,6 +191,15 @@
             color: cyan;
         }
 
+        select:disabled {
+            /* For the text */
+            color: transparent;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            /* for the iamges */
+            filter: blur(1px);
+            -webkit-filter: blur(1px);
+        }
+
 		.tab {
             overflow: hidden;
             border: 1px solid #ccc;
@@ -2063,9 +2072,12 @@
         };
 
         let displayCompositeInfo = () => {
-            // console.log('Displaying');
-            let compositeId = document.getElementById('composites').value;
-            composeCompositeInfo(compositeId);
+            let selectBox = document.getElementById('composites');
+            if (selectBox.disabled != true) {
+                // console.log('Displaying');
+                let compositeId = selectBox.value;
+                composeCompositeInfo(compositeId);
+            }
         };
 
         let composeCompositeInfo = (compositeId) => {
