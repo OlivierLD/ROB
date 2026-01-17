@@ -8,7 +8,7 @@
     <!--meta charset="iso-8859-1"-->
     <!--meta charset="utf-8"-->
     <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-    <title>Weather Wizard</title>
+    <title>Weather Wizard Workbench</title>
 
     <link rel="icon" type="image/ico" href="../icons/hammerhead.02.ico">
 
@@ -28,203 +28,205 @@
 
     <script type="text/javascript">
 
-  let flavor = 'Ajax'; // Default, WebSocket not implemented here (we run on a small http server).
+let flavor = 'Ajax'; // Default, WebSocket not implemented here (we run on a small http server).
 
-  let currentFax = 1;
-  let canvas, context;
+let currentFax = 1;
+let canvas, context;
 
-  let thisZoomFactor = 1;
+let thisZoomFactor = 1;
 
-  window.onload = function() {
-	  init(); // init UI
+window.onload = function() {
+	init(); // init UI
 
-	  canvas = document.getElementById('mapCanvas');
-	  context = canvas.getContext('2d');
+	canvas = document.getElementById('mapCanvas');
+	context = canvas.getContext('2d');
 
-	  worldMap.clear();
-	  worldMap.setMouseMoveCallback(mouseMoveCallback);
-	  worldMap.setPositionLabel("SF");
-	  setTimeout(function () {
-		  worldMap.drawWorldMap();
-	  }, 1);
+	worldMap.clear();
+	worldMap.setMouseMoveCallback(mouseMoveCallback);
+	worldMap.setPositionLabel("Pos");
+	setTimeout(function () {
+		worldMap.drawWorldMap();
+	}, 1);
 
-	  document.getElementById("console-type").innerHTML = 'The HTML5 ' + flavor + ' Console.';
+	document.getElementById("console-type").innerHTML = 'The HTML5 ' + flavor + ' Console.';
 
-	  // Populate composites list
-	  for (let i=0; i<compositeCatalog.length; i++) {
-	    let opt = document.createElement('option');
-			opt.setAttribute('value', compositeCatalog[i].key);
-			opt.appendChild(document.createTextNode(compositeCatalog[i].name));
-			document.getElementById('composites').appendChild(opt);
-			if (i === 0) {
-				if (compositeCatalog[i].gribRequest !== undefined) {
-					document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
-				}
+	// Populate composites list
+	for (let i=0; i<compositeCatalog.length; i++) {
+	let opt = document.createElement('option');
+		opt.setAttribute('value', compositeCatalog[i].key);
+		opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+		document.getElementById('composites').appendChild(opt);
+		if (i === 0) {
+			if (compositeCatalog[i].gribRequest !== undefined) {
+				document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
 			}
-	  }
-  };
+		}
+	}
+};
 
-  let mouseMoveCallback = function(obj) {
-		//  Display position, GRIB Data., etc...
-		let mouseDataElmt = document.getElementById("mouse-data");
-		let str = "Mouse X: " + obj.x + ", Y:" + obj.y;
-		str += ("\nL: " + decToSex(obj.lat, "NS"));
-		str += ("\nG: " + decToSex(obj.lng, "EW"));
+let mouseMoveCallback = function(obj) {
+	//  Display position, GRIB Data., etc...
+	let mouseDataElmt = document.getElementById("mouse-data");
+	let str = "Mouse X: " + obj.x + ", Y:" + obj.y;
+	str += ("\nL: " + decToSex(obj.lat, "NS"));
+	str += ("\nG: " + decToSex(obj.lng, "EW"));
 
-		if (gribData !== undefined) {
-			let date = document.getElementById("grib-dates").value;
-			let oneDateGRIB = gribData[0]; // Default
-			// Look for the right date
-			for (let i = 0; i < gribData.length; i++) {
-				if (gribData[i].gribDate.formattedUTCDate === date) {
-					oneDateGRIB = gribData[i];
-					break;
-				}
+	if (gribData !== undefined) {
+		let date = document.getElementById("grib-dates").value;
+		let oneDateGRIB = gribData[0]; // Default
+		// Look for the right date
+		for (let i = 0; i < gribData.length; i++) {
+			if (gribData[i].gribDate.formattedUTCDate === date) {
+				oneDateGRIB = gribData[i];
+				break;
 			}
-			// The current frame is oneDateGRIB
-			// Find the GRIB Cell
-			let xCell = oneDateGRIB.gribDate.width - 1, yCell = oneDateGRIB.gribDate.height - 1;
-			for (let hGRIB = 0; hGRIB < oneDateGRIB.gribDate.height; hGRIB++) {
-				let lat = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB));
-				if (lat > obj.lat) {
-					yCell = (hGRIB - 1);
-					break;
-				}
+		}
+		// The current frame is oneDateGRIB
+		// Find the GRIB Cell
+		let xCell = oneDateGRIB.gribDate.width - 1, yCell = oneDateGRIB.gribDate.height - 1;
+		for (let hGRIB = 0; hGRIB < oneDateGRIB.gribDate.height; hGRIB++) {
+			let lat = oneDateGRIB.gribDate.bottom + ((oneDateGRIB.gribDate.stepy * hGRIB));
+			if (lat > obj.lat) {
+				yCell = (hGRIB - 1);
+				break;
 			}
-
-			for (let wGRIB = 0; wGRIB < oneDateGRIB.gribDate.width; wGRIB++) {
-				let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB));
-				if (lng > 0 && obj.lng > 0 && lng > obj.lng) {
-					xCell = wGRIB - 1;
-					break;
-				} else if (lng < 0 && obj.lng < 0 && obj.lng < lng) {
-					xCell = wGRIB - 1;
-					break;
-				}
-			}
-			console.log("%s / %s is in cell Row:%d, Col:%d (Total is %d rows, %d cols)",
-					decToSex(obj.lat, "NS"),
-					decToSex(obj.lng, "EW"),
-					yCell,
-					xCell,
-					oneDateGRIB.gribDate.height,
-					oneDateGRIB.gribDate.width);
-			str += ("\nGRIB cell row " + yCell + ", col " + xCell);
-			if (xCell > -1 && xCell < oneDateGRIB.gribDate.width && yCell > -1 && yCell < oneDateGRIB.gribDate.height) {
-				let foundWind = false;
-				for (let idx=0; idx<oneDateGRIB.typedData.length; idx++) {
-					let skip = false;
-					let value = oneDateGRIB.typedData[idx].data[yCell][xCell];
-					let unit  = oneDateGRIB.typedData[idx].gribType.unit;
-					let type = oneDateGRIB.typedData[idx].gribType.type;
-
-					let displayValue, displayUnit, displayType;
-					switch (type) {
-						case 'prmsl':
-							displayType = 'PRMSL';
-							displayValue = (value/100).toFixed(2);
-							displayUnit = 'hPa';
-							break;
-						case 'tmp':
-							displayType = 'AIRTMP';
-							displayValue = (value - 273.6).toFixed(2);
-							displayUnit = 'C';
-							break;
-						case 'ugrd':
-							if (!foundWind) {
-								let vgrd;
-								for (let i=0; i<oneDateGRIB.typedData.length; i++) {
-									if (oneDateGRIB.typedData[i].gribType.type === 'vgrd') {
-										vgrd = oneDateGRIB.typedData[i].data;
-										break;
-									}
-								}
-								if (vgrd !== undefined) {
-									displayUnit = '';
-									displayType = "WIND";
-									let u = value;
-									let v = vgrd[yCell][xCell]
-									let tws = getSpeed(u, v);
-									let dir = getDir(u, v);
-									displayValue = tws.toFixed(1) + " kts, " + dir.toFixed(0) + "&deg; (u:" + u.toFixed(1) + ", v:" + v.toFixed(1) + ")";
-									foundWind = true;
-								}
-							} else {
-								skip = true;
-							}
-							break;
-						case 'vgrd':
-							skip = true;
-							break;
-						case 'prate':
-							displayType = 'PRATE';
-							displayValue = (value * 3600).toFixed(2);
-							displayUnit = "mm/h";
-							break;
-						case 'hgt':
-							displayType = '500HGT';
-							try {
-								displayValue = (value).toFixed(2);
-								displayUnit = "m";
-							} catch (err) {
-								displayValue = "xx";
-								displayUnit = "-";
-								console.log(err);
-							}
-							break;
-						case 'htsgw':
-							displayType = 'WAVES';
-							if (oneDateGRIB.typedData[idx].data[0].length !== oneDateGRIB.gribDate.width) {
-								// Re-adjust. Not very elegant...
-								xCell = Math.floor(xCell * oneDateGRIB.typedData[idx].data[0].length / oneDateGRIB.gribDate.width);
-								value = oneDateGRIB.typedData[idx].data[yCell][xCell];
-							}
-							try {
-								displayValue = value.toFixed(2);
-								displayUnit = unit;
-							} catch (err) {
-								displayValue = "xx";
-								displayUnit = "-";
-								console.log(err);
-							}
-							break;
-						default:
-							break;
-					}
-					if (!skip) {
-						str += ("\n" + displayType + ": " + displayValue + " " + displayUnit);
-					}
-				}
-			}
-
 		}
 
-	  mouseDataElmt.innerHTML = ("<pre>" + str + "</pre>");
-	};
+		for (let wGRIB = 0; wGRIB < oneDateGRIB.gribDate.width; wGRIB++) {
+			let lng = ajustedLongitude(oneDateGRIB.gribDate.left, (oneDateGRIB.gribDate.stepx * wGRIB));
+			if (lng > 0 && obj.lng > 0 && lng > obj.lng) {
+				xCell = wGRIB - 1;
+				break;
+			} else if (lng < 0 && obj.lng < 0 && obj.lng < lng) {
+				xCell = wGRIB - 1;
+				break;
+			}
+		}
+		console.log("%s / %s is in cell Row:%d, Col:%d (Total is %d rows, %d cols)",
+				decToSex(obj.lat, "NS"),
+				decToSex(obj.lng, "EW"),
+				yCell,
+				xCell,
+				oneDateGRIB.gribDate.height,
+				oneDateGRIB.gribDate.width);
+		str += ("\nGRIB cell row " + yCell + ", col " + xCell);
+		if (xCell > -1 && xCell < oneDateGRIB.gribDate.width && yCell > -1 && yCell < oneDateGRIB.gribDate.height) {
+			let foundWind = false;
+			for (let idx=0; idx<oneDateGRIB.typedData.length; idx++) {
+				let skip = false;
+				let value = oneDateGRIB.typedData[idx].data[yCell][xCell];
+				let unit  = oneDateGRIB.typedData[idx].gribType.unit;
+				let type = oneDateGRIB.typedData[idx].gribType.type;
 
-  let displayErr = function(err) {
-    if (err !== undefined) {
-	    document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
-    }
-  };
+				let displayValue, displayUnit, displayType;
+				switch (type) {
+					case 'prmsl':
+						displayType = 'PRMSL';
+						displayValue = (value/100).toFixed(2);
+						displayUnit = 'hPa';
+						break;
+					case 'tmp':
+						displayType = 'AIRTMP';
+						displayValue = (value - 273.6).toFixed(2);
+						displayUnit = 'C';
+						break;
+					case 'ugrd':
+						if (!foundWind) {
+							let vgrd;
+							for (let i=0; i<oneDateGRIB.typedData.length; i++) {
+								if (oneDateGRIB.typedData[i].gribType.type === 'vgrd') {
+									vgrd = oneDateGRIB.typedData[i].data;
+									break;
+								}
+							}
+							if (vgrd !== undefined) {
+								displayUnit = '';
+								displayType = "WIND";
+								let u = value;
+								let v = vgrd[yCell][xCell]
+								let tws = getSpeed(u, v);
+								let dir = getDir(u, v);
+								displayValue = tws.toFixed(1) + " kts, " + dir.toFixed(0) + "&deg; (u:" + u.toFixed(1) + ", v:" + v.toFixed(1) + ")";
+								foundWind = true;
+							}
+						} else {
+							skip = true;
+						}
+						break;
+					case 'vgrd':
+						skip = true;
+						break;
+					case 'prate':
+						displayType = 'PRATE';
+						displayValue = (value * 3600).toFixed(2);
+						displayUnit = "mm/h";
+						break;
+					case 'hgt':
+						displayType = '500HGT';
+						try {
+							displayValue = (value).toFixed(2);
+							displayUnit = "m";
+						} catch (err) {
+							displayValue = "xx";
+							displayUnit = "-";
+							console.log(err);
+						}
+						break;
+					case 'htsgw':
+						displayType = 'WAVES';
+						if (oneDateGRIB.typedData[idx].data[0].length !== oneDateGRIB.gribDate.width) {
+							// Re-adjust. Not very elegant...
+							xCell = Math.floor(xCell * oneDateGRIB.typedData[idx].data[0].length / oneDateGRIB.gribDate.width);
+							value = oneDateGRIB.typedData[idx].data[yCell][xCell];
+						}
+						try {
+							displayValue = value.toFixed(2);
+							displayUnit = unit;
+						} catch (err) {
+							displayValue = "xx";
+							displayUnit = "-";
+							console.log(err);
+						}
+						break;
+					default:
+						break;
+				}
+				if (!skip) {
+					str += ("\n" + displayType + ": " + displayValue + " " + displayUnit);
+				}
+			}
+		}
 
-  let withChart = true;
+	}
 
-  let changeChart = function(cb) {
-	  withChart = cb.checked;
-	  redraw();
-  };
-  let changeGrid = function(cb) {
-	  worldMap.setWithGrid(cb.checked);
-	  redraw();
-  };
-  let changeTropics = function(cb) {
+	mouseDataElmt.innerHTML = ("<pre>" + str + "</pre>");
+};
+
+let displayErr = function(err) {
+if (err !== undefined) {
+	document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+}
+};
+
+let withChart = true;
+
+let changeChart = function(cb) {
+	withChart = cb.checked;
+	redraw();
+};
+
+let changeGrid = function(cb) {
+	worldMap.setWithGrid(cb.checked);
+	redraw();
+};
+
+let changeTropics = function(cb) {
     worldMap.setWithTropics(cb.checked);
 	  redraw();
   };
 
   let show = []; // [true, true, true];
-	let faxName = [];
+  let faxName = [];
   // For 3 faxes Sfc, 500mb, StreamLines
   let zoom = []; // [0.3418498710866215, 0.5209310701416114, 1.0040821009550305];
   let topLeft = [];
@@ -235,449 +237,448 @@
 //  ];
   let faxObj = [];
 
-  let faxRequestCallback = function(val, originalRequest) {
-	  	let returned = (typeof(val) === 'string') ? JSON.parse(val) : val;
+let faxRequestCallback = function(val, originalRequest) {
+	let returned = (typeof(val) === 'string') ? JSON.parse(val) : val;
 
-	  	// get data from originalRequest
-		show = [];
-		zoom = [];
-		topLeft = [];
-		faxObj = [];
-	  	faxName = [];
-		for (let idx=0; idx<originalRequest.faxData.length; idx++) {
-			show.push(true);
+	// get data from originalRequest
+	show = [];
+	zoom = [];
+	topLeft = [];
+	faxObj = [];
+	faxName = [];
+	for (let idx=0; idx<originalRequest.faxData.length; idx++) {
+		show.push(true);
 
-			let fax = new Image();
-			let x = originalRequest.faxData[idx].location.x;
-			let y = originalRequest.faxData[idx].location.y;
-			let faxZoom = originalRequest.faxData[idx].zoom;
-			zoom.push(faxZoom);
-			topLeft.push([x, y]);
-			faxName.push(originalRequest.faxData[idx].name);
-			fax.onload = function () {
-				context.drawImage(fax, x, y, (parseInt(fax.width) * faxZoom), (parseInt(fax.height) * faxZoom));
-				redraw();
+		let fax = new Image();
+		let x = originalRequest.faxData[idx].location.x;
+		let y = originalRequest.faxData[idx].location.y;
+		let faxZoom = originalRequest.faxData[idx].zoom;
+		zoom.push(faxZoom);
+		topLeft.push([x, y]);
+		faxName.push(originalRequest.faxData[idx].name);
+		fax.onload = function () {
+			context.drawImage(fax, x, y, (parseInt(fax.width) * faxZoom), (parseInt(fax.height) * faxZoom));
+			redraw();
+		};
+		// Assume that returned and originalRequest have the name cardinality
+		fax.src = '../../' + returned[idx].returned; // Tweak for another context...
+		speakUp(idx + 1);
+		console.log(fax.src);
+		faxObj.push(fax);
+
+	}
+};
+
+let findCompositeByKey = function(key) {
+	let comp = {};
+	for (let i=0; i<compositeCatalog.length; i++) {
+	if (key === compositeCatalog[i].key) {
+		comp = compositeCatalog[i];
+		break;
+	}
+	}
+	return comp;
+};
+
+let loadFaxes = function() {
+	let key = document.getElementById('composites').value;
+
+	let compositeData = findCompositeByKey(key);
+
+	console.log(compositeData);
+	worldMap.setCanvasWidth(compositeData.canvas.w);
+	worldMap.setCanvasHeight(compositeData.canvas.h);
+	worldMap.setNorth(compositeData.map.north);
+	worldMap.setSouth(compositeData.map.south);
+	worldMap.setWest(compositeData.map.west);
+	worldMap.setEast(compositeData.map.east); // Recalculated, anyway.
+	worldMap.setProjection(compositeData.map.projection);
+
+	worldMap.drawWorldMap();
+
+	document.getElementById("canvas-size").innerText = "Canvas Size: (WxH): " + worldMap.getCanvasWidth() + " x " + worldMap.getCanvasHeight();
+
+	// Clean up dynamic data
+	// 1 - Fax Table rows
+	let idx = 1;
+	let go = true;
+	while (go) {
+		let row = document.getElementById('row-' + idx);
+		if (row !== null) {
+			row.parentNode.removeChild(row);
+			idx += 1;
+		} else {
+			go = false;
+		}
+	}
+	// 2 - Fax zooms
+	idx = 1;
+	go = true;
+	while (go) {
+		let radio = document.getElementById('zoomfor-' + idx);
+		if (radio !== null) {
+			radio.parentNode.removeChild(radio);
+			idx += 1;
+		} else {
+			go = false;
+		}
+	}
+
+	let year, month, day, time;
+	let now = new Date();
+	year = now.format('Y');
+	month = now.format('m');
+	day = now.format('d');
+	time = compositeData.key + '_' + now.format('His');
+
+	let requestData = [];
+	if (compositeData.faxData !== undefined) {
+
+		compositeData.faxData.forEach(function (fax, idx) {
+			let oneFax = {
+				url: fax.faxUrl,
+				name: fax.name,
+				storage: 'web/' + year + '/' + month + '/' + day + '/' + time + '/' + compositeData.key + '_' + idx + '.png', // Original. With the date
+				returned: 'web/' + year + '/' + month + '/' + day + '/' + time + '/_' + compositeData.key + '_' + idx + '.png', // Transformed
+				transparent: fax.transp,
+				imgType: "png",
+				tx: fax.effect
 			};
-			// Assume that returned and originalRequest have the name cardinality
-			fax.src = '../../' + returned[idx].returned; // Tweak for another context...
-			speakUp(idx + 1);
-			console.log(fax.src);
-			faxObj.push(fax);
-
-		}
-  };
-
-	let findCompositeByKey = function(key) {
-		let comp = {};
-		for (let i=0; i<compositeCatalog.length; i++) {
-	    if (key === compositeCatalog[i].key) {
-	      comp = compositeCatalog[i];
-	      break;
-	    }
-		}
-		return comp;
-	};
-
-  let loadFaxes = function() {
-    let key = document.getElementById('composites').value;
-
-  	let compositeData = findCompositeByKey(key);
-
-  	console.log(compositeData);
-	  worldMap.setCanvasWidth(compositeData.canvas.w);
-	  worldMap.setCanvasHeight(compositeData.canvas.h);
-	  worldMap.setNorth(compositeData.map.north);
-	  worldMap.setSouth(compositeData.map.south);
-	  worldMap.setWest(compositeData.map.west);
-	  worldMap.setEast(compositeData.map.east); // Recalculated, anyway.
-		worldMap.setProjection(compositeData.map.projection);
-
-		worldMap.drawWorldMap();
-
-	  document.getElementById("canvas-size").innerText = "Canvas Size: (WxH): " + worldMap.getCanvasWidth() + " x " + worldMap.getCanvasHeight();
-
-	  // Clean up dynamic data
-		// 1 - Fax Table rows
-		let idx = 1;
-		let go = true;
-		while (go) {
-			let row = document.getElementById('row-' + idx);
-			if (row !== null) {
-				row.parentNode.removeChild(row);
-				idx += 1;
-			} else {
-				go = false;
+			if (fax.tx !== undefined) {
+				oneFax.from = fax.tx.from;
+				oneFax.to = fax.tx.to;
 			}
-    }
-    // 2 - Fax zooms
-		idx = 1;
-		go = true;
-		while (go) {
-			let radio = document.getElementById('zoomfor-' + idx);
-			if (radio !== null) {
-				radio.parentNode.removeChild(radio);
-				idx += 1;
-			} else {
-				go = false;
+			if (fax.rotation !== undefined) {
+				oneFax.rotation = fax.rotation;
 			}
-    }
+			requestData.push(oneFax);
 
-	  let year, month, day, time;
-	  let now = new Date();
-	  year = now.format('Y');
-	  month = now.format('m');
-	  day = now.format('d');
-	  time = compositeData.key + '_' + now.format('His');
+			/*
+			Adding rows like
+		<tr>
+			<td>[checkbox]</td>
+					<td>1</td>
+					<td><div id="name-1"></div></td>
+			<td><div id="x-1" style="text-align: right;"></div></td>
+					<td><div id="y-1" style="text-align: right;"></div></td>
+					<td><div id="zoom-1" style="text-align: right;"></div></td>
+				</tr>
+		*/
+			let faxTable = document.getElementById('fax-table');
+			let row = document.createElement('tr');
+			row.id = 'row-' + (idx + 1);
 
-		let requestData = [];
-		if (compositeData.faxData !== undefined) {
+			// Adding a checkbox <input type="checkbox" onchange="showHide(1, this);" checked>Show fax #1 <br/>
+			let div = document.createElement('div');
+			div.id = 'cb-' + (idx + 1);
 
-			compositeData.faxData.forEach(function (fax, idx) {
-				let oneFax = {
-					url: fax.faxUrl,
-					name: fax.name,
-					storage: 'web/' + year + '/' + month + '/' + day + '/' + time + '/' + compositeData.key + '_' + idx + '.png', // Original. With the date
-					returned: 'web/' + year + '/' + month + '/' + day + '/' + time + '/_' + compositeData.key + '_' + idx + '.png', // Transformed
-					transparent: fax.transp,
-					imgType: "png",
-					tx: fax.effect
-				};
-				if (fax.tx !== undefined) {
-					oneFax.from = fax.tx.from;
-					oneFax.to = fax.tx.to;
-				}
-				if (fax.rotation !== undefined) {
-					oneFax.rotation = fax.rotation;
-				}
-				requestData.push(oneFax);
+			let cb = document.createElement('input');
+			cb.type = 'checkbox';
+			cb.id = 'cb-' + (idx + 1);
+			cb.setAttribute('onchange', 'showHide(' + (idx + 1) + ', this);');
+			cb.checked = true;
+			div.appendChild(cb);
+			let col0 = document.createElement('td');
+			col0.setAttribute('style', 'text-align: center;');
+			row.appendChild(col0);
+			col0.appendChild(cb);
 
-				/*
-			  Adding rows like
-	        <tr>
-	          <td>[checkbox]</td>
-						<td>1</td>
-						<td><div id="name-1"></div></td>
-	          <td><div id="x-1" style="text-align: right;"></div></td>
-						<td><div id="y-1" style="text-align: right;"></div></td>
-						<td><div id="zoom-1" style="text-align: right;"></div></td>
-					</tr>
+			let col1 = document.createElement('td');
+			row.appendChild(col1);
+			col1.appendChild(document.createTextNode((idx + 1)));
+
+			let col2 = document.createElement('td');
+			row.appendChild(col2);
+			let div2 = document.createElement('div');
+			div2.id = 'name-' + (idx + 1);
+			div2.appendChild(document.createTextNode(fax.name));
+			col2.appendChild(div2);
+
+			let col3 = document.createElement('td');
+			row.appendChild(col3);
+			let div3 = document.createElement('div');
+			div3.id = 'x-' + (idx + 1);
+			div3.setAttribute('style', 'text-align: right;');
+			div3.appendChild(document.createTextNode(fax.location.x));
+			col3.appendChild(div3);
+
+			let col4 = document.createElement('td');
+			row.appendChild(col4);
+			let div4 = document.createElement('div');
+			div4.id = 'y-' + (idx + 1);
+			div4.setAttribute('style', 'text-align: right;');
+			div4.appendChild(document.createTextNode(fax.location.y));
+			col4.appendChild(div4);
+
+			let col5 = document.createElement('td');
+			row.appendChild(col5);
+			let div5 = document.createElement('div');
+			div5.id = 'zoom-' + (idx + 1);
+			div5.setAttribute('style', 'text-align: left;');
+			div5.appendChild(document.createTextNode(fax.zoom));
+			col5.appendChild(div5);
+
+			faxTable.appendChild(row);
+
+			/*
+			Adding zoom for each fax:
+			<input type="radio" name="faxnum" value="1" checked onclick="changeFax(this.value);">Fax #1
+				<br/>
 			*/
-				let faxTable = document.getElementById('fax-table');
-				let row = document.createElement('tr');
-				row.id = 'row-' + (idx + 1);
+			let zdiv = document.createElement('div');
+			zdiv.id = 'zoomfor-' + (idx + 1);
 
-				// Adding a checkbox <input type="checkbox" onchange="showHide(1, this);" checked>Show fax #1 <br/>
-				let div = document.createElement('div');
-				div.id = 'cb-' + (idx + 1);
+			let radio = document.createElement('input');
+			radio.type = 'radio';
+			radio.name = 'faxnum';
+			radio.value = (idx + 1);
+			radio.setAttribute('onclick', 'changeFax(this.value);');
+			radio.checked = (idx === 0) ? true : false;
+			zdiv.appendChild(radio);
+			zdiv.appendChild(document.createTextNode("Fax #" + (idx + 1)));
+			zdiv.appendChild(document.createElement('br'));
+			document.getElementById('zooms').appendChild(zdiv);
 
-				let cb = document.createElement('input');
-				cb.type = 'checkbox';
-				cb.id = 'cb-' + (idx + 1);
-				cb.setAttribute('onchange', 'showHide(' + (idx + 1) + ', this);');
-				cb.checked = true;
-				div.appendChild(cb);
-				let col0 = document.createElement('td');
-				col0.setAttribute('style', 'text-align: center;');
-				row.appendChild(col0);
-				col0.appendChild(cb);
+		}); // end forEach
 
-				let col1 = document.createElement('td');
-				row.appendChild(col1);
-				col1.appendChild(document.createTextNode((idx + 1)));
+		// Request ready
+		console.log(requestData);
+		getCompositeFaxes(requestData, compositeData, faxRequestCallback);
+	}
 
-				let col2 = document.createElement('td');
-				row.appendChild(col2);
-				let div2 = document.createElement('div');
-				div2.id = 'name-' + (idx + 1);
-				div2.appendChild(document.createTextNode(fax.name));
-				col2.appendChild(div2);
+	if (compositeData.gribRequest !== undefined) {
+		makeGRIBRequest(compositeData.gribRequest, 'web/' + year + '/' + month + '/' + day + '/' + time); // grib file Location
+	}
+};
 
-				let col3 = document.createElement('td');
-				row.appendChild(col3);
-				let div3 = document.createElement('div');
-				div3.id = 'x-' + (idx + 1);
-				div3.setAttribute('style', 'text-align: right;');
-				div3.appendChild(document.createTextNode(fax.location.x));
-				col3.appendChild(div3);
+let speakUp = function(num) {
+	document.getElementById("name-" + num).innerText = faxName[num - 1];
+	document.getElementById("x-" + num).innerText = (topLeft[num - 1][0] * thisZoomFactor).toFixed(0);
+	document.getElementById("y-" + num).innerText = (topLeft[num - 1][1] * thisZoomFactor).toFixed(0);
+	document.getElementById("zoom-" + num).innerText = (zoom[num - 1] * thisZoomFactor);
+};
 
-				let col4 = document.createElement('td');
-				row.appendChild(col4);
-				let div4 = document.createElement('div');
-				div4.id = 'y-' + (idx + 1);
-				div4.setAttribute('style', 'text-align: right;');
-				div4.appendChild(document.createTextNode(fax.location.y));
-				col4.appendChild(div4);
+let zoomFax = function(num, factor) {
+	zoom[num - 1] *= factor;
+	speakUp(num);
+	redraw();
+};
 
-				let col5 = document.createElement('td');
-				row.appendChild(col5);
-				let div5 = document.createElement('div');
-				div5.id = 'zoom-' + (idx + 1);
-				div5.setAttribute('style', 'text-align: left;');
-				div5.appendChild(document.createTextNode(fax.zoom));
-				col5.appendChild(div5);
+let zoomIn = function() {
+	let factor = parseFloat(document.getElementById("zoom-factor").value);
+	zoomFax(currentFax, factor);
+};
 
-				faxTable.appendChild(row);
+let zoomOut = function() {
+	let factor = parseFloat(document.getElementById("zoom-factor").value);
+	zoomFax(currentFax, 1 / factor);
+};
 
-				/*
-			 Adding zoom for each fax:
-			    <input type="radio" name="faxnum" value="1" checked onclick="changeFax(this.value);">Fax #1
-					<br/>
-			 */
-				let zdiv = document.createElement('div');
-				zdiv.id = 'zoomfor-' + (idx + 1);
+let up = function() {
+	topLeft[currentFax - 1][1] -= 1;
+	speakUp(currentFax);
+	redraw();
+};
+let down = function() {
+	topLeft[currentFax - 1][1] += 1;
+	speakUp(currentFax);
+	redraw();
+};
+let left = function() {
+	topLeft[currentFax - 1][0] -= 1;
+	speakUp(currentFax);
+	redraw();
+};
+let right = function() {
+	topLeft[currentFax - 1][0] += 1;
+	speakUp(currentFax);
+	redraw();
+};
 
-				let radio = document.createElement('input');
-				radio.type = 'radio';
-				radio.name = 'faxnum';
-				radio.value = (idx + 1);
-				radio.setAttribute('onclick', 'changeFax(this.value);');
-				radio.checked = (idx === 0) ? true : false;
-				zdiv.appendChild(radio);
-				zdiv.appendChild(document.createTextNode("Fax #" + (idx + 1)));
-				zdiv.appendChild(document.createElement('br'));
-				document.getElementById('zooms').appendChild(zdiv);
+let showHide = function(num, cb) {
+	show[num - 1] = cb.checked;
+	redraw();
+};
 
-			}); // end forEach
-
-			// Request ready
-			console.log(requestData);
-			getCompositeFaxes(requestData, compositeData, faxRequestCallback);
-		}
-
-		if (compositeData.gribRequest !== undefined) {
-			makeGRIBRequest(compositeData.gribRequest, 'web/' + year + '/' + month + '/' + day + '/' + time); // grib file Location
-		}
-	};
-
-  let speakUp = function(num) {
-    document.getElementById("name-" + num).innerText = faxName[num - 1];
-		document.getElementById("x-" + num).innerText = (topLeft[num - 1][0] * thisZoomFactor).toFixed(0);
-		document.getElementById("y-" + num).innerText = (topLeft[num - 1][1] * thisZoomFactor).toFixed(0);
-		document.getElementById("zoom-" + num).innerText = (zoom[num - 1] * thisZoomFactor);
-  };
-
-  let zoomFax = function(num, factor) {
-	  zoom[num - 1] *= factor;
-	  speakUp(num);
-	  redraw();
-  };
-
-  let zoomIn = function() {
-	  let factor = parseFloat(document.getElementById("zoom-factor").value);
-	  zoomFax(currentFax, factor);
-  };
-  let zoomOut = function() {
-	  let factor = parseFloat(document.getElementById("zoom-factor").value);
-	  zoomFax(currentFax, 1 / factor);
-  };
-
-  let up = function() {
-	  topLeft[currentFax - 1][1] -= 1;
-	  speakUp(currentFax);
-	  redraw();
-  };
-  let down = function() {
-	  topLeft[currentFax - 1][1] += 1;
-	  speakUp(currentFax);
-	  redraw();
-  };
-  let left = function() {
-	  topLeft[currentFax - 1][0] -= 1;
-	  speakUp(currentFax);
-	  redraw();
-  };
-  let right = function() {
-	  topLeft[currentFax - 1][0] += 1;
-	  speakUp(currentFax);
-	  redraw();
-  };
-
-  let showHide = function(num, cb) {
-	  show[num - 1] = cb.checked;
-	  redraw();
-  };
-
-  let redraw = function() {
-	  worldMap.clear();
+let redraw = function() {
+	worldMap.clear();
 //  worldMap.setPositionLabel("");
 
-	  if (withChart) { // Chart (and GRIBs) *under* the faxes
-		  worldMap.drawWorldMap(false);
-	  }
+	if (withChart) { // Chart (and GRIBs) *under* the faxes
+		worldMap.drawWorldMap(false);
+	}
 
-		for (let sh=0; sh<show.length; sh++) {
-	    if (show[sh] === true) {
-		    context.drawImage(
-		    		faxObj[sh],
+	for (let sh=0; sh<show.length; sh++) {
+		if (show[sh] === true) {
+			context.drawImage(
+					faxObj[sh],
 						topLeft[sh][0] * thisZoomFactor,
 						topLeft[sh][1] * thisZoomFactor,
 						(parseInt(faxObj[sh].width) * zoom[sh]) * thisZoomFactor,
-						(parseInt(faxObj[sh].height) * zoom[sh] * thisZoomFactor)
-				);
-	    }
+						(parseInt(faxObj[sh].height) * zoom[sh] * thisZoomFactor));
 		}
+	}
 //		if (withChart) { // GRIB over the faxes
 //			worldMap.drawWorldMap(false);
 //		}
-  };
+};
 
-  let changeFax = function(val) {
-	  currentFax = val;
-  };
+let changeFax = function(val) {
+	currentFax = val;
+};
 
-  let plotGrib = function(jsonGrib) {
-  	if (false) { // DEBUG
-			console.log("Received GRIB");
-			// Extract the dates
-			jsonGrib.forEach((grib, idx) => {
-				console.log('GRIB Date:', grib.gribDate.formattedUTCDate);
-			});
-
-			jsonGrib[0].typedData.forEach((type, idx) => {
-				console.log('Type:', type.gribType.desc);
-			});
-	  }
-		// Create the UI widgets to deal with the GRIB
-		// 1. Dates
-	  	let gribDates = document.getElementById("grib-dates");
-		while (gribDates.options.length > 0) {
-			gribDates.remove(0);
-		}
-
+let plotGrib = function(jsonGrib) {
+if (false) { // DEBUG
+		console.log("Received GRIB");
+		// Extract the dates
 		jsonGrib.forEach((grib, idx) => {
-			let option = document.createElement("option");
-			option.text = grib.gribDate.formattedUTCDate;
-			option.value = grib.gribDate.formattedUTCDate;
-			gribDates.add(option);
+			console.log('GRIB Date:', grib.gribDate.formattedUTCDate);
 		});
 
-		// 2. Types
-		let gribTypes = document.getElementById("grib-types");
-		while (gribTypes.options.length > 0) {
-			gribTypes.remove(0);
-		}
-
-		let foundWind = false;
 		jsonGrib[0].typedData.forEach((type, idx) => {
-			let option = document.createElement("option");
-			if (type.gribType.type === 'vgrd' || type.gribType.type === 'ugrd') {
-				if (!foundWind) {
-					option.text = 'Surface Wind';
-					option.value = 'wind';
-					option.selected = 'selected';
-					gribTypes.add(option);
-				}
-				foundWind = true;
-			} else {
-				option.text = type.gribType.desc;
-				option.value = type.gribType.type;
+			console.log('Type:', type.gribType.desc);
+		});
+	}
+	// Create the UI widgets to deal with the GRIB
+	// 1. Dates
+	let gribDates = document.getElementById("grib-dates");
+	while (gribDates.options.length > 0) {
+		gribDates.remove(0);
+	}
+
+	jsonGrib.forEach((grib, idx) => {
+		let option = document.createElement("option");
+		option.text = grib.gribDate.formattedUTCDate;
+		option.value = grib.gribDate.formattedUTCDate;
+		gribDates.add(option);
+	});
+
+	// 2. Types
+	let gribTypes = document.getElementById("grib-types");
+	while (gribTypes.options.length > 0) {
+		gribTypes.remove(0);
+	}
+
+	let foundWind = false;
+	jsonGrib[0].typedData.forEach((type, idx) => {
+		let option = document.createElement("option");
+		if (type.gribType.type === 'vgrd' || type.gribType.type === 'ugrd') {
+			if (!foundWind) {
+				option.text = 'Surface Wind';
+				option.value = 'wind';
+				option.selected = 'selected';
 				gribTypes.add(option);
 			}
-		});
-
-		gribData = jsonGrib; // gribData defined in ww.js
-		redraw();
-  };
-
-  let makeGRIBRequest = function(gribRequest, where) {
-	  let rawRequest = gribRequest;
-	  if (rawRequest === undefined) {
-		  rawRequest = document.getElementById("grib-request").value;
-	  }
-	  console.log(rawRequest);
-	  let jsonRequest = { request: rawRequest };
-	  if (where !== undefined) {
-	  	console.log('... into', where);
-		  jsonRequest.directory = where;
+			foundWind = true;
+		} else {
+			option.text = type.gribType.desc;
+			option.value = type.gribType.type;
+			gribTypes.add(option);
 		}
+	});
 
-	  worldMap.setAfterDrawing(renderGRIBData); // That is the callback
+	gribData = jsonGrib; // gribData defined in ww.js
+	redraw();
+};
 
-	  requestGRIB(jsonRequest, plotGrib);
-  };
+let makeGRIBRequest = function(gribRequest, where) {
+	let rawRequest = gribRequest;
+	if (rawRequest === undefined) {
+		rawRequest = document.getElementById("grib-request").value;
+	}
+	console.log(rawRequest);
+	let jsonRequest = { request: rawRequest };
+	if (where !== undefined) {
+	console.log('... into', where);
+		jsonRequest.directory = where;
+	}
 
-  let renderGRIB = function() {
-	  let rawGrib = JSON.parse(document.getElementById("json-grib").value);
-	  worldMap.setAfterDrawing(renderGRIBData);
-	  plotGrib(rawGrib);
-  };
+	worldMap.setAfterDrawing(renderGRIBData); // That is the callback
 
-  let flipGRIB = function(radio) {
-	  if (radio.value === 'web') {
+	requestGRIB(jsonRequest, plotGrib);
+};
+
+let renderGRIB = function() {
+	let rawGrib = JSON.parse(document.getElementById("json-grib").value);
+	worldMap.setAfterDrawing(renderGRIBData);
+	plotGrib(rawGrib);
+};
+
+let flipGRIB = function(radio) {
+	if (radio.value === 'web') {
 		document.getElementById("grib-web").style.display = 'block';
 		document.getElementById("grib-json").style.display = 'none';
-	  } else if (radio.value === 'json') {
+	} else if (radio.value === 'json') {
 		document.getElementById("grib-web").style.display = 'none';
 		document.getElementById("grib-json").style.display = 'block';
-	  }
-	};
+	}
+};
 
-  let updateGRIBRequest = function(option) {
-  	let key = option.value;
+let updateGRIBRequest = function(option) {
+	let key = option.value;
 	for (let i=0; i<compositeCatalog.length; i++) {
 		if (key === compositeCatalog[i].key) {
 			if (compositeCatalog[i].gribRequest !== undefined) {
-			document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+				document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
 			} else {
-			document.getElementById("grib-request").value = ('');
+				document.getElementById("grib-request").value = ('');
 			}
 			break;
 		}
 	}
-  };
+};
 
-  let changeCanvasSize = function(factor) {
-	  thisZoomFactor *= factor;
-	  worldMap.setCanvasHeight(worldMap.getCanvasHeight() * factor);
-	  worldMap.setCanvasWidth(worldMap.getCanvasWidth() * factor);
-	  // Faxes offset and zoom
-	  for (let sh=0; sh<show.length; sh++) {
-	  	speakUp(sh + 1);
-	  }
-	  document.getElementById("canvas-size").innerText = "Canvas Size: (WxH):" + worldMap.getCanvasWidth() + "x" + worldMap.getCanvasHeight();
-		redraw();
-  };
+let changeCanvasSize = function(factor) {
+	thisZoomFactor *= factor;
+	worldMap.setCanvasHeight(worldMap.getCanvasHeight() * factor);
+	worldMap.setCanvasWidth(worldMap.getCanvasWidth() * factor);
+	// Faxes offset and zoom
+	for (let sh=0; sh<show.length; sh++) {
+		speakUp(sh + 1);
+	}
+	document.getElementById("canvas-size").innerText = "Canvas Size: (WxH):" + worldMap.getCanvasWidth() + "x" + worldMap.getCanvasHeight();
+	redraw();
+};
 
-  const URL = '../catalog/compositeCatalog.json';	
+const URL = '../catalog/compositeCatalog.json';
 
-  window.fetch(URL)
-		.then(
-			response => {
-				console.log(`Response: ${response.ok}`);
-				compositeCatalog = response.json().then(doc => {
-					compositeCatalog = doc;
-					console.log(`Composites Catalog loaded, ${doc.length} elements`); 
+window.fetch(URL)
+	  .then(
+		response => {
+			console.log(`Response: ${response.ok}`);
+			compositeCatalog = response.json().then(doc => {
+				compositeCatalog = doc;
+				console.log(`Composites Catalog loaded, ${doc.length} elements`);
 
-					// Now populate the drop-down list.
-					for (let i = 0; i < compositeCatalog.length; i++) {
-						let opt = document.createElement('option');
-						opt.setAttribute('value', compositeCatalog[i].key);
-						opt.appendChild(document.createTextNode(compositeCatalog[i].name));
-						document.getElementById('composites').appendChild(opt);
-						if (i === 0) {
-							if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
-								document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
-							}
+				// Now populate the drop-down list.
+				for (let i = 0; i < compositeCatalog.length; i++) {
+					let opt = document.createElement('option');
+					opt.setAttribute('value', compositeCatalog[i].key);
+					opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+					document.getElementById('composites').appendChild(opt);
+					if (i === 0) {
+						if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
+							document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
 						}
 					}
-				});
-			}, 
-			(error, errmess) => {
-				console.log("Ooch");
-				let message;
-				if (errmess) {
-					let mess = JSON.parse(errmess);
-					if (mess.message) {
-						message = mess.message;
-					}
 				}
-				console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
 			});
+		}, (error, errmess) => {
+			console.log("Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
 
 		</script>
   </head>
   <body>
-    <h2>Weather Wizard in HTML5 - Basics</h2>
+    <h2>Weather Wizard in HTML5 - Basic Workbench</h2>
     <table border="0">
       <tr>
         <td valign="top" rowspan="2">
