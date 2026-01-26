@@ -13,13 +13,14 @@
 #
 # For a REST Channel (Consumer), consider looking at GET /bme280/data
 #
-# Start it with 
+# Start it with
 # $ python3 -u  <...>/REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') \
 #                                                   --port:8080 \
 #                                                   --verbose:true|false \
 #                                                   [--address:0x76] \
 #                                                   [--store-restore:true|false] \
 #                                                   [--log-db:true|false]
+# --log-db depends on DB_OPTION variable below (REST or SQLITE). If REST, it pushes data to passe-coque.com weather DB.
 #
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
@@ -39,6 +40,7 @@ import board
 import busio
 from adafruit_bme280 import basic as adafruit_bme280   # pip3 install adafruit-circuitpython-bme280
 import sqlite3
+import requests
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -59,6 +61,8 @@ VERBOSE_PREFIX: str = "--verbose:"
 ADDRESS_PREFIX: str = "--address:"
 STORE_RESTORE_PREFIX: str = "--store-restore:"
 LOG_DB_PREFIX: str = "--log-db:"
+
+DB_OPTION: str = "REST"   # REST or SQLITE
 
 keep_looping: bool = True
 between_loops: int = 1            # 1 sec
@@ -487,7 +491,7 @@ def long_storage_data(dummy_prm: str) -> None:
     print("\tDone with long storage data thread")
 
 
-# DB Thread. Requires the DB to exist, and types to be initialized.
+# DB or REST Thread. Requires the DB to exist, and types to be initialized.
 def db_writer(dummy_prm: str) -> None:
     global keep_looping
     global between_loops
@@ -506,30 +510,52 @@ def db_writer(dummy_prm: str) -> None:
                 rh: float = instant_data["humidity"]
                 dp: float = instant_data["dew-point"]
                 ah: float = instant_data["abs-hum"]
-                # DB Connection
-                con: sqlite3.Connection = sqlite3.connect("weather.db")
-                cur: sqlite3.Cursor = con.cursor()
 
-                sql_stmt_1: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("PRMSL", datetime("now"), {prmsl});'
-                sql_stmt_2: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AT", datetime("now"), {at});'
-                sql_stmt_3: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("RH", datetime("now"), {rh});'
-                sql_stmt_4: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("DEW-P", datetime("now"), {dp});'
-                sql_stmt_5: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AH", datetime("now"), {ah});'
+                if DB_OPTION == "SQLITE":   # SQLite option
+                    # DB Connection
+                    con: sqlite3.Connection = sqlite3.connect("weather.db")
+                    cur: sqlite3.Cursor = con.cursor()
 
-                try:
-                    cur.execute(sql_stmt_1)
-                    cur.execute(sql_stmt_2)
-                    cur.execute(sql_stmt_3)
-                    cur.execute(sql_stmt_4)
-                    cur.execute(sql_stmt_5)
-                except sqlite3.OperationalError as DBException:
-                    print(f">> Oops: {DBException}")
-                    all_good = False
-                except Exception as exception:
-                    print(f"Exception {type(exception)} : {exception}")
-                    all_good = False
-                con.commit()
-                con.close()
+                    sql_stmt_1: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("PRMSL", datetime("now"), {prmsl});'
+                    sql_stmt_2: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AT", datetime("now"), {at});'
+                    sql_stmt_3: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("RH", datetime("now"), {rh});'
+                    sql_stmt_4: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("DEW-P", datetime("now"), {dp});'
+                    sql_stmt_5: str = f'insert into WEATHER_DATA (type, data_date, value) VALUES ("AH", datetime("now"), {ah});'
+
+                    try:
+                        cur.execute(sql_stmt_1)
+                        cur.execute(sql_stmt_2)
+                        cur.execute(sql_stmt_3)
+                        cur.execute(sql_stmt_4)
+                        cur.execute(sql_stmt_5)
+                    except sqlite3.OperationalError as DBException:
+                        print(f">> Oops: {DBException}")
+                        all_good = False
+                    except Exception as exception:
+                        print(f"Exception {type(exception)} : {exception}")
+                        all_good = False
+                    con.commit()
+                    con.close()
+                if DB_OPTION == "REST":  # Push to Passe-Coque DB
+                    api_url: str = "http://passe-coque.com/tech.and.nav/weather.php/weather.php"
+
+                    payload = [
+                        {"type": "PRMSL", "value": prmsl},
+                        {"type": "AT", "value": at},
+                        {"type": "RH", "value": rh},
+                        {"type": "DEW-P", "value": dp},
+                        {"type": "AH", "value": ah}
+                    ]
+                    headers = {"Content-Type": "application/json"}
+                    for oneline in payload:
+                        response = requests.post(api_url, data=json.dumps(oneline), headers=headers)
+                        status = response.status_code
+                        returned = response.json()
+                        if (verbose):
+                            print(f"Status: {status}")
+                            print(f"Returned: {returned}")
+                    # That's it.
+
             except KeyError as key_error:
                 print(f"Oops: no {key_error} yet...")
                 all_good = False

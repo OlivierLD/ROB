@@ -14,7 +14,7 @@ function initAjax(forwardErrors=false, ping=1000) {
 }
 
 function getTheData() {
-
+    // This URL could be aon a remote server..., populated by the Python code (with FTP or so).
 	let url = '/bme280/data',
 		xhr = new XMLHttpRequest(),
 		verb = 'GET',
