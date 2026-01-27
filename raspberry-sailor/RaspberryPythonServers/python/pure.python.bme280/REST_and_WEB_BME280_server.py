@@ -548,12 +548,16 @@ def db_writer(dummy_prm: str) -> None:
                     ]
                     headers = {"Content-Type": "application/json"}
                     for oneline in payload:
-                        response = requests.post(api_url, data=json.dumps(oneline), headers=headers)
-                        status = response.status_code
-                        returned = response.json()
-                        if (verbose):
-                            print(f"Status: {status}")
-                            print(f"Returned: {returned}")
+                        try:
+                            response = requests.post(api_url, data=json.dumps(oneline), headers=headers)
+                            status = response.status_code
+                            returned = response.json()
+                            if (verbose):
+                                print(f"Status: {status}")
+                                print(f"Returned: {returned}")
+                        except Exception as ex:
+                            print(f"Oops: REST exception ({type(ex)}) {ex}")
+                            all_good = False
                     # That's it.
 
             except KeyError as key_error:

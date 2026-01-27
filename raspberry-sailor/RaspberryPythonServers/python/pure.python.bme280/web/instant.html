@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="css/web-components.css">
 
 	<script type="module" src="webcomponents/Thermometer.js"></script>
+	<script type="module" src="webcomponents/CalendarDisplay.js"></script>
 	<script type="module" src="webcomponents/SplitFlapDisplay.js"></script>
 	<script type="module" src="webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="webcomponents/AnalogWatch.js"></script>
@@ -61,7 +62,7 @@
 		//  |    |  |  |  |
 		//  |    |  |  |  14
 		//  |    |  |  11
-		//  |    |  8  
+		//  |    |  8
 		//  |    5
 		//  0
 		let year = duration.substring(0, 4);
@@ -71,6 +72,22 @@
 
 		return `${year}-${month}-${day} ${time} UTC`;
 	};
+
+	const WEEK_DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+	function updateCalendar() {
+		// let d = document.getElementById('calendar-day-01').value;
+		// let m = document.getElementById('calendar-month-01').value;
+		// let y = document.getElementById('calendar-year-01').value;
+		let date = new Date(); // new Date(y, m - 1, d);
+		let y = date.getFullYear();
+		let m = date.getMonth() + 1;
+		let d = date.getDate();
+
+		document.getElementById('calendar-01').value = d + '-' + m + '-' + y + '-' + WEEK_DAYS[date.getDay()];
+		document.getElementById('calendar-01').repaint();
+	}
+
 
 	window.onload = function() {
 		// initAjax(false); // Continuously pings, a fetch() every 1 sec
@@ -139,7 +156,7 @@
 			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-trem-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
-				if (VERBOSE) { 
+				if (VERBOSE) {
 					let keys = Object.keys(theMap);
 					console.log(`The Map: ${ JSON.stringify(theMap) }, ${keys.length} elements.`);
 					for (let i=0; i<keys.length; i++) {
@@ -154,7 +171,7 @@
 			}
 			theMap = val[AIR_TEMP_KEY];
 			if (theMap) {
-				if (VERBOSE) { 
+				if (VERBOSE) {
 					let keys = Object.keys(theMap);
 					console.log(`The Map: ${ JSON.stringify(theMap) }, ${keys.length} elements.`);
 					for (let i=0; i<keys.length; i++) {
@@ -181,7 +198,7 @@
 			//  |    |  |  |  |
 			//  |    |  |  |  14
 			//  |    |  |  11
-			//  |    |  8  
+			//  |    |  8
 			//  |    5
 			//  0
 
@@ -198,7 +215,7 @@
 				// datagraph.title = `${graphLabel}, UTC Dates, ${mess}`;
 			}
 
-			// 1 - Find the first "midnight" 
+			// 1 - Find the first "midnight"
 			startIdx = -1;
 			for (let i=0; i<keys.length; i++) {
 				if (keys[i].substring(11, 13) === '00' && parseInt(keys[i].substring(14, 16)) <= 15) {
@@ -212,8 +229,8 @@
 			if (startIdx > -1) { // Found a midnight
 				startIdx4 = -1;
 				for (let i=0; i<keys.length; i++) {
-					if ((keys[i].substring(11, 13) === '00' || keys[i].substring(11, 13) === '06' || 
-						 keys[i].substring(11, 13) === '12' || keys[i].substring(11, 13) === '18') && 
+					if ((keys[i].substring(11, 13) === '00' || keys[i].substring(11, 13) === '06' ||
+						 keys[i].substring(11, 13) === '12' || keys[i].substring(11, 13) === '18') &&
 						  parseInt(keys[i].substring(14, 16)) <= 15) { // M:S
 						startIdx4 = i;
 						break;
@@ -240,7 +257,7 @@
 				}
 				// 2 - Prepare the data, in their expected shape
 				// For day names, look for setVGridLabelsCallback
-				
+
 				let mini = graphMini, maxi = graphMaxi;
 
 				let valLabel = // "0:45"; // One label every 45 points
@@ -297,7 +314,7 @@
 					// 	}
 					// }
 				} catch (err) {
-					console.log(`Oops: ${err}`);					
+					console.log(`Oops: ${err}`);
 				}
 
 				let minMaxLabel = "";
@@ -307,7 +324,7 @@
 						console.log(`MinMax Label now ${minMaxLabel}`);
 					}
 				} catch (err) {
-					console.log(`Oops(2): ${err}`);					
+					console.log(`Oops(2): ${err}`);
 				}
 
 				datagraph.data = {
@@ -357,7 +374,7 @@
 		};
 
 		let barograph = document.getElementById('barograph-01');
-		barograph.setVGridLabelsCallback(val => {  
+		barograph.setVGridLabelsCallback(val => {
             // console.log(`VGridLabel: ${val}`);
             // 0 to max, step 96
 			if ((val - startIdx) % 96 === 0) {
@@ -378,7 +395,7 @@
 						// val beyond length. Managed.
 					}
 				}
-				return retVal; 
+				return retVal;
 			} else {
 				return "";
 			}
@@ -396,12 +413,12 @@
 			let deltaY = maxY - minY;
 			let correctedY = height - y;
 			let yValue = minY + ((correctedY / height) * deltaY);
-			
+
 			theGraph.title = `${yValue.toFixed(1)} hPa`;
 		});
 
 		let thermograph = document.getElementById('thermograph-01');
-		thermograph.setVGridLabelsCallback(val => {  
+		thermograph.setVGridLabelsCallback(val => {
             // console.log(`VGridLabel: ${val}`);
             // 0 to max, step 96
 			if ((val - startIdx) % 96 === 0) {
@@ -422,7 +439,7 @@
 						// val beyond length. Managed.
 					}
 				}
-				return retVal; 
+				return retVal;
 			} else {
 				return "";
 			}
@@ -629,7 +646,7 @@
 		let v = this.value;
 		document.body.style.setProperty("--rotateX", v + "deg");
 	}
-	
+
 	const TABS = ['tab-01', 'tab-02'];
 
 	function openTab(evt, tabNum) {
@@ -699,7 +716,7 @@
 		}
 
 		button:disabled {
-			background: silver;  
+			background: silver;
 		}
 
 	.mirror-upside-down {
@@ -771,48 +788,57 @@
 		  <!-- Dynamic alert content -->
 		</div>
 	</dialog>
-	
+
 	<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
 		<tr>
 			<td style="text-align: left;">
-				<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
-					<tr>
-						<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
-						<td>
-							<button onclick="fetchData(fetchErrCallback);" title="Refresh the data below">Update Now</button>
-						</td>
-						<td>
-							<button onclick="toggleHeadsUp();">Head Up</button>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<!-- Display Style -->
-							Widget Style:
-							<select onchange="setStyle(this.value);">
-								<option value="orange" selected>Orange</option>
-								<option value="yellow">Yellow</option>
-								<option value="white">White</option>
-								<option value="white-red">White, red hand</option>
-								<option value="cyan">Cyan</option>
-								<option value="day">Day</option>
-								<option value="night">Night</option>
-								<option value="flat-gray">Flat gray</option>
-								<option value="flat-black">Flat black</option>
-							</select>
-							<!-- Display Border -->
-							<input type="checkbox" checked onchange="setBorder(this.checked);"/>Border
-							&nbsp;&nbsp;
-							<!-- Page BG -->
-							Page Background:
-							<input type="radio" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
-							<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
-							<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
-							<input type="radio" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
-							&nbsp;&nbsp;
-						</td>
-					</tr>
-				</table>
+				<div style="display: grid; grid-template-columns: auto auto; grid-gap: 10px; align-items: center;">
+					<calendar-display id="calendar-01"
+									  class="calendar-02"
+									  title="Last update"
+									  width="105"
+									  height="126"
+									  value="01-01-1970-thursday"></calendar-display>
+
+					<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
+						<tr>
+							<td><h3>Web Components UI&nbsp;&nbsp;&nbsp;</h3></td>
+							<td>
+								<button onclick="fetchData(fetchErrCallback); updateCalendar();" title="Refresh the data below">Update Now</button>
+							</td>
+							<td>
+								<button onclick="toggleHeadsUp();">Head Up</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<!-- Display Style -->
+								Widget Style:
+								<select onchange="setStyle(this.value);">
+									<option value="orange" selected>Orange</option>
+									<option value="yellow">Yellow</option>
+									<option value="white">White</option>
+									<option value="white-red">White, red hand</option>
+									<option value="cyan">Cyan</option>
+									<option value="day">Day</option>
+									<option value="night">Night</option>
+									<option value="flat-gray">Flat gray</option>
+									<option value="flat-black">Flat black</option>
+								</select>
+								<!-- Display Border -->
+								<input type="checkbox" checked onchange="setBorder(this.checked);"/>Border
+								&nbsp;&nbsp;
+								<!-- Page BG -->
+								Page Background:
+								<input type="radio" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+								<input type="radio" name="page-bg" value="DARK" checked onchange="changeBG(this.value);">Dark
+								<input type="radio" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+								<input type="radio" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+								&nbsp;&nbsp;
+							</td>
+						</tr>
+					</table>
+				</div>
 			</td>
 		</tr>
 		<tr>
@@ -841,7 +867,7 @@
 												font-size="30"
 												value="     "></split-flap-display>
 							<span style="font-size: 40px; font-weight: bold;">%</span>
-							<br/>												
+							<br/>
 							<!-- Dew point -->
 							Dew point
 							<br/>
@@ -850,7 +876,7 @@
 												font-size="30"
 												value="     "></split-flap-display>
 							<span style="font-size: 40px; font-weight: bold;">&deg;C</span>
-							<br/>												
+							<br/>
 							<!-- Absolute Humidity -->
 							Absolute humidity
 							<br/>
@@ -898,10 +924,10 @@
 								<button class="tablinks active" style="border-radius: 5px;" onclick="openTab(event, 0);">Barograph</button>
 								<button class="tablinks" style="border-radius: 5px;" onclick="openTab(event, 1);">Thermograph</button>
 							</div>
-							
+
 							<div id="tab-01" style="display: block;">
 								<span id="from-to-pr" style="float: left;"> - </span>
-								<span id="nb-pts-pr" style="float: right;">No point</span>											   						
+								<span id="nb-pts-pr" style="float: right;">No point</span>
 								<br/>
 								<graph-display id="barograph-01"
 											   tabindex="-1"
@@ -919,7 +945,7 @@
 							<div id="tab-02" style="display: none;">
 
 								<span id="from-to-at" style="float: left;"> - </span>
-								<span id="nb-pts-at" style="float: right;">No point</span>											   						
+								<span id="nb-pts-at" style="float: right;">No point</span>
 								<br/>
 								<graph-display id="thermograph-01"
 											   tabindex="-1"
@@ -932,7 +958,7 @@
 											   vgrid="0:0.5"
 											   hgrid="0:10"
 											   label="Thermograph"
-											   title="Air Temp, UTC Dates"></graph-display>	
+											   title="Air Temp, UTC Dates"></graph-display>
 							</div>
 						</td>
 					</tr>
