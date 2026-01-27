@@ -152,7 +152,7 @@ Pour avoir une id&eacute;e :
 |:-------------------------------:|:------------------------------:|
 | ![this](./doc/baro.head.up.png) | ![That](./doc/head.up.02.jpeg) |
 
-### Le Raspberry Pi emet son propre r&eacute;seau
+### Le Raspberry Pi &eacute;met son propre r&eacute;seau
 Imaginons que vous soyez en mer, loin de toute antenne 4G... Il n'y a pas d'Internet, _mais_ vous avez
 la possibilit&eacute; de cr&eacute;er votre propre r&eacute;seau &agrave; partir du Raspberry Pi.  
 Ainsi, tout p&eacute;rih&eacute;rique capable de rejoindre ce r&eacute;seau peut lire les pages web mises &agrave; disposition par le serveur
@@ -166,5 +166,8 @@ Encore une fois, on peut avoir un r&eacute;seau, mais pas d'Internet. Il ne s’
 
 ### Des bo&icirc;tes imprim&eacute;es en 3D pour prot&eacute;ger votre travail
 - Voyez [ici](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md)
+- Pour prot&egrave;ger le BME280 &agrave; l'ext&eacute;rieur :
+  ![Wow](./doc/IMG_2409.JPG)  
+  &agrave; retrouver sur <https://www.thingiverse.com/thing:1067700>
 
 ---

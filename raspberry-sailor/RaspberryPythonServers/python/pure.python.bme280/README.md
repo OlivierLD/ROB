@@ -168,5 +168,8 @@ Again, we can have a network, but no Internet. This is _**not**_ Cloud Computing
 
 ### 3D printed enclosure(s) for your work
 - See [here](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiDevBoards/NavStations/README.md)
+- A shelter for the BME280 outside:
+  ![Wow](./doc/IMG_2409.JPG)  
+  to be found here: <https://www.thingiverse.com/thing:1067700>
 
 ---
