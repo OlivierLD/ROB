@@ -123,6 +123,8 @@ You need to create it before starting the server:
 $ sqlite3 weather.db < sql/create.db.sql
 ```
 Then use the `--log-db:true` CLI parameter at startup. This will log 5 data (pressure, relative humidity, air temperature, dew point, absolute humidity) every 15 minutes.
+This logging can be done two ways, based on the value of `DB_OPTION`, it can be `SQLITE`, `REST`, or `BOTH`. `SQLITE` will log those data into a local SQLite DB, `REST` would invoke
+some REST services (hard-coded, for now) with the data to log, and `BOTH` would - surprisingly - do both.
 
 ### Finally
 From anywhere on the same network, you can reach, in a browser, <http://192.168.1.38:8080/web/index.html>  

@@ -20,7 +20,7 @@
 #                                                   [--address:0x76] \
 #                                                   [--store-restore:true|false] \
 #                                                   [--log-db:true|false]
-# --log-db depends on DB_OPTION variable below (REST or SQLITE). If REST, it pushes data to passe-coque.com weather DB.
+# --log-db depends on DB_OPTION variable below (hard-coded for now, REST or SQLITE, or BOTH). If REST, it pushes data to passe-coque.com weather DB.
 #
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
@@ -62,7 +62,7 @@ ADDRESS_PREFIX: str = "--address:"
 STORE_RESTORE_PREFIX: str = "--store-restore:"
 LOG_DB_PREFIX: str = "--log-db:"
 
-DB_OPTION: str = "REST"   # REST or SQLITE
+DB_OPTION: str = "REST"   # REST or SQLITE, or BOTH
 
 keep_looping: bool = True
 between_loops: int = 1            # 1 sec
@@ -511,7 +511,7 @@ def db_writer(dummy_prm: str) -> None:
                 dp: float = instant_data["dew-point"]
                 ah: float = instant_data["abs-hum"]
 
-                if DB_OPTION == "SQLITE":   # SQLite option
+                if DB_OPTION == "SQLITE" or DB_OPTION == "BOTH":   # SQLite option
                     # DB Connection
                     con: sqlite3.Connection = sqlite3.connect("weather.db")
                     cur: sqlite3.Cursor = con.cursor()
@@ -536,7 +536,7 @@ def db_writer(dummy_prm: str) -> None:
                         all_good = False
                     con.commit()
                     con.close()
-                if DB_OPTION == "REST":  # Push to Passe-Coque DB
+                if DB_OPTION == "REST" or DB_OPTION == "BOTH":  # Push to Passe-Coque DB, through REST
                     api_url: str = "http://passe-coque.com/tech.and.nav/weather.php/weather.php"
 
                     payload = [
