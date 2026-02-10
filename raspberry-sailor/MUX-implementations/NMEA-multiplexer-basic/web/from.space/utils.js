@@ -82,6 +82,17 @@ export function gridSquare(lat, lng) {
     return gridSquare;
 };
 
+function getLHA(gha, longitude) {
+	// let AHL = (lng <= 0) ? ahg + lng : ahg - (360 - lng); // Wowowow !
+	let lha = gha + longitude;
+	while (lha > 360) {
+		lha -= 360;
+	}
+	while (lha < 0) {
+		lha += 360;
+	}
+	return lha;
+}
 /**
  * Returns altitude and azimuth of a body based on observer's position and body's coordinates (GHA & D)
  * @param {float} lat Latitude as a float
@@ -91,10 +102,7 @@ export function gridSquare(lat, lng) {
  * @returns { alt: float, Z: float } a JSON Object, { alt: float, Z: float }
  */
 export function sightReduction(lat, lng, ahg, dec) {
-	let AHL = ahg + lng;
-	while (AHL < 0.0) {
-		AHL = 360.0 + AHL;
-	}
+	let AHL = getLHA(ahg, lng);
 	// Formula to solve : sin He = sin L sin D + cos L cos D cos AHL
 	let sinL = Math.sin(Math.toRadians(lat));
 	let sinD = Math.sin(Math.toRadians(dec));

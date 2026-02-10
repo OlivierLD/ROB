@@ -22,6 +22,8 @@
 #                                                   [--log-db:true|false]
 # --log-db depends on DB_OPTION variable below (hard-coded for now, REST or SQLITE, or BOTH). If REST, it pushes data to passe-coque.com weather DB.
 #
+# TODO: REST Only, DB Only... To just log data, read from another (independant) UI...
+#
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
 #

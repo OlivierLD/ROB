@@ -934,6 +934,7 @@ class SunPath extends HTMLElement {
 	}
 
 	sightReduction(bodyGP, userPos) {
+	    // TODO Verify that
 		let ahgBody = bodyGP.longitude < 0 ? -bodyGP.longitude : 360 - bodyGP.longitude; // Longitude to GHA
 		let ahl = ahgBody + userPos.longitude;
 		while (ahl < 0.0) {
@@ -1116,4 +1117,3 @@ class SunPath extends HTMLElement {
 
 // Associate the tag and the class
 window.customElements.define(SUNPATH_TAG_NAME, SunPath);
-
