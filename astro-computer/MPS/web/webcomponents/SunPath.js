@@ -937,6 +937,9 @@ class SunPath extends HTMLElement {
 	    // TODO verify that
 		let ahgBody = bodyGP.longitude < 0 ? -bodyGP.longitude : 360 - bodyGP.longitude; // Longitude to GHA
 		let ahl = ahgBody + userPos.longitude;
+        while (ahl > 360) {
+            ahl -= 360;
+        }
 		while (ahl < 0.0) {
 			ahl += 360.0;
 		}

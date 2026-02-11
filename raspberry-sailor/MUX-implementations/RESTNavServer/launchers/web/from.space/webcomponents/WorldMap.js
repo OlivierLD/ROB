@@ -482,7 +482,7 @@ class WorldMap extends HTMLElement {
 			// set .setGlobeViewRightLeftRotation(-(sunD * Math.sin(Math.toRadians(lhaSun))));
 			if (this.userPosition !== {}) {
 				let userLongitude = this.userPosition.longitude;
-				if (userLongitude === undefined) { // TODO Verify that
+				if (userLongitude === undefined) {
 					userLongitude = data.from.longitude;
 				}
 				let lhaSun = data.sun.gha + this.userPosition.longitude;

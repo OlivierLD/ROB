@@ -125,7 +125,7 @@ _If_:
 - a request is not a static request
 - there is no `RESTRequestManager` registered
 
-then the server might be acting as a proxy.
+then the server might be acting as a proxy, showing the data going back and forth.
 
 For the server to act as a proxy, you need to register a `proxyFunction`.
 
@@ -354,4 +354,3 @@ With a Graphical UI, run the class `utils.proxyguisample.ProxyGUI`:
 - [Case Study](./CASE_STUDY.md) (several possibilities)
 
 ---
-
