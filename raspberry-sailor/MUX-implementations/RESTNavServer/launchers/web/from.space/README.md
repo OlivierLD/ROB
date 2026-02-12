@@ -1,6 +1,6 @@
 # FromSpace
-WiP. Will need refactoring...  
-Here WebComponents and Celestial calculation scripts are located under  the `from.space` directory.  
+WiP. Will need refactoring...
+Here WebComponents and Celestial calculation scripts are located under  the `from.space` directory.
 All those could be reused from higher in the tree.
 
 Entry point is `FromSpace.html`.
@@ -10,6 +10,12 @@ position returned by the server.
 
 For an example, try the option `13e` in the `demoLauncher.sh`, and use the
 <http://localhost:9999/web/index.2.html> menu.
+
+Southern hemisphere: use `9e` (for example).
+
+
+## TODO
+- Fix SunPath for southern latitudes...
 
 
 ---

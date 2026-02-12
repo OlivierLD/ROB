@@ -251,16 +251,16 @@
             // console.log(line);
         };
 
-        events.subscribe(events.topicNames.AWA_OFFSET, val => { 
+        events.subscribe(events.topicNames.AWA_OFFSET, val => {
             AWA_OFFSET = val; // In console.logic.js
         });
-        events.subscribe(events.topicNames.HDG_OFFSET, val => { 
+        events.subscribe(events.topicNames.HDG_OFFSET, val => {
             HDG_OFFSET = val; // In console.logic.js
         });
-        events.subscribe(events.topicNames.BSP_COEFF, val => { 
+        events.subscribe(events.topicNames.BSP_COEFF, val => {
             BSP_COEFF = val; // In console.logic.js
         });
-        events.subscribe(events.topicNames.AWS_COEFF, val => { 
+        events.subscribe(events.topicNames.AWS_COEFF, val => {
             AWS_COEFF = val; // In console.logic.js
         });
 
@@ -327,7 +327,7 @@
         events.subscribe(events.topicNames.COG, (val) => {
             cog = val;
             global_COG = val;
-            
+
             setData('compass-rose-01', val);
             setData('compass-01', val);
             // setData('compass-display-01', val);
@@ -385,7 +385,7 @@
             wtElement.value = val;
         });
         events.subscribe(events.topicNames.AIR_TEMP, (val) => {
-            let atElement = document.getElementById('air-temp');            
+            let atElement = document.getElementById('air-temp');
             atElement.value = val;
         });
 
@@ -666,7 +666,7 @@
                 let values = { x: [], y: [] };
                 for (let i=0; i<dataBuffer.length; i++) {
                     values.x.push(i);
-                    let curVal = dataBuffer[i]; //  - lastValue;	
+                    let curVal = dataBuffer[i]; //  - lastValue;
                     if (curVal < min) {
                         curVal += 360;
                     } else if (curVal > max) {
@@ -694,7 +694,7 @@
                         } else {
                             values.y.push((dataBuffer[i] - 360));
                         }
-                    } 
+                    }
                     mini = -180;
                     maxi = +180;
 
@@ -776,7 +776,7 @@
             let graphData = updateBuffer(_30sCurrentSpeed, '30s speed', 'red', 0, 6);
 			graph.data = graphData;
 			let amplitude = graphData.maxY - graphData.minY;
-			graph.vgrid = "0:1"; 
+			graph.vgrid = "0:1";
 			graph.hgrid = null;
             graph.value = val.toFixed(2) + " kt";
             graph.repaint();
@@ -808,7 +808,7 @@
             let graphData = updateBuffer(_1mCurrentSpeed, '1m speed', 'red', 0, 6);
 			graph.data = graphData;
 			//  let amplitude = graphData.maxY - graphData.minY;
-			graph.vgrid = "0:1"; 
+			graph.vgrid = "0:1";
 			graph.hgrid = null;
             graph.value = val.toFixed(2) + " kt";
             graph.repaint();
@@ -830,7 +830,7 @@
 			graph.hgrid = null;
             graph.value = val.toFixed(1) + "°";
             graph.repaint();
-            
+
             if (CURRENT_FROM_COMPUTER_10M) {
                 let bo = document.getElementById('boat-overview-01');
                 bo.cdr = val;
@@ -845,7 +845,7 @@
             let graphData = updateBuffer(_10mCurrentSpeed, '10m speed', 'red', 0, 6);
 			graph.data = graphData;
 			//  let amplitude = graphData.maxY - graphData.minY;
-			graph.vgrid = "0:1"; 
+			graph.vgrid = "0:1";
 			graph.hgrid = null;
             graph.value = val.toFixed(2) + " kt";
             graph.repaint();
@@ -1281,13 +1281,13 @@
          }
 
          div#raw-data-div {
-            display: none; 
-            border: 1px solid silver; 
-            border-radius: 10px; 
-            width: 95%; 
-            margin: auto; 
-            min-height: 100px; 
-            max-height: 150px; 
+            display: none;
+            border: 1px solid silver;
+            border-radius: 10px;
+            width: 95%;
+            margin: auto;
+            min-height: 100px;
+            max-height: 150px;
             overflow-y: scroll;
             padding-bottom: 10px;
          }
@@ -1960,7 +1960,7 @@
                         </td>
                         <td style="text-align: left;">
                             <input type="range" id="sun-path-tilt-slide"
-                                style="-webkit-appearance: slider-vertical; width: 8px; height: 520px; margin-left: 0;"
+                                style="/*-webkit-appearance: slider-vertical;*/ writing-mode: vertical-lr; width: 8px; height: 520px; margin-left: 0;"
                                 min="-90" max="90" value="-10" onchange="setNewTilt(this, 'sun-path-01');">
                         </td>
                         <td rowspan="2" valign="top" style="text-align: center;">
@@ -2058,7 +2058,7 @@
                     <button class="tablinks" onclick="openSubTabOne(event, 3);">Boat Speed Evolution</button>
                     <div class="mess">Boat Data Sub Tabs</div>
                 </div>
-                
+
                 <div id="boat-data-1">
                     <div id="row-1"
                         style="display: grid; grid-column-start: 1; grid-template-columns: auto auto auto auto auto auto; padding: 10px;">
@@ -2229,7 +2229,7 @@
                                               minor-ticks="1"
                                               value="-"
                                               width="100"
-                                              height="250"></thermo-meter>                            
+                                              height="250"></thermo-meter>
                                 <thermo-meter id="air-temp"
                                               class="thermometer-day"
                                               title="Air"
@@ -2239,7 +2239,7 @@
                                               minor-ticks="1"
                                               value="-"
                                               width="100"
-                                              height="250"></thermo-meter>                            
+                                              height="250"></thermo-meter>
                             </div>
                         </div>
 
@@ -2903,7 +2903,7 @@
                                         label="Speed"
                                         title="Speed"></graph-display>
                         </div>
-                    </div>    
+                    </div>
                 </div>
 
                 <div id="boat-data-4" style="display: none;">
@@ -2941,7 +2941,7 @@
                     +-->
                     None
                 </div>
-            </div>    
+            </div>
             <div style="text-align:left; padding: 10px;">
                 Events
                 <div id="event-content"
