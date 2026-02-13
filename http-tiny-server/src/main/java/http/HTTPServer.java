@@ -63,8 +63,14 @@ import java.util.zip.ZipInputStream;
  * - http.verbose
  * - http.verbose.dump
  * - http.port
- * - static.docs      Path elements of the static documents (like "/web/,/some/where/else/")
- * - static.zip.docs  Path elements of the documents to find in `web.archive` (like "/zip/")
+ * - static.docs      Path elements (comma separated) of the static documents (like "/web/, /some/where/else/")
+ * 		For example, if it is "/web1/,/web2/", if we have a URL like http://machine:port/web1/click.html, the server will
+ * 	    look for file named click.html in a 'web1' folder, under the directory the server was started from.
+ * - static.zip.docs  Path elements (comma separated) of the documents to find in `web.archive` below (like "/zip/,/zap/")
+ *      For example, if it is "/zip/,/zap/", if we have a URL like http://machine:port/zap/clack.html, the server will look for a
+ *      file named clack.html in the archive named like the system var web.archive (-Dweb.archive=webarchive.zip, default web.zip),
+ *      located in the directory the server was started from.
+ *      Here clack.html will be expected at the root of the archive.
  * - autobind
  * - web.archive default web.zip
  *
@@ -72,6 +78,8 @@ import java.util.zip.ZipInputStream;
  */
 public class HTTPServer {
 
+	// If set to "/", will behave like all others, from the directory the server was started from.
+	// Warning; A 'static.docs' like "/" would prevent the REST Request management...
 	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/";
 	private final static String DEFAULT_STATIC_ZIP_DOCS_PATH = "/zip/";
 

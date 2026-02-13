@@ -5,14 +5,21 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.verbose=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.verbose.dump=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.client.verbose=true"
 #
-JAVA_OPTIONS="${JAVA_OPTIONS} -Dstatic.docs=/"
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Dstatic.docs=/"
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dstatic.docs=/web/"
+JAVA_OPTIONS="${JAVA_OPTIONS} -Dstatic.zip.docs=/zip/"
+#
+pushd web
+zip -r ../web.zip *
+popd
 #
 JAVA_OPTIONS="${JAVA_OPTIONS} -Djava.util.logging.config.file=logging.properties"
 #
 PORT=2222
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.port=${PORT}"
 #
-HOSTNAME=$(hostname -I | xargs 2>/dev/null) || HOSTNAME=localhost
+# HOSTNAME=$(hostname -I | xargs 2>/dev/null) || HOSTNAME=localhost
+HOSTNAME=localhost
 #
 echo -e "Once started, reach http://${HOSTNAME}:${PORT}/web/index.html or http://${HOSTNAME}:${PORT}/zip/index.html"
 #
