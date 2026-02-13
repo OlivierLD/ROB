@@ -17,7 +17,7 @@ import java.util.*
 class HTTPServerKTTests {
     @Test
     fun detectBadRequestManager() {
-        val opList1 = Arrays.asList(
+        val opList1 = listOf(
             HTTPServer.Operation(
                 "GET",
                 "/oplist", { request: HTTPServer.Request -> emptyOperation(request) },
@@ -34,7 +34,7 @@ class HTTPServerKTTests {
                 "Hard stop, shutdown. VERY unusual REST resource..."
             )
         )
-        val opList2 = Arrays.asList(
+        val opList2 = listOf(
             HTTPServer.Operation(
                 "GET",
                 "/oplist", { request: HTTPServer.Request -> emptyOperation(request) },

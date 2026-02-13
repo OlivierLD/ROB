@@ -12,7 +12,8 @@ import scala.jdk.CollectionConverters._
 
 class HTTPServerTests {
 
-  private val NF: NumberFormat = DecimalFormat.getInstance()
+  // private val NF: NumberFormat = java.text.DecimalFormat.getInstance()
+  private val NF: NumberFormat = NumberFormat.getInstance()
   private var PORT_TO_USE: Int = 1024
 
   @Test
