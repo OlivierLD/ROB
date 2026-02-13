@@ -2,7 +2,7 @@ package memory
 
 import java.text.NumberFormat
 
-object GCTest {
+object GCTestScala {
 
   private val BOLD_RED = "\u001b[0;31;1m"            // Red and Bold
   private val GREEN = "\u001b[92m"                   // Green
