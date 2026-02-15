@@ -10,7 +10,7 @@ import java.net.{MalformedURLException, ProtocolException, SocketException}
 import java.text.{DecimalFormat, NumberFormat}
 import scala.jdk.CollectionConverters._
 
-class HTTPServerTests {
+class HTTPServerScalaTests {
 
   // private val NF: NumberFormat = java.text.DecimalFormat.getInstance()
   private val NF: NumberFormat = NumberFormat.getInstance()

@@ -72,14 +72,14 @@ import java.util.zip.ZipInputStream;
  *      located in the directory the server was started from.
  *      Here clack.html will be expected at the root of the archive.
  * - autobind
- * - web.archive default web.zip
+ * - web.archive default 'web.zip'
  *
  * </p>
  */
 public class HTTPServer {
 
 	// If set to "/", will behave like all others, from the directory the server was started from.
-	// Warning; A 'static.docs' like "/" would prevent the REST Request management...
+	// BUT Warning; A 'static.docs' like "/" would prevent the REST Request management...
 	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/";
 	private final static String DEFAULT_STATIC_ZIP_DOCS_PATH = "/zip/";
 

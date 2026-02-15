@@ -13,14 +13,16 @@ import java.net.SocketException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 //import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class HTTPServerTests {
+
+    private final static ObjectMapper mapper = new ObjectMapper();
 
     private final static NumberFormat NF = DecimalFormat.getInstance();
     private static int PORT_TO_USE = 1024;
@@ -200,6 +202,110 @@ public class HTTPServerTests {
             }
             System.out.println("... HTTP Server stopped");
         }
+    }
+
+    @Test
+    public void addOperationDynamically() {
+        List<HTTPServer.Operation> opList = new ArrayList<>();
+        // Arrays.asList would not work here. It returns a final list, cannot add to it.
+        opList.add(new HTTPServer.Operation(
+                        "GET",
+                        "/oplist",
+                        (request) -> {
+                            HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+                            String content;
+                            try {
+                                content = mapper.writeValueAsString(opList); // new Gson().toJson(opList);
+                            } catch (JsonProcessingException jpe) {
+                                response = HTTPServer.buildErrorResponse(response,
+                                        HTTPServer.Response.BAD_REQUEST,
+                                        new HTTPServer.ErrorPayload()
+                                                .errorCode("TEST-0001")
+                                                .errorMessage(jpe.toString())
+                                                .errorStack(HTTPServer.dumpException(jpe)));
+                                return response;
+                            }
+                            RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+                            response.setPayload(content.getBytes());
+                            return response;
+                        },
+                        "List of all available operations."));
+        opList.add(new HTTPServer.Operation(
+                        "POST",
+                        "/dummy/{it}",
+                        this::emptyOperation,
+                        "Blah."));
+        RESTRequestManager restServerImpl = new RESTRequestManager() {
+            @Override
+            public HTTPServer.Response onRequest(HTTPServer.Request request) throws UnsupportedOperationException {
+
+                Optional<HTTPServer.Operation> opOp = opList
+                        .stream()
+                        .filter(op -> op.getVerb().equals(request.getVerb()) && RESTProcessorUtil.pathMatches(op.getPath(), request.getPath()))
+                        .findFirst();
+                if (opOp.isPresent()) {
+                    HTTPServer.Operation op = opOp.get();
+                    request.setRequestPattern(op.getPath()); // To get the prms later on.
+                    HTTPServer.Response processed = op.getFn().apply(request); // Execute here.
+                    return processed;
+                } else {
+                    throw new UnsupportedOperationException(String.format("%s not managed", request.toString()));
+                }
+            }
+
+            @Override
+            public List<HTTPServer.Operation> getRESTOperationList() {
+                return opList;
+            }
+        };
+
+        // restServerImpl.getRESTOperationList()
+        opList.add(new HTTPServer.Operation("GET",
+                "/pouet",
+                    (request) -> {
+                        // Dummy one
+                        HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+                        return response;
+                    },
+                "Dynamically added"));
+
+        HTTPServer httpServer = null;
+        // PORT_TO_USE += 1;
+        try {
+
+            final List<HTTPServer.Operation> restOperationList = restServerImpl.getRESTOperationList();
+            System.out.printf("Operation List has %d element(s)\n", restOperationList.size());
+
+            System.out.printf("Starting HTTP Server on port %d...\n", PORT_TO_USE);
+            httpServer = new HTTPServer(PORT_TO_USE, restServerImpl, true);
+        } catch (Exception ex) {
+            fail(ex.toString());
+        }
+        assertNotNull(httpServer);
+        System.out.println("... HTTP Server started");
+
+        // Add a Shutdown Callback
+        Runnable shutdownCallback = () -> System.out.println("!! Server was shut down !!");
+        httpServer.setShutdownCallback(shutdownCallback);
+
+        try {
+            String request = String.format("http://localhost:%d/oplist", PORT_TO_USE);
+            System.out.printf("Requesting: %s\n", request);
+            String response = HTTPClient.doGet(request, new HashMap<>());
+            System.out.printf("===> Got response at %s\n", NF.format(System.currentTimeMillis()));
+            Assert.assertNotNull("Response is null", response);
+            System.out.printf("%s\n", response);
+        } catch (SocketException se) {
+            se.printStackTrace();
+            fail(se.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail(ex.toString());
+        } finally {
+            httpServer.stopRunning();
+            System.out.printf("===> End of Runnable at %s\n", NF.format(System.currentTimeMillis()));
+        }
+        System.out.println("That's it.");
     }
 
     private List<HTTPServer.Operation> opList = null;
