@@ -19,7 +19,18 @@ import java.util.logging.Level;
  * <p>
  * This list is defined in the <code>List&lt;Operation&gt;</code> named <code>operations</code>.
  * <br>
- * Those operation mostly retrieve the state of the SunFlower class, and device.
+ * Those operations refer to already defined Function&tl;Request, Response&gt;, but they can be dynamically declared, like here:
+ * <pre>
+ * opList.add(new HTTPServer.Operation(
+ *   "GET",
+ *   "/pouet",
+ *   (request) -> {
+ *      // Dummy one
+ *      HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+ *      return response;
+ *   },
+ *   "Dynamically added"));
+ * </pre>
  * <br>
  * The NavRequestManager will use the {@link #processRequest(Request)} method of this class to
  * have the required requests processed.

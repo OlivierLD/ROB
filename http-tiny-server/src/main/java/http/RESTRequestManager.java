@@ -6,6 +6,19 @@ import java.util.logging.Logger;
 
 /**
  * To be added to an HTTP Server ({@link HTTPServer }) to manage REST requests
+ * Will refer to a List&lt;HTTPServer.Operation&gt;<br/>
+ * Those operations refer to already defined Function&lt;Request, Response&gt;, but they can also be dynamically declared, like here:
+ * <pre>
+ * opList.add(new HTTPServer.Operation(
+ *   "GET",
+ *   "/pouet",
+ *   (request) -> {
+ *      // Dummy one
+ *      HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
+ *      return response;
+ *   },
+ *   "Dynamically added"));
+ * </pre>
  */
 public interface RESTRequestManager {
 	HTTPServer.Response onRequest(HTTPServer.Request request) throws UnsupportedOperationException;
