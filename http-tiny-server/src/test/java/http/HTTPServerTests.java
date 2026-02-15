@@ -262,13 +262,21 @@ public class HTTPServerTests {
         // restServerImpl.getRESTOperationList()
         opList.add(new HTTPServer.Operation("GET",
                 "/pouet",
-                    (request) -> {
+                    request -> {
                         // Dummy one
                         HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
                         return response;
                     },
                 "Dynamically added"));
 
+        opList.add(new HTTPServer.Operation("POST",
+                "/pouet",
+                request -> {
+                    // Dummy one
+                    HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+                    return response;
+                },
+                "Dynamically added"));
         HTTPServer httpServer = null;
         // PORT_TO_USE += 1;
         try {
@@ -295,6 +303,13 @@ public class HTTPServerTests {
             System.out.printf("===> Got response at %s\n", NF.format(System.currentTimeMillis()));
             Assert.assertNotNull("Response is null", response);
             System.out.printf("%s\n", response);
+
+            String request2 = String.format("http://localhost:%d/pouet", PORT_TO_USE);
+            System.out.printf("Requesting: %s\n", request2);
+            HTTPClient.HTTPResponse response2 = HTTPClient.doPost(request2, new HashMap<>(), null);
+            System.out.printf("===> Got response at %s\n", NF.format(System.currentTimeMillis()));
+            Assert.assertNotNull("Response is null", response2);
+            System.out.printf("%s\n", response2);
         } catch (SocketException se) {
             se.printStackTrace();
             fail(se.getMessage());

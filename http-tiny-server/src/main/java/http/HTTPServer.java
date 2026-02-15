@@ -1391,11 +1391,53 @@ public class HTTPServer {
 							"/oplist",
 							request -> new Response(request.getProtocol(), Response.STATUS_OK),
 							"Dummy list"),
+					// Invoke with curl -X POST http://localhost:9999/form-data -H "Content-Type: application/x-www-form-urlencoded" -d "param1=value1&param2=value2"
+					// Or with Postman, Content-Type = 'form-data'.
 					new HTTPServer.Operation(
 							"POST",
-							"/oplist",
-							request -> new Response(request.getProtocol(), Response.STATUS_OK),
-							"Dummy list"));
+							"/form-data",
+							// Dynamically declared...
+							request -> {
+								Response response = new Response(request.getProtocol(), Response.CREATED);
+								System.out.println("POST !");
+								Map<String, String> fdPrms = new HashMap<>();
+
+								String contentType = request.getHeaders().get("Content-Type");
+
+								if (contentType.contains("multipart/form-data")) {
+									String boundary = contentType.split(";")[1];
+									boundary = boundary.substring(boundary.indexOf('=') + 1);
+									String postContent = new String(request.getContent());
+									// form-data ?
+									final String[] split = postContent.split("-------------.*\r\n"); // Use boundary ?
+									// Arrays.stream(split).forEach(System.out::println);
+									// Find form-data ?
+									Arrays.stream(split)
+											.filter(elmt -> elmt.startsWith("Content-Disposition: form-data;"))
+											.forEach(fd -> {
+												// System.out.println(fd);
+												String[] oneFormData = fd.split("\r\n");
+												if (oneFormData.length == 3) {
+													String value = oneFormData[2];
+													String name = oneFormData[0].substring("Content-Disposition: form-data; name=\"".length(), oneFormData[0].length() - 1);
+													System.out.printf("%s=%s\n", name, value);
+													fdPrms.put(name, value);
+												} else {
+													System.out.println("Mmmh ?");
+												}
+											});
+								} else if (contentType.contains("application/x-www-form-urlencoded")) {
+									String postContent = new String(request.getContent());
+									String[] prms = postContent.split("&");
+									Arrays.stream(prms).forEach(prm -> {
+														final String[] nameValue = prm.split("=");
+														fdPrms.put(nameValue[0], nameValue[1]);
+													});
+								}
+								response.setPayload(fdPrms.toString().getBytes());
+
+								return response;
+							}, "FormData prms list"));
 
 			RESTRequestManager testRequestManager = new RESTRequestManager() {
 
@@ -1403,19 +1445,32 @@ public class HTTPServer {
 				public Response onRequest(Request request) throws UnsupportedOperationException {
 					// Warning!! This is just an example, hard coded for basic tests.
 					// See other implementations for the right way to do this.
-					Response response = new Response(request.getProtocol(), Response.STATUS_OK);
+					Optional<HTTPServer.Operation> opOp = opList1
+							.stream()
+							.filter(op -> op.getVerb().equals(request.getVerb()) && RESTProcessorUtil.pathMatches(op.getPath(), request.getPath()))
+							.findFirst();
+					if (opOp.isPresent()) {
+						HTTPServer.Operation op = opOp.get();
+						request.setRequestPattern(op.getPath()); // To get the prms later on.
+						HTTPServer.Response processed = op.getFn().apply(request); // Execute here.
+						return processed;
+					} else {
+						// throw new UnsupportedOperationException(String.format("%s not managed", request.toString()));
+						Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
-					List<Operation> opList = opList1; // Above
-					String content = ""; // new Gson().toJson(opList);
-					try {
-						content = mapper.writeValueAsString(opList);
-					} catch (JsonProcessingException jpe) {
-						content = jpe.getMessage();  // TODO Use dumpException ?
-						jpe.printStackTrace();
+						List<Operation> opList = opList1; // Above
+						String content = ""; // new Gson().toJson(opList);
+						try {
+							content = mapper.writeValueAsString(opList);
+						} catch (JsonProcessingException jpe) {
+							content = jpe.getMessage();  // TODO Use dumpException ?
+							jpe.printStackTrace();
+						}
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+						return response;
 					}
-					RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
-					response.setPayload(content.getBytes());
-					return response;
+
 				}
 
 				@Override
