@@ -1398,11 +1398,11 @@ public class HTTPServer {
 							"/form-data",
 							// Dynamically declared...
 							request -> {
-								Response response = new Response(request.getProtocol(), Response.CREATED);
+								Response response = new Response(request.getProtocol(), Response.CREATED); // 201
 								System.out.println("POST !");
 								Map<String, String> fdPrms = new HashMap<>();
 
-								String contentType = request.getHeaders().get("Content-Type");
+								String contentType = request.getHeaders().get(HttpHeaders.CONTENT_TYPE); //  "Content-Type"
 
 								if (contentType.contains("multipart/form-data")) {
 									String boundary = contentType.split(";")[1];
@@ -1435,12 +1435,10 @@ public class HTTPServer {
 													});
 								}
 								response.setPayload(fdPrms.toString().getBytes());
-
 								return response;
 							}, "FormData prms list"));
 
 			RESTRequestManager testRequestManager = new RESTRequestManager() {
-
 				@Override
 				public Response onRequest(Request request) throws UnsupportedOperationException {
 					// Warning!! This is just an example, hard coded for basic tests.

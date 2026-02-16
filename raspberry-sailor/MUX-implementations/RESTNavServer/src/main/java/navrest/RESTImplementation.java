@@ -23,7 +23,7 @@ import java.util.logging.Level;
  * <pre>
  * opList.add(new HTTPServer.Operation(
  *   "GET",
- *   "/pouet",
+ *   "/rest-path",
  *   (request) -> {
  *      // Dummy one
  *      HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
@@ -40,7 +40,7 @@ public class RESTImplementation {
 
 	private final static ObjectMapper mapper = new ObjectMapper();
 
-	private NavRequestManager navRequestManager;
+	private final NavRequestManager navRequestManager;
 
 	private final static String SERVER_PREFIX = "/server";
 	private final static String WW_PREFIX = "/ww";
