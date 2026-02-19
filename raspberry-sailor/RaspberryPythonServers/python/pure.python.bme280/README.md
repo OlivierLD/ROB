@@ -22,7 +22,7 @@ It provides
 ## From Scratch
 ### You will need
 - A Raspberry Pi (a Zero W would fit, here)
-  - If you only have a Raspberry Pi Zero, you will need a WiFi dongle.
+  - If you only have a Raspberry Pi Zero (with no W), you will need a WiFi dongle.
 - A micro SD card for the Raspberry Pi
 - A breadboard
 - A BME280 sensor

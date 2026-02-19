@@ -21,7 +21,7 @@ Ce qui fournit les fonctionnalit&eacute;s suivantes :
 ## En partant de z&eacute;ro
 ### Il vous faudra
 - Un Raspberry Pi (le mod&egrave;le Zero W convient ici)
-  - Si vous n'avez que le Raspberry Pi Zero, il faudra y ajouter un dongle WiFi.
+  - Si vous n'avez que le Raspberry Pi Zero (sans le W), il faudra y ajouter un dongle WiFi.
 - Une carte SD micro, pour le Raspberry Pi
 - Une breadboard
 - Un capteur BME280
