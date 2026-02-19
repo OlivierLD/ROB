@@ -29,7 +29,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * Can be used for the REST interface of an HTTP Server.
- * Can also be used as a Proxy
+ * Can also be used as a Proxy, and to serve static requests.
  *
  * GET, POST, DELETE, PUT, no PATCH (for now)
  * <br>
@@ -40,6 +40,8 @@ import java.util.zip.ZipInputStream;
  * <li><code>/exit</code> to exit the HTTP server (cannot be restarted).</li>
  * <li><code>/test</code> to test the HTTP server availability</li>
  * </ul>
+ * Those features can be used from curl, <code>curl -X GET http://machine:port/test</code>
+ *
  * <p>
  * Query parameter 'verbose' will turn verbose on or off.
  * To turn it on: give verbose no value, or 'on', 'true', 'yes' (non case sensitive).
@@ -703,6 +705,7 @@ public class HTTPServer {
 									if (line.contains(":")) { // Header?
 										if (line.indexOf(" ") > 0 && line.indexOf(" ") < line.indexOf(":")) { // TODO: Not start with Verb
 											// Not a GET http://machine HTTP/1.1, with the protocol in the request
+											System.err.println(String.format("Wierd Request: [%s]", line));
 										} else {
 											String headerKey = line.substring(0, line.indexOf(":"));
 											String headerValue = line.substring(line.indexOf(":") + 1);
@@ -1403,7 +1406,7 @@ public class HTTPServer {
 								Map<String, String> fdPrms = new HashMap<>();
 
 								String contentType = request.getHeaders().get(HttpHeaders.CONTENT_TYPE); //  "Content-Type"
-
+								// Manage form-data
 								if (contentType.contains("multipart/form-data")) {
 									String boundary = contentType.split(";")[1];
 									boundary = boundary.substring(boundary.indexOf('=') + 1);
@@ -1454,6 +1457,8 @@ public class HTTPServer {
 						return processed;
 					} else {
 						// throw new UnsupportedOperationException(String.format("%s not managed", request.toString()));
+
+						// If not a REST request, return operation list
 						Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 
 						List<Operation> opList = opList1; // Above
@@ -1468,7 +1473,6 @@ public class HTTPServer {
 						response.setPayload(content.getBytes());
 						return response;
 					}
-
 				}
 
 				@Override
