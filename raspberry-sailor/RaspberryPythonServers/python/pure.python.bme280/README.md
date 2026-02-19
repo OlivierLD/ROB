@@ -26,6 +26,10 @@ It provides
 - A micro SD card for the Raspberry Pi
 - A breadboard
 - A BME280 sensor
+  - Available from sites like [this one](https://www.aliexpress.com/p/tesla-landing/index.html?scenario=c_ppc_item_bridge&productId=4001027465901&_immersiveMode=true&withMainCard=true&src=google-language&aff_platform=true&isdl=y&src=google&albch=shopping&acnt=248-630-5778&isdl=y&slnk=&plac=&mtctp=&albbt=Google_7_shopping&aff_platform=google&aff_short_key=UneMJZVf&gclsrc=aw.ds&&albagn=888888&&ds_e_adid=&ds_e_matchtype=&ds_e_device=c&ds_e_network=x&ds_e_product_group_id=&ds_e_product_id=en4001027465901&ds_e_product_merchant_id=106630103&ds_e_product_country=ZZ&ds_e_product_language=en&ds_e_product_channel=online&ds_e_product_store_id=&ds_url_v=2&albcp=23109390367&albag=&isSmbAutoCall=false&needSmbHouyi=false&gad_source=1&gad_campaignid=23099403303&gbraid=0AAAAACWaBwdp0m6gB7HYpzmJF04LJFaR0&gclid=Cj0KCQiAhtvMBhDBARIsAL26pjH6AvrPvU8-iIFw3mKilyrSwii4EG_2QZ7wuuwDFxg9rmcNrmgYF8MaAvm_EALw_wcB),
+    [this one](https://www.kubii.com/fr/modules-capteurs/4753-capteur-de-temperature-pression-et-humidite-bme280--3272496323773.html),
+    [this one](https://www.sparkfun.com/sparkfun-atmospheric-sensor-breakout-bme280-with-headers.html),
+    or [that one](https://www.adafruit.com/product/2652)... Prices may vary, do not hesitate to investigate deeper.
 - Jumper wires
 - A power supply for the Raspberry Pi
 - A laptop (for the initial configuration)
