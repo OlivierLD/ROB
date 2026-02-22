@@ -1565,7 +1565,7 @@
         };
 
         /**
-         * If existing data is provided, it comes from the file system.
+         * If existingData is provided, it comes from the file system.
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
@@ -1760,6 +1760,11 @@
             let feedbackField = document.getElementById('time-last-load');
             if (feedbackField) {
                 feedbackField.innerText = `${compositeData.key} requested on ${ new Date().format("Y-M-d H:i:s Z") }`;
+            }
+            // IF check box is on, push the data to the server, and make it available for download and remote display.
+            if (document.getElementById('push-data').checked = true) {
+                console.log("Pushing composite data to the server...");
+                pushCompositeData(compositeData, requestData);
             }
         };
 
@@ -2744,7 +2749,7 @@
                     </div>
                     <hr/>
                     <div style="vertical-align: middle;">
-                        <button onclick="redraw();" style="margin-left: 5px;">Push Composite Data</button>
+                        <input type="checkbox"  id="push-data"/> Push Composite Data
                     </div>
                     <hr/>
                     <div id="composite-zoom">
