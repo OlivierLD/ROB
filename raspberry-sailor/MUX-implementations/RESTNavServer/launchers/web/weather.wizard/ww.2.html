@@ -1768,6 +1768,7 @@
             document.getElementById("x-" + num).innerText = (topLeft[num - 1][0] * thisZoomFactor).toFixed(0);
             document.getElementById("y-" + num).innerText = (topLeft[num - 1][1] * thisZoomFactor).toFixed(0);
             document.getElementById("zoom-" + num).innerText = (zoom[num - 1] * thisZoomFactor);
+            // TODO rotation ?
         };
 
         let zoomFax = (num, factor) => {
@@ -2199,7 +2200,6 @@
             }
             redraw();
         };
-
 
         let showRoutingDialog = () => {
             let routingDialog = document.getElementById("routing-prms-dialog");
@@ -2732,7 +2732,7 @@
                             </label>
                              Color Wind
                         </div>
-                        <div></div>
+                        <div><!-- filler --></div>
                         <div style="vertical-align: middle;">
                             <label class="rocker rocker-tiny" style="margin-bottom: -10px;">
                                 <input id="fax-checkbox" type="checkbox" onchange="changeFAXES(this);" checked/>
@@ -2741,6 +2741,10 @@
                             </label>
                              With Faxes
                         </div>
+                    </div>
+                    <hr/>
+                    <div style="vertical-align: middle;">
+                        <button onclick="redraw();" style="margin-left: 5px;">Push Composite Data</button>
                     </div>
                     <hr/>
                     <div id="composite-zoom">
@@ -2897,6 +2901,7 @@
         </td>
     </tr>
 </table>
+<div style="padding: 20px;"></div>
 </body>
 
 <script type="text/javascript">
