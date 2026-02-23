@@ -266,6 +266,187 @@ let renderGRIBData = function(canvas, context) {
 	}
 };
 
+let pushedCompositeName;
+
+// That is the function to push the composite data to the server, and make it available for download and remote display.
+function pushCompositeData(compositeData, requestData) {
+	console.log("function pushCompositeData : Composite data ready to be pushed to the server...");
+
+	// Will use a form like in programmatic.upload.html
+
+	// 1 - Buid pushedCompositeName from compositeData.key and current date, for example: "ATL-0002-FINE-2_2026-02-22T18-37-49Z"
+	let date = new Date();
+	let dateString = date.toISOString(); // .replace(/:/g, '-');
+	pushedCompositeName = `${dateString.substring(0, dateString.lastIndexOf(':'))}`;
+	console.log(`- Pushed composite name: ${pushedCompositeName}`);
+/*
+compositeData example:
+{
+    "key": "ATL-0002-FINE-2",
+    "name": "North Atlantic, current analysis (fine, 2-day GRIB), v2",
+    "comment": "GRIB and Faxes",
+    "map": {
+        "projection": "MERCATOR",
+        "north": 65.5,
+        "south": 10,
+        "east": 28.2,
+        "west": -101.8
+    },
+    "canvas": {
+        "w": 900,
+        "h": 600
+    },
+    "faxData": [
+        {
+            "faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+            "name": "North-West Atl surface analysis",
+            "transp": "WHITE",
+            "rotation": 0,
+            "tx": {
+                "from": "BLACK",
+                "to": "RED"
+            },
+            "effect": "BLUR",
+            "zoom": 0.32291855775920775,
+            "location": {
+                "x": 13,
+                "y": 8
+            }
+        },
+        {
+            "faxUrl": "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+            "name": "North-East Atl surface analysis",
+            "transp": "WHITE",
+            "rotation": 0,
+            "tx": {
+                "from": "BLACK",
+                "to": "RED"
+            },
+            "effect": "BLUR",
+            "zoom": 0.32291855775920775,
+            "location": {
+                "x": 401,
+                "y": 8
+            }
+        },
+        {
+            "faxUrl": "https://tgftp.nws.noaa.gov/fax/PPAA10.gif",
+            "name": "North Atl 500mb analysis",
+            "transp": "WHITE",
+            "tx": {
+                "from": "BLACK",
+                "to": "BLUE"
+            },
+            "effect": "BLUR",
+            "zoom": 0.49330500605497085,
+            "location": {
+                "x": 26,
+                "y": 27
+            }
+        },
+        {
+            "faxUrl": "https://tgftp.nws.noaa.gov/fax/PJAA99.gif",
+            "name": "North Atl Sea state",
+            "transp": "WHITE",
+            "tx": {
+                "from": "BLACK",
+                "to": "DARKGREEN"
+            },
+            "effect": "BLUR",
+            "zoom": 0.4928121938611098,
+            "location": {
+                "x": 26,
+                "y": 27
+            }
+        }
+    ],
+    "gribRequest": "GFS:65N,10N,100W,10E|1,1|0,3..48|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
+}
+*/
+    console.log(compositeData);
+/*
+requestData example:
+[
+    {
+        "url": "https://tgftp.nws.noaa.gov/fax/PYAA12.gif",
+        "name": "North-West Atl surface analysis",
+        "storage": "web/2026/02/22/ATL-0002-FINE-2_183749/ATL-0002-FINE-2_0.png",
+        "returned": "web/2026/02/22/ATL-0002-FINE-2_183749/_ATL-0002-FINE-2_0.png",
+        "transparent": "WHITE",
+        "imgType": "png",
+        "tx": "BLUR",
+        "from": "BLACK",
+        "to": "RED",
+        "rotation": 0
+    },
+    {
+        "url": "https://tgftp.nws.noaa.gov/fax/PYAA11.gif",
+        "name": "North-East Atl surface analysis",
+        "storage": "web/2026/02/22/ATL-0002-FINE-2_183749/ATL-0002-FINE-2_1.png",
+        "returned": "web/2026/02/22/ATL-0002-FINE-2_183749/_ATL-0002-FINE-2_1.png",
+        "transparent": "WHITE",
+        "imgType": "png",
+        "tx": "BLUR",
+        "from": "BLACK",
+        "to": "RED",
+        "rotation": 0
+    },
+    {
+        "url": "https://tgftp.nws.noaa.gov/fax/PPAA10.gif",
+        "name": "North Atl 500mb analysis",
+        "storage": "web/2026/02/22/ATL-0002-FINE-2_183749/ATL-0002-FINE-2_2.png",
+        "returned": "web/2026/02/22/ATL-0002-FINE-2_183749/_ATL-0002-FINE-2_2.png",
+        "transparent": "WHITE",
+        "imgType": "png",
+        "tx": "BLUR",
+        "from": "BLACK",
+        "to": "BLUE"
+    },
+    {
+        "url": "https://tgftp.nws.noaa.gov/fax/PJAA99.gif",
+        "name": "North Atl Sea state",
+        "storage": "web/2026/02/22/ATL-0002-FINE-2_183749/ATL-0002-FINE-2_3.png",
+        "returned": "web/2026/02/22/ATL-0002-FINE-2_183749/_ATL-0002-FINE-2_3.png",
+        "transparent": "WHITE",
+        "imgType": "png",
+        "tx": "BLUR",
+        "from": "BLACK",
+        "to": "DARKGREEN"
+    }
+]
+*/
+	console.log(requestData);
+	let faxList = [];
+	requestData.forEach(data => {
+		// let prefix = document.location.origin + document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/'));
+		// faxList.push({ file: prefix + "/../" + data.returned, mimeType: "image/png" });
+		let fileLocation = data.url;
+		if (fileLocation.startsWith('file://'))	 {
+			fileLocation = document.location.origin + data.url.substring(data.url.indexOf('/web')); // Wow !
+		} else {
+			// fileLocation = document.location.origin + "/" + data.returned;
+			fileLocation = "../../" + data.returned;
+		}
+		faxList.push({ file: fileLocation, mimeType: "image/png" }); // TODO Make sure the type is right
+		console.log(`- Fax to upload: ${fileLocation}`);
+	});
+
+	// TODO la suite... GRIB.json, etc.
+	console.log('Uploading faxes...');
+	proceed(faxList, pushedCompositeName);
+}
+
+// Push GRIB Data on its composite folder
+function pushCompositeGRIBData(gribDataJSON) {
+	// Will use a form like in programmatic.upload.html
+	if (gribDataJSON) {
+		console.log("function pushCompositeGRIBData : Pushing GRIB data to the server...");
+		console.log(`- In GRIB Data: Pushed composite name: ${pushedCompositeName}`);
+
+		proceedJSON('GRIB.json', gribDataJSON, pushedCompositeName);
+	}
+}
+
 // Routing features
 
 let routingPromise = function(payload) {
