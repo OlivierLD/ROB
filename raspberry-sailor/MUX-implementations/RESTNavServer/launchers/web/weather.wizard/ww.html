@@ -44,6 +44,7 @@ window.onload = function() {
 	worldMap.clear();
 	worldMap.setMouseMoveCallback(mouseMoveCallback);
 	worldMap.setPositionLabel("Pos");
+	worldMap.setWithGrid(true);
 	setTimeout(function () {
 		worldMap.drawWorldMap();
 	}, 1);
@@ -222,8 +223,8 @@ let changeGrid = function(cb) {
 
 let changeTropics = function(cb) {
     worldMap.setWithTropics(cb.checked);
-	  redraw();
-  };
+	redraw();
+};
 
   let show = []; // [true, true, true];
   let faxName = [];
@@ -528,7 +529,7 @@ let changeFax = function(val) {
 };
 
 let plotGrib = function(jsonGrib) {
-if (false) { // DEBUG
+	if (false) { // DEBUG
 		console.log("Received GRIB");
 		// Extract the dates
 		jsonGrib.forEach((grib, idx) => {
@@ -576,6 +577,8 @@ if (false) { // DEBUG
 			gribTypes.add(option);
 		}
 	});
+
+	let withGRIB = document.getElementById("with-grib").checked;
 
 	gribData = jsonGrib; // gribData defined in ww.js
 	redraw();
@@ -710,7 +713,8 @@ window.fetch(URL)
 					<hr/>
 
 					Zoom for the whole thing: <button onclick="changeCanvasSize(0.9);">-</button><button onclick="changeCanvasSize(1.1);">+</button>
-
+					<br/>
+					<input type="checkbox" id="with-grib" onchange="redraw();" checked/> Show GRIB data (if any)
 					<hr/>
 					<div style="padding:5px; background:#fff; border-radius: 5px; overflow-y: auto; overflow-x: auto; border: 1px solid #CCC; margin-top: 10px;">
 						<table>

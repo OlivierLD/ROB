@@ -253,6 +253,13 @@ let renderGRIBData = function(canvas, context) {
 		document.getElementById("grib-checkbox").checked = true;
 	}
 
+	let withGRIB = true;
+	if (document.getElementById("with-grib") && !document.getElementById("with-grib").checked) {
+		withGRIB = false;
+	}
+	if (!withGRIB) {
+		return;
+	}
 //console.log("Now drawing GRIB");
 	if (gribData !== undefined) {
 		let date = document.getElementById("grib-dates").value;

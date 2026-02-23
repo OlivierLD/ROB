@@ -215,9 +215,9 @@ function WorldMap (cName, prj) {
 	worldmapColorConfig = getWorldmapColorConfig();
 
 	var _west = -180,
-			_east = 180,
-			_north = 90,
-			_south = -90;
+		_east = 180,
+		_north = 90,
+		_south = -90;
 
 	var defaultRadiusRatio = 0.6;
 
