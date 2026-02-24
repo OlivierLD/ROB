@@ -670,6 +670,19 @@
 
     <script type="text/javascript">
 
+        function manage(cb) {
+            // if (document.readyState === 'loading') {
+            //     document.addEventListener('DOMContentLoaded', cb);
+            // } else {
+            //     cb();
+            // }
+            if (cb.checked) {
+                document.getElementById('form-controls').style.display = 'block';
+            } else {
+                document.getElementById('form-controls').style.display = 'none';
+            }
+        }
+
         const CHART_ON_TOP_OF_GRIB = true;
         const FAXES_ON_TOP = true;
 
@@ -2586,14 +2599,16 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
 </script>
 
 <!-- invisible forms to push composite data on another server -->
-<input type="checkbox" id="show-forms" onchange="document.getElementById('forms').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show forms (for debug).
-<input type="checkbox" id="show-iframes" onchange="document.getElementById('iframes').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show upload iframes (for debug).
-&nbsp;Service Location:&nbsp;
-<select id="service-location" onchange="changeServiceLocation(this);">
-    <option value="remote" selected>Remote</option>
-    <option value="local">Local</option>
-</select>
-<hr/>
+ <div id="form-controls" style="display: none;">
+    <input type="checkbox" id="show-forms" onchange="document.getElementById('forms').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show forms (for debug).
+    <input type="checkbox" id="show-iframes" onchange="document.getElementById('iframes').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show upload iframes (for debug).
+    &nbsp;Service Location:&nbsp;
+    <select id="service-location" onchange="changeServiceLocation(this);">
+        <option value="remote" selected>Remote</option>
+        <option value="local">Local</option>
+    </select>
+    <hr/>
+</div>
 <div id="forms" style="display: none; grid-template-columns: 50% 50%;">
 <div id="json-upload-form" style="display: block;">
     <!-- TODO in action, the full path on the machine the service is running on ? -->
@@ -2958,7 +2973,7 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
                     </div>
                     <hr/>
                     <div style="vertical-align: middle;" title="Carefull with that one...">
-                        <input type="checkbox"  id="push-data"/> Push Composite Data
+                        <input type="checkbox"  id="push-data" onchange="manage(this);"/> Push Composite Data
                     </div>
                     <hr/>
                     <div id="composite-zoom">
