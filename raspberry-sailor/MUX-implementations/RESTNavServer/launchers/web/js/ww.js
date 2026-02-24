@@ -284,7 +284,7 @@ function resetCompositeName() { // Called from the pageXOffset.
 }
 
 // That is the function to push the composite data to the server, and make it available for download and remote display.
-async function pushCompositeData(compositeData, requestData) {
+async function pushCompositeData(compositeData, requestData, gribData) {
 	console.log("function pushCompositeData : Composite data ready to be pushed to the server...");
 	resetCompositeName();
 
@@ -433,7 +433,10 @@ requestData example:
 			newCompositeData.faxData[i].faxUrl = requestData[i].returned.substring(requestData[i].returned.lastIndexOf('/') + 1); // Just the file name
 		}
 	}
-	console.log(`==> New composite data to push, compositeData.json`);
+	if (gribData) {
+		newCompositeData.gribData = gribData;
+	}
+	console.log(`==> New composite data to push, compositeData.json, in ${pushedCompositeName}`);
 	proceedJSON('compositeData.json', newCompositeData, pushedCompositeName);
 	console.log(`Done with compositeData.json upload`);
 
@@ -463,6 +466,7 @@ requestData example:
 }
 
 // Push GRIB Data on its composite folder. Should be done last, compositeName should have been set before.
+// @obsolete, as GRIB data is now included in the compositeData.json file.
 async function pushCompositeGRIBData(gribDataJSON) {
 	// Will use a form like in programmatic.upload.html
 	if (gribDataJSON) {

@@ -112,14 +112,14 @@ let getGRIB = function(request) {
 	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, request, false);
 };
 
-let requestGRIB = function(gribRequest, cb) {
+let requestGRIB = function(gribRequest, callback) {
 	let getData = getGRIB(gribRequest);
 	getData.then((value) => {
 		// console.log("Done:", value);
 		let json = JSON.parse(value);
 		// Do something smart here.
-		if (cb !== undefined) {
-			cb(json);
+		if (callback !== undefined) {
+			callback(json);
 		}
 	}, (error, errmess) => {
 		let message;

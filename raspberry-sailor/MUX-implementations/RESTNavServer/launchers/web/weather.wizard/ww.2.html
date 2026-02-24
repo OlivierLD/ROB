@@ -1754,6 +1754,8 @@
                 makeGRIBRequest(compositeData.gribRequest,
                                 existingData === undefined ? 'web/' + year + '/' + month + '/' + day + '/' + time : undefined,
                                 gribCallback); // grib file Location
+            } else {
+                console.log("No GRIB request in the composite data");
             }
 
             let feedbackField = document.getElementById('time-last-load');
@@ -1764,7 +1766,11 @@
             if (document.getElementById('push-data') && document.getElementById('push-data').checked === true) {
                 console.log("==> From the page: Pushing composite data to the server...");
                 // resetCompositeName();
-                pushCompositeData(compositeData, requestData);
+
+                // TODO: the GRIB data in the compositeData... Use lastGRIBData
+                window.setTimeout(() => { // Wait for the GRIB data to be loaded (if any)
+                    pushCompositeData(compositeData, requestData, lastGRIBData);
+                }, 15000);
             }
         };
 
@@ -1986,7 +1992,7 @@
             gribData = jsonGrib; // gribData is a function prm
 
             // Push GRIB Data
-            if (document.getElementById('push-data') && document.getElementById('push-data').checked === true) { // in ww.2.html
+            if (false && document.getElementById('push-data') && document.getElementById('push-data').checked === true) { // in ww.2.html
                 // console.log("Pushing composite GRIB data to the server...");
                 pushCompositeGRIBData(gribData);
             }
@@ -2135,7 +2141,7 @@
             infoDiv.innerHTML = "";
         };
 
-        let makeGRIBRequest = (gribRequest, where, cb) => {
+        let makeGRIBRequest = (gribRequest, where, callback) => {
 
             lastGRIBData = null; // Reset
             lastGRIBidx = -1;
@@ -2158,8 +2164,8 @@
                 worldMap.setAfterDrawing(renderGRIBData);  // That is the callback. GRIB on top of the chart.
             }
             requestGRIB(jsonRequest, plotGrib);  // Enable GRIB widgets if successful
-            if (cb) { // if Callback exists
-                cb("GRIB loaded");
+            if (callback) { // if Callback exists
+                callback("GRIB loaded");
             }
         };
 
