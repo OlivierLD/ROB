@@ -275,17 +275,20 @@ let renderGRIBData = function(canvas, context) {
 
 let pushedCompositeName;
 
-// That is the function to push the composite data to the server, and make it available for download and remote display.
-function pushCompositeData(compositeData, requestData) {
-	console.log("function pushCompositeData : Composite data ready to be pushed to the server...");
-
-	// Will use a form like in programmatic.upload.html
-
+function resetCompositeName() { // Called from the pageXOffset.
 	// 1 - Buid pushedCompositeName from compositeData.key and current date, for example: "ATL-0002-FINE-2_2026-02-22T18-37-49Z"
 	let date = new Date();
 	let dateString = date.toISOString(); // .replace(/:/g, '-');
 	pushedCompositeName = `${dateString.substring(0, dateString.lastIndexOf(':'))}`;
-	console.log(`- Pushed composite name: ${pushedCompositeName}`);
+	console.log(`- Pushed composite name is now: ${pushedCompositeName}`);
+}
+
+// That is the function to push the composite data to the server, and make it available for download and remote display.
+async function pushCompositeData(compositeData, requestData) {
+	console.log("function pushCompositeData : Composite data ready to be pushed to the server...");
+	resetCompositeName();
+
+	// Will use a form like in programmatic.upload.html
 /*
 compositeData example:
 {
@@ -370,7 +373,7 @@ compositeData example:
     "gribRequest": "GFS:65N,10N,100W,10E|1,1|0,3..48|PRMSL,WIND,HGT500,TEMP,WAVES,RAIN"
 }
 */
-    console.log(compositeData);
+    // console.log(compositeData);
 /*
 requestData example:
 [
@@ -422,7 +425,18 @@ requestData example:
     }
 ]
 */
-	console.log(requestData);
+	// console.log(requestData);
+	// Compose new compositeData with the returned file locations
+	let newCompositeData = compositeData;
+	if (newCompositeData.faxData) {
+		for (let i=0; i<newCompositeData.faxData.length; i++) {
+			newCompositeData.faxData[i].faxUrl = requestData[i].returned.substring(requestData[i].returned.lastIndexOf('/') + 1); // Just the file name
+		}
+	}
+	console.log(`==> New composite data to push, compositeData.json`);
+	proceedJSON('compositeData.json', newCompositeData, pushedCompositeName);
+	console.log(`Done with compositeData.json upload`);
+
 	let faxList = [];
 	requestData.forEach(data => {
 		// let prefix = document.location.origin + document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/'));
@@ -438,19 +452,23 @@ requestData example:
 		console.log(`- Fax to upload: ${fileLocation}`);
 	});
 
-	// TODO la suite... GRIB.json, etc.
-	console.log('Uploading faxes...');
-	proceed(faxList, pushedCompositeName);
+	// Upload faxes.
+	if (faxList.length > 0) {
+		console.log(`==> Uploading faxes for ${pushedCompositeName}...`);
+		proceed(faxList, pushedCompositeName);
+		console.log("Done with faxes upload");
+	} else {
+		console.log(`No faxes to upload for ${pushedCompositeName}.`);
+	}
 }
 
-// Push GRIB Data on its composite folder
-function pushCompositeGRIBData(gribDataJSON) {
+// Push GRIB Data on its composite folder. Should be done last, compositeName should have been set before.
+async function pushCompositeGRIBData(gribDataJSON) {
 	// Will use a form like in programmatic.upload.html
 	if (gribDataJSON) {
-		console.log("function pushCompositeGRIBData : Pushing GRIB data to the server...");
-		console.log(`- In GRIB Data: Pushed composite name: ${pushedCompositeName}`);
-
+		console.log(`==> Pushing GRIB data to the server..., for ${pushedCompositeName}`);
 		proceedJSON('GRIB.json', gribDataJSON, pushedCompositeName);
+		console.log("Done with GRIB upload");
 	}
 }
 

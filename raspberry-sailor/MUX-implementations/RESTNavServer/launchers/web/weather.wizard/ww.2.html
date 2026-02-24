@@ -1660,7 +1660,7 @@
                         url: fax.faxUrl,
                         name: fax.name,
                         storage: 'web/' + year + '/' + month + '/' + day + '/' + time + '/' + compositeData.key + '_' + idx + '.png', // Original. With the date
-                        returned: 'web/' + year + '/' + month + '/' + day + '/' + time + '/_' + compositeData.key + '_' + idx + '.png', // Transformed
+                        returned: 'web/' + year + '/' + month + '/' + day + '/' + time + '/_' + compositeData.key + '_' + idx + '.png', // Transformed (color, rotation, etc)
                         transparent: fax.transp,
                         imgType: "png",
                         tx: fax.effect
@@ -1763,6 +1763,7 @@
             // If check box is on, push the data to the server, and make it available for download and remote display.
             if (document.getElementById('push-data') && document.getElementById('push-data').checked === true) {
                 console.log("==> From the page: Pushing composite data to the server...");
+                // resetCompositeName();
                 pushCompositeData(compositeData, requestData);
             }
         };
@@ -1986,7 +1987,7 @@
 
             // Push GRIB Data
             if (document.getElementById('push-data') && document.getElementById('push-data').checked === true) { // in ww.2.html
-                console.log("Pushing composite GRIB data to the server...");
+                // console.log("Pushing composite GRIB data to the server...");
                 pushCompositeGRIBData(gribData);
             }
             // Min and max for each grib data
@@ -2002,7 +2003,7 @@
             // console.log("Display min and max for index", idx);
             // messageManager("Finding min and max for index:" + idx);
             let gribObj = gribData[idx];
-            console.log(gribObj.gribDate.formattedUTCDate);
+            // console.log(gribObj.gribDate.formattedUTCDate);
             for (let i = 0; i < gribObj.typedData.length; i++) {
                 let gribTypeData = gribObj.typedData[i];
                 if (gribTypeData.gribType.type !== 'vgrd' && gribTypeData.gribType.type !== 'ugrd' &&
@@ -2099,7 +2100,7 @@
                 if (compositeCatalog[i].key === compositeId) {
                     let title = 'Collapse';
                     let arrow = '&#9660;&nbsp;';
-                    console.log('infoDiv.style.maxHeight=', infoDiv.style.maxHeight);
+                    // console.log('infoDiv.style.maxHeight=', infoDiv.style.maxHeight);
                     if (infoDiv.style.maxHeight != null && infoDiv.style.maxHeight !== '' && infoDiv.style.maxHeight !== 'none') {
                         title = 'Expand';
                         arrow = '&#9658;&nbsp;';
@@ -2335,6 +2336,16 @@
             }
         }
 
+        const SERVICE_LOCATION_REMOTE = "http://passe-coque.com/tech.and.nav/composites/data.sender.php";
+        const SERVICE_LOCATION_LOCAL = "http://localhost:8000/tech.and.nav/composites/data.sender.php";
+
+        function changeServiceLocation(select) {
+            let serviceLocation = select.value === 'remote' ? SERVICE_LOCATION_REMOTE : SERVICE_LOCATION_LOCAL;
+            console.log('Changing service location to', serviceLocation);
+            document.getElementById('json-form').action = serviceLocation;
+            document.getElementById('upload-form').action = serviceLocation;
+        }
+
     </script>
 
 </head>
@@ -2477,7 +2488,7 @@ async function loadURLToInputField(url, fileId, fileName, fileType) {
 
 // xml blob res
 async function getFileURL(url, fileId, fileName, fileType, callback) {
-  console.log(`getFileURL: Getting file from ${url}, type ${fileType}...`);
+  // console.log(`getFileURL: Getting file from ${url}, type ${fileType}...`);
   var xhr = new XMLHttpRequest();
   xhr.onload = () => {
       callback(xhr.response);
@@ -2501,6 +2512,7 @@ let preLoad = async (url, fileId, fileName, fileType) => {
 //   { file: "./sample.files/wizard150.jpg", mimeType: "image/jpg" }
 // ];
 
+// Used for tests
 const DATA_FILES = [
   { file: "./sample.data/2026-02-20T11:00/_ATL-0002-FINE-2_0.png", mimeType: "image/png" },
   { file: "./sample.data/2026-02-20T11:00/_ATL-0002-FINE-2_1.png", mimeType: "image/png" },
@@ -2509,37 +2521,43 @@ const DATA_FILES = [
 ];
 
 let processOneFile = async (element, index) => {
-    console.log(`... Processing ${element.file}...`);
+    // console.log(`... Processing ${element.file}...`);
     let finalFileName = element.file.substring(element.file.lastIndexOf('/') + 1);
     await preLoad(element.file, `fileToUpload-${index}`, finalFileName, element.mimeType);
 }
 
 let proceed = async (faxList, compName, loop=true) => {
-  console.log("Let's go with faxes!");
+  // console.log("Let's go with faxes!");
   let faxform = document.getElementById('upload-form');
   let compositeName = compName ? compName : 'DUMMY_COMPOSITE';
 
   if (loop) {
+    // Timeout set to 10000 (10s), increase if needed, to wait for the preLoad(s) to be completed.
+    // That is a workaround to avoid callback hell, but it is not very elegant...
+    // A better solution would be to use Promises and async/await properly.
+    let timeout = 10000;
     window.setTimeout(async () => {
         document.getElementById('composite-name').value = compositeName;
         for (let i=0; i<faxList.length; i++) {
             let element = faxList[i];
-            console.log(`Processing ${element.file}`);
+            // console.log(`Processing ${element.file}`);
             await processOneFile(element, i + 1);
         }
-        window.setTimeout( () => {
+        window.setTimeout( async () => {
             faxform.submit(); // requires the form NOT not have a submit button
+            faxform.reset();
         }, 1000); // To wait for the processOneFile(s) to be completed...
-    }, 5000); // TODO Increase if needed !!
+    }, timeout); // TODO Increase if needed !!
   } else {
       // let compositeName = '2026-02-20T11:00';
       document.getElementById('composite-name').value = compositeName;
       faxform.submit(); // requires the form NOT not have a submit button
+      faxform.reset();
   }
 };
 
 let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
-  console.log("Let's go with JSON!");
+  // console.log("Let's go with JSON!");
   let compositeName;
   if (pushedCompositeName) {
     compositeName = pushedCompositeName;
@@ -2557,18 +2575,29 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
 
   document.getElementById('composite-name-json').value = compositeName;
   jsonform.submit(); // requires the form NOT not have a submit button
+  jsonform.reset();
 };
 </script>
 
 <!-- invisible forms to push composite data on another server -->
-<div id="json-upload-form" style="display: none;">
+<input type="checkbox" id="show-forms" onchange="document.getElementById('forms').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show forms (for debug).
+<input type="checkbox" id="show-iframes" onchange="document.getElementById('iframes').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show upload iframes (for debug).
+&nbsp;Service Location:&nbsp;
+<select id="service-location" onchange="changeServiceLocation(this);">
+    <option value="remote" selected>Remote</option>
+    <option value="local">Local</option>
+</select>
+<hr/>
+<div id="forms" style="display: none; grid-template-columns: 50% 50%;">
+<div id="json-upload-form" style="display: block;">
     <!-- TODO in action, the full path on the machine the service is running on ? -->
     <!-- form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
-    <!--form action="../data.sender.php" -->
-    <form action="http://localhost:8000/tech.and.nav/composites/data.sender.php"
+    <!-- form action="../data.sender.php" -->
+    <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
+    <form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php"
         method="post"
         enctype="multipart/form-data"
-        target="upload-iframe"
+        target="upload-json-iframe"
         style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
         id="json-form">
         <input type="hidden" name="operation" value="send-json">
@@ -2585,13 +2614,14 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
         <br/>
         <!--input type="submit" value="Send Content" name="submit"-->
     </form>
-    Click <button onclick="proceedJSON('GRIB.json', { dummy: 'Value', subElement: { akeu: 'coucou', coucou: 'larigou' }});" title="Proceed to uploads!">Here</button> to upload the JSON file (javascript).
+    Click <button onclick="await proceedJSON('GRIB.json', { dummy: 'Value', subElement: { akeu: 'coucou', coucou: 'larigou' }});" title="Proceed to uploads!">Here</button> to upload a sample JSON file (javascript).
 </div>
-<div id="files-upload-form" style="display: none;">
+<div id="files-upload-form" style="display: block;">
     <!-- TODO in action, the full path on the machine the service is running on ? -->
     <!-- form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
-    <!--form action="../data.sender.php" -->
-    <form action="http://localhost:8000/tech.and.nav/composites/data.sender.php"
+    <!-- form action="../data.sender.php" -->
+    <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
+    <form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php"
         method="post"
         enctype="multipart/form-data"
         target="upload-iframe"
@@ -2611,6 +2641,7 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
         <br/><br/>
         <input type="file" name="fileToUpload-4" id="fileToUpload-4">
         <br/><br/>
+        <!-- more if needed ! -->
         <hr/>
         <br/>
         <!--input type="submit" value="Upload the files above" name="submit"-->
@@ -2618,9 +2649,13 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
     <br/><br/>
     <!-- For the gribs, use application/octet-stream as mime-type -->
     <button onclick="preLoad('./sample.files/wizard150.jpg', 'fileToUpload-1', 'wizard.jpg', 'image/jpg');" title="Populate the first file input.">Populate input field</button>, with sample image...
-    Click <button onclick="proceed();" title="Proceed to uploads!">Here</button> to upload all files and submit the form (javascript).
+    Click <button onclick="await proceed();" title="Proceed to uploads!">Here</button> to upload selected files and submit the form (javascript).
 </div>
-<iframe name="upload-iframe" style="width: 80%; height: 200px; display: none; background: white;"></iframe>
+</div>
+<div id="iframes" style="display: none; grid-template-columns: 50% 50%;">
+    <iframe name="upload-json-iframe" style="width: 90%; height: 200px; display: block; background: white; font-family: 'Courier New', Courier, monospace;"></iframe>
+    <iframe name="upload-iframe" style="width: 90%; height: 200px; display: block; background: white; font-family: 'Courier New', Courier, monospace;"></iframe>
+</div>
 
 <!-- End of invisible forms -->
 
@@ -2916,7 +2951,7 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
                         </div>
                     </div>
                     <hr/>
-                    <div style="vertical-align: middle;">
+                    <div style="vertical-align: middle;" title="Carefull with that one...">
                         <input type="checkbox"  id="push-data"/> Push Composite Data
                     </div>
                     <hr/>
@@ -3116,11 +3151,10 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
         }
 
         const URL = '../catalog/compositeCatalog.json';
-
         window.fetch(URL)
             .then(
                 response => {
-                    console.log(`Response: ${response.ok}`);
+                    console.log(`Catalog Response: ${response.ok ? 'OK' : 'Not OK'}, status: ${response.status}, statusText: ${response.statusText }`);
                     compositeCatalog = response.json().then(doc => {
                         compositeCatalog = doc;
                         console.log(`Composites Catalog loaded, ${doc.length} elements`);

@@ -587,7 +587,7 @@ function WorldMap (cName, prj) {
 		}
 		if (data.sun !== undefined) {
 			// set .setGlobeViewRightLeftRotation(-(sunD * Math.sin(Math.toRadians(lhaSun))));
-			if (userPosition !== {}) {
+			if (userPosition && userPosition !== {}) {
 				var lhaSun = data.sun.gha + userPosition.longitude;
 				while (lhaSun > 360) lhaSun -= 360;
 				while (lhaSun < 0) lhaSun += 360;
