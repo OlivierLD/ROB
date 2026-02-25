@@ -2546,7 +2546,7 @@ let processOneFile = async (element, index) => {
 }
 
 /*
-Something to try:
+Something to try, returns the raw response of the submit.
 
 var xhr = new XMLHttpRequest();
 xhr.open("POST", "/your/url/name.php");
@@ -2557,7 +2557,23 @@ xhr.onload = function(event){
 var formData = new FormData(document.getElementById("myForm"));
 xhr.send(formData);
 
+Pb: doen not take the target="upload-json-iframe" ...
  */
+let customSubmit = async (formId, callback) => {
+    let form = document.getElementById(formId);
+    let formData = new FormData(form);
+    let action = form.action;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", action);
+    xhr.onload = function(event){
+        // console.log("Success, server responded with: " + event.target.response); // raw response
+        if (callback) {
+            callback(event.target);
+        }
+    };
+    xhr.send(formData);
+}
+
 let proceed = async (faxList, compName, loop=true) => {
   // console.log("Let's go with faxes!");
   let faxform = document.getElementById('upload-form');
@@ -2578,6 +2594,14 @@ let proceed = async (faxList, compName, loop=true) => {
         window.setTimeout( async () => {
             faxform.submit(); // requires the form NOT not have a submit button
             faxform.reset();
+            // await customSubmit('upload-form', (response) => {
+            //     console.log('Server response:', response);
+            //     if (response.status !== 200) {
+            //         alert('Upload failed. Server responded with status: ' + response.status + " " + response.statusText);
+            //     }
+            //     // alert('Upload completed. Server responded with: ' + response);
+            //     faxform.reset();
+            // });
         }, 1000); // To wait for the processOneFile(s) to be completed...
     }, timeout); // TODO Increase if needed !!
   } else {
@@ -2585,6 +2609,14 @@ let proceed = async (faxList, compName, loop=true) => {
       document.getElementById('composite-name').value = compositeName;
       faxform.submit(); // requires the form NOT not have a submit button
       faxform.reset();
+    //   await customSubmit('upload-form', (response) => {
+    //       console.log('Server response:', response);
+    //       if (response.status !== 200) {
+    //         alert('Upload failed. Server responded with status: ' + response.status + " " + response.statusText);
+    //       }
+    //       // alert('Upload completed. Server responded with: ' + response);
+    //       faxform.reset();
+    //   });
   }
 };
 
@@ -2608,6 +2640,15 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
   document.getElementById('composite-name-json').value = compositeName;
   jsonform.submit(); // requires the form NOT not have a submit button
   jsonform.reset();
+//   await customSubmit('json-form', (response) => {
+//       console.log('Server response:', response);
+//       if (response.status !== 200) {
+//             alert('Upload failed. Server responded with status: ' + response.status + " " + response.statusText);
+//       }
+//       // alert('Upload completed. Server responded with: ' + response);
+//       jsonform.reset();
+//   });
+
 };
 </script>
 
