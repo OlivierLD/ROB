@@ -2355,7 +2355,7 @@
             }
         }
 
-        const SERVICE_LOCATION_REMOTE = "http://passe-coque.com/tech.and.nav/composites/data.sender.php";
+        const SERVICE_LOCATION_REMOTE = "https://passe-coque.com/tech.and.nav/composites/data.sender.php";
         const SERVICE_LOCATION_LOCAL = "http://localhost:8000/tech.and.nav/composites/data.sender.php";
 
         function changeServiceLocation(select) {
@@ -2545,6 +2545,19 @@ let processOneFile = async (element, index) => {
     await preLoad(element.file, `fileToUpload-${index}`, finalFileName, element.mimeType);
 }
 
+/*
+Something to try:
+
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "/your/url/name.php");
+xhr.onload = function(event){
+    alert("Success, server responded with: " + event.target.response); // raw response
+};
+// or onerror, onabort
+var formData = new FormData(document.getElementById("myForm"));
+xhr.send(formData);
+
+ */
 let proceed = async (faxList, compName, loop=true) => {
   // console.log("Let's go with faxes!");
   let faxform = document.getElementById('upload-form');
@@ -2612,10 +2625,10 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
 <div id="forms" style="display: none; grid-template-columns: 50% 50%;">
 <div id="json-upload-form" style="display: block;">
     <!-- TODO in action, the full path on the machine the service is running on ? -->
-    <!-- form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
+    <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
     <!-- form action="../data.sender.php" -->
     <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
-    <form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php"
+    <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
         method="post"
         enctype="multipart/form-data"
         target="upload-json-iframe"
@@ -2639,10 +2652,10 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
 </div>
 <div id="files-upload-form" style="display: block;">
     <!-- TODO in action, the full path on the machine the service is running on ? -->
-    <!-- form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
+    <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
     <!-- form action="../data.sender.php" -->
     <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
-    <form action="http://passe-coque.com/tech.and.nav/composites/data.sender.php"
+    <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
         method="post"
         enctype="multipart/form-data"
         target="upload-iframe"
