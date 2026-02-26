@@ -636,6 +636,23 @@
             color: black;
             font-weight: bold;
         }
+
+        .smooth {
+            /*height: 0;*/
+            /*visibility: hidden;*/
+            /*opacity: 0;*/
+            /*transition: visibility 0.5s, height 0.5s, opacity 0.5s linear;*/
+            height: 0;
+            /* max-height: 0; */
+            /* margin: auto; */
+            /*transition: transform 0.5s, max-height 1s, height 1s;*/
+            transition: all 1s ease-in-out;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: top;
+            overflow: hidden;
+        }
+
     </style>
 
     <script type="text/javascript" src="../widgets/WorldMapData.js"></script>
@@ -1582,6 +1599,8 @@
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
+            clearMessZone();
+
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
 
@@ -2648,14 +2667,29 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
 //       // alert('Upload completed. Server responded with: ' + response);
 //       jsonform.reset();
 //   });
+};
 
+let showHideDivs = (checkbox, divId) => {
+    let theDiv = document.getElementById(divId);
+    if (checkbox.checked) {
+        // theDiv.style.display = 'grid';
+        theDiv.style.opacity = 1;
+        theDiv.style.height = 'auto';
+        theDiv.style.transform = 'scaleY(1)';
+
+    } else {
+        // theDiv.style.display = 'none';
+        theDiv.style.opacity = 0;
+        theDiv.style.height = '0';
+        theDiv.style.transform = 'scaleY(0)';
+    }
 };
 </script>
 
 <!-- invisible forms to push composite data on another server -->
  <div id="form-controls" style="display: none;">
-    <input type="checkbox" id="show-forms" onchange="document.getElementById('forms').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show forms (for debug).
-    <input type="checkbox" id="show-iframes" onchange="document.getElementById('iframes').style.display = this.checked ? 'grid' : 'none';"/>&nbsp;Show upload iframes (for debug).
+    <input type="checkbox" id="show-forms" onchange="showHideDivs(this, 'forms');"/>&nbsp;Show forms (for debug).
+    <input type="checkbox" id="show-iframes" onchange="showHideDivs(this, 'iframes');"/>&nbsp;Show upload iframes (for debug).
     &nbsp;Service Location:&nbsp;
     <select id="service-location" onchange="changeServiceLocation(this);">
         <option value="remote" selected>Remote</option>
@@ -2663,71 +2697,71 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
     </select>
     <hr/>
 </div>
-<div id="forms" style="display: none; grid-template-columns: 50% 50%;">
-<div id="json-upload-form" style="display: block;">
-    <!-- TODO in action, the full path on the machine the service is running on ? -->
-    <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
-    <!-- form action="../data.sender.php" -->
-    <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
-    <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
-        method="post"
-        enctype="multipart/form-data"
-        target="upload-json-iframe"
-        style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
-        id="json-form">
-        <input type="hidden" name="operation" value="send-json">
-        <label for="composite-name-json">Composite Name:</label>
-        <input type="text" name="composite-name" id="composite-name-json" placeholder="Composite Name"><br/>
+<div id="forms" class="smooth" style="display: grid; grid-template-columns: 50% 50%;">
+    <div id="json-upload-form" style="display: block;">
+        <!-- TODO in action, the full path on the machine the service is running on ? -->
+        <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
+        <!-- form action="../data.sender.php" -->
+        <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
+        <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
+            method="post"
+            enctype="multipart/form-data"
+            target="upload-json-iframe"
+            style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
+            id="json-form">
+            <input type="hidden" name="operation" value="send-json">
+            <label for="composite-name-json">Composite Name:</label>
+            <input type="text" name="composite-name" id="composite-name-json" placeholder="Composite Name"><br/>
+            <br/><br/>
+            <label for="file-name">JSON File Name:</label>
+            <input type="text" name="file-name" id="file-name" placeholder="JSON File Name"><br/>
+            <hr/>
+            JSON Content:<br/>
+            <hr/>
+            <textarea rows="10" cols="50" name="json-content" id="json-content" form="json-form" placeholder="JSON Content..."></textarea>
+            <hr/>
+            <br/>
+            <!--input type="submit" value="Send Content" name="submit"-->
+        </form>
+        Click <button onclick="await proceedJSON('GRIB.json', { dummy: 'Value', subElement: { akeu: 'coucou', coucou: 'larigou' }});" title="Proceed to uploads!">Here</button> to upload a sample JSON file (javascript).
+    </div>
+    <div id="files-upload-form" style="display: block;">
+        <!-- TODO in action, the full path on the machine the service is running on ? -->
+        <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
+        <!-- form action="../data.sender.php" -->
+        <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
+        <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
+            method="post"
+            enctype="multipart/form-data"
+            target="upload-iframe"
+            style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
+            id="upload-form">
+            <input type="hidden" name="operation" value="uploads">
+            <label for="composite-name">Composite Name:</label>
+            <input type="text" name="composite-name" id="composite-name" placeholder="Composite Name"><br/>
+            <hr/>
+            Select file(s) to upload (or populate with the button below):<br/>
+            <hr/>
+            <input type="file" name="fileToUpload-1" id="fileToUpload-1">
+            <br/><br/>
+            <input type="file" name="fileToUpload-2" id="fileToUpload-2">
+            <br/><br/>
+            <input type="file" name="fileToUpload-3" id="fileToUpload-3">
+            <br/><br/>
+            <input type="file" name="fileToUpload-4" id="fileToUpload-4">
+            <br/><br/>
+            <!-- more if needed ! -->
+            <hr/>
+            <br/>
+            <!--input type="submit" value="Upload the files above" name="submit"-->
+        </form>
         <br/><br/>
-        <label for="file-name">JSON File Name:</label>
-        <input type="text" name="file-name" id="file-name" placeholder="JSON File Name"><br/>
-        <hr/>
-        JSON Content:<br/>
-        <hr/>
-        <textarea rows="10" cols="50" name="json-content" id="json-content" form="json-form" placeholder="JSON Content..."></textarea>
-        <hr/>
-        <br/>
-        <!--input type="submit" value="Send Content" name="submit"-->
-    </form>
-    Click <button onclick="await proceedJSON('GRIB.json', { dummy: 'Value', subElement: { akeu: 'coucou', coucou: 'larigou' }});" title="Proceed to uploads!">Here</button> to upload a sample JSON file (javascript).
+        <!-- For the gribs, use application/octet-stream as mime-type -->
+        <button onclick="preLoad('./sample.files/wizard150.jpg', 'fileToUpload-1', 'wizard.jpg', 'image/jpg');" title="Populate the first file input.">Populate input field</button>, with sample image...
+        Click <button onclick="await proceed();" title="Proceed to uploads!">Here</button> to upload selected files and submit the form (javascript).
+    </div>
 </div>
-<div id="files-upload-form" style="display: block;">
-    <!-- TODO in action, the full path on the machine the service is running on ? -->
-    <!-- form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php" -->
-    <!-- form action="../data.sender.php" -->
-    <!-- form action="http://localhost:8000/tech.and.nav/composites/data.sender.php" -->
-    <form action="https://passe-coque.com/tech.and.nav/composites/data.sender.php"
-        method="post"
-        enctype="multipart/form-data"
-        target="upload-iframe"
-        style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
-        id="upload-form">
-        <input type="hidden" name="operation" value="uploads">
-        <label for="composite-name">Composite Name:</label>
-        <input type="text" name="composite-name" id="composite-name" placeholder="Composite Name"><br/>
-        <hr/>
-        Select file(s) to upload (or populate with the button below):<br/>
-        <hr/>
-        <input type="file" name="fileToUpload-1" id="fileToUpload-1">
-        <br/><br/>
-        <input type="file" name="fileToUpload-2" id="fileToUpload-2">
-        <br/><br/>
-        <input type="file" name="fileToUpload-3" id="fileToUpload-3">
-        <br/><br/>
-        <input type="file" name="fileToUpload-4" id="fileToUpload-4">
-        <br/><br/>
-        <!-- more if needed ! -->
-        <hr/>
-        <br/>
-        <!--input type="submit" value="Upload the files above" name="submit"-->
-    </form>
-    <br/><br/>
-    <!-- For the gribs, use application/octet-stream as mime-type -->
-    <button onclick="preLoad('./sample.files/wizard150.jpg', 'fileToUpload-1', 'wizard.jpg', 'image/jpg');" title="Populate the first file input.">Populate input field</button>, with sample image...
-    Click <button onclick="await proceed();" title="Proceed to uploads!">Here</button> to upload selected files and submit the form (javascript).
-</div>
-</div>
-<div id="iframes" style="display: none; grid-template-columns: 50% 50%;">
+<div id="iframes" class="smooth" style="display: grid; grid-template-columns: 50% 50%; ">
     <iframe name="upload-json-iframe" style="width: 90%; height: 200px; display: block; background: white; font-family: 'Courier New', Courier, monospace;"></iframe>
     <iframe name="upload-iframe" style="width: 90%; height: 200px; display: block; background: white; font-family: 'Courier New', Courier, monospace;"></iframe>
 </div>
