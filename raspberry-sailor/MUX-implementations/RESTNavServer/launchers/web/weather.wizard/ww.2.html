@@ -1631,8 +1631,10 @@
 
             // console.log("Loading", (typeof(compositeData) === 'object' ? JSON.stringify(compositeData, null, 2) : compositeData));
             messageManager(`--- Loading ${compositeData.key} ---`);
-            messageManager(compositeData);
-            messageManager("----------------");
+            if (!document.getElementById('push-data').checked) {
+                messageManager(compositeData);
+                messageManager("----------------");
+            }
 
             worldMap.setCanvasWidth(compositeData.canvas.w);
             worldMap.setCanvasHeight(compositeData.canvas.h);
@@ -2576,7 +2578,7 @@ xhr.onload = function(event){
 var formData = new FormData(document.getElementById("myForm"));
 xhr.send(formData);
 
-Pb: doen not take the target="upload-json-iframe" ...
+Pb: does not take the target="upload-json-iframe" ...
  */
 let customSubmit = async (formId, callback) => {
     let form = document.getElementById(formId);
