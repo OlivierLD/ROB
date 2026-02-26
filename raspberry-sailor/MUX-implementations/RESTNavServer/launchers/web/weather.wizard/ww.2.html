@@ -1600,6 +1600,7 @@
          */
         let loadComposite = (existingData) => {
             clearMessZone();
+            messageManager('-- clean ---');
 
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
@@ -1626,7 +1627,10 @@
 
             errManager = (mess) => { // Override the one in ww.js. Console, and TextArea
                 console.log(mess);
-                messageManager(mess); // In the message tab.
+                // In the message tab.
+                messageManager("-- Error: -----");
+                messageManager(mess);
+                messageManager("--------------");
             };
 
             // console.log("Loading", (typeof(compositeData) === 'object' ? JSON.stringify(compositeData, null, 2) : compositeData));
