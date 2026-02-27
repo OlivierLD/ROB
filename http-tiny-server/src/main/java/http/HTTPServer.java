@@ -31,7 +31,7 @@ import java.util.zip.ZipInputStream;
  * Can be used for the REST interface of an HTTP Server.
  * Can also be used as a Proxy, and to serve static requests.
  *
- * GET, POST, DELETE, PUT, no PATCH (for now)
+ * GET, POST, DELETE, PUT, no PATCH (for now). See the VERBS list below.
  * <br>
  * Also serves as a regular HTTP server for static documents (in the /web directory).
  * <br>
@@ -300,7 +300,7 @@ public class HTTPServer {
 
 			if (this.headers != null) {
 				this.headers.keySet()
-								.forEach(k -> sb.append("\n").append(k).append(":").append(this.headers.get(k)));
+							.forEach(k -> sb.append("\n").append(k).append(":").append(this.headers.get(k)));
 			}
 			if (this.payload != null) {
 				sb.append("\n\n").append(new String(this.payload));
@@ -327,7 +327,7 @@ public class HTTPServer {
 		 * @param verb GET, PUT, POST, or DELETE
 		 * @param path can include {parameters}
 		 * @param fn the code (function) to execute
-		 * @param description Quick descritoin
+		 * @param description Quick description
 		 */
 		public Operation(String verb, String path, Function<HTTPServer.Request, HTTPServer.Response> fn, String description) {
 			this.verb = verb;
