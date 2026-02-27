@@ -1042,7 +1042,7 @@
                     // Check all the checkboxes in table with id 'fax-table'
                     let faxTable = document.getElementById('fax-table');
                     let cbs = faxTable.querySelectorAll('input[type=checkbox]');
-                    if (cbs !== undefined && cbs !== null) {
+                    if (cbs !== undefined && cbs !== null && cbs.length > sh) {
                         show[sh] = cbs[sh].checked;
                     }
                 }
@@ -1786,6 +1786,13 @@
                 // console.log(requestData);
                 messageManager(requestData);
                 getCompositeFaxes(requestData, compositeData, faxRequestCallback);
+            } else {
+                // Reset if previously existing...
+                show = [];
+                zoom = [];
+                topLeft = [];
+                faxObj = [];
+                faxName = [];
             }
 
             if (compositeData.gribRequest !== undefined) {
@@ -2713,7 +2720,7 @@ let showHideDivs = (checkbox, divId) => {
             method="post"
             enctype="multipart/form-data"
             target="upload-json-iframe"
-            style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
+            style="border: 1px solid cyan; border-radius: 10px; padding: 10px; width: 90%;"
             id="json-form">
             <input type="hidden" name="operation" value="send-json">
             <label for="composite-name-json">Composite Name:</label>
@@ -2740,7 +2747,7 @@ let showHideDivs = (checkbox, divId) => {
             method="post"
             enctype="multipart/form-data"
             target="upload-iframe"
-            style="border: 1px solid navy; border-radius: 10px; padding: 10px; width: 90%;"
+            style="border: 1px solid cyan; border-radius: 10px; padding: 10px; width: 90%;"
             id="upload-form">
             <input type="hidden" name="operation" value="uploads">
             <label for="composite-name">Composite Name:</label>
