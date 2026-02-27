@@ -437,8 +437,10 @@ requestData example:
 		newCompositeData.gribData = gribData;
 	}
 	console.log(`==> New composite data to push, compositeData.json, in ${pushedCompositeName}`);
+	messageManager(`==> New composite data to push, compositeData.json, in ${pushedCompositeName}`);
 	proceedJSON('compositeData.json', newCompositeData, pushedCompositeName);
 	console.log(`Done with compositeData.json upload`);
+	messageManager(`Done with compositeData.json upload`);
 
 	let faxList = [];
 	requestData.forEach(data => {
@@ -453,15 +455,19 @@ requestData example:
 		}
 		faxList.push({ file: fileLocation, mimeType: "image/png" }); // TODO Make sure the type is right
 		console.log(`- Fax to upload: ${fileLocation}`);
+		messageManager(`- Fax to upload: ${fileLocation}`);
 	});
 
 	// Upload faxes.
 	if (faxList.length > 0) {
 		console.log(`==> Uploading faxes for ${pushedCompositeName}...`);
+		messageManager(`==> Uploading faxes for ${pushedCompositeName}...`);
 		proceed(faxList, pushedCompositeName);
 		console.log("Done with faxes upload");
+		messageManager("Done with faxes upload");
 	} else {
 		console.log(`No faxes to upload for ${pushedCompositeName}.`);
+		messageManager(`No faxes to upload for ${pushedCompositeName}.`);
 	}
 }
 
@@ -471,8 +477,10 @@ async function pushCompositeGRIBData(gribDataJSON) {
 	// Will use a form like in programmatic.upload.html
 	if (gribDataJSON) {
 		console.log(`==> Pushing GRIB data to the server..., for ${pushedCompositeName}`);
+		messageManager(`==> Pushing GRIB data to the server..., for ${pushedCompositeName}`);
 		proceedJSON('GRIB.json', gribDataJSON, pushedCompositeName);
 		console.log("Done with GRIB upload");
+		messageManager("Done with GRIB upload");
 	}
 }
 

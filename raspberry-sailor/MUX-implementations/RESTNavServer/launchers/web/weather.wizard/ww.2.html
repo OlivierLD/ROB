@@ -1600,7 +1600,7 @@
          */
         let loadComposite = (existingData) => {
             clearMessZone();
-            messageManager('-- clean ---');
+            messageManager(`-- clean at ${ new Date().format("Y-M-d H:i:s Z") } ---`);
 
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
@@ -2800,7 +2800,7 @@ let showHideDivs = (checkbox, divId) => {
                     <canvas id="mapCanvas" width="1400" height="900"></canvas>
                 </div>
                 <div id="wc-scale-slider-div" style="grid-area: top2;">
-                    <input type="range" id="scale-slider" value="100" min="0" max="100" style="width: 80%; margin-left: 5px; margin-top: 10px;"
+                    <input type="range" id="scale-slider" value="100" min="0" max="100" style="width: 75%; margin-left: 5px; margin-top: 10px;"
                             title="Components Scale"
                             oninput="/*setPadding(this);*/ compScale01.value = (this.value) + '%'; zoomWebComps(this.value);"/>
                     <!--br/-->
