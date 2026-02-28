@@ -12,6 +12,7 @@ import http.RESTProcessorUtil;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -31,6 +32,8 @@ public class RESTImplementation {
 
 	private final static boolean verbose = "true".equals(System.getProperty("image.verbose", "false"));
 	private final static String IMG_PREFIX = "/img";
+	private final static SimpleDateFormat SYSDATE_FMT = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+
 
 	private final ImgRequestManager imgRequestManager;
 
@@ -253,7 +256,7 @@ public class RESTImplementation {
 									resultList.add(txRequest);
 								} catch (Exception ex) {
 									// Return this
-									System.err.println("downloadAndTransform failed (absorbed):");
+									System.err.printf("%s: downloadAndTransform failed (absorbed):\n", SYSDATE_FMT.format(new Date()));
 									ex.printStackTrace();
 									resultList.add(ex);
 								}
