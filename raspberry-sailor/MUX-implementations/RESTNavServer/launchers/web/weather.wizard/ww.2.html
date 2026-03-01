@@ -1594,6 +1594,10 @@
             }
         };
 
+        // to push after it's loaded
+        let currentCompositeData = null;
+        let currentRequestData = null;
+        let currentGRIBData = null;
         /**
          * If existingData is provided, it comes from the file system.
          * Otherwise, get it from the web.
@@ -1601,6 +1605,11 @@
         let loadComposite = (existingData) => {
             clearMessZone();
             messageManager(`-- clean at ${ new Date().format("Y-M-d H:i:s Z") } ---`);
+
+            currentCompositeData = null;
+            currentRequestData = null;
+            currentGRIBData = null;
+            document.getElementById('push-now').diabled = true;
 
             document.getElementById("grib-widgets").style.display = 'none';
             document.getElementById("grib-web-comps").style.display = 'none';
@@ -1807,12 +1816,21 @@
             if (feedbackField) {
                 feedbackField.innerText = `${compositeData.key} requested on ${ new Date().format("Y-M-d H:i:s Z") }`;
             }
+
+            currentCompositeData = compositeData;
+            currentRequestData = requestData;
+            currentGRIBData = lastGRIBData;
+
+            if (currentCompositeData !== null && currentRequestData !== null /* && currentGRIBData !== null */) {
+                document.getElementById('push-now').disabled = false;
+            }
+
             // If check box is on, push the data to the server, and make it available for download and remote display.
             if (document.getElementById('push-data') && document.getElementById('push-data').checked === true) {
                 console.log("==> From the page: Pushing composite data to the server...");
                 // resetCompositeName();
 
-                // TODO: the GRIB data in the compositeData... Use lastGRIBData
+                // the GRIB data in the compositeData... Use lastGRIBData
                 window.setTimeout(() => { // Wait for the GRIB data to be loaded (if any)
                     pushCompositeData(compositeData, requestData, lastGRIBData);
                 }, 15000);
@@ -1951,7 +1969,9 @@
 
         let plotGrib = (jsonGrib) => {
 
+            console.log("In plotGRIB")
             lastGRIBData = jsonGrib;
+            currentGRIBData = jsonGrib; // Not that cute. Fix this.
 
             if (GRIB_DEBUG) { // DEBUG
                 // console.log("Received GRIB");
@@ -2697,6 +2717,18 @@ let showHideDivs = (checkbox, divId) => {
         theDiv.style.transform = 'scaleY(0)';
     }
 };
+
+let pushNow = () => {
+    console.log("Push Now!");
+    // let currentCompositeData = null;
+    // let currentRequestData = null;
+    // let currentGRIBData = null;
+    try {
+        pushCompositeData(currentCompositeData, currentRequestData, currentGRIBData);
+    } catch (err) {
+        console.log(`Oops: $err`);
+    }
+};
 </script>
 
 <!-- invisible forms to push composite data on another server -->
@@ -3074,7 +3106,8 @@ let showHideDivs = (checkbox, divId) => {
                     </div>
                     <hr/>
                     <div style="vertical-align: middle;" title="Carefull with that one...">
-                        <input type="checkbox"  id="push-data" onchange="manage(this);"/> Push Composite Data
+                        <span title="Push composite when loaded"><input type="checkbox" id="push-data" onchange="manage(this);"/> Push Composite Data</span>
+                        &nbsp;<button id="push-now" onclick="pushNow()" title="Push COmposite Data&#13;to a server..." disabled>Push Now</button>
                     </div>
                     <hr/>
                     <div id="composite-zoom">
