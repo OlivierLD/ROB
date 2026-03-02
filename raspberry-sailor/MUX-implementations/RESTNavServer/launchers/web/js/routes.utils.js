@@ -272,7 +272,7 @@ if (typeof(decToSex) !== 'function') {
 				s += '-'
 			}
 		}
-		s += i + "\272" + dec.toFixed(2) + "'";
+		s += i + "\xba" + dec.toFixed(2) + "'";
 
 		return s;
 	};
@@ -328,7 +328,7 @@ if (false) {
 	let dist = 55;
 	let heading = 270;
 	let dr = deadReckoning(from, dist, heading);
-	console.log("Starting from ", decToSex(toDegrees(from.lat), 'NS'), decToSex(toDegrees(from.lng), 'EW'), "heading", heading + "\272", "for", dist, "miles");
+	console.log("Starting from ", decToSex(toDegrees(from.lat), 'NS'), decToSex(toDegrees(from.lng), 'EW'), "heading", heading + "\xba", "for", dist, "miles");
 	console.log('Reaching ', decToSex(toDegrees(dr.lat), 'NS'), decToSex(toDegrees(dr.lng), 'EW'));
 
 	console.log("\nGC Test");
@@ -347,5 +347,5 @@ if (false) {
 
 	console.log("\nRhumbline test");
 	let loxo = calculateRhumbLine(from, to);
-	console.log("Heading", toDegrees(loxo.heading).toFixed(0) + '\272', "Dist:", loxo.dist.toFixed(1), "nm");
+	console.log("Heading", toDegrees(loxo.heading).toFixed(0) + '\xba2', "Dist:", loxo.dist.toFixed(1), "nm");
 }

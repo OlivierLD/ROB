@@ -1823,6 +1823,7 @@
 
             if (currentCompositeData !== null && currentRequestData !== null /* && currentGRIBData !== null */) {
                 document.getElementById('push-now').disabled = false;
+                // Title ?
             }
 
             // If check box is on, push the data to the server, and make it available for download and remote display.
@@ -3107,7 +3108,7 @@ let pushNow = () => {
                     <hr/>
                     <div style="vertical-align: middle;" title="Carefull with that one...">
                         <span title="Push composite when loaded"><input type="checkbox" id="push-data" onchange="manage(this);"/> Push Composite Data</span>
-                        &nbsp;<button id="push-now" onclick="pushNow()" title="Push COmposite Data&#13;to a server..." disabled>Push Now</button>
+                        &nbsp;<button id="push-now" onclick="pushNow()" title="Push current Composite Data&#13;to a server..." disabled>Push Now</button>
                     </div>
                     <hr/>
                     <div id="composite-zoom">
