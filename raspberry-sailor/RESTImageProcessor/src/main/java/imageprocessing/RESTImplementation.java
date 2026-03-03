@@ -256,7 +256,7 @@ public class RESTImplementation {
 									resultList.add(txRequest);
 								} catch (Exception ex) {
 									// Return this
-									System.err.printf("%s: downloadAndTransform failed (absorbed):\n", SYSDATE_FMT.format(new Date()));
+									System.err.printf("%s: requestTransformation failed (absorbed):\n", SYSDATE_FMT.format(new Date()));
 									ex.printStackTrace();
 									resultList.add(ex);
 								}

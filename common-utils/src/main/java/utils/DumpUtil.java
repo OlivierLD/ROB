@@ -41,6 +41,11 @@ public class DumpUtil {
 		return dualDump(ba);
 	}
 
+	/**
+	 * rpad, with blank
+	 * @param len Length of the final String
+	 * @return The added String
+	 */
 	private static String pad(int len) {
 		String pad = "";
 		if (len > 0) {
@@ -140,13 +145,35 @@ public class DumpUtil {
 		return stackTrace;
 	}
 
+	public static String extractMethodName(String stackLine) {
+		String methodName = stackLine.substring(0, stackLine.indexOf("("));
+		methodName = methodName.substring(methodName.lastIndexOf(".") + 1);
+		return methodName;
+	}
+
+	public static String topMethodInTheStack() {
+		final List<String> stack = whoCalledMe();
+		String methodName = "";
+		if (stack.size() > 0) {
+			String topLine = stack.get(0);
+			return extractMethodName(topLine);
+		}
+		return methodName;
+	}
+
 	public static void main(String... args) {
 		String forTests = "$GPGSA,A,3,07,17,30,11,28,13,01,19,,,,,2.3,1.4,1.9*3D";
 		String[] dd = dualDump(forTests);
 		for (String l : dd) {
 			System.out.println(l);
 		}
-		System.out.println("--- W H O   C A L L E D   M E ---");
+		System.out.println("--- W H O   C A L L E D   M E (full) ---");
 		whoCalledMe().stream().forEach(System.out::println);
+
+		System.out.println("--- W H O   C A L L E D   M E (method) ---");
+		whoCalledMe().stream().forEach(line -> System.out.println(extractMethodName(line)));
+
+		System.out.println("--- TOP METHOD ---");
+		System.out.printf("Top Method: %s\n", topMethodInTheStack());
 	}
 }
