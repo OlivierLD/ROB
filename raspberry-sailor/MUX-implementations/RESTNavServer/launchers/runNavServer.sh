@@ -58,6 +58,7 @@ TIDE_VERBOSE=false
 BREST_COEFF=true
 ASTRO_VERBOSE=false
 IMAGE_VERBOSE=false
+FAX_IMAGE_VERBOSE=false
 GRIB_VERBOSE=false
 AIS_VERBOSE=false
 REST_VERBOSE=false
@@ -109,6 +110,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dtide.verbose=${TIDE_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dwith.tide.coeffs=${BREST_COEFF}"
 JAVA_OPTS="${JAVA_OPTS} -Dastro.verbose=${ASTRO_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dimage.verbose=${IMAGE_VERBOSE}"
+JAVA_OPTS="${JAVA_OPTS} -Dfax.image.verbose=${FAX_IMAGE_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dgrib.verbose=${GRIB_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.cache.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.verbose=${AIS_VERBOSE}"
