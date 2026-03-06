@@ -65,6 +65,9 @@ REST_VERBOSE=false
 NMEA_CACHE_VERBOSE=false
 WITH_TIDE_COEFFS=true   # Experimental
 #
+MEMORY_GAUGE=true
+MEM_POLLING_INTERVAL=2
+#
 # CP=../build/libs/RESTNavServer-1.0-all.jar
 CP=$(find .. -name '*-all.jar')
 #
@@ -115,6 +118,9 @@ JAVA_OPTS="${JAVA_OPTS} -Dgrib.verbose=${GRIB_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.cache.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${HTTP_VERBOSE}"  # Was REST_VERBOSE
+JAVA_OPTS="${JAVA_OPTS} -Dmemory.gauge=${MEMORY_GAUGE}"
+JAVA_OPTS="${JAVA_OPTS} -Dmem.polling.interval=${MEM_POLLING_INTERVAL}"
+
 # Hard-coded ones:
 # JAVA_OPTS="${JAVA_OPTS} -Drest.nav.verbose=true"
 # JAVA_OPTS="${JAVA_OPTS} -Dnmea.utils.verbose=true"
