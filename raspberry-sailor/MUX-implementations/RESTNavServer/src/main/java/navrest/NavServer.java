@@ -229,12 +229,12 @@ public class NavServer {
 			try {
 				// In minutes
 				interval = Long.parseLong(System.getProperty("mem.polling.interval", Long.toString(interval)));
-				System.out.printf("Will check memory every %ld minute(s)\n", interval);
+				System.out.printf("Will check memory every %d minute(s)\n", interval);
 			} catch (NumberFormatException ex) {
 				// Leave it unchanged...
 				System.err.println("Cannot parse mem.polling.interval");
 				ex.printStackTrace();
-				System.err.printf("Leave it unchanged (%ld minute)\n", interval);
+				System.err.printf("Leave it unchanged (%d minute)\n", interval);
 			}
 			MemoryGauge memoryGauge = new MemoryGauge(interval * 60 * 1_000);
 			memoryGauge.start();
