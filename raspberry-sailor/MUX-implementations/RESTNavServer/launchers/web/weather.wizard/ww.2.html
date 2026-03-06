@@ -2179,10 +2179,12 @@
                     }
                     //  infoDiv.style.maxHeight = null;
                     content = `<h3><span onclick='expandCollapseCompInfo(this);' onmouseover='this.style.cursor="pointer";' title='${title}'>${arrow}</span> ${compositeCatalog[i].name}</h3>`;
+                    content += "<p>";
+                    content += `Key: ${compositeCatalog[i].key}`;
                     if (compositeCatalog[i].comment !== undefined) {
-                        content += `<p>${compositeCatalog[i].comment}</p>`;
+                        content += `<br/>${compositeCatalog[i].comment}`;
                     }
-
+                    content += "</p>";
                     content += "<ul>";
                     if (compositeCatalog[i].gribRequest !== undefined) {
                         content += ("<li>" + compositeCatalog[i].gribRequest + "</li>");

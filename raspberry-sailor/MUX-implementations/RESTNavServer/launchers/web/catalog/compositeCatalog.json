@@ -581,7 +581,7 @@
 	{
 		"key": "ATL-0002-FINE-2",
 		"name": "North Atlantic, current analysis (fine, 2-day GRIB), v2",
-		"comment": "GRIB and Faxes",
+		"comment": "North Atlantic GRIB and Faxes",
 		"map": {
 			"projection": "MERCATOR",
 			"north": 65.5,

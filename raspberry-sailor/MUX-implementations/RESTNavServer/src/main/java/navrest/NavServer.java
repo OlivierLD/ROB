@@ -150,11 +150,11 @@ public class NavServer {
 				try {
 					Runtime runtime = Runtime.getRuntime();
 					long memoryMax = runtime.maxMemory();
-					System.out.printf("At %s:\n", new Date());
+					System.out.printf("=> %s:\n", new Date());
 					System.out.printf("- Max Memory: %s bytes (%s Mb, %s Gb)\n",
-							NumberFormat.getInstance().format(memoryMax),
-							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L)),
-							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));
+							NumberFormat.getInstance().format(memoryMax),                                     // bytes
+							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L)),           // Kb
+							NumberFormat.getInstance().format(memoryMax / (1024L * 1024L * 1024L)));  // Mb
 					long memoryUsed = runtime.totalMemory() - runtime.freeMemory(); // used = total - free.
 					double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
 					int orientation = 0;
@@ -227,12 +227,14 @@ public class NavServer {
 		if ("true".equals(System.getProperty("memory.gauge", "true"))) {
 			long interval = 2L; // 2 minutes
 			try {
+				// In minutes
 				interval = Long.parseLong(System.getProperty("mem.polling.interval", Long.toString(interval)));
+				System.out.printf("Will check memory every %ld minute(s)\n", interval);
 			} catch (NumberFormatException ex) {
 				// Leave it unchanged...
-				System.out.println("Cannot parse mem.polling.interval");
+				System.err.println("Cannot parse mem.polling.interval");
 				ex.printStackTrace();
-				System.out.println("Leave it unchanged");
+				System.err.printf("Leave it unchanged (%ld minute)\n", interval);
 			}
 			MemoryGauge memoryGauge = new MemoryGauge(interval * 60 * 1_000);
 			memoryGauge.start();
