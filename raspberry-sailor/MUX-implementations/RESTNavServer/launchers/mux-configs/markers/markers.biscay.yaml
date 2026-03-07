@@ -1,0 +1,210 @@
+#
+# Generated Sat Mar 07 2026 18:04:04 GMT+0100 (Central European Standard Time)
+#
+description:
+  Golfe de Gascogne
+
+markers:
+  - label: "Glénan"
+    latitude: 47.71530566159559
+    longitude: -4.010009765625001
+    type: default
+  - label: "Groix"
+    latitude: 47.63370144466599
+    longitude: -3.460006713867188
+    type: default
+  - label: "Belle-Ile"
+    latitude: 47.32788670093318
+    longitude: -3.1860351562500004
+    type: default
+  - label: "Houat"
+    latitude: 47.38974991321532
+    longitude: -2.962875366210938
+    type: default
+  - label: "Hoedic"
+    latitude: 47.340451266106996
+    longitude: -2.871551513671875
+    type: default
+  - label: "Noirmoutier"
+    latitude: 46.99008919761516
+    longitude: -2.2631835937500004
+    type: default
+  - label: "Yeu"
+    latitude: 46.70738174688469
+    longitude: -2.3400878906250004
+    type: default
+  - label: "Ré"
+    latitude: 46.200270158674236
+    longitude: -1.4186096191406252
+    type: default
+  - label: "Oléron"
+    latitude: 45.93730321246348
+    longitude: -1.3032531738281252
+    type: default
+
+borders:
+  - border-name: "Bay Of Biscay"
+    type: "open"
+    border-elements:
+    - rank: 1
+      latitude: 48.04503763958813
+      longitude: -4.713134765625
+    - rank: 2
+      latitude: 48.004625021133904
+      longitude: -4.581298828125001
+    - rank: 3
+      latitude: 47.90161354142077
+      longitude: -4.394531250000001
+    - rank: 4
+      latitude: 47.8094654494779
+      longitude: -4.361572265625001
+    - rank: 5
+      latitude: 47.787325537803106
+      longitude: -4.185791015625001
+    - rank: 6
+      latitude: 47.706065135695745
+      longitude: -3.4606933593750004
+    - rank: 7
+      latitude: 47.58023129789275
+      longitude: -3.1585693359375
+    - rank: 8
+      latitude: 47.52786561031844
+      longitude: -3.1613159179687504
+    - rank: 9
+      latitude: 47.47266286861342
+      longitude: -3.1311035156250004
+    - rank: 10
+      latitude: 47.462450962249356
+      longitude: -3.06243896484375
+    - rank: 11
+      latitude: 47.53621055123139
+      longitude: -3.1324768066406254
+    - rank: 12
+      latitude: 47.564944072920376
+      longitude: -3.096084594726563
+    - rank: 13
+      latitude: 47.563322438820286
+      longitude: -3.0006408691406254
+    - rank: 14
+      latitude: 47.55637200979102
+      longitude: -2.932662963867188
+    - rank: 15
+      latitude: 47.54432241518175
+      longitude: -2.914810180664063
+    - rank: 16
+      latitude: 47.483104811626674
+      longitude: -2.8145599365234375
+    - rank: 17
+      latitude: 47.49238479666784
+      longitude: -2.6751708984375004
+    - rank: 18
+      latitude: 47.52508366826076
+      longitude: -2.5158691406250004
+    - rank: 19
+      latitude: 47.50096732311069
+      longitude: -2.4156188964843754
+    - rank: 20
+      latitude: 47.49076091764254
+      longitude: -2.4938964843750004
+    - rank: 21
+      latitude: 47.36905939398393
+      longitude: -2.5556945800781254
+    - rank: 22
+      latitude: 47.29366801600461
+      longitude: -2.5364685058593754
+    - rank: 23
+      latitude: 47.2582621308523
+      longitude: -2.4348449707031254
+    - rank: 24
+      latitude: 47.23402340128701
+      longitude: -2.3030090332031254
+    - rank: 25
+      latitude: 47.2573300771116
+      longitude: -2.1945190429687504
+    - rank: 26
+      latitude: 47.13415494882641
+      longitude: -2.2233581542968754
+    - rank: 27
+      latitude: 47.0294184666423
+      longitude: -1.9830322265625002
+    - rank: 28
+      latitude: 46.88694670664006
+      longitude: -2.1327209472656254
+    - rank: 29
+      latitude: 46.81086929621387
+      longitude: -2.1423339843750004
+    - rank: 30
+      latitude: 46.693254407491
+      longitude: -1.9692993164062502
+    - rank: 31
+      latitude: 46.49130175305463
+      longitude: -1.7976379394531252
+    - rank: 32
+      latitude: 46.41087807520757
+      longitude: -1.6259765625
+    - rank: 33
+      latitude: 46.27910579592009
+      longitude: -1.2098693847656252
+    - rank: 34
+      latitude: 46.16794333707652
+      longitude: -1.2290954589843752
+    - rank: 35
+      latitude: 45.99743862638977
+      longitude: -1.1000061035156252
+    - rank: 36
+      latitude: 45.841716113258904
+      longitude: -1.1727905273437502
+    - rank: 37
+      latitude: 45.77949628283486
+      longitude: -1.2387084960937502
+    - rank: 38
+      latitude: 45.670204413142805
+      longitude: -1.2236022949218752
+    - rank: 39
+      latitude: 45.45579591943491
+      longitude: -0.7772827148437501
+    - rank: 40
+      latitude: 45.20864987944066
+      longitude: -0.703125
+    - rank: 41
+      latitude: 45.5703130353666
+      longitude: -1.0780334472656252
+    - rank: 42
+      latitude: 45.4789105674028
+      longitude: -1.1535644531250002
+    - rank: 43
+      latitude: 44.63250508131394
+      longitude: -1.2606811523437502
+    - rank: 44
+      latitude: 44.76891811015977
+      longitude: -1.1631774902343752
+    - rank: 45
+      latitude: 44.662060022960524
+      longitude: -1.0203552246093752
+    - rank: 46
+      latitude: 44.658641213310226
+      longitude: -1.1961364746093752
+    - rank: 47
+      latitude: 44.55060085798499
+      longitude: -1.2586212158203127
+    - rank: 48
+      latitude: 43.40305202432616
+      longitude: -1.6424560546875002
+    - rank: 49
+      latitude: 43.43098253248489
+      longitude: -2.7850341796875004
+    - rank: 50
+      latitude: 43.47883342917126
+      longitude: -3.5925292968750004
+    - rank: 51
+      latitude: 43.598295002627175
+      longitude: -5.855712890625
+    - rank: 52
+      latitude: 43.75324116152001
+      longitude: -7.932128906250001
+    - rank: 53
+      latitude: 43.04681263770761
+      longitude: -9.272460937500002
+    - rank: 54
+      latitude: 42.90614831626674
+      longitude: -9.283447265625002
