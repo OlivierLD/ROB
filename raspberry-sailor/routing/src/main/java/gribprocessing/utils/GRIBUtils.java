@@ -16,6 +16,7 @@ import java.util.Date;
 public class GRIBUtils {
 
 	public final static SimpleDateFormat SDF = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_z");
+	private final static SimpleDateFormat SDF_FOR_LOG = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z z");
 
 	/**
 	 * For SailMail requests
@@ -75,7 +76,7 @@ public class GRIBUtils {
 		try {
 			long before = System.currentTimeMillis();
 			if (verbose) {
-				System.out.println("...reading (2) " + urlStr);
+				System.out.printf("%s... now reading (GRIBUtils) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
 			}
 			String fName = fileName;
 			if (fName == null) {

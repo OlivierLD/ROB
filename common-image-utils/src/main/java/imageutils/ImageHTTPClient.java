@@ -17,6 +17,8 @@ import java.util.Date;
 
 public class ImageHTTPClient {
 
+	private final static SimpleDateFormat SDF_FOR_LOG = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z z");
+
 	public static Image getFax(final String urlString, String fileName) throws Exception {
 
 		boolean verbose = "true".equals(System.getProperty("fax.image.verbose", "false"));
@@ -26,7 +28,7 @@ public class ImageHTTPClient {
 		Gif gifImage = null;
 
 		if (verbose) {
-			System.out.println("...reading (1) " + urlString);
+			System.out.printf("%s... now reading (ImageHTTPClient) %s\n", SDF_FOR_LOG.format(new Date()), urlString);
 		}
 		String fName = fileName;
 		if (fName == null) {
