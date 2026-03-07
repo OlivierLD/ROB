@@ -114,7 +114,7 @@ public class HTTPClient {
         try {
             long before = System.currentTimeMillis();
             if (verbose) {
-                System.out.printf("%s... now reading (1, image) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
+                System.out.printf("==> %s... now reading (1, image) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
             }
             String fName = fileName;
             if (fName == null) {
@@ -228,7 +228,7 @@ public class HTTPClient {
         try {
             long before = System.currentTimeMillis();
             if (verbose) {
-                System.out.printf("%s... now reading (2, GRIB) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
+                System.out.printf("==> %s... now reading (2, GRIB) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
             }
             String fName = fileName;
             if (fName == null) {

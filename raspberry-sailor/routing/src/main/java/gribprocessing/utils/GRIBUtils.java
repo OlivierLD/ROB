@@ -76,7 +76,7 @@ public class GRIBUtils {
 		try {
 			long before = System.currentTimeMillis();
 			if (verbose) {
-				System.out.printf("%s... now reading (GRIBUtils) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
+				System.out.printf("==> %s... now reading (GRIBUtils) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
 			}
 			String fName = fileName;
 			if (fName == null) {

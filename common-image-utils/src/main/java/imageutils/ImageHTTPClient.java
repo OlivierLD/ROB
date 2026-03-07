@@ -28,7 +28,7 @@ public class ImageHTTPClient {
 		Gif gifImage = null;
 
 		if (verbose) {
-			System.out.printf("%s... now reading (ImageHTTPClient) %s\n", SDF_FOR_LOG.format(new Date()), urlString);
+			System.out.printf("==> %s... now reading (ImageHTTPClient) %s\n", SDF_FOR_LOG.format(new Date()), urlString);
 		}
 		String fName = fileName;
 		if (fName == null) {
