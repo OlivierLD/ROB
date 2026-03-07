@@ -87,6 +87,7 @@ public class HTTPClient {
     }
 
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_z");
+    private final static SimpleDateFormat SDF_FOR_LOG = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z z");
 
     public static Image getChart(String urlString, String dir, boolean verbose) throws Exception {
         return getChart(urlString, dir, null, verbose);
@@ -113,7 +114,7 @@ public class HTTPClient {
         try {
             long before = System.currentTimeMillis();
             if (verbose) {
-                System.out.println("...reading (1) " + urlStr);
+                System.out.printf("%s... now reading (1, image) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
             }
             String fName = fileName;
             if (fName == null) {
@@ -227,7 +228,7 @@ public class HTTPClient {
         try {
             long before = System.currentTimeMillis();
             if (verbose) {
-                System.out.println("...reading (2) " + urlStr);
+                System.out.printf("%s... now reading (2, GRIB) %s\n", SDF_FOR_LOG.format(new Date()), urlStr);
             }
             String fName = fileName;
             if (fName == null) {
