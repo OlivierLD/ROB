@@ -76,7 +76,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
-                
+
   <xsl:variable name="GEOMUTIL.HTML"   select="0"/>
   <xsl:variable name="GEOMUTIL.SHELL"  select="1"/>
   <xsl:variable name="GEOMUTIL.SWING"  select="2"/>
@@ -85,23 +85,23 @@
   <xsl:variable name="GEOMUTIL.NONE" select="0"/>
   <xsl:variable name="GEOMUTIL.NS"   select="1"/>
   <xsl:variable name="GEOMUTIL.EW"   select="2"/>
-  
+
   <xsl:variable name="GEOMUTIL.LEADING_SIGN"  select="0"/>
   <xsl:variable name="GEOMUTIL.TRAILING_SIGN" select="1"/>
-  
+
   <xsl:variable name="star-per-col" select="29"/>
 
-  <xsl:variable name="oliv-soft">par Passe-Coque<!--Oliv Soft--></xsl:variable>
+  <xsl:variable name="oliv-soft">par <!--Passe-Coque-->Oliv Soft</xsl:variable>
   <xsl:variable name="calculated-with">Calcul&eacute; avec&nbsp;</xsl:variable>
   <xsl:variable name="compare-with">&Agrave; comparer avec</xsl:variable>
-  
+
   <xsl:variable name="SHA-warning">AHso est donn&eacute; pour le Soleil, la Lune et les Plan&egrave;tes. C'est redondant, mais pratique pour porter ces corps c&eacute;lestes sur le Star Finder 2102-D.</xsl:variable>
 
   <xsl:variable name="perpetual-almanac">&Eacute;ph&eacute;m&eacute;rides &agrave; long terme</xsl:variable>
   <xsl:variable name="nautical-almanac">&Eacute;ph&eacute;m&eacute;rides Nautiques</xsl:variable>
   <xsl:variable name="lunar-distances">Distances Lunaires</xsl:variable>
   <xsl:variable name="for">pour </xsl:variable>
-  
+
   <xsl:variable name="from">du </xsl:variable>
   <xsl:variable name="to"> au </xsl:variable>
 
@@ -125,14 +125,14 @@
   <xsl:variable name="gha-aries">AHso</xsl:variable>
   <xsl:variable name="dec">D</xsl:variable>
   <xsl:variable name="z">Z</xsl:variable>
-  
+
   <xsl:variable name="dist">Dist</xsl:variable>
-  
+
   <xsl:variable name="rise">Lever</xsl:variable>
   <xsl:variable name="set">Coucher</xsl:variable>
-  
+
   <xsl:variable name="set-rise-banner">Calcul&eacute;&nbsp;&agrave; 12:00 UCT &agrave; Greenwich</xsl:variable>
-  
+
   <xsl:variable name="at000uct">Calcul&eacute;&nbsp;&agrave; 00:00:00 U.T.</xsl:variable>
   <xsl:variable name="moe">Obliquit&eacute; moyenne de l'&eacute;cliptique</xsl:variable>
   <xsl:variable name="toe">Obliquit&eacute; vraie de l'&eacute;cliptique</xsl:variable>
@@ -185,14 +185,14 @@
     <xsl:value-of select="$year"/>
   </xsl:template>
 
-  <xsl:template name="front-page-date">  
+  <xsl:template name="front-page-date">
     <xsl:param name="nb-month"/>
     <xsl:param name="y"/>
     <xsl:param name="nb-day"/>
     <xsl:param name="m"/>
     <xsl:param name="dow"/>
     <xsl:param name="d"/>
-    
+
     <xsl:choose>
       <!-- One year -->
       <xsl:when test="$nb-month > 1">

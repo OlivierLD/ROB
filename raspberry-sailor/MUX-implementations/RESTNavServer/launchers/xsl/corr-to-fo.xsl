@@ -5,7 +5,7 @@
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xml.apache.org/fop/extensions" 
+                xmlns:fox="http://xml.apache.org/fop/extensions"
                 xmlns:xsl-util="http://www.oracle.com/XSL/Transform/java/nauticalalmanac.xsl.XSLUtil"
                 exclude-result-prefixes="xsl-util"
                 version="1.0">
@@ -19,10 +19,10 @@
   <xsl:variable name="GEOMUTIL.NONE" select="0"/>
   <xsl:variable name="GEOMUTIL.NS"   select="1"/>
   <xsl:variable name="GEOMUTIL.EW"   select="2"/>
-  
+
   <xsl:variable name="GEOMUTIL.LEADING_SIGN"  select="0"/>
   <xsl:variable name="GEOMUTIL.TRAILING_SIGN" select="1"/>
-  
+
   <xsl:variable name="moon.break" select="45"/>
 
   <xsl:template match="/">
@@ -52,7 +52,7 @@
               <fo:inline font-family="Symbol">p</fo:inline> est la parallaxe horizontale, obtenue dans les &#233;ph&#233;m&#233;rides.
             </fo:block>
             <fo:block text-align="left" font-family="Courier" font-size="8pt" font-style="italic" margin="1in">
-              &#169; Passe-Coque <!-- Oliv Cool Stuff Soft -->
+              &#169; <!--Passe-Coque-->Oliv Cool Stuff Soft
             </fo:block>
           </fo:block>
           <fo:block margin="0.2in">
@@ -75,7 +75,7 @@
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
-  
+
   <xsl:template match="sun-corrections">
     <fo:block text-align="center" font-family="Courier" font-size="8pt" break-after="page">
       <fo:block>
@@ -240,9 +240,9 @@
       </fo:block>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="moon-corrections">
-   
+
     <fo:block text-align="center" font-family="Courier" font-size="8pt" break-after="page">
       <fo:block>
         <fo:table border="0.5pt solid black">
@@ -287,7 +287,7 @@
           <fo:table-body>
             <fo:table-row>
               <fo:table-cell padding="medium" border="0.5pt solid black"><fo:block text-align="right"> </fo:block></fo:table-cell>
-              <xsl:for-each select="/altitude-corrections/horizon-dips/horizon-dip">                
+              <xsl:for-each select="/altitude-corrections/horizon-dips/horizon-dip">
                 <fo:table-cell padding="medium" border="0.5pt solid black"><fo:block text-align="right"><xsl:value-of select="./@dip"/>'</fo:block></fo:table-cell>
               </xsl:for-each>
             </fo:table-row>
@@ -549,7 +549,7 @@
             </fo:table-row>
           </fo:table-header>
           <fo:table-body>
-            <xsl:for-each select="/altitude-corrections/planet-parallax/alt">          
+            <xsl:for-each select="/altitude-corrections/planet-parallax/alt">
               <xsl:variable name="alt" select="./@value"/>
               <fo:table-row>
                 <fo:table-cell number-columns-spanned="1" padding="medium" border="0.5pt solid black"><fo:block text-align="center" font-weight="bold" font-family="Courier" font-size="8pt"><xsl:value-of select="$alt"/>&#176;</fo:block></fo:table-cell>
@@ -565,8 +565,8 @@
         </fo:table>
       </fo:block>
     </fo:block>
-  </xsl:template>  
-  
+  </xsl:template>
+
   <xsl:template match="obs-altitude">
     <fo:table-row>
       <fo:table-cell padding="medium" border="0.5pt solid black"><fo:block text-align="center"><xsl:value-of select="xsl-util:decToSexTrunc(./@value, $GEOMUTIL.SWING, $GEOMUTIL.NONE)" disable-output-escaping="yes"/></fo:block></fo:table-cell>

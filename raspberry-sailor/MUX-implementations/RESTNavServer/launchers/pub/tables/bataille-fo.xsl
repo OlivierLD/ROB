@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:fox="http://xml.apache.org/fop/extensions" 
+                xmlns:fox="http://xml.apache.org/fop/extensions"
                 version="1.0">
   <xsl:import href="../../xsl/page.xsl"/>
 
   <xsl:variable name="table-I-width" select="16"/>
   <xsl:variable name="table-II-width" select="15"/>
-  
-  <xsl:template match="/">  
+
+  <xsl:template match="/">
     <fo:root>
       <fo:layout-master-set>
         <fo:simple-page-master master-name="my-page"
@@ -40,10 +40,10 @@
               <fo:external-graphic src="url('sextant.gif')"/>
             </fo:block-->
             <fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
-              &#169; Passe-Coque<!-- Oliv Cool Stuff Soft -->
+              &#169; <!--Passe-Coque-->Oliv Cool Stuff Soft
             </fo:block>
             <!--fo:block text-align="left" font-family="Times" font-size="8pt" font-style="italic" margin="0.5in">
-              <fo:inline font-style="normal">Note:</fo:inline> contrairement &#224; la convention habituelle pour les valeurs n&#233;gatives, 
+              <fo:inline font-style="normal">Note:</fo:inline> contrairement &#224; la convention habituelle pour les valeurs n&#233;gatives,
               o&#249; la partie enti&#232;re est surlign&#233;e,
               on l'a ici <fo:inline font-weight="bold">soulign&#233;e</fo:inline>.
             </fo:block-->
@@ -73,7 +73,7 @@
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
-  
+
   <xsl:template match="table[@id=1]">
     <fo:block text-align="center" font-family="Courier" font-size="6.5pt">
       <xsl:for-each select=".">
@@ -92,7 +92,7 @@
       </xsl:for-each>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="table[@id=2]">
     <fo:block text-align="center" font-family="Courier" font-size="6.5pt">
       <xsl:for-each select=".">
@@ -117,7 +117,7 @@
       </xsl:for-each>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template name="table1">
     <xsl:param name="inf" select="0"/>
     <fo:block  break-after="page">
@@ -141,21 +141,21 @@
         <fo:table-column column-width="0.4in"/>
         <fo:table-column column-width="0.4in"/>
         <fo:table-column column-width="0.4in"/>
-      
+
         <xsl:for-each select="lat">
           <fo:table-body>
             <xsl:if test="position() = 1">
               <!-- First line labels -->
               <fo:table-row>
                 <fo:table-cell/>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">
                   <fo:table-cell padding="medium"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="underline"--><xsl:value-of select="./@h"/><!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell/>
               </fo:table-row>
               <fo:table-row>
                 <fo:table-cell/>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">
                   <fo:table-cell padding="medium"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="underline"--><xsl:value-of select="./@p"/>&#176;<!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell/>
@@ -165,7 +165,7 @@
               <!-- First column -->
               <fo:table-cell><fo:block text-align="left" font-weight="bold"><xsl:value-of select="./@val"/>&#176;</fo:block></fo:table-cell>
               <!-- data -->
-              <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">                  
+              <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">
                 <fo:table-cell text-align="center">
                   <fo:block>
                     <xsl:value-of select="."/>
@@ -179,14 +179,14 @@
               <!-- Last line labels -->
               <fo:table-row>
                 <fo:table-cell/>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">
                   <fo:table-cell padding="medium" border="0"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="overline"--><xsl:value-of select="180 - ./@p"/>&#176;<!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell/>
               </fo:table-row>
               <fo:table-row>
                 <fo:table-cell/>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-I-width)]">
                   <fo:table-cell padding="medium"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="underline"--><xsl:value-of select="./@h2"/><!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell/>
@@ -197,7 +197,7 @@
       </fo:table>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template name="table2">
     <xsl:param name="inf" select="0"/>
     <fo:block  break-after="page">
@@ -221,7 +221,7 @@
         <fo:table-column column-width="0.4in"/>
         <fo:table-column column-width="0.4in"/>
         <fo:table-column column-width="0.4in"/>
-      
+
         <xsl:for-each select="lat">
           <fo:table-body>
             <xsl:if test="position() = 1">
@@ -237,7 +237,7 @@
               </fo:table-row-->
               <fo:table-row>
                 <fo:table-cell><fo:block text-align="left">Lat.</fo:block></fo:table-cell>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">
                   <fo:table-cell padding="medium"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="underline"--><xsl:value-of select="./@p"/>&#176;<!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell number-columns-spanned="2"><fo:block>Angle au P&#244;le</fo:block></fo:table-cell>
@@ -247,7 +247,7 @@
               <!-- First column -->
               <fo:table-cell><fo:block text-align="left" font-weight="bold"><xsl:value-of select="./@val"/>&#176;</fo:block></fo:table-cell>
               <!-- data -->
-              <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">                  
+              <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">
                 <fo:table-cell text-align="center">
                   <fo:block>
                     <xsl:value-of select="."/>
@@ -262,7 +262,7 @@
               <!-- Last line labels -->
               <fo:table-row>
                 <fo:table-cell>&nbsp;</fo:table-cell>
-                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">                  
+                <xsl:for-each select="value[position() &gt;= $inf and position() &lt; ($inf + $table-II-width)]">
                   <fo:table-cell padding="medium" border="0"><fo:block text-align="center" font-weight="bold"><!--fo:inline text-decoration="overline"--><xsl:value-of select="90 - ./@p"/>&#176;<!--/fo:inline--></fo:block></fo:table-cell>
                 </xsl:for-each>
                 <fo:table-cell>&nbsp;</fo:table-cell>
@@ -273,5 +273,5 @@
       </fo:table>
     </fo:block>
   </xsl:template>
-  
+
 </xsl:stylesheet>
