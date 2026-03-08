@@ -1517,7 +1517,7 @@
         let timerInterval; // Now useless (see below)
         let timeToNextLoad = 0;
 
-        let intervalInSeconds = 3600 * 6; // Between composite auto-reload
+        let intervalInSeconds = 3600 * 6; // Between composite auto-reload, default.
 
         let secToHMS = (nbSec) => {
             let h = Math.floor(nbSec / 3600);
@@ -1547,8 +1547,13 @@
         let continuousLoad = (cb) => {
             if (cb.checked === true) { // Start
                 // timeToNextLoad = intervalInSeconds; // In seconds
+                // 1 - Disable the widgets
                 document.getElementById("load-composites").disabled = true;
                 document.getElementById("composites").disabled = true;
+                document.getElementById("loading-interval").disabled = true;
+
+                // 2 - interval in seconds
+                intervalInSeconds = document.getElementById("loading-interval").value * 3600;
 
                 let nextReloadDate;
                 let setReloadMess = () => {
@@ -1559,12 +1564,13 @@
                     document.getElementById("time-to-next").innerText = nextLoadMess;
                 };
 
+                // loop on loadComposite
                 compositeInterval = setInterval(() => {
                     // console.log(`>> Reloading composite, current time is ${new Date()}, time to reload is now ${secToHMS(timeToNextLoad)}`);
                     loadComposite();
                     // timeToNextLoad = intervalInSeconds; // In seconds. Reset (now useless)
                     setReloadMess();
-                }, 1000 * intervalInSeconds); // Every 6 hours
+                }, 1000 * intervalInSeconds); // Every 6 hours by default
                 setReloadMess(); // First time
                 //
                 // The decrease below does not work as expected (loop takes too long)
@@ -1587,6 +1593,7 @@
             } else { // Stop
                 document.getElementById("load-composites").disabled = false;
                 document.getElementById("composites").disabled = false;
+                document.getElementById("loading-interval").disabled = false;
 
                 clearInterval(compositeInterval);
                 clearInterval(timerInterval);
@@ -1594,12 +1601,12 @@
             }
         };
 
-        // to push after it's loaded
+        // to push after it's loaded (if needed)
         let currentCompositeData = null;
         let currentRequestData = null;
         let currentGRIBData = null;
         /**
-         * If existingData is provided, it comes from the file system.
+         * If existingData is provided, it comes from the file system (a reload).
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
@@ -1615,6 +1622,11 @@
             document.getElementById("grib-web-comps").style.display = 'none';
 
             let key = document.getElementById('composites').value;
+            if (existingData) {
+                console.log("Loading from existing data (reload ?)");
+            } else {
+                console.log(`Loading from key [${key}] (from the web)`);
+            }
             console.log(`loadComposite: ${existingData === undefined ? JSON.stringify(findCompositeByKey(key), null, 2) : JSON.stringify(existingData, null, 2)}`);
 
             let compositeData = (existingData === undefined ? findCompositeByKey(key) : existingData);
@@ -3048,7 +3060,16 @@ let pushNow = () => {
                                         <span class="switch-left">On</span>
                                         <span class="switch-right">Off</span>
                                     </label>
-                                    <span style="margin-top: 12px;">Every 6 hours</span>
+                                    <!--span style="margin-top: 12px;">Every 6 hours</span-->
+                                    <span style="margin-top: 12px;">Every <input type="number"
+                                                                                 id="loading-interval"
+                                                                                 placeholder=""
+                                                                                 title="Interval in hours"
+                                                                                 style="width: 40px; text-align: center;"
+                                                                                 min="0"
+                                                                                 max="12"
+                                                                                 step="0.016"
+                                                                                 value="6"/> hours</span>
                                 </div>
                                 <!--input type="checkbox" onchange="continuousLoad(this);"/>Every 6 hours -->
                             </div>
