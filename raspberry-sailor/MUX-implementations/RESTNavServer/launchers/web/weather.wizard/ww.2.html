@@ -1854,6 +1854,7 @@
 
                 // the GRIB data in the compositeData... Use lastGRIBData
                 window.setTimeout(() => { // Wait for the GRIB data to be loaded (if any)
+                    messageManager(`Pushing (auto) composite at ${new Date().format("Y-M-d H:i:s Z")}`);
                     pushCompositeData(compositeData, requestData, lastGRIBData);
                 }, 15000);
             }
@@ -2744,6 +2745,7 @@ let showHideDivs = (checkbox, divId) => {
 
 let pushNow = () => {
     console.log("Push Now!");
+    messageManager(`Pushing composite at ${new Date().format("Y-M-d H:i:s Z")}`);
     // let currentCompositeData = null;
     // let currentRequestData = null;
     // let currentGRIBData = null;
