@@ -2659,7 +2659,7 @@ let proceed = async (faxList, compName, loop=true) => {
             await processOneFile(element, i + 1);
         }
         window.setTimeout( async () => {
-            faxform.submit(); // requires the form NOT not have a submit button
+            faxform.submit(); // requires the form NOT to have a submit button
             faxform.reset();
             // await customSubmit('upload-form', (response) => {
             //     console.log('Server response:', response);
@@ -2674,7 +2674,7 @@ let proceed = async (faxList, compName, loop=true) => {
   } else {
       // let compositeName = '2026-02-20T11:00';
       document.getElementById('composite-name').value = compositeName;
-      faxform.submit(); // requires the form NOT not have a submit button
+      faxform.submit(); // requires the form NOT to have a submit button
       faxform.reset();
     //   await customSubmit('upload-form', (response) => {
     //       console.log('Server response:', response);
@@ -2705,7 +2705,7 @@ let proceedJSON = async (fname, jsonObject, pushedCompositeName) => {
   document.getElementById("json-content").value = content;
 
   document.getElementById('composite-name-json').value = compositeName;
-  jsonform.submit(); // requires the form NOT not have a submit button
+  jsonform.submit(); // requires the form NOT to have a submit button
   jsonform.reset();
 //   await customSubmit('json-form', (response) => {
 //       console.log('Server response:', response);
