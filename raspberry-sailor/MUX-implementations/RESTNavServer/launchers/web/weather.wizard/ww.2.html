@@ -1280,7 +1280,7 @@
                         for (let i = 0; i < compositeList.length; i++) {
                             let comp = compositeList[i];
                             // onclick='reload(...)'
-                            htmlCode += ("<li type='disc'><a class='compositeNode' onclick='reload(\"" + getKeyFromName(comp.name) + "\", " + JSON.stringify(comp.compositeElements) + ");'>" + readableName(comp.name) + "</a></li>"); // The leaf!
+                            htmlCode += ("<li type='disc'><a class='compositeNode' onclick='displayInfo(this); reload(\"" + getKeyFromName(comp.name) + "\", " + JSON.stringify(comp.compositeElements) + ");'>" + readableName(comp.name) + "</a></li>"); // The leaf!
                         }
                         htmlCode += "</ul>";
                         htmlCode += "</li>";
@@ -1304,6 +1304,11 @@
                 document.getElementById("composite-list-server").innerHTML = (makeCompositeTree(data)); // "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
             };
             getExistingComposites(cb, filter);
+        };
+
+        let displayInfo = (anchor) => { // used when re-displaying from the file system
+            console.log(`Displaying ${anchor.innerText}`);
+            document.getElementById('current-composite-name').innerHTML = anchor.innerText + ",&nbsp;";
         };
 
         let displaySummary = (routingOutput) => {
@@ -1610,6 +1615,7 @@
          * Otherwise, get it from the web.
          */
         let loadComposite = (existingData) => {
+
             clearMessZone();
             messageManager(`-- clean at ${ new Date().format("Y-M-d H:i:s Z") } ---`);
 
@@ -1623,9 +1629,12 @@
 
             let key = document.getElementById('composites').value;
             if (existingData) {
-                console.log("Loading from existing data (reload ?)");
+                console.log("Loading from existing data (reload from file system?)");
+                // leave 'current-composite-name' as is.
+
             } else {
                 console.log(`Loading from key [${key}] (from the web)`);
+                document.getElementById('current-composite-name').innerHTML = '';
             }
             console.log(`loadComposite: ${existingData === undefined ? JSON.stringify(findCompositeByKey(key), null, 2) : JSON.stringify(existingData, null, 2)}`);
 
@@ -3275,6 +3284,7 @@ let pushNow = () => {
 
 <hr/>
 <div style="min-height: 16px;">
+    <span id="current-composite-name"></span>
     <span id="current-grib-location"></span>
 </div>
 
