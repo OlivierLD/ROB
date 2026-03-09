@@ -60,7 +60,7 @@ const SKY_MAP_TAG_NAME = 'sky-map';
  * - Latitude (Observer)
  * - LHA Aries
  * - Displayable star names
- * 
+ *
  * Compare to https://www.stelvision.com/astro/carte-ciel/
  *            https://astronomes.com/carte-du-ciel/
  */
@@ -227,9 +227,9 @@ class SkyMap extends HTMLElement {
 		this._previousClassName = "";
 		this.skyMapColorConfig = skyMapDefaultColorConfig;
 
-		this.doAFter = function(sunPath, context) { 
+		this.doAFter = function(sunPath, context) {
 			// Do-nothing by default; Callback, after drawing. Takes 'this' and the context as parameter.
-		};  
+		};
 	}
 
 	// Called whenever the custom element is inserted into the DOM.
@@ -953,7 +953,7 @@ class SkyMap extends HTMLElement {
 				for (let l = 0; l < constellation.length; l++) {
 					let starFrom = SkyMap.findStar(constellations[i].stars, constellations[i].lines[l].from);
 					let starTo = SkyMap.findStar(constellations[i].stars, constellations[i].lines[l].to);
-					if (starFrom !== {} && starTo !== {}) {
+					if (starFrom !== undefined && starTo !== undefined) {
 						context.beginPath();
 						let dec = starFrom.d * this._hemisphere;
 						let ra = starFrom.ra;

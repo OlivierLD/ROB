@@ -28,6 +28,7 @@
     <script type="module" src="./webcomponents/moonphase.2/MoonPhase.js"></script>
     <script type="module" src="./webcomponents/SunPath.js"></script>
     <script type="module" src="./webcomponents/skymap/SkyMap.js"></script>
+    <script type="module" src="./webcomponents/CelestialSphere.js"></script>
 
     <!-- Specific Scripts -->
     <script type="text/javascript" src="date.proto.js"></script>
@@ -153,7 +154,7 @@ let setUseBoatHeading = (cb, id, zSliderId) => {
     <!-- Nav Bar management -->
     <script type="text/javascript" src="js/nav-bar.js"></script>
     <!-- For the ISS -->
-    <script type="text/javascript" src="js/ajax.manager.js"></script>
+    <script type="text/javascript" src="js/ajax.manager.js"></script> <!-- TODO Add missing WebComponents classes... -->
 
     <script type="text/javascript">
 
@@ -1447,7 +1448,9 @@ let toggleForeground = () => {
                 <tr>
                     <td>
                         <!--range was [-90, 90], now [-180, 180] -->
-                        <input type="range" id="z-offset" style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;"
+                        <input type="range"
+                               id="z-offset"
+                               style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;"
                                min="-180"
                                max="180"
                                value="0"
@@ -1510,6 +1513,52 @@ let toggleForeground = () => {
         </div>
     </dialog>
 
+    <dialog id="celestial-sphere-dialog"
+            class="shadow-menu"
+            style="z-index: 10; width: 820px;" >
+            <!--
+            draggable="true"
+            ondragstart="dragStartSP(event)"
+            ondrag="draggingSP(event)"> -->
+        <!-- Draggable header -->                          <!-- AT WORK !!! -->
+        <div class="dialog-header"
+             draggable="true"
+             ondragstart="dragStartCS(event)"
+             ondrag="draggingCS(event)">
+            <span>The sky above the boat (WiP)</span> <!-- This is tweaked by the window.onload -->
+            <span id="celestial-sphere-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
+            <span class="dialog-header-close" onclick="closeCelestialSphereDialog();">&times</span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <table style="width: 98%;">
+                <tr>
+                    <td>
+                        <div class="black-frame centered">
+                            <!-- Celestial Sphere goes here -->
+                            <celestial-sphere id="celestial-sphere-01"
+                                              class="celestial-sphere-display-01"
+                                              width="800"
+                                              height="500"
+                                              latitude="35"
+                                              longitude="-3"
+                                              heading="0"
+                                              use-heading="false"/>
+                        </div>
+                        <div style="display: grid; grid-template-columns: auto auto auto auto;">
+                            <span><input type="checkbox" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
+                            <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Const.</span>
+                            <span><input type="checkbox" onchange="setStarNames('celestial-sphere-01', this);" checked>Star Names.</span>
+                            <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Const Names.</span>
+
+                            <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
+                            <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Use Boat Heading.</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </dialog>
+
   <!--
     The Big Main Menu on the left
 
@@ -1530,6 +1579,7 @@ let toggleForeground = () => {
     <span>
         <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSunPathDialog();" title="Can take time...&#13;Be patient.">Sun Path</a>
         <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSkyMapDialog();" title="Can take time...&#13;Be patient.">Sky Map</a>
+        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showCelestialSphereDialog();" title="Celestial Sphere.&#13;Can take time...&#13;Be patient.">Celest.&nbsp;Sphere</a>
     </span>
     <hr style="color: rgb(192,192,192, 0.5); width: 90%;"/>
     <!--a href="javascript:void(0)" class="active-link" style="margin-top: 20px;">More links here, some day...</a>
@@ -2489,6 +2539,9 @@ let toggleForeground = () => {
                 // userPos.latitude = val.lat;
                 // userPos.longitude = val.lng;
                 setUserPos(val.lat, val.lng); // Update the user position
+
+                document.getElementById('celestial-sphere-01').latitude = val.lat;
+                document.getElementById('celestial-sphere-01').longitude = val.lng;
             }
         });
         // events.subscribe(MARKERS, val => {
@@ -2617,12 +2670,14 @@ let toggleForeground = () => {
             // document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
             // document.getElementById('cog').value = val;
             document.getElementById('jumbo-03').value = val;
+            document.getElementById('celestial-sphere-01').heading = val;
             cog = val;
         });
         events.subscribe(TRUE_HDG, val => {
             // document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
             hdg = val; // Managed in repaint
             // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`);
+            document.getElementById('celestial-sphere-01').heading = val;
         });
         events.subscribe(BSP, val => {
             // document.getElementById('bsp').innerHTML = `${val} kn`;
@@ -2681,6 +2736,8 @@ let toggleForeground = () => {
 
         document.getElementById('sun-path-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
         document.getElementById('sky-map-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+        document.getElementById('celestial-sphere-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+
 
         console.log('On Load, done!');
     };

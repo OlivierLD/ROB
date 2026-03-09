@@ -101,7 +101,7 @@ let NavigationHelper = {
 	directionFinder: (x, y) => {
 
 		// TODO Replace with getDir in Utilities.js (atan2)
-		
+
 		let dir = 0.0;
 		if (y != 0) {
 			dir = Math.toDegrees(Math.atan(x / y));

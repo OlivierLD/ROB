@@ -590,6 +590,26 @@ compass-display .green {
 	--wandering-bodies-labels-color: red;
 }
 
+.celestial-sphere-display-01 {
+	--background-color: white;
+	--ticks-color: gray;
+	--ticks-labels-color: black;
+ 	--sky-background: rgb(21, 21, 86);
+	--heading-ticks-color: orange;
+	--sky-grid-color: gray;
+	--declination-color: black;
+	--card-points-color: red;
+	--nsew-color: blue;
+	--equatorial-grid-color: blue;
+	--constellation-lines-color: lightGray;
+	--constellation-names-color: orange;
+	--star-color: gold;
+	--star-names-color: white;
+	--star-circle-color: black;
+	--wandering-bodies-color: cyan;
+	--wandering-bodies-labels-color: red;
+}
+
 .led-panel-01 {
 	--bg-color-from: gray;
 	--bg-color-to: black;
