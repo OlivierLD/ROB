@@ -66,7 +66,7 @@ const celestialSphereDefaultColorConfig = {
 	starCircleColor: 'black',
 	starNameColor: 'white',
 	wanderingBodiesColor: 'cyan',
-	wanderingBodiesNameColor: 'red'
+	wanderingBodiesNameColor: 'limegreen'
 };
 
 /* global HTMLElement */
@@ -583,11 +583,15 @@ class CelestialSphere extends HTMLElement {
 			this.drawWanderingBodies(context, radius * 0.92);
 		}
 
-		// Display LHA Aries as text
+		// Display LHA Aries as text, ande position
 		let strAries = Utilities.decToSex(this.LHAAries);
 		context.fillStyle = this.celestialSphereColorConfig.ariesLabelColor;
 		context.font = "bold 16px Arial"; // "bold 40px Arial"
 		context.fillText('LHA Aries: ' + strAries, 10, 18);
+
+		context.fillText('From position ', 10, 18 * 2);
+		context.fillText(Utilities.decToSex(this.observerLatitude, "NS"), 10, 18 * 3);
+		context.fillText(Utilities.decToSex(this.observerLongitude, "EW"), 10, 18 * 4);
 
 		// After (callback), like Plot Stars & Constellations ?
 		if (this.doAfter !== undefined) {
