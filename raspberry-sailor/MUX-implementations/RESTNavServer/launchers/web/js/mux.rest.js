@@ -763,7 +763,7 @@ let removeMarkerLine = (clickedButton) => {
 
 let viewMarkers = (clickedButton) => {
     let theLine = clickedButton.parentNode;
-    let markerFileName = theLine.childNodes[0].innerText;
+    let markerFileName = theLine.childNodes[0].firstChild.data; // just the text, not the "Add" button.
     let mess = (`View requested on: ${markerFileName}`);
     console.log(mess);
     // alert(mess);
