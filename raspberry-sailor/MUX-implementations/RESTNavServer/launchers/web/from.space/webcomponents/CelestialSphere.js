@@ -951,14 +951,19 @@ class CelestialSphere extends HTMLElement {
 				for (let s = 0; s < constellations[i].stars.length; s++) {
 					let dec = constellations[i].stars[s].d * (this.observerLatitude >= 0 ? 1 : -1);
 					let ra = constellations[i].stars[s].ra;
-					let gha = (360 - (ra * 360 / 24));
-					gha += (/*this._hemisphere * */this.LHAAries);
+					let sha = (360 - (ra * 360 / 24)); //
+					let gha = sha + (/*this._hemisphere * */this.LHAAries);
 					if (gha > 180) {
 						gha -= 360;
 					}
 					// Sight Reduction !
         			let sr = sightReduction(this.observerLatitude, this.observerLongitude, gha, dec);
-        			// console.log(`${constellations[i].stars[s].name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
+
+					if (false) {
+						console.log(`${constellations[i].name} - ${constellations[i].stars[s].name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
+						// RA, Dec, SHA (AHso)
+						console.log(`\t  RA: ${ra}, Dec: ${decToSex(dec, "NS")}, SHA: ${decToSex(sha)}, GHA: ${decToSex(sha + this.LHAAries)} (${decToSex(gha, "EW")})`);
+					}
 
 					if (sr.alt >= 0) {
 						// let p = this.plotCoordinates(dec, gha, radius);
@@ -986,6 +991,7 @@ class CelestialSphere extends HTMLElement {
 		}
 	}
 
+	// AKA AHso
 	static findGHAAries(wBodies) {
 		let ghaA = undefined;
 		for (let i=0; i<wBodies.length; i++) {
