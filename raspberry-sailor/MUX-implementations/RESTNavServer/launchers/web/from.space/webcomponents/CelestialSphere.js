@@ -833,7 +833,7 @@ class CelestialSphere extends HTMLElement {
 			this.drawWanderingBodies(context, radius * 0.92);
 		}
 
-		// Display LHA Aries as text, ande position
+		// Display LHA Aries as text, and position
 		let strAries = Utilities.decToSex(this.LHAAries);
 		context.fillStyle = this.celestialSphereColorConfig.ariesLabelColor;
 		context.font = "bold 16px Arial"; // "bold 40px Arial"
@@ -846,6 +846,11 @@ class CelestialSphere extends HTMLElement {
 		if (this.useHeading) {
 			context.fillText(`HDG: ${this._heading.toFixed(0)}\xba true`, 10, 18 * 5);
 		}
+
+		// Zenith info
+		let str = "Zenith is in the center.";
+		let len = context.measureText(str).width;
+		context.fillText(str, (this.canvas.width) - 5 - (len), 18);
 
 		// After (callback), like Plot Stars & Constellations ?
 		if (this.doAfter !== undefined) {
