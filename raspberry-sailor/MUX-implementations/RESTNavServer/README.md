@@ -319,22 +319,22 @@ Heads Up display, from a smart-phone:
 ![HeadsUp display](./docimg/headsup.01.jpg)
 
 ### Bonus: From Space !
-Another idea... Once I was sailing at night, the sky was clear, many stars were shining in the sky.
+Another idea... Once I was sailing at night, the sky was clear, many stars were shining above my head.
 I knew some of them, but some were unknown to me... I was thinking, we know where we are, we know our heading,
 we can calculate celestial almanac, well, we have all we need to know the names of those stars!  
-So, we now have the "From Space !" item in the `index.html`. Here is what it looks like:  
+So, to help you learn to know the sky above your head, we now have the "From Space !" item in the `index.html`. Here is what it looks like:  
 ![From Space](./docimg/from.space.01.png)  
 The hamburger at the top-left brings the menu on.  
 ![From Space](./docimg/from.space.02.png)  
 You can set some background parameters...  
 ![From Space](./docimg/from.space.03.png)  
-This is good, but maybe sometimes not clear enough... In the menu, see the "Sky Path" option...  
+This is good, but maybe sometimes not clear enough... In the menu, see the "Sunki Path" option...  
 ![From Space](./docimg/from.space.04.png)  
 This shows the current path of the Sun in the sky, you can see where wandering bodies (Sun, Moon, and planets) are,
 and even stars if you wish.  
 There is also a "Sky Map" option:  
 ![From Space](./docimg/from.space.05.png)  
-That will show two kind of sky maps, the StarFinder (2102-D), used for navigation, and 
+That will show two kinds of sky maps, the StarFinder (2102-D), used for navigation, and 
 another one (like the famous Sirius SkyMap), used in astronomy.  
 ![From Space](./docimg/from.space.06.png)  
 Notice - on the Sky Map - that here, the South is on top... wierd, no? This is because that one is to be held above your head, facing down.
