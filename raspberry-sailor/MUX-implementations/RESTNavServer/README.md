@@ -318,6 +318,35 @@ Heads Up display, from a smart-phone:
 
 ![HeadsUp display](./docimg/headsup.01.jpg)
 
+### Bonus: From Space !
+Another idea... Once I was sailing at night, the sky was clear, many stars were shining in the sky.
+I knew some of them, but some were unknown to me... I was thinking, we know where we are, we know our heading,
+we can calculate celestial almanac, well, we have all we need to know the names of those stars!  
+So, we now have the "From Space !" item in the `index.html`. Here is what it looks like:  
+![From Space](./docimg/from.space.01.png)  
+The hamburger at the top-left brings the menu on.  
+![From Space](./docimg/from.space.02.png)  
+You can set some background parameters...  
+![From Space](./docimg/from.space.03.png)  
+This is good, but maybe sometimes not clear enough... In the menu, see the "Sky Path" option...  
+![From Space](./docimg/from.space.04.png)  
+This shows the current path of the Sun in the sky, you can see where wandering bodies (Sun, Moon, and planets) are,
+and even stars if you wish.  
+There is also a "Sky Map" option:  
+![From Space](./docimg/from.space.05.png)  
+That will show two kind of sky maps, the StarFinder (2102-D), used for navigation, and 
+another one (like the famous Sirius SkyMap), used in astronomy.  
+![From Space](./docimg/from.space.06.png)  
+Notice - on the Sky Map - that here, the South is on top... wierd, no? This is because that one is to be held above your head, facing down.
+This way, what you see from under the map matches what you see from under the sky ;).    
+![From Space](./docimg/from.space.07.png)  
+Another option is "Celestial Sphere". Based on the current time and your current position, the zenith is at the center of the circle.
+You have many options to show star names, constellation names, wandering bodies, etc.   
+![From Space](./docimg/from.space.08.png)  
+You can even show the heading of the boat (several shapes are available), and see on the graph what star is in your bow!  
+![From Space](./docimg/from.space.09.png)
+
+
 ### Minimal config
 > Just a GPS, data displayable on any kind of browser...  
 > The server can run on the smallest Raspberry Pi.
