@@ -65,8 +65,10 @@ const celestialSphereDefaultColorConfig = {
 	starColor: 'gold',
 	starCircleColor: 'black',
 	starNameColor: 'white',
-	wanderingBodiesColor: 'cyan',
-	wanderingBodiesNameColor: 'limegreen'
+	wanderingBodiesColor: 'orangered', // 'cyan',
+	wanderingBodiesNameColor: 'limegreen',
+	boatFillColor: 'silver', // unused
+	boatOutlineColor: 'rgba(192, 192, 192, 0.75'
 };
 
 /* global HTMLElement */
@@ -84,7 +86,8 @@ class CelestialSphere extends HTMLElement {
 			"latitude",               // Number [-90..90], default 45
 			"longitude",              // Number [-180..180], default 3
 			"heading",                // Boat heading (N, 0 by default)
-			"use-heading"             // true or false. Heading North if false
+			"use-heading",            // true or false. Heading North if false
+			"boat-shape"              // MONO, CATA, TRI, PLANE
 		];
 	}
 
@@ -110,7 +113,12 @@ class CelestialSphere extends HTMLElement {
 		this.shadowRoot.appendChild(this.canvas);
 
 		// For tests of the import
-//	this.dummyDump();
+		//	this.dummyDump();
+
+		// For the boat shapes
+		this.WL_RATIO_COEFF = 0.75; // Ratio to apply to (3.5 * Width / Length)
+		this.BOAT_LENGTH = 100; // 50;
+		this._boatShape = 'MONO'; // MONO, CATA, TRI, PLANE
 
 		// Default values
 		this._width       = 500;
@@ -197,6 +205,19 @@ class CelestialSphere extends HTMLElement {
 			case "use-heading":
 				this._use_heading = (newVal === 'true');
 				break;
+			case "boat-shape":
+				switch (newVal) {
+					case 'MONO':
+					case 'CATA':
+					case 'TRI':
+					case 'PLANE':
+						this._boatShape = newVal;
+						break;
+					default:
+						console.log(`BoatShape unchanged, invalid value [${newVal}].`);
+						break;
+				}
+				break;
 			default:
 				break;
 		}
@@ -246,6 +267,9 @@ class CelestialSphere extends HTMLElement {
 	set useHeading(val) {
 		this._use_heading = val;
 	}
+	set boatShape(val) {
+		this._boatShape = val;
+	}
 
 	set shadowRoot(val) {
 		this._shadowRoot = val;
@@ -286,6 +310,9 @@ class CelestialSphere extends HTMLElement {
 	}
 	get useHeading() {
 		return this._use_heading;
+	}
+	get boatShape() {
+		return this._boatShape;
 	}
 
 	get shadowRoot() {
@@ -398,6 +425,225 @@ class CelestialSphere extends HTMLElement {
 		this.drawCelestialSphere();
 	}
 
+	getCanvasCenter() {
+		let cw = this._width;
+		let ch = this._height;
+		return { x: cw / 2, y: ch / 2};
+	}
+
+	drawBoat(context, trueHeading) {
+		let x = [];
+		let y = [];// Half, length
+
+		let _zoom = 3;
+
+		let boatLength = this.BOAT_LENGTH * _zoom;
+
+		if (this._boatShape === 'MONO') {
+			// Width
+			x.push(this.WL_RATIO_COEFF * 0); // Bow
+			//     Starboard
+			x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( 1.5 * boatLength) / 7); // Transom, starboard
+			//     Port
+			x.push(this.WL_RATIO_COEFF * (-1.5 * boatLength) / 7); // Transom, port
+			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * boatLength) / 7);
+
+			// Length
+			y.push((-4 * boatLength) / 7); // Bow
+			//      Starboard
+			y.push((-3 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push( (1 * boatLength) / 7);
+			y.push( (3 * boatLength) / 7);
+			//     Port
+			y.push( (3 * boatLength) / 7);
+			y.push( (1 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push((-3 * boatLength) / 7);
+
+		} else if (this._boatShape === 'CATA') {
+			x.push(this.WL_RATIO_COEFF * 0); // Arm, front, center
+			// Starboard
+			x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7); // Arm starboard, hull side
+			x.push(this.WL_RATIO_COEFF * ( 1.5 * boatLength) / 7); // Starboard bow
+			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( 1.8 * boatLength) / 7); // Starboard transform, ext
+			x.push(this.WL_RATIO_COEFF * ( 1.2 * boatLength) / 7); // Starboard transform, int
+			x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7); // Arm, back, starboard, hull side
+			x.push(this.WL_RATIO_COEFF * (   0 * boatLength) / 7); // Arm, back, starboard, center
+			// Port
+			x.push(this.WL_RATIO_COEFF * (  -0 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.8 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (-1.5 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  -1 * boatLength) / 7);
+
+			// Length
+			y.push((-1 * boatLength) / 7);
+			//   Starboard
+			y.push((-1 * boatLength) / 7);
+			y.push((-4 * boatLength) / 7); // Bow
+			y.push((-1 * boatLength) / 7);
+			y.push((0 * boatLength) / 7);
+			y.push((1 * boatLength) / 7);
+			y.push((3 * boatLength) / 7);
+			y.push((3 * boatLength) / 7);
+			y.push((1 * boatLength) / 7);
+			y.push((1 * boatLength) / 7);
+			//    Port
+			y.push((1 * boatLength) / 7);
+			y.push((1 * boatLength) / 7); // Bow
+			y.push((3 * boatLength) / 7);
+			y.push((3 * boatLength) / 7);
+			y.push((1 * boatLength) / 7);
+			y.push((0 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push((-4 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+
+		} else if (this._boatShape === 'TRI') {
+			// Width
+			x.push(this.WL_RATIO_COEFF * 0); // Bow, center hull
+			// Starboard
+			x.push(this.WL_RATIO_COEFF * (  0.3 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  0.6 * boatLength) / 7); // Arm, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  1.6 * boatLength) / 7); // Arm, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * (  1.8 * boatLength) / 7); // Outrigger bow
+			x.push(this.WL_RATIO_COEFF * (    2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (    2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  1.9 * boatLength) / 7); // Outrigger transom, ext
+			x.push(this.WL_RATIO_COEFF * (  1.7 * boatLength) / 7); // Outrigger transom, int
+			x.push(this.WL_RATIO_COEFF * (  1.6 * boatLength) / 7); // Arm, back, starboard, outside
+			x.push(this.WL_RATIO_COEFF * (  0.6 * boatLength) / 7); // Arm, back, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  0.3 * boatLength) / 7); // Main hull, transom starboard,
+			// Port
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.6 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.7 * boatLength) / 7); // Outrigger transom, int
+			x.push(this.WL_RATIO_COEFF * ( -1.9 * boatLength) / 7); // Outrigger transom, ext
+			x.push(this.WL_RATIO_COEFF * (   -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (   -2 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * ( -1.8 * boatLength) / 7); // Outrigger bow
+			x.push(this.WL_RATIO_COEFF * ( -1.6 * boatLength) / 7); // Arm, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * boatLength) / 7); // Arm, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * boatLength) / 7);
+
+			// Length
+			y.push((-4 * boatLength) / 7); // Bow
+			// Starboard
+			y.push((-3 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7); // Starboard arm, front
+			y.push((-1 * boatLength) / 7); // Starboard arm, front, outrigger
+			y.push((-2.6 * boatLength) / 7); // Starboard outrigger bow
+			y.push((-1.5 * boatLength) / 7);
+			y.push(( 1.5 * boatLength) / 7);
+			y.push(( 2.5 * boatLength) / 7); // Starboard transom, ext
+			y.push(( 2.5 * boatLength) / 7); // Starboard transom, ext
+			y.push(( 1 * boatLength) / 7); // Starboard arm, back, outrigger
+			y.push(( 1 * boatLength) / 7); // Starboard arm, hull
+			y.push(( 3 * boatLength) / 7);
+			// Port
+			y.push(( 3 * boatLength) / 7);
+			y.push(( 1 * boatLength) / 7);
+			y.push(( 1 * boatLength) / 7);
+			y.push(( 2.5 * boatLength) / 7);
+			y.push(( 2.5 * boatLength) / 7);
+			y.push(( 1.5 * boatLength) / 7);
+			y.push((-1.5 * boatLength) / 7);
+			y.push((-2.6 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push((-3 * boatLength) / 7);
+		} else if (this._boatShape === 'PLANE') {
+			// Width
+			x.push(this.WL_RATIO_COEFF * 0); // Nose
+			// Starboard
+			x.push(this.WL_RATIO_COEFF * (  0.3 * boatLength) / 7);
+			x.push(this.WL_RATIO_COEFF * (  0.6 * boatLength) / 7); // Wing, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  4 * boatLength) / 7); // Wing, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * (  4 * boatLength) / 7); // Wing, outside, back
+			x.push(this.WL_RATIO_COEFF * (  0.6 * boatLength) / 7); // Wing, back, starboard, inside
+			x.push(this.WL_RATIO_COEFF * (  0.3 * boatLength) / 7); // Main hull, transom starboard,
+			x.push(this.WL_RATIO_COEFF * (    2 * boatLength) / 7); // Main hull, back wing, front
+			x.push(this.WL_RATIO_COEFF * (    2 * boatLength) / 7); // Main hull, back wing, back, ext
+			x.push(this.WL_RATIO_COEFF * (  0.1 * boatLength) / 7); // Main hull, back wing, back, int
+			// Port
+			x.push(this.WL_RATIO_COEFF * ( -0.1 * boatLength) / 7); // Main hull, back wing, back, int
+			x.push(this.WL_RATIO_COEFF * (   -2 * boatLength) / 7); // Main hull, back wing, back, ext
+			x.push(this.WL_RATIO_COEFF * (   -2 * boatLength) / 7); // Main hull, back wing, front
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * boatLength) / 7); // Main hull, transom starboard,
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * boatLength) / 7); // Wing, back, starboard, inside
+			x.push(this.WL_RATIO_COEFF * ( -4 * boatLength) / 7); // Outrigger bow
+			x.push(this.WL_RATIO_COEFF * ( -4 * boatLength) / 7); // Arm, front, starboard, outside
+			x.push(this.WL_RATIO_COEFF * ( -0.6 * boatLength) / 7); // Arm, front, starboard, inside
+			x.push(this.WL_RATIO_COEFF * ( -0.3 * boatLength) / 7);
+
+			// Length
+			y.push((-4 * boatLength) / 7); // Nose
+			// Starboard
+			y.push((-3 * boatLength) / 7);
+			y.push((-2 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push(( 0 * boatLength) / 7);
+			y.push((-0.5 * boatLength) / 7);
+			y.push(( 1.8 * boatLength) / 7);
+			y.push(( 2.5 * boatLength) / 7);
+			y.push(( 3 * boatLength) / 7);
+			y.push(( 2.8 * boatLength) / 7);
+			// Port
+			y.push(( 2.8 * boatLength) / 7);
+			y.push(( 3 * boatLength) / 7);
+			y.push(( 2.5 * boatLength) / 7);
+			y.push(( 1.8 * boatLength) / 7);
+			y.push((-0.5 * boatLength) / 7);
+			y.push(( 0 * boatLength) / 7);
+			y.push((-1 * boatLength) / 7);
+			y.push((-2 * boatLength) / 7);
+			y.push((-3 * boatLength) / 7);
+		}
+		let xPoints = [];
+		let yPoints = [];
+
+		// Rotation matrix:
+		// | cos(alpha)  -sin(alpha) |
+		// | sin(alpha)   cos(alpha) |
+		// The center happens to be the middle of the boat.
+
+		let center = this.getCanvasCenter();
+		let ptX = center.x;
+		let ptY = center.y;
+
+		for (let i=0; i<x.length; i++) { // Rotation
+			let dx = x[i] * Math.cos(Math.toRadians(trueHeading)) + (y[i] * (-Math.sin(Math.toRadians(trueHeading))));
+			let dy = x[i] * Math.sin(Math.toRadians(trueHeading)) + (y[i] *   Math.cos(Math.toRadians(trueHeading)));
+			xPoints.push(Math.round(ptX + dx));
+			yPoints.push(Math.round(ptY + dy));
+		}
+		context.fillStyle = this.celestialSphereColorConfig.boatFillColor;
+		context.beginPath();
+		context.moveTo(xPoints[0], yPoints[0]);
+		for (let i=1; i<xPoints.length; i++) {
+			context.lineTo(xPoints[i], yPoints[i]);
+		}
+		context.closePath();
+		// context.fill();
+		context.strokeStyle = this.celestialSphereColorConfig.boatOutlineColor;
+		context.lineWidth = 2;
+		context.stroke();
+	}
+
 	drawCelestialSphere() {
 
 		let currentStyle = this.className;
@@ -428,7 +674,7 @@ class CelestialSphere extends HTMLElement {
 		context.arc(this.canvas.width / 2, this.canvas.height / 2, radius, 0, 2 * Math.PI, false);
 		context.fill();
 		context.closePath();
-		// 2 circles for LHA/Dates
+		// 2 circles for LHA / Heading
 		context.beginPath();
 		context.lineWidth = 1;
 		context.strokeStyle = this.celestialSphereColorConfig.ticksColor;
@@ -515,7 +761,7 @@ class CelestialSphere extends HTMLElement {
 		// Compass / Heading
 		context.beginPath();
 		for (let i = 0; i < 360; i+=11.25) { // N, NNE, NE ,etc
-			let currentAngle = Math.toRadians(i - (this._use_heading ? this._heading : 0));
+			let currentAngle = Math.toRadians(i /* - (this._use_heading ? this._heading : 0)*/);
 			let xFrom = (this.canvas.width / 2) + ((radius * 0.92) * Math.cos(currentAngle));
 			let yFrom = (this.canvas.height / 2) + ((radius * 0.92) * Math.sin(currentAngle));
 			let xTo = (this.canvas.width / 2) + ((radius * 0.88) * Math.cos(currentAngle));
@@ -533,9 +779,9 @@ class CelestialSphere extends HTMLElement {
 		for (let i = 0; i < 360; i+=22.5) {
 			context.save();
 			context.translate(this.canvas.width / 2, (this.canvas.height / 2)); // canvas.height);
-			let __currentAngle = /*-*/ Math.toRadians(i - (this._use_heading ? this._heading : 0));
+			let __currentAngle = /*-*/ Math.toRadians(i /* - (this._use_heading ? this._heading : 0)*/);
 			context.rotate(__currentAngle); //  - Math.PI);
-			context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
+			context.font = "bold " + Math.round(12) + "px Arial"; // Like "bold 15px Arial"
 			context.fillStyle = this.celestialSphereColorConfig.cardPointLabelsColor;
 			// let hour = (this._hemisphere === Hemispheres.NORTHERN_HEMISPHERE  || i === 0 ? i : (24 - i)); // TODO Fix that
 			let label = CardinalPoints[i / 22.5];
@@ -575,6 +821,10 @@ class CelestialSphere extends HTMLElement {
 		}
 		context.restore();
 
+		if (this._use_heading) {
+			this.drawBoat(context, this._heading);
+		}
+
 		if (this._withStars || this._withConstellations) {
 			this.drawStars(context, radius * 0.92);
 		}
@@ -592,6 +842,10 @@ class CelestialSphere extends HTMLElement {
 		context.fillText('From position ', 10, 18 * 2);
 		context.fillText(Utilities.decToSex(this.observerLatitude, "NS"), 10, 18 * 3);
 		context.fillText(Utilities.decToSex(this.observerLongitude, "EW"), 10, 18 * 4);
+
+		if (this.useHeading) {
+			context.fillText(`HDG: ${this._heading.toFixed(0)}\xba true`, 10, 18 * 5);
+		}
 
 		// After (callback), like Plot Stars & Constellations ?
 		if (this.doAfter !== undefined) {
@@ -632,7 +886,7 @@ class CelestialSphere extends HTMLElement {
 						}
 						// Sight Reduction
 						let sr1 = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
-						let p1 = this.plotOnSphere(sr1.alt, sr1.Z - (this.useHeading ? this.heading : 0), radius);
+						let p1 = this.plotOnSphere(sr1.alt, sr1.Z /* - (this.useHeading ? this.heading : 0)*/, radius);
 						dec = starTo.d * (this.observerLatitude >= 0 ? 1 : -1);
 						ra = starTo.ra;
 						lng = (360 - (ra * 360 / 24));
@@ -642,7 +896,7 @@ class CelestialSphere extends HTMLElement {
 						}
 						// Sight Reduction
 						let sr2 = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
-						let p2 = this.plotOnSphere(sr2.alt, sr2.Z - (this.useHeading ? this.heading : 0), radius); // this.plotCoordinates(dec, lng, radius);
+						let p2 = this.plotOnSphere(sr2.alt, sr2.Z /*- (this.useHeading ? this.heading : 0)*/, radius); // this.plotCoordinates(dec, lng, radius);
 						context.strokeStyle = this.celestialSphereColorConfig.constellationLineColor;
 						context.lineWidth = 0.5;
 						context.moveTo((this.canvas.width / 2) - p1.x, (this.canvas.height / 2) + p1.y);
@@ -677,7 +931,7 @@ class CelestialSphere extends HTMLElement {
 					}
         			let sr = sightReduction(this.observerLatitude, this.observerLongitude, lng, centerDec);
 					// let p = this.plotCoordinates(centerDec, lng, radius);
-					let p = this.plotOnSphere(sr.alt, sr.Z - (this.useHeading ? this.heading : 0), radius);
+					let p = this.plotOnSphere(sr.alt, sr.Z /* - (this.useHeading ? this.heading : 0)*/, radius);
 
 					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = this.celestialSphereColorConfig.constellationNameColor;
@@ -703,7 +957,7 @@ class CelestialSphere extends HTMLElement {
 
 					if (sr.alt >= 0) {
 						// let p = this.plotCoordinates(dec, gha, radius);
-						let p = this.plotOnSphere(sr.alt, sr.Z - (this.useHeading ? this.heading : 0), radius);
+						let p = this.plotOnSphere(sr.alt, sr.Z /*- (this.useHeading ? this.heading : 0)*/, radius);
 						context.beginPath();
 						context.fillStyle = this.celestialSphereColorConfig.starColor;
 						const starRadius = 2;
@@ -781,9 +1035,9 @@ class CelestialSphere extends HTMLElement {
 				}
 				// Sight Reduction !
 				let sr = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
-				console.log(`${body} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
+				// console.log(`${body.name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
 				if (true || sr.alt >= 0) {
-					let p = this.plotOnSphere(sr.alt, sr.Z - (this.useHeading ? this.heading : 0), radius);
+					let p = this.plotOnSphere(sr.alt, sr.Z /*- (this.useHeading ? this.heading : 0)*/, radius);
 					context.beginPath();
 					context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesColor;
 					const bodyRadius = 4;
@@ -793,7 +1047,7 @@ class CelestialSphere extends HTMLElement {
 					context.lineWidth = 0.5;
 					context.stroke();
 
-					context.font = "bold " + Math.round(24) + "px Arial"; // Like "bold 15px Arial"
+					context.font = "bold " + Math.round(30 /*24*/) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesNameColor;
 					let str = CelestialSphere.findSymbol(body.name);
 					let len = context.measureText(str).width;

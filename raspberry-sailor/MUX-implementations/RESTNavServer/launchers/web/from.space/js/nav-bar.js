@@ -969,6 +969,11 @@ function setUseBoatHeadingCS(id, cb) {
     document.getElementById(id).useHeading = cb.checked;
 }
 
+function setBoatShape(id, list) {
+    document.getElementById(id).boatShape = list.value;
+    document.getElementById(id).repaint();
+}
+
 function setMapType(id, list) {
     document.getElementById(id).type = list.value;
     document.getElementById(id).repaint();

@@ -1551,7 +1551,15 @@ let toggleForeground = () => {
                             <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Const Names.</span>
 
                             <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
-                            <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Use Boat Heading.</span>
+                            <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Show Boat Heading.</span>
+                            <span>
+                                <select onchange="setBoatShape('celestial-sphere-01', this);">
+                                    <option value="MONO">Monohull</option>
+                                    <option value="CATA">Catamaran</option>
+                                    <option value="TRI">Trimaran</option>
+                                    <option value="PLANE">Plane</option>
+                                </select>
+                            </span>
                         </div>
                     </td>
                 </tr>
