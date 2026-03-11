@@ -972,8 +972,8 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "13e")
-  	  PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.yaml
-	    echo -e "Launching Nav Server with ${PROP_FILE}"
+  	  PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.slow.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE} (Warning: Slow version)"
       # Ask to launch a browser in interactive mode (and not provided already)
       # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
       if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then

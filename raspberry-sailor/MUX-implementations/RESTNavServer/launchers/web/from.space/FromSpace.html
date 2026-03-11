@@ -1546,14 +1546,14 @@ let toggleForeground = () => {
                         </div>
                         <div style="display: grid; grid-template-columns: auto auto auto auto;">
                             <span><input type="checkbox" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
-                            <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Const.</span>
+                            <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Constellations.</span>
                             <span><input type="checkbox" onchange="setStarNames('celestial-sphere-01', this);" checked>Star Names.</span>
-                            <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Const Names.</span>
+                            <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
 
                             <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
                             <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Show Boat Heading.</span>
                             <span>
-                                <select onchange="setBoatShape('celestial-sphere-01', this);">
+                                <select onchange="setBoatShape('celestial-sphere-01', this);" style="padding: 5px; border-radius: 5px;">
                                     <option value="MONO">Monohull</option>
                                     <option value="CATA">Catamaran</option>
                                     <option value="TRI">Trimaran</option>

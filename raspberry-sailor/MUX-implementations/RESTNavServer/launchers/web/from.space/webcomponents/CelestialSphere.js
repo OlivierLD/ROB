@@ -51,14 +51,12 @@ const celestialSphereDefaultColorConfig = {
 	bgColor: 'white',
 	ticksColor: 'gray',
 	tickLabelsColor: 'black',
-	celestialSphereMonths: 'red',
 	skyBGColor: 'rgb(21, 21, 86)', // 'lightGray',
 	headingTicksColor: 'orange',
 	skyGridColor: 'cyan',
 	declinationCircleColor: 'cyan',
 	ariesLabelColor: 'silver',
 	cardPointLabelsColor: 'red',
-	nsewColor: 'blue',
 	equatorialGridColor: 'blue',
 	constellationLineColor: 'lightGray',
 	constellationNameColor: 'orange',
@@ -353,9 +351,6 @@ class CelestialSphere extends HTMLElement {
 										case '--ticks-labels-color':
 											colorConfig.tickLabelsColor = value;
 											break;
-										case '--sky-map-month-color':
-											colorConfig.celestialSphereMonths = value;
-											break;
 										case '--sky-background':
 											colorConfig.skyBGColor = value;
 											break;
@@ -373,9 +368,6 @@ class CelestialSphere extends HTMLElement {
 											break;
 										case '--card-points-color':
 											colorConfig.cardPointLabelsColor = value;
-											break;
-										case '--nsew-color':
-											colorConfig.nsewColor = value;
 											break;
 										case '--equatorial-grid-color':
 											colorConfig.equatorialGridColor = value;
@@ -421,7 +413,7 @@ class CelestialSphere extends HTMLElement {
 		this.doAfter = func;
 	}
 
-	repaint() {
+	repaint() { // Can zoom here, with this._width & this._height
 		this.drawCelestialSphere();
 	}
 
