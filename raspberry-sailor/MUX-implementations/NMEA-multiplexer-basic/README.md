@@ -307,6 +307,13 @@ There is also a [USE_CASES](./USE_CASES.md) document.
 
 Examples of Web Admin features will also be presented (in other modules, like [RESTNavServer](../RESTNavServer/README.md)).
 
+## An idea of what it could look like...
+Start the server, and check your browser...
+```
+$ ./mux.sh nmea.mux.replay.etel.groix.yaml 
+```
+and then, from your browser, see <http://localhost:8080/web/index.html>.
+
 # Build and package for production
 See the script `to.prod.sh`. It will generate an archive that can be deployed on
 a target machine, un-archived, and run.  

@@ -763,7 +763,7 @@ let removeMarkerLine = (clickedButton) => {
 
 let viewMarkers = (clickedButton) => {
     let theLine = clickedButton.parentNode;
-    let markerFileName = theLine.childNodes[0].innerText;
+    let markerFileName = theLine.childNodes[0].firstChild.data; // just the text, not the "Add" button.
     let mess = (`View requested on: ${markerFileName}`);
     console.log(mess);
     // alert(mess);
@@ -814,20 +814,21 @@ let updateMarkerList = () => { // The final one
 
     // Next Waypoint
     let nextWPselect = document.getElementById('currentWaypoint');
-    let selectedValue = nextWPselect.options[nextWPselect.selectedIndex].value;
-    console.log(`Selected waypoint: ${selectedValue}`);
-    let wpUpdater = updateNextWaypoint(selectedValue); //  === "null" ? null : selectedValue);
-    wpUpdater.then(value => {
-        console.log(`After waypoint update ! ${value}`);
-        // Reload at the end
-        generateDiagram();
-    }, (error, errMess) => {
-        console.log(error);
-        console.log(errMess);
-        alert("Failed to update next waypoint");
-        generateDiagram();
-    });
-
+    if (nextWPselect) {
+        let selectedValue = nextWPselect.options[nextWPselect.selectedIndex].value;
+        console.log(`Selected waypoint: ${selectedValue}`);
+        let wpUpdater = updateNextWaypoint(selectedValue); //  === "null" ? null : selectedValue);
+        wpUpdater.then(value => {
+            console.log(`After waypoint update ! ${value}`);
+            // Reload at the end
+            generateDiagram();
+        }, (error, errMess) => {
+            console.log(error);
+            console.log(errMess);
+            alert("Failed to update next waypoint");
+            generateDiagram();
+        });
+    }
 };
 
 let generateDiagram = () => {
@@ -863,7 +864,7 @@ let generateDiagram = () => {
         // TODO Other stuff here (deviation file, declination, etc)
 
         // Used Markers and borders, waypoints
-        if (json['markers'] || json['markerList']) {
+        if (true || json['markers'] || json['markerList']) { // true: display empty list, to be able to update it - even if empty.
             html += '<tr><td>';
             html += 'Markers and Borders:<br/>';
             html += '<ul id="full-markers-list">';
@@ -876,7 +877,7 @@ let generateDiagram = () => {
                 })
             }
             // Current waypoint
-            // if (json['currentWaypointName']) {
+            if (json['waypointList']) {
                 html += `<li>` +
                             `<span>Current Waypoint: ` + // ${json['currentWaypointName']}</span>&nbsp;&nbsp;` +
                             `<select id="currentWaypoint" onchange="/*updateCurrentWaypoint(this);*/" disabled>` +
@@ -886,7 +887,7 @@ let generateDiagram = () => {
                 });
                 html +=     `</select>` +
                         `</li>`;
-            // }
+            }
 
             html += '</ul>';
             html += '<button class="toggle-marker-config" onclick="updateMarkerConfig();">Update markers config?</button>';

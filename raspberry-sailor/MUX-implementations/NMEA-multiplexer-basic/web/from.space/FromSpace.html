@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpg" href="./palm.04.jpg">
-    <title>ES6 Celestial Computer test page</title>
+    <title>From Space !</title>
 
     <!-- Main Module -->
     <script type="module" src="app.js"></script> <!-- THAT is the key -->
@@ -28,10 +28,11 @@
     <script type="module" src="./webcomponents/moonphase.2/MoonPhase.js"></script>
     <script type="module" src="./webcomponents/SunPath.js"></script>
     <script type="module" src="./webcomponents/skymap/SkyMap.js"></script>
+    <script type="module" src="./webcomponents/CelestialSphere.js"></script>
 
     <!-- Specific Scripts -->
     <script type="text/javascript" src="date.proto.js"></script>
-	<script type="text/javascript" src="js/pub.sub.js"></script>
+    <script type="text/javascript" src="js/pub.sub.js"></script>
 
     <script type="text/javascript">
 
@@ -70,8 +71,8 @@ let marqueeScrollUp = (marqueeId) => {
             // defaultMarqueeTextArray.forEach(item => {
             //     toDisplay.push(item);
             // });
-            // Other values    
-            if (globalAstroData !== undefined) {        
+            // Other values
+            if (globalAstroData !== undefined) {
                 toDisplay.push("Sun GHA: " + globalAstroData.sun.GHA.fmt);
                 toDisplay.push("Sun D: " + globalAstroData.sun.DEC.fmt);
                 toDisplay.push("Moon GHA: " + globalAstroData.moon.GHA.fmt);
@@ -131,12 +132,29 @@ let setNewZOffset = (range, id) => {
     }
 };
 
+let useBoatHeading = false;
+
+let setUseBoatHeading = (cb, id, zSliderId) => {
+    let elem = document.getElementById(id);
+    let zSlider = document.getElementById(zSliderId);
+    let useIt = cb.checked;
+    useBoatHeading = useIt;
+    if (useIt) {
+        zSlider.disabled = true;
+        elem.zOffset = zSlider.value; // TODO Use boat heading calculate offset, etc...
+        elem.repaint();
+    } else {
+        zSlider.disabled = false;
+        elem.zOffset = zSlider.value;
+        elem.repaint();
+    }
+};
     </script>
 
     <!-- Nav Bar management -->
     <script type="text/javascript" src="js/nav-bar.js"></script>
     <!-- For the ISS -->
-    <script type="text/javascript" src="js/ajax.manager.js"></script>
+    <script type="text/javascript" src="js/ajax.manager.js"></script> <!-- TODO Add missing WebComponents classes... -->
 
     <script type="text/javascript">
 
@@ -161,7 +179,7 @@ let transformDataForWorldWebComp = json => {
     let moon ={
         decl: json.moon.DEC.raw,
         gha: json.moon.GHA.raw
-    }; 
+    };
     newObj.moon = moon;
 
     newObj.moonPhase = json.moon.phase.phaseAngle;
@@ -208,7 +226,7 @@ let transformDataForWorldWebComp = json => {
     if (json.constellations !== undefined) {
         newObj.constellations = json.constellations;
     }
-    
+
     return newObj;
 };
 
@@ -223,7 +241,7 @@ let displayWorldData = (astroData) => {
         worldMap.setAstronomicalData(astroData);
         worldMap.repaint();
     }
-};        
+};
 
 let userSunPos = false; // user by default
 let simulatePressureAndHeading = false;
@@ -328,7 +346,7 @@ const onPosSuccess = (pos) => {
     //
     console.log('lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude); // + ' hdg= ' + pos.coords.heading + ' spd= ' + pos.coords.speed + ' m/s');
     //  console.log("Pos data:" + pos.coords);
-    // Feed the fields: 
+    // Feed the fields:
     // pos-lat-sign-01, pos-lat-deg-01, pos-lat-min-01
     // pos-lng-sign-01, pos-lng-deg-01, pos-lng-min-01
     let latSign = (pos.coords.latitude < 0) ? 'S' : 'N';
@@ -415,7 +433,7 @@ let expandCollapseHelpData = () => {
         document.getElementById('help-char').innerHTML = '&#9658;';
     } else {
         // document.getElementById('user-date-widgets').style.display = 'block';
-        document.getElementById('help-char').innerHTML = '&#9660;';    
+        document.getElementById('help-char').innerHTML = '&#9660;';
     }
     useHelpExpanded = !useHelpExpanded;
 };
@@ -450,7 +468,7 @@ let updatePosition = () => {
 };
 
 let updateFromUserPos = () => {
-    document.getElementById("pos-lat-sign-01").value = userPos.latitude < 0 ? "S" : "N"; 
+    document.getElementById("pos-lat-sign-01").value = userPos.latitude < 0 ? "S" : "N";
     document.getElementById("pos-lng-sign-01").value = userPos.longitude < 0 ? "W" : "E";
     let absLat = Math.abs(userPos.latitude);
     let absLong = Math.abs(userPos.longitude);
@@ -985,17 +1003,18 @@ let toggleForeground = () => {
 		input:checked + .switch-left + .switch-right::before {
 			background-color: #ccc;
 		}
+        /* Switch end */
 
         .bookmark {
-            font-family: 'Courier New', Courier, monospace; 
-            background-color: rgba(240, 255, 240, 0.75); 
-            color:black; 
-            margin-left:20px; 
-            margin-right: 20px; 
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(240, 255, 240, 0.75);
+            color:black;
+            margin-left:20px;
+            margin-right: 20px;
             margin-bottom: 4px;
             margin-top: 8px;
-            padding-left: 5px; 
-            padding-right: 5px; 
+            padding-left: 5px;
+            padding-right: 5px;
             border-radius: 8px;
         }
 
@@ -1008,7 +1027,7 @@ let toggleForeground = () => {
             display: grid;
             grid-template-columns: 800px 250px 280px;
             grid-template-rows: auto;
-            grid-template-areas: 
+            grid-template-areas:
                 "wm jumbos prmsl"
                 "utc utc utc"
                 "solar solar solar";
@@ -1148,351 +1167,415 @@ let toggleForeground = () => {
 </head>
 <body>
 
-    <!-- alert-dialog -->
-    <dialog id="custom-alert" class="shadow-menu" style="z-index: 10;">
-        <div class="dialog-header">
-            <span id="alert-header">Alert Title</span>
-            <span class="dialog-header-close" onclick="closeCustomAlert();">&times</span>
-        </div>
-        <div style="margin-bottom: 10px;" id="alert-content">
-            <!-- Place holder for message -->
-        </div>
-    </dialog>
-    
-    <!-- help-dialog -->
-    <dialog id="help-dialog" class="shadow-menu" style="z-index: 10;">
-        <div class="dialog-header">
-            <span>Help!</span>
-            <span class="dialog-header-close" onclick="closeHelpDialog();">&times</span>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <p>
-                This page shows how to display graphical components in background, always present, even if other elements
-                are displayed on top.
-            </p>
-            <p>
-                Use the Background Parameters link in the menu to configure the globe.
-            </p>
-            <p>
-                Use the Show/Hide Computed Data button to display the computed data in the foreground.
-            </p>
-            <p>
-                The Marquee panel (available from the hamburger &#8801; menu) will show the same data, formatted, 
-                in a dialog, on top of others.
-            </p>
-            <p>
-                <span style="font-style: italic; font-weight: bold;">Featuring:</span>
-                <ul>
-                    <li>Web Components</li>
-                    <li>Custom Tooltips</li>
-                    <li>Custom Alerts</li>
-                    <li>SVG</li>
-                    <li>Celestial Calculations (all in ES6)</li>
-                    <li>Copy-to-clipboard</li>
-                    <li>etc !</li>
-                </ul>
-            </p>
-            <p>
-                Credits:<br/>
-                All celestial calculations are based on <a href="https://www.celnav.de/" target="HU" style="color: cyan;">Hening Umland</a>'s remarkable work.
-            </p>
-        </div>
-    </dialog>
+<!-- alert-dialog -->
+<dialog id="custom-alert" class="shadow-menu" style="z-index: 10;">
+    <div class="dialog-header">
+        <span id="alert-header">Alert Title</span>
+        <span class="dialog-header-close" onclick="closeCustomAlert();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;" id="alert-content">
+        <!-- Place holder for message -->
+    </div>
+</dialog>
 
-    <!-- BG parameters -->
-    <dialog id="background-prms-dialog" class="shadow-menu" style="z-index: 10;">
-        <div class="dialog-header">
-          <span>Background Parameters...</span>
-          <span class="dialog-header-close" onclick="closePrmsDialog();">&times</span>
+<!-- help-dialog -->
+<dialog id="help-dialog" class="shadow-menu" style="z-index: 10;">
+    <div class="dialog-header">
+        <span>Help!</span>
+        <span class="dialog-header-close" onclick="closeHelpDialog();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <p>
+            This page shows how to display graphical components in background, always present, even if other elements
+            are displayed on top.
+        </p>
+        <p>
+            Use the Background Parameters link in the menu to configure the globe.
+        </p>
+        <p>
+            Use the Show/Hide Computed Data button to display the computed data in the foreground.
+        </p>
+        <p>
+            The Marquee panel (available from the hamburger &#8801; menu) will show the same data, formatted,
+            in a dialog, on top of others.
+        </p>
+        <p>
+            <span style="font-style: italic; font-weight: bold;">Featuring:</span>
+        <ul>
+            <li>Web Components</li>
+            <li>Custom Tooltips</li>
+            <li>Custom Alerts</li>
+            <li>SVG</li>
+            <li>Celestial Calculations (all in ES6)</li>
+            <li>Copy-to-clipboard</li>
+            <li>etc !</li>
+        </ul>
+        </p>
+        <p>
+            Credits:<br/>
+            All celestial calculations are based on <a href="https://www.celnav.de/" target="HU" style="color: cyan;">Hening Umland</a>'s remarkable work.
+        </p>
+    </div>
+</dialog>
+
+<!-- BG parameters -->
+<dialog id="background-prms-dialog" class="shadow-menu" style="z-index: 10;">
+    <div class="dialog-header">
+        <span>Background Parameters...</span>
+        <span class="dialog-header-close" onclick="closePrmsDialog();">&times</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: auto auto; text-align: left;">
+        <div>Center on: <span class="switch-element">User Position</span></div>
+        <div class="switch-container" style="margin-left: -150px;" title="Sun or User">
+            <label class="switch switch-element">
+                <input id="pos-slider" type="checkbox" onchange="switchPos(this);">
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-element">Sun Position</span>
         </div>
+    </div>
 
-        <div style="display: grid; grid-template-columns: auto auto; text-align: left;">
-            <div>Center on: <span class="switch-element">User Position</span></div>
-            <div class="switch-container" style="margin-left: -150px;" title="Sun or User">
-                <label class="switch switch-element">
-                  <input id="sun-pos-slider" type="checkbox" onchange="switchPos(this);">
-                  <span class="slider round"></span>
-                </label>
-                <span class="switch-element">Sun Position</span>
-            </div>
+    <div style="margin-bottom: 10px; display: none;">
+        <button id="now" class="tooltip" onclick="updateUTCDate();">Now
+            <span class="tooltiptext">Set the date/time to the current one (aka now)</span>
+        </button>&nbsp;
+        <button id="compute" class="tooltip" onclick="compute();">Compute
+            <span class="tooltiptext">Compute data for the date set before</span>
+        </button>&nbsp;
+        <!--input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);"><small>Auto Refresh</small-->
+        Real Time
+        <div class="tooltip">
+            <label class="rocker rocker-small"
+                   style="margin-bottom: -15px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
+                <input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);">
+                <span class="switch-left">On</span>
+                <span class="switch-right">Off</span>
+            </label>
+            <span class="tooltiptext">Auto-refresh the date every second.</span>
         </div>
+    </div>
 
-        <div style="margin-bottom: 10px; display: none;">
-            <button id="now" class="tooltip" onclick="updateUTCDate();">Now
-                <span class="tooltiptext">Set the date/time to the current one (aka now)</span>
-            </button>&nbsp;
-            <button id="compute" class="tooltip" onclick="compute();">Compute
-                <span class="tooltiptext">Compute data for the date set before</span>
-            </button>&nbsp;
-            <!--input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);"><small>Auto Refresh</small-->
-            Real Time
-            <div class="tooltip">
-                <label class="rocker rocker-small" 
-                    style="margin-bottom: -15px;"> <!-- One way widget. Will NOT be notified of a change on the server. -->
-                    <input type="checkbox" id="auto-refresh" onchange="autoRefresh(this);">
-                    <span class="switch-left">On</span>
-                    <span class="switch-right">Off</span>
-                </label>
-                <span class="tooltiptext">Auto-refresh the date every second.</span>
-            </div>
-        </div>
-
-        <div>
-            <!--
-             |  WORLD MAP CTRL & Co
-             +-->
-            <div id="world-map-ctrl" title="Map Controls">
-                <div class="black-frame centered">
-                    <!--div class="switch-container" style="margin-left: 30px;" title="Simulate data">
-                        <label class="switch switch-element">
-                          <input id="transp-slider" type="checkbox" onchange="setSimulation(this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element" style="width: 150%; text-align: left;">Simulate Pressure and Heading</span>
-                    </div-->
-                    <!--input type="checkbox" onchange="setTransparency('world-map-01', this);"/>Transparent -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Make globe transparent">
-                        <label class="switch switch-element">
-                          <input id="transp-slider" type="checkbox" onchange="setTransparency('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Transparent Globe</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setGrid('world-map-01', this);" checked/>Grid -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display grid on the map">
-                        <label class="switch switch-element">
-                          <input id="grid-slider" type="checkbox" onchange="setGrid('world-map-01', this);" checked>
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Polar Grid</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setSun('world-map-01', this);" checked/>Sun -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display the Sun">
-                        <label class="switch switch-element">
-                          <input id="sun-slider" type="checkbox" onchange="setSun('world-map-01', this);" checked>
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Sun</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setMoon('world-map-01', this);" checked/>Moon -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display the Moon">
-                        <label class="switch switch-element">
-                          <input id="moon-slider" type="checkbox" onchange="setMoon('world-map-01', this);" checked>
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Moon</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setSunlight('world-map-01', this);"/>Sunlight -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display Sun light and Sun shadow">
-                        <label class="switch switch-element">
-                          <input id="sunlight-slider" type="checkbox" onchange="setSunlight('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Sun Light</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display Moon light and Moon shadow">
-                        <label class="switch switch-element">
-                          <input id="moonlight-slider" type="checkbox" onchange="setMoonlight('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Moon Light</span>
-                    </div>
-                    <!--input type="checkbox"
-                            onchange="withWanderingBodies = this.checked; setWanderingBodies('world-map-01', this);"/>Wandering bodies -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display wandering bodies">
-                        <label class="switch switch-element">
-                          <input id="wb-slider" type="checkbox" onchange="withWanderingBodies = this.checked; setWanderingBodies('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Wandering Bodies</span>
-                    </div>
-                    <!--input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>Stars -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display stars">
-                        <label class="switch switch-element">
-                          <input id="stars-slider" type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Display Stars</span>
-                    </div>
-                    <!--input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>Stars -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display constellations">
-                        <label class="switch switch-element">
-                          <input id="constellations-slider" type="checkbox" onchange="withConstellations = this.checked; setConstellations('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">With Constellations</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display polar circles and tropics">
-                        <label class="switch switch-element">
-                          <input id="tropic-slider" type="checkbox" onchange="setTropics('world-map-01', this);">
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Tropics &amp; Polar Circles</span>
-                    </div>
-                    <!--input type="checkbox" onchange="setSun('world-map-01', this);" checked/>Sun -->
-                    <div class="switch-container" style="margin-left: 30px;" title="Display the Foreground Solar Date/Time">
-                        <label class="switch switch-element">
-                          <input id="solar-slider" type="checkbox" onchange="setSolarDate('solar-jumbo-wrapper', this);" checked>
-                          <span class="slider round"></span>
-                        </label>
-                        <span class="switch-element">Solar Date Foreground</span>
-                    </div>
-
-                    <!--
-                    <br/>
-                    <input type="checkbox" id="geo-sat-01"/>GeoStationary Satellites
-                    <input type="checkbox" id="iss-01" title="Requires Internet connection"/>ISS
-                    <input type="checkbox" id="gps-sat-01"/>GPS Satellites in view
-                    <input type="checkbox" id="moon-sun-path-01"/>Moon to Sun
-                    -->
-                    <!--
-                    <br/>
-                    <input type="radio" name="proj-01" value="GLOBE" onchange="setProjection('world-map-01', this);" checked>Globe
-                    <input type="radio" name="proj-01" value="MERCATOR" onchange="setProjection('world-map-01', this);">Mercator
-                    <input type="radio" name="proj-01" value="ANAXIMANDRE" onchange="setProjection('world-map-01', this);">Square
-                    -->
+    <div>
+        <!--
+         |  WORLD MAP CTRL & Co
+         +-->
+        <div id="world-map-ctrl" title="Map Controls">
+            <div class="black-frame centered">
+                <!--div class="switch-container" style="margin-left: 30px;" title="Simulate data">
+                    <label class="switch switch-element">
+                      <input id="transp-slider" type="checkbox" onchange="setSimulation(this);">
+                      <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element" style="width: 150%; text-align: left;">Simulate Pressure and Heading</span>
+                </div-->
+                <!--input type="checkbox" onchange="setTransparency('world-map-01', this);"/>Transparent -->
+                <div class="switch-container" style="margin-left: 30px;" title="Make globe transparent">
+                    <label class="switch switch-element">
+                        <input id="transp-slider" type="checkbox" onchange="setTransparency('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Transparent Globe</span>
                 </div>
+                <!--input type="checkbox" onchange="setGrid('world-map-01', this);" checked/>Grid -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display grid on the map">
+                    <label class="switch switch-element">
+                        <input id="grid-slider" type="checkbox" onchange="setGrid('world-map-01', this);" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Polar Grid</span>
+                </div>
+                <!--input type="checkbox" onchange="setSun('world-map-01', this);" checked/>Sun -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display the Sun">
+                    <label class="switch switch-element">
+                        <input id="sun-slider" type="checkbox" onchange="setSun('world-map-01', this);" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Sun</span>
+                </div>
+                <!--input type="checkbox" onchange="setMoon('world-map-01', this);" checked/>Moon -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display the Moon">
+                    <label class="switch switch-element">
+                        <input id="moon-slider" type="checkbox" onchange="setMoon('world-map-01', this);" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Moon</span>
+                </div>
+                <!--input type="checkbox" onchange="setSunlight('world-map-01', this);"/>Sunlight -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display Sun light and Sun shadow">
+                    <label class="switch switch-element">
+                        <input id="sunlight-slider" type="checkbox" onchange="setSunlight('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Sun Light</span>
+                </div>
+                <!--input type="checkbox" onchange="setMoonlight('world-map-01', this);"/>Moonlight -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display Moon light and Moon shadow">
+                    <label class="switch switch-element">
+                        <input id="moonlight-slider" type="checkbox" onchange="setMoonlight('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Moon Light</span>
+                </div>
+                <!--input type="checkbox"
+                        onchange="withWanderingBodies = this.checked; setWanderingBodies('world-map-01', this);"/>Wandering bodies -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display wandering bodies">
+                    <label class="switch switch-element">
+                        <input id="wb-slider" type="checkbox" onchange="withWanderingBodies = this.checked; setWanderingBodies('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Wandering Bodies</span>
+                </div>
+                <!--input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>Stars -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display stars">
+                    <label class="switch switch-element">
+                        <input id="stars-slider" type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Display Stars</span>
+                </div>
+                <!--input type="checkbox" onchange="withStars = this.checked; setStars('world-map-01', this);"/>Stars -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display constellations">
+                    <label class="switch switch-element">
+                        <input id="constellations-slider" type="checkbox" onchange="withConstellations = this.checked; setConstellations('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">With Constellations</span>
+                </div>
+                <!--input type="checkbox" onchange="setTropics('world-map-01', this);"/>Tropics -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display polar circles and tropics">
+                    <label class="switch switch-element">
+                        <input id="tropic-slider" type="checkbox" onchange="setTropics('world-map-01', this);">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Tropics &amp; Polar Circles</span>
+                </div>
+                <!--input type="checkbox" onchange="setSun('world-map-01', this);" checked/>Sun -->
+                <div class="switch-container" style="margin-left: 30px;" title="Display the Foreground Solar Date/Time">
+                    <label class="switch switch-element">
+                        <input id="solar-slider" type="checkbox" onchange="setSolarDate('solar-jumbo-wrapper', this);" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-element">Solar Date Foreground</span>
+                </div>
+
+                <!--
+                <br/>
+                <input type="checkbox" id="geo-sat-01"/>GeoStationary Satellites
+                <input type="checkbox" id="iss-01" title="Requires Internet connection"/>ISS
+                <input type="checkbox" id="gps-sat-01"/>GPS Satellites in view
+                <input type="checkbox" id="moon-sun-path-01"/>Moon to Sun
+                -->
+                <!--
+                <br/>
+                <input type="radio" name="proj-01" value="GLOBE" onchange="setProjection('world-map-01', this);" checked>Globe
+                <input type="radio" name="proj-01" value="MERCATOR" onchange="setProjection('world-map-01', this);">Mercator
+                <input type="radio" name="proj-01" value="ANAXIMANDRE" onchange="setProjection('world-map-01', this);">Square
+                -->
             </div>
         </div>
-        
-    </dialog>    
+    </div>
 
-    <!-- Marquee values -->
-    <dialog id="marquee-dialog" class="shadow-menu" style="z-index: 10;">
-        <div class="dialog-header">
-            <span>Astro Data Marquee</span>
-            <span class="dialog-header-close" onclick="closeMarqueeDialog();">&times</span>
+</dialog>
+
+<!-- Marquee values -->
+<dialog id="marquee-dialog" class="shadow-menu" style="z-index: 10;">
+    <div class="dialog-header">
+        <span>Astro Data Marquee</span>
+        <span class="dialog-header-close" onclick="closeMarqueeDialog();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <!-- See defaultMarqueeTextArray -->
+        <marquee-panel id="marquee-panel-01"
+                       class="marquee-01"
+                       width="600"
+                       height="350"
+                       nb-cols="200"
+                       nb-lines="68"
+                       title="Computed Data"
+                       display-data='{ "text-array": ["You must have", "triggered a computation", "to see something", "in here..."], "x": 4, "y": 12 }'/>
+    </div>
+</dialog>
+
+<!-- Sun Path - Draggable dialog (drag it from the header)
+    See in window.onload the
+    ondragover, ondrop functions.
+-->
+<dialog id="sun-path-dialog"
+        class="shadow-menu"
+        style="z-index: 10; width: 470px;" >
+    <!--
+    draggable="true"
+    ondragstart="dragStartSP(event)"
+    ondrag="draggingSP(event)"> -->
+    <!-- Draggable header -->
+    <div class="dialog-header"
+         draggable="true"
+         ondragstart="dragStartSP(event)"
+         ondrag="draggingSP(event)">
+        <span>Sun Path</span> <!-- This is tweaked by the window.onload -->
+        <span id="sun-path-header-title" style="color: rgba(255, 255, 255, 0.25); font-size: 14px;"></span>
+        <span class="dialog-header-close" onclick="closeSunPathDialog();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <div class="switch-container" style="margin-left: 30px; margin-top: 10px;" title="Boat Heading">
+            <label class="switch switch-element">
+                <input id="use-boat-heading" type="checkbox" onchange="setUseBoatHeading(this, 'sun-path-01', 'z-offset');">
+                <span class="slider round"></span>
+            </label>
+            <span class="switch-element"><small>Use Boat Heading</small></span>
         </div>
-        <div style="margin-bottom: 10px;">
-            <!-- See defaultMarqueeTextArray -->
-            <marquee-panel id="marquee-panel-01"
-                        class="marquee-01"
-                        width="600"
-                        height="350"
-                        nb-cols="200"
-                        nb-lines="68"
-                        title="Computed Data"
-                        display-data='{ "text-array": ["You must have", "triggered a computation", "to see something", "in here..."], "x": 4, "y": 12 }'/>
-        </div>    
-    </dialog>
+        <table style="width: 98%;">
+            <tr>
+                <td>
+                    <div class="black-frame centered">
+                        <sun-path id="sun-path-01"
+                                  class="sun-path-01"
+                                  width="450"
+                                  height="450"
+                                  tilt="-10"></sun-path>
+                    </div>
+                </td>
+                <td>
+                    <input type="range"
+                           style="/*-webkit-appearance: slider-vertical;*/ writing-mode: vertical-lr; width: 8px; height: 440px; margin-left: 0;"
+                           min="-90"
+                           max="90"
+                           value="-10"
+                           onchange="setNewTilt(this, 'sun-path-01');">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <!--range was [-90, 90], now [-180, 180] -->
+                    <input type="range"
+                           id="z-offset"
+                           style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;"
+                           min="-180"
+                           max="180"
+                           value="0"
+                           onchange="setNewZOffset(this, 'sun-path-01');">
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</dialog>
 
-    <!-- Sun Path - Draggable dialog (drag it from the header)
-        See in window.onload the 
-        ondragover, ondrop functions.
-    -->
-    <dialog id="sun-path-dialog" 
-            class="shadow-menu" 
-            style="z-index: 10; width: 470px;" >
-            <!--
-            draggable="true"
-            ondragstart="dragStartSP(event)" 
-            ondrag="draggingSP(event)"> -->
-        <!-- Draggable header -->
-        <div class="dialog-header"
-             draggable="true"
-             ondragstart="dragStartSP(event)" 
-             ondrag="draggingSP(event)">
-            <span>Sun Path</span> <!-- This is tweaked by the window.onload -->
-            <span id="sun-path-header-title" style="color: rgba(255, 255, 255, 0.25); font-size: 14px;"></span>
-            <span class="dialog-header-close" onclick="closeSunPathDialog();">&times</span>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <table style="width: 98%;">
-                <tr>
-                    <td>
-                        <div class="black-frame centered">
-                            <sun-path id="sun-path-01"
-                                      class="sun-path-01"
-                                      width="450"
-                                      height="450"
-                                      tilt="-10"></sun-path>
-                        </div>    
-                    </td>
-                    <td>
-                        <input type="range"
-                               style="-webkit-appearance: slider-vertical; width: 8px; height: 440px; margin-left: 0;" 
-                               min="-90"
-                               max="90" 
-                               value="-10" 
-                               onchange="setNewTilt(this, 'sun-path-01');">
-                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="range" style="/*width: 566px;*/ width: 450px; height: 8px; margin-left: 0;" 
-                               min="-90" 
-                               max="90" 
-                               value="0"
-                               onchange="setNewZOffset(this, 'sun-path-01');">
-                    </td>
-                    <td></td>
-                </tr>
-            </table>
-        </div>
-    </dialog>
+<dialog id="sky-map-dialog"
+        class="shadow-menu"
+        style="z-index: 10; width: 820px;" >
+    <!--
+    draggable="true"
+    ondragstart="dragStartSP(event)"
+    ondrag="draggingSP(event)"> -->
+    <!-- Draggable header -->
+    <div class="dialog-header"
+         draggable="true"
+         ondragstart="dragStartSM(event)"
+         ondrag="draggingSM(event)">
+        <span>Sky Map(s)</span> <!-- This is tweaked by the window.onload -->
+        <span id="sky-map-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
+        <span class="dialog-header-close" onclick="closeSkyMapDialog();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <table style="width: 98%;">
+            <tr>
+                <td>
+                    <div class="black-frame centered">
+                        <!-- Sky Map goes here -->
+                        <sky-map id="sky-map-01"
+                                 class="skymap-display-01"
+                                 width="800"
+                                 height="500"
+                                 latitude="35"/>
+                    </div>
+                    Type:
+                    <select onchange="setMapType('sky-map-01', this);">
+                        <option value="STARFINDER" selected>Star Finder</option>
+                        <option value="SKYMAP">Sky Map</option>
+                    </select>
+                    <br/>
+                    <div style="display: grid; grid-template-columns: auto auto auto auto;">
+                        <span><input type="checkbox" onchange="setWithStars('sky-map-01', this);" checked>Stars.</span>
+                        <span><input type="checkbox" onchange="setWithConst('sky-map-01', this);" checked>Const.</span>
+                        <span><input type="checkbox" onchange="setStarNames('sky-map-01', this);" checked>Star Names.</span>
+                        <span><input type="checkbox" onchange="setConstNames('sky-map-01', this);">Const Names.</span>
 
-    <dialog id="sky-map-dialog"
-            class="shadow-menu" 
-            style="z-index: 10; width: 820px;" >
-            <!--
-            draggable="true"
-            ondragstart="dragStartSP(event)" 
-            ondrag="draggingSP(event)"> -->
-        <!-- Draggable header -->
-        <div class="dialog-header"
-             draggable="true"
-             ondragstart="dragStartSM(event)" 
-             ondrag="draggingSM(event)">
-            <span>Sky Map(s)</span> <!-- This is tweaked by the window.onload -->
-            <span id="sky-map-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
-            <span class="dialog-header-close" onclick="closeSkyMapDialog();">&times</span>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <table style="width: 98%;">
-                <tr>
-                    <td>
-                        <div class="black-frame centered"> 
-                            <!-- Sky Map goes here -->
-                            <sky-map id="sky-map-01"
-                                    class="skymap-display-01"
-                                    width="800"
-                                    height="500"
-                                    latitude="35"/>
-                        </div>    
-                        Type:
-                        <select onchange="setMapType('sky-map-01', this);">
-                            <option value="STARFINDER" selected>Star Finder</option>
-                            <option value="SKYMAP">Sky Map</option>
-                        </select>
-                        <br/>
-                        <div style="display: grid; grid-template-columns: auto auto auto auto;">
-                            <span><input type="checkbox" onchange="setWithStars('sky-map-01', this);" checked>Stars.</span>
-                            <span><input type="checkbox" onchange="setWithConst('sky-map-01', this);" checked>Const.</span>
-                            <span><input type="checkbox" onchange="setStarNames('sky-map-01', this);" checked>Star Names.</span>
-                            <span><input type="checkbox" onchange="setConstNames('sky-map-01', this);">Const Names.</span>
+                        <span><input type="checkbox" onchange="setVisibleSky('sky-map-01', this);" checked>Visible sky.</span>
+                        <span><input type="checkbox" onchange="setSkyGrid('sky-map-01', this);" checked>Sky grid.</span>
+                        <span><input type="checkbox" onchange="setWanderingBodiesSM('sky-map-01', this);">Wandering bodies.</span>
+                        <span><input type="checkbox" onchange="setAriesLHASM('sky-map-01', this);">Aries LHA.</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</dialog>
 
-                            <span><input type="checkbox" onchange="setVisibleSky('sky-map-01', this);" checked>Visible sky.</span>
-                            <span><input type="checkbox" onchange="setSkyGrid('sky-map-01', this);" checked>Sky grid.</span>
-                            <span><input type="checkbox" onchange="setWanderingBodiesSM('sky-map-01', this);">Wandering bodies.</span>
-                            <span><input type="checkbox" onchange="setAriesLHASM('sky-map-01', this);">Aries LHA.</span>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </dialog>
+<dialog id="celestial-sphere-dialog"
+        class="shadow-menu"
+        style="z-index: 10; width: 820px;" >
+    <!--
+    draggable="true"
+    ondragstart="dragStartSP(event)"
+    ondrag="draggingSP(event)"> -->
+    <!-- Draggable header -->                          <!-- AT WORK !!! -->
+    <div class="dialog-header"
+         draggable="true"
+         ondragstart="dragStartCS(event)"
+         ondrag="draggingCS(event)">
+        <span>The sky above the boat</span> <!-- This is tweaked by the window.onload -->
+        <span id="celestial-sphere-header-title" style="color: rgba(255, 255, 255, 0.25);"></span>
+        <span class="dialog-header-close" onclick="closeCelestialSphereDialog();">&times</span>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <table style="width: 98%;">
+            <tr>
+                <td>
+                    <div class="black-frame centered">
+                        <!-- Celestial Sphere goes here -->
+                        <celestial-sphere id="celestial-sphere-01"
+                                          class="celestial-sphere-display-01"
+                                          width="800"
+                                          height="500"
+                                          latitude="35"
+                                          longitude="-3"
+                                          heading="0"
+                                          use-heading="false"/>
+                    </div>
+                    <div style="display: grid; grid-template-columns: auto auto auto auto;">
+                        <span><input type="checkbox" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
+                        <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Constellations.</span>
+                        <span><input type="checkbox" onchange="setStarNames('celestial-sphere-01', this);" checked>Star Names.</span>
+                        <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
 
-  <!--
-    The Big Main Menu on the left
+                        <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
+                        <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Show Boat Heading.</span>
+                        <span>
+                                <select onchange="setBoatShape('celestial-sphere-01', this);" style="padding: 5px; border-radius: 5px;">
+                                    <option value="MONO">Monohull</option>
+                                    <option value="CATA">Catamaran</option>
+                                    <option value="TRI">Trimaran</option>
+                                    <option value="PLANE">Plane</option>
+                                </select>
+                            </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</dialog>
 
-    ◄ = &#9668;
-    ► = &#9658;
-    ▼ = &#9660;
-    ▲ = &#9650;
-  -->
-<div id="side-nav" class="sidenav" onmouseleave="closeNav()"> 
+<!--
+  The Big Main Menu on the left
+
+  ◄ = &#9668;
+  ► = &#9658;
+  ▼ = &#9660;
+  ▲ = &#9650;
+-->
+<div id="side-nav" class="sidenav" onmouseleave="closeNav()">
     <a href="javascript:void(0)" id="close-nav-button" class="closebtn" onclick="closeNav()">&times;</a>
 
     <a href="javascript:void(0)" class="active-link list-link" style="margin-top: 20px; margin-right: 20px; text-align: right;" onclick="showHelpDialog();">Help!</a>
@@ -1502,8 +1585,9 @@ let toggleForeground = () => {
     <a href="javascript:void(0)" class="active-link list-link" onclick="showMarqueeDialog();">Marquee Panel</a>
     <hr style="color: rgb(192,192,192, 0.5); width: 90%;"/>
     <span>
-        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSunPathDialog();" title="Can take time...&#13;Be patient.">Sun Path</a> 
+        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSunPathDialog();" title="Can take time...&#13;Be patient.">Sun Path</a>
         <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showSkyMapDialog();" title="Can take time...&#13;Be patient.">Sky Map</a>
+        <a href="javascript:void(0)" class="active-link list-link" style="display: inline;" onclick="showCelestialSphereDialog();" title="Celestial Sphere.&#13;Can take time...&#13;Be patient.">Celest.&nbsp;Sphere</a>
     </span>
     <hr style="color: rgb(192,192,192, 0.5); width: 90%;"/>
     <!--a href="javascript:void(0)" class="active-link" style="margin-top: 20px;">More links here, some day...</a>
@@ -1515,9 +1599,9 @@ let toggleForeground = () => {
 
 <div style="display: grid; grid-template-columns: auto auto;" title="Single Page Application with Background SVG &amp; Web Components">
     <div><h1 style="vertical-align: top; margin-top: 0; font-style: normal; text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;"><span style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> As seen from Space...</h1></div>
-    <div style="text-align: right;"><small>Last code update December 4, 2025, 07:00 CET</small></div>
+    <div style="text-align: right;"><!--small>Last code update December 4, 2025, 07:00 CET</small--></div>
 </div>
-<div class="background bg-container" 
+<div class="background bg-container"
      style="margin: 10px; margin-top: 50px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 10px;">
     <!--
         WORLD MAP BG
@@ -1553,7 +1637,7 @@ let toggleForeground = () => {
                        label="BSP"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- COG -->               
+        <!-- COG -->
         <jumbo-display id="jumbo-03"
                        title="Course Over Ground"
                        class="jumbo-01 digital-font-red zero-decimal"
@@ -1561,7 +1645,7 @@ let toggleForeground = () => {
                        label="COG"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- SOG -->               
+        <!-- SOG -->
         <jumbo-display id="jumbo-04"
                        title="Speed Over Ground"
                        class="jumbo-01 digital-font-cyan one-decimal"
@@ -1569,7 +1653,7 @@ let toggleForeground = () => {
                        label="SOG"
                        width="180"
                        height="80"></jumbo-display>
-        <!-- MOON PHASE and TILT -->                
+        <!-- MOON PHASE and TILT -->
         <moon-phase-2 id="moon-phase-01"
                       width="180"
                       height="180"
@@ -1591,7 +1675,7 @@ let toggleForeground = () => {
                               justified="RIGHT"
                               nb-dec="1"
                               value="----.-"></scroll-digit-display>
-        <div style="margin-top: 50px; margin-top: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">Sun & Moon</div>                      
+        <div style="margin-top: 50px; margin-top: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">Sun & Moon</div>
         <!--div id="sru-elev-z" style="margin-top: 10px; text-align: left; color: rgba(0, 255, 255, 0.5);"-->
         <div id="sru-elev-z" style="margin-top: 0px; display: grid; grid-template-columns: auto auto;">
             <!-- Sun Z -->
@@ -1645,7 +1729,7 @@ let toggleForeground = () => {
                                 justified="LEFT"
                                 title="UTC Time"
                                 value="00:00:00 UTC"></split-flap-display>
-        </div>    
+        </div>
     </div>
 
     <div class="centered" style="grid-area: solar">
@@ -1667,7 +1751,7 @@ let toggleForeground = () => {
                                 justified="LEFT"
                                 title="Solar Time"
                                 value="00:00:00"></split-flap-display>
-        </div>    
+        </div>
     </div>
 
 </div>
@@ -1685,13 +1769,13 @@ let toggleForeground = () => {
                 <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                     <div id="user-help-switch" onclick="expandCollapseHelpData();" title="Click to expand/collase"
                          style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="help-char">&#9658;</span> Help !</div>
-                        <div id="user-help-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
-                            <i>How-to:</i> Use the hamburger (&#8801;) at the top left to set the background parameters (Wandering bodies, Sunlight, Real Time...)
-                            <br/>
-                            Then you can show or hide the computed data... And you can use the "Help" in the sliding menu.
-                        </div>
-                    </div>    
-                </td>
+                    <div id="user-help-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
+                        <i>How-to:</i> Use the hamburger (&#8801;) at the top left to set the background parameters (Wandering bodies, Sunlight, Real Time...)
+                        <br/>
+                        Then you can show or hide the computed data... And you can use the "Help" in the sliding menu.
+                    </div>
+                </div>
+            </td>
             </td>
         </tr>
         <tr>
@@ -1738,7 +1822,7 @@ let toggleForeground = () => {
                             min="0"
                             max="180"
                             step="1"
-                            value="122"/> 
+                            value="122"/>
                         <input type="number"
                             id="pos-lng-min-01"
                             placeholder="Minutes"
@@ -1747,39 +1831,39 @@ let toggleForeground = () => {
                             min="0"
                             max="59.99"
                             step="0.01"
-                            value="30.42"/> 
+                            value="30.42"/>
                         &nbsp;&nbsp;
                         <button id="update-position"
-                                class="tooltip" 
+                                class="tooltip"
                                 onclick="updatePosition();"
                                 style="margin-top: 3px;">Set Position
                             <span class="tooltiptext tooltiptext-right">Set position value on the map</span>
                         </button>
                         <br/-->
-                        <!-- Enable Geolocation APIs -->        
-                        <!--div class="switch-container" style="margin-left: 30px;" title="Enable GeoLocation APIs">
-                            <label class="switch switch-element">
-                              <input id="geoloc-slider" type="checkbox" onchange="setGeolocation(this);">
-                              <span class="slider round"></span>
-                            </label>
-                            <span class="switch-element">Enable GeoLocation</span>
+                    <!-- Enable Geolocation APIs -->
+                    <!--div class="switch-container" style="margin-left: 30px;" title="Enable GeoLocation APIs">
+                        <label class="switch switch-element">
+                          <input id="geoloc-slider" type="checkbox" onchange="setGeolocation(this);">
+                          <span class="slider round"></span>
+                        </label>
+                        <span class="switch-element">Enable GeoLocation</span>
+                    </div>
+                    <div id="geo-mess" style="display: none;"><small style="font-style: italic; color: yellow;">(hit "Set Position" when GeoLocation is obtained)</small></div>
+
+                    <div id="url-placeHolder" style="display: none;">
+                        <div id="alert-zone" class="smooth" style="padding: 2px; border: 1px solid red; border-radius: 5px; padding: 5px;">
+                            <div id="alert-mess" style="color: green; background-color: orange; border-radius: 5px; padding: 5px;"></div>
                         </div>
-                        <div id="geo-mess" style="display: none;"><small style="font-style: italic; color: yellow;">(hit "Set Position" when GeoLocation is obtained)</small></div>
-    
-                        <div id="url-placeHolder" style="display: none;">
-                            <div id="alert-zone" class="smooth" style="padding: 2px; border: 1px solid red; border-radius: 5px; padding: 5px;">
-                                <div id="alert-mess" style="color: green; background-color: orange; border-radius: 5px; padding: 5px;"></div>
-                            </div>    
-                    
-                            <div style="display: grid; grid-template-columns: auto auto auto; align-items: center; border: 1px solid rgba(128, 128, 128, 0.75); border-radius: 5px; margin: 5px; padding: 3px;">
-                                <small style="text-align: right;">Bookmark this URL:</small>
-                                <div id="url-to-bookmark" class="bookmark" style="white-space: nowrap; overflow-x: scroll; height: fit-content;"></div>
-                                <button onclick="copyToClipboard('url-to-bookmark')" style="max-width: 55px; padding: 4px;">
-                                    <img src="icons8-copy-to-clipboard-50.png" style="width: 40px; height: auto;" title="Copy URL to Clipboard">
-                                </button>
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: auto auto auto; align-items: center; border: 1px solid rgba(128, 128, 128, 0.75); border-radius: 5px; margin: 5px; padding: 3px;">
+                            <small style="text-align: right;">Bookmark this URL:</small>
+                            <div id="url-to-bookmark" class="bookmark" style="white-space: nowrap; overflow-x: scroll; height: fit-content;"></div>
+                            <button onclick="copyToClipboard('url-to-bookmark')" style="max-width: 55px; padding: 4px;">
+                                <img src="icons8-copy-to-clipboard-50.png" style="width: 40px; height: auto;" title="Copy URL to Clipboard">
+                            </button>
                         </div>
-                    </div-->
+                    </div>
+                </div-->
                 </div>
             </td>
             <td style="vertical-align: top; min-width: 50px; max-width: 55px; width: 50px; border: 0px solid silver; border-radius: 4px;" rowspan="2">
@@ -1790,7 +1874,7 @@ let toggleForeground = () => {
             <td style="vertical-align: top;" colspan="1">
                 <div style="border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                     <div id="user-date-switch" onclick="expandCollapseDateData();" title="Click to expand/collase"
-                        style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="date-char">&#9658;</span> <!--UTC Date, and --> Options</div>
+                         style="margin: 3px; padding-left: 5px; padding-right: 5px; cursor: pointer;"><span id="date-char">&#9658;</span> <!--UTC Date, and --> Options</div>
 
                     <div id="user-date-widgets" class="smooth" style="padding: 2px; border: 1px solid rgba(0, 255, 255, 0.25); border-radius: 5px;">
                         <!--small>Enter UTC date and time, then click the Compute button (in the background parameters).</small-->
@@ -1821,30 +1905,30 @@ let toggleForeground = () => {
                             <!--input type="checkbox" id="no-planet"><small>Skip planets calculations</small-->
                             <div class="switch-container" style="margin-left: 30px; margin-top: 10px;" title="Planet Calculation">
                                 <label class="switch switch-element">
-                                  <input id="no-planet" type="checkbox">
-                                  <span class="slider round"></span>
+                                    <input id="no-planet" type="checkbox">
+                                    <span class="slider round"></span>
                                 </label>
                                 <span class="switch-element"><small>Skip planets calculations</small></span>
                             </div>
                             <!--input type="checkbox" id="no-star"><small>Skip stars calculations</small-->
                             <div class="switch-container" style="margin-left: 30px;" title="Star Calculation">
                                 <label class="switch switch-element">
-                                  <input id="no-star" type="checkbox">
-                                  <span class="slider round"></span>
+                                    <input id="no-star" type="checkbox">
+                                    <span class="slider round"></span>
                                 </label>
                                 <span class="switch-element"><small>Skip stars calculations</small></span>
                             </div>
                             <!--input type="checkbox" id="verbose" onchange="verbose(this);"><small>Console Verbose</small-->
                             <div class="switch-container" style="margin-left: 30px;" title="Console verbose">
                                 <label class="switch switch-element">
-                                  <input id="verbose" type="checkbox" onchange="verbose(this);">
-                                  <span class="slider round"></span>
+                                    <input id="verbose" type="checkbox" onchange="verbose(this);">
+                                    <span class="slider round"></span>
                                 </label>
                                 <span class="switch-element"><small>Console verbose</small></span>
                             </div>
                         </div>
-                    </div>    
-                </div>    
+                    </div>
+                </div>
             </td>
         </tr>
     </table>
@@ -2030,7 +2114,7 @@ let toggleForeground = () => {
                 let phaseDivImage = document.getElementById('moon-phase-div');
                 phaseDivImage.innerHTML =
                     `<img src='${phaseImageName}' alt='${testResult.moon.phase.phaseAngle}' title='Phase ${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}&#13;Illum ${testResult.moon.illum.toFixed(0) + '%'}'><br/><small>Phase&nbsp;${testResult.moon.phase.phaseAngle.toFixed(0) + '&deg'}<br/>Illum&nbsp;${testResult.moon.illum.toFixed(0) + '%'}</small>`;
-                // phaseDivImage.title = `Phase ${testResult.moon.phase.phaseAngle.toFixed(0)}\272`;    
+                // phaseDivImage.title = `Phase ${testResult.moon.phase.phaseAngle.toFixed(0)}\272`;
             }
         } catch (oops) {
             console.log(oops);
@@ -2071,20 +2155,20 @@ let toggleForeground = () => {
         let bigUTCJumbo = document.getElementById('jumbo-plus-01');
         bigUTCJumbo.value = `${lpad(solarDate.day.toFixed(0), '0', 2)} ${MONTHS[solarDate.month - 1]} ${solarDate.year.toFixed(0)}` +
                             `|${lpad(solarDate.hour.toFixed(0), '0', 2)}:${lpad(solarDate.minute.toFixed(0), '0', 2)}:${lpad(solarDate.second.toFixed(0), '0', 2)}`;
-        bigUTCJumbo.label = 'Solar, from ' + // 'Solar Date & Time from ' + 
+        bigUTCJumbo.label = 'Solar, from ' + // 'Solar Date & Time from ' +
             decToSex(userPos.latitude, "NS") + " / " +
             decToSex(userPos.longitude, "EW");
         bigUTCJumbo.repaint();
 
         // Moon-tilt
         // userPos.latitude, userPos.longitude
-        let moonTilt = getMoonTilt({lat: userPos.latitude, lng: userPos.longitude}, 
-							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw}, 
+        let moonTilt = getMoonTilt({lat: userPos.latitude, lng: userPos.longitude},
+							{gha: testResult.sun.GHA.raw, dec: testResult.sun.DEC.raw},
 							{gha: testResult.moon.GHA.raw, dec: testResult.moon.DEC.raw});
         // console.log(`Moon Tilt: ${moonTilt}`);
         let moonPhase = document.getElementById('moon-phase-01');
         moonPhase.phase = testResult.moon.phase.phaseAngle;
-        moonPhase.tilt = moonTilt;   
+        moonPhase.tilt = moonTilt;
         let illum = `${testResult.moon.illum.toFixed(0)} %`;
         moonPhase.title = `Tilt:${moonTilt.toFixed(1)}°\nIllum:${illum}`; // Update tooltip
 		// Update small label
@@ -2179,7 +2263,7 @@ let toggleForeground = () => {
     // Display real COG
     let hdg = 0;
     let prmsl = 1013.5;
-    
+
     // Random Simulation
     let sensorUpdater = () => {
         // Display real COG
@@ -2196,7 +2280,7 @@ let toggleForeground = () => {
             // _hdg %= 360;
             while (_hdg < 0) {
                 _hdg += 360;
-            } 
+            }
             while (_hdg >= 360) {
                 _hdg -= 360;
             }
@@ -2323,6 +2407,19 @@ let toggleForeground = () => {
     let extraDrawingSunPath = (sp, context) => {
         // console.log("Extra Sun Path drawings");
         // globalAstroData
+        if (useBoatHeading) {
+            // console.log("Using boat heading for sun path...");
+            // Defaul zOffset = 0 => hdg=180;
+            // TODO Maybe some love needed here...
+            // For now hdg = cog
+            if (sp.invertX == -1) { // Pointing north
+                sp._zOffset = hdg.toFixed(0);
+            } else { // Pointing south, default
+                let offset = 180 - hdg.toFixed(0);
+                sp._zOffset = offset;
+            }
+        }
+        // console.log(`Sun Path: zOffset=${sp._zOffset}, invertX=${sp.invertX} (hdg: ${hdg})`);
         try {
             let withStars = document.getElementById("stars-slider").checked;
             if (withStars && globalAstroData.stars !== undefined) {
@@ -2338,7 +2435,7 @@ let toggleForeground = () => {
                 let radius = (sp.canvas.width / 2) * .8;
 
                 // Draw forward / backwards half circle...
-                if (globalSRUStars.length > 0) { 
+                if (globalSRUStars.length > 0) {
                     context.save()
                     context.strokeStyle = 'orange'; // sp.sunPathColorConfig.gridColor;
                     context.beginPath();
@@ -2364,7 +2461,8 @@ let toggleForeground = () => {
                             z += 360;
                         }
                         // Do not display stars behind...
-                        if (isWithin90degrees(z, star.z)) { // (star.z > (z - 90) && star.z < (z + 90)) { 
+                        // TODO ? An Option ?
+                        if (isWithin90degrees(z, star.z)) { // (star.z > (z - 90) && star.z < (z + 90)) {
                             sp.plotCelestialBody(context, center, radius, 'white', 'white', star.h, star.z, star.name, false);
                         }
                     }
@@ -2449,6 +2547,9 @@ let toggleForeground = () => {
                 // userPos.latitude = val.lat;
                 // userPos.longitude = val.lng;
                 setUserPos(val.lat, val.lng); // Update the user position
+
+                document.getElementById('celestial-sphere-01').latitude = val.lat;
+                document.getElementById('celestial-sphere-01').longitude = val.lng;
             }
         });
         // events.subscribe(MARKERS, val => {
@@ -2501,7 +2602,7 @@ let toggleForeground = () => {
         // });
         // events.subscribe(ROUTES, val => {
         //     // TODO Manage this
-        //     // console.log(`Routes subscription: ${JSON.stringify(val)}`); 
+        //     // console.log(`Routes subscription: ${JSON.stringify(val)}`);
         // });
         // events.subscribe(AIS, val => {  // Possibly contains threats
         //     aisTargets = [];
@@ -2537,12 +2638,12 @@ let toggleForeground = () => {
         //             // console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
 
         //             aisTargets.push({
-        //                 mmsi: keys[i], 
-        //                 vesselName: vesselName, 
-        //                 lat: recContent.latitude, 
-        //                 lng: recContent.longitude, 
-        //                 cog: recContent.cog, 
-        //                 sog: recContent.sog, 
+        //                 mmsi: keys[i],
+        //                 vesselName: vesselName,
+        //                 lat: recContent.latitude,
+        //                 lng: recContent.longitude,
+        //                 cog: recContent.cog,
+        //                 sog: recContent.sog,
         //                 radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
         //                 threat: rec18.collisionThreat !== null,
         //                 bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
@@ -2577,12 +2678,14 @@ let toggleForeground = () => {
             // document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
             // document.getElementById('cog').value = val;
             document.getElementById('jumbo-03').value = val;
+            document.getElementById('celestial-sphere-01').heading = val;
             cog = val;
         });
         events.subscribe(TRUE_HDG, val => {
             // document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
             hdg = val; // Managed in repaint
-            // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`); 
+            // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`);
+            document.getElementById('celestial-sphere-01').heading = val;
         });
         events.subscribe(BSP, val => {
             // document.getElementById('bsp').innerHTML = `${val} kn`;
@@ -2641,6 +2744,8 @@ let toggleForeground = () => {
 
         document.getElementById('sun-path-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
         document.getElementById('sky-map-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+        document.getElementById('celestial-sphere-header-title').innerText = (navigator.userAgent.indexOf("Chrome") > -1 ? "(draggable header)" : "");
+
 
         console.log('On Load, done!');
     };

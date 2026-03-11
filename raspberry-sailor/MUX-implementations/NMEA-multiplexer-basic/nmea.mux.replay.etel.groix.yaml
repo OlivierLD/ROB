@@ -6,6 +6,7 @@ description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.
   - Markers and Borders tests
+  - WebUI is available. Check out http://machine:8080/web/index.html
 context:
   with.http.server: true
   http.port: 8080
