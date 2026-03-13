@@ -335,7 +335,7 @@ and even stars if you wish.
 There is also a "Sky Map" option:  
 ![From Space](./docimg/from.space.05.png)  
 That will show two kinds of sky maps, the StarFinder (2102-D), used for navigation, and 
-another one (like the famous Sirius SkyMap), used in astronomy.  
+another one (like the famous Sirius SkyMap, look for "Carte du ciel Sirius"), used in astronomy.  
 ![From Space](./docimg/from.space.06.png)  
 Notice - on the Sky Map - that here, the South is on top... wierd, no? This is because that one is to be held above your head, facing down.
 This way, what you see from under the map matches what you see from under the sky ;).    
