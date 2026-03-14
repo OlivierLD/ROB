@@ -74,7 +74,7 @@ class CelestialSphere extends HTMLElement {
 			"heading",                // Boat (true) heading (N, 0 by default)
 			"use-heading",            // true or false. Heading North (0 true) if false
 			"boat-shape"              // MONO, CATA, TRI, PLANE
-			// TODO a zoom factor
+			// TODO a zoom factor?
 		];
 	}
 
