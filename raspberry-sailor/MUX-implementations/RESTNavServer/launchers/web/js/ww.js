@@ -28,7 +28,7 @@ if (typeof(errManager) !== 'function') {
 
 var ONE_MINUTE = 60000; // in ms.
 var DEFAULT_TIMEOUT = 5 * ONE_MINUTE; // 120000: 2 minutes, 300000: 5 minutes
-var WW_VERBOSE = false;
+var WW_VERBOSE = true;
 
 /*
  * Demo features
@@ -129,6 +129,9 @@ function getPromise(url,                          // full api path
 
 let requestCompositeFaxes = function(requestPayload) {
 	let url = "/img/download-and-transform";
+	if (WW_VERBOSE) {
+		console.log(`requestCompositeFaxes, ${url} with payload ${JSON.stringify(requestPayload, null, 2)}`);
+	}
 	return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, requestPayload, false);
 };
 
@@ -138,7 +141,7 @@ let setWWVerbose = function(value) {
 
 let getCompositeFaxes = function(options, compositeData, callback) {
 	if (WW_VERBOSE) {
-		console.log(`getCompositeFaxes, starting`);
+		console.log(`getCompositeFaxes, starting, with option ${JSON.stringify(options, null, 2)}`);
 	}
 	let getData = requestCompositeFaxes(options);
 	getData.then((value) => {
