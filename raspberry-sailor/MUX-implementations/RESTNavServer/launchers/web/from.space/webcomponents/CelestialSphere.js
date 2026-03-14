@@ -871,7 +871,7 @@ class CelestialSphere extends HTMLElement {
 					let starTo = CelestialSphere.findStar(constellations[i].stars, constellations[i].lines[l].to);
 					if (starFrom !== undefined && starTo !== undefined) {
 						context.beginPath();
-						let dec = starFrom.d * (this.observerLatitude >= 0 ? 1 : -1);
+						let dec = starFrom.d; // * (this.observerLatitude >= 0 ? 1 : -1);
 						let ra = starFrom.ra;
 						let lng = (360 - (ra * 360 / 24));
 						lng += (/*this._hemisphere * */this.LHAAries);
@@ -881,7 +881,7 @@ class CelestialSphere extends HTMLElement {
 						// Sight Reduction
 						let sr1 = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
 						let p1 = this.plotOnSphere(sr1.alt, sr1.Z /* - (this.useHeading ? this.heading : 0)*/, radius);
-						dec = starTo.d * (this.observerLatitude >= 0 ? 1 : -1);
+						dec = starTo.d; // * (this.observerLatitude >= 0 ? 1 : -1);
 						ra = starTo.ra;
 						lng = (360 - (ra * 360 / 24));
 						lng += (/*this._hemisphere * */this.LHAAries);
@@ -938,7 +938,7 @@ class CelestialSphere extends HTMLElement {
 			// Stars
 			if (this._withStars) {
 				for (let s = 0; s < constellations[i].stars.length; s++) {
-					let dec = constellations[i].stars[s].d * (this.observerLatitude >= 0 ? 1 : -1);
+					let dec = constellations[i].stars[s].d; // * (this.observerLatitude >= 0 ? 1 : -1);
 					let ra = constellations[i].stars[s].ra;
 					let sha = (360 - (ra * 360 / 24)); //
 					let gha = sha + (/*this._hemisphere * */this.LHAAries);
@@ -1027,7 +1027,7 @@ class CelestialSphere extends HTMLElement {
 			let self = this;
 			let ghaAries = CelestialSphere.findGHAAries(this._wanderingBodiesData);
 			this._wanderingBodiesData.forEach((body) => {
-				let dec = body.decl * (this.observerLatitude >= 0 ? 1 : -1);
+				let dec = body.decl; // * (this.observerLatitude >= 0 ? 1 : -1);
 				let lng = body.gha - ghaAries;
 				lng += (/*this._hemisphere * */self.LHAAries);
 				if (lng > 180) {
@@ -1063,7 +1063,7 @@ class CelestialSphere extends HTMLElement {
 
 	plotCoordinates(lat, lng, radius) {
 		let r = (((90 - lat) / 180) * radius);
-		let xOffset = Math.round(r * Math.sin(Math.toRadians(lng))) * (this.observerLatitude >= 0 ? 1 : -1);
+		let xOffset = Math.round(r * Math.sin(Math.toRadians(lng))); // * (this.observerLatitude >= 0 ? 1 : -1);
 		let yOffset = Math.round(r * Math.cos(Math.toRadians(lng)));
 		return {x: xOffset, y: yOffset};
 	}

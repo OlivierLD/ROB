@@ -18,7 +18,15 @@ public class SRUTest {
         sightReductionUtil.calculate();
         double he = sightReductionUtil.getHe();
         double z = sightReductionUtil.getZ();
-        System.out.printf("Alt: %.02f\272, Z: %.01f\272 \n", he, z);
+        System.out.printf("One - Alt: %.02f\272, Z: %.01f\272 \n", he, z);
+
+        // Acrux from southern hemisphere
+        sightReductionUtil = new SightReductionUtil(/*173.35043655*/ 231d, -63.09905556, -65d, -3d);
+        sightReductionUtil.calculate();
+        he = sightReductionUtil.getHe();
+        z = sightReductionUtil.getZ();
+        System.out.printf("Acrux: Alt: %.02f\272, Z: %.01f\272 \n", he, z);
+
     }
 
 }
