@@ -15,6 +15,8 @@ import java.io.FileWriter;
 
 public class PullTxManager {
 
+	private final static boolean verbose = "true".equals(System.getProperty("image.verbose", "false"));
+
 	public static String downloadAndTransform(
 			String urlIn, // @NotNull
 			String locationOut,
@@ -69,6 +71,9 @@ public class PullTxManager {
 				System.out.println(String.format("Directory(ies) %s created:", outputDir) + ok);
 			}
 
+			if (verbose) {
+				System.out.printf("ImageHTTPClient.getFax, %s, %s\n", urlIn, locationOut);
+			}
 			Image fax = ImageHTTPClient.getFax(urlIn, locationOut);
 			BufferedImage bimg = ImageUtil.toBufferedImage(fax, rotation);
 
