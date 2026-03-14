@@ -29,22 +29,10 @@ import constellations from "./skymap/stars/constellations.js";
 // import constellations from "./stars/constellations"; // minifyJs does NOT like the .js extension
 
 const CardinalPoints = [
-	"N",
-	"NNE",
-	"NE",
-	"ENE",
-	"E",
-	"ESE",
-	"SE",
-	"SSE",
-	"S",
-	"SSW",
-	"SW",
-	"WSW",
-	"W",
-	"WNW",
-	"NW",
-	"NNW"
+	"N", "NNE", "NE", "ENE",
+	"E", "ESE", "SE", "SSE",
+	"S", "SSW", "SW", "WSW",
+	"W", "WNW", "NW", "NNW"
 ];
 
 const celestialSphereDefaultColorConfig = {
@@ -77,15 +65,16 @@ class CelestialSphere extends HTMLElement {
 			"width",                  // Integer. Canvas width
 			"height",                 // Integer. Canvas height
 			"star-names",             // boolean. Default true (major stars only)
-			"stars",                  // boolean. Default true.
+			"stars",                  // boolean. Default true
 			"constellation-names",    // boolean. Default false
 			"constellations",         // boolean. Default true
 			"wandering-bodies",       // boolean. Default false
-			"latitude",               // Number [-90..90], default 45
-			"longitude",              // Number [-180..180], default 3
-			"heading",                // Boat heading (N, 0 by default)
-			"use-heading",            // true or false. Heading North if false
+			"latitude",               // Number [-90..90], default 45 (see below)
+			"longitude",              // Number [-180..180], default 3 (see below)
+			"heading",                // Boat (true) heading (N, 0 by default)
+			"use-heading",            // true or false. Heading North (0 true) if false
 			"boat-shape"              // MONO, CATA, TRI, PLANE
+			// TODO a zoom factor
 		];
 	}
 
@@ -105,7 +94,7 @@ class CelestialSphere extends HTMLElement {
 		// create and append a <canvas>
 		this.canvas = document.createElement("canvas");
 		let fallbackElemt = document.createElement("h1");
-		let content = document.createTextNode("This is a CelestialSphere or StarFinder, on an HTML5 canvas");
+		let content = document.createTextNode("This is a CelestialSphere or StarFinder, on an HTML5 canvas"); // used with fallback
 		fallbackElemt.appendChild(content);
 		this.canvas.appendChild(fallbackElemt);
 		this.shadowRoot.appendChild(this.canvas);
@@ -121,6 +110,8 @@ class CelestialSphere extends HTMLElement {
 		// Default values
 		this._width       = 500;
 		this._height      = 500;
+
+		this._zoom        = 1.0;
 
 		this._heading = 0;
 		this._use_heading = false;
@@ -268,6 +259,9 @@ class CelestialSphere extends HTMLElement {
 	set boatShape(val) {
 		this._boatShape = val;
 	}
+	set zoom(val) {
+		this._zoom = val;
+	}
 
 	set shadowRoot(val) {
 		this._shadowRoot = val;
@@ -311,6 +305,9 @@ class CelestialSphere extends HTMLElement {
 	}
 	get boatShape() {
 		return this._boatShape;
+	}
+	get zoom() {
+		return this._zoom;
 	}
 
 	get shadowRoot() {
@@ -413,13 +410,13 @@ class CelestialSphere extends HTMLElement {
 		this.doAfter = func;
 	}
 
-	repaint() { // Can zoom here, with this._width & this._height
+	repaint() {
 		this.drawCelestialSphere();
 	}
 
 	getCanvasCenter() {
-		let cw = this._width;
-		let ch = this._height;
+		let cw = this._width * this._zoom;
+		let ch = this._height * this._zoom;
 		return { x: cw / 2, y: ch / 2};
 	}
 
@@ -427,9 +424,9 @@ class CelestialSphere extends HTMLElement {
 		let x = [];
 		let y = [];// Half, length
 
-		let _zoom = 3;
+		let __zoom = 3;
 
-		let boatLength = this.BOAT_LENGTH * _zoom;
+		let boatLength = this.BOAT_LENGTH * __zoom * this._zoom;
 
 		if (this._boatShape === 'MONO') {
 			// Width
@@ -652,13 +649,13 @@ class CelestialSphere extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
-		context.clearRect(0, 0, this.width, this.height);
+		context.clearRect(0, 0, this.width * this._zoom, this.height * this._zoom);
 
-		let radius = Math.min(this.width, this.height) * 0.99 / 2;
+		let radius = Math.min(this.width, this.height) * 0.99 * this._zoom / 2;
 
 		// Set the canvas size from its container.
-		this.canvas.width = this.width;
-		this.canvas.height = this.height;
+		this.canvas.width = this.width * this._zoom;
+		this.canvas.height = this.height * this._zoom;
 
 		context.beginPath();
 		// White BG
@@ -726,7 +723,7 @@ class CelestialSphere extends HTMLElement {
 					context.translate(this.canvas.width / 2, (this.canvas.height / 2)); // canvas.height);
 					let __currentAngle = - Math.toRadians(i - ((this.observerLatitude >= 0 ? 1 : -1) * this.LHAAries));
 					context.rotate(__currentAngle - Math.PI);
-					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
+					context.font = "bold " + Math.round(10 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = this.celestialSphereColorConfig.tickLabelsColor;
 					let lha = (this.observerLatitude >= 0 || i === 0 ? i : (360 - i));
 					let str = lha.toString() + '°';
@@ -773,7 +770,7 @@ class CelestialSphere extends HTMLElement {
 			context.translate(this.canvas.width / 2, (this.canvas.height / 2)); // canvas.height);
 			let __currentAngle = /*-*/ Math.toRadians(i /* - (this._use_heading ? this._heading : 0)*/);
 			context.rotate(__currentAngle); //  - Math.PI);
-			context.font = "bold " + Math.round(12) + "px Arial"; // Like "bold 15px Arial"
+			context.font = "bold " + Math.round(12 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
 			context.fillStyle = this.celestialSphereColorConfig.cardPointLabelsColor;
 			// let hour = (this._hemisphere === Hemispheres.NORTHERN_HEMISPHERE  || i === 0 ? i : (24 - i)); // TODO Fix that
 			let label = CardinalPoints[i / 22.5];
@@ -930,7 +927,7 @@ class CelestialSphere extends HTMLElement {
 					// let p = this.plotCoordinates(centerDec, lng, radius);
 					let p = this.plotOnSphere(sr.alt, sr.Z /* - (this.useHeading ? this.heading : 0)*/, radius);
 
-					context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
+					context.font = "bold " + Math.round(10 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = this.celestialSphereColorConfig.constellationNameColor;
 					let str = constellations[i].name;
 					let len = context.measureText(str).width;
@@ -970,7 +967,7 @@ class CelestialSphere extends HTMLElement {
 						context.stroke();
 
 						if (constellations[i].stars[s].name.charAt(0) === constellations[i].stars[s].name.charAt(0).toUpperCase() && this._starNames) { // Star name, starts with uppercase
-							context.font = "bold " + Math.round(10) + "px Arial"; // Like "bold 15px Arial"
+							context.font = "bold " + Math.round(10 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
 							context.fillStyle = this.celestialSphereColorConfig.starNameColor;
 							let str = constellations[i].stars[s].name;
 							let len = context.measureText(str).width;

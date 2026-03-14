@@ -898,6 +898,45 @@ let setSunPathData = () => {
     elem1.repaint();
 }
 
+function zoomIn(id) {
+    let element = document.getElementById(id);
+    // let origWith = element.width;
+    // let origHeight = element.height;
+
+    // element.width = origWith * 1.1;
+    // element.height = origHeight * 1.1;
+
+    let origZoom = element.zoom;
+    element.zoom = origZoom * 1.1;
+
+    element.repaint();
+}
+
+function zoomOut(id) {
+    let element = document.getElementById(id);
+    // let origWith = element.width;
+    // let origHeight = element.height;
+
+    // element.width = origWith / 1.1;
+    // element.height = origHeight / 1.1;
+
+    let origZoom = element.zoom;
+    element.zoom = origZoom / 1.1;
+
+    element.repaint();
+}
+
+function resetZoom(id) {
+    let element = document.getElementById(id);
+    element.zoom = 1.0;
+    element.repaint();
+}
+
+function showHide(id, cb) {
+    let element = document.getElementById(id);
+    element.style.display = cb.checked ? 'block' : 'none';
+}
+
 function setWithStars(id, cb) {
     document.getElementById(id).stars = cb.checked;
     document.getElementById(id).repaint();

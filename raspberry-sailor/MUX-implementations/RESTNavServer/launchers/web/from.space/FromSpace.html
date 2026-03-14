@@ -1533,7 +1533,7 @@ let toggleForeground = () => {
             <table style="width: 98%;">
                 <tr>
                     <td>
-                        <div class="black-frame centered">
+                        <div class="black-frame centered" style="width: 800px; height: 500px; overflow: scroll;">
                             <!-- Celestial Sphere goes here -->
                             <celestial-sphere id="celestial-sphere-01"
                                               class="celestial-sphere-display-01"
@@ -1544,6 +1544,11 @@ let toggleForeground = () => {
                                               heading="0"
                                               use-heading="false"/>
                         </div>
+                        <div>
+                            <button onclick="zoomIn('celestial-sphere-01');" title="Zoom In">+</button>
+                            <button onclick="zoomOut('celestial-sphere-01');" title="Zoom Out">-</button>
+                            <button onclick="resetZoom('celestial-sphere-01');" title="Reset Zoom">Reset</button>
+                        </div>
                         <div style="display: grid; grid-template-columns: auto auto auto auto;">
                             <span><input type="checkbox" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
                             <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Constellations.</span>
@@ -1551,16 +1556,24 @@ let toggleForeground = () => {
                             <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
 
                             <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
-                            <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this);">Show Boat Heading.</span>
-                            <span>
+                            <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this); showHide('boat-shapes', this);">Show Boat Heading.</span>
+                            <!--span>
                                 <select onchange="setBoatShape('celestial-sphere-01', this);" style="padding: 5px; border-radius: 5px;">
-                                    <option value="MONO">Monohull</option>
+                                    <option value="MONO" selected>Monohull</option>
                                     <option value="CATA">Catamaran</option>
                                     <option value="TRI">Trimaran</option>
                                     <option value="PLANE">Plane</option>
                                 </select>
-                            </span>
+                            </span-->
                         </div>
+                        <div id="boat-shapes" style="display: none;">
+                            Boat Shape:
+                            <input type="radio" name="boat-shape" value="MONO" onchange="if (this.checked) { setBoatShape('celestial-sphere-01', this); }" checked>Monohull</input>
+                            <input type="radio" name="boat-shape" value="CATA" onchange="if (this.checked) { setBoatShape('celestial-sphere-01', this); }">Catamaran</input>
+                            <input type="radio" name="boat-shape" value="TRI" onchange="if (this.checked) { setBoatShape('celestial-sphere-01', this); }">Trimaran</input>
+                            <input type="radio" name="boat-shape" value="PLANE" onchange="if (this.checked) { setBoatShape('celestial-sphere-01', this); }">Plane</input>
+                        </div>
+
                     </td>
                 </tr>
             </table>
