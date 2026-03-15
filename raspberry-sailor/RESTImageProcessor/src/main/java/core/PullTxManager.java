@@ -72,7 +72,7 @@ public class PullTxManager {
 			}
 
 			if (verbose) {
-				System.out.printf("ImageHTTPClient.getFax, %s, %s\n", urlIn, locationOut);
+				System.out.printf("-> In ImageHTTPClient.getFax: %s into %s\n", urlIn, locationOut);
 			}
 			Image fax = ImageHTTPClient.getFax(urlIn, locationOut);
 			BufferedImage bimg = ImageUtil.toBufferedImage(fax, rotation);

@@ -235,7 +235,9 @@ public class RESTImplementation {
 											PullTxManager.TxRequest.class);
 									// Do the job here
 									if (verbose) {
-										System.out.printf("Downloading %s...\n", txRequest.toString());
+										// mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+										System.out.printf("In requestTransformation -> Downloading %s...\n",
+												mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)); // txRequest.toString());
 									}
 									if (txRequest.getUrl().startsWith("file:")) { // Comes from an existing composite
 										txRequest = txRequest.returned(txRequest.getUrl());
