@@ -216,13 +216,17 @@ public class RESTImplementation {
 			String payload = new String(request.getContent());
 			if (!"null".equals(payload)) {
 				if (verbose) {
-					System.out.printf("Tx Request: %s\n", payload);
+					System.out.printf("Full (raw) Tx Request:\n%s\n", payload);
 				}
 				StringReader stringReader = new StringReader(payload);
 				List<Object> txRequests = null;
 				final List<Object> resultList = new ArrayList<>();
 				try {
 					txRequests = mapper.readValue(stringReader, List.class);
+					if (verbose) {
+						System.out.printf("Full (formatted) Tx Request:\n%s\n",
+								mapper.writerWithDefaultPrettyPrinter().writeValueAsString(txRequests));
+					}
 					txRequests.forEach(json -> {
 								try {
 									// JsonObject jObj = gson.toJsonTree(json).getAsJsonObject();
