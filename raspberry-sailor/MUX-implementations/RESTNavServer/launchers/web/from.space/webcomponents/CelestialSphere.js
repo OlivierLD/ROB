@@ -59,6 +59,16 @@ const celestialSphereDefaultColorConfig = {
 	boatOutlineColor: 'rgba(192, 192, 192, 0.75'
 };
 
+function drawSun(context, where) {
+	// TODO Something niver...
+	let bodyRadius = 8;
+	context.beginPath();
+	context.fillStyle = 'yellow'; // this.celestialSphereColorConfig.wanderingBodiesColor;
+	context.arc(where.x, where.y, bodyRadius, 0, 2 * Math.PI, false);
+	context.fill();
+	context.closePath();
+}
+
 /* global HTMLElement */
 class CelestialSphere extends HTMLElement {
 
@@ -1119,22 +1129,34 @@ class CelestialSphere extends HTMLElement {
 					// console.log(`${body.name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
 					if (true || sr.alt >= 0) {
 						let p = this.plotOnSphere(sr.alt, sr.Z, radius);
-						context.beginPath();
-						context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesColor;
-						const bodyRadius = 4;
-						context.arc((self.canvas.width / 2) - p.x, (self.canvas.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
-						context.fill();
-						context.strokeStyle = this.celestialSphereColorConfig.starCircleColor;
-						context.lineWidth = 0.5;
-						context.stroke();
+						if (body.name !== 'sun') {
+							context.beginPath();
+							context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesColor;
+							const bodyRadius = 4;
+							// Plot point
+							context.arc((self.canvas.width / 2) - p.x, (self.canvas.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
+							context.fill();
+							context.strokeStyle = this.celestialSphereColorConfig.starCircleColor;
+							context.lineWidth = 0.5;
+							context.stroke();
 
-						context.font = "bold " + Math.round(30 /*24*/) + "px Arial"; // Like "bold 15px Arial"
-						context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesNameColor;
-						let str = CelestialSphere.findSymbol(body.name);
-						let len = context.measureText(str).width;
-						context.fillText(str, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y - 4);
+							context.font = "bold " + Math.round(30 /*24*/) + "px Arial"; // Like "bold 15px Arial"
+							context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesNameColor;
+							let str = CelestialSphere.findSymbol(body.name);
+							let len = context.measureText(str).width;
+							context.fillText(str, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y - 8);
 
-						context.closePath();
+							context.font = "bold " + Math.round(12 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
+							len = context.measureText(body.name).width;
+							context.fillText(body.name, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y + (16 * this._zoom));
+
+							context.closePath();
+						} else {
+							drawSun(context, {
+								x: (self.canvas.width / 2) - p.x,
+								y: (self.canvas.height / 2) + p.y
+							});
+						}
 					}
 				} else {
 					// Obliquity ?
