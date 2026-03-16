@@ -43,6 +43,7 @@ const celestialSphereDefaultColorConfig = {
 	headingTicksColor: 'orange',
 	skyGridColor: 'cyan',
 	eclipticColor: 'lime',
+	equatorColor: 'white',
 	declinationCircleColor: 'cyan',
 	ariesLabelColor: 'silver',
 	cardPointLabelsColor: 'red',
@@ -74,9 +75,10 @@ class CelestialSphere extends HTMLElement {
 			"longitude",              // Number [-180..180], default 3 (see below)
 			"heading",                // Boat (true) heading (N, 0 by default)
 			"use-heading",            // true or false. Heading North (0 true) if false
-			"boat-shape"              // MONO, CATA, TRI, PLANE
-			// Hodden: a zoom factor
-			// TODO Ecliptic ? See WorldMap.drawEcliptic
+			"boat-shape",             // MONO, CATA, TRI, PLANE
+			"celestial-equator"       // true or false. Default false
+			// Hidden: a zoom factor
+			// Ecliptic ? -> with wandering-bodies
 		];
 	}
 
@@ -131,6 +133,7 @@ class CelestialSphere extends HTMLElement {
 		this._constellationNames = false;
 		this._withConstellations = true;
 		this._withWanderingBodies = false;
+		this._withCelestialEquator = true;
 		this._wanderingBodiesData = undefined;
 
 		this._previousClassName = "";
@@ -183,6 +186,9 @@ class CelestialSphere extends HTMLElement {
 				break;
 			case "wandering-bodies":
 				this._withWanderingBodies = (newVal === 'true');
+				break;
+			case "celestial-equator":
+				this._withCelestialEquator = (newVal === 'true');
 				break;
 			case "latitude":
 				this.observerLatitude = parseFloat(newVal);
@@ -243,6 +249,9 @@ class CelestialSphere extends HTMLElement {
 	set wanderingBodies(val) {
 		this._withWanderingBodies = val;
 	}
+	set celestialEquator(val) {
+		this._withCelestialEquator = val;
+	}
 	set wanderingBodiesData(json) {
 		this._wanderingBodiesData = json;
 	}
@@ -289,6 +298,9 @@ class CelestialSphere extends HTMLElement {
 	}
 	get wanderingBodies() {
 		return this._withWanderingBodies;
+	}
+	get celestialEquator() {
+		return this._withCelestialEquator;
 	}
 	get wanderingBodiesData() {
 		return this._wanderingBodiesData;
@@ -364,6 +376,9 @@ class CelestialSphere extends HTMLElement {
 											break;
 										case '--ecliptic-color':
 											colorConfig.eclipticColor = value;
+											break;
+										case '--equator-color':
+											colorConfig.equatorColor = value;
 											break;
 										case '--aries-label-color':
 											colorConfig.ariesLabelColor = value;
@@ -827,6 +842,10 @@ class CelestialSphere extends HTMLElement {
 			this.drawWanderingBodies(context, radius * 0.92);
 		}
 
+		if (this._withCelestialEquator) {
+			this.drawCelestialEquator(context, radius * 0.92);
+		}
+
 		// Display LHA Aries as text, and position
 		let strAries = Utilities.decToSex(this.LHAAries);
 		context.fillStyle = this.celestialSphereColorConfig.ariesLabelColor;
@@ -1027,6 +1046,30 @@ class CelestialSphere extends HTMLElement {
 		}
 	}
 
+	drawCelestialEquator(context, radius) {
+		context.fillStyle = this.celestialSphereColorConfig.equatorColor; // 'lime';
+		for (let hdg=0; hdg<360; hdg++) {
+			let _lat = 0;
+			let _lng = hdg;
+			while (_lng > 360) {
+				_lng -= 360;
+			}
+			if (_lng > 180) {
+				_lng -= 360;
+			}
+
+			let sr = sightReduction(this.observerLatitude, this.observerLongitude, _lng, _lat);
+			if (/*true || */sr.alt >= 0) {
+				let p = this.plotOnSphere(sr.alt, sr.Z, radius);
+				context.beginPath();
+				const bodyRadius = 0.75;
+				context.arc((this.width * this._zoom / 2) - p.x, (this.height * this._zoom / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
+				context.fill();
+				context.closePath();
+			}
+		}
+	}
+
 	drawEcliptic(context, ariesGHA, obl, radius) {
 		let longitude = (ariesGHA < 180) ? -ariesGHA : 360 - ariesGHA;
 		// console.log(`Arie GHA ${ariesGHA} becomes ${longitude}`);
@@ -1049,7 +1092,7 @@ class CelestialSphere extends HTMLElement {
 				let p = this.plotOnSphere(sr.alt, sr.Z, radius);
 				context.beginPath();
 				const bodyRadius = 0.75;
-				context.arc((this.width / 2) - p.x, (this.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
+				context.arc((this.width * this._zoom / 2) - (p.x/* * this._zoom*/), (this.height * this._zoom / 2) + (p.y /* * this._zoom*/), bodyRadius, 0, 2 * Math.PI, false);
 				context.fill();
 				// context.strokeStyle = 'lime'; // this.celestialSphereColorConfig.starCircleColor;
 				// context.lineWidth = 0.5;

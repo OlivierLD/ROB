@@ -1007,6 +1007,12 @@ function setWanderingBodiesCS(id, cb) {
 
 function setUseBoatHeadingCS(id, cb) {
     document.getElementById(id).useHeading = cb.checked;
+    document.getElementById(id).repaint();
+}
+
+function setCelestialEquatorCS(id, cb) {
+    document.getElementById(id).celestialEquator = cb.checked;
+    document.getElementById(id).repaint();
 }
 
 function setBoatShape(id, list) {
