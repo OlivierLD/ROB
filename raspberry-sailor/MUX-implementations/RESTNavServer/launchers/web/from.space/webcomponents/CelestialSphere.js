@@ -42,6 +42,7 @@ const celestialSphereDefaultColorConfig = {
 	skyBGColor: 'rgb(21, 21, 86)', // 'lightGray',
 	headingTicksColor: 'orange',
 	skyGridColor: 'cyan',
+	eclipticColor: 'lime',
 	declinationCircleColor: 'cyan',
 	ariesLabelColor: 'silver',
 	cardPointLabelsColor: 'red',
@@ -74,7 +75,8 @@ class CelestialSphere extends HTMLElement {
 			"heading",                // Boat (true) heading (N, 0 by default)
 			"use-heading",            // true or false. Heading North (0 true) if false
 			"boat-shape"              // MONO, CATA, TRI, PLANE
-			// TODO a zoom factor?
+			// Hodden: a zoom factor
+			// TODO Ecliptic ? See WorldMap.drawEcliptic
 		];
 	}
 
@@ -359,6 +361,9 @@ class CelestialSphere extends HTMLElement {
 											break;
 										case '--declination-color':
 											colorConfig.declinationCircleColor = value;
+											break;
+										case '--ecliptic-color':
+											colorConfig.eclipticColor = value;
 											break;
 										case '--aries-label-color':
 											colorConfig.ariesLabelColor = value;
@@ -784,7 +789,7 @@ class CelestialSphere extends HTMLElement {
 		}
 		context.closePath();
 
-		// Full Sphere Celestial equator
+		// Full Sphere Celestial Horizon
 		context.beginPath();
 		context.lineWidth = 2;
 		context.strokeStyle = this.celestialSphereColorConfig.skyGridColor;
@@ -792,7 +797,7 @@ class CelestialSphere extends HTMLElement {
 		context.stroke();
 		context.closePath();
 
-		// Declinations
+		// Declinations circles
 		context.save();
 		context.beginPath();
 		context.setLineDash([5]);
@@ -1022,38 +1027,81 @@ class CelestialSphere extends HTMLElement {
 		}
 	}
 
+	drawEcliptic(context, ariesGHA, obl, radius) {
+		let longitude = (ariesGHA < 180) ? -ariesGHA : 360 - ariesGHA;
+		// console.log(`Arie GHA ${ariesGHA} becomes ${longitude}`);
+		longitude += 90; // Extremum, max depth.
+		while (longitude > 360) {
+			longitude -= 360;
+		}
+		let aries = { lat: obl, lng: -longitude };
+
+		context.fillStyle = this.celestialSphereColorConfig.eclipticColor; // 'lime';
+		for (let hdg=0; hdg<360; hdg++) {
+			let _lat = aries.lat * Math.cos(Math.toRadians(hdg));
+			let _lng = aries.lng + hdg;
+			while (_lng > 360) {
+				_lng -= 360;
+			}
+			// console.log(`Ecliptic point #${hdg}: ${Utilities.decToSex(_lat, "NS")}, ${Utilities.decToSex(_lng, "EW")}`);
+			let sr = sightReduction(this.observerLatitude, this.observerLongitude, _lng, _lat);
+			if (/*true || */sr.alt >= 0) {
+				let p = this.plotOnSphere(sr.alt, sr.Z, radius);
+				context.beginPath();
+				const bodyRadius = 0.75;
+				context.arc((this.width / 2) - p.x, (this.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
+				context.fill();
+				// context.strokeStyle = 'lime'; // this.celestialSphereColorConfig.starCircleColor;
+				// context.lineWidth = 0.5;
+				// context.stroke();
+				context.closePath();
+			}
+		}
+	}
+
 	drawWanderingBodies(context, radius) {
 		if (this._wanderingBodiesData !== undefined) {
 			let self = this;
 			let ghaAries = CelestialSphere.findGHAAries(this._wanderingBodiesData);
 			this._wanderingBodiesData.forEach((body) => {
-				let dec = body.decl; // * (this.observerLatitude >= 0 ? 1 : -1);
-				let lng = body.gha - ghaAries;
-				lng += (/*this._hemisphere * */self.LHAAries);
-				if (lng > 180) {
-					lng -= 360;
-				}
-				// Sight Reduction !
-				let sr = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
-				// console.log(`${body.name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
-				if (true || sr.alt >= 0) {
-					let p = this.plotOnSphere(sr.alt, sr.Z /*- (this.useHeading ? this.heading : 0)*/, radius);
-					context.beginPath();
-					context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesColor;
-					const bodyRadius = 4;
-					context.arc((self.canvas.width / 2) - p.x, (self.canvas.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
-					context.fill();
-					context.strokeStyle = this.celestialSphereColorConfig.starCircleColor;
-					context.lineWidth = 0.5;
-					context.stroke();
+				if (body.name) {
+					let dec = body.decl; // * (this.observerLatitude >= 0 ? 1 : -1);
+					let lng = body.gha - ghaAries;
+					lng += (/*this._hemisphere * */self.LHAAries);
+					if (lng > 180) {
+						lng -= 360;
+					}
+					// Sight Reduction !
+					let sr = sightReduction(this.observerLatitude, this.observerLongitude, lng, dec);
+					// console.log(`${body.name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
+					if (true || sr.alt >= 0) {
+						let p = this.plotOnSphere(sr.alt, sr.Z, radius);
+						context.beginPath();
+						context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesColor;
+						const bodyRadius = 4;
+						context.arc((self.canvas.width / 2) - p.x, (self.canvas.height / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
+						context.fill();
+						context.strokeStyle = this.celestialSphereColorConfig.starCircleColor;
+						context.lineWidth = 0.5;
+						context.stroke();
 
-					context.font = "bold " + Math.round(30 /*24*/) + "px Arial"; // Like "bold 15px Arial"
-					context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesNameColor;
-					let str = CelestialSphere.findSymbol(body.name);
-					let len = context.measureText(str).width;
-					context.fillText(str, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y - 4);
+						context.font = "bold " + Math.round(30 /*24*/) + "px Arial"; // Like "bold 15px Arial"
+						context.fillStyle = this.celestialSphereColorConfig.wanderingBodiesNameColor;
+						let str = CelestialSphere.findSymbol(body.name);
+						let len = context.measureText(str).width;
+						context.fillText(str, (self.canvas.width / 2) - p.x - (len / 2), (self.canvas.height / 2) + p.y - 4);
 
-					context.closePath();
+						context.closePath();
+					}
+				} else {
+					// Obliquity ?
+					if (body.obliq) {
+						// console.log(`Obliquity !! ${body.obliq}`);
+						// Draw ecliptique
+						this.drawEcliptic(context, ghaAries, body.obliq, radius);
+					} else {
+						console.log(`What ?? ${JSON.stringify(body)}`);
+					}
 				}
 			});
 		} else {

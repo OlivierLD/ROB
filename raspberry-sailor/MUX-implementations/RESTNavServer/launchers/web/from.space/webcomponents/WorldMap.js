@@ -161,8 +161,8 @@ class WorldMap extends HTMLElement {
 		this.globeViewForeAftRotation = 0; // Observer's latitude
 		this.globeViewLngOffset = 0;       // Observer's longitude
 
-		this.userPosition = {};
-		this.astronomicalData = {};
+		this.userPosition = null;
+		this.astronomicalData = null;
 		this.defaultRadiusRatio = 0.6;
 
 		this.vGrid = 5;
@@ -480,7 +480,7 @@ class WorldMap extends HTMLElement {
 		}
 		if (data.sun !== undefined) {
 			// set .setGlobeViewRightLeftRotation(-(sunD * Math.sin(Math.toRadians(lhaSun))));
-			if (this.userPosition !== {}) {
+			if (this.userPosition !== null) {
 				let userLongitude = this.userPosition.longitude;
 				if (userLongitude === undefined) {
 					userLongitude = data.from.longitude;
@@ -962,7 +962,7 @@ class WorldMap extends HTMLElement {
 		// TODO A style for the constellation name
 		context.fillText(text,
 			minX + ((maxX - minX) / 2) - (metrics.width / 2),
-			minY + ((maxY - minY) / 2) + (10 / 2)); 
+			minY + ((maxY - minY) / 2) + (10 / 2));
 		// context.fillText(constellation.name, minX, minY);
 		context.closePath();
 
@@ -1312,7 +1312,7 @@ class WorldMap extends HTMLElement {
 						context.lineWidth = this.worldmapColorConfig.chartLineWidth;
 						context.beginPath();
 						context.strokeStyle = this.worldmapColorConfig.chartColor;
-	
+
 						for (let p = 0; p < point.length; p++) {
 							let lat = parseFloat(point[p].Lat);
 							let lng = parseFloat(point[p].Lng);
@@ -1379,14 +1379,14 @@ class WorldMap extends HTMLElement {
 		context.restore();
 
 		// User position
-		if (this.userPosition !== {}) {
+		if (this.userPosition !== null) {
 			let userPos = this.getPanelPoint(this.userPosition.latitude, this.userPosition.longitude);
 			WorldMap.plot(context, userPos, this.worldmapColorConfig.userPosColor);
 			context.fillStyle = this.worldmapColorConfig.userPosColor;
 			context.fillText(this.positionLabel, Math.round(userPos.x) + 3, Math.round(userPos.y) - 3);
 
 			// Celestial bodies?
-			if (this.astronomicalData !== {}) {
+			if (this.astronomicalData !== null) {
 				if (this.astronomicalData.sun !== undefined) {
 					let sunLng = WorldMap.haToLongitude(this.astronomicalData.sun.gha);
 					context.save();
@@ -2078,7 +2078,7 @@ class WorldMap extends HTMLElement {
 	}
 
 	drawFlatCelestialOptions(context) {
-		if (this.astronomicalData !== {}) {
+		if (this.astronomicalData !== null) {
 			if (this.astronomicalData.sun !== undefined && this.withSun) { // TODO Separate sun and sunlight
 				context.save();
 				let sunLng = WorldMap.haToLongitude(this.astronomicalData.sun.gha);
@@ -2220,7 +2220,7 @@ class WorldMap extends HTMLElement {
 			context.closePath();
 		}
 		// User position
-		if (this.userPosition !== {}) {
+		if (this.userPosition !== null) {
 			this.plotPosToCanvas(context, this.userPosition.latitude, this.userPosition.longitude, this.positionLabel, this.worldmapColorConfig.userPosColor);
 		}
 
@@ -2297,7 +2297,7 @@ class WorldMap extends HTMLElement {
 			context.closePath();
 		}
 		// User position
-		if (this.userPosition !== {}) {
+		if (this.userPosition !== null) {
 			this.plotPosToCanvas(context, this.userPosition.latitude, this.userPosition.longitude, this.positionLabel, this.worldmapColorConfig.userPosColor);
 		}
 		this.drawFlatCelestialOptions(context);
@@ -2341,7 +2341,7 @@ class WorldMap extends HTMLElement {
 		}
 
 		// Print position and GridSquare.
-		if (this.userPosition.latitude !== undefined && this.userPosition.longitude !== undefined) {
+		if (this.userPosition && this.userPosition.latitude !== undefined && this.userPosition.longitude !== undefined) {
 			let strLat = WorldMap.decToSex(this.userPosition.latitude, "NS");
 			let strLng = WorldMap.decToSex(this.userPosition.longitude, "EW");
 			context.fillStyle = this.worldmapColorConfig.displayPositionColor;
@@ -2353,10 +2353,10 @@ class WorldMap extends HTMLElement {
 			}
 		}
 		// Print used DeltaT
-		if (this.astronomicalData !== undefined && this.astronomicalData.deltaT !== undefined) {
+		if (this.astronomicalData && this.astronomicalData.deltaT !== undefined) {
 			context.fillStyle = this.worldmapColorConfig.displayPositionColor;
 			context.font = "12px Arial"; // "bold 40px Arial"
-			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";  
+			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";
 			context.fillText(deltaT, 10, this.height - 5);
 		}
 	}
