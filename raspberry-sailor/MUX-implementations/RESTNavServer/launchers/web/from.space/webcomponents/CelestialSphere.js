@@ -21,7 +21,7 @@ if (Math.toDegrees === undefined) {
 }
 
 import * as Utilities from "./utilities/Utilities.js";
-import '../date.proto.js';
+// import '../date.proto.js';
 
 /* The map data */
 import constellations from "./skymap/stars/constellations.js";
