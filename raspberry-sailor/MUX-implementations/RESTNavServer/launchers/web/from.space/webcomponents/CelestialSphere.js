@@ -59,7 +59,7 @@ const celestialSphereDefaultColorConfig = {
 	boatOutlineColor: 'rgba(192, 192, 192, 0.75'
 };
 
-function drawSun(context, where) {
+function drawSun_backup(context, where) {
 	// TODO Something niver...
 	let bodyRadius = 8;
 	context.beginPath();
@@ -68,6 +68,67 @@ function drawSun(context, where) {
 	context.fill();
 	context.closePath();
 }
+
+let drawSun = (context, center, outsideRadius, color) => {
+
+    let posFromAngle = (radius, angle) => {
+        let point = {x: radius * Math.sin(angle),
+                    y: radius * Math.cos(angle) };
+        return point;
+    };
+
+    let r1 = outsideRadius / 2;
+    let r2 = outsideRadius;
+
+    let outside = [
+		posFromAngle(r2, 0),                // 0
+		posFromAngle(r2, Math.PI / 4),      // 1
+		posFromAngle(r2, Math.PI / 2),      // 2
+		posFromAngle(r2, 3 * Math.PI / 4),  // 3
+		posFromAngle(r2, Math.PI),          // 4
+		posFromAngle(r2, 5 * Math.PI / 4),  // 5
+		posFromAngle(r2, 3 * Math.PI / 2),  // 6
+		posFromAngle(r2, 7 * Math.PI / 4)   // 7
+    ];
+    let inside = [
+		posFromAngle(r1, (Math.PI / 8) + 0),                // 0
+		posFromAngle(r1, (Math.PI / 8) + Math.PI / 4),      // 1
+		posFromAngle(r1, (Math.PI / 8) + Math.PI / 2),      // 2
+		posFromAngle(r1, (Math.PI / 8) + 3 * Math.PI / 4),  // 3
+		posFromAngle(r1, (Math.PI / 8) + Math.PI),          // 4
+		posFromAngle(r1, (Math.PI / 8) + 5 * Math.PI / 4),  // 5
+		posFromAngle(r1, (Math.PI / 8) + 3 * Math.PI / 2),  // 6
+		posFromAngle(r1, (Math.PI / 8) + 7 * Math.PI / 4)   // 7
+    ];
+
+  // console.log(`We have ${outside.length} + ${inside.length} points`);
+
+	context.beginPath();
+
+	context.moveTo(center.x + outside[0].x, center.y + outside[0].y);
+	context.lineTo(center.x + inside[0].x, center.y + inside[0].y);
+	context.lineTo(center.x + outside[1].x, center.y + outside[1].y);
+	context.lineTo(center.x + inside[1].x, center.y + inside[1].y);
+	context.lineTo(center.x + outside[2].x, center.y + outside[2].y);
+	context.lineTo(center.x + inside[2].x, center.y + inside[2].y);
+	context.lineTo(center.x + outside[3].x, center.y + outside[3].y);
+	context.lineTo(center.x + inside[3].x, center.y + inside[3].y);
+	context.lineTo(center.x + outside[4].x, center.y + outside[4].y);
+	context.lineTo(center.x + inside[4].x, center.y + inside[4].y);
+	context.lineTo(center.x + outside[5].x, center.y + outside[5].y);
+	context.lineTo(center.x + inside[5].x, center.y + inside[5].y);
+	context.lineTo(center.x + outside[6].x, center.y + outside[6].y);
+	context.lineTo(center.x + inside[6].x, center.y + inside[6].y);
+	context.lineTo(center.x + outside[7].x, center.y + outside[7].y);
+	context.lineTo(center.x + inside[7].x, center.y + inside[7].y);
+
+	context.closePath();
+
+	context.fillStyle = color;
+	context.fill();
+};
+
+
 
 /* global HTMLElement */
 class CelestialSphere extends HTMLElement {
@@ -1152,10 +1213,14 @@ class CelestialSphere extends HTMLElement {
 
 							context.closePath();
 						} else {
+							// drawSun(context, {
+							// 	x: (self.canvas.width / 2) - p.x,
+							// 	y: (self.canvas.height / 2) + p.y
+							// });
 							drawSun(context, {
 								x: (self.canvas.width / 2) - p.x,
 								y: (self.canvas.height / 2) + p.y
-							});
+							}, 16 * this._zoom, "orange");
 						}
 					}
 				} else {
