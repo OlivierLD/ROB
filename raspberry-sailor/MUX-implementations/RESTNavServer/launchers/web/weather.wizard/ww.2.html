@@ -731,6 +731,44 @@
 
         let thisZoomFactor = 1;
 
+
+        let loadCatalog = () => {
+            const URL = '../catalog/compositeCatalog.json';
+            window.fetch(URL)
+                .then(
+                    response => {
+                        console.log(`Catalog Response: ${response.ok ? 'OK' : 'Not OK'}, status: ${response.status}, statusText: ${response.statusText }`);
+                        compositeCatalog = response.json().then(doc => {
+                            compositeCatalog = doc;
+                            console.log(`Composites Catalog loaded, ${doc.length} elements`);
+
+                            // Now populate the drop-down list.
+                            for (let i = 0; i < compositeCatalog.length; i++) {
+                                let opt = document.createElement('option');
+                                opt.setAttribute('value', compositeCatalog[i].key);
+                                opt.appendChild(document.createTextNode(compositeCatalog[i].name));
+                                document.getElementById('composites').appendChild(opt);
+                                if (i === 0) {
+                                    if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
+                                        document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
+                                    }
+                                }
+                            }
+                        });
+                    },
+                    (error, errmess) => {
+                        console.log("Ooch");
+                        let message;
+                        if (errmess) {
+                            let mess = JSON.parse(errmess);
+                            if (mess.message) {
+                                message = mess.message;
+                            }
+                        }
+                        console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+                    });
+        }
+
         let messageManager = (mess) => {
             let messZone = document.getElementById("message-zone");
             if (messZone) {
@@ -1617,6 +1655,9 @@
         let loadComposite = (existingData) => {
 
             console.log("invoked loadComposite...");
+            if (!existingData) { // Reload composite catalog, could have been changed by a Push (see proceed and pushNow methods)
+                loadCatalog();
+            }
 
             clearMessZone();
             messageManager(`-- clean at ${ new Date().format("Y-M-d H:i:s Z") } ---`);
@@ -3343,40 +3384,7 @@ let pushNow = () => {
             } }, 2000);
         }
 
-        const URL = '../catalog/compositeCatalog.json';
-        window.fetch(URL)
-            .then(
-                response => {
-                    console.log(`Catalog Response: ${response.ok ? 'OK' : 'Not OK'}, status: ${response.status}, statusText: ${response.statusText }`);
-                    compositeCatalog = response.json().then(doc => {
-                        compositeCatalog = doc;
-                        console.log(`Composites Catalog loaded, ${doc.length} elements`);
-
-                        // Now populate the drop-down list.
-                        for (let i = 0; i < compositeCatalog.length; i++) {
-                            let opt = document.createElement('option');
-                            opt.setAttribute('value', compositeCatalog[i].key);
-                            opt.appendChild(document.createTextNode(compositeCatalog[i].name));
-                            document.getElementById('composites').appendChild(opt);
-                            if (i === 0) {
-                                if (compositeCatalog[i].gribRequest !== undefined && document.getElementById("grib-request")) {
-                                    document.getElementById("grib-request").value = (compositeCatalog[i].gribRequest);
-                                }
-                            }
-                        }
-                    });
-                },
-                (error, errmess) => {
-                    console.log("Ooch");
-                    let message;
-                    if (errmess) {
-                        let mess = JSON.parse(errmess);
-                        if (mess.message) {
-                            message = mess.message;
-                        }
-                    }
-                    console.debug("Failed to get Composite Catalog..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
-                });
+        loadCatalog();
 
         window.setTimeout(() => getGPSPosition(), 1000); // Initial get position from cache
         // Get position from cache every so often
