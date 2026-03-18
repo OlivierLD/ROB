@@ -1,4 +1,6 @@
 // Could be moinimized...
+const zodiac = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpius", "Sagittarius", "Capricornus", "Aquarius", "Pisces"];
+
 const constellations = [
   {
     "name": "Ursa Minor",
@@ -141,7 +143,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Leo",
+    "name": "Leo",  // Zodiac
     "stars": [
       {
         "name": "Regulus",
@@ -569,7 +571,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Taurus",
+    "name": "Taurus",  // Zodiac
     "stars": [
       {
         "name": "Aldebaran",
@@ -635,7 +637,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Gemini",
+    "name": "Gemini",  // Zodiac
     "stars": [
       {
         "name": "Castor",
@@ -764,7 +766,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Aries",
+    "name": "Aries",  // Zodiac
     "stars": [
       {
         "name": "Hamal",
@@ -785,7 +787,7 @@ const constellations = [
     }
   },
   {
-    "name": "Cancer",
+    "name": "Cancer",  // Zodiac
     "stars": [
       {
         "name": "acubens",
@@ -824,7 +826,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Virgo",
+    "name": "Virgo",  // Zodiac
     "stars": [
       {
         "name": "Spica",
@@ -957,7 +959,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Libra",
+    "name": "Libra",  // Zodiac
     "stars": [
       {
         "name": "Zubenelgenubi",
@@ -1009,7 +1011,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Scorpius",
+    "name": "Scorpius",  // Zodiac
     "stars": [
       {
         "name": "Antares",
@@ -1150,7 +1152,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Sagittarius",
+    "name": "Sagittarius",  // Zodiac
     "stars": [
       {
         "name": "Kaus Australis",
@@ -1250,7 +1252,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Capricornus",
+    "name": "Capricornus",  // Zodiac
     "stars": [
       {
         "name": "alpha",
@@ -1302,7 +1304,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Aquarius",
+    "name": "Aquarius",  // Zodiac
     "stars": [
       {
         "name": "psi",
@@ -1408,7 +1410,7 @@ const constellations = [
     ]
   },
   {
-    "name": "Pisces",
+    "name": "Pisces",  // Zodiac
     "stars": [
       {
         "name": "tau",
@@ -3475,3 +3477,5 @@ const constellations = [
 ];
 
 export default constellations;
+export const zodiacMembers = zodiac;
+

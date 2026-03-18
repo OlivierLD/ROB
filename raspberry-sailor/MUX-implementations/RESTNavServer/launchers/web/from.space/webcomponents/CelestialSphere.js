@@ -25,6 +25,7 @@ import * as Utilities from "./utilities/Utilities.js";
 
 /* The map data */
 import constellations from "./skymap/stars/constellations.js";
+import { zodiacMembers } from "./skymap/stars/constellations.js";
 // import * as Utilities from "../utilities/Utilities.js";
 // import constellations from "./stars/constellations"; // minifyJs does NOT like the .js extension
 
@@ -996,7 +997,7 @@ class CelestialSphere extends HTMLElement {
 					}
 				}
 				if (this._constellationNames) {
-					// Calculate the center of the constellation
+					// Calculate the center of the constellation. Pb with Pisces (a wide one, around RA=0, see below)...
 					let minD = undefined, maxD = undefined, minRA = undefined, maxRA = undefined;
 					for (let s = 0; s < constellations[i].stars.length; s++) {
 						if (s === 0) {
@@ -1011,8 +1012,14 @@ class CelestialSphere extends HTMLElement {
 							maxRA = Math.max(constellations[i].stars[s].ra, maxRA);
 						}
 					}
+					if (Math.abs(maxRA - minRA) > 12) {
+						minRA += 24;
+					}
 					let centerDec = (this.observerLatitude >= 0 ? 1 : -1) * (maxD + minD) / 2;
 					let centerRA = (maxRA + minRA) / 2;
+					while (centerRA > 24) {
+						centerRA -= 24;
+					}
 					let lng = (360 - (centerRA * 360 / 24));
 					lng += (/*this._hemisphere * */this.LHAAries);
 					if (lng > 180) {
@@ -1025,6 +1032,13 @@ class CelestialSphere extends HTMLElement {
 					context.font = "bold " + Math.round(10 * this._zoom) + "px Arial"; // Like "bold 15px Arial"
 					context.fillStyle = this.celestialSphereColorConfig.constellationNameColor;
 					let str = constellations[i].name;
+					const found = zodiacMembers.find((element) => element === constellations[i].name);
+					if (found) {
+						// console.log(`${constellation.name} is in Zodiac`);
+						context.font = "bold " + Math.round(14 * this._zoom) + "px Arial";
+						context.fillStyle = 'lime'; // TODO A CSS entry
+					}
+
 					let len = context.measureText(str).width;
 					context.fillText(str, (this.canvas.width / 2) - p.x - (len / 2), (this.canvas.height / 2) + p.y - 2);
 				}

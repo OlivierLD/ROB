@@ -56,6 +56,8 @@ const worldMapDefaultColorConfig = {
 import fullWorldMap from "./world.map/worldmap.data.js";
 // import fullWorldMap from "./world.map/worldmap.data"; // minifyJs does NOT like the .js extension
 import * as Utilities from "./utilities/Utilities.js";
+import { zodiacMembers } from "./skymap/stars/constellations.js";
+
 
 /* global HTMLElement */
 class WorldMap extends HTMLElement {
@@ -957,7 +959,14 @@ class WorldMap extends HTMLElement {
 			context.font = `italic ${font}`;
 		}
 		context.fillStyle = 'silver'; // TODO A CSS entry
+		context.font = "12px sans-serif";
 		let text = constellation.name;
+		const found = zodiacMembers.find((element) => element === constellation.name);
+		if (found) {
+			// console.log(`${constellation.name} is in Zodiac`);
+			context.font = "14px sans-serif";
+			context.fillStyle = 'lime'; // TODO A CSS entry
+		}
 		let metrics = context.measureText(text);
 		// TODO A style for the constellation name
 		context.fillText(text,
@@ -2324,6 +2333,7 @@ class WorldMap extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
+		context.font = "12px sans-serif";
 
 		if (this.width === 0 || this.height === 0) { // Not visible
 			return;
