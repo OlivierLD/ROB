@@ -13,9 +13,10 @@ For an example, try the option `13e` in the `demoLauncher.sh`, and use the
 
 Southern hemisphere: use `9e` (for example).
 
-
 ## TODO
-- Fix SunPath for southern latitudes...
 
+- Fix SunPath for southern latitudes?...
+
+![Three Circles](./zodiaque.ecliptique.horizon.equateur.celeste.png)
 
 ---

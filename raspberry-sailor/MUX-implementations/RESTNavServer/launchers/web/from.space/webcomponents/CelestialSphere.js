@@ -129,8 +129,6 @@ let drawSun = (context, center, outsideRadius, color) => {
 	context.fill();
 };
 
-
-
 /* global HTMLElement */
 class CelestialSphere extends HTMLElement {
 
@@ -997,7 +995,7 @@ class CelestialSphere extends HTMLElement {
 					}
 				}
 				if (this._constellationNames) {
-					// Calculate the center of the constellation. Pb with Pisces (a wide one, around RA=0, see below)...
+					// Calculate the center of the constellation. Pb with Pisces (a wide one, around RA=0, see below, Math.abs(maxRA - minRA) > 12)...
 					let minD = undefined, maxD = undefined, minRA = undefined, maxRA = undefined;
 					for (let s = 0; s < constellations[i].stars.length; s++) {
 						if (s === 0) {
