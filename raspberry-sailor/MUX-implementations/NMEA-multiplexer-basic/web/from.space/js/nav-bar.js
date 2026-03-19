@@ -986,7 +986,8 @@ function setWanderingBodiesCS(id, cb) {
             { "name": "venus", "decl": globalAstroData.venus.DEC.raw, "gha": globalAstroData.venus.GHA.raw },
             { "name": "mars", "decl": globalAstroData.mars.DEC.raw , "gha": globalAstroData.mars.GHA.raw },
             { "name": "jupiter", "decl": globalAstroData.jupiter.DEC.raw , "gha":  globalAstroData.jupiter.GHA.raw },
-            { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw }
+            { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw },
+            { "obliq": globalAstroData.trueObliq.raw } // obliq, or trueObliq ?
         ];
     }
     document.getElementById(id).repaint();
@@ -994,6 +995,12 @@ function setWanderingBodiesCS(id, cb) {
 
 function setUseBoatHeadingCS(id, cb) {
     document.getElementById(id).useHeading = cb.checked;
+    document.getElementById(id).repaint();
+}
+
+function setCelestialEquatorCS(id, cb) {
+    document.getElementById(id).celestialEquator = cb.checked;
+    document.getElementById(id).repaint();
 }
 
 function setBoatShape(id, list) {
@@ -1075,7 +1082,8 @@ let setCelestialSphereData = () => {
             { "name": "venus", "decl": globalAstroData.venus.DEC.raw, "gha": globalAstroData.venus.GHA.raw },
             { "name": "mars", "decl": globalAstroData.mars.DEC.raw , "gha": globalAstroData.mars.GHA.raw },
             { "name": "jupiter", "decl": globalAstroData.jupiter.DEC.raw , "gha":  globalAstroData.jupiter.GHA.raw },
-            { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw }
+            { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw },
+            { "obliq": globalAstroData.trueObliq.raw } // obliq, or trueObliq ?
         ];
 
         if (userPos !== undefined && userPos.longitude !== undefined) {
@@ -1103,7 +1111,8 @@ let setCelestialSphereData = () => {
         { "name": "venus", "decl": globalAstroData.venus.DEC.raw, "gha": globalAstroData.venus.GHA.raw },
         { "name": "mars", "decl": globalAstroData.mars.DEC.raw , "gha": globalAstroData.mars.GHA.raw },
         { "name": "jupiter", "decl": globalAstroData.jupiter.DEC.raw , "gha":  globalAstroData.jupiter.GHA.raw },
-        { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw }
+        { "name": "saturn", "decl": globalAstroData.saturn.DEC.raw, "gha": globalAstroData.saturn.GHA.raw },
+        { "obliq": globalAstroData.trueObliq.raw } // obliq, or trueObliq ?
     ];
 
     if (userPos !== undefined && userPos.longitude !== undefined) {

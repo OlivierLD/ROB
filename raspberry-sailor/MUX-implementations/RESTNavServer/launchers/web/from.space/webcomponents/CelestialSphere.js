@@ -203,7 +203,7 @@ class CelestialSphere extends HTMLElement {
 		this._constellationNames = false;
 		this._withConstellations = true;
 		this._withWanderingBodies = false;
-		this._withCelestialEquator = true;
+		this._withCelestialEquator = false;
 		this._wanderingBodiesData = undefined;
 
 		this._previousClassName = "";
