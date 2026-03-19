@@ -1192,8 +1192,8 @@ class CelestialSphere extends HTMLElement {
 			this._wanderingBodiesData.forEach((body) => {
 				if (body.name) {
 					let dec = body.decl; // * (this.observerLatitude >= 0 ? 1 : -1);
-					let lng = body.gha - ghaAries;
-					lng += (/*this._hemisphere * */self.LHAAries);
+					let lng = body.gha; // - ghaAries;
+					// lng += (/*this._hemisphere * */self.LHAAries);
 					if (lng > 180) {
 						lng -= 360;
 					}
