@@ -714,6 +714,7 @@ compass-display .green {
 	--star-circle-color: black;
 	--wandering-bodies-color: orangered;
 	--wandering-bodies-labels-color: lime;
+	--wandering-bodies-names-color: silver;
 }
 
 .sat-plot-01 {
