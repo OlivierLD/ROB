@@ -1,6 +1,8 @@
 // Could be moinimized...
 const zodiac = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpius", "Sagittarius", "Capricornus", "Aquarius", "Pisces"];
 
+// "ra" is expressed in hours [0..24[
+// "d" in degrees [-90..90]
 const constellations = [
   {
     "name": "Ursa Minor",
@@ -71,8 +73,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Ursa Major",
     "stars": [
       {
@@ -141,8 +142,7 @@ const constellations = [
         "to": "megrez"
       }
     ]
-  },
-  {
+  }, {
     "name": "Leo",  // Zodiac
     "stars": [
       {
@@ -291,8 +291,7 @@ const constellations = [
         "to": "epsilon"
       }
     ]
-  },
-  {
+  }, {
     "name": "Cassiopeia",
     "stars": [
       {
@@ -339,8 +338,7 @@ const constellations = [
         "to": "epsilon"
       }
     ]
-  },
-  {
+  }, {
     "name": "Orion",
     "stars": [
       {
@@ -413,8 +411,7 @@ const constellations = [
         "to": "mintaka"
       }
     ]
-  },
-  {
+  }, {
     "name": "Cygnus",
     "stars": [
       {
@@ -461,8 +458,7 @@ const constellations = [
         "to": "delta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Lyra",
     "stars": [
       {
@@ -513,8 +509,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Aquila",
     "stars": [
       {
@@ -569,8 +564,7 @@ const constellations = [
         "to": "Altair"
       }
     ]
-  },
-  {
+  }, {
     "name": "Taurus",  // Zodiac
     "stars": [
       {
@@ -635,8 +629,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Gemini",  // Zodiac
     "stars": [
       {
@@ -764,8 +757,7 @@ const constellations = [
         "to": "mu"
       }
     ]
-  },
-  {
+  }, {
     "name": "Aries",  // Zodiac
     "stars": [
       {
@@ -785,8 +777,7 @@ const constellations = [
         "to": "beta"
       }
     }
-  },
-  {
+  }, {
     "name": "Cancer",  // Zodiac
     "stars": [
       {
@@ -824,8 +815,7 @@ const constellations = [
         "to": "iota"
       }
     ]
-  },
-  {
+  }, {
     "name": "Virgo",  // Zodiac
     "stars": [
       {
@@ -957,8 +947,7 @@ const constellations = [
         "to": "eta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Libra",  // Zodiac
     "stars": [
       {
@@ -1009,8 +998,7 @@ const constellations = [
         "to": "upsilon"
       }
     ]
-  },
-  {
+  }, {
     "name": "Scorpius",  // Zodiac
     "stars": [
       {
@@ -1150,8 +1138,7 @@ const constellations = [
         "to": "rho"
       }
     ]
-  },
-  {
+  }, {
     "name": "Sagittarius",  // Zodiac
     "stars": [
       {
@@ -1250,8 +1237,7 @@ const constellations = [
         "to": "gamma"
       }
     ]
-  },
-  {
+  }, {
     "name": "Capricornus",  // Zodiac
     "stars": [
       {
@@ -1302,8 +1288,7 @@ const constellations = [
         "to": "alpha"
       }
     ]
-  },
-  {
+  }, {
     "name": "Aquarius",  // Zodiac
     "stars": [
       {
@@ -1408,8 +1393,7 @@ const constellations = [
         "to": "epsilon"
       }
     ]
-  },
-  {
+  }, {
     "name": "Pisces",  // Zodiac
     "stars": [
       {
@@ -1505,8 +1489,7 @@ const constellations = [
         "to": "iota"
       }
     ]
-  },
-  {
+  }, {
     "name": "Auriga",
     "stars": [
       {
@@ -1562,8 +1545,7 @@ const constellations = [
         "to": "theta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Bootes",
     "stars": [
       {
@@ -1641,8 +1623,7 @@ const constellations = [
         "to": "rho"
       }
     ]
-  },
-  {
+  }, {
     "name": "Corona Borealis",
     "stars": [
       {
@@ -1707,8 +1688,7 @@ const constellations = [
         "to": "theta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Hercules",
     "stars": [
       {
@@ -1808,8 +1788,7 @@ const constellations = [
         "to": "iota"
       }
     ]
-  },
-  {
+  }, {
     "name": "Canis Major",
     "stars": [
       {
@@ -1913,8 +1892,7 @@ const constellations = [
         "to": "iota"
       }
     ]
-  },
-  {
+  }, {
     "name": "Canis Minor",
     "stars": [
       {
@@ -1934,8 +1912,7 @@ const constellations = [
         "to": "beta"
       }
     }
-  },
-  {
+  }, {
     "name": "Carina",
     "stars": [
       {
@@ -1991,8 +1968,7 @@ const constellations = [
         "to": "avior"
       }
     ]
-  },
-  {
+  }, {
     "name": "Vela",
     "stars": [
       {
@@ -2070,8 +2046,7 @@ const constellations = [
         "to": "delta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Piscis Austrinus",
     "stars": [
       {
@@ -2144,8 +2119,7 @@ const constellations = [
         "to": "Fomalhaut"
       }
     ]
-  },
-  {
+  }, {
     "name": "Centaurus",
     "stars": [
       {
@@ -2241,8 +2215,7 @@ const constellations = [
         "to": "omicron"
       }
     ]
-  },
-  {
+  }, {
     "name": "Grus",
     "stars": [
       {
@@ -2311,8 +2284,7 @@ const constellations = [
         "to": "gamma"
       }
     ]
-  },
-  {
+  }, {
     "name": "Pegasus",
     "stars": [
       {
@@ -2372,8 +2344,7 @@ const constellations = [
         "to": "Enif"
       }
     ]
-  },
-  {
+  }, {
     "name": "Puppis",
     "stars": [
       {
@@ -2429,8 +2400,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Cetus",
     "stars": [
       {
@@ -2557,8 +2527,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Draco",
     "stars": [
       {
@@ -2681,8 +2650,7 @@ const constellations = [
         "to": "xi"
       }
     ]
-  },
-  {
+  }, {
     "name": "Perseus",
     "stars": [
       {
@@ -2738,8 +2706,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Ophiuchus",
     "stars": [
       {
@@ -2816,8 +2783,7 @@ const constellations = [
         "to": "zeta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Corvus",
     "stars": [
       {
@@ -2868,8 +2834,7 @@ const constellations = [
         "to": "Gienah"
       }
     ]
-  },
-  {
+  }, {
     "name": "Pavo",
     "stars": [
       {
@@ -2969,8 +2934,7 @@ const constellations = [
         "to": "eta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Phoenix",
     "stars": [
       {
@@ -3034,8 +2998,7 @@ const constellations = [
         "to": "beta"
       }
     ]
-  },
-  {
+  }, {
     "name": "Eridanus",
     "stars": [
       {
@@ -3253,8 +3216,7 @@ const constellations = [
         "to": "achenar"
       }
     ]
-  },
-  {
+  }, {
     "name": "Triangulum Australe",
     "stars": [
       {
@@ -3287,8 +3249,7 @@ const constellations = [
         "to": "atria"
       }
     ]
-  },
-  {
+  }, {
     "name": "Hydra",
     "stars": [
       {
@@ -3438,8 +3399,7 @@ const constellations = [
         "to": "epsilon"
       }
     ]
-  },
-  {
+  }, {
     "name": "Crux",
     "stars": [
       {
