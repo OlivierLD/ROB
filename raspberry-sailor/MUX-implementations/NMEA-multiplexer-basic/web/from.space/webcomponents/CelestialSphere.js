@@ -62,7 +62,7 @@ const celestialSphereDefaultColorConfig = {
 };
 
 function drawSun_backup(context, where) {
-	// TODO Something niver...
+	// TODO Something nicer... See below.
 	let bodyRadius = 8;
 	context.beginPath();
 	context.fillStyle = 'yellow'; // this.celestialSphereColorConfig.wanderingBodiesColor;
@@ -71,6 +71,7 @@ function drawSun_backup(context, where) {
 	context.closePath();
 }
 
+// An 8-branch star/sun
 let drawSun = (context, center, outsideRadius, color) => {
 
     let posFromAngle = (radius, angle) => {

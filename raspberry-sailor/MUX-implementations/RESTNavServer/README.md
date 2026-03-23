@@ -1,4 +1,9 @@
 # Navigation Server
+
+> `Note:`  
+> This is an example (just an example) of what can be done, to give you an idea.  
+> If there is anything to add, well, just open the hood and get it added! 
+
 #### Prolongation/Extension of the NMEA-multiplexer
 This is the one you want if the board (computer) you want to run it on is strong enough.  
 It might be a bit slow on small boards like Raspberry Pi Zero or A+... 
