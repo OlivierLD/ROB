@@ -1,4 +1,4 @@
-# FromSpace
+# From Space
 WiP. Will need refactoring...
 Here WebComponents and Celestial calculation scripts are located under  the `from.space` directory.
 All those could be reused from higher in the tree.
@@ -18,6 +18,6 @@ Southern hemisphere: use `9e` (for example).
 
 ## Other apps to check out
 - [Stellarium](https://stellarium-web.org/)
-- [Start Walk](https://starwalk.space/)
+- [Star Walk](https://starwalk.space/)
 
 ---
