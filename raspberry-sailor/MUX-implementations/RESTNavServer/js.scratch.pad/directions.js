@@ -12,10 +12,12 @@ if (Math.toDegrees === undefined) {
 	};
 }
 
-let directionFinder = (x, y) => {
 
-    // Note: Prefer getDir (using atan2), below.
-    
+/**
+ * Note: Prefer getDir (using atan2), below.
+ * @Deprecated
+ */
+let directionFinder = (x, y) => {
     let dir = 0.0;
     if (y !== 0) {
         dir = Math.toDegrees(Math.atan(x / y));

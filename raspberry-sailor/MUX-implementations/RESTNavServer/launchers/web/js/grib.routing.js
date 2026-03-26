@@ -148,8 +148,10 @@ let getSpeed = function(x, y) {
  * @param x ugrd
  * @param y vgrd
  * @returns {number} Direction in degrees [0..360]
+ *
+ * @Deprecated
  */
-let getDir = function(x, y) {
+let getDir_ = function(x, y) {
 	let dir = 0.0;
 	if (y !== 0) {
 		dir = toDegrees(Math.atan(x / y));
@@ -180,6 +182,22 @@ let getDir = function(x, y) {
 		dir -= 360;
 	}
 	return dir;
+};
+
+/**
+ * Get wind direction from ugrd, vgrd.
+ *
+ * @param x ugrd
+ * @param y vgrd
+ * @returns {number} Direction in degrees [0..360[
+ */
+let getDir = (x, y) => {
+	let direction = 180 + Math.toDegrees(Math.atan2(x, y));
+	while (direction < 0) {
+		direction += 360;
+	}
+	direction %= 360;
+	return direction;
 };
 
 let toRadians = function (deg) {
