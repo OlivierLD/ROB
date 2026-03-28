@@ -140,6 +140,8 @@ echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-jav
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   echo -e "| > For the python scripts, make sure you run (once) the script ./python/scripts/install.all.sh    |"
   echo -e "| > after unzipping the archive on the target machine.                                             |"
+  echo -e "| > In case you see an \"Externally Managed\" message,                                             |"
+  echo -e "|   see https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/ ...          |"
 fi
 echo -e "| The script to launch will be 'mux.sh'                                                            |"
 echo -e "| It is your responsibility to use the right properties file, possibly modified to fit your needs. |"

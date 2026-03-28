@@ -6,8 +6,11 @@ stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 #
 # Start MUX and Co on startup
 #
-# Can be EINK2-13 or BME280-SSD
-OPTION=EINK2-13
+# Can be EINK2-13 or BME280-SSD (BME280 + SSD1306)
+OPTION=EINK2-13  # Default
+if [[ $# -gt 0 ]]; then
+  OPTION=$1
+fi
 #
 echo -e "Using option ${OPTION}"
 #

@@ -43,6 +43,8 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Warning: Use `bookworm`, **_not_** `trixie`, for JDK compatibility reasons
   - Make sure `SSH` is enabled (it's a setting parameter in the Raspberry Pi imager).
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
+  - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc), and **_do make sure you boot the first time on the right machine_**!!
+    Starting an A+ SDCard on would put you in trouble (when movingf back to A+)...   
 - Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
   - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
     If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
@@ -87,6 +89,9 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   ```
   sudo pip3 install adafruit-circuitpython-epd
   ```
+Depending on the Python servers you need, do look into the specific code to see what to install with `pip3`...
+The above is here for the `e-ink bonnet`. That would be another one for a `SSD1306` (for example).
+
   - Setup Hotspot (if needed), as explained [here](./HOTSPOT.md).
   - Expand the archive, using a command like `tar -xzvf nmea-dist.tar.gz`
   - Modify the `/etc/rc.local` to start the server when the server boots,
