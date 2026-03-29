@@ -5,6 +5,10 @@
 # Run with sudo, so scripts can be run as root.
 #
 echo -e "For the BMP180, look into https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/using-the-adafruit-bmp-python-library"
+echo -e "+--------------------------------------------------------------------------------------------------+"
+echo -e "| > In case you see an \"Externally Managed\" message,                                             |"
+echo -e "|   see https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/ ...          |"
+echo -e "+--------------------------------------------------------------------------------------------------+"
 #
 sudo pip3 install serial
 sudo pip3 install adafruit-circuitpython-htu21d

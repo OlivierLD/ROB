@@ -106,6 +106,19 @@ The above is here for the `e-ink bonnet`. That would be another one for a `SSD13
 
 Now, you're good to go, the Raspberry Pi should not need an Internet connection anymore.
 
+A first test can be done, using `start.all.sh`.
+```
+$ ./start.all.sh
+```
+For EINK2-13 (default)
+```
+$ ./start.all.sh EINK2-13
+```
+For BME280-SSD
+```
+$ ./start.all.sh BME280-SSD
+```
+
 About the modification of the `/etc/rc.local` script, to start the 
 required components when the machine boots,
 here are the lines to add to the file, _**before**_ the `exit` statement at the end:
@@ -218,7 +231,7 @@ In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
 this is the kind of things you might regret not to have done. For the backup of your SD Card, use
-[Balena Etcher](https://etcher.balena.io/) or a similar tool.
+a tool depending on the system you do the backup from, like [this one](https://forums.raspberrypi.com/viewtopic.php?t=324411) if you're on Mac.
 
 It comes with many web components and examples.  
 ![From Space 01](./doc_resources/from.space.01.png)  
