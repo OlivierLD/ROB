@@ -43,15 +43,16 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Warning: Use `bookworm`, **_not_** `trixie`, for JDK compatibility reasons
   - Make sure `SSH` is enabled (it's a setting parameter in the Raspberry Pi imager).
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
-  - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc), and **_do make sure you boot the first time on the right machine_**!!
-    Starting an A+ SDCard on would put you in trouble (when movingf back to A+)...   
+  - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc) 
+  - > and **_do make sure you boot the first time on the right machine_**!!  
+    Starting an A+ SDCard on an RPi-5 would put you in trouble (when moving back to A+)...   
 - Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
   - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
     If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
     Using a JDK11 for the build will not work at runtime on a JDK8.
   - Make sure you package the Python part as well, when prompted.
   - This will prepare a `tar.gz` archive, called - for example - `nmea-dist.tar.gz` (_**you**_ choose the name `nmea-dist` during the build process).
-  - Send the archive to the newly flashed Raspberry Pi (change it's IP address at will)
+  - Send the archive to the newly flashed Raspberry Pi (change its IP address at will)
     - ` scp nmea-dist.tar.gz pi@192.168.1.15:~`  
       where `nmea-dist` is a name chosen by _**you**_ during the execution of the `to.prod.sh` script, `pi` is the username _**you**_ chose too, and
       `192.168.1.15` is the IP Address of the Raspberry Pi, obtained with an `ifconfig` on the Raspberry Pi, or a [`fing`](https://www.fing.com/) on any machine on the same network as the Raspberry Pi.
@@ -216,7 +217,8 @@ The web UI is customizable at will. Above is _examples_ of the ChartlessMap WebC
 In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
-this is the kind of things you might regret not to have done.  
+this is the kind of things you might regret not to have done. For the backup of your SD Card, use
+[Balena Etcher](https://etcher.balena.io/) or a similar tool.
 
 It comes with many web components and examples.  
 ![From Space 01](./doc_resources/from.space.01.png)  
@@ -224,7 +226,8 @@ It comes with many web components and examples.
 The two ones below have been added recently. Sailing at night, I was wondering 
 "What is this star ahead of us?". Those components answer the question 😉.
 ![From Space 02](./doc_resources/from.space.02.png)  
-![From Space 03](./doc_resources/from.space.03.png)  
+![From Space 03](./doc_resources/from.space.03.png)    
+![From Space 04](./doc_resources/from.space.04.png)
 
 ### REST Clients
 Small boards that can be wifi-aware can connect to the network emitted by the Raspberry Pi (Huzzah, M5Stick, Arduino, etc, the list is long), using REST or other _standard_ protocols.
