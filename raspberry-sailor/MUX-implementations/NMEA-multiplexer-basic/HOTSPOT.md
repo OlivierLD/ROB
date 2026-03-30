@@ -2,8 +2,14 @@
 <!-- 
   TODO: make sure it is not redundant with the `HintsAndTips.md at the root of this repo
  -->
+Also see [here](../../../HintsAndTips.md#ad-hoc--hotspot-networking).
 
 Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>.
+
+> ### Other options...
+> - [with `nmcli`](https://www.raspberrypi.com/tutorials/host-a-hotel-wifi-hotspot/)
+>   - `nmcli` [doc](https://networkmanager.dev/docs/api/latest/nmcli.html)
+> - [RaspAP](https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express/)
 
 Connected on the Raspberry Pi (directly, or using `ssh`), do the following commands:
 
@@ -15,7 +21,12 @@ If needed:
 ```
 sudo apt-get dist-upgrade
 ```
+or
+```
+sudo apt full-upgrade
+```
 
+```
 To install `hostapd`, enter the command:
 ```
 sudo apt install hostapd

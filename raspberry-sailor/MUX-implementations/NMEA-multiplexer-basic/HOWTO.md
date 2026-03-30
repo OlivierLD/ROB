@@ -45,7 +45,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Create a user named `pi` (this is the name we use below, choose your own if you want to)
   - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc) 
   - > and **_do make sure you boot the first time on the right machine_**!!  
-    Starting an A+ SDCard on an RPi-5 would put you in trouble (when moving back to A+)...   
+    Starting an A+ SDCard on an RPi-5 could put you in trouble (when moving back to A+)...   
 - Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
   - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
     If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
@@ -90,6 +90,8 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   ```
   sudo pip3 install adafruit-circuitpython-epd
   ```
+Alternatively, in the `tar.gz`, there is a `python/scripts/install.all.sh` that does it (and more) for you. 
+
 Depending on the Python servers you need, do look into the specific code to see what to install with `pip3`...
 The above is here for the `e-ink bonnet`. That would be another one for a `SSD1306` (for example).
 
@@ -97,7 +99,7 @@ The above is here for the `e-ink bonnet`. That would be another one for a `SSD13
   - Expand the archive, using a command like `tar -xzvf nmea-dist.tar.gz`
   - Modify the `/etc/rc.local` to start the server when the server boots,
     and issue the required command (links, maps, stty, etc). There is an example in `rc.local.use_case.3.sh`.
-- Plug in the GPS and the e-ink screen, and give it a try (see for example the script `start.all.sh`)
+- Plug in the GPS and the e-ink screen, and give it a try (see for example the script `start.all.sh`, used as below)
 - Try the web interface
   - From a browser on another machine (laptop, cell-phone, tablet, ...), connected on the Raspberry Pi's network, reach
     `http://192.168.50.10:9999/zip/index.html`, and see for yourself!
@@ -231,7 +233,8 @@ In case this is good enough for you, the e-ink screen can become optional.
 
 And as soon as you have a configuration that fits your needs, do make a backup of your SD card... When you need it,
 this is the kind of things you might regret not to have done. For the backup of your SD Card, use
-a tool depending on the system you do the backup from, like [this one](https://forums.raspberrypi.com/viewtopic.php?t=324411) if you're on Mac.
+a tool depending on the system you do the backup from, like [this one](https://forums.raspberrypi.com/viewtopic.php?t=324411) if you're on Mac.  
+Also see [here](../../../HintsAndTips.md#backup--restore-sd-card).
 
 It comes with many web components and examples.  
 ![From Space 01](./doc_resources/from.space.01.png)  
