@@ -1,5 +1,5 @@
 # Java to Python, Python to Java, using TCP et al
-### and beyond... Any language to any language, and vice-versa
+### ...and beyond. Any language to any language, and vice-versa
 ## A playground. 🥳
 ### Tests, Drafts, Tentatives, Tries, Errors, Mistakes, Lessons ...
 
@@ -9,6 +9,18 @@
 
 > Raspberry Pi GPIO Headers [here](https://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/#:~:text=The%20Raspberry%20header%20is%20the,3.3V%20(on%202%20pins)).
 
+### Why this section, where it comes from...
+Originally, I wanted to use Java only, it's a language I used to practice every day, and I like it.  
+To be able to read the devices and PCBs I wanted to deal with, I (re-)wrote a bunch of drivers, based on the
+C or Python code, delivered by the components providers. To write those drivers,
+I used frameworks like `PI4J`, `diozero`...  
+Unfortunately, whenever those frameworks stop to be supported, all the work done with them become obsolete, too bad.  
+That's why I now relie only on Java, and manage the communication between Java and the devices through TCP.
+TCP is supported by Java and Python, and will remain as is. The Python drivers are supported (and written) by the 
+component providers, which would prevent the obsolescence I've been facing before.
+That's it. This brings more flexibility to the story, which never hurts.
+
+### Let's go.
 For a Java-to-Python communication, _**TCP**_ could be an option, it is socket-based, and natively supports read and write.
 
 We would have the Java code acting as a TCP server, and we would wrap the Python code into
