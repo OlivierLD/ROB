@@ -13,6 +13,7 @@ pin_button_01 = board.D20  # pin #38
 pin_button_02 = board.D21  # pin #40
 
 
+# Used as callback, from the button_manager
 def button_listener(pin, state) -> None:
     global current_value
     global pin_button_01
@@ -27,6 +28,7 @@ def button_listener(pin, state) -> None:
         print(f"Current Value is now {current_value}")
 
 
+# Used by the button_thread(s)
 def button_manager(pin, callback) -> None:
     global keep_looping
     btn: DigitalInOut = DigitalInOut(pin)
