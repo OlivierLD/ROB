@@ -158,7 +158,7 @@ then
 ```
 $ diskutil eject /dev/disk1
 ```
-Restore backup:
+### Restore backup:
 ```
 $ diskutil list
 $ diskutil unmountDisk /dev/disk2

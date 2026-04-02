@@ -9,8 +9,8 @@ VERBOSE: bool = False
 keep_looping: bool = True
 current_value: int = 0
 
-pin_button_01 = board.D20  # pin #38
-pin_button_02 = board.D21  # pin #40
+pin_button_01 = board.D20  # GPIO-20, physical pin #38
+pin_button_02 = board.D21  # GPIO-21, physical pin #40
 
 
 # Used as callback, from the button_manager

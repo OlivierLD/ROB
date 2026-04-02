@@ -26,7 +26,6 @@ or
 sudo apt full-upgrade
 ```
 
-```
 To install `hostapd`, enter the command:
 ```
 sudo apt install hostapd
@@ -37,9 +36,11 @@ To install `dnsmasq` enter the command:
 ```
 sudo apt install dnsmasq
 ```
+
 enter `Y` when prompted
 
 The installers will have set up the program so they run when the pi is started and activated them. While we set the hotspot we should stop them running. This is done with the following commands:
+
 ```
 sudo systemctl stop hostapd
 sudo systemctl stop dnsmasq
