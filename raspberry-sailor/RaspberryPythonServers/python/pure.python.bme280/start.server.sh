@@ -1,16 +1,17 @@
 #!/bin/bash
 IP_ADDR=$(hostname -I | awk '{ print $1 }')
 #
-I2C_ADDR=0x76
+I2C_ADDR=0x76          # Can be 0x77
 VERBOSE=false
 STORE_RESTORE=false
-LOG_DB=true            # Do check the DB_OPTION in the python code !
+LOG_DB=true            # Do check the DB_OPTION in the python code, and below!
+DB_OPTION=REST         # Applied if LOG_DB is true
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
 #
 # Do not omit the '-u' to get the output in the log file !!
 #
-COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB}"
+COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB} --db-option:${DB_OPTION}"
 echo "Executing: ${COMMAND}"
 nohup ${COMMAND} > bmp.log 2>&1 &
 # nohup -u python3 REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} &

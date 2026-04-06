@@ -63,6 +63,7 @@ VERBOSE_PREFIX: str = "--verbose:"
 ADDRESS_PREFIX: str = "--address:"
 STORE_RESTORE_PREFIX: str = "--store-restore:"
 LOG_DB_PREFIX: str = "--log-db:"
+DB_OPTION_PREFIX: str = "--db-option:"
 
 DB_OPTION: str = "REST"   # REST or SQLITE, or BOTH
 
@@ -626,6 +627,9 @@ if len(sys.argv) > 0:  # Script name + X args
             STORE_RESTORE = (arg[len(STORE_RESTORE_PREFIX):].lower() == "true")
         if arg[:len(LOG_DB_PREFIX)] == LOG_DB_PREFIX:
             LOG_DB = (arg[len(LOG_DB_PREFIX):].lower() == "true")
+        if arg[:len(DB_OPTION_PREFIX)] == DB_OPTION_PREFIX:
+            DB_OPTION = arg[len(DB_OPTION_PREFIX):]
+
 if verbose:
     print("-- Received from the command line: --")
     for arg in sys.argv:
