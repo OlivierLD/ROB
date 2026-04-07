@@ -5,6 +5,11 @@
 > - One pin on a GPIO-XX (`board.DXX`)
 > - The other pin on the _**GROUND**_ !
 
+Requires
+```
+$ sudo pip3 install [--force-reinstall] adafruit-blinka
+```
+
 ![Wiring](../../../../../resources/PushButtons_bb.png)
 To use with the code in `button_101.py` and `button_listener.py`.
 
@@ -19,3 +24,4 @@ The code to use is `button_101_inv.py` and `button_listener_inv.py` in this case
 - <https://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/#:~:text=The%20Raspberry%20header%20is%20the,3.3V%20(on%202%20pins)>
 - <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
 
+---
