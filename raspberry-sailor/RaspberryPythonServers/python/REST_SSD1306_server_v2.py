@@ -567,7 +567,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             if verbose:
                 print("Content: {}".format(body))
             try:
-                # Parse it
+                # Parse it, load it in nmea-cache.
                 try:
                     nmea_cache = json.loads(body)
                     if verbose:

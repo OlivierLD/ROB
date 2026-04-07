@@ -476,9 +476,10 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     # rest.query.string: ""
     verbose: true
   ```
-  - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.
-  Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.  
-  See such an example in `REST_SSD1306_server_v2.py`, it is a REST server written in Python, displaying data on an SSD1306 oled screen.
+  - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.  
+  **Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.**  
+  See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.  
+  This can be a very convenient way to communicate between languages (like here, between Java and Python).
 
 You can also implement your own forwarder (implementing the `Forwarder` interface).
 
