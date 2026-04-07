@@ -482,7 +482,7 @@ Several "dynamic" forwarders are provided, as examples. See - among others
   This can be a very convenient way to communicate between languages (like here, between Java and Python).  
   The cache can look like this:
 <!-- A scrollable div  --> 
-<div style="width: 90%; max-height: 200px; overflow: scroll; font-family: 'Courier New;">
+<div style="width: 90%; height: 200px; max-height: 200px; overflow: scroll; font-family: 'Courier New';">
 <pre style="width: 90%; max-height: 200px; overflow: scroll;">{
   "Damping": 1,
   "NMEA_AS_IS": {
