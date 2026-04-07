@@ -478,10 +478,11 @@ Several "dynamic" forwarders are provided, as examples. See - among others
   ```
   - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.  
   **Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.**  
-  See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.  
+  See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.
+  In the code, look at the `display_manager` function.  
   This can be a very convenient way to communicate between languages (like here, between Java and Python).  
   The cache can look like this:
-<!-- A scrollable div  --> 
+<!-- A scrollable div --> 
 <div style="width: 90%; height: 200px; max-height: 200px; overflow: scroll; font-family: 'Courier New';">
 <pre style="width: 90%; max-height: 200px; overflow: scroll;">{
   "Damping": 1,
