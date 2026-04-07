@@ -481,8 +481,9 @@ Several "dynamic" forwarders are provided, as examples. See - among others
   See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.  
   This can be a very convenient way to communicate between languages (like here, between Java and Python).  
   The cache can look like this:
+<!-- A scrollable div  --> 
 <div style="width: 90%; max-height: 200px; overflow: scroll; font-family: 'Courier New;">
-<pre>{
+<pre style="width: 90%; max-height: 200px; overflow: scroll;">{
   "Damping": 1,
   "NMEA_AS_IS": {
     "VLW": "$IIVLW,03013,N,012.2,N*53\r",
