@@ -36,7 +36,7 @@ HEIGHT_PREFIX: str = "--height:"
 oled = None
 
 # Define the Reset Pin
-reset_pin = board.D4  # Pin #7
+reset_pin = board.D4  # Pin #7 (physical)
 oled_reset = digitalio.DigitalInOut(reset_pin)
 
 # Change these

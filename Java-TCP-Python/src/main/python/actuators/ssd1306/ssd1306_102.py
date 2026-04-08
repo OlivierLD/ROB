@@ -71,7 +71,11 @@ font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 
 # Draw Some Text
 text: str = "Hello SSD1306!"
-(font_width, font_height) = font.getsize(text)
+# (font_width, font_height) = font.getsize(text)  # Deprecated
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
+# size = width, height
+
 draw.text(
     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
     text,
@@ -90,7 +94,9 @@ for i in range(5):
     # Draw a black background
     draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
     text = f"Still {5 - i} s..."
-    (font_width, font_height) = font.getsize(text)
+    # (font_width, font_height) = font.getsize(text)
+    left, top, right, bottom = font.getbbox(text)
+    (font_width, font_height) = right - left, bottom - top
     draw.text(
         (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
         text,
@@ -105,6 +111,25 @@ for i in range(5):
     oled.show()
     time.sleep(1)
 
+text = "Take Off!"
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
+draw.text(
+    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+    text,
+    font=font,
+    fill=WHITE,
+)
+#  cls
 oled.fill(BLACK)
 oled.show()
+# new display
+oled.image(image)
+oled.show()
+time.sleep(1)
+
+# Clear screen
+oled.fill(BLACK)
+oled.show()
+
 print("Bye!")

@@ -83,7 +83,9 @@ def display_SSD1306_Data(oled: adafruit_ssd1306.SSD1306_I2C, text: str) -> str:
     global font
 
     draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
-    (font_width, font_height) = font.getsize(text)
+    # (font_width, font_height) = font.getsize(text)
+    left, top, right, bottom = font.getbbox(text)
+    (font_width, font_height) = right - left, bottom - top
     draw.text(
         (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
         text,

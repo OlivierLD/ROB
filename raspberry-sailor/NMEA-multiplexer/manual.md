@@ -464,7 +464,7 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     forward.05.name=RMI-NMEA
     ```
 - `nmea-cache-publisher`
-  - Can be used to PUT/POST the full cache (in JSON format) to a REST server.
+  - Can be used to `PUT`/`POST` the full cache (in JSON format) to a REST server.
   ```yaml
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds

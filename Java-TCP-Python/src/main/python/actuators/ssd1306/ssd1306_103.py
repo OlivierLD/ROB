@@ -73,7 +73,9 @@ font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 
 # Draw Some Text
 text: str = "Hello SSD1306!"
-(font_width, font_height) = font.getsize(text)
+# (font_width, font_height) = font.getsize(text)
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
 draw.text(
     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
     text,
@@ -112,11 +114,15 @@ while keep_looping:
 		MemUsage = subprocess.check_output(cmd, shell=True )
 		cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
 		Disk = subprocess.check_output(cmd, shell=True )
+		cmd = "date"
+		Date = subprocess.check_output(cmd, shell=True )
 
 		draw.text((x, top),      "IP: " + str(IP.decode('utf-8')),  font=font, fill=WHITE)
 		draw.text((x, top + 8),  str(CPU.decode('utf-8')), font=font, fill=WHITE)
 		draw.text((x, top + 16), str(MemUsage.decode('utf-8')),  font=font, fill=WHITE)
-		draw.text((x, top + 24), str(Disk.decode('utf-8')),  font=font, fill=WHITE)
+		# draw.text((x, top + 24), str(Disk.decode('utf-8')),  font=font, fill=WHITE)
+		datestr: str = str(Date.decode('utf-8')).replace("  ", " ")[:-10].strip()
+		draw.text((x, top + 24), datestr,  font=font, fill=WHITE)
 		# draw.text((x, top + 40),    "  shahrulnizam.com  ",font=font, fill=WHITE)
 
 		# Display image.
@@ -126,7 +132,7 @@ while keep_looping:
 		time.sleep(1)
 	except KeyboardInterrupt:
 		keep_looping = False
-		print("Exiting at user's request")
+		print("\nExiting at user's request")
 	except Exception as ex:
 		print("Oops! {}".format(ex))
 
