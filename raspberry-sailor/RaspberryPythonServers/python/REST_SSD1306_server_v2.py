@@ -312,7 +312,9 @@ font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 
 # Draw Some Text, at startup.
 text: str = "Init SSD1306"
-(font_width, font_height) = font.getsize(text)
+# (font_width, font_height) = font.getsize(text)
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
 draw.text(
     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
     text,
@@ -612,7 +614,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # Clear screen. Say Bye for 1 second before clearing the screen.
                 clear()
                 text: str = "Bye SSD1306"
-                (font_width, font_height) = font.getsize(text)
+                # (font_width, font_height) = font.getsize(text)
+                left, top, right, bottom = font.getbbox(text)
+                (font_width, font_height) = right - left, bottom - top
                 draw.text(
                     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
                     text,
@@ -783,7 +787,9 @@ except KeyboardInterrupt:
 if oled is not None:
     clear()
     text: str = "Bye-bye..."
-    (font_width, font_height) = font.getsize(text)
+    # (font_width, font_height) = font.getsize(text)
+    left, top, right, bottom = font.getbbox(text)
+    (font_width, font_height) = right - left, bottom - top
     draw.text(
         (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
         text,

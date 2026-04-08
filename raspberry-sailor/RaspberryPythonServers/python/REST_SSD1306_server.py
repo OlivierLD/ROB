@@ -141,7 +141,9 @@ font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 
 # Draw Some Text
 text: str = "Init SSD1306"
-(font_width, font_height) = font.getsize(text)
+# (font_width, font_height) = font.getsize(text)
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
 draw.text(
     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
     text,

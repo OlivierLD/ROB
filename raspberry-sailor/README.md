@@ -1,6 +1,6 @@
 # `raspberry-sailor`
 
-### Utilities for Navigation and Sailing, in Java
+### Utilities for Navigation and Sailing, in Java, and others (Python, ES6, php, ...)
 
 - NMEA Parser and related utilities
 - Tide Engine
@@ -15,3 +15,4 @@
 - <http://www.lediouris.net/RaspberryPI/_Articles/data.logging/datalogging.html>
 - <https://github.com/OlivierLD/raspberry-coffee/blob/master/Papers/happy.navserver/HappyNavserver.md>
 
+---
