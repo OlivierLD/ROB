@@ -14,7 +14,7 @@ echo -e "Working from $PWD"
 
 PYTHON_SCRIPT_NAME=./REST_SSD1306_server_v2.py
 MACHINE_NAME=localhost
-if MACHINE_NAME=$(hostname -I) ; then
+if MACHINE_NAME=$(hostname -I | awk '{ print $1 }') ; then
     echo -e "It worked: ${MACHINE_NAME}"
 else
     MACHINE_NAME=$(hostname)
@@ -101,6 +101,8 @@ echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
 echo -e "Use ./scripts/kill.python.rest.sh to stop the server."
+echo -e "  or curl [--http0.9] -X POST http://${MACHINE_NAME}:${PORT}/ssd1306/exit"
 echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
+echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/prefix/nmea-data --data \"@cache-sample.json\" "
 
 popd

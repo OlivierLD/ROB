@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 #
+# One eInk2-13 screen, with 2 push-buttons
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)

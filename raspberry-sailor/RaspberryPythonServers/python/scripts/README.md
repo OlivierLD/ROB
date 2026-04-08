@@ -7,3 +7,9 @@ This folder contains scripts to start and stop the Python code contained one lev
   - Serves interaction with various sensors and actuators. Look into the code for details.
 
 The `start.*.server.sh` scripts have an `--interactive:true|false` option.
+
+Then, to simulate the nmea cache:
+
+```commandline
+$ curl -X PUT http://[address]:port/prefix/nmea-data --data "@cache-sample.json"
+```

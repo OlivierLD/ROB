@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 #
+# One oled SSD1306 screen
+# 2 push-buttons (external)
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
@@ -8,9 +11,11 @@
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
 # It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
 #
+# --- IMPORTANT ----------------------------------------------------------------------------------
 # -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that (in
 #      ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/doc_resources/ and in
 #      ROB/Java-TCP-Python/resources)
+# ------------------------------------------------------------------------------------------------
 #
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
 #
@@ -86,8 +91,8 @@ nmea_data: List[str] = [
     "WPT"   # Waypoint, distance and bearing
 ]
 
-pin_button_01 = board.D20  # pin #38
-pin_button_02 = board.D21  # pin #40
+pin_button_01 = board.D20  # physical pin #38
+pin_button_02 = board.D21  # physical pin #40
 
 
 def reset_screen_saver() -> None:
@@ -528,7 +533,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         if verbose:
             print("POST request, {}".format(self.path))
-        if self.path.startswith("/whatever/"):  # Dummy POST
+        if self.path.startswith(PATH_PREFIX + "/whatever/"):  # Dummy POST
             content_len: int = int(self.headers.get('Content-Length'))
             post_body = self.rfile.read(content_len).decode('utf-8')
             if verbose:
@@ -536,15 +541,25 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_response(201)
             response = {"status": "OK"}
             self.wfile.write(json.dumps(response).encode())
-        elif self.path.startswith("/exit"):
-                content_len: int = int(self.headers.get('Content-Length'))
-                post_body = self.rfile.read(content_len).decode('utf-8')
-                if verbose:
-                    print("Content: {}".format(post_body))
-                self.send_response(201)
-                response = {"status": "OK"}
-                self.wfile.write(json.dumps(response).encode())
+        elif self.path.startswith(PATH_PREFIX + "/exit"):
+            if verbose:
+                print("Exiting!...")
+            # content_len: int = int(self.headers.get('Content-Length'))
+            # post_body = self.rfile.read(content_len).decode('utf-8')
+            # if verbose:
+            #    print("Content: {}".format(post_body))
+            self.send_response(201)
+            response = {"status": "OK"}
+            # self.wfile.write(json.dumps(response).encode())
+            try:
+                print("Killing {}...".format(server_pid))
                 os.kill(server_pid, signal.SIGINT)
+                # server.shutdown()
+                # server.server_close()
+            except Exception as oops:
+                print (f"Error: {repr(oops)}")
+                response = {(f"Error: {repr(oops)}")}
+            self.wfile.write(json.dumps(response).encode())
         else:
             if verbose:
                 print("POST on {} not managed".format(self.path))
@@ -783,7 +798,9 @@ except KeyboardInterrupt:
     if enable_screen_saver:
         screen_saver_thread.join()
 
-# After all
+print("Out of the server loop")
+
+# After all, cleanup.
 if oled is not None:
     clear()
     text: str = "Bye-bye..."
