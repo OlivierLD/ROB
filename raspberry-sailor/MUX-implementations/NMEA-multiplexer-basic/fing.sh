@@ -8,7 +8,7 @@ if [[ "$1" == "-v" ]]; then
 fi
 #
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
-radic=$("${addr%.*}".)
+radic=$(echo "${addr%.*}".)
 
 echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
 
