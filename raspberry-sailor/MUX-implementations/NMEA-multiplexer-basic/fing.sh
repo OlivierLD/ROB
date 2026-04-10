@@ -10,6 +10,9 @@ fi
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)
 
+# For 'host'
+# sudo apt install bind9-host
+
 echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
 
 for i in {1..254}; do
@@ -23,7 +26,7 @@ for i in {1..254}; do
   if [[ "${VERBOSE}" == "true" ]]; then
     echo "...Got ${response}"
   fi
-  if [[ "${response}" != *", 0 packet"*" received"* ]]; then
+  if [[ "${response}" != *", 0 "*"received"* ]]; then
     # echo -e "${toping} is alive."
     hostname=$(host "${toping}" | awk '{ print $5 }')
     if [[ "${hostname}" == *"." ]]; then
@@ -32,6 +35,10 @@ for i in {1..254}; do
       hostname=${hostname%?}  # Remove last dot.
     fi
     echo -e "${toping}, ${hostname} is alive."
+  else
+    if [[ "${VERBOSE}" == "true" ]]; then
+      echo -e "Ooops: ${response} ..."
+    fi
   fi
 done
 #
