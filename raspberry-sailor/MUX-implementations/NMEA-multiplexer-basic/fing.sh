@@ -18,8 +18,12 @@ for i in {1..254}; do
   if [[ "${VERBOSE}" == "true" ]]; then
     echo "...Pinging ${toping}"
   fi
-  response=$(ping -c1 -W 1 ${toping} | grep 'transmitted')
-  if [[ "${response}" == *"1 packets received"* ]]; then
+  # response=$(ping -c1 -W 1 ${toping} | grep 'transmitted')
+  response=$(ping -c1 -W 1 ${toping} | grep 'packet loss')
+  if [[ "${VERBOSE}" == "true" ]]; then
+    echo "...Got ${response}"
+  fi
+  if [[ "${response}" != *", 0 packet"*" received"* ]]; then
     # echo -e "${toping} is alive."
     hostname=$(host "${toping}" | awk '{ print $5 }')
     if [[ "${hostname}" == *"." ]]; then
