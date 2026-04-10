@@ -102,7 +102,9 @@ ${COMMAND} &
 echo -e "Done"
 echo -e "Use ./scripts/kill.python.rest.sh to stop the server."
 echo -e "  or curl [--http0.9] -X POST http://${MACHINE_NAME}:${PORT}/ssd1306/exit"
+echo -e "To get the operation list:"
 echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
+echo -e "To populate the cache (and display some data):"
 echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/prefix/nmea-data --data \"@cache-sample.json\" "
 
 popd
