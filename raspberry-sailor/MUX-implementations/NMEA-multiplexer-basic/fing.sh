@@ -1,6 +1,18 @@
 #!/bin/bash
 echo -e "Fing, pure bash! WiP..."
 
+
+# Stolen from gradlew
+oops ( ) {
+  echo -e "host command is not available..."
+  echo -e "try this: sudo apt install bind9-host"
+  exit 1
+}
+
+# For 'host'
+# sudo apt install bind9-host
+ret=$(host 192.168.1.1) || oops
+
 VERBOSE=false
 
 if [[ "$1" == "-v" ]]; then
@@ -9,9 +21,6 @@ fi
 #
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)
-
-# For 'host'
-# sudo apt install bind9-host
 
 echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
 
