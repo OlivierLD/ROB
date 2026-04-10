@@ -41,4 +41,5 @@ for i in {1..254}; do
     fi
   fi
 done
+echo -e "Scan completed"
 #
