@@ -23,7 +23,7 @@ addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)
 
 # echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
-echo -e "Discovery on:      ${radic}.0/254 \n"
+echo -e "Discovery on:      ${radic}0/254 \n"
 
 for i in {1..254}; do
 # for i in {1..50}; do
