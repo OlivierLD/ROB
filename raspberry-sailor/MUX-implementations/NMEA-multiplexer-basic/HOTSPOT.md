@@ -11,6 +11,7 @@ Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hot
 >   - `nmcli` [doc](https://networkmanager.dev/docs/api/latest/nmcli.html)
 > - [RaspAP](https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express/)
 
+## hostapd and dnsmasq
 Connected on the Raspberry Pi (directly, or using `ssh`), do the following commands:
 
 ```
@@ -75,6 +76,7 @@ domain-needed
 bogus-priv
 dhcp-range=192.168.50.150,192.168.50.200,255.255.255.0,12h
 ```
+Keep the comment in `# bind-dynamic` to return to an Internet config.
 
 Add the following lines at the bottom of `/etc/dhcpcd.conf` (make sure you use the right file... `dhcpcd.conf`):
 ```
@@ -105,5 +107,23 @@ Notice above, the network name and password:
 Those values can be changed at will (in `/etc/hostapd/hostapd.conf`), as you wish.  
 
 Once the above is done, you can reboot the Raspberry Pi.
+
+## nmcli
+See [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
+
+Do a 
+```commandline
+$ sudo nmcli device wifi hotspot ssid <example-network-name> password <example-password>
+```
+For example
+```commandline
+$ sudo nmcli device wifi hotspot ssid RPiNetwork password PassWord
+```
+
+To disable the network:
+```commandline
+$ sudo nmcli device disconnect wlan0
+$ sudo nmcli device up wlan0
+```
 
 ---

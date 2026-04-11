@@ -18,7 +18,7 @@ oops2 ( ) {
 # For 'host'
 # sudo apt install bind9-host
 ret=$(host 192.168.1.1) || oops
-
+# sudo apt install dnsutils
 ret=$(nslookup 192.168.1.1) || oops2
 
 VERBOSE=false

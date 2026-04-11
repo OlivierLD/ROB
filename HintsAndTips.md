@@ -90,6 +90,32 @@ Also see the doc [here](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-
 ### Option 4
 See this script: <https://gist.github.com/atlury/fe0ea8b91a981c103df7>
 
+### nmcli
+See 
+- [this](https://www.raspberrypi.com/documentation/computers/configuration.html#networking)
+- and [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
+- or [that one](https://gist.github.com/narate/d3f001c97e1c981a59f94cd76f041140?permalink_comment_id=3099250)
+
+Do a
+```commandline
+$ sudo nmcli device wifi hotspot ssid <example-network-name> password <example-password>
+```
+For example
+```commandline
+$ sudo nmcli device wifi hotspot ssid RPiNetwork password PassWord
+```
+
+To disable the network:
+```commandline
+$ sudo nmcli device disconnect wlan0
+$ sudo nmcli device up wlan0
+```
+
+To scan for wireless networks, run the following command:
+```commandline
+nmcli dev wifi list
+```
+
 ## Backup / Restore SD card
 See [here](https://pimylifeup.com/backup-raspberry-pi/).
 
