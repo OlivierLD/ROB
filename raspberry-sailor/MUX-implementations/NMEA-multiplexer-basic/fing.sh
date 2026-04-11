@@ -22,7 +22,8 @@ fi
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)
 
-echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
+# echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
+echo -e "Discovery on:      ${radic}.0/254 \n"
 
 for i in {1..254}; do
 # for i in {1..50}; do
@@ -30,6 +31,7 @@ for i in {1..254}; do
   if [[ "${VERBOSE}" == "true" ]]; then
     echo "...Pinging ${toping}"
   fi
+  date=$(date '+%H:%M:%S')
   # response=$(ping -c1 -W 1 ${toping} | grep 'transmitted')
   response=$(ping -c1 -W 1 ${toping} | grep 'packet loss')
   if [[ "${VERBOSE}" == "true" ]]; then
@@ -43,12 +45,17 @@ for i in {1..254}; do
       # hostname=${hostname:0:-1}  # Remove last dot.
       hostname=${hostname%?}  # Remove last dot.
     fi
-    echo -e "${toping}, ${hostname} is alive."
+    ipv6=$(nslookup -query=hinfo ${toping} | grep 'Server:' | awk '{ print $2 }')
+    echo -e "${date} > Host is up:   ${toping}"
+    #        HH:MM:SS > H...
+    echo -e "           HW Address:   ${ipv6}"
+    echo -e "           Hostname:     ${hostname}"
+    echo -e ""
   else
     if [[ "${VERBOSE}" == "true" ]]; then
       echo -e "Ooops: ${response} ..."
     fi
   fi
 done
-echo -e "Scan completed"
+echo -e "\nScan completed"
 #
