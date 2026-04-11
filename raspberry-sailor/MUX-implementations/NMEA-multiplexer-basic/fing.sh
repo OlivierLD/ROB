@@ -9,9 +9,17 @@ oops ( ) {
   exit 1
 }
 
+oops2 ( ) {
+  echo -e "dnslookup command is not available..."
+  echo -e "try this: sudo apt install dnsutils"
+  exit 1
+}
+
 # For 'host'
 # sudo apt install bind9-host
 ret=$(host 192.168.1.1) || oops
+
+ret=$(nslookup 192.168.1.1) || oops2
 
 VERBOSE=false
 
