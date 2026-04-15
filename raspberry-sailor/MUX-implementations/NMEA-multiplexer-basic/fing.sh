@@ -1,61 +1,61 @@
 #!/bin/bash
 echo -e "Fing, pure bash! WiP..."
 
-
 # Stolen from gradlew
 oops ( ) {
   echo -e "host command is not available..."
-  echo -e "try this: sudo apt install bind9-host"
+  echo -e "On Linux, try this: sudo apt install bind9-host"
   exit 1
 }
 
 oops2 ( ) {
   echo -e "dnslookup command is not available..."
-  echo -e "try this: sudo apt install dnsutils"
+  echo -e "On Linux, try this: sudo apt install dnsutils"
   exit 1
 }
 
-# For 'host'
-# sudo apt install bind9-host
+# For 'host': sudo apt install bind9-host
 ret=$(host 192.168.1.1) || oops
-# sudo apt install dnsutils
-ret=$(nslookup 192.168.1.1) || oops2
+# For 'nslookup': sudo apt install dnsutils
+# ret=$(nslookup 192.168.1.1) || oops2
 
 VERBOSE=false
 
 if [[ "$1" == "-v" ]]; then
   VERBOSE=true
 fi
-#
+# '192' below might need to be changed...
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)
 
+echo -e "From ${addr}:"
 # echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
 echo -e "Discovery on:      ${radic}0/254 \n"
 
-for i in {1..254}; do
+for i in {0..254}; do
 # for i in {1..50}; do
-  toping=${radic}${i}
+  toPing=${radic}${i}
   if [[ "${VERBOSE}" == "true" ]]; then
-    echo "...Pinging ${toping}"
+    echo "...Pinging ${toPing}"
   fi
   date=$(date '+%H:%M:%S')
-  # response=$(ping -c1 -W 1 ${toping} | grep 'transmitted')
-  response=$(ping -c1 -W 1 ${toping} | grep 'packet loss')
+  # response=$(ping -c1 -W 1 ${toPing} | grep 'transmitted')
+  response=$(ping -c1 -W 1 ${toPing} | grep 'packet loss')
   if [[ "${VERBOSE}" == "true" ]]; then
     echo "...Got ${response}"
   fi
   if [[ "${response}" != *", 0 "*"received"* ]]; then
-    # echo -e "${toping} is alive."
-    hostname=$(host "${toping}" | awk '{ print $5 }')
+    # echo -e "${toPing} is alive."
+    hostname=$(host "${toPing}" | awk '{ print $5 }')
     if [[ "${hostname}" == *"." ]]; then
       # echo -e "Transforming [${hostname}]..."
       # hostname=${hostname:0:-1}  # Remove last dot.
       hostname=${hostname%?}  # Remove last dot.
     fi
-    ipv6=$(nslookup -query=hinfo ${toping} | grep 'Server:' | awk '{ print $2 }')
-    echo -e "${date} > Host is up:   ${toping}"
-    #        HH:MM:SS > H...
+    # ipv6=$(nslookup -query=hinfo ${toPing} | grep 'Server:' | awk '{ print $2 }')
+    ipv6=$(arp -n ${toPing} | grep "${toPing}" | awk '{ print $4 }')
+    echo -e "${date} > Host is up:   ${toPing}"
+    #        HH:MM:SS > Host ...
     echo -e "           HW Address:   ${ipv6}"
     echo -e "           Hostname:     ${hostname}"
     echo -e ""

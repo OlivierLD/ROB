@@ -10,7 +10,7 @@ if [[ "$1" == "-h" || "$1" == "-help" || "$1" == "--help" || "$1" == "?" ]]; the
   echo -e "CLI parameters are:"
   echo -e "--iface:, like in --iface:wlan0"
   echo -e "--ssid:, like in --ssid:RPiHotSpot"
-  echo -e "--pswd:, like in --pswd:PAssWord"
+  echo -e "--pswd:, like in --pswd:PassWord"
   echo -e "-h, -help, --help, ? : you're on it!"
   exit 0
 fi
