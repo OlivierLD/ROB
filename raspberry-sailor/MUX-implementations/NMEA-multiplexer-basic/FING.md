@@ -26,6 +26,14 @@ livebox.home.
 $ nslookup 192.168.1.1
 Server:		2a01:cb08:86f0:2f00:a87:c6ff:fede:a9c0
 Address:	2a01:cb08:86f0:2f00:a87:c6ff:fede:a9c0#53
+
+$ toPing=192.168.1.1
+$ arp -n ${toPing} | grep "${toPing}"
+? (192.168.1.1) at 8:87:c6:de:a9:c0 on en0 ifscope [ethernet]
+
+$ arp -n ${toPing} | grep "${toPing}" | awk '{ print $4 }'
+8:87:c6:de:a9:c0
+
 . . .
 ```
 

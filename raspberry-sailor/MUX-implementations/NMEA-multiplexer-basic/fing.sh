@@ -53,7 +53,15 @@ for i in {0..254}; do
       hostname=${hostname%?}  # Remove last dot.
     fi
     # ipv6=$(nslookup -query=hinfo ${toPing} | grep 'Server:' | awk '{ print $2 }')
-    ipv6=$(arp -n ${toPing} | grep "${toPing}" | awk '{ print $4 }')
+    arpOutput=$(arp -n ${toPing} | grep "${toPing}")
+    # echo -e "Arp, step 1: ${arpOutput}"
+    if [[ "${arpOutput}" == "? "* ]]; then
+      # echo -e "Cutting..."
+      # arpOutput=${arpOutput:2:}
+      arpOutput=$(awk '{print substr($0, 2)}' <<< "${arpOutput}")
+      # echo -e "Arp, step 2: ${arpOutput}"
+    fi
+    ipv6=$(echo "${arpOutput}" | awk '{ print $3 }')
     echo -e "${date} > Host is up:   ${toPing}"
     #        HH:MM:SS > Host ...
     echo -e "           HW Address:   ${ipv6}"
