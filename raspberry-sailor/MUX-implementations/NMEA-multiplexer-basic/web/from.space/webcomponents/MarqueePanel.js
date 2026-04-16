@@ -281,7 +281,6 @@ class MarqueePanel extends HTMLElement {
 	}
 
 	drawMarqueePanel() {
-
 		let currentStyle = this.className;
 		if (this._previousClassName !== currentStyle || true) {
 			// Reload
@@ -292,7 +291,6 @@ class MarqueePanel extends HTMLElement {
 				// Absorb?
 				console.log(err);
 			}
-
 			this._previousClassName = currentStyle;
 		}
 
@@ -335,7 +333,6 @@ class MarqueePanel extends HTMLElement {
 				}
 			}
 		}
-
 	}
 
 	/**

@@ -26,7 +26,7 @@ if [[ "$1" == "-v" ]]; then
 fi
 # '192' below might need to be changed...
 addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
-radic=$(echo "${addr%.*}".)
+radic=$(echo "${addr%.*}".)   # up to last dot
 
 echo -e "From ${addr}:"
 # echo -e "Starting with radical ${radic} Scanning ${radic}1 to ${radic}254"
@@ -58,7 +58,7 @@ for i in {0..254}; do
     if [[ "${arpOutput}" == "? "* ]]; then
       # echo -e "Cutting..."
       # arpOutput=${arpOutput:2:}
-      arpOutput=$(awk '{print substr($0, 2)}' <<< "${arpOutput}")
+      arpOutput=$(awk '{ print substr($0, 2) }' <<< "${arpOutput}")
       # echo -e "Arp, step 2: ${arpOutput}"
     fi
     ipv6=$(echo "${arpOutput}" | awk '{ print $3 }')

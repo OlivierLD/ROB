@@ -45,6 +45,12 @@ let globalSRUStars;
 let marqueeScrollUpAnimationInterval;
 // let defaultMarqueeTextArray = [ 'Raspberry Pi', 'Web Components', 'Java & Processing', 'HTML5, CSS3, ES6', 'NodeJS', 'Python', '3D Printing', 'Arduino & Co', 'AI, ML, DL', 'Artificial Intelligence', 'Artificial Insanity', 'and other toys...' ];
 
+let keepScrolling = true;
+// document.getElementById("marquee-panel-01").addEventListener("click", () => {
+//     console.log(`Marquee clicked, keepScrolling: ${keepScrolling}, will ${keepScrolling ? "stop" : "start"} scrolling`);
+//     keepScrolling = !keepScrolling;
+// });
+
 let marqueeScrollUp = (marqueeId) => {
     if (marqueeScrollUpAnimationInterval !== undefined) {
         window.clearInterval(marqueeScrollUpAnimationInterval); // Stop.
@@ -55,59 +61,63 @@ let marqueeScrollUp = (marqueeId) => {
         let yOffset = marqueeObj.yOffset;
         let y = 12;
         marqueeScrollUpAnimationInterval = window.setInterval(function() { // Start
-            let data = JSON.parse(marqueeObj.displayData); // { text-array: txt, x: x, y: y };
-            let arrayCardinality = 1;
-            if (data['text-array'] !== undefined) {
-                arrayCardinality = data['text-array'].length;
-            }
-            yOffset -= 1;
-            if (yOffset < -(arrayCardinality * 12)) {
-                yOffset = marqueeObj.nbLines;
-            }
-            marqueeObj.yOffset = yOffset;
+            if (keepScrolling) { // Allow to stop the scrolling when clicking on the marquee.
+                let data = JSON.parse(marqueeObj.displayData); // { text-array: txt, x: x, y: y };
+                let arrayCardinality = 1;
+                if (data['text-array'] !== undefined) {
+                    arrayCardinality = data['text-array'].length;
+                }
+                yOffset -= 1;
+                if (yOffset < -(arrayCardinality * 12)) {
+                    yOffset = marqueeObj.nbLines;
+                }
+                marqueeObj.yOffset = yOffset;
 
-            let toDisplay = [];
-            toDisplay.push(new Date().format('d M Y H:i:s Z'));
-            // defaultMarqueeTextArray.forEach(item => {
-            //     toDisplay.push(item);
-            // });
-            // Other values
-            if (globalAstroData !== undefined) {
-                toDisplay.push("Sun GHA: " + globalAstroData.sun.GHA.fmt);
-                toDisplay.push("Sun D: " + globalAstroData.sun.DEC.fmt);
-                toDisplay.push("Moon GHA: " + globalAstroData.moon.GHA.fmt);
-                toDisplay.push("Moon D: " + globalAstroData.moon.DEC.fmt);
-                toDisplay.push("Venus GHA: " + globalAstroData.venus.GHA.fmt);
-                toDisplay.push("Venus D: " + globalAstroData.venus.DEC.fmt);
-                toDisplay.push("Mars GHA: " + globalAstroData.mars.GHA.fmt);
-                toDisplay.push("Mars D: " + globalAstroData.mars.DEC.fmt);
-                toDisplay.push("Jupiter GHA: " + globalAstroData.jupiter.GHA.fmt);
-                toDisplay.push("Jupiter D: " + globalAstroData.jupiter.DEC.fmt);
-                toDisplay.push("Saturn GHA: " + globalAstroData.saturn.GHA.fmt);
-                toDisplay.push("Saturn D: " + globalAstroData.saturn.DEC.fmt);
-            }
-            if (userPos !== undefined && userPos.longitude !== undefined) {
-                let lhaSun  = calcLHA(globalAstroData.sun.GHA.raw, userPos.longitude);
-                let lhaMoon = calcLHA(globalAstroData.moon.GHA.raw, userPos.longitude);
+                let toDisplay = [];
+                if (false) {
+                    toDisplay.push("Syst Date (now): " + new Date().format('d M Y H:i:s Z'));
+                }
+                // defaultMarqueeTextArray.forEach(item => {
+                //     toDisplay.push(item);
+                // });
+                // Other values
+                if (globalAstroData !== undefined) {
+                    toDisplay.push("Sun GHA: " + globalAstroData.sun.GHA.fmt);
+                    toDisplay.push("Sun D: " + globalAstroData.sun.DEC.fmt);
+                    toDisplay.push("Moon GHA: " + globalAstroData.moon.GHA.fmt);
+                    toDisplay.push("Moon D: " + globalAstroData.moon.DEC.fmt);
+                    toDisplay.push("Venus GHA: " + globalAstroData.venus.GHA.fmt);
+                    toDisplay.push("Venus D: " + globalAstroData.venus.DEC.fmt);
+                    toDisplay.push("Mars GHA: " + globalAstroData.mars.GHA.fmt);
+                    toDisplay.push("Mars D: " + globalAstroData.mars.DEC.fmt);
+                    toDisplay.push("Jupiter GHA: " + globalAstroData.jupiter.GHA.fmt);
+                    toDisplay.push("Jupiter D: " + globalAstroData.jupiter.DEC.fmt);
+                    toDisplay.push("Saturn GHA: " + globalAstroData.saturn.GHA.fmt);
+                    toDisplay.push("Saturn D: " + globalAstroData.saturn.DEC.fmt);
+                }
+                if (userPos !== undefined && userPos.longitude !== undefined) {
+                    let lhaSun  = calcLHA(globalAstroData.sun.GHA.raw, userPos.longitude);
+                    let lhaMoon = calcLHA(globalAstroData.moon.GHA.raw, userPos.longitude);
+                    toDisplay.push("-----------------------");
+                    toDisplay.push(`LHA Sun: ${decToSex(lhaSun)}`);
+                    toDisplay.push(`LHA Moon: ${decToSex(lhaMoon)}`);
+                }
+                if (globalSRUSun !== undefined) {
+                    toDisplay.push("-----------------------");
+                    toDisplay.push(`Sun Elev: ${globalSRUSun.alt.toFixed(2)}°`);
+                    toDisplay.push(`Sun Z: ${globalSRUSun.Z.toFixed(1)}°`);
+                }
+                if (globalSRUMoon !== undefined) {
+                    toDisplay.push(`Moon Elev: ${globalSRUMoon.alt.toFixed(2)}°`);
+                    toDisplay.push(`Moon Z: ${globalSRUMoon.Z.toFixed(1)}°`);
+                }
                 toDisplay.push("-----------------------");
-                toDisplay.push(`LHA Sun: ${decToSex(lhaSun)}`);
-                toDisplay.push(`LHA Moon: ${decToSex(lhaMoon)}`);
-            }
-            if (globalSRUSun !== undefined) {
-                toDisplay.push("-----------------------");
-                toDisplay.push(`Sun Elev: ${globalSRUSun.alt.toFixed(2)}°`);
-                toDisplay.push(`Sun Z: ${globalSRUSun.Z.toFixed(1)}°`);
-            }
-            if (globalSRUMoon !== undefined) {
-                toDisplay.push(`Moon Elev: ${globalSRUMoon.alt.toFixed(2)}°`);
-                toDisplay.push(`Moon Z: ${globalSRUMoon.Z.toFixed(1)}°`);
-            }
-            toDisplay.push("-----------------------");
-            // toDisplay.push('And more to come!');
+                // toDisplay.push('And more to come!');
 
-            data['text-array'] = toDisplay;
-            marqueeObj.displayData = JSON.stringify(data);
-            marqueeObj.repaint();
+                data['text-array'] = toDisplay;
+                marqueeObj.displayData = JSON.stringify(data);
+                marqueeObj.repaint();
+            }
         }, 30);
     }
 };
@@ -2542,6 +2552,11 @@ let toggleForeground = () => {
     window.onload = () => {
 
         console.log('On Load, ready...');
+
+        document.getElementById("marquee-panel-01").addEventListener("click", () => {
+            console.log(`Marquee clicked, keepScrolling: ${keepScrolling}, will ${keepScrolling ? "stop" : "start"} scrolling`);
+            keepScrolling = !keepScrolling;
+        });
 
         /**
          *  SUBSCRIBERS HERE.
