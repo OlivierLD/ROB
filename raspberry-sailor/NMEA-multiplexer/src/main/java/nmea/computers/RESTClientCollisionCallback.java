@@ -90,6 +90,7 @@ public class RESTClientCollisionCallback implements Consumer<String> {
                         break;
                 }
             } catch (Exception ex) {
+                System.err.printf("Exception in doPost for [%s]\n", command);
                 if (VERBOSE || isVerbose()) {
                     System.err.println(">> Error!");
                     ex.printStackTrace();

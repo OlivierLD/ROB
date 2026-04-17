@@ -699,11 +699,32 @@ public class HTTPServer {
 										if (verbose) {
 											HTTPContext.getInstance().getLogger().info(">>> New request: " + line + " <<<");
 										}
+//									} else {
+//										if (request != null && !inPayload) {
+//											if (line.contains(":")) { // Header?
+//												if (line.contains("?") && line.indexOf("?") < line.indexOf(":")) { // In the QS, it's OK
+//													if (verbose) {
+//														HTTPContext.getInstance().getLogger().info(">>> With QS (1): " + line + " <<<");
+//													}
+//												} else if (line.indexOf(" ") > 0 && line.indexOf(" ") < line.indexOf(":")) {
+//													// Not a GET http://machine/blah HTTP/1.1, with the protocol in the request
+//													System.err.println(String.format("Wierd Request: [%s]", line));
+//												} else {
+//													String headerKey = line.substring(0, line.indexOf(":"));
+//													String headerValue = line.substring(line.indexOf(":") + 1);
+//													headers.put(headerKey, headerValue);
+//												}
+//											}
+//										}
 									}
 								}
 								if (request != null && !inPayload) {
 									if (line.contains(":")) { // Header?
-										if (line.indexOf(" ") > 0 && line.indexOf(" ") < line.indexOf(":")) { // TODO: Not start with Verb
+										if (line.contains("?") && line.indexOf("?") < line.indexOf(":")) { // In the QS, it's OK
+											if (verbose) {
+												HTTPContext.getInstance().getLogger().info(">>> With QS (2): " + line + " <<<");
+											}
+										} else if (line.indexOf(" ") > 0 && line.indexOf(" ") < line.indexOf(":")) { // TODO: Not start with Verb ?
 											// Not a GET http://machine HTTP/1.1, with the protocol in the request
 											System.err.println(String.format("Wierd Request: [%s]", line));
 										} else {
