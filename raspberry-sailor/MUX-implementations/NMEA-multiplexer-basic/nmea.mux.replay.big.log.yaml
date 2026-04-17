@@ -5,11 +5,15 @@ name: "Replay big log file."
 description:
   - Replay a big log file in the sample-data folder.
   - The file must obviously be here for the replay to work.
+  - Can be used with the console.gps.html, that has current calculation
 context:
   with.http.server: true
   http.port: 8080
   init.cache: true
   default.declination: 0
+  deviation.file.name: "dp_2011_04_15.csv"
+  max.leeway: 10.0
+  damping: 30
 channels:
   - type: file
     filename: ../../NMEA-multiplexer/sample-data/logged.data.zip

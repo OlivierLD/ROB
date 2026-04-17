@@ -1,4 +1,4 @@
-const spVerbose = true;
+const spVerbose = false;
 const SAT_PLOT_TAG_NAME = 'satellite-plotter';
 
 if (Math.toRadians === undefined) {

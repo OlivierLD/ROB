@@ -1178,7 +1178,7 @@ class CelestialSphere extends HTMLElement {
 			if (/*true || */sr.alt >= 0) {
 				let p = this.plotOnSphere(sr.alt, sr.Z, radius);
 				context.beginPath();
-				const bodyRadius = 0.75;
+				const bodyRadius = 1.5; // 0.75;
 				context.arc((this.width * this._zoom / 2) - (p.x/* * this._zoom*/), (this.height * this._zoom / 2) + (p.y /* * this._zoom*/), bodyRadius, 0, 2 * Math.PI, false);
 				context.fill();
 				// context.strokeStyle = 'lime'; // this.celestialSphereColorConfig.starCircleColor;

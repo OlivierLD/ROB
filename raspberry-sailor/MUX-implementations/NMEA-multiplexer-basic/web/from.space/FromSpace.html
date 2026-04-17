@@ -1560,12 +1560,12 @@ let toggleForeground = () => {
                         <button onclick="resetZoom('celestial-sphere-01');" title="Reset Zoom">Reset</button>
                     </div>
                     <div style="display: grid; grid-template-columns: auto auto auto auto;">
-                        <span><input type="checkbox" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
-                        <span><input type="checkbox" onchange="setWithConst('celestial-sphere-01', this);" checked>Constellations.</span>
-                        <span><input type="checkbox" onchange="setStarNames('celestial-sphere-01', this);" checked>Star Names.</span>
-                        <span><input type="checkbox" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
+                        <span><input type="checkbox" id="cscb-01" onchange="setWithStars('celestial-sphere-01', this);" checked>Stars.</span>
+                        <span><input type="checkbox" id="cscb-02" onchange="setWithConst('celestial-sphere-01', this);" checked>Constellations.</span>
+                        <span><input type="checkbox" id="cscb-03" onchange="setStarNames('celestial-sphere-01', this);" checked>Star Names.</span>
+                        <span><input type="checkbox" id="cscb-04" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
 
-                        <span><input type="checkbox" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
+                        <span><input type="checkbox" id="cscb-05" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
                         <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this); showHide('boat-shapes', this);">Show Boat Heading.</span>
                         <span><input type="checkbox" onchange="setCelestialEquatorCS('celestial-sphere-01', this);">With Celestial Equator.</span>
 

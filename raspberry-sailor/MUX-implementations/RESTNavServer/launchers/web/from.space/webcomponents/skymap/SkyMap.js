@@ -516,7 +516,7 @@ class SkyMap extends HTMLElement {
 	}
 
 	setDoAfter(func) {
-		console.log("Setting doAfter callback function");
+		// console.log("Setting doAfter callback function");
 		this.doAfter = func;
 	}
 

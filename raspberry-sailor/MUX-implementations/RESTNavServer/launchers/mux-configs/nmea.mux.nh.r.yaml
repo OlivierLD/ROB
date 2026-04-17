@@ -2,6 +2,11 @@
 # MUX definition.
 #
 name: "Replaying logged data, Nuku-Hiva to Rangiroa"
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Can be used with the console.gps.html, that has current calculation
+  - Used by option 9c in the demoLauncher
 context:
   with.http.server: true
   http.port: 9999
@@ -11,15 +16,17 @@ context:
   damping: 30
 channels:
   - type: file
-    filename: ../../NMEA-multiplexer/sample-data/logged.data.zip
+    filename: ./sample.data/logged.data.zip
     zip: true
     path.in.zip: 2010-11-08.Nuku-Hiva-Tuamotu.nmea
     verbose: false
 forwarders:
-  - class: nmea.forwarders.CharacterConsoleWriter
-    properties: mux-configs/char.console.properties
+#  - type: console
+#  - class: nmea.forwarders.CharacterConsoleWriter
+#    properties: mux-configs/char.console.properties
+  - type: "tcp"
+    port: 7001
 computers:
   - type: tw-current
     #                   30s 60s 10m
     time.buffer.length: 30, 60, 600
-
