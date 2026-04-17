@@ -300,10 +300,10 @@ public class RESTReader extends NMEAReader {
 					manageError(be);
 				} catch (final SocketException se) {
 					if (se.getMessage().contains("Connection refused")) {
-						System.out.println("Refused (1)");
+						System.out.printf("RestReader Refused (1) for [%s]\n", restURL);
 //						se.printStackTrace();
 					} else if (se.getMessage().contains("Connection reset")) {
-						System.out.println("Reset (2)");
+						System.out.printf("RestReader Reset (2) for [%s]\n", restURL);
 					} else {
 						if (se instanceof ConnectException && "Connection timed out: connect".equals(se.getMessage())) {
 							if ("true".equals(System.getProperty("verbose.data.verbose"))) {
