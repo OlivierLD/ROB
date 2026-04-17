@@ -1402,7 +1402,7 @@ let toggleForeground = () => {
                        height="350"
                        nb-cols="200"
                        nb-lines="68"
-                       title="Computed Data"
+                       title="Computed Data&#13;Click to freeze/unfreeze"
                        display-data='{ "text-array": ["You must have", "triggered a computation", "to see something", "in here..."], "x": 4, "y": 12 }'/>
     </div>
 </dialog>
@@ -1989,9 +1989,12 @@ let toggleForeground = () => {
 
     let consoleVerbose = false;
 
-    let cog = 0; // Course Over Ground
-    let bsp = 0.0; // Boat Speed
-    let sog = 0.0; // Speed Over Ground
+    let prmsl = "----.-"; // 1013.5;
+
+    let hdg = "-.-";
+    let cog = "---"; // 0; // Course Over Ground
+    let bsp = "-.-"; // 0.0; // Boat Speed
+    let sog = "-.-"; // 0.0; // Speed Over Ground
 
     // Compute and display
     let compute = () => {
@@ -2285,18 +2288,16 @@ let toggleForeground = () => {
         }
     }
 
-    // Display real COG
-    let hdg = 0;
-    let prmsl = 1013.5;
-
-    // Random Simulation
+    // Values from the cache, or simulation
     let sensorUpdater = () => {
         // Display real COG
-        try {
-            hdg = (cog !== undefined) ? cog : 0.0;
-        } catch (err) {
-            console.warn("COG not defined, using 0.0");
-            cog = 0.0; // Default value
+        if (false) {
+            try {
+                hdg = (cog !== undefined) ? cog : "-.-";
+            } catch (err) {
+                console.warn("COG not defined, using -.-");
+                cog = "-.-"; // Default value
+            }
         }
         if (simulatePressureAndHeading) {
             let diff = (Math.random() - 0.5) * 2.0; // [-1..1]
@@ -2314,10 +2315,25 @@ let toggleForeground = () => {
             document.getElementById("jumbo-01").value = hdg.toFixed(0); //  "-"; // 0;
             document.getElementById("jumbo-01").repaint();
         }
-        document.getElementById("jumbo-02").value = bsp.toFixed(1); // "-"; // 0.0;
+        document.getElementById("jumbo-02").value = (bsp === 0) ? "-.-" : bsp.toFixed(1); // "-"; // 0.0;
         document.getElementById("jumbo-02").repaint();
         // document.getElementById("jumbo-03").value = 0.0;
         // document.getElementById("jumbo-04").value = 0.0;
+    };
+
+    let jumboUpdater = () => {
+        if (document.getElementById("jumbo-01").value.startsWith("-")) {
+            document.getElementById("jumbo-01").repaint();
+        }
+        if (document.getElementById("jumbo-01").value.startsWith("-")) {
+            document.getElementById("jumbo-02").repaint();
+        }
+        if (document.getElementById("jumbo-01").value.startsWith("-")) {
+            document.getElementById("jumbo-03").repaint();
+        }
+        if (document.getElementById("jumbo-01").value.startsWith("-")) {
+            document.getElementById("jumbo-04").repaint();
+        }
     };
 
     let prmslUpdater = () => { // Simulator
@@ -2361,58 +2377,62 @@ let toggleForeground = () => {
         if (consoleVerbose) {
             console.log(`Drawing compass with hdg=${hdg} in WorldMap.`);
         }
-        context.beginPath();
-		for (let i = 0; i < 360; i += majorTicks) {
-			let heading = i - hdg;
-			let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
-			let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
-			let xTo = (width / 2) - ((radius * 0.85) * Math.cos(2 * Math.PI * (heading / 360)));
-			let yTo = (height / 2) - ((radius * 0.85) * Math.sin(2 * Math.PI * (heading / 360)));
-			context.moveTo(xFrom, yFrom);
-			context.lineTo(xTo, yTo);
-		}
-		context.lineWidth = 3;
-		context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Major ticks
-		context.stroke();
-		context.closePath();
 
-		// Minor Ticks
-		if (minorTicks > 0) {
-			context.beginPath();
-			for (let i = 0; i <= 360; i += minorTicks) {
-				let heading = i - hdg;
-				let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
-				let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
-				let xTo = (width / 2) - ((radius * 0.90) * Math.cos(2 * Math.PI * (heading / 360)));
-				let yTo = (height / 2) - ((radius * 0.90) * Math.sin(2 * Math.PI * (heading / 360)));
-				context.moveTo(xFrom, yFrom);
-				context.lineTo(xTo, yTo);
-			}
-			context.lineWidth = 1;
-			context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Minor ticks
-			context.stroke();
-			context.closePath();
-		}
-		// Numbers
-        let digitColor = 'rgba(0, 255, 255, 0.5)'; // Numbers
-		context.beginPath();
-		let scale = 1;
-		for (let i = 0; i < 360; i += numberTicks) {
-			let heading = i - hdg;
-			context.save();
-			context.translate(width / 2, (height / 2));
-			context.rotate((2 * Math.PI * (heading / 360)));
-			context.font = "bold " + Math.round(scale * 15) + "px Arial"; // Like "bold 15px Arial"
-			context.fillStyle = (i === 0) ? 'cyan' : digitColor;
-			let str = i.toString();
-			let len = context.measureText(str).width;
-			context.fillText(str, -len / 2, (-(radius * .8) + 10));
-			context.lineWidth = 1;
-			context.strokeStyle = 'rgba(0, 255, 255, 0.5)';           // Numbers
-			context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
-			context.restore();
-		}
-		context.closePath();
+        if (typeof(hdg) == 'number' || typeof(cog) == 'number') {
+            let _hdg = typeof(hdg) === 'string' ? cog : hdg;
+            context.beginPath();
+            for (let i = 0; i < 360; i += majorTicks) {
+                let heading = i - _hdg;
+                let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
+                let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
+                let xTo = (width / 2) - ((radius * 0.85) * Math.cos(2 * Math.PI * (heading / 360)));
+                let yTo = (height / 2) - ((radius * 0.85) * Math.sin(2 * Math.PI * (heading / 360)));
+                context.moveTo(xFrom, yFrom);
+                context.lineTo(xTo, yTo);
+            }
+            context.lineWidth = 3;
+            context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Major ticks
+            context.stroke();
+            context.closePath();
+
+            // Minor Ticks
+            if (minorTicks > 0) {
+                context.beginPath();
+                for (let i = 0; i <= 360; i += minorTicks) {
+                    let heading = i - _hdg;
+                    let xFrom = (width / 2) - ((radius * 0.95) * Math.cos(2 * Math.PI * (heading / 360)));
+                    let yFrom = (height / 2) - ((radius * 0.95) * Math.sin(2 * Math.PI * (heading / 360)));
+                    let xTo = (width / 2) - ((radius * 0.90) * Math.cos(2 * Math.PI * (heading / 360)));
+                    let yTo = (height / 2) - ((radius * 0.90) * Math.sin(2 * Math.PI * (heading / 360)));
+                    context.moveTo(xFrom, yFrom);
+                    context.lineTo(xTo, yTo);
+                }
+                context.lineWidth = 1;
+                context.strokeStyle = 'rgba(0, 255, 255, 0.25)'; // Minor ticks
+                context.stroke();
+                context.closePath();
+            }
+            // Numbers
+            let digitColor = 'rgba(0, 255, 255, 0.5)'; // Numbers
+            context.beginPath();
+            let scale = 1;
+            for (let i = 0; i < 360; i += numberTicks) {
+                let heading = i - _hdg;
+                context.save();
+                context.translate(width / 2, (height / 2));
+                context.rotate((2 * Math.PI * (heading / 360)));
+                context.font = "bold " + Math.round(scale * 15) + "px Arial"; // Like "bold 15px Arial"
+                context.fillStyle = (i === 0) ? 'cyan' : digitColor;
+                let str = i.toString();
+                let len = context.measureText(str).width;
+                context.fillText(str, -len / 2, (-(radius * .8) + 10));
+                context.lineWidth = 1;
+                context.strokeStyle = 'rgba(0, 255, 255, 0.5)';           // Numbers
+                context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+                context.restore();
+            }
+            context.closePath();
+        }
     };
 
     let isWithin90degrees = (userZ, bodyZ) => { // May need some tweaks...
@@ -2432,15 +2452,16 @@ let toggleForeground = () => {
     let extraDrawingSunPath = (sp, context) => {
         // console.log("Extra Sun Path drawings");
         // globalAstroData
+        let _hdg = typeof(hdg) === 'string' && hdg.startsWith("-") ? cog : hdg;
+
         if (useBoatHeading) {
             // console.log("Using boat heading for sun path...");
             // Defaul zOffset = 0 => hdg=180;
             // TODO Maybe some love needed here...
-            // For now hdg = cog
             if (sp.invertX == -1) { // Pointing north
-                sp._zOffset = hdg.toFixed(0);
+                sp._zOffset = _hdg.toFixed(0);
             } else { // Pointing south, default
-                let offset = 180 - hdg.toFixed(0);
+                let offset = 180 - _hdg.toFixed(0);
                 sp._zOffset = offset;
             }
         }
@@ -2708,18 +2729,23 @@ let toggleForeground = () => {
             // document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
             // document.getElementById('cog').value = val;
             document.getElementById('jumbo-03').value = val;
-            document.getElementById('celestial-sphere-01').heading = val;
+            if (typeof(hdg) === 'string' && hdg.startsWith("-")) {
+                document.getElementById('celestial-sphere-01').heading = val;
+            }
+            // document.getElementById('celestial-sphere-01').heading = val;
             cog = val;
         });
-        events.subscribe(TRUE_HDG, val => {
+        events.subscribe(HDG /*TRUE_HDG*/, val => {
             // document.getElementById('true-hdg').innerHTML = `${val.toFixed(0)}&deg;`;
-            hdg = val; // Managed in repaint
+            hdg = val;
+            document.getElementById('jumbo-01').value = val;
             // console.log(`True HDG:	${hdg.toFixed(0)}, COG: ${cog}, POS: ${JSON.stringify(pos)}`);
             document.getElementById('celestial-sphere-01').heading = val;
         });
         events.subscribe(BSP, val => {
             // document.getElementById('bsp').innerHTML = `${val} kn`;
-            bsp = val; // Managed in repaint
+            bsp = val;
+            document.getElementById('jumbo-02').value = val.toFixed(1);
             // console.log(`BSP:	${bsp.toFixed(2)}`);
         });
         // For debug, mainly.
@@ -2753,8 +2779,9 @@ let toggleForeground = () => {
         document.getElementById("sun-path-01").setDoAfter(extraDrawingSunPath);
         document.getElementById("sky-map-01").setDoAfter(extraDrawingSkyMap);
 
-        let hdgUpdater = window.setInterval(sensorUpdater, 1000); // Simulation
-        let prmslData = window.setInterval(prmslUpdater, 2000);   // Simulation
+        // let hdgUpdater = window.setInterval(sensorUpdater, 1000); // Simulation
+        // let prmslData = window.setInterval(prmslUpdater, 2000);   // Simulation
+        let dummyUpdater = window.setInterval(jumboUpdater, 1000);
 
         initAjax(); // ISS Station? NMEA Data ?
 

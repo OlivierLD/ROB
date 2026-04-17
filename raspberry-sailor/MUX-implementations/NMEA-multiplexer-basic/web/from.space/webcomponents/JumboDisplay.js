@@ -38,7 +38,7 @@ class JumboDisplay extends HTMLElement {
 		this.shadowRoot.appendChild(this.canvas);
 
 		// Default values
-		this._value = 0;
+		this._value = "--";
 		this._width = 50;
 		this._height = 150;
 		this._label = "VAL";
@@ -69,7 +69,7 @@ class JumboDisplay extends HTMLElement {
 	// Only attributes listed in the observedAttributes property are affected.
 	attributeChangedCallback(attrName, oldVal, newVal) {
 		if (jumboVerbose) {
-			console.log("attributeChangedCallback invoked on " + attrName + " from " + oldVal + " to " + newVal);
+			console.log("attributeChangedCallback invoked on " + attrName + " from " + oldVal + " to " + newVal); //  + " of " + this._label);
 		}
 		switch (attrName) {
 			case "value":
@@ -77,7 +77,7 @@ class JumboDisplay extends HTMLElement {
 					this._value = newVal; // parseFloat(newVal);
 				} catch (err) {
 					console.error("Invalid value for 'value' attribute:", newVal);
-					this._value = newVal; // NaN; // Reset to default on error
+					this._value = oldVal; // NaN; // Reset to default on error
 				}
 				break;
 			case "width":
@@ -277,7 +277,7 @@ class JumboDisplay extends HTMLElement {
 		// console.log("Drawing value:", jumboValue);
 
 		jumboValue = parseFloat(jumboValue); // To get the NaN if needed
-		
+
 		let strVal = isNaN(jumboValue) ? this._value : jumboValue.toFixed(this.jumboColorConfig.valueNbDecimal);
 		let metrics = context.measureText(strVal);
 		let len = metrics.width;
