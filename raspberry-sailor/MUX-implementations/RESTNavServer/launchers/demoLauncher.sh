@@ -138,7 +138,7 @@ if [[ "${SMALL_MENU}" == "Y" ]]; then
 else
   cat banner.stby.txt
 fi
-sleep 1
+sleep 1 # Wait a bit...
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #

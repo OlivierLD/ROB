@@ -14,6 +14,7 @@ body {
 
 .sidenav {
     height: 100%;
+    max-height: 100%;
     width: 0;
     position: fixed;
     z-index: 1;
@@ -21,6 +22,7 @@ body {
     left: 0;
     background-color: rgba(0, 0, 0, 0.6);
     overflow-x: hidden;
+    overflow-y: scroll;
     transition: 0.5s;
     padding-top: 60px;
 }
@@ -133,6 +135,8 @@ h2 span {
 		<div class="description">A carousel of WebComponents</div>
 		<!--a href="runner.html" target="iframe_a" title="Mobile client">Small client</a>
 		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Several instruments console</a-->
+		<!-- bottom -->
+		<div style="height: 100px;"><!-- Empty --></div>
 	</div>
 
     <div>
