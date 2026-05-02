@@ -173,7 +173,6 @@ public class JavaSample {
 				GeomUtil.decToSex(estimatedAltitude, GeomUtil.SWING, GeomUtil.NONE),
 				z);
 
-
 		System.out.println("Done with Java test run!");
 	}
 }

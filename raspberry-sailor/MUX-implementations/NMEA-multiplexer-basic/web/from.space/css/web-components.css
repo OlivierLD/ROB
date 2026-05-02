@@ -698,23 +698,28 @@ compass-display .green {
 }
 
 .celestial-sphere-display-01 {
-	--background-color: white;
-	--ticks-color: gray;
-	--ticks-labels-color: black;
- 	--sky-background: rgb(21, 21, 86);
-	--heading-ticks-color: orange;
-	--sky-grid-color: pink;
-	--declination-color: lightgray;
-	--card-points-color: cyan;
-	--equatorial-grid-color: blue;
-	--constellation-lines-color: lightGray;
-	--constellation-names-color: orange;
-	--star-color: gold;
-	--star-names-color: white;
-	--star-circle-color: black;
-	--wandering-bodies-color: orangered;
-	--wandering-bodies-labels-color: lime;
-	--wandering-bodies-names-color: silver;
+    --background-color: white;
+    --ticks-color: gray;
+    --ticks-labels-color: black;
+    --sky-map-month-color: red;
+    --sky-background: rgb(21, 21, 86);
+    --visible-sky-color: navy;
+    --skyline-color: blue;
+    --hour-ticks-color: blue;
+    --hour-tick-label-color: blue;
+    --sky-grid-color: cyan;
+    --declination-color: cyan;
+    --aries-label-color: silver;
+    --card-points-color: red;
+    --nsew-color: blue;
+    --equatorial-grid-color: white;
+    --constellation-lines-color: lightGray;
+    --constellation-names-color: orange;
+    --star-color: gold;
+    --star-names-color: white;
+    --star-circle-color: black;
+    --wandering-bodies-color: orangered;
+    --wandering-bodies-labels-color: limegreen;
 }
 
 .sat-plot-01 {

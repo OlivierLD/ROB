@@ -1010,6 +1010,16 @@ function setCelestialEquatorCS(id, cb) {
     document.getElementById(id).repaint();
 }
 
+function setEquatorGridCS(id, cb) {
+    document.getElementById(id).equGrid = cb.checked;
+    document.getElementById(id).repaint();
+}
+
+function setAzimutalGridCS(id, cb) {
+    document.getElementById(id).azimutalGrid = cb.checked;
+    document.getElementById(id).repaint();
+}
+
 function setBoatShape(id, list) {
     document.getElementById(id).boatShape = list.value;
     document.getElementById(id).repaint();

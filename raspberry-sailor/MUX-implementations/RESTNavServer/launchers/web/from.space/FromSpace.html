@@ -1566,8 +1566,11 @@ let toggleForeground = () => {
                         <span><input type="checkbox" id="cscb-04" onchange="setConstNames('celestial-sphere-01', this);">Constellation Names.</span>
 
                         <span><input type="checkbox" id="cscb-05" onchange="setWanderingBodiesCS('celestial-sphere-01', this);">Wandering bodies.</span>
-                        <span><input type="checkbox" onchange="setUseBoatHeadingCS('celestial-sphere-01', this); showHide('boat-shapes', this);">Show Boat Heading.</span>
-                        <span><input type="checkbox" onchange="setCelestialEquatorCS('celestial-sphere-01', this);">With Celestial Equator.</span>
+                        <span><input type="checkbox" id="cscb-06" onchange="setCelestialEquatorCS('celestial-sphere-01', this);">With Celestial Equator.</span>
+                        <span><input type="checkbox" id="cscb-07" onchange="setAzimutalGridCS('celestial-sphere-01', this);" checked>With Azimutal Grid.</span>
+                        <span><input type="checkbox" id="cscb-08" onchange="setEquatorGridCS('celestial-sphere-01', this);">With Equatorial Grid.</span>
+
+                        <span><input type="checkbox" id="cscb-09" onchange="setUseBoatHeadingCS('celestial-sphere-01', this); showHide('boat-shapes', this);">Show Boat Heading.</span>
 
                         <!--span>
                             <select onchange="setBoatShape('celestial-sphere-01', this);" style="padding: 5px; border-radius: 5px;">

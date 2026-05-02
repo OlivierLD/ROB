@@ -64,8 +64,8 @@ forwarders:
 #    port: 7002
 computers:
   - class: nmea.computers.BorderManager
-    # properties: mux-configs/border.mgr.properties  # SenseHat, and others
-    properties: mux-configs/border.mgr.default.properties
+    properties: mux-configs/border.mgr.properties  # SenseHat, and others
+    # properties: mux-configs/border.mgr.default.properties
     verbose: false
   - class: nmea.computers.NextWaypointManager
     verbose: false
