@@ -301,7 +301,7 @@ export function getMoonTilt(obs, sunCoord, moonCoord ) {
 										{lat: Math.toRadians(sunCoord.dec), lng: Math.toRadians(sunLongitude)},
 										20);
 	let route = [];
-	skyRoute.forEach(rp => {
+	skyRoute.forEach(rp => { // SRU: Sight Reduction Utility
 		let sru = sightReduction(obs.lat, obs.lng, longitudeToGHA(Math.toDegrees(rp.point.lng)), Math.toDegrees(rp.point.lat));
 		route.push({ observer: obs,
 					 observed: { alt: sru.alt,

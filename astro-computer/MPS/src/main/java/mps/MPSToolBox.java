@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * For the SRU and DR, compare with <a href="https://olivierld.github.io/web.stuff/astro/index_03.html">...</a>
+ * SRU: Sight Reduction Utility
  */
 public class MPSToolBox {
 

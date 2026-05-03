@@ -14,13 +14,14 @@ import java.util.TimeZone;
 
 /**
  * For the SRU and DR, compare with <a href="https://olivierld.github.io/web.stuff/astro/index_03.html">...</a>
+ * SRU: Sight Reduction Utility
  */
 public class PlanDesSommetsPlayground {
 
     // Some display options
     private final static boolean processCorrections = false;
     private final static boolean compareGCRL = false;
-    private final static boolean recalculateSRU = false;
+    private final static boolean recalculateSRU = false; // SRU: Sight Reduction Utility
     private final static boolean jsonOutput = false;
     private final static boolean verboseCircle = false;
     private final static boolean fromAlternatePos = true;
