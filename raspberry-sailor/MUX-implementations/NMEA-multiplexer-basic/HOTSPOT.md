@@ -2,16 +2,20 @@
 <!-- 
   TODO: make sure it is not redundant with the `HintsAndTips.md at the root of this repo
  -->
-Also see [here](../../../HintsAndTips.md#ad-hoc--hotspot-networking).
+Also see [this document](../../../HintsAndTips.md#ad-hoc--hotspot-networking).
 
-Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>.
-
-> ### Other options...
+### Other options...
 > - [with `nmcli`](https://www.raspberrypi.com/tutorials/host-a-hotel-wifi-hotspot/)
 >   - `nmcli` [doc](https://networkmanager.dev/docs/api/latest/nmcli.html)
-> - [RaspAP](https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express/)
+> - a [gist](https://gist.github.com/narate/d3f001c97e1c981a59f94cd76f041140?permalink_comment_id=3099250) on nmcli.
+> - [RaspAP](https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express/) in French (framboise314)
+> - [RaspAP](https://raspap.com/) web site
+
+---
 
 ## hostapd and dnsmasq
+Do as indicated on <https://www.raspberryconnect.com/projects/65-raspberrypi-hotspot-accesspoints/168-raspberry-pi-hotspot-access-point-dhcpcd-method>, it's a good one.
+
 Connected on the Raspberry Pi (directly, or using `ssh`), do the following commands:
 
 ```
@@ -86,7 +90,12 @@ interface wlan0
 nohook wpa_supplicant
 static ip_address=192.168.50.10/24
 static routers=192.168.50.1
+static domain_name_servers=8.8.8.8
+# static domain_name_servers=9.9.9.9 1.1.1.1
 ```
+The `static domain_name_servers` property seems not to be mandatory...
+
+
 Enable the `hostapd` and `dnsmasq` services:
 ```
 sudo systemctl unmask hostapd
@@ -107,6 +116,8 @@ Notice above, the network name and password:
 Those values can be changed at will (in `/etc/hostapd/hostapd.conf`), as you wish.  
 
 Once the above is done, you can reboot the Raspberry Pi.
+
+---
 
 ## nmcli
 See [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
