@@ -37,8 +37,10 @@ $ curl --location --request POST 'http://192.168.42.6:8080/ssd1305/display' \
   "status": "OK"
 }
 ```
-The body payload is a json array, one element per line of text.
-![ssd1305](../../../../images/ssd1305.jpg)
+The body payload is a json array, one element per line of text.  
+
+
+![ssd1305](../../../../../../images/ssd1305.jpg)  
 To clear the screen:
 ```
 $ curl -X POST http://192.168.42.6:8080/ssd1305/clean
