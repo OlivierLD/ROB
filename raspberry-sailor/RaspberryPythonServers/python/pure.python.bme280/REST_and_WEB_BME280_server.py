@@ -707,4 +707,4 @@ except KeyboardInterrupt:
     time.sleep(between_loops * 2)
     print("\n\t\tOver and out!")
 
-print("Done with REST and Web server.")
+print("Done with REST and Web server. Bye!")

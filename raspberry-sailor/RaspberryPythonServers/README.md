@@ -295,6 +295,7 @@ As an illustration, there is a REST server that deals with an SSD1306 oled scree
 - Wirings: <https://learn.adafruit.com/monochrome-oled-breakouts/python-wiring>
 - CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux>
   - Setup: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi>
+- 1.3inch LCD HAT: <https://m.media-amazon.com/images/I/A13dpGUAudL.pdf>
 
 ### Example 5, Python Sensor (ZDA), Python Actuator (CacheForwarder), NMEA-Multiplexer
 Inspired by the NMEA2000 network concept. Plug in any sensor, plug in any actuator.   
