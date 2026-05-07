@@ -3,6 +3,9 @@
 # Requires:
 # ---------
 # pip3 install http (already in python3.7, no need to install it)
+# pip3 install adafruit-circuitpython-ssd1306
+#
+# Manages an SDD1306, and 2 (external) push buttons
 #
 #
 import json
@@ -25,7 +28,7 @@ server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"  # aka localhost
 
-oled_wiring_option: str = "I2C"
+oled_wiring_option: str = "I2C"  # Default wiring option. Can be changed to SPI with CLI prm. Must be either "I2C" or "SPI".
 
 WIRING_PREFIX: str = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"

@@ -6,6 +6,7 @@
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
+# pip3 install adafruit-circuitpython-ssd1306
 #
 # Different from the REST_SSD1306_server.py.
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
@@ -52,20 +53,19 @@ machine_name: str = "127.0.0.1"  # aka localhost
 
 oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
 
-WIRING_PREFIX: str = "--wiring:"
-MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
-PORT_PRM_PREFIX: str = "--port:"
-VERBOSE_PREFIX: str = "--verbose:"
-HEIGHT_PREFIX: str = "--height:"
-SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
-ROTATE_PREFIX: str = "--rotate:"
+WIRING_PRM_PREFIX: str            = "--wiring:"
+MACHINE_NAME_PRM_PREFIX: str      = "--machine-name:"
+PORT_PRM_PREFIX: str              = "--port:"
+VERBOSE_PRM_PREFIX: str           = "--verbose:"
+HEIGHT_PRM_PREFIX: str            = "--height:"
+SCREEN_SAVER_MODE_PRM_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
+ROTATE_PRM_PREFIX: str            = "--rotate:"
 
-
-DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
+DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
 # Supported data (see format_data method):
 # BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
-# TODO: More data, and graphics
+# TODO: More data, and graphics ?
 
 oled = None
 server_pid: int = os.getpid()
@@ -181,7 +181,7 @@ def screen_saver_manager() -> None:
 # Change these to the right size for your display!
 #
 WIDTH: int = 128
-HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PREFIX)
+HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PRM_PREFIX)
 BORDER: int = 5
 ROTATE: bool = False
 
@@ -202,35 +202,35 @@ if len(sys.argv) > 0:  # Script name + X args
             machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
         if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
             server_port = int(arg[len(PORT_PRM_PREFIX):])
-        if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
-            verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
-        if arg[:len(ROTATE_PREFIX)] == ROTATE_PREFIX:
-            ROTATE = arg[len(ROTATE_PREFIX):].lower() == "true"
-        if arg[:len(WIRING_PREFIX)] == WIRING_PREFIX:
-            wiring_option = arg[len(WIRING_PREFIX):]
+        if arg[:len(VERBOSE_PRM_PREFIX)] == VERBOSE_PRM_PREFIX:
+            verbose = (arg[len(VERBOSE_PRM_PREFIX):].lower() == "true")
+        if arg[:len(ROTATE_PRM_PREFIX)] == ROTATE_PRM_PREFIX:
+            ROTATE = arg[len(ROTATE_PRM_PREFIX):].lower() == "true"
+        if arg[:len(WIRING_PRM_PREFIX)] == WIRING_PRM_PREFIX:
+            wiring_option = arg[len(WIRING_PRM_PREFIX):]
             if wiring_option != "SPI" and wiring_option != "I2C":
                 print(f"Wiring Option must be SPI or I2C, not {wiring_option}. Keeping {oled_wiring_option}.")
             else:
                 oled_wiring_option = wiring_option
-        if arg[:len(HEIGHT_PREFIX)] == HEIGHT_PREFIX:
+        if arg[:len(HEIGHT_PRM_PREFIX)] == HEIGHT_PRM_PREFIX:
             try:
-                user_height = int(arg[len(HEIGHT_PREFIX):])
+                user_height = int(arg[len(HEIGHT_PRM_PREFIX):])
                 if user_height == 32 or user_height == 64:
                     HEIGHT = user_height
                 else:
                     print(f"Height must be 32 or 64, not {user_height}")
             except Exception as error:
                 print(f"Height error: {repr(error)}")
-        if arg[:len(SCREEN_SAVER_MODE_PREFIX)] == SCREEN_SAVER_MODE_PREFIX:
+        if arg[:len(SCREEN_SAVER_MODE_PRM_PREFIX)] == SCREEN_SAVER_MODE_PRM_PREFIX:
             try:
-                ss_mode_prm: str = arg[len(SCREEN_SAVER_MODE_PREFIX):]
+                ss_mode_prm: str = arg[len(SCREEN_SAVER_MODE_PRM_PREFIX):]
                 if ss_mode_prm == 'off':
                     enable_screen_saver = False
             except Exception as error:
                 print(f"Screen Saver Mode error: {repr(error)}")
 
-        if arg[:len(DATA_PREFIX)] == DATA_PREFIX:
-            user_list = arg[len(DATA_PREFIX):].split(',')
+        if arg[:len(DATA_PRM_PREFIX)] == DATA_PRM_PREFIX:
+            user_list = arg[len(DATA_PRM_PREFIX):].split(',')
             nmea_data = []  # reset
             for id in user_list:
                 nmea_data.append(id.strip())
