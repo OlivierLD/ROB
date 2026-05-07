@@ -21,7 +21,7 @@ if [[ "${OPTION}" == "BME280-SSD" ]]; then
   sleep 10
   # Start the REST Server for SSD1306 (v2)
   echo -e "Starting the SSD1306 (v2) REST server"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM --screen-saver:on > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM --screen-saver:on --rotate:false > /home/pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   # Start the REST Server for EINK2-13

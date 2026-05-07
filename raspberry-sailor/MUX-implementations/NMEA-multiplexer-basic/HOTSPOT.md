@@ -90,7 +90,7 @@ interface wlan0
 nohook wpa_supplicant
 static ip_address=192.168.50.10/24
 static routers=192.168.50.1
-static domain_name_servers=8.8.8.8
+# static domain_name_servers=8.8.8.8
 # static domain_name_servers=9.9.9.9 1.1.1.1
 ```
 The `static domain_name_servers` property seems not to be mandatory...
@@ -120,7 +120,8 @@ Once the above is done, you can reboot the Raspberry Pi.
 ---
 
 ## nmcli
-See [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
+See [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)  
+See [nmcli network manager documentation](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
 
 Do a 
 ```commandline
@@ -130,6 +131,17 @@ For example
 ```commandline
 $ sudo nmcli device wifi hotspot ssid RPiNetwork password PassWord
 ```
+and then
+```commandline
+$ nmcli dev wifi show-password
+```
+
+This can be put in a `/etc/rc.local`:
+```commandline
+sudo nmcli device disconnect wlan0
+sudo nmcli device wifi hotspot ssid RPiNetwork password PassWord
+```
+
 
 To disable the network:
 ```commandline

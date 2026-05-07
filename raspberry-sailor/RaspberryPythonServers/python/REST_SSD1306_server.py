@@ -32,6 +32,7 @@ MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
+ROTATE_PREFIX: str = "--rotate:"
 
 oled = None
 
@@ -44,6 +45,7 @@ oled_reset = digitalio.DigitalInOut(reset_pin)
 WIDTH: int = 128
 HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm.
 BORDER: int = 5
+ROTATE: bool = False
 
 WHITE: int = 255
 BLACK: int = 0
@@ -63,6 +65,8 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+        if arg[:len(ROTATE_PREFIX)] == ROTATE_PREFIX:
+            ROTATE = arg[len(ROTATE_PREFIX):].lower() == "true"
         if arg[:len(WIRING_PREFIX)] == WIRING_PREFIX:
             wiring_option = arg[len(WIRING_PREFIX):]
             if wiring_option != "SPI" and wiring_option != "I2C":
@@ -113,6 +117,7 @@ else:
 
 # Clear display.
 if oled is not None:
+    oled.rotate(ROTATE)
     oled.fill(BLACK)
     oled.show()
 

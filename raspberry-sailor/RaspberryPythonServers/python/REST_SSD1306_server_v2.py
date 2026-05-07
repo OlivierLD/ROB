@@ -58,6 +58,8 @@ PORT_PRM_PREFIX: str = "--port:"
 VERBOSE_PREFIX: str = "--verbose:"
 HEIGHT_PREFIX: str = "--height:"
 SCREEN_SAVER_MODE_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
+ROTATE_PREFIX: str = "--rotate:"
+
 
 DATA_PREFIX: str = "--data:"  # Like "BSP,SOG,POS,..., etc"
 
@@ -102,7 +104,7 @@ def reset_screen_saver() -> None:
         print("Reseting screen saver")
     screen_saver_on = False
     screen_saver_timer = 0
-    
+
 
 def button_listener(pin, state) -> None:
     global current_value
@@ -181,6 +183,8 @@ def screen_saver_manager() -> None:
 WIDTH: int = 128
 HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PREFIX)
 BORDER: int = 5
+ROTATE: bool = False
+
 
 WHITE: int = 255
 BLACK: int = 0
@@ -200,6 +204,8 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
             verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
+        if arg[:len(ROTATE_PREFIX)] == ROTATE_PREFIX:
+            ROTATE = arg[len(ROTATE_PREFIX):].lower() == "true"
         if arg[:len(WIRING_PREFIX)] == WIRING_PREFIX:
             wiring_option = arg[len(WIRING_PREFIX):]
             if wiring_option != "SPI" and wiring_option != "I2C":
@@ -289,6 +295,7 @@ if enable_screen_saver:
 # Initialize OLED screen.
 # Clear display.
 if oled is not None:
+    oled.rotate(ROTATE)
     oled.fill(BLACK)
     oled.show()
 

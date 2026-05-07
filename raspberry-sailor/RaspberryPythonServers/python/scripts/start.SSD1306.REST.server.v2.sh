@@ -28,6 +28,7 @@ SCREEN_HEIGHT=32   # 32 or 64
 WIRING="I2C"       # I2C or SPI
 DATA="BSP,SOG,COG,POS"
 SS_MODE="on"
+ROTATE=false
 #
 # Prompted, or get prms from CLI
 #
@@ -74,6 +75,11 @@ if [[ "${INTERACTIVE}" == "true" ]]; then
       SS_MODE=${USER_INPUT}
   fi
   # echo "Will use screen saver mode option ${SS_MODE}"
+  echo -en "Rotate Screen (true|false) ? - Default [${ROTATE}] > "
+  read USER_INPUT
+  if [[ "${USER_INPUT}" != "" ]]; then
+      ROTATE=${USER_INPUT}
+  fi
 else
   echo -e "Getting prms from CLI"
   if [[ $# -gt 0 ]]; then
@@ -93,11 +99,13 @@ else
   	    DATA=${prm#*:}
   	  elif [[ ${prm} == "--screen-saver:"* ]]; then
   	    SS_MODE=${prm#*:}
+  	  elif [[ ${prm} == "--rotate:"* ]]; then
+  	    ROTATE=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE}"
+COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE} --rotate:${ROTATE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
