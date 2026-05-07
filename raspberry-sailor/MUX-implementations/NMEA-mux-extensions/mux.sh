@@ -28,7 +28,7 @@ PROCESS_ON_START=true # Default is true for process.on.start
 #
 if [[ "$PROCESS_ON_START" == "false" ]]; then
   MACHINE_NAME=`uname -a | awk '{ print $2 }'`
-  PORT=`cat $MUX_PROP_FILE | grep http.port=`
+  PORT=`cat $MUX_PROP_FILE | grep http.port= | hea`
   PORT=${PORT#*http.port=}
   echo -e "+-------- N O T E   o n   F O R W A R D E R S ------------------"
   echo -e "| You will need to start the forwarders yourself,"

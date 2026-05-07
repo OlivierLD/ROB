@@ -35,7 +35,7 @@ fi
 PROCESS_ON_START=true # Default is true for process.on.start
 #
 MACHINE_NAME=`uname -a | awk '{ print $2 }'`
-HTTP_PORT=`cat ${MUX_PROP_FILE} | grep -e 'http.port[:|=]'`
+HTTP_PORT=`cat ${MUX_PROP_FILE} | grep -e 'http.port[:|=]' | head -1`
 HTTP_PORT=$(echo ${HTTP_PORT})   # Trim the blanks
 PORT=${HTTP_PORT#*http.port=}
 if [[ ${PORT} =~ http.port* ]]; then

@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# See CLI prm --interactive
+# Start the REST_SSD1306_server_v2.py. SSD1306, and 2 push buttons.
+# See CLI prm --interactive. SPI or I2C, and other parameters.
 #
 INTERACTIVE=true
 if [[ $# -gt 0 ]]; then
@@ -23,8 +24,8 @@ fi
 MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
-SCREEN_HEIGHT=32
-WIRING="I2C"
+SCREEN_HEIGHT=32   # 32 or 64
+WIRING="I2C"       # I2C or SPI
 DATA="BSP,SOG,COG,POS"
 SS_MODE="on"
 #

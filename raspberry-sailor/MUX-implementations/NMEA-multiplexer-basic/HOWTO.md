@@ -125,6 +125,10 @@ About the modification of the `/etc/rc.local` script, to start the
 required components when the machine boots,
 here are the lines to add to the file, _**before**_ the `exit` statement at the end:
 ```
+#!/bin/bash
+
+. . .
+
 #
 # "Link" the Serial Port
 stty -F /dev/ttyACM0 raw 4800 cs8 clocal
@@ -138,9 +142,15 @@ sleep 10
 cd /home/pi/nmea-dist
 nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
 #
+
+. . .
+
+exit 0
 ```
 As you can tell: it starts the Python server that takes care of the e-ink display, and
 starts the mux with the config file `nmea.mux.gps.nmea-fwd.yaml`, provided [here](nmea.mux.gps.nmea-fwd.yaml).
+
+Make sure the `/etc/rc.local` is executable.
 
 Again, the system is now operational, and can be re-booted.
 

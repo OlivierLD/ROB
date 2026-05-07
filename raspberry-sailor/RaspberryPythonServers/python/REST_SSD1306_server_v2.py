@@ -50,7 +50,7 @@ server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"  # aka localhost
 
-oled_wiring_option: str = "I2C"
+oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
 
 WIRING_PREFIX: str = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"

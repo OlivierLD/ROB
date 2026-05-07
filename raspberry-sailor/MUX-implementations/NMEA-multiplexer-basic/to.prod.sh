@@ -140,7 +140,7 @@ echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-jav
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   echo -e "| > For the python scripts, make sure you run (once) the script ./python/scripts/install.all.sh    |"
   echo -e "| > after unzipping the archive on the target machine.                                             |"
-  echo -e "| > In case you see an \"Externally Managed\" message,                                             |"
+  echo -e "| > In case you see an \"Externally Managed\" message,                                               |"
   echo -e "|   see https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/ ...          |"
 fi
 echo -e "| The script to launch will be 'mux.sh'                                                            |"
@@ -150,5 +150,6 @@ echo -e "| Use it - for example - like:                                         
 echo -e "| $ cd ${distdir}                                                                                   "
 echo -e "| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |"
 echo -e "|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |"
-echo -e "| Examples of /etc/rc.local are provided. See rc.local*.sh.                                        |"
+echo -e "| Examples of /etc/rc.local are provided. See rc.local*.sh, in the current directory.              |"
 echo -e "+--------------------------------------------------------------------------------------------------+"
+echo -e "PS: Current folder is $(PWD) "

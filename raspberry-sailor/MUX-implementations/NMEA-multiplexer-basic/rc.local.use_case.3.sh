@@ -23,3 +23,5 @@ cd /home/pi/nmea-dist
 # nohup ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
 #
+
+exit 0

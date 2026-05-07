@@ -2,6 +2,7 @@
 # MUX definition.
 # The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py
 # Requires several Python servers to be running.
+# See raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/rc.local.sample.sh
 #
 name: "Real world scenario."
 description:
@@ -67,4 +68,3 @@ computers:
   - type: "tw-current"
     prefix: "CC"
     time.buffer.length: 30, 60, 600
-

@@ -19,3 +19,8 @@ sleep 10
 pushd ~pi/repos/ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic
 ./mux.sh nmea.mux.gps.sensor.nmea-fwd.yaml &
 popd
+#
+echo -e "Servers on their way!"
+echo -e "Cheers!"
+
+exit 0
