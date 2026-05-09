@@ -25,10 +25,12 @@ package utils;
  * Bright White	    97	                   107
  */
 public class EscapeCodes {
-    public final static String GREEN = "\033[92m";                   // Green
     public final static String RED = "\033[91m";                     // Red
-    public final static String YELLOW = "\033[93m";                  // Yellow
+    public final static String GREEN = "\033[92m";                   // Green
     public final static String BLUE = "\033[94m";                    // Blue
+    public final static String YELLOW = "\033[93m";                  // Yellow
+    public final static String MAGENTA = "\033[95m";                 // Magenta
+    public final static String CYAN = "\033[96m";                    // Cyan
     public final static String WHITE = "\033[97m";                   // White
     public final static String BOLD_RED = "\033[0;31;1m";            // Red and Bold
     public final static String BOLD_GREEN_BLINK = "\033[0;32;1;5m";  // Green, bold, blink.

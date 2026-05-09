@@ -162,7 +162,7 @@ public class NavServer {
 					if (previousValue != -1) {
 						if (previousValue < memoryUsedPercent) {
 							orientation = 1;
-							orientationMessage = "- Went up.";
+							orientationMessage = String.format("- Went up %.02f%%", (Math.abs(memoryUsedPercent - previousValue) / previousValue) * 100L);
 						} else if (previousValue > memoryUsedPercent) {
 							orientation = -1;
 							orientationMessage = "- Went down.";
@@ -178,7 +178,7 @@ public class NavServer {
 							(memoryUsedPercent > 50 ? EscapeCodes.RED : EscapeCodes.GREEN),
 							memoryUsedPercent,
 							EscapeCodes.NC,
-							(orientation == -1) ? EscapeCodes.BLUE : (orientation == 1 ? EscapeCodes.YELLOW : EscapeCodes.WHITE),
+							(orientation == -1) ? EscapeCodes.CYAN : (orientation == 1 ? EscapeCodes.YELLOW : EscapeCodes.WHITE),
 							orientationMessage,
 							EscapeCodes.NC);
 					if (memoryUsedPercent > 50) { // Arbitrary 50%...
@@ -190,7 +190,8 @@ public class NavServer {
 						orientationMessage = "";
 						if (previousValue != -1) {
 							if (previousValue < memoryUsedPercent) {
-								orientationMessage = "- Went up.";
+								// orientationMessage = "- Went up.";
+								orientationMessage = String.format("- Went up %.02f%%", (Math.abs(memoryUsedPercent - previousValue) / previousValue) * 100L);
 							} else if (previousValue > memoryUsedPercent) {
 								orientationMessage = "- Went down.";
 							} else {
