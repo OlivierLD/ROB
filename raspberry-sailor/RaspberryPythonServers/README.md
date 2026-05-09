@@ -1,6 +1,6 @@
 # Python NMEA Servers...
 As said before, the code in this folder is here to try _not_ to have to re-write existing drivers.  
-We will use the code provided by the sensor providers, as it is, which usually means in Python.
+We will use the code provided by the sensors' providers, as it is, which usually means in Python in 99.99% of the cases.
 The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
 framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations. We'll se how it goes.  
 > In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi's hardware, and whatever you can plug on it. And protocols like UART, SPI, I2C.  
@@ -83,6 +83,8 @@ We provide here TCP servers reading the following sensors:
 And actuators:
 - [SSD1306 oled screen](https://learn.adafruit.com/monochrome-oled-breakouts) (SPI and I2C)
 - [eInk2-13 screen](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=al)
+
+For more details (and longer list), see [here](./PCB.md).
 
 _**NMEA Sentences examples:**_
 - `ZDA`: Time & Date - UTC, day, month, year and local time zone 
