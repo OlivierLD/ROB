@@ -25,7 +25,8 @@ if [[ "$1" == "-v" ]]; then
   VERBOSE=true
 fi
 # '192' below might need to be changed...
-addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
+# addr=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
+addr=$(ifconfig | grep inet | grep broadcast | awk '{ print $2 }')
 radic=$(echo "${addr%.*}".)   # up to last dot
 
 echo -e "From ${addr}:"
