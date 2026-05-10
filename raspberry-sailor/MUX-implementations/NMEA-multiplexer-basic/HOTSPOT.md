@@ -2,6 +2,10 @@
 <!-- 
   TODO: make sure it is not redundant with the `HintsAndTips.md at the root of this repo
  -->
+
+The way to setup a HotSpot or an Ad-Hoc network keeps changing as the OS versions change.  
+This document may vary as well with time...
+
 Also see [this document](../../../HintsAndTips.md#ad-hoc--hotspot-networking).
 
 ### Other options...
@@ -10,6 +14,13 @@ Also see [this document](../../../HintsAndTips.md#ad-hoc--hotspot-networking).
 > - a [gist](https://gist.github.com/narate/d3f001c97e1c981a59f94cd76f041140?permalink_comment_id=3099250) on nmcli.
 > - [RaspAP](https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express/) in French (framboise314)
 > - [RaspAP](https://raspap.com/) web site
+> - [Raspberry Tips](https://raspberrytips.com/access-point-setup-raspberry-pi/)
+
+---
+
+### In this document
+- [hostapd and dnsmasq](#hostapd-and-dnsmasq) - Works OK before `bookworm`. Some issues after that.
+- [nmcli](#nmcli) - Easiest on recent OSs.
 
 ---
 
