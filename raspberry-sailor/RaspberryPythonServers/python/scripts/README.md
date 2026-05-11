@@ -11,5 +11,5 @@ The `start.*.server.sh` scripts have an `--interactive:true|false` option.
 Then, to simulate the nmea cache:
 
 ```commandline
-$ curl -X PUT http://[address]:port/prefix/nmea-data --data "@cache-sample.json"
+$ curl -X PUT http://[address]:[port]/prefix/nmea-data --data "@cache-sample.json"
 ```

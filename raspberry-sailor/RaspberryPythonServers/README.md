@@ -12,7 +12,10 @@ framework deprecation, restrictions based on the JDK version... Here is a try to
   - As seen in <https://www.raspberrypi-spy.co.uk/2012/05/install-rpi-gpio-python-library/>, requires a `sudo apt-get install rpi.gpio`
 - MicroPython: <https://docs.micropython.org/en/latest/library/index.html>
   - For example: <https://docs.micropython.org/en/latest/esp8266/tutorial/ssd1306.html?highlight=ssd1306>
-- CircuitPython: <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
+- CircuitPython: 
+  - <https://learn.adafruit.com/circuitpython-on-raspberrypi-linux?view=all>
+  - <https://www.adafruit.com/circuitpython?srsltid=AfmBOoq61slXn-SGE4GlOFBnR9E0bFOLtIS581DGLDfq-TfRQnrGJChm>
+- [Papyrus](https://github.com/PiSupply/PaPiRus) SDK
 
 
 For now, this is more to be seen as a Proof Of Concept (POC) than anything else. 

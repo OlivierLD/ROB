@@ -1,8 +1,10 @@
 #!/bin/bash
 echo -e "+--------------------------------------------------------------------------+"
 echo -e "| Python Sensors and Actuators.                                            |"
-echo -e "| Start ZDA TCP server, CacheForwarder (or so) REST server                 |"
-echo -e "| Run a multiplexer, that stops the 2 python servers before shutting down. |"
+echo -e "| - Start ZDA TCP server, CacheForwarder (or so) REST server               |"
+echo -e "| - Run a multiplexer.                                                     |"
+echo -e "|   - When stopped, the multiplexer stops the 2 python servers.            |"
+echo -e "|     (see the rest.onclose.* properties of the mux' yaml file)            |"
 echo -e "+--------------------------------------------------------------------------+"
 #
 # Move 1 level above the 'script' directory
@@ -11,7 +13,7 @@ pushd $(dirname $0)/..
   # Start the Python servers
   #
   echo -e "Python part..."
-  echo -e "(Script) > From $(pwd), starting Python scripts."
+  echo -e "(Script) > From $(pwd), starting 2 Python scripts."
   # pushd python
   #
   # echo -e "Script > From $(pwd):"

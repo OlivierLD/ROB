@@ -59,6 +59,17 @@ select, input {
 	--border-color: cyan;
 	--value-font: 'Courier New';
 }
+.chart-buttons {
+  z-index: 10;
+  position: relative;
+  top: -74px;
+  left: 96%;
+  height: 0;
+}
+.zoom-button {
+  padding: 4px 6px;
+  min-width: 32px;
+}
 compass-display .green {
 	--bg-color: transparent;
 	--digit-color: lime;
@@ -309,6 +320,21 @@ let withDistBearing = false;
 let withWorldMap = false;
 
 let boatRadius = 10;
+
+function zoomIn() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 0.89); // .toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	// document.getElementById('ChartWidth').innerText = newWidth;
+}
+function zoomOut() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 1.11); // .toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	// document.getElementById('ChartWidth').innerText = newWidth;
+}
 
 /**
  *  SUBSCRIBERS HERE.
@@ -1162,8 +1188,8 @@ window.onload = () => {
 	<!--h1>GPS, AIS, Markers, Borders, Waypoints</h1-->
     <table>
         <tr>
-            <td valign="top" style="height: 600px;">
-                <div style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+            <td valign="top" style="/*height: 600px;*/">
+                <div class="chart-container" style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
                     <chartless-map id="chartless-map-01"
                                    class="chartless-map-01"
                                    center-lat="0.0"
@@ -1171,6 +1197,12 @@ window.onload = () => {
                                    chart-width="5.0"
                                    width="1000"
                                    height="600"></chartless-map>
+					<div class="chart-buttons">
+						<!-- Zoom in / out -->
+						<button class="zoom-button" onclick="zoomIn();" title="Zoom in">+</button>
+						<br/>
+						<button class="zoom-button" onclick="zoomOut();" title="Zoom out">-</button>
+					</div>
                 </div>
             </td>
 			<td valign="top" rowspan="3">
@@ -1297,7 +1329,7 @@ window.onload = () => {
 				</table>
 			</td>
         </tr>
-        <tr>
+        <tr style="display: none;">  <!-- Hidden for now -->
             <td valign="top" height="50">
                 <!-- A slider for the chart scale -->
                 <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
