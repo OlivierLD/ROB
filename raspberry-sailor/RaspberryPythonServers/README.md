@@ -1,10 +1,16 @@
 # Python NMEA Servers...
 As said before, the code in this folder is here to try _not_ to have to re-write existing drivers.  
 We will use the code provided by the sensors' providers, as it is, which usually means in Python in 99.99% of the cases.
-The idea here is _not_ to depend on Java frameworks (like PI4J, diozero), as we've experienced some frustration in the past, like
+The idea here is _not_ to depend on Java frameworks (like PI4J, diozero, etc), as we've experienced some frustration in the past, like
 framework deprecation, restrictions based on the JDK version... Here is a try to get rid of those frustrations. We'll se how it goes.  
 > In short, those frameworks enable interaction with the GPIO header of the Raspberry Pi's hardware, and whatever you can plug on it. And protocols like UART, SPI, I2C.  
 > Vast topic indeed...
+
+As you've noticed, we mainly use Java for the core code. Drivers delivered with the PCBs we're talking about are mostly written in
+Python, sometimes in C. All those languages (Java, Python, C, ...) are aware of the protocols used all over the place, like
+TCP, UDP, REST, etc. Even WebSockets could be part of this picture.  
+And this is what we'll use to make all those guys talk to each other! On top of that, the various components do not even need to be on the same machine.
+Being on the same network is the only requirement, and that makes the story even more flexible.
 
 ## Python interaction with Sensors and Actuators
 - Python, in general, a _great_ resource: <https://realpython.com/>
@@ -17,14 +23,13 @@ framework deprecation, restrictions based on the JDK version... Here is a try to
   - <https://www.adafruit.com/circuitpython?srsltid=AfmBOoq61slXn-SGE4GlOFBnR9E0bFOLtIS581DGLDfq-TfRQnrGJChm>
 - [Papyrus](https://github.com/PiSupply/PaPiRus) SDK
 
-
 For now, this is more to be seen as a Proof Of Concept (POC) than anything else. 
 
 The first tricky point was to find a suitable way to establish a communication between Java and Python, and this without having to depend on external code. And ideally, a language agnostic method.  
 
 After several trials, two main communication methods emerged:
-- Transfer Control Protocol (TCP)
-- Representational State Transfer (REST)
+- **T**ransfer **C**ontrol **P**rotocol (TCP)
+- **RE**presentational **S**tate **T**ransfer (REST) (if someone knows what that means, let me know)
   - relies on HTTP, itself relying on TCP
 
 TCP, REST, HTTP, etc, are language agnostic protocols. Both Java and Python can
