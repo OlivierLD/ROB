@@ -21,6 +21,7 @@ $ htop
 $ lsb_release -a
 $ tree
 $ tree -hpu
+$ cat /etc/os-release
 
 ... more to come
 ```

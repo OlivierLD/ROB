@@ -1,4 +1,7 @@
 # Python NMEA Servers...
+
+Also see the project [Java-TCP-Python](../../Java-TCP-Python/README.md).
+
 As said before, the code in this folder is here to try _not_ to have to re-write existing drivers.  
 We will use the code provided by the sensors' providers, as it is, which usually means in Python in 99.99% of the cases.
 The idea here is _not_ to depend on Java frameworks (like PI4J, diozero, etc), as we've experienced some frustration in the past, like
