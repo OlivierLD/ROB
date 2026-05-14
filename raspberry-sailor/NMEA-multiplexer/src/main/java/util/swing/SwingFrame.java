@@ -1,7 +1,9 @@
 package util.swing;
 
 import util.LogAnalyzer;
+import util.LogAnalyzer.DatedPosition;
 import util.LogToPolarPoints;
+import util.LogToPolarPoints.PolarTriplet;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,8 +34,8 @@ import java.util.stream.IntStream;
 public class SwingFrame extends JFrame {
 	private SwingPanel swingPanel;
 
-	private List<LogAnalyzer.DatedPosition> positions = null;
-	private List<LogToPolarPoints.PolarTriplet> plList = null;
+	private List<DatedPosition> positions = null;
+	private List<PolarTriplet> plList = null;
 
 	public enum DataOption {
 		POSITIONS,
@@ -52,13 +54,13 @@ public class SwingFrame extends JFrame {
 		this(providedList, DataOption.POSITIONS);
 	}
 
-	public SwingFrame(List<?> dataList, DataOption dataOption) {
+	public SwingFrame(List<? extends Object> dataList, DataOption dataOption) {
 		if (dataOption == DataOption.POSITIONS) {
-			this.positions = (List<LogAnalyzer.DatedPosition>)dataList;
+			this.positions = (List<DatedPosition>)dataList;
 			displayControls = true;
 		}
 		if (dataOption == DataOption.POLARS) {
-			this.plList = (List<LogToPolarPoints.PolarTriplet>)dataList;
+			this.plList = (List<PolarTriplet>)dataList;
 			displayControls = false;
 		}
 		initComponents();

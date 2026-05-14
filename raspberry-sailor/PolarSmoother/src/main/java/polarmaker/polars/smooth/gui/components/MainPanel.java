@@ -305,6 +305,7 @@ public class MainPanel
 			if (dataFileName != null) {
 				Object dataArray = mapper.readValue(new FileReader(dataFileName), Object.class);
 				if (dataArray instanceof List) {
+					@SuppressWarnings(value = "unchecked")
 					List<Map<String, Object>> triplets = (List<Map<String, Object>>) dataArray;
 					triplets.forEach(tpl -> {
 						double bsp = (Double) tpl.get("bsp");

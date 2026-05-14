@@ -128,6 +128,21 @@ Those values can be changed at will (in `/etc/hostapd/hostapd.conf`), as you wis
 
 Once the above is done, you can reboot the Raspberry Pi.
 
+To disable those guys:
+```commandline
+sudo systemctl stop dhcpcd
+sudo systemctl disable dhcpcd.service
+
+sudo systemctl stop hostapd
+sudo systemctl disable hostapd.service
+
+sudo systemctl stop dnsmasq
+sudo systemctl disable dnsmasq.service
+
+sudo apt remove hostapd
+sudo apt remove dnsmasq
+```
+
 ---
 
 ## nmcli
