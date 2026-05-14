@@ -62,6 +62,12 @@ Aha! Now we're talking.
 Build the project (`../gradlew shadowJar`), and run the script `small.server.sh`.
 Look into it for details.
 
+> This is _**NOT**_ J2EE compliant, some HTTP aspects are not implemented (like HTTP responses 100 - see [here](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)), the goal here was to have
+> a code as tiny as possible.  
+> Some features have been added though, like the possibility to serve static resources from within a zip archive - to save space.
+
+> The core being written in Java, implementations can be done with any JVM-compliant language, like Scala, Kotlin, etc.
+
 ## _Note_
 Once started, all the servers above can be accessed in a language agnostic way,
 like with `curl` or `wget`, or whatever piece of code that can act as an HTTP client.
