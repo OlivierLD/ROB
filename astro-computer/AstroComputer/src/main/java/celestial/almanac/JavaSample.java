@@ -19,9 +19,10 @@ public class JavaSample {
 	}
 
 	/**
+	 * Semi-Diameter and Horizontal Parallax
 	 *
 	 * @param value in seconds of arc
-	 * @return
+	 * @return the formatted String (961.2192547890643 would return 16'01.22")
 	 */
 	private static String renderSdHp(double value) {
 		String formatted = "";
@@ -35,6 +36,11 @@ public class JavaSample {
 		return formatted;
 	}
 
+	/**
+	 * Right Ascension
+	 * @param ra in decimal hours
+	 * @return the formatted String. 7.780030403201878 would return "00h 31m 07.20s"
+	 */
 	private static String renderRA(double ra) {
 		String formatted = "";
 		double t = ra / 15d;

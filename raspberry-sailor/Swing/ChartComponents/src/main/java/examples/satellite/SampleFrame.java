@@ -30,7 +30,7 @@ public class SampleFrame extends JFrame
   {
     getContentPane().setLayout(borderLayout);
     setSize(new Dimension(600, 400));
-    setTitle("Satellite");
+    setTitle("As viewed from a Satellite");
     getContentPane().add(commandPanel, BorderLayout.CENTER);
     getContentPane().add(statusPanel, BorderLayout.SOUTH);
     statusPanel.setLayout(new BorderLayout());

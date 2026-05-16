@@ -62,7 +62,7 @@ Aha! Now we're talking.
 Build the project (`../gradlew shadowJar`), and run the script `small.server.sh`.
 Look into it for details.
 
-> This is _**NOT**_ J2EE compliant, some HTTP aspects are not implemented (like HTTP responses 100 - see [here](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)), the goal here was to have
+> This is _**NOT**_ J2EE compliant, some HTTP aspects are not implemented, yet (like HTTP responses 100 - see [here](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)), the goal here was to have
 > a code as tiny as possible.  
 > Some features have been added though, like the possibility to serve static resources from within a zip archive - to save space.
 
@@ -79,7 +79,7 @@ HTTP_PORT=9876
 $ curl -X GET http://${HOST_NAME}:${HTTP_PORT}/web/index.html
 $ wget http://${HOST_NAME}:${HTTP_PORT}/web/index.html -o test.html
 ```
-Of course, modify the environment variables `HOST_NAME` and `HTTP_PORT`.  
+Of course, modify the environment variables `HOST_NAME` and `HTTP_PORT` according to your context.  
 Depending on the various flavors, the ports are `8000`, `8080`, `3000`, `9876`. They all can be changed,
 but just make sure you are using in the request the port you've set for the server.
 

@@ -44,7 +44,7 @@ public class Main4Tests
       e.printStackTrace();
     }
     new Main4Tests();
-    double il = MercatorUtil.getIncLat(45D);
+    double il = MercatorUtil.getIncLat(45d);
     double l = MercatorUtil.getInvIncLat(il);
     System.out.println("IncLat 45:" + GeomUtil.decToSex(il, 2, 1));
     System.out.println("Lat 45   :" + GeomUtil.decToSex(l, 2, 1));

@@ -1,11 +1,16 @@
 # Almanac Related Tools
 ## Mostly almanacs and tables publishing.
 
-Uses Java to generate `XML` data files, and then `xsl-fo` to create `pdf` files from the `XML` data.  
+Uses Java to generate `XML` data files, and then `xsl-fo` to create `pdf` files from the `XML` data.
+> Another way to generate pdf files would be to generate HTML documents,
+> and print them from a browser (as pdf). Using the CSS `@media print { . . . }` directive
+> would allow the generation of print-specific behaviors, like page breaks, and others.  
+> `xsl-fo` gives a bit more flexibility though.
+
 The Java code can be (and is) reused from REST interfaces.
 
 Look into the `pub` folder, the scripts will prompt you if needed.  
-Try:
+Try this:
 
 ### For the T900 (Dieumegard & Bataille):
 ```
@@ -31,7 +36,7 @@ $ ./pub/almanac.sh
 
 ### Mercator Canvases, Plotting Sheets, etc.
 For now, look into the `ChartComponents` module (under `Swing`),
-[here](../Swing/ChartComponents).  
+[here](../Swing/ChartComponents/README.md).  
 From the module's folder, do a 
 ```
 $ ../../../gradlew shadowJar

@@ -1,4 +1,6 @@
 # Build, publish, etc
+
+## Build it
 Do it **_from the repo's root_**
 ```
 $ ./gradlew :astro-computer:AstroComputer:clean :astro-computer:AstroComputer:build :astro-computer:AstroComputer:publishToMavenLocal
@@ -10,6 +12,7 @@ $ ./gradlew :astro-computer:AstroComputer:clean :astro-computer:AstroComputer:bu
 - Almanac & others: 
   - See [almanac.sh](../raspberry-sailor/AlmanacRelatedTools/pub/almanac.sh)
   - See [corrections.sh](../raspberry-sailor/AlmanacRelatedTools/pub/corrections.sh)
-  - See [perpetual.sh](../raspberry-sailor/AlmanacRelatedTools/pub/perpetual.sh)
+  - See [perpetual.sh](../raspberry-sailor/AlmanacRelatedTools/pub/perpetual.sh) (aka Long Term Almanac)
   - See [publish.tables.sh](../raspberry-sailor/AlmanacRelatedTools/pub/publish.tables.sh)
 
+---

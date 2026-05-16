@@ -1,6 +1,6 @@
 #!/bin/bash
 echo ----------------------------
-echo Perpetual Nautical Almanac Calculation
+echo Perpetual (aka Long Term) Nautical Almanac Calculation
 echo and pdf generation.
 echo ----------------------------
 #
