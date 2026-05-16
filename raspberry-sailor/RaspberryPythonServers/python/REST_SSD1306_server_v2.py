@@ -21,10 +21,24 @@
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
 #
 # Work In Progress !
-# Do run a curl -X GET /ssd1306/oplist !
+# Do run a "curl -X GET /ssd1306/oplist" !
 #
 # See https://readthedocs.org/projects/adafruit-circuitpython-ssd1306/
 # For drawings: https://learn.adafruit.com/micropython-hardware-ssd1306-oled-display/circuitpython#drawing-2902524
+#
+# Runtime CLI parameters are:
+# --wiring: "I2C" (default) or "SPI"
+# --machine-name: The machine name or its IP address. Default "127.0.0.1"
+# --port: default 8080
+# --verbose: default false
+# --height: 32 or 64. Default 32
+# --screen-saver: "on", or "off". Default "on"
+# --rotate: "true" or "false". Default "false". Rotate the screen by 180°.
+#
+# --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list. Default "BSP,SOG,COG,POS,WPT". Managed in the code.
+#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
+#
+# See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
 import json
 import sys
