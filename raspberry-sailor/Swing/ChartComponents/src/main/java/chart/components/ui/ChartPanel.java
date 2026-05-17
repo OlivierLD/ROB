@@ -1407,9 +1407,8 @@ public class ChartPanel extends JPanel
                     gProgress = (double) ((int) (gProgress / vGrid) + 1) * vGrid;
                 boolean go = true;
 
-//      double __south = _south + globeViewForeAftRotation;
-//      double __north = _north - globeViewForeAftRotation;
-
+                // double __south = _south + globeViewForeAftRotation;
+                // double __north = _north - globeViewForeAftRotation;
                 double __south = -90;
                 double __north = 90;
 
@@ -1438,7 +1437,7 @@ public class ChartPanel extends JPanel
                     double[] xy = calculateStereoGraphicXYCoordinates(lProgress, _west);
                     double dx = xy[0];
                     double dy = xy[1];
-                    //        System.out.println("dx:" + dx + ", dy:" + dy);
+                    // System.out.println("dx:" + dx + ", dy:" + dy);
                     if (dx < minX) minX = dx;
                     if (dx > maxX) maxX = dx;
                     if (dy < minY) minY = dy;
@@ -1446,7 +1445,7 @@ public class ChartPanel extends JPanel
                     xy = calculateStereoGraphicXYCoordinates(lProgress, _east);
                     dx = xy[0];
                     dy = xy[1];
-                    //        System.out.println("dx:" + dx + ", dy:" + dy);
+                    // System.out.println("dx:" + dx + ", dy:" + dy);
                     if (dx < minX) minX = dx;
                     if (dx > maxX) maxX = dx;
                     if (dy < minY) minY = dy;
@@ -1455,25 +1454,25 @@ public class ChartPanel extends JPanel
                     if (lProgress > __north)
                         go = false;
                 }
-//      System.out.println("Stereo - MinX:" + minX + ", MaxX:" + maxX + ", MinY:" + minY + ", MaxY:" + maxY);
+                // System.out.println("Stereo - MinX:" + minX + ", MaxX:" + maxX + ", MinY:" + minY + ", MaxY:" + maxY);
                 double opWidth = Math.abs(maxX - minX);
                 double opHeight = Math.abs(maxY - minY);
                 stereoView_ratio = Math.min((double) w / opWidth, (double) h / opHeight);
-//      System.out.println("Width:" + opWidth + ", Height:" + opHeight);
-//      stereoViewOffset_X = (int)(- minX);
-//      stereoViewOffset_Y = (int)(- minY);
+                // System.out.println("Width:" + opWidth + ", Height:" + opHeight);
+                // stereoViewOffset_X = (int)(- minX);
+                // stereoViewOffset_Y = (int)(- minY);
                 stereoViewOffset_X = ((int) Math.abs((int) (stereoView_ratio * opWidth) - w) / 2) - (int) (stereoView_ratio * minX);
-//      stereoViewOffset_Y = ((int)Math.abs((int)(stereoView_ratio * opHeight) - h) / 2) - (int)(stereoView_ratio * minY);
+                // stereoViewOffset_Y = ((int)Math.abs((int)(stereoView_ratio * opHeight) - h) / 2) - (int)(stereoView_ratio * minY);
                 stereoViewOffset_Y = ((int) Math.abs((int) (stereoView_ratio * opHeight) - h) / 2) + (int) (stereoView_ratio * maxY);
-//      System.out.println("StereoView Ratio:" + stereoView_ratio + ", SVoffsetX:" + stereoViewOffset_X + ", SVoffsetY:" + stereoViewOffset_Y);
-//      System.out.println("NewWidth:" + (opWidth * stereoView_ratio) + ", newHeight:" + (opHeight * stereoView_ratio));
+                // System.out.println("StereoView Ratio:" + stereoView_ratio + ", SVoffsetX:" + stereoViewOffset_X + ", SVoffsetY:" + stereoViewOffset_Y);
+                // System.out.println("NewWidth:" + (opWidth * stereoView_ratio) + ", newHeight:" + (opHeight * stereoView_ratio));
                 break;
             default:
                 break;
         }
 
-        double gstep = 10D; //Math.abs(_east - _west) / 60;
-        double lstep = 10D;  //Math.abs(_north - _south) / 10;
+        double gstep = 10D;  // Math.abs(_east - _west) / 60;
+        double lstep = 10D;  // Math.abs(_north - _south) / 10;
         // Meridians
         for (double i = Math.min(_east, _west); i < Math.max(_east, _west); i += gstep) {
             Point previous = null;

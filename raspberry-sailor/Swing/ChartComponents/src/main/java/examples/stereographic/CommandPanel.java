@@ -68,21 +68,26 @@ public class CommandPanel extends JPanel
     bottomPanel.add(zoomInButton, null);
     bottomPanel.add(zoomOutButton, null);
     add(bottomPanel, BorderLayout.SOUTH);
-//    double nLat = 120D;
-//    double sLat = -120D;
-//    double wLong = -110D;
-//    double eLong = 115D;
+//    double nLat = 120d;
+//    double sLat = -120d;
+//    double wLong = -110d;
+//    double eLong = 115d;
+
+    double nLat, sLat, wLong, eLong;
 
     // Big one, from top to bottom
-    double nLat = 120D;
-    double sLat = -120D;
-    double wLong = -130D;
-    double eLong = 100D;
+    nLat =  120d;
+    sLat = -120d;
+    wLong = -150d; // -130d;
+    eLong =  80d; // 100d;
+    // TODO Animation, deltaG = 230 (as above)
 
-//    double nLat = 90D;
-//    double sLat = 25D;
-//    double wLong = -110D;
-//    double eLong = 45D;
+    if (false) { // Another config, for dev & tests.
+      nLat = 120d;
+      sLat = -25d;
+      wLong = -110d;
+      eLong = 45d;
+    }
 
     chartPanel.setGridColor(Color.red);
     chartPanel.setChartColor(Color.blue);    
@@ -91,8 +96,8 @@ public class CommandPanel extends JPanel
     chartPanel.setWestG(wLong);
     chartPanel.setNorthL(nLat);
     chartPanel.setSouthL(sLat);
-    chartPanel.setHorizontalGridInterval(10D);
-    chartPanel.setVerticalGridInterval(10D);
+    chartPanel.setHorizontalGridInterval(10d);
+    chartPanel.setVerticalGridInterval(10d);
 
     chartPanel.setProjection(ChartPanelInterface.STEREOGRAPHIC);
   }
