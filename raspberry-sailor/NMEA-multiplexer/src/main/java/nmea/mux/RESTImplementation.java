@@ -543,7 +543,7 @@ public class RESTImplementation {
 		String content = "";
 		try {
 			String userDir = System.getProperty("user.dir");
-			// Find all yaml files under user.dir
+			// Find all yaml files under user.dir. Warning !! Does NOT work in Windows (yet...)
 			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			Process process = Runtime.getRuntime().exec(shellCommand);
 
@@ -593,6 +593,13 @@ public class RESTImplementation {
 			content = jpe.getMessage();
 			jpe.printStackTrace();
 		} catch (IOException | InterruptedException ie) {
+			content = ie.getMessage();
+			if (ie instanceof IOException) {
+				String os = System.getProperty("os.name");
+				if (os.toUpperCase().contains("WINDOWS")) {
+					content += "\nThis command is not supported of Windows.";
+				}
+			}
 			ie.printStackTrace();
 		}
 		response.setPayload(content.getBytes());
