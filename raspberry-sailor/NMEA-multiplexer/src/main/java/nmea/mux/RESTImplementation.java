@@ -573,6 +573,9 @@ public class RESTImplementation {
 				line = br.readLine();
 				if (line != null) {
 					// System.out.printf("Read: [%s]\n", line);
+					if (os.toUpperCase().contains("WINDOWS")) {
+						System.out.printf("> Reading file %s ...\n", line);
+					}
 					// Check if it's the right kind of file...
 					String yamlFileName = line;
 					try {
