@@ -83,6 +83,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -562,7 +563,10 @@ public class RESTImplementation {
 
 			Process process = Runtime.getRuntime().exec(shellCommand);
 
-			int exitCode = process.waitFor();
+			int exitCode = 0;
+			if (!onWindows) {
+				exitCode = process.waitFor(); // When OK (ie 0), does not return on Windows...
+			}
 			System.out.printf("Exit code for [%s] was %d\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")), exitCode);
 
 			InputStreamReader isr = new InputStreamReader(process.getInputStream());
