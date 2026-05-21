@@ -543,8 +543,21 @@ public class RESTImplementation {
 		String content = "";
 		try {
 			String userDir = System.getProperty("user.dir");
+			final String[] shellCommand;
 			// Find all yaml files under user.dir. Warning !! Does NOT work in Windows (yet...)
-			final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
+			// final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
+			String os = System.getProperty("os.name");
+			if (os.toUpperCase().contains("WINDOWS")) {
+				/*
+					For Windows:
+					> dir /b /s *.yaml
+					> where /r . *.yaml
+				 */
+				shellCommand = new String[] { "cmd.exe", "/c", "where /r *.yaml" };
+			} else {
+				shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
+			}
+
 			Process process = Runtime.getRuntime().exec(shellCommand);
 
 			int exitCode = process.waitFor();
