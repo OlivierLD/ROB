@@ -556,7 +556,7 @@ public class RESTImplementation {
 					> where /r . *.yaml
 				 */
 				shellCommand = new String[] { "cmd.exe", "/c", String.format("where /r %s *.yaml", userDir) };
-				System.out.printf("Will execute [%s] on Windows...\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")));
+				// System.out.printf("Will execute [%s] on Windows...\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")));
 			} else {
 				shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			}
@@ -579,7 +579,7 @@ public class RESTImplementation {
 				line = br.readLine();
 				if (line != null) {
 					// System.out.printf("Read: [%s]\n", line);
-					if (onWindows) {
+					if (false && onWindows) {
 						System.out.printf("> Reading file %s ...\n", line);
 					}
 					// Check if it's the right kind of file...
