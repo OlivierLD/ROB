@@ -547,13 +547,15 @@ public class RESTImplementation {
 			// Find all yaml files under user.dir. Warning !! Does NOT work in Windows (yet...)
 			// final String[] shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			String os = System.getProperty("os.name");
-			if (os.toUpperCase().contains("WINDOWS")) {
+			boolean onWindows = os.toUpperCase().contains("WINDOWS");
+			if (onWindows) {
 				/*
 					For Windows:
 					> dir /b /s *.yaml
 					> where /r . *.yaml
 				 */
 				shellCommand = new String[] { "cmd.exe", "/c", String.format("where /r %s *.yaml", userDir) };
+				System.out.printf("Will execute [%s] on Windows...\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")));
 			} else {
 				shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			}
@@ -573,7 +575,7 @@ public class RESTImplementation {
 				line = br.readLine();
 				if (line != null) {
 					// System.out.printf("Read: [%s]\n", line);
-					if (os.toUpperCase().contains("WINDOWS")) {
+					if (onWindows) {
 						System.out.printf("> Reading file %s ...\n", line);
 					}
 					// Check if it's the right kind of file...
