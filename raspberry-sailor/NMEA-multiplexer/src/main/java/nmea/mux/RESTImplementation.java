@@ -553,7 +553,7 @@ public class RESTImplementation {
 					> dir /b /s *.yaml
 					> where /r . *.yaml
 				 */
-				shellCommand = new String[] { "cmd.exe", "/c", "where /r *.yaml" };
+				shellCommand = new String[] { "cmd.exe", "/c", String.format("where /r %s *.yaml", userDir) };
 			} else {
 				shellCommand = new String[] { "/bin/bash", "-c", String.format("find %s -name '*.yaml'", userDir) };
 			}
