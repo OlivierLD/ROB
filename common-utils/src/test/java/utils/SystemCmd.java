@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SystemCmd {
     public static void main(String... args) {
-        System.out.printf("Running from %s\n", System.getProperty("user.dir"));
+        System.out.printf("Running from %s, on %s\n", System.getProperty("user.dir"), System.getProperty("os.name"));
         try {
 //            final String[] command = new String[] { "ls", "-l", "README.*" };  // Fails
 //            final String[] command = new String[] { "/bin/bash", "-c", "ls", "-l", "README.*" };  // Works!!
@@ -30,7 +30,7 @@ public class SystemCmd {
 
             Process p = Runtime.getRuntime().exec(command);  // That one may raise uncaught IOException...
             List<String> output = new ArrayList<>();
-            int exitCode = p.waitFor();
+            int exitCode = p.waitFor(); // When all is well, that one does NOT return on Windows...
             BufferedReader reader = null;
             if (exitCode == 0) {
                 reader = new BufferedReader(new InputStreamReader(p.getInputStream()));

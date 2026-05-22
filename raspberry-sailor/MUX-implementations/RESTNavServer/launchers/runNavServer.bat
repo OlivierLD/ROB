@@ -1,27 +1,39 @@
 @echo off
 @setlocal
-:: Navigation REST server. WiP !!
+:: Navigation REST server, for Windows. WiP !!
 ::
-@rem echo ----------------------------
-@rem echo Usage is ${0} [-p|--proxy] [-m:propertiesfile|--mux:propertiesfile] [--no-date] [--sun-flower] --delta-t:[value]
-@rem echo      -p or --proxy means with a proxy (proxy definition in the script ${0})
-@rem echo      -m or --mux points to the properties file to use for the Multiplexer, default is nmea.mux.properties
-@rem echo      -sf or --sun-flower means with Sun Flower option (extra Request Manager)
-@rem echo      --http-verbose:true|false
-@rem echo      --no-date does not put any GPS date or time (replayed or live) in the cache (allows you to use a ZDA generator)
-@rem echo      --no-rmc-time will NOT set rmc time (only date & time). Useful when replaying data
-@rem echo ----------------------------
+echo ----------------------------
+echo Usage is %0 [-p^|--proxy] [-m:propertiesfile^|--mux:propertiesfile] [--no-date] [--sun-flower] --delta-t:[value]
+echo      -p or --proxy means with a proxy (proxy definition in the script %0)
+echo      -m or --mux points to the properties file to use for the Multiplexer, default is nmea.mux.properties
+echo      -sf or --sun-flower means with Sun Flower option (extra Request Manager)
+echo      --http-verbose:true^|false
+echo      --no-date does not put any GPS date or time (replayed or live) in the cache (allows you to use a ZDA generator)
+echo      --no-rmc-time will NOT set rmc time (only date ^& time). Useful when replaying data
+echo ----------------------------
 ::
 echo - Starting the Navigation Rest Server
 echo ----------------------------------------
 echo Script args are %*
 echo ----------------------------------------
+set PROP_FILE=
+@rem Hard=coded for now
+set PROP_FILE=mux-configs\nmea.mux.no.gps.yaml
+:: set PROP_FILE=mux-configs\nmea.mux.gps.win.yaml
+set HTTP_VERBOSE=false
+::
 :loopTop
 if (%1) == () goto loopEnd
 echo Managing param %1
+set PRM=%1
+if [%PRM:~0,6%] == [--mux:] set PROP_FILE=%PRM:~6%
+if [%PRM:~0,3%] == [-m:] set PROP_FILE=%PRM:~3%
+if [%PRM:~0,15%] == [--http-verbose:] set HTTP_VERBOSE=%PRM:~15%
 shift
 goto loopTop
 :loopEnd
+
+:: echo PropFile is %PROP_FILE%
 ::
 set CP=..\build\libs\RESTNavServer-1.0-all.jar
 :: CP=$(find .. -name '*-all.jar')
@@ -33,8 +45,8 @@ set CP=..\build\libs\RESTNavServer-1.0-all.jar
 @rem   CP=${CP}:/usr/share/java/RXTXcomm.jar # For Raspberry Pi. Should already be in the fat-jar.
 @rem fi
 ::
-@rem Hard=coded for now
-set PROP_FILE=mux-configs\nmea.mux.no.gps.yaml
+:: CP=%CP%;%HOMEPATH%\Serial\RXTXcomm.jar
+::
 set JAVA_OPTS=
 set JAVA_OPTS=%JAVA_OPTS% -Dmux.properties=%PROP_FILE%
 @rem JAVA_OPTS="${JAVA_OPTS} -Djava.util.logging.config.file=logging.properties"
@@ -44,7 +56,7 @@ set JAVA_OPTS=%JAVA_OPTS% -DdeltaT=AUTO
 @rem #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=$HTTP_VERBOSE"
 @rem #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose=true"
 @rem #JAVA_OPTS="${JAVA_OPTS} -Dhttp.verbose.dump=true"
-@rem JAVA_OPTS="${JAVA_OPTS} -Dhttp.client.verbose=$HTTP_VERBOSE"
+set JAVA_OPTS=%JAVA_OPTS% -Dhttp.client.verbose=%HTTP_VERBOSE%
 @rem #
 @rem JAVA_OPTS="${JAVA_OPTS} -Dmux.infra.verbose=${INFRA_VERBOSE}"
 @rem JAVA_OPTS="${JAVA_OPTS} -Dtide.verbose=${TIDE_VERBOSE}"
@@ -93,6 +105,9 @@ set SUDO=
 @rem   fi
 @rem fi
 ::
+:: Required by RXTXcomm.jar, location of rxtxSerial.dll
+set JAVA_OPTS=%JAVA_OPTS% -Djava.library.path=%HOMEPATH%\Serial
+::::
 @rem if [[ "${HTTP_PORT}" != "" ]]; then
 @rem   JAVA_OPTS="${JAVA_OPTS} -Dhttp.port=${HTTP_PORT}"   # Use only if not in config file yet.
 @rem fi

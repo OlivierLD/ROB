@@ -565,7 +565,9 @@ public class RESTImplementation {
 
 			int exitCode = 0;
 			if (!onWindows) {
-				exitCode = process.waitFor(); // When OK (ie 0), does not return on Windows...
+				exitCode = process.waitFor(); // When OK (ie 0), does NOT return on Windows... Hemce this block.
+			} else {
+				System.out.println("Executing Windows OS Command... No exit code returned.");
 			}
 			System.out.printf("Exit code for [%s] was %d\n", Arrays.stream(shellCommand).collect(Collectors.joining(" ")), exitCode);
 

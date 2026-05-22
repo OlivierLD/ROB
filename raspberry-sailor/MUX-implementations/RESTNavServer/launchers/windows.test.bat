@@ -6,18 +6,20 @@
 ::      RXTX_HOME is the fully qualified name of the folder where RXTXcomm.jar is
 ::      -Djava.library.path=%RXTX_HOME%\Windows\i368-mingw32 designates the folder where rxtxSerial.dll is
 ::
-set PROP_FILE_NAME=nmea.mux.2.serial.yaml
+set PROP_FILE_NAME=mux-configs\nmea.mux.2.serial.yaml
 ::
 set CP=..\build\libs\RESTNavServer-1.0-all.jar
 :: Add the java-librxtx
-set RXTX_HOME=C:\Users\olivier\rxtx-2.1-7-bins-r2
+:::: set RXTX_HOME=C:\Users\olivier\rxtx-2.1-7-bins-r2
 ::
-set CP=%CP%;%RXTX_HOME%\RXTXcomm.jar
+:::: set CP=%CP%;%RXTX_HOME%\RXTXcomm.jar
 ::
 set JAVA_OPTS=
 set JAVA_OPTS=%JAVA_OPTS% -DdeltaT=AUTO
 set JAVA_OPTS=%JAVA_OPTS% -Xms64M -Xmx1G
-set JAVA_OPTS=%JAVA_OPTS% -Djava.library.path=%RXTX_HOME%\Windows\i368-mingw32
+:: set JAVA_OPTS=%JAVA_OPTS% -Djava.library.path=%RXTX_HOME%\Windows\i368-mingw32
+:: Required by RXTXcomm.jar, location of rxtxSerial.dll
+set JAVA_OPTS=%JAVA_OPTS% -Djava.library.path=%HOMEPATH%\Serial
 set JAVA_OPTS=%JAVA_OPTS% -Dmux.properties=%PROP_FILE_NAME%
 set COMMAND=java -cp %CP% %JAVA_OPTS% navrest.NavServer
 echo "Running %COMMAND%"
