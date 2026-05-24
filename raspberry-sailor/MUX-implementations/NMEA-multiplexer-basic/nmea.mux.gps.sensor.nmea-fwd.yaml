@@ -7,7 +7,7 @@
 name: "Real world scenario."
 description:
   - Reads GPS
-  - Reads BME280 (REST, port 9876)
+  - Reads BME280 (REST, Python server port 9876)
   - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
   - Log data in a file (data.nmea)
 context:

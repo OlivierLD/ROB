@@ -474,6 +474,8 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     rest.resource: /ssd1306/nmea-data
     rest.verb: PUT
     # rest.query.string: ""
+    rest.onclose.resource: /ssd1306/clear-screen
+    rest.onclose.verb: PUT
     verbose: true
   ```
   - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.  
