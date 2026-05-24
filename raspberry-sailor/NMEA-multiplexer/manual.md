@@ -1445,7 +1445,15 @@ context:
   init.cache: true
 ```
 
-All you need to know in this case is your location, all the rest is taken care of.
+All you need to know in this case is your location, all the rest is taken care of.  
+
+> _**Note**_:  
+> The Rasbperry Pi - even the smallest one - can easily take care of gathering the data, 
+> compute the extra ones, forward them, etc, and host the Web Server that will allow you to look at them from a web page.  
+> All you need is a device that can run a browser (a laptop, tablet, cell-phone...). All it need it to be connected on the same network
+> as the Raspberry Pi (the RasPi can even emit it, if needed).  
+> All the Web UI presented in this repo use only standard components. You do not need to install _**any**_ application 
+> on the device to reach them. The browser knows.
 
 ##### Bonus
 You can even have _no_ `channel` at all.
