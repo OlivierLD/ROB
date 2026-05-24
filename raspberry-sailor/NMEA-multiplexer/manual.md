@@ -1392,7 +1392,7 @@ As `with.http.server` is set to `yes`, an `admin` web page will be available on 
 And `init.cache` is set to `true`, meaning that a Computer (not mentioned here) would be able to pick up data from the NMEA Cache.
 
 #### Minimal
-_Note_: Two system variables can be used to set the default position (in case no GPS is available) at runtime:
+_Note_: Two runtime system variables can be used to set the default position (in case no GPS is available) at runtime:
 ```
 ...
 JAVA_OPTS="$JAVA_OPTS -Ddefault.mux.latitude=37.7489 -Ddefault.mux.longitude=-122.5070" # SF.
@@ -1426,11 +1426,23 @@ In this case:
 - there is only one channel (`zda`) providing the date and time (UT) (`mux.01.type=zda`)
 - the position is provided by the user at runtime (`-Ddefault.mux.latitude=37.7489 -Ddefault.mux.longitude=-122.5070`)
 - the data are pushed to the cache (`init.cache=true`)
-- the cache is accessed from the Web UI through REST services, see in the WebPage code the statements like
+- To get to the data, the Web UI pings the cache through REST services, see in the WebPage code the statements like
 ```js
 function getNMEAData() {
   return getPromise('/mux/cache', DEFAULT_TIMEOUT, 'GET', 200, null, false);
 }
+```
+This REST service is implemented (extended) in the `http.server` that runs, as required by the lines of the config file:
+```properties
+with.http.server=yes
+http.port=9999
+```
+or in `yaml`:
+```yaml
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
 ```
 
 All you need to know in this case is your location, all the rest is taken care of.
@@ -1482,4 +1494,7 @@ HTTP server serving the REST requests can also serve HTML requests, and behave l
 - [Case Study](./casestudy.md)
 
 -----------------
-See the code for more details. _This_ is Open Source 😜
+See the code for more details. _This_ is Open Source 😜  
+You can also contact me in case this document deserves to be any clearer...
+
+---
