@@ -7,6 +7,7 @@ JAVA_OPTIONS=
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dspeed.unit=KN"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dverbose=false"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dsummary=true"
+# -Dgencsv=true|false
 #
 JAVA_OPTIONS="${JAVA_OPTIONS} -ea"  # Enable Assertions
 #

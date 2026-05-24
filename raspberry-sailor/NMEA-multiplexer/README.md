@@ -890,6 +890,8 @@ Several small utilities are available to do several operations on the data log f
  $
 ```
 
+See [here](LOG_MGMT.md) and example of the way to manage logged data.
+
 - A sample of a kml file generator is in `util.NMEAtoKML`:
 ```bash
  $ java -cp ./build/libs/NMEA-multiplexer-1.0-all.jar util.NMEAtoKML sample.data/alcatraz.2018.may.5.nmea --title:Alcatraz --sub-title:"May 5, 2018"

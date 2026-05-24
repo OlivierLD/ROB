@@ -16,10 +16,10 @@ echo -e "Merging nmea data into ${MERGED_FILE_NAME}"
 #
 rm ${MERGED_FILE_NAME} 2> /dev/null
 #
-find ${LOG_PATH} -name '*.nmea' > nmea.file.list
+find ${LOG_PATH} -name '*.nmea' | sort > nmea.file.list   # Sorted !!
 # find ${LOG_PATH} -name '*.nmea' -exec echo -e "Adding {}"; cat {} >> ${MERGED_FILE_NAME} \;
 # find ${LOG_PATH} -name '*.nmea' -exec cat {} \; # >> ${MERGED_FILE_NAME}
-for nmeadata in `cat nmea.file.list`; do
+for nmeadata in `cat nmea.file.list`; do   # Ordered by name !!!
   echo -e "Adding ${nmeadata}"
   cat "${nmeadata}" >> ${MERGED_FILE_NAME}
 done

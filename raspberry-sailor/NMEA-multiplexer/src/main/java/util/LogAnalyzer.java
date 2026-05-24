@@ -132,7 +132,7 @@ public class LogAnalyzer {
 		map.put(id, nb + 1);
 	}
 
-	private final static double MAX_CALCULATED_SPEED = 20d * 1_852d / 3_600d; // 10 knots in m/s
+	private final static double MAX_CALCULATED_SPEED = 20d * 1_852d / 3_600d; // 20 knots in m/s : 10.29
 
 	public static void main(String... args) {
 
@@ -215,7 +215,7 @@ public class LogAnalyzer {
 			long previousDate = -1L;
 			long statLineNo = 0;
 
-			if (gencsv) {
+			if (gencsv) { // Headers
 				bw.write("Idx\ttime (epoch)\tdeltaT\tdeltaDist (km)\tdeltaT(2)\tcog\tsog (kn)\tfmt-utc-date-time\tlat\tlong\tfmt-lat\tfmt-long\n");
 			}
 			statLineNo += 1;
@@ -232,6 +232,8 @@ public class LogAnalyzer {
 			Date prevRMCTime = null;
 			GeoPos firstValidPos = null;
 			GeoPos lastValidPos = null;
+			long firstValidPosIdx = -1;
+			long lastValidPosIdx = -1;
 			String line;
 			boolean keepReading = true;
 			while (keepReading) {
@@ -285,8 +287,10 @@ public class LogAnalyzer {
 									double calcSpeed = 0;
 									if (firstValidPos == null) {
 										firstValidPos = gp;
+										firstValidPosIdx = originalFileRecNo;
 									}
 									lastValidPos = gp;
+									lastValidPosIdx = originalFileRecNo;
 									if (previousPos != null) {
 										distanceKm = GeomUtil.haversineKm(previousPos.lat, previousPos.lng, gp.lat, gp.lng);
 										distanceGcNm = new GreatCirclePoint(previousPos.lat, previousPos.lng).gcDistanceBetween(new GreatCirclePoint(gp.lat, gp.lng));
@@ -468,8 +472,8 @@ public class LogAnalyzer {
 			}
 			assert (start != null && arrival != null);
 			if (start != null && arrival != null) {
-				System.out.printf("Started %s, at %s\n", SDF.format(start), firstValidPos);
-				System.out.printf("Arrived %s, at %s\n", SDF.format(arrival), lastValidPos);
+				System.out.printf("Started %s, at %s (idx %d)\n", SDF.format(start), firstValidPos, firstValidPosIdx);
+				System.out.printf("Arrived %s, at %s (idx %d)\n", SDF.format(arrival), lastValidPos, lastValidPosIdx);
 				System.out.printf("Used %s record(s) out of %s. \nTotal distance: %.03f (%.03f) %s, in %s. Avg speed:%.03f %s\n",
 						NumberFormat.getInstance().format(nbRec), // nb recs
 						NumberFormat.getInstance().format(totalNbRec), // total recs
