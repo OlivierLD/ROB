@@ -559,7 +559,11 @@ def db_writer(dummy_prm: str) -> None:
                                 print(f"Status: {status}")
                                 print(f"Returned: {returned}")
                         except Exception as ex:
-                            print(f"Oops: REST exception ({type(ex)}) {ex}")
+                            print(f"Oops: REST exception ({type(ex)}) {ex}, stopping requesting it.")
+                            if DB_OPTION == "BOTH":
+                                DB_OPTION == "SQLITE"
+                            else:
+                                DB_OPTION = "NONE"
                             all_good = False
                     # That's it.
 
