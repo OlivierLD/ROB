@@ -134,7 +134,8 @@ GO=true
 # Banner done with https://manytools.org/hacker-tools/ascii-banner/, 'Slant Relief'
 #
 if [[ "${SMALL_MENU}" == "Y" ]]; then
-  cat banner.txt
+  # cat banner.txt
+  cat banner.raw.txt
 else
   cat banner.stby.txt
 fi
@@ -175,7 +176,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R  🚀                                                                                                             |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}P${NC}. Launch proxy CLI, to visualize HTTP & REST traffic 🔎                               |                                                                                         |"
-    echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                                |                                                                                         |"
+    echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic 🕵️‍                             |                                                                                         |"
     echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}J${NC}. JConsole (JVM Monitoring) 📡   |  ${RED}JV${NC}. JVisualVM 📡                                  |                                                                                         |"
     echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |"
@@ -207,13 +208,13 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|                                                                                         | ${RED}13f${NC}. GPS only, Chartless Map (Kernével-La Trinité). GPS Only, no AIS.                   |"
     echo -e "|                                                                                         | ${RED}13g${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only, AIS from OpenCPN/UDP.        |"
     echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
-    echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse                                                               |"
+    echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse, replay.                                                      |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     # echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
     # echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-    echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                        | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                            |"
+    echo -e "|  ${RED}S${NC}. Show NavServer process(es) ⚙️                                                       | ${RED}SP${NC}. Show proxy process(es) ⚙️                                                           |"
     echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| >> Hint: use './killns.sh' to stop any running NavServer 💣                                                                                                                       |"
@@ -221,7 +222,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
     echo -e "|  >> ${BOLD_GREEN_BLINK}To get help on option X${NC}, type ${RED}H:X${NC} (like H:11, H:20b, etc)                                                                                                                     |"
     echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
-    echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                       |"
+    echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                                                                                        |"
     echo -e "+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+"
   fi
 	if [[ "${USER_OPTION}" != "" ]]; then
