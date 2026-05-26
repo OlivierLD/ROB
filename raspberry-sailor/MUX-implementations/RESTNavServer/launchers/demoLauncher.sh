@@ -53,7 +53,7 @@ if [[ $# -gt 0 ]]; then
 	  echo "Processing ${prm} ..."
 	  if [[ ${prm} == "--small" ]]; then
 	    SMALL_MENU=Y
-	  elif [[ ${prm} == "--graphics:"* ]]; then
+	  elif [[ ${prm} == "--graphics" ]]; then
 	    GRAPHICS=Y
 	  elif [[ ${prm} == "--browser:"* ]]; then
 	    LAUNCH_BROWSER=${prm#*:}
@@ -170,7 +170,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "+-------------------------------------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}Q${NC}. Quit ❎                                                                                                        |"
     echo -e "+-------------------------------------------------------------------------------------------------------------------+"
-	elif [[ "${GRAHICS}" == "Y" ]]; then
+	elif [[ "${GRAPHICS}" == "Y" ]]; then
     echo -e ">> Note ⚠️ : Optional Script Parameters : "
     echo -e "    starting the server, like ${0} --browser:[N]|Y --proxy:[N]|Y --option:1 --nohup:[N]|Y --http-port:9999 --cmd-verbose:[N]|Y --help -h help ?"
     echo -e "    --small will show a smaller version of this menu"
