@@ -240,7 +240,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|               N A V   S E R V E R   -   D E M O   L A U N C H E R                                                                                                                 |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}P${NC}. Launch proxy CLI, to visualize HTTP & REST traffic                                  |                                                                                         |"
-    echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic️‍                                |                                                                                         |"
+    echo -e "| ${RED}PG${NC}. Launch proxy GUI, to visualize HTTP & REST traffic                                  |                                                                                         |"
     echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}J${NC}. JConsole (JVM Monitoring)      |  ${RED}JV${NC}. JVisualVM                                     |                                                                                         |"
     echo -e "|                                    | - Note: for remote monitoring, jstatd must be      |                                                                                         |"
