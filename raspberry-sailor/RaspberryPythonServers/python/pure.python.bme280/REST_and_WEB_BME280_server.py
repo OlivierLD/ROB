@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 # REST and Web server.
+# For a Weather Station.
 #
 # Requires:
 # ---------
@@ -17,12 +18,11 @@
 # $ python3 -u  <...>/REST_and_WEB_BME280_server.py --machine-name:$(hostname -I | awk '{ print $1 }') \
 #                                                   --port:8080 \
 #                                                   --verbose:true|false \
-#                                                   [--address:0x76] \
-#                                                   [--store-restore:true|false] \
-#                                                   [--log-db:true|false]
+#                                                  [--address:0x76] \
+#                                                  [--store-restore:true|false] \
+#                                                  [--log-db:true|false] \
+#                                                  [--db-option:REST|SQLITE|BOTH]
 # --log-db depends on DB_OPTION variable below (hard-coded for now, REST or SQLITE, or BOTH). If REST, it pushes data to passe-coque.com weather DB.
-#
-# TODO: REST Only, DB Only... To just log data, read from another (independent) UI...
 #
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
@@ -595,7 +595,7 @@ def produce_data(dummy_prm: str) -> None:
             dpt: float = dew_point_temperature(humidity, temperature) # Celsius
             ah: float = absolute_humidity(temperature, humidity)  # g / m3
         else:
-            print("No BME280 was found")
+            print("No BME280 was found, no data available")
 
         try:
             # Send to the client

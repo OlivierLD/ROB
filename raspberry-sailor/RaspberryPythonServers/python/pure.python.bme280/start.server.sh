@@ -4,7 +4,7 @@ IP_ADDR=$(hostname -I | awk '{ print $1 }')
 I2C_ADDR=0x76          # Can be 0x77 also.
 VERBOSE=false
 STORE_RESTORE=false
-LOG_DB=true            # Do check the DB_OPTION in the python code, and below!
+LOG_DB=false            # Do check the DB_OPTION in the python code, and below!
 DB_OPTION=REST         # Applied if LOG_DB is true. REST, SQLITE, or BOTH.
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
