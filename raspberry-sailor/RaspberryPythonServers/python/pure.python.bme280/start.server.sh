@@ -13,7 +13,7 @@ echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VER
 #
 COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB} --db-option:${DB_OPTION}"
 echo "Executing: ${COMMAND}"
-nohup ${COMMAND} > bmp.log 2>&1 &
+nohup ${COMMAND} > bme.log 2>&1 &
 # nohup -u python3 REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} &
 PID=$!
 echo -e "Process [${PID}] on its way, on address ${IP_ADDR} !"

@@ -499,6 +499,7 @@ def db_writer(dummy_prm: str) -> None:
     global keep_looping
     global between_loops
     global verbose
+    global DB_OPTION
 
     print(f"Starting DB thread\n")
     ping: int = 0
