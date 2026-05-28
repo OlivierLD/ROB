@@ -142,6 +142,7 @@ if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then
   echo -e "| > after unzipping the archive on the target machine.                                             |"
   echo -e "| > In case you see an \"Externally Managed\" message,                                               |"
   echo -e "|   see https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/ ...          |"
+  echo -e "|   cd /usr/lib/python3.11 && sudo rm EXTERNALLY-MANAGED                                           |"
 fi
 echo -e "| The script to launch will be 'mux.sh'                                                            |"
 echo -e "| It is your responsibility to use the right properties file, possibly modified to fit your needs. |"

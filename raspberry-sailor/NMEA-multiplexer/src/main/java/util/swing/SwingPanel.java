@@ -41,6 +41,7 @@ public class SwingPanel
 		this.repaint();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void plot(List<?> dataList, boolean progressing, Consumer<Object> plotCallback) {
 
 		int from = (progressing ? 0 : dataList.size() - 1);

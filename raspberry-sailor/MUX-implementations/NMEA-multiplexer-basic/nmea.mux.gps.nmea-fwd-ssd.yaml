@@ -1,0 +1,50 @@
+#
+# MUX definition.
+# With SSD1306 oled or eink screen.
+# The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py or
+# also REST_EINK2-13_server.py
+# Requires several Python servers to be running.
+#
+name: "Real world scenario."
+description:
+  - Reads GPS
+  - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
+  - Log data in a file (data.nmea)
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: 0
+  markers: markers.yaml
+channels:
+  # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal (in /etc/rc.local ?)"
+  - type: file
+    filename: /dev/ttyACM0
+    verbose: false
+#    sentence.filters: ~GGA,~GSV,~GSA
+#    sentence.filters: ~GLL
+#    sentence.filters: RMC,GLL
+forwarders:
+  - type: nmea-cache-publisher
+    between-loops: 1  # in seconds
+    rest.protocol: http
+    rest.machine-name: localhost   # The machine to send the stop-signal to
+    # rest.machine-name: 192.168.1.103
+    rest.port: 8080
+    rest.resource: /ssd1306/nmea-data
+    rest.verb: PUT
+#    rest.query.string: ""
+    rest.onclose.resource: /ssd1306/bye-and-clear-screen
+    rest.onclose.verb: PUT
+    verbose: false
+  - type: file
+    # filename: data.nmea
+    # flush: true
+    verbose: false
+    timebase.filename: true
+    filename.suffix: _LOG
+    log.dir: logged
+    split: hour
+    sentence.filters: ~GGA,~GSV,~GSA
+  - type: tcp
+    port: 7001

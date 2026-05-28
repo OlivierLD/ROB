@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 """
+I2C Version
+
 This demo will fill the screen with white, draw a black box on top
 and then print Hello World! in the center of the display
 
