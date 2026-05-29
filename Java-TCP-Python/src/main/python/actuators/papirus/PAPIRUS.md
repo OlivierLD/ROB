@@ -4,6 +4,10 @@ Setup instructions:
  - Hardware [here](https://www.pi-supply.com/make/papirus-assembly-tips-and-gotchas/).
  - Software [here](https://github.com/repaper/gratis) and [here](https://github.com/PiSupply/PaPiRus).
  
+Docs to look at:
+- <https://github.com/PiSupply/PaPiRus#command-line>
+- <https://github.com/repaper/gratis>
+
 ---
 
 Communicating with the screen can be done from the System command line, using the commands like `papirus-write`

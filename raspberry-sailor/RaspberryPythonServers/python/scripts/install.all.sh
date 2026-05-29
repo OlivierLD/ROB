@@ -18,4 +18,4 @@ sudo pip3 install pyyaml
 sudo pip3 install adafruit-circuitpython-lsm303dlh-mag
 #
 sudo pip3 install adafruit-circuitpython-ssd1306
-sudo pip3 install adafruit-circuitpython-epd
+sudo pip3 install adafruit-circuitpython-epd     # For e-ink

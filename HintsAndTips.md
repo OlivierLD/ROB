@@ -91,7 +91,8 @@ Also see the doc [here](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-
 See this script: <https://gist.github.com/atlury/fe0ea8b91a981c103df7>
 
 ### nmcli
-See 
+For the doc, see <https://networkmanager.dev/docs/api/latest/nmcli.html>.  
+Also see 
 - [this](https://www.raspberrypi.com/documentation/computers/configuration.html#networking)
 - and [here](https://www.raspberrypi.com/documentation/computers/configuration.html#host-a-wireless-network-from-your-raspberry-pi)
 - or [that one](https://gist.github.com/narate/d3f001c97e1c981a59f94cd76f041140?permalink_comment_id=3099250)
