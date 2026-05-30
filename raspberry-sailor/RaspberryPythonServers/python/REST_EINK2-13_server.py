@@ -18,6 +18,7 @@
 #
 # Work In Progress !
 # Do run a curl -X GET /eink2-13/oplist !
+# To be used as an nmea-cache-publisher (see yaml files for details and examples)
 #
 # See doc at <https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all>
 #

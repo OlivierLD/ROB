@@ -1212,38 +1212,38 @@ public class HTTPServer {
 	 * Full mime-type list at https://www.sitepoint.com/web-foundations/mime-types-complete-list/
 	 * Add more types and extensions as/when needed.
 	 *
-	 * @param f file name (full). TODO Uppercase/Lowercase ? => png vs PNG ?
-	 * @return the mime-type for the given file name
+	 * @param f file name (full).
+	 * @return the mime-type for the given file name (case-insensitive)
 	 */
 	private static String getContentType(String f) {
 		String contentType = HttpHeaders.TEXT_PLAIN;
-		if (f.endsWith(".html")) {
+		if (f.toLowerCase().endsWith(".html")) {
 			contentType = HttpHeaders.TEXT_HTML;
-		} else if (f.endsWith(".js")) {
+		} else if (f.toLowerCase().endsWith(".js")) {
 			contentType = HttpHeaders.TEXT_JAVASCRIPT;
-		} else if (f.endsWith(".css")) {
+		} else if (f.toLowerCase().endsWith(".css")) {
 			contentType = HttpHeaders.TEXT_CSS;
-		} else if (f.endsWith(".xml")) {
+		} else if (f.toLowerCase().endsWith(".xml")) {
 			contentType = HttpHeaders.TEXT_XML;
-		} else if (f.endsWith(".ico")) {
+		} else if (f.toLowerCase().endsWith(".ico")) {
 			contentType = HttpHeaders.IMAGE_X_ICON;
-		} else if (f.endsWith(".png")) {
+		} else if (f.toLowerCase().endsWith(".png")) {
 			contentType = HttpHeaders.IMAGE_PNG;
-		} else if (f.endsWith(".gif")) {
+		} else if (f.toLowerCase().endsWith(".gif")) {
 			contentType = HttpHeaders.IMAGE_GIF;
-		} else if (f.endsWith(".jpg") || f.endsWith(".jpeg")) {
+		} else if (f.toLowerCase().endsWith(".jpg") || f.toLowerCase().endsWith(".jpeg")) {
 			contentType = HttpHeaders.IMAGE_JPEG;
-		} else if (f.endsWith(".svg")) {
+		} else if (f.toLowerCase().endsWith(".svg")) {
 			contentType = HttpHeaders.IMAGE_SVG_XML;
-		} else if (f.endsWith(".woff")) {
+		} else if (f.toLowerCase().endsWith(".woff")) {
 			contentType = HttpHeaders.APPLICATION_X_FONT_WOFF;
-		} else if (f.endsWith(".wav")) {
+		} else if (f.toLowerCase().endsWith(".wav")) {
 			contentType = HttpHeaders.AUDIO_WAV;
-		} else if (f.endsWith(".pdf")) {
+		} else if (f.toLowerCase().endsWith(".pdf")) {
 			contentType = HttpHeaders.APPLICATION_PDF;
-		} else if (f.endsWith(".json")) {
+		} else if (f.toLowerCase().endsWith(".json")) {
 			contentType = HttpHeaders.APPLICATION_JSON;
-		} else if (f.endsWith(".ttf")) {
+		} else if (f.toLowerCase().endsWith(".ttf")) {
 			contentType = HttpHeaders.APPLICATION_X_FONT_TTF;
 		} else {
 			System.out.printf("Unrecognized file type (content type) for [%s], you might want to add it to %s\n",

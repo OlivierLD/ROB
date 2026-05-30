@@ -19,6 +19,7 @@
 # ------------------------------------------------------------------------------------------------
 #
 # Provides a ScreenSaving mode, see ENABLE_SCREEN_SAVER_AFTER variable.
+# To be used as an nmea-cache-publisher (see yaml files for details and examples)
 #
 # Work In Progress !
 # Do run a "curl -X GET /ssd1306/oplist" !
@@ -120,6 +121,9 @@ def reset_screen_saver() -> None:
     screen_saver_timer = 0
 
 
+#
+# state: True means ON (down)
+#
 def button_listener(pin, state) -> None:
     global current_value
     global nmea_data

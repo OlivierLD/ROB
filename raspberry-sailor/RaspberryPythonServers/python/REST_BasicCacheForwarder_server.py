@@ -8,6 +8,7 @@
 # Displays Date and Position (this is just an example) on the terminal.
 #
 # Do run a curl -X GET /cache-frwd/oplist !
+# To be used as an nmea-cache-publisher (see yaml files for details and examples)
 #
 import json
 import signal
