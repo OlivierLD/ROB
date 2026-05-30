@@ -14,7 +14,7 @@ $ [sudo] pip3 install adafruit-circuitpython-ssd1306
 ```
 
 Can be used on several devices, with several dimensions. 128x32, 128x64, etc... Quite flexible!    
-Like the [Adafruit 128x32 I2C OLED](https://learn.adafruit.com/monochrome-oled-breakouts) and friends...
+Like the [Adafruit 128x32 I2C, SPI` OLED](https://learn.adafruit.com/monochrome-oled-breakouts) and friends...
 
 <!-- TODO More details here -->
 

@@ -46,7 +46,7 @@ if False:
 
 # Use for SPI
 if True:
-    spi = board.SPI()
+    spi: busio.SPI = board.SPI()
     print(f"SPI board type: {type(spi)}")
     # oled_cs = digitalio.DigitalInOut(board.D5)
     oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
