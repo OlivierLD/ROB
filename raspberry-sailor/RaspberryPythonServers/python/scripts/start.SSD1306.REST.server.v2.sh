@@ -114,6 +114,6 @@ echo -e "  or curl [--http0.9] -X POST http://${MACHINE_NAME}:${PORT}/ssd1306/ex
 echo -e "To get the operation list:"
 echo -e "- Try curl -X GET http://${MACHINE_NAME}:${PORT}/ssd1306/oplist"
 echo -e "To populate the cache (and display some data):"
-echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/prefix/nmea-data --data \"@cache-sample.json\" "
+echo -e "- Try curl -X PUT http://${MACHINE_NAME}:${PORT}/ssd1306/nmea-data --data \"@cache-sample.json\" "
 
 popd

@@ -497,7 +497,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 }, {
                     "path": PATH_PREFIX + "/nmea-data",
                     "verb": "PUT",
-                    "description": "Receive the cache, in JSON format."
+                    "description": "Client put s data in the cache, in JSON format."
                 }, {
                     "path": PATH_PREFIX + "/clear-screen",
                     "verb": "PUT",
@@ -607,7 +607,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             content_len: int = int(self.headers.get('Content-Length'))
             body: str = self.rfile.read(content_len).decode('utf-8')
             if verbose:
-                print("Content: {}".format(body))
+                print(f"{PATH_PREFIX}/nmea-data Received Content: {body}")
             try:
                 # Parse it, load it in nmea-cache.
                 try:
