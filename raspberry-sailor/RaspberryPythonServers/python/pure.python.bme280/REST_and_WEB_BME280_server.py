@@ -3,6 +3,8 @@
 # REST and Web server.
 # For a Weather Station.
 #
+# Static resources can be managed from an archive.
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
@@ -35,6 +37,7 @@ import traceback
 import time
 import math
 import threading
+import zipfile
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from datetime import datetime, timezone
@@ -48,14 +51,15 @@ __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 PATH_PREFIX: str = "/bme280"
-STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource. See below.
-# TODO zip prefix ? That'd be kewl...
+STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource, from the 'web' folder. See below.
+ZIPPED_PATH_PREFIX: str = "/zip"        # Whatever starts with /zip is managed as static resource IN A ZIP (web.zip by default). See below.
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
 ADDRESS: int = 0x77     # Default. We've seen some 0x76... Hence this parameter.
 STORE_RESTORE: bool = False
 LOG_DB: bool = False
+keep_reading_bme280: bool = True
 
 MACHINE_NAME_PRM_PREFIX: str = "--machine-name:"
 PORT_PRM_PREFIX: str = "--port:"
@@ -82,6 +86,71 @@ sample_data: Dict[str, str] = {  # Used for VIEW (and non-implemented) operation
     "3": "Third",
     "4": "Fourth"
 }
+
+BINARY = "application/octet-stream"
+TEXT_PLAIN = "text/plain"
+TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8"
+TEXT_PLAIN_ISO_8859 = "text/plain; charset=ISO-8859-1"
+TEXT_HTML = "text/html"
+TEXT_XML = "text/xml"
+APPLICATION_JSON = "application/json"
+TEXT_JAVASCRIPT = "text/javascript"
+TEXT_CSS = "text/css"
+IMAGE_X_ICON = "image/x-icon"
+IMAGE_PNG = "image/png"
+IMAGE_GIF = "image/gif"
+IMAGE_JPEG = "image/jpeg"
+IMAGE_SVG_XML = "image/svg+xml"
+APPLICATION_X_FONT_WOFF = "application/x-font-woff"
+AUDIO_WAV = "audio/wav"
+APPLICATION_PDF = "application/pdf"
+APPLICATION_X_FONT_TTF = "application/x-font-ttf"
+# ... and more to come!
+
+
+def get_file_extension_os(url: str) -> str:
+    _, file_extension = os.path.splitext(url)
+    return file_extension
+
+
+def get_mime_type(filename: str) -> str:
+    extension = get_file_extension_os(filename)
+    encoding: str = BINARY   # Default
+    if extension.upper() == '.HTML':
+        encoding = TEXT_HTML
+    elif extension.upper() == '.CSS':
+        encoding = TEXT_CSS
+    elif extension.upper() == '.JS':
+        encoding = TEXT_JAVASCRIPT
+    elif extension.upper() == '.XML':
+        encoding = TEXT_XML
+    elif extension.upper() == '.JSON':
+        encoding = APPLICATION_JSON
+    elif extension.upper() == '.JPG':
+        encoding = IMAGE_JPEG
+    elif extension.upper() == '.ICO':
+        encoding = IMAGE_X_ICON
+    elif extension.upper() == '.PNG':
+        encoding = IMAGE_PNG
+    elif extension.upper() == '.GIF':
+        encoding = IMAGE_GIF
+    elif extension.upper() == '.SVG':
+        encoding = IMAGE_SVG_XML
+    elif extension.upper() == '.WOFF':
+        encoding = APPLICATION_X_FONT_WOFF
+    elif extension.upper() == '.WAV':
+        encoding = AUDIO_WAV
+    elif extension.upper() == '.PDF':
+        encoding = APPLICATION_PDF
+    elif extension.upper() == '.TTF':
+        encoding = APPLICATION_X_FONT_TTF
+
+    return encoding
+
+
+def is_binary(filename: str) -> bool:
+    ext: str = get_file_extension_os(filename).upper()
+    return ext == '.PNG' or ext == '.ICO' or ext == '.JPG' or ext == '.JPEG' or ext == '.GIF'  # and more to come
 
 
 # Defining an HTTP request Handler class
@@ -205,39 +274,43 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(response_content)
-        elif path.startswith(STATIC_PATH_PREFIX):
+        elif path.startswith(STATIC_PATH_PREFIX) or path.startswith(ZIPPED_PATH_PREFIX):
+            from_archive: bool = path.startswith(ZIPPED_PATH_PREFIX)
             if verbose:
-                print(f"Static path: {path}")
-            static_resource: str = path[len(STATIC_PATH_PREFIX):]
-            if verbose:
-                print(f"Loading static resource [{static_resource}]")
+                if from_archive:
+                    print(f"Static path: {path}")
+                else:
+                    print(f"Zipped path: {path}")
+            static_resource: str = path[len(STATIC_PATH_PREFIX):] if not from_archive else path[len(ZIPPED_PATH_PREFIX):]
 
-            content_type: str = "text/html"
-            binary: bool = False
-            if static_resource.endswith(".css"):
-                content_type = "text/css"
-            elif static_resource.endswith(".js"):
-                content_type = "text/javascript"
-            elif static_resource.endswith(".png"):
-                content_type = "image/png"
-                binary = True
-            elif static_resource.endswith(".ico"):
-                content_type = "image/ico"
-                binary = True
-            else:
-                if static_resource.endswith("/"):  # Assuming index.html
-                    static_resource += "index.html"
-                if verbose:
-                    print(f"un-managed ststic_resource type for {static_resource}, assuming html.")
-            # TODO more cases. jpg, gif, svg, ttf, pdf, wav, etc.
+            if static_resource.endswith("/"):  # Assuming index.html
+                static_resource += "index.html"
+            if from_archive and static_resource.startswith("/"):
+                static_resource = static_resource[1:]
+
+            content_type: str = get_mime_type(static_resource)
+            binary: bool = is_binary(static_resource)
+
+            if verbose:
+                origin: str = "web.zip" if from_archive else "web folder"
+                print(f"Loading static resource [{static_resource}] from {origin}, binary: {binary}")
+
 
             # Content type based on file extension
-            if not binary:
-                with open("web" + static_resource) as f:
-                    content = f.read()
+            if not from_archive:
+                if not binary:
+                    with open("web" + static_resource) as f:
+                        content = f.read()
+                else:
+                    with open("web" + static_resource, "rb") as image:
+                        content = image.read()
+                if verbose:
+                    print(f"Content is a {type(content)}")
             else:
-                with open("web" + static_resource, "rb") as image:
-                    content = image.read()
+                z: zipfile.ZipFile = zipfile.ZipFile('web.zip')
+                file_in_zip: zipfile.ZipExtFile = z.open(static_resource, "r")  # TODO Manage an 'rb' ?
+                # print(f"The zipped file is a {type(file_in_zip)}")
+                content: bytes = file_in_zip.read()
 
             if verbose:
                 print(f"Data type: {type(content)}, content:\n{content}")
@@ -248,7 +321,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             if not binary:
-                self.wfile.write(content.encode())
+                if from_archive:
+                    self.wfile.write(content)
+                else:
+                    self.wfile.write(content.encode('utf-8'))
             else:
                 self.wfile.write(content)
         else:
@@ -433,6 +509,7 @@ def absolute_humidity(temp: float, rh: float) -> float:
 # THE long storage data producer. To be customized...
 def long_storage_data(dummy_prm: str) -> None:
     global keep_looping
+    global keep_reading_bme280
     global between_loops
     global verbose
     global DATA_ARRAY
@@ -449,41 +526,45 @@ def long_storage_data(dummy_prm: str) -> None:
             # Duration: YYYY-MM-DDTHH:MI:SS.sss
             # duration_date_time: str = dt_object.strftime("%H%M%S.00,%d,%m,%Y")
             duration_date_time: str = dt_object.strftime("%Y-%m-%dT%H:%M:%S")
-            # 1 - Pressure
-            all_good: bool = True
-            try:
-                pressure_data: float = instant_data["pressure"]
-                if verbose:
-                    print(f"New element {{ 'key':{duration_date_time}, 'value':{pressure_data} }}")
-                data: Dict = {}
-                data[duration_date_time] = pressure_data
-                PRESSURE_MAP.update(data)
-                # Trim if too long
-                while len(PRESSURE_MAP) > MAP_MAX_LENGTH:
-                    key: str = list(PRESSURE_MAP.keys())[0]
+            if keep_reading_bme280:
+                # 1 - Pressure
+                all_good: bool = True
+                try:
+                    pressure_data: float = instant_data["pressure"]
                     if verbose:
-                        print(f"Dropping {key}, {PRESSURE_MAP.get(key)}")
-                    PRESSURE_MAP.pop(key)
-            except KeyError as key_error:
-                print(f"Oops: no {key_error} yet...")
-                all_good = False
-            # 2 - Temperature
-            try:
-                temperature_data: float = instant_data["temperature"]
-                if verbose:
-                    print(f"New element {{ 'key':{duration_date_time}, 'value':{temperature_data} }}")
-                # data: Dict = {}
-                data[duration_date_time] = temperature_data
-                TEMPERATURE_MAP.update(data)
-                # Trim if too long
-                while len(TEMPERATURE_MAP) > MAP_MAX_LENGTH:
-                    key: str = list(TEMPERATURE_MAP.keys())[0]
+                        print(f"New element {{ 'key':{duration_date_time}, 'value':{pressure_data} }}")
+                    data: Dict = {}
+                    data[duration_date_time] = pressure_data
+                    PRESSURE_MAP.update(data)
+                    # Trim if too long
+                    while len(PRESSURE_MAP) > MAP_MAX_LENGTH:
+                        key: str = list(PRESSURE_MAP.keys())[0]
+                        if verbose:
+                            print(f"Dropping {key}, {PRESSURE_MAP.get(key)}")
+                        PRESSURE_MAP.pop(key)
+                except KeyError as key_error:
+                    print(f"1 - Oops: no {key_error} yet...")
+                    all_good = False
+                # 2 - Temperature
+                try:
+                    temperature_data: float = instant_data["temperature"]
                     if verbose:
-                        print(f"Dropping {key}, {TEMPERATURE_MAP.get(key)}")
-                    TEMPERATURE_MAP.pop(key)
-            except KeyError as key_error:
-                print(f"Oops: no {key_error} yet...")
-                all_good = False
+                        print(f"New element {{ 'key':{duration_date_time}, 'value':{temperature_data} }}")
+                    # data: Dict = {}
+                    data[duration_date_time] = temperature_data
+                    TEMPERATURE_MAP.update(data)
+                    # Trim if too long
+                    while len(TEMPERATURE_MAP) > MAP_MAX_LENGTH:
+                        key: str = list(TEMPERATURE_MAP.keys())[0]
+                        if verbose:
+                            print(f"Dropping {key}, {TEMPERATURE_MAP.get(key)}")
+                        TEMPERATURE_MAP.pop(key)
+                except KeyError as key_error:
+                    print(f"2 - Oops: no {key_error} yet...")
+                    all_good = False
+            else:
+                if verbose:
+                    print("Not reading sensors anymore...")
         if all_good:
             ping += 1
             if verbose:
@@ -560,7 +641,7 @@ def db_writer(dummy_prm: str) -> None:
                                 print(f"Status: {status}")
                                 print(f"Returned: {returned}")
                         except Exception as ex:
-                            print(f"Oops: REST exception ({type(ex)}) {ex}, stopping requesting it.")
+                            print(f"3 - Oops: REST exception ({type(ex)}) {ex}, stopping requesting it.")
                             if DB_OPTION == "BOTH":
                                 DB_OPTION == "SQLITE"
                             else:
@@ -569,7 +650,7 @@ def db_writer(dummy_prm: str) -> None:
                     # That's it.
 
             except KeyError as key_error:
-                print(f"Oops: no {key_error} yet...")
+                print(f"4 - Oops: no {key_error} yet...")
                 all_good = False
         if all_good:
             ping += 1
@@ -581,14 +662,15 @@ def db_writer(dummy_prm: str) -> None:
     print("\tDone with DB data thread")
 
 
-# Reads the BME280
+# Reads the BME280. Called in a thread. See between_loops
 def produce_data(dummy_prm: str) -> None:
     global verbose
     global between_loops
     global keep_looping
+    global keep_reading_bme280
     global sensor
 
-    while keep_looping:
+    while keep_looping and keep_reading_bme280:
         if sensor is not None:
             temperature: float = sensor.temperature  # Celsius
             humidity: float = sensor.relative_humidity  # %
@@ -596,7 +678,8 @@ def produce_data(dummy_prm: str) -> None:
             dpt: float = dew_point_temperature(humidity, temperature) # Celsius
             ah: float = absolute_humidity(temperature, humidity)  # g / m3
         else:
-            print("No BME280 was found, no data available")
+            print("\nNo BME280 was found, no data available. Exiting sensor loop.")
+            keep_reading_bme280 = False
 
         try:
             # Send to the client
@@ -615,7 +698,7 @@ def produce_data(dummy_prm: str) -> None:
             print("Oops!...")
             traceback.print_exc(file=sys.stdout)
             break  # Client disconnected
-    print(f"Exiting data producer thread.\nClosing.")
+    print(f"Exiting data producer thread.\nClosing.\n--------")
 
 
 if len(sys.argv) > 0:  # Script name + X args
@@ -664,7 +747,7 @@ if STORE_RESTORE:  # Read previous maps from the file system
         TEMPERATURE_MAP = json.load(f)
         f.close()
     except Exception as oops:
-        print(f"Oops: {oops}")
+        print(f"5 - Oops: {oops}")
 
 # Start data thread
 if True:
@@ -675,7 +758,7 @@ if True:
     long_storage_thread.start()
 
 if LOG_DB:
-    print("Starting DB thread")
+    print("\nStarting DB thread")
     db_thread: threading.Thread = \
                     threading.Thread(target=db_writer, args=("Parameter...",))  # DB Storage Producer
     # print(f"Thread is a {type(client_thread)}")
@@ -690,7 +773,7 @@ data_thread.start()
 
 # Server Initialization
 port_number: int = server_port
-print("Starting server {} on port {}".format(machine_name, port_number))
+print("\nStarting server {} on port {}".format(machine_name, port_number))
 server = HTTPServer((machine_name, port_number), ServiceHandler)
 #
 print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))

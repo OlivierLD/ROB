@@ -7,7 +7,8 @@ public class HttpHeaders {
     public final static String USER_AGENT = "User-Agent";
     public final static String ACCEPT = "Accept";
 
-    // Content-Type Values
+    // Content-Type Values. LIst is not closed !!
+    public final static String BINARY = "application/octet-stream";
     public final static String TEXT_PLAIN = "text/plain";
     public final static String TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8";
     public final static String TEXT_PLAIN_ISO_8859 = "text/plain; charset=ISO-8859-1";

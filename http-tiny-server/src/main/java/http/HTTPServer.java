@@ -790,7 +790,7 @@ public class HTTPServer {
 						if (zipPath != null) {
 							fName = fName.substring(zipPath.length());
 
-							String webArchive = System.getProperty("web.archive", "web.zip"); // TODO Make sure it is a zip archive
+							String webArchive = System.getProperty("web.archive", "web.zip"); // TODO Make sure it is a zip archive?
 							if (verbose) {
 								System.out.printf("%s => reading %s in %s\n", zipPath, fName, webArchive);
 							}
@@ -803,7 +803,6 @@ public class HTTPServer {
 								byte[] content = baos.toByteArray();
 								RESTProcessorUtil.generateResponseHeaders(response, getContentType(path), content.length);
 								response.setPayload(content);
-
 							} else {
 								response = new Response(request.getProtocol(), Response.NOT_FOUND);
 								response.setPayload(String.format("File [%s] not found in %s.", fName, "web.zip").getBytes());
@@ -1213,7 +1212,7 @@ public class HTTPServer {
 	 * Full mime-type list at https://www.sitepoint.com/web-foundations/mime-types-complete-list/
 	 * Add more types and extensions as/when needed.
 	 *
-	 * @param f file name (full)
+	 * @param f file name (full). TODO Uppercase/Lowercase ? => png vs PNG ?
 	 * @return the mime-type for the given file name
 	 */
 	private static String getContentType(String f) {
