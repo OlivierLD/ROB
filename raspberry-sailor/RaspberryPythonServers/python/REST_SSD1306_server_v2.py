@@ -78,10 +78,10 @@ HEIGHT_PRM_PREFIX: str            = "--height:"
 SCREEN_SAVER_MODE_PRM_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
 ROTATE_PRM_PREFIX: str            = "--rotate:"
 
-DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc"
+DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
+# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
 # TODO: More data, and graphics ?
 
 oled = None
@@ -144,7 +144,7 @@ def reset_screen_saver() -> None:
 
 
 #
-# state: True means ON (down)
+# state: True means ON (aka down)
 #
 def button_listener(pin, state) -> None:
     global current_value
@@ -790,12 +790,21 @@ def format_data(id: str) -> List[str]:
             except (TypeError, KeyError) as te:
                 cog = "-"
                 pass
+            try:
+                fmt_date: Dict = nmea_cache["GPS Date & Time"]["fmtDate"]
+                str_date: str = f"{fmt_date['year']}-{fmt_date['month']:02d}-{fmt_date['day']:02d} {fmt_date['hour']:02d}:{fmt_date['min']:02d}:{fmt_date['sec']:02d}"
+            except (TypeError, KeyError) as te:
+                str_date = "-"
+                pass
+
             formatted = [
                 f"POS: {utils.dec_to_sex(latitude, 'NS')}",
                 f"     {utils.dec_to_sex(longitude, 'EW')}",
                 f"     {grid}",
                 f"COG: {cog}°",
-                f"SOG: {sog} kts"]
+                f"SOG: {sog} kts",
+                "Date UTC:",
+                f"{str_date}" ]
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
             formatted = [ "AIR", f"{atp:.01f}°C" ]

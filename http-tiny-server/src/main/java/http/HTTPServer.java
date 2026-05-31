@@ -804,7 +804,7 @@ public class HTTPServer {
 								StaticUtil.copy(is, baos);
 								baos.close();
 								byte[] content = baos.toByteArray();
-								RESTProcessorUtil.generateResponseHeaders(response, getContentType(path), content.length);
+								RESTProcessorUtil.generateResponseHeaders(response, getContentType(fName /* was path */), content.length);
 								response.setPayload(content);
 							} else {
 								response = new Response(request.getProtocol(), Response.NOT_FOUND);
