@@ -917,9 +917,9 @@ def format_data(id: str) -> List[str]:
             ip_addr: str = get_ip_address()   # socket.gethostbyname(hostname)
             network_name: str = get_network_name()
             formatted = [
-                "HostName:", f"{host}",
-                "IP:", f"{ip_addr}",
-                "Network:", f"{network_name}"
+                "HostName:", f"  {host}",
+                "IP:", f"  {ip_addr}",
+                "Network:", f"  {network_name}"
             ]
         else:
             formatted = [id, "Not implemented"]
