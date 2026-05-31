@@ -178,4 +178,52 @@ Again, we can have a network, but no Internet. This is _**not**_ Cloud Computing
   ![Wow](./doc/IMG_2409.JPG)
   to be found here: <https://www.thingiverse.com/thing:1067700>
 
+
+### A note on Python's `log_message`
+There is a `log_message` method like
+```python
+    def log_message(fmt, *args):
+        if verbose:
+            print(fmt % args)
+        return
+```
+First argument is the format, second is an array of data.  
+Use it like this:
+```python
+>>> log_message("Pouet")
+Pouet
+```
+```python
+>>> log_message("Akeu %s", "Coucou")
+Akeu Coucou
+```
+```python
+>>> log_message("Akeu %s, %d, %d", "Coucou", 1, 2)
+Akeu Coucou, 1, 2
+```
+
+Formats can be:
+```
+# Source - https://stackoverflow.com/a/20450578
+# Posted by user2672265, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-05-31, License - CC BY-SA 3.0
+
+'d' Signed integer decimal.  
+'i' Signed integer decimal.  
+'o' Signed octal value. (1)
+'u' Obsolete type – it is identical to 'd'. (7)
+'x' Signed hexadecimal (lowercase). (2)
+'X' Signed hexadecimal (uppercase). (2)
+'e' Floating point exponential format (lowercase).  (3)
+'E' Floating point exponential format (uppercase).  (3)
+'f' Floating point decimal format.  (3)
+'F' Floating point decimal format.  (3)
+'g' Floating point format. Uses lowercase exponential format if exponent is less than -4 or not less than precision, decimal format otherwise.  (4)
+'G' Floating point format. Uses uppercase exponential format if exponent is less than -4 or not less than precision, decimal format otherwise.  (4)
+'c' Single character (accepts integer or single character string).   
+'r' String (converts any Python object using repr()).   (5)
+'s' String (converts any Python object using str()).    (6)
+'%' No argument is converted, results in a '%' character in the result.
+```
+
 ---

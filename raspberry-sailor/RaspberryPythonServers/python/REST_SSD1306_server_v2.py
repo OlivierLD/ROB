@@ -37,14 +37,16 @@
 # --rotate: "true" or "false". Default "false". Rotate the screen by 180°.
 #
 # --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list. Default "BSP,SOG,COG,POS,WPT". Managed in the code.
-#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT
+#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
 import json
 import sys
 import os
+import subprocess
 import signal
+import socket
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict
 from typing import List
@@ -110,6 +112,26 @@ nmea_data: List[str] = [
 
 pin_button_01 = board.D20  # physical pin #38
 pin_button_02 = board.D21  # physical pin #40
+
+
+def get_network_name() -> str:
+    command: str = "iwgetid -r"
+    try:
+        result: str = subprocess.check_output(command, shell=True, text=True)
+    except Exception as oops:
+        result = f"Oops: {repr(oops)}"
+        pass
+    return result
+
+
+def get_ip_address() -> str:
+    command: str = "hostname -I | awk '{ print $1 }'"
+    try:
+        result: str = subprocess.check_output(command, shell=True, text=True)
+    except Exception as oops:
+        result = f"Oops: {repr(oops)}"
+        pass
+    return result
 
 
 def reset_screen_saver() -> None:
@@ -342,6 +364,10 @@ font: PIL.ImageFont.ImageFont = ImageFont.load_default()
 
 # Draw Some Text, at startup.
 text: str = "Init SSD1306"
+# Get IP address and network name ?
+hostname: str = socket.gethostname()
+IPAddr: str = get_ip_address()   # socket.gethostbyname(hostname)
+
 # (font_width, font_height) = font.getsize(text)
 left, top, right, bottom = font.getbbox(text)
 (font_width, font_height) = right - left, bottom - top
@@ -351,12 +377,21 @@ draw.text(
     font=font,
     fill=WHITE,
 )
+text = "IP: " + IPAddr
+left, top, right, bottom = font.getbbox(text)
+(font_width, font_height) = right - left, bottom - top
+draw.text(
+    (oled.width // 2 - font_width // 2, font_height + 1 + (oled.height // 2 - font_height // 2)),
+    text,
+    font=font,
+    fill=WHITE,
+)
 
 # Display image
 oled.image(image)
 oled.show()
 # Wait a bit to show the init screen
-time.sleep(1)  # Optional
+time.sleep(5)  # Optional
 
 # First define some constants to allow easy resizing of shapes.
 padding: int = -2
@@ -441,7 +476,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         self.end_headers()
         return temp
 
-    # To silence the HTTP logger
+    # To silence the HTTP logger. See README.md
     @staticmethod
     def log_message(fmt, *args):
         if verbose:
@@ -720,10 +755,18 @@ def format_data(id: str) -> List[str]:
             bsp = nmea_cache[id]["speed"]
             formatted = ["BSP", f"{bsp} kts"]
         elif id == "SOG":
-            sog = nmea_cache[id]["speed"]
+            try:
+                sog = nmea_cache["SOG"]["speed"]
+            except TypeError as te:
+                sog = "-"
+                pass
             formatted = ["SOG", f"{sog} kts"]
         elif id == "COG":
-            cog = nmea_cache[id]["angle"]
+            try:
+                cog = nmea_cache[id]["angle"]
+            except (TypeError, KeyError) as te:
+                cog = "-"
+                pass
             formatted = ["COG", f"{cog}°"]
         elif id == "POS":
             position: Dict = nmea_cache["Position"]
@@ -737,8 +780,16 @@ def format_data(id: str) -> List[str]:
             latitude: float = position["lat"]
             longitude: float = position["lng"]
             grid: str = position["gridSquare"]
-            sog = nmea_cache["SOG"]["speed"]
-            cog = nmea_cache["COG"]["angle"]
+            try:
+                sog = nmea_cache["SOG"]["speed"]
+            except (TypeError, KeyError) as te:
+                sog = "-"
+                pass
+            try:
+                cog = nmea_cache["COG"]["angle"]
+            except (TypeError, KeyError) as te:
+                cog = "-"
+                pass
             formatted = [
                 f"POS: {utils.dec_to_sex(latitude, 'NS')}",
                 f"     {utils.dec_to_sex(longitude, 'EW')}",
@@ -768,6 +819,15 @@ def format_data(id: str) -> List[str]:
                 f"AIR  : {atp:.01f}°C",
                 f"HUM  : {hum:.01f} %",
                 f"DEW  : {dew:.01f}°C"
+            ]
+        elif id == "NET":  # Network info. Not from the cache.
+            host: str = socket.gethostname()
+            ip_addr: str = get_ip_address()   # socket.gethostbyname(hostname)
+            network_name: str = get_network_name()
+            formatted = [
+                "HostName:", f"{host}",
+                "IP:", f"{ip_addr}",
+                "Network:", f"{network_name}"
             ]
         else:
             formatted = [id, "Not implemented"]

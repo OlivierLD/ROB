@@ -53,6 +53,10 @@ __repo__ = "https://github.com/OlivierLD/ROB"
 PATH_PREFIX: str = "/bme280"
 STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource, from the 'web' folder. See below.
 ZIPPED_PATH_PREFIX: str = "/zip"        # Whatever starts with /zip is managed as static resource IN A ZIP (web.zip by default). See below.
+
+static_resources_folder: str = "web"    # Default location
+static_zipped_resources_archive: str = "web.zip" # Default name
+
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
@@ -150,7 +154,7 @@ def get_mime_type(filename: str) -> str:
 
 def is_binary(filename: str) -> bool:
     ext: str = get_file_extension_os(filename).upper()
-    return ext == '.PNG' or ext == '.ICO' or ext == '.JPG' or ext == '.JPEG' or ext == '.GIF'  # and more to come
+    return ext == '.PNG' or ext == '.ICO' or ext == '.JPG' or ext == '.JPEG' or ext == '.GIF' or ext == '.PNG'  # and more to come
 
 
 # Defining an HTTP request Handler class
@@ -177,8 +181,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
     # GET Method Definition
     def do_GET(self):
         global verbose
-        if verbose:
-            print("GET methods")
+        self.log_message("GET Methods")
         #
         full_path: str = self.path
         split = full_path.split('?')
@@ -299,15 +302,15 @@ class ServiceHandler(BaseHTTPRequestHandler):
             # Content type based on file extension
             if not from_archive:
                 if not binary:
-                    with open("web" + static_resource) as f:
+                    with open(static_resources_folder + static_resource) as f:
                         content = f.read()
                 else:
-                    with open("web" + static_resource, "rb") as image:
+                    with open(static_resources_folder + static_resource, "rb") as image:
                         content = image.read()
                 if verbose:
                     print(f"Content is a {type(content)}")
             else:
-                z: zipfile.ZipFile = zipfile.ZipFile('web.zip')
+                z: zipfile.ZipFile = zipfile.ZipFile(static_zipped_resources_archive)
                 file_in_zip: zipfile.ZipExtFile = z.open(static_resource, "r")  # TODO Manage an 'rb' ?
                 # print(f"The zipped file is a {type(file_in_zip)}")
                 content: bytes = file_in_zip.read()
