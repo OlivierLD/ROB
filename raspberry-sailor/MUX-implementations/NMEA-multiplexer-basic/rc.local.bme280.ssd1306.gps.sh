@@ -10,15 +10,14 @@
 # bits.
 #
 # By default this script does nothing.
-
+#
+nmcli device disconnect wlan0
+nmcli device wifi hotspot ssid NMEANetwork password PassWord
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
-#
-nmcli device disconnect wlan0
-nmcli device wifi hotspot ssid NMEANetwork password PassWord
 #
 pushd ~pi/nmea-dist
 ./start.all.sh BME280-SSD

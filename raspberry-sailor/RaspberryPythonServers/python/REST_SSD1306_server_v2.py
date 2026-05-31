@@ -116,11 +116,11 @@ nmea_data: List[str] = [
 pin_button_01 = board.D20  # physical pin #38
 pin_button_02 = board.D21  # physical pin #40
 
-button_01_pressed_at: int = None
-button_02_pressed_at: int = None
+button_01_pressed_at: int = 0  # Was None
+button_02_pressed_at: int = 0  # Was None
 
 shutdown_suggested: bool = False
-shutdown_suggested_at: int = None
+shutdown_suggested_at: int = 0  # Was None
 
 
 def execute_system_command(cmd: str) -> None:
@@ -139,6 +139,12 @@ def get_network_name() -> str:
         result: str = subprocess.check_output(command, shell=True, text=True)
     except Exception as oops:
         result = f"Oops: {repr(oops)}"
+        command = "nmcli dev wifi show-password | grep SSID"
+        try:
+            result: str = subprocess.check_output(command, shell=True, text=True)
+        except Exception as oops2:
+            result = f"Oops: {repr(oops2)}"
+            pass
         pass
     return result
 
@@ -916,8 +922,9 @@ def format_data(id: str) -> List[str]:
             host: str = socket.gethostname()
             ip_addr: str = get_ip_address()   # socket.gethostbyname(hostname)
             network_name: str = get_network_name()
+            # nmcli dev wifi show-password | grep SSID
             formatted = [
-                "HostName:", f"  {host}",
+                "Hostname:", f"  {host}",
                 "IP:", f"  {ip_addr}",
                 "Network:", f"  {network_name}"
             ]

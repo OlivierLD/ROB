@@ -111,6 +111,7 @@ To disable the network:
 $ sudo nmcli device disconnect wlan0
 $ sudo nmcli device up wlan0
 ```
+Do also checkout the `sudo nmtui` command...
 
 To scan for wireless networks, run the following command:
 ```commandline

@@ -164,10 +164,12 @@ $ nmcli dev wifi show-password
 
 This can be put in a `/etc/rc.local`:
 ```commandline
-sudo nmcli device disconnect wlan0
-sudo nmcli device wifi hotspot ssid RPiNetwork password PassWord
+[sudo] nmcli device disconnect wlan0
+[sudo] nmcli device wifi hotspot ssid RPiNetwork password PassWord
 ```
 
+This might need to be delayed, run by hand..., after the boot.  
+Looking into it.
 
 To disable the network:
 ```commandline
