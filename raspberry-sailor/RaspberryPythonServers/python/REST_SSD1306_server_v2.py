@@ -44,6 +44,7 @@
 import json
 import sys
 import os
+import datetime
 import subprocess
 import signal
 import socket
@@ -113,6 +114,9 @@ nmea_data: List[str] = [
 pin_button_01 = board.D20  # physical pin #38
 pin_button_02 = board.D21  # physical pin #40
 
+button_01_pressed_at: int = None
+button_02_pressed_at: int = None
+
 
 def get_network_name() -> str:
     command: str = "iwgetid -r"
@@ -145,18 +149,39 @@ def reset_screen_saver() -> None:
 
 #
 # state: True means ON (aka down)
+#        False means (back) UP
 #
 def button_listener(pin, state) -> None:
     global current_value
     global nmea_data
     global pin_button_01
     global pin_button_02
+    global button_01_pressed_at
+    global button_02_pressed_at
+
+    nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     if verbose:
-        print(f"Yo! {pin}, state {state}")
+        print(f"Yo! {pin}, state {state} at {nowms}")
+    if pin == pin_button_01 and state == False:  # Back Up !
+        diff_up_down_01 = nowms - button_01_pressed_at
+        # print(f"Press on button 1: {diff_up_down_01} ms")
+        if diff_up_down_01 > 1000:  # more that 1 sec
+            print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
+        else:
+            current_value += 1
     if pin == pin_button_01 and state == True:
-        current_value += 1
+        button_01_pressed_at = nowms
+        print(f"Button 1 is pressed at {nowms} ms!")
+    if pin == pin_button_02 and state == False:  # Back Up !
+        diff_up_down_02 = nowms - button_02_pressed_at
+        # print(f"Press on button 2: {diff_up_down_02} ms")
+        if diff_up_down_02 > 1000:  # more that 1 sec
+            print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
+        else:
+            current_value -= 1
     if pin == pin_button_02 and state == True:
-        current_value -= 1
+        button_02_pressed_at = nowms
+        print(f"Button 2 is pressed at {nowms} ms!")
     if current_value < 0:
         current_value = len(nmea_data) - 1
     if current_value >= len(nmea_data):
