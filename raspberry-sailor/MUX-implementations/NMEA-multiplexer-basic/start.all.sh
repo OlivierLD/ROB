@@ -68,4 +68,5 @@ fi
 SERVER_IP=$(hostname -I | awk '{ print $1 }')
 echo -e "${CYAN}If mux is started, try curl to check the REST available operations (GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist)${NC}"
 echo -e "${CYAN}                   Web server available, see http://${SERVER_IP}:${SERVER_HTTP_PORT}/web/index.html or http://${SERVER_IP}:${SERVER_HTTP_PORT}/zip/index.html${NC}"
+echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.\"Solar time\"'${NC}"
 echo -e "Script ${0} completed."

@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  *
  * To try:
  * curl -X GET http://localhost:1234/mux/cache | jq '."rmb"' ?
- * (Cheat Sheet at https://lzone.de/cheat-sheet/jq)
+ * (Cheat Sheet at https://lzone.de/cheat-sheet/jq, https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/)
  */
 public class NextWaypointManager extends Computer {
 

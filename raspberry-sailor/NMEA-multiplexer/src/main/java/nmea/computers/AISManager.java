@@ -50,7 +50,7 @@ import java.util.function.Consumer;
  *
  * To try:
  * curl -X GET http://localhost:1234/mux/cache | jq '.ais'
- * (Cheat Sheet at https://lzone.de/cheat-sheet/jq)
+ * (Cheat Sheet at https://lzone.de/cheat-sheet/jq, https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/)
  */
 public class AISManager extends Computer {
 

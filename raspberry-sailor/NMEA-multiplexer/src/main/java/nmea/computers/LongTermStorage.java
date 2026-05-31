@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * To try:
  * curl -X GET http://localhost:1234/mux/cache | jq '."storage-data"'
- * (Cheat Sheet at https://lzone.de/cheat-sheet/jq)
+ * (Cheat Sheet at https://lzone.de/cheat-sheet/jq https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/)
  */
 public class LongTermStorage extends Computer {
 
