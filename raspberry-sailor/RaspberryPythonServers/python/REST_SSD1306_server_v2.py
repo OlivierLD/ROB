@@ -41,6 +41,8 @@
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
+# Long press on button 1 will suggest a shutdown.
+#
 import json
 import sys
 import os
@@ -117,6 +119,19 @@ pin_button_02 = board.D21  # physical pin #40
 button_01_pressed_at: int = None
 button_02_pressed_at: int = None
 
+shutdown_suggested: bool = False
+shutdown_suggested_at: int = None
+
+
+def execute_system_command(cmd: str) -> None:
+    command: str = cmd
+    try:
+        result: str = subprocess.check_output(command, shell=True, text=True)
+    except Exception as oops:
+        result = f"Oops: {repr(oops)}"
+        pass
+    print(f"Cmd: [{str}] -> {result}")
+
 
 def get_network_name() -> str:
     command: str = "iwgetid -r"
@@ -158,6 +173,8 @@ def button_listener(pin, state) -> None:
     global pin_button_02
     global button_01_pressed_at
     global button_02_pressed_at
+    global shutdown_suggested
+    global shutdown_suggested_at
 
     nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     if verbose:
@@ -165,23 +182,37 @@ def button_listener(pin, state) -> None:
     if pin == pin_button_01 and state == False:  # Back Up !
         diff_up_down_01 = nowms - button_01_pressed_at
         # print(f"Press on button 1: {diff_up_down_01} ms")
-        if diff_up_down_01 > 1000:  # more that 1 sec
+        if diff_up_down_01 > 1000:  # more than 1 sec, long press
             print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
+            shutdown_suggested = True
+            shutdown_suggested_at = nowms
         else:
-            current_value += 1
+            if shutdown_suggested:
+                # This is a shutdown!
+                cwd = os.getcwd()
+                print(f"Shutting down!! from {cwd}...")
+                execute_system_command("../kill.all.sample.sh")  # Assuming we're running from the python directory
+                # Bye !
+            else:
+                current_value += 1
     if pin == pin_button_01 and state == True:
         button_01_pressed_at = nowms
-        print(f"Button 1 is pressed at {nowms} ms!")
+        if verbose:
+            print(f"Button 1 is pressed at {nowms} ms!")
     if pin == pin_button_02 and state == False:  # Back Up !
         diff_up_down_02 = nowms - button_02_pressed_at
         # print(f"Press on button 2: {diff_up_down_02} ms")
-        if diff_up_down_02 > 1000:  # more that 1 sec
+        if diff_up_down_02 > 1000:  # more than 1 sec
             print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
         else:
-            current_value -= 1
+            if shutdown_suggested:
+                shutdown_suggested = False
+            else:
+                current_value -= 1
     if pin == pin_button_02 and state == True:
         button_02_pressed_at = nowms
-        print(f"Button 2 is pressed at {nowms} ms!")
+        if verbose:
+            print(f"Button 2 is pressed at {nowms} ms!")
     if current_value < 0:
         current_value = len(nmea_data) - 1
     if current_value >= len(nmea_data):
@@ -433,22 +464,40 @@ def display(display_data: List[str]) -> None:
     global draw
     global x
     global screen_saver_on
+    global shutdown_suggested
+    global shutdown_suggested_at
+
     try:
         # Clear Screen. Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
 
         if not screen_saver_on:
-            y: int = top
-            # Now draw the required text
-            for line in display_data:
-                draw.text((x, y), line, font=font, fill=WHITE)
-                y = y + 8
+            nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+            if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < 5000:
+                # print("Tossion!")
+                options: List[str] = ["Really? Shutdown?",
+                                      "",
+                                      "   - Yes: button 1",
+                                      "",
+                                      "   - No:  button 2"]
+                y: int = top
+                for line in options:
+                    draw.text((x, y), line, font=font, fill=WHITE)
+                    y = y + 8
+            else:
+                if shutdown_suggested:
+                    shutdown_suggested = False    # Reset
+                y: int = top
+                # Now draw the required text
+                for line in display_data:
+                    draw.text((x, y), line, font=font, fill=WHITE)
+                    y = y + 8
 
-            # draw.text((x, top), display_data, font=font, fill=WHITE)
-            # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
-            # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
-            # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
-        else:
+                # draw.text((x, top), display_data, font=font, fill=WHITE)
+                # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
+                # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
+                # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
+        else:  # Screen saver management
             # Blink dots...
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")
@@ -713,6 +762,15 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 time.sleep(1.5)
                 # Clear screen. Say Bye for 1 second before clearing the screen.
                 clear()
+                # Draw a white background
+                draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
+
+                # Draw a smaller inner rectangle, in black
+                draw.rectangle(
+                    (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+                    outline=BLACK,
+                    fill=BLACK,
+                )
                 text: str = "Bye SSD1306"
                 # (font_width, font_height) = font.getsize(text)
                 left, top, right, bottom = font.getbbox(text)
@@ -726,7 +784,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # Display image
                 oled.image(image)
                 oled.show()
-                time.sleep(1)  # Give time to read the screen.
+                time.sleep(2)  # Give time to read the screen.
                 clear()
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
