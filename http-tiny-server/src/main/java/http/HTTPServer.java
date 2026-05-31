@@ -786,6 +786,9 @@ public class HTTPServer {
 						if (fName.contains("?")) {
 							fName = fName.substring(0, fName.indexOf("?"));
 						}
+						if (fName.endsWith("/")) { // add "index.html", even in an archive.
+							fName += "index.html";
+						}
 						String zipPath = zipPath(fName);
 						if (zipPath != null) {
 							fName = fName.substring(zipPath.length());
@@ -805,7 +808,7 @@ public class HTTPServer {
 								response.setPayload(content);
 							} else {
 								response = new Response(request.getProtocol(), Response.NOT_FOUND);
-								response.setPayload(String.format("File [%s] not found in %s.", fName, "web.zip").getBytes());
+								response.setPayload(String.format("File [%s] not found in %s.", fName, webArchive /*"web.zip"*/).getBytes());
 							}
 						} else {
 							response = new Response(request.getProtocol(), Response.NOT_FOUND);
