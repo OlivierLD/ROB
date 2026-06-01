@@ -305,7 +305,8 @@ And as no one is going to sell your personal data behind your back, the Web UI d
 
 ### A last comment
 With this configuration, we have a multiplexer - written in Java - interacting with one or more sensors (like BME280, push buttons)
-and actuators (like eInk or OLED screens).  
+and actuators (like eInk or OLED screens). Technically, we have several servers - potentially written in different languages (Java, Python, C, etc).
+As long as those languages can deal with standard protocols (like TCP, HTTP, etc), there is no problem.  
 The screens in this case act like the displays you'd have on board, at the chart table or in the cockpit.
 It's like those buses we are used to. The multiplexer makes the data circulate around the bus,
 and the display is choosing what to show. It receives all the data, and knows what to display, and how.
