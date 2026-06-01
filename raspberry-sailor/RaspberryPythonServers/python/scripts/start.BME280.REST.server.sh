@@ -70,7 +70,7 @@ else
   fi
 fi
 # echo "Will simulate if missing: ${SIMULATE_IF_MISSING}"
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --simulate-when-missing:${SIMULATE_IF_MISSING}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --simulate-when-missing:${SIMULATE_IF_MISSING}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

@@ -79,7 +79,7 @@ else
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --serial-port:${SERIAL_PORT} --baud-rate:${BAUD_RATE} --verbose:${VERBOSE}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --serial-port:${SERIAL_PORT} --baud-rate:${BAUD_RATE} --verbose:${VERBOSE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

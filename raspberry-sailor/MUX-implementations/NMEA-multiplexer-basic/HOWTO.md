@@ -120,6 +120,7 @@ For BME280-SSD
 ```
 $ ./start.all.sh BME280-SSD
 ```
+etc...
 
 About the modification of the `/etc/rc.local` script, to start the 
 required components when the machine boots,
@@ -203,6 +204,10 @@ Connected from [OpenCPN](https://opencpn.org/) through TCP, from a laptop:
 When a graphical user interface is needed, we use web pages. All you need 
 to see them is a (recent) browser. No need to worry about the operating system of the client you use (Android, iPhone, etc), nor about the type of device (laptop, tablet, cell-phone, etc).
 The Web pages presented (and packaged) here require absolutely _**NO**_ external framework.  
+_**ALL**_ the graphical user-interfaces are provided as web pages (HTML5, ES6, CSS3). That means that if you have a browser
+on the devices you want to use (laptops, tablets, cell-phones), there is absolutely _**NOTHING**_ else you need. Once you're connected on
+the network emitted by the Raspberry Pi, you're good to go.
+
 There is an `index.html`, accessible for example from `http://192.168.50.10:9999/zip/index.html`, that gathers
 several examples you can use. This includes `admin` pages, and log files management as well.    
 Again, those are only _examples_, intending to demonstrate what can be done.  
@@ -297,6 +302,26 @@ It also broadcasts the data on `tcp`, port 7001, so other software can use them,
 Data are logged into some files, so you can analyze, transform (to GPX, KML, etc) or replay them.
 
 And as no one is going to sell your personal data behind your back, the Web UI does not require any cookie.
+
+### A last comment
+With this configuration, we have a multiplexer - written in Java - interacting with one or more sensors (like BME280, push buttons)
+and actuators (like eInk or OLED screens).  
+The screens in this case act like the displays you'd have on board, at the chart table or in the cockpit.
+It's like those buses we are used to. The multiplexer makes the data circulate around the bus,
+and the display is choosing what to show. It receives all the data, and knows what to display, and how.
+
+#### Other configurations (list is not closed!)
+With an OLED screen, 2 buttons, and a Lipo battery: 
+
+|                                                    |                                                    |                                                    |
+|:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
+| ![In a box](./doc_resources/other.configs/01.jpeg) | ![In a box](./doc_resources/other.configs/02.jpeg) | ![In a box](./doc_resources/other.configs/03.jpeg) |  
+
+With an OLED Screen, a BME280 (ATM pressure, Humidity, Air Temp), 2 buttons:
+
+|                                                                |                                                                | 
+|:--------------------------------------------------------------:|:--------------------------------------------------------------:|
+| ![3D Printed enclosure](./doc_resources/other.configs/04.jpeg) | ![3D Printed enclosure](./doc_resources/other.configs/05.jpeg) |
 
 ### One piece of advice...
 Again, once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   

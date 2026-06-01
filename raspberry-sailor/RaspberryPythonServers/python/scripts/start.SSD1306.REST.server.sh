@@ -70,6 +70,8 @@ else
   	    PORT=${prm#*:}
   	  elif [[ ${prm} == "--verbose:"* ]]; then
   	    VERBOSE=${prm#*:}
+  	  elif [[ ${prm} == "--verbose-2:"* ]]; then
+  	    VERBOSE_2=${prm#*:}
   	  elif [[ ${prm} == "--height:"* ]]; then
   	    SCREEN_HEIGHT=${prm#*:}
   	  elif [[ ${prm} == "--wiring:"* ]]; then
@@ -78,7 +80,7 @@ else
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

@@ -61,7 +61,7 @@ else
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

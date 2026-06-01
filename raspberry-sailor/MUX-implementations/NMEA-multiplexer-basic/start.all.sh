@@ -42,7 +42,7 @@ elif [[ "${OPTION}" == "EINK2-13" ]]; then
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   # Start the REST Server for SSD1306 (v2)
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 else
   echo -e "Unmanaged OPTION ${OPTION}"

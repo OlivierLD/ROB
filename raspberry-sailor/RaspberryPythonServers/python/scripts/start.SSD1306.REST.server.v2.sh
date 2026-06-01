@@ -24,6 +24,7 @@ fi
 MACHINE_NAME=$(echo ${MACHINE_NAME})  # Trim the blanks
 PORT=9999
 VERBOSE=false
+VERBOSE_2=false
 SCREEN_HEIGHT=32   # 32 or 64
 WIRING="I2C"       # I2C or SPI
 DATA="BSP,SOG,COG,POS"
@@ -105,7 +106,7 @@ else
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE} --rotate:${ROTATE}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --verbose-2:${VERBOSE_2} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE} --rotate:${ROTATE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

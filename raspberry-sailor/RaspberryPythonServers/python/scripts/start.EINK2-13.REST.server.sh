@@ -84,7 +84,7 @@ else
   	done
   fi
 fi
-COMMAND="python3 ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --data:${DATA} --screen-saver:${SS_MODE} --screen-saver-option:${SS_OPTION} --screen-saver-after:${SS_AFTER_OPTION}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --data:${DATA} --screen-saver:${SS_MODE} --screen-saver-option:${SS_OPTION} --screen-saver-after:${SS_AFTER_OPTION}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"

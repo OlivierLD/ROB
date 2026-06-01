@@ -36,10 +36,19 @@
 # --screen-saver: "on", or "off". Default "on"
 # --rotate: "true" or "false". Default "false". Rotate the screen by 180°.
 #
-# --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list. Default "BSP,SOG,COG,POS,WPT". Managed in the code.
+# --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list.
+#         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
 #         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
 #
+# Acts like a bus. All the data circulate (in the cache), you choose what to display.
+#
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
+#
+# Managed:
+# - click
+# - long click
+# TODO:
+# - double click
 #
 # Long press on button 1 will suggest a shutdown.
 #
@@ -69,6 +78,7 @@ __repo__ = "https://github.com/OlivierLD/ROB"
 PATH_PREFIX = "/ssd1306"
 server_port: int = 8080
 verbose: bool = False
+verbose_level2: bool = True
 machine_name: str = "127.0.0.1"  # aka localhost
 
 oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
@@ -77,6 +87,7 @@ WIRING_PRM_PREFIX: str            = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str      = "--machine-name:"
 PORT_PRM_PREFIX: str              = "--port:"
 VERBOSE_PRM_PREFIX: str           = "--verbose:"
+VERBOSE_2_PRM_PREFIX: str         = "--verbose-2:"
 HEIGHT_PRM_PREFIX: str            = "--height:"
 SCREEN_SAVER_MODE_PRM_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
 ROTATE_PRM_PREFIX: str            = "--rotate:"
@@ -116,11 +127,11 @@ nmea_data: List[str] = [
 pin_button_01 = board.D20  # physical pin #38
 pin_button_02 = board.D21  # physical pin #40
 
-button_01_pressed_at: int = 0  # Was None
-button_02_pressed_at: int = 0  # Was None
+button_01_pressed_at: int = -1  # Was None
+button_02_pressed_at: int = -1  # Was None
 
 shutdown_suggested: bool = False
-shutdown_suggested_at: int = 0  # Was None
+shutdown_suggested_at: int = -1  # Was None
 
 
 def execute_system_command(cmd: str) -> None:
@@ -162,8 +173,8 @@ def get_ip_address() -> str:
 def reset_screen_saver() -> None:
     global screen_saver_on
     global screen_saver_timer
-    if verbose:
-        print("Reseting screen saver")
+    if verbose or verbose_level2:
+        print("- in reset_screen_saver: Reseting screen saver")
     screen_saver_on = False
     screen_saver_timer = 0
 
@@ -175,6 +186,7 @@ def reset_screen_saver() -> None:
 def button_listener(pin, state) -> None:
     global current_value
     global nmea_data
+    global screen_saver_on
     global pin_button_01
     global pin_button_02
     global button_01_pressed_at
@@ -183,42 +195,68 @@ def button_listener(pin, state) -> None:
     global shutdown_suggested_at
 
     nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
-    if verbose:
-        print(f"Yo! {pin}, state {state} at {nowms}")
+    if verbose or verbose_level2:
+        print(f">>> Yo! {pin}, state {state} at {nowms}")
     if pin == pin_button_01 and state == False:  # Back Up !
+        if button_01_pressed_at == -1:
+            print("1 - Should not happen !! Press longer!")
         diff_up_down_01 = nowms - button_01_pressed_at
-        # print(f"Press on button 1: {diff_up_down_01} ms")
-        if diff_up_down_01 > 1000:  # more than 1 sec, long press
-            print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
-            shutdown_suggested = True
-            shutdown_suggested_at = nowms
-        else:
-            if shutdown_suggested:
-                # This is a shutdown!
-                cwd = os.getcwd()
-                print(f"Shutting down!! from {cwd}...")
-                execute_system_command("../kill.all.sample.sh")  # Assuming we're running from the python directory
-                # Bye !
+        if verbose or verbose_level2:
+            print(f"Released button 1: {diff_up_down_01} ms, screen saver on: {screen_saver_on}")
+        if button_01_pressed_at != -1:
+            if diff_up_down_01 > 1000:  # more than 1 sec, long press
+                if not screen_saver_on:
+                    print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
+                    shutdown_suggested = True
+                    shutdown_suggested_at = nowms
+                else:
+                    print(">>>> 1 - Long press, but screen saver was on.")
             else:
-                current_value += 1
+                if verbose or verbose_level2:
+                    print(f"ShortPress button 1: {diff_up_down_01} ms")
+                if shutdown_suggested:  # Replied YES
+                    # This is a shutdown!
+                    cwd = os.getcwd()
+                    print(f"Shutting down!! from {cwd}...")
+                    execute_system_command("../kill.all.sample.sh")  # Assuming we're running from the python directory
+                    # Bye !
+                else:
+                    if verbose or verbose_level2:
+                        print(f"... Increasing list index")
+                    current_value += 1
+        else:
+            print("1bis - button_01_pressed_at was -1...")
     if pin == pin_button_01 and state == True:
         button_01_pressed_at = nowms
-        if verbose:
-            print(f"Button 1 is pressed at {nowms} ms!")
+        if verbose or verbose_level2:
+            print(f"Button 1 is pressed DOWN at {nowms} ms!")
     if pin == pin_button_02 and state == False:  # Back Up !
+        if button_02_pressed_at == -1:
+            print("2 - Should not happen !! Press longer!")
         diff_up_down_02 = nowms - button_02_pressed_at
-        # print(f"Press on button 2: {diff_up_down_02} ms")
-        if diff_up_down_02 > 1000:  # more than 1 sec
-            print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
-        else:
-            if shutdown_suggested:
-                shutdown_suggested = False
+        if verbose or verbose_level2:
+            print(f"Released button 2: {diff_up_down_02} ms, screen saver on: {screen_saver_on}")
+        if button_02_pressed_at != -1:
+            if diff_up_down_02 > 1000:  # more than 1 sec
+                if not screen_saver_on:
+                    print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
+                else:
+                    print(">>>> 2 - Long press, but screen saver was on.")
             else:
-                current_value -= 1
+                if verbose or verbose_level2:
+                    print(f"ShortPress button 2: {diff_up_down_02} ms")
+                if shutdown_suggested: # Replied NO
+                    shutdown_suggested = False
+                else:
+                    if verbose or verbose_level2:
+                        print(f"... Decreasing list index")
+                    current_value -= 1
+        else:
+            print("2bis - button_02_pressed_at was -1...")
     if pin == pin_button_02 and state == True:
         button_02_pressed_at = nowms
-        if verbose:
-            print(f"Button 2 is pressed at {nowms} ms!")
+        if verbose or verbose_level2:
+            print(f"Button 2 is pressed DOWN at {nowms} ms!")
     if current_value < 0:
         current_value = len(nmea_data) - 1
     if current_value >= len(nmea_data):
@@ -227,9 +265,14 @@ def button_listener(pin, state) -> None:
         print(f"Current index in list is now {current_value}")
 
 
+# Loops forever
 def button_manager(pin, callback) -> None:
+    global verbose
     global keep_looping
     global screen_saver_on
+    global button_01_pressed_at
+    global button_02_pressed_at
+
     btn: DigitalInOut = DigitalInOut(pin)
     # print(f"Button is a {type(btn)}")
     #
@@ -238,26 +281,39 @@ def button_manager(pin, callback) -> None:
     btn.direction = Direction.OUTPUT
     # btn.pull = Pull.UP
 
-    prev_state: bool = btn.value
+    prev_state: bool = btn.value  # on or off
     # print(f"Button State is a {type(prev_state)}")
+
     while keep_looping:
         try:
-            cur_state: bool = btn.value
-            if cur_state != prev_state:  # Button status has changed
-                if screen_saver_on and cur_state:  # Screen Saver on, and Button DOWN. Wake up !
+            button_down: bool = btn.value  # True means ON (aka down)
+            if button_down != prev_state:  # Button status has changed
+                if screen_saver_on:  # and button_down:  # Screen Saver on, and Button DOWN. Wake up !
+                    if verbose_level2 or verbose:
+                        print("ButtonManager: Reseting screen saver.")
                     reset_screen_saver()
+
+                    if not button_down:
+                        if pin == pin_button_01:
+                            button_01_pressed_at = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+                            if verbose_level2 or verbose:
+                                print(f"Button 1 reset_pressed_at {button_01_pressed_at}")
+                        elif pin == pin_button_02:
+                            button_02_pressed_at = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+                            if verbose_level2 or verbose:
+                                print(f"Button 2 reset_pressed_at {button_02_pressed_at}")
                 else:
-                    if not cur_state:
-                        if verbose:
-                            print("BTN is UP")
+                    if not button_down:
+                        if verbose or verbose_level2:
+                            print("                                           BTN is UP")
                         callback(pin, False)  # Broadcast wherever needed
                     else:
-                        if verbose:
-                            print("BTN is DOWN")
+                        if verbose or verbose_level2:
+                            print("                                           BTN is DOWN")
                         callback(pin, True)  # Broadcast wherever needed
-                reset_screen_saver()  # Reset when button was clicked.
-            prev_state = cur_state
-            time.sleep(0.1)  # sleep for debounce
+                # reset_screen_saver()  # Reset whenever button was clicked.
+            prev_state = button_down
+            # time.sleep(0.1)  # sleep for debounce. Tricky.
         except Exception as oops:
             print(f"Error: {repr(oops)}")
         finally:
@@ -273,7 +329,7 @@ def screen_saver_manager() -> None:
     while keep_looping:
         screen_saver_timer += 1
         if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER and not screen_saver_on:
-            if verbose:
+            if verbose or verbose_level2:
                 print("Turning screen saver ON")
             screen_saver_on = True
         time.sleep(1.0)
@@ -306,6 +362,8 @@ if len(sys.argv) > 0:  # Script name + X args
             server_port = int(arg[len(PORT_PRM_PREFIX):])
         if arg[:len(VERBOSE_PRM_PREFIX)] == VERBOSE_PRM_PREFIX:
             verbose = (arg[len(VERBOSE_PRM_PREFIX):].lower() == "true")
+        if arg[:len(VERBOSE_2_PRM_PREFIX)] == VERBOSE_2_PRM_PREFIX:
+            verbose_level2 = (arg[len(VERBOSE_2_PRM_PREFIX):].lower() == "true")
         if arg[:len(ROTATE_PRM_PREFIX)] == ROTATE_PRM_PREFIX:
             ROTATE = arg[len(ROTATE_PRM_PREFIX):].lower() == "true"
         if arg[:len(WIRING_PRM_PREFIX)] == WIRING_PRM_PREFIX:
@@ -443,7 +501,7 @@ IPAddr: str = get_ip_address()   # socket.gethostbyname(hostname)
 left, top, right, bottom = font.getbbox(text)
 (font_width, font_height) = right - left, bottom - top
 draw.text(
-    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+    (oled.width // 2 - font_width // 2, (oled.height // 2 - font_height // 2) - font_height),
     text,
     font=font,
     fill=WHITE,
@@ -574,6 +632,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # GET Method Definition
     def do_GET(self):
+        global verbose
+
         if verbose:
             print("GET methods")
         # defining all the headers
@@ -631,6 +691,14 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     "verb": "PUT",
                     "description": "Says bye, then clean the screen."
                 }, {
+                    "path": PATH_PREFIX + "/verbose/{value}",
+                    "verb": "PUT",
+                    "description": "Set the verbose value, true or false."
+                }, {
+                    "path": PATH_PREFIX + "/verbose-2/{value}",
+                    "verb": "PUT",
+                    "description": "Set the verbose-level-2 value, true or false."
+                }, {
                     "path": PATH_PREFIX + "/exit",
                     "verb": "POST",
                     "description": "Careful: terminate the server process."
@@ -680,6 +748,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
     # POST method definition
     def do_POST(self):
+        global verbose
+
         if verbose:
             print("POST request, {}".format(self.path))
         if self.path.startswith(PATH_PREFIX + "/whatever/"):  # Dummy POST
@@ -725,6 +795,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
     # PUT method Definition
     def do_PUT(self):
         global nmea_cache
+        global verbose
+        global verbose_level2
+
         if verbose:
             print("PUT request, {}".format(self.path))
         if self.path == PATH_PREFIX + "/nmea-data":  # Receive the full NMEA Cache, as a JSON Object
@@ -814,6 +887,42 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
                 self.wfile.write(bytes(error, 'utf-8'))
+        elif self.path.startswith(PATH_PREFIX + "/verbose/"):
+            try:
+                item_list = self.path.split('/')
+                verboseValue: str = item_list[len(item_list) - 1]
+                verbose = verboseValue == 'true'
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+            except Exception as error:
+                error: str = f"Exception {repr(error)}\n"
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain')
+                content_len = len(error)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(bytes(error, 'utf-8'))
+        elif self.path.startswith(PATH_PREFIX + "/verbose-2/"):
+                try:
+                    item_list = self.path.split('/')
+                    verboseValue: str = item_list[len(item_list) - 1]
+                    verbose_level2 = verboseValue == 'true'
+                    self.send_response(201)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    response = {"status": "OK"}
+                    self.wfile.write(json.dumps(response).encode())
+                except Exception as error:
+                    error: str = f"Exception {repr(error)}\n"
+                    self.send_response(404)
+                    self.send_header('Content-Type', 'text/plain')
+                    content_len = len(error)
+                    self.send_header('Content-Length', str(content_len))
+                    self.end_headers()
+                    self.wfile.write(bytes(error, 'utf-8'))
         else:
             if verbose:
                 print("PUT on {} not managed".format(self.path))
