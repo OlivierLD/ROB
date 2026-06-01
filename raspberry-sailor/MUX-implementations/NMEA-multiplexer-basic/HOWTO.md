@@ -312,19 +312,28 @@ It's like those buses we are used to. The multiplexer makes the data circulate a
 and the display is choosing what to show. It receives all the data, and knows what to display, and how.
 
 #### Other configurations (list is not closed!)
-With an OLED screen, 2 buttons, and a Lipo battery: 
+Raspberry Pi Zero WH, with an OLED screen, 2 buttons, and a Lipo battery: 
 
 |                                                    |                                                    |                                                    |
 |:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
 | ![In a box](./doc_resources/other.configs/01.jpeg) | ![In a box](./doc_resources/other.configs/02.jpeg) | ![In a box](./doc_resources/other.configs/03.jpeg) |
 |                   Ready to start                   |                    Power on!                       |                  With the foam                     |
 
-With an OLED Screen, a BME280 (ATM pressure, Humidity, Air Temp), 2 buttons:
+Raspberry Pi A+, with an OLED Screen, a BME280 (ATM pressure, Humidity, Air Temp), 2 buttons:
 
 |                                                                |                                                                | 
 |:--------------------------------------------------------------:|:--------------------------------------------------------------:|
 | ![3D Printed enclosure](./doc_resources/other.configs/04.jpeg) | ![3D Printed enclosure](./doc_resources/other.configs/05.jpeg) |
 |                           Ready...                             |                          En route !                            |
+
+Notice on the config above, that 2 push-buttons have been added. This was not necessary before, as the EInk screen we mentioned did indeed
+have those 2 buttons. Some screens come with even more buttons, or joysticks.  
+This actually triggers a very interesting question:
+> _**Beside the screen**_, what is the minimal config for a user to be able to interact with a given software?  
+> One button? Two buttons?
+
+Buttons can support `click`, `double-click`, `long-click`...  
+That would deserve some brainstorming, right? 🤪 But that would not be wasted!
 
 ### One piece of advice...
 Again, once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   
