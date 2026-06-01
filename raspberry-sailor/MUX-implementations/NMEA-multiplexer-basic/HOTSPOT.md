@@ -171,7 +171,7 @@ This can be put in a `/etc/rc.local`:
 This might need to be delayed, run by hand..., after the boot.  
 Looking into it.
 
-To disable the network:
+To disable the hotspot:
 ```commandline
 $ sudo nmcli device disconnect wlan0
 $ sudo nmcli device up wlan0

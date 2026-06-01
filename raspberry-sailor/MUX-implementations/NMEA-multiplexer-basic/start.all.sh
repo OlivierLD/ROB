@@ -46,6 +46,8 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   sleep 10
 else
   echo -e "Unmanaged OPTION ${OPTION}"
+  echo -e "Aborting"
+  exit 1
 fi
 # Start the MUX
 echo -e "Step 2 - Starting the MUX"
@@ -64,6 +66,8 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   nohup ./mux.sh nmea.mux.gps.nmea-fwd-ssd.yaml &
 else
   echo -e "Unmanaged OPTION ${OPTION}"
+  echo -e "Aborting"
+  exit 1
 fi
 SERVER_IP=$(hostname -I | awk '{ print $1 }')
 echo -e "${CYAN}If mux is started, try curl to check the REST available operations (GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist)${NC}"

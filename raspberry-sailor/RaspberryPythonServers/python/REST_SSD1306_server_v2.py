@@ -340,6 +340,15 @@ if len(sys.argv) > 0:  # Script name + X args
                 print("Data list:")
                 print(nmea_data)
 
+# Summarize all options
+print(f"Running with config:\n" +
+      f"- Server Port {server_port}\n" +
+      f"- verbose {verbose}\n" +
+      f"- machine name {machine_name}\n" +
+      f"- wiring {oled_wiring_option}\n" +
+      f"- screen height {HEIGHT}\n" +
+      f"- data {nmea_data} ")
+
 # initialize the oled screen
 if oled_wiring_option == "I2C":
     # Use for I2C.
