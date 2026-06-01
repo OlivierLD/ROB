@@ -155,6 +155,16 @@ Make sure the `/etc/rc.local` is executable.
 
 Again, the system is now operational, and can be re-booted.
 
+> _**Note**_: There are other ways to do the same. You invoke the starting script from `etc/rc.local`...
+> ```
+> . . .
+> pushd /home/pi/nmea-dist
+>   ./start.all.sh SSD1306
+> popd
+> . . .
+> exit 0
+> ```
+
 _**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
 before they get too big (triggering the message "No space left on device"...). There is a Web page for that (in the embarked Web UI), called "Log Management".  
 _**Note**_: For the log-files not to grow too big, we've excluded some strings from the log, see in the `yaml` config file:  
@@ -326,7 +336,7 @@ Raspberry Pi A+, with an OLED Screen, a BME280 (ATM pressure, Humidity, Air Temp
 | ![3D Printed enclosure](./doc_resources/other.configs/04.jpeg) | ![3D Printed enclosure](./doc_resources/other.configs/05.jpeg) |
 |                           Ready...                             |                          En route !                            |
 
-Notice on the config above, that 2 push-buttons have been added. This was not necessary before, as the EInk screen we mentioned did indeed
+Notice on the configs above, that 2 push-buttons have been added. This was not necessary before, as the EInk screen we mentioned did indeed
 have those 2 buttons. Some screens come with even more buttons, or joysticks.  
 This actually triggers a very interesting question:
 > _**Beside the screen**_, what is the minimal config for a user to be able to interact with a given software?  
