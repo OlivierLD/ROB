@@ -10,7 +10,7 @@
 #
 # Different from the REST_SSD1306_server.py.
 # That one receives full the cache (as JSON) and manages the display of the data by itself.
-# It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down)
+# It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down, and others)
 #
 # --- IMPORTANT ----------------------------------------------------------------------------------
 # -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that (in
@@ -40,7 +40,7 @@
 #         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
 #         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
 #
-# Acts like a bus. All the data circulate (in the cache), you choose what to display.
+# Acts like a bus. All the data circulate (in the cache), you choose - see the dcata obove - what to display.
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
@@ -55,7 +55,8 @@
 import json
 import sys
 import os
-import datetime
+# import datetime
+import time
 import subprocess
 import signal
 import socket
@@ -69,7 +70,6 @@ from digitalio import DigitalInOut, Direction, Pull
 import PIL
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306  # pip3 install adafruit-circuitpython-ssd1306
-import time
 import utils  # local script
 
 __version__ = "0.0.1"
@@ -127,11 +127,11 @@ nmea_data: List[str] = [
 pin_button_01 = board.D20  # physical pin #38
 pin_button_02 = board.D21  # physical pin #40
 
-button_01_pressed_at: int = -1  # Was None
-button_02_pressed_at: int = -1  # Was None
+button_01_pressed_at: int = None
+button_02_pressed_at: int = None
 
 shutdown_suggested: bool = False
-shutdown_suggested_at: int = -1  # Was None
+shutdown_suggested_at: int = None
 
 
 def execute_system_command(cmd: str) -> None:
@@ -194,16 +194,17 @@ def button_listener(pin, state) -> None:
     global shutdown_suggested
     global shutdown_suggested_at
 
-    nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+    # nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+    nowms: int = int(time.time() * 1000)  # Timestamp in ms
     if verbose or verbose_level2:
         print(f">>> Yo! {pin}, state {state} at {nowms}")
     if pin == pin_button_01 and state == False:  # Back Up !
-        if button_01_pressed_at == -1:
+        if button_01_pressed_at is None:
             print("1 - Should not happen !! Press longer!")
-        diff_up_down_01 = nowms - button_01_pressed_at
+        diff_up_down_01 = nowms - (button_01_pressed_at if button_01_pressed_at is not None else 0)
         if verbose or verbose_level2:
             print(f"Released button 1: {diff_up_down_01} ms, screen saver on: {screen_saver_on}")
-        if button_01_pressed_at != -1:
+        if button_01_pressed_at is not None:
             if diff_up_down_01 > 1000:  # more than 1 sec, long press
                 if not screen_saver_on:
                     print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
@@ -218,25 +219,32 @@ def button_listener(pin, state) -> None:
                     # This is a shutdown!
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
-                    execute_system_command("../kill.all.sample.sh")  # Assuming we're running from the python directory
+                    if False:
+                        cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"  # Self call
+                        print(f"Executing [{cmd}] ...")
+                        execute_system_command(cmd)
+                    # Kill all, mux will kill the nmea-cache-publisher's
+                    cmd: str = "../kill.all.sample.sh"
+                    print(f"Executing [{cmd}] ...")
+                    execute_system_command(cmd)
                     # Bye !
                 else:
                     if verbose or verbose_level2:
                         print(f"... Increasing list index")
                     current_value += 1
         else:
-            print("1bis - button_01_pressed_at was -1...")
+            print("1bis - button_01_pressed_at was None...")
     if pin == pin_button_01 and state == True:
         button_01_pressed_at = nowms
         if verbose or verbose_level2:
             print(f"Button 1 is pressed DOWN at {nowms} ms!")
     if pin == pin_button_02 and state == False:  # Back Up !
-        if button_02_pressed_at == -1:
+        if button_02_pressed_at is None:
             print("2 - Should not happen !! Press longer!")
-        diff_up_down_02 = nowms - button_02_pressed_at
+        diff_up_down_02 = nowms - (button_02_pressed_at if button_02_pressed_at is not None else 0)
         if verbose or verbose_level2:
             print(f"Released button 2: {diff_up_down_02} ms, screen saver on: {screen_saver_on}")
-        if button_02_pressed_at != -1:
+        if button_02_pressed_at is not None:
             if diff_up_down_02 > 1000:  # more than 1 sec
                 if not screen_saver_on:
                     print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
@@ -289,31 +297,32 @@ def button_manager(pin, callback) -> None:
             button_down: bool = btn.value  # True means ON (aka down)
             if button_down != prev_state:  # Button status has changed
                 if screen_saver_on:  # and button_down:  # Screen Saver on, and Button DOWN. Wake up !
-                    if verbose_level2 or verbose:
-                        print("ButtonManager: Reseting screen saver.")
-                    reset_screen_saver()
-
                     if not button_down:
                         if pin == pin_button_01:
-                            button_01_pressed_at = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+                            button_01_pressed_at = int(time.time() * 1000)  # Timestamp in ms
                             if verbose_level2 or verbose:
                                 print(f"Button 1 reset_pressed_at {button_01_pressed_at}")
                         elif pin == pin_button_02:
-                            button_02_pressed_at = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+                            button_02_pressed_at = int(time.time() * 1000)  # Timestamp in ms
                             if verbose_level2 or verbose:
                                 print(f"Button 2 reset_pressed_at {button_02_pressed_at}")
                 else:
                     if not button_down:
                         if verbose or verbose_level2:
-                            print("                                           BTN is UP")
+                            print("                                           >> BTN is UP")
                         callback(pin, False)  # Broadcast wherever needed
                     else:
                         if verbose or verbose_level2:
-                            print("                                           BTN is DOWN")
+                            print("                                           >> BTN is DOWN")
                         callback(pin, True)  # Broadcast wherever needed
-                # reset_screen_saver()  # Reset whenever button was clicked.
+
+            if button_down and button_down != prev_state: # To avoid repeated resets on long-clicks
+                if verbose_level2 or verbose:
+                    print("ButtonManager: Reseting screen saver.")
+                reset_screen_saver()
+
             prev_state = button_down
-            # time.sleep(0.1)  # sleep for debounce. Tricky.
+            time.sleep(0.1)  # sleep for debounce. Tricky.
         except Exception as oops:
             print(f"Error: {repr(oops)}")
         finally:
@@ -330,8 +339,11 @@ def screen_saver_manager() -> None:
         screen_saver_timer += 1
         if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER and not screen_saver_on:
             if verbose or verbose_level2:
-                print("Turning screen saver ON")
+                print(f"Turning screen saver ON, after {screen_saver_timer} seconds")
             screen_saver_on = True
+        else:
+            if verbose or verbose_level2:
+                print(f"... ScreenSaverTime is now {screen_saver_timer}")
         time.sleep(1.0)
 
 
@@ -399,7 +411,7 @@ if len(sys.argv) > 0:  # Script name + X args
                 print(nmea_data)
 
 # Summarize all options
-print(f"Running with config:\n" +
+print(f"Running process (id {server_pid}) with config:\n" +
       f"- Server Port {server_port}\n" +
       f"- verbose {verbose}\n" +
       f"- machine name {machine_name}\n" +
@@ -539,15 +551,24 @@ def display(display_data: List[str]) -> None:
     global screen_saver_on
     global shutdown_suggested
     global shutdown_suggested_at
+    global verbose
+    global verbose_level2
 
     try:
         # Clear Screen. Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
+        draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # cls
 
         if not screen_saver_on:
-            nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
+            nowms: int = int(time.time() * 1000)  # Timestamp in ms
+            if verbose or verbose_level2:
+                print(f">> Screen saver NOT on, shutdown_suggested:{shutdown_suggested}, suggested at:{shutdown_suggested_at}, nowms:{nowms} (diff: {(nowms - shutdown_suggested_at) if shutdown_suggested_at is not None else '-'})")
+                if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < 5000:
+                    print("   Displaying shutdown options")
+                else:
+                    print("   NOT Displaying shutdown options")
             if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < 5000:
-                # print("Tossion!")
+                if verbose or verbose_level2:
+                    print("Tossion! ShutdownScreen displayed !")
                 options: List[str] = ["Really? Shutdown?",
                                       "",
                                       "   - Yes: button 1",
@@ -558,14 +579,18 @@ def display(display_data: List[str]) -> None:
                     draw.text((x, y), line, font=font, fill=WHITE)
                     y = y + 8
             else:
+                if verbose or verbose_level2:
+                    print("Regular data display")
                 if shutdown_suggested:
+                    if verbose or verbose_level2:
+                        print(f"Reseting shutdown...")
                     shutdown_suggested = False    # Reset
+                    shutdown_suggested_at = None
                 y: int = top
                 # Now draw the required text
                 for line in display_data:
                     draw.text((x, y), line, font=font, fill=WHITE)
                     y = y + 8
-
                 # draw.text((x, top), display_data, font=font, fill=WHITE)
                 # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
                 # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
@@ -601,7 +626,7 @@ def clear() -> None:
     global draw
     try:
         # Draw a black filled box to clear the image.
-        draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=BLACK)
+        draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
         # Display image.
         oled.image(image)
         oled.show()
@@ -708,14 +733,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     "description": "Placeholder."
                 }]
             }
-            response_content = json.dumps(response).encode()
-            self.send_response(200)
-            # defining the response headers
-            self.send_header('Content-Type', 'application/json')
-            content_len = len(response_content)
-            self.send_header('Content-Length', str(content_len))
-            self.end_headers()
-            self.wfile.write(response_content)
+            self.wfile.write(json.dumps(response).encode())  # takes care of response code and stuff...
         else:
             if verbose:
                 print("GET on {} not managed".format(self.path))
@@ -1077,6 +1095,7 @@ display_thread.start()
 port_number: int = server_port
 print("Starting SSD1306 server on port {}".format(port_number))
 server = HTTPServer((machine_name, port_number), ServiceHandler)
+# server = HTTPServer(('', port_number), ServiceHandler)  # localhost, not IP address
 #
 # For dev. Requires import sample_cache
 # nmea_cache = json.loads(sample_cache.sample_json)

@@ -22,27 +22,29 @@ if [[ $# -gt 0 ]]; then
   OPTION=$1
 fi
 #
-echo -e "Using option ${OPTION}"
-echo -e "Step 1 - Starting the Python server(s)"
+echo -e ">>> Using option ${OPTION}"
+# MACHINE_NAME=$(hostname -I | awk '{ print $1 }')  # IP address
+MACHINE_NAME=localhost      # For the kill to work, from the MUX. prop rest.onclose.resource !!!!!
+echo -e "Step 1 - Starting the Python server(s), on ${MACHINE_NAME}"
 #
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # Start the REST Server for BME280
   echo -e "1 - Starting the BME280 REST server, port 9876, log is bme280.python.log"
-  /home/pi/nmea-dist/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:localhost --port:9876 --verbose:false > /home/pi/nmea-dist/bme280.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:9876 --verbose:false > /home/pi/nmea-dist/bme280.python.log 2>&1
   sleep 10
   # Start the REST Server for SSD1306 (v2)
   echo -e "2 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP --screen-saver:on --rotate:false > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP --screen-saver:on --rotate:false > /home/pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   # Start the REST Server for EINK2-13
   echo -e "1 - Starting the EINK2-13 REST server, port 8080, log is eink2-13.python.log"
-  /home/pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > /home/pi/nmea-dist/eink2-13.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > /home/pi/nmea-dist/eink2-13.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   # Start the REST Server for SSD1306 (v2)
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:localhost --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 else
   echo -e "Unmanaged OPTION ${OPTION}"
@@ -70,7 +72,8 @@ else
   exit 1
 fi
 SERVER_IP=$(hostname -I | awk '{ print $1 }')
-echo -e "${CYAN}If mux is started, try curl to check the REST available operations (GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist)${NC}"
+echo -e "${CYAN}If mux is started, try curl to check the REST available MUX operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist${NC}"
+echo -e "${CYAN}                            to check the REST available SSD1306 operations: curl -X GET on http://${SERVER_IP}:8080/ssd1306/oplist${NC}"
 echo -e "${CYAN}                   Web server available, see http://${SERVER_IP}:${SERVER_HTTP_PORT}/web/index.html or http://${SERVER_IP}:${SERVER_HTTP_PORT}/zip/index.html${NC}"
 echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.\"Solar time\"'${NC}"
 echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.NMEA_AS_IS'${NC}"
