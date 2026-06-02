@@ -111,8 +111,9 @@ nmea_cache: Dict[str, object] = None
 
 ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
 
-LONG_CLICK = 1000           # in ms, 1s
-BETWEEN_DOUBLE_CLICK = 300  # in ms, 0.3s
+LONG_CLICK = 1000            # in ms, 1s
+BETWEEN_DOUBLE_CLICK = 300   # in ms, 0.3s
+FORGET_SHUTDOWN_AFTER = 5000 # ms
 
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
@@ -134,6 +135,9 @@ button_01_pressed_at: int = None
 button_02_pressed_at: int = None
 previous_button_01_pressed_at: int = None
 previous_button_02_pressed_at: int = None
+
+double_click_1: bool = False
+double_click_2: bool = False
 
 shutdown_suggested: bool = False
 shutdown_suggested_at: int = None
@@ -200,6 +204,8 @@ def button_listener(pin, state) -> None:
     global shutdown_suggested_at
     global previous_button_01_pressed_at
     global previous_button_02_pressed_at
+    global double_click_1
+    global double_click_2
 
     # nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     nowms: int = int(time.time() * 1000)  # Timestamp in ms
@@ -208,6 +214,7 @@ def button_listener(pin, state) -> None:
     if pin == pin_button_01 and state == False:  # Back Up !
         if button_01_pressed_at is None:
             print("1 - Should not happen !! Press longer!")
+        double_click_1 = False
         diff_up_down_01 = nowms - (button_01_pressed_at if button_01_pressed_at is not None else 0)
         if verbose or verbose_level2:
             print(f"Released button 1: {diff_up_down_01} ms, screen saver on: {screen_saver_on}")
@@ -221,6 +228,7 @@ def button_listener(pin, state) -> None:
                     print(">>>> 1 - Long press, but screen saver was on.")
             elif button_01_pressed_at - (previous_button_01_pressed_at if previous_button_01_pressed_at is not None else 0) < BETWEEN_DOUBLE_CLICK:
                 print("Double click button 1?")
+                double_click_1 = True
             else:  # Short-Click
                 if verbose or verbose_level2:
                     print(f"ShortPress button 1: {diff_up_down_01} ms")
@@ -238,9 +246,12 @@ def button_listener(pin, state) -> None:
                     execute_system_command(cmd)
                     # Bye !
                 else:
-                    if verbose or verbose_level2:
-                        print(f"... Increasing list index")
-                    current_value += 1
+                    # TODO avoid this on double-click
+                    # time.sleep(BETWEEN_DOUBLE_CLICK)
+                    if not double_click_1:
+                        if verbose or verbose_level2:
+                            print(f"... Increasing list index")
+                        current_value += 1
         else:
             print("1bis - button_01_pressed_at was None...")
         previous_button_01_pressed_at = button_01_pressed_at
@@ -253,6 +264,7 @@ def button_listener(pin, state) -> None:
     if pin == pin_button_02 and state == False:  # Back Up !
         if button_02_pressed_at is None:
             print("2 - Should not happen !! Press longer!")
+        double_click_2 = False
         diff_up_down_02 = nowms - (button_02_pressed_at if button_02_pressed_at is not None else 0)
         if verbose or verbose_level2:
             print(f"Released button 2: {diff_up_down_02} ms, screen saver on: {screen_saver_on}")
@@ -264,15 +276,19 @@ def button_listener(pin, state) -> None:
                     print(">>>> 2 - Long press, but screen saver was on.")
             elif button_02_pressed_at - (previous_button_02_pressed_at if previous_button_02_pressed_at is not None else 0) < BETWEEN_DOUBLE_CLICK:
                 print("Double click button 2?")
+                double_click_2 = True
             else:  # Short-Click
                 if verbose or verbose_level2:
                     print(f"ShortPress button 2: {diff_up_down_02} ms")
                 if shutdown_suggested: # Replied NO
                     shutdown_suggested = False
                 else:
-                    if verbose or verbose_level2:
-                        print(f"... Decreasing list index")
-                    current_value -= 1
+                    # TODO avoid this on double-click
+                    # time.sleep(BETWEEN_DOUBLE_CLICK)
+                    if not double_click_2:
+                        if verbose or verbose_level2:
+                            print(f"... Decreasing list index")
+                        current_value -= 1
         else:
             print("2bis - button_02_pressed_at was None...")
         previous_button_02_pressed_at = button_02_pressed_at
@@ -332,14 +348,13 @@ def button_manager(pin, callback) -> None:
                             if verbose_level2 or verbose:
                                 print(f"Button 2 reset_pressed_at {button_02_pressed_at}")
                 else:
-                    if not button_down:
+                    if not button_down:  # Up
                         if verbose or verbose_level2:
-                            print("                                           >> BTN is UP")
+                            print("------------------------------------------->> BTN is UP")
                         callback(pin, False)  # Broadcast wherever needed
-
-                    else:
+                    else:                # Down
                         if verbose or verbose_level2:
-                            print("                                           >> BTN is DOWN")
+                            print("------------------------------------------->> BTN is DOWN")
                         callback(pin, True)  # Broadcast wherever needed
 
             if button_down and button_down != prev_state: # To avoid repeated resets on long-clicks
@@ -587,12 +602,12 @@ def display(display_data: List[str]) -> None:
         if not screen_saver_on:
             nowms: int = int(time.time() * 1000)  # Timestamp in ms
             if verbose or verbose_level2:
-                print(f">> Screen saver NOT on, shutdown_suggested:{shutdown_suggested}, suggested at:{shutdown_suggested_at}, nowms:{nowms} (diff: {(nowms - shutdown_suggested_at) if shutdown_suggested_at is not None else '-'})")
-                if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < 5000:
+                print(f">> Screen saver NOT on, shutdown_suggested:{shutdown_suggested}, suggested at:{shutdown_suggested_at}, nowms:{nowms} (diff: {(nowms - shutdown_suggested_at) if shutdown_suggested_at is not None else 'n/a'})")
+                if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
                     print("   Displaying shutdown options")
                 else:
                     print("   NOT Displaying shutdown options")
-            if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < 5000:
+            if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
                 if verbose or verbose_level2:
                     print("Tossion! ShutdownScreen displayed !")
                 options: List[str] = ["Really? Shutdown?",
@@ -841,6 +856,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         global nmea_cache
         global verbose
         global verbose_level2
+        global keep_looping
 
         if verbose:
             print("PUT request, {}".format(self.path))
@@ -889,10 +905,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path == PATH_PREFIX + "/bye-and-clear-screen":
             try:
-                global keep_looping
                 keep_looping = False
                 # Clear screen. Say Bye for 1.5 second before clearing the screen.
-                time.sleep(1.5)
+                time.sleep(3.5)  # Give time to the loop to exit
                 clear()
                 # Draw a white background
                 draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
