@@ -296,8 +296,17 @@ def button_manager(pin, callback) -> None:
         try:
             button_down: bool = btn.value  # True means ON (aka down)
             if button_down != prev_state:  # Button status has changed
+                if button_down:  # on button-down
+                    if pin == pin_button_01:
+                        button_01_pressed_at = int(time.time() * 1000)  # Timestamp in ms
+                        if verbose_level2 or verbose:
+                            print(f"Button 1 reset_pressed_at {button_01_pressed_at}")
+                    elif pin == pin_button_02:
+                        button_02_pressed_at = int(time.time() * 1000)  # Timestamp in ms
+                        if verbose_level2 or verbose:
+                            print(f"Button 2 reset_pressed_at {button_02_pressed_at}")
                 if screen_saver_on:  # and button_down:  # Screen Saver on, and Button DOWN. Wake up !
-                    if not button_down:
+                    if not button_down:  # button Up. TODO To be removed ?
                         if pin == pin_button_01:
                             button_01_pressed_at = int(time.time() * 1000)  # Timestamp in ms
                             if verbose_level2 or verbose:
@@ -311,6 +320,7 @@ def button_manager(pin, callback) -> None:
                         if verbose or verbose_level2:
                             print("                                           >> BTN is UP")
                         callback(pin, False)  # Broadcast wherever needed
+
                     else:
                         if verbose or verbose_level2:
                             print("                                           >> BTN is DOWN")
