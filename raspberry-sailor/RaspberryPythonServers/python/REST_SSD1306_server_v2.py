@@ -45,10 +45,9 @@
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
 # Managed:
-# - click
-# - long click
-# TODO:
-# - double click
+# - click        (on both buttons, 1 & 2)
+# - long click   (on button 1)
+# - double click (available)
 #
 # Long press on button 1 will suggest a shutdown.
 #
@@ -111,6 +110,10 @@ keep_looping: bool = True
 nmea_cache: Dict[str, object] = None
 
 ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
+
+LONG_CLICK = 1000           # in ms, 1s
+BETWEEN_DOUBLE_CLICK = 300  # in ms, 0.3s
+
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
 enable_screen_saver: bool = True
@@ -129,6 +132,8 @@ pin_button_02 = board.D21  # physical pin #40
 
 button_01_pressed_at: int = None
 button_02_pressed_at: int = None
+previous_button_01_pressed_at: int = None
+previous_button_02_pressed_at: int = None
 
 shutdown_suggested: bool = False
 shutdown_suggested_at: int = None
@@ -193,11 +198,13 @@ def button_listener(pin, state) -> None:
     global button_02_pressed_at
     global shutdown_suggested
     global shutdown_suggested_at
+    global previous_button_01_pressed_at
+    global previous_button_02_pressed_at
 
     # nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     nowms: int = int(time.time() * 1000)  # Timestamp in ms
     if verbose or verbose_level2:
-        print(f">>> Yo! {pin}, state {state} at {nowms}")
+        print(f">>> Yo! {pin}, state {state} at {nowms}, since previous click: {(nowms - button_01_pressed_at) if button_01_pressed_at is not None else 0} ms")
     if pin == pin_button_01 and state == False:  # Back Up !
         if button_01_pressed_at is None:
             print("1 - Should not happen !! Press longer!")
@@ -205,17 +212,19 @@ def button_listener(pin, state) -> None:
         if verbose or verbose_level2:
             print(f"Released button 1: {diff_up_down_01} ms, screen saver on: {screen_saver_on}")
         if button_01_pressed_at is not None:
-            if diff_up_down_01 > 1000:  # more than 1 sec, long press
+            if diff_up_down_01 > LONG_CLICK:  # more than 1 sec, long press
                 if not screen_saver_on:
                     print(f"Long press on button 1: {diff_up_down_01} ms")  # Will do something sometime!
                     shutdown_suggested = True
                     shutdown_suggested_at = nowms
                 else:
                     print(">>>> 1 - Long press, but screen saver was on.")
-            else:
+            elif button_01_pressed_at - (previous_button_01_pressed_at if previous_button_01_pressed_at is not None else 0) < BETWEEN_DOUBLE_CLICK:
+                print("Double click button 1?")
+            else:  # Short-Click
                 if verbose or verbose_level2:
                     print(f"ShortPress button 1: {diff_up_down_01} ms")
-                if shutdown_suggested:  # Replied YES
+                if shutdown_suggested:  # Replied YES to shutdown
                     # This is a shutdown!
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
@@ -234,10 +243,13 @@ def button_listener(pin, state) -> None:
                     current_value += 1
         else:
             print("1bis - button_01_pressed_at was None...")
+        previous_button_01_pressed_at = button_01_pressed_at
+
     if pin == pin_button_01 and state == True:
         button_01_pressed_at = nowms
         if verbose or verbose_level2:
             print(f"Button 1 is pressed DOWN at {nowms} ms!")
+
     if pin == pin_button_02 and state == False:  # Back Up !
         if button_02_pressed_at is None:
             print("2 - Should not happen !! Press longer!")
@@ -245,12 +257,14 @@ def button_listener(pin, state) -> None:
         if verbose or verbose_level2:
             print(f"Released button 2: {diff_up_down_02} ms, screen saver on: {screen_saver_on}")
         if button_02_pressed_at is not None:
-            if diff_up_down_02 > 1000:  # more than 1 sec
+            if diff_up_down_02 > LONG_CLICK:  # more than 1 sec
                 if not screen_saver_on:
                     print(f"Long press on button 2: {diff_up_down_02} ms")  # Will do something sometime!
                 else:
                     print(">>>> 2 - Long press, but screen saver was on.")
-            else:
+            elif button_02_pressed_at - (previous_button_02_pressed_at if previous_button_02_pressed_at is not None else 0) < BETWEEN_DOUBLE_CLICK:
+                print("Double click button 2?")
+            else:  # Short-Click
                 if verbose or verbose_level2:
                     print(f"ShortPress button 2: {diff_up_down_02} ms")
                 if shutdown_suggested: # Replied NO
@@ -260,7 +274,9 @@ def button_listener(pin, state) -> None:
                         print(f"... Decreasing list index")
                     current_value -= 1
         else:
-            print("2bis - button_02_pressed_at was -1...")
+            print("2bis - button_02_pressed_at was None...")
+        previous_button_02_pressed_at = button_02_pressed_at
+
     if pin == pin_button_02 and state == True:
         button_02_pressed_at = nowms
         if verbose or verbose_level2:
@@ -332,7 +348,7 @@ def button_manager(pin, callback) -> None:
                 reset_screen_saver()
 
             prev_state = button_down
-            time.sleep(0.1)  # sleep for debounce. Tricky.
+            time.sleep(0.01)  # sleep for debounce. Tricky.
         except Exception as oops:
             print(f"Error: {repr(oops)}")
         finally:
@@ -542,7 +558,7 @@ draw.text(
 oled.image(image)
 oled.show()
 # Wait a bit to show the init screen
-time.sleep(5)  # Optional
+time.sleep(5)  # Optional. Just long enough to read the screen above.
 
 # First define some constants to allow easy resizing of shapes.
 padding: int = -2
@@ -875,8 +891,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
             try:
                 global keep_looping
                 keep_looping = False
+                # Clear screen. Say Bye for 1.5 second before clearing the screen.
                 time.sleep(1.5)
-                # Clear screen. Say Bye for 1 second before clearing the screen.
                 clear()
                 # Draw a white background
                 draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
@@ -1092,7 +1108,7 @@ def display_manager() -> None:
         to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
         display(to_display)
         # display([f"{current_value} -> {nmea_data[current_value]}"])
-        time.sleep(1.0)
+        time.sleep(0.5)   # 1.0)  # Time between refresh
     print("Done with display thread")
 
 
@@ -1111,8 +1127,11 @@ server = HTTPServer((machine_name, port_number), ServiceHandler)
 # nmea_cache = json.loads(sample_cache.sample_json)
 
 print("Server ready for duty.")
-print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
-print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number,
+print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name,
+                                                     port_number,
+                                                     PATH_PREFIX))
+print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name,
+                                                                                    port_number,
                                                                                     PATH_PREFIX))
 #
 # Main part.
