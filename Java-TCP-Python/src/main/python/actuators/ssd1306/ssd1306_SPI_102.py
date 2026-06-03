@@ -46,7 +46,8 @@ if False:
 
 # Use for SPI
 if True:
-    spi: busio.SPI = board.SPI()
+    # spi: busio.SPI = board.SPI()
+    spi = board.SPI()
     print(f"SPI board type: {type(spi)}")
     # oled_cs = digitalio.DigitalInOut(board.D5)
     oled_cs = digitalio.DigitalInOut(board.D8)  # Pin #24
@@ -100,6 +101,35 @@ oled.show()
 # Wait 3 sec
 time.sleep(3)
 
+# Text + Drawings...
+# draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
+oled.fill(BLACK)
+
+draw.text(
+    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+    text,
+    font=font,
+    fill=WHITE
+)
+# Set a pixel in the origin [0,0] position.
+for i in range(6):
+    for j in range(6):
+        oled.pixel(i, j, 1)
+# Set a pixel in the middle [64, 16] position.
+oled.pixel(64, 16, 1)
+# Set a pixel in the opposite [127, 31] position.
+oled.pixel(127, 31, 1)
+
+#  cls
+# oled.fill(BLACK)
+oled.show()
+
+# Display image
+# oled.image(image)
+# oled.show()
+
+time.sleep(3)
+
 for i in range(5):
     # Draw a black background
     draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
@@ -120,6 +150,8 @@ for i in range(5):
     oled.image(image)
     oled.show()
     time.sleep(1)
+
+
 
 oled.fill(BLACK)
 oled.show()

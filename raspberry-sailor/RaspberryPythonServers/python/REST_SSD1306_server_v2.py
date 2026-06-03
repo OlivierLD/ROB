@@ -65,11 +65,15 @@ from typing import List
 import threading
 import board
 import digitalio
-from digitalio import DigitalInOut, Direction, Pull
+from digitalio import DigitalInOut, Direction, Pull   # for the push-buttons
 import PIL
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306  # pip3 install adafruit-circuitpython-ssd1306
-import utils  # local script
+import math
+from random import random
+
+import utils         # local script
+import ssd1306Utils  # local script
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -97,8 +101,11 @@ DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". Se
 # BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
 # TODO: More data, and graphics ?
 
+board_type = os.uname().machine
+print(f"Board: {board_type}")
+
 oled = None
-server_pid: int = os.getpid()
+server_pid: int = os.getpid()  # process id
 
 
 # Define the Reset Pin
@@ -125,7 +132,7 @@ nmea_data: List[str] = [
     "SOG",  # Speed Over Ground
     "COG",  # Course Over Ground
     "POS",  # Position
-    "WPT"   # Waypoint, distance and bearing
+    "NAV"   # Several nav data
 ]
 
 pin_button_01 = board.D20  # physical pin #38
@@ -596,7 +603,7 @@ def display(display_data: List[str]) -> None:
     global verbose_level2
 
     try:
-        # Clear Screen. Draw a black filled box to clear the image.
+        # Clear Screen. Draw a black filled box to clear the previous image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # cls
 
         if not screen_saver_on:
@@ -628,7 +635,8 @@ def display(display_data: List[str]) -> None:
                     shutdown_suggested = False    # Reset
                     shutdown_suggested_at = None
                 y: int = top
-                # Now draw the required text
+                # Now draw the required data
+                # WiP distinction on display_data type (list or drawing) ?
                 for line in display_data:
                     draw.text((x, y), line, font=font, fill=WHITE)
                     y = y + 8
@@ -657,6 +665,59 @@ def display(display_data: List[str]) -> None:
                 draw.text((x, top), "...", font=font, fill=WHITE)
         # Display image.
         oled.image(image)
+        oled.show()
+    except Exception as error:
+        print(f"Error: {repr(error)}")
+
+
+def draw_COG(cog: float) -> None:
+    global oled
+    global draw
+    global font
+    global verbose
+    global verbose_level2
+
+    try:
+        if verbose:
+            print(f"Drawing cog: 0, displayData: {cog}")  # {cog}")
+        # Full CLS
+        if True:
+            draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
+            oled.image(image)
+            oled.show()
+            # time.sleep(0.01)
+        # Prompt
+        try:
+            draw.text((1, 1), "COG:", font=font, fill=WHITE)  # Ignored, without display.image(image)...
+            draw.text((1, 9), f" {cog:03.0f}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
+            # print(f"COG: {cog:03.0f}°")
+            oled.image(image)
+        except Exception as merde:
+            print(f"Exception {repr(merde)}... ")
+            pass
+
+        # Figure
+        center_x: int = oled.width / 2
+        center_y: int = oled.height / 2
+        radius: int = (oled.height - 2) / 2
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius)  # Circle
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius - 2)
+        ssd1306Utils.draw_circle(oled, center_x, center_y, 10)     # Axis
+
+        top_x: float = center_x + (radius * math.sin(math.radians(cog)))
+        top_y: float = center_y - (radius * math.cos(math.radians(cog)))
+
+        back_left_x: float = center_x + (radius * math.sin(math.radians(cog - 170)))
+        back_left_y: float = center_y - (radius * math.cos(math.radians(cog - 170)))
+
+        back_right_x: float = center_x + (radius * math.sin(math.radians(cog + 170)))
+        back_right_y: float = center_y - (radius * math.cos(math.radians(cog + 170)))
+
+        # Needle
+        ssd1306Utils.draw_line(oled, round(top_x), round(top_y), round(back_left_x), round(back_left_y))
+        ssd1306Utils.draw_line(oled, round(back_left_x), round(back_left_y), round(back_right_x), round(back_right_y))
+        ssd1306Utils.draw_line(oled, round(back_right_x), round(back_right_y), round(top_x), round(top_y))
+
         oled.show()
     except Exception as error:
         print(f"Error: {repr(error)}")
@@ -1014,6 +1075,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 def format_data(id: str) -> List[str]:
     global nmea_cache
 
+    # print(f"format_data: id is {id}")
     formatted: List[str] = None  # Init
 
     try:
@@ -1071,6 +1133,18 @@ def format_data(id: str) -> List[str]:
                 f"SOG: {sog} kts",
                 "Date UTC:",
                 f"{str_date}" ]
+        elif id == "XXX":
+            # Special formatting, for a drawing. WiP
+            try:
+                cog = nmea_cache["COG"]["angle"]
+            except (TypeError, KeyError) as te:
+                # print(random())
+                cog = f"{360 * random()}"  # "0"
+                pass
+            formatted = [
+                f"{cog}"
+            ]
+            # print(f"XXX... -> {cog}")
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
             formatted = [ "AIR", f"{atp:.01f}°C" ]
@@ -1119,10 +1193,21 @@ def format_data(id: str) -> List[str]:
 def display_manager() -> None:
     global current_value
     global keep_looping
+    global oled
+    global draw
+    global font
+
     while keep_looping:
-        to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
-        display(to_display)
-        # display([f"{current_value} -> {nmea_data[current_value]}"])
+        # print([f"{current_value} -> {nmea_data[current_value]}"])
+        if nmea_data[current_value] == "XXX":  # Custom drawing
+            # print(f"--> Custom func.")
+            cog: float = float(format_data(nmea_data[current_value])[0])
+            draw_COG(cog)
+            # oled.show()
+        else:  # Regular data
+            to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
+            display(to_display)
+        # print([f"{current_value} -> {nmea_data[current_value]}"])
         time.sleep(0.5)   # 1.0)  # Time between refresh
     print("Done with display thread")
 
