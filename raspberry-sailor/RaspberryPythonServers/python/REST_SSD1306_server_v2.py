@@ -1181,7 +1181,7 @@ def format_data(id: str) -> List[str]:
                 pass
 
             formatted = [
-                f"POS:",
+                f"NAV:",
                 f" {utils.dec_to_sex(latitude, 'NS')} / {utils.dec_to_sex(longitude, 'EW')}",
                 f" {grid}",
                 f"COG: {cog_str}",
