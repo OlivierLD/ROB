@@ -465,6 +465,10 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     ```
 - `nmea-cache-publisher`
   - Can be used to `PUT`/`POST` the full cache (in JSON format) to a REST server.
+  - > _**Note**_: this `nmea-cache-publisher` can be seen as an NMEA bus.  
+      The full NMEA-cache would be sent to it, and it would decide what to do (to display) with it,
+      based on a user's decision/action.  
+      As far as I know, there is no standard for such a content. We use an arbitrary `json` structure here, examples are available all around.
   ```yaml
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds

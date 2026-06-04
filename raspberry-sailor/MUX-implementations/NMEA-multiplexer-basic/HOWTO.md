@@ -320,6 +320,9 @@ As long as those languages can deal with standard protocols (like TCP, HTTP, etc
 The screens in this case act like the displays you'd have on board, at the chart table or in the cockpit.
 It's like those buses we are used to. The multiplexer makes the data circulate around the bus,
 and the display is choosing what to show. It receives all the data, and knows what to display, and how.
+> **_Note_**: An `nmea-cache-publisher` (used from the MUX to send data to the server(s) managing the actuators) can be seen as an NMEA bus.
+> The full NMEA-cache would be sent to it, and it would decide what to do (to display) with it, based on a user's decision/action (taken here with button-clicks).  
+> As far as I know, there is no standard for such a content. We use an arbitrary `json` structure here, examples are available all around.
 
 #### Other configurations (list is not closed!)
 Raspberry Pi Zero WH, with an OLED screen, 2 buttons, and a Lipo battery: 
