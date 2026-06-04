@@ -15,8 +15,10 @@ for pid in $(cat km); do
 done
 rm km
 # Wait a bit, as the mux would kill the nmea-cache-publisher's
-echo -e "Waiting a bit..."
-sleep 5
+if [[ ${NB_L} != 0 ]]; then
+  echo -e "Waiting a bit..."
+  sleep 5
+fi
 echo -e "Cleaning up what's left!"
 #
 ps -ef | grep python | grep REST | awk '{ print $2 }' > server.id.txt
@@ -35,4 +37,4 @@ for pid in $(cat server.id.txt); do
   sudo kill -9 ${pid}
 done
 rm server.id.txt
-echo -e "Should be clean."
+echo -e "Should be clean. Bye!"

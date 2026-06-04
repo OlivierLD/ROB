@@ -38,7 +38,7 @@
 #
 # --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list.
 #         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
-#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
+#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, XXX
 #
 # Acts like a bus. All the data circulate (in the cache), you choose - see the dcata obove - what to display.
 #
@@ -98,7 +98,7 @@ ROTATE_PRM_PREFIX: str            = "--rotate:"
 DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET
+# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, XXX
 # TODO: More data, and graphics ?
 
 board_type = os.uname().machine
@@ -547,9 +547,24 @@ draw.rectangle(
     fill=BLACK,
 )
 
+small_font_size: int = 9   # 8
+big_font_size: int = 28
+
 # Load default font.
-font: PIL.ImageFont.ImageFont = ImageFont.load_default()
-# print(f"Font is a {type(font)}")
+# font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # size 8
+font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', small_font_size)
+# see $ fc-list | grep -i mine
+try:
+    # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+    # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+    tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', big_font_size)
+    # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
+    # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
+except Exception as ach:
+    print("Oops, no truetype, loading default.")
+    tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+    pass
+print(f"Font is a {type(font)}")
 
 # Draw Some Text, at startup.
 text: str = "Init SSD1306"
@@ -593,6 +608,7 @@ x: int = 0
 def display(display_data: List[str]) -> None:
     global oled
     global font
+    global tt_font
     global image
     global draw
     global x
@@ -625,7 +641,7 @@ def display(display_data: List[str]) -> None:
                 y: int = top
                 for line in options:
                     draw.text((x, y), line, font=font, fill=WHITE)
-                    y = y + 8
+                    y = y + small_font_size
             else:
                 if verbose or verbose_level2:
                     print("Regular data display")
@@ -637,9 +653,16 @@ def display(display_data: List[str]) -> None:
                 y: int = top
                 # Now draw the required data
                 # WiP distinction on display_data type (list or drawing) ?
-                for line in display_data:
-                    draw.text((x, y), line, font=font, fill=WHITE)
-                    y = y + 8
+                # WiP
+                if display_data[0] == "COG" or display_data[0].startswith("SOG"):   # == "SOG in kts":
+                    # print("Printing COG!!")
+                    draw.text((x, y), display_data[0], font=font, fill=WHITE)
+                    y = y + big_font_size
+                    draw.text((x, y), display_data[1], font=tt_font, fill=WHITE)
+                else:
+                    for line in display_data:
+                        draw.text((x, y), line, font=font, fill=WHITE)
+                        y = y + small_font_size
                 # draw.text((x, top), display_data, font=font, fill=WHITE)
                 # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
                 # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
@@ -670,7 +693,7 @@ def display(display_data: List[str]) -> None:
         print(f"Error: {repr(error)}")
 
 
-def draw_COG(cog: float) -> None:
+def draw_COG(cog: int) -> None:
     global oled
     global draw
     global font
@@ -689,7 +712,7 @@ def draw_COG(cog: float) -> None:
         # Prompt
         try:
             draw.text((1, 1), "COG:", font=font, fill=WHITE)  # Ignored, without display.image(image)...
-            draw.text((1, 9), f" {cog:03.0f}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
+            draw.text((1, 9), f" {cog:03d}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
             # print(f"COG: {cog:03.0f}°")
             oled.image(image)
         except Exception as merde:
@@ -1084,18 +1107,19 @@ def format_data(id: str) -> List[str]:
             formatted = ["BSP", f"{bsp} kts"]
         elif id == "SOG":
             try:
-                sog = nmea_cache["SOG"]["speed"]
+                sog = float(nmea_cache[id]["speed"])
             except TypeError as te:
-                sog = "-"
+                sog = 0
                 pass
-            formatted = ["SOG", f"{sog} kts"]
+            formattedSOG: str = f"{sog:.02f}"
+            formatted = ["SOG in kts", formattedSOG.rjust(5,'0')]
         elif id == "COG":
             try:
-                cog = nmea_cache[id]["angle"]
+                cog: int = nmea_cache[id]["angle"]
             except (TypeError, KeyError) as te:
-                cog = "-"
+                cog: int = 0
                 pass
-            formatted = ["COG", f"{cog}°"]
+            formatted = ["COG", f"{cog:03d}°"]
         elif id == "POS":
             position: Dict = nmea_cache["Position"]
             latitude: float = position["lat"]
@@ -1109,14 +1133,18 @@ def format_data(id: str) -> List[str]:
             longitude: float = position["lng"]
             grid: str = position["gridSquare"]
             try:
-                sog = nmea_cache["SOG"]["speed"]
+                sog: float = nmea_cache["SOG"]["speed"]
+                sog_str: str = f"{sog:02.02f} kts"
             except (TypeError, KeyError) as te:
-                sog = "-"
+                # sog: float = 0
+                sog_str: str = "n/a"
                 pass
             try:
-                cog = nmea_cache["COG"]["angle"]
+                cog: int = nmea_cache["COG"]["angle"]
+                cog_str: str = f"{cog:03d}°"
             except (TypeError, KeyError) as te:
-                cog = "-"
+                # cog: int = 0  # : n/a
+                cog_str: str = "n/a"
                 pass
             try:
                 fmt_date: Dict = nmea_cache["GPS Date & Time"]["fmtDate"]
@@ -1126,25 +1154,25 @@ def format_data(id: str) -> List[str]:
                 pass
 
             formatted = [
-                f"POS: {utils.dec_to_sex(latitude, 'NS')}",
-                f"     {utils.dec_to_sex(longitude, 'EW')}",
-                f"     {grid}",
-                f"COG: {cog}°",
-                f"SOG: {sog} kts",
+                f"POS:",
+                f" {utils.dec_to_sex(latitude, 'NS')} / {utils.dec_to_sex(longitude, 'EW')}",
+                f" {grid}",
+                f"COG: {cog_str}°",
+                f"SOG: {sog_str}",
                 "Date UTC:",
                 f"{str_date}" ]
         elif id == "XXX":
             # Special formatting, for a drawing. WiP
             try:
-                cog = nmea_cache["COG"]["angle"]
+                cog: int = nmea_cache["COG"]["angle"]
             except (TypeError, KeyError) as te:
                 # print(random())
-                cog = f"{360 * random()}"  # "0"
+                cog: int = round(360 * random())  # Random generation when missing. Might change...
                 pass
             formatted = [
-                f"{cog}"
+                f"{cog:03d}"
             ]
-            # print(f"XXX... -> {cog}")
+            # print(f"XXX... -> {cog:03d}, formatted:{formatted}")
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
             formatted = [ "AIR", f"{atp:.01f}°C" ]
@@ -1181,11 +1209,11 @@ def format_data(id: str) -> List[str]:
             ]
         else:
             formatted = [id, "Not implemented"]
-    except TypeError as te:
-        formatted = [id, "Not in Cache (yet)"]
+    except (TypeError, KeyError) as te:
+        formatted = [f"[{id}]", "Not in Cache (yet)", f"Except:", f"{type(te)}"]
     except Exception as oops:
         print(f"{id}:{repr(oops)}")
-        formatted = [f"{id}:{repr(oops)}"]
+        formatted = [f"[{id}]:{repr(oops)}"]
     return formatted
 
 
@@ -1200,8 +1228,8 @@ def display_manager() -> None:
     while keep_looping:
         # print([f"{current_value} -> {nmea_data[current_value]}"])
         if nmea_data[current_value] == "XXX":  # Custom drawing
-            # print(f"--> Custom func.")
-            cog: float = float(format_data(nmea_data[current_value])[0])
+            # print(f"--> Custom func for {nmea_data[current_value]}, with {format_data(nmea_data[current_value])[0]}, {type(format_data(nmea_data[current_value])[0])}.")
+            cog: int = round(float(format_data(nmea_data[current_value])[0]))
             draw_COG(cog)
             # oled.show()
         else:  # Regular data
