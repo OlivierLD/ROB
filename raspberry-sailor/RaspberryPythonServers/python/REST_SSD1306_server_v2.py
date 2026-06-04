@@ -548,6 +548,7 @@ draw.rectangle(
 )
 
 small_font_size: int = 9   # 8
+medium_font_size: int = 16
 big_font_size: int = 28
 
 # Load default font.
@@ -557,13 +558,24 @@ font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 try:
     # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
     # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-    tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', big_font_size)
+    big_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', big_font_size)
     # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
     # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
 except Exception as ach:
     print("Oops, no truetype, loading default.")
-    tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+    big_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
     pass
+try:
+    # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+    # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+    medium_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', medium_font_size)
+    # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
+    # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
+except Exception as ach:
+    print("Oops, no truetype, loading default.")
+    medium_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+    pass
+
 print(f"Font is a {type(font)}")
 
 # Draw Some Text, at startup.
@@ -608,7 +620,8 @@ x: int = 0
 def display(display_data: List[str]) -> None:
     global oled
     global font
-    global tt_font
+    global medium_font
+    global big_font
     global image
     global draw
     global x
@@ -657,8 +670,14 @@ def display(display_data: List[str]) -> None:
                 if display_data[0] == "COG" or display_data[0].startswith("SOG"):   # == "SOG in kts":
                     # print("Printing COG!!")
                     draw.text((x, y), display_data[0], font=font, fill=WHITE)
-                    y = y + big_font_size
-                    draw.text((x, y), display_data[1], font=tt_font, fill=WHITE)
+                    y = y + small_font_size
+                    draw.text((x, y), display_data[1], font=big_font, fill=WHITE)
+                elif display_data[0] == "POS":
+                    draw.text((x, y), display_data[0], font=font, fill=WHITE)
+                    y = y + small_font_size
+                    for i in range(1, len(display_data)):
+                        draw.text((x, y), display_data[i], font=medium_font, fill=WHITE)
+                        y = y + medium_font_size
                 else:
                     for line in display_data:
                         draw.text((x, y), line, font=font, fill=WHITE)
@@ -1133,17 +1152,25 @@ def format_data(id: str) -> List[str]:
             longitude: float = position["lng"]
             grid: str = position["gridSquare"]
             try:
-                sog: float = nmea_cache["SOG"]["speed"]
+                sog: float = float(nmea_cache["SOG"]["speed"])
                 sog_str: str = f"{sog:02.02f} kts"
             except (TypeError, KeyError) as te:
                 # sog: float = 0
                 sog_str: str = "n/a"
                 pass
+            except Exception as boo:
+                print(f"NAV/SOG: {repr(boo)}")
+                sog_str: str = "n/a"
+                pass
             try:
-                cog: int = nmea_cache["COG"]["angle"]
+                cog: int = round(float(nmea_cache["COG"]["angle"]))
                 cog_str: str = f"{cog:03d}°"
             except (TypeError, KeyError) as te:
                 # cog: int = 0  # : n/a
+                cog_str: str = "n/a"
+                pass
+            except Exception as boo:
+                print(f"NAV/COG: {repr(boo)}")
                 cog_str: str = "n/a"
                 pass
             try:
@@ -1157,7 +1184,7 @@ def format_data(id: str) -> List[str]:
                 f"POS:",
                 f" {utils.dec_to_sex(latitude, 'NS')} / {utils.dec_to_sex(longitude, 'EW')}",
                 f" {grid}",
-                f"COG: {cog_str}°",
+                f"COG: {cog_str}",
                 f"SOG: {sog_str}",
                 "Date UTC:",
                 f"{str_date}" ]
@@ -1229,7 +1256,12 @@ def display_manager() -> None:
         # print([f"{current_value} -> {nmea_data[current_value]}"])
         if nmea_data[current_value] == "XXX":  # Custom drawing
             # print(f"--> Custom func for {nmea_data[current_value]}, with {format_data(nmea_data[current_value])[0]}, {type(format_data(nmea_data[current_value])[0])}.")
-            cog: int = round(float(format_data(nmea_data[current_value])[0]))
+            try:
+                cog: int = round(float(format_data(nmea_data[current_value])[0]))
+            except Exception as argh:
+                print(f"float to round for {format_data(nmea_data[current_value])[0]}, {repr(argh)}")
+                cog: int = 0
+                pass
             draw_COG(cog)
             # oled.show()
         else:  # Regular data
