@@ -71,6 +71,7 @@ from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306  # pip3 install adafruit-circuitpython-ssd1306
 import math
 from random import random
+import traceback
 
 import utils         # local script
 import ssd1306Utils  # local script
@@ -151,6 +152,13 @@ shutdown_suggested_at: int = None
 
 
 def execute_system_command(cmd: str) -> None:
+    """
+    Execute a system command. Prints out the result (if any)
+
+    :param str cmd: The command to execute
+
+    :return: None
+    """
     command: str = cmd
     try:
         result: str = subprocess.check_output(command, shell=True, text=True)
@@ -161,6 +169,12 @@ def execute_system_command(cmd: str) -> None:
 
 
 def get_network_name() -> str:
+    """
+    Get the name of the network you're on (if any)
+
+    :return: the network name, if found
+    :raises Exception: just in case...
+    """
     command: str = "iwgetid -r"
     try:
         result: str = subprocess.check_output(command, shell=True, text=True)
@@ -177,6 +191,11 @@ def get_network_name() -> str:
 
 
 def get_ip_address() -> str:
+    """
+    Get your current IP address - bash version.
+
+    :return: the address, if found, or the exception if any.
+    """
     command: str = "hostname -I | awk '{ print $1 }'"
     try:
         result: str = subprocess.check_output(command, shell=True, text=True)
@@ -244,7 +263,7 @@ def button_listener(pin, state) -> None:
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
                     if False:
-                        cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"  # Self call
+                        cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"  # Self call. Does not kill the mux.
                         print(f"Executing [{cmd}] ...")
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
@@ -552,9 +571,9 @@ medium_font_size: int = 16
 big_font_size: int = 28
 
 # Load default font.
-# font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # size 8
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', small_font_size)
-# see $ fc-list | grep -i mine
+# font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # default one, size 8
+font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', small_font_size)  # not the default one
+# see $ fc-list | grep -i dejavu, or so.
 try:
     # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
     # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
@@ -616,6 +635,7 @@ bottom: int = oled.height - padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x: int = 0
 
+SS_CHARACTERS: List[str]  = ["|", "/", "-", "\\"]
 
 def display(display_data: List[str]) -> None:
     global oled
@@ -690,21 +710,24 @@ def display(display_data: List[str]) -> None:
             # Blink dots...
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")
-            if screen_saver_timer % 4 == 1:
-                if verbose:
-                    print("pixel ON .")
-                # Draw '.' on top left
-                draw.text((x, top), ".", font=font, fill=WHITE)
-            elif screen_saver_timer % 4 == 2:
-                if verbose:
-                    print("pixel ON ..")
-                # Draw '..' on top left
-                draw.text((x, top), "..", font=font, fill=WHITE)
-            elif screen_saver_timer % 4 == 3:
-                if verbose:
-                    print("pixel ON ...")
-                # Draw '...' on top left
-                draw.text((x, top), "...", font=font, fill=WHITE)
+            if False:  # . .. ... dots
+                if screen_saver_timer % 4 == 1:
+                    if verbose:
+                        print("pixel ON .")
+                    # Draw '.' on top left
+                    draw.text((x, top), ".", font=font, fill=WHITE)
+                elif screen_saver_timer % 4 == 2:
+                    if verbose:
+                        print("pixel ON ..")
+                    # Draw '..' on top left
+                    draw.text((x, top), "..", font=font, fill=WHITE)
+                elif screen_saver_timer % 4 == 3:
+                    if verbose:
+                        print("pixel ON ...")
+                    # Draw '...' on top left
+                    draw.text((x, top), "...", font=font, fill=WHITE)
+            else:
+                draw.text((x, top), SS_CHARACTERS[screen_saver_timer % 4], font=font, fill=WHITE)
         # Display image.
         oled.image(image)
         oled.show()
@@ -1134,7 +1157,7 @@ def format_data(id: str) -> List[str]:
             formatted = ["SOG in kts", formattedSOG.rjust(5,'0')]
         elif id == "COG":
             try:
-                cog: int = nmea_cache[id]["angle"]
+                cog: int = round(float(nmea_cache[id]["angle"]))
             except (TypeError, KeyError) as te:
                 cog: int = 0
                 pass
@@ -1191,7 +1214,7 @@ def format_data(id: str) -> List[str]:
         elif id == "XXX":
             # Special formatting, for a drawing. WiP
             try:
-                cog: int = nmea_cache["COG"]["angle"]
+                cog: int = round(float(nmea_cache["COG"]["angle"]))
             except (TypeError, KeyError) as te:
                 # print(random())
                 cog: int = round(360 * random())  # Random generation when missing. Might change...
@@ -1240,6 +1263,8 @@ def format_data(id: str) -> List[str]:
         formatted = [f"[{id}]", "Not in Cache (yet)", f"Except:", f"{type(te)}"]
     except Exception as oops:
         print(f"{id}:{repr(oops)}")
+        traceback.format_exception(oops)
+        print(nmea_cache)
         formatted = [f"[{id}]:{repr(oops)}"]
     return formatted
 

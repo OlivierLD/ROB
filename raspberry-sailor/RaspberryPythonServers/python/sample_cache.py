@@ -26,4 +26,35 @@ try:
         f"{nmea_cache['GPS Time']['fmtDate']['sec']:02}"
     print(gps)
 except Exception as oops:
+    print(f"{repr(oops)}")
     pass
+
+nmea_cache = json.loads(sample_json_3)
+
+cog: str = "-"
+try:
+    cog = f"{nmea_cache['COG']['angle']}"
+    print(cog)
+except Exception as oops:
+    print(f"{repr(oops)}")
+    pass
+
+cog = "162.0"
+print(f"String: {cog}")
+
+try:
+    icog: int = int(cog)
+    print(f"Int:{icog}")
+except Exception as oops:
+    print(f"{repr(oops)}")
+    pass
+
+try:
+    fcog: float = float(cog)
+    print(f"Float:{fcog}")
+    icog: int = round(fcog)
+    print(f"Int:{icog}")
+except Exception as oops:
+    print(f"{repr(oops)}")
+    pass
+
