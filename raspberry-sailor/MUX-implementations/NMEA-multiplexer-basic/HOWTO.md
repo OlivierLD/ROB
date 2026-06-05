@@ -320,7 +320,7 @@ As long as those languages can deal with standard protocols (like TCP, HTTP, etc
 The screens in this case act like the displays you'd have on board, at the chart table or in the cockpit.
 It's like those buses we are used to. The multiplexer makes the data circulate around the bus,
 and the display is choosing what to show. It receives all the data, and knows what to display, and how.
-> **_Note_**: An `nmea-cache-publisher` (used from the MUX to send data to the server(s) managing the actuators) can be seen as an NMEA bus.
+> **_Note_**: An `nmea-cache-publisher` (used from the MUX to send data to the server(s) managing the actuators) can be seen as an **NMEA bus**.
 > The full NMEA-cache would be sent to it, and it would decide what to do (to display) with it, based on a user's decision/action (taken here with button-clicks).  
 > As far as I know, there is no standard for such a content. We use an arbitrary `json` structure here, examples are available all around.
 
@@ -346,7 +346,8 @@ This actually triggers a very interesting question:
 > One button? Two buttons?
 
 Buttons can support `click`, `double-click`, `long-click`...  
-That would deserve some brainstorming, right? 🤪 But that would not be wasted!
+That would deserve some brainstorming, right? 🤪   
+But that would not be wasted!
 
 ### One piece of advice...
 Again, once you have a configuration that fits you, _**do make [<span style="color: red;">a backup</span>](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card?srsltid=AfmBOoqPxn4JmszxSOqEG7-lB2B6rY9FW8wKbtpoHEMXh3QYbhHgK06S) of your SD Card**_ !   

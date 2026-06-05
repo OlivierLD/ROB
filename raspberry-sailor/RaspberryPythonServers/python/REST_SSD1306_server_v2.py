@@ -38,9 +38,9 @@
 #
 # --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list.
 #         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
-#         Supported data (see format_data method): BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, XXX
+#         Supported data (see format_data method): BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
 #
-# Acts like a bus. All the data circulate (in the cache), you choose - see the dcata obove - what to display.
+# Acts like a bus. All the data circulate (in the cache), you choose - see the data obove - what to display.
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
@@ -99,7 +99,7 @@ ROTATE_PRM_PREFIX: str            = "--rotate:"
 DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
 
 # Supported data (see format_data method):
-# BSP, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, XXX
+# BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
 # TODO: More data, and graphics ?
 
 board_type = os.uname().machine
@@ -687,8 +687,8 @@ def display(display_data: List[str]) -> None:
                 # Now draw the required data
                 # WiP distinction on display_data type (list or drawing) ?
                 # WiP
-                if display_data[0] == "COG" or display_data[0].startswith("SOG"):   # == "SOG in kts":
-                    # print("Printing COG!!")
+                if display_data[0] == "COG" or display_data[0].startswith("SOG") or display_data[0] == "HDG" or display_data[0].startswith("BSP"):   # == "SOG in kts", "BSP in kts"
+                    # print("Printing COG, SOG, BSP, or HDG")
                     draw.text((x, y), display_data[0], font=font, fill=WHITE)
                     y = y + small_font_size
                     draw.text((x, y), display_data[1], font=big_font, fill=WHITE)
@@ -1145,8 +1145,20 @@ def format_data(id: str) -> List[str]:
 
     try:
         if id == "BSP":
-            bsp = nmea_cache[id]["speed"]
-            formatted = ["BSP", f"{bsp} kts"]
+            try:
+                bsp = nmea_cache[id]["speed"]
+            except TypeError as te:
+                bsp = 0
+                pass
+            formattedBSP: str = f"{bsp:.02f}"
+            formatted = ["BSP in kts", formattedBSP.rjust(5,'0')]
+        elif id == "HDG":
+            try:
+                hdg: int = round(float(nmea_cache["HDG c."]["angle"]))  # Compass Heading
+            except (TypeError, KeyError) as te:
+                hdg: int = 0
+                pass
+            formatted = ["HDG", f"{hdg:03d}°"]
         elif id == "SOG":
             try:
                 sog = float(nmea_cache[id]["speed"])
@@ -1211,7 +1223,7 @@ def format_data(id: str) -> List[str]:
                 f"SOG: {sog_str}",
                 "Date UTC:",
                 f"{str_date}" ]
-        elif id == "XXX":
+        elif id == "COG_G":
             # Special formatting, for a drawing. WiP
             try:
                 cog: int = round(float(nmea_cache["COG"]["angle"]))
@@ -1222,7 +1234,7 @@ def format_data(id: str) -> List[str]:
             formatted = [
                 f"{cog:03d}"
             ]
-            # print(f"XXX... -> {cog:03d}, formatted:{formatted}")
+            # print(f"COG_G... -> {cog:03d}, formatted:{formatted}")
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
             formatted = [ "AIR", f"{atp:.01f}°C" ]
@@ -1279,7 +1291,7 @@ def display_manager() -> None:
 
     while keep_looping:
         # print([f"{current_value} -> {nmea_data[current_value]}"])
-        if nmea_data[current_value] == "XXX":  # Custom drawing
+        if nmea_data[current_value] == "COG_G":  # Custom drawing
             # print(f"--> Custom func for {nmea_data[current_value]}, with {format_data(nmea_data[current_value])[0]}, {type(format_data(nmea_data[current_value])[0])}.")
             try:
                 cog: int = round(float(format_data(nmea_data[current_value])[0]))
