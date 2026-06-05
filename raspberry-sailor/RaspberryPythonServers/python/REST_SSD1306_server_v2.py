@@ -130,7 +130,7 @@ def display_help() -> None:
     print("- PRS: Barometric Pressure")
     print("- HUM: Air Humidity, dewpoint, etc")
     print("- WPT: Waypount related informations")
-    print("- NET: Network Information (Hostname, IP address, network name, ...")
+    print("- NET: Network Information (Hostname, IP address, network name)")
     print("- COG_G: Course Over Ground, graphical version")
     return
 
