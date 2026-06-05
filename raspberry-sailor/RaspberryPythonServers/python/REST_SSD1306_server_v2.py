@@ -87,6 +87,8 @@ machine_name: str = "127.0.0.1"  # aka localhost
 
 oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
 
+HELP_PRM_PREFIX: str              = "--help"
+
 WIRING_PRM_PREFIX: str            = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str      = "--machine-name:"
 PORT_PRM_PREFIX: str              = "--port:"
@@ -101,6 +103,36 @@ DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". Se
 # Supported data (see format_data method):
 # BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
 # TODO: More data, and graphics ?
+
+
+def display_help() -> None:
+    print("Available CLI parameters are:")
+    print(f"{HELP_PRM_PREFIX} - Display help and exit")
+    print(f"{WIRING_PRM_PREFIX} - Screen wiring. SPI or I2C")
+    print(f"{MACHINE_NAME_PRM_PREFIX} - Machine name. Used to start the REST server, default 127.0.0.1")
+    print(f"{PORT_PRM_PREFIX} - Port number. Used to start the REST server, default 8080")
+    print(f"{VERBOSE_PRM_PREFIX} - Verbose level 1. true or false, default false")
+    print(f"{VERBOSE_2_PRM_PREFIX} - Verbose level 2. true or false, default false")
+    print(f"{HEIGHT_PRM_PREFIX} - Screen Height (32 or 64), default 32")
+    print(f"{SCREEN_SAVER_MODE_PRM_PREFIX} - Use screen saver. on or off, default on")
+    print(f"{ROTATE_PRM_PREFIX} - Rotate screen (upside down) true or false, default false")
+    print(f"{DATA_PRM_PREFIX} - Data to display, see below, default BSP,SOG,COG,POS,NAV")
+
+    print(f"Available data (parameter {DATA_PRM_PREFIX}) are: ")
+    print("- BSP: Boat Speed")
+    print("- HDG: Boat Compass Heading")
+    print("- POS: GPS Position ")
+    print("- SOG: Speed Over Ground (GPS)")
+    print("- COG: Course Over Ground (GPS)")
+    print("- NAV: Several Nav informations ")
+    print("- ATM: Atmosphere related informations")
+    print("- ATP: Air Temperature")
+    print("- PRS: Barometric Pressure")
+    print("- HUM: Air Humidity, dewpoint, etc")
+    print("- WPT: Waypount related informations")
+    print("- NET: Network Information (Hostname, IP address, network name, ...")
+    print("- COG_G: Course Over Ground, graphical version")
+    return
 
 board_type = os.uname().machine
 print(f"Board: {board_type}")
@@ -435,6 +467,10 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
 
 if len(sys.argv) > 0:  # Script name + X args
     for arg in sys.argv:
+        if arg[:len(HELP_PRM_PREFIX)] == HELP_PRM_PREFIX:
+            print("Display Help and exit")
+            display_help()
+            exit(0)
         if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
             machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
         if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:

@@ -7,6 +7,8 @@ INTERACTIVE=true
 if [[ $# -gt 0 ]]; then
   if [[ "$1" == "--interactive:false" ]]; then
     INTERACTIVE=false
+  elif [[ "$1" == "--help" ]]; then
+    HELP=true
   fi
 fi
 # Move 1 level above the 'script' directory
@@ -14,6 +16,13 @@ pushd $(dirname $0)/..
 echo -e "Working from $PWD"
 
 PYTHON_SCRIPT_NAME=./REST_SSD1306_server_v2.py
+if [[ "$HELP" == "true" ]]; then
+  COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --help "
+  echo -e "Running ${COMMAND}"
+  ${COMMAND}
+  exit 0
+fi
+
 MACHINE_NAME=localhost
 if MACHINE_NAME=$(hostname -I | awk '{ print $1 }') ; then
     echo -e "It worked: ${MACHINE_NAME}"
