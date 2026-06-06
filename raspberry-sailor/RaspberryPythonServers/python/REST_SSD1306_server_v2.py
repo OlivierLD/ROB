@@ -162,6 +162,7 @@ FORGET_SHUTDOWN_AFTER = 5000 # ms
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
 enable_screen_saver: bool = True
+just_disabled_ss: bool = False
 
 # Default list
 nmea_data: List[str] = [
@@ -268,6 +269,7 @@ def button_listener(pin, state) -> None:
     global previous_button_02_pressed_at
     global double_click_1
     global double_click_2
+    global just_disabled_ss
 
     # nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     nowms: int = int(time.time() * 1000)  # Timestamp in ms
@@ -309,13 +311,17 @@ def button_listener(pin, state) -> None:
                     execute_system_command(cmd)
                     # Bye !
                 else:
-                    # TODO avoid this on double-click
+                    # ACTION: avoid this on double-click
                     # time.sleep(BETWEEN_DOUBLE_CLICK)
                     if not double_click_1:
-                        if verbose or verbose_level2:
-                            print(f"... Increasing list index")
-                        current_value += 1
-                        clear()  # Clear the screen
+                        # print(f"button_listener (1) UP: just_disabled_ss={just_disabled_ss}")
+                        if not just_disabled_ss:
+                            if verbose or verbose_level2:
+                                print(f"... Increasing list index")
+                            current_value += 1
+                            clear()  # Clear the screen
+                        else:
+                            just_disabled_ss = False
         else:
             print("1bis - button_01_pressed_at was None...")
         previous_button_01_pressed_at = button_01_pressed_at
@@ -347,13 +353,17 @@ def button_listener(pin, state) -> None:
                 if shutdown_suggested: # Replied NO
                     shutdown_suggested = False
                 else:
-                    # TODO avoid this on double-click
+                    # ACTION: avoid this on double-click
                     # time.sleep(BETWEEN_DOUBLE_CLICK)
                     if not double_click_2:
-                        if verbose or verbose_level2:
-                            print(f"... Decreasing list index")
-                        current_value -= 1
-                        clear()  # Clear the screen
+                        # print(f"button_listener (2) UP: just_disabled_ss={just_disabled_ss}")
+                        if not just_disabled_ss:
+                            if verbose or verbose_level2:
+                                print(f"... Decreasing list index")
+                            current_value -= 1
+                            clear()  # Clear the screen
+                        else:
+                            just_disabled_ss = False
         else:
             print("2bis - button_02_pressed_at was None...")
         previous_button_02_pressed_at = button_02_pressed_at
@@ -377,6 +387,7 @@ def button_manager(pin, callback) -> None:
     global screen_saver_on
     global button_01_pressed_at
     global button_02_pressed_at
+    global just_disabled_ss
 
     btn: DigitalInOut = DigitalInOut(pin)
     # print(f"Button is a {type(btn)}")
@@ -424,7 +435,10 @@ def button_manager(pin, callback) -> None:
 
             if button_down and button_down != prev_state: # To avoid repeated resets on long-clicks
                 if verbose_level2 or verbose:
-                    print("ButtonManager: Reseting screen saver.")
+                    print("ButtonManager: Reseting screen saver, in any case.")
+                # Warning! Disable the button_up !
+                if screen_saver_on:
+                    just_disabled_ss = True
                 reset_screen_saver()
 
             prev_state = button_down
