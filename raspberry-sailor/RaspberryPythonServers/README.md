@@ -363,5 +363,6 @@ $ python3 ./python/TCP_LSM303_HMC8553L_server.py \
 # TODO 
 - Other languages  (C, Go, etc)
   - It's all about writing TCP and REST servers...
+- A generic structure for the `nmea-cache-publisher`, in Pyton and others...
 
 ---

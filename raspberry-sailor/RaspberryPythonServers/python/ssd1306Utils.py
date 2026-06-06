@@ -50,7 +50,7 @@ def draw_rectangle(oled: adafruit_ssd1306.SSD1306_SPI, x: int, y: int, w: int, h
 
 def draw_line(oled: adafruit_ssd1306.SSD1306_SPI, from_x: int, from_y: int, to_x: int, to_y: int) -> None:
     """
-    Draw a line
+    Draw a line on an SSD1306
 
     :param SSD1306_SPI oled: The screen object
     :param int from_x: First extremity abscissa
@@ -84,7 +84,7 @@ def draw_circle(oled: adafruit_ssd1306.SSD1306_SPI, center_x: int, center_y: int
     :param SSD1306_SPI oled: The screen object
     :param int center_x: Center abscissa
     :param int center_y: Center ordinate
-    :param int radius: radius
+    :param int radius: radius of the circle, in points.
 
     :return: None
     """

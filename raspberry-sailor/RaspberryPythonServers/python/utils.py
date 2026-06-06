@@ -3,6 +3,9 @@ import math
 
 
 def dew_point_temperature(hum: float, temp: float) -> float:
+    """
+    Calculate the dew point, from relative humidity and air temperature
+    """
     c1: float = 6.10780
     c2: float = 17.08085 if (temp > 0) else 17.84362
     c3: float = 234.175 if (temp > 0) else 245.425
@@ -18,9 +21,11 @@ def dew_point_temperature(hum: float, temp: float) -> float:
 def sex_to_dec(degrees: str, minutes: str) -> float:
     """
     Convert a sexagesimal number (degrees, decimal minutes) into a decimal number
-    :param degrees: degrees, usually an int, entered as a string, like "37".
-    :param minutes: decimal minutes, entered as a string, like "12.34"
-    :return: the converted value, as a float, like 37.205666
+
+    :param str degrees: degrees, usually an int, entered as a string, like "37".
+    :param str minutes: decimal minutes, entered as a string, like "12.34"
+
+    :return: The converted value, as a float, like 37.205666
     """
     try:
         deg: float = float(degrees)
@@ -36,6 +41,14 @@ def sex_to_dec(degrees: str, minutes: str) -> float:
 # sign_type is "NS" or "EW". Default is NS
 #
 def dec_to_sex(value: float, sign_type: str) -> str:
+    """
+    Convert a decimal number (degrees, decimal minutes) into a sexagesimal representation
+
+    :param float value: The decimal value, like 12.345.
+    :param str sign_type: "NS" or "EW". Default is "NS"
+
+    :return: The converted value, as a string, like "N 12°34.56'"
+    """
     abs_val = abs(value)
     int_value: float = math.floor(abs_val)
     dec: float = abs_val - int_value

@@ -806,7 +806,7 @@ def draw_COG(cog: int) -> None:
             print(f"Drawing cog: 0, displayData: {cog}")  # {cog}")
         # Full CLS (should be done when modifying current_value
         if True:
-            # draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
+            # draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # Full cls
             draw.rectangle((0, 0, 40, 40), outline=BLACK, fill=BLACK)  # Top-left corner?... YES!!
             oled.image(image)
             # oled.show()
