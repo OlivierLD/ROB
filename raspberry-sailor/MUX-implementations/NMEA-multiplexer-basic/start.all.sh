@@ -104,4 +104,5 @@ echo -e "${CYAN}                            to check the REST available SSD1306 
 echo -e "${CYAN}                   Web server available, see http://${SERVER_IP}:${SERVER_HTTP_PORT}/web/index.html or http://${SERVER_IP}:${SERVER_HTTP_PORT}/zip/index.html${NC}"
 echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.\"Solar time\"'${NC}"
 echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.NMEA_AS_IS'${NC}"
+echo -e "Use ./show.processes.sh to see what's running."
 echo -e "Script ${0} completed."

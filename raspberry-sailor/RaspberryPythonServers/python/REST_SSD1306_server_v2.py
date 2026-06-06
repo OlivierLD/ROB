@@ -315,6 +315,7 @@ def button_listener(pin, state) -> None:
                         if verbose or verbose_level2:
                             print(f"... Increasing list index")
                         current_value += 1
+                        clear()  # Clear the screen
         else:
             print("1bis - button_01_pressed_at was None...")
         previous_button_01_pressed_at = button_01_pressed_at
@@ -352,6 +353,7 @@ def button_listener(pin, state) -> None:
                         if verbose or verbose_level2:
                             print(f"... Decreasing list index")
                         current_value -= 1
+                        clear()  # Clear the screen
         else:
             print("2bis - button_02_pressed_at was None...")
         previous_button_02_pressed_at = button_02_pressed_at
@@ -778,7 +780,7 @@ def display(display_data: List[str]) -> None:
                 # turning dash
                 draw.text((x, top), SS_CHARACTERS[screen_saver_timer % 4], font=font, fill=WHITE)
             else:
-                # Bouncing point...
+                # Bouncing point... Bzzzz
                 _x: int = round(WIDTH * random()) - 1
                 _y: int = round(HEIGHT * random()) - 1
                 draw.text((_x, _y), ".", font=font, fill=WHITE)
@@ -790,6 +792,9 @@ def display(display_data: List[str]) -> None:
 
 
 def draw_COG(cog: int) -> None:
+    """
+    WiP...
+    """
     global oled
     global draw
     global font
@@ -799,12 +804,13 @@ def draw_COG(cog: int) -> None:
     try:
         if verbose:
             print(f"Drawing cog: 0, displayData: {cog}")  # {cog}")
-        # Full CLS
-        if False:
-            draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
+        # Full CLS (should be done when modifying current_value
+        if True:
+            # draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
+            draw.rectangle((0, 0, 40, 40), outline=BLACK, fill=BLACK)  # Top-left corner?... YES!!
             oled.image(image)
-            oled.show()
-        else: # does it sll
+            # oled.show()
+        elif False:  # does it all
             clear()
         # time.sleep(0.01)  # debounce ?
         # Prompt
@@ -1328,7 +1334,7 @@ def format_data(id: str) -> List[str]:
         else:
             formatted = [id, "Not implemented"]
     except (TypeError, KeyError) as te:
-        formatted = [f"[{id}]", "Not in Cache (yet)", f"Except:", f"{type(te)}"]
+        formatted = [f"[{id}]", "Not in Cache (yet)", f"Exception:", f"{type(te)}"]
     except Exception as oops:
         print(f"{id}:{repr(oops)}")
         traceback.format_exception(oops)
