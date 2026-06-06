@@ -9,18 +9,42 @@ CYAN="\033[1;36m"                  # Cyan and bold
 BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
 NC='\033[0m'                       # Back to No Color
 #
+display_help ( ) {
+  echo -e "--------- H E L P -----------------------------------------------------"
+  echo -e "Managed CLI parameters for ${0} are:"
+  echo -e "${CYAN}--help, -h, ?${NC}"
+  echo -e "  display this message, and exit"
+  echo -e "${CYAN}EINK2-13${NC} (default)"
+  echo -e "  starts the python server for an eInk2.13 screen, and a Multiplexer"
+  echo -e "${CYAN}BME280-SSD${NC}"
+  echo -e "  starts 2 python servers:"
+  echo -e "  - one for a BME280 sensor"
+  echo -e "  - one for an SSD1306 screen"
+  echo -e "  and a Multiplexer"
+  echo -e "${CYAN}SSD1306${NC}"
+  echo -e "  starts the python server for an ssd1306 screen, and a Multiplexer"
+  echo -e "${BOLD_GREEN_BLINK}Unmanaged CLI parameters will result in a exit.${NC}"
+  echo -e "-----------------------------------------------------------------------"
+}
+#
 echo -e "${RED}Warning !! Make sure this is matching the one in rc.local !!${NC}"
 echo -e "           Assuming we're working from /home/pi/nmea-dist"
-#
-stty -F /dev/ttyACM0 raw 4800 cs8 clocal
-#
-# Start MUX and Co on startup
 #
 # Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306)
 OPTION=EINK2-13        # Default value
 if [[ $# -gt 0 ]]; then
-  OPTION=$1
+  # echo -e "CLI prm: $1"
+  if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "?" ]]; then
+    display_help
+    exit 0
+  else
+    OPTION=$1
+  fi
 fi
+#
+stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+#
+# Start MUX and Co on startup
 #
 echo -e ">>> Using option ${OPTION}"
 # MACHINE_NAME=$(hostname -I | awk '{ print $1 }')  # IP address
@@ -47,7 +71,8 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 else
-  echo -e "Unmanaged OPTION ${OPTION}"
+  echo -e ">> Unmanaged OPTION ${OPTION}"
+  display_help
   echo -e "Aborting"
   exit 1
 fi
@@ -67,7 +92,9 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   echo -e "Starting Mux, port ${SERVER_HTTP_PORT}"
   nohup ./mux.sh nmea.mux.gps.nmea-fwd-ssd.yaml &
 else
-  echo -e "Unmanaged OPTION ${OPTION}"
+  # This should have been taken of previously
+  echo -e ">> Unmanaged OPTION ${OPTION}"
+  display_help
   echo -e "Aborting"
   exit 1
 fi

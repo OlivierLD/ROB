@@ -3,14 +3,17 @@
 # One oled SSD1306 screen
 # 2 push-buttons (external)
 #
+# To be used as an nmea-cache-publisher. AKA NMEA bus client.
+# Look around for details.
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
 # pip3 install adafruit-circuitpython-ssd1306
 #
-# Different from the REST_SSD1306_server.py.
-# That one receives full the cache (as JSON) and manages the display of the data by itself.
-# It can also deal with 2 push-buttons for user's interaction, to choose the data to be displayed. (scroll up & down, and others)
+# Different from the REST_SSD1306_server.py. That one receives full the cache (as JSON) and manages the display of
+# the data by itself. It can also deal with 2 push-buttons for user's interaction, to choose the data to be
+#   displayed. (scroll up & down, and others)
 #
 # --- IMPORTANT ----------------------------------------------------------------------------------
 # -> Warning: the buttons are wired on 3V3, not GND !!! See the Fritzing diagrams about that (in
@@ -27,7 +30,8 @@
 # See https://readthedocs.org/projects/adafruit-circuitpython-ssd1306/
 # For drawings: https://learn.adafruit.com/micropython-hardware-ssd1306-oled-display/circuitpython#drawing-2902524
 #
-# Runtime CLI parameters are:
+# Runtime CLI parameters are: (see below for more details)
+# --help
 # --wiring: "I2C" (default) or "SPI"
 # --machine-name: The machine name or its IP address. Default "127.0.0.1"
 # --port: default 8080
@@ -40,7 +44,7 @@
 #         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
 #         Supported data (see format_data method): BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
 #
-# Acts like a bus. All the data circulate (in the cache), you choose - see the data obove - what to display.
+# Acts like a bus. All the data circulate (in the cache), you choose - see the data above - what to display.
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
@@ -87,8 +91,8 @@ machine_name: str = "127.0.0.1"  # aka localhost
 
 oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
 
+# See the help_display method for more details
 HELP_PRM_PREFIX: str              = "--help"
-
 WIRING_PRM_PREFIX: str            = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str      = "--machine-name:"
 PORT_PRM_PREFIX: str              = "--port:"
@@ -101,8 +105,7 @@ ROTATE_PRM_PREFIX: str            = "--rotate:"
 DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
 
 # Supported data (see format_data method):
-# BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
-# TODO: More data, and graphics ?
+# BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G   More data, and graphics to come !
 
 
 def display_help() -> None:
@@ -133,6 +136,7 @@ def display_help() -> None:
     print("- NET: Network Information (Hostname, IP address, network name)")
     print("- COG_G: Course Over Ground, graphical version")
     return
+
 
 board_type = os.uname().machine
 print(f"Board: {board_type}")
@@ -295,7 +299,8 @@ def button_listener(pin, state) -> None:
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
                     if False:
-                        cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"  # Self call. Does not kill the mux.
+                        # Self call. Does not kill the mux.
+                        cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"
                         print(f"Executing [{cmd}] ...")
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
@@ -602,18 +607,24 @@ draw.rectangle(
     fill=BLACK,
 )
 
-small_font_size: int = 9   # 8
+small_font_size: int  =  9   # 8
 medium_font_size: int = 16
-big_font_size: int = 28
+big_font_size: int    = 28
+
+# see $ fc-list | grep -i dejavu, or so.
+ttf_font_name: str = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'          # Works
+# ttf_font_name: str = '/usr/share/fonts/truetype/piboto/PibotoLtBoldItalic.ttf'       # no.
+# ttf_font_name: str = '/usr/share/fonts/truetype/piboto/Piboto-Bold.ttf'              # no.
+# ttf_font_name: str = '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' # no
+# ttf_font_name: str = '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf'           # no
 
 # Load default font.
 # font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # default one, size 8
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', small_font_size)  # not the default one
-# see $ fc-list | grep -i dejavu, or so.
+font = ImageFont.truetype(ttf_font_name, small_font_size)   # not the default one
 try:
     # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
     # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-    big_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', big_font_size)
+    big_font = ImageFont.truetype(ttf_font_name, big_font_size)
     # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
     # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
 except Exception as ach:
@@ -623,7 +634,7 @@ except Exception as ach:
 try:
     # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
     # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-    medium_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', medium_font_size)
+    medium_font = ImageFont.truetype(ttf_font_name, medium_font_size)
     # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
     # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
 except Exception as ach:
@@ -746,7 +757,8 @@ def display(display_data: List[str]) -> None:
             # Blink dots...
             if verbose:
                 print(f"screen_saver_timer  {screen_saver_timer}")
-            if False:  # . .. ... dots
+            if False:
+                # . .. ... dots
                 if screen_saver_timer % 4 == 1:
                     if verbose:
                         print("pixel ON .")
@@ -762,8 +774,14 @@ def display(display_data: List[str]) -> None:
                         print("pixel ON ...")
                     # Draw '...' on top left
                     draw.text((x, top), "...", font=font, fill=WHITE)
-            else:
+            elif False:
+                # turning dash
                 draw.text((x, top), SS_CHARACTERS[screen_saver_timer % 4], font=font, fill=WHITE)
+            else:
+                # Bouncing point...
+                _x: int = round(WIDTH * random()) - 1
+                _y: int = round(HEIGHT * random()) - 1
+                draw.text((_x, _y), ".", font=font, fill=WHITE)
         # Display image.
         oled.image(image)
         oled.show()
@@ -782,15 +800,17 @@ def draw_COG(cog: int) -> None:
         if verbose:
             print(f"Drawing cog: 0, displayData: {cog}")  # {cog}")
         # Full CLS
-        if True:
+        if False:
             draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
             oled.image(image)
             oled.show()
-            # time.sleep(0.01)
+        else: # does it sll
+            clear()
+        # time.sleep(0.01)  # debounce ?
         # Prompt
         try:
             draw.text((1, 1), "COG:", font=font, fill=WHITE)  # Ignored, without display.image(image)...
-            draw.text((1, 9), f" {cog:03d}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
+            draw.text((1, small_font_size), f" {cog:03d}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
             # print(f"COG: {cog:03.0f}°")
             oled.image(image)
         except Exception as merde:
@@ -801,9 +821,9 @@ def draw_COG(cog: int) -> None:
         center_x: int = oled.width / 2
         center_y: int = oled.height / 2
         radius: int = (oled.height - 2) / 2
-        ssd1306Utils.draw_circle(oled, center_x, center_y, radius)  # Circle
-        ssd1306Utils.draw_circle(oled, center_x, center_y, radius - 2)
-        ssd1306Utils.draw_circle(oled, center_x, center_y, 10)     # Axis
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius)     # Circle
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius - 2) # Inner circle
+        ssd1306Utils.draw_circle(oled, center_x, center_y, 10)         # Axis
 
         top_x: float = center_x + (radius * math.sin(math.radians(cog)))
         top_y: float = center_y - (radius * math.cos(math.radians(cog)))
