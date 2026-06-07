@@ -49,7 +49,8 @@
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
 # Managed:
-# - click        (on both buttons, 1 & 2)
+# - Button Up, button DOWN.
+# - click        (on both buttons, 1 & 2).
 # - long click   (on button 1)
 # - double click (available)
 #
@@ -104,39 +105,27 @@ ROTATE_PRM_PREFIX: str            = "--rotate:"
 
 DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
 
+#
+# Change these to the right size for your display!
+#
+WIDTH: int   = 128
+HEIGHT: int  = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PRM_PREFIX)
+BORDER: int  = 5
+ROTATE: bool = False
+
+WHITE: int   = 255
+BLACK: int   = 0
+SS_CHARACTERS: List[str] = ["|", "/", "-", "\\"]
+
+
 # Supported data (see format_data method):
 # BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G   More data, and graphics to come !
-
-
-def display_help() -> None:
-    print("Available CLI parameters are:")
-    print(f"{HELP_PRM_PREFIX} - Display help and exit")
-    print(f"{WIRING_PRM_PREFIX} - Screen wiring. SPI or I2C")
-    print(f"{MACHINE_NAME_PRM_PREFIX} - Machine name. Used to start the REST server, default 127.0.0.1")
-    print(f"{PORT_PRM_PREFIX} - Port number. Used to start the REST server, default 8080")
-    print(f"{VERBOSE_PRM_PREFIX} - Verbose level 1. true or false, default false")
-    print(f"{VERBOSE_2_PRM_PREFIX} - Verbose level 2. true or false, default false")
-    print(f"{HEIGHT_PRM_PREFIX} - Screen Height (32 or 64), default 32")
-    print(f"{SCREEN_SAVER_MODE_PRM_PREFIX} - Use screen saver. on or off, default on")
-    print(f"{ROTATE_PRM_PREFIX} - Rotate screen (upside down) true or false, default false")
-    print(f"{DATA_PRM_PREFIX} - Data to display, see below, default BSP,SOG,COG,POS,NAV")
-
-    print(f"Available data (parameter {DATA_PRM_PREFIX}) are: ")
-    print("- BSP: Boat Speed")
-    print("- HDG: Boat Compass Heading")
-    print("- POS: GPS Position ")
-    print("- SOG: Speed Over Ground (GPS)")
-    print("- COG: Course Over Ground (GPS)")
-    print("- NAV: Several Nav informations ")
-    print("- ATM: Atmosphere related informations")
-    print("- ATP: Air Temperature")
-    print("- PRS: Barometric Pressure")
-    print("- HUM: Air Humidity, dewpoint, etc")
-    print("- WPT: Waypoint related informations")
-    print("- NET: Network Information (Hostname, IP address, network name)")
-    print("- COG_G: Course Over Ground, graphical version")
-    return
-
+sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
+    "1": "First",
+    "2": "Second",
+    "3": "Third",
+    "4": "Fourth"
+}
 
 board_type = os.uname().machine
 print(f"Board: {board_type}")
@@ -186,6 +175,39 @@ double_click_2: bool = False
 
 shutdown_suggested: bool = False
 shutdown_suggested_at: int = None
+
+
+def display_help() -> None:
+    """
+    Guess what !
+    """
+    print("Available CLI parameters are:")
+    print(f"{HELP_PRM_PREFIX} - Display help and exit")
+    print(f"{WIRING_PRM_PREFIX} - Screen wiring. SPI or I2C")
+    print(f"{MACHINE_NAME_PRM_PREFIX} - Machine name. Used to start the REST server, default 127.0.0.1")
+    print(f"{PORT_PRM_PREFIX} - Port number. Used to start the REST server, default 8080")
+    print(f"{VERBOSE_PRM_PREFIX} - Verbose level 1. true or false, default false")
+    print(f"{VERBOSE_2_PRM_PREFIX} - Verbose level 2. true or false, default false")
+    print(f"{HEIGHT_PRM_PREFIX} - Screen Height (32 or 64), default 32")
+    print(f"{SCREEN_SAVER_MODE_PRM_PREFIX} - Use screen saver. on or off, default on")
+    print(f"{ROTATE_PRM_PREFIX} - Rotate screen (upside down) true or false, default false")
+    print(f"{DATA_PRM_PREFIX} - Data to display, see below, default BSP,SOG,COG,POS,NAV")
+
+    print(f"Available data (parameter {DATA_PRM_PREFIX}) are: ")
+    print("- BSP: Boat Speed")
+    print("- HDG: Boat Compass Heading")
+    print("- POS: GPS Position ")
+    print("- SOG: Speed Over Ground (GPS)")
+    print("- COG: Course Over Ground (GPS)")
+    print("- NAV: Several Nav informations ")
+    print("- ATM: Atmosphere related informations")
+    print("- ATP: Air Temperature")
+    print("- PRS: Barometric Pressure")
+    print("- HUM: Air Humidity, dewpoint, etc")
+    print("- WPT: Waypoint related informations")
+    print("- NET: Network Information (Hostname, IP address, network name)")
+    print("- COG_G: Course Over Ground, graphical version")
+    return
 
 
 def execute_system_command(cmd: str) -> None:
@@ -319,7 +341,7 @@ def button_listener(pin, state) -> None:
                             if verbose or verbose_level2:
                                 print(f"... Increasing list index")
                             current_value += 1
-                            clear()  # Clear the screen
+                            clear_screen()  # Clear the screen
                         else:
                             just_disabled_ss = False
         else:
@@ -361,7 +383,7 @@ def button_listener(pin, state) -> None:
                             if verbose or verbose_level2:
                                 print(f"... Decreasing list index")
                             current_value -= 1
-                            clear()  # Clear the screen
+                            clear_screen()  # Clear the screen
                         else:
                             just_disabled_ss = False
         else:
@@ -440,6 +462,7 @@ def button_manager(pin, callback) -> None:
                 if screen_saver_on:
                     just_disabled_ss = True
                 reset_screen_saver()
+                clear_screen()
 
             prev_state = button_down
             time.sleep(0.01)  # sleep for debounce. Tricky.
@@ -452,6 +475,9 @@ def button_manager(pin, callback) -> None:
 
 
 def screen_saver_manager() -> None:
+    """
+    Turn screen saver on when appropriate
+    """
     global keep_looping
     global screen_saver_timer
     global screen_saver_on
@@ -461,246 +487,60 @@ def screen_saver_manager() -> None:
             if verbose or verbose_level2:
                 print(f"Turning screen saver ON, after {screen_saver_timer} seconds")
             screen_saver_on = True
+            clear_screen()
         else:
             if verbose or verbose_level2:
                 print(f"... ScreenSaverTime is now {screen_saver_timer}")
         time.sleep(1.0)
 
 
-#
-# Change these to the right size for your display!
-#
-WIDTH: int = 128
-HEIGHT: int = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PRM_PREFIX)
-BORDER: int = 5
-ROTATE: bool = False
+def screen_saver() -> None:
+    """
+    Display the screen saver.
+    Several choices (see below)
+    """
+    global screen_saver_timer
+    global draw
+    global x
+    global verbose
+    global verbose_level2
 
-
-WHITE: int = 255
-BLACK: int = 0
-
-sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
-    "1": "First",
-    "2": "Second",
-    "3": "Third",
-    "4": "Fourth"
-}
-
-if len(sys.argv) > 0:  # Script name + X args
-    for arg in sys.argv:
-        if arg[:len(HELP_PRM_PREFIX)] == HELP_PRM_PREFIX:
-            print("Display Help and exit")
-            display_help()
-            exit(0)
-        if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
-            machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
-        if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
-            server_port = int(arg[len(PORT_PRM_PREFIX):])
-        if arg[:len(VERBOSE_PRM_PREFIX)] == VERBOSE_PRM_PREFIX:
-            verbose = (arg[len(VERBOSE_PRM_PREFIX):].lower() == "true")
-        if arg[:len(VERBOSE_2_PRM_PREFIX)] == VERBOSE_2_PRM_PREFIX:
-            verbose_level2 = (arg[len(VERBOSE_2_PRM_PREFIX):].lower() == "true")
-        if arg[:len(ROTATE_PRM_PREFIX)] == ROTATE_PRM_PREFIX:
-            ROTATE = arg[len(ROTATE_PRM_PREFIX):].lower() == "true"
-        if arg[:len(WIRING_PRM_PREFIX)] == WIRING_PRM_PREFIX:
-            wiring_option = arg[len(WIRING_PRM_PREFIX):]
-            if wiring_option != "SPI" and wiring_option != "I2C":
-                print(f"Wiring Option must be SPI or I2C, not {wiring_option}. Keeping {oled_wiring_option}.")
-            else:
-                oled_wiring_option = wiring_option
-        if arg[:len(HEIGHT_PRM_PREFIX)] == HEIGHT_PRM_PREFIX:
-            try:
-                user_height = int(arg[len(HEIGHT_PRM_PREFIX):])
-                if user_height == 32 or user_height == 64:
-                    HEIGHT = user_height
-                else:
-                    print(f"Height must be 32 or 64, not {user_height}")
-            except Exception as error:
-                print(f"Height error: {repr(error)}")
-        if arg[:len(SCREEN_SAVER_MODE_PRM_PREFIX)] == SCREEN_SAVER_MODE_PRM_PREFIX:
-            try:
-                ss_mode_prm: str = arg[len(SCREEN_SAVER_MODE_PRM_PREFIX):]
-                if ss_mode_prm == 'off':
-                    enable_screen_saver = False
-            except Exception as error:
-                print(f"Screen Saver Mode error: {repr(error)}")
-
-        if arg[:len(DATA_PRM_PREFIX)] == DATA_PRM_PREFIX:
-            user_list = arg[len(DATA_PRM_PREFIX):].split(',')
-            nmea_data = []  # reset
-            for id in user_list:
-                nmea_data.append(id.strip())
+    if verbose:
+        print(f"screen_saver_timer  {screen_saver_timer}")
+    clear_screen()
+    if False:
+        # . .. ... dots
+        if screen_saver_timer % 4 == 1:
             if verbose:
-                print("Data list:")
-                print(nmea_data)
+                print("pixel ON .")
+            # Draw '.' on top left
+            draw.text((x, top), ".", font=font, fill=WHITE)
+        elif screen_saver_timer % 4 == 2:
+            if verbose:
+                print("pixel ON ..")
+            # Draw '..' on top left
+            draw.text((x, top), "..", font=font, fill=WHITE)
+        elif screen_saver_timer % 4 == 3:
+            if verbose:
+                print("pixel ON ...")
+            # Draw '...' on top left
+            draw.text((x, top), "...", font=font, fill=WHITE)
+    elif False:
+        # turning dash
+        draw.text((x, top), SS_CHARACTERS[screen_saver_timer % 4], font=font, fill=WHITE)
+    else:
+        # Bouncing point... Bzzzz
+        _x: int = max(1, round(WIDTH * random()) - 1)
+        _y: int = max(1, round(HEIGHT * random()) - 1)
+        if False and (_x < 1 or x > (WIDTH - 2) or _y < 1 or _y > (HEIGHT - 2)):
+            print(f"ScreenSaver: _x:{_x}, _y:{_y}, WIDTH:{WIDTH}, HEIGHT:{HEIGHT}")
+        draw.text((_x, _y), ".", font=font, fill=WHITE)
 
-# Summarize all options
-print(f"Running process (id {server_pid}) with config:\n" +
-      f"- Server Port {server_port}\n" +
-      f"- verbose {verbose}\n" +
-      f"- machine name {machine_name}\n" +
-      f"- wiring {oled_wiring_option}\n" +
-      f"- screen height {HEIGHT}\n" +
-      f"- data {nmea_data} ")
-
-# initialize the oled screen
-if oled_wiring_option == "I2C":
-    # Use for I2C.
-    i2c = board.I2C()  # uses board.SCL and board.SDA
-    # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-    print(f"Using RESET {reset_pin}")
-    try:
-        oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C,
-                                                                          reset=oled_reset)
-    except:
-        print("No I2C SSD1306 was found...")
-        oled = None
-else:
-    # Use for SPI
-    spi = board.SPI()
-    reset_pin = board.D24  # pin #18
-    oled_reset = digitalio.DigitalInOut(reset_pin)  # GPIO 24, Pin #18
-    # oled_cs = digitalio.DigitalInOut(board.D5)
-    cs_pin = board.D8  # Pin #24
-    oled_cs = digitalio.DigitalInOut(cs_pin)  # Pin #24
-    # oled_dc = digitalio.DigitalInOut(board.D6)
-    dc_pin = board.D23  # Pin #16
-    oled_dc = digitalio.DigitalInOut(dc_pin)  # Pin #16
-    print(f"Using RESET {reset_pin}")
-    print(f"Using CS {cs_pin}")
-    print(f"Using DC {dc_pin}")
-
-    try:
-        oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset,
-                                                                          oled_cs)
-        # print(f"SSD1306 is a {type(oled)}")
-    except:
-        print("No SPI SSD1306 was found...")
-        oled = None
-
-# Now, let's go
-# Initialize buttons
-print("Press button connected on GPIO-20 to scroll up")
-button_thread_01: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_01, button_listener))
-# print(f"Thread is a {type(button_thread_01)}")
-button_thread_01.daemon = True  # Dies on exit
-button_thread_01.start()
-
-print("Press button connected on GPIO-21 to scroll down")
-button_thread_02: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_02, button_listener))
-button_thread_02.daemon = True  # Dies on exit
-button_thread_02.start()
-
-if enable_screen_saver:
-    print("Starting screen saver thread")
-    screen_saver_thread: threading.Thread = threading.Thread(target=screen_saver_manager)  # No args
-    screen_saver_thread.daemon = True  # Dies on exit
-    screen_saver_thread.start()
-
-# Initialize OLED screen.
-# Clear display.
-if oled is not None:
-    oled.rotate(ROTATE)
-    oled.fill(BLACK)
-    oled.show()
-
-# Create blank image for drawing.
-# Make sure to create image with mode '1' for 1-bit color.
-image: PIL.Image.Image = Image.new("1", (oled.width, oled.height))
-# print(f"Image is a {type(image)}")
-
-# Get drawing object to draw on image.
-draw: PIL.ImageDraw.ImageDraw = ImageDraw.Draw(image)
-# print(f"Draw is a {type(draw)}")
-
-# Draw a white background
-draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
-
-# Draw a smaller inner rectangle, in black
-draw.rectangle(
-    (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
-    outline=BLACK,
-    fill=BLACK,
-)
-
-small_font_size: int  =  9   # 8
-medium_font_size: int = 16
-big_font_size: int    = 28
-
-# see $ fc-list | grep -i dejavu, or so.
-ttf_font_name: str = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'          # Works
-# ttf_font_name: str = '/usr/share/fonts/truetype/piboto/PibotoLtBoldItalic.ttf'       # no.
-# ttf_font_name: str = '/usr/share/fonts/truetype/piboto/Piboto-Bold.ttf'              # no.
-# ttf_font_name: str = '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' # no
-# ttf_font_name: str = '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf'           # no
-
-# Load default font.
-# font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # default one, size 8
-font = ImageFont.truetype(ttf_font_name, small_font_size)   # not the default one
-try:
-    # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
-    # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-    big_font = ImageFont.truetype(ttf_font_name, big_font_size)
-    # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
-    # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
-except Exception as ach:
-    print("Oops, no truetype, loading default.")
-    big_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
-    pass
-try:
-    # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
-    # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
-    medium_font = ImageFont.truetype(ttf_font_name, medium_font_size)
-    # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
-    # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
-except Exception as ach:
-    print("Oops, no truetype, loading default.")
-    medium_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
-    pass
-
-print(f"Font is a {type(font)}")
-
-# Draw Some Text, at startup.
-text: str = "Init SSD1306"
-# Get IP address and network name ?
-hostname: str = socket.gethostname()
-IPAddr: str = get_ip_address()   # socket.gethostbyname(hostname)
-
-# (font_width, font_height) = font.getsize(text)
-left, top, right, bottom = font.getbbox(text)
-(font_width, font_height) = right - left, bottom - top
-draw.text(
-    (oled.width // 2 - font_width // 2, (oled.height // 2 - font_height // 2) - font_height),
-    text,
-    font=font,
-    fill=WHITE,
-)
-text = "IP: " + IPAddr
-left, top, right, bottom = font.getbbox(text)
-(font_width, font_height) = right - left, bottom - top
-draw.text(
-    (oled.width // 2 - font_width // 2, font_height + 1 + (oled.height // 2 - font_height // 2)),
-    text,
-    font=font,
-    fill=WHITE,
-)
-
-# Display image
-oled.image(image)
-oled.show()
-# Wait a bit to show the init screen
-time.sleep(5)  # Optional. Just long enough to read the screen above.
-
-# First define some constants to allow easy resizing of shapes.
-padding: int = -2
-top: int = padding
-bottom: int = oled.height - padding
-# Move left to right keeping track of the current x position for drawing shapes.
-x: int = 0
-
-SS_CHARACTERS: List[str]  = ["|", "/", "-", "\\"]
 
 def display(display_data: List[str]) -> None:
+    """
+    Manage the data to display on the screen
+    """
     global oled
     global font
     global medium_font
@@ -716,17 +556,21 @@ def display(display_data: List[str]) -> None:
 
     try:
         # Clear Screen. Draw a black filled box to clear the previous image.
-        draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # cls
+        if nmea_data[current_value] != "COG_G":  # Not for graphics
+            draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # cls
 
         if not screen_saver_on:
             nowms: int = int(time.time() * 1000)  # Timestamp in ms
             if verbose or verbose_level2:
-                print(f">> Screen saver NOT on, shutdown_suggested:{shutdown_suggested}, suggested at:{shutdown_suggested_at}, nowms:{nowms} (diff: {(nowms - shutdown_suggested_at) if shutdown_suggested_at is not None else 'n/a'})")
-                if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
+                print(
+                    f">> Screen saver NOT on, shutdown_suggested:{shutdown_suggested}, suggested at:{shutdown_suggested_at}, nowms:{nowms} (diff: {(nowms - shutdown_suggested_at) if shutdown_suggested_at is not None else 'n/a'})")
+                if shutdown_suggested_at is not None and shutdown_suggested and (
+                        nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
                     print("   Displaying shutdown options")
                 else:
                     print("   NOT Displaying shutdown options")
-            if shutdown_suggested_at is not None and shutdown_suggested and (nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
+            if shutdown_suggested_at is not None and shutdown_suggested and (
+                    nowms - shutdown_suggested_at) < FORGET_SHUTDOWN_AFTER:
                 if verbose or verbose_level2:
                     print("Tossion! ShutdownScreen displayed !")
                 options: List[str] = ["Really? Shutdown?",
@@ -744,70 +588,58 @@ def display(display_data: List[str]) -> None:
                 if shutdown_suggested:
                     if verbose or verbose_level2:
                         print(f"Reseting shutdown...")
-                    shutdown_suggested = False    # Reset
+                    shutdown_suggested = False  # Reset
                     shutdown_suggested_at = None
                 y: int = top
                 # Now draw the required data
                 # WiP distinction on display_data type (list or drawing) ?
                 # WiP
-                if display_data[0] == "COG" or display_data[0].startswith("SOG") or display_data[0] == "HDG" or display_data[0].startswith("BSP"):   # == "SOG in kts", "BSP in kts"
-                    # print("Printing COG, SOG, BSP, or HDG")
-                    draw.text((x, y), display_data[0], font=font, fill=WHITE)
-                    y = y + small_font_size
-                    draw.text((x, y), display_data[1], font=big_font, fill=WHITE)
-                elif display_data[0] == "POS":
-                    draw.text((x, y), display_data[0], font=font, fill=WHITE)
-                    y = y + small_font_size
-                    for i in range(1, len(display_data)):
-                        draw.text((x, y), display_data[i], font=medium_font, fill=WHITE)
-                        y = y + medium_font_size
+                if nmea_data[current_value] == "COG_G":  # Specific
+                    # Specific COG Graphical display
+                    # print(f"--> Custom func for {nmea_data[current_value]}, with {format_data(nmea_data[current_value])[0]}, {type(format_data(nmea_data[current_value])[0])}.")
+                    try:
+                        cog: int = round(float(format_data(nmea_data[current_value])[0]))
+                    except Exception as argh:
+                        print(f"float to round for {format_data(nmea_data[current_value])[0]}, {repr(argh)}")
+                        cog: int = 0
+                        pass
+                    draw_COG(cog)
+                    # oled.show()
                 else:
-                    for line in display_data:
-                        draw.text((x, y), line, font=font, fill=WHITE)
+                    if display_data[0] == "COG" or display_data[0].startswith("SOG") or display_data[0] == "HDG" or \
+                            display_data[0].startswith("BSP"):  # == "SOG in kts", "BSP in kts"
+                        # print("Printing COG, SOG, BSP, or HDG")
+                        draw.text((x, y), display_data[0], font=font, fill=WHITE)
                         y = y + small_font_size
-                # draw.text((x, top), display_data, font=font, fill=WHITE)
-                # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
-                # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
-                # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
+                        draw.text((x, y), display_data[1], font=big_font, fill=WHITE)
+                    elif display_data[0] == "POS":
+                        draw.text((x, y), display_data[0], font=font, fill=WHITE)
+                        y = y + small_font_size
+                        for i in range(1, len(display_data)):
+                            draw.text((x, y), display_data[i], font=medium_font, fill=WHITE)
+                            y = y + medium_font_size
+                    else:
+                        for line in display_data:
+                            draw.text((x, y), line, font=font, fill=WHITE)
+                            y = y + small_font_size
+                    # draw.text((x, top), display_data, font=font, fill=WHITE)
+                    # draw.text((x, top + 8), str(CPU.decode('utf-8')), font=font, fill=WHITE)
+                    # draw.text((x, top + 16), str(MemUsage.decode('utf-8')), font=font, fill=WHITE)
+                    # draw.text((x, top + 24), str(Disk.decode('utf-8')), font=font, fill=WHITE)
         else:  # Screen saver management
-            # Blink dots...
-            if verbose:
-                print(f"screen_saver_timer  {screen_saver_timer}")
-            if False:
-                # . .. ... dots
-                if screen_saver_timer % 4 == 1:
-                    if verbose:
-                        print("pixel ON .")
-                    # Draw '.' on top left
-                    draw.text((x, top), ".", font=font, fill=WHITE)
-                elif screen_saver_timer % 4 == 2:
-                    if verbose:
-                        print("pixel ON ..")
-                    # Draw '..' on top left
-                    draw.text((x, top), "..", font=font, fill=WHITE)
-                elif screen_saver_timer % 4 == 3:
-                    if verbose:
-                        print("pixel ON ...")
-                    # Draw '...' on top left
-                    draw.text((x, top), "...", font=font, fill=WHITE)
-            elif False:
-                # turning dash
-                draw.text((x, top), SS_CHARACTERS[screen_saver_timer % 4], font=font, fill=WHITE)
-            else:
-                # Bouncing point... Bzzzz
-                _x: int = round(WIDTH * random()) - 1
-                _y: int = round(HEIGHT * random()) - 1
-                draw.text((_x, _y), ".", font=font, fill=WHITE)
+            screen_saver()
         # Display image.
         oled.image(image)
-        oled.show()
+        if screen_saver_on or nmea_data[current_value] != "COG_G":  # Not for graphics
+            oled.show()
     except Exception as error:
         print(f"Error: {repr(error)}")
 
 
 def draw_COG(cog: int) -> None:
     """
-    WiP...
+    Graphical display.
+    WiP... Coming.
     """
     global oled
     global draw
@@ -825,12 +657,13 @@ def draw_COG(cog: int) -> None:
             oled.image(image)
             # oled.show()
         elif False:  # does it all
-            clear()
+            clear_screen()
         # time.sleep(0.01)  # debounce ?
         # Prompt
         try:
             draw.text((1, 1), "COG:", font=font, fill=WHITE)  # Ignored, without display.image(image)...
-            draw.text((1, small_font_size), f" {cog:03d}°", font=font, fill=WHITE)  # Ignored, without display.image(image)...
+            draw.text((1, small_font_size), f" {cog:03d}°", font=font,
+                      fill=WHITE)  # Ignored, without display.image(image)...
             # print(f"COG: {cog:03.0f}°")
             oled.image(image)
         except Exception as merde:
@@ -838,12 +671,13 @@ def draw_COG(cog: int) -> None:
             pass
 
         # Figure
+        # - Two circles
         center_x: int = oled.width / 2
         center_y: int = oled.height / 2
         radius: int = (oled.height - 2) / 2
-        ssd1306Utils.draw_circle(oled, center_x, center_y, radius)     # Circle
-        ssd1306Utils.draw_circle(oled, center_x, center_y, radius - 2) # Inner circle
-        ssd1306Utils.draw_circle(oled, center_x, center_y, 10)         # Axis
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius)  # Circle
+        ssd1306Utils.draw_circle(oled, center_x, center_y, radius - 2)  # Inner circle
+        ssd1306Utils.draw_circle(oled, center_x, center_y, 10)  # Axis
 
         top_x: float = center_x + (radius * math.sin(math.radians(cog)))
         top_y: float = center_y - (radius * math.cos(math.radians(cog)))
@@ -854,9 +688,10 @@ def draw_COG(cog: int) -> None:
         back_right_x: float = center_x + (radius * math.sin(math.radians(cog + 170)))
         back_right_y: float = center_y - (radius * math.cos(math.radians(cog + 170)))
 
-        # Needle
+        # - Needle
         ssd1306Utils.draw_line(oled, round(top_x), round(top_y), round(back_left_x), round(back_left_y))
-        ssd1306Utils.draw_line(oled, round(back_left_x), round(back_left_y), round(back_right_x), round(back_right_y))
+        ssd1306Utils.draw_line(oled, round(back_left_x), round(back_left_y), round(back_right_x),
+                               round(back_right_y))
         ssd1306Utils.draw_line(oled, round(back_right_x), round(back_right_y), round(top_x), round(top_y))
 
         oled.show()
@@ -864,10 +699,14 @@ def draw_COG(cog: int) -> None:
         print(f"Error: {repr(error)}")
 
 
-def clear() -> None:
+def clear_screen() -> None:
+    """
+    CLS
+    """
     global oled
     global draw
     try:
+        # print(f"CLS: HEIGHT:{HEIGHT}, oled.height:{oled.height}, WIDTH:{WIDTH}, oled.width:{oled.width}")
         # Draw a black filled box to clear the image.
         draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)
         # Display image.
@@ -1037,7 +876,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # server.shutdown()
                 # server.server_close()
             except Exception as oops:
-                print (f"Error: {repr(oops)}")
+                print(f"Error: {repr(oops)}")
                 response = {(f"Error: {repr(oops)}")}
             self.wfile.write(json.dumps(response).encode())
         else:
@@ -1091,7 +930,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path == PATH_PREFIX + "/clear-screen":
             try:
-                clear()
+                clear_screen()
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -1109,11 +948,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
             try:
                 keep_looping = False
                 # Clear screen. Say Bye for 1.5 second before clearing the screen.
-                time.sleep(3.5)  # Give time to the loop to exit
-                clear()
-                # Draw a white background
+                # time.sleep(3.5)  # Give time to the loop to exit
+                clear_screen()
+                # Draw a white background (for the white frame)
                 draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
-
                 # Draw a smaller inner rectangle, in black
                 draw.rectangle(
                     (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
@@ -1133,8 +971,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # Display image
                 oled.image(image)
                 oled.show()
-                time.sleep(2)  # Give time to read the screen.
-                clear()
+                time.sleep(3.5)  # Give time to read the screen.
+                clear_screen()
                 self.send_response(201)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -1167,23 +1005,23 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path.startswith(PATH_PREFIX + "/verbose-2/"):
-                try:
-                    item_list = self.path.split('/')
-                    verboseValue: str = item_list[len(item_list) - 1]
-                    verbose_level2 = verboseValue == 'true'
-                    self.send_response(201)
-                    self.send_header('Content-Type', 'application/json')
-                    self.end_headers()
-                    response = {"status": "OK"}
-                    self.wfile.write(json.dumps(response).encode())
-                except Exception as error:
-                    error: str = f"Exception {repr(error)}\n"
-                    self.send_response(404)
-                    self.send_header('Content-Type', 'text/plain')
-                    content_len = len(error)
-                    self.send_header('Content-Length', str(content_len))
-                    self.end_headers()
-                    self.wfile.write(bytes(error, 'utf-8'))
+            try:
+                item_list = self.path.split('/')
+                verboseValue: str = item_list[len(item_list) - 1]
+                verbose_level2 = verboseValue == 'true'
+                self.send_response(201)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                response = {"status": "OK"}
+                self.wfile.write(json.dumps(response).encode())
+            except Exception as error:
+                error: str = f"Exception {repr(error)}\n"
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain')
+                content_len = len(error)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(bytes(error, 'utf-8'))
         else:
             if verbose:
                 print("PUT on {} not managed".format(self.path))
@@ -1212,6 +1050,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
 # That one is THE display manager.
 # Whatever is displayed, the way it is displayed,
 # this is done here. It takes the values from the nmea_cache.
+# NOt applicable for graphical screens.
 #
 def format_data(id: str) -> List[str]:
     global nmea_cache
@@ -1227,7 +1066,7 @@ def format_data(id: str) -> List[str]:
                 bsp = 0
                 pass
             formattedBSP: str = f"{bsp:.02f}"
-            formatted = ["BSP in kts", formattedBSP.rjust(5,'0')]
+            formatted = ["BSP in kts", formattedBSP.rjust(5, '0')]
         elif id == "HDG":
             try:
                 hdg: int = round(float(nmea_cache["HDG c."]["angle"]))  # Compass Heading
@@ -1242,7 +1081,7 @@ def format_data(id: str) -> List[str]:
                 sog = 0
                 pass
             formattedSOG: str = f"{sog:.02f}"
-            formatted = ["SOG in kts", formattedSOG.rjust(5,'0')]
+            formatted = ["SOG in kts", formattedSOG.rjust(5, '0')]
         elif id == "COG":
             try:
                 cog: int = round(float(nmea_cache[id]["angle"]))
@@ -1298,7 +1137,7 @@ def format_data(id: str) -> List[str]:
                 f"COG: {cog_str}",
                 f"SOG: {sog_str}",
                 "Date UTC:",
-                f"{str_date}" ]
+                f"{str_date}"]
         elif id == "COG_G":
             # Special formatting, for a drawing. WiP
             try:
@@ -1313,13 +1152,13 @@ def format_data(id: str) -> List[str]:
             # print(f"COG_G... -> {cog:03d}, formatted:{formatted}")
         elif id == "ATP":
             atp: float = nmea_cache["Air Temperature"]["value"]
-            formatted = [ "AIR", f"{atp:.01f}°C" ]
+            formatted = ["AIR", f"{atp:.01f}°C"]
         elif id == "PRM":
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
-            formatted = [ "PRMSL", f"{prmsl:.01f} hPa" ]
+            formatted = ["PRMSL", f"{prmsl:.01f} hPa"]
         elif id == "HUM":
             hum: float = nmea_cache["Relative Humidity"]
-            formatted = [ id, f"{hum:.01f}%" ]
+            formatted = [id, f"{hum:.01f}%"]
         elif id == "ATM":  # ATP, PRS, HUM
             atp: float = nmea_cache["Air Temperature"]["value"]
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
@@ -1337,7 +1176,7 @@ def format_data(id: str) -> List[str]:
             ]
         elif id == "NET":  # Network info. Not from the cache.
             host: str = socket.gethostname()
-            ip_addr: str = get_ip_address()   # socket.gethostbyname(hostname)
+            ip_addr: str = get_ip_address()  # socket.gethostbyname(hostname)
             network_name: str = get_network_name()
             # nmcli dev wifi show-password | grep SSID
             formatted = [
@@ -1367,78 +1206,287 @@ def display_manager() -> None:
 
     while keep_looping:
         # print([f"{current_value} -> {nmea_data[current_value]}"])
-        if nmea_data[current_value] == "COG_G":  # Custom drawing
-            # print(f"--> Custom func for {nmea_data[current_value]}, with {format_data(nmea_data[current_value])[0]}, {type(format_data(nmea_data[current_value])[0])}.")
-            try:
-                cog: int = round(float(format_data(nmea_data[current_value])[0]))
-            except Exception as argh:
-                print(f"float to round for {format_data(nmea_data[current_value])[0]}, {repr(argh)}")
-                cog: int = 0
-                pass
-            draw_COG(cog)
-            # oled.show()
-        else:  # Regular data
-            to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
-            display(to_display)
+        to_display: List[str] = format_data(nmea_data[current_value])  # Format the data to display
+        display(to_display)
         # print([f"{current_value} -> {nmea_data[current_value]}"])
-        time.sleep(0.5)   # 1.0)  # Time between refresh
+        time.sleep(1.0)  # Time between refresh. Try 0.5 ?
     print("Done with display thread")
 
 
-# Initialize the display thread
-display_thread: threading.Thread = threading.Thread(target=display_manager, args=())
-display_thread.daemon = True  # Dies on exit
-display_thread.start()
-
-# Server Initialization
-port_number: int = server_port
-print("Starting SSD1306 server on port {}".format(port_number))
-server = HTTPServer((machine_name, port_number), ServiceHandler)
-# server = HTTPServer(('', port_number), ServiceHandler)  # localhost, not IP address
-#
-# For dev. Requires import sample_cache
-# nmea_cache = json.loads(sample_cache.sample_json)
-
-print("Server ready for duty.")
-print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name,
-                                                     port_number,
-                                                     PATH_PREFIX))
-print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name,
-                                                                                    port_number,
-                                                                                    PATH_PREFIX))
 #
 # Main part.
-# Run the server, until Ctrl-C is hit.
 #
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    print("\n\t\tUser interrupted (server.serve), exiting.")
-    keep_looping = False
-    button_thread_01.join()
-    button_thread_02.join()
-    display_thread.join()
+if __name__ == '__main__':
+
+    if len(sys.argv) > 0:  # Script name + X args
+        for arg in sys.argv:
+            if arg[:len(HELP_PRM_PREFIX)] == HELP_PRM_PREFIX:
+                print("Display Help and exit")
+                display_help()
+                exit(0)
+            if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
+                machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
+            if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
+                server_port = int(arg[len(PORT_PRM_PREFIX):])
+            if arg[:len(VERBOSE_PRM_PREFIX)] == VERBOSE_PRM_PREFIX:
+                verbose = (arg[len(VERBOSE_PRM_PREFIX):].lower() == "true")
+            if arg[:len(VERBOSE_2_PRM_PREFIX)] == VERBOSE_2_PRM_PREFIX:
+                verbose_level2 = (arg[len(VERBOSE_2_PRM_PREFIX):].lower() == "true")
+            if arg[:len(ROTATE_PRM_PREFIX)] == ROTATE_PRM_PREFIX:
+                ROTATE = arg[len(ROTATE_PRM_PREFIX):].lower() == "true"
+            if arg[:len(WIRING_PRM_PREFIX)] == WIRING_PRM_PREFIX:
+                wiring_option = arg[len(WIRING_PRM_PREFIX):]
+                if wiring_option != "SPI" and wiring_option != "I2C":
+                    print(f"Wiring Option must be SPI or I2C, not {wiring_option}. Keeping {oled_wiring_option}.")
+                else:
+                    oled_wiring_option = wiring_option
+            if arg[:len(HEIGHT_PRM_PREFIX)] == HEIGHT_PRM_PREFIX:
+                try:
+                    user_height = int(arg[len(HEIGHT_PRM_PREFIX):])
+                    if user_height == 32 or user_height == 64:
+                        HEIGHT = user_height
+                    else:
+                        print(f"Height must be 32 or 64, not {user_height}")
+                except Exception as error:
+                    print(f"Height error: {repr(error)}")
+            if arg[:len(SCREEN_SAVER_MODE_PRM_PREFIX)] == SCREEN_SAVER_MODE_PRM_PREFIX:
+                try:
+                    ss_mode_prm: str = arg[len(SCREEN_SAVER_MODE_PRM_PREFIX):]
+                    if ss_mode_prm == 'off':
+                        enable_screen_saver = False
+                except Exception as error:
+                    print(f"Screen Saver Mode error: {repr(error)}")
+
+            if arg[:len(DATA_PRM_PREFIX)] == DATA_PRM_PREFIX:
+                user_list = arg[len(DATA_PRM_PREFIX):].split(',')
+                nmea_data = []  # reset
+                for id in user_list:
+                    nmea_data.append(id.strip())
+                if verbose:
+                    print("Data list:")
+                    print(nmea_data)
+
+    # Summarize all options
+    print(f"Running process (id {server_pid}) with config:\n" +
+          f"- Server Port {server_port}\n" +
+          f"- verbose {verbose}\n" +
+          f"- machine name {machine_name}\n" +
+          f"- wiring {oled_wiring_option}\n" +
+          f"- screen height {HEIGHT}\n" +
+          f"- data {nmea_data} ")
+
+    # initialize the oled screen
+    if oled_wiring_option == "I2C":
+        # Use for I2C.
+        i2c = board.I2C()  # uses board.SCL and board.SDA
+        # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+        print(f"Using RESET {reset_pin}")
+        try:
+            oled: adafruit_ssd1306.SSD1306_I2C = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C,
+                                                                              reset=oled_reset)
+        except:
+            print("No I2C SSD1306 was found...")
+            oled = None
+    else: # Means SPI
+        # Use for SPI
+        spi = board.SPI()
+        reset_pin = board.D24  # pin #18
+        oled_reset = digitalio.DigitalInOut(reset_pin)  # GPIO 24, Pin #18
+        # oled_cs = digitalio.DigitalInOut(board.D5)
+        cs_pin = board.D8  # Pin #24
+        oled_cs = digitalio.DigitalInOut(cs_pin)  # Pin #24
+        # oled_dc = digitalio.DigitalInOut(board.D6)
+        dc_pin = board.D23  # Pin #16
+        oled_dc = digitalio.DigitalInOut(dc_pin)  # Pin #16
+        print(f"Using RESET {reset_pin}")
+        print(f"Using CS {cs_pin}")
+        print(f"Using DC {dc_pin}")
+
+        try:
+            oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset,
+                                                                              oled_cs)
+            # print(f"SSD1306 is a {type(oled)}")
+        except:
+            print("No SPI SSD1306 was found...")
+            oled = None
+
+    # Now, let's go
+    # Initialize buttons
+    print("Press button connected on GPIO-20 to scroll up")
+    button_thread_01: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_01, button_listener))
+    # print(f"Thread is a {type(button_thread_01)}")
+    button_thread_01.daemon = True  # Dies on exit
+    button_thread_01.start()
+
+    print("Press button connected on GPIO-21 to scroll down")
+    button_thread_02: threading.Thread = threading.Thread(target=button_manager, args=(pin_button_02, button_listener))
+    button_thread_02.daemon = True  # Dies on exit
+    button_thread_02.start()
+
     if enable_screen_saver:
-        screen_saver_thread.join()
+        print("Starting screen saver thread")
+        screen_saver_thread: threading.Thread = threading.Thread(target=screen_saver_manager)  # No args
+        screen_saver_thread.daemon = True  # Dies on exit
+        screen_saver_thread.start()
 
-print("Out of the server loop")
+    # Initialize OLED screen.
+    # Clear display.
+    if oled is not None:
+        oled.rotate(ROTATE)
+        oled.fill(BLACK)
+        oled.show()
 
-# After all, cleanup.
-if oled is not None:
-    clear()
-    text: str = "Bye-bye..."
+    # Create blank image for drawing.
+    # Make sure to create image with mode '1' for 1-bit color.
+    image: PIL.Image.Image = Image.new("1", (oled.width, oled.height))
+    # print(f"Image is a {type(image)}")
+
+    # Get drawing object to draw on image.
+    draw: PIL.ImageDraw.ImageDraw = ImageDraw.Draw(image)
+    # print(f"Draw is a {type(draw)}")
+
+    # Draw a white background
+    draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
+
+    # Draw a smaller inner rectangle, in black
+    draw.rectangle(
+        (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+        outline=BLACK,
+        fill=BLACK,
+    )
+
+    small_font_size: int  =  9   # 8
+    medium_font_size: int = 16
+    big_font_size: int    = 28
+
+    # see $ fc-list | grep -i dejavu, or so.
+    ttf_font_name: str = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'          # Works
+    # ttf_font_name: str = '/usr/share/fonts/truetype/piboto/PibotoLtBoldItalic.ttf'       # no.
+    # ttf_font_name: str = '/usr/share/fonts/truetype/piboto/Piboto-Bold.ttf'              # no.
+    # ttf_font_name: str = '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' # no
+    # ttf_font_name: str = '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf'           # no
+    # ttf_font_name: str = '/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf'           # ...
+
+    # Load default font.
+    # font: PIL.ImageFont.ImageFont = ImageFont.load_default()  # default one, size 8
+    font = ImageFont.truetype(ttf_font_name, small_font_size)   # not the default one
+    try:
+        # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+        # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+        big_font = ImageFont.truetype(ttf_font_name, big_font_size)
+        # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
+        # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
+    except Exception as ach:
+        print("Oops, no truetype, loading default.")
+        big_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+        pass
+    try:
+        # tt_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+        # tt_font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+        medium_font = ImageFont.truetype(ttf_font_name, medium_font_size)
+        # tt_font = ImageFont.truetype("Minecraftia.ttf", 16)
+        # tt_font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/liberationMono-Regular.ttf", 36)
+    except Exception as ach:
+        print("Oops, no truetype, loading default.")
+        medium_font: PIL.ImageFont.ImageFont = ImageFont.load_default()
+        pass
+
+    print(f"Font is a {type(font)}")
+
+    # Draw Some Text, at startup.
+    text: str = "Init SSD1306"
+    # Get IP address and network name ?
+    hostname: str = socket.gethostname()
+    IPAddr: str = get_ip_address()   # socket.gethostbyname(hostname)
+
     # (font_width, font_height) = font.getsize(text)
     left, top, right, bottom = font.getbbox(text)
     (font_width, font_height) = right - left, bottom - top
     draw.text(
-        (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+        (oled.width // 2 - font_width // 2, (oled.height // 2 - font_height // 2) - font_height),
         text,
         font=font,
         fill=WHITE,
     )
+    text = "IP: " + IPAddr
+    left, top, right, bottom = font.getbbox(text)
+    (font_width, font_height) = right - left, bottom - top
+    draw.text(
+        (oled.width // 2 - font_width // 2, font_height + 1 + (oled.height // 2 - font_height // 2)),
+        text,
+        font=font,
+        fill=WHITE,
+    )
+
     # Display image
     oled.image(image)
     oled.show()
-    time.sleep(2)
-    clear()
-print("Done with REST SSD1306 server.")
+    # Wait a bit, to show the init screen
+    time.sleep(5)  # Optional. Just long enough to read the screen above.
+
+    # First define some constants to allow easy resizing of shapes.
+    padding: int = 0   # -2
+    top: int = padding
+    bottom: int = oled.height - padding
+    # Move left to right keeping track of the current x position for drawing shapes.
+    x: int = 0
+
+    # Initialize the display thread
+    display_thread: threading.Thread = threading.Thread(target=display_manager, args=())
+    display_thread.daemon = True  # Dies on exit
+    display_thread.start()
+
+    # Server Initialization
+    port_number: int = server_port
+    print("Starting SSD1306 server on port {}".format(port_number))
+    server = HTTPServer((machine_name, port_number), ServiceHandler)
+    # server = HTTPServer(('', port_number), ServiceHandler)  # localhost, not IP address
+    #
+    # For dev. Requires import sample_cache
+    # nmea_cache = json.loads(sample_cache.sample_json)
+
+    print("Server ready for duty.")
+    print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name,
+                                                         port_number,
+                                                         PATH_PREFIX))
+    print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name,
+                                                                                        port_number,
+                                                                                        PATH_PREFIX))
+    #
+    # Main part.
+    # Run the server, until Ctrl-C is hit (or received).
+    #
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\n\t\tUser interrupted (server.serve), exiting.")
+        keep_looping = False
+        button_thread_01.join()
+        button_thread_02.join()
+        display_thread.join()
+        if enable_screen_saver:
+            screen_saver_thread.join()
+
+    print("Out of the server loop")
+
+    # After all, cleanup.
+    if oled is not None:
+        clear_screen()
+        text: str = "Bye-bye..."
+        # (font_width, font_height) = font.getsize(text)
+        left, top, right, bottom = font.getbbox(text)
+        (font_width, font_height) = right - left, bottom - top
+        draw.text(
+            (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+            text,
+            font=font,
+            fill=WHITE,
+        )
+        # Display image
+        oled.image(image)
+        oled.show()
+        time.sleep(2)
+        clear_screen()
+        oled.image(image)
+        oled.show()
+    print("Done with REST SSD1306 server.")
