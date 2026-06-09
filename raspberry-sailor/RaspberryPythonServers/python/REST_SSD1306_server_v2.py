@@ -2,6 +2,7 @@
 #
 # One oled SSD1306 screen
 # 2 push-buttons (external)
+# Designed for height 64
 #
 # To be used as an nmea-cache-publisher. AKA NMEA bus client.
 # Look around for details.
@@ -42,14 +43,14 @@
 #
 # --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list.
 #         Default "BSP,SOG,COG,POS,WPT". Managed in the code.
-#         Supported data (see format_data method): BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G
+#         Supported data (see format_data method): BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRM, HUM, WPT, NET, COG_G
 #
 # Acts like a bus. All the data circulate (in the cache), you choose - see the data above - what to display.
 #
 # See the script start.SSD1306.REST.server.v2.sh for examples of how to run this code, with different parameters.
 #
 # Managed:
-# - Button Up, button DOWN.
+# - Button UP, button DOWN.
 # - click        (on both buttons, 1 & 2).
 # - long click   (on button 1)
 # - double click (available)
@@ -202,7 +203,7 @@ def display_help() -> None:
     print("- NAV: Several Nav informations ")
     print("- ATM: Atmosphere related informations")
     print("- ATP: Air Temperature")
-    print("- PRS: Barometric Pressure")
+    print("- PRM: Barometric Pressure")
     print("- HUM: Air Humidity, dewpoint, etc")
     print("- WPT: Waypoint related informations")
     print("- NET: Network Information (Hostname, IP address, network name)")
@@ -243,7 +244,8 @@ def get_network_name() -> str:
         try:
             result: str = subprocess.check_output(command, shell=True, text=True)
         except Exception as oops2:
-            result = f"Oops: {repr(oops2)}"
+            print(f"Oops: {repr(oops2)}")
+            result = "SSID not found"
             pass
         pass
     return result
@@ -259,7 +261,8 @@ def get_ip_address() -> str:
     try:
         result: str = subprocess.check_output(command, shell=True, text=True)
     except Exception as oops:
-        result = f"Oops: {repr(oops)}"
+        print(f"Oops: {repr(oops)}")
+        result = "Not found"
         pass
     return result
 
@@ -328,7 +331,8 @@ def button_listener(pin, state) -> None:
                         print(f"Executing [{cmd}] ...")
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
-                    cmd: str = "../kill.all.sample.sh"
+                    # cmd: str = "../kill.all.sample.sh"
+                    cmd: str = "../kill.all.sh"
                     print(f"Executing [{cmd}] ...")
                     execute_system_command(cmd)
                     # Bye !
@@ -531,8 +535,8 @@ def screen_saver() -> None:
     else:
         # Bouncing point... Bzzzz
         _x: int = max(1, round(WIDTH * random()) - 1)
-        _y: int = max(1, round(HEIGHT * random()) - 1)
-        if False and (_x < 1 or x > (WIDTH - 2) or _y < 1 or _y > (HEIGHT - 2)):
+        _y: int = max(1, round((HEIGHT - small_font_size)* random()) - 1)
+        if False or (_x < 1 or x > (WIDTH - 2) or _y < 1 or _y > (HEIGHT - 2)):
             print(f"ScreenSaver: _x:{_x}, _y:{_y}, WIDTH:{WIDTH}, HEIGHT:{HEIGHT}")
         draw.text((_x, _y), ".", font=font, fill=WHITE)
 
@@ -607,7 +611,8 @@ def display(display_data: List[str]) -> None:
                     # oled.show()
                 else:
                     if display_data[0] == "COG" or display_data[0].startswith("SOG") or display_data[0] == "HDG" or \
-                            display_data[0].startswith("BSP"):  # == "SOG in kts", "BSP in kts"
+                            display_data[0].startswith("BSP") or display_data[0] == "AIR" or \
+                            display_data[0].startswith("PRMSL in") or display_data[0] == "HUM":  # == "SOG in kts", "BSP in kts"
                         # print("Printing COG, SOG, BSP, or HDG")
                         draw.text((x, y), display_data[0], font=font, fill=WHITE)
                         y = y + small_font_size
@@ -1136,7 +1141,7 @@ def format_data(id: str) -> List[str]:
                 f" {grid}",
                 f"COG: {cog_str}",
                 f"SOG: {sog_str}",
-                "Date UTC:",
+                "Date UTC (GPS) :",
                 f"{str_date}"]
         elif id == "COG_G":
             # Special formatting, for a drawing. WiP
@@ -1155,11 +1160,11 @@ def format_data(id: str) -> List[str]:
             formatted = ["AIR", f"{atp:.01f}°C"]
         elif id == "PRM":
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
-            formatted = ["PRMSL", f"{prmsl:.01f} hPa"]
+            formatted = ["PRMSL in hPa", f"{prmsl:.01f}"]
         elif id == "HUM":
             hum: float = nmea_cache["Relative Humidity"]
             formatted = [id, f"{hum:.01f}%"]
-        elif id == "ATM":  # ATP, PRS, HUM
+        elif id == "ATM":  # ATP, PRM, HUM
             atp: float = nmea_cache["Air Temperature"]["value"]
             prmsl: float = nmea_cache["Barometric Pressure"]["value"]
             hum: float = nmea_cache["Relative Humidity"]

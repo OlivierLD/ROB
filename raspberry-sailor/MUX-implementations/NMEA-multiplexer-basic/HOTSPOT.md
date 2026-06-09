@@ -177,4 +177,14 @@ $ sudo nmcli device disconnect wlan0
 $ sudo nmcli device up wlan0
 ```
 
+Other `nmcli` commands to try:
+```commandline
+$ nmcli
+$ nmcli dev wifi
+$ nmcli dev wifi show-password
+$ nmcli dev wifi connect WIFI_SSID password PSWD [ifname YOUR_IFACE]
+```
+
+And more to come!
+
 ---
