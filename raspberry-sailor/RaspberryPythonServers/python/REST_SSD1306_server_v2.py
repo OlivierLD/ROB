@@ -332,7 +332,7 @@ def button_listener(pin, state) -> None:
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
                     # cmd: str = "../kill.all.sample.sh"
-                    cmd: str = "../kill.all.sh"
+                    cmd: str = "../kill.all.sh"   # Make sure that one exists.
                     print(f"Executing [{cmd}] ...")
                     execute_system_command(cmd)
                     # Bye !
