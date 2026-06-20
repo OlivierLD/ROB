@@ -35,7 +35,7 @@ __repo__ = "https://github.com/OlivierLD/ROB"
 
 PATH_PREFIX: str = "/json-data"
 STATIC_PATH_PREFIX: str = "/web"        # Whatever starts with /web is managed as static resource
-# TODO zip prefix ? That'd be kewl...
+# TODO zip prefix ? That'd be kewl... See in REST_and_WEB_BME280_server.py
 server_port: int = 8080
 verbose: bool = False
 machine_name: str = "127.0.0.1"
@@ -98,7 +98,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 if len(nv_pair) == 2:
                     prm_map[nv_pair[0]] = nv_pair[1]
                 else:
-                    print("oops, no equal sign in {}".format(qs_prm))
+                    print("Oops, no equal sign in {}".format(qs_prm))
 
         if path == PATH_PREFIX + "/data":
             if verbose:

@@ -182,7 +182,8 @@ Other `nmcli` commands to try:
 $ nmcli
 $ nmcli dev wifi
 $ nmcli dev wifi show-password
-$ nmcli dev wifi connect WIFI_SSID password PSWD [ifname YOUR_IFACE]
+$ nmcli dev wifi connect <WIFI_SSID> password <PSWD> [ifname YOUR_IFACE]
+$ nmcli dev[ice] status
 ```
 
 And more to come!

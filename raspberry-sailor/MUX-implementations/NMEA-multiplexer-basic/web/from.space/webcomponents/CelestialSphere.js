@@ -219,7 +219,7 @@ class CelestialSphere extends HTMLElement {
 		this._previousClassName = "";
 		this.celestialSphereColorConfig = celestialSphereDefaultColorConfig;
 
-		this.doAFter = function(celestialSphere, context) {
+		this.doAfter = function(celestialSphere, context) {
 			// Do-nothing by default; Callback, after drawing. Takes 'this' and the context as parameters.
 		};
 	}

@@ -4,7 +4,7 @@
 # 2 push-buttons (external)
 # Designed for height 64
 #
-# To be used as an nmea-cache-publisher. AKA NMEA bus client.
+# To be used as an nmea-cache-publisher. Aka NMEA bus client.
 # Look around for details.
 #
 # Requires:
@@ -30,6 +30,8 @@
 #
 # See https://readthedocs.org/projects/adafruit-circuitpython-ssd1306/
 # For drawings: https://learn.adafruit.com/micropython-hardware-ssd1306-oled-display/circuitpython#drawing-2902524
+# Doc at https://www.tutorialspoint.com/python_pillow/python_pillow_imagedraw_module.htm
+#        https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
 #
 # Runtime CLI parameters are: (see below for more details)
 # --help
@@ -82,19 +84,19 @@ import traceback
 import utils         # local script
 import ssd1306Utils  # local script
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
 PATH_PREFIX = "/ssd1306"
 server_port: int = 8080
 verbose: bool = False
 verbose_level2: bool = True
-machine_name: str = "127.0.0.1"  # aka localhost
+machine_name: str = "127.0.0.1"   # aka localhost
 
-oled_wiring_option: str = "I2C"  # Default. Can be "I2C" or "SPI"
+oled_wiring_option: str = "I2C"   # Default. Can be "I2C" or "SPI"
 
-# See the help_display method for more details
-HELP_PRM_PREFIX: str              = "--help"
+
+HELP_PRM_PREFIX: str              = "--help"           # See the help_display method for more details
 WIRING_PRM_PREFIX: str            = "--wiring:"
 MACHINE_NAME_PRM_PREFIX: str      = "--machine-name:"
 PORT_PRM_PREFIX: str              = "--port:"
@@ -104,23 +106,23 @@ HEIGHT_PRM_PREFIX: str            = "--height:"
 SCREEN_SAVER_MODE_PRM_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
 ROTATE_PRM_PREFIX: str            = "--rotate:"
 
-DATA_PRM_PREFIX: str              = "--data:"  # Like "BSP,SOG,POS,..., etc". See below
+DATA_PRM_PREFIX: str              = "--data:"          # Like "BSP,SOG,POS,..., etc". See below
 
 #
 # Change these to the right size for your display!
 #
 WIDTH: int   = 128
-HEIGHT: int  = 32  # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PRM_PREFIX)
+HEIGHT: int  = 32                 # Change to 64 if needed. It is also a CLI prm (See HEIGHT_PRM_PREFIX)
 BORDER: int  = 5
 ROTATE: bool = False
 
 WHITE: int   = 255
 BLACK: int   = 0
-SS_CHARACTERS: List[str] = ["|", "/", "-", "\\"]
+SS_CHARACTERS: List[str] = ["|", "/", "-", "\\"]  # For a version of the screen saver.
 
 
 # Supported data (see format_data method):
-# BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRS, HUM, WPT, NET, COG_G   More data, and graphics to come !
+# BSP, HDG, POS, SOG, COG, NAV, ATM, ATP, PRM, HUM, WPT, NET, COG_G   More data, and graphics to come !
 sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations. Fallback.
     "1": "First",
     "2": "Second",
@@ -145,9 +147,9 @@ nmea_cache: Dict[str, object] = None
 
 ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
 
-LONG_CLICK = 1000            # in ms, 1s
-BETWEEN_DOUBLE_CLICK = 300   # in ms, 0.3s
-FORGET_SHUTDOWN_AFTER = 5000 # ms
+LONG_CLICK            = 1000  # in ms, 1s
+BETWEEN_DOUBLE_CLICK  = 300   # in ms, 0.3s
+FORGET_SHUTDOWN_AFTER = 5000  # ms
 
 screen_saver_timer: int = 0
 screen_saver_on: bool = False
@@ -160,7 +162,7 @@ nmea_data: List[str] = [
     "SOG",  # Speed Over Ground
     "COG",  # Course Over Ground
     "POS",  # Position
-    "NAV"   # Several nav data
+    "NAV"   # Several nav related data
 ]
 
 pin_button_01 = board.D20  # physical pin #38
@@ -239,13 +241,13 @@ def get_network_name() -> str:
     try:
         result: str = subprocess.check_output(command, shell=True, text=True)
     except Exception as oops:
-        result = f"Oops: {repr(oops)}"
+        # result = f"Oops: {repr(oops)}"
         command = "nmcli dev wifi show-password | grep SSID"
         try:
-            result: str = subprocess.check_output(command, shell=True, text=True)
+            result = subprocess.check_output(command, shell=True, text=True)
         except Exception as oops2:
             print(f"Oops: {repr(oops2)}")
-            result = "SSID not found"
+            result = "SSID Not found"
             pass
         pass
     return result
@@ -262,7 +264,7 @@ def get_ip_address() -> str:
         result: str = subprocess.check_output(command, shell=True, text=True)
     except Exception as oops:
         print(f"Oops: {repr(oops)}")
-        result = "Not found"
+        result = "IP Not found"
         pass
     return result
 
@@ -326,7 +328,7 @@ def button_listener(pin, state) -> None:
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
                     if False:
-                        # Self call. Does not kill the mux.
+                        # Self call. But does not kill the mux.
                         cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"
                         print(f"Executing [{cmd}] ...")
                         execute_system_command(cmd)
@@ -658,7 +660,7 @@ def draw_COG(cog: int) -> None:
         # Full CLS (should be done when modifying current_value
         if True:
             # draw.rectangle((0, 0, oled.width, oled.height), outline=BLACK, fill=BLACK)  # Full cls
-            draw.rectangle((0, 0, 40, 40), outline=BLACK, fill=BLACK)  # Top-left corner?... YES!!
+            draw.rectangle((0, 0, 40, 40), outline=BLACK, fill=BLACK)  # Just the text. Top-left corner?... YES!!
             oled.image(image)
             # oled.show()
         elif False:  # does it all
@@ -968,7 +970,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 left, top, right, bottom = font.getbbox(text)
                 (font_width, font_height) = right - left, bottom - top
                 draw.text(
-                    (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+                    (oled.width // 2 - font_width // 2,
+                     oled.height // 2 - font_height // 2),
                     text,
                     font=font,
                     fill=WHITE,
@@ -1408,7 +1411,8 @@ if __name__ == '__main__':
     left, top, right, bottom = font.getbbox(text)
     (font_width, font_height) = right - left, bottom - top
     draw.text(
-        (oled.width // 2 - font_width // 2, (oled.height // 2 - font_height // 2) - font_height),
+        (oled.width // 2 - font_width // 2,
+         (oled.height // 2 - font_height // 2) - font_height),
         text,
         font=font,
         fill=WHITE,
@@ -1417,7 +1421,8 @@ if __name__ == '__main__':
     left, top, right, bottom = font.getbbox(text)
     (font_width, font_height) = right - left, bottom - top
     draw.text(
-        (oled.width // 2 - font_width // 2, font_height + 1 + (oled.height // 2 - font_height // 2)),
+        (oled.width // 2 - font_width // 2,
+         font_height + 1 + (oled.height // 2 - font_height // 2)),
         text,
         font=font,
         fill=WHITE,
@@ -1482,7 +1487,8 @@ if __name__ == '__main__':
         left, top, right, bottom = font.getbbox(text)
         (font_width, font_height) = right - left, bottom - top
         draw.text(
-            (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
+            (oled.width // 2 - font_width // 2,
+             oled.height // 2 - font_height // 2),
             text,
             font=font,
             fill=WHITE,
@@ -1495,3 +1501,6 @@ if __name__ == '__main__':
         oled.image(image)
         oled.show()
     print("Done with REST SSD1306 server.")
+
+
+# Oh ma mere !

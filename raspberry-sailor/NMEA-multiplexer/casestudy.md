@@ -19,8 +19,8 @@ one - a prototype - based on Node-RED, specially the memory footprint.
 If not already there, Install [Node-RED](http://nodered.org/) on the Raspberry Pi.
 Installation instructions for your platform are available [here](http://nodered.org/docs/getting-started/installation.html), and it comes
 with Raspberry Pi goodies.
-
-_March 2017_: Node-RED is already installed on the NOOBS Image. It also had some cool Nodes already available. A little drawback though: the version of Node.js is not a recent one.
+_March 2017_: Node-RED is already installed on the [NOOBS Image](https://projects.raspberrypi.org/en/projects/noobs-install). 
+It also had some cool Nodes already available. A little drawback though: the version of Node.js is not a recent one.
 I upgraded mine (Node v6.10.1, Npm 3.10.10, Node-RED core 0.16.2).
 
 Among others:
@@ -335,4 +335,3 @@ Raspberry Pi at `192.168.42.6`.
  
 ---
 _March, April 2017, January 2020, and so on.._
-

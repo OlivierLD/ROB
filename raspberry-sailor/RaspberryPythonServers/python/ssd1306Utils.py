@@ -5,6 +5,12 @@ import math
 # All drawing function have to be followed by
 # display.show()
 #
+# from PIL import Image, ImageDraw, ImageFont
+# See PIL.ImageDraw.ImageDraw, maybe there is a native way to do the graphics below.
+# draw.rectangle, draw.arc, etc.
+# See https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
+#     https://www.tutorialspoint.com/python_pillow/python_pillow_imagedraw_module.htm
+#
 
 
 # Draw empty rectangle

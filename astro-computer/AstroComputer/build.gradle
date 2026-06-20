@@ -99,3 +99,9 @@ shadowJar {
     zip64 true
     mergeServiceFiles()
 }
+
+task runSeasonsTime(type: JavaExec) {
+    description 'Get the exact time of Spring, Summer, Fall, and Winter. Use gradlew runSeasonsTime'
+    mainClass = 'astro.SpringSummerFallWinter'
+    classpath = sourceSets.test.runtimeClasspath
+}

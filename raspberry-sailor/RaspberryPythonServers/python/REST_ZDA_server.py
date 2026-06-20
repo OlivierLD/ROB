@@ -119,6 +119,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "description": "Get the ZDA data, in NMEA format."
                     }]
             }
+            # TODO Fix that...
             response_content = json.dumps(response).encode()
             self.send_response(200)
             # defining the response headers
