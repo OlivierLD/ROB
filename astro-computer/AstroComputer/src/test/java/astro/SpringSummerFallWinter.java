@@ -109,12 +109,54 @@ public class SpringSummerFallWinter {
 
     private final static boolean VERBOSE = false;
 
+    private final static String HELP_PRM_1 = "--help";
+    private final static String HELP_PRM_2 = "-h";
+    private final static String HELP_PRM_3 = "?";
+    private final static String YEAR_PRM = "--year:";
+
+    private static void displayHelp() {
+        System.out.println("Usage is:");
+        System.out.println("For help:");
+        System.out.printf("\tjava %s --help\n", SpringSummerFallWinter.class.getName());
+        System.out.printf("\tjava %s -h\n", SpringSummerFallWinter.class.getName());
+        System.out.printf("\tjava %s ?\n", SpringSummerFallWinter.class.getName());
+        System.out.println("To set the calculation year:");
+        System.out.printf("\tjava %s --year:XXXX (default is current year)\n", SpringSummerFallWinter.class.getName());
+        System.out.println("-----------------------------------------------------------------");
+    }
+
     public static void main(String... args) {
         System.setProperty("deltaT", "AUTO");
 //        System.setProperty("astro.verbose", "true");
+        int year = -1;
+
+        if (args.length == 0) {
+            System.out.println("No CLI prms were found.");
+        } else {
+            for (String arg : args) {
+                if (arg.equals(HELP_PRM_1) || arg.equals(HELP_PRM_2) || arg.equals(HELP_PRM_3)) {
+                    displayHelp();
+                    System.exit(0);
+                } else if (arg.startsWith(YEAR_PRM)) {
+                    String providedYear = arg.substring(YEAR_PRM.length());
+                    try {
+                        year = Integer.parseInt(providedYear);
+                    } catch (NumberFormatException nfe) {
+                        System.out.printf("Provided year (%s) is invalid. Will use current year.\n", providedYear);
+                        year = -1;
+                    }
+                } else {
+                    System.out.printf("Unmanaged CLI prm %s\n", arg);
+                }
+            }
+        }
 
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         int currentYear = date.get(Calendar.YEAR); // Or hard-code the date you want here, go ahead!
+
+        if (year != -1) {
+            currentYear = year;
+        }
         System.out.printf("Year is %d\n", currentYear);
 
         Calendar cal = new GregorianCalendar();

@@ -100,8 +100,19 @@ shadowJar {
     mergeServiceFiles()
 }
 
+// Will put the test classes in the jar (with a build, not shadowJar)
+tasks.named('jar') {
+    from(sourceSets.test.output)
+}
+
+if (project.hasProperty("args")) {  // To be used with -Pargs='...'
+    ext.cmdargs = project.getProperty("args")
+} else {
+    ext.cmdargs = ""
+}
 task runSeasonsTime(type: JavaExec) {
     description 'Get the exact time of Spring, Summer, Fall, and Winter. Use gradlew runSeasonsTime'
     mainClass = 'astro.SpringSummerFallWinter'
     classpath = sourceSets.test.runtimeClasspath
+    args cmdargs.split()
 }
