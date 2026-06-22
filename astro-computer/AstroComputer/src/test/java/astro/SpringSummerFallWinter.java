@@ -190,6 +190,7 @@ public class SpringSummerFallWinter {
                     cal.get(Calendar.SECOND));
 
             double sunDecl = astroComputer.getSunDecl();
+            // Using Newton's method.
             if (goingUp && sunDecl > 0 && !crossed) { // Equinox
                 Calendar savedCal = (Calendar)cal.clone();
                 cal.add(STEPS[stepIndex], -STEP_BACK_FOR_NARROWING);

@@ -116,3 +116,10 @@ task runSeasonsTime(type: JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     args cmdargs.split()
 }
+
+task eclipseFinder(type: JavaExec) {
+    description 'Find solar and lunar eclipses, in the next 5 years.'
+    mainClass = 'astro.EclipseFinder'
+    classpath = sourceSets.test.runtimeClasspath
+    args cmdargs.split()
+}
