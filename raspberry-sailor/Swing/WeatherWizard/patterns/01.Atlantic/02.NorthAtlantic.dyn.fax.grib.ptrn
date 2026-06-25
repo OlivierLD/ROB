@@ -3,16 +3,16 @@
    <fax-collection>
       <fax hint="NorthAtlantic Surface - West" color="255;0;0" transparent="true" color-change="true">
          <faxScale>0.32291855775920775</faxScale>
-         <faxXoffset>-107</faxXoffset>
-         <faxYoffset>168</faxYoffset>
-         <faxRotation>90.0</faxRotation>
+         <faxXoffset>43</faxXoffset>
+         <faxYoffset>28</faxYoffset>
+         <faxRotation>0.0</faxRotation>
          <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PYAA12.gif" dir="./WeatherFaxes/noaa/sfc" prefix="NOAA_Atl_NW_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
       </fax>
       <fax hint="NorthAtlantic Surface - East" color="255;0;0" transparent="true" color-change="true">
          <faxScale>0.3238738139421861</faxScale>
-         <faxXoffset>1091</faxXoffset>
-         <faxYoffset>168</faxYoffset>
-         <faxRotation>90.0</faxRotation>
+         <faxXoffset>1241</faxXoffset>
+         <faxYoffset>28</faxYoffset>
+         <faxRotation>0.0</faxRotation>
          <dynamic-resource url="https://tgftp.nws.noaa.gov/fax/PYAA11.gif" dir="./WeatherFaxes/noaa/sfc" prefix="NOAA_Atl_NE_sfc_" pattern="yyyy_MM_dd_HH_mm_ss_z" extension="png"/>
       </fax>
       <fax hint="NorthAtlantic 500mb" color="0;0;255" transparent="true" color-change="true">
