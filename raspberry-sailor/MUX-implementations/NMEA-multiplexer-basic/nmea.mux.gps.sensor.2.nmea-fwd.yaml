@@ -65,6 +65,6 @@ forwarders:
     port: 7001
 computers:
   - type: "tw-current"
+    # Only if there is a MHU and HDG or HDM data
     prefix: "CC"
     time.buffer.length: 30, 60, 600
-

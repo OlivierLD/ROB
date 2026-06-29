@@ -11,7 +11,12 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dsummary=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -Dgencsv=true"
 JAVA_OPTIONS="${JAVA_OPTIONS} -DswingGUI=true"
 #
-JAVA_OPTIONS="${JAVA_OPTIONS} -ea"  # Enable Assertions
+FILENAME=$1
+if [[ "$1" == "ea" ]]; then
+  echo -e "Enabling assertions"
+  JAVA_OPTIONS="${JAVA_OPTIONS} -ea"  # Enable Assertions
+  FILENAME=$2
+fi
 #
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Drmc.date.offset=7168"
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Djava.awt.headless=true" # Enforce non-graphical env (no Swing).
@@ -19,5 +24,5 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -ea"  # Enable Assertions
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80"
 # use sudo on Raspberry Pi
 # sudo java ${JAVA_OPTIONS} ${LOGGING_FLAG} ${JFR_FLAGS} ${REMOTE_DEBUG_FLAGS} -cp ${CP} nmea.mux.GenericNMEAMultiplexer
-java ${JAVA_OPTIONS} -cp ${CP} util.LogAnalyzer $*
+java ${JAVA_OPTIONS} -cp ${CP} util.LogAnalyzer ${FILENAME}
 #

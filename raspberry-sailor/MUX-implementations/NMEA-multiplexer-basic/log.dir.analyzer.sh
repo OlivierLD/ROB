@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Merge all the *.nmea file of a given directory (and under) into a single one.
+# Loop on all the files under a given location, and analyze them (give statistics), no Swing
 #
 echo -e "Usage is:"
 echo -e "${0} nmea-path"
