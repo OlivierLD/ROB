@@ -11,7 +11,7 @@ if [[ $# != 1 ]]; then
 fi
 LOG_PATH=$1
 #
-find ${LOG_PATH} -name '*.nmea' > nmea.file.list
+find ${LOG_PATH} -name '*.nmea' | sort > nmea.file.list
 #
 CP=$(dirname $0)/build/libs/*.jar
 JAVA_OPTIONS=

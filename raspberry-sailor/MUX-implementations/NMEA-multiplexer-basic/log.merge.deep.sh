@@ -19,7 +19,7 @@ rm ${MERGED_FILE_NAME} 2> /dev/null
 find ${LOG_PATH} -name '*.nmea' > nmea.file.list
 # find ${LOG_PATH} -name '*.nmea' -exec echo -e "Adding {}"; cat {} >> ${MERGED_FILE_NAME} \;
 # find ${LOG_PATH} -name '*.nmea' -exec cat {} \; # >> ${MERGED_FILE_NAME}
-for nmeadata in `cat nmea.file.list`; do
+for nmeadata in `sort nmea.file.list`; do
   echo -e "Adding ${nmeadata} ($(wc -l ${nmeadata}  | awk '{ print $1}') records)"
   cat "${nmeadata}" >> ${MERGED_FILE_NAME}
 done

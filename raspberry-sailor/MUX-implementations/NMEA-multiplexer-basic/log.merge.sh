@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Merge all the *.nmea file of a given directory into a single one.
 #
@@ -12,9 +11,9 @@ fi
 LOG_PATH=$1
 MERGED_FILE_NAME=$2
 #
-# for log in `ls ${LOG_PATH}/*.nmea`; do
-for log in ${LOG_PATH}/*.nmea; do
-  echo -e "Adding ${log}"
+# for log in ${LOG_PATH}/*.nmea; do  # TODO sort
+for log in `ls ${LOG_PATH}/*.nmea | sort`; do
+  echo -e "Adding ${log} ($(wc -l ${log}  | awk '{ print $1}')records)"
   cat ${log} >> ${MERGED_FILE_NAME}
 done
 echo -e "Done"
