@@ -584,38 +584,92 @@ class CelestialSphere extends HTMLElement {
 
 	drawBoat(context, trueHeading) {
 		let x = [];
-		let y = [];// Half, length
+		let y = []; // Half, length
 
 		let __zoom = 3;
 
 		let boatLength = this.BOAT_LENGTH * __zoom * this._zoom;
 
 		if (this._boatShape === 'MONO') {
-			// Width
-			x.push(this.WL_RATIO_COEFF * 0); // Bow
-			//     Starboard
-			x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7);
-			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
-			x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
-			x.push(this.WL_RATIO_COEFF * ( 1.5 * boatLength) / 7); // Transom, starboard
-			//     Port
-			x.push(this.WL_RATIO_COEFF * (-1.5 * boatLength) / 7); // Transom, port
-			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
-			x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
-			x.push(this.WL_RATIO_COEFF * (  -1 * boatLength) / 7);
+			if (false) { // Previous version, with points
+				// Width
+				x.push(this.WL_RATIO_COEFF * 0); // Bow
+				//     Starboard
+				x.push(this.WL_RATIO_COEFF * (   1 * boatLength) / 7);
+				x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+				x.push(this.WL_RATIO_COEFF * (   2 * boatLength) / 7);
+				x.push(this.WL_RATIO_COEFF * ( 1.5 * boatLength) / 7); // Transom, starboard
+				//     Port
+				x.push(this.WL_RATIO_COEFF * (-1.5 * boatLength) / 7); // Transom, port
+				x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+				x.push(this.WL_RATIO_COEFF * (  -2 * boatLength) / 7);
+				x.push(this.WL_RATIO_COEFF * (  -1 * boatLength) / 7);
 
-			// Length
-			y.push((-4 * boatLength) / 7); // Bow
-			//      Starboard
-			y.push((-3 * boatLength) / 7);
-			y.push((-1 * boatLength) / 7);
-			y.push( (1 * boatLength) / 7);
-			y.push( (3 * boatLength) / 7);
-			//     Port
-			y.push( (3 * boatLength) / 7);
-			y.push( (1 * boatLength) / 7);
-			y.push((-1 * boatLength) / 7);
-			y.push((-3 * boatLength) / 7);
+				// Length
+				y.push((-4 * boatLength) / 7); // Bow
+				//      Starboard
+				y.push((-3 * boatLength) / 7);
+				y.push((-1 * boatLength) / 7);
+				y.push( (1 * boatLength) / 7);
+				y.push( (3 * boatLength) / 7);
+				//     Port
+				y.push( (3 * boatLength) / 7);
+				y.push( (1 * boatLength) / 7);
+				y.push((-1 * boatLength) / 7);
+				y.push((-3 * boatLength) / 7);
+			} else {
+				const BEAM_ANGLE    =  90;
+				const TRANSOM_ANGLE = 165;
+				const BOAT_FACT = 1.0; // 0.8;
+				const SCALE = 1.0;; // 0.8;
+
+				let center = this.getCanvasCenter();
+				let centerX = center.x;
+				let centerY = center.y;
+				let radius = boatLength / 2;
+
+				let boatRadius = radius * BOAT_FACT * SCALE;
+				let beam       = radius * 0.70 * BOAT_FACT * SCALE;  // 90 degrees
+				let transom    = radius * BOAT_FACT * 1.05 * SCALE;  // length from center to transom, 165 degrees
+
+				let bow = { x: centerX + (boatRadius * Math.sin(Math.toRadians(trueHeading))),
+							y: centerY - (boatRadius * Math.cos(Math.toRadians(trueHeading))) };
+
+				let beam_right = { x: centerX + (beam * Math.sin(Math.toRadians(trueHeading + BEAM_ANGLE))),
+								   y: centerY - (beam * Math.cos(Math.toRadians(trueHeading + BEAM_ANGLE))) };
+
+				let transom_right = { x: centerX + (transom * Math.sin(Math.toRadians(trueHeading + TRANSOM_ANGLE))),
+									  y: centerY - (transom * Math.cos(Math.toRadians(trueHeading + TRANSOM_ANGLE))) };
+
+				let beam_left = { x: centerX + (beam * Math.sin(Math.toRadians(trueHeading - BEAM_ANGLE))),
+								  y: centerY - (beam * Math.cos(Math.toRadians(trueHeading - BEAM_ANGLE))) };
+
+				let transom_left = { x: centerX + (transom * Math.sin(Math.toRadians(trueHeading - TRANSOM_ANGLE))),
+									 y: centerY - (transom * Math.cos(Math.toRadians(trueHeading - TRANSOM_ANGLE))) };
+
+				// context.fillStyle = this.celestialSphereColorConfig.boatFillColor;
+				context.strokeStyle = this.celestialSphereColorConfig.boatOutlineColor;
+				context.lineWidth = 2;
+
+				context.beginPath();
+				//context.lineTo(bow.x, bow.y);    // Center to bow.
+				// Starboard
+				context.moveTo(bow.x, bow.y); // Bow
+				context.quadraticCurveTo(beam_right.x,
+										 beam_right.y,
+										 transom_right.x,
+										 transom_right.y);
+                // Port
+				context.moveTo(bow.x, bow.y);
+				context.quadraticCurveTo(beam_left.x, beam_left.y,
+									     transom_left.x, transom_left.y);
+				// Transom
+				context.moveTo(transom_left.x, transom_left.y);
+				context.lineTo(transom_right.x, transom_right.y);
+
+				context.closePath();
+				context.stroke();
+			}
 
 		} else if (this._boatShape === 'CATA') {
 			x.push(this.WL_RATIO_COEFF * 0); // Arm, front, center
@@ -764,35 +818,38 @@ class CelestialSphere extends HTMLElement {
 			y.push((-2 * boatLength) / 7);
 			y.push((-3 * boatLength) / 7);
 		}
-		let xPoints = [];
-		let yPoints = [];
 
-		// Rotation matrix:
-		// | cos(alpha)  -sin(alpha) |
-		// | sin(alpha)   cos(alpha) |
-		// The center happens to be the middle of the boat.
+		if (this._boatShape !== 'MONO') {
+			let xPoints = [];
+			let yPoints = [];
 
-		let center = this.getCanvasCenter();
-		let ptX = center.x;
-		let ptY = center.y;
+			// Rotation matrix:
+			// | cos(alpha)  -sin(alpha) |
+			// | sin(alpha)   cos(alpha) |
+			// The center happens to be the middle of the boat.
 
-		for (let i=0; i<x.length; i++) { // Rotation
-			let dx = x[i] * Math.cos(Math.toRadians(trueHeading)) + (y[i] * (-Math.sin(Math.toRadians(trueHeading))));
-			let dy = x[i] * Math.sin(Math.toRadians(trueHeading)) + (y[i] *   Math.cos(Math.toRadians(trueHeading)));
-			xPoints.push(Math.round(ptX + dx));
-			yPoints.push(Math.round(ptY + dy));
+			let center = this.getCanvasCenter();
+			let ptX = center.x;
+			let ptY = center.y;
+
+			for (let i=0; i<x.length; i++) { // Rotation
+				let dx = x[i] * Math.cos(Math.toRadians(trueHeading)) + (y[i] * (-Math.sin(Math.toRadians(trueHeading))));
+				let dy = x[i] * Math.sin(Math.toRadians(trueHeading)) + (y[i] *   Math.cos(Math.toRadians(trueHeading)));
+				xPoints.push(Math.round(ptX + dx));
+				yPoints.push(Math.round(ptY + dy));
+			}
+			context.fillStyle = this.celestialSphereColorConfig.boatFillColor;
+			context.beginPath();
+			context.moveTo(xPoints[0], yPoints[0]);
+			for (let i=1; i<xPoints.length; i++) {
+				context.lineTo(xPoints[i], yPoints[i]);
+			}
+			context.closePath();
+			// context.fill();
+			context.strokeStyle = this.celestialSphereColorConfig.boatOutlineColor;
+			context.lineWidth = 2;
+			context.stroke();
 		}
-		context.fillStyle = this.celestialSphereColorConfig.boatFillColor;
-		context.beginPath();
-		context.moveTo(xPoints[0], yPoints[0]);
-		for (let i=1; i<xPoints.length; i++) {
-			context.lineTo(xPoints[i], yPoints[i]);
-		}
-		context.closePath();
-		// context.fill();
-		context.strokeStyle = this.celestialSphereColorConfig.boatOutlineColor;
-		context.lineWidth = 2;
-		context.stroke();
 	}
 
 	drawCelestialSphere() {
