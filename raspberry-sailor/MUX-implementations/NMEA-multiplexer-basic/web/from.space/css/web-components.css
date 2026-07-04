@@ -712,6 +712,7 @@ compass-display .green {
     --aries-label-color: silver;
     --card-points-color: red;
     --nsew-color: blue;
+    --equator-color: limegreen;
     --equatorial-grid-color: white;
     --constellation-lines-color: lightGray;
     --constellation-names-color: orange;

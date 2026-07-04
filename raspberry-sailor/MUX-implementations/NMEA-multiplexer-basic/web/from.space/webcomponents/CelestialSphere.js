@@ -43,7 +43,7 @@ const celestialSphereDefaultColorConfig = {
 	headingTicksColor: 'orange',
 	skyGridColor: 'cyan',
 	eclipticColor: 'lime',
-	equatorColor: 'white',
+	equatorColor: 'limegreen',
 	declinationCircleColor: 'cyan',
 	ariesLabelColor: 'silver',
 	cardPointLabelsColor: 'red',
@@ -57,7 +57,7 @@ const celestialSphereDefaultColorConfig = {
 	wanderingBodiesSymbolColor: 'limegreen',
 	wanderingBodiesNameColor: 'silver',
 	boatFillColor: 'silver', // unused
-	boatOutlineColor: 'rgba(192, 192, 192, 0.75'
+	boatOutlineColor: 'red' // 'rgba(192, 192, 192, 0.75)'
 };
 
 let drawSun = (context, center, outsideRadius, color) => {

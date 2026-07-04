@@ -15,7 +15,7 @@
     <title>From Space !</title>
 
     <!-- Main Module -->
-    <script type="module" src="app.js"></script> <!-- THAT is the key -->
+    <script type="module" src="app.js"></script> <!-- THAT is the key. ES6 CelestialComputer wrapper -->
 
     <!-- Web Components -->
     <script type="module" src="./webcomponents/WorldMap.js"></script>
@@ -2015,7 +2015,7 @@ let toggleForeground = () => {
             noStars: !document.getElementById('no-star').checked
         };
 
-        let testResult = sampleMain(calculationData); // in app.js
+        let testResult = sampleMain(calculationData); // in app.js. CelestialComputer wrapper
         globalAstroData = testResult;  // Now includes the solar date.
         if (consoleVerbose) {
             console.log("Calculation done %d-%d-%d %d:%d:%d UTC :", calculationData.utcyear, calculationData.utcmonth, calculationData.utcday, calculationData.utchour, calculationData.utcminute, calculationData.utcsecond);
