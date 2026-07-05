@@ -211,7 +211,7 @@ class CelestialSphere extends HTMLElement {
 		this.minorTicks =  5; // prm ?
 
 		this.LHAAries = 0; // "Hidden" attribute.
-		this.GHAAries = 0; // "Hidden" attribute.
+		this.GHAAries = null; // "Hidden" attribute.
 
 		this.observerLatitude = 45;
 		this.observerLongitude = -3;
@@ -1055,7 +1055,11 @@ class CelestialSphere extends HTMLElement {
 		let strAries = Utilities.decToSex(this.LHAAries);
 		context.fillStyle = this.celestialSphereColorConfig.ariesLabelColor;
 		context.font = "bold 16px Arial"; // "bold 40px Arial"
-		context.fillText('LHA Aries: ' + strAries, 10, 18);
+		let mess = "LHA Aries: " + strAries;
+		if (this.GHAAries != null) {
+			mess += " (GHA: " + Utilities.decToSex(this.GHAAries) + ")";
+		}
+		context.fillText(mess, 10, 18);
 
 		context.fillText('From position ', 10, 18 * 2);
 		context.fillText(Utilities.decToSex(this.observerLatitude, "NS"), 10, 18 * 3);
