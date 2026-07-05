@@ -19,6 +19,15 @@ if (Math.toDegrees === undefined) {
 	};
 }
 
+function haToLongitude(ha) {
+	let lng = -ha;
+	if (lng < -180) {
+		lng += 360;
+	}
+	return lng;
+};
+
+
 import * as Utilities from "./utilities/Utilities.js";
 // import '../utilities/date.proto.js';
 
@@ -43,7 +52,7 @@ const celestialSphereDefaultColorConfig = {
 	headingTicksColor: 'orange',
 	skyGridColor: 'cyan',
 	eclipticColor: 'lime',
-	equatorColor: 'limegreen',
+	equatorColor: 'cyan',
 	declinationCircleColor: 'cyan',
 	ariesLabelColor: 'silver',
 	cardPointLabelsColor: 'red',
@@ -202,6 +211,7 @@ class CelestialSphere extends HTMLElement {
 		this.minorTicks =  5; // prm ?
 
 		this.LHAAries = 0; // "Hidden" attribute.
+		this.GHAAries = 0; // "Hidden" attribute.
 
 		this.observerLatitude = 45;
 		this.observerLongitude = -3;
@@ -1093,7 +1103,7 @@ class CelestialSphere extends HTMLElement {
 						let dec = starFrom.d; // * (this.observerLatitude >= 0 ? 1 : -1);
 						let ra = starFrom.ra;
 						let lng = (360 - (ra * 360 / 24));
-						lng += (/*this._hemisphere * */this.LHAAries);
+						lng += (/*this._hemisphere * */this.GHAAries);
 						if (lng > 180) {
 							lng -= 360;
 						}
@@ -1103,7 +1113,7 @@ class CelestialSphere extends HTMLElement {
 						dec = starTo.d; // * (this.observerLatitude >= 0 ? 1 : -1);
 						ra = starTo.ra;
 						lng = (360 - (ra * 360 / 24));
-						lng += (/*this._hemisphere * */this.LHAAries);
+						lng += (/*this._hemisphere * */this.GHAAries);
 						if (lng > 180) {
 							lng -= 360;
 						}
@@ -1134,7 +1144,7 @@ class CelestialSphere extends HTMLElement {
 						if (localVerbose) {
 							console.log(`Star ${constellations[i].stars[s].name} - RA: ${constellations[i].stars[s].ra}, Dec: ${constellations[i].stars[s].d}`);
 						}
-						let _sr = CelestialSphere.sightReduction(this.observerLatitude, this.observerLongitude, (360 - (constellations[i].stars[s].ra * 360 / 24)) + (/*this._hemisphere * */this.LHAAries), constellations[i].stars[s].d);
+						let _sr = CelestialSphere.sightReduction(this.observerLatitude, this.observerLongitude, (360 - (constellations[i].stars[s].ra * 360 / 24)) + (/*this._hemisphere * */this.GHAAries), constellations[i].stars[s].d);
 						let _p = this.plotOnSphere(_sr.alt, _sr.Z /* - (this.useHeading ? this.heading : 0)*/, radius);
 						if (minX === undefined || _p.x < minX) {
 							minX = _p.x;
@@ -1199,8 +1209,16 @@ class CelestialSphere extends HTMLElement {
 					let dec = constellations[i].stars[s].d; // * (this.observerLatitude >= 0 ? 1 : -1);
 					let ra = constellations[i].stars[s].ra;
 					let sha = (360 - (ra * 360 / 24)); //
-					let gha = sha + (/*this._hemisphere * */this.LHAAries);
-					if (gha > 180) {
+					// GHA(Star) = GHA(Aries) + SHA(Star).
+					let gha = sha + (/*this._hemisphere * */ this.GHAAries);
+
+					// if (gha > 180) {
+					// 	gha -= 360;
+					// }
+					while (gha < 0) {
+						gha += 360;
+					}
+					while (gha > 360) {
 						gha -= 360;
 					}
 					// Sight Reduction !
@@ -1209,7 +1227,7 @@ class CelestialSphere extends HTMLElement {
 					if (false) {
 						console.log(`${constellations[i].name} - ${constellations[i].stars[s].name} = He: ${sr.alt}, Z: ${sr.Z}`); //  { he: srSun.alt, z: srSun.Z };
 						// RA, Dec, SHA (AHso)
-						console.log(`\t  RA: ${ra}, Dec: ${decToSex(dec, "NS")}, SHA: ${decToSex(sha)}, GHA: ${decToSex(sha + this.LHAAries)} (${decToSex(gha, "EW")})`);
+						console.log(`\t  RA: ${ra}, Dec: ${decToSex(dec, "NS")}, SHA: ${decToSex(sha)}, GHA: ${decToSex(sha + this.GHAAries)} (${decToSex(gha, "EW")})`);
 					}
 
 					if (/*true ||*/ sr.alt >= 0) {
@@ -1330,7 +1348,7 @@ class CelestialSphere extends HTMLElement {
 			if (/*true || */sr.alt >= 0) {
 				let p = this.plotOnSphere(sr.alt, sr.Z, radius);
 				context.beginPath();
-				const bodyRadius = 0.75;
+				const bodyRadius = 1.5;
 				context.arc((this.width * this._zoom / 2) - p.x, (this.height * this._zoom / 2) + p.y, bodyRadius, 0, 2 * Math.PI, false);
 				context.fill();
 				context.closePath();

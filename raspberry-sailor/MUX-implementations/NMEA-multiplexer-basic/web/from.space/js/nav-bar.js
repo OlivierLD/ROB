@@ -1108,6 +1108,7 @@ let setCelestialSphereData = () => {
             cs.longitude = userPos.longitude;
             let lhaAries  = calcLHA(globalAstroData.aries.GHA.raw, userPos.longitude);
             cs.LHAAries = lhaAries;
+            cs.GHAAries = globalAstroData.aries.GHA.raw;
         }
 
         cs.repaint();
@@ -1137,6 +1138,7 @@ let setCelestialSphereData = () => {
         cs.latitude = userPos.latitude;
         let lhaAries  = calcLHA(globalAstroData.aries.GHA.raw, userPos.longitude);
         cs.LHAAries = lhaAries;
+        cs.GHAAries = globalAstroData.aries.GHA.raw;
     }
     // cs.mapType = 'STARFINDER'; // Default
 

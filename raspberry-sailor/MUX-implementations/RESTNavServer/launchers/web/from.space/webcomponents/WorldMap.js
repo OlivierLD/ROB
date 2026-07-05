@@ -60,6 +60,19 @@ import { zodiacMembers } from "./skymap/stars/constellations.js";
 
 let previousGridCodes = "";
 
+function getLHA(gha, longitude) {
+	// let AHL = (lng <= 0) ? ahg + lng : ahg - (360 - lng); // Wowowow !
+	let lha = gha + longitude;
+	while (lha > 360) {
+		lha -= 360;
+	}
+	while (lha < 0) {
+		lha += 360;
+	}
+	return lha;
+}
+
+
 /* global HTMLElement */
 class WorldMap extends HTMLElement {
 
@@ -476,10 +489,10 @@ class WorldMap extends HTMLElement {
 	 */
 	setAstronomicalData(data) {
 		this.astronomicalData = data;
-//	console.log("Received", data);
+		// console.log("Received", data);
 		try {
 			let at = new Date(data.epoch);
-//		console.log("At", at.format("Y-M-d H:i:s"));
+			// console.log("At", at.format("Y-M-d H:i:s"));
 		} catch (err) {
 			console.log(err);
 		}
@@ -494,7 +507,7 @@ class WorldMap extends HTMLElement {
 				while (lhaSun > 360) { lhaSun -= 360; }
 				while (lhaSun < 0) { lhaSun += 360; }
 				this.globeViewRightLeftRotation = -(data.sun.decl * Math.sin(Math.toRadians(lhaSun)));
-//			console.log("Tilt is now", globeViewRightLeftRotation);
+				// console.log("Tilt is now", globeViewRightLeftRotation);
 			}
 		}
 	}
@@ -872,7 +885,10 @@ class WorldMap extends HTMLElement {
 	positionBody(context, userPos, color, name, decl, gha, drawCircle, isStar) {
 		isStar = isStar || false;
 		context.save();
-		let lng = WorldMap.haToLongitude(gha);
+		let lng = WorldMap.haToLongitude(gha); // Longitude of the PG of the body
+		if (false && name === 'Aldebaran') {
+			console.log(`WorldMap: Positioning body ${name} at decl ${decl} and gha ${gha} (lng ${lng})`);
+		}
 		let body = this.getPanelPoint(decl, lng);
 		let thisPointIsBehind = this.isBehind(Math.toRadians(decl), Math.toRadians(lng - this.globeViewLngOffset));
 		if (!thisPointIsBehind || this.transparentGlobe) {
@@ -1591,6 +1607,12 @@ class WorldMap extends HTMLElement {
 					}
 					context.restore();
 				}
+				// Temp
+				let ghaAries = this.astronomicalData.ghaAries;
+				if (ghaAries !== undefined) {
+					this.LHAAries = getLHA(ghaAries, this.userPosition.longitude);
+				}
+				// End temp
 				if (this.astronomicalData.wanderingBodies !== undefined && this.withWanderingBodies) {
 					// 1 - Ecliptic
 					let aries = WorldMap.findInList(this.astronomicalData.wanderingBodies, "name", "aries");
@@ -1621,6 +1643,9 @@ class WorldMap extends HTMLElement {
 				if (this.astronomicalData.stars !== undefined && this.withStars) {
 					let instance = this;
 					this.astronomicalData.stars.forEach((star, idx) => {
+						if (false && star.name === 'Aldebaran') {
+							console.log(`WorldMap: Positioning body ${star.name} at decl ${star.decl} and gha ${star.gha}, sha ${star.sha} (lng ${WorldMap.haToLongitude(star.gha)}, GHAAries: ${this.astronomicalData.ghaAries}, LHAAries ${this.LHAAries}) `);
+						}
 						instance.positionBody(context, userPos, instance.worldmapColorConfig.starsColor, star.name, star.decl, star.gha, false, true);
 					});
 				}

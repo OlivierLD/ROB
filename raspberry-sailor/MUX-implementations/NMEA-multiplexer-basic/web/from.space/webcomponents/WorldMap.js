@@ -59,6 +59,19 @@ import * as Utilities from "./utilities/Utilities.js";
 
 let previousGridCodes = "";
 
+function getLHA(gha, longitude) {
+	// let AHL = (lng <= 0) ? ahg + lng : ahg - (360 - lng); // Wowowow !
+	let lha = gha + longitude;
+	while (lha > 360) {
+		lha -= 360;
+	}
+	while (lha < 0) {
+		lha += 360;
+	}
+	return lha;
+}
+
+
 /* global HTMLElement */
 class WorldMap extends HTMLElement {
 
