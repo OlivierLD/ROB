@@ -57,6 +57,8 @@ import fullWorldMap from "./world.map/worldmap.data.js";
 // import fullWorldMap from "./world.map/worldmap.data"; // minifyJs does NOT like the .js extension
 import * as Utilities from "./utilities/Utilities.js";
 
+let previousGridCodes = "";
+
 /* global HTMLElement */
 class WorldMap extends HTMLElement {
 
@@ -432,10 +434,12 @@ class WorldMap extends HTMLElement {
 		this.doAfter = func;
 	}
 
-	setUserPosition(pos) {
+	setUserPosition(pos, grid, google) {
 		this.userPosition = pos;
 		this.globeViewLngOffset = pos.longitude;
 		this.globeViewForeAftRotation = pos.latitude;
+		this.userPosition.gridSquare = grid;
+		this.userPosition.googlePlusCode = google;
 	}
 
 	getUserPosition() {
@@ -962,7 +966,7 @@ class WorldMap extends HTMLElement {
 		// TODO A style for the constellation name
 		context.fillText(text,
 			minX + ((maxX - minX) / 2) - (metrics.width / 2),
-			minY + ((maxY - minY) / 2) + (10 / 2)); 
+			minY + ((maxY - minY) / 2) + (10 / 2));
 		// context.fillText(constellation.name, minX, minY);
 		context.closePath();
 
@@ -1312,7 +1316,7 @@ class WorldMap extends HTMLElement {
 						context.lineWidth = this.worldmapColorConfig.chartLineWidth;
 						context.beginPath();
 						context.strokeStyle = this.worldmapColorConfig.chartColor;
-	
+
 						for (let p = 0; p < point.length; p++) {
 							let lat = parseFloat(point[p].Lat);
 							let lng = parseFloat(point[p].Lng);
@@ -2348,15 +2352,23 @@ class WorldMap extends HTMLElement {
 			context.font = "bold 16px Arial"; // "bold 40px Arial"
 			context.fillText(strLat, 10, 18);
 			context.fillText(strLng, 10, 38);
-			if (this.userPosition.gridSquare !== undefined) {
-				context.fillText(this.userPosition.gridSquare, 10, 58);
+			if (this.userPosition.gridSquare !== undefined || this.userPosition.googlePlusCode !== undefined) {
+				let gridContent = this.userPosition.gridSquare ? this.userPosition.gridSquare : '';
+				let gpContent = this.userPosition.googlePlusCode ? this.userPosition.googlePlusCode : '';
+				let content = gridContent + ' ' + gpContent;
+				previousGridCodes = content.trim();
+				context.fillText(content.trim(), 10, 58);
+			} else {
+			    // Duh
+                // console.log("Ah ben merde !");
+                context.fillText(previousGridCodes, 10, 58);
 			}
 		}
 		// Print used DeltaT
 		if (this.astronomicalData !== undefined && this.astronomicalData.deltaT !== undefined) {
 			context.fillStyle = this.worldmapColorConfig.displayPositionColor;
 			context.font = "12px Arial"; // "bold 40px Arial"
-			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";  
+			let deltaT = "\u0394T=" + this.astronomicalData.deltaT + " s";
 			context.fillText(deltaT, 10, this.height - 5);
 		}
 	}

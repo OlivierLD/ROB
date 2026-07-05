@@ -223,10 +223,12 @@ public class NMEADataCache
 		String strLat  = System.getProperty("default.mux.latitude");
 		String strLong =  System.getProperty("default.mux.longitude");
 		if (strLat != null && !strLat.isEmpty() && strLong != null && !strLong.isEmpty()) {
+			// System.out.printf("==> Default MUX position en forced to %s / %s\n", strLat, strLong);
 			try {
 				double lat = Double.parseDouble(strLat);
 				double lng = Double.parseDouble(strLong);
 				GeoPos defaultPos = new GeoPos(lat, lng, true);
+				Context.getInstance().getLogger().log(Level.INFO, String.format("==> Default MUX position enforced to %s", defaultPos.toString()));
 				synchronized (this) {
 					this.put(POSITION, defaultPos);
 				}

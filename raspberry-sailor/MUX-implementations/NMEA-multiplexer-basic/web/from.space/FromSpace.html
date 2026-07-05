@@ -15,7 +15,7 @@
     <title>From Space !</title>
 
     <!-- Main Module -->
-    <script type="module" src="app.js"></script> <!-- THAT is the key. ES6 CelestialComputer wrapper -->
+    <script type="module" src="app.js"></script> <!-- THAT is the key. ES6 CelestialComputer wrapper, sampleMain -->
 
     <!-- Web Components -->
     <script type="module" src="./webcomponents/WorldMap.js"></script>
@@ -499,14 +499,14 @@ let userPosBackup = {
     longitude: userPos.longitude
 }
 
-let setUserPos = (lat, lng) => {
+let setUserPos = (lat, lng, grid, google) => {
     userPos.latitude = lat;
     userPos.longitude = lng;
 
     let worldMap = document.getElementById('world-map-01');
 
     // Set user position!!
-    worldMap.setUserPosition(userPos);
+    worldMap.setUserPosition(userPos, grid, google);
     worldMap.repaint();
 };
 
@@ -1217,7 +1217,7 @@ let toggleForeground = () => {
             <li>Custom Tooltips</li>
             <li>Custom Alerts</li>
             <li>SVG</li>
-            <li>Celestial Calculations (all in ES6)</li>
+            <li>Celestial Calculations (all in ES6, computed on the client side!)</li>
             <li>Copy-to-clipboard</li>
             <li>etc !</li>
         </ul>
@@ -1788,7 +1788,7 @@ let toggleForeground = () => {
 <div id="full-foreground" style="display: block;">
     <div style="padding: 6px; border: 0px solid rgba(0, 255, 255, 0.25); border-radius: 5px; margin-top: 50px;">
         <small>
-            Once the page is loaded, all celestial calculations and renderings happen only in the browser, it generates absolutely NO network traffic.<br/>
+            Once the page is loaded, <i><b>all celestial calculations</b></i> and renderings happen <i><b>only in the browser</b></i>, it generates absolutely NO network traffic.<br/>
             Guaranteed <b><i>0%</i></b> external libraries (100% pure organic HTML5/CSS3/ES6), no GMO.
         </small>
     </div>
@@ -2597,11 +2597,11 @@ let toggleForeground = () => {
                 let strLat = decToSex(val.lat, 'NS');
                 let strLng = decToSex(val.lng, 'EW');
                 if (consoleVerbose) {
-                    console.log(`Got position: ${strLat} / ${strLng}`);
+                    console.log(`Got position: ${strLat} / ${strLng}, ${val.gridSquare}, ${val.googlePlusCode}`);
                 }
                 // userPos.latitude = val.lat;
                 // userPos.longitude = val.lng;
-                setUserPos(val.lat, val.lng); // Update the user position
+                setUserPos(val.lat, val.lng, val.gridSquare, val.googlePlusCode); // Update the user position
 
                 document.getElementById('celestial-sphere-01').latitude = val.lat;
                 document.getElementById('celestial-sphere-01').longitude = val.lng;

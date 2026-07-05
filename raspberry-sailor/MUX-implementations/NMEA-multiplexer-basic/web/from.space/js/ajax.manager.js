@@ -99,7 +99,7 @@ function initAjax(forwardErrors) {
     // ISS Position http://api.open-notify.org/iss-now.json
     // ISS Passage time http://api.open-notify.org/iss-pass.json?lat=37.7&lon=-122.5 [ &alt=20&n=5 ]
     // ISS Crew members: http://api.open-notify.org/astros.json
-    if (false) { // 
+    if (false) { //
         let issInterval = setInterval(() => {
             let issPromise = getISSData();
             issPromise.then(issData => {
@@ -168,7 +168,7 @@ function getNMEAData() {
 
 const FETCH_VERBOSE = false;
 
-function fetchNMEA() { 
+function fetchNMEA() {
 	try {
 		let getData = getNMEAData();
 		getData.then((value) => {
@@ -248,7 +248,9 @@ function onMessage(json) {
 //          console.log("Pt:" + latitude + ", " + longitude);
 			events.publish(POS, {
 				'lat': latitude,
-				'lng': longitude
+				'lng': longitude,
+				'gridSquare': json.Position.gridSquare,
+				'googlePlusCode': json.Position.googlePlusCode
 			});
 			if (json["To Waypoint"] !== undefined && json["Bearing to WP"] !== undefined && json["Distance to WP"] !== undefined) {
 				events.publish(TO_WP, {

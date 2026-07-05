@@ -58,6 +58,7 @@ import fullWorldMap from "./world.map/worldmap.data.js";
 import * as Utilities from "./utilities/Utilities.js";
 import { zodiacMembers } from "./skymap/stars/constellations.js";
 
+let previousGridCodes = "";
 
 /* global HTMLElement */
 class WorldMap extends HTMLElement {
@@ -434,10 +435,12 @@ class WorldMap extends HTMLElement {
 		this.doAfter = func;
 	}
 
-	setUserPosition(pos) {
+	setUserPosition(pos, grid, google) {
 		this.userPosition = pos;
 		this.globeViewLngOffset = pos.longitude;
 		this.globeViewForeAftRotation = pos.latitude;
+		this.userPosition.gridSquare = grid;
+		this.userPosition.googlePlusCode = google;
 	}
 
 	getUserPosition() {
@@ -2358,8 +2361,16 @@ class WorldMap extends HTMLElement {
 			context.font = "bold 16px Arial"; // "bold 40px Arial"
 			context.fillText(strLat, 10, 18);
 			context.fillText(strLng, 10, 38);
-			if (this.userPosition.gridSquare !== undefined) {
-				context.fillText(this.userPosition.gridSquare, 10, 58);
+			if (this.userPosition.gridSquare !== undefined || this.userPosition.googlePlusCode !== undefined) {
+				let gridContent = this.userPosition.gridSquare ? this.userPosition.gridSquare : '';
+				let gpContent = this.userPosition.googlePlusCode ? this.userPosition.googlePlusCode : '';
+				let content = gridContent + ' ' + gpContent;
+				previousGridCodes = content.trim();
+				context.fillText(content.trim(), 10, 58);
+			} else {
+			    // Duh
+                // console.log("Ah ben merde !");
+                context.fillText(previousGridCodes, 10, 58);
 			}
 		}
 		// Print used DeltaT

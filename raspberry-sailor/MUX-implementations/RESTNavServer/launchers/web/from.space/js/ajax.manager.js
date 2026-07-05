@@ -248,7 +248,9 @@ function onMessage(json) {
 //          console.log("Pt:" + latitude + ", " + longitude);
 			events.publish(POS, {
 				'lat': latitude,
-				'lng': longitude
+				'lng': longitude,
+				'gridSquare': json.Position.gridSquare,
+				'googlePlusCode': json.Position.googlePlusCode
 			});
 			if (json["To Waypoint"] !== undefined && json["Bearing to WP"] !== undefined && json["Distance to WP"] !== undefined) {
 				events.publish(TO_WP, {
