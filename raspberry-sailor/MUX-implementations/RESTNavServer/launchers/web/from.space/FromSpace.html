@@ -95,6 +95,8 @@ let marqueeScrollUp = (marqueeId) => {
                     toDisplay.push("Jupiter D: " + globalAstroData.jupiter.DEC.fmt);
                     toDisplay.push("Saturn GHA: " + globalAstroData.saturn.GHA.fmt);
                     toDisplay.push("Saturn D: " + globalAstroData.saturn.DEC.fmt);
+                    toDisplay.push("-----------------------");
+                    toDisplay.push("Aries GHA: " + globalAstroData.aries.GHA.fmt);
                 }
                 if (userPos !== undefined && userPos.longitude !== undefined) {
                     let lhaSun  = calcLHA(globalAstroData.sun.GHA.raw, userPos.longitude);
