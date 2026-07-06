@@ -21,7 +21,7 @@ the multiplexer is driven by the configuration file `nmea.mux.gps.nmea-fwd.yaml`
 
 > _Reminder_ : The `server` is a component that can
 > - Create its own hotspot network
-> - Read the NMEA flow and manage the data (transform, forward, log, et)
+> - Read the NMEA flow and manage the data (transform, forward, log, etc)
 > - Serve static HTML requests (HTML, JS, CSS, images, etc)
 > - Serve REST requests
 > 
