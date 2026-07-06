@@ -19,6 +19,20 @@ In the use-case presented here, the NMEA-multiplexer will:
 The server (aka Mux) will be automatically started when the Raspberry Pi boots. In this example,
 the multiplexer is driven by the configuration file `nmea.mux.gps.nmea-fwd.yaml`.
 
+> _Reminder_ : The `server` is a component that can
+> - Create its own hotspot network
+> - Read the NMEA flow and manage the data (transform, forward, log, et)
+> - Serve static HTML requests (HTML, JS, CSS, images, etc)
+> - Serve REST requests
+> 
+> Some already existing components can already fulfill this kind of needs, the reason why it's
+> been re-written (from scratch) is to make it as small as possible (in disk space, and memory footprint). As it is, it is not 100% J2EE compliant
+> but it is good enough for the current purpose. In addition, it can read _**all**_ the static resources mentioned above from a zip file.
+> This considerably reduces - again - the required disk space.
+> 
+> Many user interfaces (if not all) are written in HTML and related technologies. They use absolutely _**NO**_ external libraries.
+> All you need to display the UI is a (recent) browser, compatible with HTML5, ES6, and CSS3. There is absolutely _**nothing**_ else to install.
+
 We do the build on one machine, where the git repo has been cloned, and we deploy on the Raspberry Pi
 only the parts required at runtime.
 The build is a demanding operation, the Raspberry Pi Zero could do it, but it would indeed take quite some time.
@@ -155,7 +169,7 @@ Make sure the `/etc/rc.local` is executable.
 
 Again, the system is now operational, and can be re-booted.
 
-> _**Note**_: There are other ways to do the same. You invoke the starting script from `etc/rc.local`...
+> _**Note**_: There are other ways to do the same. You invoke the starting script from `/etc/rc.local`...
 > ```
 > . . .
 > pushd /home/pi/nmea-dist
