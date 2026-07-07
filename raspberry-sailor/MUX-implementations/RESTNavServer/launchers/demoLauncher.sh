@@ -430,7 +430,7 @@ while [[ "${GO}" == "true" ]]; do
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13d}
 	        ;;
 	      "13e")
-	        PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.yaml
+	        PROP_FILE=mux-configs/nmea.mux.replay.la.trinite.groix.yaml # Can be overridden !
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_13e}
 	        ;;
 	      "13e2")

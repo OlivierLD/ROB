@@ -31,7 +31,8 @@ the multiplexer is driven by the configuration file `nmea.mux.gps.nmea-fwd.yaml`
 > This considerably reduces - again - the required disk space.
 > 
 > Many user interfaces (if not all) are written in HTML and related technologies. They use absolutely _**NO**_ external libraries.
-> All you need to display the UI is a (recent) browser, compatible with HTML5, ES6, and CSS3. There is absolutely _**nothing**_ else to install.
+> All you need to display the UI is a (recent) browser, compatible with HTML5, ES6, and CSS3. There is absolutely _**nothing**_ else to install.  
+> The server creates its own network, but again, Internet is not required. 
 
 We do the build on one machine, where the git repo has been cloned, and we deploy on the Raspberry Pi
 only the parts required at runtime.

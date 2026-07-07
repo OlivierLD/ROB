@@ -28,7 +28,7 @@ context:
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     # - markers: mux-configs/markers/markers.san.juan.yaml
     - markers: mux-configs/waypoints/waypoints.yaml
-  next-waypoint: BUGALET
+  next-waypoint: TEIGNOUSE
 channels:
   - type: file
     filename: ./sample.data/rubis.cup.2024/rubiscup.2024.zip
