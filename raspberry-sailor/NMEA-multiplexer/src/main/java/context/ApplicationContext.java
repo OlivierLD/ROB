@@ -113,7 +113,7 @@ public class ApplicationContext {
 			dataCache.put(NMEADataCache.MARKERS_FILE, markerList);
 			dataCache.put(NMEADataCache.MARKERS_DATA, allMarkers);
 			dataCache.put(NMEADataCache.BORDERS_DATA, allBorders);
-			dataCache.put(NMEADataCache.ROUTES_DATA, allRoutes);
+			dataCache.put(NMEADataCache.ROUTES_DATA, allRoutes);   // TODO Manage that one ('routes-data' in the cache)
 
 		}
 

@@ -3,7 +3,7 @@
 # For NMEA Compatibility, limit waypoint ids to 8 characters, all uppercase.
 #
 description:
-  Waypoints, and routes
+  waypoints.yaml, waypoints, and routes
 markers:
   - latitude: 47.5
     longitude: -3.004833

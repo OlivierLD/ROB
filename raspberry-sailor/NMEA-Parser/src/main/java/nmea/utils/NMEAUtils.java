@@ -459,12 +459,12 @@ public class NMEAUtils {
                         System.err.printf("Waypoint with ID %s not found\n", id);
                     }
                 });
-                System.out.printf("Route loaded from %s, %s.\n", markerFileName, (map.get("description") != null ? map.get("description") : "No description"));
+                System.out.printf("Route loaded from %s (%s).\n", markerFileName, (map.get("description") != null ? map.get("description") : "No description"));
                 if (markerList.size() > 0) {
                     route.setWaypoints(markerList);
                     if (true) {
                         System.out.printf("- Found route [%s]\n", route.getName());
-                        route.getWaypoints().forEach(m -> System.out.printf("\t- %s\n", m.toString()));
+                        route.getWaypoints().forEach(m -> System.out.printf("\t- %s\n", m.toString())); // Route's markers
                         System.out.println("------------------");
                     }
                 }
