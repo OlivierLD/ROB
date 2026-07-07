@@ -8,6 +8,7 @@ import utils.StringUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -111,7 +112,7 @@ public class DataFileReader extends NMEAReader {
 						try {
 							Thread.sleep(this.betweenRecords);
 						} catch (Exception ignore) {
-							System.err.println("Err when trying to sleep:");
+							System.err.println("Err when trying to sleep, ooch:");
 							ignore.printStackTrace();
 						}
 					} else {
@@ -138,6 +139,9 @@ public class DataFileReader extends NMEAReader {
 							break;
 						}
 					}
+				} catch (ConcurrentModificationException cme) {
+					System.err.println("Managed ConcurrentModificationException..., it's OK.");
+					cme.printStackTrace();
 				} catch (IOException ioe) { // stream may have been closed (loop = false)
 					ioe.printStackTrace();
 				}
