@@ -1,0 +1,282 @@
+#
+# Generated Tue Jul 07 2026 10:52:22 GMT+0200 (Central European Summer Time)
+#
+description:
+  Iberica West Coast
+
+markers:
+  - label: "A Coruña"
+    latitude: 43.365188127014314
+    longitude: -8.374586105346681
+    type: default
+    id: CORUNA
+  - label: "Cabo Toriñana"
+    latitude: 43.05721622232121
+    longitude: -9.294809103012087
+    type: default
+    id: TORINANA
+  - label: "Cabo Finisterre"
+    latitude: 42.88099583051603
+    longitude: -9.27177429199219
+    type: default
+    id: FINISTERRE
+  - label: "Isles Cies"
+    latitude: 42.216822141099506
+    longitude: -8.913345336914064
+    type: default
+    id: CIES
+  - label: "Ria de Vigo"
+    latitude: 42.24935997537791
+    longitude: -8.743057250976564
+    type: default
+    id: VIGO
+  - label: "Pontevedra"
+    latitude: 42.430552260619564
+    longitude: -8.65928649902344
+    type: default
+    id: PONTEVEDRA
+  - label: "Carmiña"
+    latitude: 41.878700049444156
+    longitude: -8.838672637939455
+    type: default
+    id: CARMINA
+  - label: "Viana do Castelo"
+    latitude: 41.68118166615732
+    longitude: -8.843393325805666
+    type: default
+    id: CASTELO
+  - label: "El Posende"
+    latitude: 41.532740137847156
+    longitude: -8.787002563476564
+    type: default
+    id: POSENDE
+  - label: "Porto de Leixões"
+    latitude: 41.18248956505717
+    longitude: -8.706289529800417
+    type: default
+    id: LEIXOES
+  - label: "Rio Douro"
+    latitude: 41.145440462944535
+    longitude: -8.674446344375612
+    type: default
+    id: DOURO
+  - label: "Figueria da Foz"
+    latitude: 40.14384586012983
+    longitude: -8.872833251953127
+    type: default
+    id: FIGUEIRA
+  - label: "Lisboã"
+    latitude: 38.688725613296725
+    longitude: -9.194183349609377
+    type: default
+    id: LISBOA
+  - label: "Sagres"
+    latitude: 37.00803608513944
+    longitude: -8.946990966796877
+    type: default
+    id: SAGRES
+  - label: "Gibraltar"
+    latitude: 36.10237644873644
+    longitude: -5.342102050781251
+    type: default
+    id: GIBRALTAR
+
+borders:
+  - border-name: "Border Name Here"
+    type: "open|closed"
+    border-elements:
+      - rank: 1
+        latitude: 43.297198404646366
+        longitude: -8.213653564453127
+      - rank: 2
+        latitude: 43.401056495052906
+        longitude: -8.315277099609377
+      - rank: 3
+        latitude: 43.3181840687112
+        longitude: -8.536376953125002
+      - rank: 4
+        latitude: 43.28620302246332
+        longitude: -8.739624023437502
+      - rank: 5
+        latitude: 43.3616313239934
+        longitude: -8.839187622070314
+      - rank: 6
+        latitude: 43.27345588757544
+        longitude: -8.992652893066408
+      - rank: 7
+        latitude: 43.05183041202389
+        longitude: -9.299926757812502
+      - rank: 8
+        latitude: 42.88200212690442
+        longitude: -9.269714355468752
+      - rank: 9
+        latitude: 42.921234883592945
+        longitude: -9.17015075683594
+      - rank: 10
+        latitude: 42.73995236140946
+        longitude: -9.078826904296877
+      - rank: 11
+        latitude: 42.80900310137467
+        longitude: -8.886566162109377
+      - rank: 12
+        latitude: 42.693539313660004
+        longitude: -9.023895263671877
+      - rank: 13
+        latitude: 42.56724159136565
+        longitude: -9.08500671386719
+      - rank: 14
+        latitude: 42.459940352216556
+        longitude: -9.011535644531252
+      - rank: 15
+        latitude: 42.58746644784859
+        longitude: -8.927078247070314
+      - rank: 16
+        latitude: 42.64557636874059
+        longitude: -8.753356933593752
+      - rank: 17
+        latitude: 42.55459772508892
+        longitude: -8.83781433105469
+      - rank: 18
+        latitude: 42.45943377777992
+        longitude: -8.945617675781252
+      - rank: 19
+        latitude: 42.34535034292539
+        longitude: -8.93943786621094
+      - rank: 20
+        latitude: 42.430552260619564
+        longitude: -8.69224548339844
+      - rank: 21
+        latitude: 42.42396338333737
+        longitude: -8.65653991699219
+      - rank: 22
+        latitude: 42.33773740551283
+        longitude: -8.828887939453127
+      - rank: 23
+        latitude: 42.252409537313724
+        longitude: -8.871459960937502
+      - rank: 24
+        latitude: 42.29000867789902
+        longitude: -8.670959472656252
+      - rank: 25
+        latitude: 42.346365331601895
+        longitude: -8.628387451171877
+      - rank: 26
+        latitude: 42.293056273848215
+        longitude: -8.619461059570314
+      - rank: 27
+        latitude: 42.15322331239858
+        longitude: -8.846740722656252
+      - rank: 28
+        latitude: 42.109939567658415
+        longitude: -8.899612426757814
+      - rank: 29
+        latitude: 41.86956082699455
+        longitude: -8.87901306152344
+      - rank: 30
+        latitude: 41.920161633946925
+        longitude: -8.775329589843752
+      - rank: 31
+        latitude: 41.85166206156541
+        longitude: -8.875579833984377
+      - rank: 32
+        latitude: 41.74672584176937
+        longitude: -8.883819580078127
+      - rank: 33
+        latitude: 41.68009190220902
+        longitude: -8.847427368164064
+      - rank: 34
+        latitude: 41.69957665997156
+        longitude: -8.742370605468752
+      - rank: 35
+        latitude: 41.67804053177181
+        longitude: -8.83506774902344
+      - rank: 36
+        latitude: 41.41698519272335
+        longitude: -8.78837585449219
+      - rank: 37
+        latitude: 41.33660710626426
+        longitude: -8.74992370605469
+      - rank: 38
+        latitude: 41.143501411390766
+        longitude: -8.673706054687502
+      - rank: 39
+        latitude: 41.00373905329032
+        longitude: -8.653106689453127
+      - rank: 40
+        latitude: 40.18516846826054
+        longitude: -8.909912109375002
+      - rank: 41
+        latitude: 40.11799004890476
+        longitude: -8.863220214843752
+      - rank: 42
+        latitude: 39.37040245787161
+        longitude: -9.431762695312502
+      - rank: 43
+        latitude: 38.70694605159386
+        longitude: -9.461975097656252
+      - rank: 44
+        latitude: 38.666211605156704
+        longitude: -9.319152832031252
+      - rank: 45
+        latitude: 38.70908932739828
+        longitude: -9.107666015625002
+      - rank: 46
+        latitude: 38.86109762182888
+        longitude: -9.015655517578127
+      - rank: 47
+        latitude: 38.76050866911151
+        longitude: -8.927764892578127
+      - rank: 48
+        latitude: 38.64261790634527
+        longitude: -9.110412597656252
+      - rank: 49
+        latitude: 38.67800554026613
+        longitude: -9.163970947265627
+      - rank: 50
+        latitude: 38.64798079297792
+        longitude: -9.261474609375002
+      - rank: 51
+        latitude: 38.405177640769445
+        longitude: -9.223022460937502
+      - rank: 52
+        latitude: 38.47509432050245
+        longitude: -8.948364257812502
+      - rank: 53
+        latitude: 38.348118547988065
+        longitude: -8.798675537109377
+      - rank: 54
+        latitude: 37.94528048379506
+        longitude: -8.886566162109377
+      - rank: 55
+        latitude: 37.92578434712103
+        longitude: -8.815155029296877
+      - rank: 56
+        latitude: 37.0266767305112
+        longitude: -9.006042480468752
+      - rank: 57
+        latitude: 37.09462150015557
+        longitude: -8.679199218750002
+      - rank: 58
+        latitude: 36.96086580957587
+        longitude: -7.899169921875001
+      - rank: 59
+        latitude: 37.182202221079805
+        longitude: -7.399291992187501
+      - rank: 60
+        latitude: 37.12966595484084
+        longitude: -6.858215332031251
+      - rank: 61
+        latitude: 36.79389010047562
+        longitude: -6.377563476562501
+      - rank: 62
+        latitude: 36.730079507078415
+        longitude: -6.457214355468751
+      - rank: 63
+        latitude: 36.16448788632064
+        longitude: -6.036987304687501
+      - rank: 64
+        latitude: 35.99800750540412
+        longitude: -5.6195068359375
+      - rank: 65
+        latitude: 36.10681461011844
+        longitude: -5.342102050781251
