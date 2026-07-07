@@ -140,7 +140,7 @@ public class DataFileReader extends NMEAReader {
 						}
 					}
 				} catch (ConcurrentModificationException cme) {
-					System.err.println("Managed ConcurrentModificationException..., it's OK.");
+					System.err.println("Managed ConcurrentModificationException..., it's OK if shutting down.");
 					cme.printStackTrace();
 				} catch (IOException ioe) { // stream may have been closed (loop = false)
 					ioe.printStackTrace();
