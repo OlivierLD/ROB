@@ -41,6 +41,31 @@ markers:
     latitude: 45.93730321246348
     longitude: -1.3032531738281252
     type: default
+  - label: "A Coruña"
+    latitude: 43.365188127014314
+    longitude: -8.374586105346681
+    type: default
+    id: CORUNA
+  - label: "Cabo Toriñana"
+    latitude: 43.05721622232121
+    longitude: -9.294809103012087
+    type: default
+    id: TORINANA
+  - label: "Cabo Finisterre"
+    latitude: 42.88099583051603
+    longitude: -9.27177429199219
+    type: default
+    id: FINISTERRE
+  - label: "Isles Cies"
+    latitude: 42.216822141099506
+    longitude: -8.913345336914064
+    type: default
+    id: CIES
+  - label: "Ria de Vigo"
+    latitude: 42.24935997537791
+    longitude: -8.743057250976564
+    type: default
+    id: VIGO
 
 borders:
   - border-name: "Bay Of Biscay"
