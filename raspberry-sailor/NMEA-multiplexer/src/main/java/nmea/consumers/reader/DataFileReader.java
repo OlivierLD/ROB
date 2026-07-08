@@ -123,12 +123,13 @@ public class DataFileReader extends NMEAReader {
 								System.out.println("===== Resetting Reader =====");
 							}
 							if (this.getZip()) {
-								ZipFile zipFile = new ZipFile(this.dataFileName);
-								ZipEntry zipEntry = zipFile.getEntry(this.pathInArchive); // Mandatory if zip=true
-								if (zipEntry == null) { // Path not found in the zip, take first entry.
-									zipEntry = zipFile.entries().nextElement();
+								try (ZipFile zipFile = new ZipFile(this.dataFileName)) {
+									ZipEntry zipEntry = zipFile.getEntry(this.pathInArchive); // Mandatory if zip=true
+									if (zipEntry == null) { // Path not found in the zip, take first entry.
+										zipEntry = zipFile.entries().nextElement();
+									}
+									this.fis = zipFile.getInputStream(zipEntry);
 								}
-								this.fis = zipFile.getInputStream(zipEntry);
 							} else {
 								this.fis = new FileInputStream(this.dataFileName);
 							}

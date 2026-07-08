@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# try CLI prms: --help, -h, ?
+#
 # Colors available from https://gist.github.com/vratiu/9780109
 RED='\033[0;31;1m'                 # Red and Bold
 GREEN="\033[1;32m"                 # Green and bold
@@ -40,7 +42,7 @@ display_usage ( ) {
 }
 #
 echo -e "${RED}Warning !! Make sure this is matching the one in rc.local !!${NC}"
-echo -e "           Assuming we're working from /home/pi/nmea-dist"
+echo -e "           Assuming we're working from ~pi/nmea-dist"
 #
 # Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306)
 OPTION=EINK2-13        # Default value
@@ -54,7 +56,12 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 #
-stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+MAP_SERIAL_PORT=false
+# Required if serial port is read as a file
+if [[ "${MAP_SERIAL_PORT}" == "true" ]]; then
+  echo -e "Mapping /dev/ttyACM0 to a file."
+  stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+fi
 #
 # Start MUX and Co on startup
 #
@@ -66,21 +73,21 @@ echo -e "Step 1 - Starting the Python server(s), on ${MACHINE_NAME}"
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # Start the REST Server for BME280
   echo -e "1 - Starting the BME280 REST server, port 9876, log is bme280.python.log"
-  /home/pi/nmea-dist/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:9876 --verbose:false > /home/pi/nmea-dist/bme280.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:9876 --verbose:false > ~pi/nmea-dist/bme280.python.log 2>&1
   sleep 10
   # Start the REST Server for SSD1306 (v2)
   echo -e "2 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --rotate:false > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --rotate:false > ~pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   # Start the REST Server for EINK2-13
   echo -e "1 - Starting the EINK2-13 REST server, port 8080, log is eink2-13.python.log"
-  /home/pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > /home/pi/nmea-dist/eink2-13.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > ~pi/nmea-dist/eink2-13.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   # Start the REST Server for SSD1306 (v2)
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  /home/pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --rotate:true > /home/pi/nmea-dist/ssd1306.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --rotate:true > ~pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 else
   echo -e ">> Unmanaged OPTION ${OPTION}"
@@ -90,19 +97,23 @@ else
 fi
 # Start the MUX
 echo -e "Step 2 - Starting the MUX"
-cd /home/pi/nmea-dist
+cd ~pi/nmea-dist
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
-  SERVER_HTTP_PORT=$(cat nmea.mux.gps.sensor.2.nmea-fwd.yaml | grep http.port | head -1 | awk '{ print $2 }')
+  # PROP_FILE=nmea.mux.gps.sensor.2.nmea-fwd.yaml
+  PROP_FILE=nmea.mux.gps.sensor.nmea-fwd.yaml
+  SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh nmea.mux.gps.sensor.2.nmea-fwd.yaml &
+  nohup ./mux.sh ${PROP_FILE} &
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
-  SERVER_HTTP_PORT=$(cat nmea.mux.gps.nmea-fwd.yaml | grep http.port | head -1 | awk '{ print $2 }')
+  PROP_FILE=nmea.mux.gps.nmea-fwd.yaml
+  SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh nmea.mux.gps.nmea-fwd.yaml &
+  nohup ./mux.sh ${PROP_FILE} &
 elif [[ "${OPTION}" == "SSD1306" ]]; then
-  SERVER_HTTP_PORT=$(cat nmea.mux.gps.nmea-fwd-ssd.yaml | grep http.port | head -1 | awk '{ print $2 }')
+  PROP_FILE=nmea.mux.gps.nmea-fwd-ssd.yaml
+  SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, port ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh nmea.mux.gps.nmea-fwd-ssd.yaml &
+  nohup ./mux.sh ${PROP_FILE} &
 else
   # This should have been taken of previously
   echo -e ">> Unmanaged OPTION ${OPTION}"

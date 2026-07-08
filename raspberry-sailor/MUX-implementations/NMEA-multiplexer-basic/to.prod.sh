@@ -135,7 +135,7 @@ echo -e "+----------------------------------------------------------------------
 echo -e " >> Archive $PWD/${distdir}.tar.gz ready for deployment."
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "| Send it to another machine (with scp for example), and un-archive it.                            |"
-echo -e "| Use 'tar -xzvf ${distdir}.tar.gz' to un-archive.                                                   |"
+echo -e "| Use 'tar -xzvf ${distdir}.tar.gz' to un-archive.                                                  "
 echo -e "| External dependencies like librxtx-java may be needed if you intend to use a serial port,        |"
 echo -e "| in which case you may need to run a 'sudo apt-get install librxtx-java' .                        |"
 if [[ "${PACKAGE_PYTHON}" == "Y" ]]; then

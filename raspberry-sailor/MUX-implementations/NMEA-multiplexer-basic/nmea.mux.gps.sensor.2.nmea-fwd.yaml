@@ -2,7 +2,7 @@
 # MUX definition.
 # With SSD1306 oled or eink screen.
 # The "NMEA Cache forwarder" is implemented by REST_SSD1306_server_v2.py or
-# also REST_EINK2-13_server.py
+#     also REST_EINK2-13_server.py
 # Requires several Python servers to be running.
 #
 name: "Real world scenario."
@@ -63,8 +63,8 @@ forwarders:
     sentence.filters: ~GGA,~GSV,~GSA
   - type: tcp
     port: 7001
-computers:
-  - type: "tw-current"
-    # Only if there is a MHU and HDG or HDM data
-    prefix: "CC"
-    time.buffer.length: 30, 60, 600
+# computers:
+#   - type: "tw-current"
+#     # Only if there is a MHU and HDG or HDM data
+#     prefix: "CC"
+#     time.buffer.length: 30, 60, 600

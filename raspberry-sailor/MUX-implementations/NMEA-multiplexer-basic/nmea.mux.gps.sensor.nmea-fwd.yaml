@@ -23,7 +23,8 @@ context:
     # - markers: mux-configs/bretagne.bumper.markers.yaml
 channels:
   - type: serial
-    port: /dev/ttyS80
+    port: /dev/ttyS80   # Requires a link (ln -s ...)
+    # port: /dev/ttyACM0  # Might not be accessible..., hence the link above.
     baudrate: 4800
 #    sentence.filters: ~GLL
 #    sentence.filters: RMC,GLL
