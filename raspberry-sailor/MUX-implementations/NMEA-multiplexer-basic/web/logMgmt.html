@@ -426,15 +426,15 @@
 					if (files.length > 0) {
 						files.forEach(file => {
 							let fileName = file.name;
-							let fileSize = formatter.format(file.size);
+							let fileSize = !file.name.endsWith(".zip") ? formatter.format(file.size) : '-';
 							let isActive = file.active ? '&#10006;' : '';
 							let deleteButton = !file.active && !root.total ? '<button onclick="deleteLog(\'' + encodeURIComponent(file.path) + '\');" title="Delete log file" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;"><img src="icons/delete.png" width="16" height="16" style="vertical-align: middle;"></button>' : '';
-							let detailsButton = !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?</button>' : '';
+							let detailsButton = !file.name.endsWith(".zip") && !file.active && !root.total ? '<button onclick="getLogDetails(\'' + encodeURIComponent(file.path) + '\');" title="Get log details" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">?</button>' : '';
 							let jsonButton = null;
 							if (false) {
 								jsonButton = !file.active && !root.total ? '<button onclick="getLogJSON(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">&#128521;</button>' : '';
 							} else {
-								jsonButton = !file.active && !root.total ? '<button onclick="openInChart(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">&#128521;</button>' : '';
+								jsonButton = !file.name.endsWith(".zip") && !file.active && !root.total ? '<button onclick="openInChart(\'' + encodeURIComponent(file.path) + '\');" title="Display on chart" style="width: 24px; height: 24px; border-radius: 12px; padding: 0;">&#128521;</button>' : '';
 							}
 							// console.log(`` + ' '.repeat(level * 2) + `- File: ${fileName}, size: ${fileSize}, active: ${isActive}`);
 							htmlContent += `<div style="margin-left: ${level * 20}px;">` +
