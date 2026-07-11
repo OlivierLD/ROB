@@ -56,11 +56,18 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 #
-MAP_SERIAL_PORT=false
+MAP_SERIAL_PORT=false  # File or sym-link
 # Required if serial port is read as a file
 if [[ "${MAP_SERIAL_PORT}" == "true" ]]; then
   echo -e "Mapping /dev/ttyACM0 to a file."
   stty -F /dev/ttyACM0 raw 4800 cs8 clocal
+else
+  if [[ ! -L /dev/ttyS80 ]]; then
+    echo -e "Linking /dev/ttyACM0 to /dev/ttyS80"
+    sudo ln -s /dev/ttyACM0 /dev/ttyS80
+  else
+    echo -e "SymLink exists"
+  fi
 fi
 #
 # Start MUX and Co on startup
@@ -98,6 +105,7 @@ fi
 # Start the MUX
 echo -e "Step 2 - Starting the MUX"
 cd ~pi/nmea-dist
+rm nohup.out 2> /dev/null
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # PROP_FILE=nmea.mux.gps.sensor.2.nmea-fwd.yaml
   PROP_FILE=nmea.mux.gps.sensor.nmea-fwd.yaml

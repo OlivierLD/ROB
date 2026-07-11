@@ -2,13 +2,16 @@ package nmea.forwarders;
 
 import nmea.parser.StringParsers;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * for forwarder.XX.type=file
@@ -22,6 +25,9 @@ public class DataFileWriter implements Forwarder {
 	private String dir;
 	private String split;
 	private final boolean flush;
+	private final boolean zippedOutput;
+	private String zipName;
+	private ZipOutputStream zos;
 	private long timeSplitThreshold = 0L;
 
 	private final static long MIN_MS  = 60 * 1_000;
@@ -33,6 +39,7 @@ public class DataFileWriter implements Forwarder {
 	static {
 		SDF.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 	}
+	private final static Logger LOG = Logger.getLogger("DataFileWriter"); // Logger
 
 	private enum Split {
 		min, hour, day, week, month, year
@@ -40,20 +47,39 @@ public class DataFileWriter implements Forwarder {
 
 	private List<String> filters = null;
 
+
+	private ZipOutputStream createZip(String zipName) {
+
+		// the zip file name that we will create
+		File zipFileName = Paths.get(zipName).toFile();
+
+		try {
+			ZipOutputStream zipStream = new ZipOutputStream(new FileOutputStream(zipFileName));
+			LOG.info(String.format("Zip file %s created", zipName));
+			return zipStream;
+		}
+		catch (IOException e) {
+			LOG.log(Level.SEVERE, "Error while creating zip file.", e);
+		}
+		return null;
+	}
+
 	public DataFileWriter(String fName) throws Exception {
 		this(fName, false);
 	}
 	public DataFileWriter(String fName, boolean append) throws Exception {
-		this(fName, append, false, null, null, null, false, null);
+		this(fName, append, false, null, null, null, false, false, null);
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush) throws Exception {
-		this(fName, append, false, null, null, null, flush, null);
+		this(fName, append, false, null, null, null, flush, false, null);
 	}
-
+	public DataFileWriter(String fName, boolean append, boolean flush, boolean zipped) throws Exception {
+		this(fName, append, false, null, null, null, flush, zipped, null);
+	}
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
-		this(fName, append, timeBased, radix, dir, split, flush, null);
+		this(fName, append, timeBased, radix, dir, split, flush, false, null);
 	}
-	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush, String sentenceFilters) throws Exception {
+	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush, boolean zippedOutput, String sentenceFilters) throws Exception {
 		System.out.printf("- Start writing to %s, %s \n", this.getClass().getName(), fName);
 
 		if (sentenceFilters != null) {
@@ -71,29 +97,54 @@ public class DataFileWriter implements Forwarder {
 		this.radix = radix;
 		this.dir = dir;
 		this.flush = flush;
-		if (this.timeBased) { // Then add a subdirectory, based on the time the logging was started. Each new log series is in its own folder.
-			String subDirName = SDF.format(new Date());
-			this.dir += (File.separator + subDirName);
-		}
-		if (split != null) {
-			Optional<Split> foundSplit = Arrays.stream(Split.values()).filter(val -> val.toString().equals(split)).findFirst();
-			if (foundSplit.isPresent()) {
-				this.split = foundSplit.get().toString();
-			} else {
-				throw new RuntimeException(String.format("Invalid Split value [%s]", split));
+		this.zippedOutput = zippedOutput;
+		if (zippedOutput) {
+			String zipSuffix = SDF.format(new Date());
+			this.zipName = this.dir + File.separator + "ZipLog_" + zipSuffix + ".zip";
+			if (VERBOSE) {
+				System.out.printf("==> Will create [%s]\n", this.zipName);
 			}
-		}
-		if (this.timeBased) {
-			this.log = generateFileName();
-			if (this.split != null) {
-				this.timeSplitThreshold = nextSplit();
+			this.zos = createZip(this.zipName);
+
+			String entryName = "/loggedData_" + zipSuffix + ".nmea";
+			if (VERBOSE) {
+				System.out.printf("Creating zip entry %s\n", entryName);
 			}
-		}
-		try {
-			this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
-		} catch (Exception ex) {
-			System.err.printf("When creating [%s]\n", this.log);
-			throw ex;
+
+			try {
+				ZipEntry entry = new ZipEntry(entryName);
+				entry.setCreationTime(FileTime.fromMillis(System.currentTimeMillis()));
+				entry.setComment("Created for DataFileWriter.");
+				this.zos.putNextEntry(entry);
+				LOG.info(String.format("Generated new entry for: %s", entryName));
+			} catch (java.util.zip.ZipException ze) { // entry already exists
+				LOG.warning(String.format("Entry %s already exists.", entryName));
+			}
+		} else { // On the file system
+			if (this.timeBased) { // Then add a subdirectory, based on the time the logging was started. Each new log series is in its own folder.
+				String subDirName = SDF.format(new Date());
+				this.dir += (File.separator + subDirName);
+			}
+			if (split != null) {
+				Optional<Split> foundSplit = Arrays.stream(Split.values()).filter(val -> val.toString().equals(split)).findFirst();
+				if (foundSplit.isPresent()) {
+					this.split = foundSplit.get().toString();
+				} else {
+					throw new RuntimeException(String.format("Invalid Split value [%s]", split));
+				}
+			}
+			if (this.timeBased) {
+				this.log = generateFileName();
+				if (this.split != null) {
+					this.timeSplitThreshold = nextSplit();
+				}
+			}
+			try {
+				this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
+			} catch (Exception ex) {
+				System.err.printf("When creating [%s]\n", this.log);
+				throw ex;
+			}
 		}
 	}
 
@@ -129,28 +180,64 @@ public class DataFileWriter implements Forwarder {
 				}
 			}
 			if (!mess.isEmpty() && ok) {
-				this.dataFile.write(mess + '\n');
-				if (this.flush) {
-					this.dataFile.flush();
+				if (VERBOSE) {
+					System.out.printf("FileForwarder: Writing [%s] in %s (%s), zipped: %s\n",
+							mess, this.log, this.dir, this.zippedOutput);
 				}
-				if (this.timeBased) {
-					long now = GregorianCalendar.getInstance(TimeZone.getTimeZone("etc/UTC")).getTimeInMillis();
-					if (this.split != null && now > this.timeSplitThreshold) {
-						this.dataFile.close();
-						this.log = generateFileName();
-						try {
-							this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
-						} catch (Exception ex) {
-							System.err.printf("When creating [%s]\n", this.log);
-							throw ex;
+				if (this.zippedOutput) { // Write in a zip
+					try {
+						if (false) {
+							String entryName = "/loggedData.nmea";
+							System.out.printf("Creating zip entry %s\n", entryName);
+							try {
+								ZipEntry entry = new ZipEntry(entryName);
+								entry.setCreationTime(FileTime.fromMillis(System.currentTimeMillis()));
+								entry.setComment("Created by OlivSoft, for DataFileWriter.");
+								this.zos.putNextEntry(entry);
+								LOG.info(String.format("Generated new entry for: %s", entryName));
+							} catch (java.util.zip.ZipException ze) { // entry already exists
+								LOG.warning(String.format("Entry %s already exists.", entryName));
+							}
 						}
-						this.timeSplitThreshold = nextSplit();
-//					} else {
-//						System.out.println(String.format("Keep going %d < %d, %s < %s",
-//								now,
-//								this.timeSplitThreshold,
-//								SDF.format(new Date(now)),
-//								SDF.format(new Date(this.timeSplitThreshold))));
+						String toWrite = mess + "\n";
+						try {
+							if (VERBOSE) {
+								System.out.printf("Pushing to zip.\n");
+							}
+							this.zos.write(toWrite.getBytes(), 0, toWrite.length());
+							this.zos.flush();
+						} catch (IOException ex2) {
+							System.err.println("Zip error - 2:");
+							ex2.printStackTrace();
+						}
+					} catch (Exception ex) {
+						System.err.println("Zip error:");
+						ex.printStackTrace();
+					}
+				} else { // File System
+					this.dataFile.write(mess + '\n');  // This is where data are written
+					if (this.flush) {
+						this.dataFile.flush();
+					}
+					if (this.timeBased) {
+						long now = GregorianCalendar.getInstance(TimeZone.getTimeZone("etc/UTC")).getTimeInMillis();
+						if (this.split != null && now > this.timeSplitThreshold) {
+							this.dataFile.close();
+							this.log = generateFileName();
+							try {
+								this.dataFile = new BufferedWriter(new FileWriter(this.log, this.append));
+							} catch (Exception ex) {
+								System.err.printf("When creating [%s]\n", this.log);
+								throw ex;
+							}
+							this.timeSplitThreshold = nextSplit();
+	//					} else {
+	//						System.out.println(String.format("Keep going %d < %d, %s < %s",
+	//								now,
+	//								this.timeSplitThreshold,
+	//								SDF.format(new Date(now)),
+	//								SDF.format(new Date(this.timeSplitThreshold))));
+						}
 					}
 				}
 			}
@@ -163,7 +250,12 @@ public class DataFileWriter implements Forwarder {
 	public void close() {
 		System.out.println("- Stop writing to " + this.getClass().getName());
 		try {
-			this.dataFile.close();
+			if (this.zippedOutput) {
+				System.out.printf("Closing %s\n", this.zipName);
+				this.zos.close();
+			} else {
+				this.dataFile.close();
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -245,6 +337,7 @@ public class DataFileWriter implements Forwarder {
 		private String dir;
 		private String split;
 		private boolean flush;
+		private boolean zipped;
 		private List<String> filters;
 
 
@@ -260,6 +353,7 @@ public class DataFileWriter implements Forwarder {
 			dir = instance.dir;
 			split = instance.split;
 			flush = instance.flush;
+			zipped = instance.zippedOutput;
 			filters = instance.filters;
 		}
 
@@ -299,6 +393,10 @@ public class DataFileWriter implements Forwarder {
 
 		public boolean isFlush() {
 			return flush;
+		}
+
+		public boolean isZipped() {
+			return zipped;
 		}
 
 		public List<String> getFilters() {

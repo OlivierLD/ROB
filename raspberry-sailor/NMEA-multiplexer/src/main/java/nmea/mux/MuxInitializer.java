@@ -773,7 +773,9 @@ public class MuxInitializer {
                             String logDir = muxProps.getProperty(String.format("forward.%s.log.dir", MUX_IDX_FMT.format(fwdIdx)));
                             String split = muxProps.getProperty(String.format("forward.%s.split", MUX_IDX_FMT.format(fwdIdx)));
                             String flush = muxProps.getProperty(String.format("forward.%s.flush", MUX_IDX_FMT.format(fwdIdx)));
+                            String zipped = muxProps.getProperty(String.format("forward.%s.zipped", MUX_IDX_FMT.format(fwdIdx)));
                             String fileVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
+
                             String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
                             if (verbose && sentenceFilters != null) {
                                 spitOutSentenceFilters(sentenceFilters);
@@ -781,7 +783,7 @@ public class MuxInitializer {
                             try {
                                 Forwarder fileForwarder;
                                 if (fSubClass == null) {
-                                    fileForwarder = new DataFileWriter(fName, append, timeBased, radix, logDir, split, "true".equals(flush), sentenceFilters);
+                                    fileForwarder = new DataFileWriter(fName, append, timeBased, radix, logDir, split, "true".equals(flush), "true".equals(zipped), sentenceFilters);
                                 } else {
                                     try {
                                         fileForwarder = (DataFileWriter) Class.forName(fSubClass.trim())

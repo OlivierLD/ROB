@@ -35,6 +35,7 @@ channels:
 forwarders:
   - type: file
     verbose: false
+    zipped: true
     timebase.filename: true
     filename.suffix: "_LOG"
     log.dir: "sample.data/log.test"

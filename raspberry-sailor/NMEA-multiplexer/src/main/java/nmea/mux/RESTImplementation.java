@@ -1537,7 +1537,7 @@ public class RESTImplementation {
 					if (!opFwd.isPresent()) {
 						try {
 							Forwarder fileForwarder = null;
-							if (fileJson.isTimeBased()) {
+							if (fileJson.isTimeBased() && ! fileJson.isZipped()) {
 								fileForwarder = new DataFileWriter(
 										fileJson.getLog(),
 										fileJson.append(),
@@ -1547,7 +1547,11 @@ public class RESTImplementation {
 										fileJson.getSplit(),
 										fileJson.isFlush());
 							} else {
-								fileForwarder = new DataFileWriter(fileJson.getLog(), fileJson.append(), fileJson.isFlush());
+								fileForwarder = new DataFileWriter(
+										fileJson.getLog(),
+										fileJson.append(),
+										fileJson.isFlush(),
+										fileJson.isZipped());
 							}
 							nmeaDataForwarders.add(fileForwarder);
 							String content = mapper.writeValueAsString(fileForwarder.getBean());

@@ -553,7 +553,9 @@ let forwarderList = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-					if (json[i].timeBased === true) {
+					if (json[i].zipped === true) {
+						html += ("<tr><td><b>file</b></td><td>(zipped), dir " + json[i].dir + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+					} else if (json[i].timeBased === true) {
 						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
 					} else {
 						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");

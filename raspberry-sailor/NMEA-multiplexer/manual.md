@@ -400,36 +400,41 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     forward.06.type=gpsd
     forward.06.port=2947
     ```
-- `file`
-    - Log file output
-    ```properties
-    forward.XX.type=file
-    # Option 1
-    forward.XX.filename=./data.nmea
-    # Option 2
-    forward.XX.timebase.filename=true
-    forward.XX.filename.suffix=_LOG
-    forward.XX.log.dir=logged
-    forward.XX.split=min|hour|day|week|month|year
-    #
-    forward.XX.append=true
-    forward.XX.flush=true
-    #
-    forward.XX.sentence.filters=~GSA,~GGA,~GSV
+  - `file`
+      - Log file output
+      ```properties
+      forward.XX.type=file
+      # Option 1
+      forward.XX.filename=./data.nmea
+      # Option 2
+      forward.XX.timebase.filename=true
+      forward.XX.filename.suffix=_LOG
+      forward.XX.log.dir=logged
+      forward.XX.split=min|hour|day|week|month|year
+      #
+      forward.XX.append=true
+      forward.XX.flush=true
+      #
+      forward.XX.sentence.filters=~GSA,~GGA,~GSV
 
-    ```
-    > _Explanations_:
-    > - `timebase.filename` default value is `false`
-    > - if `timebase.filename` is `false` then a `filename` is expected to be provided (default is `data.nmea`).
-    > - if `timebase.filename` is `true` then log file name will be based on the time the logging was started, like `2018-10-22_20:04:00_UTC.nmea`.
-    >   - if `filename.suffix` exists (default is an empty string) like `LOG_`, then log file name will be `LOG_2018-10-22_20:04:00_UTC.nmea`.
-    >   - if `log.dir` exists (default is `.`) log files will be generated in this directory (located under the working directory).
-    >   - if `split` exists (default is `null`) and one of `min`, `hour`, `day`, `week`, `month`, `year`, then a new log file will generated every `min`, `hour`, `day`, `week`, `month`, or `year`.
-    > - `flush` will write to the disk every time a record is written. Default is `false`.
-    > - `sentence.filters`, default `null`. Allows to log _only_ some sentences, or exclude some sentences.
-    >   - A filter like `RMC,GLL` would log only the `RMC` and `GLL` sentences
-    >   - A filter like `~GSA,~GGA,~GSV` will exclude `GSA`, `GGA` and `GSV` from the log.
-    
+      ```
+    >   _Explanations_:
+    >   - `timebase.filename` default value is `false`
+    >   - if `timebase.filename` is `false` then a `filename` is expected to be provided (default is `data.nmea`).
+    >   - if `timebase.filename` is `true` then log file name will be based on the time the logging was started, like `2018-10-22_20:04:00_UTC.nmea`.
+    >     - if `filename.suffix` exists (default is an empty string) like `LOG_`, then log file name will be `LOG_2018-10-22_20:04:00_UTC.nmea`.
+    >     - if `log.dir` exists (default is `.`) log files will be generated in this directory (located under the working directory).
+    >     - if `split` exists (default is `null`) and one of `min`, `hour`, `day`, `week`, `month`, `year`, then a new log file will generated every `min`, `hour`, `day`, `week`, `month`, or `year`.
+    >   - `flush` will write to the disk every time a record is written. Default is `false`.
+    >   - `sentence.filters`, default `null`. Allows to log _only_ some sentences, or exclude some sentences.
+    >     - A filter like `RMC,GLL` would log only the `RMC` and `GLL` sentences
+    >     - A filter like `~GSA,~GGA,~GSV` will exclude `GSA`, `GGA` and `GSV` from the log.
+
+    Work in Progress:
+      ```
+      forward.XX.zipped=true
+      ```
+
 - `ws`
     <!-- TODO: See https://www.baeldung.com/java-websockets -->
     - WebSocket server. 
