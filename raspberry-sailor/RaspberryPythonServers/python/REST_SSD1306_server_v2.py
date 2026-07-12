@@ -487,6 +487,8 @@ def screen_saver_manager() -> None:
     global keep_looping
     global screen_saver_timer
     global screen_saver_on
+    global verbose
+    global verbose_level2
     while keep_looping:
         screen_saver_timer += 1
         if screen_saver_timer > ENABLE_SCREEN_SAVER_AFTER and not screen_saver_on:
@@ -952,6 +954,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(bytes(error, 'utf-8'))
         elif self.path == PATH_PREFIX + "/bye-and-clear-screen":
+            if True or verbose:
+                print("Bye and clear screen requested")
             try:
                 keep_looping = False
                 # Clear screen. Say Bye for 1.5 second before clearing the screen.
