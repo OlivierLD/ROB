@@ -78,6 +78,8 @@ Depending on where you got the BME280 from, its shape may vary (Sparkfun here, a
 But the contact names (`GND`, `3V3`, `SDA`, `SCL`) remain the same.
 ![Fritzing](doc/RPiZeroBME280_bb.png)
 
+> _Note_: some `BME280` may work in 5V, not in 3V3.
+
 ### Check the I2C availability
 Make sure you've activated the I2C interface (with `raspi-config`)
 
