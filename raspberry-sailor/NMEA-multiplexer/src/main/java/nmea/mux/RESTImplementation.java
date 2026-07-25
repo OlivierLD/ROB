@@ -2812,9 +2812,9 @@ public class RESTImplementation {
 		//	String findCommand = String.format("find %s -name '*.nmea'", System.getProperty("user.dir", "."));
 		// find . -name '*.nmea' -print0 | xargs -0 ls -lisah | awk '{ print $7, $8, $9, $10, $11 }'
 		// String findCommand = "find . -name '*.nmea' | sort | xargs wc -l";  // Sorted !!
-		String findCommand = "find . -name \\*.nmea -o -name \\ZipLog_*.zip | sort | xargs wc -l";  // Sorted !! TODO no wc for zip files. Or two different queries
+		String findCommand = "find . -name \\*.nmea -o -name \\ZipLog_*.zip | sort | xargs wc -l";  // Sorted !! TODO no 'wc' for zip files. Or two different queries?
 		try {
-			Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", findCommand});
+			Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", findCommand}); // Bam! Execute!
 			int exitStatus = process.waitFor();
 
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));

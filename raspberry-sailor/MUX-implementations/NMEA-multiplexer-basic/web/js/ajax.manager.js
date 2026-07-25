@@ -1,6 +1,8 @@
 /*
  * @author Olivier Le Diouris
  */
+const DEBUG = false;
+
 let forwardAjaxErrors = true;
 
 function initAjax(forwardErrors) {
@@ -13,6 +15,69 @@ function initAjax(forwardErrors) {
 }
 
 const FETCH_TIMEOUT = 15000;
+const DEFAULT_TIMEOUT = 60000; // 1 minute
+
+
+/* Uses ES6 Promises */
+function getPromise(
+    url,                          // full api path
+    timeout,                      // After that, fail.
+    verb,                         // GET, PUT, DELETE, POST, etc
+    happyCode,                    // if met, resolve, otherwise fail.
+    data = null,                  // payload, when needed (PUT, POST...)
+    show = true,                  // Show the traffic [true]|false
+    headers = null) {             // Array of { name: '', value: '' }
+
+    if (show === true) {
+        document.body.style.cursor = 'wait';
+    }
+
+    if (DEBUG) {
+        console.log(">>> Promise", verb, url);
+    }
+
+    let promise = new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        let TIMEOUT = timeout;
+
+        let req = verb + " " + url;
+        if (data !== undefined && data !== null) {
+            req += ("\n" + JSON.stringify(data, null, 2));
+        }
+
+        xhr.open(verb, url, true);
+        if (headers === null) {
+            xhr.setRequestHeader("Content-type", "application/json");
+        } else {
+            headers.forEach(header => xhr.setRequestHeader(header.name, header.value));
+        }
+        try {
+            if (!data) {
+                xhr.send();
+            } else {
+                xhr.send(JSON.stringify(data));
+            }
+        } catch (err) {
+            console.log("Send Error ", err);
+        }
+
+        let requestTimer = setTimeout(() => {
+            xhr.abort();
+            let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
+            reject(mess);
+        }, TIMEOUT);
+
+        xhr.onload = () => {
+            clearTimeout(requestTimer);
+            if (xhr.status === happyCode) {
+                resolve(xhr.response);
+            } else {
+                reject({code: xhr.status, message: xhr.response});
+            }
+        };
+    });
+    return promise;
+}
 
 function getNMEAData() {
 
@@ -126,6 +191,180 @@ const BORDERS_THREATS = 'borders-threats';
 const TRUE_HDG = 'true-hdg';
 const TO_WP = 'to-wp';
 
+function requestDeclinations(payload) {
+    let url = "/astro/declination";
+    return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, payload, false);
+}
+
+function requestDevCurve() {
+    let url = "/mux/dev-curve";
+    return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+}
+
+function requestSunPath(pos) {
+    let url = "/astro/sun-path-today";
+    return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, pos, false);
+}
+
+function requestSunData(pos) {
+    let url = "/astro/sun-now";
+    return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, pos, false);
+}
+
+function loadSunData(pos) {
+    let getData = requestSunData(pos); // null (for pos) will use the default position. Can also contain the utcdate!!
+    getData.then((value) => { // Resolve
+//  console.log("Done:", value);
+        try {
+            let json = JSON.parse(value);
+
+            // console.log('Sun Data for SunPath', json);
+            let riseTime = json.riseTime; // epoch
+            let riseZ = json.riseZ; // degrees
+            let setTime = json.setTime; // epoch
+            let setZ = json.setZ; // degrees
+
+            // Specific
+            let sunPathElement = document.getElementById('sun-path-01');
+            if (sunPathElement !== null && sunPathElement !== undefined) {
+                sunPathElement.sunData = json;
+                sunPathElement.userPos = {latitude: json.lat, longitude: json.lng};
+
+                sunPathElement.sunRise = {time: riseTime, z: riseZ};
+                sunPathElement.sunSet = {time: setTime, z: setZ};
+
+                sunPathElement.repaint();
+            }
+        } catch (err) {
+            console.log("Error:", err, ("\nfor value [" + value + "]"));
+        }
+    }, (error) => { // Reject
+        console.log("Failed to get Sun data..." + (error && error.code ? error.code : ' - ') + ', ' + (error && error.message ? error.message : ' - '));
+    });
+}
+
+/**
+ *
+ * @param when UTC, Duration format: like "Y-m-dTH:i:s" -> 2018-09-10T10:09:00
+ * @param position { lat: 37.7489, lng: -122.507 }
+ * @param wandering true|false
+ * @param stars true|false
+ * @param constellations true|false
+ * @returns {Promise<any>}
+ */
+function getSkyGP(when, position, wandering, stars, constellations) {
+    let url = "/astro/positions-in-the-sky";
+    // Add date
+    url += ("?at=" + when);
+    url += ("&fromL=" + position.lat);
+    url += ("&fromG=" + position.lng);
+    // Wandering bodies
+    if (wandering !== undefined && wandering === true) { // to minimize the size of the payload
+        url += ("&wandering=true");
+    }
+    // Stars
+    if (stars && stars === true) { // to minimize the size of the payload
+        url += ("&stars=true");
+    }
+    // Constellations
+    if (constellations && constellations === true) {
+        url += ("&constellations=true");
+    }
+
+    return getPromise(url, DEFAULT_TIMEOUT, 'GET', 200, null, false);
+}
+
+/**
+ *
+ * @param when UTC, Duration format: like "Y-m-dTH:i:s" -> 2018-09-10T10:09:00
+ * @param position { lat: 37.7489, lng: -122.507 }
+ * @param wandering true|false
+ * @param stars true|false
+ * @returns {Promise<any>}
+ */
+function getAstroData(when, position, wandering, stars, constellations, callback) {
+    let getData = getSkyGP(when, position, wandering, stars, constellations);
+    getData.then((value) => { // resolve
+        let json = JSON.parse(value);
+        if (callback !== undefined) {
+            callback(json);
+        } else {
+            console.log(JSON.stringify(json, null, 2));
+        }
+    }, (error) => { // reject
+        console.log("Failed to get the Astro Data..." + (error !== undefined && error.code !== undefined ? error.code : ' - ') + ', ' + (error !== undefined && error.message !== undefined ? error.message : ' - '));
+    });
+}
+
+function setUTC(epoch) {
+    let url = "/mux/utc";
+    let obj = {epoch: epoch};
+    return getPromise(url, DEFAULT_TIMEOUT, 'PUT', 201, obj, false);
+}
+
+function setPosition(lat, lng) {
+    let url = "/mux/position";
+    let obj = {lat: lat, lng: lng};
+    return getPromise(url, DEFAULT_TIMEOUT, 'POST', 201, obj, false);
+}
+
+function setSOGCOG(sog, cog) {
+    let url = "/mux/sog-cog";
+    let obj = {sog: {unit: 'kt', sog: sog}, cog: {unit: 'deg', cog: cog}};
+    return getPromise(url, DEFAULT_TIMEOUT, 'POST', 201, obj, false);
+}
+
+function setUTCTime(epoch, callback) {
+    let setData = setUTC(epoch);
+    setData.then((value) => { // resolve
+        if (value !== undefined && value !== null && value.length > 0) {
+            let json = JSON.parse(value);
+            if (callback !== undefined) {
+                callback(json);
+            } else {
+                console.log(JSON.stringify(json, null, 2));
+            }
+        }
+    }, (error) => { // reject
+        console.log("Failed to set the UTC date and time..." + (error !== undefined && error.code !== undefined ? error.code : ' - ') + ', ' + (error !== undefined && error.message !== undefined ? error.message : ' - '));
+    });
+}
+
+let lastKnownPos = null;
+
+function setUserPos(lat, lng, callback) {
+    lastKnownPos = {
+        latitude: lat,
+        longitude: lng
+    };
+    let setData = setPosition(lat, lng);
+    setData.then((value) => { // resolve
+        if (value !== undefined && value !== null && value.length > 0) {
+            let json = JSON.parse(value);
+            if (callback !== undefined) {
+                callback(json);
+            } else {
+                console.log(JSON.stringify(json, null, 2));
+            }
+        }
+    }, (error) => { // reject
+        console.log("Failed to set the UTC date and time..." + (error !== undefined && error.code !== undefined ? error.code : ' - ') + ', ' + (error !== undefined && error.message !== undefined ? error.message : ' - '));
+    });
+}
+
+function getQueryParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) {
+        return null;
+    }
+    if (!results[2]) {
+        return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 function onMessage(json) {
 	try {

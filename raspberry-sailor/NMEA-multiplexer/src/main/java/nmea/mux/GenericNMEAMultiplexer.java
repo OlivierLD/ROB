@@ -3,6 +3,8 @@ package nmea.mux;
 import context.ApplicationContext;
 import http.HTTPServer;
 import http.RESTRequestManager;
+// import astrorest.AstroRequestManager;
+
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAParser;
@@ -332,6 +334,15 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
     public void startAdminServer(int port) {
         try {
             this.adminServer = new HTTPServer(port, this);
+            if (false) {
+                if (infraVerbose) {
+                    System.out.printf("\t>> %s (%s) - adding AstroRequestManager\n",
+                            NumberFormat.getInstance().format(System.currentTimeMillis()),
+                            this.getClass().getName());
+                }
+                // this.adminServer.addRequestManager(new AstroRequestManager());
+            }
+
             this.adminServer.startServer();
             if (infraVerbose) {
                 System.out.printf("\t>> %s (%s) - Starting Admin server on port %d\n",

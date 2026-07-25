@@ -17,7 +17,10 @@ repositories {
 compileJava.options.compilerArgs += ["-Xlint:none"]
 
 dependencies {
-    implementation project(':raspberry-sailor:NMEA-multiplexer')
+    // implementation project (':astro-computer:AstroUtilities')
+    // implementation project (':astro-computer:AstroComputer')
+    // implementation project (':raspberry-sailor:RESTNauticalAlmanac')
+    implementation project (':raspberry-sailor:NMEA-multiplexer')
 }
 
 shadowJar {

@@ -336,6 +336,7 @@ def button_listener(pin, state) -> None:
                     # cmd: str = "../kill.all.sample.sh"
                     cmd: str = "../kill.all.sh"   # Make sure that one exists.
                     print(f"Executing [{cmd}] ...")
+                    time.sleep(2)  # Wait a bit for the logs tobe written...
                     execute_system_command(cmd)
                     # Bye !
                 else:
@@ -886,7 +887,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 # server.server_close()
             except Exception as oops:
                 print(f"Error: {repr(oops)}")
-                response = {(f"Error: {repr(oops)}")}
+                response = {f"Error: {repr(oops)}"}
             self.wfile.write(json.dumps(response).encode())
         else:
             if verbose:
