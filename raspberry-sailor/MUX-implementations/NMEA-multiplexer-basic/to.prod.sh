@@ -5,6 +5,7 @@
 #
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
+echo -e "| CLI options: --basic (default) or --big                                                            |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |"
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
@@ -23,6 +24,22 @@ echo -e "| Make sure the current Java version is compatible with the target one!
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e ""
 #
+OPTION=BASIC        # Default value
+if [[ $# -gt 0 ]]; then
+  # echo -e "CLI prm: $1"
+  if [[ "$1" == "--basic" ]]; then
+    OPTION=BASIC
+  elif [ "$1" == "--big" ]; then
+    OPTION=BIG
+  else
+    echo -e "Unmanaged CLI parameter ${1}"
+    echo -e "Managed parameters are:"
+    echo -e "$0 --basic (default)"
+    echo -e "$0 --big"
+    exit 1
+  fi
+fi
+#
 # 1 - Build
 #
 # Set the proxy if needed, for maven access during the build.
@@ -30,11 +47,18 @@ PROXY_SETTINGS=
 # PROXY_SETTINGS="-Dhttp.proxyHost=www-proxy-hqdc.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy-hqdc.us.oracle.com -Dhttps.proxyPort=80"
 #
 REBUILD_REQUEST=Y
-if [[ -f ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ]]; then
+
+if [[ "${OPTION}" == "BASIC" ]]; then
+  JAR_NAME=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+elif [[ "${OPTION}" == "BIG" ]]; then
+  JAR_NAME=../RESTNavServer/build/libs/RESTNavServer-1.0-all.jar
+fi
+#
+if [[ -f ${JAR_NAME} ]]; then
   echo -e "There is an existing jar-file:"
-  ls -lisah ./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+  ls -lisah ${JAR_NAME}
   echo -e "With the following MANIFEST:"
-  ./type.manifest.sh ./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+  ./type.manifest.sh ${JAR_NAME}
   echo -e "----------------------------"
   echo -en "Do we re-build the Java part ? > "
   read REPLY
@@ -46,7 +70,13 @@ fi
 #
 if [[ "${REBUILD_REQUEST}" == "Y" ]]; then
   echo -e "Rebuilding from source (No Scala)..."
-  ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
+  if [[ "${OPTION}" == "BASIC" ]]; then
+    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
+  else
+    pushd ../RESTNavServer
+    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
+    popd
+  fi
 fi
 #
 # 2 - Create new dir
@@ -69,7 +99,11 @@ mkdir ${distdir}/build/libs
 # 3 - Copying required resources
 #
 echo -e "Copying resources..."
-cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs
+if [[ "${OPTION}" == "BASIC" ]]; then
+  cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs/mux-all.jar
+else
+  cp ../RESTNavServer/build/libs/RESTNavServer-1.0-all.jar ${distdir}/build/libs/mux-all.jar
+fi
 # Log folder
 # mkdir ${distdir}/logged
 # Web resources, zipped. To see the content: unzip -vl web.zip
@@ -123,7 +157,7 @@ ls -lisah ${distdir}.tar.gz
 echo -en "Can we drop the ${distdir} directory ? > "
 read REPLY
 if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-  echo -e "Ok, moving on."
+  echo -e "Ok, moving on, dropping ${distdir}."
   rm -rf ${distdir}
 else
   echo -e "OK. This will be your responsibility to clean it up."

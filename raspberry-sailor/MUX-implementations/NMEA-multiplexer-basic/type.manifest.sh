@@ -11,9 +11,9 @@ file_exists() {
 }
 #
 oops() {
-    echo
-    echo "$*"
-    echo
+    echo -e "(in type.manifest.sh)"
+    # echo "$*"
+    # echo
     exit 1
 }
 #

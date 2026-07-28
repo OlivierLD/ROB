@@ -54,6 +54,7 @@ public class SwingFrame extends JFrame {
 		this(providedList, DataOption.POSITIONS);
 	}
 
+	@SuppressWarnings("unchecked")
 	public SwingFrame(List<? extends Object> dataList, DataOption dataOption) {
 		if (dataOption == DataOption.POSITIONS) {
 			this.positions = (List<DatedPosition>)dataList;

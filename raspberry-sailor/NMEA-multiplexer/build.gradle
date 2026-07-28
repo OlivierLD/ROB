@@ -42,7 +42,6 @@ dependencies {
     implementation project(':common-utils')
     implementation project(':astro-computer:AstroUtilities')
     implementation project(':astro-computer:AstroComputer')
-    // implementation project(':raspberry-sailor')
     // implementation project(':raspberry-sailor:RESTNauticalAlmanac')
 
     implementation project(':raspberry-sailor:routing')

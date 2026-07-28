@@ -97,11 +97,15 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dtry.to.speak=true"
 #
 # JAVA_OPTIONS="$JAVA_OPTONS -Dpi4j.debug -Dpi4j.linking=dynamic"
 #
-CP=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+# CP=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+CP=$(find . -name '*-all.jar')
+echo -e "CP=${CP}"
+#
 SUDO=
 if [[ "$OS" == "Darwin" ]]; then
   # CP=${CP}:./libs/RXTXcomm.jar          # for Mac
-  CP=${CP}:../Serial.IO/libs/RXTXcomm.jar # for Mac
+  RXTX_JAR=~/repos/ROB/Serial-IO/libs/RXTXcomm.jar
+  CP=${CP}:${RXTX_JAR} # for Mac
 fi
 if [[ "$OS" == "Linux" ]]; then
   CP=${CP}:/usr/share/java/RXTXcomm.jar # For Raspberry Pi

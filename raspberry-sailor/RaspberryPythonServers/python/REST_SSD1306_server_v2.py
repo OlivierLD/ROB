@@ -87,7 +87,7 @@ import ssd1306Utils  # local script
 __version__ = "0.0.2"
 __repo__ = "https://github.com/OlivierLD/ROB"
 
-PATH_PREFIX = "/ssd1306"
+PATH_PREFIX: str = "/ssd1306"
 server_port: int = 8080
 verbose: bool = False
 verbose_level2: bool = True
