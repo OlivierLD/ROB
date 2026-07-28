@@ -60,12 +60,12 @@ forwarders:
     # filename: data.nmea
     # flush: true
     verbose: false
-    zipped: true
+    # zipped: true
     timebase.filename: true
     filename.suffix: _LOG
     log.dir: logged
     split: hour
-    sentence.filters: ~GGA,~GSA,~GSV
+    # sentence.filters: ~GGA,~GSA,~GSV
 computers:
   - type: "tw-current"
     prefix: "CC"

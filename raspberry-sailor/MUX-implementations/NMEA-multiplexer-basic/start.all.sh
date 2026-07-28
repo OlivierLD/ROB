@@ -25,6 +25,8 @@ display_help ( ) {
   echo -e "  and a Multiplexer"
   echo -e "${CYAN}SSD1306${NC}"
   echo -e "  starts the python server for an ssd1306 screen, and a Multiplexer"
+  echo -e "${CYAN}NAV-SERVER${NC}"
+  echo -e "  starts only a Multiplexer, with more REST operations."
   echo -e "${BOLD_GREEN_BLINK}Unmanaged CLI parameters will result in a exit.${NC}"
   echo -e "-----------------------------------------------------------------------"
 }
@@ -96,6 +98,8 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
   ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --rotate:true > ~pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
+elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
+  echo -e "No python server to be started for NAV-SERVER option"
 else
   echo -e ">> Unmanaged OPTION ${OPTION}"
   display_help
@@ -122,6 +126,14 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, port ${SERVER_HTTP_PORT}"
   nohup ./mux.sh ${PROP_FILE} &
+elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
+  PROP_FILE=nmea.mux.gps.tcp.yaml
+  NAV_SERVER_EXTRA_OPTIONS=
+  SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
+  nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+  echo -e "${RED}In a browser: http://localhost:${SERVER_HTTP_PORT}/zip/index.html${NC}"
+  echo -e "Also try: curl -X GET http://localhost:${SERVER_HTTP_PORT}/mux/cache | jq"
+  echo -e "          curl -X GET http://localhost:${SERVER_HTTP_PORT}/oplist | jq"
 else
   # This should have been taken of previously
   echo -e ">> Unmanaged OPTION ${OPTION}"

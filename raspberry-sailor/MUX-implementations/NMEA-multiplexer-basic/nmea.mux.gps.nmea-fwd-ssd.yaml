@@ -39,7 +39,7 @@ forwarders:
     verbose: false
   - type: file
     verbose: false
-    zipped: true
+    # zipped: true
     log.dir: logged
     sentence.filters: ~GGA,~GSV,~GSA
   - type: tcp

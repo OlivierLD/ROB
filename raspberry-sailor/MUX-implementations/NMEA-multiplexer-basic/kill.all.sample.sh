@@ -4,7 +4,7 @@
 #
 SUDO="sudo "
 #
-ps -ef | grep GenericNMEAMultiplexer | grep -v grep | grep -v killns | awk '{ print $2 }' > km
+ps -ef | grep -E '(GenericNMEAMultiplexer|NavServer)' | grep -v grep | grep -v killns | awk '{ print $2 }' > km
 NB_L=$(cat km | wc -l)
 if [[ ${NB_L} == 0 ]]; then
   echo No MUX process found.

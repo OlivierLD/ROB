@@ -95,6 +95,7 @@ echo -e "Creating folder ${distdir}"
 mkdir ${distdir}
 mkdir ${distdir}/build
 mkdir ${distdir}/build/libs
+mkdir ${distdir}/polars
 #
 # 3 - Copying required resources
 #
@@ -117,11 +118,14 @@ cp *.properties ${distdir}
 cp *.yaml ${distdir}
 # If needed, more resources would go here (like dev curves, etc)
 cp mux.sh ${distdir}
+cp runNavServer.sh ${distdir}
 cp mk.link.sh ${distdir}
 cp kill.all.sample.sh ${distdir}/kill.all.sh
 cp show.processes.sh ${distdir}
 cp start.all.sh ${distdir}
 cp log.*.sh ${distdir}
+cp -r polars/* ${distdir}/polars
+cp zero*.csv ${distdir}
 cp ../../NMEA-multiplexer/find.port.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}

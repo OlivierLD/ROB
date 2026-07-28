@@ -14,6 +14,13 @@ function initAjax(forwardErrors) {
 	}, 1000);
 }
 
+function displayErr(err) {
+	if (err) {
+		// document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+		console.log(err);
+	}
+}
+
 const FETCH_TIMEOUT = 15000;
 const DEFAULT_TIMEOUT = 60000; // 1 minute
 
@@ -425,6 +432,14 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
 		}
+        try {
+            let gpsSat = json["Satellites in view"];
+            if (gpsSat !== undefined) {
+                events.publish(events.topicNames.GPS_SAT, gpsSat);
+            }
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Satellites data (" + err + ")");
+        }
 
 		try {
 			let hdg = json["HDG true"].angle;

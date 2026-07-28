@@ -5,7 +5,7 @@
 echo -e "+-----------------------+"
 echo -e "| NMEA Multiplexer(s) : |"
 echo -e "+-----------------------+"
-ps -ef | grep GenericNMEAMultiplexer | grep -v grep | grep -v killns
+ps -ef | grep -E '(GenericNMEAMultiplexer|NavServer)' | grep -v grep | grep -v killns
 #
 echo -e "+-----------------------+"
 echo -e "| Python server(s) :    |"
