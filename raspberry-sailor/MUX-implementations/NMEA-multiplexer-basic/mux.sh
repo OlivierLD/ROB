@@ -87,8 +87,8 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dcalculate.solar.with.eot=true"
 # To test the AISManager
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=47.705 -Ddefault.mux.longitude=-3.105" # Locoal.
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=47.661667 -Ddefault.mux.longitude=-2.758167" # Vannes.
-# JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=47.677667 -Ddefault.mux.longitude=-3.135667" # Belz.
-JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=49.293167 -Ddefault.mux.longitude=-0.098833" # Dives.
+JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=47.677667 -Ddefault.mux.longitude=-3.135667" # Belz.
+# JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=49.293167 -Ddefault.mux.longitude=-0.098833" # Dives.
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=37.7489 -Ddefault.mux.longitude=-122.5070" # SF.
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=48.48518833333333 -Ddefault.mux.longitude=-123.07788833333333" # False Bay, San Juan Island
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Ddefault.mux.latitude=48.60448 -Ddefault.mux.longitude=-122.819285" # Olga, Orcas Island

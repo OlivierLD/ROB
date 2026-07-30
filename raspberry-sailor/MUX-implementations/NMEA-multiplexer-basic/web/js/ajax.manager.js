@@ -414,8 +414,10 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "boat speed");
 		}
 		try {
-			let log = json.Log.distance;
-			events.publish(LOG, log);
+		    if (json.Log) {
+			  let log = json.Log.distance;
+			  events.publish(LOG, log);
+			}
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "log (" + err + ")");
 		}
@@ -600,6 +602,11 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "VMG");
 		}
+        try {
+            events.publish(events.topicNames.LAST_NMEA, {'data': json['NMEA']});
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "NMEA");
+        }
 
 		try {
 			let prate = json.prate;

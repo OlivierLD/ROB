@@ -519,7 +519,7 @@ class WindAngleDisplay extends HTMLElement {
 		}
 
 		// Value
-		let text = windValue.ws.toFixed(this.analogDisplayColorConfig.valueNbDecimal);
+		let text = windValue.ws.toFixed(this.analogDisplayColorConfig.valueNbDecimal) + 'kt';
 		let len = 0;
 		context.font = "bold " + Math.round(scale * 40 * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
 		let metrics = context.measureText(text);

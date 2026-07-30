@@ -478,7 +478,7 @@ def button_manager(pin, callback) -> None:
         finally:
             if verbose and False:
                 print("button_manager, finally.")
-    print(f"Done with button listener on pin {pin}")
+    print(f"Done with button listener on pin {pin}\n")
 
 
 def screen_saver_manager() -> None:
@@ -1474,13 +1474,18 @@ if __name__ == '__main__':
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n\t\tUser interrupted (server.serve), exiting.")
+        # TODO The prints below are not seen in the log...
+        print("\n\t\tUser interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()
         button_thread_02.join()
         display_thread.join()
         if enable_screen_saver:
             screen_saver_thread.join()
+        server.shutdown()
+    except Exception as oops:
+        result = f"Oops: {repr(oops)}"
+
 
     print("Out of the server loop")
 

@@ -28,7 +28,7 @@ This means that file log files will be stored in a folder name `logged`, and spl
 
 ### To download the files
 From another machine (or not!), we are going to copy those files.  
-connected (with ssh) on the Rapsberry Pi, we can see the files:
+connected (with ssh) on the Raspberry Pi, we can see the files:
 ```commandline
 pi@rpi-a-plus:~/nmea-dist/logged [10.42.0.1] $ tree -hpu .
 [drwxr-xr-x root     4.0K]  .

@@ -522,6 +522,9 @@ function dumpIt(withDialog) { // YAML Generation
   if (markersFileName.trim().length > 0) {
       code += `  markers: ${ document.getElementById('markers').value }\n`;
   }
+  code += `#  markers-list: \n`;
+  code += `#    - markers: markers.01.yaml\n`;
+  code += `#  next-waypoint: TEIGNOUSE\n`;
 
   // Consumers
   let dropId = "drop-div-consumers";

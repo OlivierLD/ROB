@@ -518,6 +518,10 @@ function dumpIt(withDialog) { // YAML Generation
   code += `  hdg.offset: ${ document.getElementById('hdg-offset').value }\n`;
   code += `  awa.offset: ${ document.getElementById('awa-offset').value }\n`;
   code += `  damping: ${ document.getElementById('damping').value }\n`;
+  code += `#  markers-list: \n`;
+  code += `#    - markers: markers.01.yaml\n`;
+  code += `#  next-waypoint: TEIGNOUSE\n`;
+
 
 
   // Consumers

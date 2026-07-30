@@ -46,7 +46,7 @@ display_usage ( ) {
 echo -e "${RED}Warning !! Make sure this is matching the one in rc.local !!${NC}"
 echo -e "           Assuming we're working from ~pi/nmea-dist"
 #
-# Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306)
+# Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306), or NAV-SERVER
 OPTION=EINK2-13        # Default value
 if [[ $# -gt 0 ]]; then
   # echo -e "CLI prm: $1"
@@ -58,7 +58,7 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 #
-MAP_SERIAL_PORT=false  # File or sym-link
+MAP_SERIAL_PORT=false  # File or sym-link. false: map/link to port /dev/ttyS80, true: map to file
 # Required if serial port is read as a file
 if [[ "${MAP_SERIAL_PORT}" == "true" ]]; then
   echo -e "Mapping /dev/ttyACM0 to a file."

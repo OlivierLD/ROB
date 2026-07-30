@@ -9,6 +9,10 @@ context:
   with.http.server: true
   http.port: 8888
   init.cache: true
+  deviation.file.name: dp_2011_04_15.csv
+  markers.list:
+    - markers: markers.biscay.yaml
+    - markers: markers.iberica.west.yaml
 channels:
   - type: serial
     port: /dev/ttyS80

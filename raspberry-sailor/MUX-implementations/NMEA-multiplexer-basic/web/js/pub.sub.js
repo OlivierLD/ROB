@@ -55,11 +55,29 @@ let events = {
         });
     },
 
-    publish: function (topic, value) {
-        for (let i = 0; i < this.listener.length; i++) {
-            if (this.listener[i].topic === topic) {
-                this.listener[i].actionListener(value);
+//    publish: function (topic, value) {
+//        for (let i = 0; i < this.listener.length; i++) {
+//            if (this.listener[i].topic === topic) {
+//                this.listener[i].actionListener(value);
+//            }
+//        }
+//    }
+
+    commonPublish: function(topic, value) {
+        // Empty by default
+    },
+
+    publish: function(topic, value) {
+        this.commonPublish(topic, value);
+        this.listener.forEach((lsnr, idx) => {
+            if (lsnr.topic === topic) {
+                try {
+                    lsnr.actionListener(value);
+                } catch (err) {
+                    console.log("Topic %s, index %d, err: %s", topic, idx, err);
+                }
             }
-        }
+        });
     }
+
 };
