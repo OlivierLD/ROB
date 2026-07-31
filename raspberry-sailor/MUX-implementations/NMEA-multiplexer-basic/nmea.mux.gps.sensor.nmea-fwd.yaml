@@ -66,7 +66,7 @@ forwarders:
     log.dir: logged
     split: hour
     # sentence.filters: ~GGA,~GSA,~GSV
-computers:
-  - type: "tw-current"
-    prefix: "CC"
-    time.buffer.length: 30, 60, 600
+# computers:
+#   - type: "tw-current"
+#     prefix: "CC"
+#     time.buffer.length: 30, 60, 600

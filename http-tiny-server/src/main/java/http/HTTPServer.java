@@ -1016,7 +1016,7 @@ public class HTTPServer {
 
 		// Intercept Ctrl+C
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			System.out.println(" <- HTTP: Ctrl+C intercepted.");
+			System.out.printf("(%s) <- HTTP: Ctrl+C intercepted.\n", this.getClass().getName());
 			onExit();
 			// Send /exit
 			if (httpServerInstance.sendCleanStopSignal) {

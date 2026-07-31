@@ -56,7 +56,7 @@ NMEA_EOS: str = "\r\n"  # aka CR-LF
 def interrupt(sig: int, frame):
     # print(f"Signal: {type(sig)}, frame: {type(frame)}")
     global keep_listening
-    print("\nCtrl+C intercepted!")
+    print(f"\n{__file__}: Ctrl+C intercepted!")
     keep_listening = False
     time.sleep(1.5)
     print("Server Exiting.")

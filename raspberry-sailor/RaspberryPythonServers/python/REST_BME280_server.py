@@ -319,6 +319,6 @@ print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".for
 try:
     server.serve_forever()
 except KeyboardInterrupt:
-    print("\n\t\tUser interrupted (server.serve), exiting.")
+    print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.")
 
 print("Done with REST BME280 server.")

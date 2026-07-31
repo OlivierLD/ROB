@@ -297,6 +297,13 @@ def button_listener(pin, state) -> None:
     global double_click_1
     global double_click_2
     global just_disabled_ss
+    global oled
+    global keep_looping
+    global button_thread_01
+    global button_thread_02
+    global display_thread
+    global enable_screen_saver
+    global screen_saver_thread
 
     # nowms: int = int(datetime.datetime.now().timestamp() * 1000)  # Timestamp in ms
     nowms: int = int(time.time() * 1000)  # Timestamp in ms
@@ -327,16 +334,51 @@ def button_listener(pin, state) -> None:
                     # This is a shutdown!
                     cwd = os.getcwd()
                     print(f"Shutting down!! from {cwd}...")
+
+                    keep_looping = False
+                    # button_thread_01.join()
+                    # button_thread_02.join()
+                    # display_thread.join()
+                    # if enable_screen_saver:
+                    #     screen_saver_thread.join()
+
+                    # Clear the screen (redundant ?)
+                    if oled is not None:
+                        print(f"{__file__}, cleaning the screen")
+                        clear_screen()
+                        text: str = "Bye-bye..."
+                        # (font_width, font_height) = font.getsize(text)
+                        left, top, right, bottom = font.getbbox(text)
+                        (font_width, font_height) = right - left, bottom - top
+                        draw.text(
+                            (oled.width // 2 - font_width // 2,
+                             oled.height // 2 - font_height // 2),
+                            text,
+                            font=font,
+                            fill=WHITE,
+                        )
+                        # Display image
+                        oled.image(image)
+                        oled.show()
+                        time.sleep(2)
+                        clear_screen()
+                        oled.image(image)
+                        oled.show()
+                        time.sleep(1)
+                    else:
+                        print(f"{__file__}, no screen was found")
+
                     if False:
                         # Self call. But does not kill the mux.
                         cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"
-                        print(f"Executing [{cmd}] ...")
+                        print(f"{__file__} -> Executing [{cmd}] ...")
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
                     # cmd: str = "../kill.all.sample.sh"
+
                     cmd: str = "../kill.all.sh"   # Make sure that one exists.
-                    print(f"Executing [{cmd}] ...")
-                    time.sleep(2)  # Wait a bit for the logs tobe written...
+                    print(f"{__file__} -> Executing [{cmd}] ...")
+                    time.sleep(2)  # Wait a bit for the logs to be written...
                     execute_system_command(cmd)
                     # Bye !
                 else:
@@ -474,7 +516,7 @@ def button_manager(pin, callback) -> None:
             prev_state = button_down
             time.sleep(0.01)  # sleep for debounce. Tricky.
         except Exception as oops:
-            print(f"Error: {repr(oops)}")
+            print(f"{__file__} - Error: {repr(oops)}")
         finally:
             if verbose and False:
                 print("button_manager, finally.")
@@ -1475,7 +1517,7 @@ if __name__ == '__main__':
         server.serve_forever()
     except KeyboardInterrupt:
         # TODO The prints below are not seen in the log...
-        print("\n\t\tUser interrupted (server.serve), exiting.\n")
+        print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()
         button_thread_02.join()

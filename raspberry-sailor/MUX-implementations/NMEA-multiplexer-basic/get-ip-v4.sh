@@ -7,5 +7,5 @@ if [[ "$DARWIN" != "" ]]; then
   # To use on Mac
   echo -e "$(ifconfig | grep inet | grep 192 | awk '{ print $2 }')"
 else
-  echo -e "$(hostname -I)"
+  echo -e "$(hostname -I | awk '{ print $1 }')"
 fi
