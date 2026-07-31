@@ -16,11 +16,12 @@ In the use-case presented here, the NMEA-multiplexer will:
 - Broadcast the data on TCP:7001
 - Host Web Pages to display the data, manage the system, manage the log files.
 
-The server (aka Mux) will be automatically started when the Raspberry Pi boots. In this example,
+The server (aka _Mux_) will be automatically started when the Raspberry Pi boots. In this example,
 the multiplexer is driven by the configuration file `nmea.mux.gps.nmea-fwd.yaml`.
 
 > _Reminder_ : The `server` is a component that can
 > - Create its own hotspot network
+>   - For details, see the scripts like `rc.local.ssd1306.gps.sh`, `connect-network.sh`, `disable-hotspot.sh`
 > - Read the NMEA flow and manage the data (transform, forward, log, etc)
 > - Serve static HTML requests (HTML, JS, CSS, images, etc)
 > - Serve REST requests
@@ -62,6 +63,9 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - > and **_do make sure you boot the first time on the right machine_**!!  
     Starting an A+ SDCard on an RPi-5 could put you in trouble (when moving back to A+)...   
 - Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
+  - The script can take a CLI parameter with 2 options:
+    - `--basic`, basic config
+    - `--big`, more REST request managers, more options
   - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
     If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
     Using a JDK11 for the build will not work at runtime on a JDK8.
@@ -135,7 +139,8 @@ For BME280-SSD
 ```
 $ ./start.all.sh BME280-SSD
 ```
-etc...
+etc...  
+Look at the `start.all.sh` script for details, you can also do a `./start.all.sh --help`.
 
 About the modification of the `/etc/rc.local` script, to start the 
 required components when the machine boots,
