@@ -99,6 +99,7 @@ public class DataFileWriter implements Forwarder {
 		this.flush = flush;
 		this.zippedOutput = zippedOutput;
 		if (zippedOutput) {
+			// TODO There might be a flush problem...
 			String zipSuffix = SDF.format(new Date());
 			this.zipName = this.dir + File.separator + "ZipLog_" + zipSuffix + ".zip";
 			if (VERBOSE) {
@@ -205,7 +206,7 @@ public class DataFileWriter implements Forwarder {
 								System.out.printf("Pushing to zip.\n");
 							}
 							this.zos.write(toWrite.getBytes(), 0, toWrite.length());
-							this.zos.flush();
+							this.zos.flush(); // TODO check if this is working...
 						} catch (IOException ex2) {
 							System.err.println("Zip error - 2:");
 							ex2.printStackTrace();

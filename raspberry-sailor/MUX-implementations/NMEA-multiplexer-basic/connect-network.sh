@@ -14,3 +14,5 @@ nmcli dev wifi connect ${NETWORK_NAME} password ${PSWD}
 #
 nmcli dev wifi
 nmcli dev wifi show-password
+#
+echo -e "Use . ./change-prompt.sh to update the prompt with new IP address."

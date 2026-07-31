@@ -2,6 +2,8 @@
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
 ##### A tracker for less than $50...  
 We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [e-ink 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
+> As you would see below, this is just _an example_ of configuration, used to explain the way it goes.
+> Several other configurations are available, using the same process and guidelines.  
 
 The e-ink technology is quite interesting here, in the sense that it consumes energy _**only**_ when updating the screen. Once something
 is displayed on the screen, you can pull the plug, whatever's displayed remains displayed.  

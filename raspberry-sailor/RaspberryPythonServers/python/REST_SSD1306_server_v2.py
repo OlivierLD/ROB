@@ -1486,7 +1486,6 @@ if __name__ == '__main__':
     except Exception as oops:
         result = f"Oops: {repr(oops)}"
 
-
     print("Out of the server loop")
 
     # After all, cleanup.
