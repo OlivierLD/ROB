@@ -346,6 +346,7 @@ def button_listener(pin, state) -> None:
                     if oled is not None:
                         print(f"{__file__}, cleaning the screen")
                         clear_screen()
+                        drawWhiteFrame()
                         text: str = "Bye-bye..."
                         # (font_width, font_height) = font.getsize(text)
                         left, top, right, bottom = font.getbbox(text)
@@ -1268,6 +1269,20 @@ def display_manager() -> None:
     print("Done with display thread")
 
 
+def drawWhiteFrame() -> None:
+    global oled
+    global draw
+
+    # Draw a white background
+    draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
+
+    # Draw a smaller inner rectangle, in black
+    draw.rectangle(
+        (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+        outline=BLACK,
+        fill=BLACK,
+    )
+
 #
 # Main part.
 #
@@ -1400,15 +1415,18 @@ if __name__ == '__main__':
     draw: PIL.ImageDraw.ImageDraw = ImageDraw.Draw(image)
     # print(f"Draw is a {type(draw)}")
 
-    # Draw a white background
-    draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
+    if False:  # TODO To be removed
+        # Draw a white background
+        draw.rectangle((0, 0, oled.width, oled.height), outline=WHITE, fill=WHITE)
 
-    # Draw a smaller inner rectangle, in black
-    draw.rectangle(
-        (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
-        outline=BLACK,
-        fill=BLACK,
-    )
+        # Draw a smaller inner rectangle, in black
+        draw.rectangle(
+            (BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+            outline=BLACK,
+            fill=BLACK,
+        )
+    else:
+        drawWhiteFrame()
 
     small_font_size: int  =  9   # 8
     medium_font_size: int = 16
@@ -1533,6 +1551,7 @@ if __name__ == '__main__':
     # After all, cleanup.
     if oled is not None:
         clear_screen()
+        drawWhiteFrame()
         text: str = "Bye-bye..."
         # (font_width, font_height) = font.getsize(text)
         left, top, right, bottom = font.getbbox(text)

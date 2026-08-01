@@ -279,7 +279,7 @@ image = Image.new("RGB", (eink.width, eink.height))
 draw = ImageDraw.Draw(image)
 
 # Load a TTF Font
-font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
+font      = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
 bold_font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", FONTSIZE)
 
 FONT = bold_font
