@@ -524,7 +524,7 @@ def button_manager(pin, callback) -> None:
         finally:
             if verbose and False:
                 print("button_manager, finally.")
-    print(f"Done with button listener on pin {pin}\n")
+    print(f"\nDone with button listener on pin {pin}\n")
 
 
 def screen_saver_manager() -> None:
@@ -1286,6 +1286,61 @@ def drawWhiteFrame() -> None:
         fill=BLACK,
     )
 
+
+# SIGTERM (kill -15) manger
+def signal_term_handler(signal, frame):
+    global keep_looping
+    global server
+    global oled
+
+    print('got SIGTERM...')
+    print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
+
+    keep_looping = False
+    # button_thread_01.join()
+    # button_thread_02.join()
+    # display_thread.join()
+    # if enable_screen_saver:
+    #     screen_saver_thread.join()
+
+    # Clear the screen (redundant ?)
+    if oled is not None:
+        print(f"{__file__}, cleaning the screen")
+        clear_screen()
+        drawWhiteFrame()
+        text: str = "Bye-bye..."
+        # (font_width, font_height) = font.getsize(text)
+        left, top, right, bottom = font.getbbox(text)
+        (font_width, font_height) = right - left, bottom - top
+        draw.text(
+            (oled.width // 2 - font_width // 2,
+             oled.height // 2 - font_height // 2),
+            text,
+            font=font,
+            fill=WHITE,
+        )
+        # Display image
+        oled.image(image)
+        oled.show()
+        time.sleep(2)
+        clear_screen()
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
+    else:
+        print(f"{__file__}, no screen was found")
+
+    server.server_close()
+    server.shutdown()
+    print("SIGTERM management completed")
+
+
+signal.signal(signal.SIGTERM, signal_term_handler)  # kill -15
+# signal.signal(signal.SIGKILL, signal_term_handler)  # kill -9
+
+print("Starting process #{}...".format(server_pid))
+print("To stop, do a Ctrl-C, or from a terminal, a kill -15 {}".format(server_pid))
+
 #
 # Main part.
 #
@@ -1542,8 +1597,7 @@ if __name__ == '__main__':
     #
     try:
         server.serve_forever()
-    except KeyboardInterrupt:
-        # TODO The prints below are not seen in the log...
+    except KeyboardInterrupt:        # Not trapped from a kill -9, nor kill -15..
         print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()
@@ -1554,6 +1608,14 @@ if __name__ == '__main__':
         server.shutdown()
     except Exception as oops:
         result = f"Oops: {repr(oops)}"
+        # pass
+    finally:
+        # Clean-up server (close socket, etc.)
+        try:
+            server.server_close()
+            server.shutdown()
+        finally:
+            print(f"Oops-2: {repr(oops)}")
 
     print("Out of the server loop")
 
@@ -1583,3 +1645,4 @@ if __name__ == '__main__':
 
 
 # Oh ma mere !
+
