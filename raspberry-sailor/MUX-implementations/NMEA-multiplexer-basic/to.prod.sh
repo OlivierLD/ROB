@@ -62,13 +62,14 @@ if [[ -f ${JAR_NAME} ]]; then
   ls -lisah ${JAR_NAME}
   echo -e "With the following MANIFEST:"
   ./type.manifest.sh ${JAR_NAME}
-  echo -e "----------------------------"
+  # echo -e "----------------------------"
   echo -en "Do we re-build the Java part ? > "
   read REPLY
   if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
     echo -e "Ok, moving on."
     REBUILD_REQUEST=N
   fi
+  echo -e "----------------------------"
 fi
 #
 if [[ "${REBUILD_REQUEST}" == "Y" ]]; then

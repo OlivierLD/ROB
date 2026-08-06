@@ -19,12 +19,13 @@ oops() {
 #
 dump_manifest() {
   mkdir temp || oops "'temp' directory already exists in ${PWD}..."
-  pushd temp
+  pushd temp > /dev/null
+    echo -e "Dumping manifest of the jar file ${1}:"
     jar -xf ../$1 META-INF/MANIFEST.MF
     echo -e "-------- MANIFEST.MF --------"
     cat META-INF/MANIFEST.MF
     echo -e "-----------------------------"
-  popd
+  popd > /dev/null
   rm -rf temp
 }
 # Default
