@@ -62,13 +62,14 @@ MAP_SERIAL_PORT=false  # File or sym-link. false: map/link to port /dev/ttyS80, 
 # Required if serial port is read as a file
 if [[ "${MAP_SERIAL_PORT}" == "true" ]]; then
   echo -e "Mapping /dev/ttyACM0 to a file."
+  # stty -F /dev/ttyUSB0 9600 raw cs8 -cstopb -parenb
   stty -F /dev/ttyACM0 raw 4800 cs8 clocal
 else
   if [[ ! -L /dev/ttyS80 ]]; then
     echo -e "Linking /dev/ttyACM0 to /dev/ttyS80"
     sudo ln -s /dev/ttyACM0 /dev/ttyS80
   else
-    echo -e "SymLink exists"
+    echo -e "SymLink already exists"
   fi
 fi
 #
@@ -76,7 +77,7 @@ fi
 #
 echo -e ">>> Using option ${OPTION}"
 # MACHINE_NAME=$(hostname -I | awk '{ print $1 }')  # IP address
-MACHINE_NAME=localhost      # For the kill to work, from the MUX. prop rest.onclose.resource !!!!!
+MACHINE_NAME=localhost      # For the kill to work, from the MUX. See the prop rest.onclose.resource !!!!!
 echo -e "Step 1 - Starting the Python server(s), on ${MACHINE_NAME}"
 #
 if [[ "${OPTION}" == "BME280-SSD" ]]; then

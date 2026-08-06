@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 #
 # WIP
-# Warning: Run the process on the target machine. That will avoid unwanted version mismatch (java class version...)
+# Warning: If possible, run the process on the target machine.
+#          That will avoid unwanted version mismatch (java class version...)
 #
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
-echo -e "| CLI options: --basic (default) or --big                                                            |"
+echo -e "| CLI options:                                                                                       |"
+echo -e "|    --basic (default)                                                                               |"
+echo -e "| or --big                                                                                           |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |"
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"

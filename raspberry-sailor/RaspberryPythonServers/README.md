@@ -93,6 +93,8 @@ We provide here TCP servers reading the following sensors:
 
 And actuators:
 - [SSD1306 oled screen](https://learn.adafruit.com/monochrome-oled-breakouts) (SPI and I2C)
+  - Drawing on a SSD1306: [Pillow](https://www.tutorialspoint.com/python_pillow/python_pillow_imagedraw_module.htm).
+  - [ImageDraw](https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html)
 - [eInk2-13 screen](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=al)
 
 For more details (and longer list), see [here](./PCB.md).
