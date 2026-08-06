@@ -41,6 +41,7 @@
 # --verbose: default false
 # --height: 32 or 64. Default 32
 # --screen-saver: "on", or "off". Default "on"
+# --delay: XX start screen saver after XX seconds. Default 30.
 # --rotate: "true" or "false". Default "false". Rotate the screen by 180°.
 #
 # --data: Like BSP,SOG,POS,..., etc. The list of data to be displayed, in the order of the list.
@@ -104,6 +105,7 @@ VERBOSE_PRM_PREFIX: str           = "--verbose:"
 VERBOSE_2_PRM_PREFIX: str         = "--verbose-2:"
 HEIGHT_PRM_PREFIX: str            = "--height:"
 SCREEN_SAVER_MODE_PRM_PREFIX: str = "--screen-saver:"  # "on", or "off". Default "on"
+DELAY_PRM_PREFIX: str             = "--delay:"
 ROTATE_PRM_PREFIX: str            = "--rotate:"
 
 DATA_PRM_PREFIX: str              = "--data:"          # Like "BSP,SOG,POS,..., etc". See below
@@ -145,7 +147,7 @@ current_value: int = 0
 keep_looping: bool = True
 nmea_cache: Dict[str, object] = None
 
-ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds
+ENABLE_SCREEN_SAVER_AFTER: int = 30  # in seconds. Override with --delay:
 
 LONG_CLICK            = 1000  # in ms, 1s
 BETWEEN_DOUBLE_CLICK  = 300   # in ms, 0.3s
@@ -193,6 +195,7 @@ def display_help() -> None:
     print(f"{VERBOSE_2_PRM_PREFIX} - Verbose level 2. true or false, default false")
     print(f"{HEIGHT_PRM_PREFIX} - Screen Height (32 or 64), default 32")
     print(f"{SCREEN_SAVER_MODE_PRM_PREFIX} - Use screen saver. on or off, default on")
+    print(f"{DELAY_PRM_PREFIX} - Start screen saver after this value (in seconds). Default ${ENABLE_SCREEN_SAVER_AFTER}s")
     print(f"{ROTATE_PRM_PREFIX} - Rotate screen (upside down) true or false, default false")
     print(f"{DATA_PRM_PREFIX} - Data to display, see below, default BSP,SOG,COG,POS,NAV")
 
@@ -1326,6 +1329,12 @@ if __name__ == '__main__':
                         enable_screen_saver = False
                 except Exception as error:
                     print(f"Screen Saver Mode error: {repr(error)}")
+            if arg[:len(DELAY_PRM_PREFIX)] == DELAY_PRM_PREFIX:
+                try:
+                    delay_str: str = arg[len(DELAY_PRM_PREFIX):]
+                    ENABLE_SCREEN_SAVER_AFTER = int(delay_str)
+                except Exception as error:
+                    print(f"Screen Saver Delay error: {repr(error)}")
 
             if arg[:len(DATA_PRM_PREFIX)] == DATA_PRM_PREFIX:
                 user_list = arg[len(DATA_PRM_PREFIX):].split(',')

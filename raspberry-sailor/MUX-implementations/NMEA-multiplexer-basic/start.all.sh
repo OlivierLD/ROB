@@ -87,7 +87,7 @@ if [[ "${OPTION}" == "BME280-SSD" ]]; then
   sleep 10
   # Start the REST Server for SSD1306 (v2)
   echo -e "2 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --rotate:false > ~pi/nmea-dist/ssd1306.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --delay:60 --rotate:false > ~pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   # Start the REST Server for EINK2-13
@@ -97,7 +97,7 @@ elif [[ "${OPTION}" == "EINK2-13" ]]; then
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   # Start the REST Server for SSD1306 (v2)
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --rotate:true > ~pi/nmea-dist/ssd1306.python.log 2>&1
+  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --delay:60 --rotate:true > ~pi/nmea-dist/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
   echo -e "No python server to be started for NAV-SERVER option"

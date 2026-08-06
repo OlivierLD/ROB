@@ -38,6 +38,7 @@ SCREEN_HEIGHT=32   # 32 or 64
 WIRING="I2C"       # I2C or SPI
 DATA="BSP,SOG,COG,POS"
 SS_MODE="on"
+SS_DELAY="30"
 ROTATE=false
 #
 # Prompted, or get prms from CLI
@@ -109,13 +110,15 @@ else
   	    DATA=${prm#*:}
   	  elif [[ ${prm} == "--screen-saver:"* ]]; then
   	    SS_MODE=${prm#*:}
+  	  elif [[ ${prm} == "--delay:"* ]]; then
+  	    SS_DELAY=${prm#*:}
   	  elif [[ ${prm} == "--rotate:"* ]]; then
   	    ROTATE=${prm#*:}
   	  fi
   	done
   fi
 fi
-COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --verbose-2:${VERBOSE_2} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE} --rotate:${ROTATE}"
+COMMAND="python3 -u ${PYTHON_SCRIPT_NAME} --machine-name:${MACHINE_NAME} --port:${PORT} --verbose:${VERBOSE} --verbose-2:${VERBOSE_2} --height:${SCREEN_HEIGHT} --wiring:${WIRING} --data:${DATA} --screen-saver:${SS_MODE} --delay:${SS_DELAY} --rotate:${ROTATE}"
 echo -e "Running ${COMMAND}"
 ${COMMAND} &
 echo -e "Done"
