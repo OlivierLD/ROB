@@ -23,6 +23,7 @@ if (typeof(lpad) == 'undefined') {
 
 /* Uses ES6 Promises */
 if (typeof(getPromise) == 'undefined') {
+    // To try too: function getPromise(url, timeout, verb, happyCode, data = null, show = false) { ...
     window.getPromise = function (
         url,                          // full api path
         timeout,                      // After that, fail.

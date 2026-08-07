@@ -15,3 +15,4 @@ from netaddr.eui import EUI
 mac = EUI(\"$MAC\")
 ip = mac.ipv6(IPAddress('fe80::'))
 print('{ip}%{iface}'.format(ip=ip, iface=\"$IFACE\"))"
+#

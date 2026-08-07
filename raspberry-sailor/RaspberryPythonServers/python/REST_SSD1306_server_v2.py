@@ -1584,7 +1584,7 @@ if __name__ == '__main__':
     #
     try:
         server.serve_forever()
-    except KeyboardInterrupt:        # Ctrl+C. Not trapped from a kill -9, nor kill -15..
+    except KeyboardInterrupt:        # Ctrl+C. Not trapped from a kill -9, nor kill -15... So far, the catch belo is useless.
         print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()

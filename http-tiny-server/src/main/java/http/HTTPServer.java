@@ -82,7 +82,7 @@ public class HTTPServer {
 
 	// If set to "/", will behave like all others, from the directory the server was started from.
 	// BUT Warning; A 'static.docs' like "/" would prevent the REST Request management...
-	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/"; // ""/web/,/";    // Comma-separated list
+	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/"; // "/web/,/";    // Comma-separated list
 	private final static String DEFAULT_STATIC_ZIP_DOCS_PATH = "/zip/";
 
 	private static boolean verbose = "true".equals(System.getProperty("http.verbose", "false"));
