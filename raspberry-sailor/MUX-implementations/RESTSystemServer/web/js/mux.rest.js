@@ -74,7 +74,7 @@ let getPromise = (
     });
 };
 
-const DEFAULT_TIMEOUT = 10000; // 10s
+let DEFAULT_TIMEOUT = 10000; // 10s
 
 let protocolTestFunc = () => {
     let url = document.location.origin.replace('http', 'mux') + '/this-is-a-test';

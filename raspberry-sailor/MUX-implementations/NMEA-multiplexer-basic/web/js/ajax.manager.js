@@ -22,7 +22,7 @@ function displayErr(err) {
 }
 
 const FETCH_TIMEOUT = 15000;
-const DEFAULT_TIMEOUT = 60000; // 1 minute
+let DEFAULT_TIMEOUT = 60000; // 1 minute
 
 
 /* Uses ES6 Promises */

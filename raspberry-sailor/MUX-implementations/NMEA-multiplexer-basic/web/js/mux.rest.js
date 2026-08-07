@@ -6,75 +6,87 @@ let storedHistory = "";
 let storedHistoryOut = "";
 let storedElapsed = "";
 
-const DEBUG = false;
+// if (typeof(DEBUG) == 'undefined') {
+    // let DEBUG = false;
+    DEBUG = false;
+// }
 
-let lpad = (s, w, len) => {
-    let str = s;
-    while (str.length < len) {
-        str = w + str;
-    }
-    return str;
-};
+if (typeof(lpad) == 'undefined') {
+    let lpad = (s, w, len) => {
+        let str = s;
+        while (str.length < len) {
+            str = w + str;
+        }
+        return str;
+    };
+}
 
 /* Uses ES6 Promises */
-let getPromise = (
-    url,                          // full api path
-    timeout,                      // After that, fail.
-    verb,                         // GET, PUT, DELETE, POST, etc
-    happyCode,                    // A code, or a function (callback) returning a boolean. if met, resolve, otherwise fail.
-    data = null,                  // payload, when needed (PUT, POST...)
-    show = false) => {            // Show the traffic [true]|false
+// try {
+    let getPromise = (
+        url,                          // full api path
+        timeout,                      // After that, fail.
+        verb,                         // GET, PUT, DELETE, POST, etc
+        happyCode,                    // A code, or a function (callback) returning a boolean. if met, resolve, otherwise fail.
+        data = null,                  // payload, when needed (PUT, POST...)
+        show = false) => {            // Show the traffic [true]|false
 
-    if (show === true) {
-        document.body.style.cursor = 'wait';
-    }
-
-    if (DEBUG) {
-        console.log(">>> Promise", verb, url);
-    }
-
-    return new Promise((resolve, reject) => {
-        let xhr = new XMLHttpRequest();
-        let TIMEOUT = timeout;
-
-        let req = verb + " " + url;
-        if (data !== undefined && data !== null) {
-            req += ("\n" + JSON.stringify(data, null, 2));
+        if (show === true) {
+            document.body.style.cursor = 'wait';
         }
+
         if (DEBUG) {
-            console.log("Request:", req);
+            console.log(">>> Promise", verb, url);
         }
 
-        xhr.open(verb, url, true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        try {
-            if (data === undefined || data === null) {
-                xhr.send();
-            } else {
-                xhr.send(JSON.stringify(data));
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            let TIMEOUT = timeout;
+
+            let req = verb + " " + url;
+            if (data !== undefined && data !== null) {
+                req += ("\n" + JSON.stringify(data, null, 2));
             }
-        } catch (err) {
-            console.log("Send Error ", err);
-        }
-
-        let requestTimer = setTimeout(() => {
-            xhr.abort();
-            let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
-            reject(mess);
-        }, TIMEOUT);
-
-        xhr.onload = () => {
-            clearTimeout(requestTimer);
-            if ((typeof(happyCode) === 'function' && happyCode(xhr.status)) || (typeof(happyCode) === 'number' && xhr.status === happyCode)) {
-                resolve(xhr.response);
-            } else {
-                reject({code: xhr.status, message: xhr.response});
+            if (DEBUG) {
+                console.log("Request:", req);
             }
-        };
-    });
-};
 
-const DEFAULT_TIMEOUT = 10000;
+            xhr.open(verb, url, true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            try {
+                if (data === undefined || data === null) {
+                    xhr.send();
+                } else {
+                    xhr.send(JSON.stringify(data));
+                }
+            } catch (err) {
+                console.log("Send Error ", err);
+            }
+
+            let requestTimer = setTimeout(() => {
+                xhr.abort();
+                let mess = {code: 408, message: `Timeout (${timeout}ms) for ${verb} ${url}`};
+                reject(mess);
+            }, TIMEOUT);
+
+            xhr.onload = () => {
+                clearTimeout(requestTimer);
+                if ((typeof(happyCode) === 'function' && happyCode(xhr.status)) || (typeof(happyCode) === 'number' && xhr.status === happyCode)) {
+                    resolve(xhr.response);
+                } else {
+                    reject({code: xhr.status, message: xhr.response});
+                }
+            };
+        });
+    };
+// } catch (err) {
+//    console.log("Error in getPromise:", err);
+// }
+
+// if (typeof(DEFAULT_TIMEOUT) == 'undefined') {
+    // let DEFAULT_TIMEOUT = 10000;
+    DEFAULT_TIMEOUT = 10000;
+// }
 
 let protocolTestFunc = () => {
     let url = document.location.origin.replace('http', 'mux') + '/this-is-a-test';

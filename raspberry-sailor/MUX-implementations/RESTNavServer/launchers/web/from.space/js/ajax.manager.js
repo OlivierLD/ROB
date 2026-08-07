@@ -5,7 +5,7 @@
 
 const DEBUG = false;
 
-const DEFAULT_TIMEOUT = 60000; // 1 minute
+let DEFAULT_TIMEOUT = 60000; // 1 minute
 /* global events */
 
 /* Uses ES6 Promises */
@@ -99,7 +99,7 @@ function initAjax(forwardErrors) {
     // ISS Position http://api.open-notify.org/iss-now.json
     // ISS Passage time http://api.open-notify.org/iss-pass.json?lat=37.7&lon=-122.5 [ &alt=20&n=5 ]
     // ISS Crew members: http://api.open-notify.org/astros.json
-    if (false) { // 
+    if (false) { //
         let issInterval = setInterval(() => {
             let issPromise = getISSData();
             issPromise.then(issData => {
@@ -168,7 +168,7 @@ function getNMEAData() {
 
 const FETCH_VERBOSE = false;
 
-function fetchNMEA() { 
+function fetchNMEA() {
 	try {
 		let getData = getNMEAData();
 		getData.then((value) => {

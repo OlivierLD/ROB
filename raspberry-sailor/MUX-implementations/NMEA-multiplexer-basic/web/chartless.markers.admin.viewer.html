@@ -354,7 +354,7 @@ let updateMap = (elmt, context) => {
 	// context.closePath();
 };
 
-if (lpad === undefined) {
+if (typeof(lpad) == 'undefined') {
 	let lpad = (str, len, pad) => {
 		let s = str;
 		while (s.length < len) {
@@ -364,7 +364,7 @@ if (lpad === undefined) {
 	};
 }
 
-if (decToSex === undefined) {
+if (typeof(decToSex) == 'undefined') {
 	let decToSex = (val, ns_ew) => {
 		let absVal = Math.abs(val);
 		let intValue = Math.floor(absVal);
