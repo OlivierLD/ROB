@@ -351,16 +351,19 @@ def button_listener(pin, state) -> None:
                     if False:
                         # Self call. But does not kill the mux.
                         cmd: str = f"curl -X PUT http://{machine_name}:{server_port}/ssd1306/bye-and-clear-screen"
-                        print(f"{__file__} -> Executing [{cmd}] ...")
+                        print(f"From {__file__} -> Executing [{cmd}] ...")
                         execute_system_command(cmd)
                     # Kill all, mux will kill the nmea-cache-publisher's
                     # cmd: str = "../kill.all.sample.sh"
 
                     cmd: str = "../kill.all.sh"   # Make sure that one exists.
-                    print(f"{__file__} -> Executing [{cmd}] ...")
+                    print(f"{int(time.time() * 1000)}: From {__file__} -> Executing [{cmd}] ...")
                     time.sleep(2)  # Wait a bit for the logs to be written...
                     execute_system_command(cmd)
+                    # Current python process should be dead by now.
+                    print(f"{int(time.time() * 1000)}: Done with {cmd}")
                     # Bye !
+                    exit(0)
                 else:
                     # ACTION: avoid this on double-click
                     # time.sleep(BETWEEN_DOUBLE_CLICK)

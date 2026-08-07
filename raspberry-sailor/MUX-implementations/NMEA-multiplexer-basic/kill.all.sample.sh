@@ -21,6 +21,7 @@ if [[ ${NB_L} != 0 ]]; then
 fi
 echo -e "Cleaning up what's left!"
 #
+# ps -ef | grep python | grep REST | grep -v SSD1306  | awk '{ print $2 }' > server.id.txt
 ps -ef | grep python | grep REST | awk '{ print $2 }' > server.id.txt
 #
 for pid in $(cat server.id.txt); do
