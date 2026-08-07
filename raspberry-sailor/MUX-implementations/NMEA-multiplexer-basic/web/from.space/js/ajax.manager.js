@@ -3,7 +3,7 @@
  * Uses ES6 Promises for Ajax.
  */
 
-const DEBUG = false;
+let DEBUG = false;
 
 let DEFAULT_TIMEOUT = 60000; // 1 minute
 /* global events */

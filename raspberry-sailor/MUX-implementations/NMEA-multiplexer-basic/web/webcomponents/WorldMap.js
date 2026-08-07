@@ -1,7 +1,7 @@
 const worldMapVerbose = false;
 const WORLD_MAP_TAG_NAME = 'world-map';
 
-const DEBUG = false;
+let DEBUG = false;
 
 /**
  * Note: This is an extended version (constellations, etc)

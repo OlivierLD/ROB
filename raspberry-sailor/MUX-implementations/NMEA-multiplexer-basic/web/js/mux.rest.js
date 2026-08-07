@@ -12,7 +12,7 @@ let storedElapsed = "";
 // }
 
 if (typeof(lpad) == 'undefined') {
-    let lpad = (s, w, len) => {
+    window.lpad = function (s, w, len) {
         let str = s;
         while (str.length < len) {
             str = w + str;
@@ -22,14 +22,14 @@ if (typeof(lpad) == 'undefined') {
 }
 
 /* Uses ES6 Promises */
-// try {
-    let getPromise = (
+if (typeof(getPromise) == 'undefined') {
+    window.getPromise = function (
         url,                          // full api path
         timeout,                      // After that, fail.
         verb,                         // GET, PUT, DELETE, POST, etc
         happyCode,                    // A code, or a function (callback) returning a boolean. if met, resolve, otherwise fail.
         data = null,                  // payload, when needed (PUT, POST...)
-        show = false) => {            // Show the traffic [true]|false
+        show = false) {               // Show the traffic [true]|false
 
         if (show === true) {
             document.body.style.cursor = 'wait';
@@ -81,7 +81,7 @@ if (typeof(lpad) == 'undefined') {
     };
 // } catch (err) {
 //    console.log("Error in getPromise:", err);
-// }
+}
 
 // if (typeof(DEFAULT_TIMEOUT) == 'undefined') {
     // let DEFAULT_TIMEOUT = 10000;

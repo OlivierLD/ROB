@@ -1,7 +1,7 @@
 /*
  * @author Olivier Le Diouris
  */
-const DEBUG = false;
+let DEBUG = false;
 
 let forwardAjaxErrors = true;
 
