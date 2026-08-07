@@ -346,31 +346,7 @@ def button_listener(pin, state) -> None:
                     #     screen_saver_thread.join()
 
                     # Clear the screen (redundant ?)
-                    if oled is not None:
-                        print(f"{__file__}, cleaning the screen")
-                        clear_screen()
-                        drawWhiteFrame()
-                        text: str = "Bye-bye..."
-                        # (font_width, font_height) = font.getsize(text)
-                        left, top, right, bottom = font.getbbox(text)
-                        (font_width, font_height) = right - left, bottom - top
-                        draw.text(
-                            (oled.width // 2 - font_width // 2,
-                             oled.height // 2 - font_height // 2),
-                            text,
-                            font=font,
-                            fill=WHITE,
-                        )
-                        # Display image
-                        oled.image(image)
-                        oled.show()
-                        time.sleep(2)
-                        clear_screen()
-                        oled.image(image)
-                        oled.show()
-                        time.sleep(1)
-                    else:
-                        print(f"{__file__}, no screen was found")
+                    print_bye_and_clear_screen()
 
                     if False:
                         # Self call. But does not kill the mux.
@@ -1272,7 +1248,7 @@ def display_manager() -> None:
     print("Done with display thread")
 
 
-def drawWhiteFrame() -> None:
+def draw_white_frame() -> None:
     global oled
     global draw
 
@@ -1287,7 +1263,39 @@ def drawWhiteFrame() -> None:
     )
 
 
-# SIGTERM (kill -15) manger
+def print_bye_and_clear_screen() -> None:
+    global oled
+    global font
+    global draw
+
+    if oled is not None:
+        print(f"{__file__}, cleaning the screen")
+        clear_screen()
+        draw_white_frame()
+        bye_text: str = "Bye-bye..."
+        # (font_width, font_height) = font.getsize(text)
+        left, top, right, bottom = font.getbbox(bye_text)
+        (font_width, font_height) = right - left, bottom - top
+        draw.text(
+            (oled.width // 2 - font_width // 2,
+             oled.height // 2 - font_height // 2),
+            bye_text,
+            font=font,
+            fill=WHITE,
+        )
+        # Display image
+        oled.image(image)
+        oled.show()
+        time.sleep(2)
+        clear_screen()
+        oled.image(image)
+        oled.show()
+        time.sleep(1)
+    else:
+        print(f"{__file__}, no oled screen was found")
+
+
+# SIGTERM (kill -15, kill -s TERM) manager
 def signal_term_handler(signal, frame):
     global keep_looping
     global server
@@ -1304,38 +1312,14 @@ def signal_term_handler(signal, frame):
     #     screen_saver_thread.join()
 
     # Clear the screen (redundant ?)
-    if oled is not None:
-        print(f"{__file__}, cleaning the screen")
-        clear_screen()
-        drawWhiteFrame()
-        text: str = "Bye-bye..."
-        # (font_width, font_height) = font.getsize(text)
-        left, top, right, bottom = font.getbbox(text)
-        (font_width, font_height) = right - left, bottom - top
-        draw.text(
-            (oled.width // 2 - font_width // 2,
-             oled.height // 2 - font_height // 2),
-            text,
-            font=font,
-            fill=WHITE,
-        )
-        # Display image
-        oled.image(image)
-        oled.show()
-        time.sleep(2)
-        clear_screen()
-        oled.image(image)
-        oled.show()
-        time.sleep(1)
-    else:
-        print(f"{__file__}, no screen was found")
+    print_bye_and_clear_screen()
 
     server.server_close()
     server.shutdown()
     print("SIGTERM management completed")
 
 
-signal.signal(signal.SIGTERM, signal_term_handler)  # kill -15
+signal.signal(signal.SIGTERM, signal_term_handler)  # kill -15, kill -s TERM
 # signal.signal(signal.SIGKILL, signal_term_handler)  # kill -9
 
 print("Starting process #{}...".format(server_pid))
@@ -1490,7 +1474,7 @@ if __name__ == '__main__':
             fill=BLACK,
         )
     else:
-        drawWhiteFrame()
+        draw_white_frame()
 
     small_font_size: int  =  9   # 8
     medium_font_size: int = 16
@@ -1597,7 +1581,7 @@ if __name__ == '__main__':
     #
     try:
         server.serve_forever()
-    except KeyboardInterrupt:        # Not trapped from a kill -9, nor kill -15..
+    except KeyboardInterrupt:        # Ctrl+C. Not trapped from a kill -9, nor kill -15..
         print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()
@@ -1615,32 +1599,13 @@ if __name__ == '__main__':
             server.server_close()
             server.shutdown()
         finally:
-            print(f"Oops-2: {repr(oops)}")
+            print(f"Oops-2!")
 
     print("Out of the server loop")
 
     # After all, cleanup.
-    if oled is not None:
-        clear_screen()
-        drawWhiteFrame()
-        text: str = "Bye-bye..."
-        # (font_width, font_height) = font.getsize(text)
-        left, top, right, bottom = font.getbbox(text)
-        (font_width, font_height) = right - left, bottom - top
-        draw.text(
-            (oled.width // 2 - font_width // 2,
-             oled.height // 2 - font_height // 2),
-            text,
-            font=font,
-            fill=WHITE,
-        )
-        # Display image
-        oled.image(image)
-        oled.show()
-        time.sleep(2)
-        clear_screen()
-        oled.image(image)
-        oled.show()
+    print_bye_and_clear_screen()
+
     print("Done with REST SSD1306 server.")
 
 
