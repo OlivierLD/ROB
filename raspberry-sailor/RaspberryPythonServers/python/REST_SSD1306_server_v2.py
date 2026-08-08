@@ -357,7 +357,7 @@ def button_listener(pin, state) -> None:
                     # cmd: str = "../kill.all.sample.sh"
 
                     cmd: str = "../kill.all.sh"   # Make sure that one exists.
-                    print(f"{int(time.time() * 1000)}: From {__file__} -> Executing [{cmd}] ...")
+                    print(f"{int(time.time() * 1000)}: From {os.path.basename(__file__)} -> Executing [{cmd}] ...")
                     time.sleep(2)  # Wait a bit for the logs to be written...
                     execute_system_command(cmd)
                     # Current python process should be dead by now.
@@ -499,7 +499,7 @@ def button_manager(pin, callback) -> None:
             prev_state = button_down
             time.sleep(0.01)  # sleep for debounce. Tricky.
         except Exception as oops:
-            print(f"{__file__} - Error: {repr(oops)}")
+            print(f"{os.path.basename(__file__)} - Error: {repr(oops)}")
         finally:
             if verbose and False:
                 print("button_manager, finally.")
@@ -754,14 +754,14 @@ def clear_screen() -> None:
 # Defining an HTTP request Handler class, for REST requests
 class ServiceHandler(BaseHTTPRequestHandler):
     # sets basic headers for the server
-    def _set_headers(self):
+    def _set_headers(self) -> str:
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         # reads the length of the Headers
-        length = int(self.headers['Content-Length'])
+        length: int = int(self.headers['Content-Length'])
         # reads the contents of the request
-        content = self.rfile.read(length)
-        temp = str(content).strip('b\'')
+        content: bytes = self.rfile.read(length)
+        temp: str = str(content).strip('b\'')
         self.end_headers()
         return temp
 
@@ -1272,7 +1272,7 @@ def print_bye_and_clear_screen() -> None:
     global draw
 
     if oled is not None:
-        print(f"{__file__}, cleaning the screen")
+        print(f"{os.path.basename(__file__)}, cleaning the screen")
         clear_screen()
         draw_white_frame()
         bye_text: str = "Bye-bye..."
@@ -1295,7 +1295,7 @@ def print_bye_and_clear_screen() -> None:
         oled.show()
         time.sleep(1)
     else:
-        print(f"{__file__}, no oled screen was found")
+        print(f"{os.path.basename(__file__)}, no oled screen was found")
 
 
 # SIGTERM (kill -15, kill -s TERM) manager
@@ -1305,7 +1305,7 @@ def signal_term_handler(signal, frame):
     global oled
 
     print('got SIGTERM...')
-    print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
+    print(f"\n\t\t{os.path.basename(__file__)} User interrupted (server.serve), exiting.\n")
 
     keep_looping = False
     # button_thread_01.join()
@@ -1323,10 +1323,10 @@ def signal_term_handler(signal, frame):
 
 
 signal.signal(signal.SIGTERM, signal_term_handler)  # kill -15, kill -s TERM
-# signal.signal(signal.SIGKILL, signal_term_handler)  # kill -9
+# signal.signal(signal.SIGKILL, signal_term_handler)  # kill -9. Cannot be trapped.
 
 print("Starting process #{}...".format(server_pid))
-print("To stop, do a Ctrl-C, or from a terminal, a kill -15 {}".format(server_pid))
+# print("To stop, do a Ctrl-C, or from a terminal, a kill -15 {}".format(server_pid))
 
 #
 # Main part.
@@ -1424,7 +1424,11 @@ if __name__ == '__main__':
         print(f"Using DC {dc_pin}")
 
         try:
-            oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset,
+            oled: adafruit_ssd1306.SSD1306_SPI = adafruit_ssd1306.SSD1306_SPI(WIDTH,
+                                                                              HEIGHT,
+                                                                              spi,
+                                                                              oled_dc,
+                                                                              oled_reset,
                                                                               oled_cs)
             # print(f"SSD1306 is a {type(oled)}")
         except:
@@ -1562,6 +1566,9 @@ if __name__ == '__main__':
     display_thread.daemon = True  # Dies on exit
     display_thread.start()
 
+    print("Starting process #{}...".format(server_pid))
+    print("To stop, try a Ctrl-C, or from a terminal, a kill -9 (SIGKILL), or -15 (SIGTERM), or -2 (SIGINT) {}".format(server_pid))
+
     # Server Initialization
     port_number: int = server_port
     print("Starting SSD1306 server on port {}".format(port_number))
@@ -1583,9 +1590,10 @@ if __name__ == '__main__':
     # Run the server, until Ctrl-C is hit (or received).
     #
     try:
+        print("Process #{}, now serving requests...".format(server_pid))
         server.serve_forever()
-    except KeyboardInterrupt:        # Ctrl+C. Not trapped from a kill -9, nor kill -15... So far, the catch belo is useless.
-        print(f"\n\t\t{__file__} User interrupted (server.serve), exiting.\n")
+    except KeyboardInterrupt:  # Ctrl+C. Not trapped from a kill -9, nor kill -15... So far, the catch below is useless.
+        print(f"\n\t\t{os.path.basename(__file__)} User interrupted (server.serve), exiting.\n")
         keep_looping = False
         button_thread_01.join()
         button_thread_02.join()
@@ -1595,14 +1603,16 @@ if __name__ == '__main__':
         server.shutdown()
     except Exception as oops:
         result = f"Oops: {repr(oops)}"
+        print(f"\n\t\t{os.path.basename(__file__)}: {result}.\n")
         # pass
     finally:
         # Clean-up server (close socket, etc.)
+        print(f"\n\t\t{os.path.basename(__file__)}: finally block.\n")
         try:
             server.server_close()
             server.shutdown()
         finally:
-            print(f"Oops-2!")
+            print(f"\n\t\t{os.path.basename(__file__)}: finally block - 2.\n")
 
     print("Out of the server loop")
 

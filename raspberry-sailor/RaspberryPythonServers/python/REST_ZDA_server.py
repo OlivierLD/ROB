@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 #
+# Very few external dependencies, can be run (and used) as a server skeleton...
+#
 # Requires:
 # ---------
 # pip3 install http (already in python3.7+, no need to install it)
@@ -49,32 +51,32 @@ sample_data: Dict[str, str] = {  # Used for VIEW, and non-implemented operations
 # Defining an HTTP request Handler class
 class ServiceHandler(BaseHTTPRequestHandler):
     # sets basic headers for the server
-    def _set_headers(self):
+    def _set_headers(self) -> str:
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         # reads the length of the Headers
-        length = int(self.headers['Content-Length'])
+        length: int = int(self.headers['Content-Length'])
         # reads the contents of the request
-        content = self.rfile.read(length)
-        temp = str(content).strip('b\'')
+        content: bytes = self.rfile.read(length)
+        temp: str = str(content).strip('b\'')
         self.end_headers()
         return temp
 
     # To silence the HTTP logger
     @staticmethod
-    def log_message(fmt, *args):
+    def log_message(fmt, *args) -> None:
         if verbose:
             print(fmt % args)
         return
 
     # GET Method Definition
-    def do_GET(self):
+    def do_GET(self) -> None:
         if verbose:
             print("GET methods")
         #
-        full_path = self.path
-        split = full_path.split('?')
-        path = split[0]
+        full_path: str = self.path
+        split: list[str] = full_path.split('?')
+        path: str = split[0]
         qs = None
         if len(split) > 1:
             qs = split[1]
@@ -83,7 +85,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if qs is not None:
             qs_prms = qs.split('&')
             for qs_prm in qs_prms:
-                nv_pair = qs_prm.split('=')
+                nv_pair: list[str] = qs_prm.split('=')
                 if len(nv_pair) == 2:
                     prm_map[nv_pair[0]] = nv_pair[1]
                 else:
@@ -100,7 +102,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(nmea_zda.encode())
             except Exception as exception:
-                error = {"message": "{}".format(exception)}
+                error: str = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
                 self.send_response(500)
         elif path == PATH_PREFIX + "/oplist":
@@ -120,30 +122,31 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     }]
             }
             # TODO Fix that...
-            response_content = json.dumps(response).encode()
+            response_content: bytes = json.dumps(response).encode()
             self.send_response(200)
             # defining the response headers
             self.send_header('Content-Type', 'application/json')
-            content_len = len(response_content)
+            content_len: int = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(response_content)
         else:
             if verbose:
                 print("GET on {} not managed".format(self.path))
-            error = "NOT FOUND!"
+            error: str = "NOT FOUND!"
             self.send_response(400)
             self.send_header('Content-Type', 'text/plain')
-            content_len = len(error)
+            content_len: int = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
+        return
 
     # VIEW method definition. Uncommon...
-    def do_VIEW(self):
+    def do_VIEW(self) -> None:
         # dict var. for pretty print
         display = {}
-        temp = self._set_headers()
+        temp: str = self._set_headers()
         # check if the key is present in the sample_data dictionary
         if temp in sample_data:
             display[temp] = sample_data[temp]
@@ -157,9 +160,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
+        return
 
     # POST method definition
-    def do_POST(self):
+    def do_POST(self) -> None:
         if verbose:
             print("POST request, {}".format(self.path))
             print("POST on {} not managed".format(self.path))
@@ -169,11 +173,11 @@ class ServiceHandler(BaseHTTPRequestHandler):
             # post_body = self.rfile.read(content_len).decode('utf-8')
             # if verbose:
             #    print("Content: {}".format(post_body))
-            response = {"status": "OK"}
-            response_content = json.dumps(response).encode()
+            response: dict[str, str] = {"status": "OK"}
+            response_content: bytes = json.dumps(response).encode()
             self.send_response(201)
             self.send_header('Content-Type', 'application/json')
-            content_len = len(response_content)
+            content_len: int = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(response_content)
@@ -181,60 +185,73 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print(f">>> Killing ZDA server process ({server_pid}).")
             os.kill(server_pid, signal.SIGKILL)
         else:
-            error = "NOT FOUND!"
+            error: str = "NOT FOUND!"
             self.send_response(404)
             self.send_header('Content-Type', 'text/plain')
-            content_len = len(error)
+            content_len: int = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
             self.wfile.write(bytes(error, 'utf-8'))
+        return;
 
     # PUT method Definition
-    def do_PUT(self):
+    def do_PUT(self) -> None:
         if verbose:
             print("PUT request, {}".format(self.path))
             print("PUT on {} not managed".format(self.path))
-        error = "NOT FOUND!"
+        error:str = "NOT FOUND!"
         self.send_response(404)
         self.send_header('Content-Type', 'text/plain')
-        content_len = len(error)
+        content_len: int = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()
         self.wfile.write(bytes(error, 'utf-8'))
+        return
 
     # DELETE method definition
-    def do_DELETE(self):
+    def do_DELETE(self) -> None:
         if verbose:
             print("DELETE on {} not managed".format(self.path))
-        error = "NOT FOUND!"
+        error: str = "NOT FOUND!"
         self.send_response(400)
         self.send_header('Content-Type', 'text/plain')
-        content_len = len(error)
+        content_len: int = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()
         self.wfile.write(bytes(error, 'utf-8'))
+        return
 
 
-if len(sys.argv) > 0:  # Script name + X args
-    for arg in sys.argv:
-        if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
-            machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
-        if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
-            server_port = int(arg[len(PORT_PRM_PREFIX):])
-        if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
-            verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
-
-# Server Initialization
-port_number: int = server_port
-print("Starting server on port {}".format(port_number))
-server = HTTPServer((machine_name, port_number), ServiceHandler)
 #
-print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
-print("or  curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number, PATH_PREFIX))
+# Main part.
 #
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    print("\n\t\tUser interrupted (server.serve), exiting.")
+if __name__ == '__main__':
+    # print(f"{__file__} -> {os.path.basename(__file__)}")
+    if len(sys.argv) > 0:  # Script name + X args
+        for arg in sys.argv:
+            if arg[:len(MACHINE_NAME_PRM_PREFIX)] == MACHINE_NAME_PRM_PREFIX:
+                machine_name = arg[len(MACHINE_NAME_PRM_PREFIX):]
+            if arg[:len(PORT_PRM_PREFIX)] == PORT_PRM_PREFIX:
+                server_port = int(arg[len(PORT_PRM_PREFIX):])
+            if arg[:len(VERBOSE_PREFIX)] == VERBOSE_PREFIX:
+                verbose = (arg[len(VERBOSE_PREFIX):].lower() == "true")
 
-print("Done with REST UTC-DateTime server.")
+    # Server Initialization
+    port_number: int = server_port
+    print("Starting server on port {}".format(port_number))
+
+    pid: int = os.getpid()  # process id
+    print("Starting process #{}...".format(pid))
+    print("To stop, try a Ctrl-C, or from a terminal, a kill -9 (SIGKILL), or -15 (SIGTERM), or -2 (SIGINT) {}".format(pid))
+
+    server: HTTPServer = HTTPServer((machine_name, port_number), ServiceHandler)
+    #
+    print("Try curl -X GET http://{}:{}{}/oplist".format(machine_name, port_number, PATH_PREFIX))
+    print(" or curl -v -X VIEW http://{}:{}{} -H \"Content-Length: 1\" -d \"1\"".format(machine_name, port_number, PATH_PREFIX))
+    #
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:  # That one responds to a kill -2
+        print("\n\t\t-> User interrupted (server.serve), exiting.")
+
+    print(f"Done with REST UTC-DateTime server ({os.path.basename(__file__)}). Bye!")
