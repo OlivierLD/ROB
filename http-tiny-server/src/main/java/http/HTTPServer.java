@@ -31,7 +31,7 @@ import java.util.zip.ZipInputStream;
  * Can be used for the REST interface of an HTTP Server.
  * Can also be used as a Proxy, and to serve static requests.
  *
- * GET, POST, DELETE, PUT, no PATCH (for now). See the VERBS list below.
+ * GET, POST, DELETE, PUT, ... No PATCH (for now). See the VERBS list below.
  * <br>
  * Also serves as a regular HTTP server for static documents (in the /web directory).
  * <br>
@@ -82,7 +82,7 @@ public class HTTPServer {
 
 	// If set to "/", will behave like all others, from the directory the server was started from.
 	// BUT Warning; A 'static.docs' like "/" would prevent the REST Request management...
-	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/"; // "/web/,/";    // Comma-separated list
+	private final static String DEFAULT_STATIC_DOCS_PATH = "/web/"; // "/web/, /";    // Comma-separated list
 	private final static String DEFAULT_STATIC_ZIP_DOCS_PATH = "/zip/";
 
 	private static boolean verbose = "true".equals(System.getProperty("http.verbose", "false"));
@@ -867,7 +867,7 @@ public class HTTPServer {
 						System.out.printf("\"%s %s %s\" %d -\n", request.getVerb(), request.getPath(), request.getProtocol(), response.getStatus());
 						sendResponse(response, out);
 					} else {
-						if (requestManagers != null && requestManagers.size() > 0) {  // Manage it as a REST Request
+						if (requestManagers != null && requestManagers.size() > 0) {  // Then manage it as a REST Request
 							boolean unManagedRequest = true;
 							synchronized (requestManagers) {
 								try {

@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# NOT to be run with . ./connect-network.sh
+#
+pushd $(dirname $0)
 echo -e "Disconnecting first..."
 ./disable-hotspot.sh
 #
@@ -15,4 +19,6 @@ nmcli dev wifi connect ${NETWORK_NAME} password ${PSWD}
 nmcli dev wifi
 nmcli dev wifi show-password
 #
+. ./change-prompt.sh
 echo -e "Use . ./change-prompt.sh to update the prompt with new IP address."
+popd

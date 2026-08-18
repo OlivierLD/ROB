@@ -121,7 +121,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "description": "Get the ZDA data, in NMEA format."
                     }]
             }
-            # TODO Fix that...
+            # TODO Fix that... Get the operations dynamically.
             response_content: bytes = json.dumps(response).encode()
             self.send_response(200)
             # defining the response headers
