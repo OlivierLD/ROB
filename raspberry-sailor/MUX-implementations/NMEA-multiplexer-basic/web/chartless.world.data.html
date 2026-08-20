@@ -229,6 +229,7 @@ chartless-map#chartless-map-01 {
 
 	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="./webcomponents/CompassDisplay.js"></script>
+	<script type="module" src="./webcomponents/SatellitePlotter.js"></script>
 
 	<script type="text/javascript">
 
@@ -519,6 +520,13 @@ events.subscribe(BSP, val => {
 	document.getElementById('bsp').innerHTML = `${val} kn`;
 	bsp = val; // Managed in repaint
 	// console.log(`BSP:	${bsp.toFixed(2)}`);
+});
+events.subscribe(events.topicNames.GPS_SAT, (val) => {
+//	console.log("Satellite data:", val);
+	gpsSatelliteData = val;
+	let plotter = document.getElementById('sp-01');
+	plotter.setSatellites(val);
+	plotter.repaint();
 });
 // For debug, mainly.
 if (false) {
@@ -1188,7 +1196,7 @@ window.onload = () => {
 <!--h1>GPS, AIS, Markers, Borders, Waypoints</h1-->
 <table>
 	<tr>
-		<td valign="top" style="/*height: 600px;*/">
+		<td valign="top" style="height: 600px;">
 			<div class="chart-container" style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
 				<chartless-map id="chartless-map-01"
 							   class="chartless-map-01"
@@ -1208,8 +1216,8 @@ window.onload = () => {
 		<td valign="top" rowspan="3">
 			<table>
 				<tr>
-					<td>Style:</td>
-					<td>
+					<td>Widget Style:</td>
+					<td colspan="2">
 						<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
 							<option value="chartless-map-01" selected>Light</option>
 							<option value="chartless-map-02">Dark</option>
@@ -1218,10 +1226,10 @@ window.onload = () => {
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><hr/></td>
+					<td colspan="3"><hr/></td>
 				</tr>
 				<tr>
-					<td>
+					<td width="33%" align="center">
 						<compass-display id="cog"
 										 class="gray display-data"
 										 title="Course Over Ground"
@@ -1232,22 +1240,31 @@ window.onload = () => {
 										 minor-ticks="5"
 										 label="COG"></compass-display>
 					</td>
-					<td>
+					<td width="33%" align="center">
 						<analog-display class="analogdisplay-flat-gray display-data"
-										title="Speed Over Ground&#13;in knots"
+										height="200"
 										id="sog"
-										min-value="0"
-										max-value="15"
-										major-ticks="1"
-										minor-ticks="0.1"
-										with-border="true"
-										with-min-max="true"
-										overlap="40"
 										label="SOG"
-										unit="kn"
+										major-ticks="1"
+										max-value="15"
+										min-value="0"
+										minor-ticks="0.1"
+										overlap="40"
 										rotate-digits="false"
+										title="Speed Over Ground&#13;in knots"
+										unit="kn"
 										width="200"
-										height="200"></analog-display>
+										with-border="true"
+										with-min-max="true"></analog-display>
+					</td>
+					<td width="33%" align="center">
+						<!-- TODO Improve the class, according to the style -->
+						<satellite-plotter class="sat-plot-01"
+										   title="GPS Satellites in view"
+										   id="sp-01"
+										   width="200"
+										   height="200"
+										   sat-in-view='{}'></satellite-plotter>
 					</td>
 				</tr>
 				<tr>
@@ -1259,7 +1276,7 @@ window.onload = () => {
 					<td><span id="gps-time"></span></td>
 				</tr>
 				<tr>
-					<td colspan="2"><hr/></td>
+					<td colspan="3"><hr/></td>
 				</tr>
 				<tr>
 					<td>Position:</td>
@@ -1279,16 +1296,16 @@ window.onload = () => {
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><small>(Click on the chart to define your own waypoints)</small></td>
+					<td colspan="3"><small>(Click on the chart to define your own waypoints)</small></td>
 				</tr>
 				<tr>
-					<td colspan="2"><span id="xte"></span></td>
+					<td colspan="3"><span id="xte"></span></td>
 				</tr>
 				<tr>
-					<td colspan="2"><span id="to_wp"></span></td>
+					<td colspan="3"><span id="to_wp"></span></td>
 				</tr>
 				<tr>
-					<td colspan="2"><hr/></td>
+					<td colspan="3"><hr/></td>
 				</tr>
 				<tr>
 					<td>Track length:</td>
@@ -1320,18 +1337,18 @@ window.onload = () => {
 				</tr>
 				<tr>
 					<!--td valign="top">Border Threats:</td-->
-					<td colspan="2"><span id="border-threats">-</span></td>
+					<td colspan="3"><span id="border-threats">-</span></td>
 				</tr>
 				<tr>
 					<!--td valign="top">AIS Threats:</td-->
-					<td colspan="2"><div id="ais-threats">-</div></td>
+					<td colspan="3"><div id="ais-threats">-</div></td>
 				</tr>
 			</table>
 		</td>
 	</tr>
-	<tr style="display: none;">
+	<!--tr style="display: none;">
 		<td valign="top" height="50">
-			<!-- A slider for the chart scale -->
+			<!- A slider for the chart scale ->
 			<div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
 				Chart Width:
 				<input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
@@ -1339,7 +1356,7 @@ window.onload = () => {
 				<output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
 			</div>
 		</td>
-	</tr>
+	</tr-->
 	<tr>
 		<td valign="top">
 			<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">

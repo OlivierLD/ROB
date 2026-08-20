@@ -1,7 +1,7 @@
 # Navigation Server
 
 > `Note:`  
-> This is an example (just an example) of what can be done, to give you an idea.  
+> This is an example (_<u>just</u> an example_) of what can be done, to give you an idea.  
 > If there is anything to add, well, just open the hood and get it added! 
 
 #### Prolongation/Extension of the NMEA-multiplexer
