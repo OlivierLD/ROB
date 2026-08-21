@@ -213,6 +213,39 @@ compass-display .gray {
 	--value-font-size-factor: 1
 }
 
+satellite-plotter .sat-plot-01 {
+	--border-color: darkGrey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: DarkGrey;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: grey;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-02 {
+	--border-color: silver;
+	--with-gradient: true;
+	--display-background-gradient-from: DarkGrey;
+	--display-background-gradient-to: black;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: lightGreen;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-03 {
+	--border-color: silver;
+	--with-gradient: false;
+	--display-background-gradient-from: white;
+	--display-background-gradient-to: white;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: DarkGrey;
+	--font: Arial;
+}
+
 chartless-map#chartless-map-01 {
 	/* cursor: crosshair; */
 	cursor: url('./images/crosshair.png') 19 20, auto;
@@ -1089,6 +1122,7 @@ let setStyle = (opt) => {
 	let map = document.getElementById('chartless-map-01');
 	let cog = document.getElementById('cog');
 	let sog = document.getElementById('sog');
+	let sat = document.getElementById('sp-01');
 
 	document.getElementById('chartless-map-01').className = opt.value;
 
@@ -1107,6 +1141,11 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.add('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-02');
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -1122,6 +1161,11 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.add('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-01');
 			break;
 		case 'chartless-map-01':
 		default:
@@ -1138,6 +1182,11 @@ let setStyle = (opt) => {
 			sog.classList.add('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-03');
 			break;
 	}
 };
@@ -1258,8 +1307,7 @@ window.onload = () => {
 										with-min-max="true"></analog-display>
 					</td>
 					<td width="33%" align="center">
-						<!-- TODO Improve the class, according to the style -->
-						<satellite-plotter class="sat-plot-01"
+						<satellite-plotter class="sat-plot-03"
 										   title="GPS Satellites in view"
 										   id="sp-01"
 										   width="200"
@@ -1280,7 +1328,7 @@ window.onload = () => {
 				</tr>
 				<tr>
 					<td>Position:</td>
-					<td><span id="gps-position"></span></td>
+					<td colspan="2"><span id="gps-position"></span></td>
 				</tr>
 				<tr>
 					<td>Next Waypoint</td>
