@@ -92,6 +92,7 @@ const POS = 'pos';
 const BSP = 'bsp';
 const LOG = 'log';
 const GPS_TIME = 'gps-time';
+const GPS_SAT = 'gps-sat';
 const HDG = 'hdg';
 const TWD = 'twd';
 const TWA = 'twa';

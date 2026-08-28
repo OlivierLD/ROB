@@ -230,6 +230,7 @@ const BORDERS = 'borders';
 const ROUTES = 'routes';
 const BORDERS_THREATS = 'borders-threats';
 const TRUE_HDG = 'true-hdg';
+const GPS_SAT = 'gps-sat';
 const TO_WP = 'to-wp';
 
 function onMessage(json) {

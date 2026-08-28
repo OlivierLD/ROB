@@ -1,0 +1,48 @@
+#
+# MUX definition.
+#
+name: "Retour Portugal. Replay log file. Chartless Map."
+description:
+  - Replay a log file from the logged folder.
+  - The file must obviously be here for the replay to work.
+  - Markers and Borders demo/tests
+  - Used by option 15 in the demoLauncher
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  default.declination: -1
+  # markers: mux-configs/markers.01.yaml
+  # markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+  markers.list:
+    - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    # - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    - markers: mux-configs/markers/markers.stphil.kerpenhir.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    - markers: mux-configs/markers/markers.port-navalo.vilaine.yaml
+    - markers: mux-configs/markers/markers.iberica.west.yaml
+    - markers: mux-configs/markers/markers.biscay.yaml
+  # next-waypoint: BMELITE
+channels:
+  - type: file
+    filename: ./sample.data/retour.portugal.nmea.zip
+    zip: true
+    path.in.zip: retour.portugal.nmea
+    between-records: 50   # Speed up
+    verbose: false
+    # device.filters: II, GP, HC, YX
+    # sentence.filters: ~GGA,~GSV,~GSA
+    # sentence.filters: ~GGA
+  #
+# forwarders:
+computers:
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    verbose: false
+  - class: nmea.computers.AISManager
+    properties: mux-configs/ais.mgr.properties
+    verbose: false
+  - class: nmea.computers.NextWaypointManager
+    verbose: false

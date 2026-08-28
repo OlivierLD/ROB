@@ -6,6 +6,7 @@
 if [[ $# == 0 ]]; then
   echo -e "Several CLI prms are available:"
   echo -e "--file-name:2010-11-08.Nuku-Hiva-Tuamotu.nmea"
+  echo -e "--mini:yes"
   echo -e "--archive-name:sample-data/logged.data.archive.zip"
   echo -e "--dev-curve:dp_2011_04_15.csv"
   echo -e "--polar-file:CheoyLee42.polar-coeff"
@@ -32,7 +33,11 @@ JAVA_OPTIONS=
 # JAVA_OPTIONS="${JAVA_OPTIONS} -Dlimit=179"
 #
 # java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPosPlus $*
+# echo -e "-> Using just POS, use like ./log.to.leaflet.sh logged/retour.portugal.nmea"
+# COMMAND="java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPos $*"
+echo -e "-> Using POSPlus, like ./log.to.leaflet.sh --mini:yes --file-name:logged/retour.portugal.nmea"
 COMMAND="java ${JAVA_OPTIONS} -cp ${CP} util.NMEAtoJSONPosPlus $*"
+#
 echo -e "Running ${COMMAND}"
 ${COMMAND}
 #

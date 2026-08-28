@@ -213,6 +213,39 @@ compass-display .gray {
 	--value-font-size-factor: 1
 }
 
+satellite-plotter .sat-plot-01 {
+	--border-color: darkGrey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: DarkGrey;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: grey;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-02 {
+	--border-color: silver;
+	--with-gradient: true;
+	--display-background-gradient-from: DarkGrey;
+	--display-background-gradient-to: black;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: lightGreen;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-03 {
+	--border-color: silver;
+	--with-gradient: false;
+	--display-background-gradient-from: white;
+	--display-background-gradient-to: white;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: DarkGrey;
+	--font: Arial;
+}
+
 chartless-map#chartless-map-01 {
 	/* cursor: crosshair; */
 	cursor: url('./images/crosshair.png') 19 20, auto;
@@ -229,6 +262,7 @@ chartless-map#chartless-map-01 {
 
 	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="./webcomponents/CompassDisplay.js"></script>
+	<script type="module" src="./webcomponents/SatellitePlotter.js"></script>
 
 <script type="text/javascript">
 
@@ -519,6 +553,13 @@ events.subscribe(BSP, val => {
 	document.getElementById('bsp').innerHTML = `${val} kn`;
 	bsp = val; // Managed in repaint
 	// console.log(`BSP:	${bsp.toFixed(2)}`);
+});
+events.subscribe(GPS_SAT, (val) => {
+//	console.log("Satellite data:", val);
+	gpsSatelliteData = val;
+	let plotter = document.getElementById('sp-01');
+	plotter.setSatellites(val);
+	plotter.repaint();
 });
 // For debug, mainly.
 if (false) {
@@ -1081,6 +1122,7 @@ let setStyle = (opt) => {
 	let map = document.getElementById('chartless-map-01');
 	let cog = document.getElementById('cog');
 	let sog = document.getElementById('sog');
+	let sat = document.getElementById('sp-01');
 
 	document.getElementById('chartless-map-01').className = opt.value;
 
@@ -1099,6 +1141,11 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.add('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-02');
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -1114,6 +1161,11 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.add('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-01');
 			break;
 		case 'chartless-map-01':
 		default:
@@ -1130,6 +1182,11 @@ let setStyle = (opt) => {
 			sog.classList.add('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+			// Sat
+			sat.classList.remove('sat-plot-03');
+			sat.classList.remove('sat-plot-02');
+			sat.classList.remove('sat-plot-01');
+			sat.classList.add('sat-plot-03');
 			break;
 	}
 };
@@ -1218,10 +1275,10 @@ window.onload = () => {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2"><hr/></td>
+						<td colspan="3"><hr/></td>
 					</tr>
 					<tr>
-						<td>
+						<td width="33%" align="center">
 							<compass-display id="cog"
 											 class="gray display-data"
 											 title="Course Over Ground"
@@ -1232,7 +1289,7 @@ window.onload = () => {
 											 minor-ticks="5"
 											 label="COG"></compass-display>
 						</td>
-						<td>
+						<td width="33%" align="center">
 							<analog-display class="analogdisplay-flat-gray display-data"
 											title="Speed Over Ground&#13; in knots"
 											id="sog"
@@ -1249,6 +1306,14 @@ window.onload = () => {
 											width="200"
 											height="200"></analog-display>
 						</td>
+						<td width="33%" align="center">
+							<satellite-plotter class="sat-plot-03"
+											   title="GPS Satellites in view"
+											   id="sp-01"
+											   width="200"
+											   height="200"
+											   sat-in-view='{}'></satellite-plotter>
+						</td>
 					</tr>
 					<tr>
 						<td>GPS Date:</td>
@@ -1259,7 +1324,7 @@ window.onload = () => {
 						<td><span id="gps-time"></span></td>
 					</tr>
 					<tr>
-						<td colspan="2"><hr/></td>
+						<td colspan="3"><hr/></td>
 					</tr>
 					<tr>
 						<td>Position:</td>

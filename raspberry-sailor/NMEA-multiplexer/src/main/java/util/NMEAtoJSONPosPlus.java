@@ -6,6 +6,7 @@ import calc.GreatCircle;
 import calc.GreatCirclePoint;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 // import context.ApplicationContext;
 // import context.NMEADataCache;
@@ -53,6 +54,7 @@ import java.util.zip.ZipFile;
  * See CLI prms:
  * --file-name: Mandatory. File name, on the file system, or in the archive
  * --archive-name: Optional. Archive file name
+ * --mini: Optional. "yes" or "no", default "no". Will minimize the output data to lat", "lng", "gridSquare", "googlePlusCode", "sog", "cog", "rmcDate"
  * --output-file-name: Optional. Will be generated from --file-name if missing
  * --default-decl: Optional, default 0. Used if decl is not in RMC
  * --awa-offset: Optional, default 0.
@@ -441,7 +443,8 @@ public class NMEAtoJSONPosPlus {
 								  double defaultDeclinationValue,
 								  String deviationCurveFile,
 								  String polarFileName,
-	                              String fileOutName) throws Exception {
+	                              String fileOutName,
+								  boolean mini) throws Exception {
 
 		List<Object> jsonArray = new ArrayList<>();
 
@@ -722,7 +725,30 @@ public class NMEAtoJSONPosPlus {
 		for (JsonNode node : jsonNode) {
 			((ObjectNode)node).remove("latInDegMinDec");
 			((ObjectNode)node).remove("lngInDegMinDec");
+
+			// Remove optional nodes if mini
+			if (mini) {
+				// System.out.println("... minifying");
+				((ObjectNode)node).remove("hdt");
+				((ObjectNode)node).remove("hdc");
+				((ObjectNode)node).remove("cmg");
+				((ObjectNode)node).remove("leeway");
+				((ObjectNode)node).remove("decl");
+				((ObjectNode)node).remove("dev");
+				((ObjectNode)node).remove("bsp");
+				((ObjectNode)node).remove("mwt");
+				((ObjectNode)node).remove("awa");
+				((ObjectNode)node).remove("aws");
+				((ObjectNode)node).remove("twa");
+				((ObjectNode)node).remove("tws");
+				((ObjectNode)node).remove("twd");
+				((ObjectNode)node).remove("csp");
+				((ObjectNode)node).remove("cdr");
+				((ObjectNode)node).remove("perf");
+				// System.out.println("After:" + node);
+			}
 		}
+
 		if (minified) {
 			bw.write(mapper.writeValueAsString(jsonNode));
 		} else {
@@ -733,6 +759,7 @@ public class NMEAtoJSONPosPlus {
 	}
 
 	private final static String FILE_NAME_PREFIX = "--file-name:";
+	private final static String MINI_PREFIX = "--mini:";
 	private final static String OUTPUT_FILE_NAME_PREFIX = "--output-file-name:";
 	private final static String ARCHIVE_NAME_PREFIX = "--archive-name:";
 	private final static String DEFAULT_DECLINATION_PREFIX = "--default-decl:";
@@ -749,6 +776,7 @@ public class NMEAtoJSONPosPlus {
 	public static void main(String... args) {
 
 		String fileName = null;
+		boolean mini = false;
 		String outputName = null;
 		String archiveName = null;
 		double defaultDeclinationValue = 0d;
@@ -761,6 +789,8 @@ public class NMEAtoJSONPosPlus {
 				System.out.printf("Processing [%s]\n", arg);
 				if (arg.startsWith(FILE_NAME_PREFIX)) {
 					fileName = arg.substring(FILE_NAME_PREFIX.length());
+				} else if (arg.startsWith(MINI_PREFIX)) {
+					mini = ("yes".equals(arg.substring(MINI_PREFIX.length())));
 				} else if (arg.startsWith(OUTPUT_FILE_NAME_PREFIX)) {
 					outputName = arg.substring(OUTPUT_FILE_NAME_PREFIX.length());
 				} else if (arg.startsWith(ARCHIVE_NAME_PREFIX)) {
@@ -804,7 +834,8 @@ public class NMEAtoJSONPosPlus {
 										defaultDeclinationValue,
 										deviationCurveFile,
 										polarFileName,
-										outputFileName);
+										outputFileName,
+										mini);
 			System.out.printf("\nGenerated file %s is ready.\n", outputFileName);
 		} catch (Exception ex) {
 			ex.printStackTrace();
