@@ -251,22 +251,21 @@ rl.question(`Hit [return] when ready... `, name => {
   const now = new Date();
 
   let today = { // Start date
-            year: now.getUTCFullYear(),
-            month: now.getUTCMonth() + 1, // [1..12]
-            day: now.getUTCDate()
-        };
-
+    year: now.getUTCFullYear(),
+    month: now.getUTCMonth() + 1, // [1..12]
+    day: now.getUTCDate()
+  };
 
   let calculationData = {
-                utcyear: today.year,
-                utcmonth: today.month,
-                utcday: today.day,
-                utchour: now.getUTCHours(),
-                utcminute: now.getUTCMinutes(),
-                utcsecond: now.getUTCSeconds(),
-                deltaT: DELTA_T, /// Recalculated
-                noPlanets: false
-            };
+    utcyear: today.year,
+    utcmonth: today.month,
+    utcday: today.day,
+    utchour: now.getUTCHours(),
+    utcminute: now.getUTCMinutes(),
+    utcsecond: now.getUTCSeconds(),
+    deltaT: DELTA_T, /// Recalculated
+    noPlanets: false
+ };
 
   let calcResult = sampleMain(calculationData); // in app.js
   if (false) {
@@ -287,9 +286,6 @@ rl.question(`Hit [return] when ready... `, name => {
               `- Sun SD: ${calcResult.sun.SD.fmt},\n` +
               `- EOT: ${calcResult.EOT.fmt}`);
 
-
   rl.close();
-  console.log("Done.");
+  console.log("Done. Bye now!");
 });
-
-
