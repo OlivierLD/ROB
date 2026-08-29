@@ -113,6 +113,7 @@ URL_OPTION_13f="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13g="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13h="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_14="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+URL_OPTION_15="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -1199,7 +1200,7 @@ while [[ "${GO}" == "true" ]]; do
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
-		    openBrowser ${URL_OPTION_14}
+		    openBrowser ${URL_OPTION_15}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi

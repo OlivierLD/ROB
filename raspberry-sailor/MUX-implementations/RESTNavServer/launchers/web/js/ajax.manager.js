@@ -188,6 +188,15 @@ function onMessage(json) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Date (" + err + ")");
 		}
 
+        try {
+            let gpsSat = json["Satellites in view"];
+            if (gpsSat !== undefined) {
+                events.publish(GPS_SAT, gpsSat);
+            }
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "GPS Satellites data (" + err + ")");
+        }
+
 		try {
 			let hdg = json["HDG true"].angle;
 			events.publish(HDG, hdg);

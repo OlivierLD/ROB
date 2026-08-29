@@ -318,7 +318,7 @@
             }
         });
         events.subscribe(events.topicNames.GPS_SAT, (val) => {
-//		console.log("Satellite data:", val);
+//		    console.log("Satellite data:", val);
             gpsSatelliteData = val;
             let plotter = document.getElementById('sp-01');
             plotter.setSatellites(val);
