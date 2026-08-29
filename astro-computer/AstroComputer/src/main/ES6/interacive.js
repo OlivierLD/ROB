@@ -1,5 +1,13 @@
 "use strict";
 
+/*
+ * Interactive test file for the Celestial Computer.
+ *
+ * To be used with node.js:
+ * $ node interactive.js
+ *
+ */
+
 import * as CelestialComputer from './longterm.almanac.js';
 import {
     sightReduction,
@@ -56,19 +64,6 @@ export function sampleMain(userDataObject) {
     let noPlanets = userDataObject.noPlanets || false;
     return CelestialComputer.calculate(year, month, day, hour, minute, second, delta_t, noPlanets);
 }
-
-// Expose required functions
-// window.sampleMain = sampleMain;
-// window.gridSquare = CelestialComputer.gridSquare;
-// // TODO Google PlusCode. See https://github.com/google/open-location-code/blob/main/js/src/openlocationcode.js
-// window.sightReduction = CelestialComputer.sightReduction; // Note: This is the one in utils.js
-// window.getGCDistance = getGCDistance;
-// window.getGCDistanceDegreesNM = getGCDistanceDegreesNM;
-// window.calculateGreatCircle = calculateGreatCircle;
-// window.getMoonTilt = getMoonTilt;
-// window.getSunMeridianPassageTime = CelestialComputer.getSunMeridianPassageTime;
-// window.decimalToDMS = CelestialComputer.decimalToDMS;
-// // window.getSunDataForAllDay = CelestialComputer.getSunDataForAllDay;
 
 let STANDALONE = false;
 let STANDALONE_2 = false;
@@ -265,7 +260,7 @@ rl.question(`Hit [return] when ready... `, name => {
     utcsecond: now.getUTCSeconds(),
     deltaT: DELTA_T, /// Recalculated
     noPlanets: false
- };
+  };
 
   let calcResult = sampleMain(calculationData); // in app.js
   if (false) {

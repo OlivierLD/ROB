@@ -1261,6 +1261,19 @@ window.onload = () => {
 					<button class="zoom-button" onclick="zoomOut();" title="Zoom out">-</button>
 				</div>
 			</div>
+
+			<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+				<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+				<!--br/-->
+				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+				<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+				<!--br/-->
+				<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
+			</div>
+
 		</td>
 		<td valign="top" rowspan="3">
 			<table>
@@ -1407,17 +1420,6 @@ window.onload = () => {
 	</tr-->
 	<tr>
 		<td valign="top">
-			<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
-				<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
-				<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
-				<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
-				<!--br/-->
-				<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
-				<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
-				<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
-				<!--br/-->
-				<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
-			</div>
 		</td>
 	</tr>
 </table>
