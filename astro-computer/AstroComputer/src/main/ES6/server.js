@@ -173,6 +173,7 @@ let handler = (req, res) => {
 							console.log("+-------------------------------------------")
 							console.log("| Un-managed content type for " + resource);
 							console.log("| You should add it in '%s'", __filename);
+							console.log("| We'll use '%s' by default.", contentType);
 							console.log("+-------------------------------------------")
 						}
 

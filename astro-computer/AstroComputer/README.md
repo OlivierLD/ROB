@@ -6,7 +6,7 @@ The code is based on the remarkable work done by [Henning Humland](https://celna
 Online Ephemeris calculator, [this one](https://neoprogrammics.com/de405_usno_ae98/DE405_Sun.php) produces results similar to the ones you'll get here.  
 _Reminder_: `SHA = 360&deg; - RA`  
 
-This was originally started in Java, and later reproduced
+This was originally started in Java, and later reproduced/translated
 in several other languages.
 
 > _Note_:   

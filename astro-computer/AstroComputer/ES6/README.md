@@ -259,4 +259,20 @@ The resource to point to from `app.js` would be `./lib/celestial-computer.min.js
 ## On-line
 See an on-line example at <https://olivierld.github.io/web.stuff/astro/index.html>
 
+## Command Line interactive UI
+Try this!
+```commandline
+$ node interacive.js 
+CelestialComputer is loaded and ready to use.
+Hit [return] when ready... 
+Let's go!...
+At 2026-08-29 07:10:35 UTC :
+- Sun GHA: 287° 23' 41",
+- Sun DEC: N   09° 19' 00",
+- Sun HP: 8.7",
+- Sun SD: 950.2",
+- EOT:  - 1m 0.2s
+Done.
+```
+
 ---
