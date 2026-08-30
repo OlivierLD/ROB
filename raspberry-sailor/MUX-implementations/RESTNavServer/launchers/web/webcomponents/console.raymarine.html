@@ -72,11 +72,19 @@
 			document.getElementById('sog-01').innerHTML = val.toFixed(2) + " kts";
 		});
 		events.subscribe('cog', function(val) {
-			document.getElementById('cog-01').innerHTML = val.toFixed(2) + " &deg;";
+			document.getElementById('cog-01').innerHTML = val.toFixed(0) + " &deg;";
 		});
 		events.subscribe('dbt', function(val) {
 			document.getElementById('dbt-01').innerHTML = val.toFixed(2) + " m";
 		});
+
+		events.subscribe('wt', function(val) {
+			document.getElementById('sea-temp-01').innerHTML = val.toFixed(1) + "&deg;C";
+		});
+		events.subscribe('at', function(val) {
+			document.getElementById('air-temp-01').innerHTML = val.toFixed(1) + "&deg;C";
+		});
+
 		events.subscribe('log', function(val) {
 			let elem = document.getElementById('bsp-01');
 			elem.digitalDataVal = val;
@@ -108,19 +116,23 @@
 		/* global twa tws awa aws */
 		events.subscribe('twa', function(val) {
 			twa = val;
-			setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('tws', function(val) {
 			tws = val;
-			setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('aws', function(val) {
 			aws = val;
 			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('awa', function(val) {
 			awa = val;
 			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 	</script>
 
@@ -138,7 +150,7 @@
 
 		body {
 			background-color: black;
-			color: gray;
+			color: white;
 			font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
 			/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
 			background: radial-gradient(at top, DarkGrey -8%, black 55%);
@@ -271,29 +283,33 @@
 					<div class="black-frame small-box">
 						Boat Position
 						<div id="position-01" style="text-align: left; font-size: 24px; font-weight: bold;">
-
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						SOG
 						<div id="sog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
-
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						COG
 						<div id="cog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
-
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						DBT
 						<div id="dbt-01" style="text-align: left; font-size: 24px; font-weight: bold;">
-
 						</div>
 					</div>
 				</div>
-				<div id="row-1" style="display: grid; grid-column-start: 1; grid-template-columns: auto; padding: 10px;">
+				<div id="row-1" style="display: grid; grid-column-start: 1; grid-template-columns: 30% auto 30%; padding: 10px;">
+					<div>
+						<!-- Air Temp -->
+						Air Temp
+						<hr/>
+						<div id="air-temp-01" class="centered" style="font-size: 96px; font-weight: bold; text-align: left;">
+							-.- &deg;C
+						</div>
+					</div>
 					<!--
 							APP WIND DISPLAY
 					+-->
@@ -316,6 +332,24 @@
 							<input type="checkbox" class="border-cb" onchange="setBorder(this, 'aw-01');" checked>With Border
 						</div>
 					</div>
+					<div>
+						<!-- Sea Temp & Wind -->
+						Sea Temp
+						<hr/>
+						<div id="sea-temp-01" class="centered" style="font-size: 96px; font-weight: bold; text-align: left;">
+							-.- &deg;C
+						</div>
+						<hr/>
+						Wind
+						<hr/>
+						<div id="wind-01" class="centered" style="font-size: 48px; font-weight: bold; text-align: left;">
+							AW -.- kts, --- &deg;
+							<br/>
+							TW -.- kts, --- &deg;
+						</div>
+
+					</div>
+
 				</div>
 			</div>
 		</div>

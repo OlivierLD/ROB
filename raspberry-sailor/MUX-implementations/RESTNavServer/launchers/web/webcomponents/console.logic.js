@@ -59,18 +59,22 @@ function changeBG(value) {
 	switch (value) {
 		case 'WHITE':
 			bodyStyle.background = 'white';
+			bodyStyle.color = 'black';
 			htmlStyle.backgroundColor = 'white';
 			break;
 		case 'LIGHT':
 			bodyStyle.background = 'radial-gradient(at top, white -8%, lightgrey 55%)';
+			bodyStyle.color = 'black';
 			htmlStyle.backgroundColor = 'lightgrey';
 			break;
 		case 'DARK':
 			bodyStyle.background = 'radial-gradient(at top, DarkGrey -8%, black 55%)';
+			bodyStyle.color = 'white';
 			htmlStyle.backgroundColor = 'black';
 			break;
 		case 'BLACK':
 			bodyStyle.background = 'black';
+			bodyStyle.color = 'white';
 			htmlStyle.backgroundColor = 'black';
 			break;
 		default:
