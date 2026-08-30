@@ -598,6 +598,13 @@ function onMessage(json) {
         } catch (err) {
             errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
         }
+        // Depth
+        try {
+            let dbt = json.Depth.depthInMeters;
+            events.publish(events.topicNames.DBT, dbt);
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "SOG");
+        }
         // to-wp, vmg-wind, vmg-wp, b2wp
         try {
             let to_wp = json["To Waypoint"];

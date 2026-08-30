@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ ! NMEA Console, with Web Components.
+ ! Get the data from navrest.NavServer, started for example by ./runNavServer.sh
+ ! Uses ES6 Promises to get to Ajax
+ !
+ ! WiP
+ +-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Raymarine like NMEA Console</title>
+	<link rel="icon" type="image/png" href="./logo-192x192.png">
+
+	<link rel="stylesheet" href="css/stylesheet.css">
+	<link rel="stylesheet" href="css/web-components.css">
+
+	<!-- Firefox does NOT like modules... Safari OK -->
+
+	<!-- Web Components -->
+	<script type="module" src="./WindAngleDisplay.js"></script>
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="js/date.proto.js"></script>
+	<script type="text/javascript" src="js/pub.sub.js"></script>
+	<script type="text/javascript" src="js/ajax.manager.js"></script>
+
+	<script type="text/javascript">
+
+	    function decToSex(val, ns_ew) {
+			let absVal = Math.abs(val);
+			let intValue = Math.floor(absVal);
+			let dec = absVal - intValue;
+			let i = intValue;
+			dec *= 60;
+			let s = i + "°" + dec.toFixed(2) + "'";
+
+			if (val < 0) {
+				s += (ns_ew === 'NS' ? 'S' : 'W');
+			} else {
+				s += (ns_ew === 'NS' ? 'N' : 'E');
+			}
+			return s;
+	    }
+
+		// For this Console.
+		/**
+		 *  SUBSCRIBERS HERE.
+		 *
+		 * The following subscriptions make the distinction between Ajax & WebSockets
+		 * (See the initAjax & initWS methods)
+		 *
+		 * Event's definition (topic's name) is in ajax.manager.js, method onMessage
+		 */
+		/* global events gpsPosition setData gpsSatelliteData */
+		events.subscribe('pos', (val) => {
+			gpsPosition = val;
+			try {
+				document.getElementById('world-map-01').setUserPosition({ latitude: val.lat, longitude: val.lng });
+				document.getElementById('world-map-01').positionLabel = "GPS";
+				document.getElementById('world-map-01').repaint();
+			} catch (err) {
+			  // console.log('Oops'); // absorb
+			}
+			document.getElementById('position-01').innerHTML = decToSex(gpsPosition.lat, "NS") + "<br/>" + decToSex(gpsPosition.lng, "EW");
+		});
+		events.subscribe('bsp', function(val) {
+			setData('bsp-01', val);
+		});
+		events.subscribe('sog', function(val) {
+			document.getElementById('sog-01').innerHTML = val.toFixed(2) + " kts";
+		});
+		events.subscribe('cog', function(val) {
+			document.getElementById('cog-01').innerHTML = val.toFixed(2) + " &deg;";
+		});
+		events.subscribe('dbt', function(val) {
+			document.getElementById('dbt-01').innerHTML = val.toFixed(2) + " m";
+		});
+		events.subscribe('log', function(val) {
+			let elem = document.getElementById('bsp-01');
+			elem.digitalDataVal = val;
+			elem.repaint();
+		});
+		events.subscribe('gps-time', function(val) {
+			// val.format("Y-M-d H:i:s")
+			let time = new Date(val).format("H:i:s");
+			setData('analog-watch-01', time);
+			let date = new Date(val).format("d-m-Y-l");
+			setData('calendar-01', date);
+			if (gpsPosition !== undefined) {
+				let gpsDate = new Date(val);
+				/* global getAstroData DURATION_FMT withWanderingBodies withStars withConstellations astroCallback */
+				getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, withConstellations, astroCallback);
+			}
+		});
+		events.subscribe('gps-sat', function(val) {
+//		console.log("Satellite data:", val);
+			gpsSatelliteData = val;
+		});
+		events.subscribe('hdg', function(val) {
+			hdg = val;
+			setData('compass-rose-01', val);
+		});
+		events.subscribe('twd', function(val) {
+			setData('compass-01', val);
+		});
+		/* global twa tws awa aws */
+		events.subscribe('twa', function(val) {
+			twa = val;
+			setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+		});
+		events.subscribe('tws', function(val) {
+			tws = val;
+			setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+		});
+		events.subscribe('aws', function(val) {
+			aws = val;
+			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+		});
+		events.subscribe('awa', function(val) {
+			awa = val;
+			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+		});
+	</script>
+
+	<style>
+		:root {
+			--padding: 50px;
+			--perspective: 100em;
+			--rotateX: -15deg;
+		}
+
+		html {
+			height: 100%;
+			background-color: black;
+		}
+
+		body {
+			background-color: black;
+			color: gray;
+			font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+			/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
+			background: radial-gradient(at top, DarkGrey -8%, black 55%);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.black-frame {
+			padding: 3px;
+			margin: 1px;
+			border-radius: 5px;
+			border: 1px solid silver;
+		}
+
+		.centered {
+			text-align: center;
+		}
+
+		.small-box {
+			padding: 10px;
+		}
+
+		.mirror {
+			display: block;
+			-webkit-transform: matrix(-1, 0, 0, 1, 0, 0);
+			-moz-transform: matrix(-1, 0, 0, 1, 0, 0);
+			-o-transform: matrix(-1, 0, 0, 1, 0, 0);
+			transform: matrix(-1, 0, 0, 1, 0, 0);
+		}
+
+		.mirror-upside-down {
+			display: block;
+			-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		}
+
+		.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: rgba(241, 241, 241, 0.5);
+		}
+
+		/* Style the buttons inside the tab */
+		.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		.tab button.active {
+			background-color: #ccc;
+		}
+
+		.boat-data { /* Order is important */
+			transition: visibility 0.5s, opacity 0.5s linear, height 0.5s;
+		}
+
+		.raw-table {
+			border-color: cyan;
+			font-family: "Helvetica Neue", "Lato", Verdana, Helvetica, Geneva, sans-serif;
+			font-size: 20px;
+		}
+
+		th {
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		td {
+			font-family: inherit;
+			font-size: inherit;
+			padding: 5px;
+		}
+	</style>
+
+	<!-- All logic in the script below -->
+	<script type="text/javascript" src="./console.logic.js"></script>
+</head>
+<body>
+
+	<table width="100%">
+		<tr>
+			<td><h2>Raymarine NMEA Console</h2></td>
+		</tr>
+	</table>
+	<hr/>
+	<!-- Page BG -->
+	Widget's Style:
+	<select id="widgets-style" onchange="setTheme(this.value);">
+		<option value="analogdisplay-day" selected>Day</option>
+		<option value="analogdisplay-night">Night</option>
+		<option value="analogdisplay-monochrome-cyan">Cyan</option>
+		<option value="analogdisplay-monochrome-orange">Orange</option>
+		<option value="analogdisplay-monochrome-yellow">Yellow</option>
+		<option value="analogdisplay-flat-gray">Flat Gray</option>
+		<option value="analogdisplay-flat-black">Flat Black</option>
+	</select>
+	Page Background
+	<input type="radio" id="black" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+	<input type="radio" id="dark" name="page-bg" value="DARK" onchange="changeBG(this.value);" checked>Dark
+	<input type="radio" id="light" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+	<input type="radio" id="white" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+	<hr/>
+
+	<!--
+	  Good grid resource at:
+	  https://css-tricks.com/snippets/css/complete-guide-grid/
+	  https://www.w3schools.com/css/css_grid.asp
+	 -->
+
+	<!-- The NMEA widgets. The 50px columns are here for the perspective, they are pads on the left and right -->
+	<div id="one" style="display: block;">
+		<div id="nmea-widgets-1" style="display: grid; grid-template-columns: var(--padding) auto var(--padding); padding: 10px; text-align: center;">
+			<div id="boat-data" class="boat-data" style="height: auto; opacity: 1; visibility: visible; display: grid; grid-column-start: 2; grid-template-columns: auto;">
+				<div id="top-row" style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
+					<div class="black-frame small-box">
+						Boat Position
+						<div id="position-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						SOG
+						<div id="sog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						COG
+						<div id="cog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						DBT
+						<div id="dbt-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+
+						</div>
+					</div>
+				</div>
+				<div id="row-1" style="display: grid; grid-column-start: 1; grid-template-columns: auto; padding: 10px;">
+					<!--
+							APP WIND DISPLAY
+					+-->
+					<div id="analog">
+						<div class="/*black-frame*/ centered">
+							<wind-angle-display class="analogdisplay-day"
+												title="Apparent Wind Speed&#13;in Knots"
+												id="aw-01"
+												value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
+												major-ticks="30"
+												minor-ticks="5"
+												with-border="true"
+												with-digits="true"
+												label="App Wind"
+												hand="wind"
+												width="500"
+												height="500"></wind-angle-display>
+						</div>
+						<div class="/*black-frame*/ centered">
+							<input type="checkbox" class="border-cb" onchange="setBorder(this, 'aw-01');" checked>With Border
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- End of Tab 1 -->
+
+</body>
+</html>

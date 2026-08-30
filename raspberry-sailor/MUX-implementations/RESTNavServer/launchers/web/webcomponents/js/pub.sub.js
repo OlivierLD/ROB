@@ -23,6 +23,7 @@ let events = {
 		TWS: 'tws',
 		WATER_TEMP: 'wt',
 		AIR_TEMP: 'at',
+		DBT: 'dbt',
 		PRMSL: "prmsl",
 		REL_HUM: 'hum',
 		AWS: 'aws',

@@ -862,32 +862,34 @@ function astroCallback(data) {
 
 	 */
 
-	let dataTable =
-			'<table border="1" class="raw-table">' + '<tr><th>Body</th><th>D</th><th>GHA</th><th>LHA</th><th>Elev</th><th>Z</th></tr>' +
-			'<tr><td align="left">' + bodyName("sun") + '</td><td>' + worldMap.decToSex(data.sun.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.sun.gha) + '</td><td align="right">' + worldMap.decToSex(sunLHA) + '</td><td align="right">' +	worldMap.decToSex(data.sunObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.sunObs.z) + '</td></tr>' +
-			'<tr><td align="left">' + bodyName("moon") + '</td><td>' + worldMap.decToSex(data.moon.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.moon.gha) + '</td><td align="right">' + worldMap.decToSex(moonLHA) + '</td><td align="right">' +	worldMap.decToSex(data.moonObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.moonObs.z) + '</td></tr>';
+    if (worldMap !== null) {
+        let dataTable =
+                '<table border="1" class="raw-table">' + '<tr><th>Body</th><th>D</th><th>GHA</th><th>LHA</th><th>Elev</th><th>Z</th></tr>' +
+                '<tr><td align="left">' + bodyName("sun") + '</td><td>' + worldMap.decToSex(data.sun.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.sun.gha) + '</td><td align="right">' + worldMap.decToSex(sunLHA) + '</td><td align="right">' +	worldMap.decToSex(data.sunObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.sunObs.z) + '</td></tr>' +
+                '<tr><td align="left">' + bodyName("moon") + '</td><td>' + worldMap.decToSex(data.moon.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.moon.gha) + '</td><td align="right">' + worldMap.decToSex(moonLHA) + '</td><td align="right">' +	worldMap.decToSex(data.moonObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.moonObs.z) + '</td></tr>';
 
-	// Bonus: Update Sun Decl on the graph
-	try {
-		document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
-		document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
-	} catch (err) {
-		// Absorb
+        // Bonus: Update Sun Decl on the graph
+        try {
+            document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
+            document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
+        } catch (err) {
+            // Absorb
+        }
+
+        if (data.wanderingBodies) {
+            for (let i=0; i<data.wanderingBodies.length; i++) {
+                if (data.wanderingBodies[i].name !== "aries") {
+                    dataTable +=
+                    '<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
+                }
+            }
+        }
+
+        dataTable +=
+                '<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
+
+        document.getElementById("sun-moon-data").innerHTML = dataTable;
 	}
-
-	if (data.wanderingBodies) {
-		for (let i=0; i<data.wanderingBodies.length; i++) {
-			if (data.wanderingBodies[i].name !== "aries") {
-				dataTable +=
-				'<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
-			}
-		}
-	}
-
-	dataTable +=
-			'<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
-
-	document.getElementById("sun-moon-data").innerHTML = dataTable;
 
 	// Display solar date & time
 	let solarDate = new Date(data.solarDate.year, data.solarDate.month - 1, data.solarDate.day, data.solarDate.hour, data.solarDate.min, data.solarDate.sec);
@@ -905,64 +907,68 @@ function astroCallback(data) {
 	let sysDateFmt = utcDate.format('D d-M-Y H:i:s Z');
 //console.log("System date %s", sysDateFmt);
 
-	document.getElementById("split-flap-display-01")
-			.value = sysDateFmt;
+    try {
+        document.getElementById("split-flap-display-01")
+                .value = sysDateFmt;
 
-	// System date in sun path tab
-	let systemTime = utcDate.format('H:i:s');
-	setData('split-flap-system-display-00', systemTime);
-	let timeOffset = utcDate.format('Z');
-	setData('split-flap-system-display-01', timeOffset);
-	//
-	let systemDate = solarDate.format("d-m-Y-l");
-	setData('calendar-04', systemDate);
+        // System date in sun path tab
+        let systemTime = utcDate.format('H:i:s');
+        setData('split-flap-system-display-00', systemTime);
+        let timeOffset = utcDate.format('Z');
+        setData('split-flap-system-display-01', timeOffset);
+        //
+        let systemDate = solarDate.format("d-m-Y-l");
+        setData('calendar-04', systemDate);
 
-	// utc-date Raw Data tab
-	document.getElementById("utc-date").innerHTML = 'UTC: ' +
-			utcDate.getUTCFullYear() + ' ' +
-			months[utcDate.getUTCMonth()] + ' ' +
-			(utcDate.getUTCDate() < 10 ? '0' : '') + utcDate.getUTCDate() + ' ' +
-			(utcDate.getUTCHours() < 10 ? '0' : '') + utcDate.getUTCHours() + ':' +
-			(utcDate.getUTCMinutes() < 10 ? '0' : '') + utcDate.getUTCMinutes() + ':' +
-			(utcDate.getUTCSeconds() < 10 ? '0' : '') + utcDate.getUTCSeconds();
+        // utc-date Raw Data tab
+        document.getElementById("utc-date").innerHTML = 'UTC: ' +
+                utcDate.getUTCFullYear() + ' ' +
+                months[utcDate.getUTCMonth()] + ' ' +
+                (utcDate.getUTCDate() < 10 ? '0' : '') + utcDate.getUTCDate() + ' ' +
+                (utcDate.getUTCHours() < 10 ? '0' : '') + utcDate.getUTCHours() + ':' +
+                (utcDate.getUTCMinutes() < 10 ? '0' : '') + utcDate.getUTCMinutes() + ':' +
+                (utcDate.getUTCSeconds() < 10 ? '0' : '') + utcDate.getUTCSeconds();
 
-	// Solar Time Raw Data tab
-	document.getElementById("solar-date").innerHTML = 'Solar Time: ' +
-			data.solarDate.year + ' ' +
-			months[data.solarDate.month - 1] + ' ' +
-			(data.solarDate.day < 10 ? '0' : '') + data.solarDate.day + ' ' +
-			(data.solarDate.hour < 10 ? '0' : '') + data.solarDate.hour + ':' +
-			(data.solarDate.min < 10 ? '0' : '') + data.solarDate.min + ':' +
-			(data.solarDate.sec < 10 ? '0' : '') + data.solarDate.sec;
+        // Solar Time Raw Data tab
+        document.getElementById("solar-date").innerHTML = 'Solar Time: ' +
+                data.solarDate.year + ' ' +
+                months[data.solarDate.month - 1] + ' ' +
+                (data.solarDate.day < 10 ? '0' : '') + data.solarDate.day + ' ' +
+                (data.solarDate.hour < 10 ? '0' : '') + data.solarDate.hour + ':' +
+                (data.solarDate.min < 10 ? '0' : '') + data.solarDate.min + ':' +
+                (data.solarDate.sec < 10 ? '0' : '') + data.solarDate.sec;
 
-	// Display transit time Raw Data tab
-	document.getElementById("sun-transit").innerHTML = 'Sun Transit: ' +
-			(data.tPass.hour < 10 ? '0' : '') + data.tPass.hour + ':' +
-			(data.tPass.min < 10 ? '0' : '') + data.tPass.min + ':' +
-			(data.tPass.sec < 10 ? '0' : '') + data.tPass.sec + ' ' +
-			data.tPass.tz;
+        // Display transit time Raw Data tab
+        document.getElementById("sun-transit").innerHTML = 'Sun Transit: ' +
+                (data.tPass.hour < 10 ? '0' : '') + data.tPass.hour + ':' +
+                (data.tPass.min < 10 ? '0' : '') + data.tPass.min + ':' +
+                (data.tPass.sec < 10 ? '0' : '') + data.tPass.sec + ' ' +
+                data.tPass.tz;
 
-	// Extra data Raw Tab
-	if (data.moonPhase !== undefined) {
-		if (document.getElementById("moon-phase-rd")) {
-			document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
-		}
-		if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
-			let alpha = data.moonTilt; // 0;
-//			let alpha = 0; // Tilt from horizontal
-//			if (data.moonToSunSkyRoute !== undefined) {
-//				try {
-//					alpha = calculateMoonTilt(moonSunData);
-//				} catch(error) {
-//					console.debug(error);
-//				}
-//			}
-			let moonTilt = alpha;
-			if (document.getElementById("moon-tilt-rd")) {
-				//document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
-				document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
-			}
-		}
+        // Extra data Raw Tab
+        if (data.moonPhase !== undefined) {
+            if (document.getElementById("moon-phase-rd")) {
+                document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
+            }
+            if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
+                let alpha = data.moonTilt; // 0;
+    //			let alpha = 0; // Tilt from horizontal
+    //			if (data.moonToSunSkyRoute !== undefined) {
+    //				try {
+    //					alpha = calculateMoonTilt(moonSunData);
+    //				} catch(error) {
+    //					console.debug(error);
+    //				}
+    //			}
+                let moonTilt = alpha;
+                if (document.getElementById("moon-tilt-rd")) {
+                    //document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
+                    document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
+                }
+            }
+        }
+	} catch (err) {
+	    // absorb
 	}
 	// ISS?
 	if (document.getElementById('iss-01')) {
@@ -1039,23 +1045,28 @@ function astroCallback(data) {
 			document.getElementById('sun-path-01').saturnPos = undefined;
 		}
 	}
-	worldMap.setAstronomicalData(data);
-	worldMap.repaint();
 
-	if (data.wanderingBodies) {
-		let wb = data.wanderingBodies;
-		wb.push({ name: "sun", decl: data.sun.decl, gha: data.sun.gha});
-		wb.push({ name: "moon", decl: data.moon.decl, gha: data.moon.gha});
-		skyMap.wanderingBodies = true;
-		skyMap.wanderingBodiesData = wb;
-	} else {
-		skyMap.withWanderingBodies = false;
+	if (worldMap !== null) {
+        worldMap.setAstronomicalData(data);
+        worldMap.repaint();
 	}
 
-	skyMap.hemisphere = (data.from.latitude > 0 ? 'N' : 'S');
-	skyMap.lhaAries = lhaAries;
-	skyMap.latitude = Math.abs(data.from.latitude);
-	skyMap.repaint();
+    if (skyMap !== null) {
+        if (data.wanderingBodies) {
+            let wb = data.wanderingBodies;
+            wb.push({ name: "sun", decl: data.sun.decl, gha: data.sun.gha});
+            wb.push({ name: "moon", decl: data.moon.decl, gha: data.moon.gha});
+            skyMap.wanderingBodies = true;
+            skyMap.wanderingBodiesData = wb;
+        } else {
+            skyMap.withWanderingBodies = false;
+        }
+
+        skyMap.hemisphere = (data.from.latitude > 0 ? 'N' : 'S');
+        skyMap.lhaAries = lhaAries;
+        skyMap.latitude = Math.abs(data.from.latitude);
+        skyMap.repaint();
+	}
 }
 
 function setTheme(className) {
@@ -1335,8 +1346,12 @@ window.onload = () => {
 	/* global initAjax */
 	initAjax(); // Default. See later for a WebSocket option. Contains the loops on REST requests
 
-	callFirst("world-map-01"); // Will change the background, based on the Sun's altitude
-	callAfter('world-map-01'); // Adding Satellites plot.
+    try {
+        callFirst("world-map-01"); // Will change the background, based on the Sun's altitude
+        callAfter('world-map-01'); // Adding Satellites plot.
+	} catch (err) {
+	    console.log("Managed:" + err);
+	}
 
 	// Query String prms, border, bg, style, like ?border=n&bg=black&style=orange&boat-data=n
 	let style = getQSPrm('style');
