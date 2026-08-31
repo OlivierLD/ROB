@@ -251,7 +251,7 @@
 	<hr/>
 	<!-- Page BG -->
 	Widget's Style:
-	<select id="widgets-style" onchange="setTheme(this.value);">
+	<select id="widgets-style" onchange="setTheme(this.value); document.getElementById('aw-01').classList.add('yellow-droplet');">
 		<option value="analogdisplay-day" selected>Day</option>
 		<option value="analogdisplay-night">Night</option>
 		<option value="analogdisplay-monochrome-cyan">Cyan</option>
@@ -309,11 +309,11 @@
 						</div>
 					</div>
 					<!--
-							APP WIND DISPLAY
-					+-->
+					 !	APP WIND DISPLAY
+					 +-->
 					<div id="analog">
 						<div class="/*black-frame*/ centered">
-							<wind-angle-display class="analogdisplay-day"
+							<wind-angle-display class="analogdisplay-day yellow-droplet"
 												title="Apparent Wind Speed&#13;in Knots"
 												id="aw-01"
 												value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
@@ -322,7 +322,7 @@
 												with-border="true"
 												with-digits="true"
 												label="App Wind"
-												hand="wind"
+												hand="droplet"
 												width="500"
 												height="500"></wind-angle-display>
 						</div>

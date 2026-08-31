@@ -42,7 +42,7 @@ const WIND_ANGLE_TAG_NAME = 'wind-angle-display';
  * spine-case to camelCase
  */
 const defaultWindAngleDisplayColorConfig = {
-	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white', TODO */
+	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white' */
 	digitColor: 'black',
 	withGradient: true,
 	displayBackgroundGradient: {
@@ -82,7 +82,7 @@ class WindAngleDisplay extends HTMLElement {
 			"with-digits",      // Boolean, default true. Index Values for major-ticks
 			"with-border",      // Boolean, default true
 			"label",            // String. Displayed under the know (like 'App Wind')
-			"hand",             // String. 'regular' (default) or 'wind'
+			"hand",             // String. 'regular' (default) or 'wind', or 'droplet'
 			"value"             // JSON Obj. Value to display, like { wa: 0, ws: 0 }
 		];
 	}
@@ -163,7 +163,7 @@ class WindAngleDisplay extends HTMLElement {
 				this._label = newVal;
 				break;
 			case "hand":
-				this._hand = (newVal === 'wind' ? 'wind' : 'regular');
+				this._hand = newVal; // (newVal === 'wind' ? 'wind' : 'regular');
 				break;
 			default:
 				break;
@@ -568,12 +568,12 @@ class WindAngleDisplay extends HTMLElement {
 		let x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(windValue.wa))); //  - (Math.PI / 2))));
 		let y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(windValue.wa))); // - (Math.PI / 2))));
 		context.lineTo(x, y);
-		if (this.hand !== 'wind') { // Regular needle
+		if (this.hand === null || this.hand === 'regular') { // Regular needle
 			// Tip
 			x = centerX - ((radius * 0.90) * Math.cos(Utilities.toRadians(windValue.wa) + (Math.PI / 2)));
 			y = centerY - ((radius * 0.90) * Math.sin(Utilities.toRadians(windValue.wa) + (Math.PI / 2)));
 			context.lineTo(x, y);
-		} else {                    // Then draw wind arrow
+		} else if (this.hand === 'wind') {                    // Then draw wind arrow
 			/*
 			    +-+
 			    | |
@@ -603,18 +603,93 @@ class WindAngleDisplay extends HTMLElement {
 				y = centerY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
 				context.lineTo(x, y);
 			});
-		}
-		// Right
-		x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
-		y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
-		context.lineTo(x, y);
+		} else if (this.hand === 'droplet') {                  // Then draw droplet
+			/*
+				+
+			   / \
+			  /   \
+			 / +-+ \
+			/ /   \ \
+			\ \___/ /
+			 \_____/
 
-		context.closePath();
+			 */
+			let dropletPoints = [
+				{ x: 0, y: - radius * 0.40 }, // Tip, pointing inside.
+				// Right
+				{ x: + radius * 0.40, y: - radius * 0.85 }, // Right back narrow side of the droplet
+				{ x: + radius * 0.00, y: - radius * 0.95 }, // Right back fat side of the droplet
+				// Left
+				{ x: - radius * 0.40, y: - radius * 0.85 }, // Left back narrow side of the droplet
+				{ x: - radius * 0.00, y: - radius * 0.95 }  // Left back fat side of the droplet
+			];
+			let dropletCenter = { x: 0, y: - radius * 0.75 };
+			let dropletRadius = radius * 0.125;
+
+			let radAngle = Utilities.toRadians(windValue.wa); // + (Math.PI / 2);
+			// Apply rotation to the points of the needle
+			context.beginPath();
+			// First droplet point (tip)
+			x = centerX + ((dropletPoints[0].x * Math.cos(radAngle)) - (dropletPoints[0].y * Math.sin(radAngle)));
+			y = centerY + ((dropletPoints[0].x * Math.sin(radAngle)) + (dropletPoints[0].y * Math.cos(radAngle)));
+
+			// right
+			context.moveTo(x, y);
+			context.quadraticCurveTo(
+				centerX + ((dropletPoints[1].x * Math.cos(radAngle)) - (dropletPoints[1].y * Math.sin(radAngle))), centerY + ((dropletPoints[1].x * Math.sin(radAngle)) + (dropletPoints[1].y * Math.cos(radAngle))),
+				centerX + ((dropletPoints[2].x * Math.cos(radAngle)) - (dropletPoints[2].y * Math.sin(radAngle))), centerY + ((dropletPoints[2].x * Math.sin(radAngle)) + (dropletPoints[2].y * Math.cos(radAngle))));
+			// left
+			context.moveTo(x, y);
+			context.quadraticCurveTo(
+				centerX + ((dropletPoints[3].x * Math.cos(radAngle)) - (dropletPoints[3].y * Math.sin(radAngle))), centerY + ((dropletPoints[3].x * Math.sin(radAngle)) + (dropletPoints[3].y * Math.cos(radAngle))),
+				centerX + ((dropletPoints[4].x * Math.cos(radAngle)) - (dropletPoints[4].y * Math.sin(radAngle))), centerY + ((dropletPoints[4].x * Math.sin(radAngle)) + (dropletPoints[4].y * Math.cos(radAngle))));
+
+			context.moveTo(centerX + ((dropletPoints[4].x * Math.cos(radAngle)) - (dropletPoints[4].y * Math.sin(radAngle))),
+			               centerY + ((dropletPoints[4].x * Math.sin(radAngle)) + (dropletPoints[4].y * Math.cos(radAngle))));
+
+			// context.stroke();
+
+			if (true) {
+				// Circle in the middle of the droplet
+				// context.moveTo(centerX + ((dropletCenter.x * Math.cos(radAngle)) - (dropletCenter.y * Math.sin(radAngle))),
+				//                centerY + ((dropletCenter.x * Math.sin(radAngle)) + (dropletCenter.y * Math.cos(radAngle))));
+				context.arc(centerX + ((dropletCenter.x * Math.cos(radAngle)) - (dropletCenter.y * Math.sin(radAngle))),
+							centerY + ((dropletCenter.x * Math.sin(radAngle)) + (dropletCenter.y * Math.cos(radAngle))),
+							dropletRadius, 0, 2 * Math.PI, false);
+
+				if (false) { // Replaced by evenodd, below
+					context.moveTo(centerX + ((dropletCenter.x * Math.cos(radAngle)) - (dropletCenter.y * Math.sin(radAngle))),
+								   centerY + ((dropletCenter.x * Math.sin(radAngle)) + (dropletCenter.y * Math.cos(radAngle))));
+					context.globalAlpha = 0.20;
+					// context.fillStyle = "blue";
+					context.fillStyle = 'transparent';
+					context.fill();
+					context.globalAlpha = 1.00; // reset
+					// context.closePath();
+				}
+				// context.moveTo(x, y); // ???
+			}
+		}
+		// Axis
+		if (this.hand !== 'droplet') { // Regular or wind needle (no droplet), draw axis.
+			x = centerX - ((radius * 0.05) * Math.cos(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
+			y = centerY - ((radius * 0.05) * Math.sin(Utilities.toRadians(windValue.wa) + (2 * Math.PI / 2)));
+			context.lineTo(x, y);
+		// } else {
+		// 	context.moveTo(x, y);
+		}
+
 		context.fillStyle = this.analogDisplayColorConfig.handColor;
-		context.fill();
-		context.lineWidth = 1;
-		context.strokeStyle = this.analogDisplayColorConfig.handOutlineColor;
-		context.stroke();
+		context.fill('evenodd');
+
+		// Draw line around figure
+		if (this.hand !== 'droplet') { // Regular or wind needle
+			context.lineWidth = 2;
+			context.strokeStyle = this.analogDisplayColorConfig.handOutlineColor;
+			context.stroke();
+		}
+		context.closePath();
+
 		// Knob
 		context.beginPath();
 		context.arc((this.canvas.width / 2), (radius + 10), 7, 0, 2 * Math.PI, false);
