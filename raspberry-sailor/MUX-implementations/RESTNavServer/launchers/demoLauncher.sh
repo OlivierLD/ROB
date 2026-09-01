@@ -948,9 +948,9 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "13")
-      # PROP_FILE=mux-configs/nmea.mux.ais.test.yaml
-      # PROP_FILE=mux-configs/nmea.mux.ais.test.2.yaml
-      PROP_FILE=mux-configs/nmea.mux.ais.test.3.yaml
+      PROP_FILE=mux-configs/nmea.mux.ais.test.yaml  # with ais.exploratorium.edu and sinagot.net
+      # PROP_FILE=mux-configs/nmea.mux.ais.test.2.yaml # with sinagot.net
+      # PROP_FILE=mux-configs/nmea.mux.ais.test.3.yaml
       #	PROP_FILE=mux-configs/nmea.mux.gps.ais.yaml
         echo -e "Launching Nav Server with ${PROP_FILE}"
       # Ask to launch a browser in interactive mode (and not provided already)

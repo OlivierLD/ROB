@@ -31,6 +31,7 @@ dependencies {
   implementation project (':raspberry-sailor:RESTImageProcessor')
   implementation project (':raspberry-sailor:RESTRouting')
   implementation project (':raspberry-sailor:NMEA-multiplexer')
+  implementation project (':raspberry-sailor:MUX-implementations:NMEA-mux-extensions') // Add/remove at will
 
   testImplementation "junit:junit:$junit_version"
 }

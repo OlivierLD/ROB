@@ -15,6 +15,8 @@
 
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/web-components.css">
+	<link rel="stylesheet" href="css/rocker.css">
+
 
 	<!-- Web Components -->
 	<script type="module" src="./WindAngleDisplay.js"></script>
@@ -42,7 +44,12 @@
 			return s;
 	    }
 
-		// For this Console.
+		function updateDisplayStyle(style, id) {
+			setTheme(style);
+			document.getElementById(id).classList.add('yellow-droplet');
+			document.getElementById(id).repaint();
+		}
+
 		/**
 		 *  SUBSCRIBERS HERE.
 		 *
@@ -50,6 +57,7 @@
 		 * (See the initAjax & initWS methods)
 		 *
 		 * Event's definition (topic's name) is in ajax.manager.js, method onMessage
+		 * See also : const POS = 'pos';
 		 */
 		/* global events gpsPosition setData gpsSatelliteData */
 		events.subscribe('pos', (val) => {
@@ -111,26 +119,26 @@
 		events.subscribe('twd', function(val) {
 			setData('compass-01', val);
 		});
-		/* global twa tws awa aws */
+
 		events.subscribe('twa', function(val) {
 			twa = val;
 			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
-			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+			document.getElementById('true-wind-01').innerHTML = tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('tws', function(val) {
 			tws = val;
 			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
-			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+			document.getElementById('true-wind-01').innerHTML = tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('aws', function(val) {
 			aws = val;
 			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
-			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+			document.getElementById('app-wind-01').innerHTML = aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;";
 		});
 		events.subscribe('awa', function(val) {
 			awa = val;
 			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
-			document.getElementById('wind-01').innerHTML = "AW " + aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;<br/>TW " + tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+			document.getElementById('app-wind-01').innerHTML = aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;";
 		});
 	</script>
 
@@ -154,6 +162,19 @@
 			background: radial-gradient(at top, DarkGrey -8%, black 55%);
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
+		}
+
+		div#styles {
+			padding: 5px;
+		}
+
+
+		select {
+			font-size: 16px;
+			margin: 5px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid orange;
 		}
 
 		.black-frame {
@@ -245,26 +266,28 @@
 
 	<table width="100%">
 		<tr>
-			<td><h2>Raymarine NMEA Console</h2></td>
+			<td><h2>Raymarine-like NMEA Console</h2></td>
 		</tr>
 	</table>
 	<hr/>
-	<!-- Page BG -->
-	Widget's Style:
-	<select id="widgets-style" onchange="setTheme(this.value); document.getElementById('aw-01').classList.add('yellow-droplet');">
-		<option value="analogdisplay-day" selected>Day</option>
-		<option value="analogdisplay-night">Night</option>
-		<option value="analogdisplay-monochrome-cyan">Cyan</option>
-		<option value="analogdisplay-monochrome-orange">Orange</option>
-		<option value="analogdisplay-monochrome-yellow">Yellow</option>
-		<option value="analogdisplay-flat-gray">Flat Gray</option>
-		<option value="analogdisplay-flat-black">Flat Black</option>
-	</select>
-	Page Background
-	<input type="radio" id="black" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
-	<input type="radio" id="dark" name="page-bg" value="DARK" onchange="changeBG(this.value);" checked>Dark
-	<input type="radio" id="light" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
-	<input type="radio" id="white" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+	<div id="styles">
+		<!-- Widget Style & Page BG -->
+		Widget Style:
+		<select id="widgets-style" onchange="updateDisplayStyle(this.value, 'aw-01');">
+			<option value="analogdisplay-day" selected>Day</option>
+			<option value="analogdisplay-night">Night</option>
+			<option value="analogdisplay-monochrome-cyan">Cyan</option>
+			<option value="analogdisplay-monochrome-orange">Orange</option>
+			<option value="analogdisplay-monochrome-yellow">Yellow</option>
+			<option value="analogdisplay-flat-gray">Flat Gray</option>
+			<option value="analogdisplay-flat-black">Flat Black</option>
+		</select>
+		Page Background:
+		<input type="radio" id="black" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+		<input type="radio" id="dark" name="page-bg" value="DARK" onchange="changeBG(this.value);" checked>Dark
+		<input type="radio" id="light" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+		<input type="radio" id="white" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+	</div>
 	<hr/>
 
 	<!--
@@ -280,22 +303,22 @@
 				<div id="top-row" style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
 					<div class="black-frame small-box">
 						Boat Position
-						<div id="position-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+						<div id="position-01" style="text-align: right; font-size: 24px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						SOG
-						<div id="sog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+						<div id="sog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						COG
-						<div id="cog-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+						<div id="cog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						DBT
-						<div id="dbt-01" style="text-align: left; font-size: 24px; font-weight: bold;">
+						<div id="dbt-01" style="text-align: right; font-size: 24px; font-weight: bold;">
 						</div>
 					</div>
 				</div>
@@ -327,7 +350,18 @@
 												height="500"></wind-angle-display>
 						</div>
 						<div class="/*black-frame*/ centered">
-							<input type="checkbox" class="border-cb" onchange="setBorder(this, 'aw-01');" checked>With Border
+							<!--input type="checkbox" class="border-cb" onchange="setBorder(this, 'aw-01');" checked>With Border -->
+
+							<div style="margin: 2px;" title="Scroll every 5 seconds.">
+								<span style="font-weight: bold; font-style: italic;">With Border</span>
+								<!--br/-->
+								<label class="rocker" style="font-size: 0.50em; vertical-align: middle;">
+									<input type="checkbox" onchange="setBorder(this, 'aw-01');" id="scroll-switch" checked>
+									<span class="switch-left">On</span>
+									<span class="switch-right">Off</span>
+								</label>
+							</div>
+
 						</div>
 					</div>
 					<div>
@@ -340,12 +374,10 @@
 						<hr/>
 						Wind
 						<hr/>
-						<div id="wind-01" class="centered" style="font-size: 48px; font-weight: bold; text-align: right;">
-							AW -.- kts, --- &deg;
-							<br/>
-							TW -.- kts, --- &deg;
+						<div id="wind-01" class="centered" style="font-size: 48px; font-weight: bold;">
+							<div style="display: grid; grid-template-columns: auto auto;"><span>AW</span><span id="app-wind-01" style="text-align: right;">-.- kts, --- &deg;</span></div>
+							<div style="display: grid; grid-template-columns: auto auto;"><span>TW</span><span id="true-wind-01" style="text-align: right;">-.- kts, --- &deg;</span></div>
 						</div>
-
 					</div>
 
 				</div>
