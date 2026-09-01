@@ -1239,14 +1239,14 @@ window.onload = () => {
 		// document.getElementById("demo").innerHTML = text;
 	};
 
-	map._mouseMoveFeedback = (event) => {
+	map._mouseMoveFeedback = (event) => { // Override
 		let lat = event.pos.lat;
 		let lng = event.pos.lng;
 		// console.log(`Mouse moved to ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
 
 		let waypointSelect = document.getElementById('next-wp');
 		// console.log(`Waypoint select: ${waypointSelect.value}`);
-		if (waypointSelect.value !== '0') {
+		if (waypointSelect.value !== '0') { // There IS a waypoint selected.
 			// GC from waypoint to current mouse position
 			let waypoint = waypoints.filter(wp => wp.id === waypointSelect.value);
 			if (waypoint.length > 0) {
