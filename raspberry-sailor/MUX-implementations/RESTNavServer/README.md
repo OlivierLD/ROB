@@ -235,6 +235,18 @@ Once a server is atrted, you can stop it by running the `./killns.sh` script.
 
 ## Use it
 
+> _**Note**_:all the screenshots below are just examples.  
+> Keep in mind that we have several steps in the process.  
+> We have
+> - Input data (like NMEA, AIS, sensors, etc)
+> - Calculated data (current, damped data, collision detection, ...)  
+> 
+> Those data will then be pushed into the `cache`.  
+> Then, the User Interface (aka UI), usually implemented as web pages, will use REST services
+> to get to this cache, pick up in it the data it needs, and render them on the web pages (using 
+> _standard_ technologies like HTML5, ES6, CSS3, WebComponents, etc).  
+> Pretty much nothing is unfeasible. The main point is to know _**what**_ to display, and _**how**_ to display it.
+
 The web pages mentioned below are provided _as examples_ of the way to consume the REST services provided on the Raspberry Pi.
 The snapshots might be a little obsolete, this iks a work in progress, constantly evolving.
 But this will give you an idea.
@@ -260,9 +272,11 @@ The menu is accessible from the hamburger at the top left.
 
 In addition, as we are using the `NMEA Multiplexer` (see this project), you can read pretty much any
 NMEA data source, compute and transform then, and rebroadcast then on any channel you like, to enable other devices and programs
-to read them (`OpenCPN`, `SignalK`, etc) .
+to read them (`OpenCPN`, `SignalK`, etc).
 
-![Console](./docimg/screenshot.01.png)
+![Console](./docimg/screenshot.01.png)  
+
+![Console](./docimg/screenshot.XX.png)
 
 NMEA Console. The displays (night theme).
 
