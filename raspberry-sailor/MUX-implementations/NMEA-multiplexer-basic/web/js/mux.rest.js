@@ -235,6 +235,15 @@ let deleteForwarder = (forwarder) => {
     return getPromise('/mux/forwarders/' + forwarder.type, DEFAULT_TIMEOUT, 'DELETE', 204, forwarder);
 };
 
+let setForwarderActive = (forwarder, onOff) => {
+    let path = '/mux/updateforwarder/' + (onOff === true ? 'on' : 'off');
+    if (false) {
+        console.log("Setting forwarder " + JSON.stringify(forwarder) + " to " + (onOff === true ? 'ON' : 'OFF') +
+                    `, with path [${path}]`);
+    }
+    return getPromise(path, DEFAULT_TIMEOUT, 'PUT', 201, forwarder);
+};
+
 let deleteComputer = (computer) => {
     return getPromise('/mux/computers/' + computer.type, DEFAULT_TIMEOUT, 'DELETE', 204, computer);
 };
@@ -567,22 +576,40 @@ let forwarderList = () => {
             switch (type) {
                 case 'file':
 					if (json[i].zipped === true) {
-						html += ("<tr><td><b>file</b></td><td>(zipped), dir " + json[i].dir + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+						html += ("<tr><td><b>file</b></td><td>(zipped), dir " + json[i].dir + " </td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
 					} else if (json[i].timeBased === true) {
-						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
 					} else {
-						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
 					}
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
-					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
+					    html += (`<td></td><td>Filter(s): ${filterList}</td>`);
 					}
+                    html += (
+                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
+                                    (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                                    "</button>" +
+                                "</td>" +
+                             "<tr>");
                     break;
                 case 'serial':
                     html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr><td valign='top'><b>tcp</b></td><td>Port " + json[i].port + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
+                    html += ("<tr>" +
+                                "<td valign='top'><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
+                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
+                                    (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                                    "</button>" +
+                                "</td>" +
+                                "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
                     break;
                 case 'rest':
                     /*
@@ -1126,20 +1153,38 @@ let generateDiagram = () => {
             switch (type) {
                 case 'file':
 					if (json[i].timeBased === true) {
-						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
 					} else {
-						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
+						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
 					}
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
-					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td></tr>`);
+					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td>`);
 					}
+                    html += (
+                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
+                            (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                            "</button>" +
+                        "</td>" +
+                    "<tr>");
                     break;
                 case 'serial':
                     html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td></tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr><td><b>tcp</b></td><td>Port " + json[i].port + "</td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
+                    html += ("<tr>" +
+                        "<td><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
+                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
+                            (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                            "</button>" +
+                        "</td>" +
+
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                        "</tr>");
                     break;
                 // case 'udp':
                 //     html += ("<tr><td><b>tcp</b></td><td>Port " + json[i].port + "</td><td><small>" + json[i].nbClients + " Client(s)</small></td></tr>");
@@ -1398,6 +1443,33 @@ let removeForwarder = (channel) => {
             }
         }
         errManager.display("Failed to delete forwarder..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+    });
+};
+
+let activateForwarder = (forwarder, onOff, diagram) => { // TODO Finish that one.
+    let before = new Date().getTime();
+    let putData = setForwarderActive(forwarder, onOff);
+    putData.then((value) => {
+        let after = new Date().getTime();
+        document.body.style.cursor = 'default';
+        console.log("Done in " + (after - before) + " ms :", value);
+        setRESTPayload(value, (after - before));
+        if (diagram && diagram === true) {
+            generateDiagram(); // refetch
+        } else {
+            forwarderList(); // refetch
+        }
+    }, (error, errMess) => {
+        document.body.style.cursor = 'default';
+        let message;
+        if (errMess !== undefined) {
+            if (errMess.message !== undefined) {
+                message = errMess.message;
+            } else {
+                message = errMess;
+            }
+        }
+        errManager.display("Failed to activate forwarder..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
     });
 };
 
