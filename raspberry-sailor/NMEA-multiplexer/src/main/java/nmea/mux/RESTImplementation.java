@@ -2682,12 +2682,12 @@ public class RESTImplementation {
 
 	@SuppressWarnings("unchecked")
 	private HTTPServer.Response activateForwarder(HTTPServer.Request request) {
-		System.out.println("Activating forwarder !");
+		// System.out.println("Activating forwarder !");
 		return setActivateForwarder(request, true);
 	}
 	@SuppressWarnings("unchecked")
 	private HTTPServer.Response deActivateForwarder(HTTPServer.Request request) {
-		System.out.println("DE-Activating forwarder !");
+		// System.out.println("DE-Activating forwarder !");
 		return setActivateForwarder(request, false);
 	}
 
@@ -2791,6 +2791,7 @@ public class RESTImplementation {
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 				}
 				break;
+			// TODO More cases !!
 			default:
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
 				break;
