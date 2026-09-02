@@ -7,7 +7,8 @@ import nmea.consumers.reader.RandomMTWReader;
 import nmea.consumers.reader.RandomReader;
 
 /**
- * Generates random  MTW sentence, in a valid NMEA Sentence.
+ * Generates random MTW sentence, in a valid NMEA Sentence.
+ * MTW: Water Temperature
  */
 public class RandomMTWClient extends NMEAClient {
 	public RandomMTWClient() {

@@ -12,6 +12,7 @@ import java.util.Properties;
 
 public class TCPServer implements Forwarder {
 	private final TCPServer instance = this;
+	private boolean active = true;
 	private final List<Socket> clientSocketList = new ArrayList<>(1);
 	private Properties props = null;
 
@@ -31,6 +32,18 @@ public class TCPServer implements Forwarder {
 		}
 	}
 
+	@Override
+	public boolean isActive() {
+		// System.out.printf("--> TCPServer, getting active : %B\n", this.active);
+		return this.active;
+	}
+
+	@Override
+	public void setActive(boolean status) {
+		// System.out.printf("--> TCPServer, setting active : %B\n", status);
+		this.active = status;
+	}
+
 	public int getTcpPort() {
 		return this.tcpPort;
 	}
@@ -41,6 +54,12 @@ public class TCPServer implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+				System.out.println("TCP Server write: INACTIVE forwarder, skipping write."); // TODO Use LOG ?
+			}
+			return;
+		}
 		if (!withAIS) {
 			if (new String(message).trim().startsWith(AISParser.AIS_PREFIX)) {
 //				System.out.println("\t\t>> From TCP Skipping AIS message");
@@ -134,6 +153,7 @@ public class TCPServer implements Forwarder {
 		private int port;
 		private final String type = "tcp";
 		private int nbClients = 0;
+		private boolean active = true;
 
 		public int getPort() {
 			return port;
@@ -151,12 +171,15 @@ public class TCPServer implements Forwarder {
 			return nbClients;
 		}
 
+		public boolean isActive() { return active; }
+
 		public TCPBean() {}  // This is for Jackson
 
 		public TCPBean(TCPServer instance) {
 			cls = instance.getClass().getName();
 			port = instance.tcpPort;
 			nbClients = instance.getNbClients();
+			active = instance.isActive();
 		}
 	}
 
@@ -171,6 +194,11 @@ public class TCPServer implements Forwarder {
 		if (this.props != null) {
 			this.withAIS = "true".equals(this.props.getProperty("with.ais", "true"));
 //			System.out.println("\t\t>> NO AIS !!!");
+			boolean active = "true".equals(this.props.getProperty("active", "true"));
+			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+				System.out.printf("TCP Server, property active: %B\n", active);
+			}
+			this.setActive(active);
 		}
 	}
 

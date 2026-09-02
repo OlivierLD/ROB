@@ -634,6 +634,7 @@ public class MuxInitializer {
                             String tcpPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             String tcpVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
+                            String tcpActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)));
                             try {
                                 Forwarder tcpForwarder;
                                 if (tcpSubClass == null) {
@@ -641,13 +642,16 @@ public class MuxInitializer {
                                 } else {
                                     tcpForwarder = (TCPServer) Class.forName(tcpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(tcpPort));
                                 }
-                                if (tcpPropFile != null || tcpVerbose != null) {
+                                if (tcpPropFile != null || tcpVerbose != null || tcpActive != null) {
                                     Properties forwarderProps = new Properties();
                                     if (tcpPropFile != null) {
                                         forwarderProps.load(new FileReader(tcpPropFile));
                                     }
                                     if (tcpVerbose != null) {
                                         forwarderProps.setProperty("verbose", tcpVerbose.trim());
+                                    }
+                                    if (tcpActive != null) {
+                                        forwarderProps.setProperty("active", tcpActive.trim());
                                     }
                                     tcpForwarder.setProperties(forwarderProps);
                                 }

@@ -291,6 +291,16 @@ public class RESTImplementation {
 					"Update forwarder"),
 			new Operation(
 					"PUT",
+					REST_PREFIX + "/updateforwarder/on",
+					this::activateForwarder,
+					"Activate forwarder"),
+			new Operation(
+					"PUT",
+					REST_PREFIX + "/updateforwarder/off",
+					this::deActivateForwarder,
+					"De-activate forwarder"),
+			new Operation(
+					"PUT",
 					REST_PREFIX + "/computers/{id}",
 					this::putComputer,
 					"Update computer"),
@@ -2663,6 +2673,124 @@ public class RESTImplementation {
 			}
 		}
 		switch (type) {
+			default:
+				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
+				break;
+		}
+		return response;
+	}
+
+	@SuppressWarnings("unchecked")
+	private HTTPServer.Response activateForwarder(HTTPServer.Request request) {
+		System.out.println("Activating forwarder !");
+		return setActivateForwarder(request, true);
+	}
+	@SuppressWarnings("unchecked")
+	private HTTPServer.Response deActivateForwarder(HTTPServer.Request request) {
+		System.out.println("DE-Activating forwarder !");
+		return setActivateForwarder(request, false);
+	}
+
+	private HTTPServer.Response setActivateForwarder(HTTPServer.Request request, boolean onOff) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+		Optional<NMEAClient> opClient;
+		String type = "";  // tcp, file, etc...
+		if (request.getContent() == null || request.getContent().length == 0) {
+			System.err.println("!! Missing payload !");
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "missing payload");
+			return response;
+		} else {
+			try {
+				@SuppressWarnings("unchecked")
+				Object bean = mapper.readValue(new String(request.getContent()), Object.class); // new GsonBuilder().create().fromJson(new String(request.getContent()), Object.class);
+				if (bean instanceof Map) {
+					type = ((Map<String, String>) bean).get("type");
+				}
+			} catch (Exception ex) {
+				System.err.println("Exception 1 : " + ex.toString());
+				throw new RuntimeException(ex);
+			}
+			// No path parameter required
+		}
+		Optional<Forwarder> opForwarder;
+		switch (type) {
+			case "tcp":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (false) {
+						System.out.println("==> The map:");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							.filter(fwdr -> ((TCPServer.TCPBean)fwdr.getBean()).getPort() == ((Integer)custom.get("port")).intValue())
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("Updating forwarder %s to %B\n",
+								forwarder, onOff);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setActive(onOff);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
+			case "file":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (false) {
+						System.out.println("==> The map:");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							.filter(fwdr -> ((DataFileWriter.DataFileBean)fwdr.getBean()).getCls().equals((String)custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("Updating forwarder %s to %B\n",
+								forwarder, onOff);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setActive(onOff);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
 			default:
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
 				break;

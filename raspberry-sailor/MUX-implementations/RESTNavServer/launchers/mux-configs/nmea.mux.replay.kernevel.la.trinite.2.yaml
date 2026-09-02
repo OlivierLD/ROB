@@ -41,6 +41,7 @@ forwarders:
     log.dir: "sample.data/log.test"
     split: "hour"
     flush: true
+    active: true
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.default.properties

@@ -19,6 +19,7 @@ import java.util.zip.ZipOutputStream;
 public class DataFileWriter implements Forwarder {
 	private BufferedWriter dataFile;
 	private String log;
+	private boolean active = true;
 	private final boolean append;
 	private final boolean timeBased;
 	private final String radix;
@@ -152,7 +153,34 @@ public class DataFileWriter implements Forwarder {
 	boolean VERBOSE = false;
 
 	@Override
+	public boolean isActive() {
+		return this.active;
+	}
+
+	@Override
+	public void setActive(boolean status) {
+		this.active = status;
+		if (!status) {
+			try {
+				if (this.dataFile != null) {
+					this.dataFile.flush();
+				}
+			} catch (Exception ex) {
+				System.err.printf("Flushing on setActive: s\n", ex.toString());
+			}
+		}
+	}
+
+	@Override
 	public void write(byte[] message) {
+
+		if (!this.isActive()) {
+			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+				System.out.println("DataFileWriter write: INACTIVE forwarder, skipping write."); // TODO Use LOG ?
+			}
+			return;
+		}
+
 		try {
 			String mess = new String(message).trim(); // trim removes \r\n
 			boolean ok = true;
@@ -339,6 +367,7 @@ public class DataFileWriter implements Forwarder {
 		private String split;
 		private boolean flush;
 		private boolean zipped;
+		private boolean active;
 		private List<String> filters;
 
 
@@ -356,6 +385,7 @@ public class DataFileWriter implements Forwarder {
 			flush = instance.flush;
 			zipped = instance.zippedOutput;
 			filters = instance.filters;
+			active = instance.isActive();
 		}
 
 		public String getCls() {
@@ -399,6 +429,9 @@ public class DataFileWriter implements Forwarder {
 		public boolean isZipped() {
 			return zipped;
 		}
+		public boolean isActive() {
+			return active;
+		}
 
 		public List<String> getFilters() {
 			return filters;
@@ -412,5 +445,10 @@ public class DataFileWriter implements Forwarder {
 
 	@Override
 	public void setProperties(Properties props) {
+		boolean active = "true".equals(props.getProperty("active", "true"));
+		if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+			System.out.printf("DataFileWriter, property active: %B\n", active);
+		}
+		this.setActive(active);
 	}
 }
