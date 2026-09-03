@@ -182,7 +182,7 @@ rl.question(`Hit [return] when ready... `, name => {
         break;
      }
   }
-  if (starData.name !== '') {
+  if (starData.name !== undefined) {
     console.log(`- ${starName} GHA: ${decToSex(starData.gha)}\n` +
                 `- ${starName} DEC: ${decToSex(starData.decl, "NS")}`)
   } else {
