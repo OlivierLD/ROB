@@ -274,5 +274,6 @@ At 2026-08-29 07:10:35 UTC :
 - EOT:  - 1m 0.2s
 Done.
 ```
+Also look at `interactive.v2.js`...
 
 ---

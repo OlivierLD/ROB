@@ -171,6 +171,7 @@ Sounds like a good option.
   - Receive from sensors, send to actuators (asynchronously)
 - UDP
   - 1:1 UDP ?
+  - _Note_: Softs (like OpenCPN) support UDP
 
 - Java tells the server(s) to shut down (like the `LISTOP` command)...
 - AN NMEA200-like architecture with sensors and actuators
@@ -182,5 +183,6 @@ Sounds like a good option.
 > But that could be useful though, for "admin" purpose.  
 > For example, on (Python) thread would be constantly pushing the `BMP180` to its Java client, and another thread would be listening to admin commands, like `LISTOP`, or `SHUTDOWN`... 
 
+> WebSockets in Python, see <https://websockets.readthedocs.io/en/stable/>
 
 ---

@@ -31,7 +31,7 @@ channels:
   - type: file
     filename: /dev/ttyACM0
     verbose: false
-#    sentence.filters: ~GGA,~GSV,~GSA
+    sentence.filters: ~GGA,~GSV,~GSA
 #    sentence.filters: ~GLL
 #    sentence.filters: RMC,GLL
 forwarders:

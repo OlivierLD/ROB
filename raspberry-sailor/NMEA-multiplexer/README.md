@@ -503,7 +503,8 @@ returns a payload like
   {
     "cls": "forwarders.TCPWriter",
     "port": 7001,
-    "type": "tcp"
+    "type": "tcp",
+    "active": true
   },
   {
     "cls": "forwarders.ConsoleWriter",

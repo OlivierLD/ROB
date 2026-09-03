@@ -2792,8 +2792,22 @@ public class RESTImplementation {
 				}
 				break;
 			// TODO More cases !!
+			case "udp":
+			case "rest":
+			case "rnd":
+			case "serial":
+			case "in-out":
+			case "REST-forwarder":
+			case "char-console":
+			case "console":
+			case "nmea-to-text":
+			case "wsp":
+			case "ws":
+			case "rmi":
 			default:
+				System.err.printf("Type %s not implemented\n", type);
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
+				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Type %s not implemented", type));
 				break;
 		}
 		return response;
