@@ -129,6 +129,7 @@ cp show.processes.sh ${distdir}
 cp start.all.sh ${distdir}
 cp log.*.sh ${distdir}
 cp -r polars/* ${distdir}/polars
+cp -r scripts/* ${distdir}/scripts
 cp zero*.csv ${distdir}
 cp ../../NMEA-multiplexer/find.port.sh ${distdir}
 # cp tomux.sh ${distdir}
