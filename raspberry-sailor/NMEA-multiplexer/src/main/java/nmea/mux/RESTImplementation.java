@@ -3443,77 +3443,76 @@ public class RESTImplementation {
 		return response;
 	}
 	// Also used by option=txt
-	private transient static final List<String>
-			REMOVE_WHEN_TINY = Arrays.asList(new String[] {  // List.of not supported in Java8
-			NMEADataCache.LAST_NMEA_SENTENCE,
-			NMEADataCache.GPS_TIME,
+	private transient static final List<String> REMOVE_WHEN_TINY = Arrays.asList(new String[] {  // List.of not supported in Java8
+		NMEADataCache.LAST_NMEA_SENTENCE,
+		NMEADataCache.GPS_TIME,
 //			NMEADataCache.GPS_SOLAR_TIME,
-			NMEADataCache.DECLINATION,
-			NMEADataCache.LOG,
-			NMEADataCache.DAILY_LOG,
-			NMEADataCache.WATER_TEMP,
-			// NMEADataCache.AIR_TEMP,
-			// NMEADataCache.BARO_PRESS,
-			// NMEADataCache.RELATIVE_HUMIDITY,
-			NMEADataCache.AWA,
-			NMEADataCache.AWS,
-			NMEADataCache.HDG_COMPASS,
-			NMEADataCache.HDG_MAG,
-			NMEADataCache.HDG_TRUE,
-			NMEADataCache.DEVIATION,
-			NMEADataCache.VARIATION,
-			NMEADataCache.TWA,
-			NMEADataCache.TWS,
-			NMEADataCache.TWD,
-			NMEADataCache.CSP,
-			NMEADataCache.CDR,
-			NMEADataCache.XTE,
-			NMEADataCache.FROM_WP,
-			NMEADataCache.TO_WP,
-			NMEADataCache.WP_POS,
-			NMEADataCache.DBT,
-			NMEADataCache.D2WP,
-			NMEADataCache.B2WP,
-			NMEADataCache.S2WP,
-			NMEADataCache.S2STEER,
-			NMEADataCache.LEEWAY,
-			NMEADataCache.CMG,
-			NMEADataCache.SAT_IN_VIEW,
+		NMEADataCache.DECLINATION,
+		NMEADataCache.LOG,
+		NMEADataCache.DAILY_LOG,
+		NMEADataCache.WATER_TEMP,
+		// NMEADataCache.AIR_TEMP,
+		// NMEADataCache.BARO_PRESS,
+		// NMEADataCache.RELATIVE_HUMIDITY,
+		NMEADataCache.AWA,
+		NMEADataCache.AWS,
+		NMEADataCache.HDG_COMPASS,
+		NMEADataCache.HDG_MAG,
+		NMEADataCache.HDG_TRUE,
+		NMEADataCache.DEVIATION,
+		NMEADataCache.VARIATION,
+		NMEADataCache.TWA,
+		NMEADataCache.TWS,
+		NMEADataCache.TWD,
+		NMEADataCache.CSP,
+		NMEADataCache.CDR,
+		NMEADataCache.XTE,
+		NMEADataCache.FROM_WP,
+		NMEADataCache.TO_WP,
+		NMEADataCache.WP_POS,
+		NMEADataCache.DBT,
+		NMEADataCache.D2WP,
+		NMEADataCache.B2WP,
+		NMEADataCache.S2WP,
+		NMEADataCache.S2STEER,
+		NMEADataCache.LEEWAY,
+		NMEADataCache.CMG,
+		NMEADataCache.SAT_IN_VIEW,
 
-			NMEADataCache.BATTERY,
-			NMEADataCache.CALCULATED_CURRENT,
-			NMEADataCache.VDR_CURRENT,
+		NMEADataCache.BATTERY,
+		NMEADataCache.CALCULATED_CURRENT,
+		NMEADataCache.VDR_CURRENT,
 
-			NMEADataCache.BSP_FACTOR,
-			NMEADataCache.AWS_FACTOR,
-			NMEADataCache.AWA_OFFSET,
-			NMEADataCache.HDG_OFFSET,
-			NMEADataCache.MAX_LEEWAY,
+		NMEADataCache.BSP_FACTOR,
+		NMEADataCache.AWS_FACTOR,
+		NMEADataCache.AWA_OFFSET,
+		NMEADataCache.HDG_OFFSET,
+		NMEADataCache.MAX_LEEWAY,
 
-			NMEADataCache.DEVIATION_FILE,
-			NMEADataCache.DEVIATION_DATA,
-			NMEADataCache.DEFAULT_DECLINATION,
-			NMEADataCache.DAMPING,
+		NMEADataCache.DEVIATION_FILE,
+		NMEADataCache.DEVIATION_DATA,
+		NMEADataCache.DEFAULT_DECLINATION,
+		NMEADataCache.DAMPING,
 
-			NMEADataCache.VMG_ON_WIND,
-			NMEADataCache.VMG_ON_WP,
+		NMEADataCache.VMG_ON_WIND,
+		NMEADataCache.VMG_ON_WP,
 
-			NMEADataCache.ALTITUDE,
-			NMEADataCache.SMALL_DISTANCE,
-			NMEADataCache.DELTA_ALTITUDE,
+		NMEADataCache.ALTITUDE,
+		NMEADataCache.SMALL_DISTANCE,
+		NMEADataCache.DELTA_ALTITUDE,
 
-			NMEADataCache.PRATE,
-			NMEADataCache.DEW_POINT_TEMP,
+		NMEADataCache.PRATE,
+		NMEADataCache.DEW_POINT_TEMP,
 
-			NMEADataCache.NMEA_AS_IS,
+		NMEADataCache.NMEA_AS_IS,
 
-			NMEADataCache.AIS
+		NMEADataCache.AIS
 	});
 
 	@SuppressWarnings("unchecked")
 	private HTTPServer.Response getCache(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.STATUS_OK);
-		// Tiny object option
+		// Tiny object option, used by M5StickC and others
 		boolean tiny = false;
 		boolean txt = false;
 		Map<String, String> qsPrms = request.getQueryStringParameters();
@@ -3533,7 +3532,7 @@ public class RESTImplementation {
 
 		String content = "";
 		String specialContentType = null;
-		if (txt) { // Transformation into text
+		if (txt) { // Transform into text
 			specialContentType = HttpHeaders.TEXT_PLAIN;
 			double bsp = 0;
 			try {

@@ -148,12 +148,12 @@ rl.question(`Hit [return] when ready... `, name => {
 
   console.log(`- Calculation done in ${after - before} ms.\n`);
   console.log("At %s-%s-%s %s:%s:%s UTC :",
-                calculationData.utcyear.toString().padStart(4, '0'),
-                calculationData.utcmonth.toString().padStart(2, '0'),
-                calculationData.utcday.toString().padStart(2, '0'),
-                calculationData.utchour.toString().padStart(2, '0'),
-                calculationData.utcminute.toString().padStart(2, '0'),
-                calculationData.utcsecond.toString().padStart(2, '0'));
+              calculationData.utcyear.toString().padStart(4, '0'),
+              calculationData.utcmonth.toString().padStart(2, '0'),
+              calculationData.utcday.toString().padStart(2, '0'),
+              calculationData.utchour.toString().padStart(2, '0'),
+              calculationData.utcminute.toString().padStart(2, '0'),
+              calculationData.utcsecond.toString().padStart(2, '0'));
   console.log("-------------------------------------------------");
   console.log(`- Equation of Time: ${calcResult.EOT.fmt}`);
   console.log("-------------------------------------------------");
@@ -172,10 +172,13 @@ rl.question(`Hit [return] when ready... `, name => {
               `- Jupiter HP: ${calcResult.jupiter.HP.fmt},\n` +
               `- Jupiter SD: ${calcResult.jupiter.SD.fmt}`);
   console.log("-------------------------------------------------");
-  // Looking for Zubenelgenubi
+
   let starData = {};
   let arrayLen = calcResult.stars.length;
-  let starName = "Zubenelgenubi"; // The one we look for
+
+  // Looking for Zubenelgenubi
+  let starName = "Zubenelgenubi"; // The one we look for...
+
   for (let i=0; i<arrayLen; i++) {
      if (calcResult.stars[i].name == starName) {
         starData = calcResult.stars[i];
@@ -184,9 +187,9 @@ rl.question(`Hit [return] when ready... `, name => {
   }
   if (starData.name !== undefined) {
     console.log(`- ${starName} GHA: ${decToSex(starData.gha)}\n` +
-                `- ${starName} DEC: ${decToSex(starData.decl, "NS")}`)
+                `- ${starName} DEC: ${decToSex(starData.decl, "NS")}`);
   } else {
-    console.log(`${starName} was not found...`);
+    console.log(`Star ${starName} was not found...`);
   }
   console.log("-------------------------------------------------");
 
