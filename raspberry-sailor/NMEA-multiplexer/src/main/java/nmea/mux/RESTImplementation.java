@@ -71,18 +71,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -135,8 +124,8 @@ public class RESTImplementation {
 	private final Multiplexer mux;
 
 	private final static String REST_PREFIX = "/mux";
-	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	private final static SimpleDateFormat SYSDATE_FMT = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+	private final static SimpleDateFormat DURATION_FMT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+	private final static SimpleDateFormat SYSDATE_FMT = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
 	public RESTImplementation(List<NMEAClient> nmeaDataClients,
 	                          List<Forwarder> nmeaDataForwarders,
@@ -2726,7 +2715,9 @@ public class RESTImplementation {
 					}
 
 					opForwarder = nmeaDataForwarders.stream()
-							.filter(fwdr -> ((TCPServer.TCPBean)fwdr.getBean()).getPort() == ((Integer)custom.get("port")).intValue())
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> ((fwdr.getBean() instanceof TCPServer.TCPBean) &&
+									((TCPServer.TCPBean)fwdr.getBean()).getPort() == ((Integer)custom.get("port")).intValue()))
 							.findFirst();
 					if (!opForwarder.isPresent()) {
 						response.setStatus(HTTPServer.Response.NOT_FOUND);
@@ -2748,6 +2739,7 @@ public class RESTImplementation {
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					System.err.println("Exception 2: " + ex.toString());
 					response.setStatus(HTTPServer.Response.BAD_REQUEST);
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
@@ -2759,12 +2751,14 @@ public class RESTImplementation {
 					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
 
 					if (false) {
-						System.out.println("==> The map:");
+						System.out.println("==> The map (custom):");
 						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
 					}
 
 					opForwarder = nmeaDataForwarders.stream()
-							.filter(fwdr -> ((DataFileWriter.DataFileBean)fwdr.getBean()).getCls().equals((String)custom.get("cls")))
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof DataFileWriter.DataFileBean) &&
+									        ((DataFileWriter.DataFileBean) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
 							.findFirst();
 					if (!opForwarder.isPresent()) {
 						response.setStatus(HTTPServer.Response.NOT_FOUND);
@@ -2786,6 +2780,7 @@ public class RESTImplementation {
 						response.setPayload(content.getBytes());
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					System.err.println("Exception 2: " + ex.toString());
 					response.setStatus(HTTPServer.Response.BAD_REQUEST);
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
@@ -2798,6 +2793,7 @@ public class RESTImplementation {
 			case "serial":
 			case "in-out":
 			case "REST-forwarder":
+			case "nmea-cache-publisher":
 			case "char-console":
 			case "console":
 			case "nmea-to-text":
@@ -3370,7 +3366,8 @@ public class RESTImplementation {
 
 		String content = "";
 		try {
-			String formattedSysDate = SYSDATE_FMT.format(new Date());
+			String formattedSysDate = SYSDATE_FMT.format(new Date()); // "dd MMM yyyy HH:mm:ss"
+            System.out.printf("Sys Date: [%s]\n", formattedSysDate);
 			/*
 			 *      30 MAY 2023 07:56:31
 			 *      |  |   |    |  |  |

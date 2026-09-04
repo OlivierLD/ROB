@@ -63,7 +63,7 @@ if [[ -f ${JAR_NAME} ]]; then
   echo -e "With the following MANIFEST:"
   ./type.manifest.sh ${JAR_NAME}
   # echo -e "----------------------------"
-  echo -en "Do we re-build the Java part ? > "
+  echo -en "Do we re-build the Java part y|[n] ? > "
   read REPLY
   if [[ ! ${REPLY} =~ ^(yes|y|Y)$ ]]; then
     echo -e "Ok, moving on."
@@ -100,6 +100,7 @@ mkdir ${distdir}
 mkdir ${distdir}/build
 mkdir ${distdir}/build/libs
 mkdir ${distdir}/polars
+mkdir ${distdir}/scripts
 #
 # 3 - Copying required resources
 #
@@ -113,10 +114,11 @@ fi
 # mkdir ${distdir}/logged
 # Web resources, zipped. To see the content: unzip -vl web.zip
 # cp -R web ${distdir}
-cd web
+pushd web
 zip -r ../${distdir}/web.zip *
-cd ..
+popd
 #
+cp -r scripts/* ${distdir}/scripts
 # Properties files
 cp *.properties ${distdir}
 cp *.yaml ${distdir}
@@ -129,7 +131,6 @@ cp show.processes.sh ${distdir}
 cp start.all.sh ${distdir}
 cp log.*.sh ${distdir}
 cp -r polars/* ${distdir}/polars
-cp -r scripts/* ${distdir}/scripts
 cp zero*.csv ${distdir}
 cp ../../NMEA-multiplexer/find.port.sh ${distdir}
 # cp tomux.sh ${distdir}

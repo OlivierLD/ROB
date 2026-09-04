@@ -601,6 +601,7 @@ let forwarderList = () => {
                 case 'tcp':
                     html += ("<tr>" +
                                 "<td valign='top'><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
                                 "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
                                                                             (json[i].active ? "false" : "true") + ", false);'>" +
@@ -608,7 +609,6 @@ let forwarderList = () => {
                                     "</button>" +
                                 "</td>" +
                                 "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
-                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                              "</tr>");
                     break;
                 case 'rest':
