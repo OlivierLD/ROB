@@ -779,6 +779,7 @@ public class MuxInitializer {
                             String flush = muxProps.getProperty(String.format("forward.%s.flush", MUX_IDX_FMT.format(fwdIdx)));
                             String zipped = muxProps.getProperty(String.format("forward.%s.zipped", MUX_IDX_FMT.format(fwdIdx)));
                             String fileVerbose = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
+                            String fileActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)));
 
                             String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
                             if (verbose && sentenceFilters != null) {
@@ -806,6 +807,9 @@ public class MuxInitializer {
                                     }
                                     if (fileVerbose != null) {
                                         forwarderProps.setProperty("verbose", fileVerbose.trim());
+                                    }
+                                    if (fileActive != null) {
+                                        forwarderProps.setProperty("active", fileActive.trim());
                                     }
                                     fileForwarder.setProperties(forwarderProps);
                                 }

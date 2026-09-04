@@ -536,7 +536,11 @@ while [[ "${GO}" == "true" ]]; do
           fi
         fi
       fi
-      echo -e "Launching Nav Server with ${PROP_FILE}"
+      echo -e "Launching Nav Server with ${PROP_FILE}:"
+      echo -e "-----------------------------"
+      cat ${PROP_FILE}
+      echo -e ""
+      echo -e "-----------------------------"
       # QUESTION: a 'screen' option ?
       # screen -S navserver -dm "sleep 5; ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
       # echo -e "A screen session 'navserver' was started"

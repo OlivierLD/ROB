@@ -61,8 +61,10 @@ forwarders:
     log.dir: logged
     split: hour
     sentence.filters: ~GGA,~GSV,~GSA
+    active: true
   - type: tcp
     port: 7001
+    active: true
 # computers:
 #   - type: "tw-current"
 #     # Only if there is a MHU and HDG or HDM data

@@ -2696,6 +2696,9 @@ public class RESTImplementation {
 				if (bean instanceof Map) {
 					type = ((Map<String, String>) bean).get("type");
 				}
+				if (true) {
+					System.out.printf("-->> setActivateForwarder, type is %s, bean is : %s\n", type, bean);
+				}
 			} catch (Exception ex) {
 				System.err.println("Exception 1 : " + ex.toString());
 				throw new RuntimeException(ex);
@@ -2725,8 +2728,8 @@ public class RESTImplementation {
 					} else { // Then update
 						Forwarder forwarder = opForwarder.get();
 
-						System.out.printf("Updating forwarder %s to %B\n",
-								forwarder, onOff);
+						System.out.printf("** Updating forwarder %s from %B to %B\n",
+								forwarder, forwarder.isActive(), onOff);
 
 						// verbose ?
 //						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
@@ -2750,7 +2753,7 @@ public class RESTImplementation {
 					@SuppressWarnings("unchecked")
 					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
 
-					if (false) {
+					if (true) {
 						System.out.println("==> The map (custom):");
 						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
 					}
@@ -2761,13 +2764,14 @@ public class RESTImplementation {
 									        ((DataFileWriter.DataFileBean) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
 							.findFirst();
 					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setActivateForwarder, file forwarder not found.");
 						response.setStatus(HTTPServer.Response.NOT_FOUND);
 						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
 					} else { // Then update
 						Forwarder forwarder = opForwarder.get();
 
-						System.out.printf("Updating forwarder %s to %B\n",
-								forwarder, onOff);
+						System.out.printf("** Updating forwarder %s from %B to %B\n",
+								forwarder, forwarder.isActive(), onOff);
 
 						// verbose ?
 //						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();

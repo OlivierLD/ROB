@@ -159,6 +159,9 @@ public class DataFileWriter implements Forwarder {
 
 	@Override
 	public void setActive(boolean status) {
+
+		System.out.printf("-- Forwarder DataFileWriter, setActive method: %B\n", status);
+
 		this.active = status;
 		if (!status) {
 			try {
@@ -445,10 +448,24 @@ public class DataFileWriter implements Forwarder {
 
 	@Override
 	public void setProperties(Properties props) {
+
+		if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+			System.out.println("--> DataFileWriter, setProperties:");
+			System.out.println(props.toString());
+			System.out.println("--- props ---");
+			props.forEach((name, value) -> {
+				System.out.printf("%s: %s\n", name, value);
+			});
+			System.out.println("-------------");
+		}
+
 		boolean active = "true".equals(props.getProperty("active", "true"));
 		if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
-			System.out.printf("DataFileWriter, property active: %B\n", active);
+			System.out.printf("--> DataFileWriter, property active: %B\n", active);
 		}
 		this.setActive(active);
+		if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+			System.out.printf("--> DataFileWriter, active was set to %B\n", active);
+		}
 	}
 }
