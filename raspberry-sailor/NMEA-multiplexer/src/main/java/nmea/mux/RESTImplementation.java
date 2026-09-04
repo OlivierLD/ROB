@@ -2790,7 +2790,7 @@ public class RESTImplementation {
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 				}
 				break;
-			// TODO More cases !!
+			// TODO More cases to implement !!
 			case "udp":
 			case "rest":
 			case "rnd":
@@ -3634,8 +3634,11 @@ public class RESTImplementation {
 			}
 			// TODO Wind and Boat Data option ?
 			content = String.format(
-					"BSP=%.2f\nLAT=%f\nLNG=%f\nSOG=%.2f\nCOG=%d\nDATE=%s\nYEAR=%d\nMONTH=%d\nDAY=%d\nHOUR=%d\nMIN=%d\nSEC=%d\nS_HOUR=%d\nS_MIN=%d\nS_SEC=%d\nRMC_OK=%s\nBARO=%.2f\nTEMP=%.2f\nHUM=%.2f",
-					bsp, latitude, longitude, sog, cog, date, year, month, day, hours, mins, secs, solHours, solMins, solSecs, (rmcStatus ? "OK" : "KO"), press, airTemp, hum);
+					"BSP=%.2f\nLAT=%f\nLNG=%f\nSOG=%.2f\nCOG=%d\nDATE=%s\n" +
+					"YEAR=%d\nMONTH=%d\nDAY=%d\nHOUR=%d\nMIN=%d\nSEC=%d\n" +
+					"S_HOUR=%d\nS_MIN=%d\nS_SEC=%d\nRMC_OK=%s\nBARO=%.2f\nTEMP=%.2f\nHUM=%.2f",
+					bsp, latitude, longitude, sog, cog, date, year, month, day, hours, mins, secs,
+					solHours, solMins, solSecs, (rmcStatus ? "OK" : "KO"), press, airTemp, hum);
 		} else {
 			// specialContentType = HttpHeaders.TEXT_PLAIN_ISO_8859;
 			try {

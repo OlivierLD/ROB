@@ -590,7 +590,7 @@ let forwarderList = () => {
                                 "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
                                 "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
                                                                             (json[i].active ? "false" : "true") + ", false);'>" +
-                                    (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
                                     "</button>" +
                                 "</td>" +
                              "<tr>");
@@ -605,10 +605,11 @@ let forwarderList = () => {
                                 "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
                                 "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
                                                                             (json[i].active ? "false" : "true") + ", false);'>" +
-                                    (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
                                     "</button>" +
                                 "</td>" +
                                 "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                              "</tr>");
                     break;
                 case 'rest':
