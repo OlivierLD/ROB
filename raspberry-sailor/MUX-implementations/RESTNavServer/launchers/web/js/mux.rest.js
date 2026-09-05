@@ -557,7 +557,7 @@ let forwarderList = () => {
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
         let html = "<h5>Writes to</h5>" + "<table>";
-        html += "<tr><th>Type</th><th>Parameters</th></th></tr>";
+        html += "<tr><th>Type</th><th colspan='6'>Parameters</th></th></tr>";
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
@@ -596,7 +596,18 @@ let forwarderList = () => {
                                     "</button>" +
                                 "</td>" +
                                 "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                             "</tr>");
+                    break;
+                case 'nmea-cache-publisher':
+                    html += ("<tr>" +
+                                "<td valign='top'><b>nmea-cache-publisher</b></td><td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
+                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                                    "</button>" +
+                                "</td>" +
                              "</tr>");
                     break;
                 case 'rest':
@@ -624,7 +635,6 @@ let forwarderList = () => {
                 case 'console':
                     html += ("<tr><td valign='top'><b>console</b></td><td></td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
-                case 'nmea-cache-publisher':
                 default:
                     html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
@@ -1154,7 +1164,7 @@ let generateDiagram = () => {
                         "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
                         "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
                                                                     (json[i].active ? "false" : "true") + ", true);'>" +
-                            (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
                             "</button>" +
                         "</td>" +
                     "<tr>");
@@ -1165,10 +1175,11 @@ let generateDiagram = () => {
                 case 'tcp':
                     html += ("<tr>" +
                         "<td><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
                         "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
                                                                     (json[i].active ? "false" : "true") + ", true);'>" +
-                            (json[i].active ? "de-acivate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
                             "</button>" +
                         "</td>" +
 
@@ -1204,7 +1215,14 @@ let generateDiagram = () => {
                     html += ("<tr><td><b>console</b></td><td>" + valueOrText('', 'No parameter') + "</td></tr>");
                     break;
                 default:
-                    html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td></tr>");
+                    html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
+                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
+                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
+                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
+                            "</button>" +
+                        "</td></tr>");
                     break;
             }
         }

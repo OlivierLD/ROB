@@ -15,6 +15,19 @@ channels:
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: false
 forwarders:
+  - type: nmea-cache-publisher
+    between-loops: 1  # in seconds
+    rest.protocol: http
+    rest.machine-name: localhost   # The machine to send the stop-signal to
+    # rest.machine-name: 192.168.1.103
+    rest.port: 8080
+    rest.resource: /ssd1306/nmea-data
+    rest.verb: PUT
+    #    rest.query.string: ""
+    rest.onclose.resource: /ssd1306/bye-and-clear-screen
+    rest.onclose.verb: PUT
+    verbose: false
+    active: false
   - type: file
     # filename: data.nmea
     # flush: true
