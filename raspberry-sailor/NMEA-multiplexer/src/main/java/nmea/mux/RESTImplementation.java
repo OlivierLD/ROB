@@ -30,15 +30,7 @@ import nmea.consumers.reader.SerialReader;
 import nmea.consumers.reader.TCPReader;
 import nmea.consumers.reader.WebSocketReader;
 import nmea.consumers.reader.ZDAReader;
-import nmea.forwarders.ConsoleWriter;
-import nmea.forwarders.DataFileWriter;
-import nmea.forwarders.Forwarder;
-import nmea.forwarders.GPSdServer;
-import nmea.forwarders.RESTPublisher;
-import nmea.forwarders.SerialWriter;
-import nmea.forwarders.TCPServer;
-import nmea.forwarders.WebSocketProcessor;
-import nmea.forwarders.WebSocketWriter;
+import nmea.forwarders.*;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
 import nmea.mux.context.Context.StringAndTimeStamp;
@@ -2728,7 +2720,7 @@ public class RESTImplementation {
 					} else { // Then update
 						Forwarder forwarder = opForwarder.get();
 
-						System.out.printf("** Updating forwarder %s from %B to %B\n",
+						System.out.printf("** Updating TCPServer forwarder %s from %B to %B\n",
 								forwarder, forwarder.isActive(), onOff);
 
 						// verbose ?
@@ -2770,7 +2762,49 @@ public class RESTImplementation {
 					} else { // Then update
 						Forwarder forwarder = opForwarder.get();
 
-						System.out.printf("** Updating forwarder %s from %B to %B\n",
+						System.out.printf("** Updating DataFileWriter forwarder %s from %B to %B\n",
+								forwarder, forwarder.isActive(), onOff);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setActive(onOff);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
+			case "nmea-cache-publisher":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (true) {
+						System.out.println("==> The map (custom):");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof NMEACachePublisher.NMEACacheBean) &&
+									((NMEACachePublisher.NMEACacheBean) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setActivateForwarder, file forwarder not found.");
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("** Updating NMEACachePublisher forwarder %s from %B to %B\n",
 								forwarder, forwarder.isActive(), onOff);
 
 						// verbose ?
@@ -2797,7 +2831,6 @@ public class RESTImplementation {
 			case "serial":
 			case "in-out":
 			case "REST-forwarder":
-			case "nmea-cache-publisher":
 			case "char-console":
 			case "console":
 			case "nmea-to-text":

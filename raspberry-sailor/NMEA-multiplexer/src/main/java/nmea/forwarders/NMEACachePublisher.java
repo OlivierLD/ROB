@@ -31,7 +31,7 @@ public class NMEACachePublisher implements Forwarder {
     protected int port = 8888;
     protected String resource = "/";
     protected String queryString = null;
-
+    protected boolean active = true;
     protected String onCloseResource = null;
     protected String onCloseVerb = null;
 
@@ -118,88 +118,90 @@ public class NMEACachePublisher implements Forwarder {
         Thread cacheThread = new Thread("CachePublisherThread") {
             public void run() {
                 while (keepWorking) {
-                    NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
-                    try {
-                        // TODO An option to minimize the cache ?
-                        final String jsonCache = mapper.writeValueAsString(cache);
+                    if (isActive()) {
+                        NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
                         try {
-                            // Java 11
+                            // TODO An option to minimize the cache (like 'tiny') ?
+                            final String jsonCache = mapper.writeValueAsString(cache);
+                            try {
+                                // Java 11
 //                            Map<String, String> headers = Map.of("Content-Type", "application/json");
-                            // Java 8
-                            Map<String, String> headers = new HashMap<>();
-                            headers.put("Content-Type", "application/json");
+                                // Java 8
+                                Map<String, String> headers = new HashMap<>();
+                                headers.put("Content-Type", "application/json");
 
-                            switch (instance.verb) {
-                                case "POST":
-                                    String postRequest = String.format("%s://%s:%d%s%s",
-                                            instance.protocol,
-                                            instance.machineName,
-                                            instance.port,
-                                            instance.resource,
-                                            instance.queryString == null ? "" : instance.queryString);
-                                    String strContent = jsonCache;
-                                    if (instance.verbose) {
-                                        System.out.printf("%s\n%s\n", postRequest, strContent);
-                                    }
-                                    try {
-                                        HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, strContent);
+                                switch (instance.verb) {
+                                    case "POST":
+                                        String postRequest = String.format("%s://%s:%d%s%s",
+                                                instance.protocol,
+                                                instance.machineName,
+                                                instance.port,
+                                                instance.resource,
+                                                instance.queryString == null ? "" : instance.queryString);
+                                        String strContent = jsonCache;
                                         if (instance.verbose) {
-                                            System.out.printf("POST %s with %s: Response code %d, message: %s\n",
+                                            System.out.printf("%s\n%s\n", postRequest, strContent);
+                                        }
+                                        try {
+                                            HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, strContent);
+                                            if (instance.verbose) {
+                                                System.out.printf("POST %s with %s: Response code %d, message: %s\n",
+                                                        postRequest,
+                                                        strContent,
+                                                        httpResponse.getCode(),
+                                                        httpResponse.getPayload());
+                                            }
+                                        } catch (Throwable restFailure) {
+                                            System.err.printf(">> POST (%s) Error in NMEACachePublisher: %s\n",
                                                     postRequest,
-                                                    strContent,
-                                                    httpResponse.getCode(),
-                                                    httpResponse.getPayload());
+                                                    restFailure.getMessage());
+                                            if (instance.verbose) {
+                                                restFailure.printStackTrace();
+                                            }
                                         }
-                                    } catch (Throwable restFailure) {
-                                        System.err.printf(">> POST (%s) Error in NMEACachePublisher: %s\n",
-                                                postRequest,
-                                                restFailure.getMessage());
+                                        break;
+                                    case "PUT":
+                                        String putRequest = String.format("%s://%s:%d%s%s",
+                                                instance.protocol,
+                                                instance.machineName,
+                                                instance.port,
+                                                instance.resource,
+                                                instance.queryString == null ? "" : instance.queryString);
+                                        String putStrContent = jsonCache;
                                         if (instance.verbose) {
-                                            restFailure.printStackTrace();
+                                            System.out.printf("%s\n%s\n", putRequest, putStrContent);
                                         }
-                                    }
-                                    break;
-                                case "PUT":
-                                    String putRequest = String.format("%s://%s:%d%s%s",
-                                            instance.protocol,
-                                            instance.machineName,
-                                            instance.port,
-                                            instance.resource,
-                                            instance.queryString == null ? "" : instance.queryString);
-                                    String putStrContent = jsonCache;
-                                    if (instance.verbose) {
-                                        System.out.printf("%s\n%s\n", putRequest, putStrContent);
-                                    }
-                                    try {
-                                        HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
-                                        if (instance.verbose) {
-                                            System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
+                                        try {
+                                            HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
+                                            if (instance.verbose) {
+                                                System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
+                                                        putRequest,
+                                                        putStrContent,
+                                                        putResponse.getCode(),
+                                                        putResponse.getPayload());
+                                            }
+                                        } catch (Throwable restFailure) {
+                                            System.err.printf(">> PUT (%s) Error in NMEACachePublisher: %s\n",
                                                     putRequest,
-                                                    putStrContent,
-                                                    putResponse.getCode(),
-                                                    putResponse.getPayload());
+                                                    restFailure.getMessage());
+                                            if (instance.verbose) {
+                                                restFailure.printStackTrace();
+                                            }
                                         }
-                                    } catch (Throwable restFailure) {
-                                        System.err.printf(">> PUT (%s) Error in NMEACachePublisher: %s\n",
-                                                putRequest,
-                                                restFailure.getMessage());
-                                        if (instance.verbose) {
-                                            restFailure.printStackTrace();
-                                        }
-                                    }
-                                    break;
-                                default: // TODO Honk ?
-                                    break;
+                                        break;
+                                    default: // TODO Honk ?
+                                        break;
+                                }
+                            } catch (Exception ex) {
+                                if (instance.verbose) {
+                                    System.err.println(">> Error!");
+                                    ex.printStackTrace();
+                                }
+                                throw new RuntimeException(ex);
                             }
-                        } catch (Exception ex) {
-                            if (instance.verbose) {
-                                System.err.println(">> Error!");
-                                ex.printStackTrace();
-                            }
-                            throw new RuntimeException(ex);
+                        } catch (JsonProcessingException jpe) {
+                            jpe.printStackTrace();
                         }
-                    } catch (JsonProcessingException jpe) {
-                        jpe.printStackTrace();
                     }
                     try {
                         Thread.sleep(1_000L);
@@ -217,6 +219,18 @@ public class NMEACachePublisher implements Forwarder {
         initCacheThread();
     }
 
+    @Override
+    public boolean isActive() {
+        return this.active;
+    }
+
+    @Override
+    public void setActive(boolean status) {
+
+        System.out.printf("-- Forwarder NMEACachePublisher, setActive method: from %B to %B\n", this.active, status);
+
+        this.active = status;
+    }
     @Override
     public void write(byte[] message) {
         // Nothing is done here.
@@ -425,5 +439,14 @@ public class NMEACachePublisher implements Forwarder {
 
         this.onCloseResource = props.getProperty("rest.onclose.resource");;
         this.onCloseVerb = props.getProperty("rest.onclose.verb");;
+
+        boolean active = "true".equals(props.getProperty("active", "true"));
+        if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+            System.out.printf("--> DataFileWriter, property active: %B\n", active);
+        }
+        this.setActive(active);
+        if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+            System.out.printf("--> DataFileWriter, active was set to %B\n", active);
+        }
     }
 }

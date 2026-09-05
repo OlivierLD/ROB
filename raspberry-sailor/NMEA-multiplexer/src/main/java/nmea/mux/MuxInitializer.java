@@ -945,7 +945,8 @@ public class MuxInitializer {
                             String qs = muxProps.getProperty(String.format("forward.%s.rest.query.string", MUX_IDX_FMT.format(fwdIdx)));
                             String closeResource = muxProps.getProperty(String.format("forward.%s.rest.onclose.resource", MUX_IDX_FMT.format(fwdIdx)));
                             String closeVerb = muxProps.getProperty(String.format("forward.%s.rest.onclose.verb", MUX_IDX_FMT.format(fwdIdx)));
-                            // TODO, properties ?
+                            String pubActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)));
+                            // TODO, properties, pubPropFile ?
                             try {
                                 if (strPort != null) {
                                     restPort = Integer.parseInt(strPort);
@@ -972,6 +973,19 @@ public class MuxInitializer {
                                 } else {
                                     // TODO Manage this subclass case
                                     System.err.println("Subclass case not managed yet...");
+                                }
+
+                                // TODO Check that
+                                if (/*pubPropFile != null || fwdVerbose != null ||*/ pubActive != null) {
+                                    Properties forwarderProps = new Properties();
+//                                    if (pubPropFile != null) {
+//                                        forwarderProps.load(new FileReader(pubPropFile));
+//                                    }
+                                    forwarderProps.setProperty("verbose", String.format("%b", fwdVerbose));
+                                    if (pubActive != null) {
+                                        forwarderProps.setProperty("active", pubActive.trim());
+                                    }
+                                    cachePublisher.setProperties(forwarderProps);
                                 }
 
                                 cachePublisher.init();

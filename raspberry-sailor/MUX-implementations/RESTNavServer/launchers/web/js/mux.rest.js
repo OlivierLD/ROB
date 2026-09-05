@@ -624,6 +624,7 @@ let forwarderList = () => {
                 case 'console':
                     html += ("<tr><td valign='top'><b>console</b></td><td></td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
+                case 'nmea-cache-publisher':
                 default:
                     html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
                     break;
