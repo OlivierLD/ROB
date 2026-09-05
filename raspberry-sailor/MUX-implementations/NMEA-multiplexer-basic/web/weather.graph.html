@@ -480,11 +480,13 @@
 		}
 	};
 
-  let displayErr = function(err) {
-    if (err !== undefined) {
-      document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
-	}
-  };
+  if (typeof(displayErr) === 'undefined') {
+	  let displayErr = function(err) {
+		if (err !== undefined) {
+		  document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+		}
+	  };
+  }
 
   window.onresize = function() {
 //  console.log("Re-evaluating window size");

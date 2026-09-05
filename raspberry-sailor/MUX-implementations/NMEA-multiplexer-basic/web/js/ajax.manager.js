@@ -198,6 +198,15 @@ const BORDERS_THREATS = 'borders-threats';
 const TRUE_HDG = 'true-hdg';
 const TO_WP = 'to-wp';
 
+// TODO Clean that, it's duplicated...
+const EVENT_FULL     = 'full';
+const EVENT_AT       = 'at';
+const EVENT_PRMSL    = 'prmsl';
+const EVENT_HUM      = 'hum';  // Relative Hum
+const EVENT_DEW      = 'dew';
+const EVENT_AH       = 'ah';   // Absolute Hum
+
+
 function requestDeclinations(payload) {
     let url = "/astro/declination";
     return getPromise(url, DEFAULT_TIMEOUT, 'POST', 200, payload, false);
