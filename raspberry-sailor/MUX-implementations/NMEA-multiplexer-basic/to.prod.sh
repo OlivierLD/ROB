@@ -125,7 +125,7 @@ cp *.yaml ${distdir}
 # If needed, more resources would go here (like dev curves, etc)
 cp mux.sh ${distdir}
 cp runNavServer.sh ${distdir}
-cp mk.link.sh ${distdir}
+# cp mk.link.sh ${distdir}
 cp kill.all.sample.sh ${distdir}/kill.all.sh
 cp show.processes.sh ${distdir}
 cp start.all.sh ${distdir}

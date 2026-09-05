@@ -346,6 +346,7 @@ public class NMEACachePublisher implements Forwarder {
         protected String queryString;
         protected String doOnClose;
         protected String onCloseVerb;
+        protected boolean active;
 
         public NMEACacheBean() {}   // This is for Jackson
         public NMEACacheBean(NMEACachePublisher instance,
@@ -357,7 +358,8 @@ public class NMEACachePublisher implements Forwarder {
                              String resource,
                              String qs,
                              String doOnClose,
-                             String onCloseVerb) {
+                             String onCloseVerb,
+                             boolean active) {
             this.cls = instance.getClass().getName();
             this.betweenLoops = betweenLoops;
             this.protocol = protocol;
@@ -368,6 +370,7 @@ public class NMEACachePublisher implements Forwarder {
             this.queryString = qs;
             this.doOnClose = doOnClose;
             this.onCloseVerb = onCloseVerb;
+            this.active = active;
         }
 
         public String getCls() {
@@ -401,6 +404,9 @@ public class NMEACachePublisher implements Forwarder {
         public String getResource() {
             return resource;
         }
+        public boolean isActive() {
+            return active;
+        }
 
         public String getQueryString() {
             return queryString;
@@ -417,7 +423,7 @@ public class NMEACachePublisher implements Forwarder {
 
     @Override
     public Object getBean() {
-        return new NMEACacheBean(this, this.betweenPublish, this.protocol, this.verb, this.machineName, this.port, this.resource, this.queryString, this.onCloseResource, this.onCloseVerb);
+        return new NMEACacheBean(this, this.betweenPublish, this.protocol, this.verb, this.machineName, this.port, this.resource, this.queryString, this.onCloseResource, this.onCloseVerb, this.active);
     }
 
     @Override
@@ -442,11 +448,11 @@ public class NMEACachePublisher implements Forwarder {
 
         boolean active = "true".equals(props.getProperty("active", "true"));
         if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
-            System.out.printf("--> DataFileWriter, property active: %B\n", active);
+            System.out.printf("--> NMEACachePublisher, property active: %B\n", active);
         }
         this.setActive(active);
         if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
-            System.out.printf("--> DataFileWriter, active was set to %B\n", active);
+            System.out.printf("--> NMEACachePublisher, active was set to %B\n", active);
         }
     }
 }
