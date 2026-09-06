@@ -122,8 +122,21 @@
 		// A "FULL" one to get to the long-term-storage (for barograph)
 		events.subscribe(EVENT_FULL, function(val) {
 			// TODO Do it
-			const PRMSL_KEY = "PRMSL-buff";  // As in the computer (long-trem-storage), see yaml.
-			const AIR_TEMP_KEY = "air-temp"; // As in the computer (long-trem-storage), see yaml.
+			/*
+			   computers:
+			   . . .
+			      - type: long-term-storage   # PRMSL
+					ping-interval: 900   # 15 minutes, 15 x 60s
+					max-length: 672      # One week
+					data-path: "Barometric Pressure,value"  # CSV list
+					# Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
+					object-name: "PRMSL-buff"
+					verbose: true
+            */
+
+
+			const PRMSL_KEY = "PRMSL-buff";  // As in the computer (long-term-storage), see yaml.
+			const AIR_TEMP_KEY = "air-temp"; // As in the computer (long-term-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
 				if (VERBOSE) { 

@@ -67,7 +67,21 @@ forwarders:
     log.dir: logged
     split: hour
     # sentence.filters: ~GGA,~GSA,~GSV
-# computers:
+computers:
 #   - type: "tw-current"
 #     prefix: "CC"
 #     time.buffer.length: 30, 60, 600
+  - type: long-term-storage   # PRMSL
+    ping-interval: 900   # 15 minutes, 15 x 60s
+    max-length: 672      # One week
+    data-path: "Barometric Pressure,value"  # CSV list
+    # Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
+    object-name: "PRMSL-buff"
+    verbose: true
+  - type: long-term-storage  # Air Temp
+    ping-interval: 900   # 15 minutes
+    max-length: 672      # One week
+    data-path: "Air Temperature,value"
+    # Try curl -X GET http://localhost:9999/mux/cache | jq '."air-temp"'
+    object-name: "air-temp"
+    verbose: false

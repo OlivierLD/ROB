@@ -9,12 +9,9 @@ import nmea.api.Multiplexer;
 import nmea.parser.UTCDate;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TimeZone;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Used to store data like PRMSL, temperature, etc, over time.
@@ -91,6 +88,10 @@ public class LongTermStorage extends Computer {
 					}
 					// Push map to cache
 					cache.put(storagePathInCache, objectMap);
+				} else if (false && this.verbose) {
+					System.out.printf("LongTermStorage: No Data found with path %s\n",
+									  Arrays.stream(this.dataPathInCache).map(elem -> System.out.printf("%s", elem)).collect(Collectors.toList())
+					);
 				}
 			} catch (JsonProcessingException jpe) {
 				jpe.printStackTrace();
