@@ -119,10 +119,11 @@
 				display.repaint();
 			}
 		});
-		// A "FULL" one to get to the long-term-storage (for barograph)
+		// A "FULL" one to get to the long-term-storage (like for barograph)
 		events.subscribe(EVENT_FULL, function(val) {
-			// TODO Do it
 			/*
+			   To do it, we need the mux to instantiate computer(s) in its yaml:
+
 			   computers:
 			   . . .
 			      - type: long-term-storage   # PRMSL
@@ -133,8 +134,6 @@
 					object-name: "PRMSL-buff"
 					verbose: true
             */
-
-
 			const PRMSL_KEY = "PRMSL-buff";  // As in the computer (long-term-storage), see yaml.
 			const AIR_TEMP_KEY = "air-temp"; // As in the computer (long-term-storage), see yaml.
 			let theMap = val[PRMSL_KEY];

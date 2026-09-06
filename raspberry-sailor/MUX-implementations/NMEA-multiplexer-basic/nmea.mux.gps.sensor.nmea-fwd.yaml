@@ -9,7 +9,7 @@ description:
   - Reads GPS (serial port)
   - Reads BME280 (REST, Python server port 9876)
   - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
-  - Log data in a file (data.nmea)
+  - Log data in a file (splitted)
 context:
   with.http.server: true
   http.port: 9999
