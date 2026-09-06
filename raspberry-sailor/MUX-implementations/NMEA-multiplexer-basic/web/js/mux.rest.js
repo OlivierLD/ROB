@@ -681,7 +681,7 @@ let computerList = () => {
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
         let html = "<h5>Computes and writes</h5>" + "<table>";
-        html += "<tr><th>Type</th><th>Parameters</th><th>verb.</th><th>act.</th></tr>";
+        html += "<tr><th>Type</th><th colspan='2'>Parameters</th><th>verb.</th><th>act.</th></tr>";
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
@@ -693,9 +693,18 @@ let computerList = () => {
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                              "</tr>");
                     break;
+                case 'longterm-data-computer':
+                    html += ("<tr><td valign='top'><b>longterm-data-computer</b></td>" +
+                                 "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
+                                 "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
+                    break;
                 default:
                     html += ("<tr><td valign='top'><b><i>" + type + "</i></b></td>" +
-                                 "<td valign='top'>" + json[i].cls + "</td>" +
+                                 "<td valign='top'>" + json[i].cls + "</td><td></td>" +
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
                                  "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +

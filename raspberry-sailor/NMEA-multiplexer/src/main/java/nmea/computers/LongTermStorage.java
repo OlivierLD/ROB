@@ -156,6 +156,9 @@ public class LongTermStorage extends Computer {
 	public static class LongTermComputerBean {
 		private String cls;
 		private final String type = "longterm-data-computer";
+
+		private String[] dataPathInCache = {};  // CSV in the yaml...
+		private String storagePathInCache = ""; // AKA List/Buffer name
 		private boolean verbose;
 		private boolean active;
 
@@ -167,6 +170,8 @@ public class LongTermStorage extends Computer {
 			return type;
 		}
 
+		public String[] getDataPathInCache() { return dataPathInCache; }
+		public String getStoragePathInCache() { return storagePathInCache; }
 		public boolean isVerbose() {
 			return verbose;
 		}
@@ -180,6 +185,8 @@ public class LongTermStorage extends Computer {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.storagePathInCache = instance.storagePathInCache;
+			this.dataPathInCache = instance.dataPathInCache;
 		}
 	}
 
