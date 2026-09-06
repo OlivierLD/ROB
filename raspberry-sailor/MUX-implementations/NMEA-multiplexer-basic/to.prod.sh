@@ -116,6 +116,9 @@ fi
 # cp -R web ${distdir}
 pushd web
 zip -r ../${distdir}/web.zip *
+cp index.star.wars.html index.html  # Default index becomes star wars.
+zip ../${distdir}/web.zip index.html
+rm index.html
 popd
 #
 cp -r scripts/* ${distdir}/scripts
