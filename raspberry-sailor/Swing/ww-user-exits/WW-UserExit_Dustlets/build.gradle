@@ -44,6 +44,10 @@ jar {
   }
 }
 
+compileJava {
+  options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+}
+
 shadowJar {
   zip64 true
 }

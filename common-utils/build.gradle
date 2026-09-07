@@ -58,6 +58,10 @@ publishing {
 
 mainClassName = "utils.SystemUtils"
 
+compileJava {
+    options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+}
+
 shadowJar {
     zip64 true
     // to create an executable jar-file. Requires mainClassName.

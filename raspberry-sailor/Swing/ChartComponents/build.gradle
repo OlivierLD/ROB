@@ -23,6 +23,10 @@ dependencies {
   testImplementation "junit:junit:$junit_version"
 }
 
+compileJava {
+  options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+}
+
 shadowJar {
   zip64 true
 }
