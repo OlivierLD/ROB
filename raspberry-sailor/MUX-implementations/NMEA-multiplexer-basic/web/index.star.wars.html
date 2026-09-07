@@ -41,7 +41,7 @@ body {
     transition: 0.3s;
 }
 
-.sidenav a:hover, .offcanvas a:focus{
+.sidenav a:hover, .offcanvas a:focus {
     color: cyan; /* #f1f1f1; */
 }
 
@@ -108,7 +108,7 @@ h1 {
   color: #F8FF00;
   position: absolute;
   top: 10%;
-  font-size: 12vw;
+  font-size: 11vw;
   font-family: Verdana, Helvetica, sans-serif;
   font-weight: bold;
   -webkit-animation: logo 4s linear; /* Chrome, Safari, Opera */
@@ -135,7 +135,7 @@ h1x {
 
 }
 
-section{
+section {
   font-smooth: always;
   transition: all 5s;
   font-size: 22px;
@@ -143,8 +143,8 @@ section{
   width: 100%;
   height: 100px;
   color: #F8FF00;
-  -webkit-transform: rotateX(70deg) translate(0,-1800px);
-  transform: rotateX(70deg) translate(0,-1800px);
+  -webkit-transform: rotateX(70deg) translate(0, -1800px);
+  transform: rotateX(70deg) translate(0, -1800px);
   -webkit-animation: mymove 140s linear; /* Chrome, Safari, Opera */
   animation: mymove 140s linear;
 }
@@ -154,6 +154,14 @@ section p {
   font-size: 14px;
   font-smooth: always;
   text-align: justify;
+}
+
+@font-face {
+	font-family: "Digi Font";
+	src: url(./fonts/Sterion-BLLld.ttf) format("truetype");
+}
+.digifont {
+  font-family: "Digi Font", Verdana, Tahoma;
 }
 
 @-webkit-keyframes logo {
@@ -228,7 +236,7 @@ canvas {
 .cleartxt {
   top: 80px;
   position: fixed;
-  z-index:999;
+  z-index: 999;
   width: 100%;
   height: 80px;
   background: rgba(0, 0, 0, 1);
@@ -255,6 +263,7 @@ canvas {
 </head>
 <body>
 
+<!-- Side navigation bar -->
 <div id="side-nav" class="sidenav" onmouseleave="closeNav()">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <!--a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a-->
@@ -276,50 +285,42 @@ canvas {
 
 <div style="position: relative; z-index: 1200;">
     <span style="cursor:pointer; color: orange; font-size: 3vw;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
-    <span style="cursor:pointer; color: orange; float: right;" onclick="javascript:window.history.back()">&#8617;</span> <!-- Back arrow -->
+    <!--span style="cursor:pointer; color: orange; float: right;" onclick="javascript:window.history.back()">&#8617;</span--> <!-- Back arrow -->
 </div>
 
-<h1>NMEA Multiplexer</h1>
+<!-- The scrolling banner -->
+<h1 class="digifont">NMEA Multiplexer</h1>
 <div class="black"></div>
 <div class="cleartxt"></div>
-
 
 <div id="container">
     <section>
         <br/>
         <br/>
-        <h2>NMEA Multiplexer</h2>
+        <h2>NMEA Multiplexer,</h2>
         <h3>Welcome on board!</h3>
 
         <p>
           This is a top level menu for the Web UI of the NMEA Multiplexer.<br/>
-          The different menus are available from the hamburger at the top left.<br/>
+          The different menus are available from the hamburger (&#9776;) at the top left.<br/>
           Choose your favorite category and bookmark it.<br/>
           This contains several categories: generic, small screens, big screens....<br/>
-        <br/>
+          The list is not closed, and will be updated with new features and demos.<br/>
+          The limit is your imagination.<br/>
+          <br/>
           Good luck with that!
         </p>
-
-        <!--p>
-        <h2><span>Consoles</span></h2>
-        <ul>
-            <li><a href="./index.1.html" target="_blank_01">Index 1</a>, GPS and misc demos.</li>
-            <li><a href="./index.2.html" target="_blank_02">For big screens</a>, Admin, logs, GPS &amp; AIS, etc.</li>
-            <li><a href="./index.2.bis.html" target="_blank_03">For small screens</a>, GPS &amp; AIS.</li>
-            <li><a href="./index.3.html" target="_blank_04">Index 3</a>, GPS, minimal.</li>
-        </ul>
-
-        </p-->
     </section>
 </div>
 </body>
+
 <script type="text/javascript">
 // The text 3D affect, and animation is pure CSS.  Only Javascript here is to create stars.
 // Created by Darryl Huffman
 
 //////////////// STAR BACKGROUND
 window.onload = function() {
-		// Creating the Canvas
+		// Creating the Canvas and related onbjects
 		var canvas = document.createElement("canvas"),
 			  c = canvas.getContext("2d"),
 			  particles = {},
@@ -327,10 +328,10 @@ window.onload = function() {
 			  particleNum = 4;
 
 		canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight;
 		canvas.id = "motion";
 		document.body.appendChild(canvas);
-		// Finished Creating Canvas
+		// Finished Creating Canvas & Co
 
 		// Setting color which is just one big square
 		c.fillStyle = "black";
@@ -349,9 +350,9 @@ window.onload = function() {
 			particles[particleIndex] = this;
 			this.id = particleIndex;
 			this.life = 0;
-            this.size = Math.random() * 6 - 2;
+      this.size = Math.random() * 6 - 2;
 			this.maxlife = Math.random() * 80 + 20; // Stars are set to have a random life length right now, but you can shorten this or make it longer
-			this.color = "#FFF"; // Change color being displayed here
+			this.color = "#FFF"; // White. Change color being displayed here
 		}
 
 		Particle.prototype.draw = function() {
@@ -376,7 +377,7 @@ window.onload = function() {
 			for (var i in particles) {
 				particles[i].draw();
 			}
-		}, 30);
+		}, 30); // 30 ms
 	};
 //////////////// END STAR BACKGROUND
 
