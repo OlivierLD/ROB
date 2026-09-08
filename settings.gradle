@@ -1,5 +1,6 @@
 rootProject.name = 'rob'
 //
+include "Algebra"
 include "common-utils"
 include "common-swing-utils"
 include "common-image-utils"
