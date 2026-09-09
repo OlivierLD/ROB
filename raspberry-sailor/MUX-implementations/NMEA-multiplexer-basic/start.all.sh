@@ -111,22 +111,36 @@ fi
 echo -e "Step 2 - Starting the MUX"
 cd ~pi/nmea-dist
 rm nohup.out 2> /dev/null
+NAVSERVER_NB_CLASSES=$(jar -tvf ./build/libs/mux-all.jar | grep NavServer | wc -l)
+#
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # PROP_FILE=nmea.mux.gps.sensor.2.nmea-fwd.yaml
   PROP_FILE=nmea.mux.gps.sensor.nmea-fwd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh ${PROP_FILE} &
+  if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
+    nohup ./mux.sh ${PROP_FILE} &
+  else
+    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+  fi
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   PROP_FILE=nmea.mux.gps.nmea-fwd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh ${PROP_FILE} &
+  if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
+    nohup ./mux.sh ${PROP_FILE} &
+  else
+    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+  fi
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   PROP_FILE=nmea.mux.gps.nmea-fwd-ssd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, port ${SERVER_HTTP_PORT}"
-  nohup ./mux.sh ${PROP_FILE} &
+  if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
+    nohup ./mux.sh ${PROP_FILE} &
+  else
+    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+  fi
 elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
   PROP_FILE=nmea.mux.gps.tcp.yaml
   NAV_SERVER_EXTRA_OPTIONS=

@@ -110,8 +110,12 @@ mkdir ${distdir}/scripts
 #
 echo -e "Copying resources..."
 if [[ "${OPTION}" == "BASIC" ]]; then
+  echo -e "Using jar-file:"
+  ls -lisa ./build/libs/NMEA-multiplexer-basic-1.0-all.jar
   cp ./build/libs/NMEA-multiplexer-basic-1.0-all.jar ${distdir}/build/libs/mux-all.jar
 else
+  echo -e "Using jar-file:"
+  ls -lisa ../RESTNavServer/build/libs/RESTNavServer-1.0-all.jar
   cp ../RESTNavServer/build/libs/RESTNavServer-1.0-all.jar ${distdir}/build/libs/mux-all.jar
 fi
 # Log folder
