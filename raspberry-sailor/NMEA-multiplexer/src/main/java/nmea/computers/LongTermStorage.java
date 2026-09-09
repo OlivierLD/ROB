@@ -136,7 +136,9 @@ public class LongTermStorage extends Computer {
 
 	@Override
 	public void close() {
-		System.out.println("- Stop Computing Border data, " + this.getClass().getName());
+		System.out.printf("- Stop Computing Long Term Data %s (%s)\n",
+				this.getClass().getName(),
+				((LongTermComputerBean)this.getBean()).getStoragePathInCache());
 	}
 
 	@Override

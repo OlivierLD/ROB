@@ -562,25 +562,22 @@ let forwarderList = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
+                    html += "<tr>";
+                    html += ("<td><b>file</b></td>");
 					if (json[i].zipped === true) {
-						html += ("<tr><td><b>file</b></td><td>(zipped), dir " + json[i].dir + " </td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+						html += ("<td>(zipped), dir " + json[i].dir + " </td>");
 					} else if (json[i].timeBased === true) {
-						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+						html += ("<td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td>");
 					} else {
-						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+						html += ("<td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td>");
 					}
+					html += ("<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                    html += ("<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
-					    html += (`<td></td><td>Filter(s): ${filterList}</td>`);
+					    html += (`<td>Filter(s): ${filterList}</td>`);
 					}
-                    html += (
-                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
-                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                                    "</button>" +
-                                "</td>" +
-                             "<tr>");
+                    html += ("</tr>");
                     break;
                 case 'serial':
                     html += ("<tr><td valign='top'><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td></tr>");
@@ -589,12 +586,7 @@ let forwarderList = () => {
                     html += ("<tr>" +
                                 "<td valign='top'><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
-                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                                    "</button>" +
-                                "</td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                                 "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
                              "</tr>");
                     break;
@@ -602,12 +594,7 @@ let forwarderList = () => {
                     html += ("<tr>" +
                                 "<td valign='top'><b>nmea-cache-publisher</b></td><td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                                "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                                "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                            (json[i].active ? "false" : "true") + ", false);'>" +
-                                    (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                                    "</button>" +
-                                "</td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                              "</tr>");
                     break;
                 case 'rest':
@@ -681,7 +668,7 @@ let computerList = () => {
                              "</tr>");
                     break;
                 case 'longterm-data-computer':
-                    html += ("<tr><td valign='top'><b>longterm-data-computer !!</b></td>" +
+                    html += ("<tr><td valign='top'><b>longterm-data-computer</b></td>" +
                                  "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
                                  "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
@@ -728,7 +715,7 @@ let buildTable = (context, markerFiles, channels, forwarders, computers) => {
 
         "<table width='100%'>" +
         // Data
-        "<tr><th width='45%'>Pulled in from</th><th width='10%'></th><th width='45%'>Pushed out to</th></tr>" +
+        "<tr><th width='45%'>Pulled in from (listeners)</th><th width='10%'></th><th width='45%'>Pushed out to (talkers)</th></tr>" +
         "<tr><td valign='middle' align='center' rowspan='2' title='Channels'>" + channels + "</td>" +
         //      "<td valign='middle' align='center' rowspan='2'><b><i>MUX</i></b></td>" +
         "<td valign='middle' align='center' rowspan='2'><img src='images/antenna.png' width='32' height='32' alt='MUX' title='MUX'></td>" +
@@ -1160,23 +1147,19 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
+                    html += ("<tr>");
 					if (json[i].timeBased === true) {
-						html += ("<tr><td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+						html += ("<td><b>file</b></td><td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td>");
 					} else {
-						html += ("<tr><td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td><td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+						html += ("<td><b>file</b></td><td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td>");
 					}
+					html += ("<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                    html += ("<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
 					    html += (`<tr><td></td><td>Filter(s): ${filterList}</td>`);
 					}
-                    html += (
-                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
-                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                            "</button>" +
-                        "</td>" +
-                    "<tr>");
+                    html += ("<tr>");
                     break;
                 case 'serial':
                     html += ("<tr><td><b>serial</b></td><td>" + json[i].port + ":" + json[i].br + "</td></tr>");
@@ -1185,13 +1168,7 @@ let generateDiagram = () => {
                     html += ("<tr>" +
                         "<td><b>tcp</b></td><td>Port " + json[i].port + "</td>" +
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
-                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                            "</button>" +
-                        "</td>" +
-
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
                         "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
                         "</tr>");
                     break;
@@ -1224,14 +1201,11 @@ let generateDiagram = () => {
                     html += ("<tr><td><b>console</b></td><td>" + valueOrText('', 'No parameter') + "</td></tr>");
                     break;
                 default:
-                    html += ("<tr><td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td>" +
-                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                        "<td>" + (json[i].active ? "Active" : "Inactive") + "</td>" +
-                        "<td><button onclick='activateForwarder(" + JSON.stringify(json[i]) + ", " +
-                                                                    (json[i].active ? "false" : "true") + ", true);'>" +
-                            (json[i].active ? "de-activate" : "activate") /* + " " + JSON.stringify(json[i]) */ +
-                            "</button>" +
-                        "</td></tr>");
+                    html += ("<tr>" +
+                                "<td><b><i>" + type + "</i></b></td><td>" + json[i].cls + "</td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                            "</tr>");
                     break;
             }
         }
@@ -1462,9 +1436,9 @@ let removeForwarder = (channel) => {
     });
 };
 
-let activateForwarder = (forwarder, onOff, diagram) => { // TODO Finish that one.
+let activateForwarder = (cb, forwarder, diagram) => { // TODO Finish that one.
     let before = new Date().getTime();
-    let putData = setForwarderActive(forwarder, onOff);
+    let putData = setForwarderActive(forwarder, cb.checked);
     putData.then((value) => {
         let after = new Date().getTime();
         document.body.style.cursor = 'default';

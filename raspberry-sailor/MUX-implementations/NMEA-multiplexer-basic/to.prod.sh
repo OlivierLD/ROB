@@ -7,6 +7,7 @@
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
 echo -e "| CLI options:                                                                                       |"
+echo -e "|    --help                                                                                          |"
 echo -e "|    --basic (default)                                                                               |"
 echo -e "| or --big                                                                                           |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
@@ -35,10 +36,13 @@ if [[ $# -gt 0 ]]; then
   elif [ "$1" == "--big" ]; then
     OPTION=BIG
   else
-    echo -e "Unmanaged CLI parameter ${1}"
+    if [ "$1" != "--help" ]; then
+      echo -e "Unmanaged CLI parameter ${1}"
+    fi
     echo -e "Managed parameters are:"
     echo -e "$0 --basic (default)"
     echo -e "$0 --big"
+    echo -e "$0 --help"
     exit 1
   fi
 fi
