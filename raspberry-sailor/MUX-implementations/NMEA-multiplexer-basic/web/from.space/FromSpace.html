@@ -1648,7 +1648,7 @@ let toggleForeground = () => {
         </div>
     </div>
 
-    <!-- JUMBO -->
+    <!-- JUMBOS -->
     <div class="centered" style="grid-area: jumbos; width: 240px; border: 0px solid silver; border-radius: 5px;">
 
         <div style="margin-top: 50px; margin-bottom: 20px; font-weight: bold; color: rgba(0, 255, 255, 0.5);">JUMBOS</div>
@@ -2753,6 +2753,10 @@ let toggleForeground = () => {
             bsp = val;
             document.getElementById('jumbo-02').value = val.toFixed(1);
             // console.log(`BSP:	${bsp.toFixed(2)}`);
+        });
+        events.subscribe(PRMSL, val => {
+            prmsl = val;
+            document.getElementById('scroll-digit-display-01').value = val.toFixed(1);
         });
         // For debug, mainly.
         if (false) {

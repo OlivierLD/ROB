@@ -11,11 +11,12 @@ channels:
   - type: serial
     port: /dev/ttyUSB0
     baudrate: 460800  # Wow!
-    device.filters: II, GP, HC, YX
+    device.filters: II, GP, HC, YX, AI
     verbose: false
 forwarders:
   - type: "tcp"
     port: 7002
+    active: true
   - type: file
     # filename: ./data.nmea
     flush: true
@@ -24,3 +25,4 @@ forwarders:
     log.dir: logged
     split: hour   # |hour|day|week|month|year
     verbose: false
+    active: true

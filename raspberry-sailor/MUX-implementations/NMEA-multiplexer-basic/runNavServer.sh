@@ -50,7 +50,7 @@ for ARG in "$@"; do
 done
 #
 if [[ "${INFRA_VERBOSE}" == "" ]]; then
-  INFRA_VERBOSE=true
+  INFRA_VERBOSE=false
   echo -e "Setting INFRA_VERBOSE to ${INFRA_VERBOSE}"
 fi
 # HTTP_VERBOSE=true
