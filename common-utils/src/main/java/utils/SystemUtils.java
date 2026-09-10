@@ -333,6 +333,89 @@ public class SystemUtils {
         }
     }
 
+    public static class HardwareBean {
+        private String model;
+        private String pcbRev;
+        private String memory;
+        private String notes;
+
+        public HardwareBean() {
+        }
+        public HardwareBean(String model, String pcbRev, String memory, String notes) {
+            this.model = model;
+            this.pcbRev = pcbRev;
+            this.memory = memory;
+            this.notes = notes;
+        }
+        public String getModel() {
+            return model;
+        }
+
+        public void setModel(String model) {
+            this.model = model;
+        }
+
+        public String getPcbRev() {
+            return pcbRev;
+        }
+
+        public void setPcbRev(String pcbRev) {
+            this.pcbRev = pcbRev;
+        }
+
+        public String getMemory() {
+            return memory;
+        }
+
+        public void setMemory(String memory) {
+            this.memory = memory;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public void setNotes(String notes) {
+            this.notes = notes;
+        }
+    }
+
+    /**
+     * Works only for Raspberry Pi
+     * @return
+     * @throws Exception
+     */
+    public static HardwareBean getBean() throws Exception {
+        HardwareBean bean = new HardwareBean();
+        try {
+            String[] hardwareData = getRPiHardwareRevision();
+            if (hardwareData != null) {
+                if (USE_2022_DATA) {
+                    // System.out.println(">> HW Data:" + Arrays.asList(hardwareData).stream().collect(Collectors.joining(", ")));
+                    bean.setModel(hardwareData[MODEL_IDX]);
+                    bean.setPcbRev(hardwareData[PCB_REV_IDX]);
+                    bean.setMemory(hardwareData[MEMORY_IDX]);
+                    bean.setNotes(hardwareData[NOTES_IDX]);
+                } else {
+                    bean.setModel(hardwareData[MODEL_IDX]);
+                    bean.setPcbRev(hardwareData[PCB_REV_IDX]);
+                    bean.setMemory(hardwareData[MEMORY_IDX]);
+                    bean.setNotes(hardwareData[NOTES_IDX]);
+                    // hardwareData[RELEASE_IDX],
+                }
+            } else {
+                throw new Exception(String.format(">> No data for this platform. See source of %s\n", SystemUtils.class.getName()));
+            }
+        } catch (IndexOutOfBoundsException iobe) {
+            // System.out.println("- Unknown - Is that a Raspberry Pi?");
+            throw iobe;
+        } catch (Exception ex) {
+            // System.err.println("Not on a Raspberry Pi?");
+            throw ex;
+        }
+        return bean;
+    }
+
     public static void main(String... args) throws Exception {
 
         System.out.printf(">> (This is class %s)\n", SystemUtils.class.getName());

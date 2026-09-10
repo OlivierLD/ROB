@@ -519,6 +519,8 @@ public class RESTImplementation {
 		String memoryUsage;
 		String diskUsage;
 
+		SystemUtils.HardwareBean hardwareBean;
+
 		public void setIpAddress(String ipAddress) {
 			this.ipAddress = ipAddress;
 		}
@@ -558,6 +560,14 @@ public class RESTImplementation {
 		public String getDiskUsage() {
 			return diskUsage;
 		}
+
+		public SystemUtils.HardwareBean getHardwareBean() {
+			return hardwareBean;
+		}
+
+		public void setHardwareBean(SystemUtils.HardwareBean hardwareBean) {
+			this.hardwareBean = hardwareBean;
+		}
 	}
 	private Response getSystemData(Request request) {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
@@ -573,6 +583,13 @@ public class RESTImplementation {
 			systemData.cpuLoad = cpuLoad;
 			systemData.memoryUsage = memoryUsage;
 			systemData.diskUsage = diskUsage;
+
+			try {
+				final SystemUtils.HardwareBean bean = SystemUtils.getBean();
+				systemData.setHardwareBean(bean);
+			} catch (Exception ex) {
+				ex.printStackTrace(); // Oops !
+			}
 
 			String content;
 			try {
