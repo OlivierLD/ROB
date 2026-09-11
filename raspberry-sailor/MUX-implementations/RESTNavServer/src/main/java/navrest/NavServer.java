@@ -244,8 +244,8 @@ public class NavServer {
 	public static void main(String... args) {
 		new NavServer();
 		// Display memory usage after startup,
-		if ("true".equals(System.getProperty("memory.gauge", "true"))) {
-			long interval = 2L; // 2 minutes
+		if ("true".equals(System.getProperty("memory.gauge", "true"))) { // defaulted to true
+			long interval = 2L; // default 2 minutes
 			try {
 				// In minutes
 				interval = Long.parseLong(System.getProperty("mem.polling.interval", Long.toString(interval)));
@@ -254,7 +254,7 @@ public class NavServer {
 				// Leave it unchanged...
 				System.err.println("Cannot parse mem.polling.interval");
 				ex.printStackTrace();
-				System.err.printf("Leave it unchanged (%d minute)\n", interval);
+				System.err.printf("Leave it unchanged... (%d minute)\n", interval);
 			}
 			MemoryGauge memoryGauge = new MemoryGauge(interval * 60 * 1_000);
 			memoryGauge.start();
