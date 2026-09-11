@@ -2672,6 +2672,7 @@ public class RESTImplementation {
 		return setActivateForwarder(request, false);
 	}
 
+	@SuppressWarnings("unchecked")
 	private HTTPServer.Response setActivateForwarder(HTTPServer.Request request, boolean onOff) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
 		Optional<NMEAClient> opClient;
@@ -2683,7 +2684,6 @@ public class RESTImplementation {
 			return response;
 		} else {
 			try {
-				@SuppressWarnings("unchecked")
 				Object bean = mapper.readValue(new String(request.getContent()), Object.class); // new GsonBuilder().create().fromJson(new String(request.getContent()), Object.class);
 				if (bean instanceof Map) {
 					type = ((Map<String, String>) bean).get("type");

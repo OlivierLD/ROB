@@ -808,9 +808,12 @@ public class NMEADataCache
 						}
 						break;
 					case "ROT":
-						double rot = StringParsers.parseROT(nmeaSentence);
-						// TODO Check validity ?
-						this.put(ROT, rot);
+						try {
+							double rot = StringParsers.parseROT(nmeaSentence);
+							this.put(ROT, rot);
+						} catch (RuntimeException rte) {
+							System.err.printf("Invalid ROT Sentence %s, %s\n", nmeaSentence, rte);
+						}
 						break;
 					case "XDR": // Transducer measurement
 						List<StringGenerator.XDRElement> xdr = StringParsers.parseXDR(nmeaSentence);

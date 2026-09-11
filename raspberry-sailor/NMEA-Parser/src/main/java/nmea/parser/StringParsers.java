@@ -342,6 +342,8 @@ public class StringParsers {
 			String valid = sa[2];
 			if ("A".equals(valid)) {
 				d = Double.parseDouble(sa[1]);
+			} else if ("V".equals(valid)) {
+				throw new RuntimeException("Invalid sentence");
 			}
 		} catch (NumberFormatException nfe) {
 			if ("true".equals(System.getProperty("nmea.parser.verbose"))) {
