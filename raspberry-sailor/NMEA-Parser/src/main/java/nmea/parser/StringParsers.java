@@ -939,6 +939,9 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 		return new VHW().bsp(speed).hdm(hdm).hdg(hdg);
 	}
 
+	public static VLW parseVLW(String sentence) {
+		return parseVLW(sentence, false);
+	}
 	/**
 	 * VLW Distance Traveled through Water<br>
 	 * Structure is
@@ -954,9 +957,6 @@ Example: $GPGBS,125027,23.43,M,13.91,M,34.01,M*07 -- ??? (from https://gpsd.gitl
 	 * @param keepParsing move on, even if checksum is invalid
 	 * @return The result.
 	 */
-	public static VLW parseVLW(String sentence) {
-		return parseVLW(sentence, false);
-	}
 	public static VLW parseVLW(String sentence, boolean keepParsing) {
 		final int CUM_DIST = 1;
 		final int SINCE_RESET = 3;

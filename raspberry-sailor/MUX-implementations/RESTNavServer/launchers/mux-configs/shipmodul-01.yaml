@@ -42,7 +42,7 @@ forwarders:
     filename: data.4tests.nmea
     flush: false
     # sentence.filters: MWV, VHW, HDG
-    sentence.filters: ~GGA,~GSA,~GSV, ~ROT
+    sentence.filters: ~GGA,~GSA,~GSV
     device.filters: ~PL
 #  - type: console
 #  - type: tcp

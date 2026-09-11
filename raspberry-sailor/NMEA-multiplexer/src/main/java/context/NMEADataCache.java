@@ -56,6 +56,13 @@ import java.util.logging.Level;
 /**
  * For AIS, see system property "put.ais.in.cache"
  * For verbose, see property "nmea.cache.verbose"
+ *
+ * This data cache is where the data are stored and read.
+ * There is - as of now - NO standard for such a structure.
+ * This would be a good thing though.
+ *
+ * It is resented as a Map. This way, it can also be easily turned into a JSON object,
+ * which makes it usable in many other contexts.
  */
 public class NMEADataCache
 		extends ConcurrentHashMap<String, Object>
@@ -95,6 +102,7 @@ public class NMEADataCache
 
 	public static final String PITCH = "Pitch";
 	public static final String ROLL = "Roll";
+	public static final String ROT = "Rot";
 
 	public static final String TWA = "TWA";
 	public static final String TWS = "TWS";
@@ -798,6 +806,11 @@ public class NMEADataCache
 							this.put(XTE, new Distance(xte.getXteMag()));
 							this.put(S2STEER, xte.getDirToSteer());
 						}
+						break;
+					case "ROT":
+						double rot = StringParsers.parseROT(nmeaSentence);
+						// TODO Check validity ?
+						this.put(ROT, rot);
 						break;
 					case "XDR": // Transducer measurement
 						List<StringGenerator.XDRElement> xdr = StringParsers.parseXDR(nmeaSentence);
