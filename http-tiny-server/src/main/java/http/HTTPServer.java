@@ -1099,8 +1099,8 @@ public class HTTPServer {
 								long memoryMax = runtime.maxMemory();
 								System.out.printf("- Max Memory: %s bytes (%s Mb, %s Gb)\n",
 										NumberFormat.getInstance().format(memoryMax),
-										NumberFormat.getInstance().format(memoryMax / (1024 * 1024)),
-										NumberFormat.getInstance().format(memoryMax / (1024 * 1024 * 1024)));
+										NumberFormat.getInstance().format(memoryMax / (1024d * 1024d)),
+										NumberFormat.getInstance().format(memoryMax / (1024d * 1024d * 1024d)));
 								long memoryUsed = runtime.totalMemory() - runtime.freeMemory();
 								double memoryUsedPercent = (memoryUsed * 100.0) / memoryMax;
 								System.out.printf("- Used by program: %.02f %%\n", memoryUsedPercent);

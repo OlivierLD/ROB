@@ -16,8 +16,8 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- * Entry point of an example of a Navigation Server. Very Simple.<br/>
- * The complexity is somewhere else.<br/>
+ * Entry point of an example of a Navigation Server.<br/>
+ * Very Simple, the complexity is somewhere else.<br/>
  * <br/>
  * Gathers other REST Services, all in one place.<br/>
  * See the projects RESTTideEngine, RESTNauticalAlmanac, etc.<br/>
@@ -32,6 +32,15 @@ import java.util.stream.Collectors;
  *   <li>ImgRequestManager</li>
  *   <li>GRIBRequestManager</li>
  * </ul>
+ * <i>Note:</i><br/>
+ * It is the programmer's responsibility ensure that no request - from the different RequestManager's -
+ * overlap with each other.
+ * <br/>
+ * <i>Note:</i><br/>
+ * Property <code>with.http.server</code> must be set to true in the yaml. This will be automatically enforced otherwise.
+ * And <code>http.port</code> will be defaulted to 9999 if not set.<br/>
+ * Same for <code>init.cache</code>.
+ *
  */
 public class NavServer {
 
@@ -183,8 +192,8 @@ public class NavServer {
 					}
 					System.out.printf("- Used by program: %s bytes (%s Mb, %s Gb), %s %.02f %% %s %s %s %s\n",
 							NumberFormat.getInstance().format(memoryUsed),
-							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L)),
-							NumberFormat.getInstance().format(memoryUsed / (1024L * 1024L * 1024L)),
+							NumberFormat.getInstance().format(memoryUsed / (1024d * 1024d)),
+							NumberFormat.getInstance().format(memoryUsed / (1024d * 1024d * 1024d)),
 							(memoryUsedPercent > 50 ? EscapeCodes.RED : EscapeCodes.GREEN),
 							memoryUsedPercent,
 							EscapeCodes.NC,

@@ -496,6 +496,7 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "1")
       PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
+      # export INFRA_VERBOSE=true
       #
       NOHUP=""
       if [[ "${WITH_NOHUP}" == "Y" ]] || [[ "${WITH_NOHUP}" == "N" ]]; then
