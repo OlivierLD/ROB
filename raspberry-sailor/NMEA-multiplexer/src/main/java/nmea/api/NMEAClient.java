@@ -100,6 +100,7 @@ public abstract class NMEAClient {
 	}
 
 	public void initClient() {
+		// Received data will be parsed (NMEA-parsed)
 		this.addNMEAListener(new NMEAListener() {
 			@Override
 			public void dataDetected(NMEAEvent e) {

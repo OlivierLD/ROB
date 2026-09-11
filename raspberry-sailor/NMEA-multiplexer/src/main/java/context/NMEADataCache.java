@@ -405,7 +405,7 @@ public class NMEADataCache
 	@SuppressWarnings("unchecked")
 	public void parseAndFeed(String nmeaSentence) {
 		if ("true".equals(System.getProperty("mux.data.verbose"))) {
-			System.out.printf(">> NMEADataCache managing sentence %s\n", nmeaSentence);
+			System.out.printf(">> parseAndFeed: NMEADataCache managing sentence %s\n", nmeaSentence);
 		}
 		if (StringParsers.validCheckSum(nmeaSentence)) {
 			// Increment # of messages processed
@@ -420,7 +420,7 @@ public class NMEADataCache
 			// Feed pure NMEA cache (NMEA sentences, as they are)
 			String sentenceId = StringParsers.getSentenceID(nmeaSentence);
 			Map<String, Object> asIsMap = (Map<String, Object>)this.get(NMEA_AS_IS);
-			switch(sentenceId) {
+			switch (sentenceId) {
 				case "GSV":
 					asIsMap.put(sentenceId, StringParsers.getGSVList());
 					break;
@@ -477,10 +477,10 @@ public class NMEADataCache
 						ex.printStackTrace();
 					}
 				}
-			} else { // NMEA
+			} else { // Regular NMEA, not AIS
 				String id = StringParsers.getSentenceID(nmeaSentence);
 				if ("true".equals(System.getProperty("mux.data.verbose"))) {
-					System.out.printf(">> NMEADataCache managing sentence ID %s\n", id);
+					System.out.printf(">> StdNMEA: NMEADataCache managing sentence ID %s\n", id);
 				}
 				switch (id) {
 					case "GGA":
@@ -862,8 +862,8 @@ public class NMEADataCache
 						}
 						break;
 					default:
-						if (System.getProperty("verbose", "false").equals("true")) {
-							System.out.printf("NMEA Sentence [%s] not managed by parseAndFeed.\n", id);
+						if ("true".equals(System.getProperty("verbose", "false"))) {
+							System.out.printf("==> NMEA Sentence [%s] not managed by parseAndFeed.\n", id);
 						}
 						break;
 				}

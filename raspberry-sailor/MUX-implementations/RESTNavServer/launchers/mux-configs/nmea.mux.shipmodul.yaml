@@ -10,7 +10,7 @@ context:
 channels:
   - type: serial
     port: /dev/ttyUSB0
-    baudrate: 460800  # Wow!
+    baudrate: 460800  # Wow! ShipModul
     device.filters: II, GP, HC, YX, AI
     verbose: false
 forwarders:

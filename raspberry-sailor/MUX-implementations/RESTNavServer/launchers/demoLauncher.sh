@@ -28,6 +28,7 @@ USER_OPTION=
 WITH_NOHUP=
 SMALL_MENU=N
 GRAPHICS=N
+export MUX_VERBOSE=false
 export CMD_VERBOSE=N
 # Program parameters
 NAV_SERVER_EXTRA_OPTIONS=
@@ -1176,6 +1177,8 @@ while [[ "${GO}" == "true" ]]; do
           echo -e ">> Will launch a browser"
         fi
       fi
+      # echo -e "In ${0}, setting MUX_VERBOSE to true"
+      # export MUX_VERBOSE=true
 	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
 	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
 		    echo -e ">>> Waiting for the server to start..."

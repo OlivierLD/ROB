@@ -53,6 +53,13 @@ if [[ "${INFRA_VERBOSE}" == "" ]]; then
   INFRA_VERBOSE=false
   echo -e "Setting INFRA_VERBOSE to ${INFRA_VERBOSE}"
 fi
+#
+if [[ "${MUX_VERBOSE}" == "" ]]; then
+  MUX_VERBOSE=false
+  # for mux.data.verbose
+  echo -e "Setting MUX_VERBOSE to ${MUX_VERBOSE}"
+fi
+#
 # HTTP_VERBOSE=true
 TIDE_VERBOSE=false
 BREST_COEFF=true
@@ -118,6 +125,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dgrib.verbose=${GRIB_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.cache.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dais.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${HTTP_VERBOSE}"  # Was REST_VERBOSE
+JAVA_OPTS="${JAVA_OPTS} -Dmux.data.verbose=${MUX_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Dmemory.gauge=${MEMORY_GAUGE}"
 JAVA_OPTS="${JAVA_OPTS} -Dmem.polling.interval=${MEM_POLLING_INTERVAL}"
 
@@ -130,6 +138,10 @@ if [[ "${USE_PROXY}" == "true" ]]; then
   echo -e "Using proxy (hard-coded)"
   JAVA_OPTS="${JAVA_OPTS} -Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80"
 fi
+#
+# if [[ "${MUX_VERBOSE}" == "true" ]]; then
+  echo -e "In {0}, MUX_VERBOSE is ${MUX_VERBOSE}"
+# fi
 #
 # refers to nmea.mux.properties, unless -Dmux.properties is set
 WEATHER_STATION=false # Hard coded, for now...

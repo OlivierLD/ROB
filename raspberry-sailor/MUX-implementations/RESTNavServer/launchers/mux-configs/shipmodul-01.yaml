@@ -31,7 +31,7 @@ channels:
     # path.in.zip: going.to.groix.2.nmea
     between-records: 50   # Speed up
     verbose: false
-    device.filters: II, GP, HC, YX
+    # device.filters: II, GP, HC, YX
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
   #
@@ -40,9 +40,10 @@ forwarders:
     verbose: false
     timebase.filename: false
     filename: data.4tests.nmea
-    flush: true
+    flush: false
     # sentence.filters: MWV, VHW, HDG
-    sentence.filters: ~GGA,~GSA,~GSV
+    sentence.filters: ~GGA,~GSA,~GSV, ~ROT
+    device.filters: ~PL
 #  - type: console
 #  - type: tcp
 #    port: 7002

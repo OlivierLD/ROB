@@ -84,9 +84,12 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             System.out.println("==== From MUX: " + mess);
             DumpUtil.displayDualDump(mess);
             System.out.println("==== End Mux =============");
+//        } else {
+//            System.out.println("===>>> onData: NO VERBOSE !! <<<===");
         }
         // Cache, if initialized
         if (ApplicationContext.getInstance().getDataCache() != null) {
+            // System.out.println("==> Parse and Feed the cache...");
             ApplicationContext.getInstance().getDataCache().parseAndFeed(mess);
         }
 

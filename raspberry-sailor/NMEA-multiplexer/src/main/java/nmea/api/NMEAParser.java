@@ -59,7 +59,7 @@ public final class NMEAParser extends Thread {
 		NMEAListeners = al;
 		this.addNMEAListener(new NMEAListener() {
 			public void dataRead(NMEAEvent e) {
-//        System.out.println("Received Data:" + e.getContent());
+      //        System.out.println("Received Data:" + e.getContent());
 				nmeaStream.append(e.getContent());
 				// Send to parser
 				String s = "";
