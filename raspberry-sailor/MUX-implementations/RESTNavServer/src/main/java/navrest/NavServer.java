@@ -79,14 +79,14 @@ public class NavServer {
 
 		// Add astronomical features...
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - adding AstroRequestManager\n",
+			System.out.printf("\t>> %s (%s) - adding AstroRequestManager...\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}
 		this.httpServer.addRequestManager(new AstroRequestManager());
 		// Add tide features...
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - adding TideRequestManager\n",
+			System.out.printf("\t>> %s (%s) - adding TideRequestManager...\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}
@@ -95,27 +95,27 @@ public class NavServer {
 		Properties definitions = muxDefinitions; // GenericNMEAMultiplexer.getDefinitions();
 		multiplexer = new GenericNMEAMultiplexer(definitions);
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - adding GenericNMEAMultiplexer\n",
+			System.out.printf("\t>> %s (%s) - adding GenericNMEAMultiplexer...\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}
 		this.httpServer.addRequestManager((GenericNMEAMultiplexer)multiplexer); // refers to nmea.mux.properties, unless -Dmux.properties is set
 		// Add image processing service...
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - adding ImgRequestManager\n",
+			System.out.printf("\t>> %s (%s) - adding ImgRequestManager...\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}
 		this.httpServer.addRequestManager(new ImgRequestManager());
 		// Add GRIB features
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - adding GRIBRequestManager\n",
+			System.out.printf("\t>> %s (%s) - adding GRIBRequestManager...\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}
 		this.httpServer.addRequestManager(new GRIBRequestManager());
 		if (infraVerbose) {
-			System.out.printf("\t>> %s (%s) - End of NavServer constructor\n",
+			System.out.printf("\t>> %s (%s) - End of NavServer constructor. Bam.\n",
 					NumberFormat.getInstance().format(System.currentTimeMillis()),
 					this.getClass().getName());
 		}

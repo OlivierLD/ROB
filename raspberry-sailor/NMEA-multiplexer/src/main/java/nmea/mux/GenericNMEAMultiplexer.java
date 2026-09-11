@@ -27,7 +27,8 @@ import java.util.logging.LogManager;
  * <b>NMEA Multiplexer.</b><br>
  * The main. See main method javadoc for more.
  * <br/>
- * Also contains the definition of the REST operations for admin purpose.<br>
+ * Also contains the definition of the REST operations for admin purpose (used by the admin.html pages),
+ * if the http option is activated (with.http.server).<br>
  * See {@link RESTRequestManager} and {@link HTTPServer}.<br>
  * Also see below the definition of <code>List&lt;Operation&gt; operations</code>.
  */
