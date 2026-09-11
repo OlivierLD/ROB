@@ -16,12 +16,22 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- * Entry point. Very Simple.
- * The complexity is somewhere else.
- *
- * Gathers other REST Services, all in one place.
- * See RESTTideEngine, RESTNauticalAlmanac, etc.
- * See the addRequestManager invocations below.
+ * Entry point of an example of a Navigation Server. Very Simple.<br/>
+ * The complexity is somewhere else.<br/>
+ * <br/>
+ * Gathers other REST Services, all in one place.<br/>
+ * See the projects RESTTideEngine, RESTNauticalAlmanac, etc.<br/>
+ * See (from {@link http.HTTPServer}) the addRequestManager invocations below.<br/>
+ * <br/>
+ * RequestManagers, see below:
+ * <ul>
+ *   <li>NavRequestManager</li>
+ *   <li>AstroRequestManager</li>
+ *   <li>TideRequestManager</li>
+ *   <li>GenericNMEAMultiplexer</li>
+ *   <li>ImgRequestManager</li>
+ *   <li>GRIBRequestManager</li>
+ * </ul>
  */
 public class NavServer {
 
@@ -32,7 +42,7 @@ public class NavServer {
 
 	public NavServer() {
 
-		boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose", "true"));
+		boolean infraVerbose = "true".equals(System.getProperty("mux.infra.verbose", "true")); // On, if not explicitly Off.
 
 		final Properties muxDefinitions = GenericNMEAMultiplexer.getDefinitions();
 
