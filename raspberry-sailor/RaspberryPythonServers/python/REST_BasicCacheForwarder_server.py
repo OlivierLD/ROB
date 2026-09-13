@@ -299,9 +299,10 @@ def display_manager() -> None:
     global current_value
     global keep_looping
     while keep_looping:
-        to_display: List[str] = format_data()  # Format the data to display
-        print("+---------------")
-        print(f"{to_display}")
+        if False:  # display current cache content
+            to_display: List[str] = format_data()  # Format the data to display
+            print("+---------------")
+            print(f"{to_display}")
         # display([f"{current_value} -> {nmea_data[current_value]}"])
         time.sleep(1.0)
     print("Done with display thread")

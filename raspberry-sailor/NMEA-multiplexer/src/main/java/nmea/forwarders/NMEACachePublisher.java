@@ -23,26 +23,32 @@ public class NMEACachePublisher implements Forwarder {
 
     private boolean keepWorking = true;
 
-    private static NMEACachePublisher instance = null;
+    private NMEACachePublisher instance = null;
 
-    protected boolean verbose = false;
-    protected long betweenPublish = 1_000L;
-    protected String protocol = "http";
-    protected String verb = "PUT";
-    protected String machineName = "localhost";
-    protected int port = 8888;
-    protected String resource = "/";
-    protected String queryString = null;
-    protected boolean active = true;
-    protected String description = "No description";
-    protected String onCloseResource = null;
-    protected String onCloseVerb = null;
+    private boolean verbose = false;
+    private long betweenPublish = 1; // In seconds
+    private String protocol = "http";
+    private String verb = "PUT";
+    private String machineName = "localhost";
+    private int port = 8888;
+    private String resource = "/";
+    private String queryString = null;
+    private String option = "full"; // TODO Manage that one: 'full', 'small', 'tiny', 'minimal'
 
-    public static NMEACachePublisher getInstance() {
-        return instance;
+    private boolean active = true;
+    private String description = "No description";
+    private String idx;
+    private String onCloseResource = null;
+    private String onCloseVerb = null;
+
+    private Thread cacheThread;
+
+    public NMEACachePublisher getInstance() {
+        return this.instance;
     }
 
-    public NMEACachePublisher(Long betweenPublish,
+    public NMEACachePublisher(String idx,
+                              Long betweenPublish,
                               String verb,
                               String protocol,
                               String machineName,
@@ -52,21 +58,23 @@ public class NMEACachePublisher implements Forwarder {
                               boolean verbose,
                               boolean active,
                               String desc) throws Exception {
-        this(betweenPublish,
-                verb,
-                protocol,
-                machineName,
-                port,
-                resource,
-                qs,
-                verbose,
-                active,
-                null,
-                null,
-                desc);
+        this(idx,
+             betweenPublish,
+             verb,
+             protocol,
+             machineName,
+             port,
+             resource,
+             qs,
+             verbose,
+             active,
+             null,
+             null,
+             desc);
     }
 
-    public NMEACachePublisher(Long betweenPublish,
+    public NMEACachePublisher(String idx,
+                              Long betweenPublish,
                               String verb,
                               String protocol,
                               String machineName,
@@ -79,14 +87,20 @@ public class NMEACachePublisher implements Forwarder {
                               String onCloseVerb,
                               String desc) throws Exception {
 
-        instance = this;
+        if (false) {
+            System.out.println("Before constructor:");
+            System.out.printf("Idx: %s, Resource: %s\n", this.idx, this.resource);
+        }
+
+        this.instance = this;
+        this.idx = idx;
 
         this.verbose = verbose;
         this.active = active;
         this.description = desc;
 
         if (betweenPublish != null) {
-            this.betweenPublish = betweenPublish * 1_000L;
+            this.betweenPublish = betweenPublish;
         }
         if (verb != null) {
             this.verb = verb;
@@ -131,21 +145,64 @@ public class NMEACachePublisher implements Forwarder {
                 ok = true;
             }
         }
+        if (false) {
+            System.out.println("After constructor:");
+            System.out.printf("Idx: %s, Resource: %s\n", this.idx, this.resource);
+        }
+
     }
 
-    protected void initCacheThread() {
+    private void initCacheThread(String idx) {
         // This is the loop providing the cache data
-        Thread cacheThread = new Thread("CachePublisherThread") {
+        if (instance.verbose) {
+            System.out.printf("-- NMEACacheForwarder, initCacheThread, %s\n",
+                    String.format("%s: %s://%s:%d%s%s",
+                            idx,
+                            this.protocol,
+                            this.machineName,
+                            this.port,
+                            this.resource,
+                            this.queryString == null ? "" : this.queryString));
+        }
+        Thread restThread = new Thread("CachePublisherThread-" + idx) {
             public void run() {
-                while (keepWorking) {
-                    if (isActive()) {
+                while (instance.keepWorking) {
+
+                    String restRequest = String.format("%s://%s:%d%s%s",
+                            instance.protocol,
+                            instance.machineName,
+                            instance.port,
+                            instance.resource,
+                            instance.queryString == null ? "" : instance.queryString);
+
+                    if (instance.verbose) {
+                        System.out.printf("\tIn thread %s, --> In the loop, TOP: curl -X %s %s\n",
+                                this.getName(),
+                                instance.verb,
+                                restRequest);
+                    }
+
+                    if (instance.isActive()) {
                         NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
                         try {
-                            // TODO An option to minimize the cache (like 'tiny') ?
+                            // Options to minimize the cache (like 'full', 'small', 'tiny', 'minimal') ?
+                            if (!option.equals("full")) {
+                                if (instance.verbose) {
+                                    System.out.printf("--> CachePublisher, shrinking the cache (option %s)\n", option);
+                                }
+                                // To remove: markers-file-name, Bearing to WP, borders-data, routes-data,
+                                //            next-waypoint, Deviation data
+                                cache.remove("markers-file-name");
+                                cache.remove("Bearing to WP");
+                                cache.remove("borders-data");
+                                cache.remove("routes-data");
+                                cache.remove("next-waypoint");
+                                cache.remove("Deviation data");
+                            }
                             final String jsonCache = mapper.writeValueAsString(cache);
                             try {
                                 // Java 11
-//                            Map<String, String> headers = Map.of("Content-Type", "application/json");
+  //                            Map<String, String> headers = Map.of("Content-Type", "application/json");
                                 // Java 8
                                 Map<String, String> headers = new HashMap<>();
                                 headers.put("Content-Type", "application/json");
@@ -189,19 +246,19 @@ public class NMEACachePublisher implements Forwarder {
                                                 instance.queryString == null ? "" : instance.queryString);
                                         String putStrContent = jsonCache;
                                         if (instance.verbose) {
-                                            System.out.printf("%s\n%s\n", putRequest, putStrContent);
+                                            System.out.printf("\tPUT case: curl -X PUT %s\n%s\n", putRequest, putStrContent);
                                         }
                                         try {
                                             HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
                                             if (instance.verbose) {
-                                                System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
+                                                System.out.printf("\tPUT %s with %s: Response code %d, message: %s\n",
                                                         putRequest,
                                                         putStrContent,
                                                         putResponse.getCode(),
                                                         putResponse.getPayload());
                                             }
                                         } catch (Throwable restFailure) {
-                                            System.err.printf(">> PUT (%s) Error in NMEACachePublisher: %s\n",
+                                            System.err.printf("\t>> PUT (%s) Error in NMEACachePublisher: %s\n",
                                                     putRequest,
                                                     restFailure.getMessage());
                                             if (instance.verbose) {
@@ -222,21 +279,31 @@ public class NMEACachePublisher implements Forwarder {
                         } catch (JsonProcessingException jpe) {
                             jpe.printStackTrace();
                         }
+                    } else {
+                        // Inactive instance
+                        if (instance.verbose) {
+                            System.out.printf("\tInactive Forwarder: %s \n", restRequest);
+                        }
                     }
                     try {
-                        Thread.sleep(1_000L);
+                        if (instance.verbose) {
+                            System.out.printf("Sleeping for %d s\n", betweenPublish);
+                        }
+                        Thread.sleep(betweenPublish * 1_000L);
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
                 System.out.println("Cache thread completed.");
             }
         };
-        cacheThread.start();
+        this.cacheThread = restThread;
+        this.cacheThread.start();
     }
 
     @Override
     public void init() {
-        initCacheThread();
+        initCacheThread(this.idx);
     }
 
     @Override
@@ -262,10 +329,21 @@ public class NMEACachePublisher implements Forwarder {
         this.description = description;
     }
 
+    public void setOption(String opt) {
+        this.option = opt;
+    }
+
+    public Thread getCacheThread() {
+        return this.cacheThread;
+    }
+
     @Override
     public void write(byte[] message) {
         // Nothing is done here.
         // It is replaced by the Thread in the constructor, in init -> initCacheThread
+        if (false && this.verbose) {
+            System.out.printf("write was invoked on NMEACachePublisher (with payload [%s]\n", new String(message));
+        }
     }
 
     @Override
@@ -352,7 +430,8 @@ public class NMEACachePublisher implements Forwarder {
 
         try {
             // Stop Cache thread
-            keepWorking = false;
+            System.out.printf("Killing thread %s\n", this.cacheThread.getName());
+            this.keepWorking = false;
             try {
                 Thread.sleep(2_000L);
             } catch (Exception ex) {
@@ -368,17 +447,17 @@ public class NMEACachePublisher implements Forwarder {
     public static class NMEACacheBean {
         private String cls; // Class
         private String type = "nmea-cache-publisher";
-        protected long betweenLoops;
-        protected String protocol;
-        protected String verb;
-        protected String machineName;
-        protected int port;
-        protected String resource;
-        protected String queryString;
-        protected String doOnClose;
-        protected String onCloseVerb;
-        protected boolean active;
-        protected String description;
+        private long betweenLoops;
+        private String protocol;
+        private String verb;
+        private String machineName;
+        private int port;
+        private String resource;
+        private String queryString;
+        private String doOnClose;
+        private String onCloseVerb;
+        private boolean active;
+        private String description;
 
         public NMEACacheBean() {}   // This is for Jackson
         public NMEACacheBean(NMEACachePublisher instance,
@@ -455,6 +534,10 @@ public class NMEACachePublisher implements Forwarder {
 
         public String getOnCloseVerb() {
             return onCloseVerb;
+        }
+
+        public String getCURLString() {
+            return String.format("curl -X %s %s://%s:%d%s [data]", this.verb, this.protocol, this.machineName, this.port, this.resource);
         }
     }
 

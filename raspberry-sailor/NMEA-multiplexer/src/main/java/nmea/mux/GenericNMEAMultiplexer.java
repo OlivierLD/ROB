@@ -1,5 +1,6 @@
 package nmea.mux;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import http.HTTPServer;
 import http.RESTRequestManager;
@@ -10,6 +11,7 @@ import nmea.api.NMEAParser;
 import nmea.computers.Computer;
 
 import nmea.forwarders.Forwarder;
+import nmea.forwarders.NMEACachePublisher;
 import nmea.mux.context.Context;
 import org.yaml.snakeyaml.Yaml;
 import utils.DumpUtil;
@@ -33,6 +35,8 @@ import java.util.logging.LogManager;
  * Also see below the definition of <code>List&lt;Operation&gt; operations</code>.
  */
 public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
+
+    private final static ObjectMapper mapper = new ObjectMapper();
     private HTTPServer adminServer; // = null;
     protected Properties muxProperties;
 
@@ -102,11 +106,47 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             }
 
             // Forwarders
+            if (false) {
+                System.out.println("onData: Generated fowarders list:");
+                System.out.println("-------------------------------");
+                nmeaDataForwarders.forEach(fwd -> {
+                    System.out.printf("Forwarder is a %s\n", fwd.getClass().getName());
+                    if (fwd instanceof NMEACachePublisher) {
+                        NMEACachePublisher ncp = (NMEACachePublisher)fwd;
+                        System.out.printf("- %s\n", ((NMEACachePublisher.NMEACacheBean) ncp.getBean()).getCURLString() );
+                        System.out.printf("\tThread %s, alive %b\n", ncp.getCacheThread().getName(), ncp.getCacheThread().isAlive());
+                    }
+                });
+                System.out.println("-------------------------------");
+            }
             synchronized (nmeaDataForwarders) {
                 nmeaDataForwarders
                         .forEach(fwd -> {
+                            if (false) {
+                                if (fwd instanceof NMEACachePublisher) {
+                                    try {
+                                        System.out.printf("==> onData, loop on forwarders, now feeding a %s, %s \n",
+                                                fwd.getClass().getName(),
+                                                mapper.writeValueAsString(fwd.getBean()));
+                                    } catch (Exception jpe) {
+                                        jpe.printStackTrace();
+                                    }
+                                } else {
+                                   System.out.printf("==> onData, loop on forwarders, now feeding a %s\n",
+                                            fwd.getClass().getName());
+                                }
+                            }
                             try {
-                                fwd.write((mess.trim() + NMEAParser.STANDARD_NMEA_EOS).getBytes());
+                                if (fwd.isActive()) {
+                                    fwd.write((mess.trim() + NMEAParser.STANDARD_NMEA_EOS).getBytes());
+                                    if (false) {
+                                        System.out.printf("\t(write) data sent successfully.\n");
+                                    }
+                                } else {
+                                    if (false) {
+                                        System.out.println("\tInactive forwarder.");
+                                    }
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

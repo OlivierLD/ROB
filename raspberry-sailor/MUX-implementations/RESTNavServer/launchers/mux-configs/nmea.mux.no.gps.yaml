@@ -18,13 +18,28 @@ channels:
     description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature."
 forwarders:
   - type: nmea-cache-publisher
+    # Requires: python REST_BasicCacheForwarder_server.py --machine-name:localhost --port:1234 --verbose:true
+    # PUT http://localhost:1234/cache-fwd/nmea-data
     between-loops: 1  # in seconds
     rest.protocol: http
-    rest.machine-name: localhost   # The machine to send the stop-signal to
+    rest.machine-name: localhost   # The machine to send the request to
+    rest.port: 1234
+    rest.resource: /cache-fwd/nmea-data
+    rest.verb: PUT
+    option: small  # 'full', 'small', 'tiny', 'minimal'
+    # rest.query.string: ""
+    verbose: false
+    active: true
+    description: "Cache publisher for Tests (requires test server to be up and running. See yaml.)"
+  - type: nmea-cache-publisher
+    between-loops: 5  # in seconds
+    rest.protocol: http
+    rest.machine-name: localhost
     # rest.machine-name: 192.168.1.103
     rest.port: 8080
     rest.resource: /ssd1306/nmea-data
     rest.verb: PUT
+    option: small  # 'full', 'small', 'tiny', 'minimal'
     #    rest.query.string: ""
     rest.onclose.resource: /ssd1306/bye-and-clear-screen
     rest.onclose.verb: PUT

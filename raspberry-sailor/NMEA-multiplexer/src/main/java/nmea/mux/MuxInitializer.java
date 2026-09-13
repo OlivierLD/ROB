@@ -985,6 +985,9 @@ public class MuxInitializer {
                             String closeVerb = muxProps.getProperty(String.format("forward.%s.rest.onclose.verb", MUX_IDX_FMT.format(fwdIdx)));
                             String pubActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)), "true");
                             String desc = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(fwdIdx)), "Desc: Oops.");
+                            // TODO Manage that one: 'full', 'small', 'tiny', 'minimal'
+                            String option = muxProps.getProperty(String.format("forward.%s.option", MUX_IDX_FMT.format(fwdIdx)), "full");
+
                             // TODO, properties, pubPropFile ?
                             String pubPropFile = muxProps.getProperty(String.format("forward.%s.prop.file", MUX_IDX_FMT.format(fwdIdx)));
                             try {
@@ -1007,13 +1010,18 @@ public class MuxInitializer {
                                 Forwarder cachePublisher = null;
                                 if (cacheSubClass == null) {
                                     if (closeResource != null) {
-                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), closeResource, closeVerb, desc);
+                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), closeResource, closeVerb, desc);
                                     } else {
-                                        cachePublisher = new NMEACachePublisher(betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), desc);
+                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), desc);
                                     }
+                                    System.out.printf("==> In MuxInitializer, instantiated a %s\n", cachePublisher.getClass().getName());
                                 } else {
                                     // TODO Manage this subclass case
                                     System.err.println("Subclass case not managed yet...");
+                                }
+                                if (!"full".equals(option)) {
+                                    System.out.printf("====>>>> Setting cache option to %s\n", option);
+                                    ((NMEACachePublisher) cachePublisher).setOption(option);
                                 }
 
                                 // TODO Check that, if there is an additional propFile associated...
@@ -1026,6 +1034,9 @@ public class MuxInitializer {
                                 }
                                 cachePublisher.init();
                                 nmeaDataForwarders.add(cachePublisher);
+                                if (verbose) {
+                                    System.out.printf("-- We now have %d forwarder(s)\n", nmeaDataForwarders.size());
+                                }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -1040,6 +1051,20 @@ public class MuxInitializer {
         if (verbose) {
             System.out.printf("\t>> %s - Done with forwarders\n", NumberFormat.getInstance().format(System.currentTimeMillis()));
         }
+        if (verbose) {
+            System.out.println("Generated fowarders list:");
+            System.out.println("-------------------------------");
+            nmeaDataForwarders.forEach(fwd -> {
+                System.out.printf("Forwarder is a %s\n", fwd.getClass().getName());
+                if (fwd instanceof NMEACachePublisher) {
+                    NMEACachePublisher ncp = (NMEACachePublisher)fwd;
+                    System.out.printf("- %s\n", ((NMEACachePublisher.NMEACacheBean) ncp.getBean()).getCURLString() );
+                    System.out.printf("\tThread %s, alive %b\n", ncp.getCacheThread().getName(), ncp.getCacheThread().isAlive());
+                }
+            });
+            System.out.println("-------------------------------");
+        }
+
         // Init cache (for Computers et al).
         if ("true".equals(muxProps.getProperty("init.cache", "false"))) {
             try {
