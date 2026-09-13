@@ -61,9 +61,10 @@ public abstract class NMEAClient {
 	protected Properties props = null;
 
 	protected boolean verbose = false;
+	protected String description = "";
 
 	public NMEAClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	/**
@@ -74,19 +75,28 @@ public abstract class NMEAClient {
 	 */
 	public NMEAClient(String[] prefix,
 	                  String[] sentence) {
-		this(prefix, sentence, null);
+		this(prefix, sentence, null, "");
 	}
 
 	public NMEAClient(Multiplexer multiplexer) {
-		this(null, null, multiplexer);
+		this(null, null, multiplexer, "");
 	}
 
+//	public NMEAClient(String[] prefix,
+//	                  String[] sentence,
+//	                  Multiplexer multiplexer) {
+//		this.setDevicePrefix(prefix);
+//		this.setSentenceArray(sentence);
+//		this.setMultiplexer(multiplexer);
+//	}
 	public NMEAClient(String[] prefix,
-	                  String[] sentence,
-	                  Multiplexer multiplexer) {
+					  String[] sentence,
+					  Multiplexer multiplexer,
+					  String description) {
 		this.setDevicePrefix(prefix);
 		this.setSentenceArray(sentence);
 		this.setMultiplexer(multiplexer);
+		this.setDescription(description);
 	}
 
 	protected Multiplexer multiplexer;
@@ -95,7 +105,7 @@ public abstract class NMEAClient {
 		this.multiplexer = multiplexer;
 	}
 
-	public Multiplexer getMutiplexer() {
+	public Multiplexer getMultiplexer() {
 		return this.multiplexer;
 	}
 
@@ -257,5 +267,13 @@ public abstract class NMEAClient {
 		if (this.getReader() != null) {
 			this.getReader().setVerbose(b);
 		}
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

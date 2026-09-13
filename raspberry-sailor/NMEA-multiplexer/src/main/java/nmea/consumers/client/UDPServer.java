@@ -16,19 +16,19 @@ public class UDPServer extends NMEAClient {
 	private String hostName = DEFAULT_HOST;
 
 	public UDPServer() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public UDPServer(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public UDPServer(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public UDPServer(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public UDPServer(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
 	}
 
@@ -52,6 +52,7 @@ public class UDPServer extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -69,6 +70,7 @@ public class UDPServer extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -94,6 +96,11 @@ public class UDPServer extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override
@@ -132,4 +139,3 @@ public class UDPServer extends NMEAClient {
 		nmeaClient.startWorking();
 	}
 }
-

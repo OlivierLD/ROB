@@ -10,19 +10,19 @@ import nmea.consumers.reader.RESTReader;
 */
 public class RESTClient extends NMEAClient {
 	public RESTClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public RESTClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public RESTClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public RESTClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public RESTClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("rest.data.verbose", "false"));
 	}
 
@@ -60,6 +60,7 @@ public class RESTClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -108,6 +109,7 @@ public class RESTClient extends NMEAClient {
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
 			frequency = ((RESTReader) instance.getReader()).getBetweenLoops();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -133,6 +135,11 @@ public class RESTClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; }
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override

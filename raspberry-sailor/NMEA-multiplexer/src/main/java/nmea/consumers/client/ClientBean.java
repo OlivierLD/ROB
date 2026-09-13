@@ -5,4 +5,5 @@ public interface ClientBean {
 	boolean getVerbose();
 	String[] getDeviceFilters();
 	String[] getSentenceFilters();
+	String getDescription();
 }

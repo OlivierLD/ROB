@@ -99,7 +99,7 @@ public class MuxInitializer {
         while (thereIsMore) {
             String classProp = String.format("mux.%s.class", MUX_IDX_FMT.format(muxIdx));
             String clss = muxProps.getProperty(classProp);
-            if (clss != null) { // Dynamic loading
+            if (clss != null) { // Dynamic loading !!
                 if (verbose) {
                     System.out.printf("\t>> %s - Dynamic loading for input channel %s\n", NumberFormat.getInstance().format(System.currentTimeMillis()), classProp);
                 }
@@ -109,20 +109,24 @@ public class MuxInitializer {
                     String sentenceFilters = "";
                     deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                    String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
+
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
+                        System.out.printf("Instantiation of class %s, desc is [%s]\n", clss, desc);
                     }
                     Object dynamic = Class.forName(clss)
-                            .getDeclaredConstructor(String[].class, String[].class, Multiplexer.class)
+                            .getDeclaredConstructor(String[].class, String[].class, Multiplexer.class, String.class)
                             .newInstance(
                                     !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                     !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                    mux);
+                                    mux, desc);
                     if (dynamic instanceof NMEAClient) {
                         NMEAClient nmeaClient = (NMEAClient) dynamic;
 
                         String verboseProp = String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx));
                         nmeaClient.setVerbose("true".equals(muxProps.getProperty(verboseProp)));
+                        nmeaClient.setDescription(desc); // Is that necessary ?
 
                         String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                         String propFileName = muxProps.getProperty(propProp);
@@ -200,10 +204,12 @@ public class MuxInitializer {
                                         nfe.printStackTrace();
                                     }
                                 }
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 SerialClient serialClient = new SerialClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -216,7 +222,7 @@ public class MuxInitializer {
                                     }
                                 }
                                 serialClient.initClient();
-                                serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialPort, Integer.parseInt(br), resetInterval));
+                                serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialPort, Integer.parseInt(br), resetInterval, desc));
                                 serialClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(serialClient);
                             } catch (Exception e) {
@@ -233,6 +239,7 @@ public class MuxInitializer {
                                 String queryString = muxProps.getProperty(String.format("mux.%s.query-string", MUX_IDX_FMT.format(muxIdx)));
                                 String jqString = muxProps.getProperty(String.format("mux.%s.jqs", MUX_IDX_FMT.format(muxIdx)));
                                 String nmeaProcessor = muxProps.getProperty(String.format("mux.%s.nmea-processor", MUX_IDX_FMT.format(muxIdx)));
+                                String description = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 Long betweenLoops = null;
                                 String strBetweenLoops = muxProps.getProperty(String.format("mux.%s.between-loops", MUX_IDX_FMT.format(muxIdx)));
                                 if (strBetweenLoops != null) {
@@ -247,7 +254,8 @@ public class MuxInitializer {
                                 RESTClient restClient = new RESTClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        description);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -284,10 +292,12 @@ public class MuxInitializer {
 //                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
                                 boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 TCPClient tcpClient = new TCPClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -339,10 +349,12 @@ public class MuxInitializer {
 //                                        String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx)),
 //                                        muxProps.getProperty(String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx))));
                                 boolean loop = "true".equals(muxProps.getProperty(String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx)), "true").trim());
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 DataFileClient fileClient = new DataFileClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -371,10 +383,12 @@ public class MuxInitializer {
                                 String wsUri = muxProps.getProperty(String.format("mux.%s.wsuri", MUX_IDX_FMT.format(muxIdx)));
 //                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
 //                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 WebSocketClient wsClient = new WebSocketClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -398,10 +412,12 @@ public class MuxInitializer {
                             try {
 //                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
 //                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 RandomClient rndClient = new RandomClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -427,10 +443,12 @@ public class MuxInitializer {
                             try {
 //                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
 //                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                                 ZDAClient zdaClient = new ZDAClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -452,11 +470,12 @@ public class MuxInitializer {
                                 err.printStackTrace();
                             }
                             break;
-                        case "udp":    // User Defined Protocol
+                        case "udp":    // Consumer, User Defined Protocol
                             try {
                                 String udpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServerTimeout = muxProps.getProperty(String.format("mux.%s.timeout", MUX_IDX_FMT.format(muxIdx)));
+                                String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
 //                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
 //                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 // String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
@@ -464,7 +483,8 @@ public class MuxInitializer {
                                 nmea.consumers.client.UDPServer udpClient = new nmea.consumers.client.UDPServer(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                        mux);
+                                        mux,
+                                        desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {

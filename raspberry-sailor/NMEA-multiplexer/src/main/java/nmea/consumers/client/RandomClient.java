@@ -10,19 +10,19 @@ import nmea.consumers.reader.RandomReader;
  */
 public class RandomClient extends NMEAClient {
 	public RandomClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public RandomClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public RandomClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public RandomClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public RandomClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("rnd.data.verbose", "false"));
 	}
 
@@ -44,6 +44,7 @@ public class RandomClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose = false;
+		private String description = "";
 
 		public RandomBean() { // for Jackson
 		}
@@ -53,6 +54,7 @@ public class RandomClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = this.getDescription();
 		}
 
 		public String getCls() {
@@ -79,6 +81,11 @@ public class RandomClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override

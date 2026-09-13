@@ -16,19 +16,19 @@ public class SerialClient extends NMEAClient {
 	private String clientName; // TODO Put this in the supertype?
 
 	public SerialClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public SerialClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public SerialClient(String s[], String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public SerialClient(String s[], String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public SerialClient(String s[], String[] sa, Multiplexer mux, String description) {
+		super(s, sa, mux, description);
 		this.verbose = "true".equals(System.getProperty("serial.data.verbose", "false"));
 		this.clientName = String.valueOf(System.currentTimeMillis()) ; // ((SerialReader) this.getReader()).getPort();
 		// this.clientName = String.format("Serial-%d", System.currentTimeMillis()); // TODO Why not?
@@ -61,6 +61,7 @@ public class SerialClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -78,6 +79,7 @@ public class SerialClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -103,6 +105,9 @@ public class SerialClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() { return this.description; }
 	}
 
 	@Override

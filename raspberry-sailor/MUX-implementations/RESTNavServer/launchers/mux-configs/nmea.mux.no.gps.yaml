@@ -11,9 +11,11 @@ context:
   init.cache: true
 channels:
   - type: zda
+    description: "ZDA Generator"
   - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: false
+    description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature."
 forwarders:
   - type: nmea-cache-publisher
     between-loops: 1  # in seconds

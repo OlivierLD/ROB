@@ -52,7 +52,7 @@ public class TXTExample extends NMEAClient {
     }
 
     public TXTExample(String[] s, String[] sa, Multiplexer mux) {
-        super(s, sa, mux);
+        super(s, sa, mux, "Dummy description");
         nmeaClient = this;
         // Here is a way to set the reader without the 'reader' property.
         this.setReader(new TXTExample.TXTReader("TXTProducer", this.getListeners()));

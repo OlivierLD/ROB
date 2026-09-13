@@ -12,19 +12,19 @@ import java.util.Properties;
  */
 public class WeatherStationWSClient extends NMEAClient {
 	public WeatherStationWSClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public WeatherStationWSClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public WeatherStationWSClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public WeatherStationWSClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public WeatherStationWSClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("weather.station.data.verbose", "false"));
 	}
 
@@ -52,6 +52,7 @@ public class WeatherStationWSClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -68,6 +69,7 @@ public class WeatherStationWSClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -84,6 +86,11 @@ public class WeatherStationWSClient extends NMEAClient {
 
 		@Override
 		public String[] getDeviceFilters() { return this.deviceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };

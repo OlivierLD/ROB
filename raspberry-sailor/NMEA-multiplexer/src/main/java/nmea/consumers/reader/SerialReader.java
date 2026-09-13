@@ -26,6 +26,7 @@ public class SerialReader
 	private String comPort = "/dev/ttyUSB0"; // "COM1";
 	private int br = 4_800;
 	private SerialPort serialPort;
+	private String description = "";
 
 	private final static int TIMEOUT = 10_000;
 	private final static int DEFAULT_MAX_OPEN_TRIES = 5;
@@ -79,9 +80,9 @@ public class SerialReader
 		this(null, al, com, br);
 	}
 	public SerialReader(String threadName, List<NMEAListener> al, String com, int br) {
-		this(threadName, al, com, br, null);
+		this(threadName, al, com, br, null, "");
 	}
-	public SerialReader(String threadName, List<NMEAListener> al, String com, int br, Long resetInterval) {
+	public SerialReader(String threadName, List<NMEAListener> al, String com, int br, Long resetInterval, String description) {
 		super(threadName, al);
 		this.comPort = com;
 		this.br = br;
@@ -89,6 +90,7 @@ public class SerialReader
 			this.resetThread = new ResetThread(resetInterval);
 			this.resetThread.start();
 		}
+		this.description = description;
 	}
 
 	public int getBr() {

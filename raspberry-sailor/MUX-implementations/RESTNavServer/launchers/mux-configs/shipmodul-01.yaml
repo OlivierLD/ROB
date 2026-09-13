@@ -27,11 +27,10 @@ context:
 channels:
   - type: file
     filename: ./sample.data/la.reveuse.01.nmea
-    # zip: true
-    # path.in.zip: going.to.groix.2.nmea
     between-records: 50   # Speed up
     verbose: false
     # device.filters: II, GP, HC, YX
+    device.filters: ~PL
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
   #
@@ -43,7 +42,8 @@ forwarders:
     flush: false
     # sentence.filters: MWV, VHW, HDG
     sentence.filters: ~GGA,~GSA,~GSV
-    device.filters: ~PL
+    device.filters: ~PL  # TODO Find a right way to exclude strings like $PLCJE8FC8,69A6,2A00,2162,00,*75, $PLCJ,6503,67ED,3C,94A1,7273*35, ...
+    # TODO Or introduce full ID filter, like PLCJE8FC8, PLCJ
 #  - type: console
 #  - type: tcp
 #    port: 7002

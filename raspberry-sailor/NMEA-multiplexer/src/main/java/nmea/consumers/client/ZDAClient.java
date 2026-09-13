@@ -11,19 +11,19 @@ import nmea.consumers.reader.ZDAReader;
  */
 public class ZDAClient extends NMEAClient {
 	public ZDAClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public ZDAClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public ZDAClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public ZDAClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public ZDAClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("zda.data.verbose", "false"));
 	}
 
@@ -63,6 +63,7 @@ public class ZDAClient extends NMEAClient {
 		private String[] sentenceFilters;
 		private String devicePrefix;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -79,6 +80,7 @@ public class ZDAClient extends NMEAClient {
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
 			devicePrefix = instance.getSpecificDevicePrefix();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -96,6 +98,11 @@ public class ZDAClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 
 		public String getDevicePrefix() { return this.devicePrefix; }
 	}

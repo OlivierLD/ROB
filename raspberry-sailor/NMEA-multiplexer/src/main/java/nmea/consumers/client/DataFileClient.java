@@ -14,19 +14,19 @@ public class DataFileClient extends NMEAClient {
 	private String pathInArchive = "";
 
 	public DataFileClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public DataFileClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public DataFileClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public DataFileClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public DataFileClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("file.data.verbose", "false"));
 	}
 
@@ -72,6 +72,7 @@ public class DataFileClient extends NMEAClient {
 		private boolean loop;
 		private boolean zip;
 		private String pathInArchive;
+		private String description = "";
 
 		public DataFileBean() {}
 
@@ -85,6 +86,7 @@ public class DataFileClient extends NMEAClient {
 			loop = instance.isLoop();
 			zip = instance.isZip();
 			pathInArchive = instance.getPathInArchive();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -131,6 +133,11 @@ public class DataFileClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override
@@ -158,7 +165,7 @@ public class DataFileClient extends NMEAClient {
 			dataFile = args[0];
 		}
 
-		nmeaClient = new DataFileClient(null, new String[] { "RMC", "GLL" }, null);
+		nmeaClient = new DataFileClient(null, new String[] { "RMC", "GLL" }, null, "DataFileClient for Tests");
 		nmeaClient.setVerbose("true".equals(System.getProperty("file.data.verbose", "false")));
 
 		Runtime.getRuntime().addShutdownHook(new Thread("DataFileClient shutdown hook") {

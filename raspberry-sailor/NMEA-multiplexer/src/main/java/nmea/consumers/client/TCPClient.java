@@ -10,19 +10,17 @@ import nmea.consumers.reader.TCPReader;
  */
 public class TCPClient extends NMEAClient {
 	public TCPClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public TCPClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
-
 	public TCPClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
-
-	public TCPClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public TCPClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("tcp.data.verbose", "false"));
 	}
 
@@ -48,6 +46,7 @@ public class TCPClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -67,6 +66,7 @@ public class TCPClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -101,6 +101,11 @@ public class TCPClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override

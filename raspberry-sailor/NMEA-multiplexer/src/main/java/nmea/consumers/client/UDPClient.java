@@ -12,19 +12,19 @@ import nmea.consumers.reader.UDPReader;
  */
 public class UDPClient extends NMEAClient {
 	public UDPClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public UDPClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public UDPClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public UDPClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public UDPClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
 	}
 
@@ -48,6 +48,7 @@ public class UDPClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -65,6 +66,7 @@ public class UDPClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -90,6 +92,11 @@ public class UDPClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override

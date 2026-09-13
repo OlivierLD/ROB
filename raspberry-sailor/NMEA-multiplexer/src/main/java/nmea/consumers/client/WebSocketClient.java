@@ -10,19 +10,19 @@ import nmea.consumers.reader.WebSocketReader;
  */
 public class WebSocketClient extends NMEAClient {
 	public WebSocketClient() {
-		this(null, null, null);
+		this(null, null, null, "");
 	}
 
 	public WebSocketClient(Multiplexer mux) {
-		this(null, null, mux);
+		this(null, null, mux, "");
 	}
 
 	public WebSocketClient(String[] s, String[] sa) {
-		this(s, sa, null);
+		this(s, sa, null, "");
 	}
 
-	public WebSocketClient(String[] s, String[] sa, Multiplexer mux) {
-		super(s, sa, mux);
+	public WebSocketClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+		super(s, sa, mux, desc);
 		this.verbose = "true".equals(System.getProperty("ws.data.verbose", "false"));
 	}
 
@@ -45,6 +45,7 @@ public class WebSocketClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private String description = "";
 
 		public String getCls() {
 			return cls;
@@ -61,6 +62,7 @@ public class WebSocketClient extends NMEAClient {
 			verbose = instance.isVerbose();
 			deviceFilters = instance.getDevicePrefix();
 			sentenceFilters = instance.getSentenceArray();
+			description = instance.getDescription();
 		}
 
 		@Override
@@ -80,6 +82,11 @@ public class WebSocketClient extends NMEAClient {
 
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override
