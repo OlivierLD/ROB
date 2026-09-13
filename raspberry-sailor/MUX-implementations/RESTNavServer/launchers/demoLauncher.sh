@@ -216,6 +216,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|                                                                                         | ${RED}13g${NC}. GPS only, Chartless Map (La Trinité-Groix). GPS Only, AIS from OpenCPN/UDP.        |"
     echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
     echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse, replay.                                                      |"
+    echo -e "|                                                                                         | ${RED}14a${NC}. ShipModul, reading (for tests).                                                      |"
     echo -e "|                                                                                         | ${RED}15${NC}. retour Portugal, replay.                                                            |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
@@ -460,6 +461,12 @@ while [[ "${GO}" == "true" ]]; do
 	        echo -e "ShipModul, first test"
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_14}
 	        ;;
+	      "14a")
+	        PROP_FILE=mux-configs/nmea.mux.shipmodul.yaml
+	        echo -e "ShipModul, first test"
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_14}
+	        ;;
+
 	      "15")
 	        PROP_FILE=mux-configs/retour-portugal.yaml
 	        echo -e "Retour Portugal"
@@ -1167,6 +1174,32 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "14")
   	  PROP_FILE=mux-configs/shipmodul-01.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
+      # echo -e "In ${0}, setting MUX_VERBOSE to true"
+      # export MUX_VERBOSE=true
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_14}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    echo -e "Also try, ${RED}in a browser: http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n ${NC}"
+	    GO=false
+	    ;;
+	  "14a")
+  	  PROP_FILE=mux-configs/nmea.mux.shipmodul.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
       # Ask to launch a browser in interactive mode (and not provided already)
       # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"

@@ -9,14 +9,23 @@ context:
   init.cache: true
 channels:
   - type: serial
+    port: /dev/ttyS80
+    baudrate: 4800
+    verbose: false
+    active: false
+    description: "Reads the GPS dongle"
+  - type: serial
     port: /dev/ttyUSB0
     baudrate: 460800  # Wow! ShipModul
     device.filters: II, GP, HC, YX, AI
     verbose: false
+    active: false
+    description: "Reads a ShipModul. Notice the BaudRate..."
 forwarders:
   - type: "tcp"
     port: 7002
     active: true
+    description: "TCP, port 7002"
   - type: file
     # filename: ./data.nmea
     flush: true
@@ -24,5 +33,5 @@ forwarders:
     filename.suffix: _LOG
     log.dir: logged
     split: hour   # |hour|day|week|month|year
-    verbose: false
     active: true
+    description: "File System logging"

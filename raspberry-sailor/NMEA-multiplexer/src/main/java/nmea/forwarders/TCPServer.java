@@ -13,6 +13,7 @@ import java.util.Properties;
 public class TCPServer implements Forwarder {
 	private final TCPServer instance = this;
 	private boolean active = true;
+	private String description = "No desc.";
 	private final List<Socket> clientSocketList = new ArrayList<>(1);
 	private Properties props = null;
 
@@ -22,7 +23,11 @@ public class TCPServer implements Forwarder {
 	private boolean withAIS = true;
 
 	public TCPServer(int port) throws Exception {
+		this(port, "Oops. No desc.");
+	}
+	public TCPServer(int port, String desc) throws Exception {
 		this.tcpPort = port;
+		this.description = desc;
 
 		try {
 			SocketThread socketThread = new SocketThread(this);
@@ -42,6 +47,16 @@ public class TCPServer implements Forwarder {
 	public void setActive(boolean status) {
 		// System.out.printf("--> TCPServer, setting active : %B\n", status);
 		this.active = status;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public int getTcpPort() {
@@ -154,6 +169,7 @@ public class TCPServer implements Forwarder {
 		private final String type = "tcp";
 		private int nbClients = 0;
 		private boolean active = true;
+		private String description;
 
 		public int getPort() {
 			return port;
@@ -173,6 +189,8 @@ public class TCPServer implements Forwarder {
 
 		public boolean isActive() { return active; }
 
+		public String getDescription() { return description; }
+
 		public TCPBean() {}  // This is for Jackson
 
 		public TCPBean(TCPServer instance) {
@@ -180,6 +198,7 @@ public class TCPServer implements Forwarder {
 			port = instance.tcpPort;
 			nbClients = instance.getNbClients();
 			active = instance.isActive();
+			description = instance.getDescription();
 		}
 	}
 

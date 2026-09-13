@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import http.client.HTTPClient;
+import utils.DumpUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -32,6 +34,7 @@ public class NMEACachePublisher implements Forwarder {
     protected String resource = "/";
     protected String queryString = null;
     protected boolean active = true;
+    protected String description = "No description";
     protected String onCloseResource = null;
     protected String onCloseVerb = null;
 
@@ -46,8 +49,21 @@ public class NMEACachePublisher implements Forwarder {
                               Integer port,
                               String resource,
                               String qs,
-                              boolean verbose) throws Exception {
-        this(betweenPublish, verb, protocol, machineName, port, resource, qs, verbose, null, null);
+                              boolean verbose,
+                              boolean active,
+                              String desc) throws Exception {
+        this(betweenPublish,
+                verb,
+                protocol,
+                machineName,
+                port,
+                resource,
+                qs,
+                verbose,
+                active,
+                null,
+                null,
+                desc);
     }
 
     public NMEACachePublisher(Long betweenPublish,
@@ -58,12 +74,16 @@ public class NMEACachePublisher implements Forwarder {
                               String resource,
                               String qs,
                               boolean verbose,
+                              boolean active,
                               String doOnClose,
-                              String onCloseVerb) throws Exception {
+                              String onCloseVerb,
+                              String desc) throws Exception {
 
         instance = this;
 
         this.verbose = verbose;
+        this.active = active;
+        this.description = desc;
 
         if (betweenPublish != null) {
             this.betweenPublish = betweenPublish * 1_000L;
@@ -231,6 +251,17 @@ public class NMEACachePublisher implements Forwarder {
 
         this.active = status;
     }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public void write(byte[] message) {
         // Nothing is done here.
@@ -347,6 +378,7 @@ public class NMEACachePublisher implements Forwarder {
         protected String doOnClose;
         protected String onCloseVerb;
         protected boolean active;
+        protected String description;
 
         public NMEACacheBean() {}   // This is for Jackson
         public NMEACacheBean(NMEACachePublisher instance,
@@ -359,7 +391,8 @@ public class NMEACachePublisher implements Forwarder {
                              String qs,
                              String doOnClose,
                              String onCloseVerb,
-                             boolean active) {
+                             boolean active,
+                             String desc) {
             this.cls = instance.getClass().getName();
             this.betweenLoops = betweenLoops;
             this.protocol = protocol;
@@ -371,6 +404,7 @@ public class NMEACachePublisher implements Forwarder {
             this.doOnClose = doOnClose;
             this.onCloseVerb = onCloseVerb;
             this.active = active;
+            this.description = desc;
         }
 
         public String getCls() {
@@ -407,6 +441,9 @@ public class NMEACachePublisher implements Forwarder {
         public boolean isActive() {
             return active;
         }
+        public String getDescription() {
+            return description;
+        }
 
         public String getQueryString() {
             return queryString;
@@ -423,36 +460,29 @@ public class NMEACachePublisher implements Forwarder {
 
     @Override
     public Object getBean() {
-        return new NMEACacheBean(this, this.betweenPublish, this.protocol, this.verb, this.machineName, this.port, this.resource, this.queryString, this.onCloseResource, this.onCloseVerb, this.active);
+        return new NMEACacheBean(this,
+                this.betweenPublish,
+                this.protocol,
+                this.verb,
+                this.machineName,
+                this.port,
+                this.resource,
+                this.queryString,
+                this.onCloseResource,
+                this.onCloseVerb,
+                this.active,
+                this.description);
     }
 
     @Override
     public void setProperties(Properties props) {
-		
-		String betweenLoops = props.getProperty("between.loops", "1");
-        try {
-            this.betweenPublish = Long.parseLong(betweenLoops) * 1_000L;
-        } catch (NumberFormatException nfe) {
-            System.err.println("Using default value for between.loops time");
-        }
-        this.verbose = "true".equals(props.getProperty("verbose", "false"));
-        this.protocol = props.getProperty("rest.protocol", "http");  // Make sure it is http or https
-        this.verb = props.getProperty("rest.verb", "PUT");
-        this.machineName = props.getProperty("rest.machine-name", "http");
-        this.port = Integer.parseInt(props.getProperty("rest.port", "8080")); // TODO trap exception
-        this.resource = props.getProperty("rest.resource", "/");
-        this.queryString = props.getProperty("rest.query.string");
 
-        this.onCloseResource = props.getProperty("rest.onclose.resource");;
-        this.onCloseVerb = props.getProperty("rest.onclose.verb");;
-
-        boolean active = "true".equals(props.getProperty("active", "true"));
-        if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
-            System.out.printf("--> NMEACachePublisher, property active: %B\n", active);
+        if (true) {
+            System.out.println("--> NMEACachePublisher.setProperties invoked from:");
+            final List<String> strings = DumpUtil.whoCalledMe();
+            strings.stream().forEach(System.out::println);
+            System.out.println("--------------------------------------------------");
         }
-        this.setActive(active);
-        if (true || "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
-            System.out.printf("--> NMEACachePublisher, active was set to %B\n", active);
-        }
+        // TODO Implement...
     }
 }

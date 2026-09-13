@@ -30,19 +30,22 @@ forwarders:
     rest.onclose.verb: PUT
     verbose: false
     active: false
+    description: "Cache publisher for SSD1306"
   - type: file
     # filename: data.nmea
     # flush: true
-    verbose: false
+    # verbose: false # NO such prop
     timebase.filename: true
     filename.suffix: _LOG
     log.dir: logged
     split: hour
     sentence.filters: ~GGA,~GSV,~GSA
     active: false
+    description: "Log in file, splitted."
   - type: "tcp"
     port: 7001
     active: false
+    description: "TCP:7001"
 computers:
   - type: long-term-storage   # PRMSL
     ping-interval: 900   # 15 minutes, 15 x 60s

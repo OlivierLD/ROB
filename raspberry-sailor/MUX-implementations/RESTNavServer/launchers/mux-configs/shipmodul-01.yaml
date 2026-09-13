@@ -33,6 +33,7 @@ channels:
     device.filters: ~PL
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
+    description: "Reads a ShipModul's logged data."
   #
 forwarders:
   - type: file

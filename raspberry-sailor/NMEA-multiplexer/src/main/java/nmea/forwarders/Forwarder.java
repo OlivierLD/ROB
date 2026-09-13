@@ -26,5 +26,11 @@ public interface Forwarder {
 	default void setActive(boolean status) {
 	}
 
+	default String getDescription() {
+		return "No desc.";
+	}
+	default void setDescription(String desc) {
+	}
+
 	Object getBean();
 }

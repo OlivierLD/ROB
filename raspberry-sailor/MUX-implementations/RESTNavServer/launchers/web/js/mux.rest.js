@@ -615,13 +615,14 @@ let forwarderList = () => {
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
         let html = "<h5>Writes to</h5>" + "<table>";
-        html += "<tr><th>Type</th><th colspan='6'>Parameters</th></th></tr>";
+        html += "<tr><th>Type</th><th colspan='7'>Parameters</th></th></tr>";
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
                 case 'file':
                     html += "<tr>";
-                    html += ("<td><b>file</b></td>");
+                    html += ("<td><b>file</b></td>" +
+                             "<td>" + json[i].description + "</td>");
 					if (json[i].zipped === true) {
 						html += ("<td>(zipped), dir " + json[i].dir + " </td>");
 					} else if (json[i].timeBased === true) {
@@ -638,11 +639,18 @@ let forwarderList = () => {
                     html += ("</tr>");
                     break;
                 case 'serial':
-                    html += ("<tr>" + "<td valign='top'><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "</tr>");
+                    html += ("<tr>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td valign='top'><b>serial</b></td>" +
+                    "<td>" + json[i].port + ":" + json[i].br + "</td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
                 case 'tcp':
                     html += ("<tr>" +
-                                "<td valign='top'><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" +
+                                "<td valign='top'><b>tcp</b></td>" +
+                                "<td>" + json[i].description + "</td>" +
+                                "<td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                                 "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
@@ -650,7 +658,9 @@ let forwarderList = () => {
                     break;
                 case 'nmea-cache-publisher':
                     html += ("<tr>" +
-                                "<td valign='top'><b>nmea-cache-publisher</b></td>" + "<td>Port " + json[i].port + "</td>" +
+                                "<td valign='top'><b>nmea-cache-publisher</b></td>" +
+                                "<td>" + json[i].description + "</td>" +
+                                "<td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                              "</tr>");
@@ -662,26 +672,56 @@ let forwarderList = () => {
                      "verb": "POST",
                      "resource": "/whatever",
                      */
-                    html += ("<tr>" + "<td valign='top'><b>rest</b></td>" + "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                    html += ("<tr>" +
+                    "<td valign='top'><b>rest</b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
                 case 'gpsd':
-                    html += ("<tr>" + "<td valign='top'><b>gpsd</b></td>" + "<td>Port " + json[i].port + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "<td><small>" + json[i].nbClients + " Client(s)</small></td>" + "</tr>");
+                    html += ("<tr>" +
+                    "<td valign='top'><b>gpsd</b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td>Port " + json[i].port + "</td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                    "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr>" + "<td valign='top'><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "</tr>");
+                    html += ("<tr>" +
+                    "<td valign='top'><b>ws</b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td>" + json[i].wsUri + "</td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
                 case 'rmi':
-                    html += ("<tr>" + "<td valign='top'><b>rmi</b></td>" + "<td valign='top'>" +
+                    html += ("<tr>" + "<td valign='top'><b>rmi</b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td valign='top'>" +
                         "Port: " + json[i].port + "<br>" +
                         "Name: " + json[i].bindingName + "<br>" +
                         "Address: " + json[i].serverAddress +
-                        "</td>" + "<td valign='top'><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "</tr>");
+                    "</td>" +
+                    "<td valign='top'><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
                 case 'console':
-                    html += ("<tr>" + "<td valign='top'><b>console</b></td>" + "<td></td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "</tr>");
+                    html += ("<tr>" +
+                    "<td valign='top'><b>console</b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td></td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
                 default:
-                    html += ("<tr>" + "<td><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + "</tr>");
+                    html += ("<tr>" +
+                    "<td><b><i>" + type + "</i></b></td>" +
+                    "<td>" + json[i].description + "</td>" +
+                    "<td>" + json[i].cls + "</td>" +
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</tr>");
                     break;
             }
         }

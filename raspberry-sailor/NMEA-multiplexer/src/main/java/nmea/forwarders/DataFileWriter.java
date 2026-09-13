@@ -29,6 +29,8 @@ public class DataFileWriter implements Forwarder {
 	private final boolean zippedOutput;
 	private String zipName;
 	private ZipOutputStream zos;
+
+	private String description = "--";
 	private long timeSplitThreshold = 0L;
 
 	private final static long MIN_MS  = 60 * 1_000;
@@ -69,19 +71,28 @@ public class DataFileWriter implements Forwarder {
 		this(fName, false);
 	}
 	public DataFileWriter(String fName, boolean append) throws Exception {
-		this(fName, append, false, null, null, null, false, false, null);
+		this(fName, append, false, null, null, null, false, false, null, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush) throws Exception {
-		this(fName, append, false, null, null, null, flush, false, null);
+		this(fName, append, false, null, null, null, flush, false, null, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush, boolean zipped) throws Exception {
-		this(fName, append, false, null, null, null, flush, zipped, null);
+		this(fName, append, false, null, null, null, flush, zipped, null, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
-		this(fName, append, timeBased, radix, dir, split, flush, false, null);
+		this(fName, append, timeBased, radix, dir, split, flush, false, null, "Nope");
 	}
-	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush, boolean zippedOutput, String sentenceFilters) throws Exception {
-		System.out.printf("- Start writing to %s, %s \n", this.getClass().getName(), fName);
+	public DataFileWriter(String fName,
+						  boolean append,
+						  boolean timeBased,
+						  String radix,
+						  String dir,
+						  String split,
+						  boolean flush,
+						  boolean zippedOutput,
+						  String sentenceFilters,
+						  String desc) throws Exception {
+		System.out.printf("- Instantiating %s, %s \n", this.getClass().getName(), fName);
 
 		if (sentenceFilters != null) {
 			if (sentenceFilters.trim().length() > 0) {
@@ -148,6 +159,7 @@ public class DataFileWriter implements Forwarder {
 				throw ex;
 			}
 		}
+		this.description = desc;
 	}
 
 	boolean VERBOSE = false;
@@ -172,6 +184,15 @@ public class DataFileWriter implements Forwarder {
 				System.err.printf("Flushing on setActive: s\n", ex.toString());
 			}
 		}
+	}
+
+	@Override
+	public void setDescription(String desc) {
+		this.description = desc;
+	}
+	@Override
+	public String getDescription() {
+		return this.description;
 	}
 
 	@Override
@@ -372,6 +393,7 @@ public class DataFileWriter implements Forwarder {
 		private boolean zipped;
 		private boolean active;
 		private List<String> filters;
+		private String description;
 
 
 		private final String type = "file";
@@ -389,6 +411,7 @@ public class DataFileWriter implements Forwarder {
 			zipped = instance.zippedOutput;
 			filters = instance.filters;
 			active = instance.isActive();
+			description = instance.getDescription();
 		}
 
 		public String getCls() {
@@ -434,6 +457,14 @@ public class DataFileWriter implements Forwarder {
 		}
 		public boolean isActive() {
 			return active;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
 		}
 
 		public List<String> getFilters() {
