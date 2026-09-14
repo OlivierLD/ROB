@@ -246,10 +246,13 @@ channels:
       between-loops: 2000  # in ms (default 1000)
       verbose: false
     ```
-    <!-- This one is more designed to be extended. -->  
+    <!-- This one is more designed to be extended. --> 
+    Typically, this could be used to ping a Python server that reads a sensor,
+    to get to the data it emits.  
     Look into the repo for more examples.    
     The tricky point is that this has to generate a _valid_ NMEA String, and that requires
-    a knowledge of the structure of the payload returned by the service, if not some post-processing.
+    a knowledge of the structure of the payload returned by the service, if not some post-processing.  
+    See the method `nmea.consumers.client.RESTClient.dataDetectedEvent` for details.
   
     As it is now, we can deal with REST services returning in the response's payload:
     - A JSON Map
@@ -468,158 +471,164 @@ Several "dynamic" forwarders are provided, as examples. See - among others
     forward.05.port=1099
     forward.05.name=RMI-NMEA
     ```
-- `nmea-cache-publisher`
-  - Can be used to `PUT`/`POST` the full cache (in JSON format) to a REST server.
-  - > _**Note**_: this `nmea-cache-publisher` can be seen as an NMEA bus.  
-      The full NMEA-cache would be sent to it, and it would decide what to do (to display) with it,
-      based on a user's decision/action.  
-      As far as I know, there is no standard for such a content. We use an arbitrary `json` structure here, examples are available all around.
-  ```yaml
-  - type: nmea-cache-publisher
-    between-loops: 1  # in seconds
-    rest.protocol: http
-    rest.machine-name: 192.168.1.103
-    rest.port: 8080
-    rest.resource: /ssd1306/nmea-data
-    rest.verb: PUT
-    # rest.query.string: ""
-    rest.onclose.resource: /ssd1306/clear-screen
-    rest.onclose.verb: PUT
-    verbose: true
-  ```
-  - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.  
-  **Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.**  
-  See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.
-  In the code, look at the `display_manager` function.  
-  This can be a very convenient way to communicate between languages (like here, between Java and Python).  
-  The cache can look like this:
-<!-- A scrollable div --> 
-<div style="width: 90%; height: 200px; max-height: 200px; overflow: scroll; font-family: 'Courier New';">
-<pre style="width: 90%; max-height: 200px; overflow: scroll;">{
-  "Damping": 1,
-  "NMEA_AS_IS": {
-    "VLW": "$IIVLW,03013,N,012.2,N*53\r",
-    "VWR": "$IIVWR,126,L,15.6,N,,,,*78\r",
-    "MTW": "$IIMTW,+26.5,C*39\r",
-    "VHW": "$IIVHW,,,217,M,06.5,N,,*63\r",
-    "GLL": "$IIGLL,0906.458,S,14012.521,W,220716,A,A*59\r",
-    "RMB": "$IIRMB,A,3.00,R,,RANGI   ,,,,,561.80,230,06.5,V,A*0F\r",
-    "RMC": "$IIRMC,220714,A,0906.455,S,14012.519,W,06.6,227,211110,10,E,A*05\r",
-    "DPT": "$IIDPT,001.0,+0.7,*41\r",
-    "HDG": "$IIHDG,217,,,10,E*17\r",
-    "MWV": "$IIMWV,217,T,20.0,N,A*13\r"
-  },
-  "HDG Offset": 0,
-  "D": {
-    "angle": 0
-  },
-  "XTE": {
-    "distance": 3
-  },
-  "To Waypoint": "RANGI   ",
-  "AWA": {
-    "angle": -126
-  },
-  "Depth": {
-    "depthInMeters": 1.7000000476837158
-  },
-  "NbMess": 33,
-  "Daily": {
-    "distance": 12.2
-  },
-  "Bearing to WP": {
-    "angle": 230
-  },
-  "Max Leeway": 0,
-  "Speed to WP": {
-    "speed": 6.5
-  },
-  "COG": {
-    "angle": 227
-  },
-  "HDG c.": {
-    "angle": 217
-  },
-  "AWS": {
-    "speed": 15.6
-  },
-  "BSP": {
-    "speed": 6.5
-  },
-  "AWA Offset": 0,
-  "RMCStatus": true,
-  "Current calculated with damping": {},
-  "Position": {
-    "lat": -9.107633333333332,
-    "lng": -140.20868333333334,
-    "gridSquare": "BI90vv"
-  },
-  "Log": {
-    "distance": 3013
-  },
-  "Solar Time": {
-    "date": "Jan 1, 1970, 1:46:25 PM",
-    "fmtDate": {
-      "epoch": 45985916,
-      "year": 1970,
-      "month": 1,
-      "day": 1,
-      "hour": 12,
-      "min": 46,
-      "sec": 25
-    }
-  },
-  "Default Declination": {
-    "angle": 0
-  },
-  "Deviation file name": "zero-deviation.csv",
-  "SOG": {
-    "speed": 6.6
-  },
-  "GPS Date & Time": {
-    "date": "Nov 21, 2010, 11:07:14 PM",
-    "epoch": 1290377234000,
-    "fmtDate": {
-      "epoch": 1290377234000,
-      "year": 2010,
-      "month": 11,
-      "day": 21,
-      "hour": 22,
-      "min": 7,
-      "sec": 14
-    }
-  },
-  "BSP Factor": 1,
-  "WayPoint pos": {
-    "lat": 0,
-    "lng": 0,
-    "gridSquare": "JJ00aa"
-  },
-  "From Waypoint": "",
-  "GPS Time": {
-    "date": "Jan 1, 1970, 11:07:16 PM",
-    "fmtDate": {
-      "epoch": 79636000,
-      "year": 1970,
-      "month": 1,
-      "day": 1,
-      "hour": 22,
-      "min": 7,
-      "sec": 16
-    }
-  },
-  "Steer": "R",
-  "Distance to WP": {
-    "distance": 561.8
-  },
-  "AWS Factor": 1,
-  "Water Temperature": {
-    "temperature": 26.5
-  },
-  "Small Distance": 0.0035980740646052206,
-  "NMEA": "$IIMWV,217,T,20.0,N,A*13\r"
-}</pre>
-</div>
+  - `nmea-cache-publisher`
+    - Can be used to `PUT`/`POST` the full cache (in JSON format) to a REST server.
+    - > _**Note**_: this `nmea-cache-publisher` can be seen as an NMEA bus.  
+        The full (or shrinked, see the `option` property) NMEA-cache would be sent to it, and it would decide what to do (to display) with it,
+        based on a user's decision/action.  
+        As far as I know, there is no standard for such a content. We use an arbitrary `json` structure here, examples are available all around.
+ 
+    - > It is up to the service implemented on the server defined by
+      `rest.protocol`, `rest.machine-name`, `rest.port`, `rest.resource`and `rest.verb`
+      to know what to do with the data it received...
+
+    ```yaml
+    - type: nmea-cache-publisher
+      between-loops: 1  # in seconds
+      rest.protocol: http
+      rest.machine-name: 192.168.1.103
+      rest.port: 8080
+      rest.resource: /ssd1306/nmea-data
+      rest.verb: PUT
+      option: full  # 'full', 'small', 'tiny', 'minimal'
+      # rest.query.string: ""
+      rest.onclose.resource: /ssd1306/clear-screen
+      rest.onclose.verb: PUT
+      verbose: true
+    ```
+    - The config above tells the multiplexer to `PUT` the cache (JSON-formatted, with a `Content-Type: application/json` header) to `http://192.168.1.103:8080/ssd1306/nmea-data` every 1 second.  
+    **Then it is the server's (the one running on `192.168.1.103:8080` here) job to do what has to be done with the data.**  
+    See such an example in `REST_SSD1306_server_v2.py` (and its neighbors), it is a REST server written in Python, displaying data on an `SSD1306` oled screen. Push-buttons allow the user to choose what to do - what data to display.
+    In the code, look at the `display_manager` function.  
+    This can be a very convenient way to communicate between languages (like here, between Java and Python).  
+    The (full) cache can look like this:
+      <!-- A scrollable div --> 
+      <div style="width: 90%; height: 200px; max-height: 200px; overflow: scroll; font-family: 'Courier New';">
+      <pre style="width: 90%; max-height: 200px; overflow: scroll;">{
+        "Damping": 1,
+        "NMEA_AS_IS": {
+          "VLW": "$IIVLW,03013,N,012.2,N*53\r",
+          "VWR": "$IIVWR,126,L,15.6,N,,,,*78\r",
+          "MTW": "$IIMTW,+26.5,C*39\r",
+          "VHW": "$IIVHW,,,217,M,06.5,N,,*63\r",
+          "GLL": "$IIGLL,0906.458,S,14012.521,W,220716,A,A*59\r",
+          "RMB": "$IIRMB,A,3.00,R,,RANGI   ,,,,,561.80,230,06.5,V,A*0F\r",
+          "RMC": "$IIRMC,220714,A,0906.455,S,14012.519,W,06.6,227,211110,10,E,A*05\r",
+          "DPT": "$IIDPT,001.0,+0.7,*41\r",
+          "HDG": "$IIHDG,217,,,10,E*17\r",
+          "MWV": "$IIMWV,217,T,20.0,N,A*13\r"
+        },
+        "HDG Offset": 0,
+        "D": {
+          "angle": 0
+        },
+        "XTE": {
+          "distance": 3
+        },
+        "To Waypoint": "RANGI   ",
+        "AWA": {
+          "angle": -126
+        },
+        "Depth": {
+          "depthInMeters": 1.7000000476837158
+        },
+        "NbMess": 33,
+        "Daily": {
+          "distance": 12.2
+        },
+        "Bearing to WP": {
+          "angle": 230
+        },
+        "Max Leeway": 0,
+        "Speed to WP": {
+          "speed": 6.5
+        },
+        "COG": {
+          "angle": 227
+        },
+        "HDG c.": {
+          "angle": 217
+        },
+        "AWS": {
+          "speed": 15.6
+        },
+        "BSP": {
+          "speed": 6.5
+        },
+        "AWA Offset": 0,
+        "RMCStatus": true,
+        "Current calculated with damping": {},
+        "Position": {
+          "lat": -9.107633333333332,
+          "lng": -140.20868333333334,
+          "gridSquare": "BI90vv"
+        },
+        "Log": {
+          "distance": 3013
+        },
+        "Solar Time": {
+          "date": "Jan 1, 1970, 1:46:25 PM",
+          "fmtDate": {
+            "epoch": 45985916,
+            "year": 1970,
+            "month": 1,
+            "day": 1,
+            "hour": 12,
+            "min": 46,
+            "sec": 25
+          }
+        },
+        "Default Declination": {
+          "angle": 0
+        },
+        "Deviation file name": "zero-deviation.csv",
+        "SOG": {
+          "speed": 6.6
+        },
+        "GPS Date & Time": {
+          "date": "Nov 21, 2010, 11:07:14 PM",
+          "epoch": 1290377234000,
+          "fmtDate": {
+            "epoch": 1290377234000,
+            "year": 2010,
+            "month": 11,
+            "day": 21,
+            "hour": 22,
+            "min": 7,
+            "sec": 14
+          }
+        },
+        "BSP Factor": 1,
+        "WayPoint pos": {
+          "lat": 0,
+          "lng": 0,
+          "gridSquare": "JJ00aa"
+        },
+        "From Waypoint": "",
+        "GPS Time": {
+          "date": "Jan 1, 1970, 11:07:16 PM",
+          "fmtDate": {
+            "epoch": 79636000,
+            "year": 1970,
+            "month": 1,
+            "day": 1,
+            "hour": 22,
+            "min": 7,
+            "sec": 16
+          }
+        },
+        "Steer": "R",
+        "Distance to WP": {
+          "distance": 561.8
+        },
+        "AWS Factor": 1,
+        "Water Temperature": {
+          "temperature": 26.5
+        },
+        "Small Distance": 0.0035980740646052206,
+        "NMEA": "$IIMWV,217,T,20.0,N,A*13\r"
+      }</pre>
+      </div>
 
 You can also implement your own forwarder (implementing the `Forwarder` interface).
 
