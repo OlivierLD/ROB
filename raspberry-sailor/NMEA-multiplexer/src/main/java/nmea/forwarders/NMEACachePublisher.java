@@ -342,7 +342,7 @@ public class NMEACachePublisher implements Forwarder {
         // Nothing is done here.
         // It is replaced by the Thread in the constructor, in init -> initCacheThread
         if (false && this.verbose) {
-            System.out.printf("write was invoked on NMEACachePublisher (with payload [%s]\n", new String(message));
+            System.out.printf("write was invoked on NMEACachePublisher (with payload [%s]\n", new String(message).trim());
         }
     }
 
