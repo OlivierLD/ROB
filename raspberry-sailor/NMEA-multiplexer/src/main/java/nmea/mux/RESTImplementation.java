@@ -1437,7 +1437,7 @@ public class RESTImplementation {
 							.findFirst();
 					if (!opFwd.isPresent()) {
 						try {
-							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(), restJson.getServerName(), restJson.getPort(), restJson.getResource());
+							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(), restJson.getServerName(), restJson.getPort(), restJson.getResource(), restJson.getDescription());
 							nmeaDataForwarders.add(restForwarder);
 							String content = mapper.writeValueAsString(restForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);

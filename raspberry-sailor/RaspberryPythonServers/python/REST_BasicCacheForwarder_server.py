@@ -82,9 +82,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
         if verbose:
             print("GET methods")
         # defining all the headers
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
+        # self.send_response(200)
+        # self.send_header('Content-Type', 'application/json')
+        # self.end_headers()
         #
         full_path = self.path
         split = full_path.split('?')
@@ -113,6 +113,23 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 error = {"message": "{}".format(exception)}
                 self.wfile.write(json.dumps(error).encode())
                 self.send_response(500)
+        if path == PATH_PREFIX + "/nmea-thing":
+            if verbose:
+                print("CacheForwarder nmea-thing request")
+            try:
+                nmea_data: dict = {"nmea-data": "$GPRMC,130156.000,A,4735.66035,N,00258.87018,W,0.00,,201125,,,D*68"}  # This is a sample...
+                response_content = json.dumps(nmea_data).encode()
+                self.send_response(200)
+                # defining the response headers
+                self.send_header('Content-Type', 'application/json')
+                content_len = len(response_content)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(response_content)
+            except Exception as exception:
+                error = {"message": "{}".format(exception)}
+                self.wfile.write(json.dumps(error).encode())
+                self.send_response(500)
         elif path == PATH_PREFIX + "/oplist":
             response = {
                 "oplist": [{
@@ -123,6 +140,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     "path": PATH_PREFIX + "/duh",
                     "verb": "GET",
                     "description": "Placeholder, in json format."
+                }, {
+                    "path": PATH_PREFIX + "/nmea-thing",
+                    "verb": "GET",
+                    "description": "NMEA data, in json format."
                 }, {
                     "path": PATH_PREFIX + "/nmea-data",
                     "verb": "PUT",

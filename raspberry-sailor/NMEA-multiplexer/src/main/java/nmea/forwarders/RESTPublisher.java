@@ -11,6 +11,8 @@ import java.util.Properties;
 public class RESTPublisher implements Forwarder {
 	private Properties props = null;
 
+	private String description = "No description";
+
 	private int httpPort = 80;                  // Default
 	private String serverName = "localhost";    // Default
 	private String restResource = null;         // Required. No default.
@@ -27,11 +29,13 @@ public class RESTPublisher implements Forwarder {
 	public RESTPublisher(String verb,
 						 String serverName,
 						 int port,
-						 String resource) {
+						 String resource,
+						 String desc) {
 		this.verb = verb;
 		this.serverName = serverName;
 		this.httpPort = port;
 		this.restResource = resource;
+		this.description = desc;
 	}
 
 	public String getProtocol() {
@@ -52,6 +56,16 @@ public class RESTPublisher implements Forwarder {
 
 	public String getVerb() {
 		return verb;
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -138,6 +152,7 @@ public class RESTPublisher implements Forwarder {
 		private String verb;
 		private String resource;
 		private final String type = "rest";
+		private  String description;
 
 		public String getProtocol() {
 			return protocol;
@@ -160,6 +175,9 @@ public class RESTPublisher implements Forwarder {
 		public String getType() {
 			return type;
 		}
+		public String getDescription() {
+			return description;
+		}
 
 		public RESTBean() {}   // This is for Jackson
 
@@ -170,6 +188,7 @@ public class RESTPublisher implements Forwarder {
 			serverName = instance.serverName;
 			verb = instance.verb;
 			resource = instance.restResource;
+			description = instance.getDescription();
 		}
 	}
 

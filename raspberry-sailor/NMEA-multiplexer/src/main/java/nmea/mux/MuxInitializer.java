@@ -718,7 +718,7 @@ public class MuxInitializer {
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             String verboseStr = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
-                            // TODO description
+                            String description = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(muxIdx)), "No desc.");
 
                             List<String> properties = Arrays.asList(
                                     "server.name", "server.port", "rest.resource", "rest.verb", "http.headers", "rest.protocol"
@@ -758,6 +758,7 @@ public class MuxInitializer {
                                     configProps.forEach((name, value) -> System.out.printf("%s : %s\n", name, value));
                                 }
                                 restForwarder.setProperties(configProps);
+                                restForwarder.setDescription(description);
                                 restForwarder.init();
                                 nmeaDataForwarders.add(restForwarder);
                             } catch (Exception ex) {
@@ -1148,6 +1149,7 @@ public class MuxInitializer {
                                     Long maxLength = null;
                                     String[] dataPath = null;
                                     String objectName = null;
+                                    String description = "Empty";
                                     try {
                                         String propValue = muxProps.getProperty(String.format("computer.%s.ping-interval", MUX_IDX_FMT.format(cptrIdx)));
                                         if (propValue != null) {
@@ -1199,7 +1201,13 @@ public class MuxInitializer {
                                         ex.printStackTrace();
                                     }
                                     try {
-                                        Computer longTermStorage = new LongTermStorage(mux, pingInterval, maxLength, dataPath, objectName);
+                                        description = muxProps.getProperty(String.format("computer.%s.description", MUX_IDX_FMT.format(cptrIdx)), "Empty desc");
+                                    } catch (Exception ex) {
+                                        System.err.println("description property:");
+                                        ex.printStackTrace();
+                                    }
+                                    try {
+                                        Computer longTermStorage = new LongTermStorage(mux, pingInterval, maxLength, dataPath, objectName, description);
                                         longTermStorage.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
                                         nmeaDataComputers.add(longTermStorage);
                                     } catch (Exception ex) {

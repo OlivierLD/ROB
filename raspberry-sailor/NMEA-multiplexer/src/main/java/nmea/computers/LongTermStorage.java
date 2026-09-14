@@ -29,6 +29,7 @@ public class LongTermStorage extends Computer {
 		DURATION_FMT.setTimeZone(TimeZone.getTimeZone("etc/UTC"));
 	}
 
+	private String description = "LongTermStorage - default desc";
 	// Properties
 	private long pingInterval = 900; // 3_600;  // in seconds. 900 : 15 minutes
 	private long maxLength = 672; // Max length of the buffer. 900s = 15 minutes, 672 = 4 * 24 * 7: one week, with one point every 15 minutes.
@@ -110,7 +111,7 @@ public class LongTermStorage extends Computer {
 		} // EOL while true
 	}, "dataCollector");
 
-	public LongTermStorage(Multiplexer mux, Long pingInterval, Long maxLength, String[] dataPath, String objectName) {
+	public LongTermStorage(Multiplexer mux, Long pingInterval, Long maxLength, String[] dataPath, String objectName, String desc) {
 		super(mux);
 		if (pingInterval != null) {
 			this.pingInterval = pingInterval;
@@ -120,7 +121,18 @@ public class LongTermStorage extends Computer {
 		}
 		this.dataPathInCache = dataPath;
 		this.storagePathInCache = objectName;
+		this.description = desc;
 		dataCollector.start();
+	}
+
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -163,6 +175,7 @@ public class LongTermStorage extends Computer {
 		private String storagePathInCache = ""; // AKA List/Buffer name
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -182,6 +195,10 @@ public class LongTermStorage extends Computer {
 			return active;
 		}
 
+		public String getDescription() {
+			return this.description;
+		}
+
 		public LongTermComputerBean() {}  // This is for Jackson
 		public LongTermComputerBean(LongTermStorage instance) {
 			this.cls = instance.getClass().getName();
@@ -189,6 +206,7 @@ public class LongTermStorage extends Computer {
 			this.active = instance.isActive();
 			this.storagePathInCache = instance.storagePathInCache;
 			this.dataPathInCache = instance.dataPathInCache;
+			this.description = instance.getDescription();
 		}
 	}
 

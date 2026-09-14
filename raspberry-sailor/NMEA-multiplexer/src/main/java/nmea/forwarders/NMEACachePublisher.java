@@ -13,8 +13,11 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Forward the full NMEA Cache to a REST resource, in JSON.
+ * Forward the full (or shrinked) NMEA Cache to a REST resource, in JSON.
  * This requires a knowledge of its structure...
+ * This can be seen as an NMEA bus, forwarding the content to a server (a display or so) that
+ * knows what to do with it (like what to display from the cache).
+ *
  * REST verb can be PUT or POST. Other verbs would not really make sense here.
  */
 public class NMEACachePublisher implements Forwarder {
@@ -321,7 +324,7 @@ public class NMEACachePublisher implements Forwarder {
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override

@@ -17,11 +17,18 @@ import java.util.TimeZone;
  */
 public class EclipseFinder {
 
+    private final static boolean VERBOSE = false;
+    private final static boolean VERBOSE_2 = false;
+
     private final static SimpleDateFormat SDF_UTC = new SimpleDateFormat("EEE yyyy-MMM-dd HH:mm:ss 'UTC'");
     private final static SimpleDateFormat SDF_MONTH = new SimpleDateFormat("MMM yyyy");
     static {
         SDF_UTC.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+        SDF_MONTH.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
     }
+
+    public final static char LOWERCASE_DELTA = '\u03B4';
+    public final static char UPPERCASE_DELTA = '\u0394';
 
     private final static AstroComputerV2 astroComputerV2 = new AstroComputerV2();
 
@@ -47,8 +54,6 @@ public class EclipseFinder {
         SOLAR,
         LUNAR
     }
-    private final static boolean VERBOSE = false;
-    private final static boolean VERBOSE_2 = false;
 
     private static double deltaGHA(double one, double two) {
         double diff = Math.abs(one - two);
@@ -149,7 +154,7 @@ public class EclipseFinder {
                     startedAt = SDF_UTC.format(new Date(localCal.getTime().getTime()));
                 }
                 if (VERBOSE) {
-                    System.out.printf("\t\t--> GHA => \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",
+                    System.out.printf("\t\t--> GHA => \u0394 GHA: %f, \u0394 Decl: %f, At %s\n",
                             deltaGHA,
                             deltaDecl,
                             SDF_UTC.format(new Date(localCal.getTime().getTime())));
@@ -170,31 +175,32 @@ public class EclipseFinder {
             // Increment
             localCal.add(delta, 1);
         }
-        if (VERBOSE) {
-            System.out.printf("\tGHA => min \u03B4 GHA: %f, \u03B4 Decl: %f, At %s\n",  // U+0384: δ
+        if (lastCalendar == null || VERBOSE) {
+            System.out.println("--- narrow search ---");
+            System.out.printf("\tGHA => min \u0394 GHA: %f, \u0394 Decl: %f, At %s\n",  // U+0384: δ
                     minimalGHA.getDeltaGHA(),
                     minimalGHA.getDeltaDecl(),
                     SDF_UTC.format(new Date(minimalGHA.getWhen().getTime().getTime())));
-            System.out.printf("\tDecl => \u03B4 GHA: %f, min \u03B4 Decl: %f, At %s\n",
+            System.out.printf("\tDecl => \u0394 GHA: %f, min \u0394 Decl: %f, At %s\n",
                     minimalD.getDeltaGHA(),
                     minimalD.getDeltaDecl(),
                     SDF_UTC.format(new Date(minimalD.getWhen().getTime().getTime())));
+            System.out.println("---------------------");
         }
         return lastCalendar;
     }
 
     public static void main(String... args) {
 
-        EclipseType typeToUse = EclipseType.LUNAR; //  EclipseType.SOLAR;
-
+        int howManyYears = 1; // 5;
         System.setProperty("deltaT", "AUTO");
-//        System.setProperty("astro.verbose", "true");
+//      System.setProperty("astro.verbose", "true");
 
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC")); // Now
         int currentYear = date.get(Calendar.YEAR); // Or hard-code the date you want here
 
-        System.out.printf("Looking for %s eclipses\n", (typeToUse.equals(EclipseType.SOLAR) ? "solar" : "lunar"));
-        System.out.printf("Year %d\n", currentYear);
+        System.out.printf("Looking for all eclipses, in %d year%s.\n", howManyYears, (howManyYears > 1 ? "s" : ""));
+        System.out.printf("Staring year %d\n", currentYear);
 
         Calendar cal = new GregorianCalendar();
         cal.setTimeZone(TimeZone.getTimeZone("Etc/UTC" /*"America/Los_Angeles"*/));
@@ -215,9 +221,9 @@ public class EclipseFinder {
         long iterations = 0L;
         int stepIndex = Step.HOUR.getIndex(); // See above.
         long before = System.currentTimeMillis();
-        while (cal.get(Calendar.YEAR) <= (currentYear + 4)) { // on 5 years
+        while (cal.get(Calendar.YEAR) <= (currentYear + (howManyYears - 1))) {
             if (cal.get(Calendar.DAY_OF_MONTH) == 1 && cal.get(Calendar.HOUR_OF_DAY) == 0) {
-                System.out.printf("- Now working from %s\n", /*SDF_MONTH*/ SDF_UTC.format(new Date(cal.getTime().getTime())));
+                System.out.printf("- Now working from %s\n", SDF_MONTH.format(new Date(cal.getTime().getTime())));
             }
             iterations++;
             astroComputerV2.calculate(
@@ -238,7 +244,7 @@ public class EclipseFinder {
                 // Check Declinations
                 if (Math.abs(sunDecl - moonDecl) < 1.0) {
                     if (true || VERBOSE) {
-                        System.out.printf("%s, SOLAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
+                        System.out.printf("%s, SOLAR eclipse (\u0394 HA %f, \u0394 D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
                                 SDF_UTC.format(new Date(cal.getTime().getTime())),
                                 deltaGHA, Math.abs(sunDecl - moonDecl),
                                 sunDecl,
@@ -252,7 +258,7 @@ public class EclipseFinder {
                     // Refine/narrow (Newton?) to sun/moon semi-diameters (16' = 0.266667°)
                     Calendar startCal = (Calendar)cal.clone();
                     startCal.add(Calendar.DAY_OF_MONTH, -1);
-                    Calendar narrowCal = narrowSearch(startCal, typeToUse); // cal - 1 day
+                    Calendar narrowCal = narrowSearch(startCal, EclipseType.SOLAR); // cal - 1 day
                     if (narrowCal != null) {
                         // Depends on the step (stepIndex) !!!
                         cal.set(Calendar.YEAR, narrowCal.get(Calendar.YEAR));
@@ -268,7 +274,7 @@ public class EclipseFinder {
                 // Check Declinations
                 if (Math.abs(sunDecl + moonDecl) < 1.0) {
                     if (true || VERBOSE) {
-                        System.out.printf("%s, LUNAR eclipse (delta HA %f, delta D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
+                        System.out.printf("%s, LUNAR eclipse (\u0394 HA %f, \u0394 D %f) ? Sun: D: %f, GHA: %f - Moon: D: %f, GHA: %f\n",
                                 SDF_UTC.format(new Date(cal.getTime().getTime())),
                                 deltaGHA2, Math.abs(sunDecl + moonDecl),
                                 sunDecl,

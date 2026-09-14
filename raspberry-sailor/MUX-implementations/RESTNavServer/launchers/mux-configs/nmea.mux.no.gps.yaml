@@ -5,6 +5,10 @@
 # Astronomical data can be rendered at http://localhost:9999/web/webcomponents/console.gps.html?style=orange&bg=black&border=n&boat-data=n
 #
 name: "No GPS, using ZDA"
+description:
+  - Can be used for tests
+  - Requires python REST_BasicCacheForwarder_server.py --machine-name:localhost --port:1234 --verbose:true
+  - Can test several kinds of channels, forwarders, and computers
 context:
   with.http.server: true
   http.port: 9999
@@ -12,6 +16,17 @@ context:
 channels:
   - type: zda
     description: "ZDA Generator"
+  - type: rest           # Pings the Python REST Server, for tests (GET)
+    protocol: http
+    machine-name: localhost
+    # machine-name: 192.168.50.10
+    http-port: 1234
+    query-path: /cache-fwd/nmea-thing  # This will be a GET on the python server mentioned above.
+    # query-string:      # Would include the ?, and subsequent &...
+    jqs: '."nmea-data"'  # JQ String, to apply on the response. Require knowledge of what comes back.
+    between-loops: 2000  # in ms
+    description: "This is a REST consumer (aka channel)"
+    verbose: false
   - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: false
@@ -28,8 +43,10 @@ forwarders:
     rest.verb: PUT
     option: small  # 'full', 'small', 'tiny', 'minimal'
     # rest.query.string: ""
+    rest.onclose.resource: /cache-fwd/exit  # Optional. Will shut down the Python server
+    rest.onclose.verb: POST
     verbose: false
-    active: true
+    active: false
     description: "Cache publisher for Tests (requires test server to be up and running. See yaml.)"
   - type: nmea-cache-publisher
     between-loops: 5  # in seconds
@@ -68,4 +85,5 @@ computers:
     data-path: "Barometric Pressure,value"  # CSV list
     # Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
     object-name: "PRMSL-buff"
+    description: "Long term PRMSL storage, useful for a barograph"
     verbose: false
