@@ -486,32 +486,32 @@ let channelList = () => {
                     "</tr>");
                     break;
                 case 'serial':
-                    html += ("<tr>" + 
-                    "<td valign='top'><b>serial</b></td>" + 
-                    "<td>" + json[i].port + ":" + json[i].br + "</td>" + 
-                    "<td>" + buildList(json[i].deviceFilters) + "</td>" + 
-                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" + 
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" + 
-                    "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" + 
+                    html += ("<tr>" +
+                    "<td valign='top'><b>serial</b></td>" +
+                    "<td>" + json[i].port + ":" + json[i].br + "</td>" +
+                    "<td>" + buildList(json[i].deviceFilters) + "</td>" +
+                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
+                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
                     break;
                 case 'tcp':
                     html += ("<tr>" +
-                    "<td valign='top'><b>tcp</b></td>" + 
-                    "<td>" + json[i].hostname + ":" + json[i].port + "</td>" + 
-                    "<td>" + buildList(json[i].deviceFilters) + "</td>" + 
-                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" + 
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" + 
+                    "<td valign='top'><b>tcp</b></td>" +
+                    "<td>" + json[i].hostname + ":" + json[i].port + "</td>" +
+                    "<td>" + buildList(json[i].deviceFilters) + "</td>" +
+                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
+                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr>" + 
-                    "<td valign='top'><b>ws</b></td>" + 
-                    "<td> " + json[i].wsUri + "</td>" + 
-                    "<td>" + buildList(json[i].deviceFilters) + "</td>" + 
+                    html += ("<tr>" +
+                    "<td valign='top'><b>ws</b></td>" +
+                    "<td> " + json[i].wsUri + "</td>" +
+                    "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
                     "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +

@@ -26,10 +26,12 @@ channels:
     jqs: '."nmea-data"'  # JQ String, to apply on the response. Require knowledge of what comes back.
     between-loops: 2000  # in ms
     description: "This is a REST consumer (aka channel)"
+    active: false
     verbose: false
   - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature
     reader: nmea.consumers.reader.RandomMTWReader
-    verbose: false
+    verbose: true
+    active: true
     description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature."
 forwarders:
   - type: nmea-cache-publisher
@@ -86,4 +88,5 @@ computers:
     # Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
     object-name: "PRMSL-buff"
     description: "Long term PRMSL storage, useful for a barograph"
+    active: true
     verbose: false
