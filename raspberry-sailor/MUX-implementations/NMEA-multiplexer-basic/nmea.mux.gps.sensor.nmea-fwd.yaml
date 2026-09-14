@@ -29,6 +29,7 @@ channels:
     baudrate: 4800
 #    sentence.filters: ~GLL
 #    sentence.filters: RMC,GLL
+    description: "Reads the GPS dongle"
   - type: serial
     port: /dev/ttyUSB0
     baudrate: 460800  # Wow! ShipModul
@@ -45,6 +46,7 @@ channels:
     # jqs:               # JQ String, to apply on the response
     between-loops: 2000  # in ms
     verbose: false
+    description: "Reads the BME280 data from its Python server"
 #  - type: tcp
 #    server: 192.168.1.103
 #    port: 9876
@@ -58,10 +60,12 @@ forwarders:
     rest.port: 8080
     rest.resource: /ssd1306/nmea-data
     rest.verb: PUT
+    option: small
 #    rest.query.string: ""
     rest.onclose.resource: /ssd1306/clear-screen
     rest.onclose.verb: PUT
     verbose: false
+    description: "Forward the cache to the SSD1306 Python server"
   - type: file
     # filename: data.nmea
     # flush: true
@@ -72,8 +76,10 @@ forwarders:
     log.dir: logged
     split: hour
     sentence.filters: ~GGA,~GSA,~GSV
+    description: "Log for replay or analysis"
   - type: tcp
     port: 7001
+    description: "TCP 7001, OpenCPN and others might like it."
 computers:
 #   - type: "tw-current"
 #     prefix: "CC"
