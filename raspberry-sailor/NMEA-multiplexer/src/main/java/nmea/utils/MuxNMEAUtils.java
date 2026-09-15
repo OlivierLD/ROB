@@ -164,15 +164,19 @@ public class MuxNMEAUtils {
         } catch (Exception ex) {
         }
         if (cog != -1 && sog != -1) {
-            double[] cr = NMEAUtils.calculateCurrent(bsp,
-                    bspCoeff,
-                    heading,
-                    hdgOffset,
-                    leeway,
-                    sog,
-                    cog);
-            cache.put(NMEADataCache.CDR, new Angle360(cr[0]));
-            cache.put(NMEADataCache.CSP, new Speed(cr[1]));
+            try {
+                double[] cr = NMEAUtils.calculateCurrent(bsp,
+                        bspCoeff,
+                        heading,
+                        hdgOffset,
+                        leeway,
+                        sog,
+                        cog);
+                cache.put(NMEADataCache.CDR, new Angle360(cr[0]));
+                cache.put(NMEADataCache.CSP, new Speed(cr[1]));
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
         calculateVMGs(cache);

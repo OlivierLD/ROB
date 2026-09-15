@@ -233,7 +233,16 @@ public class ExtraDataComputer extends Computer {
 				int producedWith = -1;
 				if (cache != null) {
 					synchronized (cache) {
-						MuxNMEAUtils.computeAndSendValuesToCache(cache);
+						try {
+							MuxNMEAUtils.computeAndSendValuesToCache(cache);
+						} catch (Exception ex) {
+							if (this.isVerbose()) {
+								final StackTraceElement[] stackTrace = ex.getStackTrace();
+								String from = stackTrace.length > 1 ? stackTrace[1].toString() + " - " : "";
+								System.err.println(from + ex.getMessage());
+								// ex.printStackTrace(); // optional...
+							}
+						}
 						// True Wind
 						try {
 							twa = ((Angle180) cache.get(NMEADataCache.TWA)).getValue();

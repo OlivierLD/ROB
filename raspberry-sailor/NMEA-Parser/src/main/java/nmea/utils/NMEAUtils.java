@@ -212,10 +212,10 @@ public class NMEAUtils {
         try {
             cdr = getDir((float) a, (float) b);
         } catch (AmbiguousException ae) {
-            // Absorb
-            final StackTraceElement[] stackTrace = ae.getStackTrace();
-            String from = stackTrace.length > 1 ? stackTrace[1].toString() + " - " : "";
-            System.err.println(from + ae.getMessage());
+            throw new RuntimeException(ae);
+//            final StackTraceElement[] stackTrace = ae.getStackTrace();
+//            String from = stackTrace.length > 1 ? stackTrace[1].toString() + " - " : "";
+//            System.err.println(from + ae.getMessage());
         }
 
         return new double[]{cdr, csp};
