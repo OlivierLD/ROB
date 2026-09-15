@@ -1001,9 +1001,13 @@ let generateDiagram = () => {
         setRESTPayload(json, (after - before));
         console.log("Building Context Table");
         let html = "<table width='100%'>";
-        // Mux name
+        // Mux name and prop file.
         if (json['name']) {
-            html += `<tr><td>${json['name']}</td></tr>`;
+            let propFile;
+            if (json['propFileName']) {
+                propFile = json['propFileName'];
+            }
+            html += `<tr><td>Driven by ${propFile},<br/>${json['name']}</td></tr>`;
         }
         // Mux description
         if (json['description']) {

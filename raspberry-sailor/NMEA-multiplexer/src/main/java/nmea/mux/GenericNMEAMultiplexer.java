@@ -256,6 +256,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
          */
         final Context context = Context.getInstance();
         Context.TopContext instanceContext = new Context.TopContext();
+        instanceContext.setPropFileName(System.getProperty("mux.properties", "nmea.mux.properties"));
         // name
         instanceContext.setName(muxProps.getProperty("name"));
         // description
@@ -316,6 +317,9 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         // And finally
         context.setMainContext(instanceContext);
         this.topContext = instanceContext;
+        System.out.printf("-->\tTopContext: %s: %s\n",
+                this.topContext.getPropFileName(),
+                this.topContext.getName());
 
         // Display logging config
         LogManager logManager = LogManager.getLogManager();

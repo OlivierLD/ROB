@@ -36,6 +36,8 @@ public class Context {
 	 * Displayed in the Admin pages.
 	 */
 	public static class TopContext {
+
+		private String propFileName;
 		private String name;
 		private List<String> description;
 		private Boolean withHTTPServer = false;
@@ -153,6 +155,14 @@ public class Context {
 
 		public void setCurrentWaypointName(String currentWaypointName) {
 			this.currentWaypointName = currentWaypointName;
+		}
+
+		public String getPropFileName() {
+			return propFileName;
+		}
+
+		public void setPropFileName(String propFileName) {
+			this.propFileName = propFileName;
 		}
 
 		@Override
