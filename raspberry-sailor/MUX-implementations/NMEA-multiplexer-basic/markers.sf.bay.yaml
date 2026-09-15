@@ -21,6 +21,22 @@ markers:
     longitude: -122.37872696628075
     label: "Oyster Point"
     type: default
+  - latitude: 37.861713982570706
+    longitude: -122.43222812830936
+    label: "Angel Island"
+    type: default
+  - latitude: 37.823892615824654
+    longitude: -122.37094501673712
+    label: "Treasure Island"
+    type: default
+  - latitude: 37.82646414405717
+    longitude: -122.42263746760729
+    label: "Alcatraz"
+    type: default
+  - latitude: 37.8177905790683
+    longitude: -122.4785767000867
+    label: "Golden Gate"
+    type: default
 borders:
   - border-name: "sf-bay"
     type: "open"

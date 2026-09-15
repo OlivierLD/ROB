@@ -1370,10 +1370,34 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'tw-current':
-                    html += ("<tr>" + "<td valign='top'><b>tw-current</b></td>" + "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" + "</tr>");
+                    html += ("<tr>" +
+                                 "<td valign='top'><b>tw-current</b></td>" +
+                                 "<td>" + (json[i].description) + "</td>" +
+                                 "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
+                                 "<td></td>" + // Dummy Prm placeholder
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td></td>" + // Active placeholder
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
+                    break;
+                case 'longterm-data-computer':
+                    html += ("<tr>" + "<td valign='top'><b>longterm-data-computer</b></td>" +
+                                 "<td>" + (json[i].description) + "</td>" +
+                                 "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
+                                 "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
                     break;
                 default:
-                    html += ("<tr>" + "<td valign='top'><b><i>" + type + "</i></b></td>" + "<td valign='top'>" + json[i].cls + "</td>" + "</tr>");
+                    html += ("<tr>" + "<td valign='top'><b><i>" + type + "</i></b></td>" +
+                                 "<td>" + (json[i].description) + "</td>" +
+                                 "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                             "</tr>");
                     break;
             }
         }

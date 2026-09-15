@@ -762,6 +762,7 @@ let computerList = () => {
                                  "<td valign='top'><b>tw-current</b></td>" +
                                  "<td>" + (json[i].description) + "</td>" +
                                  "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
+                                 "<td></td>" + // Dummy Prm placeholder
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
                                  "<td></td>" + // Active placeholder
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +

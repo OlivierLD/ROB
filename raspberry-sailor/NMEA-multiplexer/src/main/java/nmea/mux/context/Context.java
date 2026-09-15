@@ -38,8 +38,8 @@ public class Context {
 	public static class TopContext {
 
 		private String propFileName;
-		private String name;
-		private List<String> description;
+		private String name;              // aka title
+		private List<String> description; // details
 		private Boolean withHTTPServer = false;
 		private int httpPort = -1;
 		private Boolean initCache = false;
