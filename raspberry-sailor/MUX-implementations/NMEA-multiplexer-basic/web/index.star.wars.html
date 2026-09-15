@@ -5,9 +5,8 @@
  +-->
 <head>
     <meta charset="UTF-8">
-    <title>Star Wars</title>
+    <title>Star Wars Menu</title>
     <link rel="icon" type="image/png" href="icons/jellyfish.png">
-    <!--link rel="stylesheet" href="css/stylesheet.css" type="text/css"/-->
 
     <style type="text/css">
 
@@ -99,7 +98,7 @@ h2 span {
     height: 100%;
 }
 
-  </style>
+    </style>
 
     <style type="text/css">
 h1 {
@@ -329,11 +328,28 @@ canvas {
             Bonne chance!
         </p>
     </section>
+    <section id="es-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>Multiplexor NMEA</h2>
+        <h3>¡Bienvenido!</h3>
+
+        <p>
+          Este es el menú principal de la interfaz web del Multiplexor NMEA.<br/>
+          Puedes acceder a los diferentes menús desde el menú de hamburguesa (&#9776;) en la esquina superior izquierda.<br/>
+          Elige tu categoría preferida y añádela a tus favoritos.<br/>
+          Hay varias categorías: general, pantallas pequeñas, pantallas grandes...<br/>
+          Esta lista no es exhaustiva y se actualizará con nuevas funciones y demostraciones.<br/>
+          El único límite es tu imaginación.<br/>
+          <br/>
+          ¡Buena suerte!
+
+        </p>
+    </section>
 </div>
 </body>
 
 <script type="text/javascript">
-
 
 let getQSPrm = (prm) => {
 	let value;
@@ -354,30 +370,40 @@ let getQSPrm = (prm) => {
 };
 
 let switchToFrench = () => {
-
   document.getElementById('fr-version').style.display = 'block';
   document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'none';
 };
 
-// The text 3D affect, and animation is pure CSS.  Only Javascript here is to create stars.
+let switchToSpanish = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'block';
+};
+
+let switchToEnglish = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'block';
+  document.getElementById('es-version').style.display = 'none';
+};
+
+// The text 3D affect, and animation is pure CSS.
+// Javascript is only here to create stars.
 // Created by Darryl Huffman
 
-//////////////// STAR BACKGROUND
 window.onload = function() {
-    // 1 - lang
+    // 1 - lang QS parameter or browser language.
     let userLang = getQSPrm('lang');
-	// if (userLang) {
-	// 	if (userLang === 'EN') {
-	// 		switchLanguage();
-	// 	}
-	// } else {
   	if (!userLang) {
 	  	let browserUserLang = navigator.language || navigator.userLanguage;
 		  console.log("The browser's language is: " + browserUserLang);
 		  if (browserUserLang) {
 			  if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
 		  		userLang = 'FR';
-				  console.log("On parle français.");
+				  console.log("On va parler français.");
+			  } else if (browserUserLang.substring(0, 2).toUpperCase() === 'ES') {
+				  userLang = 'ES';
+				  console.log("Vamos a hablar español.");
 			  } else {
 				  userLang = 'EN';
 				  console.log("We'll speak english");
@@ -387,8 +413,15 @@ window.onload = function() {
 	  if (userLang && userLang === 'FR') {
       console.log('Switching to French');
 		  switchToFrench();
-	  }
+	  } else if (userLang && userLang === 'EN') {
+      console.log('Switching to English');
+      switchToEnglish();
+	  } else if (userLang && userLang === 'ES') {
+      console.log('Switching to Spanish');
+      switchToSpanish();
+    }
 
+//////////////// 2 - STAR BACKGROUND and Co.
 		// Creating the Canvas and related onbjects
 		var canvas = document.createElement("canvas"),
 			  c = canvas.getContext("2d"),
@@ -437,7 +470,7 @@ window.onload = function() {
 			c.fillRect(this.x, this.y, this.size, this.size);
 		};
 
-		setInterval(function(){
+		setInterval(function() {
 			c.fillStyle = "black";
 			c.clearRect(0,0,canvas.width,canvas.height);
 			for (var i = 0; i < particleNum; i++) {
@@ -447,8 +480,8 @@ window.onload = function() {
 				particles[i].draw();
 			}
 		}, 30); // 30 ms
-	};
 //////////////// END STAR BACKGROUND
+	};
 
 </script>
 
@@ -461,6 +494,6 @@ let openNav = function() {
 let closeNav = function() {
     document.getElementById("side-nav").style.width = "0";
 };
-	</script>
+</script>
 
 </html>
