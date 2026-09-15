@@ -1191,6 +1191,15 @@ let setStyle = (opt) => {
 	}
 };
 
+let showHide = (cb, id) => {
+	let elmt = document.getElementById(id);
+	if (elmt) {
+		elmt.style.display = cb.checked ? 'block' : 'none';
+	} else {
+		console.log(`Element ${id} not found...`);
+	}
+};
+
 window.onload = () => {
 	initAjax(false, ping=250); // ping ununsed
 	// console.log("Commented initAjax!");
@@ -1285,6 +1294,12 @@ window.onload = () => {
 							<option value="chartless-map-02">Dark</option>
 							<option value="chartless-map-03">Darker</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<!-- Show-hide SatPlotter -->
+						<input type="checkbox" id="sp-cb" checked onchange="showHide(this, 'sp-01');"> Show Satellites plotter
 					</td>
 				</tr>
 				<tr>
