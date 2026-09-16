@@ -32,7 +32,9 @@ public class ClientSkeleton extends NMEAClient {
 			System.out.println("Received from Skeleton:" + e.getContent());
 		}
 		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

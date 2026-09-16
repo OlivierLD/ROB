@@ -35,7 +35,9 @@ public class RESTClient extends NMEAClient {
 			if (verbose) {
 				System.out.println("From REST, mux.onData :" + e.getContent());
 			}
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		} else {
 			if (verbose) {
 				System.out.println("From REST, NO mux");

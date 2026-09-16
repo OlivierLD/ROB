@@ -34,7 +34,9 @@ public class WeatherStationWSClient extends NMEAClient {
 			System.out.println("Received from WebSocket :" + e.getContent());
 		}
 		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

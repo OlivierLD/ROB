@@ -61,6 +61,9 @@ public abstract class NMEAClient {
 	protected Properties props = null;
 
 	protected boolean verbose = false;
+
+	protected boolean active = true;
+
 	protected String description = "";
 
 	public NMEAClient() {
@@ -267,6 +270,11 @@ public abstract class NMEAClient {
 		if (this.getReader() != null) {
 			this.getReader().setVerbose(b);
 		}
+	}
+
+	public boolean isActive() { return this.active; }
+	public void setActive(boolean b) {
+		this.active = b;
 	}
 
 	public String getDescription() {

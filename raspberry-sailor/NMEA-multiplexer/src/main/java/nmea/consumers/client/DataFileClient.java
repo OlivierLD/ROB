@@ -54,8 +54,10 @@ public class DataFileClient extends NMEAClient {
 		if (verbose) {
 			System.out.println(">> DataFileClient >> Received from File:" + e.getContent());
 		}
-		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+		if (multiplexer != null) { // Only if active !
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

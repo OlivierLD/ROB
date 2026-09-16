@@ -38,5 +38,9 @@ public interface Forwarder {
 	default void setDescription(String desc) {
 	}
 
+	/**
+	 * Used by the RESTImplementation
+	 * @return the bean corresponding to the object (consumer, forwarder or computer)
+	 */
 	Object getBean();
 }

@@ -46,8 +46,10 @@ public class SerialClient extends NMEAClient {
 					((SerialReader) this.getReader()).getBr(),
 					e.getContent());
 		}
-		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+		if (multiplexer != null) { // Only if active !
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

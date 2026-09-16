@@ -38,12 +38,13 @@ channels:
 forwarders:
   - type: file
     verbose: true
+    append: false
     timebase.filename: false
     filename: data.4tests.nmea
     flush: false
-    # sentence.filters: MWV, VHW, HDG
-    sentence.filters: ~GGA,~GSA,~GSV, ~ROT
-    device.filters: ~PL
+    # sentence.filters: MWV, VHW, HDG... RSA:Rudder Sensor Angle
+    sentence.filters: ~GGA,~GSA,~GSV,~ROT,~XDR,~RSA
+    device.filters: ~PL,~YX,~AG
     description: "Log the data, with filters"
 #  - type: console
 #  - type: tcp

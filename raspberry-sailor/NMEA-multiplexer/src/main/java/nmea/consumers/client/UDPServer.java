@@ -38,7 +38,9 @@ public class UDPServer extends NMEAClient {
 			System.out.println("Received from UDP :" + e.getContent());
 		}
 		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

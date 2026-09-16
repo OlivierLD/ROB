@@ -34,7 +34,9 @@ public class RandomMTWClient extends NMEAClient {
 			System.out.println("Received from MTW-RND:" + e.getContent());
 		}
 		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 

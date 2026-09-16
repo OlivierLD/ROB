@@ -43,14 +43,15 @@ public class ZDAClient extends NMEAClient {
 		}
 	}
 
-
 	@Override
 	public void dataDetectedEvent(NMEAEvent e) {
 		if (verbose) {
 			System.out.println("Generated from ZDA:" + e.getContent());
 		}
 		if (multiplexer != null) {
-			multiplexer.onData(e.getContent());
+			if (this.isActive()) {
+				multiplexer.onData(e.getContent());
+			}
 		}
 	}
 
