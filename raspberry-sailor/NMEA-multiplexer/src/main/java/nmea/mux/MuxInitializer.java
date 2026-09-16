@@ -718,10 +718,20 @@ public class MuxInitializer {
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
                             String verboseStr = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
+                            String activeStr = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)));
                             String description = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(muxIdx)), "No desc.");
 
+                            String protocol = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(muxIdx)));
+                            String serverName = muxProps.getProperty(String.format("forward.%s.server.name", MUX_IDX_FMT.format(muxIdx)));
+                            String serverPort = muxProps.getProperty(String.format("forward.%s.server.port", MUX_IDX_FMT.format(muxIdx)));
+                            String resource = muxProps.getProperty(String.format("forward.%s.rest.resource", MUX_IDX_FMT.format(muxIdx)));
+                            String verb = muxProps.getProperty(String.format("forward.%s.rest.verb", MUX_IDX_FMT.format(muxIdx)));
+                            String restHeaders = muxProps.getProperty(String.format("forward.%s.http.headers", MUX_IDX_FMT.format(muxIdx)));
+                            String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null);
+                            String deviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null);
+
                             List<String> properties = Arrays.asList(
-                                    "server.name", "server.port", "rest.resource", "rest.verb", "http.headers", "rest.protocol"
+                                    "server.name", "server.port", "rest.resource", "rest.verb", "http.headers", "rest.protocol", "device.filters", "sentence.filters"
                             );
                             final int idx = fwdIdx;
                             Properties configProps = new Properties();
@@ -735,6 +745,17 @@ public class MuxInitializer {
                                     configProps.put(prop, propVal);
                                 }
                             });
+                            final Map<String, String> headers;
+                            if (restHeaders != null) {
+                                headers = new HashMap<>();
+                                final String[] split = restHeaders.split(",");
+                                Arrays.stream(split).forEach(nvp -> {
+                                    final String[] nvpSplit = nvp.trim().split(":");
+                                    headers.put(nvpSplit[0], nvpSplit[1]);
+                                });
+                            } else {
+                                headers = null;
+                            }
 //							props.put("server.name", "192.168.42.6");
 //							props.put("server.port", "8080");
 //							props.put("rest.resource", "/rest/endpoint?qs=prm");
@@ -744,7 +765,17 @@ public class MuxInitializer {
                             try {
                                 Forwarder restForwarder;
                                 if (restSubClass == null) {
-                                    restForwarder = new RESTPublisher();
+                                    restForwarder = new RESTPublisher(verb,
+                                            serverName,
+                                            Integer.parseInt(serverPort),
+                                            resource,
+                                            protocol,
+                                            headers,
+                                            "true".equals(verboseStr),
+                                            "true".equals(activeStr),
+                                            deviceFilters,
+                                            sentenceFilters,
+                                            description);
                                 } else {
                                     restForwarder = (RESTPublisher) Class.forName(restSubClass.trim()).getConstructor().newInstance();
                                 }
@@ -758,7 +789,7 @@ public class MuxInitializer {
                                     configProps.forEach((name, value) -> System.out.printf("%s : %s\n", name, value));
                                 }
                                 restForwarder.setProperties(configProps);
-                                restForwarder.setDescription(description);
+
                                 restForwarder.init();
                                 nmeaDataForwarders.add(restForwarder);
                             } catch (Exception ex) {
@@ -807,12 +838,12 @@ public class MuxInitializer {
                             String zipped = muxProps.getProperty(String.format("forward.%s.zipped", MUX_IDX_FMT.format(fwdIdx)));
                             String fileActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)), "true");
                             String fileDesc = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(fwdIdx)), "No desc found.");
-                            boolean fileVerb = "true".equals(muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)), "false"));
+                            boolean fileVerbose = "true".equals(muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)), "false"));
 
-                            String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
-                            String deviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
-                            if (verbose && sentenceFilters != null) {
-                                spitOutSentenceFilters(sentenceFilters);
+                            String fileSentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
+                            String fileDeviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
+                            if (verbose && fileSentenceFilters != null) {
+                                spitOutSentenceFilters(fileSentenceFilters);
                             }
                             try {
                                 Forwarder fileForwarder;
@@ -828,9 +859,9 @@ public class MuxInitializer {
                                             split,
                                             "true".equals(flush),
                                             "true".equals(zipped),
-                                            sentenceFilters,
-                                            deviceFilters,
-                                            fileVerb,
+                                            fileSentenceFilters,
+                                            fileDeviceFilters,
+                                            fileVerbose,
                                             fileDesc);
                                 } else {
                                     if (true) {
@@ -839,7 +870,7 @@ public class MuxInitializer {
                                     try {
                                         fileForwarder = (DataFileWriter) Class.forName(fSubClass.trim())
                                                 .getConstructor(String.class, Boolean.class, Boolean.class, String.class, String.class, String.class, Boolean.class, String.class)
-                                                .newInstance(fName, append, timeBased, radix, logDir, split, "true".equals(flush), sentenceFilters);
+                                                .newInstance(fName, append, timeBased, radix, logDir, split, "true".equals(flush), fileSentenceFilters);
                                     } catch (NoSuchMethodException nsme) {
                                         fileForwarder = (DataFileWriter) Class.forName(fSubClass.trim()) // Fallback on previous constructor
                                                 .getConstructor(String.class, Boolean.class)
@@ -849,7 +880,7 @@ public class MuxInitializer {
                                 if (fileActive != null) {
                                     fileForwarder.setActive("true".equals(fileActive));
                                 }
-                                if (propFile != null) {
+                                if (propFile != null) { // For the subClass types...
                                     Properties forwarderProps = new Properties();
                                     if (propFile != null) {
                                         forwarderProps.load(new FileReader(propFile));
@@ -981,10 +1012,10 @@ public class MuxInitializer {
                             boolean fwdVerbose = "true".equals(muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)), "false"));
                             String strPort = muxProps.getProperty(String.format("forward.%s.rest.port", MUX_IDX_FMT.format(fwdIdx)));
                             String strBetweenLoops = muxProps.getProperty(String.format("forward.%s.between-loops", MUX_IDX_FMT.format(fwdIdx)));
-                            String protocol = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(fwdIdx)));
+                            String protocol_2 = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(fwdIdx)));
                             String machine = muxProps.getProperty(String.format("forward.%s.rest.machine-name", MUX_IDX_FMT.format(fwdIdx)));
-                            String resource = muxProps.getProperty(String.format("forward.%s.rest.resource", MUX_IDX_FMT.format(fwdIdx)));
-                            String verb = muxProps.getProperty(String.format("forward.%s.rest.verb", MUX_IDX_FMT.format(fwdIdx)));
+                            String resource_2 = muxProps.getProperty(String.format("forward.%s.rest.resource", MUX_IDX_FMT.format(fwdIdx)));
+                            String verb_2 = muxProps.getProperty(String.format("forward.%s.rest.verb", MUX_IDX_FMT.format(fwdIdx)));
                             String qs = muxProps.getProperty(String.format("forward.%s.rest.query.string", MUX_IDX_FMT.format(fwdIdx)));
                             String closeResource = muxProps.getProperty(String.format("forward.%s.rest.onclose.resource", MUX_IDX_FMT.format(fwdIdx)));
                             String closeVerb = muxProps.getProperty(String.format("forward.%s.rest.onclose.verb", MUX_IDX_FMT.format(fwdIdx)));
@@ -1003,21 +1034,21 @@ public class MuxInitializer {
                                     betweenLoops = Long.parseLong(strBetweenLoops);
                                 }
                                 // Validate values (protocol, verb, ...)
-                                if (protocol != null && !protocol.equals("http") && !protocol.equals("https")) {
-                                    protocol = null;
-                                    System.err.printf("Protocol [%s] not supported. Only http and https can be used. Keeping default.\n", protocol);
+                                if (protocol_2 != null && !protocol_2.equals("http") && !protocol_2.equals("https")) {
+                                    protocol_2 = null;
+                                    System.err.printf("Protocol [%s] not supported. Only http and https can be used. Keeping default.\n", protocol_2);
                                 }
-                                if (verb != null && !verb.equals("PUT") && !verb.equals("POST")) {
-                                    verb = null;
-                                    System.err.printf("Verb [%s] not supported. Only PUT and POST can be used. Keeping default.\n", verb);
+                                if (verb_2 != null && !verb_2.equals("PUT") && !verb_2.equals("POST")) {
+                                    verb_2 = null;
+                                    System.err.printf("Verb [%s] not supported. Only PUT and POST can be used. Keeping default.\n", verb_2);
                                 }
 
                                 Forwarder cachePublisher = null;
                                 if (cacheSubClass == null) {
                                     if (closeResource != null) {
-                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), closeResource, closeVerb, desc);
+                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb_2, protocol_2, machine, restPort, resource_2, qs, fwdVerbose, "true".equals(pubActive), closeResource, closeVerb, desc);
                                     } else {
-                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb, protocol, machine, restPort, resource, qs, fwdVerbose, "true".equals(pubActive), desc);
+                                        cachePublisher = new NMEACachePublisher(MUX_IDX_FMT.format(fwdIdx), betweenLoops, verb_2, protocol_2, machine, restPort, resource_2, qs, fwdVerbose, "true".equals(pubActive), desc);
                                     }
                                     System.out.printf("==> In MuxInitializer, instantiated a %s\n", cachePublisher.getClass().getName());
                                 } else {

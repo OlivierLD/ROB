@@ -22,8 +22,11 @@ public class DataFileWriter implements Forwarder {
 	private BufferedWriter dataFile;
 	private String log;
 	
-	private boolean verbose = false;
+	private boolean verbose;
 	private boolean active = true;
+	private List<String> sentenceFilters = null; // Sentence filters
+	private List<String> deviceFilters = null; // Device filters
+	private String description = "--";
 	private final boolean append;
 	private final boolean timeBased;
 	private final String radix;
@@ -33,8 +36,6 @@ public class DataFileWriter implements Forwarder {
 	private final boolean zippedOutput;
 	private String zipName;
 	private ZipOutputStream zos;
-
-	private String description = "--";
 	private long timeSplitThreshold = 0L;
 
 	private final static long MIN_MS  = 60 * 1_000;
@@ -51,10 +52,6 @@ public class DataFileWriter implements Forwarder {
 	private enum Split {
 		min, hour, day, week, month, year
 	}
-
-	private List<String> sentenceFilters = null; // Sentence filters
-	private List<String> deviceFilters = null; // Device filters
-
 
 	private ZipOutputStream createZip(String zipName) {
 
@@ -444,16 +441,16 @@ public class DataFileWriter implements Forwarder {
 		private String log;
 		private boolean append;
 		private boolean verbose;
+		private boolean active;
+		private List<String> filters;
+		private List<String> deviceFilters;
+		private String description;
 		private boolean timeBased;
 		private String radix;
 		private String dir;
 		private String split;
 		private boolean flush;
 		private boolean zipped;
-		private boolean active;
-		private List<String> filters;
-		private List<String> deviceFilters;
-		private String description;
 
 
 		private final String type = "file";

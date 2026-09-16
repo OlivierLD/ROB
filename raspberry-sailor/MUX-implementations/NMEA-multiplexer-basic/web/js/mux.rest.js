@@ -588,7 +588,8 @@ let channelList = () => {
                     "<td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
                              "JQ syntax: " + json[i].jsonQueryString + "<br/>" +
                              "Frequency: " + json[i].frequency + "ms <br/>" +
-                             (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td>" +
+                             (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+                   "</td>" +
                    "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +

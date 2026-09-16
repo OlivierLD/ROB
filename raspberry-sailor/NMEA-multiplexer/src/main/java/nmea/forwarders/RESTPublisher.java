@@ -3,16 +3,18 @@ package nmea.forwarders;
 import http.client.HTTPClient;
 import nmea.ais.AISParser;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 // See the test, in the test folder.
 public class RESTPublisher implements Forwarder {
 	private Properties props = null;
 
+	private boolean verbose;
+	private boolean active = true;
+	private List<String> sentenceFilters = null; // Sentence filters
+	private List<String> deviceFilters = null; // Device filters
 	private String description = "No description";
-
 	private int httpPort = 80;                  // Default
 	private String serverName = "localhost";    // Default
 	private String restResource = null;         // Required. No default.
@@ -30,12 +32,47 @@ public class RESTPublisher implements Forwarder {
 						 String serverName,
 						 int port,
 						 String resource,
-						 String desc) {
+						 String protocol,
+						 Map<String, String> headers,
+						 boolean verbose,
+						 boolean active,
+						 String deviceFilters,
+						 String sentenceFilters,
+						 String description) {
+		System.out.printf("- Instantiating %s\n", this.getClass().getName());
+
+		if (sentenceFilters != null) {
+			if (sentenceFilters.trim().length() > 0) {
+				this.sentenceFilters = Arrays.asList(sentenceFilters.trim().split(","))
+						.stream()
+						.map(String::trim)
+						.collect(Collectors.toList());
+
+			}
+		}
+		if (deviceFilters != null) {
+			if (deviceFilters.trim().length() > 0) {
+				this.deviceFilters = Arrays.asList(deviceFilters.trim().split(","))
+						.stream()
+						.map(String::trim)
+						.collect(Collectors.toList());
+
+			}
+		}
+
 		this.verb = verb;
 		this.serverName = serverName;
 		this.httpPort = port;
 		this.restResource = resource;
-		this.description = desc;
+		this.description = description;
+		this.verbose = verbose;
+		this.active = active;
+		if (protocol != null) {
+			this.protocol = protocol;
+		}
+		if (headers != null) {
+			this.headers = headers;
+		}
 	}
 
 	public String getProtocol() {
@@ -58,14 +95,68 @@ public class RESTPublisher implements Forwarder {
 		return verb;
 	}
 
-	@Override
-	public String getDescription() {
-		return this.description;
+	public List<String> getSentenceFilters() {
+		return sentenceFilters;
+	}
+
+	public void setSentenceFilters(List<String> sentenceFilters) {
+		this.sentenceFilters = sentenceFilters;
+	}
+
+	public List<String> getDeviceFilters() {
+		return deviceFilters;
+	}
+
+	public void setDeviceFilters(List<String> deviceFilters) {
+		this.deviceFilters = deviceFilters;
+	}
+
+	public void setHttpPort(int httpPort) {
+		this.httpPort = httpPort;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public void setRestResource(String restResource) {
+		this.restResource = restResource;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	public void setVerb(String verb) {
+		this.verb = verb;
 	}
 
 	@Override
-	public void setDescription(String description) {
-		this.description = description;
+	public boolean isActive() {
+		return this.active;
+	}
+	@Override
+	public void setActive(boolean status) {
+
+		System.out.printf("-- Forwarder DataFileWriter, setActive method: %B\n", status);
+		this.active = status;
+	}
+
+	@Override
+	public void setVerbose(boolean status) {
+		this.verbose = status;
+	}
+	@Override
+	public boolean isVerbose() {
+		return this.verbose;
+	}
+	@Override
+	public void setDescription(String desc) {
+		this.description = desc;
+	}
+	@Override
+	public String getDescription() {
+		return this.description;
 	}
 
 	/**
@@ -76,6 +167,13 @@ public class RESTPublisher implements Forwarder {
 	 */
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+				System.out.println("DataFileWriter write: INACTIVE forwarder, skipping write."); // TODO Use LOG ?
+			}
+			return;
+		}
+
 		if (restClient == null) {
 			restClient = new HTTPClient();
 		}
@@ -85,7 +183,7 @@ public class RESTPublisher implements Forwarder {
 					String postRequest = String.format("%s://%s:%d%s", protocol, serverName, httpPort, restResource);
 					String strContent = new String(message).trim();
 //					System.out.println("Verbose: [" + this.props.getProperty("verbose") + "]");
-					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+					if (this.verbose) {
 						System.out.printf("%s\n%s\n", postRequest, strContent);
 						if ("true".equals(System.getProperty("parse.ais"))) {
 							if (strContent.startsWith(AISParser.AIS_PREFIX)) {
@@ -101,7 +199,7 @@ public class RESTPublisher implements Forwarder {
 						}
 					}
 					HTTPClient.HTTPResponse httpResponse = HTTPClient.doPost(postRequest, headers, strContent);
-					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+					if (this.verbose) {
 						System.out.printf("POST %s with %s: Response code %d, message: %s\n",
 								postRequest,
 								strContent,
@@ -114,11 +212,11 @@ public class RESTPublisher implements Forwarder {
 					String putRequest = String.format("%s://%s:%d%s", protocol, serverName, httpPort, restResource);
 					String putStrContent = new String(message).trim();
 //					System.out.println("Verbose: [" + this.props.getProperty("verbose") + "]");
-					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+					if (this.verbose) {
 						System.out.printf("%s\n%s\n", putRequest, putStrContent);
 					}
 					HTTPClient.HTTPResponse putResponse = HTTPClient.doPut(putRequest, headers, putStrContent);
-					if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+					if (this.verbose) {
 						System.out.printf("PUT %s with %s: Response code %d, message: %s\n",
 								putRequest,
 								putStrContent,
@@ -131,7 +229,7 @@ public class RESTPublisher implements Forwarder {
 					break;
 			}
 		} catch (Exception ex) {
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+			if (this.verbose) {
 				System.err.println(">> Error!");
 				ex.printStackTrace();
 			}
@@ -152,7 +250,12 @@ public class RESTPublisher implements Forwarder {
 		private String verb;
 		private String resource;
 		private final String type = "rest";
-		private  String description;
+		private boolean verbose;
+		private boolean active;
+		private List<String> filters;
+		private List<String> deviceFilters;
+		private Map<String, String> headers;
+		private String description;
 
 		public String getProtocol() {
 			return protocol;
@@ -175,9 +278,30 @@ public class RESTPublisher implements Forwarder {
 		public String getType() {
 			return type;
 		}
+		public boolean isActive() {
+			return active;
+		}
+		public boolean isVerbose() {
+			return verbose;
+		}
 		public String getDescription() {
 			return description;
 		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public Map<String, String> getHeaders() {
+			return headers;
+		}
+		public void setHeaders(Map<String, String> headers) {
+			this.headers = headers;
+		}
+
+		public List<String> getFilters() {
+			return filters;
+		}
+		public List<String> getDeviceFilters() { return deviceFilters; }
 
 		public RESTBean() {}   // This is for Jackson
 
@@ -188,7 +312,12 @@ public class RESTPublisher implements Forwarder {
 			serverName = instance.serverName;
 			verb = instance.verb;
 			resource = instance.restResource;
+			active = instance.active;
+			verbose = instance.verbose;
 			description = instance.getDescription();
+			filters = instance.sentenceFilters;
+			deviceFilters = instance.deviceFilters;
+			headers = instance.headers;
 		}
 	}
 

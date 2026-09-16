@@ -1437,7 +1437,25 @@ public class RESTImplementation {
 							.findFirst();
 					if (!opFwd.isPresent()) {
 						try {
-							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(), restJson.getServerName(), restJson.getPort(), restJson.getResource(), restJson.getDescription());
+							String deviceFilters = null;
+							String sentenceFilters = null;
+							if (restJson.getDeviceFilters() != null) {
+								deviceFilters = restJson.getDeviceFilters().stream().collect(Collectors.joining(", "));
+							}
+							if (restJson.getFilters() != null) {
+								sentenceFilters = restJson.getFilters().stream().collect(Collectors.joining(", "));
+							}
+							Forwarder restForwarder = new RESTPublisher(restJson.getVerb(),
+									restJson.getServerName(),
+									restJson.getPort(),
+									restJson.getResource(),
+									restJson.getProtocol(),
+									restJson.getHeaders(),
+									restJson.isVerbose(),
+									restJson.isActive(),
+									deviceFilters,
+									sentenceFilters,
+									restJson.getDescription());
 							nmeaDataForwarders.add(restForwarder);
 							String content = mapper.writeValueAsString(restForwarder.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);

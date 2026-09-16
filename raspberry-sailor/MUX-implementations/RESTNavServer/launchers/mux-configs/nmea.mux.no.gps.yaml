@@ -15,8 +15,8 @@ context:
   init.cache: true
 channels:
   - type: zda
-    description: "ZDA Generator"
-  - type: rest           # Pings the Python REST Server, for tests (GET)
+    description: "ZDA Generator, GP prefix."
+  - type: rest           # Pings the Python REST Server, for tests. Verb is GET.
     protocol: http
     machine-name: localhost
     # machine-name: 192.168.50.10
@@ -25,9 +25,11 @@ channels:
     # query-string:      # Would include the ?, and subsequent &...
     jqs: '."nmea-data"'  # JQ String, to apply on the response. Require knowledge of what comes back.
     between-loops: 2000  # in ms
+    device.filters: GP
+    sentence.filters: RMC
     description: "This is a REST consumer (aka channel)"
-    active: false
-    verbose: false
+    active: false  # Not implemented
+    verbose: true
   - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: true
@@ -74,6 +76,7 @@ forwarders:
     log.dir: logged
     split: hour
     sentence.filters: ~GGA,~GSV,~GSA
+    device.filters: GP, AE
     active: false
     description: "Log in file, splitted."
   - type: "tcp"
