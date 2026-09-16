@@ -343,7 +343,22 @@ canvas {
           El único límite es tu imaginación.<br/>
           <br/>
           ¡Buena suerte!
+        </p>
+    </section>
+    <section id="de-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>NMEA Multiplexer</h2>
+        <h3>Willkommen an Bord!</h3>
 
+        <p>
+          Dies ist das Hauptmenü der Web-Oberfläche des NMEA Multiplexers.<br/>
+          Die verschiedenen Menüs erreichen Sie über das Hamburger-Menü (&#9776;) oben links.<br/>
+          Wählen Sie Ihre bevorzugte Kategorie und speichern Sie sie als Lesezeichen.<br/>
+          Hier finden Sie verschiedene Kategorien: Allgemein, Kleine Bildschirme, Große Bildschirme usw.<br/>
+          Die Liste wird laufend mit neuen Funktionen und Demos aktualisiert.<br/>
+          Ihrer Fantasie sind keine Grenzen gesetzt.<br/>
+          Viel Erfolg!
         </p>
     </section>
 </div>
@@ -373,18 +388,28 @@ let switchToFrench = () => {
   document.getElementById('fr-version').style.display = 'block';
   document.getElementById('en-version').style.display = 'none';
   document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'none';
 };
 
 let switchToSpanish = () => {
   document.getElementById('fr-version').style.display = 'none';
   document.getElementById('en-version').style.display = 'none';
   document.getElementById('es-version').style.display = 'block';
+  document.getElementById('de-version').style.display = 'none';
 };
 
 let switchToEnglish = () => {
   document.getElementById('fr-version').style.display = 'none';
   document.getElementById('en-version').style.display = 'block';
   document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'none';
+};
+
+let switchToGerman = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'block';
 };
 
 // The text 3D affect, and animation is pure CSS.
@@ -404,6 +429,9 @@ window.onload = function() {
 			  } else if (browserUserLang.substring(0, 2).toUpperCase() === 'ES') {
 				  userLang = 'ES';
 				  console.log("Vamos a hablar español.");
+			  } else if (browserUserLang.substring(0, 2).toUpperCase() === 'DE') {
+				  userLang = 'DE';
+				  console.log("Jetz sprechen wir deutsch.");
 			  } else {
 				  userLang = 'EN';
 				  console.log("We'll speak english");
@@ -413,12 +441,15 @@ window.onload = function() {
 	  if (userLang && userLang === 'FR') {
       console.log('Switching to French');
 		  switchToFrench();
-	  } else if (userLang && userLang === 'EN') {
-      console.log('Switching to English');
-      switchToEnglish();
 	  } else if (userLang && userLang === 'ES') {
       console.log('Switching to Spanish');
       switchToSpanish();
+	  } else if (userLang && userLang === 'DE') {
+      console.log('Switching to German');
+      switchToGerman();
+	  } else {
+      console.log('Switching to English');
+      switchToEnglish();
     }
 
 //////////////// 2 - STAR BACKGROUND and Co.

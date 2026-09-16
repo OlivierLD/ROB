@@ -32,7 +32,7 @@ channels:
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: true
     active: true
-    description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature."
+    description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature and more. Device prefix: AE, Sentences: MTW, XDR, MTA, MDA, MMB"
 forwarders:
   - type: nmea-cache-publisher
     # Requires: python REST_BasicCacheForwarder_server.py --machine-name:localhost --port:1234 --verbose:true

@@ -112,7 +112,7 @@ if [[ "$OS" == "Linux" ]]; then
   SUDO="sudo "
 fi
 #
-# For JFR
+# For JFR, Java Flight Recorder, see https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/about.htm
 JFR_FLAGS=
 # JFR_FLAGS="-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=10m,filename=nmea.jfr"
 # For remote debugging

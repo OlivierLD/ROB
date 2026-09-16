@@ -30,21 +30,21 @@ channels:
     between-records: 50   # Speed up
     verbose: false
     # device.filters: II, GP, HC, YX
-    device.filters: ~PL
+    # device.filters: ~PL
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
     description: "Reads a ShipModul's logged data."
   #
 forwarders:
   - type: file
-    verbose: false
+    verbose: true
     timebase.filename: false
     filename: data.4tests.nmea
     flush: false
     # sentence.filters: MWV, VHW, HDG
-    sentence.filters: ~GGA,~GSA,~GSV
-    device.filters: ~PL  # TODO Find a right way to exclude strings like $PLCJE8FC8,69A6,2A00,2162,00,*75, $PLCJ,6503,67ED,3C,94A1,7273*35, ...
-    # TODO Or introduce full ID filter, like PLCJE8FC8, PLCJ
+    sentence.filters: ~GGA,~GSA,~GSV, ~ROT
+    device.filters: ~PL
+    description: "Log the data, with filters"
 #  - type: console
 #  - type: tcp
 #    port: 7002

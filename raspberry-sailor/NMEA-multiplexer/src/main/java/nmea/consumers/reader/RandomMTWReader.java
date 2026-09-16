@@ -10,8 +10,16 @@ import utils.StringUtils;
 import java.util.List;
 
 /**
- * Generates random temperature sentence.
+ * Generates random temperature (and other) sentences.
  * For debugging.
+ *
+ * Device prefix: AE (Application Extension)
+ * Sentences: MTW, XDR, MTA, MDA, MMB
+ * - MTW: Water Temperature
+ * - XDR: Transducer Measurement
+ * - MTA: Air Temperature
+ * - MDA: Meteorological Composite
+ * - MMB: Atmospheric pressure
  */
 public class RandomMTWReader extends NMEAReader {
 

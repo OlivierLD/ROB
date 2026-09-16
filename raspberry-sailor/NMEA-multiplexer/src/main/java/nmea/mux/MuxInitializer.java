@@ -807,8 +807,10 @@ public class MuxInitializer {
                             String zipped = muxProps.getProperty(String.format("forward.%s.zipped", MUX_IDX_FMT.format(fwdIdx)));
                             String fileActive = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)), "true");
                             String fileDesc = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(fwdIdx)), "No desc found.");
+                            boolean fileVerb = "true".equals(muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)), "false"));
 
                             String sentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
+                            String deviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
                             if (verbose && sentenceFilters != null) {
                                 spitOutSentenceFilters(sentenceFilters);
                             }
@@ -827,6 +829,8 @@ public class MuxInitializer {
                                             "true".equals(flush),
                                             "true".equals(zipped),
                                             sentenceFilters,
+                                            deviceFilters,
+                                            fileVerb,
                                             fileDesc);
                                 } else {
                                     if (true) {

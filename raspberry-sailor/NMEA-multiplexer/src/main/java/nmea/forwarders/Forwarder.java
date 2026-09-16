@@ -26,6 +26,12 @@ public interface Forwarder {
 	default void setActive(boolean status) {
 	}
 
+	default void setVerbose(boolean status) {
+	}
+	default boolean isVerbose() {
+		return false;
+	}
+
 	default String getDescription() {
 		return "No desc.";
 	}

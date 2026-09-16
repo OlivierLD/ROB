@@ -236,7 +236,16 @@ let deleteForwarder = (forwarder) => {
 };
 
 let setForwarderActive = (forwarder, onOff) => {
-    let path = '/mux/updateforwarder/' + (onOff === true ? 'on' : 'off');
+    let path = '/mux/activateforwarder?status=' + (onOff === true ? 'on' : 'off');
+    if (false) {
+        console.log("Setting forwarder " + JSON.stringify(forwarder) + " to " + (onOff === true ? 'ON' : 'OFF') +
+                    `, with path [${path}]`);
+    }
+    return getPromise(path, DEFAULT_TIMEOUT, 'PUT', 201, forwarder);
+};
+
+let setForwarderVerbose = (forwarder, onOff) => {
+    let path = '/mux/verboseforwarder?status=' + (onOff === true ? 'on' : 'off');
     if (false) {
         console.log("Setting forwarder " + JSON.stringify(forwarder) + " to " + (onOff === true ? 'ON' : 'OFF') +
                     `, with path [${path}]`);
@@ -645,9 +654,18 @@ let forwarderList = () => {
 					}
 					html += ("<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
                     html += ("<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>");
+                    html += ("<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
 					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
 					}
                     html += ("</tr>");
                     break;
@@ -775,6 +793,7 @@ let computerList = () => {
                                  "<td valign='top'><b>tw-current</b></td>" +
                                  "<td>" + (json[i].description) + "</td>" +
                                  "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
+                                 "<td></td>" + // Dummy Prm placeholder
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
                                  "<td></td>" + // Active placeholder
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
@@ -1582,6 +1601,33 @@ let removeForwarder = (channel) => {
 let activateForwarder = (cb, forwarder, diagram) => { // TODO Finish that one.
     let before = new Date().getTime();
     let putData = setForwarderActive(forwarder, cb.checked);
+    putData.then((value) => {
+        let after = new Date().getTime();
+        document.body.style.cursor = 'default';
+        console.log("Done in " + (after - before) + " ms :", value);
+        setRESTPayload(value, (after - before));
+        if (diagram && diagram === true) {
+            generateDiagram(); // refetch
+        } else {
+            forwarderList(); // refetch
+        }
+    }, (error, errMess) => {
+        document.body.style.cursor = 'default';
+        let message;
+        if (errMess !== undefined) {
+            if (errMess.message !== undefined) {
+                message = errMess.message;
+            } else {
+                message = errMess;
+            }
+        }
+        errManager.display("Failed to activate forwarder..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
+    });
+};
+
+let verboseForwarder = (cb, forwarder, diagram) => { // TODO Finish that one.
+    let before = new Date().getTime();
+    let putData = setForwarderVerbose(forwarder, cb.checked);
     putData.then((value) => {
         let after = new Date().getTime();
         document.body.style.cursor = 'default';

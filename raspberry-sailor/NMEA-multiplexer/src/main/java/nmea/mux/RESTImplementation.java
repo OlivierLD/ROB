@@ -272,14 +272,14 @@ public class RESTImplementation {
 					"Update forwarder"),
 			new Operation(
 					"PUT",
-					REST_PREFIX + "/updateforwarder/on",
-					this::activateForwarder,
-					"Activate forwarder"),
+					REST_PREFIX + "/activateforwarder",
+					this::setActivateForwarder,
+					"Activate or de-activate forwarder, QS param status=on|off"),
 			new Operation(
 					"PUT",
-					REST_PREFIX + "/updateforwarder/off",
-					this::deActivateForwarder,
-					"De-activate forwarder"),
+					REST_PREFIX + "/verboseforwarder",
+					this::setVerboseForwarder,
+					"Set verbose on or off for a forwarder, QS param status=on|off"),
 			new Operation(
 					"PUT",
 					REST_PREFIX + "/computers/{id}",
@@ -2662,21 +2662,17 @@ public class RESTImplementation {
 	}
 
 	@SuppressWarnings("unchecked")
-	private HTTPServer.Response activateForwarder(HTTPServer.Request request) {
-		// System.out.println("Activating forwarder !");
-		return setActivateForwarder(request, true);
-	}
-	@SuppressWarnings("unchecked")
-	private HTTPServer.Response deActivateForwarder(HTTPServer.Request request) {
-		// System.out.println("DE-Activating forwarder !");
-		return setActivateForwarder(request, false);
-	}
-
-	@SuppressWarnings("unchecked")
-	private HTTPServer.Response setActivateForwarder(HTTPServer.Request request, boolean onOff) {
+	private HTTPServer.Response setActivateForwarder(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
 		Optional<NMEAClient> opClient;
 		String type = "";  // tcp, file, etc...
+		boolean on = false;
+		Map<String, String> qsPrms = request.getQueryStringParameters();
+		if (qsPrms != null && qsPrms.get("status") != null) {
+			on = qsPrms.get("status").equals("on");
+		} else {
+			// Missing status QS Param
+		}
 		if (request.getContent() == null || request.getContent().length == 0) {
 			System.err.println("!! Missing payload !");
 			response.setStatus(HTTPServer.Response.BAD_REQUEST);
@@ -2721,13 +2717,13 @@ public class RESTImplementation {
 						Forwarder forwarder = opForwarder.get();
 
 						System.out.printf("** Updating TCPServer forwarder %s from %B to %B\n",
-								forwarder, forwarder.isActive(), onOff);
+								forwarder, forwarder.isActive(), on);
 
 						// verbose ?
 //						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 //						forwarder.setVerbose(verbose);
 						// active ?
-						forwarder.setActive(onOff);
+						forwarder.setActive(on);
 
 						String content = mapper.writeValueAsString(forwarder.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
@@ -2763,13 +2759,13 @@ public class RESTImplementation {
 						Forwarder forwarder = opForwarder.get();
 
 						System.out.printf("** Updating DataFileWriter forwarder %s from %B to %B\n",
-								forwarder, forwarder.isActive(), onOff);
+								forwarder, forwarder.isActive(), on);
 
 						// verbose ?
 //						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 //						forwarder.setVerbose(verbose);
 						// active ?
-						forwarder.setActive(onOff);
+						forwarder.setActive(on);
 
 						String content = mapper.writeValueAsString(forwarder.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
@@ -2805,13 +2801,194 @@ public class RESTImplementation {
 						Forwarder forwarder = opForwarder.get();
 
 						System.out.printf("** Updating NMEACachePublisher forwarder %s from %B to %B\n",
-								forwarder, forwarder.isActive(), onOff);
+								forwarder, forwarder.isActive(), on);
 
 						// verbose ?
 //						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 //						forwarder.setVerbose(verbose);
 						// active ?
-						forwarder.setActive(onOff);
+						forwarder.setActive(on);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
+			// TODO More cases to implement !!
+			case "udp":
+			case "rest":
+			case "rnd":
+			case "serial":
+			case "in-out":
+			case "REST-forwarder":
+			case "char-console":
+			case "console":
+			case "nmea-to-text":
+			case "wsp":
+			case "ws":
+			case "rmi":
+			default:
+				System.err.printf("Type %s not implemented\n", type);
+				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
+				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Type %s not implemented", type));
+				break;
+		}
+		return response;
+	}
+
+	@SuppressWarnings("unchecked")
+	private HTTPServer.Response setVerboseForwarder(HTTPServer.Request request) {
+		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
+		Optional<NMEAClient> opClient;
+		String type = "";  // tcp, file, etc...
+		boolean on = false;
+		Map<String, String> qsPrms = request.getQueryStringParameters();
+		if (qsPrms != null && qsPrms.get("status") != null) {
+			on = qsPrms.get("status").equals("on");
+		} else {
+			// Missing status QS Param
+		}
+		if (request.getContent() == null || request.getContent().length == 0) {
+			System.err.println("!! Missing payload !");
+			response.setStatus(HTTPServer.Response.BAD_REQUEST);
+			RESTProcessorUtil.addErrorMessageToResponse(response, "missing payload");
+			return response;
+		} else {
+			try {
+				Object bean = mapper.readValue(new String(request.getContent()), Object.class); // new GsonBuilder().create().fromJson(new String(request.getContent()), Object.class);
+				if (bean instanceof Map) {
+					type = ((Map<String, String>) bean).get("type");
+				}
+				if (true) {
+					System.out.printf("-->> setActivateForwarder, type is %s, bean is : %s\n", type, bean);
+				}
+			} catch (Exception ex) {
+				System.err.println("Exception 1 : " + ex.toString());
+				throw new RuntimeException(ex);
+			}
+			// No path parameter required
+		}
+		Optional<Forwarder> opForwarder;
+		switch (type) {
+			case "tcp":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (false) {
+						System.out.println("==> The map:");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> ((fwdr.getBean() instanceof TCPServer.TCPBean) &&
+									((TCPServer.TCPBean)fwdr.getBean()).getPort() == ((Integer)custom.get("port")).intValue()))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("** Updating TCPServer forwarder %s from %B to %B\n",
+								forwarder, forwarder.isVerbose(), on);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setVerbose(on);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
+			case "file":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (true) {
+						System.out.println("==> The map (custom):");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof DataFileWriter.DataFileBean) &&
+									((DataFileWriter.DataFileBean) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setVerboseForwarder, file forwarder not found.");
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("** Updating DataFileWriter forwarder %s from %B to %B\n",
+								forwarder, forwarder.isVerbose(), on);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setVerbose(on);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
+			case "nmea-cache-publisher":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (true) {
+						System.out.println("==> The map (custom):");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof NMEACachePublisher.NMEACacheBean) &&
+									((NMEACachePublisher.NMEACacheBean) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setVerboseForwarder, file forwarder not found.");
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("** Updating NMEACachePublisher forwarder %s from %B to %B\n",
+								forwarder, forwarder.isVerbose(), on);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setVerbose(on);
 
 						String content = mapper.writeValueAsString(forwarder.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
@@ -2847,7 +3024,7 @@ public class RESTImplementation {
 	}
 
 	/**
-	 * Used for verbose and active
+	 * Used for verbose and active TODO What ???
 	 *
 	 * @param request
 	 * @return

@@ -14,11 +14,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * for forwarder.XX.type=file
+ * for
+ * - forwarder.XX.type=file
+ * - type: file
  */
 public class DataFileWriter implements Forwarder {
 	private BufferedWriter dataFile;
 	private String log;
+	
+	private boolean verbose = false;
 	private boolean active = true;
 	private final boolean append;
 	private final boolean timeBased;
@@ -48,7 +52,8 @@ public class DataFileWriter implements Forwarder {
 		min, hour, day, week, month, year
 	}
 
-	private List<String> filters = null;
+	private List<String> sentenceFilters = null; // Sentence filters
+	private List<String> deviceFilters = null; // Device filters
 
 
 	private ZipOutputStream createZip(String zipName) {
@@ -71,16 +76,16 @@ public class DataFileWriter implements Forwarder {
 		this(fName, false);
 	}
 	public DataFileWriter(String fName, boolean append) throws Exception {
-		this(fName, append, false, null, null, null, false, false, null, "Nope");
+		this(fName, append, false, null, null, null, false, false, null, null, false, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush) throws Exception {
-		this(fName, append, false, null, null, null, flush, false, null, "Nope");
+		this(fName, append, false, null, null, null, flush, false, null, null, false, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean flush, boolean zipped) throws Exception {
-		this(fName, append, false, null, null, null, flush, zipped, null, "Nope");
+		this(fName, append, false, null, null, null, flush, zipped, null, null, false, "Nope");
 	}
 	public DataFileWriter(String fName, boolean append, boolean timeBased, String radix, String dir, String split, boolean flush) throws Exception {
-		this(fName, append, timeBased, radix, dir, split, flush, false, null, "Nope");
+		this(fName, append, timeBased, radix, dir, split, flush, false, null, null, false, "Nope");
 	}
 	public DataFileWriter(String fName,
 						  boolean append,
@@ -91,12 +96,23 @@ public class DataFileWriter implements Forwarder {
 						  boolean flush,
 						  boolean zippedOutput,
 						  String sentenceFilters,
+						  String deviceFilters,
+						  boolean verbose,
 						  String desc) throws Exception {
 		System.out.printf("- Instantiating %s, %s \n", this.getClass().getName(), fName);
 
 		if (sentenceFilters != null) {
 			if (sentenceFilters.trim().length() > 0) {
-				filters = Arrays.asList(sentenceFilters.trim().split(","))
+				this.sentenceFilters = Arrays.asList(sentenceFilters.trim().split(","))
+						.stream()
+						.map(String::trim)
+						.collect(Collectors.toList());
+
+			}
+		}
+		if (deviceFilters != null) {
+			if (deviceFilters.trim().length() > 0) {
+				this.deviceFilters = Arrays.asList(deviceFilters.trim().split(","))
 						.stream()
 						.map(String::trim)
 						.collect(Collectors.toList());
@@ -105,6 +121,7 @@ public class DataFileWriter implements Forwarder {
 		}
 		this.log = fName;
 		this.append = append;
+		this.verbose = verbose;
 		this.timeBased = timeBased;
 		this.radix = radix;
 		this.dir = dir;
@@ -114,13 +131,13 @@ public class DataFileWriter implements Forwarder {
 			// TODO There might be a flush problem...
 			String zipSuffix = SDF.format(new Date());
 			this.zipName = this.dir + File.separator + "ZipLog_" + zipSuffix + ".zip";
-			if (VERBOSE) {
+			if (verbose) {
 				System.out.printf("==> Will create [%s]\n", this.zipName);
 			}
 			this.zos = createZip(this.zipName);
 
 			String entryName = "/loggedData_" + zipSuffix + ".nmea";
-			if (VERBOSE) {
+			if (verbose) {
 				System.out.printf("Creating zip entry %s\n", entryName);
 			}
 
@@ -162,13 +179,10 @@ public class DataFileWriter implements Forwarder {
 		this.description = desc;
 	}
 
-	boolean VERBOSE = false;
-
 	@Override
 	public boolean isActive() {
 		return this.active;
 	}
-
 	@Override
 	public void setActive(boolean status) {
 
@@ -184,6 +198,16 @@ public class DataFileWriter implements Forwarder {
 				System.err.printf("Flushing on setActive: s\n", ex.toString());
 			}
 		}
+	}
+
+	@Override
+	public void setVerbose(boolean status) {
+		this.verbose = status;
+	}
+
+	@Override
+	public boolean isVerbose() {
+		return this.verbose;
 	}
 
 	@Override
@@ -208,32 +232,66 @@ public class DataFileWriter implements Forwarder {
 		try {
 			String mess = new String(message).trim(); // trim removes \r\n
 			boolean ok = true;
-			if (mess.startsWith("$") && mess.length() > 6 && filters != null) {
-				ok = false;
-				String key = mess.substring(3, 6);
-				for (String filter : filters) {
-					if (!filter.startsWith("~")) { // include
-						if (filter.equals(key)) {
-							ok = true;
-							if (VERBOSE) {
-								System.out.printf("DataFileWriter >> Including [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+			if (mess.startsWith("$") && mess.length() > 6) {
+				if  (sentenceFilters != null) {
+					ok = false;
+					String key = mess.substring(3, 6);
+					for (String filter : sentenceFilters) {
+						if (!filter.startsWith("~")) { // include
+							if (filter.equals(key)) {
+								ok = true;
+								if (verbose) {
+									try {
+										System.out.printf("DataFileWriter >> Including sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+									} catch (Exception ex) {
+										System.out.printf("(2) DataFileWriter >> Including sentence [%s], %s\n", key, mess);
+									}
+								}
+							}
+						} else {  // exclude
+							if (filter.substring(1).equals(key)) { // Don't !
+								ok = false;
+								if (verbose) {
+									try {
+										System.out.printf("DataFileWriter >> Excluding sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+									} catch (Exception ex) {
+										System.out.printf("(2) DataFileWriter >> Excluding sentence [%s], %s\n", key, mess);
+									}
+								}
+								break;
+							} else {
+								ok = true;
 							}
 						}
-					} else {  // exclude
-						if (filter.substring(1).equals(key)) { // Don't !
-							ok = false;
-							if (VERBOSE) {
-								System.out.printf("DataFileWriter >> Excluding [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+					}
+				}
+				if  (ok && deviceFilters != null) {
+					// ok = false;
+					String dev = mess.substring(1, 3);
+					for (String filter : deviceFilters) {
+						if (!filter.startsWith("~")) { // include
+							if (filter.equals(dev)) {
+								ok = true;
+								if (verbose) {
+									System.out.printf("DataFileWriter >> Including device [%s], %s\n", dev, mess);
+								}
 							}
-							break;
-						} else {
-							ok = true;
+						} else {  // exclude
+							if (filter.substring(1).equals(dev)) { // Don't !
+								ok = false;
+								if (verbose) {
+									System.out.printf("DataFileWriter >> Excluding device [%s], %s\n", dev, mess);
+								}
+								break;
+							} else {
+								ok = true;
+							}
 						}
 					}
 				}
 			}
 			if (!mess.isEmpty() && ok) {
-				if (VERBOSE) {
+				if (verbose) {
 					System.out.printf("FileForwarder: Writing [%s] in %s (%s), zipped: %s\n",
 							mess, this.log, this.dir, this.zippedOutput);
 				}
@@ -254,7 +312,7 @@ public class DataFileWriter implements Forwarder {
 						}
 						String toWrite = mess + "\n";
 						try {
-							if (VERBOSE) {
+							if (verbose) {
 								System.out.printf("Pushing to zip.\n");
 							}
 							this.zos.write(toWrite.getBytes(), 0, toWrite.length());
@@ -385,6 +443,7 @@ public class DataFileWriter implements Forwarder {
 		private String cls;
 		private String log;
 		private boolean append;
+		private boolean verbose;
 		private boolean timeBased;
 		private String radix;
 		private String dir;
@@ -393,6 +452,7 @@ public class DataFileWriter implements Forwarder {
 		private boolean zipped;
 		private boolean active;
 		private List<String> filters;
+		private List<String> deviceFilters;
 		private String description;
 
 
@@ -403,13 +463,15 @@ public class DataFileWriter implements Forwarder {
 			cls = instance.getClass().getName();
 			log = instance.log;
 			append = instance.append;
+			verbose = instance.verbose;
 			timeBased = instance.timeBased;
 			radix = instance.radix;
 			dir = instance.dir;
 			split = instance.split;
 			flush = instance.flush;
 			zipped = instance.zippedOutput;
-			filters = instance.filters;
+			filters = instance.sentenceFilters;
+			deviceFilters = instance.deviceFilters;
 			active = instance.isActive();
 			description = instance.getDescription();
 		}
@@ -417,52 +479,43 @@ public class DataFileWriter implements Forwarder {
 		public String getCls() {
 			return cls;
 		}
-
 		public boolean isAppend() {
 			return append;
 		}
-
 		public String getType() {
 			return type;
 		}
-
 		public String getLog() {
 			return log;
 		}
-
 		public boolean append() { return append; } // Any useful ?
-
 		public boolean isTimeBased() {
 			return timeBased;
 		}
-
 		public String getRadix() {
 			return radix;
 		}
-
 		public String getDir() {
 			return dir;
 		}
-
 		public String getSplit() {
 			return split;
 		}
-
 		public boolean isFlush() {
 			return flush;
 		}
-
 		public boolean isZipped() {
 			return zipped;
 		}
 		public boolean isActive() {
 			return active;
 		}
-
+		public boolean isVerbose() {
+			return verbose;
+		}
 		public String getDescription() {
 			return description;
 		}
-
 		public void setDescription(String description) {
 			this.description = description;
 		}
@@ -470,6 +523,7 @@ public class DataFileWriter implements Forwarder {
 		public List<String> getFilters() {
 			return filters;
 		}
+		public List<String> getDeviceFilters() { return deviceFilters; }
 	}
 
 	@Override

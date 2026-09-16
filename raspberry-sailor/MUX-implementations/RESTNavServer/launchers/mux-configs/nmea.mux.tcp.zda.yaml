@@ -16,6 +16,8 @@ channels:
     server: localhost
     port: 7002
     verbose: true
+    description: "TCP Server must be running"
 forwarders:
   - type: "tcp"
     port: 7001
+    description: "Just for tests"
