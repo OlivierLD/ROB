@@ -55,8 +55,8 @@ public abstract class NMEAClient {
 	private List<NMEAListener> NMEAListeners = new ArrayList<>(2);
 	private NMEAParser parser;
 	private NMEAReader reader;
-	private String[] devicePrefix = null;
-	private String[] sentenceArray = null;
+	private String[] deviceFilters = null; // Filters, positive or negative, 2 characters. NO EFFECT ON A CLIENT !!
+	private String[] sentenceFilters = null; // Filters, positive or negative, 3 characters. NO EFFECT ON A CLIENT !!
 
 	protected Properties props = null;
 
@@ -73,12 +73,12 @@ public abstract class NMEAClient {
 	/**
 	 * Create the client
 	 *
-	 * @param prefix   the Device Identifier. Can be null. '~' negates the condition, like below.
-	 * @param sentence the String Array containing the NMEA sentence identifiers to read (or not). If the identifier begins with '~', then the =sentence is dropped if the identifier matches.
+	 * @param devices   the Device Identifier(s). Can be null. '~' negates the condition, like below.
+	 * @param sentences the String List containing the NMEA sentence identifiers to read (or not). If the identifier begins with '~', then the sentence is dropped if the identifier matches.
 	 */
-	public NMEAClient(String[] prefix,
-	                  String[] sentence) {
-		this(prefix, sentence, null, "");
+	public NMEAClient(String[] devices,
+					  String[] sentences) {
+		this(devices, sentences, null, "");
 	}
 
 	public NMEAClient(Multiplexer multiplexer) {
@@ -92,12 +92,12 @@ public abstract class NMEAClient {
 //		this.setSentenceArray(sentence);
 //		this.setMultiplexer(multiplexer);
 //	}
-	public NMEAClient(String[] prefix,
-					  String[] sentence,
+	public NMEAClient(String[] devices,
+					  String[] sentences,
 					  Multiplexer multiplexer,
 					  String description) {
-		this.setDevicePrefix(prefix);
-		this.setSentenceArray(sentence);
+		this.setDeviceFilters(devices);
+		this.setSentenceFilters(sentences);
 		this.setMultiplexer(multiplexer);
 		this.setDescription(description);
 	}
@@ -121,28 +121,28 @@ public abstract class NMEAClient {
 			}
 		});
 		parser = new NMEAParser(NMEAListeners);
-		parser.setDeviceFilters(this.getDevicePrefix());
-		parser.setSentenceFilters(this.getSentenceArray());
+		parser.setDeviceFilters(this.getDeviceFilters());
+		parser.setSentenceFilters(this.getSentenceFilters());
 	}
 
 	public void setProperties(Properties props) {
 		this.props = props;
 	}
 
-	public void setDevicePrefix(String[] s) {
-		this.devicePrefix = s;
+	public void setDeviceFilters(String[] s) {
+		this.deviceFilters = s;
 	}
 
-	public String[] getDevicePrefix() {
-		return this.devicePrefix;
+	public String[] getDeviceFilters() {
+		return this.deviceFilters;
 	}
 
-	public void setSentenceArray(String[] sa) {
-		this.sentenceArray = sa;
+	public void setSentenceFilters(String[] sa) {
+		this.sentenceFilters = sa;
 	}
 
-	public String[] getSentenceArray() {
-		return this.sentenceArray;
+	public String[] getSentenceFilters() {
+		return this.sentenceFilters;
 	}
 
 	public void setParser(NMEAParser p) {

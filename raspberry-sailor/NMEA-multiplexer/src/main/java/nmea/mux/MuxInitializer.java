@@ -95,7 +95,7 @@ public class MuxInitializer {
                              boolean verbose) {
         int muxIdx = 1;
         boolean thereIsMore = true;
-        // 1 - Input channels
+        // 1 - Input channels, consumers
         while (thereIsMore) {
             String classProp = String.format("mux.%s.class", MUX_IDX_FMT.format(muxIdx));
             String clss = muxProps.getProperty(classProp);
@@ -126,7 +126,9 @@ public class MuxInitializer {
 
                         String verboseProp = String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx));
                         nmeaClient.setVerbose("true".equals(muxProps.getProperty(verboseProp)));
-                        nmeaClient.setDescription(desc); // Is that necessary ?
+                        String activeProp = String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx));
+                        nmeaClient.setActive("true".equals(muxProps.getProperty(activeProp)));
+                        nmeaClient.setDescription(desc);
 
                         String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                         String propFileName = muxProps.getProperty(propProp);
@@ -184,17 +186,18 @@ public class MuxInitializer {
                     // Make this generic, not specific like below.
                     String deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     String sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
+                    String consumerActive = muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)));
+                    String consumerVerbose = muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)));
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
                     }
 
+                    // Add consumers
                     switch (type) {
                         case "serial": // Consumer
                             try {
                                 String serialPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String br = muxProps.getProperty(String.format("mux.%s.baudrate", MUX_IDX_FMT.format(muxIdx)));
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 String resetIntervalStr = muxProps.getProperty(String.format("mux.%s.reset.interval", MUX_IDX_FMT.format(muxIdx)));
                                 Long resetInterval = null;
                                 if (resetIntervalStr != null) {
@@ -209,7 +212,9 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
-                                        desc);
+                                        "true".equals(consumerVerbose),
+                                        "true".equals(consumerActive),
+                                        desc); // TODO Check if active and verbose props work OK...
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
@@ -255,6 +260,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerVerbose),
+                                        "true".equals(consumerActive),
                                         description);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -354,6 +361,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerVerbose),
+                                        "true".equals(consumerActive),
                                         desc);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -368,8 +377,9 @@ public class MuxInitializer {
                                 }
                                 fileClient.initClient();
 								fileClient.setLoop(loop);
-                                fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), filename, betweenRec, loop, zip, pathInArchive));
-                                fileClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), filename, betweenRec, loop, zip, pathInArchive, fileClient.isVerbose()));
+                                // moved that one above
+                                // fileClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 fileClient.setZip(zip);
                                 fileClient.setPathInArchive(pathInArchive);
                                 nmeaDataClients.add(fileClient);

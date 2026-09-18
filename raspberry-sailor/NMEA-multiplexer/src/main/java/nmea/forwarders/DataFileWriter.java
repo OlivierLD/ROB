@@ -1,6 +1,7 @@
 package nmea.forwarders;
 
 import nmea.parser.StringParsers;
+import nmea.utils.MuxNMEAUtils;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -220,72 +221,26 @@ public class DataFileWriter implements Forwarder {
 	public void write(byte[] message) {
 
 		if (!this.isActive()) {
-			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+			if (verbose) { // "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
 				System.out.println("DataFileWriter write: INACTIVE forwarder, skipping write."); // TODO Use LOG ?
 			}
 			return;
+		} else {
+			if (verbose) {
+				System.out.println("DataFileWriter write: ACTIVE forwarder, will write."); // TODO Use LOG ?
+			}
 		}
 
 		try {
 			String mess = new String(message).trim(); // trim removes \r\n
-			boolean ok = true;
+			if (verbose) {
+				System.out.printf("***\tDataFileWriter.write ? : [%s]\n", mess);
+			}
+			boolean ok;
 			if (mess.startsWith("$") && mess.length() > 6) {
-				if  (sentenceFilters != null) {
-					ok = false;
-					String key = mess.substring(3, 6);
-					for (String filter : sentenceFilters) {
-						if (!filter.startsWith("~")) { // include
-							if (filter.equals(key)) {
-								ok = true;
-								if (verbose) {
-									try {
-										System.out.printf("DataFileWriter >> Including sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
-									} catch (Exception ex) {
-										System.out.printf("(2) DataFileWriter >> Including sentence [%s], %s\n", key, mess);
-									}
-								}
-							}
-						} else {  // exclude
-							if (filter.substring(1).equals(key)) { // Don't !
-								ok = false;
-								if (verbose) {
-									try {
-										System.out.printf("DataFileWriter >> Excluding sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
-									} catch (Exception ex) {
-										System.out.printf("(2) DataFileWriter >> Excluding sentence [%s], %s\n", key, mess);
-									}
-								}
-								break;
-							} else {
-								ok = true;
-							}
-						}
-					}
-				}
-				if  (ok && deviceFilters != null) {
-					// ok = false;
-					String dev = mess.substring(1, 3);
-					for (String filter : deviceFilters) {
-						if (!filter.startsWith("~")) { // include
-							if (filter.equals(dev)) {
-								ok = true;
-								if (verbose) {
-									System.out.printf("DataFileWriter >> Including device [%s], %s\n", dev, mess);
-								}
-							}
-						} else {  // exclude
-							if (filter.substring(1).equals(dev)) { // Don't !
-								ok = false;
-								if (verbose) {
-									System.out.printf("DataFileWriter >> Excluding device [%s], %s\n", dev, mess);
-								}
-								break;
-							} else {
-								ok = true;
-							}
-						}
-					}
-				}
+				ok = MuxNMEAUtils.goesThruFilters(mess, sentenceFilters, deviceFilters, verbose); // TODO Apply everywhere else
+			} else {
+				ok = false; // TODO Is that right ?
 			}
 			if (!mess.isEmpty() && ok) {
 				if (verbose) {

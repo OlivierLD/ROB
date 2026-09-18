@@ -14,20 +14,21 @@ public class DataFileClient extends NMEAClient {
 	private String pathInArchive = "";
 
 	public DataFileClient() {
-		this(null, null, null, "");
+		this(null, null, null, false, true, "");
 	}
 
 	public DataFileClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, false, true, "");
 	}
 
 	public DataFileClient(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, false, true, "");
 	}
 
-	public DataFileClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+	public DataFileClient(String[] s, String[] sa, Multiplexer mux, boolean verbose, boolean active, String desc) {
 		super(s, sa, mux, desc);
-		this.verbose = "true".equals(System.getProperty("file.data.verbose", "false"));
+		this.setVerbose(verbose); // verbose = "true".equals(System.getProperty("file.data.verbose", "false"));
+		this.setActive(active);
 	}
 
 	public boolean isLoop() {
@@ -50,13 +51,25 @@ public class DataFileClient extends NMEAClient {
 	}
 
 	@Override
+	public void setVerbose(boolean b ) {
+		this.verbose = b;
+		if (this.getReader() != null) {
+			this.getReader().setVerbose(b);
+		}
+	}
+
+	@Override
 	public void dataDetectedEvent(NMEAEvent e) {
 		if (verbose) {
 			System.out.println(">> DataFileClient >> Received from File:" + e.getContent());
 		}
 		if (multiplexer != null) { // Only if active !
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				String fullSentence = e.getContent(); // This is NOT an NMEA Sentence... it's stream containing NMEA Data...
+				if (verbose) {
+					System.out.printf("==>\tDataFileClient.dataDetectedEvent, data is [%s]\n", fullSentence);
+				}
+				multiplexer.onData(fullSentence);
 			}
 		}
 	}
@@ -71,6 +84,7 @@ public class DataFileClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private boolean loop;
 		private boolean zip;
 		private String pathInArchive;
@@ -83,8 +97,9 @@ public class DataFileClient extends NMEAClient {
 			file = ((DataFileReader) instance.getReader()).getFileName();
 			pause = ((DataFileReader) instance.getReader()).getBetweenRecord();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			loop = instance.isLoop();
 			zip = instance.isZip();
 			pathInArchive = instance.getPathInArchive();
@@ -104,9 +119,9 @@ public class DataFileClient extends NMEAClient {
 			return cls;
 		}
 
-		public boolean isVerbose() {
-			return verbose;
-		}
+//		public boolean isVerbose() {
+//			return verbose;
+//		}
 
 		public boolean isLoop() {
 			return loop;
@@ -129,7 +144,10 @@ public class DataFileClient extends NMEAClient {
 		public boolean getVerbose() {
 			return this.verbose;
 		}
-
+		@Override
+		public boolean isActive() {
+			return this.active;
+		}
 		@Override
 		public String[] getDeviceFilters() { return this.deviceFilters; };
 
@@ -167,8 +185,13 @@ public class DataFileClient extends NMEAClient {
 			dataFile = args[0];
 		}
 
-		nmeaClient = new DataFileClient(null, new String[] { "RMC", "GLL" }, null, "DataFileClient for Tests");
-		nmeaClient.setVerbose("true".equals(System.getProperty("file.data.verbose", "false")));
+		nmeaClient = new DataFileClient(null,
+				new String[] { "RMC", "GLL" },
+				null,
+				"true".equals(System.getProperty("file.data.verbose", "false")),
+				true, "" +
+				"DataFileClient for Tests");
+		// nmeaClient.setVerbose("true".equals(System.getProperty("file.data.verbose", "false")));
 
 		Runtime.getRuntime().addShutdownHook(new Thread("DataFileClient shutdown hook") {
 			public void run() {

@@ -86,6 +86,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
         Context.getInstance().setLastDataSentence(mess); // That one also increments the nb of messages processed.
 
         if (verbose) {
+            System.out.println("=== Multiplexer.onData ===");
             System.out.println("==== From MUX: " + mess);
             DumpUtil.displayDualDump(mess);
             System.out.println("==== End Mux =============");

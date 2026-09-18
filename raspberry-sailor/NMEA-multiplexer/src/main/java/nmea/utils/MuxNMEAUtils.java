@@ -2,15 +2,12 @@ package nmea.utils;
 
 import context.NMEADataCache;
 import nmea.mux.context.Context;
-import nmea.parser.Angle180;
-import nmea.parser.Angle180EW;
-import nmea.parser.Angle180LR;
-import nmea.parser.Angle360;
-import nmea.parser.Speed;
-import nmea.parser.TrueWindDirection;
-import nmea.parser.TrueWindSpeed;
+import nmea.parser.*;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class MuxNMEAUtils {
 
@@ -227,4 +224,115 @@ public class MuxNMEAUtils {
         }
     }
 
+    public static boolean goesThruFilters(String mess, List<String> sentenceFilters, List<String> deviceFilters, boolean verbose) {
+
+        boolean ok = true;
+        if (mess.startsWith("$") && mess.length() > 6) {
+            ok = false;
+            if  (sentenceFilters != null) {
+                String key = mess.substring(3, 6);
+                for (String filter : sentenceFilters) {
+                    if (!filter.startsWith("~")) { // include
+                        if (filter.equals(key)) {
+                            ok = true;
+                            if (verbose) {
+                                try {
+                                    System.out.printf("DataFileWriter >> Including sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+                                } catch (Exception ex) {
+                                    System.out.printf("(2) DataFileWriter >> Including sentence [%s], %s\n", key, mess);
+                                }
+                            }
+                        }
+                    } else {  // exclude
+                        if (filter.substring(1).equals(key)) { // Don't !
+                            ok = false;
+                            if (verbose) {
+                                try {
+                                    System.out.printf("DataFileWriter >> Excluding sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+                                } catch (Exception ex) {
+                                    System.out.printf("(2) DataFileWriter >> Excluding sentence [%s], %s\n", key, mess);
+                                }
+                            }
+                            break;
+                        } else {
+                            ok = true;
+                            if (verbose) {
+                                try {
+                                    System.out.printf("DataFileWriter >> Including sentence [%s] (%s), %s\n", key, StringParsers.findDispatcherByKey(key).description(), mess);
+                                } catch (Exception ex) {
+                                    System.out.printf("(2) DataFileWriter >> Including sentence [%s], %s\n", key, mess);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                ok = true;
+                if (verbose) {
+                    System.out.printf("--> NO Sentence Filter for [%s].\n", mess);
+                }
+            }
+            if  (ok && deviceFilters != null) {
+                // ok = false;
+                String dev = mess.substring(1, 3);
+                for (String filter : deviceFilters) {
+                    if (!filter.startsWith("~")) { // include
+                        if (filter.equals(dev)) {
+                            ok = true;
+                            if (verbose) {
+                                System.out.printf("DataFileWriter >> Including device [%s], for %s\n", dev, mess);
+                            }
+                        }
+                    } else {  // exclude
+                        if (filter.substring(1).equals(dev)) { // Don't !
+                            ok = false;
+                            if (verbose) {
+                                System.out.printf("DataFileWriter >> Excluding device [%s], for %s\n", dev, mess);
+                            }
+                            break;
+                        } else {
+                            ok = true;
+                            if (verbose) {
+                                System.out.printf("DataFileWriter >> Including device [%s], for %s\n", dev, mess);
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (verbose) {
+                    if (ok) {
+                        System.out.printf("--> NO Device Filter for [%s].\n", mess);
+                    } else {
+                        System.out.printf("--> Skipped device filter for [%s]", mess);
+                    }
+                }
+            }
+        }
+
+        return ok;
+    }
+
+    /**
+     * This is for tests...
+     * @param args
+     */
+    public static void main(String... args) {
+        // String nmea = "$AEMMB,0.0299,I,1.0127,B*4A";
+        String nmea = "$AEMMB,0.0299,I,1.0133,B*4F";
+
+        // List<String> sentenceFilter = Arrays.asList("~XXX");
+        List<String> sentenceFilter = Arrays.asList("MMB", "MTA");
+        // List<String> deviceFilter = Arrays.asList("~II", "~GP");
+        // List<String> deviceFilter = Arrays.asList("AE", "GP");
+        // List<String> deviceFilter = Arrays.asList("~AE", "~GP");
+        List<String> deviceFilter = null;
+
+        boolean ok = goesThruFilters(nmea, sentenceFilter, deviceFilter, true);
+
+        System.out.printf("For string [%s], deviceFilter [%s], sentenceFilter [%s]\n",
+                nmea,
+                deviceFilter == null ? "null" : deviceFilter.stream().collect(Collectors.joining(", ")),
+                sentenceFilter == null ? "null" : sentenceFilter.stream().collect(Collectors.joining(", ")));
+        System.out.printf("For [%s], ok:%B\n", nmea, ok);
+    }
 }

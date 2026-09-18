@@ -16,6 +16,7 @@
  * </li>
  * <li>Reader classes ( v ) must extends {@link nmea.api.NMEAReader}, it takes care of getting the actual data (from the real sensor).</li>
  * </ul>
+ * Reader is to be added to the Client (by the Client).
  * </p>
  * A List of {@link nmea.api.NMEAClient} is created in {@link nmea.mux.GenericNMEAMultiplexer}, each of its elements is created
  * in {@link nmea.mux.MuxInitializer}, where a corresponding {@link nmea.api.NMEAReader} is created and assigned to it.

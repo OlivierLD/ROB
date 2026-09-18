@@ -12,6 +12,7 @@ import utils.EscapeCodes;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -242,6 +243,17 @@ public class NavServer {
 	}
 
 	public static void main(String... args) {
+
+		if (false) {
+			final Properties properties = System.getProperties();
+			properties.forEach((n, v) -> {
+				System.out.printf("%s -> %s\n", n, v);
+			});
+		}
+		if (true) {
+			System.out.printf("-> Running with mux.properties=%s\n", System.getProperty("mux.properties"));
+		}
+
 		new NavServer();
 		// Display memory usage after startup,
 		if ("true".equals(System.getProperty("memory.gauge", "true"))) { // defaulted to true

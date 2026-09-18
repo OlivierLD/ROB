@@ -16,20 +16,21 @@ public class SerialClient extends NMEAClient {
 	private String clientName; // TODO Put this in the supertype?
 
 	public SerialClient() {
-		this(null, null, null, "");
+		this(null, null, null, false, true, "");
 	}
 
 	public SerialClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, false, true,"");
 	}
 
 	public SerialClient(String s[], String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, false, true,"");
 	}
 
-	public SerialClient(String s[], String[] sa, Multiplexer mux, String description) {
-		super(s, sa, mux, description);
-		this.verbose = "true".equals(System.getProperty("serial.data.verbose", "false"));
+	public SerialClient(String[] devices, String[] sentences, Multiplexer mux, boolean verbose, boolean active, String description) {
+		super(devices, sentences, mux, description);
+		this.setVerbose(verbose); // "true".equals(System.getProperty("serial.data.verbose", "false")));
+		this.setActive(active);
 		this.clientName = String.valueOf(System.currentTimeMillis()) ; // ((SerialReader) this.getReader()).getPort();
 		// this.clientName = String.format("Serial-%d", System.currentTimeMillis()); // TODO Why not?
 	}
@@ -48,7 +49,7 @@ public class SerialClient extends NMEAClient {
 		}
 		if (multiplexer != null) { // Only if active !
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -63,14 +64,21 @@ public class SerialClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description;
 
 		public String getCls() {
 			return cls;
 		}
 
-		public boolean isVerbose() {
+		@Override
+		public boolean getVerbose() {
 			return verbose;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
 		}
 
 		public SerialBean() {}
@@ -79,8 +87,9 @@ public class SerialClient extends NMEAClient {
 			port = ((SerialReader) instance.getReader()).getPort();
 			br = ((SerialReader) instance.getReader()).getBr();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -95,11 +104,6 @@ public class SerialClient extends NMEAClient {
 
 		public int getBr() {
 			return br;
-		}
-
-		@Override
-		public boolean getVerbose() {
-			return this.verbose;
 		}
 
 		@Override

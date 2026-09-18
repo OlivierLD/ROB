@@ -38,9 +38,9 @@ public class DataFileReader extends NMEAReader {
 		this(null, al, fName, pause, false, null);
 	}
 	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause, boolean isZip, String pathInZip) {
-		this(threadName, al, fName, 500, true,false, null);
+		this(threadName, al, fName, 500, true,false, null, false);
 	}
-	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause, boolean loop, boolean isZip, String pathInZip) {
+	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause, boolean loop, boolean isZip, String pathInZip, boolean verbose) {
 		super(threadName, al);
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
@@ -50,6 +50,7 @@ public class DataFileReader extends NMEAReader {
 		this.zip = isZip;
 		this.pathInArchive = pathInZip;
 		this.loop = loop;
+		this.verbose = verbose;
 	}
 
 	public String getFileName() {
@@ -106,7 +107,7 @@ public class DataFileReader extends NMEAReader {
 							nmeaContent = StringUtils.removeNullsFromString(nmeaContent);
 						}
 						if (verbose) {
-							System.out.println("Spitting out [" + nmeaContent + "]");
+							System.out.println("****\tSpitting out [" + nmeaContent + "]");
 						}
 						fireDataRead(new NMEAEvent(this, nmeaContent));
 						try {

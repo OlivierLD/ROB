@@ -33,7 +33,7 @@ public class ClientSkeleton extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -46,6 +46,7 @@ public class ClientSkeleton extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description = "";
 
 		public SkeletonBean() {}
@@ -53,8 +54,9 @@ public class ClientSkeleton extends NMEAClient {
 		public SkeletonBean(ClientSkeleton instance) {
 			cls = instance.getClass().getName();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -74,6 +76,10 @@ public class ClientSkeleton extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		@Override

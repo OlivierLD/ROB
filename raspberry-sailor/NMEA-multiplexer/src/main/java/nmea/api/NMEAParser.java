@@ -34,8 +34,8 @@ public final class NMEAParser extends Thread {
 
 	private final static boolean VERBOSE = System.getProperty("nmea.parser.verbose", "false").equals("true");
 
-	private String[] nmeaPrefix = null;
-	private String[] nmeaSentence = null;
+	private String[] nmeaPrefixes = null;
+	private String[] nmeaSentences = null;
 
 	private StringBuffer nmeaStream = new StringBuffer();
 	private final static long MAX_STREAM_SIZE = 2_048;
@@ -69,8 +69,8 @@ public final class NMEAParser extends Thread {
 						if (s != null && s.length() > 6 && (s.startsWith("$") || s.startsWith(AISParser.AIS_PREFIX))) { // Potentially valid
 							// TODO ? RegExp on the full sentence. Maybe not too user friendly...
 							boolean broadcast = true;
-							if (nmeaPrefix != null) {
-								for (String device : nmeaPrefix) {
+							if (nmeaPrefixes != null) {
+								for (String device : nmeaPrefixes) {
 									if (!device.trim().isEmpty() &&
 													( (!device.startsWith("~") && !device.equals(StringParsers.getDeviceID(s))) ||
 															device.startsWith("~") && device.substring(1).equals(StringParsers.getDeviceID(s)))) {
@@ -80,19 +80,19 @@ public final class NMEAParser extends Thread {
 								}
 							}
 							// Negative filters
-							if (broadcast && nmeaSentence != null) {
+							if (broadcast && nmeaSentences != null) {
 								String thisId = StringParsers.getSentenceID(s);
-								for (String prefix : nmeaSentence) {
+								for (String prefix : nmeaSentences) {
 									if (prefix.trim().startsWith("~") && thisId.equals(prefix.trim().substring(1))) {
 										broadcast = false;
 										break;
 									}
 								}
 								// Positive filters
-								long pos = Arrays.stream(nmeaSentence).filter(id -> !id.trim().startsWith("~")).count();
+								long pos = Arrays.stream(nmeaSentences).filter(id -> !id.trim().startsWith("~")).count();
 								if (broadcast && pos > 0) {
 									broadcast = false;
-									for (String prefix : nmeaSentence) {
+									for (String prefix : nmeaSentences) {
 										if (!prefix.trim().startsWith("~") && thisId.equals(prefix.trim())) {
 											broadcast = true;
 											break;
@@ -117,26 +117,26 @@ public final class NMEAParser extends Thread {
 	}
 
 	public String[] getDeviceFilters() {
-		return this.nmeaPrefix;
+		return this.nmeaPrefixes;
 	}
 
 	public void setDeviceFilters(String[] s) {
 		if (s != null && s.length == 1 && s[0].trim().isEmpty()) {
-			this.nmeaPrefix = null;
+			this.nmeaPrefixes = null;
 		} else {
-			this.nmeaPrefix = s;
+			this.nmeaPrefixes = s;
 		}
 	}
 
 	public String[] getSentenceFilters() {
-		return this.nmeaSentence;
+		return this.nmeaSentences;
 	}
 
 	public void setSentenceFilters(String[] sa) {
 		if (sa != null && sa.length == 1 && sa[0].trim().isEmpty()) {
-			this.nmeaSentence = null;
+			this.nmeaSentences = null;
 		} else {
-			this.nmeaSentence = sa;
+			this.nmeaSentences = sa;
 		}
 	}
 

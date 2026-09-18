@@ -4,7 +4,9 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.RandomMTWReader;
-import nmea.consumers.reader.RandomReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
  * Generates random MTW sentence, in a valid NMEA Sentence.
@@ -31,11 +33,31 @@ public class RandomMTWClient extends NMEAClient {
 	@Override
 	public void dataDetectedEvent(NMEAEvent e) {
 		if (verbose) {
-			System.out.println("Received from MTW-RND:" + e.getContent());
+			System.out.println("Received (generated) from MTW-RND:" + e.getContent());
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				if (verbose) {
+					System.out.printf("***\tRandomMTWClient.dataDetectedEvent: [%s]\n", e.getContent());
+				}
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());
+				} else {
+					if (verbose) {
+						System.out.printf("**\t[%s] does not go thru filters\n", e.getContent());
+					}
+				}
+			} else {
+				if (verbose) {
+					System.out.println("Client INACTIVE, data not sent.");
+				}
 			}
 		}
 	}
@@ -48,6 +70,7 @@ public class RandomMTWClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose = false;
+		private boolean active = false;
 		private String description; // = "";
 
 		public RandomMTWBean() { // for Jackson
@@ -56,8 +79,9 @@ public class RandomMTWClient extends NMEAClient {
 		public RandomMTWBean(RandomMTWClient instance) {
 			cls = instance.getClass().getName();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -78,6 +102,10 @@ public class RandomMTWClient extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		@Override

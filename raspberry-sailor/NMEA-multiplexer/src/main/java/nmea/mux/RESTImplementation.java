@@ -254,7 +254,7 @@ public class RESTImplementation {
 					"POST",
 					REST_PREFIX + "/channels",
 					this::postChannel,
-					"Creates an input channel (aka consumer)"),
+					"Creates an input channel (aka consumer, listener)"),
 			new Operation(
 					"POST",
 					REST_PREFIX + "/computers",
@@ -1714,6 +1714,11 @@ public class RESTImplementation {
 		return response;
 	}
 
+	/**
+	 * Add a channel from REST
+	 * @param request
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private HTTPServer.Response postChannel(HTTPServer.Request request) {
 		HTTPServer.Response response = new HTTPServer.Response(request.getProtocol(), HTTPServer.Response.CREATED);
@@ -1781,7 +1786,7 @@ public class RESTImplementation {
 							.findFirst();
 					if (!opClient.isPresent()) {
 						try {
-							NMEAClient serialClient = new SerialClient(serialJson.getDeviceFilters(), serialJson.getSentenceFilters(), this.mux, "");
+							NMEAClient serialClient = new SerialClient(serialJson.getDeviceFilters(), serialJson.getSentenceFilters(),this.mux, serialJson.getVerbose(), serialJson.isActive(), "");
 							serialClient.initClient();
 							// TODO Reset Interval ?
 							serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialJson.getPort(), serialJson.getBr()));
@@ -1846,9 +1851,14 @@ public class RESTImplementation {
 							.filter(channel -> channel instanceof DataFileClient &&
 									((DataFileClient.DataFileBean) channel.getBean()).getFile().equals(fileJson.getFile()))
 							.findFirst();
-					if (!opClient.isPresent()) {
+					if (!opClient.isPresent()) { // then good to go
 						try {
-							NMEAClient fileClient = new DataFileClient(fileJson.getDeviceFilters(), fileJson.getSentenceFilters(), this.mux, fileJson.getDescription());
+							NMEAClient fileClient = new DataFileClient(fileJson.getDeviceFilters(),
+									fileJson.getSentenceFilters(),
+									this.mux,
+									fileJson.getVerbose(),  // TODO or isVerbose ?
+									fileJson.isActive(),
+									fileJson.getDescription());
 							fileClient.initClient();
 							fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), fileJson.getFile(), fileJson.getPause()));
 							nmeaDataClients.add(fileClient);
@@ -2115,7 +2125,12 @@ public class RESTImplementation {
 							.findFirst();
 					if (!opClient.isPresent()) {
 						try {
-							NMEAClient restClient = new RESTClient(restJson.getDeviceFilters(), restJson.getSentenceFilters(), this.mux, restJson.getDescription());
+							NMEAClient restClient = new RESTClient(restJson.getDeviceFilters(),
+									restJson.getSentenceFilters(),
+									this.mux,
+									restJson.getVerbose(),
+									restJson.isActive(),
+									restJson.getDescription());
 							restClient.initClient();
 							restClient.setReader(new RESTReader("MUX-RESTReader",
 									restClient.getListeners(),
@@ -2428,6 +2443,7 @@ public class RESTImplementation {
 					} else { // Then update
 						SerialClient serialClient = (SerialClient) opClient.get();
 						serialClient.setVerbose(serialJson.getVerbose());
+						serialClient.setActive(serialJson.isActive());
 						String content = mapper.writeValueAsString(serialClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -2450,6 +2466,7 @@ public class RESTImplementation {
 					} else { // Then update
 						DataFileClient dataFileClient = (DataFileClient) opClient.get();
 						dataFileClient.setVerbose(fileJson.getVerbose());
+						dataFileClient.setActive(fileJson.isActive());
 						dataFileClient.setLoop(fileJson.getLoop());
 						String content = mapper.writeValueAsString(dataFileClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
@@ -2474,6 +2491,7 @@ public class RESTImplementation {
 					} else { // Then update
 						TCPClient tcpClient = (TCPClient) opClient.get();
 						tcpClient.setVerbose(tcpJson.getVerbose());
+						tcpClient.setActive(tcpJson.isActive());
 						String content = mapper.writeValueAsString(tcpClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -2496,6 +2514,7 @@ public class RESTImplementation {
 					} else { // Then update
 						WebSocketClient webSocketClient = (WebSocketClient) opClient.get();
 						webSocketClient.setVerbose(wsJson.getVerbose());
+						webSocketClient.setActive(wsJson.isActive());
 						String content = mapper.writeValueAsString(webSocketClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -2565,6 +2584,7 @@ public class RESTImplementation {
 					} else { // Then update
 						ZDAClient zdaClient = (ZDAClient) opClient.get();
 						zdaClient.setVerbose(zdaJson.getVerbose());
+						zdaClient.setActive(zdaJson.isActive());
 						String content = mapper.writeValueAsString(zdaClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -2602,6 +2622,7 @@ public class RESTImplementation {
 					} else { // Then update
 						RandomClient randomClient = (RandomClient) opClient.get();
 						randomClient.setVerbose(rndJson.getVerbose());
+						randomClient.setActive(rndJson.isActive());
 						String content = mapper.writeValueAsString(randomClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());
@@ -2625,6 +2646,7 @@ public class RESTImplementation {
 						NMEAClient nmeaClient = opClient.get();
 						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
 						nmeaClient.setVerbose(verbose);
+						nmeaClient.setActive(((Boolean)custom.get("active")).booleanValue());
 						String content = mapper.writeValueAsString(nmeaClient.getBean());
 						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 						response.setPayload(content.getBytes());

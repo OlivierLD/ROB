@@ -31,7 +31,7 @@ public class TCPClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -48,6 +48,7 @@ public class TCPClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description = "";
 
 		public String getCls() {
@@ -66,8 +67,9 @@ public class TCPClient extends NMEAClient {
 			initialRequest = ((TCPReader) instance.getReader()).getInitialRequest();
 			keepTrying = ((TCPReader) instance.getReader()).isKeepTrying();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -96,6 +98,10 @@ public class TCPClient extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		@Override

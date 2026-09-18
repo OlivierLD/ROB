@@ -29,22 +29,27 @@ channels:
     filename: ./sample.data/la.reveuse.01.nmea
     between-records: 50   # Speed up
     verbose: false
+    active: true
+    # Filters not efficient on fileReaders...
+    # ---------------------------------------
     # device.filters: II, GP, HC, YX
     # device.filters: ~PL
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
-    description: "Reads a ShipModul's logged data."
+    description: "Reads data logged by a ShipModul."
   #
 forwarders:
   - type: file
     verbose: true
     append: false
+    active: true
     timebase.filename: false
     filename: data.4tests.nmea
-    flush: false
+    flush: true
     # sentence.filters: MWV, VHW, HDG... RSA:Rudder Sensor Angle
-    sentence.filters: ~GGA,~GSA,~GSV,~ROT,~XDR,~RSA
-    device.filters: ~PL,~YX,~AG
+    # sentence.filters: ~GGA,~GSA,~GSV,~ROT,~XDR,~RSA
+    # device.filters: ~PL,~YX,~AG
+    device.filters: GP
     description: "Log the data, with filters"
 #  - type: console
 #  - type: tcp

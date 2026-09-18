@@ -10,20 +10,21 @@ import nmea.consumers.reader.RESTReader;
 */
 public class RESTClient extends NMEAClient {
 	public RESTClient() {
-		this(null, null, null, "");
+		this(null, null, null,  false, true, "");
 	}
 
 	public RESTClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux,  false, true, "");
 	}
 
 	public RESTClient(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, false, true, "");
 	}
 
-	public RESTClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+	public RESTClient(String[] s, String[] sa, Multiplexer mux, boolean verbose, boolean active, String desc) {
 		super(s, sa, mux, desc);
-		this.verbose = "true".equals(System.getProperty("rest.data.verbose", "false"));
+		this.setVerbose(verbose); //  = "true".equals(System.getProperty("rest.data.verbose", "false"));
+		this.setActive(active);
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class RESTClient extends NMEAClient {
 				System.out.println("From REST, mux.onData :" + e.getContent());
 			}
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		} else {
 			if (verbose) {
@@ -62,6 +63,7 @@ public class RESTClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description;
 
 		public String getCls() {
@@ -92,9 +94,11 @@ public class RESTClient extends NMEAClient {
 
 		public long getFrequency() { return frequency; }
 
-		public boolean isVerbose() {
-			return verbose;
-		}
+		@Override
+		public boolean isActive() { return active; }
+//		public boolean isVerbose() {
+//			return verbose;
+//		}
 
 		public RESTBean() {}
 
@@ -108,8 +112,9 @@ public class RESTClient extends NMEAClient {
 			jsonQueryString = ((RESTReader) instance.getReader()).getJQString();
 			nmeaProcessor = ((RESTReader) instance.getReader()).getNmeaProcessor();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			frequency = ((RESTReader) instance.getReader()).getBetweenLoops();
 			description = instance.getDescription();
 		}

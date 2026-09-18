@@ -35,7 +35,7 @@ public class UDPClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -50,15 +50,16 @@ public class UDPClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description = "";
 
 		public String getCls() {
 			return cls;
 		}
 
-		public boolean isVerbose() {
-			return verbose;
-		}
+//		public boolean isVerbose() {
+//			return verbose;
+//		}
 
 		public UDPBean() {}
 		public UDPBean(UDPClient instance) {
@@ -66,8 +67,9 @@ public class UDPClient extends NMEAClient {
 			port = ((UDPReader) instance.getReader()).getPort();
 			hostname = ((UDPReader) instance.getReader()).getHostname();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -87,6 +89,10 @@ public class UDPClient extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		@Override

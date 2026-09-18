@@ -20,6 +20,10 @@ channels:
     zip: true
     path.in.zip: 2012-06-10.china.camp-oyster.point.nmea
     verbose: true
+    active: true
+    sentence.filters: ~XXX
+    device.filters: GP
+    description: "Replaying China Camp to Oyster Point"
 #forwarders:
 #  - class: nmea.forwarders.CharacterConsoleWriter
 #    properties: char.console.properties
@@ -28,4 +32,3 @@ computers:
     verbose: false
     time.buffer.length: 30, 60, 600
     #                   30s 60s 10m
-

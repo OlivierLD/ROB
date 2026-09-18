@@ -476,7 +476,16 @@ let channelList = () => {
         setRESTPayload(json, (after - before));
         let html = "<h5>Reads from</h5>" +
             "<table>";
-        html += "<tr><th>Type</th><th>Parameters</th><th>Device filters</th><th>Sentence filters</th><th>verb.</th><th></th><th>Desc.</th></tr>"
+        html += "<tr>" + 
+            "<th>Type</th>" +
+            "<th>Parameters</th>" +
+            "<th>Device filters</th>" +
+            "<th>Sentence filters</th>" +
+            "<th>verb.</th>" +
+            "<th>act.</th>" +
+            "<th></th>" +
+            "<th>Desc.</th>" +
+        "</tr>"
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
@@ -490,6 +499,7 @@ let channelList = () => {
                     "<td valign='top'>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td valign='top'>" + buildList(json[i].sentenceFilters) + "</td>" +
                     "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td valign='top'><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -500,7 +510,8 @@ let channelList = () => {
                     "<td>" + json[i].port + ":" + json[i].br + "</td>" +
                     "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -511,7 +522,8 @@ let channelList = () => {
                     "<td>" + json[i].hostname + ":" + json[i].port + "</td>" +
                     "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -522,7 +534,8 @@ let channelList = () => {
                     "<td> " + json[i].wsUri + "</td>" +
                     "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -532,7 +545,8 @@ let channelList = () => {
                     "<td valign='top'><b>rnd</b></td>" + "<td></td>" +
                     "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -561,7 +575,8 @@ let channelList = () => {
                     "<td valign='top'><b>zda</b></td>" + "<td> Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") + "</td>" +
                     "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                     "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                    "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                    "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                     "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -579,7 +594,8 @@ let channelList = () => {
                    "</td>" +
                    "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                    "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                   "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                   "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                   "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                    "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                    "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                    "</tr>");
@@ -590,7 +606,8 @@ let channelList = () => {
                         "<td>" + json[i].cls + "</td>" +
                         "<td>" + buildList(json[i].deviceFilters) + "</td>" +
                         "<td>" + buildList(json[i].sentenceFilters) + "</td>" +
-                        "<td align='center'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                        "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose ? " checked" : "") + "></td>" +
+                        "<td align='center' valign='top'><input type='checkbox' onchange='manageChannelActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active ? " checked" : "") + "></td>" +
                         "<td><button onclick='removeChannel(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td>" + (json[i].description == null ? "" : json[i].description) +  "</td>" +
                     "</tr>");
@@ -662,8 +679,20 @@ let forwarderList = () => {
                     "<td>" + json[i].description + "</td>" +
                     "<td valign='top'><b>serial</b></td>" +
                     "<td>" + json[i].port + ":" + json[i].br + "</td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'tcp':
                     html += ("<tr>" +
@@ -672,17 +701,43 @@ let forwarderList = () => {
                                 "<td>Port " + json[i].port + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                                "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
-                             "</tr>");
+                                "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                "<td><small>" + json[i].nbClients + " Client(s)</small></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'nmea-cache-publisher':
                     html += ("<tr>" +
-                                "<td valign='top'><b>nmea-cache-publisher</b></td>" +
-                                "<td>" + json[i].description + "</td>" +
-                                "<td>Port " + json[i].port + "</td>" +
-                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                             "</tr>");
+                        "<td valign='top'><b>nmea-cache-publisher</b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'rest':
                     /*
@@ -692,55 +747,139 @@ let forwarderList = () => {
                      "resource": "/whatever",
                      */
                     html += ("<tr>" +
-                    "<td valign='top'><b>rest</b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                        "<td valign='top'><b>rest</b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'gpsd':
                     html += ("<tr>" +
-                    "<td valign='top'><b>gpsd</b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td>Port " + json[i].port + "</td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
-                    "</tr>");
+                        "<td valign='top'><b>gpsd</b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'ws':
                     html += ("<tr>" +
-                    "<td valign='top'><b>ws</b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td>" + json[i].wsUri + "</td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                        "<td valign='top'><b>ws</b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td>" + json[i].wsUri + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'rmi':
                     html += ("<tr>" + "<td valign='top'><b>rmi</b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td valign='top'>" +
-                        "Port: " + json[i].port + "<br>" +
-                        "Name: " + json[i].bindingName + "<br>" +
-                        "Address: " + json[i].serverAddress +
-                    "</td>" +
-                    "<td valign='top'><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                        "<td>" + json[i].description + "</td>" +
+                        "<td valign='top'>" +
+                            "Port: " + json[i].port + "<br>" +
+                            "Name: " + json[i].bindingName + "<br>" +
+                            "Address: " + json[i].serverAddress +
+                        "</td>" +
+                        "<td valign='top'><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 case 'console':
                     html += ("<tr>" +
-                    "<td valign='top'><b>console</b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td></td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                        "<td valign='top'><b>console</b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td></td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
                 default:
                     html += ("<tr>" +
-                    "<td><b><i>" + type + "</i></b></td>" +
-                    "<td>" + json[i].description + "</td>" +
-                    "<td>" + json[i].cls + "</td>" +
-                    "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                    "</tr>");
+                        "<td><b><i>" + type + "</i></b></td>" +
+                        "<td>" + json[i].description + "</td>" +
+                        "<td>" + json[i].cls + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
                     break;
             }
         }
@@ -772,7 +911,7 @@ let computerList = () => {
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
         let html = "<h5>Computes and writes</h5>" + "<table>";
-        html += "<tr><th>Type</th><th>Desc.</th><th colspan='2'>Parameters</th><th>verb.</th><th>act.</th></tr>";
+        html += "<tr><th>Type</th>" + "<th>Desc.</th><th colspan='2'>Parameters</th>" + "<th>verb.</th>" + "<th>act.</th></tr>";
         for (let i = 0; i < json.length; i++) {
             let type = json[i].type;
             switch (type) {
@@ -1707,6 +1846,13 @@ let changeComputer = (computer) => {
         }
         errManager.display("Failed to update computer..." + (error !== undefined ? JSON.stringify(error) : ' - ') + ', ' + (message !== undefined ? message : ' - '));
     });
+};
+
+let manageChannelActive = (cb, channel) => {
+    console.log('Clicked checkbox on', channel, ' checked:', cb.checked);
+    // PUT on the channel.
+    channel.active = cb.checked;
+    changeChannel(channel);
 };
 
 let manageChannelVerbose = (cb, channel) => {

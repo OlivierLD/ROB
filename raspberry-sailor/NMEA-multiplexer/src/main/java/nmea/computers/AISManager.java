@@ -162,14 +162,16 @@ public class AISManager extends Computer {
 								// It's worth calculating
 								if (distToTarget <= this.minimumDistance) {
 									// double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
-									String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), min dist: %.02f/%.02f",
-											TimeUtil.getTimeStamp(),
-											(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : (aisRecord.getMMSI() != 0 ? aisRecord.getMMSI() : "")), // MMSI ?
-											distToTarget,
-											this.minimumDistance,
-											distToTarget,
-											this.collisionThreatDistance);
-									System.out.println(inRangeMessage);
+									if (verbose) {
+										String inRangeMessage = String.format("(%s) AISManager >> In range: [%s] (%.02f/%.02f nm), min dist: %.02f/%.02f",
+												TimeUtil.getTimeStamp(),
+												(aisRecord.getVesselName() != null ? aisRecord.getVesselName() : (aisRecord.getMMSI() != 0 ? aisRecord.getMMSI() : "")), // MMSI ?
+												distToTarget,
+												this.minimumDistance,
+												distToTarget,
+												this.collisionThreatDistance);
+										System.out.println(inRangeMessage);
+									}
 									if (false) {
 										// A test
 										String messToSpeak = String.format("Boat in range %.02f miles! %s", distToTarget, (aisRecord.getVesselName() != null ? aisRecord.getVesselName() : ""));
@@ -201,24 +203,25 @@ public class AISManager extends Computer {
 												ex.printStackTrace();
 											}
 										}
-										String warningText = String.format("!!! Possible collision threat with %s (%s), at %s / %s\n" +
-														"\tdistance %.02f nm (min is %.02f)\n" +
-														"\tBearing from target to current pos. %.02f\272\n" +
-														"\tCOG Target: %.02f\n" +
-														"\tSOG Target: %.02f\n" +
-														"\tMin dist: %.03fnm",
-												aisRecord.getMMSI(),
-												vesselName != null ? vesselName.replace("@", " ").trim() : "-",
-												GeomUtil.decToSex(aisRecord.getLatitude(), GeomUtil.SWING, GeomUtil.NS),
-												GeomUtil.decToSex(aisRecord.getLongitude(), GeomUtil.SWING, GeomUtil.EW),
-												distToTarget,
-												this.minimumDistance,
-												bearingFromTarget,
-												aisRecord.getCog(),
-												aisRecord.getSog(),
-												dist);
-										System.out.println(warningText);
-
+										if (true || verbose) {
+											String warningText = String.format("!!! Possible collision threat with %s (%s), at %s / %s\n" +
+															"\tdistance %.02f nm (min is %.02f)\n" +
+															"\tBearing from target to current pos. %.02f\272\n" +
+															"\tCOG Target: %.02f\n" +
+															"\tSOG Target: %.02f\n" +
+															"\tMin dist: %.03fnm",
+													aisRecord.getMMSI(),
+													vesselName != null ? vesselName.replace("@", " ").trim() : "-",
+													GeomUtil.decToSex(aisRecord.getLatitude(), GeomUtil.SWING, GeomUtil.NS),
+													GeomUtil.decToSex(aisRecord.getLongitude(), GeomUtil.SWING, GeomUtil.EW),
+													distToTarget,
+													this.minimumDistance,
+													bearingFromTarget,
+													aisRecord.getCog(),
+													aisRecord.getSog(),
+													dist);
+											System.out.println(warningText);
+										}
 										// Honk! Define a callback Consumer<String> (see 'speak' below), or just a signal (sent to a buzzer, a light, whatever).
 										if (collisionCallback != null) {
 											// A test
@@ -289,8 +292,8 @@ public class AISManager extends Computer {
 		super.setActive(active);
 		// Specific to some callback, as they run on their own...
 		if (collisionCallback != null && (collisionCallback instanceof BufferedCollisionCallback ||
-				collisionCallback instanceof BufferedCollisionSingletonCallback ||
-				collisionCallback instanceof RESTClientCollisionCallback)) {
+			collisionCallback instanceof BufferedCollisionSingletonCallback ||
+			collisionCallback instanceof RESTClientCollisionCallback)) {
 			if (isVerbose()) {
 				System.out.printf("Setting BufferedCollision(*)Callback to %b\n", active);
 			}

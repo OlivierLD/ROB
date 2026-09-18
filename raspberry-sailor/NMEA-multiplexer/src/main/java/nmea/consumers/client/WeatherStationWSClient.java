@@ -35,7 +35,7 @@ public class WeatherStationWSClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -54,6 +54,7 @@ public class WeatherStationWSClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose;
+		private boolean active;
 		private String description = "";
 
 		public String getCls() {
@@ -69,8 +70,9 @@ public class WeatherStationWSClient extends NMEAClient {
 			cls = instance.getClass().getName();
 			wsUri = ((WeatherStationWSReader) instance.getReader()).getWsUri();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
 			description = instance.getDescription();
 		}
 
@@ -80,6 +82,10 @@ public class WeatherStationWSClient extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		public String getWsUri() {

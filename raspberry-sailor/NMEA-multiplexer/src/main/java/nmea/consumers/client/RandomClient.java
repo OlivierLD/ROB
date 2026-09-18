@@ -33,7 +33,7 @@ public class RandomClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent());
+				multiplexer.onData(e.getContent()); // TODO Manage filters !!
 			}
 		}
 	}
@@ -46,6 +46,7 @@ public class RandomClient extends NMEAClient {
 		private String[] deviceFilters;
 		private String[] sentenceFilters;
 		private boolean verbose = false;
+		private boolean active = true;
 		private String description = "";
 
 		public RandomBean() { // for Jackson
@@ -54,19 +55,19 @@ public class RandomClient extends NMEAClient {
 		public RandomBean(RandomClient instance) {
 			cls = instance.getClass().getName();
 			verbose = instance.isVerbose();
-			deviceFilters = instance.getDevicePrefix();
-			sentenceFilters = instance.getSentenceArray();
-			description = this.getDescription();
+			active = instance.isActive();
+			deviceFilters = instance.getDeviceFilters();
+			sentenceFilters = instance.getSentenceFilters();
+			description = instance.getDescription();
 		}
 
 		public String getCls() {
 			return cls;
 		}
 
-		public boolean isVerbose() {
-			return verbose;
-		}
-
+//		public boolean isVerbose() {
+//			return verbose;
+//		}
 
 		@Override
 		public String getType() {
@@ -76,6 +77,10 @@ public class RandomClient extends NMEAClient {
 		@Override
 		public boolean getVerbose() {
 			return this.verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return this.active;
 		}
 
 		@Override
