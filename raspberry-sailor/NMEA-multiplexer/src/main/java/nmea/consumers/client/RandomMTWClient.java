@@ -40,6 +40,7 @@ public class RandomMTWClient extends NMEAClient {
 				if (verbose) {
 					System.out.printf("***\tRandomMTWClient.dataDetectedEvent: [%s]\n", e.getContent());
 				}
+				// Filters work on that one, as we have here a valid NMEA string...
 				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
 						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
 						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),

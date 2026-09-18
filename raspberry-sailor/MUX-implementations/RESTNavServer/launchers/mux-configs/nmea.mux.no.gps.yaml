@@ -8,7 +8,7 @@ name: "No GPS, using ZDA"
 description:
   - Can be used for tests
   - Requires python REST_BasicCacheForwarder_server.py --machine-name:localhost --port:1234 --verbose:true
-  - Can test several kinds of channels, forwarders, and computers
+  - Can test several kinds of channels, forwarders, and computers...
 context:
   with.http.server: true
   http.port: 9999

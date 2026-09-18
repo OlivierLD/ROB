@@ -45,6 +45,13 @@ if [[ $# -gt 0 ]]; then
     echo -e "$0 --help"
     exit 1
   fi
+else
+  echo -e "+-----------------------+"
+  echo -e "| CLI options:          |"
+  echo -e "|    --help             |"
+  echo -e "|    --basic (default)  |"
+  echo -e "| or --big              |"
+  echo -e "+------------------------"
 fi
 #
 # 1 - Build
@@ -79,10 +86,10 @@ fi
 if [[ "${REBUILD_REQUEST}" == "Y" ]]; then
   echo -e "Rebuilding from source (No Scala)..."
   if [[ "${OPTION}" == "BASIC" ]]; then
-    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
+    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
   else
     pushd ../RESTNavServer
-    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala ${PROXY_SETTINGS}
+    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
     popd
   fi
 fi
@@ -212,3 +219,11 @@ echo -e "| The script 'start.all.sh' is worth a look too.                       
 echo -e "| Once the server is started, try http://<host>:<port>/zip/index.html from a browser...            |"
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "PS: Current folder is $(PWD) "
+echo -e ""
+echo -e "For tests, you cab run:"
+echo -e "./mux.sh nmea.mux.basics.yaml"
+echo -e "Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
+echo -e "http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
+echo -e "Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.star.wars.html ..."
+# Yo!
+#

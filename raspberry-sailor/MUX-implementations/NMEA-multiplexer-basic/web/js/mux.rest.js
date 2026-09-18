@@ -987,14 +987,22 @@ let buildTable = (context, markerFiles, channels, forwarders, computers) => {
 
         "<br/><br/>" +
 
+        // Listeners and Talkers
         "<table width='100%'>" +
-        // Data
-        "<tr><th width='45%'>Pulled in from (listeners)</th><th width='10%'></th><th width='45%'>Pushed out to (talkers)</th></tr>" +
-        "<tr><td valign='middle' align='center' rowspan='2' title='Channels'>" + channels + "</td>" +
-        //      "<td valign='middle' align='center' rowspan='2'><b><i>MUX</i></b></td>" +
-        "<td valign='middle' align='center' rowspan='2'><img src='images/antenna.png' width='32' height='32' alt='MUX' title='MUX'></td>" +
-        "<td valign='middle' align='center' title='Forwarders'>" + forwarders + "</td></tr>" +
-        "<tr><td valign='middle' align='center' title='Computers'>" + computers + "</td></tr>" +
+            // Data
+            "<tr>" +
+                "<th width='45%'>Pulled in from (listeners)</th>" +
+                "<th width='10%'></th>" +  // Antenna
+                "<th width='45%'>Pushed out to (talkers &amp; computers)</th>" +
+            "</tr>" +
+            "<tr>" +
+                "<td valign='middle' align='center' rowspan='2' title='Channels'>" + channels + "</td>" +
+                "<td valign='middle' align='center' rowspan='2'><img src='images/antenna.png' width='32' height='32' alt='MUX' title='MUX'></td>" +
+                "<td valign='middle' align='center' title='Forwarders'>" + forwarders + "</td>" +
+            "</tr>" +
+            "<tr>" +
+                "<td valign='middle' align='center' title='Computers'>" + computers + "</td>" +
+            "</tr>" +
         "</table>";
     return html;
 };
@@ -1302,7 +1310,7 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr>" + "<td valign='top'><b>file</b></td>" + "<td valign='top'>File: " + json[i].file +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>file</b></td>" + "<td valign='top'>File: " + json[i].file +
                         "<br>Archive ?: " + json[i].zip  +
                         "<br>Path in archive: " + (json[i].pathInArchive ? json[i].pathInArchive : "-")  +
                         "<br>Between reads: " + json[i].pause + " ms" +
@@ -1312,25 +1320,25 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'serial':
-                    html += ("<tr>" + "<td valign='top'><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr>" + "<td valign='top'><b>tcp</b></td>" + "<td>" + json[i].hostname + ":" + json[i].port +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>tcp</b></td>" + "<td>" + json[i].hostname + ":" + json[i].port +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr>" + "<td valign='top'><b>ws</b></td>" + "<td> " + json[i].wsUri +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>ws</b></td>" + "<td> " + json[i].wsUri +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'rnd':
-                    html += ("<tr>" + "<td valign='top'><b>rnd</b></td>" + "<td></td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>rnd</b></td>" + "<td></td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
@@ -1356,7 +1364,7 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'zda':
-                    html += ("<tr>" + "<td valign='top'><b>zda</b></td>" + "<td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>zda</b></td>" + "<td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
@@ -1368,7 +1376,7 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'rest':
-                    html += ("<tr>" + "<td valign='top'><b>rest</b></td>" + "<td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>rest</b></td>" + "<td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
                             "JQ syntax: " + (json[i].jsonQueryString ? json[i].jsonQueryString : "-") + "<br/>" +
                             "Frequency: " + json[i].frequency + "ms <br/>" +
                             (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
@@ -1376,7 +1384,7 @@ let generateDiagram = () => {
                             "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') + "</td>" + "</tr>");
                     break;
                 default:
-                    html += ("<tr>" + "<td valign='top'><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
@@ -1425,30 +1433,28 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr>");
-					if (json[i].timeBased === true) {
-						html += ("<td><b>file</b></td>" + "<td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td>");
-					} else {
-						html += ("<td><b>file</b></td>" + "<td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td>");
-					}
-					html += ("<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
-                    html += ("<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>");
-					if (json[i].filters) {
-					    let filterList = json[i].filters.join(", ");
-					    html += (`<tr><td></td>" + "<td>Filter(s): ${filterList}</td>`);
-					}
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">");
+                        if (json[i].timeBased === true) {
+                            html += ("<td><b>file</b></td>" + "<td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td>");
+                        } else {
+                            html += ("<td><b>file</b></td>" + "<td>" + json[i].log + ", " + (json[i].append === true ? 'append' : 'reset') + " mode.</td>");
+                        }
+                        html += ("<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                        html += ("<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>");
                     html += ("<tr>");
                     break;
                 case 'serial':
-                    html += ("<tr>" + "<td><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br + "</td>" + "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                            "<td><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br + "</td>" +
+                         "</tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr>" +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                         "<td><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" +
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
                         "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
-                        "</tr>");
+                    "</tr>");
                     break;
                 // case 'udp':
                 //     html += ("<tr>" + "<td><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" + "<td><small>" + json[i].nbClients + " Client(s)</small></td>" + "</tr>");
@@ -1460,26 +1466,39 @@ let generateDiagram = () => {
                      "verb": "POST",
                      "resource": "/whatever",
                      */
-                    html += ("<tr>" + "<td><b>rest</b></td>" + "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" + "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                        "<td><b>rest</b></td>" +
+                        "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    "</td>");
                     break;
                 case 'gpsd':
-                    html += ("<tr>" + "<td><b>gpsd</b></td>" + "<td>Port " + json[i].port + "</td>" + "<td><small>" + json[i].nbClients + " Client(s)</small></td>" + "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                        "<td><b>gpsd</b></td>" + "<td>Port " + json[i].port + "</td>" +
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                    "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr>" + "<td><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" + "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                        "<td><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" +
+                    "</tr>");
                     break;
                 case 'rmi':
-                    html += ("<tr>" + "<td valign='top'><b>rmi</b></td>" + "<td valign='top'>" +
-                        "Port: " + json[i].port + "<br>" +
-                        "Name: " + json[i].bindingName + "<br>" +
-                        "Address: " + json[i].serverAddress +
-                        "</td>" + "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                                "<td valign='top'><b>rmi</b></td>" + "<td valign='top'>" +
+                                    "Port: " + json[i].port + "<br>" +
+                                    "Name: " + json[i].bindingName + "<br>" +
+                                    "Address: " + json[i].serverAddress +
+                                "</td>" +
+                            "</tr>");
                     break;
                 case 'console':
-                    html += ("<tr>" + "<td><b>console</b></td>" + "<td>" + valueOrText('', 'No parameter') + "</td>" + "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                        "<td><b>console</b></td>" + "<td>" + valueOrText('', 'No parameter') + "</td>" +
+                    "</tr>");
                     break;
                 default:
-                    html += ("<tr>" +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                                 "<td><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
@@ -1529,33 +1548,32 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'tw-current':
-                    html += ("<tr>" +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                                  "<td valign='top'><b>tw-current</b></td>" +
                                  "<td>" + (json[i].description) + "</td>" +
                                  "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
                                  "<td></td>" + // Dummy Prm placeholder
-                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
-                                 "<td></td>" + // Active placeholder
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                              "</tr>");
                     break;
                 case 'longterm-data-computer':
-                    html += ("<tr>" + "<td valign='top'><b>longterm-data-computer</b></td>" +
-                                 "<td>" + (json[i].description) + "</td>" +
-                                 "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
-                                 "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
-                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
-                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                             "</tr>");
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                                "<td valign='top'><b>longterm-data-computer</b></td>" +
+                                "<td>" + (json[i].description) + "</td>" +
+                                "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
+                                "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
+                                "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                            "</tr>");
                     break;
                 default:
-                    html += ("<tr>" + "<td valign='top'><b><i>" + type + "</i></b></td>" +
-                                 "<td>" + (json[i].description) + "</td>" +
-                                 "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
-                                 "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
-                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                                "<td valign='top'><b><i>" + type + "</i></b></td>" +
+                                "<td>" + (json[i].description) + "</td>" +
+                                "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
+                                "<td></td>" + // Dummy Prm placeholder
+                                "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                              "</tr>");
                     break;
             }

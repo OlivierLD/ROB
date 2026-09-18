@@ -97,8 +97,11 @@ JAVA_OPTIONS="${JAVA_OPTIONS} -Dtry.to.speak=true"
 #
 # JAVA_OPTIONS="$JAVA_OPTONS -Dpi4j.debug -Dpi4j.linking=dynamic"
 #
-# CP=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
-CP=$(find . -name '*-all.jar')
+if [[ -f "./build/libs/NMEA-multiplexer-basic-1.0-all.jar" ]]; then
+  CP=./build/libs/NMEA-multiplexer-basic-1.0-all.jar
+else
+  CP=$(find . -name '*-all.jar')
+fi
 echo -e "CP=${CP}"
 #
 SUDO=
