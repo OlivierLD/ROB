@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Multilang, and printable -->
+<head>
+	<meta charset="UTF-8">
+	<title>MUX Doc 101</title>
+    <link rel="stylesheet" href="../css/stylesheet.css" type="text/css"/>
+    <link rel="icon" type="image/ico" href="../icons/hammerhead.ico">
+
+    <style type="text/css">
+		body {
+			background: black;
+			color: cyan;
+            font-weight: normal;
+		}
+        h1 {
+            color: white;
+            font-size: 2em;
+            text-align: center;
+        }
+        h2 {
+            color: white;
+            font-size: 1.5em;
+            text-align: left;
+        }
+        li {
+            color: white;
+            font-size: 1.2em;
+        }
+        a:link {
+            color: cyan;
+        }
+
+	</style>
+
+    <link rel="stylesheet" media="print" href="print.css" />
+
+</head>
+
+<section id="en-content" style="display: none;">
+    <h1 class="screen-only">Basic Documentation</h1>
+    <span class="screen-only">Translatable and printable</span><br/>
+    <a class="screen-only" href="javascript:void(0)" onclick="navTo('FR');">En fran&ccedil;ais</a>
+    <hr class="screen-only"/>
+    <h1>More here soon...</h1>
+
+    <div>
+        Preamble: Some other available solutions already exist to address the exact same problem as the one we are targeting here.
+        <br/>
+        So, what's the point here? Good question.
+        <br/>
+        Goals here are to:
+        <ul>
+            <li>Keep the size of the executable code as small as possible</li>
+            <li>Keep the Web Pages (and other related components) storage as tiny as possible</li>
+            <li>Keep the client(s) independent from any extra software to install</li>
+            <li>Keep the runtime energy consumption as small as possible</li>
+            <li>Keep the cost of the hardware as low as possible</li>
+            <li>Keep it as compliant as possible with existing standards (vast topic!), to allow communication with the outside world</li>
+        </ul>
+    </div>
+    <div>
+        MUX, Runtime &amp; Admin
+    </div>
+    <div>
+        HTTP Server, Web Pages and REST services.
+    </div>
+    <hr/>
+    <address>Oliv Soft did it again.</address>
+</section>
+
+<section id="fr-content" style="display: none;">
+    <h1 class="screen-only">Documentation de base</h1>
+    <span class="screen-only">Traduisible et imprimable</span><br/>
+    <a class="screen-only" href="javascript:void(0)" onclick="navTo('EN');">In English</a>
+    <hr class="screen-only"/>
+    <h1>Plus d'information prochainement... &Ccedil;a vient.</h1>
+
+    <div>
+        Préambule : Il existe déjà d'autres solutions pour répondre exactement au même problème que celui que nous abordons ici.
+        <br/>
+        Alors, quel est l'intérêt de ce qu'on montre ici ? Bonne question.
+        <br/>
+        Les objectifs sont de :
+        <ul>
+            <li>Réduire au maximum la taille du code exécutable</li>
+            <li>Minimiser l'espace de stockage des pages web (et des composants associés)</li>
+            <li>Rendre le(s) client(s) indépendant(s) de tout logiciel supplémentaire à installer</li>
+            <li>Réduire au maximum la consommation d'énergie lors de l'exécution</li>
+            <li>Maintenir le coût du matériel aussi bas que possible.</li>
+            <li>Rester aussi conforme que possible aux normes existantes (vaste sujet !), afin de permettre la communication avec l'extérieur.</li>
+        </ul>
+    </div>
+    <div>
+        MUX, environnement d'exécution et administration
+    </div>
+    <div>
+        Serveur HTTP, pages web et services REST.
+    </div>
+    <hr/>
+    <address>Oliv Soft did it again.</address>
+</section>
+<body>
+
+    <div id="full-content">
+
+    </div>
+    <hr class="screen-only"/>
+
+    <div style="height: 150px;"><!-- Bottom padding ??? --></div>
+
+</body>
+
+<script type="text/javascript">
+
+    let navTo = (prm) => {
+        let url = window.location.href;
+        let newUrl = url.split('?')[0] + '?lang=' + prm;
+        console.log("New URL: " + newUrl);
+        window.location = newUrl;
+    };
+
+    let getQueryParameterByName = (name, url) => {
+        if (!url) {
+            url = window.location.href;
+        }
+        name = name.replace(/[\[\]]/g, "\\$&");
+        let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) {
+            return null;
+        }
+        if (!results[2]) {
+            return '';
+        }
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    };
+
+    let translate = (lang) => {
+        let enContent = document.getElementById('en-content');
+        let frContent = document.getElementById('fr-content');
+
+        let fullContent = document.getElementById('full-content');
+        if (lang === 'FR') {
+            // enContent.style.display = 'none';
+            // frContent.style.display = 'block';
+            fullContent.innerHTML = frContent.innerHTML;
+        } else {
+            // enContent.style.display = 'block';
+            // frContent.style.display = 'none';
+            fullContent.innerHTML = enContent.innerHTML;
+        }
+    };
+
+    window.onload = () => { // Important: window.onload
+        let userLang = getQueryParameterByName('lang');
+        if (!userLang) {
+            let browserUserLang = navigator.language || navigator.userLanguage;
+            console.log("The browser's language is: " + browserUserLang);
+            if (browserUserLang) {
+                if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+                    userLang = 'FR';
+                    console.log("On va parler français")
+                } else {
+                    userLang = 'EN';
+                    console.log("We'll speak english");
+                }
+            }
+        }
+        if (userLang) {
+            langToUse = userLang;
+            console.log(`Lang to use will be ${langToUse}`);
+        }
+        if (langToUse !== 'FR') { // Then switch to French, default is EN.
+            langToUse = 'EN';
+        }
+        translate(langToUse);
+    };
+</script>
+
+</html>

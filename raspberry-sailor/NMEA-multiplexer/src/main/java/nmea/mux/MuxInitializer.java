@@ -377,7 +377,17 @@ public class MuxInitializer {
                                 }
                                 fileClient.initClient();
 								fileClient.setLoop(loop);
-                                fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), filename, betweenRec, loop, zip, pathInArchive, fileClient.isVerbose()));
+                                fileClient.setReader(new DataFileReader("MUX-FileReader",
+                                        fileClient.getListeners(),
+                                        filename,
+                                        betweenRec,
+                                        loop,
+                                        zip,
+                                        pathInArchive,
+                                        fileClient.isVerbose()));
+                                // Use deviceFilters and sentenceFilters ?
+                                ((DataFileReader)fileClient.getReader()).setDeviceFilters(fileClient.getDeviceFilters());
+                                ((DataFileReader)fileClient.getReader()).setSentenceFilters(fileClient.getSentenceFilters());
                                 // moved that one above
                                 // fileClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 fileClient.setZip(zip);

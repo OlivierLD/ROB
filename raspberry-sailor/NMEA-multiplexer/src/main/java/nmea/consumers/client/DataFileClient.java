@@ -150,7 +150,6 @@ public class DataFileClient extends NMEAClient {
 		}
 		@Override
 		public String[] getDeviceFilters() { return this.deviceFilters; };
-
 		@Override
 		public String[] getSentenceFilters() { return this.sentenceFilters; };
 
@@ -211,6 +210,8 @@ public class DataFileClient extends NMEAClient {
 					pathInArchive));
 		nmeaClient.getReader().setVerbose("true".equals(System.getProperty("file.data.verbose", "false")));
 		((DataFileReader)nmeaClient.getReader()).setLoop(false);
+		((DataFileReader)nmeaClient.getReader()).setDeviceFilters(nmeaClient.getDeviceFilters());
+		((DataFileReader)nmeaClient.getReader()).setSentenceFilters(nmeaClient.getSentenceFilters());
 		nmeaClient.startWorking();
 	}
 }

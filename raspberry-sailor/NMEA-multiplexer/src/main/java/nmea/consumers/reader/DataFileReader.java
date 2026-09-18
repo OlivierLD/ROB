@@ -25,6 +25,9 @@ public class DataFileReader extends NMEAReader {
 	private boolean zip = false;
 	private String pathInArchive = "";
 
+	private String[] deviceFilters;
+	private String[] sentenceFilters;
+
 	public DataFileReader(List<NMEAListener> al, String fName) {
 		this(null, al, fName, 500, false, null);
 	}
@@ -69,7 +72,12 @@ public class DataFileReader extends NMEAReader {
 	public String getPathInArchive() {
 		return pathInArchive;
 	}
-
+	public void setDeviceFilters(String[] deviceFilters) {
+		this.deviceFilters = deviceFilters;
+	}
+	public void setSentenceFilters(String[] sentenceFilters) {
+		this.sentenceFilters = sentenceFilters;
+	}
 	@Override
 	public void startReader() {
 		super.enableReading();
@@ -109,7 +117,8 @@ public class DataFileReader extends NMEAReader {
 						if (verbose) {
 							System.out.println("****\tSpitting out [" + nmeaContent + "]");
 						}
-						fireDataRead(new NMEAEvent(this, nmeaContent));
+						// To follow that one until it's NMEA valid, see in NMEAParser.dataRead
+						fireDataRead(new NMEAEvent(this, nmeaContent), this.deviceFilters, this.sentenceFilters);
 						try {
 							Thread.sleep(this.betweenRecords);
 						} catch (Exception ignore) {

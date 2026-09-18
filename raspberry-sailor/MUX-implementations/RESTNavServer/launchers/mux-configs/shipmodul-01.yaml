@@ -30,11 +30,11 @@ channels:
     between-records: 50   # Speed up
     verbose: false
     active: true
-    # Filters not efficient on fileReaders...
+    # NEW: Filters efficient on fileReaders!... (NMEAParser does the job)
     # ---------------------------------------
-    # device.filters: II, GP, HC, YX
+    device.filters: II, GP, HC, YX
     # device.filters: ~PL
-    # sentence.filters: ~GGA,~GSV,~GSA
+    sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
     description: "Reads data logged by a ShipModul."
   #

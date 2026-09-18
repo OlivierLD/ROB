@@ -8,6 +8,7 @@ public abstract class NMEAListener implements EventListener {
 	public void dataDetected(NMEAEvent e) {	}
 
 	public void dataRead(NMEAEvent e) {	}
+	// public void dataRead(NMEAEvent e, String[] deviceFilters, String[] sentenceFilters) {	}
 
 	public void stopReading(NMEAEvent e) {	}
 

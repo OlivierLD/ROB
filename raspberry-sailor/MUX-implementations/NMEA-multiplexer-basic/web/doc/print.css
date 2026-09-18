@@ -1,0 +1,67 @@
+/*
+ * Pending: Page numbers, indexes, ...
+ */
+
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: white;
+    color: black;
+}
+body {
+    background: white;
+    color: black;
+    font-weight: normal;
+}
+h1 {
+    color: black;
+    font-size: 2em;
+    text-align: center;
+}
+h2 {
+    color: black;
+    font-size: 1.5em;
+    text-align: left;
+}
+li {
+    color: black;
+    font-size: 1.2em;
+}
+
+.table-content, .content, .blank-for-print {
+    page-break-before: always;
+}
+
+.doc-section {
+    page-break-inside: avoid;
+}
+
+.in-the-middle {
+    margin-top: 30vh; /* 400px; */
+}
+
+.below {
+    margin-top: 100px;
+}
+
+.screen-only {
+    display: none;
+}
+
+.print-only {  /* overrides the one in main.css */
+    display: block;
+}
+.print-only-2 {  /* overrides the one in main.css */
+    display: inline;
+}
+
+.toc {
+    text-decoration: none;
+    color: inherit;
+}
+
+.smaller {
+    font-size: 45%;
+}
+.smaller-plus {
+    font-size: 75%;
+}

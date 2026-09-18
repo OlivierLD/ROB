@@ -67,13 +67,17 @@ public abstract class NMEAReader extends Thread {
 	/*
 	 * The one that tells the Controller to start working
 	 *
-	 * @see nmea.api.NMEAParser
+	 * @see nmea.api.NMEAParser.dataRead
 	 */
 	protected void fireDataRead(NMEAEvent e) {
+		fireDataRead(e, null, null);
+	}
+	protected void fireDataRead(NMEAEvent e, String[] deviceFilters, String[] sentenceFilters) {
 		synchronized(this.NMEAListeners) {
 			this.NMEAListeners.stream().forEach(listener -> {
+				// available here: String[] deviceFilters, String[] sentenceFilters
 				synchronized (listener) {
-					listener.dataRead(e);
+					listener.dataRead(e);  // NMEAParser.dataRead needs the filters...
 				}
 			});
 		}

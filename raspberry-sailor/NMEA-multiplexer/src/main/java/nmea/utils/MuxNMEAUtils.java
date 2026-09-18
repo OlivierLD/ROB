@@ -269,7 +269,7 @@ public class MuxNMEAUtils {
             } else {
                 ok = true;
                 if (verbose) {
-                    System.out.printf("--> NO Sentence Filter for [%s].\n", mess);
+                    System.out.printf("--> NO Sentence Filter for [%s] (or filtered already).\n", mess);
                 }
             }
             if  (ok && deviceFilters != null) {

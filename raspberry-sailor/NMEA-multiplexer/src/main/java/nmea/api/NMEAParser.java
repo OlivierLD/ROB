@@ -7,6 +7,7 @@ import utils.DumpUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A Controller. Common to everyone, final class.
@@ -34,8 +35,8 @@ public final class NMEAParser extends Thread {
 
 	private final static boolean VERBOSE = System.getProperty("nmea.parser.verbose", "false").equals("true");
 
-	private String[] nmeaPrefixes = null;
-	private String[] nmeaSentences = null;
+	private String[] deviceFilters = null;
+	private String[] sentenceFilters = null;
 
 	private StringBuffer nmeaStream = new StringBuffer();
 	private final static long MAX_STREAM_SIZE = 2_048;
@@ -69,31 +70,50 @@ public final class NMEAParser extends Thread {
 						if (s != null && s.length() > 6 && (s.startsWith("$") || s.startsWith(AISParser.AIS_PREFIX))) { // Potentially valid
 							// TODO ? RegExp on the full sentence. Maybe not too user friendly...
 							boolean broadcast = true;
-							if (nmeaPrefixes != null) {
-								for (String device : nmeaPrefixes) {
-									if (!device.trim().isEmpty() &&
-													( (!device.startsWith("~") && !device.equals(StringParsers.getDeviceID(s))) ||
-															device.startsWith("~") && device.substring(1).equals(StringParsers.getDeviceID(s)))) {
+							if (VERBOSE) {
+								System.out.printf("Managing sentence [%s],\nDevice filters [%s]\nSentence Filters [%s]",
+										s,
+										deviceFilters != null ? Arrays.asList(deviceFilters).stream().collect(Collectors.joining(", ")) : null,
+										sentenceFilters != null ? Arrays.asList(sentenceFilters).stream().collect(Collectors.joining(", ")) : null);
+							}
+							// Device filters
+							if (deviceFilters != null) {
+								String thisId = StringParsers.getDeviceID(s);
+								// Negative device filters
+								for (String deviceID : deviceFilters) {
+									if (deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim().substring(1))) {
 										broadcast = false;
 										break;
+									}
+								}
+								// Positive device filters
+								long pos = Arrays.stream(deviceFilters).filter(id -> !id.trim().startsWith("~")).count();
+								if (broadcast && pos > 0) {
+									broadcast = false;
+									for (String deviceID : deviceFilters) {
+										if (!deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim())) {
+											broadcast = true;
+											break;
+										}
 									}
 								}
 							}
-							// Negative filters
-							if (broadcast && nmeaSentences != null) {
+							// Sentence filters
+							if (broadcast && sentenceFilters != null) {
 								String thisId = StringParsers.getSentenceID(s);
-								for (String prefix : nmeaSentences) {
-									if (prefix.trim().startsWith("~") && thisId.equals(prefix.trim().substring(1))) {
+								// Negative sentence filters
+								for (String sentenceId : sentenceFilters) {
+									if (sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim().substring(1))) {
 										broadcast = false;
 										break;
 									}
 								}
-								// Positive filters
-								long pos = Arrays.stream(nmeaSentences).filter(id -> !id.trim().startsWith("~")).count();
+								// Positive sentence filters
+								long pos = Arrays.stream(sentenceFilters).filter(id -> !id.trim().startsWith("~")).count();
 								if (broadcast && pos > 0) {
 									broadcast = false;
-									for (String prefix : nmeaSentences) {
-										if (!prefix.trim().startsWith("~") && thisId.equals(prefix.trim())) {
+									for (String sentenceId : sentenceFilters) {
+										if (!sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim())) {
 											broadcast = true;
 											break;
 										}
@@ -101,6 +121,9 @@ public final class NMEAParser extends Thread {
 								}
 							}
 							if (broadcast) {
+								if (VERBOSE) {
+									System.out.printf("  >>> Broadcasting [%s] <<< \n", s.trim());
+								}
 								instance.fireDataDetected(new NMEAEvent(this, s));
 							} else {
 								if (VERBOSE) {
@@ -117,26 +140,26 @@ public final class NMEAParser extends Thread {
 	}
 
 	public String[] getDeviceFilters() {
-		return this.nmeaPrefixes;
+		return this.deviceFilters;
 	}
 
 	public void setDeviceFilters(String[] s) {
 		if (s != null && s.length == 1 && s[0].trim().isEmpty()) {
-			this.nmeaPrefixes = null;
+			this.deviceFilters = null;
 		} else {
-			this.nmeaPrefixes = s;
+			this.deviceFilters = s;
 		}
 	}
 
 	public String[] getSentenceFilters() {
-		return this.nmeaSentences;
+		return this.sentenceFilters;
 	}
 
 	public void setSentenceFilters(String[] sa) {
 		if (sa != null && sa.length == 1 && sa[0].trim().isEmpty()) {
-			this.nmeaSentences = null;
+			this.sentenceFilters = null;
 		} else {
-			this.nmeaSentences = sa;
+			this.sentenceFilters = sa;
 		}
 	}
 
