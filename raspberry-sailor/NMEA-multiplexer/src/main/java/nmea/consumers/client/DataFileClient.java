@@ -165,7 +165,7 @@ public class DataFileClient extends NMEAClient {
 	}
 
 	/**
-	 * For tests (TODO isolate?)
+	 * For tests (TODO isolate in tests?)
 	 * @param args
 	 */
 	public static void main(String... args) {

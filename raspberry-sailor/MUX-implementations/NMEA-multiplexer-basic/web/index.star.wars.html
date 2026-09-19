@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
- | Inspired by a pen by Darryl Huffman ;)
+ | Star Wars stuff inspired by a pen by Darryl Huffman ;)
+ |
+ | Multilingual. SQ Parameter 'lang' can be used to switch language, or the browser's language is used.
  +-->
 <head>
     <meta charset="UTF-8">
@@ -266,21 +268,78 @@ canvas {
 <div id="side-nav" class="sidenav" onmouseleave="closeNav()">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <!--a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a-->
-    <h2 style="padding-top: 30px;"><span>Documentation</span></h2>
-    <a href="./doc/index.html" target="_blank">MUX doc</a>
-    <div class="description">How it works. Basic documentation.</div>
 
-    <h2 style="padding-top: 30px;"><span>Console Menus</span></h2>
+    <menu-section id="en-menu" style="display: block">
+      <h2 style="padding-top: 30px;"><span>Documentation</span></h2>
+      <a href="./doc/index.html" target="_blank">MUX doc</a>
+      <div class="description">How it works. Basic documentation.</div>
 
-    <a href="./index.1.html" target="_blank_01">GPS features</a>
-    <div class="description">GPS and misc demos.</div>
+      <h2 style="padding-top: 30px;"><span>Console Menus</span></h2>
 
-    <a href="./index.2.html" target="_blank_02">For big screens</a>
-    <div class="description">Admin, logs, GPS &amp; AIS, etc.</div>
-    <a href="./index.2.bis.html" target="_blank_03">For small screens</a>
-    <div class="description">GPS &amp; AIS.</div>
-    <a href="./index.3.html" target="_blank_04">Minimal GPS</a>
-    <div class="description">GPS, minimal features.</div>
+      <a href="./index.1.html" target="_blank_01">GPS features</a>
+      <div class="description">GPS and misc demos.</div>
+
+      <a href="./index.2.html" target="_blank_02">For big screens</a>
+      <div class="description">Admin, logs, GPS &amp; AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">For small screens</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Minimal GPS</a>
+      <div class="description">GPS, minimal features.</div>
+    </menu-section>
+
+    <menu-section id="fr-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Documentation</span></h2>
+      <a href="./doc/index.html?lang=FR" target="_blank">MUX doc</a>
+      <div class="description">Comment &ccedil;a marche. Doc de base.</div>
+
+      <h2 style="padding-top: 30px;"><span>Console Menus</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS</a>
+      <div class="description">GPS et demos diverses.</div>
+
+      <a href="./index.2.html" target="_blank_02">Pour les grands &eacute;crans</a>
+      <div class="description">Admin, logs, GPS &amp; AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Pour les petits &eacute;crans</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Minimal GPS</a>
+      <div class="description">GPS, fonctionnalit&eacute;s minimales.</div>
+    </menu-section>
+
+    <menu-section id="es-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Documentación</span></h2>
+      <a href="./doc/index.html?lang=ES" target="_blank">Documentación del MUX</a>
+      <div class="description">Funcionamiento. Documentación básica.</div>
+
+      <h2 style="padding-top: 30px;"><span>Menús de la consola</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS</a>
+      <div class="description">Funciones de GPS</div>
+
+      <a href="./index.2.html" target="_blank_02">Para pantallas grandes</a>
+      <div class="description">Administración, registros, GPS y AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Para pantallas pequeñas</a>
+      <div class="description">GPS y AIS.</div>
+      <a href="./index.3.html" target="_blank_04">GPS básico</a>
+      <div class="description">GPS, funciones básicas.</div>
+    </menu-section>
+
+    <menu-section id="de-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Dokumentation</span></h2>
+      <a href="./doc/index.html?lang=DE" target="_blank">MUX-Dokumentation</a>
+      <div class="description">Comment &ccedil;a marche. Doc de base.</div>
+
+      <h2 style="padding-top: 30px;"><span>Konsolenmenüs</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS-Funktionen</a>
+      <div class="description">GPS- und diverse Demos.</div>
+
+      <a href="./index.2.html" target="_blank_02">Für große Bildschirme</a>
+      <div class="description">Admin, Protokolle, GPS & AIS usw.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Für kleine Bildschirme</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Minimales GPS</a>
+      <div class="description">GPS, minimale Funktionen.</div>
+    </menu-section>
 
     <!-- bottom -->
     <div style="height: 100px;"><!-- Empty --></div>
@@ -298,7 +357,7 @@ canvas {
 
 
 <div id="container">
-    <section id="en-version" style="display: block;">
+    <section id="en-version" style="display: none;">
         <br/>
         <br/>
         <h2>NMEA Multiplexer,</h2>
@@ -393,6 +452,11 @@ let switchToFrench = () => {
   document.getElementById('en-version').style.display = 'none';
   document.getElementById('es-version').style.display = 'none';
   document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'block';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'none';
 };
 
 let switchToSpanish = () => {
@@ -400,6 +464,11 @@ let switchToSpanish = () => {
   document.getElementById('en-version').style.display = 'none';
   document.getElementById('es-version').style.display = 'block';
   document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'block';
+  document.getElementById('de-menu').style.display = 'none';
 };
 
 let switchToEnglish = () => {
@@ -407,6 +476,11 @@ let switchToEnglish = () => {
   document.getElementById('en-version').style.display = 'block';
   document.getElementById('es-version').style.display = 'none';
   document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'block';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'none';
 };
 
 let switchToGerman = () => {
@@ -414,6 +488,11 @@ let switchToGerman = () => {
   document.getElementById('en-version').style.display = 'none';
   document.getElementById('es-version').style.display = 'none';
   document.getElementById('de-version').style.display = 'block';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'block';
 };
 
 // The text 3D affect, and animation is pure CSS.

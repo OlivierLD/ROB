@@ -49,7 +49,7 @@ public class SerialClient extends NMEAClient {
 		}
 		if (multiplexer != null) { // Only if active !
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				multiplexer.onData(e.getContent()); // TODO Manage filters !! See DataFileClient and Writer.
 			}
 		}
 	}

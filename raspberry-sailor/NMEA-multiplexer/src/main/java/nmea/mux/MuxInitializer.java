@@ -227,8 +227,18 @@ public class MuxInitializer {
                                     }
                                 }
                                 serialClient.initClient();
-                                serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialPort, Integer.parseInt(br), resetInterval, desc));
-                                serialClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                serialClient.setReader(new SerialReader("MUX-SerialReader",
+                                        serialClient.getListeners(),
+                                        serialPort,
+                                        Integer.parseInt(br),
+                                        resetInterval,
+                                        desc));
+                                // TODO Implement methods below (like in DataFileReader), and same for all Readers
+                                // ((SerialReader)serialClient.getReader()).setDeviceFilters(serialClient.getDeviceFilters());
+                                // ((SerialReader)serialClient.getReader()).setSentenceFilters(serialClient.getSentenceFilters());
+
+                                // Moved above
+                                // serialClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(serialClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
