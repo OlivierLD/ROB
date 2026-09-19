@@ -72,9 +72,11 @@ public class DataFileReader extends NMEAReader {
 	public String getPathInArchive() {
 		return pathInArchive;
 	}
+	@Override
 	public void setDeviceFilters(String[] deviceFilters) {
 		this.deviceFilters = deviceFilters;
 	}
+	@Override
 	public void setSentenceFilters(String[] sentenceFilters) {
 		this.sentenceFilters = sentenceFilters;
 	}

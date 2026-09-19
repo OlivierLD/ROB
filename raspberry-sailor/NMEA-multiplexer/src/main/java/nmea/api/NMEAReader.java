@@ -23,6 +23,8 @@ public abstract class NMEAReader extends Thread {
 	private NMEAReader instance = this;
 	protected boolean verbose = false;
 
+	protected String[] deviceFilters = null;
+	protected String[] sentenceFilters = null;
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 		if (verbose && NMEAListeners != null) {
@@ -113,6 +115,12 @@ public abstract class NMEAReader extends Thread {
 
 	public void enableReading() {
 		this.goRead = true;
+	}
+	public void setDeviceFilters(String[] deviceFilters) {
+		this.deviceFilters = deviceFilters;
+	}
+	public void setSentenceFilters(String[] sentenceFilters) {
+		this.sentenceFilters = sentenceFilters;
 	}
 
 	/**

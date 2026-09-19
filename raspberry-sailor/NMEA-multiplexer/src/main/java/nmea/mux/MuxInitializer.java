@@ -233,9 +233,9 @@ public class MuxInitializer {
                                         Integer.parseInt(br),
                                         resetInterval,
                                         desc));
-                                // TODO Implement methods below (like in DataFileReader), and same for all Readers
-                                // ((SerialReader)serialClient.getReader()).setDeviceFilters(serialClient.getDeviceFilters());
-                                // ((SerialReader)serialClient.getReader()).setSentenceFilters(serialClient.getSentenceFilters());
+                                // TODO the same for all Readers
+                                 serialClient.getReader().setDeviceFilters(serialClient.getDeviceFilters());
+                                 serialClient.getReader().setSentenceFilters(serialClient.getSentenceFilters());
 
                                 // Moved above
                                 // serialClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
@@ -295,7 +295,10 @@ public class MuxInitializer {
                                                         jqString,
                                                         nmeaProcessor,
                                                         betweenLoops));
-                                restClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                // Use deviceFilters and sentenceFilters
+                                restClient.getReader().setDeviceFilters(restClient.getDeviceFilters());
+                                restClient.getReader().setSentenceFilters(restClient.getSentenceFilters());
+                                restClient.setVerbose("true".equals(consumerVerbose)); // "true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(restClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -332,7 +335,10 @@ public class MuxInitializer {
                                 } else {
                                     tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), initialRequest, keepTrying));
                                 }
-                                tcpClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                tcpClient.setVerbose("true".equals(consumerVerbose)); // muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                // Use deviceFilters and sentenceFilters
+                                tcpClient.getReader().setDeviceFilters(tcpClient.getDeviceFilters());
+                                tcpClient.getReader().setSentenceFilters(tcpClient.getSentenceFilters());
                                 nmeaDataClients.add(tcpClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -395,9 +401,9 @@ public class MuxInitializer {
                                         zip,
                                         pathInArchive,
                                         fileClient.isVerbose()));
-                                // Use deviceFilters and sentenceFilters ?
-                                ((DataFileReader)fileClient.getReader()).setDeviceFilters(fileClient.getDeviceFilters());
-                                ((DataFileReader)fileClient.getReader()).setSentenceFilters(fileClient.getSentenceFilters());
+                                // Use deviceFilters and sentenceFilters
+                                fileClient.getReader().setDeviceFilters(fileClient.getDeviceFilters());
+                                fileClient.getReader().setSentenceFilters(fileClient.getSentenceFilters());
                                 // moved that one above
                                 // fileClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 fileClient.setZip(zip);
@@ -432,7 +438,10 @@ public class MuxInitializer {
                                 }
                                 wsClient.initClient();
                                 wsClient.setReader(new WebSocketReader("MUX-WSReader", wsClient.getListeners(), wsUri));
-                                wsClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                wsClient.getReader().setDeviceFilters(wsClient.getDeviceFilters());
+                                wsClient.getReader().setSentenceFilters(wsClient.getSentenceFilters());
+                                wsClient.setVerbose("true".equals(consumerVerbose));
+                                // wsClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(wsClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -461,7 +470,10 @@ public class MuxInitializer {
                                 }
                                 rndClient.initClient();
                                 rndClient.setReader(new RandomReader("MUX-RndReader", rndClient.getListeners()));
-                                rndClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                rndClient.getReader().setDeviceFilters(rndClient.getDeviceFilters());
+                                rndClient.getReader().setSentenceFilters(rndClient.getSentenceFilters());
+                                rndClient.setVerbose("true".equals(consumerVerbose));
+                                // rndClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(rndClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -492,7 +504,10 @@ public class MuxInitializer {
                                 }
                                 zdaClient.initClient();
                                 zdaClient.setReader(new ZDAReader("MUX-ZDAReader", zdaClient.getListeners()));
-                                zdaClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                zdaClient.getReader().setDeviceFilters(zdaClient.getDeviceFilters());
+                                zdaClient.getReader().setSentenceFilters(zdaClient.getSentenceFilters());
+                                zdaClient.setVerbose("true".equals(consumerVerbose));
+                                // zdaClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(zdaClient);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -532,7 +547,10 @@ public class MuxInitializer {
                                     udpReader.setTimeout(Long.parseLong(udpServerTimeout));
                                 }
                                 udpClient.setReader(udpReader);
-                                udpClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                udpClient.getReader().setDeviceFilters(udpClient.getDeviceFilters());
+                                udpClient.getReader().setSentenceFilters(udpClient.getSentenceFilters());
+                                udpClient.setVerbose("true".equals(consumerVerbose));
+                                // udpClient.setVerbose("true".equals(muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 nmeaDataClients.add(udpClient);
                             } catch (Exception e) {
                                 e.printStackTrace();

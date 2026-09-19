@@ -30,7 +30,7 @@ channels:
     between-records: 50   # Speed up
     verbose: false
     active: true
-    # NEW: Filters efficient on fileReaders!... (NMEAParser does the job)
+    # NEW (Sep-2026): Filters efficient on fileReaders!... (NMEAParser does the job)
     # ---------------------------------------
     device.filters: II, GP, HC, YX
     # device.filters: ~PL
@@ -40,7 +40,7 @@ channels:
   #
 forwarders:
   - type: file
-    verbose: true
+    verbose: false
     append: false
     active: true
     timebase.filename: false
