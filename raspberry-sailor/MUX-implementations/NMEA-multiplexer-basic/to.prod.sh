@@ -84,7 +84,7 @@ if [[ -f ${JAR_NAME} ]]; then
 fi
 #
 if [[ "${REBUILD_REQUEST}" == "Y" ]]; then
-  echo -e "Rebuilding from source (No Scala)..."
+  echo -e "Rebuilding from source (No Scala, no Kotlin)..."
   if [[ "${OPTION}" == "BASIC" ]]; then
     ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
   else
@@ -220,7 +220,7 @@ echo -e "| Once the server is started, try http://<host>:<port>/zip/index.html f
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "PS: Current folder is $(PWD) "
 echo -e ""
-echo -e "For tests, you cab run:"
+echo -e "For tests, you can run (form the distrib folder, if not dropped):"
 echo -e "./mux.sh nmea.mux.basics.yaml"
 echo -e "Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
 echo -e "http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
