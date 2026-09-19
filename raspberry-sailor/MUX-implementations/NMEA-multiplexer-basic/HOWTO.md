@@ -1,6 +1,9 @@
 # From scratch
 ### _An example_: how to setup a new Raspberry Pi for a minimalist Nav Station.
-##### A tracker for less than $50...  
+##### A tracker for less than $50...
+
+- Also look at this [summary](./use_cases/summary.md).
+
 We will be setting up a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/) with an [e-ink 2.13" bonnet](https://learn.adafruit.com/2-13-in-e-ink-bonnet?view=all).  
 > As you would see below, this is just _an example_ of configuration, used to explain the way it goes.
 > Several other configurations are available, using the same process and guidelines.  
@@ -41,7 +44,7 @@ We do the build on one machine, where the git repo has been cloned, and we deplo
 only the parts required at runtime.
 The build is a demanding operation, the Raspberry Pi Zero could do it, but it would indeed take quite some time.
 A more powerful machine is more suitable for this kind of process.  
-The process goes in two main big steps (also summarized [here](use_cases/summary.md)).
+The process goes in two main big steps (also summarized [here](use_cases/summary/summary.md)).
 
 - **Step One**: you clone this repo, do the build, and package for deployment.
   - This step requires a bit more resources than the next one.
