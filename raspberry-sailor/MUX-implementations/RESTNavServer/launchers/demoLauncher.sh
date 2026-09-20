@@ -86,6 +86,7 @@ fi
 URL_OPTION_1_00="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 URL_OPTION_1_01="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_1a="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
+URL_OPTION_1b="http://localhost:${HTTP_PORT}/web/index.html"
 URL_OPTION_2="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n"
 URL_OPTION_4="http://localhost:${HTTP_PORT}/web/webcomponents/console.gps.html?style=flat-gray&bg=black&border=y"
 URL_OPTION_5="http://localhost:${HTTP_PORT}/web/index.html"
@@ -128,6 +129,7 @@ function displayHelp() {
   echo -e "--------------------------------"
   echo -e "Option $1, property file is $2"
   cat $2
+  echo -e "" # CR-NL
   echo -e "--------------------------------"
   if [[ "$3" != "" ]]; then
     echo -e "Would open a browser with URL ${3}"
@@ -194,6 +196,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
     echo -e "|     (Including almanacs publication)                                                    |             Does not require a GPS                                                      |"
+    echo -e "|  ${RED}1b${NC}. Time simulated by a ZDA generator; Minimal config                                  |                                                                                         |"
     echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
     echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
     echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
@@ -256,6 +259,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "+------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}1${NC}. Time simulated by a ZDA generator; HTTP Server, rich Web UI. Does not require a GPS |  ${RED}1a${NC}. Time from a TCP ZDA generator (port 7002), TCP Server, rich Web UI.                |"
     echo -e "|     (Including almanacs publication)                                                    |             Does not require a GPS                                                      |"
+    echo -e "|  ${RED}1b${NC}. Time simulated by a ZDA generator; Minimal config                                  |                                                                                         |"
     echo -e "|  ${RED}2${NC}. Interactive Time (user-set), HTTP Server, rich Web UI. Does not require a GPS       |  ${RED}3${NC}. Home Weather Station data                                                           |"
     echo -e "|  ${RED}4${NC}. With GPS and NMEA data, waits for the RMC sentence to be active to begin logging    |  ${RED}5${NC}. Like option '1', but with 'Sun Flower' option                                       |"
     echo -e "|                     (Check your GPS connection setting in nmea.mux.gps.properties file) |                                                                                         |"
@@ -354,6 +358,10 @@ while [[ "${GO}" == "true" ]]; do
 	      "1a")
 	        PROP_FILE=mux-configs/nmea.mux.tcp.zda.yaml
 	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1a}
+	        ;;
+	      "1b")
+	        PROP_FILE=mux-configs/nmea.mux.minimal.yaml
+	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1b}
 	        ;;
 	      "2")
 	        PROP_FILE=mux-configs/nmea.mux.interactive.time.properties
@@ -599,6 +607,32 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5  # Wait (5s) for the server to be operational
 		    openBrowser ${URL_OPTION_1a}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
+	    GO=false
+	    ;;
+	  "1b")
+  	  PROP_FILE=mux-configs/nmea.mux.minimal.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
+	    if [[ "${CMD_VERBOSE}" == "Y" ]]; then
+	      echo -e "Running command: [./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &]"
+	    fi
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5  # Wait (5s) for the server to be operational
+		    openBrowser ${URL_OPTION_1b}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
