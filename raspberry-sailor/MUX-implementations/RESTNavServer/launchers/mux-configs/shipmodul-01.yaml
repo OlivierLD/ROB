@@ -54,6 +54,11 @@ forwarders:
 #  - type: console
 #  - type: tcp
 #    port: 7002
+  - type: gpsd
+    port: 2947
+    description: "To be consumed by OpenCPN"
+    verbose: true
+    active: false
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties

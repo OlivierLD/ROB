@@ -119,7 +119,7 @@ public class RandomMTWClient extends NMEAClient {
 	}
 
 	@Override
-	public Object getBean() {
+	public ClientBean getBean() {
 		return new RandomMTWBean(this);
 	}
 

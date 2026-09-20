@@ -6,6 +6,7 @@ import calc.GreatCircle;
 import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.parser.*;
 
@@ -107,28 +108,33 @@ public class NextWaypointManager extends Computer {
 		this.verbose = "true".equals(props.getProperty("verbose"));
 	}
 
-	public static class WaypointComputerBean {
+	public static class WaypointComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "waypoint-computer";
 		private boolean verbose;
 		private boolean active;
 		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
 
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
 
+		@Override
 		public boolean isActive() {
 			return active;
 		}
+		@Override
 		public String getDescription() { return description; }
 
 		public WaypointComputerBean() {}  // This is for Jackson
@@ -141,7 +147,7 @@ public class NextWaypointManager extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new WaypointComputerBean(this);
 	}
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.ais.AISParser;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.parser.StringParsers;
 import utils.TimeUtil;
@@ -174,19 +175,48 @@ public class AISTargetLogger extends Computer {
 		this.setVerbose("true".equals(props.getProperty("verbose")));
 	}
 
-	public static class AISTargetLoggerBean {
+	public static class AISTargetLoggerBean implements BeanInterface {
 		private final String cls;
 		private final String type = "ais-target-computer";
 		private final boolean verbose;
+		private boolean active;
+		private String description;
 
 		public AISTargetLoggerBean(AISTargetLogger instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
+			this.active = instance.isActive();
+			this.description = instance.getDescription();
+		}
+
+		@Override
+		public String getCls() {
+			return cls;
+		}
+
+		@Override
+		public String getType() {
+			return type;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new AISTargetLoggerBean(this);
 	}
 

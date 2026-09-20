@@ -105,7 +105,7 @@ public class WeatherStationWSClient extends NMEAClient {
 	}
 
 	@Override
-	public Object getBean() {
+	public ClientBean getBean() {
 		return new WeatherStationBean(this);
 	}
 

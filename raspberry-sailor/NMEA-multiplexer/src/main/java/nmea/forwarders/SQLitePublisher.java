@@ -1,5 +1,6 @@
 package nmea.forwarders;
 
+import nmea.api.BeanInterface;
 import nmea.parser.StringParsers;
 
 import java.sql.Connection;
@@ -115,23 +116,45 @@ public class SQLitePublisher implements Forwarder {
 		}
 	}
 
-	public static class SQLiteBean {
+	public static class SQLiteBean implements BeanInterface {
 		private String cls;
 		private String dbURL;
 		private String type = "sqlite";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
 		public SQLiteBean() {}   // This is for Jackson
 		public SQLiteBean(SQLitePublisher instance) {
 			cls = instance.getClass().getName();
 			dbURL = instance.dbURL;
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
-
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public String getDbURL() {
@@ -140,7 +163,7 @@ public class SQLitePublisher implements Forwarder {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new SQLiteBean(this);
 	}
 

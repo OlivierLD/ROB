@@ -1,5 +1,7 @@
 package nmea.forwarders;
 
+import nmea.api.BeanInterface;
+
 import java.util.Properties;
 
 public interface Forwarder {
@@ -44,5 +46,5 @@ public interface Forwarder {
 	 * Used by the RESTImplementation
 	 * @return the bean corresponding to the object (consumer, forwarder or computer)
 	 */
-	Object getBean();
+	BeanInterface getBean();
 }

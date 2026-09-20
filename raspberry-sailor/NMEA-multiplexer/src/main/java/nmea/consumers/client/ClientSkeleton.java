@@ -95,7 +95,7 @@ public class ClientSkeleton extends NMEAClient {
 	}
 
 	@Override
-	public Object getBean() {
+	public ClientBean getBean() {
 		return new SkeletonBean(this);
 	}
 

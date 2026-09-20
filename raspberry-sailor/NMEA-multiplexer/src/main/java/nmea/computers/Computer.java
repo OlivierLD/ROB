@@ -26,18 +26,22 @@ public abstract class Computer implements Forwarder {
 		this.multiplexer.onData(mess);
 	}
 
+	@Override
 	public boolean isVerbose() {
 		return verbose;
 	}
 
+	@Override
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
 
+	@Override
 	public boolean isActive() {
 		return active;
 	}
 
+	@Override
 	public void setActive(boolean active) {
 		this.active = active;
 	}

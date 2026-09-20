@@ -1,6 +1,6 @@
 package nmea.forwarders;
 
-import nmea.parser.StringParsers;
+import nmea.api.BeanInterface;
 import nmea.utils.MuxNMEAUtils;
 
 import java.io.*;
@@ -391,7 +391,7 @@ public class DataFileWriter implements Forwarder {
 		return timeSplitThreshold;
 	}
 
-	public static class DataFileBean {
+	public static class DataFileBean implements BeanInterface {
 		private String cls;
 		private String log;
 		private boolean append;
@@ -428,12 +428,14 @@ public class DataFileWriter implements Forwarder {
 			description = instance.getDescription();
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 		public boolean isAppend() {
 			return append;
 		}
+		@Override
 		public String getType() {
 			return type;
 		}
@@ -459,12 +461,15 @@ public class DataFileWriter implements Forwarder {
 		public boolean isZipped() {
 			return zipped;
 		}
+		@Override
 		public boolean isActive() {
 			return active;
 		}
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
+		@Override
 		public String getDescription() {
 			return description;
 		}
@@ -479,7 +484,7 @@ public class DataFileWriter implements Forwarder {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new DataFileBean(this);
 	}
 

@@ -1,5 +1,6 @@
 package nmea.forwarders;
 
+import nmea.api.BeanInterface;
 import nmea.parser.GeoPos;
 import nmea.parser.RMC;
 import nmea.parser.StringParsers;
@@ -138,23 +139,46 @@ public class MQTTPublisher implements Forwarder {
 		}
 	}
 
-	public static class MQTTBean {
+	public static class MQTTBean implements BeanInterface {
 		private String cls;
-		private String brokerURL;
 		private String type = "mqtt";
+		private boolean verbose;
+		private boolean active;
+		private String description;
+		private String brokerURL;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public MQTTBean() {}   // This is for Jackson
 		public MQTTBean(MQTTPublisher instance) {
 			cls = instance.getClass().getName();
 			brokerURL = instance.brokerURL;
+			verbose = instance.isVerbose();
+			active = instance.isActive();
+			description = instance.getDescription();
 		}
 
 		public String getBrokerURL() {
@@ -163,7 +187,7 @@ public class MQTTPublisher implements Forwarder {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new MQTTBean(this);
 	}
 

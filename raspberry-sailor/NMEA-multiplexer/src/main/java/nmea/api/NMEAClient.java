@@ -1,5 +1,6 @@
 package nmea.api;
 
+import nmea.consumers.client.ClientBean;
 import nmea.consumers.client.Janitor;
 import nmea.utils.MuxNMEAUtils;
 
@@ -261,7 +262,7 @@ public abstract class NMEAClient {
 		}
 	}
 
-	public abstract Object getBean();
+	public abstract ClientBean getBean();
 
 	public boolean isVerbose() {
 		return this.verbose;

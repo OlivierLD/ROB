@@ -150,7 +150,7 @@ public class RESTClient extends NMEAClient {
 	}
 
 	@Override
-	public Object getBean() {
+	public ClientBean getBean() {
 		return new RESTBean(this);
 	}
 

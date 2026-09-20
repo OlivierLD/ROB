@@ -11,6 +11,7 @@ import http.HTTPServer.Operation;
 import http.HTTPServer.Request;
 import http.HTTPServer.Response;
 import http.RESTProcessorUtil;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
@@ -2860,7 +2861,7 @@ public class RESTImplementation {
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 				}
 				break;
-			// TODO More cases to implement !!
+			case "gpsd":
 			case "udp":
 			case "rest":
 			case "rnd":
@@ -2873,8 +2874,49 @@ public class RESTImplementation {
 			case "wsp":
 			case "ws":
 			case "rmi":
+				// TODO Make it generic (above) ?
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (true) {
+						System.out.printf("==> The map (custom) for :\n", type);
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof BeanInterface /*DataFileWriter.DataFileBean*/) &&
+									((BeanInterface) fwdr.getBean()).getCls().equals((String) custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setActivateForwarder, file forwarder not found.");
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+
+						System.out.printf("** Updating DataFileWriter forwarder %s from %B to %B\n",
+								forwarder, forwarder.isActive(), on);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setActive(on);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
 			default:
-				System.err.printf("Type %s not implemented\n", type);
+				System.err.printf("RESTImplementation: Type %s not implemented/managed\n", type);
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
 				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Type %s not implemented", type));
 				break;

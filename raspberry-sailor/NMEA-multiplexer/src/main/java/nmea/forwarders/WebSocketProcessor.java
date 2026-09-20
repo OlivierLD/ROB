@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.parser.Angle180;
 import nmea.parser.Angle180EW;
 import nmea.parser.Angle180LR;
@@ -314,23 +315,46 @@ public class WebSocketProcessor implements Forwarder {
 		}
 	}
 
-	public static class WSBean {
+	public static class WSBean implements BeanInterface {
 		private String cls;
 		private String wsUri;
 		private final String type = "wsp";
+		private boolean active = true;
+		private boolean verbose;
+		private String description;
 
 		public WSBean() {}  // This is for Jackson
 		public WSBean(WebSocketProcessor instance) {
 			cls = instance.getClass().getName();
 			wsUri = instance.wsUri;
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public String getWsUri() {
@@ -339,7 +363,7 @@ public class WebSocketProcessor implements Forwarder {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new WSBean(this);
 	}
 

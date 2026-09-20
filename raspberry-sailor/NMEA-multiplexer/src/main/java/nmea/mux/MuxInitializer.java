@@ -849,7 +849,9 @@ public class MuxInitializer {
                                     configProps.forEach((name, value) -> System.out.printf("%s : %s\n", name, value));
                                 }
                                 restForwarder.setProperties(configProps);
-
+//                                restForwarder.setVerbose("true".equals(fwdVerbose));
+//                                restForwarder.setActive("true".equals(fwdActive));
+//                                restForwarder.setDescription(fwdDesc);
                                 restForwarder.init();
                                 nmeaDataForwarders.add(restForwarder);
                             } catch (Exception ex) {

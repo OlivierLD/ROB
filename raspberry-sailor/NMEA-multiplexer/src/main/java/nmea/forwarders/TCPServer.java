@@ -1,6 +1,7 @@
 package nmea.forwarders;
 
 import nmea.ais.AISParser;
+import nmea.api.BeanInterface;
 
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
@@ -162,23 +163,26 @@ public class TCPServer implements Forwarder {
 		}
 	}
 
-	public static class TCPBean {
+	public static class TCPBean implements BeanInterface {
 
 		private String cls;
 		private int port;
 		private final String type = "tcp";
 		private int nbClients = 0;
 		private boolean active = true;
+		private boolean verbose;
 		private String description;
 
 		public int getPort() {
 			return port;
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
@@ -187,8 +191,15 @@ public class TCPServer implements Forwarder {
 			return nbClients;
 		}
 
+		@Override
 		public boolean isActive() { return active; }
 
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
 		public String getDescription() { return description; }
 
 		public TCPBean() {}  // This is for Jackson
@@ -199,11 +210,12 @@ public class TCPServer implements Forwarder {
 			nbClients = instance.getNbClients();
 			active = instance.isActive();
 			description = instance.getDescription();
+			verbose = instance.isVerbose();
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new TCPBean(this);
 	}
 

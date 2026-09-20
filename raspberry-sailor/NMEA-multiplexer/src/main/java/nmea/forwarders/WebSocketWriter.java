@@ -1,5 +1,6 @@
 package nmea.forwarders;
 
+import nmea.api.BeanInterface;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -75,21 +76,29 @@ public class WebSocketWriter implements Forwarder {
 		}
 	}
 
-	public static class WSBean {
+	public static class WSBean implements BeanInterface {
 		private String cls;
 		private String wsUri;
 		private final String type = "ws";
+		private boolean active = true;
+		private boolean verbose;
+		private String description;
 
 		public WSBean() {}  // This is for Jackson
 		public WSBean(WebSocketWriter instance) {
 			cls = instance.getClass().getName();
 			wsUri = instance.wsUri;
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
@@ -97,10 +106,25 @@ public class WebSocketWriter implements Forwarder {
 		public String getWsUri() {
 			return wsUri;
 		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new WSBean(this);
 	}
 

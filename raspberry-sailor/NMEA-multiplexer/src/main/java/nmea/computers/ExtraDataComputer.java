@@ -2,6 +2,7 @@ package nmea.computers;
 
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAParser;
 import nmea.computers.current.LongTimeCurrentCalculator;
@@ -342,13 +343,14 @@ public class ExtraDataComputer extends Computer {
 		this.longTimeCurrentCalculator.stream().forEach(ltcc -> ltcc.resetBuffers());
 	}
 
-	public static class ComputerBean {
+	public static class ComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "tw-current";
 		private String timeBufferLength = "600000"; // Default is 10 minutes.
 		private int cacheSize = 0;
 		private String tbSize = "";  // Time Buffer
 		private boolean verbose = false;
+		private boolean active = true;
 		private String prefix = "OS";
 		private String description;
 
@@ -364,14 +366,19 @@ public class ExtraDataComputer extends Computer {
 			return prefix;
 		}
 
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
+		@Override
+		public boolean isActive() { return active; }
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
@@ -379,6 +386,7 @@ public class ExtraDataComputer extends Computer {
 		public String getTbSize() {
 			return tbSize;
 		}
+		@Override
 		public String getDescription() { return description; }
 
 
@@ -387,6 +395,7 @@ public class ExtraDataComputer extends Computer {
 			this.cls = instance.getClass().getName();
 			this.cacheSize = ApplicationContext.getInstance().getDataCache().size();
 			this.verbose = instance.isVerbose();
+			this.active = instance.isActive();
 			this.timeBufferLength = instance.longTimeCurrentCalculator
 							.stream()
 							.map(ltcc -> String.valueOf(ltcc.getBufferLength()))
@@ -401,7 +410,7 @@ public class ExtraDataComputer extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new ComputerBean(this);
 	}
 }

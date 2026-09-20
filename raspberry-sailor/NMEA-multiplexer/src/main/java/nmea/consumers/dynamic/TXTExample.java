@@ -6,6 +6,7 @@ import nmea.api.NMEAEvent;
 import nmea.api.NMEAListener;
 import nmea.api.NMEAParser;
 import nmea.api.NMEAReader;
+import nmea.consumers.client.ClientBean;
 import nmea.parser.StringParsers;
 import utils.StringUtils;
 
@@ -93,7 +94,7 @@ public class TXTExample extends NMEAClient {
     }
 
     @Override
-    public Object getBean() {
+    public ClientBean getBean() {
         return null;
     }
 

@@ -3,6 +3,7 @@ package nmea.forwarders;
 import calc.GeomUtil;
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.forwarders.delegate.DelegateConsumer;
 import nmea.parser.Angle180;
 import nmea.parser.Angle180EW;
@@ -737,25 +738,46 @@ public class NMEAtoTextProcessor implements Forwarder {
     }
 
 
-    public static class NMEAtoTextBean {
+    public static class NMEAtoTextBean implements BeanInterface {
         private final String cls; // Class
         private final String type = "nmea-to-text";
+        private boolean active;
+        private boolean verbose;
+        private String description;
 
         public NMEAtoTextBean(NMEAtoTextProcessor instance) {
             cls = instance.getClass().getName();
+            verbose = instance.isVerbose();
+            active = instance.isActive();
+            description = instance.getDescription();
         }
 
+        @Override
+        public String getDescription() {
+            return description;
+        }
+        @Override
         public String getCls() {
             return cls;
         }
-
+        @Override
         public String getType() {
             return type;
+        }
+
+        @Override
+        public boolean isActive() {
+            return active;
+        }
+
+        @Override
+        public boolean isVerbose() {
+            return verbose;
         }
     }
 
     @Override
-    public Object getBean() {
+    public BeanInterface getBean() {
         return new NMEAtoTextBean(this);
     }
 

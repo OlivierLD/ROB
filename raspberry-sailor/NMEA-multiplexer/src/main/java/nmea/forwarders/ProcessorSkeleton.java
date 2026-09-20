@@ -2,6 +2,7 @@ package nmea.forwarders;
 
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 
 import java.util.Properties;
 
@@ -59,26 +60,49 @@ public class ProcessorSkeleton implements Forwarder {
 		}
 	}
 
-	public static class SkeletonBean {
+	public static class SkeletonBean implements BeanInterface {
 		private String cls;
 		private String type = "skeleton";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public SkeletonBean() {}  // This is for Jackson
 		public SkeletonBean(ProcessorSkeleton instance) {
 			cls = instance.getClass().getName();
+			verbose = instance.isVerbose();
+			active = instance.isActive();
+			description = instance.getDescription();
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new SkeletonBean(this);
 	}
 

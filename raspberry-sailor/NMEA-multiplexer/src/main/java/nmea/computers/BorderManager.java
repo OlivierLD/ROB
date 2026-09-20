@@ -5,6 +5,7 @@ import algebra.SystemUtil;
 import calc.GreatCirclePoint;
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.parser.*;
 
@@ -395,29 +396,34 @@ public class BorderManager extends Computer {
 		}
 	}
 
-	public static class BorderComputerBean {
+	public static class BorderComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "border-computer";
 		private boolean verbose;
 		private boolean active;
 		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
 
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
 
+		@Override
 		public boolean isActive() {
 			return active;
 		}
 
+		@Override
 		public String getDescription() { return description; }
 
 		public BorderComputerBean() {}  // This is for Jackson
@@ -430,7 +436,7 @@ public class BorderManager extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new BorderComputerBean(this);
 	}
 

@@ -1,5 +1,6 @@
 package nmea.computers;
 
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAParser;
 import nmea.parser.StringParsers;
@@ -62,28 +63,33 @@ public class ComputerSkeleton extends Computer {
 		System.out.println("- Stop Computing New Data, " + this.getClass().getName());
 	}
 
-	public static class ComputerSkeletonBean { // TODO: implement a trait
+	public static class ComputerSkeletonBean implements BeanInterface { // TODO: implement a trait
 		private String cls;
 		private final String type = "skeleton";
 		private boolean verbose;
 		private boolean active;
 		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
 
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
 
+		@Override
 		public boolean isActive() {
 			return active;
 		}
+		@Override
 		public String getDescription() { return description; }
 
 		public ComputerSkeletonBean() {}  // This is for Jackson
@@ -96,7 +102,7 @@ public class ComputerSkeleton extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new ComputerSkeletonBean(this);
 	}
 }

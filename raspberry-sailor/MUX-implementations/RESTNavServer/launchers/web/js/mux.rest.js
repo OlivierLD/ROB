@@ -775,7 +775,8 @@ let forwarderList = () => {
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                         "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
-                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>");
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                    "</tr>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
 					    html += (`<td>Filter(s): ${filterList}</td>`);
@@ -1462,6 +1463,8 @@ let generateDiagram = () => {
                 case 'gpsd':
                     html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                         "<td><b>gpsd</b></td>" + "<td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                         "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
                     "</tr>");
                     break;

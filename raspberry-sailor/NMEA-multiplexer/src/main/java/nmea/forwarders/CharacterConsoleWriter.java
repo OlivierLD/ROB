@@ -2,6 +2,7 @@ package nmea.forwarders;
 
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.forwarders.displays.CharacterModeConsole;
 
 import java.util.Properties;
@@ -59,27 +60,46 @@ public class CharacterConsoleWriter implements Forwarder {
 		}
 	}
 
-	private static class ConsoleBean {
+	private static class ConsoleBean implements BeanInterface {
 		private String cls;
+		private boolean active;
+		private boolean verbose;
+		private String description;
 		private final String type = "char-console";
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
-
+		@Override
 		public String getType() {
 			return type;
+		}
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public ConsoleBean() {
 		}
 		public ConsoleBean(CharacterConsoleWriter instance) {
 			cls = instance.getClass().getName();
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new ConsoleBean(this);
 	}
 

@@ -1,5 +1,7 @@
 package nmea.forwarders;
 
+import nmea.api.BeanInterface;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -78,8 +80,11 @@ public class UDPServer implements Forwarder {
 		System.out.println("- Stop writing to " + this.getClass().getName());
 	}
 
-	public static class UDPBean {
+	public static class UDPBean implements BeanInterface {
 		private String cls;
+		private boolean active = true;
+		private boolean verbose;
+		private String description;
 		private int port;
 		private final String type = "udp";
 
@@ -87,23 +92,43 @@ public class UDPServer implements Forwarder {
 		public UDPBean(UDPServer instance) {
 			cls = instance.getClass().getName();
 			port = instance.udpPort;
+			verbose = instance.isVerbose();
+			active = instance.isActive();
+			description = instance.getDescription();
 		}
 
 		public int getPort() {
 			return port;
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new UDPBean(this);
 	}
 

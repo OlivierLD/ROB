@@ -6,6 +6,8 @@ import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
+import nmea.api.BeanInterface;
+
 import java.io.OutputStream;
 
 import java.io.IOException;
@@ -103,19 +105,26 @@ public class SerialWriter implements Forwarder {
 		return this.comPort;
 	}
 
-	public static class SerialBean {
+	public static class SerialBean implements BeanInterface {
 		private String cls;
 		private String port;
 		private int br;
 		private String type = "serial";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
 		public SerialBean() {}   // This is for Jackson
 		public SerialBean(SerialWriter instance) {
 			cls = instance.getClass().getName();
 			port = instance.comPort;
 			br = instance.br;
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance .getDescription();
 		}
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
@@ -124,6 +133,7 @@ public class SerialWriter implements Forwarder {
 			return br;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
@@ -134,10 +144,25 @@ public class SerialWriter implements Forwarder {
 		public int getBR() {
 			return br;
 		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new SerialBean(this);
 	}
 

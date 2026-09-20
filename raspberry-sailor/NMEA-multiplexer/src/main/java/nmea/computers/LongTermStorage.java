@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.parser.UTCDate;
 
@@ -167,7 +168,7 @@ public class LongTermStorage extends Computer {
 		}
 	}
 
-	public static class LongTermComputerBean {
+	public static class LongTermComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "longterm-data-computer";
 
@@ -177,24 +178,25 @@ public class LongTermStorage extends Computer {
 		private boolean active;
 		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
-
+		@Override
 		public String getType() {
 			return type;
 		}
-
 		public String[] getDataPathInCache() { return dataPathInCache; }
 		public String getStoragePathInCache() { return storagePathInCache; }
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
-
+		@Override
 		public boolean isActive() {
 			return active;
 		}
-
+		@Override
 		public String getDescription() {
 			return this.description;
 		}
@@ -211,7 +213,7 @@ public class LongTermStorage extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new LongTermComputerBean(this);
 	}
 }

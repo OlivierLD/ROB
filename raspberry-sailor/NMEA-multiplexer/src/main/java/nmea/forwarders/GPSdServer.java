@@ -1,6 +1,7 @@
 package nmea.forwarders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nmea.api.BeanInterface;
 import utils.DumpUtil;
 
 import java.io.DataOutputStream;
@@ -25,6 +26,10 @@ public class GPSdServer implements Forwarder {
 	private int tcpPort = 2947;
 	private ServerSocket serverSocket = null;
 
+	private boolean verbose;
+	private boolean active;
+	private String description;
+
 	public GPSdServer(int port) throws Exception {
 		this.tcpPort = port;
 
@@ -42,6 +47,36 @@ public class GPSdServer implements Forwarder {
 
 	protected void setSocket(Socket skt) {
 		this.clientSocketlist.add(skt);
+	}
+
+	@Override
+	public boolean isVerbose() {
+		return verbose;
+	}
+
+	@Override
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/*
@@ -191,38 +226,54 @@ public class GPSdServer implements Forwarder {
 		return read;
 	}
 
-	public static class GPSdBean {
+	public static class GPSdBean implements BeanInterface {
 		private String cls;
 		private int port;
 		private String type = "gpsd";
 		private int nbClients = 0;
+		private String description;
+		private boolean verbose;
+		private boolean active;
 
 		public int getPort() {
 			return port;
 		}
-
+		@Override
 		public String getCls() {
 			return cls;
 		}
-
+		@Override
 		public String getType() {
 			return type;
 		}
-
 		public int getNbClients() {
 			return nbClients;
 		}
-
+		@Override
+		public String getDescription() {
+			return description;
+		}
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+		@Override
+		public boolean isActive() {
+			return active;
+		}
 		public GPSdBean() {}   // This is for Jackson
 		public GPSdBean(GPSdServer instance) {
 			cls = instance.getClass().getName();
 			port = instance.tcpPort;
 			nbClients = instance.getNbClients();
+			description = instance.getDescription();
+			verbose = instance.isVerbose();
+			active = instance.isActive();
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new GPSdBean(this);
 	}
 

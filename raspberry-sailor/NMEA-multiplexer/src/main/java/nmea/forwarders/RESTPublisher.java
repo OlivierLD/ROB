@@ -2,6 +2,7 @@ package nmea.forwarders;
 
 import http.client.HTTPClient;
 import nmea.ais.AISParser;
+import nmea.api.BeanInterface;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -242,7 +243,7 @@ public class RESTPublisher implements Forwarder {
 		System.out.println("- Stop writing to " + this.getClass().getName());
 	}
 
-	public static class RESTBean {
+	public static class RESTBean implements BeanInterface {
 		private String cls;
 		private String protocol;
 		private int port;
@@ -272,18 +273,23 @@ public class RESTPublisher implements Forwarder {
 		public String getResource() {
 			return resource;
 		}
+		@Override
 		public String getCls() {
 			return cls;
 		}
+		@Override
 		public String getType() {
 			return type;
 		}
+		@Override
 		public boolean isActive() {
 			return active;
 		}
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
+		@Override
 		public String getDescription() {
 			return description;
 		}
@@ -322,7 +328,7 @@ public class RESTPublisher implements Forwarder {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new RESTBean(this);
 	}
 

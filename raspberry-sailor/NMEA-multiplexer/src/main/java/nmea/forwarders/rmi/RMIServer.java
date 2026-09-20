@@ -1,6 +1,7 @@
 package nmea.forwarders.rmi;
 
 import context.ApplicationContext;
+import nmea.api.BeanInterface;
 import nmea.forwarders.Forwarder;
 
 import java.net.InetAddress;
@@ -130,19 +131,39 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface, F
 		return t.execute();
 	}
 
-	public static class RMIBean {
+	public static class RMIBean implements BeanInterface {
 		private final String cls;
 		private final int port;
 		private final String type = "rmi";
 		private final String bindingName;
 		private final String serverAddress;
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 
 		public String getServerAddress() {
@@ -165,7 +186,7 @@ public class RMIServer extends UnicastRemoteObject implements ServerInterface, F
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new RMIBean(this);
 	}
 

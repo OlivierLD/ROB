@@ -117,7 +117,7 @@ public class TCPClient extends NMEAClient {
 	}
 
 	@Override
-	public Object getBean() {
+	public ClientBean getBean() {
 		return new TCPBean(this);
 	}
 

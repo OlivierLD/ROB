@@ -2,12 +2,11 @@ package nmea.computers;
 
 import context.ApplicationContext;
 import context.NMEADataCache;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
-import nmea.api.NMEAParser;
 import nmea.parser.StringGenerator;
 import nmea.parser.StringParsers;
 import nmea.parser.Temperature;
-import utils.StringUtils;
 import utils.WeatherUtil;
 
 import java.util.Arrays;
@@ -113,29 +112,34 @@ public class DewPointTemperatureComputer extends Computer {
 		System.out.println("- Stop Computing Dew Point Temperature, " + this.getClass().getName());
 	}
 
-	public static class DewPointComputerBean {
+	public static class DewPointComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "dew-point-computer";
 		private boolean verbose;
 		private boolean active;
 		private String description;
 
+		@Override
 		public String getCls() {
 			return cls;
 		}
 
+		@Override
 		public String getType() {
 			return type;
 		}
 
+		@Override
 		public boolean isVerbose() {
 			return verbose;
 		}
 
+		@Override
 		public boolean isActive() {
 			return active;
 		}
 
+		@Override
 		public String getDescription() { return description; }
 
 		public DewPointComputerBean() {}  // This is for Jackson
@@ -148,7 +152,7 @@ public class DewPointTemperatureComputer extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new DewPointComputerBean(this);
 	}
 }

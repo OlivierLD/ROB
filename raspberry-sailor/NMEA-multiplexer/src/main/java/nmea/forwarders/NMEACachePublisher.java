@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import http.client.HTTPClient;
+import nmea.api.BeanInterface;
 import utils.DumpUtil;
 
 import java.util.HashMap;
@@ -447,7 +448,7 @@ public class NMEACachePublisher implements Forwarder {
     /**
      * Unused getters are for Jackson.
      */
-    public static class NMEACacheBean {
+    public static class NMEACacheBean implements BeanInterface {
         private String cls; // Class
         private String type = "nmea-cache-publisher";
         private long betweenLoops;
@@ -460,6 +461,7 @@ public class NMEACachePublisher implements Forwarder {
         private String doOnClose;
         private String onCloseVerb;
         private boolean active;
+        private boolean verbose;
         private String description;
 
         public NMEACacheBean() {}   // This is for Jackson
@@ -489,10 +491,12 @@ public class NMEACachePublisher implements Forwarder {
             this.description = desc;
         }
 
+        @Override
         public String getCls() {
             return cls;
         }
 
+        @Override
         public String getType() {
             return type;
         }
@@ -520,9 +524,17 @@ public class NMEACachePublisher implements Forwarder {
         public String getResource() {
             return resource;
         }
+        @Override
         public boolean isActive() {
             return active;
         }
+
+        @Override
+        public boolean isVerbose() {
+            return verbose;
+        }
+
+        @Override
         public String getDescription() {
             return description;
         }
@@ -545,7 +557,7 @@ public class NMEACachePublisher implements Forwarder {
     }
 
     @Override
-    public Object getBean() {
+    public BeanInterface getBean() {
         return new NMEACacheBean(this,
                 this.betweenPublish,
                 this.protocol,

@@ -6,6 +6,7 @@ import calc.GeomUtil;
 import context.ApplicationContext;
 import context.NMEADataCache;
 import nmea.ais.AISParser;
+import nmea.api.BeanInterface;
 import nmea.api.Multiplexer;
 import nmea.parser.Angle360;
 import nmea.parser.GeoPos;
@@ -369,7 +370,7 @@ public class AISManager extends Computer {
 		}
 	}
 
-	public static class AISComputerBean {
+	public static class AISComputerBean implements BeanInterface {
 		private String cls;
 		private final String type = "ais-computer";
 		private boolean verbose;
@@ -402,7 +403,7 @@ public class AISManager extends Computer {
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new AISComputerBean(this);
 	}
 

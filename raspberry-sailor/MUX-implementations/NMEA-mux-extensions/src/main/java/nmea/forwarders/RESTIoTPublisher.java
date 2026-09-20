@@ -3,6 +3,7 @@ package nmea.forwarders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import http.client.HTTPClient;
 import http.HttpHeaders;
+import nmea.api.BeanInterface;
 import nmea.parser.StringGenerator;
 import nmea.parser.StringParsers;
 
@@ -320,17 +321,48 @@ public class RESTIoTPublisher implements Forwarder {
 		System.out.println("- Stop writing (REST-> Adafruit-IO) to " + this.getClass().getName());
 	}
 
-	public static class RESTBean {
+	public static class RESTBean implements BeanInterface {
 		private final String cls;
 		private final String type = "REST-forwarder";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
 		public RESTBean(RESTIoTPublisher instance) {
 			cls = instance.getClass().getName();
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
+		}
+
+		@Override
+		public String getCls() {
+			return cls;
+		}
+
+		@Override
+		public String getType() {
+			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new RESTBean(this);
 	}
 

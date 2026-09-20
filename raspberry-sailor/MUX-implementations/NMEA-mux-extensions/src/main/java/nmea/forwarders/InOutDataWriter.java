@@ -4,6 +4,8 @@ import context.ApplicationContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+
+import nmea.api.BeanInterface;
 import nmea.parser.StringGenerator.XDRElement;
 import nmea.parser.StringGenerator.XDRTypes;
 import nmea.parser.StringParsers;
@@ -86,17 +88,48 @@ public class InOutDataWriter implements Forwarder {
 		System.out.println("- Stop writing special data to the cache. (" + this.getClass().getName() + ")");
 	}
 
-	private static class InOutBean {
+	private static class InOutBean implements BeanInterface {
 		private final String cls;
 		private final String type = "in-out";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
 		public InOutBean(InOutDataWriter instance) {
 			cls = instance.getClass().getName();
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
+		}
+
+		@Override
+		public String getCls() {
+			return cls;
+		}
+
+		@Override
+		public String getType() {
+			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new InOutBean(this);
 	}
 

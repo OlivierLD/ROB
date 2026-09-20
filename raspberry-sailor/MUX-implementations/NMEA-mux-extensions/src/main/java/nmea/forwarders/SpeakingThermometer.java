@@ -1,6 +1,8 @@
 package nmea.forwarders;
 
 import java.util.Properties;
+
+import nmea.api.BeanInterface;
 import nmea.parser.StringParsers;
 import util.TextToSpeech;
 
@@ -49,17 +51,48 @@ public class SpeakingThermometer implements Forwarder {
 		System.out.println("- Stop writing (speaking) to " + this.getClass().getName());
 	}
 
-	public static class SpeakerBean {
+	public static class SpeakerBean implements BeanInterface {
 		private String cls;
 		private String type = "thermo-speaker";
+		private boolean active;
+		private boolean verbose;
+		private String description;
 
 		public SpeakerBean(SpeakingThermometer instance) {
 			cls = instance.getClass().getName();
+			active = instance.isActive();
+			verbose = instance.isVerbose();
+			description = instance.getDescription();
+		}
+
+		@Override
+		public String getCls() {
+			return cls;
+		}
+
+		@Override
+		public String getType() {
+			return type;
+		}
+
+		@Override
+		public boolean isActive() {
+			return active;
+		}
+
+		@Override
+		public boolean isVerbose() {
+			return verbose;
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 
 	@Override
-	public Object getBean() {
+	public BeanInterface getBean() {
 		return new SpeakerBean(this);
 	}
 
