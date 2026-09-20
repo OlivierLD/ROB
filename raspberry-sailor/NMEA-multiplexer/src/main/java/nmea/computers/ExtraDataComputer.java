@@ -350,6 +350,7 @@ public class ExtraDataComputer extends Computer {
 		private String tbSize = "";  // Time Buffer
 		private boolean verbose = false;
 		private String prefix = "OS";
+		private String description;
 
 		public int getCacheSize() {
 			return this.cacheSize;
@@ -378,6 +379,8 @@ public class ExtraDataComputer extends Computer {
 		public String getTbSize() {
 			return tbSize;
 		}
+		public String getDescription() { return description; }
+
 
 		public ComputerBean() {}  // This is for Jackson
 		public ComputerBean(ExtraDataComputer instance) {
@@ -393,6 +396,7 @@ public class ExtraDataComputer extends Computer {
 							.map(ltcc -> String.valueOf(ltcc.getBufferSize()))
 							.collect(Collectors.joining(", "));
 			this.prefix = instance.generatedStringsPrefix;
+			this.description = instance.getDescription();
 		}
 	}
 

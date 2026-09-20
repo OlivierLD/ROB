@@ -57,9 +57,12 @@ forwarders:
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
+    description: "Border manager. Will honk if too close"
     verbose: false
   - class: nmea.computers.AISManager
     properties: mux-configs/ais.mgr.properties
+    description: "AIS manager. Will detect collision threats"
     verbose: false
   - class: nmea.computers.NextWaypointManager
+    description: "Waypoint manager."
     verbose: false

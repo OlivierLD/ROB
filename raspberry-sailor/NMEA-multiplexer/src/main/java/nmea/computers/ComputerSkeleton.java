@@ -67,6 +67,7 @@ public class ComputerSkeleton extends Computer {
 		private final String type = "skeleton";
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -83,12 +84,14 @@ public class ComputerSkeleton extends Computer {
 		public boolean isActive() {
 			return active;
 		}
+		public String getDescription() { return description; }
 
 		public ComputerSkeletonBean() {}  // This is for Jackson
 		public ComputerSkeletonBean(ComputerSkeleton instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.description = instance.getDescription();
 		}
 	}
 

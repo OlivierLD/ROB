@@ -374,6 +374,7 @@ public class AISManager extends Computer {
 		private final String type = "ais-computer";
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -389,12 +390,14 @@ public class AISManager extends Computer {
 		public boolean isActive() {
 			return active;
 		}
+		public String getDescription() { return description; }
 
 		public AISComputerBean() {}  // This is for Jackson
 		public AISComputerBean(AISManager instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.description = instance.getDescription();
 		}
 	}
 

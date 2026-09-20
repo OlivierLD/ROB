@@ -12,6 +12,7 @@ public abstract class Computer implements Forwarder {
 	protected boolean verbose = false;
 	protected boolean active = true;
 	protected Properties props = null;
+	protected String description;
 
 	public Computer(Multiplexer mux){
 		this.multiplexer = mux;
@@ -43,5 +44,14 @@ public abstract class Computer implements Forwarder {
 
 	public void setProperties(Properties props) {
 		this.props = props;
+	}
+
+	@Override
+	public void setDescription(String desc) {
+		this.description = desc;
+	}
+	@Override
+	public String getDescription() {
+		return description;
 	}
 }

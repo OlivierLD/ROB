@@ -118,6 +118,7 @@ public class DewPointTemperatureComputer extends Computer {
 		private final String type = "dew-point-computer";
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -135,11 +136,14 @@ public class DewPointTemperatureComputer extends Computer {
 			return active;
 		}
 
+		public String getDescription() { return description; }
+
 		public DewPointComputerBean() {}  // This is for Jackson
 		public DewPointComputerBean(DewPointTemperatureComputer instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.description = instance.getDescription();
 		}
 	}
 

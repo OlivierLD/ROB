@@ -400,6 +400,7 @@ public class BorderManager extends Computer {
 		private final String type = "border-computer";
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -417,11 +418,14 @@ public class BorderManager extends Computer {
 			return active;
 		}
 
+		public String getDescription() { return description; }
+
 		public BorderComputerBean() {}  // This is for Jackson
 		public BorderComputerBean(BorderManager instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.description = instance.getDescription();
 		}
 	}
 

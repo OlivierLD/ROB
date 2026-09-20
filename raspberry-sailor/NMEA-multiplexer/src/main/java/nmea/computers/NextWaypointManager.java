@@ -112,6 +112,7 @@ public class NextWaypointManager extends Computer {
 		private final String type = "waypoint-computer";
 		private boolean verbose;
 		private boolean active;
+		private String description;
 
 		public String getCls() {
 			return cls;
@@ -128,12 +129,14 @@ public class NextWaypointManager extends Computer {
 		public boolean isActive() {
 			return active;
 		}
+		public String getDescription() { return description; }
 
 		public WaypointComputerBean() {}  // This is for Jackson
 		public WaypointComputerBean(NextWaypointManager instance) {
 			this.cls = instance.getClass().getName();
 			this.verbose = instance.isVerbose();
 			this.active = instance.isActive();
+			this.description = instance.getDescription();
 		}
 	}
 

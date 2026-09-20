@@ -2,6 +2,7 @@ package nmea.api;
 
 import nmea.ais.AISParser;
 import nmea.parser.StringParsers;
+import nmea.utils.MuxNMEAUtils;
 import utils.DumpUtil;
 
 import java.util.ArrayList;
@@ -76,46 +77,52 @@ public final class NMEAParser extends Thread {
 										deviceFilters != null ? Arrays.asList(deviceFilters).stream().collect(Collectors.joining(", ")) : null,
 										sentenceFilters != null ? Arrays.asList(sentenceFilters).stream().collect(Collectors.joining(", ")) : null);
 							}
-							// Device filters
-							if (deviceFilters != null) {
-								String thisId = StringParsers.getDeviceID(s);
-								// Negative device filters
-								for (String deviceID : deviceFilters) {
-									if (deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim().substring(1))) {
-										broadcast = false;
-										break;
-									}
-								}
-								// Positive device filters
-								long pos = Arrays.stream(deviceFilters).filter(id -> !id.trim().startsWith("~")).count();
-								if (broadcast && pos > 0) {
-									broadcast = false;
+							broadcast = MuxNMEAUtils.goesThruFilters(s,
+									sentenceFilters != null ? Arrays.asList(sentenceFilters) : null,
+									deviceFilters != null ? Arrays.asList(deviceFilters) : null,
+									VERBOSE);
+							if (false) {  // TODO Remove that block
+								// Device filters
+								if (deviceFilters != null) {
+									String thisId = StringParsers.getDeviceID(s);
+									// Negative device filters
 									for (String deviceID : deviceFilters) {
-										if (!deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim())) {
-											broadcast = true;
+										if (deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim().substring(1))) {
+											broadcast = false;
 											break;
 										}
 									}
-								}
-							}
-							// Sentence filters
-							if (broadcast && sentenceFilters != null) {
-								String thisId = StringParsers.getSentenceID(s);
-								// Negative sentence filters
-								for (String sentenceId : sentenceFilters) {
-									if (sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim().substring(1))) {
+									// Positive device filters
+									long pos = Arrays.stream(deviceFilters).filter(id -> !id.trim().startsWith("~")).count();
+									if (broadcast && pos > 0) {
 										broadcast = false;
-										break;
+										for (String deviceID : deviceFilters) {
+											if (!deviceID.trim().startsWith("~") && thisId.equals(deviceID.trim())) {
+												broadcast = true;
+												break;
+											}
+										}
 									}
 								}
-								// Positive sentence filters
-								long pos = Arrays.stream(sentenceFilters).filter(id -> !id.trim().startsWith("~")).count();
-								if (broadcast && pos > 0) {
-									broadcast = false;
+								// Sentence filters
+								if (broadcast && sentenceFilters != null) {
+									String thisId = StringParsers.getSentenceID(s);
+									// Negative sentence filters
 									for (String sentenceId : sentenceFilters) {
-										if (!sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim())) {
-											broadcast = true;
+										if (sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim().substring(1))) {
+											broadcast = false;
 											break;
+										}
+									}
+									// Positive sentence filters
+									long pos = Arrays.stream(sentenceFilters).filter(id -> !id.trim().startsWith("~")).count();
+									if (broadcast && pos > 0) {
+										broadcast = false;
+										for (String sentenceId : sentenceFilters) {
+											if (!sentenceId.trim().startsWith("~") && thisId.equals(sentenceId.trim())) {
+												broadcast = true;
+												break;
+											}
 										}
 									}
 								}

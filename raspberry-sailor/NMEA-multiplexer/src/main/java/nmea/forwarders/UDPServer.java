@@ -13,6 +13,7 @@ public class UDPServer implements Forwarder {
 	private int udpPort = 8_001;
 	private InetAddress address = null;
 	private Properties props = null;
+	private String description;
 
 	private final static String DEFAULT_HOST = "127.0.0.1"; // "230.0.0.1"
 	private String hostName = DEFAULT_HOST;
@@ -111,4 +112,3 @@ public class UDPServer implements Forwarder {
 		this.props = props;
 	}
 }
-

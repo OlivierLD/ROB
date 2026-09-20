@@ -938,7 +938,7 @@ let computerList = () => {
                     break;
                 default:
                     html += ("<tr>" + "<td valign='top'><b><i>" + type + "</i></b></td>" +
-                                 "<td>" + (json[i].description) + "</td>" +
+                                 "<td>" + (json[i].description !== undefined ? json[i].description : "-") + "</td>" +
                                  "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
                                  "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
@@ -1547,7 +1547,7 @@ let generateDiagram = () => {
                 case 'longterm-data-computer':
                     html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                                 "<td valign='top'><b>longterm-data-computer</b></td>" +
-                                "<td>" + (json[i].description) + "</td>" +
+                                "<td>" + (json[i].description !== undefined ? json[i].description : "-") + "</td>" +
                                 "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
                                 "<td valign='top'>Data Path in Cache: " + JSON.stringify(json[i].dataPathInCache) + "</td>" +
                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
@@ -1557,7 +1557,7 @@ let generateDiagram = () => {
                 default:
                     html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
                                 "<td valign='top'><b><i>" + type + "</i></b></td>" +
-                                "<td>" + (json[i].description) + "</td>" +
+                                "<td>" + (json[i].description !== undefined ? json[i].description : "-") + "</td>" +
                                 "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
                                 "<td></td>" + // Dummy Prm placeholder
                                 "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
