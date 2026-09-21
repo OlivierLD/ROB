@@ -85,6 +85,9 @@ public class GPSdServer implements Forwarder {
 	 */
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			return;
+		}
 		List<Socket> toRemove = new ArrayList<>();
 		synchronized( clientSocketlist) {
 			clientSocketlist.stream().forEach(tcpClientSocket -> {

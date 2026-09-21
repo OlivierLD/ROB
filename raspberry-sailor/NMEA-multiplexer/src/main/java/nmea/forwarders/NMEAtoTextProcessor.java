@@ -231,288 +231,292 @@ public class NMEAtoTextProcessor implements Forwarder {
         Thread cacheThread = new Thread("SSD1306Processor CacheThread") {
             public void run() {
                 while (keepWorking) {
-                    NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
-                    // Populate bean
-                    CacheBean bean = new CacheBean();
-                    if (cache != null) {
-                        Object bsp = cache.get(NMEADataCache.BSP);
-                        if (bsp != null) {
-                            bean.bsp = ((Speed) bsp).getValue();
-                        }
-                        Object wtemp = cache.get(NMEADataCache.WATER_TEMP);
-                        if (wtemp != null) {
-                            bean.wtemp = ((Temperature) wtemp).getValue();
-                        }
-                        Object atemp = cache.get(NMEADataCache.AIR_TEMP);
-                        if (atemp != null) {
-                            bean.atemp = ((Temperature) atemp).getValue();
-                        }
-                        Object gpstime = cache.get(NMEADataCache.GPS_TIME);
-                        if (gpstime != null) {
-                            bean.gpsTime = ((UTCTime) gpstime).getValue().getTime();
-                        }
-                        Object gpsdatetime = cache.get(NMEADataCache.GPS_DATE_TIME);
-                        if (gpsdatetime != null) {
-                            bean.gpsDateTime = ((UTCDate) gpsdatetime).getValue().getTime();
-                        }
-                        Object nextwp = cache.get(NMEADataCache.TO_WP);
-                        if (nextwp != null) {
-                            bean.wp = (String) nextwp;
-                        }
-                        Object d2wp = cache.get(NMEADataCache.D2WP);
-                        if (d2wp != null) {
-                            bean.d2wp = ((Distance) d2wp).getValue();
-                        }
-                        Object cog = cache.get(NMEADataCache.COG);
-                        if (cog != null && ((Angle360) cog).getValue() != -1) {
-                            bean.cog = (int) Math.round(((Angle360) cog).getValue());
-                        }
-                        Object sog = cache.get(NMEADataCache.SOG);
-                        if (sog != null) {
-                            bean.sog = ((Speed) sog).getValue();
-                        }
-                        Object leeway = cache.get(NMEADataCache.LEEWAY);
-                        if (leeway != null) {
-                            bean.leeway = ((Angle180LR) leeway).getValue();
-                        }
-                        Object aws = cache.get(NMEADataCache.AWS);
-                        if (aws != null) {
-                            bean.aws = ((Speed) aws).getValue();
-                        }
-                        Object tws = cache.get(NMEADataCache.TWS);
-                        if (tws != null) {
-                            bean.tws = ((Speed) tws).getValue();
-                        }
-                        Object awa = cache.get(NMEADataCache.AWA);
-                        if (awa != null) {
-                            bean.awa = (int) Math.round(((Angle180) awa).getValue());
-                        }
-                        Object twa = cache.get(NMEADataCache.TWA);
-                        if (twa != null) {
-                            bean.twa = (int) Math.round(((Angle180) twa).getValue());
-                        }
-                        Object twd = cache.get(NMEADataCache.TWD);
-                        if (twd != null) {
-                            bean.twd = (int) Math.round(((Angle360) twd).getValue());
-                        }
-                        Object pos = cache.get(NMEADataCache.POSITION);
-                        if (pos != null) {
-                            GeoPos geopos = (GeoPos) pos;
-                            bean.lat = geopos.lat;
-                            bean.lng = geopos.lng;
-                        }
-                        Object decl = cache.get(NMEADataCache.DECLINATION);
-                        if (decl != null) {
-                            bean.D = ((Angle180EW) decl).getValue();
-                        }
-                        Object dev = cache.get(NMEADataCache.DEVIATION);
-                        if (dev != null) {
-                            bean.d = ((Angle180EW) dev).getValue();
-                        }
-                        Object w = cache.get(NMEADataCache.VARIATION);
-                        if (w != null) {
-                            bean.W = ((Angle180EW) w).getValue();
-                        }
-                        Object hdg = cache.get(NMEADataCache.HDG_COMPASS);
-                        if (hdg != null) {
-                            bean.hdg = (int) Math.round(((Angle360) hdg).getValue());  // Compass Heading. TODO Variation like below
-                        } else {
-                            hdg = cache.get(NMEADataCache.HDG_MAG);
+                    if (instance.isActive()) {
+                        NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
+                        // Populate bean
+                        CacheBean bean = new CacheBean();
+                        if (cache != null) {
+                            Object bsp = cache.get(NMEADataCache.BSP);
+                            if (bsp != null) {
+                                bean.bsp = ((Speed) bsp).getValue();
+                            }
+                            Object wtemp = cache.get(NMEADataCache.WATER_TEMP);
+                            if (wtemp != null) {
+                                bean.wtemp = ((Temperature) wtemp).getValue();
+                            }
+                            Object atemp = cache.get(NMEADataCache.AIR_TEMP);
+                            if (atemp != null) {
+                                bean.atemp = ((Temperature) atemp).getValue();
+                            }
+                            Object gpstime = cache.get(NMEADataCache.GPS_TIME);
+                            if (gpstime != null) {
+                                bean.gpsTime = ((UTCTime) gpstime).getValue().getTime();
+                            }
+                            Object gpsdatetime = cache.get(NMEADataCache.GPS_DATE_TIME);
+                            if (gpsdatetime != null) {
+                                bean.gpsDateTime = ((UTCDate) gpsdatetime).getValue().getTime();
+                            }
+                            Object nextwp = cache.get(NMEADataCache.TO_WP);
+                            if (nextwp != null) {
+                                bean.wp = (String) nextwp;
+                            }
+                            Object d2wp = cache.get(NMEADataCache.D2WP);
+                            if (d2wp != null) {
+                                bean.d2wp = ((Distance) d2wp).getValue();
+                            }
+                            Object cog = cache.get(NMEADataCache.COG);
+                            if (cog != null && ((Angle360) cog).getValue() != -1) {
+                                bean.cog = (int) Math.round(((Angle360) cog).getValue());
+                            }
+                            Object sog = cache.get(NMEADataCache.SOG);
+                            if (sog != null) {
+                                bean.sog = ((Speed) sog).getValue();
+                            }
+                            Object leeway = cache.get(NMEADataCache.LEEWAY);
+                            if (leeway != null) {
+                                bean.leeway = ((Angle180LR) leeway).getValue();
+                            }
+                            Object aws = cache.get(NMEADataCache.AWS);
+                            if (aws != null) {
+                                bean.aws = ((Speed) aws).getValue();
+                            }
+                            Object tws = cache.get(NMEADataCache.TWS);
+                            if (tws != null) {
+                                bean.tws = ((Speed) tws).getValue();
+                            }
+                            Object awa = cache.get(NMEADataCache.AWA);
+                            if (awa != null) {
+                                bean.awa = (int) Math.round(((Angle180) awa).getValue());
+                            }
+                            Object twa = cache.get(NMEADataCache.TWA);
+                            if (twa != null) {
+                                bean.twa = (int) Math.round(((Angle180) twa).getValue());
+                            }
+                            Object twd = cache.get(NMEADataCache.TWD);
+                            if (twd != null) {
+                                bean.twd = (int) Math.round(((Angle360) twd).getValue());
+                            }
+                            Object pos = cache.get(NMEADataCache.POSITION);
+                            if (pos != null) {
+                                GeoPos geopos = (GeoPos) pos;
+                                bean.lat = geopos.lat;
+                                bean.lng = geopos.lng;
+                            }
+                            Object decl = cache.get(NMEADataCache.DECLINATION);
+                            if (decl != null) {
+                                bean.D = ((Angle180EW) decl).getValue();
+                            }
+                            Object dev = cache.get(NMEADataCache.DEVIATION);
+                            if (dev != null) {
+                                bean.d = ((Angle180EW) dev).getValue();
+                            }
+                            Object w = cache.get(NMEADataCache.VARIATION);
+                            if (w != null) {
+                                bean.W = ((Angle180EW) w).getValue();
+                            }
+                            Object hdg = cache.get(NMEADataCache.HDG_COMPASS);
                             if (hdg != null) {
-                                double declination = 0d;
-                                double deviation = 0d;
-                                if (decl != null) {
-                                    declination = ((Angle180EW) decl).getValue();
-                                } else {
-                                    Object defaultDecl = cache.get(NMEADataCache.DEFAULT_DECLINATION);
-                                    if (defaultDecl != null) {
-                                        // System.out.println("Default Declination is a " + defaultDecl.getClass().getName());
-                                        declination = ((Angle180EW) defaultDecl).getValue();
+                                bean.hdg = (int) Math.round(((Angle360) hdg).getValue());  // Compass Heading. TODO Variation like below
+                            } else {
+                                hdg = cache.get(NMEADataCache.HDG_MAG);
+                                if (hdg != null) {
+                                    double declination = 0d;
+                                    double deviation = 0d;
+                                    if (decl != null) {
+                                        declination = ((Angle180EW) decl).getValue();
+                                    } else {
+                                        Object defaultDecl = cache.get(NMEADataCache.DEFAULT_DECLINATION);
+                                        if (defaultDecl != null) {
+                                            // System.out.println("Default Declination is a " + defaultDecl.getClass().getName());
+                                            declination = ((Angle180EW) defaultDecl).getValue();
+                                        }
                                     }
+                                    if (dev != null) {
+                                        deviation = ((Angle180EW) dev).getValue();
+                                    }
+                                    int hdt = (int) Math.round(((Angle360) hdg).getValue() + (declination + deviation));
+                                    while (hdt >= 360) {
+                                        hdt -= 360;
+                                    }
+                                    while (hdt < 0) {
+                                        hdt += 360;
+                                    }
+                                    bean.hdg = hdt;
                                 }
-                                if (dev != null) {
-                                    deviation = ((Angle180EW) dev).getValue();
-                                }
-                                int hdt = (int) Math.round(((Angle360) hdg).getValue() + (declination + deviation));
-                                while (hdt >= 360) {
-                                    hdt -= 360;
-                                }
-                                while (hdt < 0) {
-                                    hdt += 360;
-                                }
-                                bean.hdg = hdt;
+                            }
+                            Object cmg = cache.get(NMEADataCache.CMG);
+                            if (cmg != null) {
+                                bean.cmg = (int) Math.round(((Angle360) cmg).getValue());
+                            }
+                            Object vdr = cache.get(NMEADataCache.VDR_CURRENT);
+                            if (vdr != null) {
+                                bean.cdr = ((Current) vdr).angle;
+                                bean.csp = ((Current) vdr).speed;
+                            }
+                            Object xte = cache.get(NMEADataCache.XTE);
+                            if (xte != null) {
+                                bean.xte = ((Distance) xte).getValue();
+                            }
+                            Object b2wp = cache.get(NMEADataCache.B2WP);
+                            if (b2wp != null) {
+                                bean.b2wp = (int) Math.round(((Angle360) b2wp).getValue());
+                            }
+                            Object dbt = cache.get(NMEADataCache.DBT);
+                            if (dbt != null) {
+                                bean.dbt = ((Depth) dbt).getValue();
+                            }
+                            Object solarDate = cache.get(NMEADataCache.GPS_SOLAR_TIME);
+                            if (solarDate != null) {
+                                bean.gpsSolarDate = ((SolarDate) solarDate).getValue().getTime();
+                            }
+                            Object log = cache.get(NMEADataCache.LOG);
+                            if (log != null) {
+                                bean.log = ((Distance) log).getValue();
+                            }
+                            Object dayLog = cache.get(NMEADataCache.DAILY_LOG);
+                            if (dayLog != null) {
+                                bean.dayLog = ((Distance) dayLog).getValue();
+                            }
+                            Object prmsl = cache.get(NMEADataCache.BARO_PRESS);
+                            if (prmsl != null) {
+                                bean.prmsl = ((Pressure) prmsl).getValue();
+                            }
+                            Object hum = cache.get(NMEADataCache.RELATIVE_HUMIDITY);
+                            if (hum != null) {
+                                bean.hum = (Double) hum;
+                            }
+                            // rmcOk
+                            Object rmcStatus = cache.get(NMEADataCache.RMC_STATUS);
+                            if (rmcStatus != null) {
+                                bean.rmcOk = (Boolean) rmcStatus;
+                            } else {
+                                bean.rmcOk = false;
                             }
                         }
-                        Object cmg = cache.get(NMEADataCache.CMG);
-                        if (cmg != null) {
-                            bean.cmg = (int) Math.round(((Angle360) cmg).getValue());
+                        // Transformer's specific job.
+                        // Do see how optionList is populated from the properties.
+                        if (!optionList.isEmpty()) {
+                            DisplayOptions toDisplay = optionList.get(currentOption);
+                            switch (toDisplay.toString()) {
+                                case "TWD":
+                                    displayAngleAndValue("TWD ", bean.twd);
+                                    break;
+                                case "BSP":
+                                    displaySpeed("BSP ", bean.bsp, SpeedUnit.KNOTS);
+                                    break;
+                                case "BSP_KMH":
+                                    displaySpeed("BSP ", bean.bsp, SpeedUnit.KMH);
+                                    break;
+                                case "BSP_MPH":
+                                    displaySpeed("BSP ", bean.bsp, SpeedUnit.MPH);
+                                    break;
+                                case "BSP_MS":
+                                    displaySpeed("BSP ", bean.bsp, SpeedUnit.MS);
+                                    break;
+                                case "TWS":
+                                    displaySpeed("TWS ", bean.tws, SpeedUnit.KNOTS);
+                                    break;
+                                case "TWS_KMH":
+                                    displaySpeed("TWS ", bean.tws, SpeedUnit.KMH);
+                                    break;
+                                case "TWS_MPH":
+                                    displaySpeed("TWS ", bean.tws, SpeedUnit.MPH);
+                                    break;
+                                case "TWS_MS":
+                                    displaySpeed("TWS ", bean.tws, SpeedUnit.MS);
+                                    break;
+                                case "TWA":
+                                    displayAngleAndValue("TWA ", bean.twa);
+                                    break;
+                                case "AWA":
+                                    displayAngleAndValue("AWA ", bean.awa);
+                                    break;
+                                case "AWS":
+                                    displaySpeed("AWS ", bean.aws, SpeedUnit.KNOTS);
+                                    break;
+                                case "AWS_KMH":
+                                    displaySpeed("AWS ", bean.aws, SpeedUnit.KMH);
+                                    break;
+                                case "AWS_MPH":
+                                    displaySpeed("AWS ", bean.aws, SpeedUnit.MPH);
+                                    break;
+                                case "AWS_MS":
+                                    displaySpeed("AWS ", bean.aws, SpeedUnit.MS);
+                                    break;
+                                case "ATP":
+                                    displayTemp("AIR ", bean.atemp);
+                                    break;
+                                case "WTP":
+                                    displayTemp("WATER ", bean.wtemp);
+                                    break;
+                                case "COG":
+                                    if (bean.cog != -1) {
+                                        displayAngleAndValue("COG ", bean.cog);
+                                    } else {
+                                        displayDummyValue("COG");
+                                    }
+                                    break;
+                                case "SOG":
+                                    if (bean.sog != -1) {
+                                        displaySpeed("SOG ", bean.sog, SpeedUnit.KNOTS);
+                                    } else {
+                                        displayDummyValue("SOG");
+                                    }
+                                    break;
+                                case "SOG_KMH":
+                                    if (bean.sog != -1) {
+                                        displaySpeed("SOG ", bean.sog, SpeedUnit.KMH);
+                                    } else {
+                                        displayDummyValue("SOG");
+                                    }
+                                    break;
+                                case "SOG_MPH":
+                                    if (bean.sog != -1) {
+                                        displaySpeed("SOG ", bean.sog, SpeedUnit.MPH);
+                                    } else {
+                                        displayDummyValue("SOG");
+                                    }
+                                    break;
+                                case "SOG_MS":
+                                    if (bean.sog != -1) {
+                                        displaySpeed("SOG ", bean.sog, SpeedUnit.MS);
+                                    } else {
+                                        displayDummyValue("SOG");
+                                    }
+                                    break;
+                                case "HDG":
+                                    displayAngleAndValue("HDG ", bean.hdg);
+                                    break;
+                                case "DBT":
+                                    displayValue("DBT ", " m", bean.dbt);
+                                    break;
+                                case "HUM":
+                                    displayValue("HUM ", " %", bean.hum);
+                                    break;
+                                case "CUR":
+                                    displayCurrent(bean.cdr, bean.csp);
+                                    break;
+                                case "POS":
+                                    displayPos(bean.lat, bean.lng, bean.rmcOk);
+                                    break;
+                                case "GPS":
+                                    displayDateTime(bean.gpsDateTime);
+                                    break;
+                                case "SOL":
+                                    displaySolarDateTime(bean.gpsSolarDate);
+                                    break;
+                                case "PRS":
+                                    displayPRMSL(bean.prmsl);
+                                    break;
+                                case "SYS":
+                                    displaySystemDateTime(System.currentTimeMillis()); // Not from the cache, obviously.
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                        Object vdr = cache.get(NMEADataCache.VDR_CURRENT);
-                        if (vdr != null) {
-                            bean.cdr = ((Current) vdr).angle;
-                            bean.csp = ((Current) vdr).speed;
-                        }
-                        Object xte = cache.get(NMEADataCache.XTE);
-                        if (xte != null) {
-                            bean.xte = ((Distance) xte).getValue();
-                        }
-                        Object b2wp = cache.get(NMEADataCache.B2WP);
-                        if (b2wp != null) {
-                            bean.b2wp = (int) Math.round(((Angle360) b2wp).getValue());
-                        }
-                        Object dbt = cache.get(NMEADataCache.DBT);
-                        if (dbt != null) {
-                            bean.dbt = ((Depth) dbt).getValue();
-                        }
-                        Object solarDate = cache.get(NMEADataCache.GPS_SOLAR_TIME);
-                        if (solarDate != null) {
-                            bean.gpsSolarDate = ((SolarDate) solarDate).getValue().getTime();
-                        }
-                        Object log = cache.get(NMEADataCache.LOG);
-                        if (log != null) {
-                            bean.log = ((Distance) log).getValue();
-                        }
-                        Object dayLog = cache.get(NMEADataCache.DAILY_LOG);
-                        if (dayLog != null) {
-                            bean.dayLog = ((Distance) dayLog).getValue();
-                        }
-                        Object prmsl = cache.get(NMEADataCache.BARO_PRESS);
-                        if (prmsl != null) {
-                            bean.prmsl = ((Pressure) prmsl).getValue();
-                        }
-                        Object hum = cache.get(NMEADataCache.RELATIVE_HUMIDITY);
-                        if (hum != null) {
-                            bean.hum = (Double) hum;
-                        }
-                        // rmcOk
-                        Object rmcStatus = cache.get(NMEADataCache.RMC_STATUS);
-                        if (rmcStatus != null) {
-                            bean.rmcOk = (Boolean) rmcStatus;
-                        } else {
-                            bean.rmcOk = false;
-                        }
-                    }
-                    // Transformer's specific job.
-                    // Do see how optionList is populated from the properties.
-                    if (!optionList.isEmpty()) {
-                        DisplayOptions toDisplay = optionList.get(currentOption);
-                        switch (toDisplay.toString()) {
-                            case "TWD":
-                                displayAngleAndValue("TWD ", bean.twd);
-                                break;
-                            case "BSP":
-                                displaySpeed("BSP ", bean.bsp, SpeedUnit.KNOTS);
-                                break;
-                            case "BSP_KMH":
-                                displaySpeed("BSP ", bean.bsp, SpeedUnit.KMH);
-                                break;
-                            case "BSP_MPH":
-                                displaySpeed("BSP ", bean.bsp, SpeedUnit.MPH);
-                                break;
-                            case "BSP_MS":
-                                displaySpeed("BSP ", bean.bsp, SpeedUnit.MS);
-                                break;
-                            case "TWS":
-                                displaySpeed("TWS ", bean.tws, SpeedUnit.KNOTS);
-                                break;
-                            case "TWS_KMH":
-                                displaySpeed("TWS ", bean.tws, SpeedUnit.KMH);
-                                break;
-                            case "TWS_MPH":
-                                displaySpeed("TWS ", bean.tws, SpeedUnit.MPH);
-                                break;
-                            case "TWS_MS":
-                                displaySpeed("TWS ", bean.tws, SpeedUnit.MS);
-                                break;
-                            case "TWA":
-                                displayAngleAndValue("TWA ", bean.twa);
-                                break;
-                            case "AWA":
-                                displayAngleAndValue("AWA ", bean.awa);
-                                break;
-                            case "AWS":
-                                displaySpeed("AWS ", bean.aws, SpeedUnit.KNOTS);
-                                break;
-                            case "AWS_KMH":
-                                displaySpeed("AWS ", bean.aws, SpeedUnit.KMH);
-                                break;
-                            case "AWS_MPH":
-                                displaySpeed("AWS ", bean.aws, SpeedUnit.MPH);
-                                break;
-                            case "AWS_MS":
-                                displaySpeed("AWS ", bean.aws, SpeedUnit.MS);
-                                break;
-                            case "ATP":
-                                displayTemp("AIR ", bean.atemp);
-                                break;
-                            case "WTP":
-                                displayTemp("WATER ", bean.wtemp);
-                                break;
-                            case "COG":
-                                if (bean.cog != -1) {
-                                    displayAngleAndValue("COG ", bean.cog);
-                                } else {
-                                    displayDummyValue("COG");
-                                }
-                                break;
-                            case "SOG":
-                                if (bean.sog != -1) {
-                                    displaySpeed("SOG ", bean.sog, SpeedUnit.KNOTS);
-                                } else {
-                                    displayDummyValue("SOG");
-                                }
-                                break;
-                            case "SOG_KMH":
-                                if (bean.sog != -1) {
-                                    displaySpeed("SOG ", bean.sog, SpeedUnit.KMH);
-                                } else {
-                                    displayDummyValue("SOG");
-                                }
-                                break;
-                            case "SOG_MPH":
-                                if (bean.sog != -1) {
-                                    displaySpeed("SOG ", bean.sog, SpeedUnit.MPH);
-                                } else {
-                                    displayDummyValue("SOG");
-                                }
-                                break;
-                            case "SOG_MS":
-                                if (bean.sog != -1) {
-                                    displaySpeed("SOG ", bean.sog, SpeedUnit.MS);
-                                } else {
-                                    displayDummyValue("SOG");
-                                }
-                                break;
-                            case "HDG":
-                                displayAngleAndValue("HDG ", bean.hdg);
-                                break;
-                            case "DBT":
-                                displayValue("DBT ", " m", bean.dbt);
-                                break;
-                            case "HUM":
-                                displayValue("HUM ", " %", bean.hum);
-                                break;
-                            case "CUR":
-                                displayCurrent(bean.cdr, bean.csp);
-                                break;
-                            case "POS":
-                                displayPos(bean.lat, bean.lng, bean.rmcOk);
-                                break;
-                            case "GPS":
-                                displayDateTime(bean.gpsDateTime);
-                                break;
-                            case "SOL":
-                                displaySolarDateTime(bean.gpsSolarDate);
-                                break;
-                            case "PRS":
-                                displayPRMSL(bean.prmsl);
-                                break;
-							case "SYS":
-								displaySystemDateTime(System.currentTimeMillis()); // Not from the cache, obviously.
-								break;
-                            default:
-                                break;
-                        }
+                    } else {
+                        // TODO Honk ?
                     }
                     try {
                         Thread.sleep(1_000L);

@@ -48,60 +48,67 @@ public class LongTermStorage extends Computer {
 			// NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 			cacheReference.set(ApplicationContext.getInstance().getDataCache());
 			boolean found = false;
-			try {
-				final String jsonString;
-				NMEADataCache cache;
-				synchronized (cacheReference) {
-					cache = cacheReference.get();
-					jsonString = jacksonMapper.writeValueAsString(cache);
-				}
-				final JsonNode jsonNode = jacksonMapper.readTree(jsonString);
+			if (this.isActive()) {
+				try {
+					final String jsonString;
+					NMEADataCache cache;
+					synchronized (cacheReference) {
+						cache = cacheReference.get();
+						jsonString = jacksonMapper.writeValueAsString(cache);
+					}
+					final JsonNode jsonNode = jacksonMapper.readTree(jsonString);
 
-				Object finalData = null;
-				JsonNode previousObject = jsonNode;
-				for (String path : this.dataPathInCache) {
-					finalData = previousObject.get(path);
-					if (finalData != null) {
-						previousObject = (JsonNode)finalData;
-					} else {
-						break;
-					}
-				}
-				if (finalData != null) {
-					found = true;
-					Date measureDate = null;
-					// Get GPS Date from cache, from the system if not found in cache
-					UTCDate utcDate = (UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME, true);
-					if (utcDate != null) {
-						measureDate = utcDate.getDate();
-					} else {
-						measureDate = new Date(System.currentTimeMillis());
-					}
-					// Fill the map
-					objectMap.put(DURATION_FMT.format(measureDate), finalData);
-					if (this.verbose) {
-						System.out.printf(">> Long Storage Map %s is now %d elements big\n", this.storagePathInCache, objectMap.size());
-					}
-					// Cut the Map if too long (from the head)
-					while (objectMap.keySet().size() > this.maxLength) {
-						String first = (String)objectMap.keySet().toArray()[0];
-						if (this.verbose) {
-							System.out.printf("Dropping map element with key %s\n", first);
+					Object finalData = null;
+					JsonNode previousObject = jsonNode;
+					for (String path : this.dataPathInCache) {
+						finalData = previousObject.get(path);
+						if (finalData != null) {
+							previousObject = (JsonNode) finalData;
+						} else {
+							break;
 						}
-						objectMap.remove(first);
 					}
-					// Push map to cache
-					cache.put(storagePathInCache, objectMap);
-				} else {
-					found = false;
-					if (this.verbose) {
-						System.out.printf("LongTermStorage: No Data found with path %s\n",
-								Arrays.stream(this.dataPathInCache).map(elem -> System.out.printf("%s", elem)).collect(Collectors.toList())
-						);
+					if (finalData != null) {
+						found = true;
+						Date measureDate = null;
+						// Get GPS Date from cache, from the system if not found in cache
+						UTCDate utcDate = (UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME, true);
+						if (utcDate != null) {
+							measureDate = utcDate.getDate();
+						} else {
+							measureDate = new Date(System.currentTimeMillis());
+						}
+						// Fill the map
+						objectMap.put(DURATION_FMT.format(measureDate), finalData);
+						if (true || this.verbose) {
+							System.out.printf(">> Long Storage Map %s is now %d elements big\n", this.storagePathInCache, objectMap.size());
+						}
+						// Cut the Map if too long (from the head)
+						while (objectMap.keySet().size() > this.maxLength) {
+							String first = (String) objectMap.keySet().toArray()[0];
+							if (this.verbose) {
+								System.out.printf("Dropping map element with key %s\n", first);
+							}
+							objectMap.remove(first);
+						}
+						// Push map to cache
+						cache.put(storagePathInCache, objectMap);
+					} else {
+						found = false;
+						if (this.verbose) {
+							System.out.printf("LongTermStorage: No Data found with path %s\n",
+									Arrays.stream(this.dataPathInCache).map(elem -> System.out.printf("%s", elem)).collect(Collectors.toList())
+							);
+						}
 					}
+				} catch (JsonProcessingException jpe) {
+					jpe.printStackTrace();
 				}
-			} catch (JsonProcessingException jpe) {
-				jpe.printStackTrace();
+			} else {
+				// found = true; // For the sleep below
+				if (true || this.verbose) {
+					System.out.println(">> Long Storage is inactive. Sleeping.\n");
+				}
 			}
 			try {
 				Thread.sleep(found ? this.pingInterval * 1_000 : 1_000); // Loop faster if not found.
@@ -145,6 +152,7 @@ public class LongTermStorage extends Computer {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
+		// See in Thread dataCollector
 	}
 
 	@Override

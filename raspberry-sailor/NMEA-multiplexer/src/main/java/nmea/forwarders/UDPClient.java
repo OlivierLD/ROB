@@ -37,6 +37,10 @@ public class UDPClient implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			// TODO Honk ?
+			return;
+		}
 		try {
 			// Initialize a datagram
 			DatagramPacket packet = new DatagramPacket(message, message.length, address, udpPort);

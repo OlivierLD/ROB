@@ -12,9 +12,13 @@ public class ConsoleWriter implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
-		String mess = new String(message);
-		if (!mess.isEmpty()) {
-			System.out.println(mess.trim()); // That is what this Forwarder does.
+		if (this.isActive()) {
+			String mess = new String(message);
+			if (!mess.isEmpty()) {
+				System.out.println(mess.trim()); // That is what this Forwarder does.
+			}
+		} else {
+			// TODO Honk ?
 		}
 	}
 

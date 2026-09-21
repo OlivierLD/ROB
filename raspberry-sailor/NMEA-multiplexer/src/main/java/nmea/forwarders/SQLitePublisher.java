@@ -81,6 +81,10 @@ public class SQLitePublisher implements Forwarder {
 	@Override
 	public void write(byte[] message) {
 
+		if (!this.isActive()) {
+			// TODO Honk ?
+			return;
+		}
 		if (this.dbConnection == null) {
 			try {
 				initConnection();

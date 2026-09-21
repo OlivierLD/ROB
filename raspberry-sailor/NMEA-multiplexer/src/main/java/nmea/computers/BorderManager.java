@@ -201,6 +201,10 @@ public class BorderManager extends Computer {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
+		if (!this.isActive()) {
+			// TODO Honk
+			return;
+		}
 		String sentence = new String(mess);
 
 		if (StringParsers.validCheckSum(sentence)) {

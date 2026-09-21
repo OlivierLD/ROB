@@ -9,10 +9,7 @@ import net.thisptr.jackson.jq.JsonQuery;
 import net.thisptr.jackson.jq.Scope;
 import net.thisptr.jackson.jq.Versions;
 import net.thisptr.jackson.jq.exception.JsonQueryException;
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 import utils.TimeUtil;
 
 import java.io.IOException;
@@ -54,19 +51,19 @@ public class RESTReader extends NMEAReader {
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final Scope ROOT_SCOPE = Scope.newEmptyScope(); // jq scope
 
-	public RESTReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
+	public RESTReader(NMEAClient client, List<NMEAListener> al) {
+		this(client, null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, DEFAULT_HTTP_PORT, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
 
-	public RESTReader(List<NMEAListener> al, int http) {
-		this(null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
+	public RESTReader(NMEAClient client, List<NMEAListener> al, int http) {
+		this(client, null, al, DEFAULT_PROTOCOL, DEFAULT_HOST_NAME, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
 
-	public RESTReader(List<NMEAListener> al, String host, int http) {
-		this(null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
+	public RESTReader(NMEAClient client, List<NMEAListener> al, String host, int http) {
+		this(client, null, al, DEFAULT_PROTOCOL, host, http, DEFAULT_QUERY_PATH, DEFAULT_QUERY_STRING, null, null, null);
 	}
-	public RESTReader(String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs, String nmeaProcessor, Long betweenLoops) {
-		super(threadName != null ? threadName : "rest-thread", al);
+	public RESTReader(NMEAClient client, String threadName, List<NMEAListener> al, String protocol, String host, int http, String path, String qs, String jqs, String nmeaProcessor, Long betweenLoops) {
+		super(client, threadName != null ? threadName : "rest-thread", al);
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
 		}
@@ -285,45 +282,49 @@ public class RESTReader extends NMEAReader {
 				this.queryString != null ? this.queryString : "" );
 		try {
 			while (this.canRead()) {
-				try {
-					// Hard-coded verb and protocol for now.
-					HTTPServer.Request request = new HTTPServer.Request("GET", restURL, "HTTP/1.1");
-					Map<String, String> reqHeaders = new HashMap<>();
-					request.setHeaders(reqHeaders);
-					final HTTPServer.Response response = HTTPClient.doRequest(request);
+				if (this.getNMEAClient().isActive()) {  // Wow !!
+					try {
+						// Hard-coded verb and protocol for now.
+						HTTPServer.Request request = new HTTPServer.Request("GET", restURL, "HTTP/1.1");
+						Map<String, String> reqHeaders = new HashMap<>();
+						request.setHeaders(reqHeaders);
+						final HTTPServer.Response response = HTTPClient.doRequest(request);
 
-					responseProcessor.accept(response);
+						responseProcessor.accept(response);
 
-				} catch (BindException be) {
-					System.err.println("From " + this.getClass().getName() + ", " + hostName + ":" + httpPort);
-					be.printStackTrace();
-					manageError(be);
-				} catch (final SocketException se) {
-					if (se.getMessage().contains("Connection refused")) {
-						System.out.printf("RestReader Refused (1) for [%s]\n", restURL);
+					} catch (BindException be) {
+						System.err.println("From " + this.getClass().getName() + ", " + hostName + ":" + httpPort);
+						be.printStackTrace();
+						manageError(be);
+					} catch (final SocketException se) {
+						if (se.getMessage().contains("Connection refused")) {
+							System.out.printf("RestReader Refused (1) for [%s]\n", restURL);
 //						se.printStackTrace();
-					} else if (se.getMessage().contains("Connection reset")) {
-						System.out.printf("RestReader Reset (2) for [%s]\n", restURL);
-					} else {
-						if (se instanceof ConnectException && "Connection timed out: connect".equals(se.getMessage())) {
-							if ("true".equals(System.getProperty("verbose.data.verbose"))) {
-								System.out.println("Will try again (1)");
-							}
-							if ("true".equals(System.getProperty("verbose.data.verbose"))) {
-								System.out.println("Will try again (2)");
-							}
-						} else if (/*se instanceof SocketException &&*/ se.getMessage().startsWith("Network is unreachable (connect ")) {
-							if ("true".equals(System.getProperty("verbose.data.verbose"))) {
-								System.out.println("Will try again (3)");
-							}
-						} else if (se instanceof ConnectException) { // Et hop!
-							System.err.println("REST :" + se.getMessage());
+						} else if (se.getMessage().contains("Connection reset")) {
+							System.out.printf("RestReader Reset (2) for [%s]\n", restURL);
 						} else {
-							System.err.println("REST Server:" + se.getMessage());
+							if (se instanceof ConnectException && "Connection timed out: connect".equals(se.getMessage())) {
+								if ("true".equals(System.getProperty("verbose.data.verbose"))) {
+									System.out.println("Will try again (1)");
+								}
+								if ("true".equals(System.getProperty("verbose.data.verbose"))) {
+									System.out.println("Will try again (2)");
+								}
+							} else if (/*se instanceof SocketException &&*/ se.getMessage().startsWith("Network is unreachable (connect ")) {
+								if ("true".equals(System.getProperty("verbose.data.verbose"))) {
+									System.out.println("Will try again (3)");
+								}
+							} else if (se instanceof ConnectException) { // Et hop!
+								System.err.println("REST :" + se.getMessage());
+							} else {
+								System.err.println("REST Server:" + se.getMessage());
+							}
 						}
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
+				} else {
+					// Inactive
 				}
 				// Wait like 1 sec.
 				TimeUtil.delay(this.betweenLoops);

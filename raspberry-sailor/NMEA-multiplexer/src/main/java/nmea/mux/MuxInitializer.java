@@ -229,7 +229,8 @@ public class MuxInitializer {
                                     }
                                 }
                                 serialClient.initClient();
-                                serialClient.setReader(new SerialReader("MUX-SerialReader",
+                                serialClient.setReader(new SerialReader(serialClient,
+                                        "MUX-SerialReader",
                                         serialClient.getListeners(),
                                         serialPort,
                                         Integer.parseInt(br),
@@ -284,7 +285,8 @@ public class MuxInitializer {
                                     }
                                 }
                                 restClient.initClient();
-                                restClient.setReader(new RESTReader("MUX-RESTReader",
+                                restClient.setReader(new RESTReader(restClient,
+                                                        "MUX-RESTReader",
                                                         restClient.getListeners(),
                                                         protocol,
                                                         machineName,
@@ -329,9 +331,9 @@ public class MuxInitializer {
                                 }
                                 tcpClient.initClient();
                                 if (initialRequest.trim().isEmpty()) {
-                                    tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), keepTrying));
+                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), keepTrying));
                                 } else {
-                                    tcpClient.setReader(new TCPReader("MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), initialRequest, keepTrying));
+                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), initialRequest, keepTrying));
                                 }
                                 tcpClient.setVerbose("true".equals(consumerVerbose)); // muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 // Use deviceFilters and sentenceFilters
@@ -390,7 +392,8 @@ public class MuxInitializer {
                                 }
                                 fileClient.initClient();
 								fileClient.setLoop(loop);
-                                fileClient.setReader(new DataFileReader("MUX-FileReader",
+                                fileClient.setReader(new DataFileReader(fileClient,
+                                        "MUX-FileReader",
                                         fileClient.getListeners(),
                                         filename,
                                         betweenRec,
@@ -433,7 +436,7 @@ public class MuxInitializer {
                                     }
                                 }
                                 wsClient.initClient();
-                                wsClient.setReader(new WebSocketReader("MUX-WSReader", wsClient.getListeners(), wsUri));
+                                wsClient.setReader(new WebSocketReader(wsClient, "MUX-WSReader", wsClient.getListeners(), wsUri));
                                 wsClient.getReader().setDeviceFilters(wsClient.getDeviceFilters());
                                 wsClient.getReader().setSentenceFilters(wsClient.getSentenceFilters());
                                 wsClient.setVerbose("true".equals(consumerVerbose));
@@ -464,7 +467,7 @@ public class MuxInitializer {
                                     }
                                 }
                                 rndClient.initClient();
-                                rndClient.setReader(new RandomReader("MUX-RndReader", rndClient.getListeners()));
+                                rndClient.setReader(new RandomReader(rndClient, "MUX-RndReader", rndClient.getListeners()));
                                 rndClient.getReader().setDeviceFilters(rndClient.getDeviceFilters());
                                 rndClient.getReader().setSentenceFilters(rndClient.getSentenceFilters());
                                 rndClient.setVerbose("true".equals(consumerVerbose));
@@ -497,7 +500,7 @@ public class MuxInitializer {
                                     }
                                 }
                                 zdaClient.initClient();
-                                zdaClient.setReader(new ZDAReader("MUX-ZDAReader", zdaClient.getListeners()));
+                                zdaClient.setReader(new ZDAReader(zdaClient,"MUX-ZDAReader", zdaClient.getListeners()));
                                 zdaClient.getReader().setDeviceFilters(zdaClient.getDeviceFilters());
                                 zdaClient.getReader().setSentenceFilters(zdaClient.getSentenceFilters());
                                 zdaClient.setVerbose("true".equals(consumerVerbose));
@@ -535,7 +538,7 @@ public class MuxInitializer {
                                     }
                                 }
                                 udpClient.initClient();
-                                final UDPReader udpReader = new UDPReader("MUX-UDPReader", udpClient.getListeners(), udpServer, Integer.parseInt(udpPort));
+                                final UDPReader udpReader = new UDPReader(udpClient, "MUX-UDPReader", udpClient.getListeners(), udpServer, Integer.parseInt(udpPort));
                                 if (udpServerTimeout != null) {
                                     udpReader.setTimeout(Long.parseLong(udpServerTimeout));
                                 }

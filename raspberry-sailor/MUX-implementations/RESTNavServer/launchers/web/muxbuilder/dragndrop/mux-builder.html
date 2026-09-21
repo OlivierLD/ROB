@@ -10,7 +10,7 @@
 </head>
 
 <script type="text/javascript">
-// Utilities for the file-forwarder 
+// Utilities for the file-forwarder
 
 let fileFwdOption = (sel) => {
     console.log(`Value changed to ${sel.value}`);
@@ -90,7 +90,7 @@ let fileFwdOption = (sel) => {
     <div style="text-align: left; max-height: 300px; overflow-y: scroll;">
         <pre><span id="generated-yaml"></span></pre> <!-- This will contain the final result -->
     </div>
-</dialog>    
+</dialog>
 
 <h1>Mux GUI builder</h1>
 
@@ -170,8 +170,8 @@ let fileFwdOption = (sel) => {
             </tr>
         </table>
       </div>
-  </div>  
-  </dialog>            
+  </div>
+  </dialog>
 </div>
 
 <div class="message">Drag from the left, drop on the center pane</div>
@@ -180,7 +180,7 @@ let fileFwdOption = (sel) => {
   <button class="tablinks active" onclick="switchTab(event, 0);">Consumers</button>
   <button class="tablinks" onclick="switchTab(event, 1);">Forwarders</button>
   <button class="tablinks" onclick="switchTab(event, 2);">Computers</button>
-  <div class="mess">Guaranteed 0% external libraries.</div>
+  <div class="mess">Guaranteed 0% external libraries, GMO free.</div>
 </div>
 
 <div class="top-grid-container">
@@ -195,6 +195,8 @@ let fileFwdOption = (sel) => {
 
         <div class="vertical-scrollable-zone side-div">
           <!-- Warning! Consumers order is scrambled !! -->
+
+          <!-- Serial consumer -->
           <div id="consumer-1" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
               <div>
                 <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -236,14 +238,23 @@ let fileFwdOption = (sel) => {
                             <td><input type="checkbox" class="verbose"></td>
                         </tr>
                         <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
                             <td>Reset Interval</td>
                             <td><input type="number" class="reset-interval" placeholder="Reset Interval" value="60000"></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
                         </tr>
                       </table>
                     </div>
                   </dialog>
               </div>
           </div>
+          <!-- TCP consumer -->
           <div id="consumer-2" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
               <div>
                 <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -269,7 +280,7 @@ let fileFwdOption = (sel) => {
                           <td><input type="number" class="port-num" placeholder="TCP Port"></td>
                       </tr>
                       <tr>
-                        <td>Initial Request</td>
+                        <td>Initial Request</td> <!-- For GPSd and others -->
                         <td><input type="text" class="initial-request" size="30" placeholder="Initial Request"></td>
                       </tr>
                       <tr>
@@ -288,6 +299,14 @@ let fileFwdOption = (sel) => {
                           <td>Verbose</td>
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
@@ -457,8 +476,8 @@ let fileFwdOption = (sel) => {
                               <td><input type="checkbox" class="loop"></td>
                           </tr>
                         </table>
-                      </div>  
-                    </dialog>            
+                      </div>
+                    </dialog>
                   </div>
           </div>
           <div id="consumer-4" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -494,8 +513,8 @@ let fileFwdOption = (sel) => {
                         <td><input type="checkbox" class="verbose"></td>
                     </tr>
                   </table>
-                </div>  
-              </dialog>            
+                </div>
+              </dialog>
             </div>
           </div>
           <div id="consumer-5" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -523,8 +542,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
             </div>
           </div>
           <div id="consumer-6" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -552,8 +571,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <div id="consumer-7" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -581,8 +600,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <div id="consumer-8" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -630,8 +649,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <div id="consumer-9" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -689,8 +708,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <div id="consumer-10" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -714,8 +733,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <div id="consumer-11" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
@@ -739,8 +758,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <!-- End of Consumers List -->
@@ -748,9 +767,9 @@ let fileFwdOption = (sel) => {
 
         <div class="vertical-scrollable-zone">
             <!-- This is where things are dropped -->
-            <div id="drop-div-consumers" 
-                 class="drop-container drop-container-content" 
-                 ondrop="drop(event)" 
+            <div id="drop-div-consumers"
+                 class="drop-container drop-container-content"
+                 ondrop="drop(event)"
                  ondragover="allowDrop(event)">
             </div>
         </div>
@@ -763,7 +782,7 @@ let fileFwdOption = (sel) => {
 
         <div class="message smaller">Available Forwarders</div>
         <div class="message smaller">Drop Forwarders below</div>
-      
+
         <div class="vertical-scrollable-zone side-div">
           <div id="forwarder-8" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
@@ -800,8 +819,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="checkbox" class="flush"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -830,8 +849,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="number" class="baud-rate" placeholder="Baud Rate"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -856,8 +875,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="number" class="port-num" placeholder="TCP Port"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -882,8 +901,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="number" class="port-num" placeholder="GPSD Port" value="2947"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -908,8 +927,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="ws-uri" placeholder="WS uri"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -938,8 +957,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="rmi-name" placeholder="RMI Name" value="RMI-NMEA"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -963,8 +982,8 @@ let fileFwdOption = (sel) => {
                           <td>No parameter</td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -1020,8 +1039,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="rest-headers" size="30" placeholder="REST Headers" value="Content-Type:plain/text"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -1114,8 +1133,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="rest-headers" size="30" placeholder="REST Headers" value="Content-Type:plain/text"></td>
                       </tr-->
                     </table>
-                  </div>  
-                </dialog>    
+                  </div>
+                </dialog>
             </div>
           </div>
 
@@ -1141,16 +1160,16 @@ let fileFwdOption = (sel) => {
           </div-->
 
           <!-- End of Forwarders List -->
-        </div>  
+        </div>
 
         <div class="vertical-scrollable-zone">
           <!-- This is where things are dropped -->
-          <div id="drop-div-forwarders" 
-               class="drop-container drop-container-content" 
-               ondrop="drop(event)" 
+          <div id="drop-div-forwarders"
+               class="drop-container drop-container-content"
+               ondrop="drop(event)"
                ondragover="allowDrop(event)">
           </div>
-        </div>  
+        </div>
       </div>
     </div>
 
@@ -1159,7 +1178,7 @@ let fileFwdOption = (sel) => {
 
         <div class="message smaller">Available Computers</div>
         <div class="message smaller">Drop Computers below</div>
-      
+
         <div class="vertical-scrollable-zone side-div">
           <div id="computer-1" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
             <div>
@@ -1186,8 +1205,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="time-buffer-length" placeholder="Comma separated, in milliseconds" value="30, 60, 600"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
 
@@ -1217,8 +1236,8 @@ let fileFwdOption = (sel) => {
                           <td><input type="text" class="time-buffer-length" placeholder="Comma separated, in milliseconds" value="30, 60, 600"></td>
                       </tr>
                     </table-->
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
 
@@ -1251,22 +1270,22 @@ let fileFwdOption = (sel) => {
                         <td><input type="checkbox" class="verbose"></td>
                       </tr>
                     </table>
-                  </div>  
-                </dialog>            
+                  </div>
+                </dialog>
               </div>
           </div>
           <!-- End of Computers -->
-          
-        </div>  
+
+        </div>
 
         <div class="vertical-scrollable-zone">
           <!-- This is where things are dropped -->
-          <div id="drop-div-computers" 
-               class="drop-container drop-container-content" 
-               ondrop="drop(event)" 
+          <div id="drop-div-computers"
+               class="drop-container drop-container-content"
+               ondrop="drop(event)"
                ondragover="allowDrop(event)">
           </div>
-        </div>  
+        </div>
       </div>
     </div>
 

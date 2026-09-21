@@ -1,9 +1,6 @@
 package nmea.consumers.reader;
 
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -19,11 +16,11 @@ public class WebSocketReader extends NMEAReader {
 	private String wsUri;
 	private boolean verbose = false;
 
-	public WebSocketReader(List<NMEAListener> al, String wsUri) {
-		this(null, al, wsUri);
+	public WebSocketReader(NMEAClient nmeaClient, List<NMEAListener> al, String wsUri) {
+		this(nmeaClient, null, al, wsUri);
 	}
-	public WebSocketReader(String threadName, List<NMEAListener> al, String wsUri) {
-		super(threadName, al);
+	public WebSocketReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String wsUri) {
+		super(nmeaClient, threadName, al);
 		this.wsUri = wsUri;
 
 		this.verbose = "true".equals(System.getProperty("ws.data.verbose", "false"));
@@ -40,9 +37,15 @@ public class WebSocketReader extends NMEAReader {
 					if (verbose) {
                       System.out.printf("WebSocketReader onMessage: [%s]\n", mess);
 					}
-					String s = mess + NMEAParser.NMEA_SENTENCE_SEPARATOR;
-					NMEAEvent n = new NMEAEvent(this, s); // Will do nothing if the String is not a valid NMEA string.
-					instance.fireDataRead(n);
+					if (instance.getNMEAClient().isActive()) {
+						String s = mess + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+						NMEAEvent n = new NMEAEvent(this, s); // Will do nothing if the String is not a valid NMEA string.
+						instance.fireDataRead(n);
+					} else {
+						if (verbose) {
+							System.out.println("WebSocketReader onMessage: inactive");
+						}
+					}
 				}
 
 				@Override

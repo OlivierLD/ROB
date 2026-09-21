@@ -49,6 +49,13 @@ public class NextWaypointManager extends Computer {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
+		if (!this.isActive()) {
+			if (this.isVerbose()) {
+				System.out.printf("Inactive %s, skipping write\n", this.getClass().getName());
+			}
+			return;
+		}
+
 		String sentence = new String(mess);
 
 		if (StringParsers.validCheckSum(sentence)) {

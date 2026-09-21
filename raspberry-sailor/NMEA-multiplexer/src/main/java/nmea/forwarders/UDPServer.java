@@ -37,6 +37,10 @@ public class UDPServer implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			// TODO Honk
+			return;
+		}
 		try {
 			// Create datagram socket
 			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {

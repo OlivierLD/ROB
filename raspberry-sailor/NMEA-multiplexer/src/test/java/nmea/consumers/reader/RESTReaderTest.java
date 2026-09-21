@@ -33,7 +33,7 @@ public class RESTReaderTest {
 //                null,               // jqs
 //                null,               // nmea-processor
 //                null));             // between loops
-        nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
+        nmeaClient.setReader(new RESTReader(nmeaClient, "RESTReader", nmeaClient.getListeners(),
                 "http",     // protocol
                 "192.168.1.41",     // machine name
                 9999,              // port

@@ -64,7 +64,7 @@ public class AISClientV2 {
 				}
 			});
 			nmeaClient.initClient();
-			nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, serverPort));
+			nmeaClient.setReader(new TCPReader(nmeaClient, "TCPReader", nmeaClient.getListeners(), serverName, serverPort));
 			nmeaClient.startWorking();
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -143,7 +143,7 @@ public class UDPServer extends NMEAClient {
 			nmeaClient.stopDataRead();
 		}, "CustomUDPServer shutdown hook"));
 		nmeaClient.initClient();
-		nmeaClient.setReader(new UDPReader("UDPReader", nmeaClient.getListeners(), serverName, serverPort));
+		nmeaClient.setReader(new UDPReader(nmeaClient, "UDPReader", nmeaClient.getListeners(), serverName, serverPort));
 		nmeaClient.startWorking();
 	}
 }

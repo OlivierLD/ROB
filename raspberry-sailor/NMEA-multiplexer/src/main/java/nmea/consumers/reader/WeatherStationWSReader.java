@@ -2,10 +2,7 @@ package nmea.consumers.reader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 import nmea.parser.StringGenerator;
 //import org.java_websocket.WebSocketImpl;
 import org.java_websocket.client.WebSocketClient;
@@ -31,21 +28,21 @@ public class WeatherStationWSReader extends NMEAReader {
 
 	private final static String DEVICE_PREFIX = "WS"; // Weather Station
 
-	public WeatherStationWSReader(List<NMEAListener> al) {
-		this(al, (Properties)null);
+	public WeatherStationWSReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, al, (Properties)null);
 	}
-	public WeatherStationWSReader(List<NMEAListener> al, Properties props) {
-		this(al, props.getProperty("ws.uri"));
+	public WeatherStationWSReader(NMEAClient nmeaClient, List<NMEAListener> al, Properties props) {
+		this(nmeaClient, al, props.getProperty("ws.uri"));
 		verbose = "true".equals(props.getProperty("ws.verbose"));
 //		if (verbose) {
 //			WebSocketImpl.DEBUG = true; // Previous version
 //		}
 	}
-	public WeatherStationWSReader(List<NMEAListener> al, String wsUri) {
-		this(null, al, wsUri);
+	public WeatherStationWSReader(NMEAClient nmeaClient, List<NMEAListener> al, String wsUri) {
+		this(nmeaClient, null, al, wsUri);
 	}
-	public WeatherStationWSReader(String threadName, List<NMEAListener> al, String wsUri) {
-		super(threadName, al);
+	public WeatherStationWSReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String wsUri) {
+		super(nmeaClient, threadName, al);
 		this.wsUri = wsUri;
 		try {
 			this.wsClient = this.createWebSocketClient();
@@ -87,76 +84,80 @@ public class WeatherStationWSReader extends NMEAReader {
 				}
 
 				try {
-					@SuppressWarnings("unchecked")
-					Map<String, Object> map = mapper.readValue(mess, Map.class);
+					if (instance.getNMEAClient().isActive()) {
+						@SuppressWarnings("unchecked")
+						Map<String, Object> map = mapper.readValue(mess, Map.class);
 
-					double hum = (double)map.get("hum");
-					double volts = (double)map.get("volts");
-					double dir = (double)map.get("dir");
-					double avgdir = (double)map.get("avgdir");
-					double speed = (double)map.get("speed");
-					double gust = (double)map.get("gust");
-					double rain = (double)map.get("rain");
-					double press = (double)map.get("press");
-					double temp = (double)map.get("temp");
+						double hum = (double) map.get("hum");
+						double volts = (double) map.get("volts");
+						double dir = (double) map.get("dir");
+						double avgdir = (double) map.get("avgdir");
+						double speed = (double) map.get("speed");
+						double gust = (double) map.get("gust");
+						double rain = (double) map.get("rain");
+						double press = (double) map.get("press");
+						double temp = (double) map.get("temp");
 
-					int deviceIdx = 0; // Instead of "BME280" or so...
-					String nmeaXDR = StringGenerator.generateXDR(DEVICE_PREFIX,
-							new StringGenerator.XDRElement(StringGenerator.XDRTypes.HUMIDITY,
-									hum,
-									String.valueOf(deviceIdx++)), // %, Humidity
-							new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
-									temp,
-									String.valueOf(deviceIdx++)), // Celsius, Temperature
-							new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
-									temp,
-									String.valueOf(deviceIdx++)), // mm/h, Rain
-							new StringGenerator.XDRElement(StringGenerator.XDRTypes.GENERIC,
-									rain,
-									String.valueOf(deviceIdx++))); // Pascal, pressure
-					nmeaXDR += NMEAParser.NMEA_SENTENCE_SEPARATOR;
+						int deviceIdx = 0; // Instead of "BME280" or so...
+						String nmeaXDR = StringGenerator.generateXDR(DEVICE_PREFIX,
+								new StringGenerator.XDRElement(StringGenerator.XDRTypes.HUMIDITY,
+										hum,
+										String.valueOf(deviceIdx++)), // %, Humidity
+								new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
+										temp,
+										String.valueOf(deviceIdx++)), // Celsius, Temperature
+								new StringGenerator.XDRElement(StringGenerator.XDRTypes.TEMPERATURE,
+										temp,
+										String.valueOf(deviceIdx++)), // mm/h, Rain
+								new StringGenerator.XDRElement(StringGenerator.XDRTypes.GENERIC,
+										rain,
+										String.valueOf(deviceIdx++))); // Pascal, pressure
+						nmeaXDR += NMEAParser.NMEA_SENTENCE_SEPARATOR;
 
-					if (verbose) {
-						System.out.printf(">>> Generated [%s]\n", nmeaXDR.trim());
+						if (verbose) {
+							System.out.printf(">>> Generated [%s]\n", nmeaXDR.trim());
+						}
+
+						fireDataRead(new NMEAEvent(this, nmeaXDR));
+
+						String nmeaMDA = StringGenerator.generateMDA(DEVICE_PREFIX,
+								press / 100,
+								temp,
+								-Double.MAX_VALUE,  // Water Temp
+								hum,
+								-Double.MAX_VALUE,  // Abs hum
+								WeatherUtil.dewPointTemperature(hum, temp), // -Double.MAX_VALUE,  // dew point
+								avgdir,  // TWD
+								-Double.MAX_VALUE,  // TWD (mag)
+								speed); // TWS
+						nmeaMDA += NMEAParser.NMEA_SENTENCE_SEPARATOR;
+
+						if (verbose) {
+							System.out.printf(">>> Generated [%s]\n", nmeaMDA.trim());
+						}
+
+						instance.fireDataRead(new NMEAEvent(this, nmeaMDA));
+
+						String nmeaMTA = StringGenerator.generateMTA(DEVICE_PREFIX, temp);
+						nmeaMTA += NMEAParser.NMEA_SENTENCE_SEPARATOR;
+
+						if (verbose) {
+							System.out.printf(">>> Generated [%s]\n", nmeaMTA.trim());
+						}
+
+						instance.fireDataRead(new NMEAEvent(this, nmeaMTA));
+
+						String nmeaMMB = StringGenerator.generateMMB(DEVICE_PREFIX, press / 100);
+						nmeaMMB += NMEAParser.NMEA_SENTENCE_SEPARATOR;
+
+						if (verbose) {
+							System.out.printf(">>> Generated [%s]\n", nmeaMMB.trim());
+						}
+
+						instance.fireDataRead(new NMEAEvent(this, nmeaMMB));
+					} else {
+						// Honk
 					}
-
-					fireDataRead(new NMEAEvent(this, nmeaXDR));
-
-					String nmeaMDA = StringGenerator.generateMDA(DEVICE_PREFIX,
-							press / 100,
-							temp,
-							-Double.MAX_VALUE,  // Water Temp
-							hum,
-							-Double.MAX_VALUE,  // Abs hum
-							WeatherUtil.dewPointTemperature(hum, temp), // -Double.MAX_VALUE,  // dew point
-							avgdir,  // TWD
-							-Double.MAX_VALUE,  // TWD (mag)
-							speed); // TWS
-					nmeaMDA += NMEAParser.NMEA_SENTENCE_SEPARATOR;
-
-					if (verbose) {
-						System.out.printf(">>> Generated [%s]\n", nmeaMDA.trim());
-					}
-
-					instance.fireDataRead(new NMEAEvent(this, nmeaMDA));
-
-					String nmeaMTA = StringGenerator.generateMTA(DEVICE_PREFIX, temp);
-					nmeaMTA += NMEAParser.NMEA_SENTENCE_SEPARATOR;
-
-					if (verbose) {
-						System.out.printf(">>> Generated [%s]\n", nmeaMTA.trim());
-					}
-
-					instance.fireDataRead(new NMEAEvent(this, nmeaMTA));
-
-					String nmeaMMB = StringGenerator.generateMMB(DEVICE_PREFIX, press / 100);
-					nmeaMMB += NMEAParser.NMEA_SENTENCE_SEPARATOR;
-
-					if (verbose) {
-						System.out.printf(">>> Generated [%s]\n", nmeaMMB.trim());
-					}
-
-					instance.fireDataRead(new NMEAEvent(this, nmeaMMB));
 				} catch (JsonProcessingException jpe) {
 					throw new RuntimeException(jpe);
 				}

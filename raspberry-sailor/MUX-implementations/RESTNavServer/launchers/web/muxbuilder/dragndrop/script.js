@@ -163,6 +163,8 @@ function generateSerialConsumerCode(node) {
   code += `    baudrate: ${baudRate}\n`;
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -176,6 +178,10 @@ function generateSerialConsumerCode(node) {
   if (resetInterval.trim().length > 0) {
       code += `    reset.interval: ${resetInterval}\n`;
   }
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -186,11 +192,15 @@ function generateTCPConsumerCode(node) {
   let portNum = node.querySelector('.port-num').value;
   code += `    port: ${portNum}\n`;
   let initialRequest = node.querySelector('.initial-request').value;
-  code += `    initial.request: ${initialRequest}\n`;
+  if (initialRequest.trim().length > 0) {
+      code += `    initial.request: ${initialRequest}\n`;
+  }
   let keepTrying = node.querySelector('.keep-trying').checked;
   code += `    keep.trying: ${keepTrying}\n`;
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -199,6 +209,10 @@ function generateTCPConsumerCode(node) {
   let sentenceFilters = node.querySelector('.sentence-filter').value;
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
   }
   return code;
 }
@@ -545,40 +559,40 @@ function dumpIt(withDialog) { // YAML Generation
     if (prms.classList.contains("serial-channel")) {
       code += "  - type: serial\n";
       code += generateSerialConsumerCode(prms);
-    } else if (prms.classList.contains("tcp-channel")) { 
+    } else if (prms.classList.contains("tcp-channel")) {
       code += "  - type: tcp\n";
       code += generateTCPConsumerCode(prms);
-    } else if (prms.classList.contains("rest-channel")) { 
+    } else if (prms.classList.contains("rest-channel")) {
       code += "  - type: rest\n";
       code += generateRESTConsumerCode(prms);
     } else if (prms.classList.contains("dynamic-consumer")) {
       // code += "  - class: . . .\n";
       code += generateDynamicConsumerCode(prms);
-    } else if (prms.classList.contains("file-channel")) { 
+    } else if (prms.classList.contains("file-channel")) {
       code += "  - type: file\n";
       code += generateFileConsumerCode(prms);
-    } else if (prms.classList.contains("ws-channel")) { 
+    } else if (prms.classList.contains("ws-channel")) {
       code += "  - type: ws\n";
       code += generateWSConsumerCode(prms);
-    } else if (prms.classList.contains("htu21df-channel")) { 
+    } else if (prms.classList.contains("htu21df-channel")) {
       code += "  - type: htu21df\n";
       code += generateCodeDevicePrefix(prms);
-    } else if (prms.classList.contains("bme280-channel")) { 
+    } else if (prms.classList.contains("bme280-channel")) {
       code += "  - type: bme280\n";
       code += generateCodeDevicePrefix(prms);
-    } else if (prms.classList.contains("bmp180-channel")) { 
+    } else if (prms.classList.contains("bmp180-channel")) {
       code += "  - type: bmp180\n";
       code += generateCodeDevicePrefix(prms);
-    } else if (prms.classList.contains("hcm5883l-channel")) { 
+    } else if (prms.classList.contains("hcm5883l-channel")) {
       code += "  - type: hcm5883l\n";
       code += generateHCM5883LConsumerCode(prms);
-    } else if (prms.classList.contains("lsm303-channel")) { 
+    } else if (prms.classList.contains("lsm303-channel")) {
       code += "  - type: lsm303\n";
       code += generateLSM303ConsumerCode(prms);
-    } else if (prms.classList.contains("zda-channel")) { 
+    } else if (prms.classList.contains("zda-channel")) {
       code += "  - type: zda\n";
       code += generateNoPrmConsumerCode(prms);
-    } else if (prms.classList.contains("rnd-channel")) { 
+    } else if (prms.classList.contains("rnd-channel")) {
       code += "  - type: rnd\n";
       code += generateNoPrmConsumerCode(prms);
     } else {

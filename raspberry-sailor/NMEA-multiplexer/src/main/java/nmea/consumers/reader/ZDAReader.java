@@ -1,10 +1,8 @@
 package nmea.consumers.reader;
 
 import java.util.List;
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+
+import nmea.api.*;
 import nmea.parser.StringGenerator;
 
 /**
@@ -15,11 +13,11 @@ public class ZDAReader extends NMEAReader {
 	private static final String DEFAULT_DEVICE_PREFIX = "GP";
 	private String devicePrefix = DEFAULT_DEVICE_PREFIX;
 
-	public ZDAReader(String threadName, List<NMEAListener> al) {
-		super(threadName, al);
+	public ZDAReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al) {
+		super(nmeaClient, threadName, al);
 	}
-	public ZDAReader(List<NMEAListener> al) {
-		super(al);
+	public ZDAReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		super(nmeaClient, al);
 	}
 
 	public String getDevicePrefix() {
@@ -36,10 +34,12 @@ public class ZDAReader extends NMEAReader {
 		while (this.canRead()) {
 			// Read data every 1 second
 			try {
-				// Generate NMEA String
-				String zdaString = StringGenerator.generateZDA("GP", System.currentTimeMillis());
-				zdaString += NMEAParser.NMEA_SENTENCE_SEPARATOR;
-				fireDataRead(new NMEAEvent(this, zdaString));
+				if (this.getNMEAClient().isActive()) {
+					// Generate NMEA String
+					String zdaString = StringGenerator.generateZDA("GP", System.currentTimeMillis());
+					zdaString += NMEAParser.NMEA_SENTENCE_SEPARATOR;
+					fireDataRead(new NMEAEvent(this, zdaString));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

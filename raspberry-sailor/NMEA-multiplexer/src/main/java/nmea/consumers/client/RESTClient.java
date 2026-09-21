@@ -96,9 +96,6 @@ public class RESTClient extends NMEAClient {
 
 		@Override
 		public boolean isActive() { return active; }
-//		public boolean isVerbose() {
-//			return verbose;
-//		}
 
 		public RESTBean() {}
 
@@ -187,7 +184,7 @@ public class RESTClient extends NMEAClient {
 //				null, // NMEAProcessor
 //				null));
 		// With an NMEAProcessor
-		nmeaClient.setReader(new RESTReader("RESTReader", nmeaClient.getListeners(),
+		nmeaClient.setReader(new RESTReader(nmeaClient, "RESTReader", nmeaClient.getListeners(),
 				"http",
 				serverNameOrIP,
 				9_999, // 8_080,

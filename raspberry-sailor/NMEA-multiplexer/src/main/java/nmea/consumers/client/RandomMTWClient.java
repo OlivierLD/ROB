@@ -142,7 +142,7 @@ public class RandomMTWClient extends NMEAClient {
 		});
 
 		nmeaClient.initClient();
-		nmeaClient.setReader(new RandomMTWReader("RndMTWReader", nmeaClient.getListeners()));
+		nmeaClient.setReader(new RandomMTWReader(nmeaClient, "RndMTWReader", nmeaClient.getListeners()));
 		nmeaClient.startWorking();
 	}
 }

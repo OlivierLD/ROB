@@ -131,7 +131,7 @@ public class UDPClient extends NMEAClient {
 			}
 		});
 		udpClient.initClient();
-		udpClient.setReader(new UDPReader("UDPReader", udpClient.getListeners(), SERVER_NAME, UDP_PORT));
+		udpClient.setReader(new UDPReader(udpClient, "UDPReader", udpClient.getListeners(), SERVER_NAME, UDP_PORT));
 		udpClient.startWorking();
 	}
 }

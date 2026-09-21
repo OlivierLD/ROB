@@ -142,7 +142,7 @@ public class TCPClient extends NMEAClient {
 			nmeaClient.stopDataRead();
 		}, "TCPClient shutdown hook"));
 		nmeaClient.initClient();
-		nmeaClient.setReader(new TCPReader("TCPReader", nmeaClient.getListeners(), serverName, serverPort));
+		nmeaClient.setReader(new TCPReader(nmeaClient, "TCPReader", nmeaClient.getListeners(), serverName, serverPort));
 		nmeaClient.startWorking();
 	}
 }

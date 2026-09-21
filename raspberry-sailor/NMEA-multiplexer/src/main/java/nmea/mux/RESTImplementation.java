@@ -1752,7 +1752,8 @@ public class RESTImplementation {
 						try {
 							NMEAClient tcpClient = new TCPClient(tcpJson.getDeviceFilters(), tcpJson.getSentenceFilters(), this.mux, tcpJson.getDescription());
 							tcpClient.initClient();
-							tcpClient.setReader(new TCPReader("MUX-TCPReader",
+							tcpClient.setReader(new TCPReader(tcpClient,
+													"MUX-TCPReader",
 													tcpClient.getListeners(),
 													tcpJson.getHostname(),
 													tcpJson.getPort(),
@@ -1790,7 +1791,7 @@ public class RESTImplementation {
 							NMEAClient serialClient = new SerialClient(serialJson.getDeviceFilters(), serialJson.getSentenceFilters(),this.mux, serialJson.getVerbose(), serialJson.isActive(), "");
 							serialClient.initClient();
 							// TODO Reset Interval ?
-							serialClient.setReader(new SerialReader("MUX-SerialReader", serialClient.getListeners(), serialJson.getPort(), serialJson.getBr()));
+							serialClient.setReader(new SerialReader(serialClient, "MUX-SerialReader", serialClient.getListeners(), serialJson.getPort(), serialJson.getBr()));
 							nmeaDataClients.add(serialClient);
 							serialClient.startWorking();
 							String content = mapper.writeValueAsString(serialClient.getBean());
@@ -1823,7 +1824,7 @@ public class RESTImplementation {
 						try {
 							NMEAClient wsClient = new WebSocketClient(wsJson.getDeviceFilters(), wsJson.getSentenceFilters(), this.mux, wsJson.getDescription());
 							wsClient.initClient();
-							wsClient.setReader(new WebSocketReader("MUX-WSReader", wsClient.getListeners(), wsJson.getWsUri()));
+							wsClient.setReader(new WebSocketReader(wsClient,"MUX-WSReader", wsClient.getListeners(), wsJson.getWsUri()));
 							nmeaDataClients.add(wsClient);
 							wsClient.startWorking();
 							String content = mapper.writeValueAsString(wsClient.getBean());
@@ -1861,7 +1862,7 @@ public class RESTImplementation {
 									fileJson.isActive(),
 									fileJson.getDescription());
 							fileClient.initClient();
-							fileClient.setReader(new DataFileReader("MUX-FileReader", fileClient.getListeners(), fileJson.getFile(), fileJson.getPause()));
+							fileClient.setReader(new DataFileReader(fileClient, "MUX-FileReader", fileClient.getListeners(), fileJson.getFile(), fileJson.getPause()));
 							nmeaDataClients.add(fileClient);
 							fileClient.startWorking();
 							String content = mapper.writeValueAsString(fileClient.getBean());
@@ -1974,7 +1975,7 @@ public class RESTImplementation {
 						try {
 							NMEAClient zdaClient = new ZDAClient(zdaJson.getDeviceFilters(), zdaJson.getSentenceFilters(), this.mux, zdaJson.getDescription());
 							zdaClient.initClient();
-							zdaClient.setReader(new ZDAReader("MUX-ZDAReader", zdaClient.getListeners()));
+							zdaClient.setReader(new ZDAReader(zdaClient, "MUX-ZDAReader", zdaClient.getListeners()));
 							// To do BEFORE startWorking and AFTER setReader
 							if (zdaJson.getDevicePrefix() != null) {
 								if (zdaJson.getDevicePrefix().trim().length() != 2) {
@@ -2093,7 +2094,7 @@ public class RESTImplementation {
 						try {
 							NMEAClient rndClient = new RandomClient(rndJson.getDeviceFilters(), rndJson.getSentenceFilters(), this.mux, rndJson.getDescription());
 							rndClient.initClient();
-							rndClient.setReader(new RandomReader("MUX-RndReader", rndClient.getListeners()));
+							rndClient.setReader(new RandomReader(rndClient, "MUX-RndReader", rndClient.getListeners()));
 							nmeaDataClients.add(rndClient);
 							rndClient.startWorking();
 							String content = mapper.writeValueAsString(rndClient.getBean());
@@ -2133,7 +2134,8 @@ public class RESTImplementation {
 									restJson.isActive(),
 									restJson.getDescription());
 							restClient.initClient();
-							restClient.setReader(new RESTReader("MUX-RESTReader",
+							restClient.setReader(new RESTReader(restClient,
+									"MUX-RESTReader",
 									restClient.getListeners(),
 									restJson.getProtocol(),
 									restJson.getHostname(),

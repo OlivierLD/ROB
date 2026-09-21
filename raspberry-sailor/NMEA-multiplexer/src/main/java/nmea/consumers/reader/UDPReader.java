@@ -1,9 +1,6 @@
 package nmea.consumers.reader;
 
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -19,19 +16,19 @@ public class UDPReader extends NMEAReader {
 	private int udpPort = DEFAULT_UDP_PORT;
 	private long timeout = 5_000L; // Default value. Can be set by a property of the channel (timeout: -1). -1 means NO timeout.
 
-	public UDPReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_HOST_NAME, DEFAULT_UDP_PORT);
+	public UDPReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, null, al, DEFAULT_HOST_NAME, DEFAULT_UDP_PORT);
 	}
 
-	public UDPReader(List<NMEAListener> al, int udp) {
-		this(null, al, DEFAULT_HOST_NAME, udp);
+	public UDPReader(NMEAClient nmeaClient, List<NMEAListener> al, int udp) {
+		this(nmeaClient, null, al, DEFAULT_HOST_NAME, udp);
 	}
 
-	public UDPReader(List<NMEAListener> al, String host, int udp) {
-		this(null, al, host, udp);
+	public UDPReader(NMEAClient nmeaClient, List<NMEAListener> al, String host, int udp) {
+		this(nmeaClient, null, al, host, udp);
 	}
-	public UDPReader(String threadName, List<NMEAListener> al, String host, int udp) {
-		super(threadName, al);
+	public UDPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int udp) {
+		super(nmeaClient, threadName, al);
 		udpPort = udp;
 		this.host = host;
 	}

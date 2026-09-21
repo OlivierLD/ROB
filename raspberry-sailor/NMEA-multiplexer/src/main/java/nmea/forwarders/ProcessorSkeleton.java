@@ -44,7 +44,9 @@ public class ProcessorSkeleton implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
-		// TODO: Something smart here
+		if (this.isActive()) {
+			// TODO: Something smart here
+		}
 	}
 
 	@Override

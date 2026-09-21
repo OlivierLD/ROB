@@ -9,6 +9,7 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
+import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.api.NMEAListener;
 import nmea.api.NMEAReader;
@@ -73,17 +74,17 @@ public class SerialReader
 		this.comPort = com;
 		this.br = br;
 	}
-	public SerialReader(List<NMEAListener> al) {
-		super(al);
+	public SerialReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		super(nmeaClient, al);
 	}
-	public SerialReader(List<NMEAListener> al, String com, int br) {
-		this(null, al, com, br);
+	public SerialReader(NMEAClient nmeaClient, List<NMEAListener> al, String com, int br) {
+		this(nmeaClient, null, al, com, br);
 	}
-	public SerialReader(String threadName, List<NMEAListener> al, String com, int br) {
-		this(threadName, al, com, br, null, "");
+	public SerialReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String com, int br) {
+		this(nmeaClient, threadName, al, com, br, null, "");
 	}
-	public SerialReader(String threadName, List<NMEAListener> al, String com, int br, Long resetInterval, String description) {
-		super(threadName, al);
+	public SerialReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String com, int br, Long resetInterval, String description) {
+		super(nmeaClient, threadName, al);
 		this.comPort = com;
 		this.br = br;
 		if (resetInterval != null) {

@@ -134,7 +134,7 @@ public class ZDAClient extends NMEAClient {
 		});
 
 		nmeaClient.initClient();
-		nmeaClient.setReader(new ZDAReader("ZDAReader", nmeaClient.getListeners()));
+		nmeaClient.setReader(new ZDAReader(nmeaClient,"ZDAReader", nmeaClient.getListeners()));
 		nmeaClient.startWorking();
 	}
 }

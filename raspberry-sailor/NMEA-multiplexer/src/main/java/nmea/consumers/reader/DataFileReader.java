@@ -1,9 +1,11 @@
 package nmea.consumers.reader;
 
+import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.api.NMEAListener;
 import nmea.api.NMEAReader;
 import utils.StringUtils;
+import utils.TimeUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,23 +30,23 @@ public class DataFileReader extends NMEAReader {
 	private String[] deviceFilters;
 	private String[] sentenceFilters;
 
-	public DataFileReader(List<NMEAListener> al, String fName) {
-		this(null, al, fName, 500, false, null);
+	public DataFileReader(NMEAClient nmeaClient, List<NMEAListener> al, String fName) {
+		this(nmeaClient, null, al, fName, 500, false, null);
 	}
-	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause) {
-		this(threadName, al, fName, pause, false, null);
+	public DataFileReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String fName, long pause) {
+		this(nmeaClient, threadName, al, fName, pause, false, null);
 	}
-	public DataFileReader(String threadName, List<NMEAListener> al, String fName) {
-		this(threadName, al, fName, 500, false, null);
+	public DataFileReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String fName) {
+		this(nmeaClient, threadName, al, fName, 500, false, null);
 	}
-	public DataFileReader(List<NMEAListener> al, String fName, long pause) {
-		this(null, al, fName, pause, false, null);
+	public DataFileReader(NMEAClient nmeaClient, List<NMEAListener> al, String fName, long pause) {
+		this(nmeaClient, null, al, fName, pause, false, null);
 	}
-	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause, boolean isZip, String pathInZip) {
-		this(threadName, al, fName, 500, true,false, null, false);
+	public DataFileReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String fName, long pause, boolean isZip, String pathInZip) {
+		this(nmeaClient, threadName, al, fName, 500, true,false, null, false);
 	}
-	public DataFileReader(String threadName, List<NMEAListener> al, String fName, long pause, boolean loop, boolean isZip, String pathInZip, boolean verbose) {
-		super(threadName, al);
+	public DataFileReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String fName, long pause, boolean loop, boolean isZip, String pathInZip, boolean verbose) {
+		super(nmeaClient, threadName, al);
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ": There are " + al.size() + " listener(s)");
 		}
@@ -108,49 +110,59 @@ public class DataFileReader extends NMEAReader {
 				int dim = 1 + ((int) (750 * size)); // At least 1, no zero. Random size of the data chunk to read.
 				byte[] ba = new byte[dim];
 				try {
-					int l = fis.read(ba);
-					// System.out.println("Read " + l);
-					if (l != -1 && dim > 0) { // dim should be always greater than 0
-						String nmeaContent = new String(ba);
-						// TODO See if that would fit the nulls sneaking in from the stty /dev/ttyUSB* 38400...
-						if (REMOVE_ALL_NULLS || this.getZip()) { // Workaround... From a zip, some NULLs have been seen sneaking in the string...
-							nmeaContent = StringUtils.removeNullsFromString(nmeaContent);
-						}
-						if (verbose) {
-							System.out.println("****\tSpitting out [" + nmeaContent + "]");
-						}
-						// To follow that one until it's NMEA valid, see in NMEAParser.dataRead
-						fireDataRead(new NMEAEvent(this, nmeaContent), this.deviceFilters, this.sentenceFilters);
-						try {
-							Thread.sleep(this.betweenRecords);
-						} catch (Exception ignore) {
-							System.err.println("Err when trying to sleep, ooch:");
-							ignore.printStackTrace();
-						}
-					} else {
-						this.fis.close();
-						if (this.loop) {
-							if (this.verbose || true) {
-								System.out.println(String.format("Read:%d, Dim:%d (size: %f)", l, dim, size));
-								System.out.println("===== Resetting Reader =====");
+					if (this.getNMEAClient().isActive()) {
+						int l = fis.read(ba);
+						// System.out.println("Read " + l);
+						if (l != -1 && dim > 0) { // dim should be always greater than 0
+							String nmeaContent = new String(ba);
+							// TODO See if that would fit the nulls sneaking in from the stty /dev/ttyUSB* 38400...
+							if (REMOVE_ALL_NULLS || this.getZip()) { // Workaround... From a zip, some NULLs have been seen sneaking in the string...
+								nmeaContent = StringUtils.removeNullsFromString(nmeaContent);
 							}
-							if (this.getZip()) {
-								try (ZipFile zipFile = new ZipFile(this.dataFileName)) {
-									ZipEntry zipEntry = zipFile.getEntry(this.pathInArchive); // Mandatory if zip=true
-									if (zipEntry == null) { // Path not found in the zip, take first entry.
-										zipEntry = zipFile.entries().nextElement();
+							if (verbose) {
+								System.out.println("****\tSpitting out [" + nmeaContent + "]");
+							}
+							// To follow that one until it's NMEA valid, see in NMEAParser.dataRead
+							fireDataRead(new NMEAEvent(this, nmeaContent), this.deviceFilters, this.sentenceFilters);
+							try {
+								Thread.sleep(this.betweenRecords);
+							} catch (Exception ignore) {
+								System.err.println("Err when trying to sleep, ooch:");
+								ignore.printStackTrace();
+							}
+
+
+						} else {
+							this.fis.close();
+							if (this.loop) {
+								if (this.verbose || true) {
+									System.out.println(String.format("Read:%d, Dim:%d (size: %f)", l, dim, size));
+									System.out.println("===== Resetting Reader =====");
+								}
+								if (this.getZip()) {
+									try (ZipFile zipFile = new ZipFile(this.dataFileName)) {
+										ZipEntry zipEntry = zipFile.getEntry(this.pathInArchive); // Mandatory if zip=true
+										if (zipEntry == null) { // Path not found in the zip, take first entry.
+											zipEntry = zipFile.entries().nextElement();
+										}
+										this.fis = zipFile.getInputStream(zipEntry);
 									}
-									this.fis = zipFile.getInputStream(zipEntry);
+								} else {
+									this.fis = new FileInputStream(this.dataFileName);
 								}
 							} else {
-								this.fis = new FileInputStream(this.dataFileName);
+								if (true || this.verbose) {
+									System.out.println(">> End of stream. Not looping. <<");
+								}
+								break;
 							}
-						} else {
-							if (true || this.verbose) {
-								System.out.println(">> End of stream. Not looping. <<");
-							}
-							break;
 						}
+					} else {
+						// Inactive....
+						if (this.verbose) {
+							System.out.printf(">> Inactive %s, waiting 1sec. <<\n", this.getClass().getName());
+						}
+						TimeUtil.delay(1f);
 					}
 				} catch (ConcurrentModificationException cme) {
 					System.err.println("Managed ConcurrentModificationException..., it's OK if shutting down.");

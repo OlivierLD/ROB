@@ -47,7 +47,7 @@ public class TCPReaderTest {
 
             boolean keepTrying = true;
             while (keepTrying) {
-                TCPReader ctcpr = new TCPReader(ll, host, port);
+                TCPReader ctcpr = new TCPReader(null, ll, host, port); // Client is null, oops !
                 System.out.println(new Date().toString() + ": New " + ctcpr.getClass().getName() + " created.");
 
                 try {

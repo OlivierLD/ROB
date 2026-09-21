@@ -56,7 +56,7 @@ public class TXTExample extends NMEAClient {
         super(s, sa, mux, "Dummy description");
         nmeaClient = this;
         // Here is a way to set the reader without the 'reader' property.
-        this.setReader(new TXTExample.TXTReader("TXTProducer", this.getListeners()));
+        this.setReader(new TXTExample.TXTReader(this, "TXTProducer", this.getListeners()));
     }
 
     // Default values. Can be overridden by properties.
@@ -123,11 +123,11 @@ public class TXTExample extends NMEAClient {
         private static final String DEFAULT_DEVICE_PREFIX = "XX";
         private String devicePrefix = DEFAULT_DEVICE_PREFIX;
 
-        public TXTReader(String threadName, List<NMEAListener> al) {
-            super(threadName, al);
+        public TXTReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al) {
+            super(nmeaClient, threadName, al);
         }
-        public TXTReader(List<NMEAListener> al) {
-            super(al);
+        public TXTReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+            super(nmeaClient, al);
         }
 
         public String getDevicePrefix() {
@@ -191,7 +191,7 @@ public class TXTExample extends NMEAClient {
         });
 
         nmeaClient.initClient();
-        nmeaClient.setReader(new TXTExample.TXTReader("TXTProducer", nmeaClient.getListeners()));
+        nmeaClient.setReader(new TXTExample.TXTReader(nmeaClient, "TXTProducer", nmeaClient.getListeners()));
         nmeaClient.startWorking();
     }
 }

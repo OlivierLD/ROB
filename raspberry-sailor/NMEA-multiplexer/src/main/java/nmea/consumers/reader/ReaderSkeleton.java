@@ -1,9 +1,6 @@
 package nmea.consumers.reader;
 
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 import nmea.parser.StringParsers;
 
 import java.util.List;
@@ -14,11 +11,11 @@ import utils.StringUtils;
  */
 public class ReaderSkeleton extends NMEAReader {
 
-	public ReaderSkeleton(List<NMEAListener> al) {
-		this(null, al);
+	public ReaderSkeleton(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, null, al);
 	}
-	public ReaderSkeleton(String threadName, List<NMEAListener> al) {
-		super(threadName, al);
+	public ReaderSkeleton(NMEAClient nmeaClient, String threadName, List<NMEAListener> al) {
+		super(nmeaClient, threadName, al);
 	}
 
 	@Override

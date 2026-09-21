@@ -4,7 +4,8 @@ html {
 
 body {
     color: blue;
-    background-color: rgba(192, 192, 192, 0.25);
+    /* background-color: rgba(192, 192, 192, 0.25); */
+    background-color: whitesmoke;
     font-weight: normal;
     font-size: 10pt;
     font-family: "Lato", Verdana, Helvetica, Geneva, sans-serif;
@@ -15,7 +16,8 @@ body {
 }
 
 h1 {
-    color: silver;
+    /* color: silver; */
+    color: darkblue;
     font-style: italic;
     font-size: 26pt;
     /*font-family: Verdana, Arial, Helvetica, Geneva;*/
@@ -25,7 +27,7 @@ h1 {
 }
 
 h2 {
-    color: silver;
+    color: darkgrey;
     font-size: 12pt;
     /*font-family: Verdana, Arial, Helvetica, Geneva;*/
     padding-left: 5pt;
@@ -56,7 +58,8 @@ h4 {
 }
 
 h5 {
-    color: silver;
+    /* color: silver; */
+    color: darkblue;
     font-style: normal;
     font-weight: bold;
     font-size: 10pt;

@@ -93,5 +93,5 @@ computers:
     # Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
     object-name: "PRMSL-buff"
     description: "Long term PRMSL storage, useful for a barograph"
-    active: true
+    active: false
     verbose: false

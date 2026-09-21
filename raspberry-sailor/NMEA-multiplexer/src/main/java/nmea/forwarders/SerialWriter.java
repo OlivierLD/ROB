@@ -73,9 +73,12 @@ public class SerialWriter implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			return;
+		}
 		if (this.out != null) {
 			try {
-				if ("true".equals(System.getProperty("serial.verbose", "false"))) {
+				if (this.isVerbose()) { //  "true".equals(System.getProperty("serial.verbose", "false"))) {
 					System.out.println(String.format("Writing to %s:%d [%s]", this.comPort, this.br, new String(message).trim()));
 				}
 				this.out.write((new String(message).trim() + "\r\n").getBytes());

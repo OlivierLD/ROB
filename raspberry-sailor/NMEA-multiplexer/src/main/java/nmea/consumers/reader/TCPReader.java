@@ -1,9 +1,6 @@
 package nmea.consumers.reader;
 
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,28 +23,28 @@ public class TCPReader extends NMEAReader {
 	private String initialRequest = null;  // Like for GPSd...
 	private boolean keepTrying = false;
 
-	public TCPReader(List<NMEAListener> al) {
-		this(null, al, DEFAULT_HOST_NAME, DEFAULT_TCP_PORT, false);
+	public TCPReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, null, al, DEFAULT_HOST_NAME, DEFAULT_TCP_PORT, false);
 	}
 
-	public TCPReader(List<NMEAListener> al, int tcp) {
-		this(null, al, DEFAULT_HOST_NAME, tcp, false);
+	public TCPReader(NMEAClient nmeaClient, List<NMEAListener> al, int tcp) {
+		this(nmeaClient, null, al, DEFAULT_HOST_NAME, tcp, false);
 	}
 
-	public TCPReader(List<NMEAListener> al, String host, int tcp) {
-		this(null, al, host, tcp, false);
+	public TCPReader(NMEAClient nmeaClient, List<NMEAListener> al, String host, int tcp) {
+		this(nmeaClient, null, al, host, tcp, false);
 	}
 
-	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp) {
-		this(threadName, al, host, tcp, null, false);
+	public TCPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int tcp) {
+		this(nmeaClient, threadName, al, host, tcp, null, false);
 	}
 
-	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp, boolean keepTrying) {
-		this(threadName, al, host, tcp, null, keepTrying);
+	public TCPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int tcp, boolean keepTrying) {
+		this(nmeaClient, threadName, al, host, tcp, null, keepTrying);
 	}
 
-	public TCPReader(String threadName, List<NMEAListener> al, String host, int tcp, String initialRequest, boolean keepTrying) {
-		super(threadName != null ? threadName : "tcp-thread", al);
+	public TCPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int tcp, String initialRequest, boolean keepTrying) {
+		super(nmeaClient, threadName != null ? threadName : "tcp-thread", al);
 		this.hostName = host;
 		this.tcpPort = tcp;
 		this.initialRequest = initialRequest;

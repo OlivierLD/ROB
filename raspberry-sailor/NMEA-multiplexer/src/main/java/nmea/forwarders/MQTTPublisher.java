@@ -73,6 +73,9 @@ public class MQTTPublisher implements Forwarder {
 
 	@Override
 	public void write(byte[] message) {
+		if (!this.isActive()) {
+			return;
+		}
 
 		if (mqttClient == null) {
 			try {

@@ -1,9 +1,6 @@
 package nmea.consumers.reader;
 
-import nmea.api.NMEAEvent;
-import nmea.api.NMEAListener;
-import nmea.api.NMEAParser;
-import nmea.api.NMEAReader;
+import nmea.api.*;
 import nmea.parser.StringParsers;
 
 import java.util.List;
@@ -15,11 +12,11 @@ import utils.StringUtils;
  */
 public class RandomReader extends NMEAReader {
 
-	public RandomReader(List<NMEAListener> al) {
-		this(null, al);
+	public RandomReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, null, al);
 	}
-	public RandomReader(String threadName, List<NMEAListener> al) {
-		super(threadName, al);
+	public RandomReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al) {
+		super(nmeaClient, threadName, al);
 	}
 
 	@Override
@@ -28,9 +25,13 @@ public class RandomReader extends NMEAReader {
 		while (this.canRead()) {
 			// Read data every 1 second
 			try {
-				// Generate NMEA String
-				String customString = generateSentence("AA", "RND", Double.toString(Math.random())) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
-				fireDataRead(new NMEAEvent(this, customString));
+				if (this.getNMEAClient().isActive()) {
+					// Generate NMEA String
+					String customString = generateSentence("AA", "RND", Double.toString(Math.random())) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
+					fireDataRead(new NMEAEvent(this, customString));
+				} else {
+					// Honk
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

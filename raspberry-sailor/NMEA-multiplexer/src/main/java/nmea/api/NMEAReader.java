@@ -18,6 +18,7 @@ import java.util.List;
  */
 public abstract class NMEAReader extends Thread {
 	private List<NMEAListener> NMEAListeners = null; // new ArrayList<>(2);
+	private NMEAClient nmeaClient;
 
 	protected boolean goRead = true;
 	private NMEAReader instance = this;
@@ -32,27 +33,32 @@ public abstract class NMEAReader extends Thread {
 		}
 	}
 
+	public NMEAClient getNMEAClient() {
+		return this.nmeaClient;
+	}
+
 	public NMEAReader() {
 		this(null, null, false);
 	}
 
-	public NMEAReader(String threadName) {
-		this(threadName, null, false);
+	public NMEAReader(NMEAClient nmeaClient, String threadName) {
+		this(nmeaClient, threadName, null, false);
 	}
 
-	public NMEAReader(String threadName, List<NMEAListener> al) {
-		this(threadName, al, false);
+	public NMEAReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al) {
+		this(nmeaClient, threadName, al, false);
 	}
 
-	public NMEAReader(List<NMEAListener> al) {
-		this(null, al, false);
+	public NMEAReader(NMEAClient nmeaClient, List<NMEAListener> al) {
+		this(nmeaClient, null, al, false);
 	}
 
-	public NMEAReader(List<NMEAListener> al, boolean verbose) {
-		this(null, al, verbose);
+	public NMEAReader(NMEAClient nmeaClient, List<NMEAListener> al, boolean verbose) {
+		this(nmeaClient, null, al, verbose);
 	}
-	public NMEAReader(String threadName, List<NMEAListener> al, boolean verbose) {
+	public NMEAReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, boolean verbose) {
 		super(threadName);
+		this.nmeaClient = nmeaClient;
 		this.verbose = verbose;
 		if (verbose) {
 			System.out.println(this.getClass().getName() + ":Creating reader");

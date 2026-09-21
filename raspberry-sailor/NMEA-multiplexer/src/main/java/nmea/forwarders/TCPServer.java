@@ -71,7 +71,7 @@ public class TCPServer implements Forwarder {
 	@Override
 	public void write(byte[] message) {
 		if (!this.isActive()) {
-			if ("true".equals(System.getProperty("mux.infra.verbose", "false"))) {
+			if (this.isVerbose()) { // "true".equals(System.getProperty("mux.infra.verbose", "false"))) {
 				System.out.println("TCP Server write: INACTIVE forwarder, skipping write."); // TODO Use LOG ?
 			}
 			return;

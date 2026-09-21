@@ -42,6 +42,13 @@ public class ComputerSkeleton extends Computer {
 	 */
 	@Override
 	public void write(byte[] mess) {
+		if (!this.isActive()) {
+			if (this.isVerbose()) {
+				System.out.printf("Inactive %s, skipping write\n", this.getClass().getName());
+			}
+			return;
+		}
+
 		String sentence = new String(mess);
 		if (StringParsers.validCheckSum(sentence)) {
 			String sentenceID = StringParsers.getSentenceID(sentence);

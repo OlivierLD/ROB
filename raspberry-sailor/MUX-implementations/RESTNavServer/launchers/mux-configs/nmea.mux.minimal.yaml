@@ -7,8 +7,10 @@
 name: "No GPS, using ZDA"
 description:
   - Basic minimal MUX config. Can be used for tests.
-  - Just a ZDA generator, no forwarder, no computer.
+#  - Just a ZDA generator, no forwarder, no computer.
+  - Not even one channel
   - Some chartless maps though.
+  - Admin features available
 context:
   with.http.server: true
   http.port: 9999
@@ -25,8 +27,8 @@ context:
     - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
     - markers: mux-configs/markers/markers.port-navalo.vilaine.yaml
     - markers: mux-configs/markers/markers.vilaine.loire.yaml
-channels:
-  - type: zda
-    description: "ZDA Generator, GP prefix."
-    active: true
-    verbose: false
+#channels:
+#  - type: zda
+#    description: "ZDA Generator, GP prefix."
+#    active: true
+#    verbose: false

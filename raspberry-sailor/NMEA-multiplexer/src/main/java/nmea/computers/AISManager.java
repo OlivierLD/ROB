@@ -145,6 +145,10 @@ public class AISManager extends Computer {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void write(byte[] mess) {
+		if (!this.isActive()) {
+			// TODO Honk
+			return;
+		}
 		String sentence = new String(mess);
         // System.out.println(String.format("In AIS Computer, write method: %s", sentence));
 

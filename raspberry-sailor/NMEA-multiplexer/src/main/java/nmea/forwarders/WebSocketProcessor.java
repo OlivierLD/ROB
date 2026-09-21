@@ -287,6 +287,10 @@ public class WebSocketProcessor implements Forwarder {
 	}
 
 	public void broadcast(byte[] message) {
+		if (!this.isActive()) {
+			// TODO Honk
+			return;
+		}
 		try {
 			String mess = new String(message);
 			if (!mess.isEmpty() && isConnected) {
