@@ -8,6 +8,10 @@
  | and for now, it does.
  |
  | Also see mux.rest.js. It contains some logic associated with this dashboard.
+ |
+ | TODO:
+ | - A CLI equivalent...
+ | - Rework the styles
  +-->
 <html lang="en">
 <head>
@@ -20,7 +24,7 @@
   <script type="text/javascript" src="./js/mux.rest.js"></script>
   <script type="text/javascript" src="./widgets/Graph.js"></script>
   <link id="page-ux" rel="stylesheet" href="./css/stylesheet.css" type="text/css"/>
-  <style>
+  <style type="text/css">
 
       button {
         border-radius: 5px;
@@ -97,8 +101,18 @@
         font-style: italic;
       }
 
-    </style>
+  </style>
   <link id="graph-ux" rel="stylesheet" href="css/graph.ux.01.css" type="text/css"/>
+  <style type="text/css">
+
+  /* Override the previous ones */
+  body {
+    /* background-color: whitesmoke; */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+  }
+
+  </style>
   <script type="text/javascript">
 
         function cssSelectManager() {
@@ -143,7 +157,7 @@
 
         // Executed at startup
         (function () {
-            errManager.display = errorHandler; // above, or in mux.rest.js
+            errManager.display = errorHandler; // in mux.rest.js
         })();
 
         function channelSelectManager() {

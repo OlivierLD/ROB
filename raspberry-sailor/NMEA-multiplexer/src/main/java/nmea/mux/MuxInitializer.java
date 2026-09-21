@@ -181,10 +181,7 @@ public class MuxInitializer {
                     if (verbose) {
                         System.out.printf("\t>> %s - Loading channel %s (%s)\n", NumberFormat.getInstance().format(System.currentTimeMillis()), typeProp, type);
                     }
-                    // String deviceFilters = "";
-                    // String sentenceFilters = "";
-
-                    // Make this generic, not specific like below.
+                    // Make this generic, not specific like it was below.
                     String deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     String sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     String consumerActive = muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)));
@@ -264,8 +261,6 @@ public class MuxInitializer {
                                         nfe.printStackTrace();
                                     }
                                 }
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 RESTClient restClient = new RESTClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -309,8 +304,6 @@ public class MuxInitializer {
                             try {
                                 String tcpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String tcpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
                                 boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
                                 TCPClient tcpClient = new TCPClient(
@@ -366,11 +359,6 @@ public class MuxInitializer {
                                 } catch (NumberFormatException nfe) {
                                     pathInArchive = null; // Default value
                                 }
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                System.out.printf("From props: %s=%s%n",
-//                                        String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx)),
-//                                        muxProps.getProperty(String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx))));
                                 boolean loop = "true".equals(muxProps.getProperty(String.format("mux.%s.loop", MUX_IDX_FMT.format(muxIdx)), "true").trim());
                                 DataFileClient fileClient = new DataFileClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
@@ -417,8 +405,6 @@ public class MuxInitializer {
                         case "ws": // Consumer
                             try {
                                 String wsUri = muxProps.getProperty(String.format("mux.%s.wsuri", MUX_IDX_FMT.format(muxIdx)));
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 WebSocketClient wsClient = new WebSocketClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -448,8 +434,6 @@ public class MuxInitializer {
                             break;
                         case "rnd":  // Consumer. Random generator, for debugging
                             try {
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 RandomClient rndClient = new RandomClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -481,8 +465,6 @@ public class MuxInitializer {
                             break;
                         case "zda": // Consumer. ZDA generator
                             try {
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                                 ZDAClient zdaClient = new ZDAClient(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -517,10 +499,6 @@ public class MuxInitializer {
                                 String udpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServerTimeout = muxProps.getProperty(String.format("mux.%s.timeout", MUX_IDX_FMT.format(muxIdx)));
-//                                deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
-//                                sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                                // String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
-                                // boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
                                 nmea.consumers.client.UDPServer udpClient = new nmea.consumers.client.UDPServer(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
@@ -774,10 +752,6 @@ public class MuxInitializer {
                         case "rest": // Forwarder
                             String restPropFile = muxProps.getProperty(String.format("forward.%s.properties", MUX_IDX_FMT.format(fwdIdx)));
                             String restSubClass = muxProps.getProperty(String.format("forward.%s.subclass", MUX_IDX_FMT.format(fwdIdx)));
-//                            String verboseStr = muxProps.getProperty(String.format("forward.%s.verbose", MUX_IDX_FMT.format(fwdIdx)));
-//                            String activeStr = muxProps.getProperty(String.format("forward.%s.active", MUX_IDX_FMT.format(fwdIdx)));
-//                            String description = muxProps.getProperty(String.format("forward.%s.description", MUX_IDX_FMT.format(muxIdx)), "No desc.");
-
                             String protocol = muxProps.getProperty(String.format("forward.%s.rest.protocol", MUX_IDX_FMT.format(muxIdx)));
                             String serverName = muxProps.getProperty(String.format("forward.%s.server.name", MUX_IDX_FMT.format(muxIdx)));
                             String serverPort = muxProps.getProperty(String.format("forward.%s.server.port", MUX_IDX_FMT.format(muxIdx)));
