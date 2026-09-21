@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
  * All those objects can be also managed later on, through the REST Admin Interface
  * <br/>
  * (see {@link RESTImplementation}).
+ * See also system variable mux.data.verbose
  */
 public class MuxInitializer {
 
@@ -73,7 +74,7 @@ public class MuxInitializer {
                              List<Forwarder> nmeaDataForwarders,
                              List<Computer> nmeaDataComputers,
                              Multiplexer mux) {
-        setup(muxProps, nmeaDataClients, nmeaDataForwarders, nmeaDataComputers, mux, false);
+        setup(muxProps, nmeaDataClients, nmeaDataForwarders, nmeaDataComputers, mux, "true".equals(System.getProperty("mux.data.verbose", "false")));
     }
 
     /**

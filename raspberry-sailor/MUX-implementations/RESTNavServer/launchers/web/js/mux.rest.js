@@ -923,7 +923,7 @@ let computerList = () => {
                                  "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
                                  "<td></td>" + // Dummy Prm placeholder
                                  "<td valign='top' align='center'><input type='checkbox' title='verbose' onchange='manageComputerVerbose(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
-                                 "<td></td>" + // Active placeholder
+                                 "<td valign='top' align='center'><input type='checkbox' title='active' onchange='manageComputerActive(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                                  "<td valign='top'><button onclick='removeComputer(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                              "</tr>");
                     break;
@@ -1298,7 +1298,7 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>file</b></td>" + "<td valign='top'>File: " + json[i].file +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>file</b></td>" + "<td valign='top'>File: " + json[i].file +
                         "<br>Archive ?: " + json[i].zip  +
                         "<br>Path in archive: " + (json[i].pathInArchive ? json[i].pathInArchive : "-")  +
                         "<br>Between reads: " + json[i].pause + " ms" +
@@ -1308,25 +1308,25 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'serial':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>tcp</b></td>" + "<td>" + json[i].hostname + ":" + json[i].port +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>tcp</b></td>" + "<td>" + json[i].hostname + ":" + json[i].port +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>ws</b></td>" + "<td> " + json[i].wsUri +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>ws</b></td>" + "<td> " + json[i].wsUri +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
                 case 'rnd':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>rnd</b></td>" + "<td></td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>rnd</b></td>" + "<td></td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
                     break;
@@ -1352,7 +1352,7 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'zda':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>zda</b></td>" + "<td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>zda</b></td>" + "<td>Prefix: " + (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
@@ -1364,7 +1364,7 @@ let generateDiagram = () => {
                         "</td>" + "</tr>");
                     break;
                 case 'rest':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b>rest</b></td>" + "<td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>rest</b></td>" + "<td>" + "Service: " + json[i].verb + " " + json[i].protocol + "://" + json[i].hostname + ":" + json[i].port + json[i].queryPath + (json[i].queryString ? json[i].queryString : "") + "  <br/>" +
                             "JQ syntax: " + (json[i].jsonQueryString ? json[i].jsonQueryString : "-") + "<br/>" +
                             "Frequency: " + json[i].frequency + "ms <br/>" +
                             (json[i].devicePrefix !== undefined ? json[i].devicePrefix : "") +
@@ -1372,7 +1372,7 @@ let generateDiagram = () => {
                             "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') + "</td>" + "</tr>");
                     break;
                 default:
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" + "<td valign='top'><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].deviceFilters), 'No Device Filter') +
                         "</td>" + "<td>" + valueOrText(buildList(json[i].sentenceFilters), 'No Sentence Filter') +
                         "</td>" + "</tr>");
@@ -1421,7 +1421,7 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'file':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">");
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">");
                         if (json[i].timeBased === true) {
                             html += ("<td><b>file</b></td>" + "<td>(time based) " + json[i].radix + ", dir " + json[i].dir + ", split every " + json[i].split + ".</td>");
                         } else {
@@ -1432,12 +1432,12 @@ let generateDiagram = () => {
                     html += ("<tr>");
                     break;
                 case 'serial':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                             "<td><b>serial</b></td>" + "<td>" + json[i].port + ":" + json[i].br + "</td>" +
                          "</tr>");
                     break;
                 case 'tcp':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" +
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
@@ -1454,14 +1454,14 @@ let generateDiagram = () => {
                      "verb": "POST",
                      "resource": "/whatever",
                      */
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>rest</b></td>" +
                         "<td>" + json[i].verb + " http://" + json[i].serverName + ":" + json[i].port + json[i].resource + "</td>" +
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                     "</td>");
                     break;
                 case 'gpsd':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>gpsd</b></td>" + "<td>Port " + json[i].port + "</td>" +
                         "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                         "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
@@ -1469,12 +1469,12 @@ let generateDiagram = () => {
                     "</tr>");
                     break;
                 case 'ws':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" +
                     "</tr>");
                     break;
                 case 'rmi':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                                 "<td valign='top'><b>rmi</b></td>" + "<td valign='top'>" +
                                     "Port: " + json[i].port + "<br>" +
                                     "Name: " + json[i].bindingName + "<br>" +
@@ -1483,12 +1483,12 @@ let generateDiagram = () => {
                             "</tr>");
                     break;
                 case 'console':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>console</b></td>" + "<td>" + valueOrText('', 'No parameter') + "</td>" +
                     "</tr>");
                     break;
                 default:
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                                 "<td><b><i>" + type + "</i></b></td>" + "<td>" + json[i].cls + "</td>" +
                                 "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
                                 "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
@@ -1538,7 +1538,7 @@ let generateDiagram = () => {
             let type = json[i].type;
             switch (type) {
                 case 'tw-current':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                                  "<td valign='top'><b>tw-current</b></td>" +
                                  "<td>" + (json[i].description) + "</td>" +
                                  "<td valign='top'>Prefix: " + json[i].prefix + "<br>Timebuffer length: " + json[i].timeBufferLength.toLocaleString() + " ms.</td>" +
@@ -1548,7 +1548,7 @@ let generateDiagram = () => {
                              "</tr>");
                     break;
                 case 'longterm-data-computer':
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                                 "<td valign='top'><b>longterm-data-computer</b></td>" +
                                 "<td>" + (json[i].description !== undefined ? json[i].description : "-") + "</td>" +
                                 "<td valign='top'>Stored in Cache: " + json[i].storagePathInCache + "</td>" +
@@ -1558,7 +1558,7 @@ let generateDiagram = () => {
                             "</tr>");
                     break;
                 default:
-                    html += ("<tr" + (json[i].active === false ? " style='background: rgba(255, 0, 0, 0.35);'" : "") + ">" +
+                    html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                                 "<td valign='top'><b><i>" + type + "</i></b></td>" +
                                 "<td>" + (json[i].description !== undefined ? json[i].description : "-") + "</td>" +
                                 "<td valign='top'>" + json[i].cls + "</td>" + "<td></td>" +
