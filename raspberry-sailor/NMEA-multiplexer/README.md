@@ -1,6 +1,9 @@
 # NMEA Multiplexer
 
 ---
+Mutliplexer ? see [this](https://en.wikipedia.org/wiki/Multiplexer)! 
+
+---
 _Summary of the links used in this document:_
 - [Get started, fast](./getstarted.md)
 - [Manual](./manual.md)
