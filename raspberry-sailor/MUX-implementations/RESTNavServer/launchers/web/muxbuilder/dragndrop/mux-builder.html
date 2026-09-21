@@ -234,16 +234,16 @@ let fileFwdOption = (sel) => {
                             <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
                         </tr>
                         <tr>
+                            <td>Reset Interval</td>
+                            <td><input type="number" class="reset-interval" placeholder="Reset Interval" value="60000"></td>
+                        </tr>
+                        <tr>
                             <td>Verbose</td>
                             <td><input type="checkbox" class="verbose"></td>
                         </tr>
                         <tr>
                             <td>Active</td>
                             <td><input type="checkbox" class="active" checked></td>
-                        </tr>
-                        <tr>
-                            <td>Reset Interval</td>
-                            <td><input type="number" class="reset-interval" placeholder="Reset Interval" value="60000"></td>
                         </tr>
                         <tr>
                             <td>Description</td>
@@ -312,6 +312,7 @@ let fileFwdOption = (sel) => {
                 </dialog>
             </div>
           </div>
+          <!-- REST Consumer -->
           <div id="consumer-12" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -377,11 +378,20 @@ let fileFwdOption = (sel) => {
                         <td>Verbose</td>
                         <td><input type="checkbox" class="verbose"></td>
                     </tr>
+                    <tr>
+                        <td>Active</td>
+                        <td><input type="checkbox" class="active" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                    </tr>
                   </table>
                 </div>
               </dialog>
           </div>
           </div>
+          <!-- Dynamic -->
           <div id="consumer-13" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
                 <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -411,10 +421,6 @@ let fileFwdOption = (sel) => {
                               <td><input type="text" class="dyn-props-name" size="30" placeholder="props.properties"></td>
                           </tr>
                           <tr>
-                            <td>Verbose</td>
-                            <td><input type="checkbox" class="verbose"></td>
-                          </tr>
-                          <tr>
                             <td>Device Filters</td>
                             <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
                           </tr>
@@ -422,64 +428,86 @@ let fileFwdOption = (sel) => {
                             <td>Sentence Filters</td>
                             <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
                           </tr>
-                        </table>
-                    </div>
-                </dialog>
-            </div>
-          </div>
-          <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
-                  <div>
-                    <span class="close-icon" onclick="remove(this);">&times;</span>
-                    <span class="channel-description">Log file replay</span>
-                  </div>
-                  <div class="draggable-content">
-                    <span>File </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
-                    <dialog class="editable-prm" style="min-height: 200px;">
-                      <div class="dialog-header">
-                        <div style="padding: 10px;">
-                          <span style="margin-left: 20px;">Edit File Channel Parameters</span>
-                          <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
-                        </div>
-                      </div>
-                      <div class="editable-zone file-channel">
-                        <table>
-                          <tr>
-                              <td>File Name</td>
-                              <td><input type="text" class="file-name" size="30" placeholder="Log File Name"></td>
-                          </tr>
-                          <tr>
-                              <td>Zip</td>
-                              <td><input type="checkbox" class="zip-option"></td>
-                          </tr>
-                          <tr>
-                              <td>Path in Zip</td>
-                              <td><input type="text" class="zip-path" size="30" placeholder="Path in Zip"></td>
-                          </tr>
-                          <tr>
-                              <td>Device Filters</td>
-                              <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
-                          </tr>
-                          <tr>
-                              <td>Sentence Filters</td>
-                              <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
-                          </tr>
                           <tr>
                               <td>Verbose</td>
                               <td><input type="checkbox" class="verbose"></td>
                           </tr>
                           <tr>
-                              <td>Between records</td>
-                              <td><input type="number" class="between-records" placeholder="1000"></td>
+                              <td>Active</td>
+                              <td><input type="checkbox" class="active" checked></td>
                           </tr>
                           <tr>
-                              <td>Loop</td>
-                              <td><input type="checkbox" class="loop"></td>
+                              <td>Description</td>
+                              <td><input type="text" class="description" placeholder="Description" size="40"></td>
                           </tr>
                         </table>
-                      </div>
-                    </dialog>
-                  </div>
+                    </div>
+                </dialog>
+            </div>
           </div>
+          <!-- Log file replay -->
+          <div id="consumer-3" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
+            <div>
+              <span class="close-icon" onclick="remove(this);">&times;</span>
+              <span class="channel-description">Log file replay</span>
+            </div>
+            <div class="draggable-content">
+              <span>File </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+              <dialog class="editable-prm" style="min-height: 200px;">
+                <div class="dialog-header">
+                  <div style="padding: 10px;">
+                    <span style="margin-left: 20px;">Edit File Channel Parameters</span>
+                    <span class="dialog-header-close" onclick="closeDialog(this);">&times</span>
+                  </div>
+                </div>
+                <div class="editable-zone file-channel">
+                  <table>
+                    <tr>
+                        <td>File Name</td>
+                        <td><input type="text" class="file-name" size="30" placeholder="Log File Name"></td>
+                    </tr>
+                    <tr>
+                        <td>Zip</td>
+                        <td><input type="checkbox" class="zip-option"></td>
+                    </tr>
+                    <tr>
+                        <td>Path in Zip</td>
+                        <td><input type="text" class="zip-path" size="30" placeholder="Path in Zip"></td>
+                    </tr>
+                    <tr>
+                        <td>Device Filters</td>
+                        <td><input type="text" class="device-filter" placeholder="Device Filters" size="30" title="Comma separated list"></td>
+                    </tr>
+                    <tr>
+                        <td>Sentence Filters</td>
+                        <td><input type="text" class="sentence-filter" placeholder="Sentence Filters" size="30" title="Like RMC, GLL,&#13;~GSV, ~GGA to negate the filter."></td>
+                    </tr>
+                    <tr>
+                        <td>Between records</td>
+                        <td><input type="number" class="between-records" placeholder="1000"></td>
+                    </tr>
+                    <tr>
+                        <td>Loop</td>
+                        <td><input type="checkbox" class="loop"></td>
+                    </tr>
+                    <tr>
+                        <td>Verbose</td>
+                        <td><input type="checkbox" class="verbose"></td>
+                    </tr>
+                    <tr>
+                        <td>Active</td>
+                        <td><input type="checkbox" class="active" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                    </tr>
+                  </table>
+                </div>
+              </dialog>
+            </div>
+          </div>
+          <!-- WebSocket Consumer-->
           <div id="consumer-4" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -512,6 +540,14 @@ let fileFwdOption = (sel) => {
                         <td>Verbose</td>
                         <td><input type="checkbox" class="verbose"></td>
                     </tr>
+                    <tr>
+                        <td>Active</td>
+                        <td><input type="checkbox" class="active" checked></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                    </tr>
                   </table>
                 </div>
               </dialog>
@@ -523,7 +559,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature & Humidity Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span><span style="text-decoration: line-through;">HTU21DF</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">HTU21DF</span><br/><span style="font-size: 50%;">(Obsolete, use TCP or REST)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -552,7 +588,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature, Humidity, Pressure Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span><span style="text-decoration: line-through;">BME280</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">BME280</span><br/><span style="font-size: 50%;">(Obsolete, use TCP or REST)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -581,7 +617,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Temperature, Humidity, Pressure Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span><span style="text-decoration: line-through;">BMP180</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">BMP180</span><br/><span style="font-size: 50%;">(Obsolete, use TCP or REST)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -610,7 +646,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Magnetometer Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span><span style="text-decoration: line-through;">HCM5883L</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">HCM5883L</span><br/><span style="font-size: 50%;">(Obsolete, use TCP or REST)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -659,7 +695,7 @@ let fileFwdOption = (sel) => {
               <span class="channel-description">Magnetometer Accelerometer Sensor input</span>
             </div>
             <div class="draggable-content">
-                <span><span style="text-decoration: line-through;">LSM303</span><span style="font-size: 50%;">(Obsolete, use TCP)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span><span style="text-decoration: line-through;">LSM303</span><br/><span style="font-size: 50%;">(Obsolete, use TCP or REST)</span></span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -712,6 +748,7 @@ let fileFwdOption = (sel) => {
                 </dialog>
               </div>
           </div>
+          <!-- ZDA Consumer -->
           <div id="consumer-10" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -728,15 +765,24 @@ let fileFwdOption = (sel) => {
                   </div>
                   <div class="editable-zone zda-channel">
                     <table>
-                      <tr>
-                          <td>Verbose</td>
-                          <td><input type="checkbox" class="verbose"></td>
-                      </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
               </div>
           </div>
+          <!-- RND Consumer -->
           <div id="consumer-11" draggable="true" class="draggable-container draggable-channel" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -753,10 +799,18 @@ let fileFwdOption = (sel) => {
                   </div>
                   <div class="editable-zone rnd-channel">
                     <table>
-                      <tr>
-                          <td>Verbose</td>
-                          <td><input type="checkbox" class="verbose"></td>
-                      </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
@@ -773,7 +827,6 @@ let fileFwdOption = (sel) => {
                  ondragover="allowDrop(event)">
             </div>
         </div>
-
       </div>
     </div>
 
@@ -783,6 +836,7 @@ let fileFwdOption = (sel) => {
         <div class="message smaller">Available Forwarders</div>
         <div class="message smaller">Drop Forwarders below</div>
 
+        <!-- File Forwarder-->
         <div class="vertical-scrollable-zone side-div">
           <div id="forwarder-8" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
@@ -818,12 +872,25 @@ let fileFwdOption = (sel) => {
                           <td>Flush</td>
                           <td><input type="checkbox" class="flush"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- Serial Forwarder -->
           <div id="forwarder-1" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -848,12 +915,25 @@ let fileFwdOption = (sel) => {
                           <td>Baud Rate</td>
                           <td><input type="number" class="baud-rate" placeholder="Baud Rate"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- TCP forwarder -->
           <div id="forwarder-2" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -874,19 +954,32 @@ let fileFwdOption = (sel) => {
                           <td>Port</td>
                           <td><input type="number" class="port-num" placeholder="TCP Port"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- GPSd forwarder-->
           <div id="forwarder-3" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
-              <span class="forwarder-description">GPSD Server</span>
+              <span class="forwarder-description">GPSd Server</span>
             </div>
             <div class="draggable-content">
-                <span>GPSD </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
+                <span>GPSd </span><span class="edit-icon" onclick="edit(this);" title="Edit Parameters">✏️</span>
                 <dialog class="editable-prm" style="min-height: 200px;">
                   <div class="dialog-header">
                     <div style="padding: 10px;">
@@ -900,12 +993,25 @@ let fileFwdOption = (sel) => {
                           <td>Port</td>
                           <td><input type="number" class="port-num" placeholder="GPSD Port" value="2947"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- WebSockets forwarder -->
           <div id="forwarder-4" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -926,12 +1032,25 @@ let fileFwdOption = (sel) => {
                           <td>WebSocket URI</td>
                           <td><input type="text" class="ws-uri" placeholder="WS uri"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- RMI forwarder -->
           <div id="forwarder-5" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -956,12 +1075,25 @@ let fileFwdOption = (sel) => {
                           <td>RMI name</td>
                           <td><input type="text" class="rmi-name" placeholder="RMI Name" value="RMI-NMEA"></td>
                       </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- Console forwarder-->
           <div id="forwarder-6" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -978,15 +1110,25 @@ let fileFwdOption = (sel) => {
                   </div>
                   <div class="editable-zone console-forwarder">
                     <table>
-                      <tr>
-                          <td>No parameter</td>
-                      </tr>
+                        <tr>
+                            <td>Verbose</td>
+                            <td><input type="checkbox" class="verbose"></td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td><input type="checkbox" class="active" checked></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                        </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- REST forwarder -->
           <div id="forwarder-7" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -1038,12 +1180,25 @@ let fileFwdOption = (sel) => {
                           <td>Header(s)</td>
                           <td><input type="text" class="rest-headers" size="30" placeholder="REST Headers" value="Content-Type:plain/text"></td>
                       </tr>
+                      <tr>
+                          <td>Verbose</td>
+                          <td><input type="checkbox" class="verbose"></td>
+                      </tr>
+                      <tr>
+                          <td>Active</td>
+                          <td><input type="checkbox" class="active" checked></td>
+                      </tr>
+                      <tr>
+                          <td>Description</td>
+                          <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                      </tr>
                     </table>
                   </div>
                 </dialog>
             </div>
           </div>
 
+          <!-- Dynamic forwarder-->
           <div id="forwarder-9" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
                 <div>
                     <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -1068,12 +1223,25 @@ let fileFwdOption = (sel) => {
                                     <td>Properties file</td>
                                     <td><input type="text" class="dyn-props-name" size="30" placeholder="props.properties"></td>
                                 </tr>
+                                <tr>
+                                    <td>Verbose</td>
+                                    <td><input type="checkbox" class="verbose"></td>
+                                </tr>
+                                <tr>
+                                    <td>Active</td>
+                                    <td><input type="checkbox" class="active" checked></td>
+                                </tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                                </tr>
                             </table>
                         </div>
                     </dialog>
                 </div>
           </div>
 
+          <!-- Cache Publisher forwarder-->
           <div id="forwarder-10" draggable="true" class="draggable-container draggable-forwarder" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -1132,6 +1300,18 @@ let fileFwdOption = (sel) => {
                           <td>Header(s)</td>
                           <td><input type="text" class="rest-headers" size="30" placeholder="REST Headers" value="Content-Type:plain/text"></td>
                       </tr-->
+                      <tr>
+                          <td>Verbose</td>
+                          <td><input type="checkbox" class="verbose"></td>
+                      </tr>
+                      <tr>
+                          <td>Active</td>
+                          <td><input type="checkbox" class="active" checked></td>
+                      </tr>
+                      <tr>
+                          <td>Description</td>
+                          <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                      </tr>
                     </table>
                   </div>
                 </dialog>
@@ -1179,6 +1359,7 @@ let fileFwdOption = (sel) => {
         <div class="message smaller">Available Computers</div>
         <div class="message smaller">Drop Computers below</div>
 
+        <!-- Current and TW comnputer -->
         <div class="vertical-scrollable-zone side-div">
           <div id="computer-1" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
             <div>
@@ -1204,12 +1385,25 @@ let fileFwdOption = (sel) => {
                           <td>Time Buffer Length</td>
                           <td><input type="text" class="time-buffer-length" placeholder="Comma separated, in milliseconds" value="30, 60, 600"></td>
                       </tr>
+                      <tr>
+                          <td>Verbose</td>
+                          <td><input type="checkbox" class="verbose"></td>
+                      </tr>
+                      <tr>
+                          <td>Active</td>
+                          <td><input type="checkbox" class="active" checked></td>
+                      </tr>
+                      <tr>
+                          <td>Description</td>
+                          <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                      </tr>
                     </table>
                   </div>
                 </dialog>
               </div>
           </div>
 
+          <!-- AIS Manager (computer)-->
           <div id="computer-2" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -1225,22 +1419,26 @@ let fileFwdOption = (sel) => {
                     </div>
                   </div>
                   <div class="editable-zone ais-computer">
-                    No parameters to edit here...
-                    <!--table>
+                    <table>
                       <tr>
-                          <td>Prefix</td>
-                          <td><input type="text" class="device-prefix" placeholder="Device Prefix" value="CC"></td>
+                          <td>Verbose</td>
+                          <td><input type="checkbox" class="verbose"></td>
                       </tr>
                       <tr>
-                          <td>Time Buffer Length</td>
-                          <td><input type="text" class="time-buffer-length" placeholder="Comma separated, in milliseconds" value="30, 60, 600"></td>
+                          <td>Active</td>
+                          <td><input type="checkbox" class="active" checked></td>
                       </tr>
-                    </table-->
+                      <tr>
+                          <td>Description</td>
+                          <td><input type="text" class="description" placeholder="Description" size="40"></td>
+                      </tr>
+                    </table>
                   </div>
                 </dialog>
               </div>
           </div>
 
+          <!-- Border Manager (computer) -->
           <div id="computer-3" draggable="true" class="draggable-container draggable-computer" ondragstart="drag(event)">
             <div>
               <span class="close-icon" onclick="remove(this);">&times;</span>
@@ -1257,17 +1455,21 @@ let fileFwdOption = (sel) => {
                   </div>
                   <div class="editable-zone borders-computer">
                     <table>
-                      <!--tr>
-                        <td>class</td>
-                        <td>nmea.computers.BorderManager</td>
-                      </tr-->
                       <tr>
                           <td>Properties</td>
                           <td><input type="text" class="properties-file" placeholder="Properties File" value="borders.mgr.properties"></td>
                       </tr>
                       <tr>
-                        <td>Verbose</td>
-                        <td><input type="checkbox" class="verbose"></td>
+                          <td>Verbose</td>
+                          <td><input type="checkbox" class="verbose"></td>
+                      </tr>
+                      <tr>
+                          <td>Active</td>
+                          <td><input type="checkbox" class="active" checked></td>
+                      </tr>
+                      <tr>
+                          <td>Description</td>
+                          <td><input type="text" class="description" placeholder="Description" size="40"></td>
                       </tr>
                     </table>
                   </div>

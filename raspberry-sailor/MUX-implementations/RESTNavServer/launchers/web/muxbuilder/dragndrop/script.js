@@ -139,6 +139,19 @@ function expandCollapseHTTP(cb) {
     }
 }
 
+function generateCodeDevicePrefix(node) {
+  let code = "";
+
+  let devicePrefix = node.querySelector('.device-prefix').value;
+  code += `    device.prefix: ${devicePrefix}\n`;
+
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+
+  return code;
+}
+
+// Consumers
 function generateNoPrmConsumerCode(node) {
   let code = "";
   let verbose = false;
@@ -161,10 +174,10 @@ function generateSerialConsumerCode(node) {
   code += `    port: ${portName}\n`;
   let baudRate = node.querySelector('.baud-rate').value;
   code += `    baudrate: ${baudRate}\n`;
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
-  let active = node.querySelector('.active').checked;
-  code += `    active: ${active}\n`;
+  let resetInterval = node.querySelector('.reset-interval').value;
+  if (resetInterval.trim().length > 0) {
+      code += `    reset.interval: ${resetInterval}\n`;
+  }
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -174,10 +187,10 @@ function generateSerialConsumerCode(node) {
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
   }
-  let resetInterval = node.querySelector('.reset-interval').value;
-  if (resetInterval.trim().length > 0) {
-      code += `    reset.interval: ${resetInterval}\n`;
-  }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
   let description = node.querySelector('.description').value;
   if (description.trim().length > 0) {
       code += `    description: ${description}\n`;
@@ -197,10 +210,6 @@ function generateTCPConsumerCode(node) {
   }
   let keepTrying = node.querySelector('.keep-trying').checked;
   code += `    keep.trying: ${keepTrying}\n`;
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
-  let active = node.querySelector('.active').checked;
-  code += `    active: ${active}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -210,6 +219,10 @@ function generateTCPConsumerCode(node) {
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
   }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
   let description = node.querySelector('.description').value;
   if (description.trim().length > 0) {
       code += `    description: ${description}\n`;
@@ -229,8 +242,6 @@ function generateDynamicConsumerCode(node) {
   if (dynPropName.trim().length > 0) {
     code += `    properties: ${dynPropName}\n`;
   }
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -239,6 +250,14 @@ function generateDynamicConsumerCode(node) {
   let sentenceFilters = node.querySelector('.sentence-filter').value;
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
   }
   return code;
 }
@@ -263,8 +282,6 @@ function generateRESTConsumerCode(node) {
   let freq = node.querySelector('.rest-frequency').value;
   code += `    between-loops: ${freq}\n`;
 
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -273,6 +290,14 @@ function generateRESTConsumerCode(node) {
   let sentenceFilters = node.querySelector('.sentence-filter').value;
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
   }
   return code;
 }
@@ -295,8 +320,6 @@ function generateFileConsumerCode(node) {
   let loopOption = node.querySelector('.loop').checked;
   code += `    loop: ${loopOption}\n`;
 
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -306,18 +329,14 @@ function generateFileConsumerCode(node) {
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
   }
-  return code;
-}
-
-function generateCodeDevicePrefix(node) {
-  let code = "";
-
-  let devicePrefix = node.querySelector('.device-prefix').value;
-  code += `    device.prefix: ${devicePrefix}\n`;
-
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
-
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -325,8 +344,6 @@ function generateWSConsumerCode(node) {
   let code = "";
   let wsUrl = node.querySelector('.ws-url').value;
   code += `    wsuri: ${wsUrl}\n`;
-  let verbose = node.querySelector('.verbose').checked;
-  code += `    verbose: ${verbose}\n`;
   // filters
   let deviceFilters = node.querySelector('.device-filter').value;
   if (deviceFilters.trim().length > 0) {
@@ -335,6 +352,14 @@ function generateWSConsumerCode(node) {
   let sentenceFilters = node.querySelector('.sentence-filter').value;
   if (sentenceFilters.trim().length > 0) {
       code += `    sentence.filters: ${sentenceFilters}\n`;
+  }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
   }
   return code;
 }
@@ -377,12 +402,21 @@ function generateHCM5883LConsumerCode(node) {
   return code;
 }
 
+// Forwarders
 function generateSerialFwdCode(node) {
   let code = "";
   let portName = node.querySelector('.port-name').value;
   code += `    port: ${portName}\n`;
   let baudRate = node.querySelector('.baud-rate').value;
   code += `    baudrate: ${baudRate}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -392,13 +426,30 @@ function generateDynamicFwdCode(node) {
   code += `  - class: ${className}\n`;
   let propFile = node.querySelector('.dyn-props-name').value;
   code += `    properties: ${propFile}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
 function generateTCPFwdCode(node) {
   let code = "";
-  let baudRate = node.querySelector('.port-num').value;
-  code += `    port: ${baudRate}\n`;
+  let portNum = node.querySelector('.port-num').value;
+  code += `    port: ${portNum}\n`;
+
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -432,6 +483,14 @@ function generateFileFwdCode(node) {
   }
   let flush = node.querySelector('.flush').checked;
   code += `    flush: ${flush}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -449,6 +508,15 @@ function generateRESTFwdCode(node) {
   code += `    rest.protocol: ${restProtocol}\n`;
   let restHeaders = node.querySelector('.rest-headers').value;
   code += `    http.headers: ${restHeaders}\n`;
+
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -470,6 +538,14 @@ function generateNMEAPublisherCode(node) {
   if (qs.trim().length > 0) {
     code += `    rest.query.string: ${qs}\n`;
   }
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -477,6 +553,14 @@ function generateWSFwdCode(node) {
   let code = "";
   let wsUri = node.querySelector('.ws-uri').value;
   code += `    wsuri: ${wsUri}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -484,6 +568,14 @@ function generateGPSDFwdCode(node) {
   let code = "";
   let serverPort = node.querySelector('.port-num').value;
   code += `    port: ${serverPort}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
@@ -493,16 +585,33 @@ function generateRMIFwdCode(node) {
   code += `    port: ${serverPort}\n`;
   let serverName = node.querySelector('.rmi-name').value;
   code += `    name: ${serverName}\n`;
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
+// Computers
 function generateTWCurrentComputerCode(node) {
   let code = "";
   let devicePrefix = node.querySelector('.device-prefix').value;
   code += `    prefix: ${devicePrefix}\n`;
   let bufferLengths = node.querySelector('.time-buffer-length').value;
   code += `    time.buffer.length: ${bufferLengths}\n`;
-  // Other props? like verbose
+
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
 
   return code;
 }
@@ -513,10 +622,29 @@ function generateBordersComputerCode(node) {
   code += `    properties: ${props}\n`;
   let verbose = node.querySelector('.verbose').checked;
   code += `    verbose: ${verbose}\n`;
-
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
   return code;
 }
 
+function generateGenericComputerCode(node) {
+  let code = "";
+  let verbose = node.querySelector('.verbose').checked;
+  code += `    verbose: ${verbose}\n`;
+  let active = node.querySelector('.active').checked;
+  code += `    active: ${active}\n`;
+  let description = node.querySelector('.description').value;
+  if (description.trim().length > 0) {
+      code += `    description: ${description}\n`;
+  }
+  return code;
+}
+
+// Utilities & Co
 function dumpIt(withDialog) { // YAML Generation
 
   let code = '';
@@ -544,6 +672,7 @@ function dumpIt(withDialog) { // YAML Generation
   let markersFileName = document.getElementById('markers').value;
   if (markersFileName.trim().length > 0) {
       code += `  markers.list:\n  - markers: ${ document.getElementById('markers').value }\n`;
+      code += `  # - markers: (more here if needed)\n`;
   }
 
   // Consumers
@@ -658,8 +787,8 @@ function dumpIt(withDialog) { // YAML Generation
        code += generateTWCurrentComputerCode(prms);
      } else if (prms.classList.contains("ais-computer")) {
       code += "  - class: nmea.computers.AISManager\n";
-      code += "    verbose: false\n";
       code += "    # You might want to add properties here\n";
+      code += generateGenericComputerCode(prms);
     } else if (prms.classList.contains("borders-computer")) {
       code += "  - class: nmea.computers.BorderManager\n";
       code += generateBordersComputerCode(prms);
