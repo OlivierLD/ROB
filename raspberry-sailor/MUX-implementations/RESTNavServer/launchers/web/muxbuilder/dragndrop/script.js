@@ -529,7 +529,7 @@ function dumpIt(withDialog) { // YAML Generation
   code += `  damping: ${ document.getElementById('damping').value }\n`;
   let markersFileName = document.getElementById('markers').value;
   if (markersFileName.trim().length > 0) {
-      code += `  markers: ${ document.getElementById('markers').value }\n`;
+      code += `  markers.list:\n  - markers: ${ document.getElementById('markers').value }\n`;
   }
 
   // Consumers

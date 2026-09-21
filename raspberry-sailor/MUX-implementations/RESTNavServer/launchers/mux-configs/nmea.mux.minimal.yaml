@@ -14,6 +14,8 @@ context:
   http.port: 9999
   init.cache: true
   markers.list:
+#    - markers: mux-config/waypoints/waypoints.yaml
+#    - markers: mux-configs/markers/markers.sf.bay.yaml
     - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
     - markers: mux-configs/markers/markers.lorient.blavet.yaml
     - markers: mux-configs/markers/markers.rade.de.brest.yaml
