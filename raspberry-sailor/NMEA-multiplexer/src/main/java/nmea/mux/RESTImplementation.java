@@ -1709,7 +1709,7 @@ public class RESTImplementation {
 				break;
 			default:
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
-				RESTProcessorUtil.addErrorMessageToResponse(response, "'" + type + "' not implemented");
+				RESTProcessorUtil.addErrorMessageToResponse(response, "In postForwarder, '" + type + "' not implemented");
 				break;
 		}
 		return response;
@@ -2918,9 +2918,9 @@ public class RESTImplementation {
 				}
 				break;
 			default:
-				System.err.printf("RESTImplementation: Type %s not implemented/managed\n", type);
+				System.err.printf("RESTImplementation.setActivateForwarder: Type %s not implemented/managed\n", type);
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
-				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Type %s not implemented", type));
+				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("setActivateForwarder: Type %s not implemented", type));
 				break;
 		}
 		return response;
@@ -3098,10 +3098,50 @@ public class RESTImplementation {
 			case "wsp":
 			case "ws":
 			case "rmi":
+				try {
+					@SuppressWarnings("unchecked")
+					Map<String, Object> custom = (Map<String, Object>)mapper.readValue(new String(request.getContent()), Object.class);
+
+					if (true) {
+						System.out.println("==> The map (custom):");
+						custom.forEach((k, v) -> System.out.printf("%s: %s%n", k, v));
+					}
+
+					opForwarder = nmeaDataForwarders.stream()
+							// Here we scan ALL the forwarders, make sure we distinct the bean...
+							.filter(fwdr -> (fwdr.getBean() instanceof BeanInterface) &&
+									(fwdr.getBean()).getCls().equals((String) custom.get("cls")))
+							.findFirst();
+					if (!opForwarder.isPresent()) {
+						System.err.println("-- in setVerboseForwarder, file forwarder not found.");
+						response.setStatus(HTTPServer.Response.NOT_FOUND);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "'custom' not found");
+					} else { // Then update
+						Forwarder forwarder = opForwarder.get();
+						System.out.printf("** Updating NMEACachePublisher forwarder %s from %B to %B\n",
+								forwarder, forwarder.isVerbose(), on);
+
+						// verbose ?
+//						boolean verbose = ((Boolean) custom.get("verbose")).booleanValue();
+//						forwarder.setVerbose(verbose);
+						// active ?
+						forwarder.setVerbose(on);
+
+						String content = mapper.writeValueAsString(forwarder.getBean());
+						RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+						response.setPayload(content.getBytes());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					System.err.println("Exception 2: " + ex.toString());
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
 			default:
-				System.err.printf("Type %s not implemented\n", type);
+				System.err.printf("setVerboseForwarder: Type %s not implemented\n", type);
 				response.setStatus(HTTPServer.Response.NOT_IMPLEMENTED);
-				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("Type %s not implemented", type));
+				RESTProcessorUtil.addErrorMessageToResponse(response, String.format("setVerboseForwarder: Type %s not implemented", type));
 				break;
 		}
 		return response;

@@ -20,6 +20,9 @@ channels:
 forwarders:
   - type: ws
     wsuri: ws://localhost:9876/
+    active: false
+    verbose: false
+    description: "Requires the WebSocket server to be running. Do a 'npm start' from the NMEA-multiplexer directory"
   - type: "tcp"
     port: 7001
   - type: "gpsd"
@@ -29,4 +32,3 @@ computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
     time.buffer.length: 30, 60, 600
-

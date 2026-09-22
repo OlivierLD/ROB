@@ -5,6 +5,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Properties;
 
 public class WebSocketWriter implements Forwarder {
@@ -12,6 +13,14 @@ public class WebSocketWriter implements Forwarder {
 	private boolean isConnected = false;
 	private final String wsUri;
 	private Properties props = null;
+	private boolean verbose;
+	private boolean active = true;
+
+	// TODO Manage Filters
+	private List<String> sentenceFilters = null; // Sentence filters
+	private List<String> deviceFilters = null; // Device filters
+	private String description = "--";
+
 
 	/**
 	 * @param serverURL like ws://hostname:port/
@@ -54,6 +63,31 @@ public class WebSocketWriter implements Forwarder {
 		return this.wsUri;
 	}
 
+	@Override
+	public boolean isActive() {
+		return this.active;
+	}
+	@Override
+	public void setActive(boolean status) {
+		System.out.printf("-- Forwarder WebSocketWriter, setActive method: %B\n", status);
+		this.active = status;
+	}
+	@Override
+	public void setVerbose(boolean status) {
+		this.verbose = status;
+	}
+	@Override
+	public boolean isVerbose() {
+		return this.verbose;
+	}
+	@Override
+	public void setDescription(String desc) {
+		this.description = desc;
+	}
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
 	@Override
 	public void write(byte[] message) {
 		if (!this.isActive()) {

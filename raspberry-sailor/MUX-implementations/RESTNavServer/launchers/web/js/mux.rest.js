@@ -793,12 +793,12 @@ let forwarderList = () => {
                     break;
                 case 'ws':
                     html += ("<tr>" +
-                        "<td valign='top'><b>ws</b></td>" +
-                        "<td>" + json[i].description + "</td>" +
-                        "<td>" + json[i].wsUri + "</td>" +
-                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+                            "<td valign='top'><b>ws</b></td>" +
+                            "<td>" + json[i].description + "</td>" +
+                            "<td>" + json[i].wsUri + "</td>" +
+                            "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                            "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                            "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
 					    html += (`<td>Filter(s): ${filterList}</td>`);
@@ -1471,6 +1471,8 @@ let generateDiagram = () => {
                 case 'ws':
                     html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                     "</tr>");
                     break;
                 case 'rmi':
