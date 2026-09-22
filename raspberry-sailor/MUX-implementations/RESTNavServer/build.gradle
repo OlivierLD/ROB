@@ -36,6 +36,11 @@ dependencies {
   testImplementation "junit:junit:$junit_version"
 }
 
+configurations.all { // reduce the size of the final jar.
+  exclude group: 'org.jetbrains.kotlin'
+  exclude group: 'org.scala-lang'
+}
+
 // See https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
   publications {

@@ -23,6 +23,11 @@ dependencies {
     implementation project (':raspberry-sailor:NMEA-multiplexer')
 }
 
+configurations.all { // reduce the size of the final jar.
+    exclude group: 'org.jetbrains.kotlin'
+    exclude group: 'org.scala-lang'
+}
+
 shadowJar {
     zip64 true
 }

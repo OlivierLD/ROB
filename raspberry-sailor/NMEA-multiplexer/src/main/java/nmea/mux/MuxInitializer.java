@@ -8,11 +8,33 @@ import nmea.computers.Computer;
 import nmea.computers.DewPointTemperatureComputer;
 import nmea.computers.ExtraDataComputer;
 import nmea.computers.LongTermStorage;
-import nmea.consumers.client.*;
+import nmea.consumers.client.DataFileClient;
+import nmea.consumers.client.RESTClient;
+import nmea.consumers.client.RandomClient;
+import nmea.consumers.client.SerialClient;
+import nmea.consumers.client.TCPClient;
 import nmea.consumers.client.UDPServer;
-import nmea.consumers.reader.*;
-import nmea.forwarders.*;
+import nmea.consumers.client.WebSocketClient;
+import nmea.consumers.client.ZDAClient;
+import nmea.consumers.reader.DataFileReader;
+import nmea.consumers.reader.RESTReader;
+import nmea.consumers.reader.RandomReader;
+import nmea.consumers.reader.SerialReader;
+import nmea.consumers.reader.TCPReader;
+import nmea.consumers.reader.UDPReader;
+import nmea.consumers.reader.WebSocketReader;
+import nmea.consumers.reader.ZDAReader;
+import nmea.forwarders.ConsoleWriter;
+import nmea.forwarders.DataFileWriter;
+import nmea.forwarders.Forwarder;
+import nmea.forwarders.GPSdServer;
+import nmea.forwarders.NMEACachePublisher;
+import nmea.forwarders.RESTPublisher;
+import nmea.forwarders.SerialWriter;
+import nmea.forwarders.TCPServer;
 import nmea.forwarders.UDPClient;
+import nmea.forwarders.WebSocketProcessor;
+import nmea.forwarders.WebSocketWriter;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.parser.StringParsers;
 
@@ -21,7 +43,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -151,9 +178,9 @@ public class MuxInitializer {
                             if (readerClass != null) {
                                 // Cannot invoke declared constructor with a generic type... :(
                                 if (readerProperties == null) {
-                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class).newInstance(readerProp, nmeaClient.getListeners());
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class).newInstance(nmeaClient, readerProp, nmeaClient.getListeners());
                                 } else {
-                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(String.class, List.class, Properties.class).newInstance(readerProp, nmeaClient.getListeners(), readerProperties);
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class, Properties.class).newInstance(nmeaClient, readerProp, nmeaClient.getListeners(), readerProperties);
                                 }
                             } else {
                                 // A dynamic Consumer may require a Reader.
@@ -499,7 +526,7 @@ public class MuxInitializer {
                                 String udpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
                                 String udpServerTimeout = muxProps.getProperty(String.format("mux.%s.timeout", MUX_IDX_FMT.format(muxIdx)));
-                                nmea.consumers.client.UDPServer udpClient = new nmea.consumers.client.UDPServer(
+                                UDPServer udpClient = new UDPServer(
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,

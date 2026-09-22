@@ -221,7 +221,7 @@ echo -e "+----------------------------------------------------------------------
 echo -e "PS: Current folder is $(PWD) "
 echo -e ""
 echo -e "For tests, you can run (form the distrib folder, if not dropped):"
-echo -e "./mux.sh nmea.mux.basics.yaml"
+echo -e "./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"
 echo -e "Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
 echo -e "http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
 echo -e "Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.star.wars.html ..."

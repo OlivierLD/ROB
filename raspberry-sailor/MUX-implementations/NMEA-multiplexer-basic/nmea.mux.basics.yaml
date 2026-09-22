@@ -13,6 +13,10 @@ context:
   with.http.server: true
   http.port: 9999
   init.cache: true
+  markers.list:
+    - markers: markers.04.yaml
+    - markers: markers.houat.hoedic.belle-ile.yaml
+    - markers: markers.etel.gx.stphil.yaml
 channels:
   - type: zda
     description: "ZDA Generator, GP prefix."
