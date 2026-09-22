@@ -17,6 +17,8 @@ channels:
     between-records: 1000
     loop: true
     verbose: false
+    active: true
+    description: "Straight to Tongareva."
 forwarders:
   - type: ws
     wsuri: ws://localhost:9876/
@@ -25,10 +27,19 @@ forwarders:
     description: "Requires the WebSocket server to be running. Do a 'npm start' from the NMEA-multiplexer directory"
   - type: "tcp"
     port: 7001
+    verbose: false
+    active: true
+    description: "TCP:7001"
   - type: "gpsd"
     port: 2947
     properties: mux-configs/gpsd.properties
+    verbose: false
+    active: true
+    description: "GPSD:2947"
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
     time.buffer.length: 30, 60, 600
+    verbose: false
+    active: true
+    description: "Current buffered calculation"

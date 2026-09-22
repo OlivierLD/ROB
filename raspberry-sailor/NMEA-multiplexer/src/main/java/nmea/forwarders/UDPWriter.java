@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Properties;
 
-public class UDPClient implements Forwarder {
+public class UDPWriter implements Forwarder {
 	private int udpPort = 8001;
 	private InetAddress address = null;
 	private Properties props = null;
@@ -19,11 +19,15 @@ public class UDPClient implements Forwarder {
 
 	private DatagramSocket socket;
 
-	public UDPClient(int port) throws Exception {
+	private boolean active = true;
+	private boolean verbose;
+	private String description = "No desc.";
+
+	public UDPWriter(int port) throws Exception {
 		this(port, DEFAULT_HOST);
 	}
 
-	public UDPClient(int port, String host) throws Exception {
+	public UDPWriter(int port, String host) throws Exception {
 		this.hostName = host;
 		this.udpPort = port;
 		try {
@@ -33,6 +37,32 @@ public class UDPClient implements Forwarder {
 			throw ex;
 			// ex.printStackTrace();
 		}
+	}
+	@Override
+	public boolean isActive() {
+		// System.out.printf("--> TCPServer, getting active : %B\n", this.active);
+		return this.active;
+	}
+	@Override
+	public void setActive(boolean status) {
+		// System.out.printf("--> TCPServer, setting active : %B\n", status);
+		this.active = status;
+	}
+	@Override
+	public boolean isVerbose() {
+		return verbose;
+	}
+	@Override
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
@@ -86,7 +116,7 @@ public class UDPClient implements Forwarder {
 		private final String type = "udp";
 
 		public UDPBean() {}  // This is for Jackson
-		public UDPBean(UDPClient instance) {
+		public UDPBean(UDPWriter instance) {
 			cls = instance.getClass().getName();
 			port = instance.udpPort;
 			verbose = instance.isVerbose();

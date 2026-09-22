@@ -717,6 +717,29 @@ let forwarderList = () => {
 					}
 					html += ("</tr>");
                     break;
+                case 'udp':
+                    html += ("<tr>" +
+                                "<td valign='top'><b>udp</b></td>" +
+                                "<td>" + json[i].description + "</td>" +
+                                "<td>Port " + json[i].port + "</td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                "<td><small>" + json[i].nbClients + " Client(s)</small></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
+                    break;
                 case 'nmea-cache-publisher':
                     html += ("<tr>" +
                         "<td valign='top'><b>nmea-cache-publisher</b></td>" +
@@ -860,7 +883,7 @@ let forwarderList = () => {
 					}
 					html += ("</tr>");
                     break;
-                default:
+                default:  // TODO To be narrowed...
                     html += ("<tr>" +
                         "<td><b><i>" + type + "</i></b></td>" +
                         "<td>" + json[i].description + "</td>" +
@@ -1444,9 +1467,16 @@ let generateDiagram = () => {
                         "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
                     "</tr>");
                     break;
-                // case 'udp':
-                //     html += ("<tr>" + "<td><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" + "<td><small>" + json[i].nbClients + " Client(s)</small></td>" + "</tr>");
-                //     break;
+                 case 'udp':
+                     html += ("<tr>" +
+                        "<td><b>udp</b></td>" +
+                        "<td>" + (json[i].description) + "</td>" +
+                        "<td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                     "</tr>");
+                     break;
                 case 'rest':
                     /*
                      "port": 8080,

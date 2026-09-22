@@ -15,7 +15,9 @@ public class UDPServer implements Forwarder {
 	private int udpPort = 8_001;
 	private InetAddress address = null;
 	private Properties props = null;
-	private String description;
+	private boolean active = true;
+	private boolean verbose;
+	private String description = "No desc.";
 
 	private final static String DEFAULT_HOST = "127.0.0.1"; // "230.0.0.1"
 	private String hostName = DEFAULT_HOST;
@@ -33,6 +35,33 @@ public class UDPServer implements Forwarder {
 			throw ex;
 			// ex.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isActive() {
+		// System.out.printf("--> TCPServer, getting active : %B\n", this.active);
+		return this.active;
+	}
+	@Override
+	public void setActive(boolean status) {
+		// System.out.printf("--> TCPServer, setting active : %B\n", status);
+		this.active = status;
+	}
+	@Override
+	public boolean isVerbose() {
+		return verbose;
+	}
+	@Override
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

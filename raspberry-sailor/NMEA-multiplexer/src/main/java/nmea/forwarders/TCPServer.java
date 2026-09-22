@@ -14,6 +14,7 @@ import java.util.Properties;
 public class TCPServer implements Forwarder {
 	private final TCPServer instance = this;
 	private boolean active = true;
+	private boolean verbose;
 	private String description = "No desc.";
 	private final List<Socket> clientSocketList = new ArrayList<>(1);
 	private Properties props = null;
@@ -43,18 +44,23 @@ public class TCPServer implements Forwarder {
 		// System.out.printf("--> TCPServer, getting active : %B\n", this.active);
 		return this.active;
 	}
-
 	@Override
 	public void setActive(boolean status) {
 		// System.out.printf("--> TCPServer, setting active : %B\n", status);
 		this.active = status;
 	}
-
+	@Override
+	public boolean isVerbose() {
+		return verbose;
+	}
+	@Override
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
+	}
 	@Override
 	public String getDescription() {
 		return description;
 	}
-
 	@Override
 	public void setDescription(String description) {
 		this.description = description;

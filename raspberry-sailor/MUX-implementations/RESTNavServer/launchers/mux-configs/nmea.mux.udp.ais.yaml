@@ -7,7 +7,8 @@ description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
-  - AIS Data forwarded by OpenCPN, reading from sinagot.net (and read from udp channel)
+  - AIS Data forwarded by OpenCPN, reading from sinagot.net (and read from udp channel). May be disabled...
+  - Can forward data on UDP:7002
 context:
   with.http.server: true
   http.port: 9999
@@ -27,15 +28,17 @@ channels:
     zip: true
     path.in.zip: rubiscup.2024.nmea
     between-records: 50   # Speed up
+    active: true
     verbose: false
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
-  - type: udp
-    server: "localhost"
-    port: 8002
-    timeout: -1
-    verbose: false
-#forwarders:
+    description: "Rubi's Cup 2024 replay"
+#  - type: udp
+#    server: "localhost"
+#    port: 8002
+#    timeout: -1
+#    verbose: false
+forwarders:
 #  - type: file
 #    verbose: false
 #    timebase.filename: false
@@ -44,9 +47,14 @@ channels:
 #    # sentence.filters: MWV, VHW, HDG
 #    sentence.filters: ~GGA,~GSA,~GSV
 #  - type: console
-#  - type: tcp
-#    port: 7002
+  - type: udp
+    port: 7002
+    active: false
+    verbose: false
+    description: "To be read by OpenCPN (or others)"
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
     verbose: false
+    active: true
+    description: "This one gives a fog horn when possible detection is detected."

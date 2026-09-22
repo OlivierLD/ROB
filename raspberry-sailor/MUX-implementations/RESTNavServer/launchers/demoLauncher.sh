@@ -216,7 +216,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|                                                                                         | ${RED}13h${NC}. GPS only, Chartless Map (Groix-Gavres). GPS Only, AIS from sinagot.net (Optional). |"
     echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse, replay (with AIS).                                           |"
     echo -e "|                                                                                         | ${RED}14a${NC}. ShipModul, reading (for tests).                                                    |"
-    echo -e "|                                                                                         | ${RED}15${NC}. retour Portugal, replay.                                                            |"
+    echo -e "|                                                                                         | ${RED}15${NC}. Retour Portugal, replay.                                                            |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"

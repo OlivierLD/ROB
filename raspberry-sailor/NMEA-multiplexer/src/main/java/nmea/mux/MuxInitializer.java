@@ -32,7 +32,7 @@ import nmea.forwarders.NMEACachePublisher;
 import nmea.forwarders.RESTPublisher;
 import nmea.forwarders.SerialWriter;
 import nmea.forwarders.TCPServer;
-import nmea.forwarders.UDPClient;
+import nmea.forwarders.UDPWriter;
 import nmea.forwarders.WebSocketProcessor;
 import nmea.forwarders.WebSocketWriter;
 import nmea.forwarders.rmi.RMIServer;
@@ -756,8 +756,7 @@ public class MuxInitializer {
                             try {
                                 Forwarder udpForwarder;
                                 if (udpSubClass == null) {
-                                    // udpForwarder = new UDPServer(Integer.parseInt(udpPort));
-                                    udpForwarder = new UDPClient(Integer.parseInt(udpPort));  // This is the way OpenCPN likes it.
+                                    udpForwarder = new UDPWriter(Integer.parseInt(udpPort));  // This is the way OpenCPN likes it.
                                 } else {
                                     udpForwarder = (nmea.forwarders.UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class)
                                                                                     .newInstance(Integer.parseInt(udpPort));
