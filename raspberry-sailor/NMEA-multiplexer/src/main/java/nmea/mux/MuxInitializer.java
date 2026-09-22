@@ -178,9 +178,11 @@ public class MuxInitializer {
                             if (readerClass != null) {
                                 // Cannot invoke declared constructor with a generic type... :(
                                 if (readerProperties == null) {
-                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class).newInstance(nmeaClient, readerProp, nmeaClient.getListeners());
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class)
+                                                               .newInstance(nmeaClient, readerProp, nmeaClient.getListeners());
                                 } else {
-                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class, Properties.class).newInstance(nmeaClient, readerProp, nmeaClient.getListeners(), readerProperties);
+                                    reader = (NMEAReader) Class.forName(readerClass).getDeclaredConstructor(NMEAClient.class, String.class, List.class, Properties.class)
+                                                               .newInstance(nmeaClient, readerProp, nmeaClient.getListeners(), readerProperties);
                                 }
                             } else {
                                 // A dynamic Consumer may require a Reader.
@@ -691,7 +693,8 @@ public class MuxInitializer {
                                 if (serialSubClass == null) {
                                     serialForwarder = new SerialWriter(serialPort, baudrate);
                                 } else {
-                                    serialForwarder = (SerialWriter) Class.forName(serialSubClass.trim()).getConstructor(String.class, Integer.class).newInstance(serialPort, baudrate);
+                                    serialForwarder = (SerialWriter) Class.forName(serialSubClass.trim()).getConstructor(String.class, Integer.class)
+                                                                          .newInstance(serialPort, baudrate);
                                 }
                                 if (propFileSerial != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
@@ -721,7 +724,8 @@ public class MuxInitializer {
                                 if (tcpSubClass == null) {
                                     tcpForwarder = new TCPServer(Integer.parseInt(tcpPort), fwdDesc);
                                 } else {
-                                    tcpForwarder = (TCPServer) Class.forName(tcpSubClass.trim()).getConstructor(Integer.class, String.class).newInstance(Integer.parseInt(tcpPort), fwdDesc);
+                                    tcpForwarder = (TCPServer) Class.forName(tcpSubClass.trim()).getConstructor(Integer.class, String.class)
+                                                                    .newInstance(Integer.parseInt(tcpPort), fwdDesc);
                                 }
                                 if (tcpPropFile != null || fwdVerbose != null || fwdActive != null) {
                                     Properties forwarderProps = new Properties();
@@ -755,7 +759,8 @@ public class MuxInitializer {
                                     // udpForwarder = new UDPServer(Integer.parseInt(udpPort));
                                     udpForwarder = new UDPClient(Integer.parseInt(udpPort));  // This is the way OpenCPN likes it.
                                 } else {
-                                    udpForwarder = (nmea.forwarders.UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(udpPort));
+                                    udpForwarder = (nmea.forwarders.UDPServer) Class.forName(udpSubClass.trim()).getConstructor(Integer.class)
+                                                                                    .newInstance(Integer.parseInt(udpPort));
                                 }
                                 Properties forwarderProps = new Properties();
                                 if (udpPropFile != null) {
@@ -866,7 +871,8 @@ public class MuxInitializer {
                                 if (gpsdSubClass == null) {
                                     gpsdForwarder = new GPSdServer(Integer.parseInt(gpsdPort));
                                 } else {
-                                    gpsdForwarder = (GPSdServer) Class.forName(gpsdSubClass.trim()).getConstructor(Integer.class).newInstance(Integer.parseInt(gpsdPort));
+                                    gpsdForwarder = (GPSdServer) Class.forName(gpsdSubClass.trim()).getConstructor(Integer.class)
+                                                                      .newInstance(Integer.parseInt(gpsdPort));
                                 }
                                 if (gpsdPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
@@ -961,7 +967,8 @@ public class MuxInitializer {
                                 if (wsSubClass == null) {
                                     wsForwarder = new WebSocketWriter(wsUri);
                                 } else {
-                                    wsForwarder = (WebSocketWriter) Class.forName(wsSubClass.trim()).getConstructor(String.class).newInstance(wsUri);
+                                    wsForwarder = (WebSocketWriter) Class.forName(wsSubClass.trim()).getConstructor(String.class)
+                                                                         .newInstance(wsUri);
                                 }
                                 if (wsPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
@@ -991,7 +998,8 @@ public class MuxInitializer {
                                 if (wspSubClass == null) {
                                     wspForwarder = new WebSocketProcessor(wspUri);
                                 } else {
-                                    wspForwarder = (WebSocketProcessor) Class.forName(wspSubClass.trim()).getConstructor(String.class).newInstance(wspUri);
+                                    wspForwarder = (WebSocketProcessor) Class.forName(wspSubClass.trim()).getConstructor(String.class)
+                                                                             .newInstance(wspUri);
                                 }
                                 if (wspPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
@@ -1210,7 +1218,8 @@ public class MuxInitializer {
                             System.out.printf("\t>> %s - Dynamic loading for computer %s\n", NumberFormat.getInstance().format(System.currentTimeMillis()), classProp);
                         }
                         try {
-                            Object dynamic = Class.forName(clss).getDeclaredConstructor(Multiplexer.class).newInstance(mux);
+                            Object dynamic = Class.forName(clss).getDeclaredConstructor(Multiplexer.class)
+                                                  .newInstance(mux);
                             if (dynamic instanceof Computer) {
                                 Computer computer = (Computer) dynamic;
                                 String propProp = String.format("computer.%s.properties", MUX_IDX_FMT.format(cptrIdx));
