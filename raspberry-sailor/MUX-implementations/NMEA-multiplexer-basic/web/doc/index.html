@@ -8,27 +8,30 @@
     <link rel="icon" type="image/ico" href="../icons/hammerhead.ico">
 
     <style type="text/css">
-		body {
+		body, * {
 			background: black;
 			color: cyan;
             font-weight: normal;
 		}
         h1 {
-            color: white;
+            color: limegreen;
             font-size: 2em;
             text-align: center;
         }
         h2 {
-            color: white;
+            color: limegreen;
             font-size: 1.5em;
             text-align: left;
         }
+        h3 {
+            color: limegreen;
+        }
         li {
-            color: white;
-            font-size: 1.2em;
+            /* color: white; */
+            /* font-size: 1.2em; */
         }
         a:link {
-            color: cyan;
+            color: limegreen;
         }
 
 	</style>
@@ -52,7 +55,13 @@
         Goals here are to:
         <ul>
             <li>Keep the size of the executable code as small as possible</li>
-            <li>Keep the Web Pages (and other related components) storage as tiny as possible</li>
+            <li>
+                Keep the Web Pages (and other related components) storage as tiny as possible.
+                <ul>
+                    <li>An HTTP server has been fully re-written to serve HTTP and REST requests.</li>
+                    <li>All static documents (html, css, js, images, etc) can be read from an archive (a zip) to save space.</li>
+                </ul>
+            </li>
             <li>Keep the client(s) independent of any extra software to install</li>
             <li>Keep the runtime energy consumption as small as possible</li>
             <li>Keep the cost of the hardware as low as possible</li>
@@ -99,7 +108,13 @@
         Les objectifs sont de :
         <ul>
             <li>Réduire au maximum la taille du code exécutable</li>
-            <li>Minimiser l'espace de stockage des pages web (et des composants associés)</li>
+            <li>
+                Minimiser l'espace de stockage des pages web (et des composants associés)
+                <ul>
+                    <li>Un serveur HTTP a été entièrement réécrit pour traiter les requêtes HTTP et REST.</li>
+                    <li>Tous les documents statiques (HTML, CSS, JS, images, etc.) peuvent être lus depuis une archive (ZIP) afin d'économiser de la place.</li>
+                </ul>
+            </li>
             <li>Rendre le(s) client(s) indépendant(s) de tout logiciel supplémentaire à installer</li>
             <li>Réduire au maximum la consommation d'énergie lors de l'exécution</li>
             <li>Maintenir le coût du matériel aussi bas que possible.</li>
