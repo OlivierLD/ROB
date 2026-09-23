@@ -164,7 +164,7 @@ public class MuxInitializer {
                         if (propFileName != null) {
                             try {
                                 readerProperties = new Properties();
-                                readerProperties.load(new FileReader(propFileName));
+                                readerProperties.load(new FileReader(propFileName.trim()));
                                 nmeaClient.setProperties(readerProperties);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -248,7 +248,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         serialClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -302,7 +302,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         restClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -345,7 +345,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         tcpClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -401,7 +401,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         fileClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -444,7 +444,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         wsClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -473,7 +473,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         rndClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -504,7 +504,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         zdaClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -538,7 +538,7 @@ public class MuxInitializer {
                                 if (propFileName != null) {
                                     try {
                                         Properties readerProperties = new Properties();
-                                        readerProperties.load(new FileReader(propFileName));
+                                        readerProperties.load(new FileReader(propFileName.trim()));
                                         udpClient.setProperties(readerProperties);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -646,7 +646,7 @@ public class MuxInitializer {
                         if (propFileName != null) {
                             try {
                                 Properties properties = new Properties();
-                                properties.load(new FileReader(propFileName));
+                                properties.load(new FileReader(propFileName.trim()));
                                 forwarder.setProperties(properties);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -699,7 +699,7 @@ public class MuxInitializer {
                                 if (propFileSerial != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
                                     if (propFileSerial != null) {
-                                        forwarderProps.load(new FileReader(propFileSerial));
+                                        forwarderProps.load(new FileReader(propFileSerial.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -725,12 +725,12 @@ public class MuxInitializer {
                                     tcpForwarder = new TCPServer(Integer.parseInt(tcpPort), fwdDesc);
                                 } else {
                                     tcpForwarder = (TCPServer) Class.forName(tcpSubClass.trim()).getConstructor(Integer.class, String.class)
-                                                                    .newInstance(Integer.parseInt(tcpPort), fwdDesc);
+                                            .newInstance(Integer.parseInt(tcpPort), fwdDesc);
                                 }
                                 if (tcpPropFile != null || fwdVerbose != null || fwdActive != null) {
                                     Properties forwarderProps = new Properties();
                                     if (tcpPropFile != null) {
-                                        forwarderProps.load(new FileReader(tcpPropFile));
+                                        forwarderProps.load(new FileReader(tcpPropFile.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -745,6 +745,9 @@ public class MuxInitializer {
                                 tcpForwarder.setDescription(fwdDesc);
                                 tcpForwarder.init();
                                 nmeaDataForwarders.add(tcpForwarder);
+                            } catch (java.io.FileNotFoundException fne) {
+                                System.err.printf("MuxInitializer, running from [%s]\n", System.getProperty("user.dir"));
+                                fne.printStackTrace();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -763,7 +766,7 @@ public class MuxInitializer {
                                 }
                                 Properties forwarderProps = new Properties();
                                 if (udpPropFile != null) {
-                                    forwarderProps.load(new FileReader(udpPropFile));
+                                    forwarderProps.load(new FileReader(udpPropFile.trim()));
                                 }
                                 if (fwdVerbose != null) {
                                     forwarderProps.setProperty("verbose", fwdVerbose);
@@ -843,7 +846,7 @@ public class MuxInitializer {
                                 }
                                 if (restPropFile != null) {
                                     Properties forwarderProps = new Properties();
-                                    forwarderProps.load(new FileReader(restPropFile));
+                                    forwarderProps.load(new FileReader(restPropFile.trim()));
                                     restForwarder.setProperties(forwarderProps);
                                 }
                                 if ("true".equals(System.getProperty("mux.props.verbose"))) {
@@ -876,7 +879,7 @@ public class MuxInitializer {
                                 if (gpsdPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
                                     if (gpsdPropFile != null) {
-                                        forwarderProps.load(new FileReader(gpsdPropFile));
+                                        forwarderProps.load(new FileReader(gpsdPropFile.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -947,7 +950,7 @@ public class MuxInitializer {
                                 if (propFile != null) { // For the subClass types...
                                     Properties forwarderProps = new Properties();
                                     if (propFile != null) {
-                                        forwarderProps.load(new FileReader(propFile));
+                                        forwarderProps.load(new FileReader(propFile.trim()));
                                     }
                                     fileForwarder.setProperties(forwarderProps);
                                 }
@@ -972,7 +975,7 @@ public class MuxInitializer {
                                 if (wsPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
                                     if (wsPropFile != null) {
-                                        forwarderProps.load(new FileReader(wsPropFile));
+                                        forwarderProps.load(new FileReader(wsPropFile.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -1003,7 +1006,7 @@ public class MuxInitializer {
                                 if (wspPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
                                     if (wspPropFile != null) {
-                                        forwarderProps.load(new FileReader(wspPropFile));
+                                        forwarderProps.load(new FileReader(wspPropFile.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -1063,7 +1066,7 @@ public class MuxInitializer {
                                 if (rmiPropFile != null || fwdVerbose != null) {
                                     Properties forwarderProps = new Properties();
                                     if (rmiPropFile != null) {
-                                        forwarderProps.load(new FileReader(rmiPropFile));
+                                        forwarderProps.load(new FileReader(rmiPropFile.trim()));
                                     }
                                     if (fwdVerbose != null) {
                                         forwarderProps.setProperty("verbose", fwdVerbose.trim());
@@ -1157,7 +1160,7 @@ public class MuxInitializer {
                                 if (pubPropFile != null /* || fwdVerbose != null || pubActive != null */) {
                                     Properties forwarderProps = new Properties();
                                     if (pubPropFile != null) {
-                                        forwarderProps.load(new FileReader(pubPropFile));
+                                        forwarderProps.load(new FileReader(pubPropFile.trim()));
                                     }
                                     cachePublisher.setProperties(forwarderProps);
                                 }
@@ -1227,7 +1230,7 @@ public class MuxInitializer {
                                 String propFileName = muxProps.getProperty(propProp);
                                 if (propFileName != null) {
                                     try {
-                                        properties.load(new FileReader(propFileName));
+                                        properties.load(new FileReader(propFileName.trim()));
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }

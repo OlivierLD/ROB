@@ -796,7 +796,7 @@ public class CharacterModeConsole {
 		String propFileName = System.getProperty("console.definition", "char.console.properties"); // "D:\\_mywork\\dev-corner\\olivsoft\\OlivSoftDesktop\\char.console.properties"
 		Map<String, ConsoleData> consoleData = new HashMap<>();
 		Properties consoleProps = new Properties();
-		consoleProps.load(new FileReader(new File(propFileName)));
+		consoleProps.load(new FileReader(new File(propFileName.trim())));
 		Enumeration<String> props = (Enumeration<String>) consoleProps.propertyNames();
 		boolean lineZeroIsBusy = false;
 		while (props.hasMoreElements()) {

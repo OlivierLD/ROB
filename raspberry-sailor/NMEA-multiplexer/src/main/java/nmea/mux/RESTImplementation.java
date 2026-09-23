@@ -1670,7 +1670,7 @@ public class RESTImplementation {
 									if (propFile != null && !propFile.trim().isEmpty()) {
 										try {
 											Properties properties = new Properties();
-											properties.load(new FileReader(propFile));
+											properties.load(new FileReader(propFile.trim()));
 											forwarder.setProperties(properties);
 										} catch (Exception ex) {
 											// Send message
@@ -2212,7 +2212,7 @@ public class RESTImplementation {
 									if (propFile != null && !propFile.trim().isEmpty()) {
 										try {
 											Properties properties = new Properties();
-											properties.load(new FileReader(propFile));
+											properties.load(new FileReader(propFile.trim()));
 											nmeaClient.setProperties(properties);
 										} catch (Exception ex) {
 											// Send message
@@ -2357,7 +2357,7 @@ public class RESTImplementation {
 									if (propFile != null && !propFile.trim().isEmpty()) {
 										try {
 											Properties properties = new Properties();
-											properties.load(new FileReader(propFile));
+											properties.load(new FileReader(propFile.trim()));
 											computer.setProperties(properties);
 										} catch (Exception ex) {
 											// Send message

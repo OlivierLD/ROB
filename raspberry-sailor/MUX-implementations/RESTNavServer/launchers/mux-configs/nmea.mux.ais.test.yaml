@@ -7,7 +7,7 @@ context:
   http.port: 9999
   init.cache: true
 channels:
-  # GPS and AIS replay
+  # GPS (data) and AIS replay
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/data.nmea
     zip: false
@@ -28,9 +28,8 @@ forwarders:
 #   - type: console
   - type: tcp
     port: 7002
-    properties: no.ais.properties
+    properties: mux-configs/no.ais.properties
   - type: tcp
     subclass: nmea.forwarders.AISTCPServer
     port: 7003
     verbose: false
-

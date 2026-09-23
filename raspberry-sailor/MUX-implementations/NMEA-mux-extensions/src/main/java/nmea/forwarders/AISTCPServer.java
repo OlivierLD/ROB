@@ -16,6 +16,10 @@ public class AISTCPServer extends TCPServer {
 		super(port);
 	}
 
+	public AISTCPServer(Integer port, String desc) throws Exception {
+		super(port, desc);
+	}
+
 	@Override
 	public void write(byte[] message) {
 		String mess = new String(message).trim(); // trim removes \r\n

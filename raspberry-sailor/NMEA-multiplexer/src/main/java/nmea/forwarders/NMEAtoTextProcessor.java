@@ -800,7 +800,7 @@ public class NMEAtoTextProcessor implements Forwarder {
                     if (propFileName != null) {
                         try {
                             Properties properties = new Properties();
-                            properties.load(new FileReader(propFileName));
+                            properties.load(new FileReader(propFileName.trim()));
                             dg.setProperties(properties);
                         } catch (Exception ex) {
                             System.err.printf("Error reading DelegateConsumer's properties: [%s]\n", propFileName);

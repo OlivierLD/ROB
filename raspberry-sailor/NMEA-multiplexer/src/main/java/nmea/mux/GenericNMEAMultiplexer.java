@@ -398,7 +398,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
     public static Properties getDefinitions() {
         Properties properties = null;
         String propertiesFile = System.getProperty("mux.properties", "nmea.mux.properties");
-        if (propertiesFile.endsWith(".yaml") || propertiesFile.endsWith(".yml")) { // Yaml to props
+        if (propertiesFile.trim().endsWith(".yaml") || propertiesFile.trim().endsWith(".yml")) { // Yaml to props
             Yaml yaml = new Yaml();
             try {
                 InputStream inputStream = new FileInputStream(propertiesFile);
@@ -407,9 +407,9 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
             } catch (IOException ioe) {
                 throw new RuntimeException(String.format("File [%s] not found in %s", propertiesFile, System.getProperty("user.dir")));
             }
-        } else if (propertiesFile.endsWith(".properties")) {
+        } else if (propertiesFile.trim().endsWith(".properties")) {
             Properties definitions = new Properties();
-            File propFile = new File(propertiesFile);
+            File propFile = new File(propertiesFile.trim());
             if (!propFile.exists()) {
                 throw new RuntimeException(String.format("File [%s] not found in %s, see property 'mux.properties'", propertiesFile, System.getProperty("user.dir")));
             } else {

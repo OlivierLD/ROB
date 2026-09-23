@@ -19,7 +19,7 @@ public class BufferedCollisionCallback implements Consumer<String> {
     private boolean active = true;
     private String collisionLanguage = "EN";
     private String collisionVocabulary = "collision";
-    private boolean verbose = false;
+    private boolean verbose = true;
     private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
     private final static long POLLING_INTERVAL = 10; // in seconds. this can be a parameter (in the setProperties method)
     private long pollingInterval = POLLING_INTERVAL;
@@ -86,10 +86,10 @@ public class BufferedCollisionCallback implements Consumer<String> {
     }
 
     public void setProperties(String propFileName) {
-        System.out.printf("Loading properties file %s\n", propFileName);
+        System.out.printf("In BufferedCollisionCallback, Loading properties file [%s]\n", propFileName);
         Properties props = new Properties();
         try {
-            FileInputStream fis = new FileInputStream(propFileName);
+            FileInputStream fis = new FileInputStream(propFileName.trim());
             props.load(fis);
 
             if (props.getProperty("collision.lang") != null) {
@@ -110,7 +110,8 @@ public class BufferedCollisionCallback implements Consumer<String> {
 
         } catch (Exception e) {
             System.out.printf("%s file problem...\n", propFileName);
-            throw new RuntimeException(String.format("File not found: %s", propFileName));
+            e.printStackTrace();
+            throw new RuntimeException(String.format("File not found: [%s], from [%s]", propFileName, System.getProperty("user.dir")));
         }
     }
 }
