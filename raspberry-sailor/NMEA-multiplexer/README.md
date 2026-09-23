@@ -1,5 +1,6 @@
-# NMEA Multiplexer
-
+# NMEA Multiplexer 
+<!-- ![Grinder](docimages/grinder.png) -->
+<img src="docimages/grinder.png" style="height: 100px;">
 ---
 Mutliplexer ? see [this](https://en.wikipedia.org/wiki/Multiplexer)! 
 
