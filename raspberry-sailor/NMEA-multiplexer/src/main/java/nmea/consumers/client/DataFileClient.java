@@ -69,7 +69,7 @@ public class DataFileClient extends NMEAClient {
 				if (verbose) {
 					System.out.printf("==>\tDataFileClient.dataDetectedEvent, data is [%s]\n", fullSentence);
 				}
-				multiplexer.onData(fullSentence);
+				multiplexer.onData(fullSentence); // TODO Manage Filters ?
 			}
 		}
 	}

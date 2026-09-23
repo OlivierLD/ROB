@@ -38,6 +38,14 @@ channels:
     sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
     description: "Reads data logged by a ShipModul. With filters."
+  - type: tcp
+    server: localhost
+    port: 7002
+    active: true
+    verbose: true
+    keep.trying: true
+    sentence.filters: GLL, RMC
+    description: "Coming from OpenCPN ?... (a test) Or a TCP Service ;)"
   #
 forwarders:
   - type: file
@@ -53,13 +61,16 @@ forwarders:
     device.filters: GP
     description: "Log the data, with filters"
 #  - type: console
-#  - type: tcp
-#    port: 7002
-  - type: gpsd
-    port: 2947
-    description: "To be consumed by OpenCPN"
+  - type: tcp
+    port: 7001
+    description: "To be consumed by OpenCPN (a test)"
     verbose: true
-    active: false
+    active: true
+#  - type: gpsd
+#    port: 2947
+#    description: "To be consumed by OpenCPN (a test)"
+#    verbose: true
+#    active: false
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties

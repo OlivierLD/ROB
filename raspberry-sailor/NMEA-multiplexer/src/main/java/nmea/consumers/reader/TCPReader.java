@@ -43,10 +43,10 @@ public class TCPReader extends NMEAReader {
 		this(nmeaClient, threadName, al, host, tcp, null, keepTrying);
 	}
 
-	public TCPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int tcp, String initialRequest, boolean keepTrying) {
+	public TCPReader(NMEAClient nmeaClient, String threadName, List<NMEAListener> al, String host, int tcpPort, String initialRequest, boolean keepTrying) {
 		super(nmeaClient, threadName != null ? threadName : "tcp-thread", al);
 		this.hostName = host;
-		this.tcpPort = tcp;
+		this.tcpPort = tcpPort;
 		this.initialRequest = initialRequest;
 		this.keepTrying = keepTrying;
 	}
@@ -76,6 +76,8 @@ public class TCPReader extends NMEAReader {
 			InetAddress address = InetAddress.getByName(hostName);
 //    System.out.println("INFO:" + hostName + " (" + address.toString() + ")" + " is" + (address.isMulticastAddress() ? "" : " NOT") + " a multicast address");
 			skt = new Socket(address, tcpPort);
+
+			System.out.printf("Socket [%s], port %d, connected\n", skt, tcpPort);
 
 			if (this.initialRequest != null) {
 				// Like "?WATCH={\"enable\":true,\"json\":false,\"nmea\":true,\"raw\":0,\"scaled\":false,\"timing\":false,\"split24\":false,\"pps\":false}"
@@ -120,13 +122,16 @@ public class TCPReader extends NMEAReader {
 			manageError(be);
 		} catch (final SocketException se) {
 //			if ("true".equals(System.getProperty("tcp.data.verbose"))) {
-//		    se.printStackTrace();
+//			    se.printStackTrace();
 //			}
 			if (se.getMessage().indexOf("Connection refused") > -1) {
-				System.out.println("Refused (1)");
+				System.out.println("TCPReader: Refused (1)");           // TODO Explain !
+				// se.printStackTrace();
 			} else if (se.getMessage().indexOf("Connection reset") > -1) {
-				System.out.println("Reset (2)");
+				System.out.println("TCPReader: Reset (2)");
+				// se.printStackTrace();
 			} else {
+				// TODO Tweak the cases below...
 				boolean tryAgain = false;
 				if (se instanceof ConnectException && "Connection timed out: connect".equals(se.getMessage())) {
 					if ("true".equals(System.getProperty("tcp.data.verbose"))) {
@@ -155,8 +160,14 @@ public class TCPReader extends NMEAReader {
 		}
 		if (this.keepTrying && this.goRead) { // Reconnect
 			System.out.println("---------------------------------------");
-			System.out.printf("-- Re-connecting the TCP feed (on %s) --\n", hostName);
+			System.out.printf("-- Re-connecting the TCP feed (on %s:%d) --\n", hostName, tcpPort);
 			System.out.println("---------------------------------------");
+			try {
+				Thread.sleep(1_000); // TODO: A parameter?
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+			System.out.println("Let's go again...");
 			startReader();
 		} else {
 			System.out.println("-- End of TCP reader.");

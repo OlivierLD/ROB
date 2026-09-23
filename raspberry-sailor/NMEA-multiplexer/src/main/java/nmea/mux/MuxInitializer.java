@@ -331,7 +331,7 @@ public class MuxInitializer {
                             break;
                         case "tcp": // Consumer
                             try {
-                                String tcpPort = muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx)));
+                                int tcpPort = Integer.parseInt(muxProps.getProperty(String.format("mux.%s.port", MUX_IDX_FMT.format(muxIdx))));
                                 String tcpServer = muxProps.getProperty(String.format("mux.%s.server", MUX_IDX_FMT.format(muxIdx)));
                                 String initialRequest = muxProps.getProperty(String.format("mux.%s.initial.request", MUX_IDX_FMT.format(muxIdx)), "");
                                 boolean keepTrying = "true".equals(muxProps.getProperty(String.format("mux.%s.keep.trying", MUX_IDX_FMT.format(muxIdx)), "false"));
@@ -339,6 +339,10 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        tcpServer,
+                                        tcpPort,
+                                        initialRequest,
+                                        keepTrying,
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -353,9 +357,9 @@ public class MuxInitializer {
                                 }
                                 tcpClient.initClient();
                                 if (initialRequest.trim().isEmpty()) {
-                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), keepTrying));
+                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, tcpPort, keepTrying));
                                 } else {
-                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, Integer.parseInt(tcpPort), initialRequest, keepTrying));
+                                    tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, tcpPort, initialRequest, keepTrying));
                                 }
                                 tcpClient.setVerbose("true".equals(consumerVerbose)); // muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 // Use deviceFilters and sentenceFilters

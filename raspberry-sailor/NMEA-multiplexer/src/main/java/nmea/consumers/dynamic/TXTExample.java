@@ -89,7 +89,7 @@ public class TXTExample extends NMEAClient {
             System.out.println("Generated from TXT Producer:" + e.getContent());
         }
         if (multiplexer != null) {
-            multiplexer.onData(e.getContent());
+            multiplexer.onData(e.getContent());  // TODO FIlters?
         }
     }
 

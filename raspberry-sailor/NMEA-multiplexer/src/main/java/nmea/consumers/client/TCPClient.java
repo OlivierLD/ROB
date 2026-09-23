@@ -4,24 +4,41 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.TCPReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
  * Read NMEA Data from a TCP server
  */
 public class TCPClient extends NMEAClient {
+	private String hostName;
+	private int port;
+	private String initialRequest;
+	private boolean keepTrying;
+
 	public TCPClient() {
-		this(null, null, null, "");
+		this(null, null, null, "localhost", 7001, null, false, "");
 	}
 
 	public TCPClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, "localhost", 7001, null, false, "");
 	}
 	public TCPClient(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, "localhost", 7001, null, false, "");
 	}
-	public TCPClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+
+	// TODO Active, verbose, filters...
+	public TCPClient(String[] s, String[] sa, Multiplexer mux, String hostName, int tcpPort, String initialRequest, boolean keepTrying, String desc) {
 		super(s, sa, mux, desc);
+
+		System.out.printf("new TCPClient on [%s:%d]\n", hostName, tcpPort);
+
 		this.verbose = "true".equals(System.getProperty("tcp.data.verbose", "false"));
+		this.hostName = hostName;
+		this.port = tcpPort;
+		this.keepTrying = keepTrying;
+		this.initialRequest = initialRequest;
 	}
 
 	@Override
@@ -31,7 +48,23 @@ public class TCPClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (true || verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());
+				} else {
+					if (true || verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
+				}
+				// multiplexer.onData(e.getContent()); // TODO Manage filters ??!!
 			}
 		}
 	}
@@ -130,8 +163,11 @@ public class TCPClient extends NMEAClient {
 		for (String s : args) {
 			System.out.println("CustomTCPClient prm:" + s);
 		}
-		String serverName = "sinagot.net"; // "192.168.42.2";
-		int serverPort = 2_947; // 7_001;
+//		String serverName = "sinagot.net"; // "192.168.42.2";
+//		int serverPort = 2_947; // 7_001;
+
+		String serverName = "localhost"; // "192.168.42.2";
+		int serverPort = 7002; // 7_001;
 
 		System.setProperty("nmea.parser.verbose", "true");
 

@@ -1750,7 +1750,7 @@ public class RESTImplementation {
 							.findFirst();
 					if (!opClient.isPresent()) {
 						try {
-							NMEAClient tcpClient = new TCPClient(tcpJson.getDeviceFilters(), tcpJson.getSentenceFilters(), this.mux, tcpJson.getDescription());
+							NMEAClient tcpClient = new TCPClient(tcpJson.getDeviceFilters(), tcpJson.getSentenceFilters(), this.mux, tcpJson.getHostname(), tcpJson.getPort(), tcpJson.getInitialRequest(), tcpJson.isKeepTrying(), tcpJson.getDescription());
 							tcpClient.initClient();
 							tcpClient.setReader(new TCPReader(tcpClient,
 													"MUX-TCPReader",

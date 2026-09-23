@@ -229,11 +229,13 @@ public class MuxNMEAUtils {
         boolean ok = true;
         if (mess.startsWith("$") && mess.length() > 6) {
             ok = false;
+            // Sentences
             if  (sentenceFilters != null) {
                 String key = mess.substring(3, 6);
                 for (String filter : sentenceFilters) {
-                    if (!filter.startsWith("~")) { // include
-                        if (filter.equals(key)) {
+                    String _filter = filter.trim();
+                    if (!_filter.startsWith("~")) { // include
+                        if (_filter.equals(key)) {
                             ok = true;
                             if (verbose) {
                                 try {
@@ -244,7 +246,7 @@ public class MuxNMEAUtils {
                             }
                         }
                     } else {  // exclude
-                        if (filter.substring(1).equals(key)) { // Don't !
+                        if (_filter.substring(1).equals(key)) { // Don't !
                             ok = false;
                             if (verbose) {
                                 try {
@@ -272,11 +274,13 @@ public class MuxNMEAUtils {
                     System.out.printf("--> NO Sentence Filter for [%s] (or filtered already).\n", mess);
                 }
             }
+            // Devices
             if  (ok && deviceFilters != null) {
                 // ok = false;
                 String dev = mess.substring(1, 3);
                 for (String filter : deviceFilters) {
-                    if (!filter.startsWith("~")) { // include
+                    String _filter = filter.trim();
+                    if (!_filter.startsWith("~")) { // include
                         if (filter.equals(dev)) {
                             ok = true;
                             if (verbose) {
@@ -284,7 +288,7 @@ public class MuxNMEAUtils {
                             }
                         }
                     } else {  // exclude
-                        if (filter.substring(1).equals(dev)) { // Don't !
+                        if (_filter.substring(1).equals(dev)) { // Don't !
                             ok = false;
                             if (verbose) {
                                 System.out.printf("DataFileWriter >> Excluding device [%s], for %s\n", dev, mess);
