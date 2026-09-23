@@ -1254,7 +1254,7 @@ public class MuxInitializer {
                             }
                             switch (type) {
                                 case "tw-current": // True Wind and Current computer. True Wind is calculated with GPS COG & SOG), as it should. Also involves the LongTimeCurrentCalculator.
-                                    String prefix = muxProps.getProperty(String.format("computer.%s.prefix", MUX_IDX_FMT.format(cptrIdx)), "OS");
+                                    String prefix = muxProps.getProperty(String.format("computer.%s.prefix", MUX_IDX_FMT.format(cptrIdx)), "OS"); // Default OS, OivSoft.
                                     String[] timeBuffers = muxProps.getProperty(String.format("computer.%s.time.buffer.length", MUX_IDX_FMT.format(cptrIdx)), "600000").split(",");
                                     List<Long> timeBufferLengths = Arrays.stream(timeBuffers).map(tbl -> Long.parseLong(tbl.trim())).collect(Collectors.toList());
                                     // Check duplicates

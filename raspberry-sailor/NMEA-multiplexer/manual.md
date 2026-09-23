@@ -850,7 +850,7 @@ can also be more simply expressed as
  leeway = max.leeway * max(0, cos(awa))
 ```
 
-`damping` (default is `1`) unused for now (Aug-2018), but will be.
+`damping` (default is `1`) unused for now (Aug-2018), but might be.
 
 `deviation.file.name` mentions the name of a CSV file, like - for example - `dp_2011_04_15.csv`. The
 default value is `zero-deviation.csv`.

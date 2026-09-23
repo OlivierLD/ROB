@@ -35,7 +35,7 @@ public class BufferedCollisionSingletonCallback implements Consumer<String> {
                             if ("FR".equals(collisionLanguage)) {
                                 message = String.format("Attention ! %d danger%s de %s !", length, length > 1 ? "s" : "", collisionVocabulary);
                             }
-                            TextToSpeech.speak(message, collisionLanguage);
+                            TextToSpeech.speak(message, collisionLanguage);  // Speaking !!
                             if (VERBOSE) {
                                 System.out.printf(">> Found %d threat(s) :\n", length);
                                 threatList.stream().forEach(el -> {

@@ -8,7 +8,7 @@ context:
   init.cache: true
   deviation.file.name: "dp_2011_04_15.csv"
   max.leeway: 10.0
-  damping: 30
+  damping: 30  # Unused
 channels:
   - type: file
     filename: ../../../NMEA-multiplexer/sample-data/logged.data.zip
