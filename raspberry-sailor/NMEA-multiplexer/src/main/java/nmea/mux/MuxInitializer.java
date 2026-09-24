@@ -1,6 +1,7 @@
 package nmea.mux;
 
 import context.ApplicationContext;
+import http.HTTPServer;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
@@ -121,6 +122,14 @@ public class MuxInitializer {
                              List<Computer> nmeaDataComputers,
                              Multiplexer mux,
                              boolean verbose) {
+
+        if (false) {
+            System.out.printf("-->> The Mux is a %s <<--\n", mux.getClass().getName());
+            // For an HTTPClient ?
+            final List<HTTPServer.Operation> restOperationList = /*((GenericNMEAMultiplexer) mux)*/ mux.getRESTOperationList();
+            // Better use POST /mux/nmea-sentence -d "$XXRMC,..."
+        }
+
         int muxIdx = 1;
         boolean thereIsMore = true;
         // 1 - Input channels, consumers

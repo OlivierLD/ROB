@@ -22,7 +22,9 @@ public class TCPServer implements Forwarder {
 
 	private int tcpPort = 7001; // Default
 	private ServerSocket serverSocket = null;
+	private boolean keepListening = true;
 
+	private SocketThread socketThread = null;
 	private boolean withAIS = true;
 
 	public TCPServer(int port) throws Exception {
@@ -33,8 +35,8 @@ public class TCPServer implements Forwarder {
 		this.description = desc;
 
 		try {
-			SocketThread socketThread = new SocketThread(this);
-			socketThread.start();
+			this.socketThread = new SocketThread(this);
+			this.socketThread.start();
 		} catch (Exception ex) {
 			throw ex;
 		}
@@ -140,6 +142,19 @@ public class TCPServer implements Forwarder {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
+		this.keepListening = false;
+		try {
+			if (this.serverSocket != null) {
+				this.serverSocket.close();
+			} else {
+				System.out.println("ServerSocket already null??");
+			}
+			if (this.socketThread != null && this.socketThread.isAlive()) {
+				this.socketThread.interrupt(); // Does that work ?
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private class SocketThread extends Thread {
@@ -153,20 +168,24 @@ public class TCPServer implements Forwarder {
 		public void run() {
 			try {
 				parent.serverSocket = new ServerSocket(tcpPort);
-				while (true) { // Wait for the clients
-					if (instance.props != null && "true".equals(instance.props.getProperty("verbose"))) {
+				// parent.serverSocket.setSoTimeout(250); // in ms
+				while (parent.keepListening) { // Wait for the clients
+					if (instance.props != null && parent.isVerbose()) { //  "true".equals(instance.props.getProperty("verbose"))) {
 						System.out.println(".......... serverSocket waiting (TCP:" + tcpPort + ").");
 					}
-					Socket clientSkt = serverSocket.accept();
+					Socket clientSkt = parent.serverSocket.accept();
 					if (instance.props != null && "true".equals(instance.props.getProperty("verbose"))) {
 						System.out.println(".......... serverSocket accepted (TCP:" + tcpPort + ").");
 					}
 					parent.setSocket(clientSkt);
 				}
+				System.out.println("EndOfWhileLoop in SocketThread");
 			} catch (Exception ex) {
-				System.err.printf("SocketThread port %d: %s\n",tcpPort , ex.getLocalizedMessage());
+				System.err.printf("-> SocketThread port %d: %s\n", tcpPort, ex.getLocalizedMessage());
+				ex.printStackTrace();
+				throw new RuntimeException(ex);
 			}
-			System.out.println("..... End of TCP SocketThread.");
+			System.out.printf("..... End of TCP SocketThread, port %d\n.", tcpPort);
 		}
 	}
 

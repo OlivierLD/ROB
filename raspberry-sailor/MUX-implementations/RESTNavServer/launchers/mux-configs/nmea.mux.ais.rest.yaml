@@ -1,0 +1,22 @@
+#
+# MUX definition.
+#
+name: "With no GPS, and AIS, for tests"
+description:
+  - Use for simulation.
+  - AIS Data come from ais.exploratorium.edu:80
+  - Use curl -X POST /mux/nmea-sentence -d "$XXRMC,..." to feed the cache with 'GPS' data
+  - Used by option 16 in the demoLauncher
+  - Requires Internet connection
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  markers.list:
+    - markers: mux-configs/markers/markers.sf.bay.yaml
+channels:
+  - type: tcp
+    server: ais.exploratorium.edu
+    port: 80
+    verbose: false
+    description: "SF Area AIS data. Use GPSd ?"

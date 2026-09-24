@@ -1,10 +1,12 @@
 package nmea.utils;
 
 import context.NMEADataCache;
+import nmea.forwarders.TCPServer;
 import nmea.mux.context.Context;
 import nmea.parser.*;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -314,6 +316,62 @@ public class MuxNMEAUtils {
         }
 
         return ok;
+    }
+
+    public static void pushToTCPConsumer(int tcpPort, String[] dataToPush) {
+        pushToTCPConsumer(tcpPort, dataToPush, false);
+    }
+
+    /**
+     * Not Finished, not tested...
+     * @param tcpPort
+     * @param dataToPush
+     * @param verbose
+     */
+    public static void pushToTCPConsumer(int tcpPort, String[] dataToPush, boolean verbose) {
+        try {
+            TCPServer tcpw = new TCPServer(tcpPort);
+
+            // Will send the sentences
+            Arrays.asList(dataToPush).forEach(sentence -> {
+                if (verbose) {
+                    System.out.printf("Sending [%s]...\n", sentence);
+                }
+                try {
+                    tcpw.write(sentence.getBytes());
+                } catch (Exception ex) {
+                    System.err.println(ex.getLocalizedMessage());
+                    ex.printStackTrace();
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    // Thread.sleep(1_000L);
+                } catch (Exception ex) {
+                     ex.printStackTrace();
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            try {
+                if (verbose) {
+                    System.out.printf("Server on port %d, closing...\n", tcpPort);
+                }
+                if (tcpw != null) {
+                    tcpw.close();
+                    if (verbose) {
+                        System.out.printf("Server on port %d closed.\n", tcpPort);
+                    }
+                } else {
+                    System.out.println("TCPWriter already closed ?");
+                }
+            } catch (Exception ex) {
+                 ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     /**

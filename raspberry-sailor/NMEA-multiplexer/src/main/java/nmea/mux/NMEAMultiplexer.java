@@ -1,5 +1,6 @@
 package nmea.mux;
 
+import http.HTTPServer;
 import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.consumers.client.DataFileClient;
@@ -8,6 +9,8 @@ import nmea.consumers.client.TCPClient;
 import nmea.consumers.reader.DataFileReader;
 import nmea.consumers.reader.SerialReader;
 import nmea.consumers.reader.TCPReader;
+
+import java.util.List;
 
 /**
  * <b><i>Note</i></b>: Just an EXAMPLE, for validation of the concept.
@@ -29,6 +32,11 @@ public class NMEAMultiplexer implements Multiplexer {
 	public boolean getEnableProcess() { return true; }
 	@Override
 	public void stopAll() {}
+
+	@Override
+	public List<HTTPServer.Operation> getRESTOperationList() {
+		return null;
+	}
 
 	private final NMEAClient tcpClient;
 	private final NMEAClient fileClient;

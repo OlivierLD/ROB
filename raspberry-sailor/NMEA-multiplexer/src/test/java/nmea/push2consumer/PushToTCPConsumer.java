@@ -1,8 +1,12 @@
 package nmea.push2consumer;
 
 import nmea.forwarders.TCPServer;
+import nmea.parser.StringGenerator;
+import nmea.utils.MuxNMEAUtils;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Requires a MUX with a TCP consumer on port 7002.
@@ -42,36 +46,80 @@ public class PushToTCPConsumer {
     };
 
     public static void main(String[] args) {
-        // String gpsd = "{\"class\":\"TVP\",\"tag\":\"MID2\",\"time\":\"2010-04-30T11:48:20.10Z\",\"ept\":0.005,\"lat\":46.498204497,\"lon\":7.568061439,\"alt\":1327.689,\"epx\":15.319,\"epy\":17.054,\"epv\":124.484,\"track\":10.3797,\"speed\":0.091,\"climb\":-0.085,\"eps\",34.11,\"mode\":3}";
-        // String gpsd = "?WATCH={...};";
-        String wpl = "$GPWPL,3739.856,N,12222.812,W,OPMRNA*59";
-        try {
-            TCPServer tcpw = new TCPServer(7002);
 
-            // Will send the sentences
-            Arrays.asList(nmeaData).forEach(sentence -> {
-                System.out.printf("Sending [%s]...\n", sentence);
+        Date now = new Date();
+        TimeZone.setDefault(TimeZone.getTimeZone("etc/UTC"));
+        System.out.printf("UTC Date: %s\n", now);
+
+        int tcpPort = 7002;
+
+        if (true) {
+            try {
+                TCPServer tcpw = new TCPServer(tcpPort);
+
+                // Will send the sentences
+                Arrays.asList(nmeaData).forEach(sentence -> {
+                    System.out.printf("Sending [%s]...\n", sentence);
+                    try {
+                        tcpw.write(sentence.getBytes());
+                    } catch (Exception ex) {
+                        System.err.println(ex.getLocalizedMessage());
+                    }
+                    try {
+                        Thread.sleep(250L);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+                System.out.println("------------------");
+
+                String generatedRMC = StringGenerator.generateRMC("PC",
+                        new Date(), 47d, -3d, 4.5, 45, 0);
+                System.out.printf("Sending generated [%s]...\n", generatedRMC);
                 try {
-                    tcpw.write(sentence.getBytes());
+                    tcpw.write(generatedRMC.getBytes());
                 } catch (Exception ex) {
                     System.err.println(ex.getLocalizedMessage());
                 }
+
                 try {
-                    Thread.sleep(1_000L);
+                    tcpw.close();
+                    System.out.println("TCPServer closed.");
+                    try {
+                        tcpw.write("Just in Case".getBytes());
+                    } catch (Exception ex) {
+                        System.err.println(ex.getLocalizedMessage());
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            System.out.println("---------------------------------");
+
+            // Wait for the previous to be closed
             try {
-                tcpw.close();
-                System.out.println("Server closed.");
+                Thread.sleep(5_000L);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        TimeZone.setDefault(TimeZone.getTimeZone("etc/UTC"));
+        String generatedRMC = StringGenerator.generateRMC("AA",
+                new Date(), 47d, -3d, 4.5, 135, 0);
+        String [] dataArray = new String[] { generatedRMC };
+
+
+        try {
+            MuxNMEAUtils.pushToTCPConsumer(tcpPort, dataArray, true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         System.out.println("Bye!");
     }
 }

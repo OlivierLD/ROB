@@ -43,7 +43,7 @@ public class RESTImplementation {
 	private final NavRequestManager navRequestManager;
 
 	private final static String SERVER_PREFIX = "/server";
-	private final static String WW_PREFIX = "/ww";
+	private final static String WW_PREFIX = "/ww";  // Weather Wizard
 	private final static String NAV_PREFIX = "/nav";
 	private final static String FEATHER_PREFIX = "/feather";
 

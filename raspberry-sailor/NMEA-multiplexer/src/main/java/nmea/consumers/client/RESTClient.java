@@ -4,10 +4,14 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.RESTReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
-* Read NMEA Data from a REST server
-*/
+ * Read NMEA Data from a REST server.
+ * This one explicitly requests the data (GET) on a regular basis. (property between-loops -> frequency)
+ */
 public class RESTClient extends NMEAClient {
 	public RESTClient() {
 		this(null, null, null,  false, true, "");
@@ -37,7 +41,23 @@ public class RESTClient extends NMEAClient {
 				System.out.println("From REST, mux.onData :" + e.getContent());
 			}
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());
+				} else {
+					if (verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
+				}
+				// multiplexer.onData(e.getContent()); // Manage filters !!
 			}
 		} else {
 			if (verbose) {

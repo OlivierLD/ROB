@@ -4,26 +4,30 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.ReaderSkeleton;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
  * Skeleton for your own dynamically loaded Consumer (aka Channel)
  */
 public class ClientSkeleton extends NMEAClient {
 	public ClientSkeleton() {
-		this(null, null, null, "");
+		this(null, null, null, false, true, "");
 	}
 
 	public ClientSkeleton(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, false, true, "");
 	}
 
 	public ClientSkeleton(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, false, true, "");
 	}
 
-	public ClientSkeleton(String[] s, String[] sa, Multiplexer mux, String description) {
+	public ClientSkeleton(String[] s, String[] sa, Multiplexer mux, boolean verbose, boolean active, String description) {
 		super(s, sa, mux, description);
-		this.verbose = "true".equals(System.getProperty("skeleton.verbose", "false"));
+		this.setVerbose(verbose); // this.verbose = "true".equals(System.getProperty("skeleton.verbose", "false"));
+		this.setActive(active);
 	}
 
 	@Override
@@ -33,7 +37,23 @@ public class ClientSkeleton extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());
+				} else {
+					if (verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
+				}
+				// multiplexer.onData(e.getContent()); // Manage filters !!
 			}
 		}
 	}
@@ -53,10 +73,10 @@ public class ClientSkeleton extends NMEAClient {
 
 		public SkeletonBean(ClientSkeleton instance) {
 			cls = instance.getClass().getName();
-			verbose = instance.isVerbose();
-			active = instance.isActive();
 			deviceFilters = instance.getDeviceFilters();
 			sentenceFilters = instance.getSentenceFilters();
+			verbose = instance.isVerbose();
+			active = instance.isActive();
 			description = instance.getDescription();
 		}
 
