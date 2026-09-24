@@ -1255,6 +1255,9 @@ while [[ "${GO}" == "true" ]]; do
 	    GO=false
 	    ;;
 	  "16")
+	    # A way to define default position.
+	    DEFAULT_POS="-Ddefault.mux.latitude=37.75 -Ddefault.mux.longitude=-122.30" # San Francisco Bay
+	    export DEFAULT_POS
   	  PROP_FILE=mux-configs/nmea.mux.ais.rest.yaml
 	    echo -e "Launching Nav Server with ${PROP_FILE}"
       # Ask to launch a browser in interactive mode (and not provided already)
@@ -1275,7 +1278,8 @@ while [[ "${GO}" == "true" ]]; do
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
-	    echo -e "Also use, ${RED}curl -X POST http://localhost:${HTTP_PORT}/mux/nmea-sentence -d \"\$XXRMC,...\"  ${NC} to feed the cache..."
+	    echo -e "Also use, ${RED}curl -ivX POST http://localhost:${HTTP_PORT}/mux/nmea-sentence -d \"\$XXRMC,...\"  ${NC} to feed the cache..."
+	    echo -e "Ready for the simulator..."
 	    GO=false
 	    ;;
 	  "20")

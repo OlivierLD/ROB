@@ -19,4 +19,16 @@ channels:
     server: ais.exploratorium.edu
     port: 80
     verbose: false
+    active: true # Any impact ?...
     description: "SF Area AIS data. Use GPSd ?"
+computers:
+  - class: nmea.computers.AISManager
+    verbose: true
+    properties: mux-configs/ais.mgr.properties
+    active: true
+    description: Manage collisions with others
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    verbose: true
+    active: true
+    description: "Manage border's proximity"

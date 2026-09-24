@@ -85,7 +85,12 @@ elif [[ "${OS}" == "Linux" ]]; then
   CP=${CP}:/usr/share/java/RXTXcomm.jar # For Raspberry Pi. Should already be in the fat-jar.
 fi
 #
-JAVA_OPTS=
+if [[ "$DEFAULT_POS" != "" ]]; then
+  echo -e "Setting JAVA_OPTS to \"$DEFAULT_POS\" "
+  JAVA_OPTS="$DEFAULT_POS"
+else
+  JAVA_OPTS=
+fi
 JAVA_OPTS="${JAVA_OPTS} -Djava.util.logging.config.file=logging.properties"
 JAVA_OPTS="${JAVA_OPTS} -Dwith.tide.coeffs=${WITH_TIDE_COEFFS}"
 #
@@ -140,7 +145,7 @@ if [[ "${USE_PROXY}" == "true" ]]; then
 fi
 #
 # if [[ "${MUX_VERBOSE}" == "true" ]]; then
-  echo -e "In {0}, MUX_VERBOSE is ${MUX_VERBOSE}"
+  echo -e "In {$0}, MUX_VERBOSE is ${MUX_VERBOSE}"
 # fi
 #
 # refers to nmea.mux.properties, unless -Dmux.properties is set
@@ -178,7 +183,7 @@ if [[ "${RMC_TIME_OK}" == "false" ]]; then
   JAVA_OPTS="${JAVA_OPTS} -Drmc.time.ok=false"
 fi
 #
-if [[ "1" == "1" ]]; then
+if [[ "1" == "1" ]] && [[ "$DEFAULT_POS" == "" ]]; then
   echo -e "-----------------------------------------"
   echo -e ">> Warning: Enforcing default position..."
   echo -e "-----------------------------------------"
@@ -191,6 +196,10 @@ if [[ "1" == "1" ]]; then
   # JAVA_OPTS="${JAVA_OPTS} -Ddefault.mux.latitude=48.48518833333333 -Ddefault.mux.longitude=-123.07788833333333" # False Bay, San Juan Island
   # JAVA_OPTS="${JAVA_OPTS} -Ddefault.mux.latitude=48.60448 -Ddefault.mux.longitude=-122.819285" # Olga, Orcas Island
   # JAVA_OPTS="${JAVA_OPTS} -Ddefault.mux.latitude=39.167398801021655 -Ddefault.mux.longitude=-107.24753700739706" # Redstone, CO.
+else
+  echo -e "---------------------------------------------"
+  echo -e ">> Warning: Leaving default position as is..."
+  echo -e "---------------------------------------------"
 fi
 #
 # Polar file (coeffs)

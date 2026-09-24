@@ -4495,6 +4495,8 @@ public class RESTImplementation {
 								System.out.println("REST Feeder: There is NO mux, just feeding the cache");
 							}
 							cache.parseAndFeed(payload.trim());
+
+							response.setPayload("All Good!".getBytes());
 						}
 					}
 				} catch (Exception ex) {
