@@ -452,8 +452,10 @@ public class StringGenerator {
 		int deg = (int) Math.abs(lat);
 		double min = 0.6 * ((Math.abs(lat) - deg) * 100d);
 		rmc += (LAT_DEG_FMT.format(deg) + MIN_FMT.format(min));
-		if (lat < 0) rmc += ",S,";
-		else rmc += ",N,";
+		if (lat < 0)
+			rmc += ",S,";
+		else
+			rmc += ",N,";
 
 		deg = (int) Math.abs(lng);
 		min = 0.6 * ((Math.abs(lng) - deg) * 100d);

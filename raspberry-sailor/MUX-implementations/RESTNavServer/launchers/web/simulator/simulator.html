@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <!--
  | Requires Internet access (for Leaflet)
- | QS Parameters:
- |     interval=5000   in ms, default 5000
- |     test=true|false default false
+ | WiP! Big Time!
  +-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AIS with Leaflet</title>
+    <title>Simulator</title>
     <link rel="icon" type="image/jpg" href="../icons/jellyfish.ico">
     <style type="text/css">
 :root {
@@ -99,14 +97,14 @@ input:checked + .slider:before {
 }
     </style>
 
-    <!--link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script-->
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script type="text/javascript" src="./utilities/Utilities.js"></script>         <!-- Dead Reck & CO -->
+    <script type="text/javascript" src="./utilities/NavigationHelper.js"></script>  <!-- TW, current, etc -->
 </head>
 <body>
-<h1>AIS plotter</h1>
+<h1>Nav Simulator</h1>
 <hr/>
 <table>
     <tr>
@@ -181,9 +179,9 @@ let options = {
     timeout: 5000
 };
 
-let userPos = {
-    lat: 37.75,
-    lng: -122.5
+let userPos = {            // SF Bay
+    lat: 37.83725907032175,
+    lng: -122.41104125976562
 }; // Default. Will get this from NMEA Pos
 
 function decToSex(val, ns_ew) {
@@ -212,20 +210,6 @@ function showSurface(checkbox) {
     }
 }
 
-/*  let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
-
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 28,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'mapbox.streets'
-    }).addTo(map);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);   */
-
 let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
 
 let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
@@ -243,10 +227,14 @@ const tilesOSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     opacity: 0.5
 }).addTo(map);
 
+/*
 map.fitBounds([
     [40.712, -74.227],
     [40.774, -74.125]
 ]);
+*/
+
+map.setView([userPos.lat, userPos.lng], 9);
 
 let currentBound = [];
 let mapMarkers = [];
@@ -1190,4 +1178,23 @@ if (!FOR_TEST) {
     onMessage(json);
 }
 </script>
+
+</script>
+
+<script type="text/javascript">
+
+window.onload = () => {
+    console.log("A Test");
+
+    let start = userPos;
+    let dist = 4.5 * (5 / 3600);  // Speed 4.5kn, duration 5s
+    let bearing = 315;
+
+    let reached = deadReckoning(start, dist, bearing);
+
+    console.log(`From ${ JSON.stringify(start) }, reached ${ JSON.stringify(reached) }`);
+
+}
+</script>
+
 </html>

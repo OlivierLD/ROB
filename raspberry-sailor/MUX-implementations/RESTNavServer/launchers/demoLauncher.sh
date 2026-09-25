@@ -113,7 +113,8 @@ URL_OPTION_13g="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_13h="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_14="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_15="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
-URL_OPTION_16="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+# URL_OPTION_16="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+URL_OPTION_16="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -1279,6 +1280,7 @@ while [[ "${GO}" == "true" ]]; do
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    echo -e "Also use, ${RED}curl -ivX POST http://localhost:${HTTP_PORT}/mux/nmea-sentence -d \"\$XXRMC,...\"  ${NC} to feed the cache..."
+	    echo -e "Also check out http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 	    echo -e "Ready for the simulator..."
 	    GO=false
 	    ;;

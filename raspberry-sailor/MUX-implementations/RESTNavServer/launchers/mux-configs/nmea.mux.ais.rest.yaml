@@ -15,6 +15,10 @@ context:
   markers.list:
     - markers: mux-configs/markers/markers.sf.bay.yaml
 channels:
+  - type: zda
+    description: "ZDA Generator, GP prefix."
+    active: true
+    verbose: false
   - type: tcp
     server: ais.exploratorium.edu
     port: 80
@@ -26,7 +30,7 @@ computers:
     verbose: true
     properties: mux-configs/ais.mgr.properties
     active: true
-    description: Manage collisions with others
+    description: Manage collisions with other boats
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
     verbose: true
