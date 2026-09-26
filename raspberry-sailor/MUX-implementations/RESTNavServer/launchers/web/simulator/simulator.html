@@ -103,6 +103,8 @@ input:checked + .slider:before {
 	<script type="module" src="../webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="../webcomponents/CompassGlobe.js"></script>
 
+    <link rel="stylesheet" href="../webcomponents/css/web-components.css">
+
     <script type="text/javascript" src="./utilities/Utilities.js"></script>         <!-- Dead Reckoning & CO -->
     <script type="text/javascript" src="./utilities/NavigationHelper.js"></script>  <!-- TW, current, etc -->
     <script type="text/javascript" src="./utilities/NMEAParser.js"></script>        <!-- Parsers & generators (WiP) -->
@@ -355,14 +357,38 @@ let onMessage = json => {
         marker.addTo(map)
             .bindPopup(`<b>You are here<br/>` +
                 `<span style="color: red;">${decToSex(userPos.lat, "NS")}<br/>` +
-                                          `${decToSex(userPos.lng, "EW")}` +
-                        (cog != null && sog != null ?
-                            `<br/>` +
-                            `COG: ${cog.toFixed(0)}&deg;<br/>` +
-                            `SOG: ${sog.toFixed(1)} kn` :
-                            "") +
+                                          `${decToSex(userPos.lng, "EW")}<br/>` +
+                            `COG: ${cog != null ? cog.toFixed(0) : '-'}&deg;<br/>` +
+                            `SOG: ${sog != null ? sog.toFixed(1) : '-'} kn<br/>` +
                         `</span></b>`);
-                    // TODO Add Boat triangle (or so) and COG/SOG ?
+
+        // Draw the "boat"
+        let boatLen = 0.02;
+        let boatTriangle = L.polygon([ // COG
+            [userPos.lat + ((boatLen / 2) * Math.cos(Math.toRadians(cog != null ? cog : 0))),
+             userPos.lng + ((boatLen / 2) * Math.sin(Math.toRadians(cog != null ? cog : 0)))],           // Bow
+            [userPos.lat - ((boatLen / 2) * Math.cos(Math.toRadians((cog != null ? cog : 0) - 10))),
+             userPos.lng - ((boatLen / 2) * Math.sin(Math.toRadians((cog != null ? cog : 0) - 10)))],
+            [userPos.lat - ((boatLen * 0.9 / 2) * Math.cos(Math.toRadians((cog != null ? cog : 0) - 0))),
+             userPos.lng - ((boatLen * 0.9 / 2) * Math.sin(Math.toRadians((cog != null ? cog : 0) - 0)))], // Transom center
+            [userPos.lat - ((boatLen / 2) * Math.cos(Math.toRadians((cog != null ? cog : 0) + 10))),
+             userPos.lng - ((boatLen / 2) * Math.sin(Math.toRadians((cog != null ? cog : 0) + 10)))]
+        ], {
+            color: 'green',
+            fillColor: '#6f6',
+            fillOpacity: 0.5
+        });
+        mapMarkers.push(boatTriangle);
+        boatTriangle.addTo(map);
+            let boatSpot = L.circle([userPos.lat, userPos.lng], {
+                color: 'blue',
+                fillColor: '#39f',
+                fillOpacity: 0.5,
+                radius: 500
+            });
+            mapMarkers.push(boatSpot);
+            boatSpot.addTo(map);
+
     }
     if (json.ais !== null && json.ais !== undefined) {
         let ais = json.ais; // Full AIS object

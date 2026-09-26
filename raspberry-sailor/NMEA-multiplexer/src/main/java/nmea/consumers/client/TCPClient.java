@@ -56,7 +56,7 @@ public class TCPClient extends NMEAClient {
 					if (true || verbose) {
 						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
 					}
-					multiplexer.onData(e.getContent());
+					multiplexer.onData(e.getContent());  // TODO See where AIS strings are going (to be forwarded)
 				} else {
 					if (true || verbose) {
 						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
@@ -64,7 +64,7 @@ public class TCPClient extends NMEAClient {
 								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
 					}
 				}
-				// multiplexer.onData(e.getContent()); // TODO Manage filters ??!!
+				// multiplexer.onData(e.getContent()); // No-filter pass
 			}
 		}
 	}

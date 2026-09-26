@@ -768,3 +768,19 @@ compass-display .green {
 	--variation-display-color: lightpink;
 	--variation-arrow-color: lightpink;
 }
+
+.globe-compass-01 {
+	--bg-color: transparent;
+	--display-background-gradient-from: transparent;
+	--display-background-gradient-to: transparent;
+	--display-globe-gradient-from: silver;
+	--display-globe-gradient-to: rgb(92, 103, 103);
+	--display-cylinder-gradient-from: rgb(106, 17, 17);
+	--display-cylinder-gradient-to: rgb(223, 11, 11);
+	--index-color: rgb(255, 140, 0);
+	--display-color: rgb(220, 220, 220);
+	--value-nb-decimal: 0;
+	--label-font: 'Courier New';
+	--value-font: Verdana;
+	--value-color: cyan;
+}
