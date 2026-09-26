@@ -100,8 +100,13 @@ input:checked + .slider:before {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <script type="text/javascript" src="./utilities/Utilities.js"></script>         <!-- Dead Reck & CO -->
+	<script type="module" src="../webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="../webcomponents/CompassGlobe.js"></script>
+
+    <script type="text/javascript" src="./utilities/Utilities.js"></script>         <!-- Dead Reckoning & CO -->
     <script type="text/javascript" src="./utilities/NavigationHelper.js"></script>  <!-- TW, current, etc -->
+    <script type="text/javascript" src="./utilities/NMEAParser.js"></script>        <!-- Parsers & generators (WiP) -->
+    <script type="text/javascript" src="./utilities/ajax.manager.js"></script>
 </head>
 <body>
 <h1>Nav Simulator</h1>
@@ -144,7 +149,47 @@ input:checked + .slider:before {
     </tr>
 </table>
 <hr/>
-<span style="font-style: italic;">&copy 2020, Oliv did it.</span>
+ <!-- Simulator will go here -->
+<div>
+    <button id="start-stop" onclick="startStopSailing();">Start the Sailing</button>
+    <div style="display: grid; grid-template-columns: 50% 50%;">
+        <div style="text-align: center;">
+            <analog-display class="analogdisplay-flat-gray display-data"
+                    title="Speed Over Ground&#13; in knots"
+                    id="sog"
+                    min-value="0"
+                    max-value="15"
+                    major-ticks="1"
+                    minor-ticks="0.1"
+                    with-border="true"
+                    with-min-max="true"
+                    overlap="40"
+                    label="SOG"
+                    unit="kn"
+                    rotate-digits="false"
+                    width="300"
+                    height="300"></analog-display>
+            <div style="text-align: center;">
+                <button onclick="decreaseSOG();">-</button><button onclick="increaseSOG();">+</button>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <compass-globe id="cog"
+                    class="globe-compass-01 display-data"
+                    width="300"
+                    height="300"
+                    value="000"
+                    label=""
+                    title="Compass, COG"></compass-globe>
+            <div style="text-align: center;">
+                <button onmousedown="decreaseCOG();">-</button><button onclick="increaseCOG();">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+<span style="font-style: italic;">&copy; 2026, Oliv did it.</span>
 
 </body>
 
@@ -179,7 +224,7 @@ let options = {
     timeout: 5000
 };
 
-let userPos = {            // SF Bay
+let userPos = {            // SF Bay. Will be updated...
     lat: 37.83725907032175,
     lng: -122.41104125976562
 }; // Default. Will get this from NMEA Pos
@@ -1183,17 +1228,116 @@ if (!FOR_TEST) {
 
 <script type="text/javascript">
 
+/**
+ * Simulate sailing
+ *
+ * @param {*} fromPos start from { lat: xx.xxxx, lng: yyy.yyyy}
+ * @param {*} sog Speed OverGround, in knots
+ * @param {*} cog Course Over Ground
+ * @param {*} duration Duration, in seconds
+ */
+let sail = (fromPos, sog, cog, duration) => {
+    let dist = sog * (duration / 3600);  // in nm
+    let reached = deadReckoning(fromPos, dist, cog);
+    return reached;
+};
+
+let sailing = false;
+let sailingInterval;
+
+let startStopSailing = () => {
+    if (sailing) { // then stop
+        stopSailing();
+        document.getElementById("start-stop").innerText = "Start Sailing";
+        sailing = false;
+    } else { // then start
+        startSailing();
+        document.getElementById("start-stop").innerText = "Stop Sailing";
+        sailing = true;
+    }
+};
+
+let betweenCalc = 5000;
+
+let sog = 4.5; sog = parseFloat(document.getElementById("sog").value);
+let cog = 315; cog = parseFloat(document.getElementById("cog").value);
+let start = userPos;
+
+let newUserPos = userPos;
+
+let startSailing = () => {
+    sailingInterval = window.setInterval(() => {
+        let sog = parseFloat(document.getElementById("sog").value);
+        let cog = parseFloat(document.getElementById("cog").value);
+
+        let reached = sail(newUserPos, sog, cog, betweenCalc / 1000);
+        newUserPos = reached; // not to conflict with userPos
+
+        console.log(`Sailing -> from UserPos ${decToSex(userPos.lat, 'NS')}/${decToSex(userPos.lng, 'EW')} (${userPos.lat}/${userPos.lng})`);
+        console.log(`           Pos is now   ${decToSex(newUserPos.lat, 'NS')}/${decToSex(newUserPos.lng, 'EW')} (${newUserPos.lat}/${newUserPos.lng})`);
+
+        // Send RMC to mux, for cache update...
+        let rmc = generateRMC('PC', new Date(), newUserPos.lat, newUserPos.lng, sog, cog, 0);
+        pushNMEAData(rmc); // Send to Cache
+        // console.log(`RMC: ${rmc}`);
+    }, betweenCalc);
+};
+
+let stopSailing = () => {
+    window.clearInterval(sailingInterval);
+};
+
+let decreaseSOG = () => {
+    let sog = parseFloat(document.getElementById("sog").value);
+    if (sog > 0) {
+        sog -= 0.1;
+        document.getElementById("sog").value = sog.toFixed(1);
+    }
+};
+
+let increaseSOG = () => {
+    let sog = parseFloat(document.getElementById("sog").value);
+    sog += 0.1;
+    document.getElementById("sog").value = sog.toFixed(1);
+};
+
+let decreaseCOG = () => {
+    let cog = parseFloat(document.getElementById("cog").value);
+    cog -= 1;
+    if (cog < 0) {
+        cog += 360;
+    }
+    document.getElementById("cog").value = cog.toFixed(1);
+};
+
+let increaseCOG = () => {
+    let cog = parseFloat(document.getElementById("cog").value);
+    cog += 1;
+    if (cog >= 360) {
+        cog -= 360;
+    }
+    document.getElementById("cog").value = cog.toFixed(1);
+};
+
 window.onload = () => {
     console.log("A Test");
 
-    let start = userPos;
-    let dist = 4.5 * (5 / 3600);  // Speed 4.5kn, duration 5s
-    let bearing = 315;
+    console.log(`At the beginning: Pos is now ${decToSex(userPos.lat, 'NS')}/${decToSex(userPos.lng, 'EW')} (${userPos.lat}/${userPos.lng})`);
 
-    let reached = deadReckoning(start, dist, bearing);
+    let sog = 20.0; // Read from the Speedo
+    let cog = 315;  // Read from the Compass
+
+    let start = userPos;
+    let reached;
+
+    let newUserPos_2;
+
+    reached = sail(start, sog, cog, 5);
 
     console.log(`From ${ JSON.stringify(start) }, reached ${ JSON.stringify(reached) }`);
-
+    console.log(`Pos is now ${decToSex(reached.lat, 'NS')}/${decToSex(reached.lng, 'EW')}`);
+    let rmc = generateRMC('PC', new Date(), reached.lat, reached.lng, sog, cog, 0);
+    console.log(`RMC: ${rmc}`);
 }
 </script>
 

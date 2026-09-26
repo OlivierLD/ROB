@@ -25,6 +25,13 @@ channels:
     verbose: false
     active: true # Any impact ?...
     description: "SF Area AIS data. Use GPSd ?"
+#forwarders:
+#  - type: file
+#    filename: ./ais.nmea
+#    flush: true
+#    verbose: false
+#    active: true
+#    description: "Store AIS for replay"
 computers:
   - class: nmea.computers.AISManager
     verbose: true

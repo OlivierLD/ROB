@@ -1,5 +1,5 @@
 /*
- * Various NMEA Generators
+ * Misc dummy tests
  */
 
 const d = new Date();

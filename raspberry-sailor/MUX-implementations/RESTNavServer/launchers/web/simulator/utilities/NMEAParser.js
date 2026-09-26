@@ -1040,5 +1040,7 @@ var tests = function () {
 //exports.parseVWT = parseVWT;
 //exports.parseXDR = parseXDR;
 
-let rmc = generateRMC('PC', new Date(), 47.234, -3.456, 4.5, 315, 0);
-console.log(rmc);
+if (false) {
+    let rmc = generateRMC('PC', new Date(), 47.234, -3.456, 4.5, 315, 0);
+    console.log(rmc);
+}
