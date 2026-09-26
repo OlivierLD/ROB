@@ -108,7 +108,7 @@ public class GenericNMEAMultiplexer implements RESTRequestManager, Multiplexer {
 
             // Forwarders
             if (false) {
-                System.out.println("onData: Generated fowarders list:");
+                System.out.println("onData: Generated forwarders list:");
                 System.out.println("-------------------------------");
                 nmeaDataForwarders.forEach(fwd -> {
                     System.out.printf("Forwarder is a %s\n", fwd.getClass().getName());

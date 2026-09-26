@@ -162,7 +162,7 @@ input:checked + .slider:before {
                     major-ticks="1"
                     minor-ticks="0.1"
                     with-border="true"
-                    with-min-max="true"
+                    with-min-max="false"
                     overlap="40"
                     label="SOG"
                     unit="kn"
@@ -182,7 +182,7 @@ input:checked + .slider:before {
                     label=""
                     title="Compass, COG"></compass-globe>
             <div style="text-align: center;">
-                <button onmousedown="decreaseCOG();">-</button><button onclick="increaseCOG();">+</button>
+                <button onclick="decreaseCOG();">-</button><button onclick="increaseCOG();">+</button>
             </div>
         </div>
     </div>
@@ -341,14 +341,28 @@ let onMessage = json => {
            map.removeLayer(mark);
         });
 
-        if (json["Position"] !== undefined) {
+        if (json["Position"] !== undefined) { // Update user position
             userPos.lat = json["Position"].lat;
             userPos.lng = json["Position"].lng;
+        }
+        let cog = null, sog = null;
+        if (json["COG"] !== undefined && json["SOG"] !== undefined) {
+            cog = json["COG"].doubleValue;
+            sog = json["SOG"].doubleValue;
         }
         let marker =  L.marker([userPos.lat, userPos.lng]);
         mapMarkers.push(marker);
         marker.addTo(map)
-            .bindPopup(`<b>You are here<br/><span style="color: red;">${decToSex(userPos.lat, "NS")}<br/>${decToSex(userPos.lng, "EW")}</span></b>`);
+            .bindPopup(`<b>You are here<br/>` +
+                `<span style="color: red;">${decToSex(userPos.lat, "NS")}<br/>` +
+                                          `${decToSex(userPos.lng, "EW")}` +
+                        (cog != null && sog != null ?
+                            `<br/>` +
+                            `COG: ${cog.toFixed(0)}&deg;<br/>` +
+                            `SOG: ${sog.toFixed(1)} kn` :
+                            "") +
+                        `</span></b>`);
+                    // TODO Add Boat triangle (or so) and COG/SOG ?
     }
     if (json.ais !== null && json.ais !== undefined) {
         let ais = json.ais; // Full AIS object
