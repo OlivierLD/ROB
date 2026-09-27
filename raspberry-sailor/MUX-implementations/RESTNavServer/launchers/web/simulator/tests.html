@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="background: silver;">
+<div>
+  <img id="wheel" src="wheel.png">
+</div>
+<button id="left" onclick="turnLeft();">-</button><button id="right" onclick="turnRight();">+</button>
+</body>
+<script type="text/javascript">
+  let angle = 0;
+
+  let turnRight = () => {
+    angle += 1;
+    document.getElementById("wheel").style.transform = `rotate(${angle}deg)`;
+  }
+  let turnLeft = () => {
+    angle -= 1;
+    document.getElementById("wheel").style.transform = `rotate(${angle}deg)`;
+  }
+
+  let leftIsDown = false;
+
+  let keepLefting = () => {
+    while (leftIsDown) {
+      turnLeft();
+    }
+  }
+
+  let keepLefting2 = () => {
+    let int = window.setInterval(() => {
+      if (leftIsDown) {
+        turnLeft();
+      } else {
+        window.clearInterval(int);
+      }
+    }, 50);
+  }
+
+  window.onload = () => {
+    document.getElementById("left").addEventListener("mousedown", () => {
+        console.log("Left mousedown");
+        leftIsDown = true;
+        keepLefting2();
+    });
+    document.getElementById("left").addEventListener("mouseup", () => {
+        console.log("Left mouseup");
+        leftIsDown = false;
+    });
+  }
+</script>
+</html>

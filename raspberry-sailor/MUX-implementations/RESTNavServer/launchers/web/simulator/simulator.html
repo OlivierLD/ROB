@@ -152,9 +152,9 @@ input:checked + .slider:before {
 </table>
 <hr/>
  <!-- Simulator will go here -->
-<div>
-    <button id="start-stop" onclick="startStopSailing();">Start the Sailing</button>
-    <div style="display: grid; grid-template-columns: 50% 50%;">
+<button id="start-stop" onclick="startStopSailing();">Start the Sailing</button>
+<div style="max-height: 330px; overflow-y: hidden; border: 1px solid silver; border-radius: 5px; padding: 5px; margin: 5px; background-color: #2b759d;">
+    <div style="display: grid; grid-template-columns: auto auto auto;">
         <div style="text-align: center;">
             <analog-display class="analogdisplay-flat-gray display-data"
                     title="Speed Over Ground&#13; in knots"
@@ -174,6 +174,9 @@ input:checked + .slider:before {
             <div style="text-align: center;">
                 <button onclick="decreaseSOG();">-</button><button onclick="increaseSOG();">+</button>
             </div>
+        </div>
+        <div style="margin-top: 100px; text-align: center;">
+            <img id="wheel" src="wheel.png" width="300" height="300" alt="Wheel" title="Wheel, COG" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <div style="text-align: center;">
             <compass-globe id="cog"
@@ -1348,6 +1351,7 @@ let decreaseCOG = () => {
         cog += 360;
     }
     document.getElementById("cog").value = cog.toFixed(1);
+    document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
 let increaseCOG = () => {
@@ -1357,6 +1361,7 @@ let increaseCOG = () => {
         cog -= 360;
     }
     document.getElementById("cog").value = cog.toFixed(1);
+    document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
 window.onload = () => {
