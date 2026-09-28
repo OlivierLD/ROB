@@ -95,6 +95,50 @@ input:checked + .slider:before {
 .switch-element {
   place-self: center;
 }
+
+button {
+  padding: 4px 20px;
+  /* give the background a gradient */
+  background:#ffae00; /* fallback for browsers that don't support gradients */
+  /* background: -webkit-linear-gradient(top, #ffae00, #d67600); */
+  background: -webkit-linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  background: -moz-linear-gradient(top, #ffae00, #d67600);
+  background: -o-linear-gradient(top, #ffae00, #d67600);
+  /* background: linear-gradient(top, #ffae00, #d67600); */
+  background: linear-gradient(top, rgba(255, 174, 0, 0.6), rgba(214, 118, 0, 0.6));
+  border: 2px outset #dad9d8;
+  /* style the text */
+  font-family: Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0px 1px 10px #000;
+  /* add to small curve to the corners of the button */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  /* give the button a drop shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  -moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+  box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+/* NOW STYLE THE BUTTON'S HOVER STATE */
+/*	button#rCoffee:hover, button#rCoffee:focus { */
+button:hover, button:focus {
+  border:2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;
+    color: gray;
+}
+
+.round-button {
+    border-radius: 50%;
+}
+
+
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -152,8 +196,14 @@ input:checked + .slider:before {
 </table>
 <hr/>
  <!-- Simulator will go here -->
-<button id="start-stop" onclick="startStopSailing();">Start the Sailing</button>
-<div style="max-height: 330px; overflow-y: hidden; border: 1px solid silver; border-radius: 5px; padding: 5px; margin: 5px; background-color: #2b759d;">
+<button id="start-stop" onclick="startStopSailing();">Start Sailing</button>
+<div style="max-height: 330px;
+            overflow-y: hidden;
+            border: 1px solid silver;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+            background-image: linear-gradient(to bottom, rgb(0, 85, 255), rgb(201, 237, 239));">
     <div style="display: grid; grid-template-columns: auto auto auto;">
         <div style="text-align: center;">
             <analog-display class="analogdisplay-flat-gray display-data"
@@ -172,7 +222,7 @@ input:checked + .slider:before {
                     width="300"
                     height="300"></analog-display>
             <div style="text-align: center;">
-                <button onclick="decreaseSOG();">-</button><button onclick="increaseSOG();">+</button>
+                <button id="minusSOG" class="round-button" onclick="decreaseSOG();">-</button><button id="plusSOG" class="round-button" onclick="increaseSOG();">+</button>
             </div>
         </div>
         <div style="margin-top: 100px; text-align: center;">
@@ -187,7 +237,7 @@ input:checked + .slider:before {
                     label="Contest"
                     title="Compass, COG"></compass-globe>
             <div style="text-align: center;">
-                <button onclick="decreaseCOG();">-</button><button onclick="increaseCOG();">+</button>
+                <button id="minusCOG" class="round-button" onclick="decreaseCOG();">-</button><button id="plusCOG" class="round-button" onclick="increaseCOG();">+</button>
             </div>
         </div>
     </div>
@@ -1364,7 +1414,90 @@ let increaseCOG = () => {
     document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
+let keepMinusSOG = () => {
+    let int = window.setInterval(() => {
+        if (minusSOGIsDown) {
+            decreaseSOG();
+        } else {
+            window.clearInterval(int);
+        }
+    }, 50);
+}
+let keepPlusSOG = () => {
+    let int = window.setInterval(() => {
+        if (plusSOGIsDown) {
+            increaseSOG();
+        } else {
+            window.clearInterval(int);
+        }
+    }, 50);
+}
+let keepMinusCOG = () => {
+    let int = window.setInterval(() => {
+        if (minusCOGIsDown) {
+            decreaseCOG();
+        } else {
+            window.clearInterval(int);
+        }
+    }, 50);
+}
+let keepPlusCOG = () => {
+    let int = window.setInterval(() => {
+        if (plusCOGIsDown) {
+            increaseCOG();
+        } else {
+            window.clearInterval(int);
+        }
+    }, 50);
+}
+
+let minusCOGIsDown = false;
+let plusCOGIsDown = false;
+let minusSOGIsDown = false;
+let plusSOGIsDown = false;
+
 window.onload = () => {
+    // To implement the continuous button down...
+    // SOG
+    document.getElementById("minusSOG").addEventListener("mousedown", () => {
+        console.log("Minus SOG mousedown");
+        minusSOGIsDown = true;
+        keepMinusSOG();
+    });
+    document.getElementById("minusSOG").addEventListener("mouseup", () => {
+        console.log("Minus SOG mouseup");
+        minusSOGIsDown = false;
+    });
+    document.getElementById("plusSOG").addEventListener("mousedown", () => {
+        console.log("Plus SOG mousedown");
+        plusSOGIsDown = true;
+        keepPlusSOG();
+    });
+    document.getElementById("plusSOG").addEventListener("mouseup", () => {
+        console.log("Plus SOG mouseup");
+        plusSOGIsDown = false;
+    });
+    // COG
+    document.getElementById("minusCOG").addEventListener("mousedown", () => {
+        console.log("Minus COG mousedown");
+        minusCOGIsDown = true;
+        keepMinusCOG();
+    });
+    document.getElementById("minusCOG").addEventListener("mouseup", () => {
+        console.log("Minus COG mouseup");
+        minusCOGIsDown = false;
+    });
+    document.getElementById("plusCOG").addEventListener("mousedown", () => {
+        console.log("Plus COG mousedown");
+        plusCOGIsDown = true;
+        keepPlusCOG();
+    });
+    document.getElementById("plusCOG").addEventListener("mouseup", () => {
+        console.log("Plus COG mouseup");
+        plusCOGIsDown = false;
+    });
+
+    /*
     console.log("A Test");
 
     console.log(`At the beginning: Pos is now ${decToSex(userPos.lat, 'NS')}/${decToSex(userPos.lng, 'EW')} (${userPos.lat}/${userPos.lng})`);
@@ -1383,6 +1516,7 @@ window.onload = () => {
     console.log(`Pos is now ${decToSex(reached.lat, 'NS')}/${decToSex(reached.lng, 'EW')}`);
     let rmc = generateRMC('PC', new Date(), reached.lat, reached.lng, sog, cog, 0);
     console.log(`RMC: ${rmc}`);
+    */
 }
 </script>
 
