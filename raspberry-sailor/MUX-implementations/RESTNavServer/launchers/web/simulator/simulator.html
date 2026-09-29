@@ -197,7 +197,7 @@ button:disabled {
 <hr/>
  <!-- Simulator will go here -->
 <button id="start-stop" onclick="startStopSailing();">Start Sailing</button>
-<div style="max-height: 330px;
+<div style="max-height: 340px;
             overflow-y: hidden;
             border: 1px solid silver;
             border-radius: 5px;
@@ -1421,7 +1421,7 @@ let keepMinusSOG = () => {
         } else {
             window.clearInterval(int);
         }
-    }, 50);
+    }, 100);
 }
 let keepPlusSOG = () => {
     let int = window.setInterval(() => {
@@ -1430,7 +1430,7 @@ let keepPlusSOG = () => {
         } else {
             window.clearInterval(int);
         }
-    }, 50);
+    }, 100);
 }
 let keepMinusCOG = () => {
     let int = window.setInterval(() => {
@@ -1439,7 +1439,7 @@ let keepMinusCOG = () => {
         } else {
             window.clearInterval(int);
         }
-    }, 50);
+    }, 100);
 }
 let keepPlusCOG = () => {
     let int = window.setInterval(() => {
@@ -1448,7 +1448,7 @@ let keepPlusCOG = () => {
         } else {
             window.clearInterval(int);
         }
-    }, 50);
+    }, 100);
 }
 
 let minusCOGIsDown = false;

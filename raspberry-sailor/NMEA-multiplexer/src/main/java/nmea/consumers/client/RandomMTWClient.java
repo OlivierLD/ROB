@@ -14,20 +14,22 @@ import java.util.Arrays;
  */
 public class RandomMTWClient extends NMEAClient {
 	public RandomMTWClient() {
-		this(null, null, null, "");
+		this(null, null, null, true, false, "");
 	}
 
 	public RandomMTWClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, true, false, "");
 	}
 
 	public RandomMTWClient(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, true, false, "");
 	}
 
-	public RandomMTWClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+	public RandomMTWClient(String[] s, String[] sa, Multiplexer mux, boolean active, boolean verbose, String desc) {
 		super(s, sa, mux, desc);
-		this.verbose = "true".equals(System.getProperty("rnd.mtw.data.verbose", "false"));
+		// this.verbose = "true".equals(System.getProperty("rnd.mtw.data.verbose", "false"));
+		this.setVerbose(verbose);
+		this.setActive(active);
 	}
 
 	@Override

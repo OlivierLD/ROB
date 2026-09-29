@@ -352,6 +352,8 @@ public class MuxInitializer {
                                         tcpPort,
                                         initialRequest,
                                         keepTrying,
+                                        "true".equals(consumerActive),
+                                        "true".equals(consumerVerbose),
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -370,7 +372,7 @@ public class MuxInitializer {
                                 } else {
                                     tcpClient.setReader(new TCPReader(tcpClient, "MUX-TCPReader", tcpClient.getListeners(), tcpServer, tcpPort, initialRequest, keepTrying));
                                 }
-                                tcpClient.setVerbose("true".equals(consumerVerbose)); // muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
+                                // tcpClient.setVerbose("true".equals(consumerVerbose)); // muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false")));
                                 // Use deviceFilters and sentenceFilters
                                 tcpClient.getReader().setDeviceFilters(tcpClient.getDeviceFilters());
                                 tcpClient.getReader().setSentenceFilters(tcpClient.getSentenceFilters());
@@ -451,6 +453,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerActive),
+                                        "true".equals(consumerVerbose),
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -480,6 +484,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerVerbose),
+                                        "true".equals(consumerActive),
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -511,6 +517,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerActive),
+                                        "true".equals(consumerVerbose),
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);
@@ -545,6 +553,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        "true".equals(consumerActive),
+                                        "true".equals(consumerVerbose),
                                         consumerDescription);
                                 String propProp = String.format("mux.%s.properties", MUX_IDX_FMT.format(muxIdx));
                                 String propFileName = muxProps.getProperty(propProp);

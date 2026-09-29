@@ -18,23 +18,24 @@ public class TCPClient extends NMEAClient {
 	private boolean keepTrying;
 
 	public TCPClient() {
-		this(null, null, null, "localhost", 7001, null, false, "");
+		this(null, null, null, "localhost", 7001, null, false, true, false, "");
 	}
 
 	public TCPClient(Multiplexer mux) {
-		this(null, null, mux, "localhost", 7001, null, false, "");
+		this(null, null, mux, "localhost", 7001, null, false, true, false, "");
 	}
 	public TCPClient(String[] s, String[] sa) {
-		this(s, sa, null, "localhost", 7001, null, false, "");
+		this(s, sa, null, "localhost", 7001, null, false, true, false, "");
 	}
 
-	// TODO Active, verbose, filters...
-	public TCPClient(String[] s, String[] sa, Multiplexer mux, String hostName, int tcpPort, String initialRequest, boolean keepTrying, String desc) {
+	public TCPClient(String[] s, String[] sa, Multiplexer mux, String hostName, int tcpPort, String initialRequest, boolean keepTrying, boolean active, boolean verbose, String desc) {
 		super(s, sa, mux, desc);
 
 		System.out.printf("new TCPClient on [%s:%d]\n", hostName, tcpPort);
 
-		this.verbose = "true".equals(System.getProperty("tcp.data.verbose", "false"));
+		// this.verbose = "true".equals(System.getProperty("tcp.data.verbose", "false"));
+		this.setVerbose(verbose);
+		this.setActive(active);
 		this.hostName = hostName;
 		this.port = tcpPort;
 		this.keepTrying = keepTrying;

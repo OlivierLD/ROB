@@ -769,7 +769,7 @@
 				<span class="display-title">True Wind Angle</span>
 				<span class="display-data" id="twa-dig">000</span>
 				<span class="display-unit">degrees</span>
-			</div>	
+			</div>
 			<wind-angle-display class="analogdisplay-day-dir display-data"
 								title="True Wind Angle"
 								id="twa"
@@ -876,7 +876,7 @@
 						  minor-ticks="1"
 						  value="-"
 						  width="100"
-						  height="250"></thermo-meter>                            
+						  height="250"></thermo-meter>
 		</div>
 
 		<div class="text">WT</div>
@@ -914,7 +914,7 @@
 						  minor-ticks="1"
 						  value="-"
 						  width="100"
-						  height="250"></thermo-meter>                            
+						  height="250"></thermo-meter>
 		  </div>
 
 		<div class="text">AT</div>
@@ -961,15 +961,15 @@
 	<div class="next" onclick="plusSlides(+1);">&#10095;</div>
 
 	<div class="dots">
-		<span class="dot" onclick="currentSlide(01);" title="POS"></span>
-		<span class="dot" onclick="currentSlide(02);" title="GPS"></span>
-		<span class="dot" onclick="currentSlide(03);" title="SAT"></span>
-		<span class="dot" onclick="currentSlide(04);" title="COG"></span>
-		<span class="dot" onclick="currentSlide(05);" title="SOG"></span>
-		<span class="dot" onclick="currentSlide(06);" title="MAP"></span>
-		<span class="dot" onclick="currentSlide(07);" title="STW"></span>
-		<span class="dot" onclick="currentSlide(08);" title="AWS"></span>
-		<span class="dot" onclick="currentSlide(09);" title="AWA"></span>
+		<span class="dot" onclick="currentSlide( 1);" title="POS"></span>
+		<span class="dot" onclick="currentSlide( 2);" title="GPS"></span>
+		<span class="dot" onclick="currentSlide( 3);" title="SAT"></span>
+		<span class="dot" onclick="currentSlide( 4);" title="COG"></span>
+		<span class="dot" onclick="currentSlide( 5);" title="SOG"></span>
+		<span class="dot" onclick="currentSlide( 6);" title="MAP"></span>
+		<span class="dot" onclick="currentSlide( 7);" title="STW"></span>
+		<span class="dot" onclick="currentSlide( 8);" title="AWS"></span>
+		<span class="dot" onclick="currentSlide( 9);" title="AWA"></span>
 		<span class="dot" onclick="currentSlide(10);" title="TWS"></span>
 		<span class="dot" onclick="currentSlide(11);" title="TWD"></span>
 		<span class="dot" onclick="currentSlide(12);" title="TWA"></span>
@@ -981,7 +981,7 @@
 		<span class="dot" onclick="currentSlide(18);" title="HUM"></span>
 		<span class="dot" onclick="currentSlide(19);" title="RAW"></span>
 	</div>
-	
+
 </div>
 
 <dialog id="help-dialog" style="width: 300px; z-index: 10;">
@@ -1155,7 +1155,7 @@
 		<span class="switch-element">RAW</span>
 	</div>
 
-</div>	
+</div>
 
 <script type="text/javascript">
 	let auto = false;
@@ -1294,9 +1294,9 @@
 		let dotArray = dots.querySelectorAll('.dot');
 
 		let slideDisplayArray = [
-			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
+			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap,
 			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum,
 			displayRaw
 		];
 		// showSlides(slideIndex += n);
@@ -1345,12 +1345,12 @@
 			slides[slideIndex - 1].classList.add("visible-slide"); // Show active one
 
 			dots[slideIndex - 1].className += " active";
-		} else { // Auto. 
+		} else { // Auto.
 
 			let slideDisplayArray = [
-				displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
+				displayPos, displayGps, displaySat, displayCog, displaySog, displayMap,
 				displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-				displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+				displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum,
 				displayRaw
 			];
 
@@ -1411,9 +1411,9 @@
 		let dots = document.querySelector('.dots');
 		let dotArray = dots.querySelectorAll('.dot');
 		let slideDisplayArray = [
-			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap, 
+			displayPos, displayGps, displaySat, displayCog, displaySog, displayMap,
 			displayStw, displayAws, displayAwa, displayTws, displayTws, displayTwa,
-			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum, 
+			displayHdg, displayHdg2, displayPrmsl, displayWt, displayAt, displayHum,
 			displayRaw
 		];
 		// Display/Hide the dots

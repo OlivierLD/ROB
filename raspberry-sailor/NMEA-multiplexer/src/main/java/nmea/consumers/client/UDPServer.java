@@ -16,20 +16,22 @@ public class UDPServer extends NMEAClient {
 	private String hostName = DEFAULT_HOST;
 
 	public UDPServer() {
-		this(null, null, null, "");
+		this(null, null, null, true, false, "");
 	}
 
 	public UDPServer(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, true, false, "");
 	}
 
 	public UDPServer(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, true, false, "");
 	}
 
-	public UDPServer(String[] s, String[] sa, Multiplexer mux, String desc) {
+	public UDPServer(String[] s, String[] sa, Multiplexer mux, boolean active, boolean verbose, String desc) {
 		super(s, sa, mux, desc);
-		this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
+		// this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
+		this.setActive(active);
+		this.setVerbose(verbose);
 	}
 
 	@Override

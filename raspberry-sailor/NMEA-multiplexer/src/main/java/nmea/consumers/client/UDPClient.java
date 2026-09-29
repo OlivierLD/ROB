@@ -5,6 +5,9 @@ import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 // import nmea.consumers.reader.TCPReader;
 import nmea.consumers.reader.UDPReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
  * Read NMEA Data from a UDP server.
@@ -12,20 +15,22 @@ import nmea.consumers.reader.UDPReader;
  */
 public class UDPClient extends NMEAClient {
 	public UDPClient() {
-		this(null, null, null, "");
+		this(null, null, null, true, false, "");
 	}
 
 	public UDPClient(Multiplexer mux) {
-		this(null, null, mux, "");
+		this(null, null, mux, true, false, "");
 	}
 
 	public UDPClient(String[] s, String[] sa) {
-		this(s, sa, null, "");
+		this(s, sa, null, true, false, "");
 	}
 
-	public UDPClient(String[] s, String[] sa, Multiplexer mux, String desc) {
+	public UDPClient(String[] s, String[] sa, Multiplexer mux, boolean active, boolean verbose, String desc) {
 		super(s, sa, mux, desc);
-		this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
+		// this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
+		this.setActive(active);
+		this.setVerbose(verbose);
 	}
 
 	@Override
@@ -35,7 +40,22 @@ public class UDPClient extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (true || verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());  // TODO See where AIS strings are going (to be forwarded)
+				} else {
+					if (true || verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
+				}
 			}
 		}
 	}

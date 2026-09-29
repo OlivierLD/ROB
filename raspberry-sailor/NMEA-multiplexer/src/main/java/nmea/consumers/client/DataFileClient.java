@@ -4,6 +4,9 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.DataFileReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 
 /**
  * Read a file containing logged data for replay
@@ -65,11 +68,22 @@ public class DataFileClient extends NMEAClient {
 		}
 		if (multiplexer != null) { // Only if active !
 			if (this.isActive()) {
-				String fullSentence = e.getContent(); // This is NOT an NMEA Sentence... it's stream containing NMEA Data...
-				if (verbose) {
-					System.out.printf("==>\tDataFileClient.dataDetectedEvent, data is [%s]\n", fullSentence);
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (true || verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());  // TODO See where AIS strings are going (to be forwarded)
+				} else {
+					if (true || verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
 				}
-				multiplexer.onData(fullSentence); // TODO Manage Filters ?
 			}
 		}
 	}
