@@ -2,6 +2,8 @@
 <!--
  | Requires Internet access (for Leaflet)
  | WiP! Big Time!
+ | To use with the Mux, driven by nmea.mux.ais.rest.yaml (for example)
+ | See the result from another page, like http://localhost:9999/web/chartless.world.data.html
  +-->
 <html lang="en">
 <head>
@@ -136,9 +138,9 @@ button:disabled {
 
 .round-button {
     border-radius: 50%;
+    height: 50px;
+    width: 50px;
 }
-
-
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -160,13 +162,16 @@ Set your speed and heading, and start sailing!
 <hr/>
  <!-- Simulator will go here -->
 <button id="start-stop" onclick="startStopSailing();">Start Sailing</button>
-<div style="max-height: 340px;
+<div style="max-height: 355px;
             overflow-y: hidden;
             border: 1px solid silver;
             border-radius: 5px;
             padding: 5px;
             margin: 5px;
-            background-image: linear-gradient(to bottom, rgb(0, 85, 255), rgb(201, 237, 239));">
+            /*background-image: linear-gradient(to bottom, rgb(0, 85, 255), rgb(201, 237, 239));*/
+            background-image: url('images/horizon.jpeg');
+            background-repeat: no-repeat;
+            background-size: 100% 400px;">
     <div style="display: grid; grid-template-columns: auto auto auto;">
         <div style="text-align: center;">
             <analog-display class="analogdisplay-flat-gray display-data"
@@ -188,7 +193,7 @@ Set your speed and heading, and start sailing!
                 <button id="minusSOG" class="round-button" onclick="decreaseSOG();">-</button><button id="plusSOG" class="round-button" onclick="increaseSOG();">+</button>
             </div>
         </div>
-        <div style="margin-top: 100px; text-align: center;">
+        <div style="margin-top: 130px; text-align: center;">
             <img id="wheel" src="wheel.png" width="300" height="300" alt="Wheel" title="Wheel, COG" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <div style="text-align: center;">
