@@ -4531,7 +4531,7 @@ public class RESTImplementation {
 				try {
 					// Verbose
 					if ("true".equals(System.getProperty("rest.feeder.verbose"))) {
-						System.out.printf("REST Feed: %s\n", payload);
+						System.out.printf("Prop rest.feeder.verbose, REST Feed: %s\n", payload);
 					}
 					// Parse NMEA/AIS Data. See System variable put.ais.in.cache
 					// Push UTC Date in the cache
@@ -4546,7 +4546,7 @@ public class RESTImplementation {
 					} else {
 						if (this.mux != null) {
 							if ("true".equals(System.getProperty("rest.feeder.verbose"))) {
-								System.out.println("REST Feeder: There IS a mux, using regular onData method.");
+								System.out.println("Prop rest.feeder.verbose, REST Feeder: There IS a mux, using regular onData method.");
 							}
 							synchronized (this.mux) {
 								this.mux.onData(payload.trim());
@@ -4554,7 +4554,7 @@ public class RESTImplementation {
 						} else {
 							// Push here, auto-parse
 							if ("true".equals(System.getProperty("rest.feeder.verbose"))) {
-								System.out.println("REST Feeder: There is NO mux, just feeding the cache");
+								System.out.println("Prop rest.feeder.verbose, REST Feeder: There is NO mux, just feeding the cache");
 							}
 							cache.parseAndFeed(payload.trim());
 

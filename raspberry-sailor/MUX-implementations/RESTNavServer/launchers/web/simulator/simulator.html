@@ -156,44 +156,7 @@ button:disabled {
 </head>
 <body>
 <h1>Nav Simulator</h1>
-<hr/>
-<table>
-    <tr>
-        <td valign="top">
-            <div class="switch-container" style="margin-left: 30px; text-align: right;" title="Chart layers">
-                <label class="switch switch-element">
-                    <input id="slide-slider" type="checkbox" onchange="showSurface(this);" checked>
-                    <span class="slider round"></span>
-                </label>
-                <span class="switch-element" id="carto-label">With Cartography</span>
-            </div>
-
-            <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
-            <div id="mapid" style="width: 1200px; height: 600px; resize: both; overflow: auto;"></div>
-        </td>
-        <td valign="top" align="left" style="padding: 5px;">
-            <input type="checkbox" id="keep-centered" checked/><small>Keep map centered (and zoomed)</small>
-            <hr/>
-            <i><b>Mouse position:</b></i>
-            <hr/>
-            <small><i>Degrees, Decimal mins:</i></small>
-            <div id="curr-pos"></div>
-            <hr/>
-            <small><i>Decimal:</i></small>
-            <div id="curr-pos-dec"></div>
-            <hr/>
-            <i><b>Last click position:</b></i>
-            <hr/>
-            <small><i>Degrees, Decimal mins:</i></small>
-            <div id="curr-pos-click"></div>
-            <hr/>
-            <small><i>Decimal:</i></small>
-            <div id="curr-pos-click-dec"></div>
-            <hr/>
-            <span id="ais-status"></span>
-        </td>
-    </tr>
-</table>
+Set your speed and heading, and start sailing!
 <hr/>
  <!-- Simulator will go here -->
 <button id="start-stop" onclick="startStopSailing();">Start Sailing</button>
@@ -243,6 +206,44 @@ button:disabled {
     </div>
 </div>
 
+<hr/>
+<table id="leaflet-section">
+    <tr>
+        <td valign="top">
+            <div class="switch-container" style="margin-left: 30px; text-align: right;" title="Chart layers">
+                <label class="switch switch-element">
+                    <input id="slide-slider" type="checkbox" onchange="showSurface(this);" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span class="switch-element" id="carto-label">With Cartography</span>
+            </div>
+
+            <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
+            <div id="mapid" style="width: 1200px; height: 600px; resize: both; overflow: auto;"></div>
+        </td>
+        <td valign="top" align="left" style="padding: 5px;">
+            <input type="checkbox" id="keep-centered" checked/><small>Keep map centered (and zoomed)</small>
+            <hr/>
+            <i><b>Mouse position:</b></i>
+            <hr/>
+            <small><i>Degrees, Decimal mins:</i></small>
+            <div id="curr-pos"></div>
+            <hr/>
+            <small><i>Decimal:</i></small>
+            <div id="curr-pos-dec"></div>
+            <hr/>
+            <i><b>Last click position:</b></i>
+            <hr/>
+            <small><i>Degrees, Decimal mins:</i></small>
+            <div id="curr-pos-click"></div>
+            <hr/>
+            <small><i>Decimal:</i></small>
+            <div id="curr-pos-click-dec"></div>
+            <hr/>
+            <span id="ais-status"></span>
+        </td>
+    </tr>
+</table>
 <hr/>
 <span style="font-style: italic;">&copy; 2026, Oliv did it.</span>
 

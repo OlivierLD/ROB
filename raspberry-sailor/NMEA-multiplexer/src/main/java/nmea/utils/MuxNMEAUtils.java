@@ -382,6 +382,9 @@ public class MuxNMEAUtils {
     public static void main(String... args) {
         // String nmea = "$AEMMB,0.0299,I,1.0127,B*4A";
         String nmea = "$AEMMB,0.0299,I,1.0133,B*4F";
+//        String nmea = "!AIVDM,1,1,,B,403OtVAuLWBL;o?I`tE`4Ig02<5f,0*3A";
+//        String nmea = "!AIVDM,1,1,,B,B52k@g@00=l1DpUJcS?Q3wUUoP06,0*04";
+
 
         // List<String> sentenceFilter = Arrays.asList("~XXX");
         List<String> sentenceFilter = Arrays.asList("MMB", "MTA");
