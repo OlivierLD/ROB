@@ -172,7 +172,7 @@ Set your speed and heading, and start sailing!
             background-image: url('images/horizon.jpeg');
             background-repeat: no-repeat;
             background-size: 100% 400px;">
-    <div style="display: grid; grid-template-columns: auto auto auto;">
+    <div style="width: 100%; display: grid; grid-template-columns: auto auto auto;">
         <div style="text-align: center;">
             <analog-display class="analogdisplay-flat-gray display-data"
                     title="Speed Over Ground&#13; in knots"
@@ -202,7 +202,7 @@ Set your speed and heading, and start sailing!
                     width="300"
                     height="300"
                     value="000"
-                    label="Contest"
+                    label="COG"
                     title="Compass, COG"></compass-globe>
             <div style="text-align: center;">
                 <button id="minusCOG" class="round-button" onclick="decreaseCOG();">-</button><button id="plusCOG" class="round-button" onclick="increaseCOG();">+</button>
@@ -212,7 +212,7 @@ Set your speed and heading, and start sailing!
 </div>
 
 <hr/>
-<table id="leaflet-section">
+<table id="leaflet-section" >
     <tr>
         <td valign="top">
             <div class="switch-container" style="margin-left: 30px; text-align: right;" title="Chart layers">
@@ -224,7 +224,8 @@ Set your speed and heading, and start sailing!
             </div>
 
             <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
-            <div id="mapid" style="width: 1200px; height: 600px; resize: both; overflow: auto;"></div>
+            <!-- TODO Check chart width... -->
+            <div id="mapid" style="width: 800px; height: 600px; resize: both; overflow: auto;"></div>
         </td>
         <td valign="top" align="left" style="padding: 5px;">
             <input type="checkbox" id="keep-centered" checked/><small>Keep map centered (and zoomed)</small>

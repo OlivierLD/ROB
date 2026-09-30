@@ -77,6 +77,37 @@ public class BufferedCollisionCallback implements Consumer<String> {
     }
     @Override
     public void accept(String s) {
+        /*
+        Mess structure:
+
+        String.format("AIS-COLLISION;%s;%.02f;%d;%f",
+                targetName,
+                distToTarget,
+                bearingToTarget,
+                dist);
+        [AIS-COLLISION;338005000;3.13;323;0.323479]
+
+         */
+
+        String[] messElements = s.split(";");
+        assert(messElements.length == 5);
+        String targetName = messElements[1];
+        double distToTarget = Double.parseDouble(messElements[2]);
+        int bearingToTarget = Integer.parseInt(messElements[3]);
+        double minDist = Double.parseDouble(messElements[4]);
+
+        if (true) {
+            String detailedMessage = String.format("Danger de collision avec %s, à %.02f nm dans le %d (minimum distance %.02f nm).",
+                    targetName,
+                    distToTarget,
+                    bearingToTarget,
+                    minDist);
+            System.out.printf("Speaking: %s\n", detailedMessage);
+            if (false) {
+                TextToSpeech.speak(detailedMessage, "FR"); // Speak !
+            }
+        }
+
         if (VERBOSE || isVerbose()) {
             System.out.printf("Accept >> Adding %s threat [%s] to %s\n", collisionVocabulary, s, this.getClass().getName());
         }

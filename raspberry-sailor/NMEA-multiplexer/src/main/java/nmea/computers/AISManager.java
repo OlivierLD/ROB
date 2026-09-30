@@ -164,6 +164,7 @@ public class AISManager extends Computer {
 							if (position != null) {
 								double distToTarget = GeomUtil.haversineNm(position.lat, position.lng, aisRecord.getLatitude(), aisRecord.getLongitude());
 								double bearingFromTarget = GeomUtil.bearingFromTo(aisRecord.getLatitude(), aisRecord.getLongitude(), position.lat, position.lng);
+								// double bearingToTarget = GeomUtil.bearingFromTo(position.lat, position.lng, aisRecord.getLatitude(), aisRecord.getLongitude());
 								// It's worth calculating
 								if (distToTarget <= this.minimumDistance) {
 									// double diffHeading = GeomUtil.bearingDiff(bearingFromTarget, aisRecord.getCog());
