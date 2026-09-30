@@ -485,7 +485,121 @@ events.subscribe(AIS, val => {  // Possibly contains threats
 		let recordKeys = Object.keys(recSet);
 		// console.log(`${recordKeys.length} records`);
 		// Is there a "18" (Position report) ?
-		if (recordKeys.indexOf('18') !== -1) {
+		if (recordKeys.indexOf('1') !== -1) { // Type 1
+			// console.log(`We have a 1`);
+			let rec1 = recSet['1'];
+			let vesselName = rec1['vesselName'];
+			let recContent = rec1['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec1.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec1.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec1.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec1.collisionThreat !== null ? rec1.collisionThreat.minimumDistance : 0,
+				threat: rec1.collisionThreat !== null,
+				bearingFromTarget: rec1.collisionThreat !== null ? rec1.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec1.collisionThreat !== null ? rec1.collisionThreat.distToTarget : null,
+				minDist: rec1.collisionThreat !== null ? rec1.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec1.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('2') !== -1) { // Type 2
+			// console.log(`We have a 2`);
+			let rec2 = recSet['2'];
+			let vesselName = rec2['vesselName'];
+			let recContent = rec2['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec2.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec2.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec2.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec2.collisionThreat !== null ? rec2.collisionThreat.minimumDistance : 0,
+				threat: rec2.collisionThreat !== null,
+				bearingFromTarget: rec2.collisionThreat !== null ? rec2.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec2.collisionThreat !== null ? rec2.collisionThreat.distToTarget : null,
+				minDist: rec2.collisionThreat !== null ? rec2.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec2.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('3') !== -1) { // Type 3
+			// console.log(`We have a 3`);
+			let rec3 = recSet['3'];
+			let vesselName = rec3['vesselName'];
+			let recContent = rec3['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec3.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec3.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec3.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec3.collisionThreat !== null ? rec3.collisionThreat.minimumDistance : 0,
+				threat: rec3.collisionThreat !== null,
+				bearingFromTarget: rec3.collisionThreat !== null ? rec3.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec3.collisionThreat !== null ? rec3.collisionThreat.distToTarget : null,
+				minDist: rec3.collisionThreat !== null ? rec3.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec3.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('18') !== -1) { // TODO 1, 2, 3 too.
 			// console.log(`We have a 18`);
 			let rec18 = recSet['18'];
 			let vesselName = rec18['vesselName'];
@@ -917,7 +1031,7 @@ let updateMap = (elmt, context) => {
 				let oneThreat = `<ul>
 					<li>With ${target.mmsi} - ${target.vesselName}</li>
 					<li>at ${decToSex(target.lat, "NS")} / ${decToSex(target.lng, "EW")}</li>
-					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)} </li>
+					<li>${target.distToTarget.toFixed(2)} nm in the ${((target.bearingFromTarget + 180) % 360).toFixed(0)}&deg; </li>
 					<li>COG: ${target.cog}&deg;</li>
 					<li>SOG: ${target.sog.toFixed(2)} kn</li>
 					<li>At: ${target.date.format("Y-M-d H:i:s")}</li>
@@ -1451,7 +1565,7 @@ window.onload = () => {
 					</tr>
 					<tr>
 						<!--td valign="top">AIS Threats:</td-->
-						<td colspan="2"><div id="ais-threats">-</div></td>
+						<td colspan="2"><div id="ais-threats" style="color: navy;">-</div></td>
 					</tr>
 				</table>
 			</td>

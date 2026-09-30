@@ -137,7 +137,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dmem.polling.interval=${MEM_POLLING_INTERVAL}"
 # Hard-coded ones:
 # JAVA_OPTS="${JAVA_OPTS} -Drest.nav.verbose=true"
 # JAVA_OPTS="${JAVA_OPTS} -Dnmea.utils.verbose=true"
-JAVA_OPTS="${JAVA_OPTS} -Drest.feeder.verbose=true"
+# JAVA_OPTS="${JAVA_OPTS} -Drest.feeder.verbose=true"
 #
 if [[ "${USE_PROXY}" == "true" ]]; then
   echo -e "Using proxy (hard-coded)"

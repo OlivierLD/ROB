@@ -35,12 +35,12 @@ channels:
 #    description: "Store AIS for replay"
 computers:
   - class: nmea.computers.AISManager
-    verbose: false
     properties: mux-configs/ais.mgr.properties
     active: true
+    verbose: false
     description: "Manage AIS collisions with other boats"
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
-    verbose: false
     active: true
+    verbose: false
     description: "Manage border's proximity"
