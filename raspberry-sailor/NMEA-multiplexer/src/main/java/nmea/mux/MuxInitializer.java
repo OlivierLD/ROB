@@ -225,7 +225,6 @@ public class MuxInitializer {
                     String consumerActive = muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)));
                     String consumerVerbose = muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)));
                     String consumerDescription = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)));
-                    // TODO Add description here
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
                     }
@@ -553,6 +552,8 @@ public class MuxInitializer {
                                         !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                         !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
                                         mux,
+                                        udpServer,
+                                        Integer.parseInt(udpPort),
                                         "true".equals(consumerActive),
                                         "true".equals(consumerVerbose),
                                         consumerDescription);
@@ -930,8 +931,8 @@ public class MuxInitializer {
                             String flush = muxProps.getProperty(String.format("forward.%s.flush", MUX_IDX_FMT.format(fwdIdx)));
                             String zipped = muxProps.getProperty(String.format("forward.%s.zipped", MUX_IDX_FMT.format(fwdIdx)));
 
-                            String fileSentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
-                            String fileDeviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null); // TODO Make it for other forwarders too ?
+                            String fileSentenceFilters = muxProps.getProperty(String.format("forward.%s.sentence.filters", MUX_IDX_FMT.format(fwdIdx)), null);
+                            String fileDeviceFilters = muxProps.getProperty(String.format("forward.%s.device.filters", MUX_IDX_FMT.format(fwdIdx)), null);
                             if (verbose && fileSentenceFilters != null) {
                                 spitOutSentenceFilters(fileSentenceFilters);
                             }

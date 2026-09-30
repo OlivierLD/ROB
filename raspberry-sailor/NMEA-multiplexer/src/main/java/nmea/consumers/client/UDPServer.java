@@ -4,6 +4,9 @@ import nmea.api.Multiplexer;
 import nmea.api.NMEAClient;
 import nmea.api.NMEAEvent;
 import nmea.consumers.reader.UDPReader;
+import nmea.utils.MuxNMEAUtils;
+
+import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -15,23 +18,43 @@ public class UDPServer extends NMEAClient {
 	private final static String DEFAULT_HOST = "127.0.0.1"; // "230.0.0.1"
 	private String hostName = DEFAULT_HOST;
 
+	private int port;
+
 	public UDPServer() {
-		this(null, null, null, true, false, "");
+		this(null, null, null, "localhost", 8001, true, false, "");
 	}
 
 	public UDPServer(Multiplexer mux) {
-		this(null, null, mux, true, false, "");
+		this(null, null, mux, "localhost", 8001, true, false, "");
 	}
 
 	public UDPServer(String[] s, String[] sa) {
-		this(s, sa, null, true, false, "");
+		this(s, sa, null, "localhost", 8001, true, false, "");
 	}
 
-	public UDPServer(String[] s, String[] sa, Multiplexer mux, boolean active, boolean verbose, String desc) {
+	public UDPServer(String[] s, String[] sa, Multiplexer mux, String hostname, int port, boolean active, boolean verbose, String desc) {
 		super(s, sa, mux, desc);
+		this.setHostName(hostname);
+		this.setPort(port);
 		// this.verbose = "true".equals(System.getProperty("udp.data.verbose", "false"));
 		this.setActive(active);
 		this.setVerbose(verbose);
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	@Override
@@ -41,7 +64,22 @@ public class UDPServer extends NMEAClient {
 		}
 		if (multiplexer != null) {
 			if (this.isActive()) {
-				multiplexer.onData(e.getContent()); // TODO Manage filters !!
+				boolean ok = MuxNMEAUtils.goesThruFilters(e.getContent(),
+						this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+						this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()),
+						verbose);
+				if (ok) {
+					if (verbose) {
+						System.out.printf("***\tInvoking multiplexer.onData for [%s]\n", e.getContent());
+					}
+					multiplexer.onData(e.getContent());
+				} else {
+					if (verbose) {
+						System.out.printf("**\t[%s] does NOT go thru filters (%s, %s)\n", e.getContent(),
+								this.getSentenceFilters() == null ? null : Arrays.asList(this.getSentenceFilters()),
+								this.getDeviceFilters() == null ? null : Arrays.asList(this.getDeviceFilters()));
+					}
+				}
 			}
 		}
 	}
@@ -90,6 +128,14 @@ public class UDPServer extends NMEAClient {
 
 		public String getHostname() {
 			return this.hostname;
+		}
+
+		public void setPort(int port) {
+			this.port = port;
+		}
+
+		public void setHostname(String hostname) {
+			this.hostname = hostname;
 		}
 
 		@Override

@@ -17,20 +17,9 @@ import nmea.api.NMEAClient;
 import nmea.api.NMEAReader;
 import nmea.computers.Computer;
 import nmea.computers.ExtraDataComputer;
-import nmea.consumers.client.DataFileClient;
-import nmea.consumers.client.RESTClient;
-import nmea.consumers.client.RandomClient;
-import nmea.consumers.client.SerialClient;
-import nmea.consumers.client.TCPClient;
-import nmea.consumers.client.WebSocketClient;
-import nmea.consumers.client.ZDAClient;
-import nmea.consumers.reader.DataFileReader;
-import nmea.consumers.reader.RESTReader;
-import nmea.consumers.reader.RandomReader;
-import nmea.consumers.reader.SerialReader;
-import nmea.consumers.reader.TCPReader;
-import nmea.consumers.reader.WebSocketReader;
-import nmea.consumers.reader.ZDAReader;
+import nmea.consumers.client.*;
+import nmea.consumers.client.UDPServer;
+import nmea.consumers.reader.*;
 import nmea.forwarders.*;
 import nmea.forwarders.rmi.RMIServer;
 import nmea.mux.context.Context;
@@ -1800,7 +1789,50 @@ public class RESTImplementation {
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 				}
 				break;
-			// TODO case "udp": ?
+			case "udp":
+				try {
+					UDPClient.UDPBean udpJson = mapper.readValue(new String(request.getContent()), UDPClient.UDPBean.class);
+					opClient = nmeaDataClients.stream()
+							.filter(channel -> channel instanceof TCPClient &&
+									((TCPClient.TCPBean) channel.getBean()).getPort() == udpJson.getPort() &&
+									((TCPClient.TCPBean) channel.getBean()).getHostname().equals(udpJson.getHostname()))
+							.findFirst();
+					if (!opClient.isPresent()) {
+						try {
+							NMEAClient udpClient = new UDPServer(udpJson.getDeviceFilters(),
+									udpJson.getSentenceFilters(),
+									this.mux,
+									udpJson.getHostname(),
+									udpJson.getPort(),
+									udpJson.isActive(),
+									udpJson.getVerbose(),
+									udpJson.getDescription());
+							udpClient.initClient();
+							udpClient.setReader(new UDPReader(udpClient,
+									"MUX-UDPReader",
+									udpClient.getListeners(),
+									((UDPServer)udpClient).getHostName(),
+									((UDPServer)udpClient).getPort()));
+							nmeaDataClients.add(udpClient);
+							udpClient.startWorking();
+							String content = mapper.writeValueAsString(udpClient.getBean());
+							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
+							response.setPayload(content.getBytes());
+						} catch (Exception ex) {
+							response.setStatus(HTTPServer.Response.BAD_REQUEST);
+							RESTProcessorUtil.addErrorMessageToResponse(response, ex.toString());
+							ex.printStackTrace();
+						}
+					} else {
+						// Already there
+						response.setStatus(HTTPServer.Response.BAD_REQUEST);
+						RESTProcessorUtil.addErrorMessageToResponse(response, "this 'tcp' already exists");
+					}
+				} catch (Exception ex) {
+					response.setStatus(HTTPServer.Response.BAD_REQUEST);
+					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
+				}
+				break;
 			case "serial":
 				try {
 					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class);
@@ -3190,7 +3222,7 @@ public class RESTImplementation {
 	}
 
 	/**
-	 * Used for verbose and active TODO What ???
+	 * Also used for verbose and active.
 	 *
 	 * @param request
 	 * @return

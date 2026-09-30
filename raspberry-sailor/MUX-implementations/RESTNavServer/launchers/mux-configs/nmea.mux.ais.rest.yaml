@@ -25,22 +25,22 @@ channels:
     verbose: false
     active: true # Any impact ?...
     description: "SF Area AIS data. Use GPSd ?"
-forwarders:
-  - type: file
-    filename: ./ais.nmea
-    flush: true
-    device.filters: AI
-    verbose: false
-    active: true
-    description: "Store AIS for replay"
+#forwarders:
+#  - type: file
+#    filename: ./ais.nmea
+#    flush: true
+#    device.filters: AI
+#    verbose: false
+#    active: true
+#    description: "Store AIS for replay"
 computers:
   - class: nmea.computers.AISManager
-    verbose: true
+    verbose: false
     properties: mux-configs/ais.mgr.properties
     active: true
-    description: Manage collisions with other boats
+    description: "Manage AIS collisions with other boats"
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
-    verbose: true
+    verbose: false
     active: true
     description: "Manage border's proximity"
