@@ -237,8 +237,8 @@ public class DataFileWriter implements Forwarder {
 				System.out.printf("***\tDataFileWriter.write ? : [%s]\n", mess);
 			}
 			boolean ok;
-			if (mess.startsWith("$") && mess.length() > 6) {
-				ok = MuxNMEAUtils.goesThruFilters(mess, sentenceFilters, deviceFilters, verbose); // TODO Apply everywhere else
+			if ((mess.startsWith("$") && mess.length() > 6) || (mess.startsWith("!") && mess.length() > 6)) { // NMEA or AIS
+				ok = MuxNMEAUtils.goesThruFilters(mess, sentenceFilters, deviceFilters, verbose);
 			} else {
 				ok = false; // TODO Is that right ?
 			}

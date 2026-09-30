@@ -1800,7 +1800,7 @@ public class RESTImplementation {
 					RESTProcessorUtil.addErrorMessageToResponse(response, ex.getMessage());
 				}
 				break;
-			// TODO case "udp":
+			// TODO case "udp": ?
 			case "serial":
 				try {
 					SerialClient.SerialBean serialJson = mapper.readValue(new String(request.getContent()), SerialClient.SerialBean.class);

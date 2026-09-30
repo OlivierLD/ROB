@@ -229,7 +229,8 @@ public class MuxNMEAUtils {
     public static boolean goesThruFilters(String mess, List<String> sentenceFilters, List<String> deviceFilters, boolean verbose) {
 
         boolean ok = true;
-        if (mess.startsWith("$") && mess.length() > 6) {
+        // NMEA or AIS
+        if ((mess.startsWith("$") && mess.length() > 6) || (mess.startsWith("!") && mess.length() > 6)) {
             ok = false;
             // Sentences
             if  (sentenceFilters != null) {
@@ -278,7 +279,7 @@ public class MuxNMEAUtils {
             }
             // Devices
             if  (ok && deviceFilters != null) {
-                // ok = false;
+                ok = false;
                 String dev = mess.substring(1, 3);
                 for (String filter : deviceFilters) {
                     String _filter = filter.trim();
