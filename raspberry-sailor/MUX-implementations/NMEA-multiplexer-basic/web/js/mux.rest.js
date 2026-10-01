@@ -730,6 +730,29 @@ let forwarderList = () => {
 					}
 					html += ("</tr>");
                     break;
+                case 'udp':
+                    html += ("<tr>" +
+                                "<td valign='top'><b>udp</b></td>" +
+                                "<td>" + json[i].description + "</td>" +
+                                "<td>Port " + json[i].port + "</td>" +
+                                "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                                "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                                "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>" +
+                                "<td><small>" + json[i].nbClients + " Client(s)</small></td>");
+					if (json[i].filters) {
+					    let filterList = json[i].filters.join(", ");
+					    html += (`<td>Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					if (json[i].deviceFilters) {
+					    let filterList = json[i].deviceFilters.join(", ");
+					    html += (`<td>Device Filter(s): ${filterList}</td>`);
+					} else {
+					    html += ('<td></td>');
+					}
+					html += ("</tr>");
+                    break;
                 case 'nmea-cache-publisher':
                     html += ("<tr>" +
                         "<td valign='top'><b>nmea-cache-publisher</b></td>" +
@@ -806,12 +829,12 @@ let forwarderList = () => {
                     break;
                 case 'ws':
                     html += ("<tr>" +
-                        "<td valign='top'><b>ws</b></td>" +
-                        "<td>" + json[i].description + "</td>" +
-                        "<td>" + json[i].wsUri + "</td>" +
-                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
-                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
-                        "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
+                            "<td valign='top'><b>ws</b></td>" +
+                            "<td>" + json[i].description + "</td>" +
+                            "<td>" + json[i].wsUri + "</td>" +
+                            "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                            "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                            "<td valign='top' align='center'>Verbose: <input type='checkbox' title='verbose' onchange='verboseForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].verbose === true ? " checked" : "") + "></td>");
 					if (json[i].filters) {
 					    let filterList = json[i].filters.join(", ");
 					    html += (`<td>Filter(s): ${filterList}</td>`);
@@ -1457,9 +1480,16 @@ let generateDiagram = () => {
                         "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
                     "</tr>");
                     break;
-                // case 'udp':
-                //     html += ("<tr>" + "<td><b>tcp</b></td>" + "<td>Port " + json[i].port + "</td>" + "<td><small>" + json[i].nbClients + " Client(s)</small></td>" + "</tr>");
-                //     break;
+                 case 'udp':
+                     html += ("<tr>" +
+                        "<td><b>udp</b></td>" +
+                        "<td>" + (json[i].description) + "</td>" +
+                        "<td>Port " + json[i].port + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ", true);'" + (json[i].active === true ? " checked" : "") + "></td>" +
+                        "<td><small>" + json[i].nbClients + " Client(s)</small></td>" +
+                     "</tr>");
+                     break;
                 case 'rest':
                     /*
                      "port": 8080,
@@ -1484,6 +1514,8 @@ let generateDiagram = () => {
                 case 'ws':
                     html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" +
                         "<td><b>ws</b></td>" + "<td>" + json[i].wsUri + "</td>" +
+                        "<td><button onclick='removeForwarder(" + JSON.stringify(json[i]) + ");'>remove</button></td>" +
+                        "<td valign='top' align='center'>Active: <input type='checkbox' title='active' onchange='activateForwarder(this, " + JSON.stringify(json[i]) + ");'" + (json[i].active === true ? " checked" : "") + "></td>" +
                     "</tr>");
                     break;
                 case 'rmi':
@@ -1611,6 +1643,80 @@ let generateDiagram = () => {
     });
 };
 
+/* Used for JSON formatter */
+
+function createJsonTree(data) {
+    const container = document.createElement('div');
+
+    if (typeof data === 'object' && data !== null) {
+        const isArray = Array.isArray(data);
+        const details = document.createElement('details');
+        details.open = true; // Kept open by default
+
+        const summary = document.createElement('summary');
+        summary.textContent = isArray ? `Array [${data.length}]` : 'Object';
+        details.appendChild(summary);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'json-node';
+
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                const row = document.createElement('div');
+
+                // Render Key
+                const keySpan = document.createElement('span');
+                keySpan.className = 'json-key';
+                keySpan.textContent = isArray ? `${key}: ` : `"${key}": `;
+                row.appendChild(keySpan);
+
+                // Render Value recursively
+                const val = data[key];
+                if (typeof val === 'object' && val !== null) {
+                    row.appendChild(createJsonTree(val));
+                } else {
+                    const valSpan = document.createElement('span');
+                    valSpan.className = getValClass(val);
+                    valSpan.textContent = typeof val === 'string' ? `"${val}"` : String(val);
+                    row.appendChild(valSpan);
+                }
+                wrapper.appendChild(row);
+            }
+        }
+        details.appendChild(wrapper);
+        container.appendChild(details);
+    } else {
+        // Handle primitive root data
+        const valSpan = document.createElement('span');
+        valSpan.className = getValClass(data);
+        valSpan.textContent = String(data);
+        container.appendChild(valSpan);
+    }
+
+    return container;
+}
+
+function getValClass(val) {
+    if (typeof val === 'string') return 'json-string';
+    if (typeof val === 'number') return 'json-number';
+    if (typeof val === 'boolean') return 'json-boolean';
+    if (val === null) return 'json-null';
+    return '';
+}
+
+let fmtJson = () => {
+    let jsonContainer = document.getElementById('fmt-cache');
+    let theMap = JSON.parse(jsonContainer.getElementsByTagName('pre')[0].innerText);
+
+    // let list = document.getElementById('json-viewer');
+    while (jsonContainer.hasChildNodes()) {
+        jsonContainer.removeChild(jsonContainer.children[0]);
+    }
+    jsonContainer.appendChild(createJsonTree(theMap));
+};
+
+/* End of JSON formatter */
+
 let generateCache = () => {
     let before = new Date().getTime();
     let getData = getCache();
@@ -1620,15 +1726,16 @@ let generateCache = () => {
         console.log("Done in " + (after - before) + " ms :", value);
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
-        let html = `<h5>NMEA Cache at <i>${new Date()}</i></h5>`;
+        let html = `<h5>NMEA Cache at <i>${new Date()}</i>. <button onclick="fmtJson();">Formatted</button></h5>`;
         if (json) {
-            html += "<div style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
+            html += "<div id='fmt-cache' style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
             html += "<pre>" + JSON.stringify(json, null, 2) + "</pre>";
             html += "</div>";
         } else {
             html += "<i>No Cache available</i>";
         }
         document.getElementById("lists").innerHTML = html;
+
         document.getElementById("diagram").style.display = 'none';
         document.getElementById("lists").style.display = 'block';
     }, (error, errMess) => {
