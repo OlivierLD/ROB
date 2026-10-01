@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Collapsible JSON Viewer</title>
+  <style>
+        .json-container {
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            line-height: 1.5;
+        }
+        .json-node {
+            margin-left: 20px;
+        }
+        details > summary {
+            cursor: pointer;
+            color: #d63384;
+            font-weight: bold;
+            outline: none;
+        }
+        details > summary:hover {
+            text-decoration: underline;
+        }
+        .json-key {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+        .json-string { color: #198754; }
+        .json-number { color: #fd7e14; }
+        .json-boolean { color: #6f42c1; }
+        .json-null { color: #6c757d; }
+    </style>
+    <script type="text/javascript">
+        const bigOne = "../sample.mux.data.json";
+
+        let loadBig = () => {
+            // Please wait !!
+        	fetch(bigOne).then(response => {
+                console.log(`Data Response: ${response.status} - ${response.statusText}`);
+                response.json().then(doc => {
+                    theMap = doc;
+                    console.log(`In dev, ${Object.keys(theMap).length} entries.`);
+
+                    let list = document.getElementById('json-viewer');
+                    while (list.hasChildNodes()) {
+                      list.removeChild(list.children[0]);
+                    }
+                    list.appendChild(createJsonTree(theMap));
+                });
+            },
+            (error, errmess) => {
+                console.log("Ooch");
+                let message;
+                if (errmess) {
+                    let mess = JSON.parse(errmess);
+                    if (mess.message) {
+                        message = mess.message;
+                    }
+                }
+                console.debug("Failed to get the data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+            });
+        };
+    </script>
+</head>
+<body>
+
+<button onclick="loadBig();">Load big file...</button>
+<div id="json-viewer" class="json-container" style="border: 1px solid silver;"></div>
+
+
+<script>
+        // TODO Try loading ../sample.mux.data.json
+
+        const sampleData = {
+            name: "John Doe",
+            age: 30,
+            isEmployee: true,
+            skills: ["JavaScript", "HTML", "CSS"],
+            address: {
+                city: "San Francisco",
+                state: "CA",
+                zip: 94105
+            },
+            emptyValue: null
+        };
+        function createJsonTree(data) {
+            const container = document.createElement('div');
+
+            if (typeof data === 'object' && data !== null) {
+                const isArray = Array.isArray(data);
+                const details = document.createElement('details');
+                details.open = true; // Kept open by default
+
+                const summary = document.createElement('summary');
+                summary.textContent = isArray ? `Array [${data.length}]` : 'Object';
+                details.appendChild(summary);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'json-node';
+
+                for (const key in data) {
+                    if (Object.prototype.hasOwnProperty.call(data, key)) {
+                        const row = document.createElement('div');
+
+                        // Render Key
+                        const keySpan = document.createElement('span');
+                        keySpan.className = 'json-key';
+                        keySpan.textContent = isArray ? `${key}: ` : `"${key}": `;
+                        row.appendChild(keySpan);
+
+                        // Render Value recursively
+                        const val = data[key];
+                        if (typeof val === 'object' && val !== null) {
+                            row.appendChild(createJsonTree(val));
+                        } else {
+                            const valSpan = document.createElement('span');
+                            valSpan.className = getValClass(val);
+                            valSpan.textContent = typeof val === 'string' ? `"${val}"` : String(val);
+                            row.appendChild(valSpan);
+                        }
+                        wrapper.appendChild(row);
+                    }
+                }
+                details.appendChild(wrapper);
+                container.appendChild(details);
+            } else {
+                // Handle primitive root data
+                const valSpan = document.createElement('span');
+                valSpan.className = getValClass(data);
+                valSpan.textContent = String(data);
+                container.appendChild(valSpan);
+            }
+
+            return container;
+        }
+
+        function getValClass(val) {
+            if (typeof val === 'string') return 'json-string';
+            if (typeof val === 'number') return 'json-number';
+            if (typeof val === 'boolean') return 'json-boolean';
+            if (val === null) return 'json-null';
+            return '';
+        }
+
+        // Render the tree to the DOM
+        document.getElementById('json-viewer').appendChild(createJsonTree(sampleData));
+    </script>
+</body>
+</html>
